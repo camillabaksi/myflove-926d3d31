@@ -118,7 +118,7 @@ export default function CalendarPage() {
     return { focus, tasks, reminders, familyEvents };
   };
 
-  const days = [];
+  const days: (string | null)[] = [];
   for (let i = 0; i < startOffset; i++) {
     days.push(null);
   }
