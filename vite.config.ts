@@ -5,11 +5,24 @@
 //     error logger plugins, and sandbox detection (port/host/strictPort).
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
+import path from "path";
 
 export default defineConfig({
   tanstackStart: {
-    // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
-    // nitro/vite builds from this
     server: { entry: "server" },
+  },
+  vite: {
+    resolve: {
+      alias: {
+        wouter: path.resolve(__dirname, "src/compat/wouter.tsx"),
+        "@clerk/react/internal": path.resolve(__dirname, "src/compat/clerk.tsx"),
+        "@clerk/react": path.resolve(__dirname, "src/compat/clerk.tsx"),
+        "@clerk/themes": path.resolve(__dirname, "src/compat/clerk-themes.ts"),
+        "@workspace/api-client-react": path.resolve(
+          __dirname,
+          "src/compat/api-client.ts",
+        ),
+      },
+    },
   },
 });
