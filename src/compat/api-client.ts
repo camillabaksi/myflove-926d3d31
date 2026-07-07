@@ -31,9 +31,9 @@ const noopMutation = (..._args: any[]): any => ({
 });
 
 export function useGetMyHousehold(_opts?: any): any { return emptyQuery(); }
-export function useCreateHousehold(): any { return noopMutation(); }
-export function useJoinHousehold(): any { return noopMutation(); }
-export function useLeaveHousehold(): any { return noopMutation(); }
+export function useCreateHousehold(_opts?: any): any { return noopMutation(); }
+export function useJoinHousehold(_opts?: any): any { return noopMutation(); }
+export function useLeaveHousehold(_opts?: any): any { return noopMutation(); }
 
 export type ShoppingItem = {
   id: string;
@@ -44,20 +44,20 @@ export type ShoppingItem = {
 export function useListShoppingItems(_opts?: any): any {
   return { ...emptyQuery(), data: [] as ShoppingItem[] };
 }
-export function useAddShoppingItem(): any { return noopMutation(); }
-export function useToggleShoppingItem(): any { return noopMutation(); }
-export function useDeleteShoppingItem(): any { return noopMutation(); }
+export function useAddShoppingItem(_opts?: any): any { return noopMutation(); }
+export function useToggleShoppingItem(_opts?: any): any { return noopMutation(); }
+export function useDeleteShoppingItem(_opts?: any): any { return noopMutation(); }
 
 export function useListFamilyEvents(_opts?: any): any {
   return { ...emptyQuery(), data: [] as any[] };
 }
-export function useCreateFamilyEvent(): any { return noopMutation(); }
-export function useDeleteFamilyEvent(): any { return noopMutation(); }
+export function useCreateFamilyEvent(_opts?: any): any { return noopMutation(); }
+export function useDeleteFamilyEvent(_opts?: any): any { return noopMutation(); }
 
 export function useListMealPlans(_opts?: any): any {
   return { ...emptyQuery(), data: [] as any[] };
 }
-export function useUpsertMealPlanSlot(): any { return noopMutation(); }
+export function useUpsertMealPlanSlot(_opts?: any): any { return noopMutation(); }
 
 export function useGetAnalyticsSummary(_opts?: any): any { return emptyQuery(); }
 
