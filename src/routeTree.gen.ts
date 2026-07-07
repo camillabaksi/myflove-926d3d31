@@ -9,38 +9,301 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SignUpRouteImport } from './routes/sign-up'
+import { Route as SignInRouteImport } from './routes/sign-in'
+import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppTravelRouteImport } from './routes/_app.travel'
+import { Route as AppTasksRouteImport } from './routes/_app.tasks'
+import { Route as AppStatistikRouteImport } from './routes/_app.statistik'
+import { Route as AppShoppingRouteImport } from './routes/_app.shopping'
+import { Route as AppPomodoroRouteImport } from './routes/_app.pomodoro'
+import { Route as AppMoodRouteImport } from './routes/_app.mood'
+import { Route as AppMedicinRouteImport } from './routes/_app.medicin'
+import { Route as AppMatlistaRouteImport } from './routes/_app.matlista'
+import { Route as AppKalenderRouteImport } from './routes/_app.kalender'
+import { Route as AppHemRouteImport } from './routes/_app.hem'
+import { Route as AppFokusRouteImport } from './routes/_app.fokus'
+import { Route as AppFinancesRouteImport } from './routes/_app.finances'
+import { Route as AppFamiljRouteImport } from './routes/_app.familj'
+import { Route as AppDumpRouteImport } from './routes/_app.dump'
+import { Route as AppBeloningarRouteImport } from './routes/_app.beloningar'
+import { Route as AppAssistantRouteImport } from './routes/_app.assistant'
+import { Route as AppAdminStatistikRouteImport } from './routes/_app.admin-statistik'
 
+const SignUpRoute = SignUpRouteImport.update({
+  id: '/sign-up',
+  path: '/sign-up',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignInRoute = SignInRouteImport.update({
+  id: '/sign-in',
+  path: '/sign-in',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppTravelRoute = AppTravelRouteImport.update({
+  id: '/travel',
+  path: '/travel',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppTasksRoute = AppTasksRouteImport.update({
+  id: '/tasks',
+  path: '/tasks',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppStatistikRoute = AppStatistikRouteImport.update({
+  id: '/statistik',
+  path: '/statistik',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppShoppingRoute = AppShoppingRouteImport.update({
+  id: '/shopping',
+  path: '/shopping',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPomodoroRoute = AppPomodoroRouteImport.update({
+  id: '/pomodoro',
+  path: '/pomodoro',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMoodRoute = AppMoodRouteImport.update({
+  id: '/mood',
+  path: '/mood',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMedicinRoute = AppMedicinRouteImport.update({
+  id: '/medicin',
+  path: '/medicin',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMatlistaRoute = AppMatlistaRouteImport.update({
+  id: '/matlista',
+  path: '/matlista',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppKalenderRoute = AppKalenderRouteImport.update({
+  id: '/kalender',
+  path: '/kalender',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppHemRoute = AppHemRouteImport.update({
+  id: '/hem',
+  path: '/hem',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFokusRoute = AppFokusRouteImport.update({
+  id: '/fokus',
+  path: '/fokus',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFinancesRoute = AppFinancesRouteImport.update({
+  id: '/finances',
+  path: '/finances',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFamiljRoute = AppFamiljRouteImport.update({
+  id: '/familj',
+  path: '/familj',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDumpRoute = AppDumpRouteImport.update({
+  id: '/dump',
+  path: '/dump',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppBeloningarRoute = AppBeloningarRouteImport.update({
+  id: '/beloningar',
+  path: '/beloningar',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAssistantRoute = AppAssistantRouteImport.update({
+  id: '/assistant',
+  path: '/assistant',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAdminStatistikRoute = AppAdminStatistikRouteImport.update({
+  id: '/admin-statistik',
+  path: '/admin-statistik',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/sign-in': typeof SignInRoute
+  '/sign-up': typeof SignUpRoute
+  '/admin-statistik': typeof AppAdminStatistikRoute
+  '/assistant': typeof AppAssistantRoute
+  '/beloningar': typeof AppBeloningarRoute
+  '/dump': typeof AppDumpRoute
+  '/familj': typeof AppFamiljRoute
+  '/finances': typeof AppFinancesRoute
+  '/fokus': typeof AppFokusRoute
+  '/hem': typeof AppHemRoute
+  '/kalender': typeof AppKalenderRoute
+  '/matlista': typeof AppMatlistaRoute
+  '/medicin': typeof AppMedicinRoute
+  '/mood': typeof AppMoodRoute
+  '/pomodoro': typeof AppPomodoroRoute
+  '/shopping': typeof AppShoppingRoute
+  '/statistik': typeof AppStatistikRoute
+  '/tasks': typeof AppTasksRoute
+  '/travel': typeof AppTravelRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/sign-in': typeof SignInRoute
+  '/sign-up': typeof SignUpRoute
+  '/admin-statistik': typeof AppAdminStatistikRoute
+  '/assistant': typeof AppAssistantRoute
+  '/beloningar': typeof AppBeloningarRoute
+  '/dump': typeof AppDumpRoute
+  '/familj': typeof AppFamiljRoute
+  '/finances': typeof AppFinancesRoute
+  '/fokus': typeof AppFokusRoute
+  '/hem': typeof AppHemRoute
+  '/kalender': typeof AppKalenderRoute
+  '/matlista': typeof AppMatlistaRoute
+  '/medicin': typeof AppMedicinRoute
+  '/mood': typeof AppMoodRoute
+  '/pomodoro': typeof AppPomodoroRoute
+  '/shopping': typeof AppShoppingRoute
+  '/statistik': typeof AppStatistikRoute
+  '/tasks': typeof AppTasksRoute
+  '/travel': typeof AppTravelRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_app': typeof AppRouteWithChildren
+  '/sign-in': typeof SignInRoute
+  '/sign-up': typeof SignUpRoute
+  '/_app/admin-statistik': typeof AppAdminStatistikRoute
+  '/_app/assistant': typeof AppAssistantRoute
+  '/_app/beloningar': typeof AppBeloningarRoute
+  '/_app/dump': typeof AppDumpRoute
+  '/_app/familj': typeof AppFamiljRoute
+  '/_app/finances': typeof AppFinancesRoute
+  '/_app/fokus': typeof AppFokusRoute
+  '/_app/hem': typeof AppHemRoute
+  '/_app/kalender': typeof AppKalenderRoute
+  '/_app/matlista': typeof AppMatlistaRoute
+  '/_app/medicin': typeof AppMedicinRoute
+  '/_app/mood': typeof AppMoodRoute
+  '/_app/pomodoro': typeof AppPomodoroRoute
+  '/_app/shopping': typeof AppShoppingRoute
+  '/_app/statistik': typeof AppStatistikRoute
+  '/_app/tasks': typeof AppTasksRoute
+  '/_app/travel': typeof AppTravelRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/sign-in'
+    | '/sign-up'
+    | '/admin-statistik'
+    | '/assistant'
+    | '/beloningar'
+    | '/dump'
+    | '/familj'
+    | '/finances'
+    | '/fokus'
+    | '/hem'
+    | '/kalender'
+    | '/matlista'
+    | '/medicin'
+    | '/mood'
+    | '/pomodoro'
+    | '/shopping'
+    | '/statistik'
+    | '/tasks'
+    | '/travel'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/sign-in'
+    | '/sign-up'
+    | '/admin-statistik'
+    | '/assistant'
+    | '/beloningar'
+    | '/dump'
+    | '/familj'
+    | '/finances'
+    | '/fokus'
+    | '/hem'
+    | '/kalender'
+    | '/matlista'
+    | '/medicin'
+    | '/mood'
+    | '/pomodoro'
+    | '/shopping'
+    | '/statistik'
+    | '/tasks'
+    | '/travel'
+  id:
+    | '__root__'
+    | '/'
+    | '/_app'
+    | '/sign-in'
+    | '/sign-up'
+    | '/_app/admin-statistik'
+    | '/_app/assistant'
+    | '/_app/beloningar'
+    | '/_app/dump'
+    | '/_app/familj'
+    | '/_app/finances'
+    | '/_app/fokus'
+    | '/_app/hem'
+    | '/_app/kalender'
+    | '/_app/matlista'
+    | '/_app/medicin'
+    | '/_app/mood'
+    | '/_app/pomodoro'
+    | '/_app/shopping'
+    | '/_app/statistik'
+    | '/_app/tasks'
+    | '/_app/travel'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
+  SignInRoute: typeof SignInRoute
+  SignUpRoute: typeof SignUpRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sign-up': {
+      id: '/sign-up'
+      path: '/sign-up'
+      fullPath: '/sign-up'
+      preLoaderRoute: typeof SignUpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sign-in': {
+      id: '/sign-in'
+      path: '/sign-in'
+      fullPath: '/sign-in'
+      preLoaderRoute: typeof SignInRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +311,175 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/travel': {
+      id: '/_app/travel'
+      path: '/travel'
+      fullPath: '/travel'
+      preLoaderRoute: typeof AppTravelRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/tasks': {
+      id: '/_app/tasks'
+      path: '/tasks'
+      fullPath: '/tasks'
+      preLoaderRoute: typeof AppTasksRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/statistik': {
+      id: '/_app/statistik'
+      path: '/statistik'
+      fullPath: '/statistik'
+      preLoaderRoute: typeof AppStatistikRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/shopping': {
+      id: '/_app/shopping'
+      path: '/shopping'
+      fullPath: '/shopping'
+      preLoaderRoute: typeof AppShoppingRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/pomodoro': {
+      id: '/_app/pomodoro'
+      path: '/pomodoro'
+      fullPath: '/pomodoro'
+      preLoaderRoute: typeof AppPomodoroRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/mood': {
+      id: '/_app/mood'
+      path: '/mood'
+      fullPath: '/mood'
+      preLoaderRoute: typeof AppMoodRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/medicin': {
+      id: '/_app/medicin'
+      path: '/medicin'
+      fullPath: '/medicin'
+      preLoaderRoute: typeof AppMedicinRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/matlista': {
+      id: '/_app/matlista'
+      path: '/matlista'
+      fullPath: '/matlista'
+      preLoaderRoute: typeof AppMatlistaRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/kalender': {
+      id: '/_app/kalender'
+      path: '/kalender'
+      fullPath: '/kalender'
+      preLoaderRoute: typeof AppKalenderRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/hem': {
+      id: '/_app/hem'
+      path: '/hem'
+      fullPath: '/hem'
+      preLoaderRoute: typeof AppHemRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/fokus': {
+      id: '/_app/fokus'
+      path: '/fokus'
+      fullPath: '/fokus'
+      preLoaderRoute: typeof AppFokusRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finances': {
+      id: '/_app/finances'
+      path: '/finances'
+      fullPath: '/finances'
+      preLoaderRoute: typeof AppFinancesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/familj': {
+      id: '/_app/familj'
+      path: '/familj'
+      fullPath: '/familj'
+      preLoaderRoute: typeof AppFamiljRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/dump': {
+      id: '/_app/dump'
+      path: '/dump'
+      fullPath: '/dump'
+      preLoaderRoute: typeof AppDumpRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/beloningar': {
+      id: '/_app/beloningar'
+      path: '/beloningar'
+      fullPath: '/beloningar'
+      preLoaderRoute: typeof AppBeloningarRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/assistant': {
+      id: '/_app/assistant'
+      path: '/assistant'
+      fullPath: '/assistant'
+      preLoaderRoute: typeof AppAssistantRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/admin-statistik': {
+      id: '/_app/admin-statistik'
+      path: '/admin-statistik'
+      fullPath: '/admin-statistik'
+      preLoaderRoute: typeof AppAdminStatistikRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
+interface AppRouteChildren {
+  AppAdminStatistikRoute: typeof AppAdminStatistikRoute
+  AppAssistantRoute: typeof AppAssistantRoute
+  AppBeloningarRoute: typeof AppBeloningarRoute
+  AppDumpRoute: typeof AppDumpRoute
+  AppFamiljRoute: typeof AppFamiljRoute
+  AppFinancesRoute: typeof AppFinancesRoute
+  AppFokusRoute: typeof AppFokusRoute
+  AppHemRoute: typeof AppHemRoute
+  AppKalenderRoute: typeof AppKalenderRoute
+  AppMatlistaRoute: typeof AppMatlistaRoute
+  AppMedicinRoute: typeof AppMedicinRoute
+  AppMoodRoute: typeof AppMoodRoute
+  AppPomodoroRoute: typeof AppPomodoroRoute
+  AppShoppingRoute: typeof AppShoppingRoute
+  AppStatistikRoute: typeof AppStatistikRoute
+  AppTasksRoute: typeof AppTasksRoute
+  AppTravelRoute: typeof AppTravelRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppAdminStatistikRoute: AppAdminStatistikRoute,
+  AppAssistantRoute: AppAssistantRoute,
+  AppBeloningarRoute: AppBeloningarRoute,
+  AppDumpRoute: AppDumpRoute,
+  AppFamiljRoute: AppFamiljRoute,
+  AppFinancesRoute: AppFinancesRoute,
+  AppFokusRoute: AppFokusRoute,
+  AppHemRoute: AppHemRoute,
+  AppKalenderRoute: AppKalenderRoute,
+  AppMatlistaRoute: AppMatlistaRoute,
+  AppMedicinRoute: AppMedicinRoute,
+  AppMoodRoute: AppMoodRoute,
+  AppPomodoroRoute: AppPomodoroRoute,
+  AppShoppingRoute: AppShoppingRoute,
+  AppStatistikRoute: AppStatistikRoute,
+  AppTasksRoute: AppTasksRoute,
+  AppTravelRoute: AppTravelRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AppRoute: AppRouteWithChildren,
+  SignInRoute: SignInRoute,
+  SignUpRoute: SignUpRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
