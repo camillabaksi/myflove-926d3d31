@@ -1,94 +1,68 @@
 // Shim for @workspace/api-client-react — MyFlow backend hooks stubbed with
-// localStorage-backed no-ops so the app runs on the client only for now.
-// Household/family/shared shopping/meal-planner/analytics/Trafiklab features
-// degrade gracefully (empty data, no-op mutations).
+// safe no-ops so the frontend runs without the original API server. Types
+// are intentionally loose (any) so downstream pages type-check.
 
-import { useCallback, useEffect, useState } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
-// --- Analytics ---
-export async function trackEvent(_payload: {
-  sessionId: string;
-  section: string;
-  action: string;
-}): Promise<void> {
+export async function trackEvent(_payload: any): Promise<void> {
   return Promise.resolve();
 }
 
-// --- Query key helpers ---
-export const getGetMyHouseholdQueryKey = () => ["household"];
-export const getListShoppingItemsQueryKey = () => ["shopping-items"];
-export const getListFamilyEventsQueryKey = () => ["family-events"];
-export const getListMealPlansQueryKey = () => ["meal-plans"];
+export const getGetMyHouseholdQueryKey = (): any[] => ["household"];
+export const getListShoppingItemsQueryKey = (): any[] => ["shopping-items"];
+export const getListFamilyEventsQueryKey = (..._args: any[]): any[] => ["family-events"];
+export const getListMealPlansQueryKey = (..._args: any[]): any[] => ["meal-plans"];
 
-// --- Household ---
-export function useGetMyHousehold(_opts?: any) {
-  return { data: null as null | { id: string; name: string; joinCode: string; members: any[] }, isLoading: false } as const;
-}
-export function useCreateHousehold() {
-  return { mutateAsync: async (_: any) => ({}), isPending: false } as const;
-}
-export function useJoinHousehold() {
-  return { mutateAsync: async (_: any) => ({}), isPending: false } as const;
-}
-export function useLeaveHousehold() {
-  return { mutateAsync: async (_: any) => ({}), isPending: false } as const;
-}
+const emptyQuery = (): any => ({
+  data: undefined,
+  isLoading: false,
+  isError: false,
+  isFetching: false,
+  error: null,
+  refetch: async () => ({}),
+});
 
-// --- Shared shopping ---
+const noopMutation = (): any => ({
+  mutate: (_: any, opts?: any) => opts?.onSuccess?.(),
+  mutateAsync: async (_: any) => ({}),
+  isPending: false,
+  isError: false,
+  reset: () => {},
+});
+
+export function useGetMyHousehold(_opts?: any): any { return emptyQuery(); }
+export function useCreateHousehold(): any { return noopMutation(); }
+export function useJoinHousehold(): any { return noopMutation(); }
+export function useLeaveHousehold(): any { return noopMutation(); }
+
 export type ShoppingItem = {
   id: string;
   title: string;
   completed: boolean;
   createdAt: number;
 };
-export function useListShoppingItems(_opts?: any) {
-  return { data: [] as ShoppingItem[], isLoading: false } as const;
+export function useListShoppingItems(_opts?: any): any {
+  return { ...emptyQuery(), data: [] as ShoppingItem[] };
 }
-export function useAddShoppingItem() {
-  return { mutateAsync: async (_: any) => ({}), isPending: false } as const;
-}
-export function useToggleShoppingItem() {
-  return { mutateAsync: async (_: any) => ({}), isPending: false } as const;
-}
-export function useDeleteShoppingItem() {
-  return { mutateAsync: async (_: any) => ({}), isPending: false } as const;
-}
+export function useAddShoppingItem(): any { return noopMutation(); }
+export function useToggleShoppingItem(): any { return noopMutation(); }
+export function useDeleteShoppingItem(): any { return noopMutation(); }
 
-// --- Family events ---
-export function useListFamilyEvents(_opts?: any) {
-  return { data: [] as any[], isLoading: false } as const;
+export function useListFamilyEvents(_opts?: any): any {
+  return { ...emptyQuery(), data: [] as any[] };
 }
-export function useCreateFamilyEvent() {
-  return { mutateAsync: async (_: any) => ({}), isPending: false } as const;
-}
-export function useDeleteFamilyEvent() {
-  return { mutateAsync: async (_: any) => ({}), isPending: false } as const;
-}
+export function useCreateFamilyEvent(): any { return noopMutation(); }
+export function useDeleteFamilyEvent(): any { return noopMutation(); }
 
-// --- Meal planner ---
-export function useListMealPlans(_opts?: any) {
-  return { data: [] as any[], isLoading: false } as const;
+export function useListMealPlans(_opts?: any): any {
+  return { ...emptyQuery(), data: [] as any[] };
 }
-export function useUpsertMealPlanSlot() {
-  return { mutateAsync: async (_: any) => ({}), isPending: false } as const;
-}
+export function useUpsertMealPlanSlot(): any { return noopMutation(); }
 
-// --- Analytics summary ---
-export function useGetAnalyticsSummary(_opts?: any) {
-  return { data: null as any, isLoading: false } as const;
-}
+export function useGetAnalyticsSummary(_opts?: any): any { return emptyQuery(); }
 
-// --- Trafiklab / SL trip ---
-export async function getSlTrip(_args: { from: string; to: string }): Promise<any> {
-  return { trips: [] };
+export async function getSlTrip(_args: any): Promise<any> { return { trips: [] }; }
+export async function getSlNearbyStop(_args: any): Promise<any> { return { stops: [] }; }
+export function useGetSlTrip(..._args: any[]): any {
+  return { ...emptyQuery(), data: null };
 }
-export async function getSlNearbyStop(_args: { lat: number; lon: number }): Promise<any> {
-  return { stops: [] };
-}
-export function useGetSlTrip(_opts?: any) {
-  return { data: null as any, isLoading: false, refetch: async () => ({}) } as const;
-}
-
-// Placeholder to silence unused-var lint
-export const __shimVersion = 1;
-export { useCallback as _uc, useEffect as _ue, useState as _us };
