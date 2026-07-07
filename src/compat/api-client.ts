@@ -8,8 +8,8 @@ export async function trackEvent(_payload: any): Promise<void> {
   return Promise.resolve();
 }
 
-export const getGetMyHouseholdQueryKey = (): any[] => ["household"];
-export const getListShoppingItemsQueryKey = (): any[] => ["shopping-items"];
+export const getGetMyHouseholdQueryKey = (..._args: any[]): any[] => ["household"];
+export const getListShoppingItemsQueryKey = (..._args: any[]): any[] => ["shopping-items"];
 export const getListFamilyEventsQueryKey = (..._args: any[]): any[] => ["family-events"];
 export const getListMealPlansQueryKey = (..._args: any[]): any[] => ["meal-plans"];
 
