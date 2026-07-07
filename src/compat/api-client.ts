@@ -22,7 +22,7 @@ const emptyQuery = (): any => ({
   refetch: async () => ({}),
 });
 
-const noopMutation = (): any => ({
+const noopMutation = (..._args: any[]): any => ({
   mutate: (_: any, opts?: any) => opts?.onSuccess?.(),
   mutateAsync: async (_: any) => ({}),
   isPending: false,
