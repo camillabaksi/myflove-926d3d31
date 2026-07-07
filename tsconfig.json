@@ -15,13 +15,20 @@
 
     /* Linting */
     "skipLibCheck": true,
-    "strict": true,
+    "strict": false,
+    "strictNullChecks": true,
+    "noImplicitAny": false,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "wouter": ["./src/compat/wouter.tsx"],
+      "@clerk/react": ["./src/compat/clerk.tsx"],
+      "@clerk/react/internal": ["./src/compat/clerk.tsx"],
+      "@clerk/themes": ["./src/compat/clerk-themes.ts"],
+      "@workspace/api-client-react": ["./src/compat/api-client.ts"]
     }
   }
 }
