@@ -6,6 +6,8 @@ import HelpMeModal from "@/components/help-me-modal";
 import WeatherCard from "@/components/weather-card";
 import ProactiveSuggestions from "@/components/proactive-suggestions";
 import { Button } from "@/components/ui/button";
+import { useServerFn } from "@tanstack/react-start";
+import { downloadVideo } from "@/lib/video.functions";
 import {
   useFocus,
   useTasks,
@@ -28,6 +30,7 @@ import {
   Sparkles,
   ArrowRight,
   ShoppingBag,
+  Download,
 } from "lucide-react";
 
 function sortTasksByPriority(tasks: Task[]): Task[] {
@@ -51,6 +54,29 @@ export default function Home() {
   const [helpModalOpen, setHelpModalOpen] = useState(false);
   const [overwhelmedOpen, setOverwhelmedOpen] = useState(false);
   const [helpPlan, setHelpPlan] = useState<HelpPlan | null>(null);
+  const [downloading, setDownloading] = useState(false);
+  const fetchVideo = useServerFn(downloadVideo);
+
+  async function handleDownloadVideo() {
+    try {
+      setDownloading(true);
+      const response = await fetchVideo();
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "myflow-preview.mp4";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Nedladdning misslyckades:", error);
+      alert("Kunde inte ladda ner videon just nu.");
+    } finally {
+      setDownloading(false);
+    }
+  }
 
   const todayStr = new Date().toISOString().split("T")[0] as string;
 
@@ -320,6 +346,16 @@ export default function Home() {
           className="w-full h-12 rounded-2xl"
         >
           Jag är överväldigad — hjälp mig prioritera
+        </Button>
+
+        <Button
+          variant="ghost"
+          onClick={handleDownloadVideo}
+          disabled={downloading}
+          className="w-full h-12 rounded-2xl"
+        >
+          <Download className="size-4" />
+          {downloading ? "Laddar ner…" : "Ladda ner demo-video"}
         </Button>
       </div>
 
