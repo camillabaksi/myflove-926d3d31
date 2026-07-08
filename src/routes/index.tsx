@@ -52,16 +52,6 @@ function LandingPage() {
           <Button asChild size="lg" variant="outline" className="w-full">
             <Link to="/sign-in">Logga in</Link>
           </Button>
-          <Button
-            size="lg"
-            variant="secondary"
-            className="w-full"
-            onClick={handleDownload}
-            disabled={downloading}
-          >
-            <Download className="size-4" />
-            {downloading ? "Laddar ner…" : "Ladda ner demo-video"}
-          </Button>
         </div>
       </div>
     </main>
