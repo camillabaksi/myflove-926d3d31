@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Cloud,
   CloudRain,
@@ -53,9 +53,11 @@ async function reverseGeocode(lat: number, lon: number): Promise<string> {
 export default function WeatherCard() {
   const [state, setState] = useState<WeatherState | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [hasAsked, setHasAsked] = useState(false);
 
   const load = () => {
+    setHasAsked(true);
     setError(null);
     setLoading(true);
     if (!("geolocation" in navigator)) {
@@ -92,7 +94,9 @@ export default function WeatherCard() {
       },
       (err) => {
         if (err.code === err.PERMISSION_DENIED) {
-          setError("Platsåtkomst är blockerad. Tillåt plats i webbläsarens inställningar och tryck här igen.");
+          setError("Platsåtkomst är nekad eller blockerad för den här sidan.");
+        } else if (err.code === err.TIMEOUT) {
+          setError("Det tog för lång tid att hitta din plats. Tryck för att försöka igen.");
         } else {
           setError("Kunde inte hitta din plats. Tryck för att försöka igen.");
         }
@@ -101,11 +105,6 @@ export default function WeatherCard() {
       { enableHighAccuracy: false, timeout: 8000, maximumAge: 15 * 60 * 1000 },
     );
   };
-
-  useEffect(() => {
-    load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   if (loading) {
     return (
@@ -126,11 +125,12 @@ export default function WeatherCard() {
         <MapPin size={16} className="mt-0.5 shrink-0 text-primary" />
         <div className="flex-1 space-y-1.5">
           <p className="text-foreground font-medium">
-            {error ?? "Tryck för att visa vädret där du är."}
+            {error ?? "Tryck här för att godkänna plats och visa vädret."}
           </p>
           <p className="text-xs text-muted-foreground leading-snug">
-            Händer inget? Öppna webbläsarens meny (⋮ i Chrome) → Inställningar →
-            Webbplatsinställningar → Plats, och tillåt för <b>lovable.app</b>. Ladda sedan om sidan.
+            {hasAsked
+              ? "Om ingen fråga visas: tryck på låset/inställningsikonen vid adressfältet och ändra Plats till Tillåt. Ladda sedan om sidan."
+              : "Webbläsarens platsfråga visas först efter att du trycker på kortet."}
           </p>
         </div>
       </button>
