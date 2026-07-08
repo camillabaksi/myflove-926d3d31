@@ -129,12 +129,40 @@ export default function FlowPlanPage() {
 
         <div className="bg-card border border-border rounded-2xl p-5 space-y-5">
           <div>
-            <label className="text-sm font-medium mb-2 block">Hur är energin just nu?</label>
+            <div className="flex items-center justify-between mb-2 gap-2">
+              <label className="text-sm font-medium">Hur är energin just nu?</label>
+              {energyAuto && !energyManual && (
+                <span className="text-xs text-muted-foreground flex items-center gap-1">
+                  <Battery size={12} className="text-primary" />
+                  Från Energikarta ({LEVEL_LABELS[energyAuto.level]}, {timeAgo(energyAuto.loggedAt)})
+                </span>
+              )}
+              {energyAuto && energyManual && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEnergyManual(false);
+                    setEnergy(levelToEnergy(energyAuto.level));
+                  }}
+                  className="text-xs text-primary hover:underline"
+                >
+                  Använd loggad energi
+                </button>
+              )}
+              {!energyAuto && (
+                <Link to="/energikarta" className="text-xs text-primary hover:underline flex items-center gap-1">
+                  <Battery size={12} /> Logga energi
+                </Link>
+              )}
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
               {(Object.keys(ENERGY_LABELS) as Energy[]).map((e) => (
                 <button
                   key={e}
-                  onClick={() => setEnergy(e)}
+                  onClick={() => {
+                    setEnergy(e);
+                    setEnergyManual(true);
+                  }}
                   className={`px-3 py-3 rounded-xl border text-sm text-left transition-colors ${
                     energy === e
                       ? "border-primary bg-primary/10 text-primary"
@@ -146,6 +174,7 @@ export default function FlowPlanPage() {
               ))}
             </div>
           </div>
+
 
           <div>
             <label className="text-sm font-medium mb-2 flex items-center gap-2">
