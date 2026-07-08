@@ -40,6 +40,7 @@ export default function Layout({ children }: LayoutProps) {
   const { alerts, dismissAlert } = useCommuteAlerts();
   const { alerts: medicationAlerts, dismissAlert: dismissMedicationAlert } = useMedicationAlerts();
   const { alerts: proximityAlerts, dismissAlert: dismissProximityAlert } = useShoppingProximityAlerts();
+  const { isAdmin } = useIsAdmin();
 
   useEffect(() => {
     const section = SECTION_BY_PATH[location] ?? (location.replace(/^\//, "") || "home");
