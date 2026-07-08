@@ -1,11 +1,13 @@
 import { ReactNode, useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
-import { Home, Target, CheckSquare, ShoppingBag, Smile, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Battery } from "lucide-react";
+import { Home, Target, CheckSquare, ShoppingBag, Smile, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Battery, Download } from "lucide-react";
 import { useCommuteAlerts } from "@/hooks/use-commute-alerts";
 import { useMedicationAlerts } from "@/hooks/use-medication-alerts";
 import { useShoppingProximityAlerts } from "@/hooks/use-shopping-proximity-alerts";
 import { useIsAdmin } from "@/hooks/use-is-admin";
 import { trackEvent } from "@/lib/analytics";
+import { useServerFn } from "@tanstack/react-start";
+import { downloadVideo } from "@/lib/video.functions";
 
 interface LayoutProps {
   children: ReactNode;
