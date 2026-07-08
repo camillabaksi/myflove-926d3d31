@@ -51,29 +51,8 @@ export default function Home() {
   const [helpModalOpen, setHelpModalOpen] = useState(false);
   const [overwhelmedOpen, setOverwhelmedOpen] = useState(false);
   const [helpPlan, setHelpPlan] = useState<HelpPlan | null>(null);
-  const [downloading, setDownloading] = useState(false);
 
-  async function handleDownloadVideo() {
-    try {
-      setDownloading(true);
-      const response = await fetch("/myflow-preview.mp4");
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "myflow-preview.mp4";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("Nedladdning misslyckades:", error);
-      alert("Kunde inte ladda ner videon just nu.");
-    } finally {
-      setDownloading(false);
-    }
-  }
+
 
   const todayStr = new Date().toISOString().split("T")[0] as string;
 
