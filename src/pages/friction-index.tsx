@@ -23,6 +23,8 @@ interface Vote {
 }
 
 const CATEGORIES = [
+  { value: "feedback", label: "Feedback – vad du tycker om appen" },
+  { value: "suggestion", label: "Förslag – ny funktion eller idé" },
   { value: "ui", label: "UI/UX – förvirrande eller trögt" },
   { value: "bug", label: "Bugg – något går sönder" },
   { value: "missing", label: "Saknad funktion" },
