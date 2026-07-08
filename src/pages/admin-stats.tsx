@@ -41,7 +41,29 @@ function actionLabel(action: string): string {
 }
 
 export default function AdminStats() {
+  const { isAdmin, loading: adminLoading } = useIsAdmin();
   const { data, isLoading, isError } = useGetAnalyticsSummary();
+
+  if (adminLoading) {
+    return (
+      <Layout>
+        <p className="text-muted-foreground">Laddar…</p>
+      </Layout>
+    );
+  }
+
+  if (!isAdmin) {
+    return (
+      <Layout>
+        <div className="max-w-md mx-auto text-center space-y-3 py-16">
+          <Lock size={40} className="mx-auto text-muted-foreground" />
+          <h1 className="text-2xl font-bold">Endast för grundaren</h1>
+          <p className="text-muted-foreground">Den här sidan är privat.</p>
+        </div>
+      </Layout>
+    );
+  }
+
 
   const viewsBySection = (data?.featureUsage ?? [])
     .filter((row) => row.action === "view")
