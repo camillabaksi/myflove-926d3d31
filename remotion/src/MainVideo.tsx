@@ -4,22 +4,28 @@ import { fade } from "@remotion/transitions/fade";
 import { AbsoluteFill } from "remotion";
 import { COLORS } from "./theme";
 import { Scene1Intro } from "./scenes/Scene1Intro";
-import { FeatureScene } from "./scenes/FeatureScene";
+import { SceneFlowVoice } from "./scenes/SceneFlowVoice";
+import { SceneModulesConnected } from "./scenes/SceneModulesConnected";
+import { SceneScenarios } from "./scenes/SceneScenarios";
+import { SceneFlowPlan } from "./scenes/SceneFlowPlan";
+import { SceneFeeling } from "./scenes/SceneFeeling";
 import { SceneOutro } from "./scenes/SceneOutro";
 
 export const FPS = 30;
 export const WIDTH = 1280;
 export const HEIGHT = 720;
 
-const SCENE_A = 150; // 5s intro
-const SCENE_B = 270; // 9s feature block
-const SCENE_C = 270;
-const SCENE_D = 270;
-const SCENE_E = 240; // 8s
-const SCENE_F = 180; // 6s outro
+const S_INTRO = 150;   // 5s
+const S_VOICE = 270;   // 9s – Flow talar
+const S_MODULES = 240; // 8s – allt hänger ihop
+const S_SCENARIOS = 240; // 8s
+const S_FLOWPLAN = 300; // 10s
+const S_FEELING = 210;  // 7s
+const S_OUTRO = 300;    // 10s
 const TRANS = 20;
 
-export const TOTAL_FRAMES = SCENE_A + SCENE_B + SCENE_C + SCENE_D + SCENE_E + SCENE_F - TRANS * 5;
+export const TOTAL_FRAMES =
+  S_INTRO + S_VOICE + S_MODULES + S_SCENARIOS + S_FLOWPLAN + S_FEELING + S_OUTRO - TRANS * 6;
 
 const timing = () => linearTiming({ durationInFrames: TRANS });
 
@@ -27,73 +33,31 @@ export const MainVideo: React.FC = () => {
   return (
     <AbsoluteFill style={{ backgroundColor: COLORS.bg }}>
       <TransitionSeries>
-        <TransitionSeries.Sequence durationInFrames={SCENE_A}>
+        <TransitionSeries.Sequence durationInFrames={S_INTRO}>
           <Scene1Intro />
         </TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={fade()} timing={timing()} />
-        <TransitionSeries.Sequence durationInFrames={SCENE_B}>
-          <FeatureScene
-            eyebrow="Planera dagen"
-            title="Struktur som håller."
-            sub="Se dagen i ett svep, bryt ner det i mjuka steg och håll fokus utan att bränna ut dig."
-            accent={COLORS.primary}
-            features={[
-              { icon: "◐", label: "Hem", desc: "Dagens överblick – lugn start." },
-              { icon: "▤", label: "Kalender", desc: "Allt på ett ställe, färgkodat." },
-              { icon: "≡", label: "FlowPlan", desc: "Dagen i realistiska block." },
-              { icon: "✓", label: "Att göra", desc: "Små steg, inte långa listor." },
-              { icon: "◎", label: "Fokus & Timer", desc: "Pomodoro utan press." },
-            ]}
-          />
+        <TransitionSeries.Sequence durationInFrames={S_VOICE}>
+          <SceneFlowVoice />
         </TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={fade()} timing={timing()} />
-        <TransitionSeries.Sequence durationInFrames={SCENE_C}>
-          <FeatureScene
-            eyebrow="Må bra"
-            title="Kroppen med, inte emot."
-            sub="Lyssna på energin, kom ihåg medicinen och fira det som gick bra – oavsett hur stort."
-            accent={COLORS.sage}
-            features={[
-              { icon: "☺", label: "Mående", desc: "Snabb check-in utan ord." },
-              { icon: "⚡", label: "Energikarta", desc: "Se när du toppar och dippar." },
-              { icon: "℞", label: "Medicin", desc: "Påminnelser du inte missar." },
-              { icon: "★", label: "Belöningar", desc: "Små segrar räknas." },
-            ]}
-          />
+        <TransitionSeries.Sequence durationInFrames={S_MODULES}>
+          <SceneModulesConnected />
         </TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={fade()} timing={timing()} />
-        <TransitionSeries.Sequence durationInFrames={SCENE_D}>
-          <FeatureScene
-            eyebrow="Vardagen"
-            title="Praktisk hjälp där det skaver."
-            sub="Från kylskåp till kontoutdrag – mindre mental last i det som annars faller mellan stolarna."
-            accent={COLORS.primary}
-            features={[
-              { icon: "🛒", label: "Inköp", desc: "Larmar när du är nära affären." },
-              { icon: "🍽", label: "Matlista", desc: "Veckans måltider – klara." },
-              { icon: "💳", label: "Ekonomi", desc: "Koll utan ångest." },
-              { icon: "🧭", label: "Resor", desc: "Avgångar & påminnelser." },
-              { icon: "👪", label: "Familj", desc: "Alla synkade, en kalender." },
-            ]}
-          />
+        <TransitionSeries.Sequence durationInFrames={S_SCENARIOS}>
+          <SceneScenarios />
         </TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={fade()} timing={timing()} />
-        <TransitionSeries.Sequence durationInFrames={SCENE_E}>
-          <FeatureScene
-            eyebrow="Reflektera & växa"
-            title="Se mönstren. Forma appen."
-            sub="Töm huvudet, se vad som funkar, be om hjälp när det behövs – och forma appen efter dig."
-            accent={COLORS.gold}
-            features={[
-              { icon: "⇩", label: "Dumping", desc: "Tanketömning på 5 sek." },
-              { icon: "📊", label: "Statistik", desc: "Mönster du själv missar." },
-              { icon: "✦", label: "Hjälp-AI", desc: "Bollplank, alltid vaken." },
-              { icon: "♥", label: "Feedback", desc: "Rösta upp det som ska fixas." },
-            ]}
-          />
+        <TransitionSeries.Sequence durationInFrames={S_FLOWPLAN}>
+          <SceneFlowPlan />
         </TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={fade()} timing={timing()} />
-        <TransitionSeries.Sequence durationInFrames={SCENE_F}>
+        <TransitionSeries.Sequence durationInFrames={S_FEELING}>
+          <SceneFeeling />
+        </TransitionSeries.Sequence>
+        <TransitionSeries.Transition presentation={fade()} timing={timing()} />
+        <TransitionSeries.Sequence durationInFrames={S_OUTRO}>
           <SceneOutro />
         </TransitionSeries.Sequence>
       </TransitionSeries>
