@@ -318,7 +318,7 @@ export default function FrictionIndexPage() {
           </div>
         ) : (
           <div className="space-y-3">
-            {ranked.map(({ item, votes: v, score }) => {
+            {ranked.map(({ item, votes: v, total, priority }) => {
               const mine = myVotes.has(item.id);
               const isReporter = userId === item.reporter_id;
               return (
@@ -329,6 +329,9 @@ export default function FrictionIndexPage() {
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap mb-1">
+                        <span className={`text-xs px-2 py-0.5 rounded-full border ${priority.className}`}>
+                          {priority.label} · {total} p
+                        </span>
                         <span
                           className={`text-xs px-2 py-0.5 rounded-full ${STATUS_COLORS[item.status]}`}
                         >
@@ -363,7 +366,7 @@ export default function FrictionIndexPage() {
                   </div>
                   <div className="flex items-center justify-between text-xs text-muted-foreground pt-1 border-t border-border">
                     <span>
-                      Poäng <strong className="text-foreground">{score}</strong> · påverkan {item.impact} · röster {v}
+                      Påverkan {item.impact} · frekvens {item.frequency ?? 3} · mental {item.mental_load ?? 3} · röster {v}
                     </span>
                     {isReporter ? (
                       <select
