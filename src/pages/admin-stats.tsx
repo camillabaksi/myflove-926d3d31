@@ -1,6 +1,7 @@
 import Layout from "@/components/layout";
 import { useGetAnalyticsSummary } from "@workspace/api-client-react";
-import { BarChart3, Users, Activity, Flame } from "lucide-react";
+import { BarChart3, Users, Activity, Flame, Lock } from "lucide-react";
+import { useIsAdmin } from "@/hooks/use-is-admin";
 
 const SECTION_LABELS: Record<string, string> = {
   mood: "Mående",
