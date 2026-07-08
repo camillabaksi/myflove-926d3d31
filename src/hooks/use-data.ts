@@ -7,6 +7,17 @@ export interface Focus {
   date: string; // ISO date string for matching "today"
 }
 
+// Blueprint 2.0 §7.4: skiljer på Uppgift / Ärende / Projekt.
+// Status följer Blueprint: Väntar på / Pågår / Klart.
+export type TaskKind = "uppgift" | "arende" | "projekt";
+export type TaskStatus = "pagar" | "vantar" | "klart";
+
+export interface TaskStep {
+  id: string;
+  title: string;
+  done: boolean;
+}
+
 export interface Task {
   id: string;
   title: string;
@@ -14,6 +25,10 @@ export interface Task {
   createdAt: number;
   dueDate?: string; // ISO date string YYYY-MM-DD
   snoozedUntil?: string; // ISO date string YYYY-MM-DD; hidden from view until this date has passed
+  kind?: TaskKind; // default "uppgift"
+  status?: TaskStatus; // default "pagar"; "klart" ⇔ completed=true
+  waitingOn?: string; // fritt fält: "vem/vad vi väntar på"
+  steps?: TaskStep[]; // delsteg (särskilt för ärenden och projekt)
 }
 
 export interface ShoppingItem {
@@ -61,14 +76,69 @@ export function useTasks() {
 
   const getTodayDateString = () => new Date().toISOString().split('T')[0] as string;
 
-  const addTask = (title: string, dueDate?: string) => {
-    setTasks([{ id: generateId(), title, completed: false, createdAt: Date.now(), dueDate }, ...tasks]);
+  const addTask = (
+    title: string,
+    dueDate?: string,
+    opts?: { kind?: TaskKind; waitingOn?: string }
+  ) => {
+    setTasks([
+      {
+        id: generateId(),
+        title,
+        completed: false,
+        createdAt: Date.now(),
+        dueDate,
+        kind: opts?.kind ?? "uppgift",
+        status: opts?.waitingOn ? "vantar" : "pagar",
+        waitingOn: opts?.waitingOn,
+        steps: [],
+      },
+      ...tasks,
+    ]);
   };
 
   const toggleTask = (id: string) => {
     const task = tasks.find(t => t.id === id);
-    setTasks(tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t));
+    setTasks(tasks.map(t => {
+      if (t.id !== id) return t;
+      const nowCompleted = !t.completed;
+      return { ...t, completed: nowCompleted, status: nowCompleted ? "klart" : "pagar" };
+    }));
     if (task && !task.completed) trackEvent('tasks', 'task_completed');
+  };
+
+  const setTaskStatus = (id: string, status: TaskStatus, waitingOn?: string) => {
+    setTasks(tasks.map(t => {
+      if (t.id !== id) return t;
+      return {
+        ...t,
+        status,
+        completed: status === "klart",
+        waitingOn: status === "vantar" ? (waitingOn ?? t.waitingOn ?? "") : undefined,
+      };
+    }));
+  };
+
+  const setTaskKind = (id: string, kind: TaskKind) => {
+    setTasks(tasks.map(t => (t.id === id ? { ...t, kind } : t)));
+  };
+
+  const addTaskStep = (id: string, title: string) => {
+    setTasks(tasks.map(t => t.id === id
+      ? { ...t, steps: [...(t.steps ?? []), { id: generateId(), title, done: false }] }
+      : t));
+  };
+
+  const toggleTaskStep = (taskId: string, stepId: string) => {
+    setTasks(tasks.map(t => t.id === taskId
+      ? { ...t, steps: (t.steps ?? []).map(s => s.id === stepId ? { ...s, done: !s.done } : s) }
+      : t));
+  };
+
+  const deleteTaskStep = (taskId: string, stepId: string) => {
+    setTasks(tasks.map(t => t.id === taskId
+      ? { ...t, steps: (t.steps ?? []).filter(s => s.id !== stepId) }
+      : t));
   };
 
   const deleteTask = (id: string) => {
@@ -106,6 +176,11 @@ export function useTasks() {
     deleteTask,
     snoozeTask,
     unsnoozeTask,
+    setTaskStatus,
+    setTaskKind,
+    addTaskStep,
+    toggleTaskStep,
+    deleteTaskStep,
   };
 }
 
