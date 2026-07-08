@@ -74,6 +74,8 @@ export default function FrictionIndexPage() {
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("ui");
   const [impact, setImpact] = useState(3);
+  const [frequency, setFrequency] = useState(3);
+  const [mentalLoad, setMentalLoad] = useState(3);
   const [saving, setSaving] = useState(false);
 
   const load = async () => {
