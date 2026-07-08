@@ -18,6 +18,8 @@ type WeatherState = {
   city: string;
 };
 
+type GeoPermissionState = PermissionState | "unknown" | "unsupported";
+
 interface WMOInfo {
   label: string;
   Icon: typeof Cloud;
@@ -50,11 +52,69 @@ async function reverseGeocode(lat: number, lon: number): Promise<string> {
   }
 }
 
+async function lookupCity(query: string): Promise<{ latitude: number; longitude: number; name: string } | null> {
+  try {
+    const res = await fetch(
+      `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&language=sv&count=1`,
+    );
+    if (!res.ok) return null;
+    const json = (await res.json()) as {
+      results?: Array<{ latitude: number; longitude: number; name: string; admin1?: string }>;
+    };
+    const result = json.results?.[0];
+    if (!result) return null;
+    return {
+      latitude: result.latitude,
+      longitude: result.longitude,
+      name: result.admin1 ? `${result.name}, ${result.admin1}` : result.name,
+    };
+  } catch {
+    return null;
+  }
+}
+
+async function getGeolocationPermission(): Promise<GeoPermissionState> {
+  if (!("permissions" in navigator)) return "unsupported";
+  try {
+    const status = await navigator.permissions.query({ name: "geolocation" });
+    return status.state;
+  } catch {
+    return "unknown";
+  }
+}
+
 export default function WeatherCard() {
   const [state, setState] = useState<WeatherState | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [hasAsked, setHasAsked] = useState(false);
+  const [cityQuery, setCityQuery] = useState("");
+
+  const loadWeather = async (latitude: number, longitude: number, cityFallback?: string) => {
+    try {
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,apparent_temperature,weather_code&timezone=auto`;
+      const [wx, city] = await Promise.all([
+        fetch(url).then((r) => r.json() as Promise<{
+          current?: { temperature_2m: number; apparent_temperature: number; weather_code: number };
+        }>),
+        cityFallback ? Promise.resolve(cityFallback) : reverseGeocode(latitude, longitude),
+      ]);
+      if (!wx.current) {
+        setError("Kunde inte hämta vädret just nu.");
+      } else {
+        setState({
+          temperature: Math.round(wx.current.temperature_2m),
+          apparent: Math.round(wx.current.apparent_temperature),
+          code: wx.current.weather_code,
+          city,
+        });
+      }
+    } catch {
+      setError("Kunde inte hämta vädret just nu.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const load = () => {
     setHasAsked(true);
@@ -66,35 +126,18 @@ export default function WeatherCard() {
       return;
     }
     navigator.geolocation.getCurrentPosition(
-      async (pos) => {
-        try {
-          const { latitude, longitude } = pos.coords;
-          const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,apparent_temperature,weather_code&timezone=auto`;
-          const [wx, city] = await Promise.all([
-            fetch(url).then((r) => r.json() as Promise<{
-              current?: { temperature_2m: number; apparent_temperature: number; weather_code: number };
-            }>),
-            reverseGeocode(latitude, longitude),
-          ]);
-          if (!wx.current) {
-            setError("Kunde inte hämta vädret just nu.");
-          } else {
-            setState({
-              temperature: Math.round(wx.current.temperature_2m),
-              apparent: Math.round(wx.current.apparent_temperature),
-              code: wx.current.weather_code,
-              city,
-            });
-          }
-        } catch {
-          setError("Kunde inte hämta vädret just nu.");
-        } finally {
-          setLoading(false);
-        }
+      (pos) => {
+        const { latitude, longitude } = pos.coords;
+        void loadWeather(latitude, longitude);
       },
-      (err) => {
+      async (err) => {
         if (err.code === err.PERMISSION_DENIED) {
-          setError("Platsåtkomst är nekad eller blockerad för den här sidan.");
+          const permission = await getGeolocationPermission();
+          setError(
+            permission === "denied"
+              ? "Platsåtkomst är nekad i webbläsaren."
+              : "Platsfrågan kunde inte öppnas just nu. Skriv en stad nedan eller försök igen.",
+          );
         } else if (err.code === err.TIMEOUT) {
           setError("Det tog för lång tid att hitta din plats. Tryck för att försöka igen.");
         } else {
@@ -104,6 +147,21 @@ export default function WeatherCard() {
       },
       { enableHighAccuracy: false, timeout: 8000, maximumAge: 15 * 60 * 1000 },
     );
+  };
+
+  const loadCity = async () => {
+    const query = cityQuery.trim();
+    if (!query) return;
+    setHasAsked(true);
+    setError(null);
+    setLoading(true);
+    const city = await lookupCity(query);
+    if (!city) {
+      setError("Jag hittade inte staden. Testa att skriva till exempel Stockholm.");
+      setLoading(false);
+      return;
+    }
+    await loadWeather(city.latitude, city.longitude, city.name);
   };
 
   if (loading) {
@@ -117,11 +175,7 @@ export default function WeatherCard() {
 
   if (error || !state) {
     return (
-      <button
-        type="button"
-        onClick={load}
-        className="w-full text-left rounded-2xl bg-card border border-border p-4 flex items-start gap-3 text-sm hover:bg-secondary/60 active:scale-[0.99] transition"
-      >
+      <div className="w-full rounded-2xl bg-card border border-border p-4 flex items-start gap-3 text-sm">
         <MapPin size={16} className="mt-0.5 shrink-0 text-primary" />
         <div className="flex-1 space-y-1.5">
           <p className="text-foreground font-medium">
@@ -129,11 +183,41 @@ export default function WeatherCard() {
           </p>
           <p className="text-xs text-muted-foreground leading-snug">
             {hasAsked
-              ? "Om ingen fråga visas: tryck på låset/inställningsikonen vid adressfältet och ändra Plats till Tillåt. Ladda sedan om sidan."
+              ? "Om plats ändå inte fungerar kan webbläsaren eller telefonens platstjänster stoppa frågan. Du kan skriva stad istället."
               : "Webbläsarens platsfråga visas först efter att du trycker på kortet."}
           </p>
+          <div className="pt-2 flex flex-col gap-2 sm:flex-row">
+            <button
+              type="button"
+              onClick={load}
+              className="rounded-xl bg-primary px-3 py-2 text-xs font-medium text-primary-foreground active:scale-[0.99] transition"
+            >
+              Använd min plats
+            </button>
+            <form
+              className="flex min-w-0 flex-1 gap-2"
+              onSubmit={(event) => {
+                event.preventDefault();
+                void loadCity();
+              }}
+            >
+              <input
+                value={cityQuery}
+                onChange={(event) => setCityQuery(event.target.value)}
+                placeholder="Skriv stad"
+                className="min-w-0 flex-1 rounded-xl border border-border bg-background px-3 py-2 text-xs text-foreground outline-none focus:ring-2 focus:ring-ring"
+              />
+              <button
+                type="submit"
+                disabled={!cityQuery.trim()}
+                className="rounded-xl bg-secondary px-3 py-2 text-xs font-medium text-secondary-foreground transition disabled:opacity-50"
+              >
+                Visa
+              </button>
+            </form>
+          </div>
         </div>
-      </button>
+      </div>
     );
   }
 
