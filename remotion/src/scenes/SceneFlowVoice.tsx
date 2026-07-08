@@ -4,7 +4,7 @@ import { COLORS, FONTS, SceneShell, SectionEyebrow, SectionTitle, useEntrance } 
 
 const MESSAGES: { text: string; delay: number }[] = [
   {
-    text: "God morgon Camilla 💙\n\nDet ser ut att bli regn idag. Ta gärna med ett paraply.\n\nGlöm inte din medicin innan du går hemifrån.",
+    text: "God morgon Camilla.\n\nDet ser ut att bli regn idag. Ta gärna med ett paraply.\n\nGlöm inte din medicin innan du går hemifrån.",
     delay: 20,
   },
   {
