@@ -25,6 +25,7 @@ const SECTION_BY_PATH: Record<string, string> = {
   "/statistik": "statistik",
   "/beloningar": "beloningar",
   "/assistant": "assistant",
+  "/flowplan": "flowplan",
   "/admin-statistik": "admin",
   "/familj": "familj",
   "/matlista": "matlista",
