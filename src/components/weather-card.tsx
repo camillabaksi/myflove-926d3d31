@@ -121,10 +121,18 @@ export default function WeatherCard() {
       <button
         type="button"
         onClick={load}
-        className="w-full text-left rounded-2xl bg-card border border-border p-4 flex items-start gap-3 text-sm text-muted-foreground hover:bg-secondary/60 active:scale-[0.99] transition"
+        className="w-full text-left rounded-2xl bg-card border border-border p-4 flex items-start gap-3 text-sm hover:bg-secondary/60 active:scale-[0.99] transition"
       >
         <MapPin size={16} className="mt-0.5 shrink-0 text-primary" />
-        <span>{error ?? "Tryck för att visa vädret där du är."}</span>
+        <div className="flex-1 space-y-1.5">
+          <p className="text-foreground font-medium">
+            {error ?? "Tryck för att visa vädret där du är."}
+          </p>
+          <p className="text-xs text-muted-foreground leading-snug">
+            Händer inget? Öppna webbläsarens meny (⋮ i Chrome) → Inställningar →
+            Webbplatsinställningar → Plats, och tillåt för <b>lovable.app</b>. Ladda sedan om sidan.
+          </p>
+        </div>
       </button>
     );
   }
