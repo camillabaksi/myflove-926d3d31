@@ -97,6 +97,8 @@ export default function Home() {
           <p className="text-muted-foreground">Här är en lugn överblick över idag.</p>
         </div>
 
+        <WeatherCard />
+
         <button
           type="button"
           onClick={() => setHelpModalOpen(true)}
