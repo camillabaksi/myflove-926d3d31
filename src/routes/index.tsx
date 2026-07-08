@@ -18,7 +18,7 @@ function LandingPage() {
   const navigate = useNavigate();
   const [checking, setChecking] = useState(true);
   const [downloading, setDownloading] = useState(false);
-  const fetchVideo = useServerFn(downloadVideo);
+  
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -33,7 +33,8 @@ function LandingPage() {
   async function handleDownload() {
     try {
       setDownloading(true);
-      const response = await fetchVideo();
+      const response = await fetch("/myflow-preview.mp4");
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
