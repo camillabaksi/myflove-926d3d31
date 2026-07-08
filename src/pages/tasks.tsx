@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Check, Plus, Trash2, CheckCircle2, Circle, CalendarIcon, Moon, RotateCcw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { getRandomEncouragement } from "@/lib/encouragements";
+import { confirmations } from "@/lib/flow-voice";
 
 export default function Tasks() {
   const { activeTasks, completedTasks, snoozedTasks, addTask, toggleTask, deleteTask, unsnoozeTask } = useTasks();
@@ -16,7 +17,7 @@ export default function Tasks() {
   const handleToggle = (task: Task) => {
     toggleTask(task.id);
     if (!task.completed) {
-      toast({ description: getRandomEncouragement() });
+      toast({ description: `${confirmations.taskDone} ${getRandomEncouragement()}` });
     }
   };
 

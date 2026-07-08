@@ -103,7 +103,7 @@ export default function Medication() {
         {medications.length === 0 ? (
           <div className="border-2 border-dashed border-border rounded-2xl p-10 text-center">
             <Pill size={32} className="mx-auto mb-3 text-muted-foreground" />
-            <p className="text-muted-foreground">Inga mediciner tillagda än.</p>
+            <p className="text-muted-foreground">Inga mediciner tillagda än – lägg till när det passar.</p>
           </div>
         ) : (
           <div className="space-y-4">
