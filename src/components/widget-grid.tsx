@@ -101,7 +101,7 @@ export default function WidgetGrid() {
       value: `${activeItems.length} varor`,
     },
     {
-      href: "/calendar",
+      href: "/kalender",
       icon: Calendar,
       iconBg: "bg-rose-100",
       iconColor: "text-rose-700",
