@@ -2,7 +2,6 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Download } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -17,8 +16,6 @@ export const Route = createFileRoute("/")({
 function LandingPage() {
   const navigate = useNavigate();
   const [checking, setChecking] = useState(true);
-  const [downloading, setDownloading] = useState(false);
-  
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -30,27 +27,6 @@ function LandingPage() {
     });
   }, [navigate]);
 
-  async function handleDownload() {
-    try {
-      setDownloading(true);
-      const response = await fetch("/myflow-preview.mp4");
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "myflow-preview.mp4";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("Nedladdning misslyckades:", error);
-      alert("Kunde inte ladda ner videon just nu.");
-    } finally {
-      setDownloading(false);
-    }
-  }
 
   if (checking) {
     return (
@@ -75,16 +51,6 @@ function LandingPage() {
           </Button>
           <Button asChild size="lg" variant="outline" className="w-full">
             <Link to="/sign-in">Logga in</Link>
-          </Button>
-          <Button
-            size="lg"
-            variant="secondary"
-            className="w-full"
-            onClick={handleDownload}
-            disabled={downloading}
-          >
-            <Download className="size-4" />
-            {downloading ? "Laddar ner…" : "Ladda ner demo-video"}
           </Button>
         </div>
       </div>
