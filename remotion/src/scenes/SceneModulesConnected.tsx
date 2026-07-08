@@ -4,10 +4,10 @@ import { COLORS, FONTS, SceneShell, SectionEyebrow, SectionTitle, SectionSub, us
 
 const MODULES = [
   { label: "Kalender", icon: "▤" },
-  { label: "Ekonomi", icon: "💳" },
+  { label: "Ekonomi", icon: "◈" },
   { label: "Hälsa", icon: "♥" },
-  { label: "Familj", icon: "👪" },
-  { label: "Inköp", icon: "🛒" },
+  { label: "Familj", icon: "☺" },
+  { label: "Inköp", icon: "◉" },
   { label: "Ärenden", icon: "✓" },
   { label: "FlowPlan™", icon: "≡" },
 ];
