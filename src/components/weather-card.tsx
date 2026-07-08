@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Cloud,
   CloudRain,
@@ -10,12 +10,14 @@ import {
   MapPin,
   Loader2,
 } from "lucide-react";
+import { setWeatherSnapshot } from "@/hooks/use-weather";
 
 type WeatherState = {
   temperature: number;
   apparent: number;
   code: number;
   city: string;
+  fetchedAt?: number;
 };
 
 type GeoPermissionState = PermissionState | "unknown" | "unsupported";
@@ -90,6 +92,15 @@ export default function WeatherCard() {
   const [hasAsked, setHasAsked] = useState(false);
   const [cityQuery, setCityQuery] = useState("");
 
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem("flow.weather.snapshot");
+      if (raw) setState(JSON.parse(raw) as WeatherState);
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
   const loadWeather = async (latitude: number, longitude: number, cityFallback?: string) => {
     try {
       const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,apparent_temperature,weather_code&timezone=auto`;
@@ -102,12 +113,15 @@ export default function WeatherCard() {
       if (!wx.current) {
         setError("Kunde inte hämta vädret just nu.");
       } else {
-        setState({
+        const snap = {
           temperature: Math.round(wx.current.temperature_2m),
           apparent: Math.round(wx.current.apparent_temperature),
           code: wx.current.weather_code,
           city,
-        });
+          fetchedAt: Date.now(),
+        };
+        setState(snap);
+        setWeatherSnapshot(snap);
       }
     } catch {
       setError("Kunde inte hämta vädret just nu.");
