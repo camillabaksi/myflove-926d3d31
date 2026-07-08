@@ -92,6 +92,15 @@ export default function WeatherCard() {
   const [hasAsked, setHasAsked] = useState(false);
   const [cityQuery, setCityQuery] = useState("");
 
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem("flow.weather.snapshot");
+      if (raw) setState(JSON.parse(raw) as WeatherState);
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
   const loadWeather = async (latitude: number, longitude: number, cityFallback?: string) => {
     try {
       const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,apparent_temperature,weather_code&timezone=auto`;
