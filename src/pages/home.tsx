@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import Layout from "@/components/layout";
 import OverwhelmedModal from "@/components/overwhelmed-modal";
 import HelpMeModal from "@/components/help-me-modal";
+import WeatherCard from "@/components/weather-card";
 import { Button } from "@/components/ui/button";
 import {
   useFocus,
@@ -95,6 +96,8 @@ export default function Home() {
           <h1 className="text-3xl font-bold">{getGreeting()}</h1>
           <p className="text-muted-foreground">Här är en lugn överblick över idag.</p>
         </div>
+
+        <WeatherCard />
 
         <button
           type="button"
