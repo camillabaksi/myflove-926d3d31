@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Cloud,
   CloudRain,
@@ -10,6 +10,7 @@ import {
   MapPin,
   Loader2,
 } from "lucide-react";
+import { setWeatherSnapshot } from "@/hooks/use-weather";
 
 type WeatherState = {
   temperature: number;
