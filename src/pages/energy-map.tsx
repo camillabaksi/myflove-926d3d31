@@ -1,0 +1,291 @@
+import { useEffect, useMemo, useState } from "react";
+import Layout from "@/components/layout";
+import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import { Battery, Loader2, Sparkles } from "lucide-react";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  CartesianGrid,
+} from "recharts";
+
+interface EnergyLog {
+  id: string;
+  level: number;
+  note: string | null;
+  logged_at: string;
+}
+
+const LEVEL_LABELS: Record<number, string> = {
+  1: "Tom",
+  2: "Låg",
+  3: "Ok",
+  4: "På",
+  5: "Fullt laddad",
+};
+
+const LEVEL_EMOJI: Record<number, string> = {
+  1: "🪫",
+  2: "😮‍💨",
+  3: "🙂",
+  4: "⚡",
+  5: "🔋",
+};
+
+function formatHour(h: number) {
+  return `${String(h).padStart(2, "0")}:00`;
+}
+
+export default function EnergyMapPage() {
+  const [logs, setLogs] = useState<EnergyLog[]>([]);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [selected, setSelected] = useState<number | null>(null);
+  const [note, setNote] = useState("");
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      const { data: userData } = await supabase.auth.getUser();
+      if (!mounted) return;
+      const uid = userData.user?.id ?? null;
+      setUserId(uid);
+      if (!uid) {
+        setLoading(false);
+        return;
+      }
+      const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+      const { data, error: err } = await supabase
+        .from("energy_logs")
+        .select("id, level, note, logged_at")
+        .eq("user_id", uid)
+        .gte("logged_at", sevenDaysAgo)
+        .order("logged_at", { ascending: true });
+      if (!mounted) return;
+      if (err) setError(err.message);
+      else setLogs(data ?? []);
+      setLoading(false);
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const todayLogs = useMemo(() => {
+    const start = new Date();
+    start.setHours(0, 0, 0, 0);
+    return logs
+      .filter((l) => new Date(l.logged_at) >= start)
+      .map((l) => ({
+        time: new Date(l.logged_at).toLocaleTimeString("sv-SE", {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+        level: l.level,
+      }));
+  }, [logs]);
+
+  const hourAverages = useMemo(() => {
+    const buckets: Record<number, { sum: number; n: number }> = {};
+    for (const l of logs) {
+      const h = new Date(l.logged_at).getHours();
+      buckets[h] = buckets[h] || { sum: 0, n: 0 };
+      buckets[h].sum += l.level;
+      buckets[h].n += 1;
+    }
+    return Array.from({ length: 24 }, (_, h) => ({
+      hour: formatHour(h),
+      avg: buckets[h] ? Number((buckets[h].sum / buckets[h].n).toFixed(2)) : 0,
+      n: buckets[h]?.n ?? 0,
+    })).filter((row) => row.n > 0);
+  }, [logs]);
+
+  const peakHour = useMemo(() => {
+    if (hourAverages.length === 0) return null;
+    return [...hourAverages].sort((a, b) => b.avg - a.avg)[0];
+  }, [hourAverages]);
+
+  const lowHour = useMemo(() => {
+    if (hourAverages.length === 0) return null;
+    return [...hourAverages].sort((a, b) => a.avg - b.avg)[0];
+  }, [hourAverages]);
+
+  async function handleSave() {
+    if (!userId || !selected) return;
+    setSaving(true);
+    setError(null);
+    const { data, error: err } = await supabase
+      .from("energy_logs")
+      .insert({
+        user_id: userId,
+        level: selected,
+        note: note.trim() || null,
+      })
+      .select("id, level, note, logged_at")
+      .single();
+    setSaving(false);
+    if (err) {
+      setError(err.message);
+      return;
+    }
+    if (data) setLogs((prev) => [...prev, data]);
+    setSelected(null);
+    setNote("");
+  }
+
+  return (
+    <Layout>
+      <div className="space-y-6">
+        <header className="space-y-1">
+          <div className="flex items-center gap-2">
+            <Battery className="text-primary" size={28} />
+            <h1 className="text-2xl font-semibold tracking-tight">Energikarta</h1>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            Logga hur du känner dig just nu. Flow lär sig när på dygnet du har mest att ge – och när du behöver vila.
+          </p>
+        </header>
+
+        {!userId && !loading && (
+          <div className="rounded-2xl bg-card border border-border p-4 text-sm text-muted-foreground">
+            Logga in för att spara din energi över tid.
+          </div>
+        )}
+
+        {userId && (
+          <section className="rounded-2xl bg-card border border-border p-5 space-y-4 shadow-sm">
+            <div>
+              <h2 className="font-medium">Hur känns det just nu?</h2>
+              <p className="text-xs text-muted-foreground">Välj det som passar närmast – det finns inga fel svar.</p>
+            </div>
+            <div className="grid grid-cols-5 gap-2">
+              {[1, 2, 3, 4, 5].map((lvl) => {
+                const active = selected === lvl;
+                return (
+                  <button
+                    key={lvl}
+                    type="button"
+                    onClick={() => setSelected(lvl)}
+                    className={`flex flex-col items-center justify-center gap-1 rounded-2xl border p-3 transition-all ${
+                      active
+                        ? "bg-primary text-primary-foreground border-primary shadow-sm scale-[1.02]"
+                        : "bg-secondary/40 border-transparent hover:bg-secondary"
+                    }`}
+                  >
+                    <span className="text-2xl leading-none">{LEVEL_EMOJI[lvl]}</span>
+                    <span className="text-[11px] leading-tight">{LEVEL_LABELS[lvl]}</span>
+                  </button>
+                );
+              })}
+            </div>
+            {selected !== null && (
+              <div className="space-y-3 animate-in fade-in slide-in-from-top-1">
+                <textarea
+                  value={note}
+                  onChange={(e) => setNote(e.target.value)}
+                  placeholder="Något som påverkade? (valfritt)"
+                  className="w-full rounded-xl border border-border bg-background p-3 text-sm resize-none"
+                  rows={2}
+                />
+                <div className="flex gap-2">
+                  <Button onClick={handleSave} disabled={saving} className="flex-1">
+                    {saving ? <Loader2 className="animate-spin" size={16} /> : "Spara"}
+                  </Button>
+                  <Button variant="ghost" onClick={() => { setSelected(null); setNote(""); }}>
+                    Avbryt
+                  </Button>
+                </div>
+              </div>
+            )}
+            {error && <p className="text-sm text-destructive">{error}</p>}
+          </section>
+        )}
+
+        {loading ? (
+          <div className="flex items-center justify-center py-12 text-muted-foreground">
+            <Loader2 className="animate-spin" size={20} />
+          </div>
+        ) : (
+          <>
+            <section className="rounded-2xl bg-card border border-border p-5 shadow-sm">
+              <h2 className="font-medium mb-1">Idag</h2>
+              <p className="text-xs text-muted-foreground mb-4">
+                {todayLogs.length === 0
+                  ? "Ingen loggning idag än – lägg en när det passar."
+                  : `${todayLogs.length} loggning${todayLogs.length === 1 ? "" : "ar"} idag.`}
+              </p>
+              {todayLogs.length > 0 && (
+                <div className="h-48">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={todayLogs} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
+                      <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
+                      <XAxis dataKey="time" tick={{ fontSize: 11 }} />
+                      <YAxis domain={[0, 5]} ticks={[1, 2, 3, 4, 5]} tick={{ fontSize: 11 }} />
+                      <Tooltip
+                        formatter={(v: number) => [`${v} – ${LEVEL_LABELS[v]}`, "Energi"]}
+                        contentStyle={{ borderRadius: 12, fontSize: 12 }}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="level"
+                        stroke="hsl(var(--primary))"
+                        strokeWidth={2.5}
+                        dot={{ r: 4, fill: "hsl(var(--primary))" }}
+                        activeDot={{ r: 6 }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              )}
+            </section>
+
+            <section className="rounded-2xl bg-card border border-border p-5 shadow-sm">
+              <h2 className="font-medium mb-1">Din vecka i snitt</h2>
+              <p className="text-xs text-muted-foreground mb-4">
+                Snittenergi per timme, senaste 7 dagarna.
+              </p>
+              {hourAverages.length === 0 ? (
+                <p className="text-sm text-muted-foreground py-6 text-center">
+                  Logga några gånger så börjar din karta ta form.
+                </p>
+              ) : (
+                <>
+                  <div className="h-48">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={hourAverages} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
+                        <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
+                        <XAxis dataKey="hour" tick={{ fontSize: 10 }} interval="preserveStartEnd" />
+                        <YAxis domain={[0, 5]} ticks={[1, 2, 3, 4, 5]} tick={{ fontSize: 11 }} />
+                        <Tooltip
+                          formatter={(v: number) => [v, "Snitt"]}
+                          contentStyle={{ borderRadius: 12, fontSize: 12 }}
+                        />
+                        <Bar dataKey="avg" fill="hsl(var(--primary))" radius={[6, 6, 0, 0]} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                  {peakHour && lowHour && peakHour.hour !== lowHour.hour && (
+                    <div className="mt-4 flex items-start gap-2 rounded-xl bg-secondary/40 p-3 text-sm">
+                      <Sparkles size={16} className="text-primary shrink-0 mt-0.5" />
+                      <p className="leading-snug">
+                        Du är oftast som mest på runt <strong>{peakHour.hour}</strong> och lägre kring <strong>{lowHour.hour}</strong>. Planera det tunga när kroppen är med.
+                      </p>
+                    </div>
+                  )}
+                </>
+              )}
+            </section>
+          </>
+        )}
+      </div>
+    </Layout>
+  );
+}

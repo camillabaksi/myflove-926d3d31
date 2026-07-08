@@ -1,6 +1,6 @@
 import { ReactNode, useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
-import { Home, Target, CheckSquare, ShoppingBag, Smile, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame } from "lucide-react";
+import { Home, Target, CheckSquare, ShoppingBag, Smile, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Battery } from "lucide-react";
 import { useCommuteAlerts } from "@/hooks/use-commute-alerts";
 import { useMedicationAlerts } from "@/hooks/use-medication-alerts";
 import { useShoppingProximityAlerts } from "@/hooks/use-shopping-proximity-alerts";
@@ -30,6 +30,7 @@ const SECTION_BY_PATH: Record<string, string> = {
   "/friktionsindex": "friktionsindex",
   "/familj": "familj",
   "/matlista": "matlista",
+  "/energikarta": "energikarta",
 };
 
 export default function Layout({ children }: LayoutProps) {
@@ -62,8 +63,9 @@ export default function Layout({ children }: LayoutProps) {
     { href: "/statistik", label: "Statistik", icon: BarChart3 },
     { href: "/beloningar", label: "Belöningar", icon: Trophy },
     { href: "/assistant", label: "Hjälp", icon: Sparkles },
-    { href: "/friktionsindex", label: "Friktion", icon: Flame },
-  ];
+      { href: "/friktionsindex", label: "Friktion", icon: Flame },
+      { href: "/energikarta", label: "Energi", icon: Battery },
+    ];
 
   // For mobile bottom bar, we show first 4 items and a "Mer" button
   const mobileNavItems = navItems.slice(0, 4);
