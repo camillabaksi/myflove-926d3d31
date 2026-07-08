@@ -62,8 +62,8 @@ async function lookupStopId(name: string, key: string): Promise<string> {
   const url = `${BASE}/location.name?input=${encodeURIComponent(name)}&format=json&accessId=${key}&maxNo=1`;
   const res = await fetch(url);
   if (!res.ok) throw new Response(`Kunde inte hitta hållplats: ${name}`, { status: 502 });
-  const data = (await res.json()) as ResRobotStop;
-  const stop = data.StopLocation?.[0];
+  const data = (await res.json()) as ResRobotStopResponse;
+  const stop = data.stopLocationOrCoordLocation?.[0]?.StopLocation;
   const id = stop?.extId ?? stop?.id;
   if (!id) throw new Response(`Hittade ingen hållplats för "${name}"`, { status: 404 });
   return id;
@@ -124,8 +124,8 @@ export const getSlNearbyStopFn = createServerFn({ method: "GET" })
     const url = `${BASE}/location.nearbystops?originCoordLat=${data.lat}&originCoordLong=${data.lon}&format=json&accessId=${key}&maxNo=1`;
     const res = await fetch(url);
     if (!res.ok) throw new Response("Kunde inte hitta hållplats nära dig", { status: 502 });
-    const json = (await res.json()) as ResRobotStop;
-    const stop = json.StopLocation?.[0];
+    const json = (await res.json()) as ResRobotStopResponse;
+    const stop = json.stopLocationOrCoordLocation?.[0]?.StopLocation;
     if (!stop?.name) throw new Response("Ingen hållplats hittades i närheten", { status: 404 });
     return { name: stop.name };
   });
