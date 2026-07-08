@@ -93,7 +93,7 @@ export const SceneOutro: React.FC = () => {
           }}
         >
           Du öppnar inte en app. Du möter Flow – en lugn, intelligent följeslagare
-          som hjälper dig genom vardagen. 💙
+          som hjälper dig genom vardagen.
         </div>
         <div
           style={{
