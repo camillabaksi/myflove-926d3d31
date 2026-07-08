@@ -118,11 +118,18 @@ export default function FrictionIndexPage() {
 
   const ranked = useMemo(() => {
     return [...items]
-      .map((it) => ({
-        item: it,
-        votes: voteCounts.get(it.id) ?? 0,
-        score: it.impact * ((voteCounts.get(it.id) ?? 0) + 1),
-      }))
+      .map((it) => {
+        const total = (it.impact ?? 3) + (it.frequency ?? 3) + (it.mental_load ?? 3);
+        const voteBonus = voteCounts.get(it.id) ?? 0;
+        return {
+          item: it,
+          votes: voteBonus,
+          total,
+          priority: priorityFor(total),
+          // Total (3–15) styr huvudsorteringen; röster används som tie-breaker.
+          score: total * 10 + voteBonus,
+        };
+      })
       .sort((a, b) => {
         if (a.item.status === "done" && b.item.status !== "done") return 1;
         if (b.item.status === "done" && a.item.status !== "done") return -1;
@@ -141,13 +148,17 @@ export default function FrictionIndexPage() {
         description: description.trim() || null,
         category,
         impact,
+        frequency,
+        mental_load: mentalLoad,
         reporter_id: userId,
-      });
+      } as never);
       if (insErr) throw insErr;
       setTitle("");
       setDescription("");
       setCategory("ui");
       setImpact(3);
+      setFrequency(3);
+      setMentalLoad(3);
       setShowForm(false);
       await load();
     } catch (e) {
