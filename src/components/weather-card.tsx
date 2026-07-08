@@ -17,6 +17,7 @@ type WeatherState = {
   apparent: number;
   code: number;
   city: string;
+  fetchedAt?: number;
 };
 
 type GeoPermissionState = PermissionState | "unknown" | "unsupported";
