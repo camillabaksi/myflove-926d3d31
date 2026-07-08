@@ -179,11 +179,11 @@ export default function FrictionIndexPage() {
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
-            <Flame className="text-primary" /> Friktionsindex
+            <Flame className="text-primary" /> Feedback & förslag
           </h1>
           <p className="text-muted-foreground">
-            Samla saker som skaver i appen. Rösta upp det som stör flest – högst poäng
-            (påverkan × röster) hamnar överst.
+            Lämna feedback, förslag eller rapportera saker som skaver. Rösta upp det som stör
+            eller behövs mest – högst poäng (påverkan × röster) hamnar överst.
           </p>
         </div>
 
@@ -195,7 +195,7 @@ export default function FrictionIndexPage() {
 
         <div className="flex justify-end">
           <Button onClick={() => setShowForm((s) => !s)} className="rounded-full">
-            <Plus size={16} className="mr-1" /> {showForm ? "Stäng" : "Lägg till friktion"}
+            <Plus size={16} className="mr-1" /> {showForm ? "Stäng" : "Lämna feedback"}
           </Button>
         </div>
 
