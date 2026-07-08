@@ -6,8 +6,6 @@ import HelpMeModal from "@/components/help-me-modal";
 import WeatherCard from "@/components/weather-card";
 import ProactiveSuggestions from "@/components/proactive-suggestions";
 import { Button } from "@/components/ui/button";
-import { useServerFn } from "@tanstack/react-start";
-import { downloadVideo } from "@/lib/video.functions";
 import {
   useFocus,
   useTasks,
@@ -55,12 +53,12 @@ export default function Home() {
   const [overwhelmedOpen, setOverwhelmedOpen] = useState(false);
   const [helpPlan, setHelpPlan] = useState<HelpPlan | null>(null);
   const [downloading, setDownloading] = useState(false);
-  const fetchVideo = useServerFn(downloadVideo);
 
   async function handleDownloadVideo() {
     try {
       setDownloading(true);
-      const response = await fetchVideo();
+      const response = await fetch("/myflow-preview.mp4");
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
