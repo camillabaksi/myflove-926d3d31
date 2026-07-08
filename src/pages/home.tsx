@@ -28,7 +28,6 @@ import {
   Sparkles,
   ArrowRight,
   ShoppingBag,
-  Download,
 } from "lucide-react";
 
 function sortTasksByPriority(tasks: Task[]): Task[] {
