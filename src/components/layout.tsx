@@ -187,7 +187,7 @@ export default function Layout({ children }: LayoutProps) {
           </div>
         )}
 
-        <div className="flex-1 overflow-y-auto pb-24 md:pb-8">
+        <div className="flex-1 overflow-y-auto pb-24 md:pb-8" style={CATEGORY_THEMES[location] as React.CSSProperties}>
           <div className="max-w-2xl mx-auto w-full p-4 md:p-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             {children}
           </div>
