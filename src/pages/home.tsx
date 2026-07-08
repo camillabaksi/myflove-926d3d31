@@ -212,7 +212,7 @@ export default function Home() {
               </Link>
 
               <Link
-                href="/calendar"
+                href="/kalender"
                 className="flex items-center gap-4 p-5 bg-card border border-border rounded-2xl shadow-sm hover:border-primary/40 transition-colors"
               >
                 <div className="w-12 h-12 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center shrink-0">
