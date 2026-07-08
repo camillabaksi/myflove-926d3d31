@@ -23,6 +23,7 @@ import { Route as AppMedicinRouteImport } from './routes/_app.medicin'
 import { Route as AppMatlistaRouteImport } from './routes/_app.matlista'
 import { Route as AppKalenderRouteImport } from './routes/_app.kalender'
 import { Route as AppHemRouteImport } from './routes/_app.hem'
+import { Route as AppFriktionsindexRouteImport } from './routes/_app.friktionsindex'
 import { Route as AppFokusRouteImport } from './routes/_app.fokus'
 import { Route as AppFlowplanRouteImport } from './routes/_app.flowplan'
 import { Route as AppFinancesRouteImport } from './routes/_app.finances'
@@ -101,6 +102,11 @@ const AppHemRoute = AppHemRouteImport.update({
   path: '/hem',
   getParentRoute: () => AppRoute,
 } as any)
+const AppFriktionsindexRoute = AppFriktionsindexRouteImport.update({
+  id: '/friktionsindex',
+  path: '/friktionsindex',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppFokusRoute = AppFokusRouteImport.update({
   id: '/fokus',
   path: '/fokus',
@@ -154,6 +160,7 @@ export interface FileRoutesByFullPath {
   '/finances': typeof AppFinancesRoute
   '/flowplan': typeof AppFlowplanRoute
   '/fokus': typeof AppFokusRoute
+  '/friktionsindex': typeof AppFriktionsindexRoute
   '/hem': typeof AppHemRoute
   '/kalender': typeof AppKalenderRoute
   '/matlista': typeof AppMatlistaRoute
@@ -177,6 +184,7 @@ export interface FileRoutesByTo {
   '/finances': typeof AppFinancesRoute
   '/flowplan': typeof AppFlowplanRoute
   '/fokus': typeof AppFokusRoute
+  '/friktionsindex': typeof AppFriktionsindexRoute
   '/hem': typeof AppHemRoute
   '/kalender': typeof AppKalenderRoute
   '/matlista': typeof AppMatlistaRoute
@@ -202,6 +210,7 @@ export interface FileRoutesById {
   '/_app/finances': typeof AppFinancesRoute
   '/_app/flowplan': typeof AppFlowplanRoute
   '/_app/fokus': typeof AppFokusRoute
+  '/_app/friktionsindex': typeof AppFriktionsindexRoute
   '/_app/hem': typeof AppHemRoute
   '/_app/kalender': typeof AppKalenderRoute
   '/_app/matlista': typeof AppMatlistaRoute
@@ -227,6 +236,7 @@ export interface FileRouteTypes {
     | '/finances'
     | '/flowplan'
     | '/fokus'
+    | '/friktionsindex'
     | '/hem'
     | '/kalender'
     | '/matlista'
@@ -250,6 +260,7 @@ export interface FileRouteTypes {
     | '/finances'
     | '/flowplan'
     | '/fokus'
+    | '/friktionsindex'
     | '/hem'
     | '/kalender'
     | '/matlista'
@@ -274,6 +285,7 @@ export interface FileRouteTypes {
     | '/_app/finances'
     | '/_app/flowplan'
     | '/_app/fokus'
+    | '/_app/friktionsindex'
     | '/_app/hem'
     | '/_app/kalender'
     | '/_app/matlista'
@@ -393,6 +405,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppHemRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/friktionsindex': {
+      id: '/_app/friktionsindex'
+      path: '/friktionsindex'
+      fullPath: '/friktionsindex'
+      preLoaderRoute: typeof AppFriktionsindexRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/fokus': {
       id: '/_app/fokus'
       path: '/fokus'
@@ -461,6 +480,7 @@ interface AppRouteChildren {
   AppFinancesRoute: typeof AppFinancesRoute
   AppFlowplanRoute: typeof AppFlowplanRoute
   AppFokusRoute: typeof AppFokusRoute
+  AppFriktionsindexRoute: typeof AppFriktionsindexRoute
   AppHemRoute: typeof AppHemRoute
   AppKalenderRoute: typeof AppKalenderRoute
   AppMatlistaRoute: typeof AppMatlistaRoute
@@ -482,6 +502,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppFinancesRoute: AppFinancesRoute,
   AppFlowplanRoute: AppFlowplanRoute,
   AppFokusRoute: AppFokusRoute,
+  AppFriktionsindexRoute: AppFriktionsindexRoute,
   AppHemRoute: AppHemRoute,
   AppKalenderRoute: AppKalenderRoute,
   AppMatlistaRoute: AppMatlistaRoute,
