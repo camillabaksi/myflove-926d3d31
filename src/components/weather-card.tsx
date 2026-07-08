@@ -55,8 +55,9 @@ export default function WeatherCard() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    let cancelled = false;
+  const load = () => {
+    setError(null);
+    setLoading(true);
     if (!("geolocation" in navigator)) {
       setError("Din enhet stöder inte platsdelning.");
       setLoading(false);
@@ -73,7 +74,6 @@ export default function WeatherCard() {
             }>),
             reverseGeocode(latitude, longitude),
           ]);
-          if (cancelled) return;
           if (!wx.current) {
             setError("Kunde inte hämta vädret just nu.");
           } else {
@@ -85,21 +85,26 @@ export default function WeatherCard() {
             });
           }
         } catch {
-          if (!cancelled) setError("Kunde inte hämta vädret just nu.");
+          setError("Kunde inte hämta vädret just nu.");
         } finally {
-          if (!cancelled) setLoading(false);
+          setLoading(false);
         }
       },
-      () => {
-        if (cancelled) return;
-        setError("Ge platsåtkomst för att se vädret där du är.");
+      (err) => {
+        if (err.code === err.PERMISSION_DENIED) {
+          setError("Platsåtkomst är blockerad. Tillåt plats i webbläsarens inställningar och tryck här igen.");
+        } else {
+          setError("Kunde inte hitta din plats. Tryck för att försöka igen.");
+        }
         setLoading(false);
       },
       { enableHighAccuracy: false, timeout: 8000, maximumAge: 15 * 60 * 1000 },
     );
-    return () => {
-      cancelled = true;
-    };
+  };
+
+  useEffect(() => {
+    load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (loading) {
@@ -113,10 +118,14 @@ export default function WeatherCard() {
 
   if (error || !state) {
     return (
-      <div className="rounded-2xl bg-card border border-border p-4 flex items-start gap-3 text-sm text-muted-foreground">
-        <MapPin size={16} className="mt-0.5 shrink-0" />
-        <span>{error ?? "Inget väder att visa just nu."}</span>
-      </div>
+      <button
+        type="button"
+        onClick={load}
+        className="w-full text-left rounded-2xl bg-card border border-border p-4 flex items-start gap-3 text-sm text-muted-foreground hover:bg-secondary/60 active:scale-[0.99] transition"
+      >
+        <MapPin size={16} className="mt-0.5 shrink-0 text-primary" />
+        <span>{error ?? "Tryck för att visa vädret där du är."}</span>
+      </button>
     );
   }
 
