@@ -208,9 +208,17 @@ export default function FrictionIndexPage() {
             <Flame className="text-primary" /> Feedback & förslag
           </h1>
           <p className="text-muted-foreground">
-            Lämna feedback, förslag eller rapportera saker som skaver. Rösta upp det som stör
-            eller behövs mest – högst poäng (påverkan × röster) hamnar överst.
+            Lämna feedback, förslag eller rapportera saker som skaver. Varje friktion bedöms på
+            tre skalor – <strong>påverkan</strong>, <strong>frekvens</strong> och{" "}
+            <strong>mental belastning</strong> (1–5 vardera) – som ger en totalpoäng 3–15.
+            Röster används som tiebreaker.
           </p>
+          <div className="mt-3 flex flex-wrap gap-2 text-xs">
+            <span className="px-2 py-1 rounded-full border bg-destructive/15 text-destructive border-destructive/30">Kritisk 13–15</span>
+            <span className="px-2 py-1 rounded-full border bg-orange-100 text-orange-800 border-orange-200">Hög 10–12</span>
+            <span className="px-2 py-1 rounded-full border bg-amber-100 text-amber-800 border-amber-200">Medel 6–9</span>
+            <span className="px-2 py-1 rounded-full border bg-secondary text-muted-foreground border-border">Låg 3–5</span>
+          </div>
         </div>
 
         {error && (
