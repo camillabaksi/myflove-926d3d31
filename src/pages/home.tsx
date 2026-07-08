@@ -347,6 +347,16 @@ export default function Home() {
         >
           Jag är överväldigad — hjälp mig prioritera
         </Button>
+
+        <Button
+          variant="ghost"
+          onClick={handleDownloadVideo}
+          disabled={downloading}
+          className="w-full h-12 rounded-2xl"
+        >
+          <Download className="size-4" />
+          {downloading ? "Laddar ner…" : "Ladda ner demo-video"}
+        </Button>
       </div>
 
       <HelpMeModal
