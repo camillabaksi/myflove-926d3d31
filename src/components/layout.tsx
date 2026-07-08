@@ -64,30 +64,8 @@ export default function Layout({ children }: LayoutProps) {
   const { alerts: medicationAlerts, dismissAlert: dismissMedicationAlert } = useMedicationAlerts();
   const { alerts: proximityAlerts, dismissAlert: dismissProximityAlert } = useShoppingProximityAlerts();
   const { isAdmin } = useIsAdmin();
-  const [downloading, setDownloading] = useState(false);
 
-  async function handleDownloadVideo() {
-    if (downloading) return;
-    setDownloading(true);
-    try {
-      const response = await fetch("/myflow-preview.mp4");
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "myflow-preview.mp4";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    } catch (e) {
-      console.error("download failed", e);
-      alert("Kunde inte ladda ner videon.");
-    } finally {
-      setDownloading(false);
-    }
-  }
+
 
   useEffect(() => {
     const section = SECTION_BY_PATH[location] ?? (location.replace(/^\//, "") || "home");
