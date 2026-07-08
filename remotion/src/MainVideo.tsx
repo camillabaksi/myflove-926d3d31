@@ -87,8 +87,8 @@ export const MainVideo: React.FC = () => {
             features={[
               { icon: "⇩", label: "Dumping", desc: "Tanketömning på 5 sek." },
               { icon: "📊", label: "Statistik", desc: "Mönster du själv missar." },
-              { icon: "✨", label: "Hjälp-AI", desc: "Bollplank, alltid vaken." },
-              { icon: "🔥", label: "Feedback", desc: "Rösta upp det som ska fixas." },
+              { icon: "✦", label: "Hjälp-AI", desc: "Bollplank, alltid vaken." },
+              { icon: "♥", label: "Feedback", desc: "Rösta upp det som ska fixas." },
             ]}
           />
         </TransitionSeries.Sequence>
