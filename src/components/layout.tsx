@@ -66,6 +66,31 @@ export default function Layout({ children }: LayoutProps) {
   const { alerts: medicationAlerts, dismissAlert: dismissMedicationAlert } = useMedicationAlerts();
   const { alerts: proximityAlerts, dismissAlert: dismissProximityAlert } = useShoppingProximityAlerts();
   const { isAdmin } = useIsAdmin();
+  const fetchVideo = useServerFn(downloadVideo);
+  const [downloading, setDownloading] = useState(false);
+
+  async function handleDownloadVideo() {
+    if (downloading) return;
+    setDownloading(true);
+    try {
+      const res = await fetchVideo();
+      const bytes = Uint8Array.from(atob(res.base64), (c) => c.charCodeAt(0));
+      const blob = new Blob([bytes], { type: res.contentType });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = res.filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error("download failed", e);
+      alert("Kunde inte ladda ner videon.");
+    } finally {
+      setDownloading(false);
+    }
+  }
 
   useEffect(() => {
     const section = SECTION_BY_PATH[location] ?? (location.replace(/^\//, "") || "home");
