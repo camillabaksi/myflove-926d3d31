@@ -291,18 +291,6 @@ export default function Layout({ children }: LayoutProps) {
                   );
                 })}
               </div>
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  handleDownloadVideo();
-                }}
-                disabled={downloading}
-                className="mt-6 w-full flex items-center justify-center gap-2 rounded-2xl px-4 py-3 bg-primary text-primary-foreground font-medium disabled:opacity-60"
-              >
-                <Download size={18} />
-                <span>{downloading ? "Laddar ner…" : "Ladda ner demo-video"}</span>
-              </button>
             </div>
           </div>
         </div>
