@@ -103,12 +103,15 @@ export default function WeatherCard() {
       if (!wx.current) {
         setError("Kunde inte hämta vädret just nu.");
       } else {
-        setState({
+        const snap = {
           temperature: Math.round(wx.current.temperature_2m),
           apparent: Math.round(wx.current.apparent_temperature),
           code: wx.current.weather_code,
           city,
-        });
+          fetchedAt: Date.now(),
+        };
+        setState(snap);
+        setWeatherSnapshot(snap);
       }
     } catch {
       setError("Kunde inte hämta vädret just nu.");
