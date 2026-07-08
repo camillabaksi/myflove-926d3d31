@@ -73,13 +73,12 @@ export default function Layout({ children }: LayoutProps) {
     if (downloading) return;
     setDownloading(true);
     try {
-      const res = await fetchVideo();
-      const bytes = Uint8Array.from(atob(res.base64), (c) => c.charCodeAt(0));
-      const blob = new Blob([bytes], { type: res.contentType });
+      const response = await fetchVideo();
+      const blob = await response.blob();
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = res.filename;
+      a.download = "myflow-preview.mp4";
       document.body.appendChild(a);
       a.click();
       a.remove();
