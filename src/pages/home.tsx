@@ -14,6 +14,7 @@ import {
 } from "@/hooks/use-data";
 import { useSharedShoppingList } from "@/hooks/use-shared-shopping-list";
 import { getGreeting } from "@/lib/greeting";
+import { emptyState } from "@/lib/flow-voice";
 import { buildHelpPlan, type HelpFeelingId, type HelpPlan } from "@/lib/help-me";
 import {
   HeartHandshake,
@@ -159,7 +160,7 @@ export default function Home() {
 
           {visibleTasks.length === 0 && !currentFocus ? (
             <div className="text-center py-8 text-muted-foreground bg-secondary/30 rounded-2xl border border-dashed border-border">
-              Inget att göra är inplanerat just nu. Det är okej att bara vara.
+              {emptyState.tasks}
             </div>
           ) : (
             <div className="space-y-3">
