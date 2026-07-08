@@ -1,18 +1,81 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Layout from "@/components/layout";
-import { useTasks, Task } from "@/hooks/use-data";
+import { useTasks, Task, TaskKind, TaskStatus } from "@/hooks/use-data";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Check, Plus, Trash2, CheckCircle2, Circle, CalendarIcon, Moon, RotateCcw } from "lucide-react";
+import {
+  Plus,
+  Trash2,
+  CheckCircle2,
+  Circle,
+  CalendarIcon,
+  Moon,
+  RotateCcw,
+  Clock,
+  Pause,
+  Check,
+  ListChecks,
+  Briefcase,
+  FolderKanban,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { getRandomEncouragement } from "@/lib/encouragements";
 import { confirmations } from "@/lib/flow-voice";
 
+// Blueprint 2.0 §7.4: Uppgift / Ärende / Projekt.
+const KIND_META: Record<TaskKind, { label: string; hint: string; Icon: typeof ListChecks }> = {
+  uppgift: { label: "Uppgift", hint: "Något enkelt du kan bocka av", Icon: ListChecks },
+  arende:  { label: "Ärende",  hint: "Kräver flera steg eller väntetid", Icon: Briefcase },
+  projekt: { label: "Projekt", hint: "Större sak med flera delar", Icon: FolderKanban },
+};
+
+const STATUS_META: Record<TaskStatus, { label: string; Icon: typeof Clock; badge: string }> = {
+  pagar:  { label: "Pågår",     Icon: Clock, badge: "bg-primary/10 text-primary border-primary/20" },
+  vantar: { label: "Väntar på", Icon: Pause, badge: "bg-amber-100 text-amber-800 border-amber-200" },
+  klart:  { label: "Klart",     Icon: Check, badge: "bg-secondary text-muted-foreground border-border" },
+};
+
+function getKind(t: Task): TaskKind { return t.kind ?? "uppgift"; }
+function getStatus(t: Task): TaskStatus {
+  if (t.completed) return "klart";
+  return t.status ?? "pagar";
+}
+
 export default function Tasks() {
-  const { activeTasks, completedTasks, snoozedTasks, addTask, toggleTask, deleteTask, unsnoozeTask } = useTasks();
+  const {
+    activeTasks,
+    completedTasks,
+    snoozedTasks,
+    addTask,
+    toggleTask,
+    deleteTask,
+    unsnoozeTask,
+    setTaskStatus,
+    setTaskKind,
+    addTaskStep,
+    toggleTaskStep,
+    deleteTaskStep,
+  } = useTasks();
   const { toast } = useToast();
+
   const [newTask, setNewTask] = useState("");
   const [dueDate, setDueDate] = useState("");
+  const [newKind, setNewKind] = useState<TaskKind>("uppgift");
+
+  const [filter, setFilter] = useState<"all" | TaskKind>("all");
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
+  const [stepDrafts, setStepDrafts] = useState<Record<string, string>>({});
+  const [waitingDrafts, setWaitingDrafts] = useState<Record<string, string>>({});
+
+  const toggleExpand = (id: string) => {
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  };
 
   const handleToggle = (task: Task) => {
     toggleTask(task.id);
@@ -24,10 +87,216 @@ export default function Tasks() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (newTask.trim()) {
-      addTask(newTask.trim(), dueDate || undefined);
+      addTask(newTask.trim(), dueDate || undefined, { kind: newKind });
       setNewTask("");
       setDueDate("");
+      setNewKind("uppgift");
     }
+  };
+
+  const filteredActive = useMemo(
+    () => filter === "all" ? activeTasks : activeTasks.filter((t) => getKind(t) === filter),
+    [activeTasks, filter]
+  );
+
+  const grouped = useMemo(() => {
+    const waiting = filteredActive.filter((t) => getStatus(t) === "vantar");
+    const doing   = filteredActive.filter((t) => getStatus(t) === "pagar");
+    return { waiting, doing };
+  }, [filteredActive]);
+
+  const kindTabs: Array<{ id: "all" | TaskKind; label: string }> = [
+    { id: "all", label: "Allt" },
+    { id: "uppgift", label: "Uppgifter" },
+    { id: "arende", label: "Ärenden" },
+    { id: "projekt", label: "Projekt" },
+  ];
+
+  const renderTask = (task: Task) => {
+    const kind = getKind(task);
+    const status = getStatus(task);
+    const KindIcon = KIND_META[kind].Icon;
+    const StatusIcon = STATUS_META[status].Icon;
+    const isOpen = expanded.has(task.id);
+    const steps = task.steps ?? [];
+    const stepsDone = steps.filter((s) => s.done).length;
+
+    return (
+      <div
+        key={task.id}
+        className="group bg-card border border-border rounded-2xl shadow-sm hover:border-primary/30 transition-colors overflow-hidden"
+      >
+        <div className="flex items-start gap-3 p-4">
+          <button
+            onClick={() => handleToggle(task)}
+            className="mt-1 text-muted-foreground hover:text-primary transition-colors shrink-0"
+            aria-label="Markera klart"
+          >
+            <Circle size={26} strokeWidth={1.5} />
+          </button>
+
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 flex-wrap mb-1">
+              <span className={`inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full border ${STATUS_META[status].badge}`}>
+                <StatusIcon size={11} /> {STATUS_META[status].label}
+              </span>
+              <span className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full bg-secondary/60 text-muted-foreground border border-border">
+                <KindIcon size={11} /> {KIND_META[kind].label}
+              </span>
+              {task.dueDate && (
+                <span className="inline-flex items-center gap-1 text-[11px] text-primary font-medium">
+                  <CalendarIcon size={11} /> {task.dueDate}
+                </span>
+              )}
+              {steps.length > 0 && (
+                <span className="text-[11px] text-muted-foreground">
+                  {stepsDone}/{steps.length} delsteg
+                </span>
+              )}
+            </div>
+
+            <p className="text-base leading-snug">{task.title}</p>
+
+            {status === "vantar" && task.waitingOn && (
+              <p className="text-xs text-amber-800 mt-1">Väntar på: <strong>{task.waitingOn}</strong></p>
+            )}
+
+            {/* Status-switcher (Blueprint status: Pågår / Väntar på / Klart) */}
+            <div className="mt-3 flex flex-wrap gap-1.5">
+              {(Object.keys(STATUS_META) as TaskStatus[]).map((s) => {
+                const active = s === status;
+                const Icon = STATUS_META[s].Icon;
+                return (
+                  <button
+                    key={s}
+                    type="button"
+                    onClick={() => {
+                      if (s === "vantar" && !task.waitingOn) {
+                        toggleExpand(task.id);
+                      }
+                      setTaskStatus(task.id, s);
+                    }}
+                    className={`inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full border transition-colors ${
+                      active
+                        ? "bg-primary text-primary-foreground border-primary"
+                        : "bg-background text-muted-foreground border-border hover:text-foreground"
+                    }`}
+                  >
+                    <Icon size={12} /> {STATUS_META[s].label}
+                  </button>
+                );
+              })}
+
+              {(kind === "arende" || kind === "projekt" || steps.length > 0) && (
+                <button
+                  type="button"
+                  onClick={() => toggleExpand(task.id)}
+                  className="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full border border-border text-muted-foreground hover:text-foreground ml-auto"
+                >
+                  {isOpen ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+                  Delsteg
+                </button>
+              )}
+            </div>
+          </div>
+
+          <button
+            onClick={() => deleteTask(task.id)}
+            className="p-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-xl transition-colors md:opacity-0 md:group-hover:opacity-100 shrink-0"
+            aria-label="Ta bort"
+          >
+            <Trash2 size={18} />
+          </button>
+        </div>
+
+        {isOpen && (
+          <div className="border-t border-border bg-secondary/20 p-4 space-y-3">
+            {/* Kind-swap */}
+            <div className="flex flex-wrap gap-1.5 text-xs">
+              <span className="text-muted-foreground self-center mr-1">Typ:</span>
+              {(Object.keys(KIND_META) as TaskKind[]).map((k) => (
+                <button
+                  key={k}
+                  type="button"
+                  onClick={() => setTaskKind(task.id, k)}
+                  className={`px-2.5 py-1 rounded-full border transition-colors ${
+                    k === kind
+                      ? "bg-primary/10 text-primary border-primary/30"
+                      : "bg-background text-muted-foreground border-border hover:text-foreground"
+                  }`}
+                >
+                  {KIND_META[k].label}
+                </button>
+              ))}
+            </div>
+
+            {/* Waiting-on */}
+            {status === "vantar" && (
+              <div className="flex gap-2">
+                <Input
+                  value={waitingDrafts[task.id] ?? task.waitingOn ?? ""}
+                  onChange={(e) => setWaitingDrafts((d) => ({ ...d, [task.id]: e.target.value }))}
+                  onBlur={(e) => setTaskStatus(task.id, "vantar", e.target.value)}
+                  placeholder="Vem eller vad väntar du på?"
+                  className="h-10 rounded-xl text-sm bg-background"
+                />
+              </div>
+            )}
+
+            {/* Steps */}
+            <div className="space-y-2">
+              {steps.map((step) => (
+                <div key={step.id} className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => toggleTaskStep(task.id, step.id)}
+                    className="text-muted-foreground hover:text-primary"
+                    aria-label={step.done ? "Ångra" : "Klar"}
+                  >
+                    {step.done ? (
+                      <CheckCircle2 size={20} className="text-primary" />
+                    ) : (
+                      <Circle size={20} />
+                    )}
+                  </button>
+                  <span className={`flex-1 text-sm ${step.done ? "line-through text-muted-foreground" : ""}`}>
+                    {step.title}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => deleteTaskStep(task.id, step.id)}
+                    className="p-1.5 text-muted-foreground hover:text-destructive rounded-lg"
+                    aria-label="Ta bort delsteg"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              ))}
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const draft = (stepDrafts[task.id] ?? "").trim();
+                  if (!draft) return;
+                  addTaskStep(task.id, draft);
+                  setStepDrafts((d) => ({ ...d, [task.id]: "" }));
+                }}
+                className="flex gap-2"
+              >
+                <Input
+                  value={stepDrafts[task.id] ?? ""}
+                  onChange={(e) => setStepDrafts((d) => ({ ...d, [task.id]: e.target.value }))}
+                  placeholder="Lägg till delsteg"
+                  className="h-10 rounded-xl text-sm bg-background"
+                />
+                <Button type="submit" size="sm" variant="secondary" className="rounded-xl">
+                  <Plus size={16} />
+                </Button>
+              </form>
+            </div>
+          </div>
+        )}
+      </div>
+    );
   };
 
   return (
@@ -35,128 +304,155 @@ export default function Tasks() {
       <div className="space-y-8">
         <div>
           <h1 className="text-3xl font-bold mb-2">Att göra</h1>
-          <p className="text-muted-foreground">Skriv ner det du behöver komma ihåg, ta det i din egen takt.</p>
+          <p className="text-muted-foreground">
+            Skilj på uppgifter (bocka av), ärenden (flera steg eller väntetid) och projekt.
+            Sätt status <em>Pågår</em>, <em>Väntar på</em> eller <em>Klart</em> — så håller du reda utan att bära allt i huvudet.
+          </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-3 bg-card p-4 rounded-3xl border border-border shadow-sm">
-          <Input
-            value={newTask}
-            onChange={(e) => setNewTask(e.target.value)}
-            placeholder="Vad behöver du göra?"
-            className="h-14 rounded-2xl text-lg bg-secondary/50 border-transparent focus-visible:ring-primary md:flex-1"
-          />
-          <div className="flex gap-3">
-            <div className="relative flex-1 md:w-48">
-              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-                <CalendarIcon size={18} />
+        <form onSubmit={handleSubmit} className="bg-card p-4 rounded-3xl border border-border shadow-sm space-y-3">
+          <div className="flex flex-col md:flex-row gap-3">
+            <Input
+              value={newTask}
+              onChange={(e) => setNewTask(e.target.value)}
+              placeholder="Vad behöver du göra?"
+              className="h-14 rounded-2xl text-lg bg-secondary/50 border-transparent focus-visible:ring-primary md:flex-1"
+            />
+            <div className="flex gap-3">
+              <div className="relative flex-1 md:w-48">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                  <CalendarIcon size={18} />
+                </div>
+                <Input
+                  type="date"
+                  value={dueDate}
+                  onChange={(e) => setDueDate(e.target.value)}
+                  className="h-14 rounded-2xl text-base bg-secondary/50 border-transparent focus-visible:ring-primary pl-10 w-full"
+                />
               </div>
-              <Input
-                type="date"
-                value={dueDate}
-                onChange={(e) => setDueDate(e.target.value)}
-                className="h-14 rounded-2xl text-base bg-secondary/50 border-transparent focus-visible:ring-primary pl-10 w-full"
-              />
+              <Button
+                type="submit"
+                disabled={!newTask.trim()}
+                className="h-14 px-6 rounded-2xl shadow-sm shrink-0"
+              >
+                <Plus size={24} className="md:mr-2" />
+                <span className="hidden md:inline">Lägg till</span>
+              </Button>
             </div>
-            <Button 
-              type="submit" 
-              disabled={!newTask.trim()}
-              className="h-14 px-6 rounded-2xl shadow-sm shrink-0"
-            >
-              <Plus size={24} className="md:mr-2" />
-              <span className="hidden md:inline">Lägg till</span>
-            </Button>
+          </div>
+          <div className="flex flex-wrap gap-1.5">
+            {(Object.keys(KIND_META) as TaskKind[]).map((k) => {
+              const active = k === newKind;
+              const Icon = KIND_META[k].Icon;
+              return (
+                <button
+                  key={k}
+                  type="button"
+                  onClick={() => setNewKind(k)}
+                  className={`inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full border transition-colors ${
+                    active
+                      ? "bg-primary/10 text-primary border-primary/30"
+                      : "bg-background text-muted-foreground border-border hover:text-foreground"
+                  }`}
+                  title={KIND_META[k].hint}
+                >
+                  <Icon size={13} /> {KIND_META[k].label}
+                </button>
+              );
+            })}
           </div>
         </form>
 
-        <div className="space-y-6">
-          {activeTasks.length === 0 && completedTasks.length === 0 && (
+        {/* Kind-filter */}
+        <div className="flex flex-wrap gap-1.5">
+          {kindTabs.map((tab) => (
+            <button
+              key={tab.id}
+              type="button"
+              onClick={() => setFilter(tab.id)}
+              className={`text-sm px-3 py-1.5 rounded-full border transition-colors ${
+                filter === tab.id
+                  ? "bg-primary text-primary-foreground border-primary"
+                  : "bg-background text-muted-foreground border-border hover:text-foreground"
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="space-y-8">
+          {filteredActive.length === 0 && completedTasks.length === 0 && (
             <div className="text-center py-16 text-muted-foreground border-2 border-dashed border-border rounded-3xl">
               <p className="text-lg">Inget att göra just nu.</p>
               <p className="text-sm mt-2 opacity-70">Ta en paus och andas.</p>
             </div>
           )}
 
-          {activeTasks.length > 0 && (
-            <div className="space-y-3">
-              {activeTasks.map(task => (
-                <div 
-                  key={task.id}
-                  className="group flex flex-col md:flex-row md:items-center justify-between p-4 bg-card border border-border rounded-2xl shadow-sm hover:border-primary/30 transition-colors gap-3 md:gap-0"
-                >
-                  <button 
-                    onClick={() => handleToggle(task)}
-                    className="flex items-center gap-4 flex-1 text-left"
+          {grouped.doing.length > 0 && (
+            <section className="space-y-3">
+              <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2">
+                <Clock size={14} /> Pågår
+              </h2>
+              {grouped.doing.map(renderTask)}
+            </section>
+          )}
+
+          {grouped.waiting.length > 0 && (
+            <section className="space-y-3">
+              <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2">
+                <Pause size={14} /> Väntar på
+              </h2>
+              {grouped.waiting.map(renderTask)}
+            </section>
+          )}
+
+          {completedTasks.length > 0 && (
+            <section className="space-y-3 pt-6 border-t border-border">
+              <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2">
+                <Check size={14} /> Avklarat
+              </h2>
+              {completedTasks
+                .filter((t) => filter === "all" || getKind(t) === filter)
+                .map((task) => (
+                  <div
+                    key={task.id}
+                    className="flex items-center justify-between p-4 bg-card/50 border border-border/50 rounded-2xl opacity-70"
                   >
-                    <div className="text-muted-foreground group-hover:text-primary transition-colors shrink-0">
-                      <Circle size={28} strokeWidth={1.5} />
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-lg">{task.title}</span>
-                      {task.dueDate && (
-                        <span className="text-sm text-primary font-medium flex items-center gap-1.5 mt-0.5">
-                          <CalendarIcon size={16} />
-                          {task.dueDate === new Date().toLocaleDateString('sv-SE').split(' ')[0] ? "Idag" : task.dueDate}
+                    <button
+                      onClick={() => handleToggle(task)}
+                      className="flex items-center gap-4 flex-1 text-left"
+                    >
+                      <div className="text-primary shrink-0">
+                        <CheckCircle2 size={28} className="fill-primary/20" strokeWidth={2} />
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-lg line-through">{task.title}</span>
+                        <span className="text-xs text-muted-foreground">
+                          {KIND_META[getKind(task)].label}
+                          {task.dueDate ? ` · ${task.dueDate}` : ""}
                         </span>
-                      )}
-                    </div>
-                  </button>
-                  <div className="flex justify-end md:block">
-                    <button 
+                      </div>
+                    </button>
+                    <button
                       onClick={() => deleteTask(task.id)}
-                      className="p-3 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-xl transition-colors md:opacity-0 md:group-hover:opacity-100"
+                      className="p-3 text-muted-foreground hover:text-destructive rounded-xl transition-colors"
                       aria-label="Ta bort"
                     >
                       <Trash2 size={20} />
                     </button>
                   </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {completedTasks.length > 0 && (
-            <div className="space-y-3 pt-6 border-t border-border">
-              <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2">Avklarat</h2>
-              {completedTasks.map(task => (
-                <div 
-                  key={task.id}
-                  className="flex items-center justify-between p-4 bg-card/50 border border-border/50 rounded-2xl opacity-70"
-                >
-                  <button 
-                    onClick={() => handleToggle(task)}
-                    className="flex items-center gap-4 flex-1 text-left"
-                  >
-                    <div className="text-primary shrink-0">
-                      <CheckCircle2 size={28} className="fill-primary/20" strokeWidth={2} />
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-lg line-through">{task.title}</span>
-                      {task.dueDate && (
-                        <span className="text-sm text-muted-foreground flex items-center gap-1.5 mt-0.5">
-                          <CalendarIcon size={16} />
-                          {task.dueDate}
-                        </span>
-                      )}
-                    </div>
-                  </button>
-                  <button 
-                    onClick={() => deleteTask(task.id)}
-                    className="p-3 text-muted-foreground hover:text-destructive rounded-xl transition-colors"
-                  >
-                    <Trash2 size={20} />
-                  </button>
-                </div>
-              ))}
-            </div>
+                ))}
+            </section>
           )}
 
           {snoozedTasks.length > 0 && (
-            <div className="space-y-3 pt-6 border-t border-border">
+            <section className="space-y-3 pt-6 border-t border-border">
               <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2">
                 <Moon size={16} />
                 Undanstoppat ett tag
               </h2>
-              {snoozedTasks.map(task => (
+              {snoozedTasks.map((task) => (
                 <div
                   key={task.id}
                   className="flex items-center justify-between p-4 bg-secondary/30 border border-dashed border-border rounded-2xl"
@@ -177,7 +473,7 @@ export default function Tasks() {
                   </button>
                 </div>
               ))}
-            </div>
+            </section>
           )}
         </div>
       </div>
