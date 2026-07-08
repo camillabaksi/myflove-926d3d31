@@ -13,8 +13,9 @@ const NearbyInput = z.object({
   lon: z.number(),
 });
 
-type ResRobotStop = {
-  StopLocation?: Array<{ id?: string; extId?: string; name?: string; lat?: number; lon?: number }>;
+type ResRobotStopLocation = { id?: string; extId?: string; name?: string; lat?: number; lon?: number };
+type ResRobotStopResponse = {
+  stopLocationOrCoordLocation?: Array<{ StopLocation?: ResRobotStopLocation }>;
 };
 
 type ResRobotLeg = {
