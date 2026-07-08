@@ -61,8 +61,21 @@ export function useUpsertMealPlanSlot(_opts?: any): any { return noopMutation();
 
 export function useGetAnalyticsSummary(_opts?: any): any { return emptyQuery(); }
 
-export async function getSlTrip(_args: any): Promise<any> { return { trips: [] }; }
-export async function getSlNearbyStop(_args: any): Promise<any> { return { stops: [] }; }
-export function useGetSlTrip(..._args: any[]): any {
-  return { ...emptyQuery(), data: null };
+import { useQuery } from "@tanstack/react-query";
+import { getSlTripFn, getSlNearbyStopFn } from "@/lib/sl.functions";
+
+export async function getSlTrip(args: { from: string; to: string }): Promise<any> {
+  return getSlTripFn({ data: args });
+}
+export async function getSlNearbyStop(args: { lat: number; lon: number }): Promise<any> {
+  return getSlNearbyStopFn({ data: args });
+}
+export function useGetSlTrip(args: { from: string; to: string }, opts?: any): any {
+  const enabled = opts?.query?.enabled ?? Boolean(args.from && args.to);
+  return useQuery({
+    queryKey: opts?.query?.queryKey ?? ["sl-trip", args],
+    queryFn: () => getSlTripFn({ data: args }),
+    enabled,
+    retry: opts?.query?.retry ?? false,
+  });
 }
