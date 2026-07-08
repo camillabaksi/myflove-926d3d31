@@ -1,10 +1,12 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import Layout from "@/components/layout";
 import { Button } from "@/components/ui/button";
-import { Loader2, ListOrdered, Sparkles, Clock } from "lucide-react";
+import { Loader2, ListOrdered, Sparkles, Clock, Battery } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { planFlowSequence, type FlowPlanResult } from "@/lib/flowplan.functions";
 import { useTasks, useFocus } from "@/hooks/use-data";
+import { supabase } from "@/integrations/supabase/client";
 
 type Energy = "low" | "medium" | "high";
 
@@ -14,16 +16,66 @@ const ENERGY_LABELS: Record<Energy, string> = {
   high: "Hög – jag är peppad",
 };
 
+const LEVEL_LABELS: Record<number, string> = {
+  1: "Tom",
+  2: "Låg",
+  3: "Ok",
+  4: "På",
+  5: "Fullt laddad",
+};
+
+function levelToEnergy(level: number): Energy {
+  if (level <= 2) return "low";
+  if (level >= 4) return "high";
+  return "medium";
+}
+
+function timeAgo(iso: string) {
+  const diff = Date.now() - new Date(iso).getTime();
+  const mins = Math.round(diff / 60000);
+  if (mins < 1) return "just nu";
+  if (mins < 60) return `${mins} min sedan`;
+  const hrs = Math.round(mins / 60);
+  return `${hrs} h sedan`;
+}
+
 export default function FlowPlanPage() {
   const { activeTasks, toggleTask } = useTasks();
   const { currentFocus } = useFocus();
   const [energy, setEnergy] = useState<Energy>("medium");
+  const [energyAuto, setEnergyAuto] = useState<{ level: number; loggedAt: string } | null>(null);
+  const [energyManual, setEnergyManual] = useState(false);
   const [timeAvailable, setTimeAvailable] = useState<number>(120);
   const [plan, setPlan] = useState<FlowPlanResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const run = useServerFn(planFlowSequence);
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      const { data: userData } = await supabase.auth.getUser();
+      const uid = userData.user?.id;
+      if (!uid) return;
+      const since = new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString();
+      const { data } = await supabase
+        .from("energy_logs")
+        .select("level, logged_at")
+        .eq("user_id", uid)
+        .gte("logged_at", since)
+        .order("logged_at", { ascending: false })
+        .limit(1);
+      if (!mounted || !data || data.length === 0) return;
+      const latest = data[0];
+      setEnergyAuto({ level: latest.level, loggedAt: latest.logged_at });
+      setEnergy((prev) => (energyManual ? prev : levelToEnergy(latest.level)));
+    })();
+    return () => {
+      mounted = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const taskById = useMemo(() => {
     const m = new Map<string, string>();
@@ -77,12 +129,40 @@ export default function FlowPlanPage() {
 
         <div className="bg-card border border-border rounded-2xl p-5 space-y-5">
           <div>
-            <label className="text-sm font-medium mb-2 block">Hur är energin just nu?</label>
+            <div className="flex items-center justify-between mb-2 gap-2">
+              <label className="text-sm font-medium">Hur är energin just nu?</label>
+              {energyAuto && !energyManual && (
+                <span className="text-xs text-muted-foreground flex items-center gap-1">
+                  <Battery size={12} className="text-primary" />
+                  Från Energikarta ({LEVEL_LABELS[energyAuto.level]}, {timeAgo(energyAuto.loggedAt)})
+                </span>
+              )}
+              {energyAuto && energyManual && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEnergyManual(false);
+                    setEnergy(levelToEnergy(energyAuto.level));
+                  }}
+                  className="text-xs text-primary hover:underline"
+                >
+                  Använd loggad energi
+                </button>
+              )}
+              {!energyAuto && (
+                <Link to="/energikarta" className="text-xs text-primary hover:underline flex items-center gap-1">
+                  <Battery size={12} /> Logga energi
+                </Link>
+              )}
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
               {(Object.keys(ENERGY_LABELS) as Energy[]).map((e) => (
                 <button
                   key={e}
-                  onClick={() => setEnergy(e)}
+                  onClick={() => {
+                    setEnergy(e);
+                    setEnergyManual(true);
+                  }}
                   className={`px-3 py-3 rounded-xl border text-sm text-left transition-colors ${
                     energy === e
                       ? "border-primary bg-primary/10 text-primary"
@@ -94,6 +174,7 @@ export default function FlowPlanPage() {
               ))}
             </div>
           </div>
+
 
           <div>
             <label className="text-sm font-medium mb-2 flex items-center gap-2">
