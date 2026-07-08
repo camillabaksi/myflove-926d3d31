@@ -29,6 +29,7 @@ import { Route as AppFlowplanRouteImport } from './routes/_app.flowplan'
 import { Route as AppFinancesRouteImport } from './routes/_app.finances'
 import { Route as AppFamiljRouteImport } from './routes/_app.familj'
 import { Route as AppDumpRouteImport } from './routes/_app.dump'
+import { Route as AppCalendarRouteImport } from './routes/_app.calendar'
 import { Route as AppBeloningarRouteImport } from './routes/_app.beloningar'
 import { Route as AppAssistantRouteImport } from './routes/_app.assistant'
 import { Route as AppAdminStatistikRouteImport } from './routes/_app.admin-statistik'
@@ -132,6 +133,11 @@ const AppDumpRoute = AppDumpRouteImport.update({
   path: '/dump',
   getParentRoute: () => AppRoute,
 } as any)
+const AppCalendarRoute = AppCalendarRouteImport.update({
+  id: '/calendar',
+  path: '/calendar',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppBeloningarRoute = AppBeloningarRouteImport.update({
   id: '/beloningar',
   path: '/beloningar',
@@ -155,6 +161,7 @@ export interface FileRoutesByFullPath {
   '/admin-statistik': typeof AppAdminStatistikRoute
   '/assistant': typeof AppAssistantRoute
   '/beloningar': typeof AppBeloningarRoute
+  '/calendar': typeof AppCalendarRoute
   '/dump': typeof AppDumpRoute
   '/familj': typeof AppFamiljRoute
   '/finances': typeof AppFinancesRoute
@@ -179,6 +186,7 @@ export interface FileRoutesByTo {
   '/admin-statistik': typeof AppAdminStatistikRoute
   '/assistant': typeof AppAssistantRoute
   '/beloningar': typeof AppBeloningarRoute
+  '/calendar': typeof AppCalendarRoute
   '/dump': typeof AppDumpRoute
   '/familj': typeof AppFamiljRoute
   '/finances': typeof AppFinancesRoute
@@ -205,6 +213,7 @@ export interface FileRoutesById {
   '/_app/admin-statistik': typeof AppAdminStatistikRoute
   '/_app/assistant': typeof AppAssistantRoute
   '/_app/beloningar': typeof AppBeloningarRoute
+  '/_app/calendar': typeof AppCalendarRoute
   '/_app/dump': typeof AppDumpRoute
   '/_app/familj': typeof AppFamiljRoute
   '/_app/finances': typeof AppFinancesRoute
@@ -231,6 +240,7 @@ export interface FileRouteTypes {
     | '/admin-statistik'
     | '/assistant'
     | '/beloningar'
+    | '/calendar'
     | '/dump'
     | '/familj'
     | '/finances'
@@ -255,6 +265,7 @@ export interface FileRouteTypes {
     | '/admin-statistik'
     | '/assistant'
     | '/beloningar'
+    | '/calendar'
     | '/dump'
     | '/familj'
     | '/finances'
@@ -280,6 +291,7 @@ export interface FileRouteTypes {
     | '/_app/admin-statistik'
     | '/_app/assistant'
     | '/_app/beloningar'
+    | '/_app/calendar'
     | '/_app/dump'
     | '/_app/familj'
     | '/_app/finances'
@@ -447,6 +459,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppDumpRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/calendar': {
+      id: '/_app/calendar'
+      path: '/calendar'
+      fullPath: '/calendar'
+      preLoaderRoute: typeof AppCalendarRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/beloningar': {
       id: '/_app/beloningar'
       path: '/beloningar'
@@ -475,6 +494,7 @@ interface AppRouteChildren {
   AppAdminStatistikRoute: typeof AppAdminStatistikRoute
   AppAssistantRoute: typeof AppAssistantRoute
   AppBeloningarRoute: typeof AppBeloningarRoute
+  AppCalendarRoute: typeof AppCalendarRoute
   AppDumpRoute: typeof AppDumpRoute
   AppFamiljRoute: typeof AppFamiljRoute
   AppFinancesRoute: typeof AppFinancesRoute
@@ -497,6 +517,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppAdminStatistikRoute: AppAdminStatistikRoute,
   AppAssistantRoute: AppAssistantRoute,
   AppBeloningarRoute: AppBeloningarRoute,
+  AppCalendarRoute: AppCalendarRoute,
   AppDumpRoute: AppDumpRoute,
   AppFamiljRoute: AppFamiljRoute,
   AppFinancesRoute: AppFinancesRoute,
@@ -526,3 +547,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
