@@ -149,6 +149,15 @@ export default function Layout({ children }: LayoutProps) {
             );
           })}
         </div>
+        <button
+          type="button"
+          onClick={handleDownloadVideo}
+          disabled={downloading}
+          className="mt-4 flex items-center justify-center gap-2 rounded-2xl px-3 py-3 text-sm bg-secondary/40 hover:bg-secondary text-foreground disabled:opacity-60"
+        >
+          <Download size={18} />
+          <span>{downloading ? "Laddar ner…" : "Ladda ner demo-video"}</span>
+        </button>
       </nav>
 
       {/* Main Content Area */}
