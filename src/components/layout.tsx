@@ -34,6 +34,29 @@ const SECTION_BY_PATH: Record<string, string> = {
   "/energikarta": "energikarta",
 };
 
+/**
+ * Per-category color themes. Overrides --primary / --accent / --ring so all
+ * text-primary, bg-primary, bg-accent etc. classes automatically re-tint per page.
+ * Values are HSL triples (used inside hsl(...)) to match src/styles.css tokens.
+ */
+const CATEGORY_THEMES: Record<string, Record<string, string>> = {
+  "/mood":           { "--primary": "130 24% 40%", "--ring": "130 24% 40%", "--accent": "130 30% 84%", "--accent-foreground": "130 40% 22%" },
+  "/pomodoro":       { "--primary": "14 55% 50%",  "--ring": "14 55% 50%",  "--accent": "20 55% 84%",  "--accent-foreground": "14 50% 24%" },
+  "/fokus":          { "--primary": "14 55% 50%",  "--ring": "14 55% 50%",  "--accent": "20 55% 84%",  "--accent-foreground": "14 50% 24%" },
+  "/finances":       { "--primary": "40 60% 42%",  "--ring": "40 60% 42%",  "--accent": "42 60% 84%",  "--accent-foreground": "38 55% 22%" },
+  "/kalender":       { "--primary": "210 32% 44%", "--ring": "210 32% 44%", "--accent": "210 38% 84%", "--accent-foreground": "212 40% 22%" },
+  "/flowplan":       { "--primary": "210 32% 44%", "--ring": "210 32% 44%", "--accent": "210 38% 84%", "--accent-foreground": "212 40% 22%" },
+  "/shopping":       { "--primary": "32 45% 44%",  "--ring": "32 45% 44%",  "--accent": "34 55% 84%",  "--accent-foreground": "28 45% 22%" },
+  "/matlista":       { "--primary": "32 45% 44%",  "--ring": "32 45% 44%",  "--accent": "34 55% 84%",  "--accent-foreground": "28 45% 22%" },
+  "/medicin":        { "--primary": "18 45% 46%",  "--ring": "18 45% 46%",  "--accent": "22 45% 84%",  "--accent-foreground": "16 45% 22%" },
+  "/travel":         { "--primary": "195 45% 38%", "--ring": "195 45% 38%", "--accent": "195 50% 84%", "--accent-foreground": "198 55% 20%" },
+  "/familj":         { "--primary": "340 32% 50%", "--ring": "340 32% 50%", "--accent": "342 45% 86%", "--accent-foreground": "340 45% 24%" },
+  "/beloningar":     { "--primary": "42 65% 46%",  "--ring": "42 65% 46%",  "--accent": "44 65% 84%",  "--accent-foreground": "38 60% 22%" },
+  "/statistik":      { "--primary": "260 22% 48%", "--ring": "260 22% 48%", "--accent": "258 32% 86%", "--accent-foreground": "260 32% 24%" },
+  "/friktionsindex": { "--primary": "25 18% 44%",  "--ring": "25 18% 44%",  "--accent": "25 22% 84%",  "--accent-foreground": "22 25% 22%" },
+  "/energikarta":    { "--primary": "175 32% 38%", "--ring": "175 32% 38%", "--accent": "175 42% 84%", "--accent-foreground": "175 45% 20%" },
+};
+
 export default function Layout({ children }: LayoutProps) {
   const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
