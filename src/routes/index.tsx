@@ -19,6 +19,8 @@ export const Route = createFileRoute("/")({
 function LandingPage() {
   const navigate = useNavigate();
   const [checking, setChecking] = useState(true);
+  const [downloading, setDownloading] = useState(false);
+  const fetchVideo = useServerFn(downloadVideo);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -29,6 +31,27 @@ function LandingPage() {
       }
     });
   }, [navigate]);
+
+  async function handleDownload() {
+    try {
+      setDownloading(true);
+      const response = await fetchVideo();
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "myflow-preview.mp4";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Nedladdning misslyckades:", error);
+      alert("Kunde inte ladda ner videon just nu.");
+    } finally {
+      setDownloading(false);
+    }
+  }
 
   if (checking) {
     return (
