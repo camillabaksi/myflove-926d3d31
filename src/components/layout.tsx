@@ -50,6 +50,7 @@ export default function Layout({ children }: LayoutProps) {
     { href: "/calendar", label: "Kalender", icon: Calendar },
     { href: "/fokus", label: "Fokus", icon: Target },
     { href: "/tasks", label: "Att göra", icon: CheckSquare },
+    { href: "/flowplan", label: "FlowPlan", icon: ListOrdered },
     { href: "/pomodoro", label: "Timer", icon: Timer },
     { href: "/medicin", label: "Medicin", icon: Pill },
     { href: "/shopping", label: "Inköp", icon: ShoppingBag },
