@@ -67,7 +67,7 @@ export default function Layout({ children }: LayoutProps) {
     { href: "/assistant", label: "Hjälp", icon: Sparkles },
       { href: "/friktionsindex", label: "Feedback", icon: Flame },
       { href: "/energikarta", label: "Energi", icon: Battery },
-      { href: "/admin-statistik", label: "Appstatistik", icon: BarChart3 },
+      ...(isAdmin ? [{ href: "/admin-statistik", label: "Appstatistik", icon: BarChart3 }] : []),
     ];
 
   // For mobile bottom bar, we show first 4 items and a "Mer" button
