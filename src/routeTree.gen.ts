@@ -24,6 +24,7 @@ import { Route as AppMatlistaRouteImport } from './routes/_app.matlista'
 import { Route as AppKalenderRouteImport } from './routes/_app.kalender'
 import { Route as AppHemRouteImport } from './routes/_app.hem'
 import { Route as AppFokusRouteImport } from './routes/_app.fokus'
+import { Route as AppFlowplanRouteImport } from './routes/_app.flowplan'
 import { Route as AppFinancesRouteImport } from './routes/_app.finances'
 import { Route as AppFamiljRouteImport } from './routes/_app.familj'
 import { Route as AppDumpRouteImport } from './routes/_app.dump'
@@ -105,6 +106,11 @@ const AppFokusRoute = AppFokusRouteImport.update({
   path: '/fokus',
   getParentRoute: () => AppRoute,
 } as any)
+const AppFlowplanRoute = AppFlowplanRouteImport.update({
+  id: '/flowplan',
+  path: '/flowplan',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppFinancesRoute = AppFinancesRouteImport.update({
   id: '/finances',
   path: '/finances',
@@ -146,6 +152,7 @@ export interface FileRoutesByFullPath {
   '/dump': typeof AppDumpRoute
   '/familj': typeof AppFamiljRoute
   '/finances': typeof AppFinancesRoute
+  '/flowplan': typeof AppFlowplanRoute
   '/fokus': typeof AppFokusRoute
   '/hem': typeof AppHemRoute
   '/kalender': typeof AppKalenderRoute
@@ -168,6 +175,7 @@ export interface FileRoutesByTo {
   '/dump': typeof AppDumpRoute
   '/familj': typeof AppFamiljRoute
   '/finances': typeof AppFinancesRoute
+  '/flowplan': typeof AppFlowplanRoute
   '/fokus': typeof AppFokusRoute
   '/hem': typeof AppHemRoute
   '/kalender': typeof AppKalenderRoute
@@ -192,6 +200,7 @@ export interface FileRoutesById {
   '/_app/dump': typeof AppDumpRoute
   '/_app/familj': typeof AppFamiljRoute
   '/_app/finances': typeof AppFinancesRoute
+  '/_app/flowplan': typeof AppFlowplanRoute
   '/_app/fokus': typeof AppFokusRoute
   '/_app/hem': typeof AppHemRoute
   '/_app/kalender': typeof AppKalenderRoute
@@ -216,6 +225,7 @@ export interface FileRouteTypes {
     | '/dump'
     | '/familj'
     | '/finances'
+    | '/flowplan'
     | '/fokus'
     | '/hem'
     | '/kalender'
@@ -238,6 +248,7 @@ export interface FileRouteTypes {
     | '/dump'
     | '/familj'
     | '/finances'
+    | '/flowplan'
     | '/fokus'
     | '/hem'
     | '/kalender'
@@ -261,6 +272,7 @@ export interface FileRouteTypes {
     | '/_app/dump'
     | '/_app/familj'
     | '/_app/finances'
+    | '/_app/flowplan'
     | '/_app/fokus'
     | '/_app/hem'
     | '/_app/kalender'
@@ -388,6 +400,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppFokusRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/flowplan': {
+      id: '/_app/flowplan'
+      path: '/flowplan'
+      fullPath: '/flowplan'
+      preLoaderRoute: typeof AppFlowplanRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/finances': {
       id: '/_app/finances'
       path: '/finances'
@@ -440,6 +459,7 @@ interface AppRouteChildren {
   AppDumpRoute: typeof AppDumpRoute
   AppFamiljRoute: typeof AppFamiljRoute
   AppFinancesRoute: typeof AppFinancesRoute
+  AppFlowplanRoute: typeof AppFlowplanRoute
   AppFokusRoute: typeof AppFokusRoute
   AppHemRoute: typeof AppHemRoute
   AppKalenderRoute: typeof AppKalenderRoute
@@ -460,6 +480,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppDumpRoute: AppDumpRoute,
   AppFamiljRoute: AppFamiljRoute,
   AppFinancesRoute: AppFinancesRoute,
+  AppFlowplanRoute: AppFlowplanRoute,
   AppFokusRoute: AppFokusRoute,
   AppHemRoute: AppHemRoute,
   AppKalenderRoute: AppKalenderRoute,
