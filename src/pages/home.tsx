@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import Layout from "@/components/layout";
 import OverwhelmedModal from "@/components/overwhelmed-modal";
 import HelpMeModal from "@/components/help-me-modal";
+import WeatherCard from "@/components/weather-card";
 import { Button } from "@/components/ui/button";
 import {
   useFocus,
