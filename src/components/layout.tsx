@@ -1,6 +1,6 @@
 import { ReactNode, useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
-import { Home, Target, CheckSquare, ShoppingBag, Smile, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin } from "lucide-react";
+import { Home, Target, CheckSquare, ShoppingBag, Smile, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered } from "lucide-react";
 import { useCommuteAlerts } from "@/hooks/use-commute-alerts";
 import { useMedicationAlerts } from "@/hooks/use-medication-alerts";
 import { useShoppingProximityAlerts } from "@/hooks/use-shopping-proximity-alerts";
@@ -25,6 +25,7 @@ const SECTION_BY_PATH: Record<string, string> = {
   "/statistik": "statistik",
   "/beloningar": "beloningar",
   "/assistant": "assistant",
+  "/flowplan": "flowplan",
   "/admin-statistik": "admin",
   "/familj": "familj",
   "/matlista": "matlista",
@@ -49,6 +50,7 @@ export default function Layout({ children }: LayoutProps) {
     { href: "/calendar", label: "Kalender", icon: Calendar },
     { href: "/fokus", label: "Fokus", icon: Target },
     { href: "/tasks", label: "Att göra", icon: CheckSquare },
+    { href: "/flowplan", label: "FlowPlan", icon: ListOrdered },
     { href: "/pomodoro", label: "Timer", icon: Timer },
     { href: "/medicin", label: "Medicin", icon: Pill },
     { href: "/shopping", label: "Inköp", icon: ShoppingBag },
