@@ -1,25 +1,42 @@
-import { useState } from "react";
-import { Link } from "wouter";
+import { useEffect, useRef, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import Layout from "@/components/layout";
-import { breakDownTask } from "@/lib/ai-assistant";
 import { Button } from "@/components/ui/button";
-import { Sparkles, Loader2, ArrowRight, Bot } from "lucide-react";
+import { Loader2, Send, Sparkles } from "lucide-react";
+import { chatWithFlow } from "@/lib/flow-chat.functions";
 import { useTasks, useMoods, useFocus, useReminders } from "@/hooks/use-data";
 import { useLocalStorage } from "@/lib/storage";
 import { generateCoachMessage } from "@/lib/coach";
+
+type ChatMessage = { role: "user" | "assistant"; content: string };
 
 function todayStr(): string {
   return new Date().toISOString().split("T")[0] as string;
 }
 
-export default function Assistant() {
-  const [input, setInput] = useState("");
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [steps, setSteps] = useState<string[] | null>(null);
-  
-  const { addTask, activeTasks } = useTasks();
-  const [addedSteps, setAddedSteps] = useState<Set<number>>(new Set());
+const GREETING: ChatMessage = {
+  role: "assistant",
+  content:
+    "Hej, jag är Flow. Jag finns här för att avlasta – inte för att ge dig mer att göra. Vad snurrar i huvudet just nu?",
+};
 
+const QUICK_PROMPTS = [
+  "Det känns för mycket idag",
+  "Hjälp mig bryta ner en uppgift",
+  "Vad borde jag börja med?",
+];
+
+export default function Assistant() {
+  const [messages, setMessages] = useState<ChatMessage[]>([GREETING]);
+  const [input, setInput] = useState("");
+  const [isSending, setIsSending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  const chat = useServerFn(chatWithFlow);
+
+  const { activeTasks } = useTasks();
   const { moods } = useMoods();
   const { currentFocus } = useFocus();
   const { activeReminders } = useReminders();
@@ -28,7 +45,6 @@ export default function Assistant() {
     count: 0,
   });
   const pomodoroTodaySessions = sessionLog.date === todayStr() ? sessionLog.count : 0;
-
   const coachMessage = generateCoachMessage({
     moods,
     activeTasks,
@@ -37,134 +53,124 @@ export default function Assistant() {
     pomodoroTodaySessions,
   });
 
-  const handleBreakdown = async () => {
-    if (!input.trim()) return;
-    
-    setIsProcessing(true);
-    setSteps(null);
-    setAddedSteps(new Set());
-    
-    try {
-      const result = await breakDownTask(input);
-      setSteps(result);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsProcessing(false);
-    }
-  };
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+  }, [messages, isSending]);
 
-  const handleAddStepToTasks = (step: string, index: number) => {
-    addTask(step);
-    setAddedSteps(prev => new Set(prev).add(index));
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, [isSending]);
+
+  const send = async (text: string) => {
+    const trimmed = text.trim();
+    if (!trimmed || isSending) return;
+    setError(null);
+    const next: ChatMessage[] = [...messages, { role: "user", content: trimmed }];
+    setMessages(next);
+    setInput("");
+    setIsSending(true);
+    try {
+      const { reply } = await chat({ data: { messages: next } });
+      setMessages((m) => [...m, { role: "assistant", content: reply }]);
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "Något gick fel. Prova igen om en stund.";
+      setError(msg);
+    } finally {
+      setIsSending(false);
+    }
   };
 
   return (
     <Layout>
-      <div className="space-y-8">
+      <div className="space-y-6">
         <div>
           <div className="flex items-center gap-3 mb-2">
-            <h1 className="text-3xl font-bold">AI-Assistent</h1>
-            <div className="bg-primary/10 text-primary px-2 py-1 rounded text-xs font-semibold tracking-wider">BETA</div>
+            <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+              <Sparkles size={20} />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold leading-tight">Flow</h1>
+              <p className="text-sm text-muted-foreground">Din andra hjärna – lugn, empatisk, aldrig dömande</p>
+            </div>
           </div>
-          <p className="text-muted-foreground leading-relaxed">
-            Känns en uppgift för stor eller svår att starta med? Skriv vad du behöver göra, 
-            så hjälper assistenten till att bryta ner det i små, hanterbara steg.
-          </p>
         </div>
 
-        <div className="flex items-start gap-4 p-5 bg-card border border-border rounded-2xl shadow-sm">
-          <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
-            <Bot size={22} />
-          </div>
-          <div className="flex-1">
-            <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">Din coach idag</p>
-            <p className="font-medium leading-snug">
-              {coachMessage.emoji} {coachMessage.text}
-            </p>
-            {coachMessage.ctaHref && coachMessage.ctaLabel && (
-              <Link
-                href={coachMessage.ctaHref}
-                className="inline-flex items-center gap-1 text-sm text-primary font-medium mt-2 hover:underline"
+        <div className="p-4 bg-card border border-border rounded-2xl">
+          <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">Idag</p>
+          <p className="text-sm leading-snug">{coachMessage.text}</p>
+        </div>
+
+        <div
+          ref={scrollRef}
+          className="bg-card border border-border rounded-3xl p-4 space-y-4 max-h-[55vh] overflow-y-auto"
+        >
+          {messages.map((m, i) => (
+            <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
+              <div
+                className={`max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
+                  m.role === "user"
+                    ? "bg-primary text-white rounded-br-sm"
+                    : "bg-secondary text-foreground rounded-bl-sm"
+                }`}
               >
-                {coachMessage.ctaLabel} <ArrowRight size={14} />
-              </Link>
-            )}
-          </div>
+                {m.content}
+              </div>
+            </div>
+          ))}
+          {isSending && (
+            <div className="flex justify-start">
+              <div className="bg-secondary text-muted-foreground px-4 py-3 rounded-2xl rounded-bl-sm text-sm flex items-center gap-2">
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Flow tänker…
+              </div>
+            </div>
+          )}
+          {error && (
+            <div className="text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-xl px-3 py-2">
+              {error}
+            </div>
+          )}
         </div>
 
-        <div className="bg-card p-2 rounded-3xl shadow-sm border border-border relative focus-within:ring-2 focus-within:ring-primary/20 transition-all">
+        {messages.length <= 1 && (
+          <div className="flex flex-wrap gap-2">
+            {QUICK_PROMPTS.map((p) => (
+              <button
+                key={p}
+                onClick={() => send(p)}
+                className="px-3 py-2 rounded-full text-sm bg-secondary hover:bg-secondary/80 text-foreground transition-colors"
+              >
+                {p}
+              </button>
+            ))}
+          </div>
+        )}
+
+        <div className="bg-card p-2 rounded-3xl shadow-sm border border-border focus-within:ring-2 focus-within:ring-primary/20 transition-all">
           <textarea
+            ref={inputRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="T.ex. 'Jag måste städa hela lägenheten inför helgen men vet inte var jag ska börja...'"
-            className="w-full h-32 p-4 pb-16 bg-transparent border-none outline-none resize-none text-lg"
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                void send(input);
+              }
+            }}
+            placeholder="Skriv till Flow…"
+            className="w-full h-24 p-3 pb-14 bg-transparent border-none outline-none resize-none text-base"
           />
-          <div className="absolute bottom-3 right-3 left-3 flex justify-between items-center">
-            <span className="text-xs text-muted-foreground px-2">Tips: Var så specifik som möjligt.</span>
-            <Button 
-              onClick={handleBreakdown}
-              disabled={!input.trim() || isProcessing}
-              className="rounded-xl shadow-sm h-10 px-6 bg-primary hover:bg-primary/90 text-white"
+          <div className="absolute-none flex justify-end px-2 pb-2 -mt-12 relative">
+            <Button
+              onClick={() => void send(input)}
+              disabled={!input.trim() || isSending}
+              className="rounded-xl h-10 px-5 bg-primary hover:bg-primary/90 text-white"
             >
-              {isProcessing ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Tänker...
-                </>
-              ) : (
-                <>
-                  <Sparkles className="mr-2 h-4 w-4" />
-                  Bryt ner uppgift
-                </>
-              )}
+              <Send className="w-4 h-4 mr-2" />
+              Skicka
             </Button>
           </div>
         </div>
-
-        {steps && (
-          <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500 mt-8">
-            <h2 className="text-xl font-semibold">Förslag på små steg:</h2>
-            <div className="space-y-3">
-              {steps.map((step, idx) => {
-                const isAdded = addedSteps.has(idx);
-                return (
-                  <div key={idx} className="bg-card p-4 rounded-2xl border border-border shadow-sm flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-4 flex-1">
-                      <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-sm font-medium text-muted-foreground shrink-0">
-                        {idx + 1}
-                      </div>
-                      <p className="text-foreground">{step}</p>
-                    </div>
-                    <Button
-                      variant={isAdded ? "secondary" : "ghost"}
-                      size="sm"
-                      onClick={() => handleAddStepToTasks(step, idx)}
-                      disabled={isAdded}
-                      className={`shrink-0 rounded-xl transition-all ${isAdded ? "text-primary" : "text-primary hover:bg-primary/10"}`}
-                    >
-                      {isAdded ? "Tillagd i Att göra" : (
-                        <>
-                          <ArrowRight className="w-4 h-4 mr-1 md:mr-2" />
-                          <span className="hidden md:inline">Lägg till i Att göra</span>
-                        </>
-                      )}
-                    </Button>
-                  </div>
-                );
-              })}
-            </div>
-            
-            <div className="mt-8 pt-8 border-t border-border flex flex-col items-center text-center">
-              <p className="text-muted-foreground text-sm max-w-sm mb-4">
-                Kom ihåg att du inte måste göra alla steg idag. Börja med steg 1 och se hur det känns.
-              </p>
-              <Button variant="outline" onClick={() => { setSteps(null); setInput(""); }} className="rounded-xl">
-                Börja om med ny uppgift
-              </Button>
-            </div>
-          </div>
-        )}
       </div>
     </Layout>
   );
