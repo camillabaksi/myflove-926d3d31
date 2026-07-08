@@ -7,6 +7,17 @@ export interface Focus {
   date: string; // ISO date string for matching "today"
 }
 
+// Blueprint 2.0 §7.4: skiljer på Uppgift / Ärende / Projekt.
+// Status följer Blueprint: Väntar på / Pågår / Klart.
+export type TaskKind = "uppgift" | "arende" | "projekt";
+export type TaskStatus = "pagar" | "vantar" | "klart";
+
+export interface TaskStep {
+  id: string;
+  title: string;
+  done: boolean;
+}
+
 export interface Task {
   id: string;
   title: string;
@@ -14,6 +25,10 @@ export interface Task {
   createdAt: number;
   dueDate?: string; // ISO date string YYYY-MM-DD
   snoozedUntil?: string; // ISO date string YYYY-MM-DD; hidden from view until this date has passed
+  kind?: TaskKind; // default "uppgift"
+  status?: TaskStatus; // default "pagar"; "klart" ⇔ completed=true
+  waitingOn?: string; // fritt fält: "vem/vad vi väntar på"
+  steps?: TaskStep[]; // delsteg (särskilt för ärenden och projekt)
 }
 
 export interface ShoppingItem {
