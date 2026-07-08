@@ -28,6 +28,7 @@ import { Route as AppFokusRouteImport } from './routes/_app.fokus'
 import { Route as AppFlowplanRouteImport } from './routes/_app.flowplan'
 import { Route as AppFinancesRouteImport } from './routes/_app.finances'
 import { Route as AppFamiljRouteImport } from './routes/_app.familj'
+import { Route as AppEnergikartaRouteImport } from './routes/_app.energikarta'
 import { Route as AppDumpRouteImport } from './routes/_app.dump'
 import { Route as AppCalendarRouteImport } from './routes/_app.calendar'
 import { Route as AppBeloningarRouteImport } from './routes/_app.beloningar'
@@ -128,6 +129,11 @@ const AppFamiljRoute = AppFamiljRouteImport.update({
   path: '/familj',
   getParentRoute: () => AppRoute,
 } as any)
+const AppEnergikartaRoute = AppEnergikartaRouteImport.update({
+  id: '/energikarta',
+  path: '/energikarta',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppDumpRoute = AppDumpRouteImport.update({
   id: '/dump',
   path: '/dump',
@@ -163,6 +169,7 @@ export interface FileRoutesByFullPath {
   '/beloningar': typeof AppBeloningarRoute
   '/calendar': typeof AppCalendarRoute
   '/dump': typeof AppDumpRoute
+  '/energikarta': typeof AppEnergikartaRoute
   '/familj': typeof AppFamiljRoute
   '/finances': typeof AppFinancesRoute
   '/flowplan': typeof AppFlowplanRoute
@@ -188,6 +195,7 @@ export interface FileRoutesByTo {
   '/beloningar': typeof AppBeloningarRoute
   '/calendar': typeof AppCalendarRoute
   '/dump': typeof AppDumpRoute
+  '/energikarta': typeof AppEnergikartaRoute
   '/familj': typeof AppFamiljRoute
   '/finances': typeof AppFinancesRoute
   '/flowplan': typeof AppFlowplanRoute
@@ -215,6 +223,7 @@ export interface FileRoutesById {
   '/_app/beloningar': typeof AppBeloningarRoute
   '/_app/calendar': typeof AppCalendarRoute
   '/_app/dump': typeof AppDumpRoute
+  '/_app/energikarta': typeof AppEnergikartaRoute
   '/_app/familj': typeof AppFamiljRoute
   '/_app/finances': typeof AppFinancesRoute
   '/_app/flowplan': typeof AppFlowplanRoute
@@ -242,6 +251,7 @@ export interface FileRouteTypes {
     | '/beloningar'
     | '/calendar'
     | '/dump'
+    | '/energikarta'
     | '/familj'
     | '/finances'
     | '/flowplan'
@@ -267,6 +277,7 @@ export interface FileRouteTypes {
     | '/beloningar'
     | '/calendar'
     | '/dump'
+    | '/energikarta'
     | '/familj'
     | '/finances'
     | '/flowplan'
@@ -293,6 +304,7 @@ export interface FileRouteTypes {
     | '/_app/beloningar'
     | '/_app/calendar'
     | '/_app/dump'
+    | '/_app/energikarta'
     | '/_app/familj'
     | '/_app/finances'
     | '/_app/flowplan'
@@ -452,6 +464,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppFamiljRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/energikarta': {
+      id: '/_app/energikarta'
+      path: '/energikarta'
+      fullPath: '/energikarta'
+      preLoaderRoute: typeof AppEnergikartaRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/dump': {
       id: '/_app/dump'
       path: '/dump'
@@ -496,6 +515,7 @@ interface AppRouteChildren {
   AppBeloningarRoute: typeof AppBeloningarRoute
   AppCalendarRoute: typeof AppCalendarRoute
   AppDumpRoute: typeof AppDumpRoute
+  AppEnergikartaRoute: typeof AppEnergikartaRoute
   AppFamiljRoute: typeof AppFamiljRoute
   AppFinancesRoute: typeof AppFinancesRoute
   AppFlowplanRoute: typeof AppFlowplanRoute
@@ -519,6 +539,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppBeloningarRoute: AppBeloningarRoute,
   AppCalendarRoute: AppCalendarRoute,
   AppDumpRoute: AppDumpRoute,
+  AppEnergikartaRoute: AppEnergikartaRoute,
   AppFamiljRoute: AppFamiljRoute,
   AppFinancesRoute: AppFinancesRoute,
   AppFlowplanRoute: AppFlowplanRoute,
