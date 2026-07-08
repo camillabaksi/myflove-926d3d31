@@ -12,6 +12,8 @@ interface FrictionItem {
   description: string | null;
   category: string;
   impact: number;
+  frequency: number;
+  mental_load: number;
   status: Status;
   reporter_id: string;
   created_at: string;
@@ -47,6 +49,17 @@ const STATUS_COLORS: Record<Status, string> = {
   done: "bg-green-100 text-green-800",
   ignored: "bg-gray-100 text-gray-600",
 };
+
+// Blueprint 2.0 §6.1
+type Priority = { label: string; className: string };
+function priorityFor(total: number): Priority {
+  if (total >= 13) return { label: "Kritisk", className: "bg-destructive/15 text-destructive border-destructive/30" };
+  if (total >= 10) return { label: "Hög", className: "bg-orange-100 text-orange-800 border-orange-200" };
+  if (total >= 6)  return { label: "Medel", className: "bg-amber-100 text-amber-800 border-amber-200" };
+  return { label: "Låg", className: "bg-secondary text-muted-foreground border-border" };
+}
+
+const SCALE_LABELS: Record<number, string> = { 1: "mycket lite", 2: "lite", 3: "medel", 4: "mycket", 5: "väldigt mycket" };
 
 export default function FrictionIndexPage() {
   const [items, setItems] = useState<FrictionItem[]>([]);
