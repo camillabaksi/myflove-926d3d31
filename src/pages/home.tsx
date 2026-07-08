@@ -6,6 +6,8 @@ import HelpMeModal from "@/components/help-me-modal";
 import WeatherCard from "@/components/weather-card";
 import ProactiveSuggestions from "@/components/proactive-suggestions";
 import { Button } from "@/components/ui/button";
+import { useServerFn } from "@tanstack/react-start";
+import { downloadVideo } from "@/lib/video.functions";
 import {
   useFocus,
   useTasks,
@@ -28,6 +30,7 @@ import {
   Sparkles,
   ArrowRight,
   ShoppingBag,
+  Download,
 } from "lucide-react";
 
 function sortTasksByPriority(tasks: Task[]): Task[] {
