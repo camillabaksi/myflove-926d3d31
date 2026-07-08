@@ -118,10 +118,14 @@ export default function WeatherCard() {
 
   if (error || !state) {
     return (
-      <div className="rounded-2xl bg-card border border-border p-4 flex items-start gap-3 text-sm text-muted-foreground">
-        <MapPin size={16} className="mt-0.5 shrink-0" />
-        <span>{error ?? "Inget väder att visa just nu."}</span>
-      </div>
+      <button
+        type="button"
+        onClick={load}
+        className="w-full text-left rounded-2xl bg-card border border-border p-4 flex items-start gap-3 text-sm text-muted-foreground hover:bg-secondary/60 active:scale-[0.99] transition"
+      >
+        <MapPin size={16} className="mt-0.5 shrink-0 text-primary" />
+        <span>{error ?? "Tryck för att visa vädret där du är."}</span>
+      </button>
     );
   }
 
