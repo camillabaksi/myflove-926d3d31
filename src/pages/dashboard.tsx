@@ -179,7 +179,7 @@ export default function Dashboard() {
 
           {activeReminders.length === 0 && !showReminderForm && (
             <div className="text-center py-8 text-muted-foreground bg-secondary/30 rounded-2xl border border-dashed border-border">
-              Inga aktiva påminnelser just nu.
+              Inget inplanerat – dagen är din.
             </div>
           )}
 
