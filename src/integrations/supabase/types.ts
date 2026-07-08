@@ -46,8 +46,10 @@ export type Database = {
           category: string
           created_at: string
           description: string | null
+          frequency: number
           id: string
           impact: number
+          mental_load: number
           reporter_id: string
           status: string
           title: string
@@ -57,8 +59,10 @@ export type Database = {
           category?: string
           created_at?: string
           description?: string | null
+          frequency?: number
           id?: string
           impact?: number
+          mental_load?: number
           reporter_id: string
           status?: string
           title: string
@@ -68,8 +72,10 @@ export type Database = {
           category?: string
           created_at?: string
           description?: string | null
+          frequency?: number
           id?: string
           impact?: number
+          mental_load?: number
           reporter_id?: string
           status?: string
           title?: string
