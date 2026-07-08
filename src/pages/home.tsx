@@ -100,6 +100,9 @@ export default function Home() {
 
         <WeatherCard />
 
+        <ProactiveSuggestions />
+
+
         <button
           type="button"
           onClick={() => setHelpModalOpen(true)}
