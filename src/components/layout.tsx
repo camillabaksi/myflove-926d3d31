@@ -4,6 +4,7 @@ import { Home, Target, CheckSquare, ShoppingBag, Smile, Sparkles, Wallet, Naviga
 import { useCommuteAlerts } from "@/hooks/use-commute-alerts";
 import { useMedicationAlerts } from "@/hooks/use-medication-alerts";
 import { useShoppingProximityAlerts } from "@/hooks/use-shopping-proximity-alerts";
+import { useIsAdmin } from "@/hooks/use-is-admin";
 import { trackEvent } from "@/lib/analytics";
 
 interface LayoutProps {
@@ -39,6 +40,7 @@ export default function Layout({ children }: LayoutProps) {
   const { alerts, dismissAlert } = useCommuteAlerts();
   const { alerts: medicationAlerts, dismissAlert: dismissMedicationAlert } = useMedicationAlerts();
   const { alerts: proximityAlerts, dismissAlert: dismissProximityAlert } = useShoppingProximityAlerts();
+  const { isAdmin } = useIsAdmin();
 
   useEffect(() => {
     const section = SECTION_BY_PATH[location] ?? (location.replace(/^\//, "") || "home");
@@ -65,7 +67,7 @@ export default function Layout({ children }: LayoutProps) {
     { href: "/assistant", label: "Hjälp", icon: Sparkles },
       { href: "/friktionsindex", label: "Feedback", icon: Flame },
       { href: "/energikarta", label: "Energi", icon: Battery },
-      { href: "/admin-statistik", label: "Appstatistik", icon: BarChart3 },
+      ...(isAdmin ? [{ href: "/admin-statistik", label: "Appstatistik", icon: BarChart3 }] : []),
     ];
 
   // For mobile bottom bar, we show first 4 items and a "Mer" button
