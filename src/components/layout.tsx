@@ -1,11 +1,13 @@
 import { ReactNode, useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
-import { Home, Target, CheckSquare, ShoppingBag, Smile, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Battery } from "lucide-react";
+import { Home, Target, CheckSquare, ShoppingBag, Smile, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Battery, Download } from "lucide-react";
 import { useCommuteAlerts } from "@/hooks/use-commute-alerts";
 import { useMedicationAlerts } from "@/hooks/use-medication-alerts";
 import { useShoppingProximityAlerts } from "@/hooks/use-shopping-proximity-alerts";
 import { useIsAdmin } from "@/hooks/use-is-admin";
 import { trackEvent } from "@/lib/analytics";
+import { useServerFn } from "@tanstack/react-start";
+import { downloadVideo } from "@/lib/video.functions";
 
 interface LayoutProps {
   children: ReactNode;
@@ -64,6 +66,30 @@ export default function Layout({ children }: LayoutProps) {
   const { alerts: medicationAlerts, dismissAlert: dismissMedicationAlert } = useMedicationAlerts();
   const { alerts: proximityAlerts, dismissAlert: dismissProximityAlert } = useShoppingProximityAlerts();
   const { isAdmin } = useIsAdmin();
+  const fetchVideo = useServerFn(downloadVideo);
+  const [downloading, setDownloading] = useState(false);
+
+  async function handleDownloadVideo() {
+    if (downloading) return;
+    setDownloading(true);
+    try {
+      const response = await fetchVideo();
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "myflow-preview.mp4";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error("download failed", e);
+      alert("Kunde inte ladda ner videon.");
+    } finally {
+      setDownloading(false);
+    }
+  }
 
   useEffect(() => {
     const section = SECTION_BY_PATH[location] ?? (location.replace(/^\//, "") || "home");
@@ -123,6 +149,15 @@ export default function Layout({ children }: LayoutProps) {
             );
           })}
         </div>
+        <button
+          type="button"
+          onClick={handleDownloadVideo}
+          disabled={downloading}
+          className="mt-4 flex items-center justify-center gap-2 rounded-2xl px-3 py-3 text-sm bg-secondary/40 hover:bg-secondary text-foreground disabled:opacity-60"
+        >
+          <Download size={18} />
+          <span>{downloading ? "Laddar ner…" : "Ladda ner demo-video"}</span>
+        </button>
       </nav>
 
       {/* Main Content Area */}
@@ -289,6 +324,18 @@ export default function Layout({ children }: LayoutProps) {
                   );
                 })}
               </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  handleDownloadVideo();
+                }}
+                disabled={downloading}
+                className="mt-6 w-full flex items-center justify-center gap-2 rounded-2xl px-4 py-3 bg-primary text-primary-foreground font-medium disabled:opacity-60"
+              >
+                <Download size={18} />
+                <span>{downloading ? "Laddar ner…" : "Ladda ner demo-video"}</span>
+              </button>
             </div>
           </div>
         </div>
