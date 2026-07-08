@@ -261,35 +261,48 @@ export default function FrictionIndexPage() {
                 className="w-full rounded-2xl border border-border bg-background p-3 text-sm"
               />
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="text-sm font-medium block mb-1">Kategori</label>
-                <select
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                  className="w-full rounded-2xl border border-border bg-background p-3 text-sm"
-                >
-                  {CATEGORIES.map((c) => (
-                    <option key={c.value} value={c.value}>
-                      {c.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="text-sm font-medium block mb-1">Påverkan (1–5)</label>
-                <select
-                  value={impact}
-                  onChange={(e) => setImpact(Number(e.target.value))}
-                  className="w-full rounded-2xl border border-border bg-background p-3 text-sm"
-                >
-                  {[1, 2, 3, 4, 5].map((n) => (
-                    <option key={n} value={n}>
-                      {n} {n === 1 ? "– litet" : n === 5 ? "– stort" : ""}
-                    </option>
-                  ))}
-                </select>
-              </div>
+            <div>
+              <label className="text-sm font-medium block mb-1">Kategori</label>
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="w-full rounded-2xl border border-border bg-background p-3 text-sm"
+              >
+                {CATEGORIES.map((c) => (
+                  <option key={c.value} value={c.value}>
+                    {c.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {([
+                { label: "Påverkan", hint: "Hur stort är problemet?", value: impact, setter: setImpact },
+                { label: "Frekvens", hint: "Hur ofta händer det?", value: frequency, setter: setFrequency },
+                { label: "Mental belastning", hint: "Hur mycket stjäl det energi?", value: mentalLoad, setter: setMentalLoad },
+              ] as const).map((axis) => (
+                <div key={axis.label}>
+                  <label className="text-sm font-medium block mb-1">{axis.label} (1–5)</label>
+                  <select
+                    value={axis.value}
+                    onChange={(e) => axis.setter(Number(e.target.value))}
+                    className="w-full rounded-2xl border border-border bg-background p-3 text-sm"
+                  >
+                    {[1, 2, 3, 4, 5].map((n) => (
+                      <option key={n} value={n}>
+                        {n} – {SCALE_LABELS[n]}
+                      </option>
+                    ))}
+                  </select>
+                  <p className="text-[11px] text-muted-foreground mt-1">{axis.hint}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="text-xs text-muted-foreground bg-secondary/40 rounded-xl px-3 py-2">
+              Totalpoäng blir <strong className="text-foreground">{impact + frequency + mentalLoad}</strong>{" "}
+              – {priorityFor(impact + frequency + mentalLoad).label} prioritet.
             </div>
             <Button type="submit" disabled={saving || !title.trim()} className="rounded-full">
               {saving ? <Loader2 size={16} className="animate-spin mr-1" /> : null} Spara
