@@ -6,8 +6,6 @@ import { useMedicationAlerts } from "@/hooks/use-medication-alerts";
 import { useShoppingProximityAlerts } from "@/hooks/use-shopping-proximity-alerts";
 import { useIsAdmin } from "@/hooks/use-is-admin";
 import { trackEvent } from "@/lib/analytics";
-import { useServerFn } from "@tanstack/react-start";
-import { downloadVideo } from "@/lib/video.functions";
 
 interface LayoutProps {
   children: ReactNode;
@@ -66,14 +64,14 @@ export default function Layout({ children }: LayoutProps) {
   const { alerts: medicationAlerts, dismissAlert: dismissMedicationAlert } = useMedicationAlerts();
   const { alerts: proximityAlerts, dismissAlert: dismissProximityAlert } = useShoppingProximityAlerts();
   const { isAdmin } = useIsAdmin();
-  const fetchVideo = useServerFn(downloadVideo);
   const [downloading, setDownloading] = useState(false);
 
   async function handleDownloadVideo() {
     if (downloading) return;
     setDownloading(true);
     try {
-      const response = await fetchVideo();
+      const response = await fetch("/myflow-preview.mp4");
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
