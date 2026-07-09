@@ -184,6 +184,7 @@ export function useTasks() {
     unsnoozeTask,
     setTaskStatus,
     setTaskKind,
+    setTaskDueDate,
     addTaskStep,
     toggleTaskStep,
     deleteTaskStep,
