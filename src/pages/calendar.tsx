@@ -2,6 +2,7 @@ import { useState } from "react";
 import Layout from "@/components/layout";
 import { useFocus, useTasks, useReminders } from "@/hooks/use-data";
 import { CheckSquare, Target, Bell, ChevronLeft, ChevronRight, Trash2, Users, Plus } from "lucide-react";
+import { requestNotificationPermission, getNotificationPermission } from "@/lib/push-notifications";
 import { useUser } from "@clerk/react";
 import {
   useGetMyHousehold,
