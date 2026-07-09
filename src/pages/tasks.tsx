@@ -359,6 +359,38 @@ export default function Tasks() {
               </Button>
             </div>
           </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <label className="inline-flex items-center gap-2 text-xs text-muted-foreground">
+              <Clock size={14} />
+              <span>Tid (valfritt)</span>
+              <Input
+                type="time"
+                value={newTime}
+                onChange={(e) => {
+                  setNewTime(e.target.value);
+                  if (!e.target.value) setNewReminder("");
+                }}
+                className="h-9 w-28 rounded-xl text-sm bg-background"
+              />
+            </label>
+            <label className="inline-flex items-center gap-2 text-xs text-muted-foreground">
+              <BellRing size={14} />
+              <span>Påminn mig</span>
+              <select
+                value={newReminder}
+                onChange={(e) => setNewReminder(e.target.value === "" ? "" : Number(e.target.value))}
+                disabled={!newTime}
+                className="h-9 rounded-xl text-sm bg-background border border-border px-2 disabled:opacity-50"
+              >
+                <option value="">Ingen</option>
+                <option value={0}>På minuten</option>
+                <option value={5}>5 min innan</option>
+                <option value={15}>15 min innan</option>
+                <option value={30}>30 min innan</option>
+                <option value={60}>1 h innan</option>
+              </select>
+            </label>
+          </div>
           <div className="flex flex-wrap gap-1.5">
             {(Object.keys(KIND_META) as TaskKind[]).map((k) => {
               const active = k === newKind;
