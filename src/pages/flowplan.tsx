@@ -2,11 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import Layout from "@/components/layout";
 import { Button } from "@/components/ui/button";
-import { Loader2, ListOrdered, Sparkles, Clock, Battery } from "lucide-react";
+import { Loader2, ListOrdered, Sparkles, Clock, Battery, RotateCcw } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { planFlowSequence, type FlowPlanResult } from "@/lib/flowplan.functions";
 import { useTasks, useFocus } from "@/hooks/use-data";
 import { supabase } from "@/integrations/supabase/client";
+import { useLocalStorage } from "@/lib/storage";
+
+type StoredPlan = { plan: FlowPlanResult; savedAt: string; date: string };
 
 type Energy = "low" | "medium" | "high";
 
@@ -46,9 +49,22 @@ export default function FlowPlanPage() {
   const [energyAuto, setEnergyAuto] = useState<{ level: number; loggedAt: string } | null>(null);
   const [energyManual, setEnergyManual] = useState(false);
   const [timeAvailable, setTimeAvailable] = useState<number>(120);
-  const [plan, setPlan] = useState<FlowPlanResult | null>(null);
+  const [storedPlan, setStoredPlan] = useLocalStorage<StoredPlan | null>("myflow-flowplan", null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const plan = storedPlan?.plan ?? null;
+  const setPlan = (p: FlowPlanResult | null) => {
+    if (!p) {
+      setStoredPlan(null);
+      return;
+    }
+    setStoredPlan({
+      plan: p,
+      savedAt: new Date().toISOString(),
+      date: new Date().toISOString().split("T")[0] as string,
+    });
+  };
 
   const run = useServerFn(planFlowSequence);
 
@@ -236,6 +252,19 @@ export default function FlowPlanPage() {
 
         {plan && (
           <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="flex items-center justify-between gap-3">
+              <span className="text-xs text-muted-foreground">
+                {storedPlan?.date === new Date().toISOString().split("T")[0]
+                  ? "Sparad plan för idag"
+                  : `Sparad plan från ${storedPlan?.date}`}
+              </span>
+              <button
+                onClick={() => setPlan(null)}
+                className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1"
+              >
+                <RotateCcw size={12} /> Rensa
+              </button>
+            </div>
             <div className="p-4 bg-primary/5 border border-primary/20 rounded-2xl">
               <p className="text-sm leading-relaxed">{plan.intro}</p>
             </div>
