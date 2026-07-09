@@ -34,7 +34,16 @@
   --color-destructive: hsl(var(--destructive));
   --color-destructive-foreground: hsl(var(--destructive-foreground));
 
-  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  /* Brand accents from the MyFlow preview palette */
+  --color-ink: hsl(var(--ink));
+  --color-cream: hsl(var(--cream));
+  --color-sage: hsl(var(--sage));
+  --color-gold: hsl(var(--gold));
+  --color-terracotta: hsl(var(--terracotta));
+  --color-terracotta-soft: hsl(var(--terracotta-soft));
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces", ui-serif, Georgia, serif;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -43,69 +52,81 @@
 }
 
 :root {
-  /* Blueprint 2.0: varma, dämpade jordtoner – aldrig skarpt, aldrig kliniskt */
-  --background: 42 30% 94%;
-  --foreground: 80 20% 20%;
-  --border: 60 15% 82%;
+  /* MyFlow preview palette: warm, grounded, never clinical */
+  --background: 38 35% 94%;
+  --foreground: 194 13% 20%;
+  --border: 30 18% 82%;
 
-  --card: 45 40% 97%;
-  --card-foreground: 80 20% 20%;
+  --card: 40 100% 98%;
+  --card-foreground: 194 13% 20%;
 
-  --popover: 45 40% 97%;
-  --popover-foreground: 80 20% 20%;
+  --popover: 40 100% 98%;
+  --popover-foreground: 194 13% 20%;
 
-  --primary: 80 24% 40%;
-  --primary-foreground: 45 45% 97%;
+  --primary: 7 47% 49%;
+  --primary-foreground: 40 100% 98%;
 
-  --secondary: 45 45% 86%;
-  --secondary-foreground: 70 30% 26%;
+  --secondary: 39 36% 89%;
+  --secondary-foreground: 194 13% 20%;
 
-  --muted: 55 18% 88%;
-  --muted-foreground: 75 10% 44%;
+  --muted: 39 25% 89%;
+  --muted-foreground: 29 10% 43%;
 
-  --accent: 35 55% 82%;
-  --accent-foreground: 30 40% 24%;
+  --accent: 138 30% 84%;
+  --accent-foreground: 138 30% 22%;
 
-  /* Mjukare "fel" – terrakotta istället för alarmrött */
-  --destructive: 14 45% 55%;
-  --destructive-foreground: 45 40% 97%;
+  --destructive: 8 55% 55%;
+  --destructive-foreground: 40 100% 98%;
 
-  --input: 60 15% 84%;
-  --ring: 80 24% 40%;
+  --input: 38 30% 88%;
+  --ring: 7 47% 49%;
 
   --radius: 1rem;
+
+  /* Raw brand tokens */
+  --ink: 194 13% 20%;
+  --cream: 40 100% 98%;
+  --sage: 138 15% 70%;
+  --gold: 35 73% 61%;
+  --terracotta: 7 47% 49%;
+  --terracotta-soft: 8 61% 61%;
 }
 
-
 .dark {
-  --background: 80 18% 10%;
-  --foreground: 60 25% 90%;
-  --border: 75 15% 20%;
+  --background: 194 13% 12%;
+  --foreground: 40 60% 95%;
+  --border: 194 10% 22%;
 
-  --card: 80 15% 14%;
-  --card-foreground: 60 25% 90%;
+  --card: 194 12% 16%;
+  --card-foreground: 40 60% 95%;
 
-  --popover: 80 15% 14%;
-  --popover-foreground: 60 25% 90%;
+  --popover: 194 12% 16%;
+  --popover-foreground: 40 60% 95%;
 
-  --primary: 80 25% 48%;
-  --primary-foreground: 80 20% 10%;
+  --primary: 8 55% 58%;
+  --primary-foreground: 40 40% 10%;
 
-  --secondary: 55 30% 24%;
-  --secondary-foreground: 50 55% 85%;
+  --secondary: 38 14% 20%;
+  --secondary-foreground: 40 45% 88%;
 
-  --muted: 75 12% 20%;
-  --muted-foreground: 70 12% 62%;
+  --muted: 194 10% 20%;
+  --muted-foreground: 38 12% 65%;
 
-  --accent: 48 35% 28%;
-  --accent-foreground: 48 65% 82%;
+  --accent: 138 18% 24%;
+  --accent-foreground: 138 40% 82%;
 
-  --destructive: 14 40% 52%;
-  --destructive-foreground: 45 40% 95%;
+  --destructive: 8 55% 55%;
+  --destructive-foreground: 40 100% 98%;
 
+  --input: 194 10% 24%;
+  --ring: 8 55% 58%;
 
-  --input: 75 12% 24%;
-  --ring: 80 25% 48%;
+  --ink: 40 60% 95%;
+  --cream: 194 13% 12%;
+  --sage: 138 18% 60%;
+  --gold: 35 65% 58%;
+  --terracotta: 8 55% 58%;
+  --terracotta-soft: 8 65% 68%;
 }
 
 @layer base {
@@ -118,5 +139,9 @@
     color: hsl(var(--foreground));
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
   }
 }

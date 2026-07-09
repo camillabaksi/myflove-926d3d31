@@ -38,27 +38,35 @@ const SECTION_BY_PATH: Record<string, string> = {
 };
 
 /**
- * Per-category color themes. Overrides --primary / --accent / --ring so all
- * text-primary, bg-primary, bg-accent etc. classes automatically re-tint per page.
- * Values are HSL triples (used inside hsl(...)) to match src/styles.css tokens.
+ * Per-category color themes, all drawn from the warm MyFlow preview palette.
+ * They override --primary / --accent / --ring so text-primary, bg-primary, etc.
+ * re-tint automatically per page.
  */
-const CATEGORY_THEMES: Record<string, Record<string, string>> = {
-  "/mood":           { "--primary": "130 24% 40%", "--ring": "130 24% 40%", "--accent": "130 30% 84%", "--accent-foreground": "130 40% 22%" },
-  "/pomodoro":       { "--primary": "14 55% 50%",  "--ring": "14 55% 50%",  "--accent": "20 55% 84%",  "--accent-foreground": "14 50% 24%" },
-  "/fokus":          { "--primary": "14 55% 50%",  "--ring": "14 55% 50%",  "--accent": "20 55% 84%",  "--accent-foreground": "14 50% 24%" },
-  "/finances":       { "--primary": "40 60% 42%",  "--ring": "40 60% 42%",  "--accent": "42 60% 84%",  "--accent-foreground": "38 55% 22%" },
-  "/kalender":       { "--primary": "210 32% 44%", "--ring": "210 32% 44%", "--accent": "210 38% 84%", "--accent-foreground": "212 40% 22%" },
-  "/flowplan":       { "--primary": "210 32% 44%", "--ring": "210 32% 44%", "--accent": "210 38% 84%", "--accent-foreground": "212 40% 22%" },
-  "/shopping":       { "--primary": "32 45% 44%",  "--ring": "32 45% 44%",  "--accent": "34 55% 84%",  "--accent-foreground": "28 45% 22%" },
-  "/matlista":       { "--primary": "32 45% 44%",  "--ring": "32 45% 44%",  "--accent": "34 55% 84%",  "--accent-foreground": "28 45% 22%" },
-  "/medicin":        { "--primary": "18 45% 46%",  "--ring": "18 45% 46%",  "--accent": "22 45% 84%",  "--accent-foreground": "16 45% 22%" },
-  "/travel":         { "--primary": "195 45% 38%", "--ring": "195 45% 38%", "--accent": "195 50% 84%", "--accent-foreground": "198 55% 20%" },
-  "/familj":         { "--primary": "340 32% 50%", "--ring": "340 32% 50%", "--accent": "342 45% 86%", "--accent-foreground": "340 45% 24%" },
-  "/beloningar":     { "--primary": "42 65% 46%",  "--ring": "42 65% 46%",  "--accent": "44 65% 84%",  "--accent-foreground": "38 60% 22%" },
-  "/statistik":      { "--primary": "260 22% 48%", "--ring": "260 22% 48%", "--accent": "258 32% 86%", "--accent-foreground": "260 32% 24%" },
-  "/friktionsindex": { "--primary": "25 18% 44%",  "--ring": "25 18% 44%",  "--accent": "25 22% 84%",  "--accent-foreground": "22 25% 22%" },
-  "/energikarta":    { "--primary": "175 32% 38%", "--ring": "175 32% 38%", "--accent": "175 42% 84%", "--accent-foreground": "175 45% 20%" },
+const T = {
+  terracotta: { "--primary": "7 47% 49%", "--ring": "7 47% 49%", "--accent": "8 45% 84%", "--accent-foreground": "7 50% 24%" },
+  sage:       { "--primary": "138 24% 40%", "--ring": "138 24% 40%", "--accent": "138 30% 84%", "--accent-foreground": "138 40% 22%" },
+  gold:       { "--primary": "35 65% 45%",  "--ring": "35 65% 45%",  "--accent": "35 55% 82%",  "--accent-foreground": "35 45% 22%" },
+  ink:        { "--primary": "194 13% 25%", "--ring": "194 13% 25%", "--accent": "194 10% 80%", "--accent-foreground": "194 20% 18%" },
 };
+
+const CATEGORY_THEMES: Record<string, Record<string, string>> = {
+  "/mood":           T.sage,
+  "/pomodoro":       T.terracotta,
+  "/fokus":          T.terracotta,
+  "/finances":       T.gold,
+  "/kalender":       T.ink,
+  "/flowplan":       T.ink,
+  "/shopping":       T.sage,
+  "/matlista":       T.sage,
+  "/medicin":        T.terracotta,
+  "/travel":         T.ink,
+  "/familj":         T.gold,
+  "/beloningar":     T.gold,
+  "/statistik":      T.ink,
+  "/friktionsindex": T.terracotta,
+  "/energikarta":    T.sage,
+};
+
 
 export default function Layout({ children }: LayoutProps) {
   const [location] = useLocation();
@@ -77,7 +85,7 @@ export default function Layout({ children }: LayoutProps) {
   }, [location]);
 
   const navItems = [
-    { href: "/", label: "Hem", icon: Home },
+    { href: "/hem", label: "Hem", icon: Home },
     { href: "/mood", label: "Mående", icon: Smile },
     { href: "/dump", label: "Dumping", icon: Inbox },
     { href: "/kalender", label: "Kalender", icon: Calendar },
@@ -94,10 +102,10 @@ export default function Layout({ children }: LayoutProps) {
     { href: "/statistik", label: "Statistik", icon: BarChart3 },
     { href: "/beloningar", label: "Belöningar", icon: Trophy },
     { href: "/assistant", label: "Hjälp", icon: Sparkles },
-      { href: "/friktionsindex", label: "Feedback", icon: Flame },
-      { href: "/energikarta", label: "Energi", icon: Battery },
-      ...(isAdmin ? [{ href: "/admin-statistik", label: "Appstatistik", icon: BarChart3 }] : []),
-    ];
+    { href: "/friktionsindex", label: "Feedback", icon: Flame },
+    { href: "/energikarta", label: "Energi", icon: Battery },
+    ...(isAdmin ? [{ href: "/admin-statistik", label: "Appstatistik", icon: BarChart3 }] : []),
+  ];
 
   // Bottom nav: Home is fixed, the remaining 3 slots are user-customizable.
   const [bottomNavHrefs, setBottomNavHrefs] = useLocalStorage<string[]>("myflow-bottom-nav", [
@@ -108,7 +116,7 @@ export default function Layout({ children }: LayoutProps) {
   const [editingBottomNav, setEditingBottomNav] = useState(false);
 
   const mobileNavItems = useMemo(() => {
-    const home = navItems.find((i) => i.href === "/")!;
+    const home = navItems.find((i) => i.href === "/hem")!;
     const chosen = bottomNavHrefs
       .map((href) => navItems.find((i) => i.href === href))
       .filter(Boolean) as typeof navItems;
@@ -163,7 +171,7 @@ export default function Layout({ children }: LayoutProps) {
             {alerts.map((alert) => (
               <div
                 key={alert.tripId}
-                className="flex items-center justify-between gap-3 bg-yellow-100 border border-yellow-300 text-yellow-900 rounded-2xl px-4 py-3 shadow-sm animate-in fade-in slide-in-from-top-2"
+                className="flex items-center justify-between gap-3 bg-gold/15 border border-gold/30 text-ink rounded-2xl px-4 py-3 shadow-sm animate-in fade-in slide-in-from-top-2"
               >
                 <div className="flex items-center gap-3">
                   <BellRing size={20} className="shrink-0" />
@@ -175,8 +183,9 @@ export default function Layout({ children }: LayoutProps) {
                   type="button"
                   onClick={() => dismissAlert(alert)}
                   aria-label="Stäng varning"
-                  className="shrink-0 p-1.5 rounded-full hover:bg-yellow-200/60"
+                  className="shrink-0 p-1.5 rounded-full hover:bg-gold/25"
                 >
+
                   <X size={18} />
                 </button>
               </div>
@@ -189,7 +198,7 @@ export default function Layout({ children }: LayoutProps) {
             {medicationAlerts.map((alert) => (
               <div
                 key={alert.key}
-                className="flex items-center justify-between gap-3 bg-yellow-100 border border-yellow-300 text-yellow-900 rounded-2xl px-4 py-3 shadow-sm animate-in fade-in slide-in-from-top-2"
+                className="flex items-center justify-between gap-3 bg-gold/15 border border-gold/30 text-ink rounded-2xl px-4 py-3 shadow-sm animate-in fade-in slide-in-from-top-2"
               >
                 <div className="flex items-center gap-3">
                   <Pill size={20} className="shrink-0" />
@@ -201,8 +210,9 @@ export default function Layout({ children }: LayoutProps) {
                   type="button"
                   onClick={() => dismissMedicationAlert(alert)}
                   aria-label="Stäng varning"
-                  className="shrink-0 p-1.5 rounded-full hover:bg-yellow-200/60"
+                  className="shrink-0 p-1.5 rounded-full hover:bg-gold/25"
                 >
+
                   <X size={18} />
                 </button>
               </div>
@@ -215,7 +225,7 @@ export default function Layout({ children }: LayoutProps) {
             {proximityAlerts.map((alert) => (
               <div
                 key={alert.storeId}
-                className="flex items-center justify-between gap-3 bg-yellow-100 border border-yellow-300 text-yellow-900 rounded-2xl px-4 py-3 shadow-sm animate-in fade-in slide-in-from-top-2"
+                className="flex items-center justify-between gap-3 bg-gold/15 border border-gold/30 text-ink rounded-2xl px-4 py-3 shadow-sm animate-in fade-in slide-in-from-top-2"
               >
                 <div className="flex items-center gap-3">
                   <MapPin size={20} className="shrink-0" />
@@ -227,8 +237,9 @@ export default function Layout({ children }: LayoutProps) {
                   type="button"
                   onClick={() => dismissProximityAlert(alert)}
                   aria-label="Stäng varning"
-                  className="shrink-0 p-1.5 rounded-full hover:bg-yellow-200/60"
+                  className="shrink-0 p-1.5 rounded-full hover:bg-gold/25"
                 >
+
                   <X size={18} />
                 </button>
               </div>
