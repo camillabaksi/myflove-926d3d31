@@ -59,6 +59,9 @@ export default function CalendarPage() {
   const [isAddingEvent, setIsAddingEvent] = useState(false);
   const [newEventTitle, setNewEventTitle] = useState("");
   const [newEventTime, setNewEventTime] = useState("");
+  const [isAddingReminder, setIsAddingReminder] = useState(false);
+  const [newReminderTitle, setNewReminderTitle] = useState("");
+  const [newReminderTime, setNewReminderTime] = useState("");
 
   const createEventMutation = useCreateFamilyEvent({
     mutation: {
