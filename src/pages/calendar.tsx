@@ -47,7 +47,7 @@ function useFamilyEventsByDate() {
 export default function CalendarPage() {
   const { currentFocus } = useFocus();
   const { activeTasks, completedTasks } = useTasks();
-  const { activeReminders, deleteReminder } = useReminders();
+  const { activeReminders, addReminder, deleteReminder } = useReminders();
   const { eventsForDate, hasHousehold } = useFamilyEventsByDate();
   const { toast } = useToast();
   const queryClient = useQueryClient();
