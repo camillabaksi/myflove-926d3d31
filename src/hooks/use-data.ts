@@ -81,7 +81,7 @@ export function useTasks() {
   const addTask = (
     title: string,
     dueDate?: string,
-    opts?: { kind?: TaskKind; waitingOn?: string }
+    opts?: { kind?: TaskKind; waitingOn?: string; time?: string; reminderMinutesBefore?: number }
   ) => {
     // Blueprint: uppgifter ska alltid landa i kalendern så inget "försvinner".
     // Om inget datum anges kopplas uppgiften till idag.
@@ -92,6 +92,8 @@ export function useTasks() {
         completed: false,
         createdAt: Date.now(),
         dueDate: dueDate ?? getTodayDateString(),
+        time: opts?.time,
+        reminderMinutesBefore: opts?.reminderMinutesBefore,
         kind: opts?.kind ?? "uppgift",
         status: opts?.waitingOn ? "vantar" : "pagar",
         waitingOn: opts?.waitingOn,
@@ -103,6 +105,12 @@ export function useTasks() {
 
   const setTaskDueDate = (id: string, dueDate: string) => {
     setTasks((prev) => prev.map(t => (t.id === id ? { ...t, dueDate } : t)));
+  };
+
+  const setTaskTime = (id: string, time: string | undefined, reminderMinutesBefore?: number) => {
+    setTasks((prev) => prev.map(t => (t.id === id
+      ? { ...t, time, reminderMinutesBefore: time ? reminderMinutesBefore : undefined }
+      : t)));
   };
 
   const toggleTask = (id: string) => {
