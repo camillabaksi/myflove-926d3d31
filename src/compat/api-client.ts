@@ -59,7 +59,16 @@ export function useListMealPlans(_opts?: any): any {
 }
 export function useUpsertMealPlanSlot(_opts?: any): any { return noopMutation(); }
 
-export function useGetAnalyticsSummary(_opts?: any): any { return emptyQuery(); }
+import { getAnalyticsSummaryFn } from "@/lib/analytics.functions";
+
+export function useGetAnalyticsSummary(_opts?: any): any {
+  return useQuery({
+    queryKey: ["analytics-summary"],
+    queryFn: () => getAnalyticsSummaryFn(),
+    retry: false,
+    staleTime: 60_000,
+  });
+}
 
 import { useQuery } from "@tanstack/react-query";
 import { getSlTripFn, getSlNearbyStopFn } from "@/lib/sl.functions";

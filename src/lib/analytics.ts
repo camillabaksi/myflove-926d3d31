@@ -1,4 +1,4 @@
-import { trackEvent as postTrackEvent } from "@workspace/api-client-react";
+import { logAnalyticsEventFn } from "@/lib/analytics.functions";
 
 const SESSION_KEY = "myflow-analytics-session-id";
 
@@ -26,7 +26,7 @@ function getSessionId(): string {
 export function trackEvent(section: string, action: string): void {
   if (typeof window === "undefined") return;
   const sessionId = getSessionId();
-  postTrackEvent({ sessionId, section, action }).catch(() => {
+  logAnalyticsEventFn({ data: { sessionId, section, action } }).catch(() => {
     // Analytics must never disrupt the user experience.
   });
 }

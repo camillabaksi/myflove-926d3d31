@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      analytics_events: {
+        Row: {
+          action: string
+          created_at: string
+          id: string
+          section: string
+          session_id: string
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          id?: string
+          section: string
+          session_id: string
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          id?: string
+          section?: string
+          session_id?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       energy_logs: {
         Row: {
           created_at: string
