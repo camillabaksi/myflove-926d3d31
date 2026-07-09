@@ -63,6 +63,46 @@ export default function CalendarPage() {
   const [isAddingReminder, setIsAddingReminder] = useState(false);
   const [newReminderTitle, setNewReminderTitle] = useState("");
   const [newReminderTime, setNewReminderTime] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleExportAll = () => {
+    const events: IcsEvent[] = [];
+    for (const r of activeReminders) {
+      events.push({ title: r.title, date: r.date, time: r.time, uid: `reminder-${r.id}@myflow` });
+    }
+    for (const t of allTasks) {
+      if (t.dueDate) events.push({ title: t.title, date: t.dueDate, time: t.time, uid: `task-${t.id}@myflow` });
+    }
+    if (currentFocus) {
+      events.push({ title: `Fokus: ${currentFocus.text}`, date: todayStr, uid: `focus-${currentFocus.id}@myflow` });
+    }
+    if (events.length === 0) {
+      toast({ description: "Inget att exportera ännu." });
+      return;
+    }
+    downloadIcs(events, "myflow-kalender.ics");
+    toast({ description: `Exporterade ${events.length} händelser. Öppna filen i din kalenderapp.` });
+  };
+
+  const handleImportFile = async (file: File) => {
+    try {
+      const text = await file.text();
+      const events = parseIcs(text);
+      if (events.length === 0) {
+        toast({ description: "Hittade inga händelser i filen.", variant: "destructive" });
+        return;
+      }
+      let added = 0;
+      for (const e of events) {
+        addReminder(e.title, e.date, e.time);
+        added++;
+      }
+      toast({ description: `Importerade ${added} händelser till kalendern.` });
+    } catch {
+      toast({ description: "Kunde inte läsa filen. Kontrollera att det är en .ics-fil.", variant: "destructive" });
+    }
+  };
+
 
   const createEventMutation = useCreateFamilyEvent({
     mutation: {
