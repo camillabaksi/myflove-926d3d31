@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Layout from "@/components/layout";
 import { useFocus, useTasks, useReminders } from "@/hooks/use-data";
-import { CheckSquare, Target, Bell, ChevronLeft, ChevronRight, Trash2, Users, Plus } from "lucide-react";
+import { CheckSquare, Target, Bell, ChevronLeft, ChevronRight, Trash2, Users, Plus, Download, Upload } from "lucide-react";
 import { requestNotificationPermission, getNotificationPermission } from "@/lib/push-notifications";
+import { downloadIcs, parseIcs, type IcsEvent } from "@/lib/ics";
 import { useUser } from "@clerk/react";
 import {
   useGetMyHousehold,
@@ -62,6 +63,46 @@ export default function CalendarPage() {
   const [isAddingReminder, setIsAddingReminder] = useState(false);
   const [newReminderTitle, setNewReminderTitle] = useState("");
   const [newReminderTime, setNewReminderTime] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleExportAll = () => {
+    const events: IcsEvent[] = [];
+    for (const r of activeReminders) {
+      events.push({ title: r.title, date: r.date, time: r.time, uid: `reminder-${r.id}@myflow` });
+    }
+    for (const t of allTasks) {
+      if (t.dueDate) events.push({ title: t.title, date: t.dueDate, time: t.time, uid: `task-${t.id}@myflow` });
+    }
+    if (currentFocus) {
+      events.push({ title: `Fokus: ${currentFocus.text}`, date: todayStr, uid: `focus-${todayStr}@myflow` });
+    }
+    if (events.length === 0) {
+      toast({ description: "Inget att exportera ännu." });
+      return;
+    }
+    downloadIcs(events, "myflow-kalender.ics");
+    toast({ description: `Exporterade ${events.length} händelser. Öppna filen i din kalenderapp.` });
+  };
+
+  const handleImportFile = async (file: File) => {
+    try {
+      const text = await file.text();
+      const events = parseIcs(text);
+      if (events.length === 0) {
+        toast({ description: "Hittade inga händelser i filen.", variant: "destructive" });
+        return;
+      }
+      let added = 0;
+      for (const e of events) {
+        addReminder(e.title, e.date, e.time);
+        added++;
+      }
+      toast({ description: `Importerade ${added} händelser till kalendern.` });
+    } catch {
+      toast({ description: "Kunde inte läsa filen. Kontrollera att det är en .ics-fil.", variant: "destructive" });
+    }
+  };
+
 
   const createEventMutation = useCreateFamilyEvent({
     mutation: {
@@ -146,6 +187,37 @@ export default function CalendarPage() {
           <h1 className="text-3xl font-bold mb-2">Kalender</h1>
           <p className="text-muted-foreground">Översikt över dina dagar. Inga stressiga detaljer.</p>
         </div>
+
+        <div className="flex flex-wrap gap-2">
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            className="flex items-center gap-2 px-4 py-2.5 bg-card border border-border rounded-2xl text-sm font-medium hover:bg-secondary transition-colors"
+          >
+            <Upload size={16} />
+            Importera från telefonens kalender
+          </button>
+          <button
+            onClick={handleExportAll}
+            className="flex items-center gap-2 px-4 py-2.5 bg-card border border-border rounded-2xl text-sm font-medium hover:bg-secondary transition-colors"
+          >
+            <Download size={16} />
+            Exportera till kalender (.ics)
+          </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".ics,text/calendar"
+            className="hidden"
+            onChange={(e) => {
+              const f = e.target.files?.[0];
+              if (f) handleImportFile(f);
+              e.target.value = "";
+            }}
+          />
+        </div>
+        <p className="text-xs text-muted-foreground -mt-4">
+          Tips: exportera i telefonens kalender som .ics och importera här för att få in dina möten i MyFlow.
+        </p>
 
         <div className="bg-card rounded-3xl border border-border shadow-sm overflow-hidden">
           <div className="flex items-center justify-between p-6 pb-2">
