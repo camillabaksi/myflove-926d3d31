@@ -311,15 +311,15 @@ export default function Layout({ children }: LayoutProps) {
             </div>
             <div className="flex-1 overflow-y-auto p-4 pb-24">
               {editingBottomNav ? (
-                <BottomNavEditor
-                  allItems={navItems.filter((i) => i.href !== "/")}
-                  selected={bottomNavHrefs.filter((href) =>
-                    navItems.some((i) => i.href === href)
-                  )}
-                  onChange={setBottomNavHrefs}
-                  onClose={() => setEditingBottomNav(false)}
-                  onReset={() => setBottomNavHrefs(["/mood", "/dump", "/kalender"])}
-                />
+                  <BottomNavEditor
+                    allItems={navItems.filter((i) => i.href !== "/hem")}
+                    selected={bottomNavHrefs.filter((href) =>
+                      navItems.some((i) => i.href === href)
+                    )}
+                    onChange={setBottomNavHrefs}
+                    onClose={() => setEditingBottomNav(false)}
+                    onReset={() => setBottomNavHrefs(["/mood", "/dump", "/kalender"])}
+                  />
               ) : (
                 <>
                   <div className="grid grid-cols-3 gap-3">
