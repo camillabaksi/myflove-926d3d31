@@ -252,6 +252,19 @@ export default function FlowPlanPage() {
 
         {plan && (
           <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="flex items-center justify-between gap-3">
+              <span className="text-xs text-muted-foreground">
+                {storedPlan?.date === new Date().toISOString().split("T")[0]
+                  ? "Sparad plan för idag"
+                  : `Sparad plan från ${storedPlan?.date}`}
+              </span>
+              <button
+                onClick={() => setPlan(null)}
+                className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1"
+              >
+                <RotateCcw size={12} /> Rensa
+              </button>
+            </div>
             <div className="p-4 bg-primary/5 border border-primary/20 rounded-2xl">
               <p className="text-sm leading-relaxed">{plan.intro}</p>
             </div>
