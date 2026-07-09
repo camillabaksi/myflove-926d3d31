@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 const LOCAL_STORAGE_EVENT = 'myflow-local-storage';
 
@@ -17,13 +17,14 @@ function readStoredValue<T>(key: string, initialValue: T): T {
 }
 
 export function useLocalStorage<T>(key: string, initialValue: T) {
-  const [storedValue, setStoredValue] = useState<T>(() => readStoredValue(key, initialValue));
+  const initialValueRef = useRef(initialValue);
+  const [storedValue, setStoredValue] = useState<T>(() => readStoredValue(key, initialValueRef.current));
 
   useEffect(() => {
     const syncValue = (event?: StorageEvent | Event) => {
       if (event instanceof StorageEvent && event.key !== key) return;
       if (event instanceof CustomEvent && event.detail?.key !== key) return;
-      setStoredValue(readStoredValue(key, initialValue));
+      setStoredValue(readStoredValue(key, initialValueRef.current));
     };
 
     syncValue();
@@ -34,7 +35,7 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
       window.removeEventListener('storage', syncValue);
       window.removeEventListener(LOCAL_STORAGE_EVENT, syncValue);
     };
-  }, [initialValue, key]);
+  }, [key]);
 
   // Return a wrapped version of useState's setter function that ...
   // ... persists the new value to localStorage.
