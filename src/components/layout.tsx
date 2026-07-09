@@ -1,11 +1,13 @@
-import { ReactNode, useState, useEffect } from "react";
+import { ReactNode, useState, useEffect, useMemo } from "react";
 import { Link, useLocation } from "wouter";
-import { Home, Target, CheckSquare, ShoppingBag, Smile, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Battery } from "lucide-react";
+import { Home, Target, CheckSquare, ShoppingBag, Smile, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Battery, Settings2, Check, RotateCcw, ArrowUp, ArrowDown } from "lucide-react";
 import { useCommuteAlerts } from "@/hooks/use-commute-alerts";
 import { useMedicationAlerts } from "@/hooks/use-medication-alerts";
 import { useShoppingProximityAlerts } from "@/hooks/use-shopping-proximity-alerts";
 import { useIsAdmin } from "@/hooks/use-is-admin";
+import { useLocalStorage } from "@/lib/storage";
 import { trackEvent } from "@/lib/analytics";
+import { Button } from "@/components/ui/button";
 
 interface LayoutProps {
   children: ReactNode;
@@ -95,8 +97,28 @@ export default function Layout({ children }: LayoutProps) {
       ...(isAdmin ? [{ href: "/admin-statistik", label: "Appstatistik", icon: BarChart3 }] : []),
     ];
 
-  // For mobile bottom bar, we show first 4 items and a "Mer" button
-  const mobileNavItems = navItems.slice(0, 4);
+  // Bottom nav: Home is fixed, the remaining 3 slots are user-customizable.
+  const [bottomNavHrefs, setBottomNavHrefs] = useLocalStorage<string[]>("myflow-bottom-nav", [
+    "/mood",
+    "/dump",
+    "/kalender",
+  ]);
+  const [editingBottomNav, setEditingBottomNav] = useState(false);
+
+  const mobileNavItems = useMemo(() => {
+    const home = navItems.find((i) => i.href === "/")!;
+    const chosen = bottomNavHrefs
+      .map((href) => navItems.find((i) => i.href === href))
+      .filter(Boolean) as typeof navItems;
+    // Ensure we always have 3 valid slots; fill missing with defaults.
+    const defaults = [navItems[1], navItems[2], navItems[3]].filter(Boolean) as typeof navItems;
+    const filled = [...chosen];
+    for (const d of defaults) {
+      if (filled.length >= 3) break;
+      if (!filled.some((i) => i.href === d.href)) filled.push(d);
+    }
+    return [home, ...filled.slice(0, 3)];
+  }, [bottomNavHrefs, navItems]);
 
   return (
     <div className="min-h-[100dvh] flex flex-col bg-background md:flex-row relative">
@@ -260,41 +282,185 @@ export default function Layout({ children }: LayoutProps) {
       {mobileMenuOpen && (
         <div className="md:hidden fixed inset-0 z-50 bg-background/95 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="flex flex-col h-full">
-            <div className="flex justify-end p-4 border-b border-border/50">
-              <button 
-                onClick={() => setMobileMenuOpen(false)}
+            <div className="flex justify-between items-center p-4 border-b border-border/50">
+              <h2 className="text-lg font-medium text-muted-foreground">
+                {editingBottomNav ? "Anpassa bottennav" : "Alla sektioner"}
+              </h2>
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setEditingBottomNav(false);
+                }}
                 className="p-2 text-muted-foreground hover:bg-secondary rounded-full"
               >
                 <X size={28} />
               </button>
             </div>
             <div className="flex-1 overflow-y-auto p-4 pb-24">
-              <h2 className="text-lg font-medium text-muted-foreground px-2 mb-4">Alla sektioner</h2>
-              <div className="grid grid-cols-3 gap-3">
-                {navItems.map((item) => {
-                  const isActive = location === item.href;
-                  const Icon = item.icon;
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className={`aspect-square flex flex-col items-center justify-center gap-2 rounded-2xl p-2 text-center transition-all duration-200 ${
-                        isActive
-                          ? "bg-primary text-primary-foreground font-medium shadow-sm"
-                          : "bg-card text-foreground border border-border shadow-sm"
-                      }`}
+              {editingBottomNav ? (
+                <BottomNavEditor
+                  allItems={navItems.filter((i) => i.href !== "/")}
+                  selected={bottomNavHrefs.filter((href) =>
+                    navItems.some((i) => i.href === href)
+                  )}
+                  onChange={setBottomNavHrefs}
+                  onClose={() => setEditingBottomNav(false)}
+                  onReset={() => setBottomNavHrefs(["/mood", "/dump", "/kalender"])}
+                />
+              ) : (
+                <>
+                  <div className="grid grid-cols-3 gap-3">
+                    {navItems.map((item) => {
+                      const isActive = location === item.href;
+                      const Icon = item.icon;
+                      return (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className={`aspect-square flex flex-col items-center justify-center gap-2 rounded-2xl p-2 text-center transition-all duration-200 ${
+                            isActive
+                              ? "bg-primary text-primary-foreground font-medium shadow-sm"
+                              : "bg-card text-foreground border border-border shadow-sm"
+                          }`}
+                        >
+                          <Icon size={26} strokeWidth={isActive ? 2.5 : 2} />
+                          <span className="text-xs leading-tight">{item.label}</span>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                  <div className="mt-6 flex items-center justify-center">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setEditingBottomNav(true)}
+                      className="rounded-xl gap-2"
                     >
-                      <Icon size={26} strokeWidth={isActive ? 2.5 : 2} />
-                      <span className="text-xs leading-tight">{item.label}</span>
-                    </Link>
-                  );
-                })}
-              </div>
+                      <Settings2 size={16} /> Redigera bottennav
+                    </Button>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+interface BottomNavEditorProps {
+  allItems: { href: string; label: string; icon: typeof Home }[];
+  selected: string[];
+  onChange: (hrefs: string[]) => void;
+  onClose: () => void;
+  onReset: () => void;
+}
+
+function BottomNavEditor({ allItems, selected, onChange, onClose, onReset }: BottomNavEditorProps) {
+  const selectedItems = selected
+    .map((href) => allItems.find((i) => i.href === href))
+    .filter(Boolean) as { href: string; label: string; icon: typeof Home }[];
+
+  const toggle = (href: string) => {
+    if (selected.includes(href)) {
+      onChange(selected.filter((h) => h !== href));
+    } else if (selected.length < 3) {
+      onChange([...selected, href]);
+    }
+  };
+
+  const move = (href: string, dir: -1 | 1) => {
+    const idx = selected.indexOf(href);
+    const next = idx + dir;
+    if (idx < 0 || next < 0 || next >= selected.length) return;
+    const arr = [...selected];
+    [arr[idx], arr[next]] = [arr[next]!, arr[idx]!];
+    onChange(arr);
+  };
+
+  return (
+    <div className="space-y-6">
+      <p className="text-sm text-muted-foreground">
+        Välj 3 ikoner som ska visas bredvid Hem. Ordningen bestämmer ordningen i bottennavet.
+      </p>
+
+      {/* Selected slots preview */}
+      <div className="grid grid-cols-3 gap-3">
+        {selectedItems.map((item, idx) => {
+          const Icon = item.icon;
+          return (
+            <div
+              key={item.href}
+              className="relative aspect-square flex flex-col items-center justify-center gap-2 rounded-2xl p-2 text-center bg-primary text-primary-foreground font-medium shadow-sm"
+            >
+              <Icon size={26} strokeWidth={2.5} />
+              <span className="text-xs leading-tight">{item.label}</span>
+              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
+                <button
+                  type="button"
+                  onClick={() => move(item.href, -1)}
+                  disabled={idx === 0}
+                  className="p-1 rounded-md bg-primary-foreground/20 text-primary-foreground disabled:opacity-30"
+                  aria-label="Flytta vänster"
+                >
+                  <ArrowUp size={12} className="rotate-[-90deg]" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => move(item.href, 1)}
+                  disabled={idx === selectedItems.length - 1}
+                  className="p-1 rounded-md bg-primary-foreground/20 text-primary-foreground disabled:opacity-30"
+                  aria-label="Flytta höger"
+                >
+                  <ArrowDown size={12} className="rotate-[-90deg]" />
+                </button>
+              </div>
+            </div>
+          );
+        })}
+        {Array.from({ length: 3 - selectedItems.length }).map((_, idx) => (
+          <div
+            key={idx}
+            className="aspect-square flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border bg-muted/40"
+          >
+            <span className="text-xs text-muted-foreground">Plats {idx + 1}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* All items */}
+      <div className="grid grid-cols-3 gap-3">
+        {allItems.map((item) => {
+          const isSelected = selected.includes(item.href);
+          const Icon = item.icon;
+          return (
+            <button
+              key={item.href}
+              type="button"
+              onClick={() => toggle(item.href)}
+              className={`aspect-square flex flex-col items-center justify-center gap-2 rounded-2xl p-2 text-center transition-all ${
+                isSelected
+                  ? "bg-primary text-primary-foreground font-medium shadow-sm"
+                  : "bg-card text-foreground border border-border shadow-sm"
+              }`}
+            >
+              <Icon size={26} strokeWidth={isSelected ? 2.5 : 2} />
+              <span className="text-xs leading-tight">{item.label}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="flex gap-3 justify-center">
+        <Button variant="ghost" size="sm" onClick={onReset} className="rounded-xl gap-1">
+          <RotateCcw size={14} /> Återställ
+        </Button>
+        <Button size="sm" onClick={onClose} className="rounded-xl gap-1">
+          <Check size={14} /> Klar
+        </Button>
+      </div>
     </div>
   );
 }
