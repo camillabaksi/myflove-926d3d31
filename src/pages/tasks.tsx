@@ -64,6 +64,8 @@ export default function Tasks() {
 
   const [newTask, setNewTask] = useState("");
   const [dueDate, setDueDate] = useState("");
+  const [newTime, setNewTime] = useState("");
+  const [newReminder, setNewReminder] = useState<number | "">("");
   const [newKind, setNewKind] = useState<TaskKind>("uppgift");
 
   const [filter, setFilter] = useState<"all" | TaskKind>("all");
@@ -86,14 +88,23 @@ export default function Tasks() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (newTask.trim()) {
-      addTask(newTask.trim(), dueDate || undefined, { kind: newKind });
-      setNewTask("");
-      setDueDate("");
-      setNewKind("uppgift");
+    if (!newTask.trim()) return;
+    const reminderMinutes = newTime && newReminder !== "" ? Number(newReminder) : undefined;
+    if (reminderMinutes !== undefined && getNotificationPermission() === "default") {
+      await requestNotificationPermission();
     }
+    addTask(newTask.trim(), dueDate || undefined, {
+      kind: newKind,
+      time: newTime || undefined,
+      reminderMinutesBefore: reminderMinutes,
+    });
+    setNewTask("");
+    setDueDate("");
+    setNewTime("");
+    setNewReminder("");
+    setNewKind("uppgift");
   };
 
   const filteredActive = useMemo(
