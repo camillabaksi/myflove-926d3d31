@@ -41,23 +41,18 @@ function sortTasksByPriority(tasks: Task[]): Task[] {
 export default function Home() {
   const { currentFocus, toggleFocusCompleted } = useFocus();
   const { activeTasks, toggleTask } = useTasks();
-  const { activeReminders } = useReminders();
+  const { activeReminders: _activeReminders } = useReminders();
   const { transactions } = useFinances();
   const { medications, isTaken } = useMedications();
-  const { activeItems: shoppingItems } = useSharedShoppingList();
+  const { activeItems: _shoppingItems } = useSharedShoppingList();
 
   const [helpModalOpen, setHelpModalOpen] = useState(false);
   const [overwhelmedOpen, setOverwhelmedOpen] = useState(false);
   const [helpPlan, setHelpPlan] = useState<HelpPlan | null>(null);
 
-
-
-  const todayStr = new Date().toISOString().split("T")[0] as string;
-
   const prioritizedTasks = useMemo(() => sortTasksByPriority(activeTasks), [activeTasks]);
   const visibleTasks = prioritizedTasks.slice(0, helpPlan?.taskLimit ?? 3);
 
-  const nextReminder = activeReminders[0];
 
   const now = Date.now();
   const pastOrTodayTransactions = transactions.filter((t) => t.date <= now);
