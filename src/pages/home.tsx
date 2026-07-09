@@ -51,7 +51,12 @@ export default function Home() {
   const [helpPlan, setHelpPlan] = useState<HelpPlan | null>(null);
 
   const prioritizedTasks = useMemo(() => sortTasksByPriority(activeTasks), [activeTasks]);
-  const visibleTasks = prioritizedTasks.slice(0, helpPlan?.taskLimit ?? 3);
+  const limit = helpPlan?.taskLimit ?? 3;
+  const visibleActive = prioritizedTasks.slice(0, limit);
+  // Also show today's just-completed tasks inline so klarmarkering ger tydlig feedback.
+  const todayStr = new Date().toISOString().split("T")[0];
+  const completedToday = completedTasks.filter((t) => (t.dueDate ?? todayStr) === todayStr);
+  const visibleTasks = [...visibleActive, ...completedToday.slice(0, limit)];
 
 
   const now = Date.now();
@@ -172,10 +177,16 @@ export default function Home() {
                   key={task.id}
                   type="button"
                   onClick={() => toggleTask(task.id)}
-                  className="w-full flex items-center gap-3 p-4 bg-card border border-border rounded-2xl shadow-sm hover:border-primary/40 transition-all text-left"
+                  className={`w-full flex items-center gap-3 p-4 bg-card border rounded-2xl shadow-sm hover:border-primary/40 transition-all text-left ${
+                    task.completed ? "border-primary/30 opacity-70" : "border-border"
+                  }`}
                 >
-                  <Circle size={20} className="text-muted-foreground shrink-0" />
-                  <span className="flex-1">{task.title}</span>
+                  {task.completed ? (
+                    <CheckCircle2 size={20} className="text-primary fill-primary/20 shrink-0" />
+                  ) : (
+                    <Circle size={20} className="text-muted-foreground shrink-0" />
+                  )}
+                  <span className={`flex-1 ${task.completed ? "line-through" : ""}`}>{task.title}</span>
                   {task.dueDate && (
                     <span className="text-xs text-muted-foreground shrink-0">{task.dueDate}</span>
                   )}
