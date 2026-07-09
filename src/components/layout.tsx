@@ -394,10 +394,30 @@ function BottomNavEditor({ allItems, selected, onChange, onClose, onReset }: Bot
           return (
             <div
               key={item.href}
-              className="aspect-square flex flex-col items-center justify-center gap-2 rounded-2xl p-2 text-center bg-primary text-primary-foreground font-medium shadow-sm"
+              className="relative aspect-square flex flex-col items-center justify-center gap-2 rounded-2xl p-2 text-center bg-primary text-primary-foreground font-medium shadow-sm"
             >
               <Icon size={26} strokeWidth={2.5} />
               <span className="text-xs leading-tight">{item.label}</span>
+              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
+                <button
+                  type="button"
+                  onClick={() => move(item.href, -1)}
+                  disabled={idx === 0}
+                  className="p-1 rounded-md bg-primary-foreground/20 text-primary-foreground disabled:opacity-30"
+                  aria-label="Flytta vänster"
+                >
+                  <ArrowUp size={12} className="rotate-[-90deg]" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => move(item.href, 1)}
+                  disabled={idx === selectedItems.length - 1}
+                  className="p-1 rounded-md bg-primary-foreground/20 text-primary-foreground disabled:opacity-30"
+                  aria-label="Flytta höger"
+                >
+                  <ArrowDown size={12} className="rotate-[-90deg]" />
+                </button>
+              </div>
             </div>
           );
         })}
