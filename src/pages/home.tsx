@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "wouter";
+import HomeShortcuts from "@/components/home-shortcuts";
 import Layout from "@/components/layout";
 import OverwhelmedModal from "@/components/overwhelmed-modal";
 import HelpMeModal from "@/components/help-me-modal";
