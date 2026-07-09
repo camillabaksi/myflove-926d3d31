@@ -366,9 +366,6 @@ function BottomNavEditor({ allItems, selected, onChange, onClose, onReset }: Bot
       onChange(selected.filter((h) => h !== href));
     } else if (selected.length < 3) {
       onChange([...selected, href]);
-    } else {
-      // Replace the last selected item
-      onChange([...selected.slice(0, 2), href]);
     }
   };
 
