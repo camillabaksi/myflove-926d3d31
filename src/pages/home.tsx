@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "wouter";
+import HomeShortcuts from "@/components/home-shortcuts";
 import Layout from "@/components/layout";
 import OverwhelmedModal from "@/components/overwhelmed-modal";
 import HelpMeModal from "@/components/help-me-modal";
@@ -22,12 +23,9 @@ import {
   HeartHandshake,
   CheckCircle2,
   Circle,
-  Calendar,
-  Wallet,
   Pill,
   Sparkles,
   ArrowRight,
-  ShoppingBag,
 } from "lucide-react";
 
 function sortTasksByPriority(tasks: Task[]): Task[] {
@@ -43,23 +41,18 @@ function sortTasksByPriority(tasks: Task[]): Task[] {
 export default function Home() {
   const { currentFocus, toggleFocusCompleted } = useFocus();
   const { activeTasks, toggleTask } = useTasks();
-  const { activeReminders } = useReminders();
+  const { activeReminders: _activeReminders } = useReminders();
   const { transactions } = useFinances();
   const { medications, isTaken } = useMedications();
-  const { activeItems: shoppingItems } = useSharedShoppingList();
+  const { activeItems: _shoppingItems } = useSharedShoppingList();
 
   const [helpModalOpen, setHelpModalOpen] = useState(false);
   const [overwhelmedOpen, setOverwhelmedOpen] = useState(false);
   const [helpPlan, setHelpPlan] = useState<HelpPlan | null>(null);
 
-
-
-  const todayStr = new Date().toISOString().split("T")[0] as string;
-
   const prioritizedTasks = useMemo(() => sortTasksByPriority(activeTasks), [activeTasks]);
   const visibleTasks = prioritizedTasks.slice(0, helpPlan?.taskLimit ?? 3);
 
-  const nextReminder = activeReminders[0];
 
   const now = Date.now();
   const pastOrTodayTransactions = transactions.filter((t) => t.date <= now);
@@ -193,81 +186,8 @@ export default function Home() {
 
         {showExtras && (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Link
-                href="/shopping"
-                className="flex items-center gap-4 p-5 bg-card border border-border rounded-2xl shadow-sm hover:border-primary/40 transition-colors"
-              >
-                <div className="w-12 h-12 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
-                  <ShoppingBag size={22} />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs uppercase tracking-wide text-muted-foreground mb-0.5">
-                    Inköpslista
-                  </p>
-                  <p className="font-medium truncate">
-                    {shoppingItems.length === 0
-                      ? "Inget att handla just nu"
-                      : `${shoppingItems.length} vara${shoppingItems.length === 1 ? "" : "r"} kvar`}
-                  </p>
-                  {shoppingItems.length > 0 && (
-                    <p className="text-sm text-muted-foreground truncate">
-                      {shoppingItems.slice(0, 2).map((i) => i.title).join(", ")}
-                      {shoppingItems.length > 2 ? "..." : ""}
-                    </p>
-                  )}
-                </div>
-                <ArrowRight size={16} className="text-muted-foreground shrink-0" />
-              </Link>
+            <HomeShortcuts />
 
-              <Link
-                href="/kalender"
-                className="flex items-center gap-4 p-5 bg-card border border-border rounded-2xl shadow-sm hover:border-primary/40 transition-colors"
-              >
-                <div className="w-12 h-12 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center shrink-0">
-                  <Calendar size={22} />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs uppercase tracking-wide text-muted-foreground mb-0.5">
-                    Nästa aktivitet
-                  </p>
-                  <p className="font-medium truncate">
-                    {nextReminder ? nextReminder.title : "Inget inplanerat"}
-                  </p>
-                  {nextReminder && (
-                    <p className="text-sm text-muted-foreground">
-                      {nextReminder.date === todayStr ? "Idag" : nextReminder.date}
-                      {nextReminder.time ? ` · ${nextReminder.time}` : ""}
-                    </p>
-                  )}
-                </div>
-                <ArrowRight size={16} className="text-muted-foreground shrink-0" />
-              </Link>
-
-              <Link
-                href="/finances"
-                className="flex items-center gap-4 p-5 bg-card border border-border rounded-2xl shadow-sm hover:border-primary/40 transition-colors"
-              >
-                <div className="w-12 h-12 rounded-full bg-teal-100 text-teal-700 flex items-center justify-center shrink-0">
-                  <Wallet size={22} />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs uppercase tracking-wide text-muted-foreground mb-0.5">
-                    Pengar kvar
-                  </p>
-                  <p className="font-medium">
-                    {moneyLeftAfterPlanned >= 0 ? "+" : ""}
-                    {moneyLeftAfterPlanned} kr
-                  </p>
-                  {upcomingBills.length > 0 && (
-                    <p className="text-sm text-muted-foreground">
-                      efter {upcomingBills.length} kommande {upcomingBills.length === 1 ? "räkning" : "räkningar"}
-                    </p>
-                  )}
-                </div>
-                <ArrowRight size={16} className="text-muted-foreground shrink-0" />
-              </Link>
-            </div>
 
             {upcomingBills.length > 0 && (
               <div className="space-y-3">
