@@ -40,7 +40,7 @@ function sortTasksByPriority(tasks: Task[]): Task[] {
 
 export default function Home() {
   const { currentFocus, toggleFocusCompleted } = useFocus();
-  const { activeTasks, toggleTask } = useTasks();
+  const { activeTasks, completedTasks, toggleTask } = useTasks();
   const { activeReminders: _activeReminders } = useReminders();
   const { transactions } = useFinances();
   const { medications, isTaken } = useMedications();
