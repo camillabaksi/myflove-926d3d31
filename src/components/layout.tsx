@@ -4,6 +4,7 @@ import { Home, Target, CheckSquare, ShoppingBag, Smile, Sparkles, Wallet, Naviga
 import { useCommuteAlerts } from "@/hooks/use-commute-alerts";
 import { useMedicationAlerts } from "@/hooks/use-medication-alerts";
 import { useShoppingProximityAlerts } from "@/hooks/use-shopping-proximity-alerts";
+import { useNotificationScheduler } from "@/hooks/use-notification-scheduler";
 import { useIsAdmin } from "@/hooks/use-is-admin";
 import { useLocalStorage } from "@/lib/storage";
 import { trackEvent } from "@/lib/analytics";
