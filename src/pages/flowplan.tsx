@@ -103,6 +103,12 @@ export default function FlowPlanPage() {
         },
       });
       setPlan(result);
+      // Förankra planens uppgifter i dagens kalender så inget "försvinner".
+      const today = new Date().toISOString().split("T")[0] as string;
+      for (const item of result.plan) {
+        const t = activeTasks.find((x) => x.id === item.taskId);
+        if (t && !t.dueDate) setTaskDueDate(t.id, today);
+      }
     } catch (e) {
       setError(e instanceof Error ? e.message : "Något gick fel.");
     } finally {
