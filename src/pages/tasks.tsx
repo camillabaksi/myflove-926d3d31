@@ -19,7 +19,9 @@ import {
   FolderKanban,
   ChevronDown,
   ChevronUp,
+  BellRing,
 } from "lucide-react";
+import { requestNotificationPermission, getNotificationPermission } from "@/lib/push-notifications";
 import { useToast } from "@/hooks/use-toast";
 import { getRandomEncouragement } from "@/lib/encouragements";
 import { confirmations } from "@/lib/flow-voice";
@@ -62,6 +64,8 @@ export default function Tasks() {
 
   const [newTask, setNewTask] = useState("");
   const [dueDate, setDueDate] = useState("");
+  const [newTime, setNewTime] = useState("");
+  const [newReminder, setNewReminder] = useState<number | "">("");
   const [newKind, setNewKind] = useState<TaskKind>("uppgift");
 
   const [filter, setFilter] = useState<"all" | TaskKind>("all");
@@ -84,14 +88,23 @@ export default function Tasks() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (newTask.trim()) {
-      addTask(newTask.trim(), dueDate || undefined, { kind: newKind });
-      setNewTask("");
-      setDueDate("");
-      setNewKind("uppgift");
+    if (!newTask.trim()) return;
+    const reminderMinutes = newTime && newReminder !== "" ? Number(newReminder) : undefined;
+    if (reminderMinutes !== undefined && getNotificationPermission() === "default") {
+      await requestNotificationPermission();
     }
+    addTask(newTask.trim(), dueDate || undefined, {
+      kind: newKind,
+      time: newTime || undefined,
+      reminderMinutesBefore: reminderMinutes,
+    });
+    setNewTask("");
+    setDueDate("");
+    setNewTime("");
+    setNewReminder("");
+    setNewKind("uppgift");
   };
 
   const filteredActive = useMemo(
@@ -146,8 +159,14 @@ export default function Tasks() {
               {task.dueDate && (
                 <span className="inline-flex items-center gap-1 text-[11px] text-primary font-medium">
                   <CalendarIcon size={11} /> {task.dueDate}
+                  {task.time && <> · kl {task.time}</>}
                 </span>
               )}
+              {task.time && task.reminderMinutesBefore ? (
+                <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
+                  <BellRing size={11} /> {task.reminderMinutesBefore} min innan
+                </span>
+              ) : null}
               {steps.length > 0 && (
                 <span className="text-[11px] text-muted-foreground">
                   {stepsDone}/{steps.length} delsteg
@@ -339,6 +358,38 @@ export default function Tasks() {
                 <span className="hidden md:inline">Lägg till</span>
               </Button>
             </div>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <label className="inline-flex items-center gap-2 text-xs text-muted-foreground">
+              <Clock size={14} />
+              <span>Tid (valfritt)</span>
+              <Input
+                type="time"
+                value={newTime}
+                onChange={(e) => {
+                  setNewTime(e.target.value);
+                  if (!e.target.value) setNewReminder("");
+                }}
+                className="h-9 w-28 rounded-xl text-sm bg-background"
+              />
+            </label>
+            <label className="inline-flex items-center gap-2 text-xs text-muted-foreground">
+              <BellRing size={14} />
+              <span>Påminn mig</span>
+              <select
+                value={newReminder}
+                onChange={(e) => setNewReminder(e.target.value === "" ? "" : Number(e.target.value))}
+                disabled={!newTime}
+                className="h-9 rounded-xl text-sm bg-background border border-border px-2 disabled:opacity-50"
+              >
+                <option value="">Ingen</option>
+                <option value={0}>På minuten</option>
+                <option value={5}>5 min innan</option>
+                <option value={15}>15 min innan</option>
+                <option value={30}>30 min innan</option>
+                <option value={60}>1 h innan</option>
+              </select>
+            </label>
           </div>
           <div className="flex flex-wrap gap-1.5">
             {(Object.keys(KIND_META) as TaskKind[]).map((k) => {

@@ -2,6 +2,7 @@ import { useState } from "react";
 import Layout from "@/components/layout";
 import { useFocus, useTasks, useReminders } from "@/hooks/use-data";
 import { CheckSquare, Target, Bell, ChevronLeft, ChevronRight, Trash2, Users, Plus } from "lucide-react";
+import { requestNotificationPermission, getNotificationPermission } from "@/lib/push-notifications";
 import { useUser } from "@clerk/react";
 import {
   useGetMyHousehold,
@@ -46,7 +47,7 @@ function useFamilyEventsByDate() {
 export default function CalendarPage() {
   const { currentFocus } = useFocus();
   const { activeTasks, completedTasks } = useTasks();
-  const { activeReminders, deleteReminder } = useReminders();
+  const { activeReminders, addReminder, deleteReminder } = useReminders();
   const { eventsForDate, hasHousehold } = useFamilyEventsByDate();
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -58,6 +59,9 @@ export default function CalendarPage() {
   const [isAddingEvent, setIsAddingEvent] = useState(false);
   const [newEventTitle, setNewEventTitle] = useState("");
   const [newEventTime, setNewEventTime] = useState("");
+  const [isAddingReminder, setIsAddingReminder] = useState(false);
+  const [newReminderTitle, setNewReminderTitle] = useState("");
+  const [newReminderTime, setNewReminderTime] = useState("");
 
   const createEventMutation = useCreateFamilyEvent({
     mutation: {
@@ -213,15 +217,24 @@ export default function CalendarPage() {
                   ? "Idag"
                   : new Date(selectedDateStr).toLocaleDateString('sv-SE', { weekday: 'long', day: 'numeric', month: 'long' })}
               </h3>
-              {hasHousehold && (
+              <div className="flex items-center gap-3">
                 <button
-                  onClick={() => setIsAddingEvent(true)}
+                  onClick={() => setIsAddingReminder(true)}
                   className="flex items-center gap-1.5 text-sm text-primary hover:underline"
                 >
                   <Plus size={16} />
-                  Familjehändelse
+                  Påminnelse
                 </button>
-              )}
+                {hasHousehold && (
+                  <button
+                    onClick={() => setIsAddingEvent(true)}
+                    className="flex items-center gap-1.5 text-sm text-primary hover:underline"
+                  >
+                    <Plus size={16} />
+                    Familjehändelse
+                  </button>
+                )}
+              </div>
             </div>
             
             {!selectedItems.focus && selectedItems.tasks.length === 0 && selectedItems.reminders.length === 0 && selectedItems.familyEvents.length === 0 && (
@@ -289,14 +302,67 @@ export default function CalendarPage() {
               {selectedItems.tasks.map(t => (
                 <div key={t.id} className={`flex items-center gap-4 p-4 bg-card border border-border rounded-2xl ${t.completed ? 'opacity-60' : ''}`}>
                   <CheckSquare className={t.completed ? "text-primary" : "text-muted-foreground"} size={24} />
-                  <div className={`text-lg font-medium ${t.completed ? 'line-through text-muted-foreground' : ''}`}>
-                    {t.title}
+                  <div className="flex-1">
+                    {t.time && (
+                      <div className="text-xs text-primary font-medium uppercase tracking-wider mb-0.5">
+                        kl {t.time}
+                        {t.reminderMinutesBefore != null && ` · påminn ${t.reminderMinutesBefore} min innan`}
+                      </div>
+                    )}
+                    <div className={`text-lg font-medium ${t.completed ? 'line-through text-muted-foreground' : ''}`}>
+                      {t.title}
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
           </div>
         )}
+
+        <Dialog open={isAddingReminder} onOpenChange={setIsAddingReminder}>
+          <DialogContent className="rounded-3xl">
+            <DialogHeader>
+              <DialogTitle>Ny påminnelse</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4 pt-2">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Vad ska du komma ihåg?</label>
+                <Input
+                  value={newReminderTitle}
+                  onChange={(e) => setNewReminderTitle(e.target.value)}
+                  placeholder="T.ex. Möte med chefen"
+                  className="h-12 rounded-2xl"
+                  autoFocus
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Tid (valfritt)</label>
+                <Input
+                  type="time"
+                  value={newReminderTime}
+                  onChange={(e) => setNewReminderTime(e.target.value)}
+                  className="h-12 rounded-2xl"
+                />
+              </div>
+              <Button
+                onClick={async () => {
+                  if (!newReminderTitle.trim() || !selectedDateStr) return;
+                  if (newReminderTime && getNotificationPermission() === "default") {
+                    await requestNotificationPermission();
+                  }
+                  addReminder(newReminderTitle.trim(), selectedDateStr, newReminderTime || undefined);
+                  setNewReminderTitle("");
+                  setNewReminderTime("");
+                  setIsAddingReminder(false);
+                }}
+                disabled={!newReminderTitle.trim()}
+                className="w-full h-12 rounded-2xl"
+              >
+                Lägg till
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
 
         <Dialog open={isAddingEvent} onOpenChange={setIsAddingEvent}>
           <DialogContent className="rounded-3xl">
