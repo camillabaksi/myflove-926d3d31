@@ -66,15 +66,16 @@ export default function AdminStats() {
 
 
   const viewsBySection = (data?.featureUsage ?? [])
-    .filter((row) => row.action === "view")
-    .sort((a, b) => b.events - a.events);
+    .filter((row: any) => row.action === "view")
+    .sort((a: any, b: any) => b.events - a.events);
 
   const otherActions = (data?.featureUsage ?? [])
-    .filter((row) => row.action !== "view")
-    .sort((a, b) => b.events - a.events);
+    .filter((row: any) => row.action !== "view")
+    .sort((a: any, b: any) => b.events - a.events);
 
-  const maxViews = Math.max(1, ...viewsBySection.map((row) => row.events));
-  const maxDaily = Math.max(1, ...(data?.dailyActiveSessions ?? []).map((d) => d.sessions));
+  const maxViews = Math.max(1, ...viewsBySection.map((row: any) => row.events));
+  const maxDaily = Math.max(1, ...(data?.dailyActiveSessions ?? []).map((d: any) => d.sessions));
+  const maxSignups = Math.max(1, ...(data?.dailySignups ?? []).map((d: any) => d.users));
 
   return (
     <Layout>
@@ -93,11 +94,21 @@ export default function AdminStats() {
 
         {data && (
           <>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               <div className="bg-card p-5 rounded-3xl border border-border shadow-sm space-y-1">
                 <Users size={20} className="text-primary" />
+                <p className="text-2xl font-bold">{data.totalUsers ?? 0}</p>
+                <p className="text-xs text-muted-foreground">Registrerade användare</p>
+              </div>
+              <div className="bg-card p-5 rounded-3xl border border-border shadow-sm space-y-1">
+                <Users size={20} className="text-primary" />
+                <p className="text-2xl font-bold">{data.newUsers7d ?? 0}</p>
+                <p className="text-xs text-muted-foreground">Nya senaste 7 dagarna</p>
+              </div>
+              <div className="bg-card p-5 rounded-3xl border border-border shadow-sm space-y-1">
+                <Activity size={20} className="text-primary" />
                 <p className="text-2xl font-bold">{data.totalSessions}</p>
-                <p className="text-xs text-muted-foreground">Användare totalt</p>
+                <p className="text-xs text-muted-foreground">Besökare (30 d)</p>
               </div>
               <div className="bg-card p-5 rounded-3xl border border-border shadow-sm space-y-1">
                 <Activity size={20} className="text-primary" />
@@ -113,6 +124,25 @@ export default function AdminStats() {
                 <Flame size={20} className="text-primary" />
                 <p className="text-2xl font-bold">{data.activeSessions30d}</p>
                 <p className="text-xs text-muted-foreground">Aktiva senaste 30 dagarna</p>
+              </div>
+            </div>
+
+            <div className="bg-card p-6 rounded-3xl border border-border shadow-sm space-y-4">
+              <h2 className="text-lg font-semibold">Nya registreringar (senaste 14 dagarna)</h2>
+              {(data.dailySignups ?? []).length === 0 && (
+                <p className="text-sm text-muted-foreground">Ingen data än.</p>
+              )}
+              <div className="flex items-end gap-1.5 h-32">
+                {(data.dailySignups ?? []).map((day: any) => (
+                  <div key={day.date} className="flex-1 flex flex-col items-center justify-end gap-1">
+                    <div
+                      className="w-full bg-primary rounded-t-md"
+                      style={{ height: `${(day.users / maxSignups) * 100}%`, minHeight: day.users > 0 ? "4px" : "0" }}
+                      title={`${day.date}: ${day.users}`}
+                    />
+                    <span className="text-[9px] text-muted-foreground">{day.date.slice(5)}</span>
+                  </div>
+                ))}
               </div>
             </div>
 
