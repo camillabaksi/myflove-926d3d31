@@ -364,7 +364,6 @@ function BottomNavEditor({ allItems, selected, onChange, onClose, onReset }: Bot
     .filter(Boolean) as { href: string; label: string; icon: typeof Home }[];
 
   const toggle = (href: string) => {
-    console.log("toggle", href, "selected", selected, "length", selected.length);
     if (selected.includes(href)) {
       onChange(selected.filter((h) => h !== href));
     } else if (selected.length < 3) {
