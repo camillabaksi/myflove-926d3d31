@@ -188,6 +188,37 @@ export default function CalendarPage() {
           <p className="text-muted-foreground">Översikt över dina dagar. Inga stressiga detaljer.</p>
         </div>
 
+        <div className="flex flex-wrap gap-2">
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            className="flex items-center gap-2 px-4 py-2.5 bg-card border border-border rounded-2xl text-sm font-medium hover:bg-secondary transition-colors"
+          >
+            <Upload size={16} />
+            Importera från telefonens kalender
+          </button>
+          <button
+            onClick={handleExportAll}
+            className="flex items-center gap-2 px-4 py-2.5 bg-card border border-border rounded-2xl text-sm font-medium hover:bg-secondary transition-colors"
+          >
+            <Download size={16} />
+            Exportera till kalender (.ics)
+          </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".ics,text/calendar"
+            className="hidden"
+            onChange={(e) => {
+              const f = e.target.files?.[0];
+              if (f) handleImportFile(f);
+              e.target.value = "";
+            }}
+          />
+        </div>
+        <p className="text-xs text-muted-foreground -mt-4">
+          Tips: exportera i telefonens kalender som .ics och importera här för att få in dina möten i MyFlow.
+        </p>
+
         <div className="bg-card rounded-3xl border border-border shadow-sm overflow-hidden">
           <div className="flex items-center justify-between p-6 pb-2">
             <button onClick={prevMonth} className="p-2 hover:bg-secondary rounded-xl transition-colors">
