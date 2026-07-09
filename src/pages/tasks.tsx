@@ -19,7 +19,9 @@ import {
   FolderKanban,
   ChevronDown,
   ChevronUp,
+  BellRing,
 } from "lucide-react";
+import { requestNotificationPermission, getNotificationPermission } from "@/lib/push-notifications";
 import { useToast } from "@/hooks/use-toast";
 import { getRandomEncouragement } from "@/lib/encouragements";
 import { confirmations } from "@/lib/flow-voice";
