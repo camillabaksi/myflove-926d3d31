@@ -195,6 +195,7 @@ export function useTasks() {
     setTaskStatus,
     setTaskKind,
     setTaskDueDate,
+    setTaskTime,
     addTaskStep,
     toggleTaskStep,
     deleteTaskStep,
