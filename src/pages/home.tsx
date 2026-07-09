@@ -51,7 +51,12 @@ export default function Home() {
   const [helpPlan, setHelpPlan] = useState<HelpPlan | null>(null);
 
   const prioritizedTasks = useMemo(() => sortTasksByPriority(activeTasks), [activeTasks]);
-  const visibleTasks = prioritizedTasks.slice(0, helpPlan?.taskLimit ?? 3);
+  const limit = helpPlan?.taskLimit ?? 3;
+  const visibleActive = prioritizedTasks.slice(0, limit);
+  // Also show today's just-completed tasks inline so klarmarkering ger tydlig feedback.
+  const todayStr = new Date().toISOString().split("T")[0];
+  const completedToday = completedTasks.filter((t) => (t.dueDate ?? todayStr) === todayStr);
+  const visibleTasks = [...visibleActive, ...completedToday.slice(0, limit)];
 
 
   const now = Date.now();
