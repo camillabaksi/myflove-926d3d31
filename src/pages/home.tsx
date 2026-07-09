@@ -83,8 +83,6 @@ export default function Home() {
     setHelpPlan(buildHelpPlan(feeling));
   };
 
-  const showExtras = !helpPlan?.hideExtras;
-
   return (
     <Layout>
       <div className="space-y-8">
@@ -94,6 +92,9 @@ export default function Home() {
         </div>
 
         <WeatherCard />
+
+        {/* 4 custom shortcuts — always visible launchpad */}
+        <HomeShortcuts />
 
         <ProactiveSuggestions />
 
@@ -205,56 +206,49 @@ export default function Home() {
           )}
         </div>
 
-        {showExtras && (
-          <>
-            <HomeShortcuts />
-
-
-            {upcomingBills.length > 0 && (
-              <div className="space-y-3">
-                <h2 className="text-xl font-semibold">Kommande räkningar</h2>
-                <div className="space-y-3">
-                  {upcomingBills.slice(0, 3).map((bill) => (
-                    <div
-                      key={bill.id}
-                      className="flex items-center justify-between p-4 bg-card border border-border rounded-2xl shadow-sm"
-                    >
-                      <div>
-                        <p className="font-medium">{bill.category}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {new Date(bill.date).toLocaleDateString("sv-SE", { month: "short", day: "numeric" })}
-                          {bill.note ? ` · ${bill.note}` : ""}
-                        </p>
-                      </div>
-                      <span className="font-semibold">{bill.amount} kr</span>
-                    </div>
-                  ))}
+        {upcomingBills.length > 0 && (
+          <div className="space-y-3">
+            <h2 className="text-xl font-semibold">Kommande räkningar</h2>
+            <div className="space-y-3">
+              {upcomingBills.slice(0, 3).map((bill) => (
+                <div
+                  key={bill.id}
+                  className="flex items-center justify-between p-4 bg-card border border-border rounded-2xl shadow-sm"
+                >
+                  <div>
+                    <p className="font-medium">{bill.category}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {new Date(bill.date).toLocaleDateString("sv-SE", { month: "short", day: "numeric" })}
+                      {bill.note ? ` · ${bill.note}` : ""}
+                    </p>
+                  </div>
+                  <span className="font-semibold">{bill.amount} kr</span>
                 </div>
-              </div>
-            )}
+              ))}
+            </div>
+          </div>
+        )}
 
-            {nextMedication && (
-              <Link
-                href="/medicin"
-                className="flex items-center gap-4 p-5 bg-card border border-border rounded-2xl shadow-sm hover:border-primary/40 transition-colors"
-              >
-                <div className="w-12 h-12 rounded-full bg-violet-100 text-violet-700 flex items-center justify-center shrink-0">
-                  <Pill size={22} />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs uppercase tracking-wide text-muted-foreground mb-0.5">
-                    Medicinpåminnelse
-                  </p>
-                  <p className="font-medium truncate">
-                    {nextMedication.med.name}
-                    {nextMedication.med.dosage ? ` · ${nextMedication.med.dosage}` : ""}
-                  </p>
-                  <p className="text-sm text-muted-foreground">{nextMedication.nextTime}</p>
-                </div>
-                <ArrowRight size={16} className="text-muted-foreground shrink-0" />
-              </Link>
-            )}
-          </>
+        {nextMedication && (
+          <Link
+            href="/medicin"
+            className="flex items-center gap-4 p-5 bg-card border border-border rounded-2xl shadow-sm hover:border-primary/40 transition-colors"
+          >
+            <div className="w-12 h-12 rounded-full bg-violet-100 text-violet-700 flex items-center justify-center shrink-0">
+              <Pill size={22} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs uppercase tracking-wide text-muted-foreground mb-0.5">
+                Medicinpåminnelse
+              </p>
+              <p className="font-medium truncate">
+                {nextMedication.med.name}
+                {nextMedication.med.dosage ? ` · ${nextMedication.med.dosage}` : ""}
+              </p>
+              <p className="text-sm text-muted-foreground">{nextMedication.nextTime}</p>
+            </div>
+            <ArrowRight size={16} className="text-muted-foreground shrink-0" />
+          </Link>
         )}
 
         <Button
