@@ -40,7 +40,7 @@ function timeAgo(iso: string) {
 }
 
 export default function FlowPlanPage() {
-  const { activeTasks, toggleTask } = useTasks();
+  const { activeTasks, toggleTask, setTaskDueDate } = useTasks();
   const { currentFocus } = useFocus();
   const [energy, setEnergy] = useState<Energy>("medium");
   const [energyAuto, setEnergyAuto] = useState<{ level: number; loggedAt: string } | null>(null);
