@@ -47,7 +47,7 @@ function LandingPage() {
         <div className="pointer-events-none absolute -bottom-32 -left-16 h-[320px] w-[320px] rounded-full bg-[#A7BEAE] opacity-50" />
         <div className="relative mx-auto max-w-3xl text-center">
           <p className="text-xs uppercase tracking-[0.35em] text-[#B85042] font-semibold">MyFlow</p>
-          <h1 className="mt-4 font-serif text-6xl md:text-8xl font-bold leading-[0.95] tracking-tight">
+          <h1 className="mt-4 font-display text-6xl md:text-8xl font-bold leading-[0.95] tracking-tight">
             Ditt liv,<br />i flow.
           </h1>
           <p className="mt-6 text-lg md:text-xl text-[#7A6E63] max-w-xl mx-auto leading-relaxed">
@@ -80,7 +80,7 @@ function LandingPage() {
           <p className="text-xs uppercase tracking-[0.3em] text-[#B85042] font-semibold">
             Flow talar
           </p>
-          <h2 className="mt-3 font-serif text-4xl md:text-5xl font-bold leading-tight">
+          <h2 className="mt-3 font-display text-4xl md:text-5xl font-bold leading-tight">
             Som en vän i fickan.
           </h2>
           <p className="mt-4 text-[#7A6E63] max-w-xl">
@@ -112,7 +112,7 @@ function LandingPage() {
           <p className="text-xs uppercase tracking-[0.3em] text-[#B85042] font-semibold">
             Allt hänger ihop
           </p>
-          <h2 className="mt-3 font-serif text-4xl md:text-5xl font-bold leading-tight">
+          <h2 className="mt-3 font-display text-4xl md:text-5xl font-bold leading-tight">
             En hjärna. Inte sju appar.
           </h2>
           <p className="mt-4 text-[#7A6E63] max-w-2xl">
@@ -162,7 +162,7 @@ function LandingPage() {
           <p className="text-xs uppercase tracking-[0.3em] text-[#B85042] font-semibold">
             I vardagen
           </p>
-          <h2 className="mt-3 font-serif text-4xl md:text-5xl font-bold leading-tight">
+          <h2 className="mt-3 font-display text-4xl md:text-5xl font-bold leading-tight">
             När livet skaver – finns Flow där.
           </h2>
 
@@ -192,7 +192,7 @@ function LandingPage() {
                 <p className="text-xs uppercase tracking-[0.25em] text-[#B85042] font-semibold">
                   {sc.s}
                 </p>
-                <p className="mt-3 font-serif text-xl leading-snug text-[#2C3639]">
+                <p className="mt-3 font-display text-xl leading-snug text-[#2C3639]">
                   {sc.r}
                 </p>
               </div>
@@ -208,7 +208,7 @@ function LandingPage() {
           <p className="text-xs uppercase tracking-[0.3em] text-[#E4A853] font-semibold">
             FlowPlan™
           </p>
-          <h2 className="mt-3 font-serif text-4xl md:text-5xl font-bold leading-tight">
+          <h2 className="mt-3 font-display text-4xl md:text-5xl font-bold leading-tight">
             Rätt sak, i rätt ordning.
           </h2>
           <p className="mt-4 text-white/70 max-w-xl">
@@ -250,7 +250,7 @@ function LandingPage() {
                     key={st.n}
                     className="flex items-center gap-3 rounded-2xl bg-white/[0.06] border border-white/10 p-3"
                   >
-                    <div className="w-9 h-9 rounded-full bg-[#B85042] text-white flex items-center justify-center font-serif font-bold flex-shrink-0">
+                    <div className="w-9 h-9 rounded-full bg-[#B85042] text-white flex items-center justify-center font-display font-bold flex-shrink-0">
                       {st.n}
                     </div>
                     <div className="flex-1 min-w-0">
@@ -276,7 +276,7 @@ function LandingPage() {
               {["lugn.", "trygghet.", "värme.", "enkelhet.", "mindre att bära."].map((w) => (
                 <div
                   key={w}
-                  className="font-serif text-4xl md:text-5xl font-bold leading-tight text-[#2C3639]"
+                  className="font-display text-4xl md:text-5xl font-bold leading-tight text-[#2C3639]"
                 >
                   {w}
                 </div>
@@ -299,11 +299,11 @@ function LandingPage() {
           <p className="text-xs uppercase tracking-[0.4em] text-[#E4A853] font-semibold">
             Vår vision
           </p>
-          <h2 className="mt-6 font-serif text-4xl md:text-6xl font-bold leading-[1.05] tracking-tight">
+          <h2 className="mt-6 font-display text-4xl md:text-6xl font-bold leading-[1.05] tracking-tight">
             Vi bygger inte funktioner.<br />
             Vi löser vardagsfriktion.
           </h2>
-          <p className="mt-6 font-serif text-2xl md:text-3xl italic text-[#D97060]">
+          <p className="mt-6 font-display text-2xl md:text-3xl italic text-[#D97060]">
             Bär mindre. Gör inte mer.
           </p>
           <p className="mt-10 text-white/70 text-base md:text-lg leading-relaxed max-w-xl mx-auto">
@@ -331,7 +331,7 @@ function LandingPage() {
 function FlowBubble({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex items-start gap-3">
-      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#D97060] to-[#B85042] text-white flex items-center justify-center font-serif font-bold flex-shrink-0 shadow-md">
+      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#D97060] to-[#B85042] text-white flex items-center justify-center font-display font-bold flex-shrink-0 shadow-md">
         F
       </div>
       <div className="bg-white rounded-3xl rounded-tl-md px-5 py-4 shadow-sm border border-[#2C3639]/5 space-y-2 text-[#2C3639] leading-relaxed">

@@ -18,24 +18,36 @@ interface Shortcut {
   iconColor: string;
 }
 
-const ALL_SHORTCUTS: Shortcut[] = [
-  { id: "mood",       href: "/mood",           label: "Mående",     icon: Smile,            iconBg: "bg-emerald-100", iconColor: "text-emerald-700" },
-  { id: "fokus",      href: "/fokus",          label: "Dagens fokus", icon: Target,         iconBg: "bg-primary/10",  iconColor: "text-primary" },
-  { id: "tasks",      href: "/tasks",          label: "Att göra",   icon: CheckSquare,      iconBg: "bg-amber-100",   iconColor: "text-amber-700" },
-  { id: "shopping",   href: "/shopping",       label: "Inköp",      icon: ShoppingBag,      iconBg: "bg-sky-100",     iconColor: "text-sky-700" },
-  { id: "kalender",   href: "/kalender",       label: "Kalender",   icon: Calendar,         iconBg: "bg-rose-100",    iconColor: "text-rose-700" },
-  { id: "medicin",    href: "/medicin",        label: "Medicin",    icon: Pill,             iconBg: "bg-violet-100",  iconColor: "text-violet-700" },
-  { id: "pomodoro",   href: "/pomodoro",       label: "Fokuspass",  icon: Timer,            iconBg: "bg-orange-100",  iconColor: "text-orange-700" },
-  { id: "finances",   href: "/finances",       label: "Ekonomi",    icon: Wallet,           iconBg: "bg-teal-100",    iconColor: "text-teal-700" },
-  { id: "statistik",  href: "/statistik",      label: "Statistik",  icon: BarChart3,        iconBg: "bg-indigo-100",  iconColor: "text-indigo-700" },
-  { id: "beloningar", href: "/beloningar",     label: "Belöningar", icon: Trophy,           iconBg: "bg-yellow-100",  iconColor: "text-yellow-700" },
-  { id: "dump",       href: "/dump",           label: "Dumping",    icon: Inbox,            iconBg: "bg-slate-100",   iconColor: "text-slate-700" },
-  { id: "matlista",   href: "/matlista",       label: "Matlista",   icon: UtensilsCrossed,  iconBg: "bg-orange-100",  iconColor: "text-orange-700" },
-  { id: "travel",     href: "/travel",         label: "Resor",      icon: Navigation,       iconBg: "bg-cyan-100",    iconColor: "text-cyan-700" },
-  { id: "energikarta",href: "/energikarta",    label: "Energikarta",icon: Battery,          iconBg: "bg-teal-100",    iconColor: "text-teal-700" },
-  { id: "flowplan",   href: "/flowplan",       label: "FlowPlan",   icon: Sparkles,         iconBg: "bg-blue-100",    iconColor: "text-blue-700" },
-  { id: "assistant",  href: "/assistant",      label: "Flow-chatt", icon: Sparkles,         iconBg: "bg-primary/10",  iconColor: "text-primary" },
+const PREVIEW_PALETTE = [
+  { bg: "bg-terracotta/10", color: "text-terracotta" },
+  { bg: "bg-sage/15", color: "text-sage" },
+  { bg: "bg-gold/15", color: "text-gold" },
+  { bg: "bg-ink/10", color: "text-ink" },
+  { bg: "bg-terracotta-soft/10", color: "text-terracotta-soft" },
 ];
+
+const ALL_SHORTCUTS: Shortcut[] = [
+  { id: "mood",       href: "/mood",           label: "Mående",     icon: Smile },
+  { id: "fokus",      href: "/fokus",          label: "Dagens fokus", icon: Target },
+  { id: "tasks",      href: "/tasks",          label: "Att göra",   icon: CheckSquare },
+  { id: "shopping",   href: "/shopping",       label: "Inköp",      icon: ShoppingBag },
+  { id: "kalender",   href: "/kalender",       label: "Kalender",   icon: Calendar },
+  { id: "medicin",    href: "/medicin",        label: "Medicin",    icon: Pill },
+  { id: "pomodoro",   href: "/pomodoro",       label: "Fokuspass",  icon: Timer },
+  { id: "finances",   href: "/finances",       label: "Ekonomi",    icon: Wallet },
+  { id: "statistik",  href: "/statistik",      label: "Statistik",  icon: BarChart3 },
+  { id: "beloningar", href: "/beloningar",     label: "Belöningar", icon: Trophy },
+  { id: "dump",       href: "/dump",           label: "Dumping",    icon: Inbox },
+  { id: "matlista",   href: "/matlista",       label: "Matlista",   icon: UtensilsCrossed },
+  { id: "travel",     href: "/travel",         label: "Resor",      icon: Navigation },
+  { id: "energikarta",href: "/energikarta",    label: "Energikarta",icon: Battery },
+  { id: "flowplan",   href: "/flowplan",       label: "FlowPlan",   icon: Sparkles },
+  { id: "assistant",  href: "/assistant",      label: "Flow-chatt", icon: Sparkles },
+].map((s, i) => {
+  const palette = PREVIEW_PALETTE[i % PREVIEW_PALETTE.length];
+  return { ...s, iconBg: palette.bg, iconColor: palette.color };
+});
+
 
 const DEFAULT_FAVORITES = ["shopping", "kalender", "finances", "mood"];
 const DEFAULT_ORDER = ALL_SHORTCUTS.map((s) => s.id);

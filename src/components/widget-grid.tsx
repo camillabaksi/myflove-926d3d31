@@ -9,6 +9,14 @@ import { getAchievements } from "@/lib/achievements";
 
 const EMOJI_BY_SCORE: Record<number, string> = { 1: "😢", 2: "😕", 3: "😐", 4: "🙂", 5: "😄" };
 
+const PREVIEW_PALETTE = [
+  { bg: "bg-terracotta/10", color: "text-terracotta" },
+  { bg: "bg-sage/15", color: "text-sage" },
+  { bg: "bg-gold/15", color: "text-gold" },
+  { bg: "bg-ink/10", color: "text-ink" },
+  { bg: "bg-terracotta-soft/10", color: "text-terracotta-soft" },
+];
+
 interface Widget {
   href: string;
   icon: typeof Smile;
@@ -71,40 +79,30 @@ export default function WidgetGrid() {
     {
       href: "/mood",
       icon: Smile,
-      iconBg: "bg-emerald-100",
-      iconColor: "text-emerald-700",
       label: "Mående idag",
       value: todayMood ? `${EMOJI_BY_SCORE[todayMood.score]} idag` : "Checka in",
     },
     {
       href: "/fokus",
       icon: Target,
-      iconBg: "bg-primary/10",
-      iconColor: "text-primary",
       label: "Dagens fokus",
       value: currentFocus ? currentFocus.text : "Inget valt",
     },
     {
       href: "/tasks",
       icon: CheckSquare,
-      iconBg: "bg-amber-100",
-      iconColor: "text-amber-700",
       label: "Att göra",
       value: `${activeTasks.length} kvar`,
     },
     {
       href: "/shopping",
       icon: ShoppingBag,
-      iconBg: "bg-sky-100",
-      iconColor: "text-sky-700",
       label: "Inköp",
       value: `${activeItems.length} varor`,
     },
     {
       href: "/kalender",
       icon: Calendar,
-      iconBg: "bg-rose-100",
-      iconColor: "text-rose-700",
       label: "Nästa händelse",
       value: nextReminder ? nextReminder.title : "Inget inplanerat",
       hint: nextReminder ? (nextReminder.date === todayStr ? "Idag" : nextReminder.date) : undefined,
@@ -112,44 +110,37 @@ export default function WidgetGrid() {
     {
       href: "/medicin",
       icon: Pill,
-      iconBg: "bg-violet-100",
-      iconColor: "text-violet-700",
       label: "Medicin idag",
       value: totalTimesToday > 0 ? `${takenTimesToday} av ${totalTimesToday} tagna` : "Inget bokat",
     },
     {
       href: "/pomodoro",
       icon: Timer,
-      iconBg: "bg-orange-100",
-      iconColor: "text-orange-700",
       label: "Fokuspass idag",
       value: `${todaysSessions} genomförda`,
     },
     {
       href: "/finances",
       icon: Wallet,
-      iconBg: "bg-teal-100",
-      iconColor: "text-teal-700",
       label: "Ekonomi denna månad",
       value: monthlyTransactions.length > 0 ? `${monthBalance >= 0 ? "+" : ""}${monthBalance} kr` : "Inget bokfört",
     },
     {
       href: "/statistik",
       icon: BarChart3,
-      iconBg: "bg-indigo-100",
-      iconColor: "text-indigo-700",
       label: "Veckotrend",
       value: trendLabel,
     },
     {
       href: "/beloningar",
       icon: Trophy,
-      iconBg: "bg-yellow-100",
-      iconColor: "text-yellow-700",
       label: "Belöningar",
       value: `${unlockedCount} av ${achievements.length}`,
     },
-  ];
+  ].map((w, i) => {
+    const palette = PREVIEW_PALETTE[i % PREVIEW_PALETTE.length];
+    return { ...w, iconBg: palette.bg, iconColor: palette.color };
+  });
 
   return (
     <div>
@@ -178,3 +169,4 @@ export default function WidgetGrid() {
     </div>
   );
 }
+
