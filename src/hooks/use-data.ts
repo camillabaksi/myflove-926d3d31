@@ -24,6 +24,8 @@ export interface Task {
   completed: boolean;
   createdAt: number;
   dueDate?: string; // ISO date string YYYY-MM-DD
+  time?: string; // HH:MM (t.ex. "11:00" för ett möte)
+  reminderMinutesBefore?: number; // valfri påminnelse: minuter före `time`
   snoozedUntil?: string; // ISO date string YYYY-MM-DD; hidden from view until this date has passed
   kind?: TaskKind; // default "uppgift"
   status?: TaskStatus; // default "pagar"; "klart" ⇔ completed=true
