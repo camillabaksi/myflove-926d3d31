@@ -66,6 +66,7 @@ export default function Layout({ children }: LayoutProps) {
   const { alerts, dismissAlert } = useCommuteAlerts();
   const { alerts: medicationAlerts, dismissAlert: dismissMedicationAlert } = useMedicationAlerts();
   const { alerts: proximityAlerts, dismissAlert: dismissProximityAlert } = useShoppingProximityAlerts();
+  useNotificationScheduler();
   const { isAdmin } = useIsAdmin();
 
 
