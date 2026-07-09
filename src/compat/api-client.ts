@@ -59,12 +59,9 @@ export function useListMealPlans(_opts?: any): any {
 }
 export function useUpsertMealPlanSlot(_opts?: any): any { return noopMutation(); }
 
+import { getAnalyticsSummaryFn } from "@/lib/analytics.functions";
+
 export function useGetAnalyticsSummary(_opts?: any): any {
-  // Lazy import to avoid pulling the query hook into places that don't need it.
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { useQuery } = require("@tanstack/react-query");
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { getAnalyticsSummaryFn } = require("@/lib/analytics.functions");
   return useQuery({
     queryKey: ["analytics-summary"],
     queryFn: () => getAnalyticsSummaryFn(),
