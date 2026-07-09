@@ -95,8 +95,8 @@ export default function HomeShortcuts() {
           <h2 className="text-xl font-semibold">Dina genvägar</h2>
           <p className="text-sm text-muted-foreground">
             {editing
-              ? `Välj upp till ${MAX_FAVORITES} favoriter att visa här.`
-              : `${favorites.length} av ${MAX_FAVORITES} valda`}
+              ? `Välj 4 favoriter. Resten hittar du i menyn.`
+              : `4 favoriter — resten finns i menyn.`}
           </p>
         </div>
         <div className="flex gap-2">
@@ -111,7 +111,7 @@ export default function HomeShortcuts() {
             onClick={() => setEditing((e) => !e)}
             className="rounded-xl gap-1"
           >
-            {editing ? <><Check size={14} /> Klar</> : <><Settings2 size={14} /> Anpassa</>}
+            {editing ? <><Check size={14} /> Klar</> : <><Settings2 size={14} /> Bytt</>}
           </Button>
         </div>
       </div>
