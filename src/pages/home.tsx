@@ -23,12 +23,9 @@ import {
   HeartHandshake,
   CheckCircle2,
   Circle,
-  Calendar,
-  Wallet,
   Pill,
   Sparkles,
   ArrowRight,
-  ShoppingBag,
 } from "lucide-react";
 
 function sortTasksByPriority(tasks: Task[]): Task[] {
