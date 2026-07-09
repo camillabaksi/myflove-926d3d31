@@ -23,6 +23,7 @@ export interface Task {
   title: string;
   completed: boolean;
   createdAt: number;
+  completedAt?: number;
   dueDate?: string; // ISO date string YYYY-MM-DD
   time?: string; // HH:MM (t.ex. "11:00" för ett möte)
   reminderMinutesBefore?: number; // valfri påminnelse: minuter före `time`
@@ -118,7 +119,12 @@ export function useTasks() {
     setTasks((prev) => prev.map(t => {
       if (t.id !== id) return t;
       const nowCompleted = !t.completed;
-      return { ...t, completed: nowCompleted, status: nowCompleted ? "klart" : "pagar" };
+      return {
+        ...t,
+        completed: nowCompleted,
+        completedAt: nowCompleted ? Date.now() : undefined,
+        status: nowCompleted ? "klart" : "pagar",
+      };
     }));
     if (task && !task.completed) trackEvent('tasks', 'task_completed');
   };
@@ -177,7 +183,9 @@ export function useTasks() {
   const activeTasks = tasks
     .filter(t => !t.completed && !isSnoozed(t))
     .sort((a, b) => b.createdAt - a.createdAt);
-  const completedTasks = tasks.filter(t => t.completed).sort((a, b) => b.createdAt - a.createdAt);
+  const completedTasks = tasks
+    .filter(t => t.completed)
+    .sort((a, b) => (b.completedAt ?? b.createdAt) - (a.completedAt ?? a.createdAt));
   const snoozedTasks = tasks
     .filter(t => !t.completed && isSnoozed(t))
     .sort((a, b) => (a.snoozedUntil ?? '').localeCompare(b.snoozedUntil ?? ''));
