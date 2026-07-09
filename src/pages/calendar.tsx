@@ -74,7 +74,7 @@ export default function CalendarPage() {
       if (t.dueDate) events.push({ title: t.title, date: t.dueDate, time: t.time, uid: `task-${t.id}@myflow` });
     }
     if (currentFocus) {
-      events.push({ title: `Fokus: ${currentFocus.text}`, date: todayStr, uid: `focus-${currentFocus.id}@myflow` });
+      events.push({ title: `Fokus: ${currentFocus.text}`, date: todayStr, uid: `focus-${todayStr}@myflow` });
     }
     if (events.length === 0) {
       toast({ description: "Inget att exportera ännu." });
