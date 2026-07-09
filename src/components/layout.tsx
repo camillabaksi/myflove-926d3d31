@@ -300,7 +300,9 @@ export default function Layout({ children }: LayoutProps) {
               {editingBottomNav ? (
                 <BottomNavEditor
                   allItems={navItems.filter((i) => i.href !== "/")}
-                  selected={mobileNavItems.slice(1).map((i) => i.href)}
+                  selected={bottomNavHrefs.filter((href) =>
+                    navItems.some((i) => i.href === href)
+                  )}
                   onChange={setBottomNavHrefs}
                   onClose={() => setEditingBottomNav(false)}
                   onReset={() => setBottomNavHrefs(["/mood", "/dump", "/kalender"])}
