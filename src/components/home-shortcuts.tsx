@@ -95,8 +95,8 @@ export default function HomeShortcuts() {
           <h2 className="text-xl font-semibold">Dina genvägar</h2>
           <p className="text-sm text-muted-foreground">
             {editing
-              ? `Fäst upp till ${MAX_FAVORITES} favoriter och flytta resten som du vill.`
-              : `${favorites.length} av ${MAX_FAVORITES} favoriter · ${restShortcuts.length} fler`}
+              ? `Välj upp till ${MAX_FAVORITES} favoriter att visa här.`
+              : `${favorites.length} av ${MAX_FAVORITES} valda`}
           </p>
         </div>
         <div className="flex gap-2">
@@ -132,8 +132,8 @@ export default function HomeShortcuts() {
         </div>
       )}
 
-      {/* Rest — small tiles */}
-      {restShortcuts.length > 0 && (
+      {/* Rest — small tiles, only visible while editing */}
+      {editing && restShortcuts.length > 0 && (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
           {restShortcuts.map((s, idx) => (
             <ShortcutTile
