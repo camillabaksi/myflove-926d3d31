@@ -49,9 +49,22 @@ export default function FlowPlanPage() {
   const [energyAuto, setEnergyAuto] = useState<{ level: number; loggedAt: string } | null>(null);
   const [energyManual, setEnergyManual] = useState(false);
   const [timeAvailable, setTimeAvailable] = useState<number>(120);
-  const [plan, setPlan] = useState<FlowPlanResult | null>(null);
+  const [storedPlan, setStoredPlan] = useLocalStorage<StoredPlan | null>("myflow-flowplan", null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const plan = storedPlan?.plan ?? null;
+  const setPlan = (p: FlowPlanResult | null) => {
+    if (!p) {
+      setStoredPlan(null);
+      return;
+    }
+    setStoredPlan({
+      plan: p,
+      savedAt: new Date().toISOString(),
+      date: new Date().toISOString().split("T")[0] as string,
+    });
+  };
 
   const run = useServerFn(planFlowSequence);
 
