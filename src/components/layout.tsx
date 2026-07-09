@@ -282,41 +282,166 @@ export default function Layout({ children }: LayoutProps) {
       {mobileMenuOpen && (
         <div className="md:hidden fixed inset-0 z-50 bg-background/95 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="flex flex-col h-full">
-            <div className="flex justify-end p-4 border-b border-border/50">
-              <button 
-                onClick={() => setMobileMenuOpen(false)}
+            <div className="flex justify-between items-center p-4 border-b border-border/50">
+              <h2 className="text-lg font-medium text-muted-foreground">
+                {editingBottomNav ? "Anpassa bottennav" : "Alla sektioner"}
+              </h2>
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setEditingBottomNav(false);
+                }}
                 className="p-2 text-muted-foreground hover:bg-secondary rounded-full"
               >
                 <X size={28} />
               </button>
             </div>
             <div className="flex-1 overflow-y-auto p-4 pb-24">
-              <h2 className="text-lg font-medium text-muted-foreground px-2 mb-4">Alla sektioner</h2>
-              <div className="grid grid-cols-3 gap-3">
-                {navItems.map((item) => {
-                  const isActive = location === item.href;
-                  const Icon = item.icon;
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className={`aspect-square flex flex-col items-center justify-center gap-2 rounded-2xl p-2 text-center transition-all duration-200 ${
-                        isActive
-                          ? "bg-primary text-primary-foreground font-medium shadow-sm"
-                          : "bg-card text-foreground border border-border shadow-sm"
-                      }`}
+              {editingBottomNav ? (
+                <BottomNavEditor
+                  allItems={navItems.filter((i) => i.href !== "/")}
+                  selected={mobileNavItems.slice(1).map((i) => i.href)}
+                  onChange={setBottomNavHrefs}
+                  onClose={() => setEditingBottomNav(false)}
+                  onReset={() => setBottomNavHrefs(["/mood", "/dump", "/kalender"])}
+                />
+              ) : (
+                <>
+                  <div className="grid grid-cols-3 gap-3">
+                    {navItems.map((item) => {
+                      const isActive = location === item.href;
+                      const Icon = item.icon;
+                      return (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className={`aspect-square flex flex-col items-center justify-center gap-2 rounded-2xl p-2 text-center transition-all duration-200 ${
+                            isActive
+                              ? "bg-primary text-primary-foreground font-medium shadow-sm"
+                              : "bg-card text-foreground border border-border shadow-sm"
+                          }`}
+                        >
+                          <Icon size={26} strokeWidth={isActive ? 2.5 : 2} />
+                          <span className="text-xs leading-tight">{item.label}</span>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                  <div className="mt-6 flex items-center justify-center">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setEditingBottomNav(true)}
+                      className="rounded-xl gap-2"
                     >
-                      <Icon size={26} strokeWidth={isActive ? 2.5 : 2} />
-                      <span className="text-xs leading-tight">{item.label}</span>
-                    </Link>
-                  );
-                })}
-              </div>
+                      <Settings2 size={16} /> Redigera bottennav
+                    </Button>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+interface BottomNavEditorProps {
+  allItems: { href: string; label: string; icon: typeof Home }[];
+  selected: string[];
+  onChange: (hrefs: string[]) => void;
+  onClose: () => void;
+  onReset: () => void;
+}
+
+function BottomNavEditor({ allItems, selected, onChange, onClose, onReset }: BottomNavEditorProps) {
+  const selectedItems = selected
+    .map((href) => allItems.find((i) => i.href === href))
+    .filter(Boolean) as { href: string; label: string; icon: typeof Home }[];
+
+  const toggle = (href: string) => {
+    if (selected.includes(href)) {
+      onChange(selected.filter((h) => h !== href));
+    } else if (selected.length < 3) {
+      onChange([...selected, href]);
+    } else {
+      // Replace the last selected item
+      onChange([...selected.slice(0, 2), href]);
+    }
+  };
+
+  const move = (href: string, dir: -1 | 1) => {
+    const idx = selected.indexOf(href);
+    const next = idx + dir;
+    if (idx < 0 || next < 0 || next >= selected.length) return;
+    const arr = [...selected];
+    [arr[idx], arr[next]] = [arr[next]!, arr[idx]!];
+    onChange(arr);
+  };
+
+  return (
+    <div className="space-y-6">
+      <p className="text-sm text-muted-foreground">
+        Välj 3 ikoner som ska visas bredvid Hem. Ordningen bestämmer ordningen i bottennavet.
+      </p>
+
+      {/* Selected slots preview */}
+      <div className="grid grid-cols-3 gap-3">
+        {selectedItems.map((item, idx) => {
+          const Icon = item.icon;
+          return (
+            <div
+              key={item.href}
+              className="aspect-square flex flex-col items-center justify-center gap-2 rounded-2xl p-2 text-center bg-primary text-primary-foreground font-medium shadow-sm"
+            >
+              <Icon size={26} strokeWidth={2.5} />
+              <span className="text-xs leading-tight">{item.label}</span>
+            </div>
+          );
+        })}
+        {Array.from({ length: 3 - selectedItems.length }).map((_, idx) => (
+          <div
+            key={idx}
+            className="aspect-square flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border bg-muted/40"
+          >
+            <span className="text-xs text-muted-foreground">Plats {idx + 1}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* All items */}
+      <div className="grid grid-cols-3 gap-3">
+        {allItems.map((item) => {
+          const isSelected = selected.includes(item.href);
+          const Icon = item.icon;
+          return (
+            <button
+              key={item.href}
+              type="button"
+              onClick={() => toggle(item.href)}
+              className={`aspect-square flex flex-col items-center justify-center gap-2 rounded-2xl p-2 text-center transition-all ${
+                isSelected
+                  ? "bg-primary text-primary-foreground font-medium shadow-sm"
+                  : "bg-card text-foreground border border-border shadow-sm"
+              }`}
+            >
+              <Icon size={26} strokeWidth={isSelected ? 2.5 : 2} />
+              <span className="text-xs leading-tight">{item.label}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="flex gap-3 justify-center">
+        <Button variant="ghost" size="sm" onClick={onReset} className="rounded-xl gap-1">
+          <RotateCcw size={14} /> Återställ
+        </Button>
+        <Button size="sm" onClick={onClose} className="rounded-xl gap-1">
+          <Check size={14} /> Klar
+        </Button>
+      </div>
     </div>
   );
 }
