@@ -95,8 +95,8 @@ export default function HomeShortcuts() {
           <h2 className="text-xl font-semibold">Dina genvägar</h2>
           <p className="text-sm text-muted-foreground">
             {editing
-              ? `Fäst upp till ${MAX_FAVORITES} favoriter och flytta resten som du vill.`
-              : `${favorites.length} av ${MAX_FAVORITES} favoriter · ${restShortcuts.length} fler`}
+              ? `Välj upp till ${MAX_FAVORITES} favoriter att visa här.`
+              : `${favorites.length} av ${MAX_FAVORITES} valda`}
           </p>
         </div>
         <div className="flex gap-2">
