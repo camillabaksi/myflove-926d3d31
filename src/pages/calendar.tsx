@@ -302,14 +302,67 @@ export default function CalendarPage() {
               {selectedItems.tasks.map(t => (
                 <div key={t.id} className={`flex items-center gap-4 p-4 bg-card border border-border rounded-2xl ${t.completed ? 'opacity-60' : ''}`}>
                   <CheckSquare className={t.completed ? "text-primary" : "text-muted-foreground"} size={24} />
-                  <div className={`text-lg font-medium ${t.completed ? 'line-through text-muted-foreground' : ''}`}>
-                    {t.title}
+                  <div className="flex-1">
+                    {t.time && (
+                      <div className="text-xs text-primary font-medium uppercase tracking-wider mb-0.5">
+                        kl {t.time}
+                        {t.reminderMinutesBefore != null && ` · påminn ${t.reminderMinutesBefore} min innan`}
+                      </div>
+                    )}
+                    <div className={`text-lg font-medium ${t.completed ? 'line-through text-muted-foreground' : ''}`}>
+                      {t.title}
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
           </div>
         )}
+
+        <Dialog open={isAddingReminder} onOpenChange={setIsAddingReminder}>
+          <DialogContent className="rounded-3xl">
+            <DialogHeader>
+              <DialogTitle>Ny påminnelse</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4 pt-2">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Vad ska du komma ihåg?</label>
+                <Input
+                  value={newReminderTitle}
+                  onChange={(e) => setNewReminderTitle(e.target.value)}
+                  placeholder="T.ex. Möte med chefen"
+                  className="h-12 rounded-2xl"
+                  autoFocus
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Tid (valfritt)</label>
+                <Input
+                  type="time"
+                  value={newReminderTime}
+                  onChange={(e) => setNewReminderTime(e.target.value)}
+                  className="h-12 rounded-2xl"
+                />
+              </div>
+              <Button
+                onClick={async () => {
+                  if (!newReminderTitle.trim() || !selectedDateStr) return;
+                  if (newReminderTime && getNotificationPermission() === "default") {
+                    await requestNotificationPermission();
+                  }
+                  addReminder(newReminderTitle.trim(), selectedDateStr, newReminderTime || undefined);
+                  setNewReminderTitle("");
+                  setNewReminderTime("");
+                  setIsAddingReminder(false);
+                }}
+                disabled={!newReminderTitle.trim()}
+                className="w-full h-12 rounded-2xl"
+              >
+                Lägg till
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
 
         <Dialog open={isAddingEvent} onOpenChange={setIsAddingEvent}>
           <DialogContent className="rounded-3xl">
