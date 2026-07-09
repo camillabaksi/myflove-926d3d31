@@ -97,8 +97,28 @@ export default function Layout({ children }: LayoutProps) {
       ...(isAdmin ? [{ href: "/admin-statistik", label: "Appstatistik", icon: BarChart3 }] : []),
     ];
 
-  // For mobile bottom bar, we show first 4 items and a "Mer" button
-  const mobileNavItems = navItems.slice(0, 4);
+  // Bottom nav: Home is fixed, the remaining 3 slots are user-customizable.
+  const [bottomNavHrefs, setBottomNavHrefs] = useLocalStorage<string[]>("myflow-bottom-nav", [
+    "/mood",
+    "/dump",
+    "/kalender",
+  ]);
+  const [editingBottomNav, setEditingBottomNav] = useState(false);
+
+  const mobileNavItems = useMemo(() => {
+    const home = navItems.find((i) => i.href === "/")!;
+    const chosen = bottomNavHrefs
+      .map((href) => navItems.find((i) => i.href === href))
+      .filter(Boolean) as typeof navItems;
+    // Ensure we always have 3 valid slots; fill missing with defaults.
+    const defaults = [navItems[1], navItems[2], navItems[3]].filter(Boolean) as typeof navItems;
+    const filled = [...chosen];
+    for (const d of defaults) {
+      if (filled.length >= 3) break;
+      if (!filled.some((i) => i.href === d.href)) filled.push(d);
+    }
+    return [home, ...filled.slice(0, 3)];
+  }, [bottomNavHrefs, navItems]);
 
   return (
     <div className="min-h-[100dvh] flex flex-col bg-background md:flex-row relative">
