@@ -40,7 +40,7 @@ function timeAgo(iso: string) {
 }
 
 export default function FlowPlanPage() {
-  const { activeTasks, toggleTask } = useTasks();
+  const { activeTasks, toggleTask, setTaskDueDate } = useTasks();
   const { currentFocus } = useFocus();
   const [energy, setEnergy] = useState<Energy>("medium");
   const [energyAuto, setEnergyAuto] = useState<{ level: number; loggedAt: string } | null>(null);
@@ -103,6 +103,12 @@ export default function FlowPlanPage() {
         },
       });
       setPlan(result);
+      // Förankra planens uppgifter i dagens kalender så inget "försvinner".
+      const today = new Date().toISOString().split("T")[0] as string;
+      for (const item of result.plan) {
+        const t = activeTasks.find((x) => x.id === item.taskId);
+        if (t && !t.dueDate) setTaskDueDate(t.id, today);
+      }
     } catch (e) {
       setError(e instanceof Error ? e.message : "Något gick fel.");
     } finally {
