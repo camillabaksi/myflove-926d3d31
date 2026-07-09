@@ -2,11 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import Layout from "@/components/layout";
 import { Button } from "@/components/ui/button";
-import { Loader2, ListOrdered, Sparkles, Clock, Battery } from "lucide-react";
+import { Loader2, ListOrdered, Sparkles, Clock, Battery, RotateCcw } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { planFlowSequence, type FlowPlanResult } from "@/lib/flowplan.functions";
 import { useTasks, useFocus } from "@/hooks/use-data";
 import { supabase } from "@/integrations/supabase/client";
+import { useLocalStorage } from "@/lib/storage";
+
+type StoredPlan = { plan: FlowPlanResult; savedAt: string; date: string };
 
 type Energy = "low" | "medium" | "high";
 
