@@ -217,15 +217,24 @@ export default function CalendarPage() {
                   ? "Idag"
                   : new Date(selectedDateStr).toLocaleDateString('sv-SE', { weekday: 'long', day: 'numeric', month: 'long' })}
               </h3>
-              {hasHousehold && (
+              <div className="flex items-center gap-3">
                 <button
-                  onClick={() => setIsAddingEvent(true)}
+                  onClick={() => setIsAddingReminder(true)}
                   className="flex items-center gap-1.5 text-sm text-primary hover:underline"
                 >
                   <Plus size={16} />
-                  Familjehändelse
+                  Påminnelse
                 </button>
-              )}
+                {hasHousehold && (
+                  <button
+                    onClick={() => setIsAddingEvent(true)}
+                    className="flex items-center gap-1.5 text-sm text-primary hover:underline"
+                  >
+                    <Plus size={16} />
+                    Familjehändelse
+                  </button>
+                )}
+              </div>
             </div>
             
             {!selectedItems.focus && selectedItems.tasks.length === 0 && selectedItems.reminders.length === 0 && selectedItems.familyEvents.length === 0 && (
