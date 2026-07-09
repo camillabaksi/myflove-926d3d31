@@ -83,7 +83,7 @@ export function useTasks() {
   ) => {
     // Blueprint: uppgifter ska alltid landa i kalendern så inget "försvinner".
     // Om inget datum anges kopplas uppgiften till idag.
-    setTasks([
+    setTasks((prev) => [
       {
         id: generateId(),
         title,
@@ -95,17 +95,17 @@ export function useTasks() {
         waitingOn: opts?.waitingOn,
         steps: [],
       },
-      ...tasks,
+      ...prev,
     ]);
   };
 
   const setTaskDueDate = (id: string, dueDate: string) => {
-    setTasks(tasks.map(t => (t.id === id ? { ...t, dueDate } : t)));
+    setTasks((prev) => prev.map(t => (t.id === id ? { ...t, dueDate } : t)));
   };
 
   const toggleTask = (id: string) => {
     const task = tasks.find(t => t.id === id);
-    setTasks(tasks.map(t => {
+    setTasks((prev) => prev.map(t => {
       if (t.id !== id) return t;
       const nowCompleted = !t.completed;
       return { ...t, completed: nowCompleted, status: nowCompleted ? "klart" : "pagar" };
@@ -114,7 +114,7 @@ export function useTasks() {
   };
 
   const setTaskStatus = (id: string, status: TaskStatus, waitingOn?: string) => {
-    setTasks(tasks.map(t => {
+    setTasks((prev) => prev.map(t => {
       if (t.id !== id) return t;
       return {
         ...t,
@@ -126,40 +126,40 @@ export function useTasks() {
   };
 
   const setTaskKind = (id: string, kind: TaskKind) => {
-    setTasks(tasks.map(t => (t.id === id ? { ...t, kind } : t)));
+    setTasks((prev) => prev.map(t => (t.id === id ? { ...t, kind } : t)));
   };
 
   const addTaskStep = (id: string, title: string) => {
-    setTasks(tasks.map(t => t.id === id
+    setTasks((prev) => prev.map(t => t.id === id
       ? { ...t, steps: [...(t.steps ?? []), { id: generateId(), title, done: false }] }
       : t));
   };
 
   const toggleTaskStep = (taskId: string, stepId: string) => {
-    setTasks(tasks.map(t => t.id === taskId
+    setTasks((prev) => prev.map(t => t.id === taskId
       ? { ...t, steps: (t.steps ?? []).map(s => s.id === stepId ? { ...s, done: !s.done } : s) }
       : t));
   };
 
   const deleteTaskStep = (taskId: string, stepId: string) => {
-    setTasks(tasks.map(t => t.id === taskId
+    setTasks((prev) => prev.map(t => t.id === taskId
       ? { ...t, steps: (t.steps ?? []).filter(s => s.id !== stepId) }
       : t));
   };
 
   const deleteTask = (id: string) => {
-    setTasks(tasks.filter(t => t.id !== id));
+    setTasks((prev) => prev.filter(t => t.id !== id));
   };
 
   const snoozeTask = (id: string, days: number) => {
     const until = new Date();
     until.setDate(until.getDate() + days);
     const untilStr = until.toISOString().split('T')[0] as string;
-    setTasks(tasks.map(t => t.id === id ? { ...t, snoozedUntil: untilStr } : t));
+    setTasks((prev) => prev.map(t => t.id === id ? { ...t, snoozedUntil: untilStr } : t));
   };
 
   const unsnoozeTask = (id: string) => {
-    setTasks(tasks.map(t => t.id === id ? { ...t, snoozedUntil: undefined } : t));
+    setTasks((prev) => prev.map(t => t.id === id ? { ...t, snoozedUntil: undefined } : t));
   };
 
   const isSnoozed = (t: Task) => !!t.snoozedUntil && t.snoozedUntil > getTodayDateString();
