@@ -132,8 +132,8 @@ export default function HomeShortcuts() {
         </div>
       )}
 
-      {/* Rest — small tiles */}
-      {restShortcuts.length > 0 && (
+      {/* Rest — small tiles, only visible while editing */}
+      {editing && restShortcuts.length > 0 && (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
           {restShortcuts.map((s, idx) => (
             <ShortcutTile
