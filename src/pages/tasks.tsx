@@ -159,8 +159,14 @@ export default function Tasks() {
               {task.dueDate && (
                 <span className="inline-flex items-center gap-1 text-[11px] text-primary font-medium">
                   <CalendarIcon size={11} /> {task.dueDate}
+                  {task.time && <> · kl {task.time}</>}
                 </span>
               )}
+              {task.time && task.reminderMinutesBefore ? (
+                <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
+                  <BellRing size={11} /> {task.reminderMinutesBefore} min innan
+                </span>
+              ) : null}
               {steps.length > 0 && (
                 <span className="text-[11px] text-muted-foreground">
                   {stepsDone}/{steps.length} delsteg
