@@ -47,7 +47,9 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
         // Save to local storage
         if (typeof window !== "undefined") {
           window.localStorage.setItem(key, JSON.stringify(valueToStore));
-          window.dispatchEvent(new CustomEvent(LOCAL_STORAGE_EVENT, { detail: { key } }));
+          window.queueMicrotask(() => {
+            window.dispatchEvent(new CustomEvent(LOCAL_STORAGE_EVENT, { detail: { key } }));
+          });
         }
         return valueToStore;
       });
