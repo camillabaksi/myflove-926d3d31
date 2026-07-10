@@ -1,6 +1,6 @@
 import { ReactNode, useState, useEffect, useMemo } from "react";
 import { Link, useLocation } from "wouter";
-import { Home, Target, CheckSquare, ShoppingBag, Smile, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Battery, Settings2, Check, RotateCcw, ArrowUp, ArrowDown } from "lucide-react";
+import { Home, Target, CheckSquare, ShoppingBag, Smile, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Battery, Settings2, Check, RotateCcw, ArrowUp, ArrowDown, LogOut } from "lucide-react";
 import { useCommuteAlerts } from "@/hooks/use-commute-alerts";
 import { useMedicationAlerts } from "@/hooks/use-medication-alerts";
 import { useShoppingProximityAlerts } from "@/hooks/use-shopping-proximity-alerts";
@@ -9,6 +9,7 @@ import { useIsAdmin } from "@/hooks/use-is-admin";
 import { useLocalStorage } from "@/lib/storage";
 import { trackEvent } from "@/lib/analytics";
 import { Button } from "@/components/ui/button";
+import { useClerk, Show } from "@clerk/react";
 
 interface LayoutProps {
   children: ReactNode;
@@ -71,6 +72,7 @@ const CATEGORY_THEMES: Record<string, Record<string, string>> = {
 export default function Layout({ children }: LayoutProps) {
   const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { signOut } = useClerk();
   const { alerts, dismissAlert } = useCommuteAlerts();
   const { alerts: medicationAlerts, dismissAlert: dismissMedicationAlert } = useMedicationAlerts();
   const { alerts: proximityAlerts, dismissAlert: dismissProximityAlert } = useShoppingProximityAlerts();
@@ -156,6 +158,17 @@ export default function Layout({ children }: LayoutProps) {
               </Link>
             );
           })}
+        </div>
+        <div className="mt-auto pt-4 pb-2">
+          <Show when="signed-in">
+            <Button
+              variant="outline"
+              className="w-full rounded-xl gap-2"
+              onClick={() => signOut()}
+            >
+              <LogOut size={16} /> Logga ut
+            </Button>
+          </Show>
         </div>
       </nav>
 
@@ -352,6 +365,21 @@ export default function Layout({ children }: LayoutProps) {
                     >
                       <Settings2 size={16} /> Redigera bottennav
                     </Button>
+                  </div>
+                  <div className="mt-6 flex items-center justify-center">
+                    <Show when="signed-in">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="rounded-xl gap-2"
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          signOut();
+                        }}
+                      >
+                        <LogOut size={16} /> Logga ut
+                      </Button>
+                    </Show>
                   </div>
                 </>
               )}
