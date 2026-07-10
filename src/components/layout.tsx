@@ -159,6 +159,17 @@ export default function Layout({ children }: LayoutProps) {
             );
           })}
         </div>
+        <div className="mt-auto pt-4 pb-2">
+          <Show when="signed-in">
+            <Button
+              variant="outline"
+              className="w-full rounded-xl gap-2"
+              onClick={() => signOut()}
+            >
+              <LogOut size={16} /> Logga ut
+            </Button>
+          </Show>
+        </div>
       </nav>
 
       {/* Main Content Area */}
