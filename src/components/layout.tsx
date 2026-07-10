@@ -366,6 +366,21 @@ export default function Layout({ children }: LayoutProps) {
                       <Settings2 size={16} /> Redigera bottennav
                     </Button>
                   </div>
+                  <div className="mt-6 flex items-center justify-center">
+                    <Show when="signed-in">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="rounded-xl gap-2"
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          signOut();
+                        }}
+                      >
+                        <LogOut size={16} /> Logga ut
+                      </Button>
+                    </Show>
+                  </div>
                 </>
               )}
             </div>
