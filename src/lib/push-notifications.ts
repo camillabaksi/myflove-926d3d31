@@ -18,8 +18,7 @@ export async function requestNotificationPermission(): Promise<NotificationPermi
     return Notification.permission;
   }
   try {
-    const result = await Notification.requestPermission();
-    return result;
+    return await Notification.requestPermission();
   } catch {
     return 'denied';
   }
@@ -55,110 +54,155 @@ export function subscribeAlarmPref(cb: (enabled: boolean) => void): () => void {
   return () => window.removeEventListener(ALARM_EVENT, handler);
 }
 
-let audioCtx: AudioContext | null = null;
-let unlockBound = false;
+// ------------------------------------------------------------------
+// Ljudmotor: förgenererad WAV som spelas via HTMLAudioElement.
+// Detta är MYCKET mer pålitligt än Web Audio från timers, särskilt
+// på mobil och när fliken är i bakgrunden.
+// ------------------------------------------------------------------
 
-function getAudioContext(): AudioContext | null {
-  if (typeof window === 'undefined') return null;
-  const Ctx = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-  if (!Ctx) return null;
-  if (!audioCtx) {
-    try {
-      audioCtx = new Ctx();
-    } catch {
-      audioCtx = null;
+let audioEl: HTMLAudioElement | null = null;
+let audioUrl: string | null = null;
+let unlockBound = false;
+let unlocked = false;
+
+/** Bygger en WAV-blob med tre mjuka pip (880 / 1046 / 880 Hz). */
+function buildAlarmWav(): Blob {
+  const sampleRate = 44100;
+  const beeps = [
+    { start: 0.0, freq: 880, dur: 0.28 },
+    { start: 0.35, freq: 1046, dur: 0.28 },
+    { start: 0.7, freq: 880, dur: 0.32 },
+  ];
+  const totalSeconds = 1.1;
+  const totalSamples = Math.floor(sampleRate * totalSeconds);
+  const samples = new Float32Array(totalSamples);
+
+  for (const beep of beeps) {
+    const startSample = Math.floor(beep.start * sampleRate);
+    const durSamples = Math.floor(beep.dur * sampleRate);
+    const attack = Math.floor(0.02 * sampleRate);
+    const release = Math.floor(0.08 * sampleRate);
+    for (let i = 0; i < durSamples; i++) {
+      const idx = startSample + i;
+      if (idx >= totalSamples) break;
+      let env = 1;
+      if (i < attack) env = i / attack;
+      else if (i > durSamples - release) env = Math.max(0, (durSamples - i) / release);
+      const t = i / sampleRate;
+      samples[idx] += Math.sin(2 * Math.PI * beep.freq * t) * env * 0.35;
     }
   }
-  return audioCtx;
+
+  // Encode as 16-bit PCM WAV
+  const buffer = new ArrayBuffer(44 + samples.length * 2);
+  const view = new DataView(buffer);
+  const writeStr = (o: number, s: string) => {
+    for (let i = 0; i < s.length; i++) view.setUint8(o + i, s.charCodeAt(i));
+  };
+  writeStr(0, 'RIFF');
+  view.setUint32(4, 36 + samples.length * 2, true);
+  writeStr(8, 'WAVE');
+  writeStr(12, 'fmt ');
+  view.setUint32(16, 16, true);
+  view.setUint16(20, 1, true);
+  view.setUint16(22, 1, true);
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, sampleRate * 2, true);
+  view.setUint16(32, 2, true);
+  view.setUint16(34, 16, true);
+  writeStr(36, 'data');
+  view.setUint32(40, samples.length * 2, true);
+  let offset = 44;
+  for (let i = 0; i < samples.length; i++) {
+    const s = Math.max(-1, Math.min(1, samples[i]));
+    view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
+    offset += 2;
+  }
+  return new Blob([buffer], { type: 'audio/wav' });
+}
+
+function ensureAudio(): HTMLAudioElement | null {
+  if (typeof window === 'undefined') return null;
+  if (!audioEl) {
+    try {
+      audioUrl = URL.createObjectURL(buildAlarmWav());
+      audioEl = new Audio(audioUrl);
+      audioEl.preload = 'auto';
+      audioEl.load();
+    } catch {
+      audioEl = null;
+    }
+  }
+  return audioEl;
 }
 
 /**
- * Låser upp AudioContext vid första användarinteraktion så att ljud kan
- * spelas senare från timers/notifikationer (webbläsare kräver user gesture).
+ * Låser upp ljudet vid första användarinteraktion. Spelar en tyst version
+ * så att webbläsaren tillåter senare uppspelning från timers/notifikationer.
  */
 export function initAlarmAudioUnlock(): void {
   if (typeof window === 'undefined' || unlockBound) return;
   unlockBound = true;
   const unlock = () => {
-    const ctx = getAudioContext();
-    if (!ctx) return;
-    if (ctx.state === 'suspended') ctx.resume().catch(() => {});
-    // Spela en helt tyst ton för att låsa upp iOS/Safari.
-    try {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      gain.gain.value = 0.0001;
-      osc.connect(gain).connect(ctx.destination);
-      osc.start();
-      osc.stop(ctx.currentTime + 0.01);
-    } catch {
-      // ignore
-    }
+    const el = ensureAudio();
+    if (!el) return;
+    const prevVol = el.volume;
+    el.volume = 0;
+    el.play()
+      .then(() => {
+        el.pause();
+        el.currentTime = 0;
+        el.volume = prevVol;
+        unlocked = true;
+      })
+      .catch(() => {
+        el.volume = prevVol;
+      });
     window.removeEventListener('pointerdown', unlock);
     window.removeEventListener('keydown', unlock);
     window.removeEventListener('touchstart', unlock);
+    window.removeEventListener('click', unlock);
   };
-  window.addEventListener('pointerdown', unlock, { once: false });
-  window.addEventListener('keydown', unlock, { once: false });
-  window.addEventListener('touchstart', unlock, { once: false });
+  window.addEventListener('pointerdown', unlock);
+  window.addEventListener('keydown', unlock);
+  window.addEventListener('touchstart', unlock);
+  window.addEventListener('click', unlock);
 }
 
-
-/**
- * Spelar en mjuk, varm alarmsignal (tre pip) via Web Audio API.
- * Ingen extern ljudfil behövs.
- */
 export function playAlarmSound(): void {
   if (!isAlarmSoundEnabled()) return;
-  const ctx = getAudioContext();
-  if (!ctx) return;
-
-  // Vissa webbläsare kräver att kontexten återupptas efter user gesture.
-  if (ctx.state === 'suspended') {
-    ctx.resume().catch(() => {});
-  }
-
-  const now = ctx.currentTime;
-  const beeps = [
-    { start: 0, freq: 880 },
-    { start: 0.35, freq: 1046 },
-    { start: 0.7, freq: 880 },
-  ];
-
-  for (const beep of beeps) {
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = 'sine';
-    osc.frequency.value = beep.freq;
-    gain.gain.setValueAtTime(0.0001, now + beep.start);
-    gain.gain.exponentialRampToValueAtTime(0.25, now + beep.start + 0.03);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + beep.start + 0.28);
-    osc.connect(gain).connect(ctx.destination);
-    osc.start(now + beep.start);
-    osc.stop(now + beep.start + 0.3);
+  const el = ensureAudio();
+  if (!el) return;
+  try {
+    el.currentTime = 0;
+    el.volume = 1;
+    void el.play().catch(() => {
+      // Antagligen blockerat p.g.a. saknad user gesture.
+    });
+  } catch {
+    // ignore
   }
 }
 
-/** Kort testljud för preferens-UI, spelar även om alarmet är avstängt. */
+/** Kort testljud för preferens-UI (spelar även när alarm är avstängt). */
 export function playAlarmPreview(): void {
-  const ctx = getAudioContext();
-  if (!ctx) return;
-  if (ctx.state === 'suspended') ctx.resume().catch(() => {});
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
-  osc.type = 'sine';
-  osc.frequency.value = 880;
-  const now = ctx.currentTime;
-  gain.gain.setValueAtTime(0.0001, now);
-  gain.gain.exponentialRampToValueAtTime(0.25, now + 0.03);
-  gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.3);
-  osc.connect(gain).connect(ctx.destination);
-  osc.start(now);
-  osc.stop(now + 0.32);
+  const el = ensureAudio();
+  if (!el) return;
+  try {
+    el.currentTime = 0;
+    el.volume = 1;
+    void el.play().catch(() => {});
+  } catch {
+    // ignore
+  }
+}
+
+/** Returnerar om ljudet har låsts upp av en användarinteraktion. */
+export function isAudioUnlocked(): boolean {
+  return unlocked;
 }
 
 interface FlowNotificationOptions extends NotificationOptions {
-  /** Sätt true för att hoppa över alarmljudet, även om det är på. */
   silentAlarm?: boolean;
 }
 
@@ -171,6 +215,6 @@ export function sendPushNotification(title: string, options?: FlowNotificationOp
   try {
     new Notification(title, rest);
   } catch {
-    // Ignore notification errors (e.g. unsupported in this browsing context)
+    // ignore
   }
 }
