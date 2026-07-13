@@ -388,6 +388,17 @@ export default function Layout({ children }: LayoutProps) {
                       <Settings2 size={16} /> Redigera bottennav
                     </Button>
                   </div>
+                  <div className="mt-4 flex items-center justify-center">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="rounded-xl gap-2"
+                      onClick={toggleAlarm}
+                    >
+                      {alarmEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
+                      Alarmljud: {alarmEnabled ? "på" : "av"}
+                    </Button>
+                  </div>
                   <div className="mt-6 flex items-center justify-center">
                     <Show when="signed-in">
                       <Button
