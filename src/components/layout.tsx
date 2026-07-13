@@ -1,7 +1,7 @@
 import { ReactNode, useState, useEffect, useMemo } from "react";
 import { Link, useLocation } from "wouter";
 import { Home, Target, CheckSquare, ShoppingBag, Smile, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Battery, Settings2, Check, RotateCcw, ArrowUp, ArrowDown, LogOut, Volume2, VolumeX } from "lucide-react";
-import { isAlarmSoundEnabled, setAlarmSoundEnabled, subscribeAlarmPref, playAlarmPreview } from "@/lib/push-notifications";
+import { isAlarmSoundEnabled, setAlarmSoundEnabled, subscribeAlarmPref, playAlarmPreview, initAlarmAudioUnlock } from "@/lib/push-notifications";
 import { useCommuteAlerts } from "@/hooks/use-commute-alerts";
 import { useMedicationAlerts } from "@/hooks/use-medication-alerts";
 import { useShoppingProximityAlerts } from "@/hooks/use-shopping-proximity-alerts";
@@ -82,6 +82,7 @@ export default function Layout({ children }: LayoutProps) {
 
   const [alarmEnabled, setAlarmEnabledState] = useState<boolean>(() => isAlarmSoundEnabled());
   useEffect(() => subscribeAlarmPref((v) => setAlarmEnabledState(v)), []);
+  useEffect(() => { initAlarmAudioUnlock(); }, []);
   const toggleAlarm = () => {
     const next = !alarmEnabled;
     setAlarmSoundEnabled(next);
