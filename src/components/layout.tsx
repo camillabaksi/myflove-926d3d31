@@ -1,6 +1,7 @@
 import { ReactNode, useState, useEffect, useMemo } from "react";
 import { Link, useLocation } from "wouter";
-import { Home, Target, CheckSquare, ShoppingBag, Smile, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Battery, Settings2, Check, RotateCcw, ArrowUp, ArrowDown, LogOut } from "lucide-react";
+import { Home, Target, CheckSquare, ShoppingBag, Smile, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Battery, Settings2, Check, RotateCcw, ArrowUp, ArrowDown, LogOut, Volume2, VolumeX } from "lucide-react";
+import { isAlarmSoundEnabled, setAlarmSoundEnabled, subscribeAlarmPref, playAlarmPreview } from "@/lib/push-notifications";
 import { useCommuteAlerts } from "@/hooks/use-commute-alerts";
 import { useMedicationAlerts } from "@/hooks/use-medication-alerts";
 import { useShoppingProximityAlerts } from "@/hooks/use-shopping-proximity-alerts";
@@ -78,6 +79,17 @@ export default function Layout({ children }: LayoutProps) {
   const { alerts: proximityAlerts, dismissAlert: dismissProximityAlert } = useShoppingProximityAlerts();
   useNotificationScheduler();
   const { isAdmin } = useIsAdmin();
+
+  const [alarmEnabled, setAlarmEnabledState] = useState<boolean>(() => isAlarmSoundEnabled());
+  useEffect(() => subscribeAlarmPref((v) => setAlarmEnabledState(v)), []);
+  const toggleAlarm = () => {
+    const next = !alarmEnabled;
+    setAlarmSoundEnabled(next);
+    setAlarmEnabledState(next);
+    if (next) playAlarmPreview();
+  };
+
+
 
 
 
@@ -159,7 +171,16 @@ export default function Layout({ children }: LayoutProps) {
             );
           })}
         </div>
-        <div className="mt-auto pt-4 pb-2">
+        <div className="mt-auto pt-4 pb-2 space-y-2">
+          <Button
+            variant="outline"
+            className="w-full rounded-xl gap-2"
+            onClick={toggleAlarm}
+            title={alarmEnabled ? "Stäng av alarmljud" : "Slå på alarmljud"}
+          >
+            {alarmEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
+            Alarmljud: {alarmEnabled ? "på" : "av"}
+          </Button>
           <Show when="signed-in">
             <Button
               variant="outline"
@@ -170,6 +191,7 @@ export default function Layout({ children }: LayoutProps) {
             </Button>
           </Show>
         </div>
+
       </nav>
 
       {/* Main Content Area */}
@@ -364,6 +386,17 @@ export default function Layout({ children }: LayoutProps) {
                       className="rounded-xl gap-2"
                     >
                       <Settings2 size={16} /> Redigera bottennav
+                    </Button>
+                  </div>
+                  <div className="mt-4 flex items-center justify-center">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="rounded-xl gap-2"
+                      onClick={toggleAlarm}
+                    >
+                      {alarmEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
+                      Alarmljud: {alarmEnabled ? "på" : "av"}
                     </Button>
                   </div>
                   <div className="mt-6 flex items-center justify-center">
