@@ -171,7 +171,16 @@ export default function Layout({ children }: LayoutProps) {
             );
           })}
         </div>
-        <div className="mt-auto pt-4 pb-2">
+        <div className="mt-auto pt-4 pb-2 space-y-2">
+          <Button
+            variant="outline"
+            className="w-full rounded-xl gap-2"
+            onClick={toggleAlarm}
+            title={alarmEnabled ? "Stäng av alarmljud" : "Slå på alarmljud"}
+          >
+            {alarmEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
+            Alarmljud: {alarmEnabled ? "på" : "av"}
+          </Button>
           <Show when="signed-in">
             <Button
               variant="outline"
@@ -182,6 +191,7 @@ export default function Layout({ children }: LayoutProps) {
             </Button>
           </Show>
         </div>
+
       </nav>
 
       {/* Main Content Area */}
