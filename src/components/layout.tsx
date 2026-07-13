@@ -82,6 +82,7 @@ export default function Layout({ children }: LayoutProps) {
 
   const [alarmEnabled, setAlarmEnabledState] = useState<boolean>(() => isAlarmSoundEnabled());
   useEffect(() => subscribeAlarmPref((v) => setAlarmEnabledState(v)), []);
+  useEffect(() => { initAlarmAudioUnlock(); }, []);
   const toggleAlarm = () => {
     const next = !alarmEnabled;
     setAlarmSoundEnabled(next);
