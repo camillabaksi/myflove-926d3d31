@@ -56,6 +56,7 @@ export function subscribeAlarmPref(cb: (enabled: boolean) => void): () => void {
 }
 
 let audioCtx: AudioContext | null = null;
+let unlockBound = false;
 
 function getAudioContext(): AudioContext | null {
   if (typeof window === 'undefined') return null;
@@ -70,6 +71,38 @@ function getAudioContext(): AudioContext | null {
   }
   return audioCtx;
 }
+
+/**
+ * Låser upp AudioContext vid första användarinteraktion så att ljud kan
+ * spelas senare från timers/notifikationer (webbläsare kräver user gesture).
+ */
+export function initAlarmAudioUnlock(): void {
+  if (typeof window === 'undefined' || unlockBound) return;
+  unlockBound = true;
+  const unlock = () => {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    if (ctx.state === 'suspended') ctx.resume().catch(() => {});
+    // Spela en helt tyst ton för att låsa upp iOS/Safari.
+    try {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      gain.gain.value = 0.0001;
+      osc.connect(gain).connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.01);
+    } catch {
+      // ignore
+    }
+    window.removeEventListener('pointerdown', unlock);
+    window.removeEventListener('keydown', unlock);
+    window.removeEventListener('touchstart', unlock);
+  };
+  window.addEventListener('pointerdown', unlock, { once: false });
+  window.addEventListener('keydown', unlock, { once: false });
+  window.addEventListener('touchstart', unlock, { once: false });
+}
+
 
 /**
  * Spelar en mjuk, varm alarmsignal (tre pip) via Web Audio API.
