@@ -80,6 +80,17 @@ export default function Layout({ children }: LayoutProps) {
   useNotificationScheduler();
   const { isAdmin } = useIsAdmin();
 
+  const [alarmEnabled, setAlarmEnabledState] = useState<boolean>(() => isAlarmSoundEnabled());
+  useEffect(() => subscribeAlarmPref((v) => setAlarmEnabledState(v)), []);
+  const toggleAlarm = () => {
+    const next = !alarmEnabled;
+    setAlarmSoundEnabled(next);
+    setAlarmEnabledState(next);
+    if (next) playAlarmPreview();
+  };
+
+
+
 
 
   useEffect(() => {
