@@ -103,54 +103,20 @@ export default function Mood() {
           )}
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <button
-            type="button"
-            onClick={() => setOverwhelmedOpen(true)}
-            className="flex items-center gap-4 p-5 bg-card border border-border rounded-2xl shadow-sm hover:border-primary/40 transition-colors text-left"
-          >
-            <div className="w-12 h-12 rounded-full bg-accent/60 text-accent-foreground flex items-center justify-center shrink-0">
-              <LifeBuoy size={24} />
-            </div>
-            <div>
-              <p className="font-medium">Jag är överväldigad</p>
-              <p className="text-sm text-muted-foreground">Prioritera det viktigaste, flytta undan resten</p>
-            </div>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setFlowInsightsOpen(true)}
-            className="flex items-center gap-4 p-5 bg-card border border-border rounded-2xl shadow-sm hover:border-primary/40 transition-colors text-left"
-          >
-            <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
-              <Sparkles size={24} />
-            </div>
-            <div>
-              <p className="font-medium">Hitta mitt flow</p>
-              <p className="text-sm text-muted-foreground">Se vad som gått bra på sistone</p>
-            </div>
-          </button>
-        </div>
-
-        <WidgetGrid />
-
         <button
           type="button"
           onClick={() => setFlowInsightsOpen(true)}
           className="w-full flex items-center gap-4 p-5 bg-card border border-border rounded-2xl shadow-sm hover:border-primary/40 transition-colors text-left"
         >
-          <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
-            <TrendingUp size={20} />
+          <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
+            <Sparkles size={24} />
           </div>
-          <div className="flex-1">
-            <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">Sammanfattning</p>
-            <p className="font-medium leading-snug line-clamp-2">
-              {todayScore ? `Idag: ${todayScore.emoji} ${todayScore.label}` : (topInsight?.text ?? "Checka in för att se din sammanfattning")}
-            </p>
+          <div>
+            <p className="font-medium">Hitta mitt flow</p>
+            <p className="text-sm text-muted-foreground">Se vad som gått bra på sistone</p>
           </div>
-          <ArrowRight size={16} className="text-muted-foreground shrink-0" />
         </button>
+
 
         {moods.length > 0 && (
           <div className="space-y-4">
