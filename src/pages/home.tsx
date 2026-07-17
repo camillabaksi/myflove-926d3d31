@@ -4,6 +4,7 @@ import HomeShortcuts from "@/components/home-shortcuts";
 import Layout from "@/components/layout";
 import OverwhelmedModal from "@/components/overwhelmed-modal";
 import HelpMeModal from "@/components/help-me-modal";
+import StopModal from "@/components/stop-modal";
 import WeatherCard from "@/components/weather-card";
 import ProactiveSuggestions from "@/components/proactive-suggestions";
 import { Button } from "@/components/ui/button";
