@@ -139,8 +139,8 @@ export default function Mood() {
         )}
       </div>
 
-      <OverwhelmedModal open={overwhelmedOpen} onOpenChange={setOverwhelmedOpen} />
       <FlowInsightsModal open={flowInsightsOpen} onOpenChange={setFlowInsightsOpen} />
+
     </Layout>
   );
 }
