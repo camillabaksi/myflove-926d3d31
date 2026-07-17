@@ -2,17 +2,12 @@ import { useState } from "react";
 import Layout from "@/components/layout";
 import { useMoods } from "@/hooks/use-data";
 import { Button } from "@/components/ui/button";
-import OverwhelmedModal from "@/components/overwhelmed-modal";
 import FlowInsightsModal from "@/components/flow-insights-modal";
-import { LifeBuoy, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { getRandomEncouragement } from "@/lib/encouragements";
 import { useToast } from "@/hooks/use-toast";
-import { useFocus, useTasks, useReminders } from "@/hooks/use-data";
-import { generateFlowInsights } from "@/lib/flow-insights";
-import { Link } from "wouter";
-import { TrendingUp, ArrowRight } from "lucide-react";
-import WidgetGrid from "@/components/widget-grid";
 import { getGreeting } from "@/lib/greeting";
+
 
 const EMOJIS = [
   { score: 1, emoji: "😢", label: "Tungt" },
@@ -25,13 +20,9 @@ const EMOJIS = [
 export default function Mood() {
   const { moods, addMood } = useMoods();
   const { toast } = useToast();
-  const { currentFocus } = useFocus();
-  const { activeTasks } = useTasks();
-  const { activeReminders } = useReminders();
   const [selectedScore, setSelectedScore] = useState<number | null>(null);
   const [note, setNote] = useState("");
   const [justSaved, setJustSaved] = useState(false);
-  const [overwhelmedOpen, setOverwhelmedOpen] = useState(false);
   const [flowInsightsOpen, setFlowInsightsOpen] = useState(false);
 
   const handleSave = () => {
@@ -55,12 +46,6 @@ export default function Mood() {
     }).format(new Date(timestamp));
   };
 
-  const todayScore = moods.length > 0 && new Date(moods[0]!.date).toDateString() === new Date().toDateString()
-    ? EMOJIS.find(e => e.score === moods[0]!.score)
-    : null;
-
-  const insights = generateFlowInsights(moods, activeTasks, currentFocus);
-  const topInsight = insights[0];
 
   return (
     <Layout>
@@ -118,54 +103,20 @@ export default function Mood() {
           )}
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <button
-            type="button"
-            onClick={() => setOverwhelmedOpen(true)}
-            className="flex items-center gap-4 p-5 bg-card border border-border rounded-2xl shadow-sm hover:border-primary/40 transition-colors text-left"
-          >
-            <div className="w-12 h-12 rounded-full bg-accent/60 text-accent-foreground flex items-center justify-center shrink-0">
-              <LifeBuoy size={24} />
-            </div>
-            <div>
-              <p className="font-medium">Jag är överväldigad</p>
-              <p className="text-sm text-muted-foreground">Prioritera det viktigaste, flytta undan resten</p>
-            </div>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setFlowInsightsOpen(true)}
-            className="flex items-center gap-4 p-5 bg-card border border-border rounded-2xl shadow-sm hover:border-primary/40 transition-colors text-left"
-          >
-            <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
-              <Sparkles size={24} />
-            </div>
-            <div>
-              <p className="font-medium">Hitta mitt flow</p>
-              <p className="text-sm text-muted-foreground">Se vad som gått bra på sistone</p>
-            </div>
-          </button>
-        </div>
-
-        <WidgetGrid />
-
         <button
           type="button"
           onClick={() => setFlowInsightsOpen(true)}
           className="w-full flex items-center gap-4 p-5 bg-card border border-border rounded-2xl shadow-sm hover:border-primary/40 transition-colors text-left"
         >
-          <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
-            <TrendingUp size={20} />
+          <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
+            <Sparkles size={24} />
           </div>
-          <div className="flex-1">
-            <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">Sammanfattning</p>
-            <p className="font-medium leading-snug line-clamp-2">
-              {todayScore ? `Idag: ${todayScore.emoji} ${todayScore.label}` : (topInsight?.text ?? "Checka in för att se din sammanfattning")}
-            </p>
+          <div>
+            <p className="font-medium">Hitta mitt flow</p>
+            <p className="text-sm text-muted-foreground">Se vad som gått bra på sistone</p>
           </div>
-          <ArrowRight size={16} className="text-muted-foreground shrink-0" />
         </button>
+
 
         {moods.length > 0 && (
           <div className="space-y-4">
@@ -188,8 +139,8 @@ export default function Mood() {
         )}
       </div>
 
-      <OverwhelmedModal open={overwhelmedOpen} onOpenChange={setOverwhelmedOpen} />
       <FlowInsightsModal open={flowInsightsOpen} onOpenChange={setFlowInsightsOpen} />
+
     </Layout>
   );
 }
