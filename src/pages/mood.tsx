@@ -20,13 +20,9 @@ const EMOJIS = [
 export default function Mood() {
   const { moods, addMood } = useMoods();
   const { toast } = useToast();
-  const { currentFocus } = useFocus();
-  const { activeTasks } = useTasks();
-  const { activeReminders } = useReminders();
   const [selectedScore, setSelectedScore] = useState<number | null>(null);
   const [note, setNote] = useState("");
   const [justSaved, setJustSaved] = useState(false);
-  const [overwhelmedOpen, setOverwhelmedOpen] = useState(false);
   const [flowInsightsOpen, setFlowInsightsOpen] = useState(false);
 
   const handleSave = () => {
@@ -50,12 +46,6 @@ export default function Mood() {
     }).format(new Date(timestamp));
   };
 
-  const todayScore = moods.length > 0 && new Date(moods[0]!.date).toDateString() === new Date().toDateString()
-    ? EMOJIS.find(e => e.score === moods[0]!.score)
-    : null;
-
-  const insights = generateFlowInsights(moods, activeTasks, currentFocus);
-  const topInsight = insights[0];
 
   return (
     <Layout>
