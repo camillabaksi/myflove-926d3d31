@@ -1,11 +1,14 @@
+import { useState } from "react";
 import { Link } from "wouter";
 import {
-  Smile, Target, CheckSquare, ShoppingBag, Calendar, Pill, Timer, Wallet, BarChart3, Trophy,
+  Smile, Target, CheckSquare, ShoppingBag, Calendar, Pill, Timer, Wallet, BarChart3, Trophy, OctagonAlert,
+  type LucideIcon,
 } from "lucide-react";
 import { useMoods, useFocus, useTasks, useShoppingList, useReminders, useMedications, useFinances } from "@/hooks/use-data";
 import { useLocalStorage } from "@/lib/storage";
 import { getWeeklyMoodStats } from "@/lib/mood-stats";
 import { getAchievements } from "@/lib/achievements";
+import StopModal from "@/components/stop-modal";
 
 const EMOJI_BY_SCORE: Record<number, string> = { 1: "😢", 2: "😕", 3: "😐", 4: "🙂", 5: "😄" };
 
