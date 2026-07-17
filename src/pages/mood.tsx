@@ -2,17 +2,12 @@ import { useState } from "react";
 import Layout from "@/components/layout";
 import { useMoods } from "@/hooks/use-data";
 import { Button } from "@/components/ui/button";
-import OverwhelmedModal from "@/components/overwhelmed-modal";
 import FlowInsightsModal from "@/components/flow-insights-modal";
-import { LifeBuoy, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { getRandomEncouragement } from "@/lib/encouragements";
 import { useToast } from "@/hooks/use-toast";
-import { useFocus, useTasks, useReminders } from "@/hooks/use-data";
-import { generateFlowInsights } from "@/lib/flow-insights";
-import { Link } from "wouter";
-import { TrendingUp, ArrowRight } from "lucide-react";
-import WidgetGrid from "@/components/widget-grid";
 import { getGreeting } from "@/lib/greeting";
+
 
 const EMOJIS = [
   { score: 1, emoji: "😢", label: "Tungt" },
