@@ -1,11 +1,14 @@
+import { useState } from "react";
 import { Link } from "wouter";
 import {
-  Smile, Target, CheckSquare, ShoppingBag, Calendar, Pill, Timer, Wallet, BarChart3, Trophy,
+  Smile, Target, CheckSquare, ShoppingBag, Calendar, Pill, Timer, Wallet, BarChart3, Trophy, OctagonAlert,
+  type LucideIcon,
 } from "lucide-react";
 import { useMoods, useFocus, useTasks, useShoppingList, useReminders, useMedications, useFinances } from "@/hooks/use-data";
 import { useLocalStorage } from "@/lib/storage";
 import { getWeeklyMoodStats } from "@/lib/mood-stats";
 import { getAchievements } from "@/lib/achievements";
+import StopModal from "@/components/stop-modal";
 
 const EMOJI_BY_SCORE: Record<number, string> = { 1: "😢", 2: "😕", 3: "😐", 4: "🙂", 5: "😄" };
 
@@ -18,16 +21,19 @@ const PREVIEW_PALETTE = [
 ];
 
 interface Widget {
-  href: string;
-  icon: typeof Smile;
+  href?: string;
+  onClick?: () => void;
+  icon: LucideIcon;
   iconBg: string;
   iconColor: string;
   label: string;
   value: string;
   hint?: string;
+  emphasis?: boolean;
 }
 
 export default function WidgetGrid() {
+  const [stopOpen, setStopOpen] = useState(false);
   const { moods } = useMoods();
   const { currentFocus, completedFocusCount } = useFocus();
   const { activeTasks, tasks } = useTasks();
@@ -137,6 +143,13 @@ export default function WidgetGrid() {
       label: "Belöningar",
       value: `${unlockedCount} av ${achievements.length}`,
     },
+    {
+      onClick: () => setStopOpen(true),
+      icon: OctagonAlert,
+      label: "Stop!",
+      value: "Pausa impulsen",
+      emphasis: true,
+    },
   ].map((w, i) => {
     const palette = PREVIEW_PALETTE[i % PREVIEW_PALETTE.length];
     return { ...w, iconBg: palette.bg, iconColor: palette.color };
@@ -148,12 +161,11 @@ export default function WidgetGrid() {
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
         {widgets.map((widget) => {
           const Icon = widget.icon;
-          return (
-            <Link
-              key={widget.label}
-              href={widget.href}
-              className="flex flex-col gap-2 p-4 bg-card border border-border rounded-2xl shadow-sm hover:border-primary/40 hover:-translate-y-0.5 transition-all"
-            >
+          const tileClass = `flex flex-col gap-2 p-4 bg-card border rounded-2xl shadow-sm hover:-translate-y-0.5 transition-all text-left ${
+            widget.emphasis ? "border-terracotta/40 hover:border-terracotta" : "border-border hover:border-primary/40"
+          }`;
+          const inner = (
+            <>
               <div className={`w-9 h-9 rounded-full ${widget.iconBg} ${widget.iconColor} flex items-center justify-center shrink-0`}>
                 <Icon size={18} />
               </div>
@@ -162,11 +174,25 @@ export default function WidgetGrid() {
                 <p className="font-medium leading-snug text-sm line-clamp-2">{widget.value}</p>
                 {widget.hint && <p className="text-xs text-primary font-medium mt-0.5">{widget.hint}</p>}
               </div>
+            </>
+          );
+          if (widget.onClick) {
+            return (
+              <button key={widget.label} type="button" onClick={widget.onClick} className={tileClass}>
+                {inner}
+              </button>
+            );
+          }
+          return (
+            <Link key={widget.label} href={widget.href ?? "#"} className={tileClass}>
+              {inner}
             </Link>
           );
         })}
       </div>
+      <StopModal open={stopOpen} onOpenChange={setStopOpen} />
     </div>
   );
 }
+
 
