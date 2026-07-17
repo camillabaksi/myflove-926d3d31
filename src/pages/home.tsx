@@ -50,6 +50,7 @@ export default function Home() {
 
   const [helpModalOpen, setHelpModalOpen] = useState(false);
   const [overwhelmedOpen, setOverwhelmedOpen] = useState(false);
+  const [stopOpen, setStopOpen] = useState(false);
   const [helpPlan, setHelpPlan] = useState<HelpPlan | null>(null);
 
   const prioritizedTasks = useMemo(() => sortTasksByPriority(activeTasks), [activeTasks]);
