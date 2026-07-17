@@ -27,6 +27,7 @@ import {
   Pill,
   Sparkles,
   ArrowRight,
+  Hand,
 } from "lucide-react";
 
 function sortTasksByPriority(tasks: Task[]): Task[] {
