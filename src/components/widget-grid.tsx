@@ -21,16 +21,19 @@ const PREVIEW_PALETTE = [
 ];
 
 interface Widget {
-  href: string;
-  icon: typeof Smile;
+  href?: string;
+  onClick?: () => void;
+  icon: LucideIcon;
   iconBg: string;
   iconColor: string;
   label: string;
   value: string;
   hint?: string;
+  emphasis?: boolean;
 }
 
 export default function WidgetGrid() {
+  const [stopOpen, setStopOpen] = useState(false);
   const { moods } = useMoods();
   const { currentFocus, completedFocusCount } = useFocus();
   const { activeTasks, tasks } = useTasks();
