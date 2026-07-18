@@ -158,7 +158,7 @@ export const listUsersWithRolesFn = createServerFn({ method: "GET" })
 
 const RoleInput = z.object({
   userId: z.string().uuid(),
-  role: z.enum(["admin", "moderator", "user"]),
+  role: z.enum(["admin", "user"]),
 });
 
 export const grantRoleFn = createServerFn({ method: "POST" })

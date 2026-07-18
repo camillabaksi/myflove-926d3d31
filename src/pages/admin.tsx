@@ -167,11 +167,11 @@ function UsersSection() {
   });
 
   const grant = useMutation({
-    mutationFn: (v: { userId: string; role: "admin" | "moderator" | "user" }) => grantRoleFn({ data: v }),
+    mutationFn: (v: { userId: string; role: "admin" | "user" }) => grantRoleFn({ data: v }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-users"] }),
   });
   const revoke = useMutation({
-    mutationFn: (v: { userId: string; role: "admin" | "moderator" | "user" }) => revokeRoleFn({ data: v }),
+    mutationFn: (v: { userId: string; role: "admin" | "user" }) => revokeRoleFn({ data: v }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-users"] }),
   });
 
