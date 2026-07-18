@@ -1,4 +1,5 @@
 import { useLocalStorage } from '../lib/storage';
+import { useCloudSyncedStorage } from '../lib/cloud-storage';
 import { trackEvent } from '../lib/analytics';
 
 export interface Focus {
