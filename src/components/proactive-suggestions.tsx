@@ -1,7 +1,17 @@
 import { useMemo } from "react";
-import { Sparkles, Umbrella, Snowflake, Thermometer, Clock, Wallet, Pill, CloudRain } from "lucide-react";
+import { Sparkles, Umbrella, Snowflake, Thermometer, Clock, Wallet, Pill, CloudRain, Shirt, AlarmClock } from "lucide-react";
 import { useWeather } from "@/hooks/use-weather";
-import { useReminders, useFinances, useMedications } from "@/hooks/use-data";
+import { useReminders, useFinances, useMedications, useTasks } from "@/hooks/use-data";
+
+// Öppna uppgifter som brukar "pågå i bakgrunden" – vi puffar när de blivit gamla
+// så användaren inte glömmer tvätten i maskinen, disken i diskmaskinen osv.
+const LOOP_KEYWORDS: { pattern: RegExp; label: string; nudge: string; minutes: number }[] = [
+  { pattern: /tvätt|tvättmaskin|tork/i, label: "Tvätten", nudge: "Kolla om tvätten är klar – häng gärna innan den blir liggande.", minutes: 50 },
+  { pattern: /disk(maskin)?/i, label: "Disken", nudge: "Diskmaskinen är nog klar snart – öppna gärna på glänt.", minutes: 55 },
+  { pattern: /ugn|gryta|kokar|spis|stek/i, label: "På spisen", nudge: "Kolla ugnen/spisen så inget står och bränner vid.", minutes: 25 },
+  { pattern: /kaffe|te\b/i, label: "Kaffet", nudge: "Kaffet är nog klart – ta en klunk innan det blir kallt.", minutes: 8 },
+  { pattern: /hämta|barn|dagis|förskola|skolan/i, label: "Hämtning", nudge: "Snart dags att gå – lägg in lite marginal.", minutes: 30 },
+];
 
 type Suggestion = {
   id: string;
