@@ -271,7 +271,7 @@ export default function Home() {
         onSelectFeeling={handleSelectFeeling}
       />
       <OverwhelmedModal open={overwhelmedOpen} onOpenChange={setOverwhelmedOpen} />
-      <StopModal open={stopOpen} onOpenChange={setStopOpen} />
+
     </Layout>
   );
 }
