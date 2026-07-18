@@ -20,6 +20,14 @@ function SignUpPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (!consent) {
+      toast({
+        title: "Godkänn villkoren",
+        description: "Du behöver godkänna villkor och integritetspolicy för att skapa konto.",
+        variant: "destructive",
+      });
+      return;
+    }
     setLoading(true);
     const redirectUrl = `${window.location.origin}/hem`;
     const { error } = await supabase.auth.signUp({
