@@ -6,6 +6,8 @@ import OverwhelmedModal from "@/components/overwhelmed-modal";
 import HelpMeModal from "@/components/help-me-modal";
 import WeatherCard from "@/components/weather-card";
 import ProactiveSuggestions from "@/components/proactive-suggestions";
+import { EnablePushButton } from "@/components/enable-push-button";
+import { useReminderSync } from "@/hooks/use-reminder-sync";
 import {
   useFocus,
   useTasks,
@@ -55,6 +57,8 @@ export default function Home() {
   const [overwhelmedOpen, setOverwhelmedOpen] = useState(false);
   const [helpPlan, setHelpPlan] = useState<HelpPlan | null>(null);
   const [showAllTasks, setShowAllTasks] = useState(false);
+
+  useReminderSync();
 
 
   const prioritizedTasks = useMemo(() => sortTasksByPriority(activeTasks), [activeTasks]);
@@ -143,6 +147,17 @@ export default function Home() {
         </div>
 
         <WeatherCard />
+
+        <div className="rounded-2xl bg-card border border-border p-4 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p className="font-semibold text-ink">Påminnelser även när appen är stängd</p>
+            <p className="text-sm text-muted-foreground">
+              Medicin, tvätt, väder och tider – som en varsam knuff när det behövs.
+            </p>
+          </div>
+          <EnablePushButton />
+        </div>
+
 
         {/* 4 custom shortcuts — always visible launchpad */}
         <HomeShortcuts />
