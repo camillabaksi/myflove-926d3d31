@@ -7,6 +7,7 @@ import { Sparkles } from "lucide-react";
 import { getRandomEncouragement } from "@/lib/encouragements";
 import { useToast } from "@/hooks/use-toast";
 import { getGreeting } from "@/lib/greeting";
+import { useUserProfile } from "@/hooks/use-user-profile";
 
 
 const EMOJIS = [
@@ -51,8 +52,7 @@ export default function Mood() {
     <Layout>
       <div className="space-y-10">
         <div>
-          <h1 className="text-3xl font-bold mb-2">{getGreeting()}</h1>
-          <p className="text-muted-foreground">Hur känns det i kroppen och knoppen just nu? Ingen dömer dig här.</p>
+          <MoodHeader />
         </div>
 
         <div className="bg-card p-6 md:p-8 rounded-3xl shadow-sm border border-border">

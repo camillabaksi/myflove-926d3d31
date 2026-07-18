@@ -16,6 +16,7 @@ import {
 } from "@/hooks/use-data";
 import { useSharedShoppingList } from "@/hooks/use-shared-shopping-list";
 import { getGreeting } from "@/lib/greeting";
+import { useUserProfile } from "@/hooks/use-user-profile";
 import { emptyState } from "@/lib/flow-voice";
 import { buildHelpPlan, type HelpFeelingId, type HelpPlan } from "@/lib/help-me";
 import {
@@ -39,6 +40,10 @@ function sortTasksByPriority(tasks: Task[]): Task[] {
 }
 
 export default function Home() {
+  const { name, setName, lastVisit } = useUserProfile();
+  const greeting = getGreeting({ name, lastVisit });
+  const [editingName, setEditingName] = useState(false);
+  const [nameDraft, setNameDraft] = useState(name);
   const { currentFocus, toggleFocusCompleted } = useFocus();
   const { activeTasks, completedTasks, toggleTask } = useTasks();
   const { activeReminders: _activeReminders } = useReminders();
@@ -92,9 +97,46 @@ export default function Home() {
         <div className="relative overflow-hidden rounded-3xl bg-card p-6 shadow-sm">
           <div className="pointer-events-none absolute -top-20 -right-16 h-40 w-40 rounded-full bg-gradient-to-br from-terracotta-soft to-terracotta opacity-20 blur-md" />
           <div className="pointer-events-none absolute -bottom-16 -left-10 h-32 w-32 rounded-full bg-sage opacity-25" />
-          <div className="relative space-y-1">
-            <h1 className="text-4xl font-bold text-ink">{getGreeting()}</h1>
-            <p className="text-muted-foreground">Här är en lugn överblick över idag.</p>
+          <div className="relative space-y-2">
+            <h1 className="text-4xl font-bold text-ink">{greeting.title}</h1>
+            <p className="text-muted-foreground">{greeting.subtitle}</p>
+            {editingName ? (
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  setName(nameDraft);
+                  setEditingName(false);
+                }}
+                className="flex flex-wrap items-center gap-2 pt-1"
+              >
+                <input
+                  autoFocus
+                  value={nameDraft}
+                  onChange={(e) => setNameDraft(e.target.value)}
+                  placeholder="Vad ska jag kalla dig?"
+                  className="rounded-full bg-background/80 border border-border px-3 py-1 text-sm min-w-0"
+                  maxLength={32}
+                />
+                <button type="submit" className="text-xs font-medium text-primary hover:underline">
+                  Spara
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setNameDraft(name); setEditingName(false); }}
+                  className="text-xs text-muted-foreground hover:underline"
+                >
+                  Avbryt
+                </button>
+              </form>
+            ) : (
+              <button
+                type="button"
+                onClick={() => { setNameDraft(name); setEditingName(true); }}
+                className="text-xs text-muted-foreground/80 hover:text-foreground underline underline-offset-2"
+              >
+                {name ? "Byt namn" : "Vad ska jag kalla dig?"}
+              </button>
+            )}
           </div>
         </div>
 
