@@ -6,6 +6,8 @@ import OverwhelmedModal from "@/components/overwhelmed-modal";
 import HelpMeModal from "@/components/help-me-modal";
 import WeatherCard from "@/components/weather-card";
 import ProactiveSuggestions from "@/components/proactive-suggestions";
+import { EnablePushButton } from "@/components/enable-push-button";
+import { useReminderSync } from "@/hooks/use-reminder-sync";
 import {
   useFocus,
   useTasks,
