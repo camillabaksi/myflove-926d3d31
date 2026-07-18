@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 const BASE = "https://api.resrobot.se/v2.1";
 
@@ -70,6 +71,7 @@ async function lookupStopId(name: string, key: string): Promise<string> {
 }
 
 export const getSlTripFn = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => TripInput.parse(data))
   .handler(async ({ data }) => {
     const key = requireKey();
@@ -118,6 +120,7 @@ export const getSlTripFn = createServerFn({ method: "GET" })
   });
 
 export const getSlNearbyStopFn = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => NearbyInput.parse(data))
   .handler(async ({ data }) => {
     const key = requireKey();
