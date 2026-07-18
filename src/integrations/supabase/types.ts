@@ -136,6 +136,65 @@ export type Database = {
           },
         ]
       }
+      household_members: {
+        Row: {
+          color: string
+          created_at: string
+          display_name: string
+          household_id: string
+          user_id: string
+        }
+        Insert: {
+          color?: string
+          created_at?: string
+          display_name: string
+          household_id: string
+          user_id: string
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          display_name?: string
+          household_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "household_members_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      households: {
+        Row: {
+          created_at: string
+          created_by: string
+          id: string
+          invite_code: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          id?: string
+          invite_code?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          id?: string
+          invite_code?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -162,6 +221,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      create_household: {
+        Args: { _color: string; _display_name: string; _name: string }
+        Returns: string
+      }
       get_friction_board: {
         Args: never
         Returns: {
@@ -186,6 +249,14 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      is_household_member: {
+        Args: { _household_id: string; _user_id: string }
+        Returns: boolean
+      }
+      join_household_by_code: {
+        Args: { _code: string; _color: string; _display_name: string }
+        Returns: string
       }
     }
     Enums: {
