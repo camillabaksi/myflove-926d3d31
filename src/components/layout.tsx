@@ -297,6 +297,31 @@ export default function Layout({ children }: LayoutProps) {
           <div className="max-w-2xl mx-auto w-full p-4 md:p-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             {children}
           </div>
+          <footer className="max-w-2xl mx-auto w-full px-4 md:px-8 pt-4 pb-8 mt-8 border-t border-border/40">
+            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
+              <Link href="/integritet" className="hover:text-primary underline-offset-2 hover:underline">
+                Integritet
+              </Link>
+              <span aria-hidden>·</span>
+              <Link href="/villkor" className="hover:text-primary underline-offset-2 hover:underline">
+                Villkor
+              </Link>
+              <span aria-hidden>·</span>
+              <Link href="/cookies" className="hover:text-primary underline-offset-2 hover:underline">
+                Cookies
+              </Link>
+              <span aria-hidden>·</span>
+              <a
+                href="mailto:hej@myflove.app"
+                className="hover:text-primary underline-offset-2 hover:underline"
+              >
+                Kontakt
+              </a>
+            </div>
+            <p className="mt-3 text-center text-[10px] text-muted-foreground/70">
+              © {new Date().getFullYear()} MyFlove
+            </p>
+          </footer>
         </div>
       </main>
 
