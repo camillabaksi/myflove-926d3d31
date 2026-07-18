@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VillkorRouteImport } from './routes/villkor'
 import { Route as SignUpRouteImport } from './routes/sign-up'
 import { Route as SignInRouteImport } from './routes/sign-in'
 import { Route as IntegritetRouteImport } from './routes/integritet'
@@ -36,6 +37,11 @@ import { Route as AppBeloningarRouteImport } from './routes/_app.beloningar'
 import { Route as AppAssistantRouteImport } from './routes/_app.assistant'
 import { Route as AppAdminStatistikRouteImport } from './routes/_app.admin-statistik'
 
+const VillkorRoute = VillkorRouteImport.update({
+  id: '/villkor',
+  path: '/villkor',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SignUpRoute = SignUpRouteImport.update({
   id: '/sign-up',
   path: '/sign-up',
@@ -171,6 +177,7 @@ export interface FileRoutesByFullPath {
   '/integritet': typeof IntegritetRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
+  '/villkor': typeof VillkorRoute
   '/admin-statistik': typeof AppAdminStatistikRoute
   '/assistant': typeof AppAssistantRoute
   '/beloningar': typeof AppBeloningarRoute
@@ -198,6 +205,7 @@ export interface FileRoutesByTo {
   '/integritet': typeof IntegritetRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
+  '/villkor': typeof VillkorRoute
   '/admin-statistik': typeof AppAdminStatistikRoute
   '/assistant': typeof AppAssistantRoute
   '/beloningar': typeof AppBeloningarRoute
@@ -227,6 +235,7 @@ export interface FileRoutesById {
   '/integritet': typeof IntegritetRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
+  '/villkor': typeof VillkorRoute
   '/_app/admin-statistik': typeof AppAdminStatistikRoute
   '/_app/assistant': typeof AppAssistantRoute
   '/_app/beloningar': typeof AppBeloningarRoute
@@ -256,6 +265,7 @@ export interface FileRouteTypes {
     | '/integritet'
     | '/sign-in'
     | '/sign-up'
+    | '/villkor'
     | '/admin-statistik'
     | '/assistant'
     | '/beloningar'
@@ -283,6 +293,7 @@ export interface FileRouteTypes {
     | '/integritet'
     | '/sign-in'
     | '/sign-up'
+    | '/villkor'
     | '/admin-statistik'
     | '/assistant'
     | '/beloningar'
@@ -311,6 +322,7 @@ export interface FileRouteTypes {
     | '/integritet'
     | '/sign-in'
     | '/sign-up'
+    | '/villkor'
     | '/_app/admin-statistik'
     | '/_app/assistant'
     | '/_app/beloningar'
@@ -340,10 +352,18 @@ export interface RootRouteChildren {
   IntegritetRoute: typeof IntegritetRoute
   SignInRoute: typeof SignInRoute
   SignUpRoute: typeof SignUpRoute
+  VillkorRoute: typeof VillkorRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/villkor': {
+      id: '/villkor'
+      path: '/villkor'
+      fullPath: '/villkor'
+      preLoaderRoute: typeof VillkorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sign-up': {
       id: '/sign-up'
       path: '/sign-up'
@@ -585,6 +605,7 @@ const rootRouteChildren: RootRouteChildren = {
   IntegritetRoute: IntegritetRoute,
   SignInRoute: SignInRoute,
   SignUpRoute: SignUpRoute,
+  VillkorRoute: VillkorRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
