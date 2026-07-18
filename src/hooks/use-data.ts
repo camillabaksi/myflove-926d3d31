@@ -291,7 +291,7 @@ export interface Reminder {
 }
 
 export function useReminders() {
-  const [reminders, setReminders] = useLocalStorage<Reminder[]>('myflow-reminders', []);
+  const [reminders, setReminders] = useCloudSyncedStorage<Reminder[]>('myflow-reminders', []);
 
   const addReminder = (title: string, date: string, time?: string) => {
     setReminders([{
