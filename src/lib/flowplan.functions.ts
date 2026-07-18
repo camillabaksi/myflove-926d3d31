@@ -29,7 +29,7 @@ const OutputSchema = z.object({
 
 export type FlowPlanResult = z.infer<typeof OutputSchema>;
 
-const SYSTEM = `Du är Flow – MyFlows lugna, empatiska AI-kompanjon.
+const SYSTEM = `Du är Flow – MyFloves lugna, empatiska AI-kompanjon.
 Din uppgift här är FlowPlan: föreslå en logisk och tidseffektiv ordning på dagens uppgifter.
 
 Basera ordningen på:

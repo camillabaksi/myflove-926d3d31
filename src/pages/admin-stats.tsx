@@ -85,7 +85,7 @@ export default function AdminStats() {
             <BarChart3 className="text-primary" /> Appstatistik
           </h1>
           <p className="text-muted-foreground">
-            Anonym, sammanslagen statistik om hur MyFlow används — ingen personlig data (mående, texter osv) ingår.
+            Anonym, sammanslagen statistik om hur MyFlove används — ingen personlig data (mående, texter osv) ingår.
           </p>
         </div>
 

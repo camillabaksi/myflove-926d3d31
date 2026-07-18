@@ -32,7 +32,7 @@ function SignInPage() {
   return (
     <div className="flex min-h-[100dvh] items-center justify-center bg-background px-4">
       <div className="w-full max-w-md rounded-3xl border border-border bg-card p-8 shadow-sm">
-        <h1 className="mb-2 text-3xl font-bold text-primary tracking-tight">MyFlow</h1>
+        <h1 className="mb-2 text-3xl font-bold text-primary tracking-tight">MyFlove</h1>
         <p className="mb-6 text-sm text-muted-foreground">Logga in för att fortsätta.</p>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">

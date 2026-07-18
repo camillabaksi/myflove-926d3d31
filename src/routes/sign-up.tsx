@@ -39,7 +39,7 @@ function SignUpPage() {
     <div className="flex min-h-[100dvh] items-center justify-center bg-background px-4">
       <div className="w-full max-w-md rounded-3xl border border-border bg-card p-8 shadow-sm">
         <h1 className="mb-2 text-3xl font-bold text-primary tracking-tight">Skapa konto</h1>
-        <p className="mb-6 text-sm text-muted-foreground">Kom igång med MyFlow på en minut.</p>
+        <p className="mb-6 text-sm text-muted-foreground">Kom igång med MyFlove på en minut.</p>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email">E-post</Label>
