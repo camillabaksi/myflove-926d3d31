@@ -195,6 +195,120 @@ export type Database = {
         }
         Relationships: []
       }
+      push_preferences: {
+        Row: {
+          last_lat: number | null
+          last_lon: number | null
+          last_weather_check_at: string | null
+          loops_enabled: boolean
+          medication_enabled: boolean
+          tasks_enabled: boolean
+          updated_at: string
+          user_id: string
+          weather_enabled: boolean
+          weather_time: string
+        }
+        Insert: {
+          last_lat?: number | null
+          last_lon?: number | null
+          last_weather_check_at?: string | null
+          loops_enabled?: boolean
+          medication_enabled?: boolean
+          tasks_enabled?: boolean
+          updated_at?: string
+          user_id: string
+          weather_enabled?: boolean
+          weather_time?: string
+        }
+        Update: {
+          last_lat?: number | null
+          last_lon?: number | null
+          last_weather_check_at?: string | null
+          loops_enabled?: boolean
+          medication_enabled?: boolean
+          tasks_enabled?: boolean
+          updated_at?: string
+          user_id?: string
+          weather_enabled?: boolean
+          weather_time?: string
+        }
+        Relationships: []
+      }
+      push_reminders: {
+        Row: {
+          body: string
+          canceled_at: string | null
+          client_key: string
+          created_at: string
+          deliver_at: string
+          delivered_at: string | null
+          id: string
+          kind: string
+          title: string
+          url: string | null
+          user_id: string
+        }
+        Insert: {
+          body: string
+          canceled_at?: string | null
+          client_key: string
+          created_at?: string
+          deliver_at: string
+          delivered_at?: string | null
+          id?: string
+          kind: string
+          title: string
+          url?: string | null
+          user_id: string
+        }
+        Update: {
+          body?: string
+          canceled_at?: string | null
+          client_key?: string
+          created_at?: string
+          deliver_at?: string
+          delivered_at?: string | null
+          id?: string
+          kind?: string
+          title?: string
+          url?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      push_subscriptions: {
+        Row: {
+          auth: string
+          created_at: string
+          endpoint: string
+          id: string
+          last_seen_at: string
+          p256dh: string
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          auth: string
+          created_at?: string
+          endpoint: string
+          id?: string
+          last_seen_at?: string
+          p256dh: string
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          auth?: string
+          created_at?: string
+          endpoint?: string
+          id?: string
+          last_seen_at?: string
+          p256dh?: string
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string

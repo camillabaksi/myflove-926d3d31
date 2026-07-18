@@ -38,6 +38,7 @@ import { Route as AppBeloningarRouteImport } from './routes/_app.beloningar'
 import { Route as AppAssistantRouteImport } from './routes/_app.assistant'
 import { Route as AppAdminStatistikRouteImport } from './routes/_app.admin-statistik'
 import { Route as AppAdminRouteImport } from './routes/_app.admin'
+import { Route as ApiPublicHooksPushTickRouteImport } from './routes/api/public/hooks/push-tick'
 
 const VillkorRoute = VillkorRouteImport.update({
   id: '/villkor',
@@ -183,6 +184,11 @@ const AppAdminRoute = AppAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AppRoute,
 } as any)
+const ApiPublicHooksPushTickRoute = ApiPublicHooksPushTickRouteImport.update({
+  id: '/api/public/hooks/push-tick',
+  path: '/api/public/hooks/push-tick',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -213,6 +219,7 @@ export interface FileRoutesByFullPath {
   '/statistik': typeof AppStatistikRoute
   '/tasks': typeof AppTasksRoute
   '/travel': typeof AppTravelRoute
+  '/api/public/hooks/push-tick': typeof ApiPublicHooksPushTickRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -243,6 +250,7 @@ export interface FileRoutesByTo {
   '/statistik': typeof AppStatistikRoute
   '/tasks': typeof AppTasksRoute
   '/travel': typeof AppTravelRoute
+  '/api/public/hooks/push-tick': typeof ApiPublicHooksPushTickRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -275,6 +283,7 @@ export interface FileRoutesById {
   '/_app/statistik': typeof AppStatistikRoute
   '/_app/tasks': typeof AppTasksRoute
   '/_app/travel': typeof AppTravelRoute
+  '/api/public/hooks/push-tick': typeof ApiPublicHooksPushTickRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -307,6 +316,7 @@ export interface FileRouteTypes {
     | '/statistik'
     | '/tasks'
     | '/travel'
+    | '/api/public/hooks/push-tick'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -337,6 +347,7 @@ export interface FileRouteTypes {
     | '/statistik'
     | '/tasks'
     | '/travel'
+    | '/api/public/hooks/push-tick'
   id:
     | '__root__'
     | '/'
@@ -368,6 +379,7 @@ export interface FileRouteTypes {
     | '/_app/statistik'
     | '/_app/tasks'
     | '/_app/travel'
+    | '/api/public/hooks/push-tick'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -378,6 +390,7 @@ export interface RootRouteChildren {
   SignInRoute: typeof SignInRoute
   SignUpRoute: typeof SignUpRoute
   VillkorRoute: typeof VillkorRoute
+  ApiPublicHooksPushTickRoute: typeof ApiPublicHooksPushTickRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -585,6 +598,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdminRouteImport
       parentRoute: typeof AppRoute
     }
+    '/api/public/hooks/push-tick': {
+      id: '/api/public/hooks/push-tick'
+      path: '/api/public/hooks/push-tick'
+      fullPath: '/api/public/hooks/push-tick'
+      preLoaderRoute: typeof ApiPublicHooksPushTickRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -648,6 +668,7 @@ const rootRouteChildren: RootRouteChildren = {
   SignInRoute: SignInRoute,
   SignUpRoute: SignUpRoute,
   VillkorRoute: VillkorRoute,
+  ApiPublicHooksPushTickRoute: ApiPublicHooksPushTickRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
