@@ -52,6 +52,7 @@ Blueprint-regler:
 - Svara ENDAST med giltig JSON enligt schemat, ingen annan text.`;
 
 export const planFlowSequence = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => InputSchema.parse(data))
   .handler(async ({ data }): Promise<FlowPlanResult> => {
     const apiKey = process.env.LOVABLE_API_KEY;
