@@ -83,15 +83,47 @@ export default function FrictionIndexPage() {
     setError(null);
     try {
       const { data: userData } = await supabase.auth.getUser();
-      setUserId(userData.user?.id ?? null);
-      const [itemsRes, votesRes] = await Promise.all([
-        supabase.from("friction_items").select("*").order("created_at", { ascending: false }),
-        supabase.from("friction_votes").select("item_id,user_id"),
-      ]);
-      if (itemsRes.error) throw itemsRes.error;
-      if (votesRes.error) throw votesRes.error;
-      setItems((itemsRes.data ?? []) as FrictionItem[]);
-      setVotes((votesRes.data ?? []) as Vote[]);
+      const uid = userData.user?.id ?? null;
+      setUserId(uid);
+      const { data, error: rpcErr } = await supabase.rpc("get_friction_board");
+      if (rpcErr) throw rpcErr;
+      const rows = (data ?? []) as Array<{
+        id: string;
+        title: string;
+        description: string | null;
+        category: string;
+        impact: number;
+        frequency: number;
+        mental_load: number;
+        status: Status;
+        created_at: string;
+        updated_at: string;
+        is_mine: boolean;
+        vote_count: number;
+        has_voted: boolean;
+      }>;
+      setItems(
+        rows.map((r) => ({
+          id: r.id,
+          title: r.title,
+          description: r.description,
+          category: r.category,
+          impact: r.impact,
+          frequency: r.frequency,
+          mental_load: r.mental_load,
+          status: r.status,
+          created_at: r.created_at,
+          updated_at: r.updated_at,
+          reporter_id: r.is_mine && uid ? uid : "",
+        })) as FrictionItem[],
+      );
+      const flatVotes: Vote[] = [];
+      for (const r of rows) {
+        for (let i = 0; i < r.vote_count; i++) {
+          flatVotes.push({ item_id: r.id, user_id: r.has_voted && i === 0 && uid ? uid : `anon-${r.id}-${i}` });
+        }
+      }
+      setVotes(flatVotes);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Kunde inte hämta friktionsindex");
     } finally {
@@ -115,6 +147,7 @@ export default function FrictionIndexPage() {
     for (const v of votes) if (v.user_id === userId) s.add(v.item_id);
     return s;
   }, [votes, userId]);
+
 
   const ranked = useMemo(() => {
     return [...items]
