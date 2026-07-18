@@ -144,3 +144,14 @@ export default function Mood() {
     </Layout>
   );
 }
+
+function MoodHeader() {
+  const { name, lastVisit } = useUserProfile();
+  const g = getGreeting({ name, lastVisit });
+  return (
+    <>
+      <h1 className="text-3xl font-bold mb-2">{g.title}</h1>
+      <p className="text-muted-foreground">Hur känns det i kroppen och knoppen just nu? Ingen dömer dig här.</p>
+    </>
+  );
+}
