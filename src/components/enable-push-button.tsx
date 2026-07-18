@@ -11,6 +11,20 @@ import {
 } from "@/lib/push-client";
 import { subscribeToPush, unsubscribeFromPush, sendTestPush } from "@/lib/push.functions";
 
+function isPreviewOrIframe(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    if (window.top !== window.self) return true;
+    const host = window.location.hostname;
+    if (host.startsWith("id-preview--") || host.startsWith("preview--")) return true;
+    if (host.endsWith(".lovableproject.com") || host.endsWith(".lovableproject-dev.com")) return true;
+    if (host === "localhost" || host === "127.0.0.1") return true;
+  } catch {
+    return false;
+  }
+  return false;
+}
+
 export function EnablePushButton() {
   const subscribeFn = useServerFn(subscribeToPush);
   const unsubscribeFn = useServerFn(unsubscribeFromPush);
@@ -19,9 +33,11 @@ export function EnablePushButton() {
   const [supported, setSupported] = useState<boolean | null>(null);
   const [enabled, setEnabled] = useState<boolean>(false);
   const [busy, setBusy] = useState(false);
+  const [inPreview, setInPreview] = useState(false);
 
   useEffect(() => {
     let alive = true;
+    setInPreview(isPreviewOrIframe());
     (async () => {
       const ok = pushSupported();
       if (!alive) return;
@@ -40,6 +56,17 @@ export function EnablePushButton() {
     return (
       <div className="rounded-2xl bg-card p-4 text-sm text-muted-foreground">
         Din webbläsare stödjer inte push-notiser. Installera MyFlove på hemskärmen (iPhone: Dela → Lägg till på hemskärmen) och öppna sedan igen.
+      </div>
+    );
+  }
+
+  if (inPreview) {
+    return (
+      <div className="rounded-2xl bg-card p-4 text-sm text-muted-foreground space-y-2">
+        <p className="font-medium text-foreground">Notiser funkar inte i förhandsvisningen</p>
+        <p>
+          Öppna den publicerade appen på <a href="https://myflove.lovable.app" className="underline" target="_blank" rel="noreferrer">myflove.lovable.app</a> och aktivera notiser därifrån. På iPhone: Safari → Dela → <em>Lägg till på hemskärmen</em>, öppna appen från ikonen, och tryck sedan Aktivera notiser.
+        </p>
       </div>
     );
   }
