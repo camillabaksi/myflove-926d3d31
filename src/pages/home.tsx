@@ -4,10 +4,8 @@ import HomeShortcuts from "@/components/home-shortcuts";
 import Layout from "@/components/layout";
 import OverwhelmedModal from "@/components/overwhelmed-modal";
 import HelpMeModal from "@/components/help-me-modal";
-import StopModal from "@/components/stop-modal";
 import WeatherCard from "@/components/weather-card";
 import ProactiveSuggestions from "@/components/proactive-suggestions";
-import { Button } from "@/components/ui/button";
 import {
   useFocus,
   useTasks,
@@ -27,8 +25,8 @@ import {
   Pill,
   Sparkles,
   ArrowRight,
-  Hand,
 } from "lucide-react";
+
 
 function sortTasksByPriority(tasks: Task[]): Task[] {
   const withDueDate = tasks
@@ -50,8 +48,8 @@ export default function Home() {
 
   const [helpModalOpen, setHelpModalOpen] = useState(false);
   const [overwhelmedOpen, setOverwhelmedOpen] = useState(false);
-  const [stopOpen, setStopOpen] = useState(false);
   const [helpPlan, setHelpPlan] = useState<HelpPlan | null>(null);
+
 
   const prioritizedTasks = useMemo(() => sortTasksByPriority(activeTasks), [activeTasks]);
   const limit = helpPlan?.taskLimit ?? 3;
@@ -125,22 +123,6 @@ export default function Home() {
           </div>
         </button>
 
-        <button
-          type="button"
-          onClick={() => setStopOpen(true)}
-          className="group relative w-full overflow-hidden flex items-center gap-4 p-5 rounded-3xl text-cream shadow-lg transition-transform text-left active:scale-[0.99] border-2 border-cream/20"
-          style={{ background: "linear-gradient(135deg, #8B2E2E 0%, hsl(var(--terracotta)) 100%)" }}
-        >
-          <div className="w-14 h-14 rounded-full bg-cream/20 flex items-center justify-center shrink-0 backdrop-blur-sm">
-            <Hand size={28} />
-          </div>
-          <div className="flex-1">
-            <p className="text-xl font-bold tracking-wide">Stop!</p>
-            <p className="text-cream/90 text-sm">
-              Är du på väg att göra något du kan ångra? Ta en paus med Flow först.
-            </p>
-          </div>
-        </button>
 
 
         {helpPlan && (
@@ -280,23 +262,16 @@ export default function Home() {
           </Link>
         )}
 
-        <Button
-          variant="outline"
-          onClick={() => setOverwhelmedOpen(true)}
-          className="w-full h-12 rounded-2xl"
-        >
-          Jag är överväldigad — hjälp mig prioritera
-        </Button>
-
       </div>
 
       <HelpMeModal
+
         open={helpModalOpen}
         onOpenChange={setHelpModalOpen}
         onSelectFeeling={handleSelectFeeling}
       />
       <OverwhelmedModal open={overwhelmedOpen} onOpenChange={setOverwhelmedOpen} />
-      <StopModal open={stopOpen} onOpenChange={setStopOpen} />
+
     </Layout>
   );
 }
