@@ -120,6 +120,7 @@ export const getSlTripFn = createServerFn({ method: "GET" })
   });
 
 export const getSlNearbyStopFn = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => NearbyInput.parse(data))
   .handler(async ({ data }) => {
     const key = requireKey();
