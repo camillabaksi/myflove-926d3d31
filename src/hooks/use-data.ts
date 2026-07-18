@@ -1,4 +1,5 @@
 import { useLocalStorage } from '../lib/storage';
+import { useCloudSyncedStorage } from '../lib/cloud-storage';
 import { trackEvent } from '../lib/analytics';
 
 export interface Focus {
@@ -75,7 +76,7 @@ export function useFocus() {
 }
 
 export function useTasks() {
-  const [tasks, setTasks] = useLocalStorage<Task[]>('myflow-tasks', []);
+  const [tasks, setTasks] = useCloudSyncedStorage<Task[]>('myflow-tasks', []);
 
   const getTodayDateString = () => new Date().toISOString().split('T')[0] as string;
 
@@ -290,7 +291,7 @@ export interface Reminder {
 }
 
 export function useReminders() {
-  const [reminders, setReminders] = useLocalStorage<Reminder[]>('myflow-reminders', []);
+  const [reminders, setReminders] = useCloudSyncedStorage<Reminder[]>('myflow-reminders', []);
 
   const addReminder = (title: string, date: string, time?: string) => {
     setReminders([{
