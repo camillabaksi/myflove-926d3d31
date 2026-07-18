@@ -37,6 +37,7 @@ import { Route as AppCalendarRouteImport } from './routes/_app.calendar'
 import { Route as AppBeloningarRouteImport } from './routes/_app.beloningar'
 import { Route as AppAssistantRouteImport } from './routes/_app.assistant'
 import { Route as AppAdminStatistikRouteImport } from './routes/_app.admin-statistik'
+import { Route as AppAdminRouteImport } from './routes/_app.admin'
 
 const VillkorRoute = VillkorRouteImport.update({
   id: '/villkor',
@@ -177,6 +178,11 @@ const AppAdminStatistikRoute = AppAdminStatistikRouteImport.update({
   path: '/admin-statistik',
   getParentRoute: () => AppRoute,
 } as any)
+const AppAdminRoute = AppAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -185,6 +191,7 @@ export interface FileRoutesByFullPath {
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/villkor': typeof VillkorRoute
+  '/admin': typeof AppAdminRoute
   '/admin-statistik': typeof AppAdminStatistikRoute
   '/assistant': typeof AppAssistantRoute
   '/beloningar': typeof AppBeloningarRoute
@@ -214,6 +221,7 @@ export interface FileRoutesByTo {
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/villkor': typeof VillkorRoute
+  '/admin': typeof AppAdminRoute
   '/admin-statistik': typeof AppAdminStatistikRoute
   '/assistant': typeof AppAssistantRoute
   '/beloningar': typeof AppBeloningarRoute
@@ -245,6 +253,7 @@ export interface FileRoutesById {
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/villkor': typeof VillkorRoute
+  '/_app/admin': typeof AppAdminRoute
   '/_app/admin-statistik': typeof AppAdminStatistikRoute
   '/_app/assistant': typeof AppAssistantRoute
   '/_app/beloningar': typeof AppBeloningarRoute
@@ -276,6 +285,7 @@ export interface FileRouteTypes {
     | '/sign-in'
     | '/sign-up'
     | '/villkor'
+    | '/admin'
     | '/admin-statistik'
     | '/assistant'
     | '/beloningar'
@@ -305,6 +315,7 @@ export interface FileRouteTypes {
     | '/sign-in'
     | '/sign-up'
     | '/villkor'
+    | '/admin'
     | '/admin-statistik'
     | '/assistant'
     | '/beloningar'
@@ -335,6 +346,7 @@ export interface FileRouteTypes {
     | '/sign-in'
     | '/sign-up'
     | '/villkor'
+    | '/_app/admin'
     | '/_app/admin-statistik'
     | '/_app/assistant'
     | '/_app/beloningar'
@@ -566,10 +578,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdminStatistikRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/admin': {
+      id: '/_app/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AppAdminRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
 interface AppRouteChildren {
+  AppAdminRoute: typeof AppAdminRoute
   AppAdminStatistikRoute: typeof AppAdminStatistikRoute
   AppAssistantRoute: typeof AppAssistantRoute
   AppBeloningarRoute: typeof AppBeloningarRoute
@@ -594,6 +614,7 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppAdminRoute: AppAdminRoute,
   AppAdminStatistikRoute: AppAdminStatistikRoute,
   AppAssistantRoute: AppAssistantRoute,
   AppBeloningarRoute: AppBeloningarRoute,
