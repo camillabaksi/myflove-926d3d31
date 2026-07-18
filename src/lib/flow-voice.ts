@@ -1,5 +1,5 @@
 /**
- * MyFlow / Flow – språk & tonalitet (Blueprint 2.0, kapitel 6)
+ * MyFlove / Flow – språk & tonalitet (Blueprint 2.0, kapitel 6)
  *
  * En central källa för mikrocopy så att hela appen låter som Flow:
  * varm, lugn, aldrig skuldbeläggande. Använd hellre en funktion
