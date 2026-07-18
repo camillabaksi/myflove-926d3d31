@@ -239,6 +239,18 @@ export default function Home() {
             </div>
           )}
 
+          {(hiddenTaskCount > 0 || showAllTasks) && (
+            <button
+              type="button"
+              onClick={() => setShowAllTasks((v) => !v)}
+              className="w-full text-sm font-medium text-primary hover:underline pt-1"
+            >
+              {showAllTasks
+                ? "Visa bara det viktigaste"
+                : `Visa alla uppgifter som inte är klara (${prioritizedTasks.length})`}
+            </button>
+          )}
+
         </div>
 
         {upcomingBills.length > 0 && (
