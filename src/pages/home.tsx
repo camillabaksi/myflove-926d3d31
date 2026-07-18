@@ -45,7 +45,7 @@ export default function Home() {
   const [editingName, setEditingName] = useState(false);
   const [nameDraft, setNameDraft] = useState(name);
   const { currentFocus, toggleFocusCompleted } = useFocus();
-  const { activeTasks, completedTasks, toggleTask } = useTasks();
+  const { activeTasks, toggleTask } = useTasks();
   const { activeReminders: _activeReminders } = useReminders();
   const { transactions } = useFinances();
   const { medications, isTaken } = useMedications();
