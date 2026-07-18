@@ -76,7 +76,7 @@ export function useFocus() {
 }
 
 export function useTasks() {
-  const [tasks, setTasks] = useLocalStorage<Task[]>('myflow-tasks', []);
+  const [tasks, setTasks] = useCloudSyncedStorage<Task[]>('myflow-tasks', []);
 
   const getTodayDateString = () => new Date().toISOString().split('T')[0] as string;
 
