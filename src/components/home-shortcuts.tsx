@@ -4,18 +4,22 @@ import {
   Smile, Target, CheckSquare, ShoppingBag, Calendar, Pill, Timer, Wallet,
   BarChart3, Trophy, Inbox, UtensilsCrossed, Navigation, Battery,
   Sparkles, Pin, PinOff, ArrowUp, ArrowDown, Settings2, Check, RotateCcw,
+  Hand,
   type LucideIcon,
 } from "lucide-react";
 import { useLocalStorage } from "@/lib/storage";
 import { Button } from "@/components/ui/button";
+import StopModal from "@/components/stop-modal";
 
 interface Shortcut {
   id: string;
-  href: string;
+  href?: string;
+  action?: "stop";
   label: string;
   icon: LucideIcon;
   iconBg: string;
   iconColor: string;
+  emphasis?: boolean;
 }
 
 const PREVIEW_PALETTE = [
@@ -26,7 +30,8 @@ const PREVIEW_PALETTE = [
   { bg: "bg-terracotta-soft/10", color: "text-terracotta-soft" },
 ];
 
-const ALL_SHORTCUTS: Shortcut[] = [
+const ALL_SHORTCUTS: Shortcut[] = ([
+  { id: "stop",       action: "stop" as const, label: "Stop!",       icon: Hand, emphasis: true },
   { id: "mood",       href: "/mood",           label: "Mående",     icon: Smile },
   { id: "fokus",      href: "/fokus",          label: "Dagens fokus", icon: Target },
   { id: "tasks",      href: "/tasks",          label: "Att göra",   icon: CheckSquare },
@@ -43,15 +48,16 @@ const ALL_SHORTCUTS: Shortcut[] = [
   { id: "energikarta",href: "/energikarta",    label: "Energikarta",icon: Battery },
   { id: "flowplan",   href: "/flowplan",       label: "FlowPlan",   icon: Sparkles },
   { id: "assistant",  href: "/assistant",      label: "Flow-chatt", icon: Sparkles },
-].map((s, i) => {
+] as Omit<Shortcut, "iconBg" | "iconColor">[]).map((s, i) => {
   const palette = PREVIEW_PALETTE[i % PREVIEW_PALETTE.length];
-  return { ...s, iconBg: palette.bg, iconColor: palette.color };
+  return { ...s, iconBg: palette.bg, iconColor: palette.color } as Shortcut;
 });
 
 
-const DEFAULT_FAVORITES = ["shopping", "kalender", "finances", "mood"];
+const DEFAULT_FAVORITES = ["stop", "mood", "kalender", "tasks"];
 const DEFAULT_ORDER = ALL_SHORTCUTS.map((s) => s.id);
 const MAX_FAVORITES = 4;
+
 
 interface Prefs {
   favorites: string[];
@@ -63,6 +69,8 @@ const DEFAULT_PREFS: Prefs = { favorites: DEFAULT_FAVORITES, order: DEFAULT_ORDE
 export default function HomeShortcuts() {
   const [prefs, setPrefs] = useLocalStorage<Prefs>("myflow-home-shortcuts", DEFAULT_PREFS);
   const [editing, setEditing] = useState(false);
+  const [stopOpen, setStopOpen] = useState(false);
+
 
   // Merge in any new shortcuts added after user saved prefs
   const order = useMemo(() => {
@@ -139,6 +147,7 @@ export default function HomeShortcuts() {
               editing={editing}
               isFavorite
               onToggleFavorite={() => toggleFavorite(s.id)}
+              onAction={s.action === "stop" ? () => setStopOpen(true) : undefined}
             />
           ))}
         </div>
@@ -158,13 +167,16 @@ export default function HomeShortcuts() {
               onToggleFavorite={() => toggleFavorite(s.id)}
               onMoveUp={idx > 0 ? () => move(s.id, -1) : undefined}
               onMoveDown={idx < restShortcuts.length - 1 ? () => move(s.id, 1) : undefined}
+              onAction={s.action === "stop" ? () => setStopOpen(true) : undefined}
             />
           ))}
         </div>
       )}
+      <StopModal open={stopOpen} onOpenChange={setStopOpen} />
     </div>
   );
 }
+
 
 interface TileProps {
   shortcut: Shortcut;
@@ -175,15 +187,21 @@ interface TileProps {
   onToggleFavorite: () => void;
   onMoveUp?: () => void;
   onMoveDown?: () => void;
+  onAction?: () => void;
 }
 
-function ShortcutTile({ shortcut, size, editing, isFavorite, canPin = true, onToggleFavorite, onMoveUp, onMoveDown }: TileProps) {
+function ShortcutTile({ shortcut, size, editing, isFavorite, canPin = true, onToggleFavorite, onMoveUp, onMoveDown, onAction }: TileProps) {
   const Icon = shortcut.icon;
   const large = size === "large";
+  const emph = shortcut.emphasis;
 
   const inner = (
-    <div className={`flex ${large ? "flex-col gap-3 p-5" : "flex-col gap-2 p-3"} bg-card border border-border rounded-2xl shadow-sm h-full ${!editing ? "hover:border-primary/40 hover:-translate-y-0.5 transition-all" : ""}`}>
-      <div className={`${large ? "w-12 h-12" : "w-9 h-9"} rounded-full ${shortcut.iconBg} ${shortcut.iconColor} flex items-center justify-center shrink-0`}>
+    <div className={`flex ${large ? "flex-col gap-3 p-5" : "flex-col gap-2 p-3"} border rounded-2xl shadow-sm h-full ${
+      emph
+        ? "bg-terracotta text-cream border-terracotta"
+        : "bg-card border-border"
+    } ${!editing ? "hover:-translate-y-0.5 transition-all" : ""}`}>
+      <div className={`${large ? "w-12 h-12" : "w-9 h-9"} rounded-full ${emph ? "bg-cream/20 text-cream" : `${shortcut.iconBg} ${shortcut.iconColor}`} flex items-center justify-center shrink-0`}>
         <Icon size={large ? 22 : 18} />
       </div>
       <p className={`font-medium ${large ? "text-base" : "text-sm"} leading-snug`}>{shortcut.label}</p>
@@ -191,12 +209,20 @@ function ShortcutTile({ shortcut, size, editing, isFavorite, canPin = true, onTo
   );
 
   if (!editing) {
+    if (shortcut.action || !shortcut.href) {
+      return (
+        <button type="button" onClick={onAction} className="block text-left w-full">
+          {inner}
+        </button>
+      );
+    }
     return (
       <Link href={shortcut.href} className="block">
         {inner}
       </Link>
     );
   }
+
 
   return (
     <div className="relative">
