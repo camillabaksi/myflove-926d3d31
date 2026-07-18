@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 
 export const Route = createFileRoute("/sign-in")({
+  ssr: false,
   component: SignInPage,
 });
 
