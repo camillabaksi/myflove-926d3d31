@@ -69,6 +69,8 @@ const DEFAULT_PREFS: Prefs = { favorites: DEFAULT_FAVORITES, order: DEFAULT_ORDE
 export default function HomeShortcuts() {
   const [prefs, setPrefs] = useLocalStorage<Prefs>("myflow-home-shortcuts", DEFAULT_PREFS);
   const [editing, setEditing] = useState(false);
+  const [stopOpen, setStopOpen] = useState(false);
+
 
   // Merge in any new shortcuts added after user saved prefs
   const order = useMemo(() => {
