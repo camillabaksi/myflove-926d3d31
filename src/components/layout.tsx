@@ -312,7 +312,7 @@ export default function Layout({ children }: LayoutProps) {
               </Link>
               <span aria-hidden>·</span>
               <a
-                href="mailto:hej@myflove.app"
+                href="mailto:camillabaksi@hotmail.com"
                 className="hover:text-primary underline-offset-2 hover:underline"
               >
                 Kontakt
