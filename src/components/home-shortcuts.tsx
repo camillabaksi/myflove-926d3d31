@@ -147,6 +147,7 @@ export default function HomeShortcuts() {
               editing={editing}
               isFavorite
               onToggleFavorite={() => toggleFavorite(s.id)}
+              onAction={s.action === "stop" ? () => setStopOpen(true) : undefined}
             />
           ))}
         </div>
@@ -166,13 +167,16 @@ export default function HomeShortcuts() {
               onToggleFavorite={() => toggleFavorite(s.id)}
               onMoveUp={idx > 0 ? () => move(s.id, -1) : undefined}
               onMoveDown={idx < restShortcuts.length - 1 ? () => move(s.id, 1) : undefined}
+              onAction={s.action === "stop" ? () => setStopOpen(true) : undefined}
             />
           ))}
         </div>
       )}
+      <StopModal open={stopOpen} onOpenChange={setStopOpen} />
     </div>
   );
 }
+
 
 interface TileProps {
   shortcut: Shortcut;
