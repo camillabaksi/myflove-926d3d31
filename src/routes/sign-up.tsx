@@ -16,6 +16,7 @@ function SignUpPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [consent, setConsent] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
