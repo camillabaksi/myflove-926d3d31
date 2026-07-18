@@ -27,7 +27,7 @@ function PrivacyPage() {
       <h2>Personuppgiftsansvarig</h2>
       <p>
         MyFlove ansvarar för behandlingen av dina personuppgifter. Kontakt:{" "}
-        <a href="mailto:hej@myflove.app">hej@myflove.app</a>.
+        <a href="mailto:camillabaksi@hotmail.com">camillabaksi@hotmail.com</a>.
       </p>
 
       <h2>Vilka uppgifter vi behandlar</h2>
@@ -76,7 +76,7 @@ function PrivacyPage() {
       <p>
         Ditt konto och tillhörande innehåll sparas så länge du har ett aktivt konto.
         Du kan när som helst radera hela ditt konto och all data via{" "}
-        <a href="mailto:hej@myflove.app">hej@myflove.app</a>.
+        <a href="mailto:camillabaksi@hotmail.com">camillabaksi@hotmail.com</a>.
       </p>
 
       <h2>Dina rättigheter enligt GDPR</h2>

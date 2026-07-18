@@ -78,7 +78,7 @@ function TermsPage() {
 
       <h2>Kontakt</h2>
       <p>
-        Frågor? Skriv till <a href="mailto:hej@myflove.app">hej@myflove.app</a>.
+        Frågor? Skriv till <a href="mailto:camillabaksi@hotmail.com">camillabaksi@hotmail.com</a>.
       </p>
     </LegalShell>
   );
