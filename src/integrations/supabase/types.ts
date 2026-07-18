@@ -162,6 +162,24 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_friction_board: {
+        Args: never
+        Returns: {
+          category: string
+          created_at: string
+          description: string
+          frequency: number
+          has_voted: boolean
+          id: string
+          impact: number
+          is_mine: boolean
+          mental_load: number
+          status: string
+          title: string
+          updated_at: string
+          vote_count: number
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
