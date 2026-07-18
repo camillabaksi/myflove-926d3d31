@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "MyFlow – Bär mindre. Gör inte mer." },
+      { title: "MyFlove – Bär mindre. Gör inte mer." },
       {
         name: "description",
         content:
@@ -46,7 +46,7 @@ function LandingPage() {
         <div className="pointer-events-none absolute -top-40 -right-24 h-[420px] w-[420px] rounded-full bg-gradient-to-br from-[#D97060] to-[#B85042] opacity-80 blur-sm" />
         <div className="pointer-events-none absolute -bottom-32 -left-16 h-[320px] w-[320px] rounded-full bg-[#A7BEAE] opacity-50" />
         <div className="relative mx-auto max-w-3xl text-center">
-          <p className="text-xs uppercase tracking-[0.35em] text-[#B85042] font-semibold">MyFlow</p>
+          <p className="text-xs uppercase tracking-[0.35em] text-[#B85042] font-semibold">MyFlove</p>
           <h1 className="mt-4 font-display text-6xl md:text-8xl font-bold leading-[0.95] tracking-tight">
             Ditt liv,<br />i flow.
           </h1>
@@ -283,7 +283,7 @@ function LandingPage() {
               ))}
             </div>
             <p className="text-[#7A6E63] text-lg leading-relaxed">
-              MyFlow handlar inte om produktivitet. Inte om prestation.
+              MyFlove handlar inte om produktivitet. Inte om prestation.
               <br />
               Bara om mindre mental belastning – varje dag.
             </p>

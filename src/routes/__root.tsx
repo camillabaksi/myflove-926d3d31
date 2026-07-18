@@ -17,14 +17,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, maximum-scale=1" },
-      { title: "MyFlow — ditt lugna livsflöde" },
+      { title: "MyFlove — ditt lugna livsflöde" },
       {
         name: "description",
         content:
-          "MyFlow är ett mjukt dashboard för vardagen: fokus, uppgifter, humör, ekonomi, resor och mer — allt på ett ställe.",
+          "MyFlove är ett mjukt dashboard för vardagen: fokus, uppgifter, humör, ekonomi, resor och mer — allt på ett ställe.",
       },
-      { name: "author", content: "MyFlow" },
-      { property: "og:title", content: "MyFlow — ditt lugna livsflöde" },
+      { name: "author", content: "MyFlove" },
+      { property: "og:title", content: "MyFlove — ditt lugna livsflöde" },
       {
         property: "og:description",
         content: "Ett mjukt dashboard för din vardag — fokus, humör, uppgifter, ekonomi och mer.",
