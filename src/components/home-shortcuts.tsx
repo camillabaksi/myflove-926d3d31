@@ -4,18 +4,22 @@ import {
   Smile, Target, CheckSquare, ShoppingBag, Calendar, Pill, Timer, Wallet,
   BarChart3, Trophy, Inbox, UtensilsCrossed, Navigation, Battery,
   Sparkles, Pin, PinOff, ArrowUp, ArrowDown, Settings2, Check, RotateCcw,
+  Hand,
   type LucideIcon,
 } from "lucide-react";
 import { useLocalStorage } from "@/lib/storage";
 import { Button } from "@/components/ui/button";
+import StopModal from "@/components/stop-modal";
 
 interface Shortcut {
   id: string;
-  href: string;
+  href?: string;
+  action?: "stop";
   label: string;
   icon: LucideIcon;
   iconBg: string;
   iconColor: string;
+  emphasis?: boolean;
 }
 
 const PREVIEW_PALETTE = [
@@ -26,7 +30,8 @@ const PREVIEW_PALETTE = [
   { bg: "bg-terracotta-soft/10", color: "text-terracotta-soft" },
 ];
 
-const ALL_SHORTCUTS: Shortcut[] = [
+const ALL_SHORTCUTS: Shortcut[] = ([
+  { id: "stop",       action: "stop" as const, label: "Stop!",       icon: Hand, emphasis: true },
   { id: "mood",       href: "/mood",           label: "Mående",     icon: Smile },
   { id: "fokus",      href: "/fokus",          label: "Dagens fokus", icon: Target },
   { id: "tasks",      href: "/tasks",          label: "Att göra",   icon: CheckSquare },
@@ -43,15 +48,16 @@ const ALL_SHORTCUTS: Shortcut[] = [
   { id: "energikarta",href: "/energikarta",    label: "Energikarta",icon: Battery },
   { id: "flowplan",   href: "/flowplan",       label: "FlowPlan",   icon: Sparkles },
   { id: "assistant",  href: "/assistant",      label: "Flow-chatt", icon: Sparkles },
-].map((s, i) => {
+] as Omit<Shortcut, "iconBg" | "iconColor">[]).map((s, i) => {
   const palette = PREVIEW_PALETTE[i % PREVIEW_PALETTE.length];
-  return { ...s, iconBg: palette.bg, iconColor: palette.color };
+  return { ...s, iconBg: palette.bg, iconColor: palette.color } as Shortcut;
 });
 
 
-const DEFAULT_FAVORITES = ["shopping", "kalender", "finances", "mood"];
+const DEFAULT_FAVORITES = ["stop", "mood", "kalender", "tasks"];
 const DEFAULT_ORDER = ALL_SHORTCUTS.map((s) => s.id);
 const MAX_FAVORITES = 4;
+
 
 interface Prefs {
   favorites: string[];
