@@ -216,7 +216,7 @@ export default function CalendarPage() {
           />
         </div>
         <p className="text-xs text-muted-foreground -mt-4">
-          Tips: exportera i telefonens kalender som .ics och importera här för att få in dina möten i MyFlow.
+          Tips: exportera i telefonens kalender som .ics och importera här för att få in dina möten i MyFlove.
         </p>
 
         <div className="bg-card rounded-3xl border border-border shadow-sm overflow-hidden">
