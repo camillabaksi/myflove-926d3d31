@@ -264,17 +264,10 @@ export default function Home() {
           </Link>
         )}
 
-        <Button
-          variant="outline"
-          onClick={() => setOverwhelmedOpen(true)}
-          className="w-full h-12 rounded-2xl"
-        >
-          Jag är överväldigad — hjälp mig prioritera
-        </Button>
-
       </div>
 
       <HelpMeModal
+
         open={helpModalOpen}
         onOpenChange={setHelpModalOpen}
         onSelectFeeling={handleSelectFeeling}
