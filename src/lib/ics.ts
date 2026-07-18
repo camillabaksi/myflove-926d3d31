@@ -1,4 +1,4 @@
-// Lightweight ICS export/import helpers for MyFlow
+// Lightweight ICS export/import helpers for MyFlove
 
 export interface IcsEvent {
   title: string;
@@ -30,11 +30,11 @@ function nowStamp() {
   return `${d.getUTCFullYear()}${pad(d.getUTCMonth() + 1)}${pad(d.getUTCDate())}T${pad(d.getUTCHours())}${pad(d.getUTCMinutes())}${pad(d.getUTCSeconds())}Z`;
 }
 
-export function buildIcs(events: IcsEvent[], calName = "MyFlow"): string {
+export function buildIcs(events: IcsEvent[], calName = "MyFlove"): string {
   const lines: string[] = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//MyFlow//SE",
+    "PRODID:-//MyFlove//SE",
     "CALSCALE:GREGORIAN",
     `X-WR-CALNAME:${escapeText(calName)}`,
   ];

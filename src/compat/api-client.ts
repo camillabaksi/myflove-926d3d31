@@ -1,4 +1,4 @@
-// Shim for @workspace/api-client-react — MyFlow backend hooks stubbed with
+// Shim for @workspace/api-client-react — MyFlove backend hooks stubbed with
 // safe no-ops so the frontend runs without the original API server. Types
 // are intentionally loose (any) so downstream pages type-check.
 
