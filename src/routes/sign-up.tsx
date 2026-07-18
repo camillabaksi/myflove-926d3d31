@@ -16,9 +16,18 @@ function SignUpPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [consent, setConsent] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (!consent) {
+      toast({
+        title: "Godkänn villkoren",
+        description: "Du behöver godkänna villkor och integritetspolicy för att skapa konto.",
+        variant: "destructive",
+      });
+      return;
+    }
     setLoading(true);
     const redirectUrl = `${window.location.origin}/hem`;
     const { error } = await supabase.auth.signUp({
@@ -49,6 +58,25 @@ function SignUpPage() {
             <Label htmlFor="password">Lösenord</Label>
             <Input id="password" type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} />
           </div>
+          <label className="flex items-start gap-2 text-sm text-muted-foreground">
+            <input
+              type="checkbox"
+              checked={consent}
+              onChange={(e) => setConsent(e.target.checked)}
+              className="mt-1 h-4 w-4 rounded border-border accent-primary"
+            />
+            <span>
+              Jag godkänner{" "}
+              <Link to="/villkor" className="text-primary underline underline-offset-4" target="_blank">
+                användarvillkoren
+              </Link>{" "}
+              och{" "}
+              <Link to="/integritet" className="text-primary underline underline-offset-4" target="_blank">
+                integritetspolicyn
+              </Link>
+              .
+            </span>
+          </label>
           <Button type="submit" disabled={loading} className="w-full">
             {loading ? "Skapar konto…" : "Skapa konto"}
           </Button>

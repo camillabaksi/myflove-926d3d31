@@ -324,6 +324,17 @@ function LandingPage() {
           </p>
         </div>
       </section>
+
+      <footer className="bg-[#2C3639] text-white/60 border-t border-white/10 px-6 py-8">
+        <div className="mx-auto max-w-5xl flex flex-col sm:flex-row items-center justify-between gap-4 text-sm">
+          <p>© {new Date().getFullYear()} MyFlove</p>
+          <nav className="flex gap-5">
+            <Link to="/integritet" className="hover:text-white">Integritet</Link>
+            <Link to="/villkor" className="hover:text-white">Villkor</Link>
+            <Link to="/cookies" className="hover:text-white">Cookies</Link>
+          </nav>
+        </div>
+      </footer>
     </main>
   );
 }

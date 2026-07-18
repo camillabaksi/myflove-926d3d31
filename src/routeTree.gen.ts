@@ -9,8 +9,11 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VillkorRouteImport } from './routes/villkor'
 import { Route as SignUpRouteImport } from './routes/sign-up'
 import { Route as SignInRouteImport } from './routes/sign-in'
+import { Route as IntegritetRouteImport } from './routes/integritet'
+import { Route as CookiesRouteImport } from './routes/cookies'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppTravelRouteImport } from './routes/_app.travel'
@@ -35,6 +38,11 @@ import { Route as AppBeloningarRouteImport } from './routes/_app.beloningar'
 import { Route as AppAssistantRouteImport } from './routes/_app.assistant'
 import { Route as AppAdminStatistikRouteImport } from './routes/_app.admin-statistik'
 
+const VillkorRoute = VillkorRouteImport.update({
+  id: '/villkor',
+  path: '/villkor',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SignUpRoute = SignUpRouteImport.update({
   id: '/sign-up',
   path: '/sign-up',
@@ -43,6 +51,16 @@ const SignUpRoute = SignUpRouteImport.update({
 const SignInRoute = SignInRouteImport.update({
   id: '/sign-in',
   path: '/sign-in',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IntegritetRoute = IntegritetRouteImport.update({
+  id: '/integritet',
+  path: '/integritet',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CookiesRoute = CookiesRouteImport.update({
+  id: '/cookies',
+  path: '/cookies',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppRoute = AppRouteImport.update({
@@ -162,8 +180,11 @@ const AppAdminStatistikRoute = AppAdminStatistikRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/cookies': typeof CookiesRoute
+  '/integritet': typeof IntegritetRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
+  '/villkor': typeof VillkorRoute
   '/admin-statistik': typeof AppAdminStatistikRoute
   '/assistant': typeof AppAssistantRoute
   '/beloningar': typeof AppBeloningarRoute
@@ -188,8 +209,11 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/cookies': typeof CookiesRoute
+  '/integritet': typeof IntegritetRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
+  '/villkor': typeof VillkorRoute
   '/admin-statistik': typeof AppAdminStatistikRoute
   '/assistant': typeof AppAssistantRoute
   '/beloningar': typeof AppBeloningarRoute
@@ -216,8 +240,11 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_app': typeof AppRouteWithChildren
+  '/cookies': typeof CookiesRoute
+  '/integritet': typeof IntegritetRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
+  '/villkor': typeof VillkorRoute
   '/_app/admin-statistik': typeof AppAdminStatistikRoute
   '/_app/assistant': typeof AppAssistantRoute
   '/_app/beloningar': typeof AppBeloningarRoute
@@ -244,8 +271,11 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/cookies'
+    | '/integritet'
     | '/sign-in'
     | '/sign-up'
+    | '/villkor'
     | '/admin-statistik'
     | '/assistant'
     | '/beloningar'
@@ -270,8 +300,11 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/cookies'
+    | '/integritet'
     | '/sign-in'
     | '/sign-up'
+    | '/villkor'
     | '/admin-statistik'
     | '/assistant'
     | '/beloningar'
@@ -297,8 +330,11 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_app'
+    | '/cookies'
+    | '/integritet'
     | '/sign-in'
     | '/sign-up'
+    | '/villkor'
     | '/_app/admin-statistik'
     | '/_app/assistant'
     | '/_app/beloningar'
@@ -325,12 +361,22 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRouteWithChildren
+  CookiesRoute: typeof CookiesRoute
+  IntegritetRoute: typeof IntegritetRoute
   SignInRoute: typeof SignInRoute
   SignUpRoute: typeof SignUpRoute
+  VillkorRoute: typeof VillkorRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/villkor': {
+      id: '/villkor'
+      path: '/villkor'
+      fullPath: '/villkor'
+      preLoaderRoute: typeof VillkorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sign-up': {
       id: '/sign-up'
       path: '/sign-up'
@@ -343,6 +389,20 @@ declare module '@tanstack/react-router' {
       path: '/sign-in'
       fullPath: '/sign-in'
       preLoaderRoute: typeof SignInRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/integritet': {
+      id: '/integritet'
+      path: '/integritet'
+      fullPath: '/integritet'
+      preLoaderRoute: typeof IntegritetRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cookies': {
+      id: '/cookies'
+      path: '/cookies'
+      fullPath: '/cookies'
+      preLoaderRoute: typeof CookiesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_app': {
@@ -562,8 +622,11 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRouteWithChildren,
+  CookiesRoute: CookiesRoute,
+  IntegritetRoute: IntegritetRoute,
   SignInRoute: SignInRoute,
   SignUpRoute: SignUpRoute,
+  VillkorRoute: VillkorRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
