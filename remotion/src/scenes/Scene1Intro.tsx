@@ -55,7 +55,7 @@ export const Scene1Intro: React.FC = () => {
             letterSpacing: -4,
           }}
         >
-          MyFlow
+          MyFlove
         </div>
         <div
           style={{

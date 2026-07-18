@@ -58,7 +58,7 @@ export const SceneOutro: React.FC = () => {
             textTransform: "uppercase",
           }}
         >
-          MyFlow — vår vision
+          MyFlove — vår vision
         </div>
         <div
           style={{
