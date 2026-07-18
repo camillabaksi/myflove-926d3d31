@@ -63,11 +63,8 @@ export const MainVideo: React.FC = () => {
         <TransitionSeries.Sequence durationInFrames={S_FEELING}>
           <SceneFeeling />
         </TransitionSeries.Sequence>
-
-        <TransitionSeries.Sequence durationInFrames={S_FEELING}>
-          <SceneFeeling />
-        </TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={fade()} timing={timing()} />
+
         <TransitionSeries.Sequence durationInFrames={S_OUTRO}>
           <SceneOutro />
         </TransitionSeries.Sequence>
