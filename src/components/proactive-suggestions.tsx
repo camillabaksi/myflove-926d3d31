@@ -154,8 +154,46 @@ export default function ProactiveSuggestions() {
       }
     }
 
+    // Pågående öppna uppgifter som lätt glöms bort (tvätt, disk, ugn...)
+    const todayStr = new Date().toISOString().split("T")[0] as string;
+    for (const t of tasks) {
+      if (t.completed) continue;
+      if (t.dueDate && t.dueDate !== todayStr) continue;
+      const ageMin = Math.round((now - t.createdAt) / 60000);
+      if (ageMin < 5) continue;
+      const match = LOOP_KEYWORDS.find((k) => k.pattern.test(t.title));
+      if (match && ageMin >= match.minutes) {
+        out.push({
+          id: `loop-${t.id}`,
+          icon: Shirt,
+          tone: "time",
+          title: `${match.label}: "${t.title}"`,
+          body: match.nudge,
+        });
+      }
+    }
+
+    // Uppgifter med tid som passerat (mer än 10 min sen) och inte är gjorda
+    const nowMin = nowDate.getHours() * 60 + nowDate.getMinutes();
+    for (const t of tasks) {
+      if (t.completed || !t.time || t.dueDate !== todayStr) continue;
+      const [h, m] = t.time.split(":").map(Number);
+      if (Number.isNaN(h) || Number.isNaN(m)) continue;
+      const diff = nowMin - (h * 60 + m);
+      if (diff >= 10 && diff <= 180) {
+        out.push({
+          id: `late-${t.id}`,
+          icon: AlarmClock,
+          tone: "time",
+          title: `"${t.title}" var kl ${t.time}`,
+          body: "Bocka av när det är gjort – eller flytta till senare, båda är okej.",
+        });
+        break;
+      }
+    }
+
     return out.slice(0, 4);
-  }, [weather, activeReminders, transactions, medications, isTaken]);
+  }, [weather, activeReminders, transactions, medications, isTaken, tasks]);
 
   if (suggestions.length === 0) return null;
 
