@@ -58,6 +58,8 @@ export default function Home() {
   const [helpPlan, setHelpPlan] = useState<HelpPlan | null>(null);
   const [showAllTasks, setShowAllTasks] = useState(false);
 
+  useReminderSync();
+
 
   const prioritizedTasks = useMemo(() => sortTasksByPriority(activeTasks), [activeTasks]);
   const limit = helpPlan?.taskLimit ?? 3;
@@ -145,6 +147,17 @@ export default function Home() {
         </div>
 
         <WeatherCard />
+
+        <div className="rounded-2xl bg-card border border-border p-4 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p className="font-semibold text-ink">Påminnelser även när appen är stängd</p>
+            <p className="text-sm text-muted-foreground">
+              Medicin, tvätt, väder och tider – som en varsam knuff när det behövs.
+            </p>
+          </div>
+          <EnablePushButton />
+        </div>
+
 
         {/* 4 custom shortcuts — always visible launchpad */}
         <HomeShortcuts />
