@@ -102,7 +102,7 @@ export async function subscribeUserToPush(): Promise<SerializedSub | null> {
   if (!sub) {
     sub = await reg.pushManager.subscribe({
       userVisibleOnly: true,
-      applicationServerKey: urlB64ToUint8(VAPID_PUBLIC_KEY),
+      applicationServerKey: urlB64ToBuffer(VAPID_PUBLIC_KEY),
     });
   }
   return serializeSubscription(sub);
