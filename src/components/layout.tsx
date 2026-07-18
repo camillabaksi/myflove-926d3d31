@@ -35,6 +35,7 @@ const SECTION_BY_PATH: Record<string, string> = {
   "/assistant": "assistant",
   "/flowplan": "flowplan",
   "/admin-statistik": "admin",
+  "/admin": "admin",
   "/friktionsindex": "friktionsindex",
   "/familj": "familj",
   "/matlista": "matlista",
@@ -121,7 +122,12 @@ export default function Layout({ children }: LayoutProps) {
     { href: "/assistant", label: "Hjälp", icon: Sparkles },
     { href: "/friktionsindex", label: "Feedback", icon: Flame },
     { href: "/energikarta", label: "Energi", icon: Battery },
-    ...(isAdmin ? [{ href: "/admin-statistik", label: "Appstatistik", icon: BarChart3 }] : []),
+    ...(isAdmin
+      ? [
+          { href: "/admin", label: "Adminöversikt", icon: Shield },
+          { href: "/admin-statistik", label: "Appstatistik", icon: BarChart3 },
+        ]
+      : []),
   ];
 
   // Bottom nav: Home is fixed, the remaining 3 slots are user-customizable.
