@@ -54,11 +54,13 @@ export default function Home() {
   const [helpModalOpen, setHelpModalOpen] = useState(false);
   const [overwhelmedOpen, setOverwhelmedOpen] = useState(false);
   const [helpPlan, setHelpPlan] = useState<HelpPlan | null>(null);
+  const [showAllTasks, setShowAllTasks] = useState(false);
 
 
   const prioritizedTasks = useMemo(() => sortTasksByPriority(activeTasks), [activeTasks]);
   const limit = helpPlan?.taskLimit ?? 3;
-  const visibleTasks = prioritizedTasks.slice(0, limit);
+  const visibleTasks = showAllTasks ? prioritizedTasks : prioritizedTasks.slice(0, limit);
+  const hiddenTaskCount = Math.max(0, prioritizedTasks.length - limit);
 
 
   const now = Date.now();
@@ -235,6 +237,18 @@ export default function Home() {
                 </button>
               ))}
             </div>
+          )}
+
+          {(hiddenTaskCount > 0 || showAllTasks) && (
+            <button
+              type="button"
+              onClick={() => setShowAllTasks((v) => !v)}
+              className="w-full text-sm font-medium text-primary hover:underline pt-1"
+            >
+              {showAllTasks
+                ? "Visa bara det viktigaste"
+                : `Visa alla uppgifter som inte är klara (${prioritizedTasks.length})`}
+            </button>
           )}
 
         </div>
