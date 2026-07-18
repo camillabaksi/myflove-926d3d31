@@ -1,18 +1,11 @@
-import { useState } from "react";
-import { useClerk, Show } from "@clerk/react";
+import { useEffect, useState } from "react";
+import { useUser, useClerk, Show } from "@clerk/react";
 import Layout from "@/components/layout";
-import {
-  useGetMyHousehold,
-  useCreateHousehold,
-  useJoinHousehold,
-  useLeaveHousehold,
-  getGetMyHouseholdQueryKey,
-} from "@workspace/api-client-react";
-import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Users, Copy, LogOut, Check } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const COLORS = [
   { value: "#8a9a5b", label: "Oliv" },
@@ -23,9 +16,12 @@ const COLORS = [
   { value: "#d16d6d", label: "Röd" },
 ];
 
+type Member = { user_id: string; display_name: string; color: string };
+type Household = { id: string; name: string; invite_code: string; created_by: string; members: Member[] };
+
 function ColorPicker({ value, onChange }: { value: string; onChange: (c: string) => void }) {
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 flex-wrap">
       {COLORS.map((c) => (
         <button
           key={c.value}
@@ -45,44 +41,77 @@ function ColorPicker({ value, onChange }: { value: string; onChange: (c: string)
   );
 }
 
-function CreateOrJoin() {
+async function fetchMyHousehold(userId: string): Promise<Household | null> {
+  const { data: memberships, error: mErr } = await supabase
+    .from("household_members")
+    .select("household_id")
+    .eq("user_id", userId)
+    .limit(1);
+  if (mErr) throw mErr;
+  const hid = memberships?.[0]?.household_id;
+  if (!hid) return null;
+
+  const { data: h, error: hErr } = await supabase
+    .from("households")
+    .select("id, name, invite_code, created_by")
+    .eq("id", hid)
+    .single();
+  if (hErr) throw hErr;
+
+  const { data: members, error: memErr } = await supabase
+    .from("household_members")
+    .select("user_id, display_name, color")
+    .eq("household_id", hid);
+  if (memErr) throw memErr;
+
+  return { ...h, members: members ?? [] };
+}
+
+function CreateOrJoin({ onReady }: { onReady: () => void }) {
   const [mode, setMode] = useState<"create" | "join">("create");
   const [name, setName] = useState("");
   const [inviteCode, setInviteCode] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [color, setColor] = useState(COLORS[0].value);
+  const [pending, setPending] = useState(false);
   const { toast } = useToast();
-  const queryClient = useQueryClient();
 
-  const createMutation = useCreateHousehold({
-    mutation: {
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: getGetMyHouseholdQueryKey() });
-        toast({ description: "Din familj är skapad!" });
-      },
-      onError: () => toast({ description: "Något gick fel. Försök igen.", variant: "destructive" }),
-    },
-  });
-
-  const joinMutation = useJoinHousehold({
-    mutation: {
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: getGetMyHouseholdQueryKey() });
-        toast({ description: "Du gick med i familjen!" });
-      },
-      onError: () => toast({ description: "Hittade ingen familj med den koden.", variant: "destructive" }),
-    },
-  });
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!displayName.trim()) return;
-    if (mode === "create") {
-      if (!name.trim()) return;
-      createMutation.mutate({ data: { name: name.trim(), displayName: displayName.trim(), color } });
-    } else {
-      if (!inviteCode.trim()) return;
-      joinMutation.mutate({ data: { inviteCode: inviteCode.trim(), displayName: displayName.trim(), color } });
+    setPending(true);
+    try {
+      if (mode === "create") {
+        if (!name.trim()) return;
+        const { error } = await supabase.rpc("create_household", {
+          _name: name.trim(),
+          _display_name: displayName.trim(),
+          _color: color,
+        });
+        if (error) throw error;
+        toast({ description: "Din familj är skapad!" });
+      } else {
+        if (!inviteCode.trim()) return;
+        const { error } = await supabase.rpc("join_household_by_code", {
+          _code: inviteCode.trim().toUpperCase(),
+          _display_name: displayName.trim(),
+          _color: color,
+        });
+        if (error) throw error;
+        toast({ description: "Du gick med i familjen!" });
+      }
+      onReady();
+    } catch (err: any) {
+      toast({
+        description:
+          mode === "join"
+            ? "Hittade ingen familj med den koden."
+            : "Något gick fel. Försök igen.",
+        variant: "destructive",
+      });
+      console.error(err);
+    } finally {
+      setPending(false);
     }
   };
 
@@ -90,6 +119,7 @@ function CreateOrJoin() {
     <div className="max-w-md mx-auto space-y-6">
       <div className="flex bg-secondary rounded-2xl p-1">
         <button
+          type="button"
           onClick={() => setMode("create")}
           className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-colors ${
             mode === "create" ? "bg-card shadow-sm" : "text-muted-foreground"
@@ -98,6 +128,7 @@ function CreateOrJoin() {
           Skapa familj
         </button>
         <button
+          type="button"
           onClick={() => setMode("join")}
           className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-colors ${
             mode === "join" ? "bg-card shadow-sm" : "text-muted-foreground"
@@ -145,12 +176,8 @@ function CreateOrJoin() {
           <ColorPicker value={color} onChange={setColor} />
         </div>
 
-        <Button
-          type="submit"
-          className="w-full h-12 rounded-2xl"
-          disabled={createMutation.isPending || joinMutation.isPending}
-        >
-          {mode === "create" ? "Skapa familj" : "Gå med"}
+        <Button type="submit" className="w-full h-12 rounded-2xl" disabled={pending}>
+          {pending ? "Vänta..." : mode === "create" ? "Skapa familj" : "Gå med"}
         </Button>
       </form>
     </div>
@@ -159,24 +186,38 @@ function CreateOrJoin() {
 
 function HouseholdView({
   household,
+  currentUserId,
+  onLeave,
 }: {
-  household: { id: number; name: string; inviteCode: string; members: { id: number; displayName: string; color: string; isMe: boolean }[] };
+  household: Household;
+  currentUserId: string;
+  onLeave: () => void;
 }) {
   const { toast } = useToast();
-  const queryClient = useQueryClient();
-
-  const leaveMutation = useLeaveHousehold({
-    mutation: {
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: getGetMyHouseholdQueryKey() });
-        toast({ description: "Du har lämnat familjen." });
-      },
-    },
-  });
+  const [pending, setPending] = useState(false);
 
   const copyCode = () => {
-    navigator.clipboard.writeText(household.inviteCode).catch(() => {});
+    navigator.clipboard.writeText(household.invite_code).catch(() => {});
     toast({ description: "Koden är kopierad!" });
+  };
+
+  const leave = async () => {
+    setPending(true);
+    try {
+      const { error } = await supabase
+        .from("household_members")
+        .delete()
+        .eq("household_id", household.id)
+        .eq("user_id", currentUserId);
+      if (error) throw error;
+      toast({ description: "Du har lämnat familjen." });
+      onLeave();
+    } catch (err) {
+      console.error(err);
+      toast({ description: "Kunde inte lämna familjen.", variant: "destructive" });
+    } finally {
+      setPending(false);
+    }
   };
 
   return (
@@ -188,14 +229,16 @@ function HouseholdView({
           </div>
           <div>
             <div className="text-xl font-bold">{household.name}</div>
-            <div className="text-sm text-muted-foreground">{household.members.length} medlemmar</div>
+            <div className="text-sm text-muted-foreground">
+              {household.members.length} medlem{household.members.length === 1 ? "" : "mar"}
+            </div>
           </div>
         </div>
 
         <div className="flex items-center justify-between bg-secondary rounded-2xl p-4">
           <div>
             <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Inbjudningskod</div>
-            <div className="text-lg font-mono font-bold tracking-widest">{household.inviteCode}</div>
+            <div className="text-lg font-mono font-bold tracking-widest">{household.invite_code}</div>
           </div>
           <button
             onClick={copyCode}
@@ -209,18 +252,20 @@ function HouseholdView({
 
       <div className="space-y-2">
         {household.members.map((m) => (
-          <div key={m.id} className="flex items-center gap-3 bg-card border border-border rounded-2xl p-4">
+          <div key={m.user_id} className="flex items-center gap-3 bg-card border border-border rounded-2xl p-4">
             <div className="w-4 h-4 rounded-full shrink-0" style={{ backgroundColor: m.color }} />
-            <span className="text-lg">{m.displayName}</span>
-            {m.isMe && <span className="text-xs text-muted-foreground ml-auto">Du</span>}
+            <span className="text-lg">{m.display_name}</span>
+            {m.user_id === currentUserId && (
+              <span className="text-xs text-muted-foreground ml-auto">Du</span>
+            )}
           </div>
         ))}
       </div>
 
       <Button
         variant="outline"
-        onClick={() => leaveMutation.mutate()}
-        disabled={leaveMutation.isPending}
+        onClick={leave}
+        disabled={pending}
         className="w-full h-12 rounded-2xl text-destructive hover:text-destructive"
       >
         <LogOut size={18} className="mr-2" />
@@ -231,28 +276,33 @@ function HouseholdView({
 }
 
 function FamilyContent() {
-  const { data, isLoading } = useGetMyHousehold({
-    query: { queryKey: getGetMyHouseholdQueryKey() },
-  });
+  const { user } = useUser();
+  const [household, setHousehold] = useState<Household | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  if (isLoading) {
-    return <div className="text-center py-16 text-muted-foreground">Laddar...</div>;
+  const load = async () => {
+    if (!user?.id) return;
+    setLoading(true);
+    try {
+      const h = await fetchMyHousehold(user.id);
+      setHousehold(h);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]);
+
+  if (loading) return <div className="text-center py-16 text-muted-foreground">Laddar...</div>;
+  if (household && user?.id) {
+    return <HouseholdView household={household} currentUserId={user.id} onLeave={load} />;
   }
-
-  if (data?.id && data.name && data.inviteCode) {
-    return (
-      <HouseholdView
-        household={{
-          id: data.id,
-          name: data.name,
-          inviteCode: data.inviteCode,
-          members: data.members,
-        }}
-      />
-    );
-  }
-
-  return <CreateOrJoin />;
+  return <CreateOrJoin onReady={load} />;
 }
 
 export default function FamilyPage() {
