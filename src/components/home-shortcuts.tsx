@@ -187,15 +187,21 @@ interface TileProps {
   onToggleFavorite: () => void;
   onMoveUp?: () => void;
   onMoveDown?: () => void;
+  onAction?: () => void;
 }
 
-function ShortcutTile({ shortcut, size, editing, isFavorite, canPin = true, onToggleFavorite, onMoveUp, onMoveDown }: TileProps) {
+function ShortcutTile({ shortcut, size, editing, isFavorite, canPin = true, onToggleFavorite, onMoveUp, onMoveDown, onAction }: TileProps) {
   const Icon = shortcut.icon;
   const large = size === "large";
+  const emph = shortcut.emphasis;
 
   const inner = (
-    <div className={`flex ${large ? "flex-col gap-3 p-5" : "flex-col gap-2 p-3"} bg-card border border-border rounded-2xl shadow-sm h-full ${!editing ? "hover:border-primary/40 hover:-translate-y-0.5 transition-all" : ""}`}>
-      <div className={`${large ? "w-12 h-12" : "w-9 h-9"} rounded-full ${shortcut.iconBg} ${shortcut.iconColor} flex items-center justify-center shrink-0`}>
+    <div className={`flex ${large ? "flex-col gap-3 p-5" : "flex-col gap-2 p-3"} border rounded-2xl shadow-sm h-full ${
+      emph
+        ? "bg-terracotta text-cream border-terracotta"
+        : "bg-card border-border"
+    } ${!editing ? "hover:-translate-y-0.5 transition-all" : ""}`}>
+      <div className={`${large ? "w-12 h-12" : "w-9 h-9"} rounded-full ${emph ? "bg-cream/20 text-cream" : `${shortcut.iconBg} ${shortcut.iconColor}`} flex items-center justify-center shrink-0`}>
         <Icon size={large ? 22 : 18} />
       </div>
       <p className={`font-medium ${large ? "text-base" : "text-sm"} leading-snug`}>{shortcut.label}</p>
@@ -203,12 +209,20 @@ function ShortcutTile({ shortcut, size, editing, isFavorite, canPin = true, onTo
   );
 
   if (!editing) {
+    if (shortcut.action || !shortcut.href) {
+      return (
+        <button type="button" onClick={onAction} className="block text-left w-full">
+          {inner}
+        </button>
+      );
+    }
     return (
       <Link href={shortcut.href} className="block">
         {inner}
       </Link>
     );
   }
+
 
   return (
     <div className="relative">
