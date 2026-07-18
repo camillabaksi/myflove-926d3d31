@@ -71,6 +71,7 @@ async function lookupStopId(name: string, key: string): Promise<string> {
 }
 
 export const getSlTripFn = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => TripInput.parse(data))
   .handler(async ({ data }) => {
     const key = requireKey();
