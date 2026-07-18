@@ -37,6 +37,7 @@ export default function ProactiveSuggestions() {
   const { activeReminders } = useReminders();
   const { transactions } = useFinances();
   const { medications, isTaken } = useMedications();
+  const { tasks } = useTasks();
 
   const suggestions = useMemo<Suggestion[]>(() => {
     const out: Suggestion[] = [];
