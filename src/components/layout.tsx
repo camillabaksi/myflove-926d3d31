@@ -1,6 +1,6 @@
 import { ReactNode, useState, useEffect, useMemo } from "react";
 import { Link, useLocation } from "wouter";
-import { Home, Target, CheckSquare, ShoppingBag, Smile, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Battery, Settings2, Check, RotateCcw, ArrowUp, ArrowDown, LogOut, Volume2, VolumeX } from "lucide-react";
+import { Home, Target, CheckSquare, ShoppingBag, Smile, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Battery, Settings2, Check, RotateCcw, ArrowUp, ArrowDown, LogOut, Volume2, VolumeX, Shield } from "lucide-react";
 import { isAlarmSoundEnabled, setAlarmSoundEnabled, subscribeAlarmPref, playAlarmPreview, initAlarmAudioUnlock } from "@/lib/push-notifications";
 import { useCommuteAlerts } from "@/hooks/use-commute-alerts";
 import { useMedicationAlerts } from "@/hooks/use-medication-alerts";
@@ -35,6 +35,7 @@ const SECTION_BY_PATH: Record<string, string> = {
   "/assistant": "assistant",
   "/flowplan": "flowplan",
   "/admin-statistik": "admin",
+  "/admin": "admin",
   "/friktionsindex": "friktionsindex",
   "/familj": "familj",
   "/matlista": "matlista",
@@ -121,7 +122,12 @@ export default function Layout({ children }: LayoutProps) {
     { href: "/assistant", label: "Hjälp", icon: Sparkles },
     { href: "/friktionsindex", label: "Feedback", icon: Flame },
     { href: "/energikarta", label: "Energi", icon: Battery },
-    ...(isAdmin ? [{ href: "/admin-statistik", label: "Appstatistik", icon: BarChart3 }] : []),
+    ...(isAdmin
+      ? [
+          { href: "/admin", label: "Adminöversikt", icon: Shield },
+          { href: "/admin-statistik", label: "Appstatistik", icon: BarChart3 },
+        ]
+      : []),
   ];
 
   // Bottom nav: Home is fixed, the remaining 3 slots are user-customizable.
