@@ -11,6 +11,8 @@ import { useLocalStorage } from "@/lib/storage";
 import { trackEvent } from "@/lib/analytics";
 import { Button } from "@/components/ui/button";
 import { useClerk, Show } from "@clerk/react";
+import { DeleteAccountButton } from "@/components/delete-account-button";
+
 
 interface LayoutProps {
   children: ReactNode;
@@ -190,7 +192,9 @@ export default function Layout({ children }: LayoutProps) {
             >
               <LogOut size={16} /> Logga ut
             </Button>
+            <DeleteAccountButton className="w-full" />
           </Show>
+
         </div>
 
       </nav>
@@ -400,7 +404,7 @@ export default function Layout({ children }: LayoutProps) {
                       Alarmljud: {alarmEnabled ? "på" : "av"}
                     </Button>
                   </div>
-                  <div className="mt-6 flex items-center justify-center">
+                  <div className="mt-6 flex flex-col items-center justify-center gap-3">
                     <Show when="signed-in">
                       <Button
                         variant="outline"
@@ -413,8 +417,10 @@ export default function Layout({ children }: LayoutProps) {
                       >
                         <LogOut size={16} /> Logga ut
                       </Button>
+                      <DeleteAccountButton />
                     </Show>
                   </div>
+
                 </>
               )}
             </div>
