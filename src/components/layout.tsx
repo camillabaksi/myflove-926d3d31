@@ -40,7 +40,7 @@ const SECTION_BY_PATH: Record<string, string> = {
 };
 
 /**
- * Per-category color themes, all drawn from the warm MyFlow preview palette.
+ * Per-category color themes, all drawn from the warm MyFlove preview palette.
  * They override --primary / --accent / --ring so text-primary, bg-primary, etc.
  * re-tint automatically per page.
  */
@@ -150,7 +150,7 @@ export default function Layout({ children }: LayoutProps) {
       {/* Desktop Sidebar */}
       <nav className="hidden md:flex flex-col w-64 border-r border-border bg-card p-4 shrink-0 overflow-y-auto">
         <div className="mb-8 px-4 py-2">
-          <h1 className="text-2xl font-bold text-primary tracking-tight">MyFlow</h1>
+          <h1 className="text-2xl font-bold text-primary tracking-tight">MyFlove</h1>
         </div>
         <div className="grid grid-cols-2 gap-3">
           {navItems.map((item) => {
@@ -199,7 +199,7 @@ export default function Layout({ children }: LayoutProps) {
       <main className="flex-1 flex flex-col min-h-0 overflow-hidden relative">
         {/* Mobile Header */}
         <header className="md:hidden flex items-center justify-center p-4 bg-background/80 backdrop-blur-md sticky top-0 z-10 border-b border-border/50">
-          <h1 className="text-xl font-bold text-primary tracking-tight">MyFlow</h1>
+          <h1 className="text-xl font-bold text-primary tracking-tight">MyFlove</h1>
         </header>
 
         {alerts.length > 0 && (
