@@ -237,26 +237,6 @@ export default function Home() {
             </div>
           )}
 
-          {completedTasks.length > 0 && (
-            <div className="space-y-2 pt-2">
-              <h3 className="text-xs uppercase tracking-wider text-muted-foreground pl-1 flex items-center gap-1.5">
-                <CheckCircle2 size={12} /> Avklarat
-              </h3>
-              <div className="space-y-2">
-                {completedTasks.slice(0, 5).map((task) => (
-                  <button
-                    key={task.id}
-                    type="button"
-                    onClick={() => toggleTask(task.id)}
-                    className="w-full flex items-center gap-3 p-3 bg-card/50 border border-border/50 rounded-2xl text-left opacity-70 hover:opacity-100 transition-opacity"
-                  >
-                    <CheckCircle2 size={18} className="text-primary shrink-0 fill-primary/20" />
-                    <span className="flex-1 text-sm line-through">{task.title}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
 
         {upcomingBills.length > 0 && (
