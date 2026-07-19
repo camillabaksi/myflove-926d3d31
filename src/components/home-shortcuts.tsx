@@ -32,6 +32,8 @@ const PREVIEW_PALETTE = [
 
 const ALL_SHORTCUTS: Shortcut[] = ([
   { id: "stop",       action: "stop" as const, label: "Stop!",       icon: Hand, emphasis: true },
+  { id: "ma-bra",     href: "/ma-bra",         label: "Må bra",     icon: Heart },
+  { id: "daglig-rutin", href: "/daglig-rutin", label: "Daglig rutin", icon: Sun },
   { id: "mood",       href: "/mood",           label: "Mående",     icon: Smile },
   { id: "fokus",      href: "/fokus",          label: "Dagens fokus", icon: Target },
   { id: "tasks",      href: "/tasks",          label: "Att göra",   icon: CheckSquare },
