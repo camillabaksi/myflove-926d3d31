@@ -13,6 +13,7 @@ export default defineConfig({
     server: { entry: "server" },
   },
   vite: {
+    plugins: [mcpPlugin()],
     resolve: {
       alias: {
         wouter: path.resolve(__dirname, "src/compat/wouter.tsx"),

@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as VillkorRouteImport } from './routes/villkor'
 import { Route as SignUpRouteImport } from './routes/sign-up'
 import { Route as SignInRouteImport } from './routes/sign-in'
+import { Route as McpRouteImport } from './routes/mcp'
 import { Route as IntegritetRouteImport } from './routes/integritet'
 import { Route as CookiesRouteImport } from './routes/cookies'
 import { Route as AppRouteImport } from './routes/_app'
@@ -39,6 +40,9 @@ import { Route as AppBeloningarRouteImport } from './routes/_app.beloningar'
 import { Route as AppAssistantRouteImport } from './routes/_app.assistant'
 import { Route as AppAdminStatistikRouteImport } from './routes/_app.admin-statistik'
 import { Route as AppAdminRouteImport } from './routes/_app.admin'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
+import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
+import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as ApiPublicHooksPushTickRouteImport } from './routes/api/public/hooks/push-tick'
 
 const VillkorRoute = VillkorRouteImport.update({
@@ -54,6 +58,11 @@ const SignUpRoute = SignUpRouteImport.update({
 const SignInRoute = SignInRouteImport.update({
   id: '/sign-in',
   path: '/sign-in',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IntegritetRoute = IntegritetRouteImport.update({
@@ -190,6 +199,24 @@ const AppAdminRoute = AppAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AppRoute,
 } as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Char91DotmcpChar93ListToolsRoute =
+  Char91DotmcpChar93ListToolsRouteImport.update({
+    id: '/.mcp/list-tools',
+    path: '/.mcp/list-tools',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Char91DotmcpChar93InvokeToolToolRoute =
+  Char91DotmcpChar93InvokeToolToolRouteImport.update({
+    id: '/.mcp/invoke-tool/$tool',
+    path: '/.mcp/invoke-tool/$tool',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicHooksPushTickRoute = ApiPublicHooksPushTickRouteImport.update({
   id: '/api/public/hooks/push-tick',
   path: '/api/public/hooks/push-tick',
@@ -200,9 +227,12 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/cookies': typeof CookiesRoute
   '/integritet': typeof IntegritetRoute
+  '/mcp': typeof McpRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/villkor': typeof VillkorRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin': typeof AppAdminRoute
   '/admin-statistik': typeof AppAdminStatistikRoute
   '/assistant': typeof AppAssistantRoute
@@ -226,15 +256,19 @@ export interface FileRoutesByFullPath {
   '/statistik': typeof AppStatistikRoute
   '/tasks': typeof AppTasksRoute
   '/travel': typeof AppTravelRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/hooks/push-tick': typeof ApiPublicHooksPushTickRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cookies': typeof CookiesRoute
   '/integritet': typeof IntegritetRoute
+  '/mcp': typeof McpRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/villkor': typeof VillkorRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin': typeof AppAdminRoute
   '/admin-statistik': typeof AppAdminStatistikRoute
   '/assistant': typeof AppAssistantRoute
@@ -258,6 +292,7 @@ export interface FileRoutesByTo {
   '/statistik': typeof AppStatistikRoute
   '/tasks': typeof AppTasksRoute
   '/travel': typeof AppTravelRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/hooks/push-tick': typeof ApiPublicHooksPushTickRoute
 }
 export interface FileRoutesById {
@@ -266,9 +301,12 @@ export interface FileRoutesById {
   '/_app': typeof AppRouteWithChildren
   '/cookies': typeof CookiesRoute
   '/integritet': typeof IntegritetRoute
+  '/mcp': typeof McpRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/villkor': typeof VillkorRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/_app/admin': typeof AppAdminRoute
   '/_app/admin-statistik': typeof AppAdminStatistikRoute
   '/_app/assistant': typeof AppAssistantRoute
@@ -292,6 +330,7 @@ export interface FileRoutesById {
   '/_app/statistik': typeof AppStatistikRoute
   '/_app/tasks': typeof AppTasksRoute
   '/_app/travel': typeof AppTravelRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/hooks/push-tick': typeof ApiPublicHooksPushTickRoute
 }
 export interface FileRouteTypes {
@@ -300,9 +339,12 @@ export interface FileRouteTypes {
     | '/'
     | '/cookies'
     | '/integritet'
+    | '/mcp'
     | '/sign-in'
     | '/sign-up'
     | '/villkor'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/admin'
     | '/admin-statistik'
     | '/assistant'
@@ -326,15 +368,19 @@ export interface FileRouteTypes {
     | '/statistik'
     | '/tasks'
     | '/travel'
+    | '/.mcp/invoke-tool/$tool'
     | '/api/public/hooks/push-tick'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/cookies'
     | '/integritet'
+    | '/mcp'
     | '/sign-in'
     | '/sign-up'
     | '/villkor'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/admin'
     | '/admin-statistik'
     | '/assistant'
@@ -358,6 +404,7 @@ export interface FileRouteTypes {
     | '/statistik'
     | '/tasks'
     | '/travel'
+    | '/.mcp/invoke-tool/$tool'
     | '/api/public/hooks/push-tick'
   id:
     | '__root__'
@@ -365,9 +412,12 @@ export interface FileRouteTypes {
     | '/_app'
     | '/cookies'
     | '/integritet'
+    | '/mcp'
     | '/sign-in'
     | '/sign-up'
     | '/villkor'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/_app/admin'
     | '/_app/admin-statistik'
     | '/_app/assistant'
@@ -391,6 +441,7 @@ export interface FileRouteTypes {
     | '/_app/statistik'
     | '/_app/tasks'
     | '/_app/travel'
+    | '/.mcp/invoke-tool/$tool'
     | '/api/public/hooks/push-tick'
   fileRoutesById: FileRoutesById
 }
@@ -399,9 +450,13 @@ export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
   CookiesRoute: typeof CookiesRoute
   IntegritetRoute: typeof IntegritetRoute
+  McpRoute: typeof McpRoute
   SignInRoute: typeof SignInRoute
   SignUpRoute: typeof SignUpRoute
   VillkorRoute: typeof VillkorRoute
+  Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
+  Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicHooksPushTickRoute: typeof ApiPublicHooksPushTickRoute
 }
 
@@ -426,6 +481,13 @@ declare module '@tanstack/react-router' {
       path: '/sign-in'
       fullPath: '/sign-in'
       preLoaderRoute: typeof SignInRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/integritet': {
@@ -617,6 +679,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdminRouteImport
       parentRoute: typeof AppRoute
     }
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.mcp/list-tools': {
+      id: '/.mcp/list-tools'
+      path: '/.mcp/list-tools'
+      fullPath: '/.mcp/list-tools'
+      preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.mcp/invoke-tool/$tool': {
+      id: '/.mcp/invoke-tool/$tool'
+      path: '/.mcp/invoke-tool/$tool'
+      fullPath: '/.mcp/invoke-tool/$tool'
+      preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/push-tick': {
       id: '/api/public/hooks/push-tick'
       path: '/api/public/hooks/push-tick'
@@ -686,9 +769,14 @@ const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
   CookiesRoute: CookiesRoute,
   IntegritetRoute: IntegritetRoute,
+  McpRoute: McpRoute,
   SignInRoute: SignInRoute,
   SignUpRoute: SignUpRoute,
   VillkorRoute: VillkorRoute,
+  Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
+  Char91DotwellKnownChar93OauthProtectedResourceRoute:
+    Char91DotwellKnownChar93OauthProtectedResourceRoute,
+  Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicHooksPushTickRoute: ApiPublicHooksPushTickRoute,
 }
 export const routeTree = rootRouteImport
