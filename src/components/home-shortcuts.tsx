@@ -39,7 +39,6 @@ const ALL_SHORTCUTS: Shortcut[] = ([
   { id: "tasks",      href: "/tasks",          label: "Att göra",   icon: CheckSquare },
   { id: "shopping",   href: "/shopping",       label: "Inköp",      icon: ShoppingBag },
   { id: "kalender",   href: "/kalender",       label: "Kalender",   icon: Calendar },
-  { id: "medicin",    href: "/medicin",        label: "Medicin",    icon: Pill },
   { id: "pomodoro",   href: "/pomodoro",       label: "Fokuspass",  icon: Timer },
   { id: "finances",   href: "/finances",       label: "Ekonomi",    icon: Wallet },
   { id: "statistik",  href: "/statistik",      label: "Statistik",  icon: BarChart3 },
@@ -47,7 +46,6 @@ const ALL_SHORTCUTS: Shortcut[] = ([
   { id: "dump",       href: "/dump",           label: "Dumping",    icon: Inbox },
   { id: "matlista",   href: "/matlista",       label: "Matlista",   icon: UtensilsCrossed },
   { id: "travel",     href: "/travel",         label: "Resor",      icon: Navigation },
-  { id: "energikarta",href: "/energikarta",    label: "Energikarta",icon: Battery },
   { id: "flowplan",   href: "/flowplan",       label: "FlowPlan",   icon: Sparkles },
   { id: "assistant",  href: "/assistant",      label: "Flow-chatt", icon: Sparkles },
 ] as Omit<Shortcut, "iconBg" | "iconColor">[]).map((s, i) => {
