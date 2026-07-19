@@ -56,7 +56,7 @@ const ALL_SHORTCUTS: Shortcut[] = ([
 });
 
 
-const DEFAULT_FAVORITES = ["stop", "mood", "kalender", "tasks"];
+const DEFAULT_FAVORITES = ["stop", "ma-bra", "daglig-rutin", "kalender"];
 const DEFAULT_ORDER = ALL_SHORTCUTS.map((s) => s.id);
 const MAX_FAVORITES = 4;
 
