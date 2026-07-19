@@ -47,8 +47,8 @@ function useFamilyEventsByDate() {
 
 export default function CalendarPage() {
   const { currentFocus } = useFocus();
-  const { activeTasks, completedTasks } = useTasks();
-  const { activeReminders, addReminder, deleteReminder } = useReminders();
+  const { activeTasks, completedTasks, deleteTask, setTaskTime } = useTasks();
+  const { activeReminders, addReminder, deleteReminder, updateReminder } = useReminders();
   const { eventsForDate, hasHousehold } = useFamilyEventsByDate();
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -63,7 +63,13 @@ export default function CalendarPage() {
   const [isAddingReminder, setIsAddingReminder] = useState(false);
   const [newReminderTitle, setNewReminderTitle] = useState("");
   const [newReminderTime, setNewReminderTime] = useState("");
+  const [editing, setEditing] = useState<
+    | { kind: "reminder"; id: string; title: string; time: string }
+    | { kind: "task"; id: string; title: string; time: string }
+    | null
+  >(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
 
   const handleExportAll = () => {
     const events: IcsEvent[] = [];
