@@ -339,7 +339,8 @@ export default function CalendarPage() {
                   <button
                     onClick={() => deleteEventMutation.mutate({ id: e.id })}
                     aria-label="Ta bort familjehändelse"
-                    className="p-2 text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-all rounded-xl hover:bg-destructive/10 shrink-0"
+                    className="p-2 text-muted-foreground hover:text-destructive rounded-xl hover:bg-destructive/10 shrink-0"
+
                   >
                     <Trash2 size={18} />
                   </button>
