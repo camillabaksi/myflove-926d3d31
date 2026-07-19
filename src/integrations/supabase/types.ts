@@ -356,6 +356,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_user_stats: {
+        Args: never
+        Returns: {
+          new_users_7d: number
+          signups: Json
+          total_users: number
+        }[]
+      }
       create_household: {
         Args: { _color: string; _display_name: string; _name: string }
         Returns: string
