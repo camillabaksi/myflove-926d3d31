@@ -172,7 +172,7 @@ export default function FlowPlanPage() {
                 </button>
               )}
               {!energyAuto && (
-                <Link to="/energikarta" className="text-xs text-primary hover:underline flex items-center gap-1">
+                <Link to="/ma-bra" className="text-xs text-primary hover:underline flex items-center gap-1">
                   <Battery size={12} /> Logga energi
                 </Link>
               )}
