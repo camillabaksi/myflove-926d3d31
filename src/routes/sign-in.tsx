@@ -8,11 +8,20 @@ import { useToast } from "@/hooks/use-toast";
 
 export const Route = createFileRoute("/sign-in")({
   ssr: false,
+  validateSearch: (s: Record<string, unknown>) => ({
+    next: typeof s.next === "string" ? s.next : undefined,
+  }),
   component: SignInPage,
 });
 
+function safeNext(next?: string): string {
+  if (!next || !next.startsWith("/") || next.startsWith("//")) return "/hem";
+  return next;
+}
+
 function SignInPage() {
   const navigate = useNavigate();
+  const { next } = Route.useSearch();
   const { toast } = useToast();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,7 +36,8 @@ function SignInPage() {
       toast({ title: "Kunde inte logga in", description: error.message, variant: "destructive" });
       return;
     }
-    navigate({ to: "/hem" });
+    const target = safeNext(next);
+    window.location.href = target;
   }
 
   return (
