@@ -21,10 +21,7 @@ import { Route as AppTravelRouteImport } from './routes/_app.travel'
 import { Route as AppTasksRouteImport } from './routes/_app.tasks'
 import { Route as AppStatistikRouteImport } from './routes/_app.statistik'
 import { Route as AppShoppingRouteImport } from './routes/_app.shopping'
-import { Route as AppRutinerRouteImport } from './routes/_app.rutiner'
 import { Route as AppPomodoroRouteImport } from './routes/_app.pomodoro'
-import { Route as AppMoodRouteImport } from './routes/_app.mood'
-import { Route as AppMedicinRouteImport } from './routes/_app.medicin'
 import { Route as AppMatlistaRouteImport } from './routes/_app.matlista'
 import { Route as AppMaBraRouteImport } from './routes/_app.ma-bra'
 import { Route as AppKalenderRouteImport } from './routes/_app.kalender'
@@ -34,7 +31,6 @@ import { Route as AppFokusRouteImport } from './routes/_app.fokus'
 import { Route as AppFlowplanRouteImport } from './routes/_app.flowplan'
 import { Route as AppFinancesRouteImport } from './routes/_app.finances'
 import { Route as AppFamiljRouteImport } from './routes/_app.familj'
-import { Route as AppEnergikartaRouteImport } from './routes/_app.energikarta'
 import { Route as AppDumpRouteImport } from './routes/_app.dump'
 import { Route as AppDagligRutinRouteImport } from './routes/_app.daglig-rutin'
 import { Route as AppCalendarRouteImport } from './routes/_app.calendar'
@@ -107,24 +103,9 @@ const AppShoppingRoute = AppShoppingRouteImport.update({
   path: '/shopping',
   getParentRoute: () => AppRoute,
 } as any)
-const AppRutinerRoute = AppRutinerRouteImport.update({
-  id: '/rutiner',
-  path: '/rutiner',
-  getParentRoute: () => AppRoute,
-} as any)
 const AppPomodoroRoute = AppPomodoroRouteImport.update({
   id: '/pomodoro',
   path: '/pomodoro',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppMoodRoute = AppMoodRouteImport.update({
-  id: '/mood',
-  path: '/mood',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppMedicinRoute = AppMedicinRouteImport.update({
-  id: '/medicin',
-  path: '/medicin',
   getParentRoute: () => AppRoute,
 } as any)
 const AppMatlistaRoute = AppMatlistaRouteImport.update({
@@ -170,11 +151,6 @@ const AppFinancesRoute = AppFinancesRouteImport.update({
 const AppFamiljRoute = AppFamiljRouteImport.update({
   id: '/familj',
   path: '/familj',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppEnergikartaRoute = AppEnergikartaRouteImport.update({
-  id: '/energikarta',
-  path: '/energikarta',
   getParentRoute: () => AppRoute,
 } as any)
 const AppDumpRoute = AppDumpRouteImport.update({
@@ -258,7 +234,6 @@ export interface FileRoutesByFullPath {
   '/calendar': typeof AppCalendarRoute
   '/daglig-rutin': typeof AppDagligRutinRoute
   '/dump': typeof AppDumpRoute
-  '/energikarta': typeof AppEnergikartaRoute
   '/familj': typeof AppFamiljRoute
   '/finances': typeof AppFinancesRoute
   '/flowplan': typeof AppFlowplanRoute
@@ -268,10 +243,7 @@ export interface FileRoutesByFullPath {
   '/kalender': typeof AppKalenderRoute
   '/ma-bra': typeof AppMaBraRoute
   '/matlista': typeof AppMatlistaRoute
-  '/medicin': typeof AppMedicinRoute
-  '/mood': typeof AppMoodRoute
   '/pomodoro': typeof AppPomodoroRoute
-  '/rutiner': typeof AppRutinerRoute
   '/shopping': typeof AppShoppingRoute
   '/statistik': typeof AppStatistikRoute
   '/tasks': typeof AppTasksRoute
@@ -297,7 +269,6 @@ export interface FileRoutesByTo {
   '/calendar': typeof AppCalendarRoute
   '/daglig-rutin': typeof AppDagligRutinRoute
   '/dump': typeof AppDumpRoute
-  '/energikarta': typeof AppEnergikartaRoute
   '/familj': typeof AppFamiljRoute
   '/finances': typeof AppFinancesRoute
   '/flowplan': typeof AppFlowplanRoute
@@ -307,10 +278,7 @@ export interface FileRoutesByTo {
   '/kalender': typeof AppKalenderRoute
   '/ma-bra': typeof AppMaBraRoute
   '/matlista': typeof AppMatlistaRoute
-  '/medicin': typeof AppMedicinRoute
-  '/mood': typeof AppMoodRoute
   '/pomodoro': typeof AppPomodoroRoute
-  '/rutiner': typeof AppRutinerRoute
   '/shopping': typeof AppShoppingRoute
   '/statistik': typeof AppStatistikRoute
   '/tasks': typeof AppTasksRoute
@@ -338,7 +306,6 @@ export interface FileRoutesById {
   '/_app/calendar': typeof AppCalendarRoute
   '/_app/daglig-rutin': typeof AppDagligRutinRoute
   '/_app/dump': typeof AppDumpRoute
-  '/_app/energikarta': typeof AppEnergikartaRoute
   '/_app/familj': typeof AppFamiljRoute
   '/_app/finances': typeof AppFinancesRoute
   '/_app/flowplan': typeof AppFlowplanRoute
@@ -348,10 +315,7 @@ export interface FileRoutesById {
   '/_app/kalender': typeof AppKalenderRoute
   '/_app/ma-bra': typeof AppMaBraRoute
   '/_app/matlista': typeof AppMatlistaRoute
-  '/_app/medicin': typeof AppMedicinRoute
-  '/_app/mood': typeof AppMoodRoute
   '/_app/pomodoro': typeof AppPomodoroRoute
-  '/_app/rutiner': typeof AppRutinerRoute
   '/_app/shopping': typeof AppShoppingRoute
   '/_app/statistik': typeof AppStatistikRoute
   '/_app/tasks': typeof AppTasksRoute
@@ -379,7 +343,6 @@ export interface FileRouteTypes {
     | '/calendar'
     | '/daglig-rutin'
     | '/dump'
-    | '/energikarta'
     | '/familj'
     | '/finances'
     | '/flowplan'
@@ -389,10 +352,7 @@ export interface FileRouteTypes {
     | '/kalender'
     | '/ma-bra'
     | '/matlista'
-    | '/medicin'
-    | '/mood'
     | '/pomodoro'
-    | '/rutiner'
     | '/shopping'
     | '/statistik'
     | '/tasks'
@@ -418,7 +378,6 @@ export interface FileRouteTypes {
     | '/calendar'
     | '/daglig-rutin'
     | '/dump'
-    | '/energikarta'
     | '/familj'
     | '/finances'
     | '/flowplan'
@@ -428,10 +387,7 @@ export interface FileRouteTypes {
     | '/kalender'
     | '/ma-bra'
     | '/matlista'
-    | '/medicin'
-    | '/mood'
     | '/pomodoro'
-    | '/rutiner'
     | '/shopping'
     | '/statistik'
     | '/tasks'
@@ -458,7 +414,6 @@ export interface FileRouteTypes {
     | '/_app/calendar'
     | '/_app/daglig-rutin'
     | '/_app/dump'
-    | '/_app/energikarta'
     | '/_app/familj'
     | '/_app/finances'
     | '/_app/flowplan'
@@ -468,10 +423,7 @@ export interface FileRouteTypes {
     | '/_app/kalender'
     | '/_app/ma-bra'
     | '/_app/matlista'
-    | '/_app/medicin'
-    | '/_app/mood'
     | '/_app/pomodoro'
-    | '/_app/rutiner'
     | '/_app/shopping'
     | '/_app/statistik'
     | '/_app/tasks'
@@ -583,32 +535,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppShoppingRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/rutiner': {
-      id: '/_app/rutiner'
-      path: '/rutiner'
-      fullPath: '/rutiner'
-      preLoaderRoute: typeof AppRutinerRouteImport
-      parentRoute: typeof AppRoute
-    }
     '/_app/pomodoro': {
       id: '/_app/pomodoro'
       path: '/pomodoro'
       fullPath: '/pomodoro'
       preLoaderRoute: typeof AppPomodoroRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/mood': {
-      id: '/_app/mood'
-      path: '/mood'
-      fullPath: '/mood'
-      preLoaderRoute: typeof AppMoodRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/medicin': {
-      id: '/_app/medicin'
-      path: '/medicin'
-      fullPath: '/medicin'
-      preLoaderRoute: typeof AppMedicinRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/matlista': {
@@ -672,13 +603,6 @@ declare module '@tanstack/react-router' {
       path: '/familj'
       fullPath: '/familj'
       preLoaderRoute: typeof AppFamiljRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/energikarta': {
-      id: '/_app/energikarta'
-      path: '/energikarta'
-      fullPath: '/energikarta'
-      preLoaderRoute: typeof AppEnergikartaRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/dump': {
@@ -776,7 +700,6 @@ interface AppRouteChildren {
   AppCalendarRoute: typeof AppCalendarRoute
   AppDagligRutinRoute: typeof AppDagligRutinRoute
   AppDumpRoute: typeof AppDumpRoute
-  AppEnergikartaRoute: typeof AppEnergikartaRoute
   AppFamiljRoute: typeof AppFamiljRoute
   AppFinancesRoute: typeof AppFinancesRoute
   AppFlowplanRoute: typeof AppFlowplanRoute
@@ -786,10 +709,7 @@ interface AppRouteChildren {
   AppKalenderRoute: typeof AppKalenderRoute
   AppMaBraRoute: typeof AppMaBraRoute
   AppMatlistaRoute: typeof AppMatlistaRoute
-  AppMedicinRoute: typeof AppMedicinRoute
-  AppMoodRoute: typeof AppMoodRoute
   AppPomodoroRoute: typeof AppPomodoroRoute
-  AppRutinerRoute: typeof AppRutinerRoute
   AppShoppingRoute: typeof AppShoppingRoute
   AppStatistikRoute: typeof AppStatistikRoute
   AppTasksRoute: typeof AppTasksRoute
@@ -804,7 +724,6 @@ const AppRouteChildren: AppRouteChildren = {
   AppCalendarRoute: AppCalendarRoute,
   AppDagligRutinRoute: AppDagligRutinRoute,
   AppDumpRoute: AppDumpRoute,
-  AppEnergikartaRoute: AppEnergikartaRoute,
   AppFamiljRoute: AppFamiljRoute,
   AppFinancesRoute: AppFinancesRoute,
   AppFlowplanRoute: AppFlowplanRoute,
@@ -814,10 +733,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppKalenderRoute: AppKalenderRoute,
   AppMaBraRoute: AppMaBraRoute,
   AppMatlistaRoute: AppMatlistaRoute,
-  AppMedicinRoute: AppMedicinRoute,
-  AppMoodRoute: AppMoodRoute,
   AppPomodoroRoute: AppPomodoroRoute,
-  AppRutinerRoute: AppRutinerRoute,
   AppShoppingRoute: AppShoppingRoute,
   AppStatistikRoute: AppStatistikRoute,
   AppTasksRoute: AppTasksRoute,
