@@ -83,6 +83,23 @@ export default function RoutinesPage() {
     setRoutines((prev) => prev.map((r) => (r.id === id ? { ...r, enabled: !r.enabled } : r)));
   };
 
+  const updateTime = (id: string, newTime: string) => {
+    if (!newTime) return;
+    const r = routines.find((x) => x.id === id);
+    if (!r || r.time === newTime) return;
+    setRoutines((prev) => prev.map((x) => (x.id === id ? { ...x, time: newTime } : x)));
+    // Update today's pending reminder to match new time
+    const today = todayIso();
+    const existing = reminders.find(
+      (rem) => rem.date === today && rem.time === r.time && rem.title === r.title && !rem.completed
+    );
+    if (existing) {
+      deleteReminder(existing.id);
+      addReminder(r.title, today, newTime);
+    }
+    toast({ description: `Tiden för "${r.title}" ändrad till ${newTime}` });
+  };
+
   const remove = (id: string) => {
     const r = routines.find((x) => x.id === id);
     setRoutines((prev) => prev.filter((x) => x.id !== id));
