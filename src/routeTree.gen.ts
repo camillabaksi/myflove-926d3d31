@@ -20,6 +20,7 @@ import { Route as AppTravelRouteImport } from './routes/_app.travel'
 import { Route as AppTasksRouteImport } from './routes/_app.tasks'
 import { Route as AppStatistikRouteImport } from './routes/_app.statistik'
 import { Route as AppShoppingRouteImport } from './routes/_app.shopping'
+import { Route as AppRutinerRouteImport } from './routes/_app.rutiner'
 import { Route as AppPomodoroRouteImport } from './routes/_app.pomodoro'
 import { Route as AppMoodRouteImport } from './routes/_app.mood'
 import { Route as AppMedicinRouteImport } from './routes/_app.medicin'
@@ -92,6 +93,11 @@ const AppStatistikRoute = AppStatistikRouteImport.update({
 const AppShoppingRoute = AppShoppingRouteImport.update({
   id: '/shopping',
   path: '/shopping',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppRutinerRoute = AppRutinerRouteImport.update({
+  id: '/rutiner',
+  path: '/rutiner',
   getParentRoute: () => AppRoute,
 } as any)
 const AppPomodoroRoute = AppPomodoroRouteImport.update({
@@ -215,6 +221,7 @@ export interface FileRoutesByFullPath {
   '/medicin': typeof AppMedicinRoute
   '/mood': typeof AppMoodRoute
   '/pomodoro': typeof AppPomodoroRoute
+  '/rutiner': typeof AppRutinerRoute
   '/shopping': typeof AppShoppingRoute
   '/statistik': typeof AppStatistikRoute
   '/tasks': typeof AppTasksRoute
@@ -246,6 +253,7 @@ export interface FileRoutesByTo {
   '/medicin': typeof AppMedicinRoute
   '/mood': typeof AppMoodRoute
   '/pomodoro': typeof AppPomodoroRoute
+  '/rutiner': typeof AppRutinerRoute
   '/shopping': typeof AppShoppingRoute
   '/statistik': typeof AppStatistikRoute
   '/tasks': typeof AppTasksRoute
@@ -279,6 +287,7 @@ export interface FileRoutesById {
   '/_app/medicin': typeof AppMedicinRoute
   '/_app/mood': typeof AppMoodRoute
   '/_app/pomodoro': typeof AppPomodoroRoute
+  '/_app/rutiner': typeof AppRutinerRoute
   '/_app/shopping': typeof AppShoppingRoute
   '/_app/statistik': typeof AppStatistikRoute
   '/_app/tasks': typeof AppTasksRoute
@@ -312,6 +321,7 @@ export interface FileRouteTypes {
     | '/medicin'
     | '/mood'
     | '/pomodoro'
+    | '/rutiner'
     | '/shopping'
     | '/statistik'
     | '/tasks'
@@ -343,6 +353,7 @@ export interface FileRouteTypes {
     | '/medicin'
     | '/mood'
     | '/pomodoro'
+    | '/rutiner'
     | '/shopping'
     | '/statistik'
     | '/tasks'
@@ -375,6 +386,7 @@ export interface FileRouteTypes {
     | '/_app/medicin'
     | '/_app/mood'
     | '/_app/pomodoro'
+    | '/_app/rutiner'
     | '/_app/shopping'
     | '/_app/statistik'
     | '/_app/tasks'
@@ -470,6 +482,13 @@ declare module '@tanstack/react-router' {
       path: '/shopping'
       fullPath: '/shopping'
       preLoaderRoute: typeof AppShoppingRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/rutiner': {
+      id: '/_app/rutiner'
+      path: '/rutiner'
+      fullPath: '/rutiner'
+      preLoaderRoute: typeof AppRutinerRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/pomodoro': {
@@ -627,6 +646,7 @@ interface AppRouteChildren {
   AppMedicinRoute: typeof AppMedicinRoute
   AppMoodRoute: typeof AppMoodRoute
   AppPomodoroRoute: typeof AppPomodoroRoute
+  AppRutinerRoute: typeof AppRutinerRoute
   AppShoppingRoute: typeof AppShoppingRoute
   AppStatistikRoute: typeof AppStatistikRoute
   AppTasksRoute: typeof AppTasksRoute
@@ -652,6 +672,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppMedicinRoute: AppMedicinRoute,
   AppMoodRoute: AppMoodRoute,
   AppPomodoroRoute: AppPomodoroRoute,
+  AppRutinerRoute: AppRutinerRoute,
   AppShoppingRoute: AppShoppingRoute,
   AppStatistikRoute: AppStatistikRoute,
   AppTasksRoute: AppTasksRoute,
@@ -673,13 +694,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
