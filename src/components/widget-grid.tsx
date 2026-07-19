@@ -83,7 +83,7 @@ export default function WidgetGrid() {
 
   const widgets: Widget[] = [
     {
-      href: "/mood",
+      href: "/ma-bra",
       icon: Smile,
       label: "Mående idag",
       value: todayMood ? `${EMOJI_BY_SCORE[todayMood.score]} idag` : "Checka in",
