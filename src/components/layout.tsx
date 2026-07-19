@@ -1,6 +1,6 @@
 import { ReactNode, useState, useEffect, useMemo } from "react";
 import { Link, useLocation } from "wouter";
-import { Home, Target, CheckSquare, ShoppingBag, Smile, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Battery, Settings2, Check, RotateCcw, ArrowUp, ArrowDown, LogOut, Volume2, VolumeX, Shield, Repeat } from "lucide-react";
+import { Home, Target, CheckSquare, ShoppingBag, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Settings2, Check, RotateCcw, ArrowUp, ArrowDown, LogOut, Volume2, VolumeX, Shield, Heart, Sun } from "lucide-react";
 import { isAlarmSoundEnabled, setAlarmSoundEnabled, subscribeAlarmPref, playAlarmPreview, initAlarmAudioUnlock } from "@/lib/push-notifications";
 import { useCommuteAlerts } from "@/hooks/use-commute-alerts";
 import { useMedicationAlerts } from "@/hooks/use-medication-alerts";
@@ -20,13 +20,13 @@ interface LayoutProps {
 
 const SECTION_BY_PATH: Record<string, string> = {
   "/": "home",
-  "/mood": "mood",
+  "/ma-bra": "ma-bra",
+  "/daglig-rutin": "daglig-rutin",
   "/dump": "dump",
   "/kalender": "calendar",
   "/fokus": "fokus",
   "/tasks": "tasks",
   "/pomodoro": "pomodoro",
-  "/medicin": "medicin",
   "/shopping": "shopping",
   "/finances": "finances",
   "/travel": "travel",
@@ -39,9 +39,8 @@ const SECTION_BY_PATH: Record<string, string> = {
   "/friktionsindex": "friktionsindex",
   "/familj": "familj",
   "/matlista": "matlista",
-  "/energikarta": "energikarta",
-  "/rutiner": "rutiner",
 };
+
 
 /**
  * Per-category color themes, all drawn from the warm MyFlove preview palette.
@@ -56,7 +55,8 @@ const T = {
 };
 
 const CATEGORY_THEMES: Record<string, Record<string, string>> = {
-  "/mood":           T.sage,
+  "/ma-bra":         T.sage,
+  "/daglig-rutin":   T.terracotta,
   "/pomodoro":       T.terracotta,
   "/fokus":          T.terracotta,
   "/finances":       T.gold,
@@ -64,14 +64,13 @@ const CATEGORY_THEMES: Record<string, Record<string, string>> = {
   "/flowplan":       T.ink,
   "/shopping":       T.sage,
   "/matlista":       T.sage,
-  "/medicin":        T.terracotta,
   "/travel":         T.ink,
   "/familj":         T.gold,
   "/beloningar":     T.gold,
   "/statistik":      T.ink,
   "/friktionsindex": T.terracotta,
-  "/energikarta":    T.sage,
 };
+
 
 
 export default function Layout({ children }: LayoutProps) {
@@ -105,15 +104,14 @@ export default function Layout({ children }: LayoutProps) {
 
   const navItems = [
     { href: "/hem", label: "Hem", icon: Home },
-    { href: "/mood", label: "Mående", icon: Smile },
+    { href: "/ma-bra", label: "Må bra", icon: Heart },
+    { href: "/daglig-rutin", label: "Daglig rutin", icon: Sun },
     { href: "/dump", label: "Dumping", icon: Inbox },
     { href: "/kalender", label: "Kalender", icon: Calendar },
     { href: "/fokus", label: "Fokus", icon: Target },
     { href: "/tasks", label: "Att göra", icon: CheckSquare },
     { href: "/flowplan", label: "FlowPlan", icon: ListOrdered },
     { href: "/pomodoro", label: "Timer", icon: Timer },
-    { href: "/rutiner", label: "Rutiner", icon: Repeat },
-    { href: "/medicin", label: "Medicin", icon: Pill },
     { href: "/shopping", label: "Inköp", icon: ShoppingBag },
     { href: "/matlista", label: "Matlista", icon: UtensilsCrossed },
     { href: "/finances", label: "Ekonomi", icon: Wallet },
@@ -123,7 +121,6 @@ export default function Layout({ children }: LayoutProps) {
     { href: "/beloningar", label: "Belöningar", icon: Trophy },
     { href: "/assistant", label: "Hjälp", icon: Sparkles },
     { href: "/friktionsindex", label: "Feedback", icon: Flame },
-    { href: "/energikarta", label: "Energi", icon: Battery },
     ...(isAdmin
       ? [
           { href: "/admin", label: "Adminöversikt", icon: Shield },
@@ -134,7 +131,7 @@ export default function Layout({ children }: LayoutProps) {
 
   // Bottom nav: Home is fixed, the remaining 3 slots are user-customizable.
   const [bottomNavHrefs, setBottomNavHrefs] = useLocalStorage<string[]>("myflow-bottom-nav", [
-    "/mood",
+    "/ma-bra",
     "/dump",
     "/kalender",
   ]);
@@ -391,7 +388,7 @@ export default function Layout({ children }: LayoutProps) {
                     )}
                     onChange={setBottomNavHrefs}
                     onClose={() => setEditingBottomNav(false)}
-                    onReset={() => setBottomNavHrefs(["/mood", "/dump", "/kalender"])}
+                    onReset={() => setBottomNavHrefs(["/ma-bra", "/dump", "/kalender"])}
                   />
               ) : (
                 <>
