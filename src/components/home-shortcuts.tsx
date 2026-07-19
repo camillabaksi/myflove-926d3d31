@@ -4,10 +4,6 @@ import {
   Smile, Target, CheckSquare, ShoppingBag, Calendar, Pill, Timer, Wallet,
   BarChart3, Trophy, Inbox, UtensilsCrossed, Navigation, Battery,
   Sparkles, Pin, PinOff, ArrowUp, ArrowDown, Settings2, Check, RotateCcw,
-import {
-  Smile, Target, CheckSquare, ShoppingBag, Calendar, Pill, Timer, Wallet,
-  BarChart3, Trophy, Inbox, UtensilsCrossed, Navigation, Battery,
-  Sparkles, Pin, PinOff, ArrowUp, ArrowDown, Settings2, Check, RotateCcw,
   Hand, Heart, Sun,
   type LucideIcon,
 } from "lucide-react";
