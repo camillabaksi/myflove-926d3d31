@@ -114,7 +114,7 @@ export default function WidgetGrid() {
       hint: nextReminder ? (nextReminder.date === todayStr ? "Idag" : nextReminder.date) : undefined,
     },
     {
-      href: "/medicin",
+      href: "/daglig-rutin",
       icon: Pill,
       label: "Medicin idag",
       value: totalTimesToday > 0 ? `${takenTimesToday} av ${totalTimesToday} tagna` : "Inget bokat",
