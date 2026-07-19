@@ -225,8 +225,15 @@ export default function RoutinesPage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-medium truncate">{r.title}</p>
-                    <p className="text-sm text-muted-foreground">Varje dag kl {r.time}</p>
+                    <p className="text-xs text-muted-foreground">Varje dag</p>
                   </div>
+                  <input
+                    type="time"
+                    value={r.time}
+                    onChange={(e) => updateTime(r.id, e.target.value)}
+                    className="p-2 rounded-lg bg-secondary/50 border border-transparent focus:border-primary focus:ring-1 focus:ring-primary outline-none text-sm w-[6.5rem]"
+                    aria-label={`Ändra tid för ${r.title}`}
+                  />
                   <label className="inline-flex items-center gap-2 cursor-pointer select-none">
                     <input
                       type="checkbox"
