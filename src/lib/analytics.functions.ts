@@ -117,34 +117,25 @@ export const getAnalyticsSummaryFn = createServerFn({ method: "GET" })
       dailyActiveSessions.push({ date: d, sessions: dailyMap.get(d)?.size ?? 0 });
     }
 
-    // Count auth users (admin API).
+    // Count auth users via admin RPC (reliable on Lovable Cloud where the
+    // admin listUsers API can fail silently and leave totals at 0).
     let totalUsers = 0;
     let newUsers7d = 0;
     const signupsByDay = new Map<string, number>();
     try {
-      let page = 1;
-      const perPage = 1000;
-      while (true) {
-        const { data, error: uErr } = await supabaseAdmin.auth.admin.listUsers({ page, perPage });
-        if (uErr) break;
-        const users = data?.users ?? [];
-        totalUsers += users.length;
-        const cutoff = now - 7 * oneDay;
-        for (const u of users) {
-          if (!u.created_at) continue;
-          const ts = new Date(u.created_at).getTime();
-          if (ts >= cutoff) newUsers7d += 1;
-          if (ts >= now - 14 * oneDay) {
-            const d = dayKey(u.created_at);
-            signupsByDay.set(d, (signupsByDay.get(d) ?? 0) + 1);
-          }
+      const { data: stats, error: sErr } = await context.supabase.rpc("admin_user_stats");
+      if (sErr) throw sErr;
+      const row = Array.isArray(stats) ? stats[0] : stats;
+      if (row) {
+        totalUsers = Number(row.total_users ?? 0);
+        newUsers7d = Number(row.new_users_7d ?? 0);
+        const signups = (row.signups ?? {}) as Record<string, number>;
+        for (const [day, cnt] of Object.entries(signups)) {
+          signupsByDay.set(day, Number(cnt));
         }
-        if (users.length < perPage) break;
-        page += 1;
-        if (page > 20) break;
       }
     } catch (err) {
-      console.warn("[analytics] listUsers failed:", err);
+      console.warn("[analytics] admin_user_stats failed:", err);
     }
 
     const dailySignups: Array<{ date: string; users: number }> = [];
