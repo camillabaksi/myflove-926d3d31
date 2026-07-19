@@ -146,8 +146,8 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
   }
 
   return (
-    <Layout>
-      <div className="space-y-6">
+    <div className="space-y-6">
+      {showHeader && (
         <header className="space-y-1">
           <div className="flex items-center gap-2">
             <Battery className="text-primary" size={28} />
@@ -157,6 +157,8 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
             Logga hur du känner dig just nu. Flow lär sig när på dygnet du har mest att ge – och när du behöver vila.
           </p>
         </header>
+      )}
+
 
         {!userId && !loading && (
           <div className="rounded-2xl bg-card border border-border p-4 text-sm text-muted-foreground">
