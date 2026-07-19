@@ -42,7 +42,11 @@ function formatHour(h: number) {
   return `${String(h).padStart(2, "0")}:00`;
 }
 
-export default function EnergyMapPage() {
+interface EnergyContentProps {
+  showHeader?: boolean;
+}
+
+export function EnergyContent({ showHeader = true }: EnergyContentProps) {
   const [logs, setLogs] = useState<EnergyLog[]>([]);
   const [userId, setUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -142,8 +146,8 @@ export default function EnergyMapPage() {
   }
 
   return (
-    <Layout>
-      <div className="space-y-6">
+    <div className="space-y-6">
+      {showHeader && (
         <header className="space-y-1">
           <div className="flex items-center gap-2">
             <Battery className="text-primary" size={28} />
@@ -153,6 +157,8 @@ export default function EnergyMapPage() {
             Logga hur du känner dig just nu. Flow lär sig när på dygnet du har mest att ge – och när du behöver vila.
           </p>
         </header>
+      )}
+
 
         {!userId && !loading && (
           <div className="rounded-2xl bg-card border border-border p-4 text-sm text-muted-foreground">
@@ -286,6 +292,14 @@ export default function EnergyMapPage() {
           </>
         )}
       </div>
+  );
+}
+
+export default function EnergyMapPage() {
+  return (
+    <Layout>
+      <EnergyContent />
     </Layout>
   );
 }
+
