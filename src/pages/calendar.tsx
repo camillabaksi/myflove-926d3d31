@@ -47,8 +47,8 @@ function useFamilyEventsByDate() {
 
 export default function CalendarPage() {
   const { currentFocus } = useFocus();
-  const { activeTasks, completedTasks } = useTasks();
-  const { activeReminders, addReminder, deleteReminder } = useReminders();
+  const { activeTasks, completedTasks, deleteTask, setTaskTime } = useTasks();
+  const { activeReminders, addReminder, deleteReminder, updateReminder } = useReminders();
   const { eventsForDate, hasHousehold } = useFamilyEventsByDate();
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -63,7 +63,13 @@ export default function CalendarPage() {
   const [isAddingReminder, setIsAddingReminder] = useState(false);
   const [newReminderTitle, setNewReminderTitle] = useState("");
   const [newReminderTime, setNewReminderTime] = useState("");
+  const [editing, setEditing] = useState<
+    | { kind: "reminder"; id: string; title: string; time: string }
+    | { kind: "task"; id: string; title: string; time: string }
+    | null
+  >(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
 
   const handleExportAll = () => {
     const events: IcsEvent[] = [];
@@ -333,7 +339,8 @@ export default function CalendarPage() {
                   <button
                     onClick={() => deleteEventMutation.mutate({ id: e.id })}
                     aria-label="Ta bort familjehändelse"
-                    className="p-2 text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-all rounded-xl hover:bg-destructive/10 shrink-0"
+                    className="p-2 text-muted-foreground hover:text-destructive rounded-xl hover:bg-destructive/10 shrink-0"
+
                   >
                     <Trash2 size={18} />
                   </button>
@@ -351,42 +358,70 @@ export default function CalendarPage() {
               )}
 
               {selectedItems.reminders.map(r => (
-                <div key={r.id} className="flex items-center justify-between gap-4 p-4 bg-primary/5 border border-primary/10 rounded-2xl group">
-                  <div className="flex items-center gap-4">
-                    <Bell className="text-primary" size={24} />
-                    <div>
+                <div key={r.id} className="flex items-center justify-between gap-4 p-4 bg-primary/5 border border-primary/10 rounded-2xl">
+                  <div className="flex items-center gap-4 min-w-0">
+                    <Bell className="text-primary shrink-0" size={24} />
+                    <div className="min-w-0">
                       <div className="text-xs text-primary font-medium uppercase tracking-wider mb-0.5">
                         Påminnelse {r.time && `kl ${r.time}`}
                       </div>
-                      <div className="text-lg font-medium">{r.title}</div>
+                      <div className="text-lg font-medium truncate">{r.title}</div>
                     </div>
                   </div>
-                  <button
-                    onClick={() => deleteReminder(r.id)}
-                    aria-label="Ta bort påminnelse"
-                    className="p-2 text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-all rounded-xl hover:bg-destructive/10 shrink-0"
-                  >
-                    <Trash2 size={18} />
-                  </button>
+                  <div className="flex items-center gap-1 shrink-0">
+                    <button
+                      onClick={() => setEditing({ kind: "reminder", id: r.id, title: r.title, time: r.time ?? "" })}
+                      aria-label="Ändra påminnelse"
+                      className="px-3 py-2 text-sm text-primary rounded-xl hover:bg-primary/10"
+                    >
+                      Ändra
+                    </button>
+                    <button
+                      onClick={() => deleteReminder(r.id)}
+                      aria-label="Ta bort påminnelse"
+                      className="p-2 text-muted-foreground hover:text-destructive rounded-xl hover:bg-destructive/10"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  </div>
                 </div>
               ))}
 
               {selectedItems.tasks.map(t => (
-                <div key={t.id} className={`flex items-center gap-4 p-4 bg-card border border-border rounded-2xl ${t.completed ? 'opacity-60' : ''}`}>
-                  <CheckSquare className={t.completed ? "text-primary" : "text-muted-foreground"} size={24} />
-                  <div className="flex-1">
-                    {t.time && (
-                      <div className="text-xs text-primary font-medium uppercase tracking-wider mb-0.5">
-                        kl {t.time}
-                        {t.reminderMinutesBefore != null && ` · påminn ${t.reminderMinutesBefore} min innan`}
+                <div key={t.id} className={`flex items-center justify-between gap-4 p-4 bg-card border border-border rounded-2xl ${t.completed ? 'opacity-60' : ''}`}>
+                  <div className="flex items-center gap-4 min-w-0">
+                    <CheckSquare className={t.completed ? "text-primary" : "text-muted-foreground"} size={24} />
+                    <div className="flex-1 min-w-0">
+                      {t.time && (
+                        <div className="text-xs text-primary font-medium uppercase tracking-wider mb-0.5">
+                          kl {t.time}
+                          {t.reminderMinutesBefore != null && ` · påminn ${t.reminderMinutesBefore} min innan`}
+                        </div>
+                      )}
+                      <div className={`text-lg font-medium truncate ${t.completed ? 'line-through text-muted-foreground' : ''}`}>
+                        {t.title}
                       </div>
-                    )}
-                    <div className={`text-lg font-medium ${t.completed ? 'line-through text-muted-foreground' : ''}`}>
-                      {t.title}
                     </div>
+                  </div>
+                  <div className="flex items-center gap-1 shrink-0">
+                    <button
+                      onClick={() => setEditing({ kind: "task", id: t.id, title: t.title, time: t.time ?? "" })}
+                      aria-label="Ändra tid"
+                      className="px-3 py-2 text-sm text-primary rounded-xl hover:bg-primary/10"
+                    >
+                      Ändra tid
+                    </button>
+                    <button
+                      onClick={() => deleteTask(t.id)}
+                      aria-label="Ta bort uppgift"
+                      className="p-2 text-muted-foreground hover:text-destructive rounded-xl hover:bg-destructive/10"
+                    >
+                      <Trash2 size={18} />
+                    </button>
                   </div>
                 </div>
               ))}
+
             </div>
           </div>
         )}
@@ -471,6 +506,71 @@ export default function CalendarPage() {
             </div>
           </DialogContent>
         </Dialog>
+
+        <Dialog open={!!editing} onOpenChange={(open) => !open && setEditing(null)}>
+          <DialogContent className="rounded-3xl">
+            <DialogHeader>
+              <DialogTitle>
+                {editing?.kind === "task" ? "Ändra uppgift" : "Ändra påminnelse"}
+              </DialogTitle>
+            </DialogHeader>
+            {editing && (
+              <div className="space-y-4 pt-2">
+                {editing.kind === "reminder" && (
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Titel</label>
+                    <Input
+                      value={editing.title}
+                      onChange={(e) => setEditing({ ...editing, title: e.target.value })}
+                      className="h-12 rounded-2xl"
+                    />
+                  </div>
+                )}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Tid (valfritt)</label>
+                  <Input
+                    type="time"
+                    value={editing.time}
+                    onChange={(e) => setEditing({ ...editing, time: e.target.value })}
+                    className="h-12 rounded-2xl"
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      if (editing.kind === "reminder") deleteReminder(editing.id);
+                      else deleteTask(editing.id);
+                      setEditing(null);
+                      toast({ description: "Borttagen." });
+                    }}
+                    className="flex-1 h-12 rounded-2xl text-destructive"
+                  >
+                    <Trash2 size={16} className="mr-2" /> Ta bort
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      if (editing.kind === "reminder") {
+                        updateReminder(editing.id, {
+                          title: editing.title.trim() || "Påminnelse",
+                          time: editing.time || undefined,
+                        });
+                      } else {
+                        setTaskTime(editing.id, editing.time || undefined);
+                      }
+                      setEditing(null);
+                      toast({ description: "Sparat ✨" });
+                    }}
+                    className="flex-1 h-12 rounded-2xl"
+                  >
+                    Spara
+                  </Button>
+                </div>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
+
       </div>
     </Layout>
   );
