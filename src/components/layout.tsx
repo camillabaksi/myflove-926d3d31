@@ -131,7 +131,7 @@ export default function Layout({ children }: LayoutProps) {
 
   // Bottom nav: Home is fixed, the remaining 3 slots are user-customizable.
   const [bottomNavHrefs, setBottomNavHrefs] = useLocalStorage<string[]>("myflow-bottom-nav", [
-    "/mood",
+    "/ma-bra",
     "/dump",
     "/kalender",
   ]);
