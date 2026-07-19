@@ -6,7 +6,11 @@ import { Pill, Plus, Trash2, Check, Clock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { getRandomEncouragement } from "@/lib/encouragements";
 
-export default function Medication() {
+interface MedicationContentProps {
+  showHeader?: boolean;
+}
+
+export function MedicationContent({ showHeader = true }: MedicationContentProps) {
   const { medications, addMedication, deleteMedication, isTaken, toggleTaken } = useMedications();
   const { toast } = useToast();
   const [name, setName] = useState("");
@@ -39,12 +43,14 @@ export default function Medication() {
   };
 
   return (
-    <Layout>
-      <div className="space-y-8">
+    <div className="space-y-8">
+      {showHeader && (
         <div>
           <h1 className="text-3xl font-bold mb-2">Medicinpåminnelser</h1>
           <p className="text-muted-foreground">Lägg till dina mediciner och bocka av när du tagit dem.</p>
         </div>
+      )}
+
 
         <form onSubmit={handleSubmit} className="bg-card p-5 rounded-2xl border border-border shadow-sm space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -153,6 +159,14 @@ export default function Medication() {
           </div>
         )}
       </div>
+  );
+}
+
+export default function Medication() {
+  return (
+    <Layout>
+      <MedicationContent />
     </Layout>
   );
 }
+
