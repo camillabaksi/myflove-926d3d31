@@ -313,6 +313,10 @@ export function useReminders() {
     setReminders(reminders.filter(r => r.id !== id));
   };
 
+  const updateReminder = (id: string, patch: { title?: string; date?: string; time?: string | undefined }) => {
+    setReminders(reminders.map(r => r.id === id ? { ...r, ...patch } : r));
+  };
+
   const activeReminders = reminders.filter(r => !r.completed).sort((a, b) => {
     // Sort by date then time
     const dateCompare = a.date.localeCompare(b.date);
@@ -323,7 +327,8 @@ export function useReminders() {
     return 0;
   });
 
-  return { reminders, activeReminders, addReminder, toggleReminder, deleteReminder };
+  return { reminders, activeReminders, addReminder, toggleReminder, deleteReminder, updateReminder };
+
 }
 
 export interface Medication {
