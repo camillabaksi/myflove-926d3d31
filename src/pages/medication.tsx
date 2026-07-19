@@ -159,6 +159,14 @@ export function MedicationContent({ showHeader = true }: MedicationContentProps)
           </div>
         )}
       </div>
+  );
+}
+
+export default function Medication() {
+  return (
+    <Layout>
+      <MedicationContent />
     </Layout>
   );
 }
+
