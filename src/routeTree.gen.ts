@@ -43,6 +43,7 @@ import { Route as AppAdminRouteImport } from './routes/_app.admin'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as ApiPublicHooksPushTickRouteImport } from './routes/api/public/hooks/push-tick'
 
 const VillkorRoute = VillkorRouteImport.update({
@@ -217,6 +218,11 @@ const Char91DotmcpChar93InvokeToolToolRoute =
     path: '/.mcp/invoke-tool/$tool',
     getParentRoute: () => rootRouteImport,
   } as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicHooksPushTickRoute = ApiPublicHooksPushTickRouteImport.update({
   id: '/api/public/hooks/push-tick',
   path: '/api/public/hooks/push-tick',
@@ -256,6 +262,7 @@ export interface FileRoutesByFullPath {
   '/statistik': typeof AppStatistikRoute
   '/tasks': typeof AppTasksRoute
   '/travel': typeof AppTravelRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/hooks/push-tick': typeof ApiPublicHooksPushTickRoute
 }
@@ -292,6 +299,7 @@ export interface FileRoutesByTo {
   '/statistik': typeof AppStatistikRoute
   '/tasks': typeof AppTasksRoute
   '/travel': typeof AppTravelRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/hooks/push-tick': typeof ApiPublicHooksPushTickRoute
 }
@@ -330,6 +338,7 @@ export interface FileRoutesById {
   '/_app/statistik': typeof AppStatistikRoute
   '/_app/tasks': typeof AppTasksRoute
   '/_app/travel': typeof AppTravelRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/hooks/push-tick': typeof ApiPublicHooksPushTickRoute
 }
@@ -368,6 +377,7 @@ export interface FileRouteTypes {
     | '/statistik'
     | '/tasks'
     | '/travel'
+    | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/public/hooks/push-tick'
   fileRoutesByTo: FileRoutesByTo
@@ -404,6 +414,7 @@ export interface FileRouteTypes {
     | '/statistik'
     | '/tasks'
     | '/travel'
+    | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/public/hooks/push-tick'
   id:
@@ -441,6 +452,7 @@ export interface FileRouteTypes {
     | '/_app/statistik'
     | '/_app/tasks'
     | '/_app/travel'
+    | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/public/hooks/push-tick'
   fileRoutesById: FileRoutesById
@@ -456,6 +468,7 @@ export interface RootRouteChildren {
   VillkorRoute: typeof VillkorRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicHooksPushTickRoute: typeof ApiPublicHooksPushTickRoute
 }
@@ -700,6 +713,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/push-tick': {
       id: '/api/public/hooks/push-tick'
       path: '/api/public/hooks/push-tick'
@@ -776,6 +796,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
+  DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicHooksPushTickRoute: ApiPublicHooksPushTickRoute,
 }
