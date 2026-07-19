@@ -293,7 +293,7 @@ export default function Home() {
 
         {nextMedication && (
           <Link
-            href="/medicin"
+            href="/daglig-rutin"
             className="flex items-center gap-4 p-5 bg-card border border-border rounded-2xl shadow-sm hover:border-primary/40 transition-colors"
           >
             <div className="w-12 h-12 rounded-full bg-violet-100 text-violet-700 flex items-center justify-center shrink-0">
