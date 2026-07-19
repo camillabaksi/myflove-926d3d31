@@ -1,0 +1,122 @@
+{
+  "version": 1,
+  "sdk_version": "0.23.0",
+  "path": "/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://jvwcozwlyupxqtjeqkgb.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "myflove-mcp",
+      "version": "0.1.0",
+      "title": "MyFlove"
+    },
+    "tools": [
+      {
+        "name": "list_tasks",
+        "title": "Lista uppgifter",
+        "description": "Listar den inloggade användarens MyFlove-uppgifter. Filtrera med `status` (open/completed/all) och begränsa antalet med `limit`.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "status": {
+              "default": "open",
+              "description": "Vilka uppgifter som ska returneras.",
+              "type": "string",
+              "enum": [
+                "open",
+                "completed",
+                "all"
+              ]
+            },
+            "limit": {
+              "default": 50,
+              "description": "Maxantal uppgifter att returnera.",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "add_task",
+        "title": "Lägg till uppgift",
+        "description": "Skapar en ny uppgift i MyFlove för den inloggade användaren. `dueDate` är YYYY-MM-DD och `time` är HH:MM.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200,
+              "description": "Uppgiftens titel."
+            },
+            "dueDate": {
+              "description": "Datum (YYYY-MM-DD).",
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "time": {
+              "description": "Klockslag (HH:MM).",
+              "type": "string",
+              "pattern": "^\\d{2}:\\d{2}$"
+            }
+          },
+          "required": [
+            "title"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "log_mood",
+        "title": "Logga humör",
+        "description": "Loggar en humörsiffra 1–5 (och en valfri notering) för den inloggade användaren.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "score": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 5,
+              "description": "Humör 1 (tungt) till 5 (fint)."
+            },
+            "note": {
+              "description": "Valfri kort notering.",
+              "type": "string",
+              "maxLength": 500
+            }
+          },
+          "required": [
+            "score"
+          ]
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}

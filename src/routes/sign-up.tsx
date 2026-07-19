@@ -8,11 +8,20 @@ import { useToast } from "@/hooks/use-toast";
 
 export const Route = createFileRoute("/sign-up")({
   ssr: false,
+  validateSearch: (s: Record<string, unknown>) => ({
+    next: typeof s.next === "string" ? s.next : undefined,
+  }),
   component: SignUpPage,
 });
 
+function safeNext(next?: string): string {
+  if (!next || !next.startsWith("/") || next.startsWith("//")) return "/hem";
+  return next;
+}
+
 function SignUpPage() {
   const navigate = useNavigate();
+  const { next } = Route.useSearch();
   const { toast } = useToast();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,7 +39,8 @@ function SignUpPage() {
       return;
     }
     setLoading(true);
-    const redirectUrl = `${window.location.origin}/hem`;
+    const target = safeNext(next);
+    const redirectUrl = `${window.location.origin}${target}`;
     const { error } = await supabase.auth.signUp({
       email,
       password,
@@ -42,7 +52,7 @@ function SignUpPage() {
       return;
     }
     toast({ title: "Konto skapat", description: "Du kan logga in nu." });
-    navigate({ to: "/hem" });
+    navigate({ to: "/sign-in", search: { next: target } });
   }
 
   return (
@@ -84,7 +94,7 @@ function SignUpPage() {
         </form>
         <p className="mt-6 text-center text-sm text-muted-foreground">
           Har du redan ett konto?{" "}
-          <Link to="/sign-in" className="text-primary underline underline-offset-4">
+          <Link to="/sign-in" search={{ next }} className="text-primary underline underline-offset-4">
             Logga in
           </Link>
         </p>
