@@ -263,6 +263,14 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
           </>
         )}
       </div>
+  );
+}
+
+export default function RoutinesPage() {
+  return (
+    <Layout>
+      <RoutinesContent />
     </Layout>
   );
 }
+
