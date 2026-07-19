@@ -357,42 +357,70 @@ export default function CalendarPage() {
               )}
 
               {selectedItems.reminders.map(r => (
-                <div key={r.id} className="flex items-center justify-between gap-4 p-4 bg-primary/5 border border-primary/10 rounded-2xl group">
-                  <div className="flex items-center gap-4">
-                    <Bell className="text-primary" size={24} />
-                    <div>
+                <div key={r.id} className="flex items-center justify-between gap-4 p-4 bg-primary/5 border border-primary/10 rounded-2xl">
+                  <div className="flex items-center gap-4 min-w-0">
+                    <Bell className="text-primary shrink-0" size={24} />
+                    <div className="min-w-0">
                       <div className="text-xs text-primary font-medium uppercase tracking-wider mb-0.5">
                         Påminnelse {r.time && `kl ${r.time}`}
                       </div>
-                      <div className="text-lg font-medium">{r.title}</div>
+                      <div className="text-lg font-medium truncate">{r.title}</div>
                     </div>
                   </div>
-                  <button
-                    onClick={() => deleteReminder(r.id)}
-                    aria-label="Ta bort påminnelse"
-                    className="p-2 text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-all rounded-xl hover:bg-destructive/10 shrink-0"
-                  >
-                    <Trash2 size={18} />
-                  </button>
+                  <div className="flex items-center gap-1 shrink-0">
+                    <button
+                      onClick={() => setEditing({ kind: "reminder", id: r.id, title: r.title, time: r.time ?? "" })}
+                      aria-label="Ändra påminnelse"
+                      className="px-3 py-2 text-sm text-primary rounded-xl hover:bg-primary/10"
+                    >
+                      Ändra
+                    </button>
+                    <button
+                      onClick={() => deleteReminder(r.id)}
+                      aria-label="Ta bort påminnelse"
+                      className="p-2 text-muted-foreground hover:text-destructive rounded-xl hover:bg-destructive/10"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  </div>
                 </div>
               ))}
 
               {selectedItems.tasks.map(t => (
-                <div key={t.id} className={`flex items-center gap-4 p-4 bg-card border border-border rounded-2xl ${t.completed ? 'opacity-60' : ''}`}>
-                  <CheckSquare className={t.completed ? "text-primary" : "text-muted-foreground"} size={24} />
-                  <div className="flex-1">
-                    {t.time && (
-                      <div className="text-xs text-primary font-medium uppercase tracking-wider mb-0.5">
-                        kl {t.time}
-                        {t.reminderMinutesBefore != null && ` · påminn ${t.reminderMinutesBefore} min innan`}
+                <div key={t.id} className={`flex items-center justify-between gap-4 p-4 bg-card border border-border rounded-2xl ${t.completed ? 'opacity-60' : ''}`}>
+                  <div className="flex items-center gap-4 min-w-0">
+                    <CheckSquare className={t.completed ? "text-primary" : "text-muted-foreground"} size={24} />
+                    <div className="flex-1 min-w-0">
+                      {t.time && (
+                        <div className="text-xs text-primary font-medium uppercase tracking-wider mb-0.5">
+                          kl {t.time}
+                          {t.reminderMinutesBefore != null && ` · påminn ${t.reminderMinutesBefore} min innan`}
+                        </div>
+                      )}
+                      <div className={`text-lg font-medium truncate ${t.completed ? 'line-through text-muted-foreground' : ''}`}>
+                        {t.title}
                       </div>
-                    )}
-                    <div className={`text-lg font-medium ${t.completed ? 'line-through text-muted-foreground' : ''}`}>
-                      {t.title}
                     </div>
+                  </div>
+                  <div className="flex items-center gap-1 shrink-0">
+                    <button
+                      onClick={() => setEditing({ kind: "task", id: t.id, title: t.title, time: t.time ?? "" })}
+                      aria-label="Ändra tid"
+                      className="px-3 py-2 text-sm text-primary rounded-xl hover:bg-primary/10"
+                    >
+                      Ändra tid
+                    </button>
+                    <button
+                      onClick={() => deleteTask(t.id)}
+                      aria-label="Ta bort uppgift"
+                      className="p-2 text-muted-foreground hover:text-destructive rounded-xl hover:bg-destructive/10"
+                    >
+                      <Trash2 size={18} />
+                    </button>
                   </div>
                 </div>
               ))}
+
             </div>
           </div>
         )}
