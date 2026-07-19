@@ -26,7 +26,11 @@ const SUGGESTIONS: Array<{ title: string; time: string }> = [
   { title: "Borsta tänderna", time: "20:00" },
 ];
 
-export default function RoutinesPage() {
+interface RoutinesContentProps {
+  showHeader?: boolean;
+}
+
+export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
   const [routines, setRoutines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
   const { reminders, addReminder, deleteReminder } = useReminders();
   const { toast } = useToast();
