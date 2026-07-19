@@ -20,13 +20,13 @@ interface LayoutProps {
 
 const SECTION_BY_PATH: Record<string, string> = {
   "/": "home",
-  "/mood": "mood",
+  "/ma-bra": "ma-bra",
+  "/daglig-rutin": "daglig-rutin",
   "/dump": "dump",
   "/kalender": "calendar",
   "/fokus": "fokus",
   "/tasks": "tasks",
   "/pomodoro": "pomodoro",
-  "/medicin": "medicin",
   "/shopping": "shopping",
   "/finances": "finances",
   "/travel": "travel",
@@ -39,9 +39,8 @@ const SECTION_BY_PATH: Record<string, string> = {
   "/friktionsindex": "friktionsindex",
   "/familj": "familj",
   "/matlista": "matlista",
-  "/energikarta": "energikarta",
-  "/rutiner": "rutiner",
 };
+
 
 /**
  * Per-category color themes, all drawn from the warm MyFlove preview palette.
