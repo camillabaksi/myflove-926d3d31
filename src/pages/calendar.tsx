@@ -506,6 +506,71 @@ export default function CalendarPage() {
             </div>
           </DialogContent>
         </Dialog>
+
+        <Dialog open={!!editing} onOpenChange={(open) => !open && setEditing(null)}>
+          <DialogContent className="rounded-3xl">
+            <DialogHeader>
+              <DialogTitle>
+                {editing?.kind === "task" ? "Ändra uppgift" : "Ändra påminnelse"}
+              </DialogTitle>
+            </DialogHeader>
+            {editing && (
+              <div className="space-y-4 pt-2">
+                {editing.kind === "reminder" && (
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Titel</label>
+                    <Input
+                      value={editing.title}
+                      onChange={(e) => setEditing({ ...editing, title: e.target.value })}
+                      className="h-12 rounded-2xl"
+                    />
+                  </div>
+                )}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Tid (valfritt)</label>
+                  <Input
+                    type="time"
+                    value={editing.time}
+                    onChange={(e) => setEditing({ ...editing, time: e.target.value })}
+                    className="h-12 rounded-2xl"
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      if (editing.kind === "reminder") deleteReminder(editing.id);
+                      else deleteTask(editing.id);
+                      setEditing(null);
+                      toast({ description: "Borttagen." });
+                    }}
+                    className="flex-1 h-12 rounded-2xl text-destructive"
+                  >
+                    <Trash2 size={16} className="mr-2" /> Ta bort
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      if (editing.kind === "reminder") {
+                        updateReminder(editing.id, {
+                          title: editing.title.trim() || "Påminnelse",
+                          time: editing.time || undefined,
+                        });
+                      } else {
+                        setTaskTime(editing.id, editing.time || undefined);
+                      }
+                      setEditing(null);
+                      toast({ description: "Sparat ✨" });
+                    }}
+                    className="flex-1 h-12 rounded-2xl"
+                  >
+                    Spara
+                  </Button>
+                </div>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
+
       </div>
     </Layout>
   );
