@@ -140,8 +140,8 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
   const sorted = [...routines].sort((a, b) => a.time.localeCompare(b.time));
 
   return (
-    <Layout>
-      <div className="space-y-8">
+    <div className="space-y-8">
+      {showHeader && (
         <div>
           <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
             <Repeat size={26} className="text-primary" /> Rutiner
@@ -151,6 +151,8 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
             påminnelse om notiser är på.
           </p>
         </div>
+      )}
+
 
         <form onSubmit={handleAdd} className="bg-card p-5 rounded-2xl border border-border shadow-sm space-y-3">
           <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-3">
