@@ -1,6 +1,6 @@
 import { ReactNode, useState, useEffect, useMemo } from "react";
 import { Link, useLocation } from "wouter";
-import { Home, Target, CheckSquare, ShoppingBag, Smile, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Battery, Settings2, Check, RotateCcw, ArrowUp, ArrowDown, LogOut, Volume2, VolumeX, Shield } from "lucide-react";
+import { Home, Target, CheckSquare, ShoppingBag, Smile, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Battery, Settings2, Check, RotateCcw, ArrowUp, ArrowDown, LogOut, Volume2, VolumeX, Shield, Repeat } from "lucide-react";
 import { isAlarmSoundEnabled, setAlarmSoundEnabled, subscribeAlarmPref, playAlarmPreview, initAlarmAudioUnlock } from "@/lib/push-notifications";
 import { useCommuteAlerts } from "@/hooks/use-commute-alerts";
 import { useMedicationAlerts } from "@/hooks/use-medication-alerts";
@@ -40,6 +40,7 @@ const SECTION_BY_PATH: Record<string, string> = {
   "/familj": "familj",
   "/matlista": "matlista",
   "/energikarta": "energikarta",
+  "/rutiner": "rutiner",
 };
 
 /**
@@ -111,6 +112,7 @@ export default function Layout({ children }: LayoutProps) {
     { href: "/tasks", label: "Att göra", icon: CheckSquare },
     { href: "/flowplan", label: "FlowPlan", icon: ListOrdered },
     { href: "/pomodoro", label: "Timer", icon: Timer },
+    { href: "/rutiner", label: "Rutiner", icon: Repeat },
     { href: "/medicin", label: "Medicin", icon: Pill },
     { href: "/shopping", label: "Inköp", icon: ShoppingBag },
     { href: "/matlista", label: "Matlista", icon: UtensilsCrossed },

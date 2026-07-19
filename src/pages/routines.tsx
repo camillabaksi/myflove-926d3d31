@@ -1,0 +1,238 @@
+import { useEffect, useState } from "react";
+import Layout from "@/components/layout";
+import { Button } from "@/components/ui/button";
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
+import { useReminders } from "@/hooks/use-data";
+import { useToast } from "@/hooks/use-toast";
+import { Plus, Trash2, Repeat, Clock, Sparkles } from "lucide-react";
+
+export interface Routine {
+  id: string;
+  title: string;
+  time: string; // HH:MM
+  enabled: boolean;
+  createdAt: number;
+}
+
+const generateId = () => Math.random().toString(36).slice(2, 11);
+const todayIso = () => new Date().toISOString().slice(0, 10);
+
+const SUGGESTIONS: Array<{ title: string; time: string }> = [
+  { title: "Ta medicinen", time: "07:00" },
+  { title: "Frukost", time: "08:00" },
+  { title: "Lunch", time: "11:30" },
+  { title: "Mellanmål", time: "14:00" },
+  { title: "Middag", time: "19:00" },
+  { title: "Borsta tänderna", time: "20:00" },
+];
+
+export default function RoutinesPage() {
+  const [routines, setRoutines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
+  const { reminders, addReminder, deleteReminder } = useReminders();
+  const { toast } = useToast();
+  const [title, setTitle] = useState("");
+  const [time, setTime] = useState("");
+
+  // Auto-materialize today's reminders from enabled routines (once per day per routine)
+  useEffect(() => {
+    const today = todayIso();
+    const marker = `myflove-routines-materialized:${today}`;
+    if (typeof window === "undefined") return;
+    if (localStorage.getItem(marker)) return;
+    if (routines.length === 0) return;
+
+    let created = 0;
+    for (const r of routines) {
+      if (!r.enabled) continue;
+      const exists = reminders.some(
+        (rem) => rem.date === today && rem.time === r.time && rem.title === r.title
+      );
+      if (!exists) {
+        addReminder(r.title, today, r.time);
+        created++;
+      }
+    }
+    localStorage.setItem(marker, "1");
+    if (created > 0) {
+      toast({ description: `La in ${created} rutin${created === 1 ? "" : "er"} i dagens kalender ✨` });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [routines.length]);
+
+  const handleAdd = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!title.trim() || !time) return;
+    setRoutines((prev) => [
+      ...prev,
+      { id: generateId(), title: title.trim(), time, enabled: true, createdAt: Date.now() },
+    ].sort((a, b) => a.time.localeCompare(b.time)));
+    setTitle("");
+    setTime("");
+    toast({ description: "Rutin sparad – dyker upp i morgondagens dag också 🌱" });
+  };
+
+  const addSuggestion = (s: { title: string; time: string }) => {
+    if (routines.some((r) => r.title === s.title && r.time === s.time)) return;
+    setRoutines((prev) => [
+      ...prev,
+      { id: generateId(), title: s.title, time: s.time, enabled: true, createdAt: Date.now() },
+    ].sort((a, b) => a.time.localeCompare(b.time)));
+  };
+
+  const toggleEnabled = (id: string) => {
+    setRoutines((prev) => prev.map((r) => (r.id === id ? { ...r, enabled: !r.enabled } : r)));
+  };
+
+  const remove = (id: string) => {
+    const r = routines.find((x) => x.id === id);
+    setRoutines((prev) => prev.filter((x) => x.id !== id));
+    // Also clean today's auto-created reminder if it's still pending
+    if (r) {
+      const today = todayIso();
+      const dup = reminders.find(
+        (rem) => rem.date === today && rem.time === r.time && rem.title === r.title && !rem.completed
+      );
+      if (dup) deleteReminder(dup.id);
+    }
+  };
+
+  const addAllForToday = () => {
+    const today = todayIso();
+    let created = 0;
+    for (const r of routines) {
+      if (!r.enabled) continue;
+      const exists = reminders.some(
+        (rem) => rem.date === today && rem.time === r.time && rem.title === r.title
+      );
+      if (!exists) {
+        addReminder(r.title, today, r.time);
+        created++;
+      }
+    }
+    toast({
+      description: created > 0
+        ? `La in ${created} rutin${created === 1 ? "" : "er"} i dag`
+        : "Alla rutiner finns redan i dag",
+    });
+  };
+
+  const sorted = [...routines].sort((a, b) => a.time.localeCompare(b.time));
+
+  return (
+    <Layout>
+      <div className="space-y-8">
+        <div>
+          <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
+            <Repeat size={26} className="text-primary" /> Rutiner
+          </h1>
+          <p className="text-muted-foreground">
+            Dina dagliga hållpunkter. Läggs automatiskt in i kalendern varje dag och skickar
+            påminnelse om notiser är på.
+          </p>
+        </div>
+
+        <form onSubmit={handleAdd} className="bg-card p-5 rounded-2xl border border-border shadow-sm space-y-3">
+          <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-3">
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="T.ex. Borsta tänderna"
+              className="p-3 rounded-xl bg-secondary/50 border-transparent focus:border-primary focus:ring-1 focus:ring-primary outline-none text-base"
+            />
+            <input
+              type="time"
+              value={time}
+              onChange={(e) => setTime(e.target.value)}
+              className="p-3 rounded-xl bg-secondary/50 border-transparent focus:border-primary focus:ring-1 focus:ring-primary outline-none text-base"
+            />
+          </div>
+          <Button type="submit" className="w-full h-12 rounded-xl">
+            <Plus size={18} className="mr-2" /> Lägg till rutin
+          </Button>
+        </form>
+
+        <div className="bg-secondary/30 p-4 rounded-2xl border border-border/50">
+          <p className="text-sm font-medium mb-3 flex items-center gap-2">
+            <Sparkles size={16} className="text-primary" /> Snabbstart – klicka för att lägga till
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {SUGGESTIONS.map((s) => {
+              const already = routines.some((r) => r.title === s.title && r.time === s.time);
+              return (
+                <button
+                  key={`${s.title}-${s.time}`}
+                  type="button"
+                  disabled={already}
+                  onClick={() => addSuggestion(s)}
+                  className={`px-3 py-2 rounded-xl border text-sm transition-all ${
+                    already
+                      ? "bg-primary/10 border-primary/30 text-primary cursor-default"
+                      : "bg-background border-border hover:border-primary/40"
+                  }`}
+                >
+                  {s.title} · {s.time}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {sorted.length === 0 ? (
+          <div className="border-2 border-dashed border-border rounded-2xl p-10 text-center">
+            <Repeat size={32} className="mx-auto mb-3 text-muted-foreground" />
+            <p className="text-muted-foreground">
+              Inga rutiner än – börja smått, t.ex. bara medicin på morgonen.
+            </p>
+          </div>
+        ) : (
+          <>
+            <div className="flex items-center justify-between">
+              <p className="text-sm text-muted-foreground">
+                {sorted.filter((r) => r.enabled).length} aktiva av {sorted.length}
+              </p>
+              <Button variant="outline" size="sm" onClick={addAllForToday} className="rounded-xl">
+                Lägg in i dag nu
+              </Button>
+            </div>
+            <div className="space-y-2">
+              {sorted.map((r) => (
+                <div
+                  key={r.id}
+                  className={`flex items-center gap-3 p-4 rounded-2xl border shadow-sm ${
+                    r.enabled ? "bg-card border-border" : "bg-secondary/30 border-border/50 opacity-70"
+                  }`}
+                >
+                  <div className="w-11 h-11 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                    <Clock size={20} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium truncate">{r.title}</p>
+                    <p className="text-sm text-muted-foreground">Varje dag kl {r.time}</p>
+                  </div>
+                  <label className="inline-flex items-center gap-2 cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      checked={r.enabled}
+                      onChange={() => toggleEnabled(r.id)}
+                      className="w-4 h-4 accent-primary"
+                    />
+                    <span className="text-xs text-muted-foreground">På</span>
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => remove(r.id)}
+                    className="p-2 text-muted-foreground hover:text-destructive rounded-lg"
+                    aria-label="Ta bort rutin"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+    </Layout>
+  );
+}
