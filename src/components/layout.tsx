@@ -388,7 +388,7 @@ export default function Layout({ children }: LayoutProps) {
                     )}
                     onChange={setBottomNavHrefs}
                     onClose={() => setEditingBottomNav(false)}
-                    onReset={() => setBottomNavHrefs(["/mood", "/dump", "/kalender"])}
+                    onReset={() => setBottomNavHrefs(["/ma-bra", "/dump", "/kalender"])}
                   />
               ) : (
                 <>
