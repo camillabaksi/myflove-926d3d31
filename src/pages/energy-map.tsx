@@ -292,6 +292,14 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
           </>
         )}
       </div>
+  );
+}
+
+export default function EnergyMapPage() {
+  return (
+    <Layout>
+      <EnergyContent />
     </Layout>
   );
 }
+
