@@ -83,7 +83,7 @@ export default function WidgetGrid() {
 
   const widgets: Widget[] = [
     {
-      href: "/mood",
+      href: "/ma-bra",
       icon: Smile,
       label: "Mående idag",
       value: todayMood ? `${EMOJI_BY_SCORE[todayMood.score]} idag` : "Checka in",
@@ -114,7 +114,7 @@ export default function WidgetGrid() {
       hint: nextReminder ? (nextReminder.date === todayStr ? "Idag" : nextReminder.date) : undefined,
     },
     {
-      href: "/medicin",
+      href: "/daglig-rutin",
       icon: Pill,
       label: "Medicin idag",
       value: totalTimesToday > 0 ? `${takenTimesToday} av ${totalTimesToday} tagna` : "Inget bokat",
