@@ -42,7 +42,11 @@ function formatHour(h: number) {
   return `${String(h).padStart(2, "0")}:00`;
 }
 
-export default function EnergyMapPage() {
+interface EnergyContentProps {
+  showHeader?: boolean;
+}
+
+export function EnergyContent({ showHeader = true }: EnergyContentProps) {
   const [logs, setLogs] = useState<EnergyLog[]>([]);
   const [userId, setUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
