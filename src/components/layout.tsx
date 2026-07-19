@@ -55,7 +55,8 @@ const T = {
 };
 
 const CATEGORY_THEMES: Record<string, Record<string, string>> = {
-  "/mood":           T.sage,
+  "/ma-bra":         T.sage,
+  "/daglig-rutin":   T.terracotta,
   "/pomodoro":       T.terracotta,
   "/fokus":          T.terracotta,
   "/finances":       T.gold,
@@ -63,14 +64,13 @@ const CATEGORY_THEMES: Record<string, Record<string, string>> = {
   "/flowplan":       T.ink,
   "/shopping":       T.sage,
   "/matlista":       T.sage,
-  "/medicin":        T.terracotta,
   "/travel":         T.ink,
   "/familj":         T.gold,
   "/beloningar":     T.gold,
   "/statistik":      T.ink,
   "/friktionsindex": T.terracotta,
-  "/energikarta":    T.sage,
 };
+
 
 
 export default function Layout({ children }: LayoutProps) {
