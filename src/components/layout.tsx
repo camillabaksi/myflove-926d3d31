@@ -104,15 +104,14 @@ export default function Layout({ children }: LayoutProps) {
 
   const navItems = [
     { href: "/hem", label: "Hem", icon: Home },
-    { href: "/mood", label: "Mående", icon: Smile },
+    { href: "/ma-bra", label: "Må bra", icon: Heart },
+    { href: "/daglig-rutin", label: "Daglig rutin", icon: Sun },
     { href: "/dump", label: "Dumping", icon: Inbox },
     { href: "/kalender", label: "Kalender", icon: Calendar },
     { href: "/fokus", label: "Fokus", icon: Target },
     { href: "/tasks", label: "Att göra", icon: CheckSquare },
     { href: "/flowplan", label: "FlowPlan", icon: ListOrdered },
     { href: "/pomodoro", label: "Timer", icon: Timer },
-    { href: "/rutiner", label: "Rutiner", icon: Repeat },
-    { href: "/medicin", label: "Medicin", icon: Pill },
     { href: "/shopping", label: "Inköp", icon: ShoppingBag },
     { href: "/matlista", label: "Matlista", icon: UtensilsCrossed },
     { href: "/finances", label: "Ekonomi", icon: Wallet },
@@ -122,7 +121,6 @@ export default function Layout({ children }: LayoutProps) {
     { href: "/beloningar", label: "Belöningar", icon: Trophy },
     { href: "/assistant", label: "Hjälp", icon: Sparkles },
     { href: "/friktionsindex", label: "Feedback", icon: Flame },
-    { href: "/energikarta", label: "Energi", icon: Battery },
     ...(isAdmin
       ? [
           { href: "/admin", label: "Adminöversikt", icon: Shield },
