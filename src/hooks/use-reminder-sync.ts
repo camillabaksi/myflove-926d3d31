@@ -83,7 +83,7 @@ export function useReminderSync() {
               title: `💊 ${med.name}`,
               body: med.dosage ? `${med.dosage} – kl ${time}` : `Dags kl ${time}`,
               deliverAt: when.toISOString(),
-              url: "/medicin",
+              url: "/daglig-rutin",
             });
           }
         }
