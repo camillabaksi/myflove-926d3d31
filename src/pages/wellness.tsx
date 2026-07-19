@@ -1,0 +1,59 @@
+import Layout from "@/components/layout";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { MoodContent } from "@/pages/mood";
+import { EnergyContent } from "@/pages/energy-map";
+import { Heart, Smile, Battery } from "lucide-react";
+
+export default function WellnessPage() {
+  return (
+    <Layout>
+      <div className="space-y-6">
+        <header className="space-y-1">
+          <div className="flex items-center gap-2">
+            <Heart className="text-primary" size={26} />
+            <h1 className="text-3xl font-bold">Må bra</h1>
+          </div>
+          <p className="text-muted-foreground">
+            Checka in mående och energi från samma ställe – båda eller var för sig.
+          </p>
+        </header>
+
+        <Tabs defaultValue="both" className="w-full">
+          <TabsList className="grid w-full grid-cols-3 h-11 rounded-2xl">
+            <TabsTrigger value="both" className="rounded-xl">Båda</TabsTrigger>
+            <TabsTrigger value="mood" className="rounded-xl">
+              <Smile size={14} className="mr-1.5" /> Mående
+            </TabsTrigger>
+            <TabsTrigger value="energy" className="rounded-xl">
+              <Battery size={14} className="mr-1.5" /> Energi
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="both" className="mt-6 space-y-10">
+            <section>
+              <h2 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                <Smile size={18} className="text-primary" /> Mående
+              </h2>
+              <MoodContent showHeader={false} />
+            </section>
+            <div className="h-px bg-border" />
+            <section>
+              <h2 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                <Battery size={18} className="text-primary" /> Energi
+              </h2>
+              <EnergyContent showHeader={false} />
+            </section>
+          </TabsContent>
+
+          <TabsContent value="mood" className="mt-6">
+            <MoodContent showHeader={false} />
+          </TabsContent>
+
+          <TabsContent value="energy" className="mt-6">
+            <EnergyContent showHeader={false} />
+          </TabsContent>
+        </Tabs>
+      </div>
+    </Layout>
+  );
+}
