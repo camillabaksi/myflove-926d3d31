@@ -94,7 +94,7 @@ function SignUpPage() {
         </form>
         <p className="mt-6 text-center text-sm text-muted-foreground">
           Har du redan ett konto?{" "}
-          <Link to="/sign-in" className="text-primary underline underline-offset-4">
+          <Link to="/sign-in" search={{ next }} className="text-primary underline underline-offset-4">
             Logga in
           </Link>
         </p>
