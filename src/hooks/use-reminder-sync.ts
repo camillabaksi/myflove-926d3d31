@@ -159,8 +159,9 @@ export function useReminderSync() {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    // Rerun on any change to timed tasks or medications
+    // Rerun on any change to timed tasks, medications, or reminders
     JSON.stringify(tasks.map((t) => [t.id, t.completed, t.time, t.dueDate, t.reminderMinutesBefore])),
     JSON.stringify(medications.map((m) => [m.id, m.name, m.dosage, m.times.join(",")])),
+    JSON.stringify(reminders.map((r) => [r.id, r.completed, r.date, r.time, r.repeat])),
   ]);
 }
