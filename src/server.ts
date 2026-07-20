@@ -44,18 +44,70 @@ function isH3SwallowedErrorBody(body: string): boolean {
   }
 }
 
+// Content-Security-Policy — start in Report-Only so nothing breaks.
+// Flip CSP_ENFORCE=true (or swap header name below) after inspecting violation
+// reports in the browser console / DevTools → Network → your report endpoint.
+//
+// Sources allowed (based on what the app actually loads):
+//   - Google Fonts (stylesheet + font files)
+//   - Supabase (Postgres/Auth/Storage/Realtime over https + wss)
+//   - Open-Meteo (weather API + geocoding)
+//   - Trafiklab ResRobot (travel API)
+//   - Self-hosted assets, data: / blob: images (icons, generated images, sw)
+//   - Inline styles + scripts are needed for TanStack Start SSR hydration
+//     and shadcn/Radix style injection. Tighten with nonces later if desired.
+const CSP_DIRECTIVES = [
+  "default-src 'self'",
+  "base-uri 'self'",
+  "object-src 'none'",
+  "frame-ancestors 'self' https://*.lovable.app https://*.lovable.dev",
+  "form-action 'self'",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.lovable.app https://*.lovable.dev",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  "font-src 'self' data: https://fonts.gstatic.com",
+  "img-src 'self' data: blob: https://*.supabase.co https://*.tile.openstreetmap.org https://open-meteo.com https://*.open-meteo.com",
+  "media-src 'self' blob:",
+  "worker-src 'self' blob:",
+  "manifest-src 'self'",
+  "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.open-meteo.com https://geocoding-api.open-meteo.com https://api.resrobot.se https://*.lovable.app https://*.lovable.dev",
+  "upgrade-insecure-requests",
+].join("; ");
+
+const CSP_ENFORCE = false; // set to true after verifying reports look clean
+const CSP_HEADER_NAME = CSP_ENFORCE
+  ? "Content-Security-Policy"
+  : "Content-Security-Policy-Report-Only";
+
+function withSecurityHeaders(response: Response): Response {
+  const contentType = response.headers.get("content-type") ?? "";
+  // Only attach CSP to HTML documents — no need on JSON/asset responses.
+  if (!contentType.includes("text/html")) return response;
+  const headers = new Headers(response.headers);
+  if (!headers.has(CSP_HEADER_NAME)) {
+    headers.set(CSP_HEADER_NAME, CSP_DIRECTIVES);
+  }
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
-      return await normalizeCatastrophicSsrResponse(response);
+      const normalized = await normalizeCatastrophicSsrResponse(response);
+      return withSecurityHeaders(normalized);
     } catch (error) {
       console.error(error);
-      return new Response(renderErrorPage(), {
-        status: 500,
-        headers: { "content-type": "text/html; charset=utf-8" },
-      });
+      return withSecurityHeaders(
+        new Response(renderErrorPage(), {
+          status: 500,
+          headers: { "content-type": "text/html; charset=utf-8" },
+        }),
+      );
     }
   },
 };
