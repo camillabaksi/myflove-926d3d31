@@ -10,6 +10,10 @@ MyFlove hjälper dig att hantera vardagen med mindre mental belastning. Appen ko
 - [Logga in](/sign-in): Logga in på ditt MyFlove-konto.
 - [Skapa konto](/sign-up): Kom igång med MyFlove.
 
+## Guides
+
+- [ADHD-planner för vuxna](/guide/adhd-planner-for-adults): Så väljer du en planner som faktiskt håller — digital vs papper, friktionspunkter och checklista.
+
 ## Legal
 
 - [Integritetspolicy](/integritet): Hur vi hanterar personuppgifter (GDPR).
