@@ -54,7 +54,7 @@ export function useReminderSync() {
       // Timed tasks
       for (const t of tasks) {
         if (t.completed || !t.time || !t.dueDate) continue;
-        if (!dates.includes(t.dueDate)) continue;
+        if (!taskDates.includes(t.dueDate)) continue;
         const when = combineDateTime(t.dueDate, t.time);
         if (!when) continue;
         const minsBefore = t.reminderMinutesBefore ?? 0;
