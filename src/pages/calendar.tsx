@@ -452,15 +452,40 @@ export default function CalendarPage() {
                   className="h-12 rounded-2xl"
                 />
               </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Upprepa</label>
+                <div className="grid grid-cols-2 gap-2">
+                  {([
+                    ["none", "Bara en gång"],
+                    ["daily", "Varje dag"],
+                    ["weekdays", "Vardagar"],
+                    ["weekly", "Varje vecka"],
+                  ] as const).map(([val, label]) => (
+                    <button
+                      key={val}
+                      type="button"
+                      onClick={() => setNewReminderRepeat(val)}
+                      className={`h-11 rounded-2xl text-sm font-medium border transition-all ${
+                        newReminderRepeat === val
+                          ? "bg-primary text-primary-foreground border-primary"
+                          : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
               <Button
                 onClick={async () => {
                   if (!newReminderTitle.trim() || !selectedDateStr) return;
                   if (newReminderTime && getNotificationPermission() === "default") {
                     await requestNotificationPermission();
                   }
-                  addReminder(newReminderTitle.trim(), selectedDateStr, newReminderTime || undefined);
+                  addReminder(newReminderTitle.trim(), selectedDateStr, newReminderTime || undefined, newReminderRepeat);
                   setNewReminderTitle("");
                   setNewReminderTime("");
+                  setNewReminderRepeat("none");
                   setIsAddingReminder(false);
                 }}
                 disabled={!newReminderTitle.trim()}
