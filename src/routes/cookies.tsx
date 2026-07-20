@@ -10,7 +10,10 @@ export const Route = createFileRoute("/cookies")({
         content:
           "MyFlove använder bara nödvändig lokal lagring – ingen spårning, inga marknadscookies.",
       },
+      { property: "og:title", content: "Cookiepolicy – MyFlove" },
+      { property: "og:url", content: "https://myflove.lovable.app/cookies" },
     ],
+    links: [{ rel: "canonical", href: "https://myflove.lovable.app/cookies" }],
   }),
   component: CookiesPage,
 });
