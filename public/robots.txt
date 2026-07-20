@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://myflove.lovable.app/sitemap.xml
