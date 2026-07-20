@@ -1,0 +1,17 @@
+# MyFlove
+
+> Ett empatiskt vardagsstöd för familjer och neurodivergenta vuxna — planering, rutiner, mående och friktion i en varm och lugn app.
+
+MyFlove hjälper dig att hantera vardagen med mindre mental belastning. Appen kombinerar kalender, rutiner, medicin, mående, energikarta, matlista och en AI-assistent som pratar med Flow-röst — varm, kort och utan pekpinnar.
+
+## Pages
+
+- [Hem](/): Introduktion till MyFlove och våra funktioner.
+- [Logga in](/sign-in): Logga in på ditt MyFlove-konto.
+- [Skapa konto](/sign-up): Kom igång med MyFlove.
+
+## Legal
+
+- [Integritetspolicy](/integritet): Hur vi hanterar personuppgifter (GDPR).
+- [Användarvillkor](/villkor): Villkor för att använda MyFlove.
+- [Cookies](/cookies): Cookie-policy och samtycke.
