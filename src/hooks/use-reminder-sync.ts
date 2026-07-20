@@ -71,13 +71,13 @@ export function useReminderSync() {
         });
       }
 
-      // Medications (today only – tomorrow's "taken" isn't known yet, we still schedule)
+      // Medications: daily for the next 14 days so notiser fortsätter komma
       for (const med of medications) {
         for (const time of med.times) {
-          for (const date of dates) {
+          for (const date of medDates) {
             const when = combineDateTime(date, time);
             if (!when) continue;
-            if (date === dates[0] && isTaken(med.id, time, date)) continue;
+            if (date === medDates[0] && isTaken(med.id, time, date)) continue;
             if (when.getTime() < now + 30_000) continue;
             const key = `med:${med.id}:${date}:${time}`;
             desired.set(key, {
