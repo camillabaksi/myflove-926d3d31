@@ -24,6 +24,7 @@ function combineDateTime(date: string, time: string): Date | null {
 export function useReminderSync() {
   const { tasks } = useTasks();
   const { medications, isTaken } = useMedications();
+  const { reminders } = useReminders();
   const syncFn = useServerFn(syncReminder);
   const cancelFn = useServerFn(cancelReminder);
   const lastKeys = useRef<Set<string>>(new Set());
