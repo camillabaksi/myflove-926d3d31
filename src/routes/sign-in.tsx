@@ -56,8 +56,8 @@ function SignInPage() {
   return (
     <div className="flex min-h-[100dvh] items-center justify-center bg-background px-4">
       <div className="w-full max-w-md rounded-3xl border border-border bg-card p-8 shadow-sm">
-        <h1 className="mb-2 text-3xl font-bold text-primary tracking-tight">MyFlove</h1>
-        <p className="mb-6 text-sm text-muted-foreground">Logga in för att fortsätta.</p>
+        <h1 className="mb-2 text-3xl font-bold text-primary tracking-tight">Logga in på MyFlove — Ditt stöd i vardagen</h1>
+        <p className="mb-6 text-sm text-muted-foreground">Välkommen tillbaka. Logga in för att fortsätta din flow.</p>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email">E-post</Label>
