@@ -45,7 +45,7 @@ export function useReminderSync() {
       for (let i = 0; i < 14; i++) medDates.push(todayIso(i));
       const desired = new Map<string, {
         clientKey: string;
-        kind: "task" | "medication";
+        kind: "task" | "medication" | "custom";
         title: string;
         body: string;
         deliverAt: string;
