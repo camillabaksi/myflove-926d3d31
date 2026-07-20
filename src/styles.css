@@ -63,14 +63,14 @@
   --popover: 40 100% 98%;
   --popover-foreground: 194 13% 20%;
 
-  --primary: 7 47% 49%;
+  --primary: 7 47% 44%;
   --primary-foreground: 40 100% 98%;
 
   --secondary: 39 36% 89%;
   --secondary-foreground: 194 13% 20%;
 
   --muted: 39 25% 89%;
-  --muted-foreground: 29 10% 43%;
+  --muted-foreground: 29 10% 40%;
 
   --accent: 138 30% 84%;
   --accent-foreground: 138 30% 22%;
@@ -79,7 +79,8 @@
   --destructive-foreground: 40 100% 98%;
 
   --input: 38 30% 88%;
-  --ring: 7 47% 49%;
+  --ring: 7 47% 44%;
+
 
   --radius: 1rem;
 
@@ -88,7 +89,7 @@
   --cream: 40 100% 98%;
   --sage: 138 15% 70%;
   --gold: 35 73% 61%;
-  --terracotta: 7 47% 49%;
+  --terracotta: 7 47% 44%;
   --terracotta-soft: 8 61% 61%;
 }
 
