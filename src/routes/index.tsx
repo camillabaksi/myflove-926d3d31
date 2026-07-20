@@ -12,7 +12,10 @@ export const Route = createFileRoute("/")({
         content:
           "Möt Flow – en lugn, intelligent följeslagare som håller ihop kalender, ekonomi, hälsa, familj, inköp och ärenden så att du kan bära mindre.",
       },
+      { property: "og:title", content: "MyFlove – Bär mindre. Gör inte mer." },
+      { property: "og:url", content: "https://myflove.lovable.app/" },
     ],
+    links: [{ rel: "canonical", href: "https://myflove.lovable.app/" }],
   }),
   component: LandingPage,
 });

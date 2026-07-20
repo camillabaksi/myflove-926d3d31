@@ -8,6 +8,19 @@ import { useToast } from "@/hooks/use-toast";
 
 export const Route = createFileRoute("/sign-in")({
   ssr: false,
+  head: () => ({
+    meta: [
+      { title: "Logga in – MyFlove" },
+      {
+        name: "description",
+        content:
+          "Logga in på MyFlove – din lugna följeslagare för vardagen med kalender, uppgifter, humör och mer.",
+      },
+      { property: "og:title", content: "Logga in – MyFlove" },
+      { property: "og:url", content: "https://myflove.lovable.app/sign-in" },
+    ],
+    links: [{ rel: "canonical", href: "https://myflove.lovable.app/sign-in" }],
+  }),
   validateSearch: (s: Record<string, unknown>) => ({
     next: typeof s.next === "string" ? s.next : undefined,
   }),
