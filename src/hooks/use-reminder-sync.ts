@@ -38,7 +38,10 @@ export function useReminderSync() {
       if (!alive || !sub) return;
 
       const now = Date.now();
-      const dates = [todayIso(0), todayIso(1)];
+      // Timed tasks: today + tomorrow. Medications: daily for 14 days ahead.
+      const taskDates = [todayIso(0), todayIso(1)];
+      const medDates: string[] = [];
+      for (let i = 0; i < 14; i++) medDates.push(todayIso(i));
       const desired = new Map<string, {
         clientKey: string;
         kind: "task" | "medication";
@@ -51,7 +54,7 @@ export function useReminderSync() {
       // Timed tasks
       for (const t of tasks) {
         if (t.completed || !t.time || !t.dueDate) continue;
-        if (!dates.includes(t.dueDate)) continue;
+        if (!taskDates.includes(t.dueDate)) continue;
         const when = combineDateTime(t.dueDate, t.time);
         if (!when) continue;
         const minsBefore = t.reminderMinutesBefore ?? 0;
@@ -68,13 +71,13 @@ export function useReminderSync() {
         });
       }
 
-      // Medications (today only – tomorrow's "taken" isn't known yet, we still schedule)
+      // Medications: daily for the next 14 days so notiser fortsätter komma
       for (const med of medications) {
         for (const time of med.times) {
-          for (const date of dates) {
+          for (const date of medDates) {
             const when = combineDateTime(date, time);
             if (!when) continue;
-            if (date === dates[0] && isTaken(med.id, time, date)) continue;
+            if (date === medDates[0] && isTaken(med.id, time, date)) continue;
             if (when.getTime() < now + 30_000) continue;
             const key = `med:${med.id}:${date}:${time}`;
             desired.set(key, {
