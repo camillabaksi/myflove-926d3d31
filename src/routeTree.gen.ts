@@ -18,6 +18,7 @@ import { Route as IntegritetRouteImport } from './routes/integritet'
 import { Route as CookiesRouteImport } from './routes/cookies'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as GuideAdhdPlannerForAdultsRouteImport } from './routes/guide.adhd-planner-for-adults'
 import { Route as AppTravelRouteImport } from './routes/_app.travel'
 import { Route as AppTasksRouteImport } from './routes/_app.tasks'
 import { Route as AppStatistikRouteImport } from './routes/_app.statistik'
@@ -89,6 +90,12 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GuideAdhdPlannerForAdultsRoute =
+  GuideAdhdPlannerForAdultsRouteImport.update({
+    id: '/guide/adhd-planner-for-adults',
+    path: '/guide/adhd-planner-for-adults',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AppTravelRoute = AppTravelRouteImport.update({
   id: '/travel',
   path: '/travel',
@@ -255,6 +262,7 @@ export interface FileRoutesByFullPath {
   '/statistik': typeof AppStatistikRoute
   '/tasks': typeof AppTasksRoute
   '/travel': typeof AppTravelRoute
+  '/guide/adhd-planner-for-adults': typeof GuideAdhdPlannerForAdultsRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/hooks/push-tick': typeof ApiPublicHooksPushTickRoute
@@ -291,6 +299,7 @@ export interface FileRoutesByTo {
   '/statistik': typeof AppStatistikRoute
   '/tasks': typeof AppTasksRoute
   '/travel': typeof AppTravelRoute
+  '/guide/adhd-planner-for-adults': typeof GuideAdhdPlannerForAdultsRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/hooks/push-tick': typeof ApiPublicHooksPushTickRoute
@@ -329,6 +338,7 @@ export interface FileRoutesById {
   '/_app/statistik': typeof AppStatistikRoute
   '/_app/tasks': typeof AppTasksRoute
   '/_app/travel': typeof AppTravelRoute
+  '/guide/adhd-planner-for-adults': typeof GuideAdhdPlannerForAdultsRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/hooks/push-tick': typeof ApiPublicHooksPushTickRoute
@@ -367,6 +377,7 @@ export interface FileRouteTypes {
     | '/statistik'
     | '/tasks'
     | '/travel'
+    | '/guide/adhd-planner-for-adults'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/public/hooks/push-tick'
@@ -403,6 +414,7 @@ export interface FileRouteTypes {
     | '/statistik'
     | '/tasks'
     | '/travel'
+    | '/guide/adhd-planner-for-adults'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/public/hooks/push-tick'
@@ -440,6 +452,7 @@ export interface FileRouteTypes {
     | '/_app/statistik'
     | '/_app/tasks'
     | '/_app/travel'
+    | '/guide/adhd-planner-for-adults'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/public/hooks/push-tick'
@@ -457,6 +470,7 @@ export interface RootRouteChildren {
   VillkorRoute: typeof VillkorRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  GuideAdhdPlannerForAdultsRoute: typeof GuideAdhdPlannerForAdultsRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicHooksPushTickRoute: typeof ApiPublicHooksPushTickRoute
@@ -525,6 +539,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guide/adhd-planner-for-adults': {
+      id: '/guide/adhd-planner-for-adults'
+      path: '/guide/adhd-planner-for-adults'
+      fullPath: '/guide/adhd-planner-for-adults'
+      preLoaderRoute: typeof GuideAdhdPlannerForAdultsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_app/travel': {
@@ -775,6 +796,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
+  GuideAdhdPlannerForAdultsRoute: GuideAdhdPlannerForAdultsRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicHooksPushTickRoute: ApiPublicHooksPushTickRoute,
