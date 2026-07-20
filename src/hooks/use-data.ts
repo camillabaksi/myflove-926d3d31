@@ -281,26 +281,30 @@ export function useFinances() {
   return { transactions, addTransaction, deleteTransaction };
 }
 
+export type RepeatMode = 'none' | 'daily' | 'weekdays' | 'weekly';
+
 export interface Reminder {
   id: string;
   title: string;
-  date: string; // ISO date string YYYY-MM-DD
+  date: string; // ISO date string YYYY-MM-DD (startdatum om återkommande)
   time?: string; // HH:MM
   completed: boolean;
   createdAt: number;
+  repeat?: RepeatMode; // default 'none'
 }
 
 export function useReminders() {
   const [reminders, setReminders] = useCloudSyncedStorage<Reminder[]>('myflow-reminders', []);
 
-  const addReminder = (title: string, date: string, time?: string) => {
+  const addReminder = (title: string, date: string, time?: string, repeat: RepeatMode = 'none') => {
     setReminders([{
       id: generateId(),
       title,
       date,
       time,
       completed: false,
-      createdAt: Date.now()
+      createdAt: Date.now(),
+      repeat,
     }, ...reminders]);
     trackEvent('calendar', 'reminder_added');
   };
@@ -313,7 +317,10 @@ export function useReminders() {
     setReminders(reminders.filter(r => r.id !== id));
   };
 
-  const updateReminder = (id: string, patch: { title?: string; date?: string; time?: string | undefined }) => {
+  const updateReminder = (
+    id: string,
+    patch: { title?: string; date?: string; time?: string | undefined; repeat?: RepeatMode }
+  ) => {
     setReminders(reminders.map(r => r.id === id ? { ...r, ...patch } : r));
   };
 
