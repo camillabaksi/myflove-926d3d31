@@ -56,6 +56,8 @@ function isH3SwallowedErrorBody(body: string): boolean {
 //   - Self-hosted assets, data: / blob: images (icons, generated images, sw)
 //   - Inline styles + scripts are needed for TanStack Start SSR hydration
 //     and shadcn/Radix style injection. Tighten with nonces later if desired.
+const CSP_REPORT_ENDPOINT = "/api/public/csp-report";
+
 const CSP_DIRECTIVES = [
   "default-src 'self'",
   "base-uri 'self'",
@@ -71,6 +73,8 @@ const CSP_DIRECTIVES = [
   "manifest-src 'self'",
   "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.open-meteo.com https://geocoding-api.open-meteo.com https://api.resrobot.se https://*.lovable.app https://*.lovable.dev",
   "upgrade-insecure-requests",
+  `report-uri ${CSP_REPORT_ENDPOINT}`,
+  "report-to csp-endpoint",
 ].join("; ");
 
 const CSP_ENFORCE = false; // set to true after verifying reports look clean
@@ -78,13 +82,25 @@ const CSP_HEADER_NAME = CSP_ENFORCE
   ? "Content-Security-Policy"
   : "Content-Security-Policy-Report-Only";
 
+const REPORTING_ENDPOINTS = `csp-endpoint="${CSP_REPORT_ENDPOINT}"`;
+const REPORT_TO_LEGACY = JSON.stringify({
+  group: "csp-endpoint",
+  max_age: 10886400,
+  endpoints: [{ url: CSP_REPORT_ENDPOINT }],
+});
+
 function withSecurityHeaders(response: Response): Response {
   const contentType = response.headers.get("content-type") ?? "";
-  // Only attach CSP to HTML documents — no need on JSON/asset responses.
   if (!contentType.includes("text/html")) return response;
   const headers = new Headers(response.headers);
   if (!headers.has(CSP_HEADER_NAME)) {
     headers.set(CSP_HEADER_NAME, CSP_DIRECTIVES);
+  }
+  if (!headers.has("Reporting-Endpoints")) {
+    headers.set("Reporting-Endpoints", REPORTING_ENDPOINTS);
+  }
+  if (!headers.has("Report-To")) {
+    headers.set("Report-To", REPORT_TO_LEGACY);
   }
   return new Response(response.body, {
     status: response.status,
