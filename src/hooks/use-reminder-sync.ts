@@ -38,7 +38,10 @@ export function useReminderSync() {
       if (!alive || !sub) return;
 
       const now = Date.now();
-      const dates = [todayIso(0), todayIso(1)];
+      // Timed tasks: today + tomorrow. Medications: daily for 14 days ahead.
+      const taskDates = [todayIso(0), todayIso(1)];
+      const medDates: string[] = [];
+      for (let i = 0; i < 14; i++) medDates.push(todayIso(i));
       const desired = new Map<string, {
         clientKey: string;
         kind: "task" | "medication";
