@@ -63,8 +63,9 @@ export default function CalendarPage() {
   const [isAddingReminder, setIsAddingReminder] = useState(false);
   const [newReminderTitle, setNewReminderTitle] = useState("");
   const [newReminderTime, setNewReminderTime] = useState("");
+  const [newReminderRepeat, setNewReminderRepeat] = useState<"none" | "daily" | "weekdays" | "weekly">("none");
   const [editing, setEditing] = useState<
-    | { kind: "reminder"; id: string; title: string; time: string }
+    | { kind: "reminder"; id: string; title: string; time: string; repeat: "none" | "daily" | "weekdays" | "weekly" }
     | { kind: "task"; id: string; title: string; time: string }
     | null
   >(null);
@@ -370,7 +371,7 @@ export default function CalendarPage() {
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
                     <button
-                      onClick={() => setEditing({ kind: "reminder", id: r.id, title: r.title, time: r.time ?? "" })}
+                      onClick={() => setEditing({ kind: "reminder", id: r.id, title: r.title, time: r.time ?? "", repeat: r.repeat ?? "none" })}
                       aria-label="Ändra påminnelse"
                       className="px-3 py-2 text-sm text-primary rounded-xl hover:bg-primary/10"
                     >
@@ -451,15 +452,40 @@ export default function CalendarPage() {
                   className="h-12 rounded-2xl"
                 />
               </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Upprepa</label>
+                <div className="grid grid-cols-2 gap-2">
+                  {([
+                    ["none", "Bara en gång"],
+                    ["daily", "Varje dag"],
+                    ["weekdays", "Vardagar"],
+                    ["weekly", "Varje vecka"],
+                  ] as const).map(([val, label]) => (
+                    <button
+                      key={val}
+                      type="button"
+                      onClick={() => setNewReminderRepeat(val)}
+                      className={`h-11 rounded-2xl text-sm font-medium border transition-all ${
+                        newReminderRepeat === val
+                          ? "bg-primary text-primary-foreground border-primary"
+                          : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
               <Button
                 onClick={async () => {
                   if (!newReminderTitle.trim() || !selectedDateStr) return;
                   if (newReminderTime && getNotificationPermission() === "default") {
                     await requestNotificationPermission();
                   }
-                  addReminder(newReminderTitle.trim(), selectedDateStr, newReminderTime || undefined);
+                  addReminder(newReminderTitle.trim(), selectedDateStr, newReminderTime || undefined, newReminderRepeat);
                   setNewReminderTitle("");
                   setNewReminderTime("");
+                  setNewReminderRepeat("none");
                   setIsAddingReminder(false);
                 }}
                 disabled={!newReminderTitle.trim()}
@@ -535,6 +561,32 @@ export default function CalendarPage() {
                     className="h-12 rounded-2xl"
                   />
                 </div>
+                {editing.kind === "reminder" && (
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Upprepa</label>
+                    <div className="grid grid-cols-2 gap-2">
+                      {([
+                        ["none", "Bara en gång"],
+                        ["daily", "Varje dag"],
+                        ["weekdays", "Vardagar"],
+                        ["weekly", "Varje vecka"],
+                      ] as const).map(([val, label]) => (
+                        <button
+                          key={val}
+                          type="button"
+                          onClick={() => setEditing({ ...editing, repeat: val })}
+                          className={`h-11 rounded-2xl text-sm font-medium border transition-all ${
+                            editing.repeat === val
+                              ? "bg-primary text-primary-foreground border-primary"
+                              : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
+                          }`}
+                        >
+                          {label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 <div className="flex gap-2">
                   <Button
                     variant="outline"
@@ -554,6 +606,7 @@ export default function CalendarPage() {
                         updateReminder(editing.id, {
                           title: editing.title.trim() || "Påminnelse",
                           time: editing.time || undefined,
+                          repeat: editing.repeat,
                         });
                       } else {
                         setTaskTime(editing.id, editing.time || undefined);
