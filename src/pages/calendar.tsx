@@ -561,6 +561,32 @@ export default function CalendarPage() {
                     className="h-12 rounded-2xl"
                   />
                 </div>
+                {editing.kind === "reminder" && (
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Upprepa</label>
+                    <div className="grid grid-cols-2 gap-2">
+                      {([
+                        ["none", "Bara en gång"],
+                        ["daily", "Varje dag"],
+                        ["weekdays", "Vardagar"],
+                        ["weekly", "Varje vecka"],
+                      ] as const).map(([val, label]) => (
+                        <button
+                          key={val}
+                          type="button"
+                          onClick={() => setEditing({ ...editing, repeat: val })}
+                          className={`h-11 rounded-2xl text-sm font-medium border transition-all ${
+                            editing.repeat === val
+                              ? "bg-primary text-primary-foreground border-primary"
+                              : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
+                          }`}
+                        >
+                          {label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 <div className="flex gap-2">
                   <Button
                     variant="outline"
@@ -580,6 +606,7 @@ export default function CalendarPage() {
                         updateReminder(editing.id, {
                           title: editing.title.trim() || "Påminnelse",
                           time: editing.time || undefined,
+                          repeat: editing.repeat,
                         });
                       } else {
                         setTaskTime(editing.id, editing.time || undefined);
