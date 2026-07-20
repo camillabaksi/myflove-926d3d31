@@ -36,6 +36,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "apple-mobile-web-app-status-bar-style", content: "default" },
       { name: "apple-mobile-web-app-title", content: "MyFlove" },
       { name: "mobile-web-app-capable", content: "yes" },
+      { name: "vibekollen-verifiering", content: "vk-52413b42f16be1ff3bcba37c" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
