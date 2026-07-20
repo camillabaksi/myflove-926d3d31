@@ -92,6 +92,45 @@ export function useReminderSync() {
           }
         }
       }
+      // Calendar reminders: one-off or recurring (daily / weekdays / weekly) for 14 dagar
+      const horizonDates: string[] = [];
+      for (let i = 0; i < 14; i++) horizonDates.push(todayIso(i));
+      for (const r of reminders) {
+        if (r.completed || !r.time) continue;
+        const repeat = r.repeat ?? "none";
+        const occurrences: string[] = [];
+        if (repeat === "none") {
+          if (horizonDates.includes(r.date)) occurrences.push(r.date);
+        } else {
+          for (const date of horizonDates) {
+            if (date < r.date) continue;
+            const d = new Date(date + "T00:00:00");
+            const dow = d.getDay(); // 0=Sö,1=Må..6=Lö
+            if (repeat === "daily") occurrences.push(date);
+            else if (repeat === "weekdays" && dow >= 1 && dow <= 5) occurrences.push(date);
+            else if (repeat === "weekly") {
+              const start = new Date(r.date + "T00:00:00");
+              const diffDays = Math.round((d.getTime() - start.getTime()) / 86_400_000);
+              if (diffDays % 7 === 0) occurrences.push(date);
+            }
+          }
+        }
+        for (const date of occurrences) {
+          const when = combineDateTime(date, r.time);
+          if (!when) continue;
+          if (when.getTime() < now + 30_000) continue;
+          const key = repeat === "none" ? `rem:${r.id}` : `rem:${r.id}:${date}`;
+          desired.set(key, {
+            clientKey: key,
+            kind: "custom",
+            title: `🔔 ${r.title}`,
+            body: `Påminnelse kl ${r.time}`,
+            deliverAt: when.toISOString(),
+            url: "/kalender",
+          });
+        }
+      }
+
 
       // Push all desired
       for (const r of desired.values()) {
