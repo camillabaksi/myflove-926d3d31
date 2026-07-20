@@ -50,9 +50,10 @@ function LandingPage() {
         <div className="pointer-events-none absolute -bottom-32 -left-16 h-[320px] w-[320px] rounded-full bg-[#A7BEAE] opacity-50" />
         <div className="relative mx-auto max-w-3xl text-center">
           <p className="text-xs uppercase tracking-[0.35em] text-[#B85042] font-semibold">MyFlove</p>
-          <h1 className="mt-4 font-display text-6xl md:text-8xl font-bold leading-[0.95] tracking-tight">
-            Ditt liv,<br />i flow.
+          <h1 className="mt-4 font-display text-5xl md:text-7xl font-bold leading-[0.95] tracking-tight">
+            MyFlove – lugn planering för ADHD, autism och ett fullt huvud
           </h1>
+
           <p className="mt-6 text-lg md:text-xl text-[#7A6E63] max-w-xl mx-auto leading-relaxed">
             Ett lugnare hem för hjärnan – för dig som lever med ADHD, autism eller
             bara mycket i huvudet. 💙
