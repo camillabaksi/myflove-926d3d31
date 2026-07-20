@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
-import { useTasks, useMedications } from "@/hooks/use-data";
+import { useTasks, useMedications, useReminders } from "@/hooks/use-data";
 import { syncReminder, cancelReminder } from "@/lib/push.functions";
 import { getCurrentSubscription } from "@/lib/push-client";
 
