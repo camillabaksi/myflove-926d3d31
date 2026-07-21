@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /api/
+Disallow: /mcp
+Disallow: /.lovable/
 
 Sitemap: https://myflove.lovable.app/sitemap.xml
