@@ -22,25 +22,16 @@ export const Route = createFileRoute("/")({
 
 function LandingPage() {
   const navigate = useNavigate();
-  const [checking, setChecking] = useState(true);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
       if (data.session) {
         navigate({ to: "/hem" });
-      } else {
-        setChecking(false);
       }
     });
   }, [navigate]);
 
-  if (checking) {
-    return (
-      <main className="min-h-screen flex items-center justify-center bg-background">
-        <p className="text-muted-foreground">Laddar…</p>
-      </main>
-    );
-  }
+
 
   return (
     <main className="min-h-screen bg-[#F5F1EA] text-[#2C3639]">
