@@ -148,9 +148,11 @@ export default function Dashboard() {
               variant="ghost" 
               size="icon" 
               onClick={() => setShowReminderForm(!showReminderForm)}
+              aria-label={showReminderForm ? "Stäng formulär för ny påminnelse" : "Lägg till ny påminnelse"}
+              aria-expanded={showReminderForm}
               className="rounded-xl text-primary hover:text-primary/80 hover:bg-primary/10"
             >
-              <Plus size={24} />
+              <Plus size={24} aria-hidden="true" />
             </Button>
           </div>
 
