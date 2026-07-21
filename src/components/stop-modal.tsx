@@ -196,9 +196,10 @@ export default function StopModal({ open, onOpenChange }: StopModalProps) {
                 onClick={() => void send()}
                 disabled={!input.trim() || sending}
                 size="icon"
+                aria-label="Skicka meddelande till Flow"
                 className="rounded-full h-11 w-11 shrink-0"
               >
-                <Send size={18} />
+                <Send size={18} aria-hidden="true" />
               </Button>
             </div>
           </div>
