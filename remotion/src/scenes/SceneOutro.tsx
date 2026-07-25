@@ -105,7 +105,7 @@ export const SceneOutro: React.FC = () => {
             letterSpacing: 1,
           }}
         >
-          mitt-flow.lovable.app
+          myflove.lovable.app
         </div>
       </AbsoluteFill>
     </SceneShell>
