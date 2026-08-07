@@ -13,7 +13,9 @@ export default defineConfig({
     server: { entry: "server" },
   },
   vite: {
-    plugins: [mcpPlugin()],
+    // mcpPlugin() crashes on Windows due to path separator handling (\ vs /),
+    // so it's disabled there while remaining active for Linux/macOS collaborators.
+    plugins: [...(process.platform !== "win32" ? [mcpPlugin()] : [])],
     resolve: {
       alias: {
         wouter: path.resolve(__dirname, "src/compat/wouter.tsx"),

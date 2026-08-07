@@ -9,72 +9,51 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as VillkorRouteImport } from './routes/villkor'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as SignUpRouteImport } from './routes/sign-up'
-import { Route as SignInRouteImport } from './routes/sign-in'
-import { Route as McpRouteImport } from './routes/mcp'
-import { Route as IntegritetRouteImport } from './routes/integritet'
-import { Route as CookiesRouteImport } from './routes/cookies'
-import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as GuideAdhdPlannerForAdultsRouteImport } from './routes/guide.adhd-planner-for-adults'
-import { Route as AppTravelRouteImport } from './routes/_app.travel'
-import { Route as AppTasksRouteImport } from './routes/_app.tasks'
-import { Route as AppStatistikRouteImport } from './routes/_app.statistik'
-import { Route as AppShoppingRouteImport } from './routes/_app.shopping'
-import { Route as AppPomodoroRouteImport } from './routes/_app.pomodoro'
-import { Route as AppMatlistaRouteImport } from './routes/_app.matlista'
-import { Route as AppMaBraRouteImport } from './routes/_app.ma-bra'
-import { Route as AppKalenderRouteImport } from './routes/_app.kalender'
-import { Route as AppHemRouteImport } from './routes/_app.hem'
-import { Route as AppFriktionsindexRouteImport } from './routes/_app.friktionsindex'
-import { Route as AppFokusRouteImport } from './routes/_app.fokus'
-import { Route as AppFlowplanRouteImport } from './routes/_app.flowplan'
-import { Route as AppFinancesRouteImport } from './routes/_app.finances'
-import { Route as AppFamiljRouteImport } from './routes/_app.familj'
-import { Route as AppDumpRouteImport } from './routes/_app.dump'
-import { Route as AppDagligRutinRouteImport } from './routes/_app.daglig-rutin'
-import { Route as AppCalendarRouteImport } from './routes/_app.calendar'
-import { Route as AppBeloningarRouteImport } from './routes/_app.beloningar'
-import { Route as AppAssistantRouteImport } from './routes/_app.assistant'
-import { Route as AppAdminStatistikRouteImport } from './routes/_app.admin-statistik'
-import { Route as AppAdminRouteImport } from './routes/_app.admin'
-import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
+import { Route as AppRouteImport } from './routes/_app'
+import { Route as CookiesRouteImport } from './routes/cookies'
+import { Route as IntegritetRouteImport } from './routes/integritet'
+import { Route as McpRouteImport } from './routes/mcp'
+import { Route as SignInRouteImport } from './routes/sign-in'
+import { Route as SignUpRouteImport } from './routes/sign-up'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as VillkorRouteImport } from './routes/villkor'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
-import { Route as ApiPublicCspReportRouteImport } from './routes/api/public/csp-report'
-import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
+import { Route as AppAdminRouteImport } from './routes/_app.admin'
+import { Route as AppAdminStatistikRouteImport } from './routes/_app.admin-statistik'
+import { Route as AppAssistantRouteImport } from './routes/_app.assistant'
+import { Route as AppBeloningarRouteImport } from './routes/_app.beloningar'
+import { Route as AppCalendarRouteImport } from './routes/_app.calendar'
+import { Route as AppDagligRutinRouteImport } from './routes/_app.daglig-rutin'
+import { Route as AppDumpRouteImport } from './routes/_app.dump'
+import { Route as AppFamiljRouteImport } from './routes/_app.familj'
+import { Route as AppFinancesRouteImport } from './routes/_app.finances'
+import { Route as AppFlowplanRouteImport } from './routes/_app.flowplan'
+import { Route as AppFokusRouteImport } from './routes/_app.fokus'
+import { Route as AppFriktionsindexRouteImport } from './routes/_app.friktionsindex'
+import { Route as AppHemRouteImport } from './routes/_app.hem'
+import { Route as AppKalenderRouteImport } from './routes/_app.kalender'
+import { Route as AppMaBraRouteImport } from './routes/_app.ma-bra'
+import { Route as AppMatlistaRouteImport } from './routes/_app.matlista'
+import { Route as AppPomodoroRouteImport } from './routes/_app.pomodoro'
+import { Route as AppShoppingRouteImport } from './routes/_app.shopping'
+import { Route as AppStatistikRouteImport } from './routes/_app.statistik'
+import { Route as AppTasksRouteImport } from './routes/_app.tasks'
+import { Route as AppTravelRouteImport } from './routes/_app.travel'
+import { Route as GuideAdhdPlannerForAdultsRouteImport } from './routes/guide.adhd-planner-for-adults'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
+import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
+import { Route as ApiPublicCspReportRouteImport } from './routes/api/public/csp-report'
 import { Route as ApiPublicHooksPushTickRouteImport } from './routes/api/public/hooks/push-tick'
 
-const VillkorRoute = VillkorRouteImport.update({
-  id: '/villkor',
-  path: '/villkor',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SignUpRoute = SignUpRouteImport.update({
-  id: '/sign-up',
-  path: '/sign-up',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SignInRoute = SignInRouteImport.update({
-  id: '/sign-in',
-  path: '/sign-in',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const McpRoute = McpRouteImport.update({
-  id: '/mcp',
-  path: '/mcp',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IntegritetRoute = IntegritetRouteImport.update({
-  id: '/integritet',
-  path: '/integritet',
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CookiesRoute = CookiesRouteImport.update({
@@ -82,114 +61,51 @@ const CookiesRoute = CookiesRouteImport.update({
   path: '/cookies',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AppRoute = AppRouteImport.update({
-  id: '/_app',
+const IntegritetRoute = IntegritetRouteImport.update({
+  id: '/integritet',
+  path: '/integritet',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
-const GuideAdhdPlannerForAdultsRoute =
-  GuideAdhdPlannerForAdultsRouteImport.update({
-    id: '/guide/adhd-planner-for-adults',
-    path: '/guide/adhd-planner-for-adults',
+const SignInRoute = SignInRouteImport.update({
+  id: '/sign-in',
+  path: '/sign-in',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignUpRoute = SignUpRouteImport.update({
+  id: '/sign-up',
+  path: '/sign-up',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VillkorRoute = VillkorRouteImport.update({
+  id: '/villkor',
+  path: '/villkor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Char91DotmcpChar93ListToolsRoute =
+  Char91DotmcpChar93ListToolsRouteImport.update({
+    id: '/.mcp/list-tools',
+    path: '/.mcp/list-tools',
     getParentRoute: () => rootRouteImport,
   } as any)
-const AppTravelRoute = AppTravelRouteImport.update({
-  id: '/travel',
-  path: '/travel',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppTasksRoute = AppTasksRouteImport.update({
-  id: '/tasks',
-  path: '/tasks',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppStatistikRoute = AppStatistikRouteImport.update({
-  id: '/statistik',
-  path: '/statistik',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppShoppingRoute = AppShoppingRouteImport.update({
-  id: '/shopping',
-  path: '/shopping',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppPomodoroRoute = AppPomodoroRouteImport.update({
-  id: '/pomodoro',
-  path: '/pomodoro',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppMatlistaRoute = AppMatlistaRouteImport.update({
-  id: '/matlista',
-  path: '/matlista',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppMaBraRoute = AppMaBraRouteImport.update({
-  id: '/ma-bra',
-  path: '/ma-bra',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppKalenderRoute = AppKalenderRouteImport.update({
-  id: '/kalender',
-  path: '/kalender',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppHemRoute = AppHemRouteImport.update({
-  id: '/hem',
-  path: '/hem',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppFriktionsindexRoute = AppFriktionsindexRouteImport.update({
-  id: '/friktionsindex',
-  path: '/friktionsindex',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppFokusRoute = AppFokusRouteImport.update({
-  id: '/fokus',
-  path: '/fokus',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppFlowplanRoute = AppFlowplanRouteImport.update({
-  id: '/flowplan',
-  path: '/flowplan',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppFinancesRoute = AppFinancesRouteImport.update({
-  id: '/finances',
-  path: '/finances',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppFamiljRoute = AppFamiljRouteImport.update({
-  id: '/familj',
-  path: '/familj',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppDumpRoute = AppDumpRouteImport.update({
-  id: '/dump',
-  path: '/dump',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppDagligRutinRoute = AppDagligRutinRouteImport.update({
-  id: '/daglig-rutin',
-  path: '/daglig-rutin',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppCalendarRoute = AppCalendarRouteImport.update({
-  id: '/calendar',
-  path: '/calendar',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppBeloningarRoute = AppBeloningarRouteImport.update({
-  id: '/beloningar',
-  path: '/beloningar',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppAssistantRoute = AppAssistantRouteImport.update({
-  id: '/assistant',
-  path: '/assistant',
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AppAdminRoute = AppAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => AppRoute,
 } as any)
 const AppAdminStatistikRoute = AppAdminStatistikRouteImport.update({
@@ -197,26 +113,110 @@ const AppAdminStatistikRoute = AppAdminStatistikRouteImport.update({
   path: '/admin-statistik',
   getParentRoute: () => AppRoute,
 } as any)
-const AppAdminRoute = AppAdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
+const AppAssistantRoute = AppAssistantRouteImport.update({
+  id: '/assistant',
+  path: '/assistant',
   getParentRoute: () => AppRoute,
 } as any)
-const Char91DotwellKnownChar93OauthProtectedResourceRoute =
-  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
-    id: '/.well-known/oauth-protected-resource',
-    path: '/.well-known/oauth-protected-resource',
+const AppBeloningarRoute = AppBeloningarRouteImport.update({
+  id: '/beloningar',
+  path: '/beloningar',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCalendarRoute = AppCalendarRouteImport.update({
+  id: '/calendar',
+  path: '/calendar',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDagligRutinRoute = AppDagligRutinRouteImport.update({
+  id: '/daglig-rutin',
+  path: '/daglig-rutin',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDumpRoute = AppDumpRouteImport.update({
+  id: '/dump',
+  path: '/dump',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFamiljRoute = AppFamiljRouteImport.update({
+  id: '/familj',
+  path: '/familj',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFinancesRoute = AppFinancesRouteImport.update({
+  id: '/finances',
+  path: '/finances',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFlowplanRoute = AppFlowplanRouteImport.update({
+  id: '/flowplan',
+  path: '/flowplan',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFokusRoute = AppFokusRouteImport.update({
+  id: '/fokus',
+  path: '/fokus',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFriktionsindexRoute = AppFriktionsindexRouteImport.update({
+  id: '/friktionsindex',
+  path: '/friktionsindex',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppHemRoute = AppHemRouteImport.update({
+  id: '/hem',
+  path: '/hem',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppKalenderRoute = AppKalenderRouteImport.update({
+  id: '/kalender',
+  path: '/kalender',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMaBraRoute = AppMaBraRouteImport.update({
+  id: '/ma-bra',
+  path: '/ma-bra',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMatlistaRoute = AppMatlistaRouteImport.update({
+  id: '/matlista',
+  path: '/matlista',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPomodoroRoute = AppPomodoroRouteImport.update({
+  id: '/pomodoro',
+  path: '/pomodoro',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppShoppingRoute = AppShoppingRouteImport.update({
+  id: '/shopping',
+  path: '/shopping',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppStatistikRoute = AppStatistikRouteImport.update({
+  id: '/statistik',
+  path: '/statistik',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppTasksRoute = AppTasksRouteImport.update({
+  id: '/tasks',
+  path: '/tasks',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppTravelRoute = AppTravelRouteImport.update({
+  id: '/travel',
+  path: '/travel',
+  getParentRoute: () => AppRoute,
+} as any)
+const GuideAdhdPlannerForAdultsRoute =
+  GuideAdhdPlannerForAdultsRouteImport.update({
+    id: '/guide/adhd-planner-for-adults',
+    path: '/guide/adhd-planner-for-adults',
     getParentRoute: () => rootRouteImport,
   } as any)
-const Char91DotmcpChar93ListToolsRoute =
-  Char91DotmcpChar93ListToolsRouteImport.update({
-    id: '/.mcp/list-tools',
-    path: '/.mcp/list-tools',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiPublicCspReportRoute = ApiPublicCspReportRouteImport.update({
-  id: '/api/public/csp-report',
-  path: '/api/public/csp-report',
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
   getParentRoute: () => rootRouteImport,
 } as any)
 const Char91DotmcpChar93InvokeToolToolRoute =
@@ -225,9 +225,9 @@ const Char91DotmcpChar93InvokeToolToolRoute =
     path: '/.mcp/invoke-tool/$tool',
     getParentRoute: () => rootRouteImport,
   } as any)
-const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
-  id: '/.lovable/oauth/consent',
-  path: '/.lovable/oauth/consent',
+const ApiPublicCspReportRoute = ApiPublicCspReportRouteImport.update({
+  id: '/api/public/csp-report',
+  path: '/api/public/csp-report',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicHooksPushTickRoute = ApiPublicHooksPushTickRouteImport.update({
@@ -491,53 +491,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/villkor': {
-      id: '/villkor'
-      path: '/villkor'
-      fullPath: '/villkor'
-      preLoaderRoute: typeof VillkorRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sign-up': {
-      id: '/sign-up'
-      path: '/sign-up'
-      fullPath: '/sign-up'
-      preLoaderRoute: typeof SignUpRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sign-in': {
-      id: '/sign-in'
-      path: '/sign-in'
-      fullPath: '/sign-in'
-      preLoaderRoute: typeof SignInRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/mcp': {
-      id: '/mcp'
-      path: '/mcp'
-      fullPath: '/mcp'
-      preLoaderRoute: typeof McpRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/integritet': {
-      id: '/integritet'
-      path: '/integritet'
-      fullPath: '/integritet'
-      preLoaderRoute: typeof IntegritetRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/cookies': {
-      id: '/cookies'
-      path: '/cookies'
-      fullPath: '/cookies'
-      preLoaderRoute: typeof CookiesRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_app': {
@@ -547,172 +505,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/cookies': {
+      id: '/cookies'
+      path: '/cookies'
+      fullPath: '/cookies'
+      preLoaderRoute: typeof CookiesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/guide/adhd-planner-for-adults': {
-      id: '/guide/adhd-planner-for-adults'
-      path: '/guide/adhd-planner-for-adults'
-      fullPath: '/guide/adhd-planner-for-adults'
-      preLoaderRoute: typeof GuideAdhdPlannerForAdultsRouteImport
+    '/integritet': {
+      id: '/integritet'
+      path: '/integritet'
+      fullPath: '/integritet'
+      preLoaderRoute: typeof IntegritetRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_app/travel': {
-      id: '/_app/travel'
-      path: '/travel'
-      fullPath: '/travel'
-      preLoaderRoute: typeof AppTravelRouteImport
-      parentRoute: typeof AppRoute
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_app/tasks': {
-      id: '/_app/tasks'
-      path: '/tasks'
-      fullPath: '/tasks'
-      preLoaderRoute: typeof AppTasksRouteImport
-      parentRoute: typeof AppRoute
+    '/sign-in': {
+      id: '/sign-in'
+      path: '/sign-in'
+      fullPath: '/sign-in'
+      preLoaderRoute: typeof SignInRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_app/statistik': {
-      id: '/_app/statistik'
-      path: '/statistik'
-      fullPath: '/statistik'
-      preLoaderRoute: typeof AppStatistikRouteImport
-      parentRoute: typeof AppRoute
+    '/sign-up': {
+      id: '/sign-up'
+      path: '/sign-up'
+      fullPath: '/sign-up'
+      preLoaderRoute: typeof SignUpRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_app/shopping': {
-      id: '/_app/shopping'
-      path: '/shopping'
-      fullPath: '/shopping'
-      preLoaderRoute: typeof AppShoppingRouteImport
-      parentRoute: typeof AppRoute
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_app/pomodoro': {
-      id: '/_app/pomodoro'
-      path: '/pomodoro'
-      fullPath: '/pomodoro'
-      preLoaderRoute: typeof AppPomodoroRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/matlista': {
-      id: '/_app/matlista'
-      path: '/matlista'
-      fullPath: '/matlista'
-      preLoaderRoute: typeof AppMatlistaRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/ma-bra': {
-      id: '/_app/ma-bra'
-      path: '/ma-bra'
-      fullPath: '/ma-bra'
-      preLoaderRoute: typeof AppMaBraRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/kalender': {
-      id: '/_app/kalender'
-      path: '/kalender'
-      fullPath: '/kalender'
-      preLoaderRoute: typeof AppKalenderRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/hem': {
-      id: '/_app/hem'
-      path: '/hem'
-      fullPath: '/hem'
-      preLoaderRoute: typeof AppHemRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/friktionsindex': {
-      id: '/_app/friktionsindex'
-      path: '/friktionsindex'
-      fullPath: '/friktionsindex'
-      preLoaderRoute: typeof AppFriktionsindexRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/fokus': {
-      id: '/_app/fokus'
-      path: '/fokus'
-      fullPath: '/fokus'
-      preLoaderRoute: typeof AppFokusRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/flowplan': {
-      id: '/_app/flowplan'
-      path: '/flowplan'
-      fullPath: '/flowplan'
-      preLoaderRoute: typeof AppFlowplanRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/finances': {
-      id: '/_app/finances'
-      path: '/finances'
-      fullPath: '/finances'
-      preLoaderRoute: typeof AppFinancesRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/familj': {
-      id: '/_app/familj'
-      path: '/familj'
-      fullPath: '/familj'
-      preLoaderRoute: typeof AppFamiljRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/dump': {
-      id: '/_app/dump'
-      path: '/dump'
-      fullPath: '/dump'
-      preLoaderRoute: typeof AppDumpRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/daglig-rutin': {
-      id: '/_app/daglig-rutin'
-      path: '/daglig-rutin'
-      fullPath: '/daglig-rutin'
-      preLoaderRoute: typeof AppDagligRutinRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/calendar': {
-      id: '/_app/calendar'
-      path: '/calendar'
-      fullPath: '/calendar'
-      preLoaderRoute: typeof AppCalendarRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/beloningar': {
-      id: '/_app/beloningar'
-      path: '/beloningar'
-      fullPath: '/beloningar'
-      preLoaderRoute: typeof AppBeloningarRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/assistant': {
-      id: '/_app/assistant'
-      path: '/assistant'
-      fullPath: '/assistant'
-      preLoaderRoute: typeof AppAssistantRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/admin-statistik': {
-      id: '/_app/admin-statistik'
-      path: '/admin-statistik'
-      fullPath: '/admin-statistik'
-      preLoaderRoute: typeof AppAdminStatistikRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/admin': {
-      id: '/_app/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AppAdminRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/.well-known/oauth-protected-resource': {
-      id: '/.well-known/oauth-protected-resource'
-      path: '/.well-known/oauth-protected-resource'
-      fullPath: '/.well-known/oauth-protected-resource'
-      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
+    '/villkor': {
+      id: '/villkor'
+      path: '/villkor'
+      fullPath: '/villkor'
+      preLoaderRoute: typeof VillkorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/.mcp/list-tools': {
@@ -722,11 +561,172 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/csp-report': {
-      id: '/api/public/csp-report'
-      path: '/api/public/csp-report'
-      fullPath: '/api/public/csp-report'
-      preLoaderRoute: typeof ApiPublicCspReportRouteImport
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app/admin': {
+      id: '/_app/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AppAdminRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/admin-statistik': {
+      id: '/_app/admin-statistik'
+      path: '/admin-statistik'
+      fullPath: '/admin-statistik'
+      preLoaderRoute: typeof AppAdminStatistikRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/assistant': {
+      id: '/_app/assistant'
+      path: '/assistant'
+      fullPath: '/assistant'
+      preLoaderRoute: typeof AppAssistantRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/beloningar': {
+      id: '/_app/beloningar'
+      path: '/beloningar'
+      fullPath: '/beloningar'
+      preLoaderRoute: typeof AppBeloningarRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/calendar': {
+      id: '/_app/calendar'
+      path: '/calendar'
+      fullPath: '/calendar'
+      preLoaderRoute: typeof AppCalendarRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/daglig-rutin': {
+      id: '/_app/daglig-rutin'
+      path: '/daglig-rutin'
+      fullPath: '/daglig-rutin'
+      preLoaderRoute: typeof AppDagligRutinRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/dump': {
+      id: '/_app/dump'
+      path: '/dump'
+      fullPath: '/dump'
+      preLoaderRoute: typeof AppDumpRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/familj': {
+      id: '/_app/familj'
+      path: '/familj'
+      fullPath: '/familj'
+      preLoaderRoute: typeof AppFamiljRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finances': {
+      id: '/_app/finances'
+      path: '/finances'
+      fullPath: '/finances'
+      preLoaderRoute: typeof AppFinancesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/flowplan': {
+      id: '/_app/flowplan'
+      path: '/flowplan'
+      fullPath: '/flowplan'
+      preLoaderRoute: typeof AppFlowplanRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/fokus': {
+      id: '/_app/fokus'
+      path: '/fokus'
+      fullPath: '/fokus'
+      preLoaderRoute: typeof AppFokusRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/friktionsindex': {
+      id: '/_app/friktionsindex'
+      path: '/friktionsindex'
+      fullPath: '/friktionsindex'
+      preLoaderRoute: typeof AppFriktionsindexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/hem': {
+      id: '/_app/hem'
+      path: '/hem'
+      fullPath: '/hem'
+      preLoaderRoute: typeof AppHemRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/kalender': {
+      id: '/_app/kalender'
+      path: '/kalender'
+      fullPath: '/kalender'
+      preLoaderRoute: typeof AppKalenderRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/ma-bra': {
+      id: '/_app/ma-bra'
+      path: '/ma-bra'
+      fullPath: '/ma-bra'
+      preLoaderRoute: typeof AppMaBraRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/matlista': {
+      id: '/_app/matlista'
+      path: '/matlista'
+      fullPath: '/matlista'
+      preLoaderRoute: typeof AppMatlistaRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/pomodoro': {
+      id: '/_app/pomodoro'
+      path: '/pomodoro'
+      fullPath: '/pomodoro'
+      preLoaderRoute: typeof AppPomodoroRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/shopping': {
+      id: '/_app/shopping'
+      path: '/shopping'
+      fullPath: '/shopping'
+      preLoaderRoute: typeof AppShoppingRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/statistik': {
+      id: '/_app/statistik'
+      path: '/statistik'
+      fullPath: '/statistik'
+      preLoaderRoute: typeof AppStatistikRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/tasks': {
+      id: '/_app/tasks'
+      path: '/tasks'
+      fullPath: '/tasks'
+      preLoaderRoute: typeof AppTasksRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/travel': {
+      id: '/_app/travel'
+      path: '/travel'
+      fullPath: '/travel'
+      preLoaderRoute: typeof AppTravelRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/guide/adhd-planner-for-adults': {
+      id: '/guide/adhd-planner-for-adults'
+      path: '/guide/adhd-planner-for-adults'
+      fullPath: '/guide/adhd-planner-for-adults'
+      preLoaderRoute: typeof GuideAdhdPlannerForAdultsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/.mcp/invoke-tool/$tool': {
@@ -736,11 +736,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/.lovable/oauth/consent': {
-      id: '/.lovable/oauth/consent'
-      path: '/.lovable/oauth/consent'
-      fullPath: '/.lovable/oauth/consent'
-      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+    '/api/public/csp-report': {
+      id: '/api/public/csp-report'
+      path: '/api/public/csp-report'
+      fullPath: '/api/public/csp-report'
+      preLoaderRoute: typeof ApiPublicCspReportRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/hooks/push-tick': {
