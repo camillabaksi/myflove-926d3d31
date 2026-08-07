@@ -38,19 +38,31 @@ function SignInPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [waking, setWaking] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { error } = await withBackendRecovery(
+      () => supabase.auth.signInWithPassword({ email, password }),
+      (status) => setWaking(status === "waking"),
+    );
     setLoading(false);
+    setWaking(false);
     if (error) {
-      toast({ title: "Kunde inte logga in", description: error.message, variant: "destructive" });
+      toast({
+        title: "Kunde inte logga in",
+        description: isBackendAsleepError(error)
+          ? "Tjänsten vaknar fortfarande. Vänta en liten stund och försök igen."
+          : (error as { message?: string }).message,
+        variant: "destructive",
+      });
       return;
     }
     const target = safeNext(next);
     window.location.href = target;
   }
+
 
   return (
     <div className="flex min-h-[100dvh] items-center justify-center bg-background px-4">
