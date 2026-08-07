@@ -54,16 +54,28 @@ function SignUpPage() {
     setLoading(true);
     const target = safeNext(next);
     const redirectUrl = `${window.location.origin}${target}`;
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: { emailRedirectTo: redirectUrl },
-    });
+    const { error } = await withBackendRecovery(
+      () =>
+        supabase.auth.signUp({
+          email,
+          password,
+          options: { emailRedirectTo: redirectUrl },
+        }),
+      (status) => setWaking(status === "waking"),
+    );
     setLoading(false);
+    setWaking(false);
     if (error) {
-      toast({ title: "Kunde inte skapa konto", description: error.message, variant: "destructive" });
+      toast({
+        title: "Kunde inte skapa konto",
+        description: isBackendAsleepError(error)
+          ? "Tjänsten vaknar fortfarande. Vänta en liten stund och försök igen."
+          : (error as { message?: string }).message,
+        variant: "destructive",
+      });
       return;
     }
+
     toast({ title: "Konto skapat", description: "Du kan logga in nu." });
     navigate({ to: "/sign-in", search: { next: target } });
   }
