@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { withBackendRecovery, isBackendAsleepError } from "@/lib/backend-wake";
+
 
 export const Route = createFileRoute("/sign-up")({
   ssr: false,
