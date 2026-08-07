@@ -118,7 +118,7 @@ function SignUpPage() {
             </span>
           </label>
           <Button type="submit" disabled={loading} className="w-full">
-            {loading ? "Skapar konto…" : "Skapa konto"}
+            {waking ? "Väcker tjänsten…" : loading ? "Skapar konto…" : "Skapa konto"}
           </Button>
         </form>
         <p className="mt-6 text-center text-sm text-muted-foreground">
