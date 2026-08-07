@@ -81,7 +81,7 @@ function SignInPage() {
             <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
           </div>
           <Button type="submit" disabled={loading} className="w-full">
-            {loading ? "Loggar in…" : "Logga in"}
+            {waking ? "Väcker tjänsten…" : loading ? "Loggar in…" : "Logga in"}
           </Button>
         </form>
         <p className="mt-6 text-center text-sm text-muted-foreground">
