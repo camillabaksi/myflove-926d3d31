@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { withBackendRecovery, isBackendAsleepError } from "@/lib/backend-wake";
+
 
 export const Route = createFileRoute("/sign-up")({
   ssr: false,
@@ -40,6 +42,8 @@ function SignUpPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [consent, setConsent] = useState(false);
+  const [waking, setWaking] = useState(false);
+
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -54,16 +58,28 @@ function SignUpPage() {
     setLoading(true);
     const target = safeNext(next);
     const redirectUrl = `${window.location.origin}${target}`;
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: { emailRedirectTo: redirectUrl },
-    });
+    const { error } = await withBackendRecovery(
+      () =>
+        supabase.auth.signUp({
+          email,
+          password,
+          options: { emailRedirectTo: redirectUrl },
+        }),
+      (status) => setWaking(status === "waking"),
+    );
     setLoading(false);
+    setWaking(false);
     if (error) {
-      toast({ title: "Kunde inte skapa konto", description: error.message, variant: "destructive" });
+      toast({
+        title: "Kunde inte skapa konto",
+        description: isBackendAsleepError(error)
+          ? "Tjänsten vaknar fortfarande. Vänta en liten stund och försök igen."
+          : (error as { message?: string }).message,
+        variant: "destructive",
+      });
       return;
     }
+
     toast({ title: "Konto skapat", description: "Du kan logga in nu." });
     navigate({ to: "/sign-in", search: { next: target } });
   }
@@ -102,7 +118,7 @@ function SignUpPage() {
             </span>
           </label>
           <Button type="submit" disabled={loading} className="w-full">
-            {loading ? "Skapar konto…" : "Skapa konto"}
+            {waking ? "Väcker tjänsten…" : loading ? "Skapar konto…" : "Skapa konto"}
           </Button>
         </form>
         <p className="mt-6 text-center text-sm text-muted-foreground">
