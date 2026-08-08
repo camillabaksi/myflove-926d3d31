@@ -268,7 +268,6 @@ export function useGetAnalyticsSummary(_opts?: any): any {
   });
 }
 
-import { useQuery } from "@tanstack/react-query";
 import { getSlTripFn, getSlNearbyStopFn } from "@/lib/sl.functions";
 
 export async function getSlTrip(args: { from: string; to: string }): Promise<any> {
