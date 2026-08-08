@@ -1,57 +1,44 @@
-## Vad du får
+# Fix: family sharing for shopping list and calendar
 
-Riktiga push-notiser som når din telefon även när MyFlove är stängd:
-- **Medicin** – när det är dags och du inte kryssat i
-- **Uppgifts-loopar** – tvätt klar (~50 min), disk (~55 min), ugn (~25 min) osv.
-- **Uppgifter med tid** – när klockslaget passerar och den inte är avbockad
-- **Väder** – morgonpuff om regn/kyla/värme väntas idag
+## Confirmed problem
 
-## Så funkar det
+Creating or joining a family works — it writes real rows to the database. But every
+part of the app that *reads* the family goes through a placeholder module
+(`src/compat/api-client.ts`) that returns empty data and fake "success" for every
+action. So:
 
-1. Du installerar MyFlove på hemskärmen (PWA – redan klart).
-2. Första gången du öppnar appen frågar den om lov att skicka notiser.
-3. Servern kollar var 5:e minut vad som ska gå ut till dig och skickar via Web Push.
+- The shopping list always falls back to the device-only list; the "Delad med din familj"
+  badge never shows and items never reach other family members.
+- Calendar events look like they were added (the dialog closes, success is shown), but
+  nothing is saved and nothing shows up later.
 
-**Viktig gräns för iPhone:** Push-notiser i PWA funkar bara om appen är **installerad på hemskärmen** (iOS 16.4+). I vanlig Safari-flik funkar det inte – det är Apples begränsning, inte MyFloves.
+There is also no storage in the database for shared shopping items or family events yet.
 
-## Vad jag bygger
+## What to build
 
-**Frontend**
-- Service worker `public/sw.js` som tar emot push-events och visar notisen (även när appen är stängd).
-- En "Aktivera notiser"-knapp på hemskärmen som ber om lov och sparar prenumerationen.
-- Guarded registrering – service workern kör aldrig i Lovable-preview, bara i den publicerade appen.
+1. **Database (needs the paused cloud database to be resumed first)**
+   - `household_shopping_items`: title, completed flag, which family it belongs to, who added it.
+   - `household_events`: title, date, optional time, which family member it belongs to.
+   - Access rules: only members of the same family can view, add, edit and delete that
+     family's items and events.
 
-**Backend (Lovable Cloud)**
-- Ny tabell `push_subscriptions` (user_id, endpoint, keys, enabled) med RLS så du bara ser dina egna.
-- Ny tabell `push_preferences` (medicin, loopar, väder på/av per användare) + inställningar i appen.
-- Server function `subscribeToPush` – sparar prenumerationen.
-- Server function `unsubscribeFromPush` – tar bort den.
-- Publik hook-route `/api/public/hooks/push-tick` skyddad med `apikey` – kollar vilka notiser som ska ut just nu.
-- pg_cron var 5:e minut som anropar hook-routen.
+2. **Replace the placeholder hooks with real ones** in `src/compat/api-client.ts`
+   (keeping the exact same function names and call shapes so no page has to change):
+   - `useGetMyHousehold` — reads the user's family plus its members.
+   - `useListShoppingItems`, `useAddShoppingItem`, `useToggleShoppingItem`,
+     `useDeleteShoppingItem` — read/write the shared shopping table.
+   - `useListFamilyEvents`, `useCreateFamilyEvent`, `useDeleteFamilyEvent` — read/write
+     the family events table.
+   - Errors surface properly instead of a fake success callback.
 
-**Väder-schemaläggning**
-- Varje morgon kl 07:00 kollar servern väder för din senast kända plats (från weather-card) och skickar puff om paraply/varma kläder behövs.
+3. **Verify** that `src/hooks/use-shared-shopping-list.ts`, `src/pages/shopping.tsx` and
+   `src/pages/calendar.tsx` work unchanged: shared badge appears with a family, items and
+   events persist and are visible to both members.
 
-## Teknisk sektion
+## Technical notes
 
-- **VAPID-nycklar**: genereras en gång och sparas som `VAPID_PUBLIC_KEY` (publik, i client) och `VAPID_PRIVATE_KEY` (secret). Publik nyckel exponeras via `import.meta.env`.
-- **web-push-signering**: `web-push`-npm är Node-only och kraschar på Cloudflare Workers. Använder istället `@block65/webcrypto-web-push` (Web Crypto, Worker-kompatibel) eller handrullad VAPID-JWT med `crypto.subtle`.
-- **Service worker** följer PWA-skill: registreras endast i produktion, aldrig i preview/dev, med kill-switch `?sw=off`.
-- **Loop-detektion**: samma logik som `proactive-suggestions.tsx` idag, men körd server-side mot användarens `tasks` i localStorage → jag flyttar loop-trigger till en enkel `task_reminders`-tabell så servern kan schemalägga notisen när uppgiften skapas.
-- **Väder-plats**: lagras i `push_preferences.last_location` när weather-card hämtar den.
-- **Deduplicering**: `push_deliveries`-tabell så samma notis inte skickas två gånger.
-
-## Vad du behöver göra själv
-
-1. Installera MyFlove på hemskärmen (iPhone: Dela → Lägg till på hemskärmen).
-2. Tryck "Aktivera notiser" i appen och godkänn.
-3. Klart – ingen tredjepartstjänst, inga extra konton.
-
-## Vad jag INTE gör i den här omgången
-
-- Native iOS/Android-app via Capacitor (separat projekt).
-- Push till Apple Watch / Wear OS.
-- Custom notis-ljud (browser bestämmer ljudet i bakgrunden).
-- SMS/e-post-fallback.
-
-Vill du att jag kör igång?
+- Data access uses the browser Supabase client with row-level security scoped through the
+  existing `is_household_member` function; no new server functions needed.
+- Shopping item ids stay numeric because `use-shared-shopping-list.ts` calls `Number(id)`.
+- Calendar matches events to members by user id, so `member_id` stores the member's user id.
+- The migration cannot run until the hosted database is resumed from Cloud.
