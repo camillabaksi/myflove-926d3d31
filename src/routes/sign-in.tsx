@@ -22,9 +22,8 @@ export const Route = createFileRoute("/sign-in")({
     ],
     links: [{ rel: "canonical", href: "https://myflove.lovable.app/sign-in" }],
   }),
-  validateSearch: (s: Record<string, unknown>) => ({
-    next: typeof s.next === "string" ? s.next : undefined,
-  }),
+  validateSearch: (s: Record<string, unknown>): { next?: string } =>
+    typeof s.next === "string" ? { next: s.next } : {},
   component: SignInPage,
 });
 

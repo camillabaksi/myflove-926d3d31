@@ -136,6 +136,47 @@ export type Database = {
           },
         ]
       }
+      household_events: {
+        Row: {
+          created_at: string
+          date: string
+          household_id: string
+          id: number
+          member_id: string
+          time: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          date: string
+          household_id: string
+          id?: never
+          member_id?: string
+          time?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          household_id?: string
+          id?: never
+          member_id?: string
+          time?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "household_events_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       household_members: {
         Row: {
           color: string
@@ -161,6 +202,44 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "household_members_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      household_shopping_items: {
+        Row: {
+          completed: boolean
+          created_at: string
+          created_by: string
+          household_id: string
+          id: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          completed?: boolean
+          created_at?: string
+          created_by?: string
+          household_id: string
+          id?: never
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          completed?: boolean
+          created_at?: string
+          created_by?: string
+          household_id?: string
+          id?: never
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "household_shopping_items_household_id_fkey"
             columns: ["household_id"]
             isOneToOne: false
             referencedRelation: "households"
