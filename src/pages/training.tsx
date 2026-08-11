@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import Layout from "@/components/layout";
 import { Button } from "@/components/ui/button";
@@ -149,6 +149,7 @@ export default function TrainingPage() {
   const [equipment, setEquipment] = useState(state.goal?.equipment ?? "");
   const [limitations, setLimitations] = useState(state.goal?.limitations ?? "");
   const [loading, setLoading] = useState(false);
+  const settingsRef = useRef<HTMLElement | null>(null);
 
 
   const [healthAvailable, setHealthAvailable] = useState(false);
@@ -715,7 +716,7 @@ export default function TrainingPage() {
 
         {view === "program" && (
           <>
-        <section className="surface-card p-5 space-y-4">
+        <section ref={settingsRef} className="surface-card p-5 space-y-4">
           <h2 className="text-lg font-semibold text-ink">Ditt mål</h2>
           <Input
             placeholder="T.ex. bli starkare i ryggen och orka springa 5 km"
@@ -808,6 +809,22 @@ export default function TrainingPage() {
               </div>
               <Button variant="ghost" size="sm" className="rounded-xl" onClick={clearProgram}>
                 Rensa
+              </Button>
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+              <Button variant="outline" size="sm" className="rounded-xl gap-2" onClick={handleEditProgram}>
+                <Pencil size={15} /> Redigera programmet
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="rounded-xl gap-2"
+                onClick={handleRecreate}
+                disabled={loading || !state.goal}
+              >
+                {loading ? <Loader2 size={15} className="animate-spin" /> : <RefreshCw size={15} />}
+                Skapa om med samma inställningar
               </Button>
             </div>
 
