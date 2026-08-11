@@ -18,7 +18,13 @@ type WeatherState = {
   code: number;
   city: string;
   fetchedAt?: number;
+  latitude?: number;
+  longitude?: number;
 };
+
+// Vädret räknas som färskt i 20 minuter, sedan hämtas det om automatiskt.
+const MAX_AGE_MS = 20 * 60 * 1000;
+
 
 type GeoPermissionState = PermissionState | "unknown" | "unsupported";
 
