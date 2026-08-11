@@ -298,7 +298,34 @@ export default function WeatherCard() {
           <span>känns som {state.apparent}°</span>
         </div>
         {info.hint && <p className="text-xs text-foreground/80 mt-1.5 leading-snug">{info.hint}</p>}
+        <div className="mt-1.5 flex items-center gap-2 text-[11px] text-muted-foreground">
+          {state.fetchedAt && (
+            <span>
+              Uppdaterad{" "}
+              {new Date(state.fetchedAt).toLocaleTimeString("sv-SE", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </span>
+          )}
+          <button
+            type="button"
+            onClick={() => {
+              setLoading(true);
+              if (state.latitude != null && state.longitude != null) {
+                void loadWeather(state.latitude, state.longitude, state.city);
+              } else {
+                load();
+              }
+            }}
+            className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
+          >
+            <RefreshCw size={11} />
+            Uppdatera
+          </button>
+        </div>
       </div>
+
     </div>
   );
 }
