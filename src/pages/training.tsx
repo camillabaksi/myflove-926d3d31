@@ -238,13 +238,82 @@ export default function TrainingPage() {
             </span>
           </div>
 
-          {!healthAvailable && (
-            <p className="text-xs text-muted-foreground flex items-start gap-2">
-              <Smartphone size={14} className="mt-0.5 shrink-0" />
-              Automatisk stegräkning läses från Apple Hälsa eller Health Connect när du använder MyFlove som app i
-              mobilen. I webbläsaren fyller du i stegen själv.
-            </p>
-          )}
+          {/* Statuspanel för stegsynk */}
+          <div className="rounded-2xl border border-border/70 bg-muted/40 p-4 space-y-3">
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-start gap-2">
+                <span
+                  aria-hidden
+                  className={`mt-1.5 h-2.5 w-2.5 rounded-full shrink-0 ${
+                    syncing
+                      ? "bg-amber-500 animate-pulse"
+                      : syncError
+                        ? "bg-destructive"
+                        : lastSyncAt
+                          ? "bg-primary"
+                          : "bg-muted-foreground/50"
+                  }`}
+                />
+                <div className="space-y-0.5">
+                  <p className="text-sm font-medium text-ink">
+                    {syncing
+                      ? "Synkar steg…"
+                      : !healthChecked
+                        ? "Kontrollerar hälsoapp…"
+                        : healthAvailable
+                          ? syncError
+                            ? "Synk misslyckades"
+                            : "Kopplad till hälsoappen"
+                          : "Manuellt läge"}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {lastSyncAt
+                      ? `Senast uppdaterad ${formatSyncTime(lastSyncAt)}${syncedDays ? ` · ${syncedDays} dagar hämtade` : ""}`
+                      : healthAvailable
+                        ? "Ingen synk gjord ännu."
+                        : "Stegen sparas från det du fyller i nedan."}
+                  </p>
+                </div>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                className="rounded-xl gap-2 shrink-0"
+                onClick={() => syncSteps()}
+                disabled={syncing}
+              >
+                {syncing ? <Loader2 size={16} className="animate-spin" /> : <RefreshCw size={16} />}
+                Hämta om
+              </Button>
+            </div>
+
+            {syncError && (
+              <div className="flex items-start gap-2 rounded-xl bg-destructive/10 p-3 text-xs text-destructive">
+                <AlertTriangle size={14} className="mt-0.5 shrink-0" />
+                <div className="space-y-2">
+                  <p>{syncError}</p>
+                  {healthAvailable && (
+                    <button
+                      type="button"
+                      onClick={() => void openHealthSettings()}
+                      className="underline underline-offset-2 font-medium"
+                    >
+                      Öppna hälsoinställningar
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {healthChecked && !healthAvailable && (
+              <p className="text-xs text-muted-foreground flex items-start gap-2">
+                <Smartphone size={14} className="mt-0.5 shrink-0" />
+                Automatisk stegräkning läses från Apple Hälsa eller Health Connect när du använder MyFlove som app i
+                mobilen. I webbläsaren fyller du i stegen själv.
+              </p>
+            )}
+          </div>
+
         </section>
 
         {/* Mål & generering */}
