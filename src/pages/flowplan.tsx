@@ -8,6 +8,8 @@ import { planFlowSequence, type FlowPlanResult } from "@/lib/flowplan.functions"
 import { useTasks, useFocus } from "@/hooks/use-data";
 import { supabase } from "@/integrations/supabase/client";
 import { useLocalStorage } from "@/lib/storage";
+import { DailyFocusCard } from "@/components/daily-focus-card";
+
 
 type StoredPlan = { plan: FlowPlanResult; savedAt: string; date: string };
 
@@ -143,11 +145,14 @@ export default function FlowPlanPage() {
             <div>
               <h1 className="text-3xl font-bold leading-tight">FlowPlan</h1>
               <p className="text-sm text-muted-foreground">
-                Flow föreslår en ordning som passar dagen – inte en lista på allt du "borde" hinna.
+                Sätt dagens fokus och låt Flow föreslå en ordning som passar dagen – inte en lista på allt du "borde" hinna.
               </p>
             </div>
           </div>
         </div>
+
+        <DailyFocusCard />
+
 
         <div className="bg-card border border-border rounded-2xl p-5 space-y-5">
           <div>
