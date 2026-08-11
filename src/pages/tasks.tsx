@@ -327,7 +327,14 @@ export default function Tasks() {
             Skilj på uppgifter (bocka av), ärenden (flera steg eller väntetid) och projekt.
             Sätt status <em>Pågår</em>, <em>Väntar på</em> eller <em>Klart</em> — så håller du reda utan att bära allt i huvudet.
           </p>
+          <AreaSwitcher className="mt-4" size="sm" />
+          {activeArea !== "alla" && (
+            <p className="text-xs text-muted-foreground mt-2">
+              Du är i {AREA_META[activeArea].label.toLowerCase()}srummet. Nya saker hamnar här.
+            </p>
+          )}
         </div>
+
 
         <form onSubmit={handleSubmit} className="bg-card p-4 rounded-3xl border border-border shadow-sm space-y-3">
           <div className="flex flex-col md:flex-row gap-3">
