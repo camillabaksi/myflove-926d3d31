@@ -129,6 +129,23 @@ export default function Layout({ children }: LayoutProps) {
       : []),
   ];
 
+  // Kategorier – gör navigationen lugnare genom att gruppera sektionerna.
+  const categories = useMemo(() => {
+    const byHref = (href: string) => navItems.find((i) => i.href === href);
+    const groups: { id: string; label: string; icon: typeof Home; hrefs: string[] }[] = [
+      { id: "dagen", label: "Min dag", icon: Sun, hrefs: ["/hem", "/daglig-rutin", "/kalender", "/tasks", "/flowplan"] },
+      { id: "fokus", label: "Fokus & lugn", icon: Target, hrefs: ["/fokus", "/pomodoro", "/dump", "/assistant"] },
+      { id: "mabra", label: "Må bra", icon: Heart, hrefs: ["/ma-bra", "/beloningar", "/statistik"] },
+      { id: "hem", label: "Hem & familj", icon: Users, hrefs: ["/familj", "/shopping", "/matlista", "/finances", "/travel"] },
+      { id: "ovrigt", label: "Övrigt", icon: Settings2, hrefs: ["/friktionsindex", "/admin", "/admin-statistik"] },
+    ];
+    return groups
+      .map((g) => ({ ...g, items: g.hrefs.map(byHref).filter(Boolean) as typeof navItems }))
+      .filter((g) => g.items.length > 0);
+  }, [navItems]);
+
+  const [openCategory, setOpenCategory] = useState<string | null>(null);
+
   // Bottom nav: Home is fixed, the remaining 3 slots are user-customizable.
   const [bottomNavHrefs, setBottomNavHrefs] = useLocalStorage<string[]>("myflow-bottom-nav", [
     "/ma-bra",
@@ -159,25 +176,35 @@ export default function Layout({ children }: LayoutProps) {
         <div className="mb-8 px-4 py-2">
           <h1 className="text-2xl font-bold text-primary tracking-tight">MyFlove</h1>
         </div>
-        <div className="grid grid-cols-2 gap-3">
-          {navItems.map((item) => {
-            const isActive = location === item.href;
-            const Icon = item.icon;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`aspect-square flex flex-col items-center justify-center gap-2 rounded-2xl p-2 text-center transition-all duration-200 ${
-                  isActive
-                    ? "bg-primary text-primary-foreground font-medium shadow-sm"
-                    : "bg-secondary/40 text-muted-foreground hover:bg-secondary hover:text-foreground"
-                }`}
-              >
-                <Icon size={24} strokeWidth={isActive ? 2.5 : 2} />
-                <span className="text-xs leading-tight">{item.label}</span>
-              </Link>
-            );
-          })}
+        <div className="space-y-5">
+          {categories.map((cat) => (
+            <div key={cat.id}>
+              <div className="flex items-center gap-2 px-1 mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                <cat.icon size={14} />
+                {cat.label}
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                {cat.items.map((item) => {
+                  const isActive = location === item.href;
+                  const Icon = item.icon;
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={`aspect-square flex flex-col items-center justify-center gap-2 rounded-2xl p-2 text-center transition-all duration-200 ${
+                        isActive
+                          ? "bg-primary text-primary-foreground font-medium shadow-sm"
+                          : "bg-secondary/40 text-muted-foreground hover:bg-secondary hover:text-foreground"
+                      }`}
+                    >
+                      <Icon size={24} strokeWidth={isActive ? 2.5 : 2} />
+                      <span className="text-xs leading-tight">{item.label}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </div>
         <div className="mt-auto pt-4 pb-2 space-y-2">
           <Button
@@ -367,12 +394,17 @@ export default function Layout({ children }: LayoutProps) {
           <div className="flex flex-col h-full">
             <div className="flex justify-between items-center p-4 border-b border-border/50">
               <h2 className="text-lg font-medium text-muted-foreground">
-                {editingBottomNav ? "Anpassa bottennav" : "Alla sektioner"}
+                {editingBottomNav
+                  ? "Anpassa bottennav"
+                  : openCategory
+                    ? categories.find((c) => c.id === openCategory)?.label ?? "Sektioner"
+                    : "Välj kategori"}
               </h2>
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
                   setEditingBottomNav(false);
+                  setOpenCategory(null);
                 }}
                 className="p-2 text-muted-foreground hover:bg-secondary rounded-full"
               >
@@ -390,17 +422,27 @@ export default function Layout({ children }: LayoutProps) {
                     onClose={() => setEditingBottomNav(false)}
                     onReset={() => setBottomNavHrefs(["/ma-bra", "/dump", "/kalender"])}
                   />
-              ) : (
+              ) : openCategory ? (
                 <>
+                  <button
+                    type="button"
+                    onClick={() => setOpenCategory(null)}
+                    className="mb-4 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
+                  >
+                    <RotateCcw size={16} /> Alla kategorier
+                  </button>
                   <div className="grid grid-cols-3 gap-3">
-                    {navItems.map((item) => {
+                    {(categories.find((c) => c.id === openCategory)?.items ?? []).map((item) => {
                       const isActive = location === item.href;
                       const Icon = item.icon;
                       return (
                         <Link
                           key={item.href}
                           href={item.href}
-                          onClick={() => setMobileMenuOpen(false)}
+                          onClick={() => {
+                            setMobileMenuOpen(false);
+                            setOpenCategory(null);
+                          }}
                           className={`aspect-square flex flex-col items-center justify-center gap-2 rounded-2xl p-2 text-center transition-all duration-200 ${
                             isActive
                               ? "bg-primary text-primary-foreground font-medium shadow-sm"
@@ -413,6 +455,29 @@ export default function Layout({ children }: LayoutProps) {
                       );
                     })}
                   </div>
+                </>
+              ) : (
+                <>
+                  <div className="grid grid-cols-2 gap-3">
+                    {categories.map((cat) => {
+                      const Icon = cat.icon;
+                      return (
+                        <button
+                          key={cat.id}
+                          type="button"
+                          onClick={() => setOpenCategory(cat.id)}
+                          className="aspect-square flex flex-col items-center justify-center gap-2 rounded-3xl p-3 text-center bg-card text-foreground border border-border shadow-sm transition-all duration-200 active:scale-95"
+                        >
+                          <Icon size={30} />
+                          <span className="text-sm font-medium leading-tight">{cat.label}</span>
+                          <span className="text-[11px] text-muted-foreground">
+                            {cat.items.length} sektioner
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
                   <div className="mt-6 flex items-center justify-center">
                     <Button
                       variant="outline"
