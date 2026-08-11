@@ -40,18 +40,14 @@ export function AreaSwitcher({ size = "md", className = "" }: Props) {
       {options.map((o) => {
         const isActive = activeArea === o.value;
         const area = o.value === "alla" ? null : (o.value as LifeArea);
-        const style = area
-          ? isActive
-            ? areaChipStyle(area, true)
-            : { borderColor: areaColor(area) + "", opacity: 0.95 }
-          : undefined;
+        const style = area && isActive ? areaChipStyle(area, true) : undefined;
         return (
           <button
             key={o.value}
             type="button"
             onClick={() => setActiveArea(o.value)}
             aria-pressed={isActive}
-            style={area ? { ...style, ...(isActive ? {} : { borderColor: undefined }) } : undefined}
+            style={style}
             className={`${pad} rounded-full border transition-colors ${
               isActive
                 ? area
