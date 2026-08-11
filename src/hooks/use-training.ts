@@ -1,6 +1,8 @@
 import { useCallback } from "react";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import type { TrainingProgram } from "@/lib/training.functions";
+import { buildWeeklyPlan, weekStartKey, type WeekFeedback, type WeeklyPlan } from "@/lib/weekly-plan";
+import { movementById } from "@/lib/everyday-movement";
 
 export interface TrainingGoal {
   goal: string;
@@ -24,6 +26,10 @@ export interface TrainingState {
   movement?: Record<string, string[]>;
   /** Mål för vardagsmotion i minuter per dag */
   movementGoal?: number;
+  /** Aktuell veckoplan */
+  weeklyPlan?: WeeklyPlan | null;
+  /** veckostart (ISO-måndag) -> hur veckan kändes */
+  weekFeedback?: Record<string, WeekFeedback>;
   createdAt?: number;
 }
 
@@ -35,7 +41,10 @@ const DEFAULT_STATE: TrainingState = {
   stepGoal: 7000,
   movement: {},
   movementGoal: 20,
+  weeklyPlan: null,
+  weekFeedback: {},
 };
+
 
 
 export const todayKey = () => new Date().toISOString().slice(0, 10);
