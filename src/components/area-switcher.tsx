@@ -1,4 +1,11 @@
-import { AREA_META, useActiveArea, type AreaFilter } from "@/lib/life-areas";
+import {
+  AREA_META,
+  areaChipStyle,
+  areaColor,
+  useActiveArea,
+  type AreaFilter,
+  type LifeArea,
+} from "@/lib/life-areas";
 
 interface Props {
   /** Kompakt läge för sidor med ont om plats */
@@ -32,18 +39,30 @@ export function AreaSwitcher({ size = "md", className = "" }: Props) {
     >
       {options.map((o) => {
         const isActive = activeArea === o.value;
+        const area = o.value === "alla" ? null : (o.value as LifeArea);
+        const style = area && isActive ? areaChipStyle(area, true) : undefined;
         return (
           <button
             key={o.value}
             type="button"
             onClick={() => setActiveArea(o.value)}
             aria-pressed={isActive}
+            style={style}
             className={`${pad} rounded-full border transition-colors ${
               isActive
-                ? "border-primary bg-primary/10 text-primary font-medium"
+                ? area
+                  ? "font-medium"
+                  : "border-primary bg-primary/10 text-primary font-medium"
                 : "border-border bg-card text-muted-foreground hover:bg-secondary"
             }`}
           >
+            {area ? (
+              <span
+                aria-hidden="true"
+                className="inline-block w-2 h-2 rounded-full mr-1.5 align-middle"
+                style={{ backgroundColor: areaColor(area) }}
+              />
+            ) : null}
             {o.emoji ? <span aria-hidden="true">{o.emoji} </span> : null}
             {o.label}
           </button>
