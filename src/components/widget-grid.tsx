@@ -89,7 +89,7 @@ export default function WidgetGrid() {
       value: todayMood ? `${EMOJI_BY_SCORE[todayMood.score]} idag` : "Checka in",
     },
     {
-      href: "/fokus",
+      href: "/flowplan",
       icon: Target,
       label: "Dagens fokus",
       value: currentFocus ? currentFocus.text : "Inget valt",

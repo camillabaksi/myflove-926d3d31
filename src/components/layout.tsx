@@ -108,7 +108,7 @@ export default function Layout({ children }: LayoutProps) {
     { href: "/daglig-rutin", label: "Daglig rutin", icon: Sun },
     { href: "/dump", label: "Dumping", icon: Inbox },
     { href: "/kalender", label: "Kalender", icon: Calendar },
-    { href: "/fokus", label: "Fokus", icon: Target },
+    
     { href: "/tasks", label: "Att göra", icon: CheckSquare },
     { href: "/flowplan", label: "FlowPlan", icon: ListOrdered },
     { href: "/pomodoro", label: "Timer", icon: Timer },
@@ -134,7 +134,7 @@ export default function Layout({ children }: LayoutProps) {
     const byHref = (href: string) => navItems.find((i) => i.href === href);
     const groups: { id: string; label: string; icon: typeof Home; hrefs: string[] }[] = [
       { id: "dagen", label: "Min dag", icon: Sun, hrefs: ["/hem", "/daglig-rutin", "/kalender", "/tasks", "/flowplan"] },
-      { id: "fokus", label: "Fokus & lugn", icon: Target, hrefs: ["/fokus", "/pomodoro", "/dump", "/assistant"] },
+      { id: "fokus", label: "Fokus & lugn", icon: Target, hrefs: ["/pomodoro", "/dump", "/assistant"] },
       { id: "mabra", label: "Må bra", icon: Heart, hrefs: ["/ma-bra", "/beloningar", "/statistik"] },
       { id: "hem", label: "Hem & familj", icon: Users, hrefs: ["/familj", "/shopping", "/matlista", "/finances", "/travel"] },
       { id: "ovrigt", label: "Övrigt", icon: Settings2, hrefs: ["/friktionsindex", "/admin", "/admin-statistik"] },
