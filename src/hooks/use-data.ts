@@ -270,8 +270,13 @@ export function useTasks() {
     setTaskArea,
 
     addTaskStep,
+    addTaskSteps,
+    setTaskCourse,
+    addTaskAttachment,
+    removeTaskAttachment,
     toggleTaskStep,
     deleteTaskStep,
+
   };
 }
 
