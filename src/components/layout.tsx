@@ -394,7 +394,11 @@ export default function Layout({ children }: LayoutProps) {
           <div className="flex flex-col h-full">
             <div className="flex justify-between items-center p-4 border-b border-border/50">
               <h2 className="text-lg font-medium text-muted-foreground">
-                {editingBottomNav ? "Anpassa bottennav" : "Alla sektioner"}
+                {editingBottomNav
+                  ? "Anpassa bottennav"
+                  : openCategory
+                    ? categories.find((c) => c.id === openCategory)?.label ?? "Sektioner"
+                    : "Välj kategori"}
               </h2>
               <button
                 onClick={() => {
