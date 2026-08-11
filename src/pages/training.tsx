@@ -126,6 +126,7 @@ export default function TrainingPage() {
     setWeekFeedback,
     regenerateWeeklyPlan,
     setWeight,
+    removeWeight,
     setWeightGoal,
     weightEntries,
     weightGoal,
@@ -136,6 +137,8 @@ export default function TrainingPage() {
 
   const [view, setView] = useState<TrainingView>("overview");
   const [weightInput, setWeightInput] = useState("");
+  const [weightDate, setWeightDate] = useState(() => new Date().toISOString().slice(0, 10));
+  const [weightNote, setWeightNote] = useState("");
   const [weightGoalInput, setWeightGoalInput] = useState(weightGoal ? String(weightGoal) : "");
 
   const [goal, setGoal] = useState(state.goal?.goal ?? "");
@@ -874,29 +877,56 @@ export default function TrainingPage() {
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="rounded-2xl border border-border/70 p-4 space-y-3">
+              <p className="text-sm font-medium text-ink">Registrera en vägning</p>
+              <div className="grid gap-2 sm:grid-cols-2">
+                <Input
+                  type="number"
+                  step="0.1"
+                  inputMode="decimal"
+                  placeholder="Vikt (kg)"
+                  value={weightInput}
+                  onChange={(e) => setWeightInput(e.target.value)}
+                  className="rounded-xl"
+                  aria-label="Vikt i kg"
+                />
+                <Input
+                  type="date"
+                  value={weightDate}
+                  max={new Date().toISOString().slice(0, 10)}
+                  onChange={(e) => setWeightDate(e.target.value)}
+                  className="rounded-xl"
+                  aria-label="Datum för vägningen"
+                />
+              </div>
               <Input
-                type="number"
-                step="0.1"
-                inputMode="decimal"
-                placeholder="Vikt idag (kg)"
-                value={weightInput}
-                onChange={(e) => setWeightInput(e.target.value)}
-                className="w-40 rounded-xl"
+                placeholder="Notering (valfritt) – t.ex. sov dåligt, tränat mycket"
+                value={weightNote}
+                onChange={(e) => setWeightNote(e.target.value)}
+                className="rounded-xl"
+                aria-label="Notering"
               />
               <Button
                 variant="secondary"
                 className="rounded-xl"
                 onClick={() => {
                   const n = Number(weightInput.replace(",", "."));
-                  if (!Number.isFinite(n) || n <= 0) return;
-                  setWeight(n);
+                  if (!Number.isFinite(n) || n <= 0) {
+                    toast({ title: "Fyll i vikten", description: "Skriv en vikt i kilo först." });
+                    return;
+                  }
+                  const date = weightDate || new Date().toISOString().slice(0, 10);
+                  setWeight(n, date, weightNote);
                   setWeightInput("");
-                  toast({ title: "Sparat", description: "Vikten är loggad för idag." });
+                  setWeightNote("");
+                  toast({ title: "Sparat", description: `Vikten är loggad för ${date}.` });
                 }}
               >
-                Spara vikt
+                Spara vägning
               </Button>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
               <Input
                 type="number"
                 step="0.1"
@@ -937,6 +967,57 @@ export default function TrainingPage() {
                 })}
               </div>
             )}
+
+            <div className="space-y-2">
+              <p className="text-sm font-medium text-ink">Vikthistorik</p>
+              {weights.length === 0 ? (
+                <p className="text-sm text-muted-foreground">
+                  Inga vägningar än. Din första registrering hamnar här.
+                </p>
+              ) : (
+                <ul className="divide-y divide-border/70 rounded-2xl border border-border/70">
+                  {[...weights].reverse().map((w, i, arr) => {
+                    const prev = arr[i + 1];
+                    const diff = prev ? Math.round((w.kg - prev.kg) * 10) / 10 : null;
+                    return (
+                      <li key={w.date} className="flex items-start gap-3 p-3">
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-ink">
+                            {w.kg} kg
+                            {diff !== null && diff !== 0 && (
+                              <span className="ml-2 text-xs text-muted-foreground">
+                                {diff > 0 ? "+" : ""}
+                                {diff} kg
+                              </span>
+                            )}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {new Date(w.date + "T00:00:00").toLocaleDateString("sv-SE", {
+                              weekday: "short",
+                              day: "numeric",
+                              month: "long",
+                            })}
+                          </p>
+                          {w.note && <p className="text-sm text-muted-foreground mt-1 break-words">{w.note}</p>}
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="rounded-xl text-muted-foreground"
+                          onClick={() => {
+                            removeWeight(w.date);
+                            toast({ title: "Borttagen", description: "Vägningen är raderad." });
+                          }}
+                        >
+                          Ta bort
+                        </Button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </div>
+
 
             <p className="text-xs text-muted-foreground">
               MyFlove ger inga kost- eller kaloriråd. Prata med vården om du behöver stöd med kost eller hälsa.
