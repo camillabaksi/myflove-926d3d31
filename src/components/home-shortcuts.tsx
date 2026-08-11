@@ -35,7 +35,7 @@ const ALL_SHORTCUTS: Shortcut[] = ([
   { id: "ma-bra",     href: "/ma-bra",         label: "Må bra",     icon: Heart },
   { id: "daglig-rutin", href: "/daglig-rutin", label: "Daglig rutin", icon: Sun },
   
-  { id: "fokus",      href: "/fokus",          label: "Dagens fokus", icon: Target },
+  { id: "fokus",      href: "/flowplan",          label: "Dagens fokus", icon: Target },
   { id: "tasks",      href: "/tasks",          label: "Att göra",   icon: CheckSquare },
   { id: "shopping",   href: "/shopping",       label: "Inköp",      icon: ShoppingBag },
   { id: "kalender",   href: "/kalender",       label: "Kalender",   icon: Calendar },
