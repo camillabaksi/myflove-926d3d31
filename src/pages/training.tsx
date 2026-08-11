@@ -457,6 +457,7 @@ export default function TrainingPage() {
             </div>
           </div>
         </section>
+        )}
 
         {view === "motion" && (
         <section className="surface-card p-5 space-y-4">
