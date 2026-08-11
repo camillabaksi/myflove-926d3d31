@@ -12,6 +12,8 @@ import {
   Circle,
   RefreshCw,
   Smartphone,
+  AlertTriangle,
+
   Target,
 } from "lucide-react";
 import { generateTrainingProgram } from "@/lib/training.functions";
@@ -26,6 +28,19 @@ const FOCUS: { id: TrainingGoal["focus"]; label: string }[] = [
   { id: "blandat", label: "Blandat" },
 ];
 const LEVELS: TrainingGoal["level"][] = ["nybörjare", "van", "erfaren"];
+const LAST_SYNC_KEY = "myflove.steps.lastSync";
+
+function formatSyncTime(stamp: number): string {
+  const d = new Date(stamp);
+  const diffMin = Math.round((Date.now() - stamp) / 60000);
+  if (diffMin < 1) return "just nu";
+  if (diffMin < 60) return `för ${diffMin} min sedan`;
+  const sameDay = d.toDateString() === new Date().toDateString();
+  const time = d.toLocaleTimeString("sv-SE", { hour: "2-digit", minute: "2-digit" });
+  if (sameDay) return `idag ${time}`;
+  return `${d.toLocaleDateString("sv-SE", { day: "numeric", month: "short" })} ${time}`;
+}
+
 
 const TYPE_TINT: Record<string, string> = {
   styrka: "205 45% 34%",
@@ -50,14 +65,24 @@ export default function TrainingPage() {
   const [loading, setLoading] = useState(false);
 
   const [healthAvailable, setHealthAvailable] = useState(false);
+  const [healthChecked, setHealthChecked] = useState(false);
   const [syncing, setSyncing] = useState(false);
   const [manualSteps, setManualSteps] = useState("");
+  const [lastSyncAt, setLastSyncAt] = useState<number | null>(null);
+  const [syncError, setSyncError] = useState<string | null>(null);
+  const [syncedDays, setSyncedDays] = useState(0);
+
+  useEffect(() => {
+    const saved = Number(localStorage.getItem(LAST_SYNC_KEY));
+    if (Number.isFinite(saved) && saved > 0) setLastSyncAt(saved);
+  }, []);
 
   useEffect(() => {
     let active = true;
     isHealthAppAvailable().then((ok) => {
       if (!active) return;
       setHealthAvailable(ok);
+      setHealthChecked(true);
       if (ok) syncSteps(true);
     });
     return () => {
@@ -68,9 +93,15 @@ export default function TrainingPage() {
 
   const syncSteps = async (silent = false) => {
     setSyncing(true);
+    setSyncError(null);
     const rows = await readStepsForDays(7);
     setSyncing(false);
     if (!rows || rows.length === 0) {
+      setSyncError(
+        rows
+          ? "Hälsoappen svarade men innehöll inga steg för den senaste veckan."
+          : "Kunde inte läsa steg. Godkänn åtkomst till steg i hälsoappen – eller fyll i stegen manuellt.",
+      );
       if (!silent) {
         toast({
           title: "Hittade ingen hälsodata",
@@ -81,10 +112,15 @@ export default function TrainingPage() {
       return;
     }
     for (const row of rows) setSteps(row.steps, row.date);
+    const stamp = Date.now();
+    setLastSyncAt(stamp);
+    setSyncedDays(rows.length);
+    localStorage.setItem(LAST_SYNC_KEY, String(stamp));
     const today = new Date().toISOString().slice(0, 10);
     const count = rows.find((r) => r.date === today)?.steps ?? rows.at(-1)?.steps ?? 0;
     if (!silent) toast({ title: "Steg hämtade", description: `${count.toLocaleString("sv-SE")} steg idag.` });
   };
+
 
 
   const handleGenerate = async () => {
@@ -204,13 +240,82 @@ export default function TrainingPage() {
             </span>
           </div>
 
-          {!healthAvailable && (
-            <p className="text-xs text-muted-foreground flex items-start gap-2">
-              <Smartphone size={14} className="mt-0.5 shrink-0" />
-              Automatisk stegräkning läses från Apple Hälsa eller Health Connect när du använder MyFlove som app i
-              mobilen. I webbläsaren fyller du i stegen själv.
-            </p>
-          )}
+          {/* Statuspanel för stegsynk */}
+          <div className="rounded-2xl border border-border/70 bg-muted/40 p-4 space-y-3">
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-start gap-2">
+                <span
+                  aria-hidden
+                  className={`mt-1.5 h-2.5 w-2.5 rounded-full shrink-0 ${
+                    syncing
+                      ? "bg-amber-500 animate-pulse"
+                      : syncError
+                        ? "bg-destructive"
+                        : lastSyncAt
+                          ? "bg-primary"
+                          : "bg-muted-foreground/50"
+                  }`}
+                />
+                <div className="space-y-0.5">
+                  <p className="text-sm font-medium text-ink">
+                    {syncing
+                      ? "Synkar steg…"
+                      : !healthChecked
+                        ? "Kontrollerar hälsoapp…"
+                        : healthAvailable
+                          ? syncError
+                            ? "Synk misslyckades"
+                            : "Kopplad till hälsoappen"
+                          : "Manuellt läge"}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {lastSyncAt
+                      ? `Senast uppdaterad ${formatSyncTime(lastSyncAt)}${syncedDays ? ` · ${syncedDays} dagar hämtade` : ""}`
+                      : healthAvailable
+                        ? "Ingen synk gjord ännu."
+                        : "Stegen sparas från det du fyller i nedan."}
+                  </p>
+                </div>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                className="rounded-xl gap-2 shrink-0"
+                onClick={() => syncSteps()}
+                disabled={syncing}
+              >
+                {syncing ? <Loader2 size={16} className="animate-spin" /> : <RefreshCw size={16} />}
+                Hämta om
+              </Button>
+            </div>
+
+            {syncError && (
+              <div className="flex items-start gap-2 rounded-xl bg-destructive/10 p-3 text-xs text-destructive">
+                <AlertTriangle size={14} className="mt-0.5 shrink-0" />
+                <div className="space-y-2">
+                  <p>{syncError}</p>
+                  {healthAvailable && (
+                    <button
+                      type="button"
+                      onClick={() => void openHealthSettings()}
+                      className="underline underline-offset-2 font-medium"
+                    >
+                      Öppna hälsoinställningar
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {healthChecked && !healthAvailable && (
+              <p className="text-xs text-muted-foreground flex items-start gap-2">
+                <Smartphone size={14} className="mt-0.5 shrink-0" />
+                Automatisk stegräkning läses från Apple Hälsa eller Health Connect när du använder MyFlove som app i
+                mobilen. I webbläsaren fyller du i stegen själv.
+              </p>
+            )}
+          </div>
+
         </section>
 
         {/* Mål & generering */}
