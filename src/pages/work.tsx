@@ -201,7 +201,7 @@ export default function WorkPage() {
               <Briefcase size={20} />
             </div>
             <div>
-              <h1 className="text-3xl font-bold leading-tight">Jobb</h1>
+              <h1 className="text-3xl font-bold leading-tight text-ink">Jobb</h1>
               <p className="text-sm text-muted-foreground">
                 Projekt, arbetsuppgifter och dokument på ett ställe. Flow delar upp det stora i små steg.
               </p>
@@ -210,16 +210,16 @@ export default function WorkPage() {
         </header>
 
         {/* Projekt */}
-        <section className="bg-card border border-border rounded-2xl p-5 space-y-4">
+        <section className="surface-card p-5 space-y-4">
           <h2 className="text-lg font-semibold">Dina projekt</h2>
           <form onSubmit={handleAddProject} className="flex gap-2">
             <Input
               value={projectDraft}
               onChange={(e) => setProjectDraft(e.target.value)}
               placeholder="T.ex. Kvartalsrapport"
-              className="h-11 rounded-xl bg-secondary/50 border-transparent"
+              className="h-11 rounded-2xl bg-secondary/50 border-transparent"
             />
-            <Button type="submit" disabled={!projectDraft.trim()} className="h-11 rounded-xl">
+            <Button type="submit" disabled={!projectDraft.trim()} className="h-11 rounded-2xl">
               <Plus size={18} />
             </Button>
           </form>
@@ -256,14 +256,14 @@ export default function WorkPage() {
         </section>
 
         {/* Ny arbetsuppgift */}
-        <section className="bg-card border border-border rounded-2xl p-5 space-y-3">
+        <section className="surface-card p-5 space-y-3">
           <h2 className="text-lg font-semibold">Ny arbetsuppgift</h2>
           <form onSubmit={handleAddWorkTask} className="space-y-3">
             <Input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Vad ska göras? T.ex. Skicka underlag till chefen"
-              className="h-12 rounded-xl bg-secondary/50 border-transparent"
+              className="h-12 rounded-2xl bg-secondary/50 border-transparent"
             />
             <div className="flex flex-wrap gap-3">
               <label className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -272,13 +272,13 @@ export default function WorkPage() {
                   type="date"
                   value={dueDate}
                   onChange={(e) => setDueDate(e.target.value)}
-                  className="h-11 rounded-xl bg-background w-44"
+                  className="h-11 rounded-2xl bg-background w-44"
                 />
               </label>
               <select
                 value={projectId}
                 onChange={(e) => setProjectId(e.target.value)}
-                className="h-11 rounded-xl border border-border bg-background px-3 text-sm"
+                className="h-11 rounded-2xl border border-border bg-background px-3 text-sm"
                 aria-label="Välj projekt"
               >
                 <option value="">Inget projekt</option>
@@ -295,10 +295,10 @@ export default function WorkPage() {
                   value={reminderTime}
                   onChange={(e) => setReminderTime(e.target.value)}
                   aria-label="Klockslag för deadline-påminnelser"
-                  className="h-11 rounded-xl bg-background w-28"
+                  className="h-11 rounded-2xl bg-background w-28"
                 />
               </label>
-              <Button type="submit" disabled={!title.trim()} className="h-11 rounded-xl px-5">
+              <Button type="submit" disabled={!title.trim()} className="h-11 rounded-2xl px-5">
                 <Plus size={18} className="mr-1" /> Lägg till
               </Button>
             </div>
@@ -310,7 +310,7 @@ export default function WorkPage() {
               onChange={(e) => setDetails(e.target.value)}
               placeholder="Valfritt: klistra in uppdraget så kan Flow dela upp det bättre."
               rows={2}
-              className="w-full rounded-xl border border-border bg-background p-3 text-sm"
+              className="w-full rounded-2xl border border-border bg-background p-3 text-sm"
             />
           </form>
         </section>
@@ -333,7 +333,7 @@ export default function WorkPage() {
             return (
               <article
                 key={task.id}
-                className={`bg-card border border-border rounded-2xl p-5 space-y-4 ${
+                className={`surface-card p-5 space-y-4 ${
                   task.completed ? "opacity-60" : ""
                 }`}
               >
@@ -395,7 +395,7 @@ export default function WorkPage() {
                 </div>
 
                 {intros[task.id] && (
-                  <p className="text-sm leading-relaxed bg-primary/5 border border-primary/20 rounded-xl p-3">
+                  <p className="text-sm leading-relaxed bg-primary/5 border border-primary/20 rounded-2xl p-3">
                     {intros[task.id]}
                   </p>
                 )}
@@ -406,7 +406,7 @@ export default function WorkPage() {
                       <li key={s.id}>
                         <button
                           onClick={() => toggleTaskStep(task.id, s.id)}
-                          className="w-full flex items-start gap-2 text-left text-sm p-2 rounded-xl hover:bg-secondary/60"
+                          className="w-full flex items-start gap-2 text-left text-sm p-2 rounded-2xl hover:bg-secondary/60"
                         >
                           {s.done ? (
                             <CheckCircle2 size={16} className="text-primary mt-0.5 shrink-0" />
@@ -444,7 +444,7 @@ export default function WorkPage() {
                 )}
 
                 {task.dueDate && !task.completed && (
-                  <div className="rounded-xl border border-border bg-secondary/30 p-3 space-y-2">
+                  <div className="rounded-2xl border border-border bg-secondary/30 p-3 space-y-2">
                     <p className="text-xs text-muted-foreground flex items-center gap-1.5">
                       <BellRing size={12} /> Påminn mig innan deadline
                     </p>
@@ -488,7 +488,7 @@ export default function WorkPage() {
                   <Button
                     variant="secondary"
                     size="sm"
-                    className="rounded-xl"
+                    className="rounded-2xl"
                     disabled={busyId === task.id}
                     onClick={() => handleBreakDown(task)}
                   >
@@ -518,7 +518,7 @@ export default function WorkPage() {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="rounded-xl"
+                    className="rounded-2xl"
                     disabled={uploadingId === task.id}
                     onClick={() => fileInputs.current[task.id]?.click()}
                   >

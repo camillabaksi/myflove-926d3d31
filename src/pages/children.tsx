@@ -229,7 +229,7 @@ function ChildrenContent() {
           ))}
         </div>
 
-        <form onSubmit={handleAddChild} className="bg-card border border-border rounded-3xl p-4 space-y-3">
+        <form onSubmit={handleAddChild} className="surface-card p-4 space-y-3">
           <div className="flex flex-col sm:flex-row gap-2">
             <Input
               value={childName}
@@ -269,7 +269,7 @@ function ChildrenContent() {
         <>
           {/* Lägg till innehåll */}
           {isOwner && (
-            <section className="bg-card border border-border rounded-3xl p-5 space-y-3">
+            <section className="surface-card p-5 space-y-3">
               <h2 className="text-lg font-semibold">Lägg till för {activeChild.name}</h2>
               <form onSubmit={handleAddItem} className="space-y-3">
                 <div className="flex gap-2 flex-wrap">
@@ -374,7 +374,7 @@ function ChildrenContent() {
                   const Icon = KIND_META[item.kind].icon;
                   const mine = item.owner_id === userId;
                   return (
-                    <li key={item.id} className="bg-card border border-border rounded-2xl p-4 space-y-2">
+                    <li key={item.id} className="surface-card p-4 space-y-2">
                       <div className="flex items-start gap-3">
                         {item.kind === "task" || item.kind === "activity" ? (
                           <button
@@ -529,14 +529,14 @@ export default function ChildrenPage() {
     <Layout>
       <div className="space-y-8">
         <div>
-          <h1 className="text-3xl font-bold mb-2">Barn</h1>
+          <h1 className="text-3xl font-bold mb-2 text-ink">Barn</h1>
           <p className="text-muted-foreground">
             Allt som rör barnen på ett ställe – privat för dig, delat bara när du vill.
           </p>
         </div>
 
         <Show when="signed-out">
-          <div className="max-w-md mx-auto text-center py-16 bg-card/50 border-2 border-dashed border-border rounded-3xl space-y-4">
+          <div className="max-w-md mx-auto text-center py-16 surface-card border-dashed bg-card/60 space-y-4">
             <Baby className="mx-auto text-muted-foreground" size={40} />
             <p className="text-lg">Logga in för att använda barn-delen.</p>
             <Button onClick={() => openSignIn()} className="rounded-2xl h-12 px-8">
