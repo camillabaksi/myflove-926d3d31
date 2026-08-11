@@ -1,12 +1,13 @@
 import { ReactNode, useState, useEffect, useMemo } from "react";
 import { Link, useLocation } from "wouter";
-import { Home, Target, CheckSquare, ShoppingBag, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Settings2, Check, RotateCcw, ArrowUp, ArrowDown, LogOut, Volume2, VolumeX, Shield, Heart, Sun, Search } from "lucide-react";
+import { Home, Target, CheckSquare, ShoppingBag, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Settings2, Check, RotateCcw, ArrowUp, ArrowDown, LogOut, Volume2, VolumeX, Shield, Heart, Sun, Search, GraduationCap } from "lucide-react";
 import { isAlarmSoundEnabled, setAlarmSoundEnabled, subscribeAlarmPref, playAlarmPreview, initAlarmAudioUnlock } from "@/lib/push-notifications";
 import { useCommuteAlerts } from "@/hooks/use-commute-alerts";
 import { useMedicationAlerts } from "@/hooks/use-medication-alerts";
 import { useShoppingProximityAlerts } from "@/hooks/use-shopping-proximity-alerts";
 import { useNotificationScheduler } from "@/hooks/use-notification-scheduler";
 import { useIsAdmin } from "@/hooks/use-is-admin";
+import { useEnabledAreas } from "@/lib/life-areas";
 import { useLocalStorage } from "@/lib/storage";
 import { trackEvent } from "@/lib/analytics";
 import { Button } from "@/components/ui/button";
@@ -121,6 +122,9 @@ export default function Layout({ children }: LayoutProps) {
     { href: "/beloningar", label: "Belöningar", icon: Trophy },
     { href: "/assistant", label: "Hjälp", icon: Sparkles },
     { href: "/friktionsindex", label: "Feedback", icon: Flame },
+    ...(enabledAreas.includes("studier")
+      ? [{ href: "/studier", label: "Studier", icon: GraduationCap }]
+      : []),
     ...(isAdmin
       ? [
           { href: "/admin", label: "Adminöversikt", icon: Shield },
@@ -137,6 +141,7 @@ export default function Layout({ children }: LayoutProps) {
       { id: "fokus", label: "Fokus & lugn", icon: Target, hrefs: ["/pomodoro", "/dump", "/assistant"] },
       { id: "mabra", label: "Må bra", icon: Heart, hrefs: ["/ma-bra", "/beloningar", "/statistik"] },
       { id: "hem", label: "Hem & familj", icon: Users, hrefs: ["/familj", "/shopping", "/matlista", "/finances", "/travel"] },
+      { id: "studier", label: "Studier", icon: GraduationCap, hrefs: ["/studier"] },
       { id: "ovrigt", label: "Övrigt", icon: Settings2, hrefs: ["/friktionsindex", "/admin", "/admin-statistik"] },
     ];
     return groups
