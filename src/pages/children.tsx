@@ -529,14 +529,14 @@ export default function ChildrenPage() {
     <Layout>
       <div className="space-y-8">
         <div>
-          <h1 className="text-3xl font-bold mb-2">Barn</h1>
+          <h1 className="text-3xl font-bold mb-2 text-ink">Barn</h1>
           <p className="text-muted-foreground">
             Allt som rör barnen på ett ställe – privat för dig, delat bara när du vill.
           </p>
         </div>
 
         <Show when="signed-out">
-          <div className="max-w-md mx-auto text-center py-16 bg-card/50 border-2 border-dashed border-border rounded-3xl space-y-4">
+          <div className="max-w-md mx-auto text-center py-16 surface-card border-dashed bg-card/60 space-y-4">
             <Baby className="mx-auto text-muted-foreground" size={40} />
             <p className="text-lg">Logga in för att använda barn-delen.</p>
             <Button onClick={() => openSignIn()} className="rounded-2xl h-12 px-8">
