@@ -172,6 +172,21 @@ export default function TrainingPage() {
   const maxSteps = Math.max(state.stepGoal, ...week.map((d) => d.steps), 1);
   const stepPct = Math.min(100, Math.round((stepsToday / state.stepGoal) * 100));
 
+  const todayIso = new Date().toISOString().slice(0, 10);
+  const tipOfDay = movementOfTheDay(todayIso);
+  const movementMinutes = movementToday.reduce((sum, id) => sum + (movementById(id)?.minutes ?? 0), 0);
+  const movementPct = Math.min(100, Math.round((movementMinutes / movementGoal) * 100));
+  const movementWeek = movementDays(7);
+  const movementStreak = (() => {
+    let n = 0;
+    for (let i = movementWeek.length - 1; i >= 0; i--) {
+      if ((movementWeek[i]?.ids.length ?? 0) > 0) n++;
+      else break;
+    }
+    return n;
+  })();
+
+
   return (
     <Layout>
       <div className="max-w-3xl mx-auto px-4 py-6 space-y-6">
