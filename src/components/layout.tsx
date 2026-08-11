@@ -83,6 +83,8 @@ export default function Layout({ children }: LayoutProps) {
   const { alerts: proximityAlerts, dismissAlert: dismissProximityAlert } = useShoppingProximityAlerts();
   useNotificationScheduler();
   const { isAdmin } = useIsAdmin();
+  const { enabled: enabledAreas } = useEnabledAreas();
+
 
   const [alarmEnabled, setAlarmEnabledState] = useState<boolean>(() => isAlarmSoundEnabled());
   useEffect(() => subscribeAlarmPref((v) => setAlarmEnabledState(v)), []);
