@@ -68,20 +68,24 @@ export default function TrainingPage() {
 
   const syncSteps = async (silent = false) => {
     setSyncing(true);
-    const count = await readTodaySteps();
+    const rows = await readStepsForDays(7);
     setSyncing(false);
-    if (count === null) {
+    if (!rows || rows.length === 0) {
       if (!silent) {
         toast({
           title: "Hittade ingen hälsodata",
-          description: "Öppna appen på mobilen och godkänn åtkomst till steg – eller fyll i steg manuellt.",
+          description: "Godkänn åtkomst till steg i hälsoappen – eller fyll i steg manuellt.",
         });
+        await openHealthSettings();
       }
       return;
     }
-    setSteps(count);
+    for (const row of rows) setSteps(row.steps, row.date);
+    const today = new Date().toISOString().slice(0, 10);
+    const count = rows.find((r) => r.date === today)?.steps ?? rows.at(-1)?.steps ?? 0;
     if (!silent) toast({ title: "Steg hämtade", description: `${count.toLocaleString("sv-SE")} steg idag.` });
   };
+
 
   const handleGenerate = async () => {
     if (!goal.trim()) {
