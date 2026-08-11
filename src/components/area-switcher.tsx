@@ -1,4 +1,11 @@
-import { AREA_META, useActiveArea, type AreaFilter } from "@/lib/life-areas";
+import {
+  AREA_META,
+  areaChipStyle,
+  areaColor,
+  useActiveArea,
+  type AreaFilter,
+  type LifeArea,
+} from "@/lib/life-areas";
 
 interface Props {
   /** Kompakt läge för sidor med ont om plats */
