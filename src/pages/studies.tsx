@@ -15,6 +15,7 @@ import {
   Trash2,
   FileText,
   AlertCircle,
+  BellRing,
 } from "lucide-react";
 import { useTasks, type Task } from "@/hooks/use-data";
 import { useCourses } from "@/hooks/use-courses";
@@ -24,6 +25,11 @@ import { useToast } from "@/hooks/use-toast";
 import { celebrateFromEvent } from "@/lib/celebrate";
 
 const BUCKET = "study-docs";
+
+/** Standard: notis 7, 3 och 1 dag innan deadline. */
+const DEFAULT_LEADS = [7, 3, 1];
+const LEAD_CHOICES = [14, 7, 3, 1, 0];
+const leadLabel = (d: number) => (d === 0 ? "På dagen" : `${d} d`);
 
 function daysLeft(dueDate?: string) {
   if (!dueDate) return null;
@@ -53,6 +59,7 @@ export default function StudiesPage() {
     toggleTaskStep,
     addTaskAttachment,
     removeTaskAttachment,
+    setTaskDeadlineReminders,
   } = useTasks();
   const { activeCourses, addCourse, deleteCourse } = useCourses();
   const { toast } = useToast();
@@ -63,6 +70,7 @@ export default function StudiesPage() {
   const [dueDate, setDueDate] = useState("");
   const [courseId, setCourseId] = useState<string>("");
   const [details, setDetails] = useState("");
+  const [reminderTime, setReminderTime] = useState("09:00");
   const [busyId, setBusyId] = useState<string | null>(null);
   const [uploadingId, setUploadingId] = useState<string | null>(null);
   const [intros, setIntros] = useState<Record<string, string>>({});
@@ -96,6 +104,8 @@ export default function StudiesPage() {
       kind: "projekt",
       area: "studier",
       courseId: courseId || undefined,
+      deadlineLeadDays: dueDate ? DEFAULT_LEADS : undefined,
+      deadlineReminderTime: reminderTime,
     });
     setTitle("");
     setDueDate("");
@@ -170,6 +180,12 @@ export default function StudiesPage() {
   const deleteAttachment = async (task: Task, path: string) => {
     await supabase.storage.from(BUCKET).remove([path]);
     removeTaskAttachment(task.id, path);
+  };
+
+  const toggleLead = (task: Task, lead: number) => {
+    const current = task.deadlineLeadDays ?? [];
+    const next = current.includes(lead) ? current.filter((d) => d !== lead) : [...current, lead];
+    setTaskDeadlineReminders(task.id, next, task.deadlineReminderTime ?? "09:00");
   };
 
   return (
