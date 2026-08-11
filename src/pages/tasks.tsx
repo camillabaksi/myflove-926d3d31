@@ -102,6 +102,7 @@ export default function Tasks() {
       kind: newKind,
       time: newTime || undefined,
       reminderMinutesBefore: reminderMinutes,
+      area: defaultAreaFor(activeArea),
     });
     setNewTask("");
     setDueDate("");
@@ -110,10 +111,13 @@ export default function Tasks() {
     setNewKind("uppgift");
   };
 
+  const areaActive = useMemo(() => filterByArea(activeTasks, activeArea), [activeTasks, activeArea]);
+
   const filteredActive = useMemo(
-    () => filter === "all" ? activeTasks : activeTasks.filter((t) => getKind(t) === filter),
-    [activeTasks, filter]
+    () => filter === "all" ? areaActive : areaActive.filter((t) => getKind(t) === filter),
+    [areaActive, filter]
   );
+
 
   const grouped = useMemo(() => {
     const waiting = filteredActive.filter((t) => getStatus(t) === "vantar");
