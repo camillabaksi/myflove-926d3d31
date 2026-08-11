@@ -192,7 +192,7 @@ export default function Home() {
         <WeatherCard />
 
 
-        <div className="rounded-2xl bg-card border border-border p-4 flex flex-wrap items-center justify-between gap-3">
+        <div className="surface-card p-4 flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className="font-semibold text-ink">Påminnelser även när appen är stängd</p>
             <p className="text-sm text-muted-foreground">
@@ -214,16 +214,17 @@ export default function Home() {
         <button
           type="button"
           onClick={() => setHelpModalOpen(true)}
-          className="group relative w-full overflow-hidden flex items-center gap-4 p-6 rounded-full text-cream shadow-lg transition-transform text-left active:scale-[0.99]"
-          style={{ background: "linear-gradient(135deg, hsl(var(--terracotta)) 0%, hsl(var(--terracotta-soft)) 100%)" }}
+          className="group relative w-full overflow-hidden flex items-center gap-4 p-6 rounded-3xl text-primary-foreground shadow-lifted transition-transform text-left active:scale-[0.99]"
+          style={{ background: "linear-gradient(135deg, hsl(var(--forest)) 0%, hsl(var(--forest-deep)) 100%)" }}
         >
-          <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-          <div className="w-14 h-14 rounded-full bg-cream/20 flex items-center justify-center shrink-0 backdrop-blur-sm">
+          <div className="absolute inset-0 bg-primary-foreground/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+
+          <div className="w-14 h-14 rounded-full bg-primary-foreground/15 flex items-center justify-center shrink-0 backdrop-blur-sm">
             <HeartHandshake size={28} />
           </div>
           <div className="flex-1 relative">
             <p className="text-xl font-semibold">Hjälp mig</p>
-            <p className="text-cream/90 text-sm">
+            <p className="text-primary-foreground/85 text-sm">
               Känns det tungt just nu? Berätta hur du mår, så gör jag idag lite mindre.
             </p>
           </div>
@@ -239,7 +240,7 @@ export default function Home() {
               <button
                 type="button"
                 onClick={() => setHelpPlan(null)}
-                className="text-sm font-medium text-terracotta mt-2 underline underline-offset-2"
+                className="text-sm font-medium text-primary mt-2 underline underline-offset-2"
               >
                 Visa allt igen
               </button>
@@ -309,7 +310,7 @@ export default function Home() {
                     celebrateFromEvent(e);
                   }}
                   style={{ animationDelay: `${i * 60}ms` }}
-                  className="w-full flex items-center gap-3 p-4 bg-card border border-border rounded-2xl shadow-sm hover:border-primary/40 hover:shadow-md transition-all text-left animate-fade-in active:scale-[0.99]"
+                  className="w-full flex items-center gap-3 p-4 surface-card hover:border-primary/40 hover:shadow-lifted transition-all text-left animate-fade-in active:scale-[0.99]"
                 >
                   <Circle size={20} className="text-muted-foreground shrink-0" />
                   <span className="flex-1">{task.title}</span>
@@ -343,7 +344,7 @@ export default function Home() {
               {upcomingBills.slice(0, 3).map((bill) => (
                 <div
                   key={bill.id}
-                  className="flex items-center justify-between p-4 bg-card border border-border rounded-2xl shadow-sm"
+                  className="flex items-center justify-between p-4 surface-card"
                 >
                   <div>
                     <p className="font-medium">{bill.category}</p>
@@ -362,7 +363,7 @@ export default function Home() {
         {nextMedication && (
           <Link
             href="/daglig-rutin"
-            className="flex items-center gap-4 p-5 bg-card border border-border rounded-2xl shadow-sm hover:border-primary/40 transition-colors"
+            className="flex items-center gap-4 p-5 surface-card hover:border-primary/40 transition-colors"
           >
             <div className="w-12 h-12 rounded-full bg-violet-100 text-violet-700 flex items-center justify-center shrink-0">
               <Pill size={22} />
