@@ -19,6 +19,14 @@ import {
 import { generateTrainingProgram } from "@/lib/training.functions";
 import { useTraining, type TrainingGoal } from "@/hooks/use-training";
 import { isHealthAppAvailable, openHealthSettings, readStepsForDays } from "@/lib/health-steps";
+import {
+  MOVEMENT_IDEAS,
+  MOVEMENT_TAG_HUE,
+  MOVEMENT_TAG_LABEL,
+  movementById,
+  movementOfTheDay,
+} from "@/lib/everyday-movement";
+
 import { useToast } from "@/hooks/use-toast";
 import { celebrateFromEvent } from "@/lib/celebrate";
 
