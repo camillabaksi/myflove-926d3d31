@@ -25,6 +25,9 @@ import { requestNotificationPermission, getNotificationPermission } from "@/lib/
 import { useToast } from "@/hooks/use-toast";
 import { getRandomEncouragement } from "@/lib/encouragements";
 import { confirmations } from "@/lib/flow-voice";
+import { AreaSwitcher } from "@/components/area-switcher";
+import { AREA_META, defaultAreaFor, filterByArea, getArea, useActiveArea } from "@/lib/life-areas";
+
 
 // Blueprint 2.0 §7.4: Uppgift / Ärende / Projekt.
 const KIND_META: Record<TaskKind, { label: string; hint: string; Icon: typeof ListChecks }> = {
@@ -61,6 +64,8 @@ export default function Tasks() {
     deleteTaskStep,
   } = useTasks();
   const { toast } = useToast();
+  const { activeArea } = useActiveArea();
+
 
   const [newTask, setNewTask] = useState("");
   const [dueDate, setDueDate] = useState("");
@@ -99,6 +104,7 @@ export default function Tasks() {
       kind: newKind,
       time: newTime || undefined,
       reminderMinutesBefore: reminderMinutes,
+      area: defaultAreaFor(activeArea),
     });
     setNewTask("");
     setDueDate("");
@@ -107,10 +113,13 @@ export default function Tasks() {
     setNewKind("uppgift");
   };
 
+  const areaActive = useMemo(() => filterByArea(activeTasks, activeArea), [activeTasks, activeArea]);
+
   const filteredActive = useMemo(
-    () => filter === "all" ? activeTasks : activeTasks.filter((t) => getKind(t) === filter),
-    [activeTasks, filter]
+    () => filter === "all" ? areaActive : areaActive.filter((t) => getKind(t) === filter),
+    [areaActive, filter]
   );
+
 
   const grouped = useMemo(() => {
     const waiting = filteredActive.filter((t) => getStatus(t) === "vantar");
@@ -156,6 +165,12 @@ export default function Tasks() {
               <span className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full bg-secondary/60 text-muted-foreground border border-border">
                 <KindIcon size={11} /> {KIND_META[kind].label}
               </span>
+              {activeArea === "alla" && (
+                <span className="text-[11px] text-muted-foreground">
+                  {AREA_META[getArea(task)].emoji} {AREA_META[getArea(task)].label}
+                </span>
+              )}
+
               {task.dueDate && (
                 <span className="inline-flex items-center gap-1 text-[11px] text-primary font-medium">
                   <CalendarIcon size={11} /> {task.dueDate}
@@ -327,7 +342,14 @@ export default function Tasks() {
             Skilj på uppgifter (bocka av), ärenden (flera steg eller väntetid) och projekt.
             Sätt status <em>Pågår</em>, <em>Väntar på</em> eller <em>Klart</em> — så håller du reda utan att bära allt i huvudet.
           </p>
+          <AreaSwitcher className="mt-4" size="sm" />
+          {activeArea !== "alla" && (
+            <p className="text-xs text-muted-foreground mt-2">
+              Du är i {AREA_META[activeArea].label.toLowerCase()}srummet. Nya saker hamnar här.
+            </p>
+          )}
         </div>
+
 
         <form onSubmit={handleSubmit} className="bg-card p-4 rounded-3xl border border-border shadow-sm space-y-3">
           <div className="flex flex-col md:flex-row gap-3">

@@ -1,6 +1,8 @@
 import { useLocalStorage } from '../lib/storage';
 import { useCloudSyncedStorage } from '../lib/cloud-storage';
 import { trackEvent } from '../lib/analytics';
+import type { LifeArea } from '../lib/life-areas';
+
 
 export interface Focus {
   text: string;
@@ -33,7 +35,10 @@ export interface Task {
   status?: TaskStatus; // default "pagar"; "klart" ⇔ completed=true
   waitingOn?: string; // fritt fält: "vem/vad vi väntar på"
   steps?: TaskStep[]; // delsteg (särskilt för ärenden och projekt)
+  area?: LifeArea; // livsområde: vardag / privat / studier / jobb
+  courseId?: string; // kopplad kurs (studieflödet)
 }
+
 
 export interface ShoppingItem {
   id: string;
@@ -83,7 +88,15 @@ export function useTasks() {
   const addTask = (
     title: string,
     dueDate?: string,
-    opts?: { kind?: TaskKind; waitingOn?: string; time?: string; reminderMinutesBefore?: number }
+    opts?: {
+      kind?: TaskKind;
+      waitingOn?: string;
+      time?: string;
+      reminderMinutesBefore?: number;
+      area?: LifeArea;
+      courseId?: string;
+      steps?: string[];
+    }
   ) => {
     // Blueprint: uppgifter ska alltid landa i kalendern så inget "försvinner".
     // Om inget datum anges kopplas uppgiften till idag.
@@ -99,7 +112,9 @@ export function useTasks() {
         kind: opts?.kind ?? "uppgift",
         status: opts?.waitingOn ? "vantar" : "pagar",
         waitingOn: opts?.waitingOn,
-        steps: [],
+        area: opts?.area ?? "vardag",
+        courseId: opts?.courseId,
+        steps: (opts?.steps ?? []).map((s) => ({ id: generateId(), title: s, done: false })),
       },
       ...prev,
     ]);
@@ -109,7 +124,12 @@ export function useTasks() {
     setTasks((prev) => prev.map(t => (t.id === id ? { ...t, dueDate } : t)));
   };
 
+  const setTaskArea = (id: string, area: LifeArea) => {
+    setTasks((prev) => prev.map(t => (t.id === id ? { ...t, area } : t)));
+  };
+
   const setTaskTime = (id: string, time: string | undefined, reminderMinutesBefore?: number) => {
+
     setTasks((prev) => prev.map(t => (t.id === id
       ? { ...t, time, reminderMinutesBefore: time ? reminderMinutesBefore : undefined }
       : t)));
@@ -205,6 +225,8 @@ export function useTasks() {
     setTaskKind,
     setTaskDueDate,
     setTaskTime,
+    setTaskArea,
+
     addTaskStep,
     toggleTaskStep,
     deleteTaskStep,
