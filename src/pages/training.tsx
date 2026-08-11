@@ -370,6 +370,7 @@ export default function TrainingPage() {
           </div>
 
         </section>
+        )}
 
         {view === "plan" && (
         <section className="surface-card p-5 space-y-4">
