@@ -39,6 +39,7 @@ import { Route as AppDumpRouteImport } from './routes/_app.dump'
 import { Route as AppDagligRutinRouteImport } from './routes/_app.daglig-rutin'
 import { Route as AppCalendarRouteImport } from './routes/_app.calendar'
 import { Route as AppBeloningarRouteImport } from './routes/_app.beloningar'
+import { Route as AppBarnRouteImport } from './routes/_app.barn'
 import { Route as AppAssistantRouteImport } from './routes/_app.assistant'
 import { Route as AppAdminStatistikRouteImport } from './routes/_app.admin-statistik'
 import { Route as AppAdminRouteImport } from './routes/_app.admin'
@@ -199,6 +200,11 @@ const AppBeloningarRoute = AppBeloningarRouteImport.update({
   path: '/beloningar',
   getParentRoute: () => AppRoute,
 } as any)
+const AppBarnRoute = AppBarnRouteImport.update({
+  id: '/barn',
+  path: '/barn',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppAssistantRoute = AppAssistantRouteImport.update({
   id: '/assistant',
   path: '/assistant',
@@ -262,6 +268,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AppAdminRoute
   '/admin-statistik': typeof AppAdminStatistikRoute
   '/assistant': typeof AppAssistantRoute
+  '/barn': typeof AppBarnRoute
   '/beloningar': typeof AppBeloningarRoute
   '/calendar': typeof AppCalendarRoute
   '/daglig-rutin': typeof AppDagligRutinRoute
@@ -302,6 +309,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AppAdminRoute
   '/admin-statistik': typeof AppAdminStatistikRoute
   '/assistant': typeof AppAssistantRoute
+  '/barn': typeof AppBarnRoute
   '/beloningar': typeof AppBeloningarRoute
   '/calendar': typeof AppCalendarRoute
   '/daglig-rutin': typeof AppDagligRutinRoute
@@ -344,6 +352,7 @@ export interface FileRoutesById {
   '/_app/admin': typeof AppAdminRoute
   '/_app/admin-statistik': typeof AppAdminStatistikRoute
   '/_app/assistant': typeof AppAssistantRoute
+  '/_app/barn': typeof AppBarnRoute
   '/_app/beloningar': typeof AppBeloningarRoute
   '/_app/calendar': typeof AppCalendarRoute
   '/_app/daglig-rutin': typeof AppDagligRutinRoute
@@ -386,6 +395,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/admin-statistik'
     | '/assistant'
+    | '/barn'
     | '/beloningar'
     | '/calendar'
     | '/daglig-rutin'
@@ -426,6 +436,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/admin-statistik'
     | '/assistant'
+    | '/barn'
     | '/beloningar'
     | '/calendar'
     | '/daglig-rutin'
@@ -467,6 +478,7 @@ export interface FileRouteTypes {
     | '/_app/admin'
     | '/_app/admin-statistik'
     | '/_app/assistant'
+    | '/_app/barn'
     | '/_app/beloningar'
     | '/_app/calendar'
     | '/_app/daglig-rutin'
@@ -725,6 +737,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppBeloningarRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/barn': {
+      id: '/_app/barn'
+      path: '/barn'
+      fullPath: '/barn'
+      preLoaderRoute: typeof AppBarnRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/assistant': {
       id: '/_app/assistant'
       path: '/assistant'
@@ -795,6 +814,7 @@ interface AppRouteChildren {
   AppAdminRoute: typeof AppAdminRoute
   AppAdminStatistikRoute: typeof AppAdminStatistikRoute
   AppAssistantRoute: typeof AppAssistantRoute
+  AppBarnRoute: typeof AppBarnRoute
   AppBeloningarRoute: typeof AppBeloningarRoute
   AppCalendarRoute: typeof AppCalendarRoute
   AppDagligRutinRoute: typeof AppDagligRutinRoute
@@ -821,6 +841,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppAdminRoute: AppAdminRoute,
   AppAdminStatistikRoute: AppAdminStatistikRoute,
   AppAssistantRoute: AppAssistantRoute,
+  AppBarnRoute: AppBarnRoute,
   AppBeloningarRoute: AppBeloningarRoute,
   AppCalendarRoute: AppCalendarRoute,
   AppDagligRutinRoute: AppDagligRutinRoute,
