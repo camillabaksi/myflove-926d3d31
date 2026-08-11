@@ -12,6 +12,8 @@ import {
   Circle,
   RefreshCw,
   Smartphone,
+  AlertTriangle,
+
   Target,
 } from "lucide-react";
 import { generateTrainingProgram } from "@/lib/training.functions";
