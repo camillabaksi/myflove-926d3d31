@@ -50,6 +50,7 @@ const DEFAULT_STATE: TrainingState = {
   weeklyPlan: null,
   weekFeedback: {},
   weights: {},
+  weightNotes: {},
   weightGoal: null,
 };
 
