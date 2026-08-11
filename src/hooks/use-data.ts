@@ -88,7 +88,15 @@ export function useTasks() {
   const addTask = (
     title: string,
     dueDate?: string,
-    opts?: { kind?: TaskKind; waitingOn?: string; time?: string; reminderMinutesBefore?: number }
+    opts?: {
+      kind?: TaskKind;
+      waitingOn?: string;
+      time?: string;
+      reminderMinutesBefore?: number;
+      area?: LifeArea;
+      courseId?: string;
+      steps?: string[];
+    }
   ) => {
     // Blueprint: uppgifter ska alltid landa i kalendern så inget "försvinner".
     // Om inget datum anges kopplas uppgiften till idag.
@@ -104,8 +112,13 @@ export function useTasks() {
         kind: opts?.kind ?? "uppgift",
         status: opts?.waitingOn ? "vantar" : "pagar",
         waitingOn: opts?.waitingOn,
-        steps: [],
+        area: opts?.area ?? "vardag",
+        courseId: opts?.courseId,
+        steps: (opts?.steps ?? []).map((s) => ({ id: generateId(), title: s, done: false })),
       },
+      ...prev,
+    ]);
+
       ...prev,
     ]);
   };
