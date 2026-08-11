@@ -201,7 +201,7 @@ export default function FlowPlanPage() {
         <DailyFocusCard />
 
 
-        <div className="bg-card border border-border rounded-2xl p-5 space-y-5">
+        <div className="surface-card p-5 space-y-5">
           <div>
             <div className="flex items-center justify-between mb-2 gap-2">
               <label className="text-sm font-medium">Hur är energin just nu?</label>
@@ -237,7 +237,7 @@ export default function FlowPlanPage() {
                     setEnergy(e);
                     setEnergyManual(true);
                   }}
-                  className={`px-3 py-3 rounded-xl border text-sm text-left transition-colors ${
+                  className={`px-3 py-3 rounded-2xl border text-sm text-left transition-colors ${
                     energy === e
                       ? "border-primary bg-primary/10 text-primary"
                       : "border-border bg-background hover:bg-secondary"
@@ -282,7 +282,7 @@ export default function FlowPlanPage() {
           <Button
             onClick={handlePlan}
             disabled={!canPlan}
-            className="rounded-xl h-11 px-5 bg-primary hover:bg-primary/90 text-white w-full sm:w-auto"
+            className="rounded-2xl h-11 px-5 bg-primary hover:bg-primary/90 text-white w-full sm:w-auto"
           >
             {loading ? (
               <>
@@ -296,7 +296,7 @@ export default function FlowPlanPage() {
           </Button>
 
           {error && (
-            <div className="text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-xl px-3 py-2">
+            <div className="text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-2xl px-3 py-2">
               {error}
             </div>
           )}
@@ -337,7 +337,7 @@ export default function FlowPlanPage() {
                   return (
                     <div
                       key={item.taskId}
-                      className="bg-card border border-border rounded-2xl p-4 flex items-start gap-4"
+                      className="surface-card p-4 flex items-start gap-4"
                     >
                       <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 font-medium text-sm">
                         {idx + 1}
