@@ -20,6 +20,7 @@ import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as GuideAdhdPlannerForAdultsRouteImport } from './routes/guide.adhd-planner-for-adults'
 import { Route as AppTravelRouteImport } from './routes/_app.travel'
+import { Route as AppTraningRouteImport } from './routes/_app.traning'
 import { Route as AppTasksRouteImport } from './routes/_app.tasks'
 import { Route as AppStudierRouteImport } from './routes/_app.studier'
 import { Route as AppStatistikRouteImport } from './routes/_app.statistik'
@@ -103,6 +104,11 @@ const GuideAdhdPlannerForAdultsRoute =
 const AppTravelRoute = AppTravelRouteImport.update({
   id: '/travel',
   path: '/travel',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppTraningRoute = AppTraningRouteImport.update({
+  id: '/traning',
+  path: '/traning',
   getParentRoute: () => AppRoute,
 } as any)
 const AppTasksRoute = AppTasksRouteImport.update({
@@ -288,6 +294,7 @@ export interface FileRoutesByFullPath {
   '/statistik': typeof AppStatistikRoute
   '/studier': typeof AppStudierRoute
   '/tasks': typeof AppTasksRoute
+  '/traning': typeof AppTraningRoute
   '/travel': typeof AppTravelRoute
   '/guide/adhd-planner-for-adults': typeof GuideAdhdPlannerForAdultsRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -329,6 +336,7 @@ export interface FileRoutesByTo {
   '/statistik': typeof AppStatistikRoute
   '/studier': typeof AppStudierRoute
   '/tasks': typeof AppTasksRoute
+  '/traning': typeof AppTraningRoute
   '/travel': typeof AppTravelRoute
   '/guide/adhd-planner-for-adults': typeof GuideAdhdPlannerForAdultsRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -372,6 +380,7 @@ export interface FileRoutesById {
   '/_app/statistik': typeof AppStatistikRoute
   '/_app/studier': typeof AppStudierRoute
   '/_app/tasks': typeof AppTasksRoute
+  '/_app/traning': typeof AppTraningRoute
   '/_app/travel': typeof AppTravelRoute
   '/guide/adhd-planner-for-adults': typeof GuideAdhdPlannerForAdultsRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -415,6 +424,7 @@ export interface FileRouteTypes {
     | '/statistik'
     | '/studier'
     | '/tasks'
+    | '/traning'
     | '/travel'
     | '/guide/adhd-planner-for-adults'
     | '/.lovable/oauth/consent'
@@ -456,6 +466,7 @@ export interface FileRouteTypes {
     | '/statistik'
     | '/studier'
     | '/tasks'
+    | '/traning'
     | '/travel'
     | '/guide/adhd-planner-for-adults'
     | '/.lovable/oauth/consent'
@@ -498,6 +509,7 @@ export interface FileRouteTypes {
     | '/_app/statistik'
     | '/_app/studier'
     | '/_app/tasks'
+    | '/_app/traning'
     | '/_app/travel'
     | '/guide/adhd-planner-for-adults'
     | '/.lovable/oauth/consent'
@@ -602,6 +614,13 @@ declare module '@tanstack/react-router' {
       path: '/travel'
       fullPath: '/travel'
       preLoaderRoute: typeof AppTravelRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/traning': {
+      id: '/_app/traning'
+      path: '/traning'
+      fullPath: '/traning'
+      preLoaderRoute: typeof AppTraningRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/tasks': {
@@ -834,6 +853,7 @@ interface AppRouteChildren {
   AppStatistikRoute: typeof AppStatistikRoute
   AppStudierRoute: typeof AppStudierRoute
   AppTasksRoute: typeof AppTasksRoute
+  AppTraningRoute: typeof AppTraningRoute
   AppTravelRoute: typeof AppTravelRoute
 }
 
@@ -861,6 +881,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppStatistikRoute: AppStatistikRoute,
   AppStudierRoute: AppStudierRoute,
   AppTasksRoute: AppTasksRoute,
+  AppTraningRoute: AppTraningRoute,
   AppTravelRoute: AppTravelRoute,
 }
 
