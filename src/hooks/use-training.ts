@@ -32,6 +32,8 @@ export interface TrainingState {
   weekFeedback?: Record<string, WeekFeedback>;
   /** ISO-datum -> vikt i kg */
   weights?: Record<string, number>;
+  /** ISO-datum -> notering till viktmätningen */
+  weightNotes?: Record<string, string>;
   /** Målvikt i kg */
   weightGoal?: number | null;
   createdAt?: number;
