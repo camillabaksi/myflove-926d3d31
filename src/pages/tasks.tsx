@@ -165,6 +165,12 @@ export default function Tasks() {
               <span className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full bg-secondary/60 text-muted-foreground border border-border">
                 <KindIcon size={11} /> {KIND_META[kind].label}
               </span>
+              {activeArea === "alla" && (
+                <span className="text-[11px] text-muted-foreground">
+                  {AREA_META[getArea(task)].emoji} {AREA_META[getArea(task)].label}
+                </span>
+              )}
+
               {task.dueDate && (
                 <span className="inline-flex items-center gap-1 text-[11px] text-primary font-medium">
                   <CalendarIcon size={11} /> {task.dueDate}
