@@ -6,7 +6,7 @@ import { movementById } from "@/lib/everyday-movement";
 
 export interface TrainingGoal {
   goal: string;
-  focus: "styrka" | "kondition" | "blandat";
+  focus: "styrka" | "kondition" | "blandat" | "viktnedgång";
   daysPerWeek: number;
   minutesPerSession: number;
   level: "nybörjare" | "van" | "erfaren";
@@ -30,6 +30,10 @@ export interface TrainingState {
   weeklyPlan?: WeeklyPlan | null;
   /** veckostart (ISO-måndag) -> hur veckan kändes */
   weekFeedback?: Record<string, WeekFeedback>;
+  /** ISO-datum -> vikt i kg */
+  weights?: Record<string, number>;
+  /** Målvikt i kg */
+  weightGoal?: number | null;
   createdAt?: number;
 }
 
@@ -43,7 +47,10 @@ const DEFAULT_STATE: TrainingState = {
   movementGoal: 20,
   weeklyPlan: null,
   weekFeedback: {},
+  weights: {},
+  weightGoal: null,
 };
+
 
 
 
