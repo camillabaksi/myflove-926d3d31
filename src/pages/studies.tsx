@@ -284,10 +284,23 @@ export default function StudiesPage() {
                   </option>
                 ))}
               </select>
+              <label className="flex items-center gap-2 text-sm text-muted-foreground">
+                <BellRing size={16} />
+                <Input
+                  type="time"
+                  value={reminderTime}
+                  onChange={(e) => setReminderTime(e.target.value)}
+                  aria-label="Klockslag för deadline-påminnelser"
+                  className="h-11 rounded-xl bg-background w-28"
+                />
+              </label>
               <Button type="submit" disabled={!title.trim()} className="h-11 rounded-xl px-5">
                 <Plus size={18} className="mr-1" /> Lägg till
               </Button>
             </div>
+            <p className="text-xs text-muted-foreground">
+              Med deadline får du automatiskt notis 7, 3 och 1 dag innan – du kan ändra per uppgift.
+            </p>
             <textarea
               value={details}
               onChange={(e) => setDetails(e.target.value)}
@@ -418,6 +431,47 @@ export default function StudiesPage() {
                       </li>
                     ))}
                   </ul>
+                )}
+
+                {task.dueDate && !task.completed && (
+                  <div className="rounded-xl border border-border bg-secondary/30 p-3 space-y-2">
+                    <p className="text-xs text-muted-foreground flex items-center gap-1.5">
+                      <BellRing size={12} /> Påminn mig innan deadline
+                    </p>
+                    <div className="flex flex-wrap items-center gap-2">
+                      {LEAD_CHOICES.map((lead) => {
+                        const on = (task.deadlineLeadDays ?? []).includes(lead);
+                        return (
+                          <button
+                            key={lead}
+                            type="button"
+                            onClick={() => toggleLead(task, lead)}
+                            aria-pressed={on}
+                            className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${
+                              on
+                                ? "border-primary/40 bg-primary/10 text-primary"
+                                : "border-border bg-background text-muted-foreground hover:bg-secondary"
+                            }`}
+                          >
+                            {leadLabel(lead)}
+                          </button>
+                        );
+                      })}
+                      <Input
+                        type="time"
+                        value={task.deadlineReminderTime ?? "09:00"}
+                        onChange={(e) =>
+                          setTaskDeadlineReminders(
+                            task.id,
+                            task.deadlineLeadDays ?? DEFAULT_LEADS,
+                            e.target.value,
+                          )
+                        }
+                        aria-label={`Klockslag för påminnelser om ${task.title}`}
+                        className="h-8 w-24 rounded-full bg-background text-xs"
+                      />
+                    </div>
+                  </div>
                 )}
 
                 <div className="flex flex-wrap gap-2">
