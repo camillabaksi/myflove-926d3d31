@@ -2,12 +2,22 @@ import { useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import Layout from "@/components/layout";
 import { Button } from "@/components/ui/button";
-import { Loader2, ListOrdered, Sparkles, Clock, Battery, RotateCcw } from "lucide-react";
+import { Loader2, ListOrdered, Sparkles, Clock, Battery, RotateCcw, BellRing } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { planFlowSequence, type FlowPlanResult } from "@/lib/flowplan.functions";
 import { useTasks, useFocus } from "@/hooks/use-data";
 import { supabase } from "@/integrations/supabase/client";
 import { useLocalStorage } from "@/lib/storage";
+
+type DeadlineInfo = { daysUntilDue: number; hasReminder: boolean; activeNow: boolean };
+
+/** Uppgiften prioriteras upp om AI:n flaggat den eller om en påminnelse redan är aktiv. */
+function item2Boost(
+  item: { taskId: string; deadlineBoost?: boolean },
+  info: Map<string, DeadlineInfo>,
+) {
+  return Boolean(item.deadlineBoost) || Boolean(info.get(item.taskId)?.activeNow);
+}
 import { DailyFocusCard } from "@/components/daily-focus-card";
 
 
@@ -95,6 +105,26 @@ export default function FlowPlanPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /** Deadline-info per uppgift: dagar kvar + om en påminnelse redan är aktiv. */
+  const deadlineInfo = useMemo(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const m = new Map<string, { daysUntilDue: number; hasReminder: boolean; activeNow: boolean }>();
+    for (const t of activeTasks) {
+      if (!t.dueDate) continue;
+      const due = new Date(t.dueDate + "T00:00:00");
+      const days = Math.round((due.getTime() - today.getTime()) / 86_400_000);
+      const leads = t.deadlineLeadDays ?? [];
+      const hasReminder = leads.length > 0;
+      m.set(t.id, {
+        daysUntilDue: days,
+        hasReminder,
+        activeNow: hasReminder && days <= Math.max(...leads, 0),
+      });
+    }
+    return m;
+  }, [activeTasks]);
+
   const taskById = useMemo(() => {
     const m = new Map<string, string>();
     for (const t of activeTasks) m.set(t.id, t.title);
@@ -113,11 +143,28 @@ export default function FlowPlanPage() {
           energy,
           focus: currentFocus?.text,
           timeAvailableMin: timeAvailable,
-          tasks: activeTasks.slice(0, 15).map((t) => ({
-            id: t.id,
-            title: t.title,
-            dueDate: t.dueDate,
-          })),
+          tasks: [...activeTasks]
+            // Se till att uppgifter med aktiv deadline-påminnelse alltid kommer med.
+            .sort((a, b) => {
+              const ia = deadlineInfo.get(a.id);
+              const ib = deadlineInfo.get(b.id);
+              const pa = ia?.activeNow ? 0 : ia ? 1 : 2;
+              const pb = ib?.activeNow ? 0 : ib ? 1 : 2;
+              if (pa !== pb) return pa - pb;
+              return (ia?.daysUntilDue ?? 999) - (ib?.daysUntilDue ?? 999);
+            })
+            .slice(0, 15)
+            .map((t) => {
+              const info = deadlineInfo.get(t.id);
+              return {
+                id: t.id,
+                title: t.title,
+                dueDate: t.dueDate,
+                daysUntilDue: info?.daysUntilDue,
+                hasDeadlineReminder: info?.hasReminder,
+                reminderActiveNow: info?.activeNow,
+              };
+            }),
         },
       });
       setPlan(result);
@@ -275,18 +322,25 @@ export default function FlowPlanPage() {
             </div>
 
             <div className="space-y-3">
-              {plan.plan
-                .sort((a, b) => a.order - b.order)
-                .map((item) => {
+              {[...plan.plan]
+                .sort((a, b) => {
+                  const ba = item2Boost(a, deadlineInfo) ? 0 : 1;
+                  const bb = item2Boost(b, deadlineInfo) ? 0 : 1;
+                  if (ba !== bb) return ba - bb;
+                  return a.order - b.order;
+                })
+                .map((item, idx) => {
                   const title = taskById.get(item.taskId);
                   if (!title) return null;
+                  const info = deadlineInfo.get(item.taskId);
+                  const boosted = item2Boost(item, deadlineInfo);
                   return (
                     <div
                       key={item.taskId}
                       className="bg-card border border-border rounded-2xl p-4 flex items-start gap-4"
                     >
                       <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 font-medium text-sm">
-                        {item.order}
+                        {idx + 1}
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-baseline justify-between gap-3">
@@ -295,6 +349,16 @@ export default function FlowPlanPage() {
                             ~{item.estimatedMin} min
                           </span>
                         </div>
+                        {boosted && info && (
+                          <p className="mt-1.5 inline-flex items-center gap-1.5 text-xs font-medium text-primary bg-primary/10 border border-primary/20 rounded-full px-2.5 py-1">
+                            <BellRing size={12} />
+                            {info.daysUntilDue < 0
+                              ? `Deadline passerad – prioriterad idag`
+                              : info.daysUntilDue === 0
+                                ? "Deadline idag – prioriterad först"
+                                : `Deadline om ${info.daysUntilDue} dag${info.daysUntilDue === 1 ? "" : "ar"} – påminnelsen har gått igång`}
+                          </p>
+                        )}
                         <p className="text-sm text-muted-foreground mt-1">{item.why}</p>
                         <button
                           onClick={() => toggleTask(item.taskId)}
