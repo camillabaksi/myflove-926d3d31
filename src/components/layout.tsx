@@ -216,10 +216,14 @@ export default function Layout({ children }: LayoutProps) {
         <div className="space-y-5">
           {categories.map((cat) => (
             <div key={cat.id}>
-              <div className="flex items-center gap-2 px-1 mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              <div
+                className="flex items-center gap-2 px-1 mb-2 text-xs font-semibold uppercase tracking-wider"
+                style={{ color: catColor(cat.id) }}
+              >
                 <cat.icon size={14} />
                 {cat.label}
               </div>
+
               <div className="grid grid-cols-2 gap-3">
                 {cat.items.map((item) => {
                   const isActive = location === item.href;
