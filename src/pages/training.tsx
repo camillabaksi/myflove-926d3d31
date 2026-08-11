@@ -50,14 +50,24 @@ export default function TrainingPage() {
   const [loading, setLoading] = useState(false);
 
   const [healthAvailable, setHealthAvailable] = useState(false);
+  const [healthChecked, setHealthChecked] = useState(false);
   const [syncing, setSyncing] = useState(false);
   const [manualSteps, setManualSteps] = useState("");
+  const [lastSyncAt, setLastSyncAt] = useState<number | null>(null);
+  const [syncError, setSyncError] = useState<string | null>(null);
+  const [syncedDays, setSyncedDays] = useState(0);
+
+  useEffect(() => {
+    const saved = Number(localStorage.getItem(LAST_SYNC_KEY));
+    if (Number.isFinite(saved) && saved > 0) setLastSyncAt(saved);
+  }, []);
 
   useEffect(() => {
     let active = true;
     isHealthAppAvailable().then((ok) => {
       if (!active) return;
       setHealthAvailable(ok);
+      setHealthChecked(true);
       if (ok) syncSteps(true);
     });
     return () => {
@@ -68,9 +78,15 @@ export default function TrainingPage() {
 
   const syncSteps = async (silent = false) => {
     setSyncing(true);
+    setSyncError(null);
     const rows = await readStepsForDays(7);
     setSyncing(false);
     if (!rows || rows.length === 0) {
+      setSyncError(
+        rows
+          ? "Hälsoappen svarade men innehöll inga steg för den senaste veckan."
+          : "Kunde inte läsa steg. Godkänn åtkomst till steg i hälsoappen – eller fyll i stegen manuellt.",
+      );
       if (!silent) {
         toast({
           title: "Hittade ingen hälsodata",
@@ -81,10 +97,15 @@ export default function TrainingPage() {
       return;
     }
     for (const row of rows) setSteps(row.steps, row.date);
+    const stamp = Date.now();
+    setLastSyncAt(stamp);
+    setSyncedDays(rows.length);
+    localStorage.setItem(LAST_SYNC_KEY, String(stamp));
     const today = new Date().toISOString().slice(0, 10);
     const count = rows.find((r) => r.date === today)?.steps ?? rows.at(-1)?.steps ?? 0;
     if (!silent) toast({ title: "Steg hämtade", description: `${count.toLocaleString("sv-SE")} steg idag.` });
   };
+
 
 
   const handleGenerate = async () => {
