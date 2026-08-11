@@ -968,6 +968,57 @@ export default function TrainingPage() {
               </div>
             )}
 
+            <div className="space-y-2">
+              <p className="text-sm font-medium text-ink">Vikthistorik</p>
+              {weights.length === 0 ? (
+                <p className="text-sm text-muted-foreground">
+                  Inga vägningar än. Din första registrering hamnar här.
+                </p>
+              ) : (
+                <ul className="divide-y divide-border/70 rounded-2xl border border-border/70">
+                  {[...weights].reverse().map((w, i, arr) => {
+                    const prev = arr[i + 1];
+                    const diff = prev ? Math.round((w.kg - prev.kg) * 10) / 10 : null;
+                    return (
+                      <li key={w.date} className="flex items-start gap-3 p-3">
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-ink">
+                            {w.kg} kg
+                            {diff !== null && diff !== 0 && (
+                              <span className="ml-2 text-xs text-muted-foreground">
+                                {diff > 0 ? "+" : ""}
+                                {diff} kg
+                              </span>
+                            )}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {new Date(w.date + "T00:00:00").toLocaleDateString("sv-SE", {
+                              weekday: "short",
+                              day: "numeric",
+                              month: "long",
+                            })}
+                          </p>
+                          {w.note && <p className="text-sm text-muted-foreground mt-1 break-words">{w.note}</p>}
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="rounded-xl text-muted-foreground"
+                          onClick={() => {
+                            removeWeight(w.date);
+                            toast({ title: "Borttagen", description: "Vägningen är raderad." });
+                          }}
+                        >
+                          Ta bort
+                        </Button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </div>
+
+
             <p className="text-xs text-muted-foreground">
               MyFlove ger inga kost- eller kaloriråd. Prata med vården om du behöver stöd med kost eller hälsa.
             </p>
