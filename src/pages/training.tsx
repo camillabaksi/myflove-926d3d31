@@ -1,0 +1,357 @@
+import { useEffect, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import Layout from "@/components/layout";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Dumbbell,
+  Loader2,
+  Sparkles,
+  Footprints,
+  CheckCircle2,
+  Circle,
+  RefreshCw,
+  Smartphone,
+  Target,
+} from "lucide-react";
+import { generateTrainingProgram } from "@/lib/training.functions";
+import { useTraining, type TrainingGoal } from "@/hooks/use-training";
+import { isHealthAppAvailable, readTodaySteps } from "@/lib/health-steps";
+import { useToast } from "@/hooks/use-toast";
+import { celebrateFromEvent } from "@/lib/celebrate";
+
+const FOCUS: { id: TrainingGoal["focus"]; label: string }[] = [
+  { id: "styrka", label: "Styrka" },
+  { id: "kondition", label: "Kondition" },
+  { id: "blandat", label: "Blandat" },
+];
+const LEVELS: TrainingGoal["level"][] = ["nybörjare", "van", "erfaren"];
+
+const TYPE_TINT: Record<string, string> = {
+  styrka: "205 45% 34%",
+  kondition: "7 47% 49%",
+  rörlighet: "265 32% 45%",
+  vila: "152 30% 32%",
+};
+
+export default function TrainingPage() {
+  const { state, saveProgram, clearProgram, toggleSessionDone, setSteps, setStepGoal, lastDays, doneToday, stepsToday } =
+    useTraining();
+  const { toast } = useToast();
+  const run = useServerFn(generateTrainingProgram);
+
+  const [goal, setGoal] = useState(state.goal?.goal ?? "");
+  const [focus, setFocus] = useState<TrainingGoal["focus"]>(state.goal?.focus ?? "blandat");
+  const [daysPerWeek, setDaysPerWeek] = useState(state.goal?.daysPerWeek ?? 3);
+  const [minutes, setMinutes] = useState(state.goal?.minutesPerSession ?? 45);
+  const [level, setLevel] = useState<TrainingGoal["level"]>(state.goal?.level ?? "nybörjare");
+  const [equipment, setEquipment] = useState(state.goal?.equipment ?? "");
+  const [limitations, setLimitations] = useState(state.goal?.limitations ?? "");
+  const [loading, setLoading] = useState(false);
+
+  const [healthAvailable, setHealthAvailable] = useState(false);
+  const [syncing, setSyncing] = useState(false);
+  const [manualSteps, setManualSteps] = useState("");
+
+  useEffect(() => {
+    let active = true;
+    isHealthAppAvailable().then((ok) => {
+      if (!active) return;
+      setHealthAvailable(ok);
+      if (ok) syncSteps(true);
+    });
+    return () => {
+      active = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const syncSteps = async (silent = false) => {
+    setSyncing(true);
+    const count = await readTodaySteps();
+    setSyncing(false);
+    if (count === null) {
+      if (!silent) {
+        toast({
+          title: "Hittade ingen hälsodata",
+          description: "Öppna appen på mobilen och godkänn åtkomst till steg – eller fyll i steg manuellt.",
+        });
+      }
+      return;
+    }
+    setSteps(count);
+    if (!silent) toast({ title: "Steg hämtade", description: `${count.toLocaleString("sv-SE")} steg idag.` });
+  };
+
+  const handleGenerate = async () => {
+    if (!goal.trim()) {
+      toast({ title: "Berätta vad du vill", description: "Skriv ditt mål med träningen först." });
+      return;
+    }
+    const payload: TrainingGoal = {
+      goal: goal.trim(),
+      focus,
+      daysPerWeek,
+      minutesPerSession: minutes,
+      level,
+      ...(equipment.trim() ? { equipment: equipment.trim() } : {}),
+      ...(limitations.trim() ? { limitations: limitations.trim() } : {}),
+    };
+    setLoading(true);
+    try {
+      const program = await run({ data: payload });
+      saveProgram(payload, program);
+      toast({ title: "Programmet är klart", description: program.intro });
+    } catch (err) {
+      toast({
+        title: "Det gick inte just nu",
+        description: err instanceof Error ? err.message : "Försök igen om en stund.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const week = lastDays(7);
+  const maxSteps = Math.max(state.stepGoal, ...week.map((d) => d.steps), 1);
+  const stepPct = Math.min(100, Math.round((stepsToday / state.stepGoal) * 100));
+
+  return (
+    <Layout>
+      <div className="max-w-3xl mx-auto px-4 py-6 space-y-6">
+        <header className="space-y-1">
+          <h1 className="text-3xl font-bold text-ink flex items-center gap-2">
+            <Dumbbell className="text-primary" /> Träning
+          </h1>
+          <p className="text-muted-foreground">
+            Berätta vad du vill med träningen – Flow bygger ett program som passar din vecka.
+          </p>
+        </header>
+
+        {/* Steg & hälsoapp */}
+        <section className="surface-card p-5 space-y-4">
+          <div className="flex items-center justify-between gap-3">
+            <h2 className="text-lg font-semibold text-ink flex items-center gap-2">
+              <Footprints size={18} className="text-primary" /> Steg idag
+            </h2>
+            <Button variant="outline" size="sm" className="rounded-xl gap-2" onClick={() => syncSteps()} disabled={syncing}>
+              {syncing ? <Loader2 size={16} className="animate-spin" /> : <RefreshCw size={16} />}
+              Hämta från hälsoappen
+            </Button>
+          </div>
+
+          <div>
+            <div className="flex items-end justify-between mb-2">
+              <span className="text-3xl font-bold text-ink">{stepsToday.toLocaleString("sv-SE")}</span>
+              <span className="text-sm text-muted-foreground">mål {state.stepGoal.toLocaleString("sv-SE")}</span>
+            </div>
+            <div className="h-3 rounded-full bg-muted overflow-hidden">
+              <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${stepPct}%` }} />
+            </div>
+          </div>
+
+          <div className="flex items-end gap-2 h-24">
+            {week.map((d) => (
+              <div key={d.date} className="flex-1 flex flex-col items-center gap-1">
+                <div
+                  className="w-full rounded-t-lg bg-primary/30"
+                  style={{ height: `${Math.max(4, (d.steps / maxSteps) * 72)}px` }}
+                  title={`${d.steps} steg`}
+                />
+                <span className="text-[10px] text-muted-foreground">
+                  {new Date(d.date + "T00:00:00").toLocaleDateString("sv-SE", { weekday: "short" }).slice(0, 2)}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex flex-wrap gap-2 items-center">
+            <Input
+              type="number"
+              inputMode="numeric"
+              placeholder="Steg manuellt"
+              value={manualSteps}
+              onChange={(e) => setManualSteps(e.target.value)}
+              className="w-40 rounded-xl"
+            />
+            <Button
+              variant="secondary"
+              className="rounded-xl"
+              onClick={() => {
+                const n = Number(manualSteps);
+                if (!Number.isFinite(n) || n <= 0) return;
+                setSteps(n);
+                setManualSteps("");
+              }}
+            >
+              Spara
+            </Button>
+            <Input
+              type="number"
+              inputMode="numeric"
+              value={state.stepGoal}
+              onChange={(e) => setStepGoal(Number(e.target.value) || 7000)}
+              className="w-32 rounded-xl"
+              aria-label="Stegmål"
+            />
+            <span className="text-sm text-muted-foreground flex items-center gap-1">
+              <Target size={14} /> stegmål
+            </span>
+          </div>
+
+          {!healthAvailable && (
+            <p className="text-xs text-muted-foreground flex items-start gap-2">
+              <Smartphone size={14} className="mt-0.5 shrink-0" />
+              Automatisk stegräkning läses från Apple Hälsa eller Health Connect när du använder MyFlove som app i
+              mobilen. I webbläsaren fyller du i stegen själv.
+            </p>
+          )}
+        </section>
+
+        {/* Mål & generering */}
+        <section className="surface-card p-5 space-y-4">
+          <h2 className="text-lg font-semibold text-ink">Ditt mål</h2>
+          <Input
+            placeholder="T.ex. bli starkare i ryggen och orka springa 5 km"
+            value={goal}
+            onChange={(e) => setGoal(e.target.value)}
+            className="rounded-xl"
+          />
+
+          <div className="flex flex-wrap gap-2">
+            {FOCUS.map((f) => (
+              <button
+                key={f.id}
+                type="button"
+                onClick={() => setFocus(f.id)}
+                className={`rounded-xl border px-3 py-1.5 text-sm transition ${
+                  focus === f.id ? "bg-primary text-primary-foreground border-primary" : "border-border text-ink"
+                }`}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <label className="text-sm text-muted-foreground">
+              Dagar/vecka
+              <Input
+                type="number"
+                min={1}
+                max={7}
+                value={daysPerWeek}
+                onChange={(e) => setDaysPerWeek(Math.min(7, Math.max(1, Number(e.target.value) || 3)))}
+                className="rounded-xl mt-1"
+              />
+            </label>
+            <label className="text-sm text-muted-foreground">
+              Minuter/pass
+              <Input
+                type="number"
+                min={10}
+                max={180}
+                value={minutes}
+                onChange={(e) => setMinutes(Math.min(180, Math.max(10, Number(e.target.value) || 45)))}
+                className="rounded-xl mt-1"
+              />
+            </label>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            {LEVELS.map((l) => (
+              <button
+                key={l}
+                type="button"
+                onClick={() => setLevel(l)}
+                className={`rounded-xl border px-3 py-1.5 text-sm capitalize transition ${
+                  level === l ? "bg-primary text-primary-foreground border-primary" : "border-border text-ink"
+                }`}
+              >
+                {l}
+              </button>
+            ))}
+          </div>
+
+          <Input
+            placeholder="Utrustning (gym, hantlar, inget alls…)"
+            value={equipment}
+            onChange={(e) => setEquipment(e.target.value)}
+            className="rounded-xl"
+          />
+          <Input
+            placeholder="Något att ta hänsyn till? (t.ex. ont i knät, låg energi)"
+            value={limitations}
+            onChange={(e) => setLimitations(e.target.value)}
+            className="rounded-xl"
+          />
+
+          <Button onClick={handleGenerate} disabled={loading} className="rounded-xl gap-2 w-full">
+            {loading ? <Loader2 size={16} className="animate-spin" /> : <Sparkles size={16} />}
+            {state.program ? "Gör ett nytt program" : "Skapa mitt program"}
+          </Button>
+        </section>
+
+        {/* Programmet */}
+        {state.program && (
+          <section className="surface-card p-5 space-y-4">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <h2 className="text-lg font-semibold text-ink">Din vecka</h2>
+                <p className="text-sm text-muted-foreground">{state.program.intro}</p>
+              </div>
+              <Button variant="ghost" size="sm" className="rounded-xl" onClick={clearProgram}>
+                Rensa
+              </Button>
+            </div>
+
+            <ul className="space-y-3">
+              {state.program.sessions.map((s, i) => {
+                const done = doneToday.includes(i);
+                const hue = TYPE_TINT[s.type] ?? "205 45% 34%";
+                return (
+                  <li
+                    key={`${s.day}-${i}`}
+                    className="rounded-2xl border p-4"
+                    style={{ backgroundColor: `hsl(${hue} / 0.08)`, borderColor: `hsl(${hue} / 0.3)` }}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <div className="text-xs uppercase tracking-wide" style={{ color: `hsl(${hue})` }}>
+                          {s.day} · {s.type}
+                          {s.minutes ? ` · ${s.minutes} min` : ""}
+                        </div>
+                        <div className="font-semibold text-ink">{s.title}</div>
+                      </div>
+                      <button
+                        type="button"
+                        aria-label={done ? "Markera som ej klar" : "Markera som klar"}
+                        onClick={(e) => {
+                          if (!done) celebrateFromEvent(e);
+                          toggleSessionDone(i);
+                        }}
+                        className="shrink-0 text-primary"
+                      >
+                        {done ? <CheckCircle2 size={22} /> : <Circle size={22} className="text-muted-foreground" />}
+                      </button>
+                    </div>
+                    {s.exercises.length > 0 && (
+                      <ul className="mt-2 space-y-1 text-sm text-ink/80">
+                        {s.exercises.map((ex, j) => (
+                          <li key={j}>• {ex}</li>
+                        ))}
+                      </ul>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+
+            <p className="text-sm text-muted-foreground">{state.program.note}</p>
+          </section>
+        )}
+      </div>
+    </Layout>
+  );
+}
