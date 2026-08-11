@@ -124,7 +124,12 @@ export function useTasks() {
     setTasks((prev) => prev.map(t => (t.id === id ? { ...t, dueDate } : t)));
   };
 
+  const setTaskArea = (id: string, area: LifeArea) => {
+    setTasks((prev) => prev.map(t => (t.id === id ? { ...t, area } : t)));
+  };
+
   const setTaskTime = (id: string, time: string | undefined, reminderMinutesBefore?: number) => {
+
     setTasks((prev) => prev.map(t => (t.id === id
       ? { ...t, time, reminderMinutesBefore: time ? reminderMinutesBefore : undefined }
       : t)));
