@@ -356,7 +356,116 @@ export default function TrainingPage() {
 
         </section>
 
+        {/* Vardagsmotion */}
+        <section className="surface-card p-5 space-y-4">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <h2 className="text-lg font-semibold text-ink flex items-center gap-2">
+                <Footprints size={18} className="text-primary" /> Vardagsmotion
+              </h2>
+              <p className="text-sm text-muted-foreground">
+                Allt räknas. Små rörelser flera gånger om dagen gör mer för måendet än ett perfekt pass du aldrig blir av
+                med.
+              </p>
+            </div>
+            {movementStreak > 1 && (
+              <span className="shrink-0 rounded-xl bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+                {movementStreak} dagar i rad
+              </span>
+            )}
+          </div>
+
+          <div>
+            <div className="flex items-end justify-between mb-2">
+              <span className="text-2xl font-bold text-ink">{movementMinutes} min idag</span>
+              <span className="text-sm text-muted-foreground">mål {movementGoal} min</span>
+            </div>
+            <div className="h-3 rounded-full bg-muted overflow-hidden">
+              <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${movementPct}%` }} />
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-primary/25 bg-primary/5 p-4">
+            <p className="text-xs uppercase tracking-wide text-primary">Dagens minsta möjliga steg</p>
+            <p className="font-semibold text-ink">
+              {tipOfDay.label} · {tipOfDay.minutes} min
+            </p>
+            <p className="text-sm text-muted-foreground">{tipOfDay.hint}</p>
+          </div>
+
+          <div className="grid gap-2 sm:grid-cols-2">
+            {MOVEMENT_IDEAS.map((m) => {
+              const done = movementToday.includes(m.id);
+              const hue = MOVEMENT_TAG_HUE[m.tag];
+              return (
+                <button
+                  key={m.id}
+                  type="button"
+                  onClick={(e) => {
+                    if (!done) celebrateFromEvent(e);
+                    toggleMovement(m.id);
+                  }}
+                  className="rounded-2xl border p-3 text-left transition hover:opacity-90"
+                  style={{
+                    backgroundColor: done ? `hsl(${hue} / 0.14)` : "transparent",
+                    borderColor: `hsl(${hue} / ${done ? 0.5 : 0.25})`,
+                  }}
+                  aria-pressed={done}
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <div className="text-[11px] uppercase tracking-wide" style={{ color: `hsl(${hue})` }}>
+                        {MOVEMENT_TAG_LABEL[m.tag]} · {m.minutes} min
+                      </div>
+                      <div className="font-medium text-ink">{m.label}</div>
+                      <div className="text-xs text-muted-foreground">{m.hint}</div>
+                    </div>
+                    {done ? (
+                      <CheckCircle2 size={20} className="shrink-0 text-primary" />
+                    ) : (
+                      <Circle size={20} className="shrink-0 text-muted-foreground" />
+                    )}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <Input
+              type="number"
+              inputMode="numeric"
+              value={movementGoal}
+              onChange={(e) => setMovementGoal(Number(e.target.value) || 20)}
+              className="w-28 rounded-xl"
+              aria-label="Mål för vardagsmotion i minuter"
+            />
+            <span className="text-sm text-muted-foreground flex items-center gap-1">
+              <Target size={14} /> minuter vardagsmotion per dag
+            </span>
+          </div>
+
+          <div className="flex items-end gap-2">
+            {movementWeek.map((d) => {
+              const mins = d.ids.reduce((s, id) => s + (movementById(id)?.minutes ?? 0), 0);
+              return (
+                <div key={d.date} className="flex-1 flex flex-col items-center gap-1">
+                  <div
+                    className="w-full rounded-t-lg bg-primary/30"
+                    style={{ height: `${Math.max(4, Math.min(1, mins / Math.max(movementGoal, 1)) * 48)}px` }}
+                    title={`${mins} min`}
+                  />
+                  <span className="text-[10px] text-muted-foreground">
+                    {new Date(d.date + "T00:00:00").toLocaleDateString("sv-SE", { weekday: "short" }).slice(0, 2)}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
         {/* Mål & generering */}
+
         <section className="surface-card p-5 space-y-4">
           <h2 className="text-lg font-semibold text-ink">Ditt mål</h2>
           <Input
