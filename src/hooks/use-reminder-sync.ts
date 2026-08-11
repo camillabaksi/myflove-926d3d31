@@ -72,6 +72,39 @@ export function useReminderSync() {
         });
       }
 
+      // Smarta deadline-påminnelser (Studier m.fl.): X dagar innan förfallodatum.
+      const horizon = todayIso(14);
+      for (const t of tasks) {
+        if (t.completed || !t.dueDate) continue;
+        const leads = t.deadlineLeadDays ?? [];
+        if (leads.length === 0) continue;
+        const at = t.deadlineReminderTime ?? "09:00";
+        for (const lead of leads) {
+          const due = new Date(t.dueDate + "T00:00:00");
+          due.setDate(due.getDate() - lead);
+          const date = `${due.getFullYear()}-${String(due.getMonth() + 1).padStart(2, "0")}-${String(due.getDate()).padStart(2, "0")}`;
+          if (date > horizon) continue;
+          const when = combineDateTime(date, at);
+          if (!when) continue;
+          if (when.getTime() < now + 30_000) continue;
+          const key = `deadline:${t.id}:${lead}`;
+          desired.set(key, {
+            clientKey: key,
+            kind: "custom",
+            title:
+              lead === 0
+                ? `📅 Deadline idag: ${t.title}`
+                : `📅 ${lead} dag${lead === 1 ? "" : "ar"} kvar: ${t.title}`,
+            body:
+              lead === 0
+                ? "Sista dagen – ett litet steg räcker."
+                : `Deadline ${t.dueDate}. Vill du ta ett steg idag?`,
+            deliverAt: when.toISOString(),
+            url: t.area === "studier" ? "/studier" : "/tasks",
+          });
+        }
+      }
+
       // Medications: daily for the next 14 days so notiser fortsätter komma
       for (const med of medications) {
         for (const time of med.times) {
@@ -160,7 +193,7 @@ export function useReminderSync() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     // Rerun on any change to timed tasks, medications, or reminders
-    JSON.stringify(tasks.map((t) => [t.id, t.completed, t.time, t.dueDate, t.reminderMinutesBefore])),
+    JSON.stringify(tasks.map((t) => [t.id, t.completed, t.time, t.dueDate, t.reminderMinutesBefore, (t.deadlineLeadDays ?? []).join(","), t.deadlineReminderTime])),
     JSON.stringify(medications.map((m) => [m.id, m.name, m.dosage, m.times.join(",")])),
     JSON.stringify(reminders.map((r) => [r.id, r.completed, r.date, r.time, r.repeat])),
   ]);
