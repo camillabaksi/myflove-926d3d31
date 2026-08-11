@@ -1,6 +1,8 @@
 import { useLocalStorage } from '../lib/storage';
 import { useCloudSyncedStorage } from '../lib/cloud-storage';
 import { trackEvent } from '../lib/analytics';
+import type { LifeArea } from '../lib/life-areas';
+
 
 export interface Focus {
   text: string;
