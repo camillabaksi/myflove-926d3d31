@@ -25,6 +25,9 @@ import { requestNotificationPermission, getNotificationPermission } from "@/lib/
 import { useToast } from "@/hooks/use-toast";
 import { getRandomEncouragement } from "@/lib/encouragements";
 import { confirmations } from "@/lib/flow-voice";
+import { AreaSwitcher } from "@/components/area-switcher";
+import { AREA_META, defaultAreaFor, filterByArea, getArea, useActiveArea } from "@/lib/life-areas";
+
 
 // Blueprint 2.0 §7.4: Uppgift / Ärende / Projekt.
 const KIND_META: Record<TaskKind, { label: string; hint: string; Icon: typeof ListChecks }> = {
