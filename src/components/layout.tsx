@@ -127,6 +127,9 @@ export default function Layout({ children }: LayoutProps) {
     ...(enabledAreas.includes("studier")
       ? [{ href: "/studier", label: "Studier", icon: GraduationCap }]
       : []),
+    ...(enabledAreas.includes("jobb")
+      ? [{ href: "/jobb", label: "Jobb", icon: Briefcase }]
+      : []),
     ...(isAdmin
       ? [
           { href: "/admin", label: "Adminöversikt", icon: Shield },
@@ -144,6 +147,7 @@ export default function Layout({ children }: LayoutProps) {
       { id: "mabra", label: "Må bra", icon: Heart, hrefs: ["/ma-bra", "/beloningar", "/statistik"] },
       { id: "hem", label: "Hem & familj", icon: Users, hrefs: ["/familj", "/shopping", "/matlista", "/finances", "/travel"] },
       { id: "studier", label: "Studier", icon: GraduationCap, hrefs: ["/studier"] },
+      { id: "jobb", label: "Jobb", icon: Briefcase, hrefs: ["/jobb"] },
       { id: "ovrigt", label: "Övrigt", icon: Settings2, hrefs: ["/friktionsindex", "/admin", "/admin-statistik"] },
     ];
     return groups
