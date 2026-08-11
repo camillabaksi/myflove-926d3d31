@@ -1,6 +1,8 @@
 import { useCallback } from "react";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import type { TrainingProgram } from "@/lib/training.functions";
+import { buildWeeklyPlan, weekStartKey, type WeekFeedback, type WeeklyPlan } from "@/lib/weekly-plan";
+import { movementById } from "@/lib/everyday-movement";
 
 export interface TrainingGoal {
   goal: string;
@@ -24,6 +26,10 @@ export interface TrainingState {
   movement?: Record<string, string[]>;
   /** Mål för vardagsmotion i minuter per dag */
   movementGoal?: number;
+  /** Aktuell veckoplan */
+  weeklyPlan?: WeeklyPlan | null;
+  /** veckostart (ISO-måndag) -> hur veckan kändes */
+  weekFeedback?: Record<string, WeekFeedback>;
   createdAt?: number;
 }
 
@@ -35,7 +41,10 @@ const DEFAULT_STATE: TrainingState = {
   stepGoal: 7000,
   movement: {},
   movementGoal: 20,
+  weeklyPlan: null,
+  weekFeedback: {},
 };
+
 
 
 export const todayKey = () => new Date().toISOString().slice(0, 10);
@@ -129,6 +138,53 @@ export function useTraining() {
     [state.movement],
   );
 
+  const currentWeek = weekStartKey();
+  const weekFeedback = state.weekFeedback?.[currentWeek] ?? null;
+
+  const setWeekFeedback = useCallback(
+    (feedback: WeekFeedback, week = weekStartKey()) => {
+      setState((prev) => ({ ...prev, weekFeedback: { ...(prev.weekFeedback ?? {}), [week]: feedback } }));
+    },
+    [setState],
+  );
+
+  /** Bygger en ny veckoplan från senaste 7 dagarna + veckans känsla. */
+  const regenerateWeeklyPlan = useCallback(() => {
+    let created: WeeklyPlan | null = null;
+    setState((prev) => {
+      const days: string[] = [];
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        days.push(d.toISOString().slice(0, 10));
+      }
+      const steps = days.map((k) => prev.steps[k] ?? 0);
+      const movementMinutes = days.map((k) =>
+        (prev.movement?.[k] ?? []).reduce((sum, id) => sum + (movementById(id)?.minutes ?? 0), 0),
+      );
+      const doneSessions = days.reduce((sum, k) => sum + (prev.done[k]?.length ?? 0), 0);
+      const week = weekStartKey();
+      const plan = buildWeeklyPlan({
+        steps,
+        movementMinutes,
+        doneSessions,
+        plannedSessions:
+          prev.program?.sessions.filter((s) => s.type !== "vila").length ?? prev.goal?.daysPerWeek ?? 0,
+        currentStepGoal: prev.stepGoal,
+        currentMovementGoal: prev.movementGoal ?? 20,
+        feedback: prev.weekFeedback?.[week] ?? null,
+      });
+      created = plan;
+      return {
+        ...prev,
+        weeklyPlan: plan,
+        stepGoal: plan.stepTarget,
+        movementGoal: plan.movementTarget,
+      };
+    });
+    return created;
+  }, [setState]);
+
   return {
     state,
     saveProgram,
@@ -140,10 +196,16 @@ export function useTraining() {
     toggleMovement,
     setMovementGoal,
     movementDays,
+    weeklyPlan: state.weeklyPlan ?? null,
+    weekFeedback,
+    setWeekFeedback,
+    regenerateWeeklyPlan,
+    currentWeek,
     movementToday: state.movement?.[todayKey()] ?? [],
     movementGoal: state.movementGoal ?? 20,
     doneToday: state.done[todayKey()] ?? [],
     stepsToday: state.steps[todayKey()] ?? 0,
   };
+
 
 }

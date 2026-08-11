@@ -13,11 +13,12 @@ import {
   RefreshCw,
   Smartphone,
   AlertTriangle,
-
+  CalendarRange,
   Target,
 } from "lucide-react";
 import { generateTrainingProgram } from "@/lib/training.functions";
 import { useTraining, type TrainingGoal } from "@/hooks/use-training";
+import { FEEDBACK_LABEL, weekStartKey, type WeekFeedback } from "@/lib/weekly-plan";
 import { isHealthAppAvailable, openHealthSettings, readStepsForDays } from "@/lib/health-steps";
 import {
   MOVEMENT_IDEAS,
@@ -29,6 +30,7 @@ import {
 
 import { useToast } from "@/hooks/use-toast";
 import { celebrateFromEvent } from "@/lib/celebrate";
+
 
 const FOCUS: { id: TrainingGoal["focus"]; label: string }[] = [
   { id: "styrka", label: "Styrka" },
@@ -73,7 +75,12 @@ export default function TrainingPage() {
     movementDays,
     movementToday,
     movementGoal,
+    weeklyPlan,
+    weekFeedback,
+    setWeekFeedback,
+    regenerateWeeklyPlan,
   } = useTraining();
+
   const { toast } = useToast();
   const run = useServerFn(generateTrainingProgram);
 
@@ -192,6 +199,14 @@ export default function TrainingPage() {
       else break;
     }
     return n;
+  })();
+
+  const sessionsThisWeek = (() => {
+    const start = weekStartKey();
+    return Object.entries(state.done).reduce(
+      (sum, [date, list]) => (date >= start ? sum + list.length : sum),
+      0,
+    );
   })();
 
 
@@ -356,7 +371,95 @@ export default function TrainingPage() {
 
         </section>
 
+        {/* Veckoplan */}
+        <section className="surface-card p-5 space-y-4">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <h2 className="text-lg font-semibold text-ink flex items-center gap-2">
+                <CalendarRange size={18} className="text-primary" /> Din veckoplan
+              </h2>
+              <p className="text-sm text-muted-foreground">
+                Målen anpassas efter vad du faktiskt gjorde – och hur veckan kändes.
+              </p>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              className="rounded-xl gap-2 shrink-0"
+              onClick={() => {
+                regenerateWeeklyPlan();
+                toast({ title: "Veckoplanen är uppdaterad", description: "Målen är justerade efter din senaste vecka." });
+              }}
+            >
+              <Sparkles size={16} /> Uppdatera
+            </Button>
+          </div>
+
+          {weeklyPlan ? (
+            <>
+              <div className="grid gap-3 sm:grid-cols-3">
+                <div className="rounded-2xl border border-border/70 bg-muted/40 p-4">
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground">Steg per dag</p>
+                  <p className="text-2xl font-bold text-ink">{weeklyPlan.stepTarget.toLocaleString("sv-SE")}</p>
+                  <p className="text-xs text-muted-foreground">
+                    snitt förra veckan {weeklyPlan.basis.avgSteps.toLocaleString("sv-SE")}
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-border/70 bg-muted/40 p-4">
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground">Vardagsmotion</p>
+                  <p className="text-2xl font-bold text-ink">{weeklyPlan.movementTarget} min</p>
+                  <p className="text-xs text-muted-foreground">snitt förra veckan {weeklyPlan.basis.avgMovement} min</p>
+                </div>
+                <div className="rounded-2xl border border-border/70 bg-muted/40 p-4">
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground">Pass denna vecka</p>
+                  <p className="text-2xl font-bold text-ink">
+                    {sessionsThisWeek}/{weeklyPlan.sessionTarget}
+                  </p>
+                  <p className="text-xs text-muted-foreground">{weeklyPlan.basis.doneSessions} pass förra perioden</p>
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-primary/25 bg-primary/5 p-4 text-sm text-ink">
+                {weeklyPlan.note}
+              </div>
+            </>
+          ) : (
+            <p className="text-sm text-muted-foreground">
+              Ingen plan ännu. Tryck på <strong>Uppdatera</strong> så bygger vi en utifrån dina senaste dagar.
+            </p>
+          )}
+
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-ink">Hur känns nivån just nu?</p>
+            <div className="flex flex-wrap gap-2">
+              {(Object.keys(FEEDBACK_LABEL) as WeekFeedback[]).map((f) => {
+                const active = weekFeedback === f;
+                return (
+                  <Button
+                    key={f}
+                    type="button"
+                    variant={active ? "default" : "outline"}
+                    size="sm"
+                    className="rounded-xl"
+                    onClick={() => {
+                      setWeekFeedback(f);
+                      toast({
+                        title: "Tack – jag justerar",
+                        description: "Tryck på Uppdatera för att räkna om veckans mål.",
+                      });
+                    }}
+                    aria-pressed={active}
+                  >
+                    {FEEDBACK_LABEL[f]}
+                  </Button>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
         {/* Vardagsmotion */}
+
         <section className="surface-card p-5 space-y-4">
           <div className="flex items-start justify-between gap-3">
             <div>
