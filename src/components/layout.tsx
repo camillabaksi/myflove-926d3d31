@@ -129,6 +129,23 @@ export default function Layout({ children }: LayoutProps) {
       : []),
   ];
 
+  // Kategorier – gör navigationen lugnare genom att gruppera sektionerna.
+  const categories = useMemo(() => {
+    const byHref = (href: string) => navItems.find((i) => i.href === href);
+    const groups: { id: string; label: string; icon: typeof Home; hrefs: string[] }[] = [
+      { id: "dagen", label: "Min dag", icon: Sun, hrefs: ["/hem", "/daglig-rutin", "/kalender", "/tasks", "/flowplan"] },
+      { id: "fokus", label: "Fokus & lugn", icon: Target, hrefs: ["/fokus", "/pomodoro", "/dump", "/assistant"] },
+      { id: "mabra", label: "Må bra", icon: Heart, hrefs: ["/ma-bra", "/beloningar", "/statistik"] },
+      { id: "hem", label: "Hem & familj", icon: Users, hrefs: ["/familj", "/shopping", "/matlista", "/finances", "/travel"] },
+      { id: "ovrigt", label: "Övrigt", icon: Settings2, hrefs: ["/friktionsindex", "/admin", "/admin-statistik"] },
+    ];
+    return groups
+      .map((g) => ({ ...g, items: g.hrefs.map(byHref).filter(Boolean) as typeof navItems }))
+      .filter((g) => g.items.length > 0);
+  }, [navItems]);
+
+  const [openCategory, setOpenCategory] = useState<string | null>(null);
+
   // Bottom nav: Home is fixed, the remaining 3 slots are user-customizable.
   const [bottomNavHrefs, setBottomNavHrefs] = useLocalStorage<string[]>("myflow-bottom-nav", [
     "/ma-bra",
