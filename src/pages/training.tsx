@@ -877,29 +877,56 @@ export default function TrainingPage() {
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="rounded-2xl border border-border/70 p-4 space-y-3">
+              <p className="text-sm font-medium text-ink">Registrera en vägning</p>
+              <div className="grid gap-2 sm:grid-cols-2">
+                <Input
+                  type="number"
+                  step="0.1"
+                  inputMode="decimal"
+                  placeholder="Vikt (kg)"
+                  value={weightInput}
+                  onChange={(e) => setWeightInput(e.target.value)}
+                  className="rounded-xl"
+                  aria-label="Vikt i kg"
+                />
+                <Input
+                  type="date"
+                  value={weightDate}
+                  max={new Date().toISOString().slice(0, 10)}
+                  onChange={(e) => setWeightDate(e.target.value)}
+                  className="rounded-xl"
+                  aria-label="Datum för vägningen"
+                />
+              </div>
               <Input
-                type="number"
-                step="0.1"
-                inputMode="decimal"
-                placeholder="Vikt idag (kg)"
-                value={weightInput}
-                onChange={(e) => setWeightInput(e.target.value)}
-                className="w-40 rounded-xl"
+                placeholder="Notering (valfritt) – t.ex. sov dåligt, tränat mycket"
+                value={weightNote}
+                onChange={(e) => setWeightNote(e.target.value)}
+                className="rounded-xl"
+                aria-label="Notering"
               />
               <Button
                 variant="secondary"
                 className="rounded-xl"
                 onClick={() => {
                   const n = Number(weightInput.replace(",", "."));
-                  if (!Number.isFinite(n) || n <= 0) return;
-                  setWeight(n);
+                  if (!Number.isFinite(n) || n <= 0) {
+                    toast({ title: "Fyll i vikten", description: "Skriv en vikt i kilo först." });
+                    return;
+                  }
+                  const date = weightDate || new Date().toISOString().slice(0, 10);
+                  setWeight(n, date, weightNote);
                   setWeightInput("");
-                  toast({ title: "Sparat", description: "Vikten är loggad för idag." });
+                  setWeightNote("");
+                  toast({ title: "Sparat", description: `Vikten är loggad för ${date}.` });
                 }}
               >
-                Spara vikt
+                Spara vägning
               </Button>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
               <Input
                 type="number"
                 step="0.1"
