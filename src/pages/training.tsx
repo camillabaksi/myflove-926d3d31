@@ -710,7 +710,122 @@ export default function TrainingPage() {
             <p className="text-sm text-muted-foreground">{state.program.note}</p>
           </section>
         )}
+          </>
+        )}
+
+        {view === "vikt" && (
+          <section className="surface-card p-5 space-y-4">
+            <div>
+              <h2 className="text-lg font-semibold text-ink flex items-center gap-2">
+                <Scale size={18} className="text-primary" /> Vikt & viktnedgång
+              </h2>
+              <p className="text-sm text-muted-foreground">
+                Väg dig när det känns bra – inte varje dag. Kurvan över tid säger mer än en enskild morgon.
+              </p>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-3">
+              <div className="rounded-2xl border border-border/70 bg-muted/40 p-4">
+                <p className="text-xs uppercase tracking-wide text-muted-foreground">Senaste vikt</p>
+                <p className="text-2xl font-bold text-ink">{latestWeight ? `${latestWeight.kg} kg` : "–"}</p>
+                <p className="text-xs text-muted-foreground">
+                  {latestWeight
+                    ? new Date(latestWeight.date + "T00:00:00").toLocaleDateString("sv-SE", {
+                        day: "numeric",
+                        month: "short",
+                      })
+                    : "Ingen vikt inlagd ännu"}
+                </p>
+              </div>
+              <div className="rounded-2xl border border-border/70 bg-muted/40 p-4">
+                <p className="text-xs uppercase tracking-wide text-muted-foreground">Målvikt</p>
+                <p className="text-2xl font-bold text-ink">{weightGoal ? `${weightGoal} kg` : "–"}</p>
+                <p className="text-xs text-muted-foreground">
+                  {weightGoal && latestWeight
+                    ? `${Math.abs(Math.round((latestWeight.kg - weightGoal) * 10) / 10)} kg kvar`
+                    : "Sätt ett mål om du vill"}
+                </p>
+              </div>
+              <div className="rounded-2xl border border-border/70 bg-muted/40 p-4">
+                <p className="text-xs uppercase tracking-wide text-muted-foreground">Förändring</p>
+                <p className="text-2xl font-bold text-ink">
+                  {weightChange === null ? "–" : `${weightChange > 0 ? "+" : ""}${weightChange} kg`}
+                </p>
+                <p className="text-xs text-muted-foreground">sedan första mätningen</p>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+              <Input
+                type="number"
+                step="0.1"
+                inputMode="decimal"
+                placeholder="Vikt idag (kg)"
+                value={weightInput}
+                onChange={(e) => setWeightInput(e.target.value)}
+                className="w-40 rounded-xl"
+              />
+              <Button
+                variant="secondary"
+                className="rounded-xl"
+                onClick={() => {
+                  const n = Number(weightInput.replace(",", "."));
+                  if (!Number.isFinite(n) || n <= 0) return;
+                  setWeight(n);
+                  setWeightInput("");
+                  toast({ title: "Sparat", description: "Vikten är loggad för idag." });
+                }}
+              >
+                Spara vikt
+              </Button>
+              <Input
+                type="number"
+                step="0.1"
+                inputMode="decimal"
+                placeholder="Målvikt"
+                value={weightGoalInput}
+                onChange={(e) => {
+                  setWeightGoalInput(e.target.value);
+                  const n = Number(e.target.value.replace(",", "."));
+                  setWeightGoal(Number.isFinite(n) && n > 0 ? n : null);
+                }}
+                className="w-32 rounded-xl"
+                aria-label="Målvikt i kg"
+              />
+              <span className="text-sm text-muted-foreground flex items-center gap-1">
+                <Target size={14} /> målvikt
+              </span>
+            </div>
+
+            {weights.length > 1 && (
+              <div className="flex items-end gap-1 h-28">
+                {weights.slice(-14).map((w) => {
+                  const min = Math.min(...weights.slice(-14).map((x) => x.kg));
+                  const max = Math.max(...weights.slice(-14).map((x) => x.kg));
+                  const span = Math.max(1, max - min);
+                  return (
+                    <div key={w.date} className="flex-1 flex flex-col items-center gap-1">
+                      <div
+                        className="w-full rounded-t-lg bg-primary/30"
+                        style={{ height: `${16 + ((w.kg - min) / span) * 60}px` }}
+                        title={`${w.kg} kg`}
+                      />
+                      <span className="text-[10px] text-muted-foreground">
+                        {new Date(w.date + "T00:00:00").toLocaleDateString("sv-SE", { day: "numeric", month: "numeric" })}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            <p className="text-xs text-muted-foreground">
+              MyFlove ger inga kost- eller kaloriråd. Prata med vården om du behöver stöd med kost eller hälsa.
+            </p>
+          </section>
+        )}
       </div>
+
     </Layout>
   );
 }
