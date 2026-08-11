@@ -6,7 +6,10 @@ export type WeatherSnapshot = {
   code: number;
   city: string;
   fetchedAt: number;
+  latitude?: number;
+  longitude?: number;
 };
+
 
 const STORAGE_KEY = "flow.weather.snapshot";
 const listeners = new Set<() => void>();
