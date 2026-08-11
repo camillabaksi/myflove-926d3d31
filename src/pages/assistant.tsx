@@ -1,24 +1,27 @@
 import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
+import { useNavigate } from "@tanstack/react-router";
 import Layout from "@/components/layout";
 import { Button } from "@/components/ui/button";
-import { Loader2, Send, Sparkles } from "lucide-react";
+import { Loader2, Send, Sparkles, History, Plus, Trash2, X } from "lucide-react";
 import { chatWithFlow } from "@/lib/flow-chat.functions";
 import { useTasks, useMoods, useFocus, useReminders } from "@/hooks/use-data";
 import { useLocalStorage } from "@/lib/storage";
 import { generateCoachMessage } from "@/lib/coach";
-
-type ChatMessage = { role: "user" | "assistant"; content: string };
+import {
+  createFlowConversation,
+  saveFlowMessage,
+  useFlowConversations,
+  useFlowMessages,
+  type FlowMessage,
+} from "@/hooks/use-flow-chats";
 
 function todayStr(): string {
   return new Date().toISOString().split("T")[0] as string;
 }
 
-const GREETING: ChatMessage = {
-  role: "assistant",
-  content:
-    "Hej, jag är Flow. Jag finns här för att avlasta – inte för att ge dig mer att göra. Vad snurrar i huvudet just nu?",
-};
+const GREETING =
+  "Hej, jag är Flow. Jag finns här för att avlasta – inte för att ge dig mer att göra. Vad snurrar i huvudet just nu?";
 
 const QUICK_PROMPTS = [
   "Det känns för mycket idag",
@@ -26,11 +29,21 @@ const QUICK_PROMPTS = [
   "Vad borde jag börja med?",
 ];
 
-export default function Assistant() {
-  const [messages, setMessages] = useState<ChatMessage[]>([GREETING]);
+function formatDate(iso: string): string {
+  return new Date(iso).toLocaleDateString("sv-SE", { day: "numeric", month: "short" });
+}
+
+export default function Assistant({ chatId }: { chatId?: string }) {
+  const navigate = useNavigate();
+  const conversationId = chatId ?? null;
+
+  const { conversations, refresh, remove } = useFlowConversations();
+  const { messages, setMessages, loading: loadingMessages } = useFlowMessages(conversationId);
+
   const [input, setInput] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [historyOpen, setHistoryOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -59,19 +72,34 @@ export default function Assistant() {
 
   useEffect(() => {
     inputRef.current?.focus();
-  }, [isSending]);
+  }, [isSending, conversationId]);
 
   const send = async (text: string) => {
     const trimmed = text.trim();
     if (!trimmed || isSending) return;
     setError(null);
-    const next: ChatMessage[] = [...messages, { role: "user", content: trimmed }];
-    setMessages(next);
     setInput("");
     setIsSending(true);
+
+    const optimistic: FlowMessage = { id: `tmp-${Date.now()}`, role: "user", content: trimmed };
+    const history = [...messages, optimistic];
+    setMessages(history);
+
     try {
-      const { reply } = await chat({ data: { messages: next } });
-      setMessages((m) => [...m, { role: "assistant", content: reply }]);
+      let id = conversationId;
+      if (!id) {
+        id = await createFlowConversation(trimmed);
+        if (!id) throw new Error("Kunde inte skapa chatten. Är du inloggad?");
+        void navigate({ to: "/assistant/$chatId", params: { chatId: id }, replace: true });
+      }
+      await saveFlowMessage(id, "user", trimmed);
+
+      const { reply } = await chat({
+        data: { messages: history.map((m) => ({ role: m.role, content: m.content })) },
+      });
+      setMessages((m) => [...m, { id: `tmp-a-${Date.now()}`, role: "assistant", content: reply }]);
+      await saveFlowMessage(id, "assistant", reply);
+      void refresh();
     } catch (e) {
       const msg = e instanceof Error ? e.message : "Något gick fel. Prova igen om en stund.";
       setError(msg);
@@ -80,98 +108,208 @@ export default function Assistant() {
     }
   };
 
+  const historyList = (
+    <div className="space-y-2">
+      <button
+        type="button"
+        onClick={() => {
+          setHistoryOpen(false);
+          void navigate({ to: "/assistant" });
+        }}
+        className="w-full flex items-center gap-2 rounded-2xl bg-primary/10 text-primary px-3 py-2 text-sm font-medium hover:bg-primary/15 transition-colors"
+      >
+        <Plus size={16} /> Ny chatt
+      </button>
+
+      {conversations.length === 0 ? (
+        <p className="text-xs text-muted-foreground px-1 py-2">
+          Dina samtal sparas här så du kan läsa dem igen när du vill.
+        </p>
+      ) : (
+        conversations.map((c) => (
+          <div
+            key={c.id}
+            className={`group flex items-center gap-1 rounded-2xl border px-2 transition-colors ${
+              c.id === conversationId ? "border-primary/50 bg-primary/5" : "border-border hover:border-primary/30"
+            }`}
+          >
+            <button
+              type="button"
+              onClick={() => {
+                setHistoryOpen(false);
+                void navigate({ to: "/assistant/$chatId", params: { chatId: c.id } });
+              }}
+              className="flex-1 min-w-0 text-left py-2.5"
+            >
+              <p className="text-sm truncate">{c.title}</p>
+              <p className="text-[11px] text-muted-foreground">{formatDate(c.updated_at)}</p>
+            </button>
+            <button
+              type="button"
+              aria-label={`Ta bort ${c.title}`}
+              onClick={() => {
+                void remove(c.id);
+                if (c.id === conversationId) void navigate({ to: "/assistant" });
+              }}
+              className="p-2 rounded-xl text-muted-foreground hover:text-destructive shrink-0"
+            >
+              <Trash2 size={15} />
+            </button>
+          </div>
+        ))
+      )}
+    </div>
+  );
+
   return (
     <Layout>
-      <div className="space-y-6">
-        <div>
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center">
-              <Sparkles size={20} />
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold leading-tight">Flow</h1>
-              <p className="text-sm text-muted-foreground">Din andra hjärna – lugn, empatisk, aldrig dömande</p>
-            </div>
-          </div>
-        </div>
+      <div className="lg:grid lg:grid-cols-[260px_1fr] lg:gap-6">
+        <aside className="hidden lg:block">
+          <p className="text-xs uppercase tracking-wide text-muted-foreground mb-2">Historik</p>
+          <div className="max-h-[70vh] overflow-y-auto pr-1">{historyList}</div>
+        </aside>
 
-        <div className="p-4 bg-card border border-border rounded-2xl">
-          <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">Idag</p>
-          <p className="text-sm leading-snug">{coachMessage.text}</p>
-        </div>
-
-        <div
-          ref={scrollRef}
-          className="bg-card border border-border rounded-3xl p-4 space-y-4 max-h-[55vh] overflow-y-auto"
-        >
-          {messages.map((m, i) => (
-            <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
-              <div
-                className={`max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
-                  m.role === "user"
-                    ? "bg-primary text-white rounded-br-sm"
-                    : "bg-secondary text-foreground rounded-bl-sm"
-                }`}
-              >
-                {m.content}
+        <div className="space-y-6 min-w-0">
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+                <Sparkles size={20} />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold leading-tight">Flow</h1>
+                <p className="text-sm text-muted-foreground">
+                  Din andra hjärna – lugn, empatisk, aldrig dömande
+                </p>
               </div>
             </div>
-          ))}
-          {isSending && (
-            <div className="flex justify-start">
-              <div className="bg-secondary text-muted-foreground px-4 py-3 rounded-2xl rounded-bl-sm text-sm flex items-center gap-2">
-                <Loader2 className="w-4 h-4 animate-spin" />
-                Flow tänker…
-              </div>
-            </div>
-          )}
-          {error && (
-            <div className="text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-xl px-3 py-2">
-              {error}
-            </div>
-          )}
-        </div>
-
-        {messages.length <= 1 && (
-          <div className="flex flex-wrap gap-2">
-            {QUICK_PROMPTS.map((p) => (
-              <button
-                key={p}
-                onClick={() => send(p)}
-                className="px-3 py-2 rounded-full text-sm bg-secondary hover:bg-secondary/80 text-foreground transition-colors"
-              >
-                {p}
-              </button>
-            ))}
-          </div>
-        )}
-
-        <div className="bg-card p-2 rounded-3xl shadow-sm border border-border focus-within:ring-2 focus-within:ring-primary/20 transition-all">
-          <textarea
-            ref={inputRef}
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                void send(input);
-              }
-            }}
-            placeholder="Skriv till Flow…"
-            className="w-full h-24 p-3 pb-14 bg-transparent border-none outline-none resize-none text-base"
-          />
-          <div className="absolute-none flex justify-end px-2 pb-2 -mt-12 relative">
             <Button
-              onClick={() => void send(input)}
-              disabled={!input.trim() || isSending}
-              className="rounded-xl h-10 px-5 bg-primary hover:bg-primary/90 text-white"
+              variant="outline"
+              size="sm"
+              className="rounded-xl lg:hidden shrink-0"
+              onClick={() => setHistoryOpen(true)}
             >
-              <Send className="w-4 h-4 mr-2" />
-              Skicka
+              <History size={16} className="mr-1" />
+              Historik
             </Button>
+          </div>
+
+          <div className="p-4 bg-card border border-border rounded-2xl">
+            <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">Idag</p>
+            <p className="text-sm leading-snug">{coachMessage.text}</p>
+          </div>
+
+          <div
+            ref={scrollRef}
+            className="bg-card border border-border rounded-3xl p-4 space-y-4 max-h-[55vh] overflow-y-auto"
+          >
+            {loadingMessages ? (
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Loader2 className="w-4 h-4 animate-spin" /> Hämtar samtalet…
+              </div>
+            ) : (
+              <>
+                {messages.length === 0 && (
+                  <div className="flex justify-start">
+                    <div className="max-w-[85%] px-4 py-3 rounded-2xl rounded-bl-sm text-sm leading-relaxed bg-secondary text-foreground">
+                      {GREETING}
+                    </div>
+                  </div>
+                )}
+                {messages.map((m) => (
+                  <div key={m.id} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
+                    <div
+                      className={`max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
+                        m.role === "user"
+                          ? "bg-primary text-primary-foreground rounded-br-sm"
+                          : "bg-secondary text-foreground rounded-bl-sm"
+                      }`}
+                    >
+                      {m.content}
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
+            {isSending && (
+              <div className="flex justify-start">
+                <div className="bg-secondary text-muted-foreground px-4 py-3 rounded-2xl rounded-bl-sm text-sm flex items-center gap-2">
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Flow tänker…
+                </div>
+              </div>
+            )}
+            {error && (
+              <div className="text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-xl px-3 py-2">
+                {error}
+              </div>
+            )}
+          </div>
+
+          {messages.length === 0 && (
+            <div className="flex flex-wrap gap-2">
+              {QUICK_PROMPTS.map((p) => (
+                <button
+                  key={p}
+                  onClick={() => void send(p)}
+                  className="px-3 py-2 rounded-full text-sm bg-secondary hover:bg-secondary/80 text-foreground transition-colors"
+                >
+                  {p}
+                </button>
+              ))}
+            </div>
+          )}
+
+          <div className="bg-card p-2 rounded-3xl shadow-sm border border-border focus-within:ring-2 focus-within:ring-primary/20 transition-all">
+            <textarea
+              ref={inputRef}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  void send(input);
+                }
+              }}
+              placeholder="Skriv till Flow…"
+              className="w-full h-24 p-3 pb-14 bg-transparent border-none outline-none resize-none text-base"
+            />
+            <div className="flex justify-end px-2 pb-2 -mt-12 relative">
+              <Button
+                onClick={() => void send(input)}
+                disabled={!input.trim() || isSending}
+                className="rounded-xl h-10 px-5"
+              >
+                <Send className="w-4 h-4 mr-2" />
+                Skicka
+              </Button>
+            </div>
           </div>
         </div>
       </div>
+
+      {historyOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden">
+          <div
+            className="absolute inset-0 bg-foreground/30"
+            onClick={() => setHistoryOpen(false)}
+            aria-hidden
+          />
+          <div className="absolute right-0 top-0 h-full w-[85%] max-w-xs bg-card border-l border-border p-4 overflow-y-auto animate-in slide-in-from-right">
+            <div className="flex items-center justify-between mb-3">
+              <p className="font-semibold">Dina samtal</p>
+              <button
+                type="button"
+                aria-label="Stäng historik"
+                onClick={() => setHistoryOpen(false)}
+                className="p-2 rounded-xl hover:bg-secondary"
+              >
+                <X size={18} />
+              </button>
+            </div>
+            {historyList}
+          </div>
+        </div>
+      )}
     </Layout>
   );
 }
