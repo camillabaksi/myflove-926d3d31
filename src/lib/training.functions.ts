@@ -4,7 +4,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 const InputSchema = z.object({
   goal: z.string().min(1).max(300),
-  focus: z.enum(["styrka", "kondition", "blandat"]),
+  focus: z.enum(["styrka", "kondition", "blandat", "viktnedgång"]),
   daysPerWeek: z.number().int().min(1).max(7),
   minutesPerSession: z.number().int().min(10).max(180),
   level: z.enum(["nybörjare", "van", "erfaren"]),
