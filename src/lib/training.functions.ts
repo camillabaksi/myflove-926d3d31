@@ -42,11 +42,18 @@ const OutputSchema = z.object({
       day: z.string(),
       title: z.string(),
       type: SessionTypeSchema,
-      minutes: z.number().int().min(5).max(180).optional(),
-      exercises: z.array(z.string()).default([]),
+      minutes: z.coerce.number().int().min(5).max(180).catch(30).optional(),
+      exercises: z
+        .array(z.union([z.string(), z.record(z.string(), z.any())]))
+        .default([])
+        .transform((list) =>
+          list.map((item) =>
+            typeof item === "string" ? item : Object.values(item).filter(Boolean).join(" – "),
+          ),
+        ),
     }),
   ),
-  stepGoal: z.number().int().min(1000).max(30000).optional(),
+  stepGoal: z.coerce.number().int().min(1000).max(30000).optional(),
   note: z.string(),
 });
 
