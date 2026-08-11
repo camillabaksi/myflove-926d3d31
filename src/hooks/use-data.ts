@@ -35,7 +35,10 @@ export interface Task {
   status?: TaskStatus; // default "pagar"; "klart" ⇔ completed=true
   waitingOn?: string; // fritt fält: "vem/vad vi väntar på"
   steps?: TaskStep[]; // delsteg (särskilt för ärenden och projekt)
+  area?: LifeArea; // livsområde: vardag / privat / studier / jobb
+  courseId?: string; // kopplad kurs (studieflödet)
 }
+
 
 export interface ShoppingItem {
   id: string;
