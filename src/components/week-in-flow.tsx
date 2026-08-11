@@ -88,7 +88,7 @@ export default function WeekInFlow() {
                   {summary.done.slice(0, 5).map((t) => (
                     <li key={t.id} className="text-sm text-ink/80 flex items-start gap-2">
                       <span aria-hidden="true" className="text-primary">✓</span>
-                      <span className="line-clamp-1">{t.title ?? (t as { text?: string }).text}</span>
+                      <span className="line-clamp-1">{t.title}</span>
                     </li>
                   ))}
                 </ul>
