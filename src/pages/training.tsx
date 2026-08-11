@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import Layout from "@/components/layout";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ import {
   Footprints,
   CheckCircle2,
   Circle,
+  Pencil,
   RefreshCw,
   Smartphone,
   AlertTriangle,
@@ -149,6 +150,7 @@ export default function TrainingPage() {
   const [equipment, setEquipment] = useState(state.goal?.equipment ?? "");
   const [limitations, setLimitations] = useState(state.goal?.limitations ?? "");
   const [loading, setLoading] = useState(false);
+  const settingsRef = useRef<HTMLElement | null>(null);
 
 
   const [healthAvailable, setHealthAvailable] = useState(false);
@@ -210,6 +212,42 @@ export default function TrainingPage() {
 
 
 
+  const generateWith = async (payload: TrainingGoal, successTitle = "Programmet är klart") => {
+    setLoading(true);
+    try {
+      const program = await run({ data: payload });
+      saveProgram(payload, program);
+      toast({ title: successTitle, description: program.intro });
+    } catch (err) {
+      toast({
+        title: "Det gick inte just nu",
+        description: err instanceof Error ? err.message : "Försök igen om en stund.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEditProgram = () => {
+    const g = state.goal;
+    if (!g) return;
+    setGoal(g.goal);
+    setFocus(g.focus);
+    setDaysPerWeek(g.daysPerWeek);
+    setMinutes(g.minutesPerSession);
+    setLevel(g.level);
+    setEquipment(g.equipment ?? "");
+    setLimitations(g.limitations ?? "");
+    settingsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    toast({ title: "Redigera programmet", description: "Ändra inställningarna och skapa om programmet." });
+  };
+
+  const handleRecreate = async () => {
+    if (!state.goal) return;
+    await generateWith(state.goal, "Programmet är omgjort");
+  };
+
   const handleGenerate = async () => {
     if (!goal.trim()) {
       toast({ title: "Berätta vad du vill", description: "Skriv ditt mål med träningen först." });
@@ -224,21 +262,9 @@ export default function TrainingPage() {
       ...(equipment.trim() ? { equipment: equipment.trim() } : {}),
       ...(limitations.trim() ? { limitations: limitations.trim() } : {}),
     };
-    setLoading(true);
-    try {
-      const program = await run({ data: payload });
-      saveProgram(payload, program);
-      toast({ title: "Programmet är klart", description: program.intro });
-    } catch (err) {
-      toast({
-        title: "Det gick inte just nu",
-        description: err instanceof Error ? err.message : "Försök igen om en stund.",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
+    await generateWith(payload);
   };
+
 
   const week = lastDays(7);
   const maxSteps = Math.max(state.stepGoal, ...week.map((d) => d.steps), 1);
@@ -691,7 +717,7 @@ export default function TrainingPage() {
 
         {view === "program" && (
           <>
-        <section className="surface-card p-5 space-y-4">
+        <section ref={settingsRef} className="surface-card p-5 space-y-4">
           <h2 className="text-lg font-semibold text-ink">Ditt mål</h2>
           <Input
             placeholder="T.ex. bli starkare i ryggen och orka springa 5 km"
@@ -784,6 +810,22 @@ export default function TrainingPage() {
               </div>
               <Button variant="ghost" size="sm" className="rounded-xl" onClick={clearProgram}>
                 Rensa
+              </Button>
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+              <Button variant="outline" size="sm" className="rounded-xl gap-2" onClick={handleEditProgram}>
+                <Pencil size={15} /> Redigera programmet
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="rounded-xl gap-2"
+                onClick={handleRecreate}
+                disabled={loading || !state.goal}
+              >
+                {loading ? <Loader2 size={15} className="animate-spin" /> : <RefreshCw size={15} />}
+                Skapa om med samma inställningar
               </Button>
             </div>
 
