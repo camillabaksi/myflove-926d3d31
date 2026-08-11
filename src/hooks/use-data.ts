@@ -19,7 +19,17 @@ export interface TaskStep {
   id: string;
   title: string;
   done: boolean;
+  when?: string; // valfri kort tidsmarkering, t.ex. "senast 12 sep"
 }
+
+/** Uppladdat dokument kopplat till en uppgift (studieflödet). */
+export interface TaskAttachment {
+  path: string; // sökväg i study-docs-bucketen
+  name: string;
+  size?: number;
+  uploadedAt: number;
+}
+
 
 export interface Task {
   id: string;
