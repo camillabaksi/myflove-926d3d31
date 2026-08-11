@@ -214,10 +214,11 @@ export default function Home() {
         <button
           type="button"
           onClick={() => setHelpModalOpen(true)}
-          className="group relative w-full overflow-hidden flex items-center gap-4 p-6 rounded-full text-primary-foreground shadow-lg transition-transform text-left active:scale-[0.99]"
+          className="group relative w-full overflow-hidden flex items-center gap-4 p-6 rounded-3xl text-primary-foreground shadow-lifted transition-transform text-left active:scale-[0.99]"
           style={{ background: "linear-gradient(135deg, hsl(var(--forest)) 0%, hsl(var(--forest-deep)) 100%)" }}
         >
-          <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+          <div className="absolute inset-0 bg-primary-foreground/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+
           <div className="w-14 h-14 rounded-full bg-primary-foreground/15 flex items-center justify-center shrink-0 backdrop-blur-sm">
             <HeartHandshake size={28} />
           </div>
