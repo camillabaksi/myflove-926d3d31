@@ -75,7 +75,12 @@ export default function TrainingPage() {
     movementDays,
     movementToday,
     movementGoal,
+    weeklyPlan,
+    weekFeedback,
+    setWeekFeedback,
+    regenerateWeeklyPlan,
   } = useTraining();
+
   const { toast } = useToast();
   const run = useServerFn(generateTrainingProgram);
 
