@@ -126,11 +126,11 @@ export default function Home() {
       <div className="space-y-8">
         {/* Hero header with preview-style warmth */}
         <div
-          className="relative overflow-hidden rounded-3xl p-6 shadow-sm animate-fade-in"
+          className="relative overflow-hidden rounded-3xl p-6 shadow-lifted border border-border/60 animate-fade-in"
           style={{ background: heroGradient }}
         >
-          <div className="pointer-events-none absolute -top-20 -right-16 h-40 w-40 rounded-full bg-gradient-to-br from-terracotta-soft to-terracotta opacity-20 blur-md" />
-          <div className="pointer-events-none absolute -bottom-16 -left-10 h-32 w-32 rounded-full bg-sage opacity-25" />
+          <div className="pointer-events-none absolute -top-20 -right-16 h-40 w-40 rounded-full bg-gradient-to-br from-gold to-forest opacity-20 blur-md" />
+          <div className="pointer-events-none absolute -bottom-16 -left-10 h-32 w-32 rounded-full bg-sage opacity-25 blur-[2px]" />
 
           <div className="relative space-y-2">
             <h1 className="text-4xl font-bold text-ink">{greeting.title}</h1>
