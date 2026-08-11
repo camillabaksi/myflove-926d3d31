@@ -125,11 +125,18 @@ export default function TrainingPage() {
     weekFeedback,
     setWeekFeedback,
     regenerateWeeklyPlan,
+    setWeight,
+    setWeightGoal,
+    weightEntries,
+    weightGoal,
   } = useTraining();
 
   const { toast } = useToast();
   const run = useServerFn(generateTrainingProgram);
 
+  const [view, setView] = useState<TrainingView>("overview");
+  const [weightInput, setWeightInput] = useState("");
+  const [weightGoalInput, setWeightGoalInput] = useState(weightGoal ? String(weightGoal) : "");
 
   const [goal, setGoal] = useState(state.goal?.goal ?? "");
   const [focus, setFocus] = useState<TrainingGoal["focus"]>(state.goal?.focus ?? "blandat");
@@ -139,6 +146,7 @@ export default function TrainingPage() {
   const [equipment, setEquipment] = useState(state.goal?.equipment ?? "");
   const [limitations, setLimitations] = useState(state.goal?.limitations ?? "");
   const [loading, setLoading] = useState(false);
+
 
   const [healthAvailable, setHealthAvailable] = useState(false);
   const [healthChecked, setHealthChecked] = useState(false);
