@@ -71,7 +71,11 @@ export default function Home() {
   useReminderSync();
 
 
-  const prioritizedTasks = useMemo(() => sortTasksByPriority(activeTasks), [activeTasks]);
+  const prioritizedTasks = useMemo(
+    () => sortTasksByPriority(filterByArea(activeTasks, activeArea)),
+    [activeTasks, activeArea],
+  );
+
   const limit = helpPlan?.taskLimit ?? 3;
   const visibleTasks = showAllTasks ? prioritizedTasks : prioritizedTasks.slice(0, limit);
   const hiddenTaskCount = Math.max(0, prioritizedTasks.length - limit);
