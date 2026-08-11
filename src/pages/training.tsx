@@ -201,6 +201,14 @@ export default function TrainingPage() {
     return n;
   })();
 
+  const sessionsThisWeek = (() => {
+    const start = weekStartKey();
+    return Object.entries(state.done).reduce(
+      (sum, [date, list]) => (date >= start ? sum + list.length : sum),
+      0,
+    );
+  })();
+
 
   return (
     <Layout>
