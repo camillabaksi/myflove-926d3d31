@@ -220,8 +220,13 @@ export function useTraining() {
     clearProgram,
     toggleSessionDone,
     setSteps,
-
+    setWeight,
+    setWeightGoal,
+    weightEntries,
+    weightGoal: state.weightGoal ?? null,
+    weightToday: state.weights?.[todayKey()] ?? null,
     setStepGoal,
+
     lastDays,
     toggleMovement,
     setMovementGoal,
