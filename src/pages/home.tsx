@@ -310,7 +310,7 @@ export default function Home() {
                     celebrateFromEvent(e);
                   }}
                   style={{ animationDelay: `${i * 60}ms` }}
-                  className="w-full flex items-center gap-3 p-4 surface-card hover:border-primary/40 hover:shadow-md transition-all text-left animate-fade-in active:scale-[0.99]"
+                  className="w-full flex items-center gap-3 p-4 surface-card hover:border-primary/40 hover:shadow-lifted transition-all text-left animate-fade-in active:scale-[0.99]"
                 >
                   <Circle size={20} className="text-muted-foreground shrink-0" />
                   <span className="flex-1">{task.title}</span>
