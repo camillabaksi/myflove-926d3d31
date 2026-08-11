@@ -47,7 +47,7 @@ export default function StreakCard() {
     <div className="rounded-3xl bg-card border border-border p-5 shadow-sm animate-fade-in">
       <div className="flex items-center justify-between gap-3 mb-4">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-full bg-gold/20 text-gold-foreground flex items-center justify-center shrink-0">
+          <div className="w-11 h-11 rounded-full bg-gold/25 flex items-center justify-center shrink-0">
             <Flame size={22} className="text-primary" />
           </div>
           <div>
