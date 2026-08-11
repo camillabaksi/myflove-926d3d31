@@ -113,6 +113,8 @@ export function useTasks() {
       area?: LifeArea;
       courseId?: string;
       steps?: string[];
+      deadlineLeadDays?: number[];
+      deadlineReminderTime?: string;
     }
   ) => {
     // Blueprint: uppgifter ska alltid landa i kalendern så inget "försvinner".
@@ -131,6 +133,8 @@ export function useTasks() {
         waitingOn: opts?.waitingOn,
         area: opts?.area ?? "vardag",
         courseId: opts?.courseId,
+        deadlineLeadDays: opts?.deadlineLeadDays,
+        deadlineReminderTime: opts?.deadlineReminderTime,
         steps: (opts?.steps ?? []).map((s) => ({ id: generateId(), title: s, done: false })),
       },
       ...prev,
@@ -200,6 +204,18 @@ export function useTasks() {
           ],
         }
       : t));
+  };
+
+  /** Smarta deadline-påminnelser: X dagar innan förfallodatum. */
+  const setTaskDeadlineReminders = (
+    id: string,
+    leadDays: number[],
+    time?: string,
+  ) => {
+    const clean = Array.from(new Set(leadDays.filter((d) => d >= 0))).sort((a, b) => b - a);
+    setTasks((prev) => prev.map(t => (t.id === id
+      ? { ...t, deadlineLeadDays: clean, deadlineReminderTime: time ?? t.deadlineReminderTime }
+      : t)));
   };
 
   const setTaskCourse = (id: string, courseId: string | undefined) => {
@@ -277,6 +293,7 @@ export function useTasks() {
     addTaskStep,
     addTaskSteps,
     setTaskCourse,
+    setTaskDeadlineReminders,
     addTaskAttachment,
     removeTaskAttachment,
     toggleTaskStep,
