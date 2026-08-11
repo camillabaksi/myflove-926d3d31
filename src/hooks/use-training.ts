@@ -192,12 +192,35 @@ export function useTraining() {
     return created;
   }, [setState]);
 
+  const setWeight = useCallback(
+    (kg: number, date = todayKey()) => {
+      setState((prev) => ({
+        ...prev,
+        weights: { ...(prev.weights ?? {}), [date]: Math.max(20, Math.round(kg * 10) / 10) },
+      }));
+    },
+    [setState],
+  );
+
+  const setWeightGoal = useCallback(
+    (kg: number | null) =>
+      setState((prev) => ({ ...prev, weightGoal: kg === null ? null : Math.max(20, Math.round(kg * 10) / 10) })),
+    [setState],
+  );
+
+  const weightEntries = useCallback(() => {
+    return Object.entries(state.weights ?? {})
+      .map(([date, kg]) => ({ date, kg }))
+      .sort((a, b) => a.date.localeCompare(b.date));
+  }, [state.weights]);
+
   return {
     state,
     saveProgram,
     clearProgram,
     toggleSessionDone,
     setSteps,
+
     setStepGoal,
     lastDays,
     toggleMovement,
