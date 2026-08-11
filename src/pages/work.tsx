@@ -201,7 +201,7 @@ export default function WorkPage() {
               <Briefcase size={20} />
             </div>
             <div>
-              <h1 className="text-3xl font-bold leading-tight">Jobb</h1>
+              <h1 className="text-3xl font-bold leading-tight text-ink">Jobb</h1>
               <p className="text-sm text-muted-foreground">
                 Projekt, arbetsuppgifter och dokument på ett ställe. Flow delar upp det stora i små steg.
               </p>
