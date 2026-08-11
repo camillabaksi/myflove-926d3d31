@@ -1175,6 +1175,80 @@ export default function TrainingPage() {
         )}
       </div>
 
+      <Dialog open={sessionEdit !== null} onOpenChange={(o) => !o && setSessionEdit(null)}>
+        <DialogContent className="rounded-2xl">
+          <DialogHeader>
+            <DialogTitle>{sessionEdit?.index === null ? "Lägg till pass" : "Ändra passet"}</DialogTitle>
+          </DialogHeader>
+          {sessionEdit && (
+            <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-3">
+                <label className="text-sm text-muted-foreground">
+                  Dag
+                  <Input
+                    value={sessionEdit.day}
+                    onChange={(e) => setSessionEdit({ ...sessionEdit, day: e.target.value })}
+                    className="rounded-xl mt-1"
+                  />
+                </label>
+                <label className="text-sm text-muted-foreground">
+                  Minuter
+                  <Input
+                    type="number"
+                    min={5}
+                    max={180}
+                    value={sessionEdit.minutes}
+                    onChange={(e) => setSessionEdit({ ...sessionEdit, minutes: e.target.value })}
+                    className="rounded-xl mt-1"
+                  />
+                </label>
+              </div>
+              <label className="text-sm text-muted-foreground block">
+                Namn på passet
+                <Input
+                  value={sessionEdit.title}
+                  onChange={(e) => setSessionEdit({ ...sessionEdit, title: e.target.value })}
+                  className="rounded-xl mt-1"
+                />
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {(["styrka", "kondition", "rörlighet", "vila"] as const).map((t) => (
+                  <button
+                    key={t}
+                    type="button"
+                    onClick={() => setSessionEdit({ ...sessionEdit, type: t })}
+                    className={`rounded-xl border px-3 py-1.5 text-sm capitalize transition ${
+                      sessionEdit.type === t
+                        ? "bg-primary text-primary-foreground border-primary"
+                        : "border-border text-ink"
+                    }`}
+                  >
+                    {t}
+                  </button>
+                ))}
+              </div>
+              <label className="text-sm text-muted-foreground block">
+                Övningar – en per rad
+                <Textarea
+                  rows={5}
+                  value={sessionEdit.exercises}
+                  onChange={(e) => setSessionEdit({ ...sessionEdit, exercises: e.target.value })}
+                  className="rounded-xl mt-1"
+                />
+              </label>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="ghost" className="rounded-xl" onClick={() => setSessionEdit(null)}>
+              Avbryt
+            </Button>
+            <Button className="rounded-xl" onClick={saveSessionEdit}>
+              Spara
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Layout>
+
   );
 }
