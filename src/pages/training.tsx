@@ -13,11 +13,12 @@ import {
   RefreshCw,
   Smartphone,
   AlertTriangle,
-
+  CalendarRange,
   Target,
 } from "lucide-react";
 import { generateTrainingProgram } from "@/lib/training.functions";
 import { useTraining, type TrainingGoal } from "@/hooks/use-training";
+import { FEEDBACK_LABEL, weekStartKey, type WeekFeedback } from "@/lib/weekly-plan";
 import { isHealthAppAvailable, openHealthSettings, readStepsForDays } from "@/lib/health-steps";
 import {
   MOVEMENT_IDEAS,
@@ -29,6 +30,7 @@ import {
 
 import { useToast } from "@/hooks/use-toast";
 import { celebrateFromEvent } from "@/lib/celebrate";
+
 
 const FOCUS: { id: TrainingGoal["focus"]; label: string }[] = [
   { id: "styrka", label: "Styrka" },
