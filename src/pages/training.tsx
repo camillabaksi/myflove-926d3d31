@@ -565,6 +565,7 @@ export default function TrainingPage() {
             })}
           </div>
         </section>
+        )}
 
         {view === "program" && (
           <>
