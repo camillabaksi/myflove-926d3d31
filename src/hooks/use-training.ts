@@ -196,11 +196,31 @@ export function useTraining() {
   }, [setState]);
 
   const setWeight = useCallback(
-    (kg: number, date = todayKey()) => {
-      setState((prev) => ({
-        ...prev,
-        weights: { ...(prev.weights ?? {}), [date]: Math.max(20, Math.round(kg * 10) / 10) },
-      }));
+    (kg: number, date = todayKey(), note?: string) => {
+      setState((prev) => {
+        const notes = { ...(prev.weightNotes ?? {}) };
+        const trimmed = note?.trim();
+        if (trimmed) notes[date] = trimmed;
+        else delete notes[date];
+        return {
+          ...prev,
+          weights: { ...(prev.weights ?? {}), [date]: Math.max(20, Math.round(kg * 10) / 10) },
+          weightNotes: notes,
+        };
+      });
+    },
+    [setState],
+  );
+
+  const removeWeight = useCallback(
+    (date: string) => {
+      setState((prev) => {
+        const weights = { ...(prev.weights ?? {}) };
+        const notes = { ...(prev.weightNotes ?? {}) };
+        delete weights[date];
+        delete notes[date];
+        return { ...prev, weights, weightNotes: notes };
+      });
     },
     [setState],
   );
@@ -213,9 +233,9 @@ export function useTraining() {
 
   const weightEntries = useCallback(() => {
     return Object.entries(state.weights ?? {})
-      .map(([date, kg]) => ({ date, kg }))
+      .map(([date, kg]) => ({ date, kg, note: state.weightNotes?.[date] ?? "" }))
       .sort((a, b) => a.date.localeCompare(b.date));
-  }, [state.weights]);
+  }, [state.weights, state.weightNotes]);
 
   return {
     state,
