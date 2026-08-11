@@ -176,25 +176,35 @@ export default function Layout({ children }: LayoutProps) {
         <div className="mb-8 px-4 py-2">
           <h1 className="text-2xl font-bold text-primary tracking-tight">MyFlove</h1>
         </div>
-        <div className="grid grid-cols-2 gap-3">
-          {navItems.map((item) => {
-            const isActive = location === item.href;
-            const Icon = item.icon;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`aspect-square flex flex-col items-center justify-center gap-2 rounded-2xl p-2 text-center transition-all duration-200 ${
-                  isActive
-                    ? "bg-primary text-primary-foreground font-medium shadow-sm"
-                    : "bg-secondary/40 text-muted-foreground hover:bg-secondary hover:text-foreground"
-                }`}
-              >
-                <Icon size={24} strokeWidth={isActive ? 2.5 : 2} />
-                <span className="text-xs leading-tight">{item.label}</span>
-              </Link>
-            );
-          })}
+        <div className="space-y-5">
+          {categories.map((cat) => (
+            <div key={cat.id}>
+              <div className="flex items-center gap-2 px-1 mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                <cat.icon size={14} />
+                {cat.label}
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                {cat.items.map((item) => {
+                  const isActive = location === item.href;
+                  const Icon = item.icon;
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={`aspect-square flex flex-col items-center justify-center gap-2 rounded-2xl p-2 text-center transition-all duration-200 ${
+                        isActive
+                          ? "bg-primary text-primary-foreground font-medium shadow-sm"
+                          : "bg-secondary/40 text-muted-foreground hover:bg-secondary hover:text-foreground"
+                      }`}
+                    >
+                      <Icon size={24} strokeWidth={isActive ? 2.5 : 2} />
+                      <span className="text-xs leading-tight">{item.label}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </div>
         <div className="mt-auto pt-4 pb-2 space-y-2">
           <Button
