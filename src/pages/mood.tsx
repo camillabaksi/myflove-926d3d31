@@ -29,6 +29,8 @@ export function MoodContent({ showHeader = true }: MoodContentProps) {
   const [note, setNote] = useState("");
   const [justSaved, setJustSaved] = useState(false);
   const [flowInsightsOpen, setFlowInsightsOpen] = useState(false);
+  const [showAllMoods, setShowAllMoods] = useState(false);
+
 
   const handleSave = () => {
     if (selectedScore !== null) {
@@ -115,9 +117,21 @@ export function MoodContent({ showHeader = true }: MoodContentProps) {
 
       {moods.length > 0 && (
         <div className="space-y-4">
-          <h2 className="text-xl font-semibold">Tidigare incheckningar</h2>
+          <div className="flex items-center justify-between gap-3">
+            <h2 className="text-xl font-semibold">Tidigare incheckningar</h2>
+            {moods.length > 3 && (
+              <button
+                type="button"
+                onClick={() => setShowAllMoods((v) => !v)}
+                aria-expanded={showAllMoods}
+                className="text-sm font-medium text-primary hover:underline shrink-0"
+              >
+                {showAllMoods ? "Visa färre" : `Visa alla (${moods.length})`}
+              </button>
+            )}
+          </div>
           <div className="space-y-3">
-            {moods.map((mood) => {
+            {(showAllMoods ? moods : moods.slice(0, 3)).map((mood) => {
               const emoji = EMOJIS.find((e) => e.score === mood.score)?.emoji;
               return (
                 <div key={mood.id} className="bg-card p-4 rounded-2xl border border-border shadow-sm flex items-start gap-4">
@@ -132,6 +146,7 @@ export function MoodContent({ showHeader = true }: MoodContentProps) {
           </div>
         </div>
       )}
+
 
       <FlowInsightsModal open={flowInsightsOpen} onOpenChange={setFlowInsightsOpen} />
     </div>
