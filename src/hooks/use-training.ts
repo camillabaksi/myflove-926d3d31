@@ -20,6 +20,10 @@ export interface TrainingState {
   /** ISO-datum -> steg */
   steps: Record<string, number>;
   stepGoal: number;
+  /** ISO-datum -> id:n för vardagsmotion som gjorts */
+  movement?: Record<string, string[]>;
+  /** Mål för vardagsmotion i minuter per dag */
+  movementGoal?: number;
   createdAt?: number;
 }
 
@@ -29,7 +33,10 @@ const DEFAULT_STATE: TrainingState = {
   done: {},
   steps: {},
   stepGoal: 7000,
+  movement: {},
+  movementGoal: 20,
 };
+
 
 export const todayKey = () => new Date().toISOString().slice(0, 10);
 
