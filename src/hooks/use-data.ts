@@ -48,7 +48,12 @@ export interface Task {
   area?: LifeArea; // livsområde: vardag / privat / studier / jobb
   courseId?: string; // kopplad kurs (studieflödet)
   attachments?: TaskAttachment[]; // uppladdade dokument
+  /** Smarta deadline-påminnelser: antal dagar innan dueDate som notis ska skickas */
+  deadlineLeadDays?: number[];
+  /** Klockslag för deadline-påminnelserna, HH:MM (default 09:00) */
+  deadlineReminderTime?: string;
 }
+
 
 
 
