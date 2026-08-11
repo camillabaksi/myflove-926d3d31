@@ -412,7 +412,66 @@ export default function Layout({ children }: LayoutProps) {
               </button>
             </div>
             <div className="flex-1 overflow-y-auto p-4 pb-24">
-              {editingBottomNav ? (
+              {!editingBottomNav && (
+                <div className="relative mb-4">
+                  <Search
+                    size={18}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none"
+                  />
+                  <input
+                    type="search"
+                    value={navSearch}
+                    onChange={(e) => setNavSearch(e.target.value)}
+                    placeholder="Sök sektion…"
+                    aria-label="Sök sektion"
+                    className="w-full rounded-2xl border border-border bg-card py-3 pl-10 pr-10 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                  />
+                  {navSearch && (
+                    <button
+                      type="button"
+                      aria-label="Rensa sökning"
+                      onClick={() => setNavSearch("")}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full text-muted-foreground hover:bg-secondary"
+                    >
+                      <X size={16} />
+                    </button>
+                  )}
+                </div>
+              )}
+              {!editingBottomNav && navSearch.trim() ? (
+                searchResults.length > 0 ? (
+                  <div className="grid grid-cols-3 gap-3">
+                    {searchResults.map((item) => {
+                      const isActive = location === item.href;
+                      const Icon = item.icon;
+                      return (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          onClick={() => {
+                            setMobileMenuOpen(false);
+                            setOpenCategory(null);
+                            setNavSearch("");
+                          }}
+                          className={`aspect-square flex flex-col items-center justify-center gap-2 rounded-2xl p-2 text-center transition-all duration-200 ${
+                            isActive
+                              ? "bg-primary text-primary-foreground font-medium shadow-sm"
+                              : "bg-card text-foreground border border-border shadow-sm"
+                          }`}
+                        >
+                          <Icon size={26} strokeWidth={isActive ? 2.5 : 2} />
+                          <span className="text-xs leading-tight">{item.label}</span>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <p className="text-sm text-muted-foreground text-center mt-8">
+                    Hittade inget som matchar ”{navSearch}”.
+                  </p>
+                )
+              ) : editingBottomNav ? (
+
                   <BottomNavEditor
                     allItems={navItems.filter((i) => i.href !== "/hem")}
                     selected={bottomNavHrefs.filter((href) =>
