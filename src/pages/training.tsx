@@ -10,6 +10,7 @@ import {
   Footprints,
   CheckCircle2,
   Circle,
+  Pencil,
   RefreshCw,
   Smartphone,
   AlertTriangle,
