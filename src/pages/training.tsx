@@ -928,19 +928,36 @@ export default function TrainingPage() {
 
             <div className="flex flex-wrap items-center gap-2">
               <Input
-                type="number"
-                step="0.1"
+                type="text"
                 inputMode="decimal"
                 placeholder="Målvikt"
                 value={weightGoalInput}
-                onChange={(e) => {
-                  setWeightGoalInput(e.target.value);
-                  const n = Number(e.target.value.replace(",", "."));
-                  setWeightGoal(Number.isFinite(n) && n > 0 ? n : null);
-                }}
+                onChange={(e) => setWeightGoalInput(e.target.value)}
                 className="w-32 rounded-xl"
                 aria-label="Målvikt i kg"
               />
+              <Button
+                variant="secondary"
+                className="rounded-xl"
+                onClick={() => {
+                  const raw = weightGoalInput.trim();
+                  if (!raw) {
+                    setWeightGoal(null);
+                    toast({ title: "Målvikt borttagen" });
+                    return;
+                  }
+                  const n = Number(raw.replace(",", "."));
+                  if (!Number.isFinite(n) || n < 20 || n > 400) {
+                    toast({ title: "Kontrollera målvikten", description: "Ange ett tal mellan 20 och 400 kg." });
+                    return;
+                  }
+                  setWeightGoal(n);
+                  setWeightGoalInput(String(Math.round(n * 10) / 10));
+                  toast({ title: "Målvikt sparad", description: `${Math.round(n * 10) / 10} kg` });
+                }}
+              >
+                Spara målvikt
+              </Button>
               <span className="text-sm text-muted-foreground flex items-center gap-1">
                 <Target size={14} /> målvikt
               </span>
