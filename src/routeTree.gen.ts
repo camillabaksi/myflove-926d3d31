@@ -28,6 +28,7 @@ import { Route as AppPomodoroRouteImport } from './routes/_app.pomodoro'
 import { Route as AppMatlistaRouteImport } from './routes/_app.matlista'
 import { Route as AppMaBraRouteImport } from './routes/_app.ma-bra'
 import { Route as AppKalenderRouteImport } from './routes/_app.kalender'
+import { Route as AppJobbRouteImport } from './routes/_app.jobb'
 import { Route as AppHemRouteImport } from './routes/_app.hem'
 import { Route as AppFriktionsindexRouteImport } from './routes/_app.friktionsindex'
 import { Route as AppFokusRouteImport } from './routes/_app.fokus'
@@ -141,6 +142,11 @@ const AppMaBraRoute = AppMaBraRouteImport.update({
 const AppKalenderRoute = AppKalenderRouteImport.update({
   id: '/kalender',
   path: '/kalender',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppJobbRoute = AppJobbRouteImport.update({
+  id: '/jobb',
+  path: '/jobb',
   getParentRoute: () => AppRoute,
 } as any)
 const AppHemRoute = AppHemRouteImport.update({
@@ -266,6 +272,7 @@ export interface FileRoutesByFullPath {
   '/fokus': typeof AppFokusRoute
   '/friktionsindex': typeof AppFriktionsindexRoute
   '/hem': typeof AppHemRoute
+  '/jobb': typeof AppJobbRoute
   '/kalender': typeof AppKalenderRoute
   '/ma-bra': typeof AppMaBraRoute
   '/matlista': typeof AppMatlistaRoute
@@ -305,6 +312,7 @@ export interface FileRoutesByTo {
   '/fokus': typeof AppFokusRoute
   '/friktionsindex': typeof AppFriktionsindexRoute
   '/hem': typeof AppHemRoute
+  '/jobb': typeof AppJobbRoute
   '/kalender': typeof AppKalenderRoute
   '/ma-bra': typeof AppMaBraRoute
   '/matlista': typeof AppMatlistaRoute
@@ -346,6 +354,7 @@ export interface FileRoutesById {
   '/_app/fokus': typeof AppFokusRoute
   '/_app/friktionsindex': typeof AppFriktionsindexRoute
   '/_app/hem': typeof AppHemRoute
+  '/_app/jobb': typeof AppJobbRoute
   '/_app/kalender': typeof AppKalenderRoute
   '/_app/ma-bra': typeof AppMaBraRoute
   '/_app/matlista': typeof AppMatlistaRoute
@@ -387,6 +396,7 @@ export interface FileRouteTypes {
     | '/fokus'
     | '/friktionsindex'
     | '/hem'
+    | '/jobb'
     | '/kalender'
     | '/ma-bra'
     | '/matlista'
@@ -426,6 +436,7 @@ export interface FileRouteTypes {
     | '/fokus'
     | '/friktionsindex'
     | '/hem'
+    | '/jobb'
     | '/kalender'
     | '/ma-bra'
     | '/matlista'
@@ -466,6 +477,7 @@ export interface FileRouteTypes {
     | '/_app/fokus'
     | '/_app/friktionsindex'
     | '/_app/hem'
+    | '/_app/jobb'
     | '/_app/kalender'
     | '/_app/ma-bra'
     | '/_app/matlista'
@@ -636,6 +648,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppKalenderRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/jobb': {
+      id: '/_app/jobb'
+      path: '/jobb'
+      fullPath: '/jobb'
+      preLoaderRoute: typeof AppJobbRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/hem': {
       id: '/_app/hem'
       path: '/hem'
@@ -786,6 +805,7 @@ interface AppRouteChildren {
   AppFokusRoute: typeof AppFokusRoute
   AppFriktionsindexRoute: typeof AppFriktionsindexRoute
   AppHemRoute: typeof AppHemRoute
+  AppJobbRoute: typeof AppJobbRoute
   AppKalenderRoute: typeof AppKalenderRoute
   AppMaBraRoute: typeof AppMaBraRoute
   AppMatlistaRoute: typeof AppMatlistaRoute
@@ -811,6 +831,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppFokusRoute: AppFokusRoute,
   AppFriktionsindexRoute: AppFriktionsindexRoute,
   AppHemRoute: AppHemRoute,
+  AppJobbRoute: AppJobbRoute,
   AppKalenderRoute: AppKalenderRoute,
   AppMaBraRoute: AppMaBraRoute,
   AppMatlistaRoute: AppMatlistaRoute,
