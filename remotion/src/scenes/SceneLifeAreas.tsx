@@ -4,7 +4,7 @@ import { COLORS, FONTS, SceneShell, SectionEyebrow, SectionSub, SectionTitle, us
 
 const AREAS = [
   { label: "Vardag", emoji: "🏠", sub: "Kalender, att göra, rutiner", color: COLORS.gold, delay: 16 },
-  { label: "Privat", emoji: "🌿", sub: "Familj, ärenden, inköp", color: COLORS.primary, delay: 32 },
+  { label: "Privat", emoji: "❦", sub: "Familj, ärenden, inköp", color: COLORS.primary, delay: 32 },
   { label: "Studier", emoji: "🎓", sub: "Kurser, deadlines, dokument", color: COLORS.studies, delay: 48 },
   { label: "Jobb", emoji: "📊", sub: "Projekt, möten, uppföljning", color: COLORS.work, delay: 64 },
 ];
