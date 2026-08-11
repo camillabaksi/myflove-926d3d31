@@ -41,6 +41,147 @@ export type Database = {
         }
         Relationships: []
       }
+      child_item_shares: {
+        Row: {
+          created_at: string
+          item_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          item_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          item_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "child_item_shares_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "child_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      child_items: {
+        Row: {
+          child_id: string
+          completed: boolean
+          created_at: string
+          date: string | null
+          file_path: string | null
+          id: string
+          kind: string
+          notes: string | null
+          owner_id: string
+          remind: boolean
+          time: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          child_id: string
+          completed?: boolean
+          created_at?: string
+          date?: string | null
+          file_path?: string | null
+          id?: string
+          kind?: string
+          notes?: string | null
+          owner_id?: string
+          remind?: boolean
+          time?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          child_id?: string
+          completed?: boolean
+          created_at?: string
+          date?: string | null
+          file_path?: string | null
+          id?: string
+          kind?: string
+          notes?: string | null
+          owner_id?: string
+          remind?: boolean
+          time?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "child_items_child_id_fkey"
+            columns: ["child_id"]
+            isOneToOne: false
+            referencedRelation: "children"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      child_shares: {
+        Row: {
+          child_id: string
+          created_at: string
+          user_id: string
+        }
+        Insert: {
+          child_id: string
+          created_at?: string
+          user_id: string
+        }
+        Update: {
+          child_id?: string
+          created_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "child_shares_child_id_fkey"
+            columns: ["child_id"]
+            isOneToOne: false
+            referencedRelation: "children"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      children: {
+        Row: {
+          birthdate: string | null
+          color: string
+          created_at: string
+          id: string
+          name: string
+          note: string | null
+          owner_id: string
+          updated_at: string
+        }
+        Insert: {
+          birthdate?: string | null
+          color?: string
+          created_at?: string
+          id?: string
+          name: string
+          note?: string | null
+          owner_id?: string
+          updated_at?: string
+        }
+        Update: {
+          birthdate?: string | null
+          color?: string
+          created_at?: string
+          id?: string
+          name?: string
+          note?: string | null
+          owner_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       energy_logs: {
         Row: {
           created_at: string
@@ -443,6 +584,16 @@ export type Database = {
           total_users: number
         }[]
       }
+      can_view_child: {
+        Args: { _child_id: string; _user_id: string }
+        Returns: boolean
+      }
+      can_view_child_item: {
+        Args: { _item_id: string; _user_id: string }
+        Returns: boolean
+      }
+      child_item_owner: { Args: { _item_id: string }; Returns: string }
+      child_owner: { Args: { _child_id: string }; Returns: string }
       create_household: {
         Args: { _color: string; _display_name: string; _name: string }
         Returns: string
@@ -479,6 +630,10 @@ export type Database = {
       join_household_by_code: {
         Args: { _code: string; _color: string; _display_name: string }
         Returns: string
+      }
+      share_child_item: {
+        Args: { _item_id: string; _user_ids: string[] }
+        Returns: undefined
       }
     }
     Enums: {
