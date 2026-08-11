@@ -7,15 +7,17 @@ const { fontFamily: display } = loadFraunces("normal", { weights: ["600", "700"]
 const { fontFamily: body } = loadInter("normal", { weights: ["400", "500", "600"], subsets: ["latin"] });
 
 export const COLORS = {
-  bg: "#F5F1EA",
-  bgDeep: "#EDE6D9",
-  primary: "#B85042",
-  primarySoft: "#D97060",
-  sage: "#A7BEAE",
-  ink: "#2C3639",
-  muted: "#7A6E63",
-  cream: "#FFFBF3",
-  gold: "#E4A853",
+  bg: "#F2EDE2",
+  bgDeep: "#E8E0D0",
+  primary: "#24503C",
+  primarySoft: "#3A6B53",
+  sage: "#8FB2A0",
+  ink: "#1E2A24",
+  muted: "#6E7A72",
+  cream: "#FFFCF5",
+  gold: "#D69A34",
+  studies: "#6E5A99",
+  work: "#2F5C7D",
 };
 
 export const FONTS = { display, body };
