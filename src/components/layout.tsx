@@ -1,6 +1,6 @@
 import { ReactNode, useState, useEffect, useMemo } from "react";
 import { Link, useLocation } from "wouter";
-import { Home, Target, CheckSquare, ShoppingBag, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Settings2, Check, RotateCcw, ArrowUp, ArrowDown, LogOut, Volume2, VolumeX, Shield, Heart, Sun, Search, GraduationCap, Briefcase, Baby } from "lucide-react";
+import { Home, Target, CheckSquare, ShoppingBag, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Settings2, Check, RotateCcw, ArrowUp, ArrowDown, LogOut, Volume2, VolumeX, Shield, Heart, Sun, Search, GraduationCap, Briefcase, Baby, CalendarDays, Brain, HeartPulse, House, BookOpen, Building2, LayoutGrid } from "lucide-react";
 import { isAlarmSoundEnabled, setAlarmSoundEnabled, subscribeAlarmPref, playAlarmPreview, initAlarmAudioUnlock } from "@/lib/push-notifications";
 import { useCommuteAlerts } from "@/hooks/use-commute-alerts";
 import { useMedicationAlerts } from "@/hooks/use-medication-alerts";
@@ -160,13 +160,13 @@ export default function Layout({ children }: LayoutProps) {
   const categories = useMemo(() => {
     const byHref = (href: string) => navItems.find((i) => i.href === href);
     const groups: { id: string; label: string; icon: typeof Home; hrefs: string[] }[] = [
-      { id: "dagen", label: "Min dag", icon: Sun, hrefs: ["/hem", "/daglig-rutin", "/kalender", "/tasks", "/flowplan"] },
-      { id: "fokus", label: "Fokus & lugn", icon: Target, hrefs: ["/pomodoro", "/dump", "/assistant"] },
-      { id: "mabra", label: "Må bra", icon: Heart, hrefs: ["/ma-bra", "/beloningar", "/statistik"] },
-      { id: "hem", label: "Hem & familj", icon: Users, hrefs: ["/familj", "/barn", "/shopping", "/matlista", "/finances", "/travel"] },
-      { id: "studier", label: "Studier", icon: GraduationCap, hrefs: ["/studier"] },
-      { id: "jobb", label: "Jobb", icon: Briefcase, hrefs: ["/jobb"] },
-      { id: "ovrigt", label: "Övrigt", icon: Settings2, hrefs: ["/friktionsindex", "/admin", "/admin-statistik"] },
+      { id: "dagen", label: "Min dag", icon: CalendarDays, hrefs: ["/hem", "/daglig-rutin", "/kalender", "/tasks", "/flowplan"] },
+      { id: "fokus", label: "Fokus & lugn", icon: Brain, hrefs: ["/pomodoro", "/dump", "/assistant"] },
+      { id: "mabra", label: "Må bra", icon: HeartPulse, hrefs: ["/ma-bra", "/beloningar", "/statistik"] },
+      { id: "hem", label: "Hem & familj", icon: House, hrefs: ["/familj", "/barn", "/shopping", "/matlista", "/finances", "/travel"] },
+      { id: "studier", label: "Studier", icon: BookOpen, hrefs: ["/studier"] },
+      { id: "jobb", label: "Jobb", icon: Building2, hrefs: ["/jobb"] },
+      { id: "ovrigt", label: "Övrigt", icon: LayoutGrid, hrefs: ["/friktionsindex", "/admin", "/admin-statistik"] },
     ];
     return groups
       .map((g) => ({ ...g, items: g.hrefs.map(byHref).filter(Boolean) as typeof navItems }))
@@ -220,7 +220,13 @@ export default function Layout({ children }: LayoutProps) {
                 className="flex items-center gap-2 px-1 mb-2 text-xs font-semibold uppercase tracking-wider"
                 style={{ color: catColor(cat.id) }}
               >
-                <cat.icon size={14} />
+                <span
+                  className="inline-flex h-6 w-6 items-center justify-center rounded-lg"
+                  style={{ backgroundColor: catColor(cat.id, 0.14) }}
+                  aria-hidden="true"
+                >
+                  <cat.icon size={14} />
+                </span>
                 {cat.label}
               </div>
 
@@ -531,6 +537,23 @@ export default function Layout({ children }: LayoutProps) {
                   >
                     <RotateCcw size={16} /> Alla kategorier
                   </button>
+                  {(() => {
+                    const cat = categories.find((c) => c.id === openCategory);
+                    if (!cat) return null;
+                    const CatIcon = cat.icon;
+                    return (
+                      <div className="mb-4 flex items-center gap-2 text-sm font-semibold" style={{ color: catColor(cat.id) }}>
+                        <span
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-xl"
+                          style={{ backgroundColor: catColor(cat.id, 0.15) }}
+                          aria-hidden="true"
+                        >
+                          <CatIcon size={18} />
+                        </span>
+                        {cat.label}
+                      </div>
+                    );
+                  })()}
                   <div className="grid grid-cols-3 gap-3">
                     {(categories.find((c) => c.id === openCategory)?.items ?? []).map((item) => {
                       const isActive = location === item.href;
@@ -580,7 +603,13 @@ export default function Layout({ children }: LayoutProps) {
                           }}
                           className="aspect-square flex flex-col items-center justify-center gap-2 rounded-3xl p-3 text-center border shadow-sm transition-all duration-200 active:scale-95"
                         >
-                          <Icon size={30} />
+                          <span
+                            className="inline-flex h-12 w-12 items-center justify-center rounded-2xl"
+                            style={{ backgroundColor: catColor(cat.id, 0.18) }}
+                            aria-hidden="true"
+                          >
+                            <Icon size={26} />
+                          </span>
                           <span className="text-sm font-medium leading-tight">{cat.label}</span>
                           <span className="text-[11px] opacity-70">
                             {cat.items.length} sektioner
