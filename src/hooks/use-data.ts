@@ -47,7 +47,9 @@ export interface Task {
   steps?: TaskStep[]; // delsteg (särskilt för ärenden och projekt)
   area?: LifeArea; // livsområde: vardag / privat / studier / jobb
   courseId?: string; // kopplad kurs (studieflödet)
+  attachments?: TaskAttachment[]; // uppladdade dokument
 }
+
 
 
 export interface ShoppingItem {
