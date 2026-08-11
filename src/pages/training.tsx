@@ -263,6 +263,24 @@ export default function TrainingPage() {
     );
   })();
 
+  const weights = weightEntries();
+  const latestWeight = weights.at(-1) ?? null;
+  const firstWeight = weights[0] ?? null;
+  const weightChange =
+    latestWeight && firstWeight && weights.length > 1
+      ? Math.round((latestWeight.kg - firstWeight.kg) * 10) / 10
+      : null;
+
+  const summary: Record<Exclude<TrainingView, "overview">, string> = {
+    program: state.program ? `${state.program.sessions.length} pass i veckan` : "Inget program ännu",
+    steg: `${stepsToday.toLocaleString("sv-SE")} steg idag`,
+    motion: `${movementMinutes} av ${movementGoal} min idag`,
+    plan: weeklyPlan ? `${sessionsThisWeek}/${weeklyPlan.sessionTarget} pass denna vecka` : "Ingen plan ännu",
+    vikt: latestWeight ? `${latestWeight.kg} kg senast` : "Ingen vikt inlagd",
+  };
+
+
+
 
   return (
     <Layout>
