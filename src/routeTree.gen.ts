@@ -47,6 +47,7 @@ import { Route as AppAdminRouteImport } from './routes/_app.admin'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as ApiPublicCspReportRouteImport } from './routes/api/public/csp-report'
+import { Route as AppAssistantChatIdRouteImport } from './routes/_app.assistant_.$chatId'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as ApiPublicHooksPushTickRouteImport } from './routes/api/public/hooks/push-tick'
@@ -243,6 +244,11 @@ const ApiPublicCspReportRoute = ApiPublicCspReportRouteImport.update({
   path: '/api/public/csp-report',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppAssistantChatIdRoute = AppAssistantChatIdRouteImport.update({
+  id: '/assistant_/$chatId',
+  path: '/assistant/$chatId',
+  getParentRoute: () => AppRoute,
+} as any)
 const Char91DotmcpChar93InvokeToolToolRoute =
   Char91DotmcpChar93InvokeToolToolRouteImport.update({
     id: '/.mcp/invoke-tool/$tool',
@@ -299,6 +305,7 @@ export interface FileRoutesByFullPath {
   '/guide/adhd-planner-for-adults': typeof GuideAdhdPlannerForAdultsRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/assistant/$chatId': typeof AppAssistantChatIdRoute
   '/api/public/csp-report': typeof ApiPublicCspReportRoute
   '/api/public/hooks/push-tick': typeof ApiPublicHooksPushTickRoute
 }
@@ -341,6 +348,7 @@ export interface FileRoutesByTo {
   '/guide/adhd-planner-for-adults': typeof GuideAdhdPlannerForAdultsRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/assistant/$chatId': typeof AppAssistantChatIdRoute
   '/api/public/csp-report': typeof ApiPublicCspReportRoute
   '/api/public/hooks/push-tick': typeof ApiPublicHooksPushTickRoute
 }
@@ -385,6 +393,7 @@ export interface FileRoutesById {
   '/guide/adhd-planner-for-adults': typeof GuideAdhdPlannerForAdultsRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/_app/assistant_/$chatId': typeof AppAssistantChatIdRoute
   '/api/public/csp-report': typeof ApiPublicCspReportRoute
   '/api/public/hooks/push-tick': typeof ApiPublicHooksPushTickRoute
 }
@@ -429,6 +438,7 @@ export interface FileRouteTypes {
     | '/guide/adhd-planner-for-adults'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/assistant/$chatId'
     | '/api/public/csp-report'
     | '/api/public/hooks/push-tick'
   fileRoutesByTo: FileRoutesByTo
@@ -471,6 +481,7 @@ export interface FileRouteTypes {
     | '/guide/adhd-planner-for-adults'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/assistant/$chatId'
     | '/api/public/csp-report'
     | '/api/public/hooks/push-tick'
   id:
@@ -514,6 +525,7 @@ export interface FileRouteTypes {
     | '/guide/adhd-planner-for-adults'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/_app/assistant_/$chatId'
     | '/api/public/csp-report'
     | '/api/public/hooks/push-tick'
   fileRoutesById: FileRoutesById
@@ -805,6 +817,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicCspReportRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/assistant_/$chatId': {
+      id: '/_app/assistant_/$chatId'
+      path: '/assistant/$chatId'
+      fullPath: '/assistant/$chatId'
+      preLoaderRoute: typeof AppAssistantChatIdRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/.mcp/invoke-tool/$tool': {
       id: '/.mcp/invoke-tool/$tool'
       path: '/.mcp/invoke-tool/$tool'
@@ -855,6 +874,7 @@ interface AppRouteChildren {
   AppTasksRoute: typeof AppTasksRoute
   AppTraningRoute: typeof AppTraningRoute
   AppTravelRoute: typeof AppTravelRoute
+  AppAssistantChatIdRoute: typeof AppAssistantChatIdRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
@@ -883,6 +903,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppTasksRoute: AppTasksRoute,
   AppTraningRoute: AppTraningRoute,
   AppTravelRoute: AppTravelRoute,
+  AppAssistantChatIdRoute: AppAssistantChatIdRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
