@@ -114,12 +114,12 @@ export default function Home() {
   const hour = new Date().getHours();
   const heroGradient =
     hour < 10
-      ? "linear-gradient(135deg, hsl(var(--gold) / 0.35) 0%, hsl(var(--card)) 60%)"
+      ? "linear-gradient(135deg, hsl(var(--gold) / 0.30) 0%, hsl(var(--cream)) 55%, hsl(var(--sage) / 0.25) 100%)"
       : hour < 17
-        ? "linear-gradient(135deg, hsl(var(--sage) / 0.35) 0%, hsl(var(--card)) 60%)"
+        ? "linear-gradient(135deg, hsl(var(--sage) / 0.35) 0%, hsl(var(--cream)) 60%, hsl(var(--gold) / 0.22) 100%)"
         : hour < 22
-          ? "linear-gradient(135deg, hsl(var(--terracotta-soft) / 0.32) 0%, hsl(var(--card)) 60%)"
-          : "linear-gradient(135deg, hsl(var(--ink) / 0.18) 0%, hsl(var(--card)) 60%)";
+          ? "linear-gradient(135deg, hsl(var(--gold) / 0.28) 0%, hsl(var(--cream)) 55%, hsl(var(--forest) / 0.18) 100%)"
+          : "linear-gradient(135deg, hsl(var(--forest) / 0.28) 0%, hsl(var(--card)) 65%)";
 
   return (
     <Layout>
