@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { generateTrainingProgram } from "@/lib/training.functions";
 import { useTraining, type TrainingGoal } from "@/hooks/use-training";
-import { isHealthAppAvailable, readTodaySteps } from "@/lib/health-steps";
+import { isHealthAppAvailable, openHealthSettings, readStepsForDays } from "@/lib/health-steps";
 import { useToast } from "@/hooks/use-toast";
 import { celebrateFromEvent } from "@/lib/celebrate";
 
