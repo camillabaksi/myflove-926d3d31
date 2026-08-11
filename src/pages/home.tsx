@@ -165,7 +165,19 @@ export default function Home() {
           </div>
         </div>
 
+        <AreaOnboarding />
+
+        <div className="space-y-2">
+          <AreaSwitcher size="sm" />
+          <p className="text-xs text-muted-foreground">
+            {activeArea === "alla"
+              ? "Flow ser hela din dag – oavsett vilket rum sakerna hör till."
+              : `Du är i ${AREA_META[activeArea].label.toLowerCase()}rummet. Resten väntar tills du vill se det.`}
+          </p>
+        </div>
+
         <StreakCard />
+
 
         <WeatherCard />
 
