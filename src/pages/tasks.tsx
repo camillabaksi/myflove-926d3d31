@@ -64,6 +64,8 @@ export default function Tasks() {
     deleteTaskStep,
   } = useTasks();
   const { toast } = useToast();
+  const { activeArea } = useActiveArea();
+
 
   const [newTask, setNewTask] = useState("");
   const [dueDate, setDueDate] = useState("");
