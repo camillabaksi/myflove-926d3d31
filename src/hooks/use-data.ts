@@ -19,7 +19,17 @@ export interface TaskStep {
   id: string;
   title: string;
   done: boolean;
+  when?: string; // valfri kort tidsmarkering, t.ex. "senast 12 sep"
 }
+
+/** Uppladdat dokument kopplat till en uppgift (studieflödet). */
+export interface TaskAttachment {
+  path: string; // sökväg i study-docs-bucketen
+  name: string;
+  size?: number;
+  uploadedAt: number;
+}
+
 
 export interface Task {
   id: string;
@@ -37,7 +47,9 @@ export interface Task {
   steps?: TaskStep[]; // delsteg (särskilt för ärenden och projekt)
   area?: LifeArea; // livsområde: vardag / privat / studier / jobb
   courseId?: string; // kopplad kurs (studieflödet)
+  attachments?: TaskAttachment[]; // uppladdade dokument
 }
+
 
 
 export interface ShoppingItem {
@@ -172,6 +184,36 @@ export function useTasks() {
       : t));
   };
 
+  /** Lägger till flera delsteg på en gång (t.ex. Flows uppdelning av en inlämning). */
+  const addTaskSteps = (id: string, steps: { title: string; when?: string }[]) => {
+    setTasks((prev) => prev.map(t => t.id === id
+      ? {
+          ...t,
+          steps: [
+            ...(t.steps ?? []),
+            ...steps.map((s) => ({ id: generateId(), title: s.title, done: false, when: s.when })),
+          ],
+        }
+      : t));
+  };
+
+  const setTaskCourse = (id: string, courseId: string | undefined) => {
+    setTasks((prev) => prev.map(t => (t.id === id ? { ...t, courseId } : t)));
+  };
+
+  const addTaskAttachment = (id: string, attachment: TaskAttachment) => {
+    setTasks((prev) => prev.map(t => t.id === id
+      ? { ...t, attachments: [...(t.attachments ?? []), attachment] }
+      : t));
+  };
+
+  const removeTaskAttachment = (id: string, path: string) => {
+    setTasks((prev) => prev.map(t => t.id === id
+      ? { ...t, attachments: (t.attachments ?? []).filter(a => a.path !== path) }
+      : t));
+  };
+
+
   const toggleTaskStep = (taskId: string, stepId: string) => {
     setTasks((prev) => prev.map(t => t.id === taskId
       ? { ...t, steps: (t.steps ?? []).map(s => s.id === stepId ? { ...s, done: !s.done } : s) }
@@ -228,8 +270,13 @@ export function useTasks() {
     setTaskArea,
 
     addTaskStep,
+    addTaskSteps,
+    setTaskCourse,
+    addTaskAttachment,
+    removeTaskAttachment,
     toggleTaskStep,
     deleteTaskStep,
+
   };
 }
 
