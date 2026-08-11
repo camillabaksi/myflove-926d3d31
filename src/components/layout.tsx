@@ -19,6 +19,23 @@ interface LayoutProps {
   children: ReactNode;
 }
 
+/** Egen färgton per navigationskategori – gör mer-vyn lätt att skanna. */
+const CATEGORY_HUE: Record<string, string> = {
+  dagen: "38 62% 42%",
+  fokus: "18 55% 45%",
+  mabra: "340 40% 48%",
+  hem: "152 40% 28%",
+  studier: "265 32% 45%",
+  jobb: "205 45% 34%",
+  ovrigt: "220 10% 42%",
+};
+const catColor = (id: string, alpha?: number) => {
+  const hue = CATEGORY_HUE[id] ?? "220 10% 42%";
+  return alpha === undefined ? `hsl(${hue})` : `hsl(${hue} / ${alpha})`;
+};
+
+
+
 const SECTION_BY_PATH: Record<string, string> = {
   "/": "home",
   "/ma-bra": "ma-bra",
@@ -199,10 +216,14 @@ export default function Layout({ children }: LayoutProps) {
         <div className="space-y-5">
           {categories.map((cat) => (
             <div key={cat.id}>
-              <div className="flex items-center gap-2 px-1 mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              <div
+                className="flex items-center gap-2 px-1 mb-2 text-xs font-semibold uppercase tracking-wider"
+                style={{ color: catColor(cat.id) }}
+              >
                 <cat.icon size={14} />
                 {cat.label}
               </div>
+
               <div className="grid grid-cols-2 gap-3">
                 {cat.items.map((item) => {
                   const isActive = location === item.href;
@@ -522,10 +543,17 @@ export default function Layout({ children }: LayoutProps) {
                             setMobileMenuOpen(false);
                             setOpenCategory(null);
                           }}
-                          className={`aspect-square flex flex-col items-center justify-center gap-2 rounded-2xl p-2 text-center transition-all duration-200 ${
+                          style={
                             isActive
-                              ? "bg-primary text-primary-foreground font-medium shadow-sm"
-                              : "bg-card text-foreground border border-border shadow-sm"
+                              ? { backgroundColor: catColor(openCategory), borderColor: catColor(openCategory) }
+                              : {
+                                  backgroundColor: catColor(openCategory, 0.1),
+                                  borderColor: catColor(openCategory, 0.35),
+                                  color: catColor(openCategory),
+                                }
+                          }
+                          className={`aspect-square flex flex-col items-center justify-center gap-2 rounded-2xl p-2 text-center border shadow-sm transition-all duration-200 ${
+                            isActive ? "text-primary-foreground font-medium" : ""
                           }`}
                         >
                           <Icon size={26} strokeWidth={isActive ? 2.5 : 2} />
@@ -545,17 +573,23 @@ export default function Layout({ children }: LayoutProps) {
                           key={cat.id}
                           type="button"
                           onClick={() => setOpenCategory(cat.id)}
-                          className="aspect-square flex flex-col items-center justify-center gap-2 rounded-3xl p-3 text-center bg-card text-foreground border border-border shadow-sm transition-all duration-200 active:scale-95"
+                          style={{
+                            backgroundColor: catColor(cat.id, 0.12),
+                            borderColor: catColor(cat.id, 0.35),
+                            color: catColor(cat.id),
+                          }}
+                          className="aspect-square flex flex-col items-center justify-center gap-2 rounded-3xl p-3 text-center border shadow-sm transition-all duration-200 active:scale-95"
                         >
                           <Icon size={30} />
                           <span className="text-sm font-medium leading-tight">{cat.label}</span>
-                          <span className="text-[11px] text-muted-foreground">
+                          <span className="text-[11px] opacity-70">
                             {cat.items.length} sektioner
                           </span>
                         </button>
                       );
                     })}
                   </div>
+
 
                   <div className="mt-6 flex items-center justify-center">
                     <Button
