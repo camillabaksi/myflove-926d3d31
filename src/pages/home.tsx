@@ -232,17 +232,34 @@ export default function Home() {
           )}
 
           {visibleTasks.length === 0 && !currentFocus ? (
-            <div className="text-center py-8 text-muted-foreground bg-secondary/30 rounded-2xl border border-dashed border-border">
-              {emptyState.tasks}
+            <div className="text-center py-10 px-6 bg-secondary/30 rounded-3xl border border-dashed border-border animate-fade-in">
+              <div className="mx-auto mb-3 w-14 h-14 rounded-full bg-sage/40 flex items-center justify-center">
+                <Sparkles size={26} className="text-primary" />
+              </div>
+              <p className="text-ink font-medium">{emptyState.tasks}</p>
+              <p className="text-sm text-muted-foreground mt-1">
+                Vill du sätta en enda sak för idag? Det räcker gott.
+              </p>
+              <Link
+                href="/flowplan"
+                className="inline-block mt-4 rounded-full bg-primary text-primary-foreground px-5 py-2 text-sm font-medium hover-scale"
+              >
+                Sätt dagens fokus
+              </Link>
             </div>
+
           ) : (
             <div className="space-y-3">
-              {visibleTasks.map((task) => (
+              {visibleTasks.map((task, i) => (
                 <button
                   key={task.id}
                   type="button"
-                  onClick={() => toggleTask(task.id)}
-                  className="w-full flex items-center gap-3 p-4 bg-card border border-border rounded-2xl shadow-sm hover:border-primary/40 transition-all text-left"
+                  onClick={(e) => {
+                    toggleTask(task.id);
+                    celebrateFromEvent(e);
+                  }}
+                  style={{ animationDelay: `${i * 60}ms` }}
+                  className="w-full flex items-center gap-3 p-4 bg-card border border-border rounded-2xl shadow-sm hover:border-primary/40 hover:shadow-md transition-all text-left animate-fade-in active:scale-[0.99]"
                 >
                   <Circle size={20} className="text-muted-foreground shrink-0" />
                   <span className="flex-1">{task.title}</span>
@@ -251,6 +268,7 @@ export default function Home() {
                   )}
                 </button>
               ))}
+
             </div>
           )}
 
