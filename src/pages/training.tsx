@@ -263,16 +263,6 @@ export default function TrainingPage() {
     await generateWith(payload);
   };
 
-    } catch (err) {
-      toast({
-        title: "Det gick inte just nu",
-        description: err instanceof Error ? err.message : "Försök igen om en stund.",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const week = lastDays(7);
   const maxSteps = Math.max(state.stepGoal, ...week.map((d) => d.steps), 1);
