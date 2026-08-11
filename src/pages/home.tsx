@@ -114,23 +114,23 @@ export default function Home() {
   const hour = new Date().getHours();
   const heroGradient =
     hour < 10
-      ? "linear-gradient(135deg, hsl(var(--gold) / 0.35) 0%, hsl(var(--card)) 60%)"
+      ? "linear-gradient(135deg, hsl(var(--gold) / 0.30) 0%, hsl(var(--cream)) 55%, hsl(var(--sage) / 0.25) 100%)"
       : hour < 17
-        ? "linear-gradient(135deg, hsl(var(--sage) / 0.35) 0%, hsl(var(--card)) 60%)"
+        ? "linear-gradient(135deg, hsl(var(--sage) / 0.35) 0%, hsl(var(--cream)) 60%, hsl(var(--gold) / 0.22) 100%)"
         : hour < 22
-          ? "linear-gradient(135deg, hsl(var(--terracotta-soft) / 0.32) 0%, hsl(var(--card)) 60%)"
-          : "linear-gradient(135deg, hsl(var(--ink) / 0.18) 0%, hsl(var(--card)) 60%)";
+          ? "linear-gradient(135deg, hsl(var(--gold) / 0.28) 0%, hsl(var(--cream)) 55%, hsl(var(--forest) / 0.18) 100%)"
+          : "linear-gradient(135deg, hsl(var(--forest) / 0.28) 0%, hsl(var(--card)) 65%)";
 
   return (
     <Layout>
       <div className="space-y-8">
         {/* Hero header with preview-style warmth */}
         <div
-          className="relative overflow-hidden rounded-3xl p-6 shadow-sm animate-fade-in"
+          className="relative overflow-hidden rounded-3xl p-6 shadow-lifted border border-border/60 animate-fade-in"
           style={{ background: heroGradient }}
         >
-          <div className="pointer-events-none absolute -top-20 -right-16 h-40 w-40 rounded-full bg-gradient-to-br from-terracotta-soft to-terracotta opacity-20 blur-md" />
-          <div className="pointer-events-none absolute -bottom-16 -left-10 h-32 w-32 rounded-full bg-sage opacity-25" />
+          <div className="pointer-events-none absolute -top-20 -right-16 h-40 w-40 rounded-full bg-gradient-to-br from-gold to-forest opacity-20 blur-md" />
+          <div className="pointer-events-none absolute -bottom-16 -left-10 h-32 w-32 rounded-full bg-sage opacity-25 blur-[2px]" />
 
           <div className="relative space-y-2">
             <h1 className="text-4xl font-bold text-ink">{greeting.title}</h1>
