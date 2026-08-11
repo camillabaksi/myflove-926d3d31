@@ -41,6 +41,8 @@
   --color-gold: hsl(var(--gold));
   --color-terracotta: hsl(var(--terracotta));
   --color-terracotta-soft: hsl(var(--terracotta-soft));
+  --color-forest: hsl(var(--forest));
+  --color-forest-deep: hsl(var(--forest-deep));
 
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Fraunces", ui-serif, Georgia, serif;
