@@ -1,6 +1,8 @@
 import { useCallback } from "react";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import type { TrainingProgram } from "@/lib/training.functions";
+
+export type TrainingSession = TrainingProgram["sessions"][number];
 import { buildWeeklyPlan, weekStartKey, type WeekFeedback, type WeeklyPlan } from "@/lib/weekly-plan";
 import { movementById } from "@/lib/everyday-movement";
 
@@ -71,6 +73,42 @@ export function useTraining() {
         createdAt: Date.now(),
         stepGoal: program.stepGoal ?? prev.stepGoal,
       }));
+    },
+    [setState],
+  );
+
+  const updateSession = useCallback(
+    (index: number, patch: Partial<TrainingSession>) => {
+      setState((prev) => {
+        if (!prev.program) return prev;
+        const sessions = prev.program.sessions.map((s, i) => (i === index ? { ...s, ...patch } : s));
+        return { ...prev, program: { ...prev.program, sessions } };
+      });
+    },
+    [setState],
+  );
+
+  const addSession = useCallback(
+    (session: TrainingSession) => {
+      setState((prev) => {
+        if (!prev.program) return prev;
+        return { ...prev, program: { ...prev.program, sessions: [...prev.program.sessions, session] } };
+      });
+    },
+    [setState],
+  );
+
+  const removeSession = useCallback(
+    (index: number) => {
+      setState((prev) => {
+        if (!prev.program) return prev;
+        const sessions = prev.program.sessions.filter((_, i) => i !== index);
+        const done: Record<string, number[]> = {};
+        for (const [date, list] of Object.entries(prev.done)) {
+          done[date] = list.filter((i) => i !== index).map((i) => (i > index ? i - 1 : i));
+        }
+        return { ...prev, program: { ...prev.program, sessions }, done };
+      });
     },
     [setState],
   );
@@ -241,6 +279,9 @@ export function useTraining() {
     state,
     saveProgram,
     clearProgram,
+    updateSession,
+    addSession,
+    removeSession,
     toggleSessionDone,
     setSteps,
     setWeight,
