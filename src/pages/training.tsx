@@ -213,16 +213,61 @@ export default function TrainingPage() {
   return (
     <Layout>
       <div className="max-w-3xl mx-auto px-4 py-6 space-y-6">
-        <header className="space-y-1">
+        <header className="space-y-2">
+          {view !== "overview" && (
+            <button
+              type="button"
+              onClick={() => setView("overview")}
+              className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-ink"
+            >
+              <ChevronLeft size={16} /> Tillbaka till översikten
+            </button>
+          )}
           <h1 className="text-3xl font-bold text-ink flex items-center gap-2">
-            <Dumbbell className="text-primary" /> Träning
+            <Dumbbell className="text-primary" />{" "}
+            {view === "overview" ? "Träning" : (SECTIONS.find((s) => s.id === view)?.label ?? "Träning")}
           </h1>
           <p className="text-muted-foreground">
-            Berätta vad du vill med träningen – Flow bygger ett program som passar din vecka.
+            {view === "overview"
+              ? "Välj en del i taget – du behöver inte se allt på en gång."
+              : (SECTIONS.find((s) => s.id === view)?.desc ?? "")}
           </p>
         </header>
 
-        {/* Steg & hälsoapp */}
+        {view === "overview" && (
+          <div className="grid gap-3 sm:grid-cols-2">
+            {SECTIONS.map((s) => {
+              const Icon = s.icon;
+              return (
+                <button
+                  key={s.id}
+                  type="button"
+                  onClick={() => setView(s.id)}
+                  className="surface-card p-4 text-left transition hover:opacity-90"
+                >
+                  <div className="flex items-start gap-3">
+                    <span
+                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+                      style={{ backgroundColor: `hsl(${s.hue} / 0.14)`, color: `hsl(${s.hue})` }}
+                    >
+                      <Icon size={20} />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="font-semibold text-ink">{s.label}</span>
+                        <ChevronRight size={16} className="shrink-0 text-muted-foreground" />
+                      </div>
+                      <p className="text-xs text-muted-foreground">{s.desc}</p>
+                      <p className="mt-1 text-sm font-medium text-ink">{summary[s.id]}</p>
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        {view === "steg" && (
         <section className="surface-card p-5 space-y-4">
           <div className="flex items-center justify-between gap-3">
             <h2 className="text-lg font-semibold text-ink flex items-center gap-2">
