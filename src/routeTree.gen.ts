@@ -21,6 +21,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as GuideAdhdPlannerForAdultsRouteImport } from './routes/guide.adhd-planner-for-adults'
 import { Route as AppTravelRouteImport } from './routes/_app.travel'
 import { Route as AppTasksRouteImport } from './routes/_app.tasks'
+import { Route as AppStudierRouteImport } from './routes/_app.studier'
 import { Route as AppStatistikRouteImport } from './routes/_app.statistik'
 import { Route as AppShoppingRouteImport } from './routes/_app.shopping'
 import { Route as AppPomodoroRouteImport } from './routes/_app.pomodoro'
@@ -105,6 +106,11 @@ const AppTravelRoute = AppTravelRouteImport.update({
 const AppTasksRoute = AppTasksRouteImport.update({
   id: '/tasks',
   path: '/tasks',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppStudierRoute = AppStudierRouteImport.update({
+  id: '/studier',
+  path: '/studier',
   getParentRoute: () => AppRoute,
 } as any)
 const AppStatistikRoute = AppStatistikRouteImport.update({
@@ -266,6 +272,7 @@ export interface FileRoutesByFullPath {
   '/pomodoro': typeof AppPomodoroRoute
   '/shopping': typeof AppShoppingRoute
   '/statistik': typeof AppStatistikRoute
+  '/studier': typeof AppStudierRoute
   '/tasks': typeof AppTasksRoute
   '/travel': typeof AppTravelRoute
   '/guide/adhd-planner-for-adults': typeof GuideAdhdPlannerForAdultsRoute
@@ -304,6 +311,7 @@ export interface FileRoutesByTo {
   '/pomodoro': typeof AppPomodoroRoute
   '/shopping': typeof AppShoppingRoute
   '/statistik': typeof AppStatistikRoute
+  '/studier': typeof AppStudierRoute
   '/tasks': typeof AppTasksRoute
   '/travel': typeof AppTravelRoute
   '/guide/adhd-planner-for-adults': typeof GuideAdhdPlannerForAdultsRoute
@@ -344,6 +352,7 @@ export interface FileRoutesById {
   '/_app/pomodoro': typeof AppPomodoroRoute
   '/_app/shopping': typeof AppShoppingRoute
   '/_app/statistik': typeof AppStatistikRoute
+  '/_app/studier': typeof AppStudierRoute
   '/_app/tasks': typeof AppTasksRoute
   '/_app/travel': typeof AppTravelRoute
   '/guide/adhd-planner-for-adults': typeof GuideAdhdPlannerForAdultsRoute
@@ -384,6 +393,7 @@ export interface FileRouteTypes {
     | '/pomodoro'
     | '/shopping'
     | '/statistik'
+    | '/studier'
     | '/tasks'
     | '/travel'
     | '/guide/adhd-planner-for-adults'
@@ -422,6 +432,7 @@ export interface FileRouteTypes {
     | '/pomodoro'
     | '/shopping'
     | '/statistik'
+    | '/studier'
     | '/tasks'
     | '/travel'
     | '/guide/adhd-planner-for-adults'
@@ -461,6 +472,7 @@ export interface FileRouteTypes {
     | '/_app/pomodoro'
     | '/_app/shopping'
     | '/_app/statistik'
+    | '/_app/studier'
     | '/_app/tasks'
     | '/_app/travel'
     | '/guide/adhd-planner-for-adults'
@@ -573,6 +585,13 @@ declare module '@tanstack/react-router' {
       path: '/tasks'
       fullPath: '/tasks'
       preLoaderRoute: typeof AppTasksRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/studier': {
+      id: '/_app/studier'
+      path: '/studier'
+      fullPath: '/studier'
+      preLoaderRoute: typeof AppStudierRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/statistik': {
@@ -773,6 +792,7 @@ interface AppRouteChildren {
   AppPomodoroRoute: typeof AppPomodoroRoute
   AppShoppingRoute: typeof AppShoppingRoute
   AppStatistikRoute: typeof AppStatistikRoute
+  AppStudierRoute: typeof AppStudierRoute
   AppTasksRoute: typeof AppTasksRoute
   AppTravelRoute: typeof AppTravelRoute
 }
@@ -797,6 +817,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppPomodoroRoute: AppPomodoroRoute,
   AppShoppingRoute: AppShoppingRoute,
   AppStatistikRoute: AppStatistikRoute,
+  AppStudierRoute: AppStudierRoute,
   AppTasksRoute: AppTasksRoute,
   AppTravelRoute: AppTravelRoute,
 }
