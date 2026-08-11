@@ -404,6 +404,7 @@ export default function Layout({ children }: LayoutProps) {
                 onClick={() => {
                   setMobileMenuOpen(false);
                   setEditingBottomNav(false);
+                  setOpenCategory(null);
                 }}
                 className="p-2 text-muted-foreground hover:bg-secondary rounded-full"
               >
@@ -421,17 +422,27 @@ export default function Layout({ children }: LayoutProps) {
                     onClose={() => setEditingBottomNav(false)}
                     onReset={() => setBottomNavHrefs(["/ma-bra", "/dump", "/kalender"])}
                   />
-              ) : (
+              ) : openCategory ? (
                 <>
+                  <button
+                    type="button"
+                    onClick={() => setOpenCategory(null)}
+                    className="mb-4 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
+                  >
+                    <RotateCcw size={16} /> Alla kategorier
+                  </button>
                   <div className="grid grid-cols-3 gap-3">
-                    {navItems.map((item) => {
+                    {(categories.find((c) => c.id === openCategory)?.items ?? []).map((item) => {
                       const isActive = location === item.href;
                       const Icon = item.icon;
                       return (
                         <Link
                           key={item.href}
                           href={item.href}
-                          onClick={() => setMobileMenuOpen(false)}
+                          onClick={() => {
+                            setMobileMenuOpen(false);
+                            setOpenCategory(null);
+                          }}
                           className={`aspect-square flex flex-col items-center justify-center gap-2 rounded-2xl p-2 text-center transition-all duration-200 ${
                             isActive
                               ? "bg-primary text-primary-foreground font-medium shadow-sm"
@@ -444,6 +455,29 @@ export default function Layout({ children }: LayoutProps) {
                       );
                     })}
                   </div>
+                </>
+              ) : (
+                <>
+                  <div className="grid grid-cols-2 gap-3">
+                    {categories.map((cat) => {
+                      const Icon = cat.icon;
+                      return (
+                        <button
+                          key={cat.id}
+                          type="button"
+                          onClick={() => setOpenCategory(cat.id)}
+                          className="aspect-square flex flex-col items-center justify-center gap-2 rounded-3xl p-3 text-center bg-card text-foreground border border-border shadow-sm transition-all duration-200 active:scale-95"
+                        >
+                          <Icon size={30} />
+                          <span className="text-sm font-medium leading-tight">{cat.label}</span>
+                          <span className="text-[11px] text-muted-foreground">
+                            {cat.items.length} sektioner
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
                   <div className="mt-6 flex items-center justify-center">
                     <Button
                       variant="outline"
