@@ -11,6 +11,10 @@ import WeekInFlow from "@/components/week-in-flow";
 import { celebrateFromEvent } from "@/lib/celebrate";
 import { EnablePushButton } from "@/components/enable-push-button";
 import { useReminderSync } from "@/hooks/use-reminder-sync";
+import { AreaSwitcher } from "@/components/area-switcher";
+import { AreaOnboarding } from "@/components/area-onboarding";
+import { AREA_META, filterByArea, useActiveArea } from "@/lib/life-areas";
+
 
 import {
   useFocus,
@@ -52,6 +56,8 @@ export default function Home() {
   const [nameDraft, setNameDraft] = useState(name);
   const { currentFocus, toggleFocusCompleted } = useFocus();
   const { activeTasks, toggleTask } = useTasks();
+  const { activeArea } = useActiveArea();
+
   const { activeReminders: _activeReminders } = useReminders();
   const { transactions } = useFinances();
   const { medications, isTaken } = useMedications();
@@ -65,7 +71,11 @@ export default function Home() {
   useReminderSync();
 
 
-  const prioritizedTasks = useMemo(() => sortTasksByPriority(activeTasks), [activeTasks]);
+  const prioritizedTasks = useMemo(
+    () => sortTasksByPriority(filterByArea(activeTasks, activeArea)),
+    [activeTasks, activeArea],
+  );
+
   const limit = helpPlan?.taskLimit ?? 3;
   const visibleTasks = showAllTasks ? prioritizedTasks : prioritizedTasks.slice(0, limit);
   const hiddenTaskCount = Math.max(0, prioritizedTasks.length - limit);
@@ -165,7 +175,19 @@ export default function Home() {
           </div>
         </div>
 
+        <AreaOnboarding />
+
+        <div className="space-y-2">
+          <AreaSwitcher size="sm" />
+          <p className="text-xs text-muted-foreground">
+            {activeArea === "alla"
+              ? "Flow ser hela din dag – oavsett vilket rum sakerna hör till."
+              : `Du är i ${AREA_META[activeArea].label.toLowerCase()}rummet. Resten väntar tills du vill se det.`}
+          </p>
+        </div>
+
         <StreakCard />
+
 
         <WeatherCard />
 
