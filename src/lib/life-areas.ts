@@ -25,7 +25,7 @@ export const AREA_META: Record<LifeArea, AreaMeta> = {
     emoji: "🏠",
     blurb: "Kalender, att göra, rutiner och påminnelser",
     core: true,
-    hue: "7 47% 49%",
+    hue: "38 62% 42%",
   },
   privat: {
     id: "privat",
@@ -33,21 +33,21 @@ export const AREA_META: Record<LifeArea, AreaMeta> = {
     emoji: "🏡",
     blurb: "Familj, ärenden, inköp, räkningar och bokningar",
     core: true,
-    hue: "138 24% 40%",
+    hue: "152 40% 28%",
   },
   studier: {
     id: "studier",
     label: "Studier",
     emoji: "🎓",
     blurb: "Kurser, inlämningar, deadlines och dokument",
-    hue: "35 65% 45%",
+    hue: "265 32% 45%",
   },
   jobb: {
     id: "jobb",
     label: "Jobb",
     emoji: "💼",
     blurb: "Arbetsuppgifter, möten, projekt och uppföljningar",
-    hue: "194 13% 25%",
+    hue: "205 45% 34%",
   },
 };
 
@@ -117,4 +117,24 @@ export function filterByArea<T extends { area?: LifeArea }>(
 ): T[] {
   if (filter === "alla") return items;
   return items.filter((i) => getArea(i) === filter);
+}
+
+/** Inline-stil med områdets färg – används för prickar, kanter och chips. */
+export function areaColor(area: LifeArea): string {
+  return `hsl(${AREA_META[area].hue})`;
+}
+
+export function areaTint(area: LifeArea, alpha = 0.12): string {
+  return `hsl(${AREA_META[area].hue} / ${alpha})`;
+}
+
+/** Färgsatt chip-stil för ett område. */
+export function areaChipStyle(area: LifeArea, active = true) {
+  return active
+    ? {
+        color: areaColor(area),
+        backgroundColor: areaTint(area, 0.14),
+        borderColor: areaTint(area, 0.4),
+      }
+    : { borderColor: areaTint(area, 0.35) };
 }
