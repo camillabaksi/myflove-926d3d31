@@ -244,6 +244,7 @@ export function useTraining() {
     toggleSessionDone,
     setSteps,
     setWeight,
+    removeWeight,
     setWeightGoal,
     weightEntries,
     weightGoal: state.weightGoal ?? null,
