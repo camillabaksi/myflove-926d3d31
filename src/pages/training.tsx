@@ -40,9 +40,51 @@ const FOCUS: { id: TrainingGoal["focus"]; label: string }[] = [
   { id: "styrka", label: "Styrka" },
   { id: "kondition", label: "Kondition" },
   { id: "blandat", label: "Blandat" },
+  { id: "viktnedgång", label: "Viktnedgång" },
 ];
 const LEVELS: TrainingGoal["level"][] = ["nybörjare", "van", "erfaren"];
 const LAST_SYNC_KEY = "myflove.steps.lastSync";
+
+type TrainingView = "overview" | "steg" | "plan" | "motion" | "program" | "vikt";
+
+const SECTIONS: { id: Exclude<TrainingView, "overview">; label: string; desc: string; icon: LucideIcon; hue: string }[] = [
+  {
+    id: "program",
+    label: "Träningsprogram",
+    desc: "Mål, nivå och ditt program från Flow.",
+    icon: Dumbbell,
+    hue: "205 45% 34%",
+  },
+  {
+    id: "steg",
+    label: "Steg",
+    desc: "Steg idag och synk med hälsoappen.",
+    icon: Footprints,
+    hue: "152 30% 32%",
+  },
+  {
+    id: "motion",
+    label: "Vardagsmotion",
+    desc: "Små rörelser som räknas – varje dag.",
+    icon: Sparkles,
+    hue: "42 62% 45%",
+  },
+  {
+    id: "plan",
+    label: "Veckoplan",
+    desc: "Mål som justeras efter hur veckan kändes.",
+    icon: CalendarRange,
+    hue: "265 32% 45%",
+  },
+  {
+    id: "vikt",
+    label: "Vikt",
+    desc: "Följ vikten över tid om viktnedgång är ditt mål.",
+    icon: Scale,
+    hue: "7 47% 49%",
+  },
+];
+
 
 function formatSyncTime(stamp: number): string {
   const d = new Date(stamp);
