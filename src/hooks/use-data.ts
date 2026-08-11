@@ -220,6 +220,8 @@ export function useTasks() {
     setTaskKind,
     setTaskDueDate,
     setTaskTime,
+    setTaskArea,
+
     addTaskStep,
     toggleTaskStep,
     deleteTaskStep,
