@@ -6,8 +6,12 @@ import OverwhelmedModal from "@/components/overwhelmed-modal";
 import HelpMeModal from "@/components/help-me-modal";
 import WeatherCard from "@/components/weather-card";
 import ProactiveSuggestions from "@/components/proactive-suggestions";
+import StreakCard from "@/components/streak-card";
+import WeekInFlow from "@/components/week-in-flow";
+import { celebrateFromEvent } from "@/lib/celebrate";
 import { EnablePushButton } from "@/components/enable-push-button";
 import { useReminderSync } from "@/hooks/use-reminder-sync";
+
 import {
   useFocus,
   useTasks,
@@ -96,13 +100,28 @@ export default function Home() {
     setHelpPlan(buildHelpPlan(feeling));
   };
 
+  // Hemskärmen skiftar med dygnet – morgonljus, dagsvärme, kvällsdis.
+  const hour = new Date().getHours();
+  const heroGradient =
+    hour < 10
+      ? "linear-gradient(135deg, hsl(var(--gold) / 0.35) 0%, hsl(var(--card)) 60%)"
+      : hour < 17
+        ? "linear-gradient(135deg, hsl(var(--sage) / 0.35) 0%, hsl(var(--card)) 60%)"
+        : hour < 22
+          ? "linear-gradient(135deg, hsl(var(--terracotta-soft) / 0.32) 0%, hsl(var(--card)) 60%)"
+          : "linear-gradient(135deg, hsl(var(--ink) / 0.18) 0%, hsl(var(--card)) 60%)";
+
   return (
     <Layout>
       <div className="space-y-8">
         {/* Hero header with preview-style warmth */}
-        <div className="relative overflow-hidden rounded-3xl bg-card p-6 shadow-sm">
+        <div
+          className="relative overflow-hidden rounded-3xl p-6 shadow-sm animate-fade-in"
+          style={{ background: heroGradient }}
+        >
           <div className="pointer-events-none absolute -top-20 -right-16 h-40 w-40 rounded-full bg-gradient-to-br from-terracotta-soft to-terracotta opacity-20 blur-md" />
           <div className="pointer-events-none absolute -bottom-16 -left-10 h-32 w-32 rounded-full bg-sage opacity-25" />
+
           <div className="relative space-y-2">
             <h1 className="text-4xl font-bold text-ink">{greeting.title}</h1>
             <p className="text-muted-foreground">{greeting.subtitle}</p>
@@ -146,7 +165,10 @@ export default function Home() {
           </div>
         </div>
 
+        <StreakCard />
+
         <WeatherCard />
+
 
         <div className="rounded-2xl bg-card border border-border p-4 flex flex-wrap items-center justify-between gap-3">
           <div>
@@ -161,6 +183,9 @@ export default function Home() {
 
         {/* 4 custom shortcuts — always visible launchpad */}
         <HomeShortcuts />
+
+        <WeekInFlow />
+
 
         <ProactiveSuggestions />
 
@@ -208,7 +233,10 @@ export default function Home() {
 
           {currentFocus && !helpPlan && (
             <button
-              onClick={toggleFocusCompleted}
+              onClick={(e) => {
+                if (!currentFocus.completed) celebrateFromEvent(e);
+                toggleFocusCompleted();
+              }}
               className={`w-full text-left p-5 rounded-2xl border-2 transition-all flex items-center gap-4 ${
                 currentFocus.completed
                   ? "bg-primary/10 border-primary/20 text-primary"
@@ -232,17 +260,34 @@ export default function Home() {
           )}
 
           {visibleTasks.length === 0 && !currentFocus ? (
-            <div className="text-center py-8 text-muted-foreground bg-secondary/30 rounded-2xl border border-dashed border-border">
-              {emptyState.tasks}
+            <div className="text-center py-10 px-6 bg-secondary/30 rounded-3xl border border-dashed border-border animate-fade-in">
+              <div className="mx-auto mb-3 w-14 h-14 rounded-full bg-sage/40 flex items-center justify-center">
+                <Sparkles size={26} className="text-primary" />
+              </div>
+              <p className="text-ink font-medium">{emptyState.tasks}</p>
+              <p className="text-sm text-muted-foreground mt-1">
+                Vill du sätta en enda sak för idag? Det räcker gott.
+              </p>
+              <Link
+                href="/flowplan"
+                className="inline-block mt-4 rounded-full bg-primary text-primary-foreground px-5 py-2 text-sm font-medium hover-scale"
+              >
+                Sätt dagens fokus
+              </Link>
             </div>
+
           ) : (
             <div className="space-y-3">
-              {visibleTasks.map((task) => (
+              {visibleTasks.map((task, i) => (
                 <button
                   key={task.id}
                   type="button"
-                  onClick={() => toggleTask(task.id)}
-                  className="w-full flex items-center gap-3 p-4 bg-card border border-border rounded-2xl shadow-sm hover:border-primary/40 transition-all text-left"
+                  onClick={(e) => {
+                    toggleTask(task.id);
+                    celebrateFromEvent(e);
+                  }}
+                  style={{ animationDelay: `${i * 60}ms` }}
+                  className="w-full flex items-center gap-3 p-4 bg-card border border-border rounded-2xl shadow-sm hover:border-primary/40 hover:shadow-md transition-all text-left animate-fade-in active:scale-[0.99]"
                 >
                   <Circle size={20} className="text-muted-foreground shrink-0" />
                   <span className="flex-1">{task.title}</span>
@@ -251,6 +296,7 @@ export default function Home() {
                   )}
                 </button>
               ))}
+
             </div>
           )}
 
