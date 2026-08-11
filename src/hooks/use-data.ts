@@ -118,9 +118,6 @@ export function useTasks() {
       },
       ...prev,
     ]);
-
-      ...prev,
-    ]);
   };
 
   const setTaskDueDate = (id: string, dueDate: string) => {
