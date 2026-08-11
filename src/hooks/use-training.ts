@@ -99,6 +99,36 @@ export function useTraining() {
     [state.steps],
   );
 
+  const toggleMovement = useCallback(
+    (id: string, date = todayKey()) => {
+      setState((prev) => {
+        const current = prev.movement?.[date] ?? [];
+        const next = current.includes(id) ? current.filter((x) => x !== id) : [...current, id];
+        return { ...prev, movement: { ...(prev.movement ?? {}), [date]: next } };
+      });
+    },
+    [setState],
+  );
+
+  const setMovementGoal = useCallback(
+    (minutes: number) => setState((prev) => ({ ...prev, movementGoal: Math.max(5, Math.round(minutes)) })),
+    [setState],
+  );
+
+  const movementDays = useCallback(
+    (days: number) => {
+      const out: { date: string; ids: string[] }[] = [];
+      for (let i = days - 1; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        const key = d.toISOString().slice(0, 10);
+        out.push({ date: key, ids: state.movement?.[key] ?? [] });
+      }
+      return out;
+    },
+    [state.movement],
+  );
+
   return {
     state,
     saveProgram,
@@ -107,7 +137,13 @@ export function useTraining() {
     setSteps,
     setStepGoal,
     lastDays,
+    toggleMovement,
+    setMovementGoal,
+    movementDays,
+    movementToday: state.movement?.[todayKey()] ?? [],
+    movementGoal: state.movementGoal ?? 20,
     doneToday: state.done[todayKey()] ?? [],
     stepsToday: state.steps[todayKey()] ?? 0,
   };
+
 }
