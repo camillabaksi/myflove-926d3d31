@@ -126,6 +126,7 @@ export default function TrainingPage() {
     setWeekFeedback,
     regenerateWeeklyPlan,
     setWeight,
+    removeWeight,
     setWeightGoal,
     weightEntries,
     weightGoal,
@@ -136,6 +137,8 @@ export default function TrainingPage() {
 
   const [view, setView] = useState<TrainingView>("overview");
   const [weightInput, setWeightInput] = useState("");
+  const [weightDate, setWeightDate] = useState(() => new Date().toISOString().slice(0, 10));
+  const [weightNote, setWeightNote] = useState("");
   const [weightGoalInput, setWeightGoalInput] = useState(weightGoal ? String(weightGoal) : "");
 
   const [goal, setGoal] = useState(state.goal?.goal ?? "");
