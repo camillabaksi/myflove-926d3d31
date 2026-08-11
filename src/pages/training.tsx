@@ -567,8 +567,8 @@ export default function TrainingPage() {
           </div>
         </section>
 
-        {/* Mål & generering */}
-
+        {view === "program" && (
+          <>
         <section className="surface-card p-5 space-y-4">
           <h2 className="text-lg font-semibold text-ink">Ditt mål</h2>
           <Input
