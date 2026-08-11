@@ -145,6 +145,14 @@ export default function Layout({ children }: LayoutProps) {
   }, [navItems]);
 
   const [openCategory, setOpenCategory] = useState<string | null>(null);
+  const [navSearch, setNavSearch] = useState("");
+
+  const searchResults = useMemo(() => {
+    const q = navSearch.trim().toLowerCase();
+    if (!q) return [];
+    return navItems.filter((i) => i.label.toLowerCase().includes(q));
+  }, [navSearch, navItems]);
+
 
   // Bottom nav: Home is fixed, the remaining 3 slots are user-customizable.
   const [bottomNavHrefs, setBottomNavHrefs] = useLocalStorage<string[]>("myflow-bottom-nav", [
