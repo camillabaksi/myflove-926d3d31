@@ -12,6 +12,28 @@ const InputSchema = z.object({
   limitations: z.string().max(500).optional(),
 });
 
+const TYPE_ALIASES: Record<string, "styrka" | "kondition" | "rörlighet" | "vila"> = {
+  styrka: "styrka",
+  kondition: "kondition",
+  kondtion: "kondition",
+  cardio: "kondition",
+  puls: "kondition",
+  rörlighet: "rörlighet",
+  rorlighet: "rörlighet",
+  mobilitet: "rörlighet",
+  stretch: "rörlighet",
+  yoga: "rörlighet",
+  vila: "vila",
+  återhämtning: "vila",
+  aterhamtning: "vila",
+};
+
+const SessionTypeSchema = z.preprocess((value) => {
+  if (typeof value !== "string") return value;
+  const key = value.trim().toLowerCase();
+  return TYPE_ALIASES[key] ?? (key.includes("vila") ? "vila" : key.includes("rörl") ? "rörlighet" : key.includes("kond") ? "kondition" : "styrka");
+}, z.enum(["styrka", "kondition", "rörlighet", "vila"]));
+
 const OutputSchema = z.object({
   intro: z.string(),
   weeks: z.number().int().min(1).max(12).optional(),
@@ -19,12 +41,19 @@ const OutputSchema = z.object({
     z.object({
       day: z.string(),
       title: z.string(),
-      type: z.enum(["styrka", "kondition", "rörlighet", "vila"]),
-      minutes: z.number().int().min(5).max(180).optional(),
-      exercises: z.array(z.string()).default([]),
+      type: SessionTypeSchema,
+      minutes: z.coerce.number().int().min(5).max(180).catch(30).optional(),
+      exercises: z
+        .array(z.union([z.string(), z.record(z.string(), z.any())]))
+        .default([])
+        .transform((list) =>
+          list.map((item) =>
+            typeof item === "string" ? item : Object.values(item).filter(Boolean).join(" – "),
+          ),
+        ),
     }),
   ),
-  stepGoal: z.number().int().min(1000).max(30000).optional(),
+  stepGoal: z.coerce.number().int().min(1000).max(30000).optional(),
   note: z.string(),
 });
 
