@@ -165,7 +165,10 @@ export default function Home() {
           </div>
         </div>
 
+        <StreakCard />
+
         <WeatherCard />
+
 
         <div className="rounded-2xl bg-card border border-border p-4 flex flex-wrap items-center justify-between gap-3">
           <div>
@@ -180,6 +183,9 @@ export default function Home() {
 
         {/* 4 custom shortcuts — always visible launchpad */}
         <HomeShortcuts />
+
+        <WeekInFlow />
+
 
         <ProactiveSuggestions />
 
@@ -227,7 +233,10 @@ export default function Home() {
 
           {currentFocus && !helpPlan && (
             <button
-              onClick={toggleFocusCompleted}
+              onClick={(e) => {
+                if (!currentFocus.completed) celebrateFromEvent(e);
+                toggleFocusCompleted();
+              }}
               className={`w-full text-left p-5 rounded-2xl border-2 transition-all flex items-center gap-4 ${
                 currentFocus.completed
                   ? "bg-primary/10 border-primary/20 text-primary"
