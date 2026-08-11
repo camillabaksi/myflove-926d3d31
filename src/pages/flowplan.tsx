@@ -8,6 +8,8 @@ import { planFlowSequence, type FlowPlanResult } from "@/lib/flowplan.functions"
 import { useTasks, useFocus } from "@/hooks/use-data";
 import { supabase } from "@/integrations/supabase/client";
 import { useLocalStorage } from "@/lib/storage";
+import { DailyFocusCard } from "@/components/daily-focus-card";
+
 
 type StoredPlan = { plan: FlowPlanResult; savedAt: string; date: string };
 
