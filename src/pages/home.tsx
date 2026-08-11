@@ -100,13 +100,28 @@ export default function Home() {
     setHelpPlan(buildHelpPlan(feeling));
   };
 
+  // Hemskärmen skiftar med dygnet – morgonljus, dagsvärme, kvällsdis.
+  const hour = new Date().getHours();
+  const heroGradient =
+    hour < 10
+      ? "linear-gradient(135deg, hsl(var(--gold) / 0.35) 0%, hsl(var(--card)) 60%)"
+      : hour < 17
+        ? "linear-gradient(135deg, hsl(var(--sage) / 0.35) 0%, hsl(var(--card)) 60%)"
+        : hour < 22
+          ? "linear-gradient(135deg, hsl(var(--terracotta-soft) / 0.32) 0%, hsl(var(--card)) 60%)"
+          : "linear-gradient(135deg, hsl(var(--ink) / 0.18) 0%, hsl(var(--card)) 60%)";
+
   return (
     <Layout>
       <div className="space-y-8">
         {/* Hero header with preview-style warmth */}
-        <div className="relative overflow-hidden rounded-3xl bg-card p-6 shadow-sm">
+        <div
+          className="relative overflow-hidden rounded-3xl p-6 shadow-sm animate-fade-in"
+          style={{ background: heroGradient }}
+        >
           <div className="pointer-events-none absolute -top-20 -right-16 h-40 w-40 rounded-full bg-gradient-to-br from-terracotta-soft to-terracotta opacity-20 blur-md" />
           <div className="pointer-events-none absolute -bottom-16 -left-10 h-32 w-32 rounded-full bg-sage opacity-25" />
+
           <div className="relative space-y-2">
             <h1 className="text-4xl font-bold text-ink">{greeting.title}</h1>
             <p className="text-muted-foreground">{greeting.subtitle}</p>
