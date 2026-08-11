@@ -15,6 +15,10 @@ import {
   AlertTriangle,
   CalendarRange,
   Target,
+  Scale,
+  ChevronLeft,
+  ChevronRight,
+  type LucideIcon,
 } from "lucide-react";
 import { generateTrainingProgram } from "@/lib/training.functions";
 import { useTraining, type TrainingGoal } from "@/hooks/use-training";
