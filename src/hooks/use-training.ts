@@ -6,7 +6,7 @@ import { movementById } from "@/lib/everyday-movement";
 
 export interface TrainingGoal {
   goal: string;
-  focus: "styrka" | "kondition" | "blandat";
+  focus: "styrka" | "kondition" | "blandat" | "viktnedgång";
   daysPerWeek: number;
   minutesPerSession: number;
   level: "nybörjare" | "van" | "erfaren";
@@ -30,6 +30,10 @@ export interface TrainingState {
   weeklyPlan?: WeeklyPlan | null;
   /** veckostart (ISO-måndag) -> hur veckan kändes */
   weekFeedback?: Record<string, WeekFeedback>;
+  /** ISO-datum -> vikt i kg */
+  weights?: Record<string, number>;
+  /** Målvikt i kg */
+  weightGoal?: number | null;
   createdAt?: number;
 }
 
@@ -43,7 +47,10 @@ const DEFAULT_STATE: TrainingState = {
   movementGoal: 20,
   weeklyPlan: null,
   weekFeedback: {},
+  weights: {},
+  weightGoal: null,
 };
+
 
 
 
@@ -185,13 +192,41 @@ export function useTraining() {
     return created;
   }, [setState]);
 
+  const setWeight = useCallback(
+    (kg: number, date = todayKey()) => {
+      setState((prev) => ({
+        ...prev,
+        weights: { ...(prev.weights ?? {}), [date]: Math.max(20, Math.round(kg * 10) / 10) },
+      }));
+    },
+    [setState],
+  );
+
+  const setWeightGoal = useCallback(
+    (kg: number | null) =>
+      setState((prev) => ({ ...prev, weightGoal: kg === null ? null : Math.max(20, Math.round(kg * 10) / 10) })),
+    [setState],
+  );
+
+  const weightEntries = useCallback(() => {
+    return Object.entries(state.weights ?? {})
+      .map(([date, kg]) => ({ date, kg }))
+      .sort((a, b) => a.date.localeCompare(b.date));
+  }, [state.weights]);
+
   return {
     state,
     saveProgram,
     clearProgram,
     toggleSessionDone,
     setSteps,
+    setWeight,
+    setWeightGoal,
+    weightEntries,
+    weightGoal: state.weightGoal ?? null,
+    weightToday: state.weights?.[todayKey()] ?? null,
     setStepGoal,
+
     lastDays,
     toggleMovement,
     setMovementGoal,

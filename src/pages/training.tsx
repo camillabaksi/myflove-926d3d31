@@ -15,6 +15,10 @@ import {
   AlertTriangle,
   CalendarRange,
   Target,
+  Scale,
+  ChevronLeft,
+  ChevronRight,
+  type LucideIcon,
 } from "lucide-react";
 import { generateTrainingProgram } from "@/lib/training.functions";
 import { useTraining, type TrainingGoal } from "@/hooks/use-training";
@@ -36,9 +40,51 @@ const FOCUS: { id: TrainingGoal["focus"]; label: string }[] = [
   { id: "styrka", label: "Styrka" },
   { id: "kondition", label: "Kondition" },
   { id: "blandat", label: "Blandat" },
+  { id: "viktnedgång", label: "Viktnedgång" },
 ];
 const LEVELS: TrainingGoal["level"][] = ["nybörjare", "van", "erfaren"];
 const LAST_SYNC_KEY = "myflove.steps.lastSync";
+
+type TrainingView = "overview" | "steg" | "plan" | "motion" | "program" | "vikt";
+
+const SECTIONS: { id: Exclude<TrainingView, "overview">; label: string; desc: string; icon: LucideIcon; hue: string }[] = [
+  {
+    id: "program",
+    label: "Träningsprogram",
+    desc: "Mål, nivå och ditt program från Flow.",
+    icon: Dumbbell,
+    hue: "205 45% 34%",
+  },
+  {
+    id: "steg",
+    label: "Steg",
+    desc: "Steg idag och synk med hälsoappen.",
+    icon: Footprints,
+    hue: "152 30% 32%",
+  },
+  {
+    id: "motion",
+    label: "Vardagsmotion",
+    desc: "Små rörelser som räknas – varje dag.",
+    icon: Sparkles,
+    hue: "42 62% 45%",
+  },
+  {
+    id: "plan",
+    label: "Veckoplan",
+    desc: "Mål som justeras efter hur veckan kändes.",
+    icon: CalendarRange,
+    hue: "265 32% 45%",
+  },
+  {
+    id: "vikt",
+    label: "Vikt",
+    desc: "Följ vikten över tid om viktnedgång är ditt mål.",
+    icon: Scale,
+    hue: "7 47% 49%",
+  },
+];
+
 
 function formatSyncTime(stamp: number): string {
   const d = new Date(stamp);
@@ -79,11 +125,18 @@ export default function TrainingPage() {
     weekFeedback,
     setWeekFeedback,
     regenerateWeeklyPlan,
+    setWeight,
+    setWeightGoal,
+    weightEntries,
+    weightGoal,
   } = useTraining();
 
   const { toast } = useToast();
   const run = useServerFn(generateTrainingProgram);
 
+  const [view, setView] = useState<TrainingView>("overview");
+  const [weightInput, setWeightInput] = useState("");
+  const [weightGoalInput, setWeightGoalInput] = useState(weightGoal ? String(weightGoal) : "");
 
   const [goal, setGoal] = useState(state.goal?.goal ?? "");
   const [focus, setFocus] = useState<TrainingGoal["focus"]>(state.goal?.focus ?? "blandat");
@@ -93,6 +146,7 @@ export default function TrainingPage() {
   const [equipment, setEquipment] = useState(state.goal?.equipment ?? "");
   const [limitations, setLimitations] = useState(state.goal?.limitations ?? "");
   const [loading, setLoading] = useState(false);
+
 
   const [healthAvailable, setHealthAvailable] = useState(false);
   const [healthChecked, setHealthChecked] = useState(false);
@@ -209,20 +263,83 @@ export default function TrainingPage() {
     );
   })();
 
+  const weights = weightEntries();
+  const latestWeight = weights.at(-1) ?? null;
+  const firstWeight = weights[0] ?? null;
+  const weightChange =
+    latestWeight && firstWeight && weights.length > 1
+      ? Math.round((latestWeight.kg - firstWeight.kg) * 10) / 10
+      : null;
+
+  const summary: Record<Exclude<TrainingView, "overview">, string> = {
+    program: state.program ? `${state.program.sessions.length} pass i veckan` : "Inget program ännu",
+    steg: `${stepsToday.toLocaleString("sv-SE")} steg idag`,
+    motion: `${movementMinutes} av ${movementGoal} min idag`,
+    plan: weeklyPlan ? `${sessionsThisWeek}/${weeklyPlan.sessionTarget} pass denna vecka` : "Ingen plan ännu",
+    vikt: latestWeight ? `${latestWeight.kg} kg senast` : "Ingen vikt inlagd",
+  };
+
+
+
 
   return (
     <Layout>
       <div className="max-w-3xl mx-auto px-4 py-6 space-y-6">
-        <header className="space-y-1">
+        <header className="space-y-2">
+          {view !== "overview" && (
+            <button
+              type="button"
+              onClick={() => setView("overview")}
+              className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-ink"
+            >
+              <ChevronLeft size={16} /> Tillbaka till översikten
+            </button>
+          )}
           <h1 className="text-3xl font-bold text-ink flex items-center gap-2">
-            <Dumbbell className="text-primary" /> Träning
+            <Dumbbell className="text-primary" />{" "}
+            {view === "overview" ? "Träning" : (SECTIONS.find((s) => s.id === view)?.label ?? "Träning")}
           </h1>
           <p className="text-muted-foreground">
-            Berätta vad du vill med träningen – Flow bygger ett program som passar din vecka.
+            {view === "overview"
+              ? "Välj en del i taget – du behöver inte se allt på en gång."
+              : (SECTIONS.find((s) => s.id === view)?.desc ?? "")}
           </p>
         </header>
 
-        {/* Steg & hälsoapp */}
+        {view === "overview" && (
+          <div className="grid gap-3 sm:grid-cols-2">
+            {SECTIONS.map((s) => {
+              const Icon = s.icon;
+              return (
+                <button
+                  key={s.id}
+                  type="button"
+                  onClick={() => setView(s.id)}
+                  className="surface-card p-4 text-left transition hover:opacity-90"
+                >
+                  <div className="flex items-start gap-3">
+                    <span
+                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+                      style={{ backgroundColor: `hsl(${s.hue} / 0.14)`, color: `hsl(${s.hue})` }}
+                    >
+                      <Icon size={20} />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="font-semibold text-ink">{s.label}</span>
+                        <ChevronRight size={16} className="shrink-0 text-muted-foreground" />
+                      </div>
+                      <p className="text-xs text-muted-foreground">{s.desc}</p>
+                      <p className="mt-1 text-sm font-medium text-ink">{summary[s.id]}</p>
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        {view === "steg" && (
         <section className="surface-card p-5 space-y-4">
           <div className="flex items-center justify-between gap-3">
             <h2 className="text-lg font-semibold text-ink flex items-center gap-2">
@@ -370,8 +487,9 @@ export default function TrainingPage() {
           </div>
 
         </section>
+        )}
 
-        {/* Veckoplan */}
+        {view === "plan" && (
         <section className="surface-card p-5 space-y-4">
           <div className="flex items-start justify-between gap-3">
             <div>
@@ -457,9 +575,9 @@ export default function TrainingPage() {
             </div>
           </div>
         </section>
+        )}
 
-        {/* Vardagsmotion */}
-
+        {view === "motion" && (
         <section className="surface-card p-5 space-y-4">
           <div className="flex items-start justify-between gap-3">
             <div>
@@ -566,9 +684,10 @@ export default function TrainingPage() {
             })}
           </div>
         </section>
+        )}
 
-        {/* Mål & generering */}
-
+        {view === "program" && (
+          <>
         <section className="surface-card p-5 space-y-4">
           <h2 className="text-lg font-semibold text-ink">Ditt mål</h2>
           <Input
@@ -710,7 +829,122 @@ export default function TrainingPage() {
             <p className="text-sm text-muted-foreground">{state.program.note}</p>
           </section>
         )}
+          </>
+        )}
+
+        {view === "vikt" && (
+          <section className="surface-card p-5 space-y-4">
+            <div>
+              <h2 className="text-lg font-semibold text-ink flex items-center gap-2">
+                <Scale size={18} className="text-primary" /> Vikt & viktnedgång
+              </h2>
+              <p className="text-sm text-muted-foreground">
+                Väg dig när det känns bra – inte varje dag. Kurvan över tid säger mer än en enskild morgon.
+              </p>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-3">
+              <div className="rounded-2xl border border-border/70 bg-muted/40 p-4">
+                <p className="text-xs uppercase tracking-wide text-muted-foreground">Senaste vikt</p>
+                <p className="text-2xl font-bold text-ink">{latestWeight ? `${latestWeight.kg} kg` : "–"}</p>
+                <p className="text-xs text-muted-foreground">
+                  {latestWeight
+                    ? new Date(latestWeight.date + "T00:00:00").toLocaleDateString("sv-SE", {
+                        day: "numeric",
+                        month: "short",
+                      })
+                    : "Ingen vikt inlagd ännu"}
+                </p>
+              </div>
+              <div className="rounded-2xl border border-border/70 bg-muted/40 p-4">
+                <p className="text-xs uppercase tracking-wide text-muted-foreground">Målvikt</p>
+                <p className="text-2xl font-bold text-ink">{weightGoal ? `${weightGoal} kg` : "–"}</p>
+                <p className="text-xs text-muted-foreground">
+                  {weightGoal && latestWeight
+                    ? `${Math.abs(Math.round((latestWeight.kg - weightGoal) * 10) / 10)} kg kvar`
+                    : "Sätt ett mål om du vill"}
+                </p>
+              </div>
+              <div className="rounded-2xl border border-border/70 bg-muted/40 p-4">
+                <p className="text-xs uppercase tracking-wide text-muted-foreground">Förändring</p>
+                <p className="text-2xl font-bold text-ink">
+                  {weightChange === null ? "–" : `${weightChange > 0 ? "+" : ""}${weightChange} kg`}
+                </p>
+                <p className="text-xs text-muted-foreground">sedan första mätningen</p>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+              <Input
+                type="number"
+                step="0.1"
+                inputMode="decimal"
+                placeholder="Vikt idag (kg)"
+                value={weightInput}
+                onChange={(e) => setWeightInput(e.target.value)}
+                className="w-40 rounded-xl"
+              />
+              <Button
+                variant="secondary"
+                className="rounded-xl"
+                onClick={() => {
+                  const n = Number(weightInput.replace(",", "."));
+                  if (!Number.isFinite(n) || n <= 0) return;
+                  setWeight(n);
+                  setWeightInput("");
+                  toast({ title: "Sparat", description: "Vikten är loggad för idag." });
+                }}
+              >
+                Spara vikt
+              </Button>
+              <Input
+                type="number"
+                step="0.1"
+                inputMode="decimal"
+                placeholder="Målvikt"
+                value={weightGoalInput}
+                onChange={(e) => {
+                  setWeightGoalInput(e.target.value);
+                  const n = Number(e.target.value.replace(",", "."));
+                  setWeightGoal(Number.isFinite(n) && n > 0 ? n : null);
+                }}
+                className="w-32 rounded-xl"
+                aria-label="Målvikt i kg"
+              />
+              <span className="text-sm text-muted-foreground flex items-center gap-1">
+                <Target size={14} /> målvikt
+              </span>
+            </div>
+
+            {weights.length > 1 && (
+              <div className="flex items-end gap-1 h-28">
+                {weights.slice(-14).map((w) => {
+                  const min = Math.min(...weights.slice(-14).map((x) => x.kg));
+                  const max = Math.max(...weights.slice(-14).map((x) => x.kg));
+                  const span = Math.max(1, max - min);
+                  return (
+                    <div key={w.date} className="flex-1 flex flex-col items-center gap-1">
+                      <div
+                        className="w-full rounded-t-lg bg-primary/30"
+                        style={{ height: `${16 + ((w.kg - min) / span) * 60}px` }}
+                        title={`${w.kg} kg`}
+                      />
+                      <span className="text-[10px] text-muted-foreground">
+                        {new Date(w.date + "T00:00:00").toLocaleDateString("sv-SE", { day: "numeric", month: "numeric" })}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            <p className="text-xs text-muted-foreground">
+              MyFlove ger inga kost- eller kaloriråd. Prata med vården om du behöver stöd med kost eller hälsa.
+            </p>
+          </section>
+        )}
       </div>
+
     </Layout>
   );
 }

@@ -4,7 +4,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 const InputSchema = z.object({
   goal: z.string().min(1).max(300),
-  focus: z.enum(["styrka", "kondition", "blandat"]),
+  focus: z.enum(["styrka", "kondition", "blandat", "viktnedgång"]),
   daysPerWeek: z.number().int().min(1).max(7),
   minutesPerSession: z.number().int().min(10).max(180),
   level: z.enum(["nybörjare", "van", "erfaren"]),
@@ -38,6 +38,7 @@ Regler:
 - Varje pass: kort titel, typ, ungefärlig tid och 3–6 konkreta övningar med set/reps eller tid/intensitet.
 - Anpassa efter nivå, utrustning och eventuella begränsningar. Aldrig medicinska råd.
 - Föreslå ett dagligt stegmål (stepGoal) som passar målet.
+- Vid fokus "viktnedgång": bygg ett hållbart upplägg med kombination av styrka (behåller muskler) och pulshöjande pass, högre stegmål (ofta 8000–10000), och betona vardagsrörelse och regelbundenhet framför hård träning. Ge aldrig kost- eller kaloriråd, inga dietplaner, inga löften om kilon per vecka.
 - "intro" är en mening (max 20 ord). "note" avlastar, t.ex. "Ett pass i veckan räknas också."
 - Svenska, du-form, inga emojis, aldrig dömande.
 - Svara ENDAST med giltig JSON enligt schemat.`;
