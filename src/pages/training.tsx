@@ -26,6 +26,19 @@ const FOCUS: { id: TrainingGoal["focus"]; label: string }[] = [
   { id: "blandat", label: "Blandat" },
 ];
 const LEVELS: TrainingGoal["level"][] = ["nybörjare", "van", "erfaren"];
+const LAST_SYNC_KEY = "myflove.steps.lastSync";
+
+function formatSyncTime(stamp: number): string {
+  const d = new Date(stamp);
+  const diffMin = Math.round((Date.now() - stamp) / 60000);
+  if (diffMin < 1) return "just nu";
+  if (diffMin < 60) return `för ${diffMin} min sedan`;
+  const sameDay = d.toDateString() === new Date().toDateString();
+  const time = d.toLocaleTimeString("sv-SE", { hour: "2-digit", minute: "2-digit" });
+  if (sameDay) return `idag ${time}`;
+  return `${d.toLocaleDateString("sv-SE", { day: "numeric", month: "short" })} ${time}`;
+}
+
 
 const TYPE_TINT: Record<string, string> = {
   styrka: "205 45% 34%",
