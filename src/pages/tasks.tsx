@@ -26,7 +26,7 @@ import { useToast } from "@/hooks/use-toast";
 import { getRandomEncouragement } from "@/lib/encouragements";
 import { confirmations } from "@/lib/flow-voice";
 import { AreaSwitcher } from "@/components/area-switcher";
-import { AREA_META, defaultAreaFor, filterByArea, getArea, useActiveArea } from "@/lib/life-areas";
+import { AREA_META, areaChipStyle, defaultAreaFor, filterByArea, getArea, useActiveArea } from "@/lib/life-areas";
 
 
 // Blueprint 2.0 §7.4: Uppgift / Ärende / Projekt.
@@ -166,7 +166,10 @@ export default function Tasks() {
                 <KindIcon size={11} /> {KIND_META[kind].label}
               </span>
               {activeArea === "alla" && (
-                <span className="text-[11px] text-muted-foreground">
+                <span
+                  className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full border font-medium"
+                  style={areaChipStyle(getArea(task))}
+                >
                   {AREA_META[getArea(task)].emoji} {AREA_META[getArea(task)].label}
                 </span>
               )}

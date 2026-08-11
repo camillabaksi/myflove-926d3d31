@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ALL_AREAS, AREA_META, useEnabledAreas, type LifeArea } from "@/lib/life-areas";
+import { ALL_AREAS, AREA_META, areaColor, areaTint, useEnabledAreas, type LifeArea } from "@/lib/life-areas";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
 
@@ -44,14 +44,24 @@ export function AreaOnboarding() {
                 onClick={() => toggle(a)}
                 aria-pressed={isOn}
                 disabled={meta.core}
+                style={
+                  isOn
+                    ? { borderColor: areaTint(a, 0.45), backgroundColor: areaTint(a, 0.1) }
+                    : { borderLeft: `4px solid ${areaColor(a)}` }
+                }
                 className={`w-full text-left p-4 rounded-xl border transition-colors ${
-                  isOn ? "border-primary bg-primary/5" : "border-border hover:bg-secondary"
+                  isOn ? "" : "border-border hover:bg-secondary"
                 } ${meta.core ? "opacity-90 cursor-default" : ""}`}
               >
                 <div className="flex items-center gap-2">
+                  <span
+                    aria-hidden="true"
+                    className="inline-block w-2.5 h-2.5 rounded-full"
+                    style={{ backgroundColor: areaColor(a) }}
+                  />
                   <span aria-hidden="true">{meta.emoji}</span>
-                  <span className="font-medium">{meta.label}</span>
-                  {isOn && <Check size={14} className="text-primary ml-auto" />}
+                  <span className="font-medium" style={{ color: areaColor(a) }}>{meta.label}</span>
+                  {isOn && <Check size={14} className="ml-auto" style={{ color: areaColor(a) }} />}
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">{meta.blurb}</p>
                 {meta.core && (
