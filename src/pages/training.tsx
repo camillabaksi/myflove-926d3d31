@@ -3,6 +3,14 @@ import { useServerFn } from "@tanstack/react-start";
 import Layout from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   Dumbbell,
   Loader2,
@@ -11,6 +19,8 @@ import {
   CheckCircle2,
   Circle,
   Pencil,
+  Trash2,
+  Plus,
   RefreshCw,
   Smartphone,
   AlertTriangle,
@@ -22,7 +32,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { generateTrainingProgram } from "@/lib/training.functions";
-import { useTraining, type TrainingGoal } from "@/hooks/use-training";
+import { useTraining, type TrainingGoal, type TrainingSession } from "@/hooks/use-training";
 import { FEEDBACK_LABEL, weekStartKey, type WeekFeedback } from "@/lib/weekly-plan";
 import { isHealthAppAvailable, openHealthSettings, readStepsForDays } from "@/lib/health-steps";
 import {
@@ -111,6 +121,9 @@ export default function TrainingPage() {
     state,
     saveProgram,
     clearProgram,
+    updateSession,
+    addSession,
+    removeSession,
     toggleSessionDone,
     setSteps,
     setStepGoal,
@@ -151,6 +164,58 @@ export default function TrainingPage() {
   const [limitations, setLimitations] = useState(state.goal?.limitations ?? "");
   const [loading, setLoading] = useState(false);
   const settingsRef = useRef<HTMLElement | null>(null);
+
+  const [sessionEdit, setSessionEdit] = useState<{
+    index: number | null;
+    day: string;
+    title: string;
+    type: TrainingSession["type"];
+    minutes: string;
+    exercises: string;
+  } | null>(null);
+
+  const openAddSession = () =>
+    setSessionEdit({ index: null, day: "Måndag", title: "", type: "styrka", minutes: "45", exercises: "" });
+
+  const openEditSession = (index: number) => {
+    const s = state.program?.sessions[index];
+    if (!s) return;
+    setSessionEdit({
+      index,
+      day: s.day,
+      title: s.title,
+      type: s.type,
+      minutes: s.minutes ? String(s.minutes) : "",
+      exercises: s.exercises.join("\n"),
+    });
+  };
+
+  const saveSessionEdit = () => {
+    if (!sessionEdit) return;
+    if (!sessionEdit.title.trim() || !sessionEdit.day.trim()) {
+      toast({ title: "Fyll i dag och namn", description: "Passet behöver en dag och ett namn." });
+      return;
+    }
+    const mins = Number(sessionEdit.minutes);
+    const session: TrainingSession = {
+      day: sessionEdit.day.trim(),
+      title: sessionEdit.title.trim(),
+      type: sessionEdit.type,
+      ...(Number.isFinite(mins) && mins > 0 ? { minutes: Math.round(mins) } : {}),
+      exercises: sessionEdit.exercises
+        .split("\n")
+        .map((l) => l.replace(/^[-•*\s]+/, "").trim())
+        .filter(Boolean),
+    };
+    if (sessionEdit.index === null) {
+      addSession(session);
+      toast({ title: "Passet är tillagt" });
+    } else {
+      updateSession(sessionEdit.index, session);
+      toast({ title: "Passet är ändrat" });
+    }
+    setSessionEdit(null);
+  };
 
 
   const [healthAvailable, setHealthAvailable] = useState(false);
@@ -847,6 +912,26 @@ export default function TrainingPage() {
                         </div>
                         <div className="font-semibold text-ink">{s.title}</div>
                       </div>
+                      <div className="flex shrink-0 items-center gap-2">
+                      <button
+                        type="button"
+                        aria-label="Ändra passet"
+                        onClick={() => openEditSession(i)}
+                        className="text-muted-foreground hover:text-ink"
+                      >
+                        <Pencil size={17} />
+                      </button>
+                      <button
+                        type="button"
+                        aria-label="Ta bort passet"
+                        onClick={() => {
+                          removeSession(i);
+                          toast({ title: "Passet är borttaget" });
+                        }}
+                        className="text-muted-foreground hover:text-destructive"
+                      >
+                        <Trash2 size={17} />
+                      </button>
                       <button
                         type="button"
                         aria-label={done ? "Markera som ej klar" : "Markera som klar"}
@@ -858,6 +943,7 @@ export default function TrainingPage() {
                       >
                         {done ? <CheckCircle2 size={22} /> : <Circle size={22} className="text-muted-foreground" />}
                       </button>
+                      </div>
                     </div>
                     {s.exercises.length > 0 && (
                       <ul className="mt-2 space-y-1 text-sm text-ink/80">
@@ -870,6 +956,10 @@ export default function TrainingPage() {
                 );
               })}
             </ul>
+
+            <Button variant="outline" className="rounded-xl gap-2 w-full" onClick={openAddSession}>
+              <Plus size={16} /> Lägg till pass
+            </Button>
 
             <p className="text-sm text-muted-foreground">{state.program.note}</p>
           </section>
@@ -1085,6 +1175,80 @@ export default function TrainingPage() {
         )}
       </div>
 
+      <Dialog open={sessionEdit !== null} onOpenChange={(o) => !o && setSessionEdit(null)}>
+        <DialogContent className="rounded-2xl">
+          <DialogHeader>
+            <DialogTitle>{sessionEdit?.index === null ? "Lägg till pass" : "Ändra passet"}</DialogTitle>
+          </DialogHeader>
+          {sessionEdit && (
+            <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-3">
+                <label className="text-sm text-muted-foreground">
+                  Dag
+                  <Input
+                    value={sessionEdit.day}
+                    onChange={(e) => setSessionEdit({ ...sessionEdit, day: e.target.value })}
+                    className="rounded-xl mt-1"
+                  />
+                </label>
+                <label className="text-sm text-muted-foreground">
+                  Minuter
+                  <Input
+                    type="number"
+                    min={5}
+                    max={180}
+                    value={sessionEdit.minutes}
+                    onChange={(e) => setSessionEdit({ ...sessionEdit, minutes: e.target.value })}
+                    className="rounded-xl mt-1"
+                  />
+                </label>
+              </div>
+              <label className="text-sm text-muted-foreground block">
+                Namn på passet
+                <Input
+                  value={sessionEdit.title}
+                  onChange={(e) => setSessionEdit({ ...sessionEdit, title: e.target.value })}
+                  className="rounded-xl mt-1"
+                />
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {(["styrka", "kondition", "rörlighet", "vila"] as const).map((t) => (
+                  <button
+                    key={t}
+                    type="button"
+                    onClick={() => setSessionEdit({ ...sessionEdit, type: t })}
+                    className={`rounded-xl border px-3 py-1.5 text-sm capitalize transition ${
+                      sessionEdit.type === t
+                        ? "bg-primary text-primary-foreground border-primary"
+                        : "border-border text-ink"
+                    }`}
+                  >
+                    {t}
+                  </button>
+                ))}
+              </div>
+              <label className="text-sm text-muted-foreground block">
+                Övningar – en per rad
+                <Textarea
+                  rows={5}
+                  value={sessionEdit.exercises}
+                  onChange={(e) => setSessionEdit({ ...sessionEdit, exercises: e.target.value })}
+                  className="rounded-xl mt-1"
+                />
+              </label>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="ghost" className="rounded-xl" onClick={() => setSessionEdit(null)}>
+              Avbryt
+            </Button>
+            <Button className="rounded-xl" onClick={saveSessionEdit}>
+              Spara
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Layout>
+
   );
 }
