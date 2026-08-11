@@ -50,10 +50,25 @@ const TYPE_TINT: Record<string, string> = {
 };
 
 export default function TrainingPage() {
-  const { state, saveProgram, clearProgram, toggleSessionDone, setSteps, setStepGoal, lastDays, doneToday, stepsToday } =
-    useTraining();
+  const {
+    state,
+    saveProgram,
+    clearProgram,
+    toggleSessionDone,
+    setSteps,
+    setStepGoal,
+    lastDays,
+    doneToday,
+    stepsToday,
+    toggleMovement,
+    setMovementGoal,
+    movementDays,
+    movementToday,
+    movementGoal,
+  } = useTraining();
   const { toast } = useToast();
   const run = useServerFn(generateTrainingProgram);
+
 
   const [goal, setGoal] = useState(state.goal?.goal ?? "");
   const [focus, setFocus] = useState<TrainingGoal["focus"]>(state.goal?.focus ?? "blandat");
