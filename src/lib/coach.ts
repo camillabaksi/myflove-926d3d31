@@ -51,7 +51,7 @@ export function generateCoachMessage(input: CoachInput): CoachMessage {
       emoji: "🎯",
       text: "Du har inte valt ett fokus för idag. Vad är den enda sak som skulle göra dagen bra om du klarade den?",
       ctaLabel: "Sätt dagens fokus",
-      ctaHref: "/fokus",
+      ctaHref: "/flowplan",
     };
   }
 
