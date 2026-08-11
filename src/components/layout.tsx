@@ -1,6 +1,6 @@
 import { ReactNode, useState, useEffect, useMemo } from "react";
 import { Link, useLocation } from "wouter";
-import { Home, Target, CheckSquare, ShoppingBag, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Settings2, Check, RotateCcw, ArrowUp, ArrowDown, LogOut, Volume2, VolumeX, Shield, Heart, Sun, Search, GraduationCap, Briefcase } from "lucide-react";
+import { Home, Target, CheckSquare, ShoppingBag, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Settings2, Check, RotateCcw, ArrowUp, ArrowDown, LogOut, Volume2, VolumeX, Shield, Heart, Sun, Search, GraduationCap, Briefcase, Baby } from "lucide-react";
 import { isAlarmSoundEnabled, setAlarmSoundEnabled, subscribeAlarmPref, playAlarmPreview, initAlarmAudioUnlock } from "@/lib/push-notifications";
 import { useCommuteAlerts } from "@/hooks/use-commute-alerts";
 import { useMedicationAlerts } from "@/hooks/use-medication-alerts";
@@ -120,6 +120,7 @@ export default function Layout({ children }: LayoutProps) {
     { href: "/finances", label: "Ekonomi", icon: Wallet },
     { href: "/travel", label: "Resor", icon: Navigation },
     { href: "/familj", label: "Familj", icon: Users },
+    { href: "/barn", label: "Barn", icon: Baby },
     { href: "/statistik", label: "Statistik", icon: BarChart3 },
     { href: "/beloningar", label: "Belöningar", icon: Trophy },
     { href: "/assistant", label: "Hjälp", icon: Sparkles },
@@ -145,7 +146,7 @@ export default function Layout({ children }: LayoutProps) {
       { id: "dagen", label: "Min dag", icon: Sun, hrefs: ["/hem", "/daglig-rutin", "/kalender", "/tasks", "/flowplan"] },
       { id: "fokus", label: "Fokus & lugn", icon: Target, hrefs: ["/pomodoro", "/dump", "/assistant"] },
       { id: "mabra", label: "Må bra", icon: Heart, hrefs: ["/ma-bra", "/beloningar", "/statistik"] },
-      { id: "hem", label: "Hem & familj", icon: Users, hrefs: ["/familj", "/shopping", "/matlista", "/finances", "/travel"] },
+      { id: "hem", label: "Hem & familj", icon: Users, hrefs: ["/familj", "/barn", "/shopping", "/matlista", "/finances", "/travel"] },
       { id: "studier", label: "Studier", icon: GraduationCap, hrefs: ["/studier"] },
       { id: "jobb", label: "Jobb", icon: Briefcase, hrefs: ["/jobb"] },
       { id: "ovrigt", label: "Övrigt", icon: Settings2, hrefs: ["/friktionsindex", "/admin", "/admin-statistik"] },
