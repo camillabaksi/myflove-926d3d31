@@ -210,6 +210,42 @@ export default function TrainingPage() {
 
 
 
+  const generateWith = async (payload: TrainingGoal, successTitle = "Programmet är klart") => {
+    setLoading(true);
+    try {
+      const program = await run({ data: payload });
+      saveProgram(payload, program);
+      toast({ title: successTitle, description: program.intro });
+    } catch (err) {
+      toast({
+        title: "Det gick inte just nu",
+        description: err instanceof Error ? err.message : "Försök igen om en stund.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEditProgram = () => {
+    const g = state.goal;
+    if (!g) return;
+    setGoal(g.goal);
+    setFocus(g.focus);
+    setDaysPerWeek(g.daysPerWeek);
+    setMinutes(g.minutesPerSession);
+    setLevel(g.level);
+    setEquipment(g.equipment ?? "");
+    setLimitations(g.limitations ?? "");
+    settingsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    toast({ title: "Redigera programmet", description: "Ändra inställningarna och skapa om programmet." });
+  };
+
+  const handleRecreate = async () => {
+    if (!state.goal) return;
+    await generateWith(state.goal, "Programmet är omgjort");
+  };
+
   const handleGenerate = async () => {
     if (!goal.trim()) {
       toast({ title: "Berätta vad du vill", description: "Skriv ditt mål med träningen först." });
@@ -224,11 +260,9 @@ export default function TrainingPage() {
       ...(equipment.trim() ? { equipment: equipment.trim() } : {}),
       ...(limitations.trim() ? { limitations: limitations.trim() } : {}),
     };
-    setLoading(true);
-    try {
-      const program = await run({ data: payload });
-      saveProgram(payload, program);
-      toast({ title: "Programmet är klart", description: program.intro });
+    await generateWith(payload);
+  };
+
     } catch (err) {
       toast({
         title: "Det gick inte just nu",
