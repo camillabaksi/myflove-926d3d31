@@ -24,6 +24,7 @@ import { Route as AppTraningRouteImport } from './routes/_app.traning'
 import { Route as AppTasksRouteImport } from './routes/_app.tasks'
 import { Route as AppStudierRouteImport } from './routes/_app.studier'
 import { Route as AppStatistikRouteImport } from './routes/_app.statistik'
+import { Route as AppStadningRouteImport } from './routes/_app.stadning'
 import { Route as AppShoppingRouteImport } from './routes/_app.shopping'
 import { Route as AppPomodoroRouteImport } from './routes/_app.pomodoro'
 import { Route as AppMatlistaRouteImport } from './routes/_app.matlista'
@@ -126,6 +127,11 @@ const AppStudierRoute = AppStudierRouteImport.update({
 const AppStatistikRoute = AppStatistikRouteImport.update({
   id: '/statistik',
   path: '/statistik',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppStadningRoute = AppStadningRouteImport.update({
+  id: '/stadning',
+  path: '/stadning',
   getParentRoute: () => AppRoute,
 } as any)
 const AppShoppingRoute = AppShoppingRouteImport.update({
@@ -304,6 +310,7 @@ export interface FileRoutesByFullPath {
   '/matlista': typeof AppMatlistaRoute
   '/pomodoro': typeof AppPomodoroRoute
   '/shopping': typeof AppShoppingRoute
+  '/stadning': typeof AppStadningRoute
   '/statistik': typeof AppStatistikRoute
   '/studier': typeof AppStudierRoute
   '/tasks': typeof AppTasksRoute
@@ -348,6 +355,7 @@ export interface FileRoutesByTo {
   '/matlista': typeof AppMatlistaRoute
   '/pomodoro': typeof AppPomodoroRoute
   '/shopping': typeof AppShoppingRoute
+  '/stadning': typeof AppStadningRoute
   '/statistik': typeof AppStatistikRoute
   '/studier': typeof AppStudierRoute
   '/tasks': typeof AppTasksRoute
@@ -394,6 +402,7 @@ export interface FileRoutesById {
   '/_app/matlista': typeof AppMatlistaRoute
   '/_app/pomodoro': typeof AppPomodoroRoute
   '/_app/shopping': typeof AppShoppingRoute
+  '/_app/stadning': typeof AppStadningRoute
   '/_app/statistik': typeof AppStatistikRoute
   '/_app/studier': typeof AppStudierRoute
   '/_app/tasks': typeof AppTasksRoute
@@ -440,6 +449,7 @@ export interface FileRouteTypes {
     | '/matlista'
     | '/pomodoro'
     | '/shopping'
+    | '/stadning'
     | '/statistik'
     | '/studier'
     | '/tasks'
@@ -484,6 +494,7 @@ export interface FileRouteTypes {
     | '/matlista'
     | '/pomodoro'
     | '/shopping'
+    | '/stadning'
     | '/statistik'
     | '/studier'
     | '/tasks'
@@ -529,6 +540,7 @@ export interface FileRouteTypes {
     | '/_app/matlista'
     | '/_app/pomodoro'
     | '/_app/shopping'
+    | '/_app/stadning'
     | '/_app/statistik'
     | '/_app/studier'
     | '/_app/tasks'
@@ -666,6 +678,13 @@ declare module '@tanstack/react-router' {
       path: '/statistik'
       fullPath: '/statistik'
       preLoaderRoute: typeof AppStatistikRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/stadning': {
+      id: '/_app/stadning'
+      path: '/stadning'
+      fullPath: '/stadning'
+      preLoaderRoute: typeof AppStadningRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/shopping': {
@@ -889,6 +908,7 @@ interface AppRouteChildren {
   AppMatlistaRoute: typeof AppMatlistaRoute
   AppPomodoroRoute: typeof AppPomodoroRoute
   AppShoppingRoute: typeof AppShoppingRoute
+  AppStadningRoute: typeof AppStadningRoute
   AppStatistikRoute: typeof AppStatistikRoute
   AppStudierRoute: typeof AppStudierRoute
   AppTasksRoute: typeof AppTasksRoute
@@ -919,6 +939,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppMatlistaRoute: AppMatlistaRoute,
   AppPomodoroRoute: AppPomodoroRoute,
   AppShoppingRoute: AppShoppingRoute,
+  AppStadningRoute: AppStadningRoute,
   AppStatistikRoute: AppStatistikRoute,
   AppStudierRoute: AppStudierRoute,
   AppTasksRoute: AppTasksRoute,
