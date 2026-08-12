@@ -14,6 +14,7 @@ import {
   ListChecks,
   Target,
   ArrowRight,
+  PlusCircle,
 } from "lucide-react";
 import { useCourses } from "@/hooks/use-courses";
 import { useToast } from "@/hooks/use-toast";
