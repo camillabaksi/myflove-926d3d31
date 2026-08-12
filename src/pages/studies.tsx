@@ -16,6 +16,7 @@ import {
   FileText,
   AlertCircle,
   BellRing,
+  FolderOpen,
 } from "lucide-react";
 import { useTasks, type Task } from "@/hooks/use-data";
 import { useCourses } from "@/hooks/use-courses";
