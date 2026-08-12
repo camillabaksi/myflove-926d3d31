@@ -21,6 +21,14 @@ const DEFAULTS: Prefs = {
   personal_evening_time: "20:30",
 };
 
+const isTime = (v: string) => /^\d{2}:\d{2}(:\d{2})?$/.test(v);
+const hhmm = (v: string) => (isTime(v) ? v.slice(0, 5) : v);
+const normalize = (p: Prefs): Prefs => ({
+  ...p,
+  personal_time: hhmm(p.personal_time ?? DEFAULTS.personal_time),
+  personal_evening_time: hhmm(p.personal_evening_time ?? DEFAULTS.personal_evening_time),
+});
+
 /** Inställningar för Flows personliga puffar som skickas som push. */
 export function PersonalPushSettings() {
   const loadFn = useServerFn(getPushPreferences);
