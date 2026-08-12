@@ -367,6 +367,98 @@ export default function FlowStudyPage() {
   );
 }
 
+function AddMaterialForm({
+  onSubmit,
+  onCancel,
+}: {
+  onSubmit: (payload: {
+    text?: string;
+    file?: { name: string; mime: string; dataUrl: string };
+  }) => Promise<void>;
+  onCancel: () => void;
+}) {
+  const { toast } = useToast();
+  const [text, setText] = useState("");
+  const [file, setFile] = useState<File | null>(null);
+  const [busy, setBusy] = useState(false);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!text.trim() && !file) {
+      toast({ title: "Lägg till material", description: "Klistra in text eller välj en PDF/bild." });
+      return;
+    }
+    setBusy(true);
+    try {
+      let filePayload: { name: string; mime: string; dataUrl: string } | undefined;
+      if (file) {
+        if (file.size > MAX_FILE_MB * 1024 * 1024) {
+          throw new Error(`Filen är för stor (max ${MAX_FILE_MB} MB).`);
+        }
+        filePayload = {
+          name: file.name,
+          mime: file.type || "application/pdf",
+          dataUrl: await readAsDataUrl(file),
+        };
+      }
+      await onSubmit({ text: text.trim() || undefined, file: filePayload });
+      setText("");
+      setFile(null);
+    } catch (err) {
+      toast({
+        title: "Flow kunde inte lägga till materialet",
+        description: err instanceof Error ? err.message : "Prova igen om en stund.",
+        variant: "destructive",
+      });
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <form onSubmit={submit} className="rounded-xl border border-border bg-secondary/30 p-3 space-y-3">
+      <p className="text-xs text-muted-foreground">
+        Fyll på med mer material – de nya korten och frågorna läggs till i samma set.
+      </p>
+      <textarea
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        rows={3}
+        placeholder="Klistra in mer anteckningar eller frågor."
+        className="w-full rounded-xl border border-border bg-background p-3 text-sm"
+      />
+      <div className="flex flex-wrap gap-2">
+        <input
+          ref={inputRef}
+          type="file"
+          hidden
+          accept="application/pdf,image/*,text/plain"
+          onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+        />
+        <Button type="button" size="sm" variant="outline" className="rounded-xl" onClick={() => inputRef.current?.click()}>
+          <Upload size={14} className="mr-2" /> {file ? file.name.slice(0, 24) : "PDF eller bild"}
+        </Button>
+        <Button type="submit" size="sm" className="rounded-xl" disabled={busy}>
+          {busy ? (
+            <>
+              <Loader2 size={14} className="mr-2 animate-spin" /> Flow läser…
+            </>
+          ) : (
+            <>
+              <Sparkles size={14} className="mr-2" /> Lägg till i setet
+            </>
+          )}
+        </Button>
+        <Button type="button" size="sm" variant="ghost" className="rounded-xl" onClick={onCancel}>
+          Avbryt
+        </Button>
+      </div>
+    </form>
+  );
+}
+
+
 function FlashcardRunner({
   set,
   onGrade,
