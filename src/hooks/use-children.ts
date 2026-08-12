@@ -46,6 +46,22 @@ export const CHILD_COLORS = ["#c17a56", "#8a9a5b", "#e8c547", "#6b8e9e", "#a06cd
 /* data, så en ändring syns direkt överallt utan omladdning.             */
 /* ------------------------------------------------------------------ */
 
+/** Konflikt: någon annan hann ändra samma aktivitet först. */
+export interface ChildItemConflict {
+  /** Så som saken ser ut hos oss, med mina ändringar. */
+  mine: ChildItem;
+  /** Så som den ser ut i molnet just nu (den andres version). */
+  theirs: ChildItem;
+  /** Ändringen jag försökte spara. */
+  patch: ChildItemPatch;
+  /** Om min ändring var en radering. */
+  intent: "update" | "delete";
+}
+
+export type ChildItemPatch = Partial<
+  Pick<ChildItem, "title" | "notes" | "date" | "time" | "remind" | "completed" | "kind">
+>;
+
 interface ChildrenState {
   userId: string | null;
   children: Child[];
@@ -53,6 +69,7 @@ interface ChildrenState {
   members: FamilyMember[];
   loading: boolean;
   error: string | null;
+  conflict: ChildItemConflict | null;
 }
 
 let state: ChildrenState = {
@@ -62,7 +79,9 @@ let state: ChildrenState = {
   members: [],
   loading: true,
   error: null,
+  conflict: null,
 };
+
 
 const listeners = new Set<(s: ChildrenState) => void>();
 
