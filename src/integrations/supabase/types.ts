@@ -478,9 +478,14 @@ export type Database = {
         Row: {
           last_lat: number | null
           last_lon: number | null
+          last_personal_sent_on: string | null
           last_weather_check_at: string | null
           loops_enabled: boolean
           medication_enabled: boolean
+          personal_enabled: boolean
+          personal_evening_enabled: boolean
+          personal_evening_time: string
+          personal_time: string
           tasks_enabled: boolean
           updated_at: string
           user_id: string
@@ -490,9 +495,14 @@ export type Database = {
         Insert: {
           last_lat?: number | null
           last_lon?: number | null
+          last_personal_sent_on?: string | null
           last_weather_check_at?: string | null
           loops_enabled?: boolean
           medication_enabled?: boolean
+          personal_enabled?: boolean
+          personal_evening_enabled?: boolean
+          personal_evening_time?: string
+          personal_time?: string
           tasks_enabled?: boolean
           updated_at?: string
           user_id: string
@@ -502,9 +512,14 @@ export type Database = {
         Update: {
           last_lat?: number | null
           last_lon?: number | null
+          last_personal_sent_on?: string | null
           last_weather_check_at?: string | null
           loops_enabled?: boolean
           medication_enabled?: boolean
+          personal_enabled?: boolean
+          personal_evening_enabled?: boolean
+          personal_evening_time?: string
+          personal_time?: string
           tasks_enabled?: boolean
           updated_at?: string
           user_id?: string
