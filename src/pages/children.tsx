@@ -442,7 +442,10 @@ function ChildrenContent() {
                             <div className="mt-2 space-y-2">
                               {members.length === 0 ? (
                                 <p className="text-xs text-muted-foreground">
-                                  Du behöver skapa eller gå med i en familj för att kunna dela.
+                                  Du behöver skapa eller gå med i en familj för att kunna dela.{" "}
+                                  <a href="/familj" className="text-primary underline">
+                                    Gå till Familj
+                                  </a>
                                 </p>
                               ) : (
                                 <>
