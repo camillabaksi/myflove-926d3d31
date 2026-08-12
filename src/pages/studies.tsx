@@ -535,7 +535,21 @@ export default function StudiesPage() {
                   </div>
                 )}
 
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  <select
+                    value={task.courseId ?? ""}
+                    onChange={(e) => setTaskCourse(task.id, e.target.value || undefined)}
+                    aria-label={`Flytta ${task.title} till mapp`}
+                    className="h-9 rounded-xl border border-border bg-background px-2 text-xs"
+                  >
+                    <option value="">Utan mapp</option>
+                    {activeCourses.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.title}
+                      </option>
+                    ))}
+                  </select>
+
                   <Button
                     variant="secondary"
                     size="sm"
