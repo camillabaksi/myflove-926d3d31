@@ -56,6 +56,7 @@ export default function FlowStudyPage() {
 
   const [openSetId, setOpenSetId] = useState<string | null>(null);
   const [mode, setMode] = useState<"cards" | "quiz" | null>(null);
+  const [addingId, setAddingId] = useState<string | null>(null);
 
   const courseName = (id?: string) => activeCourses.find((c) => c.id === id)?.title;
   const openSet = useMemo(() => sets.find((s) => s.id === openSetId) ?? null, [sets, openSetId]);
