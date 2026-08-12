@@ -139,6 +139,59 @@ export function useFlowStudy() {
 
   const deleteSet = useCallback((id: string) => setSets((prev) => prev.filter((s) => s.id !== id)), [setSets]);
 
+  /** Fyller på ett befintligt set med fler kort och frågor. */
+  const appendToSet = useCallback(
+    (
+      id: string,
+      input: {
+        topics?: string[];
+        cards: Array<{ front: string; back: string; topic?: string }>;
+        quiz: Array<{ question: string; options: string[]; correctIndex: number; explanation?: string; topic?: string }>;
+      },
+    ) => {
+      const now = Date.now();
+      setSets((prev) =>
+        prev.map((s) =>
+          s.id !== id
+            ? s
+            : {
+                ...s,
+                topics: Array.from(new Set([...s.topics, ...(input.topics ?? [])])).slice(0, 20),
+                cards: [
+                  ...s.cards,
+                  ...input.cards.map((c) => ({
+                    id: newId(),
+                    front: c.front,
+                    back: c.back,
+                    topic: c.topic,
+                    box: 1,
+                    dueAt: now,
+                    correct: 0,
+                    wrong: 0,
+                  })),
+                ],
+                quiz: [
+                  ...s.quiz,
+                  ...input.quiz.map((q) => ({
+                    id: newId(),
+                    question: q.question,
+                    options: q.options,
+                    correctIndex: q.correctIndex,
+                    explanation: q.explanation,
+                    topic: q.topic,
+                    box: 1,
+                    dueAt: now,
+                    correct: 0,
+                    wrong: 0,
+                  })),
+                ],
+              },
+        ),
+      );
+    },
+    [setSets],
+  );
+
   const setExamDate = useCallback(
     (id: string, examDate?: string) =>
       setSets((prev) => prev.map((s) => (s.id === id ? { ...s, examDate } : s))),
@@ -208,7 +261,7 @@ export function useFlowStudy() {
     return { dueCards, dueQuestions };
   }, [sets]);
 
-  return { sets, addSet, deleteSet, setExamDate, gradeCard, gradeQuestion, recordAttempt, stats };
+  return { sets, addSet, appendToSet, deleteSet, setExamDate, gradeCard, gradeQuestion, recordAttempt, stats };
 }
 
 /** Sorterar så att svaga och förfallna kort kommer först – enkelt adaptivt urval. */
