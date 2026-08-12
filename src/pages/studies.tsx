@@ -205,6 +205,18 @@ export default function StudiesPage() {
           </div>
         </header>
 
+        <a
+          href="/flowstudy"
+          className="block rounded-2xl border border-primary/25 bg-primary/5 p-4 hover:bg-primary/10 transition-colors"
+        >
+          <p className="font-medium">FlowStudy – plugga smartare</p>
+          <p className="text-sm text-muted-foreground">
+            Ladda upp PDF, bilder eller text. Flow gör flashcards och quiz, kommer ihåg vad du har svårt för
+            och lägger upp pluggandet inför provet.
+          </p>
+        </a>
+
+
         {/* Kurser */}
         <section className="bg-card border border-border rounded-2xl p-5 space-y-4">
           <h2 className="text-lg font-semibold">Dina kurser</h2>
