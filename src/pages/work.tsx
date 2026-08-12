@@ -65,6 +65,7 @@ export default function WorkPage() {
     addTaskAttachment,
     removeTaskAttachment,
     setTaskDeadlineReminders,
+    setTaskCourse,
   } = useTasks();
   const { activeProjects, addProject, deleteProject } = useProjects();
   const { toast } = useToast();
@@ -76,6 +77,7 @@ export default function WorkPage() {
   const [projectId, setProjectId] = useState<string>("");
   const [details, setDetails] = useState("");
   const [reminderTime, setReminderTime] = useState("09:00");
+  const [folder, setFolder] = useState<string>("all");
   const [busyId, setBusyId] = useState<string | null>(null);
   const [uploadingId, setUploadingId] = useState<string | null>(null);
   const [intros, setIntros] = useState<Record<string, string>>({});
@@ -92,7 +94,22 @@ export default function WorkPage() {
     [tasks],
   );
 
+  const countFor = (id: string) =>
+    id === "all"
+      ? workTasks.length
+      : id === "none"
+        ? workTasks.filter((t) => !t.courseId).length
+        : workTasks.filter((t) => t.courseId === id).length;
+
+  const visible = useMemo(() => {
+    if (folder === "all") return workTasks;
+    if (folder === "none") return workTasks.filter((t) => !t.courseId);
+    return workTasks.filter((t) => t.courseId === folder);
+  }, [workTasks, folder]);
+
   const projectName = (id?: string) => activeProjects.find((p) => p.id === id)?.title;
+
+
 
   const handleAddProject = (e: React.FormEvent) => {
     e.preventDefault();
