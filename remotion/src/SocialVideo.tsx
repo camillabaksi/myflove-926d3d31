@@ -95,7 +95,6 @@ const Title: React.FC<{ children: React.ReactNode; delay?: number; size?: number
       fontSize: size,
       lineHeight: 1.05,
       whiteSpace: "pre-line",
-      whiteSpace: "pre-line",
       color: COLORS.ink,
       margin: 0,
     }}
