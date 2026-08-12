@@ -155,7 +155,15 @@ export const Route = createFileRoute("/api/public/hooks/push-tick")({
         });
         const parts = Object.fromEntries(fmt.formatToParts(now).map((p) => [p.type, p.value]));
         const localHour = parts.hour ?? "00";
+        const localMinutes = Number(localHour) * 60 + Number(parts.minute ?? "0");
         const localDate = `${parts.year}-${parts.month}-${parts.day}`;
+        // Fönster: skicka om vi är på eller strax efter vald tid (0–9 min).
+        const isDue = (hhmm: string) => {
+          const [h, m] = hhmm.split(":").map(Number);
+          const target = (h || 0) * 60 + (m || 0);
+          const diff = localMinutes - target;
+          return diff >= 0 && diff < 10;
+        };
 
         const { data: personalPrefs } = await supabaseAdmin
           .from("push_preferences")
