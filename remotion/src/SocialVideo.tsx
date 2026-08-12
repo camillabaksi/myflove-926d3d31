@@ -303,7 +303,7 @@ const SceneTesters: React.FC = () => {
           boxShadow: "0 14px 34px rgba(36,80,60,0.28)",
         }}
       >
-        myflove.se
+        myflove.lovable.app
       </div>
     </Shell>
   );
@@ -343,7 +343,7 @@ const SceneOutro: React.FC = () => (
         marginTop: 12,
       }}
     >
-      Testa gratis: myflove.se
+      Testa gratis: myflove.lovable.app
     </div>
     <p style={{ ...useIn(32), fontFamily: FONTS.body, fontSize: 28, color: COLORS.sage, margin: 0 }}>
       Kommentera "testat" och berätta vad du tycker 🥰
