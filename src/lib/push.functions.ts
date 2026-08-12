@@ -134,13 +134,13 @@ const PrefsSchema = z.object({
   tasks_enabled: z.boolean().optional(),
   loops_enabled: z.boolean().optional(),
   weather_enabled: z.boolean().optional(),
-  weather_time: z.string().regex(/^\d{2}:\d{2}$/).optional(),
+  weather_time: z.string().regex(/^\d{2}:\d{2}(:\d{2})?$/).transform((v) => v.slice(0, 5)).optional(),
   last_lat: z.number().optional(),
   last_lon: z.number().optional(),
   personal_enabled: z.boolean().optional(),
-  personal_time: z.string().regex(/^\d{2}:\d{2}$/).optional(),
+  personal_time: z.string().regex(/^\d{2}:\d{2}(:\d{2})?$/).transform((v) => v.slice(0, 5)).optional(),
   personal_evening_enabled: z.boolean().optional(),
-  personal_evening_time: z.string().regex(/^\d{2}:\d{2}$/).optional(),
+  personal_evening_time: z.string().regex(/^\d{2}:\d{2}(:\d{2})?$/).transform((v) => v.slice(0, 5)).optional(),
   personal_name: z.string().max(40).optional(),
 });
 
