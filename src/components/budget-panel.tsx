@@ -121,23 +121,30 @@ export default function BudgetPanel({
 
   const start = useMemo(() => periodStart(period).getTime(), [period]);
 
-  const spentByCategory = useMemo(() => {
+  // Räknar om automatiskt så fort en transaktion läggs till, ändras eller tas bort.
+  const { spentByCategory, income, txCount } = useMemo(() => {
     const acc: Record<string, number> = {};
+    let inc = 0;
+    let count = 0;
     for (const t of transactions) {
-      if (t.type !== "expense" || t.date < start) continue;
-      acc[t.category] = (acc[t.category] ?? 0) + t.amount;
+      if (t.date < start) continue;
+      count += 1;
+      if (t.type === "income") inc += t.amount;
+      else acc[t.category] = (acc[t.category] ?? 0) + t.amount;
     }
-    return acc;
+    return { spentByCategory: acc, income: inc, txCount: count };
   }, [transactions, start]);
 
   const spent = Object.values(spentByCategory).reduce((s, n) => s + n, 0);
+  const net = spent - income; // utgifter minus inkomster i perioden
   const total = budget.total[period];
-  const left = total ? total - spent : null;
+  const left = total ? total - net : null;
   const { total: days, elapsed } = periodProgress(period);
   const daysLeft = Math.max(1, days - elapsed + 1);
   const perDay = left !== null ? Math.round(left / daysLeft) : null;
 
   const periodLabel = period === "day" ? "idag" : period === "week" ? "denna vecka" : "denna månad";
+
 
   return (
     <section className="bg-card p-6 rounded-3xl border border-border shadow-sm space-y-5">
@@ -171,8 +178,8 @@ export default function BudgetPanel({
       <div className="space-y-3">
         <div className="flex items-end justify-between gap-4">
           <div>
-            <p className="text-sm text-muted-foreground">Spenderat {periodLabel}</p>
-            <p className="text-2xl font-semibold">{spent} kr</p>
+            <p className="text-sm text-muted-foreground">Förbrukat {periodLabel}</p>
+            <p className="text-2xl font-semibold">{Math.max(0, net)} kr</p>
           </div>
           <div className="text-right">
             <p className="text-sm text-muted-foreground">Budget</p>
@@ -180,7 +187,22 @@ export default function BudgetPanel({
           </div>
         </div>
 
-        <Bar spent={spent} budget={total ?? 0} />
+        <Bar spent={Math.max(0, net)} budget={total ?? 0} />
+
+        <div className="grid grid-cols-3 gap-2 text-center">
+          <div className="rounded-xl bg-secondary/50 py-2">
+            <p className="text-xs text-muted-foreground">Utgifter</p>
+            <p className="text-sm font-semibold">-{spent} kr</p>
+          </div>
+          <div className="rounded-xl bg-secondary/50 py-2">
+            <p className="text-xs text-muted-foreground">Inkomster</p>
+            <p className="text-sm font-semibold text-primary">+{income} kr</p>
+          </div>
+          <div className="rounded-xl bg-secondary/50 py-2">
+            <p className="text-xs text-muted-foreground">Netto</p>
+            <p className="text-sm font-semibold">{net > 0 ? `-${net}` : `+${Math.abs(net)}`} kr</p>
+          </div>
+        </div>
 
         {total ? (
           <p className={`text-sm ${left! < 0 ? "text-destructive font-medium" : "text-muted-foreground"}`}>
@@ -191,7 +213,11 @@ export default function BudgetPanel({
         ) : (
           <p className="text-sm text-muted-foreground">Tryck på ”Ingen budget” för att sätta en ram.</p>
         )}
+        <p className="text-xs text-muted-foreground">
+          Uppdateras automatiskt från dina transaktioner ({txCount} {periodLabel}). Inkomster i perioden räknas av mot förbrukningen.
+        </p>
       </div>
+
 
       <div className="space-y-4 pt-2">
         <h3 className="text-sm font-medium text-muted-foreground">Per kategori</h3>
