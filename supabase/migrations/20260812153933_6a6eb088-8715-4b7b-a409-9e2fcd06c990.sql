@@ -1,0 +1,1 @@
+ALTER TABLE public.push_preferences ALTER COLUMN last_personal_sent_on TYPE text USING last_personal_sent_on::text;
