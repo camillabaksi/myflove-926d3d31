@@ -94,6 +94,8 @@ const Title: React.FC<{ children: React.ReactNode; delay?: number; size?: number
       fontWeight: 700,
       fontSize: size,
       lineHeight: 1.05,
+      whiteSpace: "pre-line",
+      whiteSpace: "pre-line",
       color: COLORS.ink,
       margin: 0,
     }}
@@ -225,6 +227,7 @@ const SceneOneBrain: React.FC = () => (
         fontWeight: 700,
         fontSize: 96,
         lineHeight: 1.05,
+      whiteSpace: "pre-line",
         color: COLORS.cream,
         margin: 0,
       }}
@@ -317,13 +320,14 @@ const SceneOutro: React.FC = () => (
         fontWeight: 700,
         fontSize: 104,
         lineHeight: 1.02,
+      whiteSpace: "pre-line",
         color: COLORS.cream,
         margin: 0,
       }}
     >
       MyFlove
     </h1>
-    <p style={{ ...useIn(10), fontFamily: FONTS.body, fontSize: 40, color: COLORS.sage, margin: 0 }}>
+    <p style={{ ...useIn(10), fontFamily: FONTS.body, fontSize: 40, color: COLORS.sage, margin: 0 , whiteSpace: "pre-line" }}>
       Lite mer ordning. Lite mindre stress.{"\n"}Framför allt – lite mer flow. 💙
     </p>
     <div
