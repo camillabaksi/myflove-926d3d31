@@ -40,25 +40,48 @@ export interface FamilyMember {
 
 export const CHILD_COLORS = ["#c17a56", "#8a9a5b", "#e8c547", "#6b8e9e", "#a06cd5", "#d16d6d"];
 
-export function useChildren() {
-  const [userId, setUserId] = useState<string | null>(null);
-  const [children, setChildren] = useState<Child[]>([]);
-  const [items, setItems] = useState<ChildItem[]>([]);
-  const [members, setMembers] = useState<FamilyMember[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+/* ------------------------------------------------------------------ */
+/* Delad butik – alla vyer (t.ex. Barn-sidan och Kalendern) läser samma  */
+/* data, så en ändring syns direkt överallt utan omladdning.             */
+/* ------------------------------------------------------------------ */
 
-  const load = useCallback(async () => {
-    setLoading(true);
-    setError(null);
+interface ChildrenState {
+  userId: string | null;
+  children: Child[];
+  items: ChildItem[];
+  members: FamilyMember[];
+  loading: boolean;
+  error: string | null;
+}
+
+let state: ChildrenState = {
+  userId: null,
+  children: [],
+  items: [],
+  members: [],
+  loading: true,
+  error: null,
+};
+
+const listeners = new Set<(s: ChildrenState) => void>();
+
+function setState(patch: Partial<ChildrenState> | ((prev: ChildrenState) => Partial<ChildrenState>)) {
+  const next = typeof patch === "function" ? patch(state) : patch;
+  state = { ...state, ...next };
+  for (const l of listeners) l(state);
+}
+
+let inFlight: Promise<void> | null = null;
+
+async function loadAll(): Promise<void> {
+  if (inFlight) return inFlight;
+  inFlight = (async () => {
+    setState({ loading: true, error: null });
     try {
       const { data: auth } = await supabase.auth.getUser();
       const uid = auth.user?.id ?? null;
-      setUserId(uid);
       if (!uid) {
-        setChildren([]);
-        setItems([]);
-        setMembers([]);
+        setState({ userId: null, children: [], items: [], members: [] });
         return;
       }
 
@@ -79,16 +102,9 @@ export function useChildren() {
         shareMap.set(s.item_id, [...(shareMap.get(s.item_id) ?? []), s.user_id]);
       }
 
-      setChildren((kids ?? []) as Child[]);
-      setItems(
-        ((rows ?? []) as Omit<ChildItem, "sharedWith">[]).map((r) => ({
-          ...r,
-          sharedWith: shareMap.get(r.id) ?? [],
-        })),
-      );
-
       // Familjemedlemmar att dela med – användaren kan vara med i flera familjer,
       // så vi samlar medlemmar från alla och tar bort dubbletter.
+      let members: FamilyMember[] = [];
       const { data: mine } = await supabase
         .from("household_members")
         .select("household_id")
@@ -103,21 +119,73 @@ export function useChildren() {
         for (const m of (mem ?? []) as FamilyMember[]) {
           if (m.user_id !== uid && !seen.has(m.user_id)) seen.set(m.user_id, m);
         }
-        setMembers(Array.from(seen.values()));
-      } else {
-        setMembers([]);
-
+        members = Array.from(seen.values());
       }
+
+      setState({
+        userId: uid,
+        children: (kids ?? []) as Child[],
+        items: ((rows ?? []) as Omit<ChildItem, "sharedWith">[]).map((r) => ({
+          ...r,
+          sharedWith: shareMap.get(r.id) ?? [],
+        })),
+        members,
+      });
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Kunde inte hämta barn-informationen.");
+      setState({ error: e instanceof Error ? e.message : "Kunde inte hämta barn-informationen." });
     } finally {
-      setLoading(false);
+      setState({ loading: false });
+      inFlight = null;
     }
-  }, []);
+  })();
+  return inFlight;
+}
+
+/** Realtime: en enda prenumeration delas av alla vyer. */
+let channel: ReturnType<typeof supabase.channel> | null = null;
+let subscribers = 0;
+
+function subscribeRealtime() {
+  subscribers += 1;
+  if (channel) return;
+  channel = supabase
+    .channel("children-sync")
+    .on("postgres_changes", { event: "*", schema: "public", table: "child_items" }, () => {
+      void loadAll();
+    })
+    .on("postgres_changes", { event: "*", schema: "public", table: "child_item_shares" }, () => {
+      void loadAll();
+    })
+    .on("postgres_changes", { event: "*", schema: "public", table: "children" }, () => {
+      void loadAll();
+    })
+    .subscribe();
+}
+
+function unsubscribeRealtime() {
+  subscribers -= 1;
+  if (subscribers <= 0 && channel) {
+    supabase.removeChannel(channel);
+    channel = null;
+    subscribers = 0;
+  }
+}
+
+export function useChildren() {
+  const [snapshot, setSnapshot] = useState<ChildrenState>(state);
 
   useEffect(() => {
-    void load();
-  }, [load]);
+    listeners.add(setSnapshot);
+    setSnapshot(state);
+    void loadAll();
+    subscribeRealtime();
+    return () => {
+      listeners.delete(setSnapshot);
+      unsubscribeRealtime();
+    };
+  }, []);
+
+  const load = useCallback(() => loadAll(), []);
 
   const addChild = async (name: string, color: string, birthdate?: string, note?: string) => {
     const { error: err } = await supabase.from("children").insert({
@@ -127,19 +195,28 @@ export function useChildren() {
       note: note || null,
     });
     if (err) throw err;
-    await load();
+    await loadAll();
   };
 
   const updateChild = async (id: string, patch: Partial<Pick<Child, "name" | "color" | "birthdate" | "note">>) => {
+    setState((prev) => ({ children: prev.children.map((c) => (c.id === id ? { ...c, ...patch } : c)) }));
     const { error: err } = await supabase.from("children").update(patch).eq("id", id);
-    if (err) throw err;
-    await load();
+    if (err) {
+      await loadAll();
+      throw err;
+    }
   };
 
   const deleteChild = async (id: string) => {
+    setState((prev) => ({
+      children: prev.children.filter((c) => c.id !== id),
+      items: prev.items.filter((i) => i.child_id !== id),
+    }));
     const { error: err } = await supabase.from("children").delete().eq("id", id);
-    if (err) throw err;
-    await load();
+    if (err) {
+      await loadAll();
+      throw err;
+    }
   };
 
   const addItem = async (input: {
@@ -164,36 +241,55 @@ export function useChildren() {
         remind: input.remind ?? false,
         file_path: input.filePath || null,
       })
-      .select("id")
+      .select("id, child_id, owner_id, kind, title, notes, date, time, completed, remind, file_path, created_at")
       .single();
     if (err) throw err;
-    await load();
-    return data.id as string;
+    const created = { ...(data as Omit<ChildItem, "sharedWith">), sharedWith: [] as string[] };
+    setState((prev) => ({ items: [created, ...prev.items] }));
+    return created.id;
+  };
+
+  const updateItem = async (
+    id: string,
+    patch: Partial<Pick<ChildItem, "title" | "notes" | "date" | "time" | "remind" | "completed" | "kind">>,
+  ) => {
+    setState((prev) => ({ items: prev.items.map((i) => (i.id === id ? { ...i, ...patch } : i)) }));
+    const { error: err } = await supabase.from("child_items").update(patch).eq("id", id);
+    if (err) {
+      await loadAll();
+      throw err;
+    }
   };
 
   const toggleItem = async (id: string, completed: boolean) => {
-    setItems((prev) => prev.map((i) => (i.id === id ? { ...i, completed } : i)));
-    const { error: err } = await supabase.from("child_items").update({ completed }).eq("id", id);
-    if (err) throw err;
+    await updateItem(id, { completed });
   };
 
   const deleteItem = async (item: ChildItem) => {
+    setState((prev) => ({ items: prev.items.filter((i) => i.id !== item.id) }));
     if (item.file_path) {
       await supabase.storage.from("child-docs").remove([item.file_path]);
     }
     const { error: err } = await supabase.from("child_items").delete().eq("id", item.id);
-    if (err) throw err;
-    await load();
+    if (err) {
+      await loadAll();
+      throw err;
+    }
   };
 
   /** Sätter exakt vilka som ska se saken. Tom lista = åter privat. */
   const setItemShares = async (itemId: string, userIds: string[]) => {
+    setState((prev) => ({
+      items: prev.items.map((i) => (i.id === itemId ? { ...i, sharedWith: userIds } : i)),
+    }));
     const { error: err } = await supabase.rpc("share_child_item", {
       _item_id: itemId,
       _user_ids: userIds,
     });
-    if (err) throw err;
-    setItems((prev) => prev.map((i) => (i.id === itemId ? { ...i, sharedWith: userIds } : i)));
+    if (err) {
+      await loadAll();
+      throw err;
+    }
   };
 
   const uploadDoc = async (childId: string, file: File) => {
@@ -210,17 +306,18 @@ export function useChildren() {
   };
 
   return {
-    userId,
-    children,
-    items,
-    members,
-    loading,
-    error,
+    userId: snapshot.userId,
+    children: snapshot.children,
+    items: snapshot.items,
+    members: snapshot.members,
+    loading: snapshot.loading,
+    error: snapshot.error,
     reload: load,
     addChild,
     updateChild,
     deleteChild,
     addItem,
+    updateItem,
     toggleItem,
     deleteItem,
     setItemShares,
