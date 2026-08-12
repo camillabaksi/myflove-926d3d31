@@ -14,6 +14,8 @@ type Ctx = {
   openToday: number;
   doneToday: number;
   isWeekend: boolean;
+  /** ökas när användaren ber om ett annat meddelande */
+  variation?: number;
 };
 
 function pick<T>(arr: T[], seed: number): T {
@@ -23,7 +25,7 @@ function pick<T>(arr: T[], seed: number): T {
 export function getPersonalNote(ctx: Ctx): PersonalNote {
   const you = ctx.name ? ctx.name : "du";
   const You = ctx.name ? ctx.name : "Du";
-  const seed = Math.floor(Date.now() / (1000 * 60 * 60 * 3)); // ny ton var tredje timme
+  const seed = Math.floor(Date.now() / (1000 * 60 * 60 * 3)) + (ctx.variation ?? 0); // ny ton var tredje timme
 
   const notes: PersonalNote[] = [];
 

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Heart, RefreshCw } from "lucide-react";
+import { RefreshCw } from "lucide-react";
 import { useTasks } from "@/hooks/use-data";
 import { useUserProfile } from "@/hooks/use-user-profile";
 import { useVisitStreak } from "@/hooks/use-visit-streak";
@@ -27,6 +27,7 @@ export default function PersonalNote() {
       openToday: todays.filter((t) => !t.completed).length,
       doneToday: todays.filter((t) => t.completed).length,
       isWeekend: day === 0 || day === 6,
+      variation: nudge,
     });
     // nudge byter meddelande när man klickar på uppdatera
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -48,7 +49,6 @@ export default function PersonalNote() {
       >
         <RefreshCw size={15} />
       </button>
-      <Heart size={0} className="hidden" />
     </div>
   );
 }
