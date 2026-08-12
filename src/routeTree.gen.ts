@@ -33,6 +33,7 @@ import { Route as AppJobbRouteImport } from './routes/_app.jobb'
 import { Route as AppHemRouteImport } from './routes/_app.hem'
 import { Route as AppFriktionsindexRouteImport } from './routes/_app.friktionsindex'
 import { Route as AppFokusRouteImport } from './routes/_app.fokus'
+import { Route as AppFlowstudyRouteImport } from './routes/_app.flowstudy'
 import { Route as AppFlowplanRouteImport } from './routes/_app.flowplan'
 import { Route as AppFinancesRouteImport } from './routes/_app.finances'
 import { Route as AppFamiljRouteImport } from './routes/_app.familj'
@@ -172,6 +173,11 @@ const AppFokusRoute = AppFokusRouteImport.update({
   path: '/fokus',
   getParentRoute: () => AppRoute,
 } as any)
+const AppFlowstudyRoute = AppFlowstudyRouteImport.update({
+  id: '/flowstudy',
+  path: '/flowstudy',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppFlowplanRoute = AppFlowplanRouteImport.update({
   id: '/flowplan',
   path: '/flowplan',
@@ -288,6 +294,7 @@ export interface FileRoutesByFullPath {
   '/familj': typeof AppFamiljRoute
   '/finances': typeof AppFinancesRoute
   '/flowplan': typeof AppFlowplanRoute
+  '/flowstudy': typeof AppFlowstudyRoute
   '/fokus': typeof AppFokusRoute
   '/friktionsindex': typeof AppFriktionsindexRoute
   '/hem': typeof AppHemRoute
@@ -331,6 +338,7 @@ export interface FileRoutesByTo {
   '/familj': typeof AppFamiljRoute
   '/finances': typeof AppFinancesRoute
   '/flowplan': typeof AppFlowplanRoute
+  '/flowstudy': typeof AppFlowstudyRoute
   '/fokus': typeof AppFokusRoute
   '/friktionsindex': typeof AppFriktionsindexRoute
   '/hem': typeof AppHemRoute
@@ -376,6 +384,7 @@ export interface FileRoutesById {
   '/_app/familj': typeof AppFamiljRoute
   '/_app/finances': typeof AppFinancesRoute
   '/_app/flowplan': typeof AppFlowplanRoute
+  '/_app/flowstudy': typeof AppFlowstudyRoute
   '/_app/fokus': typeof AppFokusRoute
   '/_app/friktionsindex': typeof AppFriktionsindexRoute
   '/_app/hem': typeof AppHemRoute
@@ -421,6 +430,7 @@ export interface FileRouteTypes {
     | '/familj'
     | '/finances'
     | '/flowplan'
+    | '/flowstudy'
     | '/fokus'
     | '/friktionsindex'
     | '/hem'
@@ -464,6 +474,7 @@ export interface FileRouteTypes {
     | '/familj'
     | '/finances'
     | '/flowplan'
+    | '/flowstudy'
     | '/fokus'
     | '/friktionsindex'
     | '/hem'
@@ -508,6 +519,7 @@ export interface FileRouteTypes {
     | '/_app/familj'
     | '/_app/finances'
     | '/_app/flowplan'
+    | '/_app/flowstudy'
     | '/_app/fokus'
     | '/_app/friktionsindex'
     | '/_app/hem'
@@ -719,6 +731,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppFokusRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/flowstudy': {
+      id: '/_app/flowstudy'
+      path: '/flowstudy'
+      fullPath: '/flowstudy'
+      preLoaderRoute: typeof AppFlowstudyRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/flowplan': {
       id: '/_app/flowplan'
       path: '/flowplan'
@@ -860,6 +879,7 @@ interface AppRouteChildren {
   AppFamiljRoute: typeof AppFamiljRoute
   AppFinancesRoute: typeof AppFinancesRoute
   AppFlowplanRoute: typeof AppFlowplanRoute
+  AppFlowstudyRoute: typeof AppFlowstudyRoute
   AppFokusRoute: typeof AppFokusRoute
   AppFriktionsindexRoute: typeof AppFriktionsindexRoute
   AppHemRoute: typeof AppHemRoute
@@ -889,6 +909,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppFamiljRoute: AppFamiljRoute,
   AppFinancesRoute: AppFinancesRoute,
   AppFlowplanRoute: AppFlowplanRoute,
+  AppFlowstudyRoute: AppFlowstudyRoute,
   AppFokusRoute: AppFokusRoute,
   AppFriktionsindexRoute: AppFriktionsindexRoute,
   AppHemRoute: AppHemRoute,
