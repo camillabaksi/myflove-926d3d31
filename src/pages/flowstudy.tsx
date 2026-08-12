@@ -302,7 +302,44 @@ export default function FlowStudyPage() {
                   >
                     <ListChecks size={14} className="mr-2" /> Kör quiz
                   </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="rounded-xl"
+                    onClick={() => setAddingId(addingId === set.id ? null : set.id)}
+                  >
+                    <PlusCircle size={14} className="mr-2" />
+                    {addingId === set.id ? "Stäng" : "Lägg till material"}
+                  </Button>
                 </div>
+
+                {addingId === set.id && (
+                  <AddMaterialForm
+                    onCancel={() => setAddingId(null)}
+                    onSubmit={async (payload) => {
+                      const result = await run({
+                        data: {
+                          title: set.title,
+                          course: courseName(set.courseId),
+                          text: payload.text,
+                          file: payload.file,
+                          cardCount: 8,
+                          quizCount: 6,
+                        },
+                      });
+                      appendToSet(set.id, {
+                        topics: result.topics,
+                        cards: result.cards,
+                        quiz: result.quiz,
+                      });
+                      setAddingId(null);
+                      toast({
+                        title: "Materialet är påfyllt",
+                        description: `+${result.cards.length} flashcards och +${result.quiz.length} frågor.`,
+                      });
+                    }}
+                  />
+                )}
 
                 {isOpen && mode === "cards" && openSet && (
                   <FlashcardRunner
