@@ -387,6 +387,9 @@ export default function Home() {
           <EnablePushButton />
         </div>
 
+        <PersonalPushSettings />
+
+
       </div>
 
 
