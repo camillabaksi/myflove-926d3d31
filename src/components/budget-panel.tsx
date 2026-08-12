@@ -121,23 +121,30 @@ export default function BudgetPanel({
 
   const start = useMemo(() => periodStart(period).getTime(), [period]);
 
-  const spentByCategory = useMemo(() => {
+  // Räknar om automatiskt så fort en transaktion läggs till, ändras eller tas bort.
+  const { spentByCategory, income, txCount } = useMemo(() => {
     const acc: Record<string, number> = {};
+    let inc = 0;
+    let count = 0;
     for (const t of transactions) {
-      if (t.type !== "expense" || t.date < start) continue;
-      acc[t.category] = (acc[t.category] ?? 0) + t.amount;
+      if (t.date < start) continue;
+      count += 1;
+      if (t.type === "income") inc += t.amount;
+      else acc[t.category] = (acc[t.category] ?? 0) + t.amount;
     }
-    return acc;
+    return { spentByCategory: acc, income: inc, txCount: count };
   }, [transactions, start]);
 
   const spent = Object.values(spentByCategory).reduce((s, n) => s + n, 0);
+  const net = spent - income; // utgifter minus inkomster i perioden
   const total = budget.total[period];
-  const left = total ? total - spent : null;
+  const left = total ? total - net : null;
   const { total: days, elapsed } = periodProgress(period);
   const daysLeft = Math.max(1, days - elapsed + 1);
   const perDay = left !== null ? Math.round(left / daysLeft) : null;
 
   const periodLabel = period === "day" ? "idag" : period === "week" ? "denna vecka" : "denna månad";
+
 
   return (
     <section className="bg-card p-6 rounded-3xl border border-border shadow-sm space-y-5">
