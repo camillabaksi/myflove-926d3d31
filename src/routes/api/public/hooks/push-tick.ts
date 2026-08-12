@@ -173,10 +173,8 @@ export const Route = createFileRoute("/api/public/hooks/push-tick")({
           .or("personal_enabled.eq.true,personal_evening_enabled.eq.true");
 
         for (const p of personalPrefs ?? []) {
-          const morningHour = (p.personal_time ?? "08:00").split(":")[0];
-          const eveningHour = (p.personal_evening_time ?? "20:30").split(":")[0];
-          const isMorning = p.personal_enabled && morningHour === localHour;
-          const isEvening = p.personal_evening_enabled && eveningHour === localHour;
+          const isMorning = !!p.personal_enabled && isDue(p.personal_time ?? "08:00");
+          const isEvening = !!p.personal_evening_enabled && isDue(p.personal_evening_time ?? "20:30");
           if (!isMorning && !isEvening) continue;
 
           const slot = isMorning ? `${localDate}-m` : `${localDate}-e`;
