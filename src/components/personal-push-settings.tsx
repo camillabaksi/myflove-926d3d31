@@ -34,7 +34,7 @@ export function PersonalPushSettings() {
       try {
         const data = (await loadFn()) as Partial<Prefs>;
         if (!alive) return;
-        setPrefs({ ...DEFAULTS, ...data });
+        setPrefs(normalize({ ...DEFAULTS, ...data }));
       } catch {
         if (alive) setPrefs(DEFAULTS);
       }
@@ -48,12 +48,18 @@ export function PersonalPushSettings() {
   const update = async (patch: Partial<Prefs>) => {
     const next = { ...(prefs ?? DEFAULTS), ...patch };
     setPrefs(next);
+    // Spara bara när båda tiderna är kompletta (HH:MM) – annars sparar vi
+    // halvskrivna värden medan man ändrar i tidsväljaren.
+    if (!isTime(next.personal_time) || !isTime(next.personal_evening_time)) return;
     try {
-      await saveFn({ data: { ...next, ...(name ? { personal_name: name } : {}) } });
-    } catch (err) {
-      toast({ title: "Kunde inte spara", description: String((err as Error).message ?? err) });
+      await saveFn({
+        data: { ...normalize(next), ...(name ? { personal_name: name } : {}) },
+      });
+    } catch {
+      toast({ title: "Kunde inte spara tiden", description: "Försök igen om en stund." });
     }
   };
+
 
   if (!prefs) return null;
 
