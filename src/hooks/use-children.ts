@@ -87,21 +87,26 @@ export function useChildren() {
         })),
       );
 
-      // Familjemedlemmar att dela med (om användaren är med i en familj)
+      // Familjemedlemmar att dela med – användaren kan vara med i flera familjer,
+      // så vi samlar medlemmar från alla och tar bort dubbletter.
       const { data: mine } = await supabase
         .from("household_members")
         .select("household_id")
-        .eq("user_id", uid)
-        .limit(1);
-      const hid = mine?.[0]?.household_id;
-      if (hid) {
+        .eq("user_id", uid);
+      const hids = (mine ?? []).map((m) => m.household_id);
+      if (hids.length > 0) {
         const { data: mem } = await supabase
           .from("household_members")
           .select("user_id, display_name, color")
-          .eq("household_id", hid);
-        setMembers((mem ?? []).filter((m) => m.user_id !== uid) as FamilyMember[]);
+          .in("household_id", hids);
+        const seen = new Map<string, FamilyMember>();
+        for (const m of (mem ?? []) as FamilyMember[]) {
+          if (m.user_id !== uid && !seen.has(m.user_id)) seen.set(m.user_id, m);
+        }
+        setMembers(Array.from(seen.values()));
       } else {
         setMembers([]);
+
       }
     } catch (e) {
       setError(e instanceof Error ? e.message : "Kunde inte hämta barn-informationen.");
