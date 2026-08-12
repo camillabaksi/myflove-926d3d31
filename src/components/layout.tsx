@@ -144,8 +144,12 @@ export default function Layout({ children }: LayoutProps) {
     { href: "/assistant", label: "Hjälp", icon: Sparkles },
     { href: "/friktionsindex", label: "Feedback", icon: Flame },
     ...(enabledAreas.includes("studier")
-      ? [{ href: "/studier", label: "Studier", icon: GraduationCap }]
+      ? [
+          { href: "/studier", label: "Studier", icon: GraduationCap },
+          { href: "/flowstudy", label: "FlowStudy", icon: Brain },
+        ]
       : []),
+
     ...(enabledAreas.includes("jobb")
       ? [{ href: "/jobb", label: "Jobb", icon: Briefcase }]
       : []),
