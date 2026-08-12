@@ -28,6 +28,7 @@ export interface ChildItem {
   remind: boolean;
   file_path: string | null;
   created_at: string;
+  updated_at: string;
   /** Vilka användare denna sak är delad med (bara ägaren ser hela listan) */
   sharedWith: string[];
 }
@@ -45,6 +46,22 @@ export const CHILD_COLORS = ["#c17a56", "#8a9a5b", "#e8c547", "#6b8e9e", "#a06cd
 /* data, så en ändring syns direkt överallt utan omladdning.             */
 /* ------------------------------------------------------------------ */
 
+/** Konflikt: någon annan hann ändra samma aktivitet först. */
+export interface ChildItemConflict {
+  /** Så som saken ser ut hos oss, med mina ändringar. */
+  mine: ChildItem;
+  /** Så som den ser ut i molnet just nu (den andres version). */
+  theirs: ChildItem;
+  /** Ändringen jag försökte spara. */
+  patch: ChildItemPatch;
+  /** Om min ändring var en radering. */
+  intent: "update" | "delete";
+}
+
+export type ChildItemPatch = Partial<
+  Pick<ChildItem, "title" | "notes" | "date" | "time" | "remind" | "completed" | "kind">
+>;
+
 interface ChildrenState {
   userId: string | null;
   children: Child[];
@@ -52,6 +69,7 @@ interface ChildrenState {
   members: FamilyMember[];
   loading: boolean;
   error: string | null;
+  conflict: ChildItemConflict | null;
 }
 
 let state: ChildrenState = {
@@ -61,7 +79,9 @@ let state: ChildrenState = {
   members: [],
   loading: true,
   error: null,
+  conflict: null,
 };
+
 
 const listeners = new Set<(s: ChildrenState) => void>();
 
@@ -90,7 +110,7 @@ async function loadAll(): Promise<void> {
           supabase.from("children").select("id, owner_id, name, birthdate, color, note").order("created_at"),
           supabase
             .from("child_items")
-            .select("id, child_id, owner_id, kind, title, notes, date, time, completed, remind, file_path, created_at")
+            .select("id, child_id, owner_id, kind, title, notes, date, time, completed, remind, file_path, created_at, updated_at")
             .order("created_at", { ascending: false }),
           supabase.from("child_item_shares").select("item_id, user_id"),
         ]);
@@ -171,7 +191,22 @@ function unsubscribeRealtime() {
   }
 }
 
+/** Hämtar den senaste versionen av en aktivitet från molnet. */
+async function fetchServerItem(id: string): Promise<ChildItem | null> {
+  const { data } = await supabase
+    .from("child_items")
+    .select(
+      "id, child_id, owner_id, kind, title, notes, date, time, completed, remind, file_path, created_at, updated_at",
+    )
+    .eq("id", id)
+    .maybeSingle();
+  if (!data) return null;
+  const { data: shares } = await supabase.from("child_item_shares").select("user_id").eq("item_id", id);
+  return { ...(data as Omit<ChildItem, "sharedWith">), sharedWith: (shares ?? []).map((s) => s.user_id) };
+}
+
 export function useChildren() {
+
   const [snapshot, setSnapshot] = useState<ChildrenState>(state);
 
   useEffect(() => {
@@ -241,7 +276,7 @@ export function useChildren() {
         remind: input.remind ?? false,
         file_path: input.filePath || null,
       })
-      .select("id, child_id, owner_id, kind, title, notes, date, time, completed, remind, file_path, created_at")
+      .select("id, child_id, owner_id, kind, title, notes, date, time, completed, remind, file_path, created_at, updated_at")
       .single();
     if (err) throw err;
     const created = { ...(data as Omit<ChildItem, "sharedWith">), sharedWith: [] as string[] };
@@ -249,33 +284,78 @@ export function useChildren() {
     return created.id;
   };
 
-  const updateItem = async (
-    id: string,
-    patch: Partial<Pick<ChildItem, "title" | "notes" | "date" | "time" | "remind" | "completed" | "kind">>,
-  ) => {
+  const updateItem = async (id: string, patch: ChildItemPatch, opts?: { force?: boolean }) => {
+    const current = state.items.find((i) => i.id === id);
+    if (!current) return;
     setState((prev) => ({ items: prev.items.map((i) => (i.id === id ? { ...i, ...patch } : i)) }));
-    const { error: err } = await supabase.from("child_items").update(patch).eq("id", id);
+
+    let q = supabase.from("child_items").update(patch).eq("id", id);
+    if (!opts?.force) q = q.eq("updated_at", current.updated_at);
+    const { data, error: err } = await q.select("id");
+
     if (err) {
       await loadAll();
       throw err;
     }
+    if (!data || data.length === 0) {
+      // Ingen rad matchade vår version → någon annan hann före.
+      const theirs = await fetchServerItem(id);
+      if (!theirs) {
+        // Saken är borttagen av någon annan.
+        setState((prev) => ({ items: prev.items.filter((i) => i.id !== id) }));
+        throw new Error("Aktiviteten har tagits bort av någon annan.");
+      }
+      setState({ conflict: { mine: { ...current, ...patch }, theirs, patch, intent: "update" } });
+      return;
+    }
+    await loadAll();
   };
 
   const toggleItem = async (id: string, completed: boolean) => {
     await updateItem(id, { completed });
   };
 
-  const deleteItem = async (item: ChildItem) => {
+  const deleteItem = async (item: ChildItem, opts?: { force?: boolean }) => {
     setState((prev) => ({ items: prev.items.filter((i) => i.id !== item.id) }));
-    if (item.file_path) {
-      await supabase.storage.from("child-docs").remove([item.file_path]);
-    }
-    const { error: err } = await supabase.from("child_items").delete().eq("id", item.id);
+
+    let q = supabase.from("child_items").delete().eq("id", item.id);
+    if (!opts?.force) q = q.eq("updated_at", item.updated_at);
+    const { data, error: err } = await q.select("id");
+
     if (err) {
       await loadAll();
       throw err;
     }
+    if (!data || data.length === 0) {
+      const theirs = await fetchServerItem(item.id);
+      if (!theirs) return; // redan borta – inget att lösa
+      setState((prev) => ({ items: [theirs, ...prev.items.filter((i) => i.id !== item.id)] }));
+      setState({ conflict: { mine: item, theirs, patch: {}, intent: "delete" } });
+      return;
+    }
+    if (item.file_path) {
+      await supabase.storage.from("child-docs").remove([item.file_path]);
+    }
   };
+
+  /** Löser en konflikt: behåll mina ändringar eller ta den andras version. */
+  const resolveConflict = async (choice: "mine" | "theirs") => {
+    const c = state.conflict;
+    setState({ conflict: null });
+    if (!c) return;
+    if (choice === "theirs") {
+      await loadAll();
+      return;
+    }
+    if (c.intent === "delete") {
+      await deleteItem(c.theirs, { force: true });
+    } else {
+      await updateItem(c.theirs.id, c.patch, { force: true });
+    }
+  };
+
+  const dismissConflict = () => setState({ conflict: null });
+
 
   /** Sätter exakt vilka som ska se saken. Tom lista = åter privat. */
   const setItemShares = async (itemId: string, userIds: string[]) => {
@@ -312,6 +392,9 @@ export function useChildren() {
     members: snapshot.members,
     loading: snapshot.loading,
     error: snapshot.error,
+    conflict: snapshot.conflict,
+    resolveConflict,
+    dismissConflict,
     reload: load,
     addChild,
     updateChild,
