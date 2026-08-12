@@ -176,6 +176,11 @@ export const getPushPreferences = createServerFn({ method: "GET" })
         weather_time: "07:00",
         last_lat: null,
         last_lon: null,
+        personal_enabled: true,
+        personal_time: "08:00",
+        personal_evening_enabled: false,
+        personal_evening_time: "20:30",
+        personal_name: null,
       }
     );
   });
