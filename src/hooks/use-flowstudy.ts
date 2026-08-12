@@ -261,7 +261,7 @@ export function useFlowStudy() {
     return { dueCards, dueQuestions };
   }, [sets]);
 
-  return { sets, addSet, deleteSet, setExamDate, gradeCard, gradeQuestion, recordAttempt, stats };
+  return { sets, addSet, appendToSet, deleteSet, setExamDate, gradeCard, gradeQuestion, recordAttempt, stats };
 }
 
 /** Sorterar så att svaga och förfallna kort kommer först – enkelt adaptivt urval. */
