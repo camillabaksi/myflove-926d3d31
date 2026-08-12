@@ -269,33 +269,78 @@ export function useChildren() {
     return created.id;
   };
 
-  const updateItem = async (
-    id: string,
-    patch: Partial<Pick<ChildItem, "title" | "notes" | "date" | "time" | "remind" | "completed" | "kind">>,
-  ) => {
+  const updateItem = async (id: string, patch: ChildItemPatch, opts?: { force?: boolean }) => {
+    const current = state.items.find((i) => i.id === id);
+    if (!current) return;
     setState((prev) => ({ items: prev.items.map((i) => (i.id === id ? { ...i, ...patch } : i)) }));
-    const { error: err } = await supabase.from("child_items").update(patch).eq("id", id);
+
+    let q = supabase.from("child_items").update(patch).eq("id", id);
+    if (!opts?.force) q = q.eq("updated_at", current.updated_at);
+    const { data, error: err } = await q.select("id");
+
     if (err) {
       await loadAll();
       throw err;
     }
+    if (!data || data.length === 0) {
+      // Ingen rad matchade vår version → någon annan hann före.
+      const theirs = await fetchServerItem(id);
+      if (!theirs) {
+        // Saken är borttagen av någon annan.
+        setState((prev) => ({ items: prev.items.filter((i) => i.id !== id) }));
+        throw new Error("Aktiviteten har tagits bort av någon annan.");
+      }
+      setState({ conflict: { mine: { ...current, ...patch }, theirs, patch, intent: "update" } });
+      return;
+    }
+    await loadAll();
   };
 
   const toggleItem = async (id: string, completed: boolean) => {
     await updateItem(id, { completed });
   };
 
-  const deleteItem = async (item: ChildItem) => {
+  const deleteItem = async (item: ChildItem, opts?: { force?: boolean }) => {
     setState((prev) => ({ items: prev.items.filter((i) => i.id !== item.id) }));
-    if (item.file_path) {
-      await supabase.storage.from("child-docs").remove([item.file_path]);
-    }
-    const { error: err } = await supabase.from("child_items").delete().eq("id", item.id);
+
+    let q = supabase.from("child_items").delete().eq("id", item.id);
+    if (!opts?.force) q = q.eq("updated_at", item.updated_at);
+    const { data, error: err } = await q.select("id");
+
     if (err) {
       await loadAll();
       throw err;
     }
+    if (!data || data.length === 0) {
+      const theirs = await fetchServerItem(item.id);
+      if (!theirs) return; // redan borta – inget att lösa
+      setState((prev) => ({ items: [theirs, ...prev.items.filter((i) => i.id !== item.id)] }));
+      setState({ conflict: { mine: item, theirs, patch: {}, intent: "delete" } });
+      return;
+    }
+    if (item.file_path) {
+      await supabase.storage.from("child-docs").remove([item.file_path]);
+    }
   };
+
+  /** Löser en konflikt: behåll mina ändringar eller ta den andras version. */
+  const resolveConflict = async (choice: "mine" | "theirs") => {
+    const c = state.conflict;
+    setState({ conflict: null });
+    if (!c) return;
+    if (choice === "theirs") {
+      await loadAll();
+      return;
+    }
+    if (c.intent === "delete") {
+      await deleteItem(c.theirs, { force: true });
+    } else {
+      await updateItem(c.theirs.id, c.patch, { force: true });
+    }
+  };
+
+  const dismissConflict = () => setState({ conflict: null });
+
 
   /** Sätter exakt vilka som ska se saken. Tom lista = åter privat. */
   const setItemShares = async (itemId: string, userIds: string[]) => {
