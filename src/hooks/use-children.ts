@@ -28,6 +28,7 @@ export interface ChildItem {
   remind: boolean;
   file_path: string | null;
   created_at: string;
+  updated_at: string;
   /** Vilka användare denna sak är delad med (bara ägaren ser hela listan) */
   sharedWith: string[];
 }
@@ -90,7 +91,7 @@ async function loadAll(): Promise<void> {
           supabase.from("children").select("id, owner_id, name, birthdate, color, note").order("created_at"),
           supabase
             .from("child_items")
-            .select("id, child_id, owner_id, kind, title, notes, date, time, completed, remind, file_path, created_at")
+            .select("id, child_id, owner_id, kind, title, notes, date, time, completed, remind, file_path, created_at, updated_at")
             .order("created_at", { ascending: false }),
           supabase.from("child_item_shares").select("item_id, user_id"),
         ]);
@@ -241,7 +242,7 @@ export function useChildren() {
         remind: input.remind ?? false,
         file_path: input.filePath || null,
       })
-      .select("id, child_id, owner_id, kind, title, notes, date, time, completed, remind, file_path, created_at")
+      .select("id, child_id, owner_id, kind, title, notes, date, time, completed, remind, file_path, created_at, updated_at")
       .single();
     if (err) throw err;
     const created = { ...(data as Omit<ChildItem, "sharedWith">), sharedWith: [] as string[] };
