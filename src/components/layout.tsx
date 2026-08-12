@@ -144,8 +144,12 @@ export default function Layout({ children }: LayoutProps) {
     { href: "/assistant", label: "Hjälp", icon: Sparkles },
     { href: "/friktionsindex", label: "Feedback", icon: Flame },
     ...(enabledAreas.includes("studier")
-      ? [{ href: "/studier", label: "Studier", icon: GraduationCap }]
+      ? [
+          { href: "/studier", label: "Studier", icon: GraduationCap },
+          { href: "/flowstudy", label: "FlowStudy", icon: Brain },
+        ]
       : []),
+
     ...(enabledAreas.includes("jobb")
       ? [{ href: "/jobb", label: "Jobb", icon: Briefcase }]
       : []),
@@ -165,7 +169,7 @@ export default function Layout({ children }: LayoutProps) {
       { id: "fokus", label: "Fokus & lugn", icon: Brain, hrefs: ["/pomodoro", "/dump", "/assistant"] },
       { id: "mabra", label: "Må bra", icon: HeartPulse, hrefs: ["/ma-bra", "/traning", "/beloningar", "/statistik"] },
       { id: "hem", label: "Hem & familj", icon: House, hrefs: ["/familj", "/barn", "/shopping", "/matlista", "/finances", "/travel"] },
-      { id: "studier", label: "Studier", icon: BookOpen, hrefs: ["/studier"] },
+      { id: "studier", label: "Studier", icon: BookOpen, hrefs: ["/studier", "/flowstudy"] },
       { id: "jobb", label: "Jobb", icon: Building2, hrefs: ["/jobb"] },
       { id: "ovrigt", label: "Övrigt", icon: LayoutGrid, hrefs: ["/friktionsindex", "/admin", "/admin-statistik"] },
     ];
