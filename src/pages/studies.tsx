@@ -16,6 +16,7 @@ import {
   FileText,
   AlertCircle,
   BellRing,
+  FolderOpen,
 } from "lucide-react";
 import { useTasks, type Task } from "@/hooks/use-data";
 import { useCourses } from "@/hooks/use-courses";
@@ -60,6 +61,7 @@ export default function StudiesPage() {
     addTaskAttachment,
     removeTaskAttachment,
     setTaskDeadlineReminders,
+    setTaskCourse,
   } = useTasks();
   const { activeCourses, addCourse, deleteCourse } = useCourses();
   const { toast } = useToast();
@@ -71,10 +73,12 @@ export default function StudiesPage() {
   const [courseId, setCourseId] = useState<string>("");
   const [details, setDetails] = useState("");
   const [reminderTime, setReminderTime] = useState("09:00");
+  const [folder, setFolder] = useState<string>("all");
   const [busyId, setBusyId] = useState<string | null>(null);
   const [uploadingId, setUploadingId] = useState<string | null>(null);
   const [intros, setIntros] = useState<Record<string, string>>({});
   const fileInputs = useRef<Record<string, HTMLInputElement | null>>({});
+
 
   const assignments = useMemo(
     () =>
@@ -87,7 +91,21 @@ export default function StudiesPage() {
     [tasks],
   );
 
+  const countFor = (id: string) =>
+    id === "all"
+      ? assignments.length
+      : id === "none"
+        ? assignments.filter((t) => !t.courseId).length
+        : assignments.filter((t) => t.courseId === id).length;
+
+  const visible = useMemo(() => {
+    if (folder === "all") return assignments;
+    if (folder === "none") return assignments.filter((t) => !t.courseId);
+    return assignments.filter((t) => t.courseId === folder);
+  }, [assignments, folder]);
+
   const courseName = (id?: string) => activeCourses.find((c) => c.id === id)?.title;
+
 
   const handleAddCourse = (e: React.FormEvent) => {
     e.preventDefault();
@@ -326,13 +344,44 @@ export default function StudiesPage() {
         {/* Inlämningar */}
         <section className="space-y-4">
           <h2 className="text-lg font-semibold">Inlämningar och deadlines</h2>
-          {assignments.length === 0 && (
+
+          {/* Mappar */}
+          <div className="flex flex-wrap gap-2">
+            {[
+              { id: "all", label: "Alla", color: null as string | null },
+              ...activeCourses.map((c) => ({ id: c.id, label: c.title, color: c.color })),
+              { id: "none", label: "Utan mapp", color: null as string | null },
+            ].map((f) => {
+              const on = folder === f.id;
+              return (
+                <button
+                  key={f.id}
+                  type="button"
+                  onClick={() => setFolder(f.id)}
+                  aria-pressed={on}
+                  className={`inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full border transition-colors ${
+                    on ? "border-primary/40 bg-primary/10 text-primary" : "border-border bg-background text-muted-foreground hover:bg-secondary"
+                  }`}
+                  style={!on && f.color ? { borderColor: `hsl(${f.color} / 0.35)`, color: `hsl(${f.color})` } : undefined}
+                >
+                  <FolderOpen size={12} />
+                  {f.label}
+                  <span className="opacity-60">{countFor(f.id)}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {visible.length === 0 && (
             <p className="text-sm text-muted-foreground">
-              Inget inlagt än. När du lägger till en uppgift hamnar den här – och i din kalender.
+              {assignments.length === 0
+                ? "Inget inlagt än. När du lägger till en uppgift hamnar den här – och i din kalender."
+                : "Inget i den här mappen än."}
             </p>
           )}
 
-          {assignments.map((task) => {
+          {visible.map((task) => {
+
             const dl = deadlineLabel(task.dueDate);
             const steps = task.steps ?? [];
             const done = steps.filter((s) => s.done).length;
@@ -486,7 +535,21 @@ export default function StudiesPage() {
                   </div>
                 )}
 
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  <select
+                    value={task.courseId ?? ""}
+                    onChange={(e) => setTaskCourse(task.id, e.target.value || undefined)}
+                    aria-label={`Flytta ${task.title} till mapp`}
+                    className="h-9 rounded-xl border border-border bg-background px-2 text-xs"
+                  >
+                    <option value="">Utan mapp</option>
+                    {activeCourses.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.title}
+                      </option>
+                    ))}
+                  </select>
+
                   <Button
                     variant="secondary"
                     size="sm"
