@@ -21,6 +21,14 @@ const DEFAULTS: Prefs = {
   personal_evening_time: "20:30",
 };
 
+const isTime = (v: string) => /^\d{2}:\d{2}(:\d{2})?$/.test(v);
+const hhmm = (v: string) => (isTime(v) ? v.slice(0, 5) : v);
+const normalize = (p: Prefs): Prefs => ({
+  ...p,
+  personal_time: hhmm(p.personal_time ?? DEFAULTS.personal_time),
+  personal_evening_time: hhmm(p.personal_evening_time ?? DEFAULTS.personal_evening_time),
+});
+
 /** Inställningar för Flows personliga puffar som skickas som push. */
 export function PersonalPushSettings() {
   const loadFn = useServerFn(getPushPreferences);
@@ -34,7 +42,7 @@ export function PersonalPushSettings() {
       try {
         const data = (await loadFn()) as Partial<Prefs>;
         if (!alive) return;
-        setPrefs({ ...DEFAULTS, ...data });
+        setPrefs(normalize({ ...DEFAULTS, ...data }));
       } catch {
         if (alive) setPrefs(DEFAULTS);
       }
@@ -48,12 +56,18 @@ export function PersonalPushSettings() {
   const update = async (patch: Partial<Prefs>) => {
     const next = { ...(prefs ?? DEFAULTS), ...patch };
     setPrefs(next);
+    // Spara bara när båda tiderna är kompletta (HH:MM) – annars sparar vi
+    // halvskrivna värden medan man ändrar i tidsväljaren.
+    if (!isTime(next.personal_time) || !isTime(next.personal_evening_time)) return;
     try {
-      await saveFn({ data: { ...next, ...(name ? { personal_name: name } : {}) } });
-    } catch (err) {
-      toast({ title: "Kunde inte spara", description: String((err as Error).message ?? err) });
+      await saveFn({
+        data: { ...normalize(next), ...(name ? { personal_name: name } : {}) },
+      });
+    } catch {
+      toast({ title: "Kunde inte spara tiden", description: "Försök igen om en stund." });
     }
   };
+
 
   if (!prefs) return null;
 
