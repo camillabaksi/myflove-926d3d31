@@ -191,7 +191,22 @@ function unsubscribeRealtime() {
   }
 }
 
+/** Hämtar den senaste versionen av en aktivitet från molnet. */
+async function fetchServerItem(id: string): Promise<ChildItem | null> {
+  const { data } = await supabase
+    .from("child_items")
+    .select(
+      "id, child_id, owner_id, kind, title, notes, date, time, completed, remind, file_path, created_at, updated_at",
+    )
+    .eq("id", id)
+    .maybeSingle();
+  if (!data) return null;
+  const { data: shares } = await supabase.from("child_item_shares").select("user_id").eq("item_id", id);
+  return { ...(data as Omit<ChildItem, "sharedWith">), sharedWith: (shares ?? []).map((s) => s.user_id) };
+}
+
 export function useChildren() {
+
   const [snapshot, setSnapshot] = useState<ChildrenState>(state);
 
   useEffect(() => {
