@@ -90,7 +90,21 @@ export default function StudiesPage() {
     [tasks],
   );
 
+  const countFor = (id: string) =>
+    id === "all"
+      ? assignments.length
+      : id === "none"
+        ? assignments.filter((t) => !t.courseId).length
+        : assignments.filter((t) => t.courseId === id).length;
+
+  const visible = useMemo(() => {
+    if (folder === "all") return assignments;
+    if (folder === "none") return assignments.filter((t) => !t.courseId);
+    return assignments.filter((t) => t.courseId === folder);
+  }, [assignments, folder]);
+
   const courseName = (id?: string) => activeCourses.find((c) => c.id === id)?.title;
+
 
   const handleAddCourse = (e: React.FormEvent) => {
     e.preventDefault();
