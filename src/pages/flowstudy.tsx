@@ -43,7 +43,7 @@ export default function FlowStudyPage() {
   const { activeCourses } = useCourses();
   const { toast } = useToast();
   const run = useServerFn(generateStudySet);
-  const { sets, addSet, deleteSet, setExamDate, gradeCard, gradeQuestion, recordAttempt, stats } =
+  const { sets, addSet, appendToSet, deleteSet, setExamDate, gradeCard, gradeQuestion, recordAttempt, stats } =
     useFlowStudy();
 
   const [title, setTitle] = useState("");
