@@ -533,7 +533,21 @@ export default function WorkPage() {
                   </div>
                 )}
 
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  <select
+                    value={task.courseId ?? ""}
+                    onChange={(e) => setTaskCourse(task.id, e.target.value || undefined)}
+                    aria-label={`Flytta ${task.title} till mapp`}
+                    className="h-9 rounded-xl border border-border bg-background px-2 text-xs"
+                  >
+                    <option value="">Utan mapp</option>
+                    {activeProjects.map((p) => (
+                      <option key={p.id} value={p.id}>
+                        {p.title}
+                      </option>
+                    ))}
+                  </select>
+
                   <Button
                     variant="secondary"
                     size="sm"
