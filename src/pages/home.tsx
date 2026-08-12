@@ -6,6 +6,7 @@ import OverwhelmedModal from "@/components/overwhelmed-modal";
 import HelpMeModal from "@/components/help-me-modal";
 import WeatherCard from "@/components/weather-card";
 import ProactiveSuggestions from "@/components/proactive-suggestions";
+import PersonalNote from "@/components/personal-note";
 import StreakCard from "@/components/streak-card";
 import WeekInFlow from "@/components/week-in-flow";
 import { celebrateFromEvent } from "@/lib/celebrate";
@@ -174,6 +175,8 @@ export default function Home() {
             )}
           </div>
         </div>
+
+        <PersonalNote />
 
         <AreaOnboarding />
 
