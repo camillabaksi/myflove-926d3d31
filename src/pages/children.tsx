@@ -19,6 +19,7 @@ import {
   BellRing,
   Loader2,
 } from "lucide-react";
+import { ChildConflictDialog } from "@/components/child-conflict-dialog";
 import { useChildren, CHILD_COLORS, type ChildItem, type ChildItemKind } from "@/hooks/use-children";
 import { useToast } from "@/hooks/use-toast";
 import { syncReminder, cancelReminder } from "@/lib/push.functions";
@@ -55,6 +56,8 @@ function ChildrenContent() {
     setItemShares,
     uploadDoc,
     openDoc,
+    conflict,
+    resolveConflict,
   } = useChildren();
   const { toast } = useToast();
   const sync = useServerFn(syncReminder);
@@ -208,6 +211,7 @@ function ChildrenContent() {
 
   return (
     <div className="space-y-8">
+      <ChildConflictDialog conflict={conflict} onResolve={(c) => void resolveConflict(c)} />
       {/* Barnprofiler */}
       <section className="space-y-3">
         <h2 className="text-lg font-semibold">Barn</h2>
