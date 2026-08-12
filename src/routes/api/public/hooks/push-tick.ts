@@ -155,7 +155,15 @@ export const Route = createFileRoute("/api/public/hooks/push-tick")({
         });
         const parts = Object.fromEntries(fmt.formatToParts(now).map((p) => [p.type, p.value]));
         const localHour = parts.hour ?? "00";
+        const localMinutes = Number(localHour) * 60 + Number(parts.minute ?? "0");
         const localDate = `${parts.year}-${parts.month}-${parts.day}`;
+        // Fönster: skicka om vi är på eller strax efter vald tid (0–9 min).
+        const isDue = (hhmm: string) => {
+          const [h, m] = hhmm.split(":").map(Number);
+          const target = (h || 0) * 60 + (m || 0);
+          const diff = localMinutes - target;
+          return diff >= 0 && diff < 10;
+        };
 
         const { data: personalPrefs } = await supabaseAdmin
           .from("push_preferences")
@@ -165,10 +173,8 @@ export const Route = createFileRoute("/api/public/hooks/push-tick")({
           .or("personal_enabled.eq.true,personal_evening_enabled.eq.true");
 
         for (const p of personalPrefs ?? []) {
-          const morningHour = (p.personal_time ?? "08:00").split(":")[0];
-          const eveningHour = (p.personal_evening_time ?? "20:30").split(":")[0];
-          const isMorning = p.personal_enabled && morningHour === localHour;
-          const isEvening = p.personal_evening_enabled && eveningHour === localHour;
+          const isMorning = !!p.personal_enabled && isDue(p.personal_time ?? "08:00");
+          const isEvening = !!p.personal_evening_enabled && isDue(p.personal_evening_time ?? "20:30");
           if (!isMorning && !isEvening) continue;
 
           const slot = isMorning ? `${localDate}-m` : `${localDate}-e`;
