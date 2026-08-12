@@ -178,8 +178,8 @@ export default function BudgetPanel({
       <div className="space-y-3">
         <div className="flex items-end justify-between gap-4">
           <div>
-            <p className="text-sm text-muted-foreground">Spenderat {periodLabel}</p>
-            <p className="text-2xl font-semibold">{spent} kr</p>
+            <p className="text-sm text-muted-foreground">Förbrukat {periodLabel}</p>
+            <p className="text-2xl font-semibold">{Math.max(0, net)} kr</p>
           </div>
           <div className="text-right">
             <p className="text-sm text-muted-foreground">Budget</p>
@@ -187,7 +187,22 @@ export default function BudgetPanel({
           </div>
         </div>
 
-        <Bar spent={spent} budget={total ?? 0} />
+        <Bar spent={Math.max(0, net)} budget={total ?? 0} />
+
+        <div className="grid grid-cols-3 gap-2 text-center">
+          <div className="rounded-xl bg-secondary/50 py-2">
+            <p className="text-xs text-muted-foreground">Utgifter</p>
+            <p className="text-sm font-semibold">-{spent} kr</p>
+          </div>
+          <div className="rounded-xl bg-secondary/50 py-2">
+            <p className="text-xs text-muted-foreground">Inkomster</p>
+            <p className="text-sm font-semibold text-primary">+{income} kr</p>
+          </div>
+          <div className="rounded-xl bg-secondary/50 py-2">
+            <p className="text-xs text-muted-foreground">Netto</p>
+            <p className="text-sm font-semibold">{net > 0 ? `-${net}` : `+${Math.abs(net)}`} kr</p>
+          </div>
+        </div>
 
         {total ? (
           <p className={`text-sm ${left! < 0 ? "text-destructive font-medium" : "text-muted-foreground"}`}>
@@ -198,7 +213,11 @@ export default function BudgetPanel({
         ) : (
           <p className="text-sm text-muted-foreground">Tryck på ”Ingen budget” för att sätta en ram.</p>
         )}
+        <p className="text-xs text-muted-foreground">
+          Uppdateras automatiskt från dina transaktioner ({txCount} {periodLabel}). Inkomster i perioden räknas av mot förbrukningen.
+        </p>
       </div>
+
 
       <div className="space-y-4 pt-2">
         <h3 className="text-sm font-medium text-muted-foreground">Per kategori</h3>
