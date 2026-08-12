@@ -1,6 +1,6 @@
 import { ReactNode, useState, useEffect, useMemo } from "react";
 import { Link, useLocation } from "wouter";
-import { Home, Target, CheckSquare, ShoppingBag, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Settings2, Check, RotateCcw, ArrowUp, ArrowDown, LogOut, Volume2, VolumeX, Shield, Heart, Sun, Search, GraduationCap, Briefcase, Baby, CalendarDays, Brain, HeartPulse, House, BookOpen, Building2, LayoutGrid, Dumbbell } from "lucide-react";
+import { Home, Target, CheckSquare, ShoppingBag, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Settings2, Check, RotateCcw, ArrowUp, ArrowDown, LogOut, Volume2, VolumeX, Shield, Heart, Sun, Search, GraduationCap, Briefcase, Baby, CalendarDays, Brain, HeartPulse, House, BookOpen, Building2, LayoutGrid, Dumbbell, SprayCan } from "lucide-react";
 import { isAlarmSoundEnabled, setAlarmSoundEnabled, subscribeAlarmPref, playAlarmPreview, initAlarmAudioUnlock } from "@/lib/push-notifications";
 import { useCommuteAlerts } from "@/hooks/use-commute-alerts";
 import { useMedicationAlerts } from "@/hooks/use-medication-alerts";
@@ -57,6 +57,7 @@ const SECTION_BY_PATH: Record<string, string> = {
   "/friktionsindex": "friktionsindex",
   "/familj": "familj",
   "/matlista": "matlista",
+  "/stadning": "stadning",
 };
 
 
@@ -82,6 +83,7 @@ const CATEGORY_THEMES: Record<string, Record<string, string>> = {
   "/flowplan":       T.ink,
   "/shopping":       T.sage,
   "/matlista":       T.sage,
+  "/stadning":       T.sage,
   "/travel":         T.ink,
   "/familj":         T.gold,
   "/beloningar":     T.gold,
@@ -135,6 +137,7 @@ export default function Layout({ children }: LayoutProps) {
     { href: "/pomodoro", label: "Timer", icon: Timer },
     { href: "/shopping", label: "Inköp", icon: ShoppingBag },
     { href: "/matlista", label: "Matlista", icon: UtensilsCrossed },
+    { href: "/stadning", label: "Städning", icon: SprayCan },
     { href: "/finances", label: "Ekonomi", icon: Wallet },
     { href: "/travel", label: "Resor", icon: Navigation },
     { href: "/familj", label: "Familj", icon: Users },
@@ -168,7 +171,7 @@ export default function Layout({ children }: LayoutProps) {
       { id: "dagen", label: "Min dag", icon: CalendarDays, hrefs: ["/hem", "/daglig-rutin", "/kalender", "/tasks", "/flowplan"] },
       { id: "fokus", label: "Fokus & lugn", icon: Brain, hrefs: ["/pomodoro", "/dump", "/assistant"] },
       { id: "mabra", label: "Må bra", icon: HeartPulse, hrefs: ["/ma-bra", "/traning", "/beloningar", "/statistik"] },
-      { id: "hem", label: "Hem & familj", icon: House, hrefs: ["/familj", "/barn", "/shopping", "/matlista", "/finances", "/travel"] },
+      { id: "hem", label: "Hem & familj", icon: House, hrefs: ["/familj", "/barn", "/shopping", "/matlista", "/stadning", "/finances", "/travel"] },
       { id: "studier", label: "Studier", icon: BookOpen, hrefs: ["/studier", "/flowstudy"] },
       { id: "jobb", label: "Jobb", icon: Building2, hrefs: ["/jobb"] },
       { id: "ovrigt", label: "Övrigt", icon: LayoutGrid, hrefs: ["/friktionsindex", "/admin", "/admin-statistik"] },
