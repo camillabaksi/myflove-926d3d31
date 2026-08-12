@@ -1,0 +1,1 @@
+ALTER TABLE public.push_preferences ADD COLUMN IF NOT EXISTS personal_name text;
