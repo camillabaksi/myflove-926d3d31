@@ -143,6 +143,65 @@ export const Route = createFileRoute("/api/public/hooks/push-tick")({
           }
         }
 
+        // 3) Personliga puffar (morgon + valfri kväll), i svensk lokaltid
+        const { getMorningPush, getEveningPush } = await import("@/lib/personal-push-messages");
+        const fmt = new Intl.DateTimeFormat("sv-SE", {
+          timeZone: "Europe/Stockholm",
+          hour: "2-digit",
+          minute: "2-digit",
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        });
+        const parts = Object.fromEntries(fmt.formatToParts(now).map((p) => [p.type, p.value]));
+        const localHour = parts.hour ?? "00";
+        const localDate = `${parts.year}-${parts.month}-${parts.day}`;
+
+        const { data: personalPrefs } = await supabaseAdmin
+          .from("push_preferences")
+          .select(
+            "user_id, personal_enabled, personal_time, personal_evening_enabled, personal_evening_time, personal_name, last_personal_sent_on",
+          )
+          .or("personal_enabled.eq.true,personal_evening_enabled.eq.true");
+
+        for (const p of personalPrefs ?? []) {
+          const morningHour = (p.personal_time ?? "08:00").split(":")[0];
+          const eveningHour = (p.personal_evening_time ?? "20:30").split(":")[0];
+          const isMorning = p.personal_enabled && morningHour === localHour;
+          const isEvening = p.personal_evening_enabled && eveningHour === localHour;
+          if (!isMorning && !isEvening) continue;
+
+          const slot = isMorning ? `${localDate}-m` : `${localDate}-e`;
+          if (p.last_personal_sent_on === slot) continue;
+
+          const seed = Math.floor(now.getTime() / (1000 * 60 * 60 * 24));
+          const note = isMorning
+            ? getMorningPush(p.personal_name, seed)
+            : getEveningPush(p.personal_name, seed);
+
+          const { data: subs } = await supabaseAdmin
+            .from("push_subscriptions")
+            .select("endpoint, p256dh, auth")
+            .eq("user_id", p.user_id);
+          for (const s of subs ?? []) {
+            const r = await sendPushTo(s, {
+              title: note.title,
+              body: note.body,
+              url: "/hem",
+              tag: `personal-${slot}`,
+            });
+            if (r === "ok") sentCount++;
+            if (r === "gone") {
+              await supabaseAdmin.from("push_subscriptions").delete().eq("endpoint", s.endpoint);
+              goneCount++;
+            }
+          }
+          await supabaseAdmin
+            .from("push_preferences")
+            .update({ last_personal_sent_on: slot })
+            .eq("user_id", p.user_id);
+        }
+
         return Response.json({ ok: true, sent: sentCount, gone: goneCount });
       },
     },

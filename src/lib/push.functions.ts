@@ -137,6 +137,11 @@ const PrefsSchema = z.object({
   weather_time: z.string().regex(/^\d{2}:\d{2}$/).optional(),
   last_lat: z.number().optional(),
   last_lon: z.number().optional(),
+  personal_enabled: z.boolean().optional(),
+  personal_time: z.string().regex(/^\d{2}:\d{2}$/).optional(),
+  personal_evening_enabled: z.boolean().optional(),
+  personal_evening_time: z.string().regex(/^\d{2}:\d{2}$/).optional(),
+  personal_name: z.string().max(40).optional(),
 });
 
 export const savePushPreferences = createServerFn({ method: "POST" })
@@ -171,6 +176,11 @@ export const getPushPreferences = createServerFn({ method: "GET" })
         weather_time: "07:00",
         last_lat: null,
         last_lon: null,
+        personal_enabled: true,
+        personal_time: "08:00",
+        personal_evening_enabled: false,
+        personal_evening_time: "20:30",
+        personal_name: null,
       }
     );
   });
