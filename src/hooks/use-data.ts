@@ -372,6 +372,47 @@ export function useFinances() {
   return { transactions, addTransaction, deleteTransaction };
 }
 
+export type BudgetPeriod = 'day' | 'week' | 'month';
+
+export interface BudgetSettings {
+  /** Totalbudget per period, kr */
+  total: Partial<Record<BudgetPeriod, number>>;
+  /** Kategoribudget per period, kr */
+  categories: Record<string, Partial<Record<BudgetPeriod, number>>>;
+}
+
+const EMPTY_BUDGET: BudgetSettings = { total: {}, categories: {} };
+
+export function useBudget() {
+  const [budget, setBudget] = useCloudSyncedStorage<BudgetSettings>('myflove-budget', EMPTY_BUDGET);
+
+  const safe: BudgetSettings = {
+    total: budget?.total ?? {},
+    categories: budget?.categories ?? {},
+  };
+
+  const setTotal = (period: BudgetPeriod, amount: number | null) => {
+    const next = { ...safe, total: { ...safe.total } };
+    if (amount === null || !Number.isFinite(amount) || amount <= 0) delete next.total[period];
+    else next.total[period] = amount;
+    setBudget(next);
+    trackEvent('finances', 'budget_set');
+  };
+
+  const setCategory = (category: string, period: BudgetPeriod, amount: number | null) => {
+    const cats = { ...safe.categories, [category]: { ...(safe.categories[category] ?? {}) } };
+    if (amount === null || !Number.isFinite(amount) || amount <= 0) delete cats[category]![period];
+    else cats[category]![period] = amount;
+    if (Object.keys(cats[category] ?? {}).length === 0) delete cats[category];
+    setBudget({ ...safe, categories: cats });
+    trackEvent('finances', 'budget_set');
+  };
+
+  return { budget: safe, setTotal, setCategory };
+}
+
+
+
 export type RepeatMode = 'none' | 'daily' | 'weekdays' | 'weekly';
 
 export interface Reminder {

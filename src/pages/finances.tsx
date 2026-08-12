@@ -3,7 +3,8 @@ import Layout from "@/components/layout";
 import { useFinances, Transaction } from "@/hooks/use-data";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus, Trash2, TrendingDown, TrendingUp, Wallet } from "lucide-react";
+import { Plus, Trash2, TrendingDown, TrendingUp } from "lucide-react";
+import BudgetPanel from "@/components/budget-panel";
 
 const CATEGORIES = ["Mat", "Boende", "Transport", "Nöje", "Övrigt"];
 
@@ -82,6 +83,8 @@ export default function Finances() {
             <span className="text-xl font-bold text-primary">{balance} kr</span>
           </div>
         </div>
+
+        <BudgetPanel transactions={transactions} categories={CATEGORIES} />
 
         <form onSubmit={handleSubmit} className="bg-card p-6 rounded-3xl border border-border shadow-sm space-y-6">
           <h2 className="text-xl font-medium">Ny transaktion</h2>
