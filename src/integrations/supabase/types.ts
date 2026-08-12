@@ -485,6 +485,7 @@ export type Database = {
           personal_enabled: boolean
           personal_evening_enabled: boolean
           personal_evening_time: string
+          personal_name: string | null
           personal_time: string
           tasks_enabled: boolean
           updated_at: string
@@ -502,6 +503,7 @@ export type Database = {
           personal_enabled?: boolean
           personal_evening_enabled?: boolean
           personal_evening_time?: string
+          personal_name?: string | null
           personal_time?: string
           tasks_enabled?: boolean
           updated_at?: string
@@ -519,6 +521,7 @@ export type Database = {
           personal_enabled?: boolean
           personal_evening_enabled?: boolean
           personal_evening_time?: string
+          personal_name?: string | null
           personal_time?: string
           tasks_enabled?: boolean
           updated_at?: string
