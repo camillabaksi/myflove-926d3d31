@@ -1,7 +1,9 @@
 import { useRef, useState } from "react";
 import Layout from "@/components/layout";
 import { useFocus, useTasks, useReminders } from "@/hooks/use-data";
-import { CheckSquare, Target, Bell, ChevronLeft, ChevronRight, Trash2, Users, Plus, Download, Upload } from "lucide-react";
+import { useChildren } from "@/hooks/use-children";
+import { Link } from "wouter";
+import { CheckSquare, Target, Bell, ChevronLeft, ChevronRight, Trash2, Users, Plus, Download, Upload, Baby } from "lucide-react";
 import { requestNotificationPermission, getNotificationPermission } from "@/lib/push-notifications";
 import { downloadIcs, parseIcs, type IcsEvent } from "@/lib/ics";
 import { useUser } from "@clerk/react";
@@ -50,6 +52,7 @@ export default function CalendarPage() {
   const { activeTasks, completedTasks, deleteTask, setTaskTime } = useTasks();
   const { activeReminders, addReminder, deleteReminder, updateReminder } = useReminders();
   const { eventsForDate, hasHousehold } = useFamilyEventsByDate();
+  const { children: kids, items: childItems } = useChildren();
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -166,8 +169,11 @@ export default function CalendarPage() {
     const tasks = allTasks.filter(t => t.dueDate === dateStr);
     const reminders = activeReminders.filter(r => r.date === dateStr);
     const familyEvents = eventsForDate(dateStr);
+    const childEvents = childItems
+      .filter((i) => i.date === dateStr)
+      .map((i) => ({ ...i, child: kids.find((c) => c.id === i.child_id) }));
 
-    return { focus, tasks, reminders, familyEvents };
+    return { focus, tasks, reminders, familyEvents, childEvents };
   };
 
   const days: (string | null)[] = [];
@@ -185,7 +191,13 @@ export default function CalendarPage() {
 
   const selectedItems = selectedDateStr
     ? getItemsForDate(selectedDateStr)
-    : { focus: null, tasks: [], reminders: [], familyEvents: [] as ReturnType<typeof eventsForDate> };
+    : {
+        focus: null,
+        tasks: [],
+        reminders: [],
+        familyEvents: [] as ReturnType<typeof eventsForDate>,
+        childEvents: [] as Array<(typeof childItems)[number] & { child?: (typeof kids)[number] }>,
+      };
 
   return (
     <Layout>
@@ -252,7 +264,7 @@ export default function CalendarPage() {
                 const isSelected = dateStr === selectedDateStr;
                 const isToday = dateStr === todayStr;
                 const items = getItemsForDate(dateStr);
-                const hasItems = items.focus || items.tasks.length > 0 || items.reminders.length > 0 || items.familyEvents.length > 0;
+                const hasItems = items.focus || items.tasks.length > 0 || items.reminders.length > 0 || items.familyEvents.length > 0 || items.childEvents.length > 0;
 
                 return (
                   <button
@@ -272,6 +284,13 @@ export default function CalendarPage() {
                         {items.focus && <div className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-white' : 'bg-accent'}`} />}
                         {items.reminders.length > 0 && <div className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-white/80' : 'bg-primary'}`} />}
                         {items.tasks.length > 0 && <div className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-white/60' : 'bg-muted-foreground'}`} />}
+                        {items.childEvents.slice(0, 3).map((e, i) => (
+                          <div
+                            key={`child-${i}`}
+                            className="w-1.5 h-1.5 rounded-full"
+                            style={{ backgroundColor: isSelected ? 'white' : (e.child?.color ?? '#a06cd5') }}
+                          />
+                        ))}
                         {items.familyEvents.slice(0, 3).map((e, i) => (
                           <div
                             key={`fam-${i}`}
@@ -316,13 +335,33 @@ export default function CalendarPage() {
               </div>
             </div>
             
-            {!selectedItems.focus && selectedItems.tasks.length === 0 && selectedItems.reminders.length === 0 && selectedItems.familyEvents.length === 0 && (
+            {!selectedItems.focus && selectedItems.tasks.length === 0 && selectedItems.reminders.length === 0 && selectedItems.familyEvents.length === 0 && selectedItems.childEvents.length === 0 && (
               <div className="text-center py-10 bg-card/50 border border-border/50 rounded-3xl text-muted-foreground">
                 Inget inplanerat denna dag.
               </div>
             )}
 
             <div className="space-y-3">
+              {selectedItems.childEvents.map(e => (
+                <Link
+                  key={`child-${e.id}`}
+                  href="/barn"
+                  className="flex items-center gap-4 p-4 bg-card border border-border rounded-2xl hover:bg-secondary transition-colors"
+                >
+                  <Baby style={{ color: e.child?.color ?? '#a06cd5' }} size={24} />
+                  <div className="min-w-0">
+                    <div
+                      className="text-xs font-medium uppercase tracking-wider mb-0.5"
+                      style={{ color: e.child?.color ?? '#a06cd5' }}
+                    >
+                      {e.child?.name ?? "Barn"} {e.time && `kl ${e.time}`}
+                      {e.sharedWith.length > 0 && " · delad"}
+                    </div>
+                    <div className={`text-lg font-medium truncate ${e.completed ? 'line-through opacity-60' : ''}`}>{e.title}</div>
+                  </div>
+                </Link>
+              ))}
+
               {selectedItems.familyEvents.map(e => (
                 <div key={`fam-${e.id}`} className="flex items-center justify-between gap-4 p-4 bg-card border border-border rounded-2xl group">
                   <div className="flex items-center gap-4">
