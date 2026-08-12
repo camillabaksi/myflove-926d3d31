@@ -60,6 +60,7 @@ export default function StudiesPage() {
     addTaskAttachment,
     removeTaskAttachment,
     setTaskDeadlineReminders,
+    setTaskCourse,
   } = useTasks();
   const { activeCourses, addCourse, deleteCourse } = useCourses();
   const { toast } = useToast();
@@ -71,10 +72,12 @@ export default function StudiesPage() {
   const [courseId, setCourseId] = useState<string>("");
   const [details, setDetails] = useState("");
   const [reminderTime, setReminderTime] = useState("09:00");
+  const [folder, setFolder] = useState<string>("all");
   const [busyId, setBusyId] = useState<string | null>(null);
   const [uploadingId, setUploadingId] = useState<string | null>(null);
   const [intros, setIntros] = useState<Record<string, string>>({});
   const fileInputs = useRef<Record<string, HTMLInputElement | null>>({});
+
 
   const assignments = useMemo(
     () =>
