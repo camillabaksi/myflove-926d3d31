@@ -42,7 +42,7 @@ const ALL_SHORTCUTS: Shortcut[] = ([
   { id: "finances",   href: "/finances",       label: "Ekonomi",    icon: Wallet },
   { id: "statistik",  href: "/statistik",      label: "Statistik",  icon: BarChart3 },
   { id: "beloningar", href: "/beloningar",     label: "Belöningar", icon: Trophy },
-  { id: "dump",       href: "/dump",           label: "Dumping",    icon: Inbox },
+  { id: "dump",       href: "/quickflow",      label: "Quickflow",  icon: Inbox },
   { id: "matlista",   href: "/matlista",       label: "Matlista",   icon: UtensilsCrossed },
   { id: "travel",     href: "/travel",         label: "Resor",      icon: Navigation },
   { id: "flowplan",   href: "/flowplan",       label: "FlowPlan",   icon: Sparkles },

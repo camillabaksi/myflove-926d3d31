@@ -40,7 +40,7 @@ const SECTION_BY_PATH: Record<string, string> = {
   "/": "home",
   "/ma-bra": "ma-bra",
   "/daglig-rutin": "daglig-rutin",
-  "/dump": "dump",
+  "/quickflow": "quickflow",
   "/kalender": "calendar",
   "/fokus": "fokus",
   "/tasks": "tasks",
@@ -129,7 +129,7 @@ export default function Layout({ children }: LayoutProps) {
     { href: "/ma-bra", label: "Må bra", icon: Heart },
     { href: "/traning", label: "Träning", icon: Dumbbell },
     { href: "/daglig-rutin", label: "Daglig rutin", icon: Sun },
-    { href: "/dump", label: "Dumping", icon: Inbox },
+    { href: "/quickflow", label: "Quickflow", icon: Inbox },
     { href: "/kalender", label: "Kalender", icon: Calendar },
     
     { href: "/tasks", label: "Att göra", icon: CheckSquare },
@@ -169,7 +169,7 @@ export default function Layout({ children }: LayoutProps) {
     const byHref = (href: string) => navItems.find((i) => i.href === href);
     const groups: { id: string; label: string; icon: typeof Home; hrefs: string[] }[] = [
       { id: "dagen", label: "Min dag", icon: CalendarDays, hrefs: ["/hem", "/daglig-rutin", "/kalender", "/tasks", "/flowplan"] },
-      { id: "fokus", label: "Fokus & lugn", icon: Brain, hrefs: ["/pomodoro", "/dump", "/assistant"] },
+      { id: "fokus", label: "Fokus & lugn", icon: Brain, hrefs: ["/pomodoro", "/quickflow", "/assistant"] },
       { id: "mabra", label: "Må bra", icon: HeartPulse, hrefs: ["/ma-bra", "/traning", "/beloningar", "/statistik"] },
       { id: "hem", label: "Hem & familj", icon: House, hrefs: ["/familj", "/barn", "/shopping", "/matlista", "/stadning", "/finances", "/travel"] },
       { id: "studier", label: "Studier", icon: BookOpen, hrefs: ["/studier", "/flowstudy"] },
@@ -194,7 +194,7 @@ export default function Layout({ children }: LayoutProps) {
   // Bottom nav: Home is fixed, the remaining 3 slots are user-customizable.
   const [bottomNavHrefs, setBottomNavHrefs] = useLocalStorage<string[]>("myflow-bottom-nav", [
     "/ma-bra",
-    "/dump",
+    "/quickflow",
     "/kalender",
   ]);
   const [editingBottomNav, setEditingBottomNav] = useState(false);
@@ -534,7 +534,7 @@ export default function Layout({ children }: LayoutProps) {
                     )}
                     onChange={setBottomNavHrefs}
                     onClose={() => setEditingBottomNav(false)}
-                    onReset={() => setBottomNavHrefs(["/ma-bra", "/dump", "/kalender"])}
+                    onReset={() => setBottomNavHrefs(["/ma-bra", "/quickflow", "/kalender"])}
                   />
               ) : openCategory ? (
                 <>
