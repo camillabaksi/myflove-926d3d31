@@ -28,6 +28,8 @@ export interface StudyScheduleSettings {
   bufferMinutes: number;
   /** Lägg själva provet i kalendern (av som standard – kan kännas övermäktigt) */
   includeExams: boolean;
+  /** Lägg automatiska repetitionspass i kalendern (av som standard) */
+  includeRevisions: boolean;
 }
 
 export const DEFAULT_SCHEDULE_SETTINGS: StudyScheduleSettings = {
@@ -38,6 +40,7 @@ export const DEFAULT_SCHEDULE_SETTINGS: StudyScheduleSettings = {
   reminderMinutesBefore: 10,
   bufferMinutes: 15,
   includeExams: false,
+  includeRevisions: false,
 };
 
 export const WEEKDAYS = ["Mån", "Tis", "Ons", "Tors", "Fre", "Lör", "Sön"] as const;
@@ -192,8 +195,9 @@ export function planStudyCalendar(input: PlanInput): PlannedEntry[] {
     });
   }
 
-  // 3. Repetitionspass – läggs i lediga luckor fram till provet.
-  for (const exam of input.exams) {
+  // 3. Repetitionspass – bara om användaren själv slagit på det.
+  for (const exam of settings.includeRevisions ? input.exams : []) {
+
     for (const date of dates) {
       if (date > exam.date) break;
       const daysLeft = Math.round(

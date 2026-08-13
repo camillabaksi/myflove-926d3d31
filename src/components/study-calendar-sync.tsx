@@ -111,7 +111,6 @@ export function StudyCalendarSync() {
     if (!autoSync) return;
     if (lastKey.current === planKey) return;
     lastKey.current = planKey;
-    if (!plan.length) return;
     doSync(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [planKey, autoSync]);
@@ -286,6 +285,16 @@ export function StudyCalendarSync() {
           className="h-4 w-4 accent-current"
         />
         Lägg även själva provdagen i kalendern
+      </label>
+
+      <label className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
+        <input
+          type="checkbox"
+          checked={settings.includeRevisions}
+          onChange={(e) => patchSettings({ includeRevisions: e.target.checked })}
+          className="h-4 w-4 accent-current"
+        />
+        Lägg in automatiska repetitionspass
       </label>
 
       <label className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
