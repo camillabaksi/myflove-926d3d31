@@ -2,6 +2,8 @@
 // more nuanced categorization if needed. For now it uses keyword matching so users
 // get a useful "dump and sort" experience without backend infrastructure.
 
+import { detectRepeat, type RepeatMode } from "./recurrence";
+
 export type DumpCategory = "task" | "shopping" | "reminder" | "idea" | "mood";
 
 export interface ParsedThought {
