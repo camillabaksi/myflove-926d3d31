@@ -57,7 +57,7 @@ export default function WorkflowPage() {
   const { tasks, addTask, toggleTask, addTaskSteps, setTaskDueDate } = useTasks();
   const { metaMap, setMeta, dayChecks, toggleCheck, settings, setSettings } = useWorkflow();
   const energy = useLatestEnergy();
-  const { flow, minutesLeft } = useFlowScore();
+  const { flow } = useFlowScore();
   const { add: addQuickflow } = useQuickflow();
   const run = useServerFn(breakDownWorkTask);
 
