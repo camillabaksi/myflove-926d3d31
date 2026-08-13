@@ -5,6 +5,7 @@ import { useTasks, useShoppingList, useReminders, useDumpIdeas, useMoods } from 
 import { parseDump, CATEGORY_LABELS, type DumpCategory, type ParsedThought } from "@/lib/brain-dump";
 import { useToast } from "@/hooks/use-toast";
 import { useLocalStorage } from "@/lib/storage";
+import { REPEAT_LABELS } from "@/lib/recurrence";
 import { getRandomEncouragement } from "@/lib/encouragements";
 import { Mic, Square, Sparkles, CheckSquare, ShoppingBag, Calendar, Lightbulb, Check, Trash2, Inbox, Smile } from "lucide-react";
 
@@ -96,7 +97,12 @@ export default function Dump() {
     if (thought.category === "task") addTask(thought.text);
     else if (thought.category === "shopping") addItem(thought.text);
     else if (thought.category === "reminder") {
-      addReminder(thought.text, thought.date ?? new Date().toISOString().split("T")[0]!, thought.time);
+      addReminder(
+        thought.text,
+        thought.date ?? new Date().toISOString().split("T")[0]!,
+        thought.time,
+        thought.repeat ?? "none"
+      );
     } else if (thought.category === "mood") {
       addMood(thought.moodScore ?? 3, thought.text);
     } else addIdea(thought.text);
@@ -187,9 +193,12 @@ export default function Dump() {
                       <Icon size={18} />
                     </div>
                     <p className="flex-1 min-w-[10rem] text-foreground">{thought.text}</p>
-                    {thought.category === "reminder" && (thought.date || thought.time) && (
+                    {thought.category === "reminder" && (thought.date || thought.time || (thought.repeat && thought.repeat !== "none")) && (
                       <span className="text-xs text-muted-foreground bg-secondary/50 px-2 py-1 rounded-lg">
-                        {thought.date ? thought.date : "Idag"}{thought.time ? ` kl ${thought.time}` : ""}
+                        {thought.repeat && thought.repeat !== "none"
+                          ? REPEAT_LABELS[thought.repeat]
+                          : thought.date ?? "Idag"}
+                        {thought.time ? ` kl ${thought.time}` : ""}
                       </span>
                     )}
                     <select
