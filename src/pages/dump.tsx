@@ -8,8 +8,8 @@ import { useLocalStorage } from "@/lib/storage";
 import { REPEAT_LABELS } from "@/lib/recurrence";
 import { getRandomEncouragement } from "@/lib/encouragements";
 import { useQuickflow } from "@/hooks/use-quickflow";
-import { suggestWhen, formatWhen } from "@/lib/quickflow";
 import QuickflowList from "@/components/quickflow-list";
+import QuickflowCapture from "@/components/quickflow-capture";
 import { Mic, Square, Sparkles, CheckSquare, ShoppingBag, Calendar, Lightbulb, Check, Trash2, Inbox, Smile } from "lucide-react";
 
 interface SortableThought extends ParsedThought {
@@ -151,6 +151,8 @@ export default function Dump() {
           </p>
         </div>
 
+        <QuickflowCapture />
+
         {!thoughts ? (
           <div className="bg-card p-2 rounded-3xl shadow-sm border border-border relative focus-within:ring-2 focus-within:ring-primary/20 transition-all">
             <textarea
@@ -270,7 +272,6 @@ export default function Dump() {
                     variant="ghost"
                     size="sm"
                     onClick={() => moveIdea(idea)}
-                    disabled={(ideaCategories[idea.id] ?? "idea") === "idea"}
                     className="rounded-xl text-primary hover:bg-primary/10 shrink-0"
                   >
                     Flytta
