@@ -256,6 +256,16 @@ export default function StudyflowPage() {
           </form>
         </header>
 
+        <Tabs defaultValue="nu" className="w-full">
+          <TabsList className="grid w-full grid-cols-2 rounded-full">
+            <TabsTrigger value="nu" className="rounded-full">Plugga nu</TabsTrigger>
+            <TabsTrigger value="kurser" className="rounded-full">Kurser & inlämningar</TabsTrigger>
+          </TabsList>
+          <TabsContent value="kurser" className="mt-4">
+            <StudiesSection />
+          </TabsContent>
+          <TabsContent value="nu" className="mt-4 space-y-5">
+
         <FlowScoreCard flow={flow} minutesLeft={minutesLeft} />
 
         <StudyCalendarSync />
@@ -712,6 +722,8 @@ export default function StudyflowPage() {
           <QuickflowCapture />
           <QuickflowList />
         </section>
+          </TabsContent>
+        </Tabs>
       </div>
     </Layout>
   );
