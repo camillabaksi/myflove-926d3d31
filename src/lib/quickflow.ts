@@ -168,3 +168,27 @@ export function isOverdue(item: QuickflowItem, now = Date.now()): boolean {
   if (item.done || !item.remindAt) return false;
   return now - item.remindAt > 60 * 60 * 1000;
 }
+
+/** Normaliserar text så "Handla mjölk!" och "handla  mjölk" räknas som samma sak. */
+export function normalizeQuickflowText(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}\s]/gu, " ")
+    .replace(/\b(att|en|ett|den|det|jag|ska|måste|kom|ihåg|komma)\b/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/** Hittar en befintlig, ej avklarad post som handlar om samma sak. */
+export function findDuplicate(items: QuickflowItem[], text: string): QuickflowItem | undefined {
+  const key = normalizeQuickflowText(text);
+  if (!key) return undefined;
+  return items.find((i) => !i.done && normalizeQuickflowText(i.text) === key);
+}
+
+const LEVEL_RANK: Record<QuickflowLevel, number> = { tanke: 0, snabbt: 1, viktigt: 2 };
+
+/** Vid sammanfogning vinner den viktigaste nivån. */
+export function strongerLevel(a: QuickflowLevel, b: QuickflowLevel): QuickflowLevel {
+  return LEVEL_RANK[a] >= LEVEL_RANK[b] ? a : b;
+}
