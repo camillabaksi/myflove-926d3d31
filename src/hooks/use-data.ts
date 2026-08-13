@@ -249,6 +249,64 @@ export function useTasks() {
       : t));
   };
 
+  /**
+   * Synkar automatgenererade poster (t.ex. StudyFlow-schemat) in i kalendern.
+   * Befintliga poster med samma syncKey behålls (så klarmarkeringar överlever),
+   * poster som inte längre finns i planen tas bort om de inte är klara.
+   */
+  const syncGeneratedTasks = (
+    prefix: string,
+    entries: Array<{
+      syncKey: string;
+      title: string;
+      dueDate: string;
+      time?: string;
+      reminderMinutesBefore?: number;
+      area?: LifeArea;
+      courseId?: string;
+    }>,
+  ) => {
+    setTasks((prev) => {
+      const wanted = new Map(entries.map((e) => [e.syncKey, e]));
+      const kept = prev.filter((t) => {
+        if (!t.syncKey?.startsWith(prefix)) return true;
+        return t.completed || wanted.has(t.syncKey);
+      });
+      const updated = kept.map((t) => {
+        const e = t.syncKey ? wanted.get(t.syncKey) : undefined;
+        if (!e || t.completed) return t;
+        return {
+          ...t,
+          title: e.title,
+          dueDate: e.dueDate,
+          time: e.time,
+          reminderMinutesBefore: e.reminderMinutesBefore,
+          area: e.area ?? t.area,
+          courseId: e.courseId ?? t.courseId,
+        };
+      });
+      const existingKeys = new Set(updated.map((t) => t.syncKey).filter(Boolean));
+      const created: Task[] = entries
+        .filter((e) => !existingKeys.has(e.syncKey))
+        .map((e) => ({
+          id: generateId(),
+          title: e.title,
+          completed: false,
+          createdAt: Date.now(),
+          dueDate: e.dueDate,
+          time: e.time,
+          reminderMinutesBefore: e.reminderMinutesBefore,
+          kind: "uppgift" as TaskKind,
+          status: "pagar" as TaskStatus,
+          area: e.area ?? "studier",
+          courseId: e.courseId,
+          syncKey: e.syncKey,
+        }));
+      return [...created, ...updated];
+    });
+    return entries.length;
+  };
+
   const deleteTask = (id: string) => {
     setTasks((prev) => prev.filter(t => t.id !== id));
   };
