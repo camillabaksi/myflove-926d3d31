@@ -175,3 +175,40 @@ export function todayKey(now = new Date()): string {
   const pad = (n: number) => String(n).padStart(2, "0");
   return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
 }
+
+/**
+ * Dynamisk plan utifrån FlowScore: bara det som ryms i dagens kapacitet
+ * och som inte är tyngre än vad som är rimligt just nu.
+ */
+export function planWithinCapacity(
+  tasks: Task[],
+  metaMap: Record<string, Partial<WorkMeta>>,
+  opts: { capacityMinutes: number; maxFriction: number; suggestedTasks: number; energy?: number | null },
+): {
+  plan: { task: Task; meta: WorkMeta }[];
+  tooHeavy: { task: Task; meta: WorkMeta }[];
+  laterToday: { task: Task; meta: WorkMeta }[];
+  plannedMinutes: number;
+} {
+  const ranked = rankTasks(tasks, metaMap, { energy: opts.energy });
+  const plan: { task: Task; meta: WorkMeta }[] = [];
+  const tooHeavy: { task: Task; meta: WorkMeta }[] = [];
+  const laterToday: { task: Task; meta: WorkMeta }[] = [];
+  let used = 0;
+
+  for (const r of ranked) {
+    const entry = { task: r.task, meta: r.meta };
+    if (r.meta.friction > opts.maxFriction) {
+      tooHeavy.push(entry);
+      continue;
+    }
+    if (plan.length < opts.suggestedTasks && used + r.meta.minutes <= opts.capacityMinutes) {
+      plan.push(entry);
+      used += r.meta.minutes;
+    } else {
+      laterToday.push(entry);
+    }
+  }
+
+  return { plan, tooHeavy, laterToday, plannedMinutes: used };
+}
