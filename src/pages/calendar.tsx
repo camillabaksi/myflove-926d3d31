@@ -315,6 +315,13 @@ export default function CalendarPage() {
                             style={{ backgroundColor: isSelected ? 'white' : (e.member?.color ?? '#8a9a5b') }}
                           />
                         ))}
+                        {items.recurring.length > 0 && (
+                          <div
+                            className={`w-1 h-1 rounded-full ${isSelected ? 'bg-white/50' : 'bg-muted-foreground/40'}`}
+                            title="Återkommande"
+                          />
+                        )}
+
                       </div>
                     )}
                   </button>
