@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { Link } from "wouter";
 import {
   Smile, Target, CheckSquare, ShoppingBag, Calendar, Pill, Timer, Wallet,
-  BarChart3, Trophy, Inbox, UtensilsCrossed, Navigation, Battery,
+  BarChart3, Inbox, UtensilsCrossed, Navigation, Battery,
   Sparkles, Pin, PinOff, ArrowUp, ArrowDown, Settings2, Check, RotateCcw,
   Hand, Heart, Sun,
   type LucideIcon,
@@ -41,7 +41,6 @@ const ALL_SHORTCUTS: Shortcut[] = ([
   { id: "pomodoro",   href: "/pomodoro",       label: "Fokuspass",  icon: Timer },
   { id: "finances",   href: "/finances",       label: "Ekonomi",    icon: Wallet },
   { id: "statistik",  href: "/statistik",      label: "Statistik",  icon: BarChart3 },
-  { id: "beloningar", href: "/beloningar",     label: "Belöningar", icon: Trophy },
   { id: "dump",       href: "/quickflow",      label: "Quickflow",  icon: Inbox },
   { id: "matlista",   href: "/matlista",       label: "Matlista",   icon: UtensilsCrossed },
   { id: "travel",     href: "/travel",         label: "Resor",      icon: Navigation },
