@@ -105,6 +105,7 @@ export default function Layout({ children }: LayoutProps) {
   const { alerts: proximityAlerts, dismissAlert: dismissProximityAlert } = useShoppingProximityAlerts();
   useNotificationScheduler();
   useAchievementPush();
+  usePurgeRevisions();
   const { isAdmin } = useIsAdmin();
   const { enabled: enabledAreas } = useEnabledAreas();
 
