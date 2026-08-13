@@ -175,7 +175,7 @@ export default function CalendarPage() {
       .map((i) => ({ ...i, child: kids.find((c) => c.id === i.child_id) }));
 
     // Återkommande poster (som inte startar just denna dag) visas som prick, inte som händelse
-    const isRecurringEcho = (date: string, repeat?: string | null) =>
+    const isRecurringEcho = (date: string | null | undefined, repeat?: string | null) =>
       !!repeat && repeat !== 'none' && date !== dateStr;
 
     const reminders = allReminders.filter(r => !isRecurringEcho(r.date, r.repeat));
