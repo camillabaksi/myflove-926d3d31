@@ -168,6 +168,25 @@ export function useReminderSync() {
       }
 
 
+      // Dagliga rutiner: schemalägg 14 dagar framåt
+      for (const routine of routines) {
+        if (!routine.enabled || !routine.time) continue;
+        for (const date of horizonDates) {
+          const when = combineDateTime(date, routine.time);
+          if (!when) continue;
+          if (when.getTime() < now + 30_000) continue;
+          const key = `routine:${routine.id}:${date}`;
+          desired.set(key, {
+            clientKey: key,
+            kind: "custom",
+            title: `🔁 ${routine.title}`,
+            body: `Dags kl ${routine.time}`,
+            deliverAt: when.toISOString(),
+            url: "/daglig-rutin",
+          });
+        }
+      }
+
       // Push all desired
       for (const r of desired.values()) {
         try {
