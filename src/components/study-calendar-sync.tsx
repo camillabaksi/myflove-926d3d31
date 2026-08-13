@@ -130,7 +130,7 @@ export function StudyCalendarSync() {
         <CalendarCheck className="h-5 w-5 text-primary" /> Schema & kalender
       </h2>
       <p className="mt-1 text-sm text-muted-foreground">
-        Lägg in dina föreläsningar en gång. Flow lägger prov och repetitionspass i luckorna som
+        Lägg in dina föreläsningar en gång. Flow lägger lugna repetitionspass i luckorna som
         blir kvar – automatiskt i{" "}
         <Link href="/kalender" className="underline">
           kalendern
@@ -279,6 +279,16 @@ export function StudyCalendarSync() {
       </div>
 
       <label className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
+        <input
+          type="checkbox"
+          checked={settings.includeExams}
+          onChange={(e) => patchSettings({ includeExams: e.target.checked })}
+          className="h-4 w-4 accent-current"
+        />
+        Lägg även själva provdagen i kalendern
+      </label>
+
+      <label className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
         <input
           type="checkbox"
           checked={autoSync}
