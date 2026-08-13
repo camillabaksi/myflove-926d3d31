@@ -4,6 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useTasks, useMedications, useReminders } from "@/hooks/use-data";
 import { syncReminder, cancelReminder } from "@/lib/push.functions";
 import { getCurrentSubscription } from "@/lib/push-client";
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
+import type { Routine } from "@/pages/routines";
 
 // Mirror today's + tomorrow's timed tasks and medications into the server
 // so the cron tick can deliver push notifications even when the app is closed.
@@ -25,6 +27,7 @@ export function useReminderSync() {
   const { tasks } = useTasks();
   const { medications, isTaken } = useMedications();
   const { reminders } = useReminders();
+  const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
   const syncFn = useServerFn(syncReminder);
   const cancelFn = useServerFn(cancelReminder);
   const lastKeys = useRef<Set<string>>(new Set());
@@ -165,6 +168,25 @@ export function useReminderSync() {
       }
 
 
+      // Dagliga rutiner: schemalägg 14 dagar framåt
+      for (const routine of routines) {
+        if (!routine.enabled || !routine.time) continue;
+        for (const date of horizonDates) {
+          const when = combineDateTime(date, routine.time);
+          if (!when) continue;
+          if (when.getTime() < now + 30_000) continue;
+          const key = `routine:${routine.id}:${date}`;
+          desired.set(key, {
+            clientKey: key,
+            kind: "custom",
+            title: `🔁 ${routine.title}`,
+            body: `Dags kl ${routine.time}`,
+            deliverAt: when.toISOString(),
+            url: "/daglig-rutin",
+          });
+        }
+      }
+
       // Push all desired
       for (const r of desired.values()) {
         try {
@@ -196,5 +218,6 @@ export function useReminderSync() {
     JSON.stringify(tasks.map((t) => [t.id, t.completed, t.time, t.dueDate, t.reminderMinutesBefore, (t.deadlineLeadDays ?? []).join(","), t.deadlineReminderTime])),
     JSON.stringify(medications.map((m) => [m.id, m.name, m.dosage, m.times.join(",")])),
     JSON.stringify(reminders.map((r) => [r.id, r.completed, r.date, r.time, r.repeat])),
+    JSON.stringify(routines.map((r) => [r.id, r.title, r.time, r.enabled])),
   ]);
 }
