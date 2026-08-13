@@ -154,7 +154,10 @@ export default function Layout({ children }: LayoutProps) {
       : []),
 
     ...(enabledAreas.includes("jobb")
-      ? [{ href: "/jobb", label: "Jobb", icon: Briefcase }]
+      ? [
+          { href: "/jobb", label: "Jobb", icon: Briefcase },
+          { href: "/workflow", label: "WorkFlow", icon: Zap },
+        ]
       : []),
     ...(isAdmin
       ? [
@@ -173,7 +176,7 @@ export default function Layout({ children }: LayoutProps) {
       { id: "mabra", label: "Må bra", icon: HeartPulse, hrefs: ["/ma-bra", "/traning", "/beloningar", "/statistik"] },
       { id: "hem", label: "Hem & familj", icon: House, hrefs: ["/familj", "/barn", "/shopping", "/matlista", "/stadning", "/finances", "/travel"] },
       { id: "studier", label: "Studier", icon: BookOpen, hrefs: ["/studier", "/flowstudy"] },
-      { id: "jobb", label: "Jobb", icon: Building2, hrefs: ["/jobb"] },
+      { id: "jobb", label: "Jobb", icon: Building2, hrefs: ["/jobb", "/workflow"] },
       { id: "ovrigt", label: "Övrigt", icon: LayoutGrid, hrefs: ["/friktionsindex", "/admin", "/admin-statistik"] },
     ];
     return groups
