@@ -12,6 +12,7 @@ export interface ParsedThought {
   date?: string; // ISO date string, only set for "reminder"
   time?: string; // HH:MM, only set for "reminder"
   moodScore?: number; // 1-5, only set for "mood"
+  repeat?: RepeatMode; // upprepning, bara relevant för "reminder"
 }
 
 const SHOPPING_KEYWORDS = [
