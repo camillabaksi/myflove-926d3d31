@@ -9,6 +9,7 @@ import ProactiveSuggestions from "@/components/proactive-suggestions";
 import QuickflowCapture from "@/components/quickflow-capture";
 import QuickflowList from "@/components/quickflow-list";
 import PersonalNote from "@/components/personal-note";
+import HomeSection from "@/components/home-section";
 import StreakCard from "@/components/streak-card";
 import WeekInFlow from "@/components/week-in-flow";
 import { celebrateFromEvent } from "@/lib/celebrate";
