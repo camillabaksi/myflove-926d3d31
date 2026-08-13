@@ -192,9 +192,12 @@ export default function Dump() {
                       <Icon size={18} />
                     </div>
                     <p className="flex-1 min-w-[10rem] text-foreground">{thought.text}</p>
-                    {thought.category === "reminder" && (thought.date || thought.time) && (
+                    {thought.category === "reminder" && (thought.date || thought.time || (thought.repeat && thought.repeat !== "none")) && (
                       <span className="text-xs text-muted-foreground bg-secondary/50 px-2 py-1 rounded-lg">
-                        {thought.date ? thought.date : "Idag"}{thought.time ? ` kl ${thought.time}` : ""}
+                        {thought.repeat && thought.repeat !== "none"
+                          ? REPEAT_LABELS[thought.repeat]
+                          : thought.date ?? "Idag"}
+                        {thought.time ? ` kl ${thought.time}` : ""}
                       </span>
                     )}
                     <select
