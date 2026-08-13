@@ -384,17 +384,21 @@ export default function Home() {
           </Link>
         )}
 
-        <div className="surface-card p-4 flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <p className="font-semibold text-ink">Påminnelser även när appen är stängd</p>
-            <p className="text-sm text-muted-foreground">
-              Medicin, tvätt, väder och tider – som en varsam knuff när det behövs.
-            </p>
-          </div>
-          <EnablePushButton />
-        </div>
+        <HomeSection id="push" title="Påminnelser">
+          <div className="space-y-4">
+            <div className="surface-card p-4 flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p className="font-semibold text-ink">Påminnelser även när appen är stängd</p>
+                <p className="text-sm text-muted-foreground">
+                  Medicin, tvätt, väder och tider – som en varsam knuff när det behövs.
+                </p>
+              </div>
+              <EnablePushButton />
+            </div>
 
-        <PersonalPushSettings />
+            <PersonalPushSettings />
+          </div>
+        </HomeSection>
 
 
       </div>
