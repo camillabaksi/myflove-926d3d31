@@ -24,6 +24,7 @@ import { Route as AppTravelRouteImport } from './routes/_app.travel'
 import { Route as AppTraningRouteImport } from './routes/_app.traning'
 import { Route as AppTasksRouteImport } from './routes/_app.tasks'
 import { Route as AppStudyflowRouteImport } from './routes/_app.studyflow'
+import { Route as AppStudybuddyRouteImport } from './routes/_app.studybuddy'
 import { Route as AppStudierRouteImport } from './routes/_app.studier'
 import { Route as AppStatistikRouteImport } from './routes/_app.statistik'
 import { Route as AppStadningRouteImport } from './routes/_app.stadning'
@@ -131,6 +132,11 @@ const AppTasksRoute = AppTasksRouteImport.update({
 const AppStudyflowRoute = AppStudyflowRouteImport.update({
   id: '/studyflow',
   path: '/studyflow',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppStudybuddyRoute = AppStudybuddyRouteImport.update({
+  id: '/studybuddy',
+  path: '/studybuddy',
   getParentRoute: () => AppRoute,
 } as any)
 const AppStudierRoute = AppStudierRouteImport.update({
@@ -339,6 +345,7 @@ export interface FileRoutesByFullPath {
   '/stadning': typeof AppStadningRoute
   '/statistik': typeof AppStatistikRoute
   '/studier': typeof AppStudierRoute
+  '/studybuddy': typeof AppStudybuddyRoute
   '/studyflow': typeof AppStudyflowRoute
   '/tasks': typeof AppTasksRoute
   '/traning': typeof AppTraningRoute
@@ -388,6 +395,7 @@ export interface FileRoutesByTo {
   '/stadning': typeof AppStadningRoute
   '/statistik': typeof AppStatistikRoute
   '/studier': typeof AppStudierRoute
+  '/studybuddy': typeof AppStudybuddyRoute
   '/studyflow': typeof AppStudyflowRoute
   '/tasks': typeof AppTasksRoute
   '/traning': typeof AppTraningRoute
@@ -439,6 +447,7 @@ export interface FileRoutesById {
   '/_app/stadning': typeof AppStadningRoute
   '/_app/statistik': typeof AppStatistikRoute
   '/_app/studier': typeof AppStudierRoute
+  '/_app/studybuddy': typeof AppStudybuddyRoute
   '/_app/studyflow': typeof AppStudyflowRoute
   '/_app/tasks': typeof AppTasksRoute
   '/_app/traning': typeof AppTraningRoute
@@ -490,6 +499,7 @@ export interface FileRouteTypes {
     | '/stadning'
     | '/statistik'
     | '/studier'
+    | '/studybuddy'
     | '/studyflow'
     | '/tasks'
     | '/traning'
@@ -539,6 +549,7 @@ export interface FileRouteTypes {
     | '/stadning'
     | '/statistik'
     | '/studier'
+    | '/studybuddy'
     | '/studyflow'
     | '/tasks'
     | '/traning'
@@ -589,6 +600,7 @@ export interface FileRouteTypes {
     | '/_app/stadning'
     | '/_app/statistik'
     | '/_app/studier'
+    | '/_app/studybuddy'
     | '/_app/studyflow'
     | '/_app/tasks'
     | '/_app/traning'
@@ -726,6 +738,13 @@ declare module '@tanstack/react-router' {
       path: '/studyflow'
       fullPath: '/studyflow'
       preLoaderRoute: typeof AppStudyflowRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/studybuddy': {
+      id: '/_app/studybuddy'
+      path: '/studybuddy'
+      fullPath: '/studybuddy'
+      preLoaderRoute: typeof AppStudybuddyRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/studier': {
@@ -989,6 +1008,7 @@ interface AppRouteChildren {
   AppStadningRoute: typeof AppStadningRoute
   AppStatistikRoute: typeof AppStatistikRoute
   AppStudierRoute: typeof AppStudierRoute
+  AppStudybuddyRoute: typeof AppStudybuddyRoute
   AppStudyflowRoute: typeof AppStudyflowRoute
   AppTasksRoute: typeof AppTasksRoute
   AppTraningRoute: typeof AppTraningRoute
@@ -1024,6 +1044,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppStadningRoute: AppStadningRoute,
   AppStatistikRoute: AppStatistikRoute,
   AppStudierRoute: AppStudierRoute,
+  AppStudybuddyRoute: AppStudybuddyRoute,
   AppStudyflowRoute: AppStudyflowRoute,
   AppTasksRoute: AppTasksRoute,
   AppTraningRoute: AppTraningRoute,
