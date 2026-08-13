@@ -58,6 +58,7 @@ const SECTION_BY_PATH: Record<string, string> = {
   "/familj": "familj",
   "/matlista": "matlista",
   "/stadning": "stadning",
+  "/insight": "insight",
 };
 
 
@@ -144,6 +145,7 @@ export default function Layout({ children }: LayoutProps) {
     { href: "/barn", label: "Barn", icon: Baby },
     { href: "/statistik", label: "Statistik", icon: BarChart3 },
     { href: "/beloningar", label: "Belöningar", icon: Trophy },
+    { href: "/insight", label: "MyFlove Insight", icon: Brain },
     { href: "/assistant", label: "Hjälp", icon: Sparkles },
     { href: "/friktionsindex", label: "Feedback", icon: Flame },
     ...(enabledAreas.includes("studier")
@@ -172,7 +174,7 @@ export default function Layout({ children }: LayoutProps) {
     const byHref = (href: string) => navItems.find((i) => i.href === href);
     const groups: { id: string; label: string; icon: typeof Home; hrefs: string[] }[] = [
       { id: "dagen", label: "Min dag", icon: CalendarDays, hrefs: ["/hem", "/daglig-rutin", "/kalender", "/tasks", "/flowplan"] },
-      { id: "fokus", label: "Fokus & lugn", icon: Brain, hrefs: ["/pomodoro", "/quickflow", "/assistant"] },
+      { id: "fokus", label: "Fokus & lugn", icon: Brain, hrefs: ["/pomodoro", "/quickflow", "/insight", "/assistant"] },
       { id: "mabra", label: "Må bra", icon: HeartPulse, hrefs: ["/ma-bra", "/traning", "/beloningar", "/statistik"] },
       { id: "hem", label: "Hem & familj", icon: House, hrefs: ["/familj", "/barn", "/shopping", "/matlista", "/stadning", "/finances", "/travel"] },
       { id: "studier", label: "Studier", icon: BookOpen, hrefs: ["/studier", "/flowstudy"] },
