@@ -1,5 +1,4 @@
-import { Link } from "wouter";
-import { Flame, Trophy } from "lucide-react";
+import { Flame } from "lucide-react";
 import { useVisitStreak } from "@/hooks/use-visit-streak";
 
 const WEEKDAYS = ["M", "T", "O", "T", "F", "L", "S"];
