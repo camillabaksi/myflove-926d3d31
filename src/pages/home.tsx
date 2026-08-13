@@ -9,6 +9,7 @@ import ProactiveSuggestions from "@/components/proactive-suggestions";
 import QuickflowCapture from "@/components/quickflow-capture";
 import QuickflowList from "@/components/quickflow-list";
 import PersonalNote from "@/components/personal-note";
+import HomeSection from "@/components/home-section";
 import StreakCard from "@/components/streak-card";
 import WeekInFlow from "@/components/week-in-flow";
 import { celebrateFromEvent } from "@/lib/celebrate";
@@ -181,9 +182,12 @@ export default function Home() {
 
         <PersonalNote />
 
-        <QuickflowCapture />
-
-        <QuickflowList />
+        <HomeSection id="quickflow" title="Quickflow">
+          <div className="space-y-4">
+            <QuickflowCapture />
+            <QuickflowList />
+          </div>
+        </HomeSection>
 
         <AreaOnboarding />
 
@@ -196,22 +200,25 @@ export default function Home() {
           </p>
         </div>
 
-        <StreakCard />
+        <HomeSection id="streak" title="Din svit">
+          <StreakCard />
+        </HomeSection>
 
+        <HomeSection id="weather" title="Väder">
+          <WeatherCard />
+        </HomeSection>
 
-        <WeatherCard />
+        <HomeSection id="shortcuts" title="Genvägar">
+          <HomeShortcuts />
+        </HomeSection>
 
+        <HomeSection id="week" title="Veckan i flow">
+          <WeekInFlow />
+        </HomeSection>
 
-
-
-
-        {/* 4 custom shortcuts — always visible launchpad */}
-        <HomeShortcuts />
-
-        <WeekInFlow />
-
-
-        <ProactiveSuggestions />
+        <HomeSection id="suggestions" title="Förslag">
+          <ProactiveSuggestions />
+        </HomeSection>
 
         <button
           type="button"
@@ -251,10 +258,8 @@ export default function Home() {
         )}
 
 
-        <div className="space-y-4">
-          <h2 className="text-xl font-semibold">
-            {helpPlan ? "Det viktigaste just nu" : "Dagens viktigaste"}
-          </h2>
+        <HomeSection id="today" title={helpPlan ? "Det viktigaste just nu" : "Dagens viktigaste"}>
+          <div className="space-y-4">
 
           {currentFocus && !helpPlan && (
             <button
@@ -337,11 +342,11 @@ export default function Home() {
             </button>
           )}
 
-        </div>
+          </div>
+        </HomeSection>
 
         {upcomingBills.length > 0 && (
-          <div className="space-y-3">
-            <h2 className="text-xl font-semibold">Kommande räkningar</h2>
+          <HomeSection id="bills" title="Kommande räkningar">
             <div className="space-y-3">
               {upcomingBills.slice(0, 3).map((bill) => (
                 <div
@@ -359,42 +364,45 @@ export default function Home() {
                 </div>
               ))}
             </div>
-          </div>
+          </HomeSection>
         )}
 
         {nextMedication && (
-          <Link
-            href="/daglig-rutin"
-            className="flex items-center gap-4 p-5 surface-card hover:border-primary/40 transition-colors"
-          >
-            <div className="w-12 h-12 rounded-full bg-violet-100 text-violet-700 flex items-center justify-center shrink-0">
-              <Pill size={22} />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-xs uppercase tracking-wide text-muted-foreground mb-0.5">
-                Medicinpåminnelse
-              </p>
-              <p className="font-medium truncate">
-                {nextMedication.med.name}
-                {nextMedication.med.dosage ? ` · ${nextMedication.med.dosage}` : ""}
-              </p>
-              <p className="text-sm text-muted-foreground">{nextMedication.nextTime}</p>
-            </div>
-            <ArrowRight size={16} className="text-muted-foreground shrink-0" />
-          </Link>
+          <HomeSection id="medication" title="Medicinpåminnelse">
+            <Link
+              href="/daglig-rutin"
+              className="flex items-center gap-4 p-5 surface-card hover:border-primary/40 transition-colors"
+            >
+              <div className="w-12 h-12 rounded-full bg-violet-100 text-violet-700 flex items-center justify-center shrink-0">
+                <Pill size={22} />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-medium truncate">
+                  {nextMedication.med.name}
+                  {nextMedication.med.dosage ? ` · ${nextMedication.med.dosage}` : ""}
+                </p>
+                <p className="text-sm text-muted-foreground">{nextMedication.nextTime}</p>
+              </div>
+              <ArrowRight size={16} className="text-muted-foreground shrink-0" />
+            </Link>
+          </HomeSection>
         )}
 
-        <div className="surface-card p-4 flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <p className="font-semibold text-ink">Påminnelser även när appen är stängd</p>
-            <p className="text-sm text-muted-foreground">
-              Medicin, tvätt, väder och tider – som en varsam knuff när det behövs.
-            </p>
-          </div>
-          <EnablePushButton />
-        </div>
+        <HomeSection id="push" title="Påminnelser">
+          <div className="space-y-4">
+            <div className="surface-card p-4 flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p className="font-semibold text-ink">Påminnelser även när appen är stängd</p>
+                <p className="text-sm text-muted-foreground">
+                  Medicin, tvätt, väder och tider – som en varsam knuff när det behövs.
+                </p>
+              </div>
+              <EnablePushButton />
+            </div>
 
-        <PersonalPushSettings />
+            <PersonalPushSettings />
+          </div>
+        </HomeSection>
 
 
       </div>
