@@ -26,6 +26,7 @@ import { Route as AppStudierRouteImport } from './routes/_app.studier'
 import { Route as AppStatistikRouteImport } from './routes/_app.statistik'
 import { Route as AppStadningRouteImport } from './routes/_app.stadning'
 import { Route as AppShoppingRouteImport } from './routes/_app.shopping'
+import { Route as AppQuickflowRouteImport } from './routes/_app.quickflow'
 import { Route as AppPomodoroRouteImport } from './routes/_app.pomodoro'
 import { Route as AppMatlistaRouteImport } from './routes/_app.matlista'
 import { Route as AppMaBraRouteImport } from './routes/_app.ma-bra'
@@ -137,6 +138,11 @@ const AppStadningRoute = AppStadningRouteImport.update({
 const AppShoppingRoute = AppShoppingRouteImport.update({
   id: '/shopping',
   path: '/shopping',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppQuickflowRoute = AppQuickflowRouteImport.update({
+  id: '/quickflow',
+  path: '/quickflow',
   getParentRoute: () => AppRoute,
 } as any)
 const AppPomodoroRoute = AppPomodoroRouteImport.update({
@@ -309,6 +315,7 @@ export interface FileRoutesByFullPath {
   '/ma-bra': typeof AppMaBraRoute
   '/matlista': typeof AppMatlistaRoute
   '/pomodoro': typeof AppPomodoroRoute
+  '/quickflow': typeof AppQuickflowRoute
   '/shopping': typeof AppShoppingRoute
   '/stadning': typeof AppStadningRoute
   '/statistik': typeof AppStatistikRoute
@@ -354,6 +361,7 @@ export interface FileRoutesByTo {
   '/ma-bra': typeof AppMaBraRoute
   '/matlista': typeof AppMatlistaRoute
   '/pomodoro': typeof AppPomodoroRoute
+  '/quickflow': typeof AppQuickflowRoute
   '/shopping': typeof AppShoppingRoute
   '/stadning': typeof AppStadningRoute
   '/statistik': typeof AppStatistikRoute
@@ -401,6 +409,7 @@ export interface FileRoutesById {
   '/_app/ma-bra': typeof AppMaBraRoute
   '/_app/matlista': typeof AppMatlistaRoute
   '/_app/pomodoro': typeof AppPomodoroRoute
+  '/_app/quickflow': typeof AppQuickflowRoute
   '/_app/shopping': typeof AppShoppingRoute
   '/_app/stadning': typeof AppStadningRoute
   '/_app/statistik': typeof AppStatistikRoute
@@ -448,6 +457,7 @@ export interface FileRouteTypes {
     | '/ma-bra'
     | '/matlista'
     | '/pomodoro'
+    | '/quickflow'
     | '/shopping'
     | '/stadning'
     | '/statistik'
@@ -493,6 +503,7 @@ export interface FileRouteTypes {
     | '/ma-bra'
     | '/matlista'
     | '/pomodoro'
+    | '/quickflow'
     | '/shopping'
     | '/stadning'
     | '/statistik'
@@ -539,6 +550,7 @@ export interface FileRouteTypes {
     | '/_app/ma-bra'
     | '/_app/matlista'
     | '/_app/pomodoro'
+    | '/_app/quickflow'
     | '/_app/shopping'
     | '/_app/stadning'
     | '/_app/statistik'
@@ -692,6 +704,13 @@ declare module '@tanstack/react-router' {
       path: '/shopping'
       fullPath: '/shopping'
       preLoaderRoute: typeof AppShoppingRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/quickflow': {
+      id: '/_app/quickflow'
+      path: '/quickflow'
+      fullPath: '/quickflow'
+      preLoaderRoute: typeof AppQuickflowRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/pomodoro': {
@@ -907,6 +926,7 @@ interface AppRouteChildren {
   AppMaBraRoute: typeof AppMaBraRoute
   AppMatlistaRoute: typeof AppMatlistaRoute
   AppPomodoroRoute: typeof AppPomodoroRoute
+  AppQuickflowRoute: typeof AppQuickflowRoute
   AppShoppingRoute: typeof AppShoppingRoute
   AppStadningRoute: typeof AppStadningRoute
   AppStatistikRoute: typeof AppStatistikRoute
@@ -938,6 +958,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppMaBraRoute: AppMaBraRoute,
   AppMatlistaRoute: AppMatlistaRoute,
   AppPomodoroRoute: AppPomodoroRoute,
+  AppQuickflowRoute: AppQuickflowRoute,
   AppShoppingRoute: AppShoppingRoute,
   AppStadningRoute: AppStadningRoute,
   AppStatistikRoute: AppStatistikRoute,

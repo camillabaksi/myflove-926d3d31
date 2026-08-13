@@ -1,0 +1,24 @@
+import { createFileRoute } from "@tanstack/react-router";
+import Page from "@/pages/dump";
+
+export const Route = createFileRoute("/_app/quickflow")({
+  head: () => ({
+    meta: [
+      { title: "Quickflow – få ut det ur huvudet | MyFlove" },
+      {
+        name: "description",
+        content:
+          "Skriv eller prata in allt du bär på. Quickflow sorterar det till rätt plats – och håller det som inte får glömmas.",
+      },
+      { property: "og:title", content: "Quickflow – få ut det ur huvudet" },
+      {
+        property: "og:description",
+        content: "Snabbfångst för ett fullt huvud. MyFlove håller tanken åt dig tills du orkar sortera.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "robots", content: "noindex, nofollow" },
+    ],
+  }),
+  component: Page,
+});
