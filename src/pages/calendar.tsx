@@ -359,11 +359,30 @@ export default function CalendarPage() {
               </div>
             </div>
             
-            {!selectedItems.focus && selectedItems.tasks.length === 0 && selectedItems.reminders.length === 0 && selectedItems.familyEvents.length === 0 && selectedItems.childEvents.length === 0 && (
+            {!selectedItems.focus && selectedItems.tasks.length === 0 && selectedItems.reminders.length === 0 && selectedItems.familyEvents.length === 0 && selectedItems.childEvents.length === 0 && selectedItems.recurring.length === 0 && (
               <div className="text-center py-10 bg-card/50 border border-border/50 rounded-3xl text-muted-foreground">
                 Inget inplanerat denna dag.
               </div>
             )}
+
+            {selectedItems.recurring.length > 0 && (
+              <div className="flex flex-wrap items-center gap-2 px-1">
+                <span className="text-xs uppercase tracking-wider text-muted-foreground">Återkommande</span>
+                {selectedItems.recurring.map(r => (
+                  <span
+                    key={r.id}
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary/60 border border-border/50 text-xs text-muted-foreground"
+                  >
+                    <span
+                      className="w-1.5 h-1.5 rounded-full"
+                      style={{ backgroundColor: r.color ?? 'hsl(var(--primary))' }}
+                    />
+                    {r.title}{r.time && ` · ${r.time}`}
+                  </span>
+                ))}
+              </div>
+            )}
+
 
             <div className="space-y-3">
               {selectedItems.childEvents.map(e => (
