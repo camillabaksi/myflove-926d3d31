@@ -154,7 +154,9 @@ export default function Layout({ children }: LayoutProps) {
     ...(enabledAreas.includes("studier")
       ? [
           { href: "/studier", label: "Studier", icon: GraduationCap },
+          { href: "/studyflow", label: "StudyFlow", icon: Zap },
           { href: "/flowstudy", label: "FlowStudy", icon: Brain },
+
         ]
       : []),
 
