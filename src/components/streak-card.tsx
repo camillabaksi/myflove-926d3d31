@@ -57,13 +57,6 @@ export default function StreakCard() {
             </p>
           </div>
         </div>
-        <Link
-          href="/beloningar"
-          className="shrink-0 text-muted-foreground hover:text-primary transition-colors"
-          aria-label="Se dina belöningar"
-        >
-          <Trophy size={20} />
-        </Link>
       </div>
 
       <ul className="flex items-center justify-between gap-1.5" aria-label="Dina senaste sju dagar">
