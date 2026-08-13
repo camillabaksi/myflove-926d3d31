@@ -7,6 +7,7 @@ import { useMedicationAlerts } from "@/hooks/use-medication-alerts";
 import { useShoppingProximityAlerts } from "@/hooks/use-shopping-proximity-alerts";
 import { useNotificationScheduler } from "@/hooks/use-notification-scheduler";
 import { useAchievementPush } from "@/hooks/use-achievement-push";
+import { usePurgeRevisions } from "@/hooks/use-purge-revisions";
 import { useIsAdmin } from "@/hooks/use-is-admin";
 import { useEnabledAreas } from "@/lib/life-areas";
 import { useLocalStorage } from "@/lib/storage";
