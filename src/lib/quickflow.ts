@@ -21,6 +21,10 @@ export interface QuickflowItem {
   /** Senaste gången MyFlove frågade "vill du fortfarande göra det?" */
   askedAt?: number;
   snoozeCount?: number;
+  /** Antal gånger samma sak lagts in igen (Dump + Quickflow slås ihop). */
+  mergedCount?: number;
+  /** När den senast slogs ihop med en dubblett. */
+  mergedAt?: number;
 }
 
 export const LEVEL_META: Record<
