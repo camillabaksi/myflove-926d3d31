@@ -186,7 +186,13 @@ export function splitIntoThoughts(raw: string): string[] {
 export function parseDump(raw: string): ParsedThought[] {
   return splitIntoThoughts(raw).map((text) => {
     const { category, date, time, moodScore } = categorize(text);
-    return { text, category, date, time, moodScore };
+    const repeat = detectRepeat(text);
+    if (repeat !== "none") {
+      // "Ta medicin varje dag kl 7" hör hemma i kalendern, som återkommande.
+      const start = date ?? new Date().toISOString().split("T")[0]!;
+      return { text, category: "reminder" as DumpCategory, date: start, time, repeat };
+    }
+    return { text, category, date, time, moodScore, repeat };
   });
 }
 
