@@ -6,6 +6,7 @@ import { Link } from "wouter";
 import { CheckSquare, Target, Bell, ChevronLeft, ChevronRight, Trash2, Users, Plus, Download, Upload, Baby } from "lucide-react";
 import { requestNotificationPermission, getNotificationPermission } from "@/lib/push-notifications";
 import { downloadIcs, parseIcs, type IcsEvent } from "@/lib/ics";
+import { occursOn, REPEAT_LABELS, type RepeatMode } from "@/lib/recurrence";
 import { useUser } from "@clerk/react";
 import {
   useGetMyHousehold,
@@ -167,10 +168,10 @@ export default function CalendarPage() {
     const isToday = dateStr === todayStr;
     const focus = isToday ? currentFocus : null;
     const tasks = allTasks.filter(t => t.dueDate === dateStr);
-    const reminders = activeReminders.filter(r => r.date === dateStr);
+    const reminders = activeReminders.filter(r => occursOn(r.date, r.repeat ?? 'none', dateStr));
     const familyEvents = eventsForDate(dateStr);
     const childEvents = childItems
-      .filter((i) => i.date === dateStr)
+      .filter((i) => occursOn(i.date, (i.repeat ?? 'none') as RepeatMode, dateStr))
       .map((i) => ({ ...i, child: kids.find((c) => c.id === i.child_id) }));
 
     return { focus, tasks, reminders, familyEvents, childEvents };
