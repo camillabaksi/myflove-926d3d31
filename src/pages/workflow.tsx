@@ -15,11 +15,14 @@ import {
   AlarmClock,
   LifeBuoy,
   ClipboardList,
+  Gauge,
   Plus,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useTasks } from "@/hooks/use-data";
 import { useWorkflow, useLatestEnergy } from "@/hooks/use-workflow";
+import { useFlowScore } from "@/hooks/use-flowscore";
+import { FlowScoreCard } from "@/components/flow-score-card";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { useVoiceInput } from "@/hooks/use-voice-input";
 import { QuickflowCapture } from "@/components/quickflow-capture";
@@ -34,6 +37,7 @@ import {
   metaFor,
   minutesLeftOfWorkday,
   pickForMinutes,
+  planWithinCapacity,
   rankTasks,
   rebuildDay,
   transitionPlan,
@@ -53,6 +57,7 @@ export default function WorkflowPage() {
   const { tasks, addTask, toggleTask, addTaskSteps, setTaskDueDate } = useTasks();
   const { metaMap, setMeta, dayChecks, toggleCheck, settings, setSettings } = useWorkflow();
   const energy = useLatestEnergy();
+  const { flow } = useFlowScore();
   const { add: addQuickflow } = useQuickflow();
   const run = useServerFn(breakDownWorkTask);
 
@@ -72,6 +77,17 @@ export default function WorkflowPage() {
   const ranked = useMemo(
     () => rankTasks(workTasks, metaMap, { energy }),
     [workTasks, metaMap, energy],
+  );
+
+  const capacityPlan = useMemo(
+    () =>
+      planWithinCapacity(workTasks, metaMap, {
+        capacityMinutes: flow.capacityMinutes,
+        maxFriction: flow.maxFriction,
+        suggestedTasks: flow.suggestedTasks,
+        energy,
+      }),
+    [workTasks, metaMap, flow, energy],
   );
 
   const timeFit = useMemo(
@@ -151,6 +167,78 @@ export default function WorkflowPage() {
             </Button>
           </form>
         </header>
+
+        <FlowScoreCard flow={flow} />
+
+        {/* Dynamisk plan efter FlowScore */}
+        <section className={card}>
+          <h2 className={sectionTitle}>
+            <Gauge className="h-5 w-5 text-primary" /> Rimligt just nu
+          </h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Anpassat efter FlowScore {flow.score} och energi {energy ? `${energy}/5` : "okänd"} – ca{" "}
+            {flow.capacityMinutes} min fokustid.
+          </p>
+          {capacityPlan.plan.length ? (
+            <ul className="mt-3 space-y-2">
+              {capacityPlan.plan.map(({ task, meta }) => (
+                <li
+                  key={task.id}
+                  className="flex items-center gap-3 rounded-2xl border border-border/70 bg-background p-3 text-sm"
+                >
+                  <button
+                    onClick={(e) => {
+                      toggleTask(task.id);
+                      celebrateFromEvent(e);
+                    }}
+                    aria-label="Markera klar"
+                    className="text-muted-foreground hover:text-primary"
+                  >
+                    <Circle className="h-5 w-5" />
+                  </button>
+                  <span className="flex-1 text-ink">{task.title}</span>
+                  <span className="text-xs text-muted-foreground">{meta.minutes} min</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="mt-3 text-sm text-muted-foreground">
+              Inget som passar din kapacitet just nu. Vila är också ett val. 💙
+            </p>
+          )}
+          {capacityPlan.plannedMinutes > 0 && (
+            <p className="mt-2 text-xs text-muted-foreground">
+              Planerat {capacityPlan.plannedMinutes} min av {flow.capacityMinutes} min.
+            </p>
+          )}
+          {capacityPlan.tooHeavy.length > 0 && (
+            <div className="mt-3 rounded-2xl bg-gold/10 p-3 text-xs text-ink">
+              <p className="font-medium">Sparas till en starkare stund (för tunga just nu):</p>
+              <ul className="mt-1 space-y-1">
+                {capacityPlan.tooHeavy.slice(0, 3).map(({ task, meta }) => (
+                  <li key={task.id} className="flex items-center justify-between gap-2">
+                    <span>
+                      🔴 {task.title} · friktion {meta.friction}/10
+                    </span>
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      disabled={busyId === task.id}
+                      onClick={() => handleBreakDown(task.id, task.title)}
+                    >
+                      {busyId === task.id ? (
+                        <Loader2 className="h-3 w-3 animate-spin" />
+                      ) : (
+                        <Sparkles className="h-3 w-3" />
+                      )}
+                      <span className="ml-1">Dela upp</span>
+                    </Button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </section>
 
         {/* 1. Vad ska jag göra nu? */}
         <section className={card}>
@@ -456,7 +544,7 @@ export default function WorkflowPage() {
           </p>
           <Button
             className="mt-3"
-            onClick={() => setRebuild(rebuildDay(workTasks, metaMap, minutesLeft, energy))}
+            onClick={() => setRebuild(rebuildDay(workTasks, metaMap, Math.min(minutesLeft, flow.capacityMinutes), energy))}
           >
             Bygg om dagen
           </Button>
