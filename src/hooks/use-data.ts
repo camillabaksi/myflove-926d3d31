@@ -52,6 +52,8 @@ export interface Task {
   deadlineLeadDays?: number[];
   /** Klockslag för deadline-påminnelserna, HH:MM (default 09:00) */
   deadlineReminderTime?: string;
+  /** Nyckel för automatgenererade poster (t.ex. StudyFlow-schemat) */
+  syncKey?: string;
 }
 
 
