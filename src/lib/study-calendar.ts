@@ -28,6 +28,8 @@ export interface StudyScheduleSettings {
   bufferMinutes: number;
   /** Lägg själva provet i kalendern (av som standard – kan kännas övermäktigt) */
   includeExams: boolean;
+  /** Lägg automatiska repetitionspass i kalendern (av som standard) */
+  includeRevisions: boolean;
 }
 
 export const DEFAULT_SCHEDULE_SETTINGS: StudyScheduleSettings = {
@@ -38,6 +40,7 @@ export const DEFAULT_SCHEDULE_SETTINGS: StudyScheduleSettings = {
   reminderMinutesBefore: 10,
   bufferMinutes: 15,
   includeExams: false,
+  includeRevisions: false,
 };
 
 export const WEEKDAYS = ["Mån", "Tis", "Ons", "Tors", "Fre", "Lör", "Sön"] as const;
