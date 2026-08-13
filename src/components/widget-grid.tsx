@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import {
-  Smile, Target, CheckSquare, ShoppingBag, Calendar, Pill, Timer, Wallet, BarChart3, Trophy, OctagonAlert,
+  Smile, Target, CheckSquare, ShoppingBag, Calendar, Pill, Timer, Wallet, BarChart3, OctagonAlert,
   type LucideIcon,
 } from "lucide-react";
 import { useMoods, useFocus, useTasks, useShoppingList, useReminders, useMedications, useFinances } from "@/hooks/use-data";
 import { useLocalStorage } from "@/lib/storage";
 import { getWeeklyMoodStats } from "@/lib/mood-stats";
-import { getAchievements } from "@/lib/achievements";
 import StopModal from "@/components/stop-modal";
 
 const EMOJI_BY_SCORE: Record<number, string> = { 1: "😢", 2: "😕", 3: "😐", 4: "🙂", 5: "😄" };
@@ -71,16 +70,6 @@ export default function WidgetGrid() {
   const { trend } = getWeeklyMoodStats(moods);
   const trendLabel = trend === "up" ? "På uppgång ↑" : trend === "down" ? "Nedåt ↓" : trend === "same" ? "Stabilt →" : "Ingen data än";
 
-  const completedTasks = tasks.filter((t) => t.completed);
-  const achievements = getAchievements({
-    moods,
-    completedTasks,
-    pomodoroTotalSessions,
-    completedFocusCount,
-    medicationLogCount: medications.length > 0 ? 1 : 0,
-  });
-  const unlockedCount = achievements.filter((a) => a.unlocked).length;
-
   const widgets: Widget[] = [
     {
       href: "/ma-bra",
@@ -136,12 +125,6 @@ export default function WidgetGrid() {
       icon: BarChart3,
       label: "Veckotrend",
       value: trendLabel,
-    },
-    {
-      href: "/beloningar",
-      icon: Trophy,
-      label: "Belöningar",
-      value: `${unlockedCount} av ${achievements.length}`,
     },
     {
       onClick: () => setStopOpen(true),
