@@ -26,6 +26,7 @@ export interface ChildItem {
   time: string | null;
   completed: boolean;
   remind: boolean;
+  repeat: "none" | "daily" | "weekdays" | "weekly";
   file_path: string | null;
   created_at: string;
   updated_at: string;
@@ -59,7 +60,7 @@ export interface ChildItemConflict {
 }
 
 export type ChildItemPatch = Partial<
-  Pick<ChildItem, "title" | "notes" | "date" | "time" | "remind" | "completed" | "kind">
+  Pick<ChildItem, "title" | "notes" | "date" | "time" | "remind" | "completed" | "kind" | "repeat">
 >;
 
 interface ChildrenState {
@@ -110,7 +111,7 @@ async function loadAll(): Promise<void> {
           supabase.from("children").select("id, owner_id, name, birthdate, color, note").order("created_at"),
           supabase
             .from("child_items")
-            .select("id, child_id, owner_id, kind, title, notes, date, time, completed, remind, file_path, created_at, updated_at")
+            .select("id, child_id, owner_id, kind, title, notes, date, time, completed, remind, repeat, file_path, created_at, updated_at")
             .order("created_at", { ascending: false }),
           supabase.from("child_item_shares").select("item_id, user_id"),
         ]);
@@ -196,7 +197,7 @@ async function fetchServerItem(id: string): Promise<ChildItem | null> {
   const { data } = await supabase
     .from("child_items")
     .select(
-      "id, child_id, owner_id, kind, title, notes, date, time, completed, remind, file_path, created_at, updated_at",
+      "id, child_id, owner_id, kind, title, notes, date, time, completed, remind, repeat, file_path, created_at, updated_at",
     )
     .eq("id", id)
     .maybeSingle();
@@ -262,6 +263,7 @@ export function useChildren() {
     date?: string;
     time?: string;
     remind?: boolean;
+    repeat?: "none" | "daily" | "weekdays" | "weekly";
     filePath?: string;
   }) => {
     const { data, error: err } = await supabase
@@ -274,9 +276,10 @@ export function useChildren() {
         date: input.date || null,
         time: input.time || null,
         remind: input.remind ?? false,
+        repeat: input.repeat ?? "none",
         file_path: input.filePath || null,
       })
-      .select("id, child_id, owner_id, kind, title, notes, date, time, completed, remind, file_path, created_at, updated_at")
+      .select("id, child_id, owner_id, kind, title, notes, date, time, completed, remind, repeat, file_path, created_at, updated_at")
       .single();
     if (err) throw err;
     const created = { ...(data as Omit<ChildItem, "sharedWith">), sharedWith: [] as string[] };
