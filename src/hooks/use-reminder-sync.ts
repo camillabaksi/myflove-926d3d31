@@ -6,6 +6,7 @@ import { syncReminder, cancelReminder } from "@/lib/push.functions";
 import { getCurrentSubscription } from "@/lib/push-client";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import type { Routine } from "@/pages/routines";
+import { useQuickflow } from "@/hooks/use-quickflow";
 
 // Mirror today's + tomorrow's timed tasks and medications into the server
 // so the cron tick can deliver push notifications even when the app is closed.
@@ -28,6 +29,7 @@ export function useReminderSync() {
   const { medications, isTaken } = useMedications();
   const { reminders } = useReminders();
   const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
+  const { openItems: quickflowItems } = useQuickflow();
   const syncFn = useServerFn(syncReminder);
   const cancelFn = useServerFn(cancelReminder);
   const lastKeys = useRef<Set<string>>(new Set());
@@ -187,6 +189,22 @@ export function useReminderSync() {
         }
       }
 
+      // Quickflow – "du bad mig komma ihåg". Får aldrig försvinna.
+      for (const item of quickflowItems) {
+        if (!item.remindAt || item.done) continue;
+        if (item.remindAt < now + 30_000) continue;
+        const key = `quickflow:${item.id}`;
+        desired.set(key, {
+          clientKey: key,
+          kind: "custom",
+          title: "🔔 MyFlove: Du bad mig komma ihåg detta.",
+          body: item.text,
+          deliverAt: new Date(item.remindAt).toISOString(),
+          url: "/hem",
+        });
+      }
+
+
       // Push all desired
       for (const r of desired.values()) {
         try {
@@ -219,5 +237,6 @@ export function useReminderSync() {
     JSON.stringify(medications.map((m) => [m.id, m.name, m.dosage, m.times.join(",")])),
     JSON.stringify(reminders.map((r) => [r.id, r.completed, r.date, r.time, r.repeat])),
     JSON.stringify(routines.map((r) => [r.id, r.title, r.time, r.enabled])),
+    JSON.stringify(quickflowItems.map((q) => [q.id, q.text, q.remindAt, q.done])),
   ]);
 }
