@@ -337,7 +337,8 @@ export default function Home() {
             </button>
           )}
 
-        </div>
+          </div>
+        </HomeSection>
 
         {upcomingBills.length > 0 && (
           <HomeSection id="bills" title="Kommande räkningar">
