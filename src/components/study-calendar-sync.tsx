@@ -111,7 +111,6 @@ export function StudyCalendarSync() {
     if (!autoSync) return;
     if (lastKey.current === planKey) return;
     lastKey.current = planKey;
-    if (!plan.length) return;
     doSync(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [planKey, autoSync]);
