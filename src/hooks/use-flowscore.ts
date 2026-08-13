@@ -13,7 +13,12 @@ function isToday(ts?: number) {
 }
 
 /** FlowScore™ – vad är rimligt för mig just nu? */
-export function useFlowScore(): { flow: FlowScore; energy: number | null; mood: number | null } {
+export function useFlowScore(): {
+  flow: FlowScore;
+  energy: number | null;
+  mood: number | null;
+  minutesLeft: number;
+} {
   const { tasks } = useTasks();
   const { moods } = useMoods();
   const { openItems } = useQuickflow();
@@ -26,6 +31,11 @@ export function useFlowScore(): { flow: FlowScore; energy: number | null; mood: 
     return latest ? latest.score : null;
   }, [moods]);
 
+  const minutesLeft = useMemo(
+    () => minutesLeftOfWorkday(settings.endHour),
+    [settings.endHour],
+  );
+
   const flow = useMemo(() => {
     const today = new Date().toISOString().slice(0, 10);
     const overdue = tasks.filter(
@@ -35,12 +45,13 @@ export function useFlowScore(): { flow: FlowScore; energy: number | null; mood: 
     return computeFlowScore({
       energy,
       mood,
-      minutesLeft: minutesLeftOfWorkday(settings.endHour),
+      minutesLeft,
       openThoughts: openItems.length,
       overdue,
       doneToday,
     });
-  }, [tasks, energy, mood, openItems.length, settings.endHour]);
+  }, [tasks, energy, mood, openItems.length, minutesLeft]);
 
-  return { flow, energy, mood };
+  return { flow, energy, mood, minutesLeft };
 }
+

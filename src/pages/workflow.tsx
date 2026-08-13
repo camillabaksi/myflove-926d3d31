@@ -168,7 +168,7 @@ export default function WorkflowPage() {
           </form>
         </header>
 
-        <FlowScoreCard flow={flow} />
+        <FlowScoreCard flow={flow} minutesLeft={minutesLeft} />
 
         {/* Dynamisk plan efter FlowScore */}
         <section className={card}>
