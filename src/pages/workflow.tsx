@@ -57,7 +57,7 @@ export default function WorkflowPage() {
   const { tasks, addTask, toggleTask, addTaskSteps, setTaskDueDate } = useTasks();
   const { metaMap, setMeta, dayChecks, toggleCheck, settings, setSettings } = useWorkflow();
   const energy = useLatestEnergy();
-  const { flow } = useFlowScore();
+  const { flow, minutesLeft } = useFlowScore();
   const { add: addQuickflow } = useQuickflow();
   const run = useServerFn(breakDownWorkTask);
 
@@ -168,7 +168,7 @@ export default function WorkflowPage() {
           </form>
         </header>
 
-        <FlowScoreCard flow={flow} />
+        <FlowScoreCard flow={flow} minutesLeft={minutesLeft} />
 
         {/* Dynamisk plan efter FlowScore */}
         <section className={card}>
