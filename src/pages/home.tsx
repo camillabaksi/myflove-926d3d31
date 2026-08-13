@@ -251,10 +251,8 @@ export default function Home() {
         )}
 
 
-        <div className="space-y-4">
-          <h2 className="text-xl font-semibold">
-            {helpPlan ? "Det viktigaste just nu" : "Dagens viktigaste"}
-          </h2>
+        <HomeSection id="today" title={helpPlan ? "Det viktigaste just nu" : "Dagens viktigaste"}>
+          <div className="space-y-4">
 
           {currentFocus && !helpPlan && (
             <button
