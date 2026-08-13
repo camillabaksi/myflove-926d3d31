@@ -133,6 +133,12 @@ export function QuickflowList() {
                 {LEVEL_META.viktigt.label}
               </span>
             )}
+            {(item.mergedCount ?? 0) > 0 && (
+              <span className="ml-1 rounded-full border border-border bg-secondary/60 px-2 py-0.5 text-[11px] text-muted-foreground">
+                Sammanfogad ×{(item.mergedCount ?? 0) + 1}
+              </span>
+            )}
+
           </p>
         </div>
         <div className="flex items-center gap-1 shrink-0">
