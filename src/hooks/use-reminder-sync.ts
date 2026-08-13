@@ -27,6 +27,7 @@ export function useReminderSync() {
   const { tasks } = useTasks();
   const { medications, isTaken } = useMedications();
   const { reminders } = useReminders();
+  const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
   const syncFn = useServerFn(syncReminder);
   const cancelFn = useServerFn(cancelReminder);
   const lastKeys = useRef<Set<string>>(new Set());
