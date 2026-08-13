@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import Layout from "@/components/layout";
 import { Button } from "@/components/ui/button";
@@ -17,12 +17,15 @@ import {
   ClipboardList,
   Gauge,
   Plus,
+  RefreshCw,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useTasks } from "@/hooks/use-data";
 import { useWorkflow, useLatestEnergy } from "@/hooks/use-workflow";
 import { useFlowScore } from "@/hooks/use-flowscore";
 import { FlowScoreCard } from "@/components/flow-score-card";
+import { FlowReplanDiff } from "@/components/flow-replan-diff";
+import { diffSnapshots, makeSnapshot, type FlowDiff, type FlowSnapshot } from "@/lib/flow-diff";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { useVoiceInput } from "@/hooks/use-voice-input";
 import { QuickflowCapture } from "@/components/quickflow-capture";
@@ -97,6 +100,57 @@ export default function WorkflowPage() {
 
   const minutesLeft = minutesLeftOfWorkday(settings.endHour);
 
+  // ---- Replanning: jämför nuläget mot senaste sparade läget ----
+  const [replanDiff, setReplanDiff] = useState<FlowDiff | null>(null);
+  const snapshotRef = useRef<FlowSnapshot | null>(null);
+
+  const currentSnapshot = useCallback(
+    () =>
+      makeSnapshot(flow, energy, capacityPlan.plan, capacityPlan.tooHeavy, capacityPlan.plannedMinutes),
+    [flow, energy, capacityPlan],
+  );
+
+  const recalc = useCallback(
+    (silent = false) => {
+      const next = currentSnapshot();
+      const prev = snapshotRef.current;
+      snapshotRef.current = next;
+      if (!prev) {
+        if (!silent) toast.success("Planen är uppdaterad 💙");
+        return;
+      }
+      const d = diffSnapshots(prev, next);
+      setReplanDiff(d);
+      if (!silent) {
+        toast.success(
+          d.scoreDelta === 0
+            ? "Omräknat – planen står sig"
+            : `Omräknat: FlowScore ${d.scoreDelta > 0 ? "+" : ""}${d.scoreDelta}`,
+        );
+      }
+    },
+    [currentSnapshot],
+  );
+
+  // Init-läge utan att visa någon diff.
+  useEffect(() => {
+    if (!snapshotRef.current) snapshotRef.current = currentSnapshot();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Räkna om automatiskt när energin ändras eller något markeras klart.
+  const doneWorkCount = useMemo(
+    () => tasks.filter((t) => t.area === "jobb" && t.completed).length,
+    [tasks],
+  );
+  const autoKey = `${energy ?? "-"}|${doneWorkCount}`;
+  const lastAutoKey = useRef(autoKey);
+  useEffect(() => {
+    if (lastAutoKey.current === autoKey) return;
+    lastAutoKey.current = autoKey;
+    recalc(true);
+  }, [autoKey, recalc]);
+
   const handleBreakDown = async (id: string, title: string) => {
     setBusyId(id);
     try {
@@ -169,6 +223,16 @@ export default function WorkflowPage() {
         </header>
 
         <FlowScoreCard flow={flow} minutesLeft={minutesLeft} />
+
+        <Button
+          variant="secondary"
+          className="w-full rounded-full"
+          onClick={() => recalc(false)}
+        >
+          <RefreshCw className="mr-2 h-4 w-4" /> Räkna om planen
+        </Button>
+
+        {replanDiff && <FlowReplanDiff diff={replanDiff} onClose={() => setReplanDiff(null)} />}
 
         {/* Dynamisk plan efter FlowScore */}
         <section className={card}>
