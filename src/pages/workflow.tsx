@@ -85,10 +85,10 @@ export default function WorkflowPage() {
     setBusyId(id);
     try {
       const res = await run({ data: { title } });
-      addTaskSteps(id, res.steps.map((s) => s.title));
+      addTaskSteps(id, res.steps.map((s) => ({ title: s.title, when: s.when })));
       toast.success("Uppdelad i små steg 💙", { description: res.intro });
     } catch {
-      addTaskSteps(id, fallbackSteps(title));
+      addTaskSteps(id, fallbackSteps(title).map((t) => ({ title: t })));
       toast.success("Uppdelad i små steg 💙");
     } finally {
       setBusyId(null);
@@ -114,7 +114,7 @@ export default function WorkflowPage() {
   };
 
   return (
-    <Layout title="WorkFlow">
+    <Layout>
       <div className="space-y-5 pb-24">
         <header className={card}>
           <div className="flex items-start justify-between gap-3">
@@ -388,7 +388,7 @@ export default function WorkflowPage() {
                 variant={voice.isListening ? "default" : "secondary"}
                 size="icon"
                 aria-label="Prata in"
-                onClick={() => (voice.isListening ? voice.stop() : voice.start())}
+                onClick={voice.toggleListening}
               >
                 <Mic className="h-4 w-4" />
               </Button>
