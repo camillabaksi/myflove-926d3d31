@@ -27,6 +27,7 @@ const CATEGORY_HUE: Record<string, string> = {
   hem: "152 40% 28%",
   studier: "265 32% 45%",
   jobb: "205 45% 34%",
+  insight: "285 38% 40%",
   ovrigt: "220 10% 42%",
 };
 const catColor = (id: string, alpha?: number) => {
@@ -90,7 +91,9 @@ const CATEGORY_THEMES: Record<string, Record<string, string>> = {
   "/beloningar":     T.gold,
   "/statistik":      T.ink,
   "/friktionsindex": T.terracotta,
+  "/insight":        { "--primary": "285 38% 40%", "--ring": "285 38% 40%", "--accent": "285 35% 86%", "--accent-foreground": "285 45% 22%" },
 };
+
 
 
 
@@ -174,11 +177,12 @@ export default function Layout({ children }: LayoutProps) {
     const byHref = (href: string) => navItems.find((i) => i.href === href);
     const groups: { id: string; label: string; icon: typeof Home; hrefs: string[] }[] = [
       { id: "dagen", label: "Min dag", icon: CalendarDays, hrefs: ["/hem", "/daglig-rutin", "/kalender", "/tasks", "/flowplan"] },
-      { id: "fokus", label: "Fokus & lugn", icon: Brain, hrefs: ["/pomodoro", "/quickflow", "/insight", "/assistant"] },
+      { id: "fokus", label: "Fokus & lugn", icon: Brain, hrefs: ["/pomodoro", "/quickflow", "/assistant"] },
       { id: "mabra", label: "Må bra", icon: HeartPulse, hrefs: ["/ma-bra", "/traning", "/beloningar", "/statistik"] },
       { id: "hem", label: "Hem & familj", icon: House, hrefs: ["/familj", "/barn", "/shopping", "/matlista", "/stadning", "/finances", "/travel"] },
       { id: "studier", label: "Studier", icon: BookOpen, hrefs: ["/studier", "/flowstudy"] },
       { id: "jobb", label: "Jobb", icon: Building2, hrefs: ["/jobb", "/workflow"] },
+      { id: "insight", label: "MyFlove Insight", icon: Brain, hrefs: ["/insight"] },
       { id: "ovrigt", label: "Övrigt", icon: LayoutGrid, hrefs: ["/friktionsindex", "/admin", "/admin-statistik"] },
     ];
     return groups
