@@ -19,6 +19,7 @@ import { Route as CookiesRouteImport } from './routes/cookies'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as GuideAdhdPlannerForAdultsRouteImport } from './routes/guide.adhd-planner-for-adults'
+import { Route as AppWorkflowRouteImport } from './routes/_app.workflow'
 import { Route as AppTravelRouteImport } from './routes/_app.travel'
 import { Route as AppTraningRouteImport } from './routes/_app.traning'
 import { Route as AppTasksRouteImport } from './routes/_app.tasks'
@@ -105,6 +106,11 @@ const GuideAdhdPlannerForAdultsRoute =
     path: '/guide/adhd-planner-for-adults',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AppWorkflowRoute = AppWorkflowRouteImport.update({
+  id: '/workflow',
+  path: '/workflow',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppTravelRoute = AppTravelRouteImport.update({
   id: '/travel',
   path: '/travel',
@@ -323,6 +329,7 @@ export interface FileRoutesByFullPath {
   '/tasks': typeof AppTasksRoute
   '/traning': typeof AppTraningRoute
   '/travel': typeof AppTravelRoute
+  '/workflow': typeof AppWorkflowRoute
   '/guide/adhd-planner-for-adults': typeof GuideAdhdPlannerForAdultsRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -369,6 +376,7 @@ export interface FileRoutesByTo {
   '/tasks': typeof AppTasksRoute
   '/traning': typeof AppTraningRoute
   '/travel': typeof AppTravelRoute
+  '/workflow': typeof AppWorkflowRoute
   '/guide/adhd-planner-for-adults': typeof GuideAdhdPlannerForAdultsRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -417,6 +425,7 @@ export interface FileRoutesById {
   '/_app/tasks': typeof AppTasksRoute
   '/_app/traning': typeof AppTraningRoute
   '/_app/travel': typeof AppTravelRoute
+  '/_app/workflow': typeof AppWorkflowRoute
   '/guide/adhd-planner-for-adults': typeof GuideAdhdPlannerForAdultsRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -465,6 +474,7 @@ export interface FileRouteTypes {
     | '/tasks'
     | '/traning'
     | '/travel'
+    | '/workflow'
     | '/guide/adhd-planner-for-adults'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -511,6 +521,7 @@ export interface FileRouteTypes {
     | '/tasks'
     | '/traning'
     | '/travel'
+    | '/workflow'
     | '/guide/adhd-planner-for-adults'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -558,6 +569,7 @@ export interface FileRouteTypes {
     | '/_app/tasks'
     | '/_app/traning'
     | '/_app/travel'
+    | '/_app/workflow'
     | '/guide/adhd-planner-for-adults'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -656,6 +668,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/guide/adhd-planner-for-adults'
       preLoaderRoute: typeof GuideAdhdPlannerForAdultsRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_app/workflow': {
+      id: '/_app/workflow'
+      path: '/workflow'
+      fullPath: '/workflow'
+      preLoaderRoute: typeof AppWorkflowRouteImport
+      parentRoute: typeof AppRoute
     }
     '/_app/travel': {
       id: '/_app/travel'
@@ -934,6 +953,7 @@ interface AppRouteChildren {
   AppTasksRoute: typeof AppTasksRoute
   AppTraningRoute: typeof AppTraningRoute
   AppTravelRoute: typeof AppTravelRoute
+  AppWorkflowRoute: typeof AppWorkflowRoute
   AppAssistantChatIdRoute: typeof AppAssistantChatIdRoute
 }
 
@@ -966,6 +986,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppTasksRoute: AppTasksRoute,
   AppTraningRoute: AppTraningRoute,
   AppTravelRoute: AppTravelRoute,
+  AppWorkflowRoute: AppWorkflowRoute,
   AppAssistantChatIdRoute: AppAssistantChatIdRoute,
 }
 
