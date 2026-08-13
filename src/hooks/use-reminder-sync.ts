@@ -218,5 +218,6 @@ export function useReminderSync() {
     JSON.stringify(tasks.map((t) => [t.id, t.completed, t.time, t.dueDate, t.reminderMinutesBefore, (t.deadlineLeadDays ?? []).join(","), t.deadlineReminderTime])),
     JSON.stringify(medications.map((m) => [m.id, m.name, m.dosage, m.times.join(",")])),
     JSON.stringify(reminders.map((r) => [r.id, r.completed, r.date, r.time, r.repeat])),
+    JSON.stringify(routines.map((r) => [r.id, r.title, r.time, r.enabled])),
   ]);
 }
