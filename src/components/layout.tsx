@@ -27,6 +27,7 @@ const CATEGORY_HUE: Record<string, string> = {
   hem: "152 40% 28%",
   studier: "265 32% 45%",
   jobb: "205 45% 34%",
+  insight: "285 38% 40%",
   ovrigt: "220 10% 42%",
 };
 const catColor = (id: string, alpha?: number) => {
