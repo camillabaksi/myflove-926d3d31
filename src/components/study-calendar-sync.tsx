@@ -291,6 +291,16 @@ export function StudyCalendarSync() {
       <label className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
         <input
           type="checkbox"
+          checked={settings.includeRevisions}
+          onChange={(e) => patchSettings({ includeRevisions: e.target.checked })}
+          className="h-4 w-4 accent-current"
+        />
+        Lägg in automatiska repetitionspass
+      </label>
+
+      <label className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
+        <input
+          type="checkbox"
           checked={autoSync}
           onChange={(e) => setAutoSync(e.target.checked)}
           className="h-4 w-4 accent-current"
