@@ -168,14 +168,30 @@ export default function CalendarPage() {
     const isToday = dateStr === todayStr;
     const focus = isToday ? currentFocus : null;
     const tasks = allTasks.filter(t => t.dueDate === dateStr);
-    const reminders = activeReminders.filter(r => occursOn(r.date, r.repeat ?? 'none', dateStr));
+    const allReminders = activeReminders.filter(r => occursOn(r.date, r.repeat ?? 'none', dateStr));
     const familyEvents = eventsForDate(dateStr);
-    const childEvents = childItems
+    const allChildEvents = childItems
       .filter((i) => occursOn(i.date, (i.repeat ?? 'none') as RepeatMode, dateStr))
       .map((i) => ({ ...i, child: kids.find((c) => c.id === i.child_id) }));
 
-    return { focus, tasks, reminders, familyEvents, childEvents };
+    // Återkommande poster (som inte startar just denna dag) visas som prick, inte som händelse
+    const isRecurringEcho = (date: string, repeat?: string | null) =>
+      !!repeat && repeat !== 'none' && date !== dateStr;
+
+    const reminders = allReminders.filter(r => !isRecurringEcho(r.date, r.repeat));
+    const childEvents = allChildEvents.filter(e => !isRecurringEcho(e.date, e.repeat as string | null));
+    const recurring = [
+      ...allReminders
+        .filter(r => isRecurringEcho(r.date, r.repeat))
+        .map(r => ({ id: `r-${r.id}`, title: r.title, time: r.time ?? "", color: undefined as string | undefined })),
+      ...allChildEvents
+        .filter(e => isRecurringEcho(e.date, e.repeat as string | null))
+        .map(e => ({ id: `c-${e.id}`, title: e.title, time: e.time ?? "", color: e.child?.color ?? '#a06cd5' })),
+    ];
+
+    return { focus, tasks, reminders, familyEvents, childEvents, recurring };
   };
+
 
   const days: (string | null)[] = [];
   for (let i = 0; i < startOffset; i++) {
