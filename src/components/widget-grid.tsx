@@ -35,7 +35,7 @@ export default function WidgetGrid() {
   const [stopOpen, setStopOpen] = useState(false);
   const { moods } = useMoods();
   const { currentFocus, completedFocusCount } = useFocus();
-  const { activeTasks, tasks } = useTasks();
+  const { activeTasks } = useTasks();
   const { activeItems } = useShoppingList();
   const { activeReminders } = useReminders();
   const { medications, isTaken } = useMedications();
@@ -44,7 +44,6 @@ export default function WidgetGrid() {
     date: "",
     count: 0,
   });
-  const [pomodoroTotalSessions] = useLocalStorage<number>("myflow-pomodoro-total-sessions", 0);
 
   const todayStr = new Date().toISOString().split("T")[0] as string;
 
