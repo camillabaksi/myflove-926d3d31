@@ -26,6 +26,8 @@ export interface StudyScheduleSettings {
   reminderMinutesBefore: number;
   /** Minsta paus efter en föreläsning innan ett pass får börja */
   bufferMinutes: number;
+  /** Lägg själva provet i kalendern (av som standard – kan kännas övermäktigt) */
+  includeExams: boolean;
 }
 
 export const DEFAULT_SCHEDULE_SETTINGS: StudyScheduleSettings = {
@@ -35,6 +37,7 @@ export const DEFAULT_SCHEDULE_SETTINGS: StudyScheduleSettings = {
   horizonDays: 14,
   reminderMinutesBefore: 10,
   bufferMinutes: 15,
+  includeExams: false,
 };
 
 export const WEEKDAYS = ["Mån", "Tis", "Ons", "Tors", "Fre", "Lör", "Sön"] as const;
