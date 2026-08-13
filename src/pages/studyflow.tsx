@@ -255,6 +255,8 @@ export default function StudyflowPage() {
 
         <FlowScoreCard flow={flow} minutesLeft={minutesLeft} />
 
+        <StudyCalendarSync />
+
         <Button variant="secondary" className="w-full rounded-full" onClick={() => recalc(false)}>
           <RefreshCw className="mr-2 h-4 w-4" /> Räkna om plugg-planen
         </Button>
