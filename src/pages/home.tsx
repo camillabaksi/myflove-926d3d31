@@ -181,9 +181,12 @@ export default function Home() {
 
         <PersonalNote />
 
-        <QuickflowCapture />
-
-        <QuickflowList />
+        <HomeSection id="quickflow" title="Quickflow">
+          <div className="space-y-4">
+            <QuickflowCapture />
+            <QuickflowList />
+          </div>
+        </HomeSection>
 
         <AreaOnboarding />
 
@@ -196,22 +199,25 @@ export default function Home() {
           </p>
         </div>
 
-        <StreakCard />
+        <HomeSection id="streak" title="Din svit">
+          <StreakCard />
+        </HomeSection>
 
+        <HomeSection id="weather" title="Väder">
+          <WeatherCard />
+        </HomeSection>
 
-        <WeatherCard />
+        <HomeSection id="shortcuts" title="Genvägar">
+          <HomeShortcuts />
+        </HomeSection>
 
+        <HomeSection id="week" title="Veckan i flow">
+          <WeekInFlow />
+        </HomeSection>
 
-
-
-
-        {/* 4 custom shortcuts — always visible launchpad */}
-        <HomeShortcuts />
-
-        <WeekInFlow />
-
-
-        <ProactiveSuggestions />
+        <HomeSection id="suggestions" title="Förslag">
+          <ProactiveSuggestions />
+        </HomeSection>
 
         <button
           type="button"
