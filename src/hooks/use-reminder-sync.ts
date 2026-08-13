@@ -105,7 +105,7 @@ export function useReminderSync() {
                 ? "Sista dagen – ett litet steg räcker."
                 : `Deadline ${t.dueDate}. Vill du ta ett steg idag?`,
             deliverAt: when.toISOString(),
-            url: t.area === "studier" ? "/studier" : "/tasks",
+            url: t.area === "studier" ? "/studyflow" : "/tasks",
           });
         }
       }
