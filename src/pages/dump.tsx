@@ -7,6 +7,9 @@ import { useToast } from "@/hooks/use-toast";
 import { useLocalStorage } from "@/lib/storage";
 import { REPEAT_LABELS } from "@/lib/recurrence";
 import { getRandomEncouragement } from "@/lib/encouragements";
+import { useQuickflow } from "@/hooks/use-quickflow";
+import QuickflowList from "@/components/quickflow-list";
+import QuickflowCapture from "@/components/quickflow-capture";
 import { Mic, Square, Sparkles, CheckSquare, ShoppingBag, Calendar, Lightbulb, Check, Trash2, Inbox, Smile } from "lucide-react";
 
 interface SortableThought extends ParsedThought {
@@ -41,7 +44,8 @@ export default function Dump() {
   const { addItem } = useShoppingList();
   const { addReminder } = useReminders();
   const { addMood } = useMoods();
-  const { ideas, addIdea, deleteIdea } = useDumpIdeas();
+  const { ideas, deleteIdea } = useDumpIdeas();
+  const { add: addQuickflow } = useQuickflow();
   const [ideaCategories, setIdeaCategories] = useState<Record<string, DumpCategory>>({});
   const { toast } = useToast();
 
@@ -105,7 +109,11 @@ export default function Dump() {
       );
     } else if (thought.category === "mood") {
       addMood(thought.moodScore ?? 3, thought.text);
-    } else addIdea(thought.text);
+    } else {
+      // "Quickflow" – tanken får inte försvinna. Sparas som öppen tanke
+      // som MyFlove frågar om senare.
+      addQuickflow({ text: thought.text, level: "tanke" });
+    }
 
     setThoughts((prev) => (prev ? prev.map((t) => (t.id === thought.id ? { ...t, added: true } : t)) : prev));
   };
@@ -116,7 +124,7 @@ export default function Dump() {
     else if (category === "shopping") addItem(idea.text);
     else if (category === "reminder") addReminder(idea.text, new Date().toISOString().split("T")[0]!);
     else if (category === "mood") addMood(3, idea.text);
-    else return;
+    else addQuickflow({ text: idea.text, level: "tanke" });
     deleteIdea(idea.id);
     toast({ description: getRandomEncouragement() });
   };
@@ -136,12 +144,14 @@ export default function Dump() {
     <Layout>
       <div className="space-y-8">
         <div>
-          <h1 className="text-3xl font-bold mb-2">Dumping</h1>
+          <h1 className="text-3xl font-bold mb-2">Quickflow</h1>
           <p className="text-muted-foreground leading-relaxed">
-            Skriv eller prata in allt som snurrar i huvudet, punkt för punkt eller huller om buller.
-            Appen hjälper dig sortera det till rätt plats.
+            Få ut det ur huvudet. Skriv eller prata in allt som snurrar – huller om buller går bra.
+            Jag sorterar det till rätt plats, och det du inte vill bestämma dig om håller jag åt dig. 💙
           </p>
         </div>
+
+        <QuickflowCapture />
 
         {!thoughts ? (
           <div className="bg-card p-2 rounded-3xl shadow-sm border border-border relative focus-within:ring-2 focus-within:ring-primary/20 transition-all">
@@ -236,10 +246,12 @@ export default function Dump() {
           </div>
         )}
 
+        <QuickflowList />
+
         {ideas.length > 0 && (
           <div className="space-y-3 pt-4">
             <h2 className="text-xl font-semibold flex items-center gap-2">
-              <Inbox size={20} /> Idébank
+              <Inbox size={20} /> Äldre idébank
             </h2>
             <div className="space-y-3">
               {ideas.map((idea) => (
@@ -260,7 +272,6 @@ export default function Dump() {
                     variant="ghost"
                     size="sm"
                     onClick={() => moveIdea(idea)}
-                    disabled={(ideaCategories[idea.id] ?? "idea") === "idea"}
                     className="rounded-xl text-primary hover:bg-primary/10 shrink-0"
                   >
                     Flytta
