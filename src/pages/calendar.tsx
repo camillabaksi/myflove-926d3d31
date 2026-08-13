@@ -214,7 +214,9 @@ export default function CalendarPage() {
         reminders: [],
         familyEvents: [] as ReturnType<typeof eventsForDate>,
         childEvents: [] as Array<(typeof childItems)[number] & { child?: (typeof kids)[number] }>,
+        recurring: [] as Array<{ id: string; title: string; time: string; color?: string }>,
       };
+
 
   return (
     <Layout>
