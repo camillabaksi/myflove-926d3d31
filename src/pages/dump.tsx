@@ -5,6 +5,7 @@ import { useTasks, useShoppingList, useReminders, useDumpIdeas, useMoods } from 
 import { parseDump, CATEGORY_LABELS, type DumpCategory, type ParsedThought } from "@/lib/brain-dump";
 import { useToast } from "@/hooks/use-toast";
 import { useLocalStorage } from "@/lib/storage";
+import { REPEAT_LABELS } from "@/lib/recurrence";
 import { getRandomEncouragement } from "@/lib/encouragements";
 import { Mic, Square, Sparkles, CheckSquare, ShoppingBag, Calendar, Lightbulb, Check, Trash2, Inbox, Smile } from "lucide-react";
 
