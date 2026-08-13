@@ -4,6 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useTasks, useMedications, useReminders } from "@/hooks/use-data";
 import { syncReminder, cancelReminder } from "@/lib/push.functions";
 import { getCurrentSubscription } from "@/lib/push-client";
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
+import type { Routine } from "@/pages/routines";
 
 // Mirror today's + tomorrow's timed tasks and medications into the server
 // so the cron tick can deliver push notifications even when the app is closed.
