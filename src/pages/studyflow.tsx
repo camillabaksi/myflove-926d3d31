@@ -37,6 +37,8 @@ import { useVoiceInput } from "@/hooks/use-voice-input";
 import { QuickflowCapture } from "@/components/quickflow-capture";
 import { QuickflowList } from "@/components/quickflow-list";
 import { breakDownAssignment } from "@/lib/study.functions";
+import { StudiesSection } from "@/pages/studies";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { celebrateFromEvent } from "@/lib/celebrate";
 import {
   MINUTE_CHOICES,
@@ -112,7 +114,7 @@ export default function StudyflowPage() {
 
   const minutesLeft = minutesLeftOfStudyDay(settings.endHour);
 
-  /** Närmaste prov från FlowStudy-materialet. */
+  /** Närmaste prov från StudyBuddy-materialet. */
   const nextExam = useMemo(() => {
     const upcoming = sets
       .filter((s) => s.examDate)
@@ -222,7 +224,7 @@ export default function StudyflowPage() {
           <div className="flex items-start justify-between gap-3">
             <div>
               <h1 className={sectionTitle}>
-                <GraduationCap className="h-5 w-5 text-gold" /> StudyFlow – MyFlove i studierna
+                <GraduationCap className="h-5 w-5 text-gold" /> StudyFlow – dina studier
               </h1>
               <p className="mt-1 text-sm text-muted-foreground">
                 Du behöver inte plugga allt. Jag säger vad som är rimligt just nu.
@@ -317,7 +319,7 @@ export default function StudyflowPage() {
           )}
         </section>
 
-        {/* Prov & repetition från FlowStudy */}
+        {/* Prov & repetition från StudyBuddy */}
         <section className={card}>
           <h2 className={sectionTitle}>
             <Brain className="h-5 w-5 text-primary" /> Prov & repetition
@@ -332,14 +334,14 @@ export default function StudyflowPage() {
             </div>
           ) : (
             <p className="mt-2 text-sm text-muted-foreground">
-              Inget prov inlagt. Lägg in provdatum i FlowStudy så planerar jag pluggandet åt dig.
+              Inget prov inlagt. Lägg in provdatum i StudyBuddy så planerar jag pluggandet åt dig.
             </p>
           )}
           <p className="mt-3 text-sm text-ink">
             🃏 {stats.dueCards} flashcards och ❓ {stats.dueQuestions} frågor väntar på repetition.
           </p>
           <Button asChild variant="secondary" className="mt-3 rounded-full">
-            <Link to="/flowstudy">Öppna FlowStudy</Link>
+            <Link to="/studybuddy">Öppna StudyBuddy</Link>
           </Button>
         </section>
 
