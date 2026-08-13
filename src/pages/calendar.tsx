@@ -6,6 +6,7 @@ import { Link } from "wouter";
 import { CheckSquare, Target, Bell, ChevronLeft, ChevronRight, Trash2, Users, Plus, Download, Upload, Baby } from "lucide-react";
 import { requestNotificationPermission, getNotificationPermission } from "@/lib/push-notifications";
 import { downloadIcs, parseIcs, type IcsEvent } from "@/lib/ics";
+import { occursOn, REPEAT_LABELS, type RepeatMode } from "@/lib/recurrence";
 import { useUser } from "@clerk/react";
 import {
   useGetMyHousehold,
