@@ -96,7 +96,12 @@ export default function Dump() {
     if (thought.category === "task") addTask(thought.text);
     else if (thought.category === "shopping") addItem(thought.text);
     else if (thought.category === "reminder") {
-      addReminder(thought.text, thought.date ?? new Date().toISOString().split("T")[0]!, thought.time);
+      addReminder(
+        thought.text,
+        thought.date ?? new Date().toISOString().split("T")[0]!,
+        thought.time,
+        thought.repeat ?? "none"
+      );
     } else if (thought.category === "mood") {
       addMood(thought.moodScore ?? 3, thought.text);
     } else addIdea(thought.text);
