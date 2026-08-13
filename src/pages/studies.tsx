@@ -1,6 +1,5 @@
 import { useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import Layout from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -50,7 +49,7 @@ function deadlineLabel(dueDate?: string) {
   return { text: `Om ${d} dagar`, tone: "calm" as const };
 }
 
-export default function StudiesPage() {
+export function StudiesSection() {
   const {
     tasks,
     addTask,
@@ -207,27 +206,12 @@ export default function StudiesPage() {
   };
 
   return (
-    <Layout>
-      <div className="space-y-8">
-        <header>
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center">
-              <GraduationCap size={20} />
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold leading-tight">Studier</h1>
-              <p className="text-sm text-muted-foreground">
-                Kurser, inlämningar och dokument på ett ställe. Flow delar upp det stora i små steg.
-              </p>
-            </div>
-          </div>
-        </header>
-
+    <div className="space-y-8">
         <a
-          href="/flowstudy"
+          href="/studybuddy"
           className="block rounded-2xl border border-primary/25 bg-primary/5 p-4 hover:bg-primary/10 transition-colors"
         >
-          <p className="font-medium">FlowStudy – plugga smartare</p>
+          <p className="font-medium">StudyBuddy – plugga smartare</p>
           <p className="text-sm text-muted-foreground">
             Ladda upp PDF, bilder eller text. Flow gör flashcards och quiz, kommer ihåg vad du har svårt för
             och lägger upp pluggandet inför provet.
@@ -602,7 +586,6 @@ export default function StudiesPage() {
             );
           })}
         </section>
-      </div>
-    </Layout>
+    </div>
   );
 }
