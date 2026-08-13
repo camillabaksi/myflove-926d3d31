@@ -2,6 +2,7 @@ import { useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useClerk, Show } from "@clerk/react";
 import Layout from "@/components/layout";
+import { REPEAT_LABELS, type RepeatMode } from "@/lib/recurrence";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -75,6 +76,7 @@ function ChildrenContent() {
   const [time, setTime] = useState("");
   const [notes, setNotes] = useState("");
   const [remind, setRemind] = useState(true);
+  const [repeat, setRepeat] = useState<RepeatMode>("none");
   const [saving, setSaving] = useState(false);
   const [shareOpen, setShareOpen] = useState<string | null>(null);
   const fileInput = useRef<HTMLInputElement | null>(null);
@@ -151,12 +153,14 @@ function ChildrenContent() {
         date: date || undefined,
         time: time || undefined,
         remind: remind && !!date && !!time,
+        repeat,
         filePath,
       });
       if (remind && date && time) await scheduleReminder(id, title.trim(), date, time);
       setTitle("");
       setDate("");
       setTime("");
+      setRepeat("none");
       setNotes("");
       setPendingFile(null);
       if (fileInput.current) fileInput.current.value = "";
@@ -315,6 +319,25 @@ function ChildrenContent() {
                       aria-label="Tid"
                       className="h-11 rounded-2xl w-32"
                     />
+                  </div>
+                )}
+
+                {(kind === "activity" || kind === "task") && (
+                  <div className="flex flex-wrap gap-2">
+                    {(["none", "daily", "weekdays", "weekly"] as RepeatMode[]).map((val) => (
+                      <button
+                        key={val}
+                        type="button"
+                        onClick={() => setRepeat(val)}
+                        className={`px-3 py-2 rounded-2xl border text-sm transition-colors ${
+                          repeat === val
+                            ? "bg-primary text-primary-foreground border-primary"
+                            : "bg-background border-border hover:border-primary/40"
+                        }`}
+                      >
+                        {REPEAT_LABELS[val]}
+                      </button>
+                    ))}
                   </div>
                 )}
 

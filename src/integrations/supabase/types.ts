@@ -79,6 +79,7 @@ export type Database = {
           notes: string | null
           owner_id: string
           remind: boolean
+          repeat: string
           time: string | null
           title: string
           updated_at: string
@@ -94,6 +95,7 @@ export type Database = {
           notes?: string | null
           owner_id?: string
           remind?: boolean
+          repeat?: string
           time?: string | null
           title: string
           updated_at?: string
@@ -109,6 +111,7 @@ export type Database = {
           notes?: string | null
           owner_id?: string
           remind?: boolean
+          repeat?: string
           time?: string | null
           title?: string
           updated_at?: string
