@@ -6,6 +6,8 @@ import OverwhelmedModal from "@/components/overwhelmed-modal";
 import HelpMeModal from "@/components/help-me-modal";
 import WeatherCard from "@/components/weather-card";
 import ProactiveSuggestions from "@/components/proactive-suggestions";
+import QuickflowCapture from "@/components/quickflow-capture";
+import QuickflowList from "@/components/quickflow-list";
 import PersonalNote from "@/components/personal-note";
 import StreakCard from "@/components/streak-card";
 import WeekInFlow from "@/components/week-in-flow";
@@ -178,6 +180,10 @@ export default function Home() {
         </div>
 
         <PersonalNote />
+
+        <QuickflowCapture />
+
+        <QuickflowList />
 
         <AreaOnboarding />
 
