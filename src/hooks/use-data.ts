@@ -358,6 +358,7 @@ export function useTasks() {
     removeTaskAttachment,
     toggleTaskStep,
     deleteTaskStep,
+    syncGeneratedTasks,
 
   };
 }
