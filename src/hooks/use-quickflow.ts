@@ -119,5 +119,5 @@ export function useQuickflow() {
 
   const openItems = items.filter((i) => !i.done);
 
-  return { items, openItems, add, update, complete, remove, snooze };
+  return { items, openItems, add, absorb, update, complete, remove, snooze };
 }

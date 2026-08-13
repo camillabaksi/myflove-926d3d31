@@ -45,7 +45,7 @@ export default function Dump() {
   const { addReminder } = useReminders();
   const { addMood } = useMoods();
   const { ideas, deleteIdea } = useDumpIdeas();
-  const { add: addQuickflow } = useQuickflow();
+  const { add: addQuickflow, absorb: absorbQuickflow } = useQuickflow();
   const [ideaCategories, setIdeaCategories] = useState<Record<string, DumpCategory>>({});
   const { toast } = useToast();
 
@@ -98,6 +98,8 @@ export default function Dump() {
   };
 
   const addSingle = (thought: SortableThought) => {
+    // Landar tanken någon annanstans? Ta bort ev. dubblett i Quickflow-listan.
+    if (thought.category !== "idea") absorbQuickflow(thought.text);
     if (thought.category === "task") addTask(thought.text);
     else if (thought.category === "shopping") addItem(thought.text);
     else if (thought.category === "reminder") {
@@ -112,7 +114,8 @@ export default function Dump() {
     } else {
       // "Quickflow" – tanken får inte försvinna. Sparas som öppen tanke
       // som MyFlove frågar om senare.
-      addQuickflow({ text: thought.text, level: "tanke" });
+      const { merged } = addQuickflow({ text: thought.text, level: "tanke" });
+      if (merged) toast({ description: "Den fanns redan i Quickflow – jag slog ihop dem." });
     }
 
     setThoughts((prev) => (prev ? prev.map((t) => (t.id === thought.id ? { ...t, added: true } : t)) : prev));
@@ -124,7 +127,8 @@ export default function Dump() {
     else if (category === "shopping") addItem(idea.text);
     else if (category === "reminder") addReminder(idea.text, new Date().toISOString().split("T")[0]!);
     else if (category === "mood") addMood(3, idea.text);
-    else addQuickflow({ text: idea.text, level: "tanke" });
+    if (category === "idea") addQuickflow({ text: idea.text, level: "tanke" });
+    else absorbQuickflow(idea.text);
     deleteIdea(idea.id);
     toast({ description: getRandomEncouragement() });
   };
