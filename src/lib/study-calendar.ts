@@ -26,6 +26,8 @@ export interface StudyScheduleSettings {
   reminderMinutesBefore: number;
   /** Minsta paus efter en föreläsning innan ett pass får börja */
   bufferMinutes: number;
+  /** Lägg själva provet i kalendern (av som standard – kan kännas övermäktigt) */
+  includeExams: boolean;
 }
 
 export const DEFAULT_SCHEDULE_SETTINGS: StudyScheduleSettings = {
@@ -35,6 +37,7 @@ export const DEFAULT_SCHEDULE_SETTINGS: StudyScheduleSettings = {
   horizonDays: 14,
   reminderMinutesBefore: 10,
   bufferMinutes: 15,
+  includeExams: false,
 };
 
 export const WEEKDAYS = ["Mån", "Tis", "Ons", "Tors", "Fre", "Lör", "Sön"] as const;
@@ -170,12 +173,13 @@ export function planStudyCalendar(input: PlanInput): PlannedEntry[] {
     }
   }
 
-  // 2. Prov – hamnar på provdagen och blockerar dagen som helhet.
+  // 2. Prov – blockerar alltid tiden, men läggs bara i kalendern om du vill.
   for (const exam of input.exams) {
     if (!dates.includes(exam.date)) continue;
     const time = exam.time ?? "09:00";
     const start = toMin(time);
     busy.push({ date: exam.date, start, end: start + 120 });
+    if (!settings.includeExams) continue;
     entries.push({
       syncKey: `${SYNC_PREFIX}exam:${exam.id}`,
       type: "exam",
