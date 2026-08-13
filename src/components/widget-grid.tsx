@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import {
-  Smile, Target, CheckSquare, ShoppingBag, Calendar, Pill, Timer, Wallet, BarChart3, Trophy, OctagonAlert,
+  Smile, Target, CheckSquare, ShoppingBag, Calendar, Pill, Timer, Wallet, BarChart3, OctagonAlert,
   type LucideIcon,
 } from "lucide-react";
 import { useMoods, useFocus, useTasks, useShoppingList, useReminders, useMedications, useFinances } from "@/hooks/use-data";
 import { useLocalStorage } from "@/lib/storage";
 import { getWeeklyMoodStats } from "@/lib/mood-stats";
-import { getAchievements } from "@/lib/achievements";
 import StopModal from "@/components/stop-modal";
 
 const EMOJI_BY_SCORE: Record<number, string> = { 1: "😢", 2: "😕", 3: "😐", 4: "🙂", 5: "😄" };
@@ -36,7 +35,7 @@ export default function WidgetGrid() {
   const [stopOpen, setStopOpen] = useState(false);
   const { moods } = useMoods();
   const { currentFocus, completedFocusCount } = useFocus();
-  const { activeTasks, tasks } = useTasks();
+  const { activeTasks } = useTasks();
   const { activeItems } = useShoppingList();
   const { activeReminders } = useReminders();
   const { medications, isTaken } = useMedications();
@@ -45,7 +44,6 @@ export default function WidgetGrid() {
     date: "",
     count: 0,
   });
-  const [pomodoroTotalSessions] = useLocalStorage<number>("myflow-pomodoro-total-sessions", 0);
 
   const todayStr = new Date().toISOString().split("T")[0] as string;
 
@@ -70,16 +68,6 @@ export default function WidgetGrid() {
 
   const { trend } = getWeeklyMoodStats(moods);
   const trendLabel = trend === "up" ? "På uppgång ↑" : trend === "down" ? "Nedåt ↓" : trend === "same" ? "Stabilt →" : "Ingen data än";
-
-  const completedTasks = tasks.filter((t) => t.completed);
-  const achievements = getAchievements({
-    moods,
-    completedTasks,
-    pomodoroTotalSessions,
-    completedFocusCount,
-    medicationLogCount: medications.length > 0 ? 1 : 0,
-  });
-  const unlockedCount = achievements.filter((a) => a.unlocked).length;
 
   const widgets: Widget[] = [
     {
@@ -136,12 +124,6 @@ export default function WidgetGrid() {
       icon: BarChart3,
       label: "Veckotrend",
       value: trendLabel,
-    },
-    {
-      href: "/beloningar",
-      icon: Trophy,
-      label: "Belöningar",
-      value: `${unlockedCount} av ${achievements.length}`,
     },
     {
       onClick: () => setStopOpen(true),
