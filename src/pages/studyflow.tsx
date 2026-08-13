@@ -29,6 +29,7 @@ import { useLatestEnergy } from "@/hooks/use-workflow";
 import { useFlowScore } from "@/hooks/use-flowscore";
 import { useFlowStudy, daysUntil, examPhase } from "@/hooks/use-flowstudy";
 import { FlowScoreCard } from "@/components/flow-score-card";
+import { StudyCalendarSync } from "@/components/study-calendar-sync";
 import { FlowReplanDiff } from "@/components/flow-replan-diff";
 import { diffSnapshots, makeSnapshot, type FlowDiff, type FlowSnapshot } from "@/lib/flow-diff";
 import { useQuickflow } from "@/hooks/use-quickflow";
@@ -254,6 +255,8 @@ export default function StudyflowPage() {
         </header>
 
         <FlowScoreCard flow={flow} minutesLeft={minutesLeft} />
+
+        <StudyCalendarSync />
 
         <Button variant="secondary" className="w-full rounded-full" onClick={() => recalc(false)}>
           <RefreshCw className="mr-2 h-4 w-4" /> Räkna om plugg-planen
