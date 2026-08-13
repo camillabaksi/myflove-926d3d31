@@ -168,14 +168,30 @@ export default function CalendarPage() {
     const isToday = dateStr === todayStr;
     const focus = isToday ? currentFocus : null;
     const tasks = allTasks.filter(t => t.dueDate === dateStr);
-    const reminders = activeReminders.filter(r => occursOn(r.date, r.repeat ?? 'none', dateStr));
+    const allReminders = activeReminders.filter(r => occursOn(r.date, r.repeat ?? 'none', dateStr));
     const familyEvents = eventsForDate(dateStr);
-    const childEvents = childItems
+    const allChildEvents = childItems
       .filter((i) => occursOn(i.date, (i.repeat ?? 'none') as RepeatMode, dateStr))
       .map((i) => ({ ...i, child: kids.find((c) => c.id === i.child_id) }));
 
-    return { focus, tasks, reminders, familyEvents, childEvents };
+    // Återkommande poster (som inte startar just denna dag) visas som prick, inte som händelse
+    const isRecurringEcho = (date: string | null | undefined, repeat?: string | null) =>
+      !!repeat && repeat !== 'none' && date !== dateStr;
+
+    const reminders = allReminders.filter(r => !isRecurringEcho(r.date, r.repeat));
+    const childEvents = allChildEvents.filter(e => !isRecurringEcho(e.date, e.repeat as string | null));
+    const recurring = [
+      ...allReminders
+        .filter(r => isRecurringEcho(r.date, r.repeat))
+        .map(r => ({ id: `r-${r.id}`, title: r.title, time: r.time ?? "", color: undefined as string | undefined })),
+      ...allChildEvents
+        .filter(e => isRecurringEcho(e.date, e.repeat as string | null))
+        .map(e => ({ id: `c-${e.id}`, title: e.title, time: e.time ?? "", color: e.child?.color ?? '#a06cd5' })),
+    ];
+
+    return { focus, tasks, reminders, familyEvents, childEvents, recurring };
   };
+
 
   const days: (string | null)[] = [];
   for (let i = 0; i < startOffset; i++) {
@@ -198,7 +214,9 @@ export default function CalendarPage() {
         reminders: [],
         familyEvents: [] as ReturnType<typeof eventsForDate>,
         childEvents: [] as Array<(typeof childItems)[number] & { child?: (typeof kids)[number] }>,
+        recurring: [] as Array<{ id: string; title: string; time: string; color?: string }>,
       };
+
 
   return (
     <Layout>
@@ -265,7 +283,7 @@ export default function CalendarPage() {
                 const isSelected = dateStr === selectedDateStr;
                 const isToday = dateStr === todayStr;
                 const items = getItemsForDate(dateStr);
-                const hasItems = items.focus || items.tasks.length > 0 || items.reminders.length > 0 || items.familyEvents.length > 0 || items.childEvents.length > 0;
+                const hasItems = items.focus || items.tasks.length > 0 || items.reminders.length > 0 || items.familyEvents.length > 0 || items.childEvents.length > 0 || items.recurring.length > 0;
 
                 return (
                   <button
@@ -299,6 +317,13 @@ export default function CalendarPage() {
                             style={{ backgroundColor: isSelected ? 'white' : (e.member?.color ?? '#8a9a5b') }}
                           />
                         ))}
+                        {items.recurring.length > 0 && (
+                          <div
+                            className={`w-1 h-1 rounded-full ${isSelected ? 'bg-white/50' : 'bg-muted-foreground/40'}`}
+                            title="Återkommande"
+                          />
+                        )}
+
                       </div>
                     )}
                   </button>
@@ -336,11 +361,30 @@ export default function CalendarPage() {
               </div>
             </div>
             
-            {!selectedItems.focus && selectedItems.tasks.length === 0 && selectedItems.reminders.length === 0 && selectedItems.familyEvents.length === 0 && selectedItems.childEvents.length === 0 && (
+            {!selectedItems.focus && selectedItems.tasks.length === 0 && selectedItems.reminders.length === 0 && selectedItems.familyEvents.length === 0 && selectedItems.childEvents.length === 0 && selectedItems.recurring.length === 0 && (
               <div className="text-center py-10 bg-card/50 border border-border/50 rounded-3xl text-muted-foreground">
                 Inget inplanerat denna dag.
               </div>
             )}
+
+            {selectedItems.recurring.length > 0 && (
+              <div className="flex flex-wrap items-center gap-2 px-1">
+                <span className="text-xs uppercase tracking-wider text-muted-foreground">Återkommande</span>
+                {selectedItems.recurring.map(r => (
+                  <span
+                    key={r.id}
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary/60 border border-border/50 text-xs text-muted-foreground"
+                  >
+                    <span
+                      className="w-1.5 h-1.5 rounded-full"
+                      style={{ backgroundColor: r.color ?? 'hsl(var(--primary))' }}
+                    />
+                    {r.title}{r.time && ` · ${r.time}`}
+                  </span>
+                ))}
+              </div>
+            )}
+
 
             <div className="space-y-3">
               {selectedItems.childEvents.map(e => (
