@@ -176,13 +176,20 @@ export default function Layout({ children }: LayoutProps) {
   const categories = useMemo(() => {
     const byHref = (href: string) => navItems.find((i) => i.href === href);
     const groups: { id: string; label: string; icon: typeof Home; hrefs: string[] }[] = [
-      { id: "dagen", label: "Min dag", icon: CalendarDays, hrefs: ["/hem", "/daglig-rutin", "/kalender", "/tasks", "/flowplan"] },
-      { id: "fokus", label: "Fokus & lugn", icon: Brain, hrefs: ["/pomodoro", "/quickflow", "/assistant"] },
-      { id: "mabra", label: "Må bra", icon: HeartPulse, hrefs: ["/ma-bra", "/traning", "/beloningar", "/statistik"] },
-      { id: "hem", label: "Hem & familj", icon: House, hrefs: ["/familj", "/barn", "/shopping", "/matlista", "/stadning", "/finances", "/travel"] },
-      { id: "studier", label: "Studier", icon: BookOpen, hrefs: ["/studier", "/studyflow", "/flowstudy"] },
-      { id: "jobb", label: "Jobb", icon: Building2, hrefs: ["/jobb", "/workflow"] },
-      { id: "insight", label: "MyFlove Insight", icon: Brain, hrefs: ["/insight"] },
+      {
+        id: "myflow",
+        label: "MyFlow",
+        icon: CalendarDays,
+        hrefs: [
+          "/hem", "/daglig-rutin", "/kalender", "/tasks", "/flowplan", "/fokus",
+          "/quickflow", "/pomodoro", "/assistant", "/ma-bra", "/traning",
+          "/beloningar", "/statistik", "/insight",
+        ],
+      },
+      { id: "homeflow", label: "HomeFlow", icon: House, hrefs: ["/shopping", "/matlista", "/stadning", "/finances", "/travel"] },
+      { id: "familyflow", label: "FamilyFlow", icon: HeartPulse, hrefs: ["/familj", "/barn"] },
+      { id: "studyflow", label: "StudyFlow", icon: BookOpen, hrefs: ["/studier", "/studyflow", "/flowstudy"] },
+      { id: "workflow", label: "WorkFlow", icon: Building2, hrefs: ["/jobb", "/workflow"] },
       { id: "ovrigt", label: "Övrigt", icon: LayoutGrid, hrefs: ["/friktionsindex", "/admin", "/admin-statistik"] },
     ];
     return groups
