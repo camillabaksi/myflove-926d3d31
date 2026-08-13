@@ -154,7 +154,9 @@ export default function Layout({ children }: LayoutProps) {
     ...(enabledAreas.includes("studier")
       ? [
           { href: "/studier", label: "Studier", icon: GraduationCap },
+          { href: "/studyflow", label: "StudyFlow", icon: Zap },
           { href: "/flowstudy", label: "FlowStudy", icon: Brain },
+
         ]
       : []),
 
@@ -180,7 +182,7 @@ export default function Layout({ children }: LayoutProps) {
       { id: "fokus", label: "Fokus & lugn", icon: Brain, hrefs: ["/pomodoro", "/quickflow", "/assistant"] },
       { id: "mabra", label: "Må bra", icon: HeartPulse, hrefs: ["/ma-bra", "/traning", "/beloningar", "/statistik"] },
       { id: "hem", label: "Hem & familj", icon: House, hrefs: ["/familj", "/barn", "/shopping", "/matlista", "/stadning", "/finances", "/travel"] },
-      { id: "studier", label: "Studier", icon: BookOpen, hrefs: ["/studier", "/flowstudy"] },
+      { id: "studier", label: "Studier", icon: BookOpen, hrefs: ["/studier", "/studyflow", "/flowstudy"] },
       { id: "jobb", label: "Jobb", icon: Building2, hrefs: ["/jobb", "/workflow"] },
       { id: "insight", label: "MyFlove Insight", icon: Brain, hrefs: ["/insight"] },
       { id: "ovrigt", label: "Övrigt", icon: LayoutGrid, hrefs: ["/friktionsindex", "/admin", "/admin-statistik"] },
