@@ -76,10 +76,16 @@ export default function Home() {
   useReminderSync();
 
 
+  // Prov ska aldrig dyka upp automatiskt bland dagens viktigaste –
+  // de känns övermäktiga. De syns bara om man lägger in dem manuellt.
   const prioritizedTasks = useMemo(
-    () => sortTasksByPriority(filterByArea(activeTasks, activeArea)),
+    () =>
+      sortTasksByPriority(
+        filterByArea(activeTasks, activeArea).filter((t) => !t.syncKey?.includes(":exam:")),
+      ),
     [activeTasks, activeArea],
   );
+
 
   const limit = helpPlan?.taskLimit ?? 3;
   const visibleTasks = showAllTasks ? prioritizedTasks : prioritizedTasks.slice(0, limit);
