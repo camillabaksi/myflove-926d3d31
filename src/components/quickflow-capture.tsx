@@ -43,10 +43,10 @@ export function QuickflowCapture({ variant = "card" }: { variant?: "card" | "com
   const save = (opts: { remindAt?: number; placeId?: string; placeName?: string }) => {
     const trimmed = text.trim();
     if (!trimmed) return;
-    add({ text: trimmed, level, ...opts });
+    const { merged } = add({ text: trimmed, level, ...opts });
     setOpen(false);
     reset();
-    toast.success("Lugn. Jag håller det åt dig. 💙", {
+    toast.success(merged ? "Den fanns redan – jag slog ihop dem. 💙" : "Lugn. Jag håller det åt dig. 💙", {
       description: opts.remindAt
         ? `Jag säger till ${formatWhen(opts.remindAt).toLowerCase()}.`
         : opts.placeName
