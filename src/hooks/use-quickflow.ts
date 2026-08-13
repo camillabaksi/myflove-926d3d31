@@ -1,6 +1,12 @@
 import { useCallback } from "react";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
-import type { QuickflowItem, QuickflowLevel } from "@/lib/quickflow";
+import {
+  findDuplicate,
+  strongerLevel,
+  normalizeQuickflowText,
+  type QuickflowItem,
+  type QuickflowLevel,
+} from "@/lib/quickflow";
 
 const STORAGE_KEY = "myflove-quickflow";
 
@@ -16,20 +22,64 @@ export function useQuickflow() {
       remindAt?: number;
       placeId?: string;
       placeName?: string;
-    }) => {
+    }): { item: QuickflowItem; merged: boolean } => {
+      const text = input.text.trim();
+      const existing = findDuplicate(items, text);
+
+      if (existing) {
+        // Samma sak finns redan (t.ex. inlagd både i Dump och Quickflow) –
+        // slå ihop istället för att visa den två gånger.
+        const merged: QuickflowItem = {
+          ...existing,
+          level: strongerLevel(existing.level, input.level),
+          remindAt:
+            input.remindAt && existing.remindAt
+              ? Math.min(input.remindAt, existing.remindAt)
+              : (input.remindAt ?? existing.remindAt),
+          ...(input.placeId
+            ? { placeId: input.placeId, placeName: input.placeName }
+            : {}),
+          notifiedAt: undefined,
+          mergedCount: (existing.mergedCount ?? 0) + 1,
+          mergedAt: Date.now(),
+        };
+        setItems((prev) => prev.map((i) => (i.id === existing.id ? merged : i)));
+        return { item: merged, merged: true };
+      }
+
       const item: QuickflowItem = {
         id: newId(),
-        text: input.text.trim(),
+        text,
         level: input.level,
         createdAt: Date.now(),
         ...(input.remindAt ? { remindAt: input.remindAt } : {}),
         ...(input.placeId ? { placeId: input.placeId, placeName: input.placeName } : {}),
       };
       setItems((prev) => [item, ...prev]);
-      return item;
+      return { item, merged: false };
     },
-    [setItems],
+    [items, setItems],
   );
+
+  /**
+   * Samma sak har landat någon annanstans (uppgift, inköpslista, påminnelse) –
+   * ta bort den öppna Quickflow-tanken så den inte visas dubbelt.
+   */
+  const absorb = useCallback(
+    (text: string): boolean => {
+      const key = normalizeQuickflowText(text);
+      if (!key) return false;
+      const hit = items.some((i) => !i.done && normalizeQuickflowText(i.text) === key);
+      if (hit) {
+        setItems((prev) =>
+          prev.filter((i) => i.done || normalizeQuickflowText(i.text) !== key),
+        );
+      }
+      return hit;
+    },
+    [items, setItems],
+  );
+
 
   const update = useCallback(
     (id: string, patch: Partial<QuickflowItem>) => {
@@ -69,5 +119,5 @@ export function useQuickflow() {
 
   const openItems = items.filter((i) => !i.done);
 
-  return { items, openItems, add, update, complete, remove, snooze };
+  return { items, openItems, add, absorb, update, complete, remove, snooze };
 }
