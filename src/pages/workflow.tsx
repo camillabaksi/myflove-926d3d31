@@ -544,7 +544,7 @@ export default function WorkflowPage() {
           </p>
           <Button
             className="mt-3"
-            onClick={() => setRebuild(rebuildDay(workTasks, metaMap, minutesLeft, energy))}
+            onClick={() => setRebuild(rebuildDay(workTasks, metaMap, Math.min(minutesLeft, flow.capacityMinutes), energy))}
           >
             Bygg om dagen
           </Button>
