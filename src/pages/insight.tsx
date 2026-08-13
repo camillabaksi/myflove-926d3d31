@@ -25,7 +25,7 @@ import {
 function DemoBanner() {
   return (
     <div className="flex gap-3 p-4 rounded-2xl border border-gold/50 bg-gold/10 text-sm">
-      <ShieldAlert size={18} className="shrink-0 mt-0.5 text-gold-foreground/80" />
+      <ShieldAlert size={18} className="shrink-0 mt-0.5 text-foreground/70" />
       <p className="leading-relaxed">
         <strong>DEMO.</strong> Den här versionen använder endast fiktiva testprofiler. Använd inte
         riktiga personuppgifter eller känsliga dokument.
