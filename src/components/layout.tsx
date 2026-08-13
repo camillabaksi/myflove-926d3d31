@@ -177,11 +177,12 @@ export default function Layout({ children }: LayoutProps) {
     const byHref = (href: string) => navItems.find((i) => i.href === href);
     const groups: { id: string; label: string; icon: typeof Home; hrefs: string[] }[] = [
       { id: "dagen", label: "Min dag", icon: CalendarDays, hrefs: ["/hem", "/daglig-rutin", "/kalender", "/tasks", "/flowplan"] },
-      { id: "fokus", label: "Fokus & lugn", icon: Brain, hrefs: ["/pomodoro", "/quickflow", "/insight", "/assistant"] },
+      { id: "fokus", label: "Fokus & lugn", icon: Brain, hrefs: ["/pomodoro", "/quickflow", "/assistant"] },
       { id: "mabra", label: "Må bra", icon: HeartPulse, hrefs: ["/ma-bra", "/traning", "/beloningar", "/statistik"] },
       { id: "hem", label: "Hem & familj", icon: House, hrefs: ["/familj", "/barn", "/shopping", "/matlista", "/stadning", "/finances", "/travel"] },
       { id: "studier", label: "Studier", icon: BookOpen, hrefs: ["/studier", "/flowstudy"] },
       { id: "jobb", label: "Jobb", icon: Building2, hrefs: ["/jobb", "/workflow"] },
+      { id: "insight", label: "MyFlove Insight", icon: Brain, hrefs: ["/insight"] },
       { id: "ovrigt", label: "Övrigt", icon: LayoutGrid, hrefs: ["/friktionsindex", "/admin", "/admin-statistik"] },
     ];
     return groups
