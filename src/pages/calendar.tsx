@@ -281,7 +281,7 @@ export default function CalendarPage() {
                 const isSelected = dateStr === selectedDateStr;
                 const isToday = dateStr === todayStr;
                 const items = getItemsForDate(dateStr);
-                const hasItems = items.focus || items.tasks.length > 0 || items.reminders.length > 0 || items.familyEvents.length > 0 || items.childEvents.length > 0;
+                const hasItems = items.focus || items.tasks.length > 0 || items.reminders.length > 0 || items.familyEvents.length > 0 || items.childEvents.length > 0 || items.recurring.length > 0;
 
                 return (
                   <button
