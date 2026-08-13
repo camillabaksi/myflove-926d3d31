@@ -195,8 +195,9 @@ export function planStudyCalendar(input: PlanInput): PlannedEntry[] {
     });
   }
 
-  // 3. Repetitionspass – läggs i lediga luckor fram till provet.
-  for (const exam of input.exams) {
+  // 3. Repetitionspass – bara om användaren själv slagit på det.
+  for (const exam of settings.includeRevisions ? input.exams : []) {
+
     for (const date of dates) {
       if (date > exam.date) break;
       const daysLeft = Math.round(
