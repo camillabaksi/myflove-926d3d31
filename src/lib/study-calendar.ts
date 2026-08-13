@@ -173,12 +173,13 @@ export function planStudyCalendar(input: PlanInput): PlannedEntry[] {
     }
   }
 
-  // 2. Prov – hamnar på provdagen och blockerar dagen som helhet.
+  // 2. Prov – blockerar alltid tiden, men läggs bara i kalendern om du vill.
   for (const exam of input.exams) {
     if (!dates.includes(exam.date)) continue;
     const time = exam.time ?? "09:00";
     const start = toMin(time);
     busy.push({ date: exam.date, start, end: start + 120 });
+    if (!settings.includeExams) continue;
     entries.push({
       syncKey: `${SYNC_PREFIX}exam:${exam.id}`,
       type: "exam",
