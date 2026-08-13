@@ -76,12 +76,14 @@ export default function Home() {
   useReminderSync();
 
 
-  // Prov ska aldrig dyka upp automatiskt bland dagens viktigaste –
-  // de känns övermäktiga. De syns bara om man lägger in dem manuellt.
+  // Prov och automatiska repetitionspass ska aldrig dyka upp bland dagens
+  // viktigaste – de känns övermäktiga. De syns bara om man lägger in dem själv.
   const prioritizedTasks = useMemo(
     () =>
       sortTasksByPriority(
-        filterByArea(activeTasks, activeArea).filter((t) => !t.syncKey?.includes(":exam:")),
+        filterByArea(activeTasks, activeArea).filter(
+          (t) => !t.syncKey?.includes(":exam:") && !t.syncKey?.includes(":revision:"),
+        ),
       ),
     [activeTasks, activeArea],
   );
