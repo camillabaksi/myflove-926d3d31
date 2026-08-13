@@ -153,9 +153,8 @@ export default function Layout({ children }: LayoutProps) {
     { href: "/friktionsindex", label: "Feedback", icon: Flame },
     ...(enabledAreas.includes("studier")
       ? [
-          { href: "/studier", label: "Studier", icon: GraduationCap },
-          { href: "/studyflow", label: "StudyFlow", icon: Zap },
-          { href: "/flowstudy", label: "FlowStudy", icon: Brain },
+          { href: "/studyflow", label: "StudyFlow", icon: GraduationCap },
+          { href: "/studybuddy", label: "StudyBuddy", icon: Brain },
 
         ]
       : []),
@@ -190,7 +189,7 @@ export default function Layout({ children }: LayoutProps) {
       },
       { id: "homeflow", label: "HomeFlow", icon: House, hrefs: ["/shopping", "/matlista", "/stadning", "/finances", "/travel"] },
       { id: "familyflow", label: "FamilyFlow", icon: HeartPulse, hrefs: ["/familj", "/barn"] },
-      { id: "studyflow", label: "StudyFlow", icon: BookOpen, hrefs: ["/studier", "/studyflow", "/flowstudy"] },
+      { id: "studyflow", label: "StudyFlow", icon: BookOpen, hrefs: ["/studyflow", "/studybuddy"] },
       { id: "workflow", label: "WorkFlow", icon: Building2, hrefs: ["/jobb", "/workflow"] },
       { id: "ovrigt", label: "Övrigt", icon: LayoutGrid, hrefs: ["/friktionsindex", "/admin", "/admin-statistik"] },
     ];
