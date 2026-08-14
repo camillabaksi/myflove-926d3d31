@@ -19,6 +19,11 @@ export const Route = createFileRoute("/sign-up")({
           "Skapa konto på MyFlove – ett lugnare hem för hjärnan för dig med ADHD, autism eller mycket i huvudet.",
       },
       { property: "og:title", content: "Skapa konto – MyFlove" },
+      {
+        property: "og:description",
+        content: "Skapa konto på MyFlove – ett lugnare hem för hjärnan, gratis att prova.",
+      },
+      { property: "og:type", content: "website" },
       { property: "og:url", content: "https://myflove.lovable.app/sign-up" },
     ],
     links: [{ rel: "canonical", href: "https://myflove.lovable.app/sign-up" }],

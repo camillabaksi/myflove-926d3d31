@@ -10,6 +10,12 @@ export const Route = createFileRoute("/integritet")({
           "Så hanterar MyFlove dina personuppgifter enligt GDPR – vilka data vi samlar, varför, hur länge och dina rättigheter.",
       },
       { property: "og:title", content: "Integritetspolicy – MyFlove" },
+      {
+        property: "og:description",
+        content:
+          "Så hanterar MyFlove dina personuppgifter enligt GDPR – vilka data vi samlar, varför och dina rättigheter.",
+      },
+      { property: "og:type", content: "website" },
       { property: "og:url", content: "https://myflove.lovable.app/integritet" },
     ],
     links: [{ rel: "canonical", href: "https://myflove.lovable.app/integritet" }],
