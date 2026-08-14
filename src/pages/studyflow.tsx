@@ -267,6 +267,10 @@ export default function StudyflowPage() {
           </TabsContent>
           <TabsContent value="nu" className="mt-4 space-y-5">
 
+        <NextLectureCard />
+
+        <ScheduleImport />
+
         <StudyCalendarSync />
 
         <Button variant="secondary" className="w-full rounded-full" onClick={() => recalc(false)}>
