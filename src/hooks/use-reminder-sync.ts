@@ -7,6 +7,7 @@ import { getCurrentSubscription } from "@/lib/push-client";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import type { Routine } from "@/pages/routines";
 import { useQuickflow } from "@/hooks/use-quickflow";
+import { useStudySchedule } from "@/hooks/use-study-schedule";
 
 // Mirror today's + tomorrow's timed tasks and medications into the server
 // so the cron tick can deliver push notifications even when the app is closed.
@@ -186,6 +187,32 @@ export function useReminderSync() {
             deliverAt: when.toISOString(),
             url: "/daglig-rutin",
           });
+        }
+      }
+
+      // Lektioner från det importerade schemat: påminnelse X min innan, 14 dagar framåt.
+      const lead = studySettings.lectureReminderMinutes ?? 0;
+      if (lead > 0) {
+        for (const lecture of lectures) {
+          for (const date of horizonDates) {
+            const d = new Date(date + "T00:00:00");
+            if (((d.getDay() + 6) % 7) !== lecture.weekday) continue;
+            const when = combineDateTime(date, lecture.start);
+            if (!when) continue;
+            const deliver = new Date(when.getTime() - lead * 60_000);
+            if (deliver.getTime() < now + 30_000) continue;
+            const key = `lecture:${lecture.id}:${date}`;
+            desired.set(key, {
+              clientKey: key,
+              kind: "custom",
+              title: `🎓 Om ${lead} min: ${lecture.title}`,
+              body: lecture.location
+                ? `Kl ${lecture.start} i ${lecture.location}`
+                : `Kl ${lecture.start}`,
+              deliverAt: deliver.toISOString(),
+              url: "/studyflow",
+            });
+          }
         }
       }
 
