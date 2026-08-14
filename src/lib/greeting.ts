@@ -23,7 +23,7 @@ function slotFor(hour: number): Slot {
 }
 
 const SALUTATIONS: Record<Slot, string[]> = {
-  night: ["Hej på dig, natturgla", "Uppe sent?", "Fint att du tittar in"],
+  night: ["Hej på dig", "God natt-timme", "Fint att du tittar in"],
   morning: ["God morgon", "Hej på morgonen", "Mysig morgon", "Godmorgon"],
   midday: ["Hej i dagen", "Skön förmiddag", "Kul att se dig"],
   afternoon: ["God eftermiddag", "Hej", "Trevlig eftermiddag"],

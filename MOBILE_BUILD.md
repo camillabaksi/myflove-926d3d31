@@ -115,3 +115,43 @@ Nuvarande push (Web Push med VAPID) fungerar i PWA-läge på webben, men
    FCM/APNs-token istället för Web Push-subscription.
 
 Säg till när du är där, så gör jag den migreringen.
+
+---
+
+## Steg från hälsoappen (Apple Health / Health Connect)
+
+Pluginet `capacitor-health` är installerat och används av `/traning`. På webben
+faller sidan tillbaka på manuell inmatning – ingen extra konfiguration behövs där.
+För native-bygget:
+
+1. Kör `bunx cap sync` så att pluginet länkas in i `ios/` och `android/`.
+
+**iOS** (Xcode):
+- Signing & Capabilities → **+ Capability** → *HealthKit*.
+- I `ios/App/App/Info.plist`, lägg till:
+
+```xml
+<key>NSHealthShareUsageDescription</key>
+<string>MyFlove läser dina steg för att visa din veckoaktivitet och anpassa träningsprogram.</string>
+<key>NSHealthUpdateUsageDescription</key>
+<string>MyFlove skriver inte hälsodata, men behovet anges av systemet.</string>
+```
+
+**Android** (`android/app/src/main/AndroidManifest.xml`):
+
+```xml
+<uses-permission android:name="android.permission.health.READ_STEPS" />
+
+<!-- inuti <activity> för MainActivity -->
+<intent-filter>
+  <action android:name="androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE" />
+</intent-filter>
+```
+
+- Health Connect måste vara installerat på telefonen (Android 13 och äldre:
+  installeras från Play Store; Android 14+: inbyggt).
+- I Play Console krävs en motivering för hälsodata-behörigheten samt länk till
+  integritetspolicyn (`/integritet`).
+
+Första gången användaren trycker **Hämta steg** visas systemets
+behörighetsdialog. Nekas den öppnar appen hälsoinställningarna automatiskt.

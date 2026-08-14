@@ -19,13 +19,17 @@ export const Route = createFileRoute("/sign-up")({
           "Skapa konto på MyFlove – ett lugnare hem för hjärnan för dig med ADHD, autism eller mycket i huvudet.",
       },
       { property: "og:title", content: "Skapa konto – MyFlove" },
+      {
+        property: "og:description",
+        content: "Skapa konto på MyFlove – ett lugnare hem för hjärnan, gratis att prova.",
+      },
+      { property: "og:type", content: "website" },
       { property: "og:url", content: "https://myflove.lovable.app/sign-up" },
     ],
     links: [{ rel: "canonical", href: "https://myflove.lovable.app/sign-up" }],
   }),
-  validateSearch: (s: Record<string, unknown>) => ({
-    next: typeof s.next === "string" ? s.next : undefined,
-  }),
+  validateSearch: (s: Record<string, unknown>): { next?: string } =>
+    typeof s.next === "string" ? { next: s.next } : {},
   component: SignUpPage,
 });
 

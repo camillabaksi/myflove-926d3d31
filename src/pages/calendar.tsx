@@ -1,9 +1,12 @@
 import { useRef, useState } from "react";
 import Layout from "@/components/layout";
 import { useFocus, useTasks, useReminders } from "@/hooks/use-data";
-import { CheckSquare, Target, Bell, ChevronLeft, ChevronRight, Trash2, Users, Plus, Download, Upload } from "lucide-react";
+import { useChildren } from "@/hooks/use-children";
+import { Link } from "wouter";
+import { CheckSquare, Target, Bell, ChevronLeft, ChevronRight, Trash2, Users, Plus, Download, Upload, Baby } from "lucide-react";
 import { requestNotificationPermission, getNotificationPermission } from "@/lib/push-notifications";
 import { downloadIcs, parseIcs, type IcsEvent } from "@/lib/ics";
+import { occursOn, REPEAT_LABELS, type RepeatMode } from "@/lib/recurrence";
 import { useUser } from "@clerk/react";
 import {
   useGetMyHousehold,
@@ -23,6 +26,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
+import CollapsibleSection from "@/components/collapsible-section";
 
 function useFamilyEventsByDate() {
   const { isSignedIn } = useUser();
@@ -50,6 +54,7 @@ export default function CalendarPage() {
   const { activeTasks, completedTasks, deleteTask, setTaskTime } = useTasks();
   const { activeReminders, addReminder, deleteReminder, updateReminder } = useReminders();
   const { eventsForDate, hasHousehold } = useFamilyEventsByDate();
+  const { children: kids, items: childItems } = useChildren();
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -164,11 +169,30 @@ export default function CalendarPage() {
     const isToday = dateStr === todayStr;
     const focus = isToday ? currentFocus : null;
     const tasks = allTasks.filter(t => t.dueDate === dateStr);
-    const reminders = activeReminders.filter(r => r.date === dateStr);
+    const allReminders = activeReminders.filter(r => occursOn(r.date, r.repeat ?? 'none', dateStr));
     const familyEvents = eventsForDate(dateStr);
+    const allChildEvents = childItems
+      .filter((i) => occursOn(i.date, (i.repeat ?? 'none') as RepeatMode, dateStr))
+      .map((i) => ({ ...i, child: kids.find((c) => c.id === i.child_id) }));
 
-    return { focus, tasks, reminders, familyEvents };
+    // Återkommande poster (som inte startar just denna dag) visas som prick, inte som händelse
+    const isRecurringEcho = (date: string | null | undefined, repeat?: string | null) =>
+      !!repeat && repeat !== 'none' && date !== dateStr;
+
+    const reminders = allReminders.filter(r => !isRecurringEcho(r.date, r.repeat));
+    const childEvents = allChildEvents.filter(e => !isRecurringEcho(e.date, e.repeat as string | null));
+    const recurring = [
+      ...allReminders
+        .filter(r => isRecurringEcho(r.date, r.repeat))
+        .map(r => ({ id: `r-${r.id}`, title: r.title, time: r.time ?? "", color: undefined as string | undefined })),
+      ...allChildEvents
+        .filter(e => isRecurringEcho(e.date, e.repeat as string | null))
+        .map(e => ({ id: `c-${e.id}`, title: e.title, time: e.time ?? "", color: e.child?.color ?? '#a06cd5' })),
+    ];
+
+    return { focus, tasks, reminders, familyEvents, childEvents, recurring };
   };
+
 
   const days: (string | null)[] = [];
   for (let i = 0; i < startOffset; i++) {
@@ -185,7 +209,15 @@ export default function CalendarPage() {
 
   const selectedItems = selectedDateStr
     ? getItemsForDate(selectedDateStr)
-    : { focus: null, tasks: [], reminders: [], familyEvents: [] as ReturnType<typeof eventsForDate> };
+    : {
+        focus: null,
+        tasks: [],
+        reminders: [],
+        familyEvents: [] as ReturnType<typeof eventsForDate>,
+        childEvents: [] as Array<(typeof childItems)[number] & { child?: (typeof kids)[number] }>,
+        recurring: [] as Array<{ id: string; title: string; time: string; color?: string }>,
+      };
+
 
   return (
     <Layout>
@@ -227,17 +259,24 @@ export default function CalendarPage() {
         </p>
 
         <div className="bg-card rounded-3xl border border-border shadow-sm overflow-hidden">
-          <div className="flex items-center justify-between p-6 pb-2">
-            <button onClick={prevMonth} className="p-2 hover:bg-secondary rounded-xl transition-colors">
-              <ChevronLeft size={24} />
-            </button>
-            <h2 className="text-xl font-medium capitalize">{monthName}</h2>
-            <button onClick={nextMonth} className="p-2 hover:bg-secondary rounded-xl transition-colors">
-              <ChevronRight size={24} />
-            </button>
-          </div>
-
-          <div className="p-6 pt-4">
+          <div className="p-6 pb-2">
+            <CollapsibleSection
+              title={monthName}
+              id="månadsöversikt"
+              help="Tryck på en dag för att se vad som händer. Prickar betyder att något är inlagt."
+              headingClassName="text-xl font-medium capitalize"
+              actions={
+                <div className="flex items-center gap-1">
+                  <button onClick={prevMonth} className="p-2 hover:bg-secondary rounded-xl transition-colors">
+                    <ChevronLeft size={24} />
+                  </button>
+                  <button onClick={nextMonth} className="p-2 hover:bg-secondary rounded-xl transition-colors">
+                    <ChevronRight size={24} />
+                  </button>
+                </div>
+              }
+            >
+          <div className="pt-2">
             <div className="grid grid-cols-7 gap-1 mb-2 text-center text-sm font-medium text-muted-foreground">
               <div>Må</div><div>Ti</div><div>On</div><div>To</div><div>Fr</div><div>Lö</div><div>Sö</div>
             </div>
@@ -252,7 +291,7 @@ export default function CalendarPage() {
                 const isSelected = dateStr === selectedDateStr;
                 const isToday = dateStr === todayStr;
                 const items = getItemsForDate(dateStr);
-                const hasItems = items.focus || items.tasks.length > 0 || items.reminders.length > 0 || items.familyEvents.length > 0;
+                const hasItems = items.focus || items.tasks.length > 0 || items.reminders.length > 0 || items.familyEvents.length > 0 || items.childEvents.length > 0 || items.recurring.length > 0;
 
                 return (
                   <button
@@ -272,6 +311,13 @@ export default function CalendarPage() {
                         {items.focus && <div className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-white' : 'bg-accent'}`} />}
                         {items.reminders.length > 0 && <div className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-white/80' : 'bg-primary'}`} />}
                         {items.tasks.length > 0 && <div className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-white/60' : 'bg-muted-foreground'}`} />}
+                        {items.childEvents.slice(0, 3).map((e, i) => (
+                          <div
+                            key={`child-${i}`}
+                            className="w-1.5 h-1.5 rounded-full"
+                            style={{ backgroundColor: isSelected ? 'white' : (e.child?.color ?? '#a06cd5') }}
+                          />
+                        ))}
                         {items.familyEvents.slice(0, 3).map((e, i) => (
                           <div
                             key={`fam-${i}`}
@@ -279,12 +325,21 @@ export default function CalendarPage() {
                             style={{ backgroundColor: isSelected ? 'white' : (e.member?.color ?? '#8a9a5b') }}
                           />
                         ))}
+                        {items.recurring.length > 0 && (
+                          <div
+                            className={`w-1 h-1 rounded-full ${isSelected ? 'bg-white/50' : 'bg-muted-foreground/40'}`}
+                            title="Återkommande"
+                          />
+                        )}
+
                       </div>
                     )}
                   </button>
                 );
               })}
             </div>
+          </div>
+            </CollapsibleSection>
           </div>
         </div>
 
@@ -316,13 +371,52 @@ export default function CalendarPage() {
               </div>
             </div>
             
-            {!selectedItems.focus && selectedItems.tasks.length === 0 && selectedItems.reminders.length === 0 && selectedItems.familyEvents.length === 0 && (
+            {!selectedItems.focus && selectedItems.tasks.length === 0 && selectedItems.reminders.length === 0 && selectedItems.familyEvents.length === 0 && selectedItems.childEvents.length === 0 && selectedItems.recurring.length === 0 && (
               <div className="text-center py-10 bg-card/50 border border-border/50 rounded-3xl text-muted-foreground">
                 Inget inplanerat denna dag.
               </div>
             )}
 
+            {selectedItems.recurring.length > 0 && (
+              <div className="flex flex-wrap items-center gap-2 px-1">
+                <span className="text-xs uppercase tracking-wider text-muted-foreground">Återkommande</span>
+                {selectedItems.recurring.map(r => (
+                  <span
+                    key={r.id}
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary/60 border border-border/50 text-xs text-muted-foreground"
+                  >
+                    <span
+                      className="w-1.5 h-1.5 rounded-full"
+                      style={{ backgroundColor: r.color ?? 'hsl(var(--primary))' }}
+                    />
+                    {r.title}{r.time && ` · ${r.time}`}
+                  </span>
+                ))}
+              </div>
+            )}
+
+
             <div className="space-y-3">
+              {selectedItems.childEvents.map(e => (
+                <Link
+                  key={`child-${e.id}`}
+                  href="/barn"
+                  className="flex items-center gap-4 p-4 bg-card border border-border rounded-2xl hover:bg-secondary transition-colors"
+                >
+                  <Baby style={{ color: e.child?.color ?? '#a06cd5' }} size={24} />
+                  <div className="min-w-0">
+                    <div
+                      className="text-xs font-medium uppercase tracking-wider mb-0.5"
+                      style={{ color: e.child?.color ?? '#a06cd5' }}
+                    >
+                      {e.child?.name ?? "Barn"} {e.time && `kl ${e.time}`}
+                      {e.sharedWith.length > 0 && " · delad"}
+                    </div>
+                    <div className={`text-lg font-medium truncate ${e.completed ? 'line-through opacity-60' : ''}`}>{e.title}</div>
+                  </div>
+                </Link>
+              ))}
+
               {selectedItems.familyEvents.map(e => (
                 <div key={`fam-${e.id}`} className="flex items-center justify-between gap-4 p-4 bg-card border border-border rounded-2xl group">
                   <div className="flex items-center gap-4">

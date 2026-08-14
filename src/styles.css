@@ -41,6 +41,8 @@
   --color-gold: hsl(var(--gold));
   --color-terracotta: hsl(var(--terracotta));
   --color-terracotta-soft: hsl(var(--terracotta-soft));
+  --color-forest: hsl(var(--forest));
+  --color-forest-deep: hsl(var(--forest-deep));
 
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Fraunces", ui-serif, Georgia, serif;
@@ -52,82 +54,94 @@
 }
 
 :root {
-  /* MyFlove preview palette: warm, grounded, never clinical */
-  --background: 38 35% 94%;
-  --foreground: 194 13% 20%;
-  --border: 30 18% 82%;
+  /* MyFlove palette: beige, skogsgrön, guld och vitt */
+  --background: 40 33% 93%;
+  --foreground: 150 18% 14%;
+  --border: 40 20% 84%;
 
-  --card: 40 100% 98%;
-  --card-foreground: 194 13% 20%;
+  --card: 0 0% 100%;
+  --card-foreground: 150 18% 14%;
 
-  --popover: 40 100% 98%;
-  --popover-foreground: 194 13% 20%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 150 18% 14%;
 
-  --primary: 7 47% 44%;
-  --primary-foreground: 40 100% 98%;
+  --primary: 152 36% 22%;
+  --primary-foreground: 45 50% 97%;
 
-  --secondary: 39 36% 89%;
-  --secondary-foreground: 194 13% 20%;
+  --secondary: 42 32% 90%;
+  --secondary-foreground: 150 18% 14%;
 
-  --muted: 39 25% 89%;
-  --muted-foreground: 29 10% 40%;
+  --muted: 42 24% 90%;
+  --muted-foreground: 150 8% 38%;
 
-  --accent: 138 30% 84%;
-  --accent-foreground: 138 30% 22%;
+  --accent: 40 45% 88%;
+  --accent-foreground: 36 60% 24%;
 
-  --destructive: 8 55% 55%;
-  --destructive-foreground: 40 100% 98%;
+  --destructive: 6 55% 46%;
+  --destructive-foreground: 45 50% 97%;
 
-  --input: 38 30% 88%;
-  --ring: 7 47% 44%;
+  --input: 40 24% 87%;
+  --ring: 152 36% 22%;
 
 
-  --radius: 1rem;
+  --radius: 1.25rem;
 
   /* Raw brand tokens */
-  --ink: 194 13% 20%;
-  --cream: 40 100% 98%;
-  --sage: 138 15% 70%;
-  --gold: 35 73% 61%;
-  --terracotta: 7 47% 44%;
-  --terracotta-soft: 8 61% 61%;
+  --ink: 150 18% 14%;
+  --cream: 42 45% 96%;
+  --sage: 150 20% 62%;
+  --gold: 38 62% 52%;
+  --terracotta: 152 36% 22%;
+  --terracotta-soft: 152 26% 38%;
+  --forest: 152 36% 22%;
+  --forest-deep: 154 40% 15%;
+
+  --gradient-hero: linear-gradient(135deg, hsl(42 45% 96%) 0%, hsl(40 40% 91%) 45%, hsl(150 22% 86%) 100%);
+  --shadow-soft: 0 1px 2px hsl(150 18% 14% / 0.04), 0 12px 28px -18px hsl(150 18% 14% / 0.28);
+  --shadow-lifted: 0 2px 4px hsl(150 18% 14% / 0.05), 0 24px 48px -24px hsl(150 18% 14% / 0.32);
 }
 
 .dark {
-  --background: 194 13% 12%;
-  --foreground: 40 60% 95%;
-  --border: 194 10% 22%;
+  --background: 154 22% 9%;
+  --foreground: 42 40% 94%;
+  --border: 154 12% 20%;
 
-  --card: 194 12% 16%;
-  --card-foreground: 40 60% 95%;
+  --card: 154 18% 13%;
+  --card-foreground: 42 40% 94%;
 
-  --popover: 194 12% 16%;
-  --popover-foreground: 40 60% 95%;
+  --popover: 154 18% 13%;
+  --popover-foreground: 42 40% 94%;
 
-  --primary: 8 55% 58%;
-  --primary-foreground: 40 40% 10%;
+  --primary: 150 34% 58%;
+  --primary-foreground: 154 40% 10%;
 
-  --secondary: 38 14% 20%;
-  --secondary-foreground: 40 45% 88%;
+  --secondary: 150 10% 20%;
+  --secondary-foreground: 42 35% 90%;
 
-  --muted: 194 10% 20%;
-  --muted-foreground: 38 12% 65%;
+  --muted: 154 10% 18%;
+  --muted-foreground: 42 12% 68%;
 
-  --accent: 138 18% 24%;
-  --accent-foreground: 138 40% 82%;
+  --accent: 38 30% 24%;
+  --accent-foreground: 38 60% 80%;
 
-  --destructive: 8 55% 55%;
-  --destructive-foreground: 40 100% 98%;
+  --destructive: 6 55% 55%;
+  --destructive-foreground: 45 50% 97%;
 
-  --input: 194 10% 24%;
-  --ring: 8 55% 58%;
+  --input: 154 10% 22%;
+  --ring: 150 34% 58%;
 
-  --ink: 40 60% 95%;
-  --cream: 194 13% 12%;
-  --sage: 138 18% 60%;
-  --gold: 35 65% 58%;
-  --terracotta: 8 55% 58%;
-  --terracotta-soft: 8 65% 68%;
+  --ink: 42 40% 94%;
+  --cream: 154 18% 13%;
+  --sage: 150 20% 55%;
+  --gold: 38 60% 60%;
+  --terracotta: 150 34% 58%;
+  --terracotta-soft: 150 26% 68%;
+  --forest: 150 34% 58%;
+  --forest-deep: 154 30% 22%;
+
+  --gradient-hero: linear-gradient(135deg, hsl(154 20% 14%) 0%, hsl(154 16% 12%) 50%, hsl(150 18% 18%) 100%);
+  --shadow-soft: 0 1px 2px hsl(0 0% 0% / 0.3), 0 12px 28px -18px hsl(0 0% 0% / 0.6);
+  --shadow-lifted: 0 2px 4px hsl(0 0% 0% / 0.35), 0 24px 48px -24px hsl(0 0% 0% / 0.65);
 }
 
 @layer base {
@@ -144,5 +158,28 @@
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
+    letter-spacing: -0.015em;
   }
+}
+
+@utility surface-card {
+  background-color: hsl(var(--card));
+  border: 1px solid hsl(var(--border) / 0.7);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+
+@utility surface-hero {
+  background-image: var(--gradient-hero);
+  border: 1px solid hsl(var(--border) / 0.6);
+  border-radius: calc(var(--radius) + 0.5rem);
+  box-shadow: var(--shadow-lifted);
+}
+
+@utility shadow-soft {
+  box-shadow: var(--shadow-soft);
+}
+
+@utility shadow-lifted {
+  box-shadow: var(--shadow-lifted);
 }

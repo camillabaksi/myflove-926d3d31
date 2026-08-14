@@ -37,6 +37,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "apple-mobile-web-app-title", content: "MyFlove" },
       { name: "mobile-web-app-capable", content: "yes" },
       { name: "vibekollen-verifiering", content: "vk-52413b42f16be1ff3bcba37c" },
+      { name: "google-site-verification", content: "no4-nUlVosHpU1GzHhDN73UtQH7v3b8E4k-qs1mNVgM" },
+
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -49,9 +51,38 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap",
       },
-
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              "@id": "https://myflove.lovable.app/#organization",
+              name: "MyFlove",
+              url: "https://myflove.lovable.app/",
+              logo: "https://myflove.lovable.app/logo.svg",
+              description:
+                "MyFlove är ett lugnt dashboard för vardagen – kalender, uppgifter, humör, ekonomi, familj och studier på ett ställe.",
+            },
+            {
+              "@type": "WebSite",
+              "@id": "https://myflove.lovable.app/#website",
+              name: "MyFlove",
+              url: "https://myflove.lovable.app/",
+              inLanguage: "sv-SE",
+              publisher: { "@id": "https://myflove.lovable.app/#organization" },
+              description:
+                "Ett mjukt dashboard för din vardag — fokus, humör, uppgifter, ekonomi och mer.",
+            },
+          ],
+        }),
+      },
     ],
   }),
+
   shellComponent: RootShell,
   component: RootComponent,
 });

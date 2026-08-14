@@ -143,6 +143,71 @@ export const Route = createFileRoute("/api/public/hooks/push-tick")({
           }
         }
 
+        // 3) Personliga puffar (morgon + valfri kväll), i svensk lokaltid
+        const { getMorningPush, getEveningPush } = await import("@/lib/personal-push-messages");
+        const fmt = new Intl.DateTimeFormat("sv-SE", {
+          timeZone: "Europe/Stockholm",
+          hour: "2-digit",
+          minute: "2-digit",
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        });
+        const parts = Object.fromEntries(fmt.formatToParts(now).map((p) => [p.type, p.value]));
+        const localHour = parts.hour ?? "00";
+        const localMinutes = Number(localHour) * 60 + Number(parts.minute ?? "0");
+        const localDate = `${parts.year}-${parts.month}-${parts.day}`;
+        // Fönster: skicka om vi är på eller strax efter vald tid (0–9 min).
+        const isDue = (hhmm: string) => {
+          const [h, m] = hhmm.split(":").map(Number);
+          const target = (h || 0) * 60 + (m || 0);
+          const diff = localMinutes - target;
+          return diff >= 0 && diff < 10;
+        };
+
+        const { data: personalPrefs } = await supabaseAdmin
+          .from("push_preferences")
+          .select(
+            "user_id, personal_enabled, personal_time, personal_evening_enabled, personal_evening_time, personal_name, last_personal_sent_on",
+          )
+          .or("personal_enabled.eq.true,personal_evening_enabled.eq.true");
+
+        for (const p of personalPrefs ?? []) {
+          const isMorning = !!p.personal_enabled && isDue(p.personal_time ?? "08:00");
+          const isEvening = !!p.personal_evening_enabled && isDue(p.personal_evening_time ?? "20:30");
+          if (!isMorning && !isEvening) continue;
+
+          const slot = isMorning ? `${localDate}-m` : `${localDate}-e`;
+          if (p.last_personal_sent_on === slot) continue;
+
+          const seed = Math.floor(now.getTime() / (1000 * 60 * 60 * 24));
+          const note = isMorning
+            ? getMorningPush(p.personal_name, seed)
+            : getEveningPush(p.personal_name, seed);
+
+          const { data: subs } = await supabaseAdmin
+            .from("push_subscriptions")
+            .select("endpoint, p256dh, auth")
+            .eq("user_id", p.user_id);
+          for (const s of subs ?? []) {
+            const r = await sendPushTo(s, {
+              title: note.title,
+              body: note.body,
+              url: "/hem",
+              tag: `personal-${slot}`,
+            });
+            if (r === "ok") sentCount++;
+            if (r === "gone") {
+              await supabaseAdmin.from("push_subscriptions").delete().eq("endpoint", s.endpoint);
+              goneCount++;
+            }
+          }
+          await supabaseAdmin
+            .from("push_preferences")
+            .update({ last_personal_sent_on: slot })
+            .eq("user_id", p.user_id);
+        }
+
         return Response.json({ ok: true, sent: sentCount, gone: goneCount });
       },
     },

@@ -8,7 +8,9 @@ import {
   Sun,
   CloudSun,
   MapPin,
+  RefreshCw,
   Loader2,
+
 } from "lucide-react";
 import { setWeatherSnapshot } from "@/hooks/use-weather";
 
@@ -18,7 +20,13 @@ type WeatherState = {
   code: number;
   city: string;
   fetchedAt?: number;
+  latitude?: number;
+  longitude?: number;
 };
+
+// Vädret räknas som färskt i 20 minuter, sedan hämtas det om automatiskt.
+const MAX_AGE_MS = 20 * 60 * 1000;
+
 
 type GeoPermissionState = PermissionState | "unknown" | "unsupported";
 
@@ -92,20 +100,11 @@ export default function WeatherCard() {
   const [hasAsked, setHasAsked] = useState(false);
   const [cityQuery, setCityQuery] = useState("");
 
-  useEffect(() => {
-    try {
-      const raw = window.localStorage.getItem("flow.weather.snapshot");
-      if (raw) setState(JSON.parse(raw) as WeatherState);
-    } catch {
-      /* ignore */
-    }
-  }, []);
-
   const loadWeather = async (latitude: number, longitude: number, cityFallback?: string) => {
     try {
       const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,apparent_temperature,weather_code&timezone=auto`;
       const [wx, city] = await Promise.all([
-        fetch(url).then((r) => r.json() as Promise<{
+        fetch(url, { cache: "no-store" }).then((r) => r.json() as Promise<{
           current?: { temperature_2m: number; apparent_temperature: number; weather_code: number };
         }>),
         cityFallback ? Promise.resolve(cityFallback) : reverseGeocode(latitude, longitude),
@@ -119,6 +118,8 @@ export default function WeatherCard() {
           code: wx.current.weather_code,
           city,
           fetchedAt: Date.now(),
+          latitude,
+          longitude,
         };
         setState(snap);
         setWeatherSnapshot(snap);
@@ -129,6 +130,50 @@ export default function WeatherCard() {
       setLoading(false);
     }
   };
+
+  // Läs senast sparade väder och hämta nytt om det hunnit bli gammalt.
+  useEffect(() => {
+    let cached: WeatherState | null = null;
+    try {
+      const raw = window.localStorage.getItem("flow.weather.snapshot");
+      if (raw) cached = JSON.parse(raw) as WeatherState;
+    } catch {
+      /* ignore */
+    }
+    if (!cached) return;
+    setState(cached);
+
+    const stale = Date.now() - (cached.fetchedAt ?? 0) > MAX_AGE_MS;
+    if (stale && cached.latitude != null && cached.longitude != null) {
+      void loadWeather(cached.latitude, cached.longitude, cached.city);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Hämta om vädret när appen kommer tillbaka i förgrunden.
+  useEffect(() => {
+    const onVisible = () => {
+      if (document.visibilityState !== "visible") return;
+      setState((current) => {
+        if (
+          current?.latitude != null &&
+          current.longitude != null &&
+          Date.now() - (current.fetchedAt ?? 0) > MAX_AGE_MS
+        ) {
+          void loadWeather(current.latitude, current.longitude, current.city);
+        }
+        return current;
+      });
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    const timer = window.setInterval(onVisible, MAX_AGE_MS);
+    return () => {
+      document.removeEventListener("visibilitychange", onVisible);
+      window.clearInterval(timer);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
 
   const load = () => {
     setHasAsked(true);
@@ -255,7 +300,34 @@ export default function WeatherCard() {
           <span>känns som {state.apparent}°</span>
         </div>
         {info.hint && <p className="text-xs text-foreground/80 mt-1.5 leading-snug">{info.hint}</p>}
+        <div className="mt-1.5 flex items-center gap-2 text-[11px] text-muted-foreground">
+          {state.fetchedAt && (
+            <span>
+              Uppdaterad{" "}
+              {new Date(state.fetchedAt).toLocaleTimeString("sv-SE", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </span>
+          )}
+          <button
+            type="button"
+            onClick={() => {
+              setLoading(true);
+              if (state.latitude != null && state.longitude != null) {
+                void loadWeather(state.latitude, state.longitude, state.city);
+              } else {
+                load();
+              }
+            }}
+            className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
+          >
+            <RefreshCw size={11} />
+            Uppdatera
+          </button>
+        </div>
       </div>
+
     </div>
   );
 }

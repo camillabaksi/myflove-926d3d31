@@ -1,13 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
-import Page from "@/pages/dashboard";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
+// Fokus är hopslaget med FlowPlan – gamla länkar leds vidare dit.
 export const Route = createFileRoute("/_app/fokus")({
-  head: () => ({
-    meta: [
-      { title: "Fokus – MyFlove" },
-      { name: "description", content: "En lugn fokusstund med Flow – gör en sak i taget." },
-      { name: "robots", content: "noindex, nofollow" },
-    ],
-  }),
-  component: Page,
+  beforeLoad: () => {
+    throw redirect({ to: "/flowplan" });
+  },
 });

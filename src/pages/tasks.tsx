@@ -25,6 +25,10 @@ import { requestNotificationPermission, getNotificationPermission } from "@/lib/
 import { useToast } from "@/hooks/use-toast";
 import { getRandomEncouragement } from "@/lib/encouragements";
 import { confirmations } from "@/lib/flow-voice";
+import { AreaSwitcher } from "@/components/area-switcher";
+import CollapsibleSection from "@/components/collapsible-section";
+import { AREA_META, areaChipStyle, defaultAreaFor, filterByArea, getArea, useActiveArea } from "@/lib/life-areas";
+
 
 // Blueprint 2.0 §7.4: Uppgift / Ärende / Projekt.
 const KIND_META: Record<TaskKind, { label: string; hint: string; Icon: typeof ListChecks }> = {
@@ -61,6 +65,8 @@ export default function Tasks() {
     deleteTaskStep,
   } = useTasks();
   const { toast } = useToast();
+  const { activeArea } = useActiveArea();
+
 
   const [newTask, setNewTask] = useState("");
   const [dueDate, setDueDate] = useState("");
@@ -99,6 +105,7 @@ export default function Tasks() {
       kind: newKind,
       time: newTime || undefined,
       reminderMinutesBefore: reminderMinutes,
+      area: defaultAreaFor(activeArea),
     });
     setNewTask("");
     setDueDate("");
@@ -107,10 +114,13 @@ export default function Tasks() {
     setNewKind("uppgift");
   };
 
+  const areaActive = useMemo(() => filterByArea(activeTasks, activeArea), [activeTasks, activeArea]);
+
   const filteredActive = useMemo(
-    () => filter === "all" ? activeTasks : activeTasks.filter((t) => getKind(t) === filter),
-    [activeTasks, filter]
+    () => filter === "all" ? areaActive : areaActive.filter((t) => getKind(t) === filter),
+    [areaActive, filter]
   );
+
 
   const grouped = useMemo(() => {
     const waiting = filteredActive.filter((t) => getStatus(t) === "vantar");
@@ -156,6 +166,15 @@ export default function Tasks() {
               <span className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full bg-secondary/60 text-muted-foreground border border-border">
                 <KindIcon size={11} /> {KIND_META[kind].label}
               </span>
+              {activeArea === "alla" && (
+                <span
+                  className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full border font-medium"
+                  style={areaChipStyle(getArea(task))}
+                >
+                  {AREA_META[getArea(task)].emoji} {AREA_META[getArea(task)].label}
+                </span>
+              )}
+
               {task.dueDate && (
                 <span className="inline-flex items-center gap-1 text-[11px] text-primary font-medium">
                   <CalendarIcon size={11} /> {task.dueDate}
@@ -327,7 +346,14 @@ export default function Tasks() {
             Skilj på uppgifter (bocka av), ärenden (flera steg eller väntetid) och projekt.
             Sätt status <em>Pågår</em>, <em>Väntar på</em> eller <em>Klart</em> — så håller du reda utan att bära allt i huvudet.
           </p>
+          <AreaSwitcher className="mt-4" size="sm" />
+          {activeArea !== "alla" && (
+            <p className="text-xs text-muted-foreground mt-2">
+              Du är i {AREA_META[activeArea].label.toLowerCase()}srummet. Nya saker hamnar här.
+            </p>
+          )}
         </div>
+
 
         <form onSubmit={handleSubmit} className="bg-card p-4 rounded-3xl border border-border shadow-sm space-y-3">
           <div className="flex flex-col md:flex-row gap-3">
@@ -441,28 +467,34 @@ export default function Tasks() {
           )}
 
           {grouped.doing.length > 0 && (
-            <section className="space-y-3">
-              <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2">
-                <Clock size={14} /> Pågår
-              </h2>
+            <CollapsibleSection
+              className="space-y-3"
+              headingClassName="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2"
+              title={<><Clock size={14} /> Pågår</>}
+              help="Saker du börjat på. Tryck på en rad för att bocka av eller ändra."
+            >
               {grouped.doing.map(renderTask)}
-            </section>
+            </CollapsibleSection>
           )}
 
           {grouped.waiting.length > 0 && (
-            <section className="space-y-3">
-              <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2">
-                <Pause size={14} /> Väntar på
-              </h2>
+            <CollapsibleSection
+              className="space-y-3"
+              headingClassName="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2"
+              title={<><Pause size={14} /> Väntar på</>}
+              help="Saker som hänger på någon annan. De ligger här så du slipper hålla dem i huvudet."
+            >
               {grouped.waiting.map(renderTask)}
-            </section>
+            </CollapsibleSection>
           )}
 
           {completedTasks.length > 0 && (
-            <section className="space-y-3 pt-6 border-t border-border">
-              <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2">
-                <Check size={14} /> Avklarat
-              </h2>
+            <CollapsibleSection
+              className="space-y-3 pt-6 border-t border-border"
+              headingClassName="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2"
+              title={<><Check size={14} /> Avklarat</>}
+              help="Det du gjort idag. Ligger kvar så du ser att det faktiskt blev något."
+            >
               {completedTasks
                 .filter((t) => filter === "all" || getKind(t) === filter)
                 .map((task) => (
@@ -494,15 +526,16 @@ export default function Tasks() {
                     </button>
                   </div>
                 ))}
-            </section>
+            </CollapsibleSection>
           )}
 
           {snoozedTasks.length > 0 && (
-            <section className="space-y-3 pt-6 border-t border-border">
-              <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2">
-                <Moon size={16} />
-                Undanstoppat ett tag
-              </h2>
+            <CollapsibleSection
+              className="space-y-3 pt-6 border-t border-border"
+              headingClassName="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2"
+              title={<><Moon size={16} /> Undanstoppat ett tag</>}
+              help="Sådant du skjutit upp. Tryck för att ta tillbaka det när du orkar."
+            >
               {snoozedTasks.map((task) => (
                 <div
                   key={task.id}
@@ -524,7 +557,7 @@ export default function Tasks() {
                   </button>
                 </div>
               ))}
-            </section>
+            </CollapsibleSection>
           )}
         </div>
       </div>

@@ -10,6 +10,7 @@ import {
   type NotificationPermissionState,
 } from "@/lib/push-notifications";
 import { MapPin, Navigation, Clock, Activity, AlertCircle, Star, X, Route, BellRing, Bell, Smartphone, LocateFixed, Loader2 } from "lucide-react";
+import CollapsibleSection from "@/components/collapsible-section";
 
 const ALERT_MINUTES_OPTIONS = [5, 10, 15, 20, 30];
 
@@ -120,11 +121,15 @@ export default function Travel() {
         )}
 
         {savedTrips.length > 0 && (
-          <div className="space-y-3">
-            <h2 className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-              <Star size={18} />
-              Favoritresor
-            </h2>
+          <CollapsibleSection
+            title={
+              <span className="flex items-center gap-2">
+                <Star size={18} />
+                Favoritresor
+              </span>
+            }
+            headingClassName="text-sm font-medium text-muted-foreground"
+          >
             <div className="flex flex-col gap-2">
               {savedTrips.map((trip) => (
                 <div
@@ -195,7 +200,7 @@ export default function Travel() {
                 </div>
               ))}
             </div>
-          </div>
+          </CollapsibleSection>
         )}
 
         <form onSubmit={handleSearch} className="bg-card p-6 rounded-3xl border border-border shadow-sm space-y-4">
@@ -262,27 +267,31 @@ export default function Travel() {
         )}
 
         {suggestion && !isLoading && !error && (
-          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-medium">Nästa avgång</h2>
-              {!isCurrentTripSaved && savingLabel === null && (
-                <button
-                  type="button"
-                  onClick={() => setSavingLabel("")}
-                  className="flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary/80"
-                >
-                  <Star size={18} />
-                  Spara som favorit
-                </button>
-              )}
-              {isCurrentTripSaved && (
-                <span className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground">
-                  <Star size={18} className="fill-primary text-primary" />
-                  Sparad favorit
-                </span>
-              )}
-            </div>
-
+          <CollapsibleSection
+            title="Nästa avgång"
+            help="Avgångar i realtid från hållplatsen närmast dig. Uppdateras automatiskt."
+            className="animate-in fade-in slide-in-from-bottom-4 duration-500"
+            actions={
+              <>
+                {!isCurrentTripSaved && savingLabel === null && (
+                  <button
+                    type="button"
+                    onClick={() => setSavingLabel("")}
+                    className="flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary/80"
+                  >
+                    <Star size={18} />
+                    Spara som favorit
+                  </button>
+                )}
+                {isCurrentTripSaved && (
+                  <span className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground">
+                    <Star size={18} className="fill-primary text-primary" />
+                    Sparad favorit
+                  </span>
+                )}
+              </>
+            }
+          >
             {savingLabel !== null && (
               <div className="flex items-center gap-2 bg-secondary/30 p-3 rounded-2xl">
                 <Input
@@ -354,7 +363,7 @@ export default function Travel() {
                 ))}
               </div>
             )}
-          </div>
+          </CollapsibleSection>
         )}
       </div>
     </Layout>

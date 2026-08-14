@@ -1,6 +1,8 @@
 import { useLocalStorage } from '../lib/storage';
 import { useCloudSyncedStorage } from '../lib/cloud-storage';
 import { trackEvent } from '../lib/analytics';
+import type { LifeArea } from '../lib/life-areas';
+
 
 export interface Focus {
   text: string;
@@ -17,7 +19,17 @@ export interface TaskStep {
   id: string;
   title: string;
   done: boolean;
+  when?: string; // valfri kort tidsmarkering, t.ex. "senast 12 sep"
 }
+
+/** Uppladdat dokument kopplat till en uppgift (studieflödet). */
+export interface TaskAttachment {
+  path: string; // sökväg i study-docs-bucketen
+  name: string;
+  size?: number;
+  uploadedAt: number;
+}
+
 
 export interface Task {
   id: string;
@@ -33,7 +45,19 @@ export interface Task {
   status?: TaskStatus; // default "pagar"; "klart" ⇔ completed=true
   waitingOn?: string; // fritt fält: "vem/vad vi väntar på"
   steps?: TaskStep[]; // delsteg (särskilt för ärenden och projekt)
+  area?: LifeArea; // livsområde: vardag / privat / studier / jobb
+  courseId?: string; // kopplad kurs (studieflödet)
+  attachments?: TaskAttachment[]; // uppladdade dokument
+  /** Smarta deadline-påminnelser: antal dagar innan dueDate som notis ska skickas */
+  deadlineLeadDays?: number[];
+  /** Klockslag för deadline-påminnelserna, HH:MM (default 09:00) */
+  deadlineReminderTime?: string;
+  /** Nyckel för automatgenererade poster (t.ex. StudyFlow-schemat) */
+  syncKey?: string;
 }
+
+
+
 
 export interface ShoppingItem {
   id: string;
@@ -83,7 +107,17 @@ export function useTasks() {
   const addTask = (
     title: string,
     dueDate?: string,
-    opts?: { kind?: TaskKind; waitingOn?: string; time?: string; reminderMinutesBefore?: number }
+    opts?: {
+      kind?: TaskKind;
+      waitingOn?: string;
+      time?: string;
+      reminderMinutesBefore?: number;
+      area?: LifeArea;
+      courseId?: string;
+      steps?: string[];
+      deadlineLeadDays?: number[];
+      deadlineReminderTime?: string;
+    }
   ) => {
     // Blueprint: uppgifter ska alltid landa i kalendern så inget "försvinner".
     // Om inget datum anges kopplas uppgiften till idag.
@@ -99,7 +133,11 @@ export function useTasks() {
         kind: opts?.kind ?? "uppgift",
         status: opts?.waitingOn ? "vantar" : "pagar",
         waitingOn: opts?.waitingOn,
-        steps: [],
+        area: opts?.area ?? "vardag",
+        courseId: opts?.courseId,
+        deadlineLeadDays: opts?.deadlineLeadDays,
+        deadlineReminderTime: opts?.deadlineReminderTime,
+        steps: (opts?.steps ?? []).map((s) => ({ id: generateId(), title: s, done: false })),
       },
       ...prev,
     ]);
@@ -109,7 +147,12 @@ export function useTasks() {
     setTasks((prev) => prev.map(t => (t.id === id ? { ...t, dueDate } : t)));
   };
 
+  const setTaskArea = (id: string, area: LifeArea) => {
+    setTasks((prev) => prev.map(t => (t.id === id ? { ...t, area } : t)));
+  };
+
   const setTaskTime = (id: string, time: string | undefined, reminderMinutesBefore?: number) => {
+
     setTasks((prev) => prev.map(t => (t.id === id
       ? { ...t, time, reminderMinutesBefore: time ? reminderMinutesBefore : undefined }
       : t)));
@@ -152,6 +195,48 @@ export function useTasks() {
       : t));
   };
 
+  /** Lägger till flera delsteg på en gång (t.ex. Flows uppdelning av en inlämning). */
+  const addTaskSteps = (id: string, steps: { title: string; when?: string }[]) => {
+    setTasks((prev) => prev.map(t => t.id === id
+      ? {
+          ...t,
+          steps: [
+            ...(t.steps ?? []),
+            ...steps.map((s) => ({ id: generateId(), title: s.title, done: false, when: s.when })),
+          ],
+        }
+      : t));
+  };
+
+  /** Smarta deadline-påminnelser: X dagar innan förfallodatum. */
+  const setTaskDeadlineReminders = (
+    id: string,
+    leadDays: number[],
+    time?: string,
+  ) => {
+    const clean = Array.from(new Set(leadDays.filter((d) => d >= 0))).sort((a, b) => b - a);
+    setTasks((prev) => prev.map(t => (t.id === id
+      ? { ...t, deadlineLeadDays: clean, deadlineReminderTime: time ?? t.deadlineReminderTime }
+      : t)));
+  };
+
+  const setTaskCourse = (id: string, courseId: string | undefined) => {
+    setTasks((prev) => prev.map(t => (t.id === id ? { ...t, courseId } : t)));
+  };
+
+  const addTaskAttachment = (id: string, attachment: TaskAttachment) => {
+    setTasks((prev) => prev.map(t => t.id === id
+      ? { ...t, attachments: [...(t.attachments ?? []), attachment] }
+      : t));
+  };
+
+  const removeTaskAttachment = (id: string, path: string) => {
+    setTasks((prev) => prev.map(t => t.id === id
+      ? { ...t, attachments: (t.attachments ?? []).filter(a => a.path !== path) }
+      : t));
+  };
+
+
   const toggleTaskStep = (taskId: string, stepId: string) => {
     setTasks((prev) => prev.map(t => t.id === taskId
       ? { ...t, steps: (t.steps ?? []).map(s => s.id === stepId ? { ...s, done: !s.done } : s) }
@@ -162,6 +247,64 @@ export function useTasks() {
     setTasks((prev) => prev.map(t => t.id === taskId
       ? { ...t, steps: (t.steps ?? []).filter(s => s.id !== stepId) }
       : t));
+  };
+
+  /**
+   * Synkar automatgenererade poster (t.ex. StudyFlow-schemat) in i kalendern.
+   * Befintliga poster med samma syncKey behålls (så klarmarkeringar överlever),
+   * poster som inte längre finns i planen tas bort om de inte är klara.
+   */
+  const syncGeneratedTasks = (
+    prefix: string,
+    entries: Array<{
+      syncKey: string;
+      title: string;
+      dueDate: string;
+      time?: string;
+      reminderMinutesBefore?: number;
+      area?: LifeArea;
+      courseId?: string;
+    }>,
+  ) => {
+    setTasks((prev) => {
+      const wanted = new Map(entries.map((e) => [e.syncKey, e]));
+      const kept = prev.filter((t) => {
+        if (!t.syncKey?.startsWith(prefix)) return true;
+        return t.completed || wanted.has(t.syncKey);
+      });
+      const updated = kept.map((t) => {
+        const e = t.syncKey ? wanted.get(t.syncKey) : undefined;
+        if (!e || t.completed) return t;
+        return {
+          ...t,
+          title: e.title,
+          dueDate: e.dueDate,
+          time: e.time,
+          reminderMinutesBefore: e.reminderMinutesBefore,
+          area: e.area ?? t.area,
+          courseId: e.courseId ?? t.courseId,
+        };
+      });
+      const existingKeys = new Set(updated.map((t) => t.syncKey).filter(Boolean));
+      const created: Task[] = entries
+        .filter((e) => !existingKeys.has(e.syncKey))
+        .map((e) => ({
+          id: generateId(),
+          title: e.title,
+          completed: false,
+          createdAt: Date.now(),
+          dueDate: e.dueDate,
+          time: e.time,
+          reminderMinutesBefore: e.reminderMinutesBefore,
+          kind: "uppgift" as TaskKind,
+          status: "pagar" as TaskStatus,
+          area: e.area ?? "studier",
+          courseId: e.courseId,
+          syncKey: e.syncKey,
+        }));
+      return [...created, ...updated];
+    });
+    return entries.length;
   };
 
   const deleteTask = (id: string) => {
@@ -205,9 +348,18 @@ export function useTasks() {
     setTaskKind,
     setTaskDueDate,
     setTaskTime,
+    setTaskArea,
+
     addTaskStep,
+    addTaskSteps,
+    setTaskCourse,
+    setTaskDeadlineReminders,
+    addTaskAttachment,
+    removeTaskAttachment,
     toggleTaskStep,
     deleteTaskStep,
+    syncGeneratedTasks,
+
   };
 }
 
@@ -280,6 +432,47 @@ export function useFinances() {
 
   return { transactions, addTransaction, deleteTransaction };
 }
+
+export type BudgetPeriod = 'day' | 'week' | 'month';
+
+export interface BudgetSettings {
+  /** Totalbudget per period, kr */
+  total: Partial<Record<BudgetPeriod, number>>;
+  /** Kategoribudget per period, kr */
+  categories: Record<string, Partial<Record<BudgetPeriod, number>>>;
+}
+
+const EMPTY_BUDGET: BudgetSettings = { total: {}, categories: {} };
+
+export function useBudget() {
+  const [budget, setBudget] = useCloudSyncedStorage<BudgetSettings>('myflove-budget', EMPTY_BUDGET);
+
+  const safe: BudgetSettings = {
+    total: budget?.total ?? {},
+    categories: budget?.categories ?? {},
+  };
+
+  const setTotal = (period: BudgetPeriod, amount: number | null) => {
+    const next = { ...safe, total: { ...safe.total } };
+    if (amount === null || !Number.isFinite(amount) || amount <= 0) delete next.total[period];
+    else next.total[period] = amount;
+    setBudget(next);
+    trackEvent('finances', 'budget_set');
+  };
+
+  const setCategory = (category: string, period: BudgetPeriod, amount: number | null) => {
+    const cats = { ...safe.categories, [category]: { ...(safe.categories[category] ?? {}) } };
+    if (amount === null || !Number.isFinite(amount) || amount <= 0) delete cats[category]![period];
+    else cats[category]![period] = amount;
+    if (Object.keys(cats[category] ?? {}).length === 0) delete cats[category];
+    setBudget({ ...safe, categories: cats });
+    trackEvent('finances', 'budget_set');
+  };
+
+  return { budget: safe, setTotal, setCategory };
+}
+
+
 
 export type RepeatMode = 'none' | 'daily' | 'weekdays' | 'weekly';
 

@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Plus, Trash2, CheckCircle2, Circle, Mic, Square, Users, MapPin, Bell, BellOff, LocateFixed, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { getRandomEncouragement } from "@/lib/encouragements";
+import CollapsibleSection from "@/components/collapsible-section";
 
 interface ListItem {
   id: string;
@@ -48,15 +49,17 @@ function StoreLocations() {
   };
 
   return (
-    <div className="space-y-4 pt-8 border-t border-border">
-      <div className="flex items-center gap-2">
-        <MapPin size={20} className="text-primary" />
-        <h2 className="text-xl font-semibold">Sparade butiker</h2>
-      </div>
-      <p className="text-sm text-muted-foreground">
-        Spara en butik där du är just nu, så påminner vi dig om det som är kvar på listan nästa gång du är i närheten.
-      </p>
-
+    <div className="pt-8 border-t border-border">
+      <CollapsibleSection
+        title={
+          <span className="flex items-center gap-2">
+            <MapPin size={20} className="text-primary" />
+            Sparade butiker
+          </span>
+        }
+        headingClassName="text-xl font-semibold"
+        description="Spara en butik där du är just nu, så påminner vi dig om det som är kvar på listan nästa gång du är i närheten."
+      >
       <div className="flex gap-2">
         <Input
           value={name}
@@ -111,6 +114,7 @@ function StoreLocations() {
           ))}
         </div>
       )}
+      </CollapsibleSection>
     </div>
   );
 }
@@ -221,10 +225,12 @@ export default function Shopping() {
           )}
 
           {completedItems.length > 0 && (
-            <div className="space-y-2 pt-6 border-t border-border">
-              <div className="flex items-center justify-between pl-2 mb-2">
-                <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">I korgen</h2>
-              </div>
+            <div className="pt-6 border-t border-border">
+            <CollapsibleSection
+              title="I korgen"
+              help="Sådant du redan lagt i vagnen. Ligger kvar tills du rensar listan."
+              headingClassName="text-sm font-medium text-muted-foreground uppercase tracking-wider"
+            >
               {completedItems.map(item => (
                 <div 
                   key={item.id}
@@ -247,6 +253,7 @@ export default function Shopping() {
                   </button>
                 </div>
               ))}
+            </CollapsibleSection>
             </div>
           )}
         </div>

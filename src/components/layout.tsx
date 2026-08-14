@@ -1,12 +1,17 @@
 import { ReactNode, useState, useEffect, useMemo } from "react";
 import { Link, useLocation } from "wouter";
-import { Home, Target, CheckSquare, ShoppingBag, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Settings2, Check, RotateCcw, ArrowUp, ArrowDown, LogOut, Volume2, VolumeX, Shield, Heart, Sun } from "lucide-react";
+import { Home, Target, CheckSquare, ShoppingBag, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Settings2, Check, RotateCcw, ArrowUp, ArrowDown, LogOut, Volume2, VolumeX, Shield, Heart, Sun, Search, GraduationCap, Briefcase, Baby, CalendarDays, Brain, HeartPulse, House, BookOpen, Building2, LayoutGrid, Dumbbell, SprayCan, Zap, Gauge, ArrowLeft } from "lucide-react";
 import { isAlarmSoundEnabled, setAlarmSoundEnabled, subscribeAlarmPref, playAlarmPreview, initAlarmAudioUnlock } from "@/lib/push-notifications";
 import { useCommuteAlerts } from "@/hooks/use-commute-alerts";
 import { useMedicationAlerts } from "@/hooks/use-medication-alerts";
 import { useShoppingProximityAlerts } from "@/hooks/use-shopping-proximity-alerts";
 import { useNotificationScheduler } from "@/hooks/use-notification-scheduler";
+import { useAchievementPush } from "@/hooks/use-achievement-push";
+import { usePurgeRevisions } from "@/hooks/use-purge-revisions";
 import { useIsAdmin } from "@/hooks/use-is-admin";
+import ViewCollapseToggle from "@/components/view-collapse-toggle";
+
+import { useEnabledAreas } from "@/lib/life-areas";
 import { useLocalStorage } from "@/lib/storage";
 import { trackEvent } from "@/lib/analytics";
 import { Button } from "@/components/ui/button";
@@ -18,11 +23,27 @@ interface LayoutProps {
   children: ReactNode;
 }
 
+/** Egen färgton per navigationskategori – gör mer-vyn lätt att skanna. */
+const CATEGORY_HUE: Record<string, string> = {
+  myflow: "38 62% 42%",
+  homeflow: "152 40% 28%",
+  familyflow: "340 40% 48%",
+  studyflow: "265 32% 45%",
+  workflow: "205 45% 34%",
+  ovrigt: "220 10% 42%",
+};
+const catColor = (id: string, alpha?: number) => {
+  const hue = CATEGORY_HUE[id] ?? "220 10% 42%";
+  return alpha === undefined ? `hsl(${hue})` : `hsl(${hue} / ${alpha})`;
+};
+
+
+
 const SECTION_BY_PATH: Record<string, string> = {
   "/": "home",
   "/ma-bra": "ma-bra",
   "/daglig-rutin": "daglig-rutin",
-  "/dump": "dump",
+  "/quickflow": "quickflow",
   "/kalender": "calendar",
   "/fokus": "fokus",
   "/tasks": "tasks",
@@ -34,11 +55,14 @@ const SECTION_BY_PATH: Record<string, string> = {
   "/beloningar": "beloningar",
   "/assistant": "assistant",
   "/flowplan": "flowplan",
+  "/flowscore": "flowscore",
   "/admin-statistik": "admin",
   "/admin": "admin",
   "/friktionsindex": "friktionsindex",
   "/familj": "familj",
   "/matlista": "matlista",
+  "/stadning": "stadning",
+  "/insight": "insight",
 };
 
 
@@ -62,14 +86,18 @@ const CATEGORY_THEMES: Record<string, Record<string, string>> = {
   "/finances":       T.gold,
   "/kalender":       T.ink,
   "/flowplan":       T.ink,
+  "/flowscore":      T.ink,
   "/shopping":       T.sage,
   "/matlista":       T.sage,
+  "/stadning":       T.sage,
   "/travel":         T.ink,
   "/familj":         T.gold,
   "/beloningar":     T.gold,
   "/statistik":      T.ink,
   "/friktionsindex": T.terracotta,
+  "/insight":        { "--primary": "285 38% 40%", "--ring": "285 38% 40%", "--accent": "285 35% 86%", "--accent-foreground": "285 45% 22%" },
 };
+
 
 
 
@@ -81,7 +109,21 @@ export default function Layout({ children }: LayoutProps) {
   const { alerts: medicationAlerts, dismissAlert: dismissMedicationAlert } = useMedicationAlerts();
   const { alerts: proximityAlerts, dismissAlert: dismissProximityAlert } = useShoppingProximityAlerts();
   useNotificationScheduler();
+  useAchievementPush();
+  usePurgeRevisions();
   const { isAdmin } = useIsAdmin();
+  const { enabled: enabledAreas } = useEnabledAreas();
+
+  const canGoBack = location !== "/" && location !== "/hem";
+  const handleBack = () => {
+    if (typeof window === "undefined") return;
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      window.location.href = "/hem";
+    }
+  };
+
 
   const [alarmEnabled, setAlarmEnabledState] = useState<boolean>(() => isAlarmSoundEnabled());
   useEffect(() => subscribeAlarmPref((v) => setAlarmEnabledState(v)), []);
@@ -102,37 +144,100 @@ export default function Layout({ children }: LayoutProps) {
     trackEvent(section, "view");
   }, [location]);
 
-  const navItems = [
-    { href: "/hem", label: "Hem", icon: Home },
-    { href: "/ma-bra", label: "Må bra", icon: Heart },
-    { href: "/daglig-rutin", label: "Daglig rutin", icon: Sun },
-    { href: "/dump", label: "Dumping", icon: Inbox },
-    { href: "/kalender", label: "Kalender", icon: Calendar },
-    { href: "/fokus", label: "Fokus", icon: Target },
-    { href: "/tasks", label: "Att göra", icon: CheckSquare },
-    { href: "/flowplan", label: "FlowPlan", icon: ListOrdered },
-    { href: "/pomodoro", label: "Timer", icon: Timer },
-    { href: "/shopping", label: "Inköp", icon: ShoppingBag },
-    { href: "/matlista", label: "Matlista", icon: UtensilsCrossed },
-    { href: "/finances", label: "Ekonomi", icon: Wallet },
-    { href: "/travel", label: "Resor", icon: Navigation },
-    { href: "/familj", label: "Familj", icon: Users },
-    { href: "/statistik", label: "Statistik", icon: BarChart3 },
-    { href: "/beloningar", label: "Belöningar", icon: Trophy },
-    { href: "/assistant", label: "Hjälp", icon: Sparkles },
-    { href: "/friktionsindex", label: "Feedback", icon: Flame },
+  type NavItem = { href: string; label: string; icon: typeof Home; hint: string; essential?: boolean };
+  const navItems: NavItem[] = [
+    { href: "/hem", label: "Hem", icon: Home, hint: "Din överblick över dagen", essential: true },
+    { href: "/ma-bra", label: "Må bra", icon: Heart, hint: "Logga hur du mår och hur mycket ork du har" },
+    { href: "/traning", label: "Träning", icon: Dumbbell, hint: "Enkla pass anpassade efter din ork" },
+    { href: "/daglig-rutin", label: "Daglig rutin", icon: Sun, hint: "Morgon- och kvällsrutiner steg för steg" },
+    { href: "/quickflow", label: "Quickflow", icon: Inbox, hint: "Skriv av dig direkt – sortera sen", essential: true },
+    { href: "/kalender", label: "Kalender", icon: Calendar, hint: "Allt som händer, dag för dag", essential: true },
+
+    { href: "/tasks", label: "Att göra", icon: CheckSquare, hint: "Din lista med saker att göra", essential: true },
+    { href: "/flowplan", label: "FlowPlan", icon: ListOrdered, hint: "Flow lägger dina uppgifter i bra ordning" },
+    { href: "/flowscore", label: "FlowScore", icon: Gauge, hint: "Hur mycket du orkar just idag" },
+    { href: "/pomodoro", label: "Timer", icon: Timer, hint: "Jobba en stund, ta paus" },
+    { href: "/shopping", label: "Inköp", icon: ShoppingBag, hint: "Inköpslista du kan dela" },
+    { href: "/matlista", label: "Matlista", icon: UtensilsCrossed, hint: "Planera veckans mat", essential: true },
+    { href: "/stadning", label: "Städning", icon: SprayCan, hint: "Vad som behöver göras hemma" },
+    { href: "/finances", label: "Ekonomi", icon: Wallet, hint: "Räkningar och budget" },
+    { href: "/travel", label: "Resor", icon: Navigation, hint: "Buss och tåg i realtid" },
+    { href: "/familj", label: "Familj", icon: Users, hint: "Dela listor och kalender med andra" },
+    { href: "/barn", label: "Barn", icon: Baby, hint: "Scheman och rutiner för barnen" },
+    { href: "/statistik", label: "Statistik", icon: BarChart3, hint: "Se dina mönster över tid" },
+    { href: "/beloningar", label: "Belöningar", icon: Trophy, hint: "Små morötter när du gjort något" },
+    { href: "/insight", label: "MyFlove Insight", icon: Brain, hint: "Behov → konkreta strategier (demo)" },
+    { href: "/assistant", label: "Hjälp", icon: Sparkles, hint: "Fråga Flow om vad som helst" },
+    { href: "/friktionsindex", label: "Feedback", icon: Flame, hint: "Berätta vad som skaver i appen" },
+    ...(enabledAreas.includes("studier")
+      ? [
+          { href: "/studyflow", label: "StudyFlow", icon: GraduationCap, hint: "Schema, prov och vad du ska plugga nu" },
+          { href: "/studybuddy", label: "StudyBuddy", icon: Brain, hint: "Flashcards och quiz på ditt material" },
+
+        ]
+      : []),
+
+    ...(enabledAreas.includes("jobb")
+      ? [
+          { href: "/jobb", label: "Jobb", icon: Briefcase, hint: "Dina arbetsuppgifter och möten" },
+          { href: "/workflow", label: "WorkFlow", icon: Zap, hint: "Vad du ska göra härnäst på jobbet" },
+        ]
+      : []),
     ...(isAdmin
       ? [
-          { href: "/admin", label: "Adminöversikt", icon: Shield },
-          { href: "/admin-statistik", label: "Appstatistik", icon: BarChart3 },
+          { href: "/admin", label: "Adminöversikt", icon: Shield, hint: "Roller, åtkomst och rapporter" },
+          { href: "/admin-statistik", label: "Appstatistik", icon: BarChart3, hint: "Besökare och användning" },
         ]
       : []),
   ];
 
+  // Kategorier – gör navigationen lugnare genom att gruppera sektionerna.
+  const categories = useMemo(() => {
+    const byHref = (href: string) => navItems.find((i) => i.href === href);
+    const groups: { id: string; label: string; hint: string; icon: typeof Home; hrefs: string[] }[] = [
+      {
+        id: "myflow",
+        label: "Din dag",
+        hint: "Kalender, att göra och ork",
+        icon: CalendarDays,
+        hrefs: [
+          "/hem", "/daglig-rutin", "/kalender", "/tasks", "/flowplan", "/fokus",
+          "/flowscore", "/quickflow", "/pomodoro", "/assistant", "/ma-bra", "/traning",
+          "/beloningar", "/statistik", "/insight",
+        ],
+      },
+      { id: "homeflow", label: "Hemma", hint: "Mat, inköp, städning och pengar", icon: House, hrefs: ["/shopping", "/matlista", "/stadning", "/finances", "/travel"] },
+      { id: "familyflow", label: "Familj", hint: "Dela vardagen med andra", icon: HeartPulse, hrefs: ["/familj", "/barn"] },
+      { id: "studyflow", label: "Studier", hint: "Schema, prov och plugg", icon: BookOpen, hrefs: ["/studyflow", "/studybuddy"] },
+      { id: "workflow", label: "Jobb", hint: "Uppgifter och möten", icon: Building2, hrefs: ["/jobb", "/workflow"] },
+      { id: "ovrigt", label: "Övrigt", hint: "Feedback och inställningar", icon: LayoutGrid, hrefs: ["/friktionsindex", "/admin", "/admin-statistik"] },
+    ];
+    return groups
+      .map((g) => ({ ...g, items: g.hrefs.map(byHref).filter(Boolean) as typeof navItems }))
+      .filter((g) => g.items.length > 0);
+  }, [navItems]);
+
+
+  const [openCategory, setOpenCategory] = useState<string | null>(null);
+  const [navSearch, setNavSearch] = useState("");
+  // Enkelt läge: visar bara det viktigaste tills man själv vill se mer.
+  const [simpleMode, setSimpleMode] = useLocalStorage<boolean>("myflove-simple-mode", true);
+  const essentialItems = useMemo(() => navItems.filter((i) => i.essential), [navItems]);
+
+  const searchResults = useMemo(() => {
+    const q = navSearch.trim().toLowerCase();
+    if (!q) return [];
+    return navItems.filter(
+      (i) => i.label.toLowerCase().includes(q) || i.hint.toLowerCase().includes(q),
+    );
+  }, [navSearch, navItems]);
+
+
+
   // Bottom nav: Home is fixed, the remaining 3 slots are user-customizable.
   const [bottomNavHrefs, setBottomNavHrefs] = useLocalStorage<string[]>("myflow-bottom-nav", [
     "/ma-bra",
-    "/dump",
+    "/quickflow",
     "/kalender",
   ]);
   const [editingBottomNav, setEditingBottomNav] = useState(false);
@@ -159,25 +264,45 @@ export default function Layout({ children }: LayoutProps) {
         <div className="mb-8 px-4 py-2">
           <h1 className="text-2xl font-bold text-primary tracking-tight">MyFlove</h1>
         </div>
-        <div className="grid grid-cols-2 gap-3">
-          {navItems.map((item) => {
-            const isActive = location === item.href;
-            const Icon = item.icon;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`aspect-square flex flex-col items-center justify-center gap-2 rounded-2xl p-2 text-center transition-all duration-200 ${
-                  isActive
-                    ? "bg-primary text-primary-foreground font-medium shadow-sm"
-                    : "bg-secondary/40 text-muted-foreground hover:bg-secondary hover:text-foreground"
-                }`}
+        <div className="space-y-5">
+          {categories.map((cat) => (
+            <div key={cat.id}>
+              <div
+                className="flex items-center gap-2 px-1 mb-2 text-xs font-semibold uppercase tracking-wider"
+                style={{ color: catColor(cat.id) }}
               >
-                <Icon size={24} strokeWidth={isActive ? 2.5 : 2} />
-                <span className="text-xs leading-tight">{item.label}</span>
-              </Link>
-            );
-          })}
+                <span
+                  className="inline-flex h-6 w-6 items-center justify-center rounded-lg"
+                  style={{ backgroundColor: catColor(cat.id, 0.14) }}
+                  aria-hidden="true"
+                >
+                  <cat.icon size={14} />
+                </span>
+                {cat.label}
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                {cat.items.map((item) => {
+                  const isActive = location === item.href;
+                  const Icon = item.icon;
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={`aspect-square flex flex-col items-center justify-center gap-2 rounded-2xl p-2 text-center transition-all duration-200 ${
+                        isActive
+                          ? "bg-primary text-primary-foreground font-medium shadow-sm"
+                          : "bg-secondary/40 text-muted-foreground hover:bg-secondary hover:text-foreground"
+                      }`}
+                    >
+                      <Icon size={24} strokeWidth={isActive ? 2.5 : 2} />
+                      <span className="text-xs leading-tight">{item.label}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </div>
         <div className="mt-auto pt-4 pb-2 space-y-2">
           <Button
@@ -207,9 +332,37 @@ export default function Layout({ children }: LayoutProps) {
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col min-h-0 overflow-hidden relative">
         {/* Mobile Header */}
-        <header className="md:hidden flex items-center justify-center p-4 bg-background/80 backdrop-blur-md sticky top-0 z-10 border-b border-border/50">
+        <header className="md:hidden relative flex items-center justify-center p-4 bg-background/80 backdrop-blur-md sticky top-0 z-10 border-b border-border/50">
+          {canGoBack && (
+            <button
+              type="button"
+              onClick={handleBack}
+              aria-label="Gå tillbaka"
+              className="absolute left-3 p-2 rounded-full hover:bg-primary/10 text-foreground transition-colors"
+            >
+              <ArrowLeft size={22} />
+            </button>
+          )}
           <h1 className="text-xl font-bold text-primary tracking-tight">MyFlove</h1>
+          <ViewCollapseToggle className="absolute right-3" />
         </header>
+
+        <div className="hidden md:flex items-center justify-between px-8 pt-6">
+          {canGoBack ? (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleBack}
+              className="gap-1 text-muted-foreground hover:text-foreground"
+            >
+              <ArrowLeft size={18} /> Tillbaka
+            </Button>
+          ) : (
+            <span />
+          )}
+          <ViewCollapseToggle />
+        </div>
+
 
         {alerts.length > 0 && (
           <div className="px-4 pt-4 md:px-8 md:pt-6 space-y-2">
@@ -367,12 +520,17 @@ export default function Layout({ children }: LayoutProps) {
           <div className="flex flex-col h-full">
             <div className="flex justify-between items-center p-4 border-b border-border/50">
               <h2 className="text-lg font-medium text-muted-foreground">
-                {editingBottomNav ? "Anpassa bottennav" : "Alla sektioner"}
+                {editingBottomNav
+                  ? "Anpassa bottennav"
+                  : openCategory
+                    ? categories.find((c) => c.id === openCategory)?.label ?? "Sektioner"
+                    : "Välj kategori"}
               </h2>
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
                   setEditingBottomNav(false);
+                  setOpenCategory(null);
                 }}
                 className="p-2 text-muted-foreground hover:bg-secondary rounded-full"
               >
@@ -380,7 +538,55 @@ export default function Layout({ children }: LayoutProps) {
               </button>
             </div>
             <div className="flex-1 overflow-y-auto p-4 pb-24">
-              {editingBottomNav ? (
+              {!editingBottomNav && (
+                <div className="relative mb-4">
+                  <Search
+                    size={18}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none"
+                  />
+                  <input
+                    type="search"
+                    value={navSearch}
+                    onChange={(e) => setNavSearch(e.target.value)}
+                    placeholder="Sök sektion…"
+                    aria-label="Sök sektion"
+                    className="w-full rounded-2xl border border-border bg-card py-3 pl-10 pr-10 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                  />
+                  {navSearch && (
+                    <button
+                      type="button"
+                      aria-label="Rensa sökning"
+                      onClick={() => setNavSearch("")}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full text-muted-foreground hover:bg-secondary"
+                    >
+                      <X size={16} />
+                    </button>
+                  )}
+                </div>
+              )}
+              {!editingBottomNav && navSearch.trim() ? (
+                searchResults.length > 0 ? (
+                  <div className="space-y-2">
+                    {searchResults.map((item) => (
+                      <NavRow
+                        key={item.href}
+                        item={item}
+                        isActive={location === item.href}
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          setOpenCategory(null);
+                          setNavSearch("");
+                        }}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-muted-foreground text-center mt-8">
+                    Hittade inget som matchar ”{navSearch}”.
+                  </p>
+                )
+              ) : editingBottomNav ? (
+
                   <BottomNavEditor
                     allItems={navItems.filter((i) => i.href !== "/hem")}
                     selected={bottomNavHrefs.filter((href) =>
@@ -388,31 +594,119 @@ export default function Layout({ children }: LayoutProps) {
                     )}
                     onChange={setBottomNavHrefs}
                     onClose={() => setEditingBottomNav(false)}
-                    onReset={() => setBottomNavHrefs(["/ma-bra", "/dump", "/kalender"])}
+                    onReset={() => setBottomNavHrefs(["/ma-bra", "/quickflow", "/kalender"])}
                   />
+              ) : openCategory ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setOpenCategory(null)}
+                    className="mb-4 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
+                  >
+                    <RotateCcw size={16} /> Alla kategorier
+                  </button>
+                  {(() => {
+                    const cat = categories.find((c) => c.id === openCategory);
+                    if (!cat) return null;
+                    const CatIcon = cat.icon;
+                    return (
+                      <div className="mb-4 flex items-center gap-2 text-sm font-semibold" style={{ color: catColor(cat.id) }}>
+                        <span
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-xl"
+                          style={{ backgroundColor: catColor(cat.id, 0.15) }}
+                          aria-hidden="true"
+                        >
+                          <CatIcon size={18} />
+                        </span>
+                        {cat.label}
+                      </div>
+                    );
+                  })()}
+                  <div className="space-y-2">
+                    {(categories.find((c) => c.id === openCategory)?.items ?? []).map((item) => (
+                      <NavRow
+                        key={item.href}
+                        item={item}
+                        isActive={location === item.href}
+                        tint={catColor(openCategory, 0.1)}
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          setOpenCategory(null);
+                        }}
+                      />
+                    ))}
+                  </div>
+                </>
+              ) : simpleMode ? (
+                <>
+                  <p className="mb-3 text-sm text-muted-foreground">
+                    Enkelt läge – bara det du behöver oftast.
+                  </p>
+                  <div className="space-y-2">
+                    {essentialItems.map((item) => (
+                      <NavRow
+                        key={item.href}
+                        item={item}
+                        isActive={location === item.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                      />
+                    ))}
+                  </div>
+                  <div className="mt-6 flex items-center justify-center">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="rounded-xl gap-2"
+                      onClick={() => setSimpleMode(false)}
+                    >
+                      <LayoutGrid size={16} /> Visa allt i appen
+                    </Button>
+                  </div>
+                </>
               ) : (
                 <>
-                  <div className="grid grid-cols-3 gap-3">
-                    {navItems.map((item) => {
-                      const isActive = location === item.href;
-                      const Icon = item.icon;
+                  <div className="grid grid-cols-2 gap-3">
+                    {categories.map((cat) => {
+                      const Icon = cat.icon;
                       return (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          onClick={() => setMobileMenuOpen(false)}
-                          className={`aspect-square flex flex-col items-center justify-center gap-2 rounded-2xl p-2 text-center transition-all duration-200 ${
-                            isActive
-                              ? "bg-primary text-primary-foreground font-medium shadow-sm"
-                              : "bg-card text-foreground border border-border shadow-sm"
-                          }`}
+                        <button
+                          key={cat.id}
+                          type="button"
+                          onClick={() => setOpenCategory(cat.id)}
+                          style={{
+                            backgroundColor: catColor(cat.id, 0.12),
+                            borderColor: catColor(cat.id, 0.35),
+                            color: catColor(cat.id),
+                          }}
+                          className="flex flex-col items-center justify-center gap-2 rounded-3xl p-4 text-center border shadow-sm transition-all duration-200 active:scale-95"
                         >
-                          <Icon size={26} strokeWidth={isActive ? 2.5 : 2} />
-                          <span className="text-xs leading-tight">{item.label}</span>
-                        </Link>
+                          <span
+                            className="inline-flex h-12 w-12 items-center justify-center rounded-2xl"
+                            style={{ backgroundColor: catColor(cat.id, 0.18) }}
+                            aria-hidden="true"
+                          >
+                            <Icon size={26} />
+                          </span>
+                          <span className="text-sm font-medium leading-tight">{cat.label}</span>
+                          <span className="text-[11px] leading-snug opacity-70">{cat.hint}</span>
+                        </button>
                       );
                     })}
                   </div>
+
+                  <div className="mt-6 flex items-center justify-center">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="rounded-xl gap-2"
+                      onClick={() => setSimpleMode(true)}
+                    >
+                      <Home size={16} /> Tillbaka till enkelt läge
+                    </Button>
+                  </div>
+
+
+
                   <div className="mt-6 flex items-center justify-center">
                     <Button
                       variant="outline"
@@ -461,7 +755,45 @@ export default function Layout({ children }: LayoutProps) {
   );
 }
 
+/** En rad i menyn: ikon, namn och en förklaring i klartext. */
+function NavRow({
+  item,
+  isActive,
+  onClick,
+  tint,
+}: {
+  item: { href: string; label: string; icon: typeof Home; hint: string };
+  isActive: boolean;
+  onClick: () => void;
+  tint?: string;
+}) {
+  const Icon = item.icon;
+  return (
+    <Link
+      href={item.href}
+      onClick={onClick}
+      style={!isActive && tint ? { backgroundColor: tint } : undefined}
+      className={`flex items-center gap-3 rounded-2xl border p-3 text-left shadow-sm transition-colors ${
+        isActive
+          ? "border-primary bg-primary text-primary-foreground"
+          : "border-border bg-card text-foreground"
+      }`}
+    >
+      <span className="shrink-0">
+        <Icon size={22} strokeWidth={isActive ? 2.5 : 2} />
+      </span>
+      <span className="min-w-0">
+        <span className="block text-sm font-medium leading-tight">{item.label}</span>
+        <span className={`block text-xs leading-snug ${isActive ? "opacity-80" : "text-muted-foreground"}`}>
+          {item.hint}
+        </span>
+      </span>
+    </Link>
+  );
+}
+
 interface BottomNavEditorProps {
+
   allItems: { href: string; label: string; icon: typeof Home }[];
   selected: string[];
   onChange: (hrefs: string[]) => void;

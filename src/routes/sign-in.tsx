@@ -18,13 +18,17 @@ export const Route = createFileRoute("/sign-in")({
           "Logga in på MyFlove – din lugna följeslagare för vardagen med kalender, uppgifter, humör och mer.",
       },
       { property: "og:title", content: "Logga in – MyFlove" },
+      {
+        property: "og:description",
+        content: "Logga in på MyFlove och fortsätt där du släppte – lugnt och samlat.",
+      },
+      { property: "og:type", content: "website" },
       { property: "og:url", content: "https://myflove.lovable.app/sign-in" },
     ],
     links: [{ rel: "canonical", href: "https://myflove.lovable.app/sign-in" }],
   }),
-  validateSearch: (s: Record<string, unknown>) => ({
-    next: typeof s.next === "string" ? s.next : undefined,
-  }),
+  validateSearch: (s: Record<string, unknown>): { next?: string } =>
+    typeof s.next === "string" ? { next: s.next } : {},
   component: SignInPage,
 });
 
@@ -84,12 +88,18 @@ function SignInPage() {
             {waking ? "Väcker tjänsten…" : loading ? "Loggar in…" : "Logga in"}
           </Button>
         </form>
-        <p className="mt-6 text-center text-sm text-muted-foreground">
+        <p className="mt-4 text-center text-sm">
+          <Link to="/glomt-losenord" className="text-muted-foreground underline underline-offset-4">
+            Glömt lösenord?
+          </Link>
+        </p>
+        <p className="mt-2 text-center text-sm text-muted-foreground">
           Inget konto?{" "}
           <Link to="/sign-up" search={{ next }} className="text-primary underline underline-offset-4">
             Skapa ett här
           </Link>
         </p>
+
       </div>
     </div>
   );

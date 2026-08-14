@@ -2,6 +2,8 @@
 // more nuanced categorization if needed. For now it uses keyword matching so users
 // get a useful "dump and sort" experience without backend infrastructure.
 
+import { detectRepeat, type RepeatMode } from "./recurrence";
+
 export type DumpCategory = "task" | "shopping" | "reminder" | "idea" | "mood";
 
 export interface ParsedThought {
@@ -10,6 +12,7 @@ export interface ParsedThought {
   date?: string; // ISO date string, only set for "reminder"
   time?: string; // HH:MM, only set for "reminder"
   moodScore?: number; // 1-5, only set for "mood"
+  repeat?: RepeatMode; // upprepning, bara relevant för "reminder"
 }
 
 const SHOPPING_KEYWORDS = [
@@ -186,7 +189,13 @@ export function splitIntoThoughts(raw: string): string[] {
 export function parseDump(raw: string): ParsedThought[] {
   return splitIntoThoughts(raw).map((text) => {
     const { category, date, time, moodScore } = categorize(text);
-    return { text, category, date, time, moodScore };
+    const repeat = detectRepeat(text);
+    if (repeat !== "none") {
+      // "Ta medicin varje dag kl 7" hör hemma i kalendern, som återkommande.
+      const start = date ?? new Date().toISOString().split("T")[0]!;
+      return { text, category: "reminder" as DumpCategory, date: start, time, repeat };
+    }
+    return { text, category, date, time, moodScore, repeat };
   });
 }
 
@@ -194,6 +203,6 @@ export const CATEGORY_LABELS: Record<DumpCategory, string> = {
   task: "Att göra",
   shopping: "Inköp",
   reminder: "Kalender",
-  idea: "Idé",
+  idea: "Quickflow",
   mood: "Mående",
 };

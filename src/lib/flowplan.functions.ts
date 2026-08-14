@@ -6,6 +6,12 @@ const TaskSchema = z.object({
   id: z.string(),
   title: z.string(),
   dueDate: z.string().optional(),
+  /** Antal dagar kvar till deadline (negativt = passerad). */
+  daysUntilDue: z.number().optional(),
+  /** Uppgiften har aktiva deadline-påminnelser (t.ex. 7/3/1 dag innan). */
+  hasDeadlineReminder: z.boolean().optional(),
+  /** Sant om en påminnelse redan har slagit till eller slår till idag. */
+  reminderActiveNow: z.boolean().optional(),
 });
 
 const InputSchema = z.object({
@@ -20,6 +26,8 @@ const PlanItemSchema = z.object({
   order: z.number(),
   estimatedMin: z.number(),
   why: z.string(),
+  /** Sätts till true när uppgiften prioriterats upp p.g.a. deadline-påminnelse. */
+  deadlineBoost: z.boolean().optional(),
 });
 
 const OutputSchema = z.object({
@@ -34,12 +42,18 @@ const SYSTEM = `Du är Flow – MyFloves lugna, empatiska AI-kompanjon.
 Din uppgift här är FlowPlan: föreslå en logisk och tidseffektiv ordning på dagens uppgifter.
 
 Basera ordningen på:
-- Deadlines
+- Deadlines, särskilt uppgifter markerade [PÅMINNELSE AKTIV]
 - Uppgifternas naturliga beroenden och väntetider
 - Uppskattad tidsåtgång
 - Vad som kan ske parallellt
 - Användarens energinivå just nu
 - Tid på dygnet
+
+Deadline-regler (viktigast):
+- Uppgifter markerade [PÅMINNELSE AKTIV] har en påminnelse som redan tickat igång – de ska ligga tidigt i planen, före uppgifter utan deadline.
+- Ju färre dagar kvar, desto högre upp. Passerad deadline hamnar först.
+- För dessa: sätt "deadlineBoost": true och skriv en "why" som tydligt nämner varför den går före, t.ex. "Deadline om 2 dagar – en bit idag räcker".
+- Även vid låg energi: ta med minst en sådan uppgift, men föreslå ett litet steg.
 
 Blueprint-regler:
 - Målet är inte att få allt gjort. Målet är att få rätt saker gjorda.
@@ -64,11 +78,23 @@ export const planFlowSequence = createServerFn({ method: "POST" })
       data.timeAvailableMin ? `Tillgänglig tid: ${data.timeAvailableMin} min` : null,
       "",
       "Uppgifter:",
-      ...data.tasks.map(
-        (t) => `- id=${t.id} | ${t.title}${t.dueDate ? ` (deadline ${t.dueDate})` : ""}`,
-      ),
+      ...data.tasks.map((t) => {
+        const bits: string[] = [];
+        if (t.dueDate) bits.push(`deadline ${t.dueDate}`);
+        if (typeof t.daysUntilDue === "number") {
+          bits.push(
+            t.daysUntilDue < 0
+              ? `${Math.abs(t.daysUntilDue)} dag(ar) försenad`
+              : `${t.daysUntilDue} dag(ar) kvar`,
+          );
+        }
+        if (t.hasDeadlineReminder) bits.push("påminnelser på");
+        const meta = bits.length ? ` (${bits.join(", ")})` : "";
+        const flag = t.reminderActiveNow ? " [PÅMINNELSE AKTIV]" : "";
+        return `- id=${t.id} | ${t.title}${meta}${flag}`;
+      }),
       "",
-      "Returnera JSON: { intro, plan: [{ taskId, order, estimatedMin, why }], note }.",
+      "Returnera JSON: { intro, plan: [{ taskId, order, estimatedMin, why, deadlineBoost }], note }.",
     ]
       .filter(Boolean)
       .join("\n");
