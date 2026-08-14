@@ -32,6 +32,8 @@ export default function CollapsibleSection({
   id,
   actions,
   description,
+  help,
+
   defaultCollapsed = false,
   className,
   headingClassName,
