@@ -19,7 +19,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 
 ### Security
 
-## [0.1.0] - Baseline Import
+## [0.1.0] - 2026-07-23
 
 Initial baseline av MyFlove — ett svenskspråkigt "lugnt livsflöde"-dashboard byggt med TanStack Start, React 19, Tailwind CSS, Supabase och Clerk.
 
