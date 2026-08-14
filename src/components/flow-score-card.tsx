@@ -22,15 +22,16 @@ export function FlowScoreCard({
         </div>
         <div className="min-w-0 flex-1">
           <h2 className="flex items-center gap-2 font-display text-lg text-ink">
-            <Gauge className="h-5 w-5 text-primary" /> FlowScore – {flow.label}
+            <Gauge className="h-5 w-5 text-primary" /> {flow.label} ork idag
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">{flow.message}</p>
-          <p className="mt-2 text-xs text-muted-foreground">
-            🧠 Belastning: {flow.load} · ⏱️ Rimlig fokustid: ca {flow.capacityMinutes} min · 🎯{" "}
-            {flow.suggestedTasks} sak{flow.suggestedTasks === 1 ? "" : "er"} att sikta på
+          <p className="mt-2 text-sm text-ink">
+            Sikta på {flow.suggestedTasks} sak{flow.suggestedTasks === 1 ? "" : "er"} idag. Ungefär{" "}
+            {flow.capacityMinutes} minuter fokus är rimligt.
           </p>
         </div>
       </div>
+
 
       {!compact && flow.factors.length > 0 && (
         <ul className="mt-4 flex flex-wrap gap-2">

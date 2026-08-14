@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Brain, Check, ChevronRight, Info, Plus, ShieldAlert, Sparkles, X } from "lucide-react";
+import { Brain, Check, ChevronRight, Info, Plus, Sparkles, X } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -22,18 +22,8 @@ import {
 } from "@/lib/insight";
 import CollapsibleSection from "@/components/collapsible-section";
 
-/** DEMO – ingen riktig dokumenthantering. Se TODO-listan i src/lib/insight.ts. */
-function DemoBanner() {
-  return (
-    <div className="flex gap-3 p-4 rounded-2xl border border-gold/50 bg-gold/10 text-sm">
-      <ShieldAlert size={18} className="shrink-0 mt-0.5 text-foreground/70" />
-      <p className="leading-relaxed">
-        <strong>DEMO.</strong> Den här versionen använder endast fiktiva testprofiler. Använd inte
-        riktiga personuppgifter eller känsliga dokument.
-      </p>
-    </div>
-  );
-}
+
+
 
 const ANALYSIS_STEPS = [
   "Identifierar styrkor",
@@ -157,7 +147,7 @@ export default function InsightPage() {
         <p className="text-muted-foreground">Förstå behov. Hitta strategier. Gör vardagen enklare.</p>
       </header>
 
-      <DemoBanner />
+
 
       {phase === "start" && (
         <>

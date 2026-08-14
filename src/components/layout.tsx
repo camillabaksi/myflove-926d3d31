@@ -134,48 +134,49 @@ export default function Layout({ children }: LayoutProps) {
     trackEvent(section, "view");
   }, [location]);
 
-  const navItems = [
-    { href: "/hem", label: "Hem", icon: Home },
-    { href: "/ma-bra", label: "Må bra", icon: Heart },
-    { href: "/traning", label: "Träning", icon: Dumbbell },
-    { href: "/daglig-rutin", label: "Daglig rutin", icon: Sun },
-    { href: "/quickflow", label: "Quickflow", icon: Inbox },
-    { href: "/kalender", label: "Kalender", icon: Calendar },
-    
-    { href: "/tasks", label: "Att göra", icon: CheckSquare },
-    { href: "/flowplan", label: "FlowPlan", icon: ListOrdered },
-    { href: "/flowscore", label: "FlowScore", icon: Gauge },
-    { href: "/pomodoro", label: "Timer", icon: Timer },
-    { href: "/shopping", label: "Inköp", icon: ShoppingBag },
-    { href: "/matlista", label: "Matlista", icon: UtensilsCrossed },
-    { href: "/stadning", label: "Städning", icon: SprayCan },
-    { href: "/finances", label: "Ekonomi", icon: Wallet },
-    { href: "/travel", label: "Resor", icon: Navigation },
-    { href: "/familj", label: "Familj", icon: Users },
-    { href: "/barn", label: "Barn", icon: Baby },
-    { href: "/statistik", label: "Statistik", icon: BarChart3 },
-    { href: "/beloningar", label: "Belöningar", icon: Trophy },
-    { href: "/insight", label: "MyFlove Insight", icon: Brain },
-    { href: "/assistant", label: "Hjälp", icon: Sparkles },
-    { href: "/friktionsindex", label: "Feedback", icon: Flame },
+  type NavItem = { href: string; label: string; icon: typeof Home; hint: string; essential?: boolean };
+  const navItems: NavItem[] = [
+    { href: "/hem", label: "Hem", icon: Home, hint: "Din överblick över dagen", essential: true },
+    { href: "/ma-bra", label: "Må bra", icon: Heart, hint: "Logga hur du mår och hur mycket ork du har" },
+    { href: "/traning", label: "Träning", icon: Dumbbell, hint: "Enkla pass anpassade efter din ork" },
+    { href: "/daglig-rutin", label: "Daglig rutin", icon: Sun, hint: "Morgon- och kvällsrutiner steg för steg" },
+    { href: "/quickflow", label: "Quickflow", icon: Inbox, hint: "Skriv av dig direkt – sortera sen", essential: true },
+    { href: "/kalender", label: "Kalender", icon: Calendar, hint: "Allt som händer, dag för dag", essential: true },
+
+    { href: "/tasks", label: "Att göra", icon: CheckSquare, hint: "Din lista med saker att göra", essential: true },
+    { href: "/flowplan", label: "FlowPlan", icon: ListOrdered, hint: "Flow lägger dina uppgifter i bra ordning" },
+    { href: "/flowscore", label: "FlowScore", icon: Gauge, hint: "Hur mycket du orkar just idag" },
+    { href: "/pomodoro", label: "Timer", icon: Timer, hint: "Jobba en stund, ta paus" },
+    { href: "/shopping", label: "Inköp", icon: ShoppingBag, hint: "Inköpslista du kan dela" },
+    { href: "/matlista", label: "Matlista", icon: UtensilsCrossed, hint: "Planera veckans mat", essential: true },
+    { href: "/stadning", label: "Städning", icon: SprayCan, hint: "Vad som behöver göras hemma" },
+    { href: "/finances", label: "Ekonomi", icon: Wallet, hint: "Räkningar och budget" },
+    { href: "/travel", label: "Resor", icon: Navigation, hint: "Buss och tåg i realtid" },
+    { href: "/familj", label: "Familj", icon: Users, hint: "Dela listor och kalender med andra" },
+    { href: "/barn", label: "Barn", icon: Baby, hint: "Scheman och rutiner för barnen" },
+    { href: "/statistik", label: "Statistik", icon: BarChart3, hint: "Se dina mönster över tid" },
+    { href: "/beloningar", label: "Belöningar", icon: Trophy, hint: "Små morötter när du gjort något" },
+    { href: "/insight", label: "MyFlove Insight", icon: Brain, hint: "Behov → konkreta strategier (demo)" },
+    { href: "/assistant", label: "Hjälp", icon: Sparkles, hint: "Fråga Flow om vad som helst" },
+    { href: "/friktionsindex", label: "Feedback", icon: Flame, hint: "Berätta vad som skaver i appen" },
     ...(enabledAreas.includes("studier")
       ? [
-          { href: "/studyflow", label: "StudyFlow", icon: GraduationCap },
-          { href: "/studybuddy", label: "StudyBuddy", icon: Brain },
+          { href: "/studyflow", label: "StudyFlow", icon: GraduationCap, hint: "Schema, prov och vad du ska plugga nu" },
+          { href: "/studybuddy", label: "StudyBuddy", icon: Brain, hint: "Flashcards och quiz på ditt material" },
 
         ]
       : []),
 
     ...(enabledAreas.includes("jobb")
       ? [
-          { href: "/jobb", label: "Jobb", icon: Briefcase },
-          { href: "/workflow", label: "WorkFlow", icon: Zap },
+          { href: "/jobb", label: "Jobb", icon: Briefcase, hint: "Dina arbetsuppgifter och möten" },
+          { href: "/workflow", label: "WorkFlow", icon: Zap, hint: "Vad du ska göra härnäst på jobbet" },
         ]
       : []),
     ...(isAdmin
       ? [
-          { href: "/admin", label: "Adminöversikt", icon: Shield },
-          { href: "/admin-statistik", label: "Appstatistik", icon: BarChart3 },
+          { href: "/admin", label: "Adminöversikt", icon: Shield, hint: "Roller, åtkomst och rapporter" },
+          { href: "/admin-statistik", label: "Appstatistik", icon: BarChart3, hint: "Besökare och användning" },
         ]
       : []),
   ];
@@ -183,10 +184,11 @@ export default function Layout({ children }: LayoutProps) {
   // Kategorier – gör navigationen lugnare genom att gruppera sektionerna.
   const categories = useMemo(() => {
     const byHref = (href: string) => navItems.find((i) => i.href === href);
-    const groups: { id: string; label: string; icon: typeof Home; hrefs: string[] }[] = [
+    const groups: { id: string; label: string; hint: string; icon: typeof Home; hrefs: string[] }[] = [
       {
         id: "myflow",
-        label: "MyFlow",
+        label: "Din dag",
+        hint: "Kalender, att göra och ork",
         icon: CalendarDays,
         hrefs: [
           "/hem", "/daglig-rutin", "/kalender", "/tasks", "/flowplan", "/fokus",
@@ -194,25 +196,32 @@ export default function Layout({ children }: LayoutProps) {
           "/beloningar", "/statistik", "/insight",
         ],
       },
-      { id: "homeflow", label: "HomeFlow", icon: House, hrefs: ["/shopping", "/matlista", "/stadning", "/finances", "/travel"] },
-      { id: "familyflow", label: "FamilyFlow", icon: HeartPulse, hrefs: ["/familj", "/barn"] },
-      { id: "studyflow", label: "StudyFlow", icon: BookOpen, hrefs: ["/studyflow", "/studybuddy"] },
-      { id: "workflow", label: "WorkFlow", icon: Building2, hrefs: ["/jobb", "/workflow"] },
-      { id: "ovrigt", label: "Övrigt", icon: LayoutGrid, hrefs: ["/friktionsindex", "/admin", "/admin-statistik"] },
+      { id: "homeflow", label: "Hemma", hint: "Mat, inköp, städning och pengar", icon: House, hrefs: ["/shopping", "/matlista", "/stadning", "/finances", "/travel"] },
+      { id: "familyflow", label: "Familj", hint: "Dela vardagen med andra", icon: HeartPulse, hrefs: ["/familj", "/barn"] },
+      { id: "studyflow", label: "Studier", hint: "Schema, prov och plugg", icon: BookOpen, hrefs: ["/studyflow", "/studybuddy"] },
+      { id: "workflow", label: "Jobb", hint: "Uppgifter och möten", icon: Building2, hrefs: ["/jobb", "/workflow"] },
+      { id: "ovrigt", label: "Övrigt", hint: "Feedback och inställningar", icon: LayoutGrid, hrefs: ["/friktionsindex", "/admin", "/admin-statistik"] },
     ];
     return groups
       .map((g) => ({ ...g, items: g.hrefs.map(byHref).filter(Boolean) as typeof navItems }))
       .filter((g) => g.items.length > 0);
   }, [navItems]);
 
+
   const [openCategory, setOpenCategory] = useState<string | null>(null);
   const [navSearch, setNavSearch] = useState("");
+  // Enkelt läge: visar bara det viktigaste tills man själv vill se mer.
+  const [simpleMode, setSimpleMode] = useLocalStorage<boolean>("myflove-simple-mode", true);
+  const essentialItems = useMemo(() => navItems.filter((i) => i.essential), [navItems]);
 
   const searchResults = useMemo(() => {
     const q = navSearch.trim().toLowerCase();
     if (!q) return [];
-    return navItems.filter((i) => i.label.toLowerCase().includes(q));
+    return navItems.filter(
+      (i) => i.label.toLowerCase().includes(q) || i.hint.toLowerCase().includes(q),
+    );
   }, [navSearch, navItems]);
+
 
 
   // Bottom nav: Home is fixed, the remaining 3 slots are user-customizable.
@@ -525,30 +534,19 @@ export default function Layout({ children }: LayoutProps) {
               )}
               {!editingBottomNav && navSearch.trim() ? (
                 searchResults.length > 0 ? (
-                  <div className="grid grid-cols-3 gap-3">
-                    {searchResults.map((item) => {
-                      const isActive = location === item.href;
-                      const Icon = item.icon;
-                      return (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          onClick={() => {
-                            setMobileMenuOpen(false);
-                            setOpenCategory(null);
-                            setNavSearch("");
-                          }}
-                          className={`aspect-square flex flex-col items-center justify-center gap-2 rounded-2xl p-2 text-center transition-all duration-200 ${
-                            isActive
-                              ? "bg-primary text-primary-foreground font-medium shadow-sm"
-                              : "bg-card text-foreground border border-border shadow-sm"
-                          }`}
-                        >
-                          <Icon size={26} strokeWidth={isActive ? 2.5 : 2} />
-                          <span className="text-xs leading-tight">{item.label}</span>
-                        </Link>
-                      );
-                    })}
+                  <div className="space-y-2">
+                    {searchResults.map((item) => (
+                      <NavRow
+                        key={item.href}
+                        item={item}
+                        isActive={location === item.href}
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          setOpenCategory(null);
+                          setNavSearch("");
+                        }}
+                      />
+                    ))}
                   </div>
                 ) : (
                   <p className="text-sm text-muted-foreground text-center mt-8">
@@ -592,36 +590,45 @@ export default function Layout({ children }: LayoutProps) {
                       </div>
                     );
                   })()}
-                  <div className="grid grid-cols-3 gap-3">
-                    {(categories.find((c) => c.id === openCategory)?.items ?? []).map((item) => {
-                      const isActive = location === item.href;
-                      const Icon = item.icon;
-                      return (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          onClick={() => {
-                            setMobileMenuOpen(false);
-                            setOpenCategory(null);
-                          }}
-                          style={
-                            isActive
-                              ? { backgroundColor: catColor(openCategory), borderColor: catColor(openCategory) }
-                              : {
-                                  backgroundColor: catColor(openCategory, 0.1),
-                                  borderColor: catColor(openCategory, 0.35),
-                                  color: catColor(openCategory),
-                                }
-                          }
-                          className={`aspect-square flex flex-col items-center justify-center gap-2 rounded-2xl p-2 text-center border shadow-sm transition-all duration-200 ${
-                            isActive ? "text-primary-foreground font-medium" : ""
-                          }`}
-                        >
-                          <Icon size={26} strokeWidth={isActive ? 2.5 : 2} />
-                          <span className="text-xs leading-tight">{item.label}</span>
-                        </Link>
-                      );
-                    })}
+                  <div className="space-y-2">
+                    {(categories.find((c) => c.id === openCategory)?.items ?? []).map((item) => (
+                      <NavRow
+                        key={item.href}
+                        item={item}
+                        isActive={location === item.href}
+                        tint={catColor(openCategory, 0.1)}
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          setOpenCategory(null);
+                        }}
+                      />
+                    ))}
+                  </div>
+                </>
+              ) : simpleMode ? (
+                <>
+                  <p className="mb-3 text-sm text-muted-foreground">
+                    Enkelt läge – bara det du behöver oftast.
+                  </p>
+                  <div className="space-y-2">
+                    {essentialItems.map((item) => (
+                      <NavRow
+                        key={item.href}
+                        item={item}
+                        isActive={location === item.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                      />
+                    ))}
+                  </div>
+                  <div className="mt-6 flex items-center justify-center">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="rounded-xl gap-2"
+                      onClick={() => setSimpleMode(false)}
+                    >
+                      <LayoutGrid size={16} /> Visa allt i appen
+                    </Button>
                   </div>
                 </>
               ) : (
@@ -639,7 +646,7 @@ export default function Layout({ children }: LayoutProps) {
                             borderColor: catColor(cat.id, 0.35),
                             color: catColor(cat.id),
                           }}
-                          className="aspect-square flex flex-col items-center justify-center gap-2 rounded-3xl p-3 text-center border shadow-sm transition-all duration-200 active:scale-95"
+                          className="flex flex-col items-center justify-center gap-2 rounded-3xl p-4 text-center border shadow-sm transition-all duration-200 active:scale-95"
                         >
                           <span
                             className="inline-flex h-12 w-12 items-center justify-center rounded-2xl"
@@ -649,13 +656,23 @@ export default function Layout({ children }: LayoutProps) {
                             <Icon size={26} />
                           </span>
                           <span className="text-sm font-medium leading-tight">{cat.label}</span>
-                          <span className="text-[11px] opacity-70">
-                            {cat.items.length} sektioner
-                          </span>
+                          <span className="text-[11px] leading-snug opacity-70">{cat.hint}</span>
                         </button>
                       );
                     })}
                   </div>
+
+                  <div className="mt-6 flex items-center justify-center">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="rounded-xl gap-2"
+                      onClick={() => setSimpleMode(true)}
+                    >
+                      <Home size={16} /> Tillbaka till enkelt läge
+                    </Button>
+                  </div>
+
 
 
                   <div className="mt-6 flex items-center justify-center">
@@ -706,7 +723,45 @@ export default function Layout({ children }: LayoutProps) {
   );
 }
 
+/** En rad i menyn: ikon, namn och en förklaring i klartext. */
+function NavRow({
+  item,
+  isActive,
+  onClick,
+  tint,
+}: {
+  item: { href: string; label: string; icon: typeof Home; hint: string };
+  isActive: boolean;
+  onClick: () => void;
+  tint?: string;
+}) {
+  const Icon = item.icon;
+  return (
+    <Link
+      href={item.href}
+      onClick={onClick}
+      style={!isActive && tint ? { backgroundColor: tint } : undefined}
+      className={`flex items-center gap-3 rounded-2xl border p-3 text-left shadow-sm transition-colors ${
+        isActive
+          ? "border-primary bg-primary text-primary-foreground"
+          : "border-border bg-card text-foreground"
+      }`}
+    >
+      <span className="shrink-0">
+        <Icon size={22} strokeWidth={isActive ? 2.5 : 2} />
+      </span>
+      <span className="min-w-0">
+        <span className="block text-sm font-medium leading-tight">{item.label}</span>
+        <span className={`block text-xs leading-snug ${isActive ? "opacity-80" : "text-muted-foreground"}`}>
+          {item.hint}
+        </span>
+      </span>
+    </Link>
+  );
+}
+
 interface BottomNavEditorProps {
+
   allItems: { href: string; label: string; icon: typeof Home }[];
   selected: string[];
   onChange: (hrefs: string[]) => void;
