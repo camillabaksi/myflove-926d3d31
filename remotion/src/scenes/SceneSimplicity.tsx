@@ -4,8 +4,8 @@ import { COLORS, FONTS, SceneShell, SectionEyebrow, SectionTitle, SectionSub, us
 
 const ITEMS = [
   { icon: "ⓘ", label: "Hjälptexter överallt", desc: "Liten i-knapp på varje kort förklarar vad du gör här.", delay: 24 },
-  { icon: "🧭", label: "Introtur", desc: "En kort rundtur första gången du loggar in.", delay: 44 },
-  { icon: "🌿", label: "Enkelt läge", desc: "Visar bara det viktigaste när huvudet är fullt.", delay: 64 },
+  { icon: "→", label: "Introtur", desc: "En kort rundtur första gången du loggar in.", delay: 44 },
+  { icon: "◐", label: "Enkelt läge", desc: "Visar bara det viktigaste när huvudet är fullt.", delay: 64 },
   { icon: "⌄", label: "Minimera & maximera", desc: "Fäll ihop det du inte behöver – valet sparas.", delay: 84 },
   { icon: "←", label: "Tillbakaknapp", desc: "Alltid en väg tillbaka, på mobil och dator.", delay: 104 },
 ];
