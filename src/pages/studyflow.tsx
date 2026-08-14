@@ -29,6 +29,8 @@ import { useLatestEnergy } from "@/hooks/use-workflow";
 import { useFlowScore } from "@/hooks/use-flowscore";
 import { useFlowStudy, daysUntil, examPhase } from "@/hooks/use-flowstudy";
 import { StudyCalendarSync } from "@/components/study-calendar-sync";
+import { ScheduleImport } from "@/components/schedule-import";
+import { NextLectureCard } from "@/components/next-lecture-card";
 import { FlowReplanDiff } from "@/components/flow-replan-diff";
 import { diffSnapshots, makeSnapshot, type FlowDiff, type FlowSnapshot } from "@/lib/flow-diff";
 import { useQuickflow } from "@/hooks/use-quickflow";
