@@ -263,6 +263,7 @@ export default function CalendarPage() {
             <CollapsibleSection
               title={monthName}
               id="månadsöversikt"
+              help="Tryck på en dag för att se vad som händer. Prickar betyder att något är inlagt."
               headingClassName="text-xl font-medium capitalize"
               actions={
                 <div className="flex items-center gap-1">

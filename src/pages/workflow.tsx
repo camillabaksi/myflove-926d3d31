@@ -237,6 +237,7 @@ export default function WorkflowPage() {
           className={card}
           headingClassName={sectionTitle}
           title={<><Gauge className="h-5 w-5 text-primary" /> Rimligt just nu</>}
+          help="Hur mycket som är realistiskt idag utifrån din ork och tiden som är kvar."
         >
           <p className="mt-1 text-sm text-muted-foreground">
             Anpassat efter FlowScore {flow.score} och energi {energy ? `${energy}/5` : "okänd"} – ca{" "}
@@ -308,6 +309,7 @@ export default function WorkflowPage() {
           className={card}
           headingClassName={sectionTitle}
           title={<><AlarmClock className="h-5 w-5 text-primary" /> Vad ska jag göra nu?</>}
+          help="Nästa sak att ta itu med. En i taget – resten kan vänta."
         >
           {ranked.length === 0 ? (
             <p className="mt-2 text-sm text-muted-foreground">
@@ -510,6 +512,7 @@ export default function WorkflowPage() {
           className={card}
           headingClassName={sectionTitle}
           title={<><ClipboardList className="h-5 w-5 text-primary" /> Mötesläge</>}
+          help="Stöd under möten: vad som sades och vad du lovade göra."
         >
           <p className="mt-1 text-sm text-muted-foreground">Inför mötet: vad behöver du ta upp?</p>
           <div className="mt-2 flex gap-2">
@@ -607,6 +610,7 @@ export default function WorkflowPage() {
           className={card}
           headingClassName={sectionTitle}
           title={<><LifeBuoy className="h-5 w-5 text-primary" /> Min dag gick åt pipsvängen</>}
+          help="Tryck här när det spårat ur. Du får hjälp att välja en enda sak istället."
         >
           <p className="mt-1 text-sm text-muted-foreground">
             Det blev inte som planerat. Ingen fara. Vill du att jag bygger om resten av dagen?
