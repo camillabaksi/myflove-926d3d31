@@ -88,12 +88,18 @@ function SignInPage() {
             {waking ? "Väcker tjänsten…" : loading ? "Loggar in…" : "Logga in"}
           </Button>
         </form>
-        <p className="mt-6 text-center text-sm text-muted-foreground">
+        <p className="mt-4 text-center text-sm">
+          <Link to="/glomt-losenord" className="text-muted-foreground underline underline-offset-4">
+            Glömt lösenord?
+          </Link>
+        </p>
+        <p className="mt-2 text-center text-sm text-muted-foreground">
           Inget konto?{" "}
           <Link to="/sign-up" search={{ next }} className="text-primary underline underline-offset-4">
             Skapa ett här
           </Link>
         </p>
+
       </div>
     </div>
   );
