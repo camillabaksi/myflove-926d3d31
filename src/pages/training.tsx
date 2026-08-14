@@ -439,6 +439,7 @@ export default function TrainingPage() {
           className="surface-card p-5"
           headingClassName="text-lg font-semibold text-ink flex items-center gap-2"
           title={<><Footprints size={18} className="text-primary" /> Steg idag</>}
+          help="Steg hämtade från mobilens hälsoapp. Ingen siffra? Då är kopplingen inte påslagen än."
           actions={
             <Button variant="outline" size="sm" className="rounded-xl gap-2" onClick={() => syncSteps()} disabled={syncing}>
               {syncing ? <Loader2 size={16} className="animate-spin" /> : <RefreshCw size={16} />}
@@ -589,6 +590,7 @@ export default function TrainingPage() {
           className="surface-card p-5"
           headingClassName="text-lg font-semibold text-ink flex items-center gap-2"
           title={<><CalendarRange size={18} className="text-primary" /> Din veckoplan</>}
+          help="Pass fördelade över veckan. Du kan byta dag eller hoppa över utan att något går sönder."
           description="Målen anpassas efter vad du faktiskt gjorde – och hur veckan kändes."
           actions={
             <Button
@@ -778,6 +780,7 @@ export default function TrainingPage() {
           className="surface-card p-5"
           headingClassName="text-lg font-semibold text-ink"
           title="Ditt mål"
+          help="Vad du tränar mot. Passen anpassas efter målet och hur mycket du orkar."
         >
           <div ref={settingsRef as React.RefObject<HTMLDivElement>} />
           <Input

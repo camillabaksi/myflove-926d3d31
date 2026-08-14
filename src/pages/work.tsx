@@ -229,7 +229,7 @@ export default function WorkPage() {
         </header>
 
         {/* Projekt */}
-        <CollapsibleSection title="Dina projekt" headingClassName="text-lg font-semibold" className="surface-card p-5">
+        <CollapsibleSection title="Dina projekt" help="Samla uppgifter per projekt så blir listan lättare att överblicka." headingClassName="text-lg font-semibold" className="surface-card p-5">
           <form onSubmit={handleAddProject} className="flex gap-2">
             <Input
               value={projectDraft}
@@ -333,7 +333,7 @@ export default function WorkPage() {
         </CollapsibleSection>
 
         {/* Uppgifter */}
-        <CollapsibleSection title="Uppgifter och deadlines" headingClassName="text-lg font-semibold">
+        <CollapsibleSection title="Uppgifter och deadlines" help="Allt med ett datum. Det som är närmast ligger överst." headingClassName="text-lg font-semibold">
           {/* Mappar */}
           <div className="flex flex-wrap gap-2">
             {[
