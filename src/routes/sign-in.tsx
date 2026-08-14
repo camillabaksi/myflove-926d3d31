@@ -18,6 +18,11 @@ export const Route = createFileRoute("/sign-in")({
           "Logga in på MyFlove – din lugna följeslagare för vardagen med kalender, uppgifter, humör och mer.",
       },
       { property: "og:title", content: "Logga in – MyFlove" },
+      {
+        property: "og:description",
+        content: "Logga in på MyFlove och fortsätt där du släppte – lugnt och samlat.",
+      },
+      { property: "og:type", content: "website" },
       { property: "og:url", content: "https://myflove.lovable.app/sign-in" },
     ],
     links: [{ rel: "canonical", href: "https://myflove.lovable.app/sign-in" }],

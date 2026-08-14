@@ -11,6 +11,12 @@ export const Route = createFileRoute("/villkor")({
           "Villkor för att använda MyFlove – ansvar, konto, innehåll och avslut. Skrivet enkelt och mänskligt.",
       },
       { property: "og:title", content: "Användarvillkor – MyFlove" },
+      {
+        property: "og:description",
+        content:
+          "Villkor för att använda MyFlove – ansvar, konto, innehåll och avslut. Enkelt och mänskligt.",
+      },
+      { property: "og:type", content: "website" },
       { property: "og:url", content: "https://myflove.lovable.app/villkor" },
     ],
     links: [{ rel: "canonical", href: "https://myflove.lovable.app/villkor" }],

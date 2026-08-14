@@ -13,6 +13,19 @@ export const Route = createFileRoute("/")({
           "Möt Flow – en lugn, intelligent följeslagare som håller ihop kalender, ekonomi, hälsa, familj, inköp och ärenden så att du kan bära mindre.",
       },
       { property: "og:title", content: "MyFlove – Bär mindre. Gör inte mer." },
+      {
+        property: "og:description",
+        content:
+          "Flow håller ihop kalender, ekonomi, hälsa, familj och ärenden – så att du kan bära mindre i huvudet.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "MyFlove – Bär mindre. Gör inte mer." },
+      {
+        name: "twitter:description",
+        content:
+          "Flow håller ihop kalender, ekonomi, hälsa, familj och ärenden – så att du kan bära mindre i huvudet.",
+      },
       { property: "og:url", content: "https://myflove.lovable.app/" },
     ],
     links: [{ rel: "canonical", href: "https://myflove.lovable.app/" }],
