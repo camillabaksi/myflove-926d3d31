@@ -19,6 +19,7 @@ import { SceneProactive } from "./scenes/SceneProactive";
 import { SceneFlowPlan } from "./scenes/SceneFlowPlan";
 import { SceneStop } from "./scenes/SceneStop";
 import { SceneFeeling } from "./scenes/SceneFeeling";
+import { SceneSimplicity } from "./scenes/SceneSimplicity";
 import { ScenePushMobile } from "./scenes/ScenePushMobile";
 import { SceneOutro } from "./scenes/SceneOutro";
 
@@ -42,11 +43,12 @@ const S_PROACTIVE = 240;   // 8s – proaktivt + Stop-teaser
 const S_FLOWPLAN = 300;
 const S_STOP = 240;
 const S_FEELING = 210;
+const S_SIMPLE = 270;       // 9s – hjälptexter, enkelt läge, minimera
 const S_PUSH = 270;        // 9s – push & mobil
 const S_OUTRO = 300;
 const TRANS = 20;
 
-const SCENES = [S_INTRO, S_VOICE, S_MODULES, S_NEWMOD, S_ORGANIZE, S_BUDGET, S_AREAS, S_FLOWS, S_STUDY, S_TRAINING, S_ASSISTANT, S_SCENARIOS, S_PROACTIVE, S_FLOWPLAN, S_STOP, S_FEELING, S_PUSH, S_OUTRO];
+const SCENES = [S_INTRO, S_VOICE, S_MODULES, S_NEWMOD, S_ORGANIZE, S_BUDGET, S_AREAS, S_FLOWS, S_STUDY, S_TRAINING, S_ASSISTANT, S_SCENARIOS, S_PROACTIVE, S_FLOWPLAN, S_STOP, S_FEELING, S_SIMPLE, S_PUSH, S_OUTRO];
 export const TOTAL_FRAMES = SCENES.reduce((a, b) => a + b, 0) - TRANS * (SCENES.length - 1);
 
 const timing = () => linearTiming({ durationInFrames: TRANS });
@@ -86,6 +88,8 @@ export const MainVideo: React.FC = () => {
         <TransitionSeries.Sequence durationInFrames={S_STOP}><SceneStop /></TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={fade()} timing={timing()} />
         <TransitionSeries.Sequence durationInFrames={S_FEELING}><SceneFeeling /></TransitionSeries.Sequence>
+        <TransitionSeries.Transition presentation={fade()} timing={timing()} />
+        <TransitionSeries.Sequence durationInFrames={S_SIMPLE}><SceneSimplicity /></TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={fade()} timing={timing()} />
         <TransitionSeries.Sequence durationInFrames={S_PUSH}><ScenePushMobile /></TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={fade()} timing={timing()} />
