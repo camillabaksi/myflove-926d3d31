@@ -210,12 +210,18 @@ export default function Layout({ children }: LayoutProps) {
 
   const [openCategory, setOpenCategory] = useState<string | null>(null);
   const [navSearch, setNavSearch] = useState("");
+  // Enkelt läge: visar bara det viktigaste tills man själv vill se mer.
+  const [simpleMode, setSimpleMode] = useLocalStorage<boolean>("myflove-simple-mode", true);
+  const essentialItems = useMemo(() => navItems.filter((i) => i.essential), [navItems]);
 
   const searchResults = useMemo(() => {
     const q = navSearch.trim().toLowerCase();
     if (!q) return [];
-    return navItems.filter((i) => i.label.toLowerCase().includes(q));
+    return navItems.filter(
+      (i) => i.label.toLowerCase().includes(q) || i.hint.toLowerCase().includes(q),
+    );
   }, [navSearch, navItems]);
+
 
 
   // Bottom nav: Home is fixed, the remaining 3 slots are user-customizable.
