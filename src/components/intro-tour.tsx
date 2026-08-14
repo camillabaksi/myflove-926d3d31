@@ -1,15 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Calendar, Heart, Inbox, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useLocalStorage } from "@/lib/storage";
-import { useHydrated } from "@/hooks/use-hydrated";
 
 const STEPS = [
   {
     icon: Sparkles,
     title: "Välkommen till MyFlove",
-    body: "MyFlove är till för att göra vardagen enklare. Du behöver inte använda allt – börja med en sak.",
+    body: "MyFlove finns till för att göra vardagen enklare. Du behöver inte använda allt – börja med en sak.",
   },
   {
     icon: Inbox,
@@ -19,21 +18,23 @@ const STEPS = [
   {
     icon: Calendar,
     title: "Kalender och Att göra",
-    body: "Här ligger det som har en tid. Du kan lägga till påminnelse om du vill – annars ligger det bara kvar.",
+    body: "Här ligger det som har en tid. Du kan lägga till en påminnelse om du vill – annars ligger det bara kvar.",
   },
   {
     icon: Heart,
     title: "Må bra – hur mycket orkar du?",
-    body: "När du loggar hur du mår anpassar appen dagens förslag. Låg ork = färre saker. Det är hela idén.",
+    body: "När du loggar hur du mår anpassas dagens förslag. Låg ork = färre saker. Det är hela idén.",
   },
 ];
 
 export default function IntroTour() {
-  const hydrated = useHydrated();
+  const [mounted, setMounted] = useState(false);
   const [seen, setSeen] = useLocalStorage<boolean>("myflove-intro-seen", false);
   const [step, setStep] = useState(0);
 
-  if (!hydrated || seen) return null;
+  useEffect(() => setMounted(true), []);
+
+  if (!mounted || seen) return null;
 
   const current = STEPS[step];
   const Icon = current.icon;
@@ -61,7 +62,7 @@ export default function IntroTour() {
           ))}
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col items-center gap-2">
           <Button
             className="w-full rounded-2xl"
             onClick={() => (isLast ? setSeen(true) : setStep((s) => s + 1))}
