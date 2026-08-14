@@ -20,6 +20,7 @@ import {
   type InsightStrategy,
   type StrategyNudge,
 } from "@/lib/insight";
+import CollapsibleSection from "@/components/collapsible-section";
 
 /** DEMO – ingen riktig dokumenthantering. Se TODO-listan i src/lib/insight.ts. */
 function DemoBanner() {
@@ -167,8 +168,7 @@ export default function InsightPage() {
             </p>
           </div>
 
-          <div className="space-y-3">
-            <h2 className="font-semibold">Prova med en exempelprofil</h2>
+          <CollapsibleSection title="Prova med en exempelprofil" headingClassName="font-semibold">
             {DEMO_PROFILES.map((p) => (
               <button
                 key={p.id}
@@ -187,13 +187,14 @@ export default function InsightPage() {
                 <ChevronRight size={18} className="text-muted-foreground" />
               </button>
             ))}
-          </div>
+          </CollapsibleSection>
 
-          <div className="p-5 rounded-3xl bg-card border border-border space-y-3">
-            <h2 className="font-semibold">Skapa en egen testprofil</h2>
-            <p className="text-sm text-muted-foreground">
-              Skriv fiktiva exempel – ett behov per rad. Inga riktiga uppgifter.
-            </p>
+          <CollapsibleSection
+            title="Skapa en egen testprofil"
+            headingClassName="font-semibold"
+            className="p-5 rounded-3xl bg-card border border-border"
+            description="Skriv fiktiva exempel – ett behov per rad. Inga riktiga uppgifter."
+          >
             <input
               value={customName}
               onChange={(e) => setCustomName(e.target.value)}
@@ -214,7 +215,7 @@ export default function InsightPage() {
             >
               Analysera testprofilen
             </Button>
-          </div>
+          </CollapsibleSection>
         </>
       )}
 
@@ -319,10 +320,15 @@ export default function InsightPage() {
       )}
 
       {saved.length > 0 && (
-        <section className="space-y-3">
-          <h2 className="font-semibold flex items-center gap-2">
-            <Brain size={18} className="text-primary" /> Dina valda strategier
-          </h2>
+        <CollapsibleSection
+          id="valda-strategier"
+          title={
+            <span className="flex items-center gap-2">
+              <Brain size={18} className="text-primary" /> Dina valda strategier
+            </span>
+          }
+          headingClassName="font-semibold"
+        >
           {saved.map((s) => (
             <div key={s.id} className="p-4 rounded-2xl bg-card border border-border flex items-start gap-3">
               <span className="text-xl" aria-hidden>{AREA_BY_ID[s.areaId]?.emoji}</span>
@@ -354,7 +360,7 @@ export default function InsightPage() {
               </button>
             </div>
           ))}
-        </section>
+        </CollapsibleSection>
       )}
 
       {/* Var vill du använda den? + konkret förslag att acceptera, ändra eller avvisa */}

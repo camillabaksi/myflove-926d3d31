@@ -3,6 +3,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { RoutinesContent } from "@/pages/routines";
 import { MedicationContent } from "@/pages/medication";
 import { Sun, Repeat, Pill } from "lucide-react";
+import CollapsibleSection from "@/components/collapsible-section";
 
 export default function DailyFlowPage() {
   return (
@@ -30,19 +31,21 @@ export default function DailyFlowPage() {
           </TabsList>
 
           <TabsContent value="both" className="mt-6 space-y-10">
-            <section>
-              <h2 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                <Repeat size={18} className="text-primary" /> Rutiner
-              </h2>
+            <CollapsibleSection
+              title={<span className="flex items-center gap-2"><Repeat size={18} className="text-primary" /> Rutiner</span>}
+              id="Rutiner"
+              headingClassName="text-lg font-semibold"
+            >
               <RoutinesContent showHeader={false} />
-            </section>
+            </CollapsibleSection>
             <div className="h-px bg-border" />
-            <section>
-              <h2 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                <Pill size={18} className="text-primary" /> Medicin
-              </h2>
+            <CollapsibleSection
+              title={<span className="flex items-center gap-2"><Pill size={18} className="text-primary" /> Medicin</span>}
+              id="Medicin"
+              headingClassName="text-lg font-semibold"
+            >
               <MedicationContent showHeader={false} />
-            </section>
+            </CollapsibleSection>
           </TabsContent>
 
           <TabsContent value="rutiner" className="mt-6">

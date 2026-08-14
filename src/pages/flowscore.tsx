@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import { Gauge, Zap, Briefcase, GraduationCap } from "lucide-react";
 import { FlowScoreCard } from "@/components/flow-score-card";
 import { useFlowScore } from "@/hooks/use-flowscore";
+import CollapsibleSection from "@/components/collapsible-section";
 
 export default function FlowScorePage() {
   const { flow, energy, mood, minutesLeft } = useFlowScore();
@@ -37,26 +38,27 @@ export default function FlowScorePage() {
         </div>
 
         <section className="rounded-3xl border border-border bg-card p-5 shadow-sm">
-          <h2 className="flex items-center gap-2 font-display text-lg text-ink">
-            <Zap className="h-5 w-5 text-primary" /> Använd din FlowScore
-          </h2>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Planerna i jobb och studier anpassas automatiskt efter den här nivån.
-          </p>
-          <div className="mt-4 grid gap-2 sm:grid-cols-2">
-            <Link
-              href="/workflow"
-              className="flex items-center gap-2 rounded-2xl border border-border bg-background px-4 py-3 text-sm text-ink transition hover:bg-muted"
-            >
-              <Briefcase className="h-4 w-4 text-primary" /> WorkFlow
-            </Link>
-            <Link
-              href="/studyflow"
-              className="flex items-center gap-2 rounded-2xl border border-border bg-background px-4 py-3 text-sm text-ink transition hover:bg-muted"
-            >
-              <GraduationCap className="h-4 w-4 text-primary" /> StudyFlow
-            </Link>
-          </div>
+          <CollapsibleSection
+            title={<span className="flex items-center gap-2"><Zap className="h-5 w-5 text-primary" /> Använd din FlowScore</span>}
+            id="Använd din FlowScore"
+            headingClassName="font-display text-lg"
+            description="Planerna i jobb och studier anpassas automatiskt efter den här nivån."
+          >
+            <div className="grid gap-2 sm:grid-cols-2">
+              <Link
+                href="/workflow"
+                className="flex items-center gap-2 rounded-2xl border border-border bg-background px-4 py-3 text-sm text-ink transition hover:bg-muted"
+              >
+                <Briefcase className="h-4 w-4 text-primary" /> WorkFlow
+              </Link>
+              <Link
+                href="/studyflow"
+                className="flex items-center gap-2 rounded-2xl border border-border bg-background px-4 py-3 text-sm text-ink transition hover:bg-muted"
+              >
+                <GraduationCap className="h-4 w-4 text-primary" /> StudyFlow
+              </Link>
+            </div>
+          </CollapsibleSection>
         </section>
       </div>
     </Layout>

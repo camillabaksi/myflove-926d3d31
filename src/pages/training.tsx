@@ -44,6 +44,7 @@ import {
 } from "@/lib/everyday-movement";
 
 import { useToast } from "@/hooks/use-toast";
+import CollapsibleSection from "@/components/collapsible-section";
 import { celebrateFromEvent } from "@/lib/celebrate";
 
 
@@ -434,17 +435,17 @@ export default function TrainingPage() {
         )}
 
         {view === "steg" && (
-        <section className="surface-card p-5 space-y-4">
-          <div className="flex items-center justify-between gap-3">
-            <h2 className="text-lg font-semibold text-ink flex items-center gap-2">
-              <Footprints size={18} className="text-primary" /> Steg idag
-            </h2>
+        <CollapsibleSection
+          className="surface-card p-5"
+          headingClassName="text-lg font-semibold text-ink flex items-center gap-2"
+          title={<><Footprints size={18} className="text-primary" /> Steg idag</>}
+          actions={
             <Button variant="outline" size="sm" className="rounded-xl gap-2" onClick={() => syncSteps()} disabled={syncing}>
               {syncing ? <Loader2 size={16} className="animate-spin" /> : <RefreshCw size={16} />}
               Hämta från hälsoappen
             </Button>
-          </div>
-
+          }
+        >
           <div>
             <div className="flex items-end justify-between mb-2">
               <span className="text-3xl font-bold text-ink">{stepsToday.toLocaleString("sv-SE")}</span>
@@ -580,20 +581,16 @@ export default function TrainingPage() {
             )}
           </div>
 
-        </section>
+        </CollapsibleSection>
         )}
 
         {view === "plan" && (
-        <section className="surface-card p-5 space-y-4">
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <h2 className="text-lg font-semibold text-ink flex items-center gap-2">
-                <CalendarRange size={18} className="text-primary" /> Din veckoplan
-              </h2>
-              <p className="text-sm text-muted-foreground">
-                Målen anpassas efter vad du faktiskt gjorde – och hur veckan kändes.
-              </p>
-            </div>
+        <CollapsibleSection
+          className="surface-card p-5"
+          headingClassName="text-lg font-semibold text-ink flex items-center gap-2"
+          title={<><CalendarRange size={18} className="text-primary" /> Din veckoplan</>}
+          description="Målen anpassas efter vad du faktiskt gjorde – och hur veckan kändes."
+          actions={
             <Button
               variant="outline"
               size="sm"
@@ -605,8 +602,8 @@ export default function TrainingPage() {
             >
               <Sparkles size={16} /> Uppdatera
             </Button>
-          </div>
-
+          }
+        >
           {weeklyPlan ? (
             <>
               <div className="grid gap-3 sm:grid-cols-3">
@@ -668,28 +665,23 @@ export default function TrainingPage() {
               })}
             </div>
           </div>
-        </section>
+        </CollapsibleSection>
         )}
 
         {view === "motion" && (
-        <section className="surface-card p-5 space-y-4">
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <h2 className="text-lg font-semibold text-ink flex items-center gap-2">
-                <Footprints size={18} className="text-primary" /> Vardagsmotion
-              </h2>
-              <p className="text-sm text-muted-foreground">
-                Allt räknas. Små rörelser flera gånger om dagen gör mer för måendet än ett perfekt pass du aldrig blir av
-                med.
-              </p>
-            </div>
-            {movementStreak > 1 && (
+        <CollapsibleSection
+          className="surface-card p-5"
+          headingClassName="text-lg font-semibold text-ink flex items-center gap-2"
+          title={<><Footprints size={18} className="text-primary" /> Vardagsmotion</>}
+          description="Allt räknas. Små rörelser flera gånger om dagen gör mer för måendet än ett perfekt pass du aldrig blir av med."
+          actions={
+            movementStreak > 1 && (
               <span className="shrink-0 rounded-xl bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
                 {movementStreak} dagar i rad
               </span>
-            )}
-          </div>
-
+            )
+          }
+        >
           <div>
             <div className="flex items-end justify-between mb-2">
               <span className="text-2xl font-bold text-ink">{movementMinutes} min idag</span>
@@ -777,13 +769,17 @@ export default function TrainingPage() {
               );
             })}
           </div>
-        </section>
+        </CollapsibleSection>
         )}
 
         {view === "program" && (
           <>
-        <section ref={settingsRef} className="surface-card p-5 space-y-4">
-          <h2 className="text-lg font-semibold text-ink">Ditt mål</h2>
+        <CollapsibleSection
+          className="surface-card p-5"
+          headingClassName="text-lg font-semibold text-ink"
+          title="Ditt mål"
+        >
+          <div ref={settingsRef as React.RefObject<HTMLDivElement>} />
           <Input
             placeholder="T.ex. bli starkare i ryggen och orka springa 5 km"
             value={goal}
@@ -863,21 +859,21 @@ export default function TrainingPage() {
             {loading ? <Loader2 size={16} className="animate-spin" /> : <Sparkles size={16} />}
             {state.program ? "Gör ett nytt program" : "Skapa mitt program"}
           </Button>
-        </section>
+        </CollapsibleSection>
 
         {/* Programmet */}
         {state.program && (
-          <section className="surface-card p-5 space-y-4">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <h2 className="text-lg font-semibold text-ink">Din vecka</h2>
-                <p className="text-sm text-muted-foreground">{state.program.intro}</p>
-              </div>
+          <CollapsibleSection
+            className="surface-card p-5"
+            headingClassName="text-lg font-semibold text-ink"
+            title="Din vecka"
+            description={state.program.intro}
+            actions={
               <Button variant="ghost" size="sm" className="rounded-xl" onClick={clearProgram}>
                 Rensa
               </Button>
-            </div>
-
+            }
+          >
             <div className="flex flex-wrap gap-2">
               <Button variant="outline" size="sm" className="rounded-xl gap-2" onClick={handleEditProgram}>
                 <Pencil size={15} /> Redigera programmet
@@ -962,22 +958,18 @@ export default function TrainingPage() {
             </Button>
 
             <p className="text-sm text-muted-foreground">{state.program.note}</p>
-          </section>
+          </CollapsibleSection>
         )}
           </>
         )}
 
         {view === "vikt" && (
-          <section className="surface-card p-5 space-y-4">
-            <div>
-              <h2 className="text-lg font-semibold text-ink flex items-center gap-2">
-                <Scale size={18} className="text-primary" /> Vikt & viktnedgång
-              </h2>
-              <p className="text-sm text-muted-foreground">
-                Väg dig när det känns bra – inte varje dag. Kurvan över tid säger mer än en enskild morgon.
-              </p>
-            </div>
-
+          <CollapsibleSection
+            className="surface-card p-5"
+            headingClassName="text-lg font-semibold text-ink flex items-center gap-2"
+            title={<><Scale size={18} className="text-primary" /> Vikt & viktnedgång</>}
+            description="Väg dig när det känns bra – inte varje dag. Kurvan över tid säger mer än en enskild morgon."
+          >
             <div className="grid gap-3 sm:grid-cols-3">
               <div className="rounded-2xl border border-border/70 bg-muted/40 p-4">
                 <p className="text-xs uppercase tracking-wide text-muted-foreground">Senaste vikt</p>
@@ -1171,7 +1163,7 @@ export default function TrainingPage() {
             <p className="text-xs text-muted-foreground">
               MyFlove ger inga kost- eller kaloriråd. Prata med vården om du behöver stöd med kost eller hälsa.
             </p>
-          </section>
+          </CollapsibleSection>
         )}
       </div>
 

@@ -12,6 +12,7 @@ import QuickflowList from "@/components/quickflow-list";
 import InsightQuickflowHint from "@/components/insight-quickflow-hint";
 import QuickflowCapture from "@/components/quickflow-capture";
 import { Mic, Square, Sparkles, CheckSquare, ShoppingBag, Calendar, Lightbulb, Check, Trash2, Inbox, Smile } from "lucide-react";
+import CollapsibleSection from "@/components/collapsible-section";
 
 interface SortableThought extends ParsedThought {
   id: string;
@@ -194,8 +195,11 @@ export default function Dump() {
             </div>
           </div>
         ) : (
-          <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <h2 className="text-xl font-semibold">Förslag på sortering:</h2>
+          <CollapsibleSection
+            title="Förslag på sortering:"
+            headingClassName="font-semibold"
+            className="animate-in fade-in slide-in-from-bottom-4 duration-500"
+          >
             <div className="space-y-3">
               {thoughts.map((thought) => {
                 const Icon = CATEGORY_ICONS[thought.category];
@@ -248,17 +252,19 @@ export default function Dump() {
                 Börja om med ny dump
               </Button>
             </div>
-          </div>
+          </CollapsibleSection>
         )}
 
         <InsightQuickflowHint />
         <QuickflowList />
 
         {ideas.length > 0 && (
-          <div className="space-y-3 pt-4">
-            <h2 className="text-xl font-semibold flex items-center gap-2">
-              <Inbox size={20} /> Äldre idébank
-            </h2>
+          <CollapsibleSection
+            title={<span className="flex items-center gap-2"><Inbox size={20} /> Äldre idébank</span>}
+            id="Äldre idébank"
+            headingClassName="font-semibold"
+            className="pt-4"
+          >
             <div className="space-y-3">
               {ideas.map((idea) => (
                 <div key={idea.id} className="bg-card p-4 rounded-2xl border border-border shadow-sm flex flex-wrap items-center gap-3">
@@ -293,7 +299,7 @@ export default function Dump() {
                 </div>
               ))}
             </div>
-          </div>
+          </CollapsibleSection>
         )}
       </div>
     </Layout>

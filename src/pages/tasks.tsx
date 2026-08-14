@@ -26,6 +26,7 @@ import { useToast } from "@/hooks/use-toast";
 import { getRandomEncouragement } from "@/lib/encouragements";
 import { confirmations } from "@/lib/flow-voice";
 import { AreaSwitcher } from "@/components/area-switcher";
+import CollapsibleSection from "@/components/collapsible-section";
 import { AREA_META, areaChipStyle, defaultAreaFor, filterByArea, getArea, useActiveArea } from "@/lib/life-areas";
 
 
@@ -466,28 +467,31 @@ export default function Tasks() {
           )}
 
           {grouped.doing.length > 0 && (
-            <section className="space-y-3">
-              <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2">
-                <Clock size={14} /> Pågår
-              </h2>
+            <CollapsibleSection
+              className="space-y-3"
+              headingClassName="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2"
+              title={<><Clock size={14} /> Pågår</>}
+            >
               {grouped.doing.map(renderTask)}
-            </section>
+            </CollapsibleSection>
           )}
 
           {grouped.waiting.length > 0 && (
-            <section className="space-y-3">
-              <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2">
-                <Pause size={14} /> Väntar på
-              </h2>
+            <CollapsibleSection
+              className="space-y-3"
+              headingClassName="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2"
+              title={<><Pause size={14} /> Väntar på</>}
+            >
               {grouped.waiting.map(renderTask)}
-            </section>
+            </CollapsibleSection>
           )}
 
           {completedTasks.length > 0 && (
-            <section className="space-y-3 pt-6 border-t border-border">
-              <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2">
-                <Check size={14} /> Avklarat
-              </h2>
+            <CollapsibleSection
+              className="space-y-3 pt-6 border-t border-border"
+              headingClassName="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2"
+              title={<><Check size={14} /> Avklarat</>}
+            >
               {completedTasks
                 .filter((t) => filter === "all" || getKind(t) === filter)
                 .map((task) => (
@@ -519,15 +523,15 @@ export default function Tasks() {
                     </button>
                   </div>
                 ))}
-            </section>
+            </CollapsibleSection>
           )}
 
           {snoozedTasks.length > 0 && (
-            <section className="space-y-3 pt-6 border-t border-border">
-              <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2">
-                <Moon size={16} />
-                Undanstoppat ett tag
-              </h2>
+            <CollapsibleSection
+              className="space-y-3 pt-6 border-t border-border"
+              headingClassName="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2"
+              title={<><Moon size={16} /> Undanstoppat ett tag</>}
+            >
               {snoozedTasks.map((task) => (
                 <div
                   key={task.id}
@@ -549,7 +553,7 @@ export default function Tasks() {
                   </button>
                 </div>
               ))}
-            </section>
+            </CollapsibleSection>
           )}
         </div>
       </div>
