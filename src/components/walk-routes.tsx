@@ -141,16 +141,34 @@ export default function WalkRoutesSection() {
             ))}
       </div>
 
-      <Button onClick={findRoutes} disabled={loading} className="rounded-xl gap-2">
-        {loading ? <Loader2 size={16} className="animate-spin" /> : <Navigation size={16} />}
-        {loading ? "Letar vägar…" : "Hitta promenadvägar"}
-      </Button>
+      <div className="flex flex-wrap items-center gap-2">
+        <Button onClick={() => void findRoutes()} disabled={loading} className="rounded-xl gap-2">
+          {loading ? <Loader2 size={16} className="animate-spin" /> : <Navigation size={16} />}
+          {loading ? "Letar vägar…" : "Hitta promenadvägar"}
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => void findRoutes({ fresh: true })}
+          disabled={loading}
+          className="rounded-xl gap-2"
+        >
+          <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
+          Uppdatera min plats
+        </Button>
+      </div>
+
+      {updatedAt && (
+        <p className="text-xs text-muted-foreground">
+          Uppdaterat {updatedAt.toLocaleTimeString("sv-SE", { hour: "2-digit", minute: "2-digit" })} utifrån din plats.
+        </p>
+      )}
 
       {target && (
         <p className="text-sm text-muted-foreground">
           Mål: ungefär {target.km} km / {target.minutes} min i lugn takt.
         </p>
       )}
+
 
       {routes && routes.length > 0 && (
         <ul className="space-y-3">
