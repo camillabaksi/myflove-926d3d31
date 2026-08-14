@@ -23,6 +23,7 @@ import { breakDownAssignment } from "@/lib/study.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { celebrateFromEvent } from "@/lib/celebrate";
+import CollapsibleSection from "@/components/collapsible-section";
 
 const BUCKET = "study-docs";
 
@@ -220,8 +221,7 @@ export function StudiesSection() {
 
 
         {/* Kurser */}
-        <section className="bg-card border border-border rounded-2xl p-5 space-y-4">
-          <h2 className="text-lg font-semibold">Dina kurser</h2>
+        <CollapsibleSection title="Dina kurser" headingClassName="text-lg font-semibold" className="bg-card border border-border rounded-2xl p-5">
           <form onSubmit={handleAddCourse} className="flex gap-2">
             <Input
               value={courseDraft}
@@ -263,11 +263,10 @@ export function StudiesSection() {
               ))}
             </ul>
           )}
-        </section>
+        </CollapsibleSection>
 
         {/* Ny inlämning */}
-        <section className="bg-card border border-border rounded-2xl p-5 space-y-3">
-          <h2 className="text-lg font-semibold">Ny skoluppgift</h2>
+        <CollapsibleSection title="Ny skoluppgift" headingClassName="text-lg font-semibold" className="bg-card border border-border rounded-2xl p-5">
           <form onSubmit={handleAddAssignment} className="space-y-3">
             <Input
               value={title}
@@ -323,12 +322,10 @@ export function StudiesSection() {
               className="w-full rounded-xl border border-border bg-background p-3 text-sm"
             />
           </form>
-        </section>
+        </CollapsibleSection>
 
         {/* Inlämningar */}
-        <section className="space-y-4">
-          <h2 className="text-lg font-semibold">Inlämningar och deadlines</h2>
-
+        <CollapsibleSection title="Inlämningar och deadlines" headingClassName="text-lg font-semibold">
           {/* Mappar */}
           <div className="flex flex-wrap gap-2">
             {[
@@ -585,7 +582,7 @@ export function StudiesSection() {
               </article>
             );
           })}
-        </section>
+        </CollapsibleSection>
     </div>
   );
 }

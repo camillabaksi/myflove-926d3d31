@@ -13,6 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import CollapsibleSection from "@/components/collapsible-section";
 
 const WEEKDAYS = ["Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag", "Söndag"];
 const MEAL_TYPES = ["Frukost", "Lunch", "Middag"];
@@ -272,10 +273,15 @@ export default function MealPlannerPage() {
         {(favorites.length > 0 || recent.length > 0) && (
           <div className="bg-card border border-border rounded-3xl p-5 shadow-sm space-y-4">
             {favorites.length > 0 && (
-              <div className="space-y-2">
-                <h2 className="font-medium flex items-center gap-2">
-                  <Star size={16} className="fill-gold text-gold" /> Mina favoriter
-                </h2>
+              <CollapsibleSection
+                title={
+                  <span className="flex items-center gap-2">
+                    <Star size={16} className="fill-gold text-gold" /> Mina favoriter
+                  </span>
+                }
+                headingClassName="font-medium"
+                className="space-y-2"
+              >
                 <div className="flex flex-wrap gap-2">
                   {favorites.map((r) => (
                     <span
@@ -296,13 +302,18 @@ export default function MealPlannerPage() {
                     </span>
                   ))}
                 </div>
-              </div>
+              </CollapsibleSection>
             )}
             {recent.length > 0 && (
-              <div className="space-y-2">
-                <h2 className="font-medium flex items-center gap-2">
-                  <History size={16} /> Från tidigare veckor
-                </h2>
+              <CollapsibleSection
+                title={
+                  <span className="flex items-center gap-2">
+                    <History size={16} /> Från tidigare veckor
+                  </span>
+                }
+                headingClassName="font-medium"
+                className="space-y-2"
+              >
                 <div className="flex flex-wrap gap-2">
                   {recent.slice(0, 12).map((r) => (
                     <span
@@ -334,7 +345,7 @@ export default function MealPlannerPage() {
                     </span>
                   ))}
                 </div>
-              </div>
+              </CollapsibleSection>
             )}
           </div>
         )}

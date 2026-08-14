@@ -3,6 +3,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { MoodContent } from "@/pages/mood";
 import { EnergyContent } from "@/pages/energy-map";
 import { Heart, Smile, Battery } from "lucide-react";
+import CollapsibleSection from "@/components/collapsible-section";
 
 export default function WellnessPage() {
   return (
@@ -30,19 +31,29 @@ export default function WellnessPage() {
           </TabsList>
 
           <TabsContent value="both" className="mt-6 space-y-10">
-            <section>
-              <h2 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                <Smile size={18} className="text-primary" /> Mående
-              </h2>
+            <CollapsibleSection
+              id="mande"
+              title={
+                <span className="flex items-center gap-2">
+                  <Smile size={18} className="text-primary" /> Mående
+                </span>
+              }
+              headingClassName="text-lg font-semibold"
+            >
               <MoodContent showHeader={false} />
-            </section>
+            </CollapsibleSection>
             <div className="h-px bg-border" />
-            <section>
-              <h2 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                <Battery size={18} className="text-primary" /> Energi
-              </h2>
+            <CollapsibleSection
+              id="energi"
+              title={
+                <span className="flex items-center gap-2">
+                  <Battery size={18} className="text-primary" /> Energi
+                </span>
+              }
+              headingClassName="text-lg font-semibold"
+            >
               <EnergyContent showHeader={false} />
-            </section>
+            </CollapsibleSection>
           </TabsContent>
 
           <TabsContent value="mood" className="mt-6">

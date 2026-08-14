@@ -24,6 +24,7 @@ import { useTasks } from "@/hooks/use-data";
 import { useWorkflow, useLatestEnergy } from "@/hooks/use-workflow";
 import { useFlowScore } from "@/hooks/use-flowscore";
 import { FlowReplanDiff } from "@/components/flow-replan-diff";
+import CollapsibleSection from "@/components/collapsible-section";
 import { diffSnapshots, makeSnapshot, type FlowDiff, type FlowSnapshot } from "@/lib/flow-diff";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { useVoiceInput } from "@/hooks/use-voice-input";
@@ -232,10 +233,11 @@ export default function WorkflowPage() {
         {replanDiff && <FlowReplanDiff diff={replanDiff} onClose={() => setReplanDiff(null)} />}
 
         {/* Dynamisk plan efter FlowScore */}
-        <section className={card}>
-          <h2 className={sectionTitle}>
-            <Gauge className="h-5 w-5 text-primary" /> Rimligt just nu
-          </h2>
+        <CollapsibleSection
+          className={card}
+          headingClassName={sectionTitle}
+          title={<><Gauge className="h-5 w-5 text-primary" /> Rimligt just nu</>}
+        >
           <p className="mt-1 text-sm text-muted-foreground">
             Anpassat efter FlowScore {flow.score} och energi {energy ? `${energy}/5` : "okänd"} – ca{" "}
             {flow.capacityMinutes} min fokustid.
@@ -299,13 +301,14 @@ export default function WorkflowPage() {
               </ul>
             </div>
           )}
-        </section>
+        </CollapsibleSection>
 
         {/* 1. Vad ska jag göra nu? */}
-        <section className={card}>
-          <h2 className={sectionTitle}>
-            <AlarmClock className="h-5 w-5 text-primary" /> Vad ska jag göra nu?
-          </h2>
+        <CollapsibleSection
+          className={card}
+          headingClassName={sectionTitle}
+          title={<><AlarmClock className="h-5 w-5 text-primary" /> Vad ska jag göra nu?</>}
+        >
           {ranked.length === 0 ? (
             <p className="mt-2 text-sm text-muted-foreground">
               Inget som väntar just nu. Det är också ett svar. 💙
@@ -423,13 +426,14 @@ export default function WorkflowPage() {
               ))}
             </ul>
           )}
-        </section>
+        </CollapsibleSection>
 
         {/* 2. Jag har X minuter */}
-        <section className={card}>
-          <h2 className={sectionTitle}>
-            <Timer className="h-5 w-5 text-primary" /> Jag har …
-          </h2>
+        <CollapsibleSection
+          className={card}
+          headingClassName={sectionTitle}
+          title={<><Timer className="h-5 w-5 text-primary" /> Jag har …</>}
+        >
           <div className="mt-3 flex flex-wrap gap-2">
             {[10, 20, 30, 45, 60].map((m) => (
               <Button
@@ -469,13 +473,14 @@ export default function WorkflowPage() {
               )}
             </div>
           )}
-        </section>
+        </CollapsibleSection>
 
         {/* 3. Övergångar */}
-        <section className={card}>
-          <h2 className={sectionTitle}>
-            <ArrowRightLeft className="h-5 w-5 text-primary" /> Hjälp vid övergångar
-          </h2>
+        <CollapsibleSection
+          className={card}
+          headingClassName={sectionTitle}
+          title={<><ArrowRightLeft className="h-5 w-5 text-primary" /> Hjälp vid övergångar</>}
+        >
           <p className="mt-1 text-sm text-muted-foreground">
             Mötet är slut – hur mycket tid har du innan nästa?
           </p>
@@ -498,13 +503,14 @@ export default function WorkflowPage() {
               ))}
             </ul>
           )}
-        </section>
+        </CollapsibleSection>
 
         {/* 4. Mötesläge */}
-        <section className={card}>
-          <h2 className={sectionTitle}>
-            <ClipboardList className="h-5 w-5 text-primary" /> Mötesläge
-          </h2>
+        <CollapsibleSection
+          className={card}
+          headingClassName={sectionTitle}
+          title={<><ClipboardList className="h-5 w-5 text-primary" /> Mötesläge</>}
+        >
           <p className="mt-1 text-sm text-muted-foreground">Inför mötet: vad behöver du ta upp?</p>
           <div className="mt-2 flex gap-2">
             <Input
@@ -544,13 +550,14 @@ export default function WorkflowPage() {
             )}
             <Button onClick={saveMeetingNotes}>Gör uppgifter</Button>
           </div>
-        </section>
+        </CollapsibleSection>
 
         {/* 5. Avslutningscheck */}
-        <section className={card}>
-          <h2 className={sectionTitle}>
-            <CheckCircle2 className="h-5 w-5 text-primary" /> Avslutningscheck
-          </h2>
+        <CollapsibleSection
+          className={card}
+          headingClassName={sectionTitle}
+          title={<><CheckCircle2 className="h-5 w-5 text-primary" /> Avslutningscheck</>}
+        >
           <p className="mt-1 text-sm text-muted-foreground">
             {minutesLeft > 0
               ? `${minutesLeft} min kvar av arbetsdagen.`
@@ -593,13 +600,14 @@ export default function WorkflowPage() {
               ))}
             </select>
           </label>
-        </section>
+        </CollapsibleSection>
 
         {/* 6. Min dag gick åt helvete */}
-        <section className={card}>
-          <h2 className={sectionTitle}>
-            <LifeBuoy className="h-5 w-5 text-primary" /> Min dag gick åt pipsvängen
-          </h2>
+        <CollapsibleSection
+          className={card}
+          headingClassName={sectionTitle}
+          title={<><LifeBuoy className="h-5 w-5 text-primary" /> Min dag gick åt pipsvängen</>}
+        >
           <p className="mt-1 text-sm text-muted-foreground">
             Det blev inte som planerat. Ingen fara. Vill du att jag bygger om resten av dagen?
           </p>
@@ -645,16 +653,17 @@ export default function WorkflowPage() {
               </div>
             </div>
           )}
-        </section>
+        </CollapsibleSection>
 
         {/* 7. Quickflow för jobbet */}
-        <section className="space-y-3">
-          <h2 className={sectionTitle}>
-            <Sparkles className="h-5 w-5 text-gold" /> Quickflow på jobbet
-          </h2>
+        <CollapsibleSection
+          className="space-y-3"
+          headingClassName={sectionTitle}
+          title={<><Sparkles className="h-5 w-5 text-gold" /> Quickflow på jobbet</>}
+        >
           <QuickflowCapture />
           <QuickflowList />
-        </section>
+        </CollapsibleSection>
       </div>
     </Layout>
   );
