@@ -18,7 +18,25 @@ import { PersonalPushSettings } from "@/components/personal-push-settings";
 import { useReminderSync } from "@/hooks/use-reminder-sync";
 import { AreaSwitcher } from "@/components/area-switcher";
 import { AreaOnboarding } from "@/components/area-onboarding";
-import { AREA_META, filterByArea, useActiveArea } from "@/lib/life-areas";
+import { AREA_META, filterByArea, useActiveArea, type LifeArea } from "@/lib/life-areas";
+
+/**
+ * Vilka block som hör hemma i vilket rum. Är du i ett rum visas bara
+ * det rummets saker – "Allt" lägger ihop hela hemskärmen igen.
+ */
+const SECTION_AREAS: Record<string, LifeArea[]> = {
+  quickflow: ["vardag", "privat", "studier", "jobb"],
+  streak: ["vardag"],
+  weather: ["vardag", "privat"],
+  shortcuts: ["vardag", "privat", "studier", "jobb"],
+  week: ["vardag", "privat", "studier", "jobb"],
+  suggestions: ["vardag", "privat"],
+  today: ["vardag", "privat", "studier", "jobb"],
+  bills: ["privat"],
+  medication: ["vardag", "privat"],
+  push: ["vardag"],
+  help: ["vardag", "privat"],
+};
 
 
 import {
@@ -63,6 +81,8 @@ export default function Home() {
   const { currentFocus, toggleFocusCompleted } = useFocus();
   const { activeTasks, toggleTask } = useTasks();
   const { activeArea } = useActiveArea();
+  const showSection = (id: string) =>
+    activeArea === "alla" || (SECTION_AREAS[id] ?? []).includes(activeArea);
 
   const { activeReminders: _activeReminders } = useReminders();
   const { transactions } = useFinances();
@@ -193,12 +213,14 @@ export default function Home() {
 
         <PersonalNote />
 
-        <HomeSection id="quickflow" title="Quickflow" help="Skriv ner det du kommer på, direkt. Du behöver inte bestämma när eller hur – sortera senare.">
-          <div className="space-y-4">
-            <QuickflowCapture />
-            <QuickflowList />
-          </div>
-        </HomeSection>
+        {showSection("quickflow") && (
+          <HomeSection id="quickflow" title="Quickflow" help="Skriv ner det du kommer på, direkt. Du behöver inte bestämma när eller hur – sortera senare.">
+            <div className="space-y-4">
+              <QuickflowCapture />
+              <QuickflowList />
+            </div>
+          </HomeSection>
+        )}
 
         <AreaOnboarding />
 
@@ -211,26 +233,37 @@ export default function Home() {
           </p>
         </div>
 
-        <HomeSection id="streak" title="Din svit" help="Antal dagar i rad du gjort något i appen. Bryts den händer inget – den finns bara som en liten morot.">
-          <StreakCard />
-        </HomeSection>
+        {showSection("streak") && (
+          <HomeSection id="streak" title="Din svit" help="Antal dagar i rad du gjort något i appen. Bryts den händer inget – den finns bara som en liten morot.">
+            <StreakCard />
+          </HomeSection>
+        )}
 
-        <HomeSection id="weather" title="Väder" help="Vädret där du är just nu. Används också för tips, som att ta med paraply.">
-          <WeatherCard />
-        </HomeSection>
+        {showSection("weather") && (
+          <HomeSection id="weather" title="Väder" help="Vädret där du är just nu. Används också för tips, som att ta med paraply.">
+            <WeatherCard />
+          </HomeSection>
+        )}
 
-        <HomeSection id="shortcuts" title="Genvägar" help="Dina fyra egna knappar. Tryck på pennan för att byta ut dem mot det du använder mest.">
-          <HomeShortcuts />
-        </HomeSection>
+        {showSection("shortcuts") && (
+          <HomeSection id="shortcuts" title="Genvägar" help="Dina fyra egna knappar. Tryck på pennan för att byta ut dem mot det du använder mest.">
+            <HomeShortcuts />
+          </HomeSection>
+        )}
 
-        <HomeSection id="week" title="Veckan i flow" help="En snabb bild av veckan. Tryck på en dag för att se vad som ligger där.">
-          <WeekInFlow />
-        </HomeSection>
+        {showSection("week") && (
+          <HomeSection id="week" title="Veckan i flow" help="En snabb bild av veckan. Tryck på en dag för att se vad som ligger där.">
+            <WeekInFlow />
+          </HomeSection>
+        )}
 
-        <HomeSection id="suggestions" title="Förslag" help="Små tips utifrån väder, dina uppgifter och hur du mått. Du kan alltid strunta i dem.">
-          <ProactiveSuggestions />
-        </HomeSection>
+        {showSection("suggestions") && (
+          <HomeSection id="suggestions" title="Förslag" help="Små tips utifrån väder, dina uppgifter och hur du mått. Du kan alltid strunta i dem.">
+            <ProactiveSuggestions />
+          </HomeSection>
+        )}
 
+        {showSection("help") && (
         <button
           type="button"
           onClick={() => setHelpModalOpen(true)}
@@ -249,8 +282,7 @@ export default function Home() {
             </p>
           </div>
         </button>
-
-
+        )}
 
         {helpPlan && (
           <div className="bg-sage/30 border border-sage rounded-2xl p-5 flex items-start gap-3 animate-in fade-in slide-in-from-top-2">
@@ -269,151 +301,159 @@ export default function Home() {
         )}
 
 
-        <HomeSection id="today" title={helpPlan ? "Det viktigaste just nu" : "Dagens viktigaste"} help="Det som är närmast i tid idag. Tryck på en rad för att bocka av den.">
-          <div className="space-y-4">
-
-          {currentFocus && !helpPlan && (
-            <button
-              onClick={(e) => {
-                if (!currentFocus.completed) celebrateFromEvent(e);
-                toggleFocusCompleted();
-              }}
-              className={`w-full text-left p-5 rounded-2xl border-2 transition-all flex items-center gap-4 ${
-                currentFocus.completed
-                  ? "bg-primary/10 border-primary/20 text-primary"
-                  : "bg-card border-primary/40 shadow-sm"
-              }`}
-            >
-              {currentFocus.completed ? (
-                <CheckCircle2 size={24} className="fill-primary text-primary-foreground shrink-0" />
-              ) : (
-                <Circle size={24} className="text-primary shrink-0" />
-              )}
-              <div>
-                <p className="text-xs uppercase tracking-wide text-muted-foreground mb-0.5">
-                  Dagens fokus
-                </p>
-                <p className={`font-medium ${currentFocus.completed ? "line-through opacity-70" : ""}`}>
-                  {currentFocus.text}
-                </p>
-              </div>
-            </button>
-          )}
-
-          {visibleTasks.length === 0 && !currentFocus ? (
-            <div className="text-center py-10 px-6 bg-secondary/30 rounded-3xl border border-dashed border-border animate-fade-in">
-              <div className="mx-auto mb-3 w-14 h-14 rounded-full bg-sage/40 flex items-center justify-center">
-                <Sparkles size={26} className="text-primary" />
-              </div>
-              <p className="text-ink font-medium">{emptyState.tasks}</p>
-              <p className="text-sm text-muted-foreground mt-1">
-                Vill du sätta en enda sak för idag? Det räcker gott.
-              </p>
-              <Link
-                href="/flowplan"
-                className="inline-block mt-4 rounded-full bg-primary text-primary-foreground px-5 py-2 text-sm font-medium hover-scale"
+        {showSection("today") && (
+          <HomeSection id="today" title={helpPlan ? "Det viktigaste just nu" : "Dagens viktigaste"} help="Det som är närmast i tid idag. Tryck på en rad för att bocka av den.">
+            <div className="space-y-4">
+  
+            {currentFocus && !helpPlan && (
+              <button
+                onClick={(e) => {
+                  if (!currentFocus.completed) celebrateFromEvent(e);
+                  toggleFocusCompleted();
+                }}
+                className={`w-full text-left p-5 rounded-2xl border-2 transition-all flex items-center gap-4 ${
+                  currentFocus.completed
+                    ? "bg-primary/10 border-primary/20 text-primary"
+                    : "bg-card border-primary/40 shadow-sm"
+                }`}
               >
-                Sätt dagens fokus
-              </Link>
-            </div>
-
-          ) : (
-            <div className="space-y-3">
-              {visibleTasks.map((task, i) => (
-                <button
-                  key={task.id}
-                  type="button"
-                  onClick={(e) => {
-                    toggleTask(task.id);
-                    celebrateFromEvent(e);
-                  }}
-                  style={{ animationDelay: `${i * 60}ms` }}
-                  className="w-full flex items-center gap-3 p-4 surface-card hover:border-primary/40 hover:shadow-lifted transition-all text-left animate-fade-in active:scale-[0.99]"
-                >
-                  <Circle size={20} className="text-muted-foreground shrink-0" />
-                  <span className="flex-1">{task.title}</span>
-                  {task.dueDate && (
-                    <span className="text-xs text-muted-foreground shrink-0">{task.dueDate}</span>
-                  )}
-                </button>
-              ))}
-
-            </div>
-          )}
-
-          {(hiddenTaskCount > 0 || showAllTasks) && (
-            <button
-              type="button"
-              onClick={() => setShowAllTasks((v) => !v)}
-              className="w-full text-sm font-medium text-primary hover:underline pt-1"
-            >
-              {showAllTasks
-                ? "Visa bara det viktigaste"
-                : `Visa alla uppgifter som inte är klara (${prioritizedTasks.length})`}
-            </button>
-          )}
-
-          </div>
-        </HomeSection>
-
-        {upcomingBills.length > 0 && (
-          <HomeSection id="bills" title="Kommande räkningar" help="Räkningar med förfallodatum inom kort. Läggs in under Ekonomi.">
-            <div className="space-y-3">
-              {upcomingBills.slice(0, 3).map((bill) => (
-                <div
-                  key={bill.id}
-                  className="flex items-center justify-between p-4 surface-card"
-                >
-                  <div>
-                    <p className="font-medium">{bill.category}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {new Date(bill.date).toLocaleDateString("sv-SE", { month: "short", day: "numeric" })}
-                      {bill.note ? ` · ${bill.note}` : ""}
-                    </p>
-                  </div>
-                  <span className="font-semibold">{bill.amount} kr</span>
+                {currentFocus.completed ? (
+                  <CheckCircle2 size={24} className="fill-primary text-primary-foreground shrink-0" />
+                ) : (
+                  <Circle size={24} className="text-primary shrink-0" />
+                )}
+                <div>
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground mb-0.5">
+                    Dagens fokus
+                  </p>
+                  <p className={`font-medium ${currentFocus.completed ? "line-through opacity-70" : ""}`}>
+                    {currentFocus.text}
+                  </p>
                 </div>
-              ))}
+              </button>
+            )}
+  
+            {visibleTasks.length === 0 && !currentFocus ? (
+              <div className="text-center py-10 px-6 bg-secondary/30 rounded-3xl border border-dashed border-border animate-fade-in">
+                <div className="mx-auto mb-3 w-14 h-14 rounded-full bg-sage/40 flex items-center justify-center">
+                  <Sparkles size={26} className="text-primary" />
+                </div>
+                <p className="text-ink font-medium">{emptyState.tasks}</p>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Vill du sätta en enda sak för idag? Det räcker gott.
+                </p>
+                <Link
+                  href="/flowplan"
+                  className="inline-block mt-4 rounded-full bg-primary text-primary-foreground px-5 py-2 text-sm font-medium hover-scale"
+                >
+                  Sätt dagens fokus
+                </Link>
+              </div>
+  
+            ) : (
+              <div className="space-y-3">
+                {visibleTasks.map((task, i) => (
+                  <button
+                    key={task.id}
+                    type="button"
+                    onClick={(e) => {
+                      toggleTask(task.id);
+                      celebrateFromEvent(e);
+                    }}
+                    style={{ animationDelay: `${i * 60}ms` }}
+                    className="w-full flex items-center gap-3 p-4 surface-card hover:border-primary/40 hover:shadow-lifted transition-all text-left animate-fade-in active:scale-[0.99]"
+                  >
+                    <Circle size={20} className="text-muted-foreground shrink-0" />
+                    <span className="flex-1">{task.title}</span>
+                    {task.dueDate && (
+                      <span className="text-xs text-muted-foreground shrink-0">{task.dueDate}</span>
+                    )}
+                  </button>
+                ))}
+  
+              </div>
+            )}
+  
+            {(hiddenTaskCount > 0 || showAllTasks) && (
+              <button
+                type="button"
+                onClick={() => setShowAllTasks((v) => !v)}
+                className="w-full text-sm font-medium text-primary hover:underline pt-1"
+              >
+                {showAllTasks
+                  ? "Visa bara det viktigaste"
+                  : `Visa alla uppgifter som inte är klara (${prioritizedTasks.length})`}
+              </button>
+            )}
+  
             </div>
           </HomeSection>
+        )}
+
+        {upcomingBills.length > 0 && (
+          {showSection("bills") && (
+          <HomeSection id="bills" title="Kommande räkningar" help="Räkningar med förfallodatum inom kort. Läggs in under Ekonomi.">
+              <div className="space-y-3">
+                {upcomingBills.slice(0, 3).map((bill) => (
+                  <div
+                    key={bill.id}
+                    className="flex items-center justify-between p-4 surface-card"
+                  >
+                    <div>
+                      <p className="font-medium">{bill.category}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {new Date(bill.date).toLocaleDateString("sv-SE", { month: "short", day: "numeric" })}
+                        {bill.note ? ` · ${bill.note}` : ""}
+                      </p>
+                    </div>
+                    <span className="font-semibold">{bill.amount} kr</span>
+                  </div>
+                ))}
+              </div>
+            </HomeSection>
+        )}
         )}
 
         {nextMedication && (
+          {showSection("medication") && (
           <HomeSection id="medication" title="Medicinpåminnelse" help="Bocka av när du tagit din medicin. Tiden ställer du in under Må bra.">
-            <Link
-              href="/daglig-rutin"
-              className="flex items-center gap-4 p-5 surface-card hover:border-primary/40 transition-colors"
-            >
-              <div className="w-12 h-12 rounded-full bg-violet-100 text-violet-700 flex items-center justify-center shrink-0">
-                <Pill size={22} />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-medium truncate">
-                  {nextMedication.med.name}
-                  {nextMedication.med.dosage ? ` · ${nextMedication.med.dosage}` : ""}
-                </p>
-                <p className="text-sm text-muted-foreground">{nextMedication.nextTime}</p>
-              </div>
-              <ArrowRight size={16} className="text-muted-foreground shrink-0" />
-            </Link>
-          </HomeSection>
+              <Link
+                href="/daglig-rutin"
+                className="flex items-center gap-4 p-5 surface-card hover:border-primary/40 transition-colors"
+              >
+                <div className="w-12 h-12 rounded-full bg-violet-100 text-violet-700 flex items-center justify-center shrink-0">
+                  <Pill size={22} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium truncate">
+                    {nextMedication.med.name}
+                    {nextMedication.med.dosage ? ` · ${nextMedication.med.dosage}` : ""}
+                  </p>
+                  <p className="text-sm text-muted-foreground">{nextMedication.nextTime}</p>
+                </div>
+                <ArrowRight size={16} className="text-muted-foreground shrink-0" />
+              </Link>
+            </HomeSection>
+        )}
         )}
 
-        <HomeSection id="push" title="Påminnelser" help="Slå på notiser i mobilen så påminner appen dig även när den är stängd.">
-          <div className="space-y-4">
-            <div className="surface-card p-4 flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <p className="font-semibold text-ink">Påminnelser även när appen är stängd</p>
-                <p className="text-sm text-muted-foreground">
-                  Medicin, tvätt, väder och tider – som en varsam knuff när det behövs.
-                </p>
+        {showSection("push") && (
+          <HomeSection id="push" title="Påminnelser" help="Slå på notiser i mobilen så påminner appen dig även när den är stängd.">
+            <div className="space-y-4">
+              <div className="surface-card p-4 flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <p className="font-semibold text-ink">Påminnelser även när appen är stängd</p>
+                  <p className="text-sm text-muted-foreground">
+                    Medicin, tvätt, väder och tider – som en varsam knuff när det behövs.
+                  </p>
+                </div>
+                <EnablePushButton />
               </div>
-              <EnablePushButton />
+  
+              <PersonalPushSettings />
             </div>
-
-            <PersonalPushSettings />
-          </div>
-        </HomeSection>
+          </HomeSection>
+        )}
 
 
       </div>
