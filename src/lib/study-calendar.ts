@@ -43,6 +43,7 @@ export const DEFAULT_SCHEDULE_SETTINGS: StudyScheduleSettings = {
   bufferMinutes: 15,
   includeExams: false,
   includeRevisions: false,
+  lectureReminderMinutes: 30,
 };
 
 export const WEEKDAYS = ["Mån", "Tis", "Ons", "Tors", "Fre", "Lör", "Sön"] as const;
