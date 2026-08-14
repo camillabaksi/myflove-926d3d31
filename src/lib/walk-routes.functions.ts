@@ -17,6 +17,11 @@ export type WalkRoute = {
   minutes: number;
   bearing: string;
   mapsUrl: string;
+  lat: number;
+  lon: number;
+  startLat: number;
+  startLon: number;
+  elevationGain: number | null;
 };
 
 export const suggestWalkRoutes = createServerFn({ method: "POST" })
@@ -73,6 +78,11 @@ out center 80;`;
           distanceKm,
           minutes: Math.round((distanceKm / WALK_KMH) * 60),
           bearing: bearingLabel(data.lat, data.lon, lat, lon),
+          lat,
+          lon,
+          startLat: data.lat,
+          startLon: data.lon,
+          elevationGain: null as number | null,
           mapsUrl: `https://www.google.com/maps/dir/?api=1&origin=${data.lat},${data.lon}&destination=${data.lat},${data.lon}&waypoints=${lat},${lon}&travelmode=walking`,
           diff: Math.abs(distanceKm - targetKm),
         };
@@ -87,6 +97,30 @@ out center 80;`;
       .sort((a, b) => a.diff - b.diff)
       .slice(0, 5)
       .map(({ diff: _diff, ...rest }) => rest);
+
+    // Höjdskillnad (om tillgängligt) via Open-Meteo elevation.
+    if (candidates.length > 0) {
+      try {
+        const lats = [data.lat, ...candidates.map((c) => c.lat)].join(",");
+        const lons = [data.lon, ...candidates.map((c) => c.lon)].join(",");
+        const elevRes = await fetch(
+          `https://api.open-meteo.com/v1/elevation?latitude=${lats}&longitude=${lons}`,
+        );
+        if (elevRes.ok) {
+          const json = (await elevRes.json()) as { elevation?: number[] };
+          const elev = json.elevation ?? [];
+          const base = elev[0];
+          if (typeof base === "number") {
+            candidates.forEach((c, i) => {
+              const e = elev[i + 1];
+              if (typeof e === "number") c.elevationGain = Math.round(Math.abs(e - base));
+            });
+          }
+        }
+      } catch {
+        // höjddata är valfritt
+      }
+    }
 
     return { targetKm: Math.round(targetKm * 10) / 10, targetMinutes, routes: candidates };
   });
