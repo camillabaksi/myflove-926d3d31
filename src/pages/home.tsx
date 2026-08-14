@@ -31,6 +31,7 @@ import {
 } from "@/hooks/use-data";
 import { useSharedShoppingList } from "@/hooks/use-shared-shopping-list";
 import { getGreeting } from "@/lib/greeting";
+import IntroTour from "@/components/intro-tour";
 import { useUserProfile } from "@/hooks/use-user-profile";
 import { emptyState } from "@/lib/flow-voice";
 import { buildHelpPlan, type HelpFeelingId, type HelpPlan } from "@/lib/help-me";
