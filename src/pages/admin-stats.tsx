@@ -2,6 +2,7 @@ import Layout from "@/components/layout";
 import { useGetAnalyticsSummary } from "@workspace/api-client-react";
 import { BarChart3, Users, Activity, Flame, Lock } from "lucide-react";
 import { useIsAdmin } from "@/hooks/use-is-admin";
+import CollapsibleSection from "@/components/collapsible-section";
 
 const SECTION_LABELS: Record<string, string> = {
   mood: "Mående",
@@ -127,8 +128,11 @@ export default function AdminStats() {
               </div>
             </div>
 
-            <div className="bg-card p-6 rounded-3xl border border-border shadow-sm space-y-4">
-              <h2 className="text-lg font-semibold">Nya registreringar (senaste 14 dagarna)</h2>
+            <CollapsibleSection
+              title="Nya registreringar (senaste 14 dagarna)"
+              headingClassName="text-lg font-semibold"
+              className="bg-card p-6 rounded-3xl border border-border shadow-sm"
+            >
               {(data.dailySignups ?? []).length === 0 && (
                 <p className="text-sm text-muted-foreground">Ingen data än.</p>
               )}
@@ -144,10 +148,13 @@ export default function AdminStats() {
                   </div>
                 ))}
               </div>
-            </div>
+            </CollapsibleSection>
 
-            <div className="bg-card p-6 rounded-3xl border border-border shadow-sm space-y-4">
-              <h2 className="text-lg font-semibold">Mest använda delar av appen</h2>
+            <CollapsibleSection
+              title="Mest använda delar av appen"
+              headingClassName="text-lg font-semibold"
+              className="bg-card p-6 rounded-3xl border border-border shadow-sm"
+            >
               {viewsBySection.length === 0 && (
                 <p className="text-sm text-muted-foreground">Ingen data än.</p>
               )}
@@ -169,13 +176,14 @@ export default function AdminStats() {
                   </div>
                 ))}
               </div>
-            </div>
+            </CollapsibleSection>
 
-            <div className="bg-card p-6 rounded-3xl border border-border shadow-sm space-y-4">
-              <h2 className="text-lg font-semibold">Funktioner som faktiskt används</h2>
-              <p className="text-sm text-muted-foreground">
-                Konkreta handlingar (inte bara besök) — visar vad som fungerar bra och vad som knappt rörs.
-              </p>
+            <CollapsibleSection
+              title="Funktioner som faktiskt används"
+              headingClassName="text-lg font-semibold"
+              className="bg-card p-6 rounded-3xl border border-border shadow-sm"
+              description="Konkreta handlingar (inte bara besök) — visar vad som fungerar bra och vad som knappt rörs."
+            >
               {otherActions.length === 0 && (
                 <p className="text-sm text-muted-foreground">Ingen data än.</p>
               )}
@@ -194,10 +202,13 @@ export default function AdminStats() {
                   </div>
                 ))}
               </div>
-            </div>
+            </CollapsibleSection>
 
-            <div className="bg-card p-6 rounded-3xl border border-border shadow-sm space-y-4">
-              <h2 className="text-lg font-semibold">Aktiva användare per dag (senaste 14 dagarna)</h2>
+            <CollapsibleSection
+              title="Aktiva användare per dag (senaste 14 dagarna)"
+              headingClassName="text-lg font-semibold"
+              className="bg-card p-6 rounded-3xl border border-border shadow-sm"
+            >
               {(data.dailyActiveSessions ?? []).length === 0 && (
                 <p className="text-sm text-muted-foreground">Ingen data än.</p>
               )}
@@ -215,7 +226,7 @@ export default function AdminStats() {
                   </div>
                 ))}
               </div>
-            </div>
+            </CollapsibleSection>
           </>
         )}
       </div>

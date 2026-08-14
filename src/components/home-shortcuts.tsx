@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { Link } from "wouter";
 import {
   Smile, Target, CheckSquare, ShoppingBag, Calendar, Pill, Timer, Wallet,
-  BarChart3, Trophy, Inbox, UtensilsCrossed, Navigation, Battery,
+  BarChart3, Inbox, UtensilsCrossed, Navigation, Battery,
   Sparkles, Pin, PinOff, ArrowUp, ArrowDown, Settings2, Check, RotateCcw,
   Hand, Heart, Sun,
   type LucideIcon,
@@ -35,15 +35,13 @@ const ALL_SHORTCUTS: Shortcut[] = ([
   { id: "ma-bra",     href: "/ma-bra",         label: "Må bra",     icon: Heart },
   { id: "daglig-rutin", href: "/daglig-rutin", label: "Daglig rutin", icon: Sun },
   
-  { id: "fokus",      href: "/fokus",          label: "Dagens fokus", icon: Target },
   { id: "tasks",      href: "/tasks",          label: "Att göra",   icon: CheckSquare },
   { id: "shopping",   href: "/shopping",       label: "Inköp",      icon: ShoppingBag },
   { id: "kalender",   href: "/kalender",       label: "Kalender",   icon: Calendar },
   { id: "pomodoro",   href: "/pomodoro",       label: "Fokuspass",  icon: Timer },
   { id: "finances",   href: "/finances",       label: "Ekonomi",    icon: Wallet },
   { id: "statistik",  href: "/statistik",      label: "Statistik",  icon: BarChart3 },
-  { id: "beloningar", href: "/beloningar",     label: "Belöningar", icon: Trophy },
-  { id: "dump",       href: "/dump",           label: "Dumping",    icon: Inbox },
+  { id: "dump",       href: "/quickflow",      label: "Quickflow",  icon: Inbox },
   { id: "matlista",   href: "/matlista",       label: "Matlista",   icon: UtensilsCrossed },
   { id: "travel",     href: "/travel",         label: "Resor",      icon: Navigation },
   { id: "flowplan",   href: "/flowplan",       label: "FlowPlan",   icon: Sparkles },

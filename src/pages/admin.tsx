@@ -10,7 +10,8 @@ import {
   grantRoleFn,
   revokeRoleFn,
 } from "@/lib/admin.functions";
-import { Lock, Shield, ShieldOff, Trash2, MessageSquareWarning, Users as UsersIcon } from "lucide-react";
+import { Lock, Shield, ShieldOff, Trash2, MessageSquareWarning, Users as UsersIcon, FileDown } from "lucide-react";
+import ChangelogExport from "@/components/changelog-export";
 
 const STATUS_LABELS: Record<string, string> = {
   open: "Öppen",
@@ -24,7 +25,7 @@ const STATUS_OPTIONS = ["open", "planned", "in_progress", "done", "wontfix"] as 
 
 export default function AdminPage() {
   const { isAdmin, loading: adminLoading } = useIsAdmin();
-  const [tab, setTab] = useState<"friction" | "users">("friction");
+  const [tab, setTab] = useState<"friction" | "users" | "changelog">("friction");
 
   if (adminLoading) {
     return <Layout><p className="text-muted-foreground">Laddar…</p></Layout>;
@@ -56,9 +57,12 @@ export default function AdminPage() {
           <TabBtn active={tab === "users"} onClick={() => setTab("users")} icon={<UsersIcon size={16} />}>
             Användare & roller
           </TabBtn>
+          <TabBtn active={tab === "changelog"} onClick={() => setTab("changelog")} icon={<FileDown size={16} />}>
+            Changelog
+          </TabBtn>
         </div>
 
-        {tab === "friction" ? <FrictionSection /> : <UsersSection />}
+        {tab === "friction" ? <FrictionSection /> : tab === "users" ? <UsersSection /> : <ChangelogExport />}
       </div>
     </Layout>
   );

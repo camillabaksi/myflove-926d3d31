@@ -4,6 +4,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { useTasks, useMedications, useReminders } from "@/hooks/use-data";
 import { syncReminder, cancelReminder } from "@/lib/push.functions";
 import { getCurrentSubscription } from "@/lib/push-client";
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
+import type { Routine } from "@/pages/routines";
+import { useQuickflow } from "@/hooks/use-quickflow";
+import { useStudySchedule } from "@/hooks/use-study-schedule";
 
 // Mirror today's + tomorrow's timed tasks and medications into the server
 // so the cron tick can deliver push notifications even when the app is closed.
@@ -25,6 +29,9 @@ export function useReminderSync() {
   const { tasks } = useTasks();
   const { medications, isTaken } = useMedications();
   const { reminders } = useReminders();
+  const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
+  const { openItems: quickflowItems } = useQuickflow();
+  const { lectures, settings: studySettings } = useStudySchedule();
   const syncFn = useServerFn(syncReminder);
   const cancelFn = useServerFn(cancelReminder);
   const lastKeys = useRef<Set<string>>(new Set());
@@ -70,6 +77,39 @@ export function useReminderSync() {
           deliverAt: deliver.toISOString(),
           url: "/hem",
         });
+      }
+
+      // Smarta deadline-påminnelser (Studier m.fl.): X dagar innan förfallodatum.
+      const horizon = todayIso(14);
+      for (const t of tasks) {
+        if (t.completed || !t.dueDate) continue;
+        const leads = t.deadlineLeadDays ?? [];
+        if (leads.length === 0) continue;
+        const at = t.deadlineReminderTime ?? "09:00";
+        for (const lead of leads) {
+          const due = new Date(t.dueDate + "T00:00:00");
+          due.setDate(due.getDate() - lead);
+          const date = `${due.getFullYear()}-${String(due.getMonth() + 1).padStart(2, "0")}-${String(due.getDate()).padStart(2, "0")}`;
+          if (date > horizon) continue;
+          const when = combineDateTime(date, at);
+          if (!when) continue;
+          if (when.getTime() < now + 30_000) continue;
+          const key = `deadline:${t.id}:${lead}`;
+          desired.set(key, {
+            clientKey: key,
+            kind: "custom",
+            title:
+              lead === 0
+                ? `📅 Deadline idag: ${t.title}`
+                : `📅 ${lead} dag${lead === 1 ? "" : "ar"} kvar: ${t.title}`,
+            body:
+              lead === 0
+                ? "Sista dagen – ett litet steg räcker."
+                : `Deadline ${t.dueDate}. Vill du ta ett steg idag?`,
+            deliverAt: when.toISOString(),
+            url: t.area === "studier" ? "/studyflow" : "/tasks",
+          });
+        }
       }
 
       // Medications: daily for the next 14 days so notiser fortsätter komma
@@ -132,6 +172,67 @@ export function useReminderSync() {
       }
 
 
+      // Dagliga rutiner: schemalägg 14 dagar framåt
+      for (const routine of routines) {
+        if (!routine.enabled || !routine.time) continue;
+        for (const date of horizonDates) {
+          const when = combineDateTime(date, routine.time);
+          if (!when) continue;
+          if (when.getTime() < now + 30_000) continue;
+          const key = `routine:${routine.id}:${date}`;
+          desired.set(key, {
+            clientKey: key,
+            kind: "custom",
+            title: `🔁 ${routine.title}`,
+            body: `Dags kl ${routine.time}`,
+            deliverAt: when.toISOString(),
+            url: "/daglig-rutin",
+          });
+        }
+      }
+
+      // Lektioner från det importerade schemat: påminnelse X min innan, 14 dagar framåt.
+      const lead = studySettings.lectureReminderMinutes ?? 0;
+      if (lead > 0) {
+        for (const lecture of lectures) {
+          for (const date of horizonDates) {
+            const d = new Date(date + "T00:00:00");
+            if (((d.getDay() + 6) % 7) !== lecture.weekday) continue;
+            const when = combineDateTime(date, lecture.start);
+            if (!when) continue;
+            const deliver = new Date(when.getTime() - lead * 60_000);
+            if (deliver.getTime() < now + 30_000) continue;
+            const key = `lecture:${lecture.id}:${date}`;
+            desired.set(key, {
+              clientKey: key,
+              kind: "custom",
+              title: `🎓 Om ${lead} min: ${lecture.title}`,
+              body: lecture.location
+                ? `Kl ${lecture.start} i ${lecture.location}`
+                : `Kl ${lecture.start}`,
+              deliverAt: deliver.toISOString(),
+              url: "/studyflow",
+            });
+          }
+        }
+      }
+
+      // Quickflow – "du bad mig komma ihåg". Får aldrig försvinna.
+      for (const item of quickflowItems) {
+        if (!item.remindAt || item.done) continue;
+        if (item.remindAt < now + 30_000) continue;
+        const key = `quickflow:${item.id}`;
+        desired.set(key, {
+          clientKey: key,
+          kind: "custom",
+          title: "🔔 MyFlove: Du bad mig komma ihåg detta.",
+          body: item.text,
+          deliverAt: new Date(item.remindAt).toISOString(),
+          url: "/hem",
+        });
+      }
+
+
       // Push all desired
       for (const r of desired.values()) {
         try {
@@ -160,8 +261,12 @@ export function useReminderSync() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     // Rerun on any change to timed tasks, medications, or reminders
-    JSON.stringify(tasks.map((t) => [t.id, t.completed, t.time, t.dueDate, t.reminderMinutesBefore])),
+    JSON.stringify(tasks.map((t) => [t.id, t.completed, t.time, t.dueDate, t.reminderMinutesBefore, (t.deadlineLeadDays ?? []).join(","), t.deadlineReminderTime])),
     JSON.stringify(medications.map((m) => [m.id, m.name, m.dosage, m.times.join(",")])),
     JSON.stringify(reminders.map((r) => [r.id, r.completed, r.date, r.time, r.repeat])),
+    JSON.stringify(routines.map((r) => [r.id, r.title, r.time, r.enabled])),
+    JSON.stringify(quickflowItems.map((q) => [q.id, q.text, q.remindAt, q.done])),
+    JSON.stringify(lectures.map((l) => [l.id, l.title, l.weekday, l.start, l.location])),
+    studySettings.lectureReminderMinutes,
   ]);
 }

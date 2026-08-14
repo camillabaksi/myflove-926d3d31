@@ -134,9 +134,14 @@ const PrefsSchema = z.object({
   tasks_enabled: z.boolean().optional(),
   loops_enabled: z.boolean().optional(),
   weather_enabled: z.boolean().optional(),
-  weather_time: z.string().regex(/^\d{2}:\d{2}$/).optional(),
+  weather_time: z.string().regex(/^\d{2}:\d{2}(:\d{2})?$/).transform((v) => v.slice(0, 5)).optional(),
   last_lat: z.number().optional(),
   last_lon: z.number().optional(),
+  personal_enabled: z.boolean().optional(),
+  personal_time: z.string().regex(/^\d{2}:\d{2}(:\d{2})?$/).transform((v) => v.slice(0, 5)).optional(),
+  personal_evening_enabled: z.boolean().optional(),
+  personal_evening_time: z.string().regex(/^\d{2}:\d{2}(:\d{2})?$/).transform((v) => v.slice(0, 5)).optional(),
+  personal_name: z.string().max(40).optional(),
 });
 
 export const savePushPreferences = createServerFn({ method: "POST" })
@@ -161,16 +166,25 @@ export const getPushPreferences = createServerFn({ method: "GET" })
       .eq("user_id", userId)
       .maybeSingle();
     if (error) throw new Error(error.message);
-    return (
-      data ?? {
-        user_id: userId,
-        medication_enabled: true,
-        tasks_enabled: true,
-        loops_enabled: true,
-        weather_enabled: true,
-        weather_time: "07:00",
-        last_lat: null,
-        last_lon: null,
-      }
-    );
+    if (data) return data;
+
+    // Ingen rad ännu – skapa defaults så att cron-jobbet hittar användaren.
+    const defaults = {
+      user_id: userId,
+      medication_enabled: true,
+      tasks_enabled: true,
+      loops_enabled: true,
+      weather_enabled: true,
+      weather_time: "07:00",
+      personal_enabled: true,
+      personal_time: "08:00",
+      personal_evening_enabled: false,
+      personal_evening_time: "20:30",
+    };
+    const { data: created } = await supabase
+      .from("push_preferences")
+      .upsert(defaults, { onConflict: "user_id" })
+      .select("*")
+      .maybeSingle();
+    return created ?? { ...defaults, last_lat: null, last_lon: null, personal_name: null };
   });

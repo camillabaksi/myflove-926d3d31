@@ -1,7 +1,8 @@
 import { useMemo } from "react";
-import { Sparkles, Umbrella, Snowflake, Thermometer, Clock, Wallet, Pill, CloudRain, Shirt, AlarmClock } from "lucide-react";
+import { Sparkles, Umbrella, Snowflake, Thermometer, Clock, Wallet, Pill, CloudRain, Shirt, AlarmClock, GlassWater, Moon, Sunrise, HeartHandshake, PartyPopper, Coffee } from "lucide-react";
 import { useWeather } from "@/hooks/use-weather";
-import { useReminders, useFinances, useMedications, useTasks } from "@/hooks/use-data";
+import { useReminders, useFinances, useMedications, useTasks, useMoods } from "@/hooks/use-data";
+import CollapsibleSection from "@/components/collapsible-section";
 
 // Öppna uppgifter som brukar "pågå i bakgrunden" – vi puffar när de blivit gamla
 // så användaren inte glömmer tvätten i maskinen, disken i diskmaskinen osv.
@@ -18,7 +19,7 @@ type Suggestion = {
   icon: typeof Sparkles;
   title: string;
   body: string;
-  tone: "weather" | "time" | "money" | "med";
+  tone: "weather" | "time" | "money" | "med" | "care";
 };
 
 const RAIN_CODES = new Set([51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82]);
@@ -38,6 +39,7 @@ export default function ProactiveSuggestions() {
   const { transactions } = useFinances();
   const { medications, isTaken } = useMedications();
   const { tasks } = useTasks();
+  const { moods } = useMoods();
 
   const suggestions = useMemo<Suggestion[]>(() => {
     const out: Suggestion[] = [];
@@ -192,19 +194,96 @@ export default function ProactiveSuggestions() {
       }
     }
 
-    return out.slice(0, 4);
-  }, [weather, activeReminders, transactions, medications, isTaken, tasks]);
+    // Små omsorgspuffar över dagen – korta, utan pekpinnar.
+    const hour = nowDate.getHours();
+    const isWeekend = nowDate.getDay() === 0 || nowDate.getDay() === 6;
+    const todaysTasks = tasks.filter((t) => !t.dueDate || t.dueDate === todayStr);
+    const openToday = todaysTasks.filter((t) => !t.completed).length;
+    const doneToday = todaysTasks.filter((t) => t.completed).length;
+
+    if (hour >= 6 && hour < 10 && !isWeekend) {
+      out.push({
+        id: "care-morning",
+        icon: Sunrise,
+        tone: "care",
+        title: openToday > 0 ? "Välj en sak att börja med" : "Fin start på dagen",
+        body: openToday > 0
+          ? "Du behöver inte planera hela dagen – bara nästa steg."
+          : "Inget måste ännu. Ta morgonen i din takt.",
+      });
+    }
+
+    if (hour >= 11 && hour < 14) {
+      out.push({
+        id: "care-lunch",
+        icon: Coffee,
+        tone: "care",
+        title: "Har du ätit något?",
+        body: "En paus och lite mat gör resten av dagen lättare.",
+      });
+    }
+
+    if (hour >= 14 && hour < 17) {
+      out.push({
+        id: "care-water",
+        icon: GlassWater,
+        tone: "care",
+        title: "Ett glas vatten",
+        body: "Eftermiddagsdippen blir mindre med lite vätska och luft.",
+      });
+    }
+
+    if (hour >= 20) {
+      out.push({
+        id: "care-evening",
+        icon: Moon,
+        tone: "care",
+        title: "Dags att runda av",
+        body: openToday > 0
+          ? `${openToday} saker kvar – de finns kvar imorgon, helt okej.`
+          : "Dagen är klar. Skönt så.",
+      });
+    }
+
+    // Mående inte loggat idag
+    const loggedToday = moods.some((m) => new Date(m.date).toISOString().split("T")[0] === todayStr);
+    if (!loggedToday && hour >= 12) {
+      out.push({
+        id: "care-mood",
+        icon: HeartHandshake,
+        tone: "care",
+        title: "Hur känns dagen?",
+        body: "Ta tio sekunder och logga ditt mående – det hjälper Flow att peppa rätt.",
+      });
+    }
+
+    // Beröm när allt för idag är avklarat
+    if (doneToday > 0 && openToday === 0) {
+      out.push({
+        id: "care-done",
+        icon: PartyPopper,
+        tone: "care",
+        title: `${doneToday} sak${doneToday === 1 ? "" : "er"} avklarade idag`,
+        body: "Snyggt jobbat. Resten av dagen får vara ledig.",
+      });
+    }
+
+    return out.slice(0, 5);
+  }, [weather, activeReminders, transactions, medications, isTaken, tasks, moods]);
 
   if (suggestions.length === 0) return null;
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center gap-2">
-        <Sparkles size={16} className="text-primary" />
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-          Förslag just nu
-        </h2>
-      </div>
+      <CollapsibleSection
+        title={
+          <span className="inline-flex items-center gap-2">
+            <Sparkles size={16} className="text-primary" /> Förslag just nu
+          </span>
+        }
+        help="Tips utifrån väder, dina uppgifter och hur du mått. Tryck bort dem du inte vill ha."
+        headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
+      >
       <div className="space-y-2">
         {suggestions.map((s) => {
           const Icon = s.icon;
@@ -224,6 +303,7 @@ export default function ProactiveSuggestions() {
           );
         })}
       </div>
+      </CollapsibleSection>
     </div>
   );
 }
