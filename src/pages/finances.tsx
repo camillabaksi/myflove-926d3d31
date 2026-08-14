@@ -88,7 +88,7 @@ export default function Finances() {
         <BudgetPanel transactions={transactions} categories={CATEGORIES} />
 
         <div className="bg-card p-6 rounded-3xl border border-border shadow-sm">
-        <CollapsibleSection title="Ny transaktion">
+        <CollapsibleSection title="Ny transaktion" help="Här skriver du in pengar in eller ut. Välj typ, skriv summa och vad det gällde – det räcker.">
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="flex bg-secondary/50 p-1 rounded-xl">
             <button
@@ -193,7 +193,7 @@ export default function Finances() {
         </div>
 
         {transactions.length > 0 && (
-          <CollapsibleSection title="Senaste transaktioner">
+          <CollapsibleSection title="Senaste transaktioner" help="De tio senaste sakerna du lagt in. Bra för att snabbt se vart pengarna tog vägen.">
             <div className="space-y-3">
               {transactions.slice(0, 10).map(t => (
                 <div key={t.id} className="flex items-center justify-between p-4 bg-card border border-border rounded-2xl shadow-sm">

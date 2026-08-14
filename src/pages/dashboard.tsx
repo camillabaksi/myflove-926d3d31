@@ -60,7 +60,7 @@ export default function Dashboard() {
               <div className="w-16 h-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mb-2">
                 <Target size={32} />
               </div>
-              <CollapsibleSection title="Välj en sak" className="w-full items-center text-center">
+              <CollapsibleSection title="Välj en sak" help="Välj en enda sak som räcker för att dagen ska kännas okej. Allt annat är bonus." className="w-full items-center text-center">
                 <p className="text-muted-foreground text-sm leading-relaxed -mt-2">
                   Om allt annat misslyckas idag, vad skulle kännas skönt att ha bockat av? Gör det litet och konkret.
                 </p>

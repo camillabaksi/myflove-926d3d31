@@ -197,6 +197,7 @@ export default function Dump() {
         ) : (
           <CollapsibleSection
             title="Förslag på sortering:"
+            help="Flow gissar var varje tanke hör hemma. Du bestämmer – tryck för att spara eller strunta i det."
             headingClassName="font-semibold"
             className="animate-in fade-in slide-in-from-bottom-4 duration-500"
           >
