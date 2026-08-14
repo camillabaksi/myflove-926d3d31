@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { MapPin, Clock, Compass } from "lucide-react";
+import { MapPin, Clock, Compass, Bell } from "lucide-react";
 import { useStudySchedule } from "@/hooks/use-study-schedule";
 import { nextOccurrence } from "@/lib/schedule-parse";
 
@@ -91,6 +91,24 @@ export function NextLectureCard() {
             ? "Snart dags. Packa det du behöver och andas ut."
             : "Du har gott om tid. Ta en sak i taget."}
       </p>
+
+      <label className="mt-3 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+        <Bell className="h-4 w-4" />
+        <span>Påminn mig</span>
+        <select
+          value={settings.lectureReminderMinutes}
+          onChange={(e) => patchSettings({ lectureReminderMinutes: Number(e.target.value) })}
+          aria-label="Påminnelse före lektion"
+          className="rounded-xl border border-border bg-background px-3 py-2 text-sm text-ink"
+        >
+          <option value={0}>aldrig</option>
+          {[10, 15, 30, 45, 60].map((m) => (
+            <option key={m} value={m}>
+              {m} min innan
+            </option>
+          ))}
+        </select>
+      </label>
     </section>
   );
 }
