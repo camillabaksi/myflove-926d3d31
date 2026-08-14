@@ -193,7 +193,7 @@ export default function Home() {
 
         <PersonalNote />
 
-        <HomeSection id="quickflow" title="Quickflow">
+        <HomeSection id="quickflow" title="Quickflow" help="Skriv ner det du kommer på, direkt. Du behöver inte bestämma när eller hur – sortera senare.">
           <div className="space-y-4">
             <QuickflowCapture />
             <QuickflowList />
@@ -211,23 +211,23 @@ export default function Home() {
           </p>
         </div>
 
-        <HomeSection id="streak" title="Din svit">
+        <HomeSection id="streak" title="Din svit" help="Antal dagar i rad du gjort något i appen. Bryts den händer inget – den finns bara som en liten morot.">
           <StreakCard />
         </HomeSection>
 
-        <HomeSection id="weather" title="Väder">
+        <HomeSection id="weather" title="Väder" help="Vädret där du är just nu. Används också för tips, som att ta med paraply.">
           <WeatherCard />
         </HomeSection>
 
-        <HomeSection id="shortcuts" title="Genvägar">
+        <HomeSection id="shortcuts" title="Genvägar" help="Dina fyra egna knappar. Tryck på pennan för att byta ut dem mot det du använder mest.">
           <HomeShortcuts />
         </HomeSection>
 
-        <HomeSection id="week" title="Veckan i flow">
+        <HomeSection id="week" title="Veckan i flow" help="En snabb bild av veckan. Tryck på en dag för att se vad som ligger där.">
           <WeekInFlow />
         </HomeSection>
 
-        <HomeSection id="suggestions" title="Förslag">
+        <HomeSection id="suggestions" title="Förslag" help="Små tips utifrån väder, dina uppgifter och hur du mått. Du kan alltid strunta i dem.">
           <ProactiveSuggestions />
         </HomeSection>
 
@@ -269,7 +269,7 @@ export default function Home() {
         )}
 
 
-        <HomeSection id="today" title={helpPlan ? "Det viktigaste just nu" : "Dagens viktigaste"}>
+        <HomeSection id="today" title={helpPlan ? "Det viktigaste just nu" : "Dagens viktigaste"} help="Det som är närmast i tid idag. Tryck på en rad för att bocka av den.">
           <div className="space-y-4">
 
           {currentFocus && !helpPlan && (
@@ -357,7 +357,7 @@ export default function Home() {
         </HomeSection>
 
         {upcomingBills.length > 0 && (
-          <HomeSection id="bills" title="Kommande räkningar">
+          <HomeSection id="bills" title="Kommande räkningar" help="Räkningar med förfallodatum inom kort. Läggs in under Ekonomi.">
             <div className="space-y-3">
               {upcomingBills.slice(0, 3).map((bill) => (
                 <div
@@ -379,7 +379,7 @@ export default function Home() {
         )}
 
         {nextMedication && (
-          <HomeSection id="medication" title="Medicinpåminnelse">
+          <HomeSection id="medication" title="Medicinpåminnelse" help="Bocka av när du tagit din medicin. Tiden ställer du in under Må bra.">
             <Link
               href="/daglig-rutin"
               className="flex items-center gap-4 p-5 surface-card hover:border-primary/40 transition-colors"
@@ -399,7 +399,7 @@ export default function Home() {
           </HomeSection>
         )}
 
-        <HomeSection id="push" title="Påminnelser">
+        <HomeSection id="push" title="Påminnelser" help="Slå på notiser i mobilen så påminner appen dig även när den är stängd.">
           <div className="space-y-4">
             <div className="surface-card p-4 flex flex-wrap items-center justify-between gap-3">
               <div>
