@@ -1,6 +1,6 @@
 import { ReactNode, useState, useEffect, useMemo } from "react";
 import { Link, useLocation } from "wouter";
-import { Home, Target, CheckSquare, ShoppingBag, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Settings2, Check, RotateCcw, ArrowUp, ArrowDown, LogOut, Volume2, VolumeX, Shield, Heart, Sun, Search, GraduationCap, Briefcase, Baby, CalendarDays, Brain, HeartPulse, House, BookOpen, Building2, LayoutGrid, Dumbbell, SprayCan, Zap, Gauge } from "lucide-react";
+import { Home, Target, CheckSquare, ShoppingBag, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Settings2, Check, RotateCcw, ArrowUp, ArrowDown, LogOut, Volume2, VolumeX, Shield, Heart, Sun, Search, GraduationCap, Briefcase, Baby, CalendarDays, Brain, HeartPulse, House, BookOpen, Building2, LayoutGrid, Dumbbell, SprayCan, Zap, Gauge, ArrowLeft } from "lucide-react";
 import { isAlarmSoundEnabled, setAlarmSoundEnabled, subscribeAlarmPref, playAlarmPreview, initAlarmAudioUnlock } from "@/lib/push-notifications";
 import { useCommuteAlerts } from "@/hooks/use-commute-alerts";
 import { useMedicationAlerts } from "@/hooks/use-medication-alerts";
@@ -113,6 +113,16 @@ export default function Layout({ children }: LayoutProps) {
   usePurgeRevisions();
   const { isAdmin } = useIsAdmin();
   const { enabled: enabledAreas } = useEnabledAreas();
+
+  const canGoBack = location !== "/" && location !== "/hem";
+  const handleBack = () => {
+    if (typeof window === "undefined") return;
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      window.location.href = "/hem";
+    }
+  };
 
 
   const [alarmEnabled, setAlarmEnabledState] = useState<boolean>(() => isAlarmSoundEnabled());
@@ -323,11 +333,33 @@ export default function Layout({ children }: LayoutProps) {
       <main className="flex-1 flex flex-col min-h-0 overflow-hidden relative">
         {/* Mobile Header */}
         <header className="md:hidden relative flex items-center justify-center p-4 bg-background/80 backdrop-blur-md sticky top-0 z-10 border-b border-border/50">
+          {canGoBack && (
+            <button
+              type="button"
+              onClick={handleBack}
+              aria-label="Gå tillbaka"
+              className="absolute left-3 p-2 rounded-full hover:bg-primary/10 text-foreground transition-colors"
+            >
+              <ArrowLeft size={22} />
+            </button>
+          )}
           <h1 className="text-xl font-bold text-primary tracking-tight">MyFlove</h1>
           <ViewCollapseToggle className="absolute right-3" />
         </header>
 
-        <div className="hidden md:flex justify-end px-8 pt-6">
+        <div className="hidden md:flex items-center justify-between px-8 pt-6">
+          {canGoBack ? (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleBack}
+              className="gap-1 text-muted-foreground hover:text-foreground"
+            >
+              <ArrowLeft size={18} /> Tillbaka
+            </Button>
+          ) : (
+            <span />
+          )}
           <ViewCollapseToggle />
         </div>
 
