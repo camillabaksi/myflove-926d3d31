@@ -534,30 +534,19 @@ export default function Layout({ children }: LayoutProps) {
               )}
               {!editingBottomNav && navSearch.trim() ? (
                 searchResults.length > 0 ? (
-                  <div className="grid grid-cols-3 gap-3">
-                    {searchResults.map((item) => {
-                      const isActive = location === item.href;
-                      const Icon = item.icon;
-                      return (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          onClick={() => {
-                            setMobileMenuOpen(false);
-                            setOpenCategory(null);
-                            setNavSearch("");
-                          }}
-                          className={`aspect-square flex flex-col items-center justify-center gap-2 rounded-2xl p-2 text-center transition-all duration-200 ${
-                            isActive
-                              ? "bg-primary text-primary-foreground font-medium shadow-sm"
-                              : "bg-card text-foreground border border-border shadow-sm"
-                          }`}
-                        >
-                          <Icon size={26} strokeWidth={isActive ? 2.5 : 2} />
-                          <span className="text-xs leading-tight">{item.label}</span>
-                        </Link>
-                      );
-                    })}
+                  <div className="space-y-2">
+                    {searchResults.map((item) => (
+                      <NavRow
+                        key={item.href}
+                        item={item}
+                        isActive={location === item.href}
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          setOpenCategory(null);
+                          setNavSearch("");
+                        }}
+                      />
+                    ))}
                   </div>
                 ) : (
                   <p className="text-sm text-muted-foreground text-center mt-8">
@@ -601,36 +590,45 @@ export default function Layout({ children }: LayoutProps) {
                       </div>
                     );
                   })()}
-                  <div className="grid grid-cols-3 gap-3">
-                    {(categories.find((c) => c.id === openCategory)?.items ?? []).map((item) => {
-                      const isActive = location === item.href;
-                      const Icon = item.icon;
-                      return (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          onClick={() => {
-                            setMobileMenuOpen(false);
-                            setOpenCategory(null);
-                          }}
-                          style={
-                            isActive
-                              ? { backgroundColor: catColor(openCategory), borderColor: catColor(openCategory) }
-                              : {
-                                  backgroundColor: catColor(openCategory, 0.1),
-                                  borderColor: catColor(openCategory, 0.35),
-                                  color: catColor(openCategory),
-                                }
-                          }
-                          className={`aspect-square flex flex-col items-center justify-center gap-2 rounded-2xl p-2 text-center border shadow-sm transition-all duration-200 ${
-                            isActive ? "text-primary-foreground font-medium" : ""
-                          }`}
-                        >
-                          <Icon size={26} strokeWidth={isActive ? 2.5 : 2} />
-                          <span className="text-xs leading-tight">{item.label}</span>
-                        </Link>
-                      );
-                    })}
+                  <div className="space-y-2">
+                    {(categories.find((c) => c.id === openCategory)?.items ?? []).map((item) => (
+                      <NavRow
+                        key={item.href}
+                        item={item}
+                        isActive={location === item.href}
+                        tint={catColor(openCategory, 0.1)}
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          setOpenCategory(null);
+                        }}
+                      />
+                    ))}
+                  </div>
+                </>
+              ) : simpleMode ? (
+                <>
+                  <p className="mb-3 text-sm text-muted-foreground">
+                    Enkelt läge – bara det du behöver oftast.
+                  </p>
+                  <div className="space-y-2">
+                    {essentialItems.map((item) => (
+                      <NavRow
+                        key={item.href}
+                        item={item}
+                        isActive={location === item.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                      />
+                    ))}
+                  </div>
+                  <div className="mt-6 flex items-center justify-center">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="rounded-xl gap-2"
+                      onClick={() => setSimpleMode(false)}
+                    >
+                      <LayoutGrid size={16} /> Visa allt i appen
+                    </Button>
                   </div>
                 </>
               ) : (
@@ -648,7 +646,7 @@ export default function Layout({ children }: LayoutProps) {
                             borderColor: catColor(cat.id, 0.35),
                             color: catColor(cat.id),
                           }}
-                          className="aspect-square flex flex-col items-center justify-center gap-2 rounded-3xl p-3 text-center border shadow-sm transition-all duration-200 active:scale-95"
+                          className="flex flex-col items-center justify-center gap-2 rounded-3xl p-4 text-center border shadow-sm transition-all duration-200 active:scale-95"
                         >
                           <span
                             className="inline-flex h-12 w-12 items-center justify-center rounded-2xl"
@@ -658,13 +656,23 @@ export default function Layout({ children }: LayoutProps) {
                             <Icon size={26} />
                           </span>
                           <span className="text-sm font-medium leading-tight">{cat.label}</span>
-                          <span className="text-[11px] opacity-70">
-                            {cat.items.length} sektioner
-                          </span>
+                          <span className="text-[11px] leading-snug opacity-70">{cat.hint}</span>
                         </button>
                       );
                     })}
                   </div>
+
+                  <div className="mt-6 flex items-center justify-center">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="rounded-xl gap-2"
+                      onClick={() => setSimpleMode(true)}
+                    >
+                      <Home size={16} /> Tillbaka till enkelt läge
+                    </Button>
+                  </div>
+
 
 
                   <div className="mt-6 flex items-center justify-center">
