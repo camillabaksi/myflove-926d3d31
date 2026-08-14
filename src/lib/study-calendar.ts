@@ -30,6 +30,8 @@ export interface StudyScheduleSettings {
   includeExams: boolean;
   /** Lägg automatiska repetitionspass i kalendern (av som standard) */
   includeRevisions: boolean;
+  /** Minuter före en lektion som Flow påminner. 0 = av. */
+  lectureReminderMinutes: number;
 }
 
 export const DEFAULT_SCHEDULE_SETTINGS: StudyScheduleSettings = {
