@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { Button } from "@/components/ui/button";
-import { Loader2, MapPin, Navigation, Route as RouteIcon, ExternalLink } from "lucide-react";
+import { Loader2, MapPin, Navigation, Route as RouteIcon, ExternalLink, ChevronDown } from "lucide-react";
 import CollapsibleSection from "@/components/collapsible-section";
 import { suggestWalkRoutes, type WalkRoute } from "@/lib/walk-routes.functions";
 import { useToast } from "@/hooks/use-toast";
@@ -19,6 +19,7 @@ export default function WalkRoutesSection() {
   const [loading, setLoading] = useState(false);
   const [routes, setRoutes] = useState<WalkRoute[] | null>(null);
   const [target, setTarget] = useState<{ km: number; minutes: number } | null>(null);
+  const [expanded, setExpanded] = useState<string | null>(null);
 
   async function findRoutes() {
     if (typeof navigator === "undefined" || !navigator.geolocation) {
@@ -37,6 +38,7 @@ export default function WalkRoutesSection() {
             },
           });
           setRoutes(res.routes);
+          setExpanded(res.routes[0]?.id ?? null);
           setTarget({ km: res.targetKm, minutes: res.targetMinutes });
           if (res.routes.length === 0) {
             toast({
@@ -124,28 +126,75 @@ export default function WalkRoutesSection() {
       )}
 
       {routes && routes.length > 0 && (
-        <ul className="space-y-2">
-          {routes.map((r) => (
-            <li key={r.id} className="rounded-2xl border border-border/70 p-4">
-              <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0">
-                  <p className="font-medium text-ink">{r.name}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {r.kind} · {r.bearing} · {r.distanceKm} km tur och retur · ca {r.minutes} min
-                  </p>
+        <ul className="space-y-3">
+          {routes.map((r) => {
+            const open = expanded === r.id;
+            const d = 0.012 + r.distanceKm * 0.0035;
+            const minLat = Math.min(r.startLat, r.lat) - d;
+            const maxLat = Math.max(r.startLat, r.lat) + d;
+            const minLon = Math.min(r.startLon, r.lon) - d * 2;
+            const maxLon = Math.max(r.startLon, r.lon) + d * 2;
+            const mapSrc = `https://www.openstreetmap.org/export/embed.html?bbox=${minLon}%2C${minLat}%2C${maxLon}%2C${maxLat}&layer=mapnik&marker=${r.lat}%2C${r.lon}`;
+            return (
+              <li key={r.id} className="rounded-2xl border border-border/70 p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="font-medium text-ink">{r.name}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {r.kind} · {r.bearing}
+                    </p>
+                  </div>
+                  <MapPin size={16} className="shrink-0 text-primary" />
                 </div>
-                <MapPin size={16} className="shrink-0 text-primary" />
-              </div>
-              <a
-                href={r.mapsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
-              >
-                Öppna i kartan <ExternalLink size={14} />
-              </a>
-            </li>
-          ))}
+
+                <div className="mt-3 grid grid-cols-3 gap-2 text-center">
+                  <div className="rounded-xl bg-muted/40 p-2">
+                    <p className="text-[11px] text-muted-foreground">Längd</p>
+                    <p className="text-sm font-semibold text-ink">{r.distanceKm} km</p>
+                  </div>
+                  <div className="rounded-xl bg-muted/40 p-2">
+                    <p className="text-[11px] text-muted-foreground">Tid</p>
+                    <p className="text-sm font-semibold text-ink">ca {r.minutes} min</p>
+                  </div>
+                  <div className="rounded-xl bg-muted/40 p-2">
+                    <p className="text-[11px] text-muted-foreground">Höjdskillnad</p>
+                    <p className="text-sm font-semibold text-ink">
+                      {r.elevationGain === null ? "–" : `${r.elevationGain} m`}
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setExpanded(open ? null : r.id)}
+                  className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-ink hover:underline"
+                >
+                  {open ? "Dölj kartan" : "Visa karta"}
+                  <ChevronDown size={14} className={open ? "rotate-180 transition" : "transition"} />
+                </button>
+
+                {open && (
+                  <div className="mt-3 overflow-hidden rounded-xl border border-border/70">
+                    <iframe
+                      title={`Karta för ${r.name}`}
+                      src={mapSrc}
+                      loading="lazy"
+                      className="h-44 w-full border-0"
+                    />
+                  </div>
+                )}
+
+                <a
+                  href={r.mapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
+                >
+                  Öppna i Google Maps <ExternalLink size={14} />
+                </a>
+              </li>
+            );
+          })}
         </ul>
       )}
 
