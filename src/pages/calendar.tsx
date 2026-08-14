@@ -26,6 +26,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
+import CollapsibleSection from "@/components/collapsible-section";
 
 function useFamilyEventsByDate() {
   const { isSignedIn } = useUser();
@@ -258,17 +259,23 @@ export default function CalendarPage() {
         </p>
 
         <div className="bg-card rounded-3xl border border-border shadow-sm overflow-hidden">
-          <div className="flex items-center justify-between p-6 pb-2">
-            <button onClick={prevMonth} className="p-2 hover:bg-secondary rounded-xl transition-colors">
-              <ChevronLeft size={24} />
-            </button>
-            <h2 className="text-xl font-medium capitalize">{monthName}</h2>
-            <button onClick={nextMonth} className="p-2 hover:bg-secondary rounded-xl transition-colors">
-              <ChevronRight size={24} />
-            </button>
-          </div>
-
-          <div className="p-6 pt-4">
+          <div className="p-6 pb-2">
+            <CollapsibleSection
+              title={monthName}
+              id="månadsöversikt"
+              headingClassName="text-xl font-medium capitalize"
+              actions={
+                <div className="flex items-center gap-1">
+                  <button onClick={prevMonth} className="p-2 hover:bg-secondary rounded-xl transition-colors">
+                    <ChevronLeft size={24} />
+                  </button>
+                  <button onClick={nextMonth} className="p-2 hover:bg-secondary rounded-xl transition-colors">
+                    <ChevronRight size={24} />
+                  </button>
+                </div>
+              }
+            >
+          <div className="pt-2">
             <div className="grid grid-cols-7 gap-1 mb-2 text-center text-sm font-medium text-muted-foreground">
               <div>Må</div><div>Ti</div><div>On</div><div>To</div><div>Fr</div><div>Lö</div><div>Sö</div>
             </div>
@@ -330,6 +337,8 @@ export default function CalendarPage() {
                 );
               })}
             </div>
+          </div>
+            </CollapsibleSection>
           </div>
         </div>
 

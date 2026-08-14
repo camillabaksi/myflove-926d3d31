@@ -12,6 +12,7 @@ import {
   type ParsedLecture,
 } from "@/lib/schedule-parse";
 import { parseScheduleWithFlow } from "@/lib/schedule-import.functions";
+import CollapsibleSection from "@/components/collapsible-section";
 
 const card = "rounded-3xl border border-border bg-card p-5 shadow-sm";
 const sectionTitle = "flex items-center gap-2 font-display text-lg text-ink";
@@ -71,9 +72,14 @@ export function ScheduleImport() {
 
   return (
     <section className={card}>
-      <h2 className={sectionTitle}>
-        <Upload className="h-5 w-5 text-primary" /> Ladda upp ditt schema
-      </h2>
+      <CollapsibleSection
+        title={
+          <span className="inline-flex items-center gap-2">
+            <Upload className="h-5 w-5 text-primary" /> Ladda upp ditt schema
+          </span>
+        }
+        headingClassName={sectionTitle}
+      >
       <p className="mt-1 text-sm text-muted-foreground">
         Klistra in schemat som text eller ladda upp en .ics-fil från skolan. Flow gör om det till
         ditt veckoschema – sen kan Flow säga vilken lektion som är nästa och var.
@@ -155,6 +161,7 @@ export function ScheduleImport() {
           </div>
         </div>
       )}
+      </CollapsibleSection>
     </section>
   );
 }

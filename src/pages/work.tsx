@@ -24,6 +24,7 @@ import { breakDownWorkTask } from "@/lib/work.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { celebrateFromEvent } from "@/lib/celebrate";
+import CollapsibleSection from "@/components/collapsible-section";
 
 const BUCKET = "work-docs";
 
@@ -228,8 +229,7 @@ export default function WorkPage() {
         </header>
 
         {/* Projekt */}
-        <section className="surface-card p-5 space-y-4">
-          <h2 className="text-lg font-semibold">Dina projekt</h2>
+        <CollapsibleSection title="Dina projekt" headingClassName="text-lg font-semibold" className="surface-card p-5">
           <form onSubmit={handleAddProject} className="flex gap-2">
             <Input
               value={projectDraft}
@@ -271,11 +271,10 @@ export default function WorkPage() {
               ))}
             </ul>
           )}
-        </section>
+        </CollapsibleSection>
 
         {/* Ny arbetsuppgift */}
-        <section className="surface-card p-5 space-y-3">
-          <h2 className="text-lg font-semibold">Ny arbetsuppgift</h2>
+        <CollapsibleSection title="Ny arbetsuppgift" headingClassName="text-lg font-semibold" className="surface-card p-5">
           <form onSubmit={handleAddWorkTask} className="space-y-3">
             <Input
               value={title}
@@ -331,12 +330,10 @@ export default function WorkPage() {
               className="w-full rounded-2xl border border-border bg-background p-3 text-sm"
             />
           </form>
-        </section>
+        </CollapsibleSection>
 
         {/* Uppgifter */}
-        <section className="space-y-4">
-          <h2 className="text-lg font-semibold">Uppgifter och deadlines</h2>
-
+        <CollapsibleSection title="Uppgifter och deadlines" headingClassName="text-lg font-semibold">
           {/* Mappar */}
           <div className="flex flex-wrap gap-2">
             {[
@@ -599,7 +596,7 @@ export default function WorkPage() {
               </article>
             );
           })}
-        </section>
+        </CollapsibleSection>
       </div>
     </Layout>
   );

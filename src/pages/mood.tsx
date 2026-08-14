@@ -8,6 +8,7 @@ import { getRandomEncouragement } from "@/lib/encouragements";
 import { useToast } from "@/hooks/use-toast";
 import { getGreeting } from "@/lib/greeting";
 import { useUserProfile } from "@/hooks/use-user-profile";
+import CollapsibleSection from "@/components/collapsible-section";
 
 
 const EMOJIS = [
@@ -116,10 +117,11 @@ export function MoodContent({ showHeader = true }: MoodContentProps) {
       </button>
 
       {moods.length > 0 && (
-        <div className="space-y-4">
-          <div className="flex items-center justify-between gap-3">
-            <h2 className="text-xl font-semibold">Tidigare incheckningar</h2>
-            {moods.length > 3 && (
+        <CollapsibleSection
+          title="Tidigare incheckningar"
+          headingClassName="text-xl font-semibold"
+          actions={
+            moods.length > 3 && (
               <button
                 type="button"
                 onClick={() => setShowAllMoods((v) => !v)}
@@ -128,8 +130,9 @@ export function MoodContent({ showHeader = true }: MoodContentProps) {
               >
                 {showAllMoods ? "Visa färre" : `Visa alla (${moods.length})`}
               </button>
-            )}
-          </div>
+            )
+          }
+        >
           <div className="space-y-3">
             {(showAllMoods ? moods : moods.slice(0, 3)).map((mood) => {
               const emoji = EMOJIS.find((e) => e.score === mood.score)?.emoji;
@@ -144,7 +147,7 @@ export function MoodContent({ showHeader = true }: MoodContentProps) {
               );
             })}
           </div>
-        </div>
+        </CollapsibleSection>
       )}
 
 

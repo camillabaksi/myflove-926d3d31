@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Trash2, TrendingDown, TrendingUp } from "lucide-react";
 import BudgetPanel from "@/components/budget-panel";
+import CollapsibleSection from "@/components/collapsible-section";
 
 const CATEGORIES = ["Mat", "Boende", "Transport", "Nöje", "Övrigt"];
 
@@ -86,9 +87,9 @@ export default function Finances() {
 
         <BudgetPanel transactions={transactions} categories={CATEGORIES} />
 
-        <form onSubmit={handleSubmit} className="bg-card p-6 rounded-3xl border border-border shadow-sm space-y-6">
-          <h2 className="text-xl font-medium">Ny transaktion</h2>
-          
+        <div className="bg-card p-6 rounded-3xl border border-border shadow-sm">
+        <CollapsibleSection title="Ny transaktion">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="flex bg-secondary/50 p-1 rounded-xl">
             <button
               type="button"
@@ -188,10 +189,11 @@ export default function Finances() {
             Lägg till
           </Button>
         </form>
+        </CollapsibleSection>
+        </div>
 
         {transactions.length > 0 && (
-          <div className="space-y-4">
-            <h2 className="text-xl font-medium">Senaste transaktioner</h2>
+          <CollapsibleSection title="Senaste transaktioner">
             <div className="space-y-3">
               {transactions.slice(0, 10).map(t => (
                 <div key={t.id} className="flex items-center justify-between p-4 bg-card border border-border rounded-2xl shadow-sm">
@@ -222,7 +224,7 @@ export default function Finances() {
                 </div>
               ))}
             </div>
-          </div>
+          </CollapsibleSection>
         )}
       </div>
     </Layout>

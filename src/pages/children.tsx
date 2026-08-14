@@ -25,6 +25,7 @@ import { useChildren, CHILD_COLORS, type ChildItem, type ChildItemKind } from "@
 import { useToast } from "@/hooks/use-toast";
 import { syncReminder, cancelReminder } from "@/lib/push.functions";
 import { celebrateFromEvent } from "@/lib/celebrate";
+import CollapsibleSection from "@/components/collapsible-section";
 
 const KIND_META: Record<ChildItemKind, { label: string; icon: typeof Baby }> = {
   activity: { label: "Aktivitet", icon: CalendarDays },
@@ -217,8 +218,7 @@ function ChildrenContent() {
     <div className="space-y-8">
       <ChildConflictDialog conflict={conflict} onResolve={(c) => void resolveConflict(c)} />
       {/* Barnprofiler */}
-      <section className="space-y-3">
-        <h2 className="text-lg font-semibold">Barn</h2>
+      <CollapsibleSection title="Barn" headingClassName="text-lg font-semibold" className="space-y-3">
         <div className="flex gap-2 flex-wrap">
           {children.map((c) => (
             <button
@@ -271,14 +271,19 @@ function ChildrenContent() {
             ))}
           </div>
         </form>
-      </section>
+      </CollapsibleSection>
 
       {activeChild && (
         <>
           {/* Lägg till innehåll */}
           {isOwner && (
-            <section className="surface-card p-5 space-y-3">
-              <h2 className="text-lg font-semibold">Lägg till för {activeChild.name}</h2>
+            <section className="surface-card p-5">
+              <CollapsibleSection
+                title={`Lägg till för ${activeChild.name}`}
+                id="Lägg till för barn"
+                headingClassName="text-lg font-semibold"
+                className="space-y-3"
+              >
               <form onSubmit={handleAddItem} className="space-y-3">
                 <div className="flex gap-2 flex-wrap">
                   {(Object.keys(KIND_META) as ChildItemKind[]).map((k) => (
@@ -372,6 +377,7 @@ function ChildrenContent() {
                   <Lock size={12} /> Allt du lägger in är privat tills du väljer att dela det.
                 </p>
               </form>
+              </CollapsibleSection>
             </section>
           )}
 

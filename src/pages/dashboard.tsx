@@ -6,6 +6,7 @@ import { Target, CheckCircle2, Plus, Sparkles, Bell, Trash2 } from "lucide-react
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { getRandomEncouragement } from "@/lib/encouragements";
+import CollapsibleSection from "@/components/collapsible-section";
 
 export default function Dashboard() {
   const { currentFocus, setTodayFocus, toggleFocusCompleted } = useFocus();
@@ -59,30 +60,31 @@ export default function Dashboard() {
               <div className="w-16 h-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mb-2">
                 <Target size={32} />
               </div>
-              <h2 className="text-xl font-medium">Välj en sak</h2>
-              <p className="text-muted-foreground text-sm leading-relaxed -mt-2">
-                Om allt annat misslyckas idag, vad skulle kännas skönt att ha bockat av? Gör det litet och konkret.
-              </p>
-              
-              <div className="w-full relative">
-                <Input
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  placeholder="T.ex. Betala hyran..."
-                  className="h-14 text-lg rounded-2xl px-6 bg-secondary/50 border-transparent focus-visible:ring-primary focus-visible:border-primary w-full transition-all"
-                  autoFocus
-                />
-              </div>
+              <CollapsibleSection title="Välj en sak" className="w-full items-center text-center">
+                <p className="text-muted-foreground text-sm leading-relaxed -mt-2">
+                  Om allt annat misslyckas idag, vad skulle kännas skönt att ha bockat av? Gör det litet och konkret.
+                </p>
 
-              <Button 
-                type="submit" 
-                size="lg" 
-                disabled={!inputValue.trim()}
-                className="w-full h-14 rounded-2xl text-lg font-medium shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-transform"
-              >
-                <Plus className="mr-2" size={24} />
-                Sätt fokus
-              </Button>
+                <div className="w-full relative">
+                  <Input
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    placeholder="T.ex. Betala hyran..."
+                    className="h-14 text-lg rounded-2xl px-6 bg-secondary/50 border-transparent focus-visible:ring-primary focus-visible:border-primary w-full transition-all"
+                    autoFocus
+                  />
+                </div>
+
+                <Button 
+                  type="submit" 
+                  size="lg" 
+                  disabled={!inputValue.trim()}
+                  className="w-full h-14 rounded-2xl text-lg font-medium shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-transform"
+                >
+                  <Plus className="mr-2" size={24} />
+                  Sätt fokus
+                </Button>
+              </CollapsibleSection>
             </div>
           </form>
         ) : (
@@ -139,23 +141,23 @@ export default function Dashboard() {
 
         {/* Reminders Section */}
         <div className="max-w-md mx-auto mt-16 pt-8 border-t border-border">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold flex items-center gap-2">
-              <Bell size={24} className="text-primary" />
-              Påminnelser
-            </h2>
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              onClick={() => setShowReminderForm(!showReminderForm)}
-              aria-label={showReminderForm ? "Stäng formulär för ny påminnelse" : "Lägg till ny påminnelse"}
-              aria-expanded={showReminderForm}
-              className="rounded-xl text-primary hover:text-primary/80 hover:bg-primary/10"
-            >
-              <Plus size={24} aria-hidden="true" />
-            </Button>
-          </div>
-
+          <CollapsibleSection
+            title={<span className="flex items-center gap-2"><Bell size={24} className="text-primary" />Påminnelser</span>}
+            id="Påminnelser"
+            headingClassName="text-2xl font-bold"
+            actions={
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => setShowReminderForm(!showReminderForm)}
+                aria-label={showReminderForm ? "Stäng formulär för ny påminnelse" : "Lägg till ny påminnelse"}
+                aria-expanded={showReminderForm}
+                className="rounded-xl text-primary hover:text-primary/80 hover:bg-primary/10"
+              >
+                <Plus size={24} aria-hidden="true" />
+              </Button>
+            }
+          >
           {showReminderForm && (
             <form onSubmit={handleAddReminder} className="bg-card p-4 rounded-2xl border border-border shadow-sm mb-6 space-y-4 animate-in fade-in slide-in-from-top-4">
               <Input
@@ -210,6 +212,7 @@ export default function Dashboard() {
               );
             })}
           </div>
+          </CollapsibleSection>
         </div>
       </div>
     </Layout>

@@ -16,6 +16,7 @@ import {
   type CleanMode,
 } from "@/lib/cleaning";
 import { Clock, RotateCcw, Sparkles, ShoppingBasket } from "lucide-react";
+import CollapsibleSection from "@/components/collapsible-section";
 
 const todayIso = () => new Date().toISOString().slice(0, 10);
 
@@ -116,24 +117,25 @@ export default function CleaningPage() {
           className="rounded-3xl border p-5"
           style={{ borderColor: tint(0.3), backgroundColor: tint(0.07) }}
         >
-          <div className="flex items-center justify-between gap-3">
-            <div>
-              <h2 className="font-display text-xl font-bold text-foreground">
-                {room.emoji} {room.label} – {CLEAN_MODE_LABEL[mode].toLowerCase()}
-              </h2>
-              <p className="mt-1 flex items-center gap-1.5 text-sm text-muted-foreground">
-                <Clock className="h-4 w-4" />
-                {minutesLeft > 0 ? `Ca ${minutesLeft} min kvar` : "Allt avklarat"} · {completed.length}/{steps.length} klart
-              </p>
+          <CollapsibleSection
+            title={`${room.emoji} ${room.label} – ${CLEAN_MODE_LABEL[mode].toLowerCase()}`}
+            id="Översikt"
+            headingClassName="font-display text-xl font-bold"
+            actions={
+              <Button variant="ghost" size="sm" onClick={resetRoom} className="shrink-0">
+                <RotateCcw className="mr-1.5 h-4 w-4" />
+                Nollställ
+              </Button>
+            }
+          >
+            <p className="flex items-center gap-1.5 text-sm text-muted-foreground -mt-2">
+              <Clock className="h-4 w-4" />
+              {minutesLeft > 0 ? `Ca ${minutesLeft} min kvar` : "Allt avklarat"} · {completed.length}/{steps.length} klart
+            </p>
+            <div className="mt-4 h-2 w-full overflow-hidden rounded-full bg-muted">
+              <div className="h-full rounded-full transition-all" style={{ width: `${pct}%`, backgroundColor: `hsl(${room.hue})` }} />
             </div>
-            <Button variant="ghost" size="sm" onClick={resetRoom} className="shrink-0">
-              <RotateCcw className="mr-1.5 h-4 w-4" />
-              Nollställ
-            </Button>
-          </div>
-          <div className="mt-4 h-2 w-full overflow-hidden rounded-full bg-muted">
-            <div className="h-full rounded-full transition-all" style={{ width: `${pct}%`, backgroundColor: `hsl(${room.hue})` }} />
-          </div>
+          </CollapsibleSection>
         </section>
 
         {/* Steg */}
@@ -168,21 +170,23 @@ export default function CleaningPage() {
 
         {/* Vad du behöver */}
         <section className="rounded-3xl border border-border bg-card p-5">
-          <h2 className="flex items-center gap-2 font-display text-lg font-bold text-foreground">
-            <ShoppingBasket className="h-5 w-5 text-primary" />
-            Det här behöver du
-          </h2>
-          {supplies.length === 0 ? (
-            <p className="mt-2 text-sm text-muted-foreground">Inget särskilt – bara du 💛</p>
-          ) : (
-            <ul className="mt-3 flex flex-wrap gap-2">
-              {supplies.map((item) => (
-                <li key={item} className="rounded-full border border-border bg-background px-3 py-1.5 text-sm text-foreground">
-                  {item}
-                </li>
-              ))}
-            </ul>
-          )}
+          <CollapsibleSection
+            title={<span className="flex items-center gap-2"><ShoppingBasket className="h-5 w-5 text-primary" />Det här behöver du</span>}
+            id="Det här behöver du"
+            headingClassName="font-display text-lg font-bold"
+          >
+            {supplies.length === 0 ? (
+              <p className="text-sm text-muted-foreground">Inget särskilt – bara du 💛</p>
+            ) : (
+              <ul className="flex flex-wrap gap-2">
+                {supplies.map((item) => (
+                  <li key={item} className="rounded-full border border-border bg-background px-3 py-1.5 text-sm text-foreground">
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </CollapsibleSection>
         </section>
 
         <p className="flex items-center justify-center gap-2 pb-4 text-center text-sm text-muted-foreground">

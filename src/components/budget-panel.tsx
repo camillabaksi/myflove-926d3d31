@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { PiggyBank, Pencil, Check } from "lucide-react";
 import { useBudget, type BudgetPeriod, type Transaction } from "@/hooks/use-data";
+import CollapsibleSection from "@/components/collapsible-section";
 
 const PERIODS: { key: BudgetPeriod; label: string }[] = [
   { key: "day", label: "Dag" },
@@ -148,16 +149,18 @@ export default function BudgetPanel({
 
   return (
     <section className="bg-card p-6 rounded-3xl border border-border shadow-sm space-y-5">
-      <div className="flex items-center gap-3">
-        <div className="p-2.5 rounded-2xl bg-primary/10 text-primary">
-          <PiggyBank size={22} />
-        </div>
-        <div>
-          <h2 className="text-xl font-medium">Budget</h2>
-          <p className="text-sm text-muted-foreground">Sätt en ram per dag, vecka eller månad.</p>
-        </div>
-      </div>
-
+      <CollapsibleSection
+        title={
+          <span className="inline-flex items-center gap-3">
+            <span className="p-2.5 rounded-2xl bg-primary/10 text-primary">
+              <PiggyBank size={22} />
+            </span>
+            Budget
+          </span>
+        }
+        headingClassName="text-xl font-medium"
+        description="Sätt en ram per dag, vecka eller månad."
+      >
       <div className="flex bg-secondary/50 p-1 rounded-xl" role="tablist" aria-label="Budgetperiod">
         {PERIODS.map((p) => (
           <button
@@ -244,6 +247,7 @@ export default function BudgetPanel({
           );
         })}
       </div>
+      </CollapsibleSection>
     </section>
   );
 }

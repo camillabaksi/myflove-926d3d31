@@ -9,6 +9,8 @@ import { useNotificationScheduler } from "@/hooks/use-notification-scheduler";
 import { useAchievementPush } from "@/hooks/use-achievement-push";
 import { usePurgeRevisions } from "@/hooks/use-purge-revisions";
 import { useIsAdmin } from "@/hooks/use-is-admin";
+import ViewCollapseToggle from "@/components/view-collapse-toggle";
+
 import { useEnabledAreas } from "@/lib/life-areas";
 import { useLocalStorage } from "@/lib/storage";
 import { trackEvent } from "@/lib/analytics";
@@ -311,9 +313,15 @@ export default function Layout({ children }: LayoutProps) {
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col min-h-0 overflow-hidden relative">
         {/* Mobile Header */}
-        <header className="md:hidden flex items-center justify-center p-4 bg-background/80 backdrop-blur-md sticky top-0 z-10 border-b border-border/50">
+        <header className="md:hidden relative flex items-center justify-center p-4 bg-background/80 backdrop-blur-md sticky top-0 z-10 border-b border-border/50">
           <h1 className="text-xl font-bold text-primary tracking-tight">MyFlove</h1>
+          <ViewCollapseToggle className="absolute right-3" />
         </header>
+
+        <div className="hidden md:flex justify-end px-8 pt-6">
+          <ViewCollapseToggle />
+        </div>
+
 
         {alerts.length > 0 && (
           <div className="px-4 pt-4 md:px-8 md:pt-6 space-y-2">

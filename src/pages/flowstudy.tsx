@@ -27,6 +27,7 @@ import {
   examPhase,
   type StudySetRecord,
 } from "@/hooks/use-flowstudy";
+import CollapsibleSection from "@/components/collapsible-section";
 
 const MAX_FILE_MB = 8;
 
@@ -146,8 +147,8 @@ export default function StudyBuddyPage() {
         )}
 
         {/* Nytt material */}
-        <section className="bg-card border border-border rounded-2xl p-5 space-y-3">
-          <h2 className="text-lg font-semibold">Nytt studiematerial</h2>
+        <div className="bg-card border border-border rounded-2xl p-5">
+        <CollapsibleSection title="Nytt studiematerial" headingClassName="text-lg font-semibold">
           <form onSubmit={handleGenerate} className="space-y-3">
             <Input
               value={title}
@@ -212,11 +213,11 @@ export default function StudyBuddyPage() {
               Lägger du in ett provdatum får du en lugn pluggplan: flashcards först, quiz sen, repetition sist.
             </p>
           </form>
-        </section>
+        </CollapsibleSection>
+        </div>
 
         {/* Studiematerial */}
-        <section className="space-y-4">
-          <h2 className="text-lg font-semibold">Ditt material</h2>
+        <CollapsibleSection title="Ditt material" headingClassName="text-lg font-semibold">
           {sets.length === 0 && (
             <p className="text-sm text-muted-foreground">
               Inget material än. Börja med en text eller en bild på dina anteckningar.
@@ -361,7 +362,7 @@ export default function StudyBuddyPage() {
               </article>
             );
           })}
-        </section>
+        </CollapsibleSection>
       </div>
     </Layout>
   );
