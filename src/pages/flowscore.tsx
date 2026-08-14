@@ -23,19 +23,32 @@ export default function FlowScorePage() {
         <FlowScoreCard flow={flow} minutesLeft={minutesLeft} />
 
         <div className="grid grid-cols-3 gap-3">
-          <div className="rounded-2xl border border-border bg-card p-4 text-center">
+          <Link
+            href="/ma-bra"
+            className="rounded-2xl border border-border bg-card p-4 text-center transition hover:bg-muted"
+          >
             <p className="text-xs uppercase tracking-wide text-muted-foreground">Energi</p>
-            <p className="mt-1 font-display text-xl text-ink">{energy ? `${energy}/5` : "–"}</p>
-          </div>
-          <div className="rounded-2xl border border-border bg-card p-4 text-center">
+            <p className="mt-1 font-display text-xl text-ink">
+              {energy ? `${energy}/5` : <span className="text-sm text-muted-foreground">Inte loggat än</span>}
+            </p>
+          </Link>
+          <Link
+            href="/ma-bra"
+            className="rounded-2xl border border-border bg-card p-4 text-center transition hover:bg-muted"
+          >
             <p className="text-xs uppercase tracking-wide text-muted-foreground">Mående</p>
-            <p className="mt-1 font-display text-xl text-ink">{mood ? `${mood}/5` : "–"}</p>
-          </div>
+            <p className="mt-1 font-display text-xl text-ink">
+              {mood ? `${mood}/5` : <span className="text-sm text-muted-foreground">Inte loggat än</span>}
+            </p>
+          </Link>
           <div className="rounded-2xl border border-border bg-card p-4 text-center">
-            <p className="text-xs uppercase tracking-wide text-muted-foreground">Tid kvar</p>
-            <p className="mt-1 font-display text-xl text-ink">{minutesLeft} min</p>
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">Kvar av dagen</p>
+            <p className="mt-1 font-display text-xl text-ink">
+              {Math.floor(minutesLeft / 60)} h {minutesLeft % 60} min
+            </p>
           </div>
         </div>
+
 
         <section className="rounded-3xl border border-border bg-card p-5 shadow-sm">
           <CollapsibleSection

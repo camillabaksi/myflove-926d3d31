@@ -31,6 +31,7 @@ import {
 } from "@/hooks/use-data";
 import { useSharedShoppingList } from "@/hooks/use-shared-shopping-list";
 import { getGreeting } from "@/lib/greeting";
+import IntroTour from "@/components/intro-tour";
 import { useUserProfile } from "@/hooks/use-user-profile";
 import { emptyState } from "@/lib/flow-voice";
 import { buildHelpPlan, type HelpFeelingId, type HelpPlan } from "@/lib/help-me";
@@ -136,7 +137,9 @@ export default function Home() {
 
   return (
     <Layout>
+      <IntroTour />
       <div className="space-y-8">
+
         {/* Hero header with preview-style warmth */}
         <div
           className="relative overflow-hidden rounded-3xl p-6 shadow-lifted border border-border/60 animate-fade-in"
