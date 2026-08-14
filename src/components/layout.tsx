@@ -333,11 +333,33 @@ export default function Layout({ children }: LayoutProps) {
       <main className="flex-1 flex flex-col min-h-0 overflow-hidden relative">
         {/* Mobile Header */}
         <header className="md:hidden relative flex items-center justify-center p-4 bg-background/80 backdrop-blur-md sticky top-0 z-10 border-b border-border/50">
+          {canGoBack && (
+            <button
+              type="button"
+              onClick={handleBack}
+              aria-label="Gå tillbaka"
+              className="absolute left-3 p-2 rounded-full hover:bg-primary/10 text-foreground transition-colors"
+            >
+              <ArrowLeft size={22} />
+            </button>
+          )}
           <h1 className="text-xl font-bold text-primary tracking-tight">MyFlove</h1>
           <ViewCollapseToggle className="absolute right-3" />
         </header>
 
-        <div className="hidden md:flex justify-end px-8 pt-6">
+        <div className="hidden md:flex items-center justify-between px-8 pt-6">
+          {canGoBack ? (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleBack}
+              className="gap-1 text-muted-foreground hover:text-foreground"
+            >
+              <ArrowLeft size={18} /> Tillbaka
+            </Button>
+          ) : (
+            <span />
+          )}
           <ViewCollapseToggle />
         </div>
 
