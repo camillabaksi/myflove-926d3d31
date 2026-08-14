@@ -8,6 +8,7 @@ import { useTasks } from "@/hooks/use-data";
 import { useFlowStudy } from "@/hooks/use-flowstudy";
 import { useCourses } from "@/hooks/use-courses";
 import { useStudySchedule } from "@/hooks/use-study-schedule";
+import CollapsibleSection from "@/components/collapsible-section";
 import {
   SYNC_PREFIX,
   WEEKDAYS,
@@ -125,9 +126,14 @@ export function StudyCalendarSync() {
 
   return (
     <section className={card}>
-      <h2 className={sectionTitle}>
-        <CalendarCheck className="h-5 w-5 text-primary" /> Schema & kalender
-      </h2>
+      <CollapsibleSection
+        title={
+          <span className="inline-flex items-center gap-2">
+            <CalendarCheck className="h-5 w-5 text-primary" /> Schema & kalender
+          </span>
+        }
+        headingClassName={sectionTitle}
+      >
       <p className="mt-1 text-sm text-muted-foreground">
         Lägg in dina föreläsningar en gång. Flow lägger lugna repetitionspass i luckorna som
         blir kvar – automatiskt i{" "}
@@ -341,6 +347,7 @@ export function StudyCalendarSync() {
           Flow kalendern åt dig. 💙
         </p>
       )}
+      </CollapsibleSection>
     </section>
   );
 }

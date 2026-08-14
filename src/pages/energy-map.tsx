@@ -14,6 +14,7 @@ import {
   Bar,
   CartesianGrid,
 } from "recharts";
+import CollapsibleSection from "@/components/collapsible-section";
 
 interface EnergyLog {
   id: string;
@@ -167,11 +168,12 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
         )}
 
         {userId && (
-          <section className="rounded-2xl bg-card border border-border p-5 space-y-4 shadow-sm">
-            <div>
-              <h2 className="font-medium">Hur känns det just nu?</h2>
-              <p className="text-xs text-muted-foreground">Välj det som passar närmast – det finns inga fel svar.</p>
-            </div>
+          <CollapsibleSection
+            title="Hur känns det just nu?"
+            headingClassName="font-medium"
+            description="Välj det som passar närmast – det finns inga fel svar."
+            className="rounded-2xl bg-card border border-border p-5 shadow-sm"
+          >
             <div className="grid grid-cols-5 gap-2">
               {[1, 2, 3, 4, 5].map((lvl) => {
                 const active = selected === lvl;
@@ -212,7 +214,7 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
               </div>
             )}
             {error && <p className="text-sm text-destructive">{error}</p>}
-          </section>
+          </CollapsibleSection>
         )}
 
         {loading ? (
@@ -221,13 +223,16 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
           </div>
         ) : (
           <>
-            <section className="rounded-2xl bg-card border border-border p-5 shadow-sm">
-              <h2 className="font-medium mb-1">Idag</h2>
-              <p className="text-xs text-muted-foreground mb-4">
-                {todayLogs.length === 0
+            <CollapsibleSection
+              title="Idag"
+              headingClassName="font-medium"
+              description={
+                todayLogs.length === 0
                   ? "Ingen loggning idag än – lägg en när det passar."
-                  : `${todayLogs.length} loggning${todayLogs.length === 1 ? "" : "ar"} idag.`}
-              </p>
+                  : `${todayLogs.length} loggning${todayLogs.length === 1 ? "" : "ar"} idag.`
+              }
+              className="rounded-2xl bg-card border border-border p-5 shadow-sm"
+            >
               {todayLogs.length > 0 && (
                 <div className="h-48">
                   <ResponsiveContainer width="100%" height="100%">
@@ -251,13 +256,14 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
                   </ResponsiveContainer>
                 </div>
               )}
-            </section>
+            </CollapsibleSection>
 
-            <section className="rounded-2xl bg-card border border-border p-5 shadow-sm">
-              <h2 className="font-medium mb-1">Din vecka i snitt</h2>
-              <p className="text-xs text-muted-foreground mb-4">
-                Snittenergi per timme, senaste 7 dagarna.
-              </p>
+            <CollapsibleSection
+              title="Din vecka i snitt"
+              headingClassName="font-medium"
+              description="Snittenergi per timme, senaste 7 dagarna."
+              className="rounded-2xl bg-card border border-border p-5 shadow-sm"
+            >
               {hourAverages.length === 0 ? (
                 <p className="text-sm text-muted-foreground py-6 text-center">
                   Logga några gånger så börjar din karta ta form.
@@ -288,7 +294,7 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
                   )}
                 </>
               )}
-            </section>
+            </CollapsibleSection>
           </>
         )}
       </div>

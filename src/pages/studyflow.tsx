@@ -29,6 +29,7 @@ import { useLatestEnergy } from "@/hooks/use-workflow";
 import { useFlowScore } from "@/hooks/use-flowscore";
 import { useFlowStudy, daysUntil, examPhase } from "@/hooks/use-flowstudy";
 import { StudyCalendarSync } from "@/components/study-calendar-sync";
+import CollapsibleSection from "@/components/collapsible-section";
 import { ScheduleImport } from "@/components/schedule-import";
 import { NextLectureCard } from "@/components/next-lecture-card";
 import { FlowReplanDiff } from "@/components/flow-replan-diff";
@@ -280,10 +281,11 @@ export default function StudyflowPage() {
         {replanDiff && <FlowReplanDiff diff={replanDiff} onClose={() => setReplanDiff(null)} />}
 
         {/* Dynamisk plan efter FlowScore */}
-        <section className={card}>
-          <h2 className={sectionTitle}>
-            <Gauge className="h-5 w-5 text-primary" /> Rimligt att plugga just nu
-          </h2>
+        <CollapsibleSection
+          className={card}
+          headingClassName={sectionTitle}
+          title={<><Gauge className="h-5 w-5 text-primary" /> Rimligt att plugga just nu</>}
+        >
           <p className="mt-1 text-sm text-muted-foreground">
             Anpassat efter FlowScore {flow.score} och energi {energy ? `${energy}/5` : "okänd"} – ca{" "}
             {flow.capacityMinutes} min fokustid.
@@ -330,13 +332,14 @@ export default function StudyflowPage() {
               </ul>
             </div>
           )}
-        </section>
+        </CollapsibleSection>
 
         {/* Prov & repetition från StudyBuddy */}
-        <section className={card}>
-          <h2 className={sectionTitle}>
-            <Brain className="h-5 w-5 text-primary" /> Prov & repetition
-          </h2>
+        <CollapsibleSection
+          className={card}
+          headingClassName={sectionTitle}
+          title={<><Brain className="h-5 w-5 text-primary" /> Prov & repetition</>}
+        >
           {nextExam ? (
             <div className="mt-2 rounded-2xl bg-sage/20 p-3 text-sm">
               <p className="font-medium text-ink">
@@ -356,13 +359,14 @@ export default function StudyflowPage() {
           <Button asChild variant="secondary" className="mt-3 rounded-full">
             <Link to="/studybuddy">Öppna StudyBuddy</Link>
           </Button>
-        </section>
+        </CollapsibleSection>
 
         {/* Vad ska jag plugga nu? */}
-        <section className={card}>
-          <h2 className={sectionTitle}>
-            <AlarmClock className="h-5 w-5 text-primary" /> Vad ska jag göra nu?
-          </h2>
+        <CollapsibleSection
+          className={card}
+          headingClassName={sectionTitle}
+          title={<><AlarmClock className="h-5 w-5 text-primary" /> Vad ska jag göra nu?</>}
+        >
           {ranked.length === 0 ? (
             <p className="mt-2 text-sm text-muted-foreground">
               Inget som väntar just nu. Det är också ett svar. 💙
@@ -480,13 +484,14 @@ export default function StudyflowPage() {
               ))}
             </ul>
           )}
-        </section>
+        </CollapsibleSection>
 
         {/* Jag har X minuter */}
-        <section className={card}>
-          <h2 className={sectionTitle}>
-            <Timer className="h-5 w-5 text-primary" /> Jag har …
-          </h2>
+        <CollapsibleSection
+          className={card}
+          headingClassName={sectionTitle}
+          title={<><Timer className="h-5 w-5 text-primary" /> Jag har …</>}
+        >
           <div className="mt-3 flex flex-wrap gap-2">
             {[10, 20, 30, 45, 60].map((m) => (
               <Button
@@ -528,13 +533,14 @@ export default function StudyflowPage() {
               )}
             </div>
           )}
-        </section>
+        </CollapsibleSection>
 
         {/* Övergångar */}
-        <section className={card}>
-          <h2 className={sectionTitle}>
-            <ArrowRightLeft className="h-5 w-5 text-primary" /> Hjälp vid övergångar
-          </h2>
+        <CollapsibleSection
+          className={card}
+          headingClassName={sectionTitle}
+          title={<><ArrowRightLeft className="h-5 w-5 text-primary" /> Hjälp vid övergångar</>}
+        >
           <p className="mt-1 text-sm text-muted-foreground">
             Lektionen är slut – hur mycket tid har du innan nästa?
           </p>
@@ -557,13 +563,14 @@ export default function StudyflowPage() {
               ))}
             </ul>
           )}
-        </section>
+        </CollapsibleSection>
 
         {/* Föreläsningsläge */}
-        <section className={card}>
-          <h2 className={sectionTitle}>
-            <NotebookPen className="h-5 w-5 text-primary" /> Föreläsningsläge
-          </h2>
+        <CollapsibleSection
+          className={card}
+          headingClassName={sectionTitle}
+          title={<><NotebookPen className="h-5 w-5 text-primary" /> Föreläsningsläge</>}
+        >
           <p className="mt-1 text-sm text-muted-foreground">
             Innan lektionen: vad behöver du fråga eller komma ihåg?
           </p>
@@ -605,13 +612,14 @@ export default function StudyflowPage() {
             )}
             <Button onClick={saveLectureNotes}>Gör uppgifter</Button>
           </div>
-        </section>
+        </CollapsibleSection>
 
         {/* Avslutningscheck */}
-        <section className={card}>
-          <h2 className={sectionTitle}>
-            <CheckCircle2 className="h-5 w-5 text-primary" /> Avslutningscheck
-          </h2>
+        <CollapsibleSection
+          className={card}
+          headingClassName={sectionTitle}
+          title={<><CheckCircle2 className="h-5 w-5 text-primary" /> Avslutningscheck</>}
+        >
           <p className="mt-1 text-sm text-muted-foreground">
             {minutesLeft > 0
               ? `${minutesLeft} min kvar av dagens plugg-fönster.`
@@ -654,13 +662,14 @@ export default function StudyflowPage() {
               ))}
             </select>
           </label>
-        </section>
+        </CollapsibleSection>
 
         {/* Dagen gick åt pipsvängen */}
-        <section className={card}>
-          <h2 className={sectionTitle}>
-            <LifeBuoy className="h-5 w-5 text-primary" /> Jag hann inget idag
-          </h2>
+        <CollapsibleSection
+          className={card}
+          headingClassName={sectionTitle}
+          title={<><LifeBuoy className="h-5 w-5 text-primary" /> Jag hann inget idag</>}
+        >
           <p className="mt-1 text-sm text-muted-foreground">
             Det blev inte som planerat. Ingen fara. Vill du att jag bygger om resten av dagen?
           </p>
@@ -715,16 +724,17 @@ export default function StudyflowPage() {
               </div>
             </div>
           )}
-        </section>
+        </CollapsibleSection>
 
         {/* Quickflow för studierna */}
-        <section className="space-y-3">
-          <h2 className={sectionTitle}>
-            <Sparkles className="h-5 w-5 text-gold" /> Quickflow i studierna
-          </h2>
+        <CollapsibleSection
+          className="space-y-3"
+          headingClassName={sectionTitle}
+          title={<><Sparkles className="h-5 w-5 text-gold" /> Quickflow i studierna</>}
+        >
           <QuickflowCapture />
           <QuickflowList />
-        </section>
+        </CollapsibleSection>
           </TabsContent>
         </Tabs>
       </div>

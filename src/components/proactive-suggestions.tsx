@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Sparkles, Umbrella, Snowflake, Thermometer, Clock, Wallet, Pill, CloudRain, Shirt, AlarmClock, GlassWater, Moon, Sunrise, HeartHandshake, PartyPopper, Coffee } from "lucide-react";
 import { useWeather } from "@/hooks/use-weather";
 import { useReminders, useFinances, useMedications, useTasks, useMoods } from "@/hooks/use-data";
+import CollapsibleSection from "@/components/collapsible-section";
 
 // Öppna uppgifter som brukar "pågå i bakgrunden" – vi puffar när de blivit gamla
 // så användaren inte glömmer tvätten i maskinen, disken i diskmaskinen osv.
@@ -274,12 +275,14 @@ export default function ProactiveSuggestions() {
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center gap-2">
-        <Sparkles size={16} className="text-primary" />
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-          Förslag just nu
-        </h2>
-      </div>
+      <CollapsibleSection
+        title={
+          <span className="inline-flex items-center gap-2">
+            <Sparkles size={16} className="text-primary" /> Förslag just nu
+          </span>
+        }
+        headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
+      >
       <div className="space-y-2">
         {suggestions.map((s) => {
           const Icon = s.icon;
@@ -299,6 +302,7 @@ export default function ProactiveSuggestions() {
           );
         })}
       </div>
+      </CollapsibleSection>
     </div>
   );
 }

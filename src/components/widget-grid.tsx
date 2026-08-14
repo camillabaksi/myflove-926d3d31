@@ -8,6 +8,7 @@ import { useMoods, useFocus, useTasks, useShoppingList, useReminders, useMedicat
 import { useLocalStorage } from "@/lib/storage";
 import { getWeeklyMoodStats } from "@/lib/mood-stats";
 import StopModal from "@/components/stop-modal";
+import CollapsibleSection from "@/components/collapsible-section";
 
 const EMOJI_BY_SCORE: Record<number, string> = { 1: "😢", 2: "😕", 3: "😐", 4: "🙂", 5: "😄" };
 
@@ -139,7 +140,7 @@ export default function WidgetGrid() {
 
   return (
     <div>
-      <h2 className="text-lg font-semibold mb-3 text-muted-foreground">Överblick</h2>
+      <CollapsibleSection title="Överblick" headingClassName="text-lg font-semibold text-muted-foreground">
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
         {widgets.map((widget) => {
           const Icon = widget.icon;
@@ -172,6 +173,7 @@ export default function WidgetGrid() {
           );
         })}
       </div>
+      </CollapsibleSection>
       <StopModal open={stopOpen} onOpenChange={setStopOpen} />
     </div>
   );

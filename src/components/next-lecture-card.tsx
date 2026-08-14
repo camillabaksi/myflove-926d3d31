@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { MapPin, Clock, Compass, Bell } from "lucide-react";
 import { useStudySchedule } from "@/hooks/use-study-schedule";
 import { nextOccurrence } from "@/lib/schedule-parse";
+import CollapsibleSection from "@/components/collapsible-section";
 
 const card = "rounded-3xl border border-border bg-card p-5 shadow-sm";
 const sectionTitle = "flex items-center gap-2 font-display text-lg text-ink";
@@ -35,13 +36,19 @@ export function NextLectureCard() {
   if (!next) {
     return (
       <section className={card}>
-        <h2 className={sectionTitle}>
-          <Compass className="h-5 w-5 text-primary" /> Nästa lektion
-        </h2>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Ladda upp eller klistra in ditt schema nedan – sen håller Flow koll på vad som är nästa
-          och var det är. 💙
-        </p>
+        <CollapsibleSection
+          title={
+            <span className="inline-flex items-center gap-2">
+              <Compass className="h-5 w-5 text-primary" /> Nästa lektion
+            </span>
+          }
+          headingClassName={sectionTitle}
+        >
+          <p className="mt-1 text-sm text-muted-foreground">
+            Ladda upp eller klistra in ditt schema nedan – sen håller Flow koll på vad som är nästa
+            och var det är. 💙
+          </p>
+        </CollapsibleSection>
       </section>
     );
   }
@@ -56,9 +63,14 @@ export function NextLectureCard() {
 
   return (
     <section className={card} aria-live="polite">
-      <h2 className={sectionTitle}>
-        <Compass className="h-5 w-5 text-primary" /> Nästa lektion
-      </h2>
+      <CollapsibleSection
+        title={
+          <span className="inline-flex items-center gap-2">
+            <Compass className="h-5 w-5 text-primary" /> Nästa lektion
+          </span>
+        }
+        headingClassName={sectionTitle}
+      >
       <p className="mt-2 text-base text-ink">
         Nästa är <strong>{lecture.title}</strong>
         {lecture.location ? (
@@ -109,6 +121,7 @@ export function NextLectureCard() {
           ))}
         </select>
       </label>
+      </CollapsibleSection>
     </section>
   );
 }

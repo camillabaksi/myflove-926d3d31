@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Check, Clock, MapPin, Trash2, X } from "lucide-react";
 import { useQuickflow } from "@/hooks/use-quickflow";
+import CollapsibleSection from "@/components/collapsible-section";
 import { useSavedStores } from "@/hooks/use-data";
 import { sendPushNotification } from "@/lib/push-notifications";
 import { celebrateFromEvent } from "@/lib/celebrate";
@@ -193,16 +194,16 @@ export function QuickflowList() {
 
   return (
     <section className="space-y-4">
-      <div>
-        <h2 className="text-xl font-semibold flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-destructive animate-pulse" />
-          Du bad mig komma ihåg
-        </h2>
-        <p className="text-sm text-muted-foreground">
-          Ingenting här försvinner av sig självt. Jag håller det åt dig. 💙
-        </p>
-      </div>
-
+      <CollapsibleSection
+        title={
+          <span className="inline-flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-destructive animate-pulse" />
+            Du bad mig komma ihåg
+          </span>
+        }
+        headingClassName="text-xl font-semibold"
+        description="Ingenting här försvinner av sig självt. Jag håller det åt dig. 💙"
+      >
       {needsAnswer.length > 0 && (
         <div className="space-y-3">
           {needsAnswer.map((item) =>
@@ -275,6 +276,7 @@ export function QuickflowList() {
           )}
         </div>
       )}
+      </CollapsibleSection>
     </section>
   );
 }
