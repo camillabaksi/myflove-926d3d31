@@ -136,7 +136,9 @@ export default function Home() {
 
   return (
     <Layout>
+      <IntroTour />
       <div className="space-y-8">
+
         {/* Hero header with preview-style warmth */}
         <div
           className="relative overflow-hidden rounded-3xl p-6 shadow-lifted border border-border/60 animate-fade-in"
