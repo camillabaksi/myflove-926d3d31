@@ -31,6 +31,7 @@ export function useReminderSync() {
   const { reminders } = useReminders();
   const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
   const { openItems: quickflowItems } = useQuickflow();
+  const { lectures, settings: studySettings } = useStudySchedule();
   const syncFn = useServerFn(syncReminder);
   const cancelFn = useServerFn(cancelReminder);
   const lastKeys = useRef<Set<string>>(new Set());
@@ -265,5 +266,7 @@ export function useReminderSync() {
     JSON.stringify(reminders.map((r) => [r.id, r.completed, r.date, r.time, r.repeat])),
     JSON.stringify(routines.map((r) => [r.id, r.title, r.time, r.enabled])),
     JSON.stringify(quickflowItems.map((q) => [q.id, q.text, q.remindAt, q.done])),
+    JSON.stringify(lectures.map((l) => [l.id, l.title, l.weekday, l.start, l.location])),
+    studySettings.lectureReminderMinutes,
   ]);
 }
