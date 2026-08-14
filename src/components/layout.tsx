@@ -723,7 +723,45 @@ export default function Layout({ children }: LayoutProps) {
   );
 }
 
+/** En rad i menyn: ikon, namn och en förklaring i klartext. */
+function NavRow({
+  item,
+  isActive,
+  onClick,
+  tint,
+}: {
+  item: { href: string; label: string; icon: typeof Home; hint: string };
+  isActive: boolean;
+  onClick: () => void;
+  tint?: string;
+}) {
+  const Icon = item.icon;
+  return (
+    <Link
+      href={item.href}
+      onClick={onClick}
+      style={!isActive && tint ? { backgroundColor: tint } : undefined}
+      className={`flex items-center gap-3 rounded-2xl border p-3 text-left shadow-sm transition-colors ${
+        isActive
+          ? "border-primary bg-primary text-primary-foreground"
+          : "border-border bg-card text-foreground"
+      }`}
+    >
+      <span className="shrink-0">
+        <Icon size={22} strokeWidth={isActive ? 2.5 : 2} />
+      </span>
+      <span className="min-w-0">
+        <span className="block text-sm font-medium leading-tight">{item.label}</span>
+        <span className={`block text-xs leading-snug ${isActive ? "opacity-80" : "text-muted-foreground"}`}>
+          {item.hint}
+        </span>
+      </span>
+    </Link>
+  );
+}
+
 interface BottomNavEditorProps {
+
   allItems: { href: string; label: string; icon: typeof Home }[];
   selected: string[];
   onChange: (hrefs: string[]) => void;
