@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Brain, Check, ChevronRight, Info, Plus, ShieldAlert, Sparkles, X } from "lucide-react";
+import { Brain, Check, ChevronRight, Info, Plus, Sparkles, X } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
