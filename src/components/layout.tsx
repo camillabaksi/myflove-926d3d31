@@ -53,6 +53,7 @@ const SECTION_BY_PATH: Record<string, string> = {
   "/beloningar": "beloningar",
   "/assistant": "assistant",
   "/flowplan": "flowplan",
+  "/flowscore": "flowscore",
   "/admin-statistik": "admin",
   "/admin": "admin",
   "/friktionsindex": "friktionsindex",
@@ -83,6 +84,7 @@ const CATEGORY_THEMES: Record<string, Record<string, string>> = {
   "/finances":       T.gold,
   "/kalender":       T.ink,
   "/flowplan":       T.ink,
+  "/flowscore":      T.ink,
   "/shopping":       T.sage,
   "/matlista":       T.sage,
   "/stadning":       T.sage,
@@ -140,6 +142,7 @@ export default function Layout({ children }: LayoutProps) {
     
     { href: "/tasks", label: "Att göra", icon: CheckSquare },
     { href: "/flowplan", label: "FlowPlan", icon: ListOrdered },
+    { href: "/flowscore", label: "FlowScore", icon: Gauge },
     { href: "/pomodoro", label: "Timer", icon: Timer },
     { href: "/shopping", label: "Inköp", icon: ShoppingBag },
     { href: "/matlista", label: "Matlista", icon: UtensilsCrossed },
@@ -185,7 +188,7 @@ export default function Layout({ children }: LayoutProps) {
         icon: CalendarDays,
         hrefs: [
           "/hem", "/daglig-rutin", "/kalender", "/tasks", "/flowplan", "/fokus",
-          "/quickflow", "/pomodoro", "/assistant", "/ma-bra", "/traning",
+          "/flowscore", "/quickflow", "/pomodoro", "/assistant", "/ma-bra", "/traning",
           "/beloningar", "/statistik", "/insight",
         ],
       },
