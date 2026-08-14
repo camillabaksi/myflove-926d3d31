@@ -1,26 +1,45 @@
-# App Builder Buddy
+# MyFlove
 
-Kan du bygga den här appen?
+> Lugn planering för ADHD, autism och ett fullt huvud.
 
-This project was built with [Lovable](https://lovable.dev).
+Ett lugnare hem för hjärnan – för dig som lever med ADHD, autism eller bara mycket i huvudet. 💙
 
-**Live app**: https://myflove.lovable.app
+## Vad är MyFlove?
 
-## Build with Lovable
+MyFlove är inte en produktivitetsapp. Det är en lugn, intelligent följeslagare som hjälper dig genom vardagen – utan att tjata eller skuldbelägga.
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/64509658-f677-4ff5-b744-7142596dea24).
+Kärnan är **Flow** – en AI-assistent som läser av hela din vardag och hjälper dig med helheten. Inte sju appar. En hjärna.
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+## Funktioner
 
-## Development
+- 📅 Kalender & påminnelser
+- 💳 Ekonomi
+- ❤️ Hälsa & humör
+- 👪 Familj & hushåll
+- 🛒 Inköp & matlista
+- ✅ Uppgifter & ärenden
+- 🧠 FlowPlan™ – rätt sak, i rätt ordning
+- 🤖 Flow AI – som en vän i fickan
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+## Tech-stack
 
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
+- React + TypeScript
+- TanStack Router
+- Supabase (auth, databas)
+- Vite / PWA
+
+## Kom igång
+
+```bash
+npm install
 npm run dev
 ```
+
+## Bidragsgivare
+
+- Camilla Baksi – grundare, produktvision
+- Rami Elsaneh – teknisk utvecklare
+
+---
+
+© 2026 MyFlove
