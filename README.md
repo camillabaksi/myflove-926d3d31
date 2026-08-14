@@ -35,11 +35,6 @@ npm install
 npm run dev
 ```
 
-## Bidragsgivare
-
-- Camilla Baksi – grundare, produktvision
-- Rami Elsaneh – teknisk utvecklare
-
 ---
 
 © 2026 MyFlove
