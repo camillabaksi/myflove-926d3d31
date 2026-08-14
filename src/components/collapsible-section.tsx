@@ -63,8 +63,12 @@ export default function CollapsibleSection({
           />
           <span className={cn("text-xl font-medium", headingClassName)}>{title}</span>
         </button>
+        {help && (
+          <HelpHint label={typeof title === "string" ? title : undefined}>{help}</HelpHint>
+        )}
         {actions}
       </div>
+
       {description && !collapsed && (
         <p className="text-sm text-muted-foreground -mt-2">{description}</p>
       )}
