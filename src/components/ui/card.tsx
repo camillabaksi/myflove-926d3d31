@@ -101,8 +101,13 @@ const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDiv
 );
 CardHeader.displayName = "CardHeader";
 
-const CardTitle = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, children, ...props }, ref) => {
+interface CardTitleProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Kort förklaring bakom en i-knapp bredvid rubriken. */
+  help?: React.ReactNode;
+}
+
+const CardTitle = React.forwardRef<HTMLDivElement, CardTitleProps>(
+  ({ className, children, help, ...props }, ref) => {
     const ctx = React.useContext(CardContext);
     const innerRef = React.useRef<HTMLDivElement | null>(null);
 
@@ -118,14 +123,20 @@ const CardTitle = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivE
           if (typeof ref === "function") ref(node);
           else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
         }}
-        className={cn("font-semibold leading-none tracking-tight", className)}
+        className={cn(
+          "font-semibold leading-none tracking-tight",
+          help && "flex items-center gap-2",
+          className,
+        )}
         {...props}
       >
         {children}
+        {help && <HelpHint>{help}</HelpHint>}
       </div>
     );
   },
 );
+
 CardTitle.displayName = "CardTitle";
 
 const CardDescription = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
