@@ -17,7 +17,7 @@ function humanCountdown(minutes: number) {
 }
 
 export function NextLectureCard() {
-  const { lectures } = useStudySchedule();
+  const { lectures, settings, patchSettings } = useStudySchedule();
   const [now, setNow] = useState(() => new Date());
 
   useEffect(() => {
