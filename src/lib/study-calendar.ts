@@ -30,6 +30,8 @@ export interface StudyScheduleSettings {
   includeExams: boolean;
   /** Lägg automatiska repetitionspass i kalendern (av som standard) */
   includeRevisions: boolean;
+  /** Minuter före en lektion som Flow påminner. 0 = av. */
+  lectureReminderMinutes: number;
 }
 
 export const DEFAULT_SCHEDULE_SETTINGS: StudyScheduleSettings = {
@@ -41,6 +43,7 @@ export const DEFAULT_SCHEDULE_SETTINGS: StudyScheduleSettings = {
   bufferMinutes: 15,
   includeExams: false,
   includeRevisions: false,
+  lectureReminderMinutes: 30,
 };
 
 export const WEEKDAYS = ["Mån", "Tis", "Ons", "Tors", "Fre", "Lör", "Sön"] as const;
