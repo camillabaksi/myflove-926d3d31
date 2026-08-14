@@ -158,6 +158,7 @@ export default function BudgetPanel({
             Budget
           </span>
         }
+        help="Skriv in hur mycket du vill lägga på en period. Appen räknar ut hur mycket som är kvar."
         headingClassName="text-xl font-medium"
         description="Sätt en ram per dag, vecka eller månad."
       >

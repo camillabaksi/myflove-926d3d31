@@ -269,6 +269,7 @@ export default function Travel() {
         {suggestion && !isLoading && !error && (
           <CollapsibleSection
             title="Nästa avgång"
+            help="Avgångar i realtid från hållplatsen närmast dig. Uppdateras automatiskt."
             className="animate-in fade-in slide-in-from-bottom-4 duration-500"
             actions={
               <>

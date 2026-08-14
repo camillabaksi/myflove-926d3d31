@@ -2,6 +2,7 @@ import { type ReactNode } from "react";
 import { ChevronDown } from "lucide-react";
 import { useLocation } from "wouter";
 import { useCollapsible } from "@/lib/collapse-store";
+import HelpHint from "@/components/help-hint";
 import { cn } from "@/lib/utils";
 
 interface CollapsibleSectionProps {
@@ -13,11 +14,14 @@ interface CollapsibleSectionProps {
   actions?: ReactNode;
   /** Liten hjälptext under rubriken. */
   description?: ReactNode;
+  /** Kort förklaring bakom en i-knapp: vad vyn är till för och vad du gör här. */
+  help?: ReactNode;
   defaultCollapsed?: boolean;
   className?: string;
   headingClassName?: string;
   children: ReactNode;
 }
+
 
 /**
  * En vy som går att minimera eller maximera. Läget sparas per sida och rubrik
@@ -28,6 +32,8 @@ export default function CollapsibleSection({
   id,
   actions,
   description,
+  help,
+
   defaultCollapsed = false,
   className,
   headingClassName,
@@ -57,8 +63,12 @@ export default function CollapsibleSection({
           />
           <span className={cn("text-xl font-medium", headingClassName)}>{title}</span>
         </button>
+        {help && (
+          <HelpHint label={typeof title === "string" ? title : undefined}>{help}</HelpHint>
+        )}
         {actions}
       </div>
+
       {description && !collapsed && (
         <p className="text-sm text-muted-foreground -mt-2">{description}</p>
       )}

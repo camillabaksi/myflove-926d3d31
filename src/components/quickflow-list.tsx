@@ -201,6 +201,7 @@ export function QuickflowList() {
             Du bad mig komma ihåg
           </span>
         }
+        help="Allt du skrivit i Quickflow. Välj om det ska bli en uppgift, en tid i kalendern – eller bara ligga kvar."
         headingClassName="text-xl font-semibold"
         description="Ingenting här försvinner av sig självt. Jag håller det åt dig. 💙"
       >

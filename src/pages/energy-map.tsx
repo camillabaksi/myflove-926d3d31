@@ -170,6 +170,7 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
         {userId && (
           <CollapsibleSection
             title="Hur känns det just nu?"
+            help="Tryck på en nivå. Det tar två sekunder och styr hur mycket appen föreslår idag."
             headingClassName="font-medium"
             description="Välj det som passar närmast – det finns inga fel svar."
             className="rounded-2xl bg-card border border-border p-5 shadow-sm"
@@ -260,6 +261,7 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
 
             <CollapsibleSection
               title="Din vecka i snitt"
+              help="Ser du ett mönster? Använd det för att lägga tunga saker när du brukar orka."
               headingClassName="font-medium"
               description="Snittenergi per timme, senaste 7 dagarna."
               className="rounded-2xl bg-card border border-border p-5 shadow-sm"

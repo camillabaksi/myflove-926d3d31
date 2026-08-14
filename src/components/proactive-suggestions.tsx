@@ -281,6 +281,7 @@ export default function ProactiveSuggestions() {
             <Sparkles size={16} className="text-primary" /> Förslag just nu
           </span>
         }
+        help="Tips utifrån väder, dina uppgifter och hur du mått. Tryck bort dem du inte vill ha."
         headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
       >
       <div className="space-y-2">

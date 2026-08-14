@@ -471,6 +471,7 @@ export default function Tasks() {
               className="space-y-3"
               headingClassName="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2"
               title={<><Clock size={14} /> Pågår</>}
+              help="Saker du börjat på. Tryck på en rad för att bocka av eller ändra."
             >
               {grouped.doing.map(renderTask)}
             </CollapsibleSection>
@@ -481,6 +482,7 @@ export default function Tasks() {
               className="space-y-3"
               headingClassName="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2"
               title={<><Pause size={14} /> Väntar på</>}
+              help="Saker som hänger på någon annan. De ligger här så du slipper hålla dem i huvudet."
             >
               {grouped.waiting.map(renderTask)}
             </CollapsibleSection>
@@ -491,6 +493,7 @@ export default function Tasks() {
               className="space-y-3 pt-6 border-t border-border"
               headingClassName="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2"
               title={<><Check size={14} /> Avklarat</>}
+              help="Det du gjort idag. Ligger kvar så du ser att det faktiskt blev något."
             >
               {completedTasks
                 .filter((t) => filter === "all" || getKind(t) === filter)
@@ -531,6 +534,7 @@ export default function Tasks() {
               className="space-y-3 pt-6 border-t border-border"
               headingClassName="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2"
               title={<><Moon size={16} /> Undanstoppat ett tag</>}
+              help="Sådant du skjutit upp. Tryck för att ta tillbaka det när du orkar."
             >
               {snoozedTasks.map((task) => (
                 <div
