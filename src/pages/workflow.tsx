@@ -23,7 +23,6 @@ import { toast } from "sonner";
 import { useTasks } from "@/hooks/use-data";
 import { useWorkflow, useLatestEnergy } from "@/hooks/use-workflow";
 import { useFlowScore } from "@/hooks/use-flowscore";
-import { FlowScoreCard } from "@/components/flow-score-card";
 import { FlowReplanDiff } from "@/components/flow-replan-diff";
 import { diffSnapshots, makeSnapshot, type FlowDiff, type FlowSnapshot } from "@/lib/flow-diff";
 import { useQuickflow } from "@/hooks/use-quickflow";
@@ -221,8 +220,6 @@ export default function WorkflowPage() {
             </Button>
           </form>
         </header>
-
-        <FlowScoreCard flow={flow} minutesLeft={minutesLeft} />
 
         <Button
           variant="secondary"
