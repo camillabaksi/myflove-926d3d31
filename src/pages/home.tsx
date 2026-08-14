@@ -390,8 +390,7 @@ export default function Home() {
           </HomeSection>
         )}
 
-        {upcomingBills.length > 0 && (
-          {showSection("bills") && (
+        {upcomingBills.length > 0 && showSection("bills") && (
           <HomeSection id="bills" title="Kommande räkningar" help="Räkningar med förfallodatum inom kort. Läggs in under Ekonomi.">
               <div className="space-y-3">
                 {upcomingBills.slice(0, 3).map((bill) => (
@@ -412,10 +411,8 @@ export default function Home() {
               </div>
             </HomeSection>
         )}
-        )}
 
-        {nextMedication && (
-          {showSection("medication") && (
+        {nextMedication && showSection("medication") && (
           <HomeSection id="medication" title="Medicinpåminnelse" help="Bocka av när du tagit din medicin. Tiden ställer du in under Må bra.">
               <Link
                 href="/daglig-rutin"
@@ -434,7 +431,6 @@ export default function Home() {
                 <ArrowRight size={16} className="text-muted-foreground shrink-0" />
               </Link>
             </HomeSection>
-        )}
         )}
 
         {showSection("push") && (
