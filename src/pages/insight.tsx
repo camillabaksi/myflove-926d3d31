@@ -157,7 +157,7 @@ export default function InsightPage() {
         <p className="text-muted-foreground">Förstå behov. Hitta strategier. Gör vardagen enklare.</p>
       </header>
 
-      <DemoBanner />
+
 
       {phase === "start" && (
         <>
