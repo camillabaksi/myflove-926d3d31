@@ -6,7 +6,7 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Sammanställning av de viktigaste funktionerna som byggts i MyFlove.";
-export const CHANGELOG_UPDATED = "2026-08-13";
+export const CHANGELOG_UPDATED = "2026-08-14";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
