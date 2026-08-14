@@ -114,6 +114,16 @@ export default function Layout({ children }: LayoutProps) {
   const { isAdmin } = useIsAdmin();
   const { enabled: enabledAreas } = useEnabledAreas();
 
+  const canGoBack = location !== "/" && location !== "/hem";
+  const handleBack = () => {
+    if (typeof window === "undefined") return;
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      window.location.href = "/hem";
+    }
+  };
+
 
   const [alarmEnabled, setAlarmEnabledState] = useState<boolean>(() => isAlarmSoundEnabled());
   useEffect(() => subscribeAlarmPref((v) => setAlarmEnabledState(v)), []);
