@@ -119,6 +119,7 @@ export function MoodContent({ showHeader = true }: MoodContentProps) {
       {moods.length > 0 && (
         <CollapsibleSection
           title="Tidigare incheckningar"
+          help="Dina tidigare loggar. Mönstren här används för att anpassa dagens förslag."
           headingClassName="text-xl font-semibold"
           actions={
             moods.length > 3 && (

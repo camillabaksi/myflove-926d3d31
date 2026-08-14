@@ -221,7 +221,7 @@ export function StudiesSection() {
 
 
         {/* Kurser */}
-        <CollapsibleSection title="Dina kurser" headingClassName="text-lg font-semibold" className="bg-card border border-border rounded-2xl p-5">
+        <CollapsibleSection title="Dina kurser" help="Kurserna du läser. Lägg till en kurs så kan uppgifter kopplas till den." headingClassName="text-lg font-semibold" className="bg-card border border-border rounded-2xl p-5">
           <form onSubmit={handleAddCourse} className="flex gap-2">
             <Input
               value={courseDraft}
@@ -325,7 +325,7 @@ export function StudiesSection() {
         </CollapsibleSection>
 
         {/* Inlämningar */}
-        <CollapsibleSection title="Inlämningar och deadlines" headingClassName="text-lg font-semibold">
+        <CollapsibleSection title="Inlämningar och deadlines" help="Allt med ett datum. Det som är närmast ligger överst." headingClassName="text-lg font-semibold">
           {/* Mappar */}
           <div className="flex flex-wrap gap-2">
             {[

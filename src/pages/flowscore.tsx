@@ -54,6 +54,7 @@ export default function FlowScorePage() {
           <CollapsibleSection
             title={<span className="flex items-center gap-2"><Zap className="h-5 w-5 text-primary" /> Använd din FlowScore</span>}
             id="Använd din FlowScore"
+            help="Din nivå styr hur mycket jobb och studier föreslår. Ändras när du loggar hur du mår."
             headingClassName="font-display text-lg"
             description="Planerna i jobb och studier anpassas automatiskt efter den här nivån."
           >

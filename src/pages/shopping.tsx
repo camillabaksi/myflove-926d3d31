@@ -228,6 +228,7 @@ export default function Shopping() {
             <div className="pt-6 border-t border-border">
             <CollapsibleSection
               title="I korgen"
+              help="Sådant du redan lagt i vagnen. Ligger kvar tills du rensar listan."
               headingClassName="text-sm font-medium text-muted-foreground uppercase tracking-wider"
             >
               {completedItems.map(item => (

@@ -285,6 +285,7 @@ export default function StudyflowPage() {
           className={card}
           headingClassName={sectionTitle}
           title={<><Gauge className="h-5 w-5 text-primary" /> Rimligt att plugga just nu</>}
+          help="Utgår från din ork idag. Siffran är ett förslag, inte ett krav."
         >
           <p className="mt-1 text-sm text-muted-foreground">
             Anpassat efter FlowScore {flow.score} och energi {energy ? `${energy}/5` : "okänd"} – ca{" "}
@@ -339,6 +340,7 @@ export default function StudyflowPage() {
           className={card}
           headingClassName={sectionTitle}
           title={<><Brain className="h-5 w-5 text-primary" /> Prov & repetition</>}
+          help="Prov du lagt in själv. Du väljer om repetition ska hamna i kalendern."
         >
           {nextExam ? (
             <div className="mt-2 rounded-2xl bg-sage/20 p-3 text-sm">
@@ -366,6 +368,7 @@ export default function StudyflowPage() {
           className={card}
           headingClassName={sectionTitle}
           title={<><AlarmClock className="h-5 w-5 text-primary" /> Vad ska jag göra nu?</>}
+          help="En sak i taget, vald åt dig. Tryck på start så börjar vi där."
         >
           {ranked.length === 0 ? (
             <p className="mt-2 text-sm text-muted-foreground">
@@ -570,6 +573,7 @@ export default function StudyflowPage() {
           className={card}
           headingClassName={sectionTitle}
           title={<><NotebookPen className="h-5 w-5 text-primary" /> Föreläsningsläge</>}
+          help="Ett lugnt läge under lektionen: korta anteckningar och påminnelse om pauser."
         >
           <p className="mt-1 text-sm text-muted-foreground">
             Innan lektionen: vad behöver du fråga eller komma ihåg?
@@ -669,6 +673,7 @@ export default function StudyflowPage() {
           className={card}
           headingClassName={sectionTitle}
           title={<><LifeBuoy className="h-5 w-5 text-primary" /> Jag hann inget idag</>}
+          help="Tryck här när dagen sprack. Du får en mjuk omstart utan pekpinnar."
         >
           <p className="mt-1 text-sm text-muted-foreground">
             Det blev inte som planerat. Ingen fara. Vill du att jag bygger om resten av dagen?

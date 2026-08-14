@@ -173,6 +173,7 @@ export default function CleaningPage() {
           <CollapsibleSection
             title={<span className="flex items-center gap-2"><ShoppingBasket className="h-5 w-5 text-primary" />Det här behöver du</span>}
             id="Det här behöver du"
+            help="Grejer som behövs för dagens städning. Saknas något kan du lägga det på inköpslistan."
             headingClassName="font-display text-lg font-bold"
           >
             {supplies.length === 0 ? (
