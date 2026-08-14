@@ -29,6 +29,7 @@ import {
   Scale,
   ChevronLeft,
   ChevronRight,
+  Route,
   type LucideIcon,
 } from "lucide-react";
 import { generateTrainingProgram } from "@/lib/training.functions";
@@ -45,6 +46,7 @@ import {
 
 import { useToast } from "@/hooks/use-toast";
 import CollapsibleSection from "@/components/collapsible-section";
+import WalkRoutesSection from "@/components/walk-routes";
 import { celebrateFromEvent } from "@/lib/celebrate";
 
 
@@ -57,7 +59,7 @@ const FOCUS: { id: TrainingGoal["focus"]; label: string }[] = [
 const LEVELS: TrainingGoal["level"][] = ["nybörjare", "van", "erfaren"];
 const LAST_SYNC_KEY = "myflove.steps.lastSync";
 
-type TrainingView = "overview" | "steg" | "plan" | "motion" | "program" | "vikt";
+type TrainingView = "overview" | "steg" | "plan" | "motion" | "program" | "vikt" | "promenad";
 
 const SECTIONS: { id: Exclude<TrainingView, "overview">; label: string; desc: string; icon: LucideIcon; hue: string }[] = [
   {
@@ -87,6 +89,13 @@ const SECTIONS: { id: Exclude<TrainingView, "overview">; label: string; desc: st
     desc: "Mål som justeras efter hur veckan kändes.",
     icon: CalendarRange,
     hue: "265 32% 45%",
+  },
+  {
+    id: "promenad",
+    label: "Promenadvägar",
+    desc: "Förslag på rundor nära dig – efter tid eller avstånd.",
+    icon: Route,
+    hue: "180 32% 34%",
   },
   {
     id: "vikt",
@@ -371,6 +380,7 @@ export default function TrainingPage() {
     steg: `${stepsToday.toLocaleString("sv-SE")} steg idag`,
     motion: `${movementMinutes} av ${movementGoal} min idag`,
     plan: weeklyPlan ? `${sessionsThisWeek}/${weeklyPlan.sessionTarget} pass denna vecka` : "Ingen plan ännu",
+    promenad: "Hitta en runda nära dig",
     vikt: latestWeight ? `${latestWeight.kg} kg senast` : "Ingen vikt inlagd",
   };
 
@@ -965,6 +975,8 @@ export default function TrainingPage() {
         )}
           </>
         )}
+
+        {view === "promenad" && <WalkRoutesSection />}
 
         {view === "vikt" && (
           <CollapsibleSection
