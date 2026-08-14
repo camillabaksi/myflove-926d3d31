@@ -279,6 +279,7 @@ export default function MealPlannerPage() {
                     <Star size={16} className="fill-gold text-gold" /> Mina favoriter
                   </span>
                 }
+                help="Rätter du markerat med stjärna. Tryck på en för att lägga den på idag."
                 headingClassName="font-medium"
                 className="space-y-2"
               >
@@ -311,6 +312,7 @@ export default function MealPlannerPage() {
                     <History size={16} /> Från tidigare veckor
                   </span>
                 }
+                help="Sådant ni ätit förut. Bra när huvudet är tomt och middagen ska bestämmas."
                 headingClassName="font-medium"
                 className="space-y-2"
               >
