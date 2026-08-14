@@ -13,8 +13,10 @@ import { Route as VillkorRouteImport } from './routes/villkor'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SignUpRouteImport } from './routes/sign-up'
 import { Route as SignInRouteImport } from './routes/sign-in'
+import { Route as NyttLosenordRouteImport } from './routes/nytt-losenord'
 import { Route as McpRouteImport } from './routes/mcp'
 import { Route as IntegritetRouteImport } from './routes/integritet'
+import { Route as GlomtLosenordRouteImport } from './routes/glomt-losenord'
 import { Route as CookiesRouteImport } from './routes/cookies'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
@@ -80,6 +82,11 @@ const SignInRoute = SignInRouteImport.update({
   path: '/sign-in',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NyttLosenordRoute = NyttLosenordRouteImport.update({
+  id: '/nytt-losenord',
+  path: '/nytt-losenord',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const McpRoute = McpRouteImport.update({
   id: '/mcp',
   path: '/mcp',
@@ -88,6 +95,11 @@ const McpRoute = McpRouteImport.update({
 const IntegritetRoute = IntegritetRouteImport.update({
   id: '/integritet',
   path: '/integritet',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GlomtLosenordRoute = GlomtLosenordRouteImport.update({
+  id: '/glomt-losenord',
+  path: '/glomt-losenord',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CookiesRoute = CookiesRouteImport.update({
@@ -317,8 +329,10 @@ const ApiPublicHooksPushTickRoute = ApiPublicHooksPushTickRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/cookies': typeof CookiesRoute
+  '/glomt-losenord': typeof GlomtLosenordRoute
   '/integritet': typeof IntegritetRoute
   '/mcp': typeof McpRoute
+  '/nytt-losenord': typeof NyttLosenordRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -368,8 +382,10 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cookies': typeof CookiesRoute
+  '/glomt-losenord': typeof GlomtLosenordRoute
   '/integritet': typeof IntegritetRoute
   '/mcp': typeof McpRoute
+  '/nytt-losenord': typeof NyttLosenordRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -421,8 +437,10 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_app': typeof AppRouteWithChildren
   '/cookies': typeof CookiesRoute
+  '/glomt-losenord': typeof GlomtLosenordRoute
   '/integritet': typeof IntegritetRoute
   '/mcp': typeof McpRoute
+  '/nytt-losenord': typeof NyttLosenordRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -474,8 +492,10 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/cookies'
+    | '/glomt-losenord'
     | '/integritet'
     | '/mcp'
+    | '/nytt-losenord'
     | '/sign-in'
     | '/sign-up'
     | '/sitemap.xml'
@@ -525,8 +545,10 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/cookies'
+    | '/glomt-losenord'
     | '/integritet'
     | '/mcp'
+    | '/nytt-losenord'
     | '/sign-in'
     | '/sign-up'
     | '/sitemap.xml'
@@ -577,8 +599,10 @@ export interface FileRouteTypes {
     | '/'
     | '/_app'
     | '/cookies'
+    | '/glomt-losenord'
     | '/integritet'
     | '/mcp'
+    | '/nytt-losenord'
     | '/sign-in'
     | '/sign-up'
     | '/sitemap.xml'
@@ -630,8 +654,10 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRouteWithChildren
   CookiesRoute: typeof CookiesRoute
+  GlomtLosenordRoute: typeof GlomtLosenordRoute
   IntegritetRoute: typeof IntegritetRoute
   McpRoute: typeof McpRoute
+  NyttLosenordRoute: typeof NyttLosenordRoute
   SignInRoute: typeof SignInRoute
   SignUpRoute: typeof SignUpRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
@@ -675,6 +701,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignInRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/nytt-losenord': {
+      id: '/nytt-losenord'
+      path: '/nytt-losenord'
+      fullPath: '/nytt-losenord'
+      preLoaderRoute: typeof NyttLosenordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/mcp': {
       id: '/mcp'
       path: '/mcp'
@@ -687,6 +720,13 @@ declare module '@tanstack/react-router' {
       path: '/integritet'
       fullPath: '/integritet'
       preLoaderRoute: typeof IntegritetRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/glomt-losenord': {
+      id: '/glomt-losenord'
+      path: '/glomt-losenord'
+      fullPath: '/glomt-losenord'
+      preLoaderRoute: typeof GlomtLosenordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cookies': {
@@ -1080,8 +1120,10 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRouteWithChildren,
   CookiesRoute: CookiesRoute,
+  GlomtLosenordRoute: GlomtLosenordRoute,
   IntegritetRoute: IntegritetRoute,
   McpRoute: McpRoute,
+  NyttLosenordRoute: NyttLosenordRoute,
   SignInRoute: SignInRoute,
   SignUpRoute: SignUpRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
