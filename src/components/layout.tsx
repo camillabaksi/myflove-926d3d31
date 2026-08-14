@@ -134,7 +134,8 @@ export default function Layout({ children }: LayoutProps) {
     trackEvent(section, "view");
   }, [location]);
 
-  const navItems = [
+  type NavItem = { href: string; label: string; icon: typeof Home; hint: string; essential?: boolean };
+  const navItems: NavItem[] = [
     { href: "/hem", label: "Hem", icon: Home, hint: "Din överblick över dagen", essential: true },
     { href: "/ma-bra", label: "Må bra", icon: Heart, hint: "Logga hur du mår och hur mycket ork du har" },
     { href: "/traning", label: "Träning", icon: Dumbbell, hint: "Enkla pass anpassade efter din ork" },
