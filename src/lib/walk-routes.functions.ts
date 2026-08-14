@@ -9,6 +9,16 @@ const InputSchema = z.object({
   km: z.number().min(0.5).max(30).optional(),
 });
 
+export type WalkRoute = {
+  id: string;
+  name: string;
+  kind: string;
+  distanceKm: number;
+  minutes: number;
+  bearing: string;
+  mapsUrl: string;
+};
+
 export const suggestWalkRoutes = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => InputSchema.parse(data))
