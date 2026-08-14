@@ -95,8 +95,8 @@ export default function WalkRoutesSection() {
       className="surface-card p-5"
       headingClassName="text-lg font-semibold text-ink flex items-center gap-2"
       title={<><RouteIcon size={18} className="text-primary" /> Promenadvägar nära dig</>}
-      description="Säg hur länge eller hur långt du vill gå – Flow föreslår rundor och öppnar dem i kartan."
-      help="Flow använder din plats för att hitta parker, skog och vatten i närheten. Förslagen är rundor tur och retur, öppna dem i Google Maps för vägbeskrivning."
+      description="Säg hur länge eller hur långt du vill gå – Flow föreslår gångbara vägar i olika riktningar och öppnar dem i kartan."
+      help="Flow använder din plats för att hitta gångvägar, stigar och lugna gator åt olika håll. Förslagen är rundor tur och retur, öppna dem i Google Maps för vägbeskrivning."
     >
       <div className="flex flex-wrap gap-2">
         {(["tid", "avstånd"] as const).map((m) => (
@@ -185,9 +185,7 @@ export default function WalkRoutesSection() {
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <p className="font-medium text-ink">{r.name}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {r.kind} · {r.bearing}
-                    </p>
+                    <p className="text-xs text-muted-foreground">{r.kind}</p>
                   </div>
                   <MapPin size={16} className="shrink-0 text-primary" />
                 </div>
@@ -245,7 +243,7 @@ export default function WalkRoutesSection() {
 
       {routes && routes.length === 0 && (
         <p className="text-sm text-muted-foreground">
-          Flow hittade inget grönt stråk i den radien. Prova en längre promenad.
+          Flow hittade inga gångbara vägar i den radien. Prova en längre promenad.
         </p>
       )}
     </CollapsibleSection>
