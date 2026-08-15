@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Layout from "@/components/layout";
-import { useSavedStores } from "@/hooks/use-data";
+import { useSavedStores, STORE_RADIUS_OPTIONS, DEFAULT_STORE_RADIUS_METERS } from "@/hooks/use-data";
 import { useSharedShoppingList } from "@/hooks/use-shared-shopping-list";
 import { useVoiceInput } from "@/hooks/use-voice-input";
 import { Button } from "@/components/ui/button";
@@ -17,7 +17,7 @@ interface ListItem {
 }
 
 function StoreLocations() {
-  const { savedStores, addSavedStore, deleteSavedStore, setStoreAlert } = useSavedStores();
+  const { savedStores, addSavedStore, deleteSavedStore, setStoreAlert, setStoreRadius } = useSavedStores();
   const [name, setName] = useState("");
   const [locating, setLocating] = useState(false);
   const [locationError, setLocationError] = useState<string | null>(null);
@@ -58,7 +58,7 @@ function StoreLocations() {
           </span>
         }
         headingClassName="text-xl font-semibold"
-        description="Spara en butik där du är just nu, så påminner vi dig om det som är kvar på listan nästa gång du är i närheten."
+        description="Spara en butik där du är just nu, så påminner vi dig om det som är kvar på listan nästa gång du är i närheten. Välj själv hur nära du ska vara."
       >
       <div className="flex gap-2">
         <Input
