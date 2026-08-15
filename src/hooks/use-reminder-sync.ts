@@ -155,17 +155,19 @@ export function useReminderSync() {
             }
           }
         }
+        const leadMins = r.remindMinutesBefore ?? 0;
         for (const date of occurrences) {
           const when = combineDateTime(date, r.time);
           if (!when) continue;
-          if (when.getTime() < now + 30_000) continue;
+          const deliverAt = new Date(when.getTime() - leadMins * 60_000);
+          if (deliverAt.getTime() < now + 30_000) continue;
           const key = repeat === "none" ? `rem:${r.id}` : `rem:${r.id}:${date}`;
           desired.set(key, {
             clientKey: key,
             kind: "custom",
-            title: `🔔 ${r.title}`,
+            title: leadMins > 0 ? `🔔 Om ${leadMins} min: ${r.title}` : `🔔 ${r.title}`,
             body: `Påminnelse kl ${r.time}`,
-            deliverAt: when.toISOString(),
+            deliverAt: deliverAt.toISOString(),
             url: "/kalender",
           });
         }
