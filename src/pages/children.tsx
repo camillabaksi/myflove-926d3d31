@@ -51,6 +51,7 @@ function ChildrenContent() {
     members,
     loading,
     error,
+    load,
     addChild,
     deleteChild,
     addItem,
@@ -212,8 +213,17 @@ function ChildrenContent() {
     }
   };
 
-  if (loading) return <div className="py-16 text-center text-muted-foreground">Laddar barn...</div>;
-  if (error) return <div className="py-16 text-center text-destructive">{error}</div>;
+  if (loading && children.length === 0 && !error)
+    return <div className="py-16 text-center text-muted-foreground">Laddar barn...</div>;
+  if (error && children.length === 0)
+    return (
+      <div className="py-16 text-center space-y-3">
+        <p className="text-destructive">{error}</p>
+        <Button variant="outline" className="rounded-2xl" onClick={() => void load()}>
+          Försök igen
+        </Button>
+      </div>
+    );
 
   return (
     <div className="space-y-8">
