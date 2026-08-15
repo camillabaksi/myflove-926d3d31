@@ -97,6 +97,17 @@ export default function CalendarPage() {
   const queryClient = useQueryClient();
 
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [view, setView] = useLocalStorage<CalView>("myflove-calendar-view", "manad");
+  const [visible, setVisible] = useLocalStorage<CalCategory[]>(
+    "myflove-calendar-categories",
+    ALL_CATEGORIES,
+  );
+  const shows = (c: CalCategory) => visible.includes(c);
+  const toggleCategory = (c: CalCategory) =>
+    setVisible((prev) =>
+      prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c],
+    );
+
   const [selectedDateStr, setSelectedDateStr] = useState(
     new Date().toLocaleDateString('sv-SE').split(' ')[0] // fallback format YYYY-MM-DD
   );
