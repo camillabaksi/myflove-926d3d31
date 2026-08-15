@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Layout from "@/components/layout";
-import { useShoppingList } from "@/hooks/use-data";
+import { useSharedShoppingList } from "@/hooks/use-shared-shopping-list";
 import { useLocalStorage } from "@/lib/storage";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
