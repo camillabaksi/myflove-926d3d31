@@ -1,11 +1,21 @@
-import { useMemo, useState } from "react";
-import { Plus, Trash2, MapPin, CalendarClock } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Plus, Trash2, MapPin, CalendarClock, Upload, FileText, ExternalLink } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import CollapsibleSection from "@/components/collapsible-section";
 import HelpHint from "@/components/help-hint";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { parseScheduleText } from "@/lib/schedule-parse";
+import { useChildren } from "@/hooks/use-children";
+
+interface ScheduleFile {
+  path: string;
+  name: string;
+  isImage: boolean;
+}
+
+const FILES_KEY = "myflove-child-schedule-files";
 
 export interface ChildScheduleEntry {
   id: string;
@@ -46,6 +56,66 @@ export default function ChildSchedule({
   const [teacher, setTeacher] = useState("");
   const [paste, setPaste] = useState("");
   const [showPaste, setShowPaste] = useState(false);
+
+  // Bild eller dokument på schemat
+  const { uploadDoc, openDoc } = useChildren();
+  const [allFiles, setAllFiles] = useCloudSyncedStorage<Record<string, ScheduleFile[]>>(FILES_KEY, {});
+  const files = useMemo(() => allFiles[childId] ?? [], [allFiles, childId]);
+  const [previews, setPreviews] = useState<Record<string, string>>({});
+  const [uploading, setUploading] = useState(false);
+  const fileInput = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      for (const f of files) {
+        if (!f.isImage) continue;
+        try {
+          const url = await openDoc(f.path);
+          if (active) setPreviews((p) => ({ ...p, [f.path]: url }));
+        } catch {
+          /* ignorera */
+        }
+      }
+    })();
+    return () => {
+      active = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [files]);
+
+  const onPickFile = async (file: File | undefined) => {
+    if (!file) return;
+    setUploading(true);
+    try {
+      const path = await uploadDoc(childId, file);
+      const entry: ScheduleFile = {
+        path,
+        name: file.name,
+        isImage: file.type.startsWith("image/"),
+      };
+      setAllFiles((prev) => ({ ...prev, [childId]: [...(prev[childId] ?? []), entry] }));
+      toast.success("Schemat är uppladdat");
+    } catch {
+      toast.error("Kunde inte ladda upp filen");
+    } finally {
+      setUploading(false);
+      if (fileInput.current) fileInput.current.value = "";
+    }
+  };
+
+  const removeFile = (path: string) =>
+    setAllFiles((prev) => ({ ...prev, [childId]: (prev[childId] ?? []).filter((f) => f.path !== path) }));
+
+  const open = async (path: string) => {
+    try {
+      const url = await openDoc(path);
+      window.open(url, "_blank", "noopener");
+    } catch {
+      toast.error("Kunde inte öppna filen");
+    }
+  };
+
 
   const save = (next: ChildScheduleEntry[]) =>
     setAll((prev) => ({ ...prev, [childId]: next }));
@@ -132,6 +202,61 @@ export default function ChildSchedule({
         headingClassName="text-lg font-semibold"
         className="space-y-4"
       >
+        <div className="space-y-3">
+          {canEdit && (
+            <>
+              <input
+                ref={fileInput}
+                type="file"
+                accept="image/*,.pdf,.doc,.docx"
+                className="hidden"
+                onChange={(e) => onPickFile(e.target.files?.[0])}
+              />
+              <Button
+                type="button"
+                variant="outline"
+                className="h-11 rounded-2xl w-full"
+                disabled={uploading}
+                onClick={() => fileInput.current?.click()}
+              >
+                <Upload size={18} className="mr-2" />
+                {uploading ? "Laddar upp…" : "Ladda upp bild eller dokument på schemat"}
+              </Button>
+            </>
+          )}
+
+          {files.map((f) => (
+            <div key={f.path} className="rounded-2xl border border-border overflow-hidden">
+              {f.isImage && previews[f.path] ? (
+                <button type="button" onClick={() => open(f.path)} className="block w-full">
+                  <img src={previews[f.path]} alt={`Skolschema för ${childName}`} className="w-full object-contain" />
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => open(f.path)}
+                  className="flex items-center gap-2 p-3 text-sm w-full text-left"
+                >
+                  <FileText size={16} className="text-primary shrink-0" />
+                  <span className="flex-1 min-w-0 truncate">{f.name}</span>
+                  <ExternalLink size={14} className="text-muted-foreground" />
+                </button>
+              )}
+              {canEdit && (
+                <div className="flex justify-end border-t border-border p-2">
+                  <button
+                    type="button"
+                    onClick={() => removeFile(f.path)}
+                    className="text-muted-foreground hover:text-destructive text-xs flex items-center gap-1"
+                  >
+                    <Trash2 size={14} /> Ta bort
+                  </button>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
         {next && (
           <div className="rounded-2xl border border-primary/40 bg-primary/5 p-3">
             <div className="text-xs text-muted-foreground">
