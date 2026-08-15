@@ -46,6 +46,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
       "Barn-modulen – barnprofiler och delning inom familjen (2026-07-20)",
       "Barnets skolschema – lägg in lektioner (ämne, tid, sal, lärare) en gång, det ligger kvar och nästa lektion visas (2026-08-15)",
       "Skolschema som bild eller dokument – ladda upp och se det direkt i barnets schemavy (2026-08-15)",
+      "Barnvyn visar fel med \"Försök igen\" istället för att fastna på laddning (2026-08-15)",
       "Hem & familj – hushåll, gemensam inköpslista och kalender (2026-07-20)",
       "Träning – styrka/kondition, AI-genererade pass och hälsoapp-koppling (2026-08-11)",
       "Promenadvägar – riktningsbaserade förslag i närområdet via geoposition (2026-08-14)",

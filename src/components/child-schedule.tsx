@@ -7,7 +7,7 @@ import CollapsibleSection from "@/components/collapsible-section";
 import HelpHint from "@/components/help-hint";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { parseScheduleText } from "@/lib/schedule-parse";
-import { useChildren } from "@/hooks/use-children";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ScheduleFile {
   path: string;
@@ -58,7 +58,17 @@ export default function ChildSchedule({
   const [showPaste, setShowPaste] = useState(false);
 
   // Bild eller dokument på schemat
-  const { uploadDoc, openDoc } = useChildren();
+  const uploadDoc = async (id: string, file: File) => {
+    const path = `${id}/${Date.now()}-${file.name.replace(/[^\w.\-]/g, "_")}`;
+    const { error } = await supabase.storage.from("child-docs").upload(path, file);
+    if (error) throw error;
+    return path;
+  };
+  const openDoc = async (path: string) => {
+    const { data, error } = await supabase.storage.from("child-docs").createSignedUrl(path, 300);
+    if (error) throw error;
+    return data.signedUrl;
+  };
   const [allFiles, setAllFiles] = useCloudSyncedStorage<Record<string, ScheduleFile[]>>(FILES_KEY, {});
   const files = useMemo(() => allFiles[childId] ?? [], [allFiles, childId]);
   const [previews, setPreviews] = useState<Record<string, string>>({});
