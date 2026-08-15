@@ -1,11 +1,21 @@
-import { useMemo, useState } from "react";
-import { Plus, Trash2, MapPin, CalendarClock } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Plus, Trash2, MapPin, CalendarClock, Upload, FileText, ExternalLink } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import CollapsibleSection from "@/components/collapsible-section";
 import HelpHint from "@/components/help-hint";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { parseScheduleText } from "@/lib/schedule-parse";
+import { useChildren } from "@/hooks/use-children";
+
+interface ScheduleFile {
+  path: string;
+  name: string;
+  isImage: boolean;
+}
+
+const FILES_KEY = "myflove-child-schedule-files";
 
 export interface ChildScheduleEntry {
   id: string;
