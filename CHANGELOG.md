@@ -14,6 +14,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 - Inköpslista: välj själv hur nära butiken påminnelsen ska komma – "I affären" (80 m), "Alldeles nära" (300 m) eller "I området" (1 km) (2026-08-15).
 
 ### Changed
+- Barnvyn fastnar inte längre på "Laddar barn" vid nätverksstrul – visar felmeddelande med "Försök igen" (2026-08-15).
 
 ### Deprecated
 
