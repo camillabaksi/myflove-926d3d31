@@ -22,106 +22,106 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 ## [0.9.0] - 2026-08-15
 
 ### Added
-- **Fullständig changelog:** All historik sedan projektstart samlad i `CHANGELOG.md` och i appens changelog-export.
+- **Fullständig changelog** (2026-08-15): All historik sedan projektstart samlad i `CHANGELOG.md` och i appens changelog-export.
 
 ## [0.8.0] - 2026-08-14
 
 ### Added
-- **Glömt lösenord:** `/glomt-losenord` mejlar återställningslänk, `/nytt-losenord` sätter nytt lösenord, länk från inloggningen.
-- **Promenadvägar:** Riktningsbaserade gångvägar i närområdet via OpenStreetMap Overpass, höjddata och kartförhandsvisning, med "Uppdatera min plats".
+- **Glömt lösenord** (2026-08-14): `/glomt-losenord` mejlar återställningslänk, `/nytt-losenord` sätter nytt lösenord, länk från inloggningen.
+- **Promenadvägar** (2026-08-14): Riktningsbaserade gångvägar i närområdet via OpenStreetMap Overpass, höjddata och kartförhandsvisning, med "Uppdatera min plats".
 
 ### Fixed
-- Overpass-anrop returnerade tidvis 406 – rättat med korrekt Accept-header och User-Agent.
+- Overpass-anrop returnerade tidvis 406 (2026-08-14) – rättat med korrekt Accept-header och User-Agent.
 
 ### Security
-- SEO- och metadatafixar: sidspecifika og-taggar, Organization/WebSite JSON-LD, site verification.
+- SEO- och metadatafixar (2026-08-14): sidspecifika og-taggar, Organization/WebSite JSON-LD, site verification.
 
-## [0.7.0] - 2026-08
+## [0.7.0] - 2026-08-13
 
 ### Added
-- **Hjälptexter:** Kontextuella i-knappar på 17+ sidor.
-- **Tillbakaknapp:** Historikbaserad navigering i layouten.
-- **Introtur & enkelt läge:** Guidad rundtur, svenska underrubriker och naturligt språk för FlowScore.
-- **Minimera/maximera:** Persistenta kollapsbara sektioner i ~35 vyer.
-- **Områdesfiltrering:** Hemskärmen visar bara valt rum, "Alla" slår ihop.
+- **Hjälptexter** (2026-08-14): Kontextuella i-knappar på 17+ sidor.
+- **Tillbakaknapp** (2026-08-14): Historikbaserad navigering i layouten.
+- **Introtur & enkelt läge** (2026-08-14): Guidad rundtur, svenska underrubriker och naturligt språk för FlowScore.
+- **Minimera/maximera** (2026-08-14): Persistenta kollapsbara sektioner i ~35 vyer.
+- **Områdesfiltrering** (2026-08-14): Hemskärmen visar bara valt rum, "Alla" slår ihop.
 
 ### Changed
-- Blueprint uppdaterad till 2.7, ny presentation och ny preview-video (v5).
+- Blueprint uppdaterad till 2.7, ny presentation och ny preview-video (v5) (2026-08-14).
 
-## [0.6.0] - 2026-08
+## [0.6.0] - 2026-08-12
 
 ### Added
-- **StudyFlow™:** Pluggläge med föreläsningsläge, kapacitetsplanering och kalenderkoppling.
-- **Schemaimport:** AI-tolkning av schema samt "nästa lektion" med plats och vägbeskrivning.
-- **Lektionspåminnelser:** Push när nästa lektion närmar sig.
-- **FlowScore-vy:** Egen central vy för kapacitetspoäng.
-- **MyFlove Insight™:** Demoprofiler för NPF och adaptiva strategier.
-- **WorkFlow™:** Arbetsläge med omplanering, mötesläge och Nu-lista.
-- **Quickflow:** Snabbinfångst med automatisk dubbletthantering.
-- **Budget:** Budgetpanel i ekonomi.
-- **StudyBuddy/FlowStudy:** AI-flashcards, quiz och Leitner-repetition.
-- **Träning:** Styrka/kondition, AI-pass och hälsoapp-koppling via Capacitor.
-- **Livsområden:** Vardag, Studier, Jobb, Privat med egna färger, grupperad navigation och global sök.
+- **StudyFlow™** (2026-08-13): Pluggläge med föreläsningsläge, kapacitetsplanering och kalenderkoppling.
+- **Schemaimport** (2026-08-14): AI-tolkning av schema samt "nästa lektion" med plats och vägbeskrivning.
+- **Lektionspåminnelser** (2026-08-14): Push när nästa lektion närmar sig.
+- **FlowScore-vy** (2026-08-13): Egen central vy för kapacitetspoäng.
+- **MyFlove Insight™** (2026-08-13): Demoprofiler för NPF och adaptiva strategier.
+- **WorkFlow™** (2026-08-13): Arbetsläge med omplanering, mötesläge och Nu-lista.
+- **Quickflow** (2026-08-13): Snabbinfångst med automatisk dubbletthantering.
+- **Budget** (2026-08-12): Budgetpanel i ekonomi.
+- **StudyBuddy/FlowStudy** (2026-08-13): AI-flashcards, quiz och Leitner-repetition.
+- **Träning** (2026-08-11): Styrka/kondition, AI-pass och hälsoapp-koppling via Capacitor.
+- **Livsområden** (2026-08-13): Vardag, Studier, Jobb, Privat med egna färger, grupperad navigation och global sök.
 
 ### Changed
-- Prov läggs inte längre in automatiskt i kalendern; repetition rensas via purge-hook.
+- Prov läggs inte längre in automatiskt i kalendern; repetition rensas via purge-hook (2026-08-14).
 
-## [0.5.0] - 2026-08
+## [0.5.0] - 2026-07-20
 
 ### Added
-- **Push-notiser:** Service worker, `push_subscriptions` och notiser för medicin, väder och påminnelser.
-- **Återkommande påminnelser:** Dagligen, veckovis och vardagar.
-- **MCP-server:** Agentintegration på `/mcp`.
-- **Capacitor:** iOS/Android-paketering med `MOBILE_BUILD.md`.
-- **Familj/hushåll:** Join-koder, delad inköpslista och kalender.
-- **Proaktiva förslag:** Loop-nudgar utifrån uppgifter, humör och väder.
-- **Adminöversikt:** Friktionsrapporter, rollhantering och changelog-export.
-- **Rutiner:** Rutinlista med molnsynk och notiser.
-- **Kalenderintegration:** ICS-import/export.
-- **Tid & påminnelse:** Specifik tid på uppgifter med alarmljud.
-- **Valbara genvägar:** Fyra egna appar på hemskärmen.
+- **Push-notiser** (2026-07-18): Service worker, `push_subscriptions` och notiser för medicin, väder och påminnelser.
+- **Återkommande påminnelser** (2026-07-20): Dagligen, veckovis och vardagar.
+- **MCP-server** (2026-07-20): Agentintegration på `/mcp`.
+- **Capacitor** (2026-07-20): iOS/Android-paketering med `MOBILE_BUILD.md`.
+- **Familj/hushåll** (2026-07-20): Join-koder, delad inköpslista och kalender.
+- **Proaktiva förslag** (2026-07-20): Loop-nudgar utifrån uppgifter, humör och väder.
+- **Adminöversikt** (2026-07-20): Friktionsrapporter, rollhantering och changelog-export.
+- **Rutiner** (2026-07-19): Rutinlista med molnsynk och notiser.
+- **Kalenderintegration** (2026-07-09): ICS-import/export.
+- **Tid & påminnelse** (2026-07-20): Specifik tid på uppgifter med alarmljud.
+- **Valbara genvägar** (2026-07-20): Fyra egna appar på hemskärmen.
 
 ### Fixed
-- Uppgifter försvann mellan dagar – flyttade från localStorage till `user_kv`.
+- Uppgifter försvann mellan dagar (2026-07-20) – flyttade från localStorage till `user_kv`.
 
 ### Security
-- RLS-härdning och återkallad publik exekvering på interna funktioner.
+- RLS-härdning och återkallad publik exekvering på interna funktioner (2026-07-20).
 
-## [0.3.0] - 2026-07
+## [0.3.0] - 2026-07-09
 
 ### Added
-- **Energikarta:** Loggning av energinivåer, integrerad i FlowPlan.
-- **Väderkort:** Open-Meteo med geolokalisering på startsidan.
-- **Matlista utan familj:** Lokalt läge för användare utan hushåll.
-- **Admin & statistik:** `user_roles`, admin-gating och appstatistik.
-- **Resor:** Trafiklab ResRobot v2.1 med pendlingsvarningar.
-- **Friktionsindex:** `friction_items`/`friction_votes` med röstning.
-- **FlowPlan™:** AI-driven sekvensplanering.
-- **Flow AI-personlighet:** Dagsformsanpassat stöd.
-- **Designsystem:** Jordnära palett och Flow-voice-copy.
-- **Publicering:** Delbar testapp med PWA-stöd.
+- **Energikarta** (2026-07-08): Loggning av energinivåer, integrerad i FlowPlan.
+- **Väderkort** (2026-07-08): Open-Meteo med geolokalisering på startsidan.
+- **Matlista utan familj** (2026-07-09): Lokalt läge för användare utan hushåll.
+- **Admin & statistik** (2026-07-08): `user_roles`, admin-gating och appstatistik.
+- **Resor** (2026-07-08): Trafiklab ResRobot v2.1 med pendlingsvarningar.
+- **Friktionsindex** (2026-07-08): `friction_items`/`friction_votes` med röstning.
+- **FlowPlan™** (2026-07-08): AI-driven sekvensplanering.
+- **Flow AI-personlighet** (2026-07-08): Dagsformsanpassat stöd.
+- **Designsystem** (2026-07-08): Jordnära palett och Flow-voice-copy.
+- **Publicering** (2026-07-09): Delbar testapp med PWA-stöd.
 
 ### Fixed
-- Kalendern nåddes inte – routing rättad till `/kalender`.
+- Kalendern nåddes inte (2026-07-09) – routing rättad till `/kalender`.
 
 ## [0.1.0] - 2026-07-23
 
 Initial baseline av MyFlove — ett svenskspråkigt "lugnt livsflöde"-dashboard byggt med TanStack Start, React 19, Tailwind CSS och Lovable Cloud.
 
 ### Added
-- **Autentisering:** Inloggning/registrering och skyddade sidor under `/_app`.
-- **Dashboard/Hem:** Startsida med genvägar, widget-grid och väderkort.
-- **Fokus & Att göra:** Daglig fokuspunkt samt uppgiftshantering med kategorier, status, delsteg, snooze och kalenderkoppling.
-- **Kalender & Påminnelser:** Återkommande påminnelser med tid och notiser.
-- **Daglig rutin & Pomodoro:** Rutinvy samt fokus-timer.
-- **Dumping (brain dump):** Snabb idé-/tankeinsamling.
-- **Må bra:** Humörloggning och wellness-vy.
-- **Medicin:** Medicinlistor med schemalagda tider och intagsloggning.
-- **Inköp & Matlista:** Delad hushållsbaserad inköpslista med lokal fallback.
-- **Ekonomi:** Enkel transaktionshantering per kategori.
-- **Resor:** Sparade resor/hållplatser med pendlingsvarningar.
-- **Familj:** Delade funktioner för hushåll/familj.
-- **Statistik & Belöningar:** Statistikvy och achievements.
-- **AI-assistent (Flow):** Chattbaserad assistent med MCP-verktyg.
-- **Molnsynk:** Offline-first lagring med best-effort synk.
-- **Juridiskt:** Integritetspolicy, villkor och cookies.
+- **Autentisering** (2026-07-23): Inloggning/registrering och skyddade sidor under `/_app`.
+- **Dashboard/Hem** (2026-07-23): Startsida med genvägar, widget-grid och väderkort.
+- **Fokus & Att göra** (2026-07-23): Daglig fokuspunkt samt uppgiftshantering med kategorier, status, delsteg, snooze och kalenderkoppling.
+- **Kalender & Påminnelser** (2026-07-23): Återkommande påminnelser med tid och notiser.
+- **Daglig rutin & Pomodoro** (2026-07-23): Rutinvy samt fokus-timer.
+- **Dumping (brain dump)** (2026-07-23): Snabb idé-/tankeinsamling.
+- **Må bra** (2026-07-23): Humörloggning och wellness-vy.
+- **Medicin** (2026-07-23): Medicinlistor med schemalagda tider och intagsloggning.
+- **Inköp & Matlista** (2026-07-23): Delad hushållsbaserad inköpslista med lokal fallback.
+- **Ekonomi** (2026-07-23): Enkel transaktionshantering per kategori.
+- **Resor** (2026-07-23): Sparade resor/hållplatser med pendlingsvarningar.
+- **Familj** (2026-07-23): Delade funktioner för hushåll/familj.
+- **Statistik & Belöningar** (2026-07-23): Statistikvy och achievements.
+- **AI-assistent (Flow)** (2026-07-23): Chattbaserad assistent med MCP-verktyg.
+- **Molnsynk** (2026-07-23): Offline-first lagring med best-effort synk.
+- **Juridiskt** (2026-07-23): Integritetspolicy, villkor och cookies.
