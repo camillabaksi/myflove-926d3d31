@@ -202,6 +202,61 @@ export default function ChildSchedule({
         headingClassName="text-lg font-semibold"
         className="space-y-4"
       >
+        <div className="space-y-3">
+          {canEdit && (
+            <>
+              <input
+                ref={fileInput}
+                type="file"
+                accept="image/*,.pdf,.doc,.docx"
+                className="hidden"
+                onChange={(e) => onPickFile(e.target.files?.[0])}
+              />
+              <Button
+                type="button"
+                variant="outline"
+                className="h-11 rounded-2xl w-full"
+                disabled={uploading}
+                onClick={() => fileInput.current?.click()}
+              >
+                <Upload size={18} className="mr-2" />
+                {uploading ? "Laddar upp…" : "Ladda upp bild eller dokument på schemat"}
+              </Button>
+            </>
+          )}
+
+          {files.map((f) => (
+            <div key={f.path} className="rounded-2xl border border-border overflow-hidden">
+              {f.isImage && previews[f.path] ? (
+                <button type="button" onClick={() => open(f.path)} className="block w-full">
+                  <img src={previews[f.path]} alt={`Skolschema för ${childName}`} className="w-full object-contain" />
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => open(f.path)}
+                  className="flex items-center gap-2 p-3 text-sm w-full text-left"
+                >
+                  <FileText size={16} className="text-primary shrink-0" />
+                  <span className="flex-1 min-w-0 truncate">{f.name}</span>
+                  <ExternalLink size={14} className="text-muted-foreground" />
+                </button>
+              )}
+              {canEdit && (
+                <div className="flex justify-end border-t border-border p-2">
+                  <button
+                    type="button"
+                    onClick={() => removeFile(f.path)}
+                    className="text-muted-foreground hover:text-destructive text-xs flex items-center gap-1"
+                  >
+                    <Trash2 size={14} /> Ta bort
+                  </button>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
         {next && (
           <div className="rounded-2xl border border-primary/40 bg-primary/5 p-3">
             <div className="text-xs text-muted-foreground">
