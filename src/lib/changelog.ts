@@ -93,6 +93,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
       "Hushåll med unika join-koder (2026-07-20)",
       "Delad inköpslista och familjekalender (2026-07-20)",
       "Behörigheter och barn-delning (2026-07-20)",
+      "Tyst läge – pausa påminnelser 30 min–8 timmar eller varje natt (2026-08-15)",
       "Inköpslista: valbar påminnelseradie per butik – i affären, alldeles nära eller i området (2026-08-15)",
 
     ],

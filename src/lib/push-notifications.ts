@@ -1,3 +1,4 @@
+import { isQuietNow } from '@/lib/quiet-mode';
 export type NotificationPermissionState = 'granted' | 'denied' | 'default' | 'unsupported';
 
 const ALARM_PREF_KEY = 'myflow-alarm-sound-enabled';
@@ -208,6 +209,8 @@ interface FlowNotificationOptions extends NotificationOptions {
 
 export function sendPushNotification(title: string, options?: FlowNotificationOptions): void {
   const { silentAlarm, ...rest } = options ?? {};
+  // Tyst läge: hoppa över både ljud och notis medan påminnelser är pausade.
+  if (isQuietNow()) return;
   if (!silentAlarm) {
     playAlarmSound();
   }
