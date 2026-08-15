@@ -196,12 +196,24 @@ export default function CalendarPage() {
     });
   };
 
-  const prevMonth = () => {
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
+  const stepBack = () => {
+    if (view === "manad") {
+      setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
+    } else {
+      const next = addDays(currentDate, view === "vecka" ? -7 : -1);
+      setCurrentDate(next);
+      setSelectedDateStr(fmtDate(next));
+    }
   };
 
-  const nextMonth = () => {
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
+  const stepForward = () => {
+    if (view === "manad") {
+      setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
+    } else {
+      const next = addDays(currentDate, view === "vecka" ? 7 : 1);
+      setCurrentDate(next);
+      setSelectedDateStr(fmtDate(next));
+    }
   };
 
   const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
@@ -212,17 +224,33 @@ export default function CalendarPage() {
   const monthName = currentDate.toLocaleDateString('sv-SE', { month: 'long', year: 'numeric' });
   const todayStr = new Date().toLocaleDateString('sv-SE').split(' ')[0];
 
+  const weekDays = Array.from({ length: 7 }, (_, i) => fmtDate(addDays(startOfWeek(currentDate), i)));
+  const periodLabel =
+    view === "manad"
+      ? monthName
+      : view === "vecka"
+        ? `${new Date(`${weekDays[0]}T12:00:00`).toLocaleDateString('sv-SE', { day: 'numeric', month: 'short' })} – ${new Date(`${weekDays[6]}T12:00:00`).toLocaleDateString('sv-SE', { day: 'numeric', month: 'short' })}`
+        : currentDate.toLocaleDateString('sv-SE', { weekday: 'long', day: 'numeric', month: 'long' });
+
   const allTasks = [...activeTasks, ...completedTasks];
+
+  /** Vilken kategori en uppgift hör till. */
+  const taskCategory = (area?: string): CalCategory =>
+    area === "jobb" ? "jobb" : area === "studier" ? "studier" : "privat";
 
   const getItemsForDate = (dateStr: string) => {
     const isToday = dateStr === todayStr;
-    const focus = isToday ? currentFocus : null;
-    const tasks = allTasks.filter(t => t.dueDate === dateStr);
-    const allReminders = activeReminders.filter(r => occursOn(r.date, r.repeat ?? 'none', dateStr));
-    const familyEvents = eventsForDate(dateStr);
-    const allChildEvents = childItems
-      .filter((i) => occursOn(i.date, (i.repeat ?? 'none') as RepeatMode, dateStr))
-      .map((i) => ({ ...i, child: kids.find((c) => c.id === i.child_id) }));
+    const focus = isToday && shows("privat") ? currentFocus : null;
+    const tasks = allTasks.filter(t => t.dueDate === dateStr && shows(taskCategory(t.area)));
+    const allReminders = shows("privat")
+      ? activeReminders.filter(r => occursOn(r.date, r.repeat ?? 'none', dateStr))
+      : [];
+    const familyEvents = shows("familj") ? eventsForDate(dateStr) : [];
+    const allChildEvents = shows("barn")
+      ? childItems
+          .filter((i) => occursOn(i.date, (i.repeat ?? 'none') as RepeatMode, dateStr))
+          .map((i) => ({ ...i, child: kids.find((c) => c.id === i.child_id) }))
+      : [];
 
     // Återkommande poster (som inte startar just denna dag) visas som prick, inte som händelse
     const isRecurringEcho = (date: string | null | undefined, repeat?: string | null) =>
@@ -241,6 +269,7 @@ export default function CalendarPage() {
 
     return { focus, tasks, reminders, familyEvents, childEvents, recurring };
   };
+
 
 
   const days: (string | null)[] = [];
