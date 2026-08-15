@@ -57,6 +57,66 @@ export default function ChildSchedule({
   const [paste, setPaste] = useState("");
   const [showPaste, setShowPaste] = useState(false);
 
+  // Bild eller dokument på schemat
+  const { uploadDoc, openDoc } = useChildren();
+  const [allFiles, setAllFiles] = useCloudSyncedStorage<Record<string, ScheduleFile[]>>(FILES_KEY, {});
+  const files = useMemo(() => allFiles[childId] ?? [], [allFiles, childId]);
+  const [previews, setPreviews] = useState<Record<string, string>>({});
+  const [uploading, setUploading] = useState(false);
+  const fileInput = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      for (const f of files) {
+        if (!f.isImage) continue;
+        try {
+          const url = await openDoc(f.path);
+          if (active) setPreviews((p) => ({ ...p, [f.path]: url }));
+        } catch {
+          /* ignorera */
+        }
+      }
+    })();
+    return () => {
+      active = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [files]);
+
+  const onPickFile = async (file: File | undefined) => {
+    if (!file) return;
+    setUploading(true);
+    try {
+      const path = await uploadDoc(childId, file);
+      const entry: ScheduleFile = {
+        path,
+        name: file.name,
+        isImage: file.type.startsWith("image/"),
+      };
+      setAllFiles((prev) => ({ ...prev, [childId]: [...(prev[childId] ?? []), entry] }));
+      toast.success("Schemat är uppladdat");
+    } catch {
+      toast.error("Kunde inte ladda upp filen");
+    } finally {
+      setUploading(false);
+      if (fileInput.current) fileInput.current.value = "";
+    }
+  };
+
+  const removeFile = (path: string) =>
+    setAllFiles((prev) => ({ ...prev, [childId]: (prev[childId] ?? []).filter((f) => f.path !== path) }));
+
+  const open = async (path: string) => {
+    try {
+      const url = await openDoc(path);
+      window.open(url, "_blank", "noopener");
+    } catch {
+      toast.error("Kunde inte öppna filen");
+    }
+  };
+
+
   const save = (next: ChildScheduleEntry[]) =>
     setAll((prev) => ({ ...prev, [childId]: next }));
 
