@@ -15,6 +15,7 @@ export interface ChildScheduleEntry {
   end?: string; // HH:MM
   title: string;
   location?: string;
+  teacher?: string;
 }
 
 const DAYS = ["Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag", "Söndag"];
@@ -42,6 +43,7 @@ export default function ChildSchedule({
   const [end, setEnd] = useState("");
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
+  const [teacher, setTeacher] = useState("");
   const [paste, setPaste] = useState("");
   const [showPaste, setShowPaste] = useState(false);
 
@@ -60,10 +62,12 @@ export default function ChildSchedule({
         end: end || undefined,
         title: title.trim(),
         location: location.trim() || undefined,
+        teacher: teacher.trim() || undefined,
       },
     ]);
     setTitle("");
     setLocation("");
+    setTeacher("");
     setEnd("");
   };
 
@@ -103,9 +107,9 @@ export default function ChildSchedule({
         title={
           <span className="flex items-center gap-2">
             <CalendarClock size={18} className="text-primary" />
-            {childName}s schema
-            <HelpHint label="barnets schema">
-              Här ligger veckoschemat kvar vecka efter vecka. Lägg in en rad per aktivitet – dagens rader visas markerade.
+            {childName}s skolschema
+            <HelpHint label="barnets skolschema">
+              Lägg in skolschemat en gång – det ligger kvar vecka efter vecka. Dagens lektioner markeras och nästa lektion visas överst.
             </HelpHint>
           </span>
         }
@@ -134,7 +138,7 @@ export default function ChildSchedule({
             <Input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="T.ex. Fotbollsträning"
+              placeholder="Ämne, t.ex. Matematik"
               className="h-11 rounded-2xl"
             />
             <div className="grid grid-cols-2 gap-2">
@@ -156,12 +160,18 @@ export default function ChildSchedule({
             <Input
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              placeholder="Plats (valfritt)"
+              placeholder="Sal eller plats (valfritt)"
+              className="h-11 rounded-2xl"
+            />
+            <Input
+              value={teacher}
+              onChange={(e) => setTeacher(e.target.value)}
+              placeholder="Lärare (valfritt)"
               className="h-11 rounded-2xl"
             />
             <div className="flex gap-2">
               <Button type="submit" className="h-11 rounded-2xl flex-1">
-                <Plus size={18} className="mr-1" /> Lägg till i schemat
+                <Plus size={18} className="mr-1" /> Lägg till lektion
               </Button>
               <Button
                 type="button"
@@ -179,7 +189,7 @@ export default function ChildSchedule({
                   value={paste}
                   onChange={(e) => setPaste(e.target.value)}
                   rows={5}
-                  placeholder={"Måndag 08:20-09:05 Matte, sal 3\nTis 15:00-16:30 Simskola"}
+                  placeholder={"Måndag 08:20-09:05 Matematik, sal 3\nTis 09:15-10:00 Svenska, sal 12"}
                   className="w-full rounded-2xl border border-border bg-background p-3 text-sm"
                 />
                 <Button type="button" variant="outline" className="h-10 rounded-2xl" onClick={importPaste}>
@@ -193,7 +203,7 @@ export default function ChildSchedule({
         <div className="space-y-3">
           {entries.length === 0 ? (
             <p className="text-muted-foreground text-sm">
-              Inget schema än – lägg in en rad i taget, så ligger det kvar.
+              Inget skolschema än – lägg in en lektion i taget, eller klistra in hela schemat.
             </p>
           ) : (
             DAYS.map((day, i) =>
@@ -217,9 +227,9 @@ export default function ChildSchedule({
                         </span>
                         <span className="flex-1 min-w-0">
                           <span className="font-medium">{e.title}</span>
-                          {e.location && (
+                          {(e.location || e.teacher) && (
                             <span className="text-muted-foreground flex items-center gap-1 text-xs">
-                              <MapPin size={12} /> {e.location}
+                              <MapPin size={12} /> {[e.location, e.teacher].filter(Boolean).join(" · ")}
                             </span>
                           )}
                         </span>
