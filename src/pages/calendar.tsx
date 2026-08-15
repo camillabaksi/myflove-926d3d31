@@ -201,6 +201,43 @@ export default function CalendarPage() {
     });
   };
 
+  /** Skapar en händelse i vald kategori på vald dag. */
+  const handleAddAny = async () => {
+    const title = newAnyTitle.trim();
+    if (!title || !selectedDateStr) return;
+    const time = newAnyTime || undefined;
+    try {
+      if (newCat === "familj") {
+        createEventMutation.mutate({
+          data: { title, date: selectedDateStr, time: newAnyTime || null },
+        });
+      } else if (newCat === "barn") {
+        const childId = newAnyChildId || kids[0]?.id;
+        if (!childId) {
+          toast({ description: "Lägg till ett barn först på sidan Barn.", variant: "destructive" });
+          return;
+        }
+        await addChildItem({ childId, kind: "event", title, date: selectedDateStr, time });
+      } else if (newCat === "jobb" || newCat === "studier") {
+        addTask(title, selectedDateStr, { time, area: newCat });
+      } else {
+        if (time && getNotificationPermission() === "default") {
+          await requestNotificationPermission();
+        }
+        addReminder(title, selectedDateStr, time);
+      }
+      if (!visible.includes(newCat)) setVisible((prev) => [...prev, newCat]);
+      setNewAnyTitle("");
+      setNewAnyTime("");
+      setIsAddingAny(false);
+      toast({ description: "Händelsen är inlagd i kalendern." });
+    } catch {
+      toast({ description: "Kunde inte spara händelsen. Försök igen.", variant: "destructive" });
+    }
+  };
+
+
+
   const stepBack = () => {
     if (view === "manad") {
       setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
