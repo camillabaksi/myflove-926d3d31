@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useUser } from "@clerk/react";
 import { useQueryClient } from "@tanstack/react-query";
 import {
@@ -16,15 +17,41 @@ import { useShoppingList as useLocalShoppingList } from "./use-data";
 // list when the signed-in user belongs to a family, falling back to the
 // device-local list otherwise. This keeps the shopping page, the dashboard
 // shortcut, and proximity alerts consistent about where items live.
+const MODE_KEY = "myflove.shoppingListMode";
+export type ShoppingListMode = "shared" | "personal";
+
+function readMode(): ShoppingListMode {
+  if (typeof window === "undefined") return "shared";
+  return window.localStorage.getItem(MODE_KEY) === "personal" ? "personal" : "shared";
+}
+
 export function useSharedShoppingList() {
   const { isSignedIn } = useUser();
+  const [mode, setModeState] = useState<ShoppingListMode>("shared");
+
+  useEffect(() => {
+    setModeState(readMode());
+    const onChange = () => setModeState(readMode());
+    window.addEventListener("myflove-shopping-mode", onChange);
+    window.addEventListener("storage", onChange);
+    return () => {
+      window.removeEventListener("myflove-shopping-mode", onChange);
+      window.removeEventListener("storage", onChange);
+    };
+  }, []);
+
+  const setMode = (next: ShoppingListMode) => {
+    window.localStorage.setItem(MODE_KEY, next);
+    window.dispatchEvent(new Event("myflove-shopping-mode"));
+  };
   const queryClient = useQueryClient();
 
   const { data: household, isLoading: isHouseholdLoading } = useGetMyHousehold({
     query: { queryKey: getGetMyHouseholdQueryKey(), enabled: !!isSignedIn },
   });
 
-  const hasHousehold = !!household?.id;
+  const canShare = !!household?.id;
+  const hasHousehold = canShare && mode === "shared";
 
   const { data: sharedItems = [], isLoading: isItemsLoading } = useListShoppingItems({
     query: { queryKey: getListShoppingItemsQueryKey(), enabled: hasHousehold },
@@ -44,6 +71,9 @@ export function useSharedShoppingList() {
     const completed = sharedItems.filter((i) => i.completed).map(toListItem);
     return {
       isShared: true as const,
+      canShare,
+      mode,
+      setMode,
       isLoading: isHouseholdLoading || isItemsLoading,
       activeItems: active,
       completedItems: completed,
@@ -55,6 +85,9 @@ export function useSharedShoppingList() {
 
   return {
     isShared: false as const,
+    canShare,
+    mode: canShare ? mode : ("personal" as ShoppingListMode),
+    setMode,
     isLoading: isHouseholdLoading,
     activeItems: local.activeItems,
     completedItems: local.completedItems,
