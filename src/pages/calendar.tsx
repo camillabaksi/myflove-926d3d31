@@ -116,6 +116,7 @@ export default function CalendarPage() {
   const [newCat, setNewCat] = useState<CalCategory>("privat");
   const [newAnyTitle, setNewAnyTitle] = useState("");
   const [newAnyTime, setNewAnyTime] = useState("");
+  const [newAnyEndTime, setNewAnyEndTime] = useState("");
   const [newAnyChildId, setNewAnyChildId] = useState<string>("");
   const [newEventTitle, setNewEventTitle] = useState("");
   const [newEventTime, setNewEventTime] = useState("");
@@ -206,10 +207,13 @@ export default function CalendarPage() {
     const title = newAnyTitle.trim();
     if (!title || !selectedDateStr) return;
     const time = newAnyTime || undefined;
+    const endTime = newAnyEndTime || undefined;
+    /** Fritextfält (familj/barn) lagrar intervallet som "09:00–10:00". */
+    const timeRange = time && endTime ? `${time}–${endTime}` : (newAnyTime || null);
     try {
       if (newCat === "familj") {
         createEventMutation.mutate({
-          data: { title, date: selectedDateStr, time: newAnyTime || null },
+          data: { title, date: selectedDateStr, time: timeRange },
         });
       } else if (newCat === "barn") {
         const childId = newAnyChildId || kids[0]?.id;
@@ -217,18 +221,19 @@ export default function CalendarPage() {
           toast({ description: "Lägg till ett barn först på sidan Barn.", variant: "destructive" });
           return;
         }
-        await addChildItem({ childId, kind: "activity", title, date: selectedDateStr, time });
+        await addChildItem({ childId, kind: "activity", title, date: selectedDateStr, time: timeRange ?? undefined });
       } else if (newCat === "jobb" || newCat === "studier") {
-        addTask(title, selectedDateStr, { time, area: newCat });
+        addTask(title, selectedDateStr, { time, endTime, area: newCat });
       } else {
         if (time && getNotificationPermission() === "default") {
           await requestNotificationPermission();
         }
-        addReminder(title, selectedDateStr, time);
+        addReminder(title, selectedDateStr, time, "none", endTime);
       }
       if (!visible.includes(newCat)) setVisible((prev) => [...prev, newCat]);
       setNewAnyTitle("");
       setNewAnyTime("");
+      setNewAnyEndTime("");
       setIsAddingAny(false);
       toast({ description: "Händelsen är inlagd i kalendern." });
     } catch {
@@ -675,7 +680,7 @@ export default function CalendarPage() {
                     <Bell className="text-primary shrink-0" size={24} />
                     <div className="min-w-0">
                       <div className="text-xs text-primary font-medium uppercase tracking-wider mb-0.5">
-                        Påminnelse {r.time && `kl ${r.time}`}
+                        Påminnelse {r.time && `kl ${r.time}${r.endTime ? `–${r.endTime}` : ""}`}
                       </div>
                       <div className="text-lg font-medium truncate">{r.title}</div>
                     </div>
@@ -706,7 +711,7 @@ export default function CalendarPage() {
                     <div className="flex-1 min-w-0">
                       {t.time && (
                         <div className="text-xs text-primary font-medium uppercase tracking-wider mb-0.5">
-                          kl {t.time}
+                          kl {t.time}{t.endTime ? `–${t.endTime}` : ""}
                           {t.reminderMinutesBefore != null && ` · påminn ${t.reminderMinutesBefore} min innan`}
                         </div>
                       )}
@@ -1000,14 +1005,26 @@ export default function CalendarPage() {
                 />
               </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Tid (valfritt)</label>
-                <Input
-                  type="time"
-                  value={newAnyTime}
-                  onChange={(e) => setNewAnyTime(e.target.value)}
-                  className="h-12 rounded-2xl"
-                />
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Starttid (valfritt)</label>
+                  <Input
+                    type="time"
+                    value={newAnyTime}
+                    onChange={(e) => setNewAnyTime(e.target.value)}
+                    className="h-12 rounded-2xl"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Sluttid (valfritt)</label>
+                  <Input
+                    type="time"
+                    value={newAnyEndTime}
+                    onChange={(e) => setNewAnyEndTime(e.target.value)}
+                    disabled={!newAnyTime}
+                    className="h-12 rounded-2xl"
+                  />
+                </div>
               </div>
 
               <p className="text-xs text-muted-foreground">
