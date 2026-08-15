@@ -19,6 +19,9 @@ import { useReminderSync } from "@/hooks/use-reminder-sync";
 import { AreaSwitcher } from "@/components/area-switcher";
 import { AreaOnboarding } from "@/components/area-onboarding";
 import { AREA_META, filterByArea, useActiveArea, type LifeArea } from "@/lib/life-areas";
+import ViewModeToggle from "@/components/view-mode-toggle";
+import { useViewMode } from "@/lib/view-mode";
+
 
 /**
  * Vilka block som hör hemma i vilket rum. Är du i ett rum visas bara
@@ -37,6 +40,11 @@ const SECTION_AREAS: Record<string, LifeArea[]> = {
   push: ["vardag"],
   help: ["vardag", "privat"],
 };
+
+/** Vad som är kvar i förenklad vy – det du faktiskt behöver just nu. */
+const SIMPLE_SECTIONS = ["today", "shortcuts", "help"];
+
+
 
 
 import {
@@ -81,8 +89,14 @@ export default function Home() {
   const { currentFocus, toggleFocusCompleted } = useFocus();
   const { activeTasks, toggleTask } = useTasks();
   const { activeArea } = useActiveArea();
-  const showSection = (id: string) =>
-    activeArea === "alla" || (SECTION_AREAS[id] ?? []).includes(activeArea);
+  const { isSimple } = useViewMode(activeArea);
+  const showSection = (id: string) => {
+    const inArea = activeArea === "alla" || (SECTION_AREAS[id] ?? []).includes(activeArea);
+    if (!inArea) return false;
+    // Förenklad vy: bara det viktigaste i rummet du står i.
+    return isSimple ? SIMPLE_SECTIONS.includes(id) : true;
+  };
+
 
   const { activeReminders: _activeReminders } = useReminders();
   const { transactions } = useFinances();
