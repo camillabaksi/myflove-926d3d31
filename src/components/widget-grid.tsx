@@ -4,7 +4,8 @@ import {
   Smile, Target, CheckSquare, ShoppingBag, Calendar, Pill, Timer, Wallet, BarChart3, OctagonAlert,
   type LucideIcon,
 } from "lucide-react";
-import { useMoods, useFocus, useTasks, useShoppingList, useReminders, useMedications, useFinances } from "@/hooks/use-data";
+import { useMoods, useFocus, useTasks, useReminders, useMedications, useFinances } from "@/hooks/use-data";
+import { useSharedShoppingList } from "@/hooks/use-shared-shopping-list";
 import { useLocalStorage } from "@/lib/storage";
 import { getWeeklyMoodStats } from "@/lib/mood-stats";
 import StopModal from "@/components/stop-modal";
