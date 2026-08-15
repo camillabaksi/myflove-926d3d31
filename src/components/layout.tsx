@@ -104,6 +104,7 @@ const CATEGORY_THEMES: Record<string, Record<string, string>> = {
 
 export default function Layout({ children }: LayoutProps) {
   const [location] = useLocation();
+  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { signOut } = useClerk();
   const { alerts, dismissAlert } = useCommuteAlerts();
@@ -115,13 +116,16 @@ export default function Layout({ children }: LayoutProps) {
   const { isAdmin } = useIsAdmin();
   const { enabled: enabledAreas } = useEnabledAreas();
 
-  const canGoBack = location !== "/";
+  // Använd TanStack-routerns faktiska location så tillbakaknappen alltid
+  // synkar med appens historik – även vid djupa länkar eller SPA-navigering.
+  const tanstackLocation = router.state.location.pathname;
+  const canGoBack = tanstackLocation !== "/";
   const handleBack = () => {
     if (typeof window === "undefined") return;
-    if (window.history.length > 1) {
-      window.history.back();
+    if (router.history.length > 1) {
+      router.history.back();
     } else {
-      window.location.href = "/hem";
+      router.navigate({ to: "/hem" });
     }
   };
 
