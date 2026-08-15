@@ -26,6 +26,7 @@ import { useToast } from "@/hooks/use-toast";
 import { syncReminder, cancelReminder } from "@/lib/push.functions";
 import { celebrateFromEvent } from "@/lib/celebrate";
 import CollapsibleSection from "@/components/collapsible-section";
+import ChildSchedule from "@/components/child-schedule";
 
 const KIND_META: Record<ChildItemKind, { label: string; icon: typeof Baby }> = {
   activity: { label: "Aktivitet", icon: CalendarDays },
@@ -275,7 +276,9 @@ function ChildrenContent() {
 
       {activeChild && (
         <>
-          {/* Lägg till innehåll */}
+          <ChildSchedule childId={activeChild.id} childName={activeChild.name} canEdit={isOwner} />
+
+
           {isOwner && (
             <section className="surface-card p-5">
               <CollapsibleSection
