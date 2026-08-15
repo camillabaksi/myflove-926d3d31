@@ -253,6 +253,10 @@ export default function MealPlannerPage() {
             <p className="text-sm text-muted-foreground">
               Planera veckans måltider – för dig själv eller hela familjen.
             </p>
+            <span className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-xs text-secondary-foreground">
+              <ShoppingCart size={12} />
+              {isShared ? "Varor skickas till familjens inköpslista" : "Varor skickas till din egen inköpslista"}
+            </span>
           </div>
           <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
             <UtensilsCrossed size={20} />
