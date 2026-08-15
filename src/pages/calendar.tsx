@@ -28,6 +28,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import CollapsibleSection from "@/components/collapsible-section";
 import { useLocalStorage } from "@/lib/storage";
+import { pictogramFor } from "@/lib/pictograms";
 
 export type CalCategory = "privat" | "familj" | "barn" | "jobb" | "studier";
 
@@ -109,6 +110,8 @@ export default function CalendarPage() {
 
   const [currentDate, setCurrentDate] = useState(new Date());
   const [view, setView] = useLocalStorage<CalView>("myflove-calendar-view", "manad");
+  /** Bildstöd: stora symboler per händelse i dagsvyn. */
+  const [pictoMode, setPictoMode] = useLocalStorage<boolean>("myflove-calendar-pictograms", false);
   const [visible, setVisible] = useLocalStorage<CalCategory[]>(
     "myflove-calendar-categories",
     ALL_CATEGORIES,
@@ -614,6 +617,19 @@ export default function CalendarPage() {
                   <Plus size={16} />
                   Påminnelse
                 </button>
+                <button
+                  onClick={() => setPictoMode(!pictoMode)}
+                  aria-pressed={pictoMode}
+                  title="Visa stora symboler för varje händelse"
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-2xl text-sm font-medium border transition-colors ${
+                    pictoMode
+                      ? "bg-accent/30 border-accent/40 text-foreground"
+                      : "bg-secondary/50 border-transparent text-muted-foreground hover:border-primary/30"
+                  }`}
+                >
+                  <span aria-hidden>🖼️</span>
+                  Bildstöd
+                </button>
               </div>
 
             </div>
@@ -636,6 +652,7 @@ export default function CalendarPage() {
                       className="w-1.5 h-1.5 rounded-full"
                       style={{ backgroundColor: r.color ?? 'hsl(var(--primary))' }}
                     />
+                    {pictoMode && <span aria-hidden>{pictogramFor(r.title, "🔁")}</span>}
                     {r.title}{r.time && ` · ${r.time}`}
                   </span>
                 ))}
@@ -650,7 +667,11 @@ export default function CalendarPage() {
                   href="/barn"
                   className="flex items-center gap-4 p-4 bg-card border border-border rounded-2xl hover:bg-secondary transition-colors"
                 >
-                  <Baby style={{ color: e.child?.color ?? '#a06cd5' }} size={24} />
+                  {pictoMode ? (
+                    <span className="text-3xl leading-none shrink-0" aria-hidden>{pictogramFor(e.title, "🐣")}</span>
+                  ) : (
+                    <Baby style={{ color: e.child?.color ?? '#a06cd5' }} size={24} />
+                  )}
                   <div className="min-w-0">
                     <div
                       className="text-xs font-medium uppercase tracking-wider mb-0.5"
@@ -667,7 +688,11 @@ export default function CalendarPage() {
               {selectedItems.familyEvents.map(e => (
                 <div key={`fam-${e.id}`} className="flex items-center justify-between gap-4 p-4 bg-card border border-border rounded-2xl group">
                   <div className="flex items-center gap-4">
-                    <Users style={{ color: e.member?.color ?? '#8a9a5b' }} size={24} />
+                    {pictoMode ? (
+                      <span className="text-3xl leading-none shrink-0" aria-hidden>{pictogramFor(e.title, "👨‍👩‍👧")}</span>
+                    ) : (
+                      <Users style={{ color: e.member?.color ?? '#8a9a5b' }} size={24} />
+                    )}
                     <div>
                       <div
                         className="text-xs font-medium uppercase tracking-wider mb-0.5"
@@ -691,7 +716,11 @@ export default function CalendarPage() {
 
               {selectedItems.focus && (
                 <div className="flex items-center gap-4 p-4 bg-accent/20 border border-accent/30 rounded-2xl">
-                  <Target className="text-accent-foreground" size={24} />
+                  {pictoMode ? (
+                    <span className="text-3xl leading-none shrink-0" aria-hidden>{pictogramFor(selectedItems.focus.text, "🎯")}</span>
+                  ) : (
+                    <Target className="text-accent-foreground" size={24} />
+                  )}
                   <div>
                     <div className="text-xs text-accent-foreground font-medium uppercase tracking-wider mb-0.5">Dagens fokus</div>
                     <div className="text-lg font-medium">{selectedItems.focus.text}</div>
@@ -702,7 +731,11 @@ export default function CalendarPage() {
               {selectedItems.reminders.map(r => (
                 <div key={r.id} className="flex items-center justify-between gap-4 p-4 bg-primary/5 border border-primary/10 rounded-2xl">
                   <div className="flex items-center gap-4 min-w-0">
-                    <Bell className="text-primary shrink-0" size={24} />
+                    {pictoMode ? (
+                      <span className="text-3xl leading-none shrink-0" aria-hidden>{pictogramFor(r.title, "🔔")}</span>
+                    ) : (
+                      <Bell className="text-primary shrink-0" size={24} />
+                    )}
                     <div className="min-w-0">
                       <div className="text-xs text-primary font-medium uppercase tracking-wider mb-0.5">
                         Påminnelse {r.time && `kl ${r.time}${r.endTime ? `–${r.endTime}` : ""}`}
@@ -732,7 +765,11 @@ export default function CalendarPage() {
               {selectedItems.tasks.map(t => (
                 <div key={t.id} className={`flex items-center justify-between gap-4 p-4 bg-card border border-border rounded-2xl ${t.completed ? 'opacity-60' : ''}`}>
                   <div className="flex items-center gap-4 min-w-0">
-                    <CheckSquare className={t.completed ? "text-primary" : "text-muted-foreground"} size={24} />
+                    {pictoMode ? (
+                      <span className="text-3xl leading-none shrink-0" aria-hidden>{pictogramFor(t.title, "✅")}</span>
+                    ) : (
+                      <CheckSquare className={t.completed ? "text-primary" : "text-muted-foreground"} size={24} />
+                    )}
                     <div className="flex-1 min-w-0">
                       {t.time && (
                         <div className="text-xs text-primary font-medium uppercase tracking-wider mb-0.5">
