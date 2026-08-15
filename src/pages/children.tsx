@@ -51,7 +51,7 @@ function ChildrenContent() {
     members,
     loading,
     error,
-    load,
+    reload,
     addChild,
     deleteChild,
     addItem,
@@ -219,7 +219,7 @@ function ChildrenContent() {
     return (
       <div className="py-16 text-center space-y-3">
         <p className="text-destructive">{error}</p>
-        <Button variant="outline" className="rounded-2xl" onClick={() => void load()}>
+        <Button variant="outline" className="rounded-2xl" onClick={() => void reload()}>
           Försök igen
         </Button>
       </div>
