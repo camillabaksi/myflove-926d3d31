@@ -37,7 +37,7 @@ export default function WidgetGrid() {
   const { moods } = useMoods();
   const { currentFocus, completedFocusCount } = useFocus();
   const { activeTasks } = useTasks();
-  const { activeItems } = useShoppingList();
+  const { activeItems } = useSharedShoppingList();
   const { activeReminders } = useReminders();
   const { medications, isTaken } = useMedications();
   const { transactions } = useFinances();
