@@ -171,7 +171,7 @@ function EditSlotDialog({
 
 export default function MealPlannerPage() {
   const [plans, setPlans] = useLocalStorage<MealPlan[]>("myflow-meal-plans", []);
-  const { addItem } = useShoppingList();
+  const { addItem, isShared } = useSharedShoppingList();
   const { toast } = useToast();
   const [editing, setEditing] = useState<EditingSlot | null>(null);
   const { favorites, recent, remember, toggleFavorite, remove: removeRecipe, suggest } =
