@@ -935,6 +935,98 @@ export default function CalendarPage() {
           </DialogContent>
         </Dialog>
 
+        <Dialog open={isAddingAny} onOpenChange={setIsAddingAny}>
+          <DialogContent className="rounded-3xl">
+            <DialogHeader>
+              <DialogTitle>Ny händelse</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4 pt-2">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Kategori</label>
+                <div className="flex flex-wrap gap-2">
+                  {CATEGORIES.map((c) => {
+                    const disabled =
+                      (c.id === "familj" && !hasHousehold) || (c.id === "barn" && kids.length === 0);
+                    return (
+                      <button
+                        key={c.id}
+                        type="button"
+                        disabled={disabled}
+                        onClick={() => setNewCat(c.id)}
+                        title={disabled ? "Kräver familj respektive barn i appen" : undefined}
+                        className={`px-3 py-2 rounded-full text-sm font-medium border transition-all disabled:opacity-40 ${
+                          newCat === c.id ? "text-white border-transparent" : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
+                        }`}
+                        style={newCat === c.id ? { backgroundColor: c.color } : undefined}
+                      >
+                        {c.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {newCat === "barn" && kids.length > 0 && (
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Vilket barn?</label>
+                  <div className="flex flex-wrap gap-2">
+                    {kids.map((k) => (
+                      <button
+                        key={k.id}
+                        type="button"
+                        onClick={() => setNewAnyChildId(k.id)}
+                        className={`px-3 py-2 rounded-full text-sm font-medium border transition-all ${
+                          (newAnyChildId || kids[0]?.id) === k.id
+                            ? "text-white border-transparent"
+                            : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
+                        }`}
+                        style={(newAnyChildId || kids[0]?.id) === k.id ? { backgroundColor: k.color } : undefined}
+                      >
+                        {k.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Vad händer?</label>
+                <Input
+                  value={newAnyTitle}
+                  onChange={(e) => setNewAnyTitle(e.target.value)}
+                  placeholder="T.ex. Tandläkare"
+                  className="h-12 rounded-2xl"
+                  autoFocus
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Tid (valfritt)</label>
+                <Input
+                  type="time"
+                  value={newAnyTime}
+                  onChange={(e) => setNewAnyTime(e.target.value)}
+                  className="h-12 rounded-2xl"
+                />
+              </div>
+
+              <p className="text-xs text-muted-foreground">
+                Läggs in på {selectedDateStr === todayStr ? "idag" : selectedDateStr}.
+              </p>
+
+              <Button
+                onClick={handleAddAny}
+                disabled={!newAnyTitle.trim()}
+                className="w-full h-12 rounded-2xl"
+              >
+                Lägg till
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+
+
       </div>
     </Layout>
   );
