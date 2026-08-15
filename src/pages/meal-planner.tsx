@@ -227,9 +227,11 @@ export default function MealPlannerPage() {
     toast({ description: `${r.dish} inlagd på ${WEEKDAYS[weekday]!.toLowerCase()}.` });
   };
 
+  const listLabel = isShared ? "familjens inköpslista" : "din inköpslista";
+
   const sendToShoppingList = (ingredients: string[]) => {
     ingredients.forEach((i) => addItem(i));
-    toast({ description: `${ingredients.length} varor tillagda i inköpslistan!` });
+    toast({ description: `${ingredients.length} varor tillagda i ${listLabel}!` });
   };
 
   const sendWeekToShoppingList = () => {
@@ -239,7 +241,7 @@ export default function MealPlannerPage() {
       return;
     }
     all.forEach((i) => addItem(i));
-    toast({ description: `${all.length} varor tillagda i inköpslistan!` });
+    toast({ description: `${all.length} varor tillagda i ${listLabel}!` });
   };
 
   return (
