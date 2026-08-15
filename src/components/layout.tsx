@@ -1,5 +1,6 @@
 import { ReactNode, useState, useEffect, useMemo } from "react";
 import { Link, useLocation } from "wouter";
+import { useRouter } from "@tanstack/react-router";
 import { Home, Target, CheckSquare, ShoppingBag, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Settings2, Check, RotateCcw, ArrowUp, ArrowDown, LogOut, Volume2, VolumeX, Shield, Heart, Sun, Search, GraduationCap, Briefcase, Baby, CalendarDays, Brain, HeartPulse, House, BookOpen, Building2, LayoutGrid, Dumbbell, SprayCan, Zap, Gauge, ArrowLeft } from "lucide-react";
 import { isAlarmSoundEnabled, setAlarmSoundEnabled, subscribeAlarmPref, playAlarmPreview, initAlarmAudioUnlock } from "@/lib/push-notifications";
 import { useCommuteAlerts } from "@/hooks/use-commute-alerts";
@@ -103,6 +104,7 @@ const CATEGORY_THEMES: Record<string, Record<string, string>> = {
 
 export default function Layout({ children }: LayoutProps) {
   const [location] = useLocation();
+  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { signOut } = useClerk();
   const { alerts, dismissAlert } = useCommuteAlerts();
@@ -114,13 +116,16 @@ export default function Layout({ children }: LayoutProps) {
   const { isAdmin } = useIsAdmin();
   const { enabled: enabledAreas } = useEnabledAreas();
 
-  const canGoBack = location !== "/";
+  // Använd TanStack-routerns faktiska location så tillbakaknappen alltid
+  // synkar med appens historik – även vid djupa länkar eller SPA-navigering.
+  const tanstackLocation = router.state.location.pathname;
+  const canGoBack = tanstackLocation !== "/";
   const handleBack = () => {
     if (typeof window === "undefined") return;
-    if (window.history.length > 1) {
-      window.history.back();
+    if (router.history.length > 1) {
+      router.history.back();
     } else {
-      window.location.href = "/hem";
+      router.navigate({ to: "/hem" });
     }
   };
 
