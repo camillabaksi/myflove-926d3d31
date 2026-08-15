@@ -39,6 +39,7 @@ export interface Task {
   completedAt?: number;
   dueDate?: string; // ISO date string YYYY-MM-DD
   time?: string; // HH:MM (t.ex. "11:00" för ett möte)
+  endTime?: string; // HH:MM, valfri sluttid
   reminderMinutesBefore?: number; // valfri påminnelse: minuter före `time`
   snoozedUntil?: string; // ISO date string YYYY-MM-DD; hidden from view until this date has passed
   kind?: TaskKind; // default "uppgift"
