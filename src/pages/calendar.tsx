@@ -27,6 +27,44 @@ import {
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import CollapsibleSection from "@/components/collapsible-section";
+import { useLocalStorage } from "@/lib/storage";
+
+export type CalCategory = "privat" | "familj" | "barn" | "jobb" | "studier";
+
+const CATEGORIES: { id: CalCategory; label: string; color: string }[] = [
+  { id: "privat", label: "Privat", color: "hsl(152 40% 28%)" },
+  { id: "familj", label: "Familj", color: "#8a9a5b" },
+  { id: "barn", label: "Barn", color: "#a06cd5" },
+  { id: "jobb", label: "Jobb", color: "hsl(205 45% 34%)" },
+  { id: "studier", label: "Studier", color: "hsl(265 32% 45%)" },
+];
+
+const ALL_CATEGORIES: CalCategory[] = CATEGORIES.map((c) => c.id);
+
+type CalView = "manad" | "vecka" | "dag";
+
+/** YYYY-MM-DD i lokal tid */
+function fmtDate(d: Date) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
+/** Måndagen i veckan för ett givet datum */
+function startOfWeek(d: Date) {
+  const copy = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  const wd = copy.getDay() === 0 ? 6 : copy.getDay() - 1;
+  copy.setDate(copy.getDate() - wd);
+  return copy;
+}
+
+function addDays(d: Date, n: number) {
+  const copy = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  copy.setDate(copy.getDate() + n);
+  return copy;
+}
+
 
 function useFamilyEventsByDate() {
   const { isSignedIn } = useUser();
@@ -59,6 +97,17 @@ export default function CalendarPage() {
   const queryClient = useQueryClient();
 
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [view, setView] = useLocalStorage<CalView>("myflove-calendar-view", "manad");
+  const [visible, setVisible] = useLocalStorage<CalCategory[]>(
+    "myflove-calendar-categories",
+    ALL_CATEGORIES,
+  );
+  const shows = (c: CalCategory) => visible.includes(c);
+  const toggleCategory = (c: CalCategory) =>
+    setVisible((prev) =>
+      prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c],
+    );
+
   const [selectedDateStr, setSelectedDateStr] = useState(
     new Date().toLocaleDateString('sv-SE').split(' ')[0] // fallback format YYYY-MM-DD
   );
@@ -147,12 +196,24 @@ export default function CalendarPage() {
     });
   };
 
-  const prevMonth = () => {
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
+  const stepBack = () => {
+    if (view === "manad") {
+      setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
+    } else {
+      const next = addDays(currentDate, view === "vecka" ? -7 : -1);
+      setCurrentDate(next);
+      setSelectedDateStr(fmtDate(next));
+    }
   };
 
-  const nextMonth = () => {
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
+  const stepForward = () => {
+    if (view === "manad") {
+      setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
+    } else {
+      const next = addDays(currentDate, view === "vecka" ? 7 : 1);
+      setCurrentDate(next);
+      setSelectedDateStr(fmtDate(next));
+    }
   };
 
   const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
@@ -163,17 +224,33 @@ export default function CalendarPage() {
   const monthName = currentDate.toLocaleDateString('sv-SE', { month: 'long', year: 'numeric' });
   const todayStr = new Date().toLocaleDateString('sv-SE').split(' ')[0];
 
+  const weekDays = Array.from({ length: 7 }, (_, i) => fmtDate(addDays(startOfWeek(currentDate), i)));
+  const periodLabel =
+    view === "manad"
+      ? monthName
+      : view === "vecka"
+        ? `${new Date(`${weekDays[0]}T12:00:00`).toLocaleDateString('sv-SE', { day: 'numeric', month: 'short' })} – ${new Date(`${weekDays[6]}T12:00:00`).toLocaleDateString('sv-SE', { day: 'numeric', month: 'short' })}`
+        : currentDate.toLocaleDateString('sv-SE', { weekday: 'long', day: 'numeric', month: 'long' });
+
   const allTasks = [...activeTasks, ...completedTasks];
+
+  /** Vilken kategori en uppgift hör till. */
+  const taskCategory = (area?: string): CalCategory =>
+    area === "jobb" ? "jobb" : area === "studier" ? "studier" : "privat";
 
   const getItemsForDate = (dateStr: string) => {
     const isToday = dateStr === todayStr;
-    const focus = isToday ? currentFocus : null;
-    const tasks = allTasks.filter(t => t.dueDate === dateStr);
-    const allReminders = activeReminders.filter(r => occursOn(r.date, r.repeat ?? 'none', dateStr));
-    const familyEvents = eventsForDate(dateStr);
-    const allChildEvents = childItems
-      .filter((i) => occursOn(i.date, (i.repeat ?? 'none') as RepeatMode, dateStr))
-      .map((i) => ({ ...i, child: kids.find((c) => c.id === i.child_id) }));
+    const focus = isToday && shows("privat") ? currentFocus : null;
+    const tasks = allTasks.filter(t => t.dueDate === dateStr && shows(taskCategory(t.area)));
+    const allReminders = shows("privat")
+      ? activeReminders.filter(r => occursOn(r.date, r.repeat ?? 'none', dateStr))
+      : [];
+    const familyEvents = shows("familj") ? eventsForDate(dateStr) : [];
+    const allChildEvents = shows("barn")
+      ? childItems
+          .filter((i) => occursOn(i.date, (i.repeat ?? 'none') as RepeatMode, dateStr))
+          .map((i) => ({ ...i, child: kids.find((c) => c.id === i.child_id) }))
+      : [];
 
     // Återkommande poster (som inte startar just denna dag) visas som prick, inte som händelse
     const isRecurringEcho = (date: string | null | undefined, repeat?: string | null) =>
@@ -192,6 +269,7 @@ export default function CalendarPage() {
 
     return { focus, tasks, reminders, familyEvents, childEvents, recurring };
   };
+
 
 
   const days: (string | null)[] = [];
@@ -261,22 +339,77 @@ export default function CalendarPage() {
         <div className="bg-card rounded-3xl border border-border shadow-sm overflow-hidden">
           <div className="p-6 pb-2">
             <CollapsibleSection
-              title={monthName}
+              title={periodLabel}
               id="månadsöversikt"
-              help="Tryck på en dag för att se vad som händer. Prickar betyder att något är inlagt."
+              help="Välj månad, vecka eller dag – och kryssa i vilka kategorier du vill se."
               headingClassName="text-xl font-medium capitalize"
               actions={
                 <div className="flex items-center gap-1">
-                  <button onClick={prevMonth} className="p-2 hover:bg-secondary rounded-xl transition-colors">
+                  <button onClick={stepBack} aria-label="Föregående" className="p-2 hover:bg-secondary rounded-xl transition-colors">
                     <ChevronLeft size={24} />
                   </button>
-                  <button onClick={nextMonth} className="p-2 hover:bg-secondary rounded-xl transition-colors">
+                  <button onClick={stepForward} aria-label="Nästa" className="p-2 hover:bg-secondary rounded-xl transition-colors">
                     <ChevronRight size={24} />
                   </button>
                 </div>
               }
             >
+          <div className="flex flex-wrap items-center gap-2 pt-2">
+            <div role="group" aria-label="Välj vy" className="inline-flex items-center gap-1 rounded-full border border-border/60 bg-secondary/40 p-1">
+              {([["manad", "Månad"], ["vecka", "Vecka"], ["dag", "Dag"]] as const).map(([id, label]) => (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => {
+                    setView(id);
+                    if (id !== "manad" && selectedDateStr) setCurrentDate(new Date(`${selectedDateStr}T12:00:00`));
+                  }}
+                  aria-pressed={view === id}
+                  className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
+                    view === id ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                const now = new Date();
+                setCurrentDate(now);
+                setSelectedDateStr(fmtDate(now));
+              }}
+              className="rounded-full border border-border/60 px-3 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground"
+            >
+              Idag
+            </button>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2 pt-3" role="group" aria-label="Visa kategorier">
+            {CATEGORIES.map((c) => {
+              const active = shows(c.id);
+              return (
+                <button
+                  key={c.id}
+                  type="button"
+                  onClick={() => toggleCategory(c.id)}
+                  aria-pressed={active}
+                  className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
+                    active ? "text-foreground" : "text-muted-foreground/60 border-border/50"
+                  }`}
+                  style={active ? { backgroundColor: `${c.color}22`, borderColor: `${c.color}66` } : undefined}
+                >
+                  <span className="w-2 h-2 rounded-full" style={{ backgroundColor: active ? c.color : "hsl(var(--muted-foreground))" }} />
+                  {c.label}
+                </button>
+              );
+            })}
+          </div>
+
+          {view === "manad" && (
           <div className="pt-2">
+
             <div className="grid grid-cols-7 gap-1 mb-2 text-center text-sm font-medium text-muted-foreground">
               <div>Må</div><div>Ti</div><div>On</div><div>To</div><div>Fr</div><div>Lö</div><div>Sö</div>
             </div>
@@ -339,6 +472,49 @@ export default function CalendarPage() {
               })}
             </div>
           </div>
+          )}
+
+          {view === "vecka" && (
+            <div className="pt-2 grid grid-cols-1 sm:grid-cols-7 gap-2">
+              {weekDays.map((dateStr) => {
+                const d = new Date(`${dateStr}T12:00:00`);
+                const items = getItemsForDate(dateStr);
+                const entries = [
+                  ...items.childEvents.map((e) => ({ id: `c-${e.id}`, title: e.title, time: e.time ?? "", color: e.child?.color ?? '#a06cd5' })),
+                  ...items.familyEvents.map((e) => ({ id: `f-${e.id}`, title: e.title, time: e.time ?? "", color: e.member?.color ?? '#8a9a5b' })),
+                  ...items.reminders.map((r) => ({ id: `r-${r.id}`, title: r.title, time: r.time ?? "", color: 'hsl(var(--primary))' })),
+                  ...items.tasks.map((t) => ({ id: `t-${t.id}`, title: t.title, time: t.time ?? "", color: 'hsl(var(--muted-foreground))' })),
+                ].sort((a, b) => (a.time || "99").localeCompare(b.time || "99"));
+                const isSelected = dateStr === selectedDateStr;
+                return (
+                  <button
+                    key={dateStr}
+                    onClick={() => setSelectedDateStr(dateStr)}
+                    className={`text-left rounded-2xl border p-2 min-h-24 transition-colors ${
+                      isSelected ? 'border-primary bg-primary/5' : 'border-border hover:bg-secondary'
+                    }`}
+                  >
+                    <div className={`text-xs font-medium mb-1 ${dateStr === todayStr ? 'text-primary' : 'text-muted-foreground'}`}>
+                      {d.toLocaleDateString('sv-SE', { weekday: 'short', day: 'numeric' })}
+                    </div>
+                    <div className="space-y-1">
+                      {entries.slice(0, 4).map((e) => (
+                        <div key={e.id} className="flex items-center gap-1.5 text-xs text-foreground">
+                          <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: e.color }} />
+                          <span className="truncate">{e.time && `${e.time} `}{e.title}</span>
+                        </div>
+                      ))}
+                      {entries.length > 4 && (
+                        <div className="text-xs text-muted-foreground">+{entries.length - 4} till</div>
+                      )}
+                      {entries.length === 0 && <div className="text-xs text-muted-foreground/60">–</div>}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
             </CollapsibleSection>
           </div>
         </div>
