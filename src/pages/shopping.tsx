@@ -120,7 +120,7 @@ function StoreLocations() {
 }
 
 export default function Shopping() {
-  const { isShared, activeItems, completedItems, addItem, toggleItem, deleteItem } = useSharedShoppingList();
+  const { isShared, canShare, mode, setMode, activeItems, completedItems, addItem, toggleItem, deleteItem } = useSharedShoppingList();
   const { toast } = useToast();
   const [newItem, setNewItem] = useState("");
 
@@ -150,12 +150,30 @@ export default function Shopping() {
         <div>
           <h1 className="text-3xl font-bold mb-2">Inköpslista</h1>
           <p className="text-muted-foreground">Vad behöver du handla? Släpp tanken på att komma ihåg allt.</p>
-          {isShared && (
-            <div className="mt-3 inline-flex items-center gap-2 text-sm text-primary bg-primary/10 px-3 py-1.5 rounded-full">
-              <Users size={16} />
-              Delad med din familj
+          {canShare ? (
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              <div className="inline-flex rounded-full bg-muted p-1">
+                <button
+                  type="button"
+                  onClick={() => setMode("shared")}
+                  className={`px-3 py-1.5 text-sm rounded-full transition ${mode === "shared" ? "bg-card shadow-sm text-primary" : "text-muted-foreground"}`}
+                >
+                  Delad med familjen
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMode("personal")}
+                  className={`px-3 py-1.5 text-sm rounded-full transition ${mode === "personal" ? "bg-card shadow-sm text-primary" : "text-muted-foreground"}`}
+                >
+                  Bara min lista
+                </button>
+              </div>
+              <span className="text-sm text-muted-foreground inline-flex items-center gap-1.5">
+                <Users size={14} />
+                {isShared ? "Alla i familjen ser den här listan" : "Bara du ser den här listan"}
+              </span>
             </div>
-          )}
+          ) : null}
         </div>
 
         <form onSubmit={handleSubmit} className="flex gap-3">
