@@ -217,7 +217,7 @@ export default function CalendarPage() {
           toast({ description: "Lägg till ett barn först på sidan Barn.", variant: "destructive" });
           return;
         }
-        await addChildItem({ childId, kind: "event", title, date: selectedDateStr, time });
+        await addChildItem({ childId, kind: "activity", title, date: selectedDateStr, time });
       } else if (newCat === "jobb" || newCat === "studier") {
         addTask(title, selectedDateStr, { time, area: newCat });
       } else {
