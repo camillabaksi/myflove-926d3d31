@@ -112,6 +112,7 @@ export function useTasks() {
       kind?: TaskKind;
       waitingOn?: string;
       time?: string;
+      endTime?: string;
       reminderMinutesBefore?: number;
       area?: LifeArea;
       courseId?: string;
@@ -130,6 +131,7 @@ export function useTasks() {
         createdAt: Date.now(),
         dueDate: dueDate ?? getTodayDateString(),
         time: opts?.time,
+        endTime: opts?.endTime,
         reminderMinutesBefore: opts?.reminderMinutesBefore,
         kind: opts?.kind ?? "uppgift",
         status: opts?.waitingOn ? "vantar" : "pagar",
@@ -482,6 +484,7 @@ export interface Reminder {
   title: string;
   date: string; // ISO date string YYYY-MM-DD (startdatum om återkommande)
   time?: string; // HH:MM
+  endTime?: string; // HH:MM, valfri sluttid
   completed: boolean;
   createdAt: number;
   repeat?: RepeatMode; // default 'none'
@@ -490,12 +493,13 @@ export interface Reminder {
 export function useReminders() {
   const [reminders, setReminders] = useCloudSyncedStorage<Reminder[]>('myflow-reminders', []);
 
-  const addReminder = (title: string, date: string, time?: string, repeat: RepeatMode = 'none') => {
+  const addReminder = (title: string, date: string, time?: string, repeat: RepeatMode = 'none', endTime?: string) => {
     setReminders([{
       id: generateId(),
       title,
       date,
       time,
+      endTime,
       completed: false,
       createdAt: Date.now(),
       repeat,
