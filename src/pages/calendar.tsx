@@ -27,6 +27,44 @@ import {
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import CollapsibleSection from "@/components/collapsible-section";
+import { useLocalStorage } from "@/lib/storage";
+
+export type CalCategory = "privat" | "familj" | "barn" | "jobb" | "studier";
+
+const CATEGORIES: { id: CalCategory; label: string; color: string }[] = [
+  { id: "privat", label: "Privat", color: "hsl(152 40% 28%)" },
+  { id: "familj", label: "Familj", color: "#8a9a5b" },
+  { id: "barn", label: "Barn", color: "#a06cd5" },
+  { id: "jobb", label: "Jobb", color: "hsl(205 45% 34%)" },
+  { id: "studier", label: "Studier", color: "hsl(265 32% 45%)" },
+];
+
+const ALL_CATEGORIES: CalCategory[] = CATEGORIES.map((c) => c.id);
+
+type CalView = "manad" | "vecka" | "dag";
+
+/** YYYY-MM-DD i lokal tid */
+function fmtDate(d: Date) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
+/** Måndagen i veckan för ett givet datum */
+function startOfWeek(d: Date) {
+  const copy = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  const wd = copy.getDay() === 0 ? 6 : copy.getDay() - 1;
+  copy.setDate(copy.getDate() - wd);
+  return copy;
+}
+
+function addDays(d: Date, n: number) {
+  const copy = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  copy.setDate(copy.getDate() + n);
+  return copy;
+}
+
 
 function useFamilyEventsByDate() {
   const { isSignedIn } = useUser();
