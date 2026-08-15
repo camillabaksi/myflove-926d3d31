@@ -44,6 +44,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
       "Hemskärm med valbara genvägar och områdesfiltrerade widgets (2026-07-20)",
       "Hemskärm: dubbla förslagsrubriker borttagna – bara \"Förslag just nu\" visas (2026-08-15)",
       "Barn-modulen – barnprofiler och delning inom familjen (2026-07-20)",
+      "Barnets veckoschema – lägg in schemat en gång, det ligger kvar och dagens rader markeras (2026-08-15)",
       "Hem & familj – hushåll, gemensam inköpslista och kalender (2026-07-20)",
       "Träning – styrka/kondition, AI-genererade pass och hälsoapp-koppling (2026-08-11)",
       "Promenadvägar – riktningsbaserade förslag i närområdet via geoposition (2026-08-14)",
