@@ -85,33 +85,59 @@ function StoreLocations() {
           {savedStores.map((store) => (
             <div
               key={store.id}
-              className="flex items-center justify-between gap-3 bg-card border border-border rounded-2xl p-3 px-4"
+              className="bg-card border border-border rounded-2xl p-3 px-4 space-y-3"
             >
-              <div className="flex items-center gap-3 min-w-0">
-                <MapPin size={18} className="text-muted-foreground shrink-0" />
-                <span className="truncate">{store.name}</span>
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3 min-w-0">
+                  <MapPin size={18} className="text-muted-foreground shrink-0" />
+                  <span className="truncate">{store.name}</span>
+                </div>
+                <div className="flex items-center gap-1 shrink-0">
+                  <button
+                    onClick={() => setStoreAlert(store.id, !store.alertEnabled)}
+                    className={`p-2 rounded-xl transition-colors ${
+                      store.alertEnabled ? "text-primary hover:bg-primary/10" : "text-muted-foreground hover:bg-secondary"
+                    }`}
+                    aria-label={store.alertEnabled ? "Stäng av påminnelse" : "Sätt på påminnelse"}
+                    title={store.alertEnabled ? "Påminnelse på" : "Påminnelse av"}
+                  >
+                    {store.alertEnabled ? <Bell size={18} /> : <BellOff size={18} />}
+                  </button>
+                  <button
+                    onClick={() => deleteSavedStore(store.id)}
+                    className="p-2 text-muted-foreground hover:text-destructive rounded-xl transition-colors"
+                    aria-label="Ta bort butik"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </div>
               </div>
-              <div className="flex items-center gap-1 shrink-0">
-                <button
-                  onClick={() => setStoreAlert(store.id, !store.alertEnabled)}
-                  className={`p-2 rounded-xl transition-colors ${
-                    store.alertEnabled ? "text-primary hover:bg-primary/10" : "text-muted-foreground hover:bg-secondary"
-                  }`}
-                  aria-label={store.alertEnabled ? "Stäng av påminnelse" : "Sätt på påminnelse"}
-                  title={store.alertEnabled ? "Påminnelse på" : "Påminnelse av"}
-                >
-                  {store.alertEnabled ? <Bell size={18} /> : <BellOff size={18} />}
-                </button>
-                <button
-                  onClick={() => deleteSavedStore(store.id)}
-                  className="p-2 text-muted-foreground hover:text-destructive rounded-xl transition-colors"
-                  aria-label="Ta bort butik"
-                >
-                  <Trash2 size={18} />
-                </button>
-              </div>
+              {store.alertEnabled && (
+                <div className="flex flex-wrap gap-2">
+                  {STORE_RADIUS_OPTIONS.map((option) => {
+                    const current = store.alertRadiusMeters ?? DEFAULT_STORE_RADIUS_METERS;
+                    const selected = current === option.meters;
+                    return (
+                      <button
+                        key={option.meters}
+                        type="button"
+                        onClick={() => setStoreRadius(store.id, option.meters)}
+                        title={option.hint}
+                        className={`px-3 py-1.5 text-sm rounded-full border transition ${
+                          selected
+                            ? "border-primary bg-primary/10 text-primary"
+                            : "border-border text-muted-foreground hover:bg-secondary"
+                        }`}
+                      >
+                        {option.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           ))}
+
         </div>
       )}
       </CollapsibleSection>
