@@ -100,10 +100,26 @@ export default function ChildSchedule({
 
   const today = todayIndex();
 
+  const next = useMemo(() => {
+    if (entries.length === 0) return null;
+    const now = new Date();
+    const nowMin = now.getHours() * 60 + now.getMinutes();
+    const toMin = (t: string) => {
+      const [h, m] = t.split(":").map(Number);
+      return (h ?? 0) * 60 + (m ?? 0);
+    };
+    for (let offset = 0; offset < 7; offset++) {
+      const day = (today + offset) % 7;
+      const list = (byDay[day] ?? []).filter((e) => offset > 0 || toMin(e.start) >= nowMin);
+      if (list[0]) return { entry: list[0], offset, day };
+    }
+    return null;
+  }, [entries, byDay, today]);
+
   return (
     <section className="surface-card p-5">
       <CollapsibleSection
-        id="Barnets schema"
+        id="Barnets skolschema"
         title={
           <span className="flex items-center gap-2">
             <CalendarClock size={18} className="text-primary" />
@@ -116,6 +132,23 @@ export default function ChildSchedule({
         headingClassName="text-lg font-semibold"
         className="space-y-4"
       >
+        {next && (
+          <div className="rounded-2xl border border-primary/40 bg-primary/5 p-3">
+            <div className="text-xs text-muted-foreground">
+              Nästa lektion · {next.offset === 0 ? "idag" : next.offset === 1 ? "imorgon" : DAYS[next.day]}
+            </div>
+            <div className="font-medium">
+              {next.entry.start}
+              {next.entry.end ? `–${next.entry.end}` : ""} {next.entry.title}
+            </div>
+            {(next.entry.location || next.entry.teacher) && (
+              <div className="text-sm text-muted-foreground flex items-center gap-1">
+                <MapPin size={12} /> {[next.entry.location, next.entry.teacher].filter(Boolean).join(" · ")}
+              </div>
+            )}
+          </div>
+        )}
+
         {canEdit && (
           <form onSubmit={add} className="space-y-3">
             <div className="flex flex-wrap gap-2">
