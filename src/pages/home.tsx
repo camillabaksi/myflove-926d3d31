@@ -280,11 +280,8 @@ export default function Home() {
           </HomeSection>
         )}
 
-        {showSection("suggestions") && (
-          <HomeSection id="suggestions" title="Förslag" help="Små tips utifrån väder, dina uppgifter och hur du mått. Du kan alltid strunta i dem.">
-            <ProactiveSuggestions />
-          </HomeSection>
-        )}
+        {showSection("suggestions") && <ProactiveSuggestions />}
+
 
         {showSection("help") && (
         <button
