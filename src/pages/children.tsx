@@ -275,7 +275,9 @@ function ChildrenContent() {
 
       {activeChild && (
         <>
-          {/* Lägg till innehåll */}
+          <ChildSchedule childId={activeChild.id} childName={activeChild.name} canEdit={isOwner} />
+
+
           {isOwner && (
             <section className="surface-card p-5">
               <CollapsibleSection
