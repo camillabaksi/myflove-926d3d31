@@ -569,7 +569,14 @@ export default function CalendarPage() {
                   ? "Idag"
                   : new Date(selectedDateStr).toLocaleDateString('sv-SE', { weekday: 'long', day: 'numeric', month: 'long' })}
               </h3>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setIsAddingAny(true)}
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition-opacity"
+                >
+                  <Plus size={16} />
+                  Ny händelse
+                </button>
                 <button
                   onClick={() => setIsAddingReminder(true)}
                   className="flex items-center gap-1.5 text-sm text-primary hover:underline"
@@ -577,16 +584,8 @@ export default function CalendarPage() {
                   <Plus size={16} />
                   Påminnelse
                 </button>
-                {hasHousehold && (
-                  <button
-                    onClick={() => setIsAddingEvent(true)}
-                    className="flex items-center gap-1.5 text-sm text-primary hover:underline"
-                  >
-                    <Plus size={16} />
-                    Familjehändelse
-                  </button>
-                )}
               </div>
+
             </div>
             
             {!selectedItems.focus && selectedItems.tasks.length === 0 && selectedItems.reminders.length === 0 && selectedItems.familyEvents.length === 0 && selectedItems.childEvents.length === 0 && selectedItems.recurring.length === 0 && (
