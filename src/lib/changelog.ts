@@ -64,6 +64,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
       "Brain Dump – spara idéer (2026-07-23)",
       "Daglig rutin och Pomodoro-timer (2026-07-23)",
       "Minimera/maximera alla vyer med sparat läge (2026-08-14)",
+      "Kalender: 'Ny händelse' och '+ Påminnelse' fick enhetligt utseende och placering (2026-08-15)",
     ],
   },
   {
