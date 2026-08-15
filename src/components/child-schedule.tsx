@@ -104,7 +104,9 @@ export default function ChildSchedule({
           <span className="flex items-center gap-2">
             <CalendarClock size={18} className="text-primary" />
             {childName}s schema
-            <HelpHint text="Här ligger veckoschemat kvar vecka efter vecka. Lägg in en rad per aktivitet – dagens rader visas markerade." />
+            <HelpHint label="barnets schema">
+              Här ligger veckoschemat kvar vecka efter vecka. Lägg in en rad per aktivitet – dagens rader visas markerade.
+            </HelpHint>
           </span>
         }
         headingClassName="text-lg font-semibold"
