@@ -41,6 +41,17 @@ const CATEGORIES: { id: CalCategory; label: string; color: string }[] = [
 
 const ALL_CATEGORIES: CalCategory[] = CATEGORIES.map((c) => c.id);
 
+/** Valbara påminnelser innan en händelse börjar. */
+const REMIND_OPTIONS: { value: number | null; label: string }[] = [
+  { value: null, label: "Ingen" },
+  { value: 0, label: "Vid start" },
+  { value: 10, label: "10 min innan" },
+  { value: 30, label: "30 min innan" },
+  { value: 60, label: "1 tim innan" },
+  { value: 1440, label: "1 dag innan" },
+];
+
+
 type CalView = "manad" | "vecka" | "dag";
 
 /** YYYY-MM-DD i lokal tid */
@@ -117,6 +128,8 @@ export default function CalendarPage() {
   const [newAnyTitle, setNewAnyTitle] = useState("");
   const [newAnyTime, setNewAnyTime] = useState("");
   const [newAnyEndTime, setNewAnyEndTime] = useState("");
+  /** Påminnelse innan start: null = ingen, annars minuter före (0 = vid start). */
+  const [newAnyRemind, setNewAnyRemind] = useState<number | null>(null);
   const [newAnyChildId, setNewAnyChildId] = useState<string>("");
   const [newEventTitle, setNewEventTitle] = useState("");
   const [newEventTime, setNewEventTime] = useState("");
@@ -211,6 +224,10 @@ export default function CalendarPage() {
     /** Fritextfält (familj/barn) lagrar intervallet som "09:00–10:00". */
     const timeRange = time && endTime ? `${time}–${endTime}` : (newAnyTime || null);
     try {
+      const wantsReminder = Boolean(time) && newAnyRemind !== null;
+      if (wantsReminder && getNotificationPermission() === "default") {
+        await requestNotificationPermission();
+      }
       if (newCat === "familj") {
         createEventMutation.mutate({
           data: { title, date: selectedDateStr, time: timeRange },
@@ -223,17 +240,25 @@ export default function CalendarPage() {
         }
         await addChildItem({ childId, kind: "activity", title, date: selectedDateStr, time: timeRange ?? undefined });
       } else if (newCat === "jobb" || newCat === "studier") {
-        addTask(title, selectedDateStr, { time, endTime, area: newCat });
+        addTask(title, selectedDateStr, {
+          time,
+          endTime,
+          area: newCat,
+          reminderMinutesBefore: wantsReminder ? newAnyRemind ?? 0 : undefined,
+        });
       } else {
-        if (time && getNotificationPermission() === "default") {
-          await requestNotificationPermission();
-        }
-        addReminder(title, selectedDateStr, time, "none", endTime);
+        addReminder(title, selectedDateStr, time, "none", endTime, wantsReminder ? newAnyRemind ?? 0 : undefined);
+      }
+      // Familj- och barnhändelser bor i delade listor – lägg en personlig
+      // påminnelse bredvid så att notisen faktiskt når just dig.
+      if (wantsReminder && (newCat === "familj" || newCat === "barn")) {
+        addReminder(title, selectedDateStr, time, "none", endTime, newAnyRemind ?? 0);
       }
       if (!visible.includes(newCat)) setVisible((prev) => [...prev, newCat]);
       setNewAnyTitle("");
       setNewAnyTime("");
       setNewAnyEndTime("");
+      setNewAnyRemind(null);
       setIsAddingAny(false);
       toast({ description: "Händelsen är inlagd i kalendern." });
     } catch {
@@ -1025,6 +1050,32 @@ export default function CalendarPage() {
                     className="h-12 rounded-2xl"
                   />
                 </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Påminnelse</label>
+                <div className="flex flex-wrap gap-2">
+                  {REMIND_OPTIONS.map((opt) => (
+                    <button
+                      key={String(opt.value)}
+                      type="button"
+                      disabled={!newAnyTime && opt.value !== null}
+                      onClick={() => setNewAnyRemind(opt.value)}
+                      className={`px-3 py-2 rounded-full text-sm font-medium border transition-all disabled:opacity-40 ${
+                        newAnyRemind === opt.value
+                          ? "bg-primary text-primary-foreground border-transparent"
+                          : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
+                      }`}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  {newAnyTime
+                    ? "Du får en notis innan händelsen börjar – om du vill."
+                    : "Ange en starttid för att kunna få en påminnelse."}
+                </p>
               </div>
 
               <p className="text-xs text-muted-foreground">

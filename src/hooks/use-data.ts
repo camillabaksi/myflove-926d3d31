@@ -488,12 +488,20 @@ export interface Reminder {
   completed: boolean;
   createdAt: number;
   repeat?: RepeatMode; // default 'none'
+  remindMinutesBefore?: number; // notis X min innan starttid (0 = vid start)
 }
 
 export function useReminders() {
   const [reminders, setReminders] = useCloudSyncedStorage<Reminder[]>('myflow-reminders', []);
 
-  const addReminder = (title: string, date: string, time?: string, repeat: RepeatMode = 'none', endTime?: string) => {
+  const addReminder = (
+    title: string,
+    date: string,
+    time?: string,
+    repeat: RepeatMode = 'none',
+    endTime?: string,
+    remindMinutesBefore?: number,
+  ) => {
     setReminders([{
       id: generateId(),
       title,
@@ -503,6 +511,7 @@ export function useReminders() {
       completed: false,
       createdAt: Date.now(),
       repeat,
+      remindMinutesBefore,
     }, ...reminders]);
     trackEvent('calendar', 'reminder_added');
   };
@@ -517,7 +526,7 @@ export function useReminders() {
 
   const updateReminder = (
     id: string,
-    patch: { title?: string; date?: string; time?: string | undefined; repeat?: RepeatMode }
+    patch: { title?: string; date?: string; time?: string | undefined; repeat?: RepeatMode; remindMinutesBefore?: number }
   ) => {
     setReminders(reminders.map(r => r.id === id ? { ...r, ...patch } : r));
   };
