@@ -16,6 +16,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 ### Removed
 
 ### Fixed
+- Hem: dubbla förslagsrubriker borttagna – bara "Förslag just nu" visas nu (2026-08-15).
 - Kalender: "Ny händelse"-knappen fick samma utseende och format som "+ Påminnelse" för ett mer konsekvent gränssnitt (2026-08-15).
 
 ### Security
