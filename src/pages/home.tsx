@@ -240,12 +240,21 @@ export default function Home() {
 
         <div className="space-y-2">
           <AreaSwitcher size="sm" />
-          <p className="text-xs text-muted-foreground">
-            {activeArea === "alla"
-              ? "Flow ser hela din dag – oavsett vilket rum sakerna hör till."
-              : `Du är i ${AREA_META[activeArea].label.toLowerCase()}rummet. Resten väntar tills du vill se det.`}
-          </p>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <p className="text-xs text-muted-foreground">
+              {activeArea === "alla"
+                ? "Flow ser hela din dag – oavsett vilket rum sakerna hör till."
+                : `Du är i ${AREA_META[activeArea].label.toLowerCase()}rummet. Resten väntar tills du vill se det.`}
+            </p>
+            <ViewModeToggle area={activeArea} />
+          </div>
+          {isSimple && (
+            <p className="text-xs text-muted-foreground">
+              Förenklad vy: bara dagens saker, genvägar och hjälp. Byt till vanlig vy när du vill se allt.
+            </p>
+          )}
         </div>
+
 
         {showSection("streak") && (
           <HomeSection id="streak" title="Din svit" help="Antal dagar i rad du gjort något i appen. Bryts den händer inget – den finns bara som en liten morot.">

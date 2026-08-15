@@ -114,7 +114,7 @@ export default function Layout({ children }: LayoutProps) {
   const { isAdmin } = useIsAdmin();
   const { enabled: enabledAreas } = useEnabledAreas();
 
-  const canGoBack = location !== "/" && location !== "/hem";
+  const canGoBack = location !== "/";
   const handleBack = () => {
     if (typeof window === "undefined") return;
     if (window.history.length > 1) {
