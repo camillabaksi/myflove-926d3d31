@@ -596,7 +596,7 @@ export default function CalendarPage() {
 
         {selectedDateStr && (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-4">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-3">
               <h3 className="text-xl font-medium">
                 {selectedDateStr === todayStr
                   ? "Idag"
@@ -605,16 +605,16 @@ export default function CalendarPage() {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setIsAddingAny(true)}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition-opacity"
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-2xl text-sm font-medium border transition-colors bg-card border-border text-foreground hover:border-primary/40 hover:bg-secondary/50"
                 >
-                  <Plus size={16} />
+                  <Plus size={16} className="text-primary" />
                   Ny händelse
                 </button>
                 <button
                   onClick={() => setIsAddingReminder(true)}
-                  className="flex items-center gap-1.5 text-sm text-primary hover:underline"
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-2xl text-sm font-medium border transition-colors bg-card border-border text-foreground hover:border-primary/40 hover:bg-secondary/50"
                 >
-                  <Plus size={16} />
+                  <Plus size={16} className="text-primary" />
                   Påminnelse
                 </button>
                 <button
@@ -624,7 +624,7 @@ export default function CalendarPage() {
                   className={`flex items-center gap-1.5 px-3 py-2 rounded-2xl text-sm font-medium border transition-colors ${
                     pictoMode
                       ? "bg-accent/30 border-accent/40 text-foreground"
-                      : "bg-secondary/50 border-transparent text-muted-foreground hover:border-primary/30"
+                      : "bg-card border-border text-muted-foreground hover:border-primary/40 hover:bg-secondary/50"
                   }`}
                 >
                   <span aria-hidden>🖼️</span>
