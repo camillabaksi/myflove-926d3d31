@@ -417,6 +417,49 @@ export default function CalendarPage() {
               })}
             </div>
           </div>
+          )}
+
+          {view === "vecka" && (
+            <div className="pt-2 grid grid-cols-1 sm:grid-cols-7 gap-2">
+              {weekDays.map((dateStr) => {
+                const d = new Date(`${dateStr}T12:00:00`);
+                const items = getItemsForDate(dateStr);
+                const entries = [
+                  ...items.childEvents.map((e) => ({ id: `c-${e.id}`, title: e.title, time: e.time ?? "", color: e.child?.color ?? '#a06cd5' })),
+                  ...items.familyEvents.map((e) => ({ id: `f-${e.id}`, title: e.title, time: e.time ?? "", color: e.member?.color ?? '#8a9a5b' })),
+                  ...items.reminders.map((r) => ({ id: `r-${r.id}`, title: r.title, time: r.time ?? "", color: 'hsl(var(--primary))' })),
+                  ...items.tasks.map((t) => ({ id: `t-${t.id}`, title: t.title, time: t.time ?? "", color: 'hsl(var(--muted-foreground))' })),
+                ].sort((a, b) => (a.time || "99").localeCompare(b.time || "99"));
+                const isSelected = dateStr === selectedDateStr;
+                return (
+                  <button
+                    key={dateStr}
+                    onClick={() => setSelectedDateStr(dateStr)}
+                    className={`text-left rounded-2xl border p-2 min-h-24 transition-colors ${
+                      isSelected ? 'border-primary bg-primary/5' : 'border-border hover:bg-secondary'
+                    }`}
+                  >
+                    <div className={`text-xs font-medium mb-1 ${dateStr === todayStr ? 'text-primary' : 'text-muted-foreground'}`}>
+                      {d.toLocaleDateString('sv-SE', { weekday: 'short', day: 'numeric' })}
+                    </div>
+                    <div className="space-y-1">
+                      {entries.slice(0, 4).map((e) => (
+                        <div key={e.id} className="flex items-center gap-1.5 text-xs text-foreground">
+                          <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: e.color }} />
+                          <span className="truncate">{e.time && `${e.time} `}{e.title}</span>
+                        </div>
+                      ))}
+                      {entries.length > 4 && (
+                        <div className="text-xs text-muted-foreground">+{entries.length - 4} till</div>
+                      )}
+                      {entries.length === 0 && <div className="text-xs text-muted-foreground/60">–</div>}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
             </CollapsibleSection>
           </div>
         </div>
