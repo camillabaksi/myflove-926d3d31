@@ -89,10 +89,10 @@ function useFamilyEventsByDate() {
 
 export default function CalendarPage() {
   const { currentFocus } = useFocus();
-  const { activeTasks, completedTasks, deleteTask, setTaskTime } = useTasks();
+  const { activeTasks, completedTasks, deleteTask, setTaskTime, addTask } = useTasks();
   const { activeReminders, addReminder, deleteReminder, updateReminder } = useReminders();
   const { eventsForDate, hasHousehold } = useFamilyEventsByDate();
-  const { children: kids, items: childItems } = useChildren();
+  const { children: kids, items: childItems, addItem: addChildItem } = useChildren();
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -112,6 +112,11 @@ export default function CalendarPage() {
     new Date().toLocaleDateString('sv-SE').split(' ')[0] // fallback format YYYY-MM-DD
   );
   const [isAddingEvent, setIsAddingEvent] = useState(false);
+  const [isAddingAny, setIsAddingAny] = useState(false);
+  const [newCat, setNewCat] = useState<CalCategory>("privat");
+  const [newAnyTitle, setNewAnyTitle] = useState("");
+  const [newAnyTime, setNewAnyTime] = useState("");
+  const [newAnyChildId, setNewAnyChildId] = useState<string>("");
   const [newEventTitle, setNewEventTitle] = useState("");
   const [newEventTime, setNewEventTime] = useState("");
   const [isAddingReminder, setIsAddingReminder] = useState(false);
@@ -195,6 +200,43 @@ export default function CalendarPage() {
       },
     });
   };
+
+  /** Skapar en händelse i vald kategori på vald dag. */
+  const handleAddAny = async () => {
+    const title = newAnyTitle.trim();
+    if (!title || !selectedDateStr) return;
+    const time = newAnyTime || undefined;
+    try {
+      if (newCat === "familj") {
+        createEventMutation.mutate({
+          data: { title, date: selectedDateStr, time: newAnyTime || null },
+        });
+      } else if (newCat === "barn") {
+        const childId = newAnyChildId || kids[0]?.id;
+        if (!childId) {
+          toast({ description: "Lägg till ett barn först på sidan Barn.", variant: "destructive" });
+          return;
+        }
+        await addChildItem({ childId, kind: "activity", title, date: selectedDateStr, time });
+      } else if (newCat === "jobb" || newCat === "studier") {
+        addTask(title, selectedDateStr, { time, area: newCat });
+      } else {
+        if (time && getNotificationPermission() === "default") {
+          await requestNotificationPermission();
+        }
+        addReminder(title, selectedDateStr, time);
+      }
+      if (!visible.includes(newCat)) setVisible((prev) => [...prev, newCat]);
+      setNewAnyTitle("");
+      setNewAnyTime("");
+      setIsAddingAny(false);
+      toast({ description: "Händelsen är inlagd i kalendern." });
+    } catch {
+      toast({ description: "Kunde inte spara händelsen. Försök igen.", variant: "destructive" });
+    }
+  };
+
+
 
   const stepBack = () => {
     if (view === "manad") {
@@ -527,7 +569,14 @@ export default function CalendarPage() {
                   ? "Idag"
                   : new Date(selectedDateStr).toLocaleDateString('sv-SE', { weekday: 'long', day: 'numeric', month: 'long' })}
               </h3>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setIsAddingAny(true)}
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition-opacity"
+                >
+                  <Plus size={16} />
+                  Ny händelse
+                </button>
                 <button
                   onClick={() => setIsAddingReminder(true)}
                   className="flex items-center gap-1.5 text-sm text-primary hover:underline"
@@ -535,16 +584,8 @@ export default function CalendarPage() {
                   <Plus size={16} />
                   Påminnelse
                 </button>
-                {hasHousehold && (
-                  <button
-                    onClick={() => setIsAddingEvent(true)}
-                    className="flex items-center gap-1.5 text-sm text-primary hover:underline"
-                  >
-                    <Plus size={16} />
-                    Familjehändelse
-                  </button>
-                )}
               </div>
+
             </div>
             
             {!selectedItems.focus && selectedItems.tasks.length === 0 && selectedItems.reminders.length === 0 && selectedItems.familyEvents.length === 0 && selectedItems.childEvents.length === 0 && selectedItems.recurring.length === 0 && (
@@ -893,6 +934,98 @@ export default function CalendarPage() {
             )}
           </DialogContent>
         </Dialog>
+
+        <Dialog open={isAddingAny} onOpenChange={setIsAddingAny}>
+          <DialogContent className="rounded-3xl">
+            <DialogHeader>
+              <DialogTitle>Ny händelse</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4 pt-2">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Kategori</label>
+                <div className="flex flex-wrap gap-2">
+                  {CATEGORIES.map((c) => {
+                    const disabled =
+                      (c.id === "familj" && !hasHousehold) || (c.id === "barn" && kids.length === 0);
+                    return (
+                      <button
+                        key={c.id}
+                        type="button"
+                        disabled={disabled}
+                        onClick={() => setNewCat(c.id)}
+                        title={disabled ? "Kräver familj respektive barn i appen" : undefined}
+                        className={`px-3 py-2 rounded-full text-sm font-medium border transition-all disabled:opacity-40 ${
+                          newCat === c.id ? "text-white border-transparent" : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
+                        }`}
+                        style={newCat === c.id ? { backgroundColor: c.color } : undefined}
+                      >
+                        {c.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {newCat === "barn" && kids.length > 0 && (
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Vilket barn?</label>
+                  <div className="flex flex-wrap gap-2">
+                    {kids.map((k) => (
+                      <button
+                        key={k.id}
+                        type="button"
+                        onClick={() => setNewAnyChildId(k.id)}
+                        className={`px-3 py-2 rounded-full text-sm font-medium border transition-all ${
+                          (newAnyChildId || kids[0]?.id) === k.id
+                            ? "text-white border-transparent"
+                            : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
+                        }`}
+                        style={(newAnyChildId || kids[0]?.id) === k.id ? { backgroundColor: k.color } : undefined}
+                      >
+                        {k.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Vad händer?</label>
+                <Input
+                  value={newAnyTitle}
+                  onChange={(e) => setNewAnyTitle(e.target.value)}
+                  placeholder="T.ex. Tandläkare"
+                  className="h-12 rounded-2xl"
+                  autoFocus
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Tid (valfritt)</label>
+                <Input
+                  type="time"
+                  value={newAnyTime}
+                  onChange={(e) => setNewAnyTime(e.target.value)}
+                  className="h-12 rounded-2xl"
+                />
+              </div>
+
+              <p className="text-xs text-muted-foreground">
+                Läggs in på {selectedDateStr === todayStr ? "idag" : selectedDateStr}.
+              </p>
+
+              <Button
+                onClick={handleAddAny}
+                disabled={!newAnyTitle.trim()}
+                className="w-full h-12 rounded-2xl"
+              >
+                Lägg till
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+
 
       </div>
     </Layout>
