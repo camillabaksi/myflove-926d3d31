@@ -112,6 +112,11 @@ export default function CalendarPage() {
     new Date().toLocaleDateString('sv-SE').split(' ')[0] // fallback format YYYY-MM-DD
   );
   const [isAddingEvent, setIsAddingEvent] = useState(false);
+  const [isAddingAny, setIsAddingAny] = useState(false);
+  const [newCat, setNewCat] = useState<CalCategory>("privat");
+  const [newAnyTitle, setNewAnyTitle] = useState("");
+  const [newAnyTime, setNewAnyTime] = useState("");
+  const [newAnyChildId, setNewAnyChildId] = useState<string>("");
   const [newEventTitle, setNewEventTitle] = useState("");
   const [newEventTime, setNewEventTime] = useState("");
   const [isAddingReminder, setIsAddingReminder] = useState(false);
