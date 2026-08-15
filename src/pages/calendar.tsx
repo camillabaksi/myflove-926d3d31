@@ -1003,14 +1003,14 @@ export default function CalendarPage() {
         </Dialog>
 
         <Dialog open={isAddingAny} onOpenChange={setIsAddingAny}>
-          <DialogContent className="rounded-3xl">
-            <DialogHeader>
-              <DialogTitle>Ny händelse</DialogTitle>
+          <DialogContent className="rounded-3xl max-h-[85vh] overflow-y-auto">
+            <DialogHeader className="text-left">
+              <DialogTitle className="pr-8 text-left">Ny händelse</DialogTitle>
             </DialogHeader>
-            <div className="space-y-4 pt-2">
+            <div className="space-y-5 pt-1">
               <div className="space-y-2">
                 <label className="text-sm font-medium">Kategori</label>
-                <div className="flex flex-wrap gap-2">
+                <div className="grid grid-cols-3 gap-2">
                   {CATEGORIES.map((c) => {
                     const disabled =
                       (c.id === "familj" && !hasHousehold) || (c.id === "barn" && kids.length === 0);
@@ -1021,7 +1021,7 @@ export default function CalendarPage() {
                         disabled={disabled}
                         onClick={() => setNewCat(c.id)}
                         title={disabled ? "Kräver familj respektive barn i appen" : undefined}
-                        className={`px-3 py-2 rounded-full text-sm font-medium border transition-all disabled:opacity-40 ${
+                        className={`w-full h-11 px-2 rounded-2xl text-sm font-medium border transition-all disabled:opacity-40 ${
                           newCat === c.id ? "text-white border-transparent" : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
                         }`}
                         style={newCat === c.id ? { backgroundColor: c.color } : undefined}
@@ -1091,28 +1091,33 @@ export default function CalendarPage() {
 
               <div className="space-y-2">
                 <label className="text-sm font-medium">Påminnelse</label>
-                <div className="flex flex-wrap gap-2">
-                  {REMIND_OPTIONS.map((opt) => (
-                    <button
-                      key={String(opt.value)}
-                      type="button"
-                      disabled={!newAnyTime && opt.value !== null}
-                      onClick={() => setNewAnyRemind(opt.value)}
-                      className={`px-3 py-2 rounded-full text-sm font-medium border transition-all disabled:opacity-40 ${
-                        newAnyRemind === opt.value
-                          ? "bg-primary text-primary-foreground border-transparent"
-                          : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
-                      }`}
-                    >
-                      {opt.label}
-                    </button>
-                  ))}
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  {newAnyTime
-                    ? "Du får en notis innan händelsen börjar – om du vill."
-                    : "Ange en starttid för att kunna få en påminnelse."}
-                </p>
+                {newAnyTime ? (
+                  <>
+                    <div className="grid grid-cols-3 gap-2">
+                      {REMIND_OPTIONS.map((opt) => (
+                        <button
+                          key={String(opt.value)}
+                          type="button"
+                          onClick={() => setNewAnyRemind(opt.value)}
+                          className={`w-full h-11 px-2 rounded-2xl text-sm font-medium border transition-all ${
+                            newAnyRemind === opt.value
+                              ? "bg-primary text-primary-foreground border-transparent"
+                              : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
+                          }`}
+                        >
+                          {opt.label}
+                        </button>
+                      ))}
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Du får en notis innan händelsen börjar – om du vill.
+                    </p>
+                  </>
+                ) : (
+                  <p className="text-xs text-muted-foreground">
+                    Ange en starttid ovan så kan du välja påminnelse.
+                  </p>
+                )}
               </div>
 
               <p className="text-xs text-muted-foreground">
