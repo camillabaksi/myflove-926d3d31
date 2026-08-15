@@ -41,6 +41,17 @@ const CATEGORIES: { id: CalCategory; label: string; color: string }[] = [
 
 const ALL_CATEGORIES: CalCategory[] = CATEGORIES.map((c) => c.id);
 
+/** Valbara påminnelser innan en händelse börjar. */
+const REMIND_OPTIONS: { value: number | null; label: string }[] = [
+  { value: null, label: "Ingen" },
+  { value: 0, label: "Vid start" },
+  { value: 10, label: "10 min innan" },
+  { value: 30, label: "30 min innan" },
+  { value: 60, label: "1 tim innan" },
+  { value: 1440, label: "1 dag innan" },
+];
+
+
 type CalView = "manad" | "vecka" | "dag";
 
 /** YYYY-MM-DD i lokal tid */
