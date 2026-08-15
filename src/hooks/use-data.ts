@@ -620,15 +620,25 @@ export interface SavedStore {
   lat: number;
   lon: number;
   alertEnabled: boolean;
+  /** Hur nära butiken du ska vara innan påminnelsen kommer (meter). */
+  alertRadiusMeters?: number;
   createdAt: number;
 }
+
+export const DEFAULT_STORE_RADIUS_METERS = 300;
+
+export const STORE_RADIUS_OPTIONS: { meters: number; label: string; hint: string }[] = [
+  { meters: 80, label: "I affären", hint: "Bara när du står i butiken" },
+  { meters: 300, label: "Alldeles nära", hint: "När du är precis utanför" },
+  { meters: 1000, label: "I området", hint: "När du är i närheten" },
+];
 
 export function useSavedStores() {
   const [savedStores, setSavedStores] = useLocalStorage<SavedStore[]>('myflow-saved-stores', []);
 
   const addSavedStore = (name: string, lat: number, lon: number) => {
     setSavedStores((prev) => [
-      { id: generateId(), name, lat, lon, alertEnabled: true, createdAt: Date.now() },
+      { id: generateId(), name, lat, lon, alertEnabled: true, alertRadiusMeters: DEFAULT_STORE_RADIUS_METERS, createdAt: Date.now() },
       ...prev,
     ]);
   };
@@ -641,8 +651,13 @@ export function useSavedStores() {
     setSavedStores((prev) => prev.map(s => s.id === id ? { ...s, alertEnabled } : s));
   };
 
-  return { savedStores, addSavedStore, deleteSavedStore, setStoreAlert };
+  const setStoreRadius = (id: string, alertRadiusMeters: number) => {
+    setSavedStores((prev) => prev.map(s => s.id === id ? { ...s, alertRadiusMeters, alertEnabled: true } : s));
+  };
+
+  return { savedStores, addSavedStore, deleteSavedStore, setStoreAlert, setStoreRadius };
 }
+
 
 export interface SavedTrip {
   id: string;

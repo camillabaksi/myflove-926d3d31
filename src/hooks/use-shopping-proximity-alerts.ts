@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useSavedStores } from "./use-data";
+import { useSavedStores, DEFAULT_STORE_RADIUS_METERS } from "./use-data";
 import { useSharedShoppingList } from "./use-shared-shopping-list";
 import { sendPushNotification } from "@/lib/push-notifications";
 
@@ -10,7 +10,6 @@ export interface ProximityAlert {
 }
 
 const CHECK_INTERVAL_MS = 3 * 60 * 1000;
-const NEARBY_THRESHOLD_METERS = 300;
 const EARTH_RADIUS_M = 6371000;
 
 function distanceMeters(lat1: number, lon1: number, lat2: number, lon2: number): number {
@@ -39,7 +38,7 @@ export function useShoppingProximityAlerts() {
   const dismissedRef = useRef<Set<string>>(new Set());
 
   const activeStores = savedStores.filter((s) => s.alertEnabled);
-  const storesKey = activeStores.map((s) => `${s.id}:${s.lat}:${s.lon}`).join("|");
+  const storesKey = activeStores.map((s) => `${s.id}:${s.lat}:${s.lon}:${s.alertRadiusMeters ?? DEFAULT_STORE_RADIUS_METERS}`).join("|");
   const hasItemsLeft = activeItems.length > 0;
 
   useEffect(() => {
@@ -60,7 +59,8 @@ export function useShoppingProximityAlerts() {
 
           activeStores.forEach((store) => {
             const distance = distanceMeters(latitude, longitude, store.lat, store.lon);
-            if (distance <= NEARBY_THRESHOLD_METERS) {
+            const threshold = store.alertRadiusMeters ?? DEFAULT_STORE_RADIUS_METERS;
+            if (distance <= threshold) {
               const dedupeKey = `${store.id}:${todayStr}`;
               if (!dismissedRef.current.has(dedupeKey)) {
                 if (!notifiedRef.current.has(dedupeKey)) {
