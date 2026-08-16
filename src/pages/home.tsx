@@ -194,14 +194,17 @@ export default function Home() {
 
         {/* Hero header with preview-style warmth */}
         <div
-          className="relative overflow-hidden rounded-3xl p-6 shadow-lifted border border-border/60 animate-fade-in"
+          className="relative overflow-hidden rounded-3xl p-6 shadow-lifted border border-border/60 pop-in"
           style={{ order: -1, background: heroGradient }}
         >
-          <div className="pointer-events-none absolute -top-20 -right-16 h-40 w-40 rounded-full bg-gradient-to-br from-gold to-forest opacity-20 blur-md" />
-          <div className="pointer-events-none absolute -bottom-16 -left-10 h-32 w-32 rounded-full bg-sage opacity-25 blur-[2px]" />
+          <div className="pointer-events-none absolute -top-20 -right-16 h-40 w-40 rounded-full bg-blush opacity-60 blur-md" />
+          <div className="pointer-events-none absolute -bottom-16 -left-10 h-32 w-32 rounded-full bg-mint opacity-50 blur-[2px]" />
+          <div className="pointer-events-none absolute top-6 right-6 text-4xl breathe select-none" aria-hidden>
+            💜
+          </div>
 
           <div className="relative space-y-2">
-            <h1 className="text-4xl font-bold text-ink">{greeting.title}</h1>
+            <h1 className="text-4xl font-bold text-ink pr-14">{greeting.title}</h1>
             <p className="text-muted-foreground">{greeting.subtitle}</p>
             {editingName ? (
               <form
