@@ -3,6 +3,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Play, Pause, Check, Coffee, ArrowRight, Home } from "lucide-react";
 import type { ScoredTask } from "@/lib/daily-flow";
 
+const RADIUS = 88;
+const CIRC = 2 * Math.PI * RADIUS;
+
 /**
  * Fokusläge – en sak i taget, minimalt visuellt brus.
  * Ingen press: timern är ett stöd, inte ett krav.
