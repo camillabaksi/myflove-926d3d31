@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Brain, Sparkles, Timer, Zap } from "lucide-react";
+import { Link } from "wouter";
+import { ArrowRight, Brain, ChevronRight, Sparkles, Timer, Zap } from "lucide-react";
 import { toast } from "sonner";
 import FocusMode from "@/components/focus-mode";
 import { useTasks } from "@/hooks/use-data";
