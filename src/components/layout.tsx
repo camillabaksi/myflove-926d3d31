@@ -329,6 +329,11 @@ export default function Layout({ children }: LayoutProps) {
           ))}
         </div>
         <div className="mt-auto pt-4 pb-2 space-y-2">
+          <Link href="/anpassa">
+            <Button variant="outline" className="w-full rounded-xl gap-2">
+              <Accessibility size={16} /> Anpassa appen
+            </Button>
+          </Link>
           <Button
             variant="outline"
             className="w-full rounded-xl gap-2"
@@ -680,7 +685,7 @@ export default function Layout({ children }: LayoutProps) {
                       />
                     ))}
                   </div>
-                  <div className="mt-6 flex items-center justify-center">
+                  <div className="mt-6 flex flex-col items-center justify-center gap-3">
                     <Button
                       variant="outline"
                       size="sm"
@@ -689,6 +694,11 @@ export default function Layout({ children }: LayoutProps) {
                     >
                       <LayoutGrid size={16} /> Visa allt i appen
                     </Button>
+                    <Link href="/anpassa" onClick={() => setMobileMenuOpen(false)}>
+                      <Button variant="outline" size="sm" className="rounded-xl gap-2">
+                        <Accessibility size={16} /> Anpassa appen
+                      </Button>
+                    </Link>
                   </div>
                 </>
               ) : (
