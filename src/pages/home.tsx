@@ -28,7 +28,7 @@ import { AreaOnboarding } from "@/components/area-onboarding";
 import { AREA_META, filterByArea, useActiveArea, type LifeArea } from "@/lib/life-areas";
 import ViewModeToggle from "@/components/view-mode-toggle";
 import HomeCustomize from "@/components/home-customize";
-import { useHiddenHomeSections } from "@/lib/home-sections";
+import { useHiddenHomeSections, useHomeSectionOrder } from "@/lib/home-sections";
 import { useViewMode } from "@/lib/view-mode";
 
 
@@ -103,6 +103,8 @@ export default function Home() {
   const { activeArea } = useActiveArea();
   const { isSimple } = useViewMode(activeArea);
   const { isHidden } = useHiddenHomeSections();
+  const { orderOf } = useHomeSectionOrder();
+  const ord = (id: string) => ({ order: orderOf(id) });
   const showSection = (id: string) => {
     const inArea = activeArea === "alla" || (SECTION_AREAS[id] ?? []).includes(activeArea);
     if (!inArea) return false;
@@ -188,7 +190,7 @@ export default function Home() {
     <Layout>
       <IntroTour />
       <FlowOnboarding />
-      <div className="space-y-8">
+      <div className="flex flex-col gap-8">
 
         {/* Hero header with preview-style warmth */}
         <div
