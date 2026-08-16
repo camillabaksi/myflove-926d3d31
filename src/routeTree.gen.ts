@@ -23,6 +23,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as GuideAdhdPlannerForAdultsRouteImport } from './routes/guide.adhd-planner-for-adults'
 import { Route as AppWorkflowRouteImport } from './routes/_app.workflow'
 import { Route as AppVeckansFlowRouteImport } from './routes/_app.veckans-flow'
+import { Route as AppVadNuRouteImport } from './routes/_app.vad-nu'
 import { Route as AppTravelRouteImport } from './routes/_app.travel'
 import { Route as AppTraningRouteImport } from './routes/_app.traning'
 import { Route as AppTasksRouteImport } from './routes/_app.tasks'
@@ -132,6 +133,11 @@ const AppWorkflowRoute = AppWorkflowRouteImport.update({
 const AppVeckansFlowRoute = AppVeckansFlowRouteImport.update({
   id: '/veckans-flow',
   path: '/veckans-flow',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppVadNuRoute = AppVadNuRouteImport.update({
+  id: '/vad-nu',
+  path: '/vad-nu',
   getParentRoute: () => AppRoute,
 } as any)
 const AppTravelRoute = AppTravelRouteImport.update({
@@ -384,6 +390,7 @@ export interface FileRoutesByFullPath {
   '/tasks': typeof AppTasksRoute
   '/traning': typeof AppTraningRoute
   '/travel': typeof AppTravelRoute
+  '/vad-nu': typeof AppVadNuRoute
   '/veckans-flow': typeof AppVeckansFlowRoute
   '/workflow': typeof AppWorkflowRoute
   '/guide/adhd-planner-for-adults': typeof GuideAdhdPlannerForAdultsRoute
@@ -439,6 +446,7 @@ export interface FileRoutesByTo {
   '/tasks': typeof AppTasksRoute
   '/traning': typeof AppTraningRoute
   '/travel': typeof AppTravelRoute
+  '/vad-nu': typeof AppVadNuRoute
   '/veckans-flow': typeof AppVeckansFlowRoute
   '/workflow': typeof AppWorkflowRoute
   '/guide/adhd-planner-for-adults': typeof GuideAdhdPlannerForAdultsRoute
@@ -496,6 +504,7 @@ export interface FileRoutesById {
   '/_app/tasks': typeof AppTasksRoute
   '/_app/traning': typeof AppTraningRoute
   '/_app/travel': typeof AppTravelRoute
+  '/_app/vad-nu': typeof AppVadNuRoute
   '/_app/veckans-flow': typeof AppVeckansFlowRoute
   '/_app/workflow': typeof AppWorkflowRoute
   '/guide/adhd-planner-for-adults': typeof GuideAdhdPlannerForAdultsRoute
@@ -553,6 +562,7 @@ export interface FileRouteTypes {
     | '/tasks'
     | '/traning'
     | '/travel'
+    | '/vad-nu'
     | '/veckans-flow'
     | '/workflow'
     | '/guide/adhd-planner-for-adults'
@@ -608,6 +618,7 @@ export interface FileRouteTypes {
     | '/tasks'
     | '/traning'
     | '/travel'
+    | '/vad-nu'
     | '/veckans-flow'
     | '/workflow'
     | '/guide/adhd-planner-for-adults'
@@ -664,6 +675,7 @@ export interface FileRouteTypes {
     | '/_app/tasks'
     | '/_app/traning'
     | '/_app/travel'
+    | '/_app/vad-nu'
     | '/_app/veckans-flow'
     | '/_app/workflow'
     | '/guide/adhd-planner-for-adults'
@@ -793,6 +805,13 @@ declare module '@tanstack/react-router' {
       path: '/veckans-flow'
       fullPath: '/veckans-flow'
       preLoaderRoute: typeof AppVeckansFlowRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/vad-nu': {
+      id: '/_app/vad-nu'
+      path: '/vad-nu'
+      fullPath: '/vad-nu'
+      preLoaderRoute: typeof AppVadNuRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/travel': {
@@ -1112,6 +1131,7 @@ interface AppRouteChildren {
   AppTasksRoute: typeof AppTasksRoute
   AppTraningRoute: typeof AppTraningRoute
   AppTravelRoute: typeof AppTravelRoute
+  AppVadNuRoute: typeof AppVadNuRoute
   AppVeckansFlowRoute: typeof AppVeckansFlowRoute
   AppWorkflowRoute: typeof AppWorkflowRoute
   AppAssistantChatIdRoute: typeof AppAssistantChatIdRoute
@@ -1151,6 +1171,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppTasksRoute: AppTasksRoute,
   AppTraningRoute: AppTraningRoute,
   AppTravelRoute: AppTravelRoute,
+  AppVadNuRoute: AppVadNuRoute,
   AppVeckansFlowRoute: AppVeckansFlowRoute,
   AppWorkflowRoute: AppWorkflowRoute,
   AppAssistantChatIdRoute: AppAssistantChatIdRoute,
