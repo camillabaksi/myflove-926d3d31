@@ -269,6 +269,7 @@ export default function Layout({ children }: LayoutProps) {
   const mobileNavItems = useMemo(() => {
     const home = navItems.find((i) => i.href === "/hem")!;
     const chosen = bottomNavHrefs
+      .filter((href) => href !== "/quickflow")
       .map((href) => navItems.find((i) => i.href === href))
       .filter(Boolean) as typeof navItems;
     // Ensure we always have 3 valid slots; fill missing with defaults.
