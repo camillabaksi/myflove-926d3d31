@@ -1,11 +1,16 @@
+import { useState } from "react";
 import Layout from "@/components/layout";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { MoodContent } from "@/pages/mood";
 import { EnergyContent } from "@/pages/energy-map";
-import { Heart, Smile, Battery } from "lucide-react";
+import { Heart, Smile, Battery, Hand } from "lucide-react";
 import CollapsibleSection from "@/components/collapsible-section";
+import { Button } from "@/components/ui/button";
+import StopModal from "@/components/stop-modal";
 
 export default function WellnessPage() {
+  const [stopOpen, setStopOpen] = useState(false);
+
   return (
     <Layout>
       <div className="space-y-6">
@@ -18,6 +23,16 @@ export default function WellnessPage() {
             Checka in mående och energi från samma ställe – båda eller var för sig.
           </p>
         </header>
+
+        <Button
+          onClick={() => setStopOpen(true)}
+          className="w-full h-14 rounded-2xl text-lg font-semibold shadow-sm"
+        >
+          <Hand size={20} className="mr-2" aria-hidden="true" />
+          Stop – ta en paus först
+        </Button>
+        <StopModal open={stopOpen} onOpenChange={setStopOpen} />
+
 
         <Tabs defaultValue="both" className="w-full">
           <TabsList className="grid w-full grid-cols-3 h-11 rounded-2xl">
