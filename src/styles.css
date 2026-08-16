@@ -130,6 +130,13 @@
   --gradient-hero: linear-gradient(135deg, hsl(264 70% 96%) 0%, hsl(276 65% 94%) 50%, hsl(327 70% 95%) 100%);
   --shadow-soft: 0 1px 2px hsl(258 40% 30% / 0.04), 0 12px 28px -18px hsl(258 45% 35% / 0.25);
   --shadow-lifted: 0 2px 4px hsl(258 40% 30% / 0.05), 0 24px 48px -24px hsl(258 45% 35% / 0.3);
+  --shadow-float-value: 0 18px 40px -20px hsl(258 45% 35% / 0.35);
+
+  /* Kantlinjer – gemensamma stilar för kort, avdelare och fokus */
+  --border-hairline: 1px solid hsl(var(--border) / 0.7);
+  --border-strong: 1px solid hsl(var(--border));
+  --border-dashed: 1px dashed hsl(var(--border));
+  --border-accent: 1px solid hsl(var(--primary) / 0.35);
 }
 
 .dark {
