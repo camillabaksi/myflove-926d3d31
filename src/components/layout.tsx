@@ -99,7 +99,7 @@ const CATEGORY_THEMES: Record<string, Record<string, string>> = {
   "/beloningar":     T.gold,
   "/statistik":      T.ink,
   "/friktionsindex": T.terracotta,
-  "/insight":        { "--primary": "285 38% 40%", "--ring": "285 38% 40%", "--accent": "285 35% 86%", "--accent-foreground": "285 45% 22%" },
+  "/insight":        { "--primary": "285 52% 58%", "--ring": "285 52% 58%", "--accent": "285 55% 93%", "--accent-foreground": "285 45% 30%" },
 };
 
 
