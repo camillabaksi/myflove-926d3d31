@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "wouter";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { FLOW_GOALS, useFlowPrefs, type FlowGoalId } from "@/hooks/use-daily-flow";
+import { useLocalStorage } from "@/lib/storage";
 
 /**
  * Kort onboarding första gången: vad vill du att MyFlove hjälper dig med?
@@ -13,7 +14,9 @@ export default function FlowOnboarding() {
   const [step, setStep] = useState<1 | 2>(1);
   const [dismissed, setDismissed] = useState(false);
 
-  const open = !done && !dismissed;
+  // Vänta tills välkomstturen är avklarad – en sak i taget.
+  const [introSeen] = useLocalStorage<boolean>("myflove-intro-seen", false);
+  const open = introSeen && !done && !dismissed;
 
   const toggle = (id: FlowGoalId) =>
     setSelected((prev) => (prev.includes(id) ? prev.filter((g) => g !== id) : [...prev, id]));
