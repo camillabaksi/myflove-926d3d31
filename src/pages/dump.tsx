@@ -13,6 +13,7 @@ import InsightQuickflowHint from "@/components/insight-quickflow-hint";
 import QuickflowCapture from "@/components/quickflow-capture";
 import { Mic, Square, Sparkles, CheckSquare, ShoppingBag, Calendar, Lightbulb, Check, Trash2, Inbox, Smile } from "lucide-react";
 import CollapsibleSection from "@/components/collapsible-section";
+import { MyFloveListening } from "@/components/myflove/motion";
 
 interface SortableThought extends ParsedThought {
   id: string;
@@ -174,6 +175,13 @@ export default function Dump() {
               placeholder="T.ex. 'Handla mjölk. Ringa tandläkaren imorgon. Kanske börja måla om vardagsrummet någon gång...'"
               className="h-48 w-full resize-none border-none bg-transparent p-4 pb-16 text-lg outline-none"
             />
+            {(isListening || rawText.trim().length > 0) && (
+              <MyFloveListening
+                active={isListening || rawText.trim().length > 0}
+                label={isListening ? "Jag lyssnar..." : "Jag följer med."}
+                className="absolute right-4 top-4"
+              />
+            )}
             <div className="absolute bottom-3 right-3 left-3 flex justify-between items-center gap-2">
               {voiceSupported ? (
                 <button

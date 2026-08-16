@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Living UI – varje funktion har egna små animationer: MyFlove \"tänker\" i Vad ska jag göra nu, QuickFlow visar att den lyssnar, Resor ritar en rutt framåt, Ekonomi visar balans, Insight samlar punkter till ett mönster, Flow Reset tänder stjärnor och hjärtat slår i takt med din energi (2026-08-16)",
       "Gemensamt designsystem – återanvändbara MyFlove-komponenter (kort, knappar, sidhuvud, chips, empty states, loading, modal) och en fast emoji-mappning som gäller i hela appen (2026-08-16)",
       "Uppgifter, Flow Reset och Insight följer nu samma pastelldesign – hero med emoji, rundare kort, lavendelpiller och tydligare \"Nu\"-markering i dagsvyn (2026-08-16)",
       "Fokusläget har fått en stor ringtimer med start/paus i mitten, plus \"Ta paus\" och \"Klar\" (2026-08-16)",

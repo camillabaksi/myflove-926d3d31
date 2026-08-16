@@ -385,3 +385,82 @@ html[data-npf-less="true"] [data-npf="optional"] {
     animation: none !important;
   }
 }
+
+/* ------------------------------------------------------------------
+   Living UI – varje funktion har sitt eget lilla liv.
+   Alla kontinuerliga rörelser stängs av vid reduce motion (nedan).
+   ------------------------------------------------------------------ */
+
+@keyframes myflove-heart {
+  0%, 100% { transform: scale(1); }
+  18%      { transform: scale(1.14); }
+  32%      { transform: scale(1); }
+  48%      { transform: scale(1.08); }
+}
+
+@keyframes myflove-sparkle {
+  0%, 100% { opacity: 0.25; transform: scale(0.7) rotate(0deg); }
+  50%      { opacity: 1;    transform: scale(1.1) rotate(18deg); }
+}
+
+@keyframes myflove-drift {
+  0%   { transform: translate(0, 0) scale(1); }
+  33%  { transform: translate(6px, -8px) scale(1.04); }
+  66%  { transform: translate(-5px, 5px) scale(0.98); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+@keyframes myflove-think {
+  0%, 100% { opacity: 0.3; transform: translateY(2px) scale(0.9); }
+  50%      { opacity: 1;   transform: translateY(-3px) scale(1); }
+}
+
+@keyframes myflove-listen {
+  0%, 100% { transform: scaleY(0.4); }
+  50%      { transform: scaleY(1); }
+}
+
+@keyframes myflove-draw {
+  from { stroke-dashoffset: var(--draw-length, 240); }
+  to   { stroke-dashoffset: 0; }
+}
+
+@keyframes myflove-fly {
+  0%   { opacity: 0; transform: translate(0, 0) scale(0.6); }
+  25%  { opacity: 1; transform: translate(0, -14px) scale(1); }
+  100% { opacity: 0; transform: translate(var(--fly-x, 0px), var(--fly-y, 120px)) scale(0.5); }
+}
+
+@keyframes myflove-grow-bar {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+
+@keyframes myflove-check {
+  from { stroke-dashoffset: 32; }
+  to   { stroke-dashoffset: 0; }
+}
+
+@keyframes myflove-gather {
+  0%   { opacity: 0; transform: translate(var(--from-x, 0px), var(--from-y, 0px)) scale(0.6); }
+  60%  { opacity: 1; transform: translate(0, 0) scale(1); }
+  100% { opacity: 0.9; transform: translate(0, 0) scale(1); }
+}
+
+@keyframes myflove-twinkle {
+  0%, 100% { opacity: 0.15; }
+  50%      { opacity: 0.9; }
+}
+
+@utility heartbeat { animation: myflove-heart 2.8s ease-in-out infinite; }
+@utility sparkling { animation: myflove-sparkle 2.6s ease-in-out infinite; }
+@utility drifting  { animation: myflove-drift 14s ease-in-out infinite; }
+@utility twinkling { animation: myflove-twinkle 4s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .heartbeat, .sparkling, .drifting, .twinkling,
+  [data-motion="living"], [data-motion="living"] * {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
+}

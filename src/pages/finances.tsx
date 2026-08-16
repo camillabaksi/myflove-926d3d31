@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Plus, Trash2, TrendingDown, TrendingUp } from "lucide-react";
 import BudgetPanel from "@/components/budget-panel";
 import { MyFloveHeader } from "@/components/myflove";
+import { MyFloveBalanceBars } from "@/components/myflove/motion";
 import CollapsibleSection from "@/components/collapsible-section";
 
 const CATEGORIES = ["Mat", "Boende", "Transport", "Nöje", "Övrigt"];
@@ -85,6 +86,17 @@ export default function Finances() {
             <span className="text-sm text-primary mb-1">Kvar</span>
             <span className="text-xl font-bold text-primary">{balance} kr</span>
           </div>
+        </div>
+
+        <div className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft">
+          <p className="mb-3 text-sm font-semibold text-ink">Balans den här månaden</p>
+          <MyFloveBalanceBars
+            bars={[
+              { label: "In", value: totalIncome, tone: "mint" },
+              { label: "Ut", value: totalExpense, tone: "blush" },
+              { label: "Kvar", value: Math.max(0, balance), tone: "primary" },
+            ]}
+          />
         </div>
 
         <BudgetPanel transactions={transactions} categories={CATEGORIES} />

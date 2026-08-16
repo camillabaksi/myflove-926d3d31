@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Layout from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import FocusMode from "@/components/focus-mode";
@@ -6,6 +6,12 @@ import { useTasks } from "@/hooks/use-data";
 import { useDailyCheckin, useFlowUsage } from "@/hooks/use-daily-flow";
 import { scoreTask, TIME_META, type ScoredTask } from "@/lib/daily-flow";
 import { Clock, Flag, Waves, Play, Shuffle, Moon, Sparkles, Lightbulb } from "lucide-react";
+import {
+  MyFloveThinking,
+  MyFloveTransition,
+  MyFloveEmptyIllustration,
+  MyFloveFloatingElement,
+} from "@/components/myflove/motion";
 
 /** Hur mycket tid känns rimligt just nu – tre lugna val, inget mer. */
 const TIME_CHOICES = [
@@ -32,6 +38,15 @@ export default function WhatNow() {
   const [skipped, setSkipped] = useState<string[]>([]);
   const [focusOpen, setFocusOpen] = useState(false);
 
+  // MyFlove "tänker" en kort stund varje gång förutsättningarna ändras –
+  // en liten synlig process i stället för en teknisk spinner.
+  const [thinking, setThinking] = useState(true);
+  useEffect(() => {
+    setThinking(true);
+    const t = setTimeout(() => setThinking(false), 1500);
+    return () => clearTimeout(t);
+  }, [minutes, skipped.length]);
+
   const ranked = useMemo<ScoredTask[]>(() => {
     const ctx = {
       energy: checkin?.energy ?? 3,
@@ -57,8 +72,8 @@ export default function WhatNow() {
       <div className="space-y-6 animate-fade-in">
         {/* Hero */}
         <div className="relative overflow-hidden rounded-3xl border border-border/60 bg-card p-6 shadow-lifted pop-in">
-          <div className="pointer-events-none absolute -top-16 -right-12 h-36 w-36 rounded-full bg-lavender opacity-70 blur-md" />
-          <div className="pointer-events-none absolute -bottom-14 -left-10 h-28 w-28 rounded-full bg-blush opacity-60 blur-[2px]" />
+          <MyFloveFloatingElement tone="lavender" size={144} className="-top-16 -right-12" />
+          <MyFloveFloatingElement tone="blush" size={112} className="-bottom-14 -left-10" />
           <div className="relative space-y-2">
             <h1 className="font-display text-3xl font-bold text-ink">Vad ska jag göra nu?</h1>
             <p className="text-muted-foreground leading-relaxed">
@@ -90,8 +105,12 @@ export default function WhatNow() {
         </div>
 
         {/* Förslaget */}
-        {suggestion ? (
-          <div className="rounded-3xl border border-border/60 bg-card p-6 shadow-lifted space-y-5 pop-in">
+        {thinking ? (
+          <div className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft">
+            <MyFloveThinking label="Jag tittar på din tid, din energi och dina mål..." />
+          </div>
+        ) : suggestion ? (
+          <MyFloveTransition transitionKey={suggestion.task.id} className="rounded-3xl border border-border/60 bg-card p-6 shadow-lifted space-y-5">
             <div>
               <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Mitt förslag</p>
               <h2 className="mt-2 flex items-start gap-3 font-display text-2xl font-bold text-ink">
@@ -140,11 +159,11 @@ export default function WhatNow() {
                 <Moon size={18} className="mr-2" /> Inte idag
               </Button>
             </div>
-          </div>
+          </MyFloveTransition>
         ) : (
           <div className="rounded-3xl border border-border/60 bg-card p-8 text-center shadow-sm">
-            <div className="mx-auto mb-3 grid h-14 w-14 place-items-center rounded-3xl bg-mint text-primary breathe">
-              <Sparkles size={24} />
+            <div className="mx-auto mb-3 grid h-14 w-14 place-items-center rounded-3xl bg-mint">
+              <MyFloveEmptyIllustration kind="quickflow" className="text-2xl" />
             </div>
             <p className="font-display text-xl font-bold text-ink">Inget som skriker just nu</p>
             <p className="mt-2 text-muted-foreground">
