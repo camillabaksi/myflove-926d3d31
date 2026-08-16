@@ -179,12 +179,12 @@ export default function Home() {
   const hour = new Date().getHours();
   const heroGradient =
     hour < 10
-      ? "linear-gradient(135deg, hsl(var(--gold) / 0.30) 0%, hsl(var(--cream)) 55%, hsl(var(--sage) / 0.25) 100%)"
+      ? "linear-gradient(135deg, hsl(var(--sky) / 0.75) 0%, hsl(var(--cream)) 55%, hsl(var(--lavender) / 0.85) 100%)"
       : hour < 17
-        ? "linear-gradient(135deg, hsl(var(--sage) / 0.35) 0%, hsl(var(--cream)) 60%, hsl(var(--gold) / 0.22) 100%)"
+        ? "linear-gradient(135deg, hsl(var(--lavender) / 0.9) 0%, hsl(var(--cream)) 58%, hsl(var(--mint) / 0.7) 100%)"
         : hour < 22
-          ? "linear-gradient(135deg, hsl(var(--gold) / 0.28) 0%, hsl(var(--cream)) 55%, hsl(var(--forest) / 0.18) 100%)"
-          : "linear-gradient(135deg, hsl(var(--forest) / 0.28) 0%, hsl(var(--card)) 65%)";
+          ? "linear-gradient(135deg, hsl(var(--blush) / 0.8) 0%, hsl(var(--cream)) 55%, hsl(var(--lavender) / 0.85) 100%)"
+          : "linear-gradient(135deg, hsl(var(--lavender) / 0.7) 0%, hsl(var(--card)) 70%)";
 
   return (
     <Layout>
@@ -245,6 +245,23 @@ export default function Home() {
             )}
           </div>
         </div>
+
+        <Link
+          href="/vad-nu"
+          style={{ order: -1 }}
+          className="press group relative flex items-center gap-4 overflow-hidden rounded-3xl border border-primary/25 bg-card p-5 shadow-sm transition-colors hover:border-primary/50"
+        >
+          <span className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-lavender opacity-70" />
+          <span className="relative grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-primary/10 text-primary">
+            <Sparkles size={22} />
+          </span>
+          <span className="relative min-w-0">
+            <span className="block font-display text-lg font-bold text-ink">Vad ska jag göra nu?</span>
+            <span className="block text-sm text-muted-foreground">
+              Ett förslag i taget, utifrån din tid och energi.
+            </span>
+          </span>
+        </Link>
 
         <div style={{ order: -1 }}>
           <PersonalNote />

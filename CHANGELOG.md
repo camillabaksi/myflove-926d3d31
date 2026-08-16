@@ -7,6 +7,13 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 
 ## [Unreleased]
 
+### Added
+- **Egen sida: "Vad ska jag göra nu?"** (2026-08-16): Ny vy på `/vad-nu` som visar ett enda förslag i taget utifrån hur lång stund du har (10 min, 25 min eller en timme), din energi och dagens belastning – med tid, prioritet, friktion och en förklaring till varför just den. "Börja nu" öppnar fokusläget, "Välj något annat" hoppar vidare och "Inte idag" skjuter upp till imorgon. Nås direkt från startsidan.
+- **Tidslinje i kalenderns dagsvy** (2026-08-16): Dagsvyn visar nu en tidslinje från 06:00 till 22:00 med pastellfärgade händelsekort, bildstöd och en mjuk "Nu"-markering för var på dagen du är. Saker utan klockslag samlas längst ner.
+
+### Changed
+- **Ny känsla på startsida och QuickFlow** (2026-08-16): Hemskärmens hero går i pastell (lavendel, ljusblå, rosa, mint) efter tid på dygnet, och QuickFlow har fått samma mjuka hero med andande illustration.
+
 ### Changed
 - **Hoppa över onboarding** (2026-08-16): En tydlig "Hoppa över"-knapp syns nu hela tiden uppe till höger i onboarding, plus en fullbredd knapp under framåtknappen som tar dig direkt till startsidan. "Nu kör vi" på sista steget leder också till `/hem`.
 - **Onboarding som sveps i sidled** (2026-08-16): Välkomstkorten ligger nu i en karusell du kan svepa mellan med fingret. Progressen visas med punkter du kan trycka på plus en tydlig räknare ("Steg 2 av 4"), och du kan gå tillbaka utan att börja om.

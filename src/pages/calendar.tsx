@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import CollapsibleSection from "@/components/collapsible-section";
+import DayTimeline from "@/components/day-timeline";
 import { useLocalStorage } from "@/lib/storage";
 import { pictogramFor } from "@/lib/pictograms";
 import { useNpfSettings } from "@/lib/npf-mode";
@@ -661,6 +662,41 @@ export default function CalendarPage() {
                   </span>
                 ))}
               </div>
+            )}
+
+            {view === "dag" && (
+              <DayTimeline
+                isToday={selectedDateStr === todayStr}
+                entries={[
+                  ...selectedItems.childEvents.map((e) => ({
+                    id: `c-${e.id}`,
+                    title: e.title,
+                    time: e.time ?? "",
+                    color: e.child?.color ?? "#a06cd5",
+                    emoji: pictoMode ? pictogramFor(e.title, "🐣") : undefined,
+                  })),
+                  ...selectedItems.familyEvents.map((e) => ({
+                    id: `f-${e.id}`,
+                    title: e.title,
+                    time: e.time ?? "",
+                    color: e.member?.color ?? "#8a9a5b",
+                    emoji: pictoMode ? pictogramFor(e.title, "👨‍👩‍👧") : undefined,
+                  })),
+                  ...selectedItems.reminders.map((r) => ({
+                    id: `r-${r.id}`,
+                    title: r.title,
+                    time: r.time ?? "",
+                    emoji: pictoMode ? pictogramFor(r.title, "🔔") : undefined,
+                  })),
+                  ...selectedItems.tasks.map((t) => ({
+                    id: `t-${t.id}`,
+                    title: t.title,
+                    time: t.time ?? "",
+                    endTime: t.endTime,
+                    emoji: pictoMode ? pictogramFor(t.title, "✅") : undefined,
+                  })),
+                ]}
+              />
             )}
 
 

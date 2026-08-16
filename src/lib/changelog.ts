@@ -12,6 +12,9 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Egen sida \"Vad ska jag göra nu?\" på /vad-nu – ett förslag i taget med tid, prioritet, friktion och varför (2026-08-16)",
+      "Tidslinje i kalenderns dagsvy – 06–22 med pastellkort, bildstöd och \"Nu\"-markering (2026-08-16)",
+      "Pastell-hero på startsidan och i QuickFlow, med andande illustration (2026-08-16)",
       "Hoppa över onboarding – tydlig knapp uppe till höger och fullbredd knapp under, leder direkt till startsidan (2026-08-16)",
       "Onboarding sveps i sidled med tryckbara punkter och räknare \"Steg 2 av 4\" (2026-08-16)",
       "Pasteller och mjuk rörelse – sidor tonar in, kort poppar upp, knappar svarar på tryck (2026-08-16)",

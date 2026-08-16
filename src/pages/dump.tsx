@@ -149,12 +149,19 @@ export default function Dump() {
   return (
     <Layout>
       <div className="space-y-8">
-        <div>
-          <h1 className="text-3xl font-bold mb-2">Quickflow</h1>
-          <p className="text-muted-foreground leading-relaxed">
-            Få ut det ur huvudet. Skriv eller prata in allt som snurrar – huller om buller går bra.
-            Jag sorterar det till rätt plats, och det du inte vill bestämma dig om håller jag åt dig. 💙
-          </p>
+        <div className="relative overflow-hidden rounded-3xl border border-border/60 bg-card p-6 shadow-lifted pop-in">
+          <div className="pointer-events-none absolute -top-16 -right-12 h-36 w-36 rounded-full bg-lavender opacity-70 blur-md" />
+          <div className="pointer-events-none absolute -bottom-14 -left-10 h-28 w-28 rounded-full bg-mint opacity-60 blur-[2px]" />
+          <div className="pointer-events-none absolute right-6 top-6 select-none text-4xl breathe" aria-hidden>
+            💭
+          </div>
+          <div className="relative space-y-2">
+            <h1 className="font-display text-3xl font-bold text-ink pr-14">QuickFlow</h1>
+            <p className="text-muted-foreground leading-relaxed">
+              Få ut det ur huvudet. Skriv eller prata in allt som snurrar – huller om buller går bra.
+              Jag håller det åt dig tills du orkar sortera. 💜
+            </p>
+          </div>
         </div>
 
         <QuickflowCapture />
