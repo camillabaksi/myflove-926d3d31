@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import Layout from "@/components/layout";
+import { MyFloveEmptyIllustration } from "@/components/myflove/motion";
 import { useFocus, useTasks, useReminders } from "@/hooks/use-data";
 import { useChildren } from "@/hooks/use-children";
 import { Link } from "wouter";
@@ -641,6 +642,7 @@ export default function CalendarPage() {
             
             {!selectedItems.focus && selectedItems.tasks.length === 0 && selectedItems.reminders.length === 0 && selectedItems.familyEvents.length === 0 && selectedItems.childEvents.length === 0 && selectedItems.recurring.length === 0 && (
               <div className="text-center py-10 bg-card/50 border border-border/50 rounded-3xl text-muted-foreground">
+                <MyFloveEmptyIllustration kind="calendar" className="mb-2 block" />
                 Inget inplanerat denna dag.
               </div>
             )}

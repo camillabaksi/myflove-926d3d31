@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import Layout from "@/components/layout";
+import { MyFloveThinking } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
 import { Loader2, ListOrdered, Sparkles, Clock, Battery, RotateCcw, BellRing } from "lucide-react";
 import { Link } from "@tanstack/react-router";
@@ -278,6 +279,13 @@ export default function FlowPlanPage() {
                   activeTasks.length === 1 ? "" : "er"
                 } tas med i planeringen.`}
           </div>
+
+          {loading && (
+            <MyFloveThinking
+              steps={["📋", "⚡", "🎯", "✨"]}
+              label="Jag lägger uppgifterna i en ordning som håller…"
+            />
+          )}
 
           <Button
             onClick={handlePlan}

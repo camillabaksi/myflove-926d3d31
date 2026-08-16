@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Layout from "@/components/layout";
+import { MyFloveEmptyIllustration } from "@/components/myflove/motion";
 import { MyFloveHeader } from "@/components/myflove";
 import { useSavedStores, STORE_RADIUS_OPTIONS, DEFAULT_STORE_RADIUS_METERS } from "@/hooks/use-data";
 import { useSharedShoppingList } from "@/hooks/use-shared-shopping-list";
@@ -240,6 +241,7 @@ export default function Shopping() {
         <div className="space-y-6">
           {activeItems.length === 0 && completedItems.length === 0 && (
             <div className="text-center py-16 text-muted-foreground border-2 border-dashed border-border rounded-3xl">
+              <MyFloveEmptyIllustration kind="default" className="mb-2 block" />
               <p className="text-lg">Inget att handla just nu.</p>
             </div>
           )}

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useNavigate } from "@tanstack/react-router";
 import Layout from "@/components/layout";
+import { MyFloveThinking } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
 import { Loader2, Send, Sparkles, History, Plus, Trash2, X } from "lucide-react";
 import { chatWithFlow } from "@/lib/flow-chat.functions";
@@ -232,9 +233,12 @@ export default function Assistant({ chatId }: { chatId?: string }) {
             )}
             {isSending && (
               <div className="flex justify-start">
-                <div className="bg-secondary text-muted-foreground px-4 py-3 rounded-2xl rounded-bl-sm text-sm flex items-center gap-2">
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  Flow tänker…
+                <div className="bg-secondary text-muted-foreground px-4 py-2 rounded-2xl rounded-bl-sm text-sm">
+                  <MyFloveThinking
+                    steps={["💬", "🧠", "💜", "✨"]}
+                    label="Flow tänker…"
+                    className="py-1"
+                  />
                 </div>
               </div>
             )}
