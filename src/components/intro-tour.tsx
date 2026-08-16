@@ -145,20 +145,19 @@ export default function IntroTour() {
             )}
             <Button
               className="flex-1 rounded-2xl press"
-              onClick={() => (isLast ? setSeen(true) : goTo(step + 1))}
+              onClick={() => (isLast ? finish() : goTo(step + 1))}
             >
               {isLast ? "Nu kör vi" : "Nästa"}
             </Button>
           </div>
-          {!isLast && (
-            <button
-              type="button"
-              onClick={() => setSeen(true)}
-              className="text-xs text-muted-foreground hover:underline"
-            >
-              Hoppa över
-            </button>
-          )}
+          <Button
+            variant="ghost"
+            type="button"
+            onClick={finish}
+            className="w-full rounded-2xl text-sm font-medium text-muted-foreground hover:bg-muted hover:text-ink press"
+          >
+            Hoppa över intro och gå till startsidan
+          </Button>
         </div>
       </DialogContent>
     </Dialog>
