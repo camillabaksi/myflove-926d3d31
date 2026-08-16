@@ -104,10 +104,9 @@ export function MyFloveIcon({
     >
       <Icon size={px} strokeWidth={2.2} />
       {emoji && (
-        <span aria-hidden className="absolute -right-1.5 -top-1.5 text-sm leading-none drop-shadow-sm">
-          {emoji}
-        </span>
+        <MyFloveEmoji emoji={emoji} size="xs" className="absolute -right-1.5 -top-1.5 drop-shadow-sm" />
       )}
+
     </span>
   );
 }
