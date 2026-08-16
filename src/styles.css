@@ -153,6 +153,13 @@
   --forest: 258 78% 72%;
   --forest-deep: 258 40% 28%;
 
+  /* Pasteller i mörkt läge – djupa men mjuka */
+  --lavender: 264 26% 24%;
+  --blush: 335 26% 26%;
+  --mint: 158 22% 22%;
+  --sky: 202 26% 24%;
+  --sun: 44 28% 24%;
+
   --gradient-hero: linear-gradient(135deg, hsl(260 30% 15%) 0%, hsl(272 28% 17%) 50%, hsl(327 22% 20%) 100%);
   --shadow-soft: 0 1px 2px hsl(0 0% 0% / 0.3), 0 12px 28px -18px hsl(0 0% 0% / 0.6);
   --shadow-lifted: 0 2px 4px hsl(0 0% 0% / 0.35), 0 24px 48px -24px hsl(0 0% 0% / 0.65);
