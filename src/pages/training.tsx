@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import Layout from "@/components/layout";
+import { MyFloveThinking } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -867,6 +868,13 @@ export default function TrainingPage() {
             onChange={(e) => setLimitations(e.target.value)}
             className="rounded-xl"
           />
+
+          {loading && (
+            <MyFloveThinking
+              steps={["🏃", "⚡", "📋", "✨"]}
+              label="Jag sätter ihop ett pass som passar dig…"
+            />
+          )}
 
           <Button onClick={handleGenerate} disabled={loading} className="rounded-xl gap-2 w-full">
             {loading ? <Loader2 size={16} className="animate-spin" /> : <Sparkles size={16} />}
