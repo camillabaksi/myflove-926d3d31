@@ -107,7 +107,7 @@ export default function FlowReset() {
 
 
       {unfinishedToday.length > 2 && !replanned && (
-        <div className="rounded-2xl border border-border bg-muted/30 p-4 space-y-3">
+        <div className="rounded-3xl bg-card/80 p-4 space-y-3">
           <p className="text-sm text-ink">
             Det blev inte som planerat. Det är okej. Vill du att jag hjälper dig planera om?
           </p>
@@ -115,17 +115,18 @@ export default function FlowReset() {
             <button
               type="button"
               onClick={replan}
-              className="rounded-full bg-primary text-primary-foreground px-4 py-2 text-sm font-semibold"
+              className="press rounded-pill bg-primary text-primary-foreground px-4 py-2.5 text-sm font-semibold"
             >
               Ja, planera om
             </button>
             <button
               type="button"
               onClick={() => setReplanned(true)}
-              className="rounded-full border border-border px-4 py-2 text-sm font-medium"
+              className="press rounded-pill bg-lavender px-4 py-2.5 text-sm font-semibold text-ink"
             >
               Jag gör det själv
             </button>
+
             <button
               type="button"
               onClick={() => setReplanned(true)}
