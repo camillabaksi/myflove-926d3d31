@@ -21,6 +21,7 @@ import {
   type StrategyNudge,
 } from "@/lib/insight";
 import CollapsibleSection from "@/components/collapsible-section";
+import { MyFloveInsightGather } from "@/components/myflove/motion";
 
 
 
@@ -148,7 +149,7 @@ export default function InsightPage() {
         }}
       >
         <div className="flex items-start gap-3">
-          <span aria-hidden className="text-3xl leading-none">🧠</span>
+          <MyFloveInsightGather emoji="🧠" />
           <div className="min-w-0">
             <h1 className="font-display text-2xl font-bold text-ink">MyFlove Insight</h1>
             <p className="mt-1 text-sm text-muted-foreground">
