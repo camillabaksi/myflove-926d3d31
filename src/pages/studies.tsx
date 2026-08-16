@@ -18,6 +18,7 @@ import {
   FolderOpen,
 } from "lucide-react";
 import { useTasks, type Task } from "@/hooks/use-data";
+import { MyFloveThinking } from "@/components/myflove/motion";
 import { useCourses } from "@/hooks/use-courses";
 import { breakDownAssignment } from "@/lib/study.functions";
 import { supabase } from "@/integrations/supabase/client";
@@ -531,6 +532,13 @@ export function StudiesSection() {
                     ))}
                   </select>
 
+                  {busyId === task.id && (
+                    <MyFloveThinking
+                      steps={["📚", "🧠", "✂️", "✨"]}
+                      label="Jag delar upp den i mindre steg…"
+                      className="py-2"
+                    />
+                  )}
                   <Button
                     variant="secondary"
                     size="sm"

@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import Layout from "@/components/layout";
+import { MyFloveEmptyIllustration } from "@/components/myflove/motion";
 import { useTasks, Task, TaskKind, TaskStatus } from "@/hooks/use-data";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -473,6 +474,7 @@ export default function Tasks() {
         <div className="space-y-8">
           {filteredActive.length === 0 && completedTasks.length === 0 && (
             <div className="text-center py-16 text-muted-foreground border-2 border-dashed border-border rounded-3xl">
+              <MyFloveEmptyIllustration kind="default" className="mb-2 block" />
               <p className="text-lg">Inget att göra just nu.</p>
               <p className="text-sm mt-2 opacity-70">Ta en paus och andas.</p>
             </div>

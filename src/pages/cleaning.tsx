@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import Layout from "@/components/layout";
+import { MyFloveFloatingElement } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
@@ -66,7 +67,9 @@ export default function CleaningPage() {
     <Layout>
       <div className="mx-auto max-w-3xl px-4 py-6 space-y-6">
         <header>
-          <h1 className="font-display text-3xl font-bold text-foreground">Städning</h1>
+          <h1 className="font-display text-3xl font-bold text-foreground flex items-center gap-3">
+            Städning <MyFloveFloatingElement tone="mint" size={18} />
+          </h1>
           <p className="mt-1 text-muted-foreground text-sm">
             Välj rum och läge. Kryssa av i din takt – allt räknas.
           </p>

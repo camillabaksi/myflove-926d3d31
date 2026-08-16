@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { Button } from "@/components/ui/button";
+import { MyFlovePath } from "@/components/myflove/motion";
 import { Loader2, MapPin, Navigation, Route as RouteIcon, ExternalLink, ChevronDown, RefreshCw } from "lucide-react";
 import CollapsibleSection from "@/components/collapsible-section";
 import { suggestWalkRoutes, type WalkRoute } from "@/lib/walk-routes.functions";
@@ -156,6 +157,18 @@ export default function WalkRoutesSection() {
           Uppdatera min plats
         </Button>
       </div>
+
+      {loading && (
+        <MyFlovePath
+          className="my-2"
+          steps={[
+            { emoji: "📍", label: "Din plats" },
+            { emoji: "🌳", label: "Vägar" },
+            { emoji: "🚶", label: "Förslag" },
+          ]}
+          current={1}
+        />
+      )}
 
       {updatedAt && (
         <p className="text-xs text-muted-foreground">

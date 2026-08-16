@@ -1,5 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { AlertCircle } from "lucide-react";
+import { MyFloveFloatingElement } from "@/components/myflove/motion";
 
 export default function NotFound() {
   return (
@@ -7,6 +8,7 @@ export default function NotFound() {
       <Card className="w-full max-w-md mx-4">
         <CardContent className="pt-6">
           <div className="flex mb-4 gap-2">
+            <MyFloveFloatingElement tone="blush" size={32} />
             <AlertCircle className="h-8 w-8 text-destructive" aria-hidden="true" />
             <h1 className="text-2xl font-bold">404 – Sidan finns inte</h1>
           </div>

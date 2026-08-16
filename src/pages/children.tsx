@@ -2,6 +2,7 @@ import { useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useClerk, Show } from "@clerk/react";
 import Layout from "@/components/layout";
+import { MyFloveEmptyIllustration } from "@/components/myflove/motion";
 import { REPEAT_LABELS, type RepeatMode } from "@/lib/recurrence";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -413,7 +414,10 @@ function ChildrenContent() {
             </div>
 
             {visibleItems.length === 0 ? (
-              <p className="text-muted-foreground py-8 text-center">Inget här än – lugnt, det kommer.</p>
+              <p className="text-muted-foreground py-8 text-center">
+                <MyFloveEmptyIllustration kind="default" className="mb-2 block" />
+                Inget här än – lugnt, det kommer.
+              </p>
             ) : (
               <ul className="space-y-2">
                 {visibleItems.map((item) => {

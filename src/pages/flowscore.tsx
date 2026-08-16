@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import { Gauge, Zap, Briefcase, GraduationCap } from "lucide-react";
 import { FlowScoreCard } from "@/components/flow-score-card";
 import { useFlowScore } from "@/hooks/use-flowscore";
+import { MyFloveEnergyDots } from "@/components/myflove/motion";
 import CollapsibleSection from "@/components/collapsible-section";
 
 export default function FlowScorePage() {
@@ -29,7 +30,13 @@ export default function FlowScorePage() {
           >
             <p className="text-xs uppercase tracking-wide text-muted-foreground">Energi</p>
             <p className="mt-1 font-display text-xl text-ink">
-              {energy ? `${energy}/5` : <span className="text-sm text-muted-foreground">Inte loggat än</span>}
+              {energy ? (
+                <span className="flex items-center gap-2">
+                  {energy}/5 <MyFloveEnergyDots value={energy} />
+                </span>
+              ) : (
+                <span className="text-sm text-muted-foreground">Inte loggat än</span>
+              )}
             </p>
           </Link>
           <Link

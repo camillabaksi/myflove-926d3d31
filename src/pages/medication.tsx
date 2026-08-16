@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Layout from "@/components/layout";
+import { MyFloveEmptyIllustration } from "@/components/myflove/motion";
 import { useMedications } from "@/hooks/use-data";
 import { Button } from "@/components/ui/button";
 import { Pill, Plus, Trash2, Check, Clock } from "lucide-react";
@@ -109,6 +110,7 @@ export function MedicationContent({ showHeader = true }: MedicationContentProps)
         {medications.length === 0 ? (
           <div className="border-2 border-dashed border-border rounded-2xl p-10 text-center">
             <Pill size={32} className="mx-auto mb-3 text-muted-foreground" />
+            <MyFloveEmptyIllustration kind="default" className="mb-2 block" />
             <p className="text-muted-foreground">Inga mediciner tillagda än – lägg till när det passar.</p>
           </div>
         ) : (

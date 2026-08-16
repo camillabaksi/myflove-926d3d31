@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Layout from "@/components/layout";
+import { useReducedMotion } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
 import { Play, Pause, RotateCcw, Brain, Coffee, Minus, Plus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -39,6 +40,7 @@ export default function Pomodoro() {
   const [mode, setMode] = useState<Mode>("work");
   const [secondsLeft, setSecondsLeft] = useState(prefs.workMinutes * 60);
   const [isRunning, setIsRunning] = useState(false);
+  const reduced = useReducedMotion();
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const todaysSessions = sessionLog.date === todayStr() ? sessionLog.count : 0;
@@ -124,6 +126,14 @@ export default function Pomodoro() {
           </div>
 
           <div className="relative w-56 h-56 flex items-center justify-center">
+            {isRunning && !reduced && (
+              <span
+                aria-hidden
+                data-motion="living"
+                className="absolute inset-8 rounded-full bg-primary/10 breathe"
+                style={{ animationDuration: mode === "work" ? "6s" : "8s" }}
+              />
+            )}
             <svg className="w-full h-full -rotate-90" viewBox="0 0 200 200">
               <circle cx="100" cy="100" r="90" fill="none" stroke="var(--secondary)" strokeWidth="12" />
               <circle

@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import Layout from "@/components/layout";
+import { MyFloveInsightGather } from "@/components/myflove/motion";
 import { CalendarRange } from "lucide-react";
 import { useTasks } from "@/hooks/use-data";
 import { useQuickflow } from "@/hooks/use-quickflow";
@@ -65,7 +66,9 @@ export default function WeekFlowPage() {
         <header className="space-y-1">
           <div className="flex items-center gap-2">
             <CalendarRange className="text-primary" size={26} />
-            <h1 className="text-3xl font-bold">Veckans Flow</h1>
+            <h1 className="text-3xl font-bold flex items-center gap-3">
+              Veckans Flow <MyFloveInsightGather className="shrink-0" />
+            </h1>
           </div>
           <p className="text-muted-foreground">
             En lugn tillbakablick på din vecka. Inget mål, inga poäng.

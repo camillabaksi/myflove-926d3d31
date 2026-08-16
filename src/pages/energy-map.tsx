@@ -15,6 +15,7 @@ import {
   CartesianGrid,
 } from "recharts";
 import CollapsibleSection from "@/components/collapsible-section";
+import { MyFloveEnergyDots } from "@/components/myflove/motion";
 
 interface EnergyLog {
   id: string;
@@ -197,6 +198,7 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
             </div>
             {selected !== null && (
               <div className="space-y-3 animate-in fade-in slide-in-from-top-1">
+                <MyFloveEnergyDots value={selected} className="justify-center pt-1" />
                 <textarea
                   value={note}
                   onChange={(e) => setNote(e.target.value)}

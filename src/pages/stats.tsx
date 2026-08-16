@@ -1,4 +1,5 @@
 import Layout from "@/components/layout";
+import { MyFloveInsightGather } from "@/components/myflove/motion";
 import { useMoods } from "@/hooks/use-data";
 import { getWeeklyMoodStats } from "@/lib/mood-stats";
 import { TrendingUp, TrendingDown, Minus, BarChart3 } from "lucide-react";
@@ -31,7 +32,9 @@ export default function Stats() {
     <Layout>
       <div className="space-y-8">
         <div>
-          <h1 className="text-3xl font-bold mb-2">Veckostatistik</h1>
+          <h1 className="text-3xl font-bold mb-2 flex items-center gap-3">
+            Veckostatistik <MyFloveInsightGather className="shrink-0" />
+          </h1>
           <p className="text-muted-foreground">Så har ditt mående sett ut den senaste veckan.</p>
         </div>
 
