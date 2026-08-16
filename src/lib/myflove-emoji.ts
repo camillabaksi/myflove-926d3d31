@@ -3,41 +3,68 @@
  * Samma emoji för samma funktion i hela appen. Byt aldrig emoji per sida.
  */
 export const MYFLOVE_EMOJI = {
+  // Hem & navigation
   home: "🏠",
   lifeflow: "🏠",
   calendar: "📅",
+  search: "🔍",
+  settings: "⚙️",
+  profile: "👤",
+  place: "📍",
+
+  // Flow
   quickflow: "⚡",
   energy: "⚡",
   insight: "🧠",
   focus: "🧠",
+  flowplan: "🗺️",
+  flowscore: "📊",
+  flowReset: "🌙",
+  dailyFlow: "☀️",
+  whatNow: "🤔",
+  assistant: "💬",
+  pomodoro: "⏳",
+  dump: "🗒️",
+  weekFlow: "🌤️",
+
+  // Att göra
   priority: "🎯",
   tasks: "🎯",
   reminder: "⏰",
   meetings: "⏰",
   done: "✓",
   replan: "🔄",
+  routines: "🔁",
+  achievements: "🏆",
+  stats: "📈",
+
+  // Livsområden
   work: "💼",
+  study: "🎓",
+  studyflow: "🎓",
   travel: "✈️",
   finance: "💰",
   documents: "📄",
   notes: "📝",
   material: "📎",
-  settings: "⚙️",
-  flowReset: "🌙",
-  dailyFlow: "☀️",
   family: "👨‍👩‍👧",
+  children: "🧒",
+
+  // Hem & hälsa
   errands: "🛒",
   shopping: "🛒",
-  wellness: "💜",
-  training: "🏃",
-  study: "🎓",
-  children: "🧒",
   food: "🍽️",
   cleaning: "🧽",
+  wellness: "💜",
+  mood: "💜",
+  training: "🏃",
+  walk: "🚶",
   medicine: "💊",
-  profile: "👤",
-  place: "📍",
+  weather: "🌤️",
+  stop: "🛑",
+  help: "🫶",
   calls: "📞",
+  friction: "🪨",
 } as const;
 
 export type MyFloveEmojiKey = keyof typeof MYFLOVE_EMOJI;

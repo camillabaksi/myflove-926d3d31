@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Enhetliga emojis och animationer i hela appen, och knapptexter som alltid får plats – knappar växer i höjd i stället för att klippa av text (2026-08-16)",
       "Living UI på resten av appen – assistenten, FlowPlan, Träning, Studier, StudyFlow, Pomodoro, Må bra, Energikartan, FlowScore, Veckans Flow, Statistik, Belöningar, Promenadvägar, Familj, Städning och Veckomatlistan följer nu samma rörelsetema, plus levande tomma lägen (2026-08-16)",
       "Living UI i fler moduler – fokusläget andas och firar klart, WorkFlow visar energi och hur MyFlove tänker vid uppdelning, dokument/material visar läsprocessen, notiser visar att MyFlove lyssnar, och uppgifter glider mjukt iväg när de flyttas till imorgon (2026-08-16)",
       "Living UI – varje funktion har egna små animationer: MyFlove \"tänker\" i Vad ska jag göra nu, QuickFlow visar att den lyssnar, Resor ritar en rutt framåt, Ekonomi visar balans, Insight samlar punkter till ett mönster, Flow Reset tänder stjärnor och hjärtat slår i takt med din energi (2026-08-16)",

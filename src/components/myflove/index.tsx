@@ -11,6 +11,58 @@ import { cn } from "@/lib/utils";
 import { MYFLOVE_EMOJI, type MyFloveEmojiKey } from "@/lib/myflove-emoji";
 
 /* ------------------------------------------------------------------ */
+/* Emoji – samma storlekar och samma lilla liv överallt                */
+/* ------------------------------------------------------------------ */
+
+const EMOJI_SIZE = {
+  xs: "text-sm",
+  sm: "text-base",
+  md: "text-xl",
+  lg: "text-3xl",
+  xl: "text-4xl",
+} as const;
+
+const EMOJI_MOTION = {
+  none: "",
+  breathe: "breathe",
+  float: "floaty",
+} as const;
+
+/**
+ * Visa en emoji från den gemensamma mappningen.
+ * Alltid aria-hidden (dekorativ), alltid samma line-height och rörelse.
+ */
+export function MyFloveEmoji({
+  name,
+  emoji,
+  size = "md",
+  motion = "none",
+  className,
+}: {
+  name?: MyFloveEmojiKey;
+  emoji?: string;
+  size?: keyof typeof EMOJI_SIZE;
+  motion?: keyof typeof EMOJI_MOTION;
+  className?: string;
+}) {
+  const shown = emoji ?? (name ? MYFLOVE_EMOJI[name] : undefined);
+  if (!shown) return null;
+  return (
+    <span
+      aria-hidden
+      className={cn(
+        "inline-flex shrink-0 select-none items-center justify-center leading-none",
+        EMOJI_SIZE[size],
+        EMOJI_MOTION[motion],
+        className,
+      )}
+    >
+      {shown}
+    </span>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Ikon – alltid Lucide, samma storlek och stroke i hela appen         */
 /* ------------------------------------------------------------------ */
 
@@ -24,6 +76,7 @@ const TONE_BG: Record<MyFloveTone, string> = {
   sun: "bg-sun text-gold",
   plain: "bg-muted text-ink",
 };
+
 
 export function MyFloveIcon({
   icon: Icon,
@@ -51,10 +104,9 @@ export function MyFloveIcon({
     >
       <Icon size={px} strokeWidth={2.2} />
       {emoji && (
-        <span aria-hidden className="absolute -right-1.5 -top-1.5 text-sm leading-none drop-shadow-sm">
-          {emoji}
-        </span>
+        <MyFloveEmoji emoji={emoji} size="xs" className="absolute -right-1.5 -top-1.5 drop-shadow-sm" />
       )}
+
     </span>
   );
 }
@@ -84,7 +136,8 @@ type ButtonBaseProps = {
 function buttonClasses({ variant = "primary", size = "md", fullWidth, className }: ButtonBaseProps) {
   return cn(
     "press inline-flex items-center justify-center gap-2 rounded-pill font-semibold transition-colors disabled:opacity-50 disabled:pointer-events-none",
-    size === "sm" ? "min-h-9 px-4 text-sm" : "min-h-11 px-5 text-sm",
+    "text-center leading-tight text-balance break-words [&_svg]:shrink-0",
+    size === "sm" ? "min-h-9 px-4 py-1.5 text-sm" : "min-h-11 px-5 py-2 text-sm",
     BUTTON_VARIANT[variant],
     fullWidth && "w-full",
     className,
@@ -152,6 +205,7 @@ export function MyFloveCard({
 export function MyFloveSection({
   title,
   emoji,
+  emojiKey,
   description,
   action,
   className,
@@ -159,6 +213,7 @@ export function MyFloveSection({
 }: {
   title: string;
   emoji?: string;
+  emojiKey?: MyFloveEmojiKey;
   description?: string;
   action?: React.ReactNode;
   className?: string;
@@ -167,12 +222,12 @@ export function MyFloveSection({
   return (
     <section className={cn("space-y-3", className)}>
       <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <h2 className="font-display text-lg font-bold text-ink">
-            {emoji && <span aria-hidden className="mr-1.5">{emoji}</span>}
-            {title}
-          </h2>
-          {description && <p className="text-sm text-muted-foreground">{description}</p>}
+        <div className="flex min-w-0 items-start gap-2">
+          <MyFloveEmoji {...(emoji ? { emoji } : {})} {...(emojiKey ? { name: emojiKey } : {})} size="sm" className="mt-0.5" />
+          <div className="min-w-0">
+            <h2 className="font-display text-lg font-bold leading-tight text-ink">{title}</h2>
+            {description && <p className="text-sm text-muted-foreground">{description}</p>}
+          </div>
         </div>
         {action}
       </div>
@@ -204,7 +259,7 @@ export function MyFloveHeader({
   children?: React.ReactNode;
   className?: string;
 }) {
-  const shownEmoji = emoji ?? (emojiKey ? MYFLOVE_EMOJI[emojiKey] : undefined);
+
   return (
     <header
       className={cn("rounded-3xl border border-border/60 p-5 shadow-soft page-enter", className)}
@@ -224,11 +279,14 @@ export function MyFloveHeader({
             <ArrowLeft size={18} strokeWidth={2.2} />
           </button>
         )}
-        {shownEmoji && (
-          <span aria-hidden className="text-3xl leading-none">
-            {shownEmoji}
-          </span>
-        )}
+        <MyFloveEmoji
+          {...(emoji ? { emoji } : {})}
+          {...(emojiKey ? { name: emojiKey } : {})}
+          size="lg"
+          motion="breathe"
+          className="mt-0.5"
+        />
+
         <div className="min-w-0 flex-1">
           <h1 className="font-display text-2xl font-bold leading-tight text-ink">{title}</h1>
           {description && <p className="mt-1 text-sm text-muted-foreground">{description}</p>}
@@ -255,13 +313,14 @@ export function MyFloveChip({
       type="button"
       aria-pressed={active}
       className={cn(
-        "press rounded-pill px-4 py-2 text-sm font-semibold transition-colors",
+        "press inline-flex min-h-9 max-w-full items-center justify-center gap-1.5 rounded-pill px-4 py-1.5 text-sm font-semibold leading-tight transition-colors",
+        "[&_svg]:shrink-0",
         active ? "bg-primary text-primary-foreground shadow-soft" : "bg-lavender text-ink hover:bg-lavender/70",
         className,
       )}
       {...rest}
     >
-      {children}
+      <span className="truncate">{children}</span>
     </button>
   );
 }
@@ -290,9 +349,7 @@ export function MyFloveEmptyState({
         className,
       )}
     >
-      <span aria-hidden className="breathe text-4xl leading-none">
-        {emoji}
-      </span>
+      <MyFloveEmoji emoji={emoji} size="xl" motion="breathe" />
       <p className="font-display text-base font-bold text-ink">{title}</p>
       {description && <p className="max-w-xs text-sm text-muted-foreground">{description}</p>}
       {action}
@@ -303,12 +360,11 @@ export function MyFloveEmptyState({
 export function MyFloveLoading({ label = "En sekund...", className }: { label?: string; className?: string }) {
   return (
     <div className={cn("flex flex-col items-center gap-2 py-10 text-center", className)}>
-      <span aria-hidden className="breathe text-3xl leading-none">
-        💜
-      </span>
+      <MyFloveEmoji emoji="💜" size="lg" motion="breathe" />
       <p className="text-sm text-muted-foreground">{label}</p>
     </div>
   );
+
 }
 
 export function MyFloveSkeleton({ className }: { className?: string }) {
