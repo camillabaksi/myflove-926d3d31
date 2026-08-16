@@ -102,6 +102,8 @@ const CATEGORY_THEMES: Record<string, Record<string, string>> = {
 
 
 
+import QuickflowFab from "@/components/quickflow-fab";
+
 export default function Layout({ children }: LayoutProps) {
   const [location] = useLocation();
   const router = useRouter();
@@ -161,6 +163,7 @@ export default function Layout({ children }: LayoutProps) {
     { href: "/tasks", label: "Att göra", icon: CheckSquare, hint: "Din lista med saker att göra", essential: true },
     { href: "/flowplan", label: "FlowPlan", icon: ListOrdered, hint: "Flow lägger dina uppgifter i bra ordning" },
     { href: "/flowscore", label: "FlowScore", icon: Gauge, hint: "Hur mycket du orkar just idag" },
+    { href: "/veckans-flow", label: "Veckans Flow", icon: CalendarDays, hint: "Lugn tillbakablick på veckan" },
     { href: "/pomodoro", label: "Timer", icon: Timer, hint: "Jobba en stund, ta paus" },
     { href: "/shopping", label: "Inköp", icon: ShoppingBag, hint: "Inköpslista du kan dela" },
     { href: "/matlista", label: "Matlista", icon: UtensilsCrossed, hint: "Planera veckans mat", essential: true },
@@ -207,7 +210,7 @@ export default function Layout({ children }: LayoutProps) {
         icon: CalendarDays,
         hrefs: [
           "/hem", "/daglig-rutin", "/kalender", "/tasks", "/flowplan", "/fokus",
-          "/flowscore", "/quickflow", "/pomodoro", "/assistant", "/ma-bra", "/traning",
+          "/flowscore", "/veckans-flow", "/quickflow", "/pomodoro", "/assistant", "/ma-bra", "/traning",
           "/beloningar", "/statistik", "/insight",
         ],
       },
