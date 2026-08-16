@@ -6,7 +6,7 @@ import FocusMode from "@/components/focus-mode";
 import { useTasks } from "@/hooks/use-data";
 import { useDailyCheckin, useFlowUsage } from "@/hooks/use-daily-flow";
 import { useFlowScore } from "@/hooks/use-flowscore";
-import { celebrateFromEvent } from "@/lib/celebrate";
+import { celebrate } from "@/lib/celebrate";
 import {
   FRICTION_LABEL,
   PRIORITY_DOT,
@@ -297,7 +297,7 @@ export default function DailyFlowCard() {
         onOpenChange={setFocusOpen}
         onDone={(item) => {
           handleDone(item);
-          celebrateFromEvent();
+          celebrate();
         }}
         onNext={nextRecommended}
       />
