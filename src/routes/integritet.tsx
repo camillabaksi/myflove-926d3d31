@@ -126,25 +126,25 @@ export function LegalShell({
   children: React.ReactNode;
 }) {
   return (
-    <main className="min-h-screen bg-[#F5F1EA] text-[#2C3639] px-6 py-16">
+    <main className="min-h-screen bg-[#F8F5FE] text-[#2A2140] px-6 py-16">
       <div className="mx-auto max-w-2xl">
         <Link
           to="/"
-          className="text-xs uppercase tracking-[0.3em] text-[#B85042] font-semibold"
+          className="text-xs uppercase tracking-[0.3em] text-[#7C5CE0] font-semibold"
         >
           ← MyFlove
         </Link>
         <h1 className="mt-4 font-display text-4xl md:text-5xl font-bold leading-tight">
           {title}
         </h1>
-        <p className="mt-2 text-sm text-[#7A6E63]">Senast uppdaterad: {updated}</p>
-        <article className="mt-10 space-y-4 leading-relaxed [&_h2]:font-display [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-2 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:space-y-2 [&_a]:text-[#B85042] [&_a]:underline">
+        <p className="mt-2 text-sm text-[#6B647F]">Senast uppdaterad: {updated}</p>
+        <article className="mt-10 space-y-4 leading-relaxed [&_h2]:font-display [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-2 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:space-y-2 [&_a]:text-[#7C5CE0] [&_a]:underline">
           {children}
         </article>
         <div className="mt-16 flex gap-4 text-sm">
-          <Link to="/integritet" className="text-[#B85042] underline">Integritet</Link>
-          <Link to="/villkor" className="text-[#B85042] underline">Villkor</Link>
-          <Link to="/cookies" className="text-[#B85042] underline">Cookies</Link>
+          <Link to="/integritet" className="text-[#7C5CE0] underline">Integritet</Link>
+          <Link to="/villkor" className="text-[#7C5CE0] underline">Villkor</Link>
+          <Link to="/cookies" className="text-[#7C5CE0] underline">Cookies</Link>
         </div>
       </div>
     </main>
