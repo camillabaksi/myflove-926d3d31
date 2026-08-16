@@ -6,6 +6,12 @@ import { useTasks } from "@/hooks/use-data";
 import { useDailyCheckin, useFlowUsage } from "@/hooks/use-daily-flow";
 import { scoreTask, TIME_META, type ScoredTask } from "@/lib/daily-flow";
 import { Clock, Flag, Waves, Play, Shuffle, Moon, Sparkles, Lightbulb } from "lucide-react";
+import {
+  MyFloveThinking,
+  MyFloveTransition,
+  MyFloveEmptyIllustration,
+  MyFloveFloatingElement,
+} from "@/components/myflove/motion";
 
 /** Hur mycket tid känns rimligt just nu – tre lugna val, inget mer. */
 const TIME_CHOICES = [
