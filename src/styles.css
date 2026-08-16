@@ -183,3 +183,53 @@
 @utility shadow-lifted {
   box-shadow: var(--shadow-lifted);
 }
+
+/* ------------------------------------------------------------------
+   NPF-läge – globala tillgänglighetsval (styrs från /anpassa)
+   ------------------------------------------------------------------ */
+
+/* Lugnare intryck: mindre skrikiga ytor och mjukare skuggor */
+html[data-npf-calm="true"] {
+  --shadow-soft: 0 1px 2px hsl(150 18% 14% / 0.05);
+  --shadow-lifted: 0 4px 12px hsl(150 18% 14% / 0.06);
+}
+html[data-npf-calm="true"] .surface-hero,
+html[data-npf-calm="true"] [class*="bg-gradient"] {
+  background-image: none;
+}
+
+/* Mindre rörelse */
+html[data-npf-still="true"] *,
+html[data-npf-still="true"] *::before,
+html[data-npf-still="true"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Större text */
+html[data-npf-text="large"] {
+  font-size: 18.5px;
+}
+
+/* Mer luft och större tryckytor */
+html[data-npf-space="roomy"] p,
+html[data-npf-space="roomy"] li {
+  line-height: 1.75;
+}
+html[data-npf-space="roomy"] button,
+html[data-npf-space="roomy"] a[role="button"],
+html[data-npf-space="roomy"] input,
+html[data-npf-space="roomy"] select {
+  min-height: 2.9rem;
+}
+html[data-npf-space="roomy"] main .space-y-4 > * + *,
+html[data-npf-space="roomy"] main .space-y-3 > * + * {
+  margin-top: 1.35rem;
+}
+
+/* Färre saker på skärmen: dölj det som bara är extra */
+html[data-npf-less="true"] [data-npf="optional"] {
+  display: none !important;
+}

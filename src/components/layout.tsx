@@ -1,7 +1,7 @@
 import { ReactNode, useState, useEffect, useMemo } from "react";
 import { Link, useLocation } from "wouter";
 import { useRouter } from "@tanstack/react-router";
-import { Home, Target, CheckSquare, ShoppingBag, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Settings2, Check, RotateCcw, ArrowUp, ArrowDown, LogOut, Volume2, VolumeX, Shield, Heart, Sun, Search, GraduationCap, Briefcase, Baby, CalendarDays, Brain, HeartPulse, House, BookOpen, Building2, LayoutGrid, Dumbbell, SprayCan, Zap, Gauge, ArrowLeft } from "lucide-react";
+import { Home, Target, CheckSquare, ShoppingBag, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Settings2, Check, RotateCcw, ArrowUp, ArrowDown, LogOut, Volume2, VolumeX, Shield, Heart, Sun, Search, GraduationCap, Briefcase, Baby, CalendarDays, Brain, HeartPulse, House, BookOpen, Building2, LayoutGrid, Dumbbell, SprayCan, Zap, Gauge, ArrowLeft, Accessibility } from "lucide-react";
 import { isAlarmSoundEnabled, setAlarmSoundEnabled, subscribeAlarmPref, playAlarmPreview, initAlarmAudioUnlock } from "@/lib/push-notifications";
 import { useCommuteAlerts } from "@/hooks/use-commute-alerts";
 import { useMedicationAlerts } from "@/hooks/use-medication-alerts";
@@ -14,6 +14,7 @@ import ViewCollapseToggle from "@/components/view-collapse-toggle";
 
 import { useEnabledAreas } from "@/lib/life-areas";
 import { useLocalStorage } from "@/lib/storage";
+import { useNpfSettings, plainLabel } from "@/lib/npf-mode";
 import { trackEvent } from "@/lib/analytics";
 import { Button } from "@/components/ui/button";
 import { useClerk, Show } from "@clerk/react";
@@ -119,6 +120,7 @@ export default function Layout({ children }: LayoutProps) {
   usePurgeRevisions();
   const { isAdmin } = useIsAdmin();
   const { enabled: enabledAreas } = useEnabledAreas();
+  const { settings: npf } = useNpfSettings();
 
   // Använd TanStack-routerns faktiska location så tillbakaknappen alltid
   // synkar med appens historik – även vid djupa länkar eller SPA-navigering.
@@ -199,7 +201,9 @@ export default function Layout({ children }: LayoutProps) {
           { href: "/admin-statistik", label: "Appstatistik", icon: BarChart3, hint: "Besökare och användning" },
         ]
       : []),
-  ];
+    { href: "/anpassa", label: "Anpassa appen", icon: Accessibility, hint: "Lugnare färger, färre saker och enkla ord" },
+  ].map((i) => ({ ...i, label: plainLabel(i.label, npf.plainWords) }));
+
 
   // Kategorier – gör navigationen lugnare genom att gruppera sektionerna.
   const categories = useMemo(() => {
@@ -230,7 +234,7 @@ export default function Layout({ children }: LayoutProps) {
       { id: "familyflow", label: "Familj", hint: "Dela vardagen med andra", icon: HeartPulse, hrefs: ["/familj", "/barn"] },
       { id: "studyflow", label: "Studier", hint: "Schema, prov och plugg", icon: BookOpen, hrefs: ["/studyflow", "/studybuddy"] },
       { id: "workflow", label: "Jobb", hint: "Uppgifter och möten", icon: Building2, hrefs: ["/jobb", "/workflow"] },
-      { id: "ovrigt", label: "Övrigt", hint: "Feedback och inställningar", icon: LayoutGrid, hrefs: ["/friktionsindex", "/admin", "/admin-statistik"] },
+      { id: "ovrigt", label: "Övrigt", hint: "Anpassa appen, feedback och inställningar", icon: LayoutGrid, hrefs: ["/anpassa", "/friktionsindex", "/admin", "/admin-statistik"] },
     ];
     return groups
       .map((g) => ({ ...g, items: g.hrefs.map(byHref).filter(Boolean) as typeof navItems }))
@@ -325,6 +329,11 @@ export default function Layout({ children }: LayoutProps) {
           ))}
         </div>
         <div className="mt-auto pt-4 pb-2 space-y-2">
+          <Link href="/anpassa">
+            <Button variant="outline" className="w-full rounded-xl gap-2">
+              <Accessibility size={16} /> Anpassa appen
+            </Button>
+          </Link>
           <Button
             variant="outline"
             className="w-full rounded-xl gap-2"
@@ -676,7 +685,7 @@ export default function Layout({ children }: LayoutProps) {
                       />
                     ))}
                   </div>
-                  <div className="mt-6 flex items-center justify-center">
+                  <div className="mt-6 flex flex-col items-center justify-center gap-3">
                     <Button
                       variant="outline"
                       size="sm"
@@ -685,6 +694,11 @@ export default function Layout({ children }: LayoutProps) {
                     >
                       <LayoutGrid size={16} /> Visa allt i appen
                     </Button>
+                    <Link href="/anpassa" onClick={() => setMobileMenuOpen(false)}>
+                      <Button variant="outline" size="sm" className="rounded-xl gap-2">
+                        <Accessibility size={16} /> Anpassa appen
+                      </Button>
+                    </Link>
                   </div>
                 </>
               ) : (
@@ -712,7 +726,7 @@ export default function Layout({ children }: LayoutProps) {
                             <Icon size={26} />
                           </span>
                           <span className="text-sm font-medium leading-tight">{cat.label}</span>
-                          <span className="text-[11px] leading-snug opacity-70">{cat.hint}</span>
+                          <span data-npf="optional" className="text-[11px] leading-snug opacity-70">{cat.hint}</span>
                         </button>
                       );
                     })}
@@ -808,7 +822,7 @@ function NavRow({
       </span>
       <span className="min-w-0">
         <span className="block text-sm font-medium leading-tight">{item.label}</span>
-        <span className={`block text-xs leading-snug ${isActive ? "opacity-80" : "text-muted-foreground"}`}>
+        <span data-npf="optional" className={`block text-xs leading-snug ${isActive ? "opacity-80" : "text-muted-foreground"}`}>
           {item.hint}
         </span>
       </span>

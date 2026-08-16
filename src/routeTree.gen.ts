@@ -53,6 +53,7 @@ import { Route as AppCalendarRouteImport } from './routes/_app.calendar'
 import { Route as AppBeloningarRouteImport } from './routes/_app.beloningar'
 import { Route as AppBarnRouteImport } from './routes/_app.barn'
 import { Route as AppAssistantRouteImport } from './routes/_app.assistant'
+import { Route as AppAnpassaRouteImport } from './routes/_app.anpassa'
 import { Route as AppAdminStatistikRouteImport } from './routes/_app.admin-statistik'
 import { Route as AppAdminRouteImport } from './routes/_app.admin'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
@@ -283,6 +284,11 @@ const AppAssistantRoute = AppAssistantRouteImport.update({
   path: '/assistant',
   getParentRoute: () => AppRoute,
 } as any)
+const AppAnpassaRoute = AppAnpassaRouteImport.update({
+  id: '/anpassa',
+  path: '/anpassa',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppAdminStatistikRoute = AppAdminStatistikRouteImport.update({
   id: '/admin-statistik',
   path: '/admin-statistik',
@@ -347,6 +353,7 @@ export interface FileRoutesByFullPath {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin': typeof AppAdminRoute
   '/admin-statistik': typeof AppAdminStatistikRoute
+  '/anpassa': typeof AppAnpassaRoute
   '/assistant': typeof AppAssistantRoute
   '/barn': typeof AppBarnRoute
   '/beloningar': typeof AppBeloningarRoute
@@ -401,6 +408,7 @@ export interface FileRoutesByTo {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin': typeof AppAdminRoute
   '/admin-statistik': typeof AppAdminStatistikRoute
+  '/anpassa': typeof AppAnpassaRoute
   '/assistant': typeof AppAssistantRoute
   '/barn': typeof AppBarnRoute
   '/beloningar': typeof AppBeloningarRoute
@@ -457,6 +465,7 @@ export interface FileRoutesById {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/_app/admin': typeof AppAdminRoute
   '/_app/admin-statistik': typeof AppAdminStatistikRoute
+  '/_app/anpassa': typeof AppAnpassaRoute
   '/_app/assistant': typeof AppAssistantRoute
   '/_app/barn': typeof AppBarnRoute
   '/_app/beloningar': typeof AppBeloningarRoute
@@ -513,6 +522,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/admin'
     | '/admin-statistik'
+    | '/anpassa'
     | '/assistant'
     | '/barn'
     | '/beloningar'
@@ -567,6 +577,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/admin'
     | '/admin-statistik'
+    | '/anpassa'
     | '/assistant'
     | '/barn'
     | '/beloningar'
@@ -622,6 +633,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/_app/admin'
     | '/_app/admin-statistik'
+    | '/_app/anpassa'
     | '/_app/assistant'
     | '/_app/barn'
     | '/_app/beloningar'
@@ -993,6 +1005,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAssistantRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/anpassa': {
+      id: '/_app/anpassa'
+      path: '/anpassa'
+      fullPath: '/anpassa'
+      preLoaderRoute: typeof AppAnpassaRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/admin-statistik': {
       id: '/_app/admin-statistik'
       path: '/admin-statistik'
@@ -1062,6 +1081,7 @@ declare module '@tanstack/react-router' {
 interface AppRouteChildren {
   AppAdminRoute: typeof AppAdminRoute
   AppAdminStatistikRoute: typeof AppAdminStatistikRoute
+  AppAnpassaRoute: typeof AppAnpassaRoute
   AppAssistantRoute: typeof AppAssistantRoute
   AppBarnRoute: typeof AppBarnRoute
   AppBeloningarRoute: typeof AppBeloningarRoute
@@ -1100,6 +1120,7 @@ interface AppRouteChildren {
 const AppRouteChildren: AppRouteChildren = {
   AppAdminRoute: AppAdminRoute,
   AppAdminStatistikRoute: AppAdminStatistikRoute,
+  AppAnpassaRoute: AppAnpassaRoute,
   AppAssistantRoute: AppAssistantRoute,
   AppBarnRoute: AppBarnRoute,
   AppBeloningarRoute: AppBeloningarRoute,
