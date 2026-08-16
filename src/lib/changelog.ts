@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Onboarding sveps i sidled med tryckbara punkter och räknare \"Steg 2 av 4\" (2026-08-16)",
       "Pasteller och mjuk rörelse – sidor tonar in, kort poppar upp, knappar svarar på tryck (2026-08-16)",
       "QuickFlow i mitten av bottennavigationen – fem platser: Hem, ditt val, QuickFlow, ditt val och Mer (2026-08-16)",
       "Lila även på sidteman – kalender, ekonomi, familj och övriga kategorisidor tintas i lila/rosa/mint (2026-08-16)",
