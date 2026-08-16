@@ -27,6 +27,7 @@ interface LayoutProps {
 /** Egen färgton per navigationskategori – gör mer-vyn lätt att skanna. */
 const CATEGORY_HUE: Record<string, string> = {
   myflow: "38 62% 42%",
+  healthflow: "12 45% 45%",
   homeflow: "152 40% 28%",
   familyflow: "340 40% 48%",
   studyflow: "265 32% 45%",
@@ -210,9 +211,15 @@ export default function Layout({ children }: LayoutProps) {
         icon: CalendarDays,
         hrefs: [
           "/hem", "/daglig-rutin", "/kalender", "/tasks", "/flowplan", "/fokus",
-          "/flowscore", "/veckans-flow", "/quickflow", "/pomodoro", "/assistant", "/ma-bra", "/traning",
-          "/beloningar", "/statistik", "/insight",
+          "/veckans-flow", "/quickflow", "/pomodoro", "/assistant", "/beloningar", "/insight",
         ],
+      },
+      {
+        id: "healthflow",
+        label: "Hälsa",
+        hint: "Må bra, träning och din ork",
+        icon: Heart,
+        hrefs: ["/ma-bra", "/traning", "/flowscore", "/statistik"],
       },
       { id: "homeflow", label: "Hemma", hint: "Mat, inköp, städning och pengar", icon: House, hrefs: ["/shopping", "/matlista", "/stadning", "/finances", "/travel"] },
       { id: "familyflow", label: "Familj", hint: "Dela vardagen med andra", icon: HeartPulse, hrefs: ["/familj", "/barn"] },
