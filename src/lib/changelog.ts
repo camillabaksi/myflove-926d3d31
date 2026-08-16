@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Bara en \"Vad ska jag göra nu?\" på hemskärmen – dubbletten inne i Daily Flow är borttagen, kortet högst upp leder till hela vyn (2026-08-16)",
       "Uppdaterad appikon och PWA-ikoner – favicon och alla installerbara ikoner matchar den nya MyFlove-loggan (2026-08-16)",
       "\"Sätt dagens fokus\"-knappen på hemskärmen håller texten inom kanterna med samma MyFloveLinkButton-stil som resten av appen (2026-08-16)",
       "Tydligare hjärta i Daily Flow – cremefärgad bakgrundscirkel, bättre placering och skugga så det syns mot gradienten (2026-08-16)",
