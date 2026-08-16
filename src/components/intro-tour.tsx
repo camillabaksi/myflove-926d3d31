@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { Calendar, Heart, Inbox, Sparkles } from "lucide-react";
+import { Calendar, Heart, Inbox, Sparkles, X } from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useLocalStorage } from "@/lib/storage";
@@ -36,12 +37,18 @@ export default function IntroTour() {
   const [seen, setSeen] = useLocalStorage<boolean>("myflove-intro-seen", false);
   const [step, setStep] = useState(0);
   const trackRef = useRef<HTMLDivElement | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => setMounted(true), []);
 
   if (!mounted || seen) return null;
 
   const isLast = step === STEPS.length - 1;
+
+  const finish = () => {
+    setSeen(true);
+    navigate({ to: "/hem" });
+  };
 
   const goTo = (i: number) => {
     const next = Math.max(0, Math.min(STEPS.length - 1, i));
@@ -59,10 +66,23 @@ export default function IntroTour() {
   };
 
   return (
-    <Dialog open onOpenChange={(open) => { if (!open) setSeen(true); }}>
+    <Dialog open onOpenChange={(open) => { if (!open) finish(); }}>
       <DialogContent className="max-w-sm rounded-3xl px-0 pb-5 pt-6 overflow-hidden">
         <DialogTitle className="sr-only">{STEPS[step].title}</DialogTitle>
         <DialogDescription className="sr-only">{STEPS[step].body}</DialogDescription>
+
+        {/* Tydlig hoppa-över-knapp uppe till höger */}
+        <div className="absolute right-3 top-3 z-10">
+          <button
+            type="button"
+            onClick={finish}
+            className="inline-flex items-center gap-1.5 rounded-full bg-muted/70 px-3 py-1.5 text-xs font-semibold text-muted-foreground backdrop-blur-sm transition-colors hover:bg-muted hover:text-ink press"
+            aria-label="Hoppa över intro och gå till startsidan"
+          >
+            <X size={14} />
+            Hoppa över
+          </button>
+        </div>
 
         {/* Svep i sidled – ett kort i taget */}
         <div
@@ -125,20 +145,19 @@ export default function IntroTour() {
             )}
             <Button
               className="flex-1 rounded-2xl press"
-              onClick={() => (isLast ? setSeen(true) : goTo(step + 1))}
+              onClick={() => (isLast ? finish() : goTo(step + 1))}
             >
               {isLast ? "Nu kör vi" : "Nästa"}
             </Button>
           </div>
-          {!isLast && (
-            <button
-              type="button"
-              onClick={() => setSeen(true)}
-              className="text-xs text-muted-foreground hover:underline"
-            >
-              Hoppa över
-            </button>
-          )}
+          <Button
+            variant="ghost"
+            type="button"
+            onClick={finish}
+            className="w-full rounded-2xl text-sm font-medium text-muted-foreground hover:bg-muted hover:text-ink press"
+          >
+            Hoppa över intro och gå till startsidan
+          </Button>
         </div>
       </DialogContent>
     </Dialog>
