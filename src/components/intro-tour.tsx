@@ -37,12 +37,18 @@ export default function IntroTour() {
   const [seen, setSeen] = useLocalStorage<boolean>("myflove-intro-seen", false);
   const [step, setStep] = useState(0);
   const trackRef = useRef<HTMLDivElement | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => setMounted(true), []);
 
   if (!mounted || seen) return null;
 
   const isLast = step === STEPS.length - 1;
+
+  const finish = () => {
+    setSeen(true);
+    navigate({ to: "/hem" });
+  };
 
   const goTo = (i: number) => {
     const next = Math.max(0, Math.min(STEPS.length - 1, i));
