@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Uppdaterad appikon och PWA-ikoner – favicon och alla installerbara ikoner matchar den nya MyFlove-loggan (2026-08-16)",
       "\"Sätt dagens fokus\"-knappen på hemskärmen håller texten inom kanterna med samma MyFloveLinkButton-stil som resten av appen (2026-08-16)",
       "Tydligare hjärta i Daily Flow – cremefärgad bakgrundscirkel, bättre placering och skugga så det syns mot gradienten (2026-08-16)",
       "Enhetliga emojis och animationer i hela appen, och knapptexter som alltid får plats – knappar växer i höjd i stället för att klippa av text (2026-08-16)",

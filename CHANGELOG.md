@@ -17,6 +17,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 - **Tidslinje i kalenderns dagsvy** (2026-08-16): Dagsvyn visar nu en tidslinje från 06:00 till 22:00 med pastellfärgade händelsekort, bildstöd och en mjuk "Nu"-markering för var på dagen du är. Saker utan klockslag samlas längst ner.
 
 ### Changed
+- **Uppdaterad appikon och PWA-ikoner** (2026-08-16): favicon.svg och alla PWA-ikoner (192, 512, maskable, Apple touch) matchar nu den uppdaterade MyFlove-loggan med violett bakgrund, vitt flödesspår och rosa accent. Den gamla favicon.ico är borttagen.
 - **"Sätt dagens fokus"-knappen håller sig inom kanterna** (2026-08-16): Knappen på hemskärmen använder nu samma `MyFloveLinkButton`-komponent som resten av appen, så texten alltid ligger inuti knappen även på smala skärmar.
 - **Tydligare hjärta i Daily Flow** (2026-08-16): Hjärtat i "Din kapacitet idag" har fått en mjuk cremefärgad bakgrundscirkel, bättre placering och en skugga så det syns tydligt mot den lavendelfärgade gradienten.
 - **Resten av appen i samma design** (2026-08-16): Uppgifter, Flow Reset och Insight har fått samma pastellhero med emoji, rundare kort och tryckkänsla. Filterknapparna på Uppgifter är nu lavendelpiller, Flow Reset visar humöret som tre stora emoji-kort och kalenderns dagsvy har en tydligare "Nu"-markering.
