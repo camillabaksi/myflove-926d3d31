@@ -482,6 +482,10 @@ export default function Layout({ children }: LayoutProps) {
         </div>
       </main>
 
+      <QuickflowFab />
+
+
+
       {/* Mobile Bottom Bar */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-card border-t border-border pb-[env(safe-area-inset-bottom)] z-40">
         <div className="flex items-center justify-around p-2">
