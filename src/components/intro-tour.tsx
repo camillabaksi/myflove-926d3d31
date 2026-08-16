@@ -66,10 +66,23 @@ export default function IntroTour() {
   };
 
   return (
-    <Dialog open onOpenChange={(open) => { if (!open) setSeen(true); }}>
+    <Dialog open onOpenChange={(open) => { if (!open) finish(); }}>
       <DialogContent className="max-w-sm rounded-3xl px-0 pb-5 pt-6 overflow-hidden">
         <DialogTitle className="sr-only">{STEPS[step].title}</DialogTitle>
         <DialogDescription className="sr-only">{STEPS[step].body}</DialogDescription>
+
+        {/* Tydlig hoppa-över-knapp uppe till höger */}
+        <div className="absolute right-3 top-3 z-10">
+          <button
+            type="button"
+            onClick={finish}
+            className="inline-flex items-center gap-1.5 rounded-full bg-muted/70 px-3 py-1.5 text-xs font-semibold text-muted-foreground backdrop-blur-sm transition-colors hover:bg-muted hover:text-ink press"
+            aria-label="Hoppa över intro och gå till startsidan"
+          >
+            <X size={14} />
+            Hoppa över
+          </button>
+        </div>
 
         {/* Svep i sidled – ett kort i taget */}
         <div
