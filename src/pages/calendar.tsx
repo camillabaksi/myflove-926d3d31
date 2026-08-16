@@ -29,6 +29,7 @@ import { useToast } from "@/hooks/use-toast";
 import CollapsibleSection from "@/components/collapsible-section";
 import { useLocalStorage } from "@/lib/storage";
 import { pictogramFor } from "@/lib/pictograms";
+import { useNpfSettings } from "@/lib/npf-mode";
 
 export type CalCategory = "privat" | "familj" | "barn" | "jobb" | "studier";
 
@@ -111,7 +112,10 @@ export default function CalendarPage() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [view, setView] = useLocalStorage<CalView>("myflove-calendar-view", "manad");
   /** Bildstöd: stora symboler per händelse i dagsvyn. */
-  const [pictoMode, setPictoMode] = useLocalStorage<boolean>("myflove-calendar-pictograms", false);
+  const { settings: npfSettings } = useNpfSettings();
+  const [pictoStored, setPictoMode] = useLocalStorage<boolean>("myflove-calendar-pictograms", false);
+  // Globalt bildstöd (Anpassa appen) slår på symboler överallt där det finns.
+  const pictoMode = pictoStored || npfSettings.pictograms;
   const [visible, setVisible] = useLocalStorage<CalCategory[]>(
     "myflove-calendar-categories",
     ALL_CATEGORIES,
