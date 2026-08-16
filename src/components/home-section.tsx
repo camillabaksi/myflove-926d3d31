@@ -1,4 +1,4 @@
-import { type ReactNode } from "react";
+import { type CSSProperties, type ReactNode } from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { useLocalStorage } from "@/lib/storage";
 import HelpHint from "@/components/help-hint";
@@ -10,20 +10,22 @@ interface HomeSectionProps {
   help?: ReactNode;
   children: ReactNode;
   defaultCollapsed?: boolean;
+  /** Används för att styra blockets plats i hemskärmens ordning. */
+  style?: CSSProperties;
 }
 
 /**
  * Ett hopfällbart block på hemskärmen. Läget sparas per block,
  * så det du inte vill se just nu håller sig undan tills du vill ha tillbaka det.
  */
-export default function HomeSection({ id, title, help, children, defaultCollapsed = false }: HomeSectionProps) {
+export default function HomeSection({ id, title, help, children, defaultCollapsed = false, style }: HomeSectionProps) {
   const [collapsed, setCollapsed] = useLocalStorage<boolean>(
     `myflove-home-collapsed-${id}`,
     defaultCollapsed,
   );
 
   return (
-    <section className="space-y-2">
+    <section style={style} className="space-y-2">
       <div className="flex items-center gap-2">
         <button
           type="button"
