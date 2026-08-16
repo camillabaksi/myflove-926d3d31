@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Mic, Zap } from "lucide-react";
 import { toast } from "sonner";
@@ -24,6 +24,13 @@ export default function QuickflowFab() {
 
   const trimmed = text.trim();
   const suggestion = trimmed ? suggestWhen("snabbt", trimmed) : null;
+
+  // Bottennavigationens mitt-knapp öppnar samma dialog
+  useEffect(() => {
+    const open = () => setOpen(true);
+    window.addEventListener("myflove:quickflow", open);
+    return () => window.removeEventListener("myflove:quickflow", open);
+  }, []);
 
   const close = () => {
     setOpen(false);
@@ -66,7 +73,7 @@ export default function QuickflowFab() {
         type="button"
         onClick={() => setOpen(true)}
         aria-label="QuickFlow – få ut det ur huvudet"
-        className="fixed right-4 bottom-24 md:bottom-8 z-40 inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-5 py-3.5 font-semibold shadow-lifted active:scale-95 transition-transform"
+        className="hidden md:inline-flex fixed right-4 bottom-8 z-40 items-center gap-2 rounded-full bg-primary text-primary-foreground px-5 py-3.5 font-semibold shadow-lifted press"
       >
         <Zap size={18} /> QuickFlow
       </button>

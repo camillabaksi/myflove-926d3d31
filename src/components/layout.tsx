@@ -476,7 +476,7 @@ export default function Layout({ children }: LayoutProps) {
         )}
 
         <div className="flex-1 overflow-y-auto pb-24 md:pb-8" style={CATEGORY_THEMES[location] as React.CSSProperties}>
-          <div className="max-w-2xl mx-auto w-full p-4 md:p-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div key={location} className="max-w-2xl mx-auto w-full p-4 md:p-8 page-enter">
             {children}
           </div>
           <footer className="max-w-2xl mx-auto w-full px-4 md:px-8 pt-4 pb-8 mt-8 border-t border-border/40">
