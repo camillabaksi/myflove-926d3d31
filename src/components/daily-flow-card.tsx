@@ -175,8 +175,11 @@ export default function DailyFlowCard() {
               "linear-gradient(135deg, hsl(var(--lavender)) 0%, hsl(var(--cream)) 60%, hsl(var(--blush) / 0.8) 100%)",
           }}
         >
-          <div className="pointer-events-none absolute -right-2 bottom-0 select-none" aria-hidden>
-            <MyFloveHeart size={56} mood={moodFromEnergy(checkin.energy)} />
+          <div
+            className="pointer-events-none absolute right-2 bottom-2 select-none rounded-full bg-cream/90 p-3 shadow-soft backdrop-blur-sm"
+            aria-hidden
+          >
+            <MyFloveHeart size={52} mood={moodFromEnergy(checkin.energy)} className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.12)]" />
           </div>
           <div className="relative space-y-3 pr-16">
             <div className="flex items-center justify-between gap-2">
