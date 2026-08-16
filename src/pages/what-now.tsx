@@ -159,7 +159,18 @@ export default function WhatNow() {
             )}
           </div>
         )}
+
+        {/* Tips – en liten knuff, aldrig ett krav */}
+        <div className="rounded-3xl border border-border/60 bg-secondary/40 p-5">
+          <p className="flex items-center gap-2 text-sm font-semibold text-ink">
+            <Lightbulb size={16} className="text-gold" /> Tips
+          </p>
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+            Du brukar få mer gjort före lunch. Satsa på det nu 💪
+          </p>
+        </div>
       </div>
+
 
       <FocusMode
         item={suggestion}
