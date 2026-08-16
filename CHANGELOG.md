@@ -17,6 +17,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 - **Tidslinje i kalenderns dagsvy** (2026-08-16): Dagsvyn visar nu en tidslinje från 06:00 till 22:00 med pastellfärgade händelsekort, bildstöd och en mjuk "Nu"-markering för var på dagen du är. Saker utan klockslag samlas längst ner.
 
 ### Changed
+- **Tydligare hjärta i Daily Flow** (2026-08-16): Hjärtat i "Din kapacitet idag" har fått en mjuk cremefärgad bakgrundscirkel, bättre placering och en skugga så det syns tydligt mot den lavendelfärgade gradienten.
 - **Resten av appen i samma design** (2026-08-16): Uppgifter, Flow Reset och Insight har fått samma pastellhero med emoji, rundare kort och tryckkänsla. Filterknapparna på Uppgifter är nu lavendelpiller, Flow Reset visar humöret som tre stora emoji-kort och kalenderns dagsvy har en tydligare "Nu"-markering.
 - **Idag och fokusläget enligt skissen** (2026-08-16): "Din kapacitet idag" visar energi och belastning som lugna prickskalor i pastellgradient, och "Ditt fokus idag" numrerar dina tre första steg med färgade cirklar, tid, prioritet och friktion. Fokusläget har fått en stor ringtimer med start/paus mitt i cirkeln samt "Ta paus" och "Klar". "Vad ska jag göra nu?" avslutas med ett litet tips i stället för fler krav.
 
