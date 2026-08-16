@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import Layout from "@/components/layout";
+import { MyFloveThinking } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -402,6 +403,13 @@ export default function StudyflowPage() {
                       {meta.friction >= 7 && (
                         <div className="mt-2 rounded-xl bg-gold/10 p-2 text-xs text-ink">
                           Den här verkar tung att börja med. Vill du dela upp den?
+                          {busyId === task.id && (
+                            <MyFloveThinking
+                              steps={["📚", "🧠", "✂️", "✨"]}
+                              label="Jag delar upp den i mindre steg…"
+                              className="py-2"
+                            />
+                          )}
                           <Button
                             size="sm"
                             variant="secondary"

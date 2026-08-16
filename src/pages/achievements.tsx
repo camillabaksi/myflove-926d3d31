@@ -1,4 +1,5 @@
 import Layout from "@/components/layout";
+import { MyFloveCelebration } from "@/components/myflove/motion";
 import { useMoods, useTasks, useFocus, useMedications } from "@/hooks/use-data";
 import { useLocalStorage } from "@/lib/storage";
 import { getAchievements } from "@/lib/achievements";
@@ -28,6 +29,16 @@ export default function Achievements() {
           <h1 className="text-3xl font-bold mb-2">Belöningar</h1>
           <p className="text-muted-foreground">
             {unlockedCount} av {achievements.length} upplåsta — varje litet steg räknas.
+          </p>
+          <div className="mt-3">
+            {unlockedCount > 0 && (
+              <MyFloveCelebration
+                level={unlockedCount >= 6 ? 3 : unlockedCount >= 3 ? 2 : 1}
+                message="Du har samlat på dig fler små steg än du tror."
+              />
+            )}
+          </div>
+          <p className="hidden">
           </p>
         </div>
 
