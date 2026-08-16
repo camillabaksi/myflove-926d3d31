@@ -206,6 +206,7 @@ export function MyFloveCard({
 export function MyFloveSection({
   title,
   emoji,
+  emojiKey,
   description,
   action,
   className,
@@ -213,6 +214,7 @@ export function MyFloveSection({
 }: {
   title: string;
   emoji?: string;
+  emojiKey?: MyFloveEmojiKey;
   description?: string;
   action?: React.ReactNode;
   className?: string;
@@ -221,12 +223,12 @@ export function MyFloveSection({
   return (
     <section className={cn("space-y-3", className)}>
       <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <h2 className="font-display text-lg font-bold text-ink">
-            {emoji && <span aria-hidden className="mr-1.5">{emoji}</span>}
-            {title}
-          </h2>
-          {description && <p className="text-sm text-muted-foreground">{description}</p>}
+        <div className="flex min-w-0 items-start gap-2">
+          <MyFloveEmoji {...(emoji ? { emoji } : {})} {...(emojiKey ? { name: emojiKey } : {})} size="sm" className="mt-0.5" />
+          <div className="min-w-0">
+            <h2 className="font-display text-lg font-bold leading-tight text-ink">{title}</h2>
+            {description && <p className="text-sm text-muted-foreground">{description}</p>}
+          </div>
         </div>
         {action}
       </div>
