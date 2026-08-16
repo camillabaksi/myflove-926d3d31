@@ -241,7 +241,11 @@ export default function Home() {
             title="Daily Flow"
             help="Berätta hur dagen ser ut så föreslår jag ett par saker som faktiskt går att göra. Du bestämmer alltid själv."
           >
-            <DailyFlowCard />
+            <div className="space-y-4">
+              <DayRebuild />
+              <DailyFlowCard />
+            </div>
+
           </HomeSection>
         )}
 
