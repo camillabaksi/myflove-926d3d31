@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { Calendar, Heart, Inbox, Sparkles } from "lucide-react";
+import { Calendar, Heart, Inbox, Sparkles, X } from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useLocalStorage } from "@/lib/storage";
