@@ -10,6 +10,10 @@ import QuickflowCapture from "@/components/quickflow-capture";
 import QuickflowList from "@/components/quickflow-list";
 import PersonalNote from "@/components/personal-note";
 import HomeSection from "@/components/home-section";
+import DailyFlowCard from "@/components/daily-flow-card";
+import QuickflowTriage from "@/components/quickflow-triage";
+import FlowReset from "@/components/flow-reset";
+import FlowOnboarding from "@/components/flow-onboarding";
 import StreakCard from "@/components/streak-card";
 import WeekInFlow from "@/components/week-in-flow";
 import { celebrateFromEvent } from "@/lib/celebrate";
@@ -29,6 +33,8 @@ import { useViewMode } from "@/lib/view-mode";
  * det rummets saker – "Allt" lägger ihop hela hemskärmen igen.
  */
 const SECTION_AREAS: Record<string, LifeArea[]> = {
+  dailyflow: ["vardag", "privat", "studier", "jobb"],
+  reset: ["vardag", "privat", "studier", "jobb"],
   quickflow: ["vardag", "privat", "studier", "jobb"],
   streak: ["vardag"],
   weather: ["vardag", "privat"],
@@ -43,7 +49,7 @@ const SECTION_AREAS: Record<string, LifeArea[]> = {
 };
 
 /** Vad som är kvar i förenklad vy – det du faktiskt behöver just nu. */
-const SIMPLE_SECTIONS = ["today", "shortcuts", "help"];
+const SIMPLE_SECTIONS = ["dailyflow", "today", "shortcuts", "help"];
 
 
 
@@ -173,6 +179,7 @@ export default function Home() {
   return (
     <Layout>
       <IntroTour />
+      <FlowOnboarding />
       <div className="space-y-8">
 
         {/* Hero header with preview-style warmth */}
@@ -228,10 +235,21 @@ export default function Home() {
 
         <PersonalNote />
 
+        {showSection("dailyflow") && (
+          <HomeSection
+            id="dailyflow"
+            title="Daily Flow"
+            help="Berätta hur dagen ser ut så föreslår jag ett par saker som faktiskt går att göra. Du bestämmer alltid själv."
+          >
+            <DailyFlowCard />
+          </HomeSection>
+        )}
+
         {showSection("quickflow") && (
           <HomeSection id="quickflow" title="Quickflow" help="Skriv ner det du kommer på, direkt. Du behöver inte bestämma när eller hur – sortera senare.">
             <div className="space-y-4">
               <QuickflowCapture />
+              <QuickflowTriage />
               <QuickflowList />
             </div>
           </HomeSection>
@@ -452,6 +470,16 @@ export default function Home() {
                 <ArrowRight size={16} className="text-muted-foreground shrink-0" />
               </Link>
             </HomeSection>
+        )}
+
+        {showSection("reset") && new Date().getHours() >= 17 && (
+          <HomeSection
+            id="reset"
+            title="Flow Reset"
+            help="Ett frivilligt sätt att avsluta dagen. Det som inte blev gjort får bara flytta med."
+          >
+            <FlowReset />
+          </HomeSection>
         )}
 
         {showSection("push") && (
