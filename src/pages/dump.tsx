@@ -167,12 +167,12 @@ export default function Dump() {
         <QuickflowCapture />
 
         {!thoughts ? (
-          <div className="bg-card p-2 rounded-3xl shadow-sm border border-border relative focus-within:ring-2 focus-within:ring-primary/20 transition-all">
+          <div className="relative rounded-3xl border border-border/60 bg-card p-2 shadow-soft transition-all focus-within:ring-2 focus-within:ring-primary/20">
             <textarea
               value={rawText}
               onChange={(e) => setRawText(e.target.value)}
               placeholder="T.ex. 'Handla mjölk. Ringa tandläkaren imorgon. Kanske börja måla om vardagsrummet någon gång...'"
-              className="w-full h-48 p-4 pb-16 bg-transparent border-none outline-none resize-none text-lg"
+              className="h-48 w-full resize-none border-none bg-transparent p-4 pb-16 text-lg outline-none"
             />
             <div className="absolute bottom-3 right-3 left-3 flex justify-between items-center gap-2">
               {voiceSupported ? (
