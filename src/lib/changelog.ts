@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Egen kategori \"Hälsa\" i navigationen – Må bra, Träning, FlowScore och Statistik separerade från \"Din dag\" (2026-08-16)",
       "Egen ordning på hemskärmen – dra och släpp blocken i \"Anpassa hemskärmen\" (2026-08-16)",
       "Anpassa hemskärmen – lugnare startläge och egna val för vilka block som syns (2026-08-16)",
       "Daily Flow – incheckning av energi, mental belastning och tid som styr dagens förslag (2026-08-16)",
