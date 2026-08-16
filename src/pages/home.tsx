@@ -7,6 +7,7 @@ import HelpMeModal from "@/components/help-me-modal";
 import WeatherCard from "@/components/weather-card";
 import ProactiveSuggestions from "@/components/proactive-suggestions";
 import { MyFloveSparkle } from "@/components/myflove/motion";
+import { MyFloveLinkButton } from "@/components/myflove";
 import QuickflowCapture from "@/components/quickflow-capture";
 import QuickflowList from "@/components/quickflow-list";
 import PersonalNote from "@/components/personal-note";
@@ -428,12 +429,14 @@ export default function Home() {
                 <p className="text-sm text-muted-foreground mt-1">
                   Vill du sätta en enda sak för idag? Det räcker gott.
                 </p>
-                <Link
+                <MyFloveLinkButton
                   href="/flowplan"
-                  className="inline-block mt-4 rounded-full bg-primary text-primary-foreground px-5 py-2 text-sm font-medium hover-scale"
+                  variant="primary"
+                  size="sm"
+                  className="mt-4"
                 >
                   Sätt dagens fokus
-                </Link>
+                </MyFloveLinkButton>
               </div>
   
             ) : (
