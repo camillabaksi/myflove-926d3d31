@@ -250,7 +250,7 @@
   border: var(--border-dashed);
 }
 
-@utility border-accent {
+@utility border-accent-soft {
   border: var(--border-accent);
 }
 
