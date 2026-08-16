@@ -45,7 +45,7 @@
   --color-forest-deep: hsl(var(--forest-deep));
 
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Fraunces", ui-serif, Georgia, serif;
+  --font-display: "Plus Jakarta Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -54,92 +54,92 @@
 }
 
 :root {
-  /* MyFlove palette: beige, skogsgrön, guld och vitt */
-  --background: 40 33% 93%;
-  --foreground: 150 18% 14%;
-  --border: 40 20% 84%;
+  /* MyFlove palette: mjuk lila, vitt, rosa och mint */
+  --background: 264 60% 98%;
+  --foreground: 260 30% 18%;
+  --border: 264 35% 91%;
 
   --card: 0 0% 100%;
-  --card-foreground: 150 18% 14%;
+  --card-foreground: 260 30% 18%;
 
   --popover: 0 0% 100%;
-  --popover-foreground: 150 18% 14%;
+  --popover-foreground: 260 30% 18%;
 
-  --primary: 152 36% 22%;
-  --primary-foreground: 45 50% 97%;
+  --primary: 258 68% 62%;
+  --primary-foreground: 0 0% 100%;
 
-  --secondary: 42 32% 90%;
-  --secondary-foreground: 150 18% 14%;
+  --secondary: 262 55% 95%;
+  --secondary-foreground: 260 32% 26%;
 
-  --muted: 42 24% 90%;
-  --muted-foreground: 150 8% 38%;
+  --muted: 264 40% 95%;
+  --muted-foreground: 258 14% 48%;
 
-  --accent: 40 45% 88%;
-  --accent-foreground: 36 60% 24%;
+  --accent: 327 70% 94%;
+  --accent-foreground: 327 45% 38%;
 
-  --destructive: 6 55% 46%;
-  --destructive-foreground: 45 50% 97%;
+  --destructive: 352 70% 58%;
+  --destructive-foreground: 0 0% 100%;
 
-  --input: 40 24% 87%;
-  --ring: 152 36% 22%;
+  --input: 264 32% 92%;
+  --ring: 258 68% 62%;
 
 
-  --radius: 1.25rem;
+  --radius: 1.5rem;
 
   /* Raw brand tokens */
-  --ink: 150 18% 14%;
-  --cream: 42 45% 96%;
-  --sage: 150 20% 62%;
-  --gold: 38 62% 52%;
-  --terracotta: 152 36% 22%;
-  --terracotta-soft: 152 26% 38%;
-  --forest: 152 36% 22%;
-  --forest-deep: 154 40% 15%;
+  --ink: 260 30% 18%;
+  --cream: 264 60% 98%;
+  --sage: 155 45% 66%;
+  --gold: 40 92% 62%;
+  --terracotta: 327 75% 66%;
+  --terracotta-soft: 285 60% 72%;
+  --forest: 258 68% 62%;
+  --forest-deep: 258 52% 34%;
 
-  --gradient-hero: linear-gradient(135deg, hsl(42 45% 96%) 0%, hsl(40 40% 91%) 45%, hsl(150 22% 86%) 100%);
-  --shadow-soft: 0 1px 2px hsl(150 18% 14% / 0.04), 0 12px 28px -18px hsl(150 18% 14% / 0.28);
-  --shadow-lifted: 0 2px 4px hsl(150 18% 14% / 0.05), 0 24px 48px -24px hsl(150 18% 14% / 0.32);
+  --gradient-hero: linear-gradient(135deg, hsl(264 70% 96%) 0%, hsl(276 65% 94%) 50%, hsl(327 70% 95%) 100%);
+  --shadow-soft: 0 1px 2px hsl(258 40% 30% / 0.04), 0 12px 28px -18px hsl(258 45% 35% / 0.25);
+  --shadow-lifted: 0 2px 4px hsl(258 40% 30% / 0.05), 0 24px 48px -24px hsl(258 45% 35% / 0.3);
 }
 
 .dark {
-  --background: 154 22% 9%;
-  --foreground: 42 40% 94%;
-  --border: 154 12% 20%;
+  --background: 260 30% 10%;
+  --foreground: 264 40% 95%;
+  --border: 260 18% 22%;
 
-  --card: 154 18% 13%;
-  --card-foreground: 42 40% 94%;
+  --card: 260 26% 14%;
+  --card-foreground: 264 40% 95%;
 
-  --popover: 154 18% 13%;
-  --popover-foreground: 42 40% 94%;
+  --popover: 260 26% 14%;
+  --popover-foreground: 264 40% 95%;
 
-  --primary: 150 34% 58%;
-  --primary-foreground: 154 40% 10%;
+  --primary: 258 78% 72%;
+  --primary-foreground: 260 40% 12%;
 
-  --secondary: 150 10% 20%;
-  --secondary-foreground: 42 35% 90%;
+  --secondary: 260 18% 22%;
+  --secondary-foreground: 264 35% 92%;
 
-  --muted: 154 10% 18%;
-  --muted-foreground: 42 12% 68%;
+  --muted: 260 16% 20%;
+  --muted-foreground: 264 14% 70%;
 
-  --accent: 38 30% 24%;
-  --accent-foreground: 38 60% 80%;
+  --accent: 327 30% 26%;
+  --accent-foreground: 327 70% 86%;
 
-  --destructive: 6 55% 55%;
-  --destructive-foreground: 45 50% 97%;
+  --destructive: 352 65% 60%;
+  --destructive-foreground: 0 0% 100%;
 
-  --input: 154 10% 22%;
-  --ring: 150 34% 58%;
+  --input: 260 16% 24%;
+  --ring: 258 78% 72%;
 
-  --ink: 42 40% 94%;
-  --cream: 154 18% 13%;
-  --sage: 150 20% 55%;
-  --gold: 38 60% 60%;
-  --terracotta: 150 34% 58%;
-  --terracotta-soft: 150 26% 68%;
-  --forest: 150 34% 58%;
-  --forest-deep: 154 30% 22%;
+  --ink: 264 40% 95%;
+  --cream: 260 26% 14%;
+  --sage: 155 35% 60%;
+  --gold: 40 85% 66%;
+  --terracotta: 327 65% 70%;
+  --terracotta-soft: 285 50% 74%;
+  --forest: 258 78% 72%;
+  --forest-deep: 258 40% 28%;
 
-  --gradient-hero: linear-gradient(135deg, hsl(154 20% 14%) 0%, hsl(154 16% 12%) 50%, hsl(150 18% 18%) 100%);
+  --gradient-hero: linear-gradient(135deg, hsl(260 30% 15%) 0%, hsl(272 28% 17%) 50%, hsl(327 22% 20%) 100%);
   --shadow-soft: 0 1px 2px hsl(0 0% 0% / 0.3), 0 12px 28px -18px hsl(0 0% 0% / 0.6);
   --shadow-lifted: 0 2px 4px hsl(0 0% 0% / 0.35), 0 24px 48px -24px hsl(0 0% 0% / 0.65);
 }
