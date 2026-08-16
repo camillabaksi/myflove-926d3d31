@@ -6,9 +6,22 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-08-15";
+export const CHANGELOG_UPDATED = "2026-08-16";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  {
+    title: "Daglig loop",
+    items: [
+      "Daily Flow – incheckning av energi, mental belastning och tid som styr dagens förslag (2026-08-16)",
+      "\"Vad ska jag göra nu?\" – en rekommendation i taget baserad på FlowScore, friktion och tid (2026-08-16)",
+      "Fokusläge – en sak, en timer, inget brus (2026-08-16)",
+      "QuickFlow som flytande knapp – dumpa först, bestäm sen (2026-08-16)",
+      "QuickFlow-sortering med typförslag och varsam uppföljning av gamla poster (2026-08-16)",
+      "Flow Reset – frivilligt kvällsläge med omplanering utan skuld (2026-08-16)",
+      "Veckans Flow – lugn tillbakablick och mönster som observationer (2026-08-16)",
+      "Onboarding – vad vill du att MyFlove främst hjälper dig med? (2026-08-16)",
+    ],
+  },
   {
     title: "Grund & plattform",
     items: [
