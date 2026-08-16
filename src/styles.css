@@ -211,9 +211,15 @@
 
 @utility surface-card {
   background-color: hsl(var(--card));
-  border: 1px solid hsl(var(--border) / 0.7);
+  border: var(--border-hairline);
   border-radius: var(--radius);
   box-shadow: var(--shadow-soft);
+}
+
+@utility surface-panel {
+  background-color: hsl(var(--muted) / 0.6);
+  border: var(--border-hairline);
+  border-radius: var(--radius-md);
 }
 
 @utility surface-hero {
@@ -229,6 +235,31 @@
 
 @utility shadow-lifted {
   box-shadow: var(--shadow-lifted);
+}
+
+/* Kantlinje-stilar som följer temat */
+@utility border-hairline {
+  border: var(--border-hairline);
+}
+
+@utility border-strong {
+  border: var(--border-strong);
+}
+
+@utility border-dashed-soft {
+  border: var(--border-dashed);
+}
+
+@utility border-accent {
+  border: var(--border-accent);
+}
+
+@utility divider-hairline {
+  border-bottom: var(--border-hairline);
+}
+
+@utility ring-focus {
+  box-shadow: var(--shadow-focus);
 }
 
 /* ------------------------------------------------------------------
