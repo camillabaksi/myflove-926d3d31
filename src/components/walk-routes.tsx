@@ -158,7 +158,17 @@ export default function WalkRoutesSection() {
         </Button>
       </div>
 
-      {loading && <MyFlovePath className="my-2" />}
+      {loading && (
+        <MyFlovePath
+          className="my-2"
+          steps={[
+            { emoji: "📍", label: "Din plats" },
+            { emoji: "🌳", label: "Vägar" },
+            { emoji: "🚶", label: "Förslag" },
+          ]}
+          current={1}
+        />
+      )}
 
       {updatedAt && (
         <p className="text-xs text-muted-foreground">
