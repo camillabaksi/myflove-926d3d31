@@ -255,3 +255,76 @@ html[data-npf-space="roomy"] main .space-y-3 > * + * {
 html[data-npf-less="true"] [data-npf="optional"] {
   display: none !important;
 }
+
+/* ------------------------------------------------------------------
+   Mjuka animationer – liv utan stress. Respekterar NPF-läget
+   (html[data-npf-still="true"] nollar all rörelse längre upp i filen).
+   ------------------------------------------------------------------ */
+
+@keyframes myflove-fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes myflove-pop {
+  0%   { opacity: 0; transform: scale(0.96) translateY(8px); }
+  60%  { opacity: 1; transform: scale(1.01) translateY(0); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes myflove-breathe {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.06); }
+}
+
+@keyframes myflove-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+
+/* Hela vyn tonar mjukt in när man byter sida */
+@utility page-enter {
+  animation: myflove-fade-up 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Kort "poppar" in */
+@utility pop-in {
+  animation: myflove-pop 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Illustrationer som andas / gungar */
+@utility breathe {
+  animation: myflove-breathe 4.5s ease-in-out infinite;
+}
+
+@utility floaty {
+  animation: myflove-float 5s ease-in-out infinite;
+}
+
+/* Knapptryck: lätt scale */
+@utility press {
+  transition: transform 0.16s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.16s ease;
+  &:active {
+    transform: scale(0.96);
+  }
+}
+
+/* Barnen i en lista tonar in i tur och ordning */
+@utility stagger {
+  & > * {
+    animation: myflove-fade-up 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  & > *:nth-child(1) { animation-delay: 0.02s; }
+  & > *:nth-child(2) { animation-delay: 0.06s; }
+  & > *:nth-child(3) { animation-delay: 0.1s; }
+  & > *:nth-child(4) { animation-delay: 0.14s; }
+  & > *:nth-child(5) { animation-delay: 0.18s; }
+  & > *:nth-child(6) { animation-delay: 0.22s; }
+  & > *:nth-child(n + 7) { animation-delay: 0.26s; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-enter, .pop-in, .breathe, .floaty, .stagger > * {
+    animation: none !important;
+  }
+}
