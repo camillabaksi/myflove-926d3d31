@@ -191,8 +191,8 @@
 
 /* Lugnare intryck: mindre skrikiga ytor och mjukare skuggor */
 html[data-npf-calm="true"] {
-  --shadow-soft: 0 1px 2px hsl(150 18% 14% / 0.05);
-  --shadow-lifted: 0 4px 12px hsl(150 18% 14% / 0.06);
+  --shadow-soft: 0 1px 2px hsl(258 40% 30% / 0.05);
+  --shadow-lifted: 0 4px 12px hsl(258 40% 30% / 0.06);
 }
 html[data-npf-calm="true"] .surface-hero,
 html[data-npf-calm="true"] [class*="bg-gradient"] {
