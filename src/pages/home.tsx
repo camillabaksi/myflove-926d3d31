@@ -284,7 +284,9 @@ export default function Home() {
               Förenklad vy: bara dagens saker, genvägar och hjälp. Byt till vanlig vy när du vill se allt.
             </p>
           )}
+          <HomeCustomize />
         </div>
+
 
 
         {showSection("streak") && (
