@@ -280,11 +280,14 @@ export function MyFloveHeader({
             <ArrowLeft size={18} strokeWidth={2.2} />
           </button>
         )}
-        {shownEmoji && (
-          <span aria-hidden className="text-3xl leading-none">
-            {shownEmoji}
-          </span>
-        )}
+        <MyFloveEmoji
+          {...(emoji ? { emoji } : {})}
+          {...(emojiKey ? { name: emojiKey } : {})}
+          size="lg"
+          motion="breathe"
+          className="mt-0.5"
+        />
+
         <div className="min-w-0 flex-1">
           <h1 className="font-display text-2xl font-bold leading-tight text-ink">{title}</h1>
           {description && <p className="mt-1 text-sm text-muted-foreground">{description}</p>}
