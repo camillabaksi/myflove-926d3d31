@@ -1,7 +1,7 @@
 import { ReactNode, useState, useEffect, useMemo } from "react";
 import { Link, useLocation } from "wouter";
 import { useRouter } from "@tanstack/react-router";
-import { Home, Target, CheckSquare, ShoppingBag, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Settings2, Check, RotateCcw, ArrowUp, ArrowDown, LogOut, Volume2, VolumeX, Shield, Heart, Sun, Search, GraduationCap, Briefcase, Baby, CalendarDays, Brain, HeartPulse, House, BookOpen, Building2, LayoutGrid, Dumbbell, SprayCan, Zap, Gauge, ArrowLeft, Accessibility } from "lucide-react";
+import { Home, Target, CheckSquare, ShoppingBag, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Settings2, Check, RotateCcw, ArrowUp, ArrowDown, LogOut, Volume2, VolumeX, Shield, Heart, Sun, Search, GraduationCap, Briefcase, Baby, CalendarDays, Brain, HeartPulse, House, BookOpen, Building2, LayoutGrid, Dumbbell, SprayCan, Zap, Gauge, ArrowLeft, Accessibility, Plus } from "lucide-react";
 import { isAlarmSoundEnabled, setAlarmSoundEnabled, subscribeAlarmPref, playAlarmPreview, initAlarmAudioUnlock } from "@/lib/push-notifications";
 import { useCommuteAlerts } from "@/hooks/use-commute-alerts";
 import { useMedicationAlerts } from "@/hooks/use-medication-alerts";
@@ -959,5 +959,35 @@ function BottomNavEditor({ allItems, selected, onChange, onClose, onReset }: Bot
         </Button>
       </div>
     </div>
+  );
+}
+
+function BottomNavLink({
+  item,
+  active,
+  onClick,
+}: {
+  item: { href: string; label: string; icon: React.ComponentType<{ size?: number; strokeWidth?: number }> };
+  active: boolean;
+  onClick: () => void;
+}) {
+  const Icon = item.icon;
+  return (
+    <Link
+      href={item.href}
+      onClick={onClick}
+      className={`flex flex-col items-center gap-1 rounded-2xl px-2 py-1.5 min-w-[3.7rem] press ${
+        active ? "text-primary" : "text-muted-foreground hover:text-foreground"
+      }`}
+    >
+      <span
+        className={`inline-flex items-center justify-center rounded-2xl px-3 py-1 transition-colors ${
+          active ? "bg-primary/12" : ""
+        }`}
+      >
+        <Icon size={22} strokeWidth={active ? 2.6 : 2} />
+      </span>
+      <span className="text-[10px] font-medium">{item.label}</span>
+    </Link>
   );
 }
