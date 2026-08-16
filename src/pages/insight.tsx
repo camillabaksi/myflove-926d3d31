@@ -139,13 +139,25 @@ export default function InsightPage() {
     setContexts((prev) => (prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c]));
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-6 space-y-6 pb-28">
-      <header className="space-y-2">
-        <h1 className="text-3xl font-bold flex items-center gap-2">
-          <span aria-hidden>🧠</span> MyFlove Insight
-        </h1>
-        <p className="text-muted-foreground">Förstå behov. Hitta strategier. Gör vardagen enklare.</p>
+    <div className="max-w-2xl mx-auto px-4 py-6 space-y-6 pb-28 page-enter">
+      <header
+        className="rounded-3xl border border-border/60 p-5 shadow-soft"
+        style={{
+          backgroundImage:
+            "linear-gradient(135deg, hsl(var(--lavender)) 0%, hsl(var(--cream)) 60%, hsl(var(--mint) / 0.8) 100%)",
+        }}
+      >
+        <div className="flex items-start gap-3">
+          <span aria-hidden className="text-3xl leading-none">🧠</span>
+          <div className="min-w-0">
+            <h1 className="font-display text-2xl font-bold text-ink">MyFlove Insight</h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Förstå behov. Hitta strategier. Gör vardagen enklare.
+            </p>
+          </div>
+        </div>
       </header>
+
 
 
 
