@@ -71,15 +71,15 @@ const SECTION_BY_PATH: Record<string, string> = {
 
 
 /**
- * Per-category color themes, all drawn from the warm MyFlove preview palette.
+ * Per-category color themes, all drawn from the soft lilac MyFlove palette.
  * They override --primary / --accent / --ring so text-primary, bg-primary, etc.
- * re-tint automatically per page.
+ * re-tint automatically per page – alltid inom lila/rosa/mint-familjen.
  */
 const T = {
-  terracotta: { "--primary": "7 47% 49%", "--ring": "7 47% 49%", "--accent": "8 45% 84%", "--accent-foreground": "7 50% 24%" },
-  sage:       { "--primary": "138 24% 40%", "--ring": "138 24% 40%", "--accent": "138 30% 84%", "--accent-foreground": "138 40% 22%" },
-  gold:       { "--primary": "35 65% 45%",  "--ring": "35 65% 45%",  "--accent": "35 55% 82%",  "--accent-foreground": "35 45% 22%" },
-  ink:        { "--primary": "194 13% 25%", "--ring": "194 13% 25%", "--accent": "194 10% 80%", "--accent-foreground": "194 20% 18%" },
+  terracotta: { "--primary": "327 62% 62%", "--ring": "327 62% 62%", "--accent": "327 70% 93%", "--accent-foreground": "327 45% 34%" },
+  sage:       { "--primary": "168 42% 44%", "--ring": "168 42% 44%", "--accent": "168 45% 90%", "--accent-foreground": "168 45% 24%" },
+  gold:       { "--primary": "285 52% 58%", "--ring": "285 52% 58%", "--accent": "285 55% 93%", "--accent-foreground": "285 45% 30%" },
+  ink:        { "--primary": "258 68% 62%", "--ring": "258 68% 62%", "--accent": "258 60% 93%", "--accent-foreground": "258 45% 30%" },
 };
 
 const CATEGORY_THEMES: Record<string, Record<string, string>> = {
