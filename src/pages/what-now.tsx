@@ -5,7 +5,7 @@ import FocusMode from "@/components/focus-mode";
 import { useTasks } from "@/hooks/use-data";
 import { useDailyCheckin, useFlowUsage } from "@/hooks/use-daily-flow";
 import { scoreTask, TIME_META, type ScoredTask } from "@/lib/daily-flow";
-import { Clock, Flag, Waves, Play, Shuffle, Moon, Sparkles } from "lucide-react";
+import { Clock, Flag, Waves, Play, Shuffle, Moon, Sparkles, Lightbulb } from "lucide-react";
 
 /** Hur mycket tid känns rimligt just nu – tre lugna val, inget mer. */
 const TIME_CHOICES = [
@@ -159,7 +159,18 @@ export default function WhatNow() {
             )}
           </div>
         )}
+
+        {/* Tips – en liten knuff, aldrig ett krav */}
+        <div className="rounded-3xl border border-border/60 bg-secondary/40 p-5">
+          <p className="flex items-center gap-2 text-sm font-semibold text-ink">
+            <Lightbulb size={16} className="text-gold" /> Tips
+          </p>
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+            Du brukar få mer gjort före lunch. Satsa på det nu 💪
+          </p>
+        </div>
       </div>
+
 
       <FocusMode
         item={suggestion}

@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Brain, Sparkles, Timer, Zap } from "lucide-react";
+import { Link } from "wouter";
+import { ArrowRight, Brain, ChevronRight, Sparkles, Timer, Zap } from "lucide-react";
 import { toast } from "sonner";
 import FocusMode from "@/components/focus-mode";
 import { useTasks } from "@/hooks/use-data";
@@ -20,6 +21,34 @@ import {
 } from "@/lib/daily-flow";
 
 const SCALE = [1, 2, 3, 4, 5];
+
+/** Pastellfärger på siffrorna i "Ditt fokus idag". */
+const FOCUS_TONES = [
+  { bg: "bg-blush", text: "text-terracotta" },
+  { bg: "bg-sun", text: "text-gold" },
+  { bg: "bg-mint", text: "text-sage" },
+  { bg: "bg-sky", text: "text-primary" },
+  { bg: "bg-lavender", text: "text-primary" },
+];
+
+/** Liten prickskala för energi och belastning. */
+function Meter({ label, icon, value, tone }: { label: string; icon: string; value: number; tone: string }) {
+  return (
+    <div className="flex items-center gap-3">
+      <span className="w-28 shrink-0 text-sm font-medium text-ink">
+        {icon} {label}
+      </span>
+      <span className="flex gap-1.5" aria-label={`${label} ${value} av 5`}>
+        {SCALE.map((n) => (
+          <span
+            key={n}
+            className={`h-2.5 w-2.5 rounded-full ${n <= value ? tone : "bg-foreground/10"}`}
+          />
+        ))}
+      </span>
+    </div>
+  );
+}
 
 /**
  * Daily Flow – dagens incheckning, dagens fokus och "Vad ska jag göra nu?".
@@ -138,26 +167,42 @@ export default function DailyFlowCard() {
           </button>
         </div>
       ) : (
-        <div className="surface-card p-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
-          <span>⚡ Energi {checkin.energy}/5</span>
-          <span>🧠 Belastning {checkin.load}/5</span>
-          <span>⏰ {TIME_META[checkin.time].label} tid</span>
-          <button
-            type="button"
-            onClick={() => {
-              setEnergy(null);
-              setLoad(null);
-              setTime(null);
-              save({ energy: checkin.energy, load: checkin.load, time: checkin.time });
-              toast("Ändra genom att välja nytt nedan.");
-            }}
-            className="ml-auto text-xs text-muted-foreground underline underline-offset-2"
-          >
-            Uppdatera
-          </button>
-          <p className="w-full text-muted-foreground">{checkinSummary(checkin)}</p>
+        <div
+          className="relative overflow-hidden rounded-3xl border border-border/60 p-5 shadow-soft pop-in"
+          style={{
+            background:
+              "linear-gradient(135deg, hsl(var(--lavender)) 0%, hsl(var(--cream)) 60%, hsl(var(--blush) / 0.8) 100%)",
+          }}
+        >
+          <div className="pointer-events-none absolute -right-2 bottom-0 text-6xl breathe select-none" aria-hidden>
+            💜
+          </div>
+          <div className="relative space-y-3 pr-16">
+            <div className="flex items-center justify-between gap-2">
+              <p className="font-display text-base font-bold text-ink">Din kapacitet idag</p>
+              <button
+                type="button"
+                onClick={() => {
+                  setEnergy(null);
+                  setLoad(null);
+                  setTime(null);
+                  save({ energy: checkin.energy, load: checkin.load, time: checkin.time });
+                  toast("Ändra genom att välja nytt nedan.");
+                }}
+                className="text-xs font-medium text-primary underline underline-offset-2"
+              >
+                Redigera
+              </button>
+            </div>
+            <Meter label="Energi" icon="⚡" value={checkin.energy} tone="bg-primary" />
+            <Meter label="Belastning" icon="🧠" value={checkin.load} tone="bg-terracotta" />
+            <p className="text-xs text-muted-foreground">
+              ⏰ {TIME_META[checkin.time].label} tid · {checkinSummary(checkin)}
+            </p>
+          </div>
         </div>
       )}
+
 
       {/* ── Vad ska jag göra nu? ──────────────────────── */}
       <button
@@ -181,53 +226,62 @@ export default function DailyFlowCard() {
         </span>
       </button>
 
-      {/* ── Din dag i Flow ────────────────────────────── */}
-      <div className="space-y-3">
+      {/* ── Ditt fokus idag ───────────────────────────── */}
+      <div className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft space-y-3">
         <div className="flex items-center gap-2">
           <Sparkles size={16} className="text-primary" />
-          <h3 className="font-semibold text-ink">Din dag i Flow</h3>
+          <h3 className="font-display font-bold text-ink">Ditt fokus idag</h3>
         </div>
 
         {top.length === 0 ? (
-          <div className="surface-card p-5 text-sm text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             Du har inget planerat just nu. Vill du dumpa något i QuickFlow?
-          </div>
+          </p>
         ) : (
           <>
-            <div className="space-y-2">
-              {top.map((item, i) => (
-                <div key={item.task.id} className="surface-card p-4 flex items-center gap-3">
-                  <span className="text-lg shrink-0">{PRIORITY_DOT[item.priority]}</span>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-ink truncate">
-                      {i + 1}. {item.task.title}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {item.minutes} min · {FRICTION_LABEL(item.friction)} · FlowScore {item.score}
-                    </p>
-                  </div>
+            <div className="space-y-1">
+              {top.map((item, i) => {
+                const tone = FOCUS_TONES[i % FOCUS_TONES.length]!;
+                return (
                   <button
+                    key={item.task.id}
                     type="button"
                     onClick={() => startFocus(item)}
-                    className="rounded-full bg-primary/10 text-primary px-3 py-1.5 text-xs font-semibold shrink-0"
+                    className="press flex w-full items-center gap-3 rounded-2xl p-2 text-left transition-colors hover:bg-secondary/50"
                   >
-                    Starta
+                    <span
+                      className={`grid h-9 w-9 shrink-0 place-items-center rounded-full text-sm font-bold ${tone.bg} ${tone.text}`}
+                    >
+                      {i + 1}
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate font-semibold text-ink">{item.task.title}</span>
+                      <span className="block text-xs text-muted-foreground">
+                        {item.minutes} min · {PRIORITY_DOT[item.priority]} {item.priority} prioritet ·{" "}
+                        {FRICTION_LABEL(item.friction)}
+                      </span>
+                    </span>
+                    <ChevronRight size={16} className="shrink-0 text-muted-foreground" />
                   </button>
-                </div>
-              ))}
+                );
+              })}
             </div>
-            <p className="text-xs text-muted-foreground">
-              Du behöver inte göra allt. Det här är det jag tror ger mest nytta just nu.
-            </p>
+            <Link
+              href="/tasks"
+              className="flex items-center justify-center gap-1 pt-1 text-sm font-semibold text-primary"
+            >
+              Se hela dagen <ArrowRight size={14} />
+            </Link>
             <button
               type="button"
               onClick={() => top[0] && startFocus(top[0])}
-              className="w-full rounded-2xl bg-primary text-primary-foreground py-3.5 font-semibold flex items-center justify-center gap-2"
+              className="press flex w-full items-center justify-center gap-2 rounded-2xl bg-primary py-3.5 font-semibold text-primary-foreground"
             >
               <Zap size={18} /> Starta mitt Flow
             </button>
           </>
         )}
+
       </div>
 
       {/* ── Rekommendation ────────────────────────────── */}

@@ -12,6 +12,9 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Fokusläget har fått en stor ringtimer med start/paus i mitten, plus \"Ta paus\" och \"Klar\" (2026-08-16)",
+      "\"Din kapacitet idag\" visar energi och belastning som prickskalor, och \"Ditt fokus idag\" numrerar dina tre första steg i pastell (2026-08-16)",
+      "\"Vad ska jag göra nu?\" avslutas med ett litet tips i stället för fler krav (2026-08-16)",
       "Designtokens för palett, rundningar, avstånd, skuggor och kantlinjer – nya komponenter följer designen automatiskt (2026-08-16)",
       "Pastellikoner och emoji på startsidans brickor och genvägar – rundare kort, tydligare ikoner och lätt tryckkänsla (2026-08-16)",
       "Egen sida \"Vad ska jag göra nu?\" på /vad-nu – ett förslag i taget med tid, prioritet, friktion och varför (2026-08-16)",
