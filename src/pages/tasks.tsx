@@ -339,13 +339,23 @@ export default function Tasks() {
 
   return (
     <Layout>
-      <div className="space-y-8">
-        <div>
-          <h1 className="text-3xl font-bold mb-2">Att göra</h1>
-          <p className="text-muted-foreground">
-            Skilj på uppgifter (bocka av), ärenden (flera steg eller väntetid) och projekt.
-            Sätt status <em>Pågår</em>, <em>Väntar på</em> eller <em>Klart</em> — så håller du reda utan att bära allt i huvudet.
-          </p>
+      <div className="space-y-6 page-enter">
+        <div
+          className="rounded-3xl border border-border/60 p-5 shadow-soft"
+          style={{
+            backgroundImage:
+              "linear-gradient(135deg, hsl(var(--lavender)) 0%, hsl(var(--cream)) 60%, hsl(var(--blush) / 0.8) 100%)",
+          }}
+        >
+          <div className="flex items-start gap-3">
+            <span aria-hidden className="text-3xl leading-none">✅</span>
+            <div className="min-w-0">
+              <h1 className="font-display text-2xl font-bold text-ink">Uppgifter</h1>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Bocka av det lilla, håll koll på det som väntar. En sak i taget.
+              </p>
+            </div>
+          </div>
           <AreaSwitcher className="mt-4" size="sm" />
           {activeArea !== "alla" && (
             <p className="text-xs text-muted-foreground mt-2">
@@ -353,6 +363,7 @@ export default function Tasks() {
             </p>
           )}
         </div>
+
 
 
         <form onSubmit={handleSubmit} className="bg-card p-4 rounded-3xl border border-border shadow-sm space-y-3">
