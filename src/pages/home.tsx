@@ -13,6 +13,8 @@ import HomeSection from "@/components/home-section";
 import DailyFlowCard from "@/components/daily-flow-card";
 import QuickflowTriage from "@/components/quickflow-triage";
 import FlowReset from "@/components/flow-reset";
+import DayRebuild from "@/components/day-rebuild";
+
 import FlowOnboarding from "@/components/flow-onboarding";
 import StreakCard from "@/components/streak-card";
 import WeekInFlow from "@/components/week-in-flow";
@@ -241,7 +243,11 @@ export default function Home() {
             title="Daily Flow"
             help="Berätta hur dagen ser ut så föreslår jag ett par saker som faktiskt går att göra. Du bestämmer alltid själv."
           >
-            <DailyFlowCard />
+            <div className="space-y-4">
+              <DayRebuild />
+              <DailyFlowCard />
+            </div>
+
           </HomeSection>
         )}
 
