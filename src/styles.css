@@ -187,6 +187,7 @@
   --gradient-hero: linear-gradient(135deg, hsl(260 30% 15%) 0%, hsl(272 28% 17%) 50%, hsl(327 22% 20%) 100%);
   --shadow-soft: 0 1px 2px hsl(0 0% 0% / 0.3), 0 12px 28px -18px hsl(0 0% 0% / 0.6);
   --shadow-lifted: 0 2px 4px hsl(0 0% 0% / 0.35), 0 24px 48px -24px hsl(0 0% 0% / 0.65);
+  --shadow-float-value: 0 18px 40px -20px hsl(0 0% 0% / 0.6);
 }
 
 @layer base {
