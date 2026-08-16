@@ -156,17 +156,22 @@ export default function WidgetGrid() {
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
         {widgets.map((widget) => {
           const Icon = widget.icon;
-          const tileClass = `flex flex-col gap-2 p-4 bg-card border rounded-2xl shadow-sm hover:-translate-y-0.5 transition-all text-left ${
-            widget.emphasis ? "border-terracotta/40 hover:border-terracotta" : "border-border hover:border-primary/40"
+          const tileClass = `press flex flex-col gap-2.5 p-4 bg-card border rounded-3xl shadow-soft hover:-translate-y-0.5 transition-all text-left ${
+            widget.emphasis ? "border-accent bg-accent/40" : "border-border/60 hover:border-primary/40"
           }`;
           const inner = (
             <>
-              <div className={`w-9 h-9 rounded-full ${widget.iconBg} ${widget.iconColor} flex items-center justify-center shrink-0`}>
-                <Icon size={18} />
+              <div className={`relative w-11 h-11 rounded-2xl ${widget.iconBg} ${widget.iconColor} flex items-center justify-center shrink-0`}>
+                <Icon size={20} strokeWidth={2.2} />
+                {widget.emoji && (
+                  <span aria-hidden className="absolute -right-1.5 -top-1.5 text-sm leading-none drop-shadow-sm">
+                    {widget.emoji}
+                  </span>
+                )}
               </div>
               <div>
-                <p className="text-xs uppercase tracking-wide text-muted-foreground mb-0.5">{widget.label}</p>
-                <p className="font-medium leading-snug text-sm line-clamp-2">{widget.value}</p>
+                <p className="text-xs font-medium tracking-wide text-muted-foreground mb-0.5">{widget.label}</p>
+                <p className="font-semibold leading-snug text-sm line-clamp-2 text-ink">{widget.value}</p>
                 {widget.hint && <p className="text-xs text-primary font-medium mt-0.5">{widget.hint}</p>}
               </div>
             </>
