@@ -8,12 +8,12 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
 const COLORS = [
-  { value: "#8a9a5b", label: "Oliv" },
-  { value: "#e8c547", label: "Gul" },
-  { value: "#c17a56", label: "Terrakotta" },
-  { value: "#6b8e9e", label: "Blå" },
-  { value: "#a06cd5", label: "Lila" },
-  { value: "#d16d6d", label: "Röd" },
+  { value: "#7C5CE0", label: "Violett" },
+  { value: "#F5B8D0", label: "Rosa" },
+  { value: "#A78BFA", label: "Lavendel" },
+  { value: "#6C8FE0", label: "Blå" },
+  { value: "#5FBFA6", label: "Mint" },
+  { value: "#E2719B", label: "Körsbär" },
 ];
 
 type Member = { user_id: string; display_name: string; color: string };

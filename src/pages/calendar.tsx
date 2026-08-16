@@ -34,11 +34,11 @@ import { useNpfSettings } from "@/lib/npf-mode";
 export type CalCategory = "privat" | "familj" | "barn" | "jobb" | "studier";
 
 const CATEGORIES: { id: CalCategory; label: string; color: string }[] = [
-  { id: "privat", label: "Privat", color: "hsl(152 40% 28%)" },
-  { id: "familj", label: "Familj", color: "#8a9a5b" },
-  { id: "barn", label: "Barn", color: "#a06cd5" },
-  { id: "jobb", label: "Jobb", color: "hsl(205 45% 34%)" },
-  { id: "studier", label: "Studier", color: "hsl(265 32% 45%)" },
+  { id: "privat", label: "Privat", color: "hsl(258 62% 60%)" },
+  { id: "familj", label: "Familj", color: "hsl(327 62% 62%)" },
+  { id: "barn", label: "Barn", color: "hsl(285 52% 62%)" },
+  { id: "jobb", label: "Jobb", color: "hsl(212 48% 52%)" },
+  { id: "studier", label: "Studier", color: "hsl(232 58% 64%)" },
 ];
 
 const ALL_CATEGORIES: CalCategory[] = CATEGORIES.map((c) => c.id);

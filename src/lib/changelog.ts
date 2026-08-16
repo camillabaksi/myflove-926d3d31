@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Lila även på sidteman – kalender, ekonomi, familj och övriga kategorisidor tintas i lila/rosa/mint (2026-08-16)",
       "Ny design – mjuk lila palett, violett primärfärg, rosa accent, vita kort och rundare former (2026-08-16)",
       "Stop-knapp i Hälsa – nås nu direkt högst upp på \"Må bra\" (2026-08-16)",
       "Anpassa appen (NPF-läge) – lugnare färger, ingen rörelse, färre saker på skärmen, enkla ord, större text och globalt bildstöd (2026-08-16)",
