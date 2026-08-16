@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Trash2, TrendingDown, TrendingUp } from "lucide-react";
 import BudgetPanel from "@/components/budget-panel";
+import { MyFloveHeader } from "@/components/myflove";
 import CollapsibleSection from "@/components/collapsible-section";
 
 const CATEGORIES = ["Mat", "Boende", "Transport", "Nöje", "Övrigt"];
@@ -65,10 +66,11 @@ export default function Finances() {
   return (
     <Layout>
       <div className="space-y-8">
-        <div>
-          <h1 className="text-3xl font-bold mb-2">Ekonomi</h1>
-          <p className="text-muted-foreground">Enkel översikt över dina inkomster och utgifter denna månad.</p>
-        </div>
+        <MyFloveHeader
+          title="Din ekonomi"
+          emojiKey="finance"
+          description="Den här månaden – inkomster, utgifter och det som är på väg."
+        />
 
         <div className="grid grid-cols-3 gap-4">
           <div className="bg-card p-4 rounded-2xl border border-border shadow-sm flex flex-col items-center justify-center text-center">

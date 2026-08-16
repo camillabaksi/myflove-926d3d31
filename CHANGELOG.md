@@ -8,6 +8,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 ## [Unreleased]
 
 ### Added
+- **Gemensamt designsystem: MyFlove-komponenter** (2026-08-16): Nya återanvändbara byggstenar i `src/components/myflove` – `MyFloveHeader`, `MyFloveCard`, `MyFloveSection`, `MyFloveButton`, `MyFloveChip`, `MyFloveIcon`, `MyFloveEmptyState`, `MyFloveLoading`, `MyFloveProgress` och `MyFloveModal` – plus en gemensam emoji-mappning (`src/lib/myflove-emoji.ts`) så att samma funktion alltid får samma emoji. Ekonomi, Resor, Inköpslista, Må bra och WorkFlow använder nu samma sidhuvud med tillbakapil, emoji, rubrik och kort förklaring. Nya sidor följer designen automatiskt.
 - **Egen sida: "Vad ska jag göra nu?"** (2026-08-16): Ny vy på `/vad-nu` som visar ett enda förslag i taget utifrån hur lång stund du har (10 min, 25 min eller en timme), din energi och dagens belastning – med tid, prioritet, friktion och en förklaring till varför just den. "Börja nu" öppnar fokusläget, "Välj något annat" hoppar vidare och "Inte idag" skjuter upp till imorgon. Nås direkt från startsidan.
 - **Tidslinje i kalenderns dagsvy** (2026-08-16): Dagsvyn visar nu en tidslinje från 06:00 till 22:00 med pastellfärgade händelsekort, bildstöd och en mjuk "Nu"-markering för var på dagen du är. Saker utan klockslag samlas längst ner.
 

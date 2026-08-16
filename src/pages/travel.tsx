@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Layout from "@/components/layout";
+import { MyFloveHeader } from "@/components/myflove";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useGetSlTrip, getSlNearbyStop } from "@workspace/api-client-react";
@@ -94,10 +95,11 @@ export default function Travel() {
   return (
     <Layout>
       <div className="space-y-8">
-        <div>
-          <h1 className="text-3xl font-bold mb-2">Resor</h1>
-          <p className="text-muted-foreground">Sök din resa. Lugnt och enkelt.</p>
-        </div>
+        <MyFloveHeader
+          title="Resor"
+          emojiKey="travel"
+          description="Sök din resa. Lugnt och enkelt."
+        />
 
         {notificationPermission === "default" && (
           <div className="flex items-center justify-between gap-3 bg-secondary/40 border border-border rounded-2xl px-4 py-3">

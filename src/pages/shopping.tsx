@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Layout from "@/components/layout";
+import { MyFloveHeader } from "@/components/myflove";
 import { useSavedStores, STORE_RADIUS_OPTIONS, DEFAULT_STORE_RADIUS_METERS } from "@/hooks/use-data";
 import { useSharedShoppingList } from "@/hooks/use-shared-shopping-list";
 import { useVoiceInput } from "@/hooks/use-voice-input";
@@ -174,8 +175,11 @@ export default function Shopping() {
     <Layout>
       <div className="space-y-8">
         <div>
-          <h1 className="text-3xl font-bold mb-2">Inköpslista</h1>
-          <p className="text-muted-foreground">Vad behöver du handla? Släpp tanken på att komma ihåg allt.</p>
+          <MyFloveHeader
+            title="Inköpslista"
+            emojiKey="shopping"
+            description="Vad behöver du handla? Släpp tanken på att komma ihåg allt."
+          />
           {canShare ? (
             <div className="mt-3 flex flex-wrap items-center gap-2">
               <div className="inline-flex rounded-full bg-muted p-1">
