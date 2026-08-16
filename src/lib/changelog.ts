@@ -12,7 +12,9 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Anpassa hemskärmen – lugnare startläge och egna val för vilka block som syns (2026-08-16)",
       "Daily Flow – incheckning av energi, mental belastning och tid som styr dagens förslag (2026-08-16)",
+
       "Bygg om dagen – MyFlove räknar om resten av dagen när planen spricker, utan skuld (2026-08-16)",
       "\"Vad ska jag göra nu?\" – en rekommendation i taget baserad på FlowScore, friktion och tid (2026-08-16)",
       "Fokusläge – en sak, en timer, inget brus (2026-08-16)",
