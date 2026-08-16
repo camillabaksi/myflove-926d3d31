@@ -13,6 +13,8 @@ import HomeSection from "@/components/home-section";
 import DailyFlowCard from "@/components/daily-flow-card";
 import QuickflowTriage from "@/components/quickflow-triage";
 import FlowReset from "@/components/flow-reset";
+import DayRebuild from "@/components/day-rebuild";
+
 import FlowOnboarding from "@/components/flow-onboarding";
 import StreakCard from "@/components/streak-card";
 import WeekInFlow from "@/components/week-in-flow";
