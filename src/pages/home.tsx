@@ -246,6 +246,23 @@ export default function Home() {
           </div>
         </div>
 
+        <Link
+          href="/vad-nu"
+          style={{ order: -1 }}
+          className="press group relative flex items-center gap-4 overflow-hidden rounded-3xl border border-primary/25 bg-card p-5 shadow-sm transition-colors hover:border-primary/50"
+        >
+          <span className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-lavender opacity-70" />
+          <span className="relative grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-primary/10 text-primary">
+            <Sparkles size={22} />
+          </span>
+          <span className="relative min-w-0">
+            <span className="block font-display text-lg font-bold text-ink">Vad ska jag göra nu?</span>
+            <span className="block text-sm text-muted-foreground">
+              Ett förslag i taget, utifrån din tid och energi.
+            </span>
+          </span>
+        </Link>
+
         <div style={{ order: -1 }}>
           <PersonalNote />
         </div>
