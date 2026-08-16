@@ -8,6 +8,7 @@ import { useTasks } from "@/hooks/use-data";
 import { useDailyCheckin, useFlowUsage } from "@/hooks/use-daily-flow";
 import { useFlowScore } from "@/hooks/use-flowscore";
 import { celebrate } from "@/lib/celebrate";
+import { MyFloveEnergyDots, MyFloveHeart, moodFromEnergy } from "@/components/myflove/motion";
 import {
   FRICTION_LABEL,
   PRIORITY_DOT,
@@ -174,12 +175,15 @@ export default function DailyFlowCard() {
               "linear-gradient(135deg, hsl(var(--lavender)) 0%, hsl(var(--cream)) 60%, hsl(var(--blush) / 0.8) 100%)",
           }}
         >
-          <div className="pointer-events-none absolute -right-2 bottom-0 text-6xl breathe select-none" aria-hidden>
-            💜
+          <div className="pointer-events-none absolute -right-2 bottom-0 select-none" aria-hidden>
+            <MyFloveHeart size={56} mood={moodFromEnergy(checkin.energy)} />
           </div>
           <div className="relative space-y-3 pr-16">
             <div className="flex items-center justify-between gap-2">
-              <p className="font-display text-base font-bold text-ink">Din kapacitet idag</p>
+              <p className="flex items-center gap-2 font-display text-base font-bold text-ink">
+                Din kapacitet idag
+                <MyFloveEnergyDots value={checkin.energy} />
+              </p>
               <button
                 type="button"
                 onClick={() => {

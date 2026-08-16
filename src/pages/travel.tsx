@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Layout from "@/components/layout";
 import { MyFloveHeader } from "@/components/myflove";
+import { MyFlovePath } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useGetSlTrip, getSlNearbyStop } from "@workspace/api-client-react";
@@ -99,7 +100,17 @@ export default function Travel() {
           title="Resor"
           emojiKey="travel"
           description="Sök din resa. Lugnt och enkelt."
-        />
+        >
+          <MyFlovePath
+            steps={[
+              { emoji: "🏠", label: "Hemma" },
+              { emoji: "🚶", label: "På väg" },
+              { emoji: "🚆", label: "Resan" },
+              { emoji: "📍", label: "Framme" },
+            ]}
+            current={savedTrips.length > 0 ? 1 : 0}
+          />
+        </MyFloveHeader>
 
         {notificationPermission === "default" && (
           <div className="flex items-center justify-between gap-3 bg-secondary/40 border border-border rounded-2xl px-4 py-3">
