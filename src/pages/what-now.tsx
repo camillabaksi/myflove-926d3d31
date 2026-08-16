@@ -5,7 +5,7 @@ import FocusMode from "@/components/focus-mode";
 import { useTasks } from "@/hooks/use-data";
 import { useDailyCheckin, useFlowUsage } from "@/hooks/use-daily-flow";
 import { scoreTask, TIME_META, type ScoredTask } from "@/lib/daily-flow";
-import { Clock, Flag, Waves, Play, Shuffle, Moon, Sparkles } from "lucide-react";
+import { Clock, Flag, Waves, Play, Shuffle, Moon, Sparkles, Lightbulb } from "lucide-react";
 
 /** Hur mycket tid känns rimligt just nu – tre lugna val, inget mer. */
 const TIME_CHOICES = [
