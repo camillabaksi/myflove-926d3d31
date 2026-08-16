@@ -14,7 +14,7 @@ export interface AreaMeta {
   blurb: string;
   /** true = alltid på, kan inte stängas av */
   core?: boolean;
-  /** HSL-värde för områdets ton (matchar den varma paletten) */
+  /** HSL-värde för områdets ton (matchar den lila paletten) */
   hue: string;
 }
 
@@ -25,7 +25,7 @@ export const AREA_META: Record<LifeArea, AreaMeta> = {
     emoji: "🏠",
     blurb: "Kalender, att göra, rutiner och påminnelser",
     core: true,
-    hue: "38 62% 42%",
+    hue: "258 62% 60%",
   },
   privat: {
     id: "privat",
@@ -33,21 +33,21 @@ export const AREA_META: Record<LifeArea, AreaMeta> = {
     emoji: "🏡",
     blurb: "Familj, ärenden, inköp, räkningar och bokningar",
     core: true,
-    hue: "152 40% 28%",
+    hue: "327 62% 62%",
   },
   studier: {
     id: "studier",
     label: "Studier",
     emoji: "🎓",
     blurb: "Kurser, inlämningar, deadlines och dokument",
-    hue: "265 32% 45%",
+    hue: "232 58% 64%",
   },
   jobb: {
     id: "jobb",
     label: "Jobb",
     emoji: "💼",
     blurb: "Arbetsuppgifter, möten, projekt och uppföljningar",
-    hue: "205 45% 34%",
+    hue: "212 48% 52%",
   },
 };
 
