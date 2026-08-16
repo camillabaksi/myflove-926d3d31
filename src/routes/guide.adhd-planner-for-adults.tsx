@@ -41,22 +41,22 @@ export const Route = createFileRoute("/guide/adhd-planner-for-adults")({
 
 function GuidePage() {
   return (
-    <main className="min-h-screen bg-[#F5F1EA] text-[#2C3639] px-6 py-16">
+    <main className="min-h-screen bg-[#F8F5FE] text-[#2A2140] px-6 py-16">
       <div className="mx-auto max-w-2xl">
         <Link
           to="/"
-          className="text-xs uppercase tracking-[0.3em] text-[#B85042] font-semibold"
+          className="text-xs uppercase tracking-[0.3em] text-[#7C5CE0] font-semibold"
         >
           ← MyFlove
         </Link>
         <h1 className="mt-4 font-display text-4xl md:text-5xl font-bold leading-tight">
           ADHD-planner för vuxna: så väljer du en som faktiskt håller
         </h1>
-        <p className="mt-2 text-sm text-[#7A6E63]">
+        <p className="mt-2 text-sm text-[#6B647F]">
           En stödjande guide för vuxna och yrkesverksamma med ADHD.
         </p>
 
-        <article className="mt-10 space-y-6 leading-relaxed [&_h2]:font-display [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-2 [&_h3]:font-semibold [&_h3]:mt-6 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:space-y-2 [&_a]:text-[#B85042] [&_a]:underline">
+        <article className="mt-10 space-y-6 leading-relaxed [&_h2]:font-display [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-2 [&_h3]:font-semibold [&_h3]:mt-6 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:space-y-2 [&_a]:text-[#7C5CE0] [&_a]:underline">
           <p>
             De flesta planners är byggda för en hjärna som redan minns att öppna
             dem. En bra <strong>ADHD-planner för vuxna</strong> gör tvärtom — den
@@ -156,9 +156,9 @@ function GuidePage() {
         </article>
 
         <div className="mt-16 flex flex-wrap gap-4 text-sm">
-          <Link to="/" className="text-[#B85042] underline">Hem</Link>
-          <Link to="/sign-up" className="text-[#B85042] underline">Skapa konto</Link>
-          <Link to="/integritet" className="text-[#B85042] underline">Integritet</Link>
+          <Link to="/" className="text-[#7C5CE0] underline">Hem</Link>
+          <Link to="/sign-up" className="text-[#7C5CE0] underline">Skapa konto</Link>
+          <Link to="/integritet" className="text-[#7C5CE0] underline">Integritet</Link>
         </div>
       </div>
     </main>

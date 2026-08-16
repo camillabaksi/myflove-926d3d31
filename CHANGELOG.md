@@ -8,6 +8,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 ## [Unreleased]
 
 ### Changed
+- **Ny design – mjuk lila** (2026-08-16): Hela appen har fått en ny färgvärld inspirerad av den lila skissen: ljus lila bakgrund, violett primärfärg, rosa accent och vita kort med mjuka, rundade former (radie 1.5rem). Rubriker sätts i Plus Jakarta Sans. Startsida, integritetssida och guiden följer samma palett.
 - **Egen kategori för Flow** (2026-08-16): FlowPlan, Fokus, Veckans Flow, Quickflow, Hjälp, Belöningar och MyFlove Insight ligger nu i en egen kategori "Flow" i navigationen. "Din dag" innehåller Hem, Daglig rutin, Kalender, Att göra och Timer.
 - **Egen kategori för hälsa** (2026-08-16): Må bra, Träning, FlowScore och Statistik ligger nu i en egen kategori "Hälsa" i navigationen istället för i "Din dag".
 
