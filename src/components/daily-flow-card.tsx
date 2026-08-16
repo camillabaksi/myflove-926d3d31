@@ -22,6 +22,34 @@ import {
 
 const SCALE = [1, 2, 3, 4, 5];
 
+/** Pastellfärger på siffrorna i "Ditt fokus idag". */
+const FOCUS_TONES = [
+  { bg: "bg-blush", text: "text-terracotta" },
+  { bg: "bg-sun", text: "text-gold" },
+  { bg: "bg-mint", text: "text-sage" },
+  { bg: "bg-sky", text: "text-primary" },
+  { bg: "bg-lavender", text: "text-primary" },
+];
+
+/** Liten prickskala för energi och belastning. */
+function Meter({ label, icon, value, tone }: { label: string; icon: string; value: number; tone: string }) {
+  return (
+    <div className="flex items-center gap-3">
+      <span className="w-28 shrink-0 text-sm font-medium text-ink">
+        {icon} {label}
+      </span>
+      <span className="flex gap-1.5" aria-label={`${label} ${value} av 5`}>
+        {SCALE.map((n) => (
+          <span
+            key={n}
+            className={`h-2.5 w-2.5 rounded-full ${n <= value ? tone : "bg-foreground/10"}`}
+          />
+        ))}
+      </span>
+    </div>
+  );
+}
+
 /**
  * Daily Flow – dagens incheckning, dagens fokus och "Vad ska jag göra nu?".
  * Allt bygger på befintliga uppgifter, kalender och FlowScore.
