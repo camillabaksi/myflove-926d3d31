@@ -87,58 +87,76 @@ export default function FocusMode({
             </div>
           </div>
         ) : (
-          <div className="space-y-8 py-6 text-center">
-            <div className="space-y-2">
-              <p className="text-2xl font-semibold text-ink leading-snug">{item.task.title}</p>
-              <p className="text-muted-foreground">Beräknad tid: {item.minutes} min</p>
+          <div className="space-y-7 py-6 text-center">
+            <div className="space-y-1">
+              <p className="font-display text-2xl font-bold leading-snug text-ink">{item.task.title}</p>
+              <p className="text-sm text-muted-foreground">{item.minutes} minuter</p>
             </div>
 
-            {startedRef.current ? (
-              <div className="space-y-4">
-                <p className="font-mono text-5xl tabular-nums text-ink">
+            {/* Ringtimer – en sak, en cirkel, inget mer */}
+            <div className="relative mx-auto h-56 w-56">
+              <svg viewBox="0 0 200 200" className="h-full w-full -rotate-90">
+                <circle
+                  cx="100"
+                  cy="100"
+                  r={RADIUS}
+                  fill="none"
+                  strokeWidth="12"
+                  className="stroke-secondary"
+                />
+                <circle
+                  cx="100"
+                  cy="100"
+                  r={RADIUS}
+                  fill="none"
+                  strokeWidth="12"
+                  strokeLinecap="round"
+                  className="stroke-primary transition-[stroke-dashoffset] duration-500"
+                  strokeDasharray={CIRC}
+                  strokeDashoffset={CIRC - (CIRC * pct) / 100}
+                />
+              </svg>
+              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <span className="font-mono text-5xl font-semibold tabular-nums text-ink">
                   {mm}:{ss}
-                </p>
-                <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
-                  <div
-                    className="h-full rounded-full bg-primary transition-all"
-                    style={{ width: `${pct}%` }}
-                  />
-                </div>
+                </span>
                 <button
                   type="button"
-                  onClick={() => setRunning((r) => !r)}
-                  className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-2 text-sm font-medium"
+                  onClick={() => {
+                    startedRef.current = true;
+                    setRunning((r) => !r);
+                  }}
+                  aria-label={running ? "Pausa" : "Starta"}
+                  className="press mt-4 grid h-14 w-14 place-items-center rounded-full bg-primary text-primary-foreground shadow-lifted"
                 >
-                  {running ? <Pause size={16} /> : <Play size={16} />}
-                  {running ? "Pausa" : "Fortsätt"}
+                  {running ? <Pause size={22} /> : <Play size={22} />}
                 </button>
               </div>
-            ) : (
+            </div>
+
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setRunning(false)}
+                className="press flex flex-1 items-center justify-center gap-2 rounded-2xl border border-border py-3.5 font-medium text-ink"
+              >
+                <Coffee size={18} /> Ta paus
+              </button>
               <button
                 type="button"
                 onClick={() => {
-                  startedRef.current = true;
-                  setRunning(true);
+                  setRunning(false);
+                  setFinished(true);
+                  onDone(item);
                 }}
-                className="w-full rounded-2xl bg-primary text-primary-foreground py-4 text-lg font-semibold flex items-center justify-center gap-2"
+                className="press flex flex-1 items-center justify-center gap-2 rounded-2xl bg-primary py-3.5 font-semibold text-primary-foreground"
               >
-                <Play size={20} /> Börja
+                Klar <Check size={18} />
               </button>
-            )}
-
-            <button
-              type="button"
-              onClick={() => {
-                setRunning(false);
-                setFinished(true);
-                onDone(item);
-              }}
-              className="w-full rounded-2xl border border-primary/40 bg-primary/5 py-3.5 font-medium text-ink flex items-center justify-center gap-2"
-            >
-              <Check size={18} /> Markera som klar
-            </button>
+            </div>
           </div>
         )}
+
       </DialogContent>
     </Dialog>
   );
