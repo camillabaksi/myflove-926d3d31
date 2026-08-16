@@ -8,6 +8,7 @@ import { Heart, Smile, Battery, Hand } from "lucide-react";
 import CollapsibleSection from "@/components/collapsible-section";
 import { Button } from "@/components/ui/button";
 import StopModal from "@/components/stop-modal";
+import { MyFloveBreathing, MyFloveHeart } from "@/components/myflove/motion";
 
 export default function WellnessPage() {
   const [stopOpen, setStopOpen] = useState(false);
@@ -20,6 +21,12 @@ export default function WellnessPage() {
           emojiKey="wellness"
           description="Checka in mående och energi från samma ställe – båda eller var för sig."
         />
+
+        <div className="flex justify-center">
+          <MyFloveBreathing size={76} mood="calm">
+            <MyFloveHeart size={30} mood="calm" />
+          </MyFloveBreathing>
+        </div>
 
         <Button
           onClick={() => setStopOpen(true)}

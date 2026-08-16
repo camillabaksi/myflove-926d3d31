@@ -7,6 +7,7 @@ import { Sparkles } from "lucide-react";
 import { getRandomEncouragement } from "@/lib/encouragements";
 import { useToast } from "@/hooks/use-toast";
 import { getGreeting } from "@/lib/greeting";
+import { MyFloveHeart } from "@/components/myflove/motion";
 import { useUserProfile } from "@/hooks/use-user-profile";
 import CollapsibleSection from "@/components/collapsible-section";
 
@@ -170,7 +171,9 @@ function MoodHeader() {
   const g = getGreeting({ name, lastVisit });
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-2">{g.title}</h1>
+      <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
+        <MyFloveHeart size={26} /> {g.title}
+      </h1>
       <p className="text-muted-foreground">Hur känns det i kroppen och knoppen just nu? Ingen dömer dig här.</p>
     </div>
   );
