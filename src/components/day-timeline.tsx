@@ -46,7 +46,7 @@ export default function DayTimeline({
   const hours = Array.from({ length: END_HOUR - START_HOUR + 1 }, (_, i) => START_HOUR + i);
 
   return (
-    <div className="rounded-3xl border border-border/60 bg-card p-4 shadow-sm">
+    <div className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft">
       <div className="space-y-1">
         {hours.map((h) => {
           const inHour = timed.filter((e) => Math.floor(toMinutes(e.time) / 60) === h);
