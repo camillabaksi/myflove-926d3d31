@@ -55,7 +55,7 @@ export default function FlowReset() {
 
   return (
     <div
-      className="rounded-3xl border border-border/60 p-5 shadow-soft space-y-5 pop-in"
+      className="relative overflow-hidden rounded-3xl border border-border/60 p-5 shadow-soft space-y-5 pop-in"
       style={{
         backgroundImage:
           "linear-gradient(135deg, hsl(var(--lavender)) 0%, hsl(var(--cream)) 60%, hsl(var(--sky) / 0.8) 100%)",
