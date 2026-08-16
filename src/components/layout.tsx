@@ -27,6 +27,7 @@ interface LayoutProps {
 /** Egen färgton per navigationskategori – gör mer-vyn lätt att skanna. */
 const CATEGORY_HUE: Record<string, string> = {
   myflow: "38 62% 42%",
+  healthflow: "12 45% 45%",
   homeflow: "152 40% 28%",
   familyflow: "340 40% 48%",
   studyflow: "265 32% 45%",
