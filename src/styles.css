@@ -44,6 +44,13 @@
   --color-forest: hsl(var(--forest));
   --color-forest-deep: hsl(var(--forest-deep));
 
+  /* Pastellfamiljen – lila, lavendel, rosa, mint, ljusblå, creme */
+  --color-lavender: hsl(var(--lavender));
+  --color-blush: hsl(var(--blush));
+  --color-mint: hsl(var(--mint));
+  --color-sky: hsl(var(--sky));
+  --color-sun: hsl(var(--sun));
+
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Plus Jakarta Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
 
@@ -96,6 +103,13 @@
   --forest: 258 68% 62%;
   --forest-deep: 258 52% 34%;
 
+  /* Pasteller */
+  --lavender: 264 72% 93%;
+  --blush: 335 78% 93%;
+  --mint: 158 52% 89%;
+  --sky: 202 78% 92%;
+  --sun: 44 90% 90%;
+
   --gradient-hero: linear-gradient(135deg, hsl(264 70% 96%) 0%, hsl(276 65% 94%) 50%, hsl(327 70% 95%) 100%);
   --shadow-soft: 0 1px 2px hsl(258 40% 30% / 0.04), 0 12px 28px -18px hsl(258 45% 35% / 0.25);
   --shadow-lifted: 0 2px 4px hsl(258 40% 30% / 0.05), 0 24px 48px -24px hsl(258 45% 35% / 0.3);
@@ -138,6 +152,13 @@
   --terracotta-soft: 285 50% 74%;
   --forest: 258 78% 72%;
   --forest-deep: 258 40% 28%;
+
+  /* Pasteller i mörkt läge – djupa men mjuka */
+  --lavender: 264 26% 24%;
+  --blush: 335 26% 26%;
+  --mint: 158 22% 22%;
+  --sky: 202 26% 24%;
+  --sun: 44 28% 24%;
 
   --gradient-hero: linear-gradient(135deg, hsl(260 30% 15%) 0%, hsl(272 28% 17%) 50%, hsl(327 22% 20%) 100%);
   --shadow-soft: 0 1px 2px hsl(0 0% 0% / 0.3), 0 12px 28px -18px hsl(0 0% 0% / 0.6);
@@ -233,4 +254,77 @@ html[data-npf-space="roomy"] main .space-y-3 > * + * {
 /* Färre saker på skärmen: dölj det som bara är extra */
 html[data-npf-less="true"] [data-npf="optional"] {
   display: none !important;
+}
+
+/* ------------------------------------------------------------------
+   Mjuka animationer – liv utan stress. Respekterar NPF-läget
+   (html[data-npf-still="true"] nollar all rörelse längre upp i filen).
+   ------------------------------------------------------------------ */
+
+@keyframes myflove-fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes myflove-pop {
+  0%   { opacity: 0; transform: scale(0.96) translateY(8px); }
+  60%  { opacity: 1; transform: scale(1.01) translateY(0); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes myflove-breathe {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.06); }
+}
+
+@keyframes myflove-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+
+/* Hela vyn tonar mjukt in när man byter sida */
+@utility page-enter {
+  animation: myflove-fade-up 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Kort "poppar" in */
+@utility pop-in {
+  animation: myflove-pop 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Illustrationer som andas / gungar */
+@utility breathe {
+  animation: myflove-breathe 4.5s ease-in-out infinite;
+}
+
+@utility floaty {
+  animation: myflove-float 5s ease-in-out infinite;
+}
+
+/* Knapptryck: lätt scale */
+@utility press {
+  transition: transform 0.16s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.16s ease;
+  &:active {
+    transform: scale(0.96);
+  }
+}
+
+/* Barnen i en lista tonar in i tur och ordning */
+@utility stagger {
+  & > * {
+    animation: myflove-fade-up 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  & > *:nth-child(1) { animation-delay: 0.02s; }
+  & > *:nth-child(2) { animation-delay: 0.06s; }
+  & > *:nth-child(3) { animation-delay: 0.1s; }
+  & > *:nth-child(4) { animation-delay: 0.14s; }
+  & > *:nth-child(5) { animation-delay: 0.18s; }
+  & > *:nth-child(6) { animation-delay: 0.22s; }
+  & > *:nth-child(n + 7) { animation-delay: 0.26s; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-enter, .pop-in, .breathe, .floaty, .stagger > * {
+    animation: none !important;
+  }
 }

@@ -12,6 +12,8 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Pasteller och mjuk rörelse – sidor tonar in, kort poppar upp, knappar svarar på tryck (2026-08-16)",
+      "QuickFlow i mitten av bottennavigationen – fem platser: Hem, ditt val, QuickFlow, ditt val och Mer (2026-08-16)",
       "Lila även på sidteman – kalender, ekonomi, familj och övriga kategorisidor tintas i lila/rosa/mint (2026-08-16)",
       "Ny design – mjuk lila palett, violett primärfärg, rosa accent, vita kort och rundare former (2026-08-16)",
       "Stop-knapp i Hälsa – nås nu direkt högst upp på \"Må bra\" (2026-08-16)",

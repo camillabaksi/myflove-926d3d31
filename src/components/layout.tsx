@@ -1,7 +1,7 @@
 import { ReactNode, useState, useEffect, useMemo } from "react";
 import { Link, useLocation } from "wouter";
 import { useRouter } from "@tanstack/react-router";
-import { Home, Target, CheckSquare, ShoppingBag, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Settings2, Check, RotateCcw, ArrowUp, ArrowDown, LogOut, Volume2, VolumeX, Shield, Heart, Sun, Search, GraduationCap, Briefcase, Baby, CalendarDays, Brain, HeartPulse, House, BookOpen, Building2, LayoutGrid, Dumbbell, SprayCan, Zap, Gauge, ArrowLeft, Accessibility } from "lucide-react";
+import { Home, Target, CheckSquare, ShoppingBag, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Settings2, Check, RotateCcw, ArrowUp, ArrowDown, LogOut, Volume2, VolumeX, Shield, Heart, Sun, Search, GraduationCap, Briefcase, Baby, CalendarDays, Brain, HeartPulse, House, BookOpen, Building2, LayoutGrid, Dumbbell, SprayCan, Zap, Gauge, ArrowLeft, Accessibility, Plus } from "lucide-react";
 import { isAlarmSoundEnabled, setAlarmSoundEnabled, subscribeAlarmPref, playAlarmPreview, initAlarmAudioUnlock } from "@/lib/push-notifications";
 import { useCommuteAlerts } from "@/hooks/use-commute-alerts";
 import { useMedicationAlerts } from "@/hooks/use-medication-alerts";
@@ -269,6 +269,7 @@ export default function Layout({ children }: LayoutProps) {
   const mobileNavItems = useMemo(() => {
     const home = navItems.find((i) => i.href === "/hem")!;
     const chosen = bottomNavHrefs
+      .filter((href) => href !== "/quickflow")
       .map((href) => navItems.find((i) => i.href === href))
       .filter(Boolean) as typeof navItems;
     // Ensure we always have 3 valid slots; fill missing with defaults.
@@ -475,7 +476,7 @@ export default function Layout({ children }: LayoutProps) {
         )}
 
         <div className="flex-1 overflow-y-auto pb-24 md:pb-8" style={CATEGORY_THEMES[location] as React.CSSProperties}>
-          <div className="max-w-2xl mx-auto w-full p-4 md:p-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div key={location} className="max-w-2xl mx-auto w-full p-4 md:p-8 page-enter">
             {children}
           </div>
           <footer className="max-w-2xl mx-auto w-full px-4 md:px-8 pt-4 pb-8 mt-8 border-t border-border/40">
@@ -510,38 +511,53 @@ export default function Layout({ children }: LayoutProps) {
 
 
 
-      {/* Mobile Bottom Bar */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-card border-t border-border pb-[env(safe-area-inset-bottom)] z-40">
-        <div className="flex items-center justify-around p-2">
-          {mobileNavItems.map((item) => {
-            const isActive = location === item.href;
-            const Icon = item.icon;
-            return (
-              <Link 
-                key={item.href} 
-                href={item.href}
-                className={`flex flex-col items-center p-2 rounded-xl min-w-[4rem] transition-colors ${
-                  isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
-                }`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <div className={`p-1.5 rounded-lg mb-1 transition-all duration-300 ${isActive ? "bg-primary/10" : ""}`}>
-                  <Icon size={24} strokeWidth={isActive ? 2.5 : 2} />
-                </div>
-                <span className="text-[10px] font-medium">{item.label}</span>
-              </Link>
-            );
-          })}
-          
-          <button 
+      {/* Mobile Bottom Bar – 2 val, QuickFlow i mitten, 1 val och Mer */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-md border-t border-border/70 pb-[env(safe-area-inset-bottom)] z-40">
+        <div className="flex items-end justify-around px-1 pt-1.5 pb-1">
+          {mobileNavItems.slice(0, 2).map((item) => (
+            <BottomNavLink
+              key={item.href}
+              item={item}
+              active={location === item.href}
+              onClick={() => setMobileMenuOpen(false)}
+            />
+          ))}
+
+          {/* QuickFlow – alltid en tumme bort */}
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new CustomEvent("myflove:quickflow"))}
+            aria-label="QuickFlow – få ut det ur huvudet"
+            className="flex flex-col items-center gap-1 px-2 pb-1 press"
+          >
+            <span className="-mt-6 inline-flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lifted ring-4 ring-card">
+              <Plus size={26} strokeWidth={2.5} />
+            </span>
+            <span className="text-[10px] font-semibold text-primary">QuickFlow</span>
+          </button>
+
+          {mobileNavItems.slice(2, 3).map((item) => (
+            <BottomNavLink
+              key={item.href}
+              item={item}
+              active={location === item.href}
+              onClick={() => setMobileMenuOpen(false)}
+            />
+          ))}
+
+          <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className={`flex flex-col items-center p-2 rounded-xl min-w-[4rem] transition-colors ${
+            className={`flex flex-col items-center gap-1 rounded-2xl px-2 py-1.5 min-w-[3.7rem] press ${
               mobileMenuOpen ? "text-primary" : "text-muted-foreground hover:text-foreground"
             }`}
           >
-            <div className={`p-1.5 rounded-lg mb-1 transition-all duration-300 ${mobileMenuOpen ? "bg-primary/10" : ""}`}>
-              <Menu size={24} strokeWidth={mobileMenuOpen ? 2.5 : 2} />
-            </div>
+            <span
+              className={`inline-flex items-center justify-center rounded-2xl px-3 py-1 transition-colors ${
+                mobileMenuOpen ? "bg-primary/12" : ""
+              }`}
+            >
+              <Menu size={22} strokeWidth={mobileMenuOpen ? 2.6 : 2} />
+            </span>
             <span className="text-[10px] font-medium">Mer</span>
           </button>
         </div>
@@ -943,5 +959,35 @@ function BottomNavEditor({ allItems, selected, onChange, onClose, onReset }: Bot
         </Button>
       </div>
     </div>
+  );
+}
+
+function BottomNavLink({
+  item,
+  active,
+  onClick,
+}: {
+  item: { href: string; label: string; icon: React.ComponentType<{ size?: number; strokeWidth?: number }> };
+  active: boolean;
+  onClick: () => void;
+}) {
+  const Icon = item.icon;
+  return (
+    <Link
+      href={item.href}
+      onClick={onClick}
+      className={`flex flex-col items-center gap-1 rounded-2xl px-2 py-1.5 min-w-[3.7rem] press ${
+        active ? "text-primary" : "text-muted-foreground hover:text-foreground"
+      }`}
+    >
+      <span
+        className={`inline-flex items-center justify-center rounded-2xl px-3 py-1 transition-colors ${
+          active ? "bg-primary/12" : ""
+        }`}
+      >
+        <Icon size={22} strokeWidth={active ? 2.6 : 2} />
+      </span>
+      <span className="text-[10px] font-medium">{item.label}</span>
+    </Link>
   );
 }
