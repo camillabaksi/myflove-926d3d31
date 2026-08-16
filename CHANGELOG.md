@@ -12,6 +12,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 - **Tidslinje i kalenderns dagsvy** (2026-08-16): Dagsvyn visar nu en tidslinje från 06:00 till 22:00 med pastellfärgade händelsekort, bildstöd och en mjuk "Nu"-markering för var på dagen du är. Saker utan klockslag samlas längst ner.
 
 ### Changed
+- **Designtokens för hela appen** (2026-08-16): Palett, rundningar (`rounded-xs`–`rounded-2xl`, `rounded-pill`), avstånd (`gutter`, `card`, `section`, `block`), skuggor (`shadow-soft`, `shadow-lifted`, `shadow-float`, `shadow-hairline`, `ring-focus`) och kantlinjer (`border-hairline`, `border-strong`, `border-dashed-soft`, `border-accent-soft`, `divider-hairline`) är nu gemensamma tokens i temat. Nya komponenter följer designen automatiskt utan hårdkodade värden, och allt anpassar sig i mörkt läge och NPF-läget "lugnare färger".
 - **Ikoner och brickor i nya designen** (2026-08-16): Genvägar och överblicksbrickor på startsidan har fått pastellfärgade ikonplattor (lavendel, rosa, mint, ljusblå, sol) med rundade former, tydligare ikoner och en liten emoji i hörnet – t.ex. 🌸 Må bra, ✅ Att göra, 📅 Kalender, 🛍️ Inköp, 💊 Medicin och 🛑 Stop. Korten är rundare med lena skuggor och svarar med ett lätt tryck.
 - **Ny känsla på startsida och QuickFlow** (2026-08-16): Hemskärmens hero går i pastell (lavendel, ljusblå, rosa, mint) efter tid på dygnet, och QuickFlow har fått samma mjuka hero med andande illustration.
 

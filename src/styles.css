@@ -54,11 +54,28 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Plus Jakarta Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
 
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
+  /* Rundningar – hela appen utgår från --radius (1.5rem) */
+  --radius-xs: calc(var(--radius) - 12px);
+  --radius-sm: calc(var(--radius) - 8px);
+  --radius-md: calc(var(--radius) - 4px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-pill: 9999px;
+
+  /* Avstånd – gemensam rytm för kort, sektioner och sidmarginaler */
+  --spacing-tight: 0.5rem;
+  --spacing-card: 1.25rem;
+  --spacing-gutter: 1rem;
+  --spacing-section: 1.5rem;
+  --spacing-block: 2.5rem;
+
+  /* Skuggor – utöver shadow-soft/shadow-lifted */
+  --shadow-hairline: 0 1px 0 hsl(var(--border) / 0.7);
+  --shadow-float: var(--shadow-float-value);
+  --shadow-focus: 0 0 0 3px hsl(var(--ring) / 0.35);
 }
+
 
 :root {
   /* MyFlove palette: mjuk lila, vitt, rosa och mint */
@@ -113,6 +130,13 @@
   --gradient-hero: linear-gradient(135deg, hsl(264 70% 96%) 0%, hsl(276 65% 94%) 50%, hsl(327 70% 95%) 100%);
   --shadow-soft: 0 1px 2px hsl(258 40% 30% / 0.04), 0 12px 28px -18px hsl(258 45% 35% / 0.25);
   --shadow-lifted: 0 2px 4px hsl(258 40% 30% / 0.05), 0 24px 48px -24px hsl(258 45% 35% / 0.3);
+  --shadow-float-value: 0 18px 40px -20px hsl(258 45% 35% / 0.35);
+
+  /* Kantlinjer – gemensamma stilar för kort, avdelare och fokus */
+  --border-hairline: 1px solid hsl(var(--border) / 0.7);
+  --border-strong: 1px solid hsl(var(--border));
+  --border-dashed: 1px dashed hsl(var(--border));
+  --border-accent: 1px solid hsl(var(--primary) / 0.35);
 }
 
 .dark {
@@ -163,6 +187,7 @@
   --gradient-hero: linear-gradient(135deg, hsl(260 30% 15%) 0%, hsl(272 28% 17%) 50%, hsl(327 22% 20%) 100%);
   --shadow-soft: 0 1px 2px hsl(0 0% 0% / 0.3), 0 12px 28px -18px hsl(0 0% 0% / 0.6);
   --shadow-lifted: 0 2px 4px hsl(0 0% 0% / 0.35), 0 24px 48px -24px hsl(0 0% 0% / 0.65);
+  --shadow-float-value: 0 18px 40px -20px hsl(0 0% 0% / 0.6);
 }
 
 @layer base {
@@ -186,9 +211,15 @@
 
 @utility surface-card {
   background-color: hsl(var(--card));
-  border: 1px solid hsl(var(--border) / 0.7);
+  border: var(--border-hairline);
   border-radius: var(--radius);
   box-shadow: var(--shadow-soft);
+}
+
+@utility surface-panel {
+  background-color: hsl(var(--muted) / 0.6);
+  border: var(--border-hairline);
+  border-radius: var(--radius-md);
 }
 
 @utility surface-hero {
@@ -206,6 +237,31 @@
   box-shadow: var(--shadow-lifted);
 }
 
+/* Kantlinje-stilar som följer temat */
+@utility border-hairline {
+  border: var(--border-hairline);
+}
+
+@utility border-strong {
+  border: var(--border-strong);
+}
+
+@utility border-dashed-soft {
+  border: var(--border-dashed);
+}
+
+@utility border-accent-soft {
+  border: var(--border-accent);
+}
+
+@utility divider-hairline {
+  border-bottom: var(--border-hairline);
+}
+
+@utility ring-focus {
+  box-shadow: var(--shadow-focus);
+}
+
 /* ------------------------------------------------------------------
    NPF-läge – globala tillgänglighetsval (styrs från /anpassa)
    ------------------------------------------------------------------ */
@@ -214,6 +270,7 @@
 html[data-npf-calm="true"] {
   --shadow-soft: 0 1px 2px hsl(258 40% 30% / 0.05);
   --shadow-lifted: 0 4px 12px hsl(258 40% 30% / 0.06);
+  --shadow-float-value: 0 4px 12px hsl(258 40% 30% / 0.06);
 }
 html[data-npf-calm="true"] .surface-hero,
 html[data-npf-calm="true"] [class*="bg-gradient"] {
