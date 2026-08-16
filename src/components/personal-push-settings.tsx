@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 import { useUserProfile } from "@/hooks/use-user-profile";
 import { getPushPreferences, savePushPreferences } from "@/lib/push.functions";
+import { MyFloveListening } from "@/components/myflove/motion";
 
 type Prefs = {
   personal_enabled: boolean;
@@ -78,6 +79,15 @@ export function PersonalPushSettings() {
         <p className="text-sm text-muted-foreground">
           Flow skickar en varm rad som notis – även när appen är stängd.
         </p>
+        <MyFloveListening
+          active={prefs.personal_enabled || prefs.personal_evening_enabled}
+          label={
+            prefs.personal_enabled || prefs.personal_evening_enabled
+              ? "Jag håller koll åt dig"
+              : "Puffarna är avstängda"
+          }
+          className="mt-2"
+        />
       </div>
 
       <div className="flex items-center justify-between gap-3">

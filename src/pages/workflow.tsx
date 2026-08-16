@@ -32,6 +32,7 @@ import { QuickflowCapture } from "@/components/quickflow-capture";
 import { QuickflowList } from "@/components/quickflow-list";
 import { breakDownWorkTask } from "@/lib/work.functions";
 import { celebrateFromEvent } from "@/lib/celebrate";
+import { MyFloveThinking, MyFloveEnergyDots, moodFromEnergy } from "@/components/myflove/motion";
 import {
   END_OF_DAY_CHECK,
   MINUTE_CHOICES,
@@ -198,9 +199,17 @@ export default function WorkflowPage() {
             </div>
             <div className="shrink-0 rounded-2xl bg-sage/30 px-3 py-2 text-center text-xs text-ink">
               <div className="font-semibold">⚡ {energy ? `${energy}/5` : "–"}</div>
+              <MyFloveEnergyDots level={energy ?? 3} className="my-1 justify-center" />
               <div className="text-muted-foreground">Energi</div>
             </div>
           </div>
+
+          {busyId && (
+            <MyFloveThinking
+              steps={["🎯", "🧠", "✂️", "✨"]}
+              label="Jag delar upp den i mindre steg…"
+            />
+          )}
 
           <form
             className="mt-4 flex gap-2"
