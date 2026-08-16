@@ -90,13 +90,13 @@ export default function QuickflowFab() {
               placeholder="Jag måste ringa skolan..."
               className="flex-1 rounded-2xl border border-border bg-card p-3 text-base outline-none focus:border-primary"
             />
-            {voice.supported && (
+            {voice.isSupported && (
               <button
                 type="button"
-                onClick={voice.listening ? voice.stop : voice.start}
+                onClick={voice.isListening ? voice.stopListening : voice.startListening}
                 aria-label="Prata in"
                 className={`rounded-2xl border p-3 ${
-                  voice.listening ? "bg-primary text-primary-foreground border-primary" : "border-border"
+                  voice.isListening ? "bg-primary text-primary-foreground border-primary" : "border-border"
                 }`}
               >
                 <Mic size={18} />
