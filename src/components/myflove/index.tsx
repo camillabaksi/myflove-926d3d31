@@ -260,8 +260,6 @@ export function MyFloveHeader({
   children?: React.ReactNode;
   className?: string;
 }) {
-  const shownEmoji = emoji ?? (emojiKey ? MYFLOVE_EMOJI[emojiKey] : undefined);
-  void shownEmoji;
 
   return (
     <header
