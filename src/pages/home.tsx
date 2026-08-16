@@ -195,7 +195,7 @@ export default function Home() {
         {/* Hero header with preview-style warmth */}
         <div
           className="relative overflow-hidden rounded-3xl p-6 shadow-lifted border border-border/60 animate-fade-in"
-          style={{ background: heroGradient }}
+          style={{ order: -1, background: heroGradient }}
         >
           <div className="pointer-events-none absolute -top-20 -right-16 h-40 w-40 rounded-full bg-gradient-to-br from-gold to-forest opacity-20 blur-md" />
           <div className="pointer-events-none absolute -bottom-16 -left-10 h-32 w-32 rounded-full bg-sage opacity-25 blur-[2px]" />
@@ -243,10 +243,13 @@ export default function Home() {
           </div>
         </div>
 
-        <PersonalNote />
+        <div style={{ order: -1 }}>
+          <PersonalNote />
+        </div>
 
         {showSection("dailyflow") && (
           <HomeSection
+            style={ord("dailyflow")}
             id="dailyflow"
             title="Daily Flow"
             help="Berätta hur dagen ser ut så föreslår jag ett par saker som faktiskt går att göra. Du bestämmer alltid själv."
@@ -260,7 +263,7 @@ export default function Home() {
         )}
 
         {showSection("quickflow") && (
-          <HomeSection id="quickflow" title="Quickflow" help="Skriv ner det du kommer på, direkt. Du behöver inte bestämma när eller hur – sortera senare.">
+          <HomeSection style={ord("quickflow")} id="quickflow" title="Quickflow" help="Skriv ner det du kommer på, direkt. Du behöver inte bestämma när eller hur – sortera senare.">
             <div className="space-y-4">
               <QuickflowCapture />
               <QuickflowTriage />
@@ -269,9 +272,11 @@ export default function Home() {
           </HomeSection>
         )}
 
-        <AreaOnboarding />
+        <div style={{ order: -1 }}>
+          <AreaOnboarding />
+        </div>
 
-        <div className="space-y-2">
+        <div style={{ order: -1 }} className="space-y-2">
           <AreaSwitcher size="sm" />
           <div className="flex flex-wrap items-center justify-between gap-2">
             <p className="text-xs text-muted-foreground">
@@ -292,30 +297,34 @@ export default function Home() {
 
 
         {showSection("streak") && (
-          <HomeSection id="streak" title="Din svit" help="Antal dagar i rad du gjort något i appen. Bryts den händer inget – den finns bara som en liten morot.">
+          <HomeSection style={ord("streak")} id="streak" title="Din svit" help="Antal dagar i rad du gjort något i appen. Bryts den händer inget – den finns bara som en liten morot.">
             <StreakCard />
           </HomeSection>
         )}
 
         {showSection("weather") && (
-          <HomeSection id="weather" title="Väder" help="Vädret där du är just nu. Används också för tips, som att ta med paraply.">
+          <HomeSection style={ord("weather")} id="weather" title="Väder" help="Vädret där du är just nu. Används också för tips, som att ta med paraply.">
             <WeatherCard />
           </HomeSection>
         )}
 
         {showSection("shortcuts") && (
-          <HomeSection id="shortcuts" title="Genvägar" help="Dina fyra egna knappar. Tryck på pennan för att byta ut dem mot det du använder mest.">
+          <HomeSection style={ord("shortcuts")} id="shortcuts" title="Genvägar" help="Dina fyra egna knappar. Tryck på pennan för att byta ut dem mot det du använder mest.">
             <HomeShortcuts />
           </HomeSection>
         )}
 
         {showSection("week") && (
-          <HomeSection id="week" title="Veckan i flow" help="En snabb bild av veckan. Tryck på en dag för att se vad som ligger där.">
+          <HomeSection style={ord("week")} id="week" title="Veckan i flow" help="En snabb bild av veckan. Tryck på en dag för att se vad som ligger där.">
             <WeekInFlow />
           </HomeSection>
         )}
 
-        {showSection("suggestions") && <ProactiveSuggestions />}
+        {showSection("suggestions") && (
+          <div style={ord("suggestions")}>
+            <ProactiveSuggestions />
+          </div>
+        )}
 
 
         {showSection("help") && (
@@ -323,7 +332,7 @@ export default function Home() {
           type="button"
           onClick={() => setHelpModalOpen(true)}
           className="group relative w-full overflow-hidden flex items-center gap-4 p-6 rounded-3xl text-primary-foreground shadow-lifted transition-transform text-left active:scale-[0.99]"
-          style={{ background: "linear-gradient(135deg, hsl(var(--forest)) 0%, hsl(var(--forest-deep)) 100%)" }}
+          style={{ ...ord("help"), background: "linear-gradient(135deg, hsl(var(--forest)) 0%, hsl(var(--forest-deep)) 100%)" }}
         >
           <div className="absolute inset-0 bg-primary-foreground/10 opacity-0 group-hover:opacity-100 transition-opacity" />
 
@@ -340,7 +349,7 @@ export default function Home() {
         )}
 
         {helpPlan && (
-          <div className="bg-sage/30 border border-sage rounded-2xl p-5 flex items-start gap-3 animate-in fade-in slide-in-from-top-2">
+          <div style={ord("today")} className="bg-sage/30 border border-sage rounded-2xl p-5 flex items-start gap-3 animate-in fade-in slide-in-from-top-2">
             <Sparkles size={20} className="text-ink shrink-0 mt-0.5" />
             <div className="flex-1">
               <p className="text-ink leading-relaxed">{helpPlan.message}</p>
@@ -357,7 +366,7 @@ export default function Home() {
 
 
         {showSection("today") && (
-          <HomeSection id="today" title={helpPlan ? "Det viktigaste just nu" : "Dagens viktigaste"} help="Det som är närmast i tid idag. Tryck på en rad för att bocka av den.">
+          <HomeSection style={ord("today")} id="today" title={helpPlan ? "Det viktigaste just nu" : "Dagens viktigaste"} help="Det som är närmast i tid idag. Tryck på en rad för att bocka av den.">
             <div className="space-y-4">
   
             {currentFocus && !helpPlan && (
@@ -446,7 +455,7 @@ export default function Home() {
         )}
 
         {upcomingBills.length > 0 && showSection("bills") && (
-          <HomeSection id="bills" title="Kommande räkningar" help="Räkningar med förfallodatum inom kort. Läggs in under Ekonomi.">
+          <HomeSection style={ord("bills")} id="bills" title="Kommande räkningar" help="Räkningar med förfallodatum inom kort. Läggs in under Ekonomi.">
               <div className="space-y-3">
                 {upcomingBills.slice(0, 3).map((bill) => (
                   <div
@@ -468,7 +477,7 @@ export default function Home() {
         )}
 
         {nextMedication && showSection("medication") && (
-          <HomeSection id="medication" title="Medicinpåminnelse" help="Bocka av när du tagit din medicin. Tiden ställer du in under Må bra.">
+          <HomeSection style={ord("medication")} id="medication" title="Medicinpåminnelse" help="Bocka av när du tagit din medicin. Tiden ställer du in under Må bra.">
               <Link
                 href="/daglig-rutin"
                 className="flex items-center gap-4 p-5 surface-card hover:border-primary/40 transition-colors"
@@ -490,6 +499,7 @@ export default function Home() {
 
         {showSection("reset") && new Date().getHours() >= 17 && (
           <HomeSection
+            style={ord("reset")}
             id="reset"
             title="Flow Reset"
             help="Ett frivilligt sätt att avsluta dagen. Det som inte blev gjort får bara flytta med."
@@ -499,7 +509,7 @@ export default function Home() {
         )}
 
         {showSection("push") && (
-          <HomeSection id="push" title="Påminnelser" help="Slå på notiser i mobilen så påminner appen dig även när den är stängd.">
+          <HomeSection style={ord("push")} id="push" title="Påminnelser" help="Slå på notiser i mobilen så påminner appen dig även när den är stängd.">
             <div className="space-y-4">
               <div className="surface-card p-4 flex flex-wrap items-center justify-between gap-3">
                 <div>
