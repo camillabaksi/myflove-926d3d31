@@ -44,13 +44,13 @@ function mutationShim(): MutationShim {
 export function useGetMyHousehold(..._args: unknown[]) {
   return queryShim<null | { id: string; name: string; joinCode: string; members: any[] }>(null);
 }
-export function useCreateHousehold() {
+export function useCreateHousehold(..._args: unknown[]) {
   return mutationShim();
 }
-export function useJoinHousehold() {
+export function useJoinHousehold(..._args: unknown[]) {
   return mutationShim();
 }
-export function useLeaveHousehold() {
+export function useLeaveHousehold(..._args: unknown[]) {
   return mutationShim();
 }
 
@@ -64,13 +64,13 @@ export type ShoppingItem = {
 export function useListShoppingItems(..._args: unknown[]) {
   return queryShim([] as ShoppingItem[]);
 }
-export function useAddShoppingItem() {
+export function useAddShoppingItem(..._args: unknown[]) {
   return mutationShim();
 }
-export function useToggleShoppingItem() {
+export function useToggleShoppingItem(..._args: unknown[]) {
   return mutationShim();
 }
-export function useDeleteShoppingItem() {
+export function useDeleteShoppingItem(..._args: unknown[]) {
   return mutationShim();
 }
 
@@ -78,10 +78,10 @@ export function useDeleteShoppingItem() {
 export function useListFamilyEvents(..._args: unknown[]) {
   return queryShim([] as any[]);
 }
-export function useCreateFamilyEvent() {
+export function useCreateFamilyEvent(..._args: unknown[]) {
   return mutationShim();
 }
-export function useDeleteFamilyEvent() {
+export function useDeleteFamilyEvent(..._args: unknown[]) {
   return mutationShim();
 }
 
@@ -89,7 +89,7 @@ export function useDeleteFamilyEvent() {
 export function useListMealPlans(..._args: unknown[]) {
   return queryShim([] as any[]);
 }
-export function useUpsertMealPlanSlot() {
+export function useUpsertMealPlanSlot(..._args: unknown[]) {
   return mutationShim();
 }
 
