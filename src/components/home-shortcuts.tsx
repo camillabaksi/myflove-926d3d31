@@ -17,35 +17,36 @@ interface Shortcut {
   action?: "stop";
   label: string;
   icon: LucideIcon;
+  emoji?: string;
   iconBg: string;
   iconColor: string;
   emphasis?: boolean;
 }
 
 const PREVIEW_PALETTE = [
-  { bg: "bg-terracotta/10", color: "text-terracotta" },
-  { bg: "bg-sage/15", color: "text-sage" },
-  { bg: "bg-gold/15", color: "text-gold" },
-  { bg: "bg-ink/10", color: "text-ink" },
-  { bg: "bg-terracotta-soft/10", color: "text-terracotta-soft" },
+  { bg: "bg-lavender", color: "text-primary" },
+  { bg: "bg-blush", color: "text-terracotta" },
+  { bg: "bg-mint", color: "text-sage" },
+  { bg: "bg-sky", color: "text-primary" },
+  { bg: "bg-sun", color: "text-gold" },
 ];
 
 const ALL_SHORTCUTS: Shortcut[] = ([
-  { id: "stop",       action: "stop" as const, label: "Stop!",       icon: Hand, emphasis: true },
-  { id: "ma-bra",     href: "/ma-bra",         label: "Må bra",     icon: Heart },
-  { id: "daglig-rutin", href: "/daglig-rutin", label: "Daglig rutin", icon: Sun },
-  
-  { id: "tasks",      href: "/tasks",          label: "Att göra",   icon: CheckSquare },
-  { id: "shopping",   href: "/shopping",       label: "Inköp",      icon: ShoppingBag },
-  { id: "kalender",   href: "/kalender",       label: "Kalender",   icon: Calendar },
-  { id: "pomodoro",   href: "/pomodoro",       label: "Fokuspass",  icon: Timer },
-  { id: "finances",   href: "/finances",       label: "Ekonomi",    icon: Wallet },
-  { id: "statistik",  href: "/statistik",      label: "Statistik",  icon: BarChart3 },
-  { id: "dump",       href: "/quickflow",      label: "Quickflow",  icon: Inbox },
-  { id: "matlista",   href: "/matlista",       label: "Matlista",   icon: UtensilsCrossed },
-  { id: "travel",     href: "/travel",         label: "Resor",      icon: Navigation },
-  { id: "flowplan",   href: "/flowplan",       label: "FlowPlan",   icon: Sparkles },
-  { id: "assistant",  href: "/assistant",      label: "Flow-chatt", icon: Sparkles },
+  { id: "stop",       action: "stop" as const, label: "Stop!",       icon: Hand, emoji: "🛑", emphasis: true },
+  { id: "ma-bra",     href: "/ma-bra",         label: "Må bra",     icon: Heart, emoji: "🌸" },
+  { id: "daglig-rutin", href: "/daglig-rutin", label: "Daglig rutin", icon: Sun, emoji: "☀️" },
+
+  { id: "tasks",      href: "/tasks",          label: "Att göra",   icon: CheckSquare, emoji: "✅" },
+  { id: "shopping",   href: "/shopping",       label: "Inköp",      icon: ShoppingBag, emoji: "🛍️" },
+  { id: "kalender",   href: "/kalender",       label: "Kalender",   icon: Calendar, emoji: "📅" },
+  { id: "pomodoro",   href: "/pomodoro",       label: "Fokuspass",  icon: Timer, emoji: "⏳" },
+  { id: "finances",   href: "/finances",       label: "Ekonomi",    icon: Wallet, emoji: "💰" },
+  { id: "statistik",  href: "/statistik",      label: "Statistik",  icon: BarChart3, emoji: "📈" },
+  { id: "dump",       href: "/quickflow",      label: "Quickflow",  icon: Inbox, emoji: "💭" },
+  { id: "matlista",   href: "/matlista",       label: "Matlista",   icon: UtensilsCrossed, emoji: "🍲" },
+  { id: "travel",     href: "/travel",         label: "Resor",      icon: Navigation, emoji: "🚌" },
+  { id: "flowplan",   href: "/flowplan",       label: "FlowPlan",   icon: Sparkles, emoji: "🌱" },
+  { id: "assistant",  href: "/assistant",      label: "Flow-chatt", icon: Sparkles, emoji: "💬" },
 ] as Omit<Shortcut, "iconBg" | "iconColor">[]).map((s, i) => {
   const palette = PREVIEW_PALETTE[i % PREVIEW_PALETTE.length];
   return { ...s, iconBg: palette.bg, iconColor: palette.color } as Shortcut;
