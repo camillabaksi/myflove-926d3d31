@@ -11,6 +11,58 @@ import { cn } from "@/lib/utils";
 import { MYFLOVE_EMOJI, type MyFloveEmojiKey } from "@/lib/myflove-emoji";
 
 /* ------------------------------------------------------------------ */
+/* Emoji – samma storlekar och samma lilla liv överallt                */
+/* ------------------------------------------------------------------ */
+
+const EMOJI_SIZE = {
+  xs: "text-sm",
+  sm: "text-base",
+  md: "text-xl",
+  lg: "text-3xl",
+  xl: "text-4xl",
+} as const;
+
+const EMOJI_MOTION = {
+  none: "",
+  breathe: "breathe",
+  float: "floaty",
+} as const;
+
+/**
+ * Visa en emoji från den gemensamma mappningen.
+ * Alltid aria-hidden (dekorativ), alltid samma line-height och rörelse.
+ */
+export function MyFloveEmoji({
+  name,
+  emoji,
+  size = "md",
+  motion = "none",
+  className,
+}: {
+  name?: MyFloveEmojiKey;
+  emoji?: string;
+  size?: keyof typeof EMOJI_SIZE;
+  motion?: keyof typeof EMOJI_MOTION;
+  className?: string;
+}) {
+  const shown = emoji ?? (name ? MYFLOVE_EMOJI[name] : undefined);
+  if (!shown) return null;
+  return (
+    <span
+      aria-hidden
+      className={cn(
+        "inline-flex shrink-0 select-none items-center justify-center leading-none",
+        EMOJI_SIZE[size],
+        EMOJI_MOTION[motion],
+        className,
+      )}
+    >
+      {shown}
+    </span>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Ikon – alltid Lucide, samma storlek och stroke i hela appen         */
 /* ------------------------------------------------------------------ */
 
@@ -24,6 +76,7 @@ const TONE_BG: Record<MyFloveTone, string> = {
   sun: "bg-sun text-gold",
   plain: "bg-muted text-ink",
 };
+
 
 export function MyFloveIcon({
   icon: Icon,
