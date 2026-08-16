@@ -314,13 +314,14 @@ export function MyFloveChip({
       type="button"
       aria-pressed={active}
       className={cn(
-        "press rounded-pill px-4 py-2 text-sm font-semibold transition-colors",
+        "press inline-flex min-h-9 max-w-full items-center justify-center gap-1.5 rounded-pill px-4 py-1.5 text-sm font-semibold leading-tight transition-colors",
+        "[&_svg]:shrink-0",
         active ? "bg-primary text-primary-foreground shadow-soft" : "bg-lavender text-ink hover:bg-lavender/70",
         className,
       )}
       {...rest}
     >
-      {children}
+      <span className="truncate">{children}</span>
     </button>
   );
 }
@@ -349,9 +350,7 @@ export function MyFloveEmptyState({
         className,
       )}
     >
-      <span aria-hidden className="breathe text-4xl leading-none">
-        {emoji}
-      </span>
+      <MyFloveEmoji emoji={emoji} size="xl" motion="breathe" />
       <p className="font-display text-base font-bold text-ink">{title}</p>
       {description && <p className="max-w-xs text-sm text-muted-foreground">{description}</p>}
       {action}
@@ -362,12 +361,11 @@ export function MyFloveEmptyState({
 export function MyFloveLoading({ label = "En sekund...", className }: { label?: string; className?: string }) {
   return (
     <div className={cn("flex flex-col items-center gap-2 py-10 text-center", className)}>
-      <span aria-hidden className="breathe text-3xl leading-none">
-        💜
-      </span>
+      <MyFloveEmoji emoji="💜" size="lg" motion="breathe" />
       <p className="text-sm text-muted-foreground">{label}</p>
     </div>
   );
+
 }
 
 export function MyFloveSkeleton({ className }: { className?: string }) {
