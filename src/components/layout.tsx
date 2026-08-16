@@ -27,14 +27,14 @@ interface LayoutProps {
 
 /** Egen färgton per navigationskategori – gör mer-vyn lätt att skanna. */
 const CATEGORY_HUE: Record<string, string> = {
-  myflow: "38 62% 42%",
-  flowflow: "285 38% 40%",
-  healthflow: "12 45% 45%",
-  homeflow: "152 40% 28%",
-  familyflow: "340 40% 48%",
-  studyflow: "265 32% 45%",
-  workflow: "205 45% 34%",
-  ovrigt: "220 10% 42%",
+  myflow: "258 62% 60%",
+  flowflow: "285 52% 58%",
+  healthflow: "327 62% 62%",
+  homeflow: "196 48% 52%",
+  familyflow: "348 62% 66%",
+  studyflow: "232 58% 64%",
+  workflow: "212 48% 52%",
+  ovrigt: "258 12% 52%",
 };
 const catColor = (id: string, alpha?: number) => {
   const hue = CATEGORY_HUE[id] ?? "220 10% 42%";
