@@ -452,22 +452,23 @@ export default function Tasks() {
         </form>
 
         {/* Kind-filter */}
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-2">
           {kindTabs.map((tab) => (
             <button
               key={tab.id}
               type="button"
               onClick={() => setFilter(tab.id)}
-              className={`text-sm px-3 py-1.5 rounded-full border transition-colors ${
+              className={`press rounded-pill px-4 py-2 text-sm font-semibold transition-colors ${
                 filter === tab.id
-                  ? "bg-primary text-primary-foreground border-primary"
-                  : "bg-background text-muted-foreground border-border hover:text-foreground"
+                  ? "bg-primary text-primary-foreground shadow-soft"
+                  : "bg-lavender text-ink hover:bg-lavender/70"
               }`}
             >
               {tab.label}
             </button>
           ))}
         </div>
+
 
         <div className="space-y-8">
           {filteredActive.length === 0 && completedTasks.length === 0 && (
