@@ -76,30 +76,35 @@ export default function WidgetGrid() {
     {
       href: "/ma-bra",
       icon: Smile,
+      emoji: "🌸",
       label: "Mående idag",
       value: todayMood ? `${EMOJI_BY_SCORE[todayMood.score]} idag` : "Checka in",
     },
     {
       href: "/flowplan",
       icon: Target,
+      emoji: "🎯",
       label: "Dagens fokus",
       value: currentFocus ? currentFocus.text : "Inget valt",
     },
     {
       href: "/tasks",
       icon: CheckSquare,
+      emoji: "✅",
       label: "Att göra",
       value: `${activeTasks.length} kvar`,
     },
     {
       href: "/shopping",
       icon: ShoppingBag,
+      emoji: "🛍️",
       label: "Inköp",
       value: `${activeItems.length} varor`,
     },
     {
       href: "/kalender",
       icon: Calendar,
+      emoji: "📅",
       label: "Nästa händelse",
       value: nextReminder ? nextReminder.title : "Inget inplanerat",
       hint: nextReminder ? (nextReminder.date === todayStr ? "Idag" : nextReminder.date) : undefined,
@@ -107,30 +112,35 @@ export default function WidgetGrid() {
     {
       href: "/daglig-rutin",
       icon: Pill,
+      emoji: "💊",
       label: "Medicin idag",
       value: totalTimesToday > 0 ? `${takenTimesToday} av ${totalTimesToday} tagna` : "Inget bokat",
     },
     {
       href: "/pomodoro",
       icon: Timer,
+      emoji: "⏳",
       label: "Fokuspass idag",
       value: `${todaysSessions} genomförda`,
     },
     {
       href: "/finances",
       icon: Wallet,
+      emoji: "💰",
       label: "Ekonomi denna månad",
       value: monthlyTransactions.length > 0 ? `${monthBalance >= 0 ? "+" : ""}${monthBalance} kr` : "Inget bokfört",
     },
     {
       href: "/statistik",
       icon: BarChart3,
+      emoji: "📈",
       label: "Veckotrend",
       value: trendLabel,
     },
     {
       onClick: () => setStopOpen(true),
       icon: OctagonAlert,
+      emoji: "🛑",
       label: "Stop!",
       value: "Pausa impulsen",
       emphasis: true,
@@ -146,17 +156,22 @@ export default function WidgetGrid() {
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
         {widgets.map((widget) => {
           const Icon = widget.icon;
-          const tileClass = `flex flex-col gap-2 p-4 bg-card border rounded-2xl shadow-sm hover:-translate-y-0.5 transition-all text-left ${
-            widget.emphasis ? "border-terracotta/40 hover:border-terracotta" : "border-border hover:border-primary/40"
+          const tileClass = `press flex flex-col gap-2.5 p-4 bg-card border rounded-3xl shadow-soft hover:-translate-y-0.5 transition-all text-left ${
+            widget.emphasis ? "border-accent bg-accent/40" : "border-border/60 hover:border-primary/40"
           }`;
           const inner = (
             <>
-              <div className={`w-9 h-9 rounded-full ${widget.iconBg} ${widget.iconColor} flex items-center justify-center shrink-0`}>
-                <Icon size={18} />
+              <div className={`relative w-11 h-11 rounded-2xl ${widget.iconBg} ${widget.iconColor} flex items-center justify-center shrink-0`}>
+                <Icon size={20} strokeWidth={2.2} />
+                {widget.emoji && (
+                  <span aria-hidden className="absolute -right-1.5 -top-1.5 text-sm leading-none drop-shadow-sm">
+                    {widget.emoji}
+                  </span>
+                )}
               </div>
               <div>
-                <p className="text-xs uppercase tracking-wide text-muted-foreground mb-0.5">{widget.label}</p>
-                <p className="font-medium leading-snug text-sm line-clamp-2">{widget.value}</p>
+                <p className="text-xs font-medium tracking-wide text-muted-foreground mb-0.5">{widget.label}</p>
+                <p className="font-semibold leading-snug text-sm line-clamp-2 text-ink">{widget.value}</p>
                 {widget.hint && <p className="text-xs text-primary font-medium mt-0.5">{widget.hint}</p>}
               </div>
             </>

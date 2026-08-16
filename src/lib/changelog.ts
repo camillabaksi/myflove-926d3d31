@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Pastellikoner och emoji på startsidans brickor och genvägar – rundare kort, tydligare ikoner och lätt tryckkänsla (2026-08-16)",
       "Egen sida \"Vad ska jag göra nu?\" på /vad-nu – ett förslag i taget med tid, prioritet, friktion och varför (2026-08-16)",
       "Tidslinje i kalenderns dagsvy – 06–22 med pastellkort, bildstöd och \"Nu\"-markering (2026-08-16)",
       "Pastell-hero på startsidan och i QuickFlow, med andande illustration (2026-08-16)",
