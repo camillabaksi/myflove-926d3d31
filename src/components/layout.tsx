@@ -511,38 +511,53 @@ export default function Layout({ children }: LayoutProps) {
 
 
 
-      {/* Mobile Bottom Bar */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-card border-t border-border pb-[env(safe-area-inset-bottom)] z-40">
-        <div className="flex items-center justify-around p-2">
-          {mobileNavItems.map((item) => {
-            const isActive = location === item.href;
-            const Icon = item.icon;
-            return (
-              <Link 
-                key={item.href} 
-                href={item.href}
-                className={`flex flex-col items-center p-2 rounded-xl min-w-[4rem] transition-colors ${
-                  isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
-                }`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <div className={`p-1.5 rounded-lg mb-1 transition-all duration-300 ${isActive ? "bg-primary/10" : ""}`}>
-                  <Icon size={24} strokeWidth={isActive ? 2.5 : 2} />
-                </div>
-                <span className="text-[10px] font-medium">{item.label}</span>
-              </Link>
-            );
-          })}
-          
-          <button 
+      {/* Mobile Bottom Bar – 2 val, QuickFlow i mitten, 1 val och Mer */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-md border-t border-border/70 pb-[env(safe-area-inset-bottom)] z-40">
+        <div className="flex items-end justify-around px-1 pt-1.5 pb-1">
+          {mobileNavItems.slice(0, 2).map((item) => (
+            <BottomNavLink
+              key={item.href}
+              item={item}
+              active={location === item.href}
+              onClick={() => setMobileMenuOpen(false)}
+            />
+          ))}
+
+          {/* QuickFlow – alltid en tumme bort */}
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new CustomEvent("myflove:quickflow"))}
+            aria-label="QuickFlow – få ut det ur huvudet"
+            className="flex flex-col items-center gap-1 px-2 pb-1 press"
+          >
+            <span className="-mt-6 inline-flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lifted ring-4 ring-card">
+              <Plus size={26} strokeWidth={2.5} />
+            </span>
+            <span className="text-[10px] font-semibold text-primary">QuickFlow</span>
+          </button>
+
+          {mobileNavItems.slice(2, 3).map((item) => (
+            <BottomNavLink
+              key={item.href}
+              item={item}
+              active={location === item.href}
+              onClick={() => setMobileMenuOpen(false)}
+            />
+          ))}
+
+          <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className={`flex flex-col items-center p-2 rounded-xl min-w-[4rem] transition-colors ${
+            className={`flex flex-col items-center gap-1 rounded-2xl px-2 py-1.5 min-w-[3.7rem] press ${
               mobileMenuOpen ? "text-primary" : "text-muted-foreground hover:text-foreground"
             }`}
           >
-            <div className={`p-1.5 rounded-lg mb-1 transition-all duration-300 ${mobileMenuOpen ? "bg-primary/10" : ""}`}>
-              <Menu size={24} strokeWidth={mobileMenuOpen ? 2.5 : 2} />
-            </div>
+            <span
+              className={`inline-flex items-center justify-center rounded-2xl px-3 py-1 transition-colors ${
+                mobileMenuOpen ? "bg-primary/12" : ""
+              }`}
+            >
+              <Menu size={22} strokeWidth={mobileMenuOpen ? 2.6 : 2} />
+            </span>
             <span className="text-[10px] font-medium">Mer</span>
           </button>
         </div>
