@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Layout from "@/components/layout";
+import { MyFloveFloatingElement } from "@/components/myflove/motion";
 import { useSharedShoppingList } from "@/hooks/use-shared-shopping-list";
 import { useLocalStorage } from "@/lib/storage";
 import { Button } from "@/components/ui/button";
@@ -249,7 +250,9 @@ export default function MealPlannerPage() {
       <div className="space-y-6">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <h1 className="text-3xl font-bold mb-1">Veckomatlista</h1>
+            <h1 className="text-3xl font-bold mb-1 flex items-center gap-3">
+              Veckomatlista <MyFloveFloatingElement tone="sun" size={18} />
+            </h1>
             <p className="text-sm text-muted-foreground">
               Planera veckans måltider – för dig själv eller hela familjen.
             </p>

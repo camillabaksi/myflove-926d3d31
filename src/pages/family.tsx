@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useUser, useClerk, Show } from "@clerk/react";
 import Layout from "@/components/layout";
+import { MyFloveHeart } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Users, Copy, LogOut, Check } from "lucide-react";
@@ -312,7 +313,9 @@ export default function FamilyPage() {
     <Layout>
       <div className="space-y-8">
         <div>
-          <h1 className="text-3xl font-bold mb-2">Familj</h1>
+          <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
+            <MyFloveHeart size={26} /> Familj
+          </h1>
           <p className="text-muted-foreground">
             Skapa eller gå med i en familj för att dela kalender och matlista.
           </p>
