@@ -8,6 +8,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 ## [Unreleased]
 
 ### Added
+- **Egen ordning på hemskärmen** (2026-08-16): I "Anpassa hemskärmen" kan du nu dra och släppa blocken (eller använda pilarna) för att bestämma ordningen på startsidan. Ordningen sparas tills du ändrar den, och kan återställas med "Återställ ordningen".
 - **Anpassa hemskärmen** (2026-08-16): Hemskärmen startar i ett lugnare läge med färre block, och du väljer själv vad som ska synas via "Anpassa hemskärmen" – valet sparas tills du ändrar det.
 
 - **Bygg om dagen** (2026-08-16): När saker passerat sin tid frågar MyFlove "Din dag blev annorlunda än planerat – vill du att jag bygger om resten av dagen?" och räknar om en realistisk plan utifrån kvarvarande tid, deadlines, energi, friktion och prioritet.

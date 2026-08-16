@@ -37,3 +37,37 @@ export function useHiddenHomeSections() {
 
   return { hidden, isHidden, toggle, showAll, reset };
 }
+
+const DEFAULT_ORDER = HOME_SECTIONS.map((s) => s.id);
+
+/**
+ * Egen ordning på hemskärmens block. Sparas tills du ändrar den igen.
+ * Nya block hamnar sist så att inget försvinner efter en uppdatering.
+ */
+export function useHomeSectionOrder() {
+  const [saved, setSaved] = useLocalStorage<string[]>("myflove-home-section-order", DEFAULT_ORDER);
+
+  const order = [
+    ...saved.filter((id) => DEFAULT_ORDER.includes(id)),
+    ...DEFAULT_ORDER.filter((id) => !saved.includes(id)),
+  ];
+
+  const orderOf = (id: string) => {
+    const i = order.indexOf(id);
+    return i === -1 ? order.length : i;
+  };
+
+  const move = (from: number, to: number) => {
+    if (from === to || from < 0 || to < 0 || from >= order.length || to >= order.length) return;
+    const next = [...order];
+    const [item] = next.splice(from, 1);
+    next.splice(to, 0, item);
+    setSaved(next);
+  };
+
+  const moveId = (id: string, to: number) => move(order.indexOf(id), to);
+  const resetOrder = () => setSaved(DEFAULT_ORDER);
+
+  return { order, orderOf, move, moveId, resetOrder };
+}
+
