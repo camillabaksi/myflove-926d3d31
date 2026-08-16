@@ -195,15 +195,20 @@ function ShortcutTile({ shortcut, size, editing, isFavorite, canPin = true, onTo
   const emph = shortcut.emphasis;
 
   const inner = (
-    <div className={`flex ${large ? "flex-col gap-3 p-5" : "flex-col gap-2 p-3"} border rounded-2xl shadow-sm h-full ${
+    <div className={`press flex ${large ? "flex-col gap-3 p-5" : "flex-col gap-2 p-3"} border rounded-3xl shadow-soft h-full ${
       emph
-        ? "bg-terracotta text-cream border-terracotta"
-        : "bg-card border-border"
+        ? "bg-primary text-primary-foreground border-primary"
+        : "bg-card border-border/60"
     } ${!editing ? "hover:-translate-y-0.5 transition-all" : ""}`}>
-      <div className={`${large ? "w-12 h-12" : "w-9 h-9"} rounded-full ${emph ? "bg-cream/20 text-cream" : `${shortcut.iconBg} ${shortcut.iconColor}`} flex items-center justify-center shrink-0`}>
-        <Icon size={large ? 22 : 18} />
+      <div className={`relative ${large ? "w-14 h-14" : "w-10 h-10"} rounded-2xl ${emph ? "bg-primary-foreground/20 text-primary-foreground" : `${shortcut.iconBg} ${shortcut.iconColor}`} flex items-center justify-center shrink-0`}>
+        <Icon size={large ? 24 : 18} strokeWidth={2.2} />
+        {shortcut.emoji && (
+          <span aria-hidden className={`absolute -right-1.5 -top-1.5 ${large ? "text-base" : "text-sm"} leading-none drop-shadow-sm`}>
+            {shortcut.emoji}
+          </span>
+        )}
       </div>
-      <p className={`font-medium ${large ? "text-base" : "text-sm"} leading-snug`}>{shortcut.label}</p>
+      <p className={`font-semibold ${large ? "text-base" : "text-sm"} leading-snug`}>{shortcut.label}</p>
     </div>
   );
 
