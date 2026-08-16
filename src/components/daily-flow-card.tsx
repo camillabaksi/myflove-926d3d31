@@ -138,26 +138,42 @@ export default function DailyFlowCard() {
           </button>
         </div>
       ) : (
-        <div className="surface-card p-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
-          <span>⚡ Energi {checkin.energy}/5</span>
-          <span>🧠 Belastning {checkin.load}/5</span>
-          <span>⏰ {TIME_META[checkin.time].label} tid</span>
-          <button
-            type="button"
-            onClick={() => {
-              setEnergy(null);
-              setLoad(null);
-              setTime(null);
-              save({ energy: checkin.energy, load: checkin.load, time: checkin.time });
-              toast("Ändra genom att välja nytt nedan.");
-            }}
-            className="ml-auto text-xs text-muted-foreground underline underline-offset-2"
-          >
-            Uppdatera
-          </button>
-          <p className="w-full text-muted-foreground">{checkinSummary(checkin)}</p>
+        <div
+          className="relative overflow-hidden rounded-3xl border border-border/60 p-5 shadow-soft pop-in"
+          style={{
+            background:
+              "linear-gradient(135deg, hsl(var(--lavender)) 0%, hsl(var(--cream)) 60%, hsl(var(--blush) / 0.8) 100%)",
+          }}
+        >
+          <div className="pointer-events-none absolute -right-2 bottom-0 text-6xl breathe select-none" aria-hidden>
+            💜
+          </div>
+          <div className="relative space-y-3 pr-16">
+            <div className="flex items-center justify-between gap-2">
+              <p className="font-display text-base font-bold text-ink">Din kapacitet idag</p>
+              <button
+                type="button"
+                onClick={() => {
+                  setEnergy(null);
+                  setLoad(null);
+                  setTime(null);
+                  save({ energy: checkin.energy, load: checkin.load, time: checkin.time });
+                  toast("Ändra genom att välja nytt nedan.");
+                }}
+                className="text-xs font-medium text-primary underline underline-offset-2"
+              >
+                Redigera
+              </button>
+            </div>
+            <Meter label="Energi" icon="⚡" value={checkin.energy} tone="bg-primary" />
+            <Meter label="Belastning" icon="🧠" value={checkin.load} tone="bg-terracotta" />
+            <p className="text-xs text-muted-foreground">
+              ⏰ {TIME_META[checkin.time].label} tid · {checkinSummary(checkin)}
+            </p>
+          </div>
         </div>
       )}
+
 
       {/* ── Vad ska jag göra nu? ──────────────────────── */}
       <button
