@@ -61,7 +61,9 @@ export default function FlowReset() {
           "linear-gradient(135deg, hsl(var(--lavender)) 0%, hsl(var(--cream)) 60%, hsl(var(--sky) / 0.8) 100%)",
       }}
     >
-      <div className="flex items-center gap-2">
+      <MyFloveNightSky />
+
+      <div className="relative flex items-center gap-2">
         <Moon size={18} className="text-primary" />
         <h3 className="font-display text-lg font-bold text-ink">Flow Reset 🌙</h3>
       </div>
