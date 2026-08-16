@@ -14,6 +14,7 @@ import {
   type ScoredTask,
 } from "@/lib/daily-flow";
 import { minutesLeftOfWorkday } from "@/lib/workflow";
+import { useReducedMotion } from "@/components/myflove/motion";
 
 /**
  * "Din dag blev annorlunda än planerat."
@@ -60,6 +61,9 @@ export default function DayRebuild() {
     today,
   };
 
+  const reduced = useReducedMotion();
+  const [movingId, setMovingId] = useState<string | null>(null);
+
   const rebuild = () => {
     const ranked = recommendTasks(planTasks, ctx, 12);
     const fits: ScoredTask[] = [];
@@ -78,9 +82,19 @@ export default function DayRebuild() {
   };
 
   const moveToTomorrow = (item: ScoredTask) => {
-    snoozeTask(item.task.id, 1);
-    setPlan((prev) => prev?.filter((p) => p.task.id !== item.task.id) ?? null);
-    toast("Den får ta imorgon istället.");
+    const commit = () => {
+      snoozeTask(item.task.id, 1);
+      setPlan((prev) => prev?.filter((p) => p.task.id !== item.task.id) ?? null);
+      setMovingId(null);
+      toast("Den får ta imorgon istället.");
+    };
+    if (reduced) {
+      commit();
+      return;
+    }
+    // Uppgiften glider iväg mot morgondagen innan den försvinner.
+    setMovingId(item.task.id);
+    setTimeout(commit, 420);
   };
 
   if (plan) {
@@ -97,7 +111,16 @@ export default function DayRebuild() {
         ) : (
           <ul className="space-y-2">
             {plan.map((item) => (
-              <li key={item.task.id} className="flex items-center gap-3 rounded-2xl bg-muted/30 p-3">
+              <li
+                key={item.task.id}
+                data-motion="living"
+                className="flex items-center gap-3 rounded-2xl bg-muted/30 p-3 transition-all duration-500"
+                style={
+                  movingId === item.task.id
+                    ? { transform: "translateX(38%)", opacity: 0 }
+                    : undefined
+                }
+              >
                 <span>{PRIORITY_DOT[item.priority]}</span>
                 <div className="flex-1 min-w-0">
                   <p className="font-medium text-ink truncate">{item.task.title}</p>
@@ -110,7 +133,7 @@ export default function DayRebuild() {
                   onClick={() => moveToTomorrow(item)}
                   className="text-xs text-muted-foreground underline underline-offset-2 shrink-0"
                 >
-                  Flytta
+                  {movingId === item.task.id ? "Flyttar →" : "Flytta"}
                 </button>
               </li>
             ))}

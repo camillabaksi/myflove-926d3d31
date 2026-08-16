@@ -28,6 +28,7 @@ import {
   type StudySetRecord,
 } from "@/hooks/use-flowstudy";
 import CollapsibleSection from "@/components/collapsible-section";
+import { MyFloveThinking, MyFloveEmptyIllustration } from "@/components/myflove/motion";
 
 const MAX_FILE_MB = 8;
 
@@ -198,6 +199,12 @@ export default function StudyBuddyPage() {
               placeholder="Klistra in anteckningar, lärarens frågor eller en text."
               className="w-full rounded-xl border border-border bg-background p-3 text-sm"
             />
+            {busy && (
+              <MyFloveThinking
+                steps={["📄", "🧠", "🃏", "✨"]}
+                label="Jag läser materialet och gör kort av det…"
+              />
+            )}
             <Button type="submit" disabled={busy || !title.trim()} className="h-11 rounded-xl px-5">
               {busy ? (
                 <>
@@ -220,6 +227,7 @@ export default function StudyBuddyPage() {
         <CollapsibleSection title="Ditt material" headingClassName="text-lg font-semibold">
           {sets.length === 0 && (
             <p className="text-sm text-muted-foreground">
+              <MyFloveEmptyIllustration kind="documents" className="mb-2 block" />
               Inget material än. Börja med en text eller en bild på dina anteckningar.
             </p>
           )}

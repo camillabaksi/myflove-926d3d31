@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Play, Pause, Check, Coffee, ArrowRight, Home } from "lucide-react";
 import type { ScoredTask } from "@/lib/daily-flow";
+import { MyFloveSuccess, MyFloveCelebration, useReducedMotion } from "@/components/myflove/motion";
 
 const RADIUS = 88;
 const CIRC = 2 * Math.PI * RADIUS;
@@ -27,6 +28,7 @@ export default function FocusMode({
   const [elapsed, setElapsed] = useState(0);
   const [finished, setFinished] = useState(false);
   const startedRef = useRef(false);
+  const reduced = useReducedMotion();
 
   useEffect(() => {
     if (!open) {
@@ -59,7 +61,11 @@ export default function FocusMode({
 
         {finished ? (
           <div className="space-y-6 py-4 text-center">
-            <p className="text-2xl font-semibold text-ink">Bra. Den är klar. 🎉</p>
+            <div className="flex flex-col items-center gap-3">
+              <MyFloveSuccess size={56} />
+              <p className="text-2xl font-semibold text-ink">Bra. Den är klar.</p>
+              <MyFloveCelebration level={2} message="En sak mindre i huvudet." />
+            </div>
             <div className="space-y-2">
               {onNext && (
                 <button
@@ -98,6 +104,13 @@ export default function FocusMode({
 
             {/* Ringtimer – en sak, en cirkel, inget mer */}
             <div className="relative mx-auto h-56 w-56">
+              {running && !reduced && (
+                <span
+                  aria-hidden
+                  className="absolute inset-6 rounded-full bg-primary/10 breathe"
+                  style={{ animationDuration: "6s" }}
+                />
+              )}
               <svg viewBox="0 0 200 200" className="h-full w-full -rotate-90">
                 <circle
                   cx="100"

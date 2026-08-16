@@ -6,6 +6,7 @@ import OverwhelmedModal from "@/components/overwhelmed-modal";
 import HelpMeModal from "@/components/help-me-modal";
 import WeatherCard from "@/components/weather-card";
 import ProactiveSuggestions from "@/components/proactive-suggestions";
+import { MyFloveSparkle } from "@/components/myflove/motion";
 import QuickflowCapture from "@/components/quickflow-capture";
 import QuickflowList from "@/components/quickflow-list";
 import PersonalNote from "@/components/personal-note";
@@ -355,9 +356,10 @@ export default function Home() {
           style={{ ...ord("help"), background: "linear-gradient(135deg, hsl(var(--forest)) 0%, hsl(var(--forest-deep)) 100%)" }}
         >
           <div className="absolute inset-0 bg-primary-foreground/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+          <MyFloveSparkle count={3} className="opacity-40" />
 
           <div className="w-14 h-14 rounded-full bg-primary-foreground/15 flex items-center justify-center shrink-0 backdrop-blur-sm">
-            <HeartHandshake size={28} />
+            <HeartHandshake size={28} className="breathe" style={{ animationDuration: "6s" }} />
           </div>
           <div className="flex-1 relative">
             <p className="text-xl font-semibold">Hjälp mig</p>
