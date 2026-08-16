@@ -199,7 +199,9 @@ export default function Layout({ children }: LayoutProps) {
           { href: "/admin-statistik", label: "Appstatistik", icon: BarChart3, hint: "Besökare och användning" },
         ]
       : []),
-  ];
+    { href: "/anpassa", label: "Anpassa appen", icon: Accessibility, hint: "Lugnare färger, färre saker och enkla ord" },
+  ].map((i) => ({ ...i, label: plainLabel(i.label, npf.plainWords) }));
+
 
   // Kategorier – gör navigationen lugnare genom att gruppera sektionerna.
   const categories = useMemo(() => {
