@@ -14,11 +14,11 @@ import CollapsibleSection from "@/components/collapsible-section";
 const EMOJI_BY_SCORE: Record<number, string> = { 1: "😢", 2: "😕", 3: "😐", 4: "🙂", 5: "😄" };
 
 const PREVIEW_PALETTE = [
-  { bg: "bg-terracotta/10", color: "text-terracotta" },
-  { bg: "bg-sage/15", color: "text-sage" },
-  { bg: "bg-gold/15", color: "text-gold" },
-  { bg: "bg-ink/10", color: "text-ink" },
-  { bg: "bg-terracotta-soft/10", color: "text-terracotta-soft" },
+  { bg: "bg-lavender", color: "text-primary" },
+  { bg: "bg-blush", color: "text-terracotta" },
+  { bg: "bg-mint", color: "text-sage" },
+  { bg: "bg-sky", color: "text-primary" },
+  { bg: "bg-sun", color: "text-gold" },
 ];
 
 interface Widget {
@@ -27,6 +27,7 @@ interface Widget {
   icon: LucideIcon;
   iconBg: string;
   iconColor: string;
+  emoji?: string;
   label: string;
   value: string;
   hint?: string;
