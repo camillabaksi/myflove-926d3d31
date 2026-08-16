@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Trash2, TrendingDown, TrendingUp } from "lucide-react";
 import BudgetPanel from "@/components/budget-panel";
+import { MyFloveHeader } from "@/components/myflove";
 import CollapsibleSection from "@/components/collapsible-section";
 
 const CATEGORIES = ["Mat", "Boende", "Transport", "Nöje", "Övrigt"];

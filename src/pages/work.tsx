@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import Layout from "@/components/layout";
+import { MyFloveHeader } from "@/components/myflove";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -214,19 +215,11 @@ export default function WorkPage() {
   return (
     <Layout>
       <div className="space-y-8">
-        <header>
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center">
-              <Briefcase size={20} />
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold leading-tight text-ink">Jobb</h1>
-              <p className="text-sm text-muted-foreground">
-                Projekt, arbetsuppgifter och dokument på ett ställe. Flow delar upp det stora i små steg.
-              </p>
-            </div>
-          </div>
-        </header>
+        <MyFloveHeader
+          title="WorkFlow"
+          emojiKey="work"
+          description="Din arbetsdag – projekt, uppgifter och dokument på ett ställe."
+        />
 
         {/* Projekt */}
         <CollapsibleSection title="Dina projekt" help="Samla uppgifter per projekt så blir listan lättare att överblicka." headingClassName="text-lg font-semibold" className="surface-card p-5">

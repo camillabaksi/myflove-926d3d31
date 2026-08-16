@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Layout from "@/components/layout";
+import { MyFloveHeader } from "@/components/myflove";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { MoodContent } from "@/pages/mood";
 import { EnergyContent } from "@/pages/energy-map";
@@ -14,15 +15,11 @@ export default function WellnessPage() {
   return (
     <Layout>
       <div className="space-y-6">
-        <header className="space-y-1">
-          <div className="flex items-center gap-2">
-            <Heart className="text-primary" size={26} />
-            <h1 className="text-3xl font-bold">Må bra</h1>
-          </div>
-          <p className="text-muted-foreground">
-            Checka in mående och energi från samma ställe – båda eller var för sig.
-          </p>
-        </header>
+        <MyFloveHeader
+          title="Må bra"
+          emojiKey="wellness"
+          description="Checka in mående och energi från samma ställe – båda eller var för sig."
+        />
 
         <Button
           onClick={() => setStopOpen(true)}
