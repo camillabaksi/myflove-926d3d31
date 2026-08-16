@@ -44,6 +44,13 @@
   --color-forest: hsl(var(--forest));
   --color-forest-deep: hsl(var(--forest-deep));
 
+  /* Pastellfamiljen – lila, lavendel, rosa, mint, ljusblå, creme */
+  --color-lavender: hsl(var(--lavender));
+  --color-blush: hsl(var(--blush));
+  --color-mint: hsl(var(--mint));
+  --color-sky: hsl(var(--sky));
+  --color-sun: hsl(var(--sun));
+
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Plus Jakarta Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
 
