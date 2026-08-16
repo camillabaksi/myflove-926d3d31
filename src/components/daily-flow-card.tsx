@@ -100,7 +100,7 @@ export default function DailyFlowCard() {
   const startFocus = (item: ScoredTask) => {
     setFocusItem(item);
     setFocusOpen(true);
-    setNowOpen(false);
+    
     log("fokus");
   };
 
