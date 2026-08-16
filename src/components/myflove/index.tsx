@@ -261,6 +261,8 @@ export function MyFloveHeader({
   className?: string;
 }) {
   const shownEmoji = emoji ?? (emojiKey ? MYFLOVE_EMOJI[emojiKey] : undefined);
+  void shownEmoji;
+
   return (
     <header
       className={cn("rounded-3xl border border-border/60 p-5 shadow-soft page-enter", className)}
