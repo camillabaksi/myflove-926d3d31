@@ -27,7 +27,10 @@ import { AreaSwitcher } from "@/components/area-switcher";
 import { AreaOnboarding } from "@/components/area-onboarding";
 import { AREA_META, filterByArea, useActiveArea, type LifeArea } from "@/lib/life-areas";
 import ViewModeToggle from "@/components/view-mode-toggle";
+import HomeCustomize from "@/components/home-customize";
+import { useHiddenHomeSections } from "@/lib/home-sections";
 import { useViewMode } from "@/lib/view-mode";
+
 
 
 /**
@@ -99,12 +102,15 @@ export default function Home() {
   const { activeTasks, toggleTask } = useTasks();
   const { activeArea } = useActiveArea();
   const { isSimple } = useViewMode(activeArea);
+  const { isHidden } = useHiddenHomeSections();
   const showSection = (id: string) => {
     const inArea = activeArea === "alla" || (SECTION_AREAS[id] ?? []).includes(activeArea);
     if (!inArea) return false;
+    if (isHidden(id)) return false;
     // Förenklad vy: bara det viktigaste i rummet du står i.
     return isSimple ? SIMPLE_SECTIONS.includes(id) : true;
   };
+
 
 
   const { activeReminders: _activeReminders } = useReminders();
