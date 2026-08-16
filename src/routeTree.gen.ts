@@ -22,6 +22,7 @@ import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as GuideAdhdPlannerForAdultsRouteImport } from './routes/guide.adhd-planner-for-adults'
 import { Route as AppWorkflowRouteImport } from './routes/_app.workflow'
+import { Route as AppVeckansFlowRouteImport } from './routes/_app.veckans-flow'
 import { Route as AppTravelRouteImport } from './routes/_app.travel'
 import { Route as AppTraningRouteImport } from './routes/_app.traning'
 import { Route as AppTasksRouteImport } from './routes/_app.tasks'
@@ -125,6 +126,11 @@ const GuideAdhdPlannerForAdultsRoute =
 const AppWorkflowRoute = AppWorkflowRouteImport.update({
   id: '/workflow',
   path: '/workflow',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppVeckansFlowRoute = AppVeckansFlowRouteImport.update({
+  id: '/veckans-flow',
+  path: '/veckans-flow',
   getParentRoute: () => AppRoute,
 } as any)
 const AppTravelRoute = AppTravelRouteImport.update({
@@ -371,6 +377,7 @@ export interface FileRoutesByFullPath {
   '/tasks': typeof AppTasksRoute
   '/traning': typeof AppTraningRoute
   '/travel': typeof AppTravelRoute
+  '/veckans-flow': typeof AppVeckansFlowRoute
   '/workflow': typeof AppWorkflowRoute
   '/guide/adhd-planner-for-adults': typeof GuideAdhdPlannerForAdultsRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -424,6 +431,7 @@ export interface FileRoutesByTo {
   '/tasks': typeof AppTasksRoute
   '/traning': typeof AppTraningRoute
   '/travel': typeof AppTravelRoute
+  '/veckans-flow': typeof AppVeckansFlowRoute
   '/workflow': typeof AppWorkflowRoute
   '/guide/adhd-planner-for-adults': typeof GuideAdhdPlannerForAdultsRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -479,6 +487,7 @@ export interface FileRoutesById {
   '/_app/tasks': typeof AppTasksRoute
   '/_app/traning': typeof AppTraningRoute
   '/_app/travel': typeof AppTravelRoute
+  '/_app/veckans-flow': typeof AppVeckansFlowRoute
   '/_app/workflow': typeof AppWorkflowRoute
   '/guide/adhd-planner-for-adults': typeof GuideAdhdPlannerForAdultsRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -534,6 +543,7 @@ export interface FileRouteTypes {
     | '/tasks'
     | '/traning'
     | '/travel'
+    | '/veckans-flow'
     | '/workflow'
     | '/guide/adhd-planner-for-adults'
     | '/.lovable/oauth/consent'
@@ -587,6 +597,7 @@ export interface FileRouteTypes {
     | '/tasks'
     | '/traning'
     | '/travel'
+    | '/veckans-flow'
     | '/workflow'
     | '/guide/adhd-planner-for-adults'
     | '/.lovable/oauth/consent'
@@ -641,6 +652,7 @@ export interface FileRouteTypes {
     | '/_app/tasks'
     | '/_app/traning'
     | '/_app/travel'
+    | '/_app/veckans-flow'
     | '/_app/workflow'
     | '/guide/adhd-planner-for-adults'
     | '/.lovable/oauth/consent'
@@ -762,6 +774,13 @@ declare module '@tanstack/react-router' {
       path: '/workflow'
       fullPath: '/workflow'
       preLoaderRoute: typeof AppWorkflowRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/veckans-flow': {
+      id: '/_app/veckans-flow'
+      path: '/veckans-flow'
+      fullPath: '/veckans-flow'
+      preLoaderRoute: typeof AppVeckansFlowRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/travel': {
@@ -1073,6 +1092,7 @@ interface AppRouteChildren {
   AppTasksRoute: typeof AppTasksRoute
   AppTraningRoute: typeof AppTraningRoute
   AppTravelRoute: typeof AppTravelRoute
+  AppVeckansFlowRoute: typeof AppVeckansFlowRoute
   AppWorkflowRoute: typeof AppWorkflowRoute
   AppAssistantChatIdRoute: typeof AppAssistantChatIdRoute
 }
@@ -1110,6 +1130,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppTasksRoute: AppTasksRoute,
   AppTraningRoute: AppTraningRoute,
   AppTravelRoute: AppTravelRoute,
+  AppVeckansFlowRoute: AppVeckansFlowRoute,
   AppWorkflowRoute: AppWorkflowRoute,
   AppAssistantChatIdRoute: AppAssistantChatIdRoute,
 }
