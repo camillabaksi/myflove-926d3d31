@@ -12,7 +12,9 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Uppgifter, Flow Reset och Insight följer nu samma pastelldesign – hero med emoji, rundare kort, lavendelpiller och tydligare \"Nu\"-markering i dagsvyn (2026-08-16)",
       "Fokusläget har fått en stor ringtimer med start/paus i mitten, plus \"Ta paus\" och \"Klar\" (2026-08-16)",
+
       "\"Din kapacitet idag\" visar energi och belastning som prickskalor, och \"Ditt fokus idag\" numrerar dina tre första steg i pastell (2026-08-16)",
       "\"Vad ska jag göra nu?\" avslutas med ett litet tips i stället för fler krav (2026-08-16)",
       "Designtokens för palett, rundningar, avstånd, skuggor och kantlinjer – nya komponenter följer designen automatiskt (2026-08-16)",

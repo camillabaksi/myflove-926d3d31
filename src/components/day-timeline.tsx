@@ -46,7 +46,7 @@ export default function DayTimeline({
   const hours = Array.from({ length: END_HOUR - START_HOUR + 1 }, (_, i) => START_HOUR + i);
 
   return (
-    <div className="rounded-3xl border border-border/60 bg-card p-4 shadow-sm">
+    <div className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft">
       <div className="space-y-1">
         {hours.map((h) => {
           const inHour = timed.filter((e) => Math.floor(toMinutes(e.time) / 60) === h);
@@ -70,10 +70,13 @@ export default function DayTimeline({
               <div className="flex-1 space-y-1.5 py-1">
                 {showNowLine && (
                   <div className="flex items-center gap-2" aria-label="Nu">
-                    <span className="h-2 w-2 rounded-full bg-primary" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-primary" />
                     <span className="h-px flex-1 bg-primary/50" />
-                    <span className="text-[10px] font-semibold uppercase tracking-wide text-primary">Nu</span>
+                    <span className="rounded-pill bg-primary px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-primary-foreground">
+                      Nu
+                    </span>
                   </div>
+
                 )}
                 {inHour.map((e) => (
                   <div
