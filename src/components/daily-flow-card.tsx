@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Link } from "wouter";
-import { ArrowRight, Brain, ChevronRight, Sparkles, Timer, Zap } from "lucide-react";
+import { ArrowRight, ChevronRight, Sparkles, Zap } from "lucide-react";
 import { toast } from "sonner";
 import FocusMode from "@/components/focus-mode";
 import { useTasks } from "@/hooks/use-data";
@@ -56,7 +55,7 @@ function Meter({ label, icon, value, tone }: { label: string; icon: string; valu
  * Allt bygger på befintliga uppgifter, kalender och FlowScore.
  */
 export default function DailyFlowCard() {
-  const { activeTasks, toggleTask, snoozeTask } = useTasks();
+  const { activeTasks, toggleTask } = useTasks();
   const { checkin, save } = useDailyCheckin();
   const { log } = useFlowUsage();
   const { flow, minutesLeft } = useFlowScore();
@@ -65,8 +64,6 @@ export default function DailyFlowCard() {
   const [load, setLoad] = useState<number | null>(null);
   const [time, setTime] = useState<TimeAvailability | null>(null);
 
-  const [nowOpen, setNowOpen] = useState(false);
-  const [nowIndex, setNowIndex] = useState(0);
   const [focusItem, setFocusItem] = useState<ScoredTask | null>(null);
   const [focusOpen, setFocusOpen] = useState(false);
 
@@ -99,7 +96,6 @@ export default function DailyFlowCard() {
 
   const ranked = useMemo(() => recommendTasks(planTasks, ctx, 8), [planTasks, ctx]);
   const top = ranked.slice(0, Math.max(1, limit));
-  const nowPick = ranked[nowIndex] ?? null;
 
   const startFocus = (item: ScoredTask) => {
     setFocusItem(item);
@@ -211,28 +207,6 @@ export default function DailyFlowCard() {
       )}
 
 
-      {/* ── Vad ska jag göra nu? ──────────────────────── */}
-      <button
-        type="button"
-        onClick={() => {
-          setNowIndex(0);
-          setNowOpen(true);
-        }}
-        className="w-full rounded-3xl border-2 border-primary/40 bg-primary/5 px-5 py-4 text-left hover:border-primary hover:shadow-lifted transition-all active:scale-[0.99]"
-      >
-        <span className="flex items-center gap-3">
-          <span className="w-11 h-11 rounded-full bg-primary/15 text-primary flex items-center justify-center shrink-0">
-            <Brain size={22} />
-          </span>
-          <span className="flex-1">
-            <span className="block text-lg font-semibold text-ink">Vad ska jag göra nu?</span>
-            <span className="block text-sm text-muted-foreground">
-              Jag väljer en sak åt dig – du bestämmer ändå själv.
-            </span>
-          </span>
-        </span>
-      </button>
-
       {/* ── Ditt fokus idag ───────────────────────────── */}
       <div className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft space-y-3">
         <div className="flex items-center gap-2">
@@ -290,67 +264,6 @@ export default function DailyFlowCard() {
         )}
 
       </div>
-
-      {/* ── Rekommendation ────────────────────────────── */}
-      <Dialog open={nowOpen} onOpenChange={setNowOpen}>
-        <DialogContent className="sm:max-w-md rounded-3xl">
-          <DialogHeader>
-            <DialogTitle>Vad ska jag göra nu?</DialogTitle>
-          </DialogHeader>
-
-          {!nowPick ? (
-            <p className="text-sm text-muted-foreground py-4">
-              Det finns inget att välja mellan just nu. Perfekt. 🧠
-            </p>
-          ) : (
-            <div className="space-y-5 py-1">
-              <p className="text-sm text-muted-foreground">
-                Du har ungefär {ctx.availableMinutes} minuter.
-              </p>
-              <div className="rounded-2xl border border-border bg-muted/30 p-4 space-y-2">
-                <p className="text-sm text-muted-foreground">Jag rekommenderar att du börjar med:</p>
-                <p className="text-lg font-semibold text-ink">{nowPick.task.title}</p>
-                <ul className="text-sm text-muted-foreground space-y-0.5">
-                  <li className="flex items-center gap-2">
-                    <Timer size={14} /> Beräknad tid: {nowPick.minutes} minuter
-                  </li>
-                  <li>Friktion: {nowPick.friction}/10</li>
-                  <li>Prioritet: {nowPick.priority}</li>
-                </ul>
-                <p className="text-sm text-ink/80">{nowPick.why}</p>
-              </div>
-
-              <div className="space-y-2">
-                <button
-                  type="button"
-                  onClick={() => startFocus(nowPick)}
-                  className="w-full rounded-2xl bg-primary text-primary-foreground py-3.5 font-semibold"
-                >
-                  Börja nu
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setNowIndex((i) => (i + 1) % Math.max(1, ranked.length))}
-                  className="w-full rounded-2xl border border-border py-3 font-medium"
-                >
-                  Välj något annat
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    snoozeTask(nowPick.task.id, 1);
-                    toast("Okej – jag tar upp den en annan dag.");
-                    setNowOpen(false);
-                  }}
-                  className="w-full rounded-2xl py-3 text-sm text-muted-foreground"
-                >
-                  Inte idag
-                </button>
-              </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
 
       <FocusMode
         item={focusItem}
