@@ -115,6 +115,12 @@ const WEEKDAY_WORDS: Record<string, number> = {
   lördag: 6, lordag: 6,
 };
 
+export type WhenOption = {
+  label: string;
+  at: number;
+  allDay: boolean;
+};
+
 export type ParsedWhen = {
   /** Epoch ms för det datum/tid som stod i texten. */
   at: number;
@@ -122,7 +128,14 @@ export type ParsedWhen = {
   matched: string;
   /** Sant om ett klockslag också hittades. */
   hasTime: boolean;
+  /** Inget klockslag angavs – då lägger vi in det som heldag. */
+  allDay: boolean;
+  /** Varför tolkningen är osäker – visas som en fråga till användaren. */
+  ambiguous?: string;
+  /** Alternativ att välja mellan när tolkningen är osäker. */
+  options?: WhenOption[];
 };
+
 
 /**
  * Läser ut datum och tid ur en fritext ("läkartid med Cassie den 25 augusti kl 14").
