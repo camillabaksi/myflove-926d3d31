@@ -7,6 +7,7 @@ import { useTasks } from "@/hooks/use-data";
 import { useDailyCheckin, useFlowUsage } from "@/hooks/use-daily-flow";
 import { useFlowScore } from "@/hooks/use-flowscore";
 import { celebrate } from "@/lib/celebrate";
+import { focusTasksForToday } from "@/lib/focus-rules";
 import { MyFloveEnergyDots, MyFloveHeart, moodFromEnergy } from "@/components/myflove/motion";
 import {
   FRICTION_LABEL,
@@ -67,18 +68,8 @@ export default function DailyFlowCard() {
   const [focusItem, setFocusItem] = useState<ScoredTask | null>(null);
   const [focusOpen, setFocusOpen] = useState(false);
 
-  const planTasks = useMemo(
-    () =>
-      activeTasks.filter(
-        (t) =>
-          !t.syncKey?.includes(":exam:") &&
-          !t.syncKey?.includes(":revision:") &&
-          // Visa bara saker som gäller idag eller redan har passerat –
-          // framtida deadlines hör i "Resten kan vänta", inte "Ditt fokus idag".
-          (!t.dueDate || t.dueDate <= todayISO()),
-      ),
-    [activeTasks],
-  );
+  // Regelmotorn i src/lib/focus-rules.ts avgör vad som hör hemma idag.
+  const planTasks = useMemo(() => focusTasksForToday(activeTasks), [activeTasks]);
 
   const ctx = useMemo(() => {
     const e = checkin?.energy ?? 3;
