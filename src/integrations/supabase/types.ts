@@ -493,6 +493,14 @@ export type Database = {
           tasks_enabled: boolean
           updated_at: string
           user_id: string
+          wake_ack_on: string | null
+          wake_enabled: boolean
+          wake_interval_min: number
+          wake_last_sent_at: string | null
+          wake_max_followups: number
+          wake_stage: number
+          wake_started_on: string | null
+          wake_time: string
           weather_enabled: boolean
           weather_time: string
         }
@@ -511,6 +519,14 @@ export type Database = {
           tasks_enabled?: boolean
           updated_at?: string
           user_id: string
+          wake_ack_on?: string | null
+          wake_enabled?: boolean
+          wake_interval_min?: number
+          wake_last_sent_at?: string | null
+          wake_max_followups?: number
+          wake_stage?: number
+          wake_started_on?: string | null
+          wake_time?: string
           weather_enabled?: boolean
           weather_time?: string
         }
@@ -529,6 +545,14 @@ export type Database = {
           tasks_enabled?: boolean
           updated_at?: string
           user_id?: string
+          wake_ack_on?: string | null
+          wake_enabled?: boolean
+          wake_interval_min?: number
+          wake_last_sent_at?: string | null
+          wake_max_followups?: number
+          wake_stage?: number
+          wake_started_on?: string | null
+          wake_time?: string
           weather_enabled?: boolean
           weather_time?: string
         }
