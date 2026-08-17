@@ -257,8 +257,30 @@ export function parseWhenFromText(text: string, now = new Date()): ParsedWhen | 
     if (delta === 0) delta = 7;
     if (wd[1] === "nästa" && delta < 7) delta += 7;
     d.setDate(d.getDate() + delta);
-    return build(d, `${wd[1] ? `${wd[1]} ` : ""}${wd[2]}`);
+    const parsed = build(d, `${wd[1] ? `${wd[1]} ` : ""}${wd[2]}`);
+    // "fredag" utan "på"/"nästa" kan betyda den här veckan eller nästa – fråga.
+    if (!wd[1]) {
+      const next = new Date(d);
+      next.setDate(next.getDate() + 7);
+      return {
+        ...parsed,
+        ambiguous: `Menade du ${wd[2]} den här veckan eller nästa?`,
+        options: [
+          { label: `Nu på ${wd[2]}`, at: parsed.at, allDay: parsed.allDay },
+          {
+            label: `Nästa ${wd[2]}`,
+            at: (() => {
+              next.setHours(new Date(parsed.at).getHours(), new Date(parsed.at).getMinutes(), 0, 0);
+              return next.getTime();
+            })(),
+            allDay: parsed.allDay,
+          },
+        ],
+      };
+    }
+    return parsed;
   }
+
 
   return null;
 }
