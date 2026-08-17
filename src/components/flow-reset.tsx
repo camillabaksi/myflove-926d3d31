@@ -6,6 +6,7 @@ import { useTasks } from "@/hooks/use-data";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { useFlowReset, useFlowUsage, type DayFeel } from "@/hooks/use-daily-flow";
 import { todayISO } from "@/lib/daily-flow";
+import { useDayDone } from "@/hooks/use-day-done";
 
 const FEELS: { id: DayFeel; emoji: string; label: string }[] = [
   { id: "bra", emoji: "😊", label: "Bra" },
@@ -24,6 +25,7 @@ export default function FlowReset() {
   const { tasks, activeTasks, snoozedTasks, setTaskDueDate } = useTasks();
   const { items } = useQuickflow();
   const { todayEntry, save } = useFlowReset();
+  const { lines: dayDone } = useDayDone();
   const { log } = useFlowUsage();
   const [replanned, setReplanned] = useState(false);
 
@@ -105,8 +107,31 @@ export default function FlowReset() {
           <li>✅ {doneToday} {doneToday === 1 ? "uppgift klar" : "uppgifter klara"}</li>
           <li>📦 {movedToday} {movedToday === 1 ? "sak flyttad" : "saker flyttade"}</li>
           <li>💭 {capturedToday} {capturedToday === 1 ? "sak fångad" : "saker fångade"} i QuickFlow</li>
+          {dayDone.map((d) => (
+            <li key={d.text}>
+              {d.emoji} {d.text}
+            </li>
+          ))}
         </ul>
+        <p className="text-xs text-muted-foreground pt-1">
+          Rutiner, medicin och rörelse räknas också. Det är inte bara uppgifter som är en dag.
+        </p>
       </div>
+
+      {todayEntry && (
+        <div className="rounded-3xl bg-card/80 p-4">
+          <p className="text-sm text-ink">
+            {todayEntry.feel === "kaos"
+              ? "Jag tar med mig det här till imorgon och börjar dagen lugnare."
+              : todayEntry.feel === "bra"
+                ? "Jag tar med mig det här till imorgon och ger dig lite mer utrymme."
+                : "Jag tar med mig det här till imorgon och börjar neutralt."}
+          </p>
+          <p className="text-xs text-muted-foreground pt-1">
+            Din FlowScore på förmiddagen utgår från hur idag kändes.
+          </p>
+        </div>
+      )}
 
 
       {unfinishedToday.length > 2 && !replanned && (
