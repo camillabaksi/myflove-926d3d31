@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Smart framförhållning – påminnelser flyttas automatiskt tidigare om du brukar bli sen, eller senare om du brukar vara tidig, per typ av hållpunkt (2026-08-17)",
       "Notiser för barnens hållpunkter – skolschema och aktiviteter påminner innan de börjar, med valfri morgonöversikt över hela barnens dag (2026-08-17)",
       "Barnens skolschema och aktiviteter räknas som hållpunkter i livspusslet – dagen visar hur bunden den faktiskt är (2026-08-17)",
       "Insight-strategier kan slås på direkt – knappen \"Slå på åt mig\" ställer in lugna färger, symbolstöd, enkla ord eller förenklad vy (2026-08-17)",

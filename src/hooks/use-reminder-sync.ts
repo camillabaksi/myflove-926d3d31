@@ -10,6 +10,7 @@ import { useQuickflow } from "@/hooks/use-quickflow";
 import { useStudySchedule } from "@/hooks/use-study-schedule";
 import { useChildren } from "@/hooks/use-children";
 import { useChildReminderSettings } from "@/lib/child-reminders";
+import { useAdaptiveLead, applyAdaptiveLead } from "@/lib/adaptive-lead";
 import type { ChildScheduleEntry } from "@/components/child-schedule";
 
 // Mirror today's + tomorrow's timed tasks and medications into the server
@@ -41,6 +42,7 @@ export function useReminderSync() {
     {},
   );
   const { settings: childReminders } = useChildReminderSettings();
+  const { state: adaptiveLead } = useAdaptiveLead();
   const syncFn = useServerFn(syncReminder);
   const cancelFn = useServerFn(cancelReminder);
   const lastKeys = useRef<Set<string>>(new Set());
@@ -74,7 +76,7 @@ export function useReminderSync() {
         if (!taskDates.includes(t.dueDate)) continue;
         const when = combineDateTime(t.dueDate, t.time);
         if (!when) continue;
-        const minsBefore = t.reminderMinutesBefore ?? 0;
+        const minsBefore = applyAdaptiveLead(t.reminderMinutesBefore ?? 0, adaptiveLead, "uppgift");
         const deliver = new Date(when.getTime() - minsBefore * 60_000);
         if (deliver.getTime() < now + 30_000) continue; // skip past-due
         const key = `task:${t.id}`;
@@ -164,7 +166,7 @@ export function useReminderSync() {
             }
           }
         }
-        const leadMins = r.remindMinutesBefore ?? 0;
+        const leadMins = applyAdaptiveLead(r.remindMinutesBefore ?? 0, adaptiveLead, "kalender");
         for (const date of occurrences) {
           const when = combineDateTime(date, r.time);
           if (!when) continue;
@@ -203,7 +205,7 @@ export function useReminderSync() {
       }
 
       // Lektioner från det importerade schemat: påminnelse X min innan, 14 dagar framåt.
-      const lead = studySettings.lectureReminderMinutes ?? 0;
+      const lead = applyAdaptiveLead(studySettings.lectureReminderMinutes ?? 0, adaptiveLead, "lektion");
       if (lead > 0) {
         for (const lecture of lectures) {
           for (const date of horizonDates) {
@@ -231,7 +233,7 @@ export function useReminderSync() {
       // Barnens hållpunkter: skolschema + inlagda aktiviteter, 14 dagar framåt.
       if (childReminders.enabled) {
         const nameOf = new Map(children.map((c) => [c.id, c.name]));
-        const childLead = Math.max(0, childReminders.minutesBefore ?? 0);
+        const childLead = applyAdaptiveLead(Math.max(0, childReminders.minutesBefore ?? 0), adaptiveLead, "barn");
         // date -> lista med hållpunkter (för morgonöversikten)
         const byDate = new Map<string, { time: string; title: string; who: string }[]>();
 
@@ -369,5 +371,6 @@ export function useReminderSync() {
     JSON.stringify(childItems.map((i) => [i.id, i.child_id, i.title, i.date, i.time, i.completed])),
     JSON.stringify(children.map((c) => [c.id, c.name])),
     JSON.stringify(childReminders),
+    JSON.stringify(adaptiveLead),
   ]);
 }
