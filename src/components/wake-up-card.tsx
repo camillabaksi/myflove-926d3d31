@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Check, Sunrise } from "lucide-react";
+import { Check, Sunrise, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getPushPreferences } from "@/lib/push.functions";
 import { acknowledgeWake } from "@/lib/push.functions";
+import { playGentleWake, type GentleWakeHandle } from "@/lib/gentle-wake-sound";
 import {
   DEFAULT_WAKE_STEPS,
   getWakeStepsDoneToday,
@@ -12,6 +13,7 @@ import {
   localMinutesOfDay,
   setWakeStepsDoneToday,
 } from "@/lib/wake-up";
+
 
 type Prefs = {
   wake_enabled?: boolean | null;
