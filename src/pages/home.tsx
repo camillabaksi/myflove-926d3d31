@@ -25,6 +25,8 @@ import WeekInFlow from "@/components/week-in-flow";
 import { celebrateFromEvent } from "@/lib/celebrate";
 import { EnablePushButton } from "@/components/enable-push-button";
 import { PersonalPushSettings } from "@/components/personal-push-settings";
+import WakeUpCard from "@/components/wake-up-card";
+import WakeUpSettings from "@/components/wake-up-settings";
 import { QuietModeSettings } from "@/components/quiet-mode-settings";
 import { AdaptiveLeadSettings } from "@/components/adaptive-lead-settings";
 import { useReminderSync } from "@/hooks/use-reminder-sync";
