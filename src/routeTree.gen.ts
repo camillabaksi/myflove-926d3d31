@@ -35,6 +35,7 @@ import { Route as AppStadningRouteImport } from './routes/_app.stadning'
 import { Route as AppShoppingRouteImport } from './routes/_app.shopping'
 import { Route as AppQuickflowRouteImport } from './routes/_app.quickflow'
 import { Route as AppPomodoroRouteImport } from './routes/_app.pomodoro'
+import { Route as AppMinDagRouteImport } from './routes/_app.min-dag'
 import { Route as AppMatlistaRouteImport } from './routes/_app.matlista'
 import { Route as AppMaBraRouteImport } from './routes/_app.ma-bra'
 import { Route as AppKalenderRouteImport } from './routes/_app.kalender'
@@ -193,6 +194,11 @@ const AppQuickflowRoute = AppQuickflowRouteImport.update({
 const AppPomodoroRoute = AppPomodoroRouteImport.update({
   id: '/pomodoro',
   path: '/pomodoro',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMinDagRoute = AppMinDagRouteImport.update({
+  id: '/min-dag',
+  path: '/min-dag',
   getParentRoute: () => AppRoute,
 } as any)
 const AppMatlistaRoute = AppMatlistaRouteImport.update({
@@ -379,6 +385,7 @@ export interface FileRoutesByFullPath {
   '/kalender': typeof AppKalenderRoute
   '/ma-bra': typeof AppMaBraRoute
   '/matlista': typeof AppMatlistaRoute
+  '/min-dag': typeof AppMinDagRoute
   '/pomodoro': typeof AppPomodoroRoute
   '/quickflow': typeof AppQuickflowRoute
   '/shopping': typeof AppShoppingRoute
@@ -435,6 +442,7 @@ export interface FileRoutesByTo {
   '/kalender': typeof AppKalenderRoute
   '/ma-bra': typeof AppMaBraRoute
   '/matlista': typeof AppMatlistaRoute
+  '/min-dag': typeof AppMinDagRoute
   '/pomodoro': typeof AppPomodoroRoute
   '/quickflow': typeof AppQuickflowRoute
   '/shopping': typeof AppShoppingRoute
@@ -493,6 +501,7 @@ export interface FileRoutesById {
   '/_app/kalender': typeof AppKalenderRoute
   '/_app/ma-bra': typeof AppMaBraRoute
   '/_app/matlista': typeof AppMatlistaRoute
+  '/_app/min-dag': typeof AppMinDagRoute
   '/_app/pomodoro': typeof AppPomodoroRoute
   '/_app/quickflow': typeof AppQuickflowRoute
   '/_app/shopping': typeof AppShoppingRoute
@@ -551,6 +560,7 @@ export interface FileRouteTypes {
     | '/kalender'
     | '/ma-bra'
     | '/matlista'
+    | '/min-dag'
     | '/pomodoro'
     | '/quickflow'
     | '/shopping'
@@ -607,6 +617,7 @@ export interface FileRouteTypes {
     | '/kalender'
     | '/ma-bra'
     | '/matlista'
+    | '/min-dag'
     | '/pomodoro'
     | '/quickflow'
     | '/shopping'
@@ -664,6 +675,7 @@ export interface FileRouteTypes {
     | '/_app/kalender'
     | '/_app/ma-bra'
     | '/_app/matlista'
+    | '/_app/min-dag'
     | '/_app/pomodoro'
     | '/_app/quickflow'
     | '/_app/shopping'
@@ -889,6 +901,13 @@ declare module '@tanstack/react-router' {
       path: '/pomodoro'
       fullPath: '/pomodoro'
       preLoaderRoute: typeof AppPomodoroRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/min-dag': {
+      id: '/_app/min-dag'
+      path: '/min-dag'
+      fullPath: '/min-dag'
+      preLoaderRoute: typeof AppMinDagRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/matlista': {
@@ -1120,6 +1139,7 @@ interface AppRouteChildren {
   AppKalenderRoute: typeof AppKalenderRoute
   AppMaBraRoute: typeof AppMaBraRoute
   AppMatlistaRoute: typeof AppMatlistaRoute
+  AppMinDagRoute: typeof AppMinDagRoute
   AppPomodoroRoute: typeof AppPomodoroRoute
   AppQuickflowRoute: typeof AppQuickflowRoute
   AppShoppingRoute: typeof AppShoppingRoute
@@ -1160,6 +1180,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppKalenderRoute: AppKalenderRoute,
   AppMaBraRoute: AppMaBraRoute,
   AppMatlistaRoute: AppMatlistaRoute,
+  AppMinDagRoute: AppMinDagRoute,
   AppPomodoroRoute: AppPomodoroRoute,
   AppQuickflowRoute: AppQuickflowRoute,
   AppShoppingRoute: AppShoppingRoute,
