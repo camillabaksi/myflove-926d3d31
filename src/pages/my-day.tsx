@@ -7,8 +7,11 @@ import DayTimeline, { type TimelineEntry } from "@/components/day-timeline";
 import { DailyFocusCard } from "@/components/daily-focus-card";
 import { FlowScoreCard } from "@/components/flow-score-card";
 import { FlowItemCard } from "@/components/myflove/flow-item-card";
+import { FlowReplan } from "@/components/flow-replan";
 import { useFlowScore } from "@/hooks/use-flowscore";
 import { useFlowItems } from "@/hooks/use-flow-items";
+import { useReplanMode } from "@/hooks/use-replan";
+import { capacityForMode, shouldOfferReplan } from "@/lib/replan";
 import { withinCapacity, type FlowItem } from "@/lib/flow-items";
 import { useTasks, useReminders } from "@/hooks/use-data";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
@@ -55,14 +58,12 @@ export default function MyDay() {
 
   // Allt som är en "sak i livet" idag – oavsett var den skapades.
   const { today: todaysItems } = useFlowItems();
+  const { mode, chosen, setMode } = useReplanMode();
   const { keep, rest } = useMemo(
-    () =>
-      withinCapacity(todaysItems, {
-        suggestedTasks: flow.suggestedTasks || 3,
-        maxEnergy: flow.score < 45 ? 6 : 10,
-      }),
-    [todaysItems, flow.suggestedTasks, flow.score],
+    () => withinCapacity(todaysItems, capacityForMode(flow, mode)),
+    [todaysItems, flow, mode],
   );
+  const offerReplan = shouldOfferReplan(flow.score) || chosen;
 
 
 
@@ -102,6 +103,19 @@ export default function MyDay() {
         </section>
 
         <DailyFocusCard />
+
+        {offerReplan && (
+          <FlowReplan
+            flow={flow}
+            items={todaysItems}
+            mode={mode}
+            chosen={chosen}
+            onChange={setMode}
+            keepCount={keep.length}
+            restCount={rest.length}
+          />
+        )}
+
 
         <section className="surface-card p-5">
           <CollapsibleSection
