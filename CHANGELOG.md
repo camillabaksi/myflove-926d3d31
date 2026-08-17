@@ -8,6 +8,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 ## [Unreleased]
 
 ### Added
+- **Framtida datum stannar i framtiden** (2026-08-17): Lägger du in något på ett datum längre fram – t.ex. en läkartid den 25 augusti – dyker det inte längre upp i dagens vy. Saker med datum prioriteras nu enbart efter datumet (Idag / Snart / Senare), och tankar i QuickFlow med en tid framåt räknas till den dagen i stället för idag.
 - **Heldag som standard i QuickFlow** (2026-08-17): Nämner du ett datum men inget klockslag ("läkartid med Cassie den 25 augusti") läggs det nu in som heldag i stället för kl 09. Är tolkningen otydlig – t.ex. "kl 3" (morgon eller eftermiddag?) eller "fredag" (den här veckan eller nästa?) – frågar MyFlove i stället för att gissa, med tydliga val plus alternativet Heldag.
 - **QuickFlow läser datum i texten** (2026-08-17): Skriver du "läkartid med Cassie den 25 augusti" föreslår MyFlove nu 25 augusti i stället för idag. Förstår "25 augusti", "25/8", "2026-08-25", "imorgon", "i övermorgon", "på fredag"/"nästa tisdag" samt klockslag ("kl 14", "14:30"). Utan klockslag föreslås kl 09, och allt går att ändra. Triagen visar det hittade datumet och föreslår Kalender.
 - **Behaglig väckning** (2026-08-17): Morgonstart känns nu mjuk i stället för skarp. En varm, långsamt stigande klockklang (C–E–G–C) tonar in när du öppnar Morgonstart, med en ljudknapp om du vill tysta eller spela om den. Vibrationerna i puffarna är kortare och rundare, och texterna är lugnare ("Sträck på dig i sängen", "Ingen stress – tryck när du är redo").

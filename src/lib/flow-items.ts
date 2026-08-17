@@ -79,10 +79,13 @@ export function priorityFor(opts: {
   fixed?: boolean;
 }): FlowPriority {
   const d = opts.daysUntil;
-  if (typeof d === "number" && d < 0) return "nu";
-  if (opts.fixed && opts.time) return "idag";
-  if (d === 0) return "idag";
-  if (typeof d === "number" && d <= 7) return "snart";
+  if (typeof d === "number") {
+    // Ett datum längre fram hör aldrig till idag – oavsett klockslag.
+    if (d < 0) return "nu";
+    if (d === 0) return opts.fixed && opts.time ? "idag" : "idag";
+    if (d <= 7) return "snart";
+    return "senare";
+  }
   if (opts.time) return "idag";
   return "senare";
 }

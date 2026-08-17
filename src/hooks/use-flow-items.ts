@@ -123,13 +123,26 @@ export function useFlowItems(): { items: FlowItem[]; today: FlowItem[] } {
     for (const q of openItems) {
       if (q.done) continue;
       const friction = suggestFor(q.text);
+      // Har tanken en tid framåt hör den till den dagen, inte till idag.
+      const qDate = q.remindAt ? new Date(q.remindAt) : null;
+      const qDue = qDate
+        ? `${qDate.getFullYear()}-${String(qDate.getMonth() + 1).padStart(2, "0")}-${String(qDate.getDate()).padStart(2, "0")}`
+        : undefined;
+      const qDays = qDue ? daysUntilDate(qDue) : undefined;
       out.push({
         id: `qf-${q.id}`,
         title: q.text,
         source: "tanke",
         area: q.area ?? "vardag",
         emoji: "💭",
-        priority: q.level === "viktigt" ? "idag" : "senare",
+        dueDate: qDue,
+        daysUntil: qDays,
+        priority:
+          typeof qDays === "number"
+            ? priorityFor({ daysUntil: qDays })
+            : q.level === "viktigt"
+              ? "idag"
+              : "senare",
         energy: friction?.friction,
         energyReason: friction?.reason,
         href: "/quickflow",
