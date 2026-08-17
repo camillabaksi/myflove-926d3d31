@@ -346,9 +346,11 @@ export function suggestWhen(
 const WEEKDAYS = ["söndag", "måndag", "tisdag", "onsdag", "torsdag", "fredag", "lördag"];
 
 /** "Idag 17:00", "Imorgon 09:00", "Fredag 12:00" */
-export function formatWhen(at: number, now = new Date()): string {
+export function formatWhen(at: number, now = new Date(), allDay = false): string {
   const d = new Date(at);
-  const time = `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+  const time = allDay
+    ? "heldag"
+    : `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
   const startOf = (x: Date) => new Date(x.getFullYear(), x.getMonth(), x.getDate()).getTime();
   const diffDays = Math.round((startOf(d) - startOf(now)) / 86_400_000);
   if (diffDays === 0) return `Idag ${time}`;
@@ -356,6 +358,7 @@ export function formatWhen(at: number, now = new Date()): string {
   if (diffDays > 1 && diffDays < 7) return `${capitalize(WEEKDAYS[d.getDay()]!)} ${time}`;
   return `${d.toLocaleDateString("sv-SE", { day: "numeric", month: "short" })} ${time}`;
 }
+
 
 function capitalize(s: string) {
   return s.charAt(0).toUpperCase() + s.slice(1);
