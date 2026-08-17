@@ -11,6 +11,7 @@ import { Hand, Send, Wind, Sparkles } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { chatWithFlow } from "@/lib/flow-chat.functions";
 import { useLifePuzzle } from "@/hooks/use-life-puzzle";
+import StopBudget from "@/components/stop-budget";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
@@ -192,6 +193,7 @@ export default function StopModal({ open, onOpenChange }: StopModalProps) {
                 </button>
               ))}
             </div>
+            <StopBudget />
             <Button variant="ghost" onClick={() => setPhase("talk")} className="w-full h-11 rounded-2xl">
               Hoppa över
             </Button>
