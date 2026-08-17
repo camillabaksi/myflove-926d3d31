@@ -159,10 +159,38 @@ export function parseWhenFromText(text: string, now = new Date()): ParsedWhen | 
     }
   }
 
+  // "kl 3" kan betyda 03 eller 15 – då frågar vi hellre än gissar.
+  const vagueHour =
+    hour !== null && hour >= 1 && hour <= 7 && !(timeMatch?.[2]) ? hour : null;
+
   const build = (d: Date, matched: string): ParsedWhen => {
-    d.setHours(hour ?? 9, hour === null ? 0 : minute, 0, 0);
-    return { at: d.getTime(), matched, hasTime: hour !== null };
+    const allDay = hour === null;
+    // Utan klockslag blir det en heldag – vi startar dagen kl 00:00.
+    d.setHours(hour ?? 0, allDay ? 0 : minute, 0, 0);
+    const base: ParsedWhen = {
+      at: d.getTime(),
+      matched,
+      hasTime: !allDay,
+      allDay,
+    };
+    if (vagueHour !== null) {
+      const morning = new Date(d);
+      morning.setHours(vagueHour, minute, 0, 0);
+      const afternoon = new Date(d);
+      afternoon.setHours(vagueHour + 12, minute, 0, 0);
+      return {
+        ...base,
+        at: afternoon.getTime(),
+        ambiguous: `Menade du kl ${String(vagueHour).padStart(2, "0")} på morgonen eller kl ${vagueHour + 12}?`,
+        options: [
+          { label: `Kl ${String(vagueHour).padStart(2, "0")}:00`, at: morning.getTime(), allDay: false },
+          { label: `Kl ${vagueHour + 12}:00`, at: afternoon.getTime(), allDay: false },
+        ],
+      };
+    }
+    return base;
   };
+
 
   // "25 augusti" / "den 25 aug" / "augusti 25"
   const monthNames = Object.keys(MONTHS).join("|");
