@@ -269,6 +269,17 @@ export default function Home() {
           <PersonalNote />
         </div>
 
+        {showSection("livspussel") && (
+          <HomeSection
+            style={ord("livspussel")}
+            id="livspussel"
+            title="Livspusslet"
+            help="Hur dagens olika delar hänger ihop – energi, deadlines, familj, jobb och studier. Låg kapacitet ger färre krav, inte fler."
+          >
+            <LifePuzzleCard />
+          </HomeSection>
+        )}
+
         {showSection("dailyflow") && (
           <HomeSection
             style={ord("dailyflow")}
