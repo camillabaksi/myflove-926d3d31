@@ -4,7 +4,13 @@ import { Wand2 } from "lucide-react";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { useTasks, useReminders } from "@/hooks/use-data";
 import { useFlowUsage } from "@/hooks/use-daily-flow";
-import { suggestWhen, formatWhen, guessArea, type QuickflowItem } from "@/lib/quickflow";
+import {
+  suggestWhen,
+  formatWhen,
+  guessArea,
+  parseWhenFromText,
+  type QuickflowItem,
+} from "@/lib/quickflow";
 import { AREA_META, ALL_AREAS, type LifeArea } from "@/lib/life-areas";
 
 type SuggestedType = "uppgift" | "paminnelse" | "kalender" | "ide" | "minne";
@@ -115,6 +121,11 @@ export default function QuickflowTriage() {
                     <p className="text-xs text-muted-foreground">
                       Mitt förslag: {TYPE_META[type].label} – du bestämmer.
                     </p>
+                    {parseWhenFromText(item.text) && (
+                      <p className="text-xs text-primary">
+                        Jag hittade ett datum i texten: {formatWhen(suggestWhen(item.level, item.text).at)}
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div className="flex flex-wrap items-center gap-1.5">
