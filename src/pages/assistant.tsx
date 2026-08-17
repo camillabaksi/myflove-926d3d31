@@ -96,7 +96,10 @@ export default function Assistant({ chatId }: { chatId?: string }) {
       await saveFlowMessage(id, "user", trimmed);
 
       const { reply } = await chat({
-        data: { messages: history.map((m) => ({ role: m.role, content: m.content })) },
+        data: {
+          messages: history.map((m) => ({ role: m.role, content: m.content })),
+          context: contextPrompt,
+        },
       });
       setMessages((m) => [...m, { id: `tmp-a-${Date.now()}`, role: "assistant", content: reply }]);
       await saveFlowMessage(id, "assistant", reply);
