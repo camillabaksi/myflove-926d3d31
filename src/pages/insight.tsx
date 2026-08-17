@@ -21,6 +21,7 @@ import {
   type StrategyNudge,
 } from "@/lib/insight";
 import CollapsibleSection from "@/components/collapsible-section";
+import InsightApplySetting from "@/components/insight-apply-setting";
 import { MyFloveInsightGather } from "@/components/myflove/motion";
 
 
@@ -353,6 +354,7 @@ export default function InsightPage() {
                     ))}
                   </ul>
                 )}
+                <InsightApplySetting strategyId={s.strategyId} />
               </div>
               <button
                 onClick={() => removeStrategy(s.id)}

@@ -3,6 +3,7 @@ import { useTasks } from "@/hooks/use-data";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { useStudySchedule } from "@/hooks/use-study-schedule";
 import { useFlowScore } from "@/hooks/use-flowscore";
+import { useChildEvents } from "@/hooks/use-child-events";
 import { getArea } from "@/lib/life-areas";
 import {
   buildLifePuzzle,
@@ -36,6 +37,7 @@ export function useLifePuzzle(): {
   const { openItems } = useQuickflow();
   const { lectures } = useStudySchedule();
   const { flow, energy, mood, minutesLeft } = useFlowScore();
+  const childEvents = useChildEvents();
 
   const input = useMemo<LifePuzzleInput>(() => {
     const today = todayISO();
@@ -69,7 +71,9 @@ export function useLifePuzzle(): {
         .filter((l) => l.weekday === weekday)
         .sort((a, b) => a.start.localeCompare(b.start))
         .map((l) => `${l.start} ${l.title}`),
-    ];
+      // Barnens hållpunkter hör till dagen på samma sätt som mina egna.
+      ...childEvents.map((e) => `${e.time} ${e.title} (${e.childName})`),
+    ].sort((a, b) => a.localeCompare(b));
 
     return {
       score: flow.score,
@@ -83,7 +87,7 @@ export function useLifePuzzle(): {
       areas: [...byArea.values()],
       todaysEvents: events,
     };
-  }, [activeTasks, lectures, flow, energy, mood, minutesLeft, openItems.length]);
+  }, [activeTasks, lectures, childEvents, flow, energy, mood, minutesLeft, openItems.length]);
 
   const puzzle = useMemo(() => buildLifePuzzle(input), [input]);
   const contextPrompt = useMemo(() => lifeContextPrompt(input), [input]);

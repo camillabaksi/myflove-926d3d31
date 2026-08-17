@@ -12,6 +12,9 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Barnens skolschema och aktiviteter räknas som hållpunkter i livspusslet – dagen visar hur bunden den faktiskt är (2026-08-17)",
+      "Insight-strategier kan slås på direkt – knappen \"Slå på åt mig\" ställer in lugna färger, symbolstöd, enkla ord eller förenklad vy (2026-08-17)",
+      "Lugnt förslag om att dölja hemskärmsblock du inte öppnat på tre veckor – helt lokalt och alltid möjligt att ångra (2026-08-17)",
       "QuickFlow sorterar tankar till rätt livsområde – Vardag, Privat, Studier eller Jobb – och tanken blir en uppgift i rätt rum direkt (2026-08-17)",
       "Rutiner, medicin, träningspass och steg räknas i kvällens Flow Reset – dagen är mer än avklarade uppgifter (2026-08-17)",
       "Gårdagens Flow Reset sätter startläget för dagen – kaos igår ger en lugnare förmiddag, en bra dag ger lite mer utrymme (2026-08-17)",
