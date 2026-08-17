@@ -6,11 +6,14 @@ import HelpHint from "@/components/help-hint";
 import DayTimeline, { type TimelineEntry } from "@/components/day-timeline";
 import { DailyFocusCard } from "@/components/daily-focus-card";
 import { FlowScoreCard } from "@/components/flow-score-card";
+import { FlowItemCard } from "@/components/myflove/flow-item-card";
 import { useFlowScore } from "@/hooks/use-flowscore";
+import { useFlowItems } from "@/hooks/use-flow-items";
+import { withinCapacity, type FlowItem } from "@/lib/flow-items";
 import { useTasks, useReminders } from "@/hooks/use-data";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import type { Routine } from "@/pages/routines";
-import { CalendarDays, CheckCircle2, Circle, Sun, ListOrdered } from "lucide-react";
+import { CalendarDays, Sun, ListOrdered } from "lucide-react";
 import { MyFloveTransition } from "@/components/myflove/motion";
 
 function todayStr(): string {
