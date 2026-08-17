@@ -49,6 +49,7 @@ export default function Assistant({ chatId }: { chatId?: string }) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const chat = useServerFn(chatWithFlow);
+  const { puzzle, contextPrompt } = useLifePuzzle();
 
   const { activeTasks } = useTasks();
   const { moods } = useMoods();
