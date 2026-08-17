@@ -1,40 +1,83 @@
 // Flow ska veta var i appen du står, så första förslaget passar platsen.
 
+import type { LifeArea } from "./life-areas";
+
 export interface FlowPlace {
   path: string;
   label: string;
   /** Kort mening som Flow kan utgå från. */
   prompt: string;
+  /** Vilken del av livet platsen hör till. */
+  area: LifeArea;
 }
 
-const PLACES: Record<string, { label: string; prompt: string }> = {
-  "/hem": { label: "Hem", prompt: "Vad är viktigast för mig just nu?" },
-  "/min-dag": { label: "Min dag", prompt: "Hjälp mig göra dagens plan rimlig." },
-  "/tasks": { label: "Att göra", prompt: "Hjälp mig välja vad jag ska börja med." },
-  "/kalender": { label: "Kalendern", prompt: "Hur ser min dag ut och vad hinner jag?" },
-  "/daglig-rutin": { label: "Daglig rutin", prompt: "Hjälp mig komma igång med rutinen." },
-  "/studyflow": { label: "Studier", prompt: "Vad borde jag plugga på just nu?" },
-  "/studybuddy": { label: "Studier", prompt: "Hjälp mig plugga på ett lugnt sätt." },
-  "/jobb": { label: "Jobb", prompt: "Hjälp mig prioritera på jobbet idag." },
-  "/workflow": { label: "Jobb", prompt: "Vad tar jag härnäst på jobbet?" },
-  "/ma-bra": { label: "Må bra", prompt: "Jag känner så här idag – vad är rimligt?" },
-  "/traning": { label: "Träning", prompt: "Vad orkar jag röra på mig idag?" },
-  "/shopping": { label: "Inköp", prompt: "Hjälp mig få ordning på inköpen." },
-  "/matlista": { label: "Matlista", prompt: "Hjälp mig planera maten enkelt." },
-  "/stadning": { label: "Städning", prompt: "Vad är minsta möjliga hemmafix idag?" },
-  "/finances": { label: "Ekonomi", prompt: "Hjälp mig få koll på pengarna utan stress." },
-  "/familj": { label: "Familj", prompt: "Hur får vi ihop familjens dag?" },
-  "/barn": { label: "Barn", prompt: "Hjälp mig med barnens dag." },
-  "/quickflow": { label: "QuickFlow", prompt: "Hjälp mig sortera det jag skrivit ner." },
-  "/flowscore": { label: "FlowScore", prompt: "Vad är rimligt med den ork jag har?" },
+export interface FlowShortcut {
+  href: string;
+  label: string;
+  emoji: string;
+}
+
+/** Genvägar per livsområde – hämtade ur appen, inga nya menyval. */
+export const AREA_SHORTCUTS: Record<LifeArea, FlowShortcut[]> = {
+  vardag: [
+    { href: "/min-dag", label: "Min dag", emoji: "🗓️" },
+    { href: "/tasks", label: "Att göra", emoji: "✅" },
+    { href: "/daglig-rutin", label: "Rutiner", emoji: "🔁" },
+    { href: "/flowscore", label: "FlowScore", emoji: "🔋" },
+  ],
+  privat: [
+    { href: "/familj", label: "Familj", emoji: "👨‍👩‍👧" },
+    { href: "/shopping", label: "Inköp", emoji: "🛒" },
+    { href: "/matlista", label: "Matlista", emoji: "🍽️" },
+    { href: "/finances", label: "Ekonomi", emoji: "💰" },
+  ],
+  studier: [
+    { href: "/studyflow", label: "StudyFlow", emoji: "🎓" },
+    { href: "/studybuddy", label: "Plugga", emoji: "📚" },
+    { href: "/kalender", label: "Schema", emoji: "🗓️" },
+    { href: "/pomodoro", label: "Fokus", emoji: "⏱️" },
+  ],
+  jobb: [
+    { href: "/workflow", label: "WorkFlow", emoji: "💼" },
+    { href: "/tasks", label: "Att göra", emoji: "✅" },
+    { href: "/kalender", label: "Möten", emoji: "🗓️" },
+    { href: "/pomodoro", label: "Fokus", emoji: "⏱️" },
+  ],
+};
+
+const PLACES: Record<string, { label: string; prompt: string; area: LifeArea }> = {
+  "/hem": { label: "Hem", prompt: "Vad är viktigast för mig just nu?", area: "vardag" },
+  "/min-dag": { label: "Min dag", prompt: "Hjälp mig göra dagens plan rimlig.", area: "vardag" },
+  "/tasks": { label: "Att göra", prompt: "Hjälp mig välja vad jag ska börja med.", area: "vardag" },
+  "/kalender": { label: "Kalendern", prompt: "Hur ser min dag ut och vad hinner jag?", area: "vardag" },
+  "/daglig-rutin": { label: "Daglig rutin", prompt: "Hjälp mig komma igång med rutinen.", area: "vardag" },
+  "/studyflow": { label: "Studier", prompt: "Vad borde jag plugga på just nu?", area: "studier" },
+  "/studybuddy": { label: "Studier", prompt: "Hjälp mig plugga på ett lugnt sätt.", area: "studier" },
+  "/jobb": { label: "Jobb", prompt: "Hjälp mig prioritera på jobbet idag.", area: "jobb" },
+  "/workflow": { label: "Jobb", prompt: "Vad tar jag härnäst på jobbet?", area: "jobb" },
+  "/ma-bra": { label: "Må bra", prompt: "Jag känner så här idag – vad är rimligt?", area: "vardag" },
+  "/traning": { label: "Träning", prompt: "Vad orkar jag röra på mig idag?", area: "vardag" },
+  "/shopping": { label: "Inköp", prompt: "Hjälp mig få ordning på inköpen.", area: "privat" },
+  "/matlista": { label: "Matlista", prompt: "Hjälp mig planera maten enkelt.", area: "privat" },
+  "/stadning": { label: "Städning", prompt: "Vad är minsta möjliga hemmafix idag?", area: "privat" },
+  "/finances": { label: "Ekonomi", prompt: "Hjälp mig få koll på pengarna utan stress.", area: "privat" },
+  "/familj": { label: "Familj", prompt: "Hur får vi ihop familjens dag?", area: "privat" },
+  "/barn": { label: "Barn", prompt: "Hjälp mig med barnens dag.", area: "privat" },
+  "/quickflow": { label: "QuickFlow", prompt: "Hjälp mig sortera det jag skrivit ner.", area: "vardag" },
+  "/flowscore": { label: "FlowScore", prompt: "Vad är rimligt med den ork jag har?", area: "vardag" },
 };
 
 const KEY = "myflove-flow-place";
 
 export function placeFor(path: string): FlowPlace {
   const hit = PLACES[path];
-  if (hit) return { path, label: hit.label, prompt: hit.prompt };
-  return { path, label: "MyFlove", prompt: "Vad snurrar i huvudet just nu?" };
+  if (hit) return { path, label: hit.label, prompt: hit.prompt, area: hit.area };
+  return { path, label: "MyFlove", prompt: "Vad snurrar i huvudet just nu?", area: "vardag" };
+}
+
+/** Genvägar som passar platsen: först området, sen platsens egen sida sist bort. */
+export function shortcutsFor(place: FlowPlace): FlowShortcut[] {
+  return AREA_SHORTCUTS[place.area].filter((s) => s.href !== place.path).slice(0, 4);
 }
 
 /** Sparas när man navigerar, så Flow vet varifrån man kom. */
