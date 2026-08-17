@@ -8,6 +8,9 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 ## [Unreleased]
 
 ### Added
+- **De sista kopplingarna (10–12)** (2026-08-17): (10) *Barnens dag räknas in* – skolschema och barnens aktiviteter med klockslag blir hållpunkter i livspusslet på samma sätt som lektioner, så hemskärmen och FlowScore vet hur bunden dagen faktiskt är. (11) *Insight blir inställningar* – valda strategier har nu knappen "Slå på åt mig" som ställer in det som redan finns i appen (dämpade färger, ingen rörelse, större text, symbolstöd, enkla ord, förenklad vy) i stället för att bara beskriva det. (12) *Lugnt förslag om block du inte använder* – appen håller en lokal användningslogg (bara på din enhet, bara vilken del som öppnats) och föreslår efter en tid att dölja ett hemskärmsblock du inte tittat på på tre veckor. Du väljer "Dölj det" eller "Behåll", och allt går att slå på igen.
+
+### Added
 - **Fem kopplingar till mellan funktionerna** (2026-08-17): (5) *QuickFlow sorterar till rätt livsområde* – i triagen väljer du (eller så gissar MyFlove) Vardag, Privat, Studier eller Jobb, och tanken blir en uppgift i rätt rum direkt. (6) *Rutiner, medicin och rörelse räknas i kvällens Flow Reset* – "Det här blev gjort idag" visar nu även avklarade rutiner, tagna medicintider, träningspass och steg, inte bara uppgifter. (7) *Gårdagens Flow Reset sätter startläget* – hur igår kändes påverkar förmiddagens FlowScore: kaos ger en lugnare start, en bra dag ger lite mer utrymme. (8) *Rörelse höjer kapaciteten* – steg från hälsoappen och genomförda pass syns som en egen signal i FlowScore-nedbrytningen ("Du har rört dig idag"). (9) *Stopp-knappen kan pengar* – vid impulsköp visas hur mycket som finns kvar av månadens budget och du kan parkera köpet i inköpslistan i stället för att bestämma nu.
 
 ### Added
