@@ -41,6 +41,7 @@ import { useViewMode } from "@/lib/view-mode";
  * det rummets saker – "Allt" lägger ihop hela hemskärmen igen.
  */
 const SECTION_AREAS: Record<string, LifeArea[]> = {
+  livspussel: ["vardag", "privat", "studier", "jobb"],
   dailyflow: ["vardag", "privat", "studier", "jobb"],
   reset: ["vardag", "privat", "studier", "jobb"],
   quickflow: ["vardag", "privat", "studier", "jobb"],
@@ -57,7 +58,7 @@ const SECTION_AREAS: Record<string, LifeArea[]> = {
 };
 
 /** Vad som är kvar i förenklad vy – det du faktiskt behöver just nu. */
-const SIMPLE_SECTIONS = ["dailyflow", "today", "shortcuts", "help"];
+const SIMPLE_SECTIONS = ["livspussel", "dailyflow", "today", "shortcuts", "help"];
 
 
 
