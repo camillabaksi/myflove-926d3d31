@@ -20,6 +20,7 @@ const TYPE_META: Record<SuggestedType, { emoji: string; label: string }> = {
 /** Enkel, förklarbar gissning – användaren kan alltid ändra. */
 function suggestType(item: QuickflowItem): SuggestedType {
   const t = item.text.toLowerCase();
+  if (parseWhenFromText(item.text)) return "kalender";
   if (item.remindAt) return "paminnelse";
   if (/(möte|träff|läkare|tandläkare|besök|kl \d|klockan)/.test(t)) return "kalender";
   if (/(ring|boka|betala|maila|mejla|skicka|handla|fixa|hämta|tvätta)/.test(t)) return "uppgift";
@@ -27,6 +28,7 @@ function suggestType(item: QuickflowItem): SuggestedType {
   if (item.level === "viktigt") return "uppgift";
   return "minne";
 }
+
 
 const DAY = 86_400_000;
 
