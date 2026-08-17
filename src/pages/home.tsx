@@ -565,6 +565,7 @@ export default function Home() {
               <AdaptiveLeadSettings />
 
               <PersonalPushSettings />
+              <WakeUpSettings />
             </div>
           </HomeSection>
         )}
