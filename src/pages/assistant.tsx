@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2, Send, Sparkles, History, Plus, Trash2, X } from "lucide-react";
 import { chatWithFlow } from "@/lib/flow-chat.functions";
 import { useTasks, useMoods, useFocus, useReminders } from "@/hooks/use-data";
+import { useLifePuzzle } from "@/hooks/use-life-puzzle";
 import { useLocalStorage } from "@/lib/storage";
 import { generateCoachMessage } from "@/lib/coach";
 import {
