@@ -21,7 +21,12 @@ export interface FlowScoreInput {
   nextEvent?: { title: string; start: string } | null;
   /** Förväntad energi just nu enligt dina egna loggar över dygnet. */
   energyPattern?: { expected: number; diff: number; note: string } | null;
+  /** Gårdagens Flow Reset – hur igår kändes. Påverkar bara förmiddagen. */
+  yesterdayFeel?: "bra" | "sadar" | "kaos" | null;
+  /** Rörelse idag: steg från hälsoappen och genomförda träningspass. */
+  movementToday?: { steps?: number; sessions?: number } | null;
 }
+
 
 export type FlowLoad = "låg" | "medel" | "hög";
 
