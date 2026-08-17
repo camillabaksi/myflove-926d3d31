@@ -53,6 +53,10 @@ export interface FlowScore {
   baseScore: number;
   /** Kort förklaring av vad som drog upp/ner. */
   factors: FlowFactor[];
+  /** Minuter av dagen som redan är bokade. */
+  bookedMinutes: number;
+  /** Minuter som faktiskt är dina att planera i. */
+  freeMinutes: number;
 }
 
 const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
@@ -228,6 +232,8 @@ export function computeFlowScore(input: FlowScoreInput, now = new Date()): FlowS
     message,
     baseScore: BASE_SCORE,
     factors,
+    bookedMinutes,
+    freeMinutes,
   };
 }
 
