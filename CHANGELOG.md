@@ -8,6 +8,9 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 ## [Unreleased]
 
 ### Added
+- **Notiser för barnens hållpunkter** (2026-08-17): Skolschemat och barnens aktiviteter med klockslag skickar nu push-notiser innan de börjar ("🎒 Om 30 min: Idrott – Liam, kl 09:00 i Sporthallen"), 14 dagar framåt. Ny inställningspanel på Barn-sidan där du väljer om notiserna är på, hur långt innan de kommer (på slaget, 10, 15, 30 eller 60 min) och om du vill ha en morgonöversikt över hela barnens dag i en enda lugn notis vid vald tid. Tyst läge pausar dem som vanligt.
+
+### Added
 - **De sista kopplingarna (10–12)** (2026-08-17): (10) *Barnens dag räknas in* – skolschema och barnens aktiviteter med klockslag blir hållpunkter i livspusslet på samma sätt som lektioner, så hemskärmen och FlowScore vet hur bunden dagen faktiskt är. (11) *Insight blir inställningar* – valda strategier har nu knappen "Slå på åt mig" som ställer in det som redan finns i appen (dämpade färger, ingen rörelse, större text, symbolstöd, enkla ord, förenklad vy) i stället för att bara beskriva det. (12) *Lugnt förslag om block du inte använder* – appen håller en lokal användningslogg (bara på din enhet, bara vilken del som öppnats) och föreslår efter en tid att dölja ett hemskärmsblock du inte tittat på på tre veckor. Du väljer "Dölj det" eller "Behåll", och allt går att slå på igen.
 
 ### Added
