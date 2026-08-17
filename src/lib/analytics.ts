@@ -1,4 +1,5 @@
 import { logAnalyticsEventFn } from "@/lib/analytics.functions";
+import { recordUsage } from "@/lib/usage-local";
 
 const SESSION_KEY = "myflow-analytics-session-id";
 
@@ -25,6 +26,7 @@ function getSessionId(): string {
  */
 export function trackEvent(section: string, action: string): void {
   if (typeof window === "undefined") return;
+  recordUsage(section);
   const sessionId = getSessionId();
   logAnalyticsEventFn({ data: { sessionId, section, action } }).catch(() => {
     // Analytics must never disrupt the user experience.
