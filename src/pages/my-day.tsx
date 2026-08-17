@@ -104,6 +104,19 @@ export default function MyDay() {
 
         <DailyFocusCard />
 
+        {offerReplan && (
+          <FlowReplan
+            flow={flow}
+            items={todaysItems}
+            mode={mode}
+            chosen={chosen}
+            onChange={setMode}
+            keepCount={keep.length}
+            restCount={rest.length}
+          />
+        )}
+
+
         <section className="surface-card p-5">
           <CollapsibleSection
             title="Det som får plats idag"
