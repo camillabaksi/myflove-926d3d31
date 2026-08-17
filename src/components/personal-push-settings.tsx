@@ -43,7 +43,14 @@ export function PersonalPushSettings() {
       try {
         const data = (await loadFn()) as Partial<Prefs>;
         if (!alive) return;
-        setPrefs(normalize({ ...DEFAULTS, ...data }));
+        setPrefs(
+          normalize({
+            personal_enabled: data.personal_enabled ?? DEFAULTS.personal_enabled,
+            personal_time: data.personal_time ?? DEFAULTS.personal_time,
+            personal_evening_enabled: data.personal_evening_enabled ?? DEFAULTS.personal_evening_enabled,
+            personal_evening_time: data.personal_evening_time ?? DEFAULTS.personal_evening_time,
+          }),
+        );
       } catch {
         if (alive) setPrefs(DEFAULTS);
       }
@@ -60,14 +67,22 @@ export function PersonalPushSettings() {
     // Spara bara när båda tiderna är kompletta (HH:MM) – annars sparar vi
     // halvskrivna värden medan man ändrar i tidsväljaren.
     if (!isTime(next.personal_time) || !isTime(next.personal_evening_time)) return;
+    const clean = normalize(next);
     try {
       await saveFn({
-        data: { ...normalize(next), ...(name ? { personal_name: name } : {}) },
+        data: {
+          personal_enabled: clean.personal_enabled,
+          personal_time: clean.personal_time,
+          personal_evening_enabled: clean.personal_evening_enabled,
+          personal_evening_time: clean.personal_evening_time,
+          ...(name ? { personal_name: name } : {}),
+        },
       });
     } catch {
       toast({ title: "Kunde inte spara tiden", description: "Försök igen om en stund." });
     }
   };
+
 
 
   if (!prefs) return null;

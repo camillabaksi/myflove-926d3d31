@@ -129,24 +129,37 @@ export const cancelReminder = createServerFn({ method: "POST" })
 
 // ---- Preferences ------------------------------------------------------------
 
-const PrefsSchema = z.object({
-  medication_enabled: z.boolean().optional(),
-  tasks_enabled: z.boolean().optional(),
-  loops_enabled: z.boolean().optional(),
-  weather_enabled: z.boolean().optional(),
-  weather_time: z.string().regex(/^\d{2}:\d{2}(:\d{2})?$/).transform((v) => v.slice(0, 5)).optional(),
-  last_lat: z.number().optional(),
-  last_lon: z.number().optional(),
-  personal_enabled: z.boolean().optional(),
-  personal_time: z.string().regex(/^\d{2}:\d{2}(:\d{2})?$/).transform((v) => v.slice(0, 5)).optional(),
-  personal_evening_enabled: z.boolean().optional(),
-  personal_evening_time: z.string().regex(/^\d{2}:\d{2}(:\d{2})?$/).transform((v) => v.slice(0, 5)).optional(),
-  personal_name: z.string().max(40).optional(),
-  wake_enabled: z.boolean().optional(),
-  wake_time: z.string().regex(/^\d{2}:\d{2}(:\d{2})?$/).transform((v) => v.slice(0, 5)).optional(),
-  wake_interval_min: z.number().int().min(3).max(30).optional(),
-  wake_max_followups: z.number().int().min(1).max(6).optional(),
-});
+// Tåligt schema: klienten kan skicka hela raden (med null-värden) utan att
+// hela sparningen faller. Null och odefinierat plockas bort innan upsert.
+const optTime = z
+  .string()
+  .regex(/^\d{2}:\d{2}(:\d{2})?$/)
+  .transform((v) => v.slice(0, 5))
+  .nullish();
+
+const PrefsSchema = z
+  .object({
+    medication_enabled: z.boolean().nullish(),
+    tasks_enabled: z.boolean().nullish(),
+    loops_enabled: z.boolean().nullish(),
+    weather_enabled: z.boolean().nullish(),
+    weather_time: optTime,
+    last_lat: z.number().nullish(),
+    last_lon: z.number().nullish(),
+    personal_enabled: z.boolean().nullish(),
+    personal_time: optTime,
+    personal_evening_enabled: z.boolean().nullish(),
+    personal_evening_time: optTime,
+    personal_name: z.string().max(40).nullish(),
+    wake_enabled: z.boolean().nullish(),
+    wake_time: optTime,
+    wake_interval_min: z.number().int().min(3).max(30).nullish(),
+    wake_max_followups: z.number().int().min(1).max(6).nullish(),
+  })
+  .transform((obj) =>
+    Object.fromEntries(Object.entries(obj).filter(([, v]) => v !== null && v !== undefined)),
+  );
+
 
 /** Kvitterar att man är vaken – stoppar dagens uppföljningar direkt. */
 export const acknowledgeWake = createServerFn({ method: "POST" })

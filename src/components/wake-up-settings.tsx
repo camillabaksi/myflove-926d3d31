@@ -35,9 +35,10 @@ export function WakeUpSettings() {
         const data = (await loadFn()) as Partial<Wake>;
         if (!alive) return;
         setWake({
-          ...DEFAULTS,
-          ...data,
+          wake_enabled: data.wake_enabled ?? DEFAULTS.wake_enabled,
           wake_time: (data.wake_time ?? DEFAULTS.wake_time).slice(0, 5),
+          wake_interval_min: data.wake_interval_min ?? DEFAULTS.wake_interval_min,
+          wake_max_followups: data.wake_max_followups ?? DEFAULTS.wake_max_followups,
         });
       } catch {
         if (alive) setWake(DEFAULTS);
@@ -54,11 +55,19 @@ export function WakeUpSettings() {
     setWake(next);
     if (!isTime(next.wake_time)) return;
     try {
-      await saveFn({ data: next });
+      await saveFn({
+        data: {
+          wake_enabled: next.wake_enabled,
+          wake_time: next.wake_time.slice(0, 5),
+          wake_interval_min: next.wake_interval_min,
+          wake_max_followups: next.wake_max_followups,
+        },
+      });
     } catch {
       toast({ title: "Kunde inte spara", description: "Försök igen om en stund." });
     }
   };
+
 
   if (!wake) return null;
 

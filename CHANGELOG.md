@@ -8,6 +8,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 ## [Unreleased]
 
 ### Fixed
+- **Tider för personliga puffar sparas igen** (2026-08-17): Morgonpuff, kvällspuff och Morgonstart sparade inte de tider du valde – sparningen avvisades tyst i bakgrunden. Nu skickas bara dina inställningar, och tiderna ligger kvar och styr när notiserna kommer.
 - **Resor och familjekalender fungerar igen** (2026-08-17): Reseökningen hämtar återigen riktiga avgångar i realtid, och familjens kalender, inköpslista och familjeuppgifter läser och sparar mot molnet igen i stället för att bara låtsas lyckas.
 
 ### Changed
