@@ -228,6 +228,92 @@ export function useReminderSync() {
         }
       }
 
+      // Barnens hållpunkter: skolschema + inlagda aktiviteter, 14 dagar framåt.
+      if (childReminders.enabled) {
+        const nameOf = new Map(children.map((c) => [c.id, c.name]));
+        const childLead = Math.max(0, childReminders.minutesBefore ?? 0);
+        // date -> lista med hållpunkter (för morgonöversikten)
+        const byDate = new Map<string, { time: string; title: string; who: string }[]>();
+
+        const addToDay = (date: string, time: string, title: string, who: string) => {
+          const list = byDate.get(date) ?? [];
+          list.push({ time, title, who });
+          byDate.set(date, list);
+        };
+
+        for (const [childId, entries] of Object.entries(childSchedules ?? {})) {
+          const who = nameOf.get(childId);
+          if (!who) continue;
+          for (const e of entries ?? []) {
+            for (const date of horizonDates) {
+              const d = new Date(date + "T00:00:00");
+              if (((d.getDay() + 6) % 7) !== e.weekday) continue;
+              addToDay(date, e.start, e.title, who);
+              const when = combineDateTime(date, e.start);
+              if (!when) continue;
+              const deliver = new Date(when.getTime() - childLead * 60_000);
+              if (deliver.getTime() < now + 30_000) continue;
+              const key = `child-schedule:${childId}:${e.id}:${date}`;
+              desired.set(key, {
+                clientKey: key,
+                kind: "custom",
+                title: childLead > 0 ? `🎒 Om ${childLead} min: ${e.title}` : `🎒 ${e.title}`,
+                body: e.location
+                  ? `${who} – kl ${e.start} i ${e.location}`
+                  : `${who} – kl ${e.start}`,
+                deliverAt: deliver.toISOString(),
+                url: "/barn",
+              });
+            }
+          }
+        }
+
+        for (const i of childItems) {
+          if (i.completed || !i.time || !i.date) continue;
+          if (!horizonDates.includes(i.date)) continue;
+          const who = nameOf.get(i.child_id);
+          if (!who) continue;
+          const time = i.time.slice(0, 5);
+          addToDay(i.date, time, i.title, who);
+          const when = combineDateTime(i.date, time);
+          if (!when) continue;
+          const deliver = new Date(when.getTime() - childLead * 60_000);
+          if (deliver.getTime() < now + 30_000) continue;
+          const key = `child-item:${i.id}`;
+          desired.set(key, {
+            clientKey: key,
+            kind: "custom",
+            title: childLead > 0 ? `👦 Om ${childLead} min: ${i.title}` : `👦 ${i.title}`,
+            body: `${who} – kl ${time}`,
+            deliverAt: deliver.toISOString(),
+            url: "/barn",
+          });
+        }
+
+        // Morgonöversikt: hela barnens dag i en lugn notis.
+        if (childReminders.morningSummary) {
+          for (const [date, list] of byDate) {
+            if (list.length === 0) continue;
+            const when = combineDateTime(date, childReminders.morningTime || "07:00");
+            if (!when) continue;
+            if (when.getTime() < now + 30_000) continue;
+            const sorted = [...list].sort((a, b) => a.time.localeCompare(b.time));
+            const key = `child-day:${date}`;
+            desired.set(key, {
+              clientKey: key,
+              kind: "custom",
+              title: "🌤️ Barnens dag idag",
+              body: sorted
+                .slice(0, 4)
+                .map((e) => `${e.time} ${e.title} (${e.who})`)
+                .join(" · "),
+              deliverAt: when.toISOString(),
+              url: "/barn",
+            });
+          }
+        }
+      }
+
       // Quickflow – "du bad mig komma ihåg". Får aldrig försvinna.
       for (const item of quickflowItems) {
         if (!item.remindAt || item.done) continue;
