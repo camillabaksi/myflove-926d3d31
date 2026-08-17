@@ -19,7 +19,8 @@ export function useDayDone(): { lines: DayDoneLine[]; anything: boolean } {
   const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
   const { reminders } = useReminders();
   const { medications, isTaken } = useMedications();
-  const { doneToday: sessionsDone, stepsToday, stepGoal } = useTraining();
+  const { doneToday: sessionsDone, stepsToday, state: trainingState } = useTraining();
+  const stepGoal = trainingState.stepGoal;
 
   return useMemo(() => {
     const today = todayIso();
