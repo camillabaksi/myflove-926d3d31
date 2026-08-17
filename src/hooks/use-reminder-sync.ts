@@ -35,6 +35,12 @@ export function useReminderSync() {
   const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
   const { openItems: quickflowItems } = useQuickflow();
   const { lectures, settings: studySettings } = useStudySchedule();
+  const { children, items: childItems } = useChildren();
+  const [childSchedules] = useCloudSyncedStorage<Record<string, ChildScheduleEntry[]>>(
+    "myflove-child-schedules",
+    {},
+  );
+  const { settings: childReminders } = useChildReminderSettings();
   const syncFn = useServerFn(syncReminder);
   const cancelFn = useServerFn(cancelReminder);
   const lastKeys = useRef<Set<string>>(new Set());
