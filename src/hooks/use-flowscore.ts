@@ -32,6 +32,17 @@ export function useFlowScore(): {
   const energy = useLatestEnergy();
   const { expectation } = useEnergyPattern();
   const { lectures } = useStudySchedule();
+  const { entries: resetEntries } = useFlowReset();
+  const { doneToday: sessionsDone, stepsToday } = useTraining();
+
+  // Gårdagens Flow Reset – används som startläge för dagen.
+  const yesterdayFeel = useMemo(() => {
+    const d = new Date();
+    d.setDate(d.getDate() - 1);
+    const iso = d.toISOString().slice(0, 10);
+    return resetEntries.find((e) => e.date === iso)?.feel ?? null;
+  }, [resetEntries]);
+
 
   const mood = useMemo(() => {
     if (!moods.length) return null;
