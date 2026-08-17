@@ -7,6 +7,9 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 
 ## [Unreleased]
 
+### Changed
+- **"Ditt fokus idag" visar bara dagens saker** (2026-08-17): Uppgifter med ett framtida datum syns inte längre i "Ditt fokus idag" på hemskärmen – de ligger kvar i kalendern och dyker upp först när dagen är inne. Passerade datum och dagens datum visas fortfarande.
+
 ### Added
 - **Framtida datum stannar i framtiden** (2026-08-17): Lägger du in något på ett datum längre fram – t.ex. en läkartid den 25 augusti – dyker det inte längre upp i dagens vy. Saker med datum prioriteras nu enbart efter datumet (Idag / Snart / Senare), och tankar i QuickFlow med en tid framåt räknas till den dagen i stället för idag.
 - **Heldag som standard i QuickFlow** (2026-08-17): Nämner du ett datum men inget klockslag ("läkartid med Cassie den 25 augusti") läggs det nu in som heldag i stället för kl 09. Är tolkningen otydlig – t.ex. "kl 3" (morgon eller eftermiddag?) eller "fredag" (den här veckan eller nästa?) – frågar MyFlove i stället för att gissa, med tydliga val plus alternativet Heldag.
