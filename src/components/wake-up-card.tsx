@@ -54,8 +54,33 @@ export function WakeUpCard({ always = false }: { always?: boolean }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const soundRef = useRef<GentleWakeHandle | null>(null);
+  const [playing, setPlaying] = useState(false);
+
+  const stopSound = () => {
+    soundRef.current?.stop();
+    soundRef.current = null;
+    setPlaying(false);
+  };
+
+  const startSound = () => {
+    soundRef.current?.stop();
+    soundRef.current = playGentleWake();
+    setPlaying(true);
+    window.setTimeout(() => setPlaying(false), 9500);
+  };
+
+  // Öppnar man sidan från notisen får man en mjuk klang i stället för tystnad.
+  useEffect(() => {
+    if (!prefs || acked) return;
+    startSound();
+    return () => stopSound();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [prefs]);
+
   const ack = async () => {
     setAcked(true);
+    stopSound();
     try {
       await ackFn();
     } catch {
@@ -69,6 +94,7 @@ export function WakeUpCard({ always = false }: { always?: boolean }) {
     setWakeStepsDoneToday(dateKey, next);
     if (!acked && next.length > 0) void ack();
   };
+
 
   if (!prefs) return null;
   if (!prefs.wake_enabled && !always) return null;
