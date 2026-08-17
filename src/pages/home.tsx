@@ -309,6 +309,10 @@ export default function Home() {
           </HomeSection>
         )}
 
+        <div style={{ order: -2 }}>
+          <WakeUpCard />
+        </div>
+
         <div style={{ order: -1 }}>
           <AreaOnboarding />
         </div>
