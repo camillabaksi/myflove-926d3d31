@@ -112,15 +112,24 @@ export function WakeUpCard({ always = false }: { always?: boolean }) {
         <span className="mt-0.5 rounded-xl bg-primary/10 p-2 text-primary">
           <Sunrise className="h-5 w-5" />
         </span>
-        <div>
+        <div className="flex-1">
           <p className="font-medium text-foreground">Morgonstart</p>
           <p className="text-sm text-muted-foreground">
             {acked
               ? "Du är igång. Jag puffar inte mer idag 🌿"
-              : "Ett litet steg räcker. Kryssa en sak så slutar puffarna."}
+              : "God morgon. Ingen stress – lyssna klart, sträck på dig och kryssa en sak när du orkar."}
           </p>
         </div>
+        <button
+          type="button"
+          onClick={() => (playing ? stopSound() : startSound())}
+          aria-label={playing ? "Stäng av den mjuka klangen" : "Spela mjuk väckning"}
+          className="rounded-xl p-2 text-muted-foreground transition-colors hover:bg-muted"
+        >
+          {playing ? <Volume2 className="h-5 w-5 text-primary" /> : <VolumeX className="h-5 w-5" />}
+        </button>
       </div>
+
 
       <ul className="space-y-2">
         {DEFAULT_WAKE_STEPS.map((step) => {
