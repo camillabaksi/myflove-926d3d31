@@ -88,8 +88,22 @@ export function useFlowScore(): {
         ? { title: booked.nextTitle, start: booked.nextStart ?? "" }
         : null,
       energyPattern: expectation,
+      yesterdayFeel,
+      movementToday: { steps: stepsToday, sessions: sessionsDone.length },
     });
-  }, [tasks, energy, mood, openItems.length, minutesLeft, booked, expectation]);
+  }, [
+    tasks,
+    energy,
+    mood,
+    openItems.length,
+    minutesLeft,
+    booked,
+    expectation,
+    yesterdayFeel,
+    stepsToday,
+    sessionsDone.length,
+  ]);
+
 
   return { flow, energy, mood, minutesLeft };
 }
