@@ -290,17 +290,21 @@ export function suggestWhen(
   level: QuickflowLevel,
   text: string,
   now = new Date(),
-): { at: number; why: string } {
+): { at: number; why: string; allDay?: boolean; ambiguous?: string; options?: WhenOption[] } {
   // Står ett datum i texten vinner det alltid över generella gissningar.
   const parsed = parseWhenFromText(text, now);
   if (parsed) {
     return {
       at: parsed.at,
+      allDay: parsed.allDay,
+      ambiguous: parsed.ambiguous,
+      options: parsed.options,
       why: parsed.hasTime
         ? `Du skrev "${parsed.matched}" – jag använder det datumet och tiden.`
-        : `Du skrev "${parsed.matched}" – jag lägger den då, kl 09. Ändra tiden om du vill.`,
+        : `Du skrev "${parsed.matched}" – jag lägger den som heldag. Lägg till en tid om du vill.`,
     };
   }
+
 
   const lower = text.toLowerCase();
   const shoppingish = /(köp|handla|mjölk|mat|affär|ica|coop|willys|apotek)/.test(lower);
