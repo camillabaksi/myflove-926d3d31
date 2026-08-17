@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2, Send, Sparkles, History, Plus, Trash2, X } from "lucide-react";
 import { chatWithFlow } from "@/lib/flow-chat.functions";
 import { useTasks, useMoods, useFocus, useReminders } from "@/hooks/use-data";
+import { useLifePuzzle } from "@/hooks/use-life-puzzle";
 import { useLocalStorage } from "@/lib/storage";
 import { generateCoachMessage } from "@/lib/coach";
 import {
@@ -49,6 +50,7 @@ export default function Assistant({ chatId }: { chatId?: string }) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const chat = useServerFn(chatWithFlow);
+  const { puzzle, contextPrompt } = useLifePuzzle();
 
   const { activeTasks } = useTasks();
   const { moods } = useMoods();
@@ -96,7 +98,10 @@ export default function Assistant({ chatId }: { chatId?: string }) {
       await saveFlowMessage(id, "user", trimmed);
 
       const { reply } = await chat({
-        data: { messages: history.map((m) => ({ role: m.role, content: m.content })) },
+        data: {
+          messages: history.map((m) => ({ role: m.role, content: m.content })),
+          context: contextPrompt,
+        },
       });
       setMessages((m) => [...m, { id: `tmp-a-${Date.now()}`, role: "assistant", content: reply }]);
       await saveFlowMessage(id, "assistant", reply);
@@ -251,7 +256,7 @@ export default function Assistant({ chatId }: { chatId?: string }) {
 
           {messages.length === 0 && (
             <div className="flex flex-wrap gap-2">
-              {QUICK_PROMPTS.map((p) => (
+              {[puzzle.flowPrompt, ...QUICK_PROMPTS].map((p) => (
                 <button
                   key={p}
                   onClick={() => void send(p)}

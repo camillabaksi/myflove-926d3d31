@@ -9,6 +9,8 @@ const MessageSchema = z.object({
 
 const InputSchema = z.object({
   messages: z.array(MessageSchema).min(1).max(50),
+  /** Livspusslet: kapacitet, energi och vad som pågår i användarens olika livsområden. */
+  context: z.string().max(4000).optional(),
 });
 
 export const chatWithFlow = createServerFn({ method: "POST" })
@@ -30,6 +32,14 @@ export const chatWithFlow = createServerFn({ method: "POST" })
         model: "google/gemini-2.5-flash",
         messages: [
           { role: "system", content: FLOW_SYSTEM_PROMPT },
+          ...(data.context
+            ? [
+                {
+                  role: "system" as const,
+                  content: `Så här ser användarens livspussel ut just nu:\n${data.context}`,
+                },
+              ]
+            : []),
           ...data.messages,
         ],
       }),

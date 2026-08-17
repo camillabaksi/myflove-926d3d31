@@ -6,12 +6,15 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-08-16";
+export const CHANGELOG_UPDATED = "2026-08-17";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Livspusslet – nytt block högst upp på hemskärmen som visar hur dagens delar hänger ihop (energi, deadlines, familj, jobb, studier) och erbjuder att flytta resten till imorgon när kapaciteten är låg (2026-08-17)",
+      "Flow ser hela livspusslet – varje samtal utgår nu från FlowScore, energi, mående, deadlines per livsområde och dagens hållpunkter, och kan prioritera, dela upp och lägga om planen utan skuld (2026-08-17)",
+      "Stopp-knappen har fått ett känslosteg (stressad, trött, arg, ledsen, taggad, vet inte) som skapar ett mellanrum mellan känsla och handling (2026-08-17)",
       "Bara en \"Vad ska jag göra nu?\" på hemskärmen – dubbletten inne i Daily Flow är borttagen, kortet högst upp leder till hela vyn (2026-08-16)",
       "Uppdaterad appikon och PWA-ikoner – favicon och alla installerbara ikoner matchar den nya MyFlove-loggan (2026-08-16)",
       "\"Sätt dagens fokus\"-knappen på hemskärmen håller texten inom kanterna med samma MyFloveLinkButton-stil som resten av appen (2026-08-16)",

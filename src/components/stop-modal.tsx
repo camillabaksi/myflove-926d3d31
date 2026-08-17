@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Hand, Send, Wind, Sparkles } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { chatWithFlow } from "@/lib/flow-chat.functions";
+import { useLifePuzzle } from "@/hooks/use-life-puzzle";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
@@ -28,6 +29,16 @@ Din roll nu:
 - Om användaren beskriver akut fara för sig själv eller andra: uppmana varmt att kontakta 112 eller Mind Självmordslinjen 90101.
 - Håll svaren korta – 2–4 meningar. Aldrig långa listor.`;
 
+/** Känslan bakom impulsen – mellanrummet mellan känsla och handling. */
+const FEELINGS: { id: string; label: string; opener: string }[] = [
+  { id: "stressad", label: "Jag är stressad", opener: "Stress vill ofta ha en snabb utväg. Vad är det som pressar just nu?" },
+  { id: "trott", label: "Jag är trött", opener: "Trötthet gör allt tyngre. Vad var du på väg att göra?" },
+  { id: "arg", label: "Jag är arg", opener: "Ilskan får finnas. Vad hände precis innan?" },
+  { id: "ledsen", label: "Jag är ledsen", opener: "Jag är här. Vill du berätta vad som gör ont?" },
+  { id: "taggad", label: "Jag är väldigt taggad", opener: "Taggad energi kan dra iväg. Vad är det du vill göra?" },
+  { id: "vet-inte", label: "Jag vet inte", opener: "Det är okej att inte veta. Hur känns det i kroppen?" },
+];
+
 const OPENERS = [
   "Bra att du tryckte på Stop. Vad är det som händer just nu?",
   "Andas ut. Vad känns starkt i kroppen precis nu?",
@@ -39,7 +50,9 @@ export default function StopModal({ open, onOpenChange }: StopModalProps) {
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
-  const [phase, setPhase] = useState<"breathe" | "talk">("breathe");
+  const [phase, setPhase] = useState<"breathe" | "feeling" | "talk">("breathe");
+  const [feeling, setFeeling] = useState<string | null>(null);
+  const { contextPrompt } = useLifePuzzle();
   const [breathCount, setBreathCount] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -48,6 +61,7 @@ export default function StopModal({ open, onOpenChange }: StopModalProps) {
     if (open) {
       setPhase("breathe");
       setBreathCount(0);
+      setFeeling(null);
       const opener = OPENERS[Math.floor(Math.random() * OPENERS.length)] as string;
       setMessages([{ role: "assistant", content: opener }]);
       setInput("");
@@ -78,7 +92,12 @@ export default function StopModal({ open, onOpenChange }: StopModalProps) {
         { role: "assistant", content: "Okej, jag är här. Jag lyssnar utan att döma." },
         ...next,
       ];
-      const { reply } = await chat({ data: { messages: payload } });
+      const { reply } = await chat({
+        data: {
+          messages: payload,
+          context: `${contextPrompt}${feeling ? `\nAnvändaren beskriver känslan som: ${feeling}.` : ""}`,
+        },
+      });
       setMessages((m) => [...m, { role: "assistant", content: reply }]);
     } catch {
       setMessages((m) => [
@@ -131,7 +150,7 @@ export default function StopModal({ open, onOpenChange }: StopModalProps) {
             </p>
             <div className="flex flex-col gap-2">
               <Button
-                onClick={() => setPhase("talk")}
+                onClick={() => setPhase("feeling")}
                 className="w-full h-12 rounded-2xl"
               >
                 <Sparkles size={18} className="mr-2" />
@@ -150,6 +169,32 @@ export default function StopModal({ open, onOpenChange }: StopModalProps) {
               </p>
             </div>
             <style>{`@keyframes stop-breath { 0%,100% { transform: scale(0.7); opacity: 0.5; } 50% { transform: scale(1.1); opacity: 0.9; } }`}</style>
+          </div>
+        ) : phase === "feeling" ? (
+          <div className="p-6 space-y-4">
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Vill du pausa det här beslutet en stund? Du behöver inte välja rätt –
+              det hjälper bara mig att förstå.
+            </p>
+            <div className="grid gap-2">
+              {FEELINGS.map((f) => (
+                <button
+                  key={f.id}
+                  type="button"
+                  onClick={() => {
+                    setFeeling(f.label);
+                    setMessages([{ role: "assistant", content: f.opener }]);
+                    setPhase("talk");
+                  }}
+                  className="press rounded-2xl border border-border bg-card px-4 py-3 text-left text-sm hover:border-primary/50 transition-colors"
+                >
+                  {f.label}
+                </button>
+              ))}
+            </div>
+            <Button variant="ghost" onClick={() => setPhase("talk")} className="w-full h-11 rounded-2xl">
+              Hoppa över
+            </Button>
           </div>
         ) : (
           <div className="flex flex-col h-[70vh] max-h-[520px]">

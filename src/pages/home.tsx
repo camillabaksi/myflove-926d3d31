@@ -13,6 +13,7 @@ import QuickflowList from "@/components/quickflow-list";
 import PersonalNote from "@/components/personal-note";
 import HomeSection from "@/components/home-section";
 import DailyFlowCard from "@/components/daily-flow-card";
+import LifePuzzleCard from "@/components/life-puzzle-card";
 import QuickflowTriage from "@/components/quickflow-triage";
 import FlowReset from "@/components/flow-reset";
 import DayRebuild from "@/components/day-rebuild";
@@ -40,6 +41,7 @@ import { useViewMode } from "@/lib/view-mode";
  * det rummets saker – "Allt" lägger ihop hela hemskärmen igen.
  */
 const SECTION_AREAS: Record<string, LifeArea[]> = {
+  livspussel: ["vardag", "privat", "studier", "jobb"],
   dailyflow: ["vardag", "privat", "studier", "jobb"],
   reset: ["vardag", "privat", "studier", "jobb"],
   quickflow: ["vardag", "privat", "studier", "jobb"],
@@ -56,7 +58,7 @@ const SECTION_AREAS: Record<string, LifeArea[]> = {
 };
 
 /** Vad som är kvar i förenklad vy – det du faktiskt behöver just nu. */
-const SIMPLE_SECTIONS = ["dailyflow", "today", "shortcuts", "help"];
+const SIMPLE_SECTIONS = ["livspussel", "dailyflow", "today", "shortcuts", "help"];
 
 
 
@@ -268,6 +270,17 @@ export default function Home() {
         <div style={{ order: -1 }}>
           <PersonalNote />
         </div>
+
+        {showSection("livspussel") && (
+          <HomeSection
+            style={ord("livspussel")}
+            id="livspussel"
+            title="Livspusslet"
+            help="Hur dagens olika delar hänger ihop – energi, deadlines, familj, jobb och studier. Låg kapacitet ger färre krav, inte fler."
+          >
+            <LifePuzzleCard />
+          </HomeSection>
+        )}
 
         {showSection("dailyflow") && (
           <HomeSection
