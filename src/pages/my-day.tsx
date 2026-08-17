@@ -53,6 +53,19 @@ export default function MyDay() {
     return list;
   }, [activeReminders, todaysTasks, routines, today]);
 
+  // Allt som är en "sak i livet" idag – oavsett var den skapades.
+  const { today: todaysItems } = useFlowItems();
+  const { keep, rest } = useMemo(
+    () =>
+      withinCapacity(todaysItems, {
+        suggestedTasks: flow.suggestedTasks || 3,
+        maxEnergy: flow.score < 45 ? 6 : 10,
+      }),
+    [todaysItems, flow.suggestedTasks, flow.score],
+  );
+
+
+
   return (
     <Layout>
       <div className="space-y-6">
