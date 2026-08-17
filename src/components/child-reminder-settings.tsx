@@ -20,7 +20,10 @@ export default function ChildReminderSettings() {
         <p className="text-sm text-muted-foreground flex items-start gap-2">
           <Bell size={16} className="mt-0.5 shrink-0" />
           Du får en puff innan varje hållpunkt i skolschemat och inlagda aktiviteter.
-          <HelpHint text="Notiserna bygger på schemat du lagt in för barnet och aktiviteter med klockslag. Tyst läge pausar dem." />
+          <HelpHint label="notiser för barnens dag">
+            Notiserna bygger på schemat du lagt in för barnet och aktiviteter med klockslag. Tyst
+            läge pausar dem.
+          </HelpHint>
         </p>
 
         <label className="flex items-center justify-between gap-3">
