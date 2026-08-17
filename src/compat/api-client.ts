@@ -298,10 +298,11 @@ export function useUpsertMealPlanSlot(opts?: MutOpts) {
 }
 
 // --- Analytics summary (admin only, enforced server-side) ---
-export function useGetAnalyticsSummary(opts?: Opts<unknown>) {
-  return useQuery({
+export function useGetAnalyticsSummary(opts?: Opts<AnalyticsSummary>) {
+  return useQuery<AnalyticsSummary>({
     queryKey: (opts?.query?.queryKey as unknown[]) ?? ["analytics-summary"],
-    queryFn: () => getAnalyticsSummaryFn(),
+    queryFn: () => getAnalyticsSummaryFn() as Promise<AnalyticsSummary>,
+
     enabled: opts?.query?.enabled ?? true,
     retry: false,
   });
