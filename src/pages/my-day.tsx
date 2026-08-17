@@ -101,7 +101,7 @@ export default function MyDay() {
               <ul className="space-y-2">
                 {todaysTasks.slice(0, flow.suggestedTasks || 3).map((t) => (
                   <li key={t.id}>
-                    <MyFloveTransition>
+                    <MyFloveTransition transitionKey={String(t.completed)}>
                       <button
                         type="button"
                         onClick={() => toggleTask(t.id)}
