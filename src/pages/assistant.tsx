@@ -4,7 +4,7 @@ import { useNavigate } from "@tanstack/react-router";
 import Layout from "@/components/layout";
 import { MyFloveThinking } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
-import { Loader2, Send, Sparkles, History, Plus, Trash2, X } from "lucide-react";
+import { Loader2, Send, Sparkles, History, Plus, Trash2, X, ArrowLeft, ChevronRight } from "lucide-react";
 import { chatWithFlow } from "@/lib/flow-chat.functions";
 import { useTasks, useMoods, useFocus, useReminders } from "@/hooks/use-data";
 import { useLifePuzzle } from "@/hooks/use-life-puzzle";
