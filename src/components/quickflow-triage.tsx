@@ -48,6 +48,8 @@ export default function QuickflowTriage() {
   const { addReminder } = useReminders();
   const { log } = useFlowUsage();
   const [sorting, setSorting] = useState(false);
+  /** Användarens svar när tolkningen var otydlig. */
+  const [choices, setChoices] = useState<Record<string, { at: number; allDay: boolean }>>({});
 
   const stale = useMemo(
     () =>
@@ -61,6 +63,29 @@ export default function QuickflowTriage() {
 
   const areaOf = (item: QuickflowItem): LifeArea => item.area ?? guessArea(item.text);
 
+  /** Vilken tid vi faktiskt använder – null betyder "jag behöver fråga först". */
+  const planFor = (item: QuickflowItem) => {
+    const s = suggestWhen(item.level, item.text);
+    const chosen = choices[item.id];
+    if (chosen) return { ...s, at: chosen.at, allDay: chosen.allDay, ambiguous: undefined };
+    if (s.ambiguous) return { ...s, resolved: false as const };
+    return { ...s, allDay: s.allDay ?? false };
+  };
+
+  const timeString = (at: number) => {
+    const d = new Date(at);
+    return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+  };
+
+  const needsAnswer = (item: QuickflowItem) => {
+    const p = planFor(item);
+    if (p.ambiguous) {
+      toast("Jag vill inte gissa fel", { description: p.ambiguous });
+      return true;
+    }
+    return false;
+  };
+
   const toTask = (item: QuickflowItem) => {
     addTask(item.text, undefined, { area: areaOf(item) });
     complete(item.id);
@@ -69,28 +94,34 @@ export default function QuickflowTriage() {
   };
 
   const toReminder = (item: QuickflowItem) => {
-    const s = suggestWhen(item.level, item.text);
+    if (needsAnswer(item)) return;
+    const s = planFor(item);
     const d = new Date(s.at);
-    addReminder(
-      item.text,
-      d.toISOString().slice(0, 10),
-      `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`,
-    );
+    // En påminnelse behöver ett klockslag – heldag blir en lugn morgonpuff kl 09.
+    if (s.allDay) d.setHours(9, 0, 0, 0);
+    addReminder(item.text, d.toISOString().slice(0, 10), timeString(d.getTime()));
     complete(item.id);
-    toast.success(`Jag säger till ${formatWhen(s.at).toLowerCase()}.`, { description: s.why });
+    toast.success(`Jag säger till ${formatWhen(d.getTime()).toLowerCase()}.`, {
+      description: s.allDay ? "Ingen tid stod i texten, så jag valde morgonen." : s.why,
+    });
   };
 
   const toCalendar = (item: QuickflowItem) => {
-    const s = suggestWhen(item.level, item.text);
+    if (needsAnswer(item)) return;
+    const s = planFor(item);
     const d = new Date(s.at);
     addTask(item.text, d.toISOString().slice(0, 10), {
-      time: `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`,
+      // Utan klockslag lägger vi in det som heldag.
+      ...(s.allDay ? {} : { time: timeString(s.at) }),
       area: areaOf(item),
     });
     complete(item.id);
     log("planering");
-    toast.success("Inlagd i kalendern – ändra tiden när du vill.");
+    toast.success(
+      s.allDay ? "Inlagd som heldag – lägg till en tid när du vill." : "Inlagd i kalendern – ändra tiden när du vill.",
+    );
   };
+
 
   return (
     <div className="space-y-3">
@@ -112,6 +143,7 @@ export default function QuickflowTriage() {
         <div className="space-y-2">
           {openItems.map((item) => {
             const type = suggestType(item);
+            const plan = parseWhenFromText(item.text) ? planFor(item) : null;
             return (
               <div key={item.id} className="surface-card p-4 space-y-3">
                 <div className="flex items-start gap-2">
@@ -121,13 +153,46 @@ export default function QuickflowTriage() {
                     <p className="text-xs text-muted-foreground">
                       Mitt förslag: {TYPE_META[type].label} – du bestämmer.
                     </p>
-                    {parseWhenFromText(item.text) && (
+                    {plan && !plan.ambiguous && (
                       <p className="text-xs text-primary">
-                        Jag hittade ett datum i texten: {formatWhen(suggestWhen(item.level, item.text).at)}
+                        Jag hittade ett datum i texten: {formatWhen(plan.at, new Date(), plan.allDay)}
+                        {plan.allDay ? " (ingen tid angavs)" : ""}
                       </p>
                     )}
                   </div>
                 </div>
+                {plan?.ambiguous && (
+                  <div className="rounded-2xl border border-gold/40 bg-gold/10 p-3 space-y-2">
+                    <p className="text-sm text-ink">{plan.ambiguous}</p>
+                    <div className="flex flex-wrap gap-2">
+                      {plan.options?.map((o) => (
+                        <button
+                          key={o.label}
+                          type="button"
+                          onClick={() =>
+                            setChoices((prev) => ({ ...prev, [item.id]: { at: o.at, allDay: o.allDay } }))
+                          }
+                          className="rounded-full border border-border bg-card px-3 py-1.5 text-sm font-medium hover:border-primary/50"
+                        >
+                          {o.label}
+                        </button>
+                      ))}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setChoices((prev) => ({
+                            ...prev,
+                            [item.id]: { at: plan.at, allDay: true },
+                          }))
+                        }
+                        className="rounded-full border border-border bg-card px-3 py-1.5 text-sm font-medium hover:border-primary/50"
+                      >
+                        Heldag
+                      </button>
+                    </div>
+                  </div>
+                )}
+
                 <div className="flex flex-wrap items-center gap-1.5">
                   <span className="text-xs text-muted-foreground">Hör hemma i:</span>
                   {ALL_AREAS.map((a) => {

@@ -115,6 +115,12 @@ const WEEKDAY_WORDS: Record<string, number> = {
   lördag: 6, lordag: 6,
 };
 
+export type WhenOption = {
+  label: string;
+  at: number;
+  allDay: boolean;
+};
+
 export type ParsedWhen = {
   /** Epoch ms för det datum/tid som stod i texten. */
   at: number;
@@ -122,7 +128,14 @@ export type ParsedWhen = {
   matched: string;
   /** Sant om ett klockslag också hittades. */
   hasTime: boolean;
+  /** Inget klockslag angavs – då lägger vi in det som heldag. */
+  allDay: boolean;
+  /** Varför tolkningen är osäker – visas som en fråga till användaren. */
+  ambiguous?: string;
+  /** Alternativ att välja mellan när tolkningen är osäker. */
+  options?: WhenOption[];
 };
+
 
 /**
  * Läser ut datum och tid ur en fritext ("läkartid med Cassie den 25 augusti kl 14").
@@ -146,10 +159,38 @@ export function parseWhenFromText(text: string, now = new Date()): ParsedWhen | 
     }
   }
 
+  // "kl 3" kan betyda 03 eller 15 – då frågar vi hellre än gissar.
+  const vagueHour =
+    hour !== null && hour >= 1 && hour <= 7 && !(timeMatch?.[2]) ? hour : null;
+
   const build = (d: Date, matched: string): ParsedWhen => {
-    d.setHours(hour ?? 9, hour === null ? 0 : minute, 0, 0);
-    return { at: d.getTime(), matched, hasTime: hour !== null };
+    const allDay = hour === null;
+    // Utan klockslag blir det en heldag – vi startar dagen kl 00:00.
+    d.setHours(hour ?? 0, allDay ? 0 : minute, 0, 0);
+    const base: ParsedWhen = {
+      at: d.getTime(),
+      matched,
+      hasTime: !allDay,
+      allDay,
+    };
+    if (vagueHour !== null) {
+      const morning = new Date(d);
+      morning.setHours(vagueHour, minute, 0, 0);
+      const afternoon = new Date(d);
+      afternoon.setHours(vagueHour + 12, minute, 0, 0);
+      return {
+        ...base,
+        at: afternoon.getTime(),
+        ambiguous: `Menade du kl ${String(vagueHour).padStart(2, "0")} på morgonen eller kl ${vagueHour + 12}?`,
+        options: [
+          { label: `Kl ${String(vagueHour).padStart(2, "0")}:00`, at: morning.getTime(), allDay: false },
+          { label: `Kl ${vagueHour + 12}:00`, at: afternoon.getTime(), allDay: false },
+        ],
+      };
+    }
+    return base;
   };
+
 
   // "25 augusti" / "den 25 aug" / "augusti 25"
   const monthNames = Object.keys(MONTHS).join("|");
@@ -216,8 +257,30 @@ export function parseWhenFromText(text: string, now = new Date()): ParsedWhen | 
     if (delta === 0) delta = 7;
     if (wd[1] === "nästa" && delta < 7) delta += 7;
     d.setDate(d.getDate() + delta);
-    return build(d, `${wd[1] ? `${wd[1]} ` : ""}${wd[2]}`);
+    const parsed = build(d, `${wd[1] ? `${wd[1]} ` : ""}${wd[2]}`);
+    // "fredag" utan "på"/"nästa" kan betyda den här veckan eller nästa – fråga.
+    if (!wd[1]) {
+      const next = new Date(d);
+      next.setDate(next.getDate() + 7);
+      return {
+        ...parsed,
+        ambiguous: `Menade du ${wd[2]} den här veckan eller nästa?`,
+        options: [
+          { label: `Nu på ${wd[2]}`, at: parsed.at, allDay: parsed.allDay },
+          {
+            label: `Nästa ${wd[2]}`,
+            at: (() => {
+              next.setHours(new Date(parsed.at).getHours(), new Date(parsed.at).getMinutes(), 0, 0);
+              return next.getTime();
+            })(),
+            allDay: parsed.allDay,
+          },
+        ],
+      };
+    }
+    return parsed;
   }
+
 
   return null;
 }
@@ -227,17 +290,21 @@ export function suggestWhen(
   level: QuickflowLevel,
   text: string,
   now = new Date(),
-): { at: number; why: string } {
+): { at: number; why: string; allDay?: boolean; ambiguous?: string; options?: WhenOption[] } {
   // Står ett datum i texten vinner det alltid över generella gissningar.
   const parsed = parseWhenFromText(text, now);
   if (parsed) {
     return {
       at: parsed.at,
+      allDay: parsed.allDay,
+      ambiguous: parsed.ambiguous,
+      options: parsed.options,
       why: parsed.hasTime
         ? `Du skrev "${parsed.matched}" – jag använder det datumet och tiden.`
-        : `Du skrev "${parsed.matched}" – jag lägger den då, kl 09. Ändra tiden om du vill.`,
+        : `Du skrev "${parsed.matched}" – jag lägger den som heldag. Lägg till en tid om du vill.`,
     };
   }
+
 
   const lower = text.toLowerCase();
   const shoppingish = /(köp|handla|mjölk|mat|affär|ica|coop|willys|apotek)/.test(lower);
@@ -279,9 +346,11 @@ export function suggestWhen(
 const WEEKDAYS = ["söndag", "måndag", "tisdag", "onsdag", "torsdag", "fredag", "lördag"];
 
 /** "Idag 17:00", "Imorgon 09:00", "Fredag 12:00" */
-export function formatWhen(at: number, now = new Date()): string {
+export function formatWhen(at: number, now = new Date(), allDay = false): string {
   const d = new Date(at);
-  const time = `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+  const time = allDay
+    ? "heldag"
+    : `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
   const startOf = (x: Date) => new Date(x.getFullYear(), x.getMonth(), x.getDate()).getTime();
   const diffDays = Math.round((startOf(d) - startOf(now)) / 86_400_000);
   if (diffDays === 0) return `Idag ${time}`;
@@ -289,6 +358,7 @@ export function formatWhen(at: number, now = new Date()): string {
   if (diffDays > 1 && diffDays < 7) return `${capitalize(WEEKDAYS[d.getDay()]!)} ${time}`;
   return `${d.toLocaleDateString("sv-SE", { day: "numeric", month: "short" })} ${time}`;
 }
+
 
 function capitalize(s: string) {
   return s.charAt(0).toUpperCase() + s.slice(1);
