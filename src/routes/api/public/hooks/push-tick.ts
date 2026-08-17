@@ -208,6 +208,62 @@ export const Route = createFileRoute("/api/public/hooks/push-tick")({
             .eq("user_id", p.user_id);
         }
 
+        // 4) Morgonstart – envis men mjuk uppföljning för den som snoozar bort alarmet
+        const { getWakePush, hhmmToMinutes } = await import("@/lib/wake-up");
+        const { data: wakePrefs } = await supabaseAdmin
+          .from("push_preferences")
+          .select(
+            "user_id, wake_enabled, wake_time, wake_interval_min, wake_max_followups, wake_stage, wake_started_on, wake_last_sent_at, wake_ack_on, personal_name",
+          )
+          .eq("wake_enabled", true);
+
+        for (const p of wakePrefs ?? []) {
+          if (p.wake_ack_on === localDate) continue;
+          const target = hhmmToMinutes(p.wake_time ?? "07:00");
+          const interval = p.wake_interval_min ?? 8;
+          const maxFollowups = p.wake_max_followups ?? 4;
+          const diff = localMinutes - target;
+          if (diff < 0 || diff > interval * (maxFollowups + 1) + 15) continue;
+
+          const freshDay = p.wake_started_on !== localDate;
+          const stage = freshDay ? 0 : (p.wake_stage ?? 0);
+          if (!freshDay) {
+            if (stage > maxFollowups) continue;
+            const lastMs = p.wake_last_sent_at ? new Date(p.wake_last_sent_at).getTime() : 0;
+            if (now.getTime() - lastMs < interval * 60 * 1000 - 60 * 1000) continue;
+          }
+
+          const note = getWakePush(p.personal_name, stage, maxFollowups);
+          const { data: subs } = await supabaseAdmin
+            .from("push_subscriptions")
+            .select("endpoint, p256dh, auth")
+            .eq("user_id", p.user_id);
+          for (const s of subs ?? []) {
+            const r = await sendPushTo(s, {
+              title: note.title,
+              body: note.body,
+              url: "/morgonstart",
+              tag: `wake-${localDate}`,
+              requireInteraction: note.requireInteraction,
+              vibrate: note.vibrate,
+            });
+            if (r === "ok") sentCount++;
+            if (r === "gone") {
+              await supabaseAdmin.from("push_subscriptions").delete().eq("endpoint", s.endpoint);
+              goneCount++;
+            }
+          }
+
+          await supabaseAdmin
+            .from("push_preferences")
+            .update({
+              wake_started_on: localDate,
+              wake_stage: stage + 1,
+              wake_last_sent_at: nowIso,
+            })
+            .eq("user_id", p.user_id);
+        }
+
         return Response.json({ ok: true, sent: sentCount, gone: goneCount });
       },
     },
