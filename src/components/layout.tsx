@@ -558,57 +558,54 @@ export default function Layout({ children }: LayoutProps) {
         </div>
       </nav>
 
-      {/* Mobile Fullscreen Menu */}
+      {/* Mer – en lugn vy: sök, kategorier och inställningar */}
       {mobileMenuOpen && (
         <div className="md:hidden fixed inset-0 z-50 bg-background/95 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="flex flex-col h-full">
             <div className="flex justify-between items-center p-4 border-b border-border/50">
               <h2 className="text-lg font-medium text-muted-foreground">
-                {editingBottomNav
-                  ? "Anpassa bottennav"
-                  : openCategory
-                    ? categories.find((c) => c.id === openCategory)?.label ?? "Sektioner"
-                    : "Välj kategori"}
+                {openCategory
+                  ? categories.find((c) => c.id === openCategory)?.label ?? "Mer"
+                  : "Mer"}
               </h2>
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
-                  setEditingBottomNav(false);
                   setOpenCategory(null);
                 }}
                 className="p-2 text-muted-foreground hover:bg-secondary rounded-full"
+                aria-label="Stäng"
               >
                 <X size={28} />
               </button>
             </div>
             <div className="flex-1 overflow-y-auto p-4 pb-24">
-              {!editingBottomNav && (
-                <div className="relative mb-4">
-                  <Search
-                    size={18}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none"
-                  />
-                  <input
-                    type="search"
-                    value={navSearch}
-                    onChange={(e) => setNavSearch(e.target.value)}
-                    placeholder="Sök sektion…"
-                    aria-label="Sök sektion"
-                    className="w-full rounded-2xl border border-border bg-card py-3 pl-10 pr-10 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-                  />
-                  {navSearch && (
-                    <button
-                      type="button"
-                      aria-label="Rensa sökning"
-                      onClick={() => setNavSearch("")}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full text-muted-foreground hover:bg-secondary"
-                    >
-                      <X size={16} />
-                    </button>
-                  )}
-                </div>
-              )}
-              {!editingBottomNav && navSearch.trim() ? (
+              <div className="relative mb-4">
+                <Search
+                  size={18}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none"
+                />
+                <input
+                  type="search"
+                  value={navSearch}
+                  onChange={(e) => setNavSearch(e.target.value)}
+                  placeholder="Sök i appen…"
+                  aria-label="Sök i appen"
+                  className="w-full rounded-2xl border border-border bg-card py-3 pl-10 pr-10 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                />
+                {navSearch && (
+                  <button
+                    type="button"
+                    aria-label="Rensa sökning"
+                    onClick={() => setNavSearch("")}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full text-muted-foreground hover:bg-secondary"
+                  >
+                    <X size={16} />
+                  </button>
+                )}
+              </div>
+
+              {navSearch.trim() ? (
                 searchResults.length > 0 ? (
                   <div className="space-y-2">
                     {searchResults.map((item) => (
@@ -629,17 +626,6 @@ export default function Layout({ children }: LayoutProps) {
                     Hittade inget som matchar ”{navSearch}”.
                   </p>
                 )
-              ) : editingBottomNav ? (
-
-                  <BottomNavEditor
-                    allItems={navItems.filter((i) => i.href !== "/hem")}
-                    selected={bottomNavHrefs.filter((href) =>
-                      navItems.some((i) => i.href === href)
-                    )}
-                    onChange={setBottomNavHrefs}
-                    onClose={() => setEditingBottomNav(false)}
-                    onReset={() => setBottomNavHrefs(["/ma-bra", "/quickflow", "/kalender"])}
-                  />
               ) : openCategory ? (
                 <>
                   <button
@@ -649,124 +635,79 @@ export default function Layout({ children }: LayoutProps) {
                   >
                     <RotateCcw size={16} /> Alla kategorier
                   </button>
-                  {(() => {
-                    const cat = categories.find((c) => c.id === openCategory);
-                    if (!cat) return null;
-                    const CatIcon = cat.icon;
-                    return (
-                      <div className="mb-4 flex items-center gap-2 text-sm font-semibold" style={{ color: catColor(cat.id) }}>
-                        <span
-                          className="inline-flex h-8 w-8 items-center justify-center rounded-xl"
-                          style={{ backgroundColor: catColor(cat.id, 0.15) }}
-                          aria-hidden="true"
-                        >
-                          <CatIcon size={18} />
-                        </span>
-                        {cat.label}
-                      </div>
-                    );
-                  })()}
                   <div className="space-y-2">
-                    {(categories.find((c) => c.id === openCategory)?.items ?? []).map((item) => (
-                      <NavRow
-                        key={item.href}
-                        item={item}
-                        isActive={location === item.href}
-                        tint={catColor(openCategory, 0.1)}
-                        onClick={() => {
-                          setMobileMenuOpen(false);
-                          setOpenCategory(null);
-                        }}
-                      />
-                    ))}
+                    {(categories.find((c) => c.id === openCategory)?.items ?? [])
+                      .filter((item) => (simpleMode ? item.essential : true))
+                      .map((item) => (
+                        <NavRow
+                          key={item.href}
+                          item={item}
+                          isActive={location === item.href}
+                          tint={catColor(openCategory, 0.1)}
+                          onClick={() => {
+                            setMobileMenuOpen(false);
+                            setOpenCategory(null);
+                          }}
+                        />
+                      ))}
                   </div>
                 </>
-              ) : simpleMode ? (
+              ) : (
                 <>
-                  <p className="mb-3 text-sm text-muted-foreground">
-                    Enkelt läge – bara det du behöver oftast.
-                  </p>
-                  <div className="space-y-2">
-                    {essentialItems.map((item) => (
-                      <NavRow
-                        key={item.href}
-                        item={item}
-                        isActive={location === item.href}
-                        onClick={() => setMobileMenuOpen(false)}
-                      />
-                    ))}
+                  <button
+                    type="button"
+                    onClick={() => setSimpleMode(!simpleMode)}
+                    className={`mb-4 inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
+                      simpleMode
+                        ? "border-primary bg-primary/12 text-primary"
+                        : "border-border bg-card text-muted-foreground"
+                    }`}
+                  >
+                    <Check size={14} />
+                    {simpleMode ? "Visar bara det viktigaste" : "Visa bara det viktigaste"}
+                  </button>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    {categories
+                      .filter((cat) =>
+                        simpleMode ? cat.items.some((i) => i.essential) : cat.items.length > 0
+                      )
+                      .map((cat) => {
+                        const Icon = cat.icon;
+                        return (
+                          <button
+                            key={cat.id}
+                            type="button"
+                            onClick={() => setOpenCategory(cat.id)}
+                            style={{
+                              backgroundColor: catColor(cat.id, 0.12),
+                              borderColor: catColor(cat.id, 0.35),
+                              color: catColor(cat.id),
+                            }}
+                            className="flex flex-col items-center justify-center gap-2 rounded-3xl p-4 text-center border shadow-sm transition-all duration-200 active:scale-95"
+                          >
+                            <span
+                              className="inline-flex h-12 w-12 items-center justify-center rounded-2xl"
+                              style={{ backgroundColor: catColor(cat.id, 0.18) }}
+                              aria-hidden="true"
+                            >
+                              <Icon size={26} />
+                            </span>
+                            <span className="text-sm font-medium leading-tight">{cat.label}</span>
+                            <span data-npf="optional" className="text-[11px] leading-snug opacity-70">
+                              {cat.hint}
+                            </span>
+                          </button>
+                        );
+                      })}
                   </div>
+
                   <div className="mt-6 flex flex-col items-center justify-center gap-3">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="rounded-xl gap-2"
-                      onClick={() => setSimpleMode(false)}
-                    >
-                      <LayoutGrid size={16} /> Visa allt i appen
-                    </Button>
                     <Link href="/anpassa" onClick={() => setMobileMenuOpen(false)}>
                       <Button variant="outline" size="sm" className="rounded-xl gap-2">
                         <Accessibility size={16} /> Anpassa appen
                       </Button>
                     </Link>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="grid grid-cols-2 gap-3">
-                    {categories.map((cat) => {
-                      const Icon = cat.icon;
-                      return (
-                        <button
-                          key={cat.id}
-                          type="button"
-                          onClick={() => setOpenCategory(cat.id)}
-                          style={{
-                            backgroundColor: catColor(cat.id, 0.12),
-                            borderColor: catColor(cat.id, 0.35),
-                            color: catColor(cat.id),
-                          }}
-                          className="flex flex-col items-center justify-center gap-2 rounded-3xl p-4 text-center border shadow-sm transition-all duration-200 active:scale-95"
-                        >
-                          <span
-                            className="inline-flex h-12 w-12 items-center justify-center rounded-2xl"
-                            style={{ backgroundColor: catColor(cat.id, 0.18) }}
-                            aria-hidden="true"
-                          >
-                            <Icon size={26} />
-                          </span>
-                          <span className="text-sm font-medium leading-tight">{cat.label}</span>
-                          <span data-npf="optional" className="text-[11px] leading-snug opacity-70">{cat.hint}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  <div className="mt-6 flex items-center justify-center">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="rounded-xl gap-2"
-                      onClick={() => setSimpleMode(true)}
-                    >
-                      <Home size={16} /> Tillbaka till enkelt läge
-                    </Button>
-                  </div>
-
-
-
-                  <div className="mt-6 flex items-center justify-center">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setEditingBottomNav(true)}
-                      className="rounded-xl gap-2"
-                    >
-                      <Settings2 size={16} /> Redigera bottennav
-                    </Button>
-                  </div>
-                  <div className="mt-4 flex items-center justify-center">
                     <Button
                       variant="outline"
                       size="sm"
@@ -776,8 +717,6 @@ export default function Layout({ children }: LayoutProps) {
                       {alarmEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
                       Alarmljud: {alarmEnabled ? "på" : "av"}
                     </Button>
-                  </div>
-                  <div className="mt-6 flex flex-col items-center justify-center gap-3">
                     <Show when="signed-in">
                       <Button
                         variant="outline"
@@ -793,13 +732,13 @@ export default function Layout({ children }: LayoutProps) {
                       <DeleteAccountButton />
                     </Show>
                   </div>
-
                 </>
               )}
             </div>
           </div>
         </div>
       )}
+
     </div>
   );
 }
