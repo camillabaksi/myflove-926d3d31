@@ -10,6 +10,7 @@ import { useQuickflow } from "@/hooks/use-quickflow";
 import { useStudySchedule } from "@/hooks/use-study-schedule";
 import { useChildren } from "@/hooks/use-children";
 import { useChildReminderSettings } from "@/lib/child-reminders";
+import { useAdaptiveLead, applyAdaptiveLead } from "@/lib/adaptive-lead";
 import type { ChildScheduleEntry } from "@/components/child-schedule";
 
 // Mirror today's + tomorrow's timed tasks and medications into the server
