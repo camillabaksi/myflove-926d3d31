@@ -7,6 +7,9 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 
 ## [Unreleased]
 
+### Added
+- **Livspusslet – MyFloves delar börjar samarbeta** (2026-08-17): Ny gemensam kontext (`src/lib/life-puzzle.ts` + `useLifePuzzle`) som väger ihop FlowScore, energi, mående, tid kvar, osorterade tankar, deadlines per livsområde (Vardag, Privat, Studier, Jobb) och dagens fasta hållpunkter (uppgifter med klockslag och lektioner från schemat). Nytt block "Livspusslet" högst upp på hemskärmen visar hur delarna hänger ihop i stället för att räkna upp dem – med konkreta kopplingar ("Studier har deadline om 2 dagar och energin är låg – vi tar en liten bit idag") och, vid låg kapacitet, knappen "Flytta resten till imorgon". Flow får samma helhetsbild med varje meddelande och kan därför prioritera, dela upp och lägga om planen utifrån hela livet. Flows personlighet är uppdaterad: FlowScore är kapacitet, aldrig ett betyg, och en missad uppgift leder till omplanering – inte skuld. Stopp-knappen har fått ett känslosteg (stressad, trött, arg, ledsen, taggad, vet inte) som skapar ett mellanrum mellan känsla och handling innan samtalet med Flow. Inga befintliga funktioner är borttagna eller ersatta.
+
 ### Changed
 - **En enda "Vad ska jag göra nu?" på hemskärmen** (2026-08-16): Dubbletten inne i Daily Flow-kortet (knapp + dialogruta) är borttagen. Kvar finns kortet högst upp på hemskärmen som leder till sidan `/vad-nu` med ett förslag i taget.
 
