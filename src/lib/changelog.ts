@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Behaglig väckning – mjuk, stigande klockklang när du öppnar Morgonstart, rundare vibrationer och lugnare texter (2026-08-17)",
       "Morgonstart – för den som snoozar bort alarmet: mjuka puffar som trappas upp och följer upp tills du säger \"Jag är vaken\" eller kryssar ett litet morgonsteg (2026-08-17)",
       "Ny marknadsföringsvideo renderad i MyFloves lila designspråk – 2:27 min översikt av hela appen (2026-08-17)",
       "Omplanering när kapaciteten är låg – Min dag föreslår en mindre dag (\"Gör dagen lättare\" eller \"Bara det nödvändigaste\") och flyttar resten till \"Resten kan vänta\" i stället för att kräva mer av dig (2026-08-17)",

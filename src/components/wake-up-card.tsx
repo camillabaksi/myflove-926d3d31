@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Check, Sunrise } from "lucide-react";
+import { Check, Sunrise, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getPushPreferences } from "@/lib/push.functions";
 import { acknowledgeWake } from "@/lib/push.functions";
+import { playGentleWake, type GentleWakeHandle } from "@/lib/gentle-wake-sound";
 import {
   DEFAULT_WAKE_STEPS,
   getWakeStepsDoneToday,
@@ -12,6 +13,7 @@ import {
   localMinutesOfDay,
   setWakeStepsDoneToday,
 } from "@/lib/wake-up";
+
 
 type Prefs = {
   wake_enabled?: boolean | null;
@@ -52,8 +54,33 @@ export function WakeUpCard({ always = false }: { always?: boolean }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const soundRef = useRef<GentleWakeHandle | null>(null);
+  const [playing, setPlaying] = useState(false);
+
+  const stopSound = () => {
+    soundRef.current?.stop();
+    soundRef.current = null;
+    setPlaying(false);
+  };
+
+  const startSound = () => {
+    soundRef.current?.stop();
+    soundRef.current = playGentleWake();
+    setPlaying(true);
+    window.setTimeout(() => setPlaying(false), 9500);
+  };
+
+  // Öppnar man sidan från notisen får man en mjuk klang i stället för tystnad.
+  useEffect(() => {
+    if (!prefs || acked) return;
+    startSound();
+    return () => stopSound();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [prefs]);
+
   const ack = async () => {
     setAcked(true);
+    stopSound();
     try {
       await ackFn();
     } catch {
@@ -67,6 +94,7 @@ export function WakeUpCard({ always = false }: { always?: boolean }) {
     setWakeStepsDoneToday(dateKey, next);
     if (!acked && next.length > 0) void ack();
   };
+
 
   if (!prefs) return null;
   if (!prefs.wake_enabled && !always) return null;
@@ -84,15 +112,24 @@ export function WakeUpCard({ always = false }: { always?: boolean }) {
         <span className="mt-0.5 rounded-xl bg-primary/10 p-2 text-primary">
           <Sunrise className="h-5 w-5" />
         </span>
-        <div>
+        <div className="flex-1">
           <p className="font-medium text-foreground">Morgonstart</p>
           <p className="text-sm text-muted-foreground">
             {acked
               ? "Du är igång. Jag puffar inte mer idag 🌿"
-              : "Ett litet steg räcker. Kryssa en sak så slutar puffarna."}
+              : "God morgon. Ingen stress – lyssna klart, sträck på dig och kryssa en sak när du orkar."}
           </p>
         </div>
+        <button
+          type="button"
+          onClick={() => (playing ? stopSound() : startSound())}
+          aria-label={playing ? "Stäng av den mjuka klangen" : "Spela mjuk väckning"}
+          className="rounded-xl p-2 text-muted-foreground transition-colors hover:bg-muted"
+        >
+          {playing ? <Volume2 className="h-5 w-5 text-primary" /> : <VolumeX className="h-5 w-5" />}
+        </button>
       </div>
+
 
       <ul className="space-y-2">
         {DEFAULT_WAKE_STEPS.map((step) => {
