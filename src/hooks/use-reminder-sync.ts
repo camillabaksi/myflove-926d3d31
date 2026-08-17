@@ -365,5 +365,9 @@ export function useReminderSync() {
     JSON.stringify(quickflowItems.map((q) => [q.id, q.text, q.remindAt, q.done])),
     JSON.stringify(lectures.map((l) => [l.id, l.title, l.weekday, l.start, l.location])),
     studySettings.lectureReminderMinutes,
+    JSON.stringify(childSchedules ?? {}),
+    JSON.stringify(childItems.map((i) => [i.id, i.child_id, i.title, i.date, i.time, i.completed])),
+    JSON.stringify(children.map((c) => [c.id, c.name])),
+    JSON.stringify(childReminders),
   ]);
 }
