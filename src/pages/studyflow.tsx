@@ -53,8 +53,8 @@ import {
   rebuildDay,
   type WorkPriority,
 } from "@/lib/workflow";
-import {
 import FrictionSuggestion from "@/components/friction-suggestion";
+import {
   END_OF_STUDY_CHECK,
   fallbackStudySteps,
   minutesLeftOfStudyDay,
