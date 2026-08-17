@@ -4,7 +4,8 @@ import { Wand2 } from "lucide-react";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { useTasks, useReminders } from "@/hooks/use-data";
 import { useFlowUsage } from "@/hooks/use-daily-flow";
-import { suggestWhen, formatWhen, type QuickflowItem } from "@/lib/quickflow";
+import { suggestWhen, formatWhen, guessArea, type QuickflowItem } from "@/lib/quickflow";
+import { AREA_META, ALL_AREAS, type LifeArea } from "@/lib/life-areas";
 
 type SuggestedType = "uppgift" | "paminnelse" | "kalender" | "ide" | "minne";
 
@@ -50,11 +51,13 @@ export default function QuickflowTriage() {
 
   if (openItems.length === 0) return null;
 
+  const areaOf = (item: QuickflowItem): LifeArea => item.area ?? guessArea(item.text);
+
   const toTask = (item: QuickflowItem) => {
-    addTask(item.text);
+    addTask(item.text, undefined, { area: areaOf(item) });
     complete(item.id);
     log("planering");
-    toast.success("Den ligger nu bland dina uppgifter. 💙");
+    toast.success(`Den ligger nu bland dina uppgifter i ${AREA_META[areaOf(item)].label}. 💙`);
   };
 
   const toReminder = (item: QuickflowItem) => {
@@ -74,6 +77,7 @@ export default function QuickflowTriage() {
     const d = new Date(s.at);
     addTask(item.text, d.toISOString().slice(0, 10), {
       time: `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`,
+      area: areaOf(item),
     });
     complete(item.id);
     log("planering");
@@ -110,6 +114,27 @@ export default function QuickflowTriage() {
                       Mitt förslag: {TYPE_META[type].label} – du bestämmer.
                     </p>
                   </div>
+                </div>
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <span className="text-xs text-muted-foreground">Hör hemma i:</span>
+                  {ALL_AREAS.map((a) => {
+                    const active = areaOf(item) === a;
+                    return (
+                      <button
+                        key={a}
+                        type="button"
+                        onClick={() => update(item.id, { area: a })}
+                        aria-pressed={active}
+                        className={`press rounded-pill border px-3 py-1 text-xs font-medium transition-colors ${
+                          active
+                            ? "border-primary bg-primary/10 text-primary"
+                            : "border-border bg-card text-muted-foreground"
+                        }`}
+                      >
+                        {AREA_META[a].emoji} {AREA_META[a].label}
+                      </button>
+                    );
+                  })}
                 </div>
                 <div className="flex flex-wrap gap-2">
                   <Action onClick={() => toTask(item)}>📌 Uppgift</Action>
