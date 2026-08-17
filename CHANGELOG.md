@@ -8,6 +8,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 ## [Unreleased]
 
 ### Added
+- **Brödsmulor och tillbaka-knapp på Flow** (2026-08-17): Flow-sidan visar nu en tydlig sökväg – Hem › livsområde › platsen du kom ifrån › Flow – och en knapp "Tillbaka till …" som tar dig direkt tillbaka dit du var.
 - **Flow visar var i livet du är** (2026-08-17): Flow-sidan har nu en kontextrubrik – "Du är i 🏠 Vardag · Att göra" – med genvägar till de sidor som hör till området (t.ex. Min dag, Rutiner, FlowScore) och chips för att byta del av livet (Vardag, Privat, Studier, Jobb). Inga nya menyval; genvägarna pekar på sidor som redan finns.
 - **Enklare navigation** (2026-08-17): Fem fasta vägar i navet – Hem, Min dag, QuickFlow (mitten), Flow och Mer – lika på mobil och desktop. Ny sida **Min dag** (`/min-dag`) med dagens hållpunkter, dagens viktigaste sak, FlowScore och bara de uppgifter som gäller idag. "Mer" är nu en lugn vy med sök, kategorier, chippet "Visa bara det viktigaste" och inställningar (bottennav-redigeraren behövs inte längre). Flow vet varifrån du kom och föreslår något som passar platsen.
 - **Smart framförhållning** (2026-08-17): Nytt läge som justerar påminnelsetiden per typ av hållpunkt (lektioner, barnens dag, uppgifter, kalender, rutiner) utifrån om du brukar bli sen eller tidig. Max 30 min tidigare / 15 min senare, styrs från hemskärmen.
