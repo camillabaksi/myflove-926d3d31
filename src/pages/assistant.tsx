@@ -193,7 +193,42 @@ export default function Assistant({ chatId }: { chatId?: string }) {
         </aside>
 
         <div className="space-y-6 min-w-0">
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                if (place && place.path !== "/assistant") void navigate({ to: place.path });
+                else void navigate({ to: "/hem" });
+              }}
+              className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-sm font-medium shadow-sm transition-transform active:scale-95"
+            >
+              <ArrowLeft size={16} />
+              Tillbaka till {place ? place.label : "Hem"}
+            </button>
+          </div>
+
+          <nav aria-label="Brödsmulor" className="flex flex-wrap items-center gap-1 text-xs text-muted-foreground">
+            <Link to="/hem" className="hover:text-foreground">
+              Hem
+            </Link>
+            {place && (
+              <>
+                <ChevronRight size={13} aria-hidden="true" className="opacity-60" />
+                <span style={{ color: areaColor(place.area) }} className="font-medium">
+                  {AREA_META[place.area].emoji} {AREA_META[place.area].label}
+                </span>
+                <ChevronRight size={13} aria-hidden="true" className="opacity-60" />
+                <Link to={place.path} className="hover:text-foreground">
+                  {place.label}
+                </Link>
+              </>
+            )}
+            <ChevronRight size={13} aria-hidden="true" className="opacity-60" />
+            <span className="font-medium text-foreground">Flow</span>
+          </nav>
+
           <div className="flex items-start justify-between gap-3">
+
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center">
                 <Sparkles size={20} />
