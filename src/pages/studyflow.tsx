@@ -54,6 +54,7 @@ import {
   type WorkPriority,
 } from "@/lib/workflow";
 import {
+import FrictionSuggestion from "@/components/friction-suggestion";
   END_OF_STUDY_CHECK,
   fallbackStudySteps,
   minutesLeftOfStudyDay,
@@ -487,6 +488,11 @@ export default function StudyflowPage() {
                               className="mt-1 w-full accent-[hsl(var(--primary))]"
                             />
                           </label>
+                          <FrictionSuggestion
+                            title={task.title}
+                            current={meta.friction}
+                            onApply={(f) => setMeta(task.id, { friction: f })}
+                          />
                         </div>
                       )}
                     </div>

@@ -34,6 +34,7 @@ import { breakDownWorkTask } from "@/lib/work.functions";
 import { celebrateFromEvent } from "@/lib/celebrate";
 import { MyFloveThinking, MyFloveEnergyDots } from "@/components/myflove/motion";
 import {
+import FrictionSuggestion from "@/components/friction-suggestion";
   END_OF_DAY_CHECK,
   MINUTE_CHOICES,
   PRIORITY_META,
@@ -429,6 +430,11 @@ export default function WorkflowPage() {
                               className="mt-1 w-full accent-[hsl(var(--primary))]"
                             />
                           </label>
+                          <FrictionSuggestion
+                            title={task.title}
+                            current={meta.friction}
+                            onApply={(f) => setMeta(task.id, { friction: f })}
+                          />
                         </div>
                       )}
                     </div>
