@@ -1,0 +1,1 @@
+update public.push_preferences set personal_time='08:00' where user_id='f4a99e03-2ca6-4229-8403-b8f855ed5560';
