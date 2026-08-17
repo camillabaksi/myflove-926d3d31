@@ -70,7 +70,12 @@ export default function DailyFlowCard() {
   const planTasks = useMemo(
     () =>
       activeTasks.filter(
-        (t) => !t.syncKey?.includes(":exam:") && !t.syncKey?.includes(":revision:"),
+        (t) =>
+          !t.syncKey?.includes(":exam:") &&
+          !t.syncKey?.includes(":revision:") &&
+          // Visa bara saker som gäller idag eller redan har passerat –
+          // framtida deadlines hör i "Resten kan vänta", inte "Ditt fokus idag".
+          (!t.dueDate || t.dueDate <= todayISO()),
       ),
     [activeTasks],
   );
