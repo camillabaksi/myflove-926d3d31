@@ -4,7 +4,7 @@
 
 import { useQuery, useMutation, type UseQueryOptions } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { logAnalyticsEventFn, getAnalyticsSummaryFn } from "@/lib/analytics.functions";
+import { logAnalyticsEventFn, getAnalyticsSummaryFn, type AnalyticsSummary } from "@/lib/analytics.functions";
 import { getSlTripFn, getSlNearbyStopFn } from "@/lib/sl.functions";
 
 // --- Analytics ---
