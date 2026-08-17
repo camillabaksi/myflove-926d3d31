@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Framtida datum stannar i framtiden – något du lägger in den 25 augusti syns inte i dagens vy, utan under Snart/Senare (2026-08-17)",
       "Heldag som standard i QuickFlow – datum utan klockslag blir heldag, och vid otydlighet (\"kl 3\", \"fredag\") frågar Flow i stället för att gissa (2026-08-17)",
       "QuickFlow läser datum i texten – \"läkartid den 25 augusti\" hamnar på 25 augusti, inte idag (2026-08-17)",
       "Behaglig väckning – mjuk, stigande klockklang när du öppnar Morgonstart, rundare vibrationer och lugnare texter (2026-08-17)",
