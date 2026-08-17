@@ -4,6 +4,9 @@ import { useQuickflow } from "@/hooks/use-quickflow";
 import { useWorkflow, useLatestEnergy } from "@/hooks/use-workflow";
 import { useEnergyPattern } from "@/hooks/use-energy-pattern";
 import { useStudySchedule } from "@/hooks/use-study-schedule";
+import { useFlowReset } from "@/hooks/use-daily-flow";
+import { useTraining } from "@/hooks/use-training";
+
 import { bookedTimeLeft, type BookedSlot } from "@/lib/booked-time";
 import { computeFlowScore, type FlowScore } from "@/lib/flowscore";
 import { minutesLeftOfWorkday } from "@/lib/workflow";
