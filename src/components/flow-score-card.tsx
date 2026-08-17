@@ -29,6 +29,11 @@ export function FlowScoreCard({
             Sikta på {flow.suggestedTasks} sak{flow.suggestedTasks === 1 ? "" : "er"} idag. Ungefär{" "}
             {flow.capacityMinutes} minuter fokus är rimligt.
           </p>
+          {flow.bookedMinutes > 0 && (
+            <p className="mt-1 text-sm text-muted-foreground">
+              {flow.bookedMinutes} min av dagen är redan bokad – {flow.freeMinutes} min är dina.
+            </p>
+          )}
         </div>
       </div>
 
