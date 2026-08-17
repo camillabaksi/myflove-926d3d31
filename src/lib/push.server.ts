@@ -18,6 +18,9 @@ export type PushNotificationBody = {
   tag?: string;
   icon?: string;
   badge?: string;
+  /** Notisen ligger kvar tills man svarar (används av Morgonstart). */
+  requireInteraction?: boolean;
+  vibrate?: number[];
 };
 
 function getVapid(): VapidKeys {
