@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Flow-sidan visar vilket livsområde du är i och ger genvägar dit du oftast ska härnäst – utan nya menyval (2026-08-17)",
       "Enklare navigation – fem fasta vägar (Hem, Min dag, QuickFlow, Flow, Mer), ny sida Min dag och en lugn Mer-vy med sök och kategorier (2026-08-17)",
       "Smart framförhållning – påminnelser flyttas automatiskt tidigare om du brukar bli sen, eller senare om du brukar vara tidig, per typ av hållpunkt (2026-08-17)",
       "Notiser för barnens hållpunkter – skolschema och aktiviteter påminner innan de börjar, med valfri morgonöversikt över hela barnens dag (2026-08-17)",
