@@ -1,10 +1,11 @@
 import React from "react";
 import { AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate, spring } from "remotion";
-import { loadFont as loadFraunces } from "@remotion/google-fonts/Fraunces";
+import { loadFont as loadJakarta } from "@remotion/google-fonts/PlusJakartaSans";
 import { loadFont as loadInter } from "@remotion/google-fonts/Inter";
 
-const { fontFamily: display } = loadFraunces("normal", { weights: ["600", "700"], subsets: ["latin"] });
+const { fontFamily: display } = loadJakarta("normal", { weights: ["600", "700", "800"], subsets: ["latin"] });
 const { fontFamily: body } = loadInter("normal", { weights: ["400", "500", "600"], subsets: ["latin"] });
+
 
 export const COLORS = {
   bg: "#F7F3FE",
