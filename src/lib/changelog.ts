@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Ny marknadsföringsvideo renderad i MyFloves lila designspråk – 2:27 min översikt av hela appen (2026-08-17)",
       "Omplanering när kapaciteten är låg – Min dag föreslår en mindre dag (\"Gör dagen lättare\" eller \"Bara det nödvändigaste\") och flyttar resten till \"Resten kan vänta\" i stället för att kräva mer av dig (2026-08-17)",
       "Ett gemensamt språk för allt i livet – uppgifter, deadlines, lektioner, barnens dag, rutiner och tankar visas med samma fem saker: livsområde, när, prioritet, energibehov och nästa steg. Min dag samlar dem från hela appen och visar det som ryms i din kapacitet, resten ligger kvar under \"Resten kan vänta\" (2026-08-17)",
       "Brödsmulor och tillbaka-knapp på Flow-sidan – du ser sökvägen Hem › område › plats › Flow och kommer tillbaka med ett tryck (2026-08-17)",
