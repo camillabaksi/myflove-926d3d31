@@ -16,6 +16,7 @@ import { useEnabledAreas } from "@/lib/life-areas";
 import { useLocalStorage } from "@/lib/storage";
 import { useNpfSettings, plainLabel } from "@/lib/npf-mode";
 import { trackEvent } from "@/lib/analytics";
+import { rememberPlace } from "@/lib/flow-context";
 import { Button } from "@/components/ui/button";
 import { useClerk, Show } from "@clerk/react";
 import { DeleteAccountButton } from "@/components/delete-account-button";
@@ -153,11 +154,13 @@ export default function Layout({ children }: LayoutProps) {
   useEffect(() => {
     const section = SECTION_BY_PATH[location] ?? (location.replace(/^\//, "") || "home");
     trackEvent(section, "view");
+    rememberPlace(location);
   }, [location]);
 
   type NavItem = { href: string; label: string; icon: typeof Home; hint: string; essential?: boolean };
   const navItems: NavItem[] = [
     { href: "/hem", label: "Hem", icon: Home, hint: "Din överblick över dagen", essential: true },
+    { href: "/min-dag", label: "Min dag", icon: CalendarDays, hint: "Dagens plan: hållpunkter, en viktig sak och det du orkar", essential: true },
     { href: "/ma-bra", label: "Må bra", icon: Heart, hint: "Logga hur du mår och hur mycket ork du har" },
     { href: "/traning", label: "Träning", icon: Dumbbell, hint: "Enkla pass anpassade efter din ork" },
     { href: "/daglig-rutin", label: "Daglig rutin", icon: Sun, hint: "Morgon- och kvällsrutiner steg för steg" },
@@ -214,7 +217,7 @@ export default function Layout({ children }: LayoutProps) {
         label: "Din dag",
         hint: "Kalender, att göra och dagliga rutiner",
         icon: CalendarDays,
-        hrefs: ["/hem", "/daglig-rutin", "/kalender", "/tasks", "/pomodoro"],
+        hrefs: ["/hem", "/min-dag", "/daglig-rutin", "/kalender", "/tasks", "/pomodoro"],
       },
       {
         id: "flowflow",
@@ -266,21 +269,11 @@ export default function Layout({ children }: LayoutProps) {
   ]);
   const [editingBottomNav, setEditingBottomNav] = useState(false);
 
-  const mobileNavItems = useMemo(() => {
-    const home = navItems.find((i) => i.href === "/hem")!;
-    const chosen = bottomNavHrefs
-      .filter((href) => href !== "/quickflow")
-      .map((href) => navItems.find((i) => i.href === href))
-      .filter(Boolean) as typeof navItems;
-    // Ensure we always have 3 valid slots; fill missing with defaults.
-    const defaults = [navItems[1], navItems[2], navItems[3]].filter(Boolean) as typeof navItems;
-    const filled = [...chosen];
-    for (const d of defaults) {
-      if (filled.length >= 3) break;
-      if (!filled.some((i) => i.href === d.href)) filled.push(d);
-    }
-    return [home, ...filled.slice(0, 3)];
-  }, [bottomNavHrefs, navItems]);
+  /** Fem fasta vägar – samma för alla, så navet alltid betyder samma sak. */
+  const primaryNav = useMemo(() => {
+    const pick = (href: string) => navItems.find((i) => i.href === href);
+    return [pick("/hem"), pick("/min-dag"), pick("/assistant")].filter(Boolean) as typeof navItems;
+  }, [navItems]);
 
   return (
     <div className="min-h-[100dvh] flex flex-col bg-background md:flex-row relative">
