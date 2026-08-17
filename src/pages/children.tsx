@@ -290,6 +290,9 @@ function ChildrenContent() {
         <>
           <ChildSchedule childId={activeChild.id} childName={activeChild.name} canEdit={isOwner} />
 
+          <ChildReminderSettings />
+
+
 
           {isOwner && (
             <section className="surface-card p-5">
