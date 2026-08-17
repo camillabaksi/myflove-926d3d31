@@ -55,14 +55,12 @@ export default function MyDay() {
 
   // Allt som är en "sak i livet" idag – oavsett var den skapades.
   const { today: todaysItems } = useFlowItems();
+  const { mode, chosen, setMode } = useReplanMode();
   const { keep, rest } = useMemo(
-    () =>
-      withinCapacity(todaysItems, {
-        suggestedTasks: flow.suggestedTasks || 3,
-        maxEnergy: flow.score < 45 ? 6 : 10,
-      }),
-    [todaysItems, flow.suggestedTasks, flow.score],
+    () => withinCapacity(todaysItems, capacityForMode(flow, mode)),
+    [todaysItems, flow, mode],
   );
+  const offerReplan = shouldOfferReplan(flow.score) || chosen;
 
 
 
