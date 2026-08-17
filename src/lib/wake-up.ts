@@ -28,15 +28,15 @@ export function getWakePush(
   if (stage === 1) {
     return {
       title: "Fortfarande morgon ☀️",
-      body: "Sätt fötterna i golvet. Det räcker som start.",
+      body: "Sträck på dig i sängen. Fötterna i golvet när det känns okej.",
       requireInteraction: false,
       vibrate: [80, 160, 80],
     };
   }
   if (stage === 2) {
     return {
-      title: "Dags nu 🔔",
-      body: `Tryck "Jag är vaken" så slutar jag puffa, ${you}.`,
+      title: "Fortfarande här 🔔",
+      body: `Ingen stress. Tryck "Jag är vaken" när du är redo, ${you}.`,
       requireInteraction: true,
       vibrate: [90, 180, 90, 180, 90],
     };
