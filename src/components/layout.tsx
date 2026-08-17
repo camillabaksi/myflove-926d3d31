@@ -961,10 +961,13 @@ function BottomNavLink({
   item,
   active,
   onClick,
+  label,
 }: {
   item: { href: string; label: string; icon: React.ComponentType<{ size?: number; strokeWidth?: number }> };
   active: boolean;
   onClick: () => void;
+  /** Kortare namn i navet, t.ex. "Flow" i stället för "Hjälp". */
+  label?: string;
 }) {
   const Icon = item.icon;
   return (
@@ -982,7 +985,7 @@ function BottomNavLink({
       >
         <Icon size={22} strokeWidth={active ? 2.6 : 2} />
       </span>
-      <span className="text-[10px] font-medium">{item.label}</span>
+      <span className="text-[10px] font-medium">{label ?? item.label}</span>
     </Link>
   );
 }
