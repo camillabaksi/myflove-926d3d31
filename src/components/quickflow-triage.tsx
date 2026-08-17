@@ -143,6 +143,7 @@ export default function QuickflowTriage() {
         <div className="space-y-2">
           {openItems.map((item) => {
             const type = suggestType(item);
+            const plan = parseWhenFromText(item.text) ? planFor(item) : null;
             return (
               <div key={item.id} className="surface-card p-4 space-y-3">
                 <div className="flex items-start gap-2">
@@ -152,13 +153,46 @@ export default function QuickflowTriage() {
                     <p className="text-xs text-muted-foreground">
                       Mitt förslag: {TYPE_META[type].label} – du bestämmer.
                     </p>
-                    {parseWhenFromText(item.text) && (
+                    {plan && !plan.ambiguous && (
                       <p className="text-xs text-primary">
-                        Jag hittade ett datum i texten: {formatWhen(suggestWhen(item.level, item.text).at)}
+                        Jag hittade ett datum i texten: {formatWhen(plan.at, new Date(), plan.allDay)}
+                        {plan.allDay ? " (ingen tid angavs)" : ""}
                       </p>
                     )}
                   </div>
                 </div>
+                {plan?.ambiguous && (
+                  <div className="rounded-2xl border border-gold/40 bg-gold/10 p-3 space-y-2">
+                    <p className="text-sm text-ink">{plan.ambiguous}</p>
+                    <div className="flex flex-wrap gap-2">
+                      {plan.options?.map((o) => (
+                        <button
+                          key={o.label}
+                          type="button"
+                          onClick={() =>
+                            setChoices((prev) => ({ ...prev, [item.id]: { at: o.at, allDay: o.allDay } }))
+                          }
+                          className="rounded-full border border-border bg-card px-3 py-1.5 text-sm font-medium hover:border-primary/50"
+                        >
+                          {o.label}
+                        </button>
+                      ))}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setChoices((prev) => ({
+                            ...prev,
+                            [item.id]: { at: plan.at, allDay: true },
+                          }))
+                        }
+                        className="rounded-full border border-border bg-card px-3 py-1.5 text-sm font-medium hover:border-primary/50"
+                      >
+                        Heldag
+                      </button>
+                    </div>
+                  </div>
+                )}
+
                 <div className="flex flex-wrap items-center gap-1.5">
                   <span className="text-xs text-muted-foreground">Hör hemma i:</span>
                   {ALL_AREAS.map((a) => {
