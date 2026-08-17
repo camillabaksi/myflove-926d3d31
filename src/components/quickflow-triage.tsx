@@ -4,7 +4,13 @@ import { Wand2 } from "lucide-react";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { useTasks, useReminders } from "@/hooks/use-data";
 import { useFlowUsage } from "@/hooks/use-daily-flow";
-import { suggestWhen, formatWhen, guessArea, type QuickflowItem } from "@/lib/quickflow";
+import {
+  suggestWhen,
+  formatWhen,
+  guessArea,
+  parseWhenFromText,
+  type QuickflowItem,
+} from "@/lib/quickflow";
 import { AREA_META, ALL_AREAS, type LifeArea } from "@/lib/life-areas";
 
 type SuggestedType = "uppgift" | "paminnelse" | "kalender" | "ide" | "minne";
@@ -20,6 +26,7 @@ const TYPE_META: Record<SuggestedType, { emoji: string; label: string }> = {
 /** Enkel, förklarbar gissning – användaren kan alltid ändra. */
 function suggestType(item: QuickflowItem): SuggestedType {
   const t = item.text.toLowerCase();
+  if (parseWhenFromText(item.text)) return "kalender";
   if (item.remindAt) return "paminnelse";
   if (/(möte|träff|läkare|tandläkare|besök|kl \d|klockan)/.test(t)) return "kalender";
   if (/(ring|boka|betala|maila|mejla|skicka|handla|fixa|hämta|tvätta)/.test(t)) return "uppgift";
@@ -27,6 +34,7 @@ function suggestType(item: QuickflowItem): SuggestedType {
   if (item.level === "viktigt") return "uppgift";
   return "minne";
 }
+
 
 const DAY = 86_400_000;
 
@@ -113,6 +121,11 @@ export default function QuickflowTriage() {
                     <p className="text-xs text-muted-foreground">
                       Mitt förslag: {TYPE_META[type].label} – du bestämmer.
                     </p>
+                    {parseWhenFromText(item.text) && (
+                      <p className="text-xs text-primary">
+                        Jag hittade ett datum i texten: {formatWhen(suggestWhen(item.level, item.text).at)}
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div className="flex flex-wrap items-center gap-1.5">
