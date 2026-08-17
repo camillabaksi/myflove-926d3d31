@@ -256,7 +256,7 @@ export default function Assistant({ chatId }: { chatId?: string }) {
 
           {messages.length === 0 && (
             <div className="flex flex-wrap gap-2">
-              {QUICK_PROMPTS.map((p) => (
+              {[puzzle.flowPrompt, ...QUICK_PROMPTS].map((p) => (
                 <button
                   key={p}
                   onClick={() => void send(p)}
