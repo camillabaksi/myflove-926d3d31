@@ -9,6 +9,8 @@ const MessageSchema = z.object({
 
 const InputSchema = z.object({
   messages: z.array(MessageSchema).min(1).max(50),
+  /** Livspusslet: kapacitet, energi och vad som pågår i användarens olika livsområden. */
+  context: z.string().max(4000).optional(),
 });
 
 export const chatWithFlow = createServerFn({ method: "POST" })
