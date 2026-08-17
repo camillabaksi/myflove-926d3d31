@@ -142,7 +142,27 @@ const PrefsSchema = z.object({
   personal_evening_enabled: z.boolean().optional(),
   personal_evening_time: z.string().regex(/^\d{2}:\d{2}(:\d{2})?$/).transform((v) => v.slice(0, 5)).optional(),
   personal_name: z.string().max(40).optional(),
+  wake_enabled: z.boolean().optional(),
+  wake_time: z.string().regex(/^\d{2}:\d{2}(:\d{2})?$/).transform((v) => v.slice(0, 5)).optional(),
+  wake_interval_min: z.number().int().min(3).max(30).optional(),
+  wake_max_followups: z.number().int().min(1).max(6).optional(),
 });
+
+/** Kvitterar att man är vaken – stoppar dagens uppföljningar direkt. */
+export const acknowledgeWake = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { supabase, userId } = context;
+    const { localDateKey } = await import("./wake-up");
+    const { error } = await supabase
+      .from("push_preferences")
+      .upsert(
+        { user_id: userId, wake_ack_on: localDateKey(), wake_stage: 0 },
+        { onConflict: "user_id" },
+      );
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
 
 export const savePushPreferences = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
