@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "wouter";
 import HomeShortcuts from "@/components/home-shortcuts";
+import UnusedBlocksHint from "@/components/unused-blocks-hint";
 import Layout from "@/components/layout";
 import OverwhelmedModal from "@/components/overwhelmed-modal";
 import HelpMeModal from "@/components/help-me-modal";
@@ -566,6 +567,9 @@ export default function Home() {
           </HomeSection>
         )}
 
+        <div style={{ order: 999 }}>
+          <UnusedBlocksHint />
+        </div>
 
       </div>
 
