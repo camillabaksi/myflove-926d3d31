@@ -15,6 +15,12 @@ export interface FlowScoreInput {
   overdue: number;
   /** Klarmarkerade uppgifter idag. */
   doneToday: number;
+  /** Minuter av den kvarvarande dagen som redan är bokade (möten, lektioner). */
+  bookedMinutes?: number;
+  /** Nästa hållpunkt idag, för förklaringen. */
+  nextEvent?: { title: string; start: string } | null;
+  /** Förväntad energi just nu enligt dina egna loggar över dygnet. */
+  energyPattern?: { expected: number; diff: number; note: string } | null;
 }
 
 export type FlowLoad = "låg" | "medel" | "hög";
@@ -47,6 +53,10 @@ export interface FlowScore {
   baseScore: number;
   /** Kort förklaring av vad som drog upp/ner. */
   factors: FlowFactor[];
+  /** Minuter av dagen som redan är bokade. */
+  bookedMinutes: number;
+  /** Minuter som faktiskt är dina att planera i. */
+  freeMinutes: number;
 }
 
 const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
@@ -166,7 +176,42 @@ export function computeFlowScore(input: FlowScoreInput, now = new Date()): FlowS
     });
   }
 
-  const derived = derivePlan(score, input.minutesLeft);
+  if (input.energyPattern) {
+    // Ditt eget dygnsmönster – väger lättare än dagens faktiska logg.
+    const d = Math.round(input.energyPattern.diff * 4);
+    score += d;
+    factors.push({
+      label:
+        input.energyPattern.diff <= -0.4
+          ? "Din vanliga svacka"
+          : input.energyPattern.diff >= 0.4
+            ? "Din vanliga toppetid"
+            : "Ditt energimönster",
+      delta: d,
+      source: "Energikartan över tid",
+      reading: `Du brukar ligga på ${input.energyPattern.expected}/5 den här tiden`,
+      why: input.energyPattern.note,
+    });
+  }
+
+  const bookedMinutes = Math.max(0, Math.round(input.bookedMinutes ?? 0));
+  const freeMinutes = Math.max(0, input.minutesLeft - bookedMinutes);
+  if (bookedMinutes > 0) {
+    const share = input.minutesLeft ? bookedMinutes / input.minutesLeft : 0;
+    const d = -Math.min(14, Math.round(share * 20));
+    score += d;
+    factors.push({
+      label: `${bookedMinutes} min redan bokat`,
+      delta: d,
+      source: "Kalender och schema",
+      reading: input.nextEvent
+        ? `Nästa: ${input.nextEvent.start} ${input.nextEvent.title}`
+        : `${bookedMinutes} min av dagen är bokad`,
+      why: "Bokad tid är inte fokustid. Kapaciteten räknas på de minuter som faktiskt är dina.",
+    });
+  }
+
+  const derived = derivePlan(score, freeMinutes);
 
   const message =
     derived.score >= 70
@@ -187,6 +232,8 @@ export function computeFlowScore(input: FlowScoreInput, now = new Date()): FlowS
     message,
     baseScore: BASE_SCORE,
     factors,
+    bookedMinutes,
+    freeMinutes,
   };
 }
 

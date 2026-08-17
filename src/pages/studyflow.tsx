@@ -53,6 +53,7 @@ import {
   rebuildDay,
   type WorkPriority,
 } from "@/lib/workflow";
+import FrictionSuggestion from "@/components/friction-suggestion";
 import {
   END_OF_STUDY_CHECK,
   fallbackStudySteps,
@@ -487,6 +488,11 @@ export default function StudyflowPage() {
                               className="mt-1 w-full accent-[hsl(var(--primary))]"
                             />
                           </label>
+                          <FrictionSuggestion
+                            title={task.title}
+                            current={meta.friction}
+                            onApply={(f) => setMeta(task.id, { friction: f })}
+                          />
                         </div>
                       )}
                     </div>

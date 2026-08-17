@@ -6,6 +6,8 @@ import { Loader2, MapPin, Navigation, Route as RouteIcon, ExternalLink, ChevronD
 import CollapsibleSection from "@/components/collapsible-section";
 import { suggestWalkRoutes, type WalkRoute } from "@/lib/walk-routes.functions";
 import { useToast } from "@/hooks/use-toast";
+import { useWeather } from "@/hooks/use-weather";
+import { weatherAdvice } from "@/lib/weather-advice";
 
 const MINUTES = [15, 30, 45, 60, 90];
 const KM = [2, 3, 5, 8];
@@ -13,6 +15,7 @@ const KM = [2, 3, 5, 8];
 export default function WalkRoutesSection() {
   const run = useServerFn(suggestWalkRoutes);
   const { toast } = useToast();
+  const advice = weatherAdvice(useWeather());
 
   const [mode, setMode] = useState<"tid" | "avstånd">("tid");
   const [minutes, setMinutes] = useState(30);
@@ -99,6 +102,16 @@ export default function WalkRoutesSection() {
       description="Säg hur länge eller hur långt du vill gå – Flow föreslår gångbara vägar i olika riktningar och öppnar dem i kartan."
       help="Flow använder din plats för att hitta gångvägar, stigar och lugna gator åt olika håll. Förslagen är rundor tur och retur, öppna dem i Google Maps för vägbeskrivning."
     >
+      {advice && (
+        <p
+          className={`rounded-2xl px-3 py-2 text-sm ${
+            advice.outdoorOk ? "bg-muted/50 text-muted-foreground" : "bg-destructive/10 text-ink"
+          }`}
+        >
+          {advice.emoji} {advice.outdoor}
+        </p>
+      )}
+
       <div className="flex flex-wrap gap-2">
         {(["tid", "avstånd"] as const).map((m) => (
           <button

@@ -12,6 +12,10 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Energikartan lär sig ditt dygn – FlowScore vet nu när du brukar ha svacka eller topp och anpassar planen därefter (2026-08-17)",
+      "Friktionsbiblioteket föreslår friktionsvärde på uppgifter i WorkFlow och StudyFlow – du slipper gissa hur tungt något är (2026-08-17)",
+      "Vädret påverkar planeringen – Promenadvägar föreslår inomhus vid hårt väder och Nästa lektion lägger på marginal när det regnar eller snöar (2026-08-17)",
+      "Bokad tid räknas bort – möten och lektioner dras från dagens fokustid, så FlowScore visar de minuter som faktiskt är dina (2026-08-17)",
       "Livspusslet – nytt block högst upp på hemskärmen som visar hur dagens delar hänger ihop (energi, deadlines, familj, jobb, studier) och erbjuder att flytta resten till imorgon när kapaciteten är låg (2026-08-17)",
       "Flow ser hela livspusslet – varje samtal utgår nu från FlowScore, energi, mående, deadlines per livsområde och dagens hållpunkter, och kan prioritera, dela upp och lägga om planen utan skuld (2026-08-17)",
       "Stopp-knappen har fått ett känslosteg (stressad, trött, arg, ledsen, taggad, vet inte) som skapar ett mellanrum mellan känsla och handling (2026-08-17)",
