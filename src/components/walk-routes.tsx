@@ -6,6 +6,8 @@ import { Loader2, MapPin, Navigation, Route as RouteIcon, ExternalLink, ChevronD
 import CollapsibleSection from "@/components/collapsible-section";
 import { suggestWalkRoutes, type WalkRoute } from "@/lib/walk-routes.functions";
 import { useToast } from "@/hooks/use-toast";
+import { useWeather } from "@/hooks/use-weather";
+import { weatherAdvice } from "@/lib/weather-advice";
 
 const MINUTES = [15, 30, 45, 60, 90];
 const KM = [2, 3, 5, 8];
@@ -13,6 +15,7 @@ const KM = [2, 3, 5, 8];
 export default function WalkRoutesSection() {
   const run = useServerFn(suggestWalkRoutes);
   const { toast } = useToast();
+  const advice = weatherAdvice(useWeather());
 
   const [mode, setMode] = useState<"tid" | "avstånd">("tid");
   const [minutes, setMinutes] = useState(30);

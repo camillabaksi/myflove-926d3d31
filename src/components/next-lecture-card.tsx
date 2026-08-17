@@ -3,6 +3,8 @@ import { MapPin, Clock, Compass, Bell } from "lucide-react";
 import { useStudySchedule } from "@/hooks/use-study-schedule";
 import { nextOccurrence } from "@/lib/schedule-parse";
 import CollapsibleSection from "@/components/collapsible-section";
+import { useWeather } from "@/hooks/use-weather";
+import { weatherAdvice } from "@/lib/weather-advice";
 
 const card = "rounded-3xl border border-border bg-card p-5 shadow-sm";
 const sectionTitle = "flex items-center gap-2 font-display text-lg text-ink";
@@ -19,6 +21,7 @@ function humanCountdown(minutes: number) {
 
 export function NextLectureCard() {
   const { lectures, settings, patchSettings } = useStudySchedule();
+  const advice = weatherAdvice(useWeather());
   const [now, setNow] = useState(() => new Date());
 
   useEffect(() => {
@@ -103,6 +106,15 @@ export function NextLectureCard() {
             ? "Snart dags. Packa det du behöver och andas ut."
             : "Du har gott om tid. Ta en sak i taget."}
       </p>
+
+      {advice?.travel && minutes > 0 && minutes <= 180 && (
+        <p className="mt-2 rounded-2xl bg-muted/50 px-3 py-2 text-sm text-muted-foreground">
+          {advice.emoji} {advice.travel}
+          {advice.extraTravelMinutes > 0
+            ? ` Gå gärna kl ${new Date(at.getTime() - advice.extraTravelMinutes * 60000 - 15 * 60000).toLocaleTimeString("sv-SE", { hour: "2-digit", minute: "2-digit" })}.`
+            : ""}
+        </p>
+      )}
 
       <label className="mt-3 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
         <Bell className="h-4 w-4" />
