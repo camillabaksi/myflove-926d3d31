@@ -7,6 +7,9 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 
 ## [Unreleased]
 
+### Fixed
+- **Resor och familjekalender fungerar igen** (2026-08-17): Reseökningen hämtar återigen riktiga avgångar i realtid, och familjens kalender, inköpslista och familjeuppgifter läser och sparar mot molnet igen i stället för att bara låtsas lyckas.
+
 ### Changed
 - **Tydlig regelmotor för "Ditt fokus idag"** (2026-08-17): En enda plats (`src/lib/focus-rules.ts`) avgör nu vad som hör hemma i dagens fokus, i tydlig ordning: klara saker och undanstoppade göms, automatiska poster (prov/repetition) styr inte dagen, passerade datum och dagens datum visas, framtida datum väntar och saker utan datum kan alltid göras. Varje beslut har en kort motivering i Flow-röst.
 - **"Ditt fokus idag" visar bara dagens saker** (2026-08-17): Uppgifter med ett framtida datum syns inte längre i "Ditt fokus idag" på hemskärmen – de ligger kvar i kalendern och dyker upp först när dagen är inne. Passerade datum och dagens datum visas fortfarande.
