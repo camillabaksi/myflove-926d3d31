@@ -261,14 +261,6 @@ export default function Layout({ children }: LayoutProps) {
 
 
 
-  // Bottom nav: Home is fixed, the remaining 3 slots are user-customizable.
-  const [bottomNavHrefs, setBottomNavHrefs] = useLocalStorage<string[]>("myflow-bottom-nav", [
-    "/ma-bra",
-    "/quickflow",
-    "/kalender",
-  ]);
-  const [editingBottomNav, setEditingBottomNav] = useState(false);
-
   /** Fem fasta vägar – samma för alla, så navet alltid betyder samma sak. */
   const primaryNav = useMemo(() => {
     const pick = (href: string) => navItems.find((i) => i.href === href);
@@ -370,7 +362,35 @@ export default function Layout({ children }: LayoutProps) {
           <ViewCollapseToggle className="absolute right-3" />
         </header>
 
-        <div className="hidden md:flex items-center justify-between px-8 pt-6">
+        <div className="hidden md:flex items-center gap-2 px-8 pt-6">
+          {primaryNav.map((item) => {
+            const active = item.href === "/assistant" ? location.startsWith("/assistant") : location === item.href;
+            const Icon = item.icon;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                  active
+                    ? "bg-primary text-primary-foreground shadow-sm"
+                    : "bg-card text-muted-foreground border border-border hover:text-foreground"
+                }`}
+              >
+                <Icon size={16} />
+                {item.href === "/assistant" ? "Flow" : item.label}
+              </Link>
+            );
+          })}
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new CustomEvent("myflove:quickflow"))}
+            className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-4 py-2 text-sm font-medium text-primary transition-transform active:scale-95"
+          >
+            <Plus size={16} /> QuickFlow
+          </button>
+        </div>
+
+        <div className="hidden md:flex items-center justify-between px-8 pt-4">
           {canGoBack ? (
             <Button
               variant="ghost"
@@ -777,122 +797,6 @@ function NavRow({
         </span>
       </span>
     </Link>
-  );
-}
-
-interface BottomNavEditorProps {
-
-  allItems: { href: string; label: string; icon: typeof Home }[];
-  selected: string[];
-  onChange: (hrefs: string[]) => void;
-  onClose: () => void;
-  onReset: () => void;
-}
-
-function BottomNavEditor({ allItems, selected, onChange, onClose, onReset }: BottomNavEditorProps) {
-  const selectedItems = selected
-    .map((href) => allItems.find((i) => i.href === href))
-    .filter(Boolean) as { href: string; label: string; icon: typeof Home }[];
-
-  const toggle = (href: string) => {
-    if (selected.includes(href)) {
-      onChange(selected.filter((h) => h !== href));
-    } else if (selected.length < 3) {
-      onChange([...selected, href]);
-    }
-  };
-
-  const move = (href: string, dir: -1 | 1) => {
-    const idx = selected.indexOf(href);
-    const next = idx + dir;
-    if (idx < 0 || next < 0 || next >= selected.length) return;
-    const arr = [...selected];
-    [arr[idx], arr[next]] = [arr[next]!, arr[idx]!];
-    onChange(arr);
-  };
-
-  return (
-    <div className="space-y-6">
-      <p className="text-sm text-muted-foreground">
-        Välj 3 ikoner som ska visas bredvid Hem. Ordningen bestämmer ordningen i bottennavet.
-      </p>
-
-      {/* Selected slots preview */}
-      <div className="grid grid-cols-3 gap-3">
-        {selectedItems.map((item, idx) => {
-          const Icon = item.icon;
-          return (
-            <div
-              key={item.href}
-              className="relative aspect-square flex flex-col items-center justify-center gap-2 rounded-2xl p-2 text-center bg-primary text-primary-foreground font-medium shadow-sm"
-            >
-              <Icon size={26} strokeWidth={2.5} />
-              <span className="text-xs leading-tight">{item.label}</span>
-              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
-                <button
-                  type="button"
-                  onClick={() => move(item.href, -1)}
-                  disabled={idx === 0}
-                  className="p-1 rounded-md bg-primary-foreground/20 text-primary-foreground disabled:opacity-30"
-                  aria-label="Flytta vänster"
-                >
-                  <ArrowUp size={12} className="rotate-[-90deg]" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => move(item.href, 1)}
-                  disabled={idx === selectedItems.length - 1}
-                  className="p-1 rounded-md bg-primary-foreground/20 text-primary-foreground disabled:opacity-30"
-                  aria-label="Flytta höger"
-                >
-                  <ArrowDown size={12} className="rotate-[-90deg]" />
-                </button>
-              </div>
-            </div>
-          );
-        })}
-        {Array.from({ length: 3 - selectedItems.length }).map((_, idx) => (
-          <div
-            key={idx}
-            className="aspect-square flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border bg-muted/40"
-          >
-            <span className="text-xs text-muted-foreground">Plats {idx + 1}</span>
-          </div>
-        ))}
-      </div>
-
-      {/* All items */}
-      <div className="grid grid-cols-3 gap-3">
-        {allItems.map((item) => {
-          const isSelected = selected.includes(item.href);
-          const Icon = item.icon;
-          return (
-            <button
-              key={item.href}
-              type="button"
-              onClick={() => toggle(item.href)}
-              className={`aspect-square flex flex-col items-center justify-center gap-2 rounded-2xl p-2 text-center transition-all ${
-                isSelected
-                  ? "bg-primary text-primary-foreground font-medium shadow-sm"
-                  : "bg-card text-foreground border border-border shadow-sm"
-              }`}
-            >
-              <Icon size={26} strokeWidth={isSelected ? 2.5 : 2} />
-              <span className="text-xs leading-tight">{item.label}</span>
-            </button>
-          );
-        })}
-      </div>
-
-      <div className="flex gap-3 justify-center">
-        <Button variant="ghost" size="sm" onClick={onReset} className="rounded-xl gap-1">
-          <RotateCcw size={14} /> Återställ
-        </Button>
-        <Button size="sm" onClick={onClose} className="rounded-xl gap-1">
-          <Check size={14} /> Klar
-        </Button>
-      </div>
-    </div>
   );
 }
 
