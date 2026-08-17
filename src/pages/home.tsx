@@ -13,6 +13,7 @@ import QuickflowList from "@/components/quickflow-list";
 import PersonalNote from "@/components/personal-note";
 import HomeSection from "@/components/home-section";
 import DailyFlowCard from "@/components/daily-flow-card";
+import LifePuzzleCard from "@/components/life-puzzle-card";
 import QuickflowTriage from "@/components/quickflow-triage";
 import FlowReset from "@/components/flow-reset";
 import DayRebuild from "@/components/day-rebuild";
