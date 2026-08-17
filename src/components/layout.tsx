@@ -16,6 +16,7 @@ import { useEnabledAreas } from "@/lib/life-areas";
 import { useLocalStorage } from "@/lib/storage";
 import { useNpfSettings, plainLabel } from "@/lib/npf-mode";
 import { trackEvent } from "@/lib/analytics";
+import { rememberPlace } from "@/lib/flow-context";
 import { Button } from "@/components/ui/button";
 import { useClerk, Show } from "@clerk/react";
 import { DeleteAccountButton } from "@/components/delete-account-button";
@@ -153,11 +154,13 @@ export default function Layout({ children }: LayoutProps) {
   useEffect(() => {
     const section = SECTION_BY_PATH[location] ?? (location.replace(/^\//, "") || "home");
     trackEvent(section, "view");
+    rememberPlace(location);
   }, [location]);
 
   type NavItem = { href: string; label: string; icon: typeof Home; hint: string; essential?: boolean };
   const navItems: NavItem[] = [
     { href: "/hem", label: "Hem", icon: Home, hint: "Din överblick över dagen", essential: true },
+    { href: "/min-dag", label: "Min dag", icon: CalendarDays, hint: "Dagens plan: hållpunkter, en viktig sak och det du orkar", essential: true },
     { href: "/ma-bra", label: "Må bra", icon: Heart, hint: "Logga hur du mår och hur mycket ork du har" },
     { href: "/traning", label: "Träning", icon: Dumbbell, hint: "Enkla pass anpassade efter din ork" },
     { href: "/daglig-rutin", label: "Daglig rutin", icon: Sun, hint: "Morgon- och kvällsrutiner steg för steg" },
@@ -214,7 +217,7 @@ export default function Layout({ children }: LayoutProps) {
         label: "Din dag",
         hint: "Kalender, att göra och dagliga rutiner",
         icon: CalendarDays,
-        hrefs: ["/hem", "/daglig-rutin", "/kalender", "/tasks", "/pomodoro"],
+        hrefs: ["/hem", "/min-dag", "/daglig-rutin", "/kalender", "/tasks", "/pomodoro"],
       },
       {
         id: "flowflow",
@@ -258,29 +261,11 @@ export default function Layout({ children }: LayoutProps) {
 
 
 
-  // Bottom nav: Home is fixed, the remaining 3 slots are user-customizable.
-  const [bottomNavHrefs, setBottomNavHrefs] = useLocalStorage<string[]>("myflow-bottom-nav", [
-    "/ma-bra",
-    "/quickflow",
-    "/kalender",
-  ]);
-  const [editingBottomNav, setEditingBottomNav] = useState(false);
-
-  const mobileNavItems = useMemo(() => {
-    const home = navItems.find((i) => i.href === "/hem")!;
-    const chosen = bottomNavHrefs
-      .filter((href) => href !== "/quickflow")
-      .map((href) => navItems.find((i) => i.href === href))
-      .filter(Boolean) as typeof navItems;
-    // Ensure we always have 3 valid slots; fill missing with defaults.
-    const defaults = [navItems[1], navItems[2], navItems[3]].filter(Boolean) as typeof navItems;
-    const filled = [...chosen];
-    for (const d of defaults) {
-      if (filled.length >= 3) break;
-      if (!filled.some((i) => i.href === d.href)) filled.push(d);
-    }
-    return [home, ...filled.slice(0, 3)];
-  }, [bottomNavHrefs, navItems]);
+  /** Fem fasta vägar – samma för alla, så navet alltid betyder samma sak. */
+  const primaryNav = useMemo(() => {
+    const pick = (href: string) => navItems.find((i) => i.href === href);
+    return [pick("/hem"), pick("/min-dag"), pick("/assistant")].filter(Boolean) as typeof navItems;
+  }, [navItems]);
 
   return (
     <div className="min-h-[100dvh] flex flex-col bg-background md:flex-row relative">
@@ -377,7 +362,35 @@ export default function Layout({ children }: LayoutProps) {
           <ViewCollapseToggle className="absolute right-3" />
         </header>
 
-        <div className="hidden md:flex items-center justify-between px-8 pt-6">
+        <div className="hidden md:flex items-center gap-2 px-8 pt-6">
+          {primaryNav.map((item) => {
+            const active = item.href === "/assistant" ? location.startsWith("/assistant") : location === item.href;
+            const Icon = item.icon;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                  active
+                    ? "bg-primary text-primary-foreground shadow-sm"
+                    : "bg-card text-muted-foreground border border-border hover:text-foreground"
+                }`}
+              >
+                <Icon size={16} />
+                {item.href === "/assistant" ? "Flow" : item.label}
+              </Link>
+            );
+          })}
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new CustomEvent("myflove:quickflow"))}
+            className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-4 py-2 text-sm font-medium text-primary transition-transform active:scale-95"
+          >
+            <Plus size={16} /> QuickFlow
+          </button>
+        </div>
+
+        <div className="hidden md:flex items-center justify-between px-8 pt-4">
           {canGoBack ? (
             <Button
               variant="ghost"
@@ -511,10 +524,10 @@ export default function Layout({ children }: LayoutProps) {
 
 
 
-      {/* Mobile Bottom Bar – 2 val, QuickFlow i mitten, 1 val och Mer */}
+      {/* Mobile Bottom Bar – Hem · Min dag · QuickFlow · Flow · Mer */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-md border-t border-border/70 pb-[env(safe-area-inset-bottom)] z-40">
         <div className="flex items-end justify-around px-1 pt-1.5 pb-1">
-          {mobileNavItems.slice(0, 2).map((item) => (
+          {primaryNav.slice(0, 2).map((item) => (
             <BottomNavLink
               key={item.href}
               item={item}
@@ -530,20 +543,22 @@ export default function Layout({ children }: LayoutProps) {
             aria-label="QuickFlow – få ut det ur huvudet"
             className="flex flex-col items-center gap-1 px-2 pb-1 press"
           >
-            <span className="-mt-6 inline-flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lifted ring-4 ring-card">
+            <span className="-mt-6 inline-flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lifted ring-4 ring-card transition-transform active:scale-95">
               <Plus size={26} strokeWidth={2.5} />
             </span>
             <span className="text-[10px] font-semibold text-primary">QuickFlow</span>
           </button>
 
-          {mobileNavItems.slice(2, 3).map((item) => (
+          {primaryNav.slice(2, 3).map((item) => (
             <BottomNavLink
               key={item.href}
               item={item}
-              active={location === item.href}
+              active={location.startsWith("/assistant")}
               onClick={() => setMobileMenuOpen(false)}
+              label="Flow"
             />
           ))}
+
 
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -563,57 +578,54 @@ export default function Layout({ children }: LayoutProps) {
         </div>
       </nav>
 
-      {/* Mobile Fullscreen Menu */}
+      {/* Mer – en lugn vy: sök, kategorier och inställningar */}
       {mobileMenuOpen && (
         <div className="md:hidden fixed inset-0 z-50 bg-background/95 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="flex flex-col h-full">
             <div className="flex justify-between items-center p-4 border-b border-border/50">
               <h2 className="text-lg font-medium text-muted-foreground">
-                {editingBottomNav
-                  ? "Anpassa bottennav"
-                  : openCategory
-                    ? categories.find((c) => c.id === openCategory)?.label ?? "Sektioner"
-                    : "Välj kategori"}
+                {openCategory
+                  ? categories.find((c) => c.id === openCategory)?.label ?? "Mer"
+                  : "Mer"}
               </h2>
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
-                  setEditingBottomNav(false);
                   setOpenCategory(null);
                 }}
                 className="p-2 text-muted-foreground hover:bg-secondary rounded-full"
+                aria-label="Stäng"
               >
                 <X size={28} />
               </button>
             </div>
             <div className="flex-1 overflow-y-auto p-4 pb-24">
-              {!editingBottomNav && (
-                <div className="relative mb-4">
-                  <Search
-                    size={18}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none"
-                  />
-                  <input
-                    type="search"
-                    value={navSearch}
-                    onChange={(e) => setNavSearch(e.target.value)}
-                    placeholder="Sök sektion…"
-                    aria-label="Sök sektion"
-                    className="w-full rounded-2xl border border-border bg-card py-3 pl-10 pr-10 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-                  />
-                  {navSearch && (
-                    <button
-                      type="button"
-                      aria-label="Rensa sökning"
-                      onClick={() => setNavSearch("")}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full text-muted-foreground hover:bg-secondary"
-                    >
-                      <X size={16} />
-                    </button>
-                  )}
-                </div>
-              )}
-              {!editingBottomNav && navSearch.trim() ? (
+              <div className="relative mb-4">
+                <Search
+                  size={18}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none"
+                />
+                <input
+                  type="search"
+                  value={navSearch}
+                  onChange={(e) => setNavSearch(e.target.value)}
+                  placeholder="Sök i appen…"
+                  aria-label="Sök i appen"
+                  className="w-full rounded-2xl border border-border bg-card py-3 pl-10 pr-10 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                />
+                {navSearch && (
+                  <button
+                    type="button"
+                    aria-label="Rensa sökning"
+                    onClick={() => setNavSearch("")}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full text-muted-foreground hover:bg-secondary"
+                  >
+                    <X size={16} />
+                  </button>
+                )}
+              </div>
+
+              {navSearch.trim() ? (
                 searchResults.length > 0 ? (
                   <div className="space-y-2">
                     {searchResults.map((item) => (
@@ -634,17 +646,6 @@ export default function Layout({ children }: LayoutProps) {
                     Hittade inget som matchar ”{navSearch}”.
                   </p>
                 )
-              ) : editingBottomNav ? (
-
-                  <BottomNavEditor
-                    allItems={navItems.filter((i) => i.href !== "/hem")}
-                    selected={bottomNavHrefs.filter((href) =>
-                      navItems.some((i) => i.href === href)
-                    )}
-                    onChange={setBottomNavHrefs}
-                    onClose={() => setEditingBottomNav(false)}
-                    onReset={() => setBottomNavHrefs(["/ma-bra", "/quickflow", "/kalender"])}
-                  />
               ) : openCategory ? (
                 <>
                   <button
@@ -654,124 +655,79 @@ export default function Layout({ children }: LayoutProps) {
                   >
                     <RotateCcw size={16} /> Alla kategorier
                   </button>
-                  {(() => {
-                    const cat = categories.find((c) => c.id === openCategory);
-                    if (!cat) return null;
-                    const CatIcon = cat.icon;
-                    return (
-                      <div className="mb-4 flex items-center gap-2 text-sm font-semibold" style={{ color: catColor(cat.id) }}>
-                        <span
-                          className="inline-flex h-8 w-8 items-center justify-center rounded-xl"
-                          style={{ backgroundColor: catColor(cat.id, 0.15) }}
-                          aria-hidden="true"
-                        >
-                          <CatIcon size={18} />
-                        </span>
-                        {cat.label}
-                      </div>
-                    );
-                  })()}
                   <div className="space-y-2">
-                    {(categories.find((c) => c.id === openCategory)?.items ?? []).map((item) => (
-                      <NavRow
-                        key={item.href}
-                        item={item}
-                        isActive={location === item.href}
-                        tint={catColor(openCategory, 0.1)}
-                        onClick={() => {
-                          setMobileMenuOpen(false);
-                          setOpenCategory(null);
-                        }}
-                      />
-                    ))}
+                    {(categories.find((c) => c.id === openCategory)?.items ?? [])
+                      .filter((item) => (simpleMode ? item.essential : true))
+                      .map((item) => (
+                        <NavRow
+                          key={item.href}
+                          item={item}
+                          isActive={location === item.href}
+                          tint={catColor(openCategory, 0.1)}
+                          onClick={() => {
+                            setMobileMenuOpen(false);
+                            setOpenCategory(null);
+                          }}
+                        />
+                      ))}
                   </div>
                 </>
-              ) : simpleMode ? (
+              ) : (
                 <>
-                  <p className="mb-3 text-sm text-muted-foreground">
-                    Enkelt läge – bara det du behöver oftast.
-                  </p>
-                  <div className="space-y-2">
-                    {essentialItems.map((item) => (
-                      <NavRow
-                        key={item.href}
-                        item={item}
-                        isActive={location === item.href}
-                        onClick={() => setMobileMenuOpen(false)}
-                      />
-                    ))}
+                  <button
+                    type="button"
+                    onClick={() => setSimpleMode(!simpleMode)}
+                    className={`mb-4 inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
+                      simpleMode
+                        ? "border-primary bg-primary/12 text-primary"
+                        : "border-border bg-card text-muted-foreground"
+                    }`}
+                  >
+                    <Check size={14} />
+                    {simpleMode ? "Visar bara det viktigaste" : "Visa bara det viktigaste"}
+                  </button>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    {categories
+                      .filter((cat) =>
+                        simpleMode ? cat.items.some((i) => i.essential) : cat.items.length > 0
+                      )
+                      .map((cat) => {
+                        const Icon = cat.icon;
+                        return (
+                          <button
+                            key={cat.id}
+                            type="button"
+                            onClick={() => setOpenCategory(cat.id)}
+                            style={{
+                              backgroundColor: catColor(cat.id, 0.12),
+                              borderColor: catColor(cat.id, 0.35),
+                              color: catColor(cat.id),
+                            }}
+                            className="flex flex-col items-center justify-center gap-2 rounded-3xl p-4 text-center border shadow-sm transition-all duration-200 active:scale-95"
+                          >
+                            <span
+                              className="inline-flex h-12 w-12 items-center justify-center rounded-2xl"
+                              style={{ backgroundColor: catColor(cat.id, 0.18) }}
+                              aria-hidden="true"
+                            >
+                              <Icon size={26} />
+                            </span>
+                            <span className="text-sm font-medium leading-tight">{cat.label}</span>
+                            <span data-npf="optional" className="text-[11px] leading-snug opacity-70">
+                              {cat.hint}
+                            </span>
+                          </button>
+                        );
+                      })}
                   </div>
+
                   <div className="mt-6 flex flex-col items-center justify-center gap-3">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="rounded-xl gap-2"
-                      onClick={() => setSimpleMode(false)}
-                    >
-                      <LayoutGrid size={16} /> Visa allt i appen
-                    </Button>
                     <Link href="/anpassa" onClick={() => setMobileMenuOpen(false)}>
                       <Button variant="outline" size="sm" className="rounded-xl gap-2">
                         <Accessibility size={16} /> Anpassa appen
                       </Button>
                     </Link>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="grid grid-cols-2 gap-3">
-                    {categories.map((cat) => {
-                      const Icon = cat.icon;
-                      return (
-                        <button
-                          key={cat.id}
-                          type="button"
-                          onClick={() => setOpenCategory(cat.id)}
-                          style={{
-                            backgroundColor: catColor(cat.id, 0.12),
-                            borderColor: catColor(cat.id, 0.35),
-                            color: catColor(cat.id),
-                          }}
-                          className="flex flex-col items-center justify-center gap-2 rounded-3xl p-4 text-center border shadow-sm transition-all duration-200 active:scale-95"
-                        >
-                          <span
-                            className="inline-flex h-12 w-12 items-center justify-center rounded-2xl"
-                            style={{ backgroundColor: catColor(cat.id, 0.18) }}
-                            aria-hidden="true"
-                          >
-                            <Icon size={26} />
-                          </span>
-                          <span className="text-sm font-medium leading-tight">{cat.label}</span>
-                          <span data-npf="optional" className="text-[11px] leading-snug opacity-70">{cat.hint}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  <div className="mt-6 flex items-center justify-center">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="rounded-xl gap-2"
-                      onClick={() => setSimpleMode(true)}
-                    >
-                      <Home size={16} /> Tillbaka till enkelt läge
-                    </Button>
-                  </div>
-
-
-
-                  <div className="mt-6 flex items-center justify-center">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setEditingBottomNav(true)}
-                      className="rounded-xl gap-2"
-                    >
-                      <Settings2 size={16} /> Redigera bottennav
-                    </Button>
-                  </div>
-                  <div className="mt-4 flex items-center justify-center">
                     <Button
                       variant="outline"
                       size="sm"
@@ -781,8 +737,6 @@ export default function Layout({ children }: LayoutProps) {
                       {alarmEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
                       Alarmljud: {alarmEnabled ? "på" : "av"}
                     </Button>
-                  </div>
-                  <div className="mt-6 flex flex-col items-center justify-center gap-3">
                     <Show when="signed-in">
                       <Button
                         variant="outline"
@@ -798,13 +752,13 @@ export default function Layout({ children }: LayoutProps) {
                       <DeleteAccountButton />
                     </Show>
                   </div>
-
                 </>
               )}
             </div>
           </div>
         </div>
       )}
+
     </div>
   );
 }
@@ -846,130 +800,17 @@ function NavRow({
   );
 }
 
-interface BottomNavEditorProps {
-
-  allItems: { href: string; label: string; icon: typeof Home }[];
-  selected: string[];
-  onChange: (hrefs: string[]) => void;
-  onClose: () => void;
-  onReset: () => void;
-}
-
-function BottomNavEditor({ allItems, selected, onChange, onClose, onReset }: BottomNavEditorProps) {
-  const selectedItems = selected
-    .map((href) => allItems.find((i) => i.href === href))
-    .filter(Boolean) as { href: string; label: string; icon: typeof Home }[];
-
-  const toggle = (href: string) => {
-    if (selected.includes(href)) {
-      onChange(selected.filter((h) => h !== href));
-    } else if (selected.length < 3) {
-      onChange([...selected, href]);
-    }
-  };
-
-  const move = (href: string, dir: -1 | 1) => {
-    const idx = selected.indexOf(href);
-    const next = idx + dir;
-    if (idx < 0 || next < 0 || next >= selected.length) return;
-    const arr = [...selected];
-    [arr[idx], arr[next]] = [arr[next]!, arr[idx]!];
-    onChange(arr);
-  };
-
-  return (
-    <div className="space-y-6">
-      <p className="text-sm text-muted-foreground">
-        Välj 3 ikoner som ska visas bredvid Hem. Ordningen bestämmer ordningen i bottennavet.
-      </p>
-
-      {/* Selected slots preview */}
-      <div className="grid grid-cols-3 gap-3">
-        {selectedItems.map((item, idx) => {
-          const Icon = item.icon;
-          return (
-            <div
-              key={item.href}
-              className="relative aspect-square flex flex-col items-center justify-center gap-2 rounded-2xl p-2 text-center bg-primary text-primary-foreground font-medium shadow-sm"
-            >
-              <Icon size={26} strokeWidth={2.5} />
-              <span className="text-xs leading-tight">{item.label}</span>
-              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
-                <button
-                  type="button"
-                  onClick={() => move(item.href, -1)}
-                  disabled={idx === 0}
-                  className="p-1 rounded-md bg-primary-foreground/20 text-primary-foreground disabled:opacity-30"
-                  aria-label="Flytta vänster"
-                >
-                  <ArrowUp size={12} className="rotate-[-90deg]" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => move(item.href, 1)}
-                  disabled={idx === selectedItems.length - 1}
-                  className="p-1 rounded-md bg-primary-foreground/20 text-primary-foreground disabled:opacity-30"
-                  aria-label="Flytta höger"
-                >
-                  <ArrowDown size={12} className="rotate-[-90deg]" />
-                </button>
-              </div>
-            </div>
-          );
-        })}
-        {Array.from({ length: 3 - selectedItems.length }).map((_, idx) => (
-          <div
-            key={idx}
-            className="aspect-square flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border bg-muted/40"
-          >
-            <span className="text-xs text-muted-foreground">Plats {idx + 1}</span>
-          </div>
-        ))}
-      </div>
-
-      {/* All items */}
-      <div className="grid grid-cols-3 gap-3">
-        {allItems.map((item) => {
-          const isSelected = selected.includes(item.href);
-          const Icon = item.icon;
-          return (
-            <button
-              key={item.href}
-              type="button"
-              onClick={() => toggle(item.href)}
-              className={`aspect-square flex flex-col items-center justify-center gap-2 rounded-2xl p-2 text-center transition-all ${
-                isSelected
-                  ? "bg-primary text-primary-foreground font-medium shadow-sm"
-                  : "bg-card text-foreground border border-border shadow-sm"
-              }`}
-            >
-              <Icon size={26} strokeWidth={isSelected ? 2.5 : 2} />
-              <span className="text-xs leading-tight">{item.label}</span>
-            </button>
-          );
-        })}
-      </div>
-
-      <div className="flex gap-3 justify-center">
-        <Button variant="ghost" size="sm" onClick={onReset} className="rounded-xl gap-1">
-          <RotateCcw size={14} /> Återställ
-        </Button>
-        <Button size="sm" onClick={onClose} className="rounded-xl gap-1">
-          <Check size={14} /> Klar
-        </Button>
-      </div>
-    </div>
-  );
-}
-
 function BottomNavLink({
   item,
   active,
   onClick,
+  label,
 }: {
   item: { href: string; label: string; icon: React.ComponentType<{ size?: number; strokeWidth?: number }> };
   active: boolean;
   onClick: () => void;
+  /** Kortare namn i navet, t.ex. "Flow" i stället för "Hjälp". */
+  label?: string;
 }) {
   const Icon = item.icon;
   return (
@@ -987,7 +828,7 @@ function BottomNavLink({
       >
         <Icon size={22} strokeWidth={active ? 2.6 : 2} />
       </span>
-      <span className="text-[10px] font-medium">{item.label}</span>
+      <span className="text-[10px] font-medium">{label ?? item.label}</span>
     </Link>
   );
 }

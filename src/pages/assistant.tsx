@@ -8,6 +8,7 @@ import { Loader2, Send, Sparkles, History, Plus, Trash2, X } from "lucide-react"
 import { chatWithFlow } from "@/lib/flow-chat.functions";
 import { useTasks, useMoods, useFocus, useReminders } from "@/hooks/use-data";
 import { useLifePuzzle } from "@/hooks/use-life-puzzle";
+import { lastPlace, type FlowPlace } from "@/lib/flow-context";
 import { useLocalStorage } from "@/lib/storage";
 import { generateCoachMessage } from "@/lib/coach";
 import {
@@ -51,6 +52,10 @@ export default function Assistant({ chatId }: { chatId?: string }) {
 
   const chat = useServerFn(chatWithFlow);
   const { puzzle, contextPrompt } = useLifePuzzle();
+  const [place, setPlace] = useState<FlowPlace | null>(null);
+  useEffect(() => {
+    setPlace(lastPlace());
+  }, []);
 
   const { activeTasks } = useTasks();
   const { moods } = useMoods();
@@ -256,7 +261,9 @@ export default function Assistant({ chatId }: { chatId?: string }) {
 
           {messages.length === 0 && (
             <div className="flex flex-wrap gap-2">
-              {[puzzle.flowPrompt, ...QUICK_PROMPTS].map((p) => (
+              {[puzzle.flowPrompt, ...(place ? [place.prompt] : []), ...QUICK_PROMPTS]
+                .filter((p, i, arr) => p && arr.indexOf(p) === i)
+                .map((p) => (
                 <button
                   key={p}
                   onClick={() => void send(p)}
