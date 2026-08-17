@@ -26,6 +26,7 @@ import { celebrateFromEvent } from "@/lib/celebrate";
 import { EnablePushButton } from "@/components/enable-push-button";
 import { PersonalPushSettings } from "@/components/personal-push-settings";
 import { QuietModeSettings } from "@/components/quiet-mode-settings";
+import { AdaptiveLeadSettings } from "@/components/adaptive-lead-settings";
 import { useReminderSync } from "@/hooks/use-reminder-sync";
 import { AreaSwitcher } from "@/components/area-switcher";
 import { AreaOnboarding } from "@/components/area-onboarding";
@@ -561,6 +562,7 @@ export default function Home() {
               </div>
   
               <QuietModeSettings />
+              <AdaptiveLeadSettings />
 
               <PersonalPushSettings />
             </div>
