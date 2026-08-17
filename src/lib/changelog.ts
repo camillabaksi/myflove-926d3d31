@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Resor och familjekalender fungerar igen – riktiga avgångar i realtid, och familjens kalender/inköp sparas i molnet igen (2026-08-17)",
       "Tydlig regelmotor för Ditt fokus idag – klart och undanstoppat göms, automatiska poster styr inte dagen, passerat och dagens datum visas, framtida datum väntar och saker utan datum kan alltid göras (2026-08-17)",
       "Ditt fokus idag visar bara dagens saker – uppgifter med framtida datum syns inte i hemskärmens fokus, utan dyker upp först när dagen är inne (2026-08-17)",
       "Framtida datum stannar i framtiden – något du lägger in den 25 augusti syns inte i dagens vy, utan under Snart/Senare (2026-08-17)",
