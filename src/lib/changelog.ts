@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Ett gemensamt språk för allt i livet – uppgifter, deadlines, lektioner, barnens dag, rutiner och tankar visas med samma fem saker: livsområde, när, prioritet, energibehov och nästa steg. Min dag samlar dem från hela appen och visar det som ryms i din kapacitet, resten ligger kvar under \"Resten kan vänta\" (2026-08-17)",
       "Brödsmulor och tillbaka-knapp på Flow-sidan – du ser sökvägen Hem › område › plats › Flow och kommer tillbaka med ett tryck (2026-08-17)",
       "Flow-sidan visar vilket livsområde du är i och ger genvägar dit du oftast ska härnäst – utan nya menyval (2026-08-17)",
       "Enklare navigation – fem fasta vägar (Hem, Min dag, QuickFlow, Flow, Mer), ny sida Min dag och en lugn Mer-vy med sök och kategorier (2026-08-17)",
