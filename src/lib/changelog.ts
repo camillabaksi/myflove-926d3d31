@@ -12,6 +12,11 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "QuickFlow sorterar tankar till rätt livsområde – Vardag, Privat, Studier eller Jobb – och tanken blir en uppgift i rätt rum direkt (2026-08-17)",
+      "Rutiner, medicin, träningspass och steg räknas i kvällens Flow Reset – dagen är mer än avklarade uppgifter (2026-08-17)",
+      "Gårdagens Flow Reset sätter startläget för dagen – kaos igår ger en lugnare förmiddag, en bra dag ger lite mer utrymme (2026-08-17)",
+      "Rörelse höjer kapaciteten – steg och genomförda pass syns som en egen signal i FlowScore (2026-08-17)",
+      "Stopp-knappen visar hur mycket som finns kvar av månadens budget och kan parkera köpet i inköpslistan i stället (2026-08-17)",
       "Energikartan lär sig ditt dygn – FlowScore vet nu när du brukar ha svacka eller topp och anpassar planen därefter (2026-08-17)",
       "Friktionsbiblioteket föreslår friktionsvärde på uppgifter i WorkFlow och StudyFlow – du slipper gissa hur tungt något är (2026-08-17)",
       "Vädret påverkar planeringen – Promenadvägar föreslår inomhus vid hårt väder och Nästa lektion lägger på marginal när det regnar eller snöar (2026-08-17)",
