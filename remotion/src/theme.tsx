@@ -1,24 +1,26 @@
 import React from "react";
 import { AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate, spring } from "remotion";
-import { loadFont as loadFraunces } from "@remotion/google-fonts/Fraunces";
+import { loadFont as loadJakarta } from "@remotion/google-fonts/PlusJakartaSans";
 import { loadFont as loadInter } from "@remotion/google-fonts/Inter";
 
-const { fontFamily: display } = loadFraunces("normal", { weights: ["600", "700"], subsets: ["latin"] });
+const { fontFamily: display } = loadJakarta("normal", { weights: ["600", "700", "800"], subsets: ["latin"] });
 const { fontFamily: body } = loadInter("normal", { weights: ["400", "500", "600"], subsets: ["latin"] });
 
+
 export const COLORS = {
-  bg: "#F2EDE2",
-  bgDeep: "#E8E0D0",
-  primary: "#24503C",
-  primarySoft: "#3A6B53",
-  sage: "#8FB2A0",
-  ink: "#1E2A24",
-  muted: "#6E7A72",
-  cream: "#FFFCF5",
-  gold: "#D69A34",
-  studies: "#6E5A99",
-  work: "#2F5C7D",
+  bg: "#F7F3FE",
+  bgDeep: "#EDE5FB",
+  primary: "#7C5CE0",
+  primarySoft: "#A98CF0",
+  sage: "#C9B6F7",
+  ink: "#241C3B",
+  muted: "#6F6789",
+  cream: "#FFFFFF",
+  gold: "#F2A8CE",
+  studies: "#8B6FE8",
+  work: "#5B72C9",
 };
+
 
 export const FONTS = { display, body };
 
