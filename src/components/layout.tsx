@@ -504,10 +504,10 @@ export default function Layout({ children }: LayoutProps) {
 
 
 
-      {/* Mobile Bottom Bar – 2 val, QuickFlow i mitten, 1 val och Mer */}
+      {/* Mobile Bottom Bar – Hem · Min dag · QuickFlow · Flow · Mer */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-md border-t border-border/70 pb-[env(safe-area-inset-bottom)] z-40">
         <div className="flex items-end justify-around px-1 pt-1.5 pb-1">
-          {mobileNavItems.slice(0, 2).map((item) => (
+          {primaryNav.slice(0, 2).map((item) => (
             <BottomNavLink
               key={item.href}
               item={item}
@@ -523,20 +523,22 @@ export default function Layout({ children }: LayoutProps) {
             aria-label="QuickFlow – få ut det ur huvudet"
             className="flex flex-col items-center gap-1 px-2 pb-1 press"
           >
-            <span className="-mt-6 inline-flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lifted ring-4 ring-card">
+            <span className="-mt-6 inline-flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lifted ring-4 ring-card transition-transform active:scale-95">
               <Plus size={26} strokeWidth={2.5} />
             </span>
             <span className="text-[10px] font-semibold text-primary">QuickFlow</span>
           </button>
 
-          {mobileNavItems.slice(2, 3).map((item) => (
+          {primaryNav.slice(2, 3).map((item) => (
             <BottomNavLink
               key={item.href}
               item={item}
-              active={location === item.href}
+              active={location.startsWith("/assistant")}
               onClick={() => setMobileMenuOpen(false)}
+              label="Flow"
             />
           ))}
+
 
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
