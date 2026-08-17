@@ -2,6 +2,8 @@
 // Snabbfångst av tankar som INTE får försvinna. Användaren behöver inte
 // bestämma vad något är – bara skriva/prata in det. MyFlove håller det.
 
+import type { LifeArea } from "./life-areas";
+
 export type QuickflowLevel = "snabbt" | "viktigt" | "tanke";
 
 export interface QuickflowItem {
@@ -14,6 +16,8 @@ export interface QuickflowItem {
   /** Platsbaserad påminnelse – id/namn från sparade platser. */
   placeId?: string;
   placeName?: string;
+  /** Livsområde tanken hör hemma i – sätts i triagen. */
+  area?: LifeArea;
   done?: boolean;
   doneAt?: number;
   /** Senast levererad lokal notis (epoch ms) – hindrar dubbletter. */
@@ -195,4 +199,17 @@ const LEVEL_RANK: Record<QuickflowLevel, number> = { tanke: 0, snabbt: 1, viktig
 /** Vid sammanfogning vinner den viktigaste nivån. */
 export function strongerLevel(a: QuickflowLevel, b: QuickflowLevel): QuickflowLevel {
   return LEVEL_RANK[a] >= LEVEL_RANK[b] ? a : b;
+}
+
+
+/** Gissar livsområde ur texten. Alltid ändringsbart av användaren. */
+export function guessArea(text: string): LifeArea {
+  const t = text.toLowerCase();
+  if (/(tenta|prov|plugg|kurs|föreläsning|inlämning|uppsats|skola|studie|seminarium)/.test(t))
+    return "studier";
+  if (/(jobb|möte|chef|kollega|kund|deadline|projekt|rapport|arbets|mejl till)/.test(t))
+    return "jobb";
+  if (/(barn|familj|förskola|läkare|tandläkare|bank|faktura|räkning|försäkring|present|semester|kompis|vän)/.test(t))
+    return "privat";
+  return "vardag";
 }

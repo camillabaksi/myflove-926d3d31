@@ -4,6 +4,9 @@ import { useQuickflow } from "@/hooks/use-quickflow";
 import { useWorkflow, useLatestEnergy } from "@/hooks/use-workflow";
 import { useEnergyPattern } from "@/hooks/use-energy-pattern";
 import { useStudySchedule } from "@/hooks/use-study-schedule";
+import { useFlowReset } from "@/hooks/use-daily-flow";
+import { useTraining } from "@/hooks/use-training";
+
 import { bookedTimeLeft, type BookedSlot } from "@/lib/booked-time";
 import { computeFlowScore, type FlowScore } from "@/lib/flowscore";
 import { minutesLeftOfWorkday } from "@/lib/workflow";
@@ -29,6 +32,17 @@ export function useFlowScore(): {
   const energy = useLatestEnergy();
   const { expectation } = useEnergyPattern();
   const { lectures } = useStudySchedule();
+  const { entries: resetEntries } = useFlowReset();
+  const { doneToday: sessionsDone, stepsToday } = useTraining();
+
+  // Gårdagens Flow Reset – används som startläge för dagen.
+  const yesterdayFeel = useMemo(() => {
+    const d = new Date();
+    d.setDate(d.getDate() - 1);
+    const iso = d.toISOString().slice(0, 10);
+    return resetEntries.find((e) => e.date === iso)?.feel ?? null;
+  }, [resetEntries]);
+
 
   const mood = useMemo(() => {
     if (!moods.length) return null;
@@ -74,8 +88,22 @@ export function useFlowScore(): {
         ? { title: booked.nextTitle, start: booked.nextStart ?? "" }
         : null,
       energyPattern: expectation,
+      yesterdayFeel,
+      movementToday: { steps: stepsToday, sessions: sessionsDone.length },
     });
-  }, [tasks, energy, mood, openItems.length, minutesLeft, booked, expectation]);
+  }, [
+    tasks,
+    energy,
+    mood,
+    openItems.length,
+    minutesLeft,
+    booked,
+    expectation,
+    yesterdayFeel,
+    stepsToday,
+    sessionsDone.length,
+  ]);
+
 
   return { flow, energy, mood, minutesLeft };
 }
