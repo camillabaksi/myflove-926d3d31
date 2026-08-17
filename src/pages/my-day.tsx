@@ -6,11 +6,14 @@ import HelpHint from "@/components/help-hint";
 import DayTimeline, { type TimelineEntry } from "@/components/day-timeline";
 import { DailyFocusCard } from "@/components/daily-focus-card";
 import { FlowScoreCard } from "@/components/flow-score-card";
+import { FlowItemCard } from "@/components/myflove/flow-item-card";
 import { useFlowScore } from "@/hooks/use-flowscore";
+import { useFlowItems } from "@/hooks/use-flow-items";
+import { withinCapacity, type FlowItem } from "@/lib/flow-items";
 import { useTasks, useReminders } from "@/hooks/use-data";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import type { Routine } from "@/pages/routines";
-import { CalendarDays, CheckCircle2, Circle, Sun, ListOrdered } from "lucide-react";
+import { CalendarDays, Sun, ListOrdered } from "lucide-react";
 import { MyFloveTransition } from "@/components/myflove/motion";
 
 function todayStr(): string {
@@ -49,6 +52,19 @@ export default function MyDay() {
     }
     return list;
   }, [activeReminders, todaysTasks, routines, today]);
+
+  // Allt som är en "sak i livet" idag – oavsett var den skapades.
+  const { today: todaysItems } = useFlowItems();
+  const { keep, rest } = useMemo(
+    () =>
+      withinCapacity(todaysItems, {
+        suggestedTasks: flow.suggestedTasks || 3,
+        maxEnergy: flow.score < 45 ? 6 : 10,
+      }),
+    [todaysItems, flow.suggestedTasks, flow.score],
+  );
+
+
 
   return (
     <Layout>
@@ -93,43 +109,54 @@ export default function MyDay() {
             headingClassName="text-lg font-semibold"
             className="space-y-3"
           >
-            {todaysTasks.length === 0 ? (
+            <p className="text-sm text-muted-foreground">
+              Samlat från hela ditt liv – uppgifter, deadlines, lektioner, barnens dag och
+              tankar du lagt i Quickflow.
+              <HelpHint label="det som får plats">
+                MyFlove väljer utifrån din kapacitet just nu. Det som inte får plats försvinner
+                inte – det ligger kvar under "Resten kan vänta".
+              </HelpHint>
+            </p>
+            {keep.length === 0 ? (
               <p className="text-sm text-muted-foreground">
                 Inga uppgifter väntar. Det räcker att bara vara idag. 💙
               </p>
             ) : (
               <ul className="space-y-2">
-                {todaysTasks.slice(0, flow.suggestedTasks || 3).map((t) => (
-                  <li key={t.id}>
-                    <MyFloveTransition transitionKey={String(t.completed)}>
-                      <button
-                        type="button"
-                        onClick={() => toggleTask(t.id)}
-                        className="flex w-full items-center gap-3 rounded-2xl border border-border bg-card p-3 text-left transition-colors hover:border-primary press"
-                      >
-                        {t.completed ? (
-                          <CheckCircle2 size={20} className="text-primary shrink-0" />
-                        ) : (
-                          <Circle size={20} className="text-muted-foreground shrink-0" />
-                        )}
-                        <span className="text-sm">{t.title}</span>
-                        {t.time && (
-                          <span className="ml-auto text-xs text-muted-foreground">{t.time}</span>
-                        )}
-                      </button>
+                {keep.map((item) => (
+                  <li key={item.id}>
+                    <MyFloveTransition transitionKey={String(item.done)}>
+                      <FlowItemCard
+                        item={item}
+                        {...(item.source === "uppgift"
+                          ? { onToggle: (i: FlowItem) => toggleTask(i.id.replace(/^task-/, "")) }
+                          : {})}
+                      />
                     </MyFloveTransition>
                   </li>
                 ))}
               </ul>
             )}
-            {todaysTasks.length > (flow.suggestedTasks || 3) && (
-              <Link
-                href="/tasks"
-                className="inline-flex items-center gap-2 text-sm text-primary underline-offset-2 hover:underline"
-              >
-                <ListOrdered size={16} /> Se hela listan
-              </Link>
+            {rest.length > 0 && (
+              <details className="rounded-2xl bg-muted/50 p-3">
+                <summary className="cursor-pointer text-sm font-medium text-ink">
+                  Resten kan vänta ({rest.length})
+                </summary>
+                <ul className="mt-3 space-y-2">
+                  {rest.slice(0, 8).map((item) => (
+                    <li key={item.id}>
+                      <FlowItemCard item={item} />
+                    </li>
+                  ))}
+                </ul>
+              </details>
             )}
+            <Link
+              href="/tasks"
+              className="inline-flex items-center gap-2 text-sm text-primary underline-offset-2 hover:underline"
+            >
+              <ListOrdered size={16} /> Se hela listan
+            </Link>
           </CollapsibleSection>
         </section>
 
