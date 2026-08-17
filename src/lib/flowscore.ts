@@ -199,6 +199,49 @@ export function computeFlowScore(input: FlowScoreInput, now = new Date()): FlowS
     });
   }
 
+  // Gårdagens Flow Reset sätter startläget för dagen – men bara på förmiddagen.
+  if (input.yesterdayFeel && hour < 13) {
+    const map = {
+      bra: { d: 4, why: "Igår kändes bra. Vi börjar dagen med lite mer utrymme." },
+      sadar: { d: 0, why: "Igår var sådär. Vi börjar neutralt och ser hur det känns." },
+      kaos: { d: -6, why: "Igår var kaos. Vi börjar lugnare idag – det är inte en bestraffning, bara vila." },
+    } as const;
+    const m = map[input.yesterdayFeel];
+    score += m.d;
+    factors.push({
+      label:
+        input.yesterdayFeel === "kaos"
+          ? "Igår var tungt"
+          : input.yesterdayFeel === "bra"
+            ? "Igår kändes bra"
+            : "Igår var sådär",
+      delta: m.d,
+      source: "Flow Reset igår",
+      reading: `Du beskrev igår som "${input.yesterdayFeel === "sadar" ? "sådär" : input.yesterdayFeel}"`,
+      why: m.why,
+    });
+  }
+
+  // Rörelse räknas – kroppen är en del av kapaciteten.
+  if (input.movementToday && ((input.movementToday.steps ?? 0) > 0 || (input.movementToday.sessions ?? 0) > 0)) {
+    const steps = input.movementToday.steps ?? 0;
+    const sessions = input.movementToday.sessions ?? 0;
+    const d = Math.min(8, (steps >= 7000 ? 5 : steps >= 3000 ? 3 : steps > 0 ? 1 : 0) + sessions * 3);
+    score += d;
+    const readingParts = [
+      steps > 0 ? `${steps.toLocaleString("sv-SE")} steg` : null,
+      sessions > 0 ? `${sessions} pass` : null,
+    ].filter(Boolean);
+    factors.push({
+      label: "Du har rört dig idag",
+      delta: d,
+      source: "Träning och hälsa",
+      reading: readingParts.join(" · "),
+      why: "Rörelse ger oftast mer ork senare på dagen. Det du redan gjort med kroppen räknas in.",
+    });
+  }
+
+
   const bookedMinutes = Math.max(0, Math.round(input.bookedMinutes ?? 0));
   const freeMinutes = Math.max(0, input.minutesLeft - bookedMinutes);
   if (bookedMinutes > 0) {
