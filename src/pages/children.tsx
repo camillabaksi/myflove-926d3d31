@@ -28,6 +28,7 @@ import { syncReminder, cancelReminder } from "@/lib/push.functions";
 import { celebrateFromEvent } from "@/lib/celebrate";
 import CollapsibleSection from "@/components/collapsible-section";
 import ChildSchedule from "@/components/child-schedule";
+import ChildReminderSettings from "@/components/child-reminder-settings";
 
 const KIND_META: Record<ChildItemKind, { label: string; icon: typeof Baby }> = {
   activity: { label: "Aktivitet", icon: CalendarDays },
