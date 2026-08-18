@@ -144,7 +144,8 @@ export default function CalendarPage() {
 
   /** Påminnelse innan start: null = ingen, annars minuter före (0 = vid start). */
   const [newAnyRemind, setNewAnyRemind] = useState<number | null>(null);
-  const [newAnyChildId, setNewAnyChildId] = useState<string>("");
+  /** Flera barn kan ingå i samma händelse, t.ex. lämning av både Bella och Bianca. */
+  const [newAnyChildIds, setNewAnyChildIds] = useState<string[]>([]);
   const [newEventTitle, setNewEventTitle] = useState("");
   const [newEventTime, setNewEventTime] = useState("");
   const [isAddingReminder, setIsAddingReminder] = useState(false);
