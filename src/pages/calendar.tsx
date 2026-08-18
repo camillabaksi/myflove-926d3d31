@@ -109,7 +109,7 @@ export default function CalendarPage() {
   const { activeTasks, completedTasks, deleteTask, addTask, updateTask } = useTasks();
   const { activeReminders, addReminder, deleteReminder, updateReminder } = useReminders();
   const { eventsForDate, hasHousehold } = useFamilyEventsByDate();
-  const { children: kids, items: childItems, addItem: addChildItem } = useChildren();
+  const { children: kids, items: childItems, addItem: addChildItem, deleteItem: deleteChildItem } = useChildren();
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
