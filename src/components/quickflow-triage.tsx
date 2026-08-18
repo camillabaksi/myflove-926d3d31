@@ -108,9 +108,40 @@ export default function QuickflowTriage() {
       s.allDay ? "Inlagd som heldag – lägg till en tid när du vill." : "Inlagd i kalendern – ändra tiden när du vill.",
     );
   };
+  const toShopping = (item: QuickflowItem) => {
+    const title = shoppingTitleFrom(item.text);
+    addShoppingItem(title);
+    complete(item.id);
+    toast.success(`"${title}" ligger nu i inköpslistan. 🛒`);
+  };
 
+  const toIdea = (item: QuickflowItem) => {
+    addIdea(item.text);
+    complete(item.id);
+    toast.success("Sparad i idébanken – den finns kvar när du vill titta på den.");
+  };
+
+  /** En knapp per ställe tanken kan hamna. Förslaget ligger först. */
+  const runDestination = (item: QuickflowItem, d: QuickflowDestination) => {
+    if (d === "inkop") return toShopping(item);
+    if (d === "kalender") return toCalendar(item);
+    if (d === "uppgift") return toTask(item);
+    if (d === "paminnelse") return toReminder(item);
+    if (d === "ide") return toIdea(item);
+    return update(item.id, { askedAt: Date.now() });
+  };
+
+  const DESTINATIONS: QuickflowDestination[] = [
+    "inkop",
+    "kalender",
+    "uppgift",
+    "paminnelse",
+    "ide",
+    "behall",
+  ];
 
   return (
+
     <div className="space-y-3">
       {!sorting ? (
         <div className="surface-card p-4 flex flex-wrap items-center gap-3">
