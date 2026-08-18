@@ -526,6 +526,7 @@ export interface Reminder {
   repeat?: RepeatMode; // default 'none'
   remindMinutesBefore?: number; // notis X min innan starttid (0 = vid start)
   note?: string; // fri anteckning om vad det gäller
+  canceled?: boolean; // avbokad – ligger kvar men ger inga notiser
 }
 
 export function useReminders() {
