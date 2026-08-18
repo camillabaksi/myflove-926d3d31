@@ -40,6 +40,8 @@ supabase.auth.onAuthStateChange(() => {
 export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
   const [value, setValue] = useLocalStorage<T>(key, initialValue);
   const hydratedRef = useRef(false);
+  const dirtyRef = useRef(false);
+  const initialRef = useRef(initialValue);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const getLocalUpdatedAt = () => {
@@ -59,6 +61,16 @@ export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
     }
   };
 
+  // Är det lokala värdet fortfarande "tomt" (samma som standardvärdet)?
+  // Då får det aldrig skriva över något i molnet.
+  const isLocalEmpty = () => {
+    try {
+      return JSON.stringify(value) === JSON.stringify(initialRef.current);
+    } catch {
+      return false;
+    }
+  };
+
   // Initial hydration from cloud
   useEffect(() => {
     let cancelled = false;
@@ -75,10 +87,14 @@ export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
 
       if (cancelled) return;
 
+      // Läsningen misslyckades – rör inte molnet, annars riskerar vi att
+      // skriva över riktig data med en tom lista.
+      if (error) return;
+
       const localTs = getLocalUpdatedAt();
-      if (!error && data) {
+      if (data) {
         const cloudTs = new Date(data.updated_at as string).getTime();
-        if (cloudTs >= localTs) {
+        if (!dirtyRef.current && (cloudTs >= localTs || isLocalEmpty())) {
           setValue(data.value as T);
           setLocalUpdatedAt(cloudTs);
           hydratedRef.current = true;
@@ -86,8 +102,12 @@ export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
         }
       }
 
-      // Local is newer (or cloud is empty) — push up.
+
       hydratedRef.current = true;
+
+      // Inget i molnet och inget lokalt att spara – gör ingenting.
+      if (isLocalEmpty()) return;
+
       const nowTs = Date.now();
       setLocalUpdatedAt(nowTs);
       await supabase.from("user_kv").upsert({
@@ -103,9 +123,10 @@ export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key]);
 
-  // Push local changes to cloud (debounced)
+  // Push local changes to cloud (debounced) – bara efter en avsiktlig ändring.
   useEffect(() => {
     if (!hydratedRef.current) return;
+    if (!dirtyRef.current) return;
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(async () => {
       const user = await getSyncUser();
@@ -123,11 +144,14 @@ export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, key]);
 
+
   const setAndStamp = useCallback(
     (v: T | ((prev: T) => T)) => {
+      dirtyRef.current = true;
       setLocalUpdatedAt(Date.now());
       setValue(v);
     },
+
     // setLocalUpdatedAt är en lokal setter och behöver inte stå med här.
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [setValue],

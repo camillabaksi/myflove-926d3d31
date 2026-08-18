@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Uppgifter försvinner inte längre vid synk – en tom lista kan inte längre skriva över dina sparade uppgifter i molnet (2026-08-18)",
       "Flow svarar igen när du startar ett nytt samtal – frågan skickas klart innan sidan byter till chatten (2026-08-18)",
       "Städlistan går att anpassa – lägg till egna steg och ta bort dem du inte behöver, per rum och läge (2026-08-18)",
       "Min situation ligger som ett eget kort högst upp i Mer-menyn och visar vilka situationer som är aktiva (2026-08-18)",
