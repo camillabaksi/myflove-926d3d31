@@ -500,6 +500,13 @@ export default function Layout({ children }: LayoutProps) {
 
   const [openCategory, setOpenCategory] = useState<string | null>(null);
   const [navSearch, setNavSearch] = useState("");
+  // Egna platser i bottennavet – du byter dem själv i "Mer".
+  const [navSlots, setNavSlots] = useLocalStorage<string[]>("myflove-bottom-nav-slots", [
+    "/kalender",
+    "/assistant",
+  ]);
+  const [editingNav, setEditingNav] = useState(false);
+
   // Enkelt läge: visar bara det viktigaste tills man själv vill se mer.
   const [simpleMode, setSimpleMode] = useLocalStorage<boolean>("myflove-simple-mode", true);
   const essentialItems = useMemo(() => navItems.filter((i) => i.essential), [navItems]);
