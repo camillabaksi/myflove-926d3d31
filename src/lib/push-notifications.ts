@@ -205,16 +205,42 @@ export function isAudioUnlocked(): boolean {
 
 interface FlowNotificationOptions extends NotificationOptions {
   silentAlarm?: boolean;
+  /** `task:<id>` / `reminder:<id>` / `quickflow:<id>` – ger snabbval i notisen. */
+  itemKey?: string;
 }
 
 export function sendPushNotification(title: string, options?: FlowNotificationOptions): void {
-  const { silentAlarm, ...rest } = options ?? {};
+  const { silentAlarm, itemKey, ...rest } = options ?? {};
   // Tyst läge: hoppa över både ljud och notis medan påminnelser är pausade.
   if (isQuietNow()) return;
   if (!silentAlarm) {
     playAlarmSound();
   }
   if (!isNotificationSupported() || Notification.permission !== 'granted') return;
+
+  // Med service worker kan notisen få knappar ("Klart" / "Skjut upp").
+  if (itemKey && 'serviceWorker' in navigator) {
+    void navigator.serviceWorker.ready
+      .then((reg) =>
+        reg.showNotification(title, {
+          ...rest,
+          data: { url: (rest as { data?: { url?: string } }).data?.url ?? '/hem', itemKey },
+          actions: [
+            { action: 'done', title: '\u2713 Klart' },
+            { action: 'snooze', title: '\u23F0 10 min' },
+          ],
+        } as NotificationOptions),
+      )
+      .catch(() => {
+        try {
+          new Notification(title, rest);
+        } catch {
+          // ignore
+        }
+      });
+    return;
+  }
+
   try {
     new Notification(title, rest);
   } catch {

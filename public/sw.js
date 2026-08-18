@@ -23,7 +23,7 @@ self.addEventListener("push", (event) => {
   }
 
   const itemKey = data.itemKey;
-  const quickActions = itemKey && /^(task|reminder|quickflow):/.test(itemKey)
+  const quickActions = itemKey && /^(task|deadline|reminder|quickflow):/.test(itemKey)
     ? [
         { action: "done", title: "✓ Klart" },
         { action: "snooze", title: "⏰ 10 min" },

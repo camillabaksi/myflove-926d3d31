@@ -24,7 +24,7 @@ export const SNOOZE_MINUTES = 10;
 /** Notiser med de här prefixen får snabbval. */
 export function supportsQuickActions(itemKey: string | undefined): boolean {
   if (!itemKey) return false;
-  return /^(task|reminder|quickflow):/.test(itemKey);
+  return /^(task|deadline|reminder|quickflow):/.test(itemKey);
 }
 
 export function enqueueNotificationAction(itemKey: string, action: NotificationActionType): void {
