@@ -73,6 +73,7 @@ export default function StopModal({ open, onOpenChange }: StopModalProps) {
   const { contextPrompt } = useLifePuzzle();
   const [breathCount, setBreathCount] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const convIdRef = useRef<string | null>(null);
 
   // Reset on open
   useEffect(() => {
@@ -80,6 +81,7 @@ export default function StopModal({ open, onOpenChange }: StopModalProps) {
       setPhase("breathe");
       setBreathCount(0);
       setFeeling(null);
+      convIdRef.current = null;
       const opener = OPENERS[Math.floor(Math.random() * OPENERS.length)] as string;
       setMessages([{ role: "assistant", content: opener }]);
       setInput("");
