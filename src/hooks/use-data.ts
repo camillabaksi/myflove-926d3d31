@@ -501,6 +501,7 @@ export interface Reminder {
   createdAt: number;
   repeat?: RepeatMode; // default 'none'
   remindMinutesBefore?: number; // notis X min innan starttid (0 = vid start)
+  note?: string; // fri anteckning om vad det gäller
 }
 
 export function useReminders() {
@@ -513,6 +514,7 @@ export function useReminders() {
     repeat: RepeatMode = 'none',
     endTime?: string,
     remindMinutesBefore?: number,
+    note?: string,
   ) => {
     setReminders([{
       id: generateId(),
@@ -524,6 +526,7 @@ export function useReminders() {
       createdAt: Date.now(),
       repeat,
       remindMinutesBefore,
+      note: note?.trim() || undefined,
     }, ...reminders]);
     trackEvent('calendar', 'reminder_added');
   };
@@ -538,10 +541,11 @@ export function useReminders() {
 
   const updateReminder = (
     id: string,
-    patch: { title?: string; date?: string; time?: string | undefined; repeat?: RepeatMode; remindMinutesBefore?: number }
+    patch: { title?: string; date?: string; time?: string | undefined; repeat?: RepeatMode; remindMinutesBefore?: number; note?: string }
   ) => {
     setReminders(reminders.map(r => r.id === id ? { ...r, ...patch } : r));
   };
+
 
   const activeReminders = reminders.filter(r => !r.completed).sort((a, b) => {
     // Sort by date then time
