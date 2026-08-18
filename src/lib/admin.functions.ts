@@ -117,15 +117,38 @@ export const deleteFrictionItemFn = createServerFn({ method: "POST" })
 
 export type AdminUserRow = {
   user_id: string;
+  name: string | null;
   email: string | null;
   created_at: string | null;
   last_sign_in_at: string | null;
+  last_visit_at: string | null;
+  visits: number;
   roles: string[];
 };
 
+const UserFilter = z
+  .object({
+    from: z.string().optional(),
+    to: z.string().optional(),
+  })
+  .optional();
+
+function displayName(meta: Record<string, unknown>, email: string | null): string | null {
+  const pick = (k: string) => (typeof meta[k] === "string" ? (meta[k] as string).trim() : "");
+  const full = pick("full_name") || pick("name");
+  if (full) return full;
+  const first = pick("first_name") || pick("given_name");
+  if (first) return first;
+  const local = email?.split("@")[0] ?? "";
+  if (!local) return null;
+  const base = local.split(/[._-]/)[0] ?? local;
+  return base.charAt(0).toUpperCase() + base.slice(1);
+}
+
 export const listUsersWithRolesFn = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }): Promise<AdminUserRow[]> => {
+  .inputValidator((data: unknown) => UserFilter.parse(data))
+  .handler(async ({ data, context }): Promise<AdminUserRow[]> => {
     await assertAdmin(context.supabase, context.userId);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
@@ -147,16 +170,64 @@ export const listUsersWithRolesFn = createServerFn({ method: "GET" })
       rolesByUser.set(r.user_id, list);
     }
 
-    return (users.users ?? [])
-      .map((u) => ({
+    // Besök per användare, valfritt begränsat till ett datumintervall.
+    let visitQuery = supabaseAdmin
+      .from("analytics_events")
+      .select("user_id, created_at")
+      .not("user_id", "is", null)
+      .order("created_at", { ascending: false })
+      .limit(50000);
+    if (data?.from) visitQuery = visitQuery.gte("created_at", `${data.from}T00:00:00.000Z`);
+    if (data?.to) visitQuery = visitQuery.lte("created_at", `${data.to}T23:59:59.999Z`);
+    const { data: visitRows } = await visitQuery;
+
+    const visitStats = new Map<string, { last: string; count: number }>();
+    for (const v of visitRows ?? []) {
+      const uid = v.user_id as string;
+      const prev = visitStats.get(uid);
+      if (!prev) visitStats.set(uid, { last: v.created_at, count: 1 });
+      else {
+        prev.count += 1;
+        if (v.created_at > prev.last) prev.last = v.created_at;
+      }
+    }
+
+    const from = data?.from ? new Date(`${data.from}T00:00:00.000Z`).getTime() : null;
+    const to = data?.to ? new Date(`${data.to}T23:59:59.999Z`).getTime() : null;
+    const inRange = (iso: string | null | undefined) => {
+      if (!iso) return false;
+      const t = new Date(iso).getTime();
+      if (from !== null && t < from) return false;
+      if (to !== null && t > to) return false;
+      return true;
+    };
+
+    const rows = (users.users ?? []).map((u) => {
+      const stats = visitStats.get(u.id);
+      return {
         user_id: u.id,
+        name: displayName((u.user_metadata ?? {}) as Record<string, unknown>, u.email ?? null),
         email: u.email ?? null,
         created_at: u.created_at ?? null,
         last_sign_in_at: u.last_sign_in_at ?? null,
+        last_visit_at: stats?.last ?? null,
+        visits: stats?.count ?? 0,
         roles: rolesByUser.get(u.id) ?? [],
-      }))
-      .sort((a, b) => (b.created_at ?? "").localeCompare(a.created_at ?? ""));
+      };
+    });
+
+    const filtered =
+      from === null && to === null
+        ? rows
+        : rows.filter((r) => r.visits > 0 || inRange(r.last_sign_in_at) || inRange(r.created_at));
+
+    return filtered.sort((a, b) =>
+      (b.last_visit_at ?? b.last_sign_in_at ?? "").localeCompare(
+        a.last_visit_at ?? a.last_sign_in_at ?? "",
+      ),
+    );
   });
+
 
 const RoleInput = z.object({
   userId: z.string().uuid(),
