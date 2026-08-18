@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Utvecklarchecklista utifrån Blueprint 2.9 – ett avsnitt per kapitel med avbockningsbara delmoment och status (2026-08-18)",
       "Blueprint 2.9 – nytt kapitel om material och kommunikation, städad kapitelordning och versionshistorik, som DOCX och PDF (2026-08-19)",
       "Pitchdeck som nedladdningsbar PDF (20 sidor) med sammanfattningssidan \"MyFlove i korthet\" (2026-08-19)",
       "Pitchdeck 2.8 – nya skärmbilder från den lila appen, Familj utbytt mot Relationer och tydliga platshållare för testarcitat (2026-08-19)",
