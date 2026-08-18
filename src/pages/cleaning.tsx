@@ -244,10 +244,56 @@ export default function CleaningPage() {
                     </div>
                   )}
                 </div>
+                <button
+                  type="button"
+                  onClick={() => removeStep(s.id)}
+                  aria-label={`Ta bort ${s.label}`}
+                  className="shrink-0 rounded-full p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
+                >
+                  <X className="h-4 w-4" />
+                </button>
               </li>
             );
           })}
         </ul>
+
+        {/* Lägg till eget steg */}
+        <section className="rounded-3xl border border-border bg-card p-4 space-y-3">
+          <p className="text-sm font-medium text-foreground">Lägg till eget steg</p>
+          <div className="flex flex-wrap gap-2">
+            <Input
+              value={newLabel}
+              onChange={(e) => setNewLabel(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") addStep();
+              }}
+              placeholder="T.ex. Vattna blommorna"
+              aria-label="Vad vill du lägga till?"
+              className="min-w-[10rem] flex-1"
+            />
+            <Input
+              value={newMinutes}
+              onChange={(e) => setNewMinutes(e.target.value)}
+              inputMode="numeric"
+              aria-label="Minuter"
+              className="w-20"
+            />
+            <Button onClick={addStep} disabled={!newLabel.trim()} className="gap-1.5">
+              <Plus className="h-4 w-4" />
+              Lägg till
+            </Button>
+          </div>
+          {hiddenIds.length > 0 && (
+            <button
+              type="button"
+              onClick={restoreSteps}
+              className="text-xs text-primary hover:underline"
+            >
+              Visa borttagna standardsteg igen ({hiddenIds.length})
+            </button>
+          )}
+        </section>
+
 
         {/* Vad du behöver */}
         <section className="rounded-3xl border border-border bg-card p-5">
