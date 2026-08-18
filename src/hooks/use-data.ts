@@ -155,6 +155,28 @@ export function useTasks() {
     setTasks((prev) => prev.map(t => (t.id === id ? { ...t, note: note.trim() || undefined } : t)));
   };
 
+  /** Generell redigering: ändra titel, datum, tider, påminnelse, område m.m. i efterhand. */
+  const updateTask = (
+    id: string,
+    patch: Partial<Pick<Task,
+      'title' | 'dueDate' | 'time' | 'endTime' | 'reminderMinutesBefore' | 'note' | 'area' | 'kind' | 'waitingOn'
+    >>,
+  ) => {
+    setTasks((prev) => prev.map(t => {
+      if (t.id !== id) return t;
+      const next: Task = { ...t, ...patch };
+      if (patch.title !== undefined) next.title = patch.title.trim() || t.title;
+      if (patch.note !== undefined) next.note = patch.note.trim() || undefined;
+      if (patch.time !== undefined && !patch.time) {
+        next.time = undefined;
+        next.endTime = undefined;
+        next.reminderMinutesBefore = undefined;
+      }
+      return next;
+    }));
+  };
+
+
 
   const setTaskDueDate = (id: string, dueDate: string) => {
     setTasks((prev) => prev.map(t => (t.id === id ? { ...t, dueDate } : t)));
