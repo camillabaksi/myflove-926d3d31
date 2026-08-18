@@ -233,20 +233,18 @@ export default function Tasks() {
                 );
               })}
 
-              {(kind === "arende" || kind === "projekt" || steps.length > 0) && (
-                <button
-                  type="button"
-                  onClick={() => toggleExpand(task.id)}
               <button
                 type="button"
                 onClick={() => toggleExpand(task.id)}
                 className="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full border border-border text-muted-foreground hover:text-foreground ml-auto"
               >
                 {isOpen ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-                Anteckning & delsteg
+                Anteckning &amp; delsteg
               </button>
             </div>
           </div>
+
+
 
 
 
