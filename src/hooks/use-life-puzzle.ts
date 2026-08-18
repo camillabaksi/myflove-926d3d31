@@ -10,6 +10,8 @@ import { isMeeting, workDemand, workProfileContext } from "@/lib/work-profile";
 import { useStudyProfile } from "@/hooks/use-study-profile";
 import { useSituation } from "@/hooks/use-situation";
 import { situationContext } from "@/lib/situation";
+import { useSituationPriority } from "@/hooks/use-situation-priority";
+import { situationPriorityContext } from "@/lib/situation-priority";
 import { isBigAssignment, isExam, studyDemand, studyProfileContext } from "@/lib/study-profile";
 import {
   buildLifePuzzle,
@@ -47,6 +49,7 @@ export function useLifePuzzle(): {
   const { profile: workProfile } = useWorkProfile();
   const { profile: studyProfile } = useStudyProfile();
   const { situation } = useSituation();
+  const priority = useSituationPriority();
 
   const input = useMemo<LifePuzzleInput>(() => {
     const today = todayISO();
@@ -107,6 +110,7 @@ export function useLifePuzzle(): {
 
     return {
       situationContext: situationContext(situation),
+      priorityContext: situationPriorityContext(priority),
       studyContext: studyProfileContext(studyProfile),
       studyDemand: sDemand,
       workContext: workProfileContext(workProfile),
@@ -122,7 +126,7 @@ export function useLifePuzzle(): {
       areas: [...byArea.values()],
       todaysEvents: events,
     };
-  }, [activeTasks, lectures, childEvents, flow, energy, mood, minutesLeft, openItems.length, workProfile, studyProfile, situation]);
+  }, [activeTasks, lectures, childEvents, flow, energy, mood, minutesLeft, openItems.length, workProfile, studyProfile, situation, priority]);
 
   const puzzle = useMemo(() => buildLifePuzzle(input), [input]);
   const contextPrompt = useMemo(() => lifeContextPrompt(input), [input]);

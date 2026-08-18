@@ -6,6 +6,7 @@ import { useFlowScore } from "@/hooks/use-flowscore";
 import { useStudyProfile } from "@/hooks/use-study-profile";
 import { getArea } from "@/lib/life-areas";
 import { hasStudyProfile, studySuggestions, type StudyDayItem } from "@/lib/study-profile";
+import { useSituationPriority } from "@/hooks/use-situation-priority";
 
 function iso(offsetDays = 0): string {
   const d = new Date();
@@ -18,6 +19,7 @@ export default function StudySuggestions() {
   const { activeTasks } = useTasks();
   const { flow, energy } = useFlowScore();
   const { profile } = useStudyProfile();
+  const priority = useSituationPriority();
 
   const suggestions = useMemo(() => {
     if (!hasStudyProfile(profile) || !profile.enabled) return [];
@@ -28,13 +30,15 @@ export default function StudySuggestions() {
       .filter((t) => !t.dueDate || (t.dueDate >= today && t.dueDate <= weekEnd))
       .map((t) => ({ title: t.title, date: t.dueDate, time: t.time }));
 
-    return studySuggestions(profile, {
+    const all = studySuggestions(profile, {
       upcoming,
       energy,
       flowScore: flow.score,
       capacityMinutes: flow.capacityMinutes,
     });
-  }, [activeTasks, profile, energy, flow.score, flow.capacityMinutes]);
+    // Samma prioritering som jobbförslagen utgår från – aldrig två tunga planer.
+    return all.slice(0, priority.maxStudySuggestions);
+  }, [activeTasks, profile, energy, flow.score, flow.capacityMinutes, priority.maxStudySuggestions]);
 
   if (!suggestions.length) return null;
 
@@ -44,6 +48,9 @@ export default function StudySuggestions() {
         <Sparkles size={18} className="text-primary" aria-hidden="true" />
         Flow tänker på dina studier
       </h2>
+      {priority.order.length > 1 && (
+        <p className="mt-1 text-xs text-muted-foreground">{priority.rationale}</p>
+      )}
       <ul className="mt-3 space-y-3">
         {suggestions.map((s) => (
           <li key={s.title} className="rounded-2xl bg-card p-4 shadow-sm">
