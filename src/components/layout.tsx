@@ -946,6 +946,30 @@ export default function Layout({ children }: LayoutProps) {
                 </>
               ) : (
                 <>
+                  {/* Min situation – alltid överst i Mer */}
+                  <Link
+                    href="/min-situation"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      setOpenCategory(null);
+                    }}
+                    className="mb-4 flex items-center gap-3 rounded-3xl border border-primary/30 bg-primary/10 p-4 shadow-sm press"
+                  >
+                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary/15 text-primary">
+                      <Compass size={22} strokeWidth={2.2} />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-sm font-semibold">Min situation</span>
+                      <span
+                        data-npf="optional"
+                        className="block truncate text-xs text-muted-foreground"
+                      >
+                        {situationLabel}
+                      </span>
+                    </span>
+                    <ChevronRight size={18} className="shrink-0 text-muted-foreground" />
+                  </Link>
+
                   <button
                     type="button"
                     onClick={() => setSimpleMode(!simpleMode)}
@@ -958,6 +982,7 @@ export default function Layout({ children }: LayoutProps) {
                     <Check size={14} />
                     {simpleMode ? "Visar bara det viktigaste" : "Visa bara det viktigaste"}
                   </button>
+
 
                   {/* Byt platser i bottenmenyn */}
                   <div className="mb-4 rounded-3xl border border-border bg-card p-4 shadow-sm">
