@@ -37,6 +37,7 @@ import { Route as AppRelationerRouteImport } from './routes/_app.relationer'
 import { Route as AppQuickflowRouteImport } from './routes/_app.quickflow'
 import { Route as AppPomodoroRouteImport } from './routes/_app.pomodoro'
 import { Route as AppMorgonstartRouteImport } from './routes/_app.morgonstart'
+import { Route as AppMinSituationRouteImport } from './routes/_app.min-situation'
 import { Route as AppMinDagRouteImport } from './routes/_app.min-dag'
 import { Route as AppMatlistaRouteImport } from './routes/_app.matlista'
 import { Route as AppMaBraRouteImport } from './routes/_app.ma-bra'
@@ -208,6 +209,11 @@ const AppPomodoroRoute = AppPomodoroRouteImport.update({
 const AppMorgonstartRoute = AppMorgonstartRouteImport.update({
   id: '/morgonstart',
   path: '/morgonstart',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMinSituationRoute = AppMinSituationRouteImport.update({
+  id: '/min-situation',
+  path: '/min-situation',
   getParentRoute: () => AppRoute,
 } as any)
 const AppMinDagRoute = AppMinDagRouteImport.update({
@@ -412,6 +418,7 @@ export interface FileRoutesByFullPath {
   '/ma-bra': typeof AppMaBraRoute
   '/matlista': typeof AppMatlistaRoute
   '/min-dag': typeof AppMinDagRoute
+  '/min-situation': typeof AppMinSituationRoute
   '/morgonstart': typeof AppMorgonstartRoute
   '/pomodoro': typeof AppPomodoroRoute
   '/quickflow': typeof AppQuickflowRoute
@@ -473,6 +480,7 @@ export interface FileRoutesByTo {
   '/ma-bra': typeof AppMaBraRoute
   '/matlista': typeof AppMatlistaRoute
   '/min-dag': typeof AppMinDagRoute
+  '/min-situation': typeof AppMinSituationRoute
   '/morgonstart': typeof AppMorgonstartRoute
   '/pomodoro': typeof AppPomodoroRoute
   '/quickflow': typeof AppQuickflowRoute
@@ -536,6 +544,7 @@ export interface FileRoutesById {
   '/_app/ma-bra': typeof AppMaBraRoute
   '/_app/matlista': typeof AppMatlistaRoute
   '/_app/min-dag': typeof AppMinDagRoute
+  '/_app/min-situation': typeof AppMinSituationRoute
   '/_app/morgonstart': typeof AppMorgonstartRoute
   '/_app/pomodoro': typeof AppPomodoroRoute
   '/_app/quickflow': typeof AppQuickflowRoute
@@ -599,6 +608,7 @@ export interface FileRouteTypes {
     | '/ma-bra'
     | '/matlista'
     | '/min-dag'
+    | '/min-situation'
     | '/morgonstart'
     | '/pomodoro'
     | '/quickflow'
@@ -660,6 +670,7 @@ export interface FileRouteTypes {
     | '/ma-bra'
     | '/matlista'
     | '/min-dag'
+    | '/min-situation'
     | '/morgonstart'
     | '/pomodoro'
     | '/quickflow'
@@ -722,6 +733,7 @@ export interface FileRouteTypes {
     | '/_app/ma-bra'
     | '/_app/matlista'
     | '/_app/min-dag'
+    | '/_app/min-situation'
     | '/_app/morgonstart'
     | '/_app/pomodoro'
     | '/_app/quickflow'
@@ -965,6 +977,13 @@ declare module '@tanstack/react-router' {
       path: '/morgonstart'
       fullPath: '/morgonstart'
       preLoaderRoute: typeof AppMorgonstartRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/min-situation': {
+      id: '/_app/min-situation'
+      path: '/min-situation'
+      fullPath: '/min-situation'
+      preLoaderRoute: typeof AppMinSituationRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/min-dag': {
@@ -1219,6 +1238,7 @@ interface AppRouteChildren {
   AppMaBraRoute: typeof AppMaBraRoute
   AppMatlistaRoute: typeof AppMatlistaRoute
   AppMinDagRoute: typeof AppMinDagRoute
+  AppMinSituationRoute: typeof AppMinSituationRoute
   AppMorgonstartRoute: typeof AppMorgonstartRoute
   AppPomodoroRoute: typeof AppPomodoroRoute
   AppQuickflowRoute: typeof AppQuickflowRoute
@@ -1263,6 +1283,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppMaBraRoute: AppMaBraRoute,
   AppMatlistaRoute: AppMatlistaRoute,
   AppMinDagRoute: AppMinDagRoute,
+  AppMinSituationRoute: AppMinSituationRoute,
   AppMorgonstartRoute: AppMorgonstartRoute,
   AppPomodoroRoute: AppPomodoroRoute,
   AppQuickflowRoute: AppQuickflowRoute,

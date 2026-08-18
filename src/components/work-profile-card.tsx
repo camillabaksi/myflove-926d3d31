@@ -120,6 +120,14 @@ export default function WorkProfileCard() {
                 placeholder="T.ex. kommunal skola"
               />
             </label>
+            <label className="space-y-1 text-sm sm:col-span-2">
+              <span className="text-muted-foreground">Arbetsplats (frivilligt)</span>
+              <Input
+                value={profile.workplace}
+                onChange={(e) => update({ workplace: e.target.value })}
+                placeholder="T.ex. Björkskolan"
+              />
+            </label>
           </div>
 
           <div className="space-y-2">

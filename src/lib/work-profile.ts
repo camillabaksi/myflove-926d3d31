@@ -9,6 +9,8 @@ export interface WorkProfile {
   role: string;
   /** Bransch/verksamhet, t.ex. "kommunal skola". */
   industry: string;
+  /** Arbetsplats, t.ex. "Björkskolan". */
+  workplace: string;
   /** Huvudsakliga ansvarsområden (förvalda + egna). */
   responsibilities: string[];
   /** Arbetstider/arbetssätt. */
@@ -26,6 +28,7 @@ export interface WorkProfile {
 export const EMPTY_WORK_PROFILE: WorkProfile = {
   role: "",
   industry: "",
+  workplace: "",
   responsibilities: [],
   pace: "",
   hoursNote: "",
@@ -80,6 +83,7 @@ export function hasWorkProfile(p: WorkProfile | null | undefined): boolean {
   return Boolean(
     p.role.trim() ||
       p.industry.trim() ||
+      p.workplace?.trim() ||
       p.responsibilities.length ||
       p.pace ||
       p.hoursNote.trim() ||
@@ -105,6 +109,7 @@ export function workProfileContext(p: WorkProfile): string {
   const lines: string[] = ["Användarens jobbprofil (frivillig kontext, inte regler):"];
   if (p.role.trim()) lines.push(`- Yrkesroll: ${p.role.trim()}`);
   if (p.industry.trim()) lines.push(`- Bransch/verksamhet: ${p.industry.trim()}`);
+  if (p.workplace?.trim()) lines.push(`- Arbetsplats: ${p.workplace.trim()}`);
   if (p.responsibilities.length) lines.push(`- Ansvarsområden: ${p.responsibilities.join(", ")}`);
   if (p.pace) lines.push(`- Arbetssätt: ${PACE_META[p.pace as WorkPace].label}`);
   if (p.hoursNote.trim()) lines.push(`- Arbetstider: ${p.hoursNote.trim()}`);
