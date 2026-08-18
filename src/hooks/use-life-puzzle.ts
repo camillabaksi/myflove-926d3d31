@@ -8,6 +8,8 @@ import { getArea } from "@/lib/life-areas";
 import { useWorkProfile } from "@/hooks/use-work-profile";
 import { isMeeting, workDemand, workProfileContext } from "@/lib/work-profile";
 import { useStudyProfile } from "@/hooks/use-study-profile";
+import { useSituation } from "@/hooks/use-situation";
+import { situationContext } from "@/lib/situation";
 import { isBigAssignment, isExam, studyDemand, studyProfileContext } from "@/lib/study-profile";
 import {
   buildLifePuzzle,
@@ -44,6 +46,7 @@ export function useLifePuzzle(): {
   const childEvents = useChildEvents();
   const { profile: workProfile } = useWorkProfile();
   const { profile: studyProfile } = useStudyProfile();
+  const { situation } = useSituation();
 
   const input = useMemo<LifePuzzleInput>(() => {
     const today = todayISO();
@@ -103,6 +106,7 @@ export function useLifePuzzle(): {
     });
 
     return {
+      situationContext: situationContext(situation),
       studyContext: studyProfileContext(studyProfile),
       studyDemand: sDemand,
       workContext: workProfileContext(workProfile),
@@ -118,7 +122,7 @@ export function useLifePuzzle(): {
       areas: [...byArea.values()],
       todaysEvents: events,
     };
-  }, [activeTasks, lectures, childEvents, flow, energy, mood, minutesLeft, openItems.length, workProfile, studyProfile]);
+  }, [activeTasks, lectures, childEvents, flow, energy, mood, minutesLeft, openItems.length, workProfile, studyProfile, situation]);
 
   const puzzle = useMemo(() => buildLifePuzzle(input), [input]);
   const contextPrompt = useMemo(() => lifeContextPrompt(input), [input]);

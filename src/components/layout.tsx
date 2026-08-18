@@ -1,7 +1,7 @@
 import { ReactNode, useState, useEffect, useMemo } from "react";
 import { Link, useLocation } from "wouter";
 import { useRouter } from "@tanstack/react-router";
-import { Home, Target, CheckSquare, ShoppingBag, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Settings2, Check, RotateCcw, ArrowUp, ArrowDown, LogOut, Volume2, VolumeX, Shield, Heart, Sun, Search, GraduationCap, Briefcase, Baby, CalendarDays, Brain, HeartPulse, House, BookOpen, Building2, LayoutGrid, Dumbbell, SprayCan, Zap, Gauge, ArrowLeft, Accessibility, Plus } from "lucide-react";
+import { Home, Target, CheckSquare, ShoppingBag, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Settings2, Check, RotateCcw, ArrowUp, ArrowDown, LogOut, Volume2, VolumeX, Shield, Heart, Sun, Search, GraduationCap, Briefcase, Baby, CalendarDays, Brain, HeartPulse, House, BookOpen, Building2, LayoutGrid, Dumbbell, SprayCan, Zap, Gauge, ArrowLeft, Accessibility, Plus, Compass } from "lucide-react";
 import { isAlarmSoundEnabled, setAlarmSoundEnabled, subscribeAlarmPref, playAlarmPreview, initAlarmAudioUnlock } from "@/lib/push-notifications";
 import { useCommuteAlerts } from "@/hooks/use-commute-alerts";
 import { useMedicationAlerts } from "@/hooks/use-medication-alerts";
@@ -211,6 +211,7 @@ export default function Layout({ children }: LayoutProps) {
           { href: "/admin-statistik", label: "Appstatistik", icon: BarChart3, hint: "Besökare och användning" },
         ]
       : []),
+    { href: "/min-situation", label: "Min situation", icon: Compass, hint: "Jobb, studier, föräldraledig, sjukskriven – hur livet ser ut just nu" },
     { href: "/anpassa", label: "Anpassa appen", icon: Accessibility, hint: "Lugnare färger, färre saker och enkla ord" },
   ].map((i) => ({ ...i, label: plainLabel(i.label, npf.plainWords) }));
 
@@ -244,7 +245,7 @@ export default function Layout({ children }: LayoutProps) {
       { id: "familyflow", label: "Relationer", hint: "Personer du delar vardagen med", icon: HeartPulse, hrefs: ["/relationer", "/familj", "/barn"] },
       { id: "studyflow", label: "Studier", hint: "Schema, prov och plugg", icon: BookOpen, hrefs: ["/studyflow", "/studybuddy"] },
       { id: "workflow", label: "Jobb", hint: "Uppgifter och möten", icon: Building2, hrefs: ["/jobb", "/workflow"] },
-      { id: "ovrigt", label: "Övrigt", hint: "Anpassa appen, feedback och inställningar", icon: LayoutGrid, hrefs: ["/anpassa", "/friktionsindex", "/admin", "/admin-statistik"] },
+      { id: "ovrigt", label: "Övrigt", hint: "Anpassa appen, feedback och inställningar", icon: LayoutGrid, hrefs: ["/min-situation", "/anpassa", "/friktionsindex", "/admin", "/admin-statistik"] },
     ];
     return groups
       .map((g) => ({ ...g, items: g.hrefs.map(byHref).filter(Boolean) as typeof navItems }))
