@@ -23,13 +23,13 @@ export function DeleteAccountButton({ onDeleted, size = "sm", className }: Props
       try {
         await supabase.auth.signOut();
       } catch {
-    // ignoreras med flit – felet påverkar inte användaren
-  }
+        // ignoreras med flit – felet påverkar inte användaren
+      }
       try {
         localStorage.clear();
       } catch {
-    // ignoreras med flit – felet påverkar inte användaren
-  }
+        // ignoreras med flit – felet påverkar inte användaren
+      }
       onDeleted?.();
       if (typeof window !== "undefined") window.location.href = "/";
     } catch (e) {

@@ -41,8 +41,8 @@ async function unregisterOurWorkers() {
       const url = r.active?.scriptURL || r.installing?.scriptURL || r.waiting?.scriptURL || "";
       if (url.endsWith(SW_PATH)) await r.unregister();
     } catch {
-    // ignoreras med flit – felet påverkar inte användaren
-  }
+      // ignoreras med flit – felet påverkar inte användaren
+    }
   }
 }
 
