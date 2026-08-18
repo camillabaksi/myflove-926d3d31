@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Förslagen följer din situation direkt – aktiverar, pausar eller byter du situation uppdateras Flow-förslagen och QuickFlow-sorteringen omedelbart, med aktiva situationer överst och det som vilar sist (2026-08-18)",
       "Min situation – välj vilka livssituationer som pågår just nu (jobb, studier, föräldraledig, sjukskriven, arbetssökande, mellan arbeten, annat). Flera kan vara aktiva samtidigt, jobb och studier öppnar sina profiler, och pausade situationer behåller all information (2026-08-18)",
       "Gamla Familj-objekt mappas automatiskt till Relationer – uppgifter, kalenderhändelser, påminnelser och QuickFlow-regler behåller sitt sammanhang och kalenderfiltret \"Familj\" heter nu Relationer (2026-08-19)",
       "Relationer – välj själv vilka relationstyper (partner, barn, familj, vänner, anhöriga, husdjur, annan viktig person) och personer som finns i ditt liv. Flow föreslår kopplingen i Quickflow, tar med den som kontext i uppgifter, kalender och påminnelser, och du kan logga om en relation gav eller tog energi (2026-08-19)",

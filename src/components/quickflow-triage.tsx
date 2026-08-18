@@ -26,6 +26,8 @@ import { useRelations } from "@/hooks/use-relations";
 import { guessRelation, relationTag } from "@/lib/relations";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import { useChildren } from "@/hooks/use-children";
+import { useSituation } from "@/hooks/use-situation";
+import { situationFocus } from "@/lib/situation";
 
 
 
@@ -49,6 +51,9 @@ export default function QuickflowTriage() {
   const { people: relationPeople } = useRelations();
   const { addFactor } = useEnergyFlow();
   const { children, addItem: addChildItem } = useChildren();
+  const { situation } = useSituation();
+  // Situationen är levande: aktiverar/pausar man något ändras förslagen direkt.
+  const focus = useMemo(() => situationFocus(situation), [situation]);
 
   const [sorting, setSorting] = useState(false);
   /** Vilken tanke som väntar på svar om energin gav eller tog. */
@@ -373,6 +378,14 @@ export default function QuickflowTriage() {
     "behall",
   ];
 
+  /** Föreslagen destination först, sedan det situationen lyfter fram, sist det som vilar. */
+  const orderDestinations = (type: QuickflowDestination): QuickflowDestination[] => {
+    const rest = DESTINATIONS.filter((d) => d !== type);
+    const rank = (d: QuickflowDestination) =>
+      focus.boosted.includes(d) ? 0 : focus.muted.includes(d) ? 2 : 1;
+    return [type, ...rest.sort((a, b) => rank(a) - rank(b))];
+  };
+
   return (
 
     <div className="space-y-3">
@@ -428,6 +441,9 @@ export default function QuickflowTriage() {
                       {child ? ` Verkar gälla ${child.name}.` : ""}
                       {!child && relationFor(item) ? ` Verkar handla om ${relationFor(item)!.name}.` : ""}
                     </p>
+                    {focus.note && (
+                      <p className="text-xs text-muted-foreground">{focus.note}</p>
+                    )}
                     {plan && !plan.ambiguous && (
                       <p className="text-xs text-primary">
                         Jag hittade ett datum i texten: {formatWhen(plan.at, new Date(), plan.allDay)}
@@ -618,7 +634,7 @@ export default function QuickflowTriage() {
                   </div>
                 ) : (
                   <div className="flex flex-wrap gap-2">
-                    {[type, ...DESTINATIONS.filter((d) => d !== type)].map((d) => (
+                    {orderDestinations(type).map((d) => (
                       <Action
                         key={d}
                         onClick={() => runDestination(item, d)}
