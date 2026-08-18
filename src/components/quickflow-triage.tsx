@@ -488,6 +488,44 @@ export default function QuickflowTriage() {
                       </Action>
                     </div>
                   </div>
+                ) : laterFor === item.id ? (
+                  <div className="space-y-2">
+                    <p className="text-xs text-muted-foreground">
+                      När vill du se den igen? Den ligger kvar i QuickFlow tills dess – inget krav.
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {laterPresets().map((p) => (
+                        <Action key={p.label} onClick={() => saveLater(item, p.at)}>
+                          {p.label}
+                        </Action>
+                      ))}
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <label className="text-xs text-muted-foreground">Eget datum</label>
+                      <input
+                        type="date"
+                        value={laterDate}
+                        onChange={(e) => setLaterDate(e.target.value)}
+                        className="rounded-xl border border-border bg-card px-2 py-1.5 text-sm"
+                      />
+                      <input
+                        type="time"
+                        value={laterTime}
+                        onChange={(e) => setLaterTime(e.target.value)}
+                        className="rounded-xl border border-border bg-card px-2 py-1.5 text-sm"
+                      />
+                      <Action
+                        highlight
+                        onClick={() => {
+                          if (!laterDate) return;
+                          saveLater(item, new Date(`${laterDate}T${laterTime || "09:00"}`).getTime());
+                        }}
+                      >
+                        Spara
+                      </Action>
+                      <Action onClick={() => setLaterFor(null)}>Avbryt</Action>
+                    </div>
+                  </div>
                 ) : (
                   <div className="flex flex-wrap gap-2">
                     {[type, ...DESTINATIONS.filter((d) => d !== type)].map((d) => (
