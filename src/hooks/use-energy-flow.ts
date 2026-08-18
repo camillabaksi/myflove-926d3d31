@@ -68,10 +68,12 @@ export function useEnergyFlow(): {
   const [presets, setPresets] = useState<EnergyPreset[]>([]);
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState<string | null>(null);
-  const [settings, setSettings] = useCloudSyncedStorage<EnergyFlowSettings>(
+  const [rawSettings, setSettings] = useCloudSyncedStorage<EnergyFlowSettings>(
     "myflove-energy-flow-settings",
     DEFAULT_ENERGY_FLOW_SETTINGS,
   );
+  const settings = useMemo(() => normalizeSettings(rawSettings), [rawSettings]);
+
 
   useEffect(() => {
     let cancelled = false;
