@@ -62,6 +62,8 @@ export default function Tasks() {
     setTaskStatus,
     setTaskKind,
     setTaskNote,
+    updateTask,
+
 
     addTaskStep,
     toggleTaskStep,
