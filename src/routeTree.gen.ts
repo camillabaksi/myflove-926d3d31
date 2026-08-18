@@ -66,6 +66,7 @@ import { Route as AppAssistantChatIdRouteImport } from './routes/_app.assistant_
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as ApiPublicHooksPushTickRouteImport } from './routes/api/public/hooks/push-tick'
+import { Route as ApiPublicHooksPushResubscribeRouteImport } from './routes/api/public/hooks/push-resubscribe'
 
 const VillkorRoute = VillkorRouteImport.update({
   id: '/villkor',
@@ -355,6 +356,12 @@ const ApiPublicHooksPushTickRoute = ApiPublicHooksPushTickRouteImport.update({
   path: '/api/public/hooks/push-tick',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicHooksPushResubscribeRoute =
+  ApiPublicHooksPushResubscribeRouteImport.update({
+    id: '/api/public/hooks/push-resubscribe',
+    path: '/api/public/hooks/push-resubscribe',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -412,6 +419,7 @@ export interface FileRoutesByFullPath {
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/assistant/$chatId': typeof AppAssistantChatIdRoute
   '/api/public/csp-report': typeof ApiPublicCspReportRoute
+  '/api/public/hooks/push-resubscribe': typeof ApiPublicHooksPushResubscribeRoute
   '/api/public/hooks/push-tick': typeof ApiPublicHooksPushTickRoute
 }
 export interface FileRoutesByTo {
@@ -470,6 +478,7 @@ export interface FileRoutesByTo {
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/assistant/$chatId': typeof AppAssistantChatIdRoute
   '/api/public/csp-report': typeof ApiPublicCspReportRoute
+  '/api/public/hooks/push-resubscribe': typeof ApiPublicHooksPushResubscribeRoute
   '/api/public/hooks/push-tick': typeof ApiPublicHooksPushTickRoute
 }
 export interface FileRoutesById {
@@ -530,6 +539,7 @@ export interface FileRoutesById {
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/_app/assistant_/$chatId': typeof AppAssistantChatIdRoute
   '/api/public/csp-report': typeof ApiPublicCspReportRoute
+  '/api/public/hooks/push-resubscribe': typeof ApiPublicHooksPushResubscribeRoute
   '/api/public/hooks/push-tick': typeof ApiPublicHooksPushTickRoute
 }
 export interface FileRouteTypes {
@@ -590,6 +600,7 @@ export interface FileRouteTypes {
     | '/.mcp/invoke-tool/$tool'
     | '/assistant/$chatId'
     | '/api/public/csp-report'
+    | '/api/public/hooks/push-resubscribe'
     | '/api/public/hooks/push-tick'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -648,6 +659,7 @@ export interface FileRouteTypes {
     | '/.mcp/invoke-tool/$tool'
     | '/assistant/$chatId'
     | '/api/public/csp-report'
+    | '/api/public/hooks/push-resubscribe'
     | '/api/public/hooks/push-tick'
   id:
     | '__root__'
@@ -707,6 +719,7 @@ export interface FileRouteTypes {
     | '/.mcp/invoke-tool/$tool'
     | '/_app/assistant_/$chatId'
     | '/api/public/csp-report'
+    | '/api/public/hooks/push-resubscribe'
     | '/api/public/hooks/push-tick'
   fileRoutesById: FileRoutesById
 }
@@ -728,6 +741,7 @@ export interface RootRouteChildren {
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicCspReportRoute: typeof ApiPublicCspReportRoute
+  ApiPublicHooksPushResubscribeRoute: typeof ApiPublicHooksPushResubscribeRoute
   ApiPublicHooksPushTickRoute: typeof ApiPublicHooksPushTickRoute
 }
 
@@ -1132,6 +1146,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksPushTickRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/push-resubscribe': {
+      id: '/api/public/hooks/push-resubscribe'
+      path: '/api/public/hooks/push-resubscribe'
+      fullPath: '/api/public/hooks/push-resubscribe'
+      preLoaderRoute: typeof ApiPublicHooksPushResubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -1240,6 +1261,7 @@ const rootRouteChildren: RootRouteChildren = {
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicCspReportRoute: ApiPublicCspReportRoute,
+  ApiPublicHooksPushResubscribeRoute: ApiPublicHooksPushResubscribeRoute,
   ApiPublicHooksPushTickRoute: ApiPublicHooksPushTickRoute,
 }
 export const routeTree = rootRouteImport
