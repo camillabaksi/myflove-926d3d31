@@ -24,13 +24,9 @@ import {
   ENERGY_CATEGORIES,
   isSameDay,
   titleTrends,
-  WEIGHT_LABEL,
   type EnergyCategory,
   type EnergyDirection,
-  type EnergyFlowWeight,
 } from "@/lib/energy-flow";
-
-const WEIGHTS: EnergyFlowWeight[] = ["av", "lite", "normal", "mycket"];
 
 interface Props {
   showHeader?: boolean;
