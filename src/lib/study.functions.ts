@@ -7,6 +7,8 @@ const InputSchema = z.object({
   course: z.string().max(200).optional(),
   dueDate: z.string().max(20).optional(),
   details: z.string().max(4000).optional(),
+  /** Frivillig studieprofil som text – personlig kontext, inte regler. */
+  profileContext: z.string().max(2000).optional(),
 });
 
 const OutputSchema = z.object({
@@ -28,6 +30,7 @@ Regler:
 - "intro" är en mening (max 20 ord) som möter användaren där hen är.
 - "note" avlastar, t.ex. "Du behöver inte göra allt idag."
 - Aldrig dömande eller stressande. Svenska, du-form, inga emojis.
+- Om en studieprofil finns: anpassa språk, stegens storlek och exempel efter den, utan att anta något som inte står där.
 - Svara ENDAST med giltig JSON enligt schemat.`;
 
 export const breakDownAssignment = createServerFn({ method: "POST" })
@@ -38,6 +41,7 @@ export const breakDownAssignment = createServerFn({ method: "POST" })
     if (!apiKey) throw new Error("Missing LOVABLE_API_KEY");
 
     const userPrompt = [
+      data.profileContext?.trim() ? `${data.profileContext.trim()}\n` : null,
       `Uppgift: ${data.title}`,
       data.course ? `Kurs: ${data.course}` : null,
       data.dueDate ? `Deadline: ${data.dueDate}` : null,

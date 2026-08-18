@@ -38,6 +38,10 @@ export interface LifePuzzleInput {
   workContext?: string;
   /** Hur krävande arbetsdagen ser ut idag. */
   workDemand?: "lätt" | "normal" | "krävande";
+  /** Frivillig studieprofil som text – kontext, inte regler. */
+  studyContext?: string;
+  /** Hur krävande studieveckan ser ut. */
+  studyDemand?: "lätt" | "normal" | "krävande";
 }
 
 export interface PuzzleConnection {
@@ -161,6 +165,17 @@ export function buildLifePuzzle(input: LifePuzzleInput): LifePuzzle {
     });
   }
 
+  // Studierna väger mot resten av livspusslet
+  if (input.studyDemand === "krävande") {
+    connections.push({
+      title: "Studierna tar mycket den här veckan",
+      body: "Prov och inlämningar ligger tätt. Då är det rimligt att annat får ta mindre plats – och att pluggandet delas upp i kortare pass.",
+      suggestion: "Ta ett kort pass i taget och låt resten vänta.",
+      href: "/studyflow",
+      hrefLabel: "Se plugg-planen",
+    });
+  }
+
   // Mental belastning
   if (input.openThoughts > 5) {
     connections.push({
@@ -235,9 +250,11 @@ export function lifeContextPrompt(input: LifePuzzleInput): string {
 
   if (input.workDemand) lines.push(`Arbetsdagen idag: ${input.workDemand}.`);
   if (input.workContext) lines.push(input.workContext);
+  if (input.studyDemand) lines.push(`Studieveckan: ${input.studyDemand}.`);
+  if (input.studyContext) lines.push(input.studyContext);
 
   lines.push(
-    "Använd detta för att koppla ihop delarna. Om kapaciteten är låg: föreslå färre saker, mindre steg och att flytta resten – aldrig skuld. Om arbetsdagen är krävande: föreslå inte många krävande aktiviteter samma kväll.",
+    "Använd detta för att koppla ihop delarna. Om kapaciteten är låg: föreslå färre saker, mindre steg och att flytta resten – aldrig skuld. Om arbetsdagen eller studieveckan är krävande: föreslå inte många krävande aktiviteter samma kväll.",
   );
   return lines.join("\n");
 }

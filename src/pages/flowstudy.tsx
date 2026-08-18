@@ -20,6 +20,9 @@ import { useCourses } from "@/hooks/use-courses";
 import { useToast } from "@/hooks/use-toast";
 import { celebrateFromEvent } from "@/lib/celebrate";
 import { generateStudySet } from "@/lib/flowstudy.functions";
+import StudyProfileCard from "@/components/study-profile-card";
+import { useStudyProfile } from "@/hooks/use-study-profile";
+import { studyProfileContext } from "@/lib/study-profile";
 import {
   useFlowStudy,
   adaptiveOrder,
@@ -45,6 +48,7 @@ export default function StudyBuddyPage() {
   const { activeCourses } = useCourses();
   const { toast } = useToast();
   const run = useServerFn(generateStudySet);
+  const { profile: studyProfile } = useStudyProfile();
   const { sets, addSet, appendToSet, deleteSet, setExamDate, gradeCard, gradeQuestion, recordAttempt, stats } =
     useFlowStudy();
 
@@ -90,6 +94,7 @@ export default function StudyBuddyPage() {
           course: courseName(courseId),
           text: text.trim() || undefined,
           file: filePayload,
+          profileContext: studyProfileContext(studyProfile) || undefined,
           cardCount: 12,
           quizCount: 10,
         },
@@ -140,6 +145,8 @@ export default function StudyBuddyPage() {
             </p>
           </div>
         </header>
+
+        <StudyProfileCard />
 
         {(stats.dueCards > 0 || stats.dueQuestions > 0) && (
           <p className="text-sm rounded-2xl border border-primary/20 bg-primary/5 p-3">
@@ -334,6 +341,7 @@ export default function StudyBuddyPage() {
                           course: courseName(set.courseId),
                           text: payload.text,
                           file: payload.file,
+                          profileContext: studyProfileContext(studyProfile) || undefined,
                           cardCount: 8,
                           quizCount: 6,
                         },
