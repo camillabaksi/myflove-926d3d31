@@ -810,27 +810,35 @@ export default function CalendarPage() {
                 const names = group.map((g) => g.child?.name ?? "Barn");
                 const color = group.length > 1 ? "#a06cd5" : (e.child?.color ?? "#a06cd5");
                 return (
-                  <Link
+                  <div
                     key={`child-${e.id}`}
-                    href="/barn"
-                    className="flex items-center gap-4 p-4 bg-card border border-border rounded-2xl hover:bg-secondary transition-colors"
+                    className="flex items-center justify-between gap-3 p-4 bg-card border border-border rounded-2xl"
                   >
-                    {pictoMode ? (
-                      <span className="text-3xl leading-none shrink-0" aria-hidden>{pictogramFor(e.title, "🐣")}</span>
-                    ) : (
-                      <Baby style={{ color }} size={24} />
-                    )}
-                    <div className="min-w-0">
-                      <div
-                        className="text-xs font-medium uppercase tracking-wider mb-0.5"
-                        style={{ color }}
-                      >
-                        {names.join(" & ")} {e.time && `kl ${e.time}`}
-                        {e.sharedWith.length > 0 && " · delad"}
+                    <Link href="/barn" className="flex items-center gap-4 min-w-0 flex-1">
+                      {pictoMode ? (
+                        <span className="text-3xl leading-none shrink-0" aria-hidden>{pictogramFor(e.title, "🐣")}</span>
+                      ) : (
+                        <Baby style={{ color }} size={24} />
+                      )}
+                      <div className="min-w-0">
+                        <div
+                          className="text-xs font-medium uppercase tracking-wider mb-0.5"
+                          style={{ color }}
+                        >
+                          {names.join(" & ")} {e.time && `kl ${e.time}`}
+                          {e.sharedWith.length > 0 && " · delad"}
+                        </div>
+                        <div className={`text-lg font-medium truncate ${e.completed ? 'line-through opacity-60' : ''}`}>{e.title}</div>
                       </div>
-                      <div className={`text-lg font-medium truncate ${e.completed ? 'line-through opacity-60' : ''}`}>{e.title}</div>
-                    </div>
-                  </Link>
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => openChildGroupEditor(group)}
+                      className="shrink-0 text-xs font-medium px-3 py-2 rounded-full bg-secondary/60 hover:bg-secondary transition-colors"
+                    >
+                      Ändra barn
+                    </button>
+                  </div>
                 );
               })}
 
