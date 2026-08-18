@@ -33,6 +33,7 @@ import { Route as AppStudierRouteImport } from './routes/_app.studier'
 import { Route as AppStatistikRouteImport } from './routes/_app.statistik'
 import { Route as AppStadningRouteImport } from './routes/_app.stadning'
 import { Route as AppShoppingRouteImport } from './routes/_app.shopping'
+import { Route as AppRelationerRouteImport } from './routes/_app.relationer'
 import { Route as AppQuickflowRouteImport } from './routes/_app.quickflow'
 import { Route as AppPomodoroRouteImport } from './routes/_app.pomodoro'
 import { Route as AppMorgonstartRouteImport } from './routes/_app.morgonstart'
@@ -187,6 +188,11 @@ const AppStadningRoute = AppStadningRouteImport.update({
 const AppShoppingRoute = AppShoppingRouteImport.update({
   id: '/shopping',
   path: '/shopping',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppRelationerRoute = AppRelationerRouteImport.update({
+  id: '/relationer',
+  path: '/relationer',
   getParentRoute: () => AppRoute,
 } as any)
 const AppQuickflowRoute = AppQuickflowRouteImport.update({
@@ -409,6 +415,7 @@ export interface FileRoutesByFullPath {
   '/morgonstart': typeof AppMorgonstartRoute
   '/pomodoro': typeof AppPomodoroRoute
   '/quickflow': typeof AppQuickflowRoute
+  '/relationer': typeof AppRelationerRoute
   '/shopping': typeof AppShoppingRoute
   '/stadning': typeof AppStadningRoute
   '/statistik': typeof AppStatistikRoute
@@ -469,6 +476,7 @@ export interface FileRoutesByTo {
   '/morgonstart': typeof AppMorgonstartRoute
   '/pomodoro': typeof AppPomodoroRoute
   '/quickflow': typeof AppQuickflowRoute
+  '/relationer': typeof AppRelationerRoute
   '/shopping': typeof AppShoppingRoute
   '/stadning': typeof AppStadningRoute
   '/statistik': typeof AppStatistikRoute
@@ -531,6 +539,7 @@ export interface FileRoutesById {
   '/_app/morgonstart': typeof AppMorgonstartRoute
   '/_app/pomodoro': typeof AppPomodoroRoute
   '/_app/quickflow': typeof AppQuickflowRoute
+  '/_app/relationer': typeof AppRelationerRoute
   '/_app/shopping': typeof AppShoppingRoute
   '/_app/stadning': typeof AppStadningRoute
   '/_app/statistik': typeof AppStatistikRoute
@@ -593,6 +602,7 @@ export interface FileRouteTypes {
     | '/morgonstart'
     | '/pomodoro'
     | '/quickflow'
+    | '/relationer'
     | '/shopping'
     | '/stadning'
     | '/statistik'
@@ -653,6 +663,7 @@ export interface FileRouteTypes {
     | '/morgonstart'
     | '/pomodoro'
     | '/quickflow'
+    | '/relationer'
     | '/shopping'
     | '/stadning'
     | '/statistik'
@@ -714,6 +725,7 @@ export interface FileRouteTypes {
     | '/_app/morgonstart'
     | '/_app/pomodoro'
     | '/_app/quickflow'
+    | '/_app/relationer'
     | '/_app/shopping'
     | '/_app/stadning'
     | '/_app/statistik'
@@ -925,6 +937,13 @@ declare module '@tanstack/react-router' {
       path: '/shopping'
       fullPath: '/shopping'
       preLoaderRoute: typeof AppShoppingRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/relationer': {
+      id: '/_app/relationer'
+      path: '/relationer'
+      fullPath: '/relationer'
+      preLoaderRoute: typeof AppRelationerRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/quickflow': {
@@ -1203,6 +1222,7 @@ interface AppRouteChildren {
   AppMorgonstartRoute: typeof AppMorgonstartRoute
   AppPomodoroRoute: typeof AppPomodoroRoute
   AppQuickflowRoute: typeof AppQuickflowRoute
+  AppRelationerRoute: typeof AppRelationerRoute
   AppShoppingRoute: typeof AppShoppingRoute
   AppStadningRoute: typeof AppStadningRoute
   AppStatistikRoute: typeof AppStatistikRoute
@@ -1246,6 +1266,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppMorgonstartRoute: AppMorgonstartRoute,
   AppPomodoroRoute: AppPomodoroRoute,
   AppQuickflowRoute: AppQuickflowRoute,
+  AppRelationerRoute: AppRelationerRoute,
   AppShoppingRoute: AppShoppingRoute,
   AppStadningRoute: AppStadningRoute,
   AppStatistikRoute: AppStatistikRoute,

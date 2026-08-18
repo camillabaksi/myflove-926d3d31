@@ -26,7 +26,7 @@ export const AREA_SHORTCUTS: Record<LifeArea, FlowShortcut[]> = {
     { href: "/flowscore", label: "FlowScore", emoji: "🔋" },
   ],
   privat: [
-    { href: "/familj", label: "Familj", emoji: "👨‍👩‍👧" },
+    { href: "/relationer", label: "Relationer", emoji: "❤️" },
     { href: "/shopping", label: "Inköp", emoji: "🛒" },
     { href: "/matlista", label: "Matlista", emoji: "🍽️" },
     { href: "/finances", label: "Ekonomi", emoji: "💰" },
@@ -62,6 +62,7 @@ const PLACES: Record<string, { label: string; prompt: string; area: LifeArea }> 
   "/stadning": { label: "Städning", prompt: "Vad är minsta möjliga hemmafix idag?", area: "privat" },
   "/finances": { label: "Ekonomi", prompt: "Hjälp mig få koll på pengarna utan stress.", area: "privat" },
   "/familj": { label: "Familj", prompt: "Hur får vi ihop familjens dag?", area: "privat" },
+  "/relationer": { label: "Relationer", prompt: "Vem vill jag ge lite tid idag?", area: "privat" },
   "/barn": { label: "Barn", prompt: "Hjälp mig med barnens dag.", area: "privat" },
   "/quickflow": { label: "QuickFlow", prompt: "Hjälp mig sortera det jag skrivit ner.", area: "vardag" },
   "/flowscore": { label: "FlowScore", prompt: "Vad är rimligt med den ork jag har?", area: "vardag" },

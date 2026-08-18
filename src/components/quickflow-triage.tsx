@@ -22,6 +22,8 @@ import { AREA_META, ALL_AREAS, type LifeArea } from "@/lib/life-areas";
 import { useQuickflowRules } from "@/hooks/use-quickflow-rules";
 import { resolveDestination, titleForRule } from "@/lib/quickflow-rules";
 import { useNotes } from "@/hooks/use-notes";
+import { useRelations } from "@/hooks/use-relations";
+import { guessRelation, relationTag } from "@/lib/relations";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import { useChildren } from "@/hooks/use-children";
 
@@ -43,6 +45,8 @@ export default function QuickflowTriage() {
   const { rules } = useQuickflowRules();
 
   const { addNote } = useNotes();
+
+  const { people: relationPeople } = useRelations();
   const { addFactor } = useEnergyFlow();
   const { children, addItem: addChildItem } = useChildren();
 
@@ -107,6 +111,15 @@ export default function QuickflowTriage() {
     return resolved;
   };
 
+  /** Vem tanken verkar handla om – bara ett förslag, aldrig ett antagande. */
+  const relationFor = (item: QuickflowItem) => guessRelation(item.text, relationPeople);
+
+  /** Relationen följer med som kontext i anteckningsfältet. */
+  const relationNote = (item: QuickflowItem): string | undefined => {
+    const p = relationFor(item);
+    return p ? relationTag(p) : undefined;
+  };
+
   const areaOf = (item: QuickflowItem): LifeArea =>
     item.area ??
     ruleFor(item).area ??
@@ -153,7 +166,7 @@ export default function QuickflowTriage() {
   };
 
   const toTask = (item: QuickflowItem) => {
-    addTask(titleOf(item), undefined, { area: areaOf(item) });
+    addTask(titleOf(item), undefined, { area: areaOf(item), note: relationNote(item) });
     complete(item.id);
     log("planering");
     toast.success(`Den ligger nu bland dina uppgifter i ${AREA_META[areaOf(item)].label}. 💙`);
@@ -166,7 +179,15 @@ export default function QuickflowTriage() {
     // En påminnelse behöver ett klockslag – heldag blir en lugn morgonpuff kl 09.
     if (s.allDay) d.setHours(9, 0, 0, 0);
     d.setTime(ruleTimeOn(item, d.getTime()));
-    addReminder(titleOf(item), d.toISOString().slice(0, 10), timeString(d.getTime()));
+    addReminder(
+      titleOf(item),
+      d.toISOString().slice(0, 10),
+      timeString(d.getTime()),
+      'none',
+      undefined,
+      undefined,
+      relationNote(item),
+    );
     complete(item.id);
     toast.success(`Jag säger till ${formatWhen(d.getTime()).toLowerCase()}.`, {
       description: s.allDay ? "Ingen tid stod i texten, så jag valde morgonen." : s.why,
@@ -182,6 +203,7 @@ export default function QuickflowTriage() {
       // Utan klockslag lägger vi in det som heldag – om inte en egen regel säger tid.
       ...(ruleTime ? { time: ruleTime } : s.allDay ? {} : { time: timeString(s.at) }),
       area: areaOf(item),
+      note: relationNote(item),
     });
     complete(item.id);
     log("planering");
@@ -404,6 +426,7 @@ export default function QuickflowTriage() {
                         ? `Din regel "${resolved.rule.phrase}": ${DESTINATION_META[type].label}.`
                         : `Mitt förslag: ${DESTINATION_META[type].label} – du bestämmer.`}
                       {child ? ` Verkar gälla ${child.name}.` : ""}
+                      {!child && relationFor(item) ? ` Verkar handla om ${relationFor(item)!.name}.` : ""}
                     </p>
                     {plan && !plan.ambiguous && (
                       <p className="text-xs text-primary">

@@ -6,12 +6,13 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-08-18";
+export const CHANGELOG_UPDATED = "2026-08-19";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Relationer – välj själv vilka relationstyper (partner, barn, familj, vänner, anhöriga, husdjur, annan viktig person) och personer som finns i ditt liv. Flow föreslår kopplingen i Quickflow, tar med den som kontext i uppgifter, kalender och påminnelser, och du kan logga om en relation gav eller tog energi (2026-08-19)",
       "Flashcards och quiz anpassade efter studieprofilen – Flow väljer betoning och mängd utifrån dina stödbehov och preferenser, visar vad som styr och låter dig byta mellan balanserat, mest flashcards eller mest quiz (2026-08-18)",
       "Min studieprofil – ålder, nivå, årskurs, program, kurser, studietakt, distans/på plats, stödbehov och hur du lär dig bäst. Flow anpassar quiz, flashcards, sammanfattningar och studieplaner efter profilen och väger den mot FlowScore, energi och kalendern (2026-08-18)",
       "Min jobbprofil – berätta frivilligt yrkesroll, bransch, ansvarsområden, arbetstider och vad du vill ha hjälp med. Flow använder det som kontext för jobbförslag och väger arbetsdagens krav mot energi och resten av livspusslet (2026-08-18)",
