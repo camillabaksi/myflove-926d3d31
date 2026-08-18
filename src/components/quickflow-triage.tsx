@@ -94,7 +94,7 @@ export default function QuickflowTriage() {
       .sort((a, b) => (b.doneAt ?? 0) - (a.doneAt ?? 0));
   }, [items]);
 
-  if (openItems.length === 0) return null;
+  if (openItems.length === 0 && recentlyCompleted.length === 0) return null;
 
 
   /** Egen regel först, sedan MyFloves gissning. */
