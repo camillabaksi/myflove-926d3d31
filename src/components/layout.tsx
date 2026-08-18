@@ -512,11 +512,17 @@ export default function Layout({ children }: LayoutProps) {
     );
   }, [navSearch, navItems]);
 
-  /** Fem fasta vägar – samma för alla, så navet alltid betyder samma sak. */
+  /**
+   * Bottennavet: Hem är fast, sedan två platser du väljer själv.
+   * Standard: Kalender (hela kalendern) och Flow.
+   */
   const primaryNav = useMemo(() => {
     const pick = (href: string) => navItems.find((i) => i.href === href);
-    return [pick("/hem"), pick("/min-dag"), pick("/assistant")].filter(Boolean) as typeof navItems;
-  }, [navItems]);
+    const slot1 = pick(navSlots[0] ?? "") ?? pick("/kalender") ?? pick("/min-dag");
+    const slot2 = pick(navSlots[1] ?? "") ?? pick("/assistant");
+    return [pick("/hem"), slot1, slot2].filter(Boolean) as typeof navItems;
+  }, [navItems, navSlots]);
+
 
   return (
     <div className="min-h-[100dvh] flex flex-col bg-background md:flex-row relative">
