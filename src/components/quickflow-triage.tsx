@@ -348,8 +348,15 @@ export default function QuickflowTriage() {
       {!sorting ? (
         <div className="surface-card p-4 flex flex-wrap items-center gap-3">
           <p className="flex-1 min-w-[12rem] text-sm text-ink">
-            Du har {openItems.length} {openItems.length === 1 ? "sak" : "saker"} i QuickFlow. Vill du
-            att jag hjälper dig sortera dem?
+            Du har {openItems.length - resting.length}{" "}
+            {openItems.length - resting.length === 1 ? "sak" : "saker"} i QuickFlow. Vill du att jag
+            hjälper dig sortera dem?
+            {resting.length > 0 && (
+              <span className="block text-xs text-muted-foreground">
+                🔄 {resting.length} {resting.length === 1 ? "tanke vilar" : "tankar vilar"} tills du
+                bad mig återkomma.
+              </span>
+            )}
           </p>
           <button
             type="button"
@@ -361,7 +368,18 @@ export default function QuickflowTriage() {
         </div>
       ) : (
         <div className="space-y-2">
-          {openItems.map((item) => {
+          {resting.length > 0 && (
+            <button
+              type="button"
+              onClick={() => setShowResting((v) => !v)}
+              className="text-xs text-muted-foreground underline underline-offset-2"
+            >
+              {showResting
+                ? `Göm de ${resting.length} som vilar till senare`
+                : `Visa ${resting.length} som vilar till senare`}
+            </button>
+          )}
+          {sortList.map((item) => {
             const resolved = ruleFor(item);
             const type = resolved.destination;
             const plan = parseWhenFromText(item.text) ? planFor(item) : null;
