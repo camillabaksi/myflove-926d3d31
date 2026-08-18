@@ -70,9 +70,17 @@ export default function StudyBuddyPage() {
   const [openSetId, setOpenSetId] = useState<string | null>(null);
   const [mode, setMode] = useState<"cards" | "quiz" | null>(null);
   const [addingId, setAddingId] = useState<string | null>(null);
+  const [emphasis, setEmphasis] = useState<StudyEmphasis | null>(null);
+
+  const basePlan = useMemo(() => studyMaterialPlan(studyProfile), [studyProfile]);
+  const plan = useMemo(
+    () => (emphasis ? applyEmphasis(basePlan, emphasis) : basePlan),
+    [basePlan, emphasis],
+  );
 
   const courseName = (id?: string) => activeCourses.find((c) => c.id === id)?.title;
   const openSet = useMemo(() => sets.find((s) => s.id === openSetId) ?? null, [sets, openSetId]);
+
 
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
