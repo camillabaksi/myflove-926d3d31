@@ -355,7 +355,7 @@ export default function QuickflowTriage() {
   };
 
 
-  const DESTINATIONS: QuickflowDestination[] = [
+  const DESTINATIONS: QuickflowDestination[] = orderByPriority<QuickflowDestination>([
     "uppgift",
     "kalender",
     "paminnelse",
@@ -371,7 +371,7 @@ export default function QuickflowTriage() {
     "energi",
     "ide",
     "behall",
-  ];
+  ], priority);
 
   return (
 

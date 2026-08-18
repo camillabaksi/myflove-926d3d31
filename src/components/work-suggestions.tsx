@@ -6,6 +6,7 @@ import { useFlowScore } from "@/hooks/use-flowscore";
 import { useWorkProfile } from "@/hooks/use-work-profile";
 import { getArea } from "@/lib/life-areas";
 import { hasWorkProfile, workSuggestions, type WorkDayItem } from "@/lib/work-profile";
+import { useSituationPriority } from "@/hooks/use-situation-priority";
 
 function iso(offsetDays = 0): string {
   const d = new Date();
@@ -18,6 +19,7 @@ export default function WorkSuggestions() {
   const { activeTasks } = useTasks();
   const { flow, energy } = useFlowScore();
   const { profile } = useWorkProfile();
+  const priority = useSituationPriority();
 
   const suggestions = useMemo(() => {
     if (!hasWorkProfile(profile) || !profile.enabled) return [];
@@ -29,13 +31,15 @@ export default function WorkSuggestions() {
     });
     const today = iso();
     const tomorrow = iso(1);
-    return workSuggestions(profile, {
+    const all = workSuggestions(profile, {
       today: jobItems.filter((t) => !t.dueDate || t.dueDate === today).map(toItem),
       tomorrow: jobItems.filter((t) => t.dueDate === tomorrow).map(toItem),
       energy,
       capacityMinutes: flow.capacityMinutes,
     });
-  }, [activeTasks, profile, energy, flow.capacityMinutes]);
+    // Prioriteringen mellan aktiva situationer avgör hur mycket jobbet får ta.
+    return all.slice(0, priority.maxWorkSuggestions);
+  }, [activeTasks, profile, energy, flow.capacityMinutes, priority.maxWorkSuggestions]);
 
   if (!suggestions.length) return null;
 
@@ -45,6 +49,9 @@ export default function WorkSuggestions() {
         <Sparkles size={18} className="text-primary" aria-hidden="true" />
         Flow tänker på ditt jobb
       </h2>
+      {priority.order.length > 1 && (
+        <p className="mt-1 text-xs text-muted-foreground">{priority.rationale}</p>
+      )}
       <ul className="mt-3 space-y-3">
         {suggestions.map((s) => (
           <li key={s.title} className="rounded-2xl bg-card p-4 shadow-sm">
