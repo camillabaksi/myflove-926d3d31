@@ -370,10 +370,70 @@ export default function QuickflowTriage() {
                   })}
                 </div>
                 {energyFor === item.id ? (
-                  <div className="flex flex-wrap gap-2">
-                    <Action onClick={() => void toEnergy(item, "gives")}>🔋 Gav energi</Action>
-                    <Action onClick={() => void toEnergy(item, "drains")}>🪫 Tog energi</Action>
-                    <Action onClick={() => setEnergyFor(null)}>Avbryt</Action>
+                  <div className="space-y-2">
+                    <div className="flex flex-wrap gap-2">
+                      <Action
+                        highlight={energyDir === "gives"}
+                        onClick={() => setEnergyDir("gives")}
+                      >
+                        🔋 Gav energi
+                      </Action>
+                      <Action
+                        highlight={energyDir === "drains"}
+                        onClick={() => setEnergyDir("drains")}
+                      >
+                        🪫 Tog energi
+                      </Action>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Hur mycket påverkar det din FlowScore?
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {[1, 2, 3, 4, 5].map((s) => (
+                        <Action key={s} onClick={() => void toEnergy(item, energyDir, s)}>
+                          {"▪".repeat(s)} {s}
+                        </Action>
+                      ))}
+                      <Action onClick={() => setEnergyFor(null)}>Avbryt</Action>
+                    </div>
+                  </div>
+                ) : childFor === item.id ? (
+                  <div className="space-y-2">
+                    <p className="text-xs text-muted-foreground">Vilket barn gäller det?</p>
+                    <div className="flex flex-wrap gap-2">
+                      {children.map((c) => (
+                        <Action
+                          key={c.id}
+                          highlight={childPick === c.id}
+                          onClick={() => setChildPick(c.id)}
+                        >
+                          👧 {c.name}
+                        </Action>
+                      ))}
+                    </div>
+                    <p className="text-xs text-muted-foreground">Vad ska det bli?</p>
+                    <div className="flex flex-wrap gap-2">
+                      <Action
+                        onClick={() => childPick && void toChild(item, childPick, "activity")}
+                      >
+                        📅 Kalender
+                      </Action>
+                      <Action onClick={() => childPick && void toChild(item, childPick, "task")}>
+                        ✅ Uppgift
+                      </Action>
+                      <Action onClick={() => childPick && void toChild(item, childPick, "note")}>
+                        📝 Anteckning
+                      </Action>
+                      <Action onClick={() => toShopping(item)}>🛒 Inköp</Action>
+                      <Action
+                        onClick={() => {
+                          setChildFor(null);
+                          setChildPick(null);
+                        }}
+                      >
+                        Avbryt
+                      </Action>
+                    </div>
                   </div>
                 ) : (
                   <div className="flex flex-wrap gap-2">
@@ -387,7 +447,7 @@ export default function QuickflowTriage() {
                         {DESTINATION_META[d].emoji} {DESTINATION_META[d].label}
                       </Action>
                     ))}
-                    <Action onClick={() => remove(item.id)}>Ta bort</Action>
+                    <Action onClick={() => remove(item.id)}>🗑️ Ta bort</Action>
                   </div>
                 )}
 
