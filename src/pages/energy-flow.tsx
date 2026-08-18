@@ -2,6 +2,8 @@ import { useMemo, useState } from "react";
 import { Link } from "wouter";
 import Layout from "@/components/layout";
 import CollapsibleSection from "@/components/collapsible-section";
+import EnergyFlowSettings from "@/components/energy-flow-settings";
+
 import {
   MyFloveButton,
   MyFloveCard,
