@@ -2,38 +2,22 @@ import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Wand2 } from "lucide-react";
 import { useQuickflow } from "@/hooks/use-quickflow";
-import { useTasks, useReminders } from "@/hooks/use-data";
+import { useTasks, useReminders, useDumpIdeas } from "@/hooks/use-data";
+import { useSharedShoppingList } from "@/hooks/use-shared-shopping-list";
 import { useFlowUsage } from "@/hooks/use-daily-flow";
 import {
   suggestWhen,
   formatWhen,
   guessArea,
+  guessDestination,
+  shoppingTitleFrom,
   parseWhenFromText,
+  DESTINATION_META,
+  type QuickflowDestination,
   type QuickflowItem,
 } from "@/lib/quickflow";
 import { AREA_META, ALL_AREAS, type LifeArea } from "@/lib/life-areas";
 
-type SuggestedType = "uppgift" | "paminnelse" | "kalender" | "ide" | "minne";
-
-const TYPE_META: Record<SuggestedType, { emoji: string; label: string }> = {
-  uppgift: { emoji: "📌", label: "Uppgift" },
-  paminnelse: { emoji: "⏰", label: "Påminnelse" },
-  kalender: { emoji: "📅", label: "Kalender" },
-  ide: { emoji: "💡", label: "Idé" },
-  minne: { emoji: "🧠", label: "Bara komma ihåg" },
-};
-
-/** Enkel, förklarbar gissning – användaren kan alltid ändra. */
-function suggestType(item: QuickflowItem): SuggestedType {
-  const t = item.text.toLowerCase();
-  if (parseWhenFromText(item.text)) return "kalender";
-  if (item.remindAt) return "paminnelse";
-  if (/(möte|träff|läkare|tandläkare|besök|kl \d|klockan)/.test(t)) return "kalender";
-  if (/(ring|boka|betala|maila|mejla|skicka|handla|fixa|hämta|tvätta)/.test(t)) return "uppgift";
-  if (/(kanske|idé|ide|skulle vilja|drömmer|tänkte att)/.test(t)) return "ide";
-  if (item.level === "viktigt") return "uppgift";
-  return "minne";
-}
 
 
 const DAY = 86_400_000;
