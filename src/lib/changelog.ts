@@ -6,12 +6,13 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-08-19";
+export const CHANGELOG_UPDATED = "2026-08-18";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Adminvyn visar namn, senaste besök och senaste inloggning per användare, med filter på datumintervall. Besök kopplas nu till inloggat konto (2026-08-18)",
       "Städad kodbas – all formatering enhetlig och alla lintanmärkningar åtgärdade, utan att något i appen ändrats (2026-08-18)",
       "Snabbare sidladdning – molnsynken hämtar inloggningen en gång i stället för en gång per inställning, vilket tar bort över hundra onödiga nätverksanrop per sida (2026-08-18)",
       "Aviseringar för aktiva påminnelser – notis när tiden är inne, med valfri förvarning (5–60 min) och stöd för upprepning. Push når dig även när appen är stängd, och avbokade påminnelser är tysta (2026-08-18)",

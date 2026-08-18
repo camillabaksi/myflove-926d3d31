@@ -212,11 +212,27 @@ function FrictionSection() {
   );
 }
 
+function fmtDateTime(iso: string | null): string {
+  if (!iso) return "—";
+  return new Date(iso).toLocaleString("sv-SE", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
 function UsersSection() {
   const qc = useQueryClient();
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
+  const filter = { ...(from ? { from } : {}), ...(to ? { to } : {}) };
+  const hasFilter = Boolean(from || to);
+
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["admin-users"],
-    queryFn: () => listUsersWithRolesFn(),
+    queryKey: ["admin-users", from, to],
+    queryFn: () => listUsersWithRolesFn(hasFilter ? { data: filter } : undefined),
     retry: false,
   });
 
@@ -229,42 +245,103 @@ function UsersSection() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-users"] }),
   });
 
-  if (isLoading) return <p className="text-muted-foreground">Laddar användare…</p>;
-  if (isError) return <p className="text-destructive text-sm">Fel: {(error as Error).message}</p>;
+  const filterBar = (
+    <div className="flex flex-wrap items-end gap-3 rounded-2xl border border-border bg-card p-4">
+      <label className="text-xs text-muted-foreground">
+        Från
+        <input
+          type="date"
+          value={from}
+          onChange={(e) => setFrom(e.target.value)}
+          className="mt-1 block rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground"
+        />
+      </label>
+      <label className="text-xs text-muted-foreground">
+        Till
+        <input
+          type="date"
+          value={to}
+          onChange={(e) => setTo(e.target.value)}
+          className="mt-1 block rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground"
+        />
+      </label>
+      {hasFilter && (
+        <button
+          type="button"
+          onClick={() => {
+            setFrom("");
+            setTo("");
+          }}
+          className="rounded-xl border border-border px-3 py-2 text-sm hover:bg-secondary"
+        >
+          Rensa filter
+        </button>
+      )}
+      <p className="ml-auto text-xs text-muted-foreground">
+        Filtret gäller besök, inloggning och registrering.
+      </p>
+    </div>
+  );
+
+  if (isLoading)
+    return (
+      <div className="space-y-3">
+        {filterBar}
+        <p className="text-muted-foreground">Laddar användare…</p>
+      </div>
+    );
+  if (isError)
+    return (
+      <div className="space-y-3">
+        {filterBar}
+        <p className="text-destructive text-sm">Fel: {(error as Error).message}</p>
+      </div>
+    );
   if (!data || data.length === 0)
-    return <p className="text-muted-foreground">Inga användare hittades.</p>;
+    return (
+      <div className="space-y-3">
+        {filterBar}
+        <p className="text-muted-foreground">Inga användare i vald period.</p>
+      </div>
+    );
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-3">
+      {filterBar}
       <p className="text-sm text-muted-foreground">{data.length} användare</p>
       <div className="overflow-x-auto rounded-2xl border border-border">
         <table className="w-full text-sm">
           <thead className="bg-muted text-left">
             <tr>
-              <th className="p-3">E-post</th>
+              <th className="p-3">Namn</th>
+              <th className="p-3">Senaste besök</th>
+              <th className="p-3">Senaste inloggning</th>
               <th className="p-3">Skapad</th>
-              <th className="p-3">Senast inloggad</th>
               <th className="p-3">Roller</th>
               <th className="p-3 text-right">Åtgärd</th>
             </tr>
           </thead>
+
           <tbody>
             {data.map((u) => {
               const isAdminRow = u.roles.includes("admin");
               return (
                 <tr key={u.user_id} className="border-t border-border">
                   <td className="p-3">
-                    <div className="font-medium">{u.email ?? "—"}</div>
-                    <div className="text-xs text-muted-foreground">{u.user_id.slice(0, 8)}…</div>
+                    <div className="font-medium">{u.name ?? u.email ?? "—"}</div>
+                    <div className="text-xs text-muted-foreground">{u.email ?? "—"}</div>
+                  </td>
+                  <td className="p-3 text-xs text-muted-foreground">
+                    <div>{fmtDateTime(u.last_visit_at)}</div>
+                    <div>{u.visits > 0 ? `${u.visits} händelser` : "inga besök"}</div>
+                  </td>
+                  <td className="p-3 text-xs text-muted-foreground">
+                    {fmtDateTime(u.last_sign_in_at)}
                   </td>
                   <td className="p-3 text-xs text-muted-foreground">
                     {u.created_at ? new Date(u.created_at).toLocaleDateString("sv-SE") : "—"}
                   </td>
-                  <td className="p-3 text-xs text-muted-foreground">
-                    {u.last_sign_in_at
-                      ? new Date(u.last_sign_in_at).toLocaleDateString("sv-SE")
-                      : "—"}
-                  </td>
+
                   <td className="p-3">
                     {u.roles.length === 0 ? (
                       <span className="text-xs text-muted-foreground">användare</span>
