@@ -107,6 +107,18 @@ export default function StopModal({ open, onOpenChange }: StopModalProps) {
     setInput("");
     setSending(true);
     try {
+      // Spara samtalet så att det dyker upp bland Flow-chattarna
+      if (!convIdRef.current) {
+        const id = await createFlowConversation(`Stop: ${text}`);
+        if (id) {
+          convIdRef.current = id;
+          const opener = messages[0];
+          if (opener?.role === "assistant") {
+            await saveFlowMessage(id, "assistant", opener.content);
+          }
+        }
+      }
+      if (convIdRef.current) await saveFlowMessage(convIdRef.current, "user", text);
       const payload: Msg[] = [
         { role: "user", content: STOP_SYSTEM_HINT },
         { role: "assistant", content: "Okej, jag är här. Jag lyssnar utan att döma." },
