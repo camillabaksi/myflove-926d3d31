@@ -47,6 +47,31 @@ export function useReminderSync() {
   const cancelFn = useServerFn(cancelReminder);
   const lastKeys = useRef<Set<string>>(new Set());
 
+  // Signatur över allt som ska trigga en ny synk (uppgifter, medicin,
+  // påminnelser, rutiner, quickflow, lektioner och barnschema).
+  const syncSignature = JSON.stringify([
+    tasks.map((t) => [
+      t.id,
+      t.completed,
+      t.time,
+      t.dueDate,
+      t.reminderMinutesBefore,
+      (t.deadlineLeadDays ?? []).join(","),
+      t.deadlineReminderTime,
+    ]),
+    medications.map((m) => [m.id, m.name, m.dosage, m.times.join(",")]),
+    reminders.map((r) => [r.id, r.completed, r.date, r.time, r.repeat]),
+    routines.map((r) => [r.id, r.title, r.time, r.enabled]),
+    quickflowItems.map((q) => [q.id, q.text, q.remindAt, q.done]),
+    lectures.map((l) => [l.id, l.title, l.weekday, l.start, l.location]),
+    studySettings.lectureReminderMinutes,
+    childSchedules ?? {},
+    childItems.map((i) => [i.id, i.child_id, i.title, i.date, i.time, i.completed]),
+    children.map((c) => [c.id, c.name]),
+    childReminders,
+    adaptiveLead,
+  ]);
+
   useEffect(() => {
     let alive = true;
     (async () => {
