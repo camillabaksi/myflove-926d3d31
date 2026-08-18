@@ -1,5 +1,26 @@
 import { useEffect, useRef, useState } from "react";
 
+// Minimala typer för webbläsarens SpeechRecognition (saknas i TS lib.dom).
+type SpeechRecognitionEventLike = {
+  results?: ArrayLike<ArrayLike<{ transcript?: string }>>;
+};
+
+type SpeechRecognitionLike = {
+  lang: string;
+  continuous: boolean;
+  interimResults: boolean;
+  onresult: ((event: SpeechRecognitionEventLike) => void) | null;
+  onerror: (() => void) | null;
+  onend: (() => void) | null;
+  start: () => void;
+  stop: () => void;
+};
+
+type SpeechRecognitionWindow = {
+  SpeechRecognition?: new () => SpeechRecognitionLike;
+  webkitSpeechRecognition?: new () => SpeechRecognitionLike;
+};
+
 // Thin wrapper around the browser SpeechRecognition API for quick single-shot
 // voice capture (e.g. adding one shopping list item at a time). Falls back
 // gracefully by reporting `isSupported: false` when unavailable so callers can
