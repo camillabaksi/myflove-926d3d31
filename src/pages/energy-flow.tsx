@@ -355,26 +355,15 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
 
       <CollapsibleSection
         title="Hur mycket får det påverka?"
-        help="Du bestämmer själv hur tungt energiflödet väger i din FlowScore. Väljer du Av påverkar det ingenting."
+        help="Du bestämmer själv. Du kan stänga av påverkan helt, eller ställa in vikten för varje energifaktor för sig."
       >
-        <MyFloveCard className="space-y-3">
-          <div className="flex flex-wrap gap-2">
-            {WEIGHTS.map((w) => (
-              <MyFloveChip
-                key={w}
-                active={settings.weight === w}
-                onClick={() => setSettings({ ...settings, weight: w })}
-              >
-                {WEIGHT_LABEL[w]}
-              </MyFloveChip>
-            ))}
-          </div>
-          <p className="text-sm text-muted-foreground">
-            Energiflödet skapar aldrig kalenderhändelser eller uppgifter. Det beskriver bara din
-            kapacitet – och du kan när som helst stänga av påverkan.
-          </p>
-        </MyFloveCard>
+        <EnergyFlowSettings />
+        <p className="mt-3 text-sm text-muted-foreground">
+          Energiflödet skapar aldrig kalenderhändelser eller uppgifter. Det beskriver bara din
+          kapacitet.
+        </p>
       </CollapsibleSection>
+
     </div>
   );
 }
