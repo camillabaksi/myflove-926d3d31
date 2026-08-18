@@ -146,6 +146,8 @@ export default function StudyBuddyPage() {
           </div>
         </header>
 
+        <StudyProfileCard />
+
         {(stats.dueCards > 0 || stats.dueQuestions > 0) && (
           <p className="text-sm rounded-2xl border border-primary/20 bg-primary/5 p-3">
             Att repetera nu: {stats.dueCards} flashcards och {stats.dueQuestions} frågor. Ta det du orkar.

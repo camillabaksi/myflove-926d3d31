@@ -90,6 +90,7 @@ export default function StudyflowPage() {
   const [rebuild, setRebuild] = useState<ReturnType<typeof rebuildDay> | null>(null);
   const [lectureNotes, setLectureNotes] = useState("");
   const [lecturePrep, setLecturePrep] = useState("");
+  const { profile: studyProfile } = useStudyProfile();
   const [newTask, setNewTask] = useState("");
 
   const voice = useVoiceInput((t) => setLectureNotes((prev) => (prev ? `${prev} ${t}` : t)));
