@@ -198,6 +198,11 @@ export default function Tasks() {
 
             <p className="text-base leading-snug">{task.title}</p>
 
+            {task.note && !isOpen && (
+              <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">{task.note}</p>
+            )}
+
+
             {status === "vantar" && task.waitingOn && (
               <p className="text-xs text-amber-800 mt-1">Väntar på: <strong>{task.waitingOn}</strong></p>
             )}
