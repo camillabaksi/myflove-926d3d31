@@ -18,6 +18,8 @@ import {
 import { AREA_META, ALL_AREAS, type LifeArea } from "@/lib/life-areas";
 import { useQuickflowRules } from "@/hooks/use-quickflow-rules";
 import { resolveDestination, titleForRule } from "@/lib/quickflow-rules";
+import { useNotes } from "@/hooks/use-notes";
+import { useEnergyFlow } from "@/hooks/use-energy-flow";
 
 
 
