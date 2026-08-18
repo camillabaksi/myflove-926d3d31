@@ -109,14 +109,17 @@ export default function Tasks() {
     addTask(newTask.trim(), dueDate || undefined, {
       kind: newKind,
       time: newTime || undefined,
+      note: newNote.trim() || undefined,
       reminderMinutesBefore: reminderMinutes,
       area: defaultAreaFor(activeArea),
     });
     setNewTask("");
     setDueDate("");
     setNewTime("");
+    setNewNote("");
     setNewReminder("");
     setNewKind("uppgift");
+
   };
 
   const areaActive = useMemo(() => filterByArea(activeTasks, activeArea), [activeTasks, activeArea]);
