@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Ändra allt i efterhand – titel, datum, tid, sluttid, påminnelse, livsområde och anteckning går att justera på allt du lagt in manuellt (2026-08-19)",
       "Snabbval direkt i notisen – tryck \"Klart\" eller \"Skjut upp 10 min\" i påminnelsen utan att öppna appen (2026-08-19)",
       "Anteckningar på uppgifter och kalenderhändelser – skriv fritt vad det gäller, adress eller vad du behöver ta med (2026-08-18)",
       "Notiser kommer även när appen är stängd – push-prenumerationen förnyas vid varje appstart och uppdateras automatiskt om webbläsaren byter nyckel (2026-08-18)",
