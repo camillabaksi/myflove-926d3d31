@@ -223,7 +223,48 @@ export default function StudyBuddyPage() {
               placeholder="Klistra in anteckningar, lärarens frågor eller en text."
               className="w-full rounded-xl border border-border bg-background p-3 text-sm"
             />
+            <div className="rounded-xl border border-border bg-secondary/30 p-3 space-y-2">
+              <p className="text-xs font-medium">
+                Flow anpassar efter din studieprofil
+              </p>
+              {basePlan.chips.length > 0 ? (
+                <div className="flex flex-wrap gap-1.5">
+                  {basePlan.chips.map((c) => (
+                    <span
+                      key={c}
+                      className="rounded-full bg-background px-2.5 py-1 text-[11px] text-muted-foreground border border-border"
+                    >
+                      {c}
+                    </span>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-xs text-muted-foreground">
+                  Fyll i din studieprofil ovan så anpassas kort och frågor efter dina stödbehov.
+                </p>
+              )}
+              <div className="flex flex-wrap gap-1.5 pt-1">
+                {(Object.keys(EMPHASIS_META) as StudyEmphasis[]).map((key) => (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => setEmphasis(key)}
+                    className={`rounded-full px-3 py-1 text-[11px] border transition ${
+                      plan.emphasis === key
+                        ? "bg-primary text-primary-foreground border-primary"
+                        : "bg-background border-border text-muted-foreground"
+                    }`}
+                  >
+                    {EMPHASIS_META[key]}
+                  </button>
+                ))}
+              </div>
+              <p className="text-[11px] text-muted-foreground">
+                Blir ungefär {plan.cardCount} flashcards och {plan.quizCount} quizfrågor. Du kan alltid ändra.
+              </p>
+            </div>
             {busy && (
+
               <MyFloveThinking
                 steps={["📄", "🧠", "🃏", "✨"]}
                 label="Jag läser materialet och gör kort av det…"
