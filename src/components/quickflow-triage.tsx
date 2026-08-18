@@ -234,14 +234,19 @@ export default function QuickflowTriage() {
                   })}
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  <Action onClick={() => toTask(item)}>📌 Uppgift</Action>
-                  <Action onClick={() => toReminder(item)}>⏰ Påminnelse</Action>
-                  <Action onClick={() => toCalendar(item)}>📅 Kalender</Action>
-                  <Action onClick={() => update(item.id, { askedAt: Date.now() })}>
-                    🧠 Behåll i QuickFlow
-                  </Action>
+                  {[type, ...DESTINATIONS.filter((d) => d !== type)].map((d) => (
+                    <Action
+                      key={d}
+                      onClick={() => runDestination(item, d)}
+                      highlight={d === type}
+                      title={DESTINATION_META[d].hint}
+                    >
+                      {DESTINATION_META[d].emoji} {DESTINATION_META[d].label}
+                    </Action>
+                  ))}
                   <Action onClick={() => remove(item.id)}>Ta bort</Action>
                 </div>
+
               </div>
             );
           })}
