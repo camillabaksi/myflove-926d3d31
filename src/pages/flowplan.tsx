@@ -3,7 +3,18 @@ import { useServerFn } from "@tanstack/react-start";
 import Layout from "@/components/layout";
 import { MyFloveThinking } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
-import { Loader2, ListOrdered, Sparkles, Clock, Battery, RotateCcw, BellRing } from "lucide-react";
+import {
+  Loader2,
+  ListOrdered,
+  Sparkles,
+  Clock,
+  Battery,
+  RotateCcw,
+  BellRing,
+  ArrowUp,
+  ArrowDown,
+  Check,
+} from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { planFlowSequence, type FlowPlanResult } from "@/lib/flowplan.functions";
 import { useTasks, useFocus } from "@/hooks/use-data";
@@ -22,7 +33,15 @@ function item2Boost(
 import { DailyFocusCard } from "@/components/daily-focus-card";
 
 
-type StoredPlan = { plan: FlowPlanResult; savedAt: string; date: string };
+type StoredPlan = {
+  plan: FlowPlanResult;
+  savedAt: string;
+  date: string;
+  /** "forslag" = Flow har föreslagit, du har inte sagt ja än. */
+  status?: "forslag" | "min";
+  /** Din egen ordning (uppgifts-id). Tom = Flows förslag gäller. */
+  customOrder?: string[];
+};
 
 type Energy = "low" | "medium" | "high";
 
@@ -67,6 +86,7 @@ export default function FlowPlanPage() {
   const [error, setError] = useState<string | null>(null);
 
   const plan = storedPlan?.plan ?? null;
+  const isSuggestion = (storedPlan?.status ?? "forslag") === "forslag";
   const setPlan = (p: FlowPlanResult | null) => {
     if (!p) {
       setStoredPlan(null);
@@ -76,6 +96,8 @@ export default function FlowPlanPage() {
       plan: p,
       savedAt: new Date().toISOString(),
       date: new Date().toISOString().split("T")[0] as string,
+      status: "forslag",
+      customOrder: [],
     });
   };
 
@@ -180,6 +202,55 @@ export default function FlowPlanPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  /** Flows föreslagna ordning (deadline först, sedan AI:ns ordning). */
+  const suggestedOrder = useMemo(() => {
+    if (!plan) return [] as string[];
+    return [...plan.plan]
+      .sort((a, b) => {
+        const ba = item2Boost(a, deadlineInfo) ? 0 : 1;
+        const bb = item2Boost(b, deadlineInfo) ? 0 : 1;
+        if (ba !== bb) return ba - bb;
+        return a.order - b.order;
+      })
+      .map((i) => i.taskId);
+  }, [plan, deadlineInfo]);
+
+  /** Din ordning om du ändrat något, annars Flows förslag. */
+  const orderedItems = useMemo(() => {
+    if (!plan) return [];
+    const byId = new Map(plan.plan.map((i) => [i.taskId, i] as const));
+    const custom = storedPlan?.customOrder ?? [];
+    const ids = custom.length
+      ? [...custom.filter((id) => byId.has(id)), ...suggestedOrder.filter((id) => !custom.includes(id))]
+      : suggestedOrder;
+    return ids.map((id) => byId.get(id)!).filter(Boolean);
+  }, [plan, storedPlan?.customOrder, suggestedOrder]);
+
+  const hasCustomOrder = (storedPlan?.customOrder ?? []).length > 0;
+
+  /** Flytta en uppgift ett steg upp eller ner – din ordning sparas. */
+  const move = (taskId: string, dir: -1 | 1) => {
+    if (!storedPlan) return;
+    const ids = orderedItems.map((i) => i.taskId);
+    const from = ids.indexOf(taskId);
+    const to = from + dir;
+    if (from < 0 || to < 0 || to >= ids.length) return;
+    const next = [...ids];
+    const [moved] = next.splice(from, 1);
+    next.splice(to, 0, moved as string);
+    setStoredPlan({ ...storedPlan, customOrder: next });
+  };
+
+  const acceptPlan = () => {
+    if (!storedPlan) return;
+    setStoredPlan({ ...storedPlan, status: "min" });
+  };
+
+  const resetOrder = () => {
+    if (!storedPlan) return;
+    setStoredPlan({ ...storedPlan, customOrder: [] });
   };
 
   return (
@@ -314,71 +385,119 @@ export default function FlowPlanPage() {
           <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="flex items-center justify-between gap-3">
               <span className="text-xs text-muted-foreground">
+                {isSuggestion ? "Flows förslag" : "Din plan"}
+                {" · "}
                 {storedPlan?.date === new Date().toISOString().split("T")[0]
-                  ? "Sparad plan för idag"
-                  : `Sparad plan från ${storedPlan?.date}`}
+                  ? "idag"
+                  : storedPlan?.date}
+                {hasCustomOrder ? " · du har ändrat ordningen" : ""}
               </span>
+              <div className="flex items-center gap-3">
+              {hasCustomOrder && (
+                <button
+                  onClick={resetOrder}
+                  className="text-xs text-muted-foreground hover:text-foreground"
+                >
+                  Tillbaka till Flows ordning
+                </button>
+              )}
               <button
                 onClick={() => setPlan(null)}
                 className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1"
               >
                 <RotateCcw size={12} /> Rensa
               </button>
+              </div>
             </div>
             <div className="p-4 bg-primary/5 border border-primary/20 rounded-2xl">
               <p className="text-sm leading-relaxed">{plan.intro}</p>
             </div>
 
             <div className="space-y-3">
-              {[...plan.plan]
-                .sort((a, b) => {
-                  const ba = item2Boost(a, deadlineInfo) ? 0 : 1;
-                  const bb = item2Boost(b, deadlineInfo) ? 0 : 1;
-                  if (ba !== bb) return ba - bb;
-                  return a.order - b.order;
-                })
-                .map((item, idx) => {
-                  const title = taskById.get(item.taskId);
-                  if (!title) return null;
-                  const info = deadlineInfo.get(item.taskId);
-                  const boosted = item2Boost(item, deadlineInfo);
-                  return (
-                    <div
-                      key={item.taskId}
-                      className="surface-card p-4 flex items-start gap-4"
-                    >
-                      <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 font-medium text-sm">
-                        {idx + 1}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-baseline justify-between gap-3">
-                          <p className="font-medium">{title}</p>
-                          <span className="text-xs text-muted-foreground shrink-0">
-                            ~{item.estimatedMin} min
-                          </span>
-                        </div>
-                        {boosted && info && (
-                          <p className="mt-1.5 inline-flex items-center gap-1.5 text-xs font-medium text-primary bg-primary/10 border border-primary/20 rounded-full px-2.5 py-1">
-                            <BellRing size={12} />
-                            {info.daysUntilDue < 0
-                              ? `Deadline passerad – prioriterad idag`
-                              : info.daysUntilDue === 0
-                                ? "Deadline idag – prioriterad först"
-                                : `Deadline om ${info.daysUntilDue} dag${info.daysUntilDue === 1 ? "" : "ar"} – påminnelsen har gått igång`}
-                          </p>
-                        )}
-                        <p className="text-sm text-muted-foreground mt-1">{item.why}</p>
-                        <button
-                          onClick={() => toggleTask(item.taskId)}
-                          className="text-xs text-primary hover:underline mt-2"
-                        >
-                          Markera som klar
-                        </button>
-                      </div>
+              {orderedItems.map((item, idx) => {
+                const title = taskById.get(item.taskId);
+                if (!title) return null;
+                const info = deadlineInfo.get(item.taskId);
+                const boosted = item2Boost(item, deadlineInfo);
+                return (
+                  <div key={item.taskId} className="surface-card p-4 flex items-start gap-3">
+                    <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 font-medium text-sm">
+                      {idx + 1}
                     </div>
-                  );
-                })}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-baseline justify-between gap-3">
+                        <p className="font-medium">{title}</p>
+                        <span className="text-xs text-muted-foreground shrink-0">
+                          ~{item.estimatedMin} min
+                        </span>
+                      </div>
+                      {boosted && info && (
+                        <p className="mt-1.5 inline-flex items-center gap-1.5 text-xs font-medium text-primary bg-primary/10 border border-primary/20 rounded-full px-2.5 py-1">
+                          <BellRing size={12} />
+                          {info.daysUntilDue < 0
+                            ? `Deadline passerad – prioriterad idag`
+                            : info.daysUntilDue === 0
+                              ? "Deadline idag – prioriterad först"
+                              : `Deadline om ${info.daysUntilDue} dag${info.daysUntilDue === 1 ? "" : "ar"} – påminnelsen har gått igång`}
+                        </p>
+                      )}
+                      <p className="text-sm text-muted-foreground mt-1">{item.why}</p>
+                      <button
+                        onClick={() => toggleTask(item.taskId)}
+                        className="text-xs text-primary hover:underline mt-2"
+                      >
+                        Markera som klar
+                      </button>
+                    </div>
+                    <div className="flex flex-col gap-1 shrink-0">
+                      <button
+                        type="button"
+                        aria-label={`Flytta upp: ${title}`}
+                        onClick={() => move(item.taskId, -1)}
+                        disabled={idx === 0}
+                        className="w-8 h-8 rounded-full bg-secondary text-muted-foreground flex items-center justify-center hover:text-primary transition-colors disabled:opacity-30"
+                      >
+                        <ArrowUp size={15} />
+                      </button>
+                      <button
+                        type="button"
+                        aria-label={`Flytta ner: ${title}`}
+                        onClick={() => move(item.taskId, 1)}
+                        disabled={idx === orderedItems.length - 1}
+                        className="w-8 h-8 rounded-full bg-secondary text-muted-foreground flex items-center justify-center hover:text-primary transition-colors disabled:opacity-30"
+                      >
+                        <ArrowDown size={15} />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
+
+            {isSuggestion && (
+              <div className="surface-card p-4 space-y-3">
+                <p className="text-sm text-muted-foreground">
+                  Det här är bara ett förslag. Flytta upp och ner tills ordningen känns rätt – säg
+                  sedan ja, eller be Flow föreslå på nytt.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    onClick={acceptPlan}
+                    className="rounded-2xl h-10 px-4 bg-primary hover:bg-primary/90 text-primary-foreground"
+                  >
+                    <Check className="mr-2 h-4 w-4" /> Ja, kör den här ordningen
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={handlePlan}
+                    disabled={!canPlan}
+                    className="rounded-2xl h-10 px-4"
+                  >
+                    <Sparkles className="mr-2 h-4 w-4" /> Föreslå på nytt
+                  </Button>
+                </div>
+              </div>
+            )}
 
             <div className="p-4 bg-secondary/60 rounded-2xl text-sm text-muted-foreground leading-relaxed">
               {plan.note}
