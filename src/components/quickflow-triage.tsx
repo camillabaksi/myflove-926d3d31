@@ -38,7 +38,12 @@ export default function QuickflowTriage() {
   const { log } = useFlowUsage();
   const { rules } = useQuickflowRules();
 
+  const { addNote } = useNotes();
+  const { addFactor } = useEnergyFlow();
+
   const [sorting, setSorting] = useState(false);
+  /** Vilken tanke som väntar på svar om energin gav eller tog. */
+  const [energyFor, setEnergyFor] = useState<string | null>(null);
   /** Användarens svar när tolkningen var otydlig. */
   const [choices, setChoices] = useState<Record<string, { at: number; allDay: boolean }>>({});
 
