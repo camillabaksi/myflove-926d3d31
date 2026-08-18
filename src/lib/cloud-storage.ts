@@ -128,7 +128,7 @@ export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
       setLocalUpdatedAt(Date.now());
       setValue(v);
     },
-    [setValue],
+    [setValue, setLocalUpdatedAt],
   );
 
   return [value, setAndStamp] as const;

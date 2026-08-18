@@ -6,7 +6,10 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
-  { ignores: ["dist", ".output", ".vinxi"] },
+  {
+    // Genererade filer formateras om av verktygskedjan – lintas inte.
+    ignores: ["dist", ".output", ".vinxi", "src/routes/mcp.ts", "src/routes/[.mcp]/**", "src/routes/[.well-known]/**"],
+  },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ["**/*.{ts,tsx}"],

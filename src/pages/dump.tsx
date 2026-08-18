@@ -123,6 +123,8 @@ export default function Dump() {
     recognition.onend = () => setIsListening(false);
 
     recognitionRef.current = recognition;
+    // Sätts upp en gång; setRawText läses via stängning och behöver inte trigga omstart.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const toggleListening = () => {
