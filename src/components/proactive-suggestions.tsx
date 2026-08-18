@@ -3,6 +3,9 @@ import { Sparkles, Umbrella, Snowflake, Thermometer, Clock, Wallet, Pill, CloudR
 import { useWeather } from "@/hooks/use-weather";
 import { useReminders, useFinances, useMedications, useTasks, useMoods } from "@/hooks/use-data";
 import CollapsibleSection from "@/components/collapsible-section";
+import { useSituation } from "@/hooks/use-situation";
+import { situationSuggestions } from "@/lib/situation";
+import { Compass } from "lucide-react";
 
 // Öppna uppgifter som brukar "pågå i bakgrunden" – vi puffar när de blivit gamla
 // så användaren inte glömmer tvätten i maskinen, disken i diskmaskinen osv.
@@ -40,6 +43,7 @@ export default function ProactiveSuggestions() {
   const { medications, isTaken } = useMedications();
   const { tasks } = useTasks();
   const { moods } = useMoods();
+  const { situation } = useSituation();
 
   const suggestions = useMemo<Suggestion[]>(() => {
     const out: Suggestion[] = [];
@@ -268,8 +272,17 @@ export default function ProactiveSuggestions() {
       });
     }
 
-    return out.slice(0, 5);
-  }, [weather, activeReminders, transactions, medications, isTaken, tasks, moods]);
+    // Situationen ligger överst – den ändras direkt när du aktiverar eller pausar något.
+    const fromSituation: Suggestion[] = situationSuggestions(situation).map((s) => ({
+      id: s.id,
+      icon: Compass,
+      tone: "care" as const,
+      title: s.title,
+      body: s.body,
+    }));
+
+    return [...fromSituation, ...out].slice(0, 5);
+  }, [weather, activeReminders, transactions, medications, isTaken, tasks, moods, situation]);
 
   if (suggestions.length === 0) return null;
 
