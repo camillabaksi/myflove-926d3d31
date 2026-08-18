@@ -13,6 +13,7 @@ import InsightQuickflowHint from "@/components/insight-quickflow-hint";
 import QuickflowCapture from "@/components/quickflow-capture";
 import { Mic, Square, Sparkles, CheckSquare, ShoppingBag, Calendar, Lightbulb, Check, Trash2, Inbox, Smile } from "lucide-react";
 import CollapsibleSection from "@/components/collapsible-section";
+import QuickflowRulesSettings from "@/components/quickflow-rules-settings";
 import { MyFloveListening } from "@/components/myflove/motion";
 
 interface SortableThought extends ParsedThought {
@@ -273,6 +274,15 @@ export default function Dump() {
 
         <InsightQuickflowHint />
         <QuickflowList />
+
+        <CollapsibleSection
+          title={<span className="flex items-center gap-2"><Sparkles size={20} /> Mina sorteringsregler</span>}
+          id="QuickFlow-regler"
+          headingClassName="font-semibold"
+          className="pt-4"
+        >
+          <QuickflowRulesSettings />
+        </CollapsibleSection>
 
         {ideas.length > 0 && (
           <CollapsibleSection
