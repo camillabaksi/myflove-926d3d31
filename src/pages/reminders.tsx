@@ -1,0 +1,232 @@
+import { useMemo, useState } from "react";
+import Layout from "@/components/layout";
+import CollapsibleSection from "@/components/collapsible-section";
+import { Button } from "@/components/ui/button";
+import { useReminders, type Reminder } from "@/hooks/use-data";
+import { useToast } from "@/hooks/use-toast";
+import { BellRing, Plus, Trash2, Undo2, Pencil, Check, X, CalendarClock } from "lucide-react";
+
+const todayIso = () => new Date().toISOString().slice(0, 10);
+
+const inputClass =
+  "p-3 rounded-xl bg-secondary/50 border border-transparent focus:border-primary focus:ring-1 focus:ring-primary outline-none text-base w-full";
+
+function StatusBadge({ canceled }: { canceled: boolean }) {
+  return (
+    <span
+      className={`inline-flex items-center gap-1.5 rounded-pill px-2.5 py-1 text-xs font-semibold ${
+        canceled
+          ? "bg-muted text-muted-foreground"
+          : "bg-primary/12 text-primary"
+      }`}
+    >
+      <span
+        aria-hidden
+        className={`h-1.5 w-1.5 rounded-full ${canceled ? "bg-muted-foreground" : "bg-primary"}`}
+      />
+      {canceled ? "Avbokad" : "Aktiv"}
+    </span>
+  );
+}
+
+function ReminderRow({
+  reminder,
+  onSave,
+  onCancel,
+  onRestore,
+  onDelete,
+}: {
+  reminder: Reminder;
+  onSave: (patch: { title: string; date: string; time: string | undefined; note: string | undefined }) => void;
+  onCancel: () => void;
+  onRestore: () => void;
+  onDelete: () => void;
+}) {
+  const [editing, setEditing] = useState(false);
+  const [title, setTitle] = useState(reminder.title);
+  const [date, setDate] = useState(reminder.date);
+  const [time, setTime] = useState(reminder.time ?? "");
+  const [note, setNote] = useState(reminder.note ?? "");
+  const canceled = Boolean(reminder.canceled);
+
+  const startEdit = () => {
+    setTitle(reminder.title);
+    setDate(reminder.date);
+    setTime(reminder.time ?? "");
+    setNote(reminder.note ?? "");
+    setEditing(true);
+  };
+
+  if (editing) {
+    return (
+      <li className="rounded-2xl border border-border bg-card p-4 shadow-sm space-y-3">
+        <input className={inputClass} value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Vad gäller det?" />
+        <div className="grid grid-cols-2 gap-2">
+          <input className={inputClass} type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+          <input className={inputClass} type="time" value={time} onChange={(e) => setTime(e.target.value)} />
+        </div>
+        <input className={inputClass} value={note} onChange={(e) => setNote(e.target.value)} placeholder="Anteckning (valfritt)" />
+        <div className="flex gap-2">
+          <Button
+            className="rounded-xl"
+            onClick={() => {
+              if (!title.trim() || !date) return;
+              onSave({ title: title.trim(), date, time: time || undefined, note: note.trim() || undefined });
+              setEditing(false);
+            }}
+          >
+            <Check size={16} className="mr-1.5" /> Spara
+          </Button>
+          <Button variant="ghost" className="rounded-xl" onClick={() => setEditing(false)}>
+            <X size={16} className="mr-1.5" /> Avbryt
+          </Button>
+        </div>
+      </li>
+    );
+  }
+
+  return (
+    <li className={`rounded-2xl border border-border bg-card p-4 shadow-sm ${canceled ? "opacity-70" : ""}`}>
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <p className={`font-medium text-ink ${canceled ? "line-through" : ""}`}>{reminder.title}</p>
+          <p className="mt-0.5 flex items-center gap-1.5 text-sm text-muted-foreground">
+            <CalendarClock size={14} />
+            {reminder.date}
+            {reminder.time ? ` · ${reminder.time}` : " · hela dagen"}
+            {reminder.repeat && reminder.repeat !== "none" ? " · återkommande" : ""}
+          </p>
+          {reminder.note && <p className="mt-1 text-sm text-muted-foreground">{reminder.note}</p>}
+        </div>
+        <StatusBadge canceled={canceled} />
+      </div>
+
+      <div className="mt-3 flex flex-wrap gap-2">
+        <Button variant="secondary" size="sm" className="rounded-xl" onClick={startEdit}>
+          <Pencil size={14} className="mr-1.5" /> Ändra
+        </Button>
+        {canceled ? (
+          <Button variant="secondary" size="sm" className="rounded-xl" onClick={onRestore}>
+            <Undo2 size={14} className="mr-1.5" /> Aktivera igen
+          </Button>
+        ) : (
+          <Button variant="secondary" size="sm" className="rounded-xl" onClick={onCancel}>
+            <X size={14} className="mr-1.5" /> Avboka
+          </Button>
+        )}
+        <Button variant="ghost" size="sm" className="rounded-xl text-muted-foreground hover:text-destructive" onClick={onDelete}>
+          <Trash2 size={14} className="mr-1.5" /> Ta bort
+        </Button>
+      </div>
+    </li>
+  );
+}
+
+export default function RemindersPage() {
+  const { reminders, addReminder, updateReminder, deleteReminder, cancelReminder, restoreReminder } = useReminders();
+  const { toast } = useToast();
+  const [title, setTitle] = useState("");
+  const [date, setDate] = useState(todayIso());
+  const [time, setTime] = useState("");
+  const [note, setNote] = useState("");
+
+  const { active, canceled } = useMemo(() => {
+    const sorted = [...reminders].sort((a, b) => {
+      const d = a.date.localeCompare(b.date);
+      if (d !== 0) return d;
+      return (a.time ?? "").localeCompare(b.time ?? "");
+    });
+    return {
+      active: sorted.filter((r) => !r.canceled),
+      canceled: sorted.filter((r) => r.canceled),
+    };
+  }, [reminders]);
+
+  const handleAdd = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!title.trim() || !date) return;
+    addReminder(title.trim(), date, time || undefined, "none", undefined, undefined, note.trim() || undefined);
+    setTitle("");
+    setTime("");
+    setNote("");
+    toast({ description: "Påminnelsen är tillagd 🔔" });
+  };
+
+  return (
+    <Layout>
+      <div className="space-y-6">
+        <header className="space-y-1">
+          <h1 className="flex items-center gap-2 font-display text-3xl text-ink">
+            <BellRing className="h-7 w-7 text-primary" /> Påminnelser
+          </h1>
+          <p className="text-muted-foreground">
+            Lägg till, ändra eller avboka. Avbokade ligger kvar så du kan ta tillbaka dem.
+          </p>
+        </header>
+
+        <form onSubmit={handleAdd} className="space-y-3 rounded-2xl border border-border bg-card p-5 shadow-sm">
+          <input className={inputClass} value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Vad ska du påminnas om?" />
+          <div className="grid grid-cols-2 gap-2">
+            <input className={inputClass} type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+            <input className={inputClass} type="time" value={time} onChange={(e) => setTime(e.target.value)} />
+          </div>
+          <input className={inputClass} value={note} onChange={(e) => setNote(e.target.value)} placeholder="Anteckning (valfritt)" />
+          <Button type="submit" className="h-12 w-full rounded-xl">
+            <Plus size={18} className="mr-2" /> Lägg till påminnelse
+          </Button>
+        </form>
+
+        <section className="surface-card p-5">
+          <CollapsibleSection title={`Aktiva (${active.length})`} id="Aktiva påminnelser" headingClassName="text-lg font-semibold" className="space-y-3">
+            {active.length === 0 ? (
+              <p className="text-sm text-muted-foreground">Inga aktiva påminnelser just nu.</p>
+            ) : (
+              <ul className="space-y-3">
+                {active.map((r) => (
+                  <ReminderRow
+                    key={r.id}
+                    reminder={r}
+                    onSave={(patch) => {
+                      updateReminder(r.id, patch);
+                      toast({ description: "Ändringen är sparad" });
+                    }}
+                    onCancel={() => {
+                      cancelReminder(r.id);
+                      toast({ description: "Påminnelsen är avbokad" });
+                    }}
+                    onRestore={() => restoreReminder(r.id)}
+                    onDelete={() => deleteReminder(r.id)}
+                  />
+                ))}
+              </ul>
+            )}
+          </CollapsibleSection>
+        </section>
+
+        <section className="surface-card p-5">
+          <CollapsibleSection title={`Avbokade (${canceled.length})`} id="Avbokade påminnelser" headingClassName="text-lg font-semibold" className="space-y-3">
+            {canceled.length === 0 ? (
+              <p className="text-sm text-muted-foreground">Inget avbokat.</p>
+            ) : (
+              <ul className="space-y-3">
+                {canceled.map((r) => (
+                  <ReminderRow
+                    key={r.id}
+                    reminder={r}
+                    onSave={(patch) => updateReminder(r.id, patch)}
+                    onCancel={() => cancelReminder(r.id)}
+                    onRestore={() => {
+                      restoreReminder(r.id);
+                      toast({ description: "Påminnelsen är aktiv igen" });
+                    }}
+                    onDelete={() => deleteReminder(r.id)}
+                  />
+                ))}
+              </ul>
+            )}
+          </CollapsibleSection>
+        </section>
+      </div>
+    </Layout>
+  );
+}
