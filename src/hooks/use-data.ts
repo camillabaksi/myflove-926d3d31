@@ -591,7 +591,15 @@ export function useReminders() {
 
 
 
-  const activeReminders = reminders.filter(r => !r.completed).sort((a, b) => {
+  const cancelReminder = (id: string) => {
+    setReminders(reminders.map(r => r.id === id ? { ...r, canceled: true } : r));
+  };
+
+  const restoreReminder = (id: string) => {
+    setReminders(reminders.map(r => r.id === id ? { ...r, canceled: false } : r));
+  };
+
+  const activeReminders = reminders.filter(r => !r.completed && !r.canceled).sort((a, b) => {
     // Sort by date then time
     const dateCompare = a.date.localeCompare(b.date);
     if (dateCompare !== 0) return dateCompare;
