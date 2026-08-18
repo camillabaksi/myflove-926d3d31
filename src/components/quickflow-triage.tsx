@@ -53,6 +53,11 @@ export default function QuickflowTriage() {
   /** Vilken tanke som väntar på "vilket barn och vad blir det?". */
   const [childFor, setChildFor] = useState<string | null>(null);
   const [childPick, setChildPick] = useState<string | null>(null);
+  /** Vilken tanke som väntar på "när vill du se den igen?". */
+  const [laterFor, setLaterFor] = useState<string | null>(null);
+  /** Eget datum/tid i Återkom senare-panelen. */
+  const [laterDate, setLaterDate] = useState("");
+  const [laterTime, setLaterTime] = useState("09:00");
   /** Användarens svar när tolkningen var otydlig. */
   const [choices, setChoices] = useState<Record<string, { at: number; allDay: boolean }>>({});
 
@@ -232,6 +237,51 @@ export default function QuickflowTriage() {
     setChildPick(guessChild(item.text, children)?.id ?? children[0]?.id ?? null);
   };
 
+  /** Öppnar "När vill du se den igen?" och förifyller imorgon. */
+  const openLaterPanel = (item: QuickflowItem) => {
+    setLaterFor(item.id);
+    const base = new Date(item.remindAt ?? Date.now() + DAY);
+    setLaterDate(
+      `${base.getFullYear()}-${String(base.getMonth() + 1).padStart(2, "0")}-${String(
+        base.getDate(),
+      ).padStart(2, "0")}`,
+    );
+    setLaterTime(
+      item.remindAt
+        ? `${String(base.getHours()).padStart(2, "0")}:${String(base.getMinutes()).padStart(2, "0")}`
+        : "09:00",
+    );
+  };
+
+  /** Sparar tanken som vilande tills den valda tidpunkten. */
+  const saveLater = (item: QuickflowItem, at: number) => {
+    if (!Number.isFinite(at)) return;
+    snooze(item.id, at);
+    setLaterFor(null);
+    log("quickflow");
+    toast.success("Sparad – jag återkommer.", {
+      description: `Du får se den igen ${formatWhen(at, new Date(), false)}.`,
+    });
+  };
+
+  /** Snabbval för när tanken ska dyka upp igen. */
+  const laterPresets = () => {
+    const now = new Date();
+    const at = (days: number, h: number, m = 0) => {
+      const d = new Date(now);
+      d.setDate(d.getDate() + days);
+      d.setHours(h, m, 0, 0);
+      return d.getTime();
+    };
+    const tonight = at(0, 19);
+    const list: { label: string; at: number }[] = [];
+    if (tonight > now.getTime()) list.push({ label: "I kväll", at: tonight });
+    list.push({ label: "Imorgon bitti", at: at(1, 8) });
+    list.push({ label: "Om 3 dagar", at: at(3, 9) });
+    list.push({ label: "Nästa vecka", at: at(7, 9) });
+    return list;
+  };
+
   /** En knapp per ställe tanken kan hamna. Förslaget ligger först. */
   const runDestination = (item: QuickflowItem, d: QuickflowDestination) => {
     if (d === "inkop") return toShopping(item);
@@ -250,10 +300,12 @@ export default function QuickflowTriage() {
     if (d === "anteckning") return toNote(item);
     if (d === "energi") return setEnergyFor(item.id);
     if (d === "ide") return toIdea(item);
+    if (d === "behall") return openLaterPanel(item);
     const area = DESTINATION_AREA[d];
     if (area) return toAreaTask(item, area);
     return update(item.id, { askedAt: Date.now() });
   };
+
 
   const DESTINATIONS: QuickflowDestination[] = [
     "uppgift",
@@ -313,6 +365,18 @@ export default function QuickflowTriage() {
                       <p className="text-xs text-primary">
                         Jag hittade ett datum i texten: {formatWhen(plan.at, new Date(), plan.allDay)}
                         {plan.allDay ? " (ingen tid angavs)" : ""}
+                      </p>
+                    )}
+                    {item.remindAt && (
+                      <p className="text-xs text-muted-foreground">
+                        🔄 Sparad till senare: {formatWhen(item.remindAt, new Date(), false)}.{" "}
+                        <button
+                          type="button"
+                          onClick={() => openLaterPanel(item)}
+                          className="underline underline-offset-2"
+                        >
+                          Ändra tid
+                        </button>
                       </p>
                     )}
                   </div>
@@ -434,6 +498,44 @@ export default function QuickflowTriage() {
                       >
                         Avbryt
                       </Action>
+                    </div>
+                  </div>
+                ) : laterFor === item.id ? (
+                  <div className="space-y-2">
+                    <p className="text-xs text-muted-foreground">
+                      När vill du se den igen? Den ligger kvar i QuickFlow tills dess – inget krav.
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {laterPresets().map((p) => (
+                        <Action key={p.label} onClick={() => saveLater(item, p.at)}>
+                          {p.label}
+                        </Action>
+                      ))}
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <label className="text-xs text-muted-foreground">Eget datum</label>
+                      <input
+                        type="date"
+                        value={laterDate}
+                        onChange={(e) => setLaterDate(e.target.value)}
+                        className="rounded-xl border border-border bg-card px-2 py-1.5 text-sm"
+                      />
+                      <input
+                        type="time"
+                        value={laterTime}
+                        onChange={(e) => setLaterTime(e.target.value)}
+                        className="rounded-xl border border-border bg-card px-2 py-1.5 text-sm"
+                      />
+                      <Action
+                        highlight
+                        onClick={() => {
+                          if (!laterDate) return;
+                          saveLater(item, new Date(`${laterDate}T${laterTime || "09:00"}`).getTime());
+                        }}
+                      >
+                        Spara
+                      </Action>
+                      <Action onClick={() => setLaterFor(null)}>Avbryt</Action>
                     </div>
                   </div>
                 ) : (
