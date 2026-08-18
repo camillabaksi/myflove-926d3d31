@@ -32,6 +32,8 @@ import DayTimeline from "@/components/day-timeline";
 import { useLocalStorage } from "@/lib/storage";
 import { pictogramFor } from "@/lib/pictograms";
 import { useNpfSettings } from "@/lib/npf-mode";
+import { ALL_AREAS, AREA_META, getArea, type LifeArea } from "@/lib/life-areas";
+
 
 export type CalCategory = "privat" | "familj" | "barn" | "jobb" | "studier";
 
@@ -104,7 +106,7 @@ function useFamilyEventsByDate() {
 
 export default function CalendarPage() {
   const { currentFocus } = useFocus();
-  const { activeTasks, completedTasks, deleteTask, setTaskTime, addTask } = useTasks();
+  const { activeTasks, completedTasks, deleteTask, addTask, updateTask } = useTasks();
   const { activeReminders, addReminder, deleteReminder, updateReminder } = useReminders();
   const { eventsForDate, hasHousehold } = useFamilyEventsByDate();
   const { children: kids, items: childItems, addItem: addChildItem } = useChildren();
@@ -150,10 +152,21 @@ export default function CalendarPage() {
   const [newReminderTime, setNewReminderTime] = useState("");
   const [newReminderRepeat, setNewReminderRepeat] = useState<"none" | "daily" | "weekdays" | "weekly">("none");
   const [editing, setEditing] = useState<
-    | { kind: "reminder"; id: string; title: string; time: string; repeat: "none" | "daily" | "weekdays" | "weekly" }
-    | { kind: "task"; id: string; title: string; time: string }
+    | {
+        kind: "reminder" | "task";
+        id: string;
+        title: string;
+        date: string;
+        time: string;
+        endTime: string;
+        remind: number | null;
+        note: string;
+        area: LifeArea;
+        repeat: "none" | "daily" | "weekdays" | "weekly";
+      }
     | null
   >(null);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
 
@@ -798,7 +811,18 @@ export default function CalendarPage() {
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
                     <button
-                      onClick={() => setEditing({ kind: "reminder", id: r.id, title: r.title, time: r.time ?? "", repeat: r.repeat ?? "none" })}
+                      onClick={() => setEditing({
+                        kind: "reminder",
+                        id: r.id,
+                        title: r.title,
+                        date: r.date,
+                        time: r.time ?? "",
+                        endTime: r.endTime ?? "",
+                        remind: r.remindMinutesBefore ?? null,
+                        note: r.note ?? "",
+                        area: "vardag",
+                        repeat: r.repeat ?? "none",
+                      })}
                       aria-label="Ändra påminnelse"
                       className="px-3 py-2 text-sm text-primary rounded-xl hover:bg-primary/10"
                     >
@@ -841,11 +865,22 @@ export default function CalendarPage() {
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
                     <button
-                      onClick={() => setEditing({ kind: "task", id: t.id, title: t.title, time: t.time ?? "" })}
-                      aria-label="Ändra tid"
+                      onClick={() => setEditing({
+                        kind: "task",
+                        id: t.id,
+                        title: t.title,
+                        date: t.dueDate ?? selectedDateStr,
+                        time: t.time ?? "",
+                        endTime: t.endTime ?? "",
+                        remind: t.reminderMinutesBefore ?? null,
+                        note: t.note ?? "",
+                        area: getArea(t),
+                        repeat: "none",
+                      })}
+                      aria-label="Ändra uppgift"
                       className="px-3 py-2 text-sm text-primary rounded-xl hover:bg-primary/10"
                     >
-                      Ändra tid
+                      Ändra
                     </button>
                     <button
                       onClick={() => deleteTask(t.id)}
@@ -976,26 +1011,92 @@ export default function CalendarPage() {
               </DialogTitle>
             </DialogHeader>
             {editing && (
-              <div className="space-y-4 pt-2">
-                {editing.kind === "reminder" && (
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Titel</label>
-                    <Input
-                      value={editing.title}
-                      onChange={(e) => setEditing({ ...editing, title: e.target.value })}
-                      className="h-12 rounded-2xl"
-                    />
-                  </div>
-                )}
+              <div className="space-y-4 pt-2 max-h-[70vh] overflow-y-auto pr-1">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Tid (valfritt)</label>
+                  <label className="text-sm font-medium">Vad gäller det?</label>
                   <Input
-                    type="time"
-                    value={editing.time}
-                    onChange={(e) => setEditing({ ...editing, time: e.target.value })}
+                    value={editing.title}
+                    onChange={(e) => setEditing({ ...editing, title: e.target.value })}
                     className="h-12 rounded-2xl"
                   />
                 </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Datum</label>
+                  <Input
+                    type="date"
+                    value={editing.date}
+                    onChange={(e) => setEditing({ ...editing, date: e.target.value })}
+                    className="h-12 rounded-2xl"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Börjar (valfritt)</label>
+                    <Input
+                      type="time"
+                      value={editing.time}
+                      onChange={(e) => setEditing({ ...editing, time: e.target.value })}
+                      className="h-12 rounded-2xl"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Slutar (valfritt)</label>
+                    <Input
+                      type="time"
+                      value={editing.endTime}
+                      onChange={(e) => setEditing({ ...editing, endTime: e.target.value })}
+                      className="h-12 rounded-2xl"
+                      disabled={!editing.time}
+                    />
+                  </div>
+                </div>
+
+                {editing.time && (
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Påminnelse</label>
+                    <div className="grid grid-cols-3 gap-2">
+                      {REMIND_OPTIONS.map((opt) => (
+                        <button
+                          key={String(opt.value)}
+                          type="button"
+                          onClick={() => setEditing({ ...editing, remind: opt.value })}
+                          className={`h-11 rounded-2xl text-xs font-medium border transition-all ${
+                            editing.remind === opt.value
+                              ? "bg-primary text-primary-foreground border-primary"
+                              : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
+                          }`}
+                        >
+                          {opt.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {editing.kind === "task" && (
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Vart hör det hemma?</label>
+                    <div className="grid grid-cols-2 gap-2">
+                      {ALL_AREAS.map((a) => (
+                        <button
+                          key={a}
+                          type="button"
+                          onClick={() => setEditing({ ...editing, area: a })}
+                          className={`h-11 rounded-2xl text-sm font-medium border transition-all ${
+                            editing.area === a
+                              ? "bg-primary text-primary-foreground border-primary"
+                              : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
+                          }`}
+                        >
+                          {AREA_META[a].emoji} {AREA_META[a].label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 {editing.kind === "reminder" && (
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Upprepa</label>
@@ -1022,6 +1123,18 @@ export default function CalendarPage() {
                     </div>
                   </div>
                 )}
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Anteckning (valfritt)</label>
+                  <textarea
+                    value={editing.note}
+                    onChange={(e) => setEditing({ ...editing, note: e.target.value })}
+                    rows={2}
+                    placeholder="Skriv vad det gäller, vad du behöver ta med…"
+                    className="w-full rounded-2xl border border-border bg-background p-3 text-sm outline-none focus:border-primary"
+                  />
+                </div>
+
                 <div className="flex gap-2">
                   <Button
                     variant="outline"
@@ -1037,14 +1150,27 @@ export default function CalendarPage() {
                   </Button>
                   <Button
                     onClick={() => {
+                      const time = editing.time || undefined;
                       if (editing.kind === "reminder") {
                         updateReminder(editing.id, {
                           title: editing.title.trim() || "Påminnelse",
-                          time: editing.time || undefined,
+                          date: editing.date,
+                          time,
+                          endTime: time ? editing.endTime || undefined : undefined,
                           repeat: editing.repeat,
+                          remindMinutesBefore: time ? editing.remind ?? undefined : undefined,
+                          note: editing.note,
                         });
                       } else {
-                        setTaskTime(editing.id, editing.time || undefined);
+                        updateTask(editing.id, {
+                          title: editing.title,
+                          dueDate: editing.date,
+                          time,
+                          endTime: time ? editing.endTime || undefined : undefined,
+                          reminderMinutesBefore: time ? editing.remind ?? undefined : undefined,
+                          area: editing.area,
+                          note: editing.note,
+                        });
                       }
                       setEditing(null);
                       toast({ description: "Sparat ✨" });
@@ -1056,6 +1182,7 @@ export default function CalendarPage() {
                 </div>
               </div>
             )}
+
           </DialogContent>
         </Dialog>
 

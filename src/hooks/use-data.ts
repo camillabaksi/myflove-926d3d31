@@ -155,6 +155,28 @@ export function useTasks() {
     setTasks((prev) => prev.map(t => (t.id === id ? { ...t, note: note.trim() || undefined } : t)));
   };
 
+  /** Generell redigering: ändra titel, datum, tider, påminnelse, område m.m. i efterhand. */
+  const updateTask = (
+    id: string,
+    patch: Partial<Pick<Task,
+      'title' | 'dueDate' | 'time' | 'endTime' | 'reminderMinutesBefore' | 'note' | 'area' | 'kind' | 'waitingOn'
+    >>,
+  ) => {
+    setTasks((prev) => prev.map(t => {
+      if (t.id !== id) return t;
+      const next: Task = { ...t, ...patch };
+      if (patch.title !== undefined) next.title = patch.title.trim() || t.title;
+      if (patch.note !== undefined) next.note = patch.note.trim() || undefined;
+      if (patch.time !== undefined && !patch.time) {
+        next.time = undefined;
+        next.endTime = undefined;
+        next.reminderMinutesBefore = undefined;
+      }
+      return next;
+    }));
+  };
+
+
 
   const setTaskDueDate = (id: string, dueDate: string) => {
     setTasks((prev) => prev.map(t => (t.id === id ? { ...t, dueDate } : t)));
@@ -363,6 +385,8 @@ export function useTasks() {
     setTaskTime,
     setTaskArea,
     setTaskNote,
+    updateTask,
+
 
 
     addTaskStep,
@@ -541,10 +565,29 @@ export function useReminders() {
 
   const updateReminder = (
     id: string,
-    patch: { title?: string; date?: string; time?: string | undefined; repeat?: RepeatMode; remindMinutesBefore?: number; note?: string }
+    patch: {
+      title?: string;
+      date?: string;
+      time?: string | undefined;
+      endTime?: string | undefined;
+      repeat?: RepeatMode;
+      remindMinutesBefore?: number | undefined;
+      note?: string | undefined;
+    }
   ) => {
-    setReminders(reminders.map(r => r.id === id ? { ...r, ...patch } : r));
+    setReminders(reminders.map(r => {
+      if (r.id !== id) return r;
+      const next: Reminder = { ...r, ...patch };
+      if (patch.note !== undefined) next.note = patch.note.trim() || undefined;
+      if (patch.time !== undefined && !patch.time) {
+        next.time = undefined;
+        next.endTime = undefined;
+        next.remindMinutesBefore = undefined;
+      }
+      return next;
+    }));
   };
+
 
 
   const activeReminders = reminders.filter(r => !r.completed).sort((a, b) => {
