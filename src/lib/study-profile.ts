@@ -305,3 +305,122 @@ export function studyDemand(ctx: { exams: number; assignments: number }): StudyD
   if (weight >= 3) return "normal";
   return "lätt";
 }
+
+// ---------------------------------------------------------------------------
+// Materialplan: hur flashcards/quiz ska genereras utifrån profil + stödbehov.
+// Profilen styr betoning och mängd – aldrig fasta regler, bara ett startläge
+// som användaren alltid kan ändra innan Flow kör.
+// ---------------------------------------------------------------------------
+
+export type StudyEmphasis = "balanserat" | "flashcards" | "quiz";
+
+export const EMPHASIS_META: Record<StudyEmphasis, string> = {
+  balanserat: "Balanserat",
+  flashcards: "Mest flashcards",
+  quiz: "Mest quiz",
+};
+
+export interface StudyMaterialPlan {
+  emphasis: StudyEmphasis;
+  cardCount: number;
+  quizCount: number;
+  /** Korta etiketter att visa i UI så användaren ser vad som styr. */
+  chips: string[];
+  /** Extra instruktion till Flow, byggd på stödbehov och preferenser. */
+  focus: string;
+}
+
+const pref = (p: StudyProfile, name: string) =>
+  p.preferences.some((x) => x.toLowerCase().includes(name));
+const help = (p: StudyProfile, name: string) =>
+  p.helpWith.some((x) => x.toLowerCase().includes(name));
+
+export function studyMaterialPlan(p: StudyProfile | null | undefined): StudyMaterialPlan {
+  const base: StudyMaterialPlan = {
+    emphasis: "balanserat",
+    cardCount: 12,
+    quizCount: 10,
+    chips: [],
+    focus: "",
+  };
+  if (!p || !p.enabled || !hasStudyProfile(p)) return base;
+
+  const chips: string[] = [];
+  const focus: string[] = [];
+
+  const wantsCards = pref(p, "flashcards") || help(p, "komma ihåg") || help(p, "repetition");
+  const wantsQuiz = pref(p, "quiz") || pref(p, "frågor och svar");
+
+  if (wantsCards && !wantsQuiz) {
+    base.emphasis = "flashcards";
+    base.cardCount = 16;
+    base.quizCount = 6;
+    chips.push("Mest flashcards");
+  } else if (wantsQuiz && !wantsCards) {
+    base.emphasis = "quiz";
+    base.cardCount = 8;
+    base.quizCount = 14;
+    chips.push("Mest quiz");
+  }
+
+  if (pref(p, "korta studiepass") || pref(p, "många pauser")) {
+    base.cardCount = Math.max(6, Math.round(base.cardCount * 0.7));
+    base.quizCount = Math.max(5, Math.round(base.quizCount * 0.7));
+    chips.push("Kortare pass – färre kort åt gången");
+    focus.push(
+      "Användaren pluggar bäst i korta pass: dela upp korten i tydliga småblock (5–7 kort per block) och håll varje kort kort.",
+    );
+  }
+
+  if (pref(p, "tydliga instruktioner") || help(p, "förstå instruktioner")) {
+    chips.push("Extra tydliga formuleringar");
+    focus.push(
+      "Skriv extra tydligt och konkret: en fråga per kort, inga dubbla frågor, alltid en kort förklaring till rätt svar.",
+    );
+  }
+
+  if (pref(p, "visuellt")) {
+    chips.push("Visuellt stöd");
+    focus.push(
+      "Använd visuellt stödjande språk: konkreta exempel, jämförelser och små uppräkningar som är lätta att se framför sig.",
+    );
+  }
+
+  if (help(p, "komma igång")) {
+    chips.push("Lätt start");
+    focus.push("Lägg de enklaste korten först så att det är lätt att komma igång.");
+  }
+
+  if (help(p, "planera inför prov") || help(p, "hålla deadlines")) {
+    chips.push("Provfokus");
+    focus.push("Prioritera det som brukar komma på prov och märk topics så repetition kan riktas.");
+  }
+
+  if (help(p, "bryta ner")) {
+    focus.push("Bryt ner stora begrepp i flera små kort istället för ett långt.");
+  }
+
+  if (p.age.trim() || p.level) {
+    chips.push(
+      [p.age.trim() ? `${p.age.trim()} år` : "", p.level ? LEVEL_META[p.level as StudyLevel] : ""]
+        .filter(Boolean)
+        .join(" · "),
+    );
+  }
+
+  base.chips = chips;
+  base.focus = focus.join(" ");
+  return base;
+}
+
+export function applyEmphasis(plan: StudyMaterialPlan, emphasis: StudyEmphasis): StudyMaterialPlan {
+  const total = plan.cardCount + plan.quizCount;
+  if (emphasis === plan.emphasis) return plan;
+  if (emphasis === "flashcards") {
+    return { ...plan, emphasis, cardCount: Math.round(total * 0.7), quizCount: Math.max(4, Math.round(total * 0.3)) };
+  }
+  if (emphasis === "quiz") {
+    return { ...plan, emphasis, cardCount: Math.max(4, Math.round(total * 0.35)), quizCount: Math.round(total * 0.65) };
+  }
+  return { ...plan, emphasis, cardCount: Math.round(total * 0.55), quizCount: Math.round(total * 0.45) };
+}

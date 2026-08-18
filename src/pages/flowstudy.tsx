@@ -22,7 +22,14 @@ import { celebrateFromEvent } from "@/lib/celebrate";
 import { generateStudySet } from "@/lib/flowstudy.functions";
 import StudyProfileCard from "@/components/study-profile-card";
 import { useStudyProfile } from "@/hooks/use-study-profile";
-import { studyProfileContext } from "@/lib/study-profile";
+import {
+  studyProfileContext,
+  studyMaterialPlan,
+  applyEmphasis,
+  EMPHASIS_META,
+  type StudyEmphasis,
+} from "@/lib/study-profile";
+
 import {
   useFlowStudy,
   adaptiveOrder,
@@ -63,9 +70,17 @@ export default function StudyBuddyPage() {
   const [openSetId, setOpenSetId] = useState<string | null>(null);
   const [mode, setMode] = useState<"cards" | "quiz" | null>(null);
   const [addingId, setAddingId] = useState<string | null>(null);
+  const [emphasis, setEmphasis] = useState<StudyEmphasis | null>(null);
+
+  const basePlan = useMemo(() => studyMaterialPlan(studyProfile), [studyProfile]);
+  const plan = useMemo(
+    () => (emphasis ? applyEmphasis(basePlan, emphasis) : basePlan),
+    [basePlan, emphasis],
+  );
 
   const courseName = (id?: string) => activeCourses.find((c) => c.id === id)?.title;
   const openSet = useMemo(() => sets.find((s) => s.id === openSetId) ?? null, [sets, openSetId]);
+
 
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -95,8 +110,10 @@ export default function StudyBuddyPage() {
           text: text.trim() || undefined,
           file: filePayload,
           profileContext: studyProfileContext(studyProfile) || undefined,
-          cardCount: 12,
-          quizCount: 10,
+          focus: plan.focus || undefined,
+          cardCount: plan.cardCount,
+          quizCount: plan.quizCount,
+
         },
       });
 
@@ -206,7 +223,48 @@ export default function StudyBuddyPage() {
               placeholder="Klistra in anteckningar, lärarens frågor eller en text."
               className="w-full rounded-xl border border-border bg-background p-3 text-sm"
             />
+            <div className="rounded-xl border border-border bg-secondary/30 p-3 space-y-2">
+              <p className="text-xs font-medium">
+                Flow anpassar efter din studieprofil
+              </p>
+              {basePlan.chips.length > 0 ? (
+                <div className="flex flex-wrap gap-1.5">
+                  {basePlan.chips.map((c) => (
+                    <span
+                      key={c}
+                      className="rounded-full bg-background px-2.5 py-1 text-[11px] text-muted-foreground border border-border"
+                    >
+                      {c}
+                    </span>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-xs text-muted-foreground">
+                  Fyll i din studieprofil ovan så anpassas kort och frågor efter dina stödbehov.
+                </p>
+              )}
+              <div className="flex flex-wrap gap-1.5 pt-1">
+                {(Object.keys(EMPHASIS_META) as StudyEmphasis[]).map((key) => (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => setEmphasis(key)}
+                    className={`rounded-full px-3 py-1 text-[11px] border transition ${
+                      plan.emphasis === key
+                        ? "bg-primary text-primary-foreground border-primary"
+                        : "bg-background border-border text-muted-foreground"
+                    }`}
+                  >
+                    {EMPHASIS_META[key]}
+                  </button>
+                ))}
+              </div>
+              <p className="text-[11px] text-muted-foreground">
+                Blir ungefär {plan.cardCount} flashcards och {plan.quizCount} quizfrågor. Du kan alltid ändra.
+              </p>
+            </div>
             {busy && (
+
               <MyFloveThinking
                 steps={["📄", "🧠", "🃏", "✨"]}
                 label="Jag läser materialet och gör kort av det…"
