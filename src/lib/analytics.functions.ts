@@ -16,21 +16,46 @@ function serverClient() {
   });
 }
 
+/**
+ * Best-effort: read the signed-in user from the request bearer token so
+ * besök kan kopplas till konto i adminvyn. Anonyma besök loggas som förut.
+ */
+async function currentUserId(): Promise<string | null> {
+  try {
+    const { getRequest } = await import("@tanstack/react-start/server");
+    const authHeader = getRequest()?.headers?.get("authorization") ?? "";
+    if (!authHeader.startsWith("Bearer ")) return null;
+    const token = authHeader.slice(7);
+    if (token.split(".").length !== 3) return null;
+    const { data, error } = await serverClient().auth.getClaims(token);
+    if (error || !data?.claims?.sub) return null;
+    return String(data.claims.sub);
+  } catch {
+    return null;
+  }
+}
+
 export const logAnalyticsEventFn = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => LogInput.parse(data))
   .handler(async ({ data }) => {
-    const sb = serverClient();
-    const { error } = await sb.from("analytics_events").insert({
+    const userId = await currentUserId();
+    const row = {
       session_id: data.sessionId,
       section: data.section,
       action: data.action,
-    });
+      user_id: userId,
+    };
+    // Admin-klienten används bara för att kunna skriva ett verifierat user_id
+    // (anon-klienten har ingen auth.uid() på servern).
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin.from("analytics_events").insert(row);
     if (error) {
       // Never surface analytics errors to callers; just log server-side.
       console.warn("[analytics] insert failed:", error.message);
     }
     return { ok: true };
   });
+
 
 export type AnalyticsSummary = {
   totalSessions: number;
