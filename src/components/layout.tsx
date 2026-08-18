@@ -226,7 +226,7 @@ export default function Layout({ children }: LayoutProps) {
         label: "Din dag",
         hint: "Kalender, att göra och dagliga rutiner",
         icon: CalendarDays,
-        hrefs: ["/hem", "/min-dag", "/daglig-rutin", "/kalender", "/tasks", "/pomodoro"],
+        hrefs: ["/hem", "/min-dag", "/daglig-rutin", "/kalender", "/paminnelser", "/tasks", "/pomodoro"],
       },
       {
         id: "flowflow",
