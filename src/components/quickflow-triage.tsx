@@ -412,6 +412,17 @@ export default function QuickflowTriage() {
                         >
                           Ändra tid
                         </button>
+                        {" · "}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            complete(item.id);
+                            toast.success("Hanterad – jag gömmer den. 💜");
+                          }}
+                          className="underline underline-offset-2"
+                        >
+                          Hanterad
+                        </button>
                       </p>
                     )}
                   </div>
