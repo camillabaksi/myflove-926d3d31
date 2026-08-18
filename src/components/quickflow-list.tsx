@@ -5,6 +5,7 @@ import { useQuickflow } from "@/hooks/use-quickflow";
 import CollapsibleSection from "@/components/collapsible-section";
 import { useSavedStores } from "@/hooks/use-data";
 import { sendPushNotification } from "@/lib/push-notifications";
+import { FlowItemActions } from "@/components/flow-item-actions";
 import { celebrateFromEvent } from "@/lib/celebrate";
 import {
   LEVEL_META,
@@ -148,6 +149,7 @@ export function QuickflowList() {
           </p>
         </div>
         <div className="flex items-center gap-1 shrink-0">
+          <FlowItemActions itemId={`qf-${item.id}`} only="edit" size={15} />
           <button
             type="button"
             aria-label="Klar"

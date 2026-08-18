@@ -26,6 +26,7 @@ import { useRelations } from "@/hooks/use-relations";
 import { guessRelation, relationTag } from "@/lib/relations";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import { useChildren } from "@/hooks/use-children";
+import { FlowItemActions } from "@/components/flow-item-actions";
 import { useSituation } from "@/hooks/use-situation";
 import { situationFocus } from "@/lib/situation";
 
@@ -432,6 +433,7 @@ export default function QuickflowTriage() {
               <div key={item.id} className="surface-card p-4 space-y-3">
                 <div className="flex items-start gap-2">
                   <span className="text-lg">{DESTINATION_META[type].emoji}</span>
+                  <FlowItemActions itemId={`qf-${item.id}`} only="edit" size={15} className="order-last shrink-0" />
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-ink">{item.text}</p>
                     <p className="text-xs text-muted-foreground">

@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import HomeShortcuts from "@/components/home-shortcuts";
 import UnusedBlocksHint from "@/components/unused-blocks-hint";
 import Layout from "@/components/layout";
+import { FlowItemActions } from "@/components/flow-item-actions";
 import OverwhelmedModal from "@/components/overwhelmed-modal";
 import HelpMeModal from "@/components/help-me-modal";
 import WeatherCard from "@/components/weather-card";
@@ -463,22 +464,28 @@ export default function Home() {
             ) : (
               <div className="space-y-3">
                 {visibleTasks.map((task, i) => (
-                  <button
+                  <div
                     key={task.id}
-                    type="button"
-                    onClick={(e) => {
-                      toggleTask(task.id);
-                      celebrateFromEvent(e);
-                    }}
                     style={{ animationDelay: `${i * 60}ms` }}
-                    className="w-full flex items-center gap-3 p-4 surface-card hover:border-primary/40 hover:shadow-lifted transition-all text-left animate-fade-in active:scale-[0.99]"
+                    className="w-full flex items-center gap-3 p-4 surface-card hover:border-primary/40 hover:shadow-lifted transition-all text-left animate-fade-in"
                   >
-                    <Circle size={20} className="text-muted-foreground shrink-0" />
-                    <span className="flex-1">{task.title}</span>
-                    {task.dueDate && (
-                      <span className="text-xs text-muted-foreground shrink-0">{task.dueDate}</span>
-                    )}
-                  </button>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        toggleTask(task.id);
+                        celebrateFromEvent(e);
+                      }}
+                      aria-label={`Klarmarkera ${task.title}`}
+                      className="flex flex-1 items-center gap-3 text-left active:scale-[0.99]"
+                    >
+                      <Circle size={20} className="text-muted-foreground shrink-0" />
+                      <span className="flex-1">{task.title}</span>
+                      {task.dueDate && (
+                        <span className="text-xs text-muted-foreground shrink-0">{task.dueDate}</span>
+                      )}
+                    </button>
+                    <FlowItemActions itemId={`task-${task.id}`} size={15} />
+                  </div>
                 ))}
   
               </div>
