@@ -18,6 +18,8 @@ import {
 import { AREA_META, ALL_AREAS, type LifeArea } from "@/lib/life-areas";
 import { useQuickflowRules } from "@/hooks/use-quickflow-rules";
 import { resolveDestination, titleForRule } from "@/lib/quickflow-rules";
+import { useNotes } from "@/hooks/use-notes";
+import { useEnergyFlow } from "@/hooks/use-energy-flow";
 
 
 
@@ -36,7 +38,12 @@ export default function QuickflowTriage() {
   const { log } = useFlowUsage();
   const { rules } = useQuickflowRules();
 
+  const { addNote } = useNotes();
+  const { addFactor } = useEnergyFlow();
+
   const [sorting, setSorting] = useState(false);
+  /** Vilken tanke som väntar på svar om energin gav eller tog. */
+  const [energyFor, setEnergyFor] = useState<string | null>(null);
   /** Användarens svar när tolkningen var otydlig. */
   const [choices, setChoices] = useState<Record<string, { at: number; allDay: boolean }>>({});
 
@@ -146,12 +153,41 @@ export default function QuickflowTriage() {
     toast.success("Sparad i idébanken – den finns kvar när du vill titta på den.");
   };
 
+  /** Anteckning: får bara finnas. Ingen deadline, inget krav på åtgärd. */
+  const toNote = (item: QuickflowItem) => {
+    addNote(titleOf(item), item.area ?? ruleFor(item).area);
+    complete(item.id);
+    toast.success("Sparad som anteckning – du kan göra något av den senare om du vill. 💜");
+  };
+
+  const toAreaTask = (item: QuickflowItem, area: LifeArea) => {
+    addTask(titleOf(item), undefined, { area });
+    complete(item.id);
+    log("planering");
+    toast.success(`Den ligger nu i ${AREA_META[area].label}.`);
+  };
+
+  const toEnergy = async (item: QuickflowItem, direction: "gives" | "drains") => {
+    await addFactor({ title: titleOf(item), direction, strength: 3, category: "annat" });
+    complete(item.id);
+    setEnergyFor(null);
+    toast.success(
+      direction === "gives"
+        ? "Sparad som något som ger energi. 🔋"
+        : "Sparad som något som tar energi. 🪫",
+    );
+  };
+
   /** En knapp per ställe tanken kan hamna. Förslaget ligger först. */
   const runDestination = (item: QuickflowItem, d: QuickflowDestination) => {
     if (d === "inkop") return toShopping(item);
     if (d === "kalender") return toCalendar(item);
     if (d === "uppgift") return toTask(item);
     if (d === "paminnelse") return toReminder(item);
+    if (d === "studier") return toAreaTask(item, "studier");
+    if (d === "jobb") return toAreaTask(item, "jobb");
+    if (d === "anteckning") return toNote(item);
+    if (d === "energi") return setEnergyFor(item.id);
     if (d === "ide") return toIdea(item);
     return update(item.id, { askedAt: Date.now() });
   };
@@ -161,6 +197,10 @@ export default function QuickflowTriage() {
     "kalender",
     "uppgift",
     "paminnelse",
+    "studier",
+    "jobb",
+    "anteckning",
+    "energi",
     "ide",
     "behall",
   ];
@@ -261,19 +301,27 @@ export default function QuickflowTriage() {
                     );
                   })}
                 </div>
-                <div className="flex flex-wrap gap-2">
-                  {[type, ...DESTINATIONS.filter((d) => d !== type)].map((d) => (
-                    <Action
-                      key={d}
-                      onClick={() => runDestination(item, d)}
-                      highlight={d === type}
-                      title={DESTINATION_META[d].hint}
-                    >
-                      {DESTINATION_META[d].emoji} {DESTINATION_META[d].label}
-                    </Action>
-                  ))}
-                  <Action onClick={() => remove(item.id)}>Ta bort</Action>
-                </div>
+                {energyFor === item.id ? (
+                  <div className="flex flex-wrap gap-2">
+                    <Action onClick={() => void toEnergy(item, "gives")}>🔋 Gav energi</Action>
+                    <Action onClick={() => void toEnergy(item, "drains")}>🪫 Tog energi</Action>
+                    <Action onClick={() => setEnergyFor(null)}>Avbryt</Action>
+                  </div>
+                ) : (
+                  <div className="flex flex-wrap gap-2">
+                    {[type, ...DESTINATIONS.filter((d) => d !== type)].map((d) => (
+                      <Action
+                        key={d}
+                        onClick={() => runDestination(item, d)}
+                        highlight={d === type}
+                        title={DESTINATION_META[d].hint}
+                      >
+                        {DESTINATION_META[d].emoji} {DESTINATION_META[d].label}
+                      </Action>
+                    ))}
+                    <Action onClick={() => remove(item.id)}>Ta bort</Action>
+                  </div>
+                )}
 
               </div>
             );

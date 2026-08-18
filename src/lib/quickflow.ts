@@ -438,6 +438,10 @@ export type QuickflowDestination =
   | "kalender"
   | "uppgift"
   | "paminnelse"
+  | "studier"
+  | "jobb"
+  | "anteckning"
+  | "energi"
   | "ide"
   | "behall";
 
@@ -449,8 +453,16 @@ export const DESTINATION_META: Record<
   kalender: { emoji: "📅", label: "Kalender", hint: "Något som händer en viss dag eller tid." },
   uppgift: { emoji: "📌", label: "Att göra", hint: "Något du ska göra, utan bestämd tid." },
   paminnelse: { emoji: "⏰", label: "Påminnelse", hint: "Jag säger till när det är dags." },
+  studier: { emoji: "🎓", label: "Studier", hint: "En uppgift i livsområdet Studier." },
+  jobb: { emoji: "💼", label: "Jobb", hint: "En uppgift i livsområdet Jobb." },
+  anteckning: {
+    emoji: "📝",
+    label: "Anteckning",
+    hint: "Sparas som den är – ingen deadline, inget krav.",
+  },
+  energi: { emoji: "🔋", label: "Energifaktor", hint: "Något som gav eller tog energi." },
   ide: { emoji: "💡", label: "Idébank", hint: "En tanke att spara till senare." },
-  behall: { emoji: "🧠", label: "Behåll i QuickFlow", hint: "Ligger kvar tills du bestämmer." },
+  behall: { emoji: "🧠", label: "Annat – behåll här", hint: "Ligger kvar tills du bestämmer." },
 };
 
 const SHOPPING_WORDS =
@@ -461,6 +473,9 @@ const CALENDAR_WORDS =
 
 const TASK_WORDS =
   /(ring|boka|betala|maila|mejla|skicka|fixa|tvätta|städa|diska|sortera|packa|ansök|anmäl|beställ)/;
+
+const ENERGY_WORDS =
+  /(gav energi|tog energi|orkade inte|sov dåligt|sov bra|utmattad|återhämt|drog ur mig|laddade mig|för mycket ljud|blev stressad av)/;
 
 const IDEA_WORDS = /(kanske|idé|ide|skulle vilja|drömmer|tänkte att|någon gång|vore kul)/;
 
@@ -484,6 +499,7 @@ export function guessDestination(item: {
   remindAt?: number;
 }): QuickflowDestination {
   const t = item.text.toLowerCase();
+  if (ENERGY_WORDS.test(t)) return "energi";
   if (SHOPPING_WORDS.test(t) && !/(ring|boka|betala)/.test(t)) return "inkop";
   if (parseWhenFromText(item.text)) return "kalender";
   if (/(kl \d|klockan)/.test(t)) return "kalender";
