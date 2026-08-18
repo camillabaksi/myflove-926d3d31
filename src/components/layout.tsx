@@ -119,6 +119,8 @@ export default function Layout({ children }: LayoutProps) {
   useNotificationScheduler();
   useAchievementPush();
   usePurgeRevisions();
+  usePushSubscriptionSync();
+
   const { isAdmin } = useIsAdmin();
   const { enabled: enabledAreas } = useEnabledAreas();
   const { settings: npf } = useNpfSettings();
