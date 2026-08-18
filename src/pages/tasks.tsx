@@ -454,6 +454,14 @@ export default function Tasks() {
               </select>
             </label>
           </div>
+          <textarea
+            value={newNote}
+            onChange={(e) => setNewNote(e.target.value)}
+            rows={2}
+            placeholder="Anteckning (valfritt) – vad det gäller, vad du behöver ta med"
+            className="w-full rounded-xl border border-border bg-background p-3 text-sm outline-none focus:border-primary"
+          />
+
           <div className="flex flex-wrap gap-1.5">
             {(Object.keys(KIND_META) as TaskKind[]).map((k) => {
               const active = k === newKind;
