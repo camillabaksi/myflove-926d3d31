@@ -16,6 +16,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 
 ### Added
 
+- **Kalendern i bottenmenyn och egna platser** (2026-08-18): Hela kalendern nås nu direkt från bottenmenyn. Hem och QuickFlow ligger fast, och de två övriga platserna byter du själv under "Mer" → "Din bottenmeny". Hemskärmens block och genvägar går att anpassa som tidigare.
 - **Adminvyn visar namn, besök och inloggning** (2026-08-18): Användarlistan i adminöversikten visar nu namn, senaste besök (med antal händelser) och senaste inloggning, och går att filtrera på datumintervall. Besök loggas dessutom kopplat till inloggat konto i stället för bara anonym session. Tabellrubrikerna för namn, senaste besök, senaste inloggning och skapad går nu att sortera stigande/fallande.
 - **Aviseringar för aktiva påminnelser** (2026-08-18): Aktiva påminnelser ger nu en notis när det är dags – på tiden eller med förvarning (5/15/30/60 min), och även för upprepningar (varje dag, vardagar, varje vecka). Push-notiser når dig när appen är stängd, och avbokade påminnelser skickar aldrig något. På sidan Påminnelser finns nu en ruta där du slår på notiser.
 
