@@ -362,6 +362,8 @@ export function useTasks() {
     setTaskDueDate,
     setTaskTime,
     setTaskArea,
+    setTaskNote,
+
 
     addTaskStep,
     addTaskSteps,
