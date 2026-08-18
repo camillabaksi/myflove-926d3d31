@@ -2,38 +2,22 @@ import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Wand2 } from "lucide-react";
 import { useQuickflow } from "@/hooks/use-quickflow";
-import { useTasks, useReminders } from "@/hooks/use-data";
+import { useTasks, useReminders, useDumpIdeas } from "@/hooks/use-data";
+import { useSharedShoppingList } from "@/hooks/use-shared-shopping-list";
 import { useFlowUsage } from "@/hooks/use-daily-flow";
 import {
   suggestWhen,
   formatWhen,
   guessArea,
+  guessDestination,
+  shoppingTitleFrom,
   parseWhenFromText,
+  DESTINATION_META,
+  type QuickflowDestination,
   type QuickflowItem,
 } from "@/lib/quickflow";
 import { AREA_META, ALL_AREAS, type LifeArea } from "@/lib/life-areas";
 
-type SuggestedType = "uppgift" | "paminnelse" | "kalender" | "ide" | "minne";
-
-const TYPE_META: Record<SuggestedType, { emoji: string; label: string }> = {
-  uppgift: { emoji: "📌", label: "Uppgift" },
-  paminnelse: { emoji: "⏰", label: "Påminnelse" },
-  kalender: { emoji: "📅", label: "Kalender" },
-  ide: { emoji: "💡", label: "Idé" },
-  minne: { emoji: "🧠", label: "Bara komma ihåg" },
-};
-
-/** Enkel, förklarbar gissning – användaren kan alltid ändra. */
-function suggestType(item: QuickflowItem): SuggestedType {
-  const t = item.text.toLowerCase();
-  if (parseWhenFromText(item.text)) return "kalender";
-  if (item.remindAt) return "paminnelse";
-  if (/(möte|träff|läkare|tandläkare|besök|kl \d|klockan)/.test(t)) return "kalender";
-  if (/(ring|boka|betala|maila|mejla|skicka|handla|fixa|hämta|tvätta)/.test(t)) return "uppgift";
-  if (/(kanske|idé|ide|skulle vilja|drömmer|tänkte att)/.test(t)) return "ide";
-  if (item.level === "viktigt") return "uppgift";
-  return "minne";
-}
 
 
 const DAY = 86_400_000;
@@ -46,7 +30,10 @@ export default function QuickflowTriage() {
   const { openItems, complete, remove, snooze, update } = useQuickflow();
   const { addTask } = useTasks();
   const { addReminder } = useReminders();
+  const { addItem: addShoppingItem } = useSharedShoppingList();
+  const { addIdea } = useDumpIdeas();
   const { log } = useFlowUsage();
+
   const [sorting, setSorting] = useState(false);
   /** Användarens svar när tolkningen var otydlig. */
   const [choices, setChoices] = useState<Record<string, { at: number; allDay: boolean }>>({});
@@ -121,9 +108,40 @@ export default function QuickflowTriage() {
       s.allDay ? "Inlagd som heldag – lägg till en tid när du vill." : "Inlagd i kalendern – ändra tiden när du vill.",
     );
   };
+  const toShopping = (item: QuickflowItem) => {
+    const title = shoppingTitleFrom(item.text);
+    addShoppingItem(title);
+    complete(item.id);
+    toast.success(`"${title}" ligger nu i inköpslistan. 🛒`);
+  };
 
+  const toIdea = (item: QuickflowItem) => {
+    addIdea(item.text);
+    complete(item.id);
+    toast.success("Sparad i idébanken – den finns kvar när du vill titta på den.");
+  };
+
+  /** En knapp per ställe tanken kan hamna. Förslaget ligger först. */
+  const runDestination = (item: QuickflowItem, d: QuickflowDestination) => {
+    if (d === "inkop") return toShopping(item);
+    if (d === "kalender") return toCalendar(item);
+    if (d === "uppgift") return toTask(item);
+    if (d === "paminnelse") return toReminder(item);
+    if (d === "ide") return toIdea(item);
+    return update(item.id, { askedAt: Date.now() });
+  };
+
+  const DESTINATIONS: QuickflowDestination[] = [
+    "inkop",
+    "kalender",
+    "uppgift",
+    "paminnelse",
+    "ide",
+    "behall",
+  ];
 
   return (
+
     <div className="space-y-3">
       {!sorting ? (
         <div className="surface-card p-4 flex flex-wrap items-center gap-3">
@@ -142,16 +160,17 @@ export default function QuickflowTriage() {
       ) : (
         <div className="space-y-2">
           {openItems.map((item) => {
-            const type = suggestType(item);
+            const type = guessDestination(item);
             const plan = parseWhenFromText(item.text) ? planFor(item) : null;
             return (
               <div key={item.id} className="surface-card p-4 space-y-3">
                 <div className="flex items-start gap-2">
-                  <span className="text-lg">{TYPE_META[type].emoji}</span>
+                  <span className="text-lg">{DESTINATION_META[type].emoji}</span>
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-ink">{item.text}</p>
                     <p className="text-xs text-muted-foreground">
-                      Mitt förslag: {TYPE_META[type].label} – du bestämmer.
+                      Mitt förslag: {DESTINATION_META[type].label} – du bestämmer.
+
                     </p>
                     {plan && !plan.ambiguous && (
                       <p className="text-xs text-primary">
@@ -215,14 +234,19 @@ export default function QuickflowTriage() {
                   })}
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  <Action onClick={() => toTask(item)}>📌 Uppgift</Action>
-                  <Action onClick={() => toReminder(item)}>⏰ Påminnelse</Action>
-                  <Action onClick={() => toCalendar(item)}>📅 Kalender</Action>
-                  <Action onClick={() => update(item.id, { askedAt: Date.now() })}>
-                    🧠 Behåll i QuickFlow
-                  </Action>
+                  {[type, ...DESTINATIONS.filter((d) => d !== type)].map((d) => (
+                    <Action
+                      key={d}
+                      onClick={() => runDestination(item, d)}
+                      highlight={d === type}
+                      title={DESTINATION_META[d].hint}
+                    >
+                      {DESTINATION_META[d].emoji} {DESTINATION_META[d].label}
+                    </Action>
+                  ))}
                   <Action onClick={() => remove(item.id)}>Ta bort</Action>
                 </div>
+
               </div>
             );
           })}
@@ -259,12 +283,28 @@ export default function QuickflowTriage() {
   );
 }
 
-function Action({ onClick, children }: { onClick: () => void; children: React.ReactNode }) {
+function Action({
+  onClick,
+  children,
+  highlight,
+  title,
+}: {
+  onClick: () => void;
+  children: React.ReactNode;
+  /** Markerar MyFloves förslag – bara som hjälp, inget tvång. */
+  highlight?: boolean;
+  title?: string;
+}) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className="rounded-full border border-border bg-card px-3.5 py-2 text-sm font-medium hover:border-primary/50 transition-colors"
+      title={title}
+      className={`rounded-full border px-3.5 py-2 text-sm font-medium transition-colors ${
+        highlight
+          ? "border-primary bg-primary/10 text-primary"
+          : "border-border bg-card hover:border-primary/50"
+      }`}
     >
       {children}
     </button>

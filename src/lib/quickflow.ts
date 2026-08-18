@@ -426,3 +426,71 @@ export function guessArea(text: string): LifeArea {
     return "privat";
   return "vardag";
 }
+
+// ---------------------------------------------------------------------------
+// Sortering: vart hör en QuickFlow-tanke egentligen hemma?
+// "köpa schampo" hör hemma i inköpslistan, "förbereda middag" i kalendern.
+// Gissningen är alltid bara ett förslag – användaren väljer själv.
+// ---------------------------------------------------------------------------
+
+export type QuickflowDestination =
+  | "inkop"
+  | "kalender"
+  | "uppgift"
+  | "paminnelse"
+  | "ide"
+  | "behall";
+
+export const DESTINATION_META: Record<
+  QuickflowDestination,
+  { emoji: string; label: string; hint: string }
+> = {
+  inkop: { emoji: "🛒", label: "Inköpslista", hint: "Sånt du ska köpa hamnar i listan." },
+  kalender: { emoji: "📅", label: "Kalender", hint: "Något som händer en viss dag eller tid." },
+  uppgift: { emoji: "📌", label: "Att göra", hint: "Något du ska göra, utan bestämd tid." },
+  paminnelse: { emoji: "⏰", label: "Påminnelse", hint: "Jag säger till när det är dags." },
+  ide: { emoji: "💡", label: "Idébank", hint: "En tanke att spara till senare." },
+  behall: { emoji: "🧠", label: "Behåll i QuickFlow", hint: "Ligger kvar tills du bestämmer." },
+};
+
+const SHOPPING_WORDS =
+  /(köp|köpa|handla|inköp|slut på|behöver mer|ta med hem|shampoo|schampo|balsam|tandkräm|tvål|blöjor|mjölk|smör|ost|bröd|ägg|kaffe|te\b|frukt|grönsaker|toapapper|hushållspapper|tvättmedel|diskmedel|batterier|matvaror)/;
+
+const CALENDAR_WORDS =
+  /(möte|träff|läkare|tandläkare|besök|lektion|föreläsning|tenta|prov|middag|lunch|frukost|fest|kalas|resa|tåg|flyg|hämta|lämna|träning|pass|förbereda|planera|laga)/;
+
+const TASK_WORDS =
+  /(ring|boka|betala|maila|mejla|skicka|fixa|tvätta|städa|diska|sortera|packa|ansök|anmäl|beställ)/;
+
+const IDEA_WORDS = /(kanske|idé|ide|skulle vilja|drömmer|tänkte att|någon gång|vore kul)/;
+
+/** Ren varutitel ur en fritext: "köpa schampo på ica" → "schampo". */
+export function shoppingTitleFrom(text: string): string {
+  const cleaned = text
+    .replace(/^\s*(kom ihåg att|glöm inte att|jag (ska|måste|behöver))\s+/i, "")
+    .replace(/^\s*(att\s+)?(köp[ae]?|handla|inhandla|skaffa)\s+/i, "")
+    .replace(/\s+(på|från|i)\s+(ica|coop|willys|hemköp|lidl|city gross|apoteket|affären|butiken)\b.*$/i, "")
+    .trim();
+  return cleaned || text.trim();
+}
+
+/**
+ * Föreslår vart en tanke hör hemma. Ordningen är medveten:
+ * inköp först (tydligast signal), sedan tid/kalender, därefter att göra.
+ */
+export function guessDestination(item: {
+  text: string;
+  level?: QuickflowLevel;
+  remindAt?: number;
+}): QuickflowDestination {
+  const t = item.text.toLowerCase();
+  if (SHOPPING_WORDS.test(t) && !/(ring|boka|betala)/.test(t)) return "inkop";
+  if (parseWhenFromText(item.text)) return "kalender";
+  if (/(kl \d|klockan)/.test(t)) return "kalender";
+  if (CALENDAR_WORDS.test(t)) return "kalender";
+  if (TASK_WORDS.test(t)) return "uppgift";
+  if (IDEA_WORDS.test(t)) return "ide";
+  if (item.remindAt) return "paminnelse";
+  if (item.level === "viktigt") return "uppgift";
+  return "behall";
+}

@@ -18,6 +18,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 - **"Ditt fokus idag" visar bara dagens saker** (2026-08-17): Uppgifter med ett framtida datum syns inte längre i "Ditt fokus idag" på hemskärmen – de ligger kvar i kalendern och dyker upp först när dagen är inne. Passerade datum och dagens datum visas fortfarande.
 
 ### Added
+- **QuickFlow sorterar till alla delar av appen** (2026-08-18): Det du fångar i QuickFlow kan nu skickas vidare till inköpslistan, kalendern, att göra, påminnelser eller idébanken. MyFlove föreslår vart det hör hemma – "köpa schampo" hamnar i inköpslistan (som bara "schampo"), "förbereda middag" i kalendern – och förslaget är markerat men du väljer alltid själv.
 - **Inställningar för energipåverkan** (2026-08-18): Ny inställningsvy i Energiflöde där du kan stänga av energipåverkan helt med ett reglage, sätta en samlad vikt och dessutom ställa vikten för varje energifaktor (sömn, socialt, rörelse, ljud & miljö, stress, återhämtning, egentid, annat) oberoende av varandra. Allt går att återställa till Normalt.
 - **Energiflöde** (2026-08-19): Ny del under Må bra där du registrerar vad som ger 🔋 och tar 🪫 energi – sömn, socialt, ljud och miljö, stress, återhämtning, egentid. Dagens balans blir en egen faktor i FlowScore (du väljer själv: Av/Lite/Normalt/Mycket), och mönster över 14–30 dagar visar vad som återkommer. Posterna blir aldrig kalenderhändelser eller uppgifter – de beskriver bara din kapacitet, och Flow erbjuder en lättare plan när dagen tagit mer än den gett.
 
