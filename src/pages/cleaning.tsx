@@ -16,24 +16,81 @@ import {
   totalMinutes,
   type CleanMode,
 } from "@/lib/cleaning";
-import { Clock, RotateCcw, Sparkles, ShoppingBasket } from "lucide-react";
+import { Clock, RotateCcw, Sparkles, ShoppingBasket, Plus, X } from "lucide-react";
 import CollapsibleSection from "@/components/collapsible-section";
+import { Input } from "@/components/ui/input";
 
 const todayIso = () => new Date().toISOString().slice(0, 10);
+
+type CustomStep = { id: string; label: string; minutes: number; needs: string[] };
 
 export default function CleaningPage() {
   const [done, setDone] = useCloudSyncedStorage<Record<string, string>>(
     "myflove-cleaning-done",
     {},
   );
+  // Egna steg och bortvalda steg – sparas per rum och läge.
+  const [custom, setCustom] = useCloudSyncedStorage<Record<string, CustomStep[]>>(
+    "myflove-cleaning-custom",
+    {},
+  );
+  const [hidden, setHidden] = useCloudSyncedStorage<Record<string, string[]>>(
+    "myflove-cleaning-hidden",
+    {},
+  );
   const [roomId, setRoomId] = useState(CLEAN_ROOMS[0]!.id);
   const [mode, setMode] = useState<CleanMode>("vardag");
+  const [newLabel, setNewLabel] = useState("");
+  const [newMinutes, setNewMinutes] = useState("10");
   const { toast } = useToast();
 
   const room = CLEAN_ROOMS.find((r) => r.id === roomId)!;
-  const steps = room.steps[mode];
+  const listKey = `${roomId}:${mode}`;
+  const hiddenIds = hidden[listKey] ?? [];
+  const steps = useMemo(
+    () => [
+      ...room.steps[mode].filter((s) => !hiddenIds.includes(s.id)),
+      ...(custom[listKey] ?? []),
+    ],
+    [room, mode, hiddenIds, custom, listKey],
+  );
   const key = (stepId: string) => `${mode}:${stepId}`;
   const isDone = (stepId: string) => Boolean(done[key(stepId)]);
+
+  const addStep = () => {
+    const label = newLabel.trim();
+    if (!label) return;
+    const minutes = Math.max(1, Number(newMinutes) || 10);
+    const step: CustomStep = { id: `egen-${Date.now()}`, label, minutes, needs: [] };
+    setCustom((prev) => ({ ...prev, [listKey]: [...(prev[listKey] ?? []), step] }));
+    setNewLabel("");
+    toast({ description: "Tillagt i listan 🌱" });
+  };
+
+  const removeStep = (stepId: string) => {
+    if (stepId.startsWith("egen-")) {
+      setCustom((prev) => ({
+        ...prev,
+        [listKey]: (prev[listKey] ?? []).filter((s) => s.id !== stepId),
+      }));
+    } else {
+      setHidden((prev) => ({
+        ...prev,
+        [listKey]: [...(prev[listKey] ?? []), stepId],
+      }));
+    }
+    setDone((prev) => {
+      const next = { ...prev };
+      delete next[key(stepId)];
+      return next;
+    });
+    toast({ description: "Borttaget från listan" });
+  };
+
+  const restoreSteps = () => {
+    setHidden((prev) => ({ ...prev, [listKey]: [] }));
+    toast({ description: "Standardstegen är tillbaka" });
+  };
 
   const completed = steps.filter((s) => isDone(s.id));
   const remaining = steps.filter((s) => !isDone(s.id));
@@ -41,6 +98,7 @@ export default function CleaningPage() {
     () => suppliesFor(remaining.length ? remaining : steps),
     [remaining, steps],
   );
+
   const minutesLeft = totalMinutes(remaining);
   const pct = steps.length ? Math.round((completed.length / steps.length) * 100) : 0;
   const tint = (a: number) => `hsl(${room.hue} / ${a})`;
