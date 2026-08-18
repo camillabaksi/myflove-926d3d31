@@ -226,10 +226,15 @@ function fmtDateTime(iso: string | null): string {
   });
 }
 
+type SortKey = "name" | "last_visit" | "last_login" | "created";
+type SortDir = "asc" | "desc";
+
 function UsersSection() {
   const qc = useQueryClient();
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
+  const [sortKey, setSortKey] = useState<SortKey>("last_visit");
+  const [sortDir, setSortDir] = useState<SortDir>("desc");
   const filter = { ...(from ? { from } : {}), ...(to ? { to } : {}) };
   const hasFilter = Boolean(from || to);
 
@@ -247,6 +252,17 @@ function UsersSection() {
     mutationFn: (v: { userId: string; role: "admin" | "user" }) => revokeRoleFn({ data: v }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-users"] }),
   });
+
+  const handleSort = (key: SortKey) => {
+    if (sortKey === key) {
+      setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    } else {
+      setSortKey(key);
+      setSortDir(key === "name" ? "asc" : "desc");
+    }
+  };
+
+  const sorted = data ? [...data].sort(sortUsers(sortKey, sortDir)) : [];
 
   const filterBar = (
     <div className="flex flex-wrap items-end gap-3 rounded-2xl border border-border bg-card p-4">
@@ -316,17 +332,25 @@ function UsersSection() {
         <table className="w-full text-sm">
           <thead className="bg-muted text-left">
             <tr>
-              <th className="p-3">Namn</th>
-              <th className="p-3">Senaste besök</th>
-              <th className="p-3">Senaste inloggning</th>
-              <th className="p-3">Skapad</th>
+              <SortHeader active={sortKey === "name"} dir={sortDir} onClick={() => handleSort("name")}>
+                Namn
+              </SortHeader>
+              <SortHeader active={sortKey === "last_visit"} dir={sortDir} onClick={() => handleSort("last_visit")}>
+                Senaste besök
+              </SortHeader>
+              <SortHeader active={sortKey === "last_login"} dir={sortDir} onClick={() => handleSort("last_login")}>
+                Senaste inloggning
+              </SortHeader>
+              <SortHeader active={sortKey === "created"} dir={sortDir} onClick={() => handleSort("created")}>
+                Skapad
+              </SortHeader>
               <th className="p-3">Roller</th>
               <th className="p-3 text-right">Åtgärd</th>
             </tr>
           </thead>
 
           <tbody>
-            {data.map((u) => {
+            {sorted.map((u) => {
               const isAdminRow = u.roles.includes("admin");
               return (
                 <tr key={u.user_id} className="border-t border-border">
@@ -393,4 +417,51 @@ function UsersSection() {
       </div>
     </div>
   );
+}
+
+function SortHeader({
+  active,
+  dir,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  dir: SortDir;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <th className="p-3">
+      <button
+        type="button"
+        onClick={onClick}
+        className="flex items-center gap-1 font-semibold hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
+      >
+        {children}
+        {active && (dir === "asc" ? <ArrowUp size={14} /> : <ArrowDown size={14} />)}
+      </button>
+    </th>
+  );
+}
+
+function sortUsers(key: SortKey, dir: SortDir) {
+  const mult = dir === "asc" ? 1 : -1;
+  return (a: AdminUserRow, b: AdminUserRow) => {
+    let cmp = 0;
+    switch (key) {
+      case "name":
+        cmp = (a.name ?? a.email ?? "").localeCompare(b.name ?? b.email ?? "", "sv");
+        break;
+      case "last_visit":
+        cmp = (a.last_visit_at ?? "").localeCompare(b.last_visit_at ?? "");
+        break;
+      case "last_login":
+        cmp = (a.last_sign_in_at ?? "").localeCompare(b.last_sign_in_at ?? "");
+        break;
+      case "created":
+        cmp = (a.created_at ?? "").localeCompare(b.created_at ?? "");
+        break;
+    }
+    return cmp * mult;
+  };
 }
