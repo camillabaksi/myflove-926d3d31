@@ -50,6 +50,7 @@ import { Route as AppFlowscoreRouteImport } from './routes/_app.flowscore'
 import { Route as AppFlowplanRouteImport } from './routes/_app.flowplan'
 import { Route as AppFinancesRouteImport } from './routes/_app.finances'
 import { Route as AppFamiljRouteImport } from './routes/_app.familj'
+import { Route as AppEnergifloedeRouteImport } from './routes/_app.energifloede'
 import { Route as AppDumpRouteImport } from './routes/_app.dump'
 import { Route as AppDagligRutinRouteImport } from './routes/_app.daglig-rutin'
 import { Route as AppCalendarRouteImport } from './routes/_app.calendar'
@@ -273,6 +274,11 @@ const AppFamiljRoute = AppFamiljRouteImport.update({
   path: '/familj',
   getParentRoute: () => AppRoute,
 } as any)
+const AppEnergifloedeRoute = AppEnergifloedeRouteImport.update({
+  id: '/energifloede',
+  path: '/energifloede',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppDumpRoute = AppDumpRouteImport.update({
   id: '/dump',
   path: '/dump',
@@ -385,6 +391,7 @@ export interface FileRoutesByFullPath {
   '/calendar': typeof AppCalendarRoute
   '/daglig-rutin': typeof AppDagligRutinRoute
   '/dump': typeof AppDumpRoute
+  '/energifloede': typeof AppEnergifloedeRoute
   '/familj': typeof AppFamiljRoute
   '/finances': typeof AppFinancesRoute
   '/flowplan': typeof AppFlowplanRoute
@@ -444,6 +451,7 @@ export interface FileRoutesByTo {
   '/calendar': typeof AppCalendarRoute
   '/daglig-rutin': typeof AppDagligRutinRoute
   '/dump': typeof AppDumpRoute
+  '/energifloede': typeof AppEnergifloedeRoute
   '/familj': typeof AppFamiljRoute
   '/finances': typeof AppFinancesRoute
   '/flowplan': typeof AppFlowplanRoute
@@ -505,6 +513,7 @@ export interface FileRoutesById {
   '/_app/calendar': typeof AppCalendarRoute
   '/_app/daglig-rutin': typeof AppDagligRutinRoute
   '/_app/dump': typeof AppDumpRoute
+  '/_app/energifloede': typeof AppEnergifloedeRoute
   '/_app/familj': typeof AppFamiljRoute
   '/_app/finances': typeof AppFinancesRoute
   '/_app/flowplan': typeof AppFlowplanRoute
@@ -566,6 +575,7 @@ export interface FileRouteTypes {
     | '/calendar'
     | '/daglig-rutin'
     | '/dump'
+    | '/energifloede'
     | '/familj'
     | '/finances'
     | '/flowplan'
@@ -625,6 +635,7 @@ export interface FileRouteTypes {
     | '/calendar'
     | '/daglig-rutin'
     | '/dump'
+    | '/energifloede'
     | '/familj'
     | '/finances'
     | '/flowplan'
@@ -685,6 +696,7 @@ export interface FileRouteTypes {
     | '/_app/calendar'
     | '/_app/daglig-rutin'
     | '/_app/dump'
+    | '/_app/energifloede'
     | '/_app/familj'
     | '/_app/finances'
     | '/_app/flowplan'
@@ -1034,6 +1046,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppFamiljRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/energifloede': {
+      id: '/_app/energifloede'
+      path: '/energifloede'
+      fullPath: '/energifloede'
+      preLoaderRoute: typeof AppEnergifloedeRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/dump': {
       id: '/_app/dump'
       path: '/dump'
@@ -1166,6 +1185,7 @@ interface AppRouteChildren {
   AppCalendarRoute: typeof AppCalendarRoute
   AppDagligRutinRoute: typeof AppDagligRutinRoute
   AppDumpRoute: typeof AppDumpRoute
+  AppEnergifloedeRoute: typeof AppEnergifloedeRoute
   AppFamiljRoute: typeof AppFamiljRoute
   AppFinancesRoute: typeof AppFinancesRoute
   AppFlowplanRoute: typeof AppFlowplanRoute
@@ -1208,6 +1228,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppCalendarRoute: AppCalendarRoute,
   AppDagligRutinRoute: AppDagligRutinRoute,
   AppDumpRoute: AppDumpRoute,
+  AppEnergifloedeRoute: AppEnergifloedeRoute,
   AppFamiljRoute: AppFamiljRoute,
   AppFinancesRoute: AppFinancesRoute,
   AppFlowplanRoute: AppFlowplanRoute,
