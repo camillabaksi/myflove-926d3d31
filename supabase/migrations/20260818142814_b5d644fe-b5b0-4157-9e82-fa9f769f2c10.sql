@@ -1,0 +1,1 @@
+DELETE FROM public.flow_conversations WHERE created_at > '2026-08-18 14:20:00+00';
