@@ -609,7 +609,7 @@ export function useReminders() {
     return 0;
   });
 
-  return { reminders, activeReminders, addReminder, toggleReminder, deleteReminder, updateReminder };
+  return { reminders, activeReminders, addReminder, toggleReminder, deleteReminder, updateReminder, cancelReminder, restoreReminder };
 
 }
 
