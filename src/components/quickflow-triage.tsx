@@ -301,19 +301,27 @@ export default function QuickflowTriage() {
                     );
                   })}
                 </div>
-                <div className="flex flex-wrap gap-2">
-                  {[type, ...DESTINATIONS.filter((d) => d !== type)].map((d) => (
-                    <Action
-                      key={d}
-                      onClick={() => runDestination(item, d)}
-                      highlight={d === type}
-                      title={DESTINATION_META[d].hint}
-                    >
-                      {DESTINATION_META[d].emoji} {DESTINATION_META[d].label}
-                    </Action>
-                  ))}
-                  <Action onClick={() => remove(item.id)}>Ta bort</Action>
-                </div>
+                {energyFor === item.id ? (
+                  <div className="flex flex-wrap gap-2">
+                    <Action onClick={() => void toEnergy(item, "gives")}>🔋 Gav energi</Action>
+                    <Action onClick={() => void toEnergy(item, "drains")}>🪫 Tog energi</Action>
+                    <Action onClick={() => setEnergyFor(null)}>Avbryt</Action>
+                  </div>
+                ) : (
+                  <div className="flex flex-wrap gap-2">
+                    {[type, ...DESTINATIONS.filter((d) => d !== type)].map((d) => (
+                      <Action
+                        key={d}
+                        onClick={() => runDestination(item, d)}
+                        highlight={d === type}
+                        title={DESTINATION_META[d].hint}
+                      >
+                        {DESTINATION_META[d].emoji} {DESTINATION_META[d].label}
+                      </Action>
+                    ))}
+                    <Action onClick={() => remove(item.id)}>Ta bort</Action>
+                  </div>
+                )}
 
               </div>
             );
