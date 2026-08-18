@@ -1160,6 +1160,9 @@ export default function CalendarPage() {
                     Ange en starttid ovan så kan du välja påminnelse.
                   </p>
                 )}
+              </div>
+
+
 
               <div className="space-y-2">
                 <label className="text-sm font-medium" htmlFor="ny-anteckning">
