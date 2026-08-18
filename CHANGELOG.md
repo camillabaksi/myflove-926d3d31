@@ -7,7 +7,11 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 
 ## [Unreleased]
 
+### Fixed
+- **Gamla påminnelser borttagna** (2026-08-18): Inaktuella notiser som låg kvar i kön är avbokade – Elvanse 12:15 och 11:30 från gamla medicinposter, morgonmedicin från ett gammalt id, samt vattenpåminnelserna 05:00/05:05 (inklusive den dagliga upprepningen) och en gammal testnotis. Aktuella påminnelser och mediciner (Elvanse 13:00, morgonmedicin 06:15) är orörda.
+
 ### Added
+
 - **GitHub-issues från checklistan** (2026-08-18): 70 färdiga issues (26 kapitel-epics + delmoment) med rubrik, beskrivning och acceptance criteria utifrån Utvecklarchecklista 2.9 – som markdown, JSON och ett gh-skript för import.
 - **Utvecklarchecklista 2.9** (2026-08-18): Konkret checklista utifrån Living Blueprint 2.9 – ett avsnitt per kapitel (1–18) med avbockningsbara delmoment och status (klart/delvis/kvar), samt tre prioriterade nästa steg.
 - **Blueprint 2.9** (2026-08-19): Living Blueprint uppdaterad till 2.9 – nytt kapitel 17.9 "Material och kommunikation" (blueprint, pitchdeck i PPTX och PDF, marknadsföringsvideo och changelog i Flow-röst), städad kapitelordning, versionshistorik 18.7 och rätt versionsnummer i sidhuvudet. Finns som DOCX och PDF.
