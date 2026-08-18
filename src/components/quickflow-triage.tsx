@@ -67,10 +67,20 @@ export default function QuickflowTriage() {
   if (openItems.length === 0) return null;
 
   /** Egen regel först, sedan MyFloves gissning. */
-  const ruleFor = (item: QuickflowItem) => resolveDestination(item, rules);
+  const ruleFor = (item: QuickflowItem) => {
+    const resolved = resolveDestination(item, rules);
+    // Nämns ett av barnen vid namn väger det tyngre än den generella gissningen.
+    if (!resolved.rule && guessChild(item.text, children)) {
+      return { ...resolved, destination: "barn" as QuickflowDestination };
+    }
+    return resolved;
+  };
 
   const areaOf = (item: QuickflowItem): LifeArea =>
-    item.area ?? ruleFor(item).area ?? guessArea(item.text);
+    item.area ??
+    ruleFor(item).area ??
+    DESTINATION_AREA[ruleFor(item).destination] ??
+    guessArea(item.text);
 
   /** Titeln som regeln vill ha ("köpa schampo" → "schampo"). */
   const titleOf = (item: QuickflowItem): string => {
