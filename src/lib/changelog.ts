@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Pitchdeck som nedladdningsbar PDF (20 sidor) med sammanfattningssidan \"MyFlove i korthet\" (2026-08-19)",
       "Pitchdeck 2.8 – nya skärmbilder från den lila appen, Familj utbytt mot Relationer och tydliga platshållare för testarcitat (2026-08-19)",
       "Marknadsföringsvideo 2.8 – nya scener för Min situation, Relationer och FlowPlan som förslag. Blueprint 2.8 och uppdaterat pitchdeck (2026-08-19)",
       "FlowPlan är ett förslag först – flytta uppgifterna upp/ner med pilarna, säg ja till ordningen eller be Flow föreslå på nytt. Din ordning sparas och går att återställa till Flows förslag (2026-08-19)",

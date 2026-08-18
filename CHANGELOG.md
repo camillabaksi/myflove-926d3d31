@@ -8,6 +8,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 ## [Unreleased]
 
 ### Added
+- **Pitchdeck som PDF** (2026-08-19): Pitchdecket finns nu även som nedladdningsbar PDF (20 sidor) med de nya skärmbilderna och en avslutande sammanfattningsslide – "MyFlove i korthet" med vad appen är, hur den fungerar, vad som är nytt i 2.8 och status/nästa steg.
 - **Pitchdeck 2.8 uppdaterat** (2026-08-19): Alla skärmbilder i pitchdecket är omtagna från den nya lila appen (hem, Min dag, Relationer, Flow, FlowScore, Feedback, QuickFlow, Insight). "Familj" heter nu Relationer i problem-, lösnings- och personabilderna, rubriken "Status idag" är renodlad, och citat/siffror på testarsidan visas som tydliga platshållare tills riktig data finns.
 - **Marknadsföringsvideo 2.8** (2026-08-19): Videon har fått tre nya scener – Min situation, Relationer och FlowPlan som förslag – i samma lila MyFlove-uttryck. Blueprinten är uppdaterad till 2.8 och pitchdecket har en ny slide om vad som är nytt.
 - **FlowPlan är ett förslag – du bestämmer ordningen** (2026-08-19): När Flow lagt en plan visas den som **förslag** tills du säger ja. Flytta uppgifterna upp och ner med pilarna tills ordningen känns rätt, tryck "Ja, kör den här ordningen" eller be Flow föreslå på nytt. Din ordning sparas och ligger kvar, och du kan alltid gå "Tillbaka till Flows ordning".
