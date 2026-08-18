@@ -143,6 +143,7 @@ export function StudiesSection() {
           course: courseName(task.courseId),
           dueDate: task.dueDate,
           details: details.trim() || undefined,
+          profileContext: studyProfileContext(studyProfile) || undefined,
         },
       });
       addTaskSteps(task.id, result.steps);

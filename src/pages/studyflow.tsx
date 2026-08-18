@@ -31,6 +31,10 @@ import { useFlowScore } from "@/hooks/use-flowscore";
 import { useFlowStudy, daysUntil, examPhase } from "@/hooks/use-flowstudy";
 import { StudyCalendarSync } from "@/components/study-calendar-sync";
 import CollapsibleSection from "@/components/collapsible-section";
+import StudyProfileCard from "@/components/study-profile-card";
+import StudySuggestions from "@/components/study-suggestions";
+import { useStudyProfile } from "@/hooks/use-study-profile";
+import { studyProfileContext } from "@/lib/study-profile";
 import { ScheduleImport } from "@/components/schedule-import";
 import { NextLectureCard } from "@/components/next-lecture-card";
 import { FlowReplanDiff } from "@/components/flow-replan-diff";
@@ -186,7 +190,9 @@ export default function StudyflowPage() {
   const handleBreakDown = async (id: string, title: string, dueDate?: string) => {
     setBusyId(id);
     try {
-      const res = await run({ data: { title, dueDate } });
+      const res = await run({
+        data: { title, dueDate, profileContext: studyProfileContext(studyProfile) || undefined },
+      });
       addTaskSteps(
         id,
         res.steps.map((s) => ({ title: s.title, when: s.when })),
@@ -269,6 +275,10 @@ export default function StudyflowPage() {
             <StudiesSection />
           </TabsContent>
           <TabsContent value="nu" className="mt-4 space-y-5">
+
+        <StudyProfileCard />
+
+        <StudySuggestions />
 
         <NextLectureCard />
 
