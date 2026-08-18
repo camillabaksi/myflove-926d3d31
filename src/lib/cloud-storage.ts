@@ -94,13 +94,14 @@ export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
       const localTs = getLocalUpdatedAt();
       if (data) {
         const cloudTs = new Date(data.updated_at as string).getTime();
-        if (cloudTs >= localTs || isLocalEmpty()) {
+        if (!dirtyRef.current && (cloudTs >= localTs || isLocalEmpty())) {
           setValue(data.value as T);
           setLocalUpdatedAt(cloudTs);
           hydratedRef.current = true;
           return;
         }
       }
+
 
       hydratedRef.current = true;
 
