@@ -137,6 +137,9 @@ export default function CalendarPage() {
   const [newAnyTitle, setNewAnyTitle] = useState("");
   const [newAnyTime, setNewAnyTime] = useState("");
   const [newAnyEndTime, setNewAnyEndTime] = useState("");
+  /** Fri anteckning – vad det handlar om, vad man behöver ta med. */
+  const [newAnyNote, setNewAnyNote] = useState("");
+
   /** Påminnelse innan start: null = ingen, annars minuter före (0 = vid start). */
   const [newAnyRemind, setNewAnyRemind] = useState<number | null>(null);
   const [newAnyChildId, setNewAnyChildId] = useState<string>("");
