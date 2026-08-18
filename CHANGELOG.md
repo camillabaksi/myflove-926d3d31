@@ -8,6 +8,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 ## [Unreleased]
 
 ### Added
+- **QuickFlow: "Vart ska det här hamna?"** (2026-08-18): Efter att du fångat något föreslår Flow vart det hör hemma och visar alla val på ett ställe – uppgift, kalender, påminnelse, barn, familj, studier, jobb, hemma, hälsa, ekonomi, inköpslista, anteckning, energifaktor, återkom senare eller ta bort. Barn är nu ett eget val: nämner du ett av barnen vid namn föreslår Flow rätt barn, och du väljer om det blir kalenderhändelse, uppgift, anteckning eller inköp. Väljer du energifaktor anger du själv om den gav eller tog energi och hur mycket den ska påverka FlowScore. Alla förslag går att ändra manuellt.
 - **"Omvandla till …" på anteckningar** (2026-08-18): Varje anteckning har nu en tydlig knapp där du väljer om den ska bli uppgift, kalenderhändelse eller energifaktor. Du kan justera text, datum, tid, påminnelse eller energiriktning, styrka och kategori – och inget sparas förrän du trycker Bekräfta.
 
 ### Fixed
