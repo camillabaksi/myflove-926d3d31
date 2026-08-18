@@ -106,7 +106,7 @@ function useFamilyEventsByDate() {
 
 export default function CalendarPage() {
   const { currentFocus } = useFocus();
-  const { activeTasks, completedTasks, deleteTask, setTaskTime, addTask } = useTasks();
+  const { activeTasks, completedTasks, deleteTask, setTaskTime, addTask, updateTask } = useTasks();
   const { activeReminders, addReminder, deleteReminder, updateReminder } = useReminders();
   const { eventsForDate, hasHousehold } = useFamilyEventsByDate();
   const { children: kids, items: childItems, addItem: addChildItem } = useChildren();
