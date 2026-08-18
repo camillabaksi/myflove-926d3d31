@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Energiflöde – registrera vad som ger och tar energi (sömn, socialt, ljud, stress, egentid). Dagens balans vägs in i FlowScore, du väljer själv hur mycket den får påverka, och mönster över tid visar vad som återkommer (2026-08-19)",
       "Ändra barn i en sammanfogad händelse i efterhand via knappen \"Ändra barn\" (2026-08-18)",
       "Flera barn i samma händelse – välj både Bella och Bianca vid lämning, en händelse och en påminnelse men syns i båda barnens schema (2026-08-18)",
       "Ändra allt i efterhand – titel, datum, tid, sluttid, påminnelse, livsområde och anteckning går att justera på allt du lagt in manuellt (2026-08-19)",
