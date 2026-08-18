@@ -790,6 +790,10 @@ export default function CalendarPage() {
                         Påminnelse {r.time && `kl ${r.time}${r.endTime ? `–${r.endTime}` : ""}`}
                       </div>
                       <div className="text-lg font-medium truncate">{r.title}</div>
+                      {r.note && (
+                        <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">{r.note}</p>
+                      )}
+
                     </div>
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
