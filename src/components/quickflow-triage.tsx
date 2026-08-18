@@ -61,6 +61,9 @@ export default function QuickflowTriage() {
   /** Användarens svar när tolkningen var otydlig. */
   const [choices, setChoices] = useState<Record<string, { at: number; allDay: boolean }>>({});
 
+  /** Visa även vilande tankar när användaren själv ber om det. */
+  const [showResting, setShowResting] = useState(false);
+
   const stale = useMemo(
     () =>
       openItems.filter(
@@ -69,7 +72,21 @@ export default function QuickflowTriage() {
     [openItems],
   );
 
+  /** Tankar som väntar på sin tid – de göms tills dess. */
+  const resting = useMemo(
+    () => openItems.filter((i) => i.remindAt && i.remindAt > Date.now()),
+    [openItems],
+  );
+  const sortList = useMemo(
+    () =>
+      showResting
+        ? openItems
+        : openItems.filter((i) => !i.remindAt || i.remindAt <= Date.now() || laterFor === i.id),
+    [openItems, showResting, laterFor],
+  );
+
   if (openItems.length === 0) return null;
+
 
   /** Egen regel först, sedan MyFloves gissning. */
   const ruleFor = (item: QuickflowItem) => {
