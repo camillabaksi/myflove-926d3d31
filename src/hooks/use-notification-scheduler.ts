@@ -57,16 +57,52 @@ export function useNotificationScheduler() {
         }
       }
 
-      // Reminders (kalender-påminnelser) med tid idag
+      // Aktiva påminnelser (ej klara, ej avbokade) – inkl. upprepning och "minuter innan"
+      const dow = now.getDay(); // 0=Sö .. 6=Lö
       for (const r of reminders) {
-        if (r.completed || !r.time || r.date !== todayStr) continue;
+        if (r.completed || r.canceled || !r.time) continue;
+
+        const repeat = r.repeat ?? "none";
+        let occursToday = false;
+        if (repeat === "none") {
+          occursToday = r.date === todayStr;
+        } else if (todayStr >= r.date) {
+          if (repeat === "daily") occursToday = true;
+          else if (repeat === "weekdays") occursToday = dow >= 1 && dow <= 5;
+          else if (repeat === "weekly") {
+            const start = new Date(r.date + "T00:00:00");
+            const today = new Date(todayStr + "T00:00:00");
+            const diffDays = Math.round((today.getTime() - start.getTime()) / 86_400_000);
+            occursToday = diffDays % 7 === 0;
+          }
+        }
+        if (!occursToday) continue;
+
         const target = parseHM(r.time);
         if (target === null) continue;
+
         if (target === nowMinutes) {
           const key = `rem-${r.id}-${todayStr}`;
           if (!firedRef.current.has(key)) {
             firedRef.current.add(key);
-            sendPushNotification(r.title, { body: `Påminnelse kl ${r.time}`, tag: key, itemKey: `reminder:${r.id}` });
+            sendPushNotification(`🔔 ${r.title}`, {
+              body: r.note ? `Kl ${r.time} – ${r.note}` : `Påminnelse kl ${r.time}`,
+              tag: key,
+              itemKey: `reminder:${r.id}`,
+            });
+          }
+        }
+
+        const lead = r.remindMinutesBefore;
+        if (lead && target - lead === nowMinutes && target !== nowMinutes) {
+          const key = `rem-${r.id}-${todayStr}-lead`;
+          if (!firedRef.current.has(key)) {
+            firedRef.current.add(key);
+            sendPushNotification(`🔔 Om ${lead} min: ${r.title}`, {
+              body: `Kl ${r.time}`,
+              tag: key,
+              itemKey: `reminder:${r.id}`,
+            });
           }
         }
       }
