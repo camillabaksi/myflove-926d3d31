@@ -113,6 +113,7 @@ export function useTasks() {
     opts?: {
       kind?: TaskKind;
       waitingOn?: string;
+      note?: string;
       time?: string;
       endTime?: string;
       reminderMinutesBefore?: number;
@@ -138,6 +139,7 @@ export function useTasks() {
         kind: opts?.kind ?? "uppgift",
         status: opts?.waitingOn ? "vantar" : "pagar",
         waitingOn: opts?.waitingOn,
+        note: opts?.note?.trim() || undefined,
         area: opts?.area ?? "vardag",
         courseId: opts?.courseId,
         deadlineLeadDays: opts?.deadlineLeadDays,
@@ -147,6 +149,12 @@ export function useTasks() {
       ...prev,
     ]);
   };
+
+  /** Fri anteckning på en uppgift – tom text tar bort anteckningen. */
+  const setTaskNote = (id: string, note: string) => {
+    setTasks((prev) => prev.map(t => (t.id === id ? { ...t, note: note.trim() || undefined } : t)));
+  };
+
 
   const setTaskDueDate = (id: string, dueDate: string) => {
     setTasks((prev) => prev.map(t => (t.id === id ? { ...t, dueDate } : t)));
