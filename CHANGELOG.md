@@ -18,6 +18,8 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 - **Notiser kommer nu även när appen är stängd** (2026-08-18): Telefonens push-prenumeration kunde bytas ut i bakgrunden utan att servern fick veta – då skickades notisen till en gammal nyckel och syntes aldrig. Nu förnyas prenumerationen varje gång du öppnar appen, och tjänsten uppdaterar sig själv direkt om webbläsaren byter nyckel. Gamla, döda prenumerationer för samma enhet rensas bort.
 - **Tider för personliga puffar sparas igen** (2026-08-17): Morgonpuff, kvällspuff och Morgonstart sparade inte de tider du valde – sparningen avvisades tyst i bakgrunden. Nu skickas bara dina inställningar, och tiderna ligger kvar och styr när notiserna kommer.
 
+- **"Nyligen hanterade" syns även när allt är hanterat** (2026-08-18): Om du markerade alla QuickFlow-tankar som hanterade försvann ångra-sektionen helt, eftersom listan då dolde hela komponenten. Nu visas "Nyligen hanterade" så länge det finns något att ångra, både i listan och i sorteringen.
+
 - **Resor och familjekalender fungerar igen** (2026-08-17): Reseökningen hämtar återigen riktiga avgångar i realtid, och familjens kalender, inköpslista och familjeuppgifter läser och sparar mot molnet igen i stället för att bara låtsas lyckas.
 
 ### Changed
