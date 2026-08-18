@@ -260,12 +260,16 @@ export default function CalendarPage() {
           data: { title, date: selectedDateStr, time: timeRange },
         });
       } else if (newCat === "barn") {
-        const childId = newAnyChildId || kids[0]?.id;
-        if (!childId) {
+        const childIds = newAnyChildIds.length > 0 ? newAnyChildIds : (kids[0]?.id ? [kids[0].id] : []);
+        if (childIds.length === 0) {
           toast({ description: "Lägg till ett barn först på sidan Barn.", variant: "destructive" });
           return;
         }
-        await addChildItem({ childId, kind: "activity", title, date: selectedDateStr, time: timeRange ?? undefined, notes: note });
+        // Flera barn i samma händelse: posten hamnar i varje barns schema,
+        // men det räknas som en händelse i kalendern och en påminnelse till dig.
+        for (const childId of childIds) {
+          await addChildItem({ childId, kind: "activity", title, date: selectedDateStr, time: timeRange ?? undefined, notes: note });
+        }
       } else if (newCat === "jobb" || newCat === "studier") {
         addTask(title, selectedDateStr, {
           time,
@@ -280,8 +284,12 @@ export default function CalendarPage() {
       // Familj- och barnhändelser bor i delade listor – lägg en personlig
       // påminnelse bredvid så att notisen faktiskt når just dig.
       if (wantsReminder && (newCat === "familj" || newCat === "barn")) {
-        addReminder(title, selectedDateStr, time, "none", endTime, newAnyRemind ?? 0, note);
+        const names = kids.filter((k) => newAnyChildIds.includes(k.id)).map((k) => k.name);
+        const reminderTitle =
+          newCat === "barn" && names.length > 1 ? `${title} – ${names.join(" & ")}` : title;
+        addReminder(reminderTitle, selectedDateStr, time, "none", endTime, newAnyRemind ?? 0, note);
       }
+
       if (!visible.includes(newCat)) setVisible((prev) => [...prev, newCat]);
       setNewAnyTitle("");
       setNewAnyTime("");
