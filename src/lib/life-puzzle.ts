@@ -253,6 +253,7 @@ export function lifeContextPrompt(input: LifePuzzleInput): string {
   }
 
   if (input.situationContext) lines.push(input.situationContext);
+  if (input.priorityContext) lines.push(input.priorityContext);
   if (input.workDemand) lines.push(`Arbetsdagen idag: ${input.workDemand}.`);
   if (input.workContext) lines.push(input.workContext);
   if (input.studyDemand) lines.push(`Studieveckan: ${input.studyDemand}.`);
