@@ -12,6 +12,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { chatWithFlow } from "@/lib/flow-chat.functions";
 import { useLifePuzzle } from "@/hooks/use-life-puzzle";
 import StopBudget from "@/components/stop-budget";
+import { createFlowConversation, saveFlowMessage } from "@/hooks/use-flow-chats";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
@@ -72,6 +73,7 @@ export default function StopModal({ open, onOpenChange }: StopModalProps) {
   const { contextPrompt } = useLifePuzzle();
   const [breathCount, setBreathCount] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const convIdRef = useRef<string | null>(null);
 
   // Reset on open
   useEffect(() => {
@@ -79,6 +81,7 @@ export default function StopModal({ open, onOpenChange }: StopModalProps) {
       setPhase("breathe");
       setBreathCount(0);
       setFeeling(null);
+      convIdRef.current = null;
       const opener = OPENERS[Math.floor(Math.random() * OPENERS.length)] as string;
       setMessages([{ role: "assistant", content: opener }]);
       setInput("");
@@ -104,6 +107,18 @@ export default function StopModal({ open, onOpenChange }: StopModalProps) {
     setInput("");
     setSending(true);
     try {
+      // Spara samtalet så att det dyker upp bland Flow-chattarna
+      if (!convIdRef.current) {
+        const id = await createFlowConversation(`Stop: ${text}`);
+        if (id) {
+          convIdRef.current = id;
+          const opener = messages[0];
+          if (opener?.role === "assistant") {
+            await saveFlowMessage(id, "assistant", opener.content);
+          }
+        }
+      }
+      if (convIdRef.current) await saveFlowMessage(convIdRef.current, "user", text);
       const payload: Msg[] = [
         { role: "user", content: STOP_SYSTEM_HINT },
         { role: "assistant", content: "Okej, jag är här. Jag lyssnar utan att döma." },
@@ -116,6 +131,7 @@ export default function StopModal({ open, onOpenChange }: StopModalProps) {
         },
       });
       setMessages((m) => [...m, { role: "assistant", content: reply }]);
+      if (convIdRef.current) await saveFlowMessage(convIdRef.current, "assistant", reply);
     } catch {
       setMessages((m) => [
         ...m,
