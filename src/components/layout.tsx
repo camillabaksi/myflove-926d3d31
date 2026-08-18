@@ -825,11 +825,12 @@ export default function Layout({ children }: LayoutProps) {
             <BottomNavLink
               key={item.href}
               item={item}
-              active={location.startsWith("/assistant")}
+              active={location.startsWith(item.href)}
               onClick={() => setMobileMenuOpen(false)}
-              label="Flow"
+              label={item.href === "/assistant" ? "Flow" : item.label}
             />
           ))}
+
 
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
