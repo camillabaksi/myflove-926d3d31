@@ -26,6 +26,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { celebrateFromEvent } from "@/lib/celebrate";
 import CollapsibleSection from "@/components/collapsible-section";
+import WorkProfileCard from "@/components/work-profile-card";
+import WorkSuggestions from "@/components/work-suggestions";
 
 const BUCKET = "work-docs";
 
