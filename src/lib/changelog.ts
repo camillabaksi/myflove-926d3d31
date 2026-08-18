@@ -6,13 +6,15 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-08-17";
+export const CHANGELOG_UPDATED = "2026-08-18";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Notiser kommer även när appen är stängd – push-prenumerationen förnyas vid varje appstart och uppdateras automatiskt om webbläsaren byter nyckel (2026-08-18)",
       "Tider för personliga puffar sparas igen – morgonpuff, kvällspuff och Morgonstart behåller tiden du väljer (2026-08-17)",
+
       "Resor och familjekalender fungerar igen – riktiga avgångar i realtid, och familjens kalender/inköp sparas i molnet igen (2026-08-17)",
       "Tydlig regelmotor för Ditt fokus idag – klart och undanstoppat göms, automatiska poster styr inte dagen, passerat och dagens datum visas, framtida datum väntar och saker utan datum kan alltid göras (2026-08-17)",
       "Ditt fokus idag visar bara dagens saker – uppgifter med framtida datum syns inte i hemskärmens fokus, utan dyker upp först när dagen är inne (2026-08-17)",
