@@ -811,7 +811,18 @@ export default function CalendarPage() {
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
                     <button
-                      onClick={() => setEditing({ kind: "reminder", id: r.id, title: r.title, time: r.time ?? "", repeat: r.repeat ?? "none" })}
+                      onClick={() => setEditing({
+                        kind: "reminder",
+                        id: r.id,
+                        title: r.title,
+                        date: r.date,
+                        time: r.time ?? "",
+                        endTime: r.endTime ?? "",
+                        remind: r.remindMinutesBefore ?? null,
+                        note: r.note ?? "",
+                        area: "vardag",
+                        repeat: r.repeat ?? "none",
+                      })}
                       aria-label="Ändra påminnelse"
                       className="px-3 py-2 text-sm text-primary rounded-xl hover:bg-primary/10"
                     >
