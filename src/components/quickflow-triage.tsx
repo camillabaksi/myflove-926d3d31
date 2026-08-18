@@ -9,7 +9,6 @@ import {
   suggestWhen,
   formatWhen,
   guessArea,
-  guessDestination,
   shoppingTitleFrom,
   parseWhenFromText,
   DESTINATION_META,
