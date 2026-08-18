@@ -732,29 +732,42 @@ export default function CalendarPage() {
 
 
             <div className="space-y-3">
-              {selectedItems.childEvents.map(e => (
-                <Link
-                  key={`child-${e.id}`}
-                  href="/barn"
-                  className="flex items-center gap-4 p-4 bg-card border border-border rounded-2xl hover:bg-secondary transition-colors"
-                >
-                  {pictoMode ? (
-                    <span className="text-3xl leading-none shrink-0" aria-hidden>{pictogramFor(e.title, "🐣")}</span>
-                  ) : (
-                    <Baby style={{ color: e.child?.color ?? '#a06cd5' }} size={24} />
-                  )}
-                  <div className="min-w-0">
-                    <div
-                      className="text-xs font-medium uppercase tracking-wider mb-0.5"
-                      style={{ color: e.child?.color ?? '#a06cd5' }}
-                    >
-                      {e.child?.name ?? "Barn"} {e.time && `kl ${e.time}`}
-                      {e.sharedWith.length > 0 && " · delad"}
+              {/* Samma händelse för flera barn (t.ex. lämning av Bella och Bianca) visas ihop. */}
+              {Object.values(
+                selectedItems.childEvents.reduce<Record<string, typeof selectedItems.childEvents>>((acc, e) => {
+                  const key = `${e.title}|${e.time ?? ""}|${e.completed ? 1 : 0}`;
+                  (acc[key] ??= []).push(e);
+                  return acc;
+                }, {}),
+              ).map((group) => {
+                const e = group[0]!;
+                const names = group.map((g) => g.child?.name ?? "Barn");
+                const color = group.length > 1 ? "#a06cd5" : (e.child?.color ?? "#a06cd5");
+                return (
+                  <Link
+                    key={`child-${e.id}`}
+                    href="/barn"
+                    className="flex items-center gap-4 p-4 bg-card border border-border rounded-2xl hover:bg-secondary transition-colors"
+                  >
+                    {pictoMode ? (
+                      <span className="text-3xl leading-none shrink-0" aria-hidden>{pictogramFor(e.title, "🐣")}</span>
+                    ) : (
+                      <Baby style={{ color }} size={24} />
+                    )}
+                    <div className="min-w-0">
+                      <div
+                        className="text-xs font-medium uppercase tracking-wider mb-0.5"
+                        style={{ color }}
+                      >
+                        {names.join(" & ")} {e.time && `kl ${e.time}`}
+                        {e.sharedWith.length > 0 && " · delad"}
+                      </div>
+                      <div className={`text-lg font-medium truncate ${e.completed ? 'line-through opacity-60' : ''}`}>{e.title}</div>
                     </div>
-                    <div className={`text-lg font-medium truncate ${e.completed ? 'line-through opacity-60' : ''}`}>{e.title}</div>
-                  </div>
-                </Link>
-              ))}
+                  </Link>
+                );
+              })}
+
 
               {selectedItems.familyEvents.map(e => (
                 <div key={`fam-${e.id}`} className="flex items-center justify-between gap-4 p-4 bg-card border border-border rounded-2xl group">
