@@ -1228,26 +1228,43 @@ export default function CalendarPage() {
 
               {newCat === "barn" && kids.length > 0 && (
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Vilket barn?</label>
+                  <label className="text-sm font-medium">Vilka barn?</label>
                   <div className="flex flex-wrap gap-2">
-                    {kids.map((k) => (
-                      <button
-                        key={k.id}
-                        type="button"
-                        onClick={() => setNewAnyChildId(k.id)}
-                        className={`px-3 py-2 rounded-full text-sm font-medium border transition-all ${
-                          (newAnyChildId || kids[0]?.id) === k.id
-                            ? "text-white border-transparent"
-                            : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
-                        }`}
-                        style={(newAnyChildId || kids[0]?.id) === k.id ? { backgroundColor: k.color } : undefined}
-                      >
-                        {k.name}
-                      </button>
-                    ))}
+                    {kids.map((k) => {
+                      const selected = newAnyChildIds.length > 0
+                        ? newAnyChildIds.includes(k.id)
+                        : k.id === kids[0]?.id;
+                      return (
+                        <button
+                          key={k.id}
+                          type="button"
+                          aria-pressed={selected}
+                          onClick={() =>
+                            setNewAnyChildIds((prev) => {
+                              const base = prev.length > 0 ? prev : (kids[0]?.id ? [kids[0].id] : []);
+                              return base.includes(k.id)
+                                ? base.filter((id) => id !== k.id)
+                                : [...base, k.id];
+                            })
+                          }
+                          className={`px-3 py-2 rounded-full text-sm font-medium border transition-all ${
+                            selected
+                              ? "text-white border-transparent"
+                              : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
+                          }`}
+                          style={selected ? { backgroundColor: k.color } : undefined}
+                        >
+                          {selected ? "✓ " : ""}{k.name}
+                        </button>
+                      );
+                    })}
                   </div>
+                  <p className="text-xs text-muted-foreground">
+                    Välj ett eller flera barn – t.ex. lämning av både Bella och Bianca blir en och samma händelse.
+                  </p>
                 </div>
               )}
+
 
               <div className="space-y-2">
                 <label className="text-sm font-medium">Vad händer?</label>
