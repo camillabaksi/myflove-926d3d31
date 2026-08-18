@@ -245,16 +245,29 @@ export function QuickflowList() {
 
       {(upcoming.length > 0 || placeUpcoming.length > 0) && (
         <div className="space-y-3">
+          <p className="text-xs uppercase tracking-wide text-muted-foreground">Sparade till senare</p>
           {[...upcoming, ...placeUpcoming].map((item) =>
             renderRow(
               item,
-              <button
-                type="button"
-                onClick={() => setSnoozeFor(item.id === snoozeFor ? null : item.id)}
-                className="text-xs text-muted-foreground hover:text-foreground underline underline-offset-2"
-              >
-                Flytta till en annan tid
-              </button>,
+              <div className="flex flex-wrap items-center gap-3">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    celebrateFromEvent(e);
+                    complete(item.id);
+                  }}
+                  className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 text-primary px-3 py-1.5 text-xs font-medium hover:bg-primary hover:text-primary-foreground transition-colors"
+                >
+                  <Check size={13} /> Hanterad – göm den
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSnoozeFor(item.id === snoozeFor ? null : item.id)}
+                  className="text-xs text-muted-foreground hover:text-foreground underline underline-offset-2"
+                >
+                  Flytta till en annan tid
+                </button>
+              </div>,
             ),
           )}
         </div>
