@@ -150,10 +150,21 @@ export default function CalendarPage() {
   const [newReminderTime, setNewReminderTime] = useState("");
   const [newReminderRepeat, setNewReminderRepeat] = useState<"none" | "daily" | "weekdays" | "weekly">("none");
   const [editing, setEditing] = useState<
-    | { kind: "reminder"; id: string; title: string; time: string; repeat: "none" | "daily" | "weekdays" | "weekly" }
-    | { kind: "task"; id: string; title: string; time: string }
+    | {
+        kind: "reminder" | "task";
+        id: string;
+        title: string;
+        date: string;
+        time: string;
+        endTime: string;
+        remind: number | null;
+        note: string;
+        area: LifeArea;
+        repeat: "none" | "daily" | "weekdays" | "weekly";
+      }
     | null
   >(null);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
 
