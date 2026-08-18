@@ -28,7 +28,7 @@ import { getRandomEncouragement } from "@/lib/encouragements";
 import { confirmations } from "@/lib/flow-voice";
 import { AreaSwitcher } from "@/components/area-switcher";
 import CollapsibleSection from "@/components/collapsible-section";
-import { AREA_META, areaChipStyle, defaultAreaFor, filterByArea, getArea, useActiveArea } from "@/lib/life-areas";
+import { ALL_AREAS, AREA_META, areaChipStyle, defaultAreaFor, filterByArea, getArea, useActiveArea } from "@/lib/life-areas";
 
 
 // Blueprint 2.0 §7.4: Uppgift / Ärende / Projekt.
