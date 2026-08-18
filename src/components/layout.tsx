@@ -172,6 +172,7 @@ export default function Layout({ children }: LayoutProps) {
     { href: "/daglig-rutin", label: "Daglig rutin", icon: Sun, hint: "Morgon- och kvällsrutiner steg för steg" },
     { href: "/quickflow", label: "Quickflow", icon: Inbox, hint: "Skriv av dig direkt – sortera sen", essential: true },
     { href: "/kalender", label: "Kalender", icon: Calendar, hint: "Allt som händer, dag för dag", essential: true },
+    { href: "/paminnelser", label: "Påminnelser", icon: BellRing, hint: "Lägg till, ändra och avboka påminnelser" },
 
     { href: "/tasks", label: "Att göra", icon: CheckSquare, hint: "Din lista med saker att göra", essential: true },
     { href: "/flowplan", label: "FlowPlan", icon: ListOrdered, hint: "Flow lägger dina uppgifter i bra ordning" },
@@ -225,7 +226,7 @@ export default function Layout({ children }: LayoutProps) {
         label: "Din dag",
         hint: "Kalender, att göra och dagliga rutiner",
         icon: CalendarDays,
-        hrefs: ["/hem", "/min-dag", "/daglig-rutin", "/kalender", "/tasks", "/pomodoro"],
+        hrefs: ["/hem", "/min-dag", "/daglig-rutin", "/kalender", "/paminnelser", "/tasks", "/pomodoro"],
       },
       {
         id: "flowflow",

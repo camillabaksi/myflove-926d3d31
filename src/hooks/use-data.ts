@@ -526,6 +526,7 @@ export interface Reminder {
   repeat?: RepeatMode; // default 'none'
   remindMinutesBefore?: number; // notis X min innan starttid (0 = vid start)
   note?: string; // fri anteckning om vad det gäller
+  canceled?: boolean; // avbokad – ligger kvar men ger inga notiser
 }
 
 export function useReminders() {
@@ -590,7 +591,15 @@ export function useReminders() {
 
 
 
-  const activeReminders = reminders.filter(r => !r.completed).sort((a, b) => {
+  const cancelReminder = (id: string) => {
+    setReminders(reminders.map(r => r.id === id ? { ...r, canceled: true } : r));
+  };
+
+  const restoreReminder = (id: string) => {
+    setReminders(reminders.map(r => r.id === id ? { ...r, canceled: false } : r));
+  };
+
+  const activeReminders = reminders.filter(r => !r.completed && !r.canceled).sort((a, b) => {
     // Sort by date then time
     const dateCompare = a.date.localeCompare(b.date);
     if (dateCompare !== 0) return dateCompare;
@@ -600,7 +609,7 @@ export function useReminders() {
     return 0;
   });
 
-  return { reminders, activeReminders, addReminder, toggleReminder, deleteReminder, updateReminder };
+  return { reminders, activeReminders, addReminder, toggleReminder, deleteReminder, updateReminder, cancelReminder, restoreReminder };
 
 }
 
