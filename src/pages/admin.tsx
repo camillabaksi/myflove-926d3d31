@@ -328,17 +328,20 @@ function UsersSection() {
               return (
                 <tr key={u.user_id} className="border-t border-border">
                   <td className="p-3">
-                    <div className="font-medium">{u.email ?? "—"}</div>
-                    <div className="text-xs text-muted-foreground">{u.user_id.slice(0, 8)}…</div>
+                    <div className="font-medium">{u.name ?? u.email ?? "—"}</div>
+                    <div className="text-xs text-muted-foreground">{u.email ?? "—"}</div>
+                  </td>
+                  <td className="p-3 text-xs text-muted-foreground">
+                    <div>{fmtDateTime(u.last_visit_at)}</div>
+                    <div>{u.visits > 0 ? `${u.visits} händelser` : "inga besök"}</div>
+                  </td>
+                  <td className="p-3 text-xs text-muted-foreground">
+                    {fmtDateTime(u.last_sign_in_at)}
                   </td>
                   <td className="p-3 text-xs text-muted-foreground">
                     {u.created_at ? new Date(u.created_at).toLocaleDateString("sv-SE") : "—"}
                   </td>
-                  <td className="p-3 text-xs text-muted-foreground">
-                    {u.last_sign_in_at
-                      ? new Date(u.last_sign_in_at).toLocaleDateString("sv-SE")
-                      : "—"}
-                  </td>
+
                   <td className="p-3">
                     {u.roles.length === 0 ? (
                       <span className="text-xs text-muted-foreground">användare</span>
