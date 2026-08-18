@@ -12,6 +12,9 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 
 ### Added
 
+- **Sidan Påminnelser** (2026-08-18): Ny vy på `/paminnelser` där du lägger till, ändrar och avbokar påminnelser med datum, tid och anteckning. Varje påminnelse visar tydlig status – Aktiv eller Avbokad – och avbokade ligger kvar så att du kan aktivera dem igen eller ta bort dem helt.
+
+
 - **GitHub-issues från checklistan** (2026-08-18): 70 färdiga issues (26 kapitel-epics + delmoment) med rubrik, beskrivning och acceptance criteria utifrån Utvecklarchecklista 2.9 – som markdown, JSON och ett gh-skript för import.
 - **Utvecklarchecklista 2.9** (2026-08-18): Konkret checklista utifrån Living Blueprint 2.9 – ett avsnitt per kapitel (1–18) med avbockningsbara delmoment och status (klart/delvis/kvar), samt tre prioriterade nästa steg.
 - **Blueprint 2.9** (2026-08-19): Living Blueprint uppdaterad till 2.9 – nytt kapitel 17.9 "Material och kommunikation" (blueprint, pitchdeck i PPTX och PDF, marknadsföringsvideo och changelog i Flow-röst), städad kapitelordning, versionshistorik 18.7 och rätt versionsnummer i sidhuvudet. Finns som DOCX och PDF.
