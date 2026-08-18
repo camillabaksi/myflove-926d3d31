@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Städlistan går att anpassa – lägg till egna steg och ta bort dem du inte behöver, per rum och läge (2026-08-18)",
       "Min situation ligger som ett eget kort högst upp i Mer-menyn och visar vilka situationer som är aktiva (2026-08-18)",
       "Kalendern finns i bottenmenyn och de två fria platserna i navet byter du själv under Mer – hemskärmen anpassas som förut (2026-08-18)",
       "Adminvyn visar namn, senaste besök och senaste inloggning per användare, med filter på datumintervall och sortering på namn/besök/inloggning/skapad. Besök kopplas nu till inloggat konto (2026-08-18)",
