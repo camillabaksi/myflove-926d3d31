@@ -22,7 +22,14 @@ import { celebrateFromEvent } from "@/lib/celebrate";
 import { generateStudySet } from "@/lib/flowstudy.functions";
 import StudyProfileCard from "@/components/study-profile-card";
 import { useStudyProfile } from "@/hooks/use-study-profile";
-import { studyProfileContext } from "@/lib/study-profile";
+import {
+  studyProfileContext,
+  studyMaterialPlan,
+  applyEmphasis,
+  EMPHASIS_META,
+  type StudyEmphasis,
+} from "@/lib/study-profile";
+
 import {
   useFlowStudy,
   adaptiveOrder,
