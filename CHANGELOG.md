@@ -8,6 +8,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 ## [Unreleased]
 
 ### Fixed
+- **Snabbare start på varje sida** (2026-08-18): Molnsynken frågade efter inloggad användare en gång per sparad inställning – över 130 nätverksanrop per sidladdning. Nu delas svaret mellan alla, vilket tar ner det till en handfull och gör sidorna snabbare, särskilt på mobil och dålig uppkoppling.
 - **Gamla påminnelser borttagna** (2026-08-18): Inaktuella notiser som låg kvar i kön är avbokade – Elvanse 12:15 och 11:30 från gamla medicinposter, morgonmedicin från ett gammalt id, samt vattenpåminnelserna 05:00/05:05 (inklusive den dagliga upprepningen) och en gammal testnotis. Aktuella påminnelser och mediciner (Elvanse 13:00, morgonmedicin 06:15) är orörda.
 
 ### Added
