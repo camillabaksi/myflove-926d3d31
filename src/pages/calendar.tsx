@@ -168,6 +168,68 @@ export default function CalendarPage() {
     | null
   >(null);
 
+  /**
+   * Redigering av en sammanfogad barnhändelse: här byter man vilka barn som
+   * ingår i efterhand, utan att skapa om händelsen.
+   */
+  const [editChildGroup, setEditChildGroup] = useState<
+    | {
+        title: string;
+        time: string | null;
+        date: string;
+        note: string | null;
+        items: Array<(typeof childItems)[number]>;
+      }
+    | null
+  >(null);
+  const [editChildIds, setEditChildIds] = useState<string[]>([]);
+  const [savingChildGroup, setSavingChildGroup] = useState(false);
+
+  const openChildGroupEditor = (group: Array<(typeof childItems)[number]>) => {
+    const first = group[0]!;
+    setEditChildGroup({
+      title: first.title,
+      time: first.time,
+      date: first.date ?? selectedDateStr,
+      note: first.notes,
+      items: group,
+    });
+    setEditChildIds(group.map((g) => g.child_id));
+  };
+
+  const saveChildGroup = async () => {
+    if (!editChildGroup) return;
+    if (editChildIds.length === 0) {
+      toast({ description: "Välj minst ett barn – annars tar du bort händelsen.", variant: "destructive" });
+      return;
+    }
+    setSavingChildGroup(true);
+    try {
+      const existing = editChildGroup.items;
+      const removed = existing.filter((i) => !editChildIds.includes(i.child_id));
+      const existingIds = existing.map((i) => i.child_id);
+      const added = editChildIds.filter((id) => !existingIds.includes(id));
+
+      for (const item of removed) await deleteChildItem(item);
+      for (const childId of added) {
+        await addChildItem({
+          childId,
+          kind: "activity",
+          title: editChildGroup.title,
+          date: editChildGroup.date,
+          time: editChildGroup.time ?? undefined,
+          notes: editChildGroup.note ?? undefined,
+        });
+      }
+      toast({ description: "Uppdaterat vilka barn som ingår." });
+      setEditChildGroup(null);
+    } catch {
+      toast({ description: "Kunde inte spara ändringen. Försök igen.", variant: "destructive" });
+    } finally {
+      setSavingChildGroup(false);
+    }
+  };
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
 
