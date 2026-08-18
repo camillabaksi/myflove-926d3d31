@@ -7,13 +7,14 @@ import { useEffect, useRef, useState } from "react";
 export function useVoiceInput(onResult: (transcript: string) => void) {
   const [isListening, setIsListening] = useState(false);
   const [isSupported, setIsSupported] = useState(true);
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const onResultRef = useRef(onResult);
   onResultRef.current = onResult;
 
   useEffect(() => {
     const SpeechRecognitionCtor =
-      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      (window as unknown as SpeechRecognitionWindow).SpeechRecognition ||
+      (window as unknown as SpeechRecognitionWindow).webkitSpeechRecognition;
     if (!SpeechRecognitionCtor) {
       setIsSupported(false);
       return;
@@ -23,7 +24,7 @@ export function useVoiceInput(onResult: (transcript: string) => void) {
     recognition.continuous = false;
     recognition.interimResults = false;
 
-    recognition.onresult = (event: any) => {
+    recognition.onresult = (event: SpeechRecognitionEventLike) => {
       const transcript = event.results?.[0]?.[0]?.transcript;
       if (transcript && transcript.trim()) {
         onResultRef.current(transcript.trim());
