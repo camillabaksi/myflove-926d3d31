@@ -40,7 +40,7 @@ export function useNotificationScheduler() {
           const key = `task-${t.id}-${todayStr}-start`;
           if (!firedRef.current.has(key)) {
             firedRef.current.add(key);
-            sendPushNotification(t.title, { body: `Dags nu (${t.time})`, tag: key });
+            sendPushNotification(t.title, { body: `Dags nu (${t.time})`, tag: key, itemKey: `task:${t.id}` });
           }
         }
         const remind = t.reminderMinutesBefore;
@@ -51,6 +51,7 @@ export function useNotificationScheduler() {
             sendPushNotification(t.title, {
               body: `Om ${remind} min kl ${t.time}`,
               tag: key,
+              itemKey: `task:${t.id}`,
             });
           }
         }
@@ -65,7 +66,7 @@ export function useNotificationScheduler() {
           const key = `rem-${r.id}-${todayStr}`;
           if (!firedRef.current.has(key)) {
             firedRef.current.add(key);
-            sendPushNotification(r.title, { body: `Påminnelse kl ${r.time}`, tag: key });
+            sendPushNotification(r.title, { body: `Påminnelse kl ${r.time}`, tag: key, itemKey: `reminder:${r.id}` });
           }
         }
       }

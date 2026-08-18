@@ -10,6 +10,7 @@ import { useNotificationScheduler } from "@/hooks/use-notification-scheduler";
 import { useAchievementPush } from "@/hooks/use-achievement-push";
 import { usePurgeRevisions } from "@/hooks/use-purge-revisions";
 import { usePushSubscriptionSync } from "@/hooks/use-push-subscription-sync";
+import { useNotificationActions } from "@/hooks/use-notification-actions";
 
 import { useIsAdmin } from "@/hooks/use-is-admin";
 import ViewCollapseToggle from "@/components/view-collapse-toggle";
@@ -122,6 +123,7 @@ export default function Layout({ children }: LayoutProps) {
   useAchievementPush();
   usePurgeRevisions();
   usePushSubscriptionSync();
+  useNotificationActions();
 
   const { isAdmin } = useIsAdmin();
   const { enabled: enabledAreas } = useEnabledAreas();
