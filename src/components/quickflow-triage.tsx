@@ -186,8 +186,12 @@ export default function QuickflowTriage() {
     toast.success(`Den ligger nu i ${AREA_META[area].label}.`);
   };
 
-  const toEnergy = async (item: QuickflowItem, direction: "gives" | "drains") => {
-    await addFactor({ title: titleOf(item), direction, strength: 3, category: "annat" });
+  const toEnergy = async (
+    item: QuickflowItem,
+    direction: "gives" | "drains",
+    strength: number,
+  ) => {
+    await addFactor({ title: titleOf(item), direction, strength, category: "annat" });
     complete(item.id);
     setEnergyFor(null);
     toast.success(
@@ -197,27 +201,72 @@ export default function QuickflowTriage() {
     );
   };
 
+  /** Barn: tanken landar hos rätt barn, som aktivitet, uppgift eller anteckning. */
+  const toChild = async (
+    item: QuickflowItem,
+    childId: string,
+    kind: "activity" | "task" | "note",
+  ) => {
+    const child = children.find((c) => c.id === childId);
+    const plan = parseWhenFromText(item.text) ? planFor(item) : null;
+    const at = plan && !plan.ambiguous ? new Date(plan.at) : null;
+    await addChildItem({
+      childId,
+      kind,
+      title: titleOf(item),
+      ...(kind === "activity" && at
+        ? {
+            date: at.toISOString().slice(0, 10),
+            ...(plan?.allDay ? {} : { time: timeString(at.getTime()) }),
+          }
+        : {}),
+    });
+    complete(item.id);
+    setChildFor(null);
+    setChildPick(null);
+    toast.success(`Sparad hos ${child?.name ?? "barnet"}. 👧`);
+  };
+
+  const openChildPanel = (item: QuickflowItem) => {
+    setChildFor(item.id);
+    setChildPick(guessChild(item.text, children)?.id ?? children[0]?.id ?? null);
+  };
+
   /** En knapp per ställe tanken kan hamna. Förslaget ligger först. */
   const runDestination = (item: QuickflowItem, d: QuickflowDestination) => {
     if (d === "inkop") return toShopping(item);
     if (d === "kalender") return toCalendar(item);
     if (d === "uppgift") return toTask(item);
     if (d === "paminnelse") return toReminder(item);
-    if (d === "studier") return toAreaTask(item, "studier");
-    if (d === "jobb") return toAreaTask(item, "jobb");
+    if (d === "barn") {
+      if (children.length === 0) {
+        toast("Inga barn tillagda än", {
+          description: "Lägg till barnen under Barn så kan jag föreslå vem det gäller.",
+        });
+        return toAreaTask(item, "privat");
+      }
+      return openChildPanel(item);
+    }
     if (d === "anteckning") return toNote(item);
     if (d === "energi") return setEnergyFor(item.id);
     if (d === "ide") return toIdea(item);
+    const area = DESTINATION_AREA[d];
+    if (area) return toAreaTask(item, area);
     return update(item.id, { askedAt: Date.now() });
   };
 
   const DESTINATIONS: QuickflowDestination[] = [
-    "inkop",
-    "kalender",
     "uppgift",
+    "kalender",
     "paminnelse",
+    "barn",
+    "familj",
     "studier",
     "jobb",
+    "hemma",
+    "halsa",
+    "ekonomi",
+    "inkop",
     "anteckning",
     "energi",
     "ide",
