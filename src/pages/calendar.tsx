@@ -235,6 +235,7 @@ export default function CalendarPage() {
     const endTime = newAnyEndTime || undefined;
     /** Fritextfält (familj/barn) lagrar intervallet som "09:00–10:00". */
     const timeRange = time && endTime ? `${time}–${endTime}` : (newAnyTime || null);
+    const note = newAnyNote.trim() || undefined;
     try {
       const wantsReminder = Boolean(time) && newAnyRemind !== null;
       if (wantsReminder && getNotificationPermission() === "default") {
@@ -250,28 +251,31 @@ export default function CalendarPage() {
           toast({ description: "Lägg till ett barn först på sidan Barn.", variant: "destructive" });
           return;
         }
-        await addChildItem({ childId, kind: "activity", title, date: selectedDateStr, time: timeRange ?? undefined });
+        await addChildItem({ childId, kind: "activity", title, date: selectedDateStr, time: timeRange ?? undefined, notes: note });
       } else if (newCat === "jobb" || newCat === "studier") {
         addTask(title, selectedDateStr, {
           time,
           endTime,
+          note,
           area: newCat,
           reminderMinutesBefore: wantsReminder ? newAnyRemind ?? 0 : undefined,
         });
       } else {
-        addReminder(title, selectedDateStr, time, "none", endTime, wantsReminder ? newAnyRemind ?? 0 : undefined);
+        addReminder(title, selectedDateStr, time, "none", endTime, wantsReminder ? newAnyRemind ?? 0 : undefined, note);
       }
       // Familj- och barnhändelser bor i delade listor – lägg en personlig
       // påminnelse bredvid så att notisen faktiskt når just dig.
       if (wantsReminder && (newCat === "familj" || newCat === "barn")) {
-        addReminder(title, selectedDateStr, time, "none", endTime, newAnyRemind ?? 0);
+        addReminder(title, selectedDateStr, time, "none", endTime, newAnyRemind ?? 0, note);
       }
       if (!visible.includes(newCat)) setVisible((prev) => [...prev, newCat]);
       setNewAnyTitle("");
       setNewAnyTime("");
       setNewAnyEndTime("");
+      setNewAnyNote("");
       setNewAnyRemind(null);
       setIsAddingAny(false);
+
       toast({ description: "Händelsen är inlagd i kalendern." });
     } catch {
       toast({ description: "Kunde inte spara händelsen. Försök igen.", variant: "destructive" });
