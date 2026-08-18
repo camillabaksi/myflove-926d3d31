@@ -367,29 +367,5 @@ export function useReminderSync() {
       alive = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    // Rerun on any change to timed tasks, medications, or reminders
-    JSON.stringify(
-      tasks.map((t) => [
-        t.id,
-        t.completed,
-        t.time,
-        t.dueDate,
-        t.reminderMinutesBefore,
-        (t.deadlineLeadDays ?? []).join(","),
-        t.deadlineReminderTime,
-      ]),
-    ),
-    JSON.stringify(medications.map((m) => [m.id, m.name, m.dosage, m.times.join(",")])),
-    JSON.stringify(reminders.map((r) => [r.id, r.completed, r.date, r.time, r.repeat])),
-    JSON.stringify(routines.map((r) => [r.id, r.title, r.time, r.enabled])),
-    JSON.stringify(quickflowItems.map((q) => [q.id, q.text, q.remindAt, q.done])),
-    JSON.stringify(lectures.map((l) => [l.id, l.title, l.weekday, l.start, l.location])),
-    studySettings.lectureReminderMinutes,
-    JSON.stringify(childSchedules ?? {}),
-    JSON.stringify(childItems.map((i) => [i.id, i.child_id, i.title, i.date, i.time, i.completed])),
-    JSON.stringify(children.map((c) => [c.id, c.name])),
-    JSON.stringify(childReminders),
-    JSON.stringify(adaptiveLead),
-  ]);
+  }, [syncSignature]);
 }
