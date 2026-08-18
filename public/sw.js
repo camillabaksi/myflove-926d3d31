@@ -94,7 +94,14 @@ self.addEventListener("pushsubscriptionchange", (event) => {
 
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
-  const targetUrl = (event.notification.data && event.notification.data.url) || "/hem";
+  const info = event.notification.data || {};
+  const itemKey = info.itemKey;
+  const action = event.action; // "done" | "snooze" | ""
+  let targetUrl = info.url || "/hem";
+  if (action && itemKey) {
+    targetUrl = `${targetUrl}${targetUrl.includes("?") ? "&" : "?"}notis=${encodeURIComponent(itemKey)}&atgard=${action}`;
+  }
+
   event.waitUntil(
     (async () => {
       const allClients = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
@@ -102,6 +109,11 @@ self.addEventListener("notificationclick", (event) => {
         try {
           const url = new URL(client.url);
           if (url.origin === self.location.origin) {
+            if (action && itemKey) {
+              // Appen är redan igång: utför snabbvalet utan att flytta användaren.
+              client.postMessage({ type: "myflove-notification-action", itemKey, action });
+              if (action === "done" || action === "snooze") return;
+            }
             await client.focus();
             if ("navigate" in client) await client.navigate(targetUrl);
             return;
@@ -112,3 +124,4 @@ self.addEventListener("notificationclick", (event) => {
     })(),
   );
 });
+
