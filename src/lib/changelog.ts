@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Gamla påminnelser borttagna – inaktuella notiser (Elvanse 12:15 och 11:30, gammal morgonmedicin, vatten 05:00/05:05 med daglig upprepning och en testnotis) är avbokade. Aktuella mediciner och påminnelser är orörda (2026-08-18)",
       "GitHub-issues från Utvecklarchecklista 2.9 – 70 färdiga issues med rubrik, beskrivning och acceptance criteria, som markdown, JSON och importskript (2026-08-18)",
       "Utvecklarchecklista utifrån Blueprint 2.9 – ett avsnitt per kapitel med avbockningsbara delmoment och status (2026-08-18)",
       "Blueprint 2.9 – nytt kapitel om material och kommunikation, städad kapitelordning och versionshistorik, som DOCX och PDF (2026-08-19)",
