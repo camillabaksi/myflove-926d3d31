@@ -183,7 +183,7 @@ export function useEnergyFlow(): {
     await supabase.from("energy_factor_presets").delete().eq("id", id);
   }, []);
 
-  const balance = useMemo(() => balanceFor(entries), [entries]);
+  const balance = useMemo(() => balanceFor(entries, new Date(), settings), [entries, settings]);
   const insight = useMemo(() => energyInsight(entries, balance), [entries, balance]);
 
   return {
