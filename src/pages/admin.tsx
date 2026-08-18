@@ -18,8 +18,11 @@ import {
   MessageSquareWarning,
   Users as UsersIcon,
   FileDown,
+  ArrowUp,
+  ArrowDown,
 } from "lucide-react";
 import ChangelogExport from "@/components/changelog-export";
+import type { AdminUserRow } from "@/lib/admin.functions";
 
 const STATUS_LABELS: Record<string, string> = {
   open: "Öppen",
