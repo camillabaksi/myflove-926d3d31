@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Flashcards och quiz anpassade efter studieprofilen – Flow väljer betoning och mängd utifrån dina stödbehov och preferenser, visar vad som styr och låter dig byta mellan balanserat, mest flashcards eller mest quiz (2026-08-18)",
       "Min studieprofil – ålder, nivå, årskurs, program, kurser, studietakt, distans/på plats, stödbehov och hur du lär dig bäst. Flow anpassar quiz, flashcards, sammanfattningar och studieplaner efter profilen och väger den mot FlowScore, energi och kalendern (2026-08-18)",
       "Min jobbprofil – berätta frivilligt yrkesroll, bransch, ansvarsområden, arbetstider och vad du vill ha hjälp med. Flow använder det som kontext för jobbförslag och väger arbetsdagens krav mot energi och resten av livspusslet (2026-08-18)",
       "Ångra hanterade QuickFlow-tankar – råkar du trycka \"Hanterad\" visas tanken under \"Nyligen hanterade\" i 24 timmar, och du kan återaktivera den med ett tryck (2026-08-18)",
