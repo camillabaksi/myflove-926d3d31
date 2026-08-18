@@ -26,6 +26,8 @@ import { useRelations } from "@/hooks/use-relations";
 import { guessRelation, relationTag } from "@/lib/relations";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import { useChildren } from "@/hooks/use-children";
+import { useSituationPriority } from "@/hooks/use-situation-priority";
+import { orderByPriority } from "@/lib/situation-priority";
 
 
 
@@ -36,6 +38,9 @@ const DAY = 86_400_000;
  * Här hjälper MyFlove till att sortera – aldrig automatiskt, aldrig skuldbeläggande.
  */
 export default function QuickflowTriage() {
+  // Prioriteringen mellan aktiva situationer avgör om Jobb eller Studier
+  // föreslås först när en tanke kan höra hemma i båda.
+  const priority = useSituationPriority();
   const { items, openItems, complete, uncomplete, remove, snooze, update } = useQuickflow();
   const { addTask } = useTasks();
   const { addReminder } = useReminders();
