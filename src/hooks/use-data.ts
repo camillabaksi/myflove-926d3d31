@@ -565,10 +565,29 @@ export function useReminders() {
 
   const updateReminder = (
     id: string,
-    patch: { title?: string; date?: string; time?: string | undefined; repeat?: RepeatMode; remindMinutesBefore?: number; note?: string }
+    patch: {
+      title?: string;
+      date?: string;
+      time?: string | undefined;
+      endTime?: string | undefined;
+      repeat?: RepeatMode;
+      remindMinutesBefore?: number | undefined;
+      note?: string | undefined;
+    }
   ) => {
-    setReminders(reminders.map(r => r.id === id ? { ...r, ...patch } : r));
+    setReminders(reminders.map(r => {
+      if (r.id !== id) return r;
+      const next: Reminder = { ...r, ...patch };
+      if (patch.note !== undefined) next.note = patch.note.trim() || undefined;
+      if (patch.time !== undefined && !patch.time) {
+        next.time = undefined;
+        next.endTime = undefined;
+        next.remindMinutesBefore = undefined;
+      }
+      return next;
+    }));
   };
+
 
 
   const activeReminders = reminders.filter(r => !r.completed).sort((a, b) => {
