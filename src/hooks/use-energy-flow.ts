@@ -5,6 +5,8 @@ import {
   balanceFor,
   DEFAULT_ENERGY_FLOW_SETTINGS,
   energyInsight,
+  normalizeSettings,
+
   type EnergyBalance,
   type EnergyCategory,
   type EnergyDirection,
