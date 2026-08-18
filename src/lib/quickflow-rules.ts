@@ -32,14 +32,87 @@ export const MATCH_LABEL: Record<RuleMatchType, string> = {
 
 export const newRuleId = () => Math.random().toString(36).slice(2, 11);
 
-/** Färdiga förslag så att man slipper börja från ett tomt blad. */
-export const RULE_TEMPLATES: Array<Omit<QuickflowRule, "id" | "createdAt">> = [
-  { phrase: "köpa", matchType: "startsWith", destination: "inkop", stripPhrase: true, enabled: true },
-  { phrase: "handla", matchType: "startsWith", destination: "inkop", stripPhrase: true, enabled: true },
-  { phrase: "boka", matchType: "startsWith", destination: "kalender", enabled: true },
-  { phrase: "ring", matchType: "startsWith", destination: "uppgift", enabled: true },
-  { phrase: "betala", matchType: "startsWith", destination: "uppgift", area: "privat", enabled: true },
+export type RuleDraft = Omit<QuickflowRule, "id" | "createdAt">;
+
+export interface RuleTemplate {
+  key: string;
+  label: string;
+  /** Kort förklaring i vardagsspråk. */
+  hint: string;
+  example: string;
+  rule: RuleDraft;
+}
+
+/** Färdiga mallar för vanliga mönster – går att anpassa innan de sparas. */
+export const RULE_TEMPLATE_LIST: RuleTemplate[] = [
+  {
+    key: "kopa",
+    label: "Köpa …",
+    hint: "Hamnar i Inköpslistan, ordet \"köpa\" tas bort.",
+    example: "köpa schampo → schampo",
+    rule: { phrase: "köpa", matchType: "startsWith", destination: "inkop", stripPhrase: true, enabled: true },
+  },
+  {
+    key: "handla",
+    label: "Handla …",
+    hint: "Samma som köpa – rakt in i Inköpslistan.",
+    example: "handla mjölk → mjölk",
+    rule: { phrase: "handla", matchType: "startsWith", destination: "inkop", stripPhrase: true, enabled: true },
+  },
+  {
+    key: "boka",
+    label: "Boka …",
+    hint: "Läggs som händelse i kalendern.",
+    example: "boka tandläkare",
+    rule: { phrase: "boka", matchType: "startsWith", destination: "kalender", enabled: true },
+  },
+  {
+    key: "paminn",
+    label: "Påminn …",
+    hint: "Blir en påminnelse, förslagsvis kl 09:00.",
+    example: "påminn mig om tvätten",
+    rule: {
+      phrase: "påminn",
+      matchType: "startsWith",
+      destination: "paminnelse",
+      time: "09:00",
+      stripPhrase: true,
+      enabled: true,
+    },
+  },
+  {
+    key: "ring",
+    label: "Ring …",
+    hint: "Blir en uppgift att göra av.",
+    example: "ring vårdcentralen",
+    rule: { phrase: "ring", matchType: "startsWith", destination: "uppgift", enabled: true },
+  },
+  {
+    key: "betala",
+    label: "Betala …",
+    hint: "Uppgift i livsområdet Privat.",
+    example: "betala hyran",
+    rule: { phrase: "betala", matchType: "startsWith", destination: "uppgift", area: "privat", enabled: true },
+  },
+  {
+    key: "ide",
+    label: "Idé: …",
+    hint: "Sparas som idé – inget du måste göra nu.",
+    example: "idé: måla om hallen",
+    rule: { phrase: "idé", matchType: "startsWith", destination: "ide", stripPhrase: true, enabled: true },
+  },
+  {
+    key: "traffa",
+    label: "Träffa …",
+    hint: "Läggs i kalendern som en träff.",
+    example: "träffa Cassie fredag",
+    rule: { phrase: "träffa", matchType: "startsWith", destination: "kalender", enabled: true },
+  },
 ];
+
+/** Bakåtkompatibel lista med bara reglerna. */
+export const RULE_TEMPLATES: RuleDraft[] = RULE_TEMPLATE_LIST.map((t) => t.rule);
+
 
 function normalize(s: string): string {
   return s.toLowerCase().replace(/\s+/g, " ").trim();
