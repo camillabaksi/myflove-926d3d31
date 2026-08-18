@@ -30,8 +30,6 @@ import { FlowItemActions } from "@/components/flow-item-actions";
 import { useSituation } from "@/hooks/use-situation";
 import { situationFocus } from "@/lib/situation";
 
-
-
 const DAY = 86_400_000;
 
 /**
@@ -76,10 +74,7 @@ export default function QuickflowTriage() {
   const [showResting, setShowResting] = useState(false);
 
   const stale = useMemo(
-    () =>
-      openItems.filter(
-        (i) => Date.now() - (i.askedAt ?? i.createdAt) > 3 * DAY && !i.remindAt,
-      ),
+    () => openItems.filter((i) => Date.now() - (i.askedAt ?? i.createdAt) > 3 * DAY && !i.remindAt),
     [openItems],
   );
 
@@ -105,7 +100,6 @@ export default function QuickflowTriage() {
   }, [items]);
 
   if (openItems.length === 0 && recentlyCompleted.length === 0) return null;
-
 
   /** Egen regel först, sedan MyFloves gissning. */
   const ruleFor = (item: QuickflowItem) => {
@@ -189,7 +183,7 @@ export default function QuickflowTriage() {
       titleOf(item),
       d.toISOString().slice(0, 10),
       timeString(d.getTime()),
-      'none',
+      "none",
       undefined,
       undefined,
       relationNote(item),
@@ -214,7 +208,9 @@ export default function QuickflowTriage() {
     complete(item.id);
     log("planering");
     toast.success(
-      s.allDay ? "Inlagd som heldag – lägg till en tid när du vill." : "Inlagd i kalendern – ändra tiden när du vill.",
+      s.allDay
+        ? "Inlagd som heldag – lägg till en tid när du vill."
+        : "Inlagd i kalendern – ändra tiden när du vill.",
     );
   };
   const toShopping = (item: QuickflowItem) => {
@@ -245,11 +241,7 @@ export default function QuickflowTriage() {
     toast.success(`Den ligger nu i ${AREA_META[area].label}.`);
   };
 
-  const toEnergy = async (
-    item: QuickflowItem,
-    direction: "gives" | "drains",
-    strength: number,
-  ) => {
+  const toEnergy = async (item: QuickflowItem, direction: "gives" | "drains", strength: number) => {
     await addFactor({ title: titleOf(item), direction, strength, category: "annat" });
     complete(item.id);
     setEnergyFor(null);
@@ -360,7 +352,6 @@ export default function QuickflowTriage() {
     return update(item.id, { askedAt: Date.now() });
   };
 
-
   const DESTINATIONS: QuickflowDestination[] = [
     "uppgift",
     "kalender",
@@ -388,7 +379,6 @@ export default function QuickflowTriage() {
   };
 
   return (
-
     <div className="space-y-3">
       {!sorting ? (
         <div className="surface-card p-4 flex flex-wrap items-center gap-3">
@@ -433,7 +423,12 @@ export default function QuickflowTriage() {
               <div key={item.id} className="surface-card p-4 space-y-3">
                 <div className="flex items-start gap-2">
                   <span className="text-lg">{DESTINATION_META[type].emoji}</span>
-                  <FlowItemActions itemId={`qf-${item.id}`} only="edit" size={15} className="order-last shrink-0" />
+                  <FlowItemActions
+                    itemId={`qf-${item.id}`}
+                    only="edit"
+                    size={15}
+                    className="order-last shrink-0"
+                  />
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-ink">{item.text}</p>
                     <p className="text-xs text-muted-foreground">
@@ -441,14 +436,15 @@ export default function QuickflowTriage() {
                         ? `Din regel "${resolved.rule.phrase}": ${DESTINATION_META[type].label}.`
                         : `Mitt förslag: ${DESTINATION_META[type].label} – du bestämmer.`}
                       {child ? ` Verkar gälla ${child.name}.` : ""}
-                      {!child && relationFor(item) ? ` Verkar handla om ${relationFor(item)!.name}.` : ""}
+                      {!child && relationFor(item)
+                        ? ` Verkar handla om ${relationFor(item)!.name}.`
+                        : ""}
                     </p>
-                    {focus.note && (
-                      <p className="text-xs text-muted-foreground">{focus.note}</p>
-                    )}
+                    {focus.note && <p className="text-xs text-muted-foreground">{focus.note}</p>}
                     {plan && !plan.ambiguous && (
                       <p className="text-xs text-primary">
-                        Jag hittade ett datum i texten: {formatWhen(plan.at, new Date(), plan.allDay)}
+                        Jag hittade ett datum i texten:{" "}
+                        {formatWhen(plan.at, new Date(), plan.allDay)}
                         {plan.allDay ? " (ingen tid angavs)" : ""}
                       </p>
                     )}
@@ -486,7 +482,10 @@ export default function QuickflowTriage() {
                           key={o.label}
                           type="button"
                           onClick={() =>
-                            setChoices((prev) => ({ ...prev, [item.id]: { at: o.at, allDay: o.allDay } }))
+                            setChoices((prev) => ({
+                              ...prev,
+                              [item.id]: { at: o.at, allDay: o.allDay },
+                            }))
                           }
                           className="rounded-full border border-border bg-card px-3 py-1.5 text-sm font-medium hover:border-primary/50"
                         >
@@ -626,7 +625,10 @@ export default function QuickflowTriage() {
                         highlight
                         onClick={() => {
                           if (!laterDate) return;
-                          saveLater(item, new Date(`${laterDate}T${laterTime || "09:00"}`).getTime());
+                          saveLater(
+                            item,
+                            new Date(`${laterDate}T${laterTime || "09:00"}`).getTime(),
+                          );
                         }}
                       >
                         Spara
@@ -649,7 +651,6 @@ export default function QuickflowTriage() {
                     <Action onClick={() => remove(item.id)}>🗑️ Ta bort</Action>
                   </div>
                 )}
-
               </div>
             );
           })}
@@ -703,7 +704,9 @@ export default function QuickflowTriage() {
             </div>
             <div className="flex flex-wrap gap-2">
               <Action onClick={() => update(item.id, { askedAt: Date.now() })}>Ja, behåll</Action>
-              <Action onClick={() => snooze(item.id, Date.now() + 2 * DAY)}>Påminn mig senare</Action>
+              <Action onClick={() => snooze(item.id, Date.now() + 2 * DAY)}>
+                Påminn mig senare
+              </Action>
               <Action onClick={() => toTask(item)}>Gör till uppgift</Action>
               <Action onClick={() => remove(item.id)}>Ta bort</Action>
             </div>

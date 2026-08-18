@@ -26,7 +26,12 @@ export const RELATION_TYPES: RelationTypeMeta[] = [
   { id: "vanner", label: "Vänner", emoji: "🧑‍🤝‍🧑", blurb: "Vänner du vill hålla kontakt med" },
   { id: "anhoriga", label: "Anhöriga", emoji: "👵", blurb: "Släkt och personer du stöttar" },
   { id: "husdjur", label: "Husdjur", emoji: "🐾", blurb: "Djuren i ditt liv" },
-  { id: "annan", label: "Annan viktig person", emoji: "➕", blurb: "Någon som inte passar i övriga" },
+  {
+    id: "annan",
+    label: "Annan viktig person",
+    emoji: "➕",
+    blurb: "Någon som inte passar i övriga",
+  },
 ];
 
 export function relationTypeMeta(id: string): RelationTypeMeta {
@@ -53,7 +58,9 @@ export interface RelationsState {
 export const DEFAULT_RELATIONS: RelationsState = { enabledTypes: [], people: [] };
 
 /** Rensar bort trasig data och håller ordningen som i RELATION_TYPES. */
-export function normalizeRelations(raw: Partial<RelationsState> | null | undefined): RelationsState {
+export function normalizeRelations(
+  raw: Partial<RelationsState> | null | undefined,
+): RelationsState {
   const types = (raw?.enabledTypes ?? []).filter((t) =>
     RELATION_TYPES.some((m) => m.id === t),
   ) as RelationTypeId[];

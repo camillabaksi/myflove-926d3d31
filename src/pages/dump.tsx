@@ -2,7 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import Layout from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { useTasks, useShoppingList, useReminders, useDumpIdeas, useMoods } from "@/hooks/use-data";
-import { parseDump, CATEGORY_LABELS, type DumpCategory, type ParsedThought } from "@/lib/brain-dump";
+import {
+  parseDump,
+  CATEGORY_LABELS,
+  type DumpCategory,
+  type ParsedThought,
+} from "@/lib/brain-dump";
 import { useToast } from "@/hooks/use-toast";
 import { useLocalStorage } from "@/lib/storage";
 import { REPEAT_LABELS } from "@/lib/recurrence";
@@ -11,7 +16,20 @@ import { useQuickflow } from "@/hooks/use-quickflow";
 import QuickflowList from "@/components/quickflow-list";
 import InsightQuickflowHint from "@/components/insight-quickflow-hint";
 import QuickflowCapture from "@/components/quickflow-capture";
-import { Mic, Square, Sparkles, CheckSquare, ShoppingBag, Calendar, Lightbulb, Check, Trash2, Inbox, Smile, NotebookPen } from "lucide-react";
+import {
+  Mic,
+  Square,
+  Sparkles,
+  CheckSquare,
+  ShoppingBag,
+  Calendar,
+  Lightbulb,
+  Check,
+  Trash2,
+  Inbox,
+  Smile,
+  NotebookPen,
+} from "lucide-react";
 import CollapsibleSection from "@/components/collapsible-section";
 import QuickflowRulesSettings from "@/components/quickflow-rules-settings";
 import NotesPanel from "@/components/notes-panel";
@@ -40,7 +58,10 @@ function nextId() {
 
 export default function Dump() {
   const [rawText, setRawText] = useLocalStorage<string>("myflow-dump-draft", "");
-  const [thoughts, setThoughts] = useLocalStorage<SortableThought[] | null>("myflow-dump-thoughts", null);
+  const [thoughts, setThoughts] = useLocalStorage<SortableThought[] | null>(
+    "myflow-dump-thoughts",
+    null,
+  );
   const [isListening, setIsListening] = useState(false);
   const [voiceSupported, setVoiceSupported] = useState(true);
   const recognitionRef = useRef<any>(null);
@@ -112,7 +133,7 @@ export default function Dump() {
         thought.text,
         thought.date ?? new Date().toISOString().split("T")[0]!,
         thought.time,
-        thought.repeat ?? "none"
+        thought.repeat ?? "none",
       );
     } else if (thought.category === "mood") {
       addMood(thought.moodScore ?? 3, thought.text);
@@ -123,14 +144,17 @@ export default function Dump() {
       if (merged) toast({ description: "Den fanns redan i Quickflow – jag slog ihop dem." });
     }
 
-    setThoughts((prev) => (prev ? prev.map((t) => (t.id === thought.id ? { ...t, added: true } : t)) : prev));
+    setThoughts((prev) =>
+      prev ? prev.map((t) => (t.id === thought.id ? { ...t, added: true } : t)) : prev,
+    );
   };
 
   const moveIdea = (idea: { id: string; text: string }) => {
     const category = ideaCategories[idea.id] ?? "idea";
     if (category === "task") addTask(idea.text);
     else if (category === "shopping") addItem(idea.text);
-    else if (category === "reminder") addReminder(idea.text, new Date().toISOString().split("T")[0]!);
+    else if (category === "reminder")
+      addReminder(idea.text, new Date().toISOString().split("T")[0]!);
     else if (category === "mood") addMood(3, idea.text);
     if (category === "idea") addQuickflow({ text: idea.text, level: "tanke" });
     else absorbQuickflow(idea.text);
@@ -155,14 +179,17 @@ export default function Dump() {
         <div className="relative overflow-hidden rounded-3xl border border-border/60 bg-card p-6 shadow-lifted pop-in">
           <div className="pointer-events-none absolute -top-16 -right-12 h-36 w-36 rounded-full bg-lavender opacity-70 blur-md" />
           <div className="pointer-events-none absolute -bottom-14 -left-10 h-28 w-28 rounded-full bg-mint opacity-60 blur-[2px]" />
-          <div className="pointer-events-none absolute right-6 top-6 select-none text-4xl breathe" aria-hidden>
+          <div
+            className="pointer-events-none absolute right-6 top-6 select-none text-4xl breathe"
+            aria-hidden
+          >
             💭
           </div>
           <div className="relative space-y-2">
             <h1 className="font-display text-3xl font-bold text-ink pr-14">QuickFlow</h1>
             <p className="text-muted-foreground leading-relaxed">
-              Få ut det ur huvudet. Skriv eller prata in allt som snurrar – huller om buller går bra.
-              Jag håller det åt dig tills du orkar sortera. 💜
+              Få ut det ur huvudet. Skriv eller prata in allt som snurrar – huller om buller går
+              bra. Jag håller det åt dig tills du orkar sortera. 💜
             </p>
           </div>
         </div>
@@ -199,7 +226,9 @@ export default function Dump() {
                   {isListening ? "Lyssnar..." : "Tala in"}
                 </button>
               ) : (
-                <span className="text-xs text-muted-foreground px-2">Röstinmatning stöds inte i denna webbläsare</span>
+                <span className="text-xs text-muted-foreground px-2">
+                  Röstinmatning stöds inte i denna webbläsare
+                </span>
               )}
               <Button
                 onClick={handleSort}
@@ -230,14 +259,17 @@ export default function Dump() {
                       <Icon size={18} />
                     </div>
                     <p className="flex-1 min-w-[10rem] text-foreground">{thought.text}</p>
-                    {thought.category === "reminder" && (thought.date || thought.time || (thought.repeat && thought.repeat !== "none")) && (
-                      <span className="text-xs text-muted-foreground bg-secondary/50 px-2 py-1 rounded-lg">
-                        {thought.repeat && thought.repeat !== "none"
-                          ? REPEAT_LABELS[thought.repeat]
-                          : thought.date ?? "Idag"}
-                        {thought.time ? ` kl ${thought.time}` : ""}
-                      </span>
-                    )}
+                    {thought.category === "reminder" &&
+                      (thought.date ||
+                        thought.time ||
+                        (thought.repeat && thought.repeat !== "none")) && (
+                        <span className="text-xs text-muted-foreground bg-secondary/50 px-2 py-1 rounded-lg">
+                          {thought.repeat && thought.repeat !== "none"
+                            ? REPEAT_LABELS[thought.repeat]
+                            : (thought.date ?? "Idag")}
+                          {thought.time ? ` kl ${thought.time}` : ""}
+                        </span>
+                      )}
                     <select
                       value={thought.category}
                       onChange={(e) => updateCategory(thought.id, e.target.value as DumpCategory)}
@@ -245,7 +277,9 @@ export default function Dump() {
                       className="text-sm border border-border rounded-xl px-2 py-1.5 bg-secondary/50 outline-none"
                     >
                       {CATEGORY_OPTIONS.map((cat) => (
-                        <option key={cat} value={cat}>{CATEGORY_LABELS[cat]}</option>
+                        <option key={cat} value={cat}>
+                          {CATEGORY_LABELS[cat]}
+                        </option>
                       ))}
                     </select>
                     <Button
@@ -277,7 +311,11 @@ export default function Dump() {
         <QuickflowList />
 
         <CollapsibleSection
-          title={<span className="flex items-center gap-2"><NotebookPen size={20} /> Anteckningar</span>}
+          title={
+            <span className="flex items-center gap-2">
+              <NotebookPen size={20} /> Anteckningar
+            </span>
+          }
           id="QuickFlow-anteckningar"
           headingClassName="font-semibold"
           className="pt-4"
@@ -285,10 +323,12 @@ export default function Dump() {
           <NotesPanel />
         </CollapsibleSection>
 
-
-
         <CollapsibleSection
-          title={<span className="flex items-center gap-2"><Sparkles size={20} /> Mina sorteringsregler</span>}
+          title={
+            <span className="flex items-center gap-2">
+              <Sparkles size={20} /> Mina sorteringsregler
+            </span>
+          }
           id="QuickFlow-regler"
           headingClassName="font-semibold"
           className="pt-4"
@@ -298,24 +338,36 @@ export default function Dump() {
 
         {ideas.length > 0 && (
           <CollapsibleSection
-            title={<span className="flex items-center gap-2"><Inbox size={20} /> Äldre idébank</span>}
+            title={
+              <span className="flex items-center gap-2">
+                <Inbox size={20} /> Äldre idébank
+              </span>
+            }
             id="Äldre idébank"
             headingClassName="font-semibold"
             className="pt-4"
           >
             <div className="space-y-3">
               {ideas.map((idea) => (
-                <div key={idea.id} className="bg-card p-4 rounded-2xl border border-border shadow-sm flex flex-wrap items-center gap-3">
+                <div
+                  key={idea.id}
+                  className="bg-card p-4 rounded-2xl border border-border shadow-sm flex flex-wrap items-center gap-3"
+                >
                   <p className="text-foreground flex-1 min-w-[10rem]">{idea.text}</p>
                   <select
                     value={ideaCategories[idea.id] ?? "idea"}
                     onChange={(e) =>
-                      setIdeaCategories((prev) => ({ ...prev, [idea.id]: e.target.value as DumpCategory }))
+                      setIdeaCategories((prev) => ({
+                        ...prev,
+                        [idea.id]: e.target.value as DumpCategory,
+                      }))
                     }
                     className="text-sm border border-border rounded-xl px-2 py-1.5 bg-secondary/50 outline-none"
                   >
                     {CATEGORY_OPTIONS.map((cat) => (
-                      <option key={cat} value={cat}>{CATEGORY_LABELS[cat]}</option>
+                      <option key={cat} value={cat}>
+                        {CATEGORY_LABELS[cat]}
+                      </option>
                     ))}
                   </select>
                   <Button

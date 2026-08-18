@@ -5,7 +5,10 @@ export const Route = createFileRoute("/_app/admin")({
   head: () => ({
     meta: [
       { title: "Admin – MyFlove" },
-      { name: "description", content: "Adminpanel för att hantera feedback, roller och åtkomst i MyFlove." },
+      {
+        name: "description",
+        content: "Adminpanel för att hantera feedback, roller och åtkomst i MyFlove.",
+      },
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),

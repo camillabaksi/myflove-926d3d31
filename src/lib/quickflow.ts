@@ -38,13 +38,13 @@ export const LEVEL_META: Record<
   snabbt: {
     emoji: "⚡",
     label: "Snabbt",
-    hint: "En enkel påminnelse. \"Kom ihåg att köpa mjölk.\"",
+    hint: 'En enkel påminnelse. "Kom ihåg att köpa mjölk."',
     className: "bg-gold/15 text-ink border-gold/40",
   },
   viktigt: {
     emoji: "📌",
     label: "Viktigt",
-    hint: "Prioriteras och påminns tydligare. \"Jag måste ringa vårdcentralen.\"",
+    hint: 'Prioriteras och påminns tydligare. "Jag måste ringa vårdcentralen."',
     className: "bg-destructive/10 text-destructive border-destructive/30",
   },
   tanke: {
@@ -91,28 +91,43 @@ export const WHEN_PRESETS: WhenPreset[] = [
 ];
 
 const MONTHS: Record<string, number> = {
-  jan: 0, januari: 0,
-  feb: 1, februari: 1,
-  mar: 2, mars: 2,
-  apr: 3, april: 3,
+  jan: 0,
+  januari: 0,
+  feb: 1,
+  februari: 1,
+  mar: 2,
+  mars: 2,
+  apr: 3,
+  april: 3,
   maj: 4,
-  jun: 5, juni: 5,
-  jul: 6, juli: 6,
-  aug: 7, augusti: 7,
-  sep: 8, sept: 8, september: 8,
-  okt: 9, oktober: 9,
-  nov: 10, november: 10,
-  dec: 11, december: 11,
+  jun: 5,
+  juni: 5,
+  jul: 6,
+  juli: 6,
+  aug: 7,
+  augusti: 7,
+  sep: 8,
+  sept: 8,
+  september: 8,
+  okt: 9,
+  oktober: 9,
+  nov: 10,
+  november: 10,
+  dec: 11,
+  december: 11,
 };
 
 const WEEKDAY_WORDS: Record<string, number> = {
-  söndag: 0, sondag: 0,
-  måndag: 1, mandag: 1,
+  söndag: 0,
+  sondag: 0,
+  måndag: 1,
+  mandag: 1,
   tisdag: 2,
   onsdag: 3,
   torsdag: 4,
   fredag: 5,
-  lördag: 6, lordag: 6,
+  lördag: 6,
+  lordag: 6,
 };
 
 export type WhenOption = {
@@ -135,7 +150,6 @@ export type ParsedWhen = {
   /** Alternativ att välja mellan när tolkningen är osäker. */
   options?: WhenOption[];
 };
-
 
 /**
  * Läser ut datum och tid ur en fritext ("läkartid med Cassie den 25 augusti kl 14").
@@ -160,8 +174,7 @@ export function parseWhenFromText(text: string, now = new Date()): ParsedWhen | 
   }
 
   // "kl 3" kan betyda 03 eller 15 – då frågar vi hellre än gissar.
-  const vagueHour =
-    hour !== null && hour >= 1 && hour <= 7 && !(timeMatch?.[2]) ? hour : null;
+  const vagueHour = hour !== null && hour >= 1 && hour <= 7 && !timeMatch?.[2] ? hour : null;
 
   const build = (d: Date, matched: string): ParsedWhen => {
     const allDay = hour === null;
@@ -183,14 +196,17 @@ export function parseWhenFromText(text: string, now = new Date()): ParsedWhen | 
         at: afternoon.getTime(),
         ambiguous: `Menade du kl ${String(vagueHour).padStart(2, "0")} på morgonen eller kl ${vagueHour + 12}?`,
         options: [
-          { label: `Kl ${String(vagueHour).padStart(2, "0")}:00`, at: morning.getTime(), allDay: false },
+          {
+            label: `Kl ${String(vagueHour).padStart(2, "0")}:00`,
+            at: morning.getTime(),
+            allDay: false,
+          },
           { label: `Kl ${vagueHour + 12}:00`, at: afternoon.getTime(), allDay: false },
         ],
       };
     }
     return base;
   };
-
 
   // "25 augusti" / "den 25 aug" / "augusti 25"
   const monthNames = Object.keys(MONTHS).join("|");
@@ -281,7 +297,6 @@ export function parseWhenFromText(text: string, now = new Date()): ParsedWhen | 
     return parsed;
   }
 
-
   return null;
 }
 
@@ -305,17 +320,21 @@ export function suggestWhen(
     };
   }
 
-
   const lower = text.toLowerCase();
   const shoppingish = /(köp|handla|mjölk|mat|affär|ica|coop|willys|apotek)/.test(lower);
-  const callish = /(ring|boka|maila|mejla|kontakta|vårdcentral|försäkring|bank|myndighet)/.test(lower);
+  const callish = /(ring|boka|maila|mejla|kontakta|vårdcentral|försäkring|bank|myndighet)/.test(
+    lower,
+  );
   const hour = now.getHours();
 
   if (callish || level === "viktigt") {
     // Myndigheter och samtal: nästa vardagsförmiddag kl 09.
     const d = new Date(now);
     if (hour >= 9 && hour < 15 && d.getDay() >= 1 && d.getDay() <= 5) {
-      return { at: now.getTime() + 60 * 60_000, why: "Om en timme – då är det fortfarande kontorstid." };
+      return {
+        at: now.getTime() + 60 * 60_000,
+        why: "Om en timme – då är det fortfarande kontorstid.",
+      };
     }
     do {
       d.setDate(d.getDate() + 1);
@@ -358,7 +377,6 @@ export function formatWhen(at: number, now = new Date(), allDay = false): string
   if (diffDays > 1 && diffDays < 7) return `${capitalize(WEEKDAYS[d.getDay()]!)} ${time}`;
   return `${d.toLocaleDateString("sv-SE", { day: "numeric", month: "short" })} ${time}`;
 }
-
 
 function capitalize(s: string) {
   return s.charAt(0).toUpperCase() + s.slice(1);
@@ -414,7 +432,6 @@ export function strongerLevel(a: QuickflowLevel, b: QuickflowLevel): QuickflowLe
   return LEVEL_RANK[a] >= LEVEL_RANK[b] ? a : b;
 }
 
-
 /** Gissar livsområde ur texten. Alltid ändringsbart av användaren. */
 export function guessArea(text: string): LifeArea {
   const t = text.toLowerCase();
@@ -422,7 +439,11 @@ export function guessArea(text: string): LifeArea {
     return "studier";
   if (/(jobb|möte|chef|kollega|kund|deadline|projekt|rapport|arbets|mejl till)/.test(t))
     return "jobb";
-  if (/(barn|familj|förskola|läkare|tandläkare|bank|faktura|räkning|försäkring|present|semester|kompis|vän)/.test(t))
+  if (
+    /(barn|familj|förskola|läkare|tandläkare|bank|faktura|räkning|försäkring|present|semester|kompis|vän)/.test(
+      t,
+    )
+  )
     return "privat";
   return "vardag";
 }
@@ -546,7 +567,10 @@ export function shoppingTitleFrom(text: string): string {
   const cleaned = text
     .replace(/^\s*(kom ihåg att|glöm inte att|jag (ska|måste|behöver))\s+/i, "")
     .replace(/^\s*(att\s+)?(köp[ae]?|handla|inhandla|skaffa)\s+/i, "")
-    .replace(/\s+(på|från|i)\s+(ica|coop|willys|hemköp|lidl|city gross|apoteket|affären|butiken)\b.*$/i, "")
+    .replace(
+      /\s+(på|från|i)\s+(ica|coop|willys|hemköp|lidl|city gross|apoteket|affären|butiken)\b.*$/i,
+      "",
+    )
     .trim();
   return cleaned || text.trim();
 }

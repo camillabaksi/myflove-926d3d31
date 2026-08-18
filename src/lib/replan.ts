@@ -78,8 +78,7 @@ export function replanReason(flow: Pick<FlowScore, "score" | "load">, items: Flo
   const fixed = items.filter((i) => i.time).length;
 
   const parts: string[] = [];
-  if (overdue > 0)
-    parts.push(`${overdue} sak${overdue === 1 ? "" : "er"} har passerat sitt datum`);
+  if (overdue > 0) parts.push(`${overdue} sak${overdue === 1 ? "" : "er"} har passerat sitt datum`);
   if (heavy > 0) parts.push(`${heavy} känns tung${heavy === 1 ? "" : "a"} just nu`);
   if (fixed > 0) parts.push(`${fixed} hållpunkt${fixed === 1 ? "" : "er"} är redan bokade`);
 

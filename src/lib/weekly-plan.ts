@@ -69,7 +69,8 @@ export function buildWeeklyPlan(input: PlanInput, date = new Date()): WeeklyPlan
   const factor = input.feedback ? FACTOR[input.feedback] : 1;
 
   // Utgå från det du faktiskt gjorde, inte från ett mål du missade.
-  const stepBase = avgSteps > 0 ? (avgSteps * 2 + input.currentStepGoal) / 3 : input.currentStepGoal;
+  const stepBase =
+    avgSteps > 0 ? (avgSteps * 2 + input.currentStepGoal) / 3 : input.currentStepGoal;
   const movementBase =
     avgMovement > 0 ? (avgMovement * 2 + input.currentMovementGoal) / 3 : input.currentMovementGoal;
 
@@ -78,9 +79,11 @@ export function buildWeeklyPlan(input: PlanInput, date = new Date()): WeeklyPlan
 
   const plannedBase = input.plannedSessions > 0 ? input.plannedSessions : 3;
   let sessionTarget = plannedBase;
-  if (input.feedback === "for-tufft") sessionTarget = Math.max(1, Math.min(plannedBase, input.doneSessions || 1));
+  if (input.feedback === "for-tufft")
+    sessionTarget = Math.max(1, Math.min(plannedBase, input.doneSessions || 1));
   else if (input.feedback === "for-latt") sessionTarget = plannedBase + 1;
-  else if (input.doneSessions > 0 && input.doneSessions < plannedBase) sessionTarget = input.doneSessions + 1;
+  else if (input.doneSessions > 0 && input.doneSessions < plannedBase)
+    sessionTarget = input.doneSessions + 1;
   sessionTarget = clamp(sessionTarget, 1, 7);
 
   return {
@@ -89,14 +92,25 @@ export function buildWeeklyPlan(input: PlanInput, date = new Date()): WeeklyPlan
     movementTarget,
     sessionTarget,
     note: buildNote(input.feedback, stepTarget, input.currentStepGoal),
-    basis: { avgSteps, avgMovement, doneSessions: input.doneSessions, feedback: input.feedback ?? null },
+    basis: {
+      avgSteps,
+      avgMovement,
+      doneSessions: input.doneSessions,
+      feedback: input.feedback ?? null,
+    },
   };
 }
 
-function buildNote(feedback: WeekFeedback | null, stepTarget: number, previousGoal: number): string {
-  if (feedback === "for-tufft") return "Vi sänker ribban den här veckan. Att fortsätta alls är vinsten.";
+function buildNote(
+  feedback: WeekFeedback | null,
+  stepTarget: number,
+  previousGoal: number,
+): string {
+  if (feedback === "for-tufft")
+    return "Vi sänker ribban den här veckan. Att fortsätta alls är vinsten.";
   if (feedback === "for-latt") return "Du verkar ha utrymme för lite mer – vi höjer försiktigt.";
   if (stepTarget > previousGoal) return "Ett litet kliv upp från förra veckan. Inget dramatiskt.";
-  if (stepTarget < previousGoal) return "Målen är anpassade efter din verkliga vecka, inte en perfekt vecka.";
+  if (stepTarget < previousGoal)
+    return "Målen är anpassade efter din verkliga vecka, inte en perfekt vecka.";
   return "Samma nivå som förra veckan – stabilt är också framsteg.";
 }

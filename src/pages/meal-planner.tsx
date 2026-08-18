@@ -8,12 +8,7 @@ import { Input } from "@/components/ui/input";
 import { UtensilsCrossed, ShoppingCart, Trash2, Star, Sparkles, History } from "lucide-react";
 import { useMealFavorites, type MealRecipe } from "@/hooks/use-meal-favorites";
 import { useToast } from "@/hooks/use-toast";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import CollapsibleSection from "@/components/collapsible-section";
 
 const WEEKDAYS = ["Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag", "Söndag"];
@@ -80,7 +75,9 @@ function EditSlotDialog({
         </DialogHeader>
         <div className="space-y-4 pt-2">
           <div className="space-y-2">
-            <label htmlFor="meal-dish" className="text-sm font-medium">Maträtt</label>
+            <label htmlFor="meal-dish" className="text-sm font-medium">
+              Maträtt
+            </label>
             <div className="flex gap-2">
               <Input
                 id="meal-dish"
@@ -98,7 +95,10 @@ function EditSlotDialog({
                 onClick={() =>
                   toggleFavorite(
                     dish,
-                    ingredients.split(",").map((i) => i.trim()).filter(Boolean),
+                    ingredients
+                      .split(",")
+                      .map((i) => i.trim())
+                      .filter(Boolean),
                   )
                 }
                 className="h-12 w-12 rounded-2xl shrink-0"
@@ -124,7 +124,11 @@ function EditSlotDialog({
                     onClick={() => applyRecipe(r)}
                     className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary/50 px-3 py-1.5 text-sm hover:border-primary/50"
                   >
-                    {r.favorite ? <Star size={13} className="fill-gold text-gold" /> : <History size={13} />}
+                    {r.favorite ? (
+                      <Star size={13} className="fill-gold text-gold" />
+                    ) : (
+                      <History size={13} />
+                    )}
                     {r.dish}
                   </button>
                 ))}
@@ -175,8 +179,14 @@ export default function MealPlannerPage() {
   const { addItem, isShared } = useSharedShoppingList();
   const { toast } = useToast();
   const [editing, setEditing] = useState<EditingSlot | null>(null);
-  const { favorites, recent, remember, toggleFavorite, remove: removeRecipe, suggest } =
-    useMealFavorites();
+  const {
+    favorites,
+    recent,
+    remember,
+    toggleFavorite,
+    remove: removeRecipe,
+    suggest,
+  } = useMealFavorites();
 
   const findPlan = (weekday: number, mealType: string) =>
     plans.find((p) => p.weekday === weekday && p.mealType === mealType);
@@ -201,7 +211,10 @@ export default function MealPlannerPage() {
       toast({ description: "Alla middagar är redan planerade. 💙" });
       return;
     }
-    const picks = suggest(empty.length, plans.map((p) => p.dish));
+    const picks = suggest(
+      empty.length,
+      plans.map((p) => p.dish),
+    );
     if (picks.length === 0) {
       toast({ description: "Jag har inga favoriter eller tidigare rätter att föreslå än." });
       return;
@@ -258,7 +271,9 @@ export default function MealPlannerPage() {
             </p>
             <span className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-xs text-secondary-foreground">
               <ShoppingCart size={12} />
-              {isShared ? "Varor skickas till familjens inköpslista" : "Varor skickas till din egen inköpslista"}
+              {isShared
+                ? "Varor skickas till familjens inköpslista"
+                : "Varor skickas till din egen inköpslista"}
             </span>
           </div>
           <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
@@ -272,7 +287,11 @@ export default function MealPlannerPage() {
             Föreslå veckan från favoriter
           </Button>
           {plans.length > 0 && (
-            <Button onClick={sendWeekToShoppingList} variant="secondary" className="rounded-2xl h-11">
+            <Button
+              onClick={sendWeekToShoppingList}
+              variant="secondary"
+              className="rounded-2xl h-11"
+            >
               <ShoppingCart className="mr-2" size={16} />
               Skicka hela veckan till inköpslistan
             </Button>
@@ -298,7 +317,11 @@ export default function MealPlannerPage() {
                       key={r.id}
                       className="inline-flex items-center gap-1 rounded-full border border-gold/40 bg-gold/10 pl-3 pr-1 py-1 text-sm"
                     >
-                      <button type="button" onClick={() => useRecipeToday(r)} className="hover:underline">
+                      <button
+                        type="button"
+                        onClick={() => useRecipeToday(r)}
+                        className="hover:underline"
+                      >
                         {r.dish}
                       </button>
                       <button
@@ -331,7 +354,11 @@ export default function MealPlannerPage() {
                       key={r.id}
                       className="inline-flex items-center gap-1 rounded-full border border-border bg-secondary/50 pl-3 pr-1 py-1 text-sm"
                     >
-                      <button type="button" onClick={() => useRecipeToday(r)} className="hover:underline">
+                      <button
+                        type="button"
+                        onClick={() => useRecipeToday(r)}
+                        className="hover:underline"
+                      >
                         {r.dish}
                         {r.useCount > 1 && (
                           <span className="ml-1 text-xs text-muted-foreground">×{r.useCount}</span>

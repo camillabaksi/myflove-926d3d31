@@ -13,7 +13,8 @@ export const Route = createFileRoute("/_app/relationer")({
       { property: "og:title", content: "Relationer – MyFlove" },
       {
         property: "og:description",
-        content: "Ditt eget relationssystem: du väljer vilka relationstyper och personer som finns med.",
+        content:
+          "Ditt eget relationssystem: du väljer vilka relationstyper och personer som finns med.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

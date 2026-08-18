@@ -46,13 +46,16 @@ export function QuickflowCapture({ variant = "card" }: { variant?: "card" | "com
     const { merged } = add({ text: trimmed, level, ...opts });
     setOpen(false);
     reset();
-    toast.success(merged ? "Den fanns redan – jag slog ihop dem. 💙" : "Lugn. Jag håller det åt dig. 💙", {
-      description: opts.remindAt
-        ? `Jag säger till ${formatWhen(opts.remindAt).toLowerCase()}.`
-        : opts.placeName
-          ? `Jag knuffar dig när du är nära ${opts.placeName}.`
-          : "Den ligger som en öppen tanke – jag frågar dig senare.",
-    });
+    toast.success(
+      merged ? "Den fanns redan – jag slog ihop dem. 💙" : "Lugn. Jag håller det åt dig. 💙",
+      {
+        description: opts.remindAt
+          ? `Jag säger till ${formatWhen(opts.remindAt).toLowerCase()}.`
+          : opts.placeName
+            ? `Jag knuffar dig när du är nära ${opts.placeName}.`
+            : "Den ligger som en öppen tanke – jag frågar dig senare.",
+      },
+    );
   };
 
   return (
@@ -128,7 +131,9 @@ export function QuickflowCapture({ variant = "card" }: { variant?: "card" | "com
             </div>
 
             <div className="space-y-2">
-              <p className="text-xs uppercase tracking-wide text-muted-foreground">Hur känns det?</p>
+              <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                Hur känns det?
+              </p>
               <div className="grid gap-2">
                 {(Object.keys(LEVEL_META) as QuickflowLevel[]).map((key) => {
                   const meta = LEVEL_META[key];
@@ -138,7 +143,9 @@ export function QuickflowCapture({ variant = "card" }: { variant?: "card" | "com
                       type="button"
                       onClick={() => setLevel(key)}
                       className={`flex items-start gap-3 rounded-2xl border p-3 text-left transition-colors ${
-                        level === key ? meta.className : "border-border bg-card hover:border-primary/40"
+                        level === key
+                          ? meta.className
+                          : "border-border bg-card hover:border-primary/40"
                       }`}
                     >
                       <span className="text-lg leading-none">{meta.emoji}</span>

@@ -45,7 +45,10 @@ export const Route = createFileRoute("/api/public/hooks/push-resubscribe")({
         if (error) return Response.json({ ok: false, error: error.message }, { status: 500 });
 
         if (parsed.endpoint !== parsed.oldEndpoint) {
-          await supabaseAdmin.from("push_subscriptions").delete().eq("endpoint", parsed.oldEndpoint);
+          await supabaseAdmin
+            .from("push_subscriptions")
+            .delete()
+            .eq("endpoint", parsed.oldEndpoint);
         }
         return Response.json({ ok: true });
       },

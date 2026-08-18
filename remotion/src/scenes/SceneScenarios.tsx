@@ -74,7 +74,9 @@ const Card: React.FC<{ situation: string; response: string; delay: number }> = (
 export const SceneScenarios: React.FC = () => {
   return (
     <SceneShell bg={COLORS.bgDeep}>
-      <AbsoluteFill style={{ padding: "70px 80px", display: "flex", flexDirection: "column", gap: 28 }}>
+      <AbsoluteFill
+        style={{ padding: "70px 80px", display: "flex", flexDirection: "column", gap: 28 }}
+      >
         <div style={{ display: "flex", flexDirection: "column", gap: 12, maxWidth: 640 }}>
           <SectionEyebrow delay={0}>I vardagen</SectionEyebrow>
           <SectionTitle delay={4}>När livet skaver – finns Flow där.</SectionTitle>

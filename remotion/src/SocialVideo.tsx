@@ -1,5 +1,12 @@
 import React from "react";
-import { AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate, spring, Sequence } from "remotion";
+import {
+  AbsoluteFill,
+  useCurrentFrame,
+  useVideoConfig,
+  interpolate,
+  spring,
+  Sequence,
+} from "remotion";
 import { TransitionSeries, linearTiming } from "@remotion/transitions";
 import { fade } from "@remotion/transitions/fade";
 import { COLORS, FONTS } from "./theme";
@@ -20,7 +27,10 @@ function useIn(delay: number, damping = 16) {
   } as React.CSSProperties;
 }
 
-const Shell: React.FC<{ children: React.ReactNode; bg?: string }> = ({ children, bg = COLORS.bg }) => {
+const Shell: React.FC<{ children: React.ReactNode; bg?: string }> = ({
+  children,
+  bg = COLORS.bg,
+}) => {
   const frame = useCurrentFrame();
   const drift = Math.sin(frame / 40) * 8;
   return (
@@ -66,7 +76,10 @@ const Shell: React.FC<{ children: React.ReactNode; bg?: string }> = ({ children,
   );
 };
 
-const Eyebrow: React.FC<{ children: React.ReactNode; delay?: number }> = ({ children, delay = 0 }) => (
+const Eyebrow: React.FC<{ children: React.ReactNode; delay?: number }> = ({
+  children,
+  delay = 0,
+}) => (
   <div
     style={{
       ...useIn(delay),
@@ -122,13 +135,13 @@ const Sub: React.FC<{ children: React.ReactNode; delay?: number; size?: number }
   </p>
 );
 
-const Card: React.FC<{ icon: string; label: string; desc: string; delay: number; color?: string }> = ({
-  icon,
-  label,
-  desc,
-  delay,
-  color = COLORS.primary,
-}) => (
+const Card: React.FC<{
+  icon: string;
+  label: string;
+  desc: string;
+  delay: number;
+  color?: string;
+}> = ({ icon, label, desc, delay, color = COLORS.primary }) => (
   <div
     style={{
       ...useIn(delay),
@@ -158,7 +171,9 @@ const Card: React.FC<{ icon: string; label: string; desc: string; delay: number;
       {icon}
     </div>
     <div>
-      <div style={{ fontFamily: FONTS.body, fontWeight: 600, fontSize: 30, color: COLORS.ink }}>{label}</div>
+      <div style={{ fontFamily: FONTS.body, fontWeight: 600, fontSize: 30, color: COLORS.ink }}>
+        {label}
+      </div>
       <div style={{ fontFamily: FONTS.body, fontSize: 22, color: COLORS.muted }}>{desc}</div>
     </div>
   </div>
@@ -185,7 +200,11 @@ const SceneTabs: React.FC = () => {
       <Title>47 flikar öppna.{"\n"}I huvudet. 🫠</Title>
       <div style={{ display: "flex", flexWrap: "wrap", gap: 14, marginTop: 10 }}>
         {TABS.map((t, i) => {
-          const s = spring({ frame: frame - 30 - i * 5, fps: 30, config: { damping: 12, stiffness: 180 } });
+          const s = spring({
+            frame: frame - 30 - i * 5,
+            fps: 30,
+            config: { damping: 12, stiffness: 180 },
+          });
           const wobble = Math.sin((frame + i * 12) / 9) * 2.5;
           return (
             <div
@@ -208,8 +227,8 @@ const SceneTabs: React.FC = () => {
         })}
       </div>
       <Sub delay={95} size={31}>
-        Kalendern här, uppgiften där, påminnelsen i en tredje app… och det du skulle
-        göra för två timmar sedan försvann någonstans mellan Instagram och verkligheten.
+        Kalendern här, uppgiften där, påminnelsen i en tredje app… och det du skulle göra för två
+        timmar sedan försvann någonstans mellan Instagram och verkligheten.
       </Sub>
     </Shell>
   );
@@ -226,7 +245,7 @@ const SceneOneBrain: React.FC = () => (
         fontWeight: 700,
         fontSize: 96,
         lineHeight: 1.05,
-      whiteSpace: "pre-line",
+        whiteSpace: "pre-line",
         color: COLORS.cream,
         margin: 0,
       }}
@@ -254,9 +273,27 @@ const SceneFeatures: React.FC = () => (
     <Title size={70}>Flow hjälper dig{"\n"}planera & komma ihåg</Title>
     <div style={{ display: "flex", flexDirection: "column", gap: 18, marginTop: 12 }}>
       <Card icon="🗓️" label="Planering" desc="Kalender, uppgifter och dagens fokus" delay={22} />
-      <Card icon="🔔" label="Påminnelser" desc="Puffar som kommer även när appen är stängd" delay={32} color={COLORS.gold} />
-      <Card icon="📚" label="Friktionsbibliotek" desc="Det som skaver – samlat och synligt" delay={42} color={COLORS.studies} />
-      <Card icon="🛑" label="Stoppknappen" desc="För de där impulsiva besluten" delay={52} color="#B4462F" />
+      <Card
+        icon="🔔"
+        label="Påminnelser"
+        desc="Puffar som kommer även när appen är stängd"
+        delay={32}
+        color={COLORS.gold}
+      />
+      <Card
+        icon="📚"
+        label="Friktionsbibliotek"
+        desc="Det som skaver – samlat och synligt"
+        delay={42}
+        color={COLORS.studies}
+      />
+      <Card
+        icon="🛑"
+        label="Stoppknappen"
+        desc="För de där impulsiva besluten"
+        delay={52}
+        color="#B4462F"
+      />
     </div>
   </Shell>
 );
@@ -268,9 +305,27 @@ const SceneStudy: React.FC = () => (
     <Title size={76}>Studieflöde 🎓</Title>
     <Sub size={33}>Skoluppgifter, deadlines – och snart quiz och flashcards inför provet.</Sub>
     <div style={{ display: "flex", flexDirection: "column", gap: 18, marginTop: 8 }}>
-      <Card icon="📝" label="Uppgifter" desc="Nedbrutna i små, görbara steg" delay={26} color={COLORS.studies} />
-      <Card icon="⏳" label="Deadlines" desc="Koll utan panik kvällen innan" delay={36} color={COLORS.work} />
-      <Card icon="🃏" label="Flashcards & quiz" desc="Kommer snart" delay={46} color={COLORS.gold} />
+      <Card
+        icon="📝"
+        label="Uppgifter"
+        desc="Nedbrutna i små, görbara steg"
+        delay={26}
+        color={COLORS.studies}
+      />
+      <Card
+        icon="⏳"
+        label="Deadlines"
+        desc="Koll utan panik kvällen innan"
+        delay={36}
+        color={COLORS.work}
+      />
+      <Card
+        icon="🃏"
+        label="Flashcards & quiz"
+        desc="Kommer snart"
+        delay={46}
+        color={COLORS.gold}
+      />
     </div>
   </Shell>
 );
@@ -284,8 +339,8 @@ const SceneTesters: React.FC = () => {
       <Eyebrow>Appen är långt ifrån färdig</Eyebrow>
       <Title size={86}>Jag söker{"\n"}100 testare ❤️</Title>
       <Sub size={33}>
-        Gratis. Ärlig feedback: Vad funkar? Vad är krångligt? Vad saknas? Vad skulle få
-        dig att vilja använda den varje dag?
+        Gratis. Ärlig feedback: Vad funkar? Vad är krångligt? Vad saknas? Vad skulle få dig att
+        vilja använda den varje dag?
       </Sub>
       <div
         style={{
@@ -319,14 +374,23 @@ const SceneOutro: React.FC = () => (
         fontWeight: 700,
         fontSize: 104,
         lineHeight: 1.02,
-      whiteSpace: "pre-line",
+        whiteSpace: "pre-line",
         color: COLORS.cream,
         margin: 0,
       }}
     >
       MyFlove
     </h1>
-    <p style={{ ...useIn(10), fontFamily: FONTS.body, fontSize: 40, color: COLORS.sage, margin: 0 , whiteSpace: "pre-line" }}>
+    <p
+      style={{
+        ...useIn(10),
+        fontFamily: FONTS.body,
+        fontSize: 40,
+        color: COLORS.sage,
+        margin: 0,
+        whiteSpace: "pre-line",
+      }}
+    >
       Lite mer ordning. Lite mindre stress.{"\n"}Framför allt – lite mer flow. 💙
     </p>
     <div
@@ -345,7 +409,9 @@ const SceneOutro: React.FC = () => (
     >
       Testa gratis: myflove.lovable.app
     </div>
-    <p style={{ ...useIn(32), fontFamily: FONTS.body, fontSize: 28, color: COLORS.sage, margin: 0 }}>
+    <p
+      style={{ ...useIn(32), fontFamily: FONTS.body, fontSize: 28, color: COLORS.sage, margin: 0 }}
+    >
       Kommentera "testat" och berätta vad du tycker 🥰
     </p>
   </Shell>
@@ -359,17 +425,29 @@ const t = () => linearTiming({ durationInFrames: TRANS });
 export const SocialVideo: React.FC = () => (
   <AbsoluteFill style={{ backgroundColor: COLORS.bg }}>
     <TransitionSeries>
-      <TransitionSeries.Sequence durationInFrames={D[0]!}><SceneTabs /></TransitionSeries.Sequence>
+      <TransitionSeries.Sequence durationInFrames={D[0]!}>
+        <SceneTabs />
+      </TransitionSeries.Sequence>
       <TransitionSeries.Transition presentation={fade()} timing={t()} />
-      <TransitionSeries.Sequence durationInFrames={D[1]!}><SceneOneBrain /></TransitionSeries.Sequence>
+      <TransitionSeries.Sequence durationInFrames={D[1]!}>
+        <SceneOneBrain />
+      </TransitionSeries.Sequence>
       <TransitionSeries.Transition presentation={fade()} timing={t()} />
-      <TransitionSeries.Sequence durationInFrames={D[2]!}><SceneFeatures /></TransitionSeries.Sequence>
+      <TransitionSeries.Sequence durationInFrames={D[2]!}>
+        <SceneFeatures />
+      </TransitionSeries.Sequence>
       <TransitionSeries.Transition presentation={fade()} timing={t()} />
-      <TransitionSeries.Sequence durationInFrames={D[3]!}><SceneStudy /></TransitionSeries.Sequence>
+      <TransitionSeries.Sequence durationInFrames={D[3]!}>
+        <SceneStudy />
+      </TransitionSeries.Sequence>
       <TransitionSeries.Transition presentation={fade()} timing={t()} />
-      <TransitionSeries.Sequence durationInFrames={D[4]!}><SceneTesters /></TransitionSeries.Sequence>
+      <TransitionSeries.Sequence durationInFrames={D[4]!}>
+        <SceneTesters />
+      </TransitionSeries.Sequence>
       <TransitionSeries.Transition presentation={fade()} timing={t()} />
-      <TransitionSeries.Sequence durationInFrames={D[5]!}><SceneOutro /></TransitionSeries.Sequence>
+      <TransitionSeries.Sequence durationInFrames={D[5]!}>
+        <SceneOutro />
+      </TransitionSeries.Sequence>
     </TransitionSeries>
     <Sequence from={0} />
   </AbsoluteFill>

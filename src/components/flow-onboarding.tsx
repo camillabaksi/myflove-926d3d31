@@ -26,7 +26,9 @@ export default function FlowOnboarding() {
       <DialogContent className="sm:max-w-md rounded-3xl">
         <DialogHeader>
           <DialogTitle>
-            {step === 1 ? "Vad vill du att MyFlove främst ska hjälpa dig med?" : "Vad vill du börja med?"}
+            {step === 1
+              ? "Vad vill du att MyFlove främst ska hjälpa dig med?"
+              : "Vad vill du börja med?"}
           </DialogTitle>
         </DialogHeader>
 

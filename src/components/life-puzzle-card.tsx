@@ -51,8 +51,7 @@ export default function LifePuzzleCard() {
               key={a.area}
               className="rounded-full bg-secondary/70 px-3 py-1 text-xs text-foreground"
             >
-              {AREA_META[a.area].emoji} {AREA_META[a.area].label} ·{" "}
-              {a.today + a.overdue + a.soon}
+              {AREA_META[a.area].emoji} {AREA_META[a.area].label} · {a.today + a.overdue + a.soon}
             </span>
           ))}
         </div>

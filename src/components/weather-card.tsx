@@ -10,7 +10,6 @@ import {
   MapPin,
   RefreshCw,
   Loader2,
-
 } from "lucide-react";
 import { setWeatherSnapshot } from "@/hooks/use-weather";
 
@@ -27,7 +26,6 @@ type WeatherState = {
 // Vädret räknas som färskt i 20 minuter, sedan hämtas det om automatiskt.
 const MAX_AGE_MS = 20 * 60 * 1000;
 
-
 type GeoPermissionState = PermissionState | "unknown" | "unsupported";
 
 interface WMOInfo {
@@ -37,14 +35,26 @@ interface WMOInfo {
 }
 
 function describe(code: number, temp: number): WMOInfo {
-  if ([0].includes(code)) return { label: "Klart", Icon: Sun, hint: temp < 5 ? "Klart och kyligt – ta en extra lager." : "Sol – ta gärna en paus ute." };
-  if ([1, 2].includes(code)) return { label: "Mest klart", Icon: CloudSun, hint: "Fint väder att röra på sig i." };
-  if ([3].includes(code)) return { label: "Mulet", Icon: Cloud, hint: "Grått ute – lampor på inne hjälper humöret." };
-  if ([45, 48].includes(code)) return { label: "Dimma", Icon: CloudFog, hint: "Kör försiktigt om du är ute." };
-  if ([51, 53, 55, 56, 57].includes(code)) return { label: "Duggregn", Icon: CloudRain, hint: "Ta med jackan." };
-  if ([61, 63, 65, 66, 67, 80, 81, 82].includes(code)) return { label: "Regn", Icon: CloudRain, hint: "Regn idag – ta det lugnt om du ska ut." };
-  if ([71, 73, 75, 77, 85, 86].includes(code)) return { label: "Snö", Icon: CloudSnow, hint: "Snö – halkigt kan det bli." };
-  if ([95, 96, 99].includes(code)) return { label: "Åska", Icon: CloudLightning, hint: "Åska i luften – bra dag att vara inne." };
+  if ([0].includes(code))
+    return {
+      label: "Klart",
+      Icon: Sun,
+      hint: temp < 5 ? "Klart och kyligt – ta en extra lager." : "Sol – ta gärna en paus ute.",
+    };
+  if ([1, 2].includes(code))
+    return { label: "Mest klart", Icon: CloudSun, hint: "Fint väder att röra på sig i." };
+  if ([3].includes(code))
+    return { label: "Mulet", Icon: Cloud, hint: "Grått ute – lampor på inne hjälper humöret." };
+  if ([45, 48].includes(code))
+    return { label: "Dimma", Icon: CloudFog, hint: "Kör försiktigt om du är ute." };
+  if ([51, 53, 55, 56, 57].includes(code))
+    return { label: "Duggregn", Icon: CloudRain, hint: "Ta med jackan." };
+  if ([61, 63, 65, 66, 67, 80, 81, 82].includes(code))
+    return { label: "Regn", Icon: CloudRain, hint: "Regn idag – ta det lugnt om du ska ut." };
+  if ([71, 73, 75, 77, 85, 86].includes(code))
+    return { label: "Snö", Icon: CloudSnow, hint: "Snö – halkigt kan det bli." };
+  if ([95, 96, 99].includes(code))
+    return { label: "Åska", Icon: CloudLightning, hint: "Åska i luften – bra dag att vara inne." };
   return { label: "Vad som helst", Icon: Cloud, hint: "" };
 }
 
@@ -62,7 +72,9 @@ async function reverseGeocode(lat: number, lon: number): Promise<string> {
   }
 }
 
-async function lookupCity(query: string): Promise<{ latitude: number; longitude: number; name: string } | null> {
+async function lookupCity(
+  query: string,
+): Promise<{ latitude: number; longitude: number; name: string } | null> {
   try {
     const res = await fetch(
       `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&language=sv&count=1`,
@@ -104,9 +116,16 @@ export default function WeatherCard() {
     try {
       const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,apparent_temperature,weather_code&timezone=auto`;
       const [wx, city] = await Promise.all([
-        fetch(url, { cache: "no-store" }).then((r) => r.json() as Promise<{
-          current?: { temperature_2m: number; apparent_temperature: number; weather_code: number };
-        }>),
+        fetch(url, { cache: "no-store" }).then(
+          (r) =>
+            r.json() as Promise<{
+              current?: {
+                temperature_2m: number;
+                apparent_temperature: number;
+                weather_code: number;
+              };
+            }>,
+        ),
         cityFallback ? Promise.resolve(cityFallback) : reverseGeocode(latitude, longitude),
       ]);
       if (!wx.current) {
@@ -147,7 +166,6 @@ export default function WeatherCard() {
     if (stale && cached.latitude != null && cached.longitude != null) {
       void loadWeather(cached.latitude, cached.longitude, cached.city);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Hämta om vädret när appen kommer tillbaka i förgrunden.
@@ -171,9 +189,7 @@ export default function WeatherCard() {
       document.removeEventListener("visibilitychange", onVisible);
       window.clearInterval(timer);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
 
   const load = () => {
     setHasAsked(true);
@@ -327,7 +343,6 @@ export default function WeatherCard() {
           </button>
         </div>
       </div>
-
     </div>
   );
 }

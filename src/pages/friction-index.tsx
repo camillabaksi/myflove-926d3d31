@@ -53,13 +53,25 @@ const STATUS_COLORS: Record<Status, string> = {
 // Blueprint 2.0 §6.1
 type Priority = { label: string; className: string };
 function priorityFor(total: number): Priority {
-  if (total >= 13) return { label: "Kritisk", className: "bg-destructive/15 text-destructive border-destructive/30" };
-  if (total >= 10) return { label: "Hög", className: "bg-orange-100 text-orange-800 border-orange-200" };
-  if (total >= 6)  return { label: "Medel", className: "bg-amber-100 text-amber-800 border-amber-200" };
+  if (total >= 13)
+    return {
+      label: "Kritisk",
+      className: "bg-destructive/15 text-destructive border-destructive/30",
+    };
+  if (total >= 10)
+    return { label: "Hög", className: "bg-orange-100 text-orange-800 border-orange-200" };
+  if (total >= 6)
+    return { label: "Medel", className: "bg-amber-100 text-amber-800 border-amber-200" };
   return { label: "Låg", className: "bg-secondary text-muted-foreground border-border" };
 }
 
-const SCALE_LABELS: Record<number, string> = { 1: "mycket lite", 2: "lite", 3: "medel", 4: "mycket", 5: "väldigt mycket" };
+const SCALE_LABELS: Record<number, string> = {
+  1: "mycket lite",
+  2: "lite",
+  3: "medel",
+  4: "mycket",
+  5: "väldigt mycket",
+};
 
 export default function FrictionIndexPage() {
   const [items, setItems] = useState<FrictionItem[]>([]);
@@ -120,7 +132,10 @@ export default function FrictionIndexPage() {
       const flatVotes: Vote[] = [];
       for (const r of rows) {
         for (let i = 0; i < r.vote_count; i++) {
-          flatVotes.push({ item_id: r.id, user_id: r.has_voted && i === 0 && uid ? uid : `anon-${r.id}-${i}` });
+          flatVotes.push({
+            item_id: r.id,
+            user_id: r.has_voted && i === 0 && uid ? uid : `anon-${r.id}-${i}`,
+          });
         }
       }
       setVotes(flatVotes);
@@ -147,7 +162,6 @@ export default function FrictionIndexPage() {
     for (const v of votes) if (v.user_id === userId) s.add(v.item_id);
     return s;
   }, [votes, userId]);
-
 
   const ranked = useMemo(() => {
     return [...items]
@@ -241,16 +255,24 @@ export default function FrictionIndexPage() {
             <Flame className="text-primary" /> Feedback & förslag
           </h1>
           <p className="text-muted-foreground">
-            Lämna feedback, förslag eller rapportera saker som skaver. Varje friktion bedöms på
-            tre skalor – <strong>påverkan</strong>, <strong>frekvens</strong> och{" "}
-            <strong>mental belastning</strong> (1–5 vardera) – som ger en totalpoäng 3–15.
-            Röster används som tiebreaker.
+            Lämna feedback, förslag eller rapportera saker som skaver. Varje friktion bedöms på tre
+            skalor – <strong>påverkan</strong>, <strong>frekvens</strong> och{" "}
+            <strong>mental belastning</strong> (1–5 vardera) – som ger en totalpoäng 3–15. Röster
+            används som tiebreaker.
           </p>
           <div className="mt-3 flex flex-wrap gap-2 text-xs">
-            <span className="px-2 py-1 rounded-full border bg-destructive/15 text-destructive border-destructive/30">Kritisk 13–15</span>
-            <span className="px-2 py-1 rounded-full border bg-orange-100 text-orange-800 border-orange-200">Hög 10–12</span>
-            <span className="px-2 py-1 rounded-full border bg-amber-100 text-amber-800 border-amber-200">Medel 6–9</span>
-            <span className="px-2 py-1 rounded-full border bg-secondary text-muted-foreground border-border">Låg 3–5</span>
+            <span className="px-2 py-1 rounded-full border bg-destructive/15 text-destructive border-destructive/30">
+              Kritisk 13–15
+            </span>
+            <span className="px-2 py-1 rounded-full border bg-orange-100 text-orange-800 border-orange-200">
+              Hög 10–12
+            </span>
+            <span className="px-2 py-1 rounded-full border bg-amber-100 text-amber-800 border-amber-200">
+              Medel 6–9
+            </span>
+            <span className="px-2 py-1 rounded-full border bg-secondary text-muted-foreground border-border">
+              Låg 3–5
+            </span>
           </div>
         </div>
 
@@ -310,11 +332,28 @@ export default function FrictionIndexPage() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              {([
-                { label: "Påverkan", hint: "Hur stort är problemet?", value: impact, setter: setImpact },
-                { label: "Frekvens", hint: "Hur ofta händer det?", value: frequency, setter: setFrequency },
-                { label: "Mental belastning", hint: "Hur mycket stjäl det energi?", value: mentalLoad, setter: setMentalLoad },
-              ] as const).map((axis) => (
+              {(
+                [
+                  {
+                    label: "Påverkan",
+                    hint: "Hur stort är problemet?",
+                    value: impact,
+                    setter: setImpact,
+                  },
+                  {
+                    label: "Frekvens",
+                    hint: "Hur ofta händer det?",
+                    value: frequency,
+                    setter: setFrequency,
+                  },
+                  {
+                    label: "Mental belastning",
+                    hint: "Hur mycket stjäl det energi?",
+                    value: mentalLoad,
+                    setter: setMentalLoad,
+                  },
+                ] as const
+              ).map((axis) => (
                 <div key={axis.label}>
                   <label className="text-sm font-medium block mb-1">{axis.label} (1–5)</label>
                   <select
@@ -334,8 +373,9 @@ export default function FrictionIndexPage() {
             </div>
 
             <div className="text-xs text-muted-foreground bg-secondary/40 rounded-xl px-3 py-2">
-              Totalpoäng blir <strong className="text-foreground">{impact + frequency + mentalLoad}</strong>{" "}
-              – {priorityFor(impact + frequency + mentalLoad).label} prioritet.
+              Totalpoäng blir{" "}
+              <strong className="text-foreground">{impact + frequency + mentalLoad}</strong> –{" "}
+              {priorityFor(impact + frequency + mentalLoad).label} prioritet.
             </div>
             <Button type="submit" disabled={saving || !title.trim()} className="rounded-full">
               {saving ? <Loader2 size={16} className="animate-spin mr-1" /> : null} Spara
@@ -362,7 +402,9 @@ export default function FrictionIndexPage() {
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap mb-1">
-                        <span className={`text-xs px-2 py-0.5 rounded-full border ${priority.className}`}>
+                        <span
+                          className={`text-xs px-2 py-0.5 rounded-full border ${priority.className}`}
+                        >
                           {priority.label} · {total} p
                         </span>
                         <span
@@ -371,7 +413,8 @@ export default function FrictionIndexPage() {
                           {STATUS_LABELS[item.status]}
                         </span>
                         <span className="text-xs text-muted-foreground">
-                          {CATEGORIES.find((c) => c.value === item.category)?.label ?? item.category}
+                          {CATEGORIES.find((c) => c.value === item.category)?.label ??
+                            item.category}
                         </span>
                       </div>
                       <h3 className="font-medium">{item.title}</h3>
@@ -399,7 +442,8 @@ export default function FrictionIndexPage() {
                   </div>
                   <div className="flex items-center justify-between text-xs text-muted-foreground pt-1 border-t border-border">
                     <span>
-                      Påverkan {item.impact} · frekvens {item.frequency ?? 3} · mental {item.mental_load ?? 3} · röster {v}
+                      Påverkan {item.impact} · frekvens {item.frequency ?? 3} · mental{" "}
+                      {item.mental_load ?? 3} · röster {v}
                     </span>
                     {isReporter ? (
                       <select

@@ -47,17 +47,13 @@ export function useFlowScore(): {
     return resetEntries.find((e) => e.date === iso)?.feel ?? null;
   }, [resetEntries]);
 
-
   const mood = useMemo(() => {
     if (!moods.length) return null;
     const latest = [...moods].sort((a, b) => b.date - a.date)[0];
     return latest ? latest.score : null;
   }, [moods]);
 
-  const minutesLeft = useMemo(
-    () => minutesLeftOfWorkday(settings.endHour),
-    [settings.endHour],
-  );
+  const minutesLeft = useMemo(() => minutesLeftOfWorkday(settings.endHour), [settings.endHour]);
 
   // Bokad tid idag: uppgifter med klockslag + dagens lektioner.
   const booked = useMemo(() => {
@@ -87,12 +83,9 @@ export function useFlowScore(): {
     [energyBalance, energyFlowSettings.weight, energyFlowSettings.enabled],
   );
 
-
   const flow = useMemo(() => {
     const today = new Date().toISOString().slice(0, 10);
-    const overdue = tasks.filter(
-      (t) => !t.completed && t.dueDate && t.dueDate < today,
-    ).length;
+    const overdue = tasks.filter((t) => !t.completed && t.dueDate && t.dueDate < today).length;
     const doneToday = tasks.filter((t) => t.completed && isToday(t.completedAt)).length;
     return computeFlowScore({
       energy,
@@ -124,7 +117,5 @@ export function useFlowScore(): {
     energyFlow,
   ]);
 
-
   return { flow, energy, mood, minutesLeft };
 }
-

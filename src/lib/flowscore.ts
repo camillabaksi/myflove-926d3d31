@@ -32,7 +32,6 @@ export interface FlowScoreInput {
   energyFlow?: FlowFactor | null;
 }
 
-
 export type FlowLoad = "låg" | "medel" | "hög";
 
 export interface FlowFactor {
@@ -85,7 +84,15 @@ export function derivePlan(rawScore: number, minutesLeft: number) {
   const maxFriction = score >= 75 ? 10 : score >= 55 ? 7 : score >= 35 ? 5 : 3;
   const suggestedTasks = score >= 70 ? 3 : score >= 45 ? 2 : 1;
   const label =
-    score >= 80 ? "Full fart" : score >= 60 ? "God kapacitet" : score >= 40 ? "Lagom" : score >= 25 ? "Låg" : "Skonsamt läge";
+    score >= 80
+      ? "Full fart"
+      : score >= 60
+        ? "God kapacitet"
+        : score >= 40
+          ? "Lagom"
+          : score >= 25
+            ? "Låg"
+            : "Skonsamt läge";
   return { score, load, capacityMinutes, maxFriction, suggestedTasks, label };
 }
 
@@ -126,7 +133,8 @@ export function computeFlowScore(input: FlowScoreInput, now = new Date()): FlowS
   }
 
   const hour = now.getHours();
-  const timeDelta = hour < 7 ? -10 : hour < 10 ? 6 : hour < 14 ? 3 : hour < 17 ? -2 : hour < 20 ? -8 : -14;
+  const timeDelta =
+    hour < 7 ? -10 : hour < 10 ? 6 : hour < 14 ? 3 : hour < 17 ? -2 : hour < 20 ? -8 : -14;
   score += timeDelta;
   factors.push({
     label: "Tid på dygnet",
@@ -209,13 +217,15 @@ export function computeFlowScore(input: FlowScoreInput, now = new Date()): FlowS
     factors.push(input.energyFlow);
   }
 
-
   // Gårdagens Flow Reset sätter startläget för dagen – men bara på förmiddagen.
   if (input.yesterdayFeel && hour < 13) {
     const map = {
       bra: { d: 4, why: "Igår kändes bra. Vi börjar dagen med lite mer utrymme." },
       sadar: { d: 0, why: "Igår var sådär. Vi börjar neutralt och ser hur det känns." },
-      kaos: { d: -6, why: "Igår var kaos. Vi börjar lugnare idag – det är inte en bestraffning, bara vila." },
+      kaos: {
+        d: -6,
+        why: "Igår var kaos. Vi börjar lugnare idag – det är inte en bestraffning, bara vila.",
+      },
     } as const;
     const m = map[input.yesterdayFeel];
     score += m.d;
@@ -234,10 +244,16 @@ export function computeFlowScore(input: FlowScoreInput, now = new Date()): FlowS
   }
 
   // Rörelse räknas – kroppen är en del av kapaciteten.
-  if (input.movementToday && ((input.movementToday.steps ?? 0) > 0 || (input.movementToday.sessions ?? 0) > 0)) {
+  if (
+    input.movementToday &&
+    ((input.movementToday.steps ?? 0) > 0 || (input.movementToday.sessions ?? 0) > 0)
+  ) {
     const steps = input.movementToday.steps ?? 0;
     const sessions = input.movementToday.sessions ?? 0;
-    const d = Math.min(8, (steps >= 7000 ? 5 : steps >= 3000 ? 3 : steps > 0 ? 1 : 0) + sessions * 3);
+    const d = Math.min(
+      8,
+      (steps >= 7000 ? 5 : steps >= 3000 ? 3 : steps > 0 ? 1 : 0) + sessions * 3,
+    );
     score += d;
     const readingParts = [
       steps > 0 ? `${steps.toLocaleString("sv-SE")} steg` : null,
@@ -251,7 +267,6 @@ export function computeFlowScore(input: FlowScoreInput, now = new Date()): FlowS
       why: "Rörelse ger oftast mer ork senare på dagen. Det du redan gjort med kroppen räknas in.",
     });
   }
-
 
   const bookedMinutes = Math.max(0, Math.round(input.bookedMinutes ?? 0));
   const freeMinutes = Math.max(0, input.minutesLeft - bookedMinutes);
@@ -323,19 +338,21 @@ export function explainFlowScore(
     } else {
       if (without.capacityMinutes !== flow.capacityMinutes) {
         const diff = flow.capacityMinutes - without.capacityMinutes;
-        changes.push(`${diff > 0 ? "+" : ""}${diff} min fokustid (${without.capacityMinutes} → ${flow.capacityMinutes})`);
+        changes.push(
+          `${diff > 0 ? "+" : ""}${diff} min fokustid (${without.capacityMinutes} → ${flow.capacityMinutes})`,
+        );
       }
       if (without.maxFriction !== flow.maxFriction) {
         changes.push(
           `Friktionsgräns ${without.maxFriction} → ${flow.maxFriction} – ${
-            flow.maxFriction < without.maxFriction ? "tyngre uppgifter flyttades till \"för tungt nu\"" : "fler tunga uppgifter fick plats i planen"
+            flow.maxFriction < without.maxFriction
+              ? 'tyngre uppgifter flyttades till "för tungt nu"'
+              : "fler tunga uppgifter fick plats i planen"
           }`,
         );
       }
       if (without.suggestedTasks !== flow.suggestedTasks) {
-        changes.push(
-          `Antal saker i planen ${without.suggestedTasks} → ${flow.suggestedTasks}`,
-        );
+        changes.push(`Antal saker i planen ${without.suggestedTasks} → ${flow.suggestedTasks}`);
       }
       if (without.load !== flow.load) changes.push(`Belastning ${without.load} → ${flow.load}`);
       if (!changes.length) changes.push("Flyttade scoren, men planen landade på samma nivå.");
@@ -358,4 +375,3 @@ export function scoreTone(score: number): string {
   if (score >= 40) return "text-gold";
   return "text-destructive";
 }
-

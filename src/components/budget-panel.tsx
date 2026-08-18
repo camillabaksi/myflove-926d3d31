@@ -146,7 +146,6 @@ export default function BudgetPanel({
 
   const periodLabel = period === "day" ? "idag" : period === "week" ? "denna vecka" : "denna månad";
 
-
   return (
     <section className="bg-card p-6 rounded-3xl border border-border shadow-sm space-y-5">
       <CollapsibleSection
@@ -162,92 +161,104 @@ export default function BudgetPanel({
         headingClassName="text-xl font-medium"
         description="Sätt en ram per dag, vecka eller månad."
       >
-      <div className="flex bg-secondary/50 p-1 rounded-xl" role="tablist" aria-label="Budgetperiod">
-        {PERIODS.map((p) => (
-          <button
-            key={p.key}
-            type="button"
-            role="tab"
-            aria-selected={period === p.key}
-            onClick={() => setPeriod(p.key)}
-            className={`flex-1 py-2 px-4 rounded-lg font-medium transition-all ${
-              period === p.key ? "bg-background shadow-sm text-foreground" : "text-muted-foreground"
-            }`}
-          >
-            {p.label}
-          </button>
-        ))}
-      </div>
-
-      <div className="space-y-3">
-        <div className="flex items-end justify-between gap-4">
-          <div>
-            <p className="text-sm text-muted-foreground">Förbrukat {periodLabel}</p>
-            <p className="text-2xl font-semibold">{Math.max(0, net)} kr</p>
-          </div>
-          <div className="text-right">
-            <p className="text-sm text-muted-foreground">Budget</p>
-            <AmountField value={total} onSave={(n) => setTotal(period, n)} />
-          </div>
+        <div
+          className="flex bg-secondary/50 p-1 rounded-xl"
+          role="tablist"
+          aria-label="Budgetperiod"
+        >
+          {PERIODS.map((p) => (
+            <button
+              key={p.key}
+              type="button"
+              role="tab"
+              aria-selected={period === p.key}
+              onClick={() => setPeriod(p.key)}
+              className={`flex-1 py-2 px-4 rounded-lg font-medium transition-all ${
+                period === p.key
+                  ? "bg-background shadow-sm text-foreground"
+                  : "text-muted-foreground"
+              }`}
+            >
+              {p.label}
+            </button>
+          ))}
         </div>
 
-        <Bar spent={Math.max(0, net)} budget={total ?? 0} />
-
-        <div className="grid grid-cols-3 gap-2 text-center">
-          <div className="rounded-xl bg-secondary/50 py-2">
-            <p className="text-xs text-muted-foreground">Utgifter</p>
-            <p className="text-sm font-semibold">-{spent} kr</p>
-          </div>
-          <div className="rounded-xl bg-secondary/50 py-2">
-            <p className="text-xs text-muted-foreground">Inkomster</p>
-            <p className="text-sm font-semibold text-primary">+{income} kr</p>
-          </div>
-          <div className="rounded-xl bg-secondary/50 py-2">
-            <p className="text-xs text-muted-foreground">Netto</p>
-            <p className="text-sm font-semibold">{net > 0 ? `-${net}` : `+${Math.abs(net)}`} kr</p>
-          </div>
-        </div>
-
-        {total ? (
-          <p className={`text-sm ${left! < 0 ? "text-destructive font-medium" : "text-muted-foreground"}`}>
-            {left! < 0
-              ? `Du är ${Math.abs(left!)} kr över budgeten. Inget drama – justera resten av perioden.`
-              : `${left} kr kvar${period !== "day" ? ` • ca ${perDay} kr/dag i ${daysLeft} dagar` : ""}.`}
-          </p>
-        ) : (
-          <p className="text-sm text-muted-foreground">Tryck på ”Ingen budget” för att sätta en ram.</p>
-        )}
-        <p className="text-xs text-muted-foreground">
-          Uppdateras automatiskt från dina transaktioner ({txCount} {periodLabel}). Inkomster i perioden räknas av mot förbrukningen.
-        </p>
-      </div>
-
-
-      <div className="space-y-4 pt-2">
-        <h3 className="text-sm font-medium text-muted-foreground">Per kategori</h3>
-        {categories.map((cat) => {
-          const catBudget = budget.categories[cat]?.[period];
-          const catSpent = spentByCategory[cat] ?? 0;
-          return (
-            <div key={cat} className="space-y-2">
-              <div className="flex items-center justify-between gap-4">
-                <span className="font-medium">{cat}</span>
-                <div className="flex items-center gap-3">
-                  <span className="text-sm text-muted-foreground">
-                    {catSpent} kr{catBudget ? ` / ${catBudget} kr` : ""}
-                  </span>
-                  <AmountField
-                    value={catBudget}
-                    onSave={(n) => setCategory(cat, period, n)}
-                    placeholder="Sätt"
-                  />
-                </div>
-              </div>
-              <Bar spent={catSpent} budget={catBudget ?? 0} />
+        <div className="space-y-3">
+          <div className="flex items-end justify-between gap-4">
+            <div>
+              <p className="text-sm text-muted-foreground">Förbrukat {periodLabel}</p>
+              <p className="text-2xl font-semibold">{Math.max(0, net)} kr</p>
             </div>
-          );
-        })}
-      </div>
+            <div className="text-right">
+              <p className="text-sm text-muted-foreground">Budget</p>
+              <AmountField value={total} onSave={(n) => setTotal(period, n)} />
+            </div>
+          </div>
+
+          <Bar spent={Math.max(0, net)} budget={total ?? 0} />
+
+          <div className="grid grid-cols-3 gap-2 text-center">
+            <div className="rounded-xl bg-secondary/50 py-2">
+              <p className="text-xs text-muted-foreground">Utgifter</p>
+              <p className="text-sm font-semibold">-{spent} kr</p>
+            </div>
+            <div className="rounded-xl bg-secondary/50 py-2">
+              <p className="text-xs text-muted-foreground">Inkomster</p>
+              <p className="text-sm font-semibold text-primary">+{income} kr</p>
+            </div>
+            <div className="rounded-xl bg-secondary/50 py-2">
+              <p className="text-xs text-muted-foreground">Netto</p>
+              <p className="text-sm font-semibold">
+                {net > 0 ? `-${net}` : `+${Math.abs(net)}`} kr
+              </p>
+            </div>
+          </div>
+
+          {total ? (
+            <p
+              className={`text-sm ${left! < 0 ? "text-destructive font-medium" : "text-muted-foreground"}`}
+            >
+              {left! < 0
+                ? `Du är ${Math.abs(left!)} kr över budgeten. Inget drama – justera resten av perioden.`
+                : `${left} kr kvar${period !== "day" ? ` • ca ${perDay} kr/dag i ${daysLeft} dagar` : ""}.`}
+            </p>
+          ) : (
+            <p className="text-sm text-muted-foreground">
+              Tryck på ”Ingen budget” för att sätta en ram.
+            </p>
+          )}
+          <p className="text-xs text-muted-foreground">
+            Uppdateras automatiskt från dina transaktioner ({txCount} {periodLabel}). Inkomster i
+            perioden räknas av mot förbrukningen.
+          </p>
+        </div>
+
+        <div className="space-y-4 pt-2">
+          <h3 className="text-sm font-medium text-muted-foreground">Per kategori</h3>
+          {categories.map((cat) => {
+            const catBudget = budget.categories[cat]?.[period];
+            const catSpent = spentByCategory[cat] ?? 0;
+            return (
+              <div key={cat} className="space-y-2">
+                <div className="flex items-center justify-between gap-4">
+                  <span className="font-medium">{cat}</span>
+                  <div className="flex items-center gap-3">
+                    <span className="text-sm text-muted-foreground">
+                      {catSpent} kr{catBudget ? ` / ${catBudget} kr` : ""}
+                    </span>
+                    <AmountField
+                      value={catBudget}
+                      onSave={(n) => setCategory(cat, period, n)}
+                      placeholder="Sätt"
+                    />
+                  </div>
+                </div>
+                <Bar spent={catSpent} budget={catBudget ?? 0} />
+              </div>
+            );
+          })}
+        </div>
       </CollapsibleSection>
     </section>
   );

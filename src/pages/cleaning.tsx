@@ -22,7 +22,10 @@ import CollapsibleSection from "@/components/collapsible-section";
 const todayIso = () => new Date().toISOString().slice(0, 10);
 
 export default function CleaningPage() {
-  const [done, setDone] = useCloudSyncedStorage<Record<string, string>>("myflove-cleaning-done", {});
+  const [done, setDone] = useCloudSyncedStorage<Record<string, string>>(
+    "myflove-cleaning-done",
+    {},
+  );
   const [roomId, setRoomId] = useState(CLEAN_ROOMS[0]!.id);
   const [mode, setMode] = useState<CleanMode>("vardag");
   const { toast } = useToast();
@@ -34,7 +37,10 @@ export default function CleaningPage() {
 
   const completed = steps.filter((s) => isDone(s.id));
   const remaining = steps.filter((s) => !isDone(s.id));
-  const supplies = useMemo(() => suppliesFor(remaining.length ? remaining : steps), [remaining, steps]);
+  const supplies = useMemo(
+    () => suppliesFor(remaining.length ? remaining : steps),
+    [remaining, steps],
+  );
   const minutesLeft = totalMinutes(remaining);
   const pct = steps.length ? Math.round((completed.length / steps.length) * 100) : 0;
   const tint = (a: number) => `hsl(${room.hue} / ${a})`;
@@ -83,7 +89,9 @@ export default function CleaningPage() {
               onClick={() => setMode(m)}
               aria-pressed={mode === m}
               className={`rounded-2xl border p-4 text-left transition ${
-                mode === m ? "border-primary bg-primary/10" : "border-border bg-card hover:bg-accent/40"
+                mode === m
+                  ? "border-primary bg-primary/10"
+                  : "border-border bg-card hover:bg-accent/40"
               }`}
             >
               <div className="font-semibold text-foreground">{CLEAN_MODE_LABEL[m]}</div>
@@ -104,7 +112,11 @@ export default function CleaningPage() {
                 className="rounded-full border px-4 py-2 text-sm font-medium transition"
                 style={
                   active
-                    ? { color: `hsl(${r.hue})`, backgroundColor: `hsl(${r.hue} / 0.14)`, borderColor: `hsl(${r.hue} / 0.4)` }
+                    ? {
+                        color: `hsl(${r.hue})`,
+                        backgroundColor: `hsl(${r.hue} / 0.14)`,
+                        borderColor: `hsl(${r.hue} / 0.4)`,
+                      }
                     : { borderColor: `hsl(${r.hue} / 0.3)` }
                 }
               >
@@ -133,10 +145,14 @@ export default function CleaningPage() {
           >
             <p className="flex items-center gap-1.5 text-sm text-muted-foreground -mt-2">
               <Clock className="h-4 w-4" />
-              {minutesLeft > 0 ? `Ca ${minutesLeft} min kvar` : "Allt avklarat"} · {completed.length}/{steps.length} klart
+              {minutesLeft > 0 ? `Ca ${minutesLeft} min kvar` : "Allt avklarat"} ·{" "}
+              {completed.length}/{steps.length} klart
             </p>
             <div className="mt-4 h-2 w-full overflow-hidden rounded-full bg-muted">
-              <div className="h-full rounded-full transition-all" style={{ width: `${pct}%`, backgroundColor: `hsl(${room.hue})` }} />
+              <div
+                className="h-full rounded-full transition-all"
+                style={{ width: `${pct}%`, backgroundColor: `hsl(${room.hue})` }}
+              />
             </div>
           </CollapsibleSection>
         </section>
@@ -157,13 +173,17 @@ export default function CleaningPage() {
                   className="mt-0.5"
                 />
                 <div className="min-w-0 flex-1">
-                  <div className={`font-medium text-foreground ${checked ? "line-through" : ""}`}>{s.label}</div>
+                  <div className={`font-medium text-foreground ${checked ? "line-through" : ""}`}>
+                    {s.label}
+                  </div>
                   <div className="mt-0.5 text-xs text-muted-foreground">
                     {s.minutes} min
                     {s.needs.length > 0 && ` · ${s.needs.join(", ")}`}
                   </div>
                   {checked && done[key(s.id)] && (
-                    <div className="mt-1 text-[11px] text-muted-foreground">Klart {done[key(s.id)]}</div>
+                    <div className="mt-1 text-[11px] text-muted-foreground">
+                      Klart {done[key(s.id)]}
+                    </div>
                   )}
                 </div>
               </li>
@@ -174,7 +194,12 @@ export default function CleaningPage() {
         {/* Vad du behöver */}
         <section className="rounded-3xl border border-border bg-card p-5">
           <CollapsibleSection
-            title={<span className="flex items-center gap-2"><ShoppingBasket className="h-5 w-5 text-primary" />Det här behöver du</span>}
+            title={
+              <span className="flex items-center gap-2">
+                <ShoppingBasket className="h-5 w-5 text-primary" />
+                Det här behöver du
+              </span>
+            }
             id="Det här behöver du"
             help="Grejer som behövs för dagens städning. Saknas något kan du lägga det på inköpslistan."
             headingClassName="font-display text-lg font-bold"
@@ -184,7 +209,10 @@ export default function CleaningPage() {
             ) : (
               <ul className="flex flex-wrap gap-2">
                 {supplies.map((item) => (
-                  <li key={item} className="rounded-full border border-border bg-background px-3 py-1.5 text-sm text-foreground">
+                  <li
+                    key={item}
+                    className="rounded-full border border-border bg-background px-3 py-1.5 text-sm text-foreground"
+                  >
                     {item}
                   </li>
                 ))}

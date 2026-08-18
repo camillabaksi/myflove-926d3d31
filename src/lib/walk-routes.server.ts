@@ -47,7 +47,16 @@ export function bearingDeg(aLat: number, aLon: number, bLat: number, bLon: numbe
 
 export function bearingLabel(aLat: number, aLon: number, bLat: number, bLon: number): string {
   const deg = bearingDeg(aLat, aLon, bLat, bLon);
-  const dirs = ["norrut", "nordost", "österut", "sydost", "söderut", "sydväst", "västerut", "nordväst"];
+  const dirs = [
+    "norrut",
+    "nordost",
+    "österut",
+    "sydost",
+    "söderut",
+    "sydväst",
+    "västerut",
+    "nordväst",
+  ];
   return dirs[Math.round(deg / 45) % 8];
 }
 
@@ -95,7 +104,11 @@ out center 50;`;
   try {
     const res = await fetch("https://overpass-api.de/api/interpreter", {
       method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded", Accept: "*/*", "User-Agent": "MyFlove/1.0" },
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Accept: "*/*",
+        "User-Agent": "MyFlove/1.0",
+      },
       body: `data=${encodeURIComponent(query)}`,
     });
     if (res.ok) {
@@ -160,14 +173,14 @@ out center 50;`;
   }
 
   // Pick one good candidate per compass direction, closest to the ideal one-way distance.
-  const buckets = new Map<number, typeof raw[0][]>();
+  const buckets = new Map<number, (typeof raw)[0][]>();
   for (const r of raw) {
     const idx = Math.round(r.bearingDeg / 45) % 8;
     if (!buckets.has(idx)) buckets.set(idx, []);
     buckets.get(idx)!.push(r);
   }
 
-  const selected: typeof raw[0][] = [];
+  const selected: (typeof raw)[0][] = [];
   for (let i = 0; i < 8; i++) {
     const list = buckets.get(i);
     if (!list || list.length === 0) continue;
@@ -176,14 +189,18 @@ out center 50;`;
   }
   selected.sort((a, b) => a.bearingDeg - b.bearingDeg);
 
-  const candidates: WalkRoute[] = selected.map(({ legKm: _legKm, bearingDeg: _bearingDeg, ...rest }) => rest);
+  const candidates: WalkRoute[] = selected.map(
+    ({ legKm: _legKm, bearingDeg: _bearingDeg, ...rest }) => rest,
+  );
 
   // Optional elevation data via Open-Meteo.
   if (candidates.length > 0) {
     try {
       const lats = [input.lat, ...candidates.map((c) => c.lat)].join(",");
       const lons = [input.lon, ...candidates.map((c) => c.lon)].join(",");
-      const elevRes = await fetch(`https://api.open-meteo.com/v1/elevation?latitude=${lats}&longitude=${lons}`);
+      const elevRes = await fetch(
+        `https://api.open-meteo.com/v1/elevation?latitude=${lats}&longitude=${lons}`,
+      );
       if (elevRes.ok) {
         const json = (await elevRes.json()) as { elevation?: number[] };
         const elev = json.elevation ?? [];

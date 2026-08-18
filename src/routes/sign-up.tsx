@@ -7,7 +7,6 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { withBackendRecovery, isBackendAsleepError } from "@/lib/backend-wake";
 
-
 export const Route = createFileRoute("/sign-up")({
   ssr: false,
   head: () => ({
@@ -47,7 +46,6 @@ function SignUpPage() {
   const [loading, setLoading] = useState(false);
   const [consent, setConsent] = useState(false);
   const [waking, setWaking] = useState(false);
-
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -96,11 +94,24 @@ function SignUpPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email">E-post</Label>
-            <Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+            <Input
+              id="email"
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </div>
           <div className="space-y-2">
             <Label htmlFor="password">Lösenord</Label>
-            <Input id="password" type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} />
+            <Input
+              id="password"
+              type="password"
+              required
+              minLength={6}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </div>
           <label className="flex items-start gap-2 text-sm text-muted-foreground">
             <input
@@ -111,11 +122,19 @@ function SignUpPage() {
             />
             <span>
               Jag godkänner{" "}
-              <Link to="/villkor" className="text-primary underline underline-offset-4" target="_blank">
+              <Link
+                to="/villkor"
+                className="text-primary underline underline-offset-4"
+                target="_blank"
+              >
                 användarvillkoren
               </Link>{" "}
               och{" "}
-              <Link to="/integritet" className="text-primary underline underline-offset-4" target="_blank">
+              <Link
+                to="/integritet"
+                className="text-primary underline underline-offset-4"
+                target="_blank"
+              >
                 integritetspolicyn
               </Link>
               .
@@ -127,7 +146,11 @@ function SignUpPage() {
         </form>
         <p className="mt-6 text-center text-sm text-muted-foreground">
           Har du redan ett konto?{" "}
-          <Link to="/sign-in" search={{ next }} className="text-primary underline underline-offset-4">
+          <Link
+            to="/sign-in"
+            search={{ next }}
+            className="text-primary underline underline-offset-4"
+          >
             Logga in
           </Link>
         </p>

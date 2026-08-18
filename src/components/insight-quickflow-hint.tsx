@@ -24,9 +24,7 @@ export function InsightQuickflowHint() {
 
   const candidate = useMemo(
     () =>
-      openItems.find(
-        (i) => !dismissed.includes(i.id) && detectPreparationIntent(i.text) !== null,
-      ),
+      openItems.find((i) => !dismissed.includes(i.id) && detectPreparationIntent(i.text) !== null),
     [openItems, dismissed],
   );
 
@@ -75,8 +73,12 @@ export function InsightQuickflowHint() {
           <ul className="space-y-1 text-sm text-muted-foreground">
             {plan.map((p, i) => (
               <li key={i}>
-                {p.offsetDays === -2 ? "2 dagar innan" : p.offsetDays === -1 ? "Kvällen innan" : "Samma dag"} ·{" "}
-                {p.when} – {p.text}
+                {p.offsetDays === -2
+                  ? "2 dagar innan"
+                  : p.offsetDays === -1
+                    ? "Kvällen innan"
+                    : "Samma dag"}{" "}
+                · {p.when} – {p.text}
               </li>
             ))}
           </ul>
@@ -90,7 +92,11 @@ export function InsightQuickflowHint() {
           </div>
         </div>
       ) : (
-        <Button variant="secondary" className="rounded-full" onClick={() => setPlanFor(candidate.id)}>
+        <Button
+          variant="secondary"
+          className="rounded-full"
+          onClick={() => setPlanFor(candidate.id)}
+        >
           Skapa plan
         </Button>
       )}

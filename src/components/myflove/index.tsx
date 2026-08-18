@@ -77,7 +77,6 @@ const TONE_BG: Record<MyFloveTone, string> = {
   plain: "bg-muted text-ink",
 };
 
-
 export function MyFloveIcon({
   icon: Icon,
   tone = "lavender",
@@ -104,9 +103,12 @@ export function MyFloveIcon({
     >
       <Icon size={px} strokeWidth={2.2} />
       {emoji && (
-        <MyFloveEmoji emoji={emoji} size="xs" className="absolute -right-1.5 -top-1.5 drop-shadow-sm" />
+        <MyFloveEmoji
+          emoji={emoji}
+          size="xs"
+          className="absolute -right-1.5 -top-1.5 drop-shadow-sm"
+        />
       )}
-
     </span>
   );
 }
@@ -133,7 +135,12 @@ type ButtonBaseProps = {
   children?: React.ReactNode;
 };
 
-function buttonClasses({ variant = "primary", size = "md", fullWidth, className }: ButtonBaseProps) {
+function buttonClasses({
+  variant = "primary",
+  size = "md",
+  fullWidth,
+  className,
+}: ButtonBaseProps) {
   return cn(
     "press inline-flex items-center justify-center gap-2 rounded-pill font-semibold transition-colors disabled:opacity-50 disabled:pointer-events-none",
     "text-center leading-tight text-balance break-words [&_svg]:shrink-0",
@@ -223,7 +230,12 @@ export function MyFloveSection({
     <section className={cn("space-y-3", className)}>
       <div className="flex items-start justify-between gap-3">
         <div className="flex min-w-0 items-start gap-2">
-          <MyFloveEmoji {...(emoji ? { emoji } : {})} {...(emojiKey ? { name: emojiKey } : {})} size="sm" className="mt-0.5" />
+          <MyFloveEmoji
+            {...(emoji ? { emoji } : {})}
+            {...(emojiKey ? { name: emojiKey } : {})}
+            size="sm"
+            className="mt-0.5"
+          />
           <div className="min-w-0">
             <h2 className="font-display text-lg font-bold leading-tight text-ink">{title}</h2>
             {description && <p className="text-sm text-muted-foreground">{description}</p>}
@@ -259,7 +271,6 @@ export function MyFloveHeader({
   children?: React.ReactNode;
   className?: string;
 }) {
-
   return (
     <header
       className={cn("rounded-3xl border border-border/60 p-5 shadow-soft page-enter", className)}
@@ -315,7 +326,9 @@ export function MyFloveChip({
       className={cn(
         "press inline-flex min-h-9 max-w-full items-center justify-center gap-1.5 rounded-pill px-4 py-1.5 text-sm font-semibold leading-tight transition-colors",
         "[&_svg]:shrink-0",
-        active ? "bg-primary text-primary-foreground shadow-soft" : "bg-lavender text-ink hover:bg-lavender/70",
+        active
+          ? "bg-primary text-primary-foreground shadow-soft"
+          : "bg-lavender text-ink hover:bg-lavender/70",
         className,
       )}
       {...rest}
@@ -357,14 +370,19 @@ export function MyFloveEmptyState({
   );
 }
 
-export function MyFloveLoading({ label = "En sekund...", className }: { label?: string; className?: string }) {
+export function MyFloveLoading({
+  label = "En sekund...",
+  className,
+}: {
+  label?: string;
+  className?: string;
+}) {
   return (
     <div className={cn("flex flex-col items-center gap-2 py-10 text-center", className)}>
       <MyFloveEmoji emoji="💜" size="lg" motion="breathe" />
       <p className="text-sm text-muted-foreground">{label}</p>
     </div>
   );
-
 }
 
 export function MyFloveSkeleton({ className }: { className?: string }) {

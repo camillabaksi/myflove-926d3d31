@@ -16,33 +16,105 @@ export interface ParsedThought {
 }
 
 const SHOPPING_KEYWORDS = [
-  "köpa", "handla", "inköp", "affären", "mataffären", "ica", "coop", "willys",
-  "mjölk", "bröd", "ägg", "grönsaker", "kaffe", "tvättmedel", "hushållspapper",
+  "köpa",
+  "handla",
+  "inköp",
+  "affären",
+  "mataffären",
+  "ica",
+  "coop",
+  "willys",
+  "mjölk",
+  "bröd",
+  "ägg",
+  "grönsaker",
+  "kaffe",
+  "tvättmedel",
+  "hushållspapper",
 ];
 
 const IDEA_KEYWORDS = [
-  "tänker på", "tänkte på", "fundera", "funderar", "kanske", "skulle vara kul",
-  "idé", "idea", "undra", "önskar", "vore najs", "vore skönt",
+  "tänker på",
+  "tänkte på",
+  "fundera",
+  "funderar",
+  "kanske",
+  "skulle vara kul",
+  "idé",
+  "idea",
+  "undra",
+  "önskar",
+  "vore najs",
+  "vore skönt",
 ];
 
 const TASK_KEYWORDS = [
-  "ringa", "boka", "betala", "fixa", "mejla", "maila", "skicka", "lämna", "hämta",
-  "städa", "diska", "tvätta", "laga", "göra", "behöver", "måste", "ska", "påminn",
+  "ringa",
+  "boka",
+  "betala",
+  "fixa",
+  "mejla",
+  "maila",
+  "skicka",
+  "lämna",
+  "hämta",
+  "städa",
+  "diska",
+  "tvätta",
+  "laga",
+  "göra",
+  "behöver",
+  "måste",
+  "ska",
+  "påminn",
 ];
 
 const MOOD_KEYWORDS = [
-  "känner mig", "känns", "mår", "mående", "orkar inte", "orolig", "stressad",
-  "trött", "ledsen", "nedstämd", "glad", "peppad", "taggad", "nöjd", "överväldigad",
-  "ångest", "irriterad", "less",
+  "känner mig",
+  "känns",
+  "mår",
+  "mående",
+  "orkar inte",
+  "orolig",
+  "stressad",
+  "trött",
+  "ledsen",
+  "nedstämd",
+  "glad",
+  "peppad",
+  "taggad",
+  "nöjd",
+  "överväldigad",
+  "ångest",
+  "irriterad",
+  "less",
 ];
 
 const NEGATIVE_MOOD_WORDS = [
-  "trött", "ledsen", "nedstämd", "orolig", "stressad", "orkar inte", "överväldigad",
-  "ångest", "irriterad", "less", "dålig", "hopplös",
+  "trött",
+  "ledsen",
+  "nedstämd",
+  "orolig",
+  "stressad",
+  "orkar inte",
+  "överväldigad",
+  "ångest",
+  "irriterad",
+  "less",
+  "dålig",
+  "hopplös",
 ];
 
 const POSITIVE_MOOD_WORDS = [
-  "glad", "peppad", "taggad", "nöjd", "pigg", "stark", "bra", "toppen", "lugn",
+  "glad",
+  "peppad",
+  "taggad",
+  "nöjd",
+  "pigg",
+  "stark",
+  "bra",
+  "toppen",
+  "lugn",
 ];
 
 const WEEKDAYS = ["söndag", "måndag", "tisdag", "onsdag", "torsdag", "fredag", "lördag"];
@@ -103,7 +175,7 @@ function resolveTime(lower: string): string | undefined {
 
 const HAS_DATE_SIGNAL = new RegExp(
   `\\b(idag|imorgon|i morgon|övermorgon|nästa vecka|${WEEKDAYS.join("|")})\\b`,
-  "i"
+  "i",
 );
 const HAS_TIME_SIGNAL = /(\d{1,2}[:.]\d{2})|\bkl\.?\s?\d{1,2}\b|\bklockan\s?\d{1,2}\b/i;
 
@@ -148,19 +220,26 @@ function categorize(text: string): {
 
 // Connector words people use when they string several distinct things together
 // in one breath while talking or typing quickly, without proper punctuation.
-const LIST_CONNECTORS = /\s+(?:och sedan|och sen|och sedan även|sedan|sen|också|dessutom|därefter|efter det)\s+/gi;
+const LIST_CONNECTORS =
+  /\s+(?:och sedan|och sen|och sedan även|sedan|sen|också|dessutom|därefter|efter det)\s+/gi;
 
 const TRIGGER_WORDS = [...TASK_KEYWORDS, ...SHOPPING_KEYWORDS, ...MOOD_KEYWORDS, "och"];
 
 function splitOnConnectors(text: string): string[] {
-  const parts = text.split(LIST_CONNECTORS).map((s) => s.trim()).filter(Boolean);
+  const parts = text
+    .split(LIST_CONNECTORS)
+    .map((s) => s.trim())
+    .filter(Boolean);
   if (parts.length > 1 && parts.every((p) => p.length > 2)) return parts;
   return [text];
 }
 
 function splitOnCommaList(text: string): string[] {
   if (!text.includes(",")) return [text];
-  const segments = text.split(",").map((s) => s.trim()).filter(Boolean);
+  const segments = text
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
   if (segments.length < 2) return [text];
 
   // Only split on commas when at least one later segment starts with a
@@ -180,7 +259,12 @@ export function splitIntoThoughts(raw: string): string[] {
     .flatMap((line) => line.split(/(?<=[.!?])\s+(?=\S)/))
     .flatMap(splitOnConnectors)
     .flatMap(splitOnCommaList)
-    .map((t) => t.replace(/^[-*•]\s*/, "").replace(/[.,;]+$/, "").trim())
+    .map((t) =>
+      t
+        .replace(/^[-*•]\s*/, "")
+        .replace(/[.,;]+$/, "")
+        .trim(),
+    )
     .filter((t) => t.length > 1);
 
   return byLine;

@@ -8,7 +8,12 @@ const ORDER: { step: string; why: string; time: string; delay: number }[] = [
   { step: "Starta tvättmaskinen", why: "Går själv medan du gör annat.", time: "0 min", delay: 40 },
   { step: "Starta robotdammsugaren", why: "Städar medan du duschar.", time: "1 min", delay: 60 },
   { step: "Duscha", why: "Lugn stund. Ingen väntar på dig.", time: "5 min", delay: 80 },
-  { step: "Laga middag", why: "Tvätten färdig snart – hänger efter maten.", time: "25 min", delay: 100 },
+  {
+    step: "Laga middag",
+    why: "Tvätten färdig snart – hänger efter maten.",
+    time: "25 min",
+    delay: 100,
+  },
 ];
 
 const Chip: React.FC<{ text: string; delay: number }> = ({ text, delay }) => {
@@ -110,10 +115,15 @@ export const SceneFlowPlan: React.FC = () => {
           }}
         />
       </AbsoluteFill>
-      <AbsoluteFill style={{ padding: "60px 70px", display: "flex", flexDirection: "row", gap: 50 }}>
+      <AbsoluteFill
+        style={{ padding: "60px 70px", display: "flex", flexDirection: "row", gap: 50 }}
+      >
         <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 20 }}>
           <SectionEyebrow delay={0}>FlowPlan™</SectionEyebrow>
-          <SectionTitle delay={4}>Rätt sak,<br />i rätt ordning.</SectionTitle>
+          <SectionTitle delay={4}>
+            Rätt sak,
+            <br />i rätt ordning.
+          </SectionTitle>
           <div
             style={{
               fontFamily: FONTS.body,
@@ -123,7 +133,8 @@ export const SceneFlowPlan: React.FC = () => {
               maxWidth: 400,
             }}
           >
-            Du säger vad som ska göras. Flow räknar ut den mest effektiva ordningen – och förklarar varför.
+            Du säger vad som ska göras. Flow räknar ut den mest effektiva ordningen – och förklarar
+            varför.
           </div>
           <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 10 }}>
             <div
@@ -144,7 +155,15 @@ export const SceneFlowPlan: React.FC = () => {
             </div>
           </div>
         </div>
-        <div style={{ flex: 1.1, display: "flex", flexDirection: "column", gap: 10, justifyContent: "center" }}>
+        <div
+          style={{
+            flex: 1.1,
+            display: "flex",
+            flexDirection: "column",
+            gap: 10,
+            justifyContent: "center",
+          }}
+        >
           <div
             style={{
               fontFamily: FONTS.body,

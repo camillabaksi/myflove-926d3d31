@@ -38,7 +38,9 @@ export function useShoppingProximityAlerts() {
   const dismissedRef = useRef<Set<string>>(new Set());
 
   const activeStores = savedStores.filter((s) => s.alertEnabled);
-  const storesKey = activeStores.map((s) => `${s.id}:${s.lat}:${s.lon}:${s.alertRadiusMeters ?? DEFAULT_STORE_RADIUS_METERS}`).join("|");
+  const storesKey = activeStores
+    .map((s) => `${s.id}:${s.lat}:${s.lon}:${s.alertRadiusMeters ?? DEFAULT_STORE_RADIUS_METERS}`)
+    .join("|");
   const hasItemsLeft = activeItems.length > 0;
 
   useEffect(() => {
@@ -70,7 +72,11 @@ export function useShoppingProximityAlerts() {
                     tag: dedupeKey,
                   });
                 }
-                nearby.push({ storeId: store.id, storeName: store.name, distanceMeters: Math.round(distance) });
+                nearby.push({
+                  storeId: store.id,
+                  storeName: store.name,
+                  distanceMeters: Math.round(distance),
+                });
               }
             }
           });

@@ -59,6 +59,7 @@ export const chatWithFlow = createServerFn({ method: "POST" })
     const json = (await res.json()) as {
       choices?: Array<{ message?: { content?: string } }>;
     };
-    const reply = json.choices?.[0]?.message?.content ?? "Jag hittar inga ord just nu. Kan du säga det igen?";
+    const reply =
+      json.choices?.[0]?.message?.content ?? "Jag hittar inga ord just nu. Kan du säga det igen?";
     return { reply };
   });

@@ -28,11 +28,23 @@ const TYPE_ALIASES: Record<string, "styrka" | "kondition" | "rörlighet" | "vila
   aterhamtning: "vila",
 };
 
-const SessionTypeSchema = z.preprocess((value) => {
-  if (typeof value !== "string") return value;
-  const key = value.trim().toLowerCase();
-  return TYPE_ALIASES[key] ?? (key.includes("vila") ? "vila" : key.includes("rörl") ? "rörlighet" : key.includes("kond") ? "kondition" : "styrka");
-}, z.enum(["styrka", "kondition", "rörlighet", "vila"]));
+const SessionTypeSchema = z.preprocess(
+  (value) => {
+    if (typeof value !== "string") return value;
+    const key = value.trim().toLowerCase();
+    return (
+      TYPE_ALIASES[key] ??
+      (key.includes("vila")
+        ? "vila"
+        : key.includes("rörl")
+          ? "rörlighet"
+          : key.includes("kond")
+            ? "kondition"
+            : "styrka")
+    );
+  },
+  z.enum(["styrka", "kondition", "rörlighet", "vila"]),
+);
 
 const OutputSchema = z.object({
   intro: z.string(),
@@ -88,7 +100,7 @@ export const generateTrainingProgram = createServerFn({ method: "POST" })
       data.equipment ? `Utrustning: ${data.equipment}` : null,
       data.limitations ? `Begränsningar: ${data.limitations}` : null,
       "",
-      'Returnera JSON: { intro, weeks, sessions: [{ day, title, type, minutes, exercises: [] }], stepGoal, note }.',
+      "Returnera JSON: { intro, weeks, sessions: [{ day, title, type, minutes, exercises: [] }], stepGoal, note }.",
     ]
       .filter(Boolean)
       .join("\n");

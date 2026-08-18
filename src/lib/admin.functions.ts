@@ -46,15 +46,15 @@ export const listAllFrictionItemsFn = createServerFn({ method: "GET" })
       .limit(500);
     if (error) throw new Error(error.message);
 
-    const { data: votes } = await supabaseAdmin
-      .from("friction_votes")
-      .select("item_id");
+    const { data: votes } = await supabaseAdmin.from("friction_votes").select("item_id");
     const voteCounts = new Map<string, number>();
     for (const v of votes ?? []) {
       voteCounts.set(v.item_id, (voteCounts.get(v.item_id) ?? 0) + 1);
     }
 
-    const reporterIds = Array.from(new Set((items ?? []).map((i) => i.reporter_id).filter(Boolean)));
+    const reporterIds = Array.from(
+      new Set((items ?? []).map((i) => i.reporter_id).filter(Boolean)),
+    );
     const emails = new Map<string, string | null>();
     for (const uid of reporterIds) {
       try {
@@ -85,10 +85,12 @@ export const listAllFrictionItemsFn = createServerFn({ method: "GET" })
 export const updateFrictionStatusFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) =>
-    z.object({
-      id: z.string().uuid(),
-      status: z.enum(["open", "planned", "in_progress", "done", "wontfix"]),
-    }).parse(data),
+    z
+      .object({
+        id: z.string().uuid(),
+        status: z.enum(["open", "planned", "in_progress", "done", "wontfix"]),
+      })
+      .parse(data),
   )
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);

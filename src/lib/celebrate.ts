@@ -37,10 +37,21 @@ export function celebrate(origin?: { x: number; y: number }) {
     p.animate(
       [
         { transform: "translate(0,0) rotate(0deg)", opacity: 1 },
-        { transform: `translate(${dx}px, ${dy}px) rotate(${Math.random() * 360}deg)`, opacity: 1, offset: 0.6 },
-        { transform: `translate(${dx * 1.15}px, ${dy + 140}px) rotate(${Math.random() * 540}deg)`, opacity: 0 },
+        {
+          transform: `translate(${dx}px, ${dy}px) rotate(${Math.random() * 360}deg)`,
+          opacity: 1,
+          offset: 0.6,
+        },
+        {
+          transform: `translate(${dx * 1.15}px, ${dy + 140}px) rotate(${Math.random() * 540}deg)`,
+          opacity: 0,
+        },
       ],
-      { duration: 900 + Math.random() * 400, easing: "cubic-bezier(0.2,0.7,0.3,1)", fill: "forwards" }
+      {
+        duration: 900 + Math.random() * 400,
+        easing: "cubic-bezier(0.2,0.7,0.3,1)",
+        fill: "forwards",
+      },
     );
   }
 

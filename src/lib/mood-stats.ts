@@ -28,13 +28,21 @@ export function getWeeklyMoodStats(moods: MoodEntry[]): {
     d.setDate(now.getDate() - i);
     const dateStr = d.toISOString().split("T")[0] as string;
     const dayMoods = moods.filter((m) => toDateString(m.date) === dateStr);
-    const avg = dayMoods.length > 0 ? dayMoods.reduce((sum, m) => sum + m.score, 0) / dayMoods.length : null;
-    days.push({ date: dateStr, label: WEEKDAY_LABELS[d.getDay()] as string, avg, count: dayMoods.length });
+    const avg =
+      dayMoods.length > 0 ? dayMoods.reduce((sum, m) => sum + m.score, 0) / dayMoods.length : null;
+    days.push({
+      date: dateStr,
+      label: WEEKDAY_LABELS[d.getDay()] as string,
+      avg,
+      count: dayMoods.length,
+    });
   }
 
   const weekEntries = days.filter((d) => d.avg !== null);
   const weekAvg =
-    weekEntries.length > 0 ? weekEntries.reduce((sum, d) => sum + (d.avg as number), 0) / weekEntries.length : null;
+    weekEntries.length > 0
+      ? weekEntries.reduce((sum, d) => sum + (d.avg as number), 0) / weekEntries.length
+      : null;
 
   const prevStart = new Date(now);
   prevStart.setDate(now.getDate() - 13);

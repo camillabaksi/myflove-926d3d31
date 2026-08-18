@@ -55,11 +55,19 @@ function NewPasswordPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (password.length < 8) {
-      toast({ title: "För kort lösenord", description: "Använd minst 8 tecken.", variant: "destructive" });
+      toast({
+        title: "För kort lösenord",
+        description: "Använd minst 8 tecken.",
+        variant: "destructive",
+      });
       return;
     }
     if (password !== confirm) {
-      toast({ title: "Lösenorden matchar inte", description: "Skriv samma lösenord i båda fälten.", variant: "destructive" });
+      toast({
+        title: "Lösenorden matchar inte",
+        description: "Skriv samma lösenord i båda fälten.",
+        variant: "destructive",
+      });
       return;
     }
     setLoading(true);
@@ -80,7 +88,8 @@ function NewPasswordPage() {
         {ready && !hasSession ? (
           <>
             <p className="mb-6 text-sm text-muted-foreground">
-              Länken verkar ha gått ut eller redan använts. Begär en ny återställningslänk så fixar vi det.
+              Länken verkar ha gått ut eller redan använts. Begär en ny återställningslänk så fixar
+              vi det.
             </p>
             <Link to="/glomt-losenord">
               <Button className="w-full">Begär ny länk</Button>

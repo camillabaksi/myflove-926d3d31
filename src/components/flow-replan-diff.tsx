@@ -34,7 +34,9 @@ export function FlowReplanDiff({ diff, onClose }: { diff: FlowDiff; onClose: () 
       </div>
 
       <div className="mt-3 flex items-center gap-3 rounded-2xl bg-card p-3">
-        <span className={`font-display text-2xl ${scoreTone(diff.from.score)}`}>{diff.from.score}</span>
+        <span className={`font-display text-2xl ${scoreTone(diff.from.score)}`}>
+          {diff.from.score}
+        </span>
         <span className="text-muted-foreground">→</span>
         <span className={`font-display text-2xl ${scoreTone(diff.to.score)}`}>{diff.to.score}</span>
         <span
@@ -65,7 +67,9 @@ export function FlowReplanDiff({ diff, onClose }: { diff: FlowDiff; onClose: () 
             {diff.signalChanges.map((s) => (
               <li key={s.source}>
                 • {s.source}: {s.label} ({s.from ?? 0} → {s.to ?? 0} p,{" "}
-                <span className={s.delta > 0 ? "text-primary" : s.delta < 0 ? "text-destructive" : ""}>
+                <span
+                  className={s.delta > 0 ? "text-primary" : s.delta < 0 ? "text-destructive" : ""}
+                >
                   {s.delta > 0 ? `+${s.delta}` : s.delta}
                 </span>
                 )
@@ -93,7 +97,9 @@ export function FlowReplanDiff({ diff, onClose }: { diff: FlowDiff; onClose: () 
               </p>
               <ul className="mt-1 space-y-1 text-xs text-muted-foreground">
                 {diff.added.map((t) => (
-                  <li key={t.id}>• {t.title} · {t.minutes} min</li>
+                  <li key={t.id}>
+                    • {t.title} · {t.minutes} min
+                  </li>
                 ))}
               </ul>
             </div>

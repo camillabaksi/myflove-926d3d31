@@ -21,7 +21,11 @@ export default function Stats() {
     trend === "up"
       ? { text: "På väg uppåt jämfört med förra veckan", icon: TrendingUp, color: "text-primary" }
       : trend === "down"
-        ? { text: "Lite lägre än förra veckan — det är okej, allt går i vågor", icon: TrendingDown, color: "text-orange-600" }
+        ? {
+            text: "Lite lägre än förra veckan — det är okej, allt går i vågor",
+            icon: TrendingDown,
+            color: "text-orange-600",
+          }
         : trend === "same"
           ? { text: "Ungefär som förra veckan", icon: Minus, color: "text-muted-foreground" }
           : null;
@@ -41,14 +45,20 @@ export default function Stats() {
         <div className="bg-card p-6 md:p-8 rounded-3xl shadow-sm border border-border space-y-8">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
-              <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">Snitt denna vecka</p>
+              <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">
+                Snitt denna vecka
+              </p>
               <p className="text-3xl font-bold">
                 {weekAvg !== null ? weekAvg.toFixed(1) : "–"}
-                {weekAvg !== null && <span className="text-lg text-muted-foreground font-normal"> / 5</span>}
+                {weekAvg !== null && (
+                  <span className="text-lg text-muted-foreground font-normal"> / 5</span>
+                )}
               </p>
             </div>
             <div>
-              <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">Incheckningar</p>
+              <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">
+                Incheckningar
+              </p>
               <p className="text-3xl font-bold">{checkins}</p>
             </div>
           </div>
@@ -57,8 +67,13 @@ export default function Stats() {
             {days.map((day) => {
               const heightPct = day.avg !== null ? Math.max(10, (day.avg / 5) * 100) : 4;
               return (
-                <div key={day.date} className="flex-1 flex flex-col items-center gap-2 h-full justify-end">
-                  <span className="text-lg">{day.avg !== null ? EMOJI_BY_ROUNDED_SCORE[Math.round(day.avg)] : ""}</span>
+                <div
+                  key={day.date}
+                  className="flex-1 flex flex-col items-center gap-2 h-full justify-end"
+                >
+                  <span className="text-lg">
+                    {day.avg !== null ? EMOJI_BY_ROUNDED_SCORE[Math.round(day.avg)] : ""}
+                  </span>
                   <div
                     className={`w-full rounded-xl transition-all duration-500 ${
                       day.avg !== null ? "bg-primary" : "bg-secondary"
@@ -72,7 +87,9 @@ export default function Stats() {
           </div>
 
           {trendLabel && TrendIcon && (
-            <div className={`flex items-center gap-2 pt-2 border-t border-border ${trendLabel.color}`}>
+            <div
+              className={`flex items-center gap-2 pt-2 border-t border-border ${trendLabel.color}`}
+            >
               <TrendIcon size={18} />
               <p className="text-sm font-medium">{trendLabel.text}</p>
             </div>
@@ -80,7 +97,8 @@ export default function Stats() {
 
           {checkins === 0 && (
             <p className="text-sm text-muted-foreground text-center pt-2 border-t border-border">
-              Ingen data än denna vecka — checka in ditt mående på startsidan för att se din statistik här.
+              Ingen data än denna vecka — checka in ditt mående på startsidan för att se din
+              statistik här.
             </p>
           )}
         </div>

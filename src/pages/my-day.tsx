@@ -43,11 +43,23 @@ export default function MyDay() {
     const list: TimelineEntry[] = [];
     for (const r of activeReminders) {
       if (r.date !== today || !r.time) continue;
-      list.push({ id: `rem-${r.id}`, title: r.title, time: r.time, endTime: r.endTime, emoji: "📅" });
+      list.push({
+        id: `rem-${r.id}`,
+        title: r.title,
+        time: r.time,
+        endTime: r.endTime,
+        emoji: "📅",
+      });
     }
     for (const t of todaysTasks) {
       if (!t.time) continue;
-      list.push({ id: `task-${t.id}`, title: t.title, time: t.time, endTime: t.endTime, emoji: "✅" });
+      list.push({
+        id: `task-${t.id}`,
+        title: t.title,
+        time: t.time,
+        endTime: t.endTime,
+        emoji: "✅",
+      });
     }
     for (const r of routines ?? []) {
       if (!r.enabled || !r.time) continue;
@@ -64,8 +76,6 @@ export default function MyDay() {
     [todaysItems, flow, mode],
   );
   const offerReplan = shouldOfferReplan(flow.score) || chosen;
-
-
 
   return (
     <Layout>
@@ -95,9 +105,7 @@ export default function MyDay() {
             {entries.length > 0 ? (
               <DayTimeline entries={entries} isToday />
             ) : (
-              <p className="text-sm text-muted-foreground">
-                Inget bokat idag. Hela dagen är din.
-              </p>
+              <p className="text-sm text-muted-foreground">Inget bokat idag. Hela dagen är din.</p>
             )}
           </CollapsibleSection>
         </section>
@@ -116,7 +124,6 @@ export default function MyDay() {
           />
         )}
 
-
         <section className="surface-card p-5">
           <CollapsibleSection
             title="Det som får plats idag"
@@ -124,11 +131,11 @@ export default function MyDay() {
             className="space-y-3"
           >
             <p className="text-sm text-muted-foreground">
-              Samlat från hela ditt liv – uppgifter, deadlines, lektioner, barnens dag och
-              tankar du lagt i Quickflow.
+              Samlat från hela ditt liv – uppgifter, deadlines, lektioner, barnens dag och tankar du
+              lagt i Quickflow.
               <HelpHint label="det som får plats">
-                MyFlove väljer utifrån din kapacitet just nu. Det som inte får plats försvinner
-                inte – det ligger kvar under "Resten kan vänta".
+                MyFlove väljer utifrån din kapacitet just nu. Det som inte får plats försvinner inte
+                – det ligger kvar under "Resten kan vänta".
               </HelpHint>
             </p>
             {keep.length === 0 ? (

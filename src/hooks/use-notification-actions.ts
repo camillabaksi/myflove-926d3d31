@@ -19,8 +19,11 @@ import {
 export function useNotificationActions() {
   const { tasks, toggleTask, setTaskTime } = useTasks();
   const { reminders, toggleReminder, updateReminder } = useReminders();
-  const { items: quickflowItems, complete: completeQuickflow, snooze: snoozeQuickflow } =
-    useQuickflow();
+  const {
+    items: quickflowItems,
+    complete: completeQuickflow,
+    snooze: snoozeQuickflow,
+  } = useQuickflow();
 
   // Håll senaste datan i en ref så lyssnaren inte behöver återskapas.
   const stateRef = useRef({
@@ -59,7 +62,12 @@ export function useNotificationActions() {
           if (!task.completed) s.toggleTask(task.id);
           toast.success("Klart ✓", { description: task.title });
         } else {
-          if (task.time) s.setTaskTime(task.id, shiftTime(task.time, SNOOZE_MINUTES), task.reminderMinutesBefore);
+          if (task.time)
+            s.setTaskTime(
+              task.id,
+              shiftTime(task.time, SNOOZE_MINUTES),
+              task.reminderMinutesBefore,
+            );
           toast(`Skjuten ${SNOOZE_MINUTES} min`, { description: task.title });
         }
         return;

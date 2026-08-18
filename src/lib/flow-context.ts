@@ -49,23 +49,55 @@ const PLACES: Record<string, { label: string; prompt: string; area: LifeArea }> 
   "/hem": { label: "Hem", prompt: "Vad är viktigast för mig just nu?", area: "vardag" },
   "/min-dag": { label: "Min dag", prompt: "Hjälp mig göra dagens plan rimlig.", area: "vardag" },
   "/tasks": { label: "Att göra", prompt: "Hjälp mig välja vad jag ska börja med.", area: "vardag" },
-  "/kalender": { label: "Kalendern", prompt: "Hur ser min dag ut och vad hinner jag?", area: "vardag" },
-  "/daglig-rutin": { label: "Daglig rutin", prompt: "Hjälp mig komma igång med rutinen.", area: "vardag" },
+  "/kalender": {
+    label: "Kalendern",
+    prompt: "Hur ser min dag ut och vad hinner jag?",
+    area: "vardag",
+  },
+  "/daglig-rutin": {
+    label: "Daglig rutin",
+    prompt: "Hjälp mig komma igång med rutinen.",
+    area: "vardag",
+  },
   "/studyflow": { label: "Studier", prompt: "Vad borde jag plugga på just nu?", area: "studier" },
-  "/studybuddy": { label: "Studier", prompt: "Hjälp mig plugga på ett lugnt sätt.", area: "studier" },
+  "/studybuddy": {
+    label: "Studier",
+    prompt: "Hjälp mig plugga på ett lugnt sätt.",
+    area: "studier",
+  },
   "/jobb": { label: "Jobb", prompt: "Hjälp mig prioritera på jobbet idag.", area: "jobb" },
   "/workflow": { label: "Jobb", prompt: "Vad tar jag härnäst på jobbet?", area: "jobb" },
-  "/ma-bra": { label: "Må bra", prompt: "Jag känner så här idag – vad är rimligt?", area: "vardag" },
+  "/ma-bra": {
+    label: "Må bra",
+    prompt: "Jag känner så här idag – vad är rimligt?",
+    area: "vardag",
+  },
   "/traning": { label: "Träning", prompt: "Vad orkar jag röra på mig idag?", area: "vardag" },
   "/shopping": { label: "Inköp", prompt: "Hjälp mig få ordning på inköpen.", area: "privat" },
   "/matlista": { label: "Matlista", prompt: "Hjälp mig planera maten enkelt.", area: "privat" },
-  "/stadning": { label: "Städning", prompt: "Vad är minsta möjliga hemmafix idag?", area: "privat" },
-  "/finances": { label: "Ekonomi", prompt: "Hjälp mig få koll på pengarna utan stress.", area: "privat" },
+  "/stadning": {
+    label: "Städning",
+    prompt: "Vad är minsta möjliga hemmafix idag?",
+    area: "privat",
+  },
+  "/finances": {
+    label: "Ekonomi",
+    prompt: "Hjälp mig få koll på pengarna utan stress.",
+    area: "privat",
+  },
   "/familj": { label: "Familj", prompt: "Hur får vi ihop familjens dag?", area: "privat" },
   "/relationer": { label: "Relationer", prompt: "Vem vill jag ge lite tid idag?", area: "privat" },
   "/barn": { label: "Barn", prompt: "Hjälp mig med barnens dag.", area: "privat" },
-  "/quickflow": { label: "QuickFlow", prompt: "Hjälp mig sortera det jag skrivit ner.", area: "vardag" },
-  "/flowscore": { label: "FlowScore", prompt: "Vad är rimligt med den ork jag har?", area: "vardag" },
+  "/quickflow": {
+    label: "QuickFlow",
+    prompt: "Hjälp mig sortera det jag skrivit ner.",
+    area: "vardag",
+  },
+  "/flowscore": {
+    label: "FlowScore",
+    prompt: "Vad är rimligt med den ork jag har?",
+    area: "vardag",
+  },
 };
 
 const KEY = "myflove-flow-place";

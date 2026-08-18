@@ -3,9 +3,14 @@ import { AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate, spring } fr
 import { loadFont as loadJakarta } from "@remotion/google-fonts/PlusJakartaSans";
 import { loadFont as loadInter } from "@remotion/google-fonts/Inter";
 
-const { fontFamily: display } = loadJakarta("normal", { weights: ["600", "700", "800"], subsets: ["latin"] });
-const { fontFamily: body } = loadInter("normal", { weights: ["400", "500", "600"], subsets: ["latin"] });
-
+const { fontFamily: display } = loadJakarta("normal", {
+  weights: ["600", "700", "800"],
+  subsets: ["latin"],
+});
+const { fontFamily: body } = loadInter("normal", {
+  weights: ["400", "500", "600"],
+  subsets: ["latin"],
+});
 
 export const COLORS = {
   bg: "#F7F3FE",
@@ -20,7 +25,6 @@ export const COLORS = {
   studies: "#8B6FE8",
   work: "#5B72C9",
 };
-
 
 export const FONTS = { display, body };
 
@@ -67,7 +71,13 @@ interface FeaturePillProps {
   color?: string;
 }
 
-export const FeaturePill: React.FC<FeaturePillProps> = ({ icon, label, desc, delay, color = COLORS.primary }) => {
+export const FeaturePill: React.FC<FeaturePillProps> = ({
+  icon,
+  label,
+  desc,
+  delay,
+  color = COLORS.primary,
+}) => {
   const entrance = useEntrance(delay);
   return (
     <div
@@ -99,14 +109,21 @@ export const FeaturePill: React.FC<FeaturePillProps> = ({ icon, label, desc, del
         {icon}
       </div>
       <div style={{ display: "flex", flexDirection: "column" }}>
-        <div style={{ fontFamily: body, fontWeight: 600, color: COLORS.ink, fontSize: 20 }}>{label}</div>
-        <div style={{ fontFamily: body, fontWeight: 400, color: COLORS.muted, fontSize: 14 }}>{desc}</div>
+        <div style={{ fontFamily: body, fontWeight: 600, color: COLORS.ink, fontSize: 20 }}>
+          {label}
+        </div>
+        <div style={{ fontFamily: body, fontWeight: 400, color: COLORS.muted, fontSize: 14 }}>
+          {desc}
+        </div>
       </div>
     </div>
   );
 };
 
-export const SectionEyebrow: React.FC<{ children: React.ReactNode; delay?: number }> = ({ children, delay = 0 }) => {
+export const SectionEyebrow: React.FC<{ children: React.ReactNode; delay?: number }> = ({
+  children,
+  delay = 0,
+}) => {
   const e = useEntrance(delay);
   return (
     <div
@@ -125,7 +142,10 @@ export const SectionEyebrow: React.FC<{ children: React.ReactNode; delay?: numbe
   );
 };
 
-export const SectionTitle: React.FC<{ children: React.ReactNode; delay?: number }> = ({ children, delay = 4 }) => {
+export const SectionTitle: React.FC<{ children: React.ReactNode; delay?: number }> = ({
+  children,
+  delay = 4,
+}) => {
   const e = useEntrance(delay);
   return (
     <h2
@@ -144,7 +164,10 @@ export const SectionTitle: React.FC<{ children: React.ReactNode; delay?: number 
   );
 };
 
-export const SectionSub: React.FC<{ children: React.ReactNode; delay?: number }> = ({ children, delay = 8 }) => {
+export const SectionSub: React.FC<{ children: React.ReactNode; delay?: number }> = ({
+  children,
+  delay = 8,
+}) => {
   const e = useEntrance(delay);
   return (
     <p

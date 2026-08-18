@@ -45,7 +45,11 @@ export default function FlowScorePage() {
           >
             <p className="text-xs uppercase tracking-wide text-muted-foreground">Mående</p>
             <p className="mt-1 font-display text-xl text-ink">
-              {mood ? `${mood}/5` : <span className="text-sm text-muted-foreground">Inte loggat än</span>}
+              {mood ? (
+                `${mood}/5`
+              ) : (
+                <span className="text-sm text-muted-foreground">Inte loggat än</span>
+              )}
             </p>
           </Link>
           <div className="rounded-2xl border border-border bg-card p-4 text-center">
@@ -56,10 +60,13 @@ export default function FlowScorePage() {
           </div>
         </div>
 
-
         <section className="rounded-3xl border border-border bg-card p-5 shadow-sm">
           <CollapsibleSection
-            title={<span className="flex items-center gap-2"><Zap className="h-5 w-5 text-primary" /> Använd din FlowScore</span>}
+            title={
+              <span className="flex items-center gap-2">
+                <Zap className="h-5 w-5 text-primary" /> Använd din FlowScore
+              </span>
+            }
             id="Använd din FlowScore"
             help="Din nivå styr hur mycket jobb och studier föreslår. Ändras när du loggar hur du mår."
             headingClassName="font-display text-lg"

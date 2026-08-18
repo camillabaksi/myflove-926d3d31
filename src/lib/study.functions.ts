@@ -48,7 +48,7 @@ export const breakDownAssignment = createServerFn({ method: "POST" })
       data.details ? `Detaljer: ${data.details}` : null,
       `Dagens datum: ${new Date().toISOString().split("T")[0]}`,
       "",
-      'Returnera JSON: { intro, steps: [{ title, when }], startBy, note }.',
+      "Returnera JSON: { intro, steps: [{ title, when }], startBy, note }.",
     ]
       .filter(Boolean)
       .join("\n");

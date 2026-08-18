@@ -65,7 +65,6 @@ export default function AdminStats() {
     );
   }
 
-
   const viewsBySection = (data?.featureUsage ?? [])
     .filter((row: any) => row.action === "view")
     .sort((a: any, b: any) => b.events - a.events);
@@ -86,7 +85,8 @@ export default function AdminStats() {
             <BarChart3 className="text-primary" /> Appstatistik
           </h1>
           <p className="text-muted-foreground">
-            Anonym, sammanslagen statistik om hur MyFlove används — ingen personlig data (mående, texter osv) ingår.
+            Anonym, sammanslagen statistik om hur MyFlove används — ingen personlig data (mående,
+            texter osv) ingår.
           </p>
         </div>
 
@@ -138,10 +138,16 @@ export default function AdminStats() {
               )}
               <div className="flex items-end gap-1.5 h-32">
                 {(data.dailySignups ?? []).map((day: any) => (
-                  <div key={day.date} className="flex-1 flex flex-col items-center justify-end gap-1">
+                  <div
+                    key={day.date}
+                    className="flex-1 flex flex-col items-center justify-end gap-1"
+                  >
                     <div
                       className="w-full bg-primary rounded-t-md"
-                      style={{ height: `${(day.users / maxSignups) * 100}%`, minHeight: day.users > 0 ? "4px" : "0" }}
+                      style={{
+                        height: `${(day.users / maxSignups) * 100}%`,
+                        minHeight: day.users > 0 ? "4px" : "0",
+                      }}
                       title={`${day.date}: ${day.users}`}
                     />
                     <span className="text-[9px] text-muted-foreground">{day.date.slice(5)}</span>
@@ -214,10 +220,16 @@ export default function AdminStats() {
               )}
               <div className="flex items-end gap-1.5 h-32">
                 {data.dailyActiveSessions.map((day) => (
-                  <div key={day.date} className="flex-1 flex flex-col items-center justify-end gap-1">
+                  <div
+                    key={day.date}
+                    className="flex-1 flex flex-col items-center justify-end gap-1"
+                  >
                     <div
                       className="w-full bg-primary rounded-t-md"
-                      style={{ height: `${(day.sessions / maxDaily) * 100}%`, minHeight: day.sessions > 0 ? "4px" : "0" }}
+                      style={{
+                        height: `${(day.sessions / maxDaily) * 100}%`,
+                        minHeight: day.sessions > 0 ? "4px" : "0",
+                      }}
                       title={`${day.date}: ${day.sessions}`}
                     />
                     <span className="text-[9px] text-muted-foreground rotate-0">

@@ -45,7 +45,9 @@ export const SceneOutro: React.FC = () => {
           }}
         />
       </AbsoluteFill>
-      <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", padding: 80, textAlign: "center" }}>
+      <AbsoluteFill
+        style={{ justifyContent: "center", alignItems: "center", padding: 80, textAlign: "center" }}
+      >
         <div
           style={{
             opacity: s1,
@@ -92,8 +94,8 @@ export const SceneOutro: React.FC = () => {
             fontStyle: "italic",
           }}
         >
-          Du öppnar inte en app. Du möter Flow – en lugn, intelligent följeslagare
-          som hjälper dig genom vardagen.
+          Du öppnar inte en app. Du möter Flow – en lugn, intelligent följeslagare som hjälper dig
+          genom vardagen.
         </div>
         <div
           style={{

@@ -50,36 +50,31 @@ export const INSIGHT_AREAS: InsightArea[] = [
     id: "tid",
     emoji: "⏰",
     label: "Tidsuppfattning",
-    intro:
-      "Det kan vara värt att göra tiden synlig, så att den inte behöver hållas i huvudet.",
+    intro: "Det kan vara värt att göra tiden synlig, så att den inte behöver hållas i huvudet.",
   },
   {
     id: "overgangar",
     emoji: "🔄",
     label: "Övergångar",
-    intro:
-      "Skiften mellan aktiviteter kan bli lättare med förvarning och tydliga signaler.",
+    intro: "Skiften mellan aktiviteter kan bli lättare med förvarning och tydliga signaler.",
   },
   {
     id: "energi",
     emoji: "⚡",
     label: "Energi & återhämtning",
-    intro:
-      "Det kan vara ett område där planerad återhämtning gör mer skillnad än fler uppgifter.",
+    intro: "Det kan vara ett område där planerad återhämtning gör mer skillnad än fler uppgifter.",
   },
   {
     id: "sensorisk",
     emoji: "🔊",
     label: "Sensorisk belastning",
-    intro:
-      "Ljud, ljus och intryck kan påverka hur mycket som får plats en dag.",
+    intro: "Ljud, ljus och intryck kan påverka hur mycket som får plats en dag.",
   },
   {
     id: "kommunikation",
     emoji: "💬",
     label: "Kommunikation",
-    intro:
-      "Korta, konkreta instruktioner – en i taget – kan göra det lättare att hänga med.",
+    intro: "Korta, konkreta instruktioner – en i taget – kan göra det lättare att hänga med.",
   },
 ];
 
@@ -126,45 +121,209 @@ function minusMinutes(hhmm: string, mins: number): string {
 }
 
 const transitionNudges = (anchor: string): StrategyNudge[] => [
-  { when: minusMinutes(anchor, 15), text: "15 minuter kvar tills vi behöver börja göra oss klara." },
+  {
+    when: minusMinutes(anchor, 15),
+    text: "15 minuter kvar tills vi behöver börja göra oss klara.",
+  },
   { when: minusMinutes(anchor, 5), text: "5 minuter kvar." },
   { when: anchor, text: "Nu är det dags att gå vidare." },
 ];
 
 export const INSIGHT_STRATEGIES: InsightStrategy[] = [
   // Övergångar
-  { id: "prep-10", areaId: "overgangar", title: "Förvarna 10 minuter innan förändringen", why: "En möjlig strategi kan vara att göra skiftet förväntat i stället för plötsligt.", friction: 2, minutes: 5, makeNudges: transitionNudges },
-  { id: "prep-5", areaId: "overgangar", title: "Förvarna igen 5 minuter innan", why: "Det kan vara värt att prova en andra påminnelse närmare bytet.", friction: 2, minutes: 3, makeNudges: transitionNudges },
-  { id: "visual-countdown", areaId: "overgangar", title: "Använd visuell nedräkning", why: "Du kan testa en timer som syns, så att tiden inte behöver hållas i huvudet.", friction: 3, minutes: 10 },
-  { id: "end-signal", areaId: "overgangar", title: "Ge en tydlig avslutningssignal", why: "En tydlig signal kan göra slutet på en aktivitet mindre abrupt.", friction: 2, minutes: 5 },
-  { id: "one-instruction", areaId: "overgangar", title: "Ge en instruktion i taget", why: "Det kan vara lättare att följa ett steg än flera samtidigt.", friction: 2, minutes: 5 },
-  { id: "recovery-after", areaId: "overgangar", title: "Planera återhämtning efter en krävande aktivitet", why: "Utifrån informationen kan planerad paus vara ett område att ta hänsyn till.", friction: 3, minutes: 20 },
+  {
+    id: "prep-10",
+    areaId: "overgangar",
+    title: "Förvarna 10 minuter innan förändringen",
+    why: "En möjlig strategi kan vara att göra skiftet förväntat i stället för plötsligt.",
+    friction: 2,
+    minutes: 5,
+    makeNudges: transitionNudges,
+  },
+  {
+    id: "prep-5",
+    areaId: "overgangar",
+    title: "Förvarna igen 5 minuter innan",
+    why: "Det kan vara värt att prova en andra påminnelse närmare bytet.",
+    friction: 2,
+    minutes: 3,
+    makeNudges: transitionNudges,
+  },
+  {
+    id: "visual-countdown",
+    areaId: "overgangar",
+    title: "Använd visuell nedräkning",
+    why: "Du kan testa en timer som syns, så att tiden inte behöver hållas i huvudet.",
+    friction: 3,
+    minutes: 10,
+  },
+  {
+    id: "end-signal",
+    areaId: "overgangar",
+    title: "Ge en tydlig avslutningssignal",
+    why: "En tydlig signal kan göra slutet på en aktivitet mindre abrupt.",
+    friction: 2,
+    minutes: 5,
+  },
+  {
+    id: "one-instruction",
+    areaId: "overgangar",
+    title: "Ge en instruktion i taget",
+    why: "Det kan vara lättare att följa ett steg än flera samtidigt.",
+    friction: 2,
+    minutes: 5,
+  },
+  {
+    id: "recovery-after",
+    areaId: "overgangar",
+    title: "Planera återhämtning efter en krävande aktivitet",
+    why: "Utifrån informationen kan planerad paus vara ett område att ta hänsyn till.",
+    friction: 3,
+    minutes: 20,
+  },
 
   // Exekutiva funktioner
-  { id: "first-step", areaId: "exekutiva", title: "Bestäm ett första minsteg", why: "Det kan vara lättare att börja när första steget är löjligt litet.", friction: 2, minutes: 5 },
-  { id: "break-down", areaId: "exekutiva", title: "Dela upp uppgiften i 3 steg", why: "En möjlig strategi kan vara att göra uppgiften synligt kortare.", friction: 3, minutes: 10 },
-  { id: "bag-checklist", areaId: "exekutiva", title: "Checklista för väskan kvällen innan", why: "Du kan testa att flytta beslutet till kvällen, när det är lugnare.", friction: 4, minutes: 10, makeNudges: (a) => [{ when: a, text: "Förbered skolväskan – checklistan tar 10 minuter." }] },
-  { id: "one-priority", areaId: "exekutiva", title: "Välj en sak som räknas idag", why: "Det kan vara värt att prova att låta resten vara bonus.", friction: 2, minutes: 5 },
+  {
+    id: "first-step",
+    areaId: "exekutiva",
+    title: "Bestäm ett första minsteg",
+    why: "Det kan vara lättare att börja när första steget är löjligt litet.",
+    friction: 2,
+    minutes: 5,
+  },
+  {
+    id: "break-down",
+    areaId: "exekutiva",
+    title: "Dela upp uppgiften i 3 steg",
+    why: "En möjlig strategi kan vara att göra uppgiften synligt kortare.",
+    friction: 3,
+    minutes: 10,
+  },
+  {
+    id: "bag-checklist",
+    areaId: "exekutiva",
+    title: "Checklista för väskan kvällen innan",
+    why: "Du kan testa att flytta beslutet till kvällen, när det är lugnare.",
+    friction: 4,
+    minutes: 10,
+    makeNudges: (a) => [{ when: a, text: "Förbered skolväskan – checklistan tar 10 minuter." }],
+  },
+  {
+    id: "one-priority",
+    areaId: "exekutiva",
+    title: "Välj en sak som räknas idag",
+    why: "Det kan vara värt att prova att låta resten vara bonus.",
+    friction: 2,
+    minutes: 5,
+  },
 
   // Tid
-  { id: "time-visible", areaId: "tid", title: "Gör tiden synlig med timer", why: "En möjlig strategi kan vara att låta tiden synas i rummet.", friction: 2, minutes: 5 },
-  { id: "time-guess", areaId: "tid", title: "Gissa tiden – jämför efteråt", why: "Du kan testa att träna tidsuppfattning utan press.", friction: 3, minutes: 10 },
-  { id: "buffer", areaId: "tid", title: "Lägg in 10 minuters marginal", why: "Det kan vara värt att prova en buffert innan viktiga tider.", friction: 2, minutes: 10 },
+  {
+    id: "time-visible",
+    areaId: "tid",
+    title: "Gör tiden synlig med timer",
+    why: "En möjlig strategi kan vara att låta tiden synas i rummet.",
+    friction: 2,
+    minutes: 5,
+  },
+  {
+    id: "time-guess",
+    areaId: "tid",
+    title: "Gissa tiden – jämför efteråt",
+    why: "Du kan testa att träna tidsuppfattning utan press.",
+    friction: 3,
+    minutes: 10,
+  },
+  {
+    id: "buffer",
+    areaId: "tid",
+    title: "Lägg in 10 minuters marginal",
+    why: "Det kan vara värt att prova en buffert innan viktiga tider.",
+    friction: 2,
+    minutes: 10,
+  },
 
   // Energi
-  { id: "energy-check", areaId: "energi", title: "Kort energikoll innan planering", why: "Utifrån informationen kan dagens energi vara värd att väga in.", friction: 1, minutes: 3 },
-  { id: "recovery-slot", areaId: "energi", title: "Boka in återhämtning efter skoldagen", why: "Det kan vara värt att prova tyst tid direkt efter dagen.", friction: 2, minutes: 30, makeNudges: (a) => [{ when: a, text: "Återhämtning nu – inga krav i 30 minuter." }] },
-  { id: "work-home", areaId: "energi", title: "Avslutningsritual mellan arbete och fritid", why: "En möjlig strategi kan vara en tydlig markör för att dagen är slut.", friction: 3, minutes: 10 },
+  {
+    id: "energy-check",
+    areaId: "energi",
+    title: "Kort energikoll innan planering",
+    why: "Utifrån informationen kan dagens energi vara värd att väga in.",
+    friction: 1,
+    minutes: 3,
+  },
+  {
+    id: "recovery-slot",
+    areaId: "energi",
+    title: "Boka in återhämtning efter skoldagen",
+    why: "Det kan vara värt att prova tyst tid direkt efter dagen.",
+    friction: 2,
+    minutes: 30,
+    makeNudges: (a) => [{ when: a, text: "Återhämtning nu – inga krav i 30 minuter." }],
+  },
+  {
+    id: "work-home",
+    areaId: "energi",
+    title: "Avslutningsritual mellan arbete och fritid",
+    why: "En möjlig strategi kan vara en tydlig markör för att dagen är slut.",
+    friction: 3,
+    minutes: 10,
+  },
 
   // Sensorisk
-  { id: "sensory-break", areaId: "sensorisk", title: "Planera in en lågstimuli-paus", why: "Du kan testa en kort paus med färre intryck mitt på dagen.", friction: 2, minutes: 15 },
-  { id: "sensory-kit", areaId: "sensorisk", title: "Ha hörselkåpor eller solglasögon tillgängligt", why: "Det kan vara värt att prova att göra verktygen lätta att nå.", friction: 2, minutes: 5 },
-  { id: "predictable-day", areaId: "sensorisk", title: "Gå igenom dagens ordning på morgonen", why: "Förutsägbarhet kan vara ett område att ta hänsyn till.", friction: 2, minutes: 5, makeNudges: (a) => [{ when: a, text: "Gå igenom dagens ordning tillsammans – kort och lugnt." }] },
+  {
+    id: "sensory-break",
+    areaId: "sensorisk",
+    title: "Planera in en lågstimuli-paus",
+    why: "Du kan testa en kort paus med färre intryck mitt på dagen.",
+    friction: 2,
+    minutes: 15,
+  },
+  {
+    id: "sensory-kit",
+    areaId: "sensorisk",
+    title: "Ha hörselkåpor eller solglasögon tillgängligt",
+    why: "Det kan vara värt att prova att göra verktygen lätta att nå.",
+    friction: 2,
+    minutes: 5,
+  },
+  {
+    id: "predictable-day",
+    areaId: "sensorisk",
+    title: "Gå igenom dagens ordning på morgonen",
+    why: "Förutsägbarhet kan vara ett område att ta hänsyn till.",
+    friction: 2,
+    minutes: 5,
+    makeNudges: (a) => [
+      { when: a, text: "Gå igenom dagens ordning tillsammans – kort och lugnt." },
+    ],
+  },
 
   // Kommunikation
-  { id: "short-instructions", areaId: "kommunikation", title: "Korta instruktioner – en i taget", why: "En möjlig strategi kan vara att säga en sak och vänta.", friction: 1, minutes: 3 },
-  { id: "repeat-back", areaId: "kommunikation", title: "Be om en kort återberättelse", why: "Det kan vara värt att prova att stämma av vad som uppfattades.", friction: 2, minutes: 5 },
-  { id: "written-backup", areaId: "kommunikation", title: "Skriv ner det viktigaste", why: "Du kan testa att låta texten bära det som annars ska minnas.", friction: 2, minutes: 5 },
+  {
+    id: "short-instructions",
+    areaId: "kommunikation",
+    title: "Korta instruktioner – en i taget",
+    why: "En möjlig strategi kan vara att säga en sak och vänta.",
+    friction: 1,
+    minutes: 3,
+  },
+  {
+    id: "repeat-back",
+    areaId: "kommunikation",
+    title: "Be om en kort återberättelse",
+    why: "Det kan vara värt att prova att stämma av vad som uppfattades.",
+    friction: 2,
+    minutes: 5,
+  },
+  {
+    id: "written-backup",
+    areaId: "kommunikation",
+    title: "Skriv ner det viktigaste",
+    why: "Du kan testa att låta texten bära det som annars ska minnas.",
+    friction: 2,
+    minutes: 5,
+  },
 ];
 
 export function strategiesForArea(areaId: InsightAreaId): InsightStrategy[] {
@@ -279,7 +438,9 @@ export function matchAreasFromNeeds(needs: string[]): InsightAreaId[] {
 /** Quickflow-integration: känns tanken som en förberedelse-situation? */
 export function detectPreparationIntent(text: string): { anchorLabel: string } | null {
   const lower = text.toLowerCase();
-  if (!/(förbered|inför|tandläkar|läkar|besök|utflykt|resa|prov|byta|flytt|första dagen)/.test(lower)) {
+  if (
+    !/(förbered|inför|tandläkar|läkar|besök|utflykt|resa|prov|byta|flytt|första dagen)/.test(lower)
+  ) {
     return null;
   }
   const m = lower.match(/inför\s+([a-zåäö\s]{3,30})/);
@@ -287,7 +448,9 @@ export function detectPreparationIntent(text: string): { anchorLabel: string } |
 }
 
 /** Konkret förberedelseplan som användaren kan ändra eller neka. */
-export function buildPreparationPlan(label: string): { offsetDays: number; when: string; text: string }[] {
+export function buildPreparationPlan(
+  label: string,
+): { offsetDays: number; when: string; text: string }[] {
   return [
     { offsetDays: -2, when: "17:00", text: `Prata kort om ${label}.` },
     { offsetDays: -1, when: "19:00", text: `Förbered kläder och information inför ${label}.` },

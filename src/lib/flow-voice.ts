@@ -50,8 +50,7 @@ export const errors = {
   loadFailed: "Kunde inte hämta det just nu.",
   aiUnavailable: "Flow är tyst just nu. Prova igen om en stund.",
   aiRateLimit: "Många frågar Flow just nu. Testa igen om en stund.",
-  aiOutOfCredits:
-    "AI-krediten är slut. Fyll på i inställningarna när det passar.",
+  aiOutOfCredits: "AI-krediten är slut. Fyll på i inställningarna när det passar.",
 } as const;
 
 // ─── Beskriv en situation utan att skuldbelägga ───────────────────────────

@@ -5,7 +5,10 @@ export const Route = createFileRoute("/_app/travel")({
   head: () => ({
     meta: [
       { title: "Resa – MyFlove" },
-      { name: "description", content: "Realtidsinfo för resor med SL och ResRobot – planera lugnt." },
+      {
+        name: "description",
+        content: "Realtidsinfo för resor med SL och ResRobot – planera lugnt.",
+      },
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),

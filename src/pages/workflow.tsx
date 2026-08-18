@@ -110,7 +110,13 @@ export default function WorkflowPage() {
 
   const currentSnapshot = useCallback(
     () =>
-      makeSnapshot(flow, energy, capacityPlan.plan, capacityPlan.tooHeavy, capacityPlan.plannedMinutes),
+      makeSnapshot(
+        flow,
+        energy,
+        capacityPlan.plan,
+        capacityPlan.tooHeavy,
+        capacityPlan.plannedMinutes,
+      ),
     [flow, energy, capacityPlan],
   );
 
@@ -159,10 +165,16 @@ export default function WorkflowPage() {
     setBusyId(id);
     try {
       const res = await run({ data: { title } });
-      addTaskSteps(id, res.steps.map((s) => ({ title: s.title, when: s.when })));
+      addTaskSteps(
+        id,
+        res.steps.map((s) => ({ title: s.title, when: s.when })),
+      );
       toast.success("Uppdelad i små steg 💙", { description: res.intro });
     } catch {
-      addTaskSteps(id, fallbackSteps(title).map((t) => ({ title: t })));
+      addTaskSteps(
+        id,
+        fallbackSteps(title).map((t) => ({ title: t })),
+      );
       toast.success("Uppdelad i små steg 💙");
     } finally {
       setBusyId(null);
@@ -236,11 +248,7 @@ export default function WorkflowPage() {
           </form>
         </header>
 
-        <Button
-          variant="secondary"
-          className="w-full rounded-full"
-          onClick={() => recalc(false)}
-        >
+        <Button variant="secondary" className="w-full rounded-full" onClick={() => recalc(false)}>
           <RefreshCw className="mr-2 h-4 w-4" /> Räkna om planen
         </Button>
 
@@ -250,7 +258,11 @@ export default function WorkflowPage() {
         <CollapsibleSection
           className={card}
           headingClassName={sectionTitle}
-          title={<><Gauge className="h-5 w-5 text-primary" /> Rimligt just nu</>}
+          title={
+            <>
+              <Gauge className="h-5 w-5 text-primary" /> Rimligt just nu
+            </>
+          }
           help="Hur mycket som är realistiskt idag utifrån din ork och tiden som är kvar."
         >
           <p className="mt-1 text-sm text-muted-foreground">
@@ -322,7 +334,11 @@ export default function WorkflowPage() {
         <CollapsibleSection
           className={card}
           headingClassName={sectionTitle}
-          title={<><AlarmClock className="h-5 w-5 text-primary" /> Vad ska jag göra nu?</>}
+          title={
+            <>
+              <AlarmClock className="h-5 w-5 text-primary" /> Vad ska jag göra nu?
+            </>
+          }
           help="Nästa sak att ta itu med. En i taget – resten kan vänta."
         >
           {ranked.length === 0 ? (
@@ -453,7 +469,11 @@ export default function WorkflowPage() {
         <CollapsibleSection
           className={card}
           headingClassName={sectionTitle}
-          title={<><Timer className="h-5 w-5 text-primary" /> Jag har …</>}
+          title={
+            <>
+              <Timer className="h-5 w-5 text-primary" /> Jag har …
+            </>
+          }
         >
           <div className="mt-3 flex flex-wrap gap-2">
             {[10, 20, 30, 45, 60].map((m) => (
@@ -490,7 +510,9 @@ export default function WorkflowPage() {
                   🟡 Påbörja "{timeFit.stretch.task.title}" – du hinner en bit på vägen.
                 </p>
               ) : (
-                <p className="mt-2 text-muted-foreground">Inget som passar. Ta en paus istället. 💙</p>
+                <p className="mt-2 text-muted-foreground">
+                  Inget som passar. Ta en paus istället. 💙
+                </p>
               )}
             </div>
           )}
@@ -500,7 +522,11 @@ export default function WorkflowPage() {
         <CollapsibleSection
           className={card}
           headingClassName={sectionTitle}
-          title={<><ArrowRightLeft className="h-5 w-5 text-primary" /> Hjälp vid övergångar</>}
+          title={
+            <>
+              <ArrowRightLeft className="h-5 w-5 text-primary" /> Hjälp vid övergångar
+            </>
+          }
         >
           <p className="mt-1 text-sm text-muted-foreground">
             Mötet är slut – hur mycket tid har du innan nästa?
@@ -530,7 +556,11 @@ export default function WorkflowPage() {
         <CollapsibleSection
           className={card}
           headingClassName={sectionTitle}
-          title={<><ClipboardList className="h-5 w-5 text-primary" /> Mötesläge</>}
+          title={
+            <>
+              <ClipboardList className="h-5 w-5 text-primary" /> Mötesläge
+            </>
+          }
           help="Stöd under möten: vad som sades och vad du lovade göra."
         >
           <p className="mt-1 text-sm text-muted-foreground">Inför mötet: vad behöver du ta upp?</p>
@@ -578,12 +608,14 @@ export default function WorkflowPage() {
         <CollapsibleSection
           className={card}
           headingClassName={sectionTitle}
-          title={<><CheckCircle2 className="h-5 w-5 text-primary" /> Avslutningscheck</>}
+          title={
+            <>
+              <CheckCircle2 className="h-5 w-5 text-primary" /> Avslutningscheck
+            </>
+          }
         >
           <p className="mt-1 text-sm text-muted-foreground">
-            {minutesLeft > 0
-              ? `${minutesLeft} min kvar av arbetsdagen.`
-              : "Arbetsdagen är slut."}{" "}
+            {minutesLeft > 0 ? `${minutesLeft} min kvar av arbetsdagen.` : "Arbetsdagen är slut."}{" "}
             Så du slipper komma på saker 21:47.
           </p>
           <ul className="mt-3 space-y-2">
@@ -628,7 +660,11 @@ export default function WorkflowPage() {
         <CollapsibleSection
           className={card}
           headingClassName={sectionTitle}
-          title={<><LifeBuoy className="h-5 w-5 text-primary" /> Min dag gick åt pipsvängen</>}
+          title={
+            <>
+              <LifeBuoy className="h-5 w-5 text-primary" /> Min dag gick åt pipsvängen
+            </>
+          }
           help="Tryck här när det spårat ur. Du får hjälp att välja en enda sak istället."
         >
           <p className="mt-1 text-sm text-muted-foreground">
@@ -636,7 +672,11 @@ export default function WorkflowPage() {
           </p>
           <Button
             className="mt-3"
-            onClick={() => setRebuild(rebuildDay(workTasks, metaMap, Math.min(minutesLeft, flow.capacityMinutes), energy))}
+            onClick={() =>
+              setRebuild(
+                rebuildDay(workTasks, metaMap, Math.min(minutesLeft, flow.capacityMinutes), energy),
+              )
+            }
           >
             Bygg om dagen
           </Button>
@@ -682,7 +722,11 @@ export default function WorkflowPage() {
         <CollapsibleSection
           className="space-y-3"
           headingClassName={sectionTitle}
-          title={<><Sparkles className="h-5 w-5 text-gold" /> Quickflow på jobbet</>}
+          title={
+            <>
+              <Sparkles className="h-5 w-5 text-gold" /> Quickflow på jobbet
+            </>
+          }
         >
           <QuickflowCapture />
           <QuickflowList />

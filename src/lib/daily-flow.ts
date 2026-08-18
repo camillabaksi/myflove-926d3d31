@@ -145,7 +145,11 @@ export function recommendTasks(tasks: Task[], ctx: FlowContext, limit = 3): Scor
 }
 
 /** Hur många saker är rimligt att sikta på idag? Hellre för få än för många. */
-export function suggestedTaskCount(ctx: { energy: number; load: number; time: TimeAvailability }): number {
+export function suggestedTaskCount(ctx: {
+  energy: number;
+  load: number;
+  time: TimeAvailability;
+}): number {
   if (ctx.time === "lite" || ctx.energy <= 2 || ctx.load >= 5) return 1;
   if (ctx.energy >= 4 && ctx.load <= 3 && ctx.time === "mycket") return 3;
   return 2;

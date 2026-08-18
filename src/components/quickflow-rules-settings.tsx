@@ -11,13 +11,7 @@ import {
 import { DESTINATION_META, type QuickflowDestination } from "@/lib/quickflow";
 import { AREA_META, ALL_AREAS, type LifeArea } from "@/lib/life-areas";
 
-const DESTINATIONS: QuickflowDestination[] = [
-  "inkop",
-  "kalender",
-  "uppgift",
-  "paminnelse",
-  "ide",
-];
+const DESTINATIONS: QuickflowDestination[] = ["inkop", "kalender", "uppgift", "paminnelse", "ide"];
 
 const MATCH_TYPES: RuleMatchType[] = ["startsWith", "contains", "endsWith"];
 
@@ -62,7 +56,7 @@ export default function QuickflowRulesSettings() {
   const save = () => {
     const p = phrase.trim();
     if (!p) {
-      toast("Skriv ett ord först", { description: "T.ex. \"köpa\" eller \"boka\"." });
+      toast("Skriv ett ord först", { description: 'T.ex. "köpa" eller "boka".' });
       return;
     }
     const draft = {
@@ -75,7 +69,9 @@ export default function QuickflowRulesSettings() {
     };
     if (editingId) {
       updateRule(editingId, draft);
-      toast.success(`Ändringen är sparad – "${p}" går till ${DESTINATION_META[destination].label}.`);
+      toast.success(
+        `Ändringen är sparad – "${p}" går till ${DESTINATION_META[destination].label}.`,
+      );
     } else {
       addRule({
         phrase: p,
@@ -128,7 +124,9 @@ export default function QuickflowRulesSettings() {
                     disabled={added}
                     onClick={() => {
                       addRule(t.rule);
-                      toast.success(`"${t.rule.phrase}" är tillagd – du kan ändra den när du vill.`);
+                      toast.success(
+                        `"${t.rule.phrase}" är tillagd – du kan ändra den när du vill.`,
+                      );
                     }}
                     className="rounded-full border border-primary bg-primary/10 text-primary px-3 py-1 text-xs font-semibold inline-flex items-center gap-1 disabled:opacity-40"
                   >
@@ -235,9 +233,7 @@ export default function QuickflowRulesSettings() {
 
       <div ref={formRef} className="rounded-2xl border border-border bg-card p-4 space-y-3">
         <div className="flex items-center justify-between">
-          <p className="text-sm font-semibold text-ink">
-            {editingId ? "Ändra regel" : "Ny regel"}
-          </p>
+          <p className="text-sm font-semibold text-ink">{editingId ? "Ändra regel" : "Ny regel"}</p>
           {(editingId || phrase) && (
             <button
               type="button"
@@ -331,7 +327,9 @@ function Chip({
       type="button"
       onClick={onClick}
       className={`rounded-full border px-3 py-1.5 text-sm font-medium transition-colors ${
-        active ? "border-primary bg-primary/10 text-primary" : "border-border bg-card hover:border-primary/50"
+        active
+          ? "border-primary bg-primary/10 text-primary"
+          : "border-border bg-card hover:border-primary/50"
       }`}
     >
       {children}

@@ -68,7 +68,12 @@ export function QuickflowList() {
   const placeItems = openItems.filter((i) => i.placeId && !i.notifiedAt);
   const placeKey = placeItems.map((i) => i.id).join("|");
   useEffect(() => {
-    if (placeItems.length === 0 || typeof navigator === "undefined" || !("geolocation" in navigator)) return;
+    if (
+      placeItems.length === 0 ||
+      typeof navigator === "undefined" ||
+      !("geolocation" in navigator)
+    )
+      return;
     let cancelled = false;
     const check = () => {
       navigator.geolocation.getCurrentPosition(
@@ -77,7 +82,12 @@ export function QuickflowList() {
           for (const item of placeItems) {
             const store = savedStores.find((s) => s.id === item.placeId);
             if (!store) continue;
-            const d = distanceMeters(pos.coords.latitude, pos.coords.longitude, store.lat, store.lon);
+            const d = distanceMeters(
+              pos.coords.latitude,
+              pos.coords.longitude,
+              store.lat,
+              store.lon,
+            );
             if (d <= NEARBY_M) {
               sendPushNotification("🔔 MyFlove: Du bad mig komma ihåg detta.", {
                 body: `${item.text} – du är nära ${store.name}.`,
@@ -101,7 +111,9 @@ export function QuickflowList() {
   }, [placeKey, savedStores.length]);
 
   const { needsAnswer, upcoming, thoughts, recentlyCompleted } = useMemo(() => {
-    const sorted = [...openItems].sort((a, b) => (a.remindAt ?? Infinity) - (b.remindAt ?? Infinity));
+    const sorted = [...openItems].sort(
+      (a, b) => (a.remindAt ?? Infinity) - (b.remindAt ?? Infinity),
+    );
     const dayAgo = now - 24 * 60 * 60 * 1000;
     return {
       needsAnswer: sorted.filter((i) => isOverdue(i, now) || shouldAskAboutThought(i, now)),
@@ -145,7 +157,6 @@ export function QuickflowList() {
                 Sammanfogad ×{(item.mergedCount ?? 0) + 1}
               </span>
             )}
-
           </p>
         </div>
         <div className="flex items-center gap-1 shrink-0">
@@ -212,123 +223,125 @@ export function QuickflowList() {
         headingClassName="text-xl font-semibold"
         description="Ingenting här försvinner av sig självt. Jag håller det åt dig. 💙"
       >
-      {needsAnswer.length > 0 && (
-        <div className="space-y-3">
-          {needsAnswer.map((item) =>
-            renderRow(
-              item,
-              <div className="rounded-2xl bg-secondary/50 border border-border p-3 space-y-2">
-                <p className="text-sm text-ink">
-                  Du bad mig komma ihåg detta. Vill du fortfarande göra det?
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    onClick={() => update(item.id, { askedAt: Date.now() })}
-                    className="rounded-full bg-primary text-primary-foreground px-4 py-1.5 text-xs font-medium"
-                  >
-                    Ja – behåll
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setSnoozeFor(item.id)}
-                    className="rounded-full border border-border bg-card px-4 py-1.5 text-xs"
-                  >
-                    Senare – välj ny tid
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => remove(item.id)}
-                    className="rounded-full border border-destructive/30 text-destructive px-4 py-1.5 text-xs"
-                  >
-                    Inte längre
-                  </button>
-                </div>
-              </div>,
-            ),
-          )}
-        </div>
-      )}
+        {needsAnswer.length > 0 && (
+          <div className="space-y-3">
+            {needsAnswer.map((item) =>
+              renderRow(
+                item,
+                <div className="rounded-2xl bg-secondary/50 border border-border p-3 space-y-2">
+                  <p className="text-sm text-ink">
+                    Du bad mig komma ihåg detta. Vill du fortfarande göra det?
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={() => update(item.id, { askedAt: Date.now() })}
+                      className="rounded-full bg-primary text-primary-foreground px-4 py-1.5 text-xs font-medium"
+                    >
+                      Ja – behåll
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setSnoozeFor(item.id)}
+                      className="rounded-full border border-border bg-card px-4 py-1.5 text-xs"
+                    >
+                      Senare – välj ny tid
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => remove(item.id)}
+                      className="rounded-full border border-destructive/30 text-destructive px-4 py-1.5 text-xs"
+                    >
+                      Inte längre
+                    </button>
+                  </div>
+                </div>,
+              ),
+            )}
+          </div>
+        )}
 
-      {(upcoming.length > 0 || placeUpcoming.length > 0) && (
-        <div className="space-y-3">
-          <p className="text-xs uppercase tracking-wide text-muted-foreground">Sparade till senare</p>
-          {[...upcoming, ...placeUpcoming].map((item) =>
-            renderRow(
-              item,
-              <div className="flex flex-wrap items-center gap-3">
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    celebrateFromEvent(e);
-                    complete(item.id);
-                  }}
-                  className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 text-primary px-3 py-1.5 text-xs font-medium hover:bg-primary hover:text-primary-foreground transition-colors"
-                >
-                  <Check size={13} /> Hanterad – göm den
-                </button>
+        {(upcoming.length > 0 || placeUpcoming.length > 0) && (
+          <div className="space-y-3">
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">
+              Sparade till senare
+            </p>
+            {[...upcoming, ...placeUpcoming].map((item) =>
+              renderRow(
+                item,
+                <div className="flex flex-wrap items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      celebrateFromEvent(e);
+                      complete(item.id);
+                    }}
+                    className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 text-primary px-3 py-1.5 text-xs font-medium hover:bg-primary hover:text-primary-foreground transition-colors"
+                  >
+                    <Check size={13} /> Hanterad – göm den
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSnoozeFor(item.id === snoozeFor ? null : item.id)}
+                    className="text-xs text-muted-foreground hover:text-foreground underline underline-offset-2"
+                  >
+                    Flytta till en annan tid
+                  </button>
+                </div>,
+              ),
+            )}
+          </div>
+        )}
+
+        {thoughts.length > 0 && (
+          <div className="space-y-3">
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">Öppna tankar</p>
+            {thoughts.map((item) =>
+              renderRow(
+                item,
                 <button
                   type="button"
                   onClick={() => setSnoozeFor(item.id === snoozeFor ? null : item.id)}
-                  className="text-xs text-muted-foreground hover:text-foreground underline underline-offset-2"
+                  className="text-xs text-primary hover:underline"
                 >
-                  Flytta till en annan tid
+                  Vill du lägga in en tid för den här?
+                </button>,
+              ),
+            )}
+          </div>
+        )}
+
+        {recentlyCompleted.length > 0 && (
+          <div className="space-y-3 pt-2 border-t border-border/60">
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">
+              Nyligen hanterade – råkat du trycka fel?
+            </p>
+            {recentlyCompleted.map((item) => (
+              <div key={item.id} className="surface-card p-4 flex items-center gap-3">
+                <span className="text-xl leading-none">{guessEmoji(item.text, item.level)}</span>
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium text-ink line-through opacity-70">{item.text}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {item.remindAt
+                      ? `Var sparad till ${formatWhen(item.remindAt, new Date(now))}`
+                      : "Markerades som hanterad"}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  aria-label="Ångra"
+                  onClick={() => {
+                    uncomplete(item.id);
+                    toast.success("Ångrad – tanken är tillbaka i QuickFlow. 💜");
+                  }}
+                  className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 text-primary px-3 py-1.5 text-xs font-medium hover:bg-primary hover:text-primary-foreground transition-colors"
+                >
+                  <Undo2 size={13} /> Ångra
                 </button>
-              </div>,
-            ),
-          )}
-        </div>
-      )}
-
-      {thoughts.length > 0 && (
-        <div className="space-y-3">
-          <p className="text-xs uppercase tracking-wide text-muted-foreground">Öppna tankar</p>
-          {thoughts.map((item) =>
-            renderRow(
-              item,
-              <button
-                type="button"
-                onClick={() => setSnoozeFor(item.id === snoozeFor ? null : item.id)}
-                className="text-xs text-primary hover:underline"
-              >
-                Vill du lägga in en tid för den här?
-              </button>,
-            ),
-          )}
-        </div>
-      )}
-
-      {recentlyCompleted.length > 0 && (
-        <div className="space-y-3 pt-2 border-t border-border/60">
-          <p className="text-xs uppercase tracking-wide text-muted-foreground">
-            Nyligen hanterade – råkat du trycka fel?
-          </p>
-          {recentlyCompleted.map((item) => (
-            <div key={item.id} className="surface-card p-4 flex items-center gap-3">
-              <span className="text-xl leading-none">{guessEmoji(item.text, item.level)}</span>
-              <div className="flex-1 min-w-0">
-                <p className="font-medium text-ink line-through opacity-70">{item.text}</p>
-                <p className="text-xs text-muted-foreground">
-                  {item.remindAt
-                    ? `Var sparad till ${formatWhen(item.remindAt, new Date(now))}`
-                    : "Markerades som hanterad"}
-                </p>
               </div>
-              <button
-                type="button"
-                aria-label="Ångra"
-                onClick={() => {
-                  uncomplete(item.id);
-                  toast.success("Ångrad – tanken är tillbaka i QuickFlow. 💜");
-                }}
-                className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 text-primary px-3 py-1.5 text-xs font-medium hover:bg-primary hover:text-primary-foreground transition-colors"
-              >
-                <Undo2 size={13} /> Ångra
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
+            ))}
+          </div>
+        )}
       </CollapsibleSection>
     </section>
   );

@@ -17,8 +17,31 @@ export interface FrictionEntry {
 }
 
 const STOP_WORDS = new Set([
-  "och","att","med","för","den","det","som","till","från","min","mitt","mina",
-  "ett","en","på","av","i","om","är","ska","kan","göra","gör","inte","hos",
+  "och",
+  "att",
+  "med",
+  "för",
+  "den",
+  "det",
+  "som",
+  "till",
+  "från",
+  "min",
+  "mitt",
+  "mina",
+  "ett",
+  "en",
+  "på",
+  "av",
+  "i",
+  "om",
+  "är",
+  "ska",
+  "kan",
+  "göra",
+  "gör",
+  "inte",
+  "hos",
 ]);
 
 function words(text: string): string[] {
@@ -48,10 +71,7 @@ export interface FrictionSuggestion {
  * Hittar den friktionsrapport som bäst matchar en uppgiftstitel.
  * Returnerar null när ingenting matchar tydligt – hellre tyst än fel.
  */
-export function matchFriction(
-  title: string,
-  library: FrictionEntry[],
-): FrictionSuggestion | null {
+export function matchFriction(title: string, library: FrictionEntry[]): FrictionSuggestion | null {
   const taskWords = new Set(words(title));
   if (!taskWords.size || !library.length) return null;
 
@@ -61,7 +81,9 @@ export function matchFriction(
     let hits = 0;
     for (const w of entryWords) {
       if (taskWords.has(w)) hits += 1;
-      else if ([...taskWords].some((t) => t.startsWith(w.slice(0, 5)) || w.startsWith(t.slice(0, 5)))) {
+      else if (
+        [...taskWords].some((t) => t.startsWith(w.slice(0, 5)) || w.startsWith(t.slice(0, 5)))
+      ) {
         hits += 0.5;
       }
     }

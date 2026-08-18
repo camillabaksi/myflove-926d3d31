@@ -151,9 +151,7 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
         {insight && (
           <MyFloveCard tone="blush" className="mt-3 space-y-3">
             <p className="text-sm text-ink">{insight.message}</p>
-            {insight.suggestLighterPlan && (
-              <MyFloveLinkRow />
-            )}
+            {insight.suggestLighterPlan && <MyFloveLinkRow />}
           </MyFloveCard>
         )}
       </CollapsibleSection>
@@ -217,7 +215,11 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
             <div className="text-sm font-medium text-ink">Vad handlar det om?</div>
             <div className="flex flex-wrap gap-2">
               {ENERGY_CATEGORIES.map((c) => (
-                <MyFloveChip key={c.id} active={category === c.id} onClick={() => setCategory(c.id)}>
+                <MyFloveChip
+                  key={c.id}
+                  active={category === c.id}
+                  onClick={() => setCategory(c.id)}
+                >
                   {c.emoji} {c.label}
                 </MyFloveChip>
               ))}
@@ -273,7 +275,9 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
                     {categoryEmoji(e.category)} {categoryLabel(e.category)} ·{" "}
                     {e.direction === "gives" ? `🔋 +${e.strength}` : `🪫 −${e.strength}`}
                   </div>
-                  <div className={`font-medium text-ink ${e.countsTowardScore ? "" : "opacity-60"}`}>
+                  <div
+                    className={`font-medium text-ink ${e.countsTowardScore ? "" : "opacity-60"}`}
+                  >
                     {e.title}
                   </div>
                   {e.note && <p className="text-sm text-muted-foreground">{e.note}</p>}
@@ -329,7 +333,9 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
 
             {nameTrends.length > 0 && (
               <MyFloveCard className="space-y-2">
-                <div className="text-sm font-medium text-ink">Dina återkommande faktorer (30 dagar)</div>
+                <div className="text-sm font-medium text-ink">
+                  Dina återkommande faktorer (30 dagar)
+                </div>
                 {nameTrends.map((t) => (
                   <div key={t.key} className="flex items-center justify-between text-sm">
                     <span>
@@ -361,7 +367,6 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
           kapacitet.
         </p>
       </CollapsibleSection>
-
     </div>
   );
 }

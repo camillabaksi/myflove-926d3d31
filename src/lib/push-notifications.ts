@@ -1,42 +1,42 @@
-import { isQuietNow } from '@/lib/quiet-mode';
-export type NotificationPermissionState = 'granted' | 'denied' | 'default' | 'unsupported';
+import { isQuietNow } from "@/lib/quiet-mode";
+export type NotificationPermissionState = "granted" | "denied" | "default" | "unsupported";
 
-const ALARM_PREF_KEY = 'myflow-alarm-sound-enabled';
-const ALARM_EVENT = 'myflow-alarm-pref-changed';
+const ALARM_PREF_KEY = "myflow-alarm-sound-enabled";
+const ALARM_EVENT = "myflow-alarm-pref-changed";
 
 export function isNotificationSupported(): boolean {
-  return typeof window !== 'undefined' && 'Notification' in window;
+  return typeof window !== "undefined" && "Notification" in window;
 }
 
 export function getNotificationPermission(): NotificationPermissionState {
-  if (!isNotificationSupported()) return 'unsupported';
+  if (!isNotificationSupported()) return "unsupported";
   return Notification.permission;
 }
 
 export async function requestNotificationPermission(): Promise<NotificationPermissionState> {
-  if (!isNotificationSupported()) return 'unsupported';
-  if (Notification.permission === 'granted' || Notification.permission === 'denied') {
+  if (!isNotificationSupported()) return "unsupported";
+  if (Notification.permission === "granted" || Notification.permission === "denied") {
     return Notification.permission;
   }
   try {
     return await Notification.requestPermission();
   } catch {
-    return 'denied';
+    return "denied";
   }
 }
 
 export function isAlarmSoundEnabled(): boolean {
-  if (typeof window === 'undefined') return true;
+  if (typeof window === "undefined") return true;
   try {
     const val = window.localStorage.getItem(ALARM_PREF_KEY);
-    return val === null ? true : val === 'true';
+    return val === null ? true : val === "true";
   } catch {
     return true;
   }
 }
 
 export function setAlarmSoundEnabled(enabled: boolean): void {
-  if (typeof window === 'undefined') return;
+  if (typeof window === "undefined") return;
   try {
     window.localStorage.setItem(ALARM_PREF_KEY, String(enabled));
     window.dispatchEvent(new CustomEvent(ALARM_EVENT, { detail: { enabled } }));
@@ -46,10 +46,10 @@ export function setAlarmSoundEnabled(enabled: boolean): void {
 }
 
 export function subscribeAlarmPref(cb: (enabled: boolean) => void): () => void {
-  if (typeof window === 'undefined') return () => {};
+  if (typeof window === "undefined") return () => {};
   const handler = () => cb(isAlarmSoundEnabled());
   window.addEventListener(ALARM_EVENT, handler);
-  window.addEventListener('storage', (e) => {
+  window.addEventListener("storage", (e) => {
     if (e.key === ALARM_PREF_KEY) handler();
   });
   return () => window.removeEventListener(ALARM_EVENT, handler);
@@ -100,10 +100,10 @@ function buildAlarmWav(): Blob {
   const writeStr = (o: number, s: string) => {
     for (let i = 0; i < s.length; i++) view.setUint8(o + i, s.charCodeAt(i));
   };
-  writeStr(0, 'RIFF');
+  writeStr(0, "RIFF");
   view.setUint32(4, 36 + samples.length * 2, true);
-  writeStr(8, 'WAVE');
-  writeStr(12, 'fmt ');
+  writeStr(8, "WAVE");
+  writeStr(12, "fmt ");
   view.setUint32(16, 16, true);
   view.setUint16(20, 1, true);
   view.setUint16(22, 1, true);
@@ -111,7 +111,7 @@ function buildAlarmWav(): Blob {
   view.setUint32(28, sampleRate * 2, true);
   view.setUint16(32, 2, true);
   view.setUint16(34, 16, true);
-  writeStr(36, 'data');
+  writeStr(36, "data");
   view.setUint32(40, samples.length * 2, true);
   let offset = 44;
   for (let i = 0; i < samples.length; i++) {
@@ -119,16 +119,16 @@ function buildAlarmWav(): Blob {
     view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
     offset += 2;
   }
-  return new Blob([buffer], { type: 'audio/wav' });
+  return new Blob([buffer], { type: "audio/wav" });
 }
 
 function ensureAudio(): HTMLAudioElement | null {
-  if (typeof window === 'undefined') return null;
+  if (typeof window === "undefined") return null;
   if (!audioEl) {
     try {
       audioUrl = URL.createObjectURL(buildAlarmWav());
       audioEl = new Audio(audioUrl);
-      audioEl.preload = 'auto';
+      audioEl.preload = "auto";
       audioEl.load();
     } catch {
       audioEl = null;
@@ -142,7 +142,7 @@ function ensureAudio(): HTMLAudioElement | null {
  * så att webbläsaren tillåter senare uppspelning från timers/notifikationer.
  */
 export function initAlarmAudioUnlock(): void {
-  if (typeof window === 'undefined' || unlockBound) return;
+  if (typeof window === "undefined" || unlockBound) return;
   unlockBound = true;
   const unlock = () => {
     const el = ensureAudio();
@@ -159,15 +159,15 @@ export function initAlarmAudioUnlock(): void {
       .catch(() => {
         el.volume = prevVol;
       });
-    window.removeEventListener('pointerdown', unlock);
-    window.removeEventListener('keydown', unlock);
-    window.removeEventListener('touchstart', unlock);
-    window.removeEventListener('click', unlock);
+    window.removeEventListener("pointerdown", unlock);
+    window.removeEventListener("keydown", unlock);
+    window.removeEventListener("touchstart", unlock);
+    window.removeEventListener("click", unlock);
   };
-  window.addEventListener('pointerdown', unlock);
-  window.addEventListener('keydown', unlock);
-  window.addEventListener('touchstart', unlock);
-  window.addEventListener('click', unlock);
+  window.addEventListener("pointerdown", unlock);
+  window.addEventListener("keydown", unlock);
+  window.addEventListener("touchstart", unlock);
+  window.addEventListener("click", unlock);
 }
 
 export function playAlarmSound(): void {
@@ -216,18 +216,18 @@ export function sendPushNotification(title: string, options?: FlowNotificationOp
   if (!silentAlarm) {
     playAlarmSound();
   }
-  if (!isNotificationSupported() || Notification.permission !== 'granted') return;
+  if (!isNotificationSupported() || Notification.permission !== "granted") return;
 
   // Med service worker kan notisen få knappar ("Klart" / "Skjut upp").
-  if (itemKey && 'serviceWorker' in navigator) {
+  if (itemKey && "serviceWorker" in navigator) {
     void navigator.serviceWorker.ready
       .then((reg) =>
         reg.showNotification(title, {
           ...rest,
-          data: { url: (rest as { data?: { url?: string } }).data?.url ?? '/hem', itemKey },
+          data: { url: (rest as { data?: { url?: string } }).data?.url ?? "/hem", itemKey },
           actions: [
-            { action: 'done', title: '\u2713 Klart' },
-            { action: 'snooze', title: '\u23F0 10 min' },
+            { action: "done", title: "\u2713 Klart" },
+            { action: "snooze", title: "\u23F0 10 min" },
           ],
         } as NotificationOptions),
       )

@@ -192,9 +192,7 @@ function FlowItemEditDialog({ itemId, onClose }: { itemId: string; onClose: () =
       updateThought(realId, { text: title, area: form.area });
     } else if (kind === "rutin") {
       setRoutines((prev) =>
-        (prev ?? []).map((r) =>
-          r.id === realId ? { ...r, title, time: form.time || r.time } : r,
-        ),
+        (prev ?? []).map((r) => (r.id === realId ? { ...r, title, time: form.time || r.time } : r)),
       );
     }
     toast.success("Ändringen är sparad");
@@ -205,8 +203,7 @@ function FlowItemEditDialog({ itemId, onClose }: { itemId: string; onClose: () =
     if (kind === "uppgift") deleteTask(realId);
     else if (kind === "kalender") deleteReminder(realId);
     else if (kind === "tanke") removeThought(realId);
-    else if (kind === "rutin")
-      setRoutines((prev) => (prev ?? []).filter((r) => r.id !== realId));
+    else if (kind === "rutin") setRoutines((prev) => (prev ?? []).filter((r) => r.id !== realId));
     toast.success("Borttagen");
     onClose();
   };
@@ -215,7 +212,9 @@ function FlowItemEditDialog({ itemId, onClose }: { itemId: string; onClose: () =
     <Dialog open onOpenChange={(v) => !v && onClose()}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>{kind === "extern" ? "Ändra där den hör hemma" : "Ändra eller ta bort"}</DialogTitle>
+          <DialogTitle>
+            {kind === "extern" ? "Ändra där den hör hemma" : "Ändra eller ta bort"}
+          </DialogTitle>
           <DialogDescription>
             {kind === "extern"
               ? `Den här kommer från ${home?.label ?? "en annan del av appen"}. Ändra den där så följer den med hit.`

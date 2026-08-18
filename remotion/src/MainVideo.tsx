@@ -33,28 +33,51 @@ export const HEIGHT = 720;
 const S_INTRO = 150;
 const S_VOICE = 270;
 const S_MODULES = 240;
-const S_NEWMOD = 240;      // 8s – nya moduler
-const S_ORGANIZE = 260;    // ~8.7s – mappar, FlowStudy, städning, barn
-const S_BUDGET = 260;      // ~8.7s – budget per dag/vecka/månad
-const S_AREAS = 240;        // 8s – livsområden med färg
-const S_FLOWS = 240;        // 8s – fem flöden
-const S_STUDY = 260;        // ~8.7s – StudyFlow & StudyBuddy
-const S_TRAINING = 300;     // 10s – träning
-const S_ASSISTANT = 240;    // 8s – assistent med historik
+const S_NEWMOD = 240; // 8s – nya moduler
+const S_ORGANIZE = 260; // ~8.7s – mappar, FlowStudy, städning, barn
+const S_BUDGET = 260; // ~8.7s – budget per dag/vecka/månad
+const S_AREAS = 240; // 8s – livsområden med färg
+const S_FLOWS = 240; // 8s – fem flöden
+const S_STUDY = 260; // ~8.7s – StudyFlow & StudyBuddy
+const S_TRAINING = 300; // 10s – träning
+const S_ASSISTANT = 240; // 8s – assistent med historik
 const S_SCENARIOS = 240;
-const S_PROACTIVE = 240;   // 8s – proaktivt + Stop-teaser
+const S_PROACTIVE = 240; // 8s – proaktivt + Stop-teaser
 const S_FLOWPLAN = 300;
 const S_STOP = 240;
 const S_FEELING = 210;
-const S_SIMPLE = 270;       // 9s – hjälptexter, enkelt läge, minimera
-const S_PUSH = 270;        // 9s – push & mobil
+const S_SIMPLE = 270; // 9s – hjälptexter, enkelt läge, minimera
+const S_PUSH = 270; // 9s – push & mobil
 const S_SITUATION = 240;
 const S_RELATIONS = 240;
 const S_CONTROL = 240;
 const S_OUTRO = 300;
 const TRANS = 20;
 
-const SCENES = [S_INTRO, S_VOICE, S_MODULES, S_NEWMOD, S_ORGANIZE, S_BUDGET, S_AREAS, S_FLOWS, S_STUDY, S_TRAINING, S_ASSISTANT, S_SCENARIOS, S_PROACTIVE, S_FLOWPLAN, S_STOP, S_FEELING, S_SIMPLE, S_PUSH, S_SITUATION, S_RELATIONS, S_CONTROL, S_OUTRO];
+const SCENES = [
+  S_INTRO,
+  S_VOICE,
+  S_MODULES,
+  S_NEWMOD,
+  S_ORGANIZE,
+  S_BUDGET,
+  S_AREAS,
+  S_FLOWS,
+  S_STUDY,
+  S_TRAINING,
+  S_ASSISTANT,
+  S_SCENARIOS,
+  S_PROACTIVE,
+  S_FLOWPLAN,
+  S_STOP,
+  S_FEELING,
+  S_SIMPLE,
+  S_PUSH,
+  S_SITUATION,
+  S_RELATIONS,
+  S_CONTROL,
+  S_OUTRO,
+];
 export const TOTAL_FRAMES = SCENES.reduce((a, b) => a + b, 0) - TRANS * (SCENES.length - 1);
 
 const timing = () => linearTiming({ durationInFrames: TRANS });
@@ -63,49 +86,93 @@ export const MainVideo: React.FC = () => {
   return (
     <AbsoluteFill style={{ backgroundColor: COLORS.bg }}>
       <TransitionSeries>
-        <TransitionSeries.Sequence durationInFrames={S_INTRO}><Scene1Intro /></TransitionSeries.Sequence>
+        <TransitionSeries.Sequence durationInFrames={S_INTRO}>
+          <Scene1Intro />
+        </TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={fade()} timing={timing()} />
-        <TransitionSeries.Sequence durationInFrames={S_VOICE}><SceneFlowVoice /></TransitionSeries.Sequence>
+        <TransitionSeries.Sequence durationInFrames={S_VOICE}>
+          <SceneFlowVoice />
+        </TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={fade()} timing={timing()} />
-        <TransitionSeries.Sequence durationInFrames={S_MODULES}><SceneModulesConnected /></TransitionSeries.Sequence>
+        <TransitionSeries.Sequence durationInFrames={S_MODULES}>
+          <SceneModulesConnected />
+        </TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={fade()} timing={timing()} />
-        <TransitionSeries.Sequence durationInFrames={S_NEWMOD}><SceneNewModules /></TransitionSeries.Sequence>
+        <TransitionSeries.Sequence durationInFrames={S_NEWMOD}>
+          <SceneNewModules />
+        </TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={fade()} timing={timing()} />
-        <TransitionSeries.Sequence durationInFrames={S_ORGANIZE}><SceneOrganize /></TransitionSeries.Sequence>
+        <TransitionSeries.Sequence durationInFrames={S_ORGANIZE}>
+          <SceneOrganize />
+        </TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={fade()} timing={timing()} />
-        <TransitionSeries.Sequence durationInFrames={S_BUDGET}><SceneBudget /></TransitionSeries.Sequence>
+        <TransitionSeries.Sequence durationInFrames={S_BUDGET}>
+          <SceneBudget />
+        </TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={fade()} timing={timing()} />
-        <TransitionSeries.Sequence durationInFrames={S_AREAS}><SceneLifeAreas /></TransitionSeries.Sequence>
+        <TransitionSeries.Sequence durationInFrames={S_AREAS}>
+          <SceneLifeAreas />
+        </TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={fade()} timing={timing()} />
-        <TransitionSeries.Sequence durationInFrames={S_FLOWS}><SceneFlows /></TransitionSeries.Sequence>
+        <TransitionSeries.Sequence durationInFrames={S_FLOWS}>
+          <SceneFlows />
+        </TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={fade()} timing={timing()} />
-        <TransitionSeries.Sequence durationInFrames={S_STUDY}><SceneStudyBuddy /></TransitionSeries.Sequence>
+        <TransitionSeries.Sequence durationInFrames={S_STUDY}>
+          <SceneStudyBuddy />
+        </TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={fade()} timing={timing()} />
-        <TransitionSeries.Sequence durationInFrames={S_TRAINING}><SceneTraining /></TransitionSeries.Sequence>
+        <TransitionSeries.Sequence durationInFrames={S_TRAINING}>
+          <SceneTraining />
+        </TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={fade()} timing={timing()} />
-        <TransitionSeries.Sequence durationInFrames={S_ASSISTANT}><SceneAssistant /></TransitionSeries.Sequence>
+        <TransitionSeries.Sequence durationInFrames={S_ASSISTANT}>
+          <SceneAssistant />
+        </TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={fade()} timing={timing()} />
-        <TransitionSeries.Sequence durationInFrames={S_SCENARIOS}><SceneScenarios /></TransitionSeries.Sequence>
+        <TransitionSeries.Sequence durationInFrames={S_SCENARIOS}>
+          <SceneScenarios />
+        </TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={fade()} timing={timing()} />
-        <TransitionSeries.Sequence durationInFrames={S_PROACTIVE}><SceneProactive /></TransitionSeries.Sequence>
+        <TransitionSeries.Sequence durationInFrames={S_PROACTIVE}>
+          <SceneProactive />
+        </TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={fade()} timing={timing()} />
-        <TransitionSeries.Sequence durationInFrames={S_FLOWPLAN}><SceneFlowPlan /></TransitionSeries.Sequence>
+        <TransitionSeries.Sequence durationInFrames={S_FLOWPLAN}>
+          <SceneFlowPlan />
+        </TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={fade()} timing={timing()} />
-        <TransitionSeries.Sequence durationInFrames={S_STOP}><SceneStop /></TransitionSeries.Sequence>
+        <TransitionSeries.Sequence durationInFrames={S_STOP}>
+          <SceneStop />
+        </TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={fade()} timing={timing()} />
-        <TransitionSeries.Sequence durationInFrames={S_FEELING}><SceneFeeling /></TransitionSeries.Sequence>
+        <TransitionSeries.Sequence durationInFrames={S_FEELING}>
+          <SceneFeeling />
+        </TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={fade()} timing={timing()} />
-        <TransitionSeries.Sequence durationInFrames={S_SIMPLE}><SceneSimplicity /></TransitionSeries.Sequence>
+        <TransitionSeries.Sequence durationInFrames={S_SIMPLE}>
+          <SceneSimplicity />
+        </TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={fade()} timing={timing()} />
-        <TransitionSeries.Sequence durationInFrames={S_PUSH}><ScenePushMobile /></TransitionSeries.Sequence>
+        <TransitionSeries.Sequence durationInFrames={S_PUSH}>
+          <ScenePushMobile />
+        </TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={fade()} timing={timing()} />
-        <TransitionSeries.Sequence durationInFrames={S_SITUATION}><SceneSituation /></TransitionSeries.Sequence>
+        <TransitionSeries.Sequence durationInFrames={S_SITUATION}>
+          <SceneSituation />
+        </TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={fade()} timing={timing()} />
-        <TransitionSeries.Sequence durationInFrames={S_RELATIONS}><SceneRelations /></TransitionSeries.Sequence>
+        <TransitionSeries.Sequence durationInFrames={S_RELATIONS}>
+          <SceneRelations />
+        </TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={fade()} timing={timing()} />
-        <TransitionSeries.Sequence durationInFrames={S_CONTROL}><SceneControl /></TransitionSeries.Sequence>
+        <TransitionSeries.Sequence durationInFrames={S_CONTROL}>
+          <SceneControl />
+        </TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={fade()} timing={timing()} />
-        <TransitionSeries.Sequence durationInFrames={S_OUTRO}><SceneOutro /></TransitionSeries.Sequence>
+        <TransitionSeries.Sequence durationInFrames={S_OUTRO}>
+          <SceneOutro />
+        </TransitionSeries.Sequence>
       </TransitionSeries>
     </AbsoluteFill>
   );

@@ -84,7 +84,9 @@ export default function WhatNow() {
 
         {/* Hur lång stund har du? */}
         <div className="rounded-3xl border border-border/60 bg-card p-5 shadow-sm">
-          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Du har ungefär</p>
+          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+            Du har ungefär
+          </p>
           <div className="mt-3 flex flex-wrap gap-2">
             {TIME_CHOICES.map((c) => (
               <button
@@ -110,9 +112,14 @@ export default function WhatNow() {
             <MyFloveThinking label="Jag tittar på din tid, din energi och dina mål..." />
           </div>
         ) : suggestion ? (
-          <MyFloveTransition transitionKey={suggestion.task.id} className="rounded-3xl border border-border/60 bg-card p-6 shadow-lifted space-y-5">
+          <MyFloveTransition
+            transitionKey={suggestion.task.id}
+            className="rounded-3xl border border-border/60 bg-card p-6 shadow-lifted space-y-5"
+          >
             <div>
-              <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Mitt förslag</p>
+              <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                Mitt förslag
+              </p>
               <h2 className="mt-2 flex items-start gap-3 font-display text-2xl font-bold text-ink">
                 <span className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-2xl bg-lavender text-primary">
                   <Sparkles size={18} />
@@ -140,7 +147,10 @@ export default function WhatNow() {
             <div className="space-y-2">
               <Button
                 className="press h-12 w-full rounded-2xl text-base"
-                onClick={() => { setFocusOpen(true); log("fokus"); }}
+                onClick={() => {
+                  setFocusOpen(true);
+                  log("fokus");
+                }}
               >
                 <Play size={18} className="mr-2" /> Börja nu
               </Button>
@@ -172,7 +182,11 @@ export default function WhatNow() {
                 : "Du har inget öppet att göra. Vila lite – jag håller koll."}
             </p>
             {skipped.length > 0 && (
-              <Button variant="outline" className="press mt-4 rounded-2xl" onClick={() => setSkipped([])}>
+              <Button
+                variant="outline"
+                className="press mt-4 rounded-2xl"
+                onClick={() => setSkipped([])}
+              >
                 Visa förslagen igen
               </Button>
             )}
@@ -189,7 +203,6 @@ export default function WhatNow() {
           </p>
         </div>
       </div>
-
 
       <FocusMode
         item={suggestion}

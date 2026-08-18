@@ -32,8 +32,8 @@ export default function HomeCustomize() {
       {open && (
         <div className="surface-card p-4 space-y-3 animate-fade-in">
           <p className="text-xs text-muted-foreground">
-            Kryssa i det du vill se. Dra i handtaget – eller använd pilarna – för att ändra ordningen.
-            Det du kryssar ur försvinner bara från hemskärmen – inget tas bort.
+            Kryssa i det du vill se. Dra i handtaget – eller använd pilarna – för att ändra
+            ordningen. Det du kryssar ur försvinner bara från hemskärmen – inget tas bort.
           </p>
           <div className="grid gap-2">
             {sections.map((section, index) => {
@@ -79,7 +79,9 @@ export default function HomeCustomize() {
                   >
                     <span
                       className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md border ${
-                        visible ? "border-primary bg-primary text-primary-foreground" : "border-border"
+                        visible
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : "border-border"
                       }`}
                     >
                       {visible && <Check size={13} aria-hidden="true" />}
@@ -115,13 +117,25 @@ export default function HomeCustomize() {
             })}
           </div>
           <div className="flex flex-wrap gap-3 pt-1">
-            <button type="button" onClick={showAll} className="text-xs text-primary hover:underline">
+            <button
+              type="button"
+              onClick={showAll}
+              className="text-xs text-primary hover:underline"
+            >
               Visa allt
             </button>
-            <button type="button" onClick={reset} className="text-xs text-muted-foreground hover:underline">
+            <button
+              type="button"
+              onClick={reset}
+              className="text-xs text-muted-foreground hover:underline"
+            >
               Återställ till lugnt läge
             </button>
-            <button type="button" onClick={resetOrder} className="text-xs text-muted-foreground hover:underline">
+            <button
+              type="button"
+              onClick={resetOrder}
+              className="text-xs text-muted-foreground hover:underline"
+            >
               Återställ ordningen
             </button>
           </div>

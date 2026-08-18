@@ -206,7 +206,9 @@ export function situationFocus(state: SituationState): SituationFocus {
   if (!act.includes("jobb") && !act.includes("arbetssokande")) muted.add("jobb");
   if (!act.includes("studier")) muted.add("studier");
 
-  const labels = act.map((id) => `${SITUATION_META[id].emoji} ${SITUATION_META[id].label}`).join(" · ");
+  const labels = act
+    .map((id) => `${SITUATION_META[id].emoji} ${SITUATION_META[id].label}`)
+    .join(" · ");
   return {
     boosted: [...boosted].filter((d) => !muted.has(d)),
     muted: [...muted],

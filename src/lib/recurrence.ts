@@ -19,7 +19,7 @@ function toDate(iso: string): Date | null {
 export function occursOn(
   startDate: string | null | undefined,
   repeat: RepeatMode | null | undefined,
-  dateStr: string
+  dateStr: string,
 ): boolean {
   if (!startDate) return false;
   if (startDate === dateStr) return true;
@@ -42,9 +42,14 @@ export function occursOn(
 /** Enkel tolkning av svenska upprepningsord i fritext. */
 export function detectRepeat(text: string): RepeatMode {
   const lower = text.toLowerCase();
-  if (/(varje dag|varje morgon|varje kväll|dagligen|dagliga|daglig|varje natt)/.test(lower)) return "daily";
+  if (/(varje dag|varje morgon|varje kväll|dagligen|dagliga|daglig|varje natt)/.test(lower))
+    return "daily";
   if (/(vardagar|varje vardag|mån-fre|måndag till fredag)/.test(lower)) return "weekdays";
-  if (/(varje vecka|veckovis|varannan vecka|varje måndag|varje tisdag|varje onsdag|varje torsdag|varje fredag|varje lördag|varje söndag)/.test(lower))
+  if (
+    /(varje vecka|veckovis|varannan vecka|varje måndag|varje tisdag|varje onsdag|varje torsdag|varje fredag|varje lördag|varje söndag)/.test(
+      lower,
+    )
+  )
     return "weekly";
   return "none";
 }

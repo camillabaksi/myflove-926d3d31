@@ -54,8 +54,7 @@ export default function DayTimeline({
       <div className="space-y-1">
         {hours.map((h) => {
           const inHour = timed.filter((e) => Math.floor(toMinutes(e.time) / 60) === h);
-          const showNowLine =
-            isToday && nowMinutes >= h * 60 && nowMinutes < (h + 1) * 60;
+          const showNowLine = isToday && nowMinutes >= h * 60 && nowMinutes < (h + 1) * 60;
           if (inHour.length === 0 && !showNowLine) {
             return (
               <div key={h} className="flex items-center gap-3">
@@ -80,7 +79,6 @@ export default function DayTimeline({
                       Nu
                     </span>
                   </div>
-
                 )}
                 {inHour.map((e) => (
                   <div
@@ -92,8 +90,14 @@ export default function DayTimeline({
                         : "hsl(var(--lavender))",
                     }}
                   >
-                    {e.emoji && <span aria-hidden className="text-lg leading-none">{e.emoji}</span>}
-                    <span className="min-w-0 flex-1 truncate text-sm font-medium text-ink">{e.title}</span>
+                    {e.emoji && (
+                      <span aria-hidden className="text-lg leading-none">
+                        {e.emoji}
+                      </span>
+                    )}
+                    <span className="min-w-0 flex-1 truncate text-sm font-medium text-ink">
+                      {e.title}
+                    </span>
                     <span className="shrink-0 text-xs text-muted-foreground">
                       {e.time}
                       {e.endTime ? `–${e.endTime}` : ""}

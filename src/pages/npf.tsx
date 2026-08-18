@@ -11,13 +11,33 @@ type Row = {
 };
 
 const ROWS: Row[] = [
-  { key: "less", title: "Färre saker på skärmen", text: "Extra texter och tips göms. Du ser bara det viktigaste." },
+  {
+    key: "less",
+    title: "Färre saker på skärmen",
+    text: "Extra texter och tips göms. Du ser bara det viktigaste.",
+  },
   { key: "calm", title: "Lugnare färger", text: "Mjukare skuggor och inga starka färgtoningar." },
-  { key: "stillness", title: "Ingen rörelse", text: "Stänger av animationer som glider och blinkar." },
-  { key: "plainWords", title: "Enkla ord", text: "Vanlig svenska istället för namn som FlowPlan och FlowScore." },
-  { key: "roomy", title: "Mer luft och större knappar", text: "Lättare att träffa rätt och lättare att läsa." },
+  {
+    key: "stillness",
+    title: "Ingen rörelse",
+    text: "Stänger av animationer som glider och blinkar.",
+  },
+  {
+    key: "plainWords",
+    title: "Enkla ord",
+    text: "Vanlig svenska istället för namn som FlowPlan och FlowScore.",
+  },
+  {
+    key: "roomy",
+    title: "Mer luft och större knappar",
+    text: "Lättare att träffa rätt och lättare att läsa.",
+  },
   { key: "largeText", title: "Större text", text: "All text i appen blir lite större." },
-  { key: "pictograms", title: "Bildstöd", text: "Visar symboler tillsammans med text där det går." },
+  {
+    key: "pictograms",
+    title: "Bildstöd",
+    text: "Visar symboler tillsammans med text där det går.",
+  },
 ];
 
 export default function NpfPage() {
@@ -32,7 +52,8 @@ export default function NpfPage() {
             <h1 className="text-2xl font-bold">Anpassa appen</h1>
           </div>
           <p className="text-muted-foreground">
-            Välj hur mycket du vill se och höra. Dina val sparas och ligger kvar tills du ändrar dem.
+            Välj hur mycket du vill se och höra. Dina val sparas och ligger kvar tills du ändrar
+            dem.
           </p>
         </header>
 

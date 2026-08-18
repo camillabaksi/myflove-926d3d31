@@ -42,7 +42,6 @@ export const subscribeToPush = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
-
 // ---- Unsubscribe ------------------------------------------------------------
 
 const UnsubscribeSchema = z.object({ endpoint: z.string().url() });
@@ -171,7 +170,6 @@ const PrefsSchema = z
   .transform((obj) =>
     Object.fromEntries(Object.entries(obj).filter(([, v]) => v !== null && v !== undefined)),
   );
-
 
 /** Kvitterar att man är vaken – stoppar dagens uppföljningar direkt. */
 export const acknowledgeWake = createServerFn({ method: "POST" })

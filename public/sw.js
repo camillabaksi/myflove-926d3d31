@@ -12,7 +12,14 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("push", (event) => {
-  let data = { title: "MyFlove", body: "Ny påminnelse", url: "/hem", tag: undefined, icon: "/icon-192.png", badge: "/icon-192.png" };
+  let data = {
+    title: "MyFlove",
+    body: "Ny påminnelse",
+    url: "/hem",
+    tag: undefined,
+    icon: "/icon-192.png",
+    badge: "/icon-192.png",
+  };
   try {
     if (event.data) {
       const parsed = event.data.json();
@@ -23,12 +30,13 @@ self.addEventListener("push", (event) => {
   }
 
   const itemKey = data.itemKey;
-  const quickActions = itemKey && /^(task|deadline|reminder|quickflow):/.test(itemKey)
-    ? [
-        { action: "done", title: "✓ Klart" },
-        { action: "snooze", title: "⏰ 10 min" },
-      ]
-    : [];
+  const quickActions =
+    itemKey && /^(task|deadline|reminder|quickflow):/.test(itemKey)
+      ? [
+          { action: "done", title: "✓ Klart" },
+          { action: "snooze", title: "⏰ 10 min" },
+        ]
+      : [];
 
   const options = {
     body: data.body,
@@ -43,7 +51,6 @@ self.addEventListener("push", (event) => {
   };
   event.waitUntil(self.registration.showNotification(data.title, options));
 });
-
 
 /* Webbläsaren kan byta ut prenumerationen. Då skapar vi en ny direkt och
    berättar för servern, annars slutar notiserna komma när appen är stängd. */
@@ -124,4 +131,3 @@ self.addEventListener("notificationclick", (event) => {
     })(),
   );
 });
-

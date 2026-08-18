@@ -66,7 +66,12 @@ export default function IntroTour() {
   };
 
   return (
-    <Dialog open onOpenChange={(open) => { if (!open) finish(); }}>
+    <Dialog
+      open
+      onOpenChange={(open) => {
+        if (!open) finish();
+      }}
+    >
       <DialogContent className="max-w-sm rounded-3xl px-0 pb-5 pt-6 overflow-hidden">
         <DialogTitle className="sr-only">{STEPS[step].title}</DialogTitle>
         <DialogDescription className="sr-only">{STEPS[step].body}</DialogDescription>
@@ -97,7 +102,9 @@ export default function IntroTour() {
             const Icon = s.icon;
             return (
               <div key={s.title} className="w-full shrink-0 snap-center px-6">
-                <div className={`mx-auto mb-4 grid h-16 w-16 place-items-center rounded-3xl ${s.tint} text-primary breathe`}>
+                <div
+                  className={`mx-auto mb-4 grid h-16 w-16 place-items-center rounded-3xl ${s.tint} text-primary breathe`}
+                >
                   <Icon size={28} />
                 </div>
                 <h2 className="text-center font-display text-xl font-bold text-ink">{s.title}</h2>

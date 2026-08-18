@@ -37,17 +37,57 @@ export const CLEAN_ROOMS: CleanRoom[] = [
     hue: "38 62% 42%",
     steps: {
       vardag: [
-        { id: "kok-disk", label: "Diska eller fyll diskmaskinen", minutes: 10, needs: ["Diskmedel", "Disksvamp"] },
-        { id: "kok-banka", label: "Torka bänkar och spis", minutes: 5, needs: ["Allrengöring", "Trasa"] },
+        {
+          id: "kok-disk",
+          label: "Diska eller fyll diskmaskinen",
+          minutes: 10,
+          needs: ["Diskmedel", "Disksvamp"],
+        },
+        {
+          id: "kok-banka",
+          label: "Torka bänkar och spis",
+          minutes: 5,
+          needs: ["Allrengöring", "Trasa"],
+        },
         { id: "kok-sopor", label: "Töm soporna", minutes: 3, needs: ["Soppåse"] },
-        { id: "kok-golv", label: "Sopa/dammsug golvet", minutes: 5, needs: ["Sopborste eller dammsugare"] },
+        {
+          id: "kok-golv",
+          label: "Sopa/dammsug golvet",
+          minutes: 5,
+          needs: ["Sopborste eller dammsugare"],
+        },
       ],
       stor: [
-        { id: "kok-skap", label: "Torka ur skåp och lådor", minutes: 30, needs: ["Allrengöring", "Trasa"] },
-        { id: "kok-kyl", label: "Rensa och torka kylen", minutes: 25, needs: ["Allrengöring", "Soppåse"] },
-        { id: "kok-ugn", label: "Rengör ugn och mikro", minutes: 25, needs: ["Ugnsrent", "Handskar", "Svamp"] },
-        { id: "kok-flakt", label: "Rengör fläktfilter", minutes: 15, needs: ["Diskmedel", "Hett vatten"] },
-        { id: "kok-golv-stor", label: "Skura golvet", minutes: 15, needs: ["Mopp", "Golvrent", "Hink"] },
+        {
+          id: "kok-skap",
+          label: "Torka ur skåp och lådor",
+          minutes: 30,
+          needs: ["Allrengöring", "Trasa"],
+        },
+        {
+          id: "kok-kyl",
+          label: "Rensa och torka kylen",
+          minutes: 25,
+          needs: ["Allrengöring", "Soppåse"],
+        },
+        {
+          id: "kok-ugn",
+          label: "Rengör ugn och mikro",
+          minutes: 25,
+          needs: ["Ugnsrent", "Handskar", "Svamp"],
+        },
+        {
+          id: "kok-flakt",
+          label: "Rengör fläktfilter",
+          minutes: 15,
+          needs: ["Diskmedel", "Hett vatten"],
+        },
+        {
+          id: "kok-golv-stor",
+          label: "Skura golvet",
+          minutes: 15,
+          needs: ["Mopp", "Golvrent", "Hink"],
+        },
       ],
     },
   },
@@ -58,14 +98,39 @@ export const CLEAN_ROOMS: CleanRoom[] = [
     hue: "205 45% 34%",
     steps: {
       vardag: [
-        { id: "bad-toa", label: "Rengör toaletten", minutes: 5, needs: ["Toalettborste", "WC-rent"] },
-        { id: "bad-handfat", label: "Torka handfat och spegel", minutes: 5, needs: ["Allrengöring", "Mikrofiberduk"] },
+        {
+          id: "bad-toa",
+          label: "Rengör toaletten",
+          minutes: 5,
+          needs: ["Toalettborste", "WC-rent"],
+        },
+        {
+          id: "bad-handfat",
+          label: "Torka handfat och spegel",
+          minutes: 5,
+          needs: ["Allrengöring", "Mikrofiberduk"],
+        },
         { id: "bad-golv", label: "Torka golvet", minutes: 5, needs: ["Mopp eller trasa"] },
       ],
       stor: [
-        { id: "bad-dusch", label: "Skura dusch/badkar", minutes: 20, needs: ["Badrumsrent", "Skursvamp", "Handskar"] },
-        { id: "bad-kakel", label: "Rengör kakel och fogar", minutes: 25, needs: ["Fogborste", "Badrumsrent"] },
-        { id: "bad-golvbrunn", label: "Rensa golvbrunnen", minutes: 10, needs: ["Handskar", "Soppåse"] },
+        {
+          id: "bad-dusch",
+          label: "Skura dusch/badkar",
+          minutes: 20,
+          needs: ["Badrumsrent", "Skursvamp", "Handskar"],
+        },
+        {
+          id: "bad-kakel",
+          label: "Rengör kakel och fogar",
+          minutes: 25,
+          needs: ["Fogborste", "Badrumsrent"],
+        },
+        {
+          id: "bad-golvbrunn",
+          label: "Rensa golvbrunnen",
+          minutes: 10,
+          needs: ["Handskar", "Soppåse"],
+        },
         { id: "bad-skap", label: "Rensa i badrumsskåpet", minutes: 15, needs: ["Soppåse"] },
       ],
     },
@@ -77,14 +142,34 @@ export const CLEAN_ROOMS: CleanRoom[] = [
     hue: "152 40% 28%",
     steps: {
       vardag: [
-        { id: "vrum-plocka", label: "Plocka undan i 10 min", minutes: 10, needs: ["Korg för sånt som ska bort"] },
+        {
+          id: "vrum-plocka",
+          label: "Plocka undan i 10 min",
+          minutes: 10,
+          needs: ["Korg för sånt som ska bort"],
+        },
         { id: "vrum-damma", label: "Damma ytor", minutes: 7, needs: ["Mikrofiberduk"] },
         { id: "vrum-dammsug", label: "Dammsug golvet", minutes: 8, needs: ["Dammsugare"] },
       ],
       stor: [
-        { id: "vrum-soffa", label: "Dammsug soffan och under kuddarna", minutes: 15, needs: ["Dammsugare", "Möbelmunstycke"] },
-        { id: "vrum-under", label: "Flytta möbler och dammsug under", minutes: 25, needs: ["Dammsugare"] },
-        { id: "vrum-fonster", label: "Putsa fönster", minutes: 20, needs: ["Fönsterputs", "Skrapa", "Trasa"] },
+        {
+          id: "vrum-soffa",
+          label: "Dammsug soffan och under kuddarna",
+          minutes: 15,
+          needs: ["Dammsugare", "Möbelmunstycke"],
+        },
+        {
+          id: "vrum-under",
+          label: "Flytta möbler och dammsug under",
+          minutes: 25,
+          needs: ["Dammsugare"],
+        },
+        {
+          id: "vrum-fonster",
+          label: "Putsa fönster",
+          minutes: 20,
+          needs: ["Fönsterputs", "Skrapa", "Trasa"],
+        },
         { id: "vrum-textil", label: "Tvätta gardiner/plädar", minutes: 10, needs: ["Tvättmedel"] },
       ],
     },
@@ -102,9 +187,24 @@ export const CLEAN_ROOMS: CleanRoom[] = [
       ],
       stor: [
         { id: "sov-sang", label: "Byt sängkläder", minutes: 12, needs: ["Rena sängkläder"] },
-        { id: "sov-madrass", label: "Vädra och dammsug madrassen", minutes: 15, needs: ["Dammsugare"] },
-        { id: "sov-garderob", label: "Rensa garderoben", minutes: 30, needs: ["Kassar för second hand"] },
-        { id: "sov-golv", label: "Dammsug och torka golvet", minutes: 15, needs: ["Dammsugare", "Mopp"] },
+        {
+          id: "sov-madrass",
+          label: "Vädra och dammsug madrassen",
+          minutes: 15,
+          needs: ["Dammsugare"],
+        },
+        {
+          id: "sov-garderob",
+          label: "Rensa garderoben",
+          minutes: 30,
+          needs: ["Kassar för second hand"],
+        },
+        {
+          id: "sov-golv",
+          label: "Dammsug och torka golvet",
+          minutes: 15,
+          needs: ["Dammsugare", "Mopp"],
+        },
       ],
     },
   },
@@ -121,7 +221,12 @@ export const CLEAN_ROOMS: CleanRoom[] = [
       ],
       stor: [
         { id: "hall-rensa", label: "Rensa ytterkläder och skor", minutes: 20, needs: ["Kassar"] },
-        { id: "hall-dorr", label: "Torka dörrar och lister", minutes: 15, needs: ["Allrengöring", "Trasa"] },
+        {
+          id: "hall-dorr",
+          label: "Torka dörrar och lister",
+          minutes: 15,
+          needs: ["Allrengöring", "Trasa"],
+        },
         { id: "hall-golv-stor", label: "Skura golvet", minutes: 10, needs: ["Mopp", "Golvrent"] },
       ],
     },
@@ -134,12 +239,32 @@ export const CLEAN_ROOMS: CleanRoom[] = [
     steps: {
       vardag: [
         { id: "tvatt-start", label: "Starta en maskin", minutes: 5, needs: ["Tvättmedel"] },
-        { id: "tvatt-hang", label: "Häng eller vik tvätt", minutes: 12, needs: ["Galgar", "Torkställning"] },
+        {
+          id: "tvatt-hang",
+          label: "Häng eller vik tvätt",
+          minutes: 12,
+          needs: ["Galgar", "Torkställning"],
+        },
       ],
       stor: [
-        { id: "tvatt-sortera", label: "Sortera hela tvättberget", minutes: 20, needs: ["Tvättkorgar"] },
-        { id: "tvatt-maskin", label: "Rengör tvättmaskinens fack och filter", minutes: 15, needs: ["Ättika eller maskinrent"] },
-        { id: "tvatt-strryk", label: "Stryk det som behövs", minutes: 25, needs: ["Strykjärn", "Strykbräda"] },
+        {
+          id: "tvatt-sortera",
+          label: "Sortera hela tvättberget",
+          minutes: 20,
+          needs: ["Tvättkorgar"],
+        },
+        {
+          id: "tvatt-maskin",
+          label: "Rengör tvättmaskinens fack och filter",
+          minutes: 15,
+          needs: ["Ättika eller maskinrent"],
+        },
+        {
+          id: "tvatt-strryk",
+          label: "Stryk det som behövs",
+          minutes: 25,
+          needs: ["Strykjärn", "Strykbräda"],
+        },
       ],
     },
   },

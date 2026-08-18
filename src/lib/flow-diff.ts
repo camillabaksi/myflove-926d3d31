@@ -22,7 +22,13 @@ export interface FlowDiff {
   from: FlowSnapshot;
   to: FlowSnapshot;
   /** Vilka signaler som ändrades och hur mycket de bidrog. */
-  signalChanges: { label: string; source: string; from: number | null; to: number | null; delta: number }[];
+  signalChanges: {
+    label: string;
+    source: string;
+    from: number | null;
+    to: number | null;
+    delta: number;
+  }[];
   /** Planförändringar i klartext. */
   planChanges: string[];
   added: { id: string; title: string; minutes: number }[];
@@ -55,7 +61,10 @@ export function makeSnapshot(
 }
 
 export function diffSnapshots(from: FlowSnapshot, to: FlowSnapshot): FlowDiff {
-  const sources = new Set([...from.factors.map((f) => f.source), ...to.factors.map((f) => f.source)]);
+  const sources = new Set([
+    ...from.factors.map((f) => f.source),
+    ...to.factors.map((f) => f.source),
+  ]);
   const signalChanges: FlowDiff["signalChanges"] = [];
   for (const source of sources) {
     const a = from.factors.find((f) => f.source === source);
@@ -85,12 +94,16 @@ export function diffSnapshots(from: FlowSnapshot, to: FlowSnapshot): FlowDiff {
   const planChanges: string[] = [];
   if (to.capacityMinutes !== from.capacityMinutes) {
     const d = to.capacityMinutes - from.capacityMinutes;
-    planChanges.push(`Fokustid ${d > 0 ? "+" : ""}${d} min (${from.capacityMinutes} → ${to.capacityMinutes} min)`);
+    planChanges.push(
+      `Fokustid ${d > 0 ? "+" : ""}${d} min (${from.capacityMinutes} → ${to.capacityMinutes} min)`,
+    );
   }
   if (to.maxFriction !== from.maxFriction) {
     planChanges.push(
       `Friktionsgräns ${from.maxFriction} → ${to.maxFriction}/10 – ${
-        to.maxFriction > from.maxFriction ? "tyngre saker får plats nu" : "tyngre saker sparas till senare"
+        to.maxFriction > from.maxFriction
+          ? "tyngre saker får plats nu"
+          : "tyngre saker sparas till senare"
       }`,
     );
   }

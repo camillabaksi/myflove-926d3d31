@@ -1,6 +1,14 @@
 import React from "react";
 import { AbsoluteFill, useCurrentFrame, interpolate } from "remotion";
-import { COLORS, FONTS, SceneShell, SectionEyebrow, SectionTitle, SectionSub, useEntrance } from "../theme";
+import {
+  COLORS,
+  FONTS,
+  SceneShell,
+  SectionEyebrow,
+  SectionTitle,
+  SectionSub,
+  useEntrance,
+} from "../theme";
 
 const MODULES = [
   { label: "Kalender", icon: "▤" },
@@ -57,12 +65,19 @@ export const SceneModulesConnected: React.FC = () => {
           <SectionEyebrow delay={0}>Allt hänger ihop</SectionEyebrow>
           <SectionTitle delay={4}>En hjärna. Inte sju appar.</SectionTitle>
           <SectionSub delay={10}>
-            Flow läser av kalender, ekonomi, hälsa, familj, inköp och ärenden – och hjälper dig med helheten.
+            Flow läser av kalender, ekonomi, hälsa, familj, inköp och ärenden – och hjälper dig med
+            helheten.
           </SectionSub>
         </div>
 
         <svg
-          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }}
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            pointerEvents: "none",
+          }}
         >
           {MODULES.map((m, i) => {
             const angle = (i / MODULES.length) * Math.PI * 2 - Math.PI / 2;
@@ -108,7 +123,9 @@ export const SceneModulesConnected: React.FC = () => {
 
         {MODULES.map((m, i) => {
           const angle = (i / MODULES.length) * Math.PI * 2 - Math.PI / 2;
-          return <Node key={m.label} label={m.label} icon={m.icon} angle={angle} delay={20 + i * 5} />;
+          return (
+            <Node key={m.label} label={m.label} icon={m.icon} angle={angle} delay={20 + i * 5} />
+          );
         })}
       </AbsoluteFill>
     </SceneShell>

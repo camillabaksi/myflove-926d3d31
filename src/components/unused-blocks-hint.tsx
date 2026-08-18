@@ -33,7 +33,6 @@ export default function UnusedBlocksHint() {
       if (days !== null && days >= QUIET_DAYS) return { block, days };
     }
     return null;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dismissedUntil, handled, isHidden]);
 
   if (!candidate) return null;
@@ -43,7 +42,7 @@ export default function UnusedBlocksHint() {
   const hide = () => {
     toggle(candidate.block.id);
     setHandled((h) => [...h, candidate.block.id]);
-    toast.success("Dolt. Du hittar det under \"Anpassa hemskärmen\".");
+    toast.success('Dolt. Du hittar det under "Anpassa hemskärmen".');
   };
 
   return (

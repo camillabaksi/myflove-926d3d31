@@ -65,8 +65,9 @@ function ForgotPasswordPage() {
         {sent ? (
           <>
             <p className="mb-6 text-sm text-muted-foreground">
-              Om det finns ett konto för <span className="font-medium">{email}</span> har vi skickat en
-              återställningslänk dit. Kolla din inkorg – och skräpposten, ibland gömmer den sig där.
+              Om det finns ett konto för <span className="font-medium">{email}</span> har vi skickat
+              en återställningslänk dit. Kolla din inkorg – och skräpposten, ibland gömmer den sig
+              där.
             </p>
             <Button variant="outline" className="w-full" onClick={() => setSent(false)}>
               Skicka igen
@@ -75,7 +76,8 @@ function ForgotPasswordPage() {
         ) : (
           <>
             <p className="mb-6 text-sm text-muted-foreground">
-              Ingen stress. Skriv din e-post så skickar vi en länk där du kan välja ett nytt lösenord.
+              Ingen stress. Skriv din e-post så skickar vi en länk där du kan välja ett nytt
+              lösenord.
             </p>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">

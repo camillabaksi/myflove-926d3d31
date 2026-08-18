@@ -21,7 +21,9 @@ export function FlowScoreBreakdown({
   return (
     <div className="space-y-4">
       <div className="rounded-2xl border border-border bg-background/60 p-4">
-        <p className="text-xs uppercase tracking-wide text-muted-foreground">Så räknades det ihop</p>
+        <p className="text-xs uppercase tracking-wide text-muted-foreground">
+          Så räknades det ihop
+        </p>
         <div className="mt-2 flex flex-wrap items-center gap-1.5 text-sm">
           {runningTotal.map((step, i) => (
             <span key={step.label + i} className="flex items-center gap-1.5">
@@ -86,10 +88,19 @@ export function FlowScoreBreakdown({
           <Sparkles className="h-4 w-4 text-primary" /> Så används scoren i WorkFlow
         </p>
         <ul className="mt-2 space-y-1 text-xs text-muted-foreground">
-          <li>• Fokustid: {flow.capacityMinutes} min av {minutesLeft} min kvar av dagen.</li>
-          <li>• Friktionsgräns {flow.maxFriction}/10 – tyngre uppgifter läggs under "för tungt nu".</li>
-          <li>• Planen fylls med max {flow.suggestedTasks} sak{flow.suggestedTasks === 1 ? "" : "er"}, resten hamnar i "senare idag".</li>
-          <li>• Energin påverkar även rankningen: låg energi straffar friktion hårdare i Nu-listan.</li>
+          <li>
+            • Fokustid: {flow.capacityMinutes} min av {minutesLeft} min kvar av dagen.
+          </li>
+          <li>
+            • Friktionsgräns {flow.maxFriction}/10 – tyngre uppgifter läggs under "för tungt nu".
+          </li>
+          <li>
+            • Planen fylls med max {flow.suggestedTasks} sak{flow.suggestedTasks === 1 ? "" : "er"},
+            resten hamnar i "senare idag".
+          </li>
+          <li>
+            • Energin påverkar även rankningen: låg energi straffar friktion hårdare i Nu-listan.
+          </li>
         </ul>
       </div>
     </div>

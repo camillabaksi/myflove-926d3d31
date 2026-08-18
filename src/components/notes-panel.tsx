@@ -81,7 +81,8 @@ export default function NotesPanel() {
                   </p>
                   {suggestion && (
                     <p className="text-xs text-primary">
-                      Det här skulle kunna bli {DESTINATION_META[suggestion].label.toLowerCase()} – om du vill.
+                      Det här skulle kunna bli {DESTINATION_META[suggestion].label.toLowerCase()} –
+                      om du vill.
                     </p>
                   )}
                 </div>

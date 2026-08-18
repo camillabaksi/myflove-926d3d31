@@ -10,7 +10,9 @@ function daysBetween(a: string, b: string): number {
 
 function getCheckinStreak(moods: MoodEntry[]): number {
   if (moods.length === 0) return 0;
-  const uniqueDays = Array.from(new Set(moods.map((m) => toDateString(m.date)))).sort().reverse();
+  const uniqueDays = Array.from(new Set(moods.map((m) => toDateString(m.date))))
+    .sort()
+    .reverse();
   let streak = 0;
   let cursor = new Date().toISOString().split("T")[0] as string;
 
@@ -43,7 +45,8 @@ export interface AchievementInput {
 }
 
 export function getAchievements(input: AchievementInput): Achievement[] {
-  const { moods, completedTasks, pomodoroTotalSessions, completedFocusCount, medicationLogCount } = input;
+  const { moods, completedTasks, pomodoroTotalSessions, completedFocusCount, medicationLogCount } =
+    input;
   const checkinStreak = getCheckinStreak(moods);
 
   return [

@@ -2,7 +2,15 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { Button } from "@/components/ui/button";
 import { MyFlovePath } from "@/components/myflove/motion";
-import { Loader2, MapPin, Navigation, Route as RouteIcon, ExternalLink, ChevronDown, RefreshCw } from "lucide-react";
+import {
+  Loader2,
+  MapPin,
+  Navigation,
+  Route as RouteIcon,
+  ExternalLink,
+  ChevronDown,
+  RefreshCw,
+} from "lucide-react";
 import CollapsibleSection from "@/components/collapsible-section";
 import { suggestWalkRoutes, type WalkRoute } from "@/lib/walk-routes.functions";
 import { useToast } from "@/hooks/use-toast";
@@ -31,7 +39,11 @@ export default function WalkRoutesSection() {
   const findRoutes = useCallback(
     async (opts?: { fresh?: boolean; silent?: boolean }) => {
       if (typeof navigator === "undefined" || !navigator.geolocation) {
-        if (!opts?.silent) toast({ title: "Platsen är inte tillgänglig", description: "Din enhet delar ingen position." });
+        if (!opts?.silent)
+          toast({
+            title: "Platsen är inte tillgänglig",
+            description: "Din enhet delar ingen position.",
+          });
         return;
       }
       setLoading(true);
@@ -57,7 +69,11 @@ export default function WalkRoutesSection() {
               });
             }
           } catch {
-            if (!opts?.silent) toast({ title: "Kunde inte hämta förslag", description: "Prova igen om en liten stund." });
+            if (!opts?.silent)
+              toast({
+                title: "Kunde inte hämta förslag",
+                description: "Prova igen om en liten stund.",
+              });
           } finally {
             setLoading(false);
           }
@@ -71,7 +87,11 @@ export default function WalkRoutesSection() {
             });
           }
         },
-        { enableHighAccuracy: opts?.fresh === true, timeout: 12000, maximumAge: opts?.fresh ? 0 : 300000 },
+        {
+          enableHighAccuracy: opts?.fresh === true,
+          timeout: 12000,
+          maximumAge: opts?.fresh ? 0 : 300000,
+        },
       );
     },
     [run, toast],
@@ -93,12 +113,15 @@ export default function WalkRoutesSection() {
     };
   }, [findRoutes]);
 
-
   return (
     <CollapsibleSection
       className="surface-card p-5"
       headingClassName="text-lg font-semibold text-ink flex items-center gap-2"
-      title={<><RouteIcon size={18} className="text-primary" /> Promenadvägar nära dig</>}
+      title={
+        <>
+          <RouteIcon size={18} className="text-primary" /> Promenadvägar nära dig
+        </>
+      }
       description="Säg hur länge eller hur långt du vill gå – Flow föreslår gångbara vägar i olika riktningar och öppnar dem i kartan."
       help="Flow använder din plats för att hitta gångvägar, stigar och lugna gator åt olika håll. Förslagen är rundor tur och retur, öppna dem i Google Maps för vägbeskrivning."
     >
@@ -119,7 +142,9 @@ export default function WalkRoutesSection() {
             type="button"
             onClick={() => setMode(m)}
             className={`rounded-xl border px-3 py-1.5 text-sm capitalize transition ${
-              mode === m ? "bg-primary text-primary-foreground border-primary" : "border-border text-ink"
+              mode === m
+                ? "bg-primary text-primary-foreground border-primary"
+                : "border-border text-ink"
             }`}
           >
             {m === "tid" ? "Efter tid" : "Efter avstånd"}
@@ -135,7 +160,9 @@ export default function WalkRoutesSection() {
                 type="button"
                 onClick={() => setMinutes(v)}
                 className={`rounded-xl border px-3 py-1.5 text-sm transition ${
-                  minutes === v ? "bg-primary text-primary-foreground border-primary" : "border-border text-ink"
+                  minutes === v
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "border-border text-ink"
                 }`}
               >
                 {v} min
@@ -147,7 +174,9 @@ export default function WalkRoutesSection() {
                 type="button"
                 onClick={() => setKm(v)}
                 className={`rounded-xl border px-3 py-1.5 text-sm transition ${
-                  km === v ? "bg-primary text-primary-foreground border-primary" : "border-border text-ink"
+                  km === v
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "border-border text-ink"
                 }`}
               >
                 {v} km
@@ -185,7 +214,8 @@ export default function WalkRoutesSection() {
 
       {updatedAt && (
         <p className="text-xs text-muted-foreground">
-          Uppdaterat {updatedAt.toLocaleTimeString("sv-SE", { hour: "2-digit", minute: "2-digit" })} utifrån din plats.
+          Uppdaterat {updatedAt.toLocaleTimeString("sv-SE", { hour: "2-digit", minute: "2-digit" })}{" "}
+          utifrån din plats.
         </p>
       )}
 
@@ -194,7 +224,6 @@ export default function WalkRoutesSection() {
           Mål: ungefär {target.km} km / {target.minutes} min i lugn takt.
         </p>
       )}
-
 
       {routes && routes.length > 0 && (
         <ul className="space-y-3">
@@ -239,7 +268,10 @@ export default function WalkRoutesSection() {
                   className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-ink hover:underline"
                 >
                   {open ? "Dölj kartan" : "Visa karta"}
-                  <ChevronDown size={14} className={open ? "rotate-180 transition" : "transition"} />
+                  <ChevronDown
+                    size={14}
+                    className={open ? "rotate-180 transition" : "transition"}
+                  />
                 </button>
 
                 {open && (

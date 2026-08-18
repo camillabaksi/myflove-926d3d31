@@ -1,12 +1,7 @@
 // Logic for the "Hjälp mig" flow on the home page. Never blames or reminds the user
 // of what they missed — only ever offers a calmer, smaller version of the day.
 
-export type HelpFeelingId =
-  | "unsure"
-  | "low-energy"
-  | "stressed"
-  | "short-time"
-  | "overwhelmed";
+export type HelpFeelingId = "unsure" | "low-energy" | "stressed" | "short-time" | "overwhelmed";
 
 export interface HelpFeelingOption {
   id: HelpFeelingId;
@@ -35,21 +30,24 @@ export function buildHelpPlan(feeling: HelpFeelingId): HelpPlan {
         feeling,
         taskLimit: 1,
         hideExtras: true,
-        message: "Vi börjar smått. Här är en enda sak att rikta blicken mot — resten får vänta tills du är redo.",
+        message:
+          "Vi börjar smått. Här är en enda sak att rikta blicken mot — resten får vänta tills du är redo.",
       };
     case "low-energy":
       return {
         feeling,
         taskLimit: 1,
         hideExtras: true,
-        message: "Det är okej att gå försiktigt fram idag. Jag har plockat fram bara det allra viktigaste.",
+        message:
+          "Det är okej att gå försiktigt fram idag. Jag har plockat fram bara det allra viktigaste.",
       };
     case "short-time":
       return {
         feeling,
         taskLimit: 2,
         hideExtras: true,
-        message: "Ont om tid räcker långt om vi håller det litet. Här är det som betyder mest just nu.",
+        message:
+          "Ont om tid räcker långt om vi håller det litet. Här är det som betyder mest just nu.",
       };
     case "stressed":
       return {

@@ -17,7 +17,9 @@ interface OverwhelmedModalProps {
 
 function suggestPriorityTask(tasks: Task[]): Task | null {
   if (tasks.length === 0) return null;
-  const withDueDate = tasks.filter(t => t.dueDate).sort((a, b) => (a.dueDate ?? '').localeCompare(b.dueDate ?? ''));
+  const withDueDate = tasks
+    .filter((t) => t.dueDate)
+    .sort((a, b) => (a.dueDate ?? "").localeCompare(b.dueDate ?? ""));
   if (withDueDate.length > 0) return withDueDate[0] as Task;
   return [...tasks].sort((a, b) => a.createdAt - b.createdAt)[0] as Task;
 }
@@ -38,14 +40,12 @@ export default function OverwhelmedModal({ open, onOpenChange }: OverwhelmedModa
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
-  const selectedTask = activeTasks.find(t => t.id === selectedId) ?? null;
+  const selectedTask = activeTasks.find((t) => t.id === selectedId) ?? null;
 
   const handleConfirm = () => {
     if (!selectedTask) return;
     setTodayFocus(selectedTask.title);
-    activeTasks
-      .filter(t => t.id !== selectedTask.id)
-      .forEach(t => snoozeTask(t.id, 2));
+    activeTasks.filter((t) => t.id !== selectedTask.id).forEach((t) => snoozeTask(t.id, 2));
     setDone(true);
   };
 
@@ -57,7 +57,8 @@ export default function OverwhelmedModal({ open, onOpenChange }: OverwhelmedModa
             <div className="text-5xl">🌿</div>
             <h2 className="text-xl font-medium">Ett steg i taget</h2>
             <p className="text-muted-foreground leading-relaxed">
-              Ditt fokus idag är satt. Resten av dina uppgifter är undanstoppade i två dagar så du slipper se dem just nu.
+              Ditt fokus idag är satt. Resten av dina uppgifter är undanstoppade i två dagar så du
+              slipper se dem just nu.
             </p>
             <Button onClick={() => onOpenChange(false)} className="rounded-xl h-12 px-6">
               Stäng
@@ -68,8 +69,8 @@ export default function OverwhelmedModal({ open, onOpenChange }: OverwhelmedModa
             <DialogHeader>
               <DialogTitle className="text-xl">Jag är överväldigad</DialogTitle>
               <DialogDescription>
-                Låt oss göra det enklare. Välj den enda sak som känns viktigast just nu — resten flyttar vi undan
-                i två dagar så det inte syns.
+                Låt oss göra det enklare. Välj den enda sak som känns viktigast just nu — resten
+                flyttar vi undan i två dagar så det inte syns.
               </DialogDescription>
             </DialogHeader>
 
@@ -79,7 +80,7 @@ export default function OverwhelmedModal({ open, onOpenChange }: OverwhelmedModa
               </div>
             ) : (
               <div className="space-y-3 max-h-72 overflow-y-auto py-2">
-                {activeTasks.map(task => (
+                {activeTasks.map((task) => (
                   <button
                     key={task.id}
                     type="button"

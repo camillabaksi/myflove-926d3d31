@@ -4,7 +4,19 @@ import { MyFloveEmptyIllustration } from "@/components/myflove/motion";
 import { useFocus, useTasks, useReminders } from "@/hooks/use-data";
 import { useChildren } from "@/hooks/use-children";
 import { Link } from "wouter";
-import { CheckSquare, Target, Bell, ChevronLeft, ChevronRight, Trash2, Users, Plus, Download, Upload, Baby } from "lucide-react";
+import {
+  CheckSquare,
+  Target,
+  Bell,
+  ChevronLeft,
+  ChevronRight,
+  Trash2,
+  Users,
+  Plus,
+  Download,
+  Upload,
+  Baby,
+} from "lucide-react";
 import { requestNotificationPermission, getNotificationPermission } from "@/lib/push-notifications";
 import { downloadIcs, parseIcs, type IcsEvent } from "@/lib/ics";
 import { occursOn, REPEAT_LABELS, type RepeatMode } from "@/lib/recurrence";
@@ -20,12 +32,7 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import CollapsibleSection from "@/components/collapsible-section";
 import DayTimeline from "@/components/day-timeline";
@@ -33,7 +40,6 @@ import { useLocalStorage } from "@/lib/storage";
 import { pictogramFor } from "@/lib/pictograms";
 import { useNpfSettings } from "@/lib/npf-mode";
 import { ALL_AREAS, AREA_META, getArea, type LifeArea } from "@/lib/life-areas";
-
 
 export type CalCategory = "privat" | "relationer" | "barn" | "jobb" | "studier";
 
@@ -66,7 +72,6 @@ const REMIND_OPTIONS: { value: number | null; label: string }[] = [
   { value: 1440, label: "1 dag innan" },
 ];
 
-
 type CalView = "manad" | "vecka" | "dag";
 
 /** YYYY-MM-DD i lokal tid */
@@ -90,7 +95,6 @@ function addDays(d: Date, n: number) {
   copy.setDate(copy.getDate() + n);
   return copy;
 }
-
 
 function useFamilyEventsByDate() {
   const { isSignedIn } = useUser();
@@ -118,7 +122,12 @@ export default function CalendarPage() {
   const { activeTasks, completedTasks, deleteTask, addTask, updateTask } = useTasks();
   const { activeReminders, addReminder, deleteReminder, updateReminder } = useReminders();
   const { eventsForDate, hasHousehold } = useFamilyEventsByDate();
-  const { children: kids, items: childItems, addItem: addChildItem, deleteItem: deleteChildItem } = useChildren();
+  const {
+    children: kids,
+    items: childItems,
+    addItem: addChildItem,
+    deleteItem: deleteChildItem,
+  } = useChildren();
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -126,7 +135,10 @@ export default function CalendarPage() {
   const [view, setView] = useLocalStorage<CalView>("myflove-calendar-view", "manad");
   /** Bildstöd: stora symboler per händelse i dagsvyn. */
   const { settings: npfSettings } = useNpfSettings();
-  const [pictoStored, setPictoMode] = useLocalStorage<boolean>("myflove-calendar-pictograms", false);
+  const [pictoStored, setPictoMode] = useLocalStorage<boolean>(
+    "myflove-calendar-pictograms",
+    false,
+  );
   // Globalt bildstöd (Anpassa appen) slår på symboler överallt där det finns.
   const pictoMode = pictoStored || npfSettings.pictograms;
   const [visible, setVisible] = useLocalStorage<CalCategory[]>(
@@ -141,12 +153,10 @@ export default function CalendarPage() {
 
   const shows = (c: CalCategory) => visible.includes(c);
   const toggleCategory = (c: CalCategory) =>
-    setVisible((prev) =>
-      prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c],
-    );
+    setVisible((prev) => (prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c]));
 
   const [selectedDateStr, setSelectedDateStr] = useState(
-    new Date().toLocaleDateString('sv-SE').split(' ')[0] // fallback format YYYY-MM-DD
+    new Date().toLocaleDateString("sv-SE").split(" ")[0], // fallback format YYYY-MM-DD
   );
   const [isAddingEvent, setIsAddingEvent] = useState(false);
   const [isAddingAny, setIsAddingAny] = useState(false);
@@ -166,37 +176,33 @@ export default function CalendarPage() {
   const [isAddingReminder, setIsAddingReminder] = useState(false);
   const [newReminderTitle, setNewReminderTitle] = useState("");
   const [newReminderTime, setNewReminderTime] = useState("");
-  const [newReminderRepeat, setNewReminderRepeat] = useState<"none" | "daily" | "weekdays" | "weekly">("none");
-  const [editing, setEditing] = useState<
-    | {
-        kind: "reminder" | "task";
-        id: string;
-        title: string;
-        date: string;
-        time: string;
-        endTime: string;
-        remind: number | null;
-        note: string;
-        area: LifeArea;
-        repeat: "none" | "daily" | "weekdays" | "weekly";
-      }
-    | null
-  >(null);
+  const [newReminderRepeat, setNewReminderRepeat] = useState<
+    "none" | "daily" | "weekdays" | "weekly"
+  >("none");
+  const [editing, setEditing] = useState<{
+    kind: "reminder" | "task";
+    id: string;
+    title: string;
+    date: string;
+    time: string;
+    endTime: string;
+    remind: number | null;
+    note: string;
+    area: LifeArea;
+    repeat: "none" | "daily" | "weekdays" | "weekly";
+  } | null>(null);
 
   /**
    * Redigering av en sammanfogad barnhändelse: här byter man vilka barn som
    * ingår i efterhand, utan att skapa om händelsen.
    */
-  const [editChildGroup, setEditChildGroup] = useState<
-    | {
-        title: string;
-        time: string | null;
-        date: string;
-        note: string | null;
-        items: Array<(typeof childItems)[number]>;
-      }
-    | null
-  >(null);
+  const [editChildGroup, setEditChildGroup] = useState<{
+    title: string;
+    time: string | null;
+    date: string;
+    note: string | null;
+    items: Array<(typeof childItems)[number]>;
+  } | null>(null);
   const [editChildIds, setEditChildIds] = useState<string[]>([]);
   const [savingChildGroup, setSavingChildGroup] = useState(false);
 
@@ -215,7 +221,10 @@ export default function CalendarPage() {
   const saveChildGroup = async () => {
     if (!editChildGroup) return;
     if (editChildIds.length === 0) {
-      toast({ description: "Välj minst ett barn – annars tar du bort händelsen.", variant: "destructive" });
+      toast({
+        description: "Välj minst ett barn – annars tar du bort händelsen.",
+        variant: "destructive",
+      });
       return;
     }
     setSavingChildGroup(true);
@@ -247,24 +256,30 @@ export default function CalendarPage() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-
   const handleExportAll = () => {
     const events: IcsEvent[] = [];
     for (const r of activeReminders) {
       events.push({ title: r.title, date: r.date, time: r.time, uid: `reminder-${r.id}@myflow` });
     }
     for (const t of allTasks) {
-      if (t.dueDate) events.push({ title: t.title, date: t.dueDate, time: t.time, uid: `task-${t.id}@myflow` });
+      if (t.dueDate)
+        events.push({ title: t.title, date: t.dueDate, time: t.time, uid: `task-${t.id}@myflow` });
     }
     if (currentFocus) {
-      events.push({ title: `Fokus: ${currentFocus.text}`, date: todayStr, uid: `focus-${todayStr}@myflow` });
+      events.push({
+        title: `Fokus: ${currentFocus.text}`,
+        date: todayStr,
+        uid: `focus-${todayStr}@myflow`,
+      });
     }
     if (events.length === 0) {
       toast({ description: "Inget att exportera ännu." });
       return;
     }
     downloadIcs(events, "myflow-kalender.ics");
-    toast({ description: `Exporterade ${events.length} händelser. Öppna filen i din kalenderapp.` });
+    toast({
+      description: `Exporterade ${events.length} händelser. Öppna filen i din kalenderapp.`,
+    });
   };
 
   const handleImportFile = async (file: File) => {
@@ -282,10 +297,12 @@ export default function CalendarPage() {
       }
       toast({ description: `Importerade ${added} händelser till kalendern.` });
     } catch {
-      toast({ description: "Kunde inte läsa filen. Kontrollera att det är en .ics-fil.", variant: "destructive" });
+      toast({
+        description: "Kunde inte läsa filen. Kontrollera att det är en .ics-fil.",
+        variant: "destructive",
+      });
     }
   };
-
 
   const createEventMutation = useCreateFamilyEvent({
     mutation: {
@@ -325,7 +342,7 @@ export default function CalendarPage() {
     const time = newAnyTime || undefined;
     const endTime = newAnyEndTime || undefined;
     /** Fritextfält (familj/barn) lagrar intervallet som "09:00–10:00". */
-    const timeRange = time && endTime ? `${time}–${endTime}` : (newAnyTime || null);
+    const timeRange = time && endTime ? `${time}–${endTime}` : newAnyTime || null;
     const note = newAnyNote.trim() || undefined;
     try {
       const wantsReminder = Boolean(time) && newAnyRemind !== null;
@@ -337,7 +354,8 @@ export default function CalendarPage() {
           data: { title, date: selectedDateStr, time: timeRange },
         });
       } else if (newCat === "barn") {
-        const childIds = newAnyChildIds.length > 0 ? newAnyChildIds : (kids[0]?.id ? [kids[0].id] : []);
+        const childIds =
+          newAnyChildIds.length > 0 ? newAnyChildIds : kids[0]?.id ? [kids[0].id] : [];
         if (childIds.length === 0) {
           toast({ description: "Lägg till ett barn först på sidan Barn.", variant: "destructive" });
           return;
@@ -345,7 +363,14 @@ export default function CalendarPage() {
         // Flera barn i samma händelse: posten hamnar i varje barns schema,
         // men det räknas som en händelse i kalendern och en påminnelse till dig.
         for (const childId of childIds) {
-          await addChildItem({ childId, kind: "activity", title, date: selectedDateStr, time: timeRange ?? undefined, notes: note });
+          await addChildItem({
+            childId,
+            kind: "activity",
+            title,
+            date: selectedDateStr,
+            time: timeRange ?? undefined,
+            notes: note,
+          });
         }
       } else if (newCat === "jobb" || newCat === "studier") {
         addTask(title, selectedDateStr, {
@@ -353,10 +378,18 @@ export default function CalendarPage() {
           endTime,
           note,
           area: newCat,
-          reminderMinutesBefore: wantsReminder ? newAnyRemind ?? 0 : undefined,
+          reminderMinutesBefore: wantsReminder ? (newAnyRemind ?? 0) : undefined,
         });
       } else {
-        addReminder(title, selectedDateStr, time, "none", endTime, wantsReminder ? newAnyRemind ?? 0 : undefined, note);
+        addReminder(
+          title,
+          selectedDateStr,
+          time,
+          "none",
+          endTime,
+          wantsReminder ? (newAnyRemind ?? 0) : undefined,
+          note,
+        );
       }
       // Familj- och barnhändelser bor i delade listor – lägg en personlig
       // påminnelse bredvid så att notisen faktiskt når just dig.
@@ -383,8 +416,6 @@ export default function CalendarPage() {
     }
   };
 
-
-
   const stepBack = () => {
     if (view === "manad") {
       setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
@@ -410,16 +441,22 @@ export default function CalendarPage() {
   // Adjust so Monday is 0
   const startOffset = firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1;
 
-  const monthName = currentDate.toLocaleDateString('sv-SE', { month: 'long', year: 'numeric' });
-  const todayStr = new Date().toLocaleDateString('sv-SE').split(' ')[0];
+  const monthName = currentDate.toLocaleDateString("sv-SE", { month: "long", year: "numeric" });
+  const todayStr = new Date().toLocaleDateString("sv-SE").split(" ")[0];
 
-  const weekDays = Array.from({ length: 7 }, (_, i) => fmtDate(addDays(startOfWeek(currentDate), i)));
+  const weekDays = Array.from({ length: 7 }, (_, i) =>
+    fmtDate(addDays(startOfWeek(currentDate), i)),
+  );
   const periodLabel =
     view === "manad"
       ? monthName
       : view === "vecka"
-        ? `${new Date(`${weekDays[0]}T12:00:00`).toLocaleDateString('sv-SE', { day: 'numeric', month: 'short' })} – ${new Date(`${weekDays[6]}T12:00:00`).toLocaleDateString('sv-SE', { day: 'numeric', month: 'short' })}`
-        : currentDate.toLocaleDateString('sv-SE', { weekday: 'long', day: 'numeric', month: 'long' });
+        ? `${new Date(`${weekDays[0]}T12:00:00`).toLocaleDateString("sv-SE", { day: "numeric", month: "short" })} – ${new Date(`${weekDays[6]}T12:00:00`).toLocaleDateString("sv-SE", { day: "numeric", month: "short" })}`
+        : currentDate.toLocaleDateString("sv-SE", {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+          });
 
   const allTasks = [...activeTasks, ...completedTasks];
 
@@ -430,36 +467,46 @@ export default function CalendarPage() {
   const getItemsForDate = (dateStr: string) => {
     const isToday = dateStr === todayStr;
     const focus = isToday && shows("privat") ? currentFocus : null;
-    const tasks = allTasks.filter(t => t.dueDate === dateStr && shows(taskCategory(t.area)));
+    const tasks = allTasks.filter((t) => t.dueDate === dateStr && shows(taskCategory(t.area)));
     const allReminders = shows("privat")
-      ? activeReminders.filter(r => occursOn(r.date, r.repeat ?? 'none', dateStr))
+      ? activeReminders.filter((r) => occursOn(r.date, r.repeat ?? "none", dateStr))
       : [];
     const familyEvents = shows("relationer") ? eventsForDate(dateStr) : [];
     const allChildEvents = shows("barn")
       ? childItems
-          .filter((i) => occursOn(i.date, (i.repeat ?? 'none') as RepeatMode, dateStr))
+          .filter((i) => occursOn(i.date, (i.repeat ?? "none") as RepeatMode, dateStr))
           .map((i) => ({ ...i, child: kids.find((c) => c.id === i.child_id) }))
       : [];
 
     // Återkommande poster (som inte startar just denna dag) visas som prick, inte som händelse
     const isRecurringEcho = (date: string | null | undefined, repeat?: string | null) =>
-      !!repeat && repeat !== 'none' && date !== dateStr;
+      !!repeat && repeat !== "none" && date !== dateStr;
 
-    const reminders = allReminders.filter(r => !isRecurringEcho(r.date, r.repeat));
-    const childEvents = allChildEvents.filter(e => !isRecurringEcho(e.date, e.repeat as string | null));
+    const reminders = allReminders.filter((r) => !isRecurringEcho(r.date, r.repeat));
+    const childEvents = allChildEvents.filter(
+      (e) => !isRecurringEcho(e.date, e.repeat as string | null),
+    );
     const recurring = [
       ...allReminders
-        .filter(r => isRecurringEcho(r.date, r.repeat))
-        .map(r => ({ id: `r-${r.id}`, title: r.title, time: r.time ?? "", color: undefined as string | undefined })),
+        .filter((r) => isRecurringEcho(r.date, r.repeat))
+        .map((r) => ({
+          id: `r-${r.id}`,
+          title: r.title,
+          time: r.time ?? "",
+          color: undefined as string | undefined,
+        })),
       ...allChildEvents
-        .filter(e => isRecurringEcho(e.date, e.repeat as string | null))
-        .map(e => ({ id: `c-${e.id}`, title: e.title, time: e.time ?? "", color: e.child?.color ?? '#a06cd5' })),
+        .filter((e) => isRecurringEcho(e.date, e.repeat as string | null))
+        .map((e) => ({
+          id: `c-${e.id}`,
+          title: e.title,
+          time: e.time ?? "",
+          color: e.child?.color ?? "#a06cd5",
+        })),
     ];
 
     return { focus, tasks, reminders, familyEvents, childEvents, recurring };
   };
-
-
 
   const days: (string | null)[] = [];
   for (let i = 0; i < startOffset; i++) {
@@ -469,8 +516,8 @@ export default function CalendarPage() {
     const d = new Date(currentDate.getFullYear(), currentDate.getMonth(), i);
     // YYYY-MM-DD local format
     const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
     days.push(`${year}-${month}-${day}`);
   }
 
@@ -485,13 +532,14 @@ export default function CalendarPage() {
         recurring: [] as Array<{ id: string; title: string; time: string; color?: string }>,
       };
 
-
   return (
     <Layout>
       <div className="space-y-8">
         <div>
           <h1 className="text-3xl font-bold mb-2">Kalender</h1>
-          <p className="text-muted-foreground">Översikt över dina dagar. Inga stressiga detaljer.</p>
+          <p className="text-muted-foreground">
+            Översikt över dina dagar. Inga stressiga detaljer.
+          </p>
         </div>
 
         <div className="flex flex-wrap gap-2">
@@ -522,7 +570,8 @@ export default function CalendarPage() {
           />
         </div>
         <p className="text-xs text-muted-foreground -mt-4">
-          Tips: exportera i telefonens kalender som .ics och importera här för att få in dina möten i MyFlove.
+          Tips: exportera i telefonens kalender som .ics och importera här för att få in dina möten
+          i MyFlove.
         </p>
 
         <div className="bg-card rounded-3xl border border-border shadow-sm overflow-hidden">
@@ -534,176 +583,276 @@ export default function CalendarPage() {
               headingClassName="text-xl font-medium capitalize"
               actions={
                 <div className="flex items-center gap-1">
-                  <button onClick={stepBack} aria-label="Föregående" className="p-2 hover:bg-secondary rounded-xl transition-colors">
+                  <button
+                    onClick={stepBack}
+                    aria-label="Föregående"
+                    className="p-2 hover:bg-secondary rounded-xl transition-colors"
+                  >
                     <ChevronLeft size={24} />
                   </button>
-                  <button onClick={stepForward} aria-label="Nästa" className="p-2 hover:bg-secondary rounded-xl transition-colors">
+                  <button
+                    onClick={stepForward}
+                    aria-label="Nästa"
+                    className="p-2 hover:bg-secondary rounded-xl transition-colors"
+                  >
                     <ChevronRight size={24} />
                   </button>
                 </div>
               }
             >
-          <div className="flex flex-wrap items-center gap-2 pt-2">
-            <div role="group" aria-label="Välj vy" className="inline-flex items-center gap-1 rounded-full border border-border/60 bg-secondary/40 p-1">
-              {([["manad", "Månad"], ["vecka", "Vecka"], ["dag", "Dag"]] as const).map(([id, label]) => (
+              <div className="flex flex-wrap items-center gap-2 pt-2">
+                <div
+                  role="group"
+                  aria-label="Välj vy"
+                  className="inline-flex items-center gap-1 rounded-full border border-border/60 bg-secondary/40 p-1"
+                >
+                  {(
+                    [
+                      ["manad", "Månad"],
+                      ["vecka", "Vecka"],
+                      ["dag", "Dag"],
+                    ] as const
+                  ).map(([id, label]) => (
+                    <button
+                      key={id}
+                      type="button"
+                      onClick={() => {
+                        setView(id);
+                        if (id !== "manad" && selectedDateStr)
+                          setCurrentDate(new Date(`${selectedDateStr}T12:00:00`));
+                      }}
+                      aria-pressed={view === id}
+                      className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
+                        view === id
+                          ? "bg-primary text-primary-foreground shadow-sm"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
                 <button
-                  key={id}
                   type="button"
                   onClick={() => {
-                    setView(id);
-                    if (id !== "manad" && selectedDateStr) setCurrentDate(new Date(`${selectedDateStr}T12:00:00`));
+                    const now = new Date();
+                    setCurrentDate(now);
+                    setSelectedDateStr(fmtDate(now));
                   }}
-                  aria-pressed={view === id}
-                  className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
-                    view === id ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
-                  }`}
+                  className="rounded-full border border-border/60 px-3 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground"
                 >
-                  {label}
+                  Idag
                 </button>
-              ))}
-            </div>
-            <button
-              type="button"
-              onClick={() => {
-                const now = new Date();
-                setCurrentDate(now);
-                setSelectedDateStr(fmtDate(now));
-              }}
-              className="rounded-full border border-border/60 px-3 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground"
-            >
-              Idag
-            </button>
-          </div>
+              </div>
 
-          <div className="flex flex-wrap items-center gap-2 pt-3" role="group" aria-label="Visa kategorier">
-            {CATEGORIES.map((c) => {
-              const active = shows(c.id);
-              return (
-                <button
-                  key={c.id}
-                  type="button"
-                  onClick={() => toggleCategory(c.id)}
-                  aria-pressed={active}
-                  className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
-                    active ? "text-foreground" : "text-muted-foreground/60 border-border/50"
-                  }`}
-                  style={active ? { backgroundColor: `${c.color}22`, borderColor: `${c.color}66` } : undefined}
-                >
-                  <span className="w-2 h-2 rounded-full" style={{ backgroundColor: active ? c.color : "hsl(var(--muted-foreground))" }} />
-                  {c.label}
-                </button>
-              );
-            })}
-          </div>
+              <div
+                className="flex flex-wrap items-center gap-2 pt-3"
+                role="group"
+                aria-label="Visa kategorier"
+              >
+                {CATEGORIES.map((c) => {
+                  const active = shows(c.id);
+                  return (
+                    <button
+                      key={c.id}
+                      type="button"
+                      onClick={() => toggleCategory(c.id)}
+                      aria-pressed={active}
+                      className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
+                        active ? "text-foreground" : "text-muted-foreground/60 border-border/50"
+                      }`}
+                      style={
+                        active
+                          ? { backgroundColor: `${c.color}22`, borderColor: `${c.color}66` }
+                          : undefined
+                      }
+                    >
+                      <span
+                        className="w-2 h-2 rounded-full"
+                        style={{
+                          backgroundColor: active ? c.color : "hsl(var(--muted-foreground))",
+                        }}
+                      />
+                      {c.label}
+                    </button>
+                  );
+                })}
+              </div>
 
-          {view === "manad" && (
-          <div className="pt-2">
+              {view === "manad" && (
+                <div className="pt-2">
+                  <div className="grid grid-cols-7 gap-1 mb-2 text-center text-sm font-medium text-muted-foreground">
+                    <div>Må</div>
+                    <div>Ti</div>
+                    <div>On</div>
+                    <div>To</div>
+                    <div>Fr</div>
+                    <div>Lö</div>
+                    <div>Sö</div>
+                  </div>
 
-            <div className="grid grid-cols-7 gap-1 mb-2 text-center text-sm font-medium text-muted-foreground">
-              <div>Må</div><div>Ti</div><div>On</div><div>To</div><div>Fr</div><div>Lö</div><div>Sö</div>
-            </div>
-            
-            <div className="grid grid-cols-7 gap-1">
-              {days.map((dateStr, index) => {
-                if (!dateStr) {
-                  return <div key={`empty-${index}`} className="aspect-square" />;
-                }
-                
-                const dNum = parseInt(dateStr.split('-')[2], 10);
-                const isSelected = dateStr === selectedDateStr;
-                const isToday = dateStr === todayStr;
-                const items = getItemsForDate(dateStr);
-                const hasItems = items.focus || items.tasks.length > 0 || items.reminders.length > 0 || items.familyEvents.length > 0 || items.childEvents.length > 0 || items.recurring.length > 0;
+                  <div className="grid grid-cols-7 gap-1">
+                    {days.map((dateStr, index) => {
+                      if (!dateStr) {
+                        return <div key={`empty-${index}`} className="aspect-square" />;
+                      }
 
-                return (
-                  <button
-                    key={dateStr}
-                    onClick={() => setSelectedDateStr(dateStr)}
-                    className={`aspect-square flex flex-col items-center justify-center rounded-2xl relative transition-all ${
-                      isSelected 
-                        ? 'bg-primary text-primary-foreground shadow-sm scale-105 z-10 font-bold' 
-                        : isToday
-                          ? 'bg-primary/10 text-primary font-bold'
-                          : 'hover:bg-secondary text-foreground'
-                    }`}
-                  >
-                    <span className="text-lg">{dNum}</span>
-                    {hasItems && (
-                      <div className="absolute bottom-1.5 flex gap-1">
-                        {items.focus && <div className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-white' : 'bg-accent'}`} />}
-                        {items.reminders.length > 0 && <div className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-white/80' : 'bg-primary'}`} />}
-                        {items.tasks.length > 0 && <div className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-white/60' : 'bg-muted-foreground'}`} />}
-                        {items.childEvents.slice(0, 3).map((e, i) => (
-                          <div
-                            key={`child-${i}`}
-                            className="w-1.5 h-1.5 rounded-full"
-                            style={{ backgroundColor: isSelected ? 'white' : (e.child?.color ?? '#a06cd5') }}
-                          />
-                        ))}
-                        {items.familyEvents.slice(0, 3).map((e, i) => (
-                          <div
-                            key={`fam-${i}`}
-                            className="w-1.5 h-1.5 rounded-full"
-                            style={{ backgroundColor: isSelected ? 'white' : (e.member?.color ?? '#8a9a5b') }}
-                          />
-                        ))}
-                        {items.recurring.length > 0 && (
-                          <div
-                            className={`w-1 h-1 rounded-full ${isSelected ? 'bg-white/50' : 'bg-muted-foreground/40'}`}
-                            title="Återkommande"
-                          />
-                        )}
+                      const dNum = parseInt(dateStr.split("-")[2], 10);
+                      const isSelected = dateStr === selectedDateStr;
+                      const isToday = dateStr === todayStr;
+                      const items = getItemsForDate(dateStr);
+                      const hasItems =
+                        items.focus ||
+                        items.tasks.length > 0 ||
+                        items.reminders.length > 0 ||
+                        items.familyEvents.length > 0 ||
+                        items.childEvents.length > 0 ||
+                        items.recurring.length > 0;
 
-                      </div>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-          )}
+                      return (
+                        <button
+                          key={dateStr}
+                          onClick={() => setSelectedDateStr(dateStr)}
+                          className={`aspect-square flex flex-col items-center justify-center rounded-2xl relative transition-all ${
+                            isSelected
+                              ? "bg-primary text-primary-foreground shadow-sm scale-105 z-10 font-bold"
+                              : isToday
+                                ? "bg-primary/10 text-primary font-bold"
+                                : "hover:bg-secondary text-foreground"
+                          }`}
+                        >
+                          <span className="text-lg">{dNum}</span>
+                          {hasItems && (
+                            <div className="absolute bottom-1.5 flex gap-1">
+                              {items.focus && (
+                                <div
+                                  className={`w-1.5 h-1.5 rounded-full ${isSelected ? "bg-white" : "bg-accent"}`}
+                                />
+                              )}
+                              {items.reminders.length > 0 && (
+                                <div
+                                  className={`w-1.5 h-1.5 rounded-full ${isSelected ? "bg-white/80" : "bg-primary"}`}
+                                />
+                              )}
+                              {items.tasks.length > 0 && (
+                                <div
+                                  className={`w-1.5 h-1.5 rounded-full ${isSelected ? "bg-white/60" : "bg-muted-foreground"}`}
+                                />
+                              )}
+                              {items.childEvents.slice(0, 3).map((e, i) => (
+                                <div
+                                  key={`child-${i}`}
+                                  className="w-1.5 h-1.5 rounded-full"
+                                  style={{
+                                    backgroundColor: isSelected
+                                      ? "white"
+                                      : (e.child?.color ?? "#a06cd5"),
+                                  }}
+                                />
+                              ))}
+                              {items.familyEvents.slice(0, 3).map((e, i) => (
+                                <div
+                                  key={`fam-${i}`}
+                                  className="w-1.5 h-1.5 rounded-full"
+                                  style={{
+                                    backgroundColor: isSelected
+                                      ? "white"
+                                      : (e.member?.color ?? "#8a9a5b"),
+                                  }}
+                                />
+                              ))}
+                              {items.recurring.length > 0 && (
+                                <div
+                                  className={`w-1 h-1 rounded-full ${isSelected ? "bg-white/50" : "bg-muted-foreground/40"}`}
+                                  title="Återkommande"
+                                />
+                              )}
+                            </div>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
 
-          {view === "vecka" && (
-            <div className="pt-2 grid grid-cols-1 sm:grid-cols-7 gap-2">
-              {weekDays.map((dateStr) => {
-                const d = new Date(`${dateStr}T12:00:00`);
-                const items = getItemsForDate(dateStr);
-                const entries = [
-                  ...items.childEvents.map((e) => ({ id: `c-${e.id}`, title: e.title, time: e.time ?? "", color: e.child?.color ?? '#a06cd5' })),
-                  ...items.familyEvents.map((e) => ({ id: `f-${e.id}`, title: e.title, time: e.time ?? "", color: e.member?.color ?? '#8a9a5b' })),
-                  ...items.reminders.map((r) => ({ id: `r-${r.id}`, title: r.title, time: r.time ?? "", color: 'hsl(var(--primary))' })),
-                  ...items.tasks.map((t) => ({ id: `t-${t.id}`, title: t.title, time: t.time ?? "", color: 'hsl(var(--muted-foreground))' })),
-                ].sort((a, b) => (a.time || "99").localeCompare(b.time || "99"));
-                const isSelected = dateStr === selectedDateStr;
-                return (
-                  <button
-                    key={dateStr}
-                    onClick={() => setSelectedDateStr(dateStr)}
-                    className={`text-left rounded-2xl border p-2 min-h-24 transition-colors ${
-                      isSelected ? 'border-primary bg-primary/5' : 'border-border hover:bg-secondary'
-                    }`}
-                  >
-                    <div className={`text-xs font-medium mb-1 ${dateStr === todayStr ? 'text-primary' : 'text-muted-foreground'}`}>
-                      {d.toLocaleDateString('sv-SE', { weekday: 'short', day: 'numeric' })}
-                    </div>
-                    <div className="space-y-1">
-                      {entries.slice(0, 4).map((e) => (
-                        <div key={e.id} className="flex items-center gap-1.5 text-xs text-foreground">
-                          <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: e.color }} />
-                          <span className="truncate">{e.time && `${e.time} `}{e.title}</span>
+              {view === "vecka" && (
+                <div className="pt-2 grid grid-cols-1 sm:grid-cols-7 gap-2">
+                  {weekDays.map((dateStr) => {
+                    const d = new Date(`${dateStr}T12:00:00`);
+                    const items = getItemsForDate(dateStr);
+                    const entries = [
+                      ...items.childEvents.map((e) => ({
+                        id: `c-${e.id}`,
+                        title: e.title,
+                        time: e.time ?? "",
+                        color: e.child?.color ?? "#a06cd5",
+                      })),
+                      ...items.familyEvents.map((e) => ({
+                        id: `f-${e.id}`,
+                        title: e.title,
+                        time: e.time ?? "",
+                        color: e.member?.color ?? "#8a9a5b",
+                      })),
+                      ...items.reminders.map((r) => ({
+                        id: `r-${r.id}`,
+                        title: r.title,
+                        time: r.time ?? "",
+                        color: "hsl(var(--primary))",
+                      })),
+                      ...items.tasks.map((t) => ({
+                        id: `t-${t.id}`,
+                        title: t.title,
+                        time: t.time ?? "",
+                        color: "hsl(var(--muted-foreground))",
+                      })),
+                    ].sort((a, b) => (a.time || "99").localeCompare(b.time || "99"));
+                    const isSelected = dateStr === selectedDateStr;
+                    return (
+                      <button
+                        key={dateStr}
+                        onClick={() => setSelectedDateStr(dateStr)}
+                        className={`text-left rounded-2xl border p-2 min-h-24 transition-colors ${
+                          isSelected
+                            ? "border-primary bg-primary/5"
+                            : "border-border hover:bg-secondary"
+                        }`}
+                      >
+                        <div
+                          className={`text-xs font-medium mb-1 ${dateStr === todayStr ? "text-primary" : "text-muted-foreground"}`}
+                        >
+                          {d.toLocaleDateString("sv-SE", { weekday: "short", day: "numeric" })}
                         </div>
-                      ))}
-                      {entries.length > 4 && (
-                        <div className="text-xs text-muted-foreground">+{entries.length - 4} till</div>
-                      )}
-                      {entries.length === 0 && <div className="text-xs text-muted-foreground/60">–</div>}
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          )}
-
+                        <div className="space-y-1">
+                          {entries.slice(0, 4).map((e) => (
+                            <div
+                              key={e.id}
+                              className="flex items-center gap-1.5 text-xs text-foreground"
+                            >
+                              <span
+                                className="w-1.5 h-1.5 rounded-full shrink-0"
+                                style={{ backgroundColor: e.color }}
+                              />
+                              <span className="truncate">
+                                {e.time && `${e.time} `}
+                                {e.title}
+                              </span>
+                            </div>
+                          ))}
+                          {entries.length > 4 && (
+                            <div className="text-xs text-muted-foreground">
+                              +{entries.length - 4} till
+                            </div>
+                          )}
+                          {entries.length === 0 && (
+                            <div className="text-xs text-muted-foreground/60">–</div>
+                          )}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </CollapsibleSection>
           </div>
         </div>
@@ -714,7 +863,11 @@ export default function CalendarPage() {
               <h3 className="text-xl font-medium">
                 {selectedDateStr === todayStr
                   ? "Idag"
-                  : new Date(selectedDateStr).toLocaleDateString('sv-SE', { weekday: 'long', day: 'numeric', month: 'long' })}
+                  : new Date(selectedDateStr).toLocaleDateString("sv-SE", {
+                      weekday: "long",
+                      day: "numeric",
+                      month: "long",
+                    })}
               </h3>
               <div className="flex items-center gap-2">
                 <button
@@ -745,30 +898,37 @@ export default function CalendarPage() {
                   Bildstöd
                 </button>
               </div>
-
             </div>
-            
-            {!selectedItems.focus && selectedItems.tasks.length === 0 && selectedItems.reminders.length === 0 && selectedItems.familyEvents.length === 0 && selectedItems.childEvents.length === 0 && selectedItems.recurring.length === 0 && (
-              <div className="text-center py-10 bg-card/50 border border-border/50 rounded-3xl text-muted-foreground">
-                <MyFloveEmptyIllustration kind="calendar" className="mb-2 block" />
-                Inget inplanerat denna dag.
-              </div>
-            )}
+
+            {!selectedItems.focus &&
+              selectedItems.tasks.length === 0 &&
+              selectedItems.reminders.length === 0 &&
+              selectedItems.familyEvents.length === 0 &&
+              selectedItems.childEvents.length === 0 &&
+              selectedItems.recurring.length === 0 && (
+                <div className="text-center py-10 bg-card/50 border border-border/50 rounded-3xl text-muted-foreground">
+                  <MyFloveEmptyIllustration kind="calendar" className="mb-2 block" />
+                  Inget inplanerat denna dag.
+                </div>
+              )}
 
             {selectedItems.recurring.length > 0 && (
               <div className="flex flex-wrap items-center gap-2 px-1">
-                <span className="text-xs uppercase tracking-wider text-muted-foreground">Återkommande</span>
-                {selectedItems.recurring.map(r => (
+                <span className="text-xs uppercase tracking-wider text-muted-foreground">
+                  Återkommande
+                </span>
+                {selectedItems.recurring.map((r) => (
                   <span
                     key={r.id}
                     className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary/60 border border-border/50 text-xs text-muted-foreground"
                   >
                     <span
                       className="w-1.5 h-1.5 rounded-full"
-                      style={{ backgroundColor: r.color ?? 'hsl(var(--primary))' }}
+                      style={{ backgroundColor: r.color ?? "hsl(var(--primary))" }}
                     />
                     {pictoMode && <span aria-hidden>{pictogramFor(r.title, "🔁")}</span>}
-                    {r.title}{r.time && ` · ${r.time}`}
+                    {r.title}
+                    {r.time && ` · ${r.time}`}
                   </span>
                 ))}
               </div>
@@ -809,7 +969,6 @@ export default function CalendarPage() {
               />
             )}
 
-
             <div className="space-y-3">
               {/* Samma händelse för flera barn (t.ex. lämning av Bella och Bianca) visas ihop. */}
               {(() => {
@@ -831,7 +990,9 @@ export default function CalendarPage() {
                   >
                     <Link href="/barn" className="flex items-center gap-4 min-w-0 flex-1">
                       {pictoMode ? (
-                        <span className="text-3xl leading-none shrink-0" aria-hidden>{pictogramFor(e.title, "🐣")}</span>
+                        <span className="text-3xl leading-none shrink-0" aria-hidden>
+                          {pictogramFor(e.title, "🐣")}
+                        </span>
                       ) : (
                         <Baby style={{ color }} size={24} />
                       )}
@@ -843,7 +1004,11 @@ export default function CalendarPage() {
                           {names.join(" & ")} {e.time && `kl ${e.time}`}
                           {e.sharedWith.length > 0 && " · delad"}
                         </div>
-                        <div className={`text-lg font-medium truncate ${e.completed ? 'line-through opacity-60' : ''}`}>{e.title}</div>
+                        <div
+                          className={`text-lg font-medium truncate ${e.completed ? "line-through opacity-60" : ""}`}
+                        >
+                          {e.title}
+                        </div>
                       </div>
                     </Link>
                     <button
@@ -857,19 +1022,23 @@ export default function CalendarPage() {
                 );
               })}
 
-
-              {selectedItems.familyEvents.map(e => (
-                <div key={`fam-${e.id}`} className="flex items-center justify-between gap-4 p-4 bg-card border border-border rounded-2xl group">
+              {selectedItems.familyEvents.map((e) => (
+                <div
+                  key={`fam-${e.id}`}
+                  className="flex items-center justify-between gap-4 p-4 bg-card border border-border rounded-2xl group"
+                >
                   <div className="flex items-center gap-4">
                     {pictoMode ? (
-                      <span className="text-3xl leading-none shrink-0" aria-hidden>{pictogramFor(e.title, "👨‍👩‍👧")}</span>
+                      <span className="text-3xl leading-none shrink-0" aria-hidden>
+                        {pictogramFor(e.title, "👨‍👩‍👧")}
+                      </span>
                     ) : (
-                      <Users style={{ color: e.member?.color ?? '#8a9a5b' }} size={24} />
+                      <Users style={{ color: e.member?.color ?? "#8a9a5b" }} size={24} />
                     )}
                     <div>
                       <div
                         className="text-xs font-medium uppercase tracking-wider mb-0.5"
-                        style={{ color: e.member?.color ?? '#8a9a5b' }}
+                        style={{ color: e.member?.color ?? "#8a9a5b" }}
                       >
                         {e.member?.displayName ?? "Familj"} {e.time && `kl ${e.time}`}
                       </div>
@@ -880,7 +1049,6 @@ export default function CalendarPage() {
                     onClick={() => deleteEventMutation.mutate({ id: e.id })}
                     aria-label="Ta bort familjehändelse"
                     className="p-2 text-muted-foreground hover:text-destructive rounded-xl hover:bg-destructive/10 shrink-0"
-
                   >
                     <Trash2 size={18} />
                   </button>
@@ -890,22 +1058,31 @@ export default function CalendarPage() {
               {selectedItems.focus && (
                 <div className="flex items-center gap-4 p-4 bg-accent/20 border border-accent/30 rounded-2xl">
                   {pictoMode ? (
-                    <span className="text-3xl leading-none shrink-0" aria-hidden>{pictogramFor(selectedItems.focus.text, "🎯")}</span>
+                    <span className="text-3xl leading-none shrink-0" aria-hidden>
+                      {pictogramFor(selectedItems.focus.text, "🎯")}
+                    </span>
                   ) : (
                     <Target className="text-accent-foreground" size={24} />
                   )}
                   <div>
-                    <div className="text-xs text-accent-foreground font-medium uppercase tracking-wider mb-0.5">Dagens fokus</div>
+                    <div className="text-xs text-accent-foreground font-medium uppercase tracking-wider mb-0.5">
+                      Dagens fokus
+                    </div>
                     <div className="text-lg font-medium">{selectedItems.focus.text}</div>
                   </div>
                 </div>
               )}
 
-              {selectedItems.reminders.map(r => (
-                <div key={r.id} className="flex items-center justify-between gap-4 p-4 bg-primary/5 border border-primary/10 rounded-2xl">
+              {selectedItems.reminders.map((r) => (
+                <div
+                  key={r.id}
+                  className="flex items-center justify-between gap-4 p-4 bg-primary/5 border border-primary/10 rounded-2xl"
+                >
                   <div className="flex items-center gap-4 min-w-0">
                     {pictoMode ? (
-                      <span className="text-3xl leading-none shrink-0" aria-hidden>{pictogramFor(r.title, "🔔")}</span>
+                      <span className="text-3xl leading-none shrink-0" aria-hidden>
+                        {pictogramFor(r.title, "🔔")}
+                      </span>
                     ) : (
                       <Bell className="text-primary shrink-0" size={24} />
                     )}
@@ -915,25 +1092,28 @@ export default function CalendarPage() {
                       </div>
                       <div className="text-lg font-medium truncate">{r.title}</div>
                       {r.note && (
-                        <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">{r.note}</p>
+                        <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">
+                          {r.note}
+                        </p>
                       )}
-
                     </div>
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
                     <button
-                      onClick={() => setEditing({
-                        kind: "reminder",
-                        id: r.id,
-                        title: r.title,
-                        date: r.date,
-                        time: r.time ?? "",
-                        endTime: r.endTime ?? "",
-                        remind: r.remindMinutesBefore ?? null,
-                        note: r.note ?? "",
-                        area: "vardag",
-                        repeat: r.repeat ?? "none",
-                      })}
+                      onClick={() =>
+                        setEditing({
+                          kind: "reminder",
+                          id: r.id,
+                          title: r.title,
+                          date: r.date,
+                          time: r.time ?? "",
+                          endTime: r.endTime ?? "",
+                          remind: r.remindMinutesBefore ?? null,
+                          note: r.note ?? "",
+                          area: "vardag",
+                          repeat: r.repeat ?? "none",
+                        })
+                      }
                       aria-label="Ändra påminnelse"
                       className="px-3 py-2 text-sm text-primary rounded-xl hover:bg-primary/10"
                     >
@@ -950,44 +1130,59 @@ export default function CalendarPage() {
                 </div>
               ))}
 
-              {selectedItems.tasks.map(t => (
-                <div key={t.id} className={`flex items-center justify-between gap-4 p-4 bg-card border border-border rounded-2xl ${t.completed ? 'opacity-60' : ''}`}>
+              {selectedItems.tasks.map((t) => (
+                <div
+                  key={t.id}
+                  className={`flex items-center justify-between gap-4 p-4 bg-card border border-border rounded-2xl ${t.completed ? "opacity-60" : ""}`}
+                >
                   <div className="flex items-center gap-4 min-w-0">
                     {pictoMode ? (
-                      <span className="text-3xl leading-none shrink-0" aria-hidden>{pictogramFor(t.title, "✅")}</span>
+                      <span className="text-3xl leading-none shrink-0" aria-hidden>
+                        {pictogramFor(t.title, "✅")}
+                      </span>
                     ) : (
-                      <CheckSquare className={t.completed ? "text-primary" : "text-muted-foreground"} size={24} />
+                      <CheckSquare
+                        className={t.completed ? "text-primary" : "text-muted-foreground"}
+                        size={24}
+                      />
                     )}
                     <div className="flex-1 min-w-0">
                       {t.time && (
                         <div className="text-xs text-primary font-medium uppercase tracking-wider mb-0.5">
-                          kl {t.time}{t.endTime ? `–${t.endTime}` : ""}
-                          {t.reminderMinutesBefore != null && ` · påminn ${t.reminderMinutesBefore} min innan`}
+                          kl {t.time}
+                          {t.endTime ? `–${t.endTime}` : ""}
+                          {t.reminderMinutesBefore != null &&
+                            ` · påminn ${t.reminderMinutesBefore} min innan`}
                         </div>
                       )}
-                      <div className={`text-lg font-medium truncate ${t.completed ? 'line-through text-muted-foreground' : ''}`}>
+                      <div
+                        className={`text-lg font-medium truncate ${t.completed ? "line-through text-muted-foreground" : ""}`}
+                      >
                         {t.title}
                       </div>
                       {t.note && (
-                        <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">{t.note}</p>
+                        <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">
+                          {t.note}
+                        </p>
                       )}
-
                     </div>
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
                     <button
-                      onClick={() => setEditing({
-                        kind: "task",
-                        id: t.id,
-                        title: t.title,
-                        date: t.dueDate ?? selectedDateStr,
-                        time: t.time ?? "",
-                        endTime: t.endTime ?? "",
-                        remind: t.reminderMinutesBefore ?? null,
-                        note: t.note ?? "",
-                        area: getArea(t),
-                        repeat: "none",
-                      })}
+                      onClick={() =>
+                        setEditing({
+                          kind: "task",
+                          id: t.id,
+                          title: t.title,
+                          date: t.dueDate ?? selectedDateStr,
+                          time: t.time ?? "",
+                          endTime: t.endTime ?? "",
+                          remind: t.reminderMinutesBefore ?? null,
+                          note: t.note ?? "",
+                          area: getArea(t),
+                          repeat: "none",
+                        })
+                      }
                       aria-label="Ändra uppgift"
                       className="px-3 py-2 text-sm text-primary rounded-xl hover:bg-primary/10"
                     >
@@ -1003,7 +1198,6 @@ export default function CalendarPage() {
                   </div>
                 </div>
               ))}
-
             </div>
           </div>
         )}
@@ -1036,12 +1230,14 @@ export default function CalendarPage() {
               <div className="space-y-2">
                 <label className="text-sm font-medium">Upprepa</label>
                 <div className="grid grid-cols-2 gap-2">
-                  {([
-                    ["none", "Bara en gång"],
-                    ["daily", "Varje dag"],
-                    ["weekdays", "Vardagar"],
-                    ["weekly", "Varje vecka"],
-                  ] as const).map(([val, label]) => (
+                  {(
+                    [
+                      ["none", "Bara en gång"],
+                      ["daily", "Varje dag"],
+                      ["weekdays", "Vardagar"],
+                      ["weekly", "Varje vecka"],
+                    ] as const
+                  ).map(([val, label]) => (
                     <button
                       key={val}
                       type="button"
@@ -1063,7 +1259,12 @@ export default function CalendarPage() {
                   if (newReminderTime && getNotificationPermission() === "default") {
                     await requestNotificationPermission();
                   }
-                  addReminder(newReminderTitle.trim(), selectedDateStr, newReminderTime || undefined, newReminderRepeat);
+                  addReminder(
+                    newReminderTitle.trim(),
+                    selectedDateStr,
+                    newReminderTime || undefined,
+                    newReminderRepeat,
+                  );
                   setNewReminderTitle("");
                   setNewReminderTime("");
                   setNewReminderRepeat("none");
@@ -1212,12 +1413,14 @@ export default function CalendarPage() {
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Upprepa</label>
                     <div className="grid grid-cols-2 gap-2">
-                      {([
-                        ["none", "Bara en gång"],
-                        ["daily", "Varje dag"],
-                        ["weekdays", "Vardagar"],
-                        ["weekly", "Varje vecka"],
-                      ] as const).map(([val, label]) => (
+                      {(
+                        [
+                          ["none", "Bara en gång"],
+                          ["daily", "Varje dag"],
+                          ["weekdays", "Vardagar"],
+                          ["weekly", "Varje vecka"],
+                        ] as const
+                      ).map(([val, label]) => (
                         <button
                           key={val}
                           type="button"
@@ -1269,7 +1472,7 @@ export default function CalendarPage() {
                           time,
                           endTime: time ? editing.endTime || undefined : undefined,
                           repeat: editing.repeat,
-                          remindMinutesBefore: time ? editing.remind ?? undefined : undefined,
+                          remindMinutesBefore: time ? (editing.remind ?? undefined) : undefined,
                           note: editing.note,
                         });
                       } else {
@@ -1278,7 +1481,7 @@ export default function CalendarPage() {
                           dueDate: editing.date,
                           time,
                           endTime: time ? editing.endTime || undefined : undefined,
-                          reminderMinutesBefore: time ? editing.remind ?? undefined : undefined,
+                          reminderMinutesBefore: time ? (editing.remind ?? undefined) : undefined,
                           area: editing.area,
                           note: editing.note,
                         });
@@ -1293,7 +1496,6 @@ export default function CalendarPage() {
                 </div>
               </div>
             )}
-
           </DialogContent>
         </Dialog>
 
@@ -1308,7 +1510,8 @@ export default function CalendarPage() {
                 <div className="grid grid-cols-3 gap-2">
                   {CATEGORIES.map((c) => {
                     const disabled =
-                      (c.id === "relationer" && !hasHousehold) || (c.id === "barn" && kids.length === 0);
+                      (c.id === "relationer" && !hasHousehold) ||
+                      (c.id === "barn" && kids.length === 0);
                     return (
                       <button
                         key={c.id}
@@ -1317,7 +1520,9 @@ export default function CalendarPage() {
                         onClick={() => setNewCat(c.id)}
                         title={disabled ? "Kräver familj respektive barn i appen" : undefined}
                         className={`w-full h-11 px-2 rounded-2xl text-sm font-medium border transition-all disabled:opacity-40 ${
-                          newCat === c.id ? "text-white border-transparent" : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
+                          newCat === c.id
+                            ? "text-white border-transparent"
+                            : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
                         }`}
                         style={newCat === c.id ? { backgroundColor: c.color } : undefined}
                       >
@@ -1333,9 +1538,10 @@ export default function CalendarPage() {
                   <label className="text-sm font-medium">Vilka barn?</label>
                   <div className="flex flex-wrap gap-2">
                     {kids.map((k) => {
-                      const selected = newAnyChildIds.length > 0
-                        ? newAnyChildIds.includes(k.id)
-                        : k.id === kids[0]?.id;
+                      const selected =
+                        newAnyChildIds.length > 0
+                          ? newAnyChildIds.includes(k.id)
+                          : k.id === kids[0]?.id;
                       return (
                         <button
                           key={k.id}
@@ -1343,7 +1549,7 @@ export default function CalendarPage() {
                           aria-pressed={selected}
                           onClick={() =>
                             setNewAnyChildIds((prev) => {
-                              const base = prev.length > 0 ? prev : (kids[0]?.id ? [kids[0].id] : []);
+                              const base = prev.length > 0 ? prev : kids[0]?.id ? [kids[0].id] : [];
                               return base.includes(k.id)
                                 ? base.filter((id) => id !== k.id)
                                 : [...base, k.id];
@@ -1356,17 +1562,18 @@ export default function CalendarPage() {
                           }`}
                           style={selected ? { backgroundColor: k.color } : undefined}
                         >
-                          {selected ? "✓ " : ""}{k.name}
+                          {selected ? "✓ " : ""}
+                          {k.name}
                         </button>
                       );
                     })}
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    Välj ett eller flera barn – t.ex. lämning av både Bella och Bianca blir en och samma händelse.
+                    Välj ett eller flera barn – t.ex. lämning av både Bella och Bianca blir en och
+                    samma händelse.
                   </p>
                 </div>
               )}
-
 
               <div className="space-y-2">
                 <label className="text-sm font-medium">Vad händer?</label>
@@ -1432,8 +1639,6 @@ export default function CalendarPage() {
                 )}
               </div>
 
-
-
               <div className="space-y-2">
                 <label className="text-sm font-medium" htmlFor="ny-anteckning">
                   Anteckning (valfritt)
@@ -1447,7 +1652,6 @@ export default function CalendarPage() {
                   className="w-full rounded-2xl border border-border bg-card p-3 text-base outline-none focus:border-primary"
                 />
               </div>
-
 
               <p className="text-xs text-muted-foreground">
                 Läggs in på {selectedDateStr === todayStr ? "idag" : selectedDateStr}.
@@ -1495,13 +1699,15 @@ export default function CalendarPage() {
                       }`}
                       style={selected ? { backgroundColor: k.color } : undefined}
                     >
-                      {selected ? "✓ " : ""}{k.name}
+                      {selected ? "✓ " : ""}
+                      {k.name}
                     </button>
                   );
                 })}
               </div>
               <p className="text-xs text-muted-foreground">
-                Lägg till eller ta bort barn – händelsen finns kvar, den flyttar bara in i rätt barns schema.
+                Lägg till eller ta bort barn – händelsen finns kvar, den flyttar bara in i rätt
+                barns schema.
               </p>
               <Button
                 onClick={saveChildGroup}
@@ -1513,9 +1719,6 @@ export default function CalendarPage() {
             </div>
           </DialogContent>
         </Dialog>
-
-
-
       </div>
     </Layout>
   );

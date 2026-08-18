@@ -9,7 +9,10 @@ export type GentleWakeHandle = { stop: () => void };
  * Spelar en mjuk, stigande klockklang. Volymen börjar nästan ohörbar och växer
  * långsamt – tanken är att man ska vakna av den, inte skrämmas av den.
  */
-export function playGentleWake(options?: { durationSec?: number; peak?: number }): GentleWakeHandle {
+export function playGentleWake(options?: {
+  durationSec?: number;
+  peak?: number;
+}): GentleWakeHandle {
   if (typeof window === "undefined") return { stop: () => {} };
   const AudioCtx =
     window.AudioContext ??

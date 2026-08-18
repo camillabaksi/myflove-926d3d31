@@ -7,7 +7,8 @@ export const Route = createFileRoute("/_app/barn")({
       { title: "Barn – MyFlove" },
       {
         name: "description",
-        content: "Samla allt om barnen – aktiviteter, att göra, anteckningar och dokument. Privat tills du delar.",
+        content:
+          "Samla allt om barnen – aktiviteter, att göra, anteckningar och dokument. Privat tills du delar.",
       },
       { name: "robots", content: "noindex, nofollow" },
     ],

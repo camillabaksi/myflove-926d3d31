@@ -139,7 +139,6 @@ export async function refreshPushSubscription(): Promise<SerializedSub | null> {
   return serializeSubscription(sub);
 }
 
-
 export async function unsubscribeCurrent(): Promise<string | null> {
   const reg = await ensureServiceWorker();
   if (!reg) return null;

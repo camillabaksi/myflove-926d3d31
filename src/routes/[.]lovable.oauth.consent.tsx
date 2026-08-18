@@ -94,7 +94,10 @@ function Consent() {
           lägga till dina uppgifter samt logga humör. Dina rättigheter i appen gäller fortfarande.
         </p>
         {error && (
-          <p role="alert" className="mb-4 rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
+          <p
+            role="alert"
+            className="mb-4 rounded-lg bg-destructive/10 p-3 text-sm text-destructive"
+          >
             {error}
           </p>
         )}

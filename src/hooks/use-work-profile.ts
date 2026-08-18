@@ -9,7 +9,8 @@ export function useWorkProfile() {
   const [profile, setProfile] = useCloudSyncedStorage<WorkProfile>(KEY, EMPTY_WORK_PROFILE);
 
   const update = useCallback(
-    (patch: Partial<WorkProfile>) => setProfile((prev) => ({ ...EMPTY_WORK_PROFILE, ...prev, ...patch })),
+    (patch: Partial<WorkProfile>) =>
+      setProfile((prev) => ({ ...EMPTY_WORK_PROFILE, ...prev, ...patch })),
     [setProfile],
   );
 

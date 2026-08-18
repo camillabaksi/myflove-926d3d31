@@ -88,7 +88,9 @@ export const DEFAULT_ENERGY_FLOW_SETTINGS: EnergyFlowSettings = {
 };
 
 /** Läser in sparade inställningar och fyller på med standardvärden. */
-export function normalizeSettings(raw: Partial<EnergyFlowSettings> | null | undefined): EnergyFlowSettings {
+export function normalizeSettings(
+  raw: Partial<EnergyFlowSettings> | null | undefined,
+): EnergyFlowSettings {
   return {
     enabled: raw?.enabled ?? true,
     weight: raw?.weight ?? "normal",
@@ -96,10 +98,12 @@ export function normalizeSettings(raw: Partial<EnergyFlowSettings> | null | unde
   };
 }
 
-export function categoryWeightFor(settings: EnergyFlowSettings, category: EnergyCategory): EnergyFlowWeight {
+export function categoryWeightFor(
+  settings: EnergyFlowSettings,
+  category: EnergyCategory,
+): EnergyFlowWeight {
   return settings.categoryWeights?.[category] ?? "normal";
 }
-
 
 export function isSameDay(iso: string, day = new Date()): boolean {
   const d = new Date(iso);
@@ -214,17 +218,15 @@ export function categoryTrends(entries: EnergyFactorEntry[], days = 14): EnergyT
   const map = new Map<string, EnergyTrendRow>();
   for (const e of entries) {
     if (new Date(e.occurredAt).getTime() < since) continue;
-    const row =
-      map.get(e.category) ??
-      {
-        key: e.category,
-        label: categoryLabel(e.category),
-        emoji: categoryEmoji(e.category),
-        gives: 0,
-        drains: 0,
-        net: 0,
-        count: 0,
-      };
+    const row = map.get(e.category) ?? {
+      key: e.category,
+      label: categoryLabel(e.category),
+      emoji: categoryEmoji(e.category),
+      gives: 0,
+      drains: 0,
+      net: 0,
+      count: 0,
+    };
     if (e.direction === "gives") row.gives += e.strength;
     else row.drains += e.strength;
     row.net = row.gives - row.drains;
@@ -241,17 +243,15 @@ export function titleTrends(entries: EnergyFactorEntry[], days = 30): EnergyTren
   for (const e of entries) {
     if (new Date(e.occurredAt).getTime() < since) continue;
     const key = `${e.title.toLowerCase()}|${e.direction}`;
-    const row =
-      map.get(key) ??
-      {
-        key,
-        label: e.title,
-        emoji: e.direction === "gives" ? "🔋" : "🪫",
-        gives: 0,
-        drains: 0,
-        net: 0,
-        count: 0,
-      };
+    const row = map.get(key) ?? {
+      key,
+      label: e.title,
+      emoji: e.direction === "gives" ? "🔋" : "🪫",
+      gives: 0,
+      drains: 0,
+      net: 0,
+      count: 0,
+    };
     if (e.direction === "gives") row.gives += e.strength;
     else row.drains += e.strength;
     row.net = row.gives - row.drains;

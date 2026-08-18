@@ -28,15 +28,15 @@ function TermsPage() {
   return (
     <LegalShell title="Användarvillkor" updated="18 juli 2026">
       <p>
-        Välkommen till MyFlove. Genom att skapa konto och använda tjänsten godkänner
-        du dessa villkor. Vi håller dem korta och begripliga.
+        Välkommen till MyFlove. Genom att skapa konto och använda tjänsten godkänner du dessa
+        villkor. Vi håller dem korta och begripliga.
       </p>
 
       <h2>Om tjänsten</h2>
       <p>
-        MyFlove är ett digitalt stöd för vardagen – kalender, uppgifter, humör,
-        ekonomi, matlista, reseinfo och en AI-assistent (Flow). Tjänsten är ett
-        hjälpmedel och ersätter inte medicinsk, juridisk eller ekonomisk rådgivning.
+        MyFlove är ett digitalt stöd för vardagen – kalender, uppgifter, humör, ekonomi, matlista,
+        reseinfo och en AI-assistent (Flow). Tjänsten är ett hjälpmedel och ersätter inte medicinsk,
+        juridisk eller ekonomisk rådgivning.
       </p>
 
       <h2>Ditt konto</h2>
@@ -48,41 +48,40 @@ function TermsPage() {
 
       <h2>Ditt innehåll</h2>
       <p>
-        Allt du skapar i MyFlove tillhör dig. Vi gör inga anspråk på ditt innehåll och
-        säljer det inte vidare. Vi behöver dock en teknisk licens att lagra och visa
-        det för att tjänsten ska fungera.
+        Allt du skapar i MyFlove tillhör dig. Vi gör inga anspråk på ditt innehåll och säljer det
+        inte vidare. Vi behöver dock en teknisk licens att lagra och visa det för att tjänsten ska
+        fungera.
       </p>
 
       <h2>AI-assistenten Flow</h2>
       <p>
-        Flow är en AI-baserad följeslagare. Svaren kan innehålla fel och ska ses som
-        förslag – inte fakta. Du är själv ansvarig för beslut du tar utifrån dem.
+        Flow är en AI-baserad följeslagare. Svaren kan innehålla fel och ska ses som förslag – inte
+        fakta. Du är själv ansvarig för beslut du tar utifrån dem.
       </p>
 
       <h2>Tillgänglighet</h2>
       <p>
-        Vi strävar efter hög drifttid men kan inte garantera att tjänsten alltid är
-        tillgänglig. Vi kan uppdatera, ändra eller pausa funktioner för att förbättra
-        upplevelsen.
+        Vi strävar efter hög drifttid men kan inte garantera att tjänsten alltid är tillgänglig. Vi
+        kan uppdatera, ändra eller pausa funktioner för att förbättra upplevelsen.
       </p>
 
       <h2>Avsluta ditt konto</h2>
       <p>
-        Du kan när som helst radera ditt konto och all data. Vi kan avsluta konton
-        som bryter mot villkoren eller missbrukar tjänsten.
+        Du kan när som helst radera ditt konto och all data. Vi kan avsluta konton som bryter mot
+        villkoren eller missbrukar tjänsten.
       </p>
 
       <h2>Ansvarsbegränsning</h2>
       <p>
-        MyFlove tillhandahålls "i befintligt skick". Vi ansvarar inte för indirekta
-        skador eller förluster som uppstår genom användning av tjänsten, i den
-        utsträckning gällande lag tillåter.
+        MyFlove tillhandahålls "i befintligt skick". Vi ansvarar inte för indirekta skador eller
+        förluster som uppstår genom användning av tjänsten, i den utsträckning gällande lag
+        tillåter.
       </p>
 
       <h2>Tillämplig lag</h2>
       <p>
-        Svensk lag tillämpas. Tvister löses i första hand genom dialog, och därefter
-        vid svensk allmän domstol.
+        Svensk lag tillämpas. Tvister löses i första hand genom dialog, och därefter vid svensk
+        allmän domstol.
       </p>
 
       <h2>Kontakt</h2>

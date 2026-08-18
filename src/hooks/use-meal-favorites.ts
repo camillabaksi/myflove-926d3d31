@@ -16,8 +16,7 @@ export interface MealRecipe {
 
 const newId = () => Math.random().toString(36).slice(2, 11);
 
-export const normalizeDish = (dish: string) =>
-  dish.toLowerCase().replace(/\s+/g, " ").trim();
+export const normalizeDish = (dish: string) => dish.toLowerCase().replace(/\s+/g, " ").trim();
 
 export function useMealFavorites() {
   const [recipes, setRecipes] = useCloudSyncedStorage<MealRecipe[]>(STORAGE_KEY, []);

@@ -13,7 +13,8 @@ export const Route = createFileRoute("/_app/quickflow")({
       { property: "og:title", content: "Quickflow – få ut det ur huvudet" },
       {
         property: "og:description",
-        content: "Snabbfångst för ett fullt huvud. MyFlove håller tanken åt dig tills du orkar sortera.",
+        content:
+          "Snabbfångst för ett fullt huvud. MyFlove håller tanken åt dig tills du orkar sortera.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

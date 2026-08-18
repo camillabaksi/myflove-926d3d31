@@ -38,9 +38,7 @@ export function useWorkflow() {
         const current = prev[key] ?? [];
         return {
           ...prev,
-          [key]: current.includes(label)
-            ? current.filter((l) => l !== label)
-            : [...current, label],
+          [key]: current.includes(label) ? current.filter((l) => l !== label) : [...current, label],
         };
       });
     },

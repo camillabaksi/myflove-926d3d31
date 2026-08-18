@@ -4,7 +4,11 @@
 
 import { useQuery, useMutation, type UseQueryOptions } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { logAnalyticsEventFn, getAnalyticsSummaryFn, type AnalyticsSummary } from "@/lib/analytics.functions";
+import {
+  logAnalyticsEventFn,
+  getAnalyticsSummaryFn,
+  type AnalyticsSummary,
+} from "@/lib/analytics.functions";
 import { getSlTripFn, getSlNearbyStopFn } from "@/lib/sl.functions";
 
 // --- Analytics ---
@@ -26,7 +30,9 @@ export const getListShoppingItemsQueryKey = () => ["shopping-items"];
 export const getListFamilyEventsQueryKey = () => ["family-events"];
 export const getListMealPlansQueryKey = () => ["meal-plans"];
 
-type Opts<T> = { query?: Partial<UseQueryOptions<T>> & { queryKey?: unknown[]; enabled?: boolean } };
+type Opts<T> = {
+  query?: Partial<UseQueryOptions<T>> & { queryKey?: unknown[]; enabled?: boolean };
+};
 type MutOpts = {
   mutation?: {
     onSuccess?: (data: unknown) => void;
@@ -58,7 +64,10 @@ async function fetchMyHousehold(): Promise<Household | null> {
 
   const [{ data: h, error: hErr }, { data: members, error: memErr }] = await Promise.all([
     supabase.from("households").select("id, name, invite_code").eq("id", hid).maybeSingle(),
-    supabase.from("household_members").select("user_id, display_name, color").eq("household_id", hid),
+    supabase
+      .from("household_members")
+      .select("user_id, display_name, color")
+      .eq("household_id", hid),
   ]);
   if (hErr) throw hErr;
   if (memErr) throw memErr;

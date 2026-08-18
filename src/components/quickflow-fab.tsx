@@ -103,7 +103,9 @@ export default function QuickflowFab() {
                 onClick={voice.isListening ? voice.stopListening : voice.startListening}
                 aria-label="Prata in"
                 className={`rounded-2xl border p-3 ${
-                  voice.isListening ? "bg-primary text-primary-foreground border-primary" : "border-border"
+                  voice.isListening
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "border-border"
                 }`}
               >
                 <Mic size={18} />
@@ -128,7 +130,9 @@ export default function QuickflowFab() {
                 ⏰ Påminn mig{suggestion ? ` – ${formatWhen(suggestion.at).toLowerCase()}` : ""}
               </Btn>
               <Btn onClick={() => asTask()}>📌 Gör till uppgift</Btn>
-              <Btn onClick={() => asTask(new Date().toISOString().slice(0, 10))}>📅 Lägg i kalender</Btn>
+              <Btn onClick={() => asTask(new Date().toISOString().slice(0, 10))}>
+                📅 Lägg i kalender
+              </Btn>
               <Btn onClick={keep}>🧠 Behåll i QuickFlow</Btn>
               <button
                 type="button"

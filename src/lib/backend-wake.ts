@@ -12,7 +12,15 @@ export type WakeStatus = "waking" | "ready" | "failed";
 export function isBackendAsleepError(error: unknown): boolean {
   if (!error) return false;
   const e = error as { status?: number; message?: string; name?: string };
-  if (typeof e.status === "number" && (e.status === 0 || e.status === 503 || e.status === 502 || e.status === 504 || e.status === 522 || e.status === 408)) {
+  if (
+    typeof e.status === "number" &&
+    (e.status === 0 ||
+      e.status === 503 ||
+      e.status === 502 ||
+      e.status === 504 ||
+      e.status === 522 ||
+      e.status === 408)
+  ) {
     return true;
   }
   const msg = `${e.name ?? ""} ${e.message ?? ""}`.toLowerCase();

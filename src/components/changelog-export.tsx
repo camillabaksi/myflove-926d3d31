@@ -21,15 +21,8 @@ function downloadBlob(blob: Blob, filename: string) {
 }
 
 async function exportDocx() {
-  const {
-    Document,
-    Packer,
-    Paragraph,
-    TextRun,
-    HeadingLevel,
-    AlignmentType,
-    LevelFormat,
-  } = await import("docx");
+  const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, LevelFormat } =
+    await import("docx");
 
   const children: InstanceType<typeof Paragraph>[] = [
     new Paragraph({
@@ -208,7 +201,8 @@ export default function ChangelogExport() {
         <div>
           <h2 className="font-serif font-semibold text-lg">Exportera changelog</h2>
           <p className="text-sm text-muted-foreground">
-            {CHANGELOG_SECTIONS.length} avsnitt · {total} punkter · senast uppdaterad {CHANGELOG_UPDATED}
+            {CHANGELOG_SECTIONS.length} avsnitt · {total} punkter · senast uppdaterad{" "}
+            {CHANGELOG_UPDATED}
           </p>
         </div>
 

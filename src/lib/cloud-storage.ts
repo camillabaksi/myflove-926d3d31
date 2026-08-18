@@ -123,11 +123,13 @@ export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, key]);
 
-  const setAndStamp = useCallback((v: T | ((prev: T) => T)) => {
-    setLocalUpdatedAt(Date.now());
-    setValue(v);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setValue]);
+  const setAndStamp = useCallback(
+    (v: T | ((prev: T) => T)) => {
+      setLocalUpdatedAt(Date.now());
+      setValue(v);
+    },
+    [setValue],
+  );
 
   return [value, setAndStamp] as const;
 }

@@ -14,7 +14,6 @@ import {
   setWakeStepsDoneToday,
 } from "@/lib/wake-up";
 
-
 type Prefs = {
   wake_enabled?: boolean | null;
   wake_time?: string | null;
@@ -95,7 +94,6 @@ export function WakeUpCard({ always = false }: { always?: boolean }) {
     if (!acked && next.length > 0) void ack();
   };
 
-
   if (!prefs) return null;
   if (!prefs.wake_enabled && !always) return null;
 
@@ -129,7 +127,6 @@ export function WakeUpCard({ always = false }: { always?: boolean }) {
           {playing ? <Volume2 className="h-5 w-5 text-primary" /> : <VolumeX className="h-5 w-5" />}
         </button>
       </div>
-
 
       <ul className="space-y-2">
         {DEFAULT_WAKE_STEPS.map((step) => {

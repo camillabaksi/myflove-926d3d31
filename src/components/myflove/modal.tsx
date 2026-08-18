@@ -1,5 +1,11 @@
 import * as React from "react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
 /**
@@ -27,14 +33,22 @@ export function MyFloveModal({
 }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className={cn("rounded-3xl border-border/60 bg-card p-6 shadow-lifted", className)}>
+      <DialogContent
+        className={cn("rounded-3xl border-border/60 bg-card p-6 shadow-lifted", className)}
+      >
         <DialogHeader>
           <DialogTitle className="font-display text-xl font-bold text-ink">
-            {emoji && <span aria-hidden className="mr-1.5">{emoji}</span>}
+            {emoji && (
+              <span aria-hidden className="mr-1.5">
+                {emoji}
+              </span>
+            )}
             {title}
           </DialogTitle>
           {description && (
-            <DialogDescription className="text-sm text-muted-foreground">{description}</DialogDescription>
+            <DialogDescription className="text-sm text-muted-foreground">
+              {description}
+            </DialogDescription>
           )}
         </DialogHeader>
         {children}

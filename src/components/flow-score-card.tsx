@@ -37,7 +37,6 @@ export function FlowScoreCard({
         </div>
       </div>
 
-
       {!compact && flow.factors.length > 0 && (
         <ul className="mt-4 flex flex-wrap gap-2">
           {flow.factors.map((f) => (
@@ -78,4 +77,3 @@ export function FlowScoreCard({
 }
 
 export default FlowScoreCard;
-

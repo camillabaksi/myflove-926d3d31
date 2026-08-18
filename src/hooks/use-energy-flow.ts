@@ -6,7 +6,6 @@ import {
   DEFAULT_ENERGY_FLOW_SETTINGS,
   energyInsight,
   normalizeSettings,
-
   type EnergyBalance,
   type EnergyCategory,
   type EnergyDirection,
@@ -76,7 +75,6 @@ export function useEnergyFlow(): {
   );
   const settings = useMemo(() => normalizeSettings(rawSettings), [rawSettings]);
 
-
   useEffect(() => {
     let cancelled = false;
     (async () => {
@@ -91,7 +89,9 @@ export function useEnergyFlow(): {
         const [{ data: rows }, { data: presetRows }] = await Promise.all([
           supabase
             .from("energy_factors")
-            .select("id, title, direction, strength, category, note, counts_toward_score, occurred_at")
+            .select(
+              "id, title, direction, strength, category, note, counts_toward_score, occurred_at",
+            )
             .gte("occurred_at", since)
             .order("occurred_at", { ascending: false })
             .limit(500),

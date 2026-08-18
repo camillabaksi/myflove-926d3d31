@@ -33,9 +33,12 @@ export default function Pomodoro() {
   });
   const [sessionLog, setSessionLog] = useLocalStorage<{ date: string; count: number }>(
     "myflow-pomodoro-sessions",
-    { date: todayStr(), count: 0 }
+    { date: todayStr(), count: 0 },
   );
-  const [totalSessions, setTotalSessions] = useLocalStorage<number>("myflow-pomodoro-total-sessions", 0);
+  const [totalSessions, setTotalSessions] = useLocalStorage<number>(
+    "myflow-pomodoro-total-sessions",
+    0,
+  );
 
   const [mode, setMode] = useState<Mode>("work");
   const [secondsLeft, setSecondsLeft] = useState(prefs.workMinutes * 60);
@@ -65,7 +68,9 @@ export default function Pomodoro() {
 
     if (mode === "work") {
       const date = todayStr();
-      setSessionLog((prev) => (prev.date === date ? { date, count: prev.count + 1 } : { date, count: 1 }));
+      setSessionLog((prev) =>
+        prev.date === date ? { date, count: prev.count + 1 } : { date, count: 1 },
+      );
       setTotalSessions((prev) => prev + 1);
       trackEvent("pomodoro", "session_completed");
       toast({ description: "Bra jobbat! Dags för en paus 🌿" });
@@ -94,7 +99,10 @@ export default function Pomodoro() {
     setPrefs((prev) => {
       const next = Math.max(1, Math.min(90, prev[field] + delta));
       const updated = { ...prev, [field]: next };
-      if ((field === "workMinutes" && mode === "work") || (field === "breakMinutes" && mode === "break")) {
+      if (
+        (field === "workMinutes" && mode === "work") ||
+        (field === "breakMinutes" && mode === "break")
+      ) {
         setSecondsLeft(next * 60);
       }
       return updated;
@@ -117,7 +125,9 @@ export default function Pomodoro() {
           <div className="flex items-center gap-2">
             <span
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium ${
-                mode === "work" ? "bg-primary/10 text-primary" : "bg-accent/60 text-accent-foreground"
+                mode === "work"
+                  ? "bg-primary/10 text-primary"
+                  : "bg-accent/60 text-accent-foreground"
               }`}
             >
               {mode === "work" ? <Brain size={16} /> : <Coffee size={16} />}
@@ -135,7 +145,14 @@ export default function Pomodoro() {
               />
             )}
             <svg className="w-full h-full -rotate-90" viewBox="0 0 200 200">
-              <circle cx="100" cy="100" r="90" fill="none" stroke="var(--secondary)" strokeWidth="12" />
+              <circle
+                cx="100"
+                cy="100"
+                r="90"
+                fill="none"
+                stroke="var(--secondary)"
+                strokeWidth="12"
+              />
               <circle
                 cx="100"
                 cy="100"

@@ -1,10 +1,30 @@
 import { useMemo, useState } from "react";
 import { Link } from "wouter";
 import {
-  Smile, Target, CheckSquare, ShoppingBag, Calendar, Pill, Timer, Wallet,
-  BarChart3, Inbox, UtensilsCrossed, Navigation, Battery,
-  Sparkles, Pin, PinOff, ArrowUp, ArrowDown, Settings2, Check, RotateCcw,
-  Hand, Heart, Sun,
+  Smile,
+  Target,
+  CheckSquare,
+  ShoppingBag,
+  Calendar,
+  Pill,
+  Timer,
+  Wallet,
+  BarChart3,
+  Inbox,
+  UtensilsCrossed,
+  Navigation,
+  Battery,
+  Sparkles,
+  Pin,
+  PinOff,
+  ArrowUp,
+  ArrowDown,
+  Settings2,
+  Check,
+  RotateCcw,
+  Hand,
+  Heart,
+  Sun,
   type LucideIcon,
 } from "lucide-react";
 import { useLocalStorage } from "@/lib/storage";
@@ -31,32 +51,39 @@ const PREVIEW_PALETTE = [
   { bg: "bg-sun", color: "text-gold" },
 ];
 
-const ALL_SHORTCUTS: Shortcut[] = ([
-  { id: "stop",       action: "stop" as const, label: "Stop!",       icon: Hand, emoji: "🛑", emphasis: true },
-  { id: "ma-bra",     href: "/ma-bra",         label: "Må bra",     icon: Heart, emoji: "🌸" },
-  { id: "daglig-rutin", href: "/daglig-rutin", label: "Daglig rutin", icon: Sun, emoji: "☀️" },
+const ALL_SHORTCUTS: Shortcut[] = (
+  [
+    {
+      id: "stop",
+      action: "stop" as const,
+      label: "Stop!",
+      icon: Hand,
+      emoji: "🛑",
+      emphasis: true,
+    },
+    { id: "ma-bra", href: "/ma-bra", label: "Må bra", icon: Heart, emoji: "🌸" },
+    { id: "daglig-rutin", href: "/daglig-rutin", label: "Daglig rutin", icon: Sun, emoji: "☀️" },
 
-  { id: "tasks",      href: "/tasks",          label: "Att göra",   icon: CheckSquare, emoji: "✅" },
-  { id: "shopping",   href: "/shopping",       label: "Inköp",      icon: ShoppingBag, emoji: "🛍️" },
-  { id: "kalender",   href: "/kalender",       label: "Kalender",   icon: Calendar, emoji: "📅" },
-  { id: "pomodoro",   href: "/pomodoro",       label: "Fokuspass",  icon: Timer, emoji: "⏳" },
-  { id: "finances",   href: "/finances",       label: "Ekonomi",    icon: Wallet, emoji: "💰" },
-  { id: "statistik",  href: "/statistik",      label: "Statistik",  icon: BarChart3, emoji: "📈" },
-  { id: "dump",       href: "/quickflow",      label: "Quickflow",  icon: Inbox, emoji: "💭" },
-  { id: "matlista",   href: "/matlista",       label: "Matlista",   icon: UtensilsCrossed, emoji: "🍲" },
-  { id: "travel",     href: "/travel",         label: "Resor",      icon: Navigation, emoji: "🚌" },
-  { id: "flowplan",   href: "/flowplan",       label: "FlowPlan",   icon: Sparkles, emoji: "🌱" },
-  { id: "assistant",  href: "/assistant",      label: "Flow-chatt", icon: Sparkles, emoji: "💬" },
-] as Omit<Shortcut, "iconBg" | "iconColor">[]).map((s, i) => {
+    { id: "tasks", href: "/tasks", label: "Att göra", icon: CheckSquare, emoji: "✅" },
+    { id: "shopping", href: "/shopping", label: "Inköp", icon: ShoppingBag, emoji: "🛍️" },
+    { id: "kalender", href: "/kalender", label: "Kalender", icon: Calendar, emoji: "📅" },
+    { id: "pomodoro", href: "/pomodoro", label: "Fokuspass", icon: Timer, emoji: "⏳" },
+    { id: "finances", href: "/finances", label: "Ekonomi", icon: Wallet, emoji: "💰" },
+    { id: "statistik", href: "/statistik", label: "Statistik", icon: BarChart3, emoji: "📈" },
+    { id: "dump", href: "/quickflow", label: "Quickflow", icon: Inbox, emoji: "💭" },
+    { id: "matlista", href: "/matlista", label: "Matlista", icon: UtensilsCrossed, emoji: "🍲" },
+    { id: "travel", href: "/travel", label: "Resor", icon: Navigation, emoji: "🚌" },
+    { id: "flowplan", href: "/flowplan", label: "FlowPlan", icon: Sparkles, emoji: "🌱" },
+    { id: "assistant", href: "/assistant", label: "Flow-chatt", icon: Sparkles, emoji: "💬" },
+  ] as Omit<Shortcut, "iconBg" | "iconColor">[]
+).map((s, i) => {
   const palette = PREVIEW_PALETTE[i % PREVIEW_PALETTE.length];
   return { ...s, iconBg: palette.bg, iconColor: palette.color } as Shortcut;
 });
 
-
 const DEFAULT_FAVORITES = ["stop", "ma-bra", "daglig-rutin", "kalender"];
 const DEFAULT_ORDER = ALL_SHORTCUTS.map((s) => s.id);
 const MAX_FAVORITES = 4;
-
 
 interface Prefs {
   favorites: string[];
@@ -70,7 +97,6 @@ export default function HomeShortcuts() {
   const [editing, setEditing] = useState(false);
   const [stopOpen, setStopOpen] = useState(false);
 
-
   // Merge in any new shortcuts added after user saved prefs
   const order = useMemo(() => {
     const known = new Set(prefs.order);
@@ -83,7 +109,10 @@ export default function HomeShortcuts() {
   const byId = (id: string) => ALL_SHORTCUTS.find((s) => s.id === id);
 
   const favoriteShortcuts = favorites.map(byId).filter((s): s is Shortcut => !!s);
-  const restShortcuts = order.filter((id) => !favorites.includes(id)).map(byId).filter((s): s is Shortcut => !!s);
+  const restShortcuts = order
+    .filter((id) => !favorites.includes(id))
+    .map(byId)
+    .filter((s): s is Shortcut => !!s);
 
   const toggleFavorite = (id: string) => {
     setPrefs((p) => {
@@ -130,7 +159,15 @@ export default function HomeShortcuts() {
             onClick={() => setEditing((e) => !e)}
             className="rounded-xl gap-1"
           >
-            {editing ? <><Check size={14} /> Klar</> : <><Settings2 size={14} /> Bytt</>}
+            {editing ? (
+              <>
+                <Check size={14} /> Klar
+              </>
+            ) : (
+              <>
+                <Settings2 size={14} /> Bytt
+              </>
+            )}
           </Button>
         </div>
       </div>
@@ -176,7 +213,6 @@ export default function HomeShortcuts() {
   );
 }
 
-
 interface TileProps {
   shortcut: Shortcut;
   size: "large" | "small";
@@ -189,26 +225,43 @@ interface TileProps {
   onAction?: () => void;
 }
 
-function ShortcutTile({ shortcut, size, editing, isFavorite, canPin = true, onToggleFavorite, onMoveUp, onMoveDown, onAction }: TileProps) {
+function ShortcutTile({
+  shortcut,
+  size,
+  editing,
+  isFavorite,
+  canPin = true,
+  onToggleFavorite,
+  onMoveUp,
+  onMoveDown,
+  onAction,
+}: TileProps) {
   const Icon = shortcut.icon;
   const large = size === "large";
   const emph = shortcut.emphasis;
 
   const inner = (
-    <div className={`press flex ${large ? "flex-col gap-3 p-5" : "flex-col gap-2 p-3"} border rounded-3xl shadow-soft h-full ${
-      emph
-        ? "bg-primary text-primary-foreground border-primary"
-        : "bg-card border-border/60"
-    } ${!editing ? "hover:-translate-y-0.5 transition-all" : ""}`}>
-      <div className={`relative ${large ? "w-14 h-14" : "w-10 h-10"} rounded-2xl ${emph ? "bg-primary-foreground/20 text-primary-foreground" : `${shortcut.iconBg} ${shortcut.iconColor}`} flex items-center justify-center shrink-0`}>
+    <div
+      className={`press flex ${large ? "flex-col gap-3 p-5" : "flex-col gap-2 p-3"} border rounded-3xl shadow-soft h-full ${
+        emph ? "bg-primary text-primary-foreground border-primary" : "bg-card border-border/60"
+      } ${!editing ? "hover:-translate-y-0.5 transition-all" : ""}`}
+    >
+      <div
+        className={`relative ${large ? "w-14 h-14" : "w-10 h-10"} rounded-2xl ${emph ? "bg-primary-foreground/20 text-primary-foreground" : `${shortcut.iconBg} ${shortcut.iconColor}`} flex items-center justify-center shrink-0`}
+      >
         <Icon size={large ? 24 : 18} strokeWidth={2.2} />
         {shortcut.emoji && (
-          <span aria-hidden className={`absolute -right-1.5 -top-1.5 ${large ? "text-base" : "text-sm"} leading-none drop-shadow-sm`}>
+          <span
+            aria-hidden
+            className={`absolute -right-1.5 -top-1.5 ${large ? "text-base" : "text-sm"} leading-none drop-shadow-sm`}
+          >
             {shortcut.emoji}
           </span>
         )}
       </div>
-      <p className={`font-semibold ${large ? "text-base" : "text-sm"} leading-snug`}>{shortcut.label}</p>
+      <p className={`font-semibold ${large ? "text-base" : "text-sm"} leading-snug`}>
+        {shortcut.label}
+      </p>
     </div>
   );
 
@@ -227,7 +280,6 @@ function ShortcutTile({ shortcut, size, editing, isFavorite, canPin = true, onTo
     );
   }
 
-
   return (
     <div className="relative">
       {inner}
@@ -238,7 +290,13 @@ function ShortcutTile({ shortcut, size, editing, isFavorite, canPin = true, onTo
           disabled={!isFavorite && !canPin}
           className={`p-1.5 rounded-lg text-xs ${isFavorite ? "bg-primary text-primary-foreground" : "bg-secondary text-foreground disabled:opacity-40"}`}
           aria-label={isFavorite ? "Ta bort favorit" : "Fäst som favorit"}
-          title={isFavorite ? "Ta bort favorit" : canPin ? "Fäst som favorit" : `Max ${MAX_FAVORITES} favoriter`}
+          title={
+            isFavorite
+              ? "Ta bort favorit"
+              : canPin
+                ? "Fäst som favorit"
+                : `Max ${MAX_FAVORITES} favoriter`
+          }
         >
           {isFavorite ? <PinOff size={14} /> : <Pin size={14} />}
         </button>

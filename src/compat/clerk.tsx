@@ -9,7 +9,7 @@ type AuthState = {
   loading: boolean;
 };
 
-let listeners = new Set<() => void>();
+const listeners = new Set<() => void>();
 let state: AuthState = { user: null, session: null, loading: true };
 
 function notify() {

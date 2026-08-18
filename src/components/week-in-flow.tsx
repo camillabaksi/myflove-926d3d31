@@ -20,9 +20,7 @@ export default function WeekInFlow() {
     const done = completedTasks.filter((t) => (t.completedAt ?? t.createdAt) >= since);
     const weekMoods = moods.filter((m) => m.date >= since);
     const avg =
-      weekMoods.length > 0
-        ? weekMoods.reduce((s, m) => s + m.score, 0) / weekMoods.length
-        : null;
+      weekMoods.length > 0 ? weekMoods.reduce((s, m) => s + m.score, 0) / weekMoods.length : null;
     return { doneCount: done.length, done, moodCount: weekMoods.length, avg };
   }, [completedTasks, moods]);
 
@@ -38,7 +36,7 @@ export default function WeekInFlow() {
       parts.push(
         summary.doneCount === 1
           ? "Du bockade av en sak den här veckan – den räknas."
-          : `Du bockade av ${summary.doneCount} saker den här veckan.`
+          : `Du bockade av ${summary.doneCount} saker den här veckan.`,
       );
     }
     if (moodWord) parts.push(`Ditt mående har i snitt känts ${moodWord}.`);
@@ -87,7 +85,9 @@ export default function WeekInFlow() {
                 <ul className="space-y-1.5">
                   {summary.done.slice(0, 5).map((t) => (
                     <li key={t.id} className="text-sm text-ink/80 flex items-start gap-2">
-                      <span aria-hidden="true" className="text-primary">✓</span>
+                      <span aria-hidden="true" className="text-primary">
+                        ✓
+                      </span>
                       <span className="line-clamp-1">{t.title}</span>
                     </li>
                   ))}

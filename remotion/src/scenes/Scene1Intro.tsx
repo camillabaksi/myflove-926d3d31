@@ -80,7 +80,8 @@ export const Scene1Intro: React.FC = () => {
             maxWidth: 560,
           }}
         >
-          Ett lugnare hem för hjärnan – för dig som lever med ADHD, autism eller bara mycket i huvudet.
+          Ett lugnare hem för hjärnan – för dig som lever med ADHD, autism eller bara mycket i
+          huvudet.
         </div>
       </AbsoluteFill>
     </SceneShell>

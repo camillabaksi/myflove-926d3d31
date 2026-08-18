@@ -1,6 +1,13 @@
 import React from "react";
 import { AbsoluteFill } from "remotion";
-import { COLORS, SceneShell, SectionEyebrow, SectionTitle, SectionSub, FeaturePill } from "../theme";
+import {
+  COLORS,
+  SceneShell,
+  SectionEyebrow,
+  SectionTitle,
+  SectionSub,
+  FeaturePill,
+} from "../theme";
 
 interface FeatureSceneProps {
   eyebrow: string;
@@ -10,7 +17,13 @@ interface FeatureSceneProps {
   accent?: string;
 }
 
-export const FeatureScene: React.FC<FeatureSceneProps> = ({ eyebrow, title, sub, features, accent = COLORS.primary }) => {
+export const FeatureScene: React.FC<FeatureSceneProps> = ({
+  eyebrow,
+  title,
+  sub,
+  features,
+  accent = COLORS.primary,
+}) => {
   return (
     <SceneShell bg={COLORS.bg}>
       <AbsoluteFill>
@@ -39,7 +52,15 @@ export const FeatureScene: React.FC<FeatureSceneProps> = ({ eyebrow, title, sub,
           }}
         />
       </AbsoluteFill>
-      <AbsoluteFill style={{ padding: "70px 80px", display: "flex", flexDirection: "row", gap: 60, alignItems: "center" }}>
+      <AbsoluteFill
+        style={{
+          padding: "70px 80px",
+          display: "flex",
+          flexDirection: "row",
+          gap: 60,
+          alignItems: "center",
+        }}
+      >
         <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 20 }}>
           <SectionEyebrow delay={0}>{eyebrow}</SectionEyebrow>
           <SectionTitle delay={4}>{title}</SectionTitle>
@@ -47,7 +68,14 @@ export const FeatureScene: React.FC<FeatureSceneProps> = ({ eyebrow, title, sub,
         </div>
         <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 12 }}>
           {features.map((f, i) => (
-            <FeaturePill key={f.label} icon={f.icon} label={f.label} desc={f.desc} delay={16 + i * 6} color={f.color ?? accent} />
+            <FeaturePill
+              key={f.label}
+              icon={f.icon}
+              label={f.label}
+              desc={f.desc}
+              delay={16 + i * 6}
+              color={f.color ?? accent}
+            />
           ))}
         </div>
       </AbsoluteFill>

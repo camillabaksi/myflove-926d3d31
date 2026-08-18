@@ -2,7 +2,13 @@ import { useEffect, useMemo, useState } from "react";
 import { Brain, Check, ChevronRight, Info, Plus, Sparkles, X } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { useTasks } from "@/hooks/use-data";
 import { useFlowScore } from "@/hooks/use-flowscore";
 import { useInsightStrategies } from "@/hooks/use-insight";
@@ -23,9 +29,6 @@ import {
 import CollapsibleSection from "@/components/collapsible-section";
 import InsightApplySetting from "@/components/insight-apply-setting";
 import { MyFloveInsightGather } from "@/components/myflove/motion";
-
-
-
 
 const ANALYSIS_STEPS = [
   "Identifierar styrkor",
@@ -61,7 +64,11 @@ function AnalysisView({ onDone }: { onDone: () => void }) {
                 i < step ? "bg-primary text-primary-foreground" : "bg-secondary"
               }`}
             >
-              {i < step ? <Check size={14} /> : <span className="w-2 h-2 rounded-full bg-muted-foreground/50" />}
+              {i < step ? (
+                <Check size={14} />
+              ) : (
+                <span className="w-2 h-2 rounded-full bg-muted-foreground/50" />
+              )}
             </span>
             <span>{label}</span>
           </li>
@@ -160,9 +167,6 @@ export default function InsightPage() {
         </div>
       </header>
 
-
-
-
       {phase === "start" && (
         <>
           <div className="p-5 rounded-3xl bg-card border border-border">
@@ -179,7 +183,9 @@ export default function InsightPage() {
                 onClick={() => startAnalysis(p)}
                 className="w-full text-left p-5 rounded-3xl bg-card border border-border hover:shadow-lifted transition-all active:scale-[0.99] flex items-center gap-4"
               >
-                <span className="text-2xl" aria-hidden>{p.emoji}</span>
+                <span className="text-2xl" aria-hidden>
+                  {p.emoji}
+                </span>
                 <span className="flex-1">
                   <span className="block font-medium">
                     {p.name}, {p.age}
@@ -231,7 +237,9 @@ export default function InsightPage() {
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="font-medium">
-                  {profile ? `${profile.name}, ${profile.age}` : customName.trim() || "Egen testprofil"}
+                  {profile
+                    ? `${profile.name}, ${profile.age}`
+                    : customName.trim() || "Egen testprofil"}
                 </p>
                 <p className="text-sm text-muted-foreground">Fiktivt underlag (demo)</p>
               </div>
@@ -260,13 +268,18 @@ export default function InsightPage() {
             {INSIGHT_AREAS.filter((a) => areas.includes(a.id)).map((area) => {
               const isOpen = openArea === area.id;
               return (
-                <div key={area.id} className="rounded-3xl bg-card border border-border overflow-hidden">
+                <div
+                  key={area.id}
+                  className="rounded-3xl bg-card border border-border overflow-hidden"
+                >
                   <button
                     onClick={() => setOpenArea(isOpen ? null : area.id)}
                     className="w-full p-5 flex items-center gap-4 text-left"
                     aria-expanded={isOpen}
                   >
-                    <span className="text-2xl" aria-hidden>{area.emoji}</span>
+                    <span className="text-2xl" aria-hidden>
+                      {area.emoji}
+                    </span>
                     <span className="flex-1">
                       <span className="block font-medium">{area.label}</span>
                       {!isOpen && (
@@ -287,7 +300,10 @@ export default function InsightPage() {
                         const added = hasStrategy(s.id);
                         const fitsNow = s.friction <= flow.maxFriction;
                         return (
-                          <div key={s.id} className="p-4 rounded-2xl bg-secondary/40 border border-border space-y-2">
+                          <div
+                            key={s.id}
+                            className="p-4 rounded-2xl bg-secondary/40 border border-border space-y-2"
+                          >
                             <p className="font-medium">{s.title}</p>
                             <p className="text-sm text-muted-foreground">{s.why}</p>
                             <p className="text-xs text-muted-foreground">
@@ -334,8 +350,13 @@ export default function InsightPage() {
           headingClassName="font-semibold"
         >
           {saved.map((s) => (
-            <div key={s.id} className="p-4 rounded-2xl bg-card border border-border flex items-start gap-3">
-              <span className="text-xl" aria-hidden>{AREA_BY_ID[s.areaId]?.emoji}</span>
+            <div
+              key={s.id}
+              className="p-4 rounded-2xl bg-card border border-border flex items-start gap-3"
+            >
+              <span className="text-xl" aria-hidden>
+                {AREA_BY_ID[s.areaId]?.emoji}
+              </span>
               <div className="flex-1">
                 <p className="font-medium">{s.title}</p>
                 <p className="text-sm text-muted-foreground">
@@ -403,7 +424,11 @@ export default function InsightPage() {
                     const anchor = e.target.value || "08:30";
                     setAddFlow((prev) =>
                       prev
-                        ? { ...prev, anchor, nudges: prev.strategy.makeNudges?.(anchor) ?? prev.nudges }
+                        ? {
+                            ...prev,
+                            anchor,
+                            nudges: prev.strategy.makeNudges?.(anchor) ?? prev.nudges,
+                          }
                         : prev,
                     );
                   }}
@@ -433,7 +458,11 @@ export default function InsightPage() {
             >
               Lägg till utan påminnelser
             </Button>
-            <Button variant="ghost" className="w-full h-11 rounded-2xl" onClick={() => setAddFlow(null)}>
+            <Button
+              variant="ghost"
+              className="w-full h-11 rounded-2xl"
+              onClick={() => setAddFlow(null)}
+            >
               Inte nu
             </Button>
           </div>
