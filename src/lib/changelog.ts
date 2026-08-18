@@ -6,12 +6,13 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-08-19";
+export const CHANGELOG_UPDATED = "2026-08-18";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Ångra hanterade QuickFlow-tankar – råkar du trycka \"Hanterad\" visas tanken under \"Nyligen hanterade\" i 24 timmar, och du kan återaktivera den med ett tryck (2026-08-18)",
       "Hanterad – göm den: vilande QuickFlow-tankar göms automatiskt tills tiden är inne och kan markeras som hanterade med ett tryck (2026-08-18)",
       "Sparläge för Återkom senare – välj när tanken ska dyka upp igen (i kväll, imorgon bitti, om 3 dagar, nästa vecka eller eget datum och tid). Den ligger kvar som vilande och tidpunkten går att ändra (2026-08-18)",
       "QuickFlow: Vart ska det här hamna? – alla val på ett ställe: uppgift, kalender, påminnelse, barn, familj, studier, jobb, hemma, hälsa, ekonomi, inköp, anteckning, energifaktor, återkom senare eller ta bort. Barn är ett eget livsområde och Flow föreslår vilket barn det gäller (2026-08-18)",

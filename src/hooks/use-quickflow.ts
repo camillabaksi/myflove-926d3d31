@@ -93,6 +93,12 @@ export function useQuickflow() {
     [update],
   );
 
+  /** Ångra ett avslut – t.ex. om man råkat markera en vilande tanke som hanterad. */
+  const uncomplete = useCallback(
+    (id: string) => update(id, { done: false, doneAt: undefined }),
+    [update],
+  );
+
   const remove = useCallback(
     (id: string) => setItems((prev) => prev.filter((i) => i.id !== id)),
     [setItems],
@@ -119,5 +125,5 @@ export function useQuickflow() {
 
   const openItems = items.filter((i) => !i.done);
 
-  return { items, openItems, add, absorb, update, complete, remove, snooze };
+  return { items, openItems, add, absorb, update, complete, uncomplete, remove, snooze };
 }
