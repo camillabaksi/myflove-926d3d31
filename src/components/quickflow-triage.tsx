@@ -53,6 +53,11 @@ export default function QuickflowTriage() {
   /** Vilken tanke som väntar på "vilket barn och vad blir det?". */
   const [childFor, setChildFor] = useState<string | null>(null);
   const [childPick, setChildPick] = useState<string | null>(null);
+  /** Vilken tanke som väntar på "när vill du se den igen?". */
+  const [laterFor, setLaterFor] = useState<string | null>(null);
+  /** Eget datum/tid i Återkom senare-panelen. */
+  const [laterDate, setLaterDate] = useState("");
+  const [laterTime, setLaterTime] = useState("09:00");
   /** Användarens svar när tolkningen var otydlig. */
   const [choices, setChoices] = useState<Record<string, { at: number; allDay: boolean }>>({});
 
