@@ -1,8 +1,15 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Layout from "@/components/layout";
 import CollapsibleSection from "@/components/collapsible-section";
 import { Button } from "@/components/ui/button";
-import { useReminders, type Reminder } from "@/hooks/use-data";
+import { useReminders, type Reminder, type RepeatMode } from "@/hooks/use-data";
+import { useReminderSync } from "@/hooks/use-reminder-sync";
+import { EnablePushButton } from "@/components/enable-push-button";
+import {
+  getNotificationPermission,
+  requestNotificationPermission,
+  type NotificationPermissionState,
+} from "@/lib/push-notifications";
 import { useToast } from "@/hooks/use-toast";
 import { BellRing, Plus, Trash2, Undo2, Pencil, Check, X, CalendarClock } from "lucide-react";
 
