@@ -109,7 +109,7 @@ export default function CalendarPage() {
   const { activeTasks, completedTasks, deleteTask, addTask, updateTask } = useTasks();
   const { activeReminders, addReminder, deleteReminder, updateReminder } = useReminders();
   const { eventsForDate, hasHousehold } = useFamilyEventsByDate();
-  const { children: kids, items: childItems, addItem: addChildItem } = useChildren();
+  const { children: kids, items: childItems, addItem: addChildItem, deleteItem: deleteChildItem } = useChildren();
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -167,6 +167,68 @@ export default function CalendarPage() {
       }
     | null
   >(null);
+
+  /**
+   * Redigering av en sammanfogad barnhändelse: här byter man vilka barn som
+   * ingår i efterhand, utan att skapa om händelsen.
+   */
+  const [editChildGroup, setEditChildGroup] = useState<
+    | {
+        title: string;
+        time: string | null;
+        date: string;
+        note: string | null;
+        items: Array<(typeof childItems)[number]>;
+      }
+    | null
+  >(null);
+  const [editChildIds, setEditChildIds] = useState<string[]>([]);
+  const [savingChildGroup, setSavingChildGroup] = useState(false);
+
+  const openChildGroupEditor = (group: Array<(typeof childItems)[number]>) => {
+    const first = group[0]!;
+    setEditChildGroup({
+      title: first.title,
+      time: first.time,
+      date: first.date ?? selectedDateStr,
+      note: first.notes,
+      items: group,
+    });
+    setEditChildIds(group.map((g) => g.child_id));
+  };
+
+  const saveChildGroup = async () => {
+    if (!editChildGroup) return;
+    if (editChildIds.length === 0) {
+      toast({ description: "Välj minst ett barn – annars tar du bort händelsen.", variant: "destructive" });
+      return;
+    }
+    setSavingChildGroup(true);
+    try {
+      const existing = editChildGroup.items;
+      const removed = existing.filter((i) => !editChildIds.includes(i.child_id));
+      const existingIds = existing.map((i) => i.child_id);
+      const added = editChildIds.filter((id) => !existingIds.includes(id));
+
+      for (const item of removed) await deleteChildItem(item);
+      for (const childId of added) {
+        await addChildItem({
+          childId,
+          kind: "activity",
+          title: editChildGroup.title,
+          date: editChildGroup.date,
+          time: editChildGroup.time ?? undefined,
+          notes: editChildGroup.note ?? undefined,
+        });
+      }
+      toast({ description: "Uppdaterat vilka barn som ingår." });
+      setEditChildGroup(null);
+    } catch {
+      toast({ description: "Kunde inte spara ändringen. Försök igen.", variant: "destructive" });
+    } finally {
+      setSavingChildGroup(false);
+    }
+  };
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -748,27 +810,35 @@ export default function CalendarPage() {
                 const names = group.map((g) => g.child?.name ?? "Barn");
                 const color = group.length > 1 ? "#a06cd5" : (e.child?.color ?? "#a06cd5");
                 return (
-                  <Link
+                  <div
                     key={`child-${e.id}`}
-                    href="/barn"
-                    className="flex items-center gap-4 p-4 bg-card border border-border rounded-2xl hover:bg-secondary transition-colors"
+                    className="flex items-center justify-between gap-3 p-4 bg-card border border-border rounded-2xl"
                   >
-                    {pictoMode ? (
-                      <span className="text-3xl leading-none shrink-0" aria-hidden>{pictogramFor(e.title, "🐣")}</span>
-                    ) : (
-                      <Baby style={{ color }} size={24} />
-                    )}
-                    <div className="min-w-0">
-                      <div
-                        className="text-xs font-medium uppercase tracking-wider mb-0.5"
-                        style={{ color }}
-                      >
-                        {names.join(" & ")} {e.time && `kl ${e.time}`}
-                        {e.sharedWith.length > 0 && " · delad"}
+                    <Link href="/barn" className="flex items-center gap-4 min-w-0 flex-1">
+                      {pictoMode ? (
+                        <span className="text-3xl leading-none shrink-0" aria-hidden>{pictogramFor(e.title, "🐣")}</span>
+                      ) : (
+                        <Baby style={{ color }} size={24} />
+                      )}
+                      <div className="min-w-0">
+                        <div
+                          className="text-xs font-medium uppercase tracking-wider mb-0.5"
+                          style={{ color }}
+                        >
+                          {names.join(" & ")} {e.time && `kl ${e.time}`}
+                          {e.sharedWith.length > 0 && " · delad"}
+                        </div>
+                        <div className={`text-lg font-medium truncate ${e.completed ? 'line-through opacity-60' : ''}`}>{e.title}</div>
                       </div>
-                      <div className={`text-lg font-medium truncate ${e.completed ? 'line-through opacity-60' : ''}`}>{e.title}</div>
-                    </div>
-                  </Link>
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => openChildGroupEditor(group)}
+                      className="shrink-0 text-xs font-medium px-3 py-2 rounded-full bg-secondary/60 hover:bg-secondary transition-colors"
+                    >
+                      Ändra barn
+                    </button>
+                  </div>
                 );
               })}
 
@@ -1374,6 +1444,56 @@ export default function CalendarPage() {
                 className="w-full h-12 rounded-2xl"
               >
                 Lägg till
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Ändra vilka barn som ingår i en redan sparad, sammanfogad händelse. */}
+        <Dialog open={!!editChildGroup} onOpenChange={(open) => !open && setEditChildGroup(null)}>
+          <DialogContent className="rounded-3xl">
+            <DialogHeader>
+              <DialogTitle>Vilka barn ingår?</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <p className="text-sm text-muted-foreground">
+                {editChildGroup?.title}
+                {editChildGroup?.time ? ` · kl ${editChildGroup.time}` : ""}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {kids.map((k) => {
+                  const selected = editChildIds.includes(k.id);
+                  return (
+                    <button
+                      key={k.id}
+                      type="button"
+                      aria-pressed={selected}
+                      onClick={() =>
+                        setEditChildIds((prev) =>
+                          prev.includes(k.id) ? prev.filter((id) => id !== k.id) : [...prev, k.id],
+                        )
+                      }
+                      className={`px-3 py-2 rounded-full text-sm font-medium border transition-all ${
+                        selected
+                          ? "text-white border-transparent"
+                          : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
+                      }`}
+                      style={selected ? { backgroundColor: k.color } : undefined}
+                    >
+                      {selected ? "✓ " : ""}{k.name}
+                    </button>
+                  );
+                })}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Lägg till eller ta bort barn – händelsen finns kvar, den flyttar bara in i rätt barns schema.
+              </p>
+              <Button
+                onClick={saveChildGroup}
+                disabled={savingChildGroup}
+                className="w-full h-12 rounded-2xl"
+              >
+                {savingChildGroup ? "Sparar…" : "Spara"}
               </Button>
             </div>
           </DialogContent>
