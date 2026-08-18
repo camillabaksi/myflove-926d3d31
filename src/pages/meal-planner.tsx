@@ -231,7 +231,7 @@ export default function MealPlannerPage() {
     toast({ description: `${picks.length} middagar föreslagna – ändra fritt.` });
   };
 
-  const useRecipeToday = (r: MealRecipe) => {
+  const applyRecipeToday = (r: MealRecipe) => {
     const weekday = WEEKDAYS.map((_, i) => i).find((i) => !findPlan(i, "Middag")?.dish);
     if (weekday === undefined) {
       toast({ description: "Alla middagar är redan planerade." });
@@ -319,7 +319,7 @@ export default function MealPlannerPage() {
                     >
                       <button
                         type="button"
-                        onClick={() => useRecipeToday(r)}
+                        onClick={() => applyRecipeToday(r)}
                         className="hover:underline"
                       >
                         {r.dish}
@@ -356,7 +356,7 @@ export default function MealPlannerPage() {
                     >
                       <button
                         type="button"
-                        onClick={() => useRecipeToday(r)}
+                        onClick={() => applyRecipeToday(r)}
                         className="hover:underline"
                       >
                         {r.dish}

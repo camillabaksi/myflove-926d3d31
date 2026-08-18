@@ -46,6 +46,7 @@ export const SceneOrganize: React.FC = () => {
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
           {CARDS.map((c) => {
+            // eslint-disable-next-line react-hooks/rules-of-hooks -- Remotion-scen: listan är statisk, hook-ordningen är alltid densamma
             const e = useEntrance(c.delay);
             return (
               <div

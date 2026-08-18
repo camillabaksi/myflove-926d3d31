@@ -64,6 +64,7 @@ export const SceneTraining: React.FC = () => {
 
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
           {TABS.map((t, i) => {
+            // eslint-disable-next-line react-hooks/rules-of-hooks -- Remotion-scen: listan är statisk, hook-ordningen är alltid densamma
             const e = useEntrance(t.delay);
             const active = i === 1;
             return (
@@ -110,6 +111,7 @@ export const SceneTraining: React.FC = () => {
               Din vecka
             </div>
             {Sessions.map((s, i) => {
+              // eslint-disable-next-line react-hooks/rules-of-hooks -- Remotion-scen: listan är statisk, hook-ordningen är alltid densamma
               const e = useEntrance(30 + i * 12);
               return (
                 <div

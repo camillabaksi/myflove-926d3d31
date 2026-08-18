@@ -62,6 +62,7 @@ export const SceneAssistant: React.FC = () => {
               Historik
             </div>
             {HISTORY.map((h, i) => {
+              // eslint-disable-next-line react-hooks/rules-of-hooks -- Remotion-scen: listan är statisk, hook-ordningen är alltid densamma
               const e = useEntrance(26 + i * 10);
               const active = i === 0;
               return (
@@ -97,6 +98,7 @@ export const SceneAssistant: React.FC = () => {
             style={{ display: "flex", flexDirection: "column", gap: 14, justifyContent: "center" }}
           >
             {BUBBLES.map((b, i) => {
+              // eslint-disable-next-line react-hooks/rules-of-hooks -- Remotion-scen: listan är statisk, hook-ordningen är alltid densamma
               const e = useEntrance(46 + i * 26);
               const mine = b.from === "user";
               return (

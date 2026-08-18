@@ -126,6 +126,7 @@ export const ScenePushMobile: React.FC = () => {
           </SectionSub>
           <div style={{ display: "flex", gap: 12, marginTop: 14 }}>
             {["🍎 App Store", "🤖 Google Play", "🌐 Web / PWA"].map((t, i) => {
+              // eslint-disable-next-line react-hooks/rules-of-hooks -- Remotion-scen: listan är statisk, hook-ordningen är alltid densamma
               const e = useEntrance(30 + i * 10);
               return (
                 <div
