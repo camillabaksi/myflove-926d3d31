@@ -8,6 +8,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 ## [Unreleased]
 
 ### Added
+- **Utvecklarchecklista 2.9** (2026-08-18): Konkret checklista utifrån Living Blueprint 2.9 – ett avsnitt per kapitel (1–18) med avbockningsbara delmoment och status (klart/delvis/kvar), samt tre prioriterade nästa steg.
 - **Blueprint 2.9** (2026-08-19): Living Blueprint uppdaterad till 2.9 – nytt kapitel 17.9 "Material och kommunikation" (blueprint, pitchdeck i PPTX och PDF, marknadsföringsvideo och changelog i Flow-röst), städad kapitelordning, versionshistorik 18.7 och rätt versionsnummer i sidhuvudet. Finns som DOCX och PDF.
 - **Pitchdeck som PDF** (2026-08-19): Pitchdecket finns nu även som nedladdningsbar PDF (20 sidor) med de nya skärmbilderna och en avslutande sammanfattningsslide – "MyFlove i korthet" med vad appen är, hur den fungerar, vad som är nytt i 2.8 och status/nästa steg.
 - **Pitchdeck 2.8 uppdaterat** (2026-08-19): Alla skärmbilder i pitchdecket är omtagna från den nya lila appen (hem, Min dag, Relationer, Flow, FlowScore, Feedback, QuickFlow, Insight). "Familj" heter nu Relationer i problem-, lösnings- och personabilderna, rubriken "Status idag" är renodlad, och citat/siffror på testarsidan visas som tydliga platshållare tills riktig data finns.
