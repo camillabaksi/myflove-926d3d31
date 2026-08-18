@@ -7,6 +7,7 @@ import HelpHint from "@/components/help-hint";
 import WorkProfileCard from "@/components/work-profile-card";
 import StudyProfileCard from "@/components/study-profile-card";
 import { useSituation } from "@/hooks/use-situation";
+import { useSituationPriority } from "@/hooks/use-situation-priority";
 import {
   ALL_SITUATIONS,
   SITUATION_META,
@@ -18,6 +19,7 @@ import {
 /** Min situation – det övergripande lagret för hur livet ser ut just nu. */
 export default function SituationPage() {
   const { situation, toggle, setNote } = useSituation();
+  const priority = useSituationPriority();
   const [open, setOpen] = useState<SituationId | null>(null);
   const active = activeSituations(situation);
 
