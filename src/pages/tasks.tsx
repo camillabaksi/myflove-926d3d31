@@ -282,7 +282,23 @@ export default function Tasks() {
               </div>
             )}
 
+            {/* Anteckning */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-medium text-muted-foreground" htmlFor={`note-${task.id}`}>
+                Anteckning
+              </label>
+              <textarea
+                id={`note-${task.id}`}
+                defaultValue={task.note ?? ""}
+                onBlur={(e) => setTaskNote(task.id, e.target.value)}
+                rows={2}
+                placeholder="Skriv vad det gäller, vad du behöver ta med…"
+                className="w-full rounded-xl border border-border bg-background p-3 text-sm outline-none focus:border-primary"
+              />
+            </div>
+
             {/* Steps */}
+
             <div className="space-y-2">
               {steps.map((step) => (
                 <div key={step.id} className="flex items-center gap-2">
