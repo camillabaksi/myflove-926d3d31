@@ -1,4 +1,26 @@
 import { useEffect, useRef, useState } from "react";
+
+// Minimala typer för webbläsarens SpeechRecognition (saknas i TS lib.dom).
+type SpeechRecognitionStreamEvent = {
+  resultIndex: number;
+  results: ArrayLike<ArrayLike<{ transcript: string }>>;
+};
+
+type SpeechRecognitionLike = {
+  lang: string;
+  continuous: boolean;
+  interimResults: boolean;
+  onresult: ((event: SpeechRecognitionStreamEvent) => void) | null;
+  onerror: (() => void) | null;
+  onend: (() => void) | null;
+  start: () => void;
+  stop: () => void;
+};
+
+type SpeechRecognitionWindow = {
+  SpeechRecognition?: new () => SpeechRecognitionLike;
+  webkitSpeechRecognition?: new () => SpeechRecognitionLike;
+};
 import Layout from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { useTasks, useShoppingList, useReminders, useDumpIdeas, useMoods } from "@/hooks/use-data";
