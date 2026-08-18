@@ -865,8 +865,19 @@ export default function CalendarPage() {
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
                     <button
-                      onClick={() => setEditing({ kind: "task", id: t.id, title: t.title, time: t.time ?? "" })}
-                      aria-label="Ändra tid"
+                      onClick={() => setEditing({
+                        kind: "task",
+                        id: t.id,
+                        title: t.title,
+                        date: t.dueDate ?? selectedDateStr,
+                        time: t.time ?? "",
+                        endTime: t.endTime ?? "",
+                        remind: t.reminderMinutesBefore ?? null,
+                        note: t.note ?? "",
+                        area: getArea(t),
+                        repeat: "none",
+                      })}
+                      aria-label="Ändra uppgift"
                       className="px-3 py-2 text-sm text-primary rounded-xl hover:bg-primary/10"
                     >
                       Ändra tid
