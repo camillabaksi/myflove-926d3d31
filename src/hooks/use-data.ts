@@ -45,6 +45,8 @@ export interface Task {
   kind?: TaskKind; // default "uppgift"
   status?: TaskStatus; // default "pagar"; "klart" ⇔ completed=true
   waitingOn?: string; // fritt fält: "vem/vad vi väntar på"
+  note?: string; // fri anteckning: vad det handlar om, vad du behöver ta med
+
   steps?: TaskStep[]; // delsteg (särskilt för ärenden och projekt)
   area?: LifeArea; // livsområde: vardag / privat / studier / jobb
   courseId?: string; // kopplad kurs (studieflödet)
