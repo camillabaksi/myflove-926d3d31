@@ -157,3 +157,74 @@ export function situationContext(state: SituationState): string {
   }
   return lines.join("\n");
 }
+
+// ---------------------------------------------------------------------------
+// Situationen påverkar förslagen direkt – både Flow och QuickFlow.
+// Inget låses: vi lyfter fram det som passar och tonar ner det som vilar.
+// ---------------------------------------------------------------------------
+
+/** Vad situationen vill lyfta fram respektive tona ner i QuickFlow. */
+export interface SituationFocus {
+  /** Destinationer som visas först. */
+  boosted: string[];
+  /** Destinationer som hamnar sist – de vilar just nu. */
+  muted: string[];
+  /** Kort förklaring till användaren, tom när ingen situation är vald. */
+  note: string;
+}
+
+export function situationFocus(state: SituationState): SituationFocus {
+  const act = activeSituations(state);
+  if (!act.length) return { boosted: [], muted: [], note: "" };
+
+  const boosted = new Set<string>();
+  const muted = new Set<string>();
+
+  for (const id of act) {
+    if (id === "jobb") boosted.add("jobb");
+    if (id === "studier") boosted.add("studier");
+    if (id === "foraldraledig") {
+      boosted.add("barn");
+      boosted.add("hemma");
+      boosted.add("relationer");
+    }
+    if (id === "sjukskriven") {
+      boosted.add("halsa");
+      boosted.add("behall");
+    }
+    if (id === "arbetssokande") {
+      boosted.add("uppgift");
+      boosted.add("jobb");
+    }
+    if (id === "mellan-arbeten") {
+      boosted.add("uppgift");
+      boosted.add("halsa");
+    }
+  }
+
+  // Det som inte pågår just nu ska inte föreslås först.
+  if (!act.includes("jobb") && !act.includes("arbetssokande")) muted.add("jobb");
+  if (!act.includes("studier")) muted.add("studier");
+
+  const labels = act.map((id) => `${SITUATION_META[id].emoji} ${SITUATION_META[id].label}`).join(" · ");
+  return {
+    boosted: [...boosted].filter((d) => !muted.has(d)),
+    muted: [...muted],
+    note: `Förslagen är anpassade efter din situation: ${labels}.`,
+  };
+}
+
+/** Korta Flow-förslag som följer situationen – uppdateras direkt vid byte. */
+export function situationSuggestions(
+  state: SituationState,
+): { id: string; title: string; body: string }[] {
+  return activeSituations(state).map((id) => {
+    const meta = SITUATION_META[id];
+    const note = state.entries[id]?.note?.trim();
+    return {
+      id: `situation-${id}`,
+      title: `${meta.emoji} ${meta.label} just nu`,
+      body: note ? `${meta.flowHint} (Du skrev: ${note})` : meta.flowHint,
+    };
+  });
+}
