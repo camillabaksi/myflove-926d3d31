@@ -1160,7 +1160,21 @@ export default function CalendarPage() {
                     Ange en starttid ovan så kan du välja påminnelse.
                   </p>
                 )}
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium" htmlFor="ny-anteckning">
+                  Anteckning (valfritt)
+                </label>
+                <textarea
+                  id="ny-anteckning"
+                  value={newAnyNote}
+                  onChange={(e) => setNewAnyNote(e.target.value)}
+                  rows={3}
+                  placeholder="T.ex. ta med remiss, adress, vad mötet gäller"
+                  className="w-full rounded-2xl border border-border bg-card p-3 text-base outline-none focus:border-primary"
+                />
               </div>
+
 
               <p className="text-xs text-muted-foreground">
                 Läggs in på {selectedDateStr === todayStr ? "idag" : selectedDateStr}.
