@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Färdiga regelmallar i QuickFlow – boka, köpa, handla, påminn, ring, betala, idé och träffa. Lägg till direkt eller anpassa ord, destination, livsområde och klockslag först (2026-08-18)",
       "Egna sorteringsregler i QuickFlow – bestäm själv att \"köpa …\" går till inköpslistan och \"boka …\" till kalendern, med valfritt livsområde och klockslag (2026-08-18)",
       "QuickFlow sorterar till alla delar – inköpslista, kalender, att göra, påminnelse eller idébank, med förslag på vart tanken hör hemma (2026-08-18)",
       "Inställningar för energipåverkan – stäng av påverkan helt, sätt en samlad vikt och justera vikten för varje energifaktor oberoende (2026-08-18)",

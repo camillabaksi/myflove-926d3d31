@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { toast } from "sonner";
-import { Plus, Trash2, ArrowUp, ArrowDown, Sparkles } from "lucide-react";
+import { Plus, Trash2, ArrowUp, ArrowDown, Sparkles, Check, Pencil, X } from "lucide-react";
 import { useQuickflowRules } from "@/hooks/use-quickflow-rules";
 import {
   MATCH_LABEL,
-  RULE_TEMPLATES,
+  RULE_TEMPLATE_LIST,
+  type RuleDraft,
   type RuleMatchType,
 } from "@/lib/quickflow-rules";
 import { DESTINATION_META, type QuickflowDestination } from "@/lib/quickflow";
@@ -22,10 +23,12 @@ const MATCH_TYPES: RuleMatchType[] = ["startsWith", "contains", "endsWith"];
 
 /**
  * Egna regler för QuickFlow – "börjar med köpa → Inköpslistan".
- * Reglerna går alltid före MyFloves egen gissning.
+ * Färdiga mallar går att lägga till direkt eller anpassa först.
  */
 export default function QuickflowRulesSettings() {
   const { rules, addRule, updateRule, removeRule, moveRule } = useQuickflowRules();
+  const formRef = useRef<HTMLDivElement | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [phrase, setPhrase] = useState("");
   const [matchType, setMatchType] = useState<RuleMatchType>("startsWith");
   const [destination, setDestination] = useState<QuickflowDestination>("inkop");
@@ -33,23 +36,58 @@ export default function QuickflowRulesSettings() {
   const [time, setTime] = useState("");
   const [strip, setStrip] = useState(true);
 
+  const hasPhrase = (p: string) =>
+    rules.some((r) => r.phrase.trim().toLowerCase() === p.trim().toLowerCase());
+
+  const fillForm = (draft: RuleDraft) => {
+    setPhrase(draft.phrase);
+    setMatchType(draft.matchType);
+    setDestination(draft.destination);
+    setArea(draft.area ?? "");
+    setTime(draft.time ?? "");
+    setStrip(Boolean(draft.stripPhrase));
+    formRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+  };
+
+  const resetForm = () => {
+    setEditingId(null);
+    setPhrase("");
+    setTime("");
+    setArea("");
+    setStrip(true);
+    setMatchType("startsWith");
+    setDestination("inkop");
+  };
+
   const save = () => {
     const p = phrase.trim();
     if (!p) {
       toast("Skriv ett ord först", { description: "T.ex. \"köpa\" eller \"boka\"." });
       return;
     }
-    addRule({
+    const draft = {
       phrase: p,
       matchType,
       destination,
-      ...(area ? { area } : {}),
-      ...(time ? { time } : {}),
+      area: area || undefined,
+      time: time || undefined,
       stripPhrase: strip,
-    });
-    setPhrase("");
-    setTime("");
-    toast.success(`Klart – "${p}" hamnar nu i ${DESTINATION_META[destination].label}.`);
+    };
+    if (editingId) {
+      updateRule(editingId, draft);
+      toast.success(`Ändringen är sparad – "${p}" går till ${DESTINATION_META[destination].label}.`);
+    } else {
+      addRule({
+        phrase: p,
+        matchType,
+        destination,
+        ...(area ? { area } : {}),
+        ...(time ? { time } : {}),
+        stripPhrase: strip,
+      });
+      toast.success(`Klart – "${p}" hamnar nu i ${DESTINATION_META[destination].label}.`);
+    }
+    resetForm();
   };
 
   return (
@@ -59,21 +97,72 @@ export default function QuickflowRulesSettings() {
         annars föreslår jag som vanligt.
       </p>
 
-      {rules.length === 0 && (
-        <div className="rounded-2xl border border-border bg-card p-4 space-y-3">
-          <p className="text-sm text-ink">Inga egna regler än. Vill du börja med några vanliga?</p>
+      {/* Färdiga mallar */}
+      <div className="rounded-2xl border border-border bg-card p-4 space-y-3">
+        <div className="flex items-center gap-2">
+          <Sparkles size={16} className="text-primary" />
+          <p className="text-sm font-semibold text-ink">Färdiga mallar</p>
+        </div>
+        <p className="text-xs text-muted-foreground">
+          Lägg till direkt, eller välj Anpassa om du vill ändra något först.
+        </p>
+        <ul className="space-y-2">
+          {RULE_TEMPLATE_LIST.map((t) => {
+            const added = hasPhrase(t.rule.phrase);
+            return (
+              <li
+                key={t.key}
+                className="rounded-xl border border-border/70 bg-background/60 p-3 flex items-start gap-2"
+              >
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-ink">
+                    {t.label} → {DESTINATION_META[t.rule.destination].emoji}{" "}
+                    {DESTINATION_META[t.rule.destination].label}
+                  </p>
+                  <p className="text-xs text-muted-foreground">{t.hint}</p>
+                  <p className="text-xs text-muted-foreground italic">{t.example}</p>
+                </div>
+                <div className="flex flex-col gap-1.5 shrink-0">
+                  <button
+                    type="button"
+                    disabled={added}
+                    onClick={() => {
+                      addRule(t.rule);
+                      toast.success(`"${t.rule.phrase}" är tillagd – du kan ändra den när du vill.`);
+                    }}
+                    className="rounded-full border border-primary bg-primary/10 text-primary px-3 py-1 text-xs font-semibold inline-flex items-center gap-1 disabled:opacity-40"
+                  >
+                    {added ? <Check size={13} /> : <Plus size={13} />}
+                    {added ? "Tillagd" : "Lägg till"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEditingId(null);
+                      fillForm(t.rule);
+                    }}
+                    className="rounded-full border border-border px-3 py-1 text-xs font-medium inline-flex items-center gap-1"
+                  >
+                    <Pencil size={13} /> Anpassa
+                  </button>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+        {rules.length === 0 && (
           <button
             type="button"
             onClick={() => {
-              RULE_TEMPLATES.forEach((t) => addRule(t));
-              toast.success("Fem vanliga regler tillagda – ändra dem precis som du vill.");
+              RULE_TEMPLATE_LIST.forEach((t) => addRule(t.rule));
+              toast.success("Alla mallar tillagda – ändra dem precis som du vill.");
             }}
-            className="rounded-full border border-primary bg-primary/10 text-primary px-4 py-2 text-sm font-semibold inline-flex items-center gap-2"
+            className="rounded-full border border-border px-4 py-2 text-sm font-semibold"
           >
-            <Sparkles size={16} /> Lägg till förslag
+            Lägg till alla mallar
           </button>
-        </div>
-      )}
+        )}
+      </div>
 
       <ul className="space-y-2">
         {rules.map((r, i) => (
@@ -91,6 +180,17 @@ export default function QuickflowRulesSettings() {
                   {r.stripPhrase ? "tar bort ordet ur titeln" : "behåller hela texten"}
                 </p>
               </div>
+              <button
+                type="button"
+                aria-label="Ändra regel"
+                onClick={() => {
+                  setEditingId(r.id);
+                  fillForm(r);
+                }}
+                className="rounded-full border border-border p-1.5"
+              >
+                <Pencil size={14} />
+              </button>
               <button
                 type="button"
                 aria-label="Flytta upp"
@@ -112,7 +212,10 @@ export default function QuickflowRulesSettings() {
               <button
                 type="button"
                 aria-label="Ta bort regel"
-                onClick={() => removeRule(r.id)}
+                onClick={() => {
+                  removeRule(r.id);
+                  if (editingId === r.id) resetForm();
+                }}
                 className="rounded-full border border-border p-1.5 text-destructive"
               >
                 <Trash2 size={14} />
@@ -130,8 +233,21 @@ export default function QuickflowRulesSettings() {
         ))}
       </ul>
 
-      <div className="rounded-2xl border border-border bg-card p-4 space-y-3">
-        <p className="text-sm font-semibold text-ink">Ny regel</p>
+      <div ref={formRef} className="rounded-2xl border border-border bg-card p-4 space-y-3">
+        <div className="flex items-center justify-between">
+          <p className="text-sm font-semibold text-ink">
+            {editingId ? "Ändra regel" : "Ny regel"}
+          </p>
+          {(editingId || phrase) && (
+            <button
+              type="button"
+              onClick={resetForm}
+              className="text-xs text-muted-foreground inline-flex items-center gap-1"
+            >
+              <X size={13} /> Avbryt
+            </button>
+          )}
+        </div>
 
         <div className="flex flex-wrap gap-1.5">
           {MATCH_TYPES.map((m) => (
@@ -193,7 +309,8 @@ export default function QuickflowRulesSettings() {
           onClick={save}
           className="rounded-full bg-primary text-primary-foreground px-4 py-2 text-sm font-semibold inline-flex items-center gap-2"
         >
-          <Plus size={16} /> Spara regel
+          {editingId ? <Check size={16} /> : <Plus size={16} />}
+          {editingId ? "Spara ändring" : "Spara regel"}
         </button>
       </div>
     </div>
