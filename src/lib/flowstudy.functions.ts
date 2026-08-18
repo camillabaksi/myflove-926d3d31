@@ -17,8 +17,11 @@ const InputSchema = z.object({
     .optional(),
   /** Frivillig studieprofil som text – personlig kontext, inte regler. */
   profileContext: z.string().max(2000).optional(),
+  /** Anpassning utifrån stödbehov och inlärningspreferenser. */
+  focus: z.string().max(1500).optional(),
   cardCount: z.number().int().min(4).max(30).default(12),
   quizCount: z.number().int().min(4).max(20).default(10),
+
 });
 
 const OutputSchema = z.object({
