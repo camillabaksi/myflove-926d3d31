@@ -185,6 +185,75 @@ export type Database = {
         }
         Relationships: []
       }
+      energy_factor_presets: {
+        Row: {
+          category: string
+          created_at: string
+          direction: string
+          id: string
+          strength: number
+          title: string
+          user_id: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          direction?: string
+          id?: string
+          strength?: number
+          title: string
+          user_id: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          direction?: string
+          id?: string
+          strength?: number
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      energy_factors: {
+        Row: {
+          category: string
+          counts_toward_score: boolean
+          created_at: string
+          direction: string
+          id: string
+          note: string | null
+          occurred_at: string
+          strength: number
+          title: string
+          user_id: string
+        }
+        Insert: {
+          category?: string
+          counts_toward_score?: boolean
+          created_at?: string
+          direction?: string
+          id?: string
+          note?: string | null
+          occurred_at?: string
+          strength?: number
+          title: string
+          user_id: string
+        }
+        Update: {
+          category?: string
+          counts_toward_score?: boolean
+          created_at?: string
+          direction?: string
+          id?: string
+          note?: string | null
+          occurred_at?: string
+          strength?: number
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       energy_logs: {
         Row: {
           created_at: string
