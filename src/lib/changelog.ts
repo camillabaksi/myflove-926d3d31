@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "GitHub-issues från Utvecklarchecklista 2.9 – 70 färdiga issues med rubrik, beskrivning och acceptance criteria, som markdown, JSON och importskript (2026-08-18)",
       "Utvecklarchecklista utifrån Blueprint 2.9 – ett avsnitt per kapitel med avbockningsbara delmoment och status (2026-08-18)",
       "Blueprint 2.9 – nytt kapitel om material och kommunikation, städad kapitelordning och versionshistorik, som DOCX och PDF (2026-08-19)",
       "Pitchdeck som nedladdningsbar PDF (20 sidor) med sammanfattningssidan \"MyFlove i korthet\" (2026-08-19)",
