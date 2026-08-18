@@ -367,6 +367,18 @@ export default function QuickflowTriage() {
                         {plan.allDay ? " (ingen tid angavs)" : ""}
                       </p>
                     )}
+                    {item.remindAt && (
+                      <p className="text-xs text-muted-foreground">
+                        🔄 Sparad till senare: {formatWhen(item.remindAt, new Date(), false)}.{" "}
+                        <button
+                          type="button"
+                          onClick={() => openLaterPanel(item)}
+                          className="underline underline-offset-2"
+                        >
+                          Ändra tid
+                        </button>
+                      </p>
+                    )}
                   </div>
                 </div>
                 {plan?.ambiguous && (
