@@ -144,7 +144,8 @@ export default function CalendarPage() {
 
   /** Påminnelse innan start: null = ingen, annars minuter före (0 = vid start). */
   const [newAnyRemind, setNewAnyRemind] = useState<number | null>(null);
-  const [newAnyChildId, setNewAnyChildId] = useState<string>("");
+  /** Flera barn kan ingå i samma händelse, t.ex. lämning av både Bella och Bianca. */
+  const [newAnyChildIds, setNewAnyChildIds] = useState<string[]>([]);
   const [newEventTitle, setNewEventTitle] = useState("");
   const [newEventTime, setNewEventTime] = useState("");
   const [isAddingReminder, setIsAddingReminder] = useState(false);
@@ -259,12 +260,16 @@ export default function CalendarPage() {
           data: { title, date: selectedDateStr, time: timeRange },
         });
       } else if (newCat === "barn") {
-        const childId = newAnyChildId || kids[0]?.id;
-        if (!childId) {
+        const childIds = newAnyChildIds.length > 0 ? newAnyChildIds : (kids[0]?.id ? [kids[0].id] : []);
+        if (childIds.length === 0) {
           toast({ description: "Lägg till ett barn först på sidan Barn.", variant: "destructive" });
           return;
         }
-        await addChildItem({ childId, kind: "activity", title, date: selectedDateStr, time: timeRange ?? undefined, notes: note });
+        // Flera barn i samma händelse: posten hamnar i varje barns schema,
+        // men det räknas som en händelse i kalendern och en påminnelse till dig.
+        for (const childId of childIds) {
+          await addChildItem({ childId, kind: "activity", title, date: selectedDateStr, time: timeRange ?? undefined, notes: note });
+        }
       } else if (newCat === "jobb" || newCat === "studier") {
         addTask(title, selectedDateStr, {
           time,
@@ -279,14 +284,20 @@ export default function CalendarPage() {
       // Familj- och barnhändelser bor i delade listor – lägg en personlig
       // påminnelse bredvid så att notisen faktiskt når just dig.
       if (wantsReminder && (newCat === "familj" || newCat === "barn")) {
-        addReminder(title, selectedDateStr, time, "none", endTime, newAnyRemind ?? 0, note);
+        const names = kids.filter((k) => newAnyChildIds.includes(k.id)).map((k) => k.name);
+        const reminderTitle =
+          newCat === "barn" && names.length > 1 ? `${title} – ${names.join(" & ")}` : title;
+        addReminder(reminderTitle, selectedDateStr, time, "none", endTime, newAnyRemind ?? 0, note);
       }
+
       if (!visible.includes(newCat)) setVisible((prev) => [...prev, newCat]);
       setNewAnyTitle("");
       setNewAnyTime("");
       setNewAnyEndTime("");
       setNewAnyNote("");
       setNewAnyRemind(null);
+      setNewAnyChildIds([]);
+
       setIsAddingAny(false);
 
       toast({ description: "Händelsen är inlagd i kalendern." });
@@ -723,29 +734,44 @@ export default function CalendarPage() {
 
 
             <div className="space-y-3">
-              {selectedItems.childEvents.map(e => (
-                <Link
-                  key={`child-${e.id}`}
-                  href="/barn"
-                  className="flex items-center gap-4 p-4 bg-card border border-border rounded-2xl hover:bg-secondary transition-colors"
-                >
-                  {pictoMode ? (
-                    <span className="text-3xl leading-none shrink-0" aria-hidden>{pictogramFor(e.title, "🐣")}</span>
-                  ) : (
-                    <Baby style={{ color: e.child?.color ?? '#a06cd5' }} size={24} />
-                  )}
-                  <div className="min-w-0">
-                    <div
-                      className="text-xs font-medium uppercase tracking-wider mb-0.5"
-                      style={{ color: e.child?.color ?? '#a06cd5' }}
-                    >
-                      {e.child?.name ?? "Barn"} {e.time && `kl ${e.time}`}
-                      {e.sharedWith.length > 0 && " · delad"}
+              {/* Samma händelse för flera barn (t.ex. lämning av Bella och Bianca) visas ihop. */}
+              {(() => {
+                type ChildEv = (typeof selectedItems.childEvents)[number];
+                const groups = new Map<string, ChildEv[]>();
+                for (const e of selectedItems.childEvents) {
+                  const key = `${e.title}|${e.time ?? ""}|${e.completed ? 1 : 0}`;
+                  groups.set(key, [...(groups.get(key) ?? []), e]);
+                }
+                return Array.from(groups.values());
+              })().map((group) => {
+                const e = group[0]!;
+                const names = group.map((g) => g.child?.name ?? "Barn");
+                const color = group.length > 1 ? "#a06cd5" : (e.child?.color ?? "#a06cd5");
+                return (
+                  <Link
+                    key={`child-${e.id}`}
+                    href="/barn"
+                    className="flex items-center gap-4 p-4 bg-card border border-border rounded-2xl hover:bg-secondary transition-colors"
+                  >
+                    {pictoMode ? (
+                      <span className="text-3xl leading-none shrink-0" aria-hidden>{pictogramFor(e.title, "🐣")}</span>
+                    ) : (
+                      <Baby style={{ color }} size={24} />
+                    )}
+                    <div className="min-w-0">
+                      <div
+                        className="text-xs font-medium uppercase tracking-wider mb-0.5"
+                        style={{ color }}
+                      >
+                        {names.join(" & ")} {e.time && `kl ${e.time}`}
+                        {e.sharedWith.length > 0 && " · delad"}
+                      </div>
+                      <div className={`text-lg font-medium truncate ${e.completed ? 'line-through opacity-60' : ''}`}>{e.title}</div>
                     </div>
-                    <div className={`text-lg font-medium truncate ${e.completed ? 'line-through opacity-60' : ''}`}>{e.title}</div>
-                  </div>
-                </Link>
-              ))}
+                  </Link>
+                );
+              })}
+
 
               {selectedItems.familyEvents.map(e => (
                 <div key={`fam-${e.id}`} className="flex items-center justify-between gap-4 p-4 bg-card border border-border rounded-2xl group">
@@ -1219,26 +1245,43 @@ export default function CalendarPage() {
 
               {newCat === "barn" && kids.length > 0 && (
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Vilket barn?</label>
+                  <label className="text-sm font-medium">Vilka barn?</label>
                   <div className="flex flex-wrap gap-2">
-                    {kids.map((k) => (
-                      <button
-                        key={k.id}
-                        type="button"
-                        onClick={() => setNewAnyChildId(k.id)}
-                        className={`px-3 py-2 rounded-full text-sm font-medium border transition-all ${
-                          (newAnyChildId || kids[0]?.id) === k.id
-                            ? "text-white border-transparent"
-                            : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
-                        }`}
-                        style={(newAnyChildId || kids[0]?.id) === k.id ? { backgroundColor: k.color } : undefined}
-                      >
-                        {k.name}
-                      </button>
-                    ))}
+                    {kids.map((k) => {
+                      const selected = newAnyChildIds.length > 0
+                        ? newAnyChildIds.includes(k.id)
+                        : k.id === kids[0]?.id;
+                      return (
+                        <button
+                          key={k.id}
+                          type="button"
+                          aria-pressed={selected}
+                          onClick={() =>
+                            setNewAnyChildIds((prev) => {
+                              const base = prev.length > 0 ? prev : (kids[0]?.id ? [kids[0].id] : []);
+                              return base.includes(k.id)
+                                ? base.filter((id) => id !== k.id)
+                                : [...base, k.id];
+                            })
+                          }
+                          className={`px-3 py-2 rounded-full text-sm font-medium border transition-all ${
+                            selected
+                              ? "text-white border-transparent"
+                              : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
+                          }`}
+                          style={selected ? { backgroundColor: k.color } : undefined}
+                        >
+                          {selected ? "✓ " : ""}{k.name}
+                        </button>
+                      );
+                    })}
                   </div>
+                  <p className="text-xs text-muted-foreground">
+                    Välj ett eller flera barn – t.ex. lämning av både Bella och Bianca blir en och samma händelse.
+                  </p>
                 </div>
               )}
+
 
               <div className="space-y-2">
                 <label className="text-sm font-medium">Vad händer?</label>
