@@ -30,7 +30,10 @@ export default function QuickflowTriage() {
   const { openItems, complete, remove, snooze, update } = useQuickflow();
   const { addTask } = useTasks();
   const { addReminder } = useReminders();
+  const { addItem: addShoppingItem } = useSharedShoppingList();
+  const { addIdea } = useDumpIdeas();
   const { log } = useFlowUsage();
+
   const [sorting, setSorting] = useState(false);
   /** Användarens svar när tolkningen var otydlig. */
   const [choices, setChoices] = useState<Record<string, { at: number; allDay: boolean }>>({});
