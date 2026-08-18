@@ -8,7 +8,7 @@ import tseslint from "typescript-eslint";
 export default tseslint.config(
   {
     // Genererade filer formateras om av verktygskedjan – lintas inte.
-    ignores: ["dist", ".output", ".vinxi", "src/routes/mcp.ts", "src/routes/[.mcp]/**", "src/routes/[.well-known]/**"],
+    ignores: ["dist", ".output", ".vinxi", "src/routes/mcp.ts", "src/routes/\\[.mcp\\]/**", "src/routes/\\[.well-known\\]/**"],
   },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
