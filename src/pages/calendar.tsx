@@ -733,13 +733,15 @@ export default function CalendarPage() {
 
             <div className="space-y-3">
               {/* Samma händelse för flera barn (t.ex. lämning av Bella och Bianca) visas ihop. */}
-              {Object.values(
-                selectedItems.childEvents.reduce<Record<string, typeof selectedItems.childEvents>>((acc, e) => {
+              {(() => {
+                type ChildEv = (typeof selectedItems.childEvents)[number];
+                const groups = new Map<string, ChildEv[]>();
+                for (const e of selectedItems.childEvents) {
                   const key = `${e.title}|${e.time ?? ""}|${e.completed ? 1 : 0}`;
-                  (acc[key] ??= []).push(e);
-                  return acc;
-                }, {}),
-              ).map((group) => {
+                  groups.set(key, [...(groups.get(key) ?? []), e]);
+                }
+                return Array.from(groups.values());
+              })().map((group) => {
                 const e = group[0]!;
                 const names = group.map((g) => g.child?.name ?? "Barn");
                 const color = group.length > 1 ? "#a06cd5" : (e.child?.color ?? "#a06cd5");
