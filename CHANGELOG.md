@@ -18,6 +18,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 - **"Ditt fokus idag" visar bara dagens saker** (2026-08-17): Uppgifter med ett framtida datum syns inte längre i "Ditt fokus idag" på hemskärmen – de ligger kvar i kalendern och dyker upp först när dagen är inne. Passerade datum och dagens datum visas fortfarande.
 
 ### Added
+- **Ändra barn i sammanfogad händelse** (2026-08-18): Barnhändelser i kalendern har nu knappen "Ändra barn" – lägg till eller ta bort barn i efterhand utan att skapa en ny händelse.
 - **Flera barn i samma händelse** (2026-08-18): I "Ny händelse" kan du nu välja flera barn samtidigt – t.ex. lämning av både Bella och Bianca. Det blir en händelse i kalendern och en påminnelse ("Lämning – Bella & Bianca"), men syns i varje barns schema. Dagens vy slår ihop identiska barnhändelser till en rad.
 - **Ändra allt i efterhand** (2026-08-19): Nu kan du ändra allt du lagt in manuellt – titel, datum, starttid, sluttid, påminnelse, livsområde och anteckning. I kalendern öppnar "Ändra" en full dialog för både uppgifter och påminnelser, och på uppgiftssidan finns samma val under "Anteckning & delsteg".
 - **Snabbval direkt i notisen** (2026-08-19): Påminnelser och notiser har nu två knappar – "✓ Klart" och "⏰ 10 min". Du kan bocka av eller skjuta upp utan att öppna appen; är appen redan igång sker det direkt, annars utförs valet nästa gång du öppnar MyFlove.

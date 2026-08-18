@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Ändra barn i en sammanfogad händelse i efterhand via knappen \"Ändra barn\" (2026-08-18)",
       "Flera barn i samma händelse – välj både Bella och Bianca vid lämning, en händelse och en påminnelse men syns i båda barnens schema (2026-08-18)",
       "Ändra allt i efterhand – titel, datum, tid, sluttid, påminnelse, livsområde och anteckning går att justera på allt du lagt in manuellt (2026-08-19)",
       "Snabbval direkt i notisen – tryck \"Klart\" eller \"Skjut upp 10 min\" i påminnelsen utan att öppna appen (2026-08-19)",
