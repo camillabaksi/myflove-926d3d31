@@ -296,6 +296,8 @@ export default function CalendarPage() {
       setNewAnyEndTime("");
       setNewAnyNote("");
       setNewAnyRemind(null);
+      setNewAnyChildIds([]);
+
       setIsAddingAny(false);
 
       toast({ description: "Händelsen är inlagd i kalendern." });
