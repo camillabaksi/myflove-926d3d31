@@ -274,6 +274,16 @@ export default function Dump() {
         <InsightQuickflowHint />
         <QuickflowList />
 
+        <CollapsibleSection
+          title={<span className="flex items-center gap-2"><Sparkles size={20} /> Mina sorteringsregler</span>}
+          id="QuickFlow-regler"
+          headingClassName="font-semibold"
+          className="pt-4"
+          defaultOpen={false}
+        >
+          <QuickflowRulesSettings />
+        </CollapsibleSection>
+
         {ideas.length > 0 && (
           <CollapsibleSection
             title={<span className="flex items-center gap-2"><Inbox size={20} /> Äldre idébank</span>}
