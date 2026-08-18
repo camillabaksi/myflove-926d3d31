@@ -9,9 +9,11 @@ import {
   suggestWhen,
   formatWhen,
   guessArea,
+  guessChild,
   shoppingTitleFrom,
   parseWhenFromText,
   DESTINATION_META,
+  DESTINATION_AREA,
   type QuickflowDestination,
   type QuickflowItem,
 } from "@/lib/quickflow";
@@ -20,6 +22,7 @@ import { useQuickflowRules } from "@/hooks/use-quickflow-rules";
 import { resolveDestination, titleForRule } from "@/lib/quickflow-rules";
 import { useNotes } from "@/hooks/use-notes";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
+import { useChildren } from "@/hooks/use-children";
 
 
 
@@ -40,10 +43,16 @@ export default function QuickflowTriage() {
 
   const { addNote } = useNotes();
   const { addFactor } = useEnergyFlow();
+  const { children, addItem: addChildItem } = useChildren();
 
   const [sorting, setSorting] = useState(false);
   /** Vilken tanke som väntar på svar om energin gav eller tog. */
   const [energyFor, setEnergyFor] = useState<string | null>(null);
+  /** Riktning vald i energipanelen – nästa steg är hur mycket den påverkar. */
+  const [energyDir, setEnergyDir] = useState<"gives" | "drains">("drains");
+  /** Vilken tanke som väntar på "vilket barn och vad blir det?". */
+  const [childFor, setChildFor] = useState<string | null>(null);
+  const [childPick, setChildPick] = useState<string | null>(null);
   /** Användarens svar när tolkningen var otydlig. */
   const [choices, setChoices] = useState<Record<string, { at: number; allDay: boolean }>>({});
 
