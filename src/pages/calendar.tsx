@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Layout from "@/components/layout";
 import { MyFloveEmptyIllustration } from "@/components/myflove/motion";
 import { useFocus, useTasks, useReminders } from "@/hooks/use-data";
@@ -35,17 +35,26 @@ import { useNpfSettings } from "@/lib/npf-mode";
 import { ALL_AREAS, AREA_META, getArea, type LifeArea } from "@/lib/life-areas";
 
 
-export type CalCategory = "privat" | "familj" | "barn" | "jobb" | "studier";
+export type CalCategory = "privat" | "relationer" | "barn" | "jobb" | "studier";
 
 const CATEGORIES: { id: CalCategory; label: string; color: string }[] = [
   { id: "privat", label: "Privat", color: "hsl(258 62% 60%)" },
-  { id: "familj", label: "Familj", color: "hsl(327 62% 62%)" },
+  { id: "relationer", label: "Relationer", color: "hsl(327 62% 62%)" },
   { id: "barn", label: "Barn", color: "hsl(285 52% 62%)" },
   { id: "jobb", label: "Jobb", color: "hsl(212 48% 52%)" },
   { id: "studier", label: "Studier", color: "hsl(232 58% 64%)" },
 ];
 
 const ALL_CATEGORIES: CalCategory[] = CATEGORIES.map((c) => c.id);
+
+/**
+ * Kategorin "Familj" heter numera "Relationer". Gamla sparade filter och
+ * händelser mappas om så att historiken i kalendern behåller sitt sammanhang.
+ */
+function normalizeCategory(value: string): CalCategory {
+  if (value === "familj" || value === "family") return "relationer";
+  return (ALL_CATEGORIES as string[]).includes(value) ? (value as CalCategory) : "privat";
+}
 
 /** Valbara påminnelser innan en händelse börjar. */
 const REMIND_OPTIONS: { value: number | null; label: string }[] = [
@@ -124,6 +133,12 @@ export default function CalendarPage() {
     "myflove-calendar-categories",
     ALL_CATEGORIES,
   );
+  // Migrerar gamla filter ("familj") en gång, utan att tappa vad du valt.
+  useEffect(() => {
+    if (!visible.some((c) => (c as string) === "familj")) return;
+    setVisible((prev) => Array.from(new Set(prev.map((c) => normalizeCategory(c as string)))));
+  }, [visible, setVisible]);
+
   const shows = (c: CalCategory) => visible.includes(c);
   const toggleCategory = (c: CalCategory) =>
     setVisible((prev) =>
@@ -317,7 +332,7 @@ export default function CalendarPage() {
       if (wantsReminder && getNotificationPermission() === "default") {
         await requestNotificationPermission();
       }
-      if (newCat === "familj") {
+      if (newCat === "relationer") {
         createEventMutation.mutate({
           data: { title, date: selectedDateStr, time: timeRange },
         });
@@ -345,7 +360,7 @@ export default function CalendarPage() {
       }
       // Familj- och barnhändelser bor i delade listor – lägg en personlig
       // påminnelse bredvid så att notisen faktiskt når just dig.
-      if (wantsReminder && (newCat === "familj" || newCat === "barn")) {
+      if (wantsReminder && (newCat === "relationer" || newCat === "barn")) {
         const names = kids.filter((k) => newAnyChildIds.includes(k.id)).map((k) => k.name);
         const reminderTitle =
           newCat === "barn" && names.length > 1 ? `${title} – ${names.join(" & ")}` : title;
@@ -419,7 +434,7 @@ export default function CalendarPage() {
     const allReminders = shows("privat")
       ? activeReminders.filter(r => occursOn(r.date, r.repeat ?? 'none', dateStr))
       : [];
-    const familyEvents = shows("familj") ? eventsForDate(dateStr) : [];
+    const familyEvents = shows("relationer") ? eventsForDate(dateStr) : [];
     const allChildEvents = shows("barn")
       ? childItems
           .filter((i) => occursOn(i.date, (i.repeat ?? 'none') as RepeatMode, dateStr))
@@ -1293,7 +1308,7 @@ export default function CalendarPage() {
                 <div className="grid grid-cols-3 gap-2">
                   {CATEGORIES.map((c) => {
                     const disabled =
-                      (c.id === "familj" && !hasHousehold) || (c.id === "barn" && kids.length === 0);
+                      (c.id === "relationer" && !hasHousehold) || (c.id === "barn" && kids.length === 0);
                     return (
                       <button
                         key={c.id}
