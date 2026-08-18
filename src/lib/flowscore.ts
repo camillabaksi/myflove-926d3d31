@@ -25,6 +25,11 @@ export interface FlowScoreInput {
   yesterdayFeel?: "bra" | "sadar" | "kaos" | null;
   /** Rörelse idag: steg från hälsoappen och genomförda träningspass. */
   movementToday?: { steps?: number; sessions?: number } | null;
+  /**
+   * Energiflöde™: färdig faktor för det som gett/tagit energi idag.
+   * Byggs i use-energy-flow så att användarens egen viktning gäller.
+   */
+  energyFlow?: FlowFactor | null;
 }
 
 
