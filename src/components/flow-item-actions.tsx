@@ -55,10 +55,13 @@ export function FlowItemActions({
   itemId,
   className,
   size = 16,
+  only,
 }: {
   itemId: string;
   className?: string;
   size?: number;
+  /** "edit" när vyn redan har en egen ta bort-knapp. */
+  only?: "edit";
 }) {
   const [open, setOpen] = useState(false);
   const { kind } = kindFromId(itemId);
@@ -78,7 +81,7 @@ export function FlowItemActions({
         >
           <Pencil size={size} />
         </button>
-        {kind !== "extern" && (
+        {kind !== "extern" && only !== "edit" && (
           <button
             type="button"
             onClick={() => setOpen(true)}
