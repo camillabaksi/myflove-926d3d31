@@ -168,7 +168,7 @@ export function workSuggestions(
   const meetingsTomorrow = ctx.tomorrow.filter((i) => isMeeting(i.title));
   const docToday = ctx.today.filter((i) => isDocumentation(i.title));
 
-  if (meetingsTomorrow.length && (does("Möten") || wants("Mötesförberedelse") || true)) {
+  if (meetingsTomorrow.length) {
     const first = meetingsTomorrow[0];
     out.push({
       title: "Möte imorgon",
