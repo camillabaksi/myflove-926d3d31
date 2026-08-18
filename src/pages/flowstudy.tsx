@@ -110,8 +110,10 @@ export default function StudyBuddyPage() {
           text: text.trim() || undefined,
           file: filePayload,
           profileContext: studyProfileContext(studyProfile) || undefined,
-          cardCount: 12,
-          quizCount: 10,
+          focus: plan.focus || undefined,
+          cardCount: plan.cardCount,
+          quizCount: plan.quizCount,
+
         },
       });
 
