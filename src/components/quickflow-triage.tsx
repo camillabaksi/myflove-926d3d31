@@ -160,16 +160,17 @@ export default function QuickflowTriage() {
       ) : (
         <div className="space-y-2">
           {openItems.map((item) => {
-            const type = suggestType(item);
+            const type = guessDestination(item);
             const plan = parseWhenFromText(item.text) ? planFor(item) : null;
             return (
               <div key={item.id} className="surface-card p-4 space-y-3">
                 <div className="flex items-start gap-2">
-                  <span className="text-lg">{TYPE_META[type].emoji}</span>
+                  <span className="text-lg">{DESTINATION_META[type].emoji}</span>
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-ink">{item.text}</p>
                     <p className="text-xs text-muted-foreground">
-                      Mitt förslag: {TYPE_META[type].label} – du bestämmer.
+                      Mitt förslag: {DESTINATION_META[type].label} – du bestämmer.
+
                     </p>
                     {plan && !plan.ambiguous && (
                       <p className="text-xs text-primary">
