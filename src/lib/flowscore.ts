@@ -203,6 +203,12 @@ export function computeFlowScore(input: FlowScoreInput, now = new Date()): FlowS
       why: input.energyPattern.note,
     });
   }
+  // Energiflöde™ – det du själv registrerat som gett eller tagit energi idag.
+  if (input.energyFlow) {
+    score += input.energyFlow.delta;
+    factors.push(input.energyFlow);
+  }
+
 
   // Gårdagens Flow Reset sätter startläget för dagen – men bara på förmiddagen.
   if (input.yesterdayFeel && hour < 13) {
