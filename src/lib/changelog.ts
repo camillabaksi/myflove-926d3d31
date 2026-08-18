@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Min jobbprofil – berätta frivilligt yrkesroll, bransch, ansvarsområden, arbetstider och vad du vill ha hjälp med. Flow använder det som kontext för jobbförslag och väger arbetsdagens krav mot energi och resten av livspusslet (2026-08-18)",
       "Ångra hanterade QuickFlow-tankar – råkar du trycka \"Hanterad\" visas tanken under \"Nyligen hanterade\" i 24 timmar, och du kan återaktivera den med ett tryck (2026-08-18)",
       "Nyligen hanterade syns även när allt är hanterat – ångra-sektionen dolde sig tidigare om alla QuickFlow-tankar var klarmarkerade, nu visas den så länge det finns något att ångra (2026-08-18)",
       "Hanterad – göm den: vilande QuickFlow-tankar göms automatiskt tills tiden är inne och kan markeras som hanterade med ett tryck (2026-08-18)",

@@ -5,6 +5,8 @@ import { useStudySchedule } from "@/hooks/use-study-schedule";
 import { useFlowScore } from "@/hooks/use-flowscore";
 import { useChildEvents } from "@/hooks/use-child-events";
 import { getArea } from "@/lib/life-areas";
+import { useWorkProfile } from "@/hooks/use-work-profile";
+import { isMeeting, workDemand, workProfileContext } from "@/lib/work-profile";
 import {
   buildLifePuzzle,
   emptyAreaLoads,
@@ -38,6 +40,7 @@ export function useLifePuzzle(): {
   const { lectures } = useStudySchedule();
   const { flow, energy, mood, minutesLeft } = useFlowScore();
   const childEvents = useChildEvents();
+  const { profile: workProfile } = useWorkProfile();
 
   const input = useMemo<LifePuzzleInput>(() => {
     const today = todayISO();
@@ -75,7 +78,18 @@ export function useLifePuzzle(): {
       ...childEvents.map((e) => `${e.time} ${e.title} (${e.childName})`),
     ].sort((a, b) => a.localeCompare(b));
 
+    // Jobbets krav idag – så att kvällen inte fylls när arbetsdagen är tung.
+    const jobToday = activeTasks.filter(
+      (t) => getArea(t) === "jobb" && (!t.dueDate || t.dueDate === today),
+    );
+    const demand = workDemand({
+      meetings: jobToday.filter((t) => isMeeting(t.title)).length,
+      jobItems: jobToday.length,
+    });
+
     return {
+      workContext: workProfileContext(workProfile),
+      workDemand: demand,
       score: flow.score,
       load: flow.load,
       capacityMinutes: flow.capacityMinutes,
@@ -87,7 +101,7 @@ export function useLifePuzzle(): {
       areas: [...byArea.values()],
       todaysEvents: events,
     };
-  }, [activeTasks, lectures, childEvents, flow, energy, mood, minutesLeft, openItems.length]);
+  }, [activeTasks, lectures, childEvents, flow, energy, mood, minutesLeft, openItems.length, workProfile]);
 
   const puzzle = useMemo(() => buildLifePuzzle(input), [input]);
   const contextPrompt = useMemo(() => lifeContextPrompt(input), [input]);

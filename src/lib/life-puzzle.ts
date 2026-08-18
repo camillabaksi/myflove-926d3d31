@@ -34,6 +34,10 @@ export interface LifePuzzleInput {
   areas: AreaLoad[];
   /** Namn på det som händer idag utanför uppgiftslistan (t.ex. barnaktivitet, lektion). */
   todaysEvents: string[];
+  /** Frivillig jobbprofil som text – kontext, inte regler. */
+  workContext?: string;
+  /** Hur krävande arbetsdagen ser ut idag. */
+  workDemand?: "lätt" | "normal" | "krävande";
 }
 
 export interface PuzzleConnection {
@@ -146,6 +150,17 @@ export function buildLifePuzzle(input: LifePuzzleInput): LifePuzzle {
     });
   }
 
+  // Jobbet väger mot resten av livspusslet
+  if (input.workDemand === "krävande") {
+    connections.push({
+      title: "Jobbet tar mycket idag",
+      body: "Arbetsdagen ser krävande ut. Då är det rimligt att kvällen blir liten – inte för att du är svag, utan för att orken redan gått åt.",
+      suggestion: "Välj en sak till efter jobbet, och låt resten vänta.",
+      href: "/min-dag",
+      hrefLabel: "Se kvällen",
+    });
+  }
+
   // Mental belastning
   if (input.openThoughts > 5) {
     connections.push({
@@ -218,8 +233,11 @@ export function lifeContextPrompt(input: LifePuzzleInput): string {
     lines.push(`Fasta hållpunkter idag: ${input.todaysEvents.slice(0, 5).join(", ")}.`);
   }
 
+  if (input.workDemand) lines.push(`Arbetsdagen idag: ${input.workDemand}.`);
+  if (input.workContext) lines.push(input.workContext);
+
   lines.push(
-    "Använd detta för att koppla ihop delarna. Om kapaciteten är låg: föreslå färre saker, mindre steg och att flytta resten – aldrig skuld.",
+    "Använd detta för att koppla ihop delarna. Om kapaciteten är låg: föreslå färre saker, mindre steg och att flytta resten – aldrig skuld. Om arbetsdagen är krävande: föreslå inte många krävande aktiviteter samma kväll.",
   );
   return lines.join("\n");
 }

@@ -34,6 +34,8 @@ import { breakDownWorkTask } from "@/lib/work.functions";
 import { celebrateFromEvent } from "@/lib/celebrate";
 import { MyFloveThinking, MyFloveEnergyDots } from "@/components/myflove/motion";
 import FrictionSuggestion from "@/components/friction-suggestion";
+import WorkProfileCard from "@/components/work-profile-card";
+import WorkSuggestions from "@/components/work-suggestions";
 import {
   END_OF_DAY_CHECK,
   MINUTE_CHOICES,
@@ -188,6 +190,8 @@ export default function WorkflowPage() {
   return (
     <Layout>
       <div className="space-y-5 pb-24">
+        <WorkProfileCard />
+        <WorkSuggestions />
         <header className={card}>
           <div className="flex items-start justify-between gap-3">
             <div>

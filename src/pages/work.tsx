@@ -26,6 +26,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { celebrateFromEvent } from "@/lib/celebrate";
 import CollapsibleSection from "@/components/collapsible-section";
+import WorkProfileCard from "@/components/work-profile-card";
+import WorkSuggestions from "@/components/work-suggestions";
 
 const BUCKET = "work-docs";
 
@@ -221,7 +223,11 @@ export default function WorkPage() {
           description="Din arbetsdag – projekt, uppgifter och dokument på ett ställe."
         />
 
+        <WorkProfileCard />
+        <WorkSuggestions />
+
         {/* Projekt */}
+
         <CollapsibleSection title="Dina projekt" help="Samla uppgifter per projekt så blir listan lättare att överblicka." headingClassName="text-lg font-semibold" className="surface-card p-5">
           <form onSubmit={handleAddProject} className="flex gap-2">
             <Input
