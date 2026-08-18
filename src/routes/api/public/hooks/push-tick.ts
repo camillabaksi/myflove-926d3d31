@@ -54,7 +54,10 @@ export const Route = createFileRoute("/api/public/hooks/push-tick")({
             await supabaseAdmin
               .from("push_reminders")
               .update({ delivered_at: nowIso })
-              .in("id", reminders.map((r) => r.id));
+              .in(
+                "id",
+                reminders.map((r) => r.id),
+              );
             continue;
           }
 
@@ -68,13 +71,13 @@ export const Route = createFileRoute("/api/public/hooks/push-tick")({
                 tag: `${r.kind}-${r.id}`,
                 itemKey: r.client_key,
               });
-              if (res === "ok") { anyOk = true; sentCount++; }
+              if (res === "ok") {
+                anyOk = true;
+                sentCount++;
+              }
               if (res === "gone") {
                 goneCount++;
-                await supabaseAdmin
-                  .from("push_subscriptions")
-                  .delete()
-                  .eq("endpoint", s.endpoint);
+                await supabaseAdmin.from("push_subscriptions").delete().eq("endpoint", s.endpoint);
               }
             }
             await supabaseAdmin
@@ -89,7 +92,9 @@ export const Route = createFileRoute("/api/public/hooks/push-tick")({
         const hh = String(now.getUTCHours()).padStart(2, "0");
         const { data: prefs } = await supabaseAdmin
           .from("push_preferences")
-          .select("user_id, weather_enabled, weather_time, last_lat, last_lon, last_weather_check_at")
+          .select(
+            "user_id, weather_enabled, weather_time, last_lat, last_lon, last_weather_check_at",
+          )
           .eq("weather_enabled", true);
 
         for (const p of prefs ?? []) {
@@ -105,7 +110,11 @@ export const Route = createFileRoute("/api/public/hooks/push-tick")({
             const wres = await fetch(url);
             if (!wres.ok) continue;
             const wjson = (await wres.json()) as {
-              daily?: { precipitation_sum?: number[]; temperature_2m_max?: number[]; temperature_2m_min?: number[] };
+              daily?: {
+                precipitation_sum?: number[];
+                temperature_2m_max?: number[];
+                temperature_2m_min?: number[];
+              };
             };
             const rain = wjson.daily?.precipitation_sum?.[0] ?? 0;
             const tmax = wjson.daily?.temperature_2m_max?.[0] ?? 15;
@@ -130,7 +139,10 @@ export const Route = createFileRoute("/api/public/hooks/push-tick")({
                 });
                 if (r === "ok") sentCount++;
                 if (r === "gone") {
-                  await supabaseAdmin.from("push_subscriptions").delete().eq("endpoint", s.endpoint);
+                  await supabaseAdmin
+                    .from("push_subscriptions")
+                    .delete()
+                    .eq("endpoint", s.endpoint);
                   goneCount++;
                 }
               }
@@ -175,7 +187,8 @@ export const Route = createFileRoute("/api/public/hooks/push-tick")({
 
         for (const p of personalPrefs ?? []) {
           const isMorning = !!p.personal_enabled && isDue(p.personal_time ?? "08:00");
-          const isEvening = !!p.personal_evening_enabled && isDue(p.personal_evening_time ?? "20:30");
+          const isEvening =
+            !!p.personal_evening_enabled && isDue(p.personal_evening_time ?? "20:30");
           if (!isMorning && !isEvening) continue;
 
           const slot = isMorning ? `${localDate}-m` : `${localDate}-e`;

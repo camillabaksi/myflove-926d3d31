@@ -48,16 +48,28 @@ export const RULE_TEMPLATE_LIST: RuleTemplate[] = [
   {
     key: "kopa",
     label: "Köpa …",
-    hint: "Hamnar i Inköpslistan, ordet \"köpa\" tas bort.",
+    hint: 'Hamnar i Inköpslistan, ordet "köpa" tas bort.',
     example: "köpa schampo → schampo",
-    rule: { phrase: "köpa", matchType: "startsWith", destination: "inkop", stripPhrase: true, enabled: true },
+    rule: {
+      phrase: "köpa",
+      matchType: "startsWith",
+      destination: "inkop",
+      stripPhrase: true,
+      enabled: true,
+    },
   },
   {
     key: "handla",
     label: "Handla …",
     hint: "Samma som köpa – rakt in i Inköpslistan.",
     example: "handla mjölk → mjölk",
-    rule: { phrase: "handla", matchType: "startsWith", destination: "inkop", stripPhrase: true, enabled: true },
+    rule: {
+      phrase: "handla",
+      matchType: "startsWith",
+      destination: "inkop",
+      stripPhrase: true,
+      enabled: true,
+    },
   },
   {
     key: "boka",
@@ -92,14 +104,26 @@ export const RULE_TEMPLATE_LIST: RuleTemplate[] = [
     label: "Betala …",
     hint: "Uppgift i livsområdet Privat.",
     example: "betala hyran",
-    rule: { phrase: "betala", matchType: "startsWith", destination: "uppgift", area: "privat", enabled: true },
+    rule: {
+      phrase: "betala",
+      matchType: "startsWith",
+      destination: "uppgift",
+      area: "privat",
+      enabled: true,
+    },
   },
   {
     key: "ide",
     label: "Idé: …",
     hint: "Sparas som idé – inget du måste göra nu.",
     example: "idé: måla om hallen",
-    rule: { phrase: "idé", matchType: "startsWith", destination: "ide", stripPhrase: true, enabled: true },
+    rule: {
+      phrase: "idé",
+      matchType: "startsWith",
+      destination: "ide",
+      stripPhrase: true,
+      enabled: true,
+    },
   },
   {
     key: "traffa",
@@ -112,7 +136,6 @@ export const RULE_TEMPLATE_LIST: RuleTemplate[] = [
 
 /** Bakåtkompatibel lista med bara reglerna. */
 export const RULE_TEMPLATES: RuleDraft[] = RULE_TEMPLATE_LIST.map((t) => t.rule);
-
 
 function normalize(s: string): string {
   return s.toLowerCase().replace(/\s+/g, " ").trim();
@@ -140,7 +163,8 @@ export function titleForRule(text: string, rule: QuickflowRule): string {
   const lower = normalize(t);
   let out = t;
   if (rule.matchType === "startsWith" && lower.startsWith(p)) out = t.slice(p.length);
-  else if (rule.matchType === "endsWith" && lower.endsWith(p)) out = t.slice(0, t.length - p.length);
+  else if (rule.matchType === "endsWith" && lower.endsWith(p))
+    out = t.slice(0, t.length - p.length);
   else {
     const i = lower.indexOf(p);
     if (i >= 0) out = t.slice(0, i) + t.slice(i + p.length);
@@ -157,7 +181,11 @@ export interface ResolvedDestination {
 
 /** Egen regel först, MyFloves gissning som fallback. */
 export function resolveDestination(
-  item: { text: string; level?: Parameters<typeof guessDestination>[0]["level"]; remindAt?: number },
+  item: {
+    text: string;
+    level?: Parameters<typeof guessDestination>[0]["level"];
+    remindAt?: number;
+  },
   rules: QuickflowRule[],
 ): ResolvedDestination {
   const rule = matchRule(item.text, rules);

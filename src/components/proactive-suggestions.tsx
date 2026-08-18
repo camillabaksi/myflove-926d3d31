@@ -1,5 +1,22 @@
 import { useMemo } from "react";
-import { Sparkles, Umbrella, Snowflake, Thermometer, Clock, Wallet, Pill, CloudRain, Shirt, AlarmClock, GlassWater, Moon, Sunrise, HeartHandshake, PartyPopper, Coffee } from "lucide-react";
+import {
+  Sparkles,
+  Umbrella,
+  Snowflake,
+  Thermometer,
+  Clock,
+  Wallet,
+  Pill,
+  CloudRain,
+  Shirt,
+  AlarmClock,
+  GlassWater,
+  Moon,
+  Sunrise,
+  HeartHandshake,
+  PartyPopper,
+  Coffee,
+} from "lucide-react";
 import { useWeather } from "@/hooks/use-weather";
 import { useReminders, useFinances, useMedications, useTasks, useMoods } from "@/hooks/use-data";
 import CollapsibleSection from "@/components/collapsible-section";
@@ -10,11 +27,36 @@ import { Compass } from "lucide-react";
 // Öppna uppgifter som brukar "pågå i bakgrunden" – vi puffar när de blivit gamla
 // så användaren inte glömmer tvätten i maskinen, disken i diskmaskinen osv.
 const LOOP_KEYWORDS: { pattern: RegExp; label: string; nudge: string; minutes: number }[] = [
-  { pattern: /tvätt|tvättmaskin|tork/i, label: "Tvätten", nudge: "Kolla om tvätten är klar – häng gärna innan den blir liggande.", minutes: 50 },
-  { pattern: /disk(maskin)?/i, label: "Disken", nudge: "Diskmaskinen är nog klar snart – öppna gärna på glänt.", minutes: 55 },
-  { pattern: /ugn|gryta|kokar|spis|stek/i, label: "På spisen", nudge: "Kolla ugnen/spisen så inget står och bränner vid.", minutes: 25 },
-  { pattern: /kaffe|te\b/i, label: "Kaffet", nudge: "Kaffet är nog klart – ta en klunk innan det blir kallt.", minutes: 8 },
-  { pattern: /hämta|barn|dagis|förskola|skolan/i, label: "Hämtning", nudge: "Snart dags att gå – lägg in lite marginal.", minutes: 30 },
+  {
+    pattern: /tvätt|tvättmaskin|tork/i,
+    label: "Tvätten",
+    nudge: "Kolla om tvätten är klar – häng gärna innan den blir liggande.",
+    minutes: 50,
+  },
+  {
+    pattern: /disk(maskin)?/i,
+    label: "Disken",
+    nudge: "Diskmaskinen är nog klar snart – öppna gärna på glänt.",
+    minutes: 55,
+  },
+  {
+    pattern: /ugn|gryta|kokar|spis|stek/i,
+    label: "På spisen",
+    nudge: "Kolla ugnen/spisen så inget står och bränner vid.",
+    minutes: 25,
+  },
+  {
+    pattern: /kaffe|te\b/i,
+    label: "Kaffet",
+    nudge: "Kaffet är nog klart – ta en klunk innan det blir kallt.",
+    minutes: 8,
+  },
+  {
+    pattern: /hämta|barn|dagis|förskola|skolan/i,
+    label: "Hämtning",
+    nudge: "Snart dags att gå – lägg in lite marginal.",
+    minutes: 30,
+  },
 ];
 
 type Suggestion = {
@@ -49,7 +91,9 @@ export default function ProactiveSuggestions() {
     const out: Suggestion[] = [];
     const now = Date.now();
     const nextReminder = activeReminders[0];
-    const nextReminderTs = nextReminder ? parseReminderDate(nextReminder.date, nextReminder.time) : null;
+    const nextReminderTs = nextReminder
+      ? parseReminderDate(nextReminder.date, nextReminder.time)
+      : null;
     const withinHours = (h: number) =>
       nextReminderTs !== null && nextReminderTs - now > 0 && nextReminderTs - now <= h * 3600_000;
 
@@ -66,9 +110,10 @@ export default function ProactiveSuggestions() {
           icon: Umbrella,
           tone: "weather",
           title: "Ta med paraply",
-          body: withinHours(6) && nextReminder
-            ? `Det regnar i ${weather.city}. Innan ”${nextReminder.title}” – lägg paraplyet i väskan.`
-            : `Det regnar i ${weather.city} idag. Ett paraply räddar dagen.`,
+          body:
+            withinHours(6) && nextReminder
+              ? `Det regnar i ${weather.city}. Innan ”${nextReminder.title}” – lägg paraplyet i väskan.`
+              : `Det regnar i ${weather.city} idag. Ett paraply räddar dagen.`,
         });
       }
       if (isSnow) {
@@ -77,9 +122,10 @@ export default function ProactiveSuggestions() {
           icon: Snowflake,
           tone: "weather",
           title: "Lägg på extra restid",
-          body: withinHours(4) && nextReminder
-            ? `Snö i ${weather.city}. Räkna med 10–15 min extra till ”${nextReminder.title}”.`
-            : `Snö i luften – planera in lite extra restid idag.`,
+          body:
+            withinHours(4) && nextReminder
+              ? `Snö i ${weather.city}. Räkna med 10–15 min extra till ”${nextReminder.title}”.`
+              : `Snö i luften – planera in lite extra restid idag.`,
         });
       }
       if (isStorm) {
@@ -211,9 +257,10 @@ export default function ProactiveSuggestions() {
         icon: Sunrise,
         tone: "care",
         title: openToday > 0 ? "Välj en sak att börja med" : "Fin start på dagen",
-        body: openToday > 0
-          ? "Du behöver inte planera hela dagen – bara nästa steg."
-          : "Inget måste ännu. Ta morgonen i din takt.",
+        body:
+          openToday > 0
+            ? "Du behöver inte planera hela dagen – bara nästa steg."
+            : "Inget måste ännu. Ta morgonen i din takt.",
       });
     }
 
@@ -243,14 +290,17 @@ export default function ProactiveSuggestions() {
         icon: Moon,
         tone: "care",
         title: "Dags att runda av",
-        body: openToday > 0
-          ? `${openToday} saker kvar – de finns kvar imorgon, helt okej.`
-          : "Dagen är klar. Skönt så.",
+        body:
+          openToday > 0
+            ? `${openToday} saker kvar – de finns kvar imorgon, helt okej.`
+            : "Dagen är klar. Skönt så.",
       });
     }
 
     // Mående inte loggat idag
-    const loggedToday = moods.some((m) => new Date(m.date).toISOString().split("T")[0] === todayStr);
+    const loggedToday = moods.some(
+      (m) => new Date(m.date).toISOString().split("T")[0] === todayStr,
+    );
     if (!loggedToday && hour >= 12) {
       out.push({
         id: "care-mood",
@@ -297,25 +347,25 @@ export default function ProactiveSuggestions() {
         help="Tips utifrån väder, dina uppgifter och hur du mått. Tryck bort dem du inte vill ha."
         headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
       >
-      <div className="space-y-2">
-        {suggestions.map((s) => {
-          const Icon = s.icon;
-          return (
-            <div
-              key={s.id}
-              className="flex items-start gap-3 p-4 rounded-2xl bg-card border border-border shadow-sm"
-            >
-              <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                <Icon size={20} />
+        <div className="space-y-2">
+          {suggestions.map((s) => {
+            const Icon = s.icon;
+            return (
+              <div
+                key={s.id}
+                className="flex items-start gap-3 p-4 rounded-2xl bg-card border border-border shadow-sm"
+              >
+                <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                  <Icon size={20} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium leading-tight">{s.title}</p>
+                  <p className="text-sm text-muted-foreground leading-snug mt-0.5">{s.body}</p>
+                </div>
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-medium leading-tight">{s.title}</p>
-                <p className="text-sm text-muted-foreground leading-snug mt-0.5">{s.body}</p>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
       </CollapsibleSection>
     </div>
   );

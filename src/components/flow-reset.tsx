@@ -14,8 +14,7 @@ const FEELS: { id: DayFeel; emoji: string; label: string }[] = [
   { id: "kaos", emoji: "😵", label: "Kaos" },
 ];
 
-const isToday = (ts?: number) =>
-  !!ts && new Date(ts).toDateString() === new Date().toDateString();
+const isToday = (ts?: number) => !!ts && new Date(ts).toDateString() === new Date().toDateString();
 
 /**
  * Flow Reset – kvällsläge. Helt frivilligt.
@@ -36,10 +35,7 @@ export default function FlowReset() {
     [tasks],
   );
   const movedToday = snoozedTasks.length;
-  const capturedToday = useMemo(
-    () => items.filter((i) => isToday(i.createdAt)).length,
-    [items],
-  );
+  const capturedToday = useMemo(() => items.filter((i) => isToday(i.createdAt)).length, [items]);
   const unfinishedToday = useMemo(
     () => activeTasks.filter((t) => t.dueDate && t.dueDate <= today),
     [activeTasks, today],
@@ -91,7 +87,9 @@ export default function FlowReset() {
                     : "border-transparent bg-card/70 hover:bg-card"
                 }`}
               >
-                <span aria-hidden className="text-3xl leading-none">{f.emoji}</span>
+                <span aria-hidden className="text-3xl leading-none">
+                  {f.emoji}
+                </span>
                 <span className={`text-sm font-semibold ${active ? "text-primary" : "text-ink"}`}>
                   {f.label}
                 </span>
@@ -104,9 +102,15 @@ export default function FlowReset() {
       <div className="rounded-3xl bg-card/80 p-4 space-y-1.5">
         <p className="text-sm font-semibold text-ink">Det här hann du med idag</p>
         <ul className="text-sm text-muted-foreground space-y-1">
-          <li>✅ {doneToday} {doneToday === 1 ? "uppgift klar" : "uppgifter klara"}</li>
-          <li>📦 {movedToday} {movedToday === 1 ? "sak flyttad" : "saker flyttade"}</li>
-          <li>💭 {capturedToday} {capturedToday === 1 ? "sak fångad" : "saker fångade"} i QuickFlow</li>
+          <li>
+            ✅ {doneToday} {doneToday === 1 ? "uppgift klar" : "uppgifter klara"}
+          </li>
+          <li>
+            📦 {movedToday} {movedToday === 1 ? "sak flyttad" : "saker flyttade"}
+          </li>
+          <li>
+            💭 {capturedToday} {capturedToday === 1 ? "sak fångad" : "saker fångade"} i QuickFlow
+          </li>
           {dayDone.map((d) => (
             <li key={d.text}>
               {d.emoji} {d.text}
@@ -132,7 +136,6 @@ export default function FlowReset() {
           </p>
         </div>
       )}
-
 
       {unfinishedToday.length > 2 && !replanned && (
         <div className="rounded-3xl bg-card/80 p-4 space-y-3">

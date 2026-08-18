@@ -57,7 +57,8 @@ export function useSharedShoppingList() {
     query: { queryKey: getListShoppingItemsQueryKey(), enabled: hasHousehold },
   });
 
-  const invalidate = () => queryClient.invalidateQueries({ queryKey: getListShoppingItemsQueryKey() });
+  const invalidate = () =>
+    queryClient.invalidateQueries({ queryKey: getListShoppingItemsQueryKey() });
 
   const addMutation = useAddShoppingItem({ mutation: { onSuccess: invalidate } });
   const toggleMutation = useToggleShoppingItem({ mutation: { onSuccess: invalidate } });
@@ -66,7 +67,11 @@ export function useSharedShoppingList() {
   const local = useLocalShoppingList();
 
   if (hasHousehold) {
-    const toListItem = (i: SharedShoppingItem) => ({ id: String(i.id), title: i.title, completed: i.completed });
+    const toListItem = (i: SharedShoppingItem) => ({
+      id: String(i.id),
+      title: i.title,
+      completed: i.completed,
+    });
     const active = sharedItems.filter((i) => !i.completed).map(toListItem);
     const completed = sharedItems.filter((i) => i.completed).map(toListItem);
     return {

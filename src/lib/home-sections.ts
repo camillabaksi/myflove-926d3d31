@@ -71,4 +71,3 @@ export function useHomeSectionOrder() {
 
   return { order, orderOf, move, moveId, resetOrder };
 }
-

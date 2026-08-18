@@ -59,10 +59,7 @@ export function useFrictionLibrary(): {
     };
   }, []);
 
-  const suggestFor = useCallback(
-    (title: string) => matchFriction(title, library),
-    [library],
-  );
+  const suggestFor = useCallback((title: string) => matchFriction(title, library), [library]);
 
   return { library, loading, suggestFor };
 }

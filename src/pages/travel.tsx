@@ -11,7 +11,21 @@ import {
   requestNotificationPermission,
   type NotificationPermissionState,
 } from "@/lib/push-notifications";
-import { MapPin, Navigation, Clock, Activity, AlertCircle, Star, X, Route, BellRing, Bell, Smartphone, LocateFixed, Loader2 } from "lucide-react";
+import {
+  MapPin,
+  Navigation,
+  Clock,
+  Activity,
+  AlertCircle,
+  Star,
+  X,
+  Route,
+  BellRing,
+  Bell,
+  Smartphone,
+  LocateFixed,
+  Loader2,
+} from "lucide-react";
 import CollapsibleSection from "@/components/collapsible-section";
 
 const ALERT_MINUTES_OPTIONS = [5, 10, 15, 20, 30];
@@ -22,7 +36,8 @@ export default function Travel() {
   const [searchParams, setSearchParams] = useState<{ from: string; to: string } | null>(null);
   const [savingLabel, setSavingLabel] = useState<string | null>(null);
   const [configuringAlertFor, setConfiguringAlertFor] = useState<string | null>(null);
-  const [notificationPermission, setNotificationPermission] = useState<NotificationPermissionState>("default");
+  const [notificationPermission, setNotificationPermission] =
+    useState<NotificationPermissionState>("default");
   const [locating, setLocating] = useState(false);
   const [locationError, setLocationError] = useState<string | null>(null);
 
@@ -66,7 +81,11 @@ export default function Travel() {
     );
   };
 
-  const { data: suggestion, isFetching: isLoading, error } = useGetSlTrip(
+  const {
+    data: suggestion,
+    isFetching: isLoading,
+    error,
+  } = useGetSlTrip(
     { from: searchParams?.from ?? "", to: searchParams?.to ?? "" },
     { query: { enabled: !!searchParams, retry: false, queryKey: ["sl-trip", searchParams] } },
   );
@@ -120,7 +139,11 @@ export default function Travel() {
                 Slå på push-notiser för att få pendlingsvarningar även när fliken inte är aktiv.
               </p>
             </div>
-            <Button type="button" onClick={handleEnableNotifications} className="rounded-xl shrink-0 h-9 px-4 text-sm">
+            <Button
+              type="button"
+              onClick={handleEnableNotifications}
+              className="rounded-xl shrink-0 h-9 px-4 text-sm"
+            >
               Slå på
             </Button>
           </div>
@@ -129,7 +152,10 @@ export default function Travel() {
         {notificationPermission === "denied" && (
           <div className="flex items-start gap-3 bg-secondary/30 border border-border rounded-2xl px-4 py-3 text-xs text-muted-foreground">
             <AlertCircle size={18} className="shrink-0 mt-0.5" />
-            <p>Push-notiser är blockerade i webbläsaren. Ändra behörigheten i webbläsarinställningarna för att aktivera dem.</p>
+            <p>
+              Push-notiser är blockerade i webbläsaren. Ändra behörigheten i
+              webbläsarinställningarna för att aktivera dem.
+            </p>
           </div>
         )}
 
@@ -216,7 +242,10 @@ export default function Travel() {
           </CollapsibleSection>
         )}
 
-        <form onSubmit={handleSearch} className="bg-card p-6 rounded-3xl border border-border shadow-sm space-y-4">
+        <form
+          onSubmit={handleSearch}
+          className="bg-card p-6 rounded-3xl border border-border shadow-sm space-y-4"
+        >
           <div className="relative">
             <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground">
               <MapPin size={20} />
@@ -235,14 +264,16 @@ export default function Travel() {
               aria-label="Använd min plats"
               className="absolute right-3 top-1/2 -translate-y-1/2 text-primary hover:text-primary/80 p-2 rounded-full disabled:opacity-50"
             >
-              {locating ? <Loader2 size={20} className="animate-spin" /> : <LocateFixed size={20} />}
+              {locating ? (
+                <Loader2 size={20} className="animate-spin" />
+              ) : (
+                <LocateFixed size={20} />
+              )}
             </button>
           </div>
 
-          {locationError && (
-            <p className="text-xs text-destructive -mt-2">{locationError}</p>
-          )}
-          
+          {locationError && <p className="text-xs text-destructive -mt-2">{locationError}</p>}
+
           <div className="relative">
             <div className="absolute left-4 top-1/2 -translate-y-1/2 text-primary">
               <Navigation size={20} />
@@ -256,14 +287,14 @@ export default function Travel() {
             />
           </div>
 
-          <Button 
-            type="submit" 
+          <Button
+            type="submit"
             disabled={isLoading || !from.trim() || !to.trim()}
             className="w-full h-14 rounded-2xl text-lg font-medium shadow-sm"
           >
             {isLoading ? "Söker resa..." : "Sök resa"}
           </Button>
-          
+
           <div className="flex items-start gap-2 mt-4 text-xs text-muted-foreground/80 bg-secondary/30 p-3 rounded-xl">
             <AlertCircle size={18} className="shrink-0 mt-0.5" />
             <p>
@@ -314,7 +345,12 @@ export default function Travel() {
                   placeholder="Namn på resan (t.ex. Hem till jobbet)"
                   className="h-11 rounded-xl bg-background border-transparent focus-visible:ring-primary"
                 />
-                <Button type="button" onClick={handleSaveTrip} disabled={!savingLabel.trim()} className="h-11 rounded-xl shrink-0">
+                <Button
+                  type="button"
+                  onClick={handleSaveTrip}
+                  disabled={!savingLabel.trim()}
+                  className="h-11 rounded-xl shrink-0"
+                >
                   Spara
                 </Button>
                 <button
@@ -341,13 +377,17 @@ export default function Travel() {
                     Ankommer {suggestion.arrivalTime}
                   </div>
                 </div>
-                
+
                 <div className="bg-background rounded-2xl p-3 border border-border shadow-sm text-center min-w-[80px]">
-                  <div className="text-2xl font-bold text-primary">{suggestion.durationMinutes}</div>
-                  <div className="text-xs text-muted-foreground uppercase tracking-wider font-medium">min</div>
+                  <div className="text-2xl font-bold text-primary">
+                    {suggestion.durationMinutes}
+                  </div>
+                  <div className="text-xs text-muted-foreground uppercase tracking-wider font-medium">
+                    min
+                  </div>
                 </div>
               </div>
-              
+
               <div className="flex items-center gap-6 pt-4 border-t border-primary/10 text-muted-foreground">
                 <div className="flex items-center gap-2">
                   <Clock size={18} />
@@ -355,7 +395,9 @@ export default function Travel() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Activity size={18} />
-                  <span>{suggestion.changes === 0 ? "Inga byten" : `${suggestion.changes} byten`}</span>
+                  <span>
+                    {suggestion.changes === 0 ? "Inga byten" : `${suggestion.changes} byten`}
+                  </span>
                 </div>
               </div>
             </div>
@@ -364,10 +406,16 @@ export default function Travel() {
               <div className="bg-card border border-border rounded-3xl p-6 shadow-sm space-y-3">
                 <h3 className="text-sm font-medium text-muted-foreground mb-2">Sträckor</h3>
                 {suggestion.legs.map((leg, i) => (
-                  <div key={i} className="flex items-center justify-between text-sm py-2 border-b border-border/50 last:border-0">
+                  <div
+                    key={i}
+                    className="flex items-center justify-between text-sm py-2 border-b border-border/50 last:border-0"
+                  >
                     <div>
                       <span className="font-medium text-foreground">{leg.lineName}</span>
-                      <span className="text-muted-foreground"> · {leg.fromName} → {leg.toName}</span>
+                      <span className="text-muted-foreground">
+                        {" "}
+                        · {leg.fromName} → {leg.toName}
+                      </span>
                     </div>
                     <div className="text-muted-foreground shrink-0 ml-3">
                       {leg.departureTime}–{leg.arrivalTime}

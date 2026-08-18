@@ -1,6 +1,6 @@
-import { useEffect, useRef } from 'react';
-import { useTasks, useReminders } from './use-data';
-import { sendPushNotification, getNotificationPermission } from '../lib/push-notifications';
+import { useEffect, useRef } from "react";
+import { useTasks, useReminders } from "./use-data";
+import { sendPushNotification, getNotificationPermission } from "../lib/push-notifications";
 
 /**
  * Kollar varje minut om det finns uppgifter/påminnelser med tid som
@@ -15,14 +15,14 @@ export function useNotificationScheduler() {
 
   useEffect(() => {
     const tick = () => {
-      if (getNotificationPermission() !== 'granted') return;
+      if (getNotificationPermission() !== "granted") return;
 
       const now = new Date();
-      const todayStr = now.toISOString().split('T')[0] as string;
+      const todayStr = now.toISOString().split("T")[0] as string;
       const nowMinutes = now.getHours() * 60 + now.getMinutes();
 
       const parseHM = (hm: string): number | null => {
-        const parts = hm.split(':');
+        const parts = hm.split(":");
         if (parts.length < 2) return null;
         const h = parseInt(parts[0]!, 10);
         const m = parseInt(parts[1]!, 10);
@@ -40,7 +40,11 @@ export function useNotificationScheduler() {
           const key = `task-${t.id}-${todayStr}-start`;
           if (!firedRef.current.has(key)) {
             firedRef.current.add(key);
-            sendPushNotification(t.title, { body: `Dags nu (${t.time})`, tag: key, itemKey: `task:${t.id}` });
+            sendPushNotification(t.title, {
+              body: `Dags nu (${t.time})`,
+              tag: key,
+              itemKey: `task:${t.id}`,
+            });
           }
         }
         const remind = t.reminderMinutesBefore;

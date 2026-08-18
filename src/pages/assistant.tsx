@@ -4,12 +4,29 @@ import { useNavigate } from "@tanstack/react-router";
 import Layout from "@/components/layout";
 import { MyFloveThinking } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
-import { Loader2, Send, Sparkles, History, Plus, Trash2, X, ArrowLeft, ChevronRight } from "lucide-react";
+import {
+  Loader2,
+  Send,
+  Sparkles,
+  History,
+  Plus,
+  Trash2,
+  X,
+  ArrowLeft,
+  ChevronRight,
+} from "lucide-react";
 import { chatWithFlow } from "@/lib/flow-chat.functions";
 import { useTasks, useMoods, useFocus, useReminders } from "@/hooks/use-data";
 import { useLifePuzzle } from "@/hooks/use-life-puzzle";
 import { lastPlace, placeFor, shortcutsFor, type FlowPlace } from "@/lib/flow-context";
-import { AREA_META, ALL_AREAS, areaChipStyle, areaTint, areaColor, type LifeArea } from "@/lib/life-areas";
+import {
+  AREA_META,
+  ALL_AREAS,
+  areaChipStyle,
+  areaTint,
+  areaColor,
+  type LifeArea,
+} from "@/lib/life-areas";
 import { Link } from "@tanstack/react-router";
 import { useLocalStorage } from "@/lib/storage";
 import { generateCoachMessage } from "@/lib/coach";
@@ -73,10 +90,13 @@ export default function Assistant({ chatId }: { chatId?: string }) {
   const { moods } = useMoods();
   const { currentFocus } = useFocus();
   const { activeReminders } = useReminders();
-  const [sessionLog] = useLocalStorage<{ date: string; count: number }>("myflow-pomodoro-sessions", {
-    date: todayStr(),
-    count: 0,
-  });
+  const [sessionLog] = useLocalStorage<{ date: string; count: number }>(
+    "myflow-pomodoro-sessions",
+    {
+      date: todayStr(),
+      count: 0,
+    },
+  );
   const pomodoroTodaySessions = sessionLog.date === todayStr() ? sessionLog.count : 0;
   const coachMessage = generateCoachMessage({
     moods,
@@ -153,7 +173,9 @@ export default function Assistant({ chatId }: { chatId?: string }) {
           <div
             key={c.id}
             className={`group flex items-center gap-1 rounded-2xl border px-2 transition-colors ${
-              c.id === conversationId ? "border-primary/50 bg-primary/5" : "border-border hover:border-primary/30"
+              c.id === conversationId
+                ? "border-primary/50 bg-primary/5"
+                : "border-border hover:border-primary/30"
             }`}
           >
             <button
@@ -207,7 +229,10 @@ export default function Assistant({ chatId }: { chatId?: string }) {
             </button>
           </div>
 
-          <nav aria-label="Brödsmulor" className="flex flex-wrap items-center gap-1 text-xs text-muted-foreground">
+          <nav
+            aria-label="Brödsmulor"
+            className="flex flex-wrap items-center gap-1 text-xs text-muted-foreground"
+          >
             <Link to="/hem" className="hover:text-foreground">
               Hem
             </Link>
@@ -228,7 +253,6 @@ export default function Assistant({ chatId }: { chatId?: string }) {
           </nav>
 
           <div className="flex items-start justify-between gap-3">
-
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center">
                 <Sparkles size={20} />
@@ -254,7 +278,10 @@ export default function Assistant({ chatId }: { chatId?: string }) {
           {place && (
             <div
               className="rounded-3xl border p-4"
-              style={{ backgroundColor: areaTint(place.area, 0.1), borderColor: areaTint(place.area, 0.3) }}
+              style={{
+                backgroundColor: areaTint(place.area, 0.1),
+                borderColor: areaTint(place.area, 0.3),
+              }}
             >
               <p className="text-xs uppercase tracking-wide text-muted-foreground">Du är i</p>
               <p className="text-sm font-semibold" style={{ color: areaColor(place.area) }}>
@@ -316,7 +343,10 @@ export default function Assistant({ chatId }: { chatId?: string }) {
                   </div>
                 )}
                 {messages.map((m) => (
-                  <div key={m.id} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
+                  <div
+                    key={m.id}
+                    className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
+                  >
                     <div
                       className={`max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
                         m.role === "user"
@@ -353,14 +383,14 @@ export default function Assistant({ chatId }: { chatId?: string }) {
               {[puzzle.flowPrompt, ...(place ? [place.prompt] : []), ...QUICK_PROMPTS]
                 .filter((p, i, arr) => p && arr.indexOf(p) === i)
                 .map((p) => (
-                <button
-                  key={p}
-                  onClick={() => void send(p)}
-                  className="px-3 py-2 rounded-full text-sm bg-secondary hover:bg-secondary/80 text-foreground transition-colors"
-                >
-                  {p}
-                </button>
-              ))}
+                  <button
+                    key={p}
+                    onClick={() => void send(p)}
+                    className="px-3 py-2 rounded-full text-sm bg-secondary hover:bg-secondary/80 text-foreground transition-colors"
+                  >
+                    {p}
+                  </button>
+                ))}
             </div>
           )}
 

@@ -124,15 +124,15 @@ export function hasStudyProfile(p: StudyProfile | null | undefined): boolean {
   if (!p) return false;
   return Boolean(
     p.age.trim() ||
-      p.level ||
-      p.grade.trim() ||
-      p.program.trim() ||
-      p.subjects.length ||
-      p.pace ||
-      p.mode ||
-      p.helpWith.length ||
-      p.preferences.length ||
-      p.note.trim(),
+    p.level ||
+    p.grade.trim() ||
+    p.program.trim() ||
+    p.subjects.length ||
+    p.pace ||
+    p.mode ||
+    p.helpWith.length ||
+    p.preferences.length ||
+    p.note.trim(),
   );
 }
 
@@ -189,7 +189,15 @@ export interface StudySuggestion {
 }
 
 const EXAM_WORDS = ["prov", "tenta", "examination", "förhör", "test", "salsskrivning"];
-const BIG_WORDS = ["inlämning", "uppsats", "rapport", "projekt", "arbete", "presentation", "redovisning"];
+const BIG_WORDS = [
+  "inlämning",
+  "uppsats",
+  "rapport",
+  "projekt",
+  "arbete",
+  "presentation",
+  "redovisning",
+];
 
 const has = (title: string, words: string[]) => {
   const t = title.toLowerCase();
@@ -213,7 +221,8 @@ function dayLabel(date?: string): string {
 
 /** Föreslagen passlängd utifrån preferenser och dagens kapacitet. */
 export function studySessionMinutes(p: StudyProfile, capacityMinutes: number): number {
-  const wantsShort = p.preferences.includes("Korta studiepass") || p.preferences.includes("Många pauser");
+  const wantsShort =
+    p.preferences.includes("Korta studiepass") || p.preferences.includes("Många pauser");
   const base = wantsShort ? 20 : 35;
   if (capacityMinutes <= 0) return base;
   return Math.max(10, Math.min(base, Math.round(capacityMinutes / 2)));
@@ -417,10 +426,25 @@ export function applyEmphasis(plan: StudyMaterialPlan, emphasis: StudyEmphasis):
   const total = plan.cardCount + plan.quizCount;
   if (emphasis === plan.emphasis) return plan;
   if (emphasis === "flashcards") {
-    return { ...plan, emphasis, cardCount: Math.round(total * 0.7), quizCount: Math.max(4, Math.round(total * 0.3)) };
+    return {
+      ...plan,
+      emphasis,
+      cardCount: Math.round(total * 0.7),
+      quizCount: Math.max(4, Math.round(total * 0.3)),
+    };
   }
   if (emphasis === "quiz") {
-    return { ...plan, emphasis, cardCount: Math.max(4, Math.round(total * 0.35)), quizCount: Math.round(total * 0.65) };
+    return {
+      ...plan,
+      emphasis,
+      cardCount: Math.max(4, Math.round(total * 0.35)),
+      quizCount: Math.round(total * 0.65),
+    };
   }
-  return { ...plan, emphasis, cardCount: Math.round(total * 0.55), quizCount: Math.round(total * 0.45) };
+  return {
+    ...plan,
+    emphasis,
+    cardCount: Math.round(total * 0.55),
+    quizCount: Math.round(total * 0.45),
+  };
 }

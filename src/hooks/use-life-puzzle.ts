@@ -98,7 +98,8 @@ export function useLifePuzzle(): {
     weekEnd.setDate(weekEnd.getDate() + 9);
     const weekEndIso = weekEnd.toISOString().slice(0, 10);
     const studySoon = activeTasks.filter(
-      (t) => getArea(t) === "studier" && (!t.dueDate || (t.dueDate >= today && t.dueDate <= weekEndIso)),
+      (t) =>
+        getArea(t) === "studier" && (!t.dueDate || (t.dueDate >= today && t.dueDate <= weekEndIso)),
     );
     const sDemand = studyDemand({
       exams: studySoon.filter((t) => isExam(t.title)).length,
@@ -122,7 +123,19 @@ export function useLifePuzzle(): {
       areas: [...byArea.values()],
       todaysEvents: events,
     };
-  }, [activeTasks, lectures, childEvents, flow, energy, mood, minutesLeft, openItems.length, workProfile, studyProfile, situation]);
+  }, [
+    activeTasks,
+    lectures,
+    childEvents,
+    flow,
+    energy,
+    mood,
+    minutesLeft,
+    openItems.length,
+    workProfile,
+    studyProfile,
+    situation,
+  ]);
 
   const puzzle = useMemo(() => buildLifePuzzle(input), [input]);
   const contextPrompt = useMemo(() => lifeContextPrompt(input), [input]);

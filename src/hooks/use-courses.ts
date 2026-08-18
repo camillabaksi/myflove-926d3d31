@@ -11,13 +11,7 @@ export interface Course {
   archived?: boolean;
 }
 
-const COURSE_COLORS = [
-  "35 65% 45%",
-  "7 47% 49%",
-  "138 24% 40%",
-  "194 13% 25%",
-  "265 30% 45%",
-];
+const COURSE_COLORS = ["35 65% 45%", "7 47% 49%", "138 24% 40%", "194 13% 25%", "265 30% 45%"];
 
 const generateId = () => Math.random().toString(36).slice(2, 11);
 

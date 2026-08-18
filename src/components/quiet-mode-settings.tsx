@@ -47,7 +47,9 @@ export function QuietModeSettings() {
 
   const handlePause = (minutes: number) => {
     setState(pauseRemindersFor(minutes));
-    toast({ description: `Tyst läge på i ${minutes >= 60 ? `${minutes / 60} h` : `${minutes} min`}. Inga påminnelser stör dig.` });
+    toast({
+      description: `Tyst läge på i ${minutes >= 60 ? `${minutes / 60} h` : `${minutes} min`}. Inga påminnelser stör dig.`,
+    });
   };
 
   const handleResume = () => {
@@ -58,7 +60,11 @@ export function QuietModeSettings() {
   return (
     <div className="surface-card p-4 space-y-4">
       <div className="flex items-start gap-3">
-        {quiet ? <BellOff size={20} className="text-primary mt-0.5" /> : <Bell size={20} className="text-muted-foreground mt-0.5" />}
+        {quiet ? (
+          <BellOff size={20} className="text-primary mt-0.5" />
+        ) : (
+          <Bell size={20} className="text-muted-foreground mt-0.5" />
+        )}
         <div>
           <p className="font-semibold text-ink">Tyst läge</p>
           <p className="text-sm text-muted-foreground">
@@ -84,7 +90,12 @@ export function QuietModeSettings() {
           </Button>
         ))}
         {paused && (
-          <Button type="button" variant="ghost" className="rounded-full h-10" onClick={handleResume}>
+          <Button
+            type="button"
+            variant="ghost"
+            className="rounded-full h-10"
+            onClick={handleResume}
+          >
             Slå på igen
           </Button>
         )}
@@ -104,7 +115,9 @@ export function QuietModeSettings() {
         {state.scheduleEnabled && (
           <div className="flex items-center gap-3">
             <div className="flex-1">
-              <Label htmlFor="quiet-start" className="text-xs text-muted-foreground">Från</Label>
+              <Label htmlFor="quiet-start" className="text-xs text-muted-foreground">
+                Från
+              </Label>
               <Input
                 id="quiet-start"
                 type="time"
@@ -114,7 +127,9 @@ export function QuietModeSettings() {
               />
             </div>
             <div className="flex-1">
-              <Label htmlFor="quiet-end" className="text-xs text-muted-foreground">Till</Label>
+              <Label htmlFor="quiet-end" className="text-xs text-muted-foreground">
+                Till
+              </Label>
               <Input
                 id="quiet-end"
                 type="time"

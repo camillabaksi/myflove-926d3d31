@@ -1,25 +1,15 @@
 import { useCallback, useMemo } from "react";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { useLocalStorage } from "@/lib/storage";
-import {
-  todayISO,
-  type DailyCheckin,
-  type TimeAvailability,
-} from "@/lib/daily-flow";
+import { todayISO, type DailyCheckin, type TimeAvailability } from "@/lib/daily-flow";
 
 /* ── Dagens incheckning ──────────────────────────────────────────── */
 
 export function useDailyCheckin() {
-  const [history, setHistory] = useCloudSyncedStorage<DailyCheckin[]>(
-    "myflove-daily-checkin",
-    [],
-  );
+  const [history, setHistory] = useCloudSyncedStorage<DailyCheckin[]>("myflove-daily-checkin", []);
 
   const today = todayISO();
-  const checkin = useMemo(
-    () => history.find((c) => c.date === today) ?? null,
-    [history, today],
-  );
+  const checkin = useMemo(() => history.find((c) => c.date === today) ?? null, [history, today]);
 
   const save = useCallback(
     (input: { energy: number; load: number; time: TimeAvailability }) => {

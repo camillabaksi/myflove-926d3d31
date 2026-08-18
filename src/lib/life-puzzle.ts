@@ -83,9 +83,7 @@ function loadOf(a: AreaLoad): number {
 
 /** Bygger en sammanhängande bild av livspusslet just nu. */
 export function buildLifePuzzle(input: LifePuzzleInput): LifePuzzle {
-  const busiest = input.areas
-    .filter((a) => loadOf(a) > 0)
-    .sort((x, y) => loadOf(y) - loadOf(x));
+  const busiest = input.areas.filter((a) => loadOf(a) > 0).sort((x, y) => loadOf(y) - loadOf(x));
 
   const totalOpen = input.areas.reduce((s, a) => s + a.today + a.overdue + a.soon, 0);
   const overdue = input.areas.reduce((s, a) => s + a.overdue, 0);
@@ -141,7 +139,12 @@ export function buildLifePuzzle(input: LifePuzzleInput): LifePuzzle {
       suggestion: lowCapacity
         ? "Vi tar en liten bit av den idag – inte hela."
         : "Ska vi dela upp den i mindre steg?",
-      href: nearest.area === "studier" ? "/studyflow" : nearest.area === "jobb" ? "/workflow" : "/tasks",
+      href:
+        nearest.area === "studier"
+          ? "/studyflow"
+          : nearest.area === "jobb"
+            ? "/workflow"
+            : "/tasks",
       hrefLabel: "Dela upp den",
     });
   }

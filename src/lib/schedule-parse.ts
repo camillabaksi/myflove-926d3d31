@@ -82,7 +82,11 @@ export function parseScheduleText(text: string): ParsedLecture[] {
     const locMatch = rest.match(/[(,]\s*(sal\s*)?([A-Za-zÅÄÖåäö0-9 .:-]{1,24})\)?\s*$/i);
     if (locMatch && /\d|sal|rum|hus/i.test(locMatch[0])) {
       location = locMatch[2].trim();
-      rest = rest.slice(0, locMatch.index).trim().replace(/[,(-]\s*$/, "").trim();
+      rest = rest
+        .slice(0, locMatch.index)
+        .trim()
+        .replace(/[,(-]\s*$/, "")
+        .trim();
     }
 
     const title = rest || "Lektion";

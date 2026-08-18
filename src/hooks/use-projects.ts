@@ -11,13 +11,7 @@ export interface WorkProject {
   archived?: boolean;
 }
 
-const PROJECT_COLORS = [
-  "194 13% 25%",
-  "138 24% 40%",
-  "35 65% 45%",
-  "7 47% 49%",
-  "218 30% 40%",
-];
+const PROJECT_COLORS = ["194 13% 25%", "138 24% 40%", "35 65% 45%", "7 47% 49%", "218 30% 40%"];
 
 const generateId = () => Math.random().toString(36).slice(2, 11);
 

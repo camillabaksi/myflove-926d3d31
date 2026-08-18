@@ -4,7 +4,7 @@
 import type { MoodEntry, Task, Focus } from "@/hooks/use-data";
 
 function toDateString(timestamp: number): string {
-  return new Date(timestamp).toISOString().split('T')[0] as string;
+  return new Date(timestamp).toISOString().split("T")[0] as string;
 }
 
 function daysBetween(a: string, b: string): number {
@@ -13,9 +13,11 @@ function daysBetween(a: string, b: string): number {
 
 function getCheckinStreak(moods: MoodEntry[]): number {
   if (moods.length === 0) return 0;
-  const uniqueDays = Array.from(new Set(moods.map(m => toDateString(m.date)))).sort().reverse();
+  const uniqueDays = Array.from(new Set(moods.map((m) => toDateString(m.date))))
+    .sort()
+    .reverse();
   let streak = 0;
-  let cursor = new Date().toISOString().split('T')[0] as string;
+  let cursor = new Date().toISOString().split("T")[0] as string;
 
   for (const day of uniqueDays) {
     const diff = daysBetween(cursor, day);
@@ -37,7 +39,11 @@ export interface FlowInsight {
   text: string;
 }
 
-export function generateFlowInsights(moods: MoodEntry[], tasks: Task[], focusHistory: Focus | null): FlowInsight[] {
+export function generateFlowInsights(
+  moods: MoodEntry[],
+  tasks: Task[],
+  focusHistory: Focus | null,
+): FlowInsight[] {
   const insights: FlowInsight[] = [];
 
   const checkinStreak = getCheckinStreak(moods);
@@ -55,7 +61,7 @@ export function generateFlowInsights(moods: MoodEntry[], tasks: Task[], focusHis
 
   const now = Date.now();
   const sevenDaysAgo = now - 7 * 24 * 60 * 60 * 1000;
-  const recentMoods = moods.filter(m => m.date >= sevenDaysAgo);
+  const recentMoods = moods.filter((m) => m.date >= sevenDaysAgo);
   if (recentMoods.length > 0) {
     const avg = recentMoods.reduce((sum, m) => sum + m.score, 0) / recentMoods.length;
     if (avg >= 3.5) {
@@ -72,7 +78,7 @@ export function generateFlowInsights(moods: MoodEntry[], tasks: Task[], focusHis
   }
 
   const completedThisWeek = tasks.filter(
-    t => t.completed && (Date.now() - t.createdAt) < 7 * 24 * 60 * 60 * 1000
+    (t) => t.completed && Date.now() - t.createdAt < 7 * 24 * 60 * 60 * 1000,
   );
   if (completedThisWeek.length > 0) {
     insights.push({

@@ -1,13 +1,41 @@
 import React from "react";
 import { AbsoluteFill, useCurrentFrame, interpolate } from "remotion";
-import { COLORS, FONTS, SceneShell, SectionEyebrow, SectionTitle, SectionSub, useEntrance } from "../theme";
+import {
+  COLORS,
+  FONTS,
+  SceneShell,
+  SectionEyebrow,
+  SectionTitle,
+  SectionSub,
+  useEntrance,
+} from "../theme";
 
 const ITEMS = [
-  { icon: "ⓘ", label: "Hjälptexter överallt", desc: "Liten i-knapp på varje kort förklarar vad du gör här.", delay: 24 },
+  {
+    icon: "ⓘ",
+    label: "Hjälptexter överallt",
+    desc: "Liten i-knapp på varje kort förklarar vad du gör här.",
+    delay: 24,
+  },
   { icon: "→", label: "Introtur", desc: "En kort rundtur första gången du loggar in.", delay: 44 },
-  { icon: "◐", label: "Enkelt läge", desc: "Visar bara det viktigaste när huvudet är fullt.", delay: 64 },
-  { icon: "⌄", label: "Minimera & maximera", desc: "Fäll ihop det du inte behöver – valet sparas.", delay: 84 },
-  { icon: "←", label: "Tillbakaknapp", desc: "Alltid en väg tillbaka, på mobil och dator.", delay: 104 },
+  {
+    icon: "◐",
+    label: "Enkelt läge",
+    desc: "Visar bara det viktigaste när huvudet är fullt.",
+    delay: 64,
+  },
+  {
+    icon: "⌄",
+    label: "Minimera & maximera",
+    desc: "Fäll ihop det du inte behöver – valet sparas.",
+    delay: 84,
+  },
+  {
+    icon: "←",
+    label: "Tillbakaknapp",
+    desc: "Alltid en väg tillbaka, på mobil och dator.",
+    delay: 104,
+  },
 ];
 
 const Row: React.FC<(typeof ITEMS)[number]> = ({ icon, label, desc, delay }) => {
@@ -43,7 +71,11 @@ const Row: React.FC<(typeof ITEMS)[number]> = ({ icon, label, desc, delay }) => 
         {icon}
       </div>
       <div style={{ display: "flex", flexDirection: "column" }}>
-        <div style={{ fontFamily: FONTS.display, fontWeight: 600, fontSize: 22, color: COLORS.ink }}>{label}</div>
+        <div
+          style={{ fontFamily: FONTS.display, fontWeight: 600, fontSize: 22, color: COLORS.ink }}
+        >
+          {label}
+        </div>
         <div style={{ fontFamily: FONTS.body, fontSize: 15, color: COLORS.muted }}>{desc}</div>
       </div>
     </div>
@@ -55,12 +87,21 @@ export const SceneSimplicity: React.FC = () => {
   const pulse = interpolate(Math.sin(frame / 14), [-1, 1], [0.94, 1.04]);
   return (
     <SceneShell>
-      <AbsoluteFill style={{ padding: "70px 80px", display: "flex", flexDirection: "row", gap: 48, alignItems: "center" }}>
+      <AbsoluteFill
+        style={{
+          padding: "70px 80px",
+          display: "flex",
+          flexDirection: "row",
+          gap: 48,
+          alignItems: "center",
+        }}
+      >
         <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 16 }}>
           <SectionEyebrow delay={0}>Enklare att förstå</SectionEyebrow>
           <SectionTitle delay={4}>Du ska aldrig behöva gissa.</SectionTitle>
           <SectionSub delay={10}>
-            MyFlove förklarar sig själv – med korta svenska texter, färre val och en app du kan fälla ihop efter dagsformen.
+            MyFlove förklarar sig själv – med korta svenska texter, färre val och en app du kan
+            fälla ihop efter dagsformen.
           </SectionSub>
           <div
             style={{

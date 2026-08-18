@@ -43,10 +43,7 @@ function GuidePage() {
   return (
     <main className="min-h-screen bg-[#F8F5FE] text-[#2A2140] px-6 py-16">
       <div className="mx-auto max-w-2xl">
-        <Link
-          to="/"
-          className="text-xs uppercase tracking-[0.3em] text-[#7C5CE0] font-semibold"
-        >
+        <Link to="/" className="text-xs uppercase tracking-[0.3em] text-[#7C5CE0] font-semibold">
           ← MyFlove
         </Link>
         <h1 className="mt-4 font-display text-4xl md:text-5xl font-bold leading-tight">
@@ -58,81 +55,75 @@ function GuidePage() {
 
         <article className="mt-10 space-y-6 leading-relaxed [&_h2]:font-display [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-2 [&_h3]:font-semibold [&_h3]:mt-6 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:space-y-2 [&_a]:text-[#7C5CE0] [&_a]:underline">
           <p>
-            De flesta planners är byggda för en hjärna som redan minns att öppna
-            dem. En bra <strong>ADHD-planner för vuxna</strong> gör tvärtom — den
-            möter dig där du är, sänker friktionen och tar bort mental
-            belastning istället för att lägga på mer. Här går vi igenom vad du
-            faktiskt ska titta efter, jämför digitalt mot papper, och visar hur
+            De flesta planners är byggda för en hjärna som redan minns att öppna dem. En bra{" "}
+            <strong>ADHD-planner för vuxna</strong> gör tvärtom — den möter dig där du är, sänker
+            friktionen och tar bort mental belastning istället för att lägga på mer. Här går vi
+            igenom vad du faktiskt ska titta efter, jämför digitalt mot papper, och visar hur
             MyFlove är designad kring de vanligaste friktionspunkterna.
           </p>
 
           <h2>Vad gör en planner ADHD-vänlig?</h2>
           <ul>
             <li>
-              <strong>Låg startfriktion.</strong> Om det tar mer än några
-              sekunder att fånga en tanke, hamnar den ingenstans.
+              <strong>Låg startfriktion.</strong> Om det tar mer än några sekunder att fånga en
+              tanke, hamnar den ingenstans.
             </li>
             <li>
-              <strong>Externt minne.</strong> Påminnelser, larm och återkommande
-              rutiner som inte förutsätter att du kommer ihåg dem själv.
+              <strong>Externt minne.</strong> Påminnelser, larm och återkommande rutiner som inte
+              förutsätter att du kommer ihåg dem själv.
             </li>
             <li>
-              <strong>Energimedvetenhet.</strong> Din kapacitet varierar över
-              dagen — planen måste kunna följa med.
+              <strong>Energimedvetenhet.</strong> Din kapacitet varierar över dagen — planen måste
+              kunna följa med.
             </li>
             <li>
-              <strong>Överskådlighet utan överväldigande.</strong> En vy, en
-              nästa sak. Inte femton kalendrar staplade på varandra.
+              <strong>Överskådlighet utan överväldigande.</strong> En vy, en nästa sak. Inte femton
+              kalendrar staplade på varandra.
             </li>
             <li>
-              <strong>Förlåtande design.</strong> Missade dagar ska inte kännas
-              som ett misslyckande — de ska bara flyta vidare.
+              <strong>Förlåtande design.</strong> Missade dagar ska inte kännas som ett misslyckande
+              — de ska bara flyta vidare.
             </li>
           </ul>
 
           <h2>Digital eller papper?</h2>
           <h3>Papper</h3>
           <p>
-            Papper är taktilt, distraktionsfritt och belönar den som älskar att
-            skriva för hand. Nackdelen är att det inte påminner dig, inte följer
-            med i fickan om du glömmer det på köksbordet, och inte kan
-            omorganisera sig när dagen kraschar. Många vuxna med ADHD köper en
-            vacker bullet journal — och slutar använda den efter tre veckor.
+            Papper är taktilt, distraktionsfritt och belönar den som älskar att skriva för hand.
+            Nackdelen är att det inte påminner dig, inte följer med i fickan om du glömmer det på
+            köksbordet, och inte kan omorganisera sig när dagen kraschar. Många vuxna med ADHD köper
+            en vacker bullet journal — och slutar använda den efter tre veckor.
           </p>
           <h3>Digitalt</h3>
           <p>
-            Digitala planners kan påminna, larma, återkomma och synka mellan
-            enheter. Risken är att de blir för komplexa: fler flikar, fler
-            listor, fler notiser. Det du vill ha är en app som gör mindre — men
-            gör det åt dig.
+            Digitala planners kan påminna, larma, återkomma och synka mellan enheter. Risken är att
+            de blir för komplexa: fler flikar, fler listor, fler notiser. Det du vill ha är en app
+            som gör mindre — men gör det åt dig.
           </p>
           <h3>Kort svar</h3>
           <p>
-            Välj digitalt om du glömmer bort saker eller tappar bort papper.
-            Välj papper om du får ångest av skärmar. Välj hybrid om du älskar
-            båda: en enkel digital plan för påminnelser, en anteckningsbok för
-            reflektion.
+            Välj digitalt om du glömmer bort saker eller tappar bort papper. Välj papper om du får
+            ångest av skärmar. Välj hybrid om du älskar båda: en enkel digital plan för påminnelser,
+            en anteckningsbok för reflektion.
           </p>
 
           <h2>De fyra vanligaste friktionspunkterna (och hur MyFlove löser dem)</h2>
           <ul>
             <li>
-              <strong>Mental belastning:</strong> Rutiner™ i MyFlove kör dina
-              återkommande sekvenser åt dig — morgon, medicin, tvätt — så
-              huvudet slipper hålla reda på ordningen.
+              <strong>Mental belastning:</strong> Rutiner™ i MyFlove kör dina återkommande sekvenser
+              åt dig — morgon, medicin, tvätt — så huvudet slipper hålla reda på ordningen.
             </li>
             <li>
-              <strong>Överväldigande:</strong> FlowPlan™ tar din lista och
-              föreslår <em>en</em> nästa sak baserat på din energinivå just nu.
+              <strong>Överväldigande:</strong> FlowPlan™ tar din lista och föreslår <em>en</em>{" "}
+              nästa sak baserat på din energinivå just nu.
             </li>
             <li>
-              <strong>Att fastna:</strong> Stoppknappen™ ger dig en 60-sekunders
-              andningspaus och en mjuk AI-reflektion när något låst sig.
+              <strong>Att fastna:</strong> Stoppknappen™ ger dig en 60-sekunders andningspaus och en
+              mjuk AI-reflektion när något låst sig.
             </li>
             <li>
-              <strong>Bortglömda saker:</strong> Proaktiva loopar påminner om
-              paraply när det regnar, medicin om du inte kryssat i, tvätt som
-              ligger kvar i maskinen.
+              <strong>Bortglömda saker:</strong> Proaktiva loopar påminner om paraply när det
+              regnar, medicin om du inte kryssat i, tvätt som ligger kvar i maskinen.
             </li>
           </ul>
 
@@ -147,18 +138,23 @@ function GuidePage() {
 
           <h2>Prova MyFlove</h2>
           <p>
-            MyFlove är byggd av och för människor med neurodivergenta hjärnor.
-            Ingen produktivitetshype, ingen shame-loop — bara ett varmt stöd i
-            vardagen.{" "}
-            <Link to="/sign-up">Skapa ett konto</Link> och testa i några dagar.
-            Det är gratis att komma igång.
+            MyFlove är byggd av och för människor med neurodivergenta hjärnor. Ingen
+            produktivitetshype, ingen shame-loop — bara ett varmt stöd i vardagen.{" "}
+            <Link to="/sign-up">Skapa ett konto</Link> och testa i några dagar. Det är gratis att
+            komma igång.
           </p>
         </article>
 
         <div className="mt-16 flex flex-wrap gap-4 text-sm">
-          <Link to="/" className="text-[#7C5CE0] underline">Hem</Link>
-          <Link to="/sign-up" className="text-[#7C5CE0] underline">Skapa konto</Link>
-          <Link to="/integritet" className="text-[#7C5CE0] underline">Integritet</Link>
+          <Link to="/" className="text-[#7C5CE0] underline">
+            Hem
+          </Link>
+          <Link to="/sign-up" className="text-[#7C5CE0] underline">
+            Skapa konto
+          </Link>
+          <Link to="/integritet" className="text-[#7C5CE0] underline">
+            Integritet
+          </Link>
         </div>
       </div>
     </main>

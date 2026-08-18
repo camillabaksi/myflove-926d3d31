@@ -35,7 +35,9 @@ export function useCommuteAlerts() {
   const notifiedRef = useRef<Set<string>>(new Set());
 
   const activeTrips = savedTrips.filter((t) => t.alertEnabled);
-  const activeTripsKey = activeTrips.map((t) => `${t.id}:${t.from}:${t.to}:${t.alertMinutesBefore}`).join("|");
+  const activeTripsKey = activeTrips
+    .map((t) => `${t.id}:${t.from}:${t.to}:${t.alertMinutesBefore}`)
+    .join("|");
 
   useEffect(() => {
     if (activeTrips.length === 0) {
@@ -54,7 +56,11 @@ export function useCommuteAlerts() {
             if (minutesLeft === null) return null;
             const threshold = trip.alertMinutesBefore ?? 15;
             const dedupeKey = `${trip.id}:${suggestion.departureTime}:${new Date().toDateString()}`;
-            if (minutesLeft >= 0 && minutesLeft <= threshold && !dismissedRef.current.has(dedupeKey)) {
+            if (
+              minutesLeft >= 0 &&
+              minutesLeft <= threshold &&
+              !dismissedRef.current.has(dedupeKey)
+            ) {
               if (!notifiedRef.current.has(dedupeKey)) {
                 notifiedRef.current.add(dedupeKey);
                 sendPushNotification(`Dags att gå: ${trip.label}`, {

@@ -70,9 +70,7 @@ export function useEnabledAreas() {
 
   const toggleArea = (area: LifeArea) => {
     if (AREA_META[area].core) return;
-    setStored((prev) =>
-      prev.includes(area) ? prev.filter((a) => a !== area) : [...prev, area],
-    );
+    setStored((prev) => (prev.includes(area) ? prev.filter((a) => a !== area) : [...prev, area]));
   };
 
   const setAreas = (areas: LifeArea[]) => {
@@ -95,8 +93,7 @@ export function useActiveArea() {
   const [active, setActive] = useLocalStorage<AreaFilter>(ACTIVE_KEY, "alla");
   const { enabled } = useEnabledAreas();
 
-  const safeActive: AreaFilter =
-    active !== "alla" && !enabled.includes(active) ? "alla" : active;
+  const safeActive: AreaFilter = active !== "alla" && !enabled.includes(active) ? "alla" : active;
 
   return { activeArea: safeActive, setActiveArea: setActive, enabled };
 }
@@ -128,10 +125,7 @@ export function getArea(item: { area?: LifeArea }): LifeArea {
 }
 
 /** Filtrerar en lista på aktivt område. "alla" visar allt. */
-export function filterByArea<T extends { area?: LifeArea }>(
-  items: T[],
-  filter: AreaFilter,
-): T[] {
+export function filterByArea<T extends { area?: LifeArea }>(items: T[], filter: AreaFilter): T[] {
   if (filter === "alla") return items;
   return items.filter((i) => getArea(i) === filter);
 }

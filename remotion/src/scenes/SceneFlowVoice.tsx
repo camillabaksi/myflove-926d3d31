@@ -66,7 +66,9 @@ export const SceneFlowVoice: React.FC = () => {
           }}
         />
       </AbsoluteFill>
-      <AbsoluteFill style={{ padding: "60px 80px", display: "flex", flexDirection: "column", gap: 24 }}>
+      <AbsoluteFill
+        style={{ padding: "60px 80px", display: "flex", flexDirection: "column", gap: 24 }}
+      >
         <SectionEyebrow delay={0}>Flow talar</SectionEyebrow>
         <SectionTitle delay={4}>Som en vän i fickan.</SectionTitle>
         <div

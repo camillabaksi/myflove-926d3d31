@@ -15,8 +15,18 @@ import type { FlowNote } from "@/lib/notes";
 export type ConvertTarget = "uppgift" | "kalender" | "energi";
 
 const TARGETS: { id: ConvertTarget; emoji: string; label: string; hint: string }[] = [
-  { id: "uppgift", emoji: "✅", label: "Uppgift", hint: "Något du vill göra – utan datum om du vill" },
-  { id: "kalender", emoji: "📅", label: "Kalenderhändelse", hint: "Något som händer en viss dag och tid" },
+  {
+    id: "uppgift",
+    emoji: "✅",
+    label: "Uppgift",
+    hint: "Något du vill göra – utan datum om du vill",
+  },
+  {
+    id: "kalender",
+    emoji: "📅",
+    label: "Kalenderhändelse",
+    hint: "Något som händer en viss dag och tid",
+  },
   { id: "energi", emoji: "🔋", label: "Energifaktor", hint: "Något som gav eller tog energi" },
 ];
 
@@ -84,7 +94,9 @@ export default function NoteConvertDialog({
       } else {
         await addFactor({ title: title.trim(), direction, strength, category });
         toast.success(
-          direction === "gives" ? "Sparad som något som ger energi. 🔋" : "Sparad som något som tar energi. 🪫",
+          direction === "gives"
+            ? "Sparad som något som ger energi. 🔋"
+            : "Sparad som något som tar energi. 🪫",
         );
       }
       onConverted(target);
@@ -239,7 +251,9 @@ function Chip({
       type="button"
       onClick={onClick}
       className={`rounded-full border px-3 py-1.5 text-sm transition-colors ${
-        active ? "border-primary bg-primary/10 text-primary" : "border-border bg-card hover:border-primary/50"
+        active
+          ? "border-primary bg-primary/10 text-primary"
+          : "border-border bg-card hover:border-primary/50"
       }`}
     >
       {children}

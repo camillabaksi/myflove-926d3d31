@@ -58,23 +58,20 @@ export function FlowItemCard({
         )}
 
         <div className="min-w-0 flex-1">
-          <p className={cn("text-sm font-semibold text-ink", item.done && "line-through opacity-60")}>
+          <p
+            className={cn("text-sm font-semibold text-ink", item.done && "line-through opacity-60")}
+          >
             {item.title}
           </p>
 
           <div className="mt-2 flex flex-wrap items-center gap-1.5 text-[11px] font-medium">
-            <span
-              className="rounded-pill border px-2 py-0.5"
-              style={areaChipStyle(item.area)}
-            >
+            <span className="rounded-pill border px-2 py-0.5" style={areaChipStyle(item.area)}>
               {meta.emoji} {meta.label}
             </span>
             <span className="rounded-pill bg-muted px-2 py-0.5 text-muted-foreground">
               {SOURCE_LABEL[item.source]}
             </span>
-            {when && (
-              <span className="rounded-pill bg-lavender px-2 py-0.5 text-ink">{when}</span>
-            )}
+            {when && <span className="rounded-pill bg-lavender px-2 py-0.5 text-ink">{when}</span>}
             <span className="rounded-pill bg-muted px-2 py-0.5 text-muted-foreground">
               {PRIORITY_LABEL[item.priority]}
             </span>
@@ -89,9 +86,7 @@ export function FlowItemCard({
           </div>
 
           {item.nextStep && (
-            <p className="mt-2 text-xs text-muted-foreground">
-              Nästa steg: {item.nextStep}
-            </p>
+            <p className="mt-2 text-xs text-muted-foreground">Nästa steg: {item.nextStep}</p>
           )}
         </div>
 

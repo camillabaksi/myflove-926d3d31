@@ -42,7 +42,9 @@ export default function SituationPage() {
           <p className="rounded-2xl border border-border bg-secondary/40 px-4 py-3 text-sm text-muted-foreground">
             Aktivt nu:{" "}
             <span className="text-ink">
-              {active.map((id) => `${SITUATION_META[id].emoji} ${SITUATION_META[id].label}`).join(" · ")}
+              {active
+                .map((id) => `${SITUATION_META[id].emoji} ${SITUATION_META[id].label}`)
+                .join(" · ")}
             </span>
           </p>
         )}
@@ -70,7 +72,9 @@ export default function SituationPage() {
                   >
                     <span
                       className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border text-sm ${
-                        on ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground"
+                        on
+                          ? "border-primary bg-primary/10 text-primary"
+                          : "border-border text-muted-foreground"
                       }`}
                       aria-hidden="true"
                     >

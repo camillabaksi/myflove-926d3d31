@@ -97,7 +97,10 @@ export function getPersonalNote(ctx: Ctx): PersonalNote {
     notes.push({
       emoji: "☕",
       text: pick(
-        ["Ta morgonen lugnt. Kaffet först, listan sen.", "Morgonen är din. Inget måste hända direkt."],
+        [
+          "Ta morgonen lugnt. Kaffet först, listan sen.",
+          "Morgonen är din. Inget måste hända direkt.",
+        ],
         seed + 4,
       ),
     });
@@ -105,7 +108,10 @@ export function getPersonalNote(ctx: Ctx): PersonalNote {
     notes.push({
       emoji: "🌙",
       text: pick(
-        ["Dags att runda av. Det som är kvar finns imorgon.", `God natt snart, ${you}. Dagen räcker som den är.`],
+        [
+          "Dags att runda av. Det som är kvar finns imorgon.",
+          `God natt snart, ${you}. Dagen räcker som den är.`,
+        ],
         seed + 5,
       ),
     });
@@ -113,7 +119,10 @@ export function getPersonalNote(ctx: Ctx): PersonalNote {
     notes.push({
       emoji: "🌤️",
       text: pick(
-        ["Helg. Lägg ribban lågt och gör det som känns bra.", "Helgläge – bara det du orkar, inget mer."],
+        [
+          "Helg. Lägg ribban lågt och gör det som känns bra.",
+          "Helgläge – bara det du orkar, inget mer.",
+        ],
         seed + 6,
       ),
     });

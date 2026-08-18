@@ -1,11 +1,31 @@
 import React from "react";
 import { AbsoluteFill } from "remotion";
-import { COLORS, FONTS, SceneShell, SectionEyebrow, SectionSub, SectionTitle, useEntrance } from "../theme";
+import {
+  COLORS,
+  FONTS,
+  SceneShell,
+  SectionEyebrow,
+  SectionSub,
+  SectionTitle,
+  useEntrance,
+} from "../theme";
 
 const AREAS = [
-  { label: "Vardag", emoji: "🏠", sub: "Kalender, att göra, rutiner", color: COLORS.gold, delay: 16 },
+  {
+    label: "Vardag",
+    emoji: "🏠",
+    sub: "Kalender, att göra, rutiner",
+    color: COLORS.gold,
+    delay: 16,
+  },
   { label: "Privat", emoji: "❦", sub: "Familj, ärenden, inköp", color: COLORS.primary, delay: 32 },
-  { label: "Studier", emoji: "🎓", sub: "Kurser, deadlines, dokument", color: COLORS.studies, delay: 48 },
+  {
+    label: "Studier",
+    emoji: "🎓",
+    sub: "Kurser, deadlines, dokument",
+    color: COLORS.studies,
+    delay: 48,
+  },
   { label: "Jobb", emoji: "📊", sub: "Projekt, möten, uppföljning", color: COLORS.work, delay: 64 },
 ];
 
@@ -39,7 +59,9 @@ const AreaCard: React.FC<(typeof AREAS)[number]> = ({ label, emoji, sub, color, 
         {emoji}
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-        <div style={{ fontFamily: FONTS.display, fontWeight: 700, fontSize: 26, color }}>{label}</div>
+        <div style={{ fontFamily: FONTS.display, fontWeight: 700, fontSize: 26, color }}>
+          {label}
+        </div>
         <div style={{ fontFamily: FONTS.body, fontSize: 15, color: COLORS.muted }}>{sub}</div>
       </div>
     </div>
@@ -48,11 +70,16 @@ const AreaCard: React.FC<(typeof AREAS)[number]> = ({ label, emoji, sub, color, 
 
 export const SceneLifeAreas: React.FC = () => (
   <SceneShell bg={COLORS.bg}>
-    <AbsoluteFill style={{ padding: "64px 80px", display: "flex", flexDirection: "column", gap: 24 }}>
+    <AbsoluteFill
+      style={{ padding: "64px 80px", display: "flex", flexDirection: "column", gap: 24 }}
+    >
       <div style={{ display: "flex", flexDirection: "column", gap: 10, maxWidth: 760 }}>
         <SectionEyebrow delay={0}>Livsområden</SectionEyebrow>
         <SectionTitle delay={4}>Egen färg för varje del av livet.</SectionTitle>
-        <SectionSub delay={8}>Ikon och ton visar direkt vilket område något hör till – i menyn, i listan och i kalendern.</SectionSub>
+        <SectionSub delay={8}>
+          Ikon och ton visar direkt vilket område något hör till – i menyn, i listan och i
+          kalendern.
+        </SectionSub>
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
         {AREAS.map((a) => (

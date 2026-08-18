@@ -1,8 +1,66 @@
 import { ReactNode, useState, useEffect, useMemo } from "react";
 import { Link, useLocation } from "wouter";
 import { useRouter } from "@tanstack/react-router";
-import { Home, Target, CheckSquare, ShoppingBag, Sparkles, Wallet, Navigation, Calendar, Menu, X, BellRing, Timer, Pill, BarChart3, Trophy, Inbox, Users, UtensilsCrossed, MapPin, ListOrdered, Flame, Settings2, Check, RotateCcw, ArrowUp, ArrowDown, LogOut, Volume2, VolumeX, Shield, Heart, Sun, Search, GraduationCap, Briefcase, Baby, CalendarDays, Brain, HeartPulse, House, BookOpen, Building2, LayoutGrid, Dumbbell, SprayCan, Zap, Gauge, ArrowLeft, Accessibility, Plus, Compass } from "lucide-react";
-import { isAlarmSoundEnabled, setAlarmSoundEnabled, subscribeAlarmPref, playAlarmPreview, initAlarmAudioUnlock } from "@/lib/push-notifications";
+import {
+  Home,
+  Target,
+  CheckSquare,
+  ShoppingBag,
+  Sparkles,
+  Wallet,
+  Navigation,
+  Calendar,
+  Menu,
+  X,
+  BellRing,
+  Timer,
+  Pill,
+  BarChart3,
+  Trophy,
+  Inbox,
+  Users,
+  UtensilsCrossed,
+  MapPin,
+  ListOrdered,
+  Flame,
+  Settings2,
+  Check,
+  RotateCcw,
+  ArrowUp,
+  ArrowDown,
+  LogOut,
+  Volume2,
+  VolumeX,
+  Shield,
+  Heart,
+  Sun,
+  Search,
+  GraduationCap,
+  Briefcase,
+  Baby,
+  CalendarDays,
+  Brain,
+  HeartPulse,
+  House,
+  BookOpen,
+  Building2,
+  LayoutGrid,
+  Dumbbell,
+  SprayCan,
+  Zap,
+  Gauge,
+  ArrowLeft,
+  Accessibility,
+  Plus,
+  Compass,
+} from "lucide-react";
+import {
+  isAlarmSoundEnabled,
+  setAlarmSoundEnabled,
+  subscribeAlarmPref,
+  playAlarmPreview,
+  initAlarmAudioUnlock,
+} from "@/lib/push-notifications";
 import { useCommuteAlerts } from "@/hooks/use-commute-alerts";
 import { useMedicationAlerts } from "@/hooks/use-medication-alerts";
 import { useShoppingProximityAlerts } from "@/hooks/use-shopping-proximity-alerts";
@@ -24,7 +82,6 @@ import { Button } from "@/components/ui/button";
 import { useClerk, Show } from "@clerk/react";
 import { DeleteAccountButton } from "@/components/delete-account-button";
 
-
 interface LayoutProps {
   children: ReactNode;
 }
@@ -44,8 +101,6 @@ const catColor = (id: string, alpha?: number) => {
   const hue = CATEGORY_HUE[id] ?? "220 10% 42%";
   return alpha === undefined ? `hsl(${hue})` : `hsl(${hue} / ${alpha})`;
 };
-
-
 
 const SECTION_BY_PATH: Record<string, string> = {
   "/": "home",
@@ -73,41 +128,62 @@ const SECTION_BY_PATH: Record<string, string> = {
   "/insight": "insight",
 };
 
-
 /**
  * Per-category color themes, all drawn from the soft lilac MyFlove palette.
  * They override --primary / --accent / --ring so text-primary, bg-primary, etc.
  * re-tint automatically per page – alltid inom lila/rosa/mint-familjen.
  */
 const T = {
-  terracotta: { "--primary": "327 62% 62%", "--ring": "327 62% 62%", "--accent": "327 70% 93%", "--accent-foreground": "327 45% 34%" },
-  sage:       { "--primary": "168 42% 44%", "--ring": "168 42% 44%", "--accent": "168 45% 90%", "--accent-foreground": "168 45% 24%" },
-  gold:       { "--primary": "285 52% 58%", "--ring": "285 52% 58%", "--accent": "285 55% 93%", "--accent-foreground": "285 45% 30%" },
-  ink:        { "--primary": "258 68% 62%", "--ring": "258 68% 62%", "--accent": "258 60% 93%", "--accent-foreground": "258 45% 30%" },
+  terracotta: {
+    "--primary": "327 62% 62%",
+    "--ring": "327 62% 62%",
+    "--accent": "327 70% 93%",
+    "--accent-foreground": "327 45% 34%",
+  },
+  sage: {
+    "--primary": "168 42% 44%",
+    "--ring": "168 42% 44%",
+    "--accent": "168 45% 90%",
+    "--accent-foreground": "168 45% 24%",
+  },
+  gold: {
+    "--primary": "285 52% 58%",
+    "--ring": "285 52% 58%",
+    "--accent": "285 55% 93%",
+    "--accent-foreground": "285 45% 30%",
+  },
+  ink: {
+    "--primary": "258 68% 62%",
+    "--ring": "258 68% 62%",
+    "--accent": "258 60% 93%",
+    "--accent-foreground": "258 45% 30%",
+  },
 };
 
 const CATEGORY_THEMES: Record<string, Record<string, string>> = {
-  "/ma-bra":         T.sage,
-  "/daglig-rutin":   T.terracotta,
-  "/pomodoro":       T.terracotta,
-  "/fokus":          T.terracotta,
-  "/finances":       T.gold,
-  "/kalender":       T.ink,
-  "/flowplan":       T.ink,
-  "/flowscore":      T.ink,
-  "/shopping":       T.sage,
-  "/matlista":       T.sage,
-  "/stadning":       T.sage,
-  "/travel":         T.ink,
-  "/familj":         T.gold,
-  "/beloningar":     T.gold,
-  "/statistik":      T.ink,
+  "/ma-bra": T.sage,
+  "/daglig-rutin": T.terracotta,
+  "/pomodoro": T.terracotta,
+  "/fokus": T.terracotta,
+  "/finances": T.gold,
+  "/kalender": T.ink,
+  "/flowplan": T.ink,
+  "/flowscore": T.ink,
+  "/shopping": T.sage,
+  "/matlista": T.sage,
+  "/stadning": T.sage,
+  "/travel": T.ink,
+  "/familj": T.gold,
+  "/beloningar": T.gold,
+  "/statistik": T.ink,
   "/friktionsindex": T.terracotta,
-  "/insight":        { "--primary": "285 52% 58%", "--ring": "285 52% 58%", "--accent": "285 55% 93%", "--accent-foreground": "285 45% 30%" },
+  "/insight": {
+    "--primary": "285 52% 58%",
+    "--ring": "285 52% 58%",
+    "--accent": "285 55% 93%",
+    "--accent-foreground": "285 45% 30%",
+  },
 };
-
-
-
 
 import QuickflowFab from "@/components/quickflow-fab";
 
@@ -118,7 +194,8 @@ export default function Layout({ children }: LayoutProps) {
   const { signOut } = useClerk();
   const { alerts, dismissAlert } = useCommuteAlerts();
   const { alerts: medicationAlerts, dismissAlert: dismissMedicationAlert } = useMedicationAlerts();
-  const { alerts: proximityAlerts, dismissAlert: dismissProximityAlert } = useShoppingProximityAlerts();
+  const { alerts: proximityAlerts, dismissAlert: dismissProximityAlert } =
+    useShoppingProximityAlerts();
   useNotificationScheduler();
   useAchievementPush();
   usePurgeRevisions();
@@ -142,10 +219,11 @@ export default function Layout({ children }: LayoutProps) {
     }
   };
 
-
   const [alarmEnabled, setAlarmEnabledState] = useState<boolean>(() => isAlarmSoundEnabled());
   useEffect(() => subscribeAlarmPref((v) => setAlarmEnabledState(v)), []);
-  useEffect(() => { initAlarmAudioUnlock(); }, []);
+  useEffect(() => {
+    initAlarmAudioUnlock();
+  }, []);
   const toggleAlarm = () => {
     const next = !alarmEnabled;
     setAlarmSoundEnabled(next);
@@ -153,87 +231,224 @@ export default function Layout({ children }: LayoutProps) {
     if (next) playAlarmPreview();
   };
 
-
-
-
-
   useEffect(() => {
     const section = SECTION_BY_PATH[location] ?? (location.replace(/^\//, "") || "home");
     trackEvent(section, "view");
     rememberPlace(location);
   }, [location]);
 
-  type NavItem = { href: string; label: string; icon: typeof Home; hint: string; essential?: boolean };
+  type NavItem = {
+    href: string;
+    label: string;
+    icon: typeof Home;
+    hint: string;
+    essential?: boolean;
+  };
   const navItems: NavItem[] = [
     { href: "/hem", label: "Hem", icon: Home, hint: "Din överblick över dagen", essential: true },
-    { href: "/min-dag", label: "Min dag", icon: CalendarDays, hint: "Dagens plan: hållpunkter, en viktig sak och det du orkar", essential: true },
-    { href: "/ma-bra", label: "Må bra", icon: Heart, hint: "Logga hur du mår och hur mycket ork du har" },
-    { href: "/traning", label: "Träning", icon: Dumbbell, hint: "Enkla pass anpassade efter din ork" },
-    { href: "/daglig-rutin", label: "Daglig rutin", icon: Sun, hint: "Morgon- och kvällsrutiner steg för steg" },
-    { href: "/quickflow", label: "Quickflow", icon: Inbox, hint: "Skriv av dig direkt – sortera sen", essential: true },
-    { href: "/kalender", label: "Kalender", icon: Calendar, hint: "Allt som händer, dag för dag", essential: true },
-    { href: "/paminnelser", label: "Påminnelser", icon: BellRing, hint: "Lägg till, ändra och avboka påminnelser" },
+    {
+      href: "/min-dag",
+      label: "Min dag",
+      icon: CalendarDays,
+      hint: "Dagens plan: hållpunkter, en viktig sak och det du orkar",
+      essential: true,
+    },
+    {
+      href: "/ma-bra",
+      label: "Må bra",
+      icon: Heart,
+      hint: "Logga hur du mår och hur mycket ork du har",
+    },
+    {
+      href: "/traning",
+      label: "Träning",
+      icon: Dumbbell,
+      hint: "Enkla pass anpassade efter din ork",
+    },
+    {
+      href: "/daglig-rutin",
+      label: "Daglig rutin",
+      icon: Sun,
+      hint: "Morgon- och kvällsrutiner steg för steg",
+    },
+    {
+      href: "/quickflow",
+      label: "Quickflow",
+      icon: Inbox,
+      hint: "Skriv av dig direkt – sortera sen",
+      essential: true,
+    },
+    {
+      href: "/kalender",
+      label: "Kalender",
+      icon: Calendar,
+      hint: "Allt som händer, dag för dag",
+      essential: true,
+    },
+    {
+      href: "/paminnelser",
+      label: "Påminnelser",
+      icon: BellRing,
+      hint: "Lägg till, ändra och avboka påminnelser",
+    },
 
-    { href: "/tasks", label: "Att göra", icon: CheckSquare, hint: "Din lista med saker att göra", essential: true },
-    { href: "/flowplan", label: "FlowPlan", icon: ListOrdered, hint: "Flow lägger dina uppgifter i bra ordning" },
+    {
+      href: "/tasks",
+      label: "Att göra",
+      icon: CheckSquare,
+      hint: "Din lista med saker att göra",
+      essential: true,
+    },
+    {
+      href: "/flowplan",
+      label: "FlowPlan",
+      icon: ListOrdered,
+      hint: "Flow lägger dina uppgifter i bra ordning",
+    },
     { href: "/flowscore", label: "FlowScore", icon: Gauge, hint: "Hur mycket du orkar just idag" },
-    { href: "/veckans-flow", label: "Veckans Flow", icon: CalendarDays, hint: "Lugn tillbakablick på veckan" },
+    {
+      href: "/veckans-flow",
+      label: "Veckans Flow",
+      icon: CalendarDays,
+      hint: "Lugn tillbakablick på veckan",
+    },
     { href: "/pomodoro", label: "Timer", icon: Timer, hint: "Jobba en stund, ta paus" },
     { href: "/shopping", label: "Inköp", icon: ShoppingBag, hint: "Inköpslista du kan dela" },
-    { href: "/matlista", label: "Matlista", icon: UtensilsCrossed, hint: "Planera veckans mat", essential: true },
+    {
+      href: "/matlista",
+      label: "Matlista",
+      icon: UtensilsCrossed,
+      hint: "Planera veckans mat",
+      essential: true,
+    },
     { href: "/stadning", label: "Städning", icon: SprayCan, hint: "Vad som behöver göras hemma" },
     { href: "/finances", label: "Ekonomi", icon: Wallet, hint: "Räkningar och budget" },
     { href: "/travel", label: "Resor", icon: Navigation, hint: "Buss och tåg i realtid" },
-    { href: "/relationer", label: "Relationer", icon: Heart, hint: "Personerna som hör till ditt liv" },
+    {
+      href: "/relationer",
+      label: "Relationer",
+      icon: Heart,
+      hint: "Personerna som hör till ditt liv",
+    },
     { href: "/familj", label: "Familj", icon: Users, hint: "Dela listor och kalender med andra" },
     { href: "/barn", label: "Barn", icon: Baby, hint: "Scheman och rutiner för barnen" },
     { href: "/statistik", label: "Statistik", icon: BarChart3, hint: "Se dina mönster över tid" },
-    { href: "/beloningar", label: "Belöningar", icon: Trophy, hint: "Små morötter när du gjort något" },
-    { href: "/insight", label: "MyFlove Insight", icon: Brain, hint: "Behov → konkreta strategier (demo)" },
+    {
+      href: "/beloningar",
+      label: "Belöningar",
+      icon: Trophy,
+      hint: "Små morötter när du gjort något",
+    },
+    {
+      href: "/insight",
+      label: "MyFlove Insight",
+      icon: Brain,
+      hint: "Behov → konkreta strategier (demo)",
+    },
     { href: "/assistant", label: "Hjälp", icon: Sparkles, hint: "Fråga Flow om vad som helst" },
-    { href: "/friktionsindex", label: "Feedback", icon: Flame, hint: "Berätta vad som skaver i appen" },
+    {
+      href: "/friktionsindex",
+      label: "Feedback",
+      icon: Flame,
+      hint: "Berätta vad som skaver i appen",
+    },
     ...(enabledAreas.includes("studier")
       ? [
-          { href: "/studyflow", label: "StudyFlow", icon: GraduationCap, hint: "Schema, prov och vad du ska plugga nu" },
-          { href: "/studybuddy", label: "StudyBuddy", icon: Brain, hint: "Flashcards och quiz på ditt material" },
-
+          {
+            href: "/studyflow",
+            label: "StudyFlow",
+            icon: GraduationCap,
+            hint: "Schema, prov och vad du ska plugga nu",
+          },
+          {
+            href: "/studybuddy",
+            label: "StudyBuddy",
+            icon: Brain,
+            hint: "Flashcards och quiz på ditt material",
+          },
         ]
       : []),
 
     ...(enabledAreas.includes("jobb")
       ? [
           { href: "/jobb", label: "Jobb", icon: Briefcase, hint: "Dina arbetsuppgifter och möten" },
-          { href: "/workflow", label: "WorkFlow", icon: Zap, hint: "Vad du ska göra härnäst på jobbet" },
+          {
+            href: "/workflow",
+            label: "WorkFlow",
+            icon: Zap,
+            hint: "Vad du ska göra härnäst på jobbet",
+          },
         ]
       : []),
     ...(isAdmin
       ? [
-          { href: "/admin", label: "Adminöversikt", icon: Shield, hint: "Roller, åtkomst och rapporter" },
-          { href: "/admin-statistik", label: "Appstatistik", icon: BarChart3, hint: "Besökare och användning" },
+          {
+            href: "/admin",
+            label: "Adminöversikt",
+            icon: Shield,
+            hint: "Roller, åtkomst och rapporter",
+          },
+          {
+            href: "/admin-statistik",
+            label: "Appstatistik",
+            icon: BarChart3,
+            hint: "Besökare och användning",
+          },
         ]
       : []),
-    { href: "/min-situation", label: "Min situation", icon: Compass, hint: "Jobb, studier, föräldraledig, sjukskriven – hur livet ser ut just nu" },
-    { href: "/anpassa", label: "Anpassa appen", icon: Accessibility, hint: "Lugnare färger, färre saker och enkla ord" },
+    {
+      href: "/min-situation",
+      label: "Min situation",
+      icon: Compass,
+      hint: "Jobb, studier, föräldraledig, sjukskriven – hur livet ser ut just nu",
+    },
+    {
+      href: "/anpassa",
+      label: "Anpassa appen",
+      icon: Accessibility,
+      hint: "Lugnare färger, färre saker och enkla ord",
+    },
   ].map((i) => ({ ...i, label: plainLabel(i.label, npf.plainWords) }));
-
 
   // Kategorier – gör navigationen lugnare genom att gruppera sektionerna.
   const categories = useMemo(() => {
     const byHref = (href: string) => navItems.find((i) => i.href === href);
-    const groups: { id: string; label: string; hint: string; icon: typeof Home; hrefs: string[] }[] = [
+    const groups: {
+      id: string;
+      label: string;
+      hint: string;
+      icon: typeof Home;
+      hrefs: string[];
+    }[] = [
       {
         id: "myflow",
         label: "Din dag",
         hint: "Kalender, att göra och dagliga rutiner",
         icon: CalendarDays,
-        hrefs: ["/hem", "/min-dag", "/daglig-rutin", "/kalender", "/paminnelser", "/tasks", "/pomodoro"],
+        hrefs: [
+          "/hem",
+          "/min-dag",
+          "/daglig-rutin",
+          "/kalender",
+          "/paminnelser",
+          "/tasks",
+          "/pomodoro",
+        ],
       },
       {
         id: "flowflow",
         label: "Flow",
         hint: "FlowPlan, fokus, reflektion och AI-stöd",
         icon: Sparkles,
-        hrefs: ["/flowplan", "/fokus", "/veckans-flow", "/quickflow", "/assistant", "/beloningar", "/insight"],
+        hrefs: [
+          "/flowplan",
+          "/fokus",
+          "/veckans-flow",
+          "/quickflow",
+          "/assistant",
+          "/beloningar",
+          "/insight",
+        ],
       },
       {
         id: "healthflow",
@@ -242,17 +457,46 @@ export default function Layout({ children }: LayoutProps) {
         icon: Heart,
         hrefs: ["/ma-bra", "/traning", "/flowscore", "/statistik"],
       },
-      { id: "homeflow", label: "Hemma", hint: "Mat, inköp, städning och pengar", icon: House, hrefs: ["/shopping", "/matlista", "/stadning", "/finances", "/travel"] },
-      { id: "familyflow", label: "Relationer", hint: "Personer du delar vardagen med", icon: HeartPulse, hrefs: ["/relationer", "/familj", "/barn"] },
-      { id: "studyflow", label: "Studier", hint: "Schema, prov och plugg", icon: BookOpen, hrefs: ["/studyflow", "/studybuddy"] },
-      { id: "workflow", label: "Jobb", hint: "Uppgifter och möten", icon: Building2, hrefs: ["/jobb", "/workflow"] },
-      { id: "ovrigt", label: "Övrigt", hint: "Anpassa appen, feedback och inställningar", icon: LayoutGrid, hrefs: ["/min-situation", "/anpassa", "/friktionsindex", "/admin", "/admin-statistik"] },
+      {
+        id: "homeflow",
+        label: "Hemma",
+        hint: "Mat, inköp, städning och pengar",
+        icon: House,
+        hrefs: ["/shopping", "/matlista", "/stadning", "/finances", "/travel"],
+      },
+      {
+        id: "familyflow",
+        label: "Relationer",
+        hint: "Personer du delar vardagen med",
+        icon: HeartPulse,
+        hrefs: ["/relationer", "/familj", "/barn"],
+      },
+      {
+        id: "studyflow",
+        label: "Studier",
+        hint: "Schema, prov och plugg",
+        icon: BookOpen,
+        hrefs: ["/studyflow", "/studybuddy"],
+      },
+      {
+        id: "workflow",
+        label: "Jobb",
+        hint: "Uppgifter och möten",
+        icon: Building2,
+        hrefs: ["/jobb", "/workflow"],
+      },
+      {
+        id: "ovrigt",
+        label: "Övrigt",
+        hint: "Anpassa appen, feedback och inställningar",
+        icon: LayoutGrid,
+        hrefs: ["/min-situation", "/anpassa", "/friktionsindex", "/admin", "/admin-statistik"],
+      },
     ];
     return groups
       .map((g) => ({ ...g, items: g.hrefs.map(byHref).filter(Boolean) as typeof navItems }))
       .filter((g) => g.items.length > 0);
   }, [navItems]);
-
 
   const [openCategory, setOpenCategory] = useState<string | null>(null);
   const [navSearch, setNavSearch] = useState("");
@@ -267,8 +511,6 @@ export default function Layout({ children }: LayoutProps) {
       (i) => i.label.toLowerCase().includes(q) || i.hint.toLowerCase().includes(q),
     );
   }, [navSearch, navItems]);
-
-
 
   /** Fem fasta vägar – samma för alla, så navet alltid betyder samma sak. */
   const primaryNav = useMemo(() => {
@@ -339,18 +581,12 @@ export default function Layout({ children }: LayoutProps) {
             Alarmljud: {alarmEnabled ? "på" : "av"}
           </Button>
           <Show when="signed-in">
-            <Button
-              variant="outline"
-              className="w-full rounded-xl gap-2"
-              onClick={() => signOut()}
-            >
+            <Button variant="outline" className="w-full rounded-xl gap-2" onClick={() => signOut()}>
               <LogOut size={16} /> Logga ut
             </Button>
             <DeleteAccountButton className="w-full" />
           </Show>
-
         </div>
-
       </nav>
 
       {/* Main Content Area */}
@@ -373,7 +609,10 @@ export default function Layout({ children }: LayoutProps) {
 
         <div className="hidden md:flex items-center gap-2 px-8 pt-6">
           {primaryNav.map((item) => {
-            const active = item.href === "/assistant" ? location.startsWith("/assistant") : location === item.href;
+            const active =
+              item.href === "/assistant"
+                ? location.startsWith("/assistant")
+                : location === item.href;
             const Icon = item.icon;
             return (
               <Link
@@ -415,7 +654,6 @@ export default function Layout({ children }: LayoutProps) {
           <ViewCollapseToggle />
         </div>
 
-
         {alerts.length > 0 && (
           <div className="px-4 pt-4 md:px-8 md:pt-6 space-y-2">
             {alerts.map((alert) => (
@@ -426,7 +664,11 @@ export default function Layout({ children }: LayoutProps) {
                 <div className="flex items-center gap-3">
                   <BellRing size={20} className="shrink-0" />
                   <p className="text-sm font-medium">
-                    Dags att gå! <strong>{alert.label}</strong> avgår {alert.minutesUntilDeparture <= 0 ? "nu" : `om ${alert.minutesUntilDeparture} min`} ({alert.departureTime}, {alert.lineName})
+                    Dags att gå! <strong>{alert.label}</strong> avgår{" "}
+                    {alert.minutesUntilDeparture <= 0
+                      ? "nu"
+                      : `om ${alert.minutesUntilDeparture} min`}{" "}
+                    ({alert.departureTime}, {alert.lineName})
                   </p>
                 </div>
                 <button
@@ -435,7 +677,6 @@ export default function Layout({ children }: LayoutProps) {
                   aria-label="Stäng varning"
                   className="shrink-0 p-1.5 rounded-full hover:bg-gold/25"
                 >
-
                   <X size={18} />
                 </button>
               </div>
@@ -453,7 +694,8 @@ export default function Layout({ children }: LayoutProps) {
                 <div className="flex items-center gap-3">
                   <Pill size={20} className="shrink-0" />
                   <p className="text-sm font-medium">
-                    Dags att ta <strong>{alert.name}</strong>{alert.dosage ? ` (${alert.dosage})` : ""} – {alert.time}
+                    Dags att ta <strong>{alert.name}</strong>
+                    {alert.dosage ? ` (${alert.dosage})` : ""} – {alert.time}
                   </p>
                 </div>
                 <button
@@ -462,7 +704,6 @@ export default function Layout({ children }: LayoutProps) {
                   aria-label="Stäng varning"
                   className="shrink-0 p-1.5 rounded-full hover:bg-gold/25"
                 >
-
                   <X size={18} />
                 </button>
               </div>
@@ -489,7 +730,6 @@ export default function Layout({ children }: LayoutProps) {
                   aria-label="Stäng varning"
                   className="shrink-0 p-1.5 rounded-full hover:bg-gold/25"
                 >
-
                   <X size={18} />
                 </button>
               </div>
@@ -497,21 +737,33 @@ export default function Layout({ children }: LayoutProps) {
           </div>
         )}
 
-        <div className="flex-1 overflow-y-auto pb-24 md:pb-8" style={CATEGORY_THEMES[location] as React.CSSProperties}>
+        <div
+          className="flex-1 overflow-y-auto pb-24 md:pb-8"
+          style={CATEGORY_THEMES[location] as React.CSSProperties}
+        >
           <div key={location} className="max-w-2xl mx-auto w-full p-4 md:p-8 page-enter">
             {children}
           </div>
           <footer className="max-w-2xl mx-auto w-full px-4 md:px-8 pt-4 pb-8 mt-8 border-t border-border/40">
             <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
-              <Link href="/integritet" className="hover:text-primary underline-offset-2 hover:underline">
+              <Link
+                href="/integritet"
+                className="hover:text-primary underline-offset-2 hover:underline"
+              >
                 Integritet
               </Link>
               <span aria-hidden>·</span>
-              <Link href="/villkor" className="hover:text-primary underline-offset-2 hover:underline">
+              <Link
+                href="/villkor"
+                className="hover:text-primary underline-offset-2 hover:underline"
+              >
                 Villkor
               </Link>
               <span aria-hidden>·</span>
-              <Link href="/cookies" className="hover:text-primary underline-offset-2 hover:underline">
+              <Link
+                href="/cookies"
+                className="hover:text-primary underline-offset-2 hover:underline"
+              >
                 Cookies
               </Link>
               <span aria-hidden>·</span>
@@ -530,8 +782,6 @@ export default function Layout({ children }: LayoutProps) {
       </main>
 
       <QuickflowFab />
-
-
 
       {/* Mobile Bottom Bar – Hem · Min dag · QuickFlow · Flow · Mer */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-md border-t border-border/70 pb-[env(safe-area-inset-bottom)] z-40">
@@ -568,7 +818,6 @@ export default function Layout({ children }: LayoutProps) {
             />
           ))}
 
-
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className={`flex flex-col items-center gap-1 rounded-2xl px-2 py-1.5 min-w-[3.7rem] press ${
@@ -594,7 +843,7 @@ export default function Layout({ children }: LayoutProps) {
             <div className="flex justify-between items-center p-4 border-b border-border/50">
               <h2 className="text-lg font-medium text-muted-foreground">
                 {openCategory
-                  ? categories.find((c) => c.id === openCategory)?.label ?? "Mer"
+                  ? (categories.find((c) => c.id === openCategory)?.label ?? "Mer")
                   : "Mer"}
               </h2>
               <button
@@ -699,7 +948,7 @@ export default function Layout({ children }: LayoutProps) {
                   <div className="grid grid-cols-2 gap-3">
                     {categories
                       .filter((cat) =>
-                        simpleMode ? cat.items.some((i) => i.essential) : cat.items.length > 0
+                        simpleMode ? cat.items.some((i) => i.essential) : cat.items.length > 0,
                       )
                       .map((cat) => {
                         const Icon = cat.icon;
@@ -723,7 +972,10 @@ export default function Layout({ children }: LayoutProps) {
                               <Icon size={26} />
                             </span>
                             <span className="text-sm font-medium leading-tight">{cat.label}</span>
-                            <span data-npf="optional" className="text-[11px] leading-snug opacity-70">
+                            <span
+                              data-npf="optional"
+                              className="text-[11px] leading-snug opacity-70"
+                            >
                               {cat.hint}
                             </span>
                           </button>
@@ -767,7 +1019,6 @@ export default function Layout({ children }: LayoutProps) {
           </div>
         </div>
       )}
-
     </div>
   );
 }
@@ -801,7 +1052,10 @@ function NavRow({
       </span>
       <span className="min-w-0">
         <span className="block text-sm font-medium leading-tight">{item.label}</span>
-        <span data-npf="optional" className={`block text-xs leading-snug ${isActive ? "opacity-80" : "text-muted-foreground"}`}>
+        <span
+          data-npf="optional"
+          className={`block text-xs leading-snug ${isActive ? "opacity-80" : "text-muted-foreground"}`}
+        >
           {item.hint}
         </span>
       </span>
@@ -815,7 +1069,11 @@ function BottomNavLink({
   onClick,
   label,
 }: {
-  item: { href: string; label: string; icon: React.ComponentType<{ size?: number; strokeWidth?: number }> };
+  item: {
+    href: string;
+    label: string;
+    icon: React.ComponentType<{ size?: number; strokeWidth?: number }>;
+  };
   active: boolean;
   onClick: () => void;
   /** Kortare namn i navet, t.ex. "Flow" i stället för "Hjälp". */

@@ -61,7 +61,9 @@ export default function StudyProfileCard() {
 
   const subjectOptions = Array.from(new Set([...SUBJECT_SUGGESTIONS, ...profile.subjects]));
   const helpOptions = Array.from(new Set([...STUDY_HELP_SUGGESTIONS, ...profile.helpWith]));
-  const prefOptions = Array.from(new Set([...STUDY_PREFERENCE_SUGGESTIONS, ...profile.preferences]));
+  const prefOptions = Array.from(
+    new Set([...STUDY_PREFERENCE_SUGGESTIONS, ...profile.preferences]),
+  );
 
   const addCustom = (
     field: "subjects" | "helpWith" | "preferences",
@@ -110,7 +112,9 @@ export default function StudyProfileCard() {
       )}
 
       {!open && filled && !profile.enabled && (
-        <p className="mt-1 text-xs text-muted-foreground">Pausad – Flow använder den inte just nu.</p>
+        <p className="mt-1 text-xs text-muted-foreground">
+          Pausad – Flow använder den inte just nu.
+        </p>
       )}
 
       {open && (
@@ -165,7 +169,11 @@ export default function StudyProfileCard() {
             </p>
             <div className="flex flex-wrap gap-2">
               {subjectOptions.map((s) => (
-                <Chip key={s} active={profile.subjects.includes(s)} onClick={() => toggleIn("subjects", s)}>
+                <Chip
+                  key={s}
+                  active={profile.subjects.includes(s)}
+                  onClick={() => toggleIn("subjects", s)}
+                >
                   {s}
                 </Chip>
               ))}
@@ -228,7 +236,11 @@ export default function StudyProfileCard() {
             </p>
             <div className="flex flex-wrap gap-2">
               {helpOptions.map((h) => (
-                <Chip key={h} active={profile.helpWith.includes(h)} onClick={() => toggleIn("helpWith", h)}>
+                <Chip
+                  key={h}
+                  active={profile.helpWith.includes(h)}
+                  onClick={() => toggleIn("helpWith", h)}
+                >
                   {h}
                 </Chip>
               ))}

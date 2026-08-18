@@ -17,10 +17,7 @@ export const DEFAULT_META: WorkMeta = { minutes: 15, friction: 4, priority: "ida
 
 export const MINUTE_CHOICES = [5, 10, 15, 30, 45, 60, 90];
 
-export const PRIORITY_META: Record<
-  WorkPriority,
-  { label: string; dot: string; weight: number }
-> = {
+export const PRIORITY_META: Record<WorkPriority, { label: string; dot: string; weight: number }> = {
   nu: { label: "Nu", dot: "🔵", weight: 30 },
   idag: { label: "Idag", dot: "🟠", weight: 15 },
   sen: { label: "Sen", dot: "⚪", weight: 0 },
@@ -94,7 +91,11 @@ export function pickForMinutes(
   metaMap: Record<string, Partial<WorkMeta>>,
   minutes: number,
   energy?: number | null,
-): { picks: { task: Task; meta: WorkMeta }[]; usedMinutes: number; stretch?: { task: Task; meta: WorkMeta } } {
+): {
+  picks: { task: Task; meta: WorkMeta }[];
+  usedMinutes: number;
+  stretch?: { task: Task; meta: WorkMeta };
+} {
   const ranked = rankTasks(tasks, metaMap, { availableMinutes: minutes, energy });
   const picks: { task: Task; meta: WorkMeta }[] = [];
   let used = 0;
@@ -105,15 +106,18 @@ export function pickForMinutes(
     }
     if (minutes - used < 5) break;
   }
-  const stretch = picks.length
-    ? undefined
-    : ranked.find((r) => r.meta.minutes > minutes);
-  return { picks, usedMinutes: used, stretch: stretch ? { task: stretch.task, meta: stretch.meta } : undefined };
+  const stretch = picks.length ? undefined : ranked.find((r) => r.meta.minutes > minutes);
+  return {
+    picks,
+    usedMinutes: used,
+    stretch: stretch ? { task: stretch.task, meta: stretch.meta } : undefined,
+  };
 }
 
 /** Övergångshjälp: vad gör jag med luckan som blev? */
 export function transitionPlan(gapMinutes: number): string[] {
-  if (gapMinutes <= 5) return ["🧠 Andas ut i 2 minuter", "📝 Skriv ner det du inte får glömma i Quickflow"];
+  if (gapMinutes <= 5)
+    return ["🧠 Andas ut i 2 minuter", "📝 Skriv ner det du inte får glömma i Quickflow"];
   if (gapMinutes <= 15)
     return ["📌 Dokumentera det som precis hände", "📧 Svara på ett viktigt mejl", "🧠 5 min paus"];
   return [
@@ -183,7 +187,12 @@ export function todayKey(now = new Date()): string {
 export function planWithinCapacity(
   tasks: Task[],
   metaMap: Record<string, Partial<WorkMeta>>,
-  opts: { capacityMinutes: number; maxFriction: number; suggestedTasks: number; energy?: number | null },
+  opts: {
+    capacityMinutes: number;
+    maxFriction: number;
+    suggestedTasks: number;
+    energy?: number | null;
+  },
 ): {
   plan: { task: Task; meta: WorkMeta }[];
   tooHeavy: { task: Task; meta: WorkMeta }[];

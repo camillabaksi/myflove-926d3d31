@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { ALL_AREAS, AREA_META, areaColor, areaTint, useEnabledAreas, type LifeArea } from "@/lib/life-areas";
+import {
+  ALL_AREAS,
+  AREA_META,
+  areaColor,
+  areaTint,
+  useEnabledAreas,
+  type LifeArea,
+} from "@/lib/life-areas";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
 
@@ -28,8 +35,8 @@ export function AreaOnboarding() {
       <div>
         <h2 className="text-lg font-semibold">Vilka delar av livet vill du ha hjälp med?</h2>
         <p className="text-sm text-muted-foreground mt-1">
-          Du får egna rum för olika delar av livet – men Flow ser fortfarande helheten.
-          Du kan ändra det här när du vill.
+          Du får egna rum för olika delar av livet – men Flow ser fortfarande helheten. Du kan ändra
+          det här när du vill.
         </p>
       </div>
 
@@ -60,13 +67,13 @@ export function AreaOnboarding() {
                     style={{ backgroundColor: areaColor(a) }}
                   />
                   <span aria-hidden="true">{meta.emoji}</span>
-                  <span className="font-medium" style={{ color: areaColor(a) }}>{meta.label}</span>
+                  <span className="font-medium" style={{ color: areaColor(a) }}>
+                    {meta.label}
+                  </span>
                   {isOn && <Check size={14} className="ml-auto" style={{ color: areaColor(a) }} />}
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">{meta.blurb}</p>
-                {meta.core && (
-                  <p className="text-xs text-muted-foreground mt-1">Alltid med</p>
-                )}
+                {meta.core && <p className="text-xs text-muted-foreground mt-1">Alltid med</p>}
               </button>
             </li>
           );

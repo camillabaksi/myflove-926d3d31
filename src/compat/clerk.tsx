@@ -9,7 +9,7 @@ type AuthState = {
   loading: boolean;
 };
 
-let listeners = new Set<() => void>();
+const listeners = new Set<() => void>();
 let state: AuthState = { user: null, session: null, loading: true };
 
 function notify() {
@@ -86,10 +86,10 @@ export function Show({
 }
 
 // Stubs for SignIn/SignUp — actual auth UI lives at src/routes/sign-in.tsx and sign-up.tsx.
-export function SignIn(_props: any) {
+export function SignIn(_props: Record<string, unknown>) {
   return <div className="p-4 text-sm text-muted-foreground">Se /sign-in</div>;
 }
-export function SignUp(_props: any) {
+export function SignUp(_props: Record<string, unknown>) {
   return <div className="p-4 text-sm text-muted-foreground">Se /sign-up</div>;
 }
 

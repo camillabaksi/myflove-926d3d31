@@ -4,7 +4,12 @@ import { MyFloveInsightGather } from "@/components/myflove/motion";
 import { CalendarRange } from "lucide-react";
 import { useTasks } from "@/hooks/use-data";
 import { useQuickflow } from "@/hooks/use-quickflow";
-import { USAGE_META, useFlowUsage, useDailyCheckin, type FlowUsageKind } from "@/hooks/use-daily-flow";
+import {
+  USAGE_META,
+  useFlowUsage,
+  useDailyCheckin,
+  type FlowUsageKind,
+} from "@/hooks/use-daily-flow";
 import { estimateFriction } from "@/lib/daily-flow";
 
 const WEEK = 7 * 86_400_000;

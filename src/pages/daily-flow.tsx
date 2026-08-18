@@ -21,7 +21,9 @@ export default function DailyFlowPage() {
 
         <Tabs defaultValue="both" className="w-full">
           <TabsList className="grid w-full grid-cols-3 h-11 rounded-2xl">
-            <TabsTrigger value="both" className="rounded-xl">Båda</TabsTrigger>
+            <TabsTrigger value="both" className="rounded-xl">
+              Båda
+            </TabsTrigger>
             <TabsTrigger value="rutiner" className="rounded-xl">
               <Repeat size={14} className="mr-1.5" /> Rutiner
             </TabsTrigger>
@@ -32,7 +34,11 @@ export default function DailyFlowPage() {
 
           <TabsContent value="both" className="mt-6 space-y-10">
             <CollapsibleSection
-              title={<span className="flex items-center gap-2"><Repeat size={18} className="text-primary" /> Rutiner</span>}
+              title={
+                <span className="flex items-center gap-2">
+                  <Repeat size={18} className="text-primary" /> Rutiner
+                </span>
+              }
               id="Rutiner"
               headingClassName="text-lg font-semibold"
             >
@@ -40,7 +46,11 @@ export default function DailyFlowPage() {
             </CollapsibleSection>
             <div className="h-px bg-border" />
             <CollapsibleSection
-              title={<span className="flex items-center gap-2"><Pill size={18} className="text-primary" /> Medicin</span>}
+              title={
+                <span className="flex items-center gap-2">
+                  <Pill size={18} className="text-primary" /> Medicin
+                </span>
+              }
               id="Medicin"
               headingClassName="text-lg font-semibold"
             >

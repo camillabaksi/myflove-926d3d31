@@ -39,10 +39,11 @@ export default function WellnessPage() {
         </Button>
         <StopModal open={stopOpen} onOpenChange={setStopOpen} />
 
-
         <Tabs defaultValue="both" className="w-full">
           <TabsList className="grid w-full grid-cols-3 h-11 rounded-2xl">
-            <TabsTrigger value="both" className="rounded-xl">Båda</TabsTrigger>
+            <TabsTrigger value="both" className="rounded-xl">
+              Båda
+            </TabsTrigger>
             <TabsTrigger value="mood" className="rounded-xl">
               <Smile size={14} className="mr-1.5" /> Mående
             </TabsTrigger>
@@ -74,14 +75,15 @@ export default function WellnessPage() {
               headingClassName="text-lg font-semibold"
             >
               <EnergyContent showHeader={false} />
-            <Link href="/energifloede">
-              <MyFloveCard tone="lavender" className="mt-4 cursor-pointer p-4">
-                <div className="font-medium text-ink">🔋 Energiflöde</div>
-                <p className="text-sm text-muted-foreground">
-                  Vad ger och tar energi just nu? Det påverkar hur mycket planen förväntar sig av dig.
-                </p>
-              </MyFloveCard>
-            </Link>
+              <Link href="/energifloede">
+                <MyFloveCard tone="lavender" className="mt-4 cursor-pointer p-4">
+                  <div className="font-medium text-ink">🔋 Energiflöde</div>
+                  <p className="text-sm text-muted-foreground">
+                    Vad ger och tar energi just nu? Det påverkar hur mycket planen förväntar sig av
+                    dig.
+                  </p>
+                </MyFloveCard>
+              </Link>
             </CollapsibleSection>
           </TabsContent>
 
@@ -95,7 +97,8 @@ export default function WellnessPage() {
               <MyFloveCard tone="lavender" className="mt-4 cursor-pointer p-4">
                 <div className="font-medium text-ink">🔋 Energiflöde</div>
                 <p className="text-sm text-muted-foreground">
-                  Vad ger och tar energi just nu? Det påverkar hur mycket planen förväntar sig av dig.
+                  Vad ger och tar energi just nu? Det påverkar hur mycket planen förväntar sig av
+                  dig.
                 </p>
               </MyFloveCard>
             </Link>

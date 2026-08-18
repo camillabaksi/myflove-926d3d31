@@ -55,7 +55,11 @@ export default function Achievements() {
                   achievement.unlocked ? "bg-primary/10" : "bg-secondary"
                 }`}
               >
-                {achievement.unlocked ? achievement.emoji : <Lock size={22} className="text-muted-foreground" />}
+                {achievement.unlocked ? (
+                  achievement.emoji
+                ) : (
+                  <Lock size={22} className="text-muted-foreground" />
+                )}
               </div>
               <div>
                 <p className="font-medium">{achievement.title}</p>

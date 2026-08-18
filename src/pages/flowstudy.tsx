@@ -56,8 +56,17 @@ export default function StudyBuddyPage() {
   const { toast } = useToast();
   const run = useServerFn(generateStudySet);
   const { profile: studyProfile } = useStudyProfile();
-  const { sets, addSet, appendToSet, deleteSet, setExamDate, gradeCard, gradeQuestion, recordAttempt, stats } =
-    useFlowStudy();
+  const {
+    sets,
+    addSet,
+    appendToSet,
+    deleteSet,
+    setExamDate,
+    gradeCard,
+    gradeQuestion,
+    recordAttempt,
+    stats,
+  } = useFlowStudy();
 
   const [title, setTitle] = useState("");
   const [courseId, setCourseId] = useState("");
@@ -81,12 +90,14 @@ export default function StudyBuddyPage() {
   const courseName = (id?: string) => activeCourses.find((c) => c.id === id)?.title;
   const openSet = useMemo(() => sets.find((s) => s.id === openSetId) ?? null, [sets, openSetId]);
 
-
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim()) return;
     if (!text.trim() && !file) {
-      toast({ title: "Lägg till material", description: "Klistra in text eller ladda upp en PDF/bild." });
+      toast({
+        title: "Lägg till material",
+        description: "Klistra in text eller ladda upp en PDF/bild.",
+      });
       return;
     }
     setBusy(true);
@@ -113,7 +124,6 @@ export default function StudyBuddyPage() {
           focus: plan.focus || undefined,
           cardCount: plan.cardCount,
           quizCount: plan.quizCount,
-
         },
       });
 
@@ -158,7 +168,8 @@ export default function StudyBuddyPage() {
           <div>
             <h1 className="text-3xl font-bold leading-tight">StudyBuddy</h1>
             <p className="text-sm text-muted-foreground">
-              Ladda upp materialet – Flow gör flashcards och quiz, och kommer ihåg vad du behöver repetera.
+              Ladda upp materialet – Flow gör flashcards och quiz, och kommer ihåg vad du behöver
+              repetera.
             </p>
           </div>
         </header>
@@ -167,125 +178,135 @@ export default function StudyBuddyPage() {
 
         {(stats.dueCards > 0 || stats.dueQuestions > 0) && (
           <p className="text-sm rounded-2xl border border-primary/20 bg-primary/5 p-3">
-            Att repetera nu: {stats.dueCards} flashcards och {stats.dueQuestions} frågor. Ta det du orkar.
+            Att repetera nu: {stats.dueCards} flashcards och {stats.dueQuestions} frågor. Ta det du
+            orkar.
           </p>
         )}
 
         {/* Nytt material */}
         <div className="bg-card border border-border rounded-2xl p-5">
-        <CollapsibleSection title="Nytt studiematerial" headingClassName="text-lg font-semibold">
-          <form onSubmit={handleGenerate} className="space-y-3">
-            <Input
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="T.ex. Prov – Socialpedagogik"
-              className="h-12 rounded-xl bg-secondary/50 border-transparent"
-            />
-            <div className="flex flex-wrap gap-3">
-              <select
-                value={courseId}
-                onChange={(e) => setCourseId(e.target.value)}
-                aria-label="Välj kurs"
-                className="h-11 rounded-xl border border-border bg-background px-3 text-sm"
-              >
-                <option value="">Ingen kurs</option>
-                {activeCourses.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.title}
-                  </option>
-                ))}
-              </select>
-              <label className="flex items-center gap-2 text-sm text-muted-foreground">
-                <CalendarDays size={16} />
-                <Input
-                  type="date"
-                  value={examDate}
-                  onChange={(e) => setExamDateInput(e.target.value)}
-                  aria-label="Provdatum"
-                  className="h-11 rounded-xl bg-background w-44"
-                />
-              </label>
-              <input
-                ref={fileRef}
-                type="file"
-                hidden
-                accept="application/pdf,image/*,text/plain"
-                onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+          <CollapsibleSection title="Nytt studiematerial" headingClassName="text-lg font-semibold">
+            <form onSubmit={handleGenerate} className="space-y-3">
+              <Input
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="T.ex. Prov – Socialpedagogik"
+                className="h-12 rounded-xl bg-secondary/50 border-transparent"
               />
-              <Button type="button" variant="outline" className="h-11 rounded-xl" onClick={() => fileRef.current?.click()}>
-                <Upload size={16} className="mr-2" /> {file ? file.name.slice(0, 24) : "PDF eller bild"}
-              </Button>
-            </div>
-            <textarea
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              rows={4}
-              placeholder="Klistra in anteckningar, lärarens frågor eller en text."
-              className="w-full rounded-xl border border-border bg-background p-3 text-sm"
-            />
-            <div className="rounded-xl border border-border bg-secondary/30 p-3 space-y-2">
-              <p className="text-xs font-medium">
-                Flow anpassar efter din studieprofil
-              </p>
-              {basePlan.chips.length > 0 ? (
-                <div className="flex flex-wrap gap-1.5">
-                  {basePlan.chips.map((c) => (
-                    <span
-                      key={c}
-                      className="rounded-full bg-background px-2.5 py-1 text-[11px] text-muted-foreground border border-border"
+              <div className="flex flex-wrap gap-3">
+                <select
+                  value={courseId}
+                  onChange={(e) => setCourseId(e.target.value)}
+                  aria-label="Välj kurs"
+                  className="h-11 rounded-xl border border-border bg-background px-3 text-sm"
+                >
+                  <option value="">Ingen kurs</option>
+                  {activeCourses.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.title}
+                    </option>
+                  ))}
+                </select>
+                <label className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <CalendarDays size={16} />
+                  <Input
+                    type="date"
+                    value={examDate}
+                    onChange={(e) => setExamDateInput(e.target.value)}
+                    aria-label="Provdatum"
+                    className="h-11 rounded-xl bg-background w-44"
+                  />
+                </label>
+                <input
+                  ref={fileRef}
+                  type="file"
+                  hidden
+                  accept="application/pdf,image/*,text/plain"
+                  onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="h-11 rounded-xl"
+                  onClick={() => fileRef.current?.click()}
+                >
+                  <Upload size={16} className="mr-2" />{" "}
+                  {file ? file.name.slice(0, 24) : "PDF eller bild"}
+                </Button>
+              </div>
+              <textarea
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                rows={4}
+                placeholder="Klistra in anteckningar, lärarens frågor eller en text."
+                className="w-full rounded-xl border border-border bg-background p-3 text-sm"
+              />
+              <div className="rounded-xl border border-border bg-secondary/30 p-3 space-y-2">
+                <p className="text-xs font-medium">Flow anpassar efter din studieprofil</p>
+                {basePlan.chips.length > 0 ? (
+                  <div className="flex flex-wrap gap-1.5">
+                    {basePlan.chips.map((c) => (
+                      <span
+                        key={c}
+                        className="rounded-full bg-background px-2.5 py-1 text-[11px] text-muted-foreground border border-border"
+                      >
+                        {c}
+                      </span>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-xs text-muted-foreground">
+                    Fyll i din studieprofil ovan så anpassas kort och frågor efter dina stödbehov.
+                  </p>
+                )}
+                <div className="flex flex-wrap gap-1.5 pt-1">
+                  {(Object.keys(EMPHASIS_META) as StudyEmphasis[]).map((key) => (
+                    <button
+                      key={key}
+                      type="button"
+                      onClick={() => setEmphasis(key)}
+                      className={`rounded-full px-3 py-1 text-[11px] border transition ${
+                        plan.emphasis === key
+                          ? "bg-primary text-primary-foreground border-primary"
+                          : "bg-background border-border text-muted-foreground"
+                      }`}
                     >
-                      {c}
-                    </span>
+                      {EMPHASIS_META[key]}
+                    </button>
                   ))}
                 </div>
-              ) : (
-                <p className="text-xs text-muted-foreground">
-                  Fyll i din studieprofil ovan så anpassas kort och frågor efter dina stödbehov.
+                <p className="text-[11px] text-muted-foreground">
+                  Blir ungefär {plan.cardCount} flashcards och {plan.quizCount} quizfrågor. Du kan
+                  alltid ändra.
                 </p>
-              )}
-              <div className="flex flex-wrap gap-1.5 pt-1">
-                {(Object.keys(EMPHASIS_META) as StudyEmphasis[]).map((key) => (
-                  <button
-                    key={key}
-                    type="button"
-                    onClick={() => setEmphasis(key)}
-                    className={`rounded-full px-3 py-1 text-[11px] border transition ${
-                      plan.emphasis === key
-                        ? "bg-primary text-primary-foreground border-primary"
-                        : "bg-background border-border text-muted-foreground"
-                    }`}
-                  >
-                    {EMPHASIS_META[key]}
-                  </button>
-                ))}
               </div>
-              <p className="text-[11px] text-muted-foreground">
-                Blir ungefär {plan.cardCount} flashcards och {plan.quizCount} quizfrågor. Du kan alltid ändra.
-              </p>
-            </div>
-            {busy && (
-
-              <MyFloveThinking
-                steps={["📄", "🧠", "🃏", "✨"]}
-                label="Jag läser materialet och gör kort av det…"
-              />
-            )}
-            <Button type="submit" disabled={busy || !title.trim()} className="h-11 rounded-xl px-5">
-              {busy ? (
-                <>
-                  <Loader2 size={16} className="mr-2 animate-spin" /> Flow läser materialet…
-                </>
-              ) : (
-                <>
-                  <Sparkles size={16} className="mr-2" /> Skapa flashcards och quiz
-                </>
+              {busy && (
+                <MyFloveThinking
+                  steps={["📄", "🧠", "🃏", "✨"]}
+                  label="Jag läser materialet och gör kort av det…"
+                />
               )}
-            </Button>
-            <p className="text-xs text-muted-foreground">
-              Lägger du in ett provdatum får du en lugn pluggplan: flashcards först, quiz sen, repetition sist.
-            </p>
-          </form>
-        </CollapsibleSection>
+              <Button
+                type="submit"
+                disabled={busy || !title.trim()}
+                className="h-11 rounded-xl px-5"
+              >
+                {busy ? (
+                  <>
+                    <Loader2 size={16} className="mr-2 animate-spin" /> Flow läser materialet…
+                  </>
+                ) : (
+                  <>
+                    <Sparkles size={16} className="mr-2" /> Skapa flashcards och quiz
+                  </>
+                )}
+              </Button>
+              <p className="text-xs text-muted-foreground">
+                Lägger du in ett provdatum får du en lugn pluggplan: flashcards först, quiz sen,
+                repetition sist.
+              </p>
+            </form>
+          </CollapsibleSection>
         </div>
 
         {/* Studiematerial */}
@@ -303,7 +324,10 @@ export default function StudyBuddyPage() {
             const last = set.attempts[0];
             const isOpen = openSetId === set.id;
             return (
-              <article key={set.id} className="bg-card border border-border rounded-2xl p-5 space-y-3">
+              <article
+                key={set.id}
+                className="bg-card border border-border rounded-2xl p-5 space-y-3"
+              >
                 <div className="flex items-start gap-3">
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-wrap items-center gap-2 mb-1">
@@ -322,7 +346,9 @@ export default function StudyBuddyPage() {
                       </span>
                     </div>
                     <p className="text-base leading-snug font-medium">{set.title}</p>
-                    {set.summary && <p className="text-sm text-muted-foreground mt-1">{set.summary}</p>}
+                    {set.summary && (
+                      <p className="text-sm text-muted-foreground mt-1">{set.summary}</p>
+                    )}
                   </div>
                   <button
                     onClick={() => deleteSet(set.id)}
@@ -334,7 +360,9 @@ export default function StudyBuddyPage() {
                 </div>
 
                 {phase && (
-                  <p className="text-sm rounded-xl bg-secondary/40 border border-border p-3">{phase.advice}</p>
+                  <p className="text-sm rounded-xl bg-secondary/40 border border-border p-3">
+                    {phase.advice}
+                  </p>
                 )}
 
                 {!set.examDate && (
@@ -461,7 +489,10 @@ function AddMaterialForm({
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!text.trim() && !file) {
-      toast({ title: "Lägg till material", description: "Klistra in text eller välj en PDF/bild." });
+      toast({
+        title: "Lägg till material",
+        description: "Klistra in text eller välj en PDF/bild.",
+      });
       return;
     }
     setBusy(true);
@@ -492,7 +523,10 @@ function AddMaterialForm({
   };
 
   return (
-    <form onSubmit={submit} className="rounded-xl border border-border bg-secondary/30 p-3 space-y-3">
+    <form
+      onSubmit={submit}
+      className="rounded-xl border border-border bg-secondary/30 p-3 space-y-3"
+    >
       <p className="text-xs text-muted-foreground">
         Fyll på med mer material – de nya korten och frågorna läggs till i samma set.
       </p>
@@ -511,7 +545,13 @@ function AddMaterialForm({
           accept="application/pdf,image/*,text/plain"
           onChange={(e) => setFile(e.target.files?.[0] ?? null)}
         />
-        <Button type="button" size="sm" variant="outline" className="rounded-xl" onClick={() => inputRef.current?.click()}>
+        <Button
+          type="button"
+          size="sm"
+          variant="outline"
+          className="rounded-xl"
+          onClick={() => inputRef.current?.click()}
+        >
           <Upload size={14} className="mr-2" /> {file ? file.name.slice(0, 24) : "PDF eller bild"}
         </Button>
         <Button type="submit" size="sm" className="rounded-xl" disabled={busy}>
@@ -532,7 +572,6 @@ function AddMaterialForm({
     </form>
   );
 }
-
 
 function FlashcardRunner({
   set,
@@ -583,7 +622,14 @@ function FlashcardRunner({
           <Button size="sm" variant="outline" className="rounded-xl" onClick={() => grade(false)}>
             Behöver repetera
           </Button>
-          <Button size="sm" className="rounded-xl" onClick={(e) => { celebrateFromEvent(e); grade(true); }}>
+          <Button
+            size="sm"
+            className="rounded-xl"
+            onClick={(e) => {
+              celebrateFromEvent(e);
+              grade(true);
+            }}
+          >
             Jag kunde den
           </Button>
         </div>
@@ -600,7 +646,12 @@ function QuizRunner({
 }: {
   set: StudySetRecord;
   onGrade: (questionId: string, wasCorrect: boolean) => void;
-  onFinish: (attempt: { at: number; total: number; correct: number; wrongTopics: string[] }) => void;
+  onFinish: (attempt: {
+    at: number;
+    total: number;
+    correct: number;
+    wrongTopics: string[];
+  }) => void;
   onClose: () => void;
 }) {
   const [queue] = useState(() => adaptiveOrder(set.quiz).slice(0, 10));
@@ -638,7 +689,8 @@ function QuizRunner({
     const ok = i === q.correctIndex;
     onGrade(q.id, ok);
     if (ok) setCorrectCount((c) => c + 1);
-    else if (q.topic && !wrongTopics.includes(q.topic)) setWrongTopics((t) => [...t, q.topic as string]);
+    else if (q.topic && !wrongTopics.includes(q.topic))
+      setWrongTopics((t) => [...t, q.topic as string]);
   };
 
   const next = () => {

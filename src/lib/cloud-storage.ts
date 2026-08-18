@@ -123,11 +123,15 @@ export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, key]);
 
-  const setAndStamp = useCallback((v: T | ((prev: T) => T)) => {
-    setLocalUpdatedAt(Date.now());
-    setValue(v);
+  const setAndStamp = useCallback(
+    (v: T | ((prev: T) => T)) => {
+      setLocalUpdatedAt(Date.now());
+      setValue(v);
+    },
+    // setLocalUpdatedAt är en lokal setter och behöver inte stå med här.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setValue]);
+    [setValue],
+  );
 
   return [value, setAndStamp] as const;
 }

@@ -1,8 +1,7 @@
-import { useLocalStorage } from '../lib/storage';
-import { useCloudSyncedStorage } from '../lib/cloud-storage';
-import { trackEvent } from '../lib/analytics';
-import type { LifeArea } from '../lib/life-areas';
-
+import { useLocalStorage } from "../lib/storage";
+import { useCloudSyncedStorage } from "../lib/cloud-storage";
+import { trackEvent } from "../lib/analytics";
+import type { LifeArea } from "../lib/life-areas";
 
 export interface Focus {
   text: string;
@@ -29,7 +28,6 @@ export interface TaskAttachment {
   size?: number;
   uploadedAt: number;
 }
-
 
 export interface Task {
   id: string;
@@ -59,9 +57,6 @@ export interface Task {
   syncKey?: string;
 }
 
-
-
-
 export interface ShoppingItem {
   id: string;
   title: string;
@@ -80,10 +75,13 @@ export interface MoodEntry {
 const generateId = () => Math.random().toString(36).substr(2, 9);
 
 export function useFocus() {
-  const [focus, setFocus] = useLocalStorage<Focus | null>('myflow-focus', null);
-  const [completedCount, setCompletedCount] = useLocalStorage<number>('myflow-focus-completed-count', 0);
+  const [focus, setFocus] = useLocalStorage<Focus | null>("myflow-focus", null);
+  const [completedCount, setCompletedCount] = useLocalStorage<number>(
+    "myflow-focus-completed-count",
+    0,
+  );
 
-  const getTodayDateString = () => new Date().toISOString().split('T')[0];
+  const getTodayDateString = () => new Date().toISOString().split("T")[0];
 
   const currentFocus = focus?.date === getTodayDateString() ? focus : null;
 
@@ -103,9 +101,9 @@ export function useFocus() {
 }
 
 export function useTasks() {
-  const [tasks, setTasks] = useCloudSyncedStorage<Task[]>('myflow-tasks', []);
+  const [tasks, setTasks] = useCloudSyncedStorage<Task[]>("myflow-tasks", []);
 
-  const getTodayDateString = () => new Date().toISOString().split('T')[0] as string;
+  const getTodayDateString = () => new Date().toISOString().split("T")[0] as string;
 
   const addTask = (
     title: string,
@@ -122,7 +120,7 @@ export function useTasks() {
       steps?: string[];
       deadlineLeadDays?: number[];
       deadlineReminderTime?: string;
-    }
+    },
   ) => {
     // Blueprint: uppgifter ska alltid landa i kalendern så inget "försvinner".
     // Om inget datum anges kopplas uppgiften till idag.
@@ -152,136 +150,183 @@ export function useTasks() {
 
   /** Fri anteckning på en uppgift – tom text tar bort anteckningen. */
   const setTaskNote = (id: string, note: string) => {
-    setTasks((prev) => prev.map(t => (t.id === id ? { ...t, note: note.trim() || undefined } : t)));
+    setTasks((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, note: note.trim() || undefined } : t)),
+    );
   };
 
   /** Generell redigering: ändra titel, datum, tider, påminnelse, område m.m. i efterhand. */
   const updateTask = (
     id: string,
-    patch: Partial<Pick<Task,
-      'title' | 'dueDate' | 'time' | 'endTime' | 'reminderMinutesBefore' | 'note' | 'area' | 'kind' | 'waitingOn'
-    >>,
+    patch: Partial<
+      Pick<
+        Task,
+        | "title"
+        | "dueDate"
+        | "time"
+        | "endTime"
+        | "reminderMinutesBefore"
+        | "note"
+        | "area"
+        | "kind"
+        | "waitingOn"
+      >
+    >,
   ) => {
-    setTasks((prev) => prev.map(t => {
-      if (t.id !== id) return t;
-      const next: Task = { ...t, ...patch };
-      if (patch.title !== undefined) next.title = patch.title.trim() || t.title;
-      if (patch.note !== undefined) next.note = patch.note.trim() || undefined;
-      if (patch.time !== undefined && !patch.time) {
-        next.time = undefined;
-        next.endTime = undefined;
-        next.reminderMinutesBefore = undefined;
-      }
-      return next;
-    }));
+    setTasks((prev) =>
+      prev.map((t) => {
+        if (t.id !== id) return t;
+        const next: Task = { ...t, ...patch };
+        if (patch.title !== undefined) next.title = patch.title.trim() || t.title;
+        if (patch.note !== undefined) next.note = patch.note.trim() || undefined;
+        if (patch.time !== undefined && !patch.time) {
+          next.time = undefined;
+          next.endTime = undefined;
+          next.reminderMinutesBefore = undefined;
+        }
+        return next;
+      }),
+    );
   };
 
-
-
   const setTaskDueDate = (id: string, dueDate: string) => {
-    setTasks((prev) => prev.map(t => (t.id === id ? { ...t, dueDate } : t)));
+    setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, dueDate } : t)));
   };
 
   const setTaskArea = (id: string, area: LifeArea) => {
-    setTasks((prev) => prev.map(t => (t.id === id ? { ...t, area } : t)));
+    setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, area } : t)));
   };
 
   const setTaskTime = (id: string, time: string | undefined, reminderMinutesBefore?: number) => {
-
-    setTasks((prev) => prev.map(t => (t.id === id
-      ? { ...t, time, reminderMinutesBefore: time ? reminderMinutesBefore : undefined }
-      : t)));
+    setTasks((prev) =>
+      prev.map((t) =>
+        t.id === id
+          ? { ...t, time, reminderMinutesBefore: time ? reminderMinutesBefore : undefined }
+          : t,
+      ),
+    );
   };
 
   const toggleTask = (id: string) => {
-    const task = tasks.find(t => t.id === id);
-    setTasks((prev) => prev.map(t => {
-      if (t.id !== id) return t;
-      const nowCompleted = !t.completed;
-      return {
-        ...t,
-        completed: nowCompleted,
-        completedAt: nowCompleted ? Date.now() : undefined,
-        status: nowCompleted ? "klart" : "pagar",
-      };
-    }));
-    if (task && !task.completed) trackEvent('tasks', 'task_completed');
+    const task = tasks.find((t) => t.id === id);
+    setTasks((prev) =>
+      prev.map((t) => {
+        if (t.id !== id) return t;
+        const nowCompleted = !t.completed;
+        return {
+          ...t,
+          completed: nowCompleted,
+          completedAt: nowCompleted ? Date.now() : undefined,
+          status: nowCompleted ? "klart" : "pagar",
+        };
+      }),
+    );
+    if (task && !task.completed) trackEvent("tasks", "task_completed");
   };
 
   const setTaskStatus = (id: string, status: TaskStatus, waitingOn?: string) => {
-    setTasks((prev) => prev.map(t => {
-      if (t.id !== id) return t;
-      return {
-        ...t,
-        status,
-        completed: status === "klart",
-        waitingOn: status === "vantar" ? (waitingOn ?? t.waitingOn ?? "") : undefined,
-      };
-    }));
+    setTasks((prev) =>
+      prev.map((t) => {
+        if (t.id !== id) return t;
+        return {
+          ...t,
+          status,
+          completed: status === "klart",
+          waitingOn: status === "vantar" ? (waitingOn ?? t.waitingOn ?? "") : undefined,
+        };
+      }),
+    );
   };
 
   const setTaskKind = (id: string, kind: TaskKind) => {
-    setTasks((prev) => prev.map(t => (t.id === id ? { ...t, kind } : t)));
+    setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, kind } : t)));
   };
 
   const addTaskStep = (id: string, title: string) => {
-    setTasks((prev) => prev.map(t => t.id === id
-      ? { ...t, steps: [...(t.steps ?? []), { id: generateId(), title, done: false }] }
-      : t));
+    setTasks((prev) =>
+      prev.map((t) =>
+        t.id === id
+          ? { ...t, steps: [...(t.steps ?? []), { id: generateId(), title, done: false }] }
+          : t,
+      ),
+    );
   };
 
   /** Lägger till flera delsteg på en gång (t.ex. Flows uppdelning av en inlämning). */
   const addTaskSteps = (id: string, steps: { title: string; when?: string }[]) => {
-    setTasks((prev) => prev.map(t => t.id === id
-      ? {
-          ...t,
-          steps: [
-            ...(t.steps ?? []),
-            ...steps.map((s) => ({ id: generateId(), title: s.title, done: false, when: s.when })),
-          ],
-        }
-      : t));
+    setTasks((prev) =>
+      prev.map((t) =>
+        t.id === id
+          ? {
+              ...t,
+              steps: [
+                ...(t.steps ?? []),
+                ...steps.map((s) => ({
+                  id: generateId(),
+                  title: s.title,
+                  done: false,
+                  when: s.when,
+                })),
+              ],
+            }
+          : t,
+      ),
+    );
   };
 
   /** Smarta deadline-påminnelser: X dagar innan förfallodatum. */
-  const setTaskDeadlineReminders = (
-    id: string,
-    leadDays: number[],
-    time?: string,
-  ) => {
+  const setTaskDeadlineReminders = (id: string, leadDays: number[], time?: string) => {
     const clean = Array.from(new Set(leadDays.filter((d) => d >= 0))).sort((a, b) => b - a);
-    setTasks((prev) => prev.map(t => (t.id === id
-      ? { ...t, deadlineLeadDays: clean, deadlineReminderTime: time ?? t.deadlineReminderTime }
-      : t)));
+    setTasks((prev) =>
+      prev.map((t) =>
+        t.id === id
+          ? { ...t, deadlineLeadDays: clean, deadlineReminderTime: time ?? t.deadlineReminderTime }
+          : t,
+      ),
+    );
   };
 
   const setTaskCourse = (id: string, courseId: string | undefined) => {
-    setTasks((prev) => prev.map(t => (t.id === id ? { ...t, courseId } : t)));
+    setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, courseId } : t)));
   };
 
   const addTaskAttachment = (id: string, attachment: TaskAttachment) => {
-    setTasks((prev) => prev.map(t => t.id === id
-      ? { ...t, attachments: [...(t.attachments ?? []), attachment] }
-      : t));
+    setTasks((prev) =>
+      prev.map((t) =>
+        t.id === id ? { ...t, attachments: [...(t.attachments ?? []), attachment] } : t,
+      ),
+    );
   };
 
   const removeTaskAttachment = (id: string, path: string) => {
-    setTasks((prev) => prev.map(t => t.id === id
-      ? { ...t, attachments: (t.attachments ?? []).filter(a => a.path !== path) }
-      : t));
+    setTasks((prev) =>
+      prev.map((t) =>
+        t.id === id
+          ? { ...t, attachments: (t.attachments ?? []).filter((a) => a.path !== path) }
+          : t,
+      ),
+    );
   };
 
-
   const toggleTaskStep = (taskId: string, stepId: string) => {
-    setTasks((prev) => prev.map(t => t.id === taskId
-      ? { ...t, steps: (t.steps ?? []).map(s => s.id === stepId ? { ...s, done: !s.done } : s) }
-      : t));
+    setTasks((prev) =>
+      prev.map((t) =>
+        t.id === taskId
+          ? {
+              ...t,
+              steps: (t.steps ?? []).map((s) => (s.id === stepId ? { ...s, done: !s.done } : s)),
+            }
+          : t,
+      ),
+    );
   };
 
   const deleteTaskStep = (taskId: string, stepId: string) => {
-    setTasks((prev) => prev.map(t => t.id === taskId
-      ? { ...t, steps: (t.steps ?? []).filter(s => s.id !== stepId) }
-      : t));
+    setTasks((prev) =>
+      prev.map((t) =>
+        t.id === taskId ? { ...t, steps: (t.steps ?? []).filter((s) => s.id !== stepId) } : t,
+      ),
+    );
   };
 
   /**
@@ -343,31 +388,31 @@ export function useTasks() {
   };
 
   const deleteTask = (id: string) => {
-    setTasks((prev) => prev.filter(t => t.id !== id));
+    setTasks((prev) => prev.filter((t) => t.id !== id));
   };
 
   const snoozeTask = (id: string, days: number) => {
     const until = new Date();
     until.setDate(until.getDate() + days);
-    const untilStr = until.toISOString().split('T')[0] as string;
-    setTasks((prev) => prev.map(t => t.id === id ? { ...t, snoozedUntil: untilStr } : t));
+    const untilStr = until.toISOString().split("T")[0] as string;
+    setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, snoozedUntil: untilStr } : t)));
   };
 
   const unsnoozeTask = (id: string) => {
-    setTasks((prev) => prev.map(t => t.id === id ? { ...t, snoozedUntil: undefined } : t));
+    setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, snoozedUntil: undefined } : t)));
   };
 
   const isSnoozed = (t: Task) => !!t.snoozedUntil && t.snoozedUntil > getTodayDateString();
 
   const activeTasks = tasks
-    .filter(t => !t.completed && !isSnoozed(t))
+    .filter((t) => !t.completed && !isSnoozed(t))
     .sort((a, b) => b.createdAt - a.createdAt);
   const completedTasks = tasks
-    .filter(t => t.completed)
+    .filter((t) => t.completed)
     .sort((a, b) => (b.completedAt ?? b.createdAt) - (a.completedAt ?? a.createdAt));
   const snoozedTasks = tasks
-    .filter(t => !t.completed && isSnoozed(t))
-    .sort((a, b) => (a.snoozedUntil ?? '').localeCompare(b.snoozedUntil ?? ''));
+    .filter((t) => !t.completed && isSnoozed(t))
+    .sort((a, b) => (a.snoozedUntil ?? "").localeCompare(b.snoozedUntil ?? ""));
 
   return {
     tasks,
@@ -387,8 +432,6 @@ export function useTasks() {
     setTaskNote,
     updateTask,
 
-
-
     addTaskStep,
     addTaskSteps,
     setTaskCourse,
@@ -398,29 +441,31 @@ export function useTasks() {
     toggleTaskStep,
     deleteTaskStep,
     syncGeneratedTasks,
-
   };
 }
 
 export function useShoppingList() {
-  const [items, setItems] = useLocalStorage<ShoppingItem[]>('myflow-shopping', []);
+  const [items, setItems] = useLocalStorage<ShoppingItem[]>("myflow-shopping", []);
 
   const addItem = (title: string) => {
-    setItems((prev) => [{ id: generateId(), title, completed: false, createdAt: Date.now() }, ...prev]);
+    setItems((prev) => [
+      { id: generateId(), title, completed: false, createdAt: Date.now() },
+      ...prev,
+    ]);
   };
 
   const toggleItem = (id: string) => {
-    const item = items.find(t => t.id === id);
-    setItems(items.map(t => t.id === id ? { ...t, completed: !t.completed } : t));
-    if (item && !item.completed) trackEvent('shopping', 'item_bought');
+    const item = items.find((t) => t.id === id);
+    setItems(items.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t)));
+    if (item && !item.completed) trackEvent("shopping", "item_bought");
   };
 
   const deleteItem = (id: string) => {
-    setItems(items.filter(t => t.id !== id));
+    setItems(items.filter((t) => t.id !== id));
   };
 
-  const activeItems = items.filter(t => !t.completed).sort((a, b) => b.createdAt - a.createdAt);
-  const completedItems = items.filter(t => t.completed).sort((a, b) => b.createdAt - a.createdAt);
+  const activeItems = items.filter((t) => !t.completed).sort((a, b) => b.createdAt - a.createdAt);
+  const completedItems = items.filter((t) => t.completed).sort((a, b) => b.createdAt - a.createdAt);
 
   return { items, activeItems, completedItems, addItem, toggleItem, deleteItem };
 }
@@ -429,16 +474,16 @@ export function useShoppingList() {
 // list (see use-shared-shopping-list.ts) so proximity alerts and the dashboard
 // shortcut always have a source of truth even for users without a family.
 export function useActiveShoppingItemCount(): number {
-  const [items] = useLocalStorage<ShoppingItem[]>('myflow-shopping', []);
-  return items.filter(t => !t.completed).length;
+  const [items] = useLocalStorage<ShoppingItem[]>("myflow-shopping", []);
+  return items.filter((t) => !t.completed).length;
 }
 
 export function useMoods() {
-  const [moods, setMoods] = useLocalStorage<MoodEntry[]>('myflow-moods', []);
+  const [moods, setMoods] = useLocalStorage<MoodEntry[]>("myflow-moods", []);
 
   const addMood = (score: number, note: string) => {
     setMoods([{ id: generateId(), score, note, date: Date.now() }, ...moods]);
-    trackEvent('mood', 'mood_logged');
+    trackEvent("mood", "mood_logged");
   };
 
   return { moods, addMood };
@@ -446,7 +491,7 @@ export function useMoods() {
 
 export interface Transaction {
   id: string;
-  type: 'income' | 'expense';
+  type: "income" | "expense";
   amount: number;
   category: string;
   note?: string;
@@ -454,25 +499,28 @@ export interface Transaction {
 }
 
 export function useFinances() {
-  const [transactions, setTransactions] = useLocalStorage<Transaction[]>('myflow-finances', []);
+  const [transactions, setTransactions] = useLocalStorage<Transaction[]>("myflow-finances", []);
 
-  const addTransaction = (transaction: Omit<Transaction, 'id' | 'date'> & { date?: number }) => {
-    setTransactions([{ 
-      id: generateId(), 
-      date: transaction.date || Date.now(),
-      ...transaction 
-    }, ...transactions]);
-    trackEvent('finances', 'transaction_added');
+  const addTransaction = (transaction: Omit<Transaction, "id" | "date"> & { date?: number }) => {
+    setTransactions([
+      {
+        id: generateId(),
+        date: transaction.date || Date.now(),
+        ...transaction,
+      },
+      ...transactions,
+    ]);
+    trackEvent("finances", "transaction_added");
   };
 
   const deleteTransaction = (id: string) => {
-    setTransactions(transactions.filter(t => t.id !== id));
+    setTransactions(transactions.filter((t) => t.id !== id));
   };
 
   return { transactions, addTransaction, deleteTransaction };
 }
 
-export type BudgetPeriod = 'day' | 'week' | 'month';
+export type BudgetPeriod = "day" | "week" | "month";
 
 export interface BudgetSettings {
   /** Totalbudget per period, kr */
@@ -484,7 +532,7 @@ export interface BudgetSettings {
 const EMPTY_BUDGET: BudgetSettings = { total: {}, categories: {} };
 
 export function useBudget() {
-  const [budget, setBudget] = useCloudSyncedStorage<BudgetSettings>('myflove-budget', EMPTY_BUDGET);
+  const [budget, setBudget] = useCloudSyncedStorage<BudgetSettings>("myflove-budget", EMPTY_BUDGET);
 
   const safe: BudgetSettings = {
     total: budget?.total ?? {},
@@ -496,7 +544,7 @@ export function useBudget() {
     if (amount === null || !Number.isFinite(amount) || amount <= 0) delete next.total[period];
     else next.total[period] = amount;
     setBudget(next);
-    trackEvent('finances', 'budget_set');
+    trackEvent("finances", "budget_set");
   };
 
   const setCategory = (category: string, period: BudgetPeriod, amount: number | null) => {
@@ -505,15 +553,13 @@ export function useBudget() {
     else cats[category]![period] = amount;
     if (Object.keys(cats[category] ?? {}).length === 0) delete cats[category];
     setBudget({ ...safe, categories: cats });
-    trackEvent('finances', 'budget_set');
+    trackEvent("finances", "budget_set");
   };
 
   return { budget: safe, setTotal, setCategory };
 }
 
-
-
-export type RepeatMode = 'none' | 'daily' | 'weekdays' | 'weekly';
+export type RepeatMode = "none" | "daily" | "weekdays" | "weekly";
 
 export interface Reminder {
   id: string;
@@ -530,38 +576,41 @@ export interface Reminder {
 }
 
 export function useReminders() {
-  const [reminders, setReminders] = useCloudSyncedStorage<Reminder[]>('myflow-reminders', []);
+  const [reminders, setReminders] = useCloudSyncedStorage<Reminder[]>("myflow-reminders", []);
 
   const addReminder = (
     title: string,
     date: string,
     time?: string,
-    repeat: RepeatMode = 'none',
+    repeat: RepeatMode = "none",
     endTime?: string,
     remindMinutesBefore?: number,
     note?: string,
   ) => {
-    setReminders([{
-      id: generateId(),
-      title,
-      date,
-      time,
-      endTime,
-      completed: false,
-      createdAt: Date.now(),
-      repeat,
-      remindMinutesBefore,
-      note: note?.trim() || undefined,
-    }, ...reminders]);
-    trackEvent('calendar', 'reminder_added');
+    setReminders([
+      {
+        id: generateId(),
+        title,
+        date,
+        time,
+        endTime,
+        completed: false,
+        createdAt: Date.now(),
+        repeat,
+        remindMinutesBefore,
+        note: note?.trim() || undefined,
+      },
+      ...reminders,
+    ]);
+    trackEvent("calendar", "reminder_added");
   };
 
   const toggleReminder = (id: string) => {
-    setReminders(reminders.map(r => r.id === id ? { ...r, completed: !r.completed } : r));
+    setReminders(reminders.map((r) => (r.id === id ? { ...r, completed: !r.completed } : r)));
   };
 
   const deleteReminder = (id: string) => {
-    setReminders(reminders.filter(r => r.id !== id));
+    setReminders(reminders.filter((r) => r.id !== id));
   };
 
   const updateReminder = (
@@ -574,43 +623,53 @@ export function useReminders() {
       repeat?: RepeatMode;
       remindMinutesBefore?: number | undefined;
       note?: string | undefined;
-    }
+    },
   ) => {
-    setReminders(reminders.map(r => {
-      if (r.id !== id) return r;
-      const next: Reminder = { ...r, ...patch };
-      if (patch.note !== undefined) next.note = patch.note.trim() || undefined;
-      if (patch.time !== undefined && !patch.time) {
-        next.time = undefined;
-        next.endTime = undefined;
-        next.remindMinutesBefore = undefined;
-      }
-      return next;
-    }));
+    setReminders(
+      reminders.map((r) => {
+        if (r.id !== id) return r;
+        const next: Reminder = { ...r, ...patch };
+        if (patch.note !== undefined) next.note = patch.note.trim() || undefined;
+        if (patch.time !== undefined && !patch.time) {
+          next.time = undefined;
+          next.endTime = undefined;
+          next.remindMinutesBefore = undefined;
+        }
+        return next;
+      }),
+    );
   };
 
-
-
   const cancelReminder = (id: string) => {
-    setReminders(reminders.map(r => r.id === id ? { ...r, canceled: true } : r));
+    setReminders(reminders.map((r) => (r.id === id ? { ...r, canceled: true } : r)));
   };
 
   const restoreReminder = (id: string) => {
-    setReminders(reminders.map(r => r.id === id ? { ...r, canceled: false } : r));
+    setReminders(reminders.map((r) => (r.id === id ? { ...r, canceled: false } : r)));
   };
 
-  const activeReminders = reminders.filter(r => !r.completed && !r.canceled).sort((a, b) => {
-    // Sort by date then time
-    const dateCompare = a.date.localeCompare(b.date);
-    if (dateCompare !== 0) return dateCompare;
-    if (a.time && b.time) return a.time.localeCompare(b.time);
-    if (a.time) return -1;
-    if (b.time) return 1;
-    return 0;
-  });
+  const activeReminders = reminders
+    .filter((r) => !r.completed && !r.canceled)
+    .sort((a, b) => {
+      // Sort by date then time
+      const dateCompare = a.date.localeCompare(b.date);
+      if (dateCompare !== 0) return dateCompare;
+      if (a.time && b.time) return a.time.localeCompare(b.time);
+      if (a.time) return -1;
+      if (b.time) return 1;
+      return 0;
+    });
 
-  return { reminders, activeReminders, addReminder, toggleReminder, deleteReminder, updateReminder, cancelReminder, restoreReminder };
-
+  return {
+    reminders,
+    activeReminders,
+    addReminder,
+    toggleReminder,
+    deleteReminder,
+    updateReminder,
+    cancelReminder,
+    restoreReminder,
+  };
 }
 
 export interface Medication {
@@ -628,10 +687,10 @@ export interface MedicationLogEntry {
 }
 
 export function useMedications() {
-  const [medications, setMedications] = useLocalStorage<Medication[]>('myflow-medications', []);
-  const [log, setLog] = useLocalStorage<MedicationLogEntry[]>('myflow-medication-log', []);
+  const [medications, setMedications] = useLocalStorage<Medication[]>("myflow-medications", []);
+  const [log, setLog] = useLocalStorage<MedicationLogEntry[]>("myflow-medication-log", []);
 
-  const getTodayDateString = () => new Date().toISOString().split('T')[0] as string;
+  const getTodayDateString = () => new Date().toISOString().split("T")[0] as string;
 
   const addMedication = (name: string, times: string[], dosage?: string) => {
     setMedications([
@@ -641,20 +700,20 @@ export function useMedications() {
   };
 
   const deleteMedication = (id: string) => {
-    setMedications(medications.filter(m => m.id !== id));
-    setLog(log.filter(l => l.medId !== id));
+    setMedications(medications.filter((m) => m.id !== id));
+    setLog(log.filter((l) => l.medId !== id));
   };
 
   const isTaken = (medId: string, time: string, date: string = getTodayDateString()) =>
-    log.some(l => l.medId === medId && l.time === time && l.date === date);
+    log.some((l) => l.medId === medId && l.time === time && l.date === date);
 
   const toggleTaken = (medId: string, time: string) => {
     const date = getTodayDateString();
     if (isTaken(medId, time, date)) {
-      setLog(log.filter(l => !(l.medId === medId && l.time === time && l.date === date)));
+      setLog(log.filter((l) => !(l.medId === medId && l.time === time && l.date === date)));
     } else {
       setLog([...log, { medId, time, date }]);
-      trackEvent('medicin', 'dose_taken');
+      trackEvent("medicin", "dose_taken");
     }
   };
 
@@ -668,15 +727,15 @@ export interface DumpIdea {
 }
 
 export function useDumpIdeas() {
-  const [ideas, setIdeas] = useLocalStorage<DumpIdea[]>('myflow-dump-ideas', []);
+  const [ideas, setIdeas] = useLocalStorage<DumpIdea[]>("myflow-dump-ideas", []);
 
   const addIdea = (text: string) => {
     setIdeas([{ id: generateId(), text, createdAt: Date.now() }, ...ideas]);
-    trackEvent('dump', 'idea_saved');
+    trackEvent("dump", "idea_saved");
   };
 
   const deleteIdea = (id: string) => {
-    setIdeas(ideas.filter(i => i.id !== id));
+    setIdeas(ideas.filter((i) => i.id !== id));
   };
 
   return { ideas, addIdea, deleteIdea };
@@ -702,30 +761,39 @@ export const STORE_RADIUS_OPTIONS: { meters: number; label: string; hint: string
 ];
 
 export function useSavedStores() {
-  const [savedStores, setSavedStores] = useLocalStorage<SavedStore[]>('myflow-saved-stores', []);
+  const [savedStores, setSavedStores] = useLocalStorage<SavedStore[]>("myflow-saved-stores", []);
 
   const addSavedStore = (name: string, lat: number, lon: number) => {
     setSavedStores((prev) => [
-      { id: generateId(), name, lat, lon, alertEnabled: true, alertRadiusMeters: DEFAULT_STORE_RADIUS_METERS, createdAt: Date.now() },
+      {
+        id: generateId(),
+        name,
+        lat,
+        lon,
+        alertEnabled: true,
+        alertRadiusMeters: DEFAULT_STORE_RADIUS_METERS,
+        createdAt: Date.now(),
+      },
       ...prev,
     ]);
   };
 
   const deleteSavedStore = (id: string) => {
-    setSavedStores((prev) => prev.filter(s => s.id !== id));
+    setSavedStores((prev) => prev.filter((s) => s.id !== id));
   };
 
   const setStoreAlert = (id: string, alertEnabled: boolean) => {
-    setSavedStores((prev) => prev.map(s => s.id === id ? { ...s, alertEnabled } : s));
+    setSavedStores((prev) => prev.map((s) => (s.id === id ? { ...s, alertEnabled } : s)));
   };
 
   const setStoreRadius = (id: string, alertRadiusMeters: number) => {
-    setSavedStores((prev) => prev.map(s => s.id === id ? { ...s, alertRadiusMeters, alertEnabled: true } : s));
+    setSavedStores((prev) =>
+      prev.map((s) => (s.id === id ? { ...s, alertRadiusMeters, alertEnabled: true } : s)),
+    );
   };
 
   return { savedStores, addSavedStore, deleteSavedStore, setStoreAlert, setStoreRadius };
 }
-
 
 export interface SavedTrip {
   id: string;
@@ -738,20 +806,28 @@ export interface SavedTrip {
 }
 
 export function useSavedTrips() {
-  const [savedTrips, setSavedTrips] = useLocalStorage<SavedTrip[]>('myflow-saved-trips', []);
+  const [savedTrips, setSavedTrips] = useLocalStorage<SavedTrip[]>("myflow-saved-trips", []);
 
   const addSavedTrip = (label: string, from: string, to: string) => {
     setSavedTrips([{ id: generateId(), label, from, to, createdAt: Date.now() }, ...savedTrips]);
   };
 
   const deleteSavedTrip = (id: string) => {
-    setSavedTrips(savedTrips.filter(t => t.id !== id));
+    setSavedTrips(savedTrips.filter((t) => t.id !== id));
   };
 
   const setTripAlert = (id: string, alertEnabled: boolean, alertMinutesBefore?: number) => {
-    setSavedTrips(savedTrips.map(t => t.id === id
-      ? { ...t, alertEnabled, alertMinutesBefore: alertMinutesBefore ?? t.alertMinutesBefore ?? 15 }
-      : t));
+    setSavedTrips(
+      savedTrips.map((t) =>
+        t.id === id
+          ? {
+              ...t,
+              alertEnabled,
+              alertMinutesBefore: alertMinutesBefore ?? t.alertMinutesBefore ?? 15,
+            }
+          : t,
+      ),
+    );
   };
 
   return { savedTrips, addSavedTrip, deleteSavedTrip, setTripAlert };

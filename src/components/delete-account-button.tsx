@@ -20,8 +20,16 @@ export function DeleteAccountButton({ onDeleted, size = "sm", className }: Props
     setBusy(true);
     try {
       await del({ data: undefined });
-      try { await supabase.auth.signOut(); } catch {}
-      try { localStorage.clear(); } catch {}
+      try {
+        await supabase.auth.signOut();
+      } catch {
+        // ignoreras med flit – felet påverkar inte användaren
+      }
+      try {
+        localStorage.clear();
+      } catch {
+        // ignoreras med flit – felet påverkar inte användaren
+      }
       onDeleted?.();
       if (typeof window !== "undefined") window.location.href = "/";
     } catch (e) {
@@ -45,7 +53,9 @@ export function DeleteAccountButton({ onDeleted, size = "sm", className }: Props
   }
 
   return (
-    <div className={`flex flex-col gap-2 rounded-xl border border-destructive/40 bg-destructive/5 p-3 ${className ?? ""}`}>
+    <div
+      className={`flex flex-col gap-2 rounded-xl border border-destructive/40 bg-destructive/5 p-3 ${className ?? ""}`}
+    >
       <p className="text-sm text-foreground">
         Är du säker? Detta raderar ditt konto och all data permanent.
       </p>

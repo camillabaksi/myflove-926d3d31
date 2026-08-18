@@ -47,6 +47,31 @@ export function useReminderSync() {
   const cancelFn = useServerFn(cancelReminder);
   const lastKeys = useRef<Set<string>>(new Set());
 
+  // Signatur över allt som ska trigga en ny synk (uppgifter, medicin,
+  // påminnelser, rutiner, quickflow, lektioner och barnschema).
+  const syncSignature = JSON.stringify([
+    tasks.map((t) => [
+      t.id,
+      t.completed,
+      t.time,
+      t.dueDate,
+      t.reminderMinutesBefore,
+      (t.deadlineLeadDays ?? []).join(","),
+      t.deadlineReminderTime,
+    ]),
+    medications.map((m) => [m.id, m.name, m.dosage, m.times.join(",")]),
+    reminders.map((r) => [r.id, r.completed, r.date, r.time, r.repeat]),
+    routines.map((r) => [r.id, r.title, r.time, r.enabled]),
+    quickflowItems.map((q) => [q.id, q.text, q.remindAt, q.done]),
+    lectures.map((l) => [l.id, l.title, l.weekday, l.start, l.location]),
+    studySettings.lectureReminderMinutes,
+    childSchedules ?? {},
+    childItems.map((i) => [i.id, i.child_id, i.title, i.date, i.time, i.completed]),
+    children.map((c) => [c.id, c.name]),
+    childReminders,
+    adaptiveLead,
+  ]);
+
   useEffect(() => {
     let alive = true;
     (async () => {
@@ -61,14 +86,17 @@ export function useReminderSync() {
       const taskDates = [todayIso(0), todayIso(1)];
       const medDates: string[] = [];
       for (let i = 0; i < 14; i++) medDates.push(todayIso(i));
-      const desired = new Map<string, {
-        clientKey: string;
-        kind: "task" | "medication" | "custom";
-        title: string;
-        body: string;
-        deliverAt: string;
-        url: string;
-      }>();
+      const desired = new Map<
+        string,
+        {
+          clientKey: string;
+          kind: "task" | "medication" | "custom";
+          title: string;
+          body: string;
+          deliverAt: string;
+          url: string;
+        }
+      >();
 
       // Timed tasks
       for (const t of tasks) {
@@ -184,7 +212,6 @@ export function useReminderSync() {
         }
       }
 
-
       // Dagliga rutiner: schemalägg 14 dagar framåt
       for (const routine of routines) {
         if (!routine.enabled || !routine.time) continue;
@@ -205,12 +232,16 @@ export function useReminderSync() {
       }
 
       // Lektioner från det importerade schemat: påminnelse X min innan, 14 dagar framåt.
-      const lead = applyAdaptiveLead(studySettings.lectureReminderMinutes ?? 0, adaptiveLead, "lektion");
+      const lead = applyAdaptiveLead(
+        studySettings.lectureReminderMinutes ?? 0,
+        adaptiveLead,
+        "lektion",
+      );
       if (lead > 0) {
         for (const lecture of lectures) {
           for (const date of horizonDates) {
             const d = new Date(date + "T00:00:00");
-            if (((d.getDay() + 6) % 7) !== lecture.weekday) continue;
+            if ((d.getDay() + 6) % 7 !== lecture.weekday) continue;
             const when = combineDateTime(date, lecture.start);
             if (!when) continue;
             const deliver = new Date(when.getTime() - lead * 60_000);
@@ -233,7 +264,11 @@ export function useReminderSync() {
       // Barnens hållpunkter: skolschema + inlagda aktiviteter, 14 dagar framåt.
       if (childReminders.enabled) {
         const nameOf = new Map(children.map((c) => [c.id, c.name]));
-        const childLead = applyAdaptiveLead(Math.max(0, childReminders.minutesBefore ?? 0), adaptiveLead, "barn");
+        const childLead = applyAdaptiveLead(
+          Math.max(0, childReminders.minutesBefore ?? 0),
+          adaptiveLead,
+          "barn",
+        );
         // date -> lista med hållpunkter (för morgonöversikten)
         const byDate = new Map<string, { time: string; title: string; who: string }[]>();
 
@@ -249,7 +284,7 @@ export function useReminderSync() {
           for (const e of entries ?? []) {
             for (const date of horizonDates) {
               const d = new Date(date + "T00:00:00");
-              if (((d.getDay() + 6) % 7) !== e.weekday) continue;
+              if ((d.getDay() + 6) % 7 !== e.weekday) continue;
               addToDay(date, e.start, e.title, who);
               const when = combineDateTime(date, e.start);
               if (!when) continue;
@@ -331,7 +366,6 @@ export function useReminderSync() {
         });
       }
 
-
       // Push all desired
       for (const r of desired.values()) {
         try {
@@ -358,19 +392,5 @@ export function useReminderSync() {
       alive = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    // Rerun on any change to timed tasks, medications, or reminders
-    JSON.stringify(tasks.map((t) => [t.id, t.completed, t.time, t.dueDate, t.reminderMinutesBefore, (t.deadlineLeadDays ?? []).join(","), t.deadlineReminderTime])),
-    JSON.stringify(medications.map((m) => [m.id, m.name, m.dosage, m.times.join(",")])),
-    JSON.stringify(reminders.map((r) => [r.id, r.completed, r.date, r.time, r.repeat])),
-    JSON.stringify(routines.map((r) => [r.id, r.title, r.time, r.enabled])),
-    JSON.stringify(quickflowItems.map((q) => [q.id, q.text, q.remindAt, q.done])),
-    JSON.stringify(lectures.map((l) => [l.id, l.title, l.weekday, l.start, l.location])),
-    studySettings.lectureReminderMinutes,
-    JSON.stringify(childSchedules ?? {}),
-    JSON.stringify(childItems.map((i) => [i.id, i.child_id, i.title, i.date, i.time, i.completed])),
-    JSON.stringify(children.map((c) => [c.id, c.name])),
-    JSON.stringify(childReminders),
-    JSON.stringify(adaptiveLead),
-  ]);
+  }, [syncSignature]);
 }

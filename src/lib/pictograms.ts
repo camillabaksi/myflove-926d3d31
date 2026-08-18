@@ -8,15 +8,34 @@ type Rule = { emoji: string; words: string[] };
 
 const RULES: Rule[] = [
   { emoji: "🦷", words: ["tandläkare", "tandvård", "tandhygien"] },
-  { emoji: "🏥", words: ["läkare", "vårdcentral", "sjukhus", "bvc", "vaccin", "besök hos", "mottagning"] },
+  {
+    emoji: "🏥",
+    words: ["läkare", "vårdcentral", "sjukhus", "bvc", "vaccin", "besök hos", "mottagning"],
+  },
   { emoji: "💊", words: ["medicin", "tablett", "dosett", "apotek"] },
   { emoji: "🧠", words: ["terapi", "psykolog", "kurator", "samtal"] },
-  { emoji: "🎓", words: ["föreläsning", "lektion", "skola", "plugg", "studie", "tenta", "prov", "seminarium", "kurs"] },
+  {
+    emoji: "🎓",
+    words: [
+      "föreläsning",
+      "lektion",
+      "skola",
+      "plugg",
+      "studie",
+      "tenta",
+      "prov",
+      "seminarium",
+      "kurs",
+    ],
+  },
   { emoji: "💼", words: ["jobb", "arbete", "möte", "avstämning", "kund", "deadline"] },
   { emoji: "🛒", words: ["handla", "mat", "ica", "coop", "inköp", "affär", "matbutik"] },
   { emoji: "🍽️", words: ["middag", "lunch", "frukost", "fika", "äta", "matlåda"] },
   { emoji: "🧺", words: ["tvätt", "tvättstuga", "vika", "städ", "damma", "diska"] },
-  { emoji: "🏃", words: ["träning", "gym", "löpning", "spring", "promenad", "yoga", "simning", "pass"] },
+  {
+    emoji: "🏃",
+    words: ["träning", "gym", "löpning", "spring", "promenad", "yoga", "simning", "pass"],
+  },
   { emoji: "⚽", words: ["fotboll", "träningsmatch", "match", "innebandy", "hockey"] },
   { emoji: "🚌", words: ["buss", "tåg", "pendel", "resa", "avgång", "tunnelbana"] },
   { emoji: "🚗", words: ["köra", "bil", "hämta", "lämna", "skjuts"] },

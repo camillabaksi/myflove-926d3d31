@@ -18,8 +18,17 @@ export default defineTool({
   description:
     "Listar den inloggade användarens MyFlove-uppgifter. Filtrera med `status` (open/completed/all) och begränsa antalet med `limit`.",
   inputSchema: {
-    status: z.enum(["open", "completed", "all"]).default("open").describe("Vilka uppgifter som ska returneras."),
-    limit: z.number().int().min(1).max(200).default(50).describe("Maxantal uppgifter att returnera."),
+    status: z
+      .enum(["open", "completed", "all"])
+      .default("open")
+      .describe("Vilka uppgifter som ska returneras."),
+    limit: z
+      .number()
+      .int()
+      .min(1)
+      .max(200)
+      .default(50)
+      .describe("Maxantal uppgifter att returnera."),
   },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: async ({ status, limit }, ctx) => {

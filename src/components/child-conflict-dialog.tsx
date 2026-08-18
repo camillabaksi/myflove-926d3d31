@@ -11,7 +11,9 @@ import {
 import type { ChildItemConflict } from "@/hooks/use-children";
 
 function summary(title: string, date: string | null, time: string | null, completed: boolean) {
-  const bits = [date ?? "utan datum", time ?? null, completed ? "klarmarkerad" : null].filter(Boolean);
+  const bits = [date ?? "utan datum", time ?? null, completed ? "klarmarkerad" : null].filter(
+    Boolean,
+  );
   return `${title} · ${bits.join(" · ")}`;
 }
 

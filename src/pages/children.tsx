@@ -22,7 +22,12 @@ import {
   Loader2,
 } from "lucide-react";
 import { ChildConflictDialog } from "@/components/child-conflict-dialog";
-import { useChildren, CHILD_COLORS, type ChildItem, type ChildItemKind } from "@/hooks/use-children";
+import {
+  useChildren,
+  CHILD_COLORS,
+  type ChildItem,
+  type ChildItemKind,
+} from "@/hooks/use-children";
 import { useToast } from "@/hooks/use-toast";
 import { syncReminder, cancelReminder } from "@/lib/push.functions";
 import { celebrateFromEvent } from "@/lib/celebrate";
@@ -87,8 +92,14 @@ function ChildrenContent() {
   const fileInput = useRef<HTMLInputElement | null>(null);
   const [pendingFile, setPendingFile] = useState<File | null>(null);
 
-  const myChildren = useMemo(() => children.filter((c) => c.owner_id === userId), [children, userId]);
-  const sharedChildren = useMemo(() => children.filter((c) => c.owner_id !== userId), [children, userId]);
+  const myChildren = useMemo(
+    () => children.filter((c) => c.owner_id === userId),
+    [children, userId],
+  );
+  const sharedChildren = useMemo(
+    () => children.filter((c) => c.owner_id !== userId),
+    [children, userId],
+  );
 
   const activeChildId = selectedChild ?? myChildren[0]?.id ?? sharedChildren[0]?.id ?? null;
   const activeChild = children.find((c) => c.id === activeChildId) ?? null;
@@ -106,7 +117,8 @@ function ChildrenContent() {
     [items, activeChildId, filter],
   );
 
-  const memberName = (id: string) => members.find((m) => m.user_id === id)?.display_name ?? "Familjemedlem";
+  const memberName = (id: string) =>
+    members.find((m) => m.user_id === id)?.display_name ?? "Familjemedlem";
 
   const handleAddChild = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -200,7 +212,10 @@ function ChildrenContent() {
 
   const shareWithAll = async (item: ChildItem) => {
     try {
-      await setItemShares(item.id, members.map((m) => m.user_id));
+      await setItemShares(
+        item.id,
+        members.map((m) => m.user_id),
+      );
     } catch {
       toast({ description: "Kunde inte dela med familjen.", variant: "destructive" });
     }
@@ -231,7 +246,11 @@ function ChildrenContent() {
     <div className="space-y-8">
       <ChildConflictDialog conflict={conflict} onResolve={(c) => void resolveConflict(c)} />
       {/* Barnprofiler */}
-      <CollapsibleSection title="Barn" headingClassName="text-lg font-semibold" className="space-y-3">
+      <CollapsibleSection
+        title="Barn"
+        headingClassName="text-lg font-semibold"
+        className="space-y-3"
+      >
         <div className="flex gap-2 flex-wrap">
           {children.map((c) => (
             <button
@@ -245,7 +264,9 @@ function ChildrenContent() {
             >
               <span className="w-3 h-3 rounded-full" style={{ backgroundColor: c.color }} />
               {c.name}
-              {c.owner_id !== userId && <span className="text-xs text-muted-foreground">delat med dig</span>}
+              {c.owner_id !== userId && (
+                <span className="text-xs text-muted-foreground">delat med dig</span>
+              )}
             </button>
           ))}
         </div>
@@ -277,7 +298,10 @@ function ChildrenContent() {
                 aria-label={`Färg ${c}`}
                 onClick={() => setChildColor(c)}
                 className="w-8 h-8 rounded-full border-2 flex items-center justify-center"
-                style={{ backgroundColor: c, borderColor: childColor === c ? "var(--foreground)" : "transparent" }}
+                style={{
+                  backgroundColor: c,
+                  borderColor: childColor === c ? "var(--foreground)" : "transparent",
+                }}
               >
                 {childColor === c && <Check size={14} className="text-white drop-shadow" />}
               </button>
@@ -292,8 +316,6 @@ function ChildrenContent() {
 
           <ChildReminderSettings />
 
-
-
           {isOwner && (
             <section className="surface-card p-5">
               <CollapsibleSection
@@ -302,99 +324,105 @@ function ChildrenContent() {
                 headingClassName="text-lg font-semibold"
                 className="space-y-3"
               >
-              <form onSubmit={handleAddItem} className="space-y-3">
-                <div className="flex gap-2 flex-wrap">
-                  {(Object.keys(KIND_META) as ChildItemKind[]).map((k) => (
-                    <button
-                      key={k}
-                      type="button"
-                      onClick={() => setKind(k)}
-                      aria-pressed={kind === k}
-                      className={`px-3 py-1.5 rounded-full text-sm border ${
-                        kind === k ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground"
-                      }`}
-                    >
-                      {KIND_META[k].label}
-                    </button>
-                  ))}
-                </div>
-
-                <Input
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  placeholder={kind === "note" ? "Rubrik på anteckningen" : "Vad gäller det?"}
-                  className="h-11 rounded-2xl"
-                />
-
-                {(kind === "activity" || kind === "task") && (
-                  <div className="flex gap-2">
-                    <Input
-                      type="date"
-                      value={date}
-                      onChange={(e) => setDate(e.target.value)}
-                      aria-label="Datum"
-                      className="h-11 rounded-2xl"
-                    />
-                    <Input
-                      type="time"
-                      value={time}
-                      onChange={(e) => setTime(e.target.value)}
-                      aria-label="Tid"
-                      className="h-11 rounded-2xl w-32"
-                    />
-                  </div>
-                )}
-
-                {(kind === "activity" || kind === "task") && (
-                  <div className="flex flex-wrap gap-2">
-                    {(["none", "daily", "weekdays", "weekly"] as RepeatMode[]).map((val) => (
+                <form onSubmit={handleAddItem} className="space-y-3">
+                  <div className="flex gap-2 flex-wrap">
+                    {(Object.keys(KIND_META) as ChildItemKind[]).map((k) => (
                       <button
-                        key={val}
+                        key={k}
                         type="button"
-                        onClick={() => setRepeat(val)}
-                        className={`px-3 py-2 rounded-2xl border text-sm transition-colors ${
-                          repeat === val
-                            ? "bg-primary text-primary-foreground border-primary"
-                            : "bg-background border-border hover:border-primary/40"
+                        onClick={() => setKind(k)}
+                        aria-pressed={kind === k}
+                        className={`px-3 py-1.5 rounded-full text-sm border ${
+                          kind === k
+                            ? "border-primary bg-primary/10 text-primary"
+                            : "border-border text-muted-foreground"
                         }`}
                       >
-                        {REPEAT_LABELS[val]}
+                        {KIND_META[k].label}
                       </button>
                     ))}
                   </div>
-                )}
 
-                {kind === "doc" && (
-                  <input
-                    ref={fileInput}
-                    type="file"
-                    aria-label="Välj dokument"
-                    onChange={(e) => setPendingFile(e.target.files?.[0] ?? null)}
-                    className="block w-full text-sm text-muted-foreground"
+                  <Input
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder={kind === "note" ? "Rubrik på anteckningen" : "Vad gäller det?"}
+                    className="h-11 rounded-2xl"
                   />
-                )}
 
-                <Input
-                  value={notes}
-                  onChange={(e) => setNotes(e.target.value)}
-                  placeholder="Anteckning (valfritt)"
-                  className="h-11 rounded-2xl"
-                />
+                  {(kind === "activity" || kind === "task") && (
+                    <div className="flex gap-2">
+                      <Input
+                        type="date"
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
+                        aria-label="Datum"
+                        className="h-11 rounded-2xl"
+                      />
+                      <Input
+                        type="time"
+                        value={time}
+                        onChange={(e) => setTime(e.target.value)}
+                        aria-label="Tid"
+                        className="h-11 rounded-2xl w-32"
+                      />
+                    </div>
+                  )}
 
-                {(kind === "activity" || kind === "task") && (
-                  <label className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <input type="checkbox" checked={remind} onChange={(e) => setRemind(e.target.checked)} />
-                    <BellRing size={15} /> Påminn mig när det är dags
-                  </label>
-                )}
+                  {(kind === "activity" || kind === "task") && (
+                    <div className="flex flex-wrap gap-2">
+                      {(["none", "daily", "weekdays", "weekly"] as RepeatMode[]).map((val) => (
+                        <button
+                          key={val}
+                          type="button"
+                          onClick={() => setRepeat(val)}
+                          className={`px-3 py-2 rounded-2xl border text-sm transition-colors ${
+                            repeat === val
+                              ? "bg-primary text-primary-foreground border-primary"
+                              : "bg-background border-border hover:border-primary/40"
+                          }`}
+                        >
+                          {REPEAT_LABELS[val]}
+                        </button>
+                      ))}
+                    </div>
+                  )}
 
-                <Button type="submit" disabled={saving} className="h-11 rounded-2xl w-full">
-                  {saving ? <Loader2 size={18} className="animate-spin" /> : "Spara"}
-                </Button>
-                <p className="text-xs text-muted-foreground flex items-center gap-1">
-                  <Lock size={12} /> Allt du lägger in är privat tills du väljer att dela det.
-                </p>
-              </form>
+                  {kind === "doc" && (
+                    <input
+                      ref={fileInput}
+                      type="file"
+                      aria-label="Välj dokument"
+                      onChange={(e) => setPendingFile(e.target.files?.[0] ?? null)}
+                      className="block w-full text-sm text-muted-foreground"
+                    />
+                  )}
+
+                  <Input
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    placeholder="Anteckning (valfritt)"
+                    className="h-11 rounded-2xl"
+                  />
+
+                  {(kind === "activity" || kind === "task") && (
+                    <label className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <input
+                        type="checkbox"
+                        checked={remind}
+                        onChange={(e) => setRemind(e.target.checked)}
+                      />
+                      <BellRing size={15} /> Påminn mig när det är dags
+                    </label>
+                  )}
+
+                  <Button type="submit" disabled={saving} className="h-11 rounded-2xl w-full">
+                    {saving ? <Loader2 size={18} className="animate-spin" /> : "Spara"}
+                  </Button>
+                  <p className="text-xs text-muted-foreground flex items-center gap-1">
+                    <Lock size={12} /> Allt du lägger in är privat tills du väljer att dela det.
+                  </p>
+                </form>
               </CollapsibleSection>
             </section>
           )}
@@ -409,7 +437,9 @@ function ChildrenContent() {
                   onClick={() => setFilter(f.id)}
                   aria-pressed={filter === f.id}
                   className={`px-3 py-1.5 rounded-full text-sm border ${
-                    filter === f.id ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground"
+                    filter === f.id
+                      ? "border-primary bg-primary/10 text-primary"
+                      : "border-border text-muted-foreground"
                   }`}
                 >
                   {f.label}
@@ -444,11 +474,15 @@ function ChildrenContent() {
                           <Icon size={20} className="mt-0.5 text-muted-foreground" />
                         )}
                         <div className="flex-1 min-w-0">
-                          <div className={`font-medium ${item.completed ? "line-through text-muted-foreground" : ""}`}>
+                          <div
+                            className={`font-medium ${item.completed ? "line-through text-muted-foreground" : ""}`}
+                          >
                             {item.title}
                           </div>
                           <div className="text-sm text-muted-foreground">
-                            {[KIND_META[item.kind].label, item.date, item.time].filter(Boolean).join(" · ")}
+                            {[KIND_META[item.kind].label, item.date, item.time]
+                              .filter(Boolean)
+                              .join(" · ")}
                           </div>
                           {item.notes && <p className="text-sm mt-1">{item.notes}</p>}
                           {item.file_path && (

@@ -41,8 +41,8 @@ export function FlowReplan({
       <h2 className="flex items-center gap-2 font-display text-lg text-ink">
         <RefreshCw size={18} className="text-primary" /> Ska vi lägga om dagen?
         <HelpHint label="omplanering">
-          MyFlove föreslår en mindre dag när kapaciteten är låg. Inget tas bort – det du
-          inte gör idag flyttas till "Resten kan vänta".
+          MyFlove föreslår en mindre dag när kapaciteten är låg. Inget tas bort – det du inte gör
+          idag flyttas till "Resten kan vänta".
         </HelpHint>
       </h2>
 
@@ -81,8 +81,8 @@ export function FlowReplan({
 
       {chosen ? (
         <p className="mt-3 text-sm text-ink">
-          {replanOption(mode).emoji} {replanEffect(mode, keepCount, restCount)} Du kan byta
-          läge när som helst idag.
+          {replanOption(mode).emoji} {replanEffect(mode, keepCount, restCount)} Du kan byta läge när
+          som helst idag.
         </p>
       ) : (
         <MyFloveButton

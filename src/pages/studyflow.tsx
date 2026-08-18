@@ -269,502 +269,550 @@ export default function StudyflowPage() {
 
         <Tabs defaultValue="nu" className="w-full">
           <TabsList className="grid w-full grid-cols-2 rounded-full">
-            <TabsTrigger value="nu" className="rounded-full">Plugga nu</TabsTrigger>
-            <TabsTrigger value="kurser" className="rounded-full">Kurser & inlämningar</TabsTrigger>
+            <TabsTrigger value="nu" className="rounded-full">
+              Plugga nu
+            </TabsTrigger>
+            <TabsTrigger value="kurser" className="rounded-full">
+              Kurser & inlämningar
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="kurser" className="mt-4">
             <StudiesSection />
           </TabsContent>
           <TabsContent value="nu" className="mt-4 space-y-5">
+            <StudyProfileCard />
 
-        <StudyProfileCard />
+            <StudySuggestions />
 
-        <StudySuggestions />
+            <NextLectureCard />
 
-        <NextLectureCard />
+            <ScheduleImport />
 
-        <ScheduleImport />
+            <StudyCalendarSync />
 
-        <StudyCalendarSync />
-
-        <Button variant="secondary" className="w-full rounded-full" onClick={() => recalc(false)}>
-          <RefreshCw className="mr-2 h-4 w-4" /> Räkna om plugg-planen
-        </Button>
-
-        {replanDiff && <FlowReplanDiff diff={replanDiff} onClose={() => setReplanDiff(null)} />}
-
-        {/* Dynamisk plan efter FlowScore */}
-        <CollapsibleSection
-          className={card}
-          headingClassName={sectionTitle}
-          title={<><Gauge className="h-5 w-5 text-primary" /> Rimligt att plugga just nu</>}
-          help="Utgår från din ork idag. Siffran är ett förslag, inte ett krav."
-        >
-          <p className="mt-1 text-sm text-muted-foreground">
-            Anpassat efter FlowScore {flow.score} och energi {energy ? `${energy}/5` : "okänd"} – ca{" "}
-            {flow.capacityMinutes} min fokustid.
-          </p>
-          {capacityPlan.plan.length ? (
-            <ul className="mt-3 space-y-2">
-              {capacityPlan.plan.map(({ task, meta }) => (
-                <li
-                  key={task.id}
-                  className="flex items-center gap-3 rounded-2xl border border-border/70 bg-background p-3 text-sm"
-                >
-                  <button
-                    onClick={(e) => {
-                      toggleTask(task.id);
-                      celebrateFromEvent(e);
-                    }}
-                    aria-label="Markera klar"
-                    className="text-muted-foreground hover:text-primary"
-                  >
-                    <Circle className="h-5 w-5" />
-                  </button>
-                  <span className="flex-1 text-ink">{task.title}</span>
-                  <span className="text-xs text-muted-foreground">{meta.minutes} min</span>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="mt-3 text-sm text-muted-foreground">
-              Inget som passar din kapacitet just nu. Vila är också plugg. 💙
-            </p>
-          )}
-          {capacityPlan.plannedMinutes > 0 && (
-            <p className="mt-2 text-xs text-muted-foreground">
-              Planerat {capacityPlan.plannedMinutes} min av {flow.capacityMinutes} min.
-            </p>
-          )}
-          {capacityPlan.tooHeavy.length > 0 && (
-            <div className="mt-3 rounded-2xl bg-gold/10 p-3 text-sm">
-              <p className="font-medium text-ink">Känns tungt just nu – ta det senare:</p>
-              <ul className="mt-1 space-y-1 text-muted-foreground">
-                {capacityPlan.tooHeavy.slice(0, 3).map(({ task }) => (
-                  <li key={task.id}>→ {task.title}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </CollapsibleSection>
-
-        {/* Prov & repetition från StudyBuddy */}
-        <CollapsibleSection
-          className={card}
-          headingClassName={sectionTitle}
-          title={<><Brain className="h-5 w-5 text-primary" /> Prov & repetition</>}
-          help="Prov du lagt in själv. Du väljer om repetition ska hamna i kalendern."
-        >
-          {nextExam ? (
-            <div className="mt-2 rounded-2xl bg-sage/20 p-3 text-sm">
-              <p className="font-medium text-ink">
-                <CalendarClock className="mr-1 inline h-4 w-4" />
-                {nextExam.set.title} – {examPhase(nextExam.days)?.label}
-              </p>
-              <p className="mt-1 text-muted-foreground">{examPhase(nextExam.days)?.advice}</p>
-            </div>
-          ) : (
-            <p className="mt-2 text-sm text-muted-foreground">
-              Inget prov inlagt. Lägg in provdatum i StudyBuddy så planerar jag pluggandet åt dig.
-            </p>
-          )}
-          <p className="mt-3 text-sm text-ink">
-            🃏 {stats.dueCards} flashcards och ❓ {stats.dueQuestions} frågor väntar på repetition.
-          </p>
-          <Button asChild variant="secondary" className="mt-3 rounded-full">
-            <Link to="/studybuddy">Öppna StudyBuddy</Link>
-          </Button>
-        </CollapsibleSection>
-
-        {/* Vad ska jag plugga nu? */}
-        <CollapsibleSection
-          className={card}
-          headingClassName={sectionTitle}
-          title={<><AlarmClock className="h-5 w-5 text-primary" /> Vad ska jag göra nu?</>}
-          help="En sak i taget, vald åt dig. Tryck på start så börjar vi där."
-        >
-          {ranked.length === 0 ? (
-            <p className="mt-2 text-sm text-muted-foreground">
-              Inget som väntar just nu. Det är också ett svar. 💙
-            </p>
-          ) : (
-            <ul className="mt-3 space-y-2">
-              {ranked.slice(0, 5).map(({ task, meta }, i) => (
-                <li key={task.id} className="rounded-2xl border border-border/70 bg-background p-3">
-                  <div className="flex items-start gap-3">
-                    <button
-                      onClick={(e) => {
-                        toggleTask(task.id);
-                        celebrateFromEvent(e);
-                      }}
-                      aria-label="Markera klar"
-                      className="mt-0.5 text-muted-foreground hover:text-primary"
-                    >
-                      <Circle className="h-5 w-5" />
-                    </button>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-ink">
-                        {i === 0 && <span className="mr-1 font-semibold">NU</span>}
-                        {PRIORITY_META[meta.priority].dot} {task.title}
-                      </p>
-                      <p className="mt-0.5 text-xs text-muted-foreground">
-                        {meta.minutes} min · friktion {meta.friction}/10
-                        {task.dueDate ? ` · inlämning ${task.dueDate}` : ""}
-                      </p>
-
-                      {meta.friction >= 7 && (
-                        <div className="mt-2 rounded-xl bg-gold/10 p-2 text-xs text-ink">
-                          Den här verkar tung att börja med. Vill du dela upp den?
-                          {busyId === task.id && (
-                            <MyFloveThinking
-                              steps={["📚", "🧠", "✂️", "✨"]}
-                              label="Jag delar upp den i mindre steg…"
-                              className="py-2"
-                            />
-                          )}
-                          <Button
-                            size="sm"
-                            variant="secondary"
-                            className="ml-2"
-                            disabled={busyId === task.id}
-                            onClick={() => handleBreakDown(task.id, task.title, task.dueDate)}
-                          >
-                            {busyId === task.id ? (
-                              <Loader2 className="h-3 w-3 animate-spin" />
-                            ) : (
-                              <Sparkles className="h-3 w-3" />
-                            )}
-                            <span className="ml-1">Dela upp</span>
-                          </Button>
-                        </div>
-                      )}
-
-                      {task.steps && task.steps.length > 0 && (
-                        <ul className="mt-2 space-y-1 text-xs text-muted-foreground">
-                          {task.steps.map((s) => (
-                            <li key={s.id}>→ {s.title}</li>
-                          ))}
-                        </ul>
-                      )}
-
-                      <button
-                        className="mt-2 text-xs text-primary underline"
-                        onClick={() => setEditing(editing === task.id ? null : task.id)}
-                      >
-                        {editing === task.id ? "Dölj" : "Justera tid, friktion & prioritet"}
-                      </button>
-
-                      {editing === task.id && (
-                        <div className="mt-2 space-y-2">
-                          <div className="flex flex-wrap gap-1">
-                            {MINUTE_CHOICES.map((m) => (
-                              <button
-                                key={m}
-                                onClick={() => setMeta(task.id, { minutes: m })}
-                                className={`rounded-full border px-2 py-1 text-xs ${
-                                  metaFor(metaMap, task.id).minutes === m
-                                    ? "border-primary bg-primary/10 text-primary"
-                                    : "border-border text-muted-foreground"
-                                }`}
-                              >
-                                {m} min
-                              </button>
-                            ))}
-                          </div>
-                          <div className="flex flex-wrap gap-1">
-                            {(Object.keys(PRIORITY_META) as WorkPriority[]).map((p) => (
-                              <button
-                                key={p}
-                                onClick={() => setMeta(task.id, { priority: p })}
-                                className={`rounded-full border px-2 py-1 text-xs ${
-                                  meta.priority === p
-                                    ? "border-primary bg-primary/10 text-primary"
-                                    : "border-border text-muted-foreground"
-                                }`}
-                              >
-                                {PRIORITY_META[p].dot} {PRIORITY_META[p].label}
-                              </button>
-                            ))}
-                          </div>
-                          <label className="block text-xs text-muted-foreground">
-                            Friktion: {meta.friction}/10
-                            <input
-                              type="range"
-                              min={1}
-                              max={10}
-                              value={meta.friction}
-                              onChange={(e) =>
-                                setMeta(task.id, { friction: Number(e.target.value) })
-                              }
-                              className="mt-1 w-full accent-[hsl(var(--primary))]"
-                            />
-                          </label>
-                          <FrictionSuggestion
-                            title={task.title}
-                            current={meta.friction}
-                            onApply={(f) => setMeta(task.id, { friction: f })}
-                          />
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </CollapsibleSection>
-
-        {/* Jag har X minuter */}
-        <CollapsibleSection
-          className={card}
-          headingClassName={sectionTitle}
-          title={<><Timer className="h-5 w-5 text-primary" /> Jag har …</>}
-        >
-          <div className="mt-3 flex flex-wrap gap-2">
-            {[10, 20, 30, 45, 60].map((m) => (
-              <Button
-                key={m}
-                size="sm"
-                variant={availableMinutes === m ? "default" : "secondary"}
-                onClick={() => setAvailableMinutes(availableMinutes === m ? null : m)}
-              >
-                {m} minuter
-              </Button>
-            ))}
-          </div>
-          {timeFit && (
-            <div className="mt-3 rounded-2xl bg-sage/20 p-3 text-sm">
-              <p className="font-medium text-ink">
-                ⚡ Bäst användning av dina {availableMinutes} minuter
-              </p>
-              {timeFit.picks.length ? (
-                <>
-                  <ul className="mt-2 space-y-1">
-                    {timeFit.picks.map(({ task, meta }) => (
-                      <li key={task.id}>
-                        🟢 {task.title} – {meta.minutes} min
-                      </li>
-                    ))}
-                  </ul>
-                  <p className="mt-2 text-xs text-muted-foreground">
-                    Totalt {timeFit.usedMinutes} min av {availableMinutes}.
-                  </p>
-                </>
-              ) : timeFit.stretch ? (
-                <p className="mt-2">
-                  🟡 Påbörja "{timeFit.stretch.task.title}" – du hinner en bit på vägen.
-                </p>
-              ) : (
-                <p className="mt-2 text-muted-foreground">
-                  Inget som passar. Ta en runda flashcards istället. 💙
-                </p>
-              )}
-            </div>
-          )}
-        </CollapsibleSection>
-
-        {/* Övergångar */}
-        <CollapsibleSection
-          className={card}
-          headingClassName={sectionTitle}
-          title={<><ArrowRightLeft className="h-5 w-5 text-primary" /> Hjälp vid övergångar</>}
-        >
-          <p className="mt-1 text-sm text-muted-foreground">
-            Lektionen är slut – hur mycket tid har du innan nästa?
-          </p>
-          <div className="mt-2 flex flex-wrap gap-2">
-            {[5, 15, 25, 45].map((m) => (
-              <Button
-                key={m}
-                size="sm"
-                variant={gap === m ? "default" : "secondary"}
-                onClick={() => setGap(gap === m ? null : m)}
-              >
-                {m} min
-              </Button>
-            ))}
-          </div>
-          {gap && (
-            <ul className="mt-3 space-y-1 rounded-2xl bg-background p-3 text-sm">
-              {studyTransitionPlan(gap).map((s) => (
-                <li key={s}>{s}</li>
-              ))}
-            </ul>
-          )}
-        </CollapsibleSection>
-
-        {/* Föreläsningsläge */}
-        <CollapsibleSection
-          className={card}
-          headingClassName={sectionTitle}
-          title={<><NotebookPen className="h-5 w-5 text-primary" /> Föreläsningsläge</>}
-          help="Ett lugnt läge under lektionen: korta anteckningar och påminnelse om pauser."
-        >
-          <p className="mt-1 text-sm text-muted-foreground">
-            Innan lektionen: vad behöver du fråga eller komma ihåg?
-          </p>
-          <div className="mt-2 flex gap-2">
-            <Input
-              value={lecturePrep}
-              onChange={(e) => setLecturePrep(e.target.value)}
-              placeholder="T.ex. Fråga om deadline för inlämningen"
-            />
             <Button
               variant="secondary"
-              onClick={() => {
-                if (!lecturePrep.trim()) return;
-                addQuickflow({ text: lecturePrep.trim(), level: "viktigt" });
-                setLecturePrep("");
-                toast.success("Sparat i Quickflow – jag påminner dig på lektionen. 💙");
-              }}
+              className="w-full rounded-full"
+              onClick={() => recalc(false)}
             >
-              Spara
+              <RefreshCw className="mr-2 h-4 w-4" /> Räkna om plugg-planen
             </Button>
-          </div>
 
-          <p className="mt-4 text-sm text-muted-foreground">Efter lektionen: vad kom fram?</p>
-          <div className="mt-2 flex gap-2">
-            <Input
-              value={lectureNotes}
-              onChange={(e) => setLectureNotes(e.target.value)}
-              placeholder="Prata eller skriv – jag gör uppgifter av det"
-            />
-            {voice.isSupported && (
-              <Button
-                variant={voice.isListening ? "default" : "secondary"}
-                size="icon"
-                aria-label="Prata in"
-                onClick={voice.toggleListening}
-              >
-                <Mic className="h-4 w-4" />
-              </Button>
-            )}
-            <Button onClick={saveLectureNotes}>Gör uppgifter</Button>
-          </div>
-        </CollapsibleSection>
+            {replanDiff && <FlowReplanDiff diff={replanDiff} onClose={() => setReplanDiff(null)} />}
 
-        {/* Avslutningscheck */}
-        <CollapsibleSection
-          className={card}
-          headingClassName={sectionTitle}
-          title={<><CheckCircle2 className="h-5 w-5 text-primary" /> Avslutningscheck</>}
-        >
-          <p className="mt-1 text-sm text-muted-foreground">
-            {minutesLeft > 0
-              ? `${minutesLeft} min kvar av dagens plugg-fönster.`
-              : "Plugg-fönstret är stängt för idag."}{" "}
-            Så du slipper komma på saker 23:47.
-          </p>
-          <ul className="mt-3 space-y-2">
-            {END_OF_STUDY_CHECK.map((label) => {
-              const done = dayChecks.includes(label);
-              return (
-                <li key={label}>
-                  <button
-                    onClick={() => toggleCheck(label)}
-                    className="flex w-full items-center gap-2 rounded-2xl border border-border/70 bg-background p-3 text-left text-sm"
-                  >
-                    {done ? (
-                      <CheckCircle2 className="h-4 w-4 text-primary" />
-                    ) : (
-                      <Circle className="h-4 w-4 text-muted-foreground" />
-                    )}
-                    <span className={done ? "text-muted-foreground line-through" : "text-ink"}>
-                      {label}
-                    </span>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-          <label className="mt-3 block text-xs text-muted-foreground">
-            Jag slutar plugga kl.
-            <select
-              className="ml-2 rounded-lg border border-border bg-background px-2 py-1 text-ink"
-              value={settings.endHour}
-              onChange={(e) => setSettings({ endHour: Number(e.target.value) })}
+            {/* Dynamisk plan efter FlowScore */}
+            <CollapsibleSection
+              className={card}
+              headingClassName={sectionTitle}
+              title={
+                <>
+                  <Gauge className="h-5 w-5 text-primary" /> Rimligt att plugga just nu
+                </>
+              }
+              help="Utgår från din ork idag. Siffran är ett förslag, inte ett krav."
             >
-              {[16, 17, 18, 19, 20, 21, 22].map((h) => (
-                <option key={h} value={h}>
-                  {String(h).padStart(2, "0")}:00
-                </option>
-              ))}
-            </select>
-          </label>
-        </CollapsibleSection>
-
-        {/* Dagen gick åt pipsvängen */}
-        <CollapsibleSection
-          className={card}
-          headingClassName={sectionTitle}
-          title={<><LifeBuoy className="h-5 w-5 text-primary" /> Jag hann inget idag</>}
-          help="Tryck här när dagen sprack. Du får en mjuk omstart utan pekpinnar."
-        >
-          <p className="mt-1 text-sm text-muted-foreground">
-            Det blev inte som planerat. Ingen fara. Vill du att jag bygger om resten av dagen?
-          </p>
-          <Button
-            className="mt-3"
-            onClick={() =>
-              setRebuild(
-                rebuildDay(
-                  studyTasks,
-                  metaMap,
-                  Math.min(minutesLeft, flow.capacityMinutes),
-                  energy,
-                ),
-              )
-            }
-          >
-            Bygg om dagen
-          </Button>
-          {rebuild && (
-            <div className="mt-3 space-y-3 rounded-2xl bg-background p-3 text-sm">
-              <div>
-                <p className="font-medium text-ink">Det här hinner du:</p>
-                {rebuild.keep.length ? (
-                  <ul className="mt-1 space-y-1">
-                    {rebuild.keep.map(({ task, meta }) => (
-                      <li key={task.id}>
-                        🟢 {task.title} – {meta.minutes} min
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="text-muted-foreground">Inget mer idag. Det är okej. 💙</p>
-                )}
-              </div>
-              {rebuild.moveOn.length > 0 && (
-                <div>
-                  <p className="font-medium text-ink">Flyttas till imorgon:</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Anpassat efter FlowScore {flow.score} och energi {energy ? `${energy}/5` : "okänd"}{" "}
+                – ca {flow.capacityMinutes} min fokustid.
+              </p>
+              {capacityPlan.plan.length ? (
+                <ul className="mt-3 space-y-2">
+                  {capacityPlan.plan.map(({ task, meta }) => (
+                    <li
+                      key={task.id}
+                      className="flex items-center gap-3 rounded-2xl border border-border/70 bg-background p-3 text-sm"
+                    >
+                      <button
+                        onClick={(e) => {
+                          toggleTask(task.id);
+                          celebrateFromEvent(e);
+                        }}
+                        aria-label="Markera klar"
+                        className="text-muted-foreground hover:text-primary"
+                      >
+                        <Circle className="h-5 w-5" />
+                      </button>
+                      <span className="flex-1 text-ink">{task.title}</span>
+                      <span className="text-xs text-muted-foreground">{meta.minutes} min</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="mt-3 text-sm text-muted-foreground">
+                  Inget som passar din kapacitet just nu. Vila är också plugg. 💙
+                </p>
+              )}
+              {capacityPlan.plannedMinutes > 0 && (
+                <p className="mt-2 text-xs text-muted-foreground">
+                  Planerat {capacityPlan.plannedMinutes} min av {flow.capacityMinutes} min.
+                </p>
+              )}
+              {capacityPlan.tooHeavy.length > 0 && (
+                <div className="mt-3 rounded-2xl bg-gold/10 p-3 text-sm">
+                  <p className="font-medium text-ink">Känns tungt just nu – ta det senare:</p>
                   <ul className="mt-1 space-y-1 text-muted-foreground">
-                    {rebuild.moveOn.map(({ task }) => (
+                    {capacityPlan.tooHeavy.slice(0, 3).map(({ task }) => (
                       <li key={task.id}>→ {task.title}</li>
                     ))}
                   </ul>
                 </div>
               )}
-              <div className="flex gap-2">
-                <Button size="sm" onClick={applyRebuild}>
-                  Ja, gör så
-                </Button>
-                <Button size="sm" variant="secondary" onClick={() => setRebuild(null)}>
-                  Nej tack
+            </CollapsibleSection>
+
+            {/* Prov & repetition från StudyBuddy */}
+            <CollapsibleSection
+              className={card}
+              headingClassName={sectionTitle}
+              title={
+                <>
+                  <Brain className="h-5 w-5 text-primary" /> Prov & repetition
+                </>
+              }
+              help="Prov du lagt in själv. Du väljer om repetition ska hamna i kalendern."
+            >
+              {nextExam ? (
+                <div className="mt-2 rounded-2xl bg-sage/20 p-3 text-sm">
+                  <p className="font-medium text-ink">
+                    <CalendarClock className="mr-1 inline h-4 w-4" />
+                    {nextExam.set.title} – {examPhase(nextExam.days)?.label}
+                  </p>
+                  <p className="mt-1 text-muted-foreground">{examPhase(nextExam.days)?.advice}</p>
+                </div>
+              ) : (
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Inget prov inlagt. Lägg in provdatum i StudyBuddy så planerar jag pluggandet åt
+                  dig.
+                </p>
+              )}
+              <p className="mt-3 text-sm text-ink">
+                🃏 {stats.dueCards} flashcards och ❓ {stats.dueQuestions} frågor väntar på
+                repetition.
+              </p>
+              <Button asChild variant="secondary" className="mt-3 rounded-full">
+                <Link to="/studybuddy">Öppna StudyBuddy</Link>
+              </Button>
+            </CollapsibleSection>
+
+            {/* Vad ska jag plugga nu? */}
+            <CollapsibleSection
+              className={card}
+              headingClassName={sectionTitle}
+              title={
+                <>
+                  <AlarmClock className="h-5 w-5 text-primary" /> Vad ska jag göra nu?
+                </>
+              }
+              help="En sak i taget, vald åt dig. Tryck på start så börjar vi där."
+            >
+              {ranked.length === 0 ? (
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Inget som väntar just nu. Det är också ett svar. 💙
+                </p>
+              ) : (
+                <ul className="mt-3 space-y-2">
+                  {ranked.slice(0, 5).map(({ task, meta }, i) => (
+                    <li
+                      key={task.id}
+                      className="rounded-2xl border border-border/70 bg-background p-3"
+                    >
+                      <div className="flex items-start gap-3">
+                        <button
+                          onClick={(e) => {
+                            toggleTask(task.id);
+                            celebrateFromEvent(e);
+                          }}
+                          aria-label="Markera klar"
+                          className="mt-0.5 text-muted-foreground hover:text-primary"
+                        >
+                          <Circle className="h-5 w-5" />
+                        </button>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm font-medium text-ink">
+                            {i === 0 && <span className="mr-1 font-semibold">NU</span>}
+                            {PRIORITY_META[meta.priority].dot} {task.title}
+                          </p>
+                          <p className="mt-0.5 text-xs text-muted-foreground">
+                            {meta.minutes} min · friktion {meta.friction}/10
+                            {task.dueDate ? ` · inlämning ${task.dueDate}` : ""}
+                          </p>
+
+                          {meta.friction >= 7 && (
+                            <div className="mt-2 rounded-xl bg-gold/10 p-2 text-xs text-ink">
+                              Den här verkar tung att börja med. Vill du dela upp den?
+                              {busyId === task.id && (
+                                <MyFloveThinking
+                                  steps={["📚", "🧠", "✂️", "✨"]}
+                                  label="Jag delar upp den i mindre steg…"
+                                  className="py-2"
+                                />
+                              )}
+                              <Button
+                                size="sm"
+                                variant="secondary"
+                                className="ml-2"
+                                disabled={busyId === task.id}
+                                onClick={() => handleBreakDown(task.id, task.title, task.dueDate)}
+                              >
+                                {busyId === task.id ? (
+                                  <Loader2 className="h-3 w-3 animate-spin" />
+                                ) : (
+                                  <Sparkles className="h-3 w-3" />
+                                )}
+                                <span className="ml-1">Dela upp</span>
+                              </Button>
+                            </div>
+                          )}
+
+                          {task.steps && task.steps.length > 0 && (
+                            <ul className="mt-2 space-y-1 text-xs text-muted-foreground">
+                              {task.steps.map((s) => (
+                                <li key={s.id}>→ {s.title}</li>
+                              ))}
+                            </ul>
+                          )}
+
+                          <button
+                            className="mt-2 text-xs text-primary underline"
+                            onClick={() => setEditing(editing === task.id ? null : task.id)}
+                          >
+                            {editing === task.id ? "Dölj" : "Justera tid, friktion & prioritet"}
+                          </button>
+
+                          {editing === task.id && (
+                            <div className="mt-2 space-y-2">
+                              <div className="flex flex-wrap gap-1">
+                                {MINUTE_CHOICES.map((m) => (
+                                  <button
+                                    key={m}
+                                    onClick={() => setMeta(task.id, { minutes: m })}
+                                    className={`rounded-full border px-2 py-1 text-xs ${
+                                      metaFor(metaMap, task.id).minutes === m
+                                        ? "border-primary bg-primary/10 text-primary"
+                                        : "border-border text-muted-foreground"
+                                    }`}
+                                  >
+                                    {m} min
+                                  </button>
+                                ))}
+                              </div>
+                              <div className="flex flex-wrap gap-1">
+                                {(Object.keys(PRIORITY_META) as WorkPriority[]).map((p) => (
+                                  <button
+                                    key={p}
+                                    onClick={() => setMeta(task.id, { priority: p })}
+                                    className={`rounded-full border px-2 py-1 text-xs ${
+                                      meta.priority === p
+                                        ? "border-primary bg-primary/10 text-primary"
+                                        : "border-border text-muted-foreground"
+                                    }`}
+                                  >
+                                    {PRIORITY_META[p].dot} {PRIORITY_META[p].label}
+                                  </button>
+                                ))}
+                              </div>
+                              <label className="block text-xs text-muted-foreground">
+                                Friktion: {meta.friction}/10
+                                <input
+                                  type="range"
+                                  min={1}
+                                  max={10}
+                                  value={meta.friction}
+                                  onChange={(e) =>
+                                    setMeta(task.id, { friction: Number(e.target.value) })
+                                  }
+                                  className="mt-1 w-full accent-[hsl(var(--primary))]"
+                                />
+                              </label>
+                              <FrictionSuggestion
+                                title={task.title}
+                                current={meta.friction}
+                                onApply={(f) => setMeta(task.id, { friction: f })}
+                              />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </CollapsibleSection>
+
+            {/* Jag har X minuter */}
+            <CollapsibleSection
+              className={card}
+              headingClassName={sectionTitle}
+              title={
+                <>
+                  <Timer className="h-5 w-5 text-primary" /> Jag har …
+                </>
+              }
+            >
+              <div className="mt-3 flex flex-wrap gap-2">
+                {[10, 20, 30, 45, 60].map((m) => (
+                  <Button
+                    key={m}
+                    size="sm"
+                    variant={availableMinutes === m ? "default" : "secondary"}
+                    onClick={() => setAvailableMinutes(availableMinutes === m ? null : m)}
+                  >
+                    {m} minuter
+                  </Button>
+                ))}
+              </div>
+              {timeFit && (
+                <div className="mt-3 rounded-2xl bg-sage/20 p-3 text-sm">
+                  <p className="font-medium text-ink">
+                    ⚡ Bäst användning av dina {availableMinutes} minuter
+                  </p>
+                  {timeFit.picks.length ? (
+                    <>
+                      <ul className="mt-2 space-y-1">
+                        {timeFit.picks.map(({ task, meta }) => (
+                          <li key={task.id}>
+                            🟢 {task.title} – {meta.minutes} min
+                          </li>
+                        ))}
+                      </ul>
+                      <p className="mt-2 text-xs text-muted-foreground">
+                        Totalt {timeFit.usedMinutes} min av {availableMinutes}.
+                      </p>
+                    </>
+                  ) : timeFit.stretch ? (
+                    <p className="mt-2">
+                      🟡 Påbörja "{timeFit.stretch.task.title}" – du hinner en bit på vägen.
+                    </p>
+                  ) : (
+                    <p className="mt-2 text-muted-foreground">
+                      Inget som passar. Ta en runda flashcards istället. 💙
+                    </p>
+                  )}
+                </div>
+              )}
+            </CollapsibleSection>
+
+            {/* Övergångar */}
+            <CollapsibleSection
+              className={card}
+              headingClassName={sectionTitle}
+              title={
+                <>
+                  <ArrowRightLeft className="h-5 w-5 text-primary" /> Hjälp vid övergångar
+                </>
+              }
+            >
+              <p className="mt-1 text-sm text-muted-foreground">
+                Lektionen är slut – hur mycket tid har du innan nästa?
+              </p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {[5, 15, 25, 45].map((m) => (
+                  <Button
+                    key={m}
+                    size="sm"
+                    variant={gap === m ? "default" : "secondary"}
+                    onClick={() => setGap(gap === m ? null : m)}
+                  >
+                    {m} min
+                  </Button>
+                ))}
+              </div>
+              {gap && (
+                <ul className="mt-3 space-y-1 rounded-2xl bg-background p-3 text-sm">
+                  {studyTransitionPlan(gap).map((s) => (
+                    <li key={s}>{s}</li>
+                  ))}
+                </ul>
+              )}
+            </CollapsibleSection>
+
+            {/* Föreläsningsläge */}
+            <CollapsibleSection
+              className={card}
+              headingClassName={sectionTitle}
+              title={
+                <>
+                  <NotebookPen className="h-5 w-5 text-primary" /> Föreläsningsläge
+                </>
+              }
+              help="Ett lugnt läge under lektionen: korta anteckningar och påminnelse om pauser."
+            >
+              <p className="mt-1 text-sm text-muted-foreground">
+                Innan lektionen: vad behöver du fråga eller komma ihåg?
+              </p>
+              <div className="mt-2 flex gap-2">
+                <Input
+                  value={lecturePrep}
+                  onChange={(e) => setLecturePrep(e.target.value)}
+                  placeholder="T.ex. Fråga om deadline för inlämningen"
+                />
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    if (!lecturePrep.trim()) return;
+                    addQuickflow({ text: lecturePrep.trim(), level: "viktigt" });
+                    setLecturePrep("");
+                    toast.success("Sparat i Quickflow – jag påminner dig på lektionen. 💙");
+                  }}
+                >
+                  Spara
                 </Button>
               </div>
-            </div>
-          )}
-        </CollapsibleSection>
 
-        {/* Quickflow för studierna */}
-        <CollapsibleSection
-          className="space-y-3"
-          headingClassName={sectionTitle}
-          title={<><Sparkles className="h-5 w-5 text-gold" /> Quickflow i studierna</>}
-        >
-          <QuickflowCapture />
-          <QuickflowList />
-        </CollapsibleSection>
+              <p className="mt-4 text-sm text-muted-foreground">Efter lektionen: vad kom fram?</p>
+              <div className="mt-2 flex gap-2">
+                <Input
+                  value={lectureNotes}
+                  onChange={(e) => setLectureNotes(e.target.value)}
+                  placeholder="Prata eller skriv – jag gör uppgifter av det"
+                />
+                {voice.isSupported && (
+                  <Button
+                    variant={voice.isListening ? "default" : "secondary"}
+                    size="icon"
+                    aria-label="Prata in"
+                    onClick={voice.toggleListening}
+                  >
+                    <Mic className="h-4 w-4" />
+                  </Button>
+                )}
+                <Button onClick={saveLectureNotes}>Gör uppgifter</Button>
+              </div>
+            </CollapsibleSection>
+
+            {/* Avslutningscheck */}
+            <CollapsibleSection
+              className={card}
+              headingClassName={sectionTitle}
+              title={
+                <>
+                  <CheckCircle2 className="h-5 w-5 text-primary" /> Avslutningscheck
+                </>
+              }
+            >
+              <p className="mt-1 text-sm text-muted-foreground">
+                {minutesLeft > 0
+                  ? `${minutesLeft} min kvar av dagens plugg-fönster.`
+                  : "Plugg-fönstret är stängt för idag."}{" "}
+                Så du slipper komma på saker 23:47.
+              </p>
+              <ul className="mt-3 space-y-2">
+                {END_OF_STUDY_CHECK.map((label) => {
+                  const done = dayChecks.includes(label);
+                  return (
+                    <li key={label}>
+                      <button
+                        onClick={() => toggleCheck(label)}
+                        className="flex w-full items-center gap-2 rounded-2xl border border-border/70 bg-background p-3 text-left text-sm"
+                      >
+                        {done ? (
+                          <CheckCircle2 className="h-4 w-4 text-primary" />
+                        ) : (
+                          <Circle className="h-4 w-4 text-muted-foreground" />
+                        )}
+                        <span className={done ? "text-muted-foreground line-through" : "text-ink"}>
+                          {label}
+                        </span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+              <label className="mt-3 block text-xs text-muted-foreground">
+                Jag slutar plugga kl.
+                <select
+                  className="ml-2 rounded-lg border border-border bg-background px-2 py-1 text-ink"
+                  value={settings.endHour}
+                  onChange={(e) => setSettings({ endHour: Number(e.target.value) })}
+                >
+                  {[16, 17, 18, 19, 20, 21, 22].map((h) => (
+                    <option key={h} value={h}>
+                      {String(h).padStart(2, "0")}:00
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </CollapsibleSection>
+
+            {/* Dagen gick åt pipsvängen */}
+            <CollapsibleSection
+              className={card}
+              headingClassName={sectionTitle}
+              title={
+                <>
+                  <LifeBuoy className="h-5 w-5 text-primary" /> Jag hann inget idag
+                </>
+              }
+              help="Tryck här när dagen sprack. Du får en mjuk omstart utan pekpinnar."
+            >
+              <p className="mt-1 text-sm text-muted-foreground">
+                Det blev inte som planerat. Ingen fara. Vill du att jag bygger om resten av dagen?
+              </p>
+              <Button
+                className="mt-3"
+                onClick={() =>
+                  setRebuild(
+                    rebuildDay(
+                      studyTasks,
+                      metaMap,
+                      Math.min(minutesLeft, flow.capacityMinutes),
+                      energy,
+                    ),
+                  )
+                }
+              >
+                Bygg om dagen
+              </Button>
+              {rebuild && (
+                <div className="mt-3 space-y-3 rounded-2xl bg-background p-3 text-sm">
+                  <div>
+                    <p className="font-medium text-ink">Det här hinner du:</p>
+                    {rebuild.keep.length ? (
+                      <ul className="mt-1 space-y-1">
+                        {rebuild.keep.map(({ task, meta }) => (
+                          <li key={task.id}>
+                            🟢 {task.title} – {meta.minutes} min
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-muted-foreground">Inget mer idag. Det är okej. 💙</p>
+                    )}
+                  </div>
+                  {rebuild.moveOn.length > 0 && (
+                    <div>
+                      <p className="font-medium text-ink">Flyttas till imorgon:</p>
+                      <ul className="mt-1 space-y-1 text-muted-foreground">
+                        {rebuild.moveOn.map(({ task }) => (
+                          <li key={task.id}>→ {task.title}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  <div className="flex gap-2">
+                    <Button size="sm" onClick={applyRebuild}>
+                      Ja, gör så
+                    </Button>
+                    <Button size="sm" variant="secondary" onClick={() => setRebuild(null)}>
+                      Nej tack
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </CollapsibleSection>
+
+            {/* Quickflow för studierna */}
+            <CollapsibleSection
+              className="space-y-3"
+              headingClassName={sectionTitle}
+              title={
+                <>
+                  <Sparkles className="h-5 w-5 text-gold" /> Quickflow i studierna
+                </>
+              }
+            >
+              <QuickflowCapture />
+              <QuickflowList />
+            </CollapsibleSection>
           </TabsContent>
         </Tabs>
       </div>

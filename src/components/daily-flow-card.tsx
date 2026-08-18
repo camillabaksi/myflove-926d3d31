@@ -33,7 +33,17 @@ const FOCUS_TONES = [
 ];
 
 /** Liten prickskala för energi och belastning. */
-function Meter({ label, icon, value, tone }: { label: string; icon: string; value: number; tone: string }) {
+function Meter({
+  label,
+  icon,
+  value,
+  tone,
+}: {
+  label: string;
+  icon: string;
+  value: number;
+  tone: string;
+}) {
   return (
     <div className="flex items-center gap-3">
       <span className="w-28 shrink-0 text-sm font-medium text-ink">
@@ -96,7 +106,7 @@ export default function DailyFlowCard() {
   const startFocus = (item: ScoredTask) => {
     setFocusItem(item);
     setFocusOpen(true);
-    
+
     log("fokus");
   };
 
@@ -171,7 +181,11 @@ export default function DailyFlowCard() {
             className="pointer-events-none absolute right-2 bottom-2 select-none rounded-full bg-cream/90 p-3 shadow-soft backdrop-blur-sm"
             aria-hidden
           >
-            <MyFloveHeart size={52} mood={moodFromEnergy(checkin.energy)} className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.12)]" />
+            <MyFloveHeart
+              size={52}
+              mood={moodFromEnergy(checkin.energy)}
+              className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.12)]"
+            />
           </div>
           <div className="relative space-y-3 pr-16">
             <div className="flex items-center justify-between gap-2">
@@ -202,7 +216,6 @@ export default function DailyFlowCard() {
         </div>
       )}
 
-
       {/* ── Ditt fokus idag ───────────────────────────── */}
       <div className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft space-y-3">
         <div className="flex items-center gap-2">
@@ -232,10 +245,12 @@ export default function DailyFlowCard() {
                       {i + 1}
                     </span>
                     <span className="min-w-0 flex-1">
-                      <span className="block truncate font-semibold text-ink">{item.task.title}</span>
+                      <span className="block truncate font-semibold text-ink">
+                        {item.task.title}
+                      </span>
                       <span className="block text-xs text-muted-foreground">
-                        {item.minutes} min · {PRIORITY_DOT[item.priority]} {item.priority} prioritet ·{" "}
-                        {FRICTION_LABEL(item.friction)}
+                        {item.minutes} min · {PRIORITY_DOT[item.priority]} {item.priority} prioritet
+                        · {FRICTION_LABEL(item.friction)}
                       </span>
                     </span>
                     <ChevronRight size={16} className="shrink-0 text-muted-foreground" />
@@ -258,7 +273,6 @@ export default function DailyFlowCard() {
             </button>
           </>
         )}
-
       </div>
 
       <FocusMode

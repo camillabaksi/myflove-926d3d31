@@ -6,7 +6,17 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
-  { ignores: ["dist", ".output", ".vinxi"] },
+  {
+    // Genererade filer formateras om av verktygskedjan – lintas inte.
+    ignores: [
+      "dist",
+      ".output",
+      ".vinxi",
+      "src/routes/mcp.ts",
+      "src/routes/\\[.mcp\\]/**",
+      "src/routes/\\[.well-known\\]/**",
+    ],
+  },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ["**/*.{ts,tsx}"],
@@ -34,6 +44,20 @@ export default tseslint.config(
       ],
       "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
       "@typescript-eslint/no-unused-vars": "off",
+    },
+  },
+  {
+    // shadcn/ui, Remotion-scener och kompatibilitetslager exporterar med flit
+    // både komponenter och varianter/hjälpare – Fast Refresh-regeln gäller inte här.
+    files: [
+      "src/components/ui/**/*.{ts,tsx}",
+      "src/compat/**/*.{ts,tsx}",
+      "remotion/**/*.{ts,tsx}",
+      "src/components/myflove/motion.tsx",
+      "src/components/flow-item-actions.tsx",
+    ],
+    rules: {
+      "react-refresh/only-export-components": "off",
     },
   },
   eslintPluginPrettier,

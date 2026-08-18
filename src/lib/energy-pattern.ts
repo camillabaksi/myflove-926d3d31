@@ -40,9 +40,7 @@ export function buildEnergyPattern(samples: EnergySample[]): EnergyPattern {
     return count ? total / count : null;
   });
 
-  const average = samples.length
-    ? samples.reduce((s, x) => s + x.level, 0) / samples.length
-    : null;
+  const average = samples.length ? samples.reduce((s, x) => s + x.level, 0) / samples.length : null;
 
   return {
     byHour,
@@ -72,10 +70,7 @@ export interface EnergyExpectation {
  * Vad brukar din energi vara just den här tiden på dygnet?
  * Returnerar null när underlaget är för tunt – hellre tyst än gissa.
  */
-export function expectationFor(
-  pattern: EnergyPattern,
-  now = new Date(),
-): EnergyExpectation | null {
+export function expectationFor(pattern: EnergyPattern, now = new Date()): EnergyExpectation | null {
   if (!pattern.reliable || pattern.average == null) return null;
   const expected = pattern.byHour[now.getHours()];
   if (expected == null) return null;

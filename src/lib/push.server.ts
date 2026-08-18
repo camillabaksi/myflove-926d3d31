@@ -23,7 +23,6 @@ export type PushNotificationBody = {
   /** `task:<id>` / `reminder:<id>` / `quickflow:<id>` – ger snabbval i notisen. */
   itemKey?: string;
   vibrate?: number[];
-
 };
 
 function getVapid(): VapidKeys {

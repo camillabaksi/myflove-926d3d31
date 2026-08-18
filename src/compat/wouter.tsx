@@ -9,12 +9,8 @@ type LinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> & {
 export function Link({ href, children, onClick, ...rest }: LinkProps) {
   // Use TanStack Link where possible; fall back to <a> for unknown routes.
   return (
-    <TSLink
-      to={href as string}
-      onClick={onClick as any}
-      {...(rest as any)}
-    >
-      {children as any}
+    <TSLink to={href as string} onClick={onClick} {...rest}>
+      {children}
     </TSLink>
   );
 }

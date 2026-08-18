@@ -32,7 +32,6 @@ function item2Boost(
 }
 import { DailyFocusCard } from "@/components/daily-focus-card";
 
-
 type StoredPlan = {
   plan: FlowPlanResult;
   savedAt: string;
@@ -223,7 +222,10 @@ export default function FlowPlanPage() {
     const byId = new Map(plan.plan.map((i) => [i.taskId, i] as const));
     const custom = storedPlan?.customOrder ?? [];
     const ids = custom.length
-      ? [...custom.filter((id) => byId.has(id)), ...suggestedOrder.filter((id) => !custom.includes(id))]
+      ? [
+          ...custom.filter((id) => byId.has(id)),
+          ...suggestedOrder.filter((id) => !custom.includes(id)),
+        ]
       : suggestedOrder;
     return ids.map((id) => byId.get(id)!).filter(Boolean);
   }, [plan, storedPlan?.customOrder, suggestedOrder]);
@@ -264,14 +266,14 @@ export default function FlowPlanPage() {
             <div>
               <h1 className="text-3xl font-bold leading-tight text-ink">FlowPlan</h1>
               <p className="text-sm text-muted-foreground">
-                Sätt dagens fokus och låt Flow föreslå en ordning som passar dagen – inte en lista på allt du "borde" hinna.
+                Sätt dagens fokus och låt Flow föreslå en ordning som passar dagen – inte en lista
+                på allt du "borde" hinna.
               </p>
             </div>
           </div>
         </div>
 
         <DailyFocusCard />
-
 
         <div className="surface-card p-5 space-y-5">
           <div>
@@ -280,7 +282,8 @@ export default function FlowPlanPage() {
               {energyAuto && !energyManual && (
                 <span className="text-xs text-muted-foreground flex items-center gap-1">
                   <Battery size={12} className="text-primary" />
-                  Från Energikarta ({LEVEL_LABELS[energyAuto.level]}, {timeAgo(energyAuto.loggedAt)})
+                  Från Energikarta ({LEVEL_LABELS[energyAuto.level]}, {timeAgo(energyAuto.loggedAt)}
+                  )
                 </span>
               )}
               {energyAuto && energyManual && (
@@ -296,7 +299,10 @@ export default function FlowPlanPage() {
                 </button>
               )}
               {!energyAuto && (
-                <Link to="/ma-bra" className="text-xs text-primary hover:underline flex items-center gap-1">
+                <Link
+                  to="/ma-bra"
+                  className="text-xs text-primary hover:underline flex items-center gap-1"
+                >
                   <Battery size={12} /> Logga energi
                 </Link>
               )}
@@ -320,7 +326,6 @@ export default function FlowPlanPage() {
               ))}
             </div>
           </div>
-
 
           <div>
             <label className="text-sm font-medium mb-2 flex items-center gap-2">
@@ -393,20 +398,20 @@ export default function FlowPlanPage() {
                 {hasCustomOrder ? " · du har ändrat ordningen" : ""}
               </span>
               <div className="flex items-center gap-3">
-              {hasCustomOrder && (
+                {hasCustomOrder && (
+                  <button
+                    onClick={resetOrder}
+                    className="text-xs text-muted-foreground hover:text-foreground"
+                  >
+                    Tillbaka till Flows ordning
+                  </button>
+                )}
                 <button
-                  onClick={resetOrder}
-                  className="text-xs text-muted-foreground hover:text-foreground"
+                  onClick={() => setPlan(null)}
+                  className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1"
                 >
-                  Tillbaka till Flows ordning
+                  <RotateCcw size={12} /> Rensa
                 </button>
-              )}
-              <button
-                onClick={() => setPlan(null)}
-                className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1"
-              >
-                <RotateCcw size={12} /> Rensa
-              </button>
               </div>
             </div>
             <div className="p-4 bg-primary/5 border border-primary/20 rounded-2xl">

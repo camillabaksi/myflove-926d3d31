@@ -83,10 +83,11 @@ let state: ChildrenState = {
   conflict: null,
 };
 
-
 const listeners = new Set<(s: ChildrenState) => void>();
 
-function setState(patch: Partial<ChildrenState> | ((prev: ChildrenState) => Partial<ChildrenState>)) {
+function setState(
+  patch: Partial<ChildrenState> | ((prev: ChildrenState) => Partial<ChildrenState>),
+) {
   const next = typeof patch === "function" ? patch(state) : patch;
   state = { ...state, ...next };
   for (const l of listeners) l(state);
@@ -108,10 +109,15 @@ async function loadAll(): Promise<void> {
 
       const [{ data: kids, error: kidsErr }, { data: rows, error: rowsErr }, { data: shares }] =
         await Promise.all([
-          supabase.from("children").select("id, owner_id, name, birthdate, color, note").order("created_at"),
+          supabase
+            .from("children")
+            .select("id, owner_id, name, birthdate, color, note")
+            .order("created_at"),
           supabase
             .from("child_items")
-            .select("id, child_id, owner_id, kind, title, notes, date, time, completed, remind, repeat, file_path, created_at, updated_at")
+            .select(
+              "id, child_id, owner_id, kind, title, notes, date, time, completed, remind, repeat, file_path, created_at, updated_at",
+            )
             .order("created_at", { ascending: false }),
           supabase.from("child_item_shares").select("item_id, user_id"),
         ]);
@@ -202,12 +208,17 @@ async function fetchServerItem(id: string): Promise<ChildItem | null> {
     .eq("id", id)
     .maybeSingle();
   if (!data) return null;
-  const { data: shares } = await supabase.from("child_item_shares").select("user_id").eq("item_id", id);
-  return { ...(data as Omit<ChildItem, "sharedWith">), sharedWith: (shares ?? []).map((s) => s.user_id) };
+  const { data: shares } = await supabase
+    .from("child_item_shares")
+    .select("user_id")
+    .eq("item_id", id);
+  return {
+    ...(data as Omit<ChildItem, "sharedWith">),
+    sharedWith: (shares ?? []).map((s) => s.user_id),
+  };
 }
 
 export function useChildren() {
-
   const [snapshot, setSnapshot] = useState<ChildrenState>(state);
 
   useEffect(() => {
@@ -234,8 +245,13 @@ export function useChildren() {
     await loadAll();
   };
 
-  const updateChild = async (id: string, patch: Partial<Pick<Child, "name" | "color" | "birthdate" | "note">>) => {
-    setState((prev) => ({ children: prev.children.map((c) => (c.id === id ? { ...c, ...patch } : c)) }));
+  const updateChild = async (
+    id: string,
+    patch: Partial<Pick<Child, "name" | "color" | "birthdate" | "note">>,
+  ) => {
+    setState((prev) => ({
+      children: prev.children.map((c) => (c.id === id ? { ...c, ...patch } : c)),
+    }));
     const { error: err } = await supabase.from("children").update(patch).eq("id", id);
     if (err) {
       await loadAll();
@@ -279,7 +295,9 @@ export function useChildren() {
         repeat: input.repeat ?? "none",
         file_path: input.filePath || null,
       })
-      .select("id, child_id, owner_id, kind, title, notes, date, time, completed, remind, repeat, file_path, created_at, updated_at")
+      .select(
+        "id, child_id, owner_id, kind, title, notes, date, time, completed, remind, repeat, file_path, created_at, updated_at",
+      )
       .single();
     if (err) throw err;
     const created = { ...(data as Omit<ChildItem, "sharedWith">), sharedWith: [] as string[] };
@@ -359,7 +377,6 @@ export function useChildren() {
 
   const dismissConflict = () => setState({ conflict: null });
 
-
   /** Sätter exakt vilka som ska se saken. Tom lista = åter privat. */
   const setItemShares = async (itemId: string, userIds: string[]) => {
     setState((prev) => ({
@@ -376,14 +393,16 @@ export function useChildren() {
   };
 
   const uploadDoc = async (childId: string, file: File) => {
-    const path = `${childId}/${Date.now()}-${file.name.replace(/[^\w.\-]/g, "_")}`;
+    const path = `${childId}/${Date.now()}-${file.name.replace(/[^\w.-]/g, "_")}`;
     const { error: err } = await supabase.storage.from("child-docs").upload(path, file);
     if (err) throw err;
     return path;
   };
 
   const openDoc = async (path: string) => {
-    const { data, error: err } = await supabase.storage.from("child-docs").createSignedUrl(path, 60);
+    const { data, error: err } = await supabase.storage
+      .from("child-docs")
+      .createSignedUrl(path, 60);
     if (err) throw err;
     return data.signedUrl;
   };

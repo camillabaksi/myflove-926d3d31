@@ -82,13 +82,13 @@ export function hasWorkProfile(p: WorkProfile | null | undefined): boolean {
   if (!p) return false;
   return Boolean(
     p.role.trim() ||
-      p.industry.trim() ||
-      p.workplace?.trim() ||
-      p.responsibilities.length ||
-      p.pace ||
-      p.hoursNote.trim() ||
-      p.helpWith.length ||
-      p.note.trim(),
+    p.industry.trim() ||
+    p.workplace?.trim() ||
+    p.responsibilities.length ||
+    p.pace ||
+    p.hoursNote.trim() ||
+    p.helpWith.length ||
+    p.note.trim(),
   );
 }
 
@@ -190,7 +190,10 @@ export function workSuggestions(
       href: "/workflow",
       hrefLabel: "Hitta en tid",
     });
-  } else if (meetingsToday.length >= 2 && (does("Dokumentation") || wants("Efterarbete efter möten"))) {
+  } else if (
+    meetingsToday.length >= 2 &&
+    (does("Dokumentation") || wants("Efterarbete efter möten"))
+  ) {
     out.push({
       title: "Efterarbetet behöver plats",
       body: `Med ${meetingsToday.length} möten idag brukar efterarbetet bli kvar. Boka 10 minuter direkt efter varje möte istället för allt på slutet.`,

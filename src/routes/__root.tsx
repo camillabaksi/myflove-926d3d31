@@ -1,10 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import {
-  Outlet,
-  createRootRouteWithContext,
-  HeadContent,
-  Scripts,
-} from "@tanstack/react-router";
+import { Outlet, createRootRouteWithContext, HeadContent, Scripts } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 
 import appCss from "../styles.css?url";
@@ -38,7 +33,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "mobile-web-app-capable", content: "yes" },
       { name: "vibekollen-verifiering", content: "vk-52413b42f16be1ff3bcba37c" },
       { name: "google-site-verification", content: "no4-nUlVosHpU1GzHhDN73UtQH7v3b8E4k-qs1mNVgM" },
-
     ],
     links: [
       { rel: "stylesheet", href: appCss },

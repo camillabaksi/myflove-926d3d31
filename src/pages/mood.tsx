@@ -11,13 +11,12 @@ import { MyFloveHeart } from "@/components/myflove/motion";
 import { useUserProfile } from "@/hooks/use-user-profile";
 import CollapsibleSection from "@/components/collapsible-section";
 
-
 const EMOJIS = [
   { score: 1, emoji: "😢", label: "Tungt" },
   { score: 2, emoji: "😕", label: "Låg" },
   { score: 3, emoji: "😐", label: "Okej" },
   { score: 4, emoji: "🙂", label: "Bra" },
-  { score: 5, emoji: "😄", label: "Toppen" }
+  { score: 5, emoji: "😄", label: "Toppen" },
 ];
 
 interface MoodContentProps {
@@ -32,7 +31,6 @@ export function MoodContent({ showHeader = true }: MoodContentProps) {
   const [justSaved, setJustSaved] = useState(false);
   const [flowInsightsOpen, setFlowInsightsOpen] = useState(false);
   const [showAllMoods, setShowAllMoods] = useState(false);
-
 
   const handleSave = () => {
     if (selectedScore !== null) {
@@ -79,7 +77,9 @@ export function MoodContent({ showHeader = true }: MoodContentProps) {
                   }`}
                 >
                   <span className="text-4xl md:text-5xl drop-shadow-sm">{item.emoji}</span>
-                  <span className={`text-xs md:text-sm font-medium ${selectedScore === item.score ? "text-primary" : "text-muted-foreground"}`}>
+                  <span
+                    className={`text-xs md:text-sm font-medium ${selectedScore === item.score ? "text-primary" : "text-muted-foreground"}`}
+                  >
                     {item.label}
                   </span>
                 </button>
@@ -94,7 +94,10 @@ export function MoodContent({ showHeader = true }: MoodContentProps) {
                   placeholder="Vill du skriva en kort rad om varför? (Valfritt)"
                   className="w-full h-24 p-4 rounded-2xl bg-secondary/50 border-transparent focus:border-primary focus:ring-1 focus:ring-primary outline-none resize-none transition-all text-base"
                 />
-                <Button onClick={handleSave} className="w-full h-14 rounded-2xl text-lg font-medium shadow-sm">
+                <Button
+                  onClick={handleSave}
+                  className="w-full h-14 rounded-2xl text-lg font-medium shadow-sm"
+                >
                   Spara mående
                 </Button>
               </div>
@@ -139,10 +142,15 @@ export function MoodContent({ showHeader = true }: MoodContentProps) {
             {(showAllMoods ? moods : moods.slice(0, 3)).map((mood) => {
               const emoji = EMOJIS.find((e) => e.score === mood.score)?.emoji;
               return (
-                <div key={mood.id} className="bg-card p-4 rounded-2xl border border-border shadow-sm flex items-start gap-4">
+                <div
+                  key={mood.id}
+                  className="bg-card p-4 rounded-2xl border border-border shadow-sm flex items-start gap-4"
+                >
                   <div className="text-3xl shrink-0 pt-1">{emoji}</div>
                   <div className="flex-1">
-                    <p className="text-sm text-muted-foreground capitalize mb-1">{formatDate(mood.date)}</p>
+                    <p className="text-sm text-muted-foreground capitalize mb-1">
+                      {formatDate(mood.date)}
+                    </p>
                     {mood.note && <p className="text-foreground leading-relaxed">{mood.note}</p>}
                   </div>
                 </div>
@@ -151,7 +159,6 @@ export function MoodContent({ showHeader = true }: MoodContentProps) {
           </div>
         </CollapsibleSection>
       )}
-
 
       <FlowInsightsModal open={flowInsightsOpen} onOpenChange={setFlowInsightsOpen} />
     </div>
@@ -174,7 +181,9 @@ function MoodHeader() {
       <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
         <MyFloveHeart size={26} /> {g.title}
       </h1>
-      <p className="text-muted-foreground">Hur känns det i kroppen och knoppen just nu? Ingen dömer dig här.</p>
+      <p className="text-muted-foreground">
+        Hur känns det i kroppen och knoppen just nu? Ingen dömer dig här.
+      </p>
     </div>
   );
 }

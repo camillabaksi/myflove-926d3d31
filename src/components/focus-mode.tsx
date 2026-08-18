@@ -98,7 +98,9 @@ export default function FocusMode({
         ) : (
           <div className="space-y-7 py-6 text-center">
             <div className="space-y-1">
-              <p className="font-display text-2xl font-bold leading-snug text-ink">{item.task.title}</p>
+              <p className="font-display text-2xl font-bold leading-snug text-ink">
+                {item.task.title}
+              </p>
               <p className="text-sm text-muted-foreground">{item.minutes} minuter</p>
             </div>
 
@@ -172,7 +174,6 @@ export default function FocusMode({
             </div>
           </div>
         )}
-
       </DialogContent>
     </Dialog>
   );

@@ -44,8 +44,6 @@ function LandingPage() {
     });
   }, [navigate]);
 
-
-
   return (
     <main className="min-h-screen bg-[#F8F5FE] text-[#2A2140]">
       {/* ── Hero ─────────────────────────────────────────── */}
@@ -53,14 +51,16 @@ function LandingPage() {
         <div className="pointer-events-none absolute -top-40 -right-24 h-[420px] w-[420px] rounded-full bg-gradient-to-br from-[#A78BFA] to-[#7C5CE0] opacity-80 blur-sm" />
         <div className="pointer-events-none absolute -bottom-32 -left-16 h-[320px] w-[320px] rounded-full bg-[#C4B5FD] opacity-50" />
         <div className="relative mx-auto max-w-3xl text-center">
-          <p className="text-xs uppercase tracking-[0.35em] text-[#7C5CE0] font-semibold">MyFlove</p>
+          <p className="text-xs uppercase tracking-[0.35em] text-[#7C5CE0] font-semibold">
+            MyFlove
+          </p>
           <h1 className="mt-4 font-display text-5xl md:text-7xl font-bold leading-[0.95] tracking-tight">
             MyFlove – lugn planering för ADHD, autism och ett fullt huvud
           </h1>
 
           <p className="mt-6 text-lg md:text-xl text-[#6B647F] max-w-xl mx-auto leading-relaxed">
-            Ett lugnare hem för hjärnan – för dig som lever med ADHD, autism eller
-            bara mycket i huvudet. 💙
+            Ett lugnare hem för hjärnan – för dig som lever med ADHD, autism eller bara mycket i
+            huvudet. 💙
           </p>
           <div className="mt-10 flex flex-col sm:flex-row gap-3 justify-center">
             <Button
@@ -92,8 +92,7 @@ function LandingPage() {
             Som en vän i fickan.
           </h2>
           <p className="mt-4 text-[#6B647F] max-w-xl">
-            Flow är lugn, empatisk och mänsklig. Aldrig tjatig, aldrig
-            skuldbeläggande.
+            Flow är lugn, empatisk och mänsklig. Aldrig tjatig, aldrig skuldbeläggande.
           </p>
 
           <div className="mt-10 space-y-5 max-w-2xl">
@@ -124,9 +123,8 @@ function LandingPage() {
             En hjärna. Inte sju appar.
           </h2>
           <p className="mt-4 text-[#6B647F] max-w-2xl">
-            Kalender, ekonomi, hälsa, familj, inköp, ärenden och FlowPlan™ är
-            inte separata funktioner. Flow läser av allt – och hjälper dig med
-            helheten.
+            Kalender, ekonomi, hälsa, familj, inköp, ärenden och FlowPlan™ är inte separata
+            funktioner. Flow läser av allt – och hjälper dig med helheten.
           </p>
 
           <div className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -145,17 +143,15 @@ function LandingPage() {
                 className="bg-white rounded-2xl p-4 text-center shadow-sm border border-[#2A2140]/5"
               >
                 <div className="text-2xl">{m.i}</div>
-                <div className="mt-1 text-sm font-semibold text-[#2A2140]">
-                  {m.l}
-                </div>
+                <div className="mt-1 text-sm font-semibold text-[#2A2140]">{m.l}</div>
               </div>
             ))}
           </div>
 
           <div className="mt-8 rounded-2xl bg-white/70 border border-[#7C5CE0]/20 p-5 max-w-2xl">
             <p className="text-sm italic text-[#2A2140] leading-relaxed">
-              "Jag såg att du har läkarbesök 14:00, saknar mjölk hemma, och att
-              banken drar hyran imorgon. Ska jag flytta träningen?"
+              "Jag såg att du har läkarbesök 14:00, saknar mjölk hemma, och att banken drar hyran
+              imorgon. Ska jag flytta träningen?"
             </p>
             <p className="mt-2 text-xs uppercase tracking-widest text-[#7C5CE0] font-semibold">
               — Flow
@@ -200,9 +196,7 @@ function LandingPage() {
                 <p className="text-xs uppercase tracking-[0.25em] text-[#7C5CE0] font-semibold">
                   {sc.s}
                 </p>
-                <p className="mt-3 font-display text-xl leading-snug text-[#2A2140]">
-                  {sc.r}
-                </p>
+                <p className="mt-3 font-display text-xl leading-snug text-[#2A2140]">{sc.r}</p>
               </div>
             ))}
           </div>
@@ -220,8 +214,8 @@ function LandingPage() {
             Rätt sak, i rätt ordning.
           </h2>
           <p className="mt-4 text-white/70 max-w-xl">
-            Du säger vad som ska göras. Flow räknar ut den mest effektiva
-            ordningen – och förklarar varför.
+            Du säger vad som ska göras. Flow räknar ut den mest effektiva ordningen – och förklarar
+            varför.
           </p>
 
           <div className="mt-10 grid md:grid-cols-2 gap-8">
@@ -249,10 +243,20 @@ function LandingPage() {
               </p>
               <div className="mt-3 space-y-2">
                 {[
-                  { n: 1, s: "Starta tvättmaskinen", w: "Går själv medan du gör annat.", t: "0 min" },
+                  {
+                    n: 1,
+                    s: "Starta tvättmaskinen",
+                    w: "Går själv medan du gör annat.",
+                    t: "0 min",
+                  },
                   { n: 2, s: "Starta robotdammsugaren", w: "Städar medan du duschar.", t: "1 min" },
                   { n: 3, s: "Duscha", w: "Lugn stund. Ingen väntar på dig.", t: "5 min" },
-                  { n: 4, s: "Laga middag", w: "Tvätten färdig snart – hänger efter maten.", t: "25 min" },
+                  {
+                    n: 4,
+                    s: "Laga middag",
+                    w: "Tvätten färdig snart – hänger efter maten.",
+                    t: "25 min",
+                  },
                 ].map((st) => (
                   <div
                     key={st.n}
@@ -308,15 +312,16 @@ function LandingPage() {
             Vår vision
           </p>
           <h2 className="mt-6 font-display text-4xl md:text-6xl font-bold leading-[1.05] tracking-tight">
-            Vi bygger inte funktioner.<br />
+            Vi bygger inte funktioner.
+            <br />
             Vi löser vardagsfriktion.
           </h2>
           <p className="mt-6 font-display text-2xl md:text-3xl italic text-[#A78BFA]">
             Bär mindre. Gör inte mer.
           </p>
           <p className="mt-10 text-white/70 text-base md:text-lg leading-relaxed max-w-xl mx-auto">
-            Du öppnar inte en app. Du möter Flow – en lugn, intelligent
-            följeslagare som hjälper dig genom vardagen. 💙
+            Du öppnar inte en app. Du möter Flow – en lugn, intelligent följeslagare som hjälper dig
+            genom vardagen. 💙
           </p>
           <div className="mt-10">
             <Button
@@ -327,9 +332,7 @@ function LandingPage() {
               <Link to="/sign-up">Möt Flow</Link>
             </Button>
           </div>
-          <p className="mt-8 text-xs text-white/40 tracking-widest">
-            mitt-flow.lovable.app
-          </p>
+          <p className="mt-8 text-xs text-white/40 tracking-widest">mitt-flow.lovable.app</p>
         </div>
       </section>
 
@@ -337,9 +340,15 @@ function LandingPage() {
         <div className="mx-auto max-w-5xl flex flex-col sm:flex-row items-center justify-between gap-4 text-sm">
           <p>© {new Date().getFullYear()} MyFlove</p>
           <nav className="flex gap-5">
-            <Link to="/integritet" className="hover:text-white">Integritet</Link>
-            <Link to="/villkor" className="hover:text-white">Villkor</Link>
-            <Link to="/cookies" className="hover:text-white">Cookies</Link>
+            <Link to="/integritet" className="hover:text-white">
+              Integritet
+            </Link>
+            <Link to="/villkor" className="hover:text-white">
+              Villkor
+            </Link>
+            <Link to="/cookies" className="hover:text-white">
+              Cookies
+            </Link>
           </nav>
         </div>
       </footer>

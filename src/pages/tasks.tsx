@@ -28,23 +28,36 @@ import { getRandomEncouragement } from "@/lib/encouragements";
 import { confirmations } from "@/lib/flow-voice";
 import { AreaSwitcher } from "@/components/area-switcher";
 import CollapsibleSection from "@/components/collapsible-section";
-import { ALL_AREAS, AREA_META, areaChipStyle, defaultAreaFor, filterByArea, getArea, useActiveArea } from "@/lib/life-areas";
-
+import {
+  ALL_AREAS,
+  AREA_META,
+  areaChipStyle,
+  defaultAreaFor,
+  filterByArea,
+  getArea,
+  useActiveArea,
+} from "@/lib/life-areas";
 
 // Blueprint 2.0 §7.4: Uppgift / Ärende / Projekt.
 const KIND_META: Record<TaskKind, { label: string; hint: string; Icon: typeof ListChecks }> = {
   uppgift: { label: "Uppgift", hint: "Något enkelt du kan bocka av", Icon: ListChecks },
-  arende:  { label: "Ärende",  hint: "Kräver flera steg eller väntetid", Icon: Briefcase },
+  arende: { label: "Ärende", hint: "Kräver flera steg eller väntetid", Icon: Briefcase },
   projekt: { label: "Projekt", hint: "Större sak med flera delar", Icon: FolderKanban },
 };
 
 const STATUS_META: Record<TaskStatus, { label: string; Icon: typeof Clock; badge: string }> = {
-  pagar:  { label: "Pågår",     Icon: Clock, badge: "bg-primary/10 text-primary border-primary/20" },
-  vantar: { label: "Väntar på", Icon: Pause, badge: "bg-amber-100 text-amber-800 border-amber-200" },
-  klart:  { label: "Klart",     Icon: Check, badge: "bg-secondary text-muted-foreground border-border" },
+  pagar: { label: "Pågår", Icon: Clock, badge: "bg-primary/10 text-primary border-primary/20" },
+  vantar: {
+    label: "Väntar på",
+    Icon: Pause,
+    badge: "bg-amber-100 text-amber-800 border-amber-200",
+  },
+  klart: { label: "Klart", Icon: Check, badge: "bg-secondary text-muted-foreground border-border" },
 };
 
-function getKind(t: Task): TaskKind { return t.kind ?? "uppgift"; }
+function getKind(t: Task): TaskKind {
+  return t.kind ?? "uppgift";
+}
 function getStatus(t: Task): TaskStatus {
   if (t.completed) return "klart";
   return t.status ?? "pagar";
@@ -64,14 +77,12 @@ export default function Tasks() {
     setTaskNote,
     updateTask,
 
-
     addTaskStep,
     toggleTaskStep,
     deleteTaskStep,
   } = useTasks();
   const { toast } = useToast();
   const { activeArea } = useActiveArea();
-
 
   const [newTask, setNewTask] = useState("");
   const [dueDate, setDueDate] = useState("");
@@ -89,7 +100,8 @@ export default function Tasks() {
   const toggleExpand = (id: string) => {
     setExpanded((prev) => {
       const next = new Set(prev);
-      if (next.has(id)) next.delete(id); else next.add(id);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
       return next;
     });
   };
@@ -121,20 +133,21 @@ export default function Tasks() {
     setNewNote("");
     setNewReminder("");
     setNewKind("uppgift");
-
   };
 
-  const areaActive = useMemo(() => filterByArea(activeTasks, activeArea), [activeTasks, activeArea]);
-
-  const filteredActive = useMemo(
-    () => filter === "all" ? areaActive : areaActive.filter((t) => getKind(t) === filter),
-    [areaActive, filter]
+  const areaActive = useMemo(
+    () => filterByArea(activeTasks, activeArea),
+    [activeTasks, activeArea],
   );
 
+  const filteredActive = useMemo(
+    () => (filter === "all" ? areaActive : areaActive.filter((t) => getKind(t) === filter)),
+    [areaActive, filter],
+  );
 
   const grouped = useMemo(() => {
     const waiting = filteredActive.filter((t) => getStatus(t) === "vantar");
-    const doing   = filteredActive.filter((t) => getStatus(t) === "pagar");
+    const doing = filteredActive.filter((t) => getStatus(t) === "pagar");
     return { waiting, doing };
   }, [filteredActive]);
 
@@ -170,7 +183,9 @@ export default function Tasks() {
 
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap mb-1">
-              <span className={`inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full border ${STATUS_META[status].badge}`}>
+              <span
+                className={`inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full border ${STATUS_META[status].badge}`}
+              >
                 <StatusIcon size={11} /> {STATUS_META[status].label}
               </span>
               <span className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full bg-secondary/60 text-muted-foreground border border-border">
@@ -209,9 +224,10 @@ export default function Tasks() {
               <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">{task.note}</p>
             )}
 
-
             {status === "vantar" && task.waitingOn && (
-              <p className="text-xs text-amber-800 mt-1">Väntar på: <strong>{task.waitingOn}</strong></p>
+              <p className="text-xs text-amber-800 mt-1">
+                Väntar på: <strong>{task.waitingOn}</strong>
+              </p>
             )}
 
             {/* Status-switcher (Blueprint status: Pågår / Väntar på / Klart) */}
@@ -250,10 +266,6 @@ export default function Tasks() {
               </button>
             </div>
           </div>
-
-
-
-
 
           <button
             onClick={() => deleteTask(task.id)}
@@ -301,7 +313,10 @@ export default function Tasks() {
             {/* Datum, tider och påminnelse – allt går att ändra i efterhand */}
             <div className="grid grid-cols-2 gap-2">
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-muted-foreground" htmlFor={`date-${task.id}`}>
+                <label
+                  className="text-xs font-medium text-muted-foreground"
+                  htmlFor={`date-${task.id}`}
+                >
                   Datum
                 </label>
                 <Input
@@ -313,7 +328,10 @@ export default function Tasks() {
                 />
               </div>
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-muted-foreground" htmlFor={`time-${task.id}`}>
+                <label
+                  className="text-xs font-medium text-muted-foreground"
+                  htmlFor={`time-${task.id}`}
+                >
                   Tid (valfritt)
                 </label>
                 <Input
@@ -326,7 +344,10 @@ export default function Tasks() {
               </div>
               {task.time && (
                 <div className="space-y-1.5">
-                  <label className="text-xs font-medium text-muted-foreground" htmlFor={`end-${task.id}`}>
+                  <label
+                    className="text-xs font-medium text-muted-foreground"
+                    htmlFor={`end-${task.id}`}
+                  >
                     Slutar (valfritt)
                   </label>
                   <Input
@@ -340,7 +361,10 @@ export default function Tasks() {
               )}
               {task.time && (
                 <div className="space-y-1.5">
-                  <label className="text-xs font-medium text-muted-foreground" htmlFor={`remind-${task.id}`}>
+                  <label
+                    className="text-xs font-medium text-muted-foreground"
+                    htmlFor={`remind-${task.id}`}
+                  >
                     Påminn innan
                   </label>
                   <select
@@ -385,8 +409,10 @@ export default function Tasks() {
 
             {/* Anteckning */}
             <div className="space-y-1.5">
-
-              <label className="text-xs font-medium text-muted-foreground" htmlFor={`note-${task.id}`}>
+              <label
+                className="text-xs font-medium text-muted-foreground"
+                htmlFor={`note-${task.id}`}
+              >
                 Anteckning
               </label>
               <textarea
@@ -416,7 +442,9 @@ export default function Tasks() {
                       <Circle size={20} />
                     )}
                   </button>
-                  <span className={`flex-1 text-sm ${step.done ? "line-through text-muted-foreground" : ""}`}>
+                  <span
+                    className={`flex-1 text-sm ${step.done ? "line-through text-muted-foreground" : ""}`}
+                  >
                     {step.title}
                   </span>
                   <button
@@ -467,7 +495,9 @@ export default function Tasks() {
           }}
         >
           <div className="flex items-start gap-3">
-            <span aria-hidden className="text-3xl leading-none">✅</span>
+            <span aria-hidden className="text-3xl leading-none">
+              ✅
+            </span>
             <div className="min-w-0">
               <h1 className="font-display text-2xl font-bold text-ink">Uppgifter</h1>
               <p className="mt-1 text-sm text-muted-foreground">
@@ -483,9 +513,10 @@ export default function Tasks() {
           )}
         </div>
 
-
-
-        <form onSubmit={handleSubmit} className="bg-card p-4 rounded-3xl border border-border shadow-sm space-y-3">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-card p-4 rounded-3xl border border-border shadow-sm space-y-3"
+        >
           <div className="flex flex-col md:flex-row gap-3">
             <Input
               value={newTask}
@@ -534,7 +565,9 @@ export default function Tasks() {
               <span>Påminn mig</span>
               <select
                 value={newReminder}
-                onChange={(e) => setNewReminder(e.target.value === "" ? "" : Number(e.target.value))}
+                onChange={(e) =>
+                  setNewReminder(e.target.value === "" ? "" : Number(e.target.value))
+                }
                 disabled={!newTime}
                 className="h-9 rounded-xl text-sm bg-background border border-border px-2 disabled:opacity-50"
               >
@@ -596,7 +629,6 @@ export default function Tasks() {
           ))}
         </div>
 
-
         <div className="space-y-8">
           {filteredActive.length === 0 && completedTasks.length === 0 && (
             <div className="text-center py-16 text-muted-foreground border-2 border-dashed border-border rounded-3xl">
@@ -610,7 +642,11 @@ export default function Tasks() {
             <CollapsibleSection
               className="space-y-3"
               headingClassName="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2"
-              title={<><Clock size={14} /> Pågår</>}
+              title={
+                <>
+                  <Clock size={14} /> Pågår
+                </>
+              }
               help="Saker du börjat på. Tryck på en rad för att bocka av eller ändra."
             >
               {grouped.doing.map(renderTask)}
@@ -621,7 +657,11 @@ export default function Tasks() {
             <CollapsibleSection
               className="space-y-3"
               headingClassName="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2"
-              title={<><Pause size={14} /> Väntar på</>}
+              title={
+                <>
+                  <Pause size={14} /> Väntar på
+                </>
+              }
               help="Saker som hänger på någon annan. De ligger här så du slipper hålla dem i huvudet."
             >
               {grouped.waiting.map(renderTask)}
@@ -632,7 +672,11 @@ export default function Tasks() {
             <CollapsibleSection
               className="space-y-3 pt-6 border-t border-border"
               headingClassName="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2"
-              title={<><Check size={14} /> Avklarat</>}
+              title={
+                <>
+                  <Check size={14} /> Avklarat
+                </>
+              }
               help="Det du gjort idag. Ligger kvar så du ser att det faktiskt blev något."
             >
               {completedTasks
@@ -673,7 +717,11 @@ export default function Tasks() {
             <CollapsibleSection
               className="space-y-3 pt-6 border-t border-border"
               headingClassName="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2"
-              title={<><Moon size={16} /> Undanstoppat ett tag</>}
+              title={
+                <>
+                  <Moon size={16} /> Undanstoppat ett tag
+                </>
+              }
               help="Sådant du skjutit upp. Tryck för att ta tillbaka det när du orkar."
             >
               {snoozedTasks.map((task) => (

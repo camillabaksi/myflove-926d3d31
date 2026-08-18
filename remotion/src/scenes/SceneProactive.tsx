@@ -24,8 +24,20 @@ const Nudge: React.FC<{ time: string; text: string; delay: number }> = ({ time, 
         gap: 18,
       }}
     >
-      <div style={{ fontFamily: FONTS.body, fontWeight: 600, fontSize: 14, color: COLORS.primary, minWidth: 56 }}>{time}</div>
-      <div style={{ fontFamily: FONTS.display, fontSize: 20, color: COLORS.ink, lineHeight: 1.3 }}>{text}</div>
+      <div
+        style={{
+          fontFamily: FONTS.body,
+          fontWeight: 600,
+          fontSize: 14,
+          color: COLORS.primary,
+          minWidth: 56,
+        }}
+      >
+        {time}
+      </div>
+      <div style={{ fontFamily: FONTS.display, fontSize: 20, color: COLORS.ink, lineHeight: 1.3 }}>
+        {text}
+      </div>
     </div>
   );
 };
@@ -35,7 +47,15 @@ export const SceneProactive: React.FC = () => {
   const pulse = interpolate(Math.sin(frame / 12), [-1, 1], [0.9, 1.05]);
   return (
     <SceneShell bg={COLORS.bgDeep}>
-      <AbsoluteFill style={{ padding: "70px 80px", display: "flex", flexDirection: "row", gap: 48, alignItems: "center" }}>
+      <AbsoluteFill
+        style={{
+          padding: "70px 80px",
+          display: "flex",
+          flexDirection: "row",
+          gap: 48,
+          alignItems: "center",
+        }}
+      >
         <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 16 }}>
           <SectionEyebrow delay={0}>Proaktivt stöd</SectionEyebrow>
           <SectionTitle delay={4}>Puffar innan du hinner glömma.</SectionTitle>
@@ -61,7 +81,9 @@ export const SceneProactive: React.FC = () => {
           </div>
         </div>
         <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 12 }}>
-          {NUDGES.map((n) => <Nudge key={n.time} {...n} />)}
+          {NUDGES.map((n) => (
+            <Nudge key={n.time} {...n} />
+          ))}
         </div>
       </AbsoluteFill>
     </SceneShell>

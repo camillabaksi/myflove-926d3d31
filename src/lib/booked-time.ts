@@ -65,6 +65,8 @@ export function bookedTimeLeft(
     minutesLeftBooked: Math.round(merged),
     upcoming: ranges.length,
     nextTitle: next?.title,
-    nextStart: next ? `${String(Math.floor(next.start / 60)).padStart(2, "0")}:${String(next.start % 60).padStart(2, "0")}` : undefined,
+    nextStart: next
+      ? `${String(Math.floor(next.start / 60)).padStart(2, "0")}:${String(next.start % 60).padStart(2, "0")}`
+      : undefined,
   };
 }

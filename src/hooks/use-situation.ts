@@ -28,7 +28,11 @@ export function useSituation() {
     (id: SituationId) => {
       const today = new Date().toISOString().slice(0, 10);
       setState((prev) => {
-        const base: SituationState = { ...EMPTY_SITUATION, ...prev, entries: { ...(prev?.entries ?? {}) } };
+        const base: SituationState = {
+          ...EMPTY_SITUATION,
+          ...prev,
+          entries: { ...(prev?.entries ?? {}) },
+        };
         const cur = base.entries[id] ?? { active: false, note: "" };
         const nextActive = !cur.active;
         base.entries[id] = {
@@ -52,7 +56,11 @@ export function useSituation() {
   const setNote = useCallback(
     (id: SituationId, note: string) =>
       setState((prev) => {
-        const base: SituationState = { ...EMPTY_SITUATION, ...prev, entries: { ...(prev?.entries ?? {}) } };
+        const base: SituationState = {
+          ...EMPTY_SITUATION,
+          ...prev,
+          entries: { ...(prev?.entries ?? {}) },
+        };
         const cur = base.entries[id] ?? { active: false, note: "" };
         base.entries[id] = { ...cur, note };
         return base;

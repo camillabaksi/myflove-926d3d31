@@ -4,13 +4,13 @@ import { COLORS, FONTS, SceneShell, SectionEyebrow, SectionTitle, useEntrance } 
 
 const PERIODS = ["Dag", "Vecka", "Månad"];
 
-const Bar: React.FC<{ label: string; spent: number; budget: number; delay: number; color: string }> = ({
-  label,
-  spent,
-  budget,
-  delay,
-  color,
-}) => {
+const Bar: React.FC<{
+  label: string;
+  spent: number;
+  budget: number;
+  delay: number;
+  color: string;
+}> = ({ label, spent, budget, delay, color }) => {
   const frame = useCurrentFrame();
   const e = useEntrance(delay);
   const grow = interpolate(frame - delay - 6, [0, 34], [0, 1], {
@@ -21,7 +21,9 @@ const Bar: React.FC<{ label: string; spent: number; budget: number; delay: numbe
   return (
     <div style={{ ...e, display: "flex", flexDirection: "column", gap: 8 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-        <span style={{ fontFamily: FONTS.body, fontWeight: 600, fontSize: 19, color: COLORS.ink }}>{label}</span>
+        <span style={{ fontFamily: FONTS.body, fontWeight: 600, fontSize: 19, color: COLORS.ink }}>
+          {label}
+        </span>
         <span style={{ fontFamily: FONTS.body, fontSize: 16, color: COLORS.muted }}>
           {Math.round(spent * grow)} / {budget} kr
         </span>
@@ -37,17 +39,29 @@ export const SceneBudget: React.FC = () => {
   const frame = useCurrentFrame();
   const card = useEntrance(20);
   const active = frame < 90 ? 2 : frame < 150 ? 1 : 0;
-  const left = interpolate(frame, [40, 90], [0, 1840], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const left = interpolate(frame, [40, 90], [0, 1840], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
 
   return (
     <SceneShell bg={COLORS.bg}>
-      <AbsoluteFill style={{ padding: "70px 80px", display: "flex", flexDirection: "column", gap: 26 }}>
+      <AbsoluteFill
+        style={{ padding: "70px 80px", display: "flex", flexDirection: "column", gap: 26 }}
+      >
         <div style={{ display: "flex", flexDirection: "column", gap: 12, maxWidth: 760 }}>
           <SectionEyebrow delay={0}>Ekonomi</SectionEyebrow>
           <SectionTitle delay={4}>Budget per dag, vecka och månad.</SectionTitle>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1.25fr 1fr", gap: 24, alignItems: "start" }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1.25fr 1fr",
+            gap: 24,
+            alignItems: "start",
+          }}
+        >
           <div
             style={{
               ...card,
@@ -60,7 +74,15 @@ export const SceneBudget: React.FC = () => {
               gap: 20,
             }}
           >
-            <div style={{ display: "flex", gap: 8, background: COLORS.bgDeep, padding: 6, borderRadius: 16 }}>
+            <div
+              style={{
+                display: "flex",
+                gap: 8,
+                background: COLORS.bgDeep,
+                padding: 6,
+                borderRadius: 16,
+              }}
+            >
               {PERIODS.map((p, i) => (
                 <div
                   key={p}
@@ -99,8 +121,17 @@ export const SceneBudget: React.FC = () => {
                 boxShadow: "0 14px 34px rgba(36,80,60,0.22)",
               }}
             >
-              <div style={{ fontFamily: FONTS.body, fontSize: 16, opacity: 0.8 }}>Kvar denna månad</div>
-              <div style={{ fontFamily: FONTS.display, fontWeight: 700, fontSize: 52, lineHeight: 1.1 }}>
+              <div style={{ fontFamily: FONTS.body, fontSize: 16, opacity: 0.8 }}>
+                Kvar denna månad
+              </div>
+              <div
+                style={{
+                  fontFamily: FONTS.display,
+                  fontWeight: 700,
+                  fontSize: 52,
+                  lineHeight: 1.1,
+                }}
+              >
                 {Math.round(left)} kr
               </div>
               <div style={{ fontFamily: FONTS.body, fontSize: 16, opacity: 0.85, marginTop: 6 }}>

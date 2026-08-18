@@ -36,9 +36,7 @@ export function useQuickflow() {
             input.remindAt && existing.remindAt
               ? Math.min(input.remindAt, existing.remindAt)
               : (input.remindAt ?? existing.remindAt),
-          ...(input.placeId
-            ? { placeId: input.placeId, placeName: input.placeName }
-            : {}),
+          ...(input.placeId ? { placeId: input.placeId, placeName: input.placeName } : {}),
           notifiedAt: undefined,
           mergedCount: (existing.mergedCount ?? 0) + 1,
           mergedAt: Date.now(),
@@ -71,15 +69,12 @@ export function useQuickflow() {
       if (!key) return false;
       const hit = items.some((i) => !i.done && normalizeQuickflowText(i.text) === key);
       if (hit) {
-        setItems((prev) =>
-          prev.filter((i) => i.done || normalizeQuickflowText(i.text) !== key),
-        );
+        setItems((prev) => prev.filter((i) => i.done || normalizeQuickflowText(i.text) !== key));
       }
       return hit;
     },
     [items, setItems],
   );
-
 
   const update = useCallback(
     (id: string, patch: Partial<QuickflowItem>) => {

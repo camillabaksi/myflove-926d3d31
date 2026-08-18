@@ -5,7 +5,10 @@ export const Route = createFileRoute("/_app/finances")({
   head: () => ({
     meta: [
       { title: "Ekonomi – MyFlove" },
-      { name: "description", content: "Håll koll på räkningar, autogiro och hushållsekonomin med lugn." },
+      {
+        name: "description",
+        content: "Håll koll på räkningar, autogiro och hushållsekonomin med lugn.",
+      },
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),

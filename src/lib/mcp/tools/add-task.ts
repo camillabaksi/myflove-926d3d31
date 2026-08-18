@@ -18,8 +18,16 @@ export default defineTool({
     "Skapar en ny uppgift i MyFlove för den inloggade användaren. `dueDate` är YYYY-MM-DD och `time` är HH:MM.",
   inputSchema: {
     title: z.string().trim().min(1).max(200).describe("Uppgiftens titel."),
-    dueDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().describe("Datum (YYYY-MM-DD)."),
-    time: z.string().regex(/^\d{2}:\d{2}$/).optional().describe("Klockslag (HH:MM)."),
+    dueDate: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/)
+      .optional()
+      .describe("Datum (YYYY-MM-DD)."),
+    time: z
+      .string()
+      .regex(/^\d{2}:\d{2}$/)
+      .optional()
+      .describe("Klockslag (HH:MM)."),
   },
   annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false },
   handler: async ({ title, dueDate, time }, ctx) => {

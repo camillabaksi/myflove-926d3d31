@@ -70,8 +70,8 @@ export default function WorkProfileCard() {
           <Briefcase size={18} className="text-primary" aria-hidden="true" />
           <h2 className="font-display text-lg text-ink">Min jobbprofil</h2>
           <HelpHint label="Min jobbprofil">
-            Berätta kort hur ditt jobb ser ut. Flow använder det som kontext för sina förslag – aldrig
-            som regler. Du kan ändra eller ta bort allt när du vill.
+            Berätta kort hur ditt jobb ser ut. Flow använder det som kontext för sina förslag –
+            aldrig som regler. Du kan ändra eller ta bort allt när du vill.
           </HelpHint>
         </div>
         <Button variant="ghost" size="sm" onClick={() => setOpen((o) => !o)}>
@@ -98,7 +98,9 @@ export default function WorkProfileCard() {
       )}
 
       {!open && filled && !profile.enabled && (
-        <p className="mt-1 text-xs text-muted-foreground">Pausad – Flow använder den inte just nu.</p>
+        <p className="mt-1 text-xs text-muted-foreground">
+          Pausad – Flow använder den inte just nu.
+        </p>
       )}
 
       {open && (
@@ -192,7 +194,11 @@ export default function WorkProfileCard() {
             </p>
             <div className="flex flex-wrap gap-2">
               {helpOptions.map((h) => (
-                <Chip key={h} active={profile.helpWith.includes(h)} onClick={() => toggleIn("helpWith", h)}>
+                <Chip
+                  key={h}
+                  active={profile.helpWith.includes(h)}
+                  onClick={() => toggleIn("helpWith", h)}
+                >
                   {h}
                 </Chip>
               ))}
@@ -257,8 +263,8 @@ export default function WorkProfileCard() {
           </div>
 
           <p className="text-xs text-muted-foreground">
-            Flow utgår från det du skrivit, men antar aldrig att alla med samma yrke jobbar likadant.
-            Förslagen vägs alltid mot din energi och resten av livspusslet.
+            Flow utgår från det du skrivit, men antar aldrig att alla med samma yrke jobbar
+            likadant. Förslagen vägs alltid mot din energi och resten av livspusslet.
           </p>
         </div>
       )}

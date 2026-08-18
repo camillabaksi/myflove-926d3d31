@@ -95,7 +95,10 @@ function unescapeText(s: string) {
   return s.replace(/\\n/gi, "\n").replace(/\\,/g, ",").replace(/\\;/g, ";").replace(/\\\\/g, "\\");
 }
 
-function parseDtStart(value: string, params: Record<string, string>): { date: string; time?: string } | null {
+function parseDtStart(
+  value: string,
+  params: Record<string, string>,
+): { date: string; time?: string } | null {
   // DATE form: YYYYMMDD
   if (params.VALUE === "DATE" || /^\d{8}$/.test(value)) {
     if (!/^\d{8}$/.test(value)) return null;

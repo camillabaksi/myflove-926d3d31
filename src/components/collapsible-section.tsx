@@ -22,7 +22,6 @@ interface CollapsibleSectionProps {
   children: ReactNode;
 }
 
-
 /**
  * En vy som går att minimera eller maximera. Läget sparas per sida och rubrik
  * och ligger kvar tills du väljer något annat.
@@ -63,9 +62,7 @@ export default function CollapsibleSection({
           />
           <span className={cn("text-xl font-medium", headingClassName)}>{title}</span>
         </button>
-        {help && (
-          <HelpHint label={typeof title === "string" ? title : undefined}>{help}</HelpHint>
-        )}
+        {help && <HelpHint label={typeof title === "string" ? title : undefined}>{help}</HelpHint>}
         {actions}
       </div>
 

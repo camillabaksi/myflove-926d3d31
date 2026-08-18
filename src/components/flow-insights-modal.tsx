@@ -23,7 +23,7 @@ export default function FlowInsightsModal({ open, onOpenChange }: FlowInsightsMo
 
   const insights = useMemo(
     () => generateFlowInsights(moods, tasks, currentFocus),
-    [moods, tasks, currentFocus]
+    [moods, tasks, currentFocus],
   );
 
   return (

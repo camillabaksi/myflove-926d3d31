@@ -38,7 +38,15 @@ export const SceneStop: React.FC = () => {
 
       <AbsoluteFill style={{ padding: 90, display: "flex", alignItems: "center" }}>
         {/* left: breathing STOP badge */}
-        <div style={{ flex: "0 0 380px", display: "flex", justifyContent: "center", alignItems: "center", position: "relative" }}>
+        <div
+          style={{
+            flex: "0 0 380px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            position: "relative",
+          }}
+        >
           <div
             style={{
               position: "absolute",

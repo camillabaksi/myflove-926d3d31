@@ -22,9 +22,7 @@ function StatusBadge({ canceled }: { canceled: boolean }) {
   return (
     <span
       className={`inline-flex items-center gap-1.5 rounded-pill px-2.5 py-1 text-xs font-semibold ${
-        canceled
-          ? "bg-muted text-muted-foreground"
-          : "bg-primary/12 text-primary"
+        canceled ? "bg-muted text-muted-foreground" : "bg-primary/12 text-primary"
       }`}
     >
       <span
@@ -44,7 +42,12 @@ function ReminderRow({
   onDelete,
 }: {
   reminder: Reminder;
-  onSave: (patch: { title: string; date: string; time: string | undefined; note: string | undefined }) => void;
+  onSave: (patch: {
+    title: string;
+    date: string;
+    time: string | undefined;
+    note: string | undefined;
+  }) => void;
   onCancel: () => void;
   onRestore: () => void;
   onDelete: () => void;
@@ -67,18 +70,43 @@ function ReminderRow({
   if (editing) {
     return (
       <li className="rounded-2xl border border-border bg-card p-4 shadow-sm space-y-3">
-        <input className={inputClass} value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Vad gäller det?" />
+        <input
+          className={inputClass}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Vad gäller det?"
+        />
         <div className="grid grid-cols-2 gap-2">
-          <input className={inputClass} type="date" value={date} onChange={(e) => setDate(e.target.value)} />
-          <input className={inputClass} type="time" value={time} onChange={(e) => setTime(e.target.value)} />
+          <input
+            className={inputClass}
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+          />
+          <input
+            className={inputClass}
+            type="time"
+            value={time}
+            onChange={(e) => setTime(e.target.value)}
+          />
         </div>
-        <input className={inputClass} value={note} onChange={(e) => setNote(e.target.value)} placeholder="Anteckning (valfritt)" />
+        <input
+          className={inputClass}
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+          placeholder="Anteckning (valfritt)"
+        />
         <div className="flex gap-2">
           <Button
             className="rounded-xl"
             onClick={() => {
               if (!title.trim() || !date) return;
-              onSave({ title: title.trim(), date, time: time || undefined, note: note.trim() || undefined });
+              onSave({
+                title: title.trim(),
+                date,
+                time: time || undefined,
+                note: note.trim() || undefined,
+              });
               setEditing(false);
             }}
           >
@@ -93,10 +121,14 @@ function ReminderRow({
   }
 
   return (
-    <li className={`rounded-2xl border border-border bg-card p-4 shadow-sm ${canceled ? "opacity-70" : ""}`}>
+    <li
+      className={`rounded-2xl border border-border bg-card p-4 shadow-sm ${canceled ? "opacity-70" : ""}`}
+    >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className={`font-medium text-ink ${canceled ? "line-through" : ""}`}>{reminder.title}</p>
+          <p className={`font-medium text-ink ${canceled ? "line-through" : ""}`}>
+            {reminder.title}
+          </p>
           <p className="mt-0.5 flex items-center gap-1.5 text-sm text-muted-foreground">
             <CalendarClock size={14} />
             {reminder.date}
@@ -121,7 +153,12 @@ function ReminderRow({
             <X size={14} className="mr-1.5" /> Avboka
           </Button>
         )}
-        <Button variant="ghost" size="sm" className="rounded-xl text-muted-foreground hover:text-destructive" onClick={onDelete}>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="rounded-xl text-muted-foreground hover:text-destructive"
+          onClick={onDelete}
+        >
           <Trash2 size={14} className="mr-1.5" /> Ta bort
         </Button>
       </div>
@@ -130,7 +167,14 @@ function ReminderRow({
 }
 
 export default function RemindersPage() {
-  const { reminders, addReminder, updateReminder, deleteReminder, cancelReminder, restoreReminder } = useReminders();
+  const {
+    reminders,
+    addReminder,
+    updateReminder,
+    deleteReminder,
+    cancelReminder,
+    restoreReminder,
+  } = useReminders();
   const { toast } = useToast();
   useReminderSync();
   const [title, setTitle] = useState("");
@@ -148,8 +192,10 @@ export default function RemindersPage() {
   const askPermission = async () => {
     const res = await requestNotificationPermission();
     setPermission(res);
-    if (res === "granted") toast({ description: "Notiser är på – du får en signal när det är dags 🔔" });
-    else if (res === "denied") toast({ description: "Notiser är blockerade i webbläsarens inställningar" });
+    if (res === "granted")
+      toast({ description: "Notiser är på – du får en signal när det är dags 🔔" });
+    else if (res === "denied")
+      toast({ description: "Notiser är blockerade i webbläsarens inställningar" });
   };
 
   const { active, canceled } = useMemo(() => {
@@ -167,7 +213,15 @@ export default function RemindersPage() {
   const handleAdd = (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !date) return;
-    addReminder(title.trim(), date, time || undefined, repeat, undefined, lead || undefined, note.trim() || undefined);
+    addReminder(
+      title.trim(),
+      date,
+      time || undefined,
+      repeat,
+      undefined,
+      lead || undefined,
+      note.trim() || undefined,
+    );
     setTitle("");
     setTime("");
     setNote("");
@@ -190,10 +244,13 @@ export default function RemindersPage() {
           <h2 className="text-lg font-semibold">Aviseringar</h2>
           {permission === "granted" ? (
             <p className="text-sm text-muted-foreground">
-              Notiser är påslagna på den här enheten. Du får en signal när en aktiv påminnelse inträffar.
+              Notiser är påslagna på den här enheten. Du får en signal när en aktiv påminnelse
+              inträffar.
             </p>
           ) : permission === "unsupported" ? (
-            <p className="text-sm text-muted-foreground">Den här webbläsaren stödjer inte notiser.</p>
+            <p className="text-sm text-muted-foreground">
+              Den här webbläsaren stödjer inte notiser.
+            </p>
           ) : permission === "denied" ? (
             <p className="text-sm text-muted-foreground">
               Notiser är blockerade. Tillåt notiser för MyFlove i webbläsarens inställningar.
@@ -212,24 +269,53 @@ export default function RemindersPage() {
             <EnablePushButton />
           </div>
           <p className="text-xs text-muted-foreground">
-            Push-notiser når dig även när appen är stängd. Avbokade påminnelser skickar aldrig något.
+            Push-notiser når dig även när appen är stängd. Avbokade påminnelser skickar aldrig
+            något.
           </p>
         </section>
 
-        <form onSubmit={handleAdd} className="space-y-3 rounded-2xl border border-border bg-card p-5 shadow-sm">
-          <input className={inputClass} value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Vad ska du påminnas om?" />
+        <form
+          onSubmit={handleAdd}
+          className="space-y-3 rounded-2xl border border-border bg-card p-5 shadow-sm"
+        >
+          <input
+            className={inputClass}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Vad ska du påminnas om?"
+          />
           <div className="grid grid-cols-2 gap-2">
-            <input className={inputClass} type="date" value={date} onChange={(e) => setDate(e.target.value)} />
-            <input className={inputClass} type="time" value={time} onChange={(e) => setTime(e.target.value)} />
+            <input
+              className={inputClass}
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+            />
+            <input
+              className={inputClass}
+              type="time"
+              value={time}
+              onChange={(e) => setTime(e.target.value)}
+            />
           </div>
           <div className="grid grid-cols-2 gap-2">
-            <select className={inputClass} value={repeat} onChange={(e) => setRepeat(e.target.value as RepeatMode)} aria-label="Upprepning">
+            <select
+              className={inputClass}
+              value={repeat}
+              onChange={(e) => setRepeat(e.target.value as RepeatMode)}
+              aria-label="Upprepning"
+            >
               <option value="none">Ingen upprepning</option>
               <option value="daily">Varje dag</option>
               <option value="weekdays">Vardagar</option>
               <option value="weekly">Varje vecka</option>
             </select>
-            <select className={inputClass} value={lead} onChange={(e) => setLead(Number(e.target.value))} aria-label="Förvarning">
+            <select
+              className={inputClass}
+              value={lead}
+              onChange={(e) => setLead(Number(e.target.value))}
+              aria-label="Förvarning"
+            >
               <option value={0}>Notis på tiden</option>
               <option value={5}>5 min innan</option>
               <option value={15}>15 min innan</option>
@@ -237,14 +323,24 @@ export default function RemindersPage() {
               <option value={60}>1 timme innan</option>
             </select>
           </div>
-          <input className={inputClass} value={note} onChange={(e) => setNote(e.target.value)} placeholder="Anteckning (valfritt)" />
+          <input
+            className={inputClass}
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            placeholder="Anteckning (valfritt)"
+          />
           <Button type="submit" className="h-12 w-full rounded-xl">
             <Plus size={18} className="mr-2" /> Lägg till påminnelse
           </Button>
         </form>
 
         <section className="surface-card p-5">
-          <CollapsibleSection title={`Aktiva (${active.length})`} id="Aktiva påminnelser" headingClassName="text-lg font-semibold" className="space-y-3">
+          <CollapsibleSection
+            title={`Aktiva (${active.length})`}
+            id="Aktiva påminnelser"
+            headingClassName="text-lg font-semibold"
+            className="space-y-3"
+          >
             {active.length === 0 ? (
               <p className="text-sm text-muted-foreground">Inga aktiva påminnelser just nu.</p>
             ) : (
@@ -271,7 +367,12 @@ export default function RemindersPage() {
         </section>
 
         <section className="surface-card p-5">
-          <CollapsibleSection title={`Avbokade (${canceled.length})`} id="Avbokade påminnelser" headingClassName="text-lg font-semibold" className="space-y-3">
+          <CollapsibleSection
+            title={`Avbokade (${canceled.length})`}
+            id="Avbokade påminnelser"
+            headingClassName="text-lg font-semibold"
+            className="space-y-3"
+          >
             {canceled.length === 0 ? (
               <p className="text-sm text-muted-foreground">Inget avbokat.</p>
             ) : (

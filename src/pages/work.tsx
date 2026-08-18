@@ -113,8 +113,6 @@ export default function WorkPage() {
 
   const projectName = (id?: string) => activeProjects.find((p) => p.id === id)?.title;
 
-
-
   const handleAddProject = (e: React.FormEvent) => {
     e.preventDefault();
     if (!projectDraft.trim()) return;
@@ -152,7 +150,11 @@ export default function WorkPage() {
       addTaskSteps(task.id, result.steps);
       setIntros((prev) => ({
         ...prev,
-        [task.id]: [result.intro, result.startBy ? `Börja senast ${result.startBy}.` : null, result.note]
+        [task.id]: [
+          result.intro,
+          result.startBy ? `Börja senast ${result.startBy}.` : null,
+          result.note,
+        ]
           .filter(Boolean)
           .join(" "),
       }));
@@ -228,7 +230,12 @@ export default function WorkPage() {
 
         {/* Projekt */}
 
-        <CollapsibleSection title="Dina projekt" help="Samla uppgifter per projekt så blir listan lättare att överblicka." headingClassName="text-lg font-semibold" className="surface-card p-5">
+        <CollapsibleSection
+          title="Dina projekt"
+          help="Samla uppgifter per projekt så blir listan lättare att överblicka."
+          headingClassName="text-lg font-semibold"
+          className="surface-card p-5"
+        >
           <form onSubmit={handleAddProject} className="flex gap-2">
             <Input
               value={projectDraft}
@@ -273,7 +280,11 @@ export default function WorkPage() {
         </CollapsibleSection>
 
         {/* Ny arbetsuppgift */}
-        <CollapsibleSection title="Ny arbetsuppgift" headingClassName="text-lg font-semibold" className="surface-card p-5">
+        <CollapsibleSection
+          title="Ny arbetsuppgift"
+          headingClassName="text-lg font-semibold"
+          className="surface-card p-5"
+        >
           <form onSubmit={handleAddWorkTask} className="space-y-3">
             <Input
               value={title}
@@ -332,7 +343,11 @@ export default function WorkPage() {
         </CollapsibleSection>
 
         {/* Uppgifter */}
-        <CollapsibleSection title="Uppgifter och deadlines" help="Allt med ett datum. Det som är närmast ligger överst." headingClassName="text-lg font-semibold">
+        <CollapsibleSection
+          title="Uppgifter och deadlines"
+          help="Allt med ett datum. Det som är närmast ligger överst."
+          headingClassName="text-lg font-semibold"
+        >
           {/* Mappar */}
           <div className="flex flex-wrap gap-2">
             {[
@@ -348,9 +363,15 @@ export default function WorkPage() {
                   onClick={() => setFolder(f.id)}
                   aria-pressed={on}
                   className={`inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full border transition-colors ${
-                    on ? "border-primary/40 bg-primary/10 text-primary" : "border-border bg-background text-muted-foreground hover:bg-secondary"
+                    on
+                      ? "border-primary/40 bg-primary/10 text-primary"
+                      : "border-border bg-background text-muted-foreground hover:bg-secondary"
                   }`}
-                  style={!on && f.color ? { borderColor: `hsl(${f.color} / 0.35)`, color: `hsl(${f.color})` } : undefined}
+                  style={
+                    !on && f.color
+                      ? { borderColor: `hsl(${f.color} / 0.35)`, color: `hsl(${f.color})` }
+                      : undefined
+                  }
                 >
                   <FolderOpen size={12} />
                   {f.label}
@@ -369,7 +390,6 @@ export default function WorkPage() {
           )}
 
           {visible.map((task) => {
-
             const dl = deadlineLabel(task.dueDate);
             const steps = task.steps ?? [];
             const done = steps.filter((s) => s.done).length;
@@ -378,9 +398,7 @@ export default function WorkPage() {
             return (
               <article
                 key={task.id}
-                className={`surface-card p-5 space-y-4 ${
-                  task.completed ? "opacity-60" : ""
-                }`}
+                className={`surface-card p-5 space-y-4 ${task.completed ? "opacity-60" : ""}`}
               >
                 <div className="flex items-start gap-3">
                   <button
@@ -415,7 +433,11 @@ export default function WorkPage() {
                                 : "border-border bg-background text-muted-foreground"
                           }`}
                         >
-                          {dl.tone === "late" ? <AlertCircle size={11} /> : <CalendarDays size={11} />}
+                          {dl.tone === "late" ? (
+                            <AlertCircle size={11} />
+                          ) : (
+                            <CalendarDays size={11} />
+                          )}
                           {task.dueDate} · {dl.text}
                         </span>
                       )}
@@ -456,11 +478,17 @@ export default function WorkPage() {
                           {s.done ? (
                             <CheckCircle2 size={16} className="text-primary mt-0.5 shrink-0" />
                           ) : (
-                            <Circle size={16} strokeWidth={1.5} className="text-muted-foreground mt-0.5 shrink-0" />
+                            <Circle
+                              size={16}
+                              strokeWidth={1.5}
+                              className="text-muted-foreground mt-0.5 shrink-0"
+                            />
                           )}
                           <span className={s.done ? "line-through text-muted-foreground" : ""}>
                             {s.title}
-                            {s.when && <span className="text-xs text-muted-foreground"> · {s.when}</span>}
+                            {s.when && (
+                              <span className="text-xs text-muted-foreground"> · {s.when}</span>
+                            )}
                           </span>
                         </button>
                       </li>
@@ -473,7 +501,10 @@ export default function WorkPage() {
                     {files.map((f) => (
                       <li key={f.path} className="flex items-center gap-2 text-sm">
                         <FileText size={14} className="text-muted-foreground shrink-0" />
-                        <button onClick={() => openAttachment(f.path)} className="text-primary hover:underline truncate">
+                        <button
+                          onClick={() => openAttachment(f.path)}
+                          className="text-primary hover:underline truncate"
+                        >
                           {f.name}
                         </button>
                         <button

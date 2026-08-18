@@ -68,7 +68,6 @@ export function WakeUpSettings() {
     }
   };
 
-
   if (!wake) return null;
 
   return (
@@ -77,8 +76,8 @@ export function WakeUpSettings() {
         <div>
           <p className="font-medium text-foreground">Morgonstart</p>
           <p className="text-sm text-muted-foreground">
-            För dig som snoozar bort alarmet. Flow puffar mjukt igen tills du säger att du är vaken –
-            sen är det tyst resten av dagen.
+            För dig som snoozar bort alarmet. Flow puffar mjukt igen tills du säger att du är vaken
+            – sen är det tyst resten av dagen.
           </p>
         </div>
         <Switch

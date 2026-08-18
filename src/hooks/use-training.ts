@@ -3,7 +3,12 @@ import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import type { TrainingProgram } from "@/lib/training.functions";
 
 export type TrainingSession = TrainingProgram["sessions"][number];
-import { buildWeeklyPlan, weekStartKey, type WeekFeedback, type WeeklyPlan } from "@/lib/weekly-plan";
+import {
+  buildWeeklyPlan,
+  weekStartKey,
+  type WeekFeedback,
+  type WeeklyPlan,
+} from "@/lib/weekly-plan";
 import { movementById } from "@/lib/everyday-movement";
 
 export interface TrainingGoal {
@@ -56,9 +61,6 @@ const DEFAULT_STATE: TrainingState = {
   weightGoal: null,
 };
 
-
-
-
 export const todayKey = () => new Date().toISOString().slice(0, 10);
 
 export function useTraining() {
@@ -81,7 +83,9 @@ export function useTraining() {
     (index: number, patch: Partial<TrainingSession>) => {
       setState((prev) => {
         if (!prev.program) return prev;
-        const sessions = prev.program.sessions.map((s, i) => (i === index ? { ...s, ...patch } : s));
+        const sessions = prev.program.sessions.map((s, i) =>
+          i === index ? { ...s, ...patch } : s,
+        );
         return { ...prev, program: { ...prev.program, sessions } };
       });
     },
@@ -92,7 +96,10 @@ export function useTraining() {
     (session: TrainingSession) => {
       setState((prev) => {
         if (!prev.program) return prev;
-        return { ...prev, program: { ...prev.program, sessions: [...prev.program.sessions, session] } };
+        return {
+          ...prev,
+          program: { ...prev.program, sessions: [...prev.program.sessions, session] },
+        };
       });
     },
     [setState],
@@ -132,13 +139,17 @@ export function useTraining() {
 
   const setSteps = useCallback(
     (count: number, date = todayKey()) => {
-      setState((prev) => ({ ...prev, steps: { ...prev.steps, [date]: Math.max(0, Math.round(count)) } }));
+      setState((prev) => ({
+        ...prev,
+        steps: { ...prev.steps, [date]: Math.max(0, Math.round(count)) },
+      }));
     },
     [setState],
   );
 
   const setStepGoal = useCallback(
-    (count: number) => setState((prev) => ({ ...prev, stepGoal: Math.max(1000, Math.round(count)) })),
+    (count: number) =>
+      setState((prev) => ({ ...prev, stepGoal: Math.max(1000, Math.round(count)) })),
     [setState],
   );
 
@@ -168,7 +179,8 @@ export function useTraining() {
   );
 
   const setMovementGoal = useCallback(
-    (minutes: number) => setState((prev) => ({ ...prev, movementGoal: Math.max(5, Math.round(minutes)) })),
+    (minutes: number) =>
+      setState((prev) => ({ ...prev, movementGoal: Math.max(5, Math.round(minutes)) })),
     [setState],
   );
 
@@ -191,7 +203,10 @@ export function useTraining() {
 
   const setWeekFeedback = useCallback(
     (feedback: WeekFeedback, week = weekStartKey()) => {
-      setState((prev) => ({ ...prev, weekFeedback: { ...(prev.weekFeedback ?? {}), [week]: feedback } }));
+      setState((prev) => ({
+        ...prev,
+        weekFeedback: { ...(prev.weekFeedback ?? {}), [week]: feedback },
+      }));
     },
     [setState],
   );
@@ -217,7 +232,9 @@ export function useTraining() {
         movementMinutes,
         doneSessions,
         plannedSessions:
-          prev.program?.sessions.filter((s) => s.type !== "vila").length ?? prev.goal?.daysPerWeek ?? 0,
+          prev.program?.sessions.filter((s) => s.type !== "vila").length ??
+          prev.goal?.daysPerWeek ??
+          0,
         currentStepGoal: prev.stepGoal,
         currentMovementGoal: prev.movementGoal ?? 20,
         feedback: prev.weekFeedback?.[week] ?? null,
@@ -265,7 +282,10 @@ export function useTraining() {
 
   const setWeightGoal = useCallback(
     (kg: number | null) =>
-      setState((prev) => ({ ...prev, weightGoal: kg === null ? null : Math.max(20, Math.round(kg * 10) / 10) })),
+      setState((prev) => ({
+        ...prev,
+        weightGoal: kg === null ? null : Math.max(20, Math.round(kg * 10) / 10),
+      })),
     [setState],
   );
 
@@ -306,6 +326,4 @@ export function useTraining() {
     doneToday: state.done[todayKey()] ?? [],
     stepsToday: state.steps[todayKey()] ?? 0,
   };
-
-
 }

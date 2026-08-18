@@ -1,6 +1,14 @@
 import React from "react";
 import { AbsoluteFill } from "remotion";
-import { COLORS, FONTS, SceneShell, SectionEyebrow, SectionSub, SectionTitle, useEntrance } from "../theme";
+import {
+  COLORS,
+  FONTS,
+  SceneShell,
+  SectionEyebrow,
+  SectionSub,
+  SectionTitle,
+  useEntrance,
+} from "../theme";
 
 const Panel: React.FC<{
   title: string;
@@ -47,18 +55,26 @@ export const SceneStudyBuddy: React.FC = () => {
   const note = useEntrance(78);
   return (
     <SceneShell bg={COLORS.bgDeep}>
-      <AbsoluteFill style={{ padding: "60px 80px", display: "flex", flexDirection: "column", gap: 24 }}>
+      <AbsoluteFill
+        style={{ padding: "60px 80px", display: "flex", flexDirection: "column", gap: 24 }}
+      >
         <div style={{ display: "flex", flexDirection: "column", gap: 10, maxWidth: 820 }}>
           <SectionEyebrow delay={0}>Studier</SectionEyebrow>
           <SectionTitle delay={4}>StudyFlow och StudyBuddy.</SectionTitle>
-          <SectionSub delay={8}>Ett ställe för studierna: planera veckan i StudyFlow, plugga aktivt med StudyBuddy.</SectionSub>
+          <SectionSub delay={8}>
+            Ett ställe för studierna: planera veckan i StudyFlow, plugga aktivt med StudyBuddy.
+          </SectionSub>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
           <Panel
             title="StudyFlow"
             color={COLORS.studies}
             delay={22}
-            rows={["Plugga nu – dagens fokuspass", "Kurser & inlämningar", "Föreläsningar in i kalendern"]}
+            rows={[
+              "Plugga nu – dagens fokuspass",
+              "Kurser & inlämningar",
+              "Föreläsningar in i kalendern",
+            ]}
           />
           <Panel
             title="StudyBuddy"

@@ -200,7 +200,6 @@ export function planStudyCalendar(input: PlanInput): PlannedEntry[] {
 
   // 3. Repetitionspass – bara om användaren själv slagit på det.
   for (const exam of settings.includeRevisions ? input.exams : []) {
-
     for (const date of dates) {
       if (date > exam.date) break;
       const daysLeft = Math.round(
@@ -212,7 +211,8 @@ export function planStudyCalendar(input: PlanInput): PlannedEntry[] {
       const dayIndex = dates.indexOf(date);
       if (dayIndex % rhythm.everyNthDay !== 0) continue;
 
-      const minutes = daysLeft === 0 ? rhythm.minutes : Math.max(rhythm.minutes, settings.sessionMinutes);
+      const minutes =
+        daysLeft === 0 ? rhythm.minutes : Math.max(rhythm.minutes, settings.sessionMinutes);
       const earliest = date === today ? nowMinutes + 10 : undefined;
       const slot = findSlot(date, minutes, busy, settings, earliest);
       if (!slot) continue;
@@ -222,9 +222,7 @@ export function planStudyCalendar(input: PlanInput): PlannedEntry[] {
         syncKey: `${SYNC_PREFIX}revision:${exam.id}:${date}`,
         type: "revision",
         title:
-          daysLeft === 0
-            ? `🃏 Lugn genomläsning: ${exam.title}`
-            : `🃏 Repetition: ${exam.title}`,
+          daysLeft === 0 ? `🃏 Lugn genomläsning: ${exam.title}` : `🃏 Repetition: ${exam.title}`,
         date,
         time: slot,
         minutes,

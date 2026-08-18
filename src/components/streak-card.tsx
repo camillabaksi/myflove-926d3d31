@@ -52,7 +52,8 @@ export default function StreakCard() {
           <div>
             <p className="font-semibold text-ink leading-tight">{headline}</p>
             <p className="text-sm text-muted-foreground">
-              {thisWeek} {thisWeek === 1 ? "dag" : "dagar"} den här veckan – inga krav, bara närvaro.
+              {thisWeek} {thisWeek === 1 ? "dag" : "dagar"} den här veckan – inga krav, bara
+              närvaro.
             </p>
           </div>
         </div>

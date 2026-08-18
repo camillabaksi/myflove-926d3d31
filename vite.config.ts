@@ -22,10 +22,7 @@ export default defineConfig({
         "@clerk/react/internal": path.resolve(__dirname, "src/compat/clerk.tsx"),
         "@clerk/react": path.resolve(__dirname, "src/compat/clerk.tsx"),
         "@clerk/themes": path.resolve(__dirname, "src/compat/clerk-themes.ts"),
-        "@workspace/api-client-react": path.resolve(
-          __dirname,
-          "src/compat/api-client.ts",
-        ),
+        "@workspace/api-client-react": path.resolve(__dirname, "src/compat/api-client.ts"),
       },
     },
   },

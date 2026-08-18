@@ -47,7 +47,8 @@ export function PersonalPushSettings() {
           normalize({
             personal_enabled: data.personal_enabled ?? DEFAULTS.personal_enabled,
             personal_time: data.personal_time ?? DEFAULTS.personal_time,
-            personal_evening_enabled: data.personal_evening_enabled ?? DEFAULTS.personal_evening_enabled,
+            personal_evening_enabled:
+              data.personal_evening_enabled ?? DEFAULTS.personal_evening_enabled,
             personal_evening_time: data.personal_evening_time ?? DEFAULTS.personal_evening_time,
           }),
         );
@@ -82,8 +83,6 @@ export function PersonalPushSettings() {
       toast({ title: "Kunde inte spara tiden", description: "Försök igen om en stund." });
     }
   };
-
-
 
   if (!prefs) return null;
 

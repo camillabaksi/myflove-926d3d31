@@ -26,7 +26,7 @@ export function ScheduleImport() {
 
   const show = (found: ParsedLecture[]) => {
     if (!found.length) {
-      toast.error("Hittade inga lektioner – prova \"Låt Flow tolka\" istället.");
+      toast.error('Hittade inga lektioner – prova "Låt Flow tolka" istället.');
       return;
     }
     setPreview(found);
@@ -80,87 +80,87 @@ export function ScheduleImport() {
         }
         headingClassName={sectionTitle}
       >
-      <p className="mt-1 text-sm text-muted-foreground">
-        Klistra in schemat som text eller ladda upp en .ics-fil från skolan. Flow gör om det till
-        ditt veckoschema – sen kan Flow säga vilken lektion som är nästa och var.
-      </p>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Klistra in schemat som text eller ladda upp en .ics-fil från skolan. Flow gör om det till
+          ditt veckoschema – sen kan Flow säga vilken lektion som är nästa och var.
+        </p>
 
-      <Textarea
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        rows={4}
-        className="mt-3 rounded-2xl"
-        aria-label="Klistra in ditt schema"
-        placeholder={"Mån 09:00-11:00 Statistik, sal B2\nTis 13-15 Programmering (D310)"}
-      />
-
-      <div className="mt-3 flex flex-wrap gap-2">
-        <Button
-          variant="secondary"
-          className="rounded-full"
-          onClick={() => show(parseScheduleText(text))}
-          disabled={!text.trim()}
-        >
-          Läs in texten
-        </Button>
-        <Button
-          variant="secondary"
-          className="rounded-full"
-          onClick={askFlow}
-          disabled={!text.trim() || busy}
-        >
-          <Sparkles className="mr-2 h-4 w-4" /> {busy ? "Flow läser…" : "Låt Flow tolka"}
-        </Button>
-        <Button
-          variant="outline"
-          className="rounded-full"
-          onClick={() => fileRef.current?.click()}
-        >
-          <FileUp className="mr-2 h-4 w-4" /> Ladda upp fil
-        </Button>
-        <input
-          ref={fileRef}
-          type="file"
-          accept=".ics,.txt,.csv,text/calendar,text/plain"
-          className="sr-only"
-          aria-label="Schemafil"
-          onChange={(e) => {
-            const file = e.target.files?.[0];
-            if (file) void handleFile(file);
-            e.target.value = "";
-          }}
+        <Textarea
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          rows={4}
+          className="mt-3 rounded-2xl"
+          aria-label="Klistra in ditt schema"
+          placeholder={"Mån 09:00-11:00 Statistik, sal B2\nTis 13-15 Programmering (D310)"}
         />
-      </div>
 
-      {preview.length > 0 && (
-        <div className="mt-4 rounded-2xl border border-border/70 bg-background p-3">
-          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-            Granska innan du sparar
-          </p>
-          <ul className="mt-2 space-y-1 text-sm text-ink">
-            {preview.map((l, i) => (
-              <li key={`${l.weekday}-${l.start}-${i}`} className="flex gap-2">
-                <span className="w-10 shrink-0 text-muted-foreground">{WEEKDAYS[l.weekday]}</span>
-                <span className="w-24 shrink-0 text-muted-foreground">
-                  {l.start}–{l.end}
-                </span>
-                <span className="flex-1">
-                  {l.title}
-                  {l.location ? ` · ${l.location}` : ""}
-                </span>
-              </li>
-            ))}
-          </ul>
-          <div className="mt-3 flex gap-2">
-            <Button className="rounded-full" onClick={save}>
-              <Check className="mr-2 h-4 w-4" /> Spara i schemat
-            </Button>
-            <Button variant="ghost" className="rounded-full" onClick={() => setPreview([])}>
-              Avbryt
-            </Button>
-          </div>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <Button
+            variant="secondary"
+            className="rounded-full"
+            onClick={() => show(parseScheduleText(text))}
+            disabled={!text.trim()}
+          >
+            Läs in texten
+          </Button>
+          <Button
+            variant="secondary"
+            className="rounded-full"
+            onClick={askFlow}
+            disabled={!text.trim() || busy}
+          >
+            <Sparkles className="mr-2 h-4 w-4" /> {busy ? "Flow läser…" : "Låt Flow tolka"}
+          </Button>
+          <Button
+            variant="outline"
+            className="rounded-full"
+            onClick={() => fileRef.current?.click()}
+          >
+            <FileUp className="mr-2 h-4 w-4" /> Ladda upp fil
+          </Button>
+          <input
+            ref={fileRef}
+            type="file"
+            accept=".ics,.txt,.csv,text/calendar,text/plain"
+            className="sr-only"
+            aria-label="Schemafil"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) void handleFile(file);
+              e.target.value = "";
+            }}
+          />
         </div>
-      )}
+
+        {preview.length > 0 && (
+          <div className="mt-4 rounded-2xl border border-border/70 bg-background p-3">
+            <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+              Granska innan du sparar
+            </p>
+            <ul className="mt-2 space-y-1 text-sm text-ink">
+              {preview.map((l, i) => (
+                <li key={`${l.weekday}-${l.start}-${i}`} className="flex gap-2">
+                  <span className="w-10 shrink-0 text-muted-foreground">{WEEKDAYS[l.weekday]}</span>
+                  <span className="w-24 shrink-0 text-muted-foreground">
+                    {l.start}–{l.end}
+                  </span>
+                  <span className="flex-1">
+                    {l.title}
+                    {l.location ? ` · ${l.location}` : ""}
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-3 flex gap-2">
+              <Button className="rounded-full" onClick={save}>
+                <Check className="mr-2 h-4 w-4" /> Spara i schemat
+              </Button>
+              <Button variant="ghost" className="rounded-full" onClick={() => setPreview([])}>
+                Avbryt
+              </Button>
+            </div>
+          </div>
+        )}
       </CollapsibleSection>
     </section>
   );

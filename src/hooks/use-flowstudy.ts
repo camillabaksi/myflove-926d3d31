@@ -76,13 +76,48 @@ export type ExamPhase = {
 /** Flows plugg-plan utifrån hur många dagar som är kvar till provet. */
 export function examPhase(days: number | null): ExamPhase | null {
   if (days === null) return null;
-  if (days < 0) return { key: "past", label: "Provet är avklarat", advice: "Fint jobbat. Materialet finns kvar om du vill repetera." };
-  if (days === 0) return { key: "today", label: "Idag är provet", advice: "Ingen ny inlärning idag. Läs igenom dina sammanfattningar och andas." };
-  if (days === 1) return { key: "light", label: "1 dag kvar", advice: "Kort repetition – 10–15 minuter av det du haft fel på. Inte fyra timmars panikplugg." };
-  if (days <= 3) return { key: "repeat", label: `${days} dagar kvar`, advice: "Repetera frågorna du svarat fel på. Kvalitet före mängd." };
-  if (days <= 7) return { key: "firstquiz", label: `${days} dagar kvar`, advice: "Dags för första quizet – då vet du vad du redan kan." };
-  if (days <= 14) return { key: "flashcards", label: `${days} dagar kvar`, advice: "Börja med flashcards, några minuter om dagen räcker." };
-  return { key: "long", label: `${days} dagar kvar`, advice: "God tid. Lägg upp materialet nu och ta en liten runda flashcards i veckan." };
+  if (days < 0)
+    return {
+      key: "past",
+      label: "Provet är avklarat",
+      advice: "Fint jobbat. Materialet finns kvar om du vill repetera.",
+    };
+  if (days === 0)
+    return {
+      key: "today",
+      label: "Idag är provet",
+      advice: "Ingen ny inlärning idag. Läs igenom dina sammanfattningar och andas.",
+    };
+  if (days === 1)
+    return {
+      key: "light",
+      label: "1 dag kvar",
+      advice:
+        "Kort repetition – 10–15 minuter av det du haft fel på. Inte fyra timmars panikplugg.",
+    };
+  if (days <= 3)
+    return {
+      key: "repeat",
+      label: `${days} dagar kvar`,
+      advice: "Repetera frågorna du svarat fel på. Kvalitet före mängd.",
+    };
+  if (days <= 7)
+    return {
+      key: "firstquiz",
+      label: `${days} dagar kvar`,
+      advice: "Dags för första quizet – då vet du vad du redan kan.",
+    };
+  if (days <= 14)
+    return {
+      key: "flashcards",
+      label: `${days} dagar kvar`,
+      advice: "Börja med flashcards, några minuter om dagen räcker.",
+    };
+  return {
+    key: "long",
+    label: `${days} dagar kvar`,
+    advice: "God tid. Lägg upp materialet nu och ta en liten runda flashcards i veckan.",
+  };
 }
 
 export function useFlowStudy() {
@@ -96,7 +131,13 @@ export function useFlowStudy() {
       summary?: string;
       topics?: string[];
       cards: Array<{ front: string; back: string; topic?: string }>;
-      quiz: Array<{ question: string; options: string[]; correctIndex: number; explanation?: string; topic?: string }>;
+      quiz: Array<{
+        question: string;
+        options: string[];
+        correctIndex: number;
+        explanation?: string;
+        topic?: string;
+      }>;
     }) => {
       const now = Date.now();
       const record: StudySetRecord = {
@@ -137,7 +178,10 @@ export function useFlowStudy() {
     [setSets],
   );
 
-  const deleteSet = useCallback((id: string) => setSets((prev) => prev.filter((s) => s.id !== id)), [setSets]);
+  const deleteSet = useCallback(
+    (id: string) => setSets((prev) => prev.filter((s) => s.id !== id)),
+    [setSets],
+  );
 
   /** Fyller på ett befintligt set med fler kort och frågor. */
   const appendToSet = useCallback(
@@ -146,7 +190,13 @@ export function useFlowStudy() {
       input: {
         topics?: string[];
         cards: Array<{ front: string; back: string; topic?: string }>;
-        quiz: Array<{ question: string; options: string[]; correctIndex: number; explanation?: string; topic?: string }>;
+        quiz: Array<{
+          question: string;
+          options: string[];
+          correctIndex: number;
+          explanation?: string;
+          topic?: string;
+        }>;
       },
     ) => {
       const now = Date.now();
@@ -249,7 +299,9 @@ export function useFlowStudy() {
   const recordAttempt = useCallback(
     (setId: string, attempt: QuizAttempt) =>
       setSets((prev) =>
-        prev.map((s) => (s.id === setId ? { ...s, attempts: [attempt, ...s.attempts].slice(0, 20) } : s)),
+        prev.map((s) =>
+          s.id === setId ? { ...s, attempts: [attempt, ...s.attempts].slice(0, 20) } : s,
+        ),
       ),
     [setSets],
   );
@@ -261,7 +313,17 @@ export function useFlowStudy() {
     return { dueCards, dueQuestions };
   }, [sets]);
 
-  return { sets, addSet, appendToSet, deleteSet, setExamDate, gradeCard, gradeQuestion, recordAttempt, stats };
+  return {
+    sets,
+    addSet,
+    appendToSet,
+    deleteSet,
+    setExamDate,
+    gradeCard,
+    gradeQuestion,
+    recordAttempt,
+    stats,
+  };
 }
 
 /** Sorterar så att svaga och förfallna kort kommer först – enkelt adaptivt urval. */

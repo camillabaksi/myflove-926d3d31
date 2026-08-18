@@ -32,11 +32,7 @@ export function AreaSwitcher({ size = "md", className = "" }: Props) {
   const pad = size === "sm" ? "px-3 py-1.5 text-xs" : "px-4 py-2 text-sm";
 
   return (
-    <div
-      role="group"
-      aria-label="Välj livsområde"
-      className={`flex flex-wrap gap-2 ${className}`}
-    >
+    <div role="group" aria-label="Välj livsområde" className={`flex flex-wrap gap-2 ${className}`}>
       {options.map((o) => {
         const isActive = activeArea === o.value;
         const area = o.value === "alla" ? null : (o.value as LifeArea);

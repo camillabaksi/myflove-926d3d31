@@ -19,7 +19,13 @@ import {
 } from "@/lib/relations";
 
 /** Lägg till en person under en relationstyp. */
-function AddPerson({ type, onAdd }: { type: RelationTypeId; onAdd: (name: string, note: string) => void }) {
+function AddPerson({
+  type,
+  onAdd,
+}: {
+  type: RelationTypeId;
+  onAdd: (name: string, note: string) => void;
+}) {
   const [name, setName] = useState("");
   const [note, setNote] = useState("");
   const [open, setOpen] = useState(false);
@@ -97,7 +103,11 @@ function PersonRow({
   if (editing) {
     return (
       <div className="space-y-2 rounded-2xl border border-border bg-card p-3">
-        <Input value={name} onChange={(e) => setName(e.target.value)} className="h-10 rounded-2xl" />
+        <Input
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="h-10 rounded-2xl"
+        />
         <Input
           value={note}
           onChange={(e) => setNote(e.target.value)}
@@ -189,7 +199,8 @@ function PersonRow({
 }
 
 function RelationsContent() {
-  const { enabledTypes, people, toggleType, addPerson, updatePerson, removePerson } = useRelations();
+  const { enabledTypes, people, toggleType, addPerson, updatePerson, removePerson } =
+    useRelations();
   const { addFactor } = useEnergyFlow();
 
   const hidden = useMemo(
@@ -273,7 +284,10 @@ function RelationsContent() {
       <div className="surface-card space-y-3 p-5">
         <div className="flex items-center gap-2">
           <h2 className="font-semibold text-ink">Vilka relationer vill du ha med?</h2>
-          <HelpHint>Du väljer själv vilka relationstyper som visas. Inget läggs till automatiskt och du kan stänga av när du vill.</HelpHint>
+          <HelpHint>
+            Du väljer själv vilka relationstyper som visas. Inget läggs till automatiskt och du kan
+            stänga av när du vill.
+          </HelpHint>
         </div>
         <div className="flex flex-wrap gap-2">
           {RELATION_TYPES.map((t) => {

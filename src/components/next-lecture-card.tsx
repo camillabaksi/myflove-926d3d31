@@ -74,65 +74,65 @@ export function NextLectureCard() {
         }
         headingClassName={sectionTitle}
       >
-      <p className="mt-2 text-base text-ink">
-        Nästa är <strong>{lecture.title}</strong>
-        {lecture.location ? (
-          <>
-            {" "}
-            i <strong>{lecture.location}</strong>
-          </>
-        ) : null}
-        , {when} ({humanCountdown(minutes)}).
-      </p>
-      <div className="mt-3 flex flex-wrap gap-2 text-sm text-muted-foreground">
-        <span className="flex items-center gap-1 rounded-full bg-sage/15 px-3 py-1">
-          <Clock className="h-4 w-4" /> {lecture.start}–{lecture.end}
-        </span>
-        {lecture.location && (
-          <a
-            className="flex items-center gap-1 rounded-full bg-sage/15 px-3 py-1 underline"
-            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lecture.location)}`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            <MapPin className="h-4 w-4" /> {lecture.location}
-          </a>
-        )}
-      </div>
-      <p className="mt-3 text-sm text-muted-foreground">
-        {minutes <= 0
-          ? "Du är mitt i den – bara att vara här. 💙"
-          : minutes <= 30
-            ? "Snart dags. Packa det du behöver och andas ut."
-            : "Du har gott om tid. Ta en sak i taget."}
-      </p>
-
-      {advice?.travel && minutes > 0 && minutes <= 180 && (
-        <p className="mt-2 rounded-2xl bg-muted/50 px-3 py-2 text-sm text-muted-foreground">
-          {advice.emoji} {advice.travel}
-          {advice.extraTravelMinutes > 0
-            ? ` Gå gärna kl ${new Date(at.getTime() - advice.extraTravelMinutes * 60000 - 15 * 60000).toLocaleTimeString("sv-SE", { hour: "2-digit", minute: "2-digit" })}.`
-            : ""}
+        <p className="mt-2 text-base text-ink">
+          Nästa är <strong>{lecture.title}</strong>
+          {lecture.location ? (
+            <>
+              {" "}
+              i <strong>{lecture.location}</strong>
+            </>
+          ) : null}
+          , {when} ({humanCountdown(minutes)}).
         </p>
-      )}
+        <div className="mt-3 flex flex-wrap gap-2 text-sm text-muted-foreground">
+          <span className="flex items-center gap-1 rounded-full bg-sage/15 px-3 py-1">
+            <Clock className="h-4 w-4" /> {lecture.start}–{lecture.end}
+          </span>
+          {lecture.location && (
+            <a
+              className="flex items-center gap-1 rounded-full bg-sage/15 px-3 py-1 underline"
+              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lecture.location)}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <MapPin className="h-4 w-4" /> {lecture.location}
+            </a>
+          )}
+        </div>
+        <p className="mt-3 text-sm text-muted-foreground">
+          {minutes <= 0
+            ? "Du är mitt i den – bara att vara här. 💙"
+            : minutes <= 30
+              ? "Snart dags. Packa det du behöver och andas ut."
+              : "Du har gott om tid. Ta en sak i taget."}
+        </p>
 
-      <label className="mt-3 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-        <Bell className="h-4 w-4" />
-        <span>Påminn mig</span>
-        <select
-          value={settings.lectureReminderMinutes}
-          onChange={(e) => patchSettings({ lectureReminderMinutes: Number(e.target.value) })}
-          aria-label="Påminnelse före lektion"
-          className="rounded-xl border border-border bg-background px-3 py-2 text-sm text-ink"
-        >
-          <option value={0}>aldrig</option>
-          {[10, 15, 30, 45, 60].map((m) => (
-            <option key={m} value={m}>
-              {m} min innan
-            </option>
-          ))}
-        </select>
-      </label>
+        {advice?.travel && minutes > 0 && minutes <= 180 && (
+          <p className="mt-2 rounded-2xl bg-muted/50 px-3 py-2 text-sm text-muted-foreground">
+            {advice.emoji} {advice.travel}
+            {advice.extraTravelMinutes > 0
+              ? ` Gå gärna kl ${new Date(at.getTime() - advice.extraTravelMinutes * 60000 - 15 * 60000).toLocaleTimeString("sv-SE", { hour: "2-digit", minute: "2-digit" })}.`
+              : ""}
+          </p>
+        )}
+
+        <label className="mt-3 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+          <Bell className="h-4 w-4" />
+          <span>Påminn mig</span>
+          <select
+            value={settings.lectureReminderMinutes}
+            onChange={(e) => patchSettings({ lectureReminderMinutes: Number(e.target.value) })}
+            aria-label="Påminnelse före lektion"
+            className="rounded-xl border border-border bg-background px-3 py-2 text-sm text-ink"
+          >
+            <option value={0}>aldrig</option>
+            {[10, 15, 30, 45, 60].map((m) => (
+              <option key={m} value={m}>
+                {m} min innan
+              </option>
+            ))}
+          </select>
+        </label>
       </CollapsibleSection>
     </section>
   );

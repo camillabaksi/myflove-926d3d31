@@ -59,7 +59,7 @@ export default function ChildSchedule({
 
   // Bild eller dokument på schemat
   const uploadDoc = async (id: string, file: File) => {
-    const path = `${id}/${Date.now()}-${file.name.replace(/[^\w.\-]/g, "_")}`;
+    const path = `${id}/${Date.now()}-${file.name.replace(/[^\w.-]/g, "_")}`;
     const { error } = await supabase.storage.from("child-docs").upload(path, file);
     if (error) throw error;
     return path;
@@ -69,7 +69,10 @@ export default function ChildSchedule({
     if (error) throw error;
     return data.signedUrl;
   };
-  const [allFiles, setAllFiles] = useCloudSyncedStorage<Record<string, ScheduleFile[]>>(FILES_KEY, {});
+  const [allFiles, setAllFiles] = useCloudSyncedStorage<Record<string, ScheduleFile[]>>(
+    FILES_KEY,
+    {},
+  );
   const files = useMemo(() => allFiles[childId] ?? [], [allFiles, childId]);
   const [previews, setPreviews] = useState<Record<string, string>>({});
   const [uploading, setUploading] = useState(false);
@@ -91,7 +94,6 @@ export default function ChildSchedule({
     return () => {
       active = false;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [files]);
 
   const onPickFile = async (file: File | undefined) => {
@@ -115,7 +117,10 @@ export default function ChildSchedule({
   };
 
   const removeFile = (path: string) =>
-    setAllFiles((prev) => ({ ...prev, [childId]: (prev[childId] ?? []).filter((f) => f.path !== path) }));
+    setAllFiles((prev) => ({
+      ...prev,
+      [childId]: (prev[childId] ?? []).filter((f) => f.path !== path),
+    }));
 
   const open = async (path: string) => {
     try {
@@ -126,9 +131,7 @@ export default function ChildSchedule({
     }
   };
 
-
-  const save = (next: ChildScheduleEntry[]) =>
-    setAll((prev) => ({ ...prev, [childId]: next }));
+  const save = (next: ChildScheduleEntry[]) => setAll((prev) => ({ ...prev, [childId]: next }));
 
   const add = (e: React.FormEvent) => {
     e.preventDefault();
@@ -205,7 +208,8 @@ export default function ChildSchedule({
             <CalendarClock size={18} className="text-primary" />
             {childName}s skolschema
             <HelpHint label="barnets skolschema">
-              Lägg in skolschemat en gång – det ligger kvar vecka efter vecka. Dagens lektioner markeras och nästa lektion visas överst.
+              Lägg in skolschemat en gång – det ligger kvar vecka efter vecka. Dagens lektioner
+              markeras och nästa lektion visas överst.
             </HelpHint>
           </span>
         }
@@ -239,7 +243,11 @@ export default function ChildSchedule({
             <div key={f.path} className="rounded-2xl border border-border overflow-hidden">
               {f.isImage && previews[f.path] ? (
                 <button type="button" onClick={() => open(f.path)} className="block w-full">
-                  <img src={previews[f.path]} alt={`Skolschema för ${childName}`} className="w-full object-contain" />
+                  <img
+                    src={previews[f.path]}
+                    alt={`Skolschema för ${childName}`}
+                    className="w-full object-contain"
+                  />
                 </button>
               ) : (
                 <button
@@ -270,7 +278,8 @@ export default function ChildSchedule({
         {next && (
           <div className="rounded-2xl border border-primary/40 bg-primary/5 p-3">
             <div className="text-xs text-muted-foreground">
-              Nästa lektion · {next.offset === 0 ? "idag" : next.offset === 1 ? "imorgon" : DAYS[next.day]}
+              Nästa lektion ·{" "}
+              {next.offset === 0 ? "idag" : next.offset === 1 ? "imorgon" : DAYS[next.day]}
             </div>
             <div className="font-medium">
               {next.entry.start}
@@ -278,7 +287,8 @@ export default function ChildSchedule({
             </div>
             {(next.entry.location || next.entry.teacher) && (
               <div className="text-sm text-muted-foreground flex items-center gap-1">
-                <MapPin size={12} /> {[next.entry.location, next.entry.teacher].filter(Boolean).join(" · ")}
+                <MapPin size={12} />{" "}
+                {[next.entry.location, next.entry.teacher].filter(Boolean).join(" · ")}
               </div>
             )}
           </div>
@@ -357,10 +367,17 @@ export default function ChildSchedule({
                   value={paste}
                   onChange={(e) => setPaste(e.target.value)}
                   rows={5}
-                  placeholder={"Måndag 08:20-09:05 Matematik, sal 3\nTis 09:15-10:00 Svenska, sal 12"}
+                  placeholder={
+                    "Måndag 08:20-09:05 Matematik, sal 3\nTis 09:15-10:00 Svenska, sal 12"
+                  }
                   className="w-full rounded-2xl border border-border bg-background p-3 text-sm"
                 />
-                <Button type="button" variant="outline" className="h-10 rounded-2xl" onClick={importPaste}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="h-10 rounded-2xl"
+                  onClick={importPaste}
+                >
                   Tolka och lägg till
                 </Button>
               </div>
@@ -397,7 +414,8 @@ export default function ChildSchedule({
                           <span className="font-medium">{e.title}</span>
                           {(e.location || e.teacher) && (
                             <span className="text-muted-foreground flex items-center gap-1 text-xs">
-                              <MapPin size={12} /> {[e.location, e.teacher].filter(Boolean).join(" · ")}
+                              <MapPin size={12} />{" "}
+                              {[e.location, e.teacher].filter(Boolean).join(" · ")}
                             </span>
                           )}
                         </span>

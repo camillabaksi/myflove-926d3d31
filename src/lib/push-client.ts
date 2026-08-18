@@ -40,7 +40,9 @@ async function unregisterOurWorkers() {
     try {
       const url = r.active?.scriptURL || r.installing?.scriptURL || r.waiting?.scriptURL || "";
       if (url.endsWith(SW_PATH)) await r.unregister();
-    } catch {}
+    } catch {
+      // ignoreras med flit – felet påverkar inte användaren
+    }
   }
 }
 
@@ -139,7 +141,6 @@ export async function refreshPushSubscription(): Promise<SerializedSub | null> {
   return serializeSubscription(sub);
 }
 
-
 export async function unsubscribeCurrent(): Promise<string | null> {
   const reg = await ensureServiceWorker();
   if (!reg) return null;
@@ -148,6 +149,8 @@ export async function unsubscribeCurrent(): Promise<string | null> {
   const endpoint = sub.endpoint;
   try {
     await sub.unsubscribe();
-  } catch {}
+  } catch {
+    // ignoreras med flit – felet påverkar inte användaren
+  }
   return endpoint;
 }

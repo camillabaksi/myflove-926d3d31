@@ -5,7 +5,10 @@ export const Route = createFileRoute("/_app/assistant_/$chatId")({
   head: () => ({
     meta: [
       { title: "Sparat samtal med Flow – MyFlove" },
-      { name: "description", content: "Läs igenom ett tidigare samtal med Flow, din lugna AI-följeslagare." },
+      {
+        name: "description",
+        content: "Läs igenom ett tidigare samtal med Flow, din lugna AI-följeslagare.",
+      },
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),

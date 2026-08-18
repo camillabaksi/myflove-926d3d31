@@ -54,7 +54,8 @@ export function useFlowItems(): { items: FlowItem[]; today: FlowItem[] } {
         energyReason: friction?.reason,
         nextStep,
         done: t.completed,
-        href: getArea(t) === "studier" ? "/studyflow" : getArea(t) === "jobb" ? "/workflow" : "/tasks",
+        href:
+          getArea(t) === "studier" ? "/studyflow" : getArea(t) === "jobb" ? "/workflow" : "/tasks",
       });
     }
 

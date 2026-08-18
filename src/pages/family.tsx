@@ -18,7 +18,13 @@ const COLORS = [
 ];
 
 type Member = { user_id: string; display_name: string; color: string };
-type Household = { id: string; name: string; invite_code: string; created_by: string; members: Member[] };
+type Household = {
+  id: string;
+  name: string;
+  invite_code: string;
+  created_by: string;
+  members: Member[];
+};
 
 function ColorPicker({ value, onChange }: { value: string; onChange: (c: string) => void }) {
   return (
@@ -102,12 +108,10 @@ function CreateOrJoin({ onReady }: { onReady: () => void }) {
         toast({ description: "Du gick med i familjen!" });
       }
       onReady();
-    } catch (err: any) {
+    } catch (err) {
       toast({
         description:
-          mode === "join"
-            ? "Hittade ingen familj med den koden."
-            : "Något gick fel. Försök igen.",
+          mode === "join" ? "Hittade ingen familj med den koden." : "Något gick fel. Försök igen.",
         variant: "destructive",
       });
       console.error(err);
@@ -139,7 +143,10 @@ function CreateOrJoin({ onReady }: { onReady: () => void }) {
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4 bg-card border border-border rounded-3xl p-6 shadow-sm">
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-4 bg-card border border-border rounded-3xl p-6 shadow-sm"
+      >
         {mode === "create" ? (
           <div className="space-y-2">
             <label className="text-sm font-medium">Familjens namn</label>
@@ -238,8 +245,12 @@ function HouseholdView({
 
         <div className="flex items-center justify-between bg-secondary rounded-2xl p-4">
           <div>
-            <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Inbjudningskod</div>
-            <div className="text-lg font-mono font-bold tracking-widest">{household.invite_code}</div>
+            <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1">
+              Inbjudningskod
+            </div>
+            <div className="text-lg font-mono font-bold tracking-widest">
+              {household.invite_code}
+            </div>
           </div>
           <button
             onClick={copyCode}
@@ -253,7 +264,10 @@ function HouseholdView({
 
       <div className="space-y-2">
         {household.members.map((m) => (
-          <div key={m.user_id} className="flex items-center gap-3 bg-card border border-border rounded-2xl p-4">
+          <div
+            key={m.user_id}
+            className="flex items-center gap-3 bg-card border border-border rounded-2xl p-4"
+          >
             <div className="w-4 h-4 rounded-full shrink-0" style={{ backgroundColor: m.color }} />
             <span className="text-lg">{m.display_name}</span>
             {m.user_id === currentUserId && (

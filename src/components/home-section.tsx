@@ -18,7 +18,14 @@ interface HomeSectionProps {
  * Ett hopfällbart block på hemskärmen. Läget sparas per block,
  * så det du inte vill se just nu håller sig undan tills du vill ha tillbaka det.
  */
-export default function HomeSection({ id, title, help, children, defaultCollapsed = false, style }: HomeSectionProps) {
+export default function HomeSection({
+  id,
+  title,
+  help,
+  children,
+  defaultCollapsed = false,
+  style,
+}: HomeSectionProps) {
   const [collapsed, setCollapsed] = useLocalStorage<boolean>(
     `myflove-home-collapsed-${id}`,
     defaultCollapsed,
@@ -33,7 +40,11 @@ export default function HomeSection({ id, title, help, children, defaultCollapse
           aria-expanded={!collapsed}
           className="flex flex-1 items-center gap-2 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground hover:text-foreground transition-colors"
         >
-          {collapsed ? <ChevronRight size={14} aria-hidden="true" /> : <ChevronDown size={14} aria-hidden="true" />}
+          {collapsed ? (
+            <ChevronRight size={14} aria-hidden="true" />
+          ) : (
+            <ChevronDown size={14} aria-hidden="true" />
+          )}
           <span>{title}</span>
           <span className="ml-auto text-[11px] normal-case tracking-normal opacity-70">
             {collapsed ? "Visa" : "Dölj"}
@@ -45,4 +56,3 @@ export default function HomeSection({ id, title, help, children, defaultCollapse
     </section>
   );
 }
-

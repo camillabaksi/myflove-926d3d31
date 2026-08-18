@@ -21,7 +21,6 @@ const InputSchema = z.object({
   focus: z.string().max(1500).optional(),
   cardCount: z.number().int().min(4).max(30).default(12),
   quizCount: z.number().int().min(4).max(20).default(10),
-
 });
 
 const OutputSchema = z.object({
@@ -78,7 +77,7 @@ export const generateStudySet = createServerFn({ method: "POST" })
       "",
       `Skapa ${data.cardCount} flashcards och ${data.quizCount} flervalsfrågor utifrån materialet.`,
       data.focus?.trim() ? `Anpassning efter användarens stödbehov: ${data.focus.trim()}` : null,
-      'Returnera JSON: { summary, topics: [string], cards: [{ front, back, topic }], quiz: [{ question, options: [4 st], correctIndex, explanation, topic }] }.',
+      "Returnera JSON: { summary, topics: [string], cards: [{ front, back, topic }], quiz: [{ question, options: [4 st], correctIndex, explanation, topic }] }.",
 
       data.text?.trim() ? `\nMaterial (text):\n${data.text.trim()}` : null,
     ]
@@ -110,7 +109,8 @@ export const generateStudySet = createServerFn({ method: "POST" })
       }),
     });
 
-    if (res.status === 429) throw new Response("För många frågor just nu. Prova igen om en stund.", { status: 429 });
+    if (res.status === 429)
+      throw new Response("För många frågor just nu. Prova igen om en stund.", { status: 429 });
     if (res.status === 402) throw new Response("AI-krediterna är slut.", { status: 402 });
     if (!res.ok) throw new Error(`AI-fel: ${res.status} ${await res.text()}`);
 
@@ -128,7 +128,9 @@ export const generateStudySet = createServerFn({ method: "POST" })
       topics: result.topics.slice(0, 12),
       cards: result.cards.slice(0, 30),
       quiz: result.quiz
-        .filter((q) => q.options.length >= 2 && q.correctIndex >= 0 && q.correctIndex < q.options.length)
+        .filter(
+          (q) => q.options.length >= 2 && q.correctIndex >= 0 && q.correctIndex < q.options.length,
+        )
         .slice(0, 20),
     };
   });

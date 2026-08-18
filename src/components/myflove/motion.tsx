@@ -43,10 +43,14 @@ export function moodFromEnergy(energy?: number | null): MyFloveMood {
 /** Sekunder per "andetag" – långsammare när energin är låg. */
 export function moodTempo(mood: MyFloveMood): number {
   switch (mood) {
-    case "calm": return 7.5;
-    case "lively": return 3.2;
-    case "focus": return 9;
-    default: return 5;
+    case "calm":
+      return 7.5;
+    case "lively":
+      return 3.2;
+    case "focus":
+      return 9;
+    default:
+      return 5;
   }
 }
 
@@ -58,7 +62,11 @@ export function MyFloveHeart({
   size = 28,
   mood = "steady",
   className,
-}: { size?: number; mood?: MyFloveMood; className?: string }) {
+}: {
+  size?: number;
+  mood?: MyFloveMood;
+  className?: string;
+}) {
   const reduced = useReducedMotion();
   return (
     <span
@@ -76,13 +84,14 @@ export function MyFloveHeart({
 /* Gnista – "något blev tydligt"                                       */
 /* ------------------------------------------------------------------ */
 
-export function MyFloveSparkle({
-  count = 3,
-  className,
-}: { count?: number; className?: string }) {
+export function MyFloveSparkle({ count = 3, className }: { count?: number; className?: string }) {
   const reduced = useReducedMotion();
   return (
-    <span aria-hidden data-motion="living" className={cn("pointer-events-none absolute inset-0", className)}>
+    <span
+      aria-hidden
+      data-motion="living"
+      className={cn("pointer-events-none absolute inset-0", className)}
+    >
       {Array.from({ length: count }).map((_, i) => (
         <span
           key={i}
@@ -111,7 +120,11 @@ export function MyFloveThinking({
   label = "Jag tittar på din situation...",
   steps = THINK_STEPS,
   className,
-}: { label?: string; steps?: string[]; className?: string }) {
+}: {
+  label?: string;
+  steps?: string[];
+  className?: string;
+}) {
   const reduced = useReducedMotion();
   const [active, setActive] = React.useState(0);
   React.useEffect(() => {
@@ -121,7 +134,10 @@ export function MyFloveThinking({
   }, [reduced, steps.length]);
 
   return (
-    <div className={cn("flex flex-col items-center gap-3 py-6 text-center", className)} data-motion="living">
+    <div
+      className={cn("flex flex-col items-center gap-3 py-6 text-center", className)}
+      data-motion="living"
+    >
       <div className="flex items-center gap-2" aria-hidden>
         {steps.map((s, i) => (
           <React.Fragment key={s + i}>
@@ -153,7 +169,12 @@ export function MyFloveBreathing({
   mood = "focus",
   children,
   className,
-}: { size?: number; mood?: MyFloveMood; children?: React.ReactNode; className?: string }) {
+}: {
+  size?: number;
+  mood?: MyFloveMood;
+  children?: React.ReactNode;
+  className?: string;
+}) {
   const reduced = useReducedMotion();
   return (
     <span
@@ -181,10 +202,17 @@ export function MyFloveListening({
   active = true,
   label,
   className,
-}: { active?: boolean; label?: string; className?: string }) {
+}: {
+  active?: boolean;
+  label?: string;
+  className?: string;
+}) {
   const reduced = useReducedMotion();
   return (
-    <span className={cn("inline-flex items-center gap-2 text-xs text-muted-foreground", className)} data-motion="living">
+    <span
+      className={cn("inline-flex items-center gap-2 text-xs text-muted-foreground", className)}
+      data-motion="living"
+    >
       <span aria-hidden className="flex h-4 items-end gap-0.5">
         {[0, 1, 2, 3].map((i) => (
           <span
@@ -194,9 +222,10 @@ export function MyFloveListening({
               height: 14,
               transformOrigin: "bottom",
               transform: active && !reduced ? undefined : "scaleY(0.35)",
-              animation: active && !reduced
-                ? `myflove-listen ${0.9 + i * 0.12}s ease-in-out ${i * 0.1}s infinite`
-                : undefined,
+              animation:
+                active && !reduced
+                  ? `myflove-listen ${0.9 + i * 0.12}s ease-in-out ${i * 0.1}s infinite`
+                  : undefined,
             }}
           />
         ))}
@@ -214,7 +243,11 @@ export function MyFloveCaptureFlight({
   text,
   show,
   onDone,
-}: { text: string; show: boolean; onDone?: () => void }) {
+}: {
+  text: string;
+  show: boolean;
+  onDone?: () => void;
+}) {
   const reduced = useReducedMotion();
   React.useEffect(() => {
     if (!show) return;
@@ -243,10 +276,7 @@ export function MyFloveCaptureFlight({
 /* Klart – checkmark som ritas + mjuk studs                            */
 /* ------------------------------------------------------------------ */
 
-export function MyFloveSuccess({
-  size = 28,
-  className,
-}: { size?: number; className?: string }) {
+export function MyFloveSuccess({ size = 28, className }: { size?: number; className?: string }) {
   const reduced = useReducedMotion();
   return (
     <svg
@@ -266,7 +296,10 @@ export function MyFloveSuccess({
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeDasharray="32"
-        style={{ animation: reduced ? "none" : "myflove-check 0.5s ease-out forwards", strokeDashoffset: reduced ? 0 : undefined }}
+        style={{
+          animation: reduced ? "none" : "myflove-check 0.5s ease-out forwards",
+          strokeDashoffset: reduced ? 0 : undefined,
+        }}
       />
     </svg>
   );
@@ -280,7 +313,11 @@ export function MyFloveCelebration({
   level = 1,
   message,
   className,
-}: { level?: 1 | 2 | 3; message?: string; className?: string }) {
+}: {
+  level?: 1 | 2 | 3;
+  message?: string;
+  className?: string;
+}) {
   const reduced = useReducedMotion();
   const emoji = level === 3 ? "💜" : level === 2 ? "✨" : "✓";
   return (
@@ -292,7 +329,12 @@ export function MyFloveCelebration({
         className,
       )}
     >
-      <span aria-hidden className={cn("text-base leading-none", !reduced && level > 1 && "sparkling")}>{emoji}</span>
+      <span
+        aria-hidden
+        className={cn("text-base leading-none", !reduced && level > 1 && "sparkling")}
+      >
+        {emoji}
+      </span>
       <span>{message ?? "Bra jobbat."}</span>
     </div>
   );
@@ -306,11 +348,18 @@ export function MyFloveEnergyDots({
   value,
   max = 5,
   className,
-}: { value: number; max?: number; className?: string }) {
+}: {
+  value: number;
+  max?: number;
+  className?: string;
+}) {
   const reduced = useReducedMotion();
   const [shown, setShown] = React.useState(reduced ? value : 0);
   React.useEffect(() => {
-    if (reduced) { setShown(value); return; }
+    if (reduced) {
+      setShown(value);
+      return;
+    }
     setShown(0);
     let n = 0;
     const t = setInterval(() => {
@@ -323,7 +372,11 @@ export function MyFloveEnergyDots({
 
   const mood = moodFromEnergy(value);
   return (
-    <span className={cn("inline-flex items-center gap-1.5", className)} aria-hidden data-motion="living">
+    <span
+      className={cn("inline-flex items-center gap-1.5", className)}
+      aria-hidden
+      data-motion="living"
+    >
       {Array.from({ length: max }).map((_, i) => (
         <span
           key={i}
@@ -347,15 +400,23 @@ export function MyFlovePath({
   steps,
   current = 0,
   className,
-}: { steps: { emoji: string; label?: string }[]; current?: number; className?: string }) {
+}: {
+  steps: { emoji: string; label?: string }[];
+  current?: number;
+  className?: string;
+}) {
   const reduced = useReducedMotion();
-  const pct = steps.length > 1 ? (Math.min(current, steps.length - 1) / (steps.length - 1)) * 100 : 0;
+  const pct =
+    steps.length > 1 ? (Math.min(current, steps.length - 1) / (steps.length - 1)) * 100 : 0;
   return (
     <div className={cn("w-full", className)} data-motion="living">
       <div className="relative mx-2 h-1.5 rounded-pill bg-lavender">
         <div
           className="absolute inset-y-0 left-0 rounded-pill bg-primary"
-          style={{ width: `${pct}%`, transition: reduced ? "none" : "width 900ms cubic-bezier(0.22,1,0.36,1)" }}
+          style={{
+            width: `${pct}%`,
+            transition: reduced ? "none" : "width 900ms cubic-bezier(0.22,1,0.36,1)",
+          }}
         />
         <span
           aria-hidden
@@ -378,7 +439,9 @@ export function MyFlovePath({
             >
               {s.emoji}
             </span>
-            {s.label && <span className="text-[11px] leading-tight text-muted-foreground">{s.label}</span>}
+            {s.label && (
+              <span className="text-[11px] leading-tight text-muted-foreground">{s.label}</span>
+            )}
           </div>
         ))}
       </div>
@@ -393,7 +456,10 @@ export function MyFlovePath({
 export function MyFloveBalanceBars({
   bars,
   className,
-}: { bars: { label: string; value: number; tone?: "primary" | "mint" | "blush" }[]; className?: string }) {
+}: {
+  bars: { label: string; value: number; tone?: "primary" | "mint" | "blush" }[];
+  className?: string;
+}) {
   const reduced = useReducedMotion();
   const max = Math.max(1, ...bars.map((b) => Math.abs(b.value)));
   return (
@@ -409,7 +475,9 @@ export function MyFloveBalanceBars({
                 style={{
                   height: `${h}%`,
                   transformOrigin: "bottom",
-                  animation: reduced ? "none" : `myflove-grow-bar 0.8s cubic-bezier(0.22,1,0.36,1) ${i * 0.12}s both`,
+                  animation: reduced
+                    ? "none"
+                    : `myflove-grow-bar 0.8s cubic-bezier(0.22,1,0.36,1) ${i * 0.12}s both`,
                 }}
               />
             </div>
@@ -428,25 +496,37 @@ export function MyFloveBalanceBars({
 export function MyFloveInsightGather({
   emoji = "💡",
   className,
-}: { emoji?: string; className?: string }) {
+}: {
+  emoji?: string;
+  className?: string;
+}) {
   const reduced = useReducedMotion();
   const dots = [
-    { x: -34, y: -18 }, { x: 30, y: -24 }, { x: -26, y: 22 },
-    { x: 32, y: 20 }, { x: 0, y: -34 }, { x: 4, y: 32 },
+    { x: -34, y: -18 },
+    { x: 30, y: -24 },
+    { x: -26, y: 22 },
+    { x: 32, y: 20 },
+    { x: 0, y: -34 },
+    { x: 4, y: 32 },
   ];
   return (
-    <span className={cn("relative grid h-14 w-14 place-items-center", className)} aria-hidden data-motion="living">
-      {!reduced && dots.map((d, i) => (
-        <span
-          key={i}
-          className="absolute h-1.5 w-1.5 rounded-full bg-primary/70"
-          style={{
-            ["--from-x" as string]: `${d.x}px`,
-            ["--from-y" as string]: `${d.y}px`,
-            animation: `myflove-gather 2.4s ease-in-out ${i * 0.12}s infinite`,
-          }}
-        />
-      ))}
+    <span
+      className={cn("relative grid h-14 w-14 place-items-center", className)}
+      aria-hidden
+      data-motion="living"
+    >
+      {!reduced &&
+        dots.map((d, i) => (
+          <span
+            key={i}
+            className="absolute h-1.5 w-1.5 rounded-full bg-primary/70"
+            style={{
+              ["--from-x" as string]: `${d.x}px`,
+              ["--from-y" as string]: `${d.y}px`,
+              animation: `myflove-gather 2.4s ease-in-out ${i * 0.12}s infinite`,
+            }}
+          />
+        ))}
       <span className={cn("relative text-2xl leading-none", !reduced && "breathe")}>{emoji}</span>
     </span>
   );
@@ -459,11 +539,19 @@ export function MyFloveInsightGather({
 export function MyFloveNightSky({ className }: { className?: string }) {
   const reduced = useReducedMotion();
   const stars = [
-    { l: 8, t: 18 }, { l: 26, t: 8 }, { l: 47, t: 24 },
-    { l: 68, t: 12 }, { l: 84, t: 30 }, { l: 92, t: 8 },
+    { l: 8, t: 18 },
+    { l: 26, t: 8 },
+    { l: 47, t: 24 },
+    { l: 68, t: 12 },
+    { l: 84, t: 30 },
+    { l: 92, t: 8 },
   ];
   return (
-    <span aria-hidden data-motion="living" className={cn("pointer-events-none absolute inset-x-0 top-0 h-24", className)}>
+    <span
+      aria-hidden
+      data-motion="living"
+      className={cn("pointer-events-none absolute inset-x-0 top-0 h-24", className)}
+    >
       {stars.map((s, i) => (
         <span
           key={i}
@@ -473,7 +561,9 @@ export function MyFloveNightSky({ className }: { className?: string }) {
           ✦
         </span>
       ))}
-      <span className={cn("absolute right-5 top-3 text-xl leading-none", !reduced && "floaty")}>🌙</span>
+      <span className={cn("absolute right-5 top-3 text-xl leading-none", !reduced && "floaty")}>
+        🌙
+      </span>
     </span>
   );
 }
@@ -496,12 +586,23 @@ export function MyFloveFloatingElement({
   style?: React.CSSProperties;
 }) {
   const reduced = useReducedMotion();
-  const bg = { lavender: "bg-lavender", blush: "bg-blush", mint: "bg-mint", sky: "bg-sky", sun: "bg-sun" }[tone];
+  const bg = {
+    lavender: "bg-lavender",
+    blush: "bg-blush",
+    mint: "bg-mint",
+    sky: "bg-sky",
+    sun: "bg-sun",
+  }[tone];
   return (
     <span
       aria-hidden
       data-motion="living"
-      className={cn("pointer-events-none absolute rounded-full opacity-60 blur-md", bg, !reduced && "drifting", className)}
+      className={cn(
+        "pointer-events-none absolute rounded-full opacity-60 blur-md",
+        bg,
+        !reduced && "drifting",
+        className,
+      )}
       style={{ width: size, height: size, animationDuration: `${moodTempo(mood) * 3}s`, ...style }}
     />
   );
@@ -516,7 +617,11 @@ export function MyFloveTransition({
   transitionKey,
   children,
   className,
-}: { transitionKey: string | number; children: React.ReactNode; className?: string }) {
+}: {
+  transitionKey: string | number;
+  children: React.ReactNode;
+  className?: string;
+}) {
   const reduced = useReducedMotion();
   return (
     <div key={transitionKey} className={cn(!reduced && "pop-in", className)} data-motion="living">
@@ -541,7 +646,10 @@ const EMPTY_ART: Record<string, { emoji: string; motion: "breathe" | "floaty" | 
 export function MyFloveEmptyIllustration({
   kind = "default",
   className,
-}: { kind?: keyof typeof EMPTY_ART | string; className?: string }) {
+}: {
+  kind?: keyof typeof EMPTY_ART | string;
+  className?: string;
+}) {
   const reduced = useReducedMotion();
   const art = EMPTY_ART[kind] ?? EMPTY_ART.default;
   return (

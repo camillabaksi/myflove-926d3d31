@@ -33,7 +33,10 @@ export function DailyFocusCard() {
 
   if (!currentFocus) {
     return (
-      <form onSubmit={handleSubmit} className="bg-card border border-border rounded-2xl p-5 space-y-4">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-card border border-border rounded-2xl p-5 space-y-4"
+      >
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
             <Target size={20} />
@@ -78,11 +81,15 @@ export function DailyFocusCard() {
           <CheckCircle2
             size={32}
             className={`mt-0.5 shrink-0 ${
-              currentFocus.completed ? "fill-primary text-primary-foreground" : "text-muted-foreground"
+              currentFocus.completed
+                ? "fill-primary text-primary-foreground"
+                : "text-muted-foreground"
             }`}
           />
           <div>
-            <p className="text-xs uppercase tracking-wider text-muted-foreground mb-1">Dagens fokus</p>
+            <p className="text-xs uppercase tracking-wider text-muted-foreground mb-1">
+              Dagens fokus
+            </p>
             <h2
               className={`text-xl font-medium leading-tight ${
                 currentFocus.completed ? "opacity-70 line-through" : "text-foreground"
@@ -101,7 +108,11 @@ export function DailyFocusCard() {
       </button>
       {currentFocus.completed && (
         <div className="text-center">
-          <Button variant="outline" onClick={() => setTodayFocus("")} className="rounded-xl h-10 px-5">
+          <Button
+            variant="outline"
+            onClick={() => setTodayFocus("")}
+            className="rounded-xl h-10 px-5"
+          >
             Byt uppgift
           </Button>
         </div>

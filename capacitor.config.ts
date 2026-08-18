@@ -1,4 +1,4 @@
-import type { CapacitorConfig } from '@capacitor/cli';
+import type { CapacitorConfig } from "@capacitor/cli";
 
 /**
  * Capacitor config för MyFlove native app (iOS + Android).
@@ -10,15 +10,15 @@ import type { CapacitorConfig } from '@capacitor/cli';
  * kör `bunx cap sync`.
  */
 const config: CapacitorConfig = {
-  appId: 'app.myflove.mobile',
-  appName: 'MyFlove',
-  webDir: 'dist',
+  appId: "app.myflove.mobile",
+  appName: "MyFlove",
+  webDir: "dist",
   server: {
-    url: 'https://myflove.lovable.app',
+    url: "https://myflove.lovable.app",
     cleartext: false,
   },
   ios: {
-    contentInset: 'always',
+    contentInset: "always",
   },
   android: {
     allowMixedContent: false,
@@ -26,12 +26,12 @@ const config: CapacitorConfig = {
   plugins: {
     SplashScreen: {
       launchShowDuration: 1200,
-      backgroundColor: '#F5EFE6',
+      backgroundColor: "#F5EFE6",
       showSpinner: false,
     },
     StatusBar: {
-      style: 'DARK',
-      backgroundColor: '#F5EFE6',
+      style: "DARK",
+      backgroundColor: "#F5EFE6",
     },
   },
 };

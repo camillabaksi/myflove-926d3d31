@@ -32,12 +32,28 @@ Din roll nu:
 
 /** Känslan bakom impulsen – mellanrummet mellan känsla och handling. */
 const FEELINGS: { id: string; label: string; opener: string }[] = [
-  { id: "stressad", label: "Jag är stressad", opener: "Stress vill ofta ha en snabb utväg. Vad är det som pressar just nu?" },
-  { id: "trott", label: "Jag är trött", opener: "Trötthet gör allt tyngre. Vad var du på väg att göra?" },
+  {
+    id: "stressad",
+    label: "Jag är stressad",
+    opener: "Stress vill ofta ha en snabb utväg. Vad är det som pressar just nu?",
+  },
+  {
+    id: "trott",
+    label: "Jag är trött",
+    opener: "Trötthet gör allt tyngre. Vad var du på väg att göra?",
+  },
   { id: "arg", label: "Jag är arg", opener: "Ilskan får finnas. Vad hände precis innan?" },
   { id: "ledsen", label: "Jag är ledsen", opener: "Jag är här. Vill du berätta vad som gör ont?" },
-  { id: "taggad", label: "Jag är väldigt taggad", opener: "Taggad energi kan dra iväg. Vad är det du vill göra?" },
-  { id: "vet-inte", label: "Jag vet inte", opener: "Det är okej att inte veta. Hur känns det i kroppen?" },
+  {
+    id: "taggad",
+    label: "Jag är väldigt taggad",
+    opener: "Taggad energi kan dra iväg. Vad är det du vill göra?",
+  },
+  {
+    id: "vet-inte",
+    label: "Jag vet inte",
+    opener: "Det är okej att inte veta. Hur känns det i kroppen?",
+  },
 ];
 
 const OPENERS = [
@@ -119,7 +135,10 @@ export default function StopModal({ open, onOpenChange }: StopModalProps) {
       <DialogContent className="max-w-lg rounded-3xl p-0 overflow-hidden">
         <div
           className="p-6 text-cream"
-          style={{ background: "linear-gradient(135deg, hsl(var(--terracotta)) 0%, hsl(var(--terracotta-soft)) 100%)" }}
+          style={{
+            background:
+              "linear-gradient(135deg, hsl(var(--terracotta)) 0%, hsl(var(--terracotta-soft)) 100%)",
+          }}
         >
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold flex items-center gap-2 text-cream">
@@ -146,14 +165,11 @@ export default function StopModal({ open, onOpenChange }: StopModalProps) {
               </div>
             </div>
             <p className="text-muted-foreground leading-relaxed">
-              Andas in långsamt … håll … andas ut ännu långsammare. Gör det ett par gånger.
-              Impulsen brukar mildras inom några minuter.
+              Andas in långsamt … håll … andas ut ännu långsammare. Gör det ett par gånger. Impulsen
+              brukar mildras inom några minuter.
             </p>
             <div className="flex flex-col gap-2">
-              <Button
-                onClick={() => setPhase("feeling")}
-                className="w-full h-12 rounded-2xl"
-              >
+              <Button onClick={() => setPhase("feeling")} className="w-full h-12 rounded-2xl">
                 <Sparkles size={18} className="mr-2" />
                 Prata med Flow om det
               </Button>
@@ -174,8 +190,8 @@ export default function StopModal({ open, onOpenChange }: StopModalProps) {
         ) : phase === "feeling" ? (
           <div className="p-6 space-y-4">
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Vill du pausa det här beslutet en stund? Du behöver inte välja rätt –
-              det hjälper bara mig att förstå.
+              Vill du pausa det här beslutet en stund? Du behöver inte välja rätt – det hjälper bara
+              mig att förstå.
             </p>
             <div className="grid gap-2">
               {FEELINGS.map((f) => (
@@ -194,7 +210,11 @@ export default function StopModal({ open, onOpenChange }: StopModalProps) {
               ))}
             </div>
             <StopBudget />
-            <Button variant="ghost" onClick={() => setPhase("talk")} className="w-full h-11 rounded-2xl">
+            <Button
+              variant="ghost"
+              onClick={() => setPhase("talk")}
+              className="w-full h-11 rounded-2xl"
+            >
               Hoppa över
             </Button>
           </div>

@@ -7,7 +7,6 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { withBackendRecovery, isBackendAsleepError } from "@/lib/backend-wake";
 
-
 export const Route = createFileRoute("/sign-in")({
   head: () => ({
     meta: [
@@ -69,20 +68,35 @@ function SignInPage() {
     window.location.href = target;
   }
 
-
   return (
     <div className="flex min-h-[100dvh] items-center justify-center bg-background px-4">
       <div className="w-full max-w-md rounded-3xl border border-border bg-card p-8 shadow-sm">
-        <h1 className="mb-2 text-3xl font-bold text-primary tracking-tight">Logga in på MyFlove — Ditt stöd i vardagen</h1>
-        <p className="mb-6 text-sm text-muted-foreground">Välkommen tillbaka. Logga in för att fortsätta din flow.</p>
+        <h1 className="mb-2 text-3xl font-bold text-primary tracking-tight">
+          Logga in på MyFlove — Ditt stöd i vardagen
+        </h1>
+        <p className="mb-6 text-sm text-muted-foreground">
+          Välkommen tillbaka. Logga in för att fortsätta din flow.
+        </p>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email">E-post</Label>
-            <Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+            <Input
+              id="email"
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </div>
           <div className="space-y-2">
             <Label htmlFor="password">Lösenord</Label>
-            <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
+            <Input
+              id="password"
+              type="password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </div>
           <Button type="submit" disabled={loading} className="w-full">
             {waking ? "Väcker tjänsten…" : loading ? "Loggar in…" : "Logga in"}
@@ -95,11 +109,14 @@ function SignInPage() {
         </p>
         <p className="mt-2 text-center text-sm text-muted-foreground">
           Inget konto?{" "}
-          <Link to="/sign-up" search={{ next }} className="text-primary underline underline-offset-4">
+          <Link
+            to="/sign-up"
+            search={{ next }}
+            className="text-primary underline underline-offset-4"
+          >
             Skapa ett här
           </Link>
         </p>
-
       </div>
     </div>
   );

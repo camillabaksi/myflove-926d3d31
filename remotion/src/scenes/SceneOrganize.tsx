@@ -36,7 +36,9 @@ const CARDS = [
 export const SceneOrganize: React.FC = () => {
   return (
     <SceneShell bg={COLORS.bgDeep}>
-      <AbsoluteFill style={{ padding: "70px 80px", display: "flex", flexDirection: "column", gap: 28 }}>
+      <AbsoluteFill
+        style={{ padding: "70px 80px", display: "flex", flexDirection: "column", gap: 28 }}
+      >
         <div style={{ display: "flex", flexDirection: "column", gap: 12, maxWidth: 760 }}>
           <SectionEyebrow delay={0}>Ordning utan press</SectionEyebrow>
           <SectionTitle delay={4}>Allt får en egen hylla.</SectionTitle>
@@ -44,6 +46,7 @@ export const SceneOrganize: React.FC = () => {
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
           {CARDS.map((c) => {
+            // eslint-disable-next-line react-hooks/rules-of-hooks -- Remotion-scen: listan är statisk, hook-ordningen är alltid densamma
             const e = useEntrance(c.delay);
             return (
               <div
@@ -74,10 +77,24 @@ export const SceneOrganize: React.FC = () => {
                   {c.icon}
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                  <div style={{ fontFamily: FONTS.display, fontWeight: 600, fontSize: 24, color: COLORS.ink }}>
+                  <div
+                    style={{
+                      fontFamily: FONTS.display,
+                      fontWeight: 600,
+                      fontSize: 24,
+                      color: COLORS.ink,
+                    }}
+                  >
                     {c.title}
                   </div>
-                  <div style={{ fontFamily: FONTS.body, fontSize: 16, color: COLORS.muted, lineHeight: 1.4 }}>
+                  <div
+                    style={{
+                      fontFamily: FONTS.body,
+                      fontSize: 16,
+                      color: COLORS.muted,
+                      lineHeight: 1.4,
+                    }}
+                  >
                     {c.sub}
                   </div>
                 </div>

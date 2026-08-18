@@ -10,7 +10,15 @@ import {
   grantRoleFn,
   revokeRoleFn,
 } from "@/lib/admin.functions";
-import { Lock, Shield, ShieldOff, Trash2, MessageSquareWarning, Users as UsersIcon, FileDown } from "lucide-react";
+import {
+  Lock,
+  Shield,
+  ShieldOff,
+  Trash2,
+  MessageSquareWarning,
+  Users as UsersIcon,
+  FileDown,
+} from "lucide-react";
 import ChangelogExport from "@/components/changelog-export";
 
 const STATUS_LABELS: Record<string, string> = {
@@ -28,7 +36,11 @@ export default function AdminPage() {
   const [tab, setTab] = useState<"friction" | "users" | "changelog">("friction");
 
   if (adminLoading) {
-    return <Layout><p className="text-muted-foreground">Laddar…</p></Layout>;
+    return (
+      <Layout>
+        <p className="text-muted-foreground">Laddar…</p>
+      </Layout>
+    );
   }
   if (!isAdmin) {
     return (
@@ -51,31 +63,59 @@ export default function AdminPage() {
         </header>
 
         <div className="flex gap-2 border-b border-border">
-          <TabBtn active={tab === "friction"} onClick={() => setTab("friction")} icon={<MessageSquareWarning size={16} />}>
+          <TabBtn
+            active={tab === "friction"}
+            onClick={() => setTab("friction")}
+            icon={<MessageSquareWarning size={16} />}
+          >
             Feedback
           </TabBtn>
-          <TabBtn active={tab === "users"} onClick={() => setTab("users")} icon={<UsersIcon size={16} />}>
+          <TabBtn
+            active={tab === "users"}
+            onClick={() => setTab("users")}
+            icon={<UsersIcon size={16} />}
+          >
             Användare & roller
           </TabBtn>
-          <TabBtn active={tab === "changelog"} onClick={() => setTab("changelog")} icon={<FileDown size={16} />}>
+          <TabBtn
+            active={tab === "changelog"}
+            onClick={() => setTab("changelog")}
+            icon={<FileDown size={16} />}
+          >
             Changelog
           </TabBtn>
         </div>
 
-        {tab === "friction" ? <FrictionSection /> : tab === "users" ? <UsersSection /> : <ChangelogExport />}
+        {tab === "friction" ? (
+          <FrictionSection />
+        ) : tab === "users" ? (
+          <UsersSection />
+        ) : (
+          <ChangelogExport />
+        )}
       </div>
     </Layout>
   );
 }
 
 function TabBtn({
-  active, onClick, icon, children,
-}: { active: boolean; onClick: () => void; icon: React.ReactNode; children: React.ReactNode }) {
+  active,
+  onClick,
+  icon,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  icon: React.ReactNode;
+  children: React.ReactNode;
+}) {
   return (
     <button
       onClick={onClick}
       className={`flex items-center gap-2 px-4 py-2 text-sm font-medium border-b-2 -mb-px transition ${
-        active ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground"
+        active
+          ? "border-primary text-primary"
+          : "border-transparent text-muted-foreground hover:text-foreground"
       }`}
     >
       {icon}
@@ -104,7 +144,8 @@ function FrictionSection() {
 
   if (isLoading) return <p className="text-muted-foreground">Laddar rapporter…</p>;
   if (isError) return <p className="text-destructive text-sm">Fel: {(error as Error).message}</p>;
-  if (!data || data.length === 0) return <p className="text-muted-foreground">Inga rapporter ännu.</p>;
+  if (!data || data.length === 0)
+    return <p className="text-muted-foreground">Inga rapporter ännu.</p>;
 
   return (
     <div className="space-y-3">
@@ -115,7 +156,9 @@ function FrictionSection() {
             <div className="min-w-0 flex-1">
               <h3 className="font-serif font-semibold text-lg">{item.title}</h3>
               {item.description && (
-                <p className="text-sm text-muted-foreground mt-1 whitespace-pre-wrap">{item.description}</p>
+                <p className="text-sm text-muted-foreground mt-1 whitespace-pre-wrap">
+                  {item.description}
+                </p>
               )}
             </div>
             <span className="text-xs bg-secondary rounded-full px-2 py-0.5 whitespace-nowrap">
@@ -124,7 +167,9 @@ function FrictionSection() {
           </div>
 
           <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
-            {item.category && <span className="rounded-full bg-muted px-2 py-0.5">{item.category}</span>}
+            {item.category && (
+              <span className="rounded-full bg-muted px-2 py-0.5">{item.category}</span>
+            )}
             {item.impact != null && <span>Effekt: {item.impact}</span>}
             {item.frequency != null && <span>Frekvens: {item.frequency}</span>}
             {item.mental_load != null && <span>Mental last: {item.mental_load}</span>}
@@ -137,13 +182,18 @@ function FrictionSection() {
             <select
               value={item.status}
               onChange={(e) =>
-                updateStatus.mutate({ id: item.id, status: e.target.value as (typeof STATUS_OPTIONS)[number] })
+                updateStatus.mutate({
+                  id: item.id,
+                  status: e.target.value as (typeof STATUS_OPTIONS)[number],
+                })
               }
               disabled={updateStatus.isPending}
               className="rounded-lg border border-border bg-background text-sm px-2 py-1"
             >
               {STATUS_OPTIONS.map((s) => (
-                <option key={s} value={s}>{STATUS_LABELS[s]}</option>
+                <option key={s} value={s}>
+                  {STATUS_LABELS[s]}
+                </option>
               ))}
             </select>
             <button
@@ -181,7 +231,8 @@ function UsersSection() {
 
   if (isLoading) return <p className="text-muted-foreground">Laddar användare…</p>;
   if (isError) return <p className="text-destructive text-sm">Fel: {(error as Error).message}</p>;
-  if (!data || data.length === 0) return <p className="text-muted-foreground">Inga användare hittades.</p>;
+  if (!data || data.length === 0)
+    return <p className="text-muted-foreground">Inga användare hittades.</p>;
 
   return (
     <div className="space-y-2">
@@ -210,7 +261,9 @@ function UsersSection() {
                     {u.created_at ? new Date(u.created_at).toLocaleDateString("sv-SE") : "—"}
                   </td>
                   <td className="p-3 text-xs text-muted-foreground">
-                    {u.last_sign_in_at ? new Date(u.last_sign_in_at).toLocaleDateString("sv-SE") : "—"}
+                    {u.last_sign_in_at
+                      ? new Date(u.last_sign_in_at).toLocaleDateString("sv-SE")
+                      : "—"}
                   </td>
                   <td className="p-3">
                     {u.roles.length === 0 ? (
