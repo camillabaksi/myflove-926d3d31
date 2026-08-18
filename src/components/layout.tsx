@@ -959,6 +959,71 @@ export default function Layout({ children }: LayoutProps) {
                     {simpleMode ? "Visar bara det viktigaste" : "Visa bara det viktigaste"}
                   </button>
 
+                  {/* Byt platser i bottenmenyn */}
+                  <div className="mb-4 rounded-3xl border border-border bg-card p-4 shadow-sm">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-sm font-semibold">Din bottenmeny</p>
+                        <p data-npf="optional" className="text-xs text-muted-foreground">
+                          Hem och QuickFlow ligger fast. Två platser väljer du själv.
+                        </p>
+                      </div>
+                      <Button
+                        variant={editingNav ? "default" : "outline"}
+                        size="sm"
+                        className="rounded-xl gap-1"
+                        onClick={() => setEditingNav((v) => !v)}
+                      >
+                        {editingNav ? (
+                          <>
+                            <Check size={14} /> Klar
+                          </>
+                        ) : (
+                          "Ändra"
+                        )}
+                      </Button>
+                    </div>
+
+                    {editingNav && (
+                      <div className="mt-3 space-y-3">
+                        {[0, 1].map((slot) => (
+                          <label key={slot} className="block">
+                            <span className="mb-1 block text-xs font-medium text-muted-foreground">
+                              Plats {slot + 1}
+                            </span>
+                            <select
+                              value={navSlots[slot] ?? ""}
+                              onChange={(e) => {
+                                const next = [navSlots[0] ?? "", navSlots[1] ?? ""];
+                                next[slot] = e.target.value;
+                                setNavSlots(next);
+                              }}
+                              className="w-full rounded-2xl border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                            >
+                              {navItems
+                                .filter((i) => i.href !== "/hem")
+                                .map((i) => (
+                                  <option key={i.href} value={i.href}>
+                                    {i.label}
+                                  </option>
+                                ))}
+                            </select>
+                          </label>
+                        ))}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="rounded-xl gap-1"
+                          onClick={() => setNavSlots(["/kalender", "/assistant"])}
+                        >
+                          <RotateCcw size={14} /> Återställ
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+
+
+
                   <div className="grid grid-cols-2 gap-3">
                     {categories
                       .filter((cat) =>
