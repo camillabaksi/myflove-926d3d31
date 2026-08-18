@@ -296,6 +296,7 @@ export default function QuickflowTriage() {
             const resolved = ruleFor(item);
             const type = resolved.destination;
             const plan = parseWhenFromText(item.text) ? planFor(item) : null;
+            const child = guessChild(item.text, children);
             return (
               <div key={item.id} className="surface-card p-4 space-y-3">
                 <div className="flex items-start gap-2">
@@ -306,7 +307,7 @@ export default function QuickflowTriage() {
                       {resolved.rule
                         ? `Din regel "${resolved.rule.phrase}": ${DESTINATION_META[type].label}.`
                         : `Mitt förslag: ${DESTINATION_META[type].label} – du bestämmer.`}
-
+                      {child ? ` Verkar gälla ${child.name}.` : ""}
                     </p>
                     {plan && !plan.ambiguous && (
                       <p className="text-xs text-primary">
