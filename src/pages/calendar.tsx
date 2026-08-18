@@ -1449,6 +1449,56 @@ export default function CalendarPage() {
           </DialogContent>
         </Dialog>
 
+        {/* Ändra vilka barn som ingår i en redan sparad, sammanfogad händelse. */}
+        <Dialog open={!!editChildGroup} onOpenChange={(open) => !open && setEditChildGroup(null)}>
+          <DialogContent className="rounded-3xl">
+            <DialogHeader>
+              <DialogTitle>Vilka barn ingår?</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <p className="text-sm text-muted-foreground">
+                {editChildGroup?.title}
+                {editChildGroup?.time ? ` · kl ${editChildGroup.time}` : ""}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {kids.map((k) => {
+                  const selected = editChildIds.includes(k.id);
+                  return (
+                    <button
+                      key={k.id}
+                      type="button"
+                      aria-pressed={selected}
+                      onClick={() =>
+                        setEditChildIds((prev) =>
+                          prev.includes(k.id) ? prev.filter((id) => id !== k.id) : [...prev, k.id],
+                        )
+                      }
+                      className={`px-3 py-2 rounded-full text-sm font-medium border transition-all ${
+                        selected
+                          ? "text-white border-transparent"
+                          : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
+                      }`}
+                      style={selected ? { backgroundColor: k.color } : undefined}
+                    >
+                      {selected ? "✓ " : ""}{k.name}
+                    </button>
+                  );
+                })}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Lägg till eller ta bort barn – händelsen finns kvar, den flyttar bara in i rätt barns schema.
+              </p>
+              <Button
+                onClick={saveChildGroup}
+                disabled={savingChildGroup}
+                className="w-full h-12 rounded-2xl"
+              >
+                {savingChildGroup ? "Sparar…" : "Spara"}
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+
 
 
       </div>
