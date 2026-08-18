@@ -276,6 +276,17 @@ export default function Dump() {
         <QuickflowList />
 
         <CollapsibleSection
+          title={<span className="flex items-center gap-2"><NotebookPen size={20} /> Anteckningar</span>}
+          id="QuickFlow-anteckningar"
+          headingClassName="font-semibold"
+          className="pt-4"
+        >
+          <NotesPanel />
+        </CollapsibleSection>
+
+
+
+        <CollapsibleSection
           title={<span className="flex items-center gap-2"><Sparkles size={20} /> Mina sorteringsregler</span>}
           id="QuickFlow-regler"
           headingClassName="font-semibold"
