@@ -47,6 +47,36 @@ export default function SituationPage() {
           </p>
         )}
 
+        {active.length > 1 && (
+          <section className="rounded-3xl border border-primary/30 bg-primary/5 p-5">
+            <h2 className="flex items-center gap-2 font-display text-lg text-ink">
+              <Compass size={18} className="text-primary" aria-hidden="true" />
+              {priority.headline}
+              <HelpHint label="Prioritering">
+                När flera situationer pågår väljer jag en ordning så att jobb och studier inte ger
+                dig två planer som drar åt olika håll. Ordningen ändras med dagen – hur krävande
+                jobbet är, hur nära prov ligger och hur mycket ork du har.
+              </HelpHint>
+            </h2>
+            <p className="mt-1 text-sm text-muted-foreground">{priority.rationale}</p>
+            <ol className="mt-3 flex flex-wrap gap-2">
+              {priority.order.map((id, i) => (
+                <li
+                  key={id}
+                  className={`rounded-full border px-3 py-1 text-sm ${
+                    i === 0
+                      ? "border-primary bg-primary/10 text-primary"
+                      : "border-border bg-card text-muted-foreground"
+                  }`}
+                >
+                  {i + 1}. {SITUATION_META[id].emoji} {SITUATION_META[id].label}
+                </li>
+              ))}
+            </ol>
+          </section>
+        )}
+
+
         <div className="space-y-3">
           {ALL_SITUATIONS.map((id) => {
             const meta = SITUATION_META[id];
