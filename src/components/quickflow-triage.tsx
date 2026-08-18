@@ -237,6 +237,51 @@ export default function QuickflowTriage() {
     setChildPick(guessChild(item.text, children)?.id ?? children[0]?.id ?? null);
   };
 
+  /** Öppnar "När vill du se den igen?" och förifyller imorgon. */
+  const openLaterPanel = (item: QuickflowItem) => {
+    setLaterFor(item.id);
+    const base = new Date(item.remindAt ?? Date.now() + DAY);
+    setLaterDate(
+      `${base.getFullYear()}-${String(base.getMonth() + 1).padStart(2, "0")}-${String(
+        base.getDate(),
+      ).padStart(2, "0")}`,
+    );
+    setLaterTime(
+      item.remindAt
+        ? `${String(base.getHours()).padStart(2, "0")}:${String(base.getMinutes()).padStart(2, "0")}`
+        : "09:00",
+    );
+  };
+
+  /** Sparar tanken som vilande tills den valda tidpunkten. */
+  const saveLater = (item: QuickflowItem, at: number) => {
+    if (!Number.isFinite(at)) return;
+    snooze(item.id, at);
+    setLaterFor(null);
+    log("quickflow");
+    toast.success("Sparad – jag återkommer.", {
+      description: `Du får se den igen ${formatWhen(at, new Date(), false)}.`,
+    });
+  };
+
+  /** Snabbval för när tanken ska dyka upp igen. */
+  const laterPresets = () => {
+    const now = new Date();
+    const at = (days: number, h: number, m = 0) => {
+      const d = new Date(now);
+      d.setDate(d.getDate() + days);
+      d.setHours(h, m, 0, 0);
+      return d.getTime();
+    };
+    const tonight = at(0, 19);
+    const list: { label: string; at: number }[] = [];
+    if (tonight > now.getTime()) list.push({ label: "I kväll", at: tonight });
+    list.push({ label: "Imorgon bitti", at: at(1, 8) });
+    list.push({ label: "Om 3 dagar", at: at(3, 9) });
+    list.push({ label: "Nästa vecka", at: at(7, 9) });
+    return list;
+  };
+
   /** En knapp per ställe tanken kan hamna. Förslaget ligger först. */
   const runDestination = (item: QuickflowItem, d: QuickflowDestination) => {
     if (d === "inkop") return toShopping(item);
@@ -255,10 +300,12 @@ export default function QuickflowTriage() {
     if (d === "anteckning") return toNote(item);
     if (d === "energi") return setEnergyFor(item.id);
     if (d === "ide") return toIdea(item);
+    if (d === "behall") return openLaterPanel(item);
     const area = DESTINATION_AREA[d];
     if (area) return toAreaTask(item, area);
     return update(item.id, { askedAt: Date.now() });
   };
+
 
   const DESTINATIONS: QuickflowDestination[] = [
     "uppgift",
