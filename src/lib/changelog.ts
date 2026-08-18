@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Sparläge för Återkom senare – välj när tanken ska dyka upp igen (i kväll, imorgon bitti, om 3 dagar, nästa vecka eller eget datum och tid). Den ligger kvar som vilande och tidpunkten går att ändra (2026-08-18)",
       "QuickFlow: Vart ska det här hamna? – alla val på ett ställe: uppgift, kalender, påminnelse, barn, familj, studier, jobb, hemma, hälsa, ekonomi, inköp, anteckning, energifaktor, återkom senare eller ta bort. Barn är ett eget livsområde och Flow föreslår vilket barn det gäller (2026-08-18)",
       "Omvandla till … på anteckningar – en tydlig knapp där du väljer uppgift, kalenderhändelse eller energifaktor, justerar detaljer och bekräftar innan något sparas (2026-08-18)",
       "Spara som anteckning i QuickFlow – fånga först, bestäm sen. Anteckningar har ingen deadline och kan senare bli uppgift, kalender, påminnelse, inköp, studier, jobb eller energifaktor när du bekräftar (2026-08-18)",
