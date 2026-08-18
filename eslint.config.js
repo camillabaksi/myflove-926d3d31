@@ -36,5 +36,19 @@ export default tseslint.config(
       "@typescript-eslint/no-unused-vars": "off",
     },
   },
+  {
+    // shadcn/ui, Remotion-scener och kompatibilitetslager exporterar med flit
+    // både komponenter och varianter/hjälpare – Fast Refresh-regeln gäller inte här.
+    files: [
+      "src/components/ui/**/*.{ts,tsx}",
+      "src/compat/**/*.{ts,tsx}",
+      "remotion/**/*.{ts,tsx}",
+      "src/components/myflove/motion.tsx",
+      "src/components/flow-item-actions.tsx",
+    ],
+    rules: {
+      "react-refresh/only-export-components": "off",
+    },
+  },
   eslintPluginPrettier,
 );
