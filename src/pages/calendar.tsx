@@ -880,7 +880,7 @@ export default function CalendarPage() {
                       aria-label="Ändra uppgift"
                       className="px-3 py-2 text-sm text-primary rounded-xl hover:bg-primary/10"
                     >
-                      Ändra tid
+                      Ändra
                     </button>
                     <button
                       onClick={() => deleteTask(t.id)}
