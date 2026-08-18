@@ -1,8 +1,36 @@
 import { useCallback, useEffect, useRef } from "react";
 import { useLocalStorage } from "@/lib/storage";
 import { supabase } from "@/integrations/supabase/client";
+import type { User } from "@supabase/supabase-js";
 
 const META_SUFFIX = "__updated_at";
+
+// Varje synkad nyckel behöver veta vem som är inloggad. Utan cache blir det
+// ett nätverksanrop per nyckel (70+ per sidladdning) – vi delar ett svar
+// mellan alla hooks och nollställer det när inloggningen ändras.
+let cachedUser: { user: User | null } | null = null;
+let inflightUser: Promise<User | null> | null = null;
+
+export async function getSyncUser(): Promise<User | null> {
+  if (cachedUser) return cachedUser.user;
+  if (!inflightUser) {
+    inflightUser = supabase.auth
+      .getUser()
+      .then(({ data }) => {
+        cachedUser = { user: data.user ?? null };
+        return cachedUser.user;
+      })
+      .catch(() => null)
+      .finally(() => {
+        inflightUser = null;
+      });
+  }
+  return inflightUser;
+}
+
+supabase.auth.onAuthStateChange(() => {
+  cachedUser = null;
+});
 
 /**
  * localStorage-backed state that also syncs to public.user_kv when the user
@@ -35,7 +63,7 @@ export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const user = await getSyncUser();
       if (!user || cancelled) return;
 
       const { data, error } = await supabase
@@ -80,7 +108,7 @@ export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
     if (!hydratedRef.current) return;
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const user = await getSyncUser();
       if (!user) return;
       setLocalUpdatedAt(Date.now());
       await supabase.from("user_kv").upsert({
