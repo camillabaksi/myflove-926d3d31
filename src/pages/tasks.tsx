@@ -61,6 +61,8 @@ export default function Tasks() {
     unsnoozeTask,
     setTaskStatus,
     setTaskKind,
+    setTaskNote,
+
     addTaskStep,
     toggleTaskStep,
     deleteTaskStep,
@@ -72,6 +74,8 @@ export default function Tasks() {
   const [newTask, setNewTask] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [newTime, setNewTime] = useState("");
+  const [newNote, setNewNote] = useState("");
+
   const [newReminder, setNewReminder] = useState<number | "">("");
   const [newKind, setNewKind] = useState<TaskKind>("uppgift");
 
@@ -105,14 +109,17 @@ export default function Tasks() {
     addTask(newTask.trim(), dueDate || undefined, {
       kind: newKind,
       time: newTime || undefined,
+      note: newNote.trim() || undefined,
       reminderMinutesBefore: reminderMinutes,
       area: defaultAreaFor(activeArea),
     });
     setNewTask("");
     setDueDate("");
     setNewTime("");
+    setNewNote("");
     setNewReminder("");
     setNewKind("uppgift");
+
   };
 
   const areaActive = useMemo(() => filterByArea(activeTasks, activeArea), [activeTasks, activeArea]);
@@ -196,6 +203,11 @@ export default function Tasks() {
 
             <p className="text-base leading-snug">{task.title}</p>
 
+            {task.note && !isOpen && (
+              <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">{task.note}</p>
+            )}
+
+
             {status === "vantar" && task.waitingOn && (
               <p className="text-xs text-amber-800 mt-1">Väntar på: <strong>{task.waitingOn}</strong></p>
             )}
@@ -226,18 +238,20 @@ export default function Tasks() {
                 );
               })}
 
-              {(kind === "arende" || kind === "projekt" || steps.length > 0) && (
-                <button
-                  type="button"
-                  onClick={() => toggleExpand(task.id)}
-                  className="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full border border-border text-muted-foreground hover:text-foreground ml-auto"
-                >
-                  {isOpen ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-                  Delsteg
-                </button>
-              )}
+              <button
+                type="button"
+                onClick={() => toggleExpand(task.id)}
+                className="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full border border-border text-muted-foreground hover:text-foreground ml-auto"
+              >
+                {isOpen ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+                Anteckning &amp; delsteg
+              </button>
             </div>
           </div>
+
+
+
+
 
           <button
             onClick={() => deleteTask(task.id)}
@@ -282,7 +296,23 @@ export default function Tasks() {
               </div>
             )}
 
+            {/* Anteckning */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-medium text-muted-foreground" htmlFor={`note-${task.id}`}>
+                Anteckning
+              </label>
+              <textarea
+                id={`note-${task.id}`}
+                defaultValue={task.note ?? ""}
+                onBlur={(e) => setTaskNote(task.id, e.target.value)}
+                rows={2}
+                placeholder="Skriv vad det gäller, vad du behöver ta med…"
+                className="w-full rounded-xl border border-border bg-background p-3 text-sm outline-none focus:border-primary"
+              />
+            </div>
+
             {/* Steps */}
+
             <div className="space-y-2">
               {steps.map((step) => (
                 <div key={step.id} className="flex items-center gap-2">
@@ -429,6 +459,14 @@ export default function Tasks() {
               </select>
             </label>
           </div>
+          <textarea
+            value={newNote}
+            onChange={(e) => setNewNote(e.target.value)}
+            rows={2}
+            placeholder="Anteckning (valfritt) – vad det gäller, vad du behöver ta med"
+            className="w-full rounded-xl border border-border bg-background p-3 text-sm outline-none focus:border-primary"
+          />
+
           <div className="flex flex-wrap gap-1.5">
             {(Object.keys(KIND_META) as TaskKind[]).map((k) => {
               const active = k === newKind;

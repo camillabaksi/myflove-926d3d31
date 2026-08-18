@@ -137,6 +137,9 @@ export default function CalendarPage() {
   const [newAnyTitle, setNewAnyTitle] = useState("");
   const [newAnyTime, setNewAnyTime] = useState("");
   const [newAnyEndTime, setNewAnyEndTime] = useState("");
+  /** Fri anteckning – vad det handlar om, vad man behöver ta med. */
+  const [newAnyNote, setNewAnyNote] = useState("");
+
   /** Påminnelse innan start: null = ingen, annars minuter före (0 = vid start). */
   const [newAnyRemind, setNewAnyRemind] = useState<number | null>(null);
   const [newAnyChildId, setNewAnyChildId] = useState<string>("");
@@ -232,6 +235,7 @@ export default function CalendarPage() {
     const endTime = newAnyEndTime || undefined;
     /** Fritextfält (familj/barn) lagrar intervallet som "09:00–10:00". */
     const timeRange = time && endTime ? `${time}–${endTime}` : (newAnyTime || null);
+    const note = newAnyNote.trim() || undefined;
     try {
       const wantsReminder = Boolean(time) && newAnyRemind !== null;
       if (wantsReminder && getNotificationPermission() === "default") {
@@ -247,28 +251,31 @@ export default function CalendarPage() {
           toast({ description: "Lägg till ett barn först på sidan Barn.", variant: "destructive" });
           return;
         }
-        await addChildItem({ childId, kind: "activity", title, date: selectedDateStr, time: timeRange ?? undefined });
+        await addChildItem({ childId, kind: "activity", title, date: selectedDateStr, time: timeRange ?? undefined, notes: note });
       } else if (newCat === "jobb" || newCat === "studier") {
         addTask(title, selectedDateStr, {
           time,
           endTime,
+          note,
           area: newCat,
           reminderMinutesBefore: wantsReminder ? newAnyRemind ?? 0 : undefined,
         });
       } else {
-        addReminder(title, selectedDateStr, time, "none", endTime, wantsReminder ? newAnyRemind ?? 0 : undefined);
+        addReminder(title, selectedDateStr, time, "none", endTime, wantsReminder ? newAnyRemind ?? 0 : undefined, note);
       }
       // Familj- och barnhändelser bor i delade listor – lägg en personlig
       // påminnelse bredvid så att notisen faktiskt når just dig.
       if (wantsReminder && (newCat === "familj" || newCat === "barn")) {
-        addReminder(title, selectedDateStr, time, "none", endTime, newAnyRemind ?? 0);
+        addReminder(title, selectedDateStr, time, "none", endTime, newAnyRemind ?? 0, note);
       }
       if (!visible.includes(newCat)) setVisible((prev) => [...prev, newCat]);
       setNewAnyTitle("");
       setNewAnyTime("");
       setNewAnyEndTime("");
+      setNewAnyNote("");
       setNewAnyRemind(null);
       setIsAddingAny(false);
+
       toast({ description: "Händelsen är inlagd i kalendern." });
     } catch {
       toast({ description: "Kunde inte spara händelsen. Försök igen.", variant: "destructive" });
@@ -783,6 +790,10 @@ export default function CalendarPage() {
                         Påminnelse {r.time && `kl ${r.time}${r.endTime ? `–${r.endTime}` : ""}`}
                       </div>
                       <div className="text-lg font-medium truncate">{r.title}</div>
+                      {r.note && (
+                        <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">{r.note}</p>
+                      )}
+
                     </div>
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
@@ -822,6 +833,10 @@ export default function CalendarPage() {
                       <div className={`text-lg font-medium truncate ${t.completed ? 'line-through text-muted-foreground' : ''}`}>
                         {t.title}
                       </div>
+                      {t.note && (
+                        <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">{t.note}</p>
+                      )}
+
                     </div>
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
@@ -1161,6 +1176,23 @@ export default function CalendarPage() {
                   </p>
                 )}
               </div>
+
+
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium" htmlFor="ny-anteckning">
+                  Anteckning (valfritt)
+                </label>
+                <textarea
+                  id="ny-anteckning"
+                  value={newAnyNote}
+                  onChange={(e) => setNewAnyNote(e.target.value)}
+                  rows={3}
+                  placeholder="T.ex. ta med remiss, adress, vad mötet gäller"
+                  className="w-full rounded-2xl border border-border bg-card p-3 text-base outline-none focus:border-primary"
+                />
+              </div>
+
 
               <p className="text-xs text-muted-foreground">
                 Läggs in på {selectedDateStr === todayStr ? "idag" : selectedDateStr}.

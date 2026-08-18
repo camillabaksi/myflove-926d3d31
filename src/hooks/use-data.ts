@@ -45,6 +45,8 @@ export interface Task {
   kind?: TaskKind; // default "uppgift"
   status?: TaskStatus; // default "pagar"; "klart" ⇔ completed=true
   waitingOn?: string; // fritt fält: "vem/vad vi väntar på"
+  note?: string; // fri anteckning: vad det handlar om, vad du behöver ta med
+
   steps?: TaskStep[]; // delsteg (särskilt för ärenden och projekt)
   area?: LifeArea; // livsområde: vardag / privat / studier / jobb
   courseId?: string; // kopplad kurs (studieflödet)
@@ -111,6 +113,7 @@ export function useTasks() {
     opts?: {
       kind?: TaskKind;
       waitingOn?: string;
+      note?: string;
       time?: string;
       endTime?: string;
       reminderMinutesBefore?: number;
@@ -136,6 +139,7 @@ export function useTasks() {
         kind: opts?.kind ?? "uppgift",
         status: opts?.waitingOn ? "vantar" : "pagar",
         waitingOn: opts?.waitingOn,
+        note: opts?.note?.trim() || undefined,
         area: opts?.area ?? "vardag",
         courseId: opts?.courseId,
         deadlineLeadDays: opts?.deadlineLeadDays,
@@ -145,6 +149,12 @@ export function useTasks() {
       ...prev,
     ]);
   };
+
+  /** Fri anteckning på en uppgift – tom text tar bort anteckningen. */
+  const setTaskNote = (id: string, note: string) => {
+    setTasks((prev) => prev.map(t => (t.id === id ? { ...t, note: note.trim() || undefined } : t)));
+  };
+
 
   const setTaskDueDate = (id: string, dueDate: string) => {
     setTasks((prev) => prev.map(t => (t.id === id ? { ...t, dueDate } : t)));
@@ -352,6 +362,8 @@ export function useTasks() {
     setTaskDueDate,
     setTaskTime,
     setTaskArea,
+    setTaskNote,
+
 
     addTaskStep,
     addTaskSteps,
@@ -489,6 +501,7 @@ export interface Reminder {
   createdAt: number;
   repeat?: RepeatMode; // default 'none'
   remindMinutesBefore?: number; // notis X min innan starttid (0 = vid start)
+  note?: string; // fri anteckning om vad det gäller
 }
 
 export function useReminders() {
@@ -501,6 +514,7 @@ export function useReminders() {
     repeat: RepeatMode = 'none',
     endTime?: string,
     remindMinutesBefore?: number,
+    note?: string,
   ) => {
     setReminders([{
       id: generateId(),
@@ -512,6 +526,7 @@ export function useReminders() {
       createdAt: Date.now(),
       repeat,
       remindMinutesBefore,
+      note: note?.trim() || undefined,
     }, ...reminders]);
     trackEvent('calendar', 'reminder_added');
   };
@@ -526,10 +541,11 @@ export function useReminders() {
 
   const updateReminder = (
     id: string,
-    patch: { title?: string; date?: string; time?: string | undefined; repeat?: RepeatMode; remindMinutesBefore?: number }
+    patch: { title?: string; date?: string; time?: string | undefined; repeat?: RepeatMode; remindMinutesBefore?: number; note?: string }
   ) => {
     setReminders(reminders.map(r => r.id === id ? { ...r, ...patch } : r));
   };
+
 
   const activeReminders = reminders.filter(r => !r.completed).sort((a, b) => {
     // Sort by date then time
