@@ -18,6 +18,8 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 - **"Ditt fokus idag" visar bara dagens saker** (2026-08-17): Uppgifter med ett framtida datum syns inte längre i "Ditt fokus idag" på hemskärmen – de ligger kvar i kalendern och dyker upp först när dagen är inne. Passerade datum och dagens datum visas fortfarande.
 
 ### Added
+- **Energiflöde** (2026-08-19): Ny del under Må bra där du registrerar vad som ger 🔋 och tar 🪫 energi – sömn, socialt, ljud och miljö, stress, återhämtning, egentid. Dagens balans blir en egen faktor i FlowScore (du väljer själv: Av/Lite/Normalt/Mycket), och mönster över 14–30 dagar visar vad som återkommer. Posterna blir aldrig kalenderhändelser eller uppgifter – de beskriver bara din kapacitet, och Flow erbjuder en lättare plan när dagen tagit mer än den gett.
+
 - **Ändra barn i sammanfogad händelse** (2026-08-18): Barnhändelser i kalendern har nu knappen "Ändra barn" – lägg till eller ta bort barn i efterhand utan att skapa en ny händelse.
 - **Flera barn i samma händelse** (2026-08-18): I "Ny händelse" kan du nu välja flera barn samtidigt – t.ex. lämning av både Bella och Bianca. Det blir en händelse i kalendern och en påminnelse ("Lämning – Bella & Bianca"), men syns i varje barns schema. Dagens vy slår ihop identiska barnhändelser till en rad.
 - **Ändra allt i efterhand** (2026-08-19): Nu kan du ändra allt du lagt in manuellt – titel, datum, starttid, sluttid, påminnelse, livsområde och anteckning. I kalendern öppnar "Ändra" en full dialog för både uppgifter och påminnelser, och på uppgiftssidan finns samma val under "Anteckning & delsteg".
