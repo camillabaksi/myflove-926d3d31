@@ -74,10 +74,32 @@ export const WEIGHT_LABEL: Record<EnergyFlowWeight, string> = {
 };
 
 export interface EnergyFlowSettings {
+  /** Huvudreglaget: av här betyder att energiflödet inte påverkar något alls. */
+  enabled: boolean;
   weight: EnergyFlowWeight;
+  /** Vikt per energifaktor (kategori) – går att ställa oberoende av varandra. */
+  categoryWeights: Partial<Record<EnergyCategory, EnergyFlowWeight>>;
 }
 
-export const DEFAULT_ENERGY_FLOW_SETTINGS: EnergyFlowSettings = { weight: "normal" };
+export const DEFAULT_ENERGY_FLOW_SETTINGS: EnergyFlowSettings = {
+  enabled: true,
+  weight: "normal",
+  categoryWeights: {},
+};
+
+/** Läser in sparade inställningar och fyller på med standardvärden. */
+export function normalizeSettings(raw: Partial<EnergyFlowSettings> | null | undefined): EnergyFlowSettings {
+  return {
+    enabled: raw?.enabled ?? true,
+    weight: raw?.weight ?? "normal",
+    categoryWeights: raw?.categoryWeights ?? {},
+  };
+}
+
+export function categoryWeightFor(settings: EnergyFlowSettings, category: EnergyCategory): EnergyFlowWeight {
+  return settings.categoryWeights?.[category] ?? "normal";
+}
+
 
 export function isSameDay(iso: string, day = new Date()): boolean {
   const d = new Date(iso);
