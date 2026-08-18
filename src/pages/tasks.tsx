@@ -298,8 +298,94 @@ export default function Tasks() {
               </div>
             )}
 
+            {/* Datum, tider och påminnelse – allt går att ändra i efterhand */}
+            <div className="grid grid-cols-2 gap-2">
+              <div className="space-y-1.5">
+                <label className="text-xs font-medium text-muted-foreground" htmlFor={`date-${task.id}`}>
+                  Datum
+                </label>
+                <Input
+                  id={`date-${task.id}`}
+                  type="date"
+                  value={task.dueDate ?? ""}
+                  onChange={(e) => updateTask(task.id, { dueDate: e.target.value })}
+                  className="h-10 rounded-xl text-sm bg-background"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-xs font-medium text-muted-foreground" htmlFor={`time-${task.id}`}>
+                  Tid (valfritt)
+                </label>
+                <Input
+                  id={`time-${task.id}`}
+                  type="time"
+                  value={task.time ?? ""}
+                  onChange={(e) => updateTask(task.id, { time: e.target.value })}
+                  className="h-10 rounded-xl text-sm bg-background"
+                />
+              </div>
+              {task.time && (
+                <div className="space-y-1.5">
+                  <label className="text-xs font-medium text-muted-foreground" htmlFor={`end-${task.id}`}>
+                    Slutar (valfritt)
+                  </label>
+                  <Input
+                    id={`end-${task.id}`}
+                    type="time"
+                    value={task.endTime ?? ""}
+                    onChange={(e) => updateTask(task.id, { endTime: e.target.value || undefined })}
+                    className="h-10 rounded-xl text-sm bg-background"
+                  />
+                </div>
+              )}
+              {task.time && (
+                <div className="space-y-1.5">
+                  <label className="text-xs font-medium text-muted-foreground" htmlFor={`remind-${task.id}`}>
+                    Påminn innan
+                  </label>
+                  <select
+                    id={`remind-${task.id}`}
+                    value={String(task.reminderMinutesBefore ?? "")}
+                    onChange={(e) =>
+                      updateTask(task.id, {
+                        reminderMinutesBefore: e.target.value ? Number(e.target.value) : undefined,
+                      })
+                    }
+                    className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm outline-none focus:border-primary"
+                  >
+                    <option value="">Ingen</option>
+                    <option value="0">Vid start</option>
+                    <option value="10">10 min innan</option>
+                    <option value="30">30 min innan</option>
+                    <option value="60">1 tim innan</option>
+                    <option value="1440">1 dag innan</option>
+                  </select>
+                </div>
+              )}
+            </div>
+
+            {/* Livsområde */}
+            <div className="flex flex-wrap gap-1.5 text-xs">
+              <span className="text-muted-foreground self-center mr-1">Hör hemma i:</span>
+              {ALL_AREAS.map((a) => (
+                <button
+                  key={a}
+                  type="button"
+                  onClick={() => updateTask(task.id, { area: a })}
+                  className={`px-2.5 py-1 rounded-full border transition-colors ${
+                    getArea(task) === a
+                      ? "bg-primary/10 text-primary border-primary/30"
+                      : "bg-background text-muted-foreground border-border hover:text-foreground"
+                  }`}
+                >
+                  {AREA_META[a].emoji} {AREA_META[a].label}
+                </button>
+              ))}
+            </div>
+
             {/* Anteckning */}
             <div className="space-y-1.5">
+
               <label className="text-xs font-medium text-muted-foreground" htmlFor={`note-${task.id}`}>
                 Anteckning
               </label>
