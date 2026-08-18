@@ -82,14 +82,6 @@ export default function WellnessPage() {
                 </p>
               </MyFloveCard>
             </Link>
-              <Link href="/energifloede">
-                <MyFloveCard tone="lavender" className="mt-4 cursor-pointer p-4">
-                  <div className="font-medium text-ink">🔋 Energiflöde</div>
-                  <p className="text-sm text-muted-foreground">
-                    Vad ger och tar energi just nu? Det påverkar hur mycket planen förväntar sig av dig.
-                  </p>
-                </MyFloveCard>
-              </Link>
             </CollapsibleSection>
           </TabsContent>
 
