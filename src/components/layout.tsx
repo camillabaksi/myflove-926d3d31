@@ -53,6 +53,7 @@ import {
   Accessibility,
   Plus,
   Compass,
+  ChevronRight,
 } from "lucide-react";
 import {
   isAlarmSoundEnabled,
@@ -71,6 +72,8 @@ import { usePushSubscriptionSync } from "@/hooks/use-push-subscription-sync";
 import { useNotificationActions } from "@/hooks/use-notification-actions";
 
 import { useIsAdmin } from "@/hooks/use-is-admin";
+import { useSituation } from "@/hooks/use-situation";
+import { situationSummary } from "@/lib/situation";
 import ViewCollapseToggle from "@/components/view-collapse-toggle";
 
 import { useEnabledAreas } from "@/lib/life-areas";
@@ -500,6 +503,8 @@ export default function Layout({ children }: LayoutProps) {
 
   const [openCategory, setOpenCategory] = useState<string | null>(null);
   const [navSearch, setNavSearch] = useState("");
+  const { situation } = useSituation();
+  const situationLabel = situationSummary(situation) || "Berätta hur livet ser ut just nu";
   // Egna platser i bottennavet – du byter dem själv i "Mer".
   const [navSlots, setNavSlots] = useLocalStorage<string[]>("myflove-bottom-nav-slots", [
     "/kalender",
