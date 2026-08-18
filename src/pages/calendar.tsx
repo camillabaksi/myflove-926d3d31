@@ -32,6 +32,8 @@ import DayTimeline from "@/components/day-timeline";
 import { useLocalStorage } from "@/lib/storage";
 import { pictogramFor } from "@/lib/pictograms";
 import { useNpfSettings } from "@/lib/npf-mode";
+import { ALL_AREAS, AREA_META, getArea, type LifeArea } from "@/lib/life-areas";
+
 
 export type CalCategory = "privat" | "familj" | "barn" | "jobb" | "studier";
 
