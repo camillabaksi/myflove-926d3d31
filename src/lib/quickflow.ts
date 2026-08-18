@@ -438,8 +438,13 @@ export type QuickflowDestination =
   | "kalender"
   | "uppgift"
   | "paminnelse"
+  | "barn"
+  | "familj"
   | "studier"
   | "jobb"
+  | "hemma"
+  | "halsa"
+  | "ekonomi"
   | "anteckning"
   | "energi"
   | "ide"
@@ -449,21 +454,56 @@ export const DESTINATION_META: Record<
   QuickflowDestination,
   { emoji: string; label: string; hint: string }
 > = {
-  inkop: { emoji: "🛒", label: "Inköpslista", hint: "Sånt du ska köpa hamnar i listan." },
+  uppgift: { emoji: "✅", label: "Att göra", hint: "Något du ska göra, utan bestämd tid." },
   kalender: { emoji: "📅", label: "Kalender", hint: "Något som händer en viss dag eller tid." },
-  uppgift: { emoji: "📌", label: "Att göra", hint: "Något du ska göra, utan bestämd tid." },
   paminnelse: { emoji: "⏰", label: "Påminnelse", hint: "Jag säger till när det är dags." },
+  barn: { emoji: "👧", label: "Barn", hint: "Gäller ett av barnen – välj vem och vad det blir." },
+  familj: { emoji: "👨‍👩‍👧", label: "Familj", hint: "Något som rör familjen." },
   studier: { emoji: "🎓", label: "Studier", hint: "En uppgift i livsområdet Studier." },
   jobb: { emoji: "💼", label: "Jobb", hint: "En uppgift i livsområdet Jobb." },
+  hemma: { emoji: "🏠", label: "Hemma", hint: "Hushåll, hemmet och vardagen." },
+  halsa: { emoji: "❤️", label: "Hälsa", hint: "Kropp, mående, vård och återhämtning." },
+  ekonomi: { emoji: "💰", label: "Ekonomi", hint: "Räkningar, pengar och bokningar." },
+  inkop: { emoji: "🛒", label: "Inköpslista", hint: "Sånt du ska köpa hamnar i listan." },
   anteckning: {
     emoji: "📝",
     label: "Anteckning",
     hint: "Sparas som den är – ingen deadline, inget krav.",
   },
-  energi: { emoji: "🔋", label: "Energifaktor", hint: "Något som gav eller tog energi." },
+  energi: { emoji: "⚡", label: "Energifaktor", hint: "Något som gav eller tog energi." },
   ide: { emoji: "💡", label: "Idébank", hint: "En tanke att spara till senare." },
-  behall: { emoji: "🧠", label: "Annat – behåll här", hint: "Ligger kvar tills du bestämmer." },
+  behall: { emoji: "🔄", label: "Återkom senare", hint: "Ligger kvar tills du bestämmer." },
 };
+
+/** Livsområdet en destination hör hemma i (för de som blir uppgifter). */
+export const DESTINATION_AREA: Partial<Record<QuickflowDestination, LifeArea>> = {
+  barn: "privat",
+  familj: "privat",
+  studier: "studier",
+  jobb: "jobb",
+  hemma: "vardag",
+  halsa: "vardag",
+  ekonomi: "privat",
+};
+
+/** Hittar vilket barn texten troligen handlar om, utifrån namnen i appen. */
+export function guessChild<T extends { id: string; name: string }>(
+  text: string,
+  children: T[],
+): T | null {
+  const t = ` ${text.toLowerCase()} `;
+  for (const c of children) {
+    const name = c.name.trim().toLowerCase();
+    if (!name) continue;
+    // Matchar "Bella", "Bellas", "bella:" men inte mitt i ett annat ord.
+    if (new RegExp(`[^a-zåäö]${escapeRe(name)}(s|s?[^a-zåäö])`, "i").test(t)) return c;
+  }
+  return null;
+}
+
+function escapeRe(s: string) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
 
 const SHOPPING_WORDS =
   /(köp|köpa|handla|inköp|slut på|behöver mer|ta med hem|shampoo|schampo|balsam|tandkräm|tvål|blöjor|mjölk|smör|ost|bröd|ägg|kaffe|te\b|frukt|grönsaker|toapapper|hushållspapper|tvättmedel|diskmedel|batterier|matvaror)/;

@@ -9,9 +9,11 @@ import {
   suggestWhen,
   formatWhen,
   guessArea,
+  guessChild,
   shoppingTitleFrom,
   parseWhenFromText,
   DESTINATION_META,
+  DESTINATION_AREA,
   type QuickflowDestination,
   type QuickflowItem,
 } from "@/lib/quickflow";
@@ -20,6 +22,7 @@ import { useQuickflowRules } from "@/hooks/use-quickflow-rules";
 import { resolveDestination, titleForRule } from "@/lib/quickflow-rules";
 import { useNotes } from "@/hooks/use-notes";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
+import { useChildren } from "@/hooks/use-children";
 
 
 
@@ -40,10 +43,16 @@ export default function QuickflowTriage() {
 
   const { addNote } = useNotes();
   const { addFactor } = useEnergyFlow();
+  const { children, addItem: addChildItem } = useChildren();
 
   const [sorting, setSorting] = useState(false);
   /** Vilken tanke som väntar på svar om energin gav eller tog. */
   const [energyFor, setEnergyFor] = useState<string | null>(null);
+  /** Riktning vald i energipanelen – nästa steg är hur mycket den påverkar. */
+  const [energyDir, setEnergyDir] = useState<"gives" | "drains">("drains");
+  /** Vilken tanke som väntar på "vilket barn och vad blir det?". */
+  const [childFor, setChildFor] = useState<string | null>(null);
+  const [childPick, setChildPick] = useState<string | null>(null);
   /** Användarens svar när tolkningen var otydlig. */
   const [choices, setChoices] = useState<Record<string, { at: number; allDay: boolean }>>({});
 
@@ -58,10 +67,20 @@ export default function QuickflowTriage() {
   if (openItems.length === 0) return null;
 
   /** Egen regel först, sedan MyFloves gissning. */
-  const ruleFor = (item: QuickflowItem) => resolveDestination(item, rules);
+  const ruleFor = (item: QuickflowItem) => {
+    const resolved = resolveDestination(item, rules);
+    // Nämns ett av barnen vid namn väger det tyngre än den generella gissningen.
+    if (!resolved.rule && guessChild(item.text, children)) {
+      return { ...resolved, destination: "barn" as QuickflowDestination };
+    }
+    return resolved;
+  };
 
   const areaOf = (item: QuickflowItem): LifeArea =>
-    item.area ?? ruleFor(item).area ?? guessArea(item.text);
+    item.area ??
+    ruleFor(item).area ??
+    DESTINATION_AREA[ruleFor(item).destination] ??
+    guessArea(item.text);
 
   /** Titeln som regeln vill ha ("köpa schampo" → "schampo"). */
   const titleOf = (item: QuickflowItem): string => {
@@ -167,8 +186,12 @@ export default function QuickflowTriage() {
     toast.success(`Den ligger nu i ${AREA_META[area].label}.`);
   };
 
-  const toEnergy = async (item: QuickflowItem, direction: "gives" | "drains") => {
-    await addFactor({ title: titleOf(item), direction, strength: 3, category: "annat" });
+  const toEnergy = async (
+    item: QuickflowItem,
+    direction: "gives" | "drains",
+    strength: number,
+  ) => {
+    await addFactor({ title: titleOf(item), direction, strength, category: "annat" });
     complete(item.id);
     setEnergyFor(null);
     toast.success(
@@ -178,27 +201,72 @@ export default function QuickflowTriage() {
     );
   };
 
+  /** Barn: tanken landar hos rätt barn, som aktivitet, uppgift eller anteckning. */
+  const toChild = async (
+    item: QuickflowItem,
+    childId: string,
+    kind: "activity" | "task" | "note",
+  ) => {
+    const child = children.find((c) => c.id === childId);
+    const plan = parseWhenFromText(item.text) ? planFor(item) : null;
+    const at = plan && !plan.ambiguous ? new Date(plan.at) : null;
+    await addChildItem({
+      childId,
+      kind,
+      title: titleOf(item),
+      ...(kind === "activity" && at
+        ? {
+            date: at.toISOString().slice(0, 10),
+            ...(plan?.allDay ? {} : { time: timeString(at.getTime()) }),
+          }
+        : {}),
+    });
+    complete(item.id);
+    setChildFor(null);
+    setChildPick(null);
+    toast.success(`Sparad hos ${child?.name ?? "barnet"}. 👧`);
+  };
+
+  const openChildPanel = (item: QuickflowItem) => {
+    setChildFor(item.id);
+    setChildPick(guessChild(item.text, children)?.id ?? children[0]?.id ?? null);
+  };
+
   /** En knapp per ställe tanken kan hamna. Förslaget ligger först. */
   const runDestination = (item: QuickflowItem, d: QuickflowDestination) => {
     if (d === "inkop") return toShopping(item);
     if (d === "kalender") return toCalendar(item);
     if (d === "uppgift") return toTask(item);
     if (d === "paminnelse") return toReminder(item);
-    if (d === "studier") return toAreaTask(item, "studier");
-    if (d === "jobb") return toAreaTask(item, "jobb");
+    if (d === "barn") {
+      if (children.length === 0) {
+        toast("Inga barn tillagda än", {
+          description: "Lägg till barnen under Barn så kan jag föreslå vem det gäller.",
+        });
+        return toAreaTask(item, "privat");
+      }
+      return openChildPanel(item);
+    }
     if (d === "anteckning") return toNote(item);
     if (d === "energi") return setEnergyFor(item.id);
     if (d === "ide") return toIdea(item);
+    const area = DESTINATION_AREA[d];
+    if (area) return toAreaTask(item, area);
     return update(item.id, { askedAt: Date.now() });
   };
 
   const DESTINATIONS: QuickflowDestination[] = [
-    "inkop",
-    "kalender",
     "uppgift",
+    "kalender",
     "paminnelse",
+    "barn",
+    "familj",
     "studier",
     "jobb",
+    "hemma",
+    "halsa",
+    "ekonomi",
+    "inkop",
     "anteckning",
     "energi",
     "ide",
@@ -228,6 +296,7 @@ export default function QuickflowTriage() {
             const resolved = ruleFor(item);
             const type = resolved.destination;
             const plan = parseWhenFromText(item.text) ? planFor(item) : null;
+            const child = guessChild(item.text, children);
             return (
               <div key={item.id} className="surface-card p-4 space-y-3">
                 <div className="flex items-start gap-2">
@@ -238,7 +307,7 @@ export default function QuickflowTriage() {
                       {resolved.rule
                         ? `Din regel "${resolved.rule.phrase}": ${DESTINATION_META[type].label}.`
                         : `Mitt förslag: ${DESTINATION_META[type].label} – du bestämmer.`}
-
+                      {child ? ` Verkar gälla ${child.name}.` : ""}
                     </p>
                     {plan && !plan.ambiguous && (
                       <p className="text-xs text-primary">
@@ -302,10 +371,70 @@ export default function QuickflowTriage() {
                   })}
                 </div>
                 {energyFor === item.id ? (
-                  <div className="flex flex-wrap gap-2">
-                    <Action onClick={() => void toEnergy(item, "gives")}>🔋 Gav energi</Action>
-                    <Action onClick={() => void toEnergy(item, "drains")}>🪫 Tog energi</Action>
-                    <Action onClick={() => setEnergyFor(null)}>Avbryt</Action>
+                  <div className="space-y-2">
+                    <div className="flex flex-wrap gap-2">
+                      <Action
+                        highlight={energyDir === "gives"}
+                        onClick={() => setEnergyDir("gives")}
+                      >
+                        🔋 Gav energi
+                      </Action>
+                      <Action
+                        highlight={energyDir === "drains"}
+                        onClick={() => setEnergyDir("drains")}
+                      >
+                        🪫 Tog energi
+                      </Action>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Hur mycket påverkar det din FlowScore?
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {[1, 2, 3, 4, 5].map((s) => (
+                        <Action key={s} onClick={() => void toEnergy(item, energyDir, s)}>
+                          {"▪".repeat(s)} {s}
+                        </Action>
+                      ))}
+                      <Action onClick={() => setEnergyFor(null)}>Avbryt</Action>
+                    </div>
+                  </div>
+                ) : childFor === item.id ? (
+                  <div className="space-y-2">
+                    <p className="text-xs text-muted-foreground">Vilket barn gäller det?</p>
+                    <div className="flex flex-wrap gap-2">
+                      {children.map((c) => (
+                        <Action
+                          key={c.id}
+                          highlight={childPick === c.id}
+                          onClick={() => setChildPick(c.id)}
+                        >
+                          👧 {c.name}
+                        </Action>
+                      ))}
+                    </div>
+                    <p className="text-xs text-muted-foreground">Vad ska det bli?</p>
+                    <div className="flex flex-wrap gap-2">
+                      <Action
+                        onClick={() => childPick && void toChild(item, childPick, "activity")}
+                      >
+                        📅 Kalender
+                      </Action>
+                      <Action onClick={() => childPick && void toChild(item, childPick, "task")}>
+                        ✅ Uppgift
+                      </Action>
+                      <Action onClick={() => childPick && void toChild(item, childPick, "note")}>
+                        📝 Anteckning
+                      </Action>
+                      <Action onClick={() => toShopping(item)}>🛒 Inköp</Action>
+                      <Action
+                        onClick={() => {
+                          setChildFor(null);
+                          setChildPick(null);
+                        }}
+                      >
+                        Avbryt
+                      </Action>
+                    </div>
                   </div>
                 ) : (
                   <div className="flex flex-wrap gap-2">
@@ -319,7 +448,7 @@ export default function QuickflowTriage() {
                         {DESTINATION_META[d].emoji} {DESTINATION_META[d].label}
                       </Action>
                     ))}
-                    <Action onClick={() => remove(item.id)}>Ta bort</Action>
+                    <Action onClick={() => remove(item.id)}>🗑️ Ta bort</Action>
                   </div>
                 )}
 
