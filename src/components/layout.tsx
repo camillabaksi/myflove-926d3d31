@@ -53,6 +53,7 @@ import {
   Accessibility,
   Plus,
   Compass,
+  ChevronRight,
 } from "lucide-react";
 import {
   isAlarmSoundEnabled,
@@ -71,6 +72,8 @@ import { usePushSubscriptionSync } from "@/hooks/use-push-subscription-sync";
 import { useNotificationActions } from "@/hooks/use-notification-actions";
 
 import { useIsAdmin } from "@/hooks/use-is-admin";
+import { useSituation } from "@/hooks/use-situation";
+import { situationSummary } from "@/lib/situation";
 import ViewCollapseToggle from "@/components/view-collapse-toggle";
 
 import { useEnabledAreas } from "@/lib/life-areas";
@@ -500,6 +503,8 @@ export default function Layout({ children }: LayoutProps) {
 
   const [openCategory, setOpenCategory] = useState<string | null>(null);
   const [navSearch, setNavSearch] = useState("");
+  const { situation } = useSituation();
+  const situationLabel = situationSummary(situation) || "Berätta hur livet ser ut just nu";
   // Egna platser i bottennavet – du byter dem själv i "Mer".
   const [navSlots, setNavSlots] = useLocalStorage<string[]>("myflove-bottom-nav-slots", [
     "/kalender",
@@ -946,6 +951,30 @@ export default function Layout({ children }: LayoutProps) {
                 </>
               ) : (
                 <>
+                  {/* Min situation – alltid överst i Mer */}
+                  <Link
+                    href="/min-situation"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      setOpenCategory(null);
+                    }}
+                    className="mb-4 flex items-center gap-3 rounded-3xl border border-primary/30 bg-primary/10 p-4 shadow-sm press"
+                  >
+                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary/15 text-primary">
+                      <Compass size={22} strokeWidth={2.2} />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-sm font-semibold">Min situation</span>
+                      <span
+                        data-npf="optional"
+                        className="block truncate text-xs text-muted-foreground"
+                      >
+                        {situationLabel}
+                      </span>
+                    </span>
+                    <ChevronRight size={18} className="shrink-0 text-muted-foreground" />
+                  </Link>
+
                   <button
                     type="button"
                     onClick={() => setSimpleMode(!simpleMode)}
@@ -958,6 +987,7 @@ export default function Layout({ children }: LayoutProps) {
                     <Check size={14} />
                     {simpleMode ? "Visar bara det viktigaste" : "Visa bara det viktigaste"}
                   </button>
+
 
                   {/* Byt platser i bottenmenyn */}
                   <div className="mb-4 rounded-3xl border border-border bg-card p-4 shadow-sm">
