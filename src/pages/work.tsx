@@ -221,7 +221,11 @@ export default function WorkPage() {
           description="Din arbetsdag – projekt, uppgifter och dokument på ett ställe."
         />
 
+        <WorkProfileCard />
+        <WorkSuggestions />
+
         {/* Projekt */}
+
         <CollapsibleSection title="Dina projekt" help="Samla uppgifter per projekt så blir listan lättare att överblicka." headingClassName="text-lg font-semibold" className="surface-card p-5">
           <form onSubmit={handleAddProject} className="flex gap-2">
             <Input
