@@ -146,12 +146,41 @@ export default function QuickflowTriage() {
     toast.success("Sparad i idébanken – den finns kvar när du vill titta på den.");
   };
 
+  /** Anteckning: får bara finnas. Ingen deadline, inget krav på åtgärd. */
+  const toNote = (item: QuickflowItem) => {
+    addNote(titleOf(item), item.area ?? ruleFor(item).area);
+    complete(item.id);
+    toast.success("Sparad som anteckning – du kan göra något av den senare om du vill. 💜");
+  };
+
+  const toAreaTask = (item: QuickflowItem, area: LifeArea) => {
+    addTask(titleOf(item), undefined, { area });
+    complete(item.id);
+    log("planering");
+    toast.success(`Den ligger nu i ${AREA_META[area].label}.`);
+  };
+
+  const toEnergy = async (item: QuickflowItem, direction: "gives" | "drains") => {
+    await addFactor({ title: titleOf(item), direction, strength: 3, category: "annat" });
+    complete(item.id);
+    setEnergyFor(null);
+    toast.success(
+      direction === "gives"
+        ? "Sparad som något som ger energi. 🔋"
+        : "Sparad som något som tar energi. 🪫",
+    );
+  };
+
   /** En knapp per ställe tanken kan hamna. Förslaget ligger först. */
   const runDestination = (item: QuickflowItem, d: QuickflowDestination) => {
     if (d === "inkop") return toShopping(item);
     if (d === "kalender") return toCalendar(item);
     if (d === "uppgift") return toTask(item);
     if (d === "paminnelse") return toReminder(item);
+    if (d === "studier") return toAreaTask(item, "studier");
+    if (d === "jobb") return toAreaTask(item, "jobb");
+    if (d === "anteckning") return toNote(item);
+    if (d === "energi") return setEnergyFor(item.id);
     if (d === "ide") return toIdea(item);
     return update(item.id, { askedAt: Date.now() });
   };
@@ -161,6 +190,10 @@ export default function QuickflowTriage() {
     "kalender",
     "uppgift",
     "paminnelse",
+    "studier",
+    "jobb",
+    "anteckning",
+    "energi",
     "ide",
     "behall",
   ];
