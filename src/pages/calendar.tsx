@@ -833,6 +833,10 @@ export default function CalendarPage() {
                       <div className={`text-lg font-medium truncate ${t.completed ? 'line-through text-muted-foreground' : ''}`}>
                         {t.title}
                       </div>
+                      {t.note && (
+                        <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">{t.note}</p>
+                      )}
+
                     </div>
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
