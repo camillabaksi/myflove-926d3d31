@@ -106,8 +106,25 @@ export function defaultAreaFor(filter: AreaFilter): LifeArea {
   return filter === "alla" ? "vardag" : filter;
 }
 
+/**
+ * Livsområdet "Familj" heter numera "Relationer" och bor i rummet Privat.
+ * Äldre uppgifter, händelser och påminnelser mappas om automatiskt så att
+ * historiken behåller sitt sammanhang.
+ */
+export const LEGACY_AREA_MAP: Record<string, LifeArea> = {
+  familj: "privat",
+  family: "privat",
+  relationer: "privat",
+};
+
+export function normalizeArea(area?: string | null): LifeArea {
+  if (area && AREA_META[area as LifeArea]) return area as LifeArea;
+  if (area && LEGACY_AREA_MAP[area]) return LEGACY_AREA_MAP[area]!;
+  return "vardag";
+}
+
 export function getArea(item: { area?: LifeArea }): LifeArea {
-  return item.area && AREA_META[item.area] ? item.area : "vardag";
+  return normalizeArea(item.area);
 }
 
 /** Filtrerar en lista på aktivt område. "alla" visar allt. */
