@@ -147,9 +147,11 @@ export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
 
   const setAndStamp = useCallback(
     (v: T | ((prev: T) => T)) => {
+      dirtyRef.current = true;
       setLocalUpdatedAt(Date.now());
       setValue(v);
     },
+
     // setLocalUpdatedAt är en lokal setter och behöver inte stå med här.
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [setValue],
