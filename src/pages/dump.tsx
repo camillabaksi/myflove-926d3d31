@@ -64,7 +64,7 @@ export default function Dump() {
   );
   const [isListening, setIsListening] = useState(false);
   const [voiceSupported, setVoiceSupported] = useState(true);
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
 
   const { addTask } = useTasks();
   const { addItem } = useShoppingList();
@@ -77,7 +77,8 @@ export default function Dump() {
 
   useEffect(() => {
     const SpeechRecognitionCtor =
-      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      (window as unknown as SpeechRecognitionWindow).SpeechRecognition ||
+      (window as unknown as SpeechRecognitionWindow).webkitSpeechRecognition;
     if (!SpeechRecognitionCtor) {
       setVoiceSupported(false);
       return;
@@ -87,7 +88,7 @@ export default function Dump() {
     recognition.continuous = true;
     recognition.interimResults = false;
 
-    recognition.onresult = (event: any) => {
+    recognition.onresult = (event: SpeechRecognitionStreamEvent) => {
       let transcript = "";
       for (let i = event.resultIndex; i < event.results.length; i++) {
         transcript += event.results[i][0].transcript;

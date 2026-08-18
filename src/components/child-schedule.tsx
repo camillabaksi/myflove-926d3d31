@@ -59,7 +59,7 @@ export default function ChildSchedule({
 
   // Bild eller dokument på schemat
   const uploadDoc = async (id: string, file: File) => {
-    const path = `${id}/${Date.now()}-${file.name.replace(/[^\w.\-]/g, "_")}`;
+    const path = `${id}/${Date.now()}-${file.name.replace(/[^\w.-]/g, "_")}`;
     const { error } = await supabase.storage.from("child-docs").upload(path, file);
     if (error) throw error;
     return path;

@@ -108,7 +108,7 @@ function CreateOrJoin({ onReady }: { onReady: () => void }) {
         toast({ description: "Du gick med i familjen!" });
       }
       onReady();
-    } catch (err: any) {
+    } catch {
       toast({
         description:
           mode === "join" ? "Hittade ingen familj med den koden." : "Något gick fel. Försök igen.",

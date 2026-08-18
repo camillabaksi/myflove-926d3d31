@@ -393,7 +393,7 @@ export function useChildren() {
   };
 
   const uploadDoc = async (childId: string, file: File) => {
-    const path = `${childId}/${Date.now()}-${file.name.replace(/[^\w.\-]/g, "_")}`;
+    const path = `${childId}/${Date.now()}-${file.name.replace(/[^\w.-]/g, "_")}`;
     const { error: err } = await supabase.storage.from("child-docs").upload(path, file);
     if (err) throw err;
     return path;

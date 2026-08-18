@@ -66,16 +66,16 @@ export default function AdminStats() {
   }
 
   const viewsBySection = (data?.featureUsage ?? [])
-    .filter((row: any) => row.action === "view")
-    .sort((a: any, b: any) => b.events - a.events);
+    .filter((row) => row.action === "view")
+    .sort((a, b) => b.events - a.events);
 
   const otherActions = (data?.featureUsage ?? [])
-    .filter((row: any) => row.action !== "view")
-    .sort((a: any, b: any) => b.events - a.events);
+    .filter((row) => row.action !== "view")
+    .sort((a, b) => b.events - a.events);
 
-  const maxViews = Math.max(1, ...viewsBySection.map((row: any) => row.events));
-  const maxDaily = Math.max(1, ...(data?.dailyActiveSessions ?? []).map((d: any) => d.sessions));
-  const maxSignups = Math.max(1, ...(data?.dailySignups ?? []).map((d: any) => d.users));
+  const maxViews = Math.max(1, ...viewsBySection.map((row) => row.events));
+  const maxDaily = Math.max(1, ...(data?.dailyActiveSessions ?? []).map((d) => d.sessions));
+  const maxSignups = Math.max(1, ...(data?.dailySignups ?? []).map((d) => d.users));
 
   return (
     <Layout>
@@ -137,7 +137,7 @@ export default function AdminStats() {
                 <p className="text-sm text-muted-foreground">Ingen data än.</p>
               )}
               <div className="flex items-end gap-1.5 h-32">
-                {(data.dailySignups ?? []).map((day: any) => (
+                {(data.dailySignups ?? []).map((day) => (
                   <div
                     key={day.date}
                     className="flex-1 flex flex-col items-center justify-end gap-1"
