@@ -22,18 +22,28 @@ self.addEventListener("push", (event) => {
     if (event.data) data.body = event.data.text();
   }
 
+  const itemKey = data.itemKey;
+  const quickActions = itemKey && /^(task|deadline|reminder|quickflow):/.test(itemKey)
+    ? [
+        { action: "done", title: "✓ Klart" },
+        { action: "snooze", title: "⏰ 10 min" },
+      ]
+    : [];
+
   const options = {
     body: data.body,
     icon: data.icon || "/icon-192.png",
     badge: data.badge || "/icon-192.png",
     tag: data.tag,
     renotify: !!data.tag,
-    data: { url: data.url || "/hem" },
+    data: { url: data.url || "/hem", itemKey: itemKey || null },
+    actions: quickActions,
     vibrate: Array.isArray(data.vibrate) ? data.vibrate : [200, 100, 200],
     requireInteraction: !!data.requireInteraction,
   };
   event.waitUntil(self.registration.showNotification(data.title, options));
 });
+
 
 /* Webbläsaren kan byta ut prenumerationen. Då skapar vi en ny direkt och
    berättar för servern, annars slutar notiserna komma när appen är stängd. */
@@ -84,7 +94,14 @@ self.addEventListener("pushsubscriptionchange", (event) => {
 
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
-  const targetUrl = (event.notification.data && event.notification.data.url) || "/hem";
+  const info = event.notification.data || {};
+  const itemKey = info.itemKey;
+  const action = event.action; // "done" | "snooze" | ""
+  let targetUrl = info.url || "/hem";
+  if (action && itemKey) {
+    targetUrl = `${targetUrl}${targetUrl.includes("?") ? "&" : "?"}notis=${encodeURIComponent(itemKey)}&atgard=${action}`;
+  }
+
   event.waitUntil(
     (async () => {
       const allClients = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
@@ -92,6 +109,11 @@ self.addEventListener("notificationclick", (event) => {
         try {
           const url = new URL(client.url);
           if (url.origin === self.location.origin) {
+            if (action && itemKey) {
+              // Appen är redan igång: utför snabbvalet utan att flytta användaren.
+              client.postMessage({ type: "myflove-notification-action", itemKey, action });
+              if (action === "done" || action === "snooze") return;
+            }
             await client.focus();
             if ("navigate" in client) await client.navigate(targetUrl);
             return;
@@ -102,3 +124,4 @@ self.addEventListener("notificationclick", (event) => {
     })(),
   );
 });
+

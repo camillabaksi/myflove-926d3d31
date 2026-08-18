@@ -24,7 +24,7 @@ export const Route = createFileRoute("/api/public/hooks/push-tick")({
         // 1) Due reminders
         const { data: due, error: dueErr } = await supabaseAdmin
           .from("push_reminders")
-          .select("id, user_id, kind, title, body, url")
+          .select("id, user_id, kind, title, body, url, client_key")
           .lte("deliver_at", nowIso)
           .is("delivered_at", null)
           .is("canceled_at", null)
@@ -66,6 +66,7 @@ export const Route = createFileRoute("/api/public/hooks/push-tick")({
                 body: r.body,
                 url: r.url ?? "/hem",
                 tag: `${r.kind}-${r.id}`,
+                itemKey: r.client_key,
               });
               if (res === "ok") { anyOk = true; sentCount++; }
               if (res === "gone") {
