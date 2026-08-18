@@ -1,8 +1,15 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Layout from "@/components/layout";
 import CollapsibleSection from "@/components/collapsible-section";
 import { Button } from "@/components/ui/button";
-import { useReminders, type Reminder } from "@/hooks/use-data";
+import { useReminders, type Reminder, type RepeatMode } from "@/hooks/use-data";
+import { useReminderSync } from "@/hooks/use-reminder-sync";
+import { EnablePushButton } from "@/components/enable-push-button";
+import {
+  getNotificationPermission,
+  requestNotificationPermission,
+  type NotificationPermissionState,
+} from "@/lib/push-notifications";
 import { useToast } from "@/hooks/use-toast";
 import { BellRing, Plus, Trash2, Undo2, Pencil, Check, X, CalendarClock } from "lucide-react";
 
@@ -125,10 +132,25 @@ function ReminderRow({
 export default function RemindersPage() {
   const { reminders, addReminder, updateReminder, deleteReminder, cancelReminder, restoreReminder } = useReminders();
   const { toast } = useToast();
+  useReminderSync();
   const [title, setTitle] = useState("");
   const [date, setDate] = useState(todayIso());
   const [time, setTime] = useState("");
   const [note, setNote] = useState("");
+  const [repeat, setRepeat] = useState<RepeatMode>("none");
+  const [lead, setLead] = useState(0);
+  const [permission, setPermission] = useState<NotificationPermissionState>("default");
+
+  useEffect(() => {
+    setPermission(getNotificationPermission());
+  }, []);
+
+  const askPermission = async () => {
+    const res = await requestNotificationPermission();
+    setPermission(res);
+    if (res === "granted") toast({ description: "Notiser är på – du får en signal när det är dags 🔔" });
+    else if (res === "denied") toast({ description: "Notiser är blockerade i webbläsarens inställningar" });
+  };
 
   const { active, canceled } = useMemo(() => {
     const sorted = [...reminders].sort((a, b) => {
@@ -145,7 +167,7 @@ export default function RemindersPage() {
   const handleAdd = (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !date) return;
-    addReminder(title.trim(), date, time || undefined, "none", undefined, undefined, note.trim() || undefined);
+    addReminder(title.trim(), date, time || undefined, repeat, undefined, lead || undefined, note.trim() || undefined);
     setTitle("");
     setTime("");
     setNote("");
@@ -160,15 +182,60 @@ export default function RemindersPage() {
             <BellRing className="h-7 w-7 text-primary" /> Påminnelser
           </h1>
           <p className="text-muted-foreground">
-            Lägg till, ändra eller avboka. Avbokade ligger kvar så du kan ta tillbaka dem.
+            Lägg till, ändra eller avboka. Aktiva påminnelser ger en notis när det är dags.
           </p>
         </header>
+
+        <section className="space-y-3 rounded-2xl border border-border bg-card p-5 shadow-sm">
+          <h2 className="text-lg font-semibold">Aviseringar</h2>
+          {permission === "granted" ? (
+            <p className="text-sm text-muted-foreground">
+              Notiser är påslagna på den här enheten. Du får en signal när en aktiv påminnelse inträffar.
+            </p>
+          ) : permission === "unsupported" ? (
+            <p className="text-sm text-muted-foreground">Den här webbläsaren stödjer inte notiser.</p>
+          ) : permission === "denied" ? (
+            <p className="text-sm text-muted-foreground">
+              Notiser är blockerade. Tillåt notiser för MyFlove i webbläsarens inställningar.
+            </p>
+          ) : (
+            <div className="space-y-2">
+              <p className="text-sm text-muted-foreground">
+                Slå på notiser så påminner appen dig när tiden är inne.
+              </p>
+              <Button onClick={askPermission} className="h-11 rounded-xl">
+                Tillåt notiser
+              </Button>
+            </div>
+          )}
+          <div className="pt-1">
+            <EnablePushButton />
+          </div>
+          <p className="text-xs text-muted-foreground">
+            Push-notiser når dig även när appen är stängd. Avbokade påminnelser skickar aldrig något.
+          </p>
+        </section>
 
         <form onSubmit={handleAdd} className="space-y-3 rounded-2xl border border-border bg-card p-5 shadow-sm">
           <input className={inputClass} value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Vad ska du påminnas om?" />
           <div className="grid grid-cols-2 gap-2">
             <input className={inputClass} type="date" value={date} onChange={(e) => setDate(e.target.value)} />
             <input className={inputClass} type="time" value={time} onChange={(e) => setTime(e.target.value)} />
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            <select className={inputClass} value={repeat} onChange={(e) => setRepeat(e.target.value as RepeatMode)} aria-label="Upprepning">
+              <option value="none">Ingen upprepning</option>
+              <option value="daily">Varje dag</option>
+              <option value="weekdays">Vardagar</option>
+              <option value="weekly">Varje vecka</option>
+            </select>
+            <select className={inputClass} value={lead} onChange={(e) => setLead(Number(e.target.value))} aria-label="Förvarning">
+              <option value={0}>Notis på tiden</option>
+              <option value={5}>5 min innan</option>
+              <option value={15}>15 min innan</option>
+              <option value={30}>30 min innan</option>
+              <option value={60}>1 timme innan</option>
+            </select>
           </div>
           <input className={inputClass} value={note} onChange={(e) => setNote(e.target.value)} placeholder="Anteckning (valfritt)" />
           <Button type="submit" className="h-12 w-full rounded-xl">

@@ -12,6 +12,8 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 
 ### Added
 
+- **Aviseringar för aktiva påminnelser** (2026-08-18): Aktiva påminnelser ger nu en notis när det är dags – på tiden eller med förvarning (5/15/30/60 min), och även för upprepningar (varje dag, vardagar, varje vecka). Push-notiser når dig när appen är stängd, och avbokade påminnelser skickar aldrig något. På sidan Påminnelser finns nu en ruta där du slår på notiser.
+
 - **Sidan Påminnelser** (2026-08-18): Ny vy på `/paminnelser` där du lägger till, ändrar och avbokar påminnelser med datum, tid och anteckning. Varje påminnelse visar tydlig status – Aktiv eller Avbokad – och avbokade ligger kvar så att du kan aktivera dem igen eller ta bort dem helt.
 
 

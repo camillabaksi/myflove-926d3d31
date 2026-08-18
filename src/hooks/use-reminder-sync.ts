@@ -147,7 +147,7 @@ export function useReminderSync() {
       const horizonDates: string[] = [];
       for (let i = 0; i < 14; i++) horizonDates.push(todayIso(i));
       for (const r of reminders) {
-        if (r.completed || !r.time) continue;
+        if (r.completed || r.canceled || !r.time) continue;
         const repeat = r.repeat ?? "none";
         const occurrences: string[] = [];
         if (repeat === "none") {
