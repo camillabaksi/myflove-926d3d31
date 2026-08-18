@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Aviseringar för aktiva påminnelser – notis när tiden är inne, med valfri förvarning (5–60 min) och stöd för upprepning. Push når dig även när appen är stängd, och avbokade påminnelser är tysta (2026-08-18)",
       "Sidan Påminnelser – lägg till, ändra och avboka påminnelser med datum, tid och anteckning. Tydlig status Aktiv/Avbokad, och avbokade går att aktivera igen eller ta bort (2026-08-18)",
       "Gamla påminnelser borttagna – inaktuella notiser (Elvanse 12:15 och 11:30, gammal morgonmedicin, vatten 05:00/05:05 med daglig upprepning och en testnotis) är avbokade. Aktuella mediciner och påminnelser är orörda (2026-08-18)",
       "GitHub-issues från Utvecklarchecklista 2.9 – 70 färdiga issues med rubrik, beskrivning och acceptance criteria, som markdown, JSON och importskript (2026-08-18)",
