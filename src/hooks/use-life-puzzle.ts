@@ -7,6 +7,8 @@ import { useChildEvents } from "@/hooks/use-child-events";
 import { getArea } from "@/lib/life-areas";
 import { useWorkProfile } from "@/hooks/use-work-profile";
 import { isMeeting, workDemand, workProfileContext } from "@/lib/work-profile";
+import { useStudyProfile } from "@/hooks/use-study-profile";
+import { isBigAssignment, isExam, studyDemand, studyProfileContext } from "@/lib/study-profile";
 import {
   buildLifePuzzle,
   emptyAreaLoads,
@@ -41,6 +43,7 @@ export function useLifePuzzle(): {
   const { flow, energy, mood, minutesLeft } = useFlowScore();
   const childEvents = useChildEvents();
   const { profile: workProfile } = useWorkProfile();
+  const { profile: studyProfile } = useStudyProfile();
 
   const input = useMemo<LifePuzzleInput>(() => {
     const today = todayISO();
@@ -87,7 +90,21 @@ export function useLifePuzzle(): {
       jobItems: jobToday.length,
     });
 
+    // Studiernas krav den närmaste veckan.
+    const weekEnd = new Date();
+    weekEnd.setDate(weekEnd.getDate() + 9);
+    const weekEndIso = weekEnd.toISOString().slice(0, 10);
+    const studySoon = activeTasks.filter(
+      (t) => getArea(t) === "studier" && (!t.dueDate || (t.dueDate >= today && t.dueDate <= weekEndIso)),
+    );
+    const sDemand = studyDemand({
+      exams: studySoon.filter((t) => isExam(t.title)).length,
+      assignments: studySoon.filter((t) => isBigAssignment(t.title)).length,
+    });
+
     return {
+      studyContext: studyProfileContext(studyProfile),
+      studyDemand: sDemand,
       workContext: workProfileContext(workProfile),
       workDemand: demand,
       score: flow.score,
@@ -101,7 +118,7 @@ export function useLifePuzzle(): {
       areas: [...byArea.values()],
       todaysEvents: events,
     };
-  }, [activeTasks, lectures, childEvents, flow, energy, mood, minutesLeft, openItems.length, workProfile]);
+  }, [activeTasks, lectures, childEvents, flow, energy, mood, minutesLeft, openItems.length, workProfile, studyProfile]);
 
   const puzzle = useMemo(() => buildLifePuzzle(input), [input]);
   const contextPrompt = useMemo(() => lifeContextPrompt(input), [input]);
