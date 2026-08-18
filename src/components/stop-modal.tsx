@@ -131,6 +131,7 @@ export default function StopModal({ open, onOpenChange }: StopModalProps) {
         },
       });
       setMessages((m) => [...m, { role: "assistant", content: reply }]);
+      if (convIdRef.current) await saveFlowMessage(convIdRef.current, "assistant", reply);
     } catch {
       setMessages((m) => [
         ...m,
