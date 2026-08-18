@@ -9,6 +9,8 @@ import { useShoppingProximityAlerts } from "@/hooks/use-shopping-proximity-alert
 import { useNotificationScheduler } from "@/hooks/use-notification-scheduler";
 import { useAchievementPush } from "@/hooks/use-achievement-push";
 import { usePurgeRevisions } from "@/hooks/use-purge-revisions";
+import { usePushSubscriptionSync } from "@/hooks/use-push-subscription-sync";
+
 import { useIsAdmin } from "@/hooks/use-is-admin";
 import ViewCollapseToggle from "@/components/view-collapse-toggle";
 
@@ -119,6 +121,8 @@ export default function Layout({ children }: LayoutProps) {
   useNotificationScheduler();
   useAchievementPush();
   usePurgeRevisions();
+  usePushSubscriptionSync();
+
   const { isAdmin } = useIsAdmin();
   const { enabled: enabledAreas } = useEnabledAreas();
   const { settings: npf } = useNpfSettings();

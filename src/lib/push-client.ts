@@ -115,6 +115,31 @@ export async function getCurrentSubscription(): Promise<SerializedSub | null> {
   return sub ? serializeSubscription(sub) : null;
 }
 
+/**
+ * Hämtar (eller återskapar) prenumerationen så att endpoint och nycklar
+ * alltid matchar det som ligger på servern. Frågar aldrig om nytt lov.
+ */
+export async function refreshPushSubscription(): Promise<SerializedSub | null> {
+  if (!pushSupported()) return null;
+  if (typeof Notification === "undefined" || Notification.permission !== "granted") return null;
+  const reg = await ensureServiceWorker();
+  if (!reg) return null;
+  let sub = await reg.pushManager.getSubscription();
+  if (!sub) {
+    try {
+      sub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlB64ToBuffer(VAPID_PUBLIC_KEY),
+      });
+    } catch (err) {
+      console.error("[push] resubscribe failed", err);
+      return null;
+    }
+  }
+  return serializeSubscription(sub);
+}
+
+
 export async function unsubscribeCurrent(): Promise<string | null> {
   const reg = await ensureServiceWorker();
   if (!reg) return null;
