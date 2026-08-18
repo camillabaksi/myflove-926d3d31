@@ -360,7 +360,7 @@ export default function QuickflowTriage() {
     "kalender",
     "paminnelse",
     "barn",
-    "familj",
+    "relationer",
     "studier",
     "jobb",
     "hemma",

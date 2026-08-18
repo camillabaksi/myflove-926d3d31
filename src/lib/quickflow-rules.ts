@@ -3,7 +3,7 @@
 // Reglerna är alltid användarens egna och går före MyFloves gissning.
 
 import type { LifeArea } from "./life-areas";
-import { guessDestination, type QuickflowDestination } from "./quickflow";
+import { guessDestination, normalizeDestination, type QuickflowDestination } from "./quickflow";
 
 export type RuleMatchType = "startsWith" | "contains" | "endsWith";
 
@@ -163,7 +163,7 @@ export function resolveDestination(
   const rule = matchRule(item.text, rules);
   if (rule) {
     return {
-      destination: rule.destination,
+      destination: normalizeDestination(rule.destination),
       rule,
       ...(rule.area ? { area: rule.area } : {}),
       ...(rule.time ? { time: rule.time } : {}),

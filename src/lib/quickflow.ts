@@ -439,6 +439,8 @@ export type QuickflowDestination =
   | "uppgift"
   | "paminnelse"
   | "barn"
+  | "relationer"
+  /** @deprecated Gamla poster/regler kan ha "familj" – normaliseras till "relationer". */
   | "familj"
   | "studier"
   | "jobb"
@@ -458,7 +460,17 @@ export const DESTINATION_META: Record<
   kalender: { emoji: "📅", label: "Kalender", hint: "Något som händer en viss dag eller tid." },
   paminnelse: { emoji: "⏰", label: "Påminnelse", hint: "Jag säger till när det är dags." },
   barn: { emoji: "👧", label: "Barn", hint: "Gäller ett av barnen – välj vem och vad det blir." },
-  familj: { emoji: "👨‍👩‍👧", label: "Familj", hint: "Något som rör familjen." },
+  relationer: {
+    emoji: "❤️",
+    label: "Relationer",
+    hint: "Handlar om en person i ditt liv – partner, familj, vän eller anhörig.",
+  },
+  // Historik: allt som tidigare låg under Familj visas nu som Relationer.
+  familj: {
+    emoji: "❤️",
+    label: "Relationer",
+    hint: "Tidigare Familj – ligger nu under Relationer.",
+  },
   studier: { emoji: "🎓", label: "Studier", hint: "En uppgift i livsområdet Studier." },
   jobb: { emoji: "💼", label: "Jobb", hint: "En uppgift i livsområdet Jobb." },
   hemma: { emoji: "🏠", label: "Hemma", hint: "Hushåll, hemmet och vardagen." },
@@ -478,6 +490,7 @@ export const DESTINATION_META: Record<
 /** Livsområdet en destination hör hemma i (för de som blir uppgifter). */
 export const DESTINATION_AREA: Partial<Record<QuickflowDestination, LifeArea>> = {
   barn: "privat",
+  relationer: "privat",
   familj: "privat",
   studier: "studier",
   jobb: "jobb",
@@ -485,6 +498,15 @@ export const DESTINATION_AREA: Partial<Record<QuickflowDestination, LifeArea>> =
   halsa: "vardag",
   ekonomi: "privat",
 };
+
+/**
+ * Gamla poster och regler kan peka på destinationen "familj". Den heter
+ * "relationer" nu, så historiken mappas om utan att tappa sammanhang.
+ */
+export function normalizeDestination(value: string | undefined | null): QuickflowDestination {
+  if (value === "familj" || value === "family") return "relationer";
+  return (value as QuickflowDestination) ?? "behall";
+}
 
 /** Hittar vilket barn texten troligen handlar om, utifrån namnen i appen. */
 export function guessChild<T extends { id: string; name: string }>(
