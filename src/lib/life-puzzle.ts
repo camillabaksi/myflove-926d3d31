@@ -36,6 +36,8 @@ export interface LifePuzzleInput {
   todaysEvents: string[];
   /** Min situation som text – vilka livssituationer som pågår just nu. */
   situationContext?: string;
+  /** Prioritering mellan flera aktiva situationer – en enda ordning att följa. */
+  priorityContext?: string;
   /** Frivillig jobbprofil som text – kontext, inte regler. */
   workContext?: string;
   /** Hur krävande arbetsdagen ser ut idag. */
