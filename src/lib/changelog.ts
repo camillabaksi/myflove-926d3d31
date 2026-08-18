@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Omvandla till … på anteckningar – en tydlig knapp där du väljer uppgift, kalenderhändelse eller energifaktor, justerar detaljer och bekräftar innan något sparas (2026-08-18)",
       "Spara som anteckning i QuickFlow – fånga först, bestäm sen. Anteckningar har ingen deadline och kan senare bli uppgift, kalender, påminnelse, inköp, studier, jobb eller energifaktor när du bekräftar (2026-08-18)",
       "Färdiga regelmallar i QuickFlow – boka, köpa, handla, påminn, ring, betala, idé och träffa. Lägg till direkt eller anpassa ord, destination, livsområde och klockslag först (2026-08-18)",
       "Egna sorteringsregler i QuickFlow – bestäm själv att \"köpa …\" går till inköpslistan och \"boka …\" till kalendern, med valfritt livsområde och klockslag (2026-08-18)",
