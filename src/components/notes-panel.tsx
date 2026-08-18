@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { toast } from "sonner";
-import { NotebookPen, Trash2 } from "lucide-react";
+import { NotebookPen, Trash2, Wand2 } from "lucide-react";
 import { useNotes } from "@/hooks/use-notes";
 import { useTasks, useReminders } from "@/hooks/use-data";
 import { useSharedShoppingList } from "@/hooks/use-shared-shopping-list";
-import { useEnergyFlow } from "@/hooks/use-energy-flow";
+import NoteConvertDialog, { type ConvertTarget } from "@/components/note-convert-dialog";
 import { suggestForNote, type FlowNote } from "@/lib/notes";
 import { DESTINATION_META, shoppingTitleFrom, type QuickflowDestination } from "@/lib/quickflow";
 import { AREA_META } from "@/lib/life-areas";
@@ -18,17 +18,14 @@ export default function NotesPanel() {
   const { addTask } = useTasks();
   const { addReminder } = useReminders();
   const { addItem: addShoppingItem } = useSharedShoppingList();
-  const { addFactor } = useEnergyFlow();
 
   const [draft, setDraft] = useState("");
-  const [energyFor, setEnergyFor] = useState<string | null>(null);
+  const [convertNote, setConvertNote] = useState<FlowNote | null>(null);
 
   const today = () => new Date().toISOString().slice(0, 10);
 
   const convert = (note: FlowNote, d: QuickflowDestination) => {
     if (d === "inkop") addShoppingItem(shoppingTitleFrom(note.text));
-    else if (d === "kalender") addTask(note.text, today(), { area: note.area });
-    else if (d === "uppgift") addTask(note.text, undefined, { area: note.area });
     else if (d === "studier") addTask(note.text, undefined, { area: "studier" });
     else if (d === "jobb") addTask(note.text, undefined, { area: "jobb" });
     else if (d === "paminnelse") addReminder(note.text, today(), "09:00");
@@ -37,23 +34,7 @@ export default function NotesPanel() {
     toast.success(`Anteckningen blev ${DESTINATION_META[d].label.toLowerCase()}.`);
   };
 
-  const toEnergy = async (note: FlowNote, direction: "gives" | "drains") => {
-    await addFactor({ title: note.text, direction, strength: 3, category: "annat" });
-    updateNote(note.id, { convertedAt: Date.now(), convertedTo: "energi" });
-    setEnergyFor(null);
-    toast.success(
-      direction === "gives" ? "Sparad som något som ger energi. 🔋" : "Sparad som något som tar energi. 🪫",
-    );
-  };
-
-  const CONVERSIONS: QuickflowDestination[] = [
-    "uppgift",
-    "kalender",
-    "paminnelse",
-    "inkop",
-    "studier",
-    "jobb",
-  ];
+  const CONVERSIONS: QuickflowDestination[] = ["paminnelse", "inkop", "studier", "jobb"];
 
   return (
     <div className="space-y-3">
@@ -114,18 +95,16 @@ export default function NotesPanel() {
                 </button>
               </div>
 
-              {energyFor === note.id ? (
+              <div className="space-y-2">
+                <button
+                  type="button"
+                  onClick={() => setConvertNote(note)}
+                  className="w-full rounded-full bg-primary text-primary-foreground px-4 py-2 text-sm font-semibold inline-flex items-center justify-center gap-2"
+                >
+                  <Wand2 size={16} /> Omvandla till …
+                </button>
                 <div className="flex flex-wrap gap-2">
-                  <Chip onClick={() => toEnergy(note, "gives")}>🔋 Gav energi</Chip>
-                  <Chip onClick={() => toEnergy(note, "drains")}>🪫 Tog energi</Chip>
-                  <Chip onClick={() => setEnergyFor(null)}>Avbryt</Chip>
-                </div>
-              ) : (
-                <div className="flex flex-wrap gap-2">
-                  {(suggestion
-                    ? [suggestion, ...CONVERSIONS.filter((d) => d !== suggestion)]
-                    : CONVERSIONS
-                  ).map((d) => (
+                  {CONVERSIONS.map((d) => (
                     <Chip
                       key={d}
                       onClick={() => convert(note, d)}
@@ -135,13 +114,27 @@ export default function NotesPanel() {
                       {DESTINATION_META[d].emoji} {DESTINATION_META[d].label}
                     </Chip>
                   ))}
-                  <Chip onClick={() => setEnergyFor(note.id)}>🔋 Energifaktor</Chip>
                 </div>
-              )}
+              </div>
             </div>
           );
         })
       )}
+
+      <NoteConvertDialog
+        note={convertNote}
+        open={convertNote !== null}
+        onOpenChange={(v) => !v && setConvertNote(null)}
+        onConverted={(target: ConvertTarget) => {
+          if (convertNote) {
+            updateNote(convertNote.id, {
+              convertedAt: Date.now(),
+              convertedTo: target === "energi" ? "energi" : target,
+            });
+          }
+          setConvertNote(null);
+        }}
+      />
     </div>
   );
 }
