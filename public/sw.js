@@ -22,18 +22,28 @@ self.addEventListener("push", (event) => {
     if (event.data) data.body = event.data.text();
   }
 
+  const itemKey = data.itemKey;
+  const quickActions = itemKey && /^(task|reminder|quickflow):/.test(itemKey)
+    ? [
+        { action: "done", title: "✓ Klart" },
+        { action: "snooze", title: "⏰ 10 min" },
+      ]
+    : [];
+
   const options = {
     body: data.body,
     icon: data.icon || "/icon-192.png",
     badge: data.badge || "/icon-192.png",
     tag: data.tag,
     renotify: !!data.tag,
-    data: { url: data.url || "/hem" },
+    data: { url: data.url || "/hem", itemKey: itemKey || null },
+    actions: quickActions,
     vibrate: Array.isArray(data.vibrate) ? data.vibrate : [200, 100, 200],
     requireInteraction: !!data.requireInteraction,
   };
   event.waitUntil(self.registration.showNotification(data.title, options));
 });
+
 
 /* Webbläsaren kan byta ut prenumerationen. Då skapar vi en ny direkt och
    berättar för servern, annars slutar notiserna komma när appen är stängd. */
