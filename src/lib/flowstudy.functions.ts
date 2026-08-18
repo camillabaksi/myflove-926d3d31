@@ -15,6 +15,8 @@ const InputSchema = z.object({
       dataUrl: z.string().max(14_000_000),
     })
     .optional(),
+  /** Frivillig studieprofil som text – personlig kontext, inte regler. */
+  profileContext: z.string().max(2000).optional(),
   cardCount: z.number().int().min(4).max(30).default(12),
   quizCount: z.number().int().min(4).max(20).default(10),
 });
@@ -47,6 +49,7 @@ Regler:
 - "topic" är ett kort ämnesord (t.ex. "Bemötande", "Trauma") så repetition kan riktas.
 - "summary" är max 2 meningar om vad materialet handlar om.
 - Bygg allt på materialet du fått. Hitta inte på fakta som saknas.
+- Om en studieprofil finns: anpassa språk, svårighetsnivå och exempel efter den, utan att anta något som inte står där.
 - Svara ENDAST med giltig JSON enligt schemat.`;
 
 type ContentBlock =
@@ -66,6 +69,7 @@ export const generateStudySet = createServerFn({ method: "POST" })
     }
 
     const instruction = [
+      data.profileContext?.trim() ? `${data.profileContext.trim()}\n` : null,
       `Material: ${data.title}`,
       data.course ? `Kurs: ${data.course}` : null,
       "",
