@@ -33,12 +33,17 @@ export function kindFromId(id: string): { kind: EditableKind; realId: string } {
   if (id.startsWith("rem-")) return { kind: "kalender", realId: id.slice(4) };
   if (id.startsWith("qf-")) return { kind: "tanke", realId: id.slice(3) };
   if (id.startsWith("routine-")) return { kind: "rutin", realId: id.slice(8) };
+  // Kalendervyn använder kortare prefix för samma saker.
+  if (id.startsWith("t-")) return { kind: "uppgift", realId: id.slice(2) };
+  if (id.startsWith("r-")) return { kind: "kalender", realId: id.slice(2) };
   return { kind: "extern", realId: id };
 }
 
 const EXTERNAL_HOME: Record<string, { label: string; href: string }> = {
   "lec-": { label: "schemat i StudyFlow", href: "/studyflow" },
   "child-": { label: "barnens schema", href: "/barn" },
+  "c-": { label: "barnens schema", href: "/barn" },
+  "f-": { label: "familjens kalender", href: "/familj" },
 };
 
 function externalHome(id: string) {

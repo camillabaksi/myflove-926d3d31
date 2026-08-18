@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { FlowItemActions } from "@/components/flow-item-actions";
 
 export interface TimelineEntry {
   id: string;
@@ -24,9 +25,12 @@ const toMinutes = (t: string) => {
 export default function DayTimeline({
   entries,
   isToday,
+  editable = true,
 }: {
   entries: TimelineEntry[];
   isToday: boolean;
+  /** Visa ändra/ta bort direkt i tidslinjen. */
+  editable?: boolean;
 }) {
   const [now, setNow] = useState(() => new Date());
 
@@ -94,6 +98,7 @@ export default function DayTimeline({
                       {e.time}
                       {e.endTime ? `–${e.endTime}` : ""}
                     </span>
+                    {editable && <FlowItemActions itemId={e.id} size={14} />}
                   </div>
                 ))}
               </div>
@@ -115,6 +120,7 @@ export default function DayTimeline({
               >
                 {e.emoji && <span aria-hidden>{e.emoji}</span>}
                 {e.title}
+                {editable && <FlowItemActions itemId={e.id} size={13} />}
               </span>
             ))}
           </div>

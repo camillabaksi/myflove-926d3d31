@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import { CheckCircle2, Circle, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { FlowItemActions } from "@/components/flow-item-actions";
 import { areaChipStyle, areaColor, AREA_META } from "@/lib/life-areas";
 import {
   describeEnergy,
@@ -93,6 +94,8 @@ export function FlowItemCard({
             </p>
           )}
         </div>
+
+        <FlowItemActions itemId={item.id} className="mt-0.5 flex shrink-0 items-center gap-0.5" />
 
         {item.href && (
           <Link
