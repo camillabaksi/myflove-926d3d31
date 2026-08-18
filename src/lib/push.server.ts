@@ -20,7 +20,10 @@ export type PushNotificationBody = {
   badge?: string;
   /** Notisen ligger kvar tills man svarar (används av Morgonstart). */
   requireInteraction?: boolean;
+  /** `task:<id>` / `reminder:<id>` / `quickflow:<id>` – ger snabbval i notisen. */
+  itemKey?: string;
   vibrate?: number[];
+
 };
 
 function getVapid(): VapidKeys {
