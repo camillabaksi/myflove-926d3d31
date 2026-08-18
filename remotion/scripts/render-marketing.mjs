@@ -30,7 +30,7 @@ await renderMedia({
   composition,
   serveUrl: bundled,
   codec: "h264",
-  outputLocation: "/mnt/documents/myflove-marknadsforing-2026-08.mp4",
+  outputLocation: "/mnt/documents/myflove-marknadsforing-2026-08-v2.mp4",
   puppeteerInstance: browser,
   muted: true,
   concurrency: 4,
