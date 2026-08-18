@@ -6,12 +6,13 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-08-18";
+export const CHANGELOG_UPDATED = "2026-08-19";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Snabbval direkt i notisen – tryck \"Klart\" eller \"Skjut upp 10 min\" i påminnelsen utan att öppna appen (2026-08-19)",
       "Anteckningar på uppgifter och kalenderhändelser – skriv fritt vad det gäller, adress eller vad du behöver ta med (2026-08-18)",
       "Notiser kommer även när appen är stängd – push-prenumerationen förnyas vid varje appstart och uppdateras automatiskt om webbläsaren byter nyckel (2026-08-18)",
       "Tider för personliga puffar sparas igen – morgonpuff, kvällspuff och Morgonstart behåller tiden du väljer (2026-08-17)",
