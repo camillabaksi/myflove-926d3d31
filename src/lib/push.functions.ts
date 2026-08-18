@@ -9,6 +9,8 @@ const SubscribeSchema = z.object({
   p256dh: z.string().min(1),
   auth: z.string().min(1),
   userAgent: z.string().optional(),
+  /** Rensa gamla, döda prenumerationer från samma enhet. */
+  replaceOthers: z.boolean().optional(),
 });
 
 export const subscribeToPush = createServerFn({ method: "POST" })
@@ -28,8 +30,18 @@ export const subscribeToPush = createServerFn({ method: "POST" })
       { onConflict: "endpoint" },
     );
     if (error) throw new Error(error.message);
+
+    if (data.replaceOthers && data.userAgent) {
+      await supabase
+        .from("push_subscriptions")
+        .delete()
+        .eq("user_id", userId)
+        .eq("user_agent", data.userAgent)
+        .neq("endpoint", data.endpoint);
+    }
     return { ok: true };
   });
+
 
 // ---- Unsubscribe ------------------------------------------------------------
 
