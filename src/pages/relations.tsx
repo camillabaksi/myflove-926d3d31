@@ -231,7 +231,7 @@ function RelationsContent() {
             key={type}
             id={`relationer-${type}`}
             title={`${meta.emoji} ${meta.label}`}
-            subtitle={meta.blurb}
+            description={meta.blurb}
           >
             <div className="space-y-2">
               {list.map((p) => (
@@ -273,7 +273,7 @@ function RelationsContent() {
       <div className="surface-card space-y-3 p-5">
         <div className="flex items-center gap-2">
           <h2 className="font-semibold text-ink">Vilka relationer vill du ha med?</h2>
-          <HelpHint text="Du väljer själv vilka relationstyper som visas. Inget läggs till automatiskt och du kan stänga av när du vill." />
+          <HelpHint>Du väljer själv vilka relationstyper som visas. Inget läggs till automatiskt och du kan stänga av när du vill.</HelpHint>
         </div>
         <div className="flex flex-wrap gap-2">
           {RELATION_TYPES.map((t) => {
