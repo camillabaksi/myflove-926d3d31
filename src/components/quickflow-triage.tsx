@@ -17,6 +17,8 @@ import {
   type QuickflowItem,
 } from "@/lib/quickflow";
 import { AREA_META, ALL_AREAS, type LifeArea } from "@/lib/life-areas";
+import { useQuickflowRules } from "@/hooks/use-quickflow-rules";
+import { resolveDestination, titleForRule } from "@/lib/quickflow-rules";
 
 
 
@@ -33,6 +35,7 @@ export default function QuickflowTriage() {
   const { addItem: addShoppingItem } = useSharedShoppingList();
   const { addIdea } = useDumpIdeas();
   const { log } = useFlowUsage();
+  const { rules } = useQuickflowRules();
 
   const [sorting, setSorting] = useState(false);
   /** Användarens svar när tolkningen var otydlig. */
@@ -48,7 +51,27 @@ export default function QuickflowTriage() {
 
   if (openItems.length === 0) return null;
 
-  const areaOf = (item: QuickflowItem): LifeArea => item.area ?? guessArea(item.text);
+  /** Egen regel först, sedan MyFloves gissning. */
+  const ruleFor = (item: QuickflowItem) => resolveDestination(item, rules);
+
+  const areaOf = (item: QuickflowItem): LifeArea =>
+    item.area ?? ruleFor(item).area ?? guessArea(item.text);
+
+  /** Titeln som regeln vill ha ("köpa schampo" → "schampo"). */
+  const titleOf = (item: QuickflowItem): string => {
+    const r = ruleFor(item).rule;
+    return r ? titleForRule(item.text, r) : item.text;
+  };
+
+  /** Klockslag från regeln, om användaren satt ett. */
+  const ruleTimeOn = (item: QuickflowItem, at: number): number => {
+    const time = ruleFor(item).time;
+    if (!time) return at;
+    const [h, m] = time.split(":").map(Number);
+    const d = new Date(at);
+    d.setHours(h ?? 9, m ?? 0, 0, 0);
+    return d.getTime();
+  };
 
   /** Vilken tid vi faktiskt använder – null betyder "jag behöver fråga först". */
   const planFor = (item: QuickflowItem) => {
@@ -74,7 +97,7 @@ export default function QuickflowTriage() {
   };
 
   const toTask = (item: QuickflowItem) => {
-    addTask(item.text, undefined, { area: areaOf(item) });
+    addTask(titleOf(item), undefined, { area: areaOf(item) });
     complete(item.id);
     log("planering");
     toast.success(`Den ligger nu bland dina uppgifter i ${AREA_META[areaOf(item)].label}. 💙`);
@@ -86,7 +109,8 @@ export default function QuickflowTriage() {
     const d = new Date(s.at);
     // En påminnelse behöver ett klockslag – heldag blir en lugn morgonpuff kl 09.
     if (s.allDay) d.setHours(9, 0, 0, 0);
-    addReminder(item.text, d.toISOString().slice(0, 10), timeString(d.getTime()));
+    d.setTime(ruleTimeOn(item, d.getTime()));
+    addReminder(titleOf(item), d.toISOString().slice(0, 10), timeString(d.getTime()));
     complete(item.id);
     toast.success(`Jag säger till ${formatWhen(d.getTime()).toLowerCase()}.`, {
       description: s.allDay ? "Ingen tid stod i texten, så jag valde morgonen." : s.why,
@@ -97,9 +121,10 @@ export default function QuickflowTriage() {
     if (needsAnswer(item)) return;
     const s = planFor(item);
     const d = new Date(s.at);
-    addTask(item.text, d.toISOString().slice(0, 10), {
-      // Utan klockslag lägger vi in det som heldag.
-      ...(s.allDay ? {} : { time: timeString(s.at) }),
+    const ruleTime = ruleFor(item).time;
+    addTask(titleOf(item), d.toISOString().slice(0, 10), {
+      // Utan klockslag lägger vi in det som heldag – om inte en egen regel säger tid.
+      ...(ruleTime ? { time: ruleTime } : s.allDay ? {} : { time: timeString(s.at) }),
       area: areaOf(item),
     });
     complete(item.id);
@@ -109,14 +134,15 @@ export default function QuickflowTriage() {
     );
   };
   const toShopping = (item: QuickflowItem) => {
-    const title = shoppingTitleFrom(item.text);
+    const r = ruleFor(item).rule;
+    const title = r ? titleForRule(item.text, r) : shoppingTitleFrom(item.text);
     addShoppingItem(title);
     complete(item.id);
     toast.success(`"${title}" ligger nu i inköpslistan. 🛒`);
   };
 
   const toIdea = (item: QuickflowItem) => {
-    addIdea(item.text);
+    addIdea(titleOf(item));
     complete(item.id);
     toast.success("Sparad i idébanken – den finns kvar när du vill titta på den.");
   };
@@ -160,7 +186,8 @@ export default function QuickflowTriage() {
       ) : (
         <div className="space-y-2">
           {openItems.map((item) => {
-            const type = guessDestination(item);
+            const resolved = ruleFor(item);
+            const type = resolved.destination;
             const plan = parseWhenFromText(item.text) ? planFor(item) : null;
             return (
               <div key={item.id} className="surface-card p-4 space-y-3">
@@ -169,7 +196,9 @@ export default function QuickflowTriage() {
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-ink">{item.text}</p>
                     <p className="text-xs text-muted-foreground">
-                      Mitt förslag: {DESTINATION_META[type].label} – du bestämmer.
+                      {resolved.rule
+                        ? `Din regel "${resolved.rule.phrase}": ${DESTINATION_META[type].label}.`
+                        : `Mitt förslag: ${DESTINATION_META[type].label} – du bestämmer.`}
 
                     </p>
                     {plan && !plan.ambiguous && (
