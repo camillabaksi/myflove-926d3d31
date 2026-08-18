@@ -12,6 +12,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { chatWithFlow } from "@/lib/flow-chat.functions";
 import { useLifePuzzle } from "@/hooks/use-life-puzzle";
 import StopBudget from "@/components/stop-budget";
+import { createFlowConversation, saveFlowMessage } from "@/hooks/use-flow-chats";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
