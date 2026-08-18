@@ -5,6 +5,8 @@ import {
   balanceFor,
   DEFAULT_ENERGY_FLOW_SETTINGS,
   energyInsight,
+  normalizeSettings,
+
   type EnergyBalance,
   type EnergyCategory,
   type EnergyDirection,
@@ -68,10 +70,12 @@ export function useEnergyFlow(): {
   const [presets, setPresets] = useState<EnergyPreset[]>([]);
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState<string | null>(null);
-  const [settings, setSettings] = useCloudSyncedStorage<EnergyFlowSettings>(
+  const [rawSettings, setSettings] = useCloudSyncedStorage<EnergyFlowSettings>(
     "myflove-energy-flow-settings",
     DEFAULT_ENERGY_FLOW_SETTINGS,
   );
+  const settings = useMemo(() => normalizeSettings(rawSettings), [rawSettings]);
+
 
   useEffect(() => {
     let cancelled = false;
@@ -183,7 +187,7 @@ export function useEnergyFlow(): {
     await supabase.from("energy_factor_presets").delete().eq("id", id);
   }, []);
 
-  const balance = useMemo(() => balanceFor(entries), [entries]);
+  const balance = useMemo(() => balanceFor(entries, new Date(), settings), [entries, settings]);
   const insight = useMemo(() => energyInsight(entries, balance), [entries, balance]);
 
   return {

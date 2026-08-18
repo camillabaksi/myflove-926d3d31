@@ -77,14 +77,16 @@ export function useFlowScore(): {
   const energyFlow = useMemo(
     () =>
       energyFlowFactor({
-        net: energyBalance.net,
+        net: energyBalance.weightedNet,
         topBoost: energyBalance.topBoost,
         topDrain: energyBalance.topDrain,
         count: energyBalance.count,
         weight: energyFlowSettings.weight,
+        enabled: energyFlowSettings.enabled,
       }),
-    [energyBalance, energyFlowSettings.weight],
+    [energyBalance, energyFlowSettings.weight, energyFlowSettings.enabled],
   );
+
 
   const flow = useMemo(() => {
     const today = new Date().toISOString().slice(0, 10);

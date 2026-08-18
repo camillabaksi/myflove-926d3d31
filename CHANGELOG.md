@@ -18,6 +18,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 - **"Ditt fokus idag" visar bara dagens saker** (2026-08-17): Uppgifter med ett framtida datum syns inte längre i "Ditt fokus idag" på hemskärmen – de ligger kvar i kalendern och dyker upp först när dagen är inne. Passerade datum och dagens datum visas fortfarande.
 
 ### Added
+- **Inställningar för energipåverkan** (2026-08-18): Ny inställningsvy i Energiflöde där du kan stänga av energipåverkan helt med ett reglage, sätta en samlad vikt och dessutom ställa vikten för varje energifaktor (sömn, socialt, rörelse, ljud & miljö, stress, återhämtning, egentid, annat) oberoende av varandra. Allt går att återställa till Normalt.
 - **Energiflöde** (2026-08-19): Ny del under Må bra där du registrerar vad som ger 🔋 och tar 🪫 energi – sömn, socialt, ljud och miljö, stress, återhämtning, egentid. Dagens balans blir en egen faktor i FlowScore (du väljer själv: Av/Lite/Normalt/Mycket), och mönster över 14–30 dagar visar vad som återkommer. Posterna blir aldrig kalenderhändelser eller uppgifter – de beskriver bara din kapacitet, och Flow erbjuder en lättare plan när dagen tagit mer än den gett.
 
 - **Ändra barn i sammanfogad händelse** (2026-08-18): Barnhändelser i kalendern har nu knappen "Ändra barn" – lägg till eller ta bort barn i efterhand utan att skapa en ny händelse.
