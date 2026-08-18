@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Check, Clock, MapPin, Trash2, X } from "lucide-react";
+import { toast } from "sonner";
+import { Check, Clock, MapPin, Trash2, Undo2, X } from "lucide-react";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import CollapsibleSection from "@/components/collapsible-section";
 import { useSavedStores } from "@/hooks/use-data";
@@ -34,7 +35,7 @@ const SNOOZE_OPTIONS = [
 ];
 
 export function QuickflowList() {
-  const { openItems, complete, remove, snooze, update } = useQuickflow();
+  const { items, openItems, complete, uncomplete, remove, snooze, update } = useQuickflow();
   const { savedStores } = useSavedStores();
   const [now, setNow] = useState(() => Date.now());
   const [snoozeFor, setSnoozeFor] = useState<string | null>(null);
@@ -98,18 +99,22 @@ export function QuickflowList() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [placeKey, savedStores.length]);
 
-  const { needsAnswer, upcoming, thoughts } = useMemo(() => {
+  const { needsAnswer, upcoming, thoughts, recentlyCompleted } = useMemo(() => {
     const sorted = [...openItems].sort((a, b) => (a.remindAt ?? Infinity) - (b.remindAt ?? Infinity));
+    const dayAgo = now - 24 * 60 * 60 * 1000;
     return {
       needsAnswer: sorted.filter((i) => isOverdue(i, now) || shouldAskAboutThought(i, now)),
       upcoming: sorted.filter((i) => i.remindAt && !isOverdue(i, now)),
       thoughts: sorted.filter((i) => !i.remindAt && !i.placeId && !shouldAskAboutThought(i, now)),
+      recentlyCompleted: items
+        .filter((i) => i.done && i.doneAt && i.doneAt > dayAgo)
+        .sort((a, b) => (b.doneAt ?? 0) - (a.doneAt ?? 0)),
     };
-  }, [openItems, now]);
+  }, [openItems, items, now]);
 
   const placeUpcoming = openItems.filter((i) => i.placeId && !isOverdue(i, now) && !i.notifiedAt);
 
-  if (openItems.length === 0) return null;
+  if (openItems.length === 0 && recentlyCompleted.length === 0) return null;
 
   const renderRow = (item: QuickflowItem, extra?: React.ReactNode) => (
     <div key={item.id} className="surface-card p-4 space-y-2">
@@ -288,6 +293,38 @@ export function QuickflowList() {
               </button>,
             ),
           )}
+        </div>
+      )}
+
+      {recentlyCompleted.length > 0 && (
+        <div className="space-y-3 pt-2 border-t border-border/60">
+          <p className="text-xs uppercase tracking-wide text-muted-foreground">
+            Nyligen hanterade – råkat du trycka fel?
+          </p>
+          {recentlyCompleted.map((item) => (
+            <div key={item.id} className="surface-card p-4 flex items-center gap-3">
+              <span className="text-xl leading-none">{guessEmoji(item.text, item.level)}</span>
+              <div className="flex-1 min-w-0">
+                <p className="font-medium text-ink line-through opacity-70">{item.text}</p>
+                <p className="text-xs text-muted-foreground">
+                  {item.remindAt
+                    ? `Var sparad till ${formatWhen(item.remindAt, new Date(now))}`
+                    : "Markerades som hanterad"}
+                </p>
+              </div>
+              <button
+                type="button"
+                aria-label="Ångra"
+                onClick={() => {
+                  uncomplete(item.id);
+                  toast.success("Ångrad – tanken är tillbaka i QuickFlow. 💜");
+                }}
+                className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 text-primary px-3 py-1.5 text-xs font-medium hover:bg-primary hover:text-primary-foreground transition-colors"
+              >
+                <Undo2 size={13} /> Ångra
+              </button>
+            </div>
+          ))}
         </div>
       )}
       </CollapsibleSection>

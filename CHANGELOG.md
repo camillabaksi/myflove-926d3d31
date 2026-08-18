@@ -8,6 +8,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 ## [Unreleased]
 
 ### Added
+- **Ångra hanterade QuickFlow-tankar** (2026-08-18): Råkar du markera en vilande tanke som "Hanterad" dyker den upp under "Nyligen hanterade" i QuickFlow-listan och sorteringen. Tryck "Ångra" så återaktiveras tanken – den får tillbaka sitt sparade datum och ligger kvar i QuickFlow igen. Syns i 24 timmar efter att den markerades hanterad.
 - **Markera "Återkom senare"-tankar som hanterade** (2026-08-18): Vilande tankar göms nu automatiskt från sorteringen tills tiden är inne – du ser bara en liten rad med hur många som vilar, och kan visa dem om du vill. Varje sparad tanke har en tydlig knapp "Hanterad – göm den" i både QuickFlow-listan och sorteringen, så den försvinner ur vyn utan att du behöver leta.
 - **Sparläge för "Återkom senare" i QuickFlow** (2026-08-18): Väljer du "Återkom senare" får du nu bestämma när tanken ska dyka upp igen – i kväll, imorgon bitti, om 3 dagar, nästa vecka eller eget datum och klockslag. Tanken ligger kvar i QuickFlow som vilande, du ser tidpunkten på kortet och kan ändra den när du vill.
 - **QuickFlow: "Vart ska det här hamna?"** (2026-08-18): Efter att du fångat något föreslår Flow vart det hör hemma och visar alla val på ett ställe – uppgift, kalender, påminnelse, barn, familj, studier, jobb, hemma, hälsa, ekonomi, inköpslista, anteckning, energifaktor, återkom senare eller ta bort. Barn är nu ett eget val: nämner du ett av barnen vid namn föreslår Flow rätt barn, och du väljer om det blir kalenderhändelse, uppgift, anteckning eller inköp. Väljer du energifaktor anger du själv om den gav eller tog energi och hur mycket den ska påverka FlowScore. Alla förslag går att ändra manuellt.
@@ -16,6 +17,8 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 ### Fixed
 - **Notiser kommer nu även när appen är stängd** (2026-08-18): Telefonens push-prenumeration kunde bytas ut i bakgrunden utan att servern fick veta – då skickades notisen till en gammal nyckel och syntes aldrig. Nu förnyas prenumerationen varje gång du öppnar appen, och tjänsten uppdaterar sig själv direkt om webbläsaren byter nyckel. Gamla, döda prenumerationer för samma enhet rensas bort.
 - **Tider för personliga puffar sparas igen** (2026-08-17): Morgonpuff, kvällspuff och Morgonstart sparade inte de tider du valde – sparningen avvisades tyst i bakgrunden. Nu skickas bara dina inställningar, och tiderna ligger kvar och styr när notiserna kommer.
+
+- **"Nyligen hanterade" syns även när allt är hanterat** (2026-08-18): Om du markerade alla QuickFlow-tankar som hanterade försvann ångra-sektionen helt, eftersom listan då dolde hela komponenten. Nu visas "Nyligen hanterade" så länge det finns något att ångra, både i listan och i sorteringen.
 
 - **Resor och familjekalender fungerar igen** (2026-08-17): Reseökningen hämtar återigen riktiga avgångar i realtid, och familjens kalender, inköpslista och familjeuppgifter läser och sparar mot molnet igen i stället för att bara låtsas lyckas.
 

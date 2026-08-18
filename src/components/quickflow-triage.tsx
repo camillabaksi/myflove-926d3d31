@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import { Wand2 } from "lucide-react";
+import { Undo2, Wand2 } from "lucide-react";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { useTasks, useReminders, useDumpIdeas } from "@/hooks/use-data";
 import { useSharedShoppingList } from "@/hooks/use-shared-shopping-list";
@@ -10,6 +10,7 @@ import {
   formatWhen,
   guessArea,
   guessChild,
+  guessEmoji,
   shoppingTitleFrom,
   parseWhenFromText,
   DESTINATION_META,
@@ -33,7 +34,7 @@ const DAY = 86_400_000;
  * Här hjälper MyFlove till att sortera – aldrig automatiskt, aldrig skuldbeläggande.
  */
 export default function QuickflowTriage() {
-  const { openItems, complete, remove, snooze, update } = useQuickflow();
+  const { items, openItems, complete, uncomplete, remove, snooze, update } = useQuickflow();
   const { addTask } = useTasks();
   const { addReminder } = useReminders();
   const { addItem: addShoppingItem } = useSharedShoppingList();
@@ -85,7 +86,15 @@ export default function QuickflowTriage() {
     [openItems, showResting, laterFor],
   );
 
-  if (openItems.length === 0) return null;
+  /** Tankar som markerats hanterade de senaste 24 timmarna – kan ångras. */
+  const recentlyCompleted = useMemo(() => {
+    const dayAgo = Date.now() - 24 * 60 * 60 * 1000;
+    return items
+      .filter((i) => i.done && i.doneAt && i.doneAt > dayAgo)
+      .sort((a, b) => (b.doneAt ?? 0) - (a.doneAt ?? 0));
+  }, [items]);
+
+  if (openItems.length === 0 && recentlyCompleted.length === 0) return null;
 
 
   /** Egen regel först, sedan MyFloves gissning. */
@@ -603,6 +612,33 @@ export default function QuickflowTriage() {
               </div>
             );
           })}
+
+          {recentlyCompleted.length > 0 && (
+            <div className="space-y-2 pt-2 border-t border-border/60">
+              <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                Nyligen hanterade – råkat du trycka fel?
+              </p>
+              {recentlyCompleted.map((item) => (
+                <div key={item.id} className="surface-card p-3 flex items-center gap-3">
+                  <span className="text-lg">{guessEmoji(item.text, item.level)}</span>
+                  <p className="flex-1 min-w-0 text-sm text-ink line-through opacity-70">
+                    {item.text}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      uncomplete(item.id);
+                      toast.success("Ångrad – tanken är tillbaka i QuickFlow. 💜");
+                    }}
+                    className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 text-primary px-3 py-1.5 text-xs font-medium hover:bg-primary hover:text-primary-foreground transition-colors"
+                  >
+                    <Undo2 size={13} /> Ångra
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
           <button
             type="button"
             onClick={() => setSorting(false)}
