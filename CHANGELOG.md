@@ -18,6 +18,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 
 ### Added
 
+- **Stop-samtal sparas** (2026-08-18): Chattarna du har med Flow via Stop-knappen sparas nu automatiskt och dyker upp bland dina Flow-samtal, så att du kan läsa dem igen senare.
 - **Egna steg i städlistan** (2026-08-18): Du kan nu lägga till egna steg i städlistan och ta bort steg du inte behöver – per rum och läge. Borttagna standardsteg går att ta tillbaka igen.
 - **Min situation överst i Mer** (2026-08-18): "Mer"-menyn inleds nu med ett eget kort för Min situation som visar vilka situationer som är aktiva just nu och tar dig direkt dit.
 - **Kalendern i bottenmenyn och egna platser** (2026-08-18): Hela kalendern nås nu direkt från bottenmenyn. Hem och QuickFlow ligger fast, och de två övriga platserna byter du själv under "Mer" → "Din bottenmeny". Hemskärmens block och genvägar går att anpassa som tidigare.
