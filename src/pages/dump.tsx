@@ -11,9 +11,10 @@ import { useQuickflow } from "@/hooks/use-quickflow";
 import QuickflowList from "@/components/quickflow-list";
 import InsightQuickflowHint from "@/components/insight-quickflow-hint";
 import QuickflowCapture from "@/components/quickflow-capture";
-import { Mic, Square, Sparkles, CheckSquare, ShoppingBag, Calendar, Lightbulb, Check, Trash2, Inbox, Smile } from "lucide-react";
+import { Mic, Square, Sparkles, CheckSquare, ShoppingBag, Calendar, Lightbulb, Check, Trash2, Inbox, Smile, NotebookPen } from "lucide-react";
 import CollapsibleSection from "@/components/collapsible-section";
 import QuickflowRulesSettings from "@/components/quickflow-rules-settings";
+import NotesPanel from "@/components/notes-panel";
 import { MyFloveListening } from "@/components/myflove/motion";
 
 interface SortableThought extends ParsedThought {
