@@ -283,12 +283,28 @@ export default function QuickflowTriage() {
   );
 }
 
-function Action({ onClick, children }: { onClick: () => void; children: React.ReactNode }) {
+function Action({
+  onClick,
+  children,
+  highlight,
+  title,
+}: {
+  onClick: () => void;
+  children: React.ReactNode;
+  /** Markerar MyFloves förslag – bara som hjälp, inget tvång. */
+  highlight?: boolean;
+  title?: string;
+}) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className="rounded-full border border-border bg-card px-3.5 py-2 text-sm font-medium hover:border-primary/50 transition-colors"
+      title={title}
+      className={`rounded-full border px-3.5 py-2 text-sm font-medium transition-colors ${
+        highlight
+          ? "border-primary bg-primary/10 text-primary"
+          : "border-border bg-card hover:border-primary/50"
+      }`}
     >
       {children}
     </button>
