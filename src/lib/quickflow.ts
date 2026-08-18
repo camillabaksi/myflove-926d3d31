@@ -474,6 +474,9 @@ const CALENDAR_WORDS =
 const TASK_WORDS =
   /(ring|boka|betala|maila|mejla|skicka|fixa|tvätta|städa|diska|sortera|packa|ansök|anmäl|beställ)/;
 
+const ENERGY_WORDS =
+  /(gav energi|tog energi|orkade inte|sov dåligt|sov bra|utmattad|återhämt|drog ur mig|laddade mig|för mycket ljud|blev stressad av)/;
+
 const IDEA_WORDS = /(kanske|idé|ide|skulle vilja|drömmer|tänkte att|någon gång|vore kul)/;
 
 /** Ren varutitel ur en fritext: "köpa schampo på ica" → "schampo". */
@@ -496,6 +499,7 @@ export function guessDestination(item: {
   remindAt?: number;
 }): QuickflowDestination {
   const t = item.text.toLowerCase();
+  if (ENERGY_WORDS.test(t)) return "energi";
   if (SHOPPING_WORDS.test(t) && !/(ring|boka|betala)/.test(t)) return "inkop";
   if (parseWhenFromText(item.text)) return "kalender";
   if (/(kl \d|klockan)/.test(t)) return "kalender";
