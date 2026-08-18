@@ -6,6 +6,8 @@ import { useEnergyPattern } from "@/hooks/use-energy-pattern";
 import { useStudySchedule } from "@/hooks/use-study-schedule";
 import { useFlowReset } from "@/hooks/use-daily-flow";
 import { useTraining } from "@/hooks/use-training";
+import { useEnergyFlow } from "@/hooks/use-energy-flow";
+import { energyFlowFactor } from "@/lib/energy-flow";
 
 import { bookedTimeLeft, type BookedSlot } from "@/lib/booked-time";
 import { computeFlowScore, type FlowScore } from "@/lib/flowscore";
@@ -34,6 +36,8 @@ export function useFlowScore(): {
   const { lectures } = useStudySchedule();
   const { entries: resetEntries } = useFlowReset();
   const { doneToday: sessionsDone, stepsToday } = useTraining();
+  // Energiflöde™: det användaren själv registrerat som ger/tar energi idag.
+  const { balance: energyBalance, settings: energyFlowSettings } = useEnergyFlow();
 
   // Gårdagens Flow Reset – används som startläge för dagen.
   const yesterdayFeel = useMemo(() => {
@@ -70,6 +74,18 @@ export function useFlowScore(): {
     return bookedTimeLeft(slots, { endHour: settings.endHour });
   }, [tasks, lectures, settings.endHour]);
 
+  const energyFlow = useMemo(
+    () =>
+      energyFlowFactor({
+        net: energyBalance.net,
+        topBoost: energyBalance.topBoost,
+        topDrain: energyBalance.topDrain,
+        count: energyBalance.count,
+        weight: energyFlowSettings.weight,
+      }),
+    [energyBalance, energyFlowSettings.weight],
+  );
+
   const flow = useMemo(() => {
     const today = new Date().toISOString().slice(0, 10);
     const overdue = tasks.filter(
@@ -90,6 +106,7 @@ export function useFlowScore(): {
       energyPattern: expectation,
       yesterdayFeel,
       movementToday: { steps: stepsToday, sessions: sessionsDone.length },
+      energyFlow,
     });
   }, [
     tasks,
@@ -102,6 +119,7 @@ export function useFlowScore(): {
     yesterdayFeel,
     stepsToday,
     sessionsDone.length,
+    energyFlow,
   ]);
 
 
