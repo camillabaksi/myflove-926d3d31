@@ -42,17 +42,21 @@ export default function WellnessPage() {
         <StopModal open={stopOpen} onOpenChange={setStopOpen} />
 
         <Tabs defaultValue="both" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 h-11 rounded-2xl">
-            <TabsTrigger value="both" className="rounded-xl">
-              Båda
+          <TabsList className="grid w-full grid-cols-4 h-11 rounded-2xl">
+            <TabsTrigger value="both" className="rounded-xl text-xs">
+              Alla
             </TabsTrigger>
-            <TabsTrigger value="mood" className="rounded-xl">
-              <Smile size={14} className="mr-1.5" /> Mående
+            <TabsTrigger value="mood" className="rounded-xl text-xs">
+              <Smile size={14} className="mr-1" /> Mående
             </TabsTrigger>
-            <TabsTrigger value="energy" className="rounded-xl">
-              <Battery size={14} className="mr-1.5" /> Energi
+            <TabsTrigger value="energy" className="rounded-xl text-xs">
+              <Battery size={14} className="mr-1" /> Energi
+            </TabsTrigger>
+            <TabsTrigger value="flow" className="rounded-xl text-xs">
+              <Zap size={14} className="mr-1" /> Flöde
             </TabsTrigger>
           </TabsList>
+
 
           <TabsContent value="both" className="mt-6 space-y-10">
             <CollapsibleSection
