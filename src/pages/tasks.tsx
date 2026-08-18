@@ -74,6 +74,8 @@ export default function Tasks() {
   const [newTask, setNewTask] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [newTime, setNewTime] = useState("");
+  const [newNote, setNewNote] = useState("");
+
   const [newReminder, setNewReminder] = useState<number | "">("");
   const [newKind, setNewKind] = useState<TaskKind>("uppgift");
 
