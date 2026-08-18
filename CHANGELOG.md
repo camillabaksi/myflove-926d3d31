@@ -5,9 +5,6 @@ Alla betydande ändringar i detta projekt dokumenteras i denna fil.
 Formatet baseras på [Keep a Changelog](https://keepachangelog.com/sv/1.1.0/),
 och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 
-## 2026-08-18 – Prioritering mellan situationer
-- Prioritering när flera situationer är aktiva – Flow väger ihop Jobb- och Studieprofilerna till EN ordning (återhämtning först, sedan den mest krävande dagen), begränsar hur många förslag varje profil får ge, visar varför på Min situation och låter Quickflow föreslå rätt av Jobb/Studier först (2026-08-18)
-
 ## [Unreleased]
 
 ### Added

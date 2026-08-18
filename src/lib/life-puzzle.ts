@@ -36,8 +36,6 @@ export interface LifePuzzleInput {
   todaysEvents: string[];
   /** Min situation som text – vilka livssituationer som pågår just nu. */
   situationContext?: string;
-  /** Prioritering mellan flera aktiva situationer – en enda ordning att följa. */
-  priorityContext?: string;
   /** Frivillig jobbprofil som text – kontext, inte regler. */
   workContext?: string;
   /** Hur krävande arbetsdagen ser ut idag. */
@@ -253,7 +251,6 @@ export function lifeContextPrompt(input: LifePuzzleInput): string {
   }
 
   if (input.situationContext) lines.push(input.situationContext);
-  if (input.priorityContext) lines.push(input.priorityContext);
   if (input.workDemand) lines.push(`Arbetsdagen idag: ${input.workDemand}.`);
   if (input.workContext) lines.push(input.workContext);
   if (input.studyDemand) lines.push(`Studieveckan: ${input.studyDemand}.`);
