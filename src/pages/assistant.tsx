@@ -127,10 +127,11 @@ export default function Assistant({ chatId }: { chatId?: string }) {
 
     try {
       let id = conversationId;
+      let created = false;
       if (!id) {
         id = await createFlowConversation(trimmed);
         if (!id) throw new Error("Kunde inte skapa chatten. Är du inloggad?");
-        void navigate({ to: "/assistant/$chatId", params: { chatId: id }, replace: true });
+        created = true;
       }
       await saveFlowMessage(id, "user", trimmed);
 
@@ -143,6 +144,10 @@ export default function Assistant({ chatId }: { chatId?: string }) {
       setMessages((m) => [...m, { id: `tmp-a-${Date.now()}`, role: "assistant", content: reply }]);
       await saveFlowMessage(id, "assistant", reply);
       void refresh();
+      // Navigera först när svaret är sparat – annars avbryts anropet av omladdningen.
+      if (created) {
+        void navigate({ to: "/assistant/$chatId", params: { chatId: id }, replace: true });
+      }
     } catch (e) {
       const msg = e instanceof Error ? e.message : "Något gick fel. Prova igen om en stund.";
       setError(msg);
@@ -150,6 +155,7 @@ export default function Assistant({ chatId }: { chatId?: string }) {
       setIsSending(false);
     }
   };
+
 
   const historyList = (
     <div className="space-y-2">
