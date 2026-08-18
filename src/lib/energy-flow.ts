@@ -117,24 +117,34 @@ export interface EnergyBalance {
   drains: number;
   /** gives − drains. */
   net: number;
+  /** Netto efter din egen vikt per energifaktor – det som faktiskt påverkar FlowScore. */
+  weightedNet: number;
   count: number;
   topBoost?: string;
   topDrain?: string;
 }
 
 /** Dagens balans – bara poster som får räknas med. */
-export function balanceFor(entries: EnergyFactorEntry[], day = new Date()): EnergyBalance {
+export function balanceFor(
+  entries: EnergyFactorEntry[],
+  day = new Date(),
+  settings: EnergyFlowSettings = DEFAULT_ENERGY_FLOW_SETTINGS,
+): EnergyBalance {
   const todays = entries.filter((e) => e.countsTowardScore && isSameDay(e.occurredAt, day));
   let gives = 0;
   let drains = 0;
+  let weightedNet = 0;
   let topBoost: EnergyFactorEntry | undefined;
   let topDrain: EnergyFactorEntry | undefined;
   for (const e of todays) {
+    const catFactor = WEIGHT_FACTOR[categoryWeightFor(settings, e.category)];
     if (e.direction === "gives") {
       gives += e.strength;
+      weightedNet += e.strength * catFactor;
       if (!topBoost || e.strength > topBoost.strength) topBoost = e;
     } else {
       drains += e.strength;
+      weightedNet -= e.strength * catFactor;
       if (!topDrain || e.strength > topDrain.strength) topDrain = e;
     }
   }
@@ -142,6 +152,7 @@ export function balanceFor(entries: EnergyFactorEntry[], day = new Date()): Ener
     gives,
     drains,
     net: gives - drains,
+    weightedNet,
     count: todays.length,
     topBoost: topBoost?.title,
     topDrain: topDrain?.title,
@@ -154,6 +165,8 @@ export interface EnergyFlowInput {
   topDrain?: string;
   count: number;
   weight: EnergyFlowWeight;
+  /** Huvudreglaget. Av = ingen påverkan alls. */
+  enabled?: boolean;
 }
 
 /**
@@ -161,10 +174,12 @@ export interface EnergyFlowInput {
  * Taket är medvetet lågt: energiflödet ska nyansera, inte kapa planen.
  */
 export function energyFlowFactor(input: EnergyFlowInput): FlowFactor | null {
+  if (input.enabled === false) return null;
   const multiplier = WEIGHT_FACTOR[input.weight];
   if (multiplier === 0 || input.count === 0) return null;
   const raw = input.net * 2.2 * multiplier;
   const delta = Math.round(Math.max(-16, Math.min(16, raw)));
+
   const reading =
     input.net === 0
       ? "Dagens poster tar ut varandra"
