@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { useVoiceInput } from "@/hooks/use-voice-input";
 import { useSavedStores } from "@/hooks/use-data";
 import { useQuickflow } from "@/hooks/use-quickflow";
+import { useNotes } from "@/hooks/use-notes";
 import {
   LEVEL_META,
   WHEN_PRESETS,
@@ -27,6 +28,7 @@ export function QuickflowCapture({ variant = "card" }: { variant?: "card" | "com
   const [customValue, setCustomValue] = useState("");
   const [placeOpen, setPlaceOpen] = useState(false);
   const { add } = useQuickflow();
+  const { addNote } = useNotes();
   const { savedStores } = useSavedStores();
   const voice = useVoiceInput((t) => setText((prev) => (prev ? `${prev} ${t}` : t)));
 
@@ -56,6 +58,18 @@ export function QuickflowCapture({ variant = "card" }: { variant?: "card" | "com
             : "Den ligger som en öppen tanke – jag frågar dig senare.",
       },
     );
+  };
+
+  /** Tanken får bara finnas – den landar direkt bland anteckningarna. */
+  const saveAsNote = () => {
+    const trimmed = text.trim();
+    if (!trimmed) return;
+    addNote(trimmed);
+    setOpen(false);
+    reset();
+    toast.success("Sparad som anteckning. 📝", {
+      description: "Du hittar den under Anteckningar i Quickflow – gör något av den när du vill.",
+    });
   };
 
   return (
