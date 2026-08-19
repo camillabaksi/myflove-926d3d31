@@ -1,10 +1,14 @@
+import { useEffect } from "react";
 import { useLocalStorage } from "@/lib/storage";
 
 /** Alla block som går att välja bort på hemskärmen. */
 export const HOME_SECTIONS: { id: string; label: string; hint: string }[] = [
   { id: "livspussel", label: "Livspusslet", hint: "Hur dagens delar hänger ihop" },
-  { id: "dailyflow", label: "Daily Flow", hint: "Dagens incheckning och nästa steg" },
-  { id: "today", label: "Dagens viktigaste", hint: "Det närmaste i tid idag" },
+  {
+    id: "dailyflow",
+    label: "Daily Flow – dagens viktigaste",
+    hint: "Incheckning, ditt fokus och dagens viktigaste i ett block",
+  },
   { id: "shortcuts", label: "Genvägar", hint: "Dina fyra egna knappar" },
   { id: "help", label: "Hjälp mig", hint: "Stora hjälpknappen" },
   { id: "suggestions", label: "Förslag just nu", hint: "Små tips utifrån dag och väder" },
@@ -29,6 +33,14 @@ export function useHiddenHomeSections() {
     "myflove-home-hidden-sections",
     DEFAULT_HIDDEN_SECTIONS,
   );
+  // Engångsmigrering: Daily Flow och Dagens viktigaste är nu ett och samma block.
+  const [merged, setMerged] = useLocalStorage<boolean>("myflove-home-merged-dailyflow", false);
+  useEffect(() => {
+    if (merged) return;
+    setMerged(true);
+    setHidden(hidden.filter((id) => id !== "dailyflow" && id !== "today"));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [merged]);
 
   const isHidden = (id: string) => hidden.includes(id);
   const toggle = (id: string) =>
@@ -38,6 +50,7 @@ export function useHiddenHomeSections() {
 
   return { hidden, isHidden, toggle, showAll, reset };
 }
+
 
 const DEFAULT_ORDER = HOME_SECTIONS.map((s) => s.id);
 
