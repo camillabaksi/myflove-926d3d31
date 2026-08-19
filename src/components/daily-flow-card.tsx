@@ -67,9 +67,12 @@ function Meter({
  */
 export default function DailyFlowCard({
   onTopTasks,
+  rest,
 }: {
   /** Rapporterar vilka uppgifter som redan visas i "Ditt fokus idag". */
   onTopTasks?: (ids: string[]) => void;
+  /** Övriga uppgifter för dagen – visas i samma kort, under fokuslistan. */
+  rest?: React.ReactNode;
 } = {}) {
   const { activeTasks, toggleTask } = useTasks();
   const { checkin, save } = useDailyCheckin();
