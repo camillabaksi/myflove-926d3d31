@@ -54,13 +54,13 @@ const SECTION_AREAS: Record<string, LifeArea[]> = {
   week: ["vardag", "privat", "studier", "jobb"],
   suggestions: ["vardag", "privat"],
   bills: ["privat"],
-  medication: ["vardag", "privat"],
+  medication: ["vardag", "privat", "studier", "jobb", "barn"],
   push: ["vardag"],
   help: ["vardag", "privat"],
 };
 
 /** Vad som är kvar i förenklad vy – det du faktiskt behöver just nu. */
-const SIMPLE_SECTIONS = ["livspussel", "dailyflow", "shortcuts", "help"];
+const SIMPLE_SECTIONS = ["livspussel", "dailyflow", "medication", "shortcuts", "help"];
 
 import {
   useFocus,
@@ -109,7 +109,7 @@ export default function Home() {
 
   const { activeReminders: _activeReminders } = useReminders();
   const { transactions } = useFinances();
-  const { medications, isTaken } = useMedications();
+  const { medications, isTaken, toggleTaken } = useMedications();
   const { activeItems: _shoppingItems } = useSharedShoppingList();
 
   const [helpModalOpen, setHelpModalOpen] = useState(false);
@@ -165,16 +165,12 @@ export default function Home() {
   const upcomingBillsTotal = upcomingBills.reduce((sum, t) => sum + t.amount, 0);
   const moneyLeftAfterPlanned = balance - upcomingBillsTotal;
 
-  const medicationsDueToday = medications
-    .map((med) => ({
-      med,
-      nextTime: med.times.find((time) => !isTaken(med.id, time)),
-    }))
-    .filter(
-      (entry): entry is { med: (typeof medications)[number]; nextTime: string } => !!entry.nextTime,
-    )
-    .sort((a, b) => a.nextTime.localeCompare(b.nextTime));
-  const nextMedication = medicationsDueToday[0];
+  // Alla doser som är kvar idag – inte bara nästa, så inget glöms bort.
+  const medicationDosesToday = medications
+    .flatMap((med) => med.times.map((time) => ({ med, time })))
+    .filter((entry) => !isTaken(entry.med.id, entry.time))
+    .sort((a, b) => a.time.localeCompare(b.time));
+  const nextMedication = medicationDosesToday[0];
 
   const handleSelectFeeling = (feeling: HelpFeelingId) => {
     if (feeling === "overwhelmed") {
@@ -573,25 +569,42 @@ export default function Home() {
           <HomeSection
             style={ord("medication")}
             id="medication"
-            title="Medicinpåminnelse"
-            help="Bocka av när du tagit din medicin. Tiden ställer du in under Må bra."
+            title="Medicinpåminnelser"
+            help="Bocka av när du tagit din medicin. Tiderna ställer du in under Daglig rutin."
           >
-            <Link
-              href="/daglig-rutin"
-              className="flex items-center gap-4 p-5 surface-card hover:border-primary/40 transition-colors"
-            >
-              <div className="w-12 h-12 rounded-full bg-violet-100 text-violet-700 flex items-center justify-center shrink-0">
-                <Pill size={22} />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-medium truncate">
-                  {nextMedication.med.name}
-                  {nextMedication.med.dosage ? ` · ${nextMedication.med.dosage}` : ""}
-                </p>
-                <p className="text-sm text-muted-foreground">{nextMedication.nextTime}</p>
-              </div>
-              <ArrowRight size={16} className="text-muted-foreground shrink-0" />
-            </Link>
+            <div className="space-y-2">
+              {medicationDosesToday.map(({ med, time }) => (
+                <div
+                  key={`${med.id}-${time}`}
+                  className="flex items-center gap-4 p-4 surface-card"
+                >
+                  <div className="w-11 h-11 rounded-full bg-violet-100 text-violet-700 flex items-center justify-center shrink-0">
+                    <Pill size={20} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium truncate">
+                      {med.name}
+                      {med.dosage ? ` · ${med.dosage}` : ""}
+                    </p>
+                    <p className="text-sm text-muted-foreground">kl {time}</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => toggleTaken(med.id, time)}
+                    className="px-3 py-2 rounded-xl text-sm font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-colors shrink-0"
+                  >
+                    Tagen
+                  </button>
+                </div>
+              ))}
+              <Link
+                href="/daglig-rutin"
+                className="flex items-center justify-between px-4 py-3 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Hantera mediciner och tider
+                <ArrowRight size={16} className="shrink-0" />
+              </Link>
+            </div>
           </HomeSection>
         )}
 
