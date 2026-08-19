@@ -238,54 +238,70 @@ export default function DailyFlowCard({
           <h3 className="font-display font-bold text-ink">Ditt fokus idag</h3>
         </div>
 
-        {top.length === 0 ? (
+        {top.length === 0 && !rest ? (
           <p className="text-sm text-muted-foreground">
             Du har inget planerat just nu. Vill du dumpa något i QuickFlow?
           </p>
         ) : (
           <>
-            <div className="space-y-1">
-              {top.map((item, i) => {
-                const tone = FOCUS_TONES[i % FOCUS_TONES.length]!;
-                return (
-                  <button
-                    key={item.task.id}
-                    type="button"
-                    onClick={() => startFocus(item)}
-                    className="press flex w-full items-center gap-3 rounded-2xl p-2 text-left transition-colors hover:bg-secondary/50"
-                  >
-                    <span
-                      className={`grid h-9 w-9 shrink-0 place-items-center rounded-full text-sm font-bold ${tone.bg} ${tone.text}`}
+            {top.length > 0 && (
+              <div className="space-y-1">
+                {top.map((item, i) => {
+                  const tone = FOCUS_TONES[i % FOCUS_TONES.length]!;
+                  return (
+                    <button
+                      key={item.task.id}
+                      type="button"
+                      onClick={() => startFocus(item)}
+                      className="press flex w-full items-center gap-3 rounded-2xl p-2 text-left transition-colors hover:bg-secondary/50"
                     >
-                      {i + 1}
-                    </span>
-                    <span className="min-w-0 flex-1">
-                      <span className="block truncate font-semibold text-ink">
-                        {item.task.title}
+                      <span
+                        className={`grid h-9 w-9 shrink-0 place-items-center rounded-full text-sm font-bold ${tone.bg} ${tone.text}`}
+                      >
+                        {i + 1}
                       </span>
-                      <span className="block text-xs text-muted-foreground">
-                        {item.minutes} min · {PRIORITY_DOT[item.priority]} {item.priority} prioritet
-                        · {FRICTION_LABEL(item.friction)}
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate font-semibold text-ink">
+                          {item.task.title}
+                        </span>
+                        <span className="block text-xs text-muted-foreground">
+                          {item.minutes} min · {PRIORITY_DOT[item.priority]} {item.priority}{" "}
+                          prioritet · {FRICTION_LABEL(item.friction)}
+                        </span>
                       </span>
-                    </span>
-                    <ChevronRight size={16} className="shrink-0 text-muted-foreground" />
-                  </button>
-                );
-              })}
-            </div>
+                      <ChevronRight size={16} className="shrink-0 text-muted-foreground" />
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+
+            {rest && (
+              <div className="space-y-2 border-t border-border/60 pt-3">
+                {top.length > 0 && (
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                    Resten av dagen
+                  </p>
+                )}
+                {rest}
+              </div>
+            )}
+
             <Link
               href="/tasks"
               className="flex items-center justify-center gap-1 pt-1 text-sm font-semibold text-primary"
             >
               Se hela dagen <ArrowRight size={14} />
             </Link>
-            <button
-              type="button"
-              onClick={() => top[0] && startFocus(top[0])}
-              className="press flex w-full items-center justify-center gap-2 rounded-2xl bg-primary py-3.5 font-semibold text-primary-foreground"
-            >
-              <Zap size={18} /> Starta mitt Flow
-            </button>
+            {top.length > 0 && (
+              <button
+                type="button"
+                onClick={() => top[0] && startFocus(top[0])}
+                className="press flex w-full items-center justify-center gap-2 rounded-2xl bg-primary py-3.5 font-semibold text-primary-foreground"
+              >
+                <Zap size={18} /> Starta mitt Flow
+              </button>
+            )}
           </>
         )}
       </div>
