@@ -12,6 +12,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 - **Barn som eget livsområde** (2026-08-19): I Att göra (och övriga vyer med livsområden) kan en sak nu läggas i Barn, vid sidan av Vardag, Privat, Studier och Jobb.
 
 ### Changed
+- **Daily Flow borttaget från hemskärmen** (2026-08-19): Blocket "Daily Flow" visas inte längre på hemskärmen eftersom det överlappar "Dagens viktigaste". Komponenterna finns kvar och kan återanvändas på andra håll om vi vill.
 - **Framtida saker stannar på sin dag** (2026-08-19): Hemskärmens lista visar bara det som gäller idag (eller saknar datum). Uppgifter, händelser och påminnelser med ett datum framåt syns först den dagen – de finns kvar under "Visa alla uppgifter som inte är klara".
 - **Städad kodbas** (2026-08-18): Alla ~6 000 lintanmärkningar är åtgärdade – enhetlig formatering i hela projektet, tydliga typer i stället för lösa `any`, kommenterade undantag där de behövs och regler anpassade för UI-bibliotek och genererade filer. Inget i appens funktion har ändrats; alla flöden testades efteråt.
 

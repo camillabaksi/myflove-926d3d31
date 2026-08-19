@@ -14,11 +14,9 @@ import QuickflowCapture from "@/components/quickflow-capture";
 import QuickflowList from "@/components/quickflow-list";
 import PersonalNote from "@/components/personal-note";
 import HomeSection from "@/components/home-section";
-import DailyFlowCard from "@/components/daily-flow-card";
 import LifePuzzleCard from "@/components/life-puzzle-card";
 import QuickflowTriage from "@/components/quickflow-triage";
 import FlowReset from "@/components/flow-reset";
-import DayRebuild from "@/components/day-rebuild";
 
 import FlowOnboarding from "@/components/flow-onboarding";
 import StreakCard from "@/components/streak-card";
@@ -45,7 +43,6 @@ import { useViewMode } from "@/lib/view-mode";
  */
 const SECTION_AREAS: Record<string, LifeArea[]> = {
   livspussel: ["vardag", "privat", "studier", "jobb"],
-  dailyflow: ["vardag", "privat", "studier", "jobb"],
   reset: ["vardag", "privat", "studier", "jobb"],
   quickflow: ["vardag", "privat", "studier", "jobb"],
   streak: ["vardag"],
@@ -61,7 +58,7 @@ const SECTION_AREAS: Record<string, LifeArea[]> = {
 };
 
 /** Vad som är kvar i förenklad vy – det du faktiskt behöver just nu. */
-const SIMPLE_SECTIONS = ["livspussel", "dailyflow", "today", "shortcuts", "help"];
+const SIMPLE_SECTIONS = ["livspussel", "today", "shortcuts", "help"];
 
 import {
   useFocus,
@@ -138,7 +135,6 @@ export default function Home() {
   const limit = helpPlan?.taskLimit ?? 3;
   const visibleTasks = showAllTasks ? areaTasks : prioritizedTasks.slice(0, limit);
   const hiddenTaskCount = Math.max(0, areaTasks.length - prioritizedTasks.slice(0, limit).length);
-
 
   const now = Date.now();
   const pastOrTodayTransactions = transactions.filter((t) => t.date <= now);
@@ -281,20 +277,6 @@ export default function Home() {
             help="Hur dagens olika delar hänger ihop – energi, deadlines, familj, jobb och studier. Låg kapacitet ger färre krav, inte fler."
           >
             <LifePuzzleCard />
-          </HomeSection>
-        )}
-
-        {showSection("dailyflow") && (
-          <HomeSection
-            style={ord("dailyflow")}
-            id="dailyflow"
-            title="Daily Flow"
-            help="Berätta hur dagen ser ut så föreslår jag ett par saker som faktiskt går att göra. Du bestämmer alltid själv."
-          >
-            <div className="space-y-4">
-              <DayRebuild />
-              <DailyFlowCard />
-            </div>
           </HomeSection>
         )}
 
