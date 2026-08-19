@@ -306,8 +306,10 @@ export default function Home() {
           >
             <div className="space-y-4">
               <DayRebuild />
-              <DailyFlowCard onTopTasks={setFlowFocusIds} />
-
+              <DailyFlowCard
+                onTopTasks={setFlowFocusIds}
+                rest={
+                  <div className="space-y-3">
               {currentFocus && !helpPlan && (
                 <button
                   onClick={(e) => {
