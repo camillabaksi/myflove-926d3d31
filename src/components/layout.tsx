@@ -263,6 +263,12 @@ export default function Layout({ children }: LayoutProps) {
       hint: "Logga hur du mår och hur mycket ork du har",
     },
     {
+      href: "/energifloede",
+      label: "Energiflöde",
+      icon: Zap,
+      hint: "Vad som ger och tar energi – vägs in i din FlowScore",
+    },
+    {
       href: "/traning",
       label: "Träning",
       icon: Dumbbell,
