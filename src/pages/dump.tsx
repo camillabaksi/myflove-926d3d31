@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "@tanstack/react-router";
 
 // Minimala typer för webbläsarens SpeechRecognition (saknas i TS lib.dom).
 type SpeechRecognitionStreamEvent = {
