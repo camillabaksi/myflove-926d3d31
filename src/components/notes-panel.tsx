@@ -94,6 +94,19 @@ export default function NotesPanel() {
     toast.success(`Anteckningen blev ${DESTINATION_META[d].label.toLowerCase()}.`);
   };
 
+  /** Tillbaka till Quickflow – anteckningen blir ett aktivt flow-block igen. */
+  const backToQuickflow = (note: FlowNote) => {
+    addQuickflow({ text: note.text, level: "tanke" });
+    removeNote(note.id);
+    if (editingId === note.id) cancelEdit();
+    toast.success("Tanken ligger i Quickflow igen. 💜", {
+      action: {
+        label: "Ångra",
+        onClick: () => addNote(note.text, note.area),
+      },
+    });
+  };
+
   const CONVERSIONS: QuickflowDestination[] = ["paminnelse", "inkop", "studier", "jobb"];
 
   return (
