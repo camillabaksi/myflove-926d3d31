@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { Check, NotebookPen, Pencil, Trash2, Wand2, X } from "lucide-react";
+import { Check, NotebookPen, Pencil, Trash2, Undo2, Wand2, X } from "lucide-react";
 import { useNotes } from "@/hooks/use-notes";
+import { useQuickflow } from "@/hooks/use-quickflow";
 import { useTasks, useReminders, useDumpIdeas } from "@/hooks/use-data";
 import { useSharedShoppingList } from "@/hooks/use-shared-shopping-list";
 import NoteConvertDialog, { type ConvertTarget } from "@/components/note-convert-dialog";
@@ -24,6 +25,7 @@ export default function NotesPanel() {
   const { addReminder } = useReminders();
   const { addItem: addShoppingItem } = useSharedShoppingList();
   const { ideas, clearIdeas } = useDumpIdeas();
+  const { add: addQuickflow } = useQuickflow();
 
   // Engångsflytt: gamla idébanken bor numera här bland anteckningarna.
   const movedIdeas = useRef(false);
@@ -90,6 +92,19 @@ export default function NotesPanel() {
     else return;
     updateNote(note.id, { convertedAt: Date.now(), convertedTo: d });
     toast.success(`Anteckningen blev ${DESTINATION_META[d].label.toLowerCase()}.`);
+  };
+
+  /** Tillbaka till Quickflow – anteckningen blir ett aktivt flow-block igen. */
+  const backToQuickflow = (note: FlowNote) => {
+    addQuickflow({ text: note.text, level: "tanke" });
+    removeNote(note.id);
+    if (editingId === note.id) cancelEdit();
+    toast.success("Tanken ligger i Quickflow igen. 💜", {
+      action: {
+        label: "Ångra",
+        onClick: () => addNote(note.text, note.area),
+      },
+    });
   };
 
   const CONVERSIONS: QuickflowDestination[] = ["paminnelse", "inkop", "studier", "jobb"];
@@ -210,6 +225,13 @@ export default function NotesPanel() {
                   className="w-full rounded-full bg-primary text-primary-foreground px-4 py-2 text-sm font-semibold inline-flex items-center justify-center gap-2"
                 >
                   <Wand2 size={16} /> Omvandla till …
+                </button>
+                <button
+                  type="button"
+                  onClick={() => backToQuickflow(note)}
+                  className="w-full rounded-full border border-border bg-card px-4 py-2 text-sm font-medium inline-flex items-center justify-center gap-2"
+                >
+                  <Undo2 size={16} /> Tillbaka till Quickflow
                 </button>
                 <div className="flex flex-wrap gap-2">
                   {CONVERSIONS.map((d) => (
