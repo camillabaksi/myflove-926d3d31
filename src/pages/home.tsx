@@ -341,7 +341,7 @@ export default function Home() {
                 </button>
               )}
 
-              {visibleTasks.length === 0 && !currentFocus ? (
+              {visibleTasks.length === 0 && !currentFocus && flowFocusIds.length === 0 ? (
                 <div className="text-center py-10 px-6 bg-secondary/30 rounded-3xl border border-dashed border-border animate-fade-in">
                   <div className="mx-auto mb-3 w-14 h-14 rounded-full bg-sage/40 flex items-center justify-center">
                     <Sparkles size={26} className="text-primary" />
