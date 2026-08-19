@@ -528,7 +528,7 @@ export default function Home() {
                 >
                   {showAllTasks
                     ? "Visa bara det viktigaste"
-                    : `Visa alla uppgifter som inte är klara (${prioritizedTasks.length})`}
+                    : `Visa alla uppgifter som inte är klara (${areaTasks.length})`}
                 </button>
               )}
             </div>
