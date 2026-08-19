@@ -306,8 +306,10 @@ export default function Home() {
           >
             <div className="space-y-4">
               <DayRebuild />
-              <DailyFlowCard onTopTasks={setFlowFocusIds} />
-
+              <DailyFlowCard
+                onTopTasks={setFlowFocusIds}
+                rest={
+                  <div className="space-y-3">
               {currentFocus && !helpPlan && (
                 <button
                   onClick={(e) => {
@@ -396,6 +398,9 @@ export default function Home() {
                     : `Visa alla uppgifter som inte är klara (${areaTasks.length})`}
                 </button>
               )}
+                  </div>
+                }
+              />
             </div>
           </HomeSection>
         )}

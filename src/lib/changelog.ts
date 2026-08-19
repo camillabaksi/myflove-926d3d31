@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Ett sammanhängande Daily Flow-kort – Ditt fokus idag och dagens viktigaste sitter ihop i samma kort med \"Resten av dagen\" direkt under fokuslistan (2026-08-19)",
       "Inga dubbletter på hemskärmen – en sak som redan ligger i Ditt fokus idag eller som dagens fokus upprepas inte i listan under (2026-08-19)",
       "Daily Flow och Dagens viktigaste är ett och samma block – incheckning, Ditt fokus idag och dagens viktigaste ligger nu tillsammans på hemskärmen (2026-08-19)",
       "Framtida saker stannar på sin dag – hemskärmen visar bara det som gäller idag eller saknar datum, resten dyker upp när det är dags (2026-08-19)",

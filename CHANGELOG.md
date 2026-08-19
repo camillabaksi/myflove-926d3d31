@@ -12,6 +12,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 - **Barn som eget livsområde** (2026-08-19): I Att göra (och övriga vyer med livsområden) kan en sak nu läggas i Barn, vid sidan av Vardag, Privat, Studier och Jobb.
 
 ### Changed
+- **Ett sammanhängande Daily Flow-kort** (2026-08-19): Ditt fokus idag och dagens viktigaste ligger nu i samma kort – fokuslistan högst upp och "Resten av dagen" direkt under, i stället för två separata kort.
 - **Inga dubbletter i Daily Flow** (2026-08-19): En uppgift som redan står i "Ditt fokus idag" eller som dagens fokus visas inte en gång till i listan under.
 - **Daily Flow och Dagens viktigaste är nu ett block** (2026-08-19): Daily Flow är tillbaka på hemskärmen och innehåller incheckningen, Ditt fokus idag och dagens viktigaste saker i samma sektion – i stället för två block som visade samma sak.
 - **Framtida saker stannar på sin dag** (2026-08-19): Hemskärmens lista visar bara det som gäller idag (eller saknar datum). Uppgifter, händelser och påminnelser med ett datum framåt syns först den dagen – de finns kvar under "Visa alla uppgifter som inte är klara".
