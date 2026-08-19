@@ -9,6 +9,7 @@ import {
   Sparkles,
   Wallet,
   Navigation,
+  NotebookPen,
   Calendar,
   Menu,
   X,
