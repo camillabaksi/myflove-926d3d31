@@ -8,6 +8,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 ## [Unreleased]
 
 ### Added
+- **Energiflöde som egen del i Hälsa** (2026-08-19): Energiflöde ligger nu som en egen ingång i Hälsa-gruppen under Mer, vid sidan av Må bra, Träning, FlowScore och Statistik.
 - **Barn som eget livsområde** (2026-08-19): I Att göra (och övriga vyer med livsområden) kan en sak nu läggas i Barn, vid sidan av Vardag, Privat, Studier och Jobb.
 
 ### Changed
