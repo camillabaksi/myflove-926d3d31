@@ -6,12 +6,13 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-08-18";
+export const CHANGELOG_UPDATED = "2026-08-19";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Energiflöde som egen rubrik under Må bra – ligger nu som en egen hopfällbar sektion i Alla-vyn, bredvid Mående och Energi (2026-08-19)",
       "Stop-samtal sparas – chattarna från Stop-knappen hamnar bland dina Flow-samtal och går att läsa igen (2026-08-18)",
       "Uppgifter försvinner inte längre vid synk – en tom lista kan inte längre skriva över dina sparade uppgifter i molnet (2026-08-18)",
       "Flow svarar igen när du startar ett nytt samtal – frågan skickas klart innan sidan byter till chatten (2026-08-18)",

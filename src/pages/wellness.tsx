@@ -5,8 +5,6 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { MoodContent } from "@/pages/mood";
 import { EnergyContent } from "@/pages/energy-map";
 import { EnergyFlowContent } from "@/pages/energy-flow";
-import { Link } from "wouter";
-import { MyFloveCard } from "@/components/myflove";
 import { Heart, Smile, Battery, Hand, Zap } from "lucide-react";
 
 import CollapsibleSection from "@/components/collapsible-section";
@@ -57,7 +55,6 @@ export default function WellnessPage() {
             </TabsTrigger>
           </TabsList>
 
-
           <TabsContent value="both" className="mt-6 space-y-10">
             <CollapsibleSection
               id="mande"
@@ -81,15 +78,18 @@ export default function WellnessPage() {
               headingClassName="text-lg font-semibold"
             >
               <EnergyContent showHeader={false} />
-              <Link href="/energifloede">
-                <MyFloveCard tone="lavender" className="mt-4 cursor-pointer p-4">
-                  <div className="font-medium text-ink">🔋 Energiflöde</div>
-                  <p className="text-sm text-muted-foreground">
-                    Vad ger och tar energi just nu? Det påverkar hur mycket planen förväntar sig av
-                    dig.
-                  </p>
-                </MyFloveCard>
-              </Link>
+            </CollapsibleSection>
+            <div className="h-px bg-border" />
+            <CollapsibleSection
+              id="energiflode"
+              title={
+                <span className="flex items-center gap-2">
+                  <Zap size={18} className="text-primary" /> Energiflöde
+                </span>
+              }
+              headingClassName="text-lg font-semibold"
+            >
+              <EnergyFlowContent showHeader={false} />
             </CollapsibleSection>
           </TabsContent>
 
@@ -104,7 +104,6 @@ export default function WellnessPage() {
           <TabsContent value="flow" className="mt-6">
             <EnergyFlowContent showHeader={false} />
           </TabsContent>
-
         </Tabs>
       </div>
     </Layout>
