@@ -77,6 +77,7 @@ import IntroTour from "@/components/intro-tour";
 import { useUserProfile } from "@/hooks/use-user-profile";
 import { emptyState } from "@/lib/flow-voice";
 import { buildHelpPlan, type HelpFeelingId, type HelpPlan } from "@/lib/help-me";
+import { focusTasksForToday } from "@/lib/focus-rules";
 import { HeartHandshake, CheckCircle2, Circle, Pill, Sparkles, ArrowRight } from "lucide-react";
 
 function sortTasksByPriority(tasks: Task[]): Task[] {
