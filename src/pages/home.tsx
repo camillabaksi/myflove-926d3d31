@@ -398,6 +398,9 @@ export default function Home() {
                     : `Visa alla uppgifter som inte är klara (${areaTasks.length})`}
                 </button>
               )}
+                  </div>
+                }
+              />
             </div>
           </HomeSection>
         )}
