@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { Check, NotebookPen, Pencil, Trash2, Wand2, X } from "lucide-react";
+import { Check, NotebookPen, Pencil, Trash2, Undo2, Wand2, X } from "lucide-react";
 import { useNotes } from "@/hooks/use-notes";
+import { useQuickflow } from "@/hooks/use-quickflow";
 import { useTasks, useReminders, useDumpIdeas } from "@/hooks/use-data";
 import { useSharedShoppingList } from "@/hooks/use-shared-shopping-list";
 import NoteConvertDialog, { type ConvertTarget } from "@/components/note-convert-dialog";
