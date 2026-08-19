@@ -7,7 +7,7 @@ import { useSharedShoppingList } from "@/hooks/use-shared-shopping-list";
 import NoteConvertDialog, { type ConvertTarget } from "@/components/note-convert-dialog";
 import { suggestForNote, type FlowNote } from "@/lib/notes";
 import { DESTINATION_META, shoppingTitleFrom, type QuickflowDestination } from "@/lib/quickflow";
-import { AREA_META, LIFE_AREAS, type LifeArea } from "@/lib/life-areas";
+import { ALL_AREAS, AREA_META, type LifeArea } from "@/lib/life-areas";
 
 /**
  * Anteckningar – det du bara ville få ur huvudet.
@@ -120,7 +120,7 @@ export default function NotesPanel() {
                     className="rounded-xl border border-border bg-card px-3 py-2 text-sm outline-none"
                   >
                     <option value="">Inget livsområde</option>
-                    {LIFE_AREAS.map((area) => (
+                    {ALL_AREAS.map((area) => (
                       <option key={area} value={area}>
                         {AREA_META[area].label}
                       </option>
