@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
-import { Check, Clock, MapPin, Trash2, Undo2, X } from "lucide-react";
+import { Check, Clock, MapPin, NotebookPen, Trash2, Undo2, X } from "lucide-react";
 import { useQuickflow } from "@/hooks/use-quickflow";
+import { useNotes } from "@/hooks/use-notes";
 import CollapsibleSection from "@/components/collapsible-section";
 import { useSavedStores } from "@/hooks/use-data";
 import { sendPushNotification } from "@/lib/push-notifications";
@@ -10,11 +11,13 @@ import { celebrateFromEvent } from "@/lib/celebrate";
 import {
   LEVEL_META,
   formatWhen,
+  guessArea,
   guessEmoji,
   isOverdue,
   shouldAskAboutThought,
   type QuickflowItem,
 } from "@/lib/quickflow";
+
 
 const PLACE_CHECK_MS = 3 * 60 * 1000;
 const NEARBY_M = 300;
