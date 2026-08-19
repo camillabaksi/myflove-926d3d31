@@ -53,7 +53,6 @@ const SECTION_AREAS: Record<string, LifeArea[]> = {
   shortcuts: ["vardag", "privat", "studier", "jobb"],
   week: ["vardag", "privat", "studier", "jobb"],
   suggestions: ["vardag", "privat"],
-  today: ["vardag", "privat", "studier", "jobb"],
   bills: ["privat"],
   medication: ["vardag", "privat"],
   push: ["vardag"],
@@ -61,7 +60,7 @@ const SECTION_AREAS: Record<string, LifeArea[]> = {
 };
 
 /** Vad som är kvar i förenklad vy – det du faktiskt behöver just nu. */
-const SIMPLE_SECTIONS = ["livspussel", "dailyflow", "today", "shortcuts", "help"];
+const SIMPLE_SECTIONS = ["livspussel", "dailyflow", "shortcuts", "help"];
 
 import {
   useFocus,
