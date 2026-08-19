@@ -23,7 +23,7 @@ type SpeechRecognitionWindow = {
 };
 import Layout from "@/components/layout";
 import { Button } from "@/components/ui/button";
-import { useTasks, useShoppingList, useReminders, useDumpIdeas, useMoods } from "@/hooks/use-data";
+import { useTasks, useShoppingList, useReminders, useMoods } from "@/hooks/use-data";
 import {
   parseDump,
   CATEGORY_LABELS,
@@ -47,8 +47,6 @@ import {
   Calendar,
   Lightbulb,
   Check,
-  Trash2,
-  Inbox,
   Smile,
   NotebookPen,
 } from "lucide-react";
@@ -92,9 +90,7 @@ export default function Dump() {
   const { addItem } = useShoppingList();
   const { addReminder } = useReminders();
   const { addMood } = useMoods();
-  const { ideas, deleteIdea } = useDumpIdeas();
   const { add: addQuickflow, absorb: absorbQuickflow } = useQuickflow();
-  const [ideaCategories, setIdeaCategories] = useState<Record<string, DumpCategory>>({});
   const { toast } = useToast();
 
   useEffect(() => {
@@ -172,19 +168,6 @@ export default function Dump() {
     setThoughts((prev) =>
       prev ? prev.map((t) => (t.id === thought.id ? { ...t, added: true } : t)) : prev,
     );
-  };
-
-  const moveIdea = (idea: { id: string; text: string }) => {
-    const category = ideaCategories[idea.id] ?? "idea";
-    if (category === "task") addTask(idea.text);
-    else if (category === "shopping") addItem(idea.text);
-    else if (category === "reminder")
-      addReminder(idea.text, new Date().toISOString().split("T")[0]!);
-    else if (category === "mood") addMood(3, idea.text);
-    if (category === "idea") addQuickflow({ text: idea.text, level: "tanke" });
-    else absorbQuickflow(idea.text);
-    deleteIdea(idea.id);
-    toast({ description: getRandomEncouragement() });
   };
 
   const addAll = () => {
@@ -361,61 +344,6 @@ export default function Dump() {
           <QuickflowRulesSettings />
         </CollapsibleSection>
 
-        {ideas.length > 0 && (
-          <CollapsibleSection
-            title={
-              <span className="flex items-center gap-2">
-                <Inbox size={20} /> Äldre idébank
-              </span>
-            }
-            id="Äldre idébank"
-            headingClassName="font-semibold"
-            className="pt-4"
-          >
-            <div className="space-y-3">
-              {ideas.map((idea) => (
-                <div
-                  key={idea.id}
-                  className="bg-card p-4 rounded-2xl border border-border shadow-sm flex flex-wrap items-center gap-3"
-                >
-                  <p className="text-foreground flex-1 min-w-[10rem]">{idea.text}</p>
-                  <select
-                    value={ideaCategories[idea.id] ?? "idea"}
-                    onChange={(e) =>
-                      setIdeaCategories((prev) => ({
-                        ...prev,
-                        [idea.id]: e.target.value as DumpCategory,
-                      }))
-                    }
-                    className="text-sm border border-border rounded-xl px-2 py-1.5 bg-secondary/50 outline-none"
-                  >
-                    {CATEGORY_OPTIONS.map((cat) => (
-                      <option key={cat} value={cat}>
-                        {CATEGORY_LABELS[cat]}
-                      </option>
-                    ))}
-                  </select>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => moveIdea(idea)}
-                    className="rounded-xl text-primary hover:bg-primary/10 shrink-0"
-                  >
-                    Flytta
-                  </Button>
-                  <button
-                    type="button"
-                    onClick={() => deleteIdea(idea.id)}
-                    className="p-2 text-muted-foreground hover:text-destructive rounded-lg shrink-0"
-                    aria-label="Ta bort idé"
-                  >
-                    <Trash2 size={18} />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </CollapsibleSection>
-        )}
       </div>
     </Layout>
   );

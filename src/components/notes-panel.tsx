@@ -1,12 +1,17 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Check, NotebookPen, Pencil, Trash2, Wand2, X } from "lucide-react";
 import { useNotes } from "@/hooks/use-notes";
-import { useTasks, useReminders } from "@/hooks/use-data";
+import { useTasks, useReminders, useDumpIdeas } from "@/hooks/use-data";
 import { useSharedShoppingList } from "@/hooks/use-shared-shopping-list";
 import NoteConvertDialog, { type ConvertTarget } from "@/components/note-convert-dialog";
 import { suggestForNote, type FlowNote } from "@/lib/notes";
-import { DESTINATION_META, shoppingTitleFrom, type QuickflowDestination } from "@/lib/quickflow";
+import {
+  DESTINATION_META,
+  guessArea,
+  shoppingTitleFrom,
+  type QuickflowDestination,
+} from "@/lib/quickflow";
 import { ALL_AREAS, AREA_META, type LifeArea } from "@/lib/life-areas";
 
 /**
@@ -18,6 +23,25 @@ export default function NotesPanel() {
   const { addTask } = useTasks();
   const { addReminder } = useReminders();
   const { addItem: addShoppingItem } = useSharedShoppingList();
+  const { ideas, clearIdeas } = useDumpIdeas();
+
+  // Engångsflytt: gamla idébanken bor numera här bland anteckningarna.
+  const movedIdeas = useRef(false);
+  useEffect(() => {
+    if (movedIdeas.current || ideas.length === 0) return;
+    movedIdeas.current = true;
+    const count = ideas.length;
+    ideas.forEach((idea) => addNote(idea.text, guessArea(idea.text)));
+    clearIdeas();
+    toast.success(
+      count === 1
+        ? "Din gamla idé ligger nu bland anteckningarna."
+        : `Dina ${count} gamla idéer ligger nu bland anteckningarna.`,
+    );
+    // Körs en gång när idéerna hunnit laddas.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ideas.length]);
+
 
   const [draft, setDraft] = useState("");
   const [convertNote, setConvertNote] = useState<FlowNote | null>(null);

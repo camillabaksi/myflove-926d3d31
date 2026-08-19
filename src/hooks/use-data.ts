@@ -738,7 +738,10 @@ export function useDumpIdeas() {
     setIdeas(ideas.filter((i) => i.id !== id));
   };
 
-  return { ideas, addIdea, deleteIdea };
+  /** Töm idébanken – används när idéerna flyttat in i Anteckningar. */
+  const clearIdeas = () => setIdeas([]);
+
+  return { ideas, addIdea, deleteIdea, clearIdeas };
 }
 
 export interface SavedStore {

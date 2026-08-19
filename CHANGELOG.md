@@ -8,6 +8,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 ## [Unreleased]
 
 ### Added
+- **Idébanken bor i Anteckningar** (2026-08-19): Den gamla idébanken i Quickflow är borta – dina sparade idéer flyttas automatiskt in bland Anteckningar med gissat livsområde, så allt ligger på ett ställe.
 - **Flytta befintliga tankar till Anteckningar** (2026-08-19): Varje tanke i "Du bad mig komma ihåg" har nu en anteckningsknapp – tanken flyttas till Anteckningar med gissat livsområde.
 - **Redigera och radera anteckningar** (2026-08-19): Varje anteckning kan ändras direkt i listan – text och livsområde – och tas bort med möjlighet att ångra.
 - **Spara direkt som anteckning från Quickflow** (2026-08-19): I Kom ihåg-rutan finns nu "📝 Spara som anteckning" – tanken landar direkt bland Anteckningar i stället för i triagelistan.
