@@ -1,12 +1,17 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Check, NotebookPen, Pencil, Trash2, Wand2, X } from "lucide-react";
 import { useNotes } from "@/hooks/use-notes";
-import { useTasks, useReminders } from "@/hooks/use-data";
+import { useTasks, useReminders, useDumpIdeas } from "@/hooks/use-data";
 import { useSharedShoppingList } from "@/hooks/use-shared-shopping-list";
 import NoteConvertDialog, { type ConvertTarget } from "@/components/note-convert-dialog";
 import { suggestForNote, type FlowNote } from "@/lib/notes";
-import { DESTINATION_META, shoppingTitleFrom, type QuickflowDestination } from "@/lib/quickflow";
+import {
+  DESTINATION_META,
+  guessArea,
+  shoppingTitleFrom,
+  type QuickflowDestination,
+} from "@/lib/quickflow";
 import { ALL_AREAS, AREA_META, type LifeArea } from "@/lib/life-areas";
 
 /**
