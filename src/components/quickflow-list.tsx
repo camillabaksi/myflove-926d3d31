@@ -40,6 +40,8 @@ const SNOOZE_OPTIONS = [
 
 export function QuickflowList() {
   const { items, openItems, complete, uncomplete, remove, snooze, update } = useQuickflow();
+  const { addNote } = useNotes();
+
   const { savedStores } = useSavedStores();
   const [now, setNow] = useState(() => Date.now());
   const [snoozeFor, setSnoozeFor] = useState<string | null>(null);
