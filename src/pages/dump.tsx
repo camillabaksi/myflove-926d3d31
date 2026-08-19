@@ -47,8 +47,6 @@ import {
   Calendar,
   Lightbulb,
   Check,
-  Trash2,
-  Inbox,
   Smile,
   NotebookPen,
 } from "lucide-react";
