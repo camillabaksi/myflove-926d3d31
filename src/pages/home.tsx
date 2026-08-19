@@ -136,7 +136,6 @@ export default function Home() {
   const visibleTasks = showAllTasks ? areaTasks : prioritizedTasks.slice(0, limit);
   const hiddenTaskCount = Math.max(0, areaTasks.length - prioritizedTasks.slice(0, limit).length);
 
-
   const now = Date.now();
   const pastOrTodayTransactions = transactions.filter((t) => t.date <= now);
   const balance = pastOrTodayTransactions.reduce(
