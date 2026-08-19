@@ -290,6 +290,12 @@ export default function Layout({ children }: LayoutProps) {
       essential: true,
     },
     {
+      href: "/anteckningar",
+      label: "Anteckningar",
+      icon: NotebookPen,
+      hint: "Din idébank – tankar utan krav",
+    },
+    {
       href: "/kalender",
       label: "Kalender",
       icon: Calendar,
