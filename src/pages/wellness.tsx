@@ -55,7 +55,6 @@ export default function WellnessPage() {
             </TabsTrigger>
           </TabsList>
 
-
           <TabsContent value="both" className="mt-6 space-y-10">
             <CollapsibleSection
               id="mande"
@@ -105,7 +104,6 @@ export default function WellnessPage() {
           <TabsContent value="flow" className="mt-6">
             <EnergyFlowContent showHeader={false} />
           </TabsContent>
-
         </Tabs>
       </div>
     </Layout>
