@@ -168,6 +168,19 @@ export function QuickflowList() {
           <FlowItemActions itemId={`qf-${item.id}`} only="edit" size={15} />
           <button
             type="button"
+            aria-label="Spara som anteckning"
+            title="Spara som anteckning"
+            onClick={() => {
+              addNote(item.text, guessArea(item.text));
+              remove(item.id);
+              toast.success("Sparad bland dina anteckningar. 📝");
+            }}
+            className="w-9 h-9 rounded-full bg-secondary text-muted-foreground flex items-center justify-center hover:text-primary transition-colors"
+          >
+            <NotebookPen size={15} />
+          </button>
+
+            type="button"
             aria-label="Klar"
             onClick={(e) => {
               celebrateFromEvent(e);
