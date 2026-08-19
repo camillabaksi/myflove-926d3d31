@@ -179,8 +179,9 @@ export function QuickflowList() {
           >
             <NotebookPen size={15} />
           </button>
-
+          <button
             type="button"
+
             aria-label="Klar"
             onClick={(e) => {
               celebrateFromEvent(e);
