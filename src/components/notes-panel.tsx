@@ -23,6 +23,27 @@ export default function NotesPanel() {
   const { addTask } = useTasks();
   const { addReminder } = useReminders();
   const { addItem: addShoppingItem } = useSharedShoppingList();
+  const { ideas, deleteIdea } = useDumpIdeas();
+
+  // Engångsflytt: gamla idébanken bor numera här bland anteckningarna.
+  const movedIdeas = useRef(false);
+  useEffect(() => {
+    if (movedIdeas.current || ideas.length === 0) return;
+    movedIdeas.current = true;
+    const count = ideas.length;
+    ideas.forEach((idea) => {
+      addNote(idea.text, guessArea(idea.text));
+      deleteIdea(idea.id);
+    });
+    toast.success(
+      count === 1
+        ? "Din gamla idé ligger nu bland anteckningarna."
+        : `Dina ${count} gamla idéer ligger nu bland anteckningarna.`,
+    );
+    // Körs en gång när idéerna hunnit laddas.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ideas.length]);
+
 
   const [draft, setDraft] = useState("");
   const [convertNote, setConvertNote] = useState<FlowNote | null>(null);
