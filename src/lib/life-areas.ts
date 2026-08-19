@@ -4,7 +4,7 @@
 import { useMemo } from "react";
 import { useLocalStorage } from "./storage";
 
-export type LifeArea = "vardag" | "studier" | "jobb" | "privat";
+export type LifeArea = "vardag" | "studier" | "jobb" | "privat" | "barn";
 export type AreaFilter = LifeArea | "alla";
 
 export interface AreaMeta {
