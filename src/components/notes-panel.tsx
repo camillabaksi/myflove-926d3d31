@@ -23,7 +23,7 @@ export default function NotesPanel() {
   const { addTask } = useTasks();
   const { addReminder } = useReminders();
   const { addItem: addShoppingItem } = useSharedShoppingList();
-  const { ideas, deleteIdea } = useDumpIdeas();
+  const { ideas, clearIdeas } = useDumpIdeas();
 
   // Engångsflytt: gamla idébanken bor numera här bland anteckningarna.
   const movedIdeas = useRef(false);
@@ -31,10 +31,8 @@ export default function NotesPanel() {
     if (movedIdeas.current || ideas.length === 0) return;
     movedIdeas.current = true;
     const count = ideas.length;
-    ideas.forEach((idea) => {
-      addNote(idea.text, guessArea(idea.text));
-      deleteIdea(idea.id);
-    });
+    ideas.forEach((idea) => addNote(idea.text, guessArea(idea.text)));
+    clearIdeas();
     toast.success(
       count === 1
         ? "Din gamla idé ligger nu bland anteckningarna."
