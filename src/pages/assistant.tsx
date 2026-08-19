@@ -80,6 +80,7 @@ export default function Assistant({ chatId }: { chatId?: string }) {
     const home: Record<LifeArea, string> = {
       vardag: "/hem",
       privat: "/familj",
+      barn: "/barn",
       studier: "/studyflow",
       jobb: "/workflow",
     };
