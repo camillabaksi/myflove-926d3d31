@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "@tanstack/react-router";
 
 // Minimala typer för webbläsarens SpeechRecognition (saknas i TS lib.dom).
 type SpeechRecognitionStreamEvent = {
@@ -52,7 +53,6 @@ import {
 } from "lucide-react";
 import CollapsibleSection from "@/components/collapsible-section";
 import QuickflowRulesSettings from "@/components/quickflow-rules-settings";
-import NotesPanel from "@/components/notes-panel";
 import { MyFloveListening } from "@/components/myflove/motion";
 
 interface SortableThought extends ParsedThought {
@@ -318,18 +318,18 @@ export default function Dump() {
         <InsightQuickflowHint />
         <QuickflowList />
 
-        <CollapsibleSection
-          title={
-            <span className="flex items-center gap-2">
-              <NotebookPen size={20} /> Anteckningar
-            </span>
-          }
-          id="QuickFlow-anteckningar"
-          headingClassName="font-semibold"
-          className="pt-4"
+        <Link
+          to="/anteckningar"
+          className="surface-card mt-4 flex items-center gap-3 p-4 text-left hover:border-primary/40"
         >
-          <NotesPanel />
-        </CollapsibleSection>
+          <NotebookPen size={20} className="text-primary" />
+          <span className="flex-1">
+            <span className="block font-semibold text-ink">Anteckningar &amp; idébank</span>
+            <span className="block text-sm text-muted-foreground">
+              Tankar utan krav bor i en egen del under Flow.
+            </span>
+          </span>
+        </Link>
 
         <CollapsibleSection
           title={

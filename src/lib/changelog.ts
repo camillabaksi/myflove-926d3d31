@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Anteckningar & idébank har en egen del under Flow – öppna Anteckningar direkt från Mer-menyn, Quickflow länkar dit (2026-08-19)",
       'Flytta en anteckning tillbaka till Quickflow – knappen "Tillbaka till Quickflow" gör anteckningen till ett aktivt flow-block igen (2026-08-19)',
       "Idébanken bor i Anteckningar – gamla idéer från Quickflow flyttas automatiskt in bland dina anteckningar (2026-08-19)",
       "Flytta befintliga tankar till Anteckningar – tryck på anteckningsikonen på en sparad Quickflow-tanke så flyttas den till Anteckningar (2026-08-19)",
