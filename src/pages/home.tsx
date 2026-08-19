@@ -77,6 +77,7 @@ import IntroTour from "@/components/intro-tour";
 import { useUserProfile } from "@/hooks/use-user-profile";
 import { emptyState } from "@/lib/flow-voice";
 import { buildHelpPlan, type HelpFeelingId, type HelpPlan } from "@/lib/help-me";
+import { focusTasksForToday } from "@/lib/focus-rules";
 import { HeartHandshake, CheckCircle2, Circle, Pill, Sparkles, ArrowRight } from "lucide-react";
 
 function sortTasksByPriority(tasks: Task[]): Task[] {
@@ -121,7 +122,7 @@ export default function Home() {
 
   // Prov och automatiska repetitionspass ska aldrig dyka upp bland dagens
   // viktigaste – de känns övermäktiga. De syns bara om man lägger in dem själv.
-  const prioritizedTasks = useMemo(
+  const areaTasks = useMemo(
     () =>
       sortTasksByPriority(
         filterByArea(activeTasks, activeArea).filter(
@@ -131,9 +132,13 @@ export default function Home() {
     [activeTasks, activeArea],
   );
 
+  // Saker med ett datum framåt hör hemma på sin egen dag – inte här.
+  const prioritizedTasks = useMemo(() => focusTasksForToday(areaTasks), [areaTasks]);
+
   const limit = helpPlan?.taskLimit ?? 3;
-  const visibleTasks = showAllTasks ? prioritizedTasks : prioritizedTasks.slice(0, limit);
-  const hiddenTaskCount = Math.max(0, prioritizedTasks.length - limit);
+  const visibleTasks = showAllTasks ? areaTasks : prioritizedTasks.slice(0, limit);
+  const hiddenTaskCount = Math.max(0, areaTasks.length - prioritizedTasks.slice(0, limit).length);
+
 
   const now = Date.now();
   const pastOrTodayTransactions = transactions.filter((t) => t.date <= now);
@@ -523,7 +528,7 @@ export default function Home() {
                 >
                   {showAllTasks
                     ? "Visa bara det viktigaste"
-                    : `Visa alla uppgifter som inte är klara (${prioritizedTasks.length})`}
+                    : `Visa alla uppgifter som inte är klara (${areaTasks.length})`}
                 </button>
               )}
             </div>
