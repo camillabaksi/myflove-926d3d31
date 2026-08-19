@@ -8,6 +8,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 ## [Unreleased]
 
 ### Added
+- **Anteckningar & idébank som egen del under Flow** (2026-08-19): Anteckningarna har fått en egen sida (/anteckningar) i Flow-gruppen i stället för att ligga inbakade i Quickflow – Quickflow länkar dit.
 - **Flytta en anteckning tillbaka till Quickflow** (2026-08-19): Varje anteckning har nu "Tillbaka till Quickflow" – tanken blir ett aktivt flow-block igen, med möjlighet att ångra.
 - **Idébanken bor i Anteckningar** (2026-08-19): Den gamla idébanken i Quickflow är borta – dina sparade idéer flyttas automatiskt in bland Anteckningar med gissat livsområde, så allt ligger på ett ställe.
 - **Flytta befintliga tankar till Anteckningar** (2026-08-19): Varje tanke i "Du bad mig komma ihåg" har nu en anteckningsknapp – tanken flyttas till Anteckningar med gissat livsområde.
