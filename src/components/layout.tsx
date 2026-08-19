@@ -108,6 +108,7 @@ const catColor = (id: string, alpha?: number) => {
 const SECTION_BY_PATH: Record<string, string> = {
   "/": "home",
   "/ma-bra": "ma-bra",
+  "/energifloede": "energifloede",
   "/daglig-rutin": "daglig-rutin",
   "/quickflow": "quickflow",
   "/kalender": "calendar",
@@ -165,6 +166,7 @@ const T = {
 
 const CATEGORY_THEMES: Record<string, Record<string, string>> = {
   "/ma-bra": T.sage,
+  "/energifloede": T.sage,
   "/daglig-rutin": T.terracotta,
   "/pomodoro": T.terracotta,
   "/fokus": T.terracotta,
