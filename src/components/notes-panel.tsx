@@ -25,6 +25,7 @@ export default function NotesPanel() {
   const { addReminder } = useReminders();
   const { addItem: addShoppingItem } = useSharedShoppingList();
   const { ideas, clearIdeas } = useDumpIdeas();
+  const { add: addQuickflow } = useQuickflow();
 
   // Engångsflytt: gamla idébanken bor numera här bland anteckningarna.
   const movedIdeas = useRef(false);
