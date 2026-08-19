@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Energiflöde har en egen ingång i Hälsa – öppna det direkt från Mer-menyn, vid sidan av Må bra, Träning, FlowScore och Statistik (2026-08-19)",
       "Barn finns som eget livsområde – välj Barn när du lägger till eller ändrar en sak i Att göra, precis som Vardag, Privat, Studier och Jobb (2026-08-19)",
       "Energiflöde som egen rubrik under Må bra – ligger nu som en egen hopfällbar sektion i Alla-vyn, bredvid Mående och Energi (2026-08-19)",
       "Stop-samtal sparas – chattarna från Stop-knappen hamnar bland dina Flow-samtal och går att läsa igen (2026-08-18)",
