@@ -51,7 +51,6 @@ export function useHiddenHomeSections() {
   return { hidden, isHidden, toggle, showAll, reset };
 }
 
-
 const DEFAULT_ORDER = HOME_SECTIONS.map((s) => s.id);
 
 /**
