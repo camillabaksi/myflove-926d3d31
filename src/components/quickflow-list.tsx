@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
-import { Check, Clock, MapPin, Trash2, Undo2, X } from "lucide-react";
+import { Check, Clock, MapPin, NotebookPen, Trash2, Undo2, X } from "lucide-react";
 import { useQuickflow } from "@/hooks/use-quickflow";
+import { useNotes } from "@/hooks/use-notes";
 import CollapsibleSection from "@/components/collapsible-section";
 import { useSavedStores } from "@/hooks/use-data";
 import { sendPushNotification } from "@/lib/push-notifications";
@@ -10,11 +11,13 @@ import { celebrateFromEvent } from "@/lib/celebrate";
 import {
   LEVEL_META,
   formatWhen,
+  guessArea,
   guessEmoji,
   isOverdue,
   shouldAskAboutThought,
   type QuickflowItem,
 } from "@/lib/quickflow";
+
 
 const PLACE_CHECK_MS = 3 * 60 * 1000;
 const NEARBY_M = 300;
@@ -37,6 +40,8 @@ const SNOOZE_OPTIONS = [
 
 export function QuickflowList() {
   const { items, openItems, complete, uncomplete, remove, snooze, update } = useQuickflow();
+  const { addNote } = useNotes();
+
   const { savedStores } = useSavedStores();
   const [now, setNow] = useState(() => Date.now());
   const [snoozeFor, setSnoozeFor] = useState<string | null>(null);
@@ -163,6 +168,20 @@ export function QuickflowList() {
           <FlowItemActions itemId={`qf-${item.id}`} only="edit" size={15} />
           <button
             type="button"
+            aria-label="Spara som anteckning"
+            title="Spara som anteckning"
+            onClick={() => {
+              addNote(item.text, guessArea(item.text));
+              remove(item.id);
+              toast.success("Sparad bland dina anteckningar. 📝");
+            }}
+            className="w-9 h-9 rounded-full bg-secondary text-muted-foreground flex items-center justify-center hover:text-primary transition-colors"
+          >
+            <NotebookPen size={15} />
+          </button>
+          <button
+            type="button"
+
             aria-label="Klar"
             onClick={(e) => {
               celebrateFromEvent(e);
