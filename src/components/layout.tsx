@@ -458,7 +458,7 @@ export default function Layout({ children }: LayoutProps) {
         label: "Hälsa",
         hint: "Må bra, träning och din ork",
         icon: Heart,
-        hrefs: ["/ma-bra", "/traning", "/flowscore", "/statistik"],
+        hrefs: ["/ma-bra", "/energifloede", "/traning", "/flowscore", "/statistik"],
       },
       {
         id: "homeflow",
