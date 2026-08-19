@@ -116,6 +116,7 @@ export default function Home() {
   const [overwhelmedOpen, setOverwhelmedOpen] = useState(false);
   const [helpPlan, setHelpPlan] = useState<HelpPlan | null>(null);
   const [showAllTasks, setShowAllTasks] = useState(false);
+  const [flowFocusIds, setFlowFocusIds] = useState<string[]>([]);
 
   useReminderSync();
 
@@ -135,8 +136,22 @@ export default function Home() {
   const prioritizedTasks = useMemo(() => focusTasksForToday(areaTasks), [areaTasks]);
 
   const limit = helpPlan?.taskLimit ?? 3;
-  const visibleTasks = showAllTasks ? areaTasks : prioritizedTasks.slice(0, limit);
-  const hiddenTaskCount = Math.max(0, areaTasks.length - prioritizedTasks.slice(0, limit).length);
+  // Det som redan står i "Ditt fokus idag" eller som dagens fokus behöver
+  // inte upprepas i listan under.
+  const alreadyShown = useMemo(() => {
+    const focusTitle = currentFocus?.text.trim().toLowerCase();
+    return (t: Task) =>
+      flowFocusIds.includes(t.id) || (!!focusTitle && t.title.trim().toLowerCase() === focusTitle);
+  }, [flowFocusIds, currentFocus]);
+
+  const remainingTasks = useMemo(
+    () => prioritizedTasks.filter((t) => !alreadyShown(t)),
+    [prioritizedTasks, alreadyShown],
+  );
+  const visibleTasks = showAllTasks
+    ? areaTasks.filter((t) => !alreadyShown(t))
+    : remainingTasks.slice(0, limit);
+  const hiddenTaskCount = Math.max(0, areaTasks.length - visibleTasks.length);
 
   const now = Date.now();
   const pastOrTodayTransactions = transactions.filter((t) => t.date <= now);
@@ -291,7 +306,7 @@ export default function Home() {
           >
             <div className="space-y-4">
               <DayRebuild />
-              <DailyFlowCard />
+              <DailyFlowCard onTopTasks={setFlowFocusIds} />
 
               {currentFocus && !helpPlan && (
                 <button
@@ -326,7 +341,7 @@ export default function Home() {
                 </button>
               )}
 
-              {visibleTasks.length === 0 && !currentFocus ? (
+              {visibleTasks.length === 0 && !currentFocus && flowFocusIds.length === 0 ? (
                 <div className="text-center py-10 px-6 bg-secondary/30 rounded-3xl border border-dashed border-border animate-fade-in">
                   <div className="mx-auto mb-3 w-14 h-14 rounded-full bg-sage/40 flex items-center justify-center">
                     <Sparkles size={26} className="text-primary" />

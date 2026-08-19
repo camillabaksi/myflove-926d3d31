@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
 import { ArrowRight, ChevronRight, Sparkles, Zap } from "lucide-react";
 import { toast } from "sonner";
@@ -65,7 +65,12 @@ function Meter({
  * Daily Flow – dagens incheckning, dagens fokus och "Vad ska jag göra nu?".
  * Allt bygger på befintliga uppgifter, kalender och FlowScore.
  */
-export default function DailyFlowCard() {
+export default function DailyFlowCard({
+  onTopTasks,
+}: {
+  /** Rapporterar vilka uppgifter som redan visas i "Ditt fokus idag". */
+  onTopTasks?: (ids: string[]) => void;
+} = {}) {
   const { activeTasks, toggleTask } = useTasks();
   const { checkin, save } = useDailyCheckin();
   const { log } = useFlowUsage();
@@ -102,6 +107,13 @@ export default function DailyFlowCard() {
 
   const ranked = useMemo(() => recommendTasks(planTasks, ctx, 8), [planTasks, ctx]);
   const top = ranked.slice(0, Math.max(1, limit));
+  const topIds = top.map((t) => t.task.id).join(",");
+
+  // Samma sak ska inte stå på två ställen på hemskärmen.
+  useEffect(() => {
+    onTopTasks?.(topIds ? topIds.split(",") : []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [topIds]);
 
   const startFocus = (item: ScoredTask) => {
     setFocusItem(item);
