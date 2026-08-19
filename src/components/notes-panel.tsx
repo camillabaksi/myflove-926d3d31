@@ -226,6 +226,13 @@ export default function NotesPanel() {
                 >
                   <Wand2 size={16} /> Omvandla till …
                 </button>
+                <button
+                  type="button"
+                  onClick={() => backToQuickflow(note)}
+                  className="w-full rounded-full border border-border bg-card px-4 py-2 text-sm font-medium inline-flex items-center justify-center gap-2"
+                >
+                  <Undo2 size={16} /> Tillbaka till Quickflow
+                </button>
                 <div className="flex flex-wrap gap-2">
                   {CONVERSIONS.map((d) => (
                     <Chip
