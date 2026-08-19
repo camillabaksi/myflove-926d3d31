@@ -8,6 +8,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 ## [Unreleased]
 
 ### Added
+- **Redigera och radera anteckningar** (2026-08-19): Varje anteckning kan ändras direkt i listan – text och livsområde – och tas bort med möjlighet att ångra.
 - **Spara direkt som anteckning från Quickflow** (2026-08-19): I Kom ihåg-rutan finns nu "📝 Spara som anteckning" – tanken landar direkt bland Anteckningar i stället för i triagelistan.
 - **Medicinpåminnelser på förstasidan** (2026-08-19): Hemskärmen visar nu alla dagens kvarvarande doser (inte bara nästa) med en "Tagen"-knapp direkt i kortet, och blocket ligger högt upp och syns även i förenklad vy och i alla rum.
 - **Energiflöde som egen del i Hälsa** (2026-08-19): Energiflöde ligger nu som en egen ingång i Hälsa-gruppen under Mer, vid sidan av Må bra, Träning, FlowScore och Statistik.

@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Redigera och radera anteckningar – ändra text och livsområde direkt i listan, eller ta bort med ångra-knapp (2026-08-19)",
       "Spara direkt som anteckning från Quickflow – välj \"Spara som anteckning\" i Kom ihåg-rutan så hamnar tanken bland dina anteckningar (2026-08-19)",
       "Medicinpåminnelser på förstasidan – alla dagens kvarvarande doser visas högt upp på hemskärmen och kan bockas av med ett tryck (2026-08-19)",
       "Ett sammanhängande Daily Flow-kort – Ditt fokus idag och dagens viktigaste sitter ihop i samma kort med \"Resten av dagen\" direkt under fokuslistan (2026-08-19)",

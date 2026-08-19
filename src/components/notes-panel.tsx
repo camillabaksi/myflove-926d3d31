@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { toast } from "sonner";
-import { NotebookPen, Trash2, Wand2 } from "lucide-react";
+import { Check, NotebookPen, Pencil, Trash2, Wand2, X } from "lucide-react";
 import { useNotes } from "@/hooks/use-notes";
 import { useTasks, useReminders } from "@/hooks/use-data";
 import { useSharedShoppingList } from "@/hooks/use-shared-shopping-list";
 import NoteConvertDialog, { type ConvertTarget } from "@/components/note-convert-dialog";
 import { suggestForNote, type FlowNote } from "@/lib/notes";
 import { DESTINATION_META, shoppingTitleFrom, type QuickflowDestination } from "@/lib/quickflow";
-import { AREA_META } from "@/lib/life-areas";
+import { ALL_AREAS, AREA_META, type LifeArea } from "@/lib/life-areas";
 
 /**
  * Anteckningar – det du bara ville få ur huvudet.
@@ -21,6 +21,40 @@ export default function NotesPanel() {
 
   const [draft, setDraft] = useState("");
   const [convertNote, setConvertNote] = useState<FlowNote | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editText, setEditText] = useState("");
+  const [editArea, setEditArea] = useState<LifeArea | "">("");
+
+  const startEdit = (note: FlowNote) => {
+    setEditingId(note.id);
+    setEditText(note.text);
+    setEditArea(note.area ?? "");
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditText("");
+    setEditArea("");
+  };
+
+  const saveEdit = (note: FlowNote) => {
+    const text = editText.trim();
+    if (!text) return;
+    updateNote(note.id, { text, area: editArea === "" ? undefined : editArea });
+    cancelEdit();
+    toast.success("Anteckningen är uppdaterad. 💜");
+  };
+
+  const deleteNote = (note: FlowNote) => {
+    removeNote(note.id);
+    if (editingId === note.id) cancelEdit();
+    toast("Anteckningen är borttagen.", {
+      action: {
+        label: "Ångra",
+        onClick: () => addNote(note.text, note.area),
+      },
+    });
+  };
 
   const today = () => new Date().toISOString().slice(0, 10);
 
@@ -71,32 +105,81 @@ export default function NotesPanel() {
           const suggestion = suggestForNote(note);
           return (
             <div key={note.id} className="surface-card p-4 space-y-3">
-              <div className="flex items-start gap-2">
-                <span className="text-lg">📝</span>
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium text-ink break-words">{note.text}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {note.area ? `${AREA_META[note.area].label} · ` : ""}
-                    Ingen deadline, inget krav.
-                  </p>
-                  {suggestion && (
-                    <p className="text-xs text-primary">
-                      Det här skulle kunna bli {DESTINATION_META[suggestion].label.toLowerCase()} –
-                      om du vill.
-                    </p>
-                  )}
+              {editingId === note.id ? (
+                <div className="space-y-2">
+                  <textarea
+                    autoFocus
+                    value={editText}
+                    onChange={(e) => setEditText(e.target.value)}
+                    rows={3}
+                    className="w-full rounded-2xl border border-border bg-background p-3 text-sm outline-none focus:border-primary"
+                  />
+                  <select
+                    value={editArea}
+                    onChange={(e) => setEditArea(e.target.value as LifeArea | "")}
+                    className="rounded-xl border border-border bg-card px-3 py-2 text-sm outline-none"
+                  >
+                    <option value="">Inget livsområde</option>
+                    {ALL_AREAS.map((area) => (
+                      <option key={area} value={area}>
+                        {AREA_META[area].label}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={() => saveEdit(note)}
+                      disabled={!editText.trim()}
+                      className="rounded-full bg-primary text-primary-foreground px-4 py-2 text-sm font-semibold inline-flex items-center gap-2 disabled:opacity-40"
+                    >
+                      <Check size={16} /> Spara ändring
+                    </button>
+                    <button
+                      type="button"
+                      onClick={cancelEdit}
+                      className="rounded-full border border-border bg-card px-4 py-2 text-sm inline-flex items-center gap-2"
+                    >
+                      <X size={16} /> Avbryt
+                    </button>
+                  </div>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => removeNote(note.id)}
-                  aria-label="Ta bort anteckning"
-                  className="text-muted-foreground hover:text-destructive"
-                >
-                  <Trash2 size={16} />
-                </button>
-              </div>
+              ) : (
+                <div className="flex items-start gap-2">
+                  <span className="text-lg">📝</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-ink break-words">{note.text}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {note.area ? `${AREA_META[note.area].label} · ` : ""}
+                      Ingen deadline, inget krav.
+                    </p>
+                    {suggestion && (
+                      <p className="text-xs text-primary">
+                        Det här skulle kunna bli {DESTINATION_META[suggestion].label.toLowerCase()}{" "}
+                        – om du vill.
+                      </p>
+                    )}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => startEdit(note)}
+                    aria-label="Redigera anteckning"
+                    className="text-muted-foreground hover:text-primary"
+                  >
+                    <Pencil size={16} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => deleteNote(note)}
+                    aria-label="Ta bort anteckning"
+                    className="text-muted-foreground hover:text-destructive"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+              )}
 
-              <div className="space-y-2">
+              <div className={`space-y-2 ${editingId === note.id ? "hidden" : ""}`}>
                 <button
                   type="button"
                   onClick={() => setConvertNote(note)}
