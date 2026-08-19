@@ -4,7 +4,7 @@
 import { useMemo } from "react";
 import { useLocalStorage } from "./storage";
 
-export type LifeArea = "vardag" | "studier" | "jobb" | "privat";
+export type LifeArea = "vardag" | "studier" | "jobb" | "privat" | "barn";
 export type AreaFilter = LifeArea | "alla";
 
 export interface AreaMeta {
@@ -42,6 +42,13 @@ export const AREA_META: Record<LifeArea, AreaMeta> = {
     blurb: "Kurser, inlämningar, deadlines och dokument",
     hue: "232 58% 64%",
   },
+  barn: {
+    id: "barn",
+    label: "Barn",
+    emoji: "🧒",
+    blurb: "Barnens aktiviteter, scheman och att göra",
+    hue: "20 70% 58%",
+  },
   jobb: {
     id: "jobb",
     label: "Jobb",
@@ -51,7 +58,7 @@ export const AREA_META: Record<LifeArea, AreaMeta> = {
   },
 };
 
-export const ALL_AREAS: LifeArea[] = ["vardag", "privat", "studier", "jobb"];
+export const ALL_AREAS: LifeArea[] = ["vardag", "privat", "barn", "studier", "jobb"];
 const CORE_AREAS: LifeArea[] = ALL_AREAS.filter((a) => AREA_META[a].core);
 
 const AREAS_KEY = "myflove-areas";

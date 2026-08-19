@@ -31,6 +31,12 @@ export const AREA_SHORTCUTS: Record<LifeArea, FlowShortcut[]> = {
     { href: "/matlista", label: "Matlista", emoji: "🍽️" },
     { href: "/finances", label: "Ekonomi", emoji: "💰" },
   ],
+  barn: [
+    { href: "/barn", label: "Barn", emoji: "🧒" },
+    { href: "/kalender", label: "Schema", emoji: "🗓️" },
+    { href: "/tasks", label: "Att göra", emoji: "✅" },
+    { href: "/shopping", label: "Inköp", emoji: "🛒" },
+  ],
   studier: [
     { href: "/studyflow", label: "StudyFlow", emoji: "🎓" },
     { href: "/studybuddy", label: "Plugga", emoji: "📚" },
