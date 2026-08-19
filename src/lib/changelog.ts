@@ -12,7 +12,6 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
-      "Daily Flow borttaget från hemskärmen – blocket överlappade Dagens viktigaste, så det visas inte längre på hemma (2026-08-19)",
       "Framtida saker stannar på sin dag – hemskärmen visar bara det som gäller idag eller saknar datum, resten dyker upp när det är dags (2026-08-19)",
       "Energiflöde har en egen ingång i Hälsa – öppna det direkt från Mer-menyn, vid sidan av Må bra, Träning, FlowScore och Statistik (2026-08-19)",
       "Barn finns som eget livsområde – välj Barn när du lägger till eller ändrar en sak i Att göra, precis som Vardag, Privat, Studier och Jobb (2026-08-19)",
