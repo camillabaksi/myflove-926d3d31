@@ -62,7 +62,13 @@ const ALL_SHORTCUTS: Shortcut[] = (
       emphasis: true,
     },
     { id: "ma-bra", href: "/ma-bra", label: "Må bra", icon: Heart, emoji: "🌸" },
-    { id: "daglig-rutin", href: "/daglig-rutin", label: "Rutiner & medicin", icon: Sun, emoji: "☀️" },
+    {
+      id: "daglig-rutin",
+      href: "/daglig-rutin",
+      label: "Rutiner & medicin",
+      icon: Sun,
+      emoji: "☀️",
+    },
 
     { id: "tasks", href: "/tasks", label: "Att göra", icon: CheckSquare, emoji: "✅" },
     { id: "shopping", href: "/shopping", label: "Inköp", icon: ShoppingBag, emoji: "🛍️" },
