@@ -172,6 +172,41 @@ export default function Home() {
     .sort((a, b) => a.time.localeCompare(b.time));
   const nextMedication = medicationDosesToday[0];
 
+  // Dagens tidslinje direkt på hemskärmen – hållpunkter, uppgifter, rutiner och medicin.
+  const todayIso = new Date().toISOString().split("T")[0] as string;
+  const dayEntries = useMemo<TimelineEntry[]>(() => {
+    const list: TimelineEntry[] = [];
+    for (const r of activeReminders) {
+      if (r.date !== todayIso || !r.time) continue;
+      list.push({
+        id: `rem-${r.id}`,
+        title: r.title,
+        time: r.time,
+        ...(r.endTime ? { endTime: r.endTime } : {}),
+        emoji: "🔔",
+      });
+    }
+    for (const t of areaTasks) {
+      if (!t.time || (t.dueDate && t.dueDate !== todayIso)) continue;
+      list.push({
+        id: `task-${t.id}`,
+        title: t.title,
+        time: t.time,
+        ...(t.endTime ? { endTime: t.endTime } : {}),
+        emoji: "✅",
+      });
+    }
+    for (const r of routines ?? []) {
+      if (!r.enabled || !r.time) continue;
+      list.push({ id: `routine-${r.id}`, title: r.title, time: r.time, emoji: "🔁" });
+    }
+    for (const { med, time } of medicationDosesToday) {
+      list.push({ id: `med-${med.id}-${time}`, title: med.name, time, emoji: "💊" });
+    }
+    return list;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeReminders, areaTasks, routines, todayIso, medications, medicationDosesToday.length]);
+
   const handleSelectFeeling = (feeling: HelpFeelingId) => {
     if (feeling === "overwhelmed") {
       setOverwhelmedOpen(true);
