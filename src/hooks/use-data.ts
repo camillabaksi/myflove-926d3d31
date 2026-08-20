@@ -257,7 +257,15 @@ export function useTasks() {
     );
   };
 
+  /** Faktisk energipåverkan efter att uppgiften markerats klar – alltid frivilligt. */
+  const setTaskActualEnergy = (id: string, actualEnergy: Task["actualEnergy"]) => {
+    setTasks((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, actualEnergy, actualEnergyAt: Date.now() } : t)),
+    );
+  };
+
   const setTaskKind = (id: string, kind: TaskKind) => {
+
     setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, kind } : t)));
   };
 
