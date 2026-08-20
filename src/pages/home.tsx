@@ -149,7 +149,6 @@ function useFlowSuggestion(): NowSuggestion {
   );
 }
 
-
 export default function Home() {
   const { name, setName, lastVisit } = useUserProfile();
   const greeting = getGreeting({ name, lastVisit });
@@ -309,7 +308,6 @@ export default function Home() {
             {suggestion.task ? "Öppna i Flow" : "Lägg till något"} <ArrowRight size={14} />
           </Link>
         </section>
-
 
         {/* Lägg till – snabbknapp */}
         <TaskQuickAdd

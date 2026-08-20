@@ -120,7 +120,7 @@ export function buildLifePuzzle(input: LifePuzzleInput): LifePuzzle {
       title: "Du har utrymme idag",
       body: `Ungefär ${input.capacityMinutes} minuters fokus finns i dagen. Det räcker för något tyngre du brukar skjuta på.`,
       href: "/flow",
-      hrefLabel: "Vad ska jag göra nu?",
+      hrefLabel: "Öppna Flow",
     });
   }
 

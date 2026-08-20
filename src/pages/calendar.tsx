@@ -1081,7 +1081,7 @@ export default function CalendarPage() {
                   )}
                   <div>
                     <div className="text-xs text-accent-foreground font-medium uppercase tracking-wider mb-0.5">
-                      Dagens fokus
+                      Viktigast idag
                     </div>
                     <div className="text-lg font-medium">{selectedItems.focus.text}</div>
                   </div>

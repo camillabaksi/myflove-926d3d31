@@ -330,13 +330,13 @@ export default function WorkflowPage() {
           )}
         </CollapsibleSection>
 
-        {/* 1. Vad ska jag göra nu? */}
+        {/* 1. Bäst att göra nu */}
         <CollapsibleSection
           className={card}
           headingClassName={sectionTitle}
           title={
             <>
-              <AlarmClock className="h-5 w-5 text-primary" /> Vad ska jag göra nu?
+              <AlarmClock className="h-5 w-5 text-primary" /> Bäst att göra nu
             </>
           }
           help="Nästa sak att ta itu med. En i taget – resten kan vänta."
