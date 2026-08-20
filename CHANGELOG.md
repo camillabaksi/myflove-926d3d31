@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-20 – Snabbknapp "Jag gjorde något" på Hem
+
+- Ny alltid synlig snabbknapp ➕ Jag gjorde något direkt under Mitt batteri på Hem – öppnar ett 3–5 sekunders flöde: välj/skriv aktivitet → 🔻/🔺/➖ sparar direkt.
+- Friktion är ett frivilligt extrasteg efter att posten sparats, med Ångra och "Lägg till en till".
+- Samma datamodell, energi- och friktionslogik som Energiflöde – dagens energiflöde och FlowScore uppdateras direkt.
+- Den stora panelen "Lägg till det du gjorde" är dold som standard på Hem (kan slås på i Anpassa hemskärmen).
+
 ## 2026-08-20 – Lägg till det du gjorde & Dagens energiflöde
 
 - Ny lågfriktionsfunktion "Lägg till det du gjorde": ett tryck för vanliga vardagssaker (middag, tvätt, undanplock, barn, packa inför imorgon) med val av när det hände, fritext och förberedd röstinmatning.

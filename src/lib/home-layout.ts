@@ -40,9 +40,10 @@ export interface HomeLayoutPrefs {
 }
 
 const DEFAULT_PREFS: HomeLayoutPrefs = {
-  hidden: [],
+  hidden: ["gjort"],
   order: HOME_BLOCKS.map((b) => b.id),
 };
+
 
 const STORAGE_KEY = "myflove-home-layout";
 

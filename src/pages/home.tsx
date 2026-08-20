@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import HomeShortcuts from "@/components/home-shortcuts";
 import { useHomeLayout, type HomeBlockId } from "@/lib/home-layout";
 import { TaskQuickAdd, type QuickAddResult } from "@/components/task-quick-add";
+import DidThisCta from "@/components/did-this-cta";
 import DidThisQuickAdd from "@/components/did-this-quick-add";
 import DayEnergyFlow from "@/components/day-energy-flow";
 import { Link } from "wouter";
@@ -253,6 +254,12 @@ export default function Home() {
           </div>
         )}
 
+        {/* Ständig snabbknapp: logga det du faktiskt gjorde */}
+        <div style={pos("batteri")}>
+          <DidThisCta />
+        </div>
+
+
         {/* Nästa – nästa relevanta aktivitet */}
         {shows("nasta") && (
           <section
@@ -344,12 +351,13 @@ export default function Home() {
           </div>
         )}
 
-        {/* Lägg till det du gjorde – vardagen som inte syns i kalendern */}
+        {/* Lägg till det du gjorde – full panel (valbar) */}
         {shows("gjort") && (
           <div style={pos("gjort")}>
             <DidThisQuickAdd />
           </div>
         )}
+
 
         {/* Dagens energiflöde – faktisk belastning */}
         {shows("energifloede") && (

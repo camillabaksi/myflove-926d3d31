@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Snabbknapp ➕ Jag gjorde något på Hem – alltid synlig under Mitt batteri, sparar en vardagshändelse på 3–5 sekunder med frivillig friktion efteråt (2026-08-20)",
       "Lägg till det du gjorde – ett tryck för vardagssaker som middag, tvätt, undanplock eller barnens dusch, med val av när det hände, fritext och röstinmatning där mobilen stödjer det (2026-08-21)",
       "Energi in/ut per aktivitet – 🔻 tar energi, 🔺 ger energi, ➖ neutral, alltid ändringsbart efteråt (2026-08-21)",
       "Friktion är en egen dimension – hur svårt något är att komma igång med räknas separat från hur mycket energi det kostar (2026-08-21)",
