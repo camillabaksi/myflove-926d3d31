@@ -3,6 +3,8 @@ import { Link } from "wouter";
 import Layout from "@/components/layout";
 import CollapsibleSection from "@/components/collapsible-section";
 import EnergyFlowSettings from "@/components/energy-flow-settings";
+import DidThisQuickAdd from "@/components/did-this-quick-add";
+import DayEnergyFlow from "@/components/day-energy-flow";
 
 import {
   MyFloveButton,
@@ -22,10 +24,18 @@ import {
   categoryLabel,
   categoryTrends,
   ENERGY_CATEGORIES,
+  ENERGY_KINDS,
+  FRICTION_LEVELS,
+  frictionEmoji,
+  frictionLabel,
+  frictionTrends,
   isSameDay,
+  kindEmoji,
+  kindLabel,
   titleTrends,
   type EnergyCategory,
   type EnergyDirection,
+  type EnergyKind,
 } from "@/lib/energy-flow";
 
 interface Props {
@@ -44,6 +54,7 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
     signedIn,
     addFactor,
     removeFactor,
+    updateFactor,
     toggleCounts,
     addPreset,
     removePreset,
@@ -55,12 +66,15 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
   const [direction, setDirection] = useState<EnergyDirection>("drains");
   const [strength, setStrength] = useState(3);
   const [category, setCategory] = useState<EnergyCategory>("annat");
+  const [kind, setKind] = useState<EnergyKind>("vardag");
+  const [friction, setFriction] = useState(2);
   const [note, setNote] = useState("");
   const [saving, setSaving] = useState(false);
 
   const today = useMemo(() => entries.filter((e) => isSameDay(e.occurredAt)), [entries]);
   const catTrends = useMemo(() => categoryTrends(entries, 14), [entries]);
   const nameTrends = useMemo(() => titleTrends(entries, 30).slice(0, 6), [entries]);
+  const frictionRows = useMemo(() => frictionTrends(entries, 30).slice(0, 5), [entries]);
 
   const save = async () => {
     const t = title.trim();
@@ -70,7 +84,7 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
     }
     setSaving(true);
     try {
-      await addFactor({ title: t, direction, strength, category, note: note.trim() });
+      await addFactor({ title: t, direction, strength, category, kind, friction, note: note.trim() });
       setTitle("");
       setNote("");
       toast({ description: "Tack – det räknas med i din kapacitet idag." });
@@ -88,6 +102,8 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
         direction: p.direction,
         strength: p.strength,
         category: p.category,
+        kind: p.kind,
+        friction: p.friction,
       });
       toast({ description: `${p.title} tillagd.` });
     } catch {
@@ -116,6 +132,10 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
           description="Vad ger och vad tar energi? Det här är inte att göra-listan – det är sådant som påverkar hur mycket du orkar."
         />
       )}
+
+      <DidThisQuickAdd />
+
+      <DayEnergyFlow showLink={false} />
 
       <CollapsibleSection
         title="Dagens balans"
@@ -246,7 +266,7 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
                   toast({ description: "Skriv en titel först, så sparar jag den som snabbknapp." });
                   return;
                 }
-                await addPreset({ title: t, direction, strength, category });
+                await addPreset({ title: t, direction, strength, category, kind, friction });
                 toast({ description: "Sparad som snabbknapp." });
               }}
             >
