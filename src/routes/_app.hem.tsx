@@ -7,7 +7,7 @@ export const Route = createFileRoute("/_app/hem")({
       { title: "Hem – MyFlove" },
       {
         name: "description",
-        content: "Din lugna startskärm i MyFlove – väder, dagens saker och genvägar.",
+        content: "Din lugna startskärm i MyFlove – se ditt batteri, nästa aktivitet och ett Flow-förslag på ett ögonblick.",
       },
       { name: "robots", content: "noindex, nofollow" },
     ],

@@ -9,6 +9,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 
 ### Changed
 
+- **Förenklad Hem-landning** (2026-08-20): Hem är nu en lugn landningssida som svarar på "Vad behöver jag veta just nu?" – med hälsning, Mitt batteri, Nästa aktivitet, ett Flow-förslag och en tydlig ＋ Lägg till-knapp. Inga långa listor, grafer eller flera AI-förslag. All sekundär funktionalitet finns kvar på sina egna sidor och nås via Mer.
 - **Enklare huvudnavigation** (2026-08-20): Appen har nu fem tydliga ingångar – Hem, Min dag, QuickFlow, Flow och Mer. Kalender, Att göra, FlowPlan, Vad ska jag göra nu?, Energiflöde, Må bra, FlowScore och Statistik är inte längre egna huvuddestinationer utan ligger under Min dag, Flow respektive Insights. Mer är omgrupperat i Min dag · Flow · Studier · Jobb · Familj · Hemma · Resor · Insights · Inställningar. Alla sidor, länkar och redirects fungerar precis som förut, och du kan fortfarande byta de två valfria platserna i bottenmenyn.
 
 ### Added

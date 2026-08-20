@@ -1,103 +1,204 @@
 import { useMemo, useState } from "react";
 import { TaskQuickAdd, type QuickAddResult } from "@/components/task-quick-add";
 import { Link } from "wouter";
-import HomeShortcuts from "@/components/home-shortcuts";
-import UnusedBlocksHint from "@/components/unused-blocks-hint";
 import Layout from "@/components/layout";
-import { FlowItemActions } from "@/components/flow-item-actions";
-import OverwhelmedModal from "@/components/overwhelmed-modal";
-import HelpMeModal from "@/components/help-me-modal";
-import WeatherCard from "@/components/weather-card";
-import ProactiveSuggestions from "@/components/proactive-suggestions";
-import { MyFloveSparkle } from "@/components/myflove/motion";
-
-import QuickflowCapture from "@/components/quickflow-capture";
-import QuickflowList from "@/components/quickflow-list";
-import PersonalNote from "@/components/personal-note";
-import HomeSection from "@/components/home-section";
-import DailyFlowCard from "@/components/daily-flow-card";
-import LifePuzzleCard from "@/components/life-puzzle-card";
-import QuickflowTriage from "@/components/quickflow-triage";
-import FlowReset from "@/components/flow-reset";
-import DayRebuild from "@/components/day-rebuild";
-import DayTimeline, { type TimelineEntry } from "@/components/day-timeline";
 import EnergyBattery from "@/components/energy-battery";
+import { useEnergyBattery } from "@/hooks/use-energy-battery";
+import { useUserProfile } from "@/hooks/use-user-profile";
+import { getGreeting } from "@/lib/greeting";
+import { useTasks, useReminders, useMedications, type Task, type Reminder } from "@/hooks/use-data";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import type { Routine } from "@/pages/routines";
-
-import FlowOnboarding from "@/components/flow-onboarding";
-import StreakCard from "@/components/streak-card";
-import WeekInFlow from "@/components/week-in-flow";
-import { celebrateFromEvent } from "@/lib/celebrate";
-import { EnablePushButton } from "@/components/enable-push-button";
-import { PersonalPushSettings } from "@/components/personal-push-settings";
-import WakeUpCard from "@/components/wake-up-card";
-import WakeUpSettings from "@/components/wake-up-settings";
-import { QuietModeSettings } from "@/components/quiet-mode-settings";
-import { AdaptiveLeadSettings } from "@/components/adaptive-lead-settings";
-import { useReminderSync } from "@/hooks/use-reminder-sync";
-import { AreaSwitcher } from "@/components/area-switcher";
+import { useStudySchedule } from "@/hooks/use-study-schedule";
 import { AreaOnboarding } from "@/components/area-onboarding";
-import { AREA_META, filterByArea, useActiveArea, type LifeArea } from "@/lib/life-areas";
-import ViewModeToggle from "@/components/view-mode-toggle";
-import HomeCustomize from "@/components/home-customize";
-import { useHiddenHomeSections, useHomeSectionOrder } from "@/lib/home-sections";
-import { useViewMode } from "@/lib/view-mode";
+import { AreaSwitcher } from "@/components/area-switcher";
+import { AREA_META, useActiveArea } from "@/lib/life-areas";
+import IntroTour from "@/components/intro-tour";
+import FlowOnboarding from "@/components/flow-onboarding";
+import {
+  Plus,
+  CalendarDays,
+  Sparkles,
+  ArrowRight,
+  Clock,
+  Battery,
+  Zap,
+  MessageCircle,
+} from "lucide-react";
 
 /**
- * Vilka block som hör hemma i vilket rum. Är du i ett rum visas bara
- * det rummets saker – "Allt" lägger ihop hela hemskärmen igen.
+ * Nästa relevanta aktivitet idag – påminnelser, uppgifter, rutiner,
+ * medicin och lektioner, sorterat efter klockslag.
  */
-const SECTION_AREAS: Record<string, LifeArea[]> = {
-  livspussel: ["vardag", "privat", "studier", "jobb"],
-  dailyflow: ["vardag", "privat", "studier", "jobb"],
-  dagen: ["vardag", "privat", "studier", "jobb", "barn"],
-  reset: ["vardag", "privat", "studier", "jobb"],
-  quickflow: ["vardag", "privat", "studier", "jobb"],
-  streak: ["vardag"],
-  weather: ["vardag", "privat"],
-  shortcuts: ["vardag", "privat", "studier", "jobb"],
-  week: ["vardag", "privat", "studier", "jobb"],
-  suggestions: ["vardag", "privat"],
-  bills: ["privat"],
-  medication: ["vardag", "privat", "studier", "jobb", "barn"],
-  push: ["vardag"],
-  help: ["vardag", "privat"],
-};
+interface NextEvent {
+  id: string;
+  title: string;
+  time: string;
+  endTime?: string;
+  emoji: string;
+  source: "påminnelse" | "uppgift" | "rutin" | "medicin" | "lektion";
+}
 
-/** Vad som är kvar i förenklad vy – det du faktiskt behöver just nu. */
-const SIMPLE_SECTIONS = [
-  "batteri",
-  "livspussel",
-  "dagen",
-  "dailyflow",
-  "medication",
-  "shortcuts",
-  "help",
-];
+function parseTime(t?: string): number | null {
+  if (!t) return null;
+  const [h, m] = t.split(":").map(Number);
+  if (Number.isNaN(h) || Number.isNaN(m)) return null;
+  return h * 60 + m;
+}
 
-import {
-  useFocus,
-  useTasks,
-  useReminders,
-  useFinances,
-  useMedications,
-  type Task,
-} from "@/hooks/use-data";
-import { useSharedShoppingList } from "@/hooks/use-shared-shopping-list";
-import { getGreeting } from "@/lib/greeting";
-import IntroTour from "@/components/intro-tour";
-import { useUserProfile } from "@/hooks/use-user-profile";
-import { buildHelpPlan, type HelpFeelingId, type HelpPlan } from "@/lib/help-me";
-import { focusTasksForToday } from "@/lib/focus-rules";
-import { HeartHandshake, CheckCircle2, Circle, Pill, Sparkles, ArrowRight } from "lucide-react";
+function useNextEvent(): NextEvent | null {
+  const { activeReminders } = useReminders();
+  const { activeTasks } = useTasks();
+  const { medications, isTaken } = useMedications();
+  const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
+  const { lectures } = useStudySchedule();
+  const todayIso = new Date().toISOString().split("T")[0] as string;
+  const nowMin = new Date().getHours() * 60 + new Date().getMinutes();
 
-function sortTasksByPriority(tasks: Task[]): Task[] {
-  const withDueDate = tasks
-    .filter((t) => t.dueDate)
-    .sort((a, b) => (a.dueDate ?? "").localeCompare(b.dueDate ?? ""));
-  const withoutDueDate = tasks.filter((t) => !t.dueDate).sort((a, b) => a.createdAt - b.createdAt);
-  return [...withDueDate, ...withoutDueDate];
+  return useMemo(() => {
+    const list: NextEvent[] = [];
+
+    for (const r of activeReminders) {
+      if (r.date !== todayIso || !r.time) continue;
+      list.push({
+        id: `rem-${r.id}`,
+        title: r.title,
+        time: r.time,
+        endTime: r.endTime,
+        emoji: "🔔",
+        source: "påminnelse",
+      });
+    }
+
+    for (const t of activeTasks) {
+      if (t.dueDate && t.dueDate !== todayIso) continue;
+      if (!t.time) continue;
+      list.push({
+        id: `task-${t.id}`,
+        title: t.title,
+        time: t.time,
+        endTime: t.endTime,
+        emoji: "✅",
+        source: "uppgift",
+      });
+    }
+
+    for (const r of routines ?? []) {
+      if (!r.enabled || !r.time) continue;
+      list.push({
+        id: `routine-${r.id}`,
+        title: r.title,
+        time: r.time,
+        emoji: "🔁",
+        source: "rutin",
+      });
+    }
+
+    for (const med of medications) {
+      for (const time of med.times) {
+        if (isTaken(med.id, time)) continue;
+        list.push({
+          id: `med-${med.id}-${time}`,
+          title: med.name,
+          time,
+          emoji: "💊",
+          source: "medicin",
+        });
+      }
+    }
+
+    const weekday = (new Date().getDay() + 6) % 7;
+    for (const l of lectures.filter((x) => x.weekday === weekday)) {
+      list.push({
+        id: `lecture-${l.id}`,
+        title: l.title,
+        time: l.start,
+        endTime: l.end,
+        emoji: "🎓",
+        source: "lektion",
+      });
+    }
+
+    const future = list
+      .map((e) => ({ e, min: parseTime(e.time) ?? 0 }))
+      .filter(({ min }) => min > nowMin)
+      .sort((a, b) => a.min - b.min);
+
+    return future[0]?.e ?? null;
+  }, [activeReminders, activeTasks, medications, isTaken, routines, lectures, todayIso, nowMin]);
+}
+
+/**
+ * Ett enda, lågkognitivt Flow-förslag baserat på batteri, nästa händelse
+ * och dagens uppgifter. Aldrig mer än ett.
+ */
+function useSingleSuggestion(nextEvent: NextEvent | null): { text: string; action?: string } | null {
+  const { reading } = useEnergyBattery();
+  const { activeTasks } = useTasks();
+  const nowMin = new Date().getHours() * 60 + new Date().getMinutes();
+
+  return useMemo(() => {
+    const todayIso = new Date().toISOString().split("T")[0] as string;
+    const topTask = activeTasks.find(
+      (t) => !t.completed && (!t.dueDate || t.dueDate === todayIso) && !t.time,
+    );
+
+    if (reading.overloaded) {
+      return {
+        text: "Dagen ser tung ut. Vill du flytta något eller lägga in en paus?",
+        action: "/min-dag",
+      };
+    }
+
+    if (reading.peak && reading.peak.startMinutes > nowMin) {
+      if (topTask) {
+        return {
+          text: `Du har bäst fokus ${reading.peak.label.toLowerCase()}. Passar det att börja med "${topTask.title}"?`,
+          action: "/min-dag",
+        };
+      }
+      return {
+        text: `Du har bäst fokus ${reading.peak.label.toLowerCase()}. Passar det att göra nästa sak då?`,
+        action: "/min-dag",
+      };
+    }
+
+    if (reading.dip && reading.dip.startMinutes > nowMin && reading.now < 50) {
+      return {
+        text: `Energin sjunker ${reading.dip.label.toLowerCase()}. En kort paus då kan hjälpa resten av dagen.`,
+        action: "/ma-bra",
+      };
+    }
+
+    if (nextEvent) {
+      const min = parseTime(nextEvent.time);
+      if (min !== null) {
+        const diff = min - nowMin;
+        if (diff > 0 && diff <= 60) {
+          return {
+            text: `Nästa sak är "${nextEvent.title}" om ${diff} min. Vill du förbereda dig?`,
+            action: "/min-dag",
+          };
+        }
+      }
+      return {
+        text: `Nästa sak är "${nextEvent.title}" ${nextEvent.time ? `kl ${nextEvent.time}` : "senare"}.`,
+        action: "/min-dag",
+      };
+    }
+
+    if (topTask) {
+      return {
+        text: `Vill du börja med "${topTask.title}"?`,
+        action: "/min-dag",
+      };
+    }
+
+    return {
+      text: "Inget planerat just nu. Vill du lägga till en sak eller ta en stund för dig själv?",
+      action: "/quickflow",
+    };
+  }, [reading, activeTasks, nextEvent, nowMin]);
 }
 
 export default function Home() {
@@ -105,132 +206,11 @@ export default function Home() {
   const greeting = getGreeting({ name, lastVisit });
   const [editingName, setEditingName] = useState(false);
   const [nameDraft, setNameDraft] = useState(name);
-  const { currentFocus, toggleFocusCompleted } = useFocus();
-  const { activeTasks, toggleTask, addTask } = useTasks();
+  const { addTask } = useTasks();
   const { activeArea } = useActiveArea();
-  const { isSimple } = useViewMode(activeArea);
-  const { isHidden } = useHiddenHomeSections();
-  const { orderOf } = useHomeSectionOrder();
-  const ord = (id: string) => ({ order: orderOf(id) });
-  const showSection = (id: string) => {
-    const inArea = activeArea === "alla" || (SECTION_AREAS[id] ?? []).includes(activeArea);
-    if (!inArea) return false;
-    if (isHidden(id)) return false;
-    // Förenklad vy: bara det viktigaste i rummet du står i.
-    return isSimple ? SIMPLE_SECTIONS.includes(id) : true;
-  };
+  const nextEvent = useNextEvent();
+  const suggestion = useSingleSuggestion(nextEvent);
 
-  const { activeReminders } = useReminders();
-  const { transactions } = useFinances();
-  const { medications, isTaken, toggleTaken } = useMedications();
-  const { activeItems: _shoppingItems } = useSharedShoppingList();
-  const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
-
-  const [helpModalOpen, setHelpModalOpen] = useState(false);
-  const [overwhelmedOpen, setOverwhelmedOpen] = useState(false);
-  const [helpPlan, setHelpPlan] = useState<HelpPlan | null>(null);
-  const [showAllTasks, setShowAllTasks] = useState(false);
-  const [flowFocusIds, setFlowFocusIds] = useState<string[]>([]);
-
-  useReminderSync();
-
-  // Prov och automatiska repetitionspass ska aldrig dyka upp bland dagens
-  // viktigaste – de känns övermäktiga. De syns bara om man lägger in dem själv.
-  const areaTasks = useMemo(
-    () =>
-      sortTasksByPriority(
-        filterByArea(activeTasks, activeArea).filter(
-          (t) => !t.syncKey?.includes(":exam:") && !t.syncKey?.includes(":revision:"),
-        ),
-      ),
-    [activeTasks, activeArea],
-  );
-
-  // Saker med ett datum framåt hör hemma på sin egen dag – inte här.
-  const prioritizedTasks = useMemo(() => focusTasksForToday(areaTasks), [areaTasks]);
-
-  const limit = helpPlan?.taskLimit ?? 3;
-  // Det som redan står i "Ditt fokus idag" eller som dagens fokus behöver
-  // inte upprepas i listan under.
-  const alreadyShown = useMemo(() => {
-    const focusTitle = currentFocus?.text.trim().toLowerCase();
-    return (t: Task) =>
-      flowFocusIds.includes(t.id) || (!!focusTitle && t.title.trim().toLowerCase() === focusTitle);
-  }, [flowFocusIds, currentFocus]);
-
-  const remainingTasks = useMemo(
-    () => prioritizedTasks.filter((t) => !alreadyShown(t)),
-    [prioritizedTasks, alreadyShown],
-  );
-  const visibleTasks = showAllTasks
-    ? areaTasks.filter((t) => !alreadyShown(t))
-    : remainingTasks.slice(0, limit);
-  const hiddenTaskCount = Math.max(0, areaTasks.length - visibleTasks.length);
-
-  const now = Date.now();
-  const pastOrTodayTransactions = transactions.filter((t) => t.date <= now);
-  const balance = pastOrTodayTransactions.reduce(
-    (sum, t) => sum + (t.type === "income" ? t.amount : -t.amount),
-    0,
-  );
-  const upcomingBills = transactions
-    .filter((t) => t.type === "expense" && t.date > now)
-    .sort((a, b) => a.date - b.date);
-  const upcomingBillsTotal = upcomingBills.reduce((sum, t) => sum + t.amount, 0);
-  const moneyLeftAfterPlanned = balance - upcomingBillsTotal;
-
-  // Alla doser som är kvar idag – inte bara nästa, så inget glöms bort.
-  const medicationDosesToday = medications
-    .flatMap((med) => med.times.map((time) => ({ med, time })))
-    .filter((entry) => !isTaken(entry.med.id, entry.time))
-    .sort((a, b) => a.time.localeCompare(b.time));
-  const nextMedication = medicationDosesToday[0];
-
-  // Dagens tidslinje direkt på hemskärmen – hållpunkter, uppgifter, rutiner och medicin.
-  const todayIso = new Date().toISOString().split("T")[0] as string;
-  const dayEntries = useMemo<TimelineEntry[]>(() => {
-    const list: TimelineEntry[] = [];
-    for (const r of activeReminders) {
-      if (r.date !== todayIso) continue;
-      list.push({
-        id: `rem-${r.id}`,
-        title: r.title,
-        time: r.time ?? "",
-        ...(r.endTime ? { endTime: r.endTime } : {}),
-        emoji: "🔔",
-      });
-    }
-    for (const t of areaTasks) {
-      if (t.dueDate && t.dueDate !== todayIso) continue;
-      if (!t.time && !t.dueDate) continue;
-      list.push({
-        id: `task-${t.id}`,
-        title: t.title,
-        time: t.time ?? "",
-        ...(t.endTime ? { endTime: t.endTime } : {}),
-        emoji: "✅",
-      });
-    }
-    for (const r of routines ?? []) {
-      if (!r.enabled || !r.time) continue;
-      list.push({ id: `routine-${r.id}`, title: r.title, time: r.time, emoji: "🔁" });
-    }
-    for (const { med, time } of medicationDosesToday) {
-      list.push({ id: `med-${med.id}-${time}`, title: med.name, time, emoji: "💊" });
-    }
-    return list;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeReminders, areaTasks, routines, todayIso, medications, medicationDosesToday.length]);
-
-  const handleSelectFeeling = (feeling: HelpFeelingId) => {
-    if (feeling === "overwhelmed") {
-      setOverwhelmedOpen(true);
-      return;
-    }
-    setHelpPlan(buildHelpPlan(feeling));
-  };
-
-  // Hemskärmen skiftar med dygnet – morgonljus, dagsvärme, kvällsdis.
   const hour = new Date().getHours();
   const heroGradient =
     hour < 10
@@ -245,11 +225,12 @@ export default function Home() {
     <Layout>
       <IntroTour />
       <FlowOnboarding />
-      <div className="flex flex-col gap-8">
-        {/* Hero header with preview-style warmth */}
+
+      <div className="flex flex-col gap-6">
+        {/* Hero: välkommen, namn, kort undertext */}
         <div
           className="relative overflow-hidden rounded-3xl p-6 shadow-lifted border border-border/60 pop-in"
-          style={{ order: -1, background: heroGradient }}
+          style={{ background: heroGradient }}
         >
           <div className="pointer-events-none absolute -top-20 -right-16 h-40 w-40 rounded-full bg-blush opacity-60 blur-md" />
           <div className="pointer-events-none absolute -bottom-16 -left-10 h-32 w-32 rounded-full bg-mint opacity-50 blur-[2px]" />
@@ -261,7 +242,7 @@ export default function Home() {
           </div>
 
           <div className="relative space-y-2">
-            <h1 className="text-4xl font-bold text-ink pr-14">{greeting.title}</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold text-ink pr-14">{greeting.title}</h1>
             <p className="text-muted-foreground">{greeting.subtitle}</p>
             {editingName ? (
               <form
@@ -309,417 +290,126 @@ export default function Home() {
           </div>
         </div>
 
-        <Link
-          href="/vad-nu"
-          style={{ order: -1 }}
-          className="press group relative flex items-center gap-4 overflow-hidden rounded-3xl border border-primary/25 bg-card p-5 shadow-sm transition-colors hover:border-primary/50"
+        {/* Mitt batteri – enkel sammanfattning */}
+        <EnergyBattery />
+
+        {/* Nästa – nästa relevanta aktivitet */}
+        <section
+          className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+          aria-label="Nästa aktivitet"
         >
-          <span className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-lavender opacity-70" />
-          <span className="relative grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-primary/10 text-primary">
-            <Sparkles size={22} />
-          </span>
-          <span className="relative min-w-0">
-            <span className="block font-display text-lg font-bold text-ink">
-              Vad ska jag göra nu?
-            </span>
-            <span className="block text-sm text-muted-foreground">
-              Ett förslag i taget, utifrån din tid och energi.
-            </span>
-          </span>
-        </Link>
-
-        <div style={{ order: -1 }}>
-          <TaskQuickAdd
-            onAdd={(result: QuickAddResult) => {
-              addTask(result.title, result.dueDate, {
-                time: result.time,
-                energyImpact: result.energyImpact,
-                friction: result.friction,
-                area: activeArea === "alla" ? "vardag" : activeArea,
-              });
-            }}
-            className="bg-primary text-primary-foreground hover:bg-primary/90"
-          />
-        </div>
-
-        <div style={{ order: -1 }}>
-          <PersonalNote />
-        </div>
-
-        {showSection("batteri") && (
-          <div style={ord("batteri")}>
-            <EnergyBattery />
+          <div className="flex items-center gap-2 mb-3">
+            <CalendarDays size={18} className="text-primary" />
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+              Nästa
+            </h2>
           </div>
-        )}
 
-        {showSection("livspussel") && (
-          <HomeSection
-            style={ord("livspussel")}
-            id="livspussel"
-            title="Livspusslet"
-            help="Hur dagens olika delar hänger ihop – energi, deadlines, familj, jobb och studier. Låg kapacitet ger färre krav, inte fler."
-          >
-            <LifePuzzleCard />
-          </HomeSection>
-        )}
-
-        {showSection("dagen") && dayEntries.length > 0 && (
-          <HomeSection
-            style={ord("dagen")}
-            id="dagen"
-            title="Dagen just nu"
-            help="Dagens tidslinje: hållpunkter, uppgifter med klockslag, rutiner och medicintider."
-          >
-            <DayTimeline entries={dayEntries} isToday editable={false} />
-          </HomeSection>
-        )}
-
-        {showSection("dailyflow") && (
-          <HomeSection
-            style={ord("dailyflow")}
-            id="dailyflow"
-            title={helpPlan ? "Det viktigaste just nu" : "Daily Flow – dagens viktigaste"}
-            help="Berätta hur dagen ser ut, se ditt fokus och dagens viktigaste saker – allt på ett ställe. Du bestämmer alltid själv."
-          >
-            <div className="space-y-4">
-              <DayRebuild />
-              <DailyFlowCard
-                onTopTasks={setFlowFocusIds}
-                rest={
-                  <div className="space-y-3">
-                    {currentFocus && !helpPlan && (
-                      <button
-                        onClick={(e) => {
-                          if (!currentFocus.completed) celebrateFromEvent(e);
-                          toggleFocusCompleted();
-                        }}
-                        className={`w-full text-left p-5 rounded-2xl border-2 transition-all flex items-center gap-4 ${
-                          currentFocus.completed
-                            ? "bg-primary/10 border-primary/20 text-primary"
-                            : "bg-card border-primary/40 shadow-sm"
-                        }`}
-                      >
-                        {currentFocus.completed ? (
-                          <CheckCircle2
-                            size={24}
-                            className="fill-primary text-primary-foreground shrink-0"
-                          />
-                        ) : (
-                          <Circle size={24} className="text-primary shrink-0" />
-                        )}
-                        <div>
-                          <p className="text-xs uppercase tracking-wide text-muted-foreground mb-0.5">
-                            Dagens fokus
-                          </p>
-                          <p
-                            className={`font-medium ${currentFocus.completed ? "line-through opacity-70" : ""}`}
-                          >
-                            {currentFocus.text}
-                          </p>
-                        </div>
-                      </button>
-                    )}
-
-                    <div className="space-y-3">
-                      {visibleTasks.map((task, i) => (
-                        <div
-                          key={task.id}
-                          style={{ animationDelay: `${i * 60}ms` }}
-                          className="w-full flex items-center gap-3 p-4 surface-card hover:border-primary/40 hover:shadow-lifted transition-all text-left animate-fade-in"
-                        >
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              toggleTask(task.id);
-                              celebrateFromEvent(e);
-                            }}
-                            aria-label={`Klarmarkera ${task.title}`}
-                            className="flex flex-1 items-center gap-3 text-left active:scale-[0.99]"
-                          >
-                            <Circle size={20} className="text-muted-foreground shrink-0" />
-                            <span className="flex-1">{task.title}</span>
-                            {task.dueDate && (
-                              <span className="text-xs text-muted-foreground shrink-0">
-                                {task.dueDate}
-                              </span>
-                            )}
-                          </button>
-                          <FlowItemActions itemId={`task-${task.id}`} size={15} />
-                        </div>
-                      ))}
-                    </div>
-
-                    {(hiddenTaskCount > 0 || showAllTasks) && (
-                      <button
-                        type="button"
-                        onClick={() => setShowAllTasks((v) => !v)}
-                        className="w-full text-sm font-medium text-primary hover:underline pt-1"
-                      >
-                        {showAllTasks
-                          ? "Visa bara det viktigaste"
-                          : `Visa alla uppgifter som inte är klara (${areaTasks.length})`}
-                      </button>
-                    )}
-                  </div>
-                }
+          {nextEvent ? (
+            <Link
+              href="/min-dag"
+              className="group flex items-center gap-4 rounded-2xl bg-secondary/40 p-4 transition-colors hover:bg-secondary/60"
+            >
+              <span aria-hidden className="text-2xl">
+                {nextEvent.emoji}
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="font-medium text-ink truncate">{nextEvent.title}</p>
+                <p className="text-sm text-muted-foreground">
+                  {nextEvent.time
+                    ? `kl ${nextEvent.time}${nextEvent.endTime ? `–${nextEvent.endTime}` : ""}`
+                    : "Saknar klockslag"}
+                </p>
+              </div>
+              <ArrowRight
+                size={18}
+                className="shrink-0 text-muted-foreground group-hover:text-foreground transition-colors"
               />
+            </Link>
+          ) : (
+            <div className="rounded-2xl bg-secondary/30 p-4 text-sm text-muted-foreground">
+              Ingen aktivitet inplanerad just nu. Lägg till en påminnelse eller uppgift så dyker den
+              upp här.
             </div>
-          </HomeSection>
-        )}
+          )}
+        </section>
 
-        {showSection("quickflow") && (
-          <HomeSection
-            style={ord("quickflow")}
-            id="quickflow"
-            title="Quickflow"
-            help="Skriv ner det du kommer på, direkt. Du behöver inte bestämma när eller hur – sortera senare."
+        {/* Ett Flow-förslag – högst ett */}
+        {suggestion && (
+          <section
+            className="rounded-3xl border border-primary/20 bg-primary/5 p-5 shadow-soft"
+            aria-label="Flow-förslag"
           >
-            <div className="space-y-4">
-              <QuickflowCapture />
-              <QuickflowTriage />
-              <QuickflowList />
+            <div className="flex items-center gap-2 mb-3">
+              <Sparkles size={18} className="text-primary" />
+              <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+                Flow-förslag
+              </h2>
             </div>
-          </HomeSection>
+            <p className="text-ink leading-relaxed">{suggestion.text}</p>
+            {suggestion.action && (
+              <Link
+                href={suggestion.action}
+                className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+              >
+                Gå vidare <ArrowRight size={14} />
+              </Link>
+            )}
+          </section>
         )}
 
-        <div style={{ order: -2 }}>
-          <WakeUpCard />
+        {/* Lägg till – snabbknapp */}
+        <TaskQuickAdd
+          onAdd={(result: QuickAddResult) => {
+            addTask(result.title, result.dueDate, {
+              time: result.time,
+              energyImpact: result.energyImpact,
+              friction: result.friction,
+              area: activeArea === "alla" ? "vardag" : activeArea,
+            });
+          }}
+          className="bg-primary text-primary-foreground hover:bg-primary/90"
+        />
+
+        {/* Korta vägar till kärnfunktionerna */}
+        <nav aria-label="Huvuddestinationer" className="grid grid-cols-3 gap-3">
+          <Link
+            href="/min-dag"
+            className="flex flex-col items-center gap-2 rounded-2xl border border-border/60 bg-card p-4 text-center shadow-soft transition-colors hover:border-primary/40 hover:bg-primary/5"
+          >
+            <CalendarDays size={22} className="text-primary" />
+            <span className="text-xs font-medium text-ink">Min dag</span>
+          </Link>
+          <Link
+            href="/quickflow"
+            className="flex flex-col items-center gap-2 rounded-2xl border border-border/60 bg-card p-4 text-center shadow-soft transition-colors hover:border-primary/40 hover:bg-primary/5"
+          >
+            <Zap size={22} className="text-primary" />
+            <span className="text-xs font-medium text-ink">QuickFlow</span>
+          </Link>
+          <Link
+            href="/assistant"
+            className="flex flex-col items-center gap-2 rounded-2xl border border-border/60 bg-card p-4 text-center shadow-soft transition-colors hover:border-primary/40 hover:bg-primary/5"
+          >
+            <MessageCircle size={22} className="text-primary" />
+            <span className="text-xs font-medium text-ink">Flow</span>
+          </Link>
+        </nav>
+
+        {/* Områdesväljare – litet, längst ner */}
+        <div className="space-y-2 pt-2">
+          <AreaSwitcher size="sm" />
+          <p className="text-xs text-muted-foreground">
+            {activeArea === "alla"
+              ? "Flow ser hela din dag – oavsett vilket rum sakerna hör till."
+              : `Du är i ${AREA_META[activeArea].label.toLowerCase()}rummet. Resten väntar tills du vill se det.`}
+          </p>
         </div>
 
-        <div style={{ order: -1 }}>
+        <div className="pt-2">
           <AreaOnboarding />
         </div>
-
-        <div style={{ order: -1 }} className="space-y-2">
-          <AreaSwitcher size="sm" />
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <p className="text-xs text-muted-foreground">
-              {activeArea === "alla"
-                ? "Flow ser hela din dag – oavsett vilket rum sakerna hör till."
-                : `Du är i ${AREA_META[activeArea].label.toLowerCase()}rummet. Resten väntar tills du vill se det.`}
-            </p>
-            <ViewModeToggle area={activeArea} />
-          </div>
-          {isSimple && (
-            <p className="text-xs text-muted-foreground">
-              Förenklad vy: bara dagens saker, genvägar och hjälp. Byt till vanlig vy när du vill se
-              allt.
-            </p>
-          )}
-          <HomeCustomize />
-        </div>
-
-        {showSection("streak") && (
-          <HomeSection
-            style={ord("streak")}
-            id="streak"
-            title="Din svit"
-            help="Antal dagar i rad du gjort något i appen. Bryts den händer inget – den finns bara som en liten morot."
-          >
-            <StreakCard />
-          </HomeSection>
-        )}
-
-        {showSection("weather") && (
-          <HomeSection
-            style={ord("weather")}
-            id="weather"
-            title="Väder"
-            help="Vädret där du är just nu. Används också för tips, som att ta med paraply."
-          >
-            <WeatherCard />
-          </HomeSection>
-        )}
-
-        {showSection("shortcuts") && (
-          <HomeSection
-            style={ord("shortcuts")}
-            id="shortcuts"
-            title="Genvägar"
-            help="Dina fyra egna knappar. Tryck på pennan för att byta ut dem mot det du använder mest."
-          >
-            <HomeShortcuts />
-          </HomeSection>
-        )}
-
-        {showSection("week") && (
-          <HomeSection
-            style={ord("week")}
-            id="week"
-            title="Veckan i flow"
-            help="En snabb bild av veckan. Tryck på en dag för att se vad som ligger där."
-          >
-            <WeekInFlow />
-          </HomeSection>
-        )}
-
-        {showSection("suggestions") && (
-          <div style={ord("suggestions")}>
-            <ProactiveSuggestions />
-          </div>
-        )}
-
-        {showSection("help") && (
-          <button
-            type="button"
-            onClick={() => setHelpModalOpen(true)}
-            className="group relative w-full overflow-hidden flex items-center gap-4 p-6 rounded-3xl text-primary-foreground shadow-lifted transition-transform text-left active:scale-[0.99]"
-            style={{
-              ...ord("help"),
-              background:
-                "linear-gradient(135deg, hsl(var(--forest)) 0%, hsl(var(--forest-deep)) 100%)",
-            }}
-          >
-            <div className="absolute inset-0 bg-primary-foreground/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-            <MyFloveSparkle count={3} className="opacity-40" />
-
-            <div className="w-14 h-14 rounded-full bg-primary-foreground/15 flex items-center justify-center shrink-0 backdrop-blur-sm">
-              <HeartHandshake size={28} className="breathe" style={{ animationDuration: "6s" }} />
-            </div>
-            <div className="flex-1 relative">
-              <p className="text-xl font-semibold">Hjälp mig</p>
-              <p className="text-primary-foreground/85 text-sm">
-                Känns det tungt just nu? Berätta hur du mår, så gör jag idag lite mindre.
-              </p>
-            </div>
-          </button>
-        )}
-
-        {helpPlan && (
-          <div
-            style={ord("dailyflow")}
-            className="bg-sage/30 border border-sage rounded-2xl p-5 flex items-start gap-3 animate-in fade-in slide-in-from-top-2"
-          >
-            <Sparkles size={20} className="text-ink shrink-0 mt-0.5" />
-            <div className="flex-1">
-              <p className="text-ink leading-relaxed">{helpPlan.message}</p>
-              <button
-                type="button"
-                onClick={() => setHelpPlan(null)}
-                className="text-sm font-medium text-primary mt-2 underline underline-offset-2"
-              >
-                Visa allt igen
-              </button>
-            </div>
-          </div>
-        )}
-
-        {upcomingBills.length > 0 && showSection("bills") && (
-          <HomeSection
-            style={ord("bills")}
-            id="bills"
-            title="Kommande räkningar"
-            help="Räkningar med förfallodatum inom kort. Läggs in under Ekonomi."
-          >
-            <div className="space-y-3">
-              {upcomingBills.slice(0, 3).map((bill) => (
-                <div key={bill.id} className="flex items-center justify-between p-4 surface-card">
-                  <div>
-                    <p className="font-medium">{bill.category}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {new Date(bill.date).toLocaleDateString("sv-SE", {
-                        month: "short",
-                        day: "numeric",
-                      })}
-                      {bill.note ? ` · ${bill.note}` : ""}
-                    </p>
-                  </div>
-                  <span className="font-semibold">{bill.amount} kr</span>
-                </div>
-              ))}
-            </div>
-          </HomeSection>
-        )}
-
-        {nextMedication && showSection("medication") && (
-          <HomeSection
-            style={ord("medication")}
-            id="medication"
-            title="Medicinpåminnelser"
-            help="Bocka av när du tagit din medicin. Tiderna ställer du in under Daglig rutin."
-          >
-            <div className="space-y-2">
-              {medicationDosesToday.map(({ med, time }) => (
-                <div key={`${med.id}-${time}`} className="flex items-center gap-4 p-4 surface-card">
-                  <div className="w-11 h-11 rounded-full bg-violet-100 text-violet-700 flex items-center justify-center shrink-0">
-                    <Pill size={20} />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium truncate">
-                      {med.name}
-                      {med.dosage ? ` · ${med.dosage}` : ""}
-                    </p>
-                    <p className="text-sm text-muted-foreground">kl {time}</p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => toggleTaken(med.id, time)}
-                    className="px-3 py-2 rounded-xl text-sm font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-colors shrink-0"
-                  >
-                    Tagen
-                  </button>
-                </div>
-              ))}
-              <Link
-                href="/daglig-rutin"
-                className="flex items-center justify-between px-4 py-3 text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Hantera mediciner och tider
-                <ArrowRight size={16} className="shrink-0" />
-              </Link>
-            </div>
-          </HomeSection>
-        )}
-
-        {showSection("reset") && new Date().getHours() >= 17 && (
-          <HomeSection
-            style={ord("reset")}
-            id="reset"
-            title="Flow Reset"
-            help="Ett frivilligt sätt att avsluta dagen. Det som inte blev gjort får bara flytta med."
-          >
-            <FlowReset />
-          </HomeSection>
-        )}
-
-        {showSection("push") && (
-          <HomeSection
-            style={ord("push")}
-            id="push"
-            title="Påminnelser"
-            help="Slå på notiser i mobilen så påminner appen dig även när den är stängd."
-          >
-            <div className="space-y-4">
-              <div className="surface-card p-4 flex flex-wrap items-center justify-between gap-3">
-                <div>
-                  <p className="font-semibold text-ink">Påminnelser även när appen är stängd</p>
-                  <p className="text-sm text-muted-foreground">
-                    Medicin, tvätt, väder och tider – som en varsam knuff när det behövs.
-                  </p>
-                </div>
-                <EnablePushButton />
-              </div>
-
-              <QuietModeSettings />
-              <AdaptiveLeadSettings />
-
-              <PersonalPushSettings />
-              <WakeUpSettings />
-            </div>
-          </HomeSection>
-        )}
-
-        <div style={{ order: 999 }}>
-          <UnusedBlocksHint />
-        </div>
       </div>
-
-      <HelpMeModal
-        open={helpModalOpen}
-        onOpenChange={setHelpModalOpen}
-        onSelectFeeling={handleSelectFeeling}
-      />
-      <OverwhelmedModal open={overwhelmedOpen} onOpenChange={setOverwhelmedOpen} />
     </Layout>
   );
 }
