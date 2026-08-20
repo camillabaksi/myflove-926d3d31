@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { TaskQuickAdd, type QuickAddResult } from "@/components/task-quick-add";
 import { Link } from "wouter";
 import HomeShortcuts from "@/components/home-shortcuts";
 import UnusedBlocksHint from "@/components/unused-blocks-hint";
