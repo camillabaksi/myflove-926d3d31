@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Ingen Sätt dagens fokus-knapp på hemskärmen – Daily Flow visar bara det som finns, fokus sätts via Flow eller FlowPlan (2026-08-20)",
       "Att göra är din dagliga agenda – flikarna Idag, Kommande och Klart, snabbtillägg med när/energi/friktion, förslag från Flow och en frivillig energifråga när du bockar av (2026-08-20)",
       "Anteckningar & idébank har en egen del under Flow – öppna Anteckningar direkt från Mer-menyn, Quickflow länkar dit (2026-08-19)",
       'Flytta en anteckning tillbaka till Quickflow – knappen "Tillbaka till Quickflow" gör anteckningen till ett aktivt flow-block igen (2026-08-19)',
