@@ -253,6 +253,12 @@ export default function Home() {
           </div>
         )}
 
+        {/* Ständig snabbknapp: logga det du faktiskt gjorde */}
+        <div style={pos("batteri")}>
+          <DidThisCta />
+        </div>
+
+
         {/* Nästa – nästa relevanta aktivitet */}
         {shows("nasta") && (
           <section
