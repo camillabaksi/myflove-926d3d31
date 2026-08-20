@@ -107,7 +107,7 @@ export default function Home() {
     return isSimple ? SIMPLE_SECTIONS.includes(id) : true;
   };
 
-  const { activeReminders: _activeReminders } = useReminders();
+  const { activeReminders } = useReminders();
   const { transactions } = useFinances();
   const { medications, isTaken, toggleTaken } = useMedications();
   const { activeItems: _shoppingItems } = useSharedShoppingList();
