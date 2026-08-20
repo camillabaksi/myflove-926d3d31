@@ -34,7 +34,13 @@ export function DidThisCta({ className }: { className?: string }) {
   const [busy, setBusy] = useState(false);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  useEffect(() => () => closeTimer.current && clearTimeout(closeTimer.current), []);
+  useEffect(
+    () => () => {
+      if (closeTimer.current) clearTimeout(closeTimer.current);
+    },
+    [],
+  );
+
 
   const chips = useMemo<DidSuggestion[]>(() => {
     const own: DidSuggestion[] = presets.map((p) => ({
