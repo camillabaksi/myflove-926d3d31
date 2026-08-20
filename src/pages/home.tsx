@@ -50,6 +50,7 @@ import { useViewMode } from "@/lib/view-mode";
 const SECTION_AREAS: Record<string, LifeArea[]> = {
   livspussel: ["vardag", "privat", "studier", "jobb"],
   dailyflow: ["vardag", "privat", "studier", "jobb"],
+  dagen: ["vardag", "privat", "studier", "jobb", "barn"],
   reset: ["vardag", "privat", "studier", "jobb"],
   quickflow: ["vardag", "privat", "studier", "jobb"],
   streak: ["vardag"],
@@ -64,7 +65,7 @@ const SECTION_AREAS: Record<string, LifeArea[]> = {
 };
 
 /** Vad som är kvar i förenklad vy – det du faktiskt behöver just nu. */
-const SIMPLE_SECTIONS = ["livspussel", "dailyflow", "medication", "shortcuts", "help"];
+const SIMPLE_SECTIONS = ["livspussel", "dagen", "dailyflow", "medication", "shortcuts", "help"];
 
 import {
   useFocus,
@@ -343,6 +344,17 @@ export default function Home() {
             help="Hur dagens olika delar hänger ihop – energi, deadlines, familj, jobb och studier. Låg kapacitet ger färre krav, inte fler."
           >
             <LifePuzzleCard />
+          </HomeSection>
+        )}
+
+        {showSection("dagen") && dayEntries.length > 0 && (
+          <HomeSection
+            style={ord("dagen")}
+            id="dagen"
+            title="Dagen just nu"
+            help="Dagens tidslinje: hållpunkter, uppgifter med klockslag, rutiner och medicintider."
+          >
+            <DayTimeline entries={dayEntries} isToday editable={false} />
           </HomeSection>
         )}
 
