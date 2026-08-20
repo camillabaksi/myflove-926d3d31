@@ -1,49 +1,100 @@
-# Testa Min dag i en riktig inloggad session
+# Steg 4 – Analys och förenkling av Flow
 
-## Vad jag hittade i projektet
+Endast analys och plan. Ingen kod ändras, inget raderas i detta steg.
 
-- **Auth**: Supabase e-post/lösenord via en Clerk-kompatibel shim (`src/compat/clerk.tsx`). Hela appen ligger bakom `src/routes/_app.tsx`, som är `ssr: false` och skickar till `/sign-in` utan session. Det finns ingen dev-bypass idag – bra.
-- **Testanvändare**: det finns 20+ riktiga konton. Ett heter `test@hotmail.com` (skapat 2026-07-09, har aldrig loggat in), men det är inte skapat av oss och ska inte kapas.
-- **Ingen seed/demo-data**: inga fixtures eller `import.meta.env.DEV`-lägen finns. Enda "demo"-datan är fiktiva texter i MyFlove Insight.
-- **Datalagring**: nästan all app-data (uppgifter, rutiner, energilogg m.m.) sparas per användare i `public.user_kv` via `src/lib/cloud-storage.ts`, plus egna tabeller för påminnelser/kalender. Allt är RLS-skyddat per `user_id`, så ett testkonto kan aldrig se eller röra någon annans data.
-- **Testsession**: plattformen kan redan skapa en tillfällig, kortlivad inloggad session åt agenten för en vald användare i det här projektet. Ingen kod, inget lösenord och ingen bypass behövs för att använda den.
+## Vad som finns idag (verifierat i koden)
 
-## Rekommendation
+Flow-relaterade vyer och routes:
 
-Använd plattformens sessionsminting mot ett **dedikerat QA-konto som vi skapar och tar bort igen** – inte mot ditt eget konto och inte mot någon befintlig användares konto.
+| Route | Fil | Vad den gör |
+|---|---|---|
+| `/assistant` (heter "Flow" i navet) | `src/pages/assistant.tsx` (457 rader) | AI-chatt med historik, snabbprompter, coach-hälsning |
+| `/flowplan` | `src/pages/flowplan.tsx` (515 rader) | AI-sekvens av dagens uppgifter + `DailyFocusCard` |
+| `/vad-nu` | `src/pages/what-now.tsx` (216 rader) | "Vad ska jag göra nu?" – ett förslag i taget + fokusläge |
+| `/min-dag` | `src/pages/my-day.tsx` (259 rader) | Cockpit: batteri, tidslinje, `DailyFocusCard`, `FlowReplan` |
+| `/flowscore` | `src/pages/flowscore.tsx` | FlowScore-poäng som eget system |
+| `/energifloede` | `src/pages/energy-flow.tsx` (394 rader) | Energipoäng, vikter, inställningar |
+| `/friktionsindex` | `src/pages/friction-index.tsx` (470 rader) | Friktionsbibliotek med röstning |
+| `/veckans-flow` | `src/pages/week-flow.tsx` | Veckoöversikt |
+| `/daglig-rutin` | `src/pages/daily-flow.tsx` | **Inte Flow** – rutiner + medicin (namnet vilseleder) |
+| `/quickflow` | infångning | Överlappar Flow endast i triage/förslag |
 
-Det är den säkraste och billigaste vägen: inga kodändringar, inget lösenord i repot, ingen permanent testanvändare, ingen produktionsdata påverkas.
+Logiklager: `daily-flow.ts`, `focus-rules.ts`, `task-agenda.ts`, `energy-battery.ts`, `flowscore.ts`, `energy-flow.ts`, `friction-match.ts`, `replan.ts`, `flow-diff.ts`, `coach.ts`, `help-me.ts`, `flow-insights.ts`, `life-puzzle.ts`, `flow-personality.ts`, `flowplan.functions.ts`, `flow-chat.functions.ts`.
 
-## Så går det till
+## Överlappningar jag hittade
 
-1. **Skapa QA-kontot** via backendens admin-API: e-post av typen `qa-minday+<datum>@myflove.test`, ett slumpgenererat engångslösenord som varken sparas i repo eller visas i chatten, e-post förbekräftad så inget riktigt mejl skickas. Kontot får inga roller och ingen hushållstillhörighet.
-2. **Mint en kortlivad session** för just det användar-id:t och kör den i webbläsaren mot förhandsvisningen. Sessionen ligger bara i sandboxen och loggas aldrig.
-3. **Kör igenom testlistan** i mobilstorlek (411 × 743, samma som din telefon):
-   - logga in och landa i appen
-   - tom dag: Min dag utan något inlagt (batteri, energibalans, tomtext ska inte krascha)
-   - lägga till aktivitet via ＋ Lägg till
-   - redigera aktivitet (tid/text) i tidslinjen
-   - markera klar
-   - ta bort aktivitet
-   - Mitt batteri: nivå, riktning, expandera till kurva
-   - dagens energibalans-mening
-   - ett Flow-förslag
-   - mobil layout: inget överfullt, inget som klipps
-4. **Rapport med skärmbilder** per steg och eventuella konsolfel.
-5. **Städa upp**: radera QA-användaren, vilket via `on delete cascade` tar bort dess rader i `user_kv` och övriga användartabeller. Efter testet finns inget testkonto kvar.
+1. **Fyra sätt att få "vad ska jag göra nu"**: `/vad-nu` (scoreTask), `/flowplan` (AI-sekvens), `DailyFocusCard` (dagens fokus) och Flow-chattens snabbprompt. Samma uppgiftsdata, fyra rankningsalgoritmer.
+2. **`DailyFocusCard` renderas på två ställen** – `/min-dag` och `/flowplan`. Samma kort, samma data.
+3. **Tre poängsystem exponerade för användaren**: FlowScore, Energiflöde och Mitt batteri. Batteriet är det enda med begriplig metafor; de två andra är interna signaler som visas som egna vyer.
+4. **Friktion visas som eget system** (`/friktionsindex` + `FrictionSuggestion` i workflow/studyflow) trots att `friction-match.ts` egentligen bara är en viktning för hur tung en uppgift känns.
+5. **Omplanering finns dubbelt**: `FlowReplan` (min-dag, workflow, studyflow) och `flowplan`s omordning gör i praktiken samma sak.
+6. **Död kod**: `proactive-suggestions.tsx` (372 rader), `daily-flow-card.tsx` (357 rader), `help-me-modal.tsx`, `week-in-flow.tsx` importeras inte längre av någon vy.
+7. **Namnkollision**: `/daglig-rutin` ("Daily Flow"-filen) har inget med Flow att göra – förvirrar både användare och kod.
 
-## Vad som påverkas
+## Klassificering
 
-- **Inga filer i `src/` ändras.** Ingen ny route, inget dev-läge, ingen bypass, inga hårdkodade uppgifter.
-- **Databas**: en tillfällig rad i auth-tabellen plus de rader QA-kontot själv skapar under testet. Allt raderas i steg 5.
-- **Inställningar**: inga ändringar i auth-konfiguration (ingen auto-confirm globalt, inga anonyma inloggningar).
+**1. BEHÅLL SOM PRIMÄR DEL AV FLOW**
+- Flow-chatten (`assistant.tsx`) – blir lagret HJÄLP
+- `flow-personality.ts`, `flow-voice.ts`, `flow-chat.functions.ts`
+- `energy-battery.ts` + `EnergyBattery` – enda synliga energimåttet
 
-## Alternativ jag avråder från
+**2. SLÅ IHOP MED FLOW**
+- `/vad-nu` → blir lagret NU inuti Flow
+- `DailyFocusCard` → uppgår i NU
+- `FlowReplan` + `replan.ts` + `flow-diff.ts` → blir lagret IDAG
+- `flowplan`s sekvenslogik (`flowplan.functions.ts`) → driver IDAG-vyn internt
+- `coach.ts` + `help-me.ts` → en enda ingång till HJÄLP
 
-- **Använda `test@hotmail.com`**: okänd ägare, kan vara en riktig person.
-- **Använda ditt eget konto**: testdata skulle blandas med din verkliga vardag.
-- **Dev-only inloggningsknapp eller mockad auth**: kräver kod i produktionsgrenen och är precis den typ av bypass vi vill undvika.
+**3. GÖM SOM AVANCERAD FUNKTION** (finns kvar under Mer → Avancerat)
+- `/flowscore`, `/energifloede`, `/friktionsindex`, `/veckans-flow`, `/insight`
 
-## Om du hellre vill
+**4. FLYTTA TILL QUICKFLOW**
+- Inget. QuickFlow är infångning, Flow är beslut – gränsen är redan tydlig. Enda justeringen: QuickFlow-triagens "föreslå destination" ska anropa samma rankningsmotor som Flow, inte sin egen.
 
-Vill du behålla ett permanent familj-/testkonto (t.ex. för att visa appen för andra) kan vi i stället skapa ett vanligt konto via den vanliga registreringssidan, som du själv äger lösenordet till. Det är säkert men lämnar ett konto kvar – säg till om du föredrar det.
+**5. TA BORT SOM SEPARAT VY MEN BEHÅLL LOGIKEN**
+- `/vad-nu` och `/flowplan` som egna routes (redirect till `/flow`)
+- `flowscore.ts`, `energy-flow.ts`, `friction-match.ts` fortsätter köra internt som insignal till batteri och rankning – men slutar vara egna "system" i gränssnittet
+
+**6. VERKLIG DUBBLETT SOM KAN TAS BORT** (senare, efter verifiering)
+- `proactive-suggestions.tsx`, `daily-flow-card.tsx`, `help-me-modal.tsx`, `week-in-flow.tsx` – oanvända
+- Dubbelrenderingen av `DailyFocusCard` i `/flowplan`
+- Filnamnet `daily-flow.tsx` byter namn till `daily-routine.tsx` (routen `/daglig-rutin` behålls)
+
+## Föreslagen slutlig Flow-struktur
+
+En route: `/flow` (nuvarande `/assistant` behålls som redirect så publicerade länkar fungerar).
+
+```text
+FLOW
+├── NU      Ett svar. Ett nästa steg. Två knappar.
+│           "Du har bra fokus och 72% energi. En uppgift kräver fokus.
+│            Vill du börja med den?"   [Ja, börja]  [Senare]
+│
+├── IDAG    En mening om dagens belastning + max ett flyttförslag.
+│           "Din eftermiddag är tung. Flytta städningen till imorgon?"
+│           [Flytta]  [Behåll]
+│
+└── HJÄLP   Chatten. Öppnas när användaren själv ber om den.
+```
+
+Inga poäng, inga procenttal utöver batteriet, inga listor av kort. Allt annat (FlowScore, friktion, energiflöde) matar motorn i bakgrunden.
+
+## Återanvändbara delar
+
+- Rankning: `daily-flow.ts:scoreTask` + `focus-rules.ts` + `task-agenda.ts` → slås ihop till en motor, `src/lib/flow-engine.ts`
+- Energi: `useEnergyBattery`, `energy-battery.ts` (redan färdig kurva över dygnet)
+- Omplanering: `replan.ts`, `flow-diff.ts`, `FlowReplanDiff`
+- Handling: `FlowItemActions`, `FocusMode`, `TaskQuickAdd`
+- Röst: `flow-voice.ts`, `flow-personality.ts`
+
+## Implementeringsordning (små steg, låg risk)
+
+1. **Motor utan UI-ändring** – skapa `src/lib/flow-engine.ts` som samlar rankning + batteri + friktion till ett svar (`nowSuggestion`, `todayLoad`, `replanSuggestion`). Inga vyer rörs. Verifierbart med typecheck.
+2. **NU-lagret** – bygg nya `/flow` med enbart NU-kortet ovanpå motorn. `/assistant` och `/vad-nu` lämnas orörda tills det är verifierat.
+3. **IDAG-lagret** – lägg till dagens belastning + ett flyttförslag, driven av `replan.ts`.
+4. **HJÄLP-lagret** – flytta in chatten som ett läge i `/flow`, behåll historiken.
+5. **Redirects** – `/assistant`, `/vad-nu`, `/flowplan` pekar om till `/flow`. Navet visar bara Flow.
+6. **Göm avancerat** – flytta FlowScore, Energiflöde, Friktionsindex, Veckans flow till "Mer → Avancerat".
+7. **Städning** – först nu radera oanvända komponenter, efter att steg 1–6 verifierats i preview.
+
+Varje steg är en separat ändring som kan testas för sig, vilket håller nere både regressionsrisk och credits.
