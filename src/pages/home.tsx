@@ -10,6 +10,8 @@ import { useTasks, useReminders, useMedications, type Task, type Reminder } from
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import type { Routine } from "@/pages/routines";
 import { useStudySchedule } from "@/hooks/use-study-schedule";
+import { suggestNow, type NowSuggestion } from "@/lib/flow-engine";
+
 import { AreaOnboarding } from "@/components/area-onboarding";
 import { AreaSwitcher } from "@/components/area-switcher";
 import { AREA_META, useActiveArea } from "@/lib/life-areas";
