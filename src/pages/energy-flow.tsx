@@ -459,11 +459,11 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
                 {frictionRows.map((t) => (
                   <div key={t.key} className="flex items-center justify-between text-sm">
                     <span>
-                      {frictionEmoji(Math.round(t.avgFriction))} {t.label}
+                      {frictionEmoji(Math.round(t.friction))} {t.label}
                     </span>
                     <span className="text-muted-foreground">
-                      friktion {t.avgFriction.toFixed(1)} · energi {t.net > 0 ? "+" : ""}
-                      {t.net}
+                      friktion {t.friction.toFixed(1)} · energi {t.energy > 0 ? "+" : ""}
+                      {t.energy.toFixed(1)}
                     </span>
                   </div>
                 ))}
