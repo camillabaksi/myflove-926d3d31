@@ -70,7 +70,11 @@ export default function DayTimeline({
               : `color-mix(in oklab, hsl(var(--primary)) ${Math.round(energy / 12)}%, transparent)`;
           if (inHour.length === 0 && !showNowLine) {
             return (
-              <div key={h} className="flex items-center gap-3 rounded-xl" style={{ backgroundColor: tint }}>
+              <div
+                key={h}
+                className="flex items-center gap-3 rounded-xl"
+                style={{ backgroundColor: tint }}
+              >
                 <span className="w-11 shrink-0 text-right text-xs text-muted-foreground/60">
                   {String(h).padStart(2, "0")}:00
                 </span>

@@ -66,7 +66,15 @@ const SECTION_AREAS: Record<string, LifeArea[]> = {
 };
 
 /** Vad som är kvar i förenklad vy – det du faktiskt behöver just nu. */
-const SIMPLE_SECTIONS = ["batteri", "livspussel", "dagen", "dailyflow", "medication", "shortcuts", "help"];
+const SIMPLE_SECTIONS = [
+  "batteri",
+  "livspussel",
+  "dagen",
+  "dailyflow",
+  "medication",
+  "shortcuts",
+  "help",
+];
 
 import {
   useFocus,
@@ -345,7 +353,6 @@ export default function Home() {
         )}
 
         {showSection("livspussel") && (
-
           <HomeSection
             style={ord("livspussel")}
             id="livspussel"

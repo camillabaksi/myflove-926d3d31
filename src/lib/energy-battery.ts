@@ -175,7 +175,6 @@ export function buildBattery(input: BatteryInput): BatteryReading {
     });
   }
 
-
   const future = slots.filter((s) => !s.past);
   const scan = future.length >= 3 ? future : slots;
 

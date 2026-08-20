@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Layout from "@/components/layout";
 import { MyFloveEmptyIllustration } from "@/components/myflove/motion";
 import { useFocus, useTasks, useReminders } from "@/hooks/use-data";
@@ -589,7 +589,6 @@ export default function CalendarPage() {
         <EnergyBattery />
 
         <div className="bg-card rounded-3xl border border-border shadow-sm overflow-hidden">
-
           <div className="p-6 pb-2">
             <CollapsibleSection
               title={periodLabel}
