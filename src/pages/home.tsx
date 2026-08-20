@@ -160,6 +160,8 @@ export default function Home() {
   const suggestion = useFlowSuggestion();
   const { visible } = useHomeLayout();
   const shows = (id: HomeBlockId) => visible.includes(id);
+  // Ordningen från "Anpassa hemskärmen" styrs via flex order.
+  const pos = (id: HomeBlockId) => ({ order: visible.indexOf(id) });
 
   const hour = new Date().getHours();
   const heroGradient =
