@@ -9,6 +9,14 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 
 ### Changed
 
+- **En enda förslagskälla** (2026-08-20): Hem, Min dag och Flow → Nu använder nu samma Flow-motor, så du får samma svar på "vad är viktigast just nu?" oavsett var du står. Kortet "Dagens fokus" på Min dag är borttaget (det upprepade tidslinjen), och den extra energimeningen är ersatt av Flows egen bedömning av dagens belastning.
+- **Ett namn på varje sak** (2026-08-20): "Daily Flow", "Vad ska jag göra nu?" och "Dagens fokus" är borta ur gränssnittet. Allt heter Flow (Nu / Idag / Hjälp), och "Daglig rutin" heter nu **Rutiner & medicin** så att den inte konkurrerar med Min dag.
+- **En väg in till Energiflöde** (2026-08-20): Energiflöde finns bara som del av Må bra i stället för att dessutom ligga under Hälsa och Avancerat. Gamla länkar till /energifloede fungerar fortfarande.
+
+### Removed
+
+- **Anpassa hemskärmen och död kod** (2026-08-20): Den gamla blockinställningen för hemskärmen beskrev block som inte längre finns på nya Hem och togs bort tillsammans med sina oanvända komponenter.
+
 - **Ett samlat Flow** (2026-08-21): Flow är nu en enda hjälpare med tre lager – **Nu** (ett tydligt förslag med Ja, börja / Senare / Redan klar), **Idag** (dagens belastning i klarspråk och förslag att flytta något till imorgon) och **Hjälp** (Flow-chatten). FlowPlan, "Vad ska jag göra nu?" och Flow-chatten är sammanslagna och når du via /flow – gamla länkar pekar om automatiskt. FlowScore, Energiflöde, Veckans flow och Friktionsindex ligger kvar under Mer → Avancerat.
 - **Förenklad Hem-landning** (2026-08-20): Hem är nu en lugn landningssida som svarar på "Vad behöver jag veta just nu?" – med hälsning, Mitt batteri, Nästa aktivitet, ett Flow-förslag och en tydlig ＋ Lägg till-knapp. Inga långa listor, grafer eller flera AI-förslag. All sekundär funktionalitet finns kvar på sina egna sidor och nås via Mer.
 - **Enklare huvudnavigation** (2026-08-20): Appen har nu fem tydliga ingångar – Hem, Min dag, QuickFlow, Flow och Mer. Kalender, Att göra, FlowPlan, Vad ska jag göra nu?, Energiflöde, Må bra, FlowScore och Statistik är inte längre egna huvuddestinationer utan ligger under Min dag, Flow respektive Insights. Mer är omgrupperat i Min dag · Flow · Studier · Jobb · Familj · Hemma · Resor · Insights · Inställningar. Alla sidor, länkar och redirects fungerar precis som förut, och du kan fortfarande byta de två valfria platserna i bottenmenyn.
