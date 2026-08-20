@@ -8,6 +8,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 ## [Unreleased]
 
 ### Added
+
 - **Snabbknapp för Att göra på hemskärmen** (2026-08-20): En stor ＋ Lägg till-knapp högt upp på hemskärmen skapar en ny Att göra-post på sekunder. Den använder samma snabbdialog som Att göra-sidan, föreslår dagens datum, och plockar upp det aktiva rummet (Vardag, Privat, Studier, Jobb eller Barn) så inget behöver sorteras i efterhand.
 - **Att göra är MyFloves dagliga agenda** (2026-08-20): Att göra har flikarna ☀️ Idag (standard), 📅 Kommande och ✅ Klart, en snabb ＋-knapp med val för när, energi och friktion, mjuka förslag från Flow när dagen inte matchar din energi, och en frivillig fråga om faktisk energi när du bockar av. Uppgifter med tid syns även i kalendern – utan tid stannar de i Att göra.
 - **Anteckningar & idébank som egen del under Flow** (2026-08-19): Anteckningarna har fått en egen sida (/anteckningar) i Flow-gruppen i stället för att ligga inbakade i Quickflow – Quickflow länkar dit.
@@ -21,6 +22,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 - **Barn som eget livsområde** (2026-08-19): I Att göra (och övriga vyer med livsområden) kan en sak nu läggas i Barn, vid sidan av Vardag, Privat, Studier och Jobb.
 
 ### Changed
+
 - **Ingen "Sätt dagens fokus"-knapp på hemskärmen** (2026-08-20): Den tomma dagen visar inte längre en uppmaning att sätta fokus – Daily Flow visar bara det som faktiskt finns, och du sätter fokus via Flow eller FlowPlan som vanligt.
 - **Ett sammanhängande Daily Flow-kort** (2026-08-19): Ditt fokus idag och dagens viktigaste ligger nu i samma kort – fokuslistan högst upp och "Resten av dagen" direkt under, i stället för två separata kort.
 - **Inga dubbletter i Daily Flow** (2026-08-19): En uppgift som redan står i "Ditt fokus idag" eller som dagens fokus visas inte en gång till i listan under.
@@ -29,6 +31,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 - **Städad kodbas** (2026-08-18): Alla ~6 000 lintanmärkningar är åtgärdade – enhetlig formatering i hela projektet, tydliga typer i stället för lösa `any`, kommenterade undantag där de behövs och regler anpassade för UI-bibliotek och genererade filer. Inget i appens funktion har ändrats; alla flöden testades efteråt.
 
 ### Fixed
+
 - **Uppgifter försvinner inte längre vid synk** (2026-08-18): Om molnläsningen misslyckades, eller om appen öppnades i en ny webbläsare/PWA med tom lokal lagring, kunde en tom lista skrivas över dina sparade uppgifter. Nu skrivs molnet bara över efter en avsiktlig ändring – aldrig av ett tomt startvärde eller ett misslyckat anrop.
 - **Flow svarar igen i chatten** (2026-08-18): När du startade ett nytt samtal byttes sidan direkt när chatten skapades, vilket avbröt anropet till Flow så att svaret aldrig kom. Nu skickas frågan klart och svaret sparas innan sidan byter till det nya samtalet.
 - **Snabbare start på varje sida** (2026-08-18): Molnsynken frågade efter inloggad användare en gång per sparad inställning – över 130 nätverksanrop per sidladdning. Nu delas svaret mellan alla, vilket tar ner det till en handfull och gör sidorna snabbare, särskilt på mobil och dålig uppkoppling.
@@ -45,7 +48,6 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 - **Aviseringar för aktiva påminnelser** (2026-08-18): Aktiva påminnelser ger nu en notis när det är dags – på tiden eller med förvarning (5/15/30/60 min), och även för upprepningar (varje dag, vardagar, varje vecka). Push-notiser når dig när appen är stängd, och avbokade påminnelser skickar aldrig något. På sidan Påminnelser finns nu en ruta där du slår på notiser.
 
 - **Sidan Påminnelser** (2026-08-18): Ny vy på `/paminnelser` där du lägger till, ändrar och avbokar påminnelser med datum, tid och anteckning. Varje påminnelse visar tydlig status – Aktiv eller Avbokad – och avbokade ligger kvar så att du kan aktivera dem igen eller ta bort dem helt.
-
 
 - **GitHub-issues från checklistan** (2026-08-18): 70 färdiga issues (26 kapitel-epics + delmoment) med rubrik, beskrivning och acceptance criteria utifrån Utvecklarchecklista 2.9 – som markdown, JSON och ett gh-skript för import.
 - **Utvecklarchecklista 2.9** (2026-08-18): Konkret checklista utifrån Living Blueprint 2.9 – ett avsnitt per kapitel (1–18) med avbockningsbara delmoment och status (klart/delvis/kvar), samt tre prioriterade nästa steg.
@@ -69,6 +71,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 - **"Omvandla till …" på anteckningar** (2026-08-18): Varje anteckning har nu en tydlig knapp där du väljer om den ska bli uppgift, kalenderhändelse eller energifaktor. Du kan justera text, datum, tid, påminnelse eller energiriktning, styrka och kategori – och inget sparas förrän du trycker Bekräfta.
 
 ### Fixed
+
 - **Notiser kommer nu även när appen är stängd** (2026-08-18): Telefonens push-prenumeration kunde bytas ut i bakgrunden utan att servern fick veta – då skickades notisen till en gammal nyckel och syntes aldrig. Nu förnyas prenumerationen varje gång du öppnar appen, och tjänsten uppdaterar sig själv direkt om webbläsaren byter nyckel. Gamla, döda prenumerationer för samma enhet rensas bort.
 - **Tider för personliga puffar sparas igen** (2026-08-17): Morgonpuff, kvällspuff och Morgonstart sparade inte de tider du valde – sparningen avvisades tyst i bakgrunden. Nu skickas bara dina inställningar, och tiderna ligger kvar och styr när notiserna kommer.
 
@@ -77,10 +80,12 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 - **Resor och familjekalender fungerar igen** (2026-08-17): Reseökningen hämtar återigen riktiga avgångar i realtid, och familjens kalender, inköpslista och familjeuppgifter läser och sparar mot molnet igen i stället för att bara låtsas lyckas.
 
 ### Changed
+
 - **Tydlig regelmotor för "Ditt fokus idag"** (2026-08-17): En enda plats (`src/lib/focus-rules.ts`) avgör nu vad som hör hemma i dagens fokus, i tydlig ordning: klara saker och undanstoppade göms, automatiska poster (prov/repetition) styr inte dagen, passerade datum och dagens datum visas, framtida datum väntar och saker utan datum kan alltid göras. Varje beslut har en kort motivering i Flow-röst.
 - **"Ditt fokus idag" visar bara dagens saker** (2026-08-17): Uppgifter med ett framtida datum syns inte längre i "Ditt fokus idag" på hemskärmen – de ligger kvar i kalendern och dyker upp först när dagen är inne. Passerade datum och dagens datum visas fortfarande.
 
 ### Added
+
 - **Spara som anteckning i QuickFlow** (2026-08-18): QuickFlow är fortsatt appens universella infångning – du behöver inte veta vad något är för att skriva ner det. Efter infångning kan du välja vad det ska bli: uppgift, kalenderhändelse, inköpslista, påminnelse, studier, jobb, livsområde, anteckning, energifaktor eller "Annat – behåll här". Väljer du anteckning sparas texten som den är, utan deadline eller krav på åtgärd, under "Anteckningar" på QuickFlow-sidan. Där kan varje anteckning senare omvandlas till något annat; Flow föreslår när det finns en tydlig koppling men omvandlar aldrig något automatiskt.
 - **Färdiga regelmallar i QuickFlow** (2026-08-18): Åtta färdiga mallar för vanliga mönster – "boka …", "köpa …", "handla …", "påminn …", "ring …", "betala …", "idé: …" och "träffa …". Lägg till en mall direkt eller välj Anpassa för att ändra ord, destination, livsområde, klockslag och om ordet ska tas bort innan du sparar. Redan sparade regler går att ändra med pennknappen.
 
@@ -100,7 +105,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 - **Behaglig väckning** (2026-08-17): Morgonstart känns nu mjuk i stället för skarp. En varm, långsamt stigande klockklang (C–E–G–C) tonar in när du öppnar Morgonstart, med en ljudknapp om du vill tysta eller spela om den. Vibrationerna i puffarna är kortare och rundare, och texterna är lugnare ("Sträck på dig i sängen", "Ingen stress – tryck när du är redo").
 - **Morgonstart för dig som snoozar** (2026-08-17): Nytt läge som fångar upp när alarmet snoozas bort. Flow puffar mjukt på vald tid och följer sedan upp med jämna mellanrum (t.ex. var 8:e minut, max 4 gånger) med stigande tydlighet: först en varm rad, sedan en tydligare, sedan en notis som ligger kvar tills du svarar. Puffarna slutar direkt när du trycker "Jag är vaken" eller kryssar ett steg i den lilla morgonrutinen (fötterna i golvet, ett glas vatten, släpp upp gardinen). Notisen öppnar den nya sidan **Morgonstart** (`/morgonstart`), och kortet syns på hemskärmen under morgonfönstret. Allt styrs från Påminnelser på hemskärmen.
 - **Ny marknadsföringsvideo** (2026-08-17): Renderad om i MyFloves lila designspråk (Plus Jakarta Sans, violett/rosa palett i stället för de gamla jordtonerna). 2:27 min, 1280x720 – `myflove-marknadsforing-2026-08.mp4`.
-- **Omplanering när kapaciteten är låg** (2026-08-17): När FlowScore är lågt frågar Min dag "Ska vi lägga om dagen?" med en konkret förklaring till varför (passerade datum, tunga saker, redan bokade hållpunkter) och tre lägen: *Behåll planen*, *Gör dagen lättare* (färre saker och bara det som inte känns tungt) och *Bara det nödvändigaste* (hållpunkter plus en enda sak). Valet ändrar direkt vad som ligger i dagens plan och vad som flyttas till "Resten kan vänta" – inget tas bort. Läget gäller resten av dagen och nollställs automatiskt till imorgon.
+- **Omplanering när kapaciteten är låg** (2026-08-17): När FlowScore är lågt frågar Min dag "Ska vi lägga om dagen?" med en konkret förklaring till varför (passerade datum, tunga saker, redan bokade hållpunkter) och tre lägen: _Behåll planen_, _Gör dagen lättare_ (färre saker och bara det som inte känns tungt) och _Bara det nödvändigaste_ (hållpunkter plus en enda sak). Valet ändrar direkt vad som ligger i dagens plan och vad som flyttas till "Resten kan vänta" – inget tas bort. Läget gäller resten av dagen och nollställs automatiskt till imorgon.
 - **Ett gemensamt språk för allt i livet – steg 1** (2026-08-17): Ny delad modell (`src/lib/flow-items.ts` + `useFlowItems`) där en uppgift, en deadline, en lektion, en kalenderhändelse, barnens hållpunkt, en rutin och en tanke i Quickflow beskrivs på exakt samma sätt: livsområde, när, prioritet, energibehov och nästa steg. Nytt kort `<FlowItemCard />` visar dem likadant oavsett var i appen de skapades. Min dag läser nu från den delade källan, så en skoluppgift med deadline når dagen automatiskt, och kapaciteten från FlowScore avgör vad som visas – resten ligger kvar under "Resten kan vänta" i stället för att försvinna. Friktionsbiblioteket sätter energibehov på allt, inte bara jobb och studier.
 - **Brödsmulor och tillbaka-knapp på Flow** (2026-08-17): Flow-sidan visar nu en tydlig sökväg – Hem › livsområde › platsen du kom ifrån › Flow – och en knapp "Tillbaka till …" som tar dig direkt tillbaka dit du var.
 - **Flow visar var i livet du är** (2026-08-17): Flow-sidan har nu en kontextrubrik – "Du är i 🏠 Vardag · Att göra" – med genvägar till de sidor som hör till området (t.ex. Min dag, Rutiner, FlowScore) och chips för att byta del av livet (Vardag, Privat, Studier, Jobb). Inga nya menyval; genvägarna pekar på sidor som redan finns.
@@ -109,20 +114,25 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 - **Notiser för barnens hållpunkter** (2026-08-17): Skolschemat och barnens aktiviteter med klockslag skickar nu push-notiser innan de börjar ("🎒 Om 30 min: Idrott – Liam, kl 09:00 i Sporthallen"), 14 dagar framåt. Ny inställningspanel på Barn-sidan där du väljer om notiserna är på, hur långt innan de kommer (på slaget, 10, 15, 30 eller 60 min) och om du vill ha en morgonöversikt över hela barnens dag i en enda lugn notis vid vald tid. Tyst läge pausar dem som vanligt.
 
 ### Added
-- **De sista kopplingarna (10–12)** (2026-08-17): (10) *Barnens dag räknas in* – skolschema och barnens aktiviteter med klockslag blir hållpunkter i livspusslet på samma sätt som lektioner, så hemskärmen och FlowScore vet hur bunden dagen faktiskt är. (11) *Insight blir inställningar* – valda strategier har nu knappen "Slå på åt mig" som ställer in det som redan finns i appen (dämpade färger, ingen rörelse, större text, symbolstöd, enkla ord, förenklad vy) i stället för att bara beskriva det. (12) *Lugnt förslag om block du inte använder* – appen håller en lokal användningslogg (bara på din enhet, bara vilken del som öppnats) och föreslår efter en tid att dölja ett hemskärmsblock du inte tittat på på tre veckor. Du väljer "Dölj det" eller "Behåll", och allt går att slå på igen.
+
+- **De sista kopplingarna (10–12)** (2026-08-17): (10) _Barnens dag räknas in_ – skolschema och barnens aktiviteter med klockslag blir hållpunkter i livspusslet på samma sätt som lektioner, så hemskärmen och FlowScore vet hur bunden dagen faktiskt är. (11) _Insight blir inställningar_ – valda strategier har nu knappen "Slå på åt mig" som ställer in det som redan finns i appen (dämpade färger, ingen rörelse, större text, symbolstöd, enkla ord, förenklad vy) i stället för att bara beskriva det. (12) _Lugnt förslag om block du inte använder_ – appen håller en lokal användningslogg (bara på din enhet, bara vilken del som öppnats) och föreslår efter en tid att dölja ett hemskärmsblock du inte tittat på på tre veckor. Du väljer "Dölj det" eller "Behåll", och allt går att slå på igen.
 
 ### Added
-- **Fem kopplingar till mellan funktionerna** (2026-08-17): (5) *QuickFlow sorterar till rätt livsområde* – i triagen väljer du (eller så gissar MyFlove) Vardag, Privat, Studier eller Jobb, och tanken blir en uppgift i rätt rum direkt. (6) *Rutiner, medicin och rörelse räknas i kvällens Flow Reset* – "Det här blev gjort idag" visar nu även avklarade rutiner, tagna medicintider, träningspass och steg, inte bara uppgifter. (7) *Gårdagens Flow Reset sätter startläget* – hur igår kändes påverkar förmiddagens FlowScore: kaos ger en lugnare start, en bra dag ger lite mer utrymme. (8) *Rörelse höjer kapaciteten* – steg från hälsoappen och genomförda pass syns som en egen signal i FlowScore-nedbrytningen ("Du har rört dig idag"). (9) *Stopp-knappen kan pengar* – vid impulsköp visas hur mycket som finns kvar av månadens budget och du kan parkera köpet i inköpslistan i stället för att bestämma nu.
+
+- **Fem kopplingar till mellan funktionerna** (2026-08-17): (5) _QuickFlow sorterar till rätt livsområde_ – i triagen väljer du (eller så gissar MyFlove) Vardag, Privat, Studier eller Jobb, och tanken blir en uppgift i rätt rum direkt. (6) _Rutiner, medicin och rörelse räknas i kvällens Flow Reset_ – "Det här blev gjort idag" visar nu även avklarade rutiner, tagna medicintider, träningspass och steg, inte bara uppgifter. (7) _Gårdagens Flow Reset sätter startläget_ – hur igår kändes påverkar förmiddagens FlowScore: kaos ger en lugnare start, en bra dag ger lite mer utrymme. (8) _Rörelse höjer kapaciteten_ – steg från hälsoappen och genomförda pass syns som en egen signal i FlowScore-nedbrytningen ("Du har rört dig idag"). (9) _Stopp-knappen kan pengar_ – vid impulsköp visas hur mycket som finns kvar av månadens budget och du kan parkera köpet i inköpslistan i stället för att bestämma nu.
 
 ### Added
-- **Fyra nya kopplingar mellan funktionerna** (2026-08-17): (1) *Energimönster över dygnet* – Energikartans loggar från de senaste 30 dagarna byggs till ett dygnsmönster (`src/lib/energy-pattern.ts`) som justerar FlowScore: "Du brukar ha lägre energi mellan 14 och 16. Planen tar höjd för det." (2) *Friktionsbiblioteket föreslår friktion* – uppgifter i WorkFlow och StudyFlow matchas mot dina friktionsrapporter (`src/lib/friction-match.ts`) och föreslår ett friktionsvärde i stället för att du ska gissa. (3) *Vädret påverkar planeringen* – Promenadvägar visar om det passar att vara ute (och föreslår inomhus vid hårt väder) och Nästa lektion lägger på marginal och föreslår en tidigare avgång när det regnar eller snöar (`src/lib/weather-advice.ts`). (4) *Bokad tid räknas bort från kapaciteten* – möten med klockslag och dagens lektioner summeras (`src/lib/booked-time.ts`) och dras från FlowScores fokustid: "120 min av dagen är redan bokad – 95 min är dina."
+
+- **Fyra nya kopplingar mellan funktionerna** (2026-08-17): (1) _Energimönster över dygnet_ – Energikartans loggar från de senaste 30 dagarna byggs till ett dygnsmönster (`src/lib/energy-pattern.ts`) som justerar FlowScore: "Du brukar ha lägre energi mellan 14 och 16. Planen tar höjd för det." (2) _Friktionsbiblioteket föreslår friktion_ – uppgifter i WorkFlow och StudyFlow matchas mot dina friktionsrapporter (`src/lib/friction-match.ts`) och föreslår ett friktionsvärde i stället för att du ska gissa. (3) _Vädret påverkar planeringen_ – Promenadvägar visar om det passar att vara ute (och föreslår inomhus vid hårt väder) och Nästa lektion lägger på marginal och föreslår en tidigare avgång när det regnar eller snöar (`src/lib/weather-advice.ts`). (4) _Bokad tid räknas bort från kapaciteten_ – möten med klockslag och dagens lektioner summeras (`src/lib/booked-time.ts`) och dras från FlowScores fokustid: "120 min av dagen är redan bokad – 95 min är dina."
 
 - **Livspusslet – MyFloves delar börjar samarbeta** (2026-08-17): Ny gemensam kontext (`src/lib/life-puzzle.ts` + `useLifePuzzle`) som väger ihop FlowScore, energi, mående, tid kvar, osorterade tankar, deadlines per livsområde (Vardag, Privat, Studier, Jobb) och dagens fasta hållpunkter (uppgifter med klockslag och lektioner från schemat). Nytt block "Livspusslet" högst upp på hemskärmen visar hur delarna hänger ihop i stället för att räkna upp dem – med konkreta kopplingar ("Studier har deadline om 2 dagar och energin är låg – vi tar en liten bit idag") och, vid låg kapacitet, knappen "Flytta resten till imorgon". Flow får samma helhetsbild med varje meddelande och kan därför prioritera, dela upp och lägga om planen utifrån hela livet. Flows personlighet är uppdaterad: FlowScore är kapacitet, aldrig ett betyg, och en missad uppgift leder till omplanering – inte skuld. Stopp-knappen har fått ett känslosteg (stressad, trött, arg, ledsen, taggad, vet inte) som skapar ett mellanrum mellan känsla och handling innan samtalet med Flow. Inga befintliga funktioner är borttagna eller ersatta.
 
 ### Changed
+
 - **En enda "Vad ska jag göra nu?" på hemskärmen** (2026-08-16): Dubbletten inne i Daily Flow-kortet (knapp + dialogruta) är borttagen. Kvar finns kortet högst upp på hemskärmen som leder till sidan `/vad-nu` med ett förslag i taget.
 
 ### Added
+
 - **Enhetliga emojis, animationer och knapptexter** (2026-08-16): Alla emojis kommer nu från samma mappning (`src/lib/myflove-emoji.ts`, utökad med bl.a. FlowPlan, FlowScore, StudyFlow, Pomodoro, Rutiner, Väder och Stopp) och visas genom en gemensam `MyFloveEmoji`-komponent med samma storlekar och samma lugna andning. Knappar i hela appen klipper inte längre av text: de växer i höjd i stället, radbryts snyggt och centreras, och chips har samma höjd och trunkerar långa etiketter. Ingen funktionalitet ändrad.
 - **Living UI på resten av appen** (2026-08-16): Samma rörelsetema finns nu i Flow-assistenten (tänkande i steg i stället för spinner), FlowPlan och Träning (Flow visar hur planen/passet växer fram), Studier och StudyFlow (uppdelning som process), Pomodoro och Må bra (andning), Energikartan och FlowScore (energi som levande prickskala), Veckans Flow och Statistik (mönster som samlas), Belöningar (lugn bekräftelse), Promenadvägar (rutt som ritas), samt Familj, Städning, Veckomatlista och 404-sidan. Tomma lägen i Uppgifter, Inköpslista, Kalender, Medicin och Barn har fått levande illustrationer. Ingen funktionalitet är ändrad och all rörelse stängs av vid "reduce motion" och i NPF-läget.
 - **Living UI i resterande moduler** (2026-08-16): Fokusläget andas mjukt bakom ringtimern och avslutas med en ritad bock och en lugn bekräftelse. WorkFlow visar energi som prickskala och hur MyFlove tänker (🎯 → 🧠 → ✂️ → ✨) när en tung uppgift delas upp. Startsidans "Hjälp mig" har ett andande hjärta med små gnistor. Studiematerial/dokument visar MyFloves läsprocess (📄 → 🧠 → 🃏 → ✨) och ett levande tomt läge. Notisinställningarna visar att MyFlove lyssnar när puffarna är på. Och när en uppgift flyttas till imorgon glider den mjukt iväg i stället för att bara försvinna. Ingen funktionalitet ändrad; all rörelse respekterar "reduce motion" och NPF-läget.
@@ -132,6 +142,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 - **Tidslinje i kalenderns dagsvy** (2026-08-16): Dagsvyn visar nu en tidslinje från 06:00 till 22:00 med pastellfärgade händelsekort, bildstöd och en mjuk "Nu"-markering för var på dagen du är. Saker utan klockslag samlas längst ner.
 
 ### Changed
+
 - **Uppdaterad appikon och PWA-ikoner** (2026-08-16): favicon.svg och alla PWA-ikoner (192, 512, maskable, Apple touch) matchar nu den uppdaterade MyFlove-loggan med violett bakgrund, vitt flödesspår och rosa accent. Den gamla favicon.ico är borttagen.
 - **"Sätt dagens fokus"-knappen håller sig inom kanterna** (2026-08-16): Knappen på hemskärmen använder nu samma `MyFloveLinkButton`-komponent som resten av appen, så texten alltid ligger inuti knappen även på smala skärmar.
 - **Tydligare hjärta i Daily Flow** (2026-08-16): Hjärtat i "Din kapacitet idag" har fått en mjuk cremefärgad bakgrundscirkel, bättre placering och en skugga så det syns tydligt mot den lavendelfärgade gradienten.
@@ -143,6 +154,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 - **Ny känsla på startsida och QuickFlow** (2026-08-16): Hemskärmens hero går i pastell (lavendel, ljusblå, rosa, mint) efter tid på dygnet, och QuickFlow har fått samma mjuka hero med andande illustration.
 
 ### Changed
+
 - **Hoppa över onboarding** (2026-08-16): En tydlig "Hoppa över"-knapp syns nu hela tiden uppe till höger i onboarding, plus en fullbredd knapp under framåtknappen som tar dig direkt till startsidan. "Nu kör vi" på sista steget leder också till `/hem`.
 - **Onboarding som sveps i sidled** (2026-08-16): Välkomstkorten ligger nu i en karusell du kan svepa mellan med fingret. Progressen visas med punkter du kan trycka på plus en tydlig räknare ("Steg 2 av 4"), och du kan gå tillbaka utan att börja om.
 - **Ny känsla: pasteller, mjuk rörelse och QuickFlow i mitten** (2026-08-16): Paletten har byggts ut med pasteller (lavendel, rosa, mint, ljusblå, creme) som fungerar i både ljust och mörkt läge. Sidor tonar mjukt in, kort poppar upp, illustrationer andas och knappar får ett lätt tryck. Bottennavigationen har nu fem platser med en upphöjd QuickFlow-knapp i mitten – Hem, ditt val, QuickFlow, ditt val och Mer. All rörelse stängs av automatiskt i NPF-läget "ingen rörelse".
@@ -152,6 +164,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 - **Egen kategori för hälsa** (2026-08-16): Må bra, Träning, FlowScore och Statistik ligger nu i en egen kategori "Hälsa" i navigationen istället för i "Din dag".
 
 ### Added
+
 - **Stop-knapp i Hälsa** (2026-08-16): Stop-knappen finns nu även högst upp på "Må bra" – ett tryck ger andning och samtal med Flow innan ett impulsivt beslut.
 - **Anpassa appen / NPF-läge** (2026-08-16): Ny sida `/anpassa` med globala val som gäller hela appen – färre saker på skärmen (extra hjälptexter göms), lugnare färger och mjukare skuggor, ingen rörelse/animation, enkla svenska ord istället för namn som FlowPlan och FlowScore, mer luft och större knappar, större text samt globalt bildstöd (slår även på symboler i kalendern). Valen sparas tills du ändrar dem och kan återställas.
 
@@ -173,6 +186,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 - Inköpslista: välj själv hur nära butiken påminnelsen ska komma – "I affären" (80 m), "Alldeles nära" (300 m) eller "I området" (1 km) (2026-08-15).
 
 ### Changed
+
 - Barnvyn fastnar inte längre på "Laddar barn" vid nätverksstrul – visar felmeddelande med "Försök igen" (2026-08-15).
 
 ### Deprecated
@@ -180,6 +194,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 ### Removed
 
 ### Fixed
+
 - Hem: dubbla förslagsrubriker borttagna – bara "Förslag just nu" visas nu (2026-08-15).
 - Kalender: "Ny händelse"-knappen fick samma utseende och format som "+ Påminnelse" för ett mer konsekvent gränssnitt (2026-08-15).
 
@@ -188,23 +203,28 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 ## [0.9.0] - 2026-08-15
 
 ### Added
+
 - **Fullständig changelog** (2026-08-15): All historik sedan projektstart samlad i `CHANGELOG.md` och i appens changelog-export.
 
 ## [0.8.0] - 2026-08-14
 
 ### Added
+
 - **Glömt lösenord** (2026-08-14): `/glomt-losenord` mejlar återställningslänk, `/nytt-losenord` sätter nytt lösenord, länk från inloggningen.
 - **Promenadvägar** (2026-08-14): Riktningsbaserade gångvägar i närområdet via OpenStreetMap Overpass, höjddata och kartförhandsvisning, med "Uppdatera min plats".
 
 ### Fixed
+
 - Overpass-anrop returnerade tidvis 406 (2026-08-14) – rättat med korrekt Accept-header och User-Agent.
 
 ### Security
+
 - SEO- och metadatafixar (2026-08-14): sidspecifika og-taggar, Organization/WebSite JSON-LD, site verification.
 
 ## [0.7.0] - 2026-08-13
 
 ### Added
+
 - **Hjälptexter** (2026-08-14): Kontextuella i-knappar på 17+ sidor.
 - **Tillbakaknapp** (2026-08-14): Historikbaserad navigering i layouten.
 - **Introtur & enkelt läge** (2026-08-14): Guidad rundtur, svenska underrubriker och naturligt språk för FlowScore.
@@ -212,11 +232,13 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 - **Områdesfiltrering** (2026-08-14): Hemskärmen visar bara valt rum, "Alla" slår ihop.
 
 ### Changed
+
 - Blueprint uppdaterad till 2.7, ny presentation och ny preview-video (v5) (2026-08-14).
 
 ## [0.6.0] - 2026-08-12
 
 ### Added
+
 - **StudyFlow™** (2026-08-13): Pluggläge med föreläsningsläge, kapacitetsplanering och kalenderkoppling.
 - **Schemaimport** (2026-08-14): AI-tolkning av schema samt "nästa lektion" med plats och vägbeskrivning.
 - **Lektionspåminnelser** (2026-08-14): Push när nästa lektion närmar sig.
@@ -230,11 +252,13 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 - **Livsområden** (2026-08-13): Vardag, Studier, Jobb, Privat med egna färger, grupperad navigation och global sök.
 
 ### Changed
+
 - Prov läggs inte längre in automatiskt i kalendern; repetition rensas via purge-hook (2026-08-14).
 
 ## [0.5.0] - 2026-07-20
 
 ### Added
+
 - **Push-notiser** (2026-07-18): Service worker, `push_subscriptions` och notiser för medicin, väder och påminnelser.
 - **Återkommande påminnelser** (2026-07-20): Dagligen, veckovis och vardagar.
 - **MCP-server** (2026-07-20): Agentintegration på `/mcp`.
@@ -248,14 +272,17 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 - **Valbara genvägar** (2026-07-20): Fyra egna appar på hemskärmen.
 
 ### Fixed
+
 - Uppgifter försvann mellan dagar (2026-07-20) – flyttade från localStorage till `user_kv`.
 
 ### Security
+
 - RLS-härdning och återkallad publik exekvering på interna funktioner (2026-07-20).
 
 ## [0.3.0] - 2026-07-09
 
 ### Added
+
 - **Energikarta** (2026-07-08): Loggning av energinivåer, integrerad i FlowPlan.
 - **Väderkort** (2026-07-08): Open-Meteo med geolokalisering på startsidan.
 - **Matlista utan familj** (2026-07-09): Lokalt läge för användare utan hushåll.
@@ -268,6 +295,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 - **Publicering** (2026-07-09): Delbar testapp med PWA-stöd.
 
 ### Fixed
+
 - Kalendern nåddes inte (2026-07-09) – routing rättad till `/kalender`.
 
 ## [0.1.0] - 2026-07-23
@@ -275,6 +303,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 Initial baseline av MyFlove — ett svenskspråkigt "lugnt livsflöde"-dashboard byggt med TanStack Start, React 19, Tailwind CSS och Lovable Cloud.
 
 ### Added
+
 - **Autentisering** (2026-07-23): Inloggning/registrering och skyddade sidor under `/_app`.
 - **Dashboard/Hem** (2026-07-23): Startsida med genvägar, widget-grid och väderkort.
 - **Fokus & Att göra** (2026-07-23): Daglig fokuspunkt samt uppgiftshantering med kategorier, status, delsteg, snooze och kalenderkoppling.
