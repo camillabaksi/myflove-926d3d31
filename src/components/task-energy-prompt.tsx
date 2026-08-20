@@ -38,6 +38,8 @@ export function TaskEnergyPrompt({
           direction: impact,
           strength: task.friction ? Math.round(FRICTION_META[task.friction].minutes / 12) || 2 : 3,
           category: "annat",
+          kind: "planerat",
+          friction: task.friction ? 3 : 2,
           note: "Loggad från Att göra",
         });
       } catch {
