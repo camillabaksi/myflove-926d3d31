@@ -388,7 +388,7 @@ export default function Home() {
             <span className="text-xs font-medium text-ink">QuickFlow</span>
           </Link>
           <Link
-            href="/assistant"
+            href="/flow"
             className="flex flex-col items-center gap-2 rounded-2xl border border-border/60 bg-card p-4 text-center shadow-soft transition-colors hover:border-primary/40 hover:bg-primary/5"
           >
             <MessageCircle size={22} className="text-primary" />

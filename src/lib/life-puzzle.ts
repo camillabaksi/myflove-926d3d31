@@ -112,14 +112,14 @@ export function buildLifePuzzle(input: LifePuzzleInput): LifePuzzle {
       title: "Energin styr planen",
       body: `Med ${input.energy != null ? `energi ${input.energy}/5` : "låg kapacitet"} är ${input.suggestedTasks} sak(er) och ungefär ${input.capacityMinutes} minuters fokus rimligt idag.`,
       suggestion: "Ska vi behålla det viktigaste och flytta resten till imorgon?",
-      href: "/vad-nu",
+      href: "/flow",
       hrefLabel: "Ta en sak i taget",
     });
   } else if (input.score >= 70 && totalOpen > 0) {
     connections.push({
       title: "Du har utrymme idag",
       body: `Ungefär ${input.capacityMinutes} minuters fokus finns i dagen. Det räcker för något tyngre du brukar skjuta på.`,
-      href: "/vad-nu",
+      href: "/flow",
       hrefLabel: "Vad ska jag göra nu?",
     });
   }

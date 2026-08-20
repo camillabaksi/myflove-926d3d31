@@ -378,7 +378,7 @@ function MyFloveLinkRow() {
       <Link href="/min-dag">
         <MyFloveButton variant="secondary">Gör planen lättare</MyFloveButton>
       </Link>
-      <Link href="/assistant">
+      <Link href="/flow">
         <MyFloveButton variant="tertiary">Prata med Flow</MyFloveButton>
       </Link>
     </div>
