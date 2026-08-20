@@ -453,6 +453,14 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
           </div>
         </div>
       )}
+    </>
+  );
+}
+
+export default function Assistant({ chatId }: { chatId?: string }) {
+  return (
+    <Layout>
+      <AssistantContent chatId={chatId} />
     </Layout>
   );
 }
