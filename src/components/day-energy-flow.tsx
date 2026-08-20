@@ -1,0 +1,118 @@
+import { useMemo } from "react";
+import { Link } from "wouter";
+import { cn } from "@/lib/utils";
+import HelpHint from "@/components/help-hint";
+import { useEnergyFlow } from "@/hooks/use-energy-flow";
+import { ENERGY_KINDS, isSameDay } from "@/lib/energy-flow";
+
+/**
+ * Dagens energiflöde – dagens faktiska belastning uppdelad i
+ * Planerat, Vardag, Spontant och Återhämtning.
+ * Poängen: en tom kalender kan ändå ha varit en tung dag.
+ */
+export function DayEnergyFlow({
+  className,
+  showLink = true,
+}: {
+  className?: string;
+  showLink?: boolean;
+}) {
+  const { entries, balance, signedIn, loading } = useEnergyFlow();
+
+  const rows = useMemo(
+    () =>
+      ENERGY_KINDS.map((k) => ({
+        ...k,
+        row: balance.byKind.find((b) => b.kind === k.id),
+      })),
+    [balance.byKind],
+  );
+
+  const todayCount = useMemo(
+    () => entries.filter((e) => isSameDay(e.occurredAt)).length,
+    [entries],
+  );
+
+  const max = Math.max(4, ...rows.map((r) => Math.abs(r.row?.net ?? 0)));
+
+  if (!signedIn || loading) return null;
+
+  return (
+    <section
+      className={cn("rounded-3xl border border-border/60 bg-card p-5 shadow-soft", className)}
+      aria-label="Dagens energiflöde"
+    >
+      <div className="mb-3 flex items-center gap-2">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+          Dagens energiflöde
+        </h2>
+        <HelpHint label="dagens energiflöde">
+          Summan av det du faktiskt gjort idag – inte bara det som stod i kalendern. Minus betyder
+          att det tog energi, plus att det gav.
+        </HelpHint>
+      </div>
+
+      {todayCount === 0 ? (
+        <p className="text-sm text-muted-foreground">
+          Inget registrerat idag än. Lägg till något du gjort så syns dagens riktiga belastning här.
+        </p>
+      ) : (
+        <div className="space-y-2">
+          {rows.map(({ id, label, emoji, hint, row }) => {
+            const net = row?.net ?? 0;
+            const width = `${Math.round((Math.abs(net) / max) * 100)}%`;
+            return (
+              <div key={id} className="flex items-center gap-3">
+                <span className="w-32 shrink-0 text-sm text-ink" title={hint}>
+                  <span aria-hidden className="mr-1">
+                    {emoji}
+                  </span>
+                  {label}
+                </span>
+                <div className="h-2 flex-1 overflow-hidden rounded-full bg-secondary/50">
+                  <div
+                    className={cn(
+                      "h-full rounded-full transition-all",
+                      net >= 0 ? "bg-primary/70" : "bg-accent/70",
+                    )}
+                    style={{ width }}
+                  />
+                </div>
+                <span className="w-12 shrink-0 text-right text-sm tabular-nums text-muted-foreground">
+                  {net > 0 ? "+" : ""}
+                  {net}
+                </span>
+              </div>
+            );
+          })}
+
+          <div className="mt-3 flex items-baseline justify-between border-t border-border/50 pt-3">
+            <span className="text-sm text-muted-foreground">Netto idag</span>
+            <span className="font-display text-2xl font-bold text-ink">
+              {balance.net > 0 ? "+" : ""}
+              {balance.net}
+            </span>
+          </div>
+
+          {balance.highFrictionCount > 0 && (
+            <p className="text-xs text-muted-foreground">
+              {balance.highFrictionCount} av dagens saker var tunga att komma igång med – friktion
+              räknas separat från energi.
+            </p>
+          )}
+        </div>
+      )}
+
+      {showLink && (
+        <Link
+          href="/energifloede"
+          className="mt-3 inline-block text-sm text-primary underline-offset-2 hover:underline"
+        >
+          Se hela energiflödet
+        </Link>
+      )}
+    </section>
+  );
+}
+
+export default DayEnergyFlow;

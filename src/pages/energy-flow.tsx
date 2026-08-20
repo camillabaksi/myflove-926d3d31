@@ -3,6 +3,8 @@ import { Link } from "wouter";
 import Layout from "@/components/layout";
 import CollapsibleSection from "@/components/collapsible-section";
 import EnergyFlowSettings from "@/components/energy-flow-settings";
+import DidThisQuickAdd from "@/components/did-this-quick-add";
+import DayEnergyFlow from "@/components/day-energy-flow";
 
 import {
   MyFloveButton,
@@ -22,10 +24,18 @@ import {
   categoryLabel,
   categoryTrends,
   ENERGY_CATEGORIES,
+  ENERGY_KINDS,
+  FRICTION_LEVELS,
+  frictionEmoji,
+  frictionLabel,
+  frictionTrends,
   isSameDay,
+  kindEmoji,
+  kindLabel,
   titleTrends,
   type EnergyCategory,
   type EnergyDirection,
+  type EnergyKind,
 } from "@/lib/energy-flow";
 
 interface Props {
@@ -44,6 +54,7 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
     signedIn,
     addFactor,
     removeFactor,
+    updateFactor,
     toggleCounts,
     addPreset,
     removePreset,
@@ -55,12 +66,15 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
   const [direction, setDirection] = useState<EnergyDirection>("drains");
   const [strength, setStrength] = useState(3);
   const [category, setCategory] = useState<EnergyCategory>("annat");
+  const [kind, setKind] = useState<EnergyKind>("vardag");
+  const [friction, setFriction] = useState(2);
   const [note, setNote] = useState("");
   const [saving, setSaving] = useState(false);
 
   const today = useMemo(() => entries.filter((e) => isSameDay(e.occurredAt)), [entries]);
   const catTrends = useMemo(() => categoryTrends(entries, 14), [entries]);
   const nameTrends = useMemo(() => titleTrends(entries, 30).slice(0, 6), [entries]);
+  const frictionRows = useMemo(() => frictionTrends(entries, 30).slice(0, 5), [entries]);
 
   const save = async () => {
     const t = title.trim();
@@ -70,7 +84,7 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
     }
     setSaving(true);
     try {
-      await addFactor({ title: t, direction, strength, category, note: note.trim() });
+      await addFactor({ title: t, direction, strength, category, kind, friction, note: note.trim() });
       setTitle("");
       setNote("");
       toast({ description: "Tack – det räknas med i din kapacitet idag." });
@@ -88,6 +102,8 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
         direction: p.direction,
         strength: p.strength,
         category: p.category,
+        kind: p.kind,
+        friction: p.friction,
       });
       toast({ description: `${p.title} tillagd.` });
     } catch {
@@ -116,6 +132,10 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
           description="Vad ger och vad tar energi? Det här är inte att göra-listan – det är sådant som påverkar hur mycket du orkar."
         />
       )}
+
+      <DidThisQuickAdd />
+
+      <DayEnergyFlow showLink={false} />
 
       <CollapsibleSection
         title="Dagens balans"
@@ -191,12 +211,15 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
             className="h-12 rounded-2xl"
           />
 
-          <div className="flex gap-2">
-            <MyFloveChip active={direction === "gives"} onClick={() => setDirection("gives")}>
-              🔋 Ger energi
-            </MyFloveChip>
+          <div className="flex flex-wrap gap-2">
             <MyFloveChip active={direction === "drains"} onClick={() => setDirection("drains")}>
-              🪫 Tar energi
+              🔻 Tar energi
+            </MyFloveChip>
+            <MyFloveChip active={direction === "gives"} onClick={() => setDirection("gives")}>
+              🔺 Ger energi
+            </MyFloveChip>
+            <MyFloveChip active={direction === "neutral"} onClick={() => setDirection("neutral")}>
+              ➖ Neutral
             </MyFloveChip>
           </div>
 
@@ -206,6 +229,36 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
               {[1, 2, 3, 4, 5].map((n) => (
                 <MyFloveChip key={n} active={strength === n} onClick={() => setStrength(n)}>
                   {n}
+                </MyFloveChip>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <div className="text-sm font-medium text-ink">Hur svårt var det att komma igång?</div>
+            <p className="text-xs text-muted-foreground">
+              Friktion är något annat än energi – tvätt kan kosta lite energi men vara tungt att
+              börja med.
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {FRICTION_LEVELS.map((f) => (
+                <MyFloveChip
+                  key={f.value}
+                  active={friction === f.value}
+                  onClick={() => setFriction(f.value)}
+                >
+                  {f.emoji} {f.label}
+                </MyFloveChip>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <div className="text-sm font-medium text-ink">Var kom det ifrån?</div>
+            <div className="flex flex-wrap gap-2">
+              {ENERGY_KINDS.map((k) => (
+                <MyFloveChip key={k.id} active={kind === k.id} onClick={() => setKind(k.id)}>
+                  {k.emoji} {k.label}
                 </MyFloveChip>
               ))}
             </div>
@@ -225,6 +278,7 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
               ))}
             </div>
           </div>
+
 
           <Textarea
             value={note}
@@ -246,7 +300,7 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
                   toast({ description: "Skriv en titel först, så sparar jag den som snabbknapp." });
                   return;
                 }
-                await addPreset({ title: t, direction, strength, category });
+                await addPreset({ title: t, direction, strength, category, kind, friction });
                 toast({ description: "Sparad som snabbknapp." });
               }}
             >
@@ -272,8 +326,14 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
               <MyFloveCard key={e.id} className="flex items-start justify-between gap-3 p-4">
                 <div className="min-w-0">
                   <div className="text-xs uppercase tracking-wider text-muted-foreground">
-                    {categoryEmoji(e.category)} {categoryLabel(e.category)} ·{" "}
-                    {e.direction === "gives" ? `🔋 +${e.strength}` : `🪫 −${e.strength}`}
+                    {kindEmoji(e.kind)} {kindLabel(e.kind)} · {categoryEmoji(e.category)}{" "}
+                    {categoryLabel(e.category)} ·{" "}
+                    {e.direction === "gives"
+                      ? `🔺 +${e.strength}`
+                      : e.direction === "neutral"
+                        ? "➖ 0"
+                        : `🔻 −${e.strength}`}
+                    {e.friction ? ` · ${frictionEmoji(e.friction)} ${frictionLabel(e.friction)}` : ""}
                   </div>
                   <div
                     className={`font-medium text-ink ${e.countsTowardScore ? "" : "opacity-60"}`}
@@ -281,6 +341,38 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
                     {e.title}
                   </div>
                   {e.note && <p className="text-sm text-muted-foreground">{e.note}</p>}
+                  <div className="mt-2 flex flex-wrap gap-1">
+                    {(["drains", "gives", "neutral"] as const).map((d) => (
+                      <button
+                        key={d}
+                        type="button"
+                        aria-label={`Ändra till ${d}`}
+                        onClick={() => updateFactor(e.id, { direction: d })}
+                        className={`rounded-full border px-2 py-0.5 text-xs ${
+                          e.direction === d
+                            ? "border-primary bg-primary/10 text-primary"
+                            : "border-border/60 text-muted-foreground"
+                        }`}
+                      >
+                        {d === "gives" ? "🔺" : d === "neutral" ? "➖" : "🔻"}
+                      </button>
+                    ))}
+                    {FRICTION_LEVELS.map((f) => (
+                      <button
+                        key={f.value}
+                        type="button"
+                        title={f.label}
+                        onClick={() => updateFactor(e.id, { friction: f.value })}
+                        className={`rounded-full border px-2 py-0.5 text-xs ${
+                          e.friction === f.value
+                            ? "border-primary bg-primary/10 text-primary"
+                            : "border-border/60 text-muted-foreground"
+                        }`}
+                      >
+                        {f.emoji}
+                      </button>
+                    ))}
+                  </div>
                 </div>
                 <div className="flex shrink-0 flex-col items-end gap-1">
                   <button
@@ -298,6 +390,7 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
                     Ta bort
                   </button>
                 </div>
+
               </MyFloveCard>
             ))}
           </div>
@@ -353,6 +446,30 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
                 </p>
               </MyFloveCard>
             )}
+
+            {frictionRows.length > 0 && (
+              <MyFloveCard className="space-y-2">
+                <div className="text-sm font-medium text-ink">
+                  Tungt att komma igång med (30 dagar)
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Hög friktion behöver inte betyda hög energikostnad – det betyder att starten är
+                  svår.
+                </p>
+                {frictionRows.map((t) => (
+                  <div key={t.key} className="flex items-center justify-between text-sm">
+                    <span>
+                      {frictionEmoji(Math.round(t.friction))} {t.label}
+                    </span>
+                    <span className="text-muted-foreground">
+                      friktion {t.friction.toFixed(1)} · energi {t.energy > 0 ? "+" : ""}
+                      {t.energy.toFixed(1)}
+                    </span>
+                  </div>
+                ))}
+              </MyFloveCard>
+            )}
+
           </div>
         )}
       </CollapsibleSection>

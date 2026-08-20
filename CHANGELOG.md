@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-08-20 – Lägg till det du gjorde & Dagens energiflöde
+
+- Ny lågfriktionsfunktion "Lägg till det du gjorde": ett tryck för vanliga vardagssaker (middag, tvätt, undanplock, barn, packa inför imorgon) med val av när det hände, fritext och förberedd röstinmatning.
+- Energi in/ut per aktivitet: 🔻 tar energi, 🔺 ger energi, ➖ neutral – går alltid att ändra i efterhand.
+- Friktion är nu en egen dimension skild från energi (lätt/lagom/tungt att komma igång).
+- Nytt kort "Dagens energiflöde" med uppdelning i Planerat, Vardag, Spontant och Återhämtning samt netto för dagen.
+- Registrerade aktiviteter räknas in i FlowScore, så en tom kalender läses inte längre som en lätt dag.
+- Nya mönster: "Tungt att komma igång med (30 dagar)" som visar när friktion och energikostnad skiljer sig åt.
+- Hem och Min dag har fått blocken; på Hem kan de döljas/sorteras i Anpassa hemskärmen.
+
+
 Alla betydande ändringar i detta projekt dokumenteras i denna fil.
 
 Formatet baseras på [Keep a Changelog](https://keepachangelog.com/sv/1.1.0/),

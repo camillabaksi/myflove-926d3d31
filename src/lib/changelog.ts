@@ -6,12 +6,18 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-08-20";
+export const CHANGELOG_UPDATED = "2026-08-21";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Lägg till det du gjorde – ett tryck för vardagssaker som middag, tvätt, undanplock eller barnens dusch, med val av när det hände, fritext och röstinmatning där mobilen stödjer det (2026-08-21)",
+      "Energi in/ut per aktivitet – 🔻 tar energi, 🔺 ger energi, ➖ neutral, alltid ändringsbart efteråt (2026-08-21)",
+      "Friktion är en egen dimension – hur svårt något är att komma igång med räknas separat från hur mycket energi det kostar (2026-08-21)",
+      "Dagens energiflöde – Planerat, Vardag, Spontant och Återhämtning med netto för dagen, så att en tom kalender inte längre ser ut som en lätt dag (2026-08-21)",
+      "Faktisk belastning räknas i FlowScore – allt du registrerat under dagen väger in, inte bara det som stod i kalendern (2026-08-21)",
+      "Nytt mönster: Tungt att komma igång med – visar sådant som har hög friktion trots låg energikostnad (2026-08-21)",
       'En enda förslagskälla – Hem, Min dag och Flow → Nu använder samma motor och ger samma svar. Kortet "Dagens fokus" och den extra energimeningen på Min dag är borttagna (2026-08-20)',
       'Ett namn på varje sak – "Daily Flow", "Vad ska jag göra nu?" och "Dagens fokus" är borta ur gränssnittet, och Daglig rutin heter nu Rutiner & medicin (2026-08-20)',
       "En väg in till Energiflöde – finns bara i Må bra, inte längre även under Hälsa och Avancerat (2026-08-20)",
