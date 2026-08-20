@@ -211,12 +211,15 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
             className="h-12 rounded-2xl"
           />
 
-          <div className="flex gap-2">
-            <MyFloveChip active={direction === "gives"} onClick={() => setDirection("gives")}>
-              🔋 Ger energi
-            </MyFloveChip>
+          <div className="flex flex-wrap gap-2">
             <MyFloveChip active={direction === "drains"} onClick={() => setDirection("drains")}>
-              🪫 Tar energi
+              🔻 Tar energi
+            </MyFloveChip>
+            <MyFloveChip active={direction === "gives"} onClick={() => setDirection("gives")}>
+              🔺 Ger energi
+            </MyFloveChip>
+            <MyFloveChip active={direction === "neutral"} onClick={() => setDirection("neutral")}>
+              ➖ Neutral
             </MyFloveChip>
           </div>
 
@@ -226,6 +229,36 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
               {[1, 2, 3, 4, 5].map((n) => (
                 <MyFloveChip key={n} active={strength === n} onClick={() => setStrength(n)}>
                   {n}
+                </MyFloveChip>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <div className="text-sm font-medium text-ink">Hur svårt var det att komma igång?</div>
+            <p className="text-xs text-muted-foreground">
+              Friktion är något annat än energi – tvätt kan kosta lite energi men vara tungt att
+              börja med.
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {FRICTION_LEVELS.map((f) => (
+                <MyFloveChip
+                  key={f.value}
+                  active={friction === f.value}
+                  onClick={() => setFriction(f.value)}
+                >
+                  {f.emoji} {f.label}
+                </MyFloveChip>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <div className="text-sm font-medium text-ink">Var kom det ifrån?</div>
+            <div className="flex flex-wrap gap-2">
+              {ENERGY_KINDS.map((k) => (
+                <MyFloveChip key={k.id} active={kind === k.id} onClick={() => setKind(k.id)}>
+                  {k.emoji} {k.label}
                 </MyFloveChip>
               ))}
             </div>
@@ -245,6 +278,7 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
               ))}
             </div>
           </div>
+
 
           <Textarea
             value={note}
