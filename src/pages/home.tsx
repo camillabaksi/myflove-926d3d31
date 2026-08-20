@@ -9,7 +9,7 @@ import HelpMeModal from "@/components/help-me-modal";
 import WeatherCard from "@/components/weather-card";
 import ProactiveSuggestions from "@/components/proactive-suggestions";
 import { MyFloveSparkle } from "@/components/myflove/motion";
-import { MyFloveLinkButton } from "@/components/myflove";
+
 import QuickflowCapture from "@/components/quickflow-capture";
 import QuickflowList from "@/components/quickflow-list";
 import PersonalNote from "@/components/personal-note";
@@ -74,7 +74,6 @@ import { useSharedShoppingList } from "@/hooks/use-shared-shopping-list";
 import { getGreeting } from "@/lib/greeting";
 import IntroTour from "@/components/intro-tour";
 import { useUserProfile } from "@/hooks/use-user-profile";
-import { emptyState } from "@/lib/flow-voice";
 import { buildHelpPlan, type HelpFeelingId, type HelpPlan } from "@/lib/help-me";
 import { focusTasksForToday } from "@/lib/focus-rules";
 import { HeartHandshake, CheckCircle2, Circle, Pill, Sparkles, ArrowRight } from "lucide-react";
