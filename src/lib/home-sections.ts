@@ -5,11 +5,20 @@ import { useLocalStorage } from "@/lib/storage";
 export const HOME_SECTIONS: { id: string; label: string; hint: string }[] = [
   { id: "livspussel", label: "Livspusslet", hint: "Hur dagens delar hänger ihop" },
   {
+    id: "dagen",
+    label: "Dagen just nu",
+    hint: "Dagens tidslinje med hållpunkter, uppgifter, rutiner och medicin",
+  },
+  {
     id: "dailyflow",
     label: "Daily Flow – dagens viktigaste",
     hint: "Incheckning, ditt fokus och dagens viktigaste i ett block",
   },
-  { id: "medication", label: "Medicinpåminnelser", hint: "Dagens doser – visas bara om du har några" },
+  {
+    id: "medication",
+    label: "Medicinpåminnelser",
+    hint: "Dagens doser – visas bara om du har några",
+  },
   { id: "shortcuts", label: "Genvägar", hint: "Dina fyra egna knappar" },
   { id: "help", label: "Hjälp mig", hint: "Stora hjälpknappen" },
   { id: "suggestions", label: "Förslag just nu", hint: "Små tips utifrån dag och väder" },

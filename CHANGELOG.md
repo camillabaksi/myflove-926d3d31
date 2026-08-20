@@ -9,6 +9,8 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 
 ### Added
 
+- **Dagen just nu på hemskärmen** (2026-08-20): Ett nytt block högt upp visar dagens tidslinje – hållpunkter, uppgifter med klockslag, rutiner och medicintider – med en mjuk Nu-markering. Går att flytta eller stänga av i Anpassa hemskärmen.
+- **Medicinpåminnelser finns i Påminnelser** (2026-08-20): Mediciner och tider hanteras nu direkt på Påminnelser-sidan, så allt som påminner dig ligger på samma ställe.
 - **Snabbknapp för Att göra på hemskärmen** (2026-08-20): En stor ＋ Lägg till-knapp högt upp på hemskärmen skapar en ny Att göra-post på sekunder. Dialogen frågar direkt om energi och föreslår en tid (avrundat uppåt till närmaste kvart), samtidigt som den plockar upp det aktiva rummet (Vardag, Privat, Studier, Jobb eller Barn) så inget behöver sorteras i efterhand.
 - **Att göra är MyFloves dagliga agenda** (2026-08-20): Att göra har flikarna ☀️ Idag (standard), 📅 Kommande och ✅ Klart, en snabb ＋-knapp med val för när, energi och friktion, mjuka förslag från Flow när dagen inte matchar din energi, och en frivillig fråga om faktisk energi när du bockar av. Uppgifter med tid syns även i kalendern – utan tid stannar de i Att göra.
 - **Anteckningar & idébank som egen del under Flow** (2026-08-19): Anteckningarna har fått en egen sida (/anteckningar) i Flow-gruppen i stället för att ligga inbakade i Quickflow – Quickflow länkar dit.

@@ -20,6 +20,9 @@ import LifePuzzleCard from "@/components/life-puzzle-card";
 import QuickflowTriage from "@/components/quickflow-triage";
 import FlowReset from "@/components/flow-reset";
 import DayRebuild from "@/components/day-rebuild";
+import DayTimeline, { type TimelineEntry } from "@/components/day-timeline";
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
+import type { Routine } from "@/pages/routines";
 
 import FlowOnboarding from "@/components/flow-onboarding";
 import StreakCard from "@/components/streak-card";
@@ -47,6 +50,7 @@ import { useViewMode } from "@/lib/view-mode";
 const SECTION_AREAS: Record<string, LifeArea[]> = {
   livspussel: ["vardag", "privat", "studier", "jobb"],
   dailyflow: ["vardag", "privat", "studier", "jobb"],
+  dagen: ["vardag", "privat", "studier", "jobb", "barn"],
   reset: ["vardag", "privat", "studier", "jobb"],
   quickflow: ["vardag", "privat", "studier", "jobb"],
   streak: ["vardag"],
@@ -61,7 +65,7 @@ const SECTION_AREAS: Record<string, LifeArea[]> = {
 };
 
 /** Vad som är kvar i förenklad vy – det du faktiskt behöver just nu. */
-const SIMPLE_SECTIONS = ["livspussel", "dailyflow", "medication", "shortcuts", "help"];
+const SIMPLE_SECTIONS = ["livspussel", "dagen", "dailyflow", "medication", "shortcuts", "help"];
 
 import {
   useFocus,
@@ -107,10 +111,11 @@ export default function Home() {
     return isSimple ? SIMPLE_SECTIONS.includes(id) : true;
   };
 
-  const { activeReminders: _activeReminders } = useReminders();
+  const { activeReminders } = useReminders();
   const { transactions } = useFinances();
   const { medications, isTaken, toggleTaken } = useMedications();
   const { activeItems: _shoppingItems } = useSharedShoppingList();
+  const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
 
   const [helpModalOpen, setHelpModalOpen] = useState(false);
   const [overwhelmedOpen, setOverwhelmedOpen] = useState(false);
@@ -171,6 +176,41 @@ export default function Home() {
     .filter((entry) => !isTaken(entry.med.id, entry.time))
     .sort((a, b) => a.time.localeCompare(b.time));
   const nextMedication = medicationDosesToday[0];
+
+  // Dagens tidslinje direkt på hemskärmen – hållpunkter, uppgifter, rutiner och medicin.
+  const todayIso = new Date().toISOString().split("T")[0] as string;
+  const dayEntries = useMemo<TimelineEntry[]>(() => {
+    const list: TimelineEntry[] = [];
+    for (const r of activeReminders) {
+      if (r.date !== todayIso || !r.time) continue;
+      list.push({
+        id: `rem-${r.id}`,
+        title: r.title,
+        time: r.time,
+        ...(r.endTime ? { endTime: r.endTime } : {}),
+        emoji: "🔔",
+      });
+    }
+    for (const t of areaTasks) {
+      if (!t.time || (t.dueDate && t.dueDate !== todayIso)) continue;
+      list.push({
+        id: `task-${t.id}`,
+        title: t.title,
+        time: t.time,
+        ...(t.endTime ? { endTime: t.endTime } : {}),
+        emoji: "✅",
+      });
+    }
+    for (const r of routines ?? []) {
+      if (!r.enabled || !r.time) continue;
+      list.push({ id: `routine-${r.id}`, title: r.title, time: r.time, emoji: "🔁" });
+    }
+    for (const { med, time } of medicationDosesToday) {
+      list.push({ id: `med-${med.id}-${time}`, title: med.name, time, emoji: "💊" });
+    }
+    return list;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeReminders, areaTasks, routines, todayIso, medications, medicationDosesToday.length]);
 
   const handleSelectFeeling = (feeling: HelpFeelingId) => {
     if (feeling === "overwhelmed") {
@@ -304,6 +344,17 @@ export default function Home() {
             help="Hur dagens olika delar hänger ihop – energi, deadlines, familj, jobb och studier. Låg kapacitet ger färre krav, inte fler."
           >
             <LifePuzzleCard />
+          </HomeSection>
+        )}
+
+        {showSection("dagen") && dayEntries.length > 0 && (
+          <HomeSection
+            style={ord("dagen")}
+            id="dagen"
+            title="Dagen just nu"
+            help="Dagens tidslinje: hållpunkter, uppgifter med klockslag, rutiner och medicintider."
+          >
+            <DayTimeline entries={dayEntries} isToday editable={false} />
           </HomeSection>
         )}
 

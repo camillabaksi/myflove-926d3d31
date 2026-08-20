@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useReminders, type Reminder, type RepeatMode } from "@/hooks/use-data";
 import { useReminderSync } from "@/hooks/use-reminder-sync";
 import { EnablePushButton } from "@/components/enable-push-button";
+import { MedicationContent } from "@/pages/medication";
 import {
   getNotificationPermission,
   requestNotificationPermission,
@@ -363,6 +364,21 @@ export default function RemindersPage() {
                 ))}
               </ul>
             )}
+          </CollapsibleSection>
+        </section>
+
+        <section className="surface-card p-5">
+          <CollapsibleSection
+            title="Medicinpåminnelser"
+            id="Medicinpåminnelser"
+            headingClassName="text-lg font-semibold"
+            className="space-y-3"
+          >
+            <p className="text-sm text-muted-foreground">
+              Dina mediciner och tider bor här tillsammans med övriga påminnelser. Bocka av när du
+              tagit dem.
+            </p>
+            <MedicationContent showHeader={false} />
           </CollapsibleSection>
         </section>
 

@@ -12,6 +12,8 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Dagen just nu på hemskärmen – dagens tidslinje med hållpunkter, uppgifter, rutiner och medicintider, med markering för var på dagen du är (2026-08-20)",
+      "Medicinpåminnelser bor i Påminnelser – lägg till, ändra och bocka av mediciner på samma sida som övriga påminnelser (2026-08-20)",
       "Snabbknapp för Att göra på hemskärmen – stor ＋ Lägg till-knapp högt upp som skapar en uppgift på sekunder, frågar direkt om energi och föreslår en tid uppåt till närmaste kvart, med aktuellt rum förifyllt (2026-08-20)",
       "Ingen Sätt dagens fokus-knapp på hemskärmen – Daily Flow visar bara det som finns, fokus sätts via Flow eller FlowPlan (2026-08-20)",
       "Att göra är din dagliga agenda – flikarna Idag, Kommande och Klart, snabbtillägg med när/energi/friktion, förslag från Flow och en frivillig energifråga när du bockar av (2026-08-20)",
