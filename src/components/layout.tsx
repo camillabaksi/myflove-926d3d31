@@ -486,14 +486,7 @@ export default function Layout({ children }: LayoutProps) {
         label: "Flow",
         hint: "Nästa steg, ordning, omplanering och hjälp",
         icon: Sparkles,
-        hrefs: [
-          "/assistant",
-          "/flowplan",
-          "/vad-nu",
-          "/quickflow",
-          "/anteckningar",
-          "/beloningar",
-        ],
+        hrefs: ["/assistant", "/flowplan", "/vad-nu", "/quickflow", "/anteckningar", "/beloningar"],
       },
       {
         id: "studyflow",
@@ -599,7 +592,6 @@ export default function Layout({ children }: LayoutProps) {
     const slot2 = pick(navSlots[1] ?? "") ?? pick("/assistant");
     return [pick("/hem"), slot1, slot2].filter(Boolean) as typeof navItems;
   }, [navItems, navSlots]);
-
 
   return (
     <div className="min-h-[100dvh] flex flex-col bg-background md:flex-row relative">
@@ -901,7 +893,6 @@ export default function Layout({ children }: LayoutProps) {
             />
           ))}
 
-
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className={`flex flex-col items-center gap-1 rounded-2xl px-2 py-1.5 min-w-[3.7rem] press ${
@@ -1053,14 +1044,14 @@ export default function Layout({ children }: LayoutProps) {
                     {simpleMode ? "Visar bara det viktigaste" : "Visa bara det viktigaste"}
                   </button>
 
-
                   {/* Byt platser i bottenmenyn */}
                   <div className="mb-4 rounded-3xl border border-border bg-card p-4 shadow-sm">
                     <div className="flex items-center justify-between gap-2">
                       <div>
                         <p className="text-sm font-semibold">Din bottenmeny</p>
                         <p data-npf="optional" className="text-xs text-muted-foreground">
-                          Hem, QuickFlow och Mer ligger fast. Två platser väljer du själv – normalt Min dag och Flow.
+                          Hem, QuickFlow och Mer ligger fast. Två platser väljer du själv – normalt
+                          Min dag och Flow.
                         </p>
                       </div>
                       <Button
@@ -1116,8 +1107,6 @@ export default function Layout({ children }: LayoutProps) {
                       </div>
                     )}
                   </div>
-
-
 
                   <div className="grid grid-cols-2 gap-3">
                     {categories
