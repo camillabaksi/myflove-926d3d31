@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-20 – Säkrare sparning av energiposter
+
+- Energiflödet följer inloggningen: loggar man in i samma flik dyker posterna upp direkt, och vid utloggning töms de direkt (tidigare krävdes omladdning).
+- Dubblettspärr: samma aktivitet med samma riktning inom en minut sparas inte två gånger – dubbeltryck skapar inte längre två poster.
+- Om en borttagning eller ändring inte går igenom mot servern återställs vyn i stället för att visa ett felaktigt läge.
+
+
+
 ## 2026-08-20 – Snabbknapp "Jag gjorde något" på Hem
 
 - Ny alltid synlig snabbknapp ➕ Jag gjorde något direkt under Mitt batteri på Hem – öppnar ett 3–5 sekunders flöde: välj/skriv aktivitet → 🔻/🔺/➖ sparar direkt.
