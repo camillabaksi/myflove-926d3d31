@@ -6,7 +6,6 @@ import HelpHint from "@/components/help-hint";
 import DayTimeline, { type TimelineEntry } from "@/components/day-timeline";
 import EnergyBattery from "@/components/energy-battery";
 import TaskQuickAdd, { type QuickAddResult } from "@/components/task-quick-add";
-import { DailyFocusCard } from "@/components/daily-focus-card";
 import { FlowItemCard } from "@/components/myflove/flow-item-card";
 import { FlowReplan } from "@/components/flow-replan";
 import { useFlowScore } from "@/hooks/use-flowscore";
@@ -14,6 +13,7 @@ import { useFlowItems } from "@/hooks/use-flow-items";
 import { useReplanMode } from "@/hooks/use-replan";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
 import { capacityForMode, shouldOfferReplan } from "@/lib/replan";
+import { assessToday, suggestNow } from "@/lib/flow-engine";
 import { withinCapacity, type FlowItem } from "@/lib/flow-items";
 import { itemCost } from "@/lib/energy-battery";
 import { useTasks, useReminders } from "@/hooks/use-data";
@@ -82,26 +82,19 @@ export default function MyDay() {
     return out;
   }, [reading.slots]);
 
-  /** Dagens energibalans i vanlig svenska – inga tekniska begrepp. */
-  const balanceText = useMemo(() => {
-    const cost = batteryItems.reduce((sum, i) => sum + Math.min(0, itemCost(i)), 0);
-    const gives = batteryItems.reduce((sum, i) => sum + Math.max(0, itemCost(i)), 0);
-    if (batteryItems.length === 0) return "Dagen är öppen. Det räcker att bara vara idag. 💙";
-    if (reading.overloaded)
-      return "Dagen kostar mer än du har kvar just nu. Välj en sak som får vänta.";
-    if (cost < -30 && gives < 10)
-      return "Flera energikrävande saker ligger nära varandra. Lägg gärna in en paus emellan.";
-    if (gives >= Math.abs(cost)) return "Dagen ser återhämtande ut – bra balans mellan krav och ork.";
-    return "Din dag ser ganska balanserad ut.";
-  }, [batteryItems, reading.overloaded]);
+  /** Dagens belastning – samma bedömning som Flow → IDAG. */
+  const load = useMemo(() => assessToday(reading, batteryItems), [reading, batteryItems]);
 
-  /** Ett enda förslag – hjälp, inte fler beslut. */
-  const suggestion = useMemo(() => {
-    if (suggestions.length > 0) return suggestions[0].text;
-    if (reading.peak)
-      return `Du har bäst fokus ${reading.peak.label}. Spara det tyngsta till dess.`;
-    return null;
-  }, [suggestions, reading.peak]);
+  /** Ett enda förslag – samma svar som Flow → NU. */
+  const suggestion = useMemo(
+    () =>
+      suggestNow({
+        tasks: activeTasks,
+        batteryNow: reading.now,
+        peakLabel: reading.peak?.label ?? null,
+      }),
+    [activeTasks, reading.now, reading.peak],
+  );
 
   const handleQuickAdd = (r: QuickAddResult) => {
     addTask(r.title, r.dueDate, {
@@ -165,25 +158,27 @@ export default function MyDay() {
           </CollapsibleSection>
         </section>
 
-        {/* ⚡ Dagens energibalans + ✨ ett förslag */}
+        {/* ⚡ Dagens energibalans + ✨ ett förslag (från Flow-motorn) */}
         <section className="surface-card space-y-3 p-5">
           <h2 className="text-lg font-semibold text-ink">Dagens energibalans</h2>
-          <p className="text-sm text-foreground">{balanceText}</p>
+          <p className="text-sm text-foreground">{load.summary}</p>
           {reading.peak && (
             <p className="text-xs text-muted-foreground">
               Starkast {reading.peak.label}
               {reading.dip ? ` · lägst ${reading.dip.label}` : ""}
             </p>
           )}
-          {suggestion && (
-            <p className="flex items-start gap-2 rounded-2xl bg-secondary/40 px-3 py-2 text-sm text-foreground">
-              <Sparkles size={16} className="mt-0.5 shrink-0 text-primary" />
-              {suggestion}
+          <div className="flex items-start gap-2 rounded-2xl bg-secondary/40 px-3 py-2 text-sm text-foreground">
+            <Sparkles size={16} className="mt-0.5 shrink-0 text-primary" />
+            <p>
+              {suggestion.headline}
+              {suggestion.task ? ` Börja gärna med "${suggestion.task.title}".` : ""}{" "}
+              <Link href="/flow" className="text-primary underline-offset-2 hover:underline">
+                Öppna Flow
+              </Link>
             </p>
-          )}
+          </div>
         </section>
-
-        <DailyFocusCard />
 
         {offerReplan && (
           <FlowReplan
