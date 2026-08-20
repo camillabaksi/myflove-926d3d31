@@ -1,4 +1,6 @@
 import { useMemo, useState } from "react";
+import HomeShortcuts from "@/components/home-shortcuts";
+import { useHomeLayout, type HomeBlockId } from "@/lib/home-layout";
 import { TaskQuickAdd, type QuickAddResult } from "@/components/task-quick-add";
 import { Link } from "wouter";
 import Layout from "@/components/layout";
@@ -26,6 +28,7 @@ import {
   Battery,
   Zap,
   MessageCircle,
+  SlidersHorizontal,
 } from "lucide-react";
 
 /**
@@ -242,11 +245,16 @@ export default function Home() {
           </div>
         </div>
 
-        {shows("batteri") && <EnergyBattery />}
+        {shows("batteri") && (
+          <div style={pos("batteri")}>
+            <EnergyBattery />
+          </div>
+        )}
 
         {/* Nästa – nästa relevanta aktivitet */}
         {shows("nasta") && (
           <section
+            style={pos("nasta")}
             className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
             aria-label="Nästa aktivitet"
           >
@@ -290,6 +298,7 @@ export default function Home() {
         {/* Ett Flow-förslag – samma svar som Flow → NU */}
         {shows("forslag") && (
           <section
+            style={pos("forslag")}
             className="rounded-3xl border border-primary/20 bg-primary/5 p-5 shadow-soft"
             aria-label="Flow-förslag"
           >
@@ -319,6 +328,7 @@ export default function Home() {
         {/* Lägg till – snabbknapp */}
         {shows("lagg-till") && (
           <TaskQuickAdd
+            style={pos("lagg-till")}
             onAdd={(result: QuickAddResult) => {
               addTask(result.title, result.dueDate, {
                 time: result.time,
@@ -332,11 +342,19 @@ export default function Home() {
         )}
 
         {/* Dina genvägar – fyra egna favoriter */}
-        {shows("genvagar") && <HomeShortcuts />}
+        {shows("genvagar") && (
+          <div style={pos("genvagar")}>
+            <HomeShortcuts />
+          </div>
+        )}
 
         {/* Korta vägar till kärnfunktionerna */}
         {shows("vagar") && (
-          <nav aria-label="Huvuddestinationer" className="grid grid-cols-3 gap-3">
+          <nav
+            style={pos("vagar")}
+            aria-label="Huvuddestinationer"
+            className="grid grid-cols-3 gap-3"
+          >
             <Link
               href="/min-dag"
               className="flex flex-col items-center gap-2 rounded-2xl border border-border/60 bg-card p-4 text-center shadow-soft transition-colors hover:border-primary/40 hover:bg-primary/5"
@@ -363,7 +381,7 @@ export default function Home() {
 
         {/* Områdesväljare – litet, längst ner */}
         {shows("omrade") && (
-          <div className="space-y-2 pt-2">
+          <div style={pos("omrade")} className="space-y-2 pt-2">
             <AreaSwitcher size="sm" />
             <p className="text-xs text-muted-foreground">
               {activeArea === "alla"
@@ -373,11 +391,11 @@ export default function Home() {
           </div>
         )}
 
-        <div className="pt-2">
+        <div style={{ order: 98 }} className="pt-2">
           <AreaOnboarding />
         </div>
 
-        <div className="pb-2 text-center">
+        <div style={{ order: 99 }} className="pb-2 text-center">
           <Link
             href="/anpassa-hem"
             className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground underline underline-offset-2"
