@@ -22,8 +22,8 @@ import { celebrateFromEvent } from "@/lib/celebrate";
 import { generateStudySet } from "@/lib/flowstudy.functions";
 import LifeProfileLink from "@/components/life-profile-link";
 import { useLifeProfile } from "@/hooks/use-life-profile";
+import { lifeProfileContext, toStudyProfile } from "@/lib/life-profile";
 import {
-  studyProfileContext,
   studyMaterialPlan,
   applyEmphasis,
   EMPHASIS_META,
