@@ -279,6 +279,20 @@ export default function Home() {
         </Link>
 
         <div style={{ order: -1 }}>
+          <TaskQuickAdd
+            onAdd={(result: QuickAddResult) => {
+              addTask(result.title, result.dueDate, {
+                time: result.time,
+                energyImpact: result.energyImpact,
+                friction: result.friction,
+                area: activeArea === "alla" ? "vardag" : activeArea,
+              });
+            }}
+            className="bg-primary text-primary-foreground hover:bg-primary/90"
+          />
+        </div>
+
+        <div style={{ order: -1 }}>
           <PersonalNote />
         </div>
 
