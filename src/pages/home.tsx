@@ -129,77 +129,24 @@ function useNextEvent(): NextEvent | null {
 }
 
 /**
- * Ett enda, lågkognitivt Flow-förslag baserat på batteri, nästa händelse
- * och dagens uppgifter. Aldrig mer än ett.
+ * Ett enda Flow-förslag – hämtat från samma motor som Flow → NU,
+ * så att Hem, Min dag och Flow alltid säger samma sak.
  */
-function useSingleSuggestion(nextEvent: NextEvent | null): { text: string; action?: string } | null {
+function useFlowSuggestion(): NowSuggestion {
   const { reading } = useEnergyBattery();
   const { activeTasks } = useTasks();
-  const nowMin = new Date().getHours() * 60 + new Date().getMinutes();
 
-  return useMemo(() => {
-    const todayIso = new Date().toISOString().split("T")[0] as string;
-    const topTask = activeTasks.find(
-      (t) => !t.completed && (!t.dueDate || t.dueDate === todayIso) && !t.time,
-    );
-
-    if (reading.overloaded) {
-      return {
-        text: "Dagen ser tung ut. Vill du flytta något eller lägga in en paus?",
-        action: "/min-dag",
-      };
-    }
-
-    if (reading.peak && reading.peak.startMinutes > nowMin) {
-      if (topTask) {
-        return {
-          text: `Du har bäst fokus ${reading.peak.label.toLowerCase()}. Passar det att börja med "${topTask.title}"?`,
-          action: "/min-dag",
-        };
-      }
-      return {
-        text: `Du har bäst fokus ${reading.peak.label.toLowerCase()}. Passar det att göra nästa sak då?`,
-        action: "/min-dag",
-      };
-    }
-
-    if (reading.dip && reading.dip.startMinutes > nowMin && reading.now < 50) {
-      return {
-        text: `Energin sjunker ${reading.dip.label.toLowerCase()}. En kort paus då kan hjälpa resten av dagen.`,
-        action: "/ma-bra",
-      };
-    }
-
-    if (nextEvent) {
-      const min = parseTime(nextEvent.time);
-      if (min !== null) {
-        const diff = min - nowMin;
-        if (diff > 0 && diff <= 60) {
-          return {
-            text: `Nästa sak är "${nextEvent.title}" om ${diff} min. Vill du förbereda dig?`,
-            action: "/min-dag",
-          };
-        }
-      }
-      return {
-        text: `Nästa sak är "${nextEvent.title}" ${nextEvent.time ? `kl ${nextEvent.time}` : "senare"}.`,
-        action: "/min-dag",
-      };
-    }
-
-    if (topTask) {
-      return {
-        text: `Vill du börja med "${topTask.title}"?`,
-        action: "/min-dag",
-      };
-    }
-
-    return {
-      text: "Inget planerat just nu. Vill du lägga till en sak eller ta en stund för dig själv?",
-      action: "/quickflow",
-    };
-  }, [reading, activeTasks, nextEvent, nowMin]);
+  return useMemo(
+    () =>
+      suggestNow({
+        tasks: activeTasks,
+        batteryNow: reading.now,
+        peakLabel: reading.peak?.label ?? null,
+      }),
+    [activeTasks, reading.now, reading.peak],
+  );
 }
+
 
 export default function Home() {
   const { name, setName, lastVisit } = useUserProfile();
