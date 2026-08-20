@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Snabbknapp för Att göra på hemskärmen – stor ＋ Lägg till-knapp högt upp som skapar en uppgift på sekunder, med samma när/energi/friktion som Att göra-sidan och aktuellt rum förifyllt (2026-08-20)",
       "Ingen Sätt dagens fokus-knapp på hemskärmen – Daily Flow visar bara det som finns, fokus sätts via Flow eller FlowPlan (2026-08-20)",
       "Att göra är din dagliga agenda – flikarna Idag, Kommande och Klart, snabbtillägg med när/energi/friktion, förslag från Flow och en frivillig energifråga när du bockar av (2026-08-20)",
       "Anteckningar & idébank har en egen del under Flow – öppna Anteckningar direkt från Mer-menyn, Quickflow länkar dit (2026-08-19)",
@@ -19,9 +20,9 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
       "Idébanken bor i Anteckningar – gamla idéer från Quickflow flyttas automatiskt in bland dina anteckningar (2026-08-19)",
       "Flytta befintliga tankar till Anteckningar – tryck på anteckningsikonen på en sparad Quickflow-tanke så flyttas den till Anteckningar (2026-08-19)",
       "Redigera och radera anteckningar – ändra text och livsområde direkt i listan, eller ta bort med ångra-knapp (2026-08-19)",
-      "Spara direkt som anteckning från Quickflow – välj \"Spara som anteckning\" i Kom ihåg-rutan så hamnar tanken bland dina anteckningar (2026-08-19)",
+      'Spara direkt som anteckning från Quickflow – välj "Spara som anteckning" i Kom ihåg-rutan så hamnar tanken bland dina anteckningar (2026-08-19)',
       "Medicinpåminnelser på förstasidan – alla dagens kvarvarande doser visas högt upp på hemskärmen och kan bockas av med ett tryck (2026-08-19)",
-      "Ett sammanhängande Daily Flow-kort – Ditt fokus idag och dagens viktigaste sitter ihop i samma kort med \"Resten av dagen\" direkt under fokuslistan (2026-08-19)",
+      'Ett sammanhängande Daily Flow-kort – Ditt fokus idag och dagens viktigaste sitter ihop i samma kort med "Resten av dagen" direkt under fokuslistan (2026-08-19)',
       "Inga dubbletter på hemskärmen – en sak som redan ligger i Ditt fokus idag eller som dagens fokus upprepas inte i listan under (2026-08-19)",
       "Daily Flow och Dagens viktigaste är ett och samma block – incheckning, Ditt fokus idag och dagens viktigaste ligger nu tillsammans på hemskärmen (2026-08-19)",
       "Framtida saker stannar på sin dag – hemskärmen visar bara det som gäller idag eller saknar datum, resten dyker upp när det är dags (2026-08-19)",

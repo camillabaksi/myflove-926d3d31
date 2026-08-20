@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { TaskQuickAdd, type QuickAddResult } from "@/components/task-quick-add";
 import { Link } from "wouter";
 import HomeShortcuts from "@/components/home-shortcuts";
 import UnusedBlocksHint from "@/components/unused-blocks-hint";
@@ -92,7 +93,7 @@ export default function Home() {
   const [editingName, setEditingName] = useState(false);
   const [nameDraft, setNameDraft] = useState(name);
   const { currentFocus, toggleFocusCompleted } = useFocus();
-  const { activeTasks, toggleTask } = useTasks();
+  const { activeTasks, toggleTask, addTask } = useTasks();
   const { activeArea } = useActiveArea();
   const { isSimple } = useViewMode(activeArea);
   const { isHidden } = useHiddenHomeSections();
@@ -278,6 +279,20 @@ export default function Home() {
         </Link>
 
         <div style={{ order: -1 }}>
+          <TaskQuickAdd
+            onAdd={(result: QuickAddResult) => {
+              addTask(result.title, result.dueDate, {
+                time: result.time,
+                energyImpact: result.energyImpact,
+                friction: result.friction,
+                area: activeArea === "alla" ? "vardag" : activeArea,
+              });
+            }}
+            className="bg-primary text-primary-foreground hover:bg-primary/90"
+          />
+        </div>
+
+        <div style={{ order: -1 }}>
           <PersonalNote />
         </div>
 
@@ -305,79 +320,79 @@ export default function Home() {
                 onTopTasks={setFlowFocusIds}
                 rest={
                   <div className="space-y-3">
-              {currentFocus && !helpPlan && (
-                <button
-                  onClick={(e) => {
-                    if (!currentFocus.completed) celebrateFromEvent(e);
-                    toggleFocusCompleted();
-                  }}
-                  className={`w-full text-left p-5 rounded-2xl border-2 transition-all flex items-center gap-4 ${
-                    currentFocus.completed
-                      ? "bg-primary/10 border-primary/20 text-primary"
-                      : "bg-card border-primary/40 shadow-sm"
-                  }`}
-                >
-                  {currentFocus.completed ? (
-                    <CheckCircle2
-                      size={24}
-                      className="fill-primary text-primary-foreground shrink-0"
-                    />
-                  ) : (
-                    <Circle size={24} className="text-primary shrink-0" />
-                  )}
-                  <div>
-                    <p className="text-xs uppercase tracking-wide text-muted-foreground mb-0.5">
-                      Dagens fokus
-                    </p>
-                    <p
-                      className={`font-medium ${currentFocus.completed ? "line-through opacity-70" : ""}`}
-                    >
-                      {currentFocus.text}
-                    </p>
-                  </div>
-                </button>
-              )}
+                    {currentFocus && !helpPlan && (
+                      <button
+                        onClick={(e) => {
+                          if (!currentFocus.completed) celebrateFromEvent(e);
+                          toggleFocusCompleted();
+                        }}
+                        className={`w-full text-left p-5 rounded-2xl border-2 transition-all flex items-center gap-4 ${
+                          currentFocus.completed
+                            ? "bg-primary/10 border-primary/20 text-primary"
+                            : "bg-card border-primary/40 shadow-sm"
+                        }`}
+                      >
+                        {currentFocus.completed ? (
+                          <CheckCircle2
+                            size={24}
+                            className="fill-primary text-primary-foreground shrink-0"
+                          />
+                        ) : (
+                          <Circle size={24} className="text-primary shrink-0" />
+                        )}
+                        <div>
+                          <p className="text-xs uppercase tracking-wide text-muted-foreground mb-0.5">
+                            Dagens fokus
+                          </p>
+                          <p
+                            className={`font-medium ${currentFocus.completed ? "line-through opacity-70" : ""}`}
+                          >
+                            {currentFocus.text}
+                          </p>
+                        </div>
+                      </button>
+                    )}
 
-              <div className="space-y-3">
-                {visibleTasks.map((task, i) => (
-                  <div
-                    key={task.id}
-                    style={{ animationDelay: `${i * 60}ms` }}
-                    className="w-full flex items-center gap-3 p-4 surface-card hover:border-primary/40 hover:shadow-lifted transition-all text-left animate-fade-in"
-                  >
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        toggleTask(task.id);
-                        celebrateFromEvent(e);
-                      }}
-                      aria-label={`Klarmarkera ${task.title}`}
-                      className="flex flex-1 items-center gap-3 text-left active:scale-[0.99]"
-                    >
-                      <Circle size={20} className="text-muted-foreground shrink-0" />
-                      <span className="flex-1">{task.title}</span>
-                      {task.dueDate && (
-                        <span className="text-xs text-muted-foreground shrink-0">
-                          {task.dueDate}
-                        </span>
-                      )}
-                    </button>
-                    <FlowItemActions itemId={`task-${task.id}`} size={15} />
-                  </div>
-                ))}
-              </div>
+                    <div className="space-y-3">
+                      {visibleTasks.map((task, i) => (
+                        <div
+                          key={task.id}
+                          style={{ animationDelay: `${i * 60}ms` }}
+                          className="w-full flex items-center gap-3 p-4 surface-card hover:border-primary/40 hover:shadow-lifted transition-all text-left animate-fade-in"
+                        >
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              toggleTask(task.id);
+                              celebrateFromEvent(e);
+                            }}
+                            aria-label={`Klarmarkera ${task.title}`}
+                            className="flex flex-1 items-center gap-3 text-left active:scale-[0.99]"
+                          >
+                            <Circle size={20} className="text-muted-foreground shrink-0" />
+                            <span className="flex-1">{task.title}</span>
+                            {task.dueDate && (
+                              <span className="text-xs text-muted-foreground shrink-0">
+                                {task.dueDate}
+                              </span>
+                            )}
+                          </button>
+                          <FlowItemActions itemId={`task-${task.id}`} size={15} />
+                        </div>
+                      ))}
+                    </div>
 
-              {(hiddenTaskCount > 0 || showAllTasks) && (
-                <button
-                  type="button"
-                  onClick={() => setShowAllTasks((v) => !v)}
-                  className="w-full text-sm font-medium text-primary hover:underline pt-1"
-                >
-                  {showAllTasks
-                    ? "Visa bara det viktigaste"
-                    : `Visa alla uppgifter som inte är klara (${areaTasks.length})`}
-                </button>
-              )}
+                    {(hiddenTaskCount > 0 || showAllTasks) && (
+                      <button
+                        type="button"
+                        onClick={() => setShowAllTasks((v) => !v)}
+                        className="w-full text-sm font-medium text-primary hover:underline pt-1"
+                      >
+                        {showAllTasks
+                          ? "Visa bara det viktigaste"
+                          : `Visa alla uppgifter som inte är klara (${areaTasks.length})`}
+                      </button>
+                    )}
                   </div>
                 }
               />
@@ -558,10 +573,7 @@ export default function Home() {
           >
             <div className="space-y-2">
               {medicationDosesToday.map(({ med, time }) => (
-                <div
-                  key={`${med.id}-${time}`}
-                  className="flex items-center gap-4 p-4 surface-card"
-                >
+                <div key={`${med.id}-${time}`} className="flex items-center gap-4 p-4 surface-card">
                   <div className="w-11 h-11 rounded-full bg-violet-100 text-violet-700 flex items-center justify-center shrink-0">
                     <Pill size={20} />
                   </div>
