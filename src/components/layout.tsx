@@ -99,6 +99,7 @@ const CATEGORY_HUE: Record<string, string> = {
   familyflow: "348 62% 66%",
   studyflow: "232 58% 64%",
   workflow: "212 48% 52%",
+  travelflow: "172 44% 46%",
   ovrigt: "258 12% 52%",
 };
 const catColor = (id: string, alpha?: number) => {
@@ -571,7 +572,7 @@ export default function Layout({ children }: LayoutProps) {
   const situationLabel = situationSummary(situation) || "Berätta hur livet ser ut just nu";
   // Egna platser i bottennavet – du byter dem själv i "Mer".
   const [navSlots, setNavSlots] = useLocalStorage<string[]>("myflove-bottom-nav-slots", [
-    "/kalender",
+    "/min-dag",
     "/assistant",
   ]);
   const [editingNav, setEditingNav] = useState(false);
@@ -594,7 +595,7 @@ export default function Layout({ children }: LayoutProps) {
    */
   const primaryNav = useMemo(() => {
     const pick = (href: string) => navItems.find((i) => i.href === href);
-    const slot1 = pick(navSlots[0] ?? "") ?? pick("/kalender") ?? pick("/min-dag");
+    const slot1 = pick(navSlots[0] ?? "") ?? pick("/min-dag") ?? pick("/kalender");
     const slot2 = pick(navSlots[1] ?? "") ?? pick("/assistant");
     return [pick("/hem"), slot1, slot2].filter(Boolean) as typeof navItems;
   }, [navItems, navSlots]);
@@ -1059,7 +1060,7 @@ export default function Layout({ children }: LayoutProps) {
                       <div>
                         <p className="text-sm font-semibold">Din bottenmeny</p>
                         <p data-npf="optional" className="text-xs text-muted-foreground">
-                          Hem och QuickFlow ligger fast. Två platser väljer du själv.
+                          Hem, QuickFlow och Mer ligger fast. Två platser väljer du själv – normalt Min dag och Flow.
                         </p>
                       </div>
                       <Button
@@ -1108,7 +1109,7 @@ export default function Layout({ children }: LayoutProps) {
                           variant="ghost"
                           size="sm"
                           className="rounded-xl gap-1"
-                          onClick={() => setNavSlots(["/kalender", "/assistant"])}
+                          onClick={() => setNavSlots(["/min-dag", "/assistant"])}
                         >
                           <RotateCcw size={14} /> Återställ
                         </Button>
