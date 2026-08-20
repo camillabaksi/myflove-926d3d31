@@ -130,6 +130,8 @@ export function useTasks() {
       steps?: string[];
       deadlineLeadDays?: number[];
       deadlineReminderTime?: string;
+      energyImpact?: Task["energyImpact"];
+      friction?: Task["friction"];
     },
   ) => {
     // Blueprint: uppgifter ska alltid landa i kalendern så inget "försvinner".
@@ -152,8 +154,11 @@ export function useTasks() {
         courseId: opts?.courseId,
         deadlineLeadDays: opts?.deadlineLeadDays,
         deadlineReminderTime: opts?.deadlineReminderTime,
+        energyImpact: opts?.energyImpact,
+        friction: opts?.friction,
         steps: (opts?.steps ?? []).map((s) => ({ id: generateId(), title: s, done: false })),
       },
+
       ...prev,
     ]);
   };
