@@ -3,6 +3,7 @@ import { useLocalStorage } from "@/lib/storage";
 
 /** Alla block som går att välja bort på hemskärmen. */
 export const HOME_SECTIONS: { id: string; label: string; hint: string }[] = [
+  { id: "batteri", label: "Mitt batteri", hint: "Din energinivå nu och över dagen" },
   { id: "livspussel", label: "Livspusslet", hint: "Hur dagens delar hänger ihop" },
   {
     id: "dagen",
