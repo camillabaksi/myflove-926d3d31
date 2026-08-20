@@ -158,6 +158,8 @@ export default function Home() {
   const { activeArea } = useActiveArea();
   const nextEvent = useNextEvent();
   const suggestion = useFlowSuggestion();
+  const { visible } = useHomeLayout();
+  const shows = (id: HomeBlockId) => visible.includes(id);
 
   const hour = new Date().getHours();
   const heroGradient =
