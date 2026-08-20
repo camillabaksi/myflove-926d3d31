@@ -226,6 +226,7 @@ export type Database = {
           category: string
           counts_toward_score: boolean
           created_at: string
+          dedup_key: string | null
           direction: string
           friction: number | null
           id: string
@@ -240,6 +241,7 @@ export type Database = {
           category?: string
           counts_toward_score?: boolean
           created_at?: string
+          dedup_key?: string | null
           direction?: string
           friction?: number | null
           id?: string
@@ -254,6 +256,7 @@ export type Database = {
           category?: string
           counts_toward_score?: boolean
           created_at?: string
+          dedup_key?: string | null
           direction?: string
           friction?: number | null
           id?: string

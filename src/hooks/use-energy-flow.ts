@@ -220,7 +220,31 @@ export function useEnergyFlow(): {
           "id, title, direction, strength, category, kind, friction, note, counts_toward_score, occurred_at",
         )
         .single();
-      if (error) throw error;
+      if (error) {
+        // 23505 = serverns dubblettspärr (samma aktivitet, riktning och minut).
+        // Då finns posten redan – hämta den och behandla sparningen som lyckad.
+        if ((error as { code?: string }).code === "23505") {
+          const { data: existing } = await supabase
+            .from("energy_factors")
+            .select(
+              "id, title, direction, strength, category, kind, friction, note, counts_toward_score, occurred_at",
+            )
+            .eq("user_id", uid)
+            .eq("direction", input.direction)
+            .ilike("title", input.title.trim())
+            .order("occurred_at", { ascending: false })
+            .limit(1)
+            .maybeSingle();
+          if (existing) {
+            const dupEntry = toEntry(existing as Row);
+            if (!store.entries.some((e) => e.id === dupEntry.id)) {
+              setStore({ entries: [dupEntry, ...store.entries] });
+            }
+            return dupEntry;
+          }
+        }
+        throw error;
+      }
       const entry = toEntry(data as Row);
       setStore({ entries: [entry, ...store.entries] });
       return entry;
