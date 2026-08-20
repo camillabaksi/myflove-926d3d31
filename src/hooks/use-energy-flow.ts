@@ -70,7 +70,7 @@ export function useEnergyFlow(): {
   setSettings: (s: EnergyFlowSettings) => void;
   loading: boolean;
   signedIn: boolean;
-  addFactor: (input: NewEnergyFactor) => Promise<void>;
+  addFactor: (input: NewEnergyFactor) => Promise<EnergyFactorEntry | null>;
   removeFactor: (id: string) => Promise<void>;
   updateFactor: (
     id: string,
@@ -138,8 +138,8 @@ export function useEnergyFlow(): {
   }, []);
 
   const addFactor = useCallback(
-    async (input: NewEnergyFactor) => {
-      if (!userId) return;
+    async (input: NewEnergyFactor): Promise<EnergyFactorEntry | null> => {
+      if (!userId) return null;
       const { data, error } = await supabase
         .from("energy_factors")
         .insert({
@@ -156,7 +156,9 @@ export function useEnergyFlow(): {
         .select("id, title, direction, strength, category, kind, friction, note, counts_toward_score, occurred_at")
         .single();
       if (error) throw error;
-      setEntries((prev) => [toEntry(data as Row), ...prev]);
+      const entry = toEntry(data as Row);
+      setEntries((prev) => [entry, ...prev]);
+      return entry;
     },
     [userId],
   );
