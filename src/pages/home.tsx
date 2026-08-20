@@ -337,7 +337,14 @@ export default function Home() {
           <PersonalNote />
         </div>
 
+        {showSection("batteri") && (
+          <div style={ord("batteri")}>
+            <EnergyBattery />
+          </div>
+        )}
+
         {showSection("livspussel") && (
+
           <HomeSection
             style={ord("livspussel")}
             id="livspussel"
