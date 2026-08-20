@@ -344,12 +344,13 @@ export default function Home() {
           </div>
         )}
 
-        {/* Lägg till det du gjorde – vardagen som inte syns i kalendern */}
+        {/* Lägg till det du gjorde – full panel (valbar) */}
         {shows("gjort") && (
           <div style={pos("gjort")}>
             <DidThisQuickAdd />
           </div>
         )}
+
 
         {/* Dagens energiflöde – faktisk belastning */}
         {shows("energifloede") && (
