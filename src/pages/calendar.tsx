@@ -574,7 +574,10 @@ export default function CalendarPage() {
           i MyFlove.
         </p>
 
+        <EnergyBattery />
+
         <div className="bg-card rounded-3xl border border-border shadow-sm overflow-hidden">
+
           <div className="p-6 pb-2">
             <CollapsibleSection
               title={periodLabel}
