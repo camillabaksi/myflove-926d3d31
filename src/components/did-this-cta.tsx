@@ -115,7 +115,7 @@ export function DidThisCta({ className }: { className?: string }) {
           className,
         )}
       >
-        <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-primary text-primary-foreground transition-transform group-hover:scale-105 group-active:scale-95 motion-safe:animate-pulse-soft">
+        <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-primary text-primary-foreground transition-transform group-hover:scale-105 group-active:scale-95 breathe">
           <Plus size={20} />
         </span>
         <span className="min-w-0">
