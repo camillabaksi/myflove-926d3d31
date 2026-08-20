@@ -93,7 +93,7 @@ export default function Home() {
   const [editingName, setEditingName] = useState(false);
   const [nameDraft, setNameDraft] = useState(name);
   const { currentFocus, toggleFocusCompleted } = useFocus();
-  const { activeTasks, toggleTask } = useTasks();
+  const { activeTasks, toggleTask, addTask } = useTasks();
   const { activeArea } = useActiveArea();
   const { isSimple } = useViewMode(activeArea);
   const { isHidden } = useHiddenHomeSections();
