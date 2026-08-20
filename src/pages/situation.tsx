@@ -155,8 +155,8 @@ export default function SituationPage() {
         </div>
 
         <p className="text-xs text-muted-foreground">
-          Flow väger din situation mot livspusslet, FlowScore och Energiflöde. Ingen situation låser
-          dig – du kan byta, pausa och ta tillbaka när livet ändrar sig.
+          Flow väger din situation mot din dag och din energi. Ingen situation låser dig – du kan
+          byta, pausa och ta tillbaka när livet ändrar sig.
         </p>
       </div>
     </Layout>

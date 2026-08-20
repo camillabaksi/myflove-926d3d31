@@ -271,12 +271,6 @@ export default function Layout({ children }: LayoutProps) {
       hint: "Logga hur du mår och hur mycket ork du har",
     },
     {
-      href: "/energifloede",
-      label: "Energiflöde",
-      icon: Zap,
-      hint: "Vad som ger och tar energi – vägs in i din FlowScore",
-    },
-    {
       href: "/traning",
       label: "Träning",
       icon: Dumbbell,
@@ -284,9 +278,9 @@ export default function Layout({ children }: LayoutProps) {
     },
     {
       href: "/daglig-rutin",
-      label: "Daglig rutin",
+      label: "Rutiner & medicin",
       icon: Sun,
-      hint: "Morgon- och kvällsrutiner steg för steg",
+      hint: "Fasta rutiner och dagens doser",
     },
     {
       href: "/quickflow",
@@ -526,7 +520,7 @@ export default function Layout({ children }: LayoutProps) {
         label: "Avancerat",
         hint: "Detaljerna bakom Flow – bara om du vill se dem",
         icon: Gauge,
-        hrefs: ["/flowscore", "/energifloede", "/veckans-flow", "/friktionsindex"],
+        hrefs: ["/flowscore", "/veckans-flow", "/friktionsindex"],
       },
       {
         id: "ovrigt",

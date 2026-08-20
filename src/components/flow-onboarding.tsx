@@ -76,7 +76,7 @@ export default function FlowOnboarding() {
               onClick={() => setDismissed(true)}
               className="w-full rounded-2xl border border-border px-4 py-4 text-left font-medium hover:border-primary/50"
             >
-              🎯 Min första Daily Flow
+              🎯 Min första dag i Flow
             </button>
             <Link
               href="/kalender"

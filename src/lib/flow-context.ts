@@ -61,7 +61,7 @@ const PLACES: Record<string, { label: string; prompt: string; area: LifeArea }> 
     area: "vardag",
   },
   "/daglig-rutin": {
-    label: "Daglig rutin",
+    label: "Rutiner & medicin",
     prompt: "Hjälp mig komma igång med rutinen.",
     area: "vardag",
   },

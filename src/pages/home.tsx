@@ -10,6 +10,8 @@ import { useTasks, useReminders, useMedications, type Task, type Reminder } from
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import type { Routine } from "@/pages/routines";
 import { useStudySchedule } from "@/hooks/use-study-schedule";
+import { suggestNow, type NowSuggestion } from "@/lib/flow-engine";
+
 import { AreaOnboarding } from "@/components/area-onboarding";
 import { AreaSwitcher } from "@/components/area-switcher";
 import { AREA_META, useActiveArea } from "@/lib/life-areas";
@@ -129,76 +131,22 @@ function useNextEvent(): NextEvent | null {
 }
 
 /**
- * Ett enda, lågkognitivt Flow-förslag baserat på batteri, nästa händelse
- * och dagens uppgifter. Aldrig mer än ett.
+ * Ett enda Flow-förslag – hämtat från samma motor som Flow → NU,
+ * så att Hem, Min dag och Flow alltid säger samma sak.
  */
-function useSingleSuggestion(nextEvent: NextEvent | null): { text: string; action?: string } | null {
+function useFlowSuggestion(): NowSuggestion {
   const { reading } = useEnergyBattery();
   const { activeTasks } = useTasks();
-  const nowMin = new Date().getHours() * 60 + new Date().getMinutes();
 
-  return useMemo(() => {
-    const todayIso = new Date().toISOString().split("T")[0] as string;
-    const topTask = activeTasks.find(
-      (t) => !t.completed && (!t.dueDate || t.dueDate === todayIso) && !t.time,
-    );
-
-    if (reading.overloaded) {
-      return {
-        text: "Dagen ser tung ut. Vill du flytta något eller lägga in en paus?",
-        action: "/min-dag",
-      };
-    }
-
-    if (reading.peak && reading.peak.startMinutes > nowMin) {
-      if (topTask) {
-        return {
-          text: `Du har bäst fokus ${reading.peak.label.toLowerCase()}. Passar det att börja med "${topTask.title}"?`,
-          action: "/min-dag",
-        };
-      }
-      return {
-        text: `Du har bäst fokus ${reading.peak.label.toLowerCase()}. Passar det att göra nästa sak då?`,
-        action: "/min-dag",
-      };
-    }
-
-    if (reading.dip && reading.dip.startMinutes > nowMin && reading.now < 50) {
-      return {
-        text: `Energin sjunker ${reading.dip.label.toLowerCase()}. En kort paus då kan hjälpa resten av dagen.`,
-        action: "/ma-bra",
-      };
-    }
-
-    if (nextEvent) {
-      const min = parseTime(nextEvent.time);
-      if (min !== null) {
-        const diff = min - nowMin;
-        if (diff > 0 && diff <= 60) {
-          return {
-            text: `Nästa sak är "${nextEvent.title}" om ${diff} min. Vill du förbereda dig?`,
-            action: "/min-dag",
-          };
-        }
-      }
-      return {
-        text: `Nästa sak är "${nextEvent.title}" ${nextEvent.time ? `kl ${nextEvent.time}` : "senare"}.`,
-        action: "/min-dag",
-      };
-    }
-
-    if (topTask) {
-      return {
-        text: `Vill du börja med "${topTask.title}"?`,
-        action: "/min-dag",
-      };
-    }
-
-    return {
-      text: "Inget planerat just nu. Vill du lägga till en sak eller ta en stund för dig själv?",
-      action: "/quickflow",
-    };
-  }, [reading, activeTasks, nextEvent, nowMin]);
+  return useMemo(
+    () =>
+      suggestNow({
+        tasks: activeTasks,
+        batteryNow: reading.now,
+        peakLabel: reading.peak?.label ?? null,
+      }),
+    [activeTasks, reading.now, reading.peak],
+  );
 }
 
 export default function Home() {
@@ -209,7 +157,7 @@ export default function Home() {
   const { addTask } = useTasks();
   const { activeArea } = useActiveArea();
   const nextEvent = useNextEvent();
-  const suggestion = useSingleSuggestion(nextEvent);
+  const suggestion = useFlowSuggestion();
 
   const hour = new Date().getHours();
   const heroGradient =
@@ -334,29 +282,32 @@ export default function Home() {
           )}
         </section>
 
-        {/* Ett Flow-förslag – högst ett */}
-        {suggestion && (
-          <section
-            className="rounded-3xl border border-primary/20 bg-primary/5 p-5 shadow-soft"
-            aria-label="Flow-förslag"
+        {/* Ett Flow-förslag – samma svar som Flow → NU */}
+        <section
+          className="rounded-3xl border border-primary/20 bg-primary/5 p-5 shadow-soft"
+          aria-label="Flow-förslag"
+        >
+          <div className="flex items-center gap-2 mb-3">
+            <Sparkles size={18} className="text-primary" />
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+              Flow-förslag
+            </h2>
+          </div>
+          <p className="text-ink leading-relaxed">{suggestion.headline}</p>
+          {suggestion.task && (
+            <p className="mt-2 text-sm text-muted-foreground">
+              <span className="font-medium text-ink">{suggestion.task.title}</span>
+              {suggestion.minutes ? ` · ca ${suggestion.minutes} min` : ""}
+              {suggestion.reason ? ` – ${suggestion.reason}` : ""}
+            </p>
+          )}
+          <Link
+            href="/flow"
+            className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
           >
-            <div className="flex items-center gap-2 mb-3">
-              <Sparkles size={18} className="text-primary" />
-              <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-                Flow-förslag
-              </h2>
-            </div>
-            <p className="text-ink leading-relaxed">{suggestion.text}</p>
-            {suggestion.action && (
-              <Link
-                href={suggestion.action}
-                className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
-              >
-                Gå vidare <ArrowRight size={14} />
-              </Link>
-            )}
-          </section>
-        )}
+            {suggestion.task ? "Öppna i Flow" : "Lägg till något"} <ArrowRight size={14} />
+          </Link>
+        </section>
 
         {/* Lägg till – snabbknapp */}
         <TaskQuickAdd

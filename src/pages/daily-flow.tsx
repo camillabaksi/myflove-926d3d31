@@ -12,10 +12,10 @@ export default function DailyFlowPage() {
         <header className="space-y-1">
           <div className="flex items-center gap-2">
             <Sun className="text-primary" size={26} />
-            <h1 className="text-3xl font-bold">Daglig rutin</h1>
+            <h1 className="text-3xl font-bold">Rutiner &amp; medicin</h1>
           </div>
           <p className="text-muted-foreground">
-            Rutiner och medicin i ett flöde – tracka båda eller var för sig.
+            Dina fasta rutiner och doser. Dagens plan och förslag bor i Min dag och Flow.
           </p>
         </header>
 

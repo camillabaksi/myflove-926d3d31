@@ -399,7 +399,7 @@ export default function StudyflowPage() {
               headingClassName={sectionTitle}
               title={
                 <>
-                  <AlarmClock className="h-5 w-5 text-primary" /> Vad ska jag göra nu?
+                  <AlarmClock className="h-5 w-5 text-primary" /> Bäst att göra nu
                 </>
               }
               help="En sak i taget, vald åt dig. Tryck på start så börjar vi där."
