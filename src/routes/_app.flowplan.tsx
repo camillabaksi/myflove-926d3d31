@@ -1,16 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
-import Page from "@/pages/flowplan";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
+/** FlowPlan™ är numera en del av Flow (lagret IDAG). Logiken lever kvar
+ *  i flowplan.functions.ts och används internt. */
 export const Route = createFileRoute("/_app/flowplan")({
-  head: () => ({
-    meta: [
-      { title: "FlowPlan – MyFlove" },
-      {
-        name: "description",
-        content: "Låt Flow räkna ut rätt ordning på dina uppgifter – utan att pressa dig.",
-      },
-      { name: "robots", content: "noindex, nofollow" },
-    ],
-  }),
-  component: Page,
+  beforeLoad: () => {
+    throw redirect({ to: "/flow", replace: true });
+  },
 });

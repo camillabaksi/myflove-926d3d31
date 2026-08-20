@@ -206,7 +206,7 @@ export function workSuggestions(
     out.push({
       title: "Krävande dag, låg energi",
       body: `Du har ${ctx.today.length} jobbhållpunkter idag och energin är ${ctx.energy}/5. Ta det som måste bli klart och låt resten vänta – kvällen behöver också vara rimlig.`,
-      href: "/vad-nu",
+      href: "/flow",
       hrefLabel: "En sak i taget",
     });
   }

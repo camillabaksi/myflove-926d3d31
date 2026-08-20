@@ -55,7 +55,8 @@ function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString("sv-SE", { day: "numeric", month: "short" });
 }
 
-export default function Assistant({ chatId }: { chatId?: string }) {
+/** Chatten utan sidram – används både som egen sida och som HJÄLP-läget i Flow. */
+export function AssistantContent({ chatId }: { chatId?: string }) {
   const navigate = useNavigate();
   const conversationId = chatId ?? null;
 
@@ -157,7 +158,6 @@ export default function Assistant({ chatId }: { chatId?: string }) {
     }
   };
 
-
   const historyList = (
     <div className="space-y-2">
       <button
@@ -214,7 +214,7 @@ export default function Assistant({ chatId }: { chatId?: string }) {
   );
 
   return (
-    <Layout>
+    <>
       <div className="lg:grid lg:grid-cols-[260px_1fr] lg:gap-6">
         <aside className="hidden lg:block">
           <p className="text-xs uppercase tracking-wide text-muted-foreground mb-2">Historik</p>
@@ -452,6 +452,14 @@ export default function Assistant({ chatId }: { chatId?: string }) {
           </div>
         </div>
       )}
+    </>
+  );
+}
+
+export default function Assistant({ chatId }: { chatId?: string }) {
+  return (
+    <Layout>
+      <AssistantContent chatId={chatId} />
     </Layout>
   );
 }

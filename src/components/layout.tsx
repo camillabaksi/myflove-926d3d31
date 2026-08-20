@@ -100,6 +100,7 @@ const CATEGORY_HUE: Record<string, string> = {
   studyflow: "232 58% 64%",
   workflow: "212 48% 52%",
   travelflow: "172 44% 46%",
+  avancerat: "258 20% 48%",
   ovrigt: "258 12% 52%",
 };
 const catColor = (id: string, alpha?: number) => {
@@ -124,6 +125,7 @@ const SECTION_BY_PATH: Record<string, string> = {
   "/statistik": "statistik",
   "/beloningar": "beloningar",
   "/assistant": "assistant",
+  "/flow": "flow",
   "/flowplan": "flowplan",
   "/flowscore": "flowscore",
   "/admin-statistik": "admin",
@@ -176,6 +178,7 @@ const CATEGORY_THEMES: Record<string, Record<string, string>> = {
   "/finances": T.gold,
   "/kalender": T.ink,
   "/flowplan": T.ink,
+  "/flow": T.ink,
   "/flowscore": T.ink,
   "/shopping": T.sage,
   "/matlista": T.sage,
@@ -319,19 +322,7 @@ export default function Layout({ children }: LayoutProps) {
       hint: "Din lista med saker att göra",
       essential: true,
     },
-    {
-      href: "/flowplan",
-      label: "FlowPlan",
-      icon: ListOrdered,
-      hint: "Flow lägger dina uppgifter i bra ordning",
-    },
     { href: "/flowscore", label: "FlowScore", icon: Gauge, hint: "Hur mycket du orkar just idag" },
-    {
-      href: "/vad-nu",
-      label: "Vad ska jag göra nu?",
-      icon: Target,
-      hint: "Flow föreslår nästa steg",
-    },
     {
       href: "/morgonstart",
       label: "Morgonstart",
@@ -386,10 +377,10 @@ export default function Layout({ children }: LayoutProps) {
       essential: true,
     },
     {
-      href: "/assistant",
+      href: "/flow",
       label: "Flow",
       icon: Sparkles,
-      hint: "Prioritering, timing och hjälp när det kör ihop sig",
+      hint: "Vad som är bäst att göra nu, dagens belastning och hjälp",
       essential: true,
     },
     {
@@ -486,7 +477,7 @@ export default function Layout({ children }: LayoutProps) {
         label: "Flow",
         hint: "Nästa steg, ordning, omplanering och hjälp",
         icon: Sparkles,
-        hrefs: ["/assistant", "/flowplan", "/vad-nu", "/quickflow", "/anteckningar", "/beloningar"],
+        hrefs: ["/flow", "/quickflow", "/anteckningar", "/beloningar"],
       },
       {
         id: "studyflow",
@@ -528,29 +519,21 @@ export default function Layout({ children }: LayoutProps) {
         label: "Insights",
         hint: "Din energi, hälsa, mönster och statistik",
         icon: Brain,
-        hrefs: [
-          "/insight",
-          "/ma-bra",
-          "/energifloede",
-          "/flowscore",
-          "/statistik",
-          "/veckans-flow",
-          "/traning",
-        ],
+        hrefs: ["/insight", "/ma-bra", "/statistik", "/traning"],
+      },
+      {
+        id: "avancerat",
+        label: "Avancerat",
+        hint: "Detaljerna bakom Flow – bara om du vill se dem",
+        icon: Gauge,
+        hrefs: ["/flowscore", "/energifloede", "/veckans-flow", "/friktionsindex"],
       },
       {
         id: "ovrigt",
         label: "Inställningar",
         hint: "Rutiner, min situation, anpassning och feedback",
         icon: LayoutGrid,
-        hrefs: [
-          "/morgonstart",
-          "/min-situation",
-          "/anpassa",
-          "/friktionsindex",
-          "/admin",
-          "/admin-statistik",
-        ],
+        hrefs: ["/morgonstart", "/min-situation", "/anpassa", "/admin", "/admin-statistik"],
       },
     ];
 
@@ -566,7 +549,7 @@ export default function Layout({ children }: LayoutProps) {
   // Egna platser i bottennavet – du byter dem själv i "Mer".
   const [navSlots, setNavSlots] = useLocalStorage<string[]>("myflove-bottom-nav-slots", [
     "/min-dag",
-    "/assistant",
+    "/flow",
   ]);
   const [editingNav, setEditingNav] = useState(false);
 
@@ -589,7 +572,7 @@ export default function Layout({ children }: LayoutProps) {
   const primaryNav = useMemo(() => {
     const pick = (href: string) => navItems.find((i) => i.href === href);
     const slot1 = pick(navSlots[0] ?? "") ?? pick("/min-dag") ?? pick("/kalender");
-    const slot2 = pick(navSlots[1] ?? "") ?? pick("/assistant");
+    const slot2 = pick(navSlots[1] ?? "") ?? pick("/flow");
     return [pick("/hem"), slot1, slot2].filter(Boolean) as typeof navItems;
   }, [navItems, navSlots]);
 
@@ -685,8 +668,8 @@ export default function Layout({ children }: LayoutProps) {
         <div className="hidden md:flex items-center gap-2 px-8 pt-6">
           {primaryNav.map((item) => {
             const active =
-              item.href === "/assistant"
-                ? location.startsWith("/assistant")
+              item.href === "/flow"
+                ? location.startsWith("/flow") || location.startsWith("/assistant")
                 : location === item.href;
             const Icon = item.icon;
             return (
@@ -700,7 +683,7 @@ export default function Layout({ children }: LayoutProps) {
                 }`}
               >
                 <Icon size={16} />
-                {item.href === "/assistant" ? "Flow" : item.label}
+                {item.label}
               </Link>
             );
           })}
@@ -889,7 +872,7 @@ export default function Layout({ children }: LayoutProps) {
               item={item}
               active={location.startsWith(item.href)}
               onClick={() => setMobileMenuOpen(false)}
-              label={item.href === "/assistant" ? "Flow" : item.label}
+              label={item.label}
             />
           ))}
 
@@ -1100,7 +1083,7 @@ export default function Layout({ children }: LayoutProps) {
                           variant="ghost"
                           size="sm"
                           className="rounded-xl gap-1"
-                          onClick={() => setNavSlots(["/min-dag", "/assistant"])}
+                          onClick={() => setNavSlots(["/min-dag", "/flow"])}
                         >
                           <RotateCcw size={14} /> Återställ
                         </Button>

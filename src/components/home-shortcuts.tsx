@@ -73,8 +73,8 @@ const ALL_SHORTCUTS: Shortcut[] = (
     { id: "dump", href: "/quickflow", label: "Quickflow", icon: Inbox, emoji: "💭" },
     { id: "matlista", href: "/matlista", label: "Matlista", icon: UtensilsCrossed, emoji: "🍲" },
     { id: "travel", href: "/travel", label: "Resor", icon: Navigation, emoji: "🚌" },
-    { id: "flowplan", href: "/flowplan", label: "FlowPlan", icon: Sparkles, emoji: "🌱" },
-    { id: "assistant", href: "/assistant", label: "Flow-chatt", icon: Sparkles, emoji: "💬" },
+
+    { id: "flow", href: "/flow", label: "Flow", icon: Sparkles, emoji: "✨" },
   ] as Omit<Shortcut, "iconBg" | "iconColor">[]
 ).map((s, i) => {
   const palette = PREVIEW_PALETTE[i % PREVIEW_PALETTE.length];

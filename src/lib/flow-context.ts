@@ -122,7 +122,7 @@ export function shortcutsFor(place: FlowPlace): FlowShortcut[] {
 /** Sparas när man navigerar, så Flow vet varifrån man kom. */
 export function rememberPlace(path: string) {
   if (typeof window === "undefined") return;
-  if (path.startsWith("/assistant")) return;
+  if (path.startsWith("/assistant") || path.startsWith("/flow")) return;
   try {
     window.sessionStorage.setItem(KEY, path);
   } catch {

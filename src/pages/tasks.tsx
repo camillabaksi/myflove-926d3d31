@@ -641,7 +641,7 @@ export default function Tasks() {
                     <p className="mt-1 text-sm text-muted-foreground">{suggestion.body}</p>
                     <div className="mt-3 flex flex-wrap gap-2">
                       <Link
-                        href="/flowplan"
+                        href="/flow"
                         className="press rounded-pill bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground"
                       >
                         Låt Flow föreslå en ordning
