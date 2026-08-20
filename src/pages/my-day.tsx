@@ -15,7 +15,7 @@ import { useReplanMode } from "@/hooks/use-replan";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
 import { capacityForMode, shouldOfferReplan } from "@/lib/replan";
 import { withinCapacity, type FlowItem } from "@/lib/flow-items";
-import { itemCost, minutesToTime } from "@/lib/energy-battery";
+import { itemCost } from "@/lib/energy-battery";
 import { useTasks, useReminders } from "@/hooks/use-data";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import type { Routine } from "@/pages/routines";
@@ -173,7 +173,6 @@ export default function MyDay() {
             <p className="text-xs text-muted-foreground">
               Starkast {reading.peak.label}
               {reading.dip ? ` · lägst ${reading.dip.label}` : ""}
-              {reading.peak.startMinutes ? "" : ""}
             </p>
           )}
           {suggestion && (
