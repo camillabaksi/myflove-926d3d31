@@ -441,6 +441,12 @@ export default function Layout({ children }: LayoutProps) {
       hint: "Jobb, studier, föräldraledig, sjukskriven – hur livet ser ut just nu",
     },
     {
+      href: "/anpassa-hem",
+      label: "Anpassa hemskärmen",
+      icon: Home,
+      hint: "Välj vilka block som syns på Hem, ordning och dina genvägar",
+    },
+    {
       href: "/anpassa",
       label: "Anpassa appen",
       icon: Accessibility,
@@ -527,7 +533,14 @@ export default function Layout({ children }: LayoutProps) {
         label: "Inställningar",
         hint: "Rutiner, min situation, anpassning och feedback",
         icon: LayoutGrid,
-        hrefs: ["/morgonstart", "/min-situation", "/anpassa", "/admin", "/admin-statistik"],
+        hrefs: [
+          "/morgonstart",
+          "/min-situation",
+          "/anpassa-hem",
+          "/anpassa",
+          "/admin",
+          "/admin-statistik",
+        ],
       },
     ];
 

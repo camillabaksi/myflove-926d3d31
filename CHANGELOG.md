@@ -7,6 +7,10 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 
 ## [Unreleased]
 
+### Added
+
+- **Anpassa hemskärmen är tillbaka** (2026-08-20): Ny sida under Mer → Inställningar (och en liten länk längst ner på Hem) där du slår av/på och sorterar de block Hem faktiskt visar – Mitt batteri, Nästa, Flow-förslag, ＋ Lägg till, Dina genvägar, Korta vägar och Områdesväljare. Här väljer du också dina fyra egna genvägar, som nu kan visas direkt på Hem igen. Valen sparas i molnet.
+
 ### Changed
 
 - **En enda förslagskälla** (2026-08-20): Hem, Min dag och Flow → Nu använder nu samma Flow-motor, så du får samma svar på "vad är viktigast just nu?" oavsett var du står. Kortet "Dagens fokus" på Min dag är borttaget (det upprepade tidslinjen), och den extra energimeningen är ersatt av Flows egen bedömning av dagens belastning.

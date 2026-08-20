@@ -1,0 +1,101 @@
+import { Link } from "wouter";
+import Layout from "@/components/layout";
+import HomeShortcuts from "@/components/home-shortcuts";
+import { HOME_BLOCKS, useHomeLayout } from "@/lib/home-layout";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, ArrowUp, ArrowDown, Eye, EyeOff, RotateCcw } from "lucide-react";
+
+/**
+ * Anpassa hemskärmen – välj vilka block som syns, i vilken ordning,
+ * och vilka fyra genvägar som ligger på Hem.
+ */
+export default function HomeCustomizePage() {
+  const { order, hidden, toggle, move, reset } = useHomeLayout();
+
+  return (
+    <Layout>
+      <div className="flex flex-col gap-6">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <Link
+              href="/hem"
+              className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+            >
+              <ArrowLeft size={14} /> Till Hem
+            </Link>
+            <h1 className="mt-2 text-2xl font-bold text-ink">Anpassa hemskärmen</h1>
+            <p className="text-sm text-muted-foreground">
+              Slå av det du inte vill se och flytta resten dit du vill ha det.
+            </p>
+          </div>
+          <Button variant="ghost" size="sm" onClick={reset} className="rounded-xl gap-1 shrink-0">
+            <RotateCcw size={14} /> Återställ
+          </Button>
+        </div>
+
+        <section className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft">
+          <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+            Block på Hem
+          </h2>
+          <ul className="space-y-2">
+            {order.map((id, idx) => {
+              const meta = HOME_BLOCKS.find((b) => b.id === id);
+              if (!meta) return null;
+              const isHidden = hidden.includes(id);
+              return (
+                <li
+                  key={id}
+                  className={`flex items-center gap-3 rounded-2xl border border-border/60 p-3 ${
+                    isHidden ? "bg-secondary/30 opacity-70" : "bg-background"
+                  }`}
+                >
+                  <div className="min-w-0 flex-1">
+                    <p className="font-medium text-ink">{meta.label}</p>
+                    <p className="text-xs text-muted-foreground">{meta.hint}</p>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <button
+                      type="button"
+                      onClick={() => move(id, -1)}
+                      disabled={idx === 0}
+                      className="rounded-lg bg-secondary p-2 text-foreground disabled:opacity-30"
+                      aria-label={`Flytta upp ${meta.label}`}
+                    >
+                      <ArrowUp size={14} />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => move(id, 1)}
+                      disabled={idx === order.length - 1}
+                      className="rounded-lg bg-secondary p-2 text-foreground disabled:opacity-30"
+                      aria-label={`Flytta ner ${meta.label}`}
+                    >
+                      <ArrowDown size={14} />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => toggle(id)}
+                      className={`rounded-lg p-2 ${
+                        isHidden
+                          ? "bg-secondary text-muted-foreground"
+                          : "bg-primary text-primary-foreground"
+                      }`}
+                      aria-label={isHidden ? `Visa ${meta.label}` : `Dölj ${meta.label}`}
+                      title={isHidden ? "Visa" : "Dölj"}
+                    >
+                      {isHidden ? <EyeOff size={14} /> : <Eye size={14} />}
+                    </button>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+
+        <section className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft">
+          <HomeShortcuts />
+        </section>
+      </div>
+    </Layout>
+  );
+}

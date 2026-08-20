@@ -1,4 +1,6 @@
 import { useMemo, useState } from "react";
+import HomeShortcuts from "@/components/home-shortcuts";
+import { useHomeLayout, type HomeBlockId } from "@/lib/home-layout";
 import { TaskQuickAdd, type QuickAddResult } from "@/components/task-quick-add";
 import { Link } from "wouter";
 import Layout from "@/components/layout";
@@ -26,6 +28,7 @@ import {
   Battery,
   Zap,
   MessageCircle,
+  SlidersHorizontal,
 } from "lucide-react";
 
 /**
@@ -158,6 +161,10 @@ export default function Home() {
   const { activeArea } = useActiveArea();
   const nextEvent = useNextEvent();
   const suggestion = useFlowSuggestion();
+  const { visible } = useHomeLayout();
+  const shows = (id: HomeBlockId) => visible.includes(id);
+  // Ordningen från "Anpassa hemskärmen" styrs via flex order.
+  const pos = (id: HomeBlockId) => ({ order: visible.indexOf(id) });
 
   const hour = new Date().getHours();
   const heroGradient =
@@ -238,127 +245,164 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Mitt batteri – enkel sammanfattning */}
-        <EnergyBattery />
+        {shows("batteri") && (
+          <div style={pos("batteri")}>
+            <EnergyBattery />
+          </div>
+        )}
 
         {/* Nästa – nästa relevanta aktivitet */}
-        <section
-          className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
-          aria-label="Nästa aktivitet"
-        >
-          <div className="flex items-center gap-2 mb-3">
-            <CalendarDays size={18} className="text-primary" />
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-              Nästa
-            </h2>
-          </div>
-
-          {nextEvent ? (
-            <Link
-              href="/min-dag"
-              className="group flex items-center gap-4 rounded-2xl bg-secondary/40 p-4 transition-colors hover:bg-secondary/60"
-            >
-              <span aria-hidden className="text-2xl">
-                {nextEvent.emoji}
-              </span>
-              <div className="min-w-0 flex-1">
-                <p className="font-medium text-ink truncate">{nextEvent.title}</p>
-                <p className="text-sm text-muted-foreground">
-                  {nextEvent.time
-                    ? `kl ${nextEvent.time}${nextEvent.endTime ? `–${nextEvent.endTime}` : ""}`
-                    : "Saknar klockslag"}
-                </p>
-              </div>
-              <ArrowRight
-                size={18}
-                className="shrink-0 text-muted-foreground group-hover:text-foreground transition-colors"
-              />
-            </Link>
-          ) : (
-            <div className="rounded-2xl bg-secondary/30 p-4 text-sm text-muted-foreground">
-              Ingen aktivitet inplanerad just nu. Lägg till en påminnelse eller uppgift så dyker den
-              upp här.
+        {shows("nasta") && (
+          <section
+            style={pos("nasta")}
+            className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+            aria-label="Nästa aktivitet"
+          >
+            <div className="flex items-center gap-2 mb-3">
+              <CalendarDays size={18} className="text-primary" />
+              <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+                Nästa
+              </h2>
             </div>
-          )}
-        </section>
+
+            {nextEvent ? (
+              <Link
+                href="/min-dag"
+                className="group flex items-center gap-4 rounded-2xl bg-secondary/40 p-4 transition-colors hover:bg-secondary/60"
+              >
+                <span aria-hidden className="text-2xl">
+                  {nextEvent.emoji}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="font-medium text-ink truncate">{nextEvent.title}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {nextEvent.time
+                      ? `kl ${nextEvent.time}${nextEvent.endTime ? `–${nextEvent.endTime}` : ""}`
+                      : "Saknar klockslag"}
+                  </p>
+                </div>
+                <ArrowRight
+                  size={18}
+                  className="shrink-0 text-muted-foreground group-hover:text-foreground transition-colors"
+                />
+              </Link>
+            ) : (
+              <div className="rounded-2xl bg-secondary/30 p-4 text-sm text-muted-foreground">
+                Ingen aktivitet inplanerad just nu. Lägg till en påminnelse eller uppgift så dyker
+                den upp här.
+              </div>
+            )}
+          </section>
+        )}
 
         {/* Ett Flow-förslag – samma svar som Flow → NU */}
-        <section
-          className="rounded-3xl border border-primary/20 bg-primary/5 p-5 shadow-soft"
-          aria-label="Flow-förslag"
-        >
-          <div className="flex items-center gap-2 mb-3">
-            <Sparkles size={18} className="text-primary" />
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-              Flow-förslag
-            </h2>
-          </div>
-          <p className="text-ink leading-relaxed">{suggestion.headline}</p>
-          {suggestion.task && (
-            <p className="mt-2 text-sm text-muted-foreground">
-              <span className="font-medium text-ink">{suggestion.task.title}</span>
-              {suggestion.minutes ? ` · ca ${suggestion.minutes} min` : ""}
-              {suggestion.reason ? ` – ${suggestion.reason}` : ""}
-            </p>
-          )}
-          <Link
-            href="/flow"
-            className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+        {shows("forslag") && (
+          <section
+            style={pos("forslag")}
+            className="rounded-3xl border border-primary/20 bg-primary/5 p-5 shadow-soft"
+            aria-label="Flow-förslag"
           >
-            {suggestion.task ? "Öppna i Flow" : "Lägg till något"} <ArrowRight size={14} />
-          </Link>
-        </section>
+            <div className="flex items-center gap-2 mb-3">
+              <Sparkles size={18} className="text-primary" />
+              <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+                Flow-förslag
+              </h2>
+            </div>
+            <p className="text-ink leading-relaxed">{suggestion.headline}</p>
+            {suggestion.task && (
+              <p className="mt-2 text-sm text-muted-foreground">
+                <span className="font-medium text-ink">{suggestion.task.title}</span>
+                {suggestion.minutes ? ` · ca ${suggestion.minutes} min` : ""}
+                {suggestion.reason ? ` – ${suggestion.reason}` : ""}
+              </p>
+            )}
+            <Link
+              href="/flow"
+              className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+            >
+              {suggestion.task ? "Öppna i Flow" : "Lägg till något"} <ArrowRight size={14} />
+            </Link>
+          </section>
+        )}
 
         {/* Lägg till – snabbknapp */}
-        <TaskQuickAdd
-          onAdd={(result: QuickAddResult) => {
-            addTask(result.title, result.dueDate, {
-              time: result.time,
-              energyImpact: result.energyImpact,
-              friction: result.friction,
-              area: activeArea === "alla" ? "vardag" : activeArea,
-            });
-          }}
-          className="bg-primary text-primary-foreground hover:bg-primary/90"
-        />
+        {shows("lagg-till") && (
+          <div style={pos("lagg-till")}>
+            <TaskQuickAdd
+              onAdd={(result: QuickAddResult) => {
+                addTask(result.title, result.dueDate, {
+                  time: result.time,
+                  energyImpact: result.energyImpact,
+                  friction: result.friction,
+                  area: activeArea === "alla" ? "vardag" : activeArea,
+                });
+              }}
+              className="bg-primary text-primary-foreground hover:bg-primary/90"
+            />
+          </div>
+        )}
+
+        {/* Dina genvägar – fyra egna favoriter */}
+        {shows("genvagar") && (
+          <div style={pos("genvagar")}>
+            <HomeShortcuts />
+          </div>
+        )}
 
         {/* Korta vägar till kärnfunktionerna */}
-        <nav aria-label="Huvuddestinationer" className="grid grid-cols-3 gap-3">
-          <Link
-            href="/min-dag"
-            className="flex flex-col items-center gap-2 rounded-2xl border border-border/60 bg-card p-4 text-center shadow-soft transition-colors hover:border-primary/40 hover:bg-primary/5"
+        {shows("vagar") && (
+          <nav
+            style={pos("vagar")}
+            aria-label="Huvuddestinationer"
+            className="grid grid-cols-3 gap-3"
           >
-            <CalendarDays size={22} className="text-primary" />
-            <span className="text-xs font-medium text-ink">Min dag</span>
-          </Link>
-          <Link
-            href="/quickflow"
-            className="flex flex-col items-center gap-2 rounded-2xl border border-border/60 bg-card p-4 text-center shadow-soft transition-colors hover:border-primary/40 hover:bg-primary/5"
-          >
-            <Zap size={22} className="text-primary" />
-            <span className="text-xs font-medium text-ink">QuickFlow</span>
-          </Link>
-          <Link
-            href="/flow"
-            className="flex flex-col items-center gap-2 rounded-2xl border border-border/60 bg-card p-4 text-center shadow-soft transition-colors hover:border-primary/40 hover:bg-primary/5"
-          >
-            <MessageCircle size={22} className="text-primary" />
-            <span className="text-xs font-medium text-ink">Flow</span>
-          </Link>
-        </nav>
+            <Link
+              href="/min-dag"
+              className="flex flex-col items-center gap-2 rounded-2xl border border-border/60 bg-card p-4 text-center shadow-soft transition-colors hover:border-primary/40 hover:bg-primary/5"
+            >
+              <CalendarDays size={22} className="text-primary" />
+              <span className="text-xs font-medium text-ink">Min dag</span>
+            </Link>
+            <Link
+              href="/quickflow"
+              className="flex flex-col items-center gap-2 rounded-2xl border border-border/60 bg-card p-4 text-center shadow-soft transition-colors hover:border-primary/40 hover:bg-primary/5"
+            >
+              <Zap size={22} className="text-primary" />
+              <span className="text-xs font-medium text-ink">QuickFlow</span>
+            </Link>
+            <Link
+              href="/flow"
+              className="flex flex-col items-center gap-2 rounded-2xl border border-border/60 bg-card p-4 text-center shadow-soft transition-colors hover:border-primary/40 hover:bg-primary/5"
+            >
+              <MessageCircle size={22} className="text-primary" />
+              <span className="text-xs font-medium text-ink">Flow</span>
+            </Link>
+          </nav>
+        )}
 
         {/* Områdesväljare – litet, längst ner */}
-        <div className="space-y-2 pt-2">
-          <AreaSwitcher size="sm" />
-          <p className="text-xs text-muted-foreground">
-            {activeArea === "alla"
-              ? "Flow ser hela din dag – oavsett vilket rum sakerna hör till."
-              : `Du är i ${AREA_META[activeArea].label.toLowerCase()}rummet. Resten väntar tills du vill se det.`}
-          </p>
+        {shows("omrade") && (
+          <div style={pos("omrade")} className="space-y-2 pt-2">
+            <AreaSwitcher size="sm" />
+            <p className="text-xs text-muted-foreground">
+              {activeArea === "alla"
+                ? "Flow ser hela din dag – oavsett vilket rum sakerna hör till."
+                : `Du är i ${AREA_META[activeArea].label.toLowerCase()}rummet. Resten väntar tills du vill se det.`}
+            </p>
+          </div>
+        )}
+
+        <div style={{ order: 98 }} className="pt-2">
+          <AreaOnboarding />
         </div>
 
-        <div className="pt-2">
-          <AreaOnboarding />
+        <div style={{ order: 99 }} className="pb-2 text-center">
+          <Link
+            href="/anpassa-hem"
+            className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground underline underline-offset-2"
+          >
+            <SlidersHorizontal size={13} /> Anpassa hemskärmen
+          </Link>
         </div>
       </div>
     </Layout>
