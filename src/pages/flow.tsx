@@ -171,10 +171,7 @@ function TodayLayer() {
   const [handled, setHandled] = useState(false);
 
   const load = useMemo(() => assessToday(reading, items), [reading, items]);
-  const move = useMemo(
-    () => suggestMove(load, reading, activeTasks),
-    [load, reading, activeTasks],
-  );
+  const move = useMemo(() => suggestMove(load, reading, activeTasks), [load, reading, activeTasks]);
 
   return (
     <section className="surface-card space-y-4 p-6">
@@ -210,9 +207,7 @@ function TodayLayer() {
         </div>
       )}
 
-      {handled && (
-        <p className="text-sm text-muted-foreground">Tack. Dagen är uppdaterad. 💙</p>
-      )}
+      {handled && <p className="text-sm text-muted-foreground">Tack. Dagen är uppdaterad. 💙</p>}
     </section>
   );
 }

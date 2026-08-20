@@ -158,7 +158,6 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
     }
   };
 
-
   const historyList = (
     <div className="space-y-2">
       <button

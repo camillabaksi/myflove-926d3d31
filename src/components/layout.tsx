@@ -533,13 +533,7 @@ export default function Layout({ children }: LayoutProps) {
         label: "Inställningar",
         hint: "Rutiner, min situation, anpassning och feedback",
         icon: LayoutGrid,
-        hrefs: [
-          "/morgonstart",
-          "/min-situation",
-          "/anpassa",
-          "/admin",
-          "/admin-statistik",
-        ],
+        hrefs: ["/morgonstart", "/min-situation", "/anpassa", "/admin", "/admin-statistik"],
       },
     ];
 
