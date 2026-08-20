@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-20 – Dubblettskydd i databasen
+
+- Servern hindrar nu identiska registreringar: samma aktivitet med samma riktning inom samma minut kan bara sparas en gång per användare, även från två flikar samtidigt.
+- Samma aktivitet vid en annan tidpunkt går att spara som vanligt.
+
 ## 2026-08-20 – Säkrare sparning av energiposter
 
 - Energiflödet följer inloggningen: loggar man in i samma flik dyker posterna upp direkt, och vid utloggning töms de direkt (tidigare krävdes omladdning).
