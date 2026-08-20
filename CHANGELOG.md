@@ -13,6 +13,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 
 ### Added
 
+- **Min dag är appens kärna** (2026-08-20): Min dag samlar nu dagens tidslinje (händelser, uppgifter och rutiner med ändra/ta bort direkt i raden), Mitt batteri högst upp med nivå, riktning och detaljer vid tryck, en stor ＋ Lägg till-knapp för uppgifter på sekunder, en enkel mening om dagens energibalans och ETT förslag från Flow. Ingen ny data eller kalender – allt bygger på befintlig logik.
 - **Mitt batteri – din energikurva över dagen** (2026-08-20): Ett lugnt, levande batteri högst upp i kalendern och som eget block på hemskärmen visar din energinivå just nu, om den stiger eller sjunker, och när du brukar vara starkast respektive lägst. Expandera för kurvan över dagen och mjuka förslag om placering och återhämtning. Kurvan bygger på FlowScore, ditt eget energimönster, Energiflöde™ och dagens aktiviteters energipåverkan – inga nya listor att fylla i. I kalenderns dagsvy tonas timmarna svagt efter din energi.
 - **Dagen just nu på hemskärmen** (2026-08-20): Ett nytt block högt upp visar dagens tidslinje – hållpunkter, uppgifter med klockslag, rutiner och medicintider – med en mjuk Nu-markering. Går att flytta eller stänga av i Anpassa hemskärmen.
 - **Medicinpåminnelser finns i Påminnelser** (2026-08-20): Mediciner och tider hanteras nu direkt på Påminnelser-sidan, så allt som påminner dig ligger på samma ställe.
