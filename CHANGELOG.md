@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-08-20 – Min livsprofil ersätter jobb- och studieprofilen
+
+- Ny samlad profil 👤 Min livsprofil (Mer → högst upp): livssituation, anpassade följdfrågor, styrkor, svårigheter, vad du vill ha hjälp med, vad som ger/tar energi och hur du vill att Flow hjälper dig.
+- Livssituationerna är utökade: Arbetar, Studerar, Arbetar och studerar, Söker jobb / mellan jobb, Föräldraledig, Sjukskriven, Frilansar / egenföretagare, Hemma / hushåll och familj, Praktik / arbetsträning och Annat – flera samtidigt.
+- Följdfrågorna visas bara för det du valt, så profilen aldrig blir ett långt formulär. Sjukskriven frågar varsamt om vardagen – inga medicinska antaganden.
+- "Profil klar X %" visas, men allt är frivilligt och appen fungerar med tom profil.
+- Gamla Min jobbprofil och Min studieprofil är borta ur gränssnittet och navigationen. Det du fyllt i migreras automatiskt till livsprofilen – ingen data raderas.
+- /min-situation leder nu till Min livsprofil.
+- Flow, StudyFlow, FlowStudy, WorkFlow och Livspusslet använder livsprofilen som kontext.
+
 ## 2026-08-20 – Dubblettskydd i databasen
 
 - Servern hindrar nu identiska registreringar: samma aktivitet med samma riktning inom samma minut kan bara sparas en gång per användare, även från två flikar samtidigt.
