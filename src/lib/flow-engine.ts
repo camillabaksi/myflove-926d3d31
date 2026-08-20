@@ -109,10 +109,17 @@ export function suggestNow(input: NowInput): NowSuggestion {
     headline = `${energyWord(level)}. Det här är det som gör mest nytta nu.`;
   }
 
+  // Om det ändå är den bästa saken ska förklaringen inte säga att den kan vänta.
+  const available = input.availableMinutes ?? defaultMinutesFor(level);
+  const reason =
+    top.minutes > available
+      ? "Den tar en stund, men det är den som gör mest nytta nu. Du kan börja med en liten bit."
+      : top.why;
+
   return {
     task: top.task,
     headline,
-    reason: top.why,
+    reason,
     ctaLabel: "Ja, börja",
     minutes: top.minutes,
   };
