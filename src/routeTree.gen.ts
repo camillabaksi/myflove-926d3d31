@@ -62,6 +62,7 @@ import { Route as AppBeloningarRouteImport } from './routes/_app.beloningar'
 import { Route as AppBarnRouteImport } from './routes/_app.barn'
 import { Route as AppAssistantRouteImport } from './routes/_app.assistant'
 import { Route as AppAnteckningarRouteImport } from './routes/_app.anteckningar'
+import { Route as AppAnpassaHemRouteImport } from './routes/_app.anpassa-hem'
 import { Route as AppAnpassaRouteImport } from './routes/_app.anpassa'
 import { Route as AppAdminStatistikRouteImport } from './routes/_app.admin-statistik'
 import { Route as AppAdminRouteImport } from './routes/_app.admin'
@@ -339,6 +340,11 @@ const AppAnteckningarRoute = AppAnteckningarRouteImport.update({
   path: '/anteckningar',
   getParentRoute: () => AppRoute,
 } as any)
+const AppAnpassaHemRoute = AppAnpassaHemRouteImport.update({
+  id: '/anpassa-hem',
+  path: '/anpassa-hem',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppAnpassaRoute = AppAnpassaRouteImport.update({
   id: '/anpassa',
   path: '/anpassa',
@@ -415,6 +421,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AppAdminRoute
   '/admin-statistik': typeof AppAdminStatistikRoute
   '/anpassa': typeof AppAnpassaRoute
+  '/anpassa-hem': typeof AppAnpassaHemRoute
   '/anteckningar': typeof AppAnteckningarRoute
   '/assistant': typeof AppAssistantRoute
   '/barn': typeof AppBarnRoute
@@ -480,6 +487,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AppAdminRoute
   '/admin-statistik': typeof AppAdminStatistikRoute
   '/anpassa': typeof AppAnpassaRoute
+  '/anpassa-hem': typeof AppAnpassaHemRoute
   '/anteckningar': typeof AppAnteckningarRoute
   '/assistant': typeof AppAssistantRoute
   '/barn': typeof AppBarnRoute
@@ -547,6 +555,7 @@ export interface FileRoutesById {
   '/_app/admin': typeof AppAdminRoute
   '/_app/admin-statistik': typeof AppAdminStatistikRoute
   '/_app/anpassa': typeof AppAnpassaRoute
+  '/_app/anpassa-hem': typeof AppAnpassaHemRoute
   '/_app/anteckningar': typeof AppAnteckningarRoute
   '/_app/assistant': typeof AppAssistantRoute
   '/_app/barn': typeof AppBarnRoute
@@ -614,6 +623,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/admin-statistik'
     | '/anpassa'
+    | '/anpassa-hem'
     | '/anteckningar'
     | '/assistant'
     | '/barn'
@@ -679,6 +689,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/admin-statistik'
     | '/anpassa'
+    | '/anpassa-hem'
     | '/anteckningar'
     | '/assistant'
     | '/barn'
@@ -745,6 +756,7 @@ export interface FileRouteTypes {
     | '/_app/admin'
     | '/_app/admin-statistik'
     | '/_app/anpassa'
+    | '/_app/anpassa-hem'
     | '/_app/anteckningar'
     | '/_app/assistant'
     | '/_app/barn'
@@ -1190,6 +1202,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAnteckningarRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/anpassa-hem': {
+      id: '/_app/anpassa-hem'
+      path: '/anpassa-hem'
+      fullPath: '/anpassa-hem'
+      preLoaderRoute: typeof AppAnpassaHemRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/anpassa': {
       id: '/_app/anpassa'
       path: '/anpassa'
@@ -1274,6 +1293,7 @@ interface AppRouteChildren {
   AppAdminRoute: typeof AppAdminRoute
   AppAdminStatistikRoute: typeof AppAdminStatistikRoute
   AppAnpassaRoute: typeof AppAnpassaRoute
+  AppAnpassaHemRoute: typeof AppAnpassaHemRoute
   AppAnteckningarRoute: typeof AppAnteckningarRoute
   AppAssistantRoute: typeof AppAssistantRoute
   AppBarnRoute: typeof AppBarnRoute
@@ -1322,6 +1342,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppAdminRoute: AppAdminRoute,
   AppAdminStatistikRoute: AppAdminStatistikRoute,
   AppAnpassaRoute: AppAnpassaRoute,
+  AppAnpassaHemRoute: AppAnpassaHemRoute,
   AppAnteckningarRoute: AppAnteckningarRoute,
   AppAssistantRoute: AppAssistantRoute,
   AppBarnRoute: AppBarnRoute,
