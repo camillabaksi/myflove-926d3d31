@@ -36,6 +36,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { useToast } from "@/hooks/use-toast";
 import CollapsibleSection from "@/components/collapsible-section";
 import DayTimeline from "@/components/day-timeline";
+import EnergyBattery from "@/components/energy-battery";
 import { useLocalStorage } from "@/lib/storage";
 import { pictogramFor } from "@/lib/pictograms";
 import { useNpfSettings } from "@/lib/npf-mode";
