@@ -11,7 +11,8 @@ import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import type { Routine } from "@/pages/routines";
 import { useStudySchedule } from "@/hooks/use-study-schedule";
 import { AreaOnboarding } from "@/components/area-onboarding";
-import { AreaSwitcher, AREA_META, useActiveArea } from "@/lib/life-areas";
+import { AreaSwitcher } from "@/components/area-switcher";
+import { AREA_META, useActiveArea } from "@/lib/life-areas";
 import IntroTour from "@/components/intro-tour";
 import FlowOnboarding from "@/components/flow-onboarding";
 import {
