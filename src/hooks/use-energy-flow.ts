@@ -56,6 +56,74 @@ export interface NewEnergyFactor {
   occurredAt?: string;
 }
 
+/**
+ * Delad store så att alla vyer (Hem, Min dag, FlowScore, Dagens energiflöde)
+ * ser samma poster direkt när något sparas – utan omladdning.
+ */
+interface EnergyStore {
+  entries: EnergyFactorEntry[];
+  presets: EnergyPreset[];
+  loading: boolean;
+  userId: string | null;
+}
+
+let store: EnergyStore = { entries: [], presets: [], loading: true, userId: null };
+const listeners = new Set<() => void>();
+const getSnapshot = () => store;
+const subscribe = (l: () => void) => {
+  listeners.add(l);
+  return () => listeners.delete(l);
+};
+const setStore = (patch: Partial<EnergyStore>) => {
+  store = { ...store, ...patch };
+  listeners.forEach((l) => l());
+};
+
+let loadPromise: Promise<void> | null = null;
+const load = () =>
+  (loadPromise ??= (async () => {
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) {
+        setStore({ userId: null, loading: false });
+        return;
+      }
+      const since = new Date(Date.now() - 60 * 86400000).toISOString();
+      const [{ data: rows }, { data: presetRows }] = await Promise.all([
+        supabase
+          .from("energy_factors")
+          .select(
+            "id, title, direction, strength, category, kind, friction, note, counts_toward_score, occurred_at",
+          )
+          .gte("occurred_at", since)
+          .order("occurred_at", { ascending: false })
+          .limit(500),
+        supabase
+          .from("energy_factor_presets")
+          .select("id, title, direction, strength, category, kind, friction")
+          .order("created_at", { ascending: true }),
+      ]);
+      setStore({
+        userId: user.id,
+        entries: ((rows ?? []) as Row[]).map(toEntry),
+        presets: (presetRows ?? []).map((p) => ({
+          id: p.id as string,
+          title: p.title as string,
+          direction: toDirection(p.direction as string),
+          strength: p.strength as number,
+          category: p.category as EnergyCategory,
+          kind: ((p as { kind?: string }).kind ?? "vardag") as EnergyKind,
+          friction: (p as { friction?: number | null }).friction ?? null,
+        })),
+        loading: false,
+      });
+    } catch {
+      setStore({ loading: false });
+    }
+  })());
+
 
 /**
  * Energiflöde™ – det som ger och tar energi. Poster blir aldrig
