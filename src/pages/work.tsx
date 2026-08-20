@@ -26,8 +26,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { celebrateFromEvent } from "@/lib/celebrate";
 import CollapsibleSection from "@/components/collapsible-section";
-import WorkProfileCard from "@/components/work-profile-card";
-import WorkSuggestions from "@/components/work-suggestions";
+import LifeProfileLink from "@/components/life-profile-link";
 
 const BUCKET = "work-docs";
 
@@ -225,8 +224,7 @@ export default function WorkPage() {
           description="Din arbetsdag – projekt, uppgifter och dokument på ett ställe."
         />
 
-        <WorkProfileCard />
-        <WorkSuggestions />
+        <LifeProfileLink />
 
         {/* Projekt */}
 

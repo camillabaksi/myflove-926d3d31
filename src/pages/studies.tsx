@@ -21,8 +21,8 @@ import { useTasks, type Task } from "@/hooks/use-data";
 import { MyFloveThinking } from "@/components/myflove/motion";
 import { useCourses } from "@/hooks/use-courses";
 import { breakDownAssignment } from "@/lib/study.functions";
-import { useStudyProfile } from "@/hooks/use-study-profile";
-import { studyProfileContext } from "@/lib/study-profile";
+import { useLifeProfile } from "@/hooks/use-life-profile";
+import { lifeProfileContext, toStudyProfile } from "@/lib/life-profile";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { celebrateFromEvent } from "@/lib/celebrate";
@@ -73,7 +73,7 @@ export function StudiesSection() {
   const { activeCourses, addCourse, deleteCourse } = useCourses();
   const { toast } = useToast();
   const run = useServerFn(breakDownAssignment);
-  const { profile: studyProfile } = useStudyProfile();
+  const { profile: lifeProfile } = useLifeProfile();
 
   const [courseDraft, setCourseDraft] = useState("");
   const [title, setTitle] = useState("");
@@ -145,7 +145,7 @@ export function StudiesSection() {
           course: courseName(task.courseId),
           dueDate: task.dueDate,
           details: details.trim() || undefined,
-          profileContext: studyProfileContext(studyProfile) || undefined,
+          profileContext: lifeProfileContext(lifeProfile) || undefined,
         },
       });
       addTaskSteps(task.id, result.steps);
