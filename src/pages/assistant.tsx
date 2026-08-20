@@ -215,7 +215,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
   );
 
   return (
-    <Layout>
+    <>
       <div className="lg:grid lg:grid-cols-[260px_1fr] lg:gap-6">
         <aside className="hidden lg:block">
           <p className="text-xs uppercase tracking-wide text-muted-foreground mb-2">Historik</p>
