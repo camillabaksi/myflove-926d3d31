@@ -12,7 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
-      "Snabbknapp för Att göro på hemskärmen – stor ＋ Lägg till-knapp högt upp som skapar en uppgift på sekunder, med samma när/energi/friktion som Att göro-sidan och aktuellt rum förifyllt (2026-08-20)",
+      "Snabbknapp för Att göra på hemskärmen – stor ＋ Lägg till-knapp högt upp som skapar en uppgift på sekunder, med samma när/energi/friktion som Att göra-sidan och aktuellt rum förifyllt (2026-08-20)",
       "Ingen Sätt dagens fokus-knapp på hemskärmen – Daily Flow visar bara det som finns, fokus sätts via Flow eller FlowPlan (2026-08-20)",
       "Att göra är din dagliga agenda – flikarna Idag, Kommande och Klart, snabbtillägg med när/energi/friktion, förslag från Flow och en frivillig energifråga när du bockar av (2026-08-20)",
       "Anteckningar & idébank har en egen del under Flow – öppna Anteckningar direkt från Mer-menyn, Quickflow länkar dit (2026-08-19)",
