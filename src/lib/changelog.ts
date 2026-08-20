@@ -6,12 +6,13 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-08-20";
+export const CHANGELOG_UPDATED = "2026-08-21";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      'Ett samlat Flow – tre lager: Nu (ett tydligt förslag), Idag (dagens belastning och omplanering) och Hjälp (Flow-chatten). FlowPlan och "Vad ska jag göra nu?" är sammanslagna i Flow, tekniska mått ligger under Mer → Avancerat (2026-08-21)',
       "Min dag är appens kärna – dagens tidslinje, Mitt batteri, snabb ＋ Lägg till, dagens energibalans i klarspråk och ett enda Flow-förslag på samma skärm (2026-08-20)",
       "Enklare huvudnavigation – fem ingångar: Hem, Min dag, QuickFlow, Flow och Mer, med Mer grupperat i Min dag, Flow, Studier, Jobb, Familj, Hemma, Resor, Insights och Inställningar (2026-08-20)",
       "Mitt batteri – levande energibatteri i kalendern och på hemskärmen med nivå nu, riktning, starkaste och lägsta period, kurva över dagen och förslag på placering och återhämtning (2026-08-20)",
