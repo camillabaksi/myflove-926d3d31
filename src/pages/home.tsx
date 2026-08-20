@@ -327,18 +327,19 @@ export default function Home() {
 
         {/* Lägg till – snabbknapp */}
         {shows("lagg-till") && (
-          <TaskQuickAdd
-            style={pos("lagg-till")}
-            onAdd={(result: QuickAddResult) => {
-              addTask(result.title, result.dueDate, {
-                time: result.time,
-                energyImpact: result.energyImpact,
-                friction: result.friction,
-                area: activeArea === "alla" ? "vardag" : activeArea,
-              });
-            }}
-            className="bg-primary text-primary-foreground hover:bg-primary/90"
-          />
+          <div style={pos("lagg-till")}>
+            <TaskQuickAdd
+              onAdd={(result: QuickAddResult) => {
+                addTask(result.title, result.dueDate, {
+                  time: result.time,
+                  energyImpact: result.energyImpact,
+                  friction: result.friction,
+                  area: activeArea === "alla" ? "vardag" : activeArea,
+                });
+              }}
+              className="bg-primary text-primary-foreground hover:bg-primary/90"
+            />
+          </div>
         )}
 
         {/* Dina genvägar – fyra egna favoriter */}
