@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { FlowItemActions } from "@/components/flow-item-actions";
+import { useLocalStorage } from "@/lib/storage";
 
 export interface TimelineEntry {
   id: string;
@@ -33,6 +34,10 @@ export default function DayTimeline({
   editable?: boolean;
 }) {
   const [now, setNow] = useState(() => new Date());
+  const [showUntimed, setShowUntimed] = useLocalStorage<boolean>(
+    "myflove-timeline-show-untimed",
+    false,
+  );
 
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), 60_000);
@@ -113,21 +118,31 @@ export default function DayTimeline({
 
       {untimed.length > 0 && (
         <div className="mt-4 border-t border-border/50 pt-3">
-          <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-            Utan klockslag
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {untimed.map((e) => (
-              <span
-                key={e.id}
-                className="inline-flex items-center gap-1.5 rounded-full bg-secondary/60 px-3 py-1.5 text-xs text-foreground"
-              >
-                {e.emoji && <span aria-hidden>{e.emoji}</span>}
-                {e.title}
-                {editable && <FlowItemActions itemId={e.id} size={13} />}
-              </span>
-            ))}
-          </div>
+          <button
+            type="button"
+            onClick={() => setShowUntimed((v) => !v)}
+            aria-expanded={showUntimed}
+            className="flex w-full items-center justify-between text-xs font-medium uppercase tracking-wide text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <span>Utan klockslag ({untimed.length})</span>
+            <span className="normal-case tracking-normal opacity-70">
+              {showUntimed ? "Dölj" : "Visa"}
+            </span>
+          </button>
+          {showUntimed && (
+            <div className="mt-2 flex flex-wrap gap-2">
+              {untimed.map((e) => (
+                <span
+                  key={e.id}
+                  className="inline-flex items-center gap-1.5 rounded-full bg-secondary/60 px-3 py-1.5 text-xs text-foreground"
+                >
+                  {e.emoji && <span aria-hidden>{e.emoji}</span>}
+                  {e.title}
+                  {editable && <FlowItemActions itemId={e.id} size={13} />}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>

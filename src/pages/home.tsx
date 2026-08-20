@@ -182,21 +182,22 @@ export default function Home() {
   const dayEntries = useMemo<TimelineEntry[]>(() => {
     const list: TimelineEntry[] = [];
     for (const r of activeReminders) {
-      if (r.date !== todayIso || !r.time) continue;
+      if (r.date !== todayIso) continue;
       list.push({
         id: `rem-${r.id}`,
         title: r.title,
-        time: r.time,
+        time: r.time ?? "",
         ...(r.endTime ? { endTime: r.endTime } : {}),
         emoji: "🔔",
       });
     }
     for (const t of areaTasks) {
-      if (!t.time || (t.dueDate && t.dueDate !== todayIso)) continue;
+      if (t.dueDate && t.dueDate !== todayIso) continue;
+      if (!t.time && !t.dueDate) continue;
       list.push({
         id: `task-${t.id}`,
         title: t.title,
-        time: t.time,
+        time: t.time ?? "",
         ...(t.endTime ? { endTime: t.endTime } : {}),
         emoji: "✅",
       });
