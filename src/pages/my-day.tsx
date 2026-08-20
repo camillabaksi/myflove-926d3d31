@@ -6,6 +6,8 @@ import HelpHint from "@/components/help-hint";
 import DayTimeline, { type TimelineEntry } from "@/components/day-timeline";
 import EnergyBattery from "@/components/energy-battery";
 import TaskQuickAdd, { type QuickAddResult } from "@/components/task-quick-add";
+import DidThisQuickAdd from "@/components/did-this-quick-add";
+import DayEnergyFlow from "@/components/day-energy-flow";
 import { FlowItemCard } from "@/components/myflove/flow-item-card";
 import { FlowReplan } from "@/components/flow-replan";
 import { useFlowScore } from "@/hooks/use-flowscore";
@@ -129,6 +131,9 @@ export default function MyDay() {
         {/* ✅ Snabb inmatning */}
         <TaskQuickAdd onAdd={handleQuickAdd} />
 
+        {/* 🏠 Lägg till det du gjorde – vardagen som kalendern missar */}
+        <DidThisQuickAdd />
+
         {/* 📅 Dagens plan */}
         <section className="surface-card p-5">
           <CollapsibleSection
@@ -178,6 +183,8 @@ export default function MyDay() {
             </p>
           </div>
         </section>
+
+        <DayEnergyFlow />
 
         {offerReplan && (
           <FlowReplan

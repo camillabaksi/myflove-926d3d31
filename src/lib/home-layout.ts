@@ -12,7 +12,9 @@ export type HomeBlockId =
   | "lagg-till"
   | "genvagar"
   | "vagar"
-  | "omrade";
+  | "omrade"
+  | "gjort"
+  | "energifloede";
 
 export interface HomeBlockMeta {
   id: HomeBlockId;
@@ -28,6 +30,8 @@ export const HOME_BLOCKS: HomeBlockMeta[] = [
   { id: "genvagar", label: "Dina genvägar", hint: "Fyra egna favoriter du väljer själv" },
   { id: "vagar", label: "Korta vägar", hint: "Min dag · QuickFlow · Flow" },
   { id: "omrade", label: "Områdesväljare", hint: "Vilket rum du är i" },
+  { id: "gjort", label: "Lägg till det du gjorde", hint: "Snabb registrering av vardagssaker" },
+  { id: "energifloede", label: "Dagens energiflöde", hint: "Planerat · Vardag · Spontant · Återhämtning" },
 ];
 
 export interface HomeLayoutPrefs {

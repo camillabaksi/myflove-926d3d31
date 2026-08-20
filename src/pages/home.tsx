@@ -2,6 +2,8 @@ import { useMemo, useState } from "react";
 import HomeShortcuts from "@/components/home-shortcuts";
 import { useHomeLayout, type HomeBlockId } from "@/lib/home-layout";
 import { TaskQuickAdd, type QuickAddResult } from "@/components/task-quick-add";
+import DidThisQuickAdd from "@/components/did-this-quick-add";
+import DayEnergyFlow from "@/components/day-energy-flow";
 import { Link } from "wouter";
 import Layout from "@/components/layout";
 import EnergyBattery from "@/components/energy-battery";
@@ -339,6 +341,20 @@ export default function Home() {
               }}
               className="bg-primary text-primary-foreground hover:bg-primary/90"
             />
+          </div>
+        )}
+
+        {/* Lägg till det du gjorde – vardagen som inte syns i kalendern */}
+        {shows("gjort") && (
+          <div style={pos("gjort")}>
+            <DidThisQuickAdd />
+          </div>
+        )}
+
+        {/* Dagens energiflöde – faktisk belastning */}
+        {shows("energifloede") && (
+          <div style={pos("energifloede")}>
+            <DayEnergyFlow />
           </div>
         )}
 
