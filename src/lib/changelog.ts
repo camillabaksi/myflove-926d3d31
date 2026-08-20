@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Dubblettskydd i databasen – samma aktivitet med samma riktning inom samma minut sparas bara en gång, även om två flikar sparar samtidigt (2026-08-20)",
       "Säkrare sparning av energiposter – följer inloggningen direkt, dubbeltryck skapar inte dubbletter och en misslyckad ändring återställs i stället för att visa fel läge (2026-08-20)",
       "Snabbknapp ➕ Jag gjorde något på Hem – alltid synlig under Mitt batteri, sparar en vardagshändelse på 3–5 sekunder med frivillig friktion efteråt (2026-08-20)",
       "Lägg till det du gjorde – ett tryck för vardagssaker som middag, tvätt, undanplock eller barnens dusch, med val av när det hände, fritext och röstinmatning där mobilen stödjer det (2026-08-21)",
