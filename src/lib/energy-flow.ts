@@ -4,7 +4,43 @@
 
 import type { FlowFactor } from "./flowscore";
 
-export type EnergyDirection = "gives" | "drains";
+export type EnergyDirection = "gives" | "drains" | "neutral";
+
+/**
+ * Var aktiviteten kom ifrån. Samma dag kan bestå av planerat, vardag,
+ * spontant och återhämtning – och en tom kalender kan ändå vara tung.
+ */
+export type EnergyKind = "planerat" | "vardag" | "spontant" | "aterhamtning";
+
+export const ENERGY_KINDS: { id: EnergyKind; label: string; emoji: string; hint: string }[] = [
+  { id: "planerat", label: "Planerat", emoji: "📅", hint: "Sådant som stod i kalendern" },
+  { id: "vardag", label: "Vardag", emoji: "🏠", hint: "Små vardagssaker du bara gjorde" },
+  { id: "spontant", label: "Spontant", emoji: "⚡", hint: "Sådant som dök upp" },
+  { id: "aterhamtning", label: "Återhämtning", emoji: "🛋️", hint: "Sådant som fyllde på" },
+];
+
+export function kindLabel(id: string): string {
+  return ENERGY_KINDS.find((k) => k.id === id)?.label ?? "Vardag";
+}
+
+export function kindEmoji(id: string): string {
+  return ENERGY_KINDS.find((k) => k.id === id)?.emoji ?? "🏠";
+}
+
+/** Friktion = hur svårt det är att komma igång. Helt skilt från energin. */
+export const FRICTION_LEVELS: { value: number; label: string; emoji: string }[] = [
+  { value: 1, label: "Lätt att börja", emoji: "🟢" },
+  { value: 2, label: "Lite motstånd", emoji: "🟡" },
+  { value: 3, label: "Tungt att börja", emoji: "🔴" },
+];
+
+export function frictionLabel(value: number | null | undefined): string {
+  return FRICTION_LEVELS.find((f) => f.value === value)?.label ?? "";
+}
+
+export function frictionEmoji(value: number | null | undefined): string {
+  return FRICTION_LEVELS.find((f) => f.value === value)?.emoji ?? "";
+}
 
 export interface EnergyFactorEntry {
   id: string;
@@ -13,6 +49,10 @@ export interface EnergyFactorEntry {
   /** Hur mycket posten upplevs ge eller ta, 1–5. */
   strength: number;
   category: EnergyCategory;
+  /** Planerat / Vardag / Spontant / Återhämtning. */
+  kind: EnergyKind;
+  /** Hur svårt det var att komma igång, 1–3. Fristående från energin. */
+  friction: number | null;
   note: string | null;
   /** Om posten alls får påverka FlowScore. */
   countsTowardScore: boolean;
@@ -25,7 +65,123 @@ export interface EnergyPreset {
   direction: EnergyDirection;
   strength: number;
   category: EnergyCategory;
+  kind: EnergyKind;
+  friction: number | null;
 }
+
+/** Vanliga vardagsaktiviteter – ett tryck räcker. */
+export interface DidSuggestion {
+  title: string;
+  emoji: string;
+  direction: EnergyDirection;
+  strength: number;
+  category: EnergyCategory;
+  kind: EnergyKind;
+  friction: number;
+}
+
+export const DID_SUGGESTIONS: DidSuggestion[] = [
+  {
+    title: "Lagade middag",
+    emoji: "🍲",
+    direction: "drains",
+    strength: 3,
+    category: "annat",
+    kind: "vardag",
+    friction: 2,
+  },
+  {
+    title: "Plockade undan",
+    emoji: "🧽",
+    direction: "drains",
+    strength: 2,
+    category: "annat",
+    kind: "vardag",
+    friction: 2,
+  },
+  {
+    title: "Tvätt",
+    emoji: "🧺",
+    direction: "drains",
+    strength: 2,
+    category: "annat",
+    kind: "vardag",
+    friction: 3,
+  },
+  {
+    title: "Duschade barnen",
+    emoji: "🛁",
+    direction: "drains",
+    strength: 3,
+    category: "socialt",
+    kind: "vardag",
+    friction: 2,
+  },
+  {
+    title: "Fixade inför imorgon",
+    emoji: "🎒",
+    direction: "drains",
+    strength: 2,
+    category: "stress",
+    kind: "vardag",
+    friction: 2,
+  },
+  {
+    title: "Svarade på meddelanden",
+    emoji: "💬",
+    direction: "drains",
+    strength: 2,
+    category: "socialt",
+    kind: "spontant",
+    friction: 2,
+  },
+  {
+    title: "Löste något oväntat",
+    emoji: "🧩",
+    direction: "drains",
+    strength: 3,
+    category: "stress",
+    kind: "spontant",
+    friction: 2,
+  },
+  {
+    title: "Handlade",
+    emoji: "🛒",
+    direction: "drains",
+    strength: 3,
+    category: "annat",
+    kind: "vardag",
+    friction: 2,
+  },
+  {
+    title: "Promenad",
+    emoji: "🚶",
+    direction: "gives",
+    strength: 3,
+    category: "rorelse",
+    kind: "aterhamtning",
+    friction: 2,
+  },
+  {
+    title: "Vila / paus",
+    emoji: "🛋️",
+    direction: "gives",
+    strength: 3,
+    category: "aterhamtning",
+    kind: "aterhamtning",
+    friction: 1,
+  },
+  {
+    title: "Egentid",
+    emoji: "🌱",
+    direction: "gives",
+    strength: 3,
+    category: "egentid",
+    kind: "aterhamtning",
+    friction: 1,
+  },
+];
+
 
 export type EnergyCategory =
   | "somn"
@@ -114,6 +270,15 @@ export function isSameDay(iso: string, day = new Date()): boolean {
   );
 }
 
+export interface EnergyKindRow {
+  kind: EnergyKind;
+  label: string;
+  emoji: string;
+  /** Nettosumma för gruppen (negativt = tog energi). */
+  net: number;
+  count: number;
+}
+
 export interface EnergyBalance {
   /** Summa av det som gav energi (positivt). */
   gives: number;
@@ -126,6 +291,10 @@ export interface EnergyBalance {
   count: number;
   topBoost?: string;
   topDrain?: string;
+  /** Dagens faktiska belastning uppdelad i Planerat / Vardag / Spontant / Återhämtning. */
+  byKind: EnergyKindRow[];
+  /** Hur många av dagens poster som kändes tunga att komma igång med. */
+  highFrictionCount: number;
 }
 
 /** Dagens balans – bara poster som får räknas med. */
@@ -138,20 +307,36 @@ export function balanceFor(
   let gives = 0;
   let drains = 0;
   let weightedNet = 0;
+  let highFrictionCount = 0;
   let topBoost: EnergyFactorEntry | undefined;
   let topDrain: EnergyFactorEntry | undefined;
+  const kinds = new Map<EnergyKind, EnergyKindRow>();
   for (const e of todays) {
     const catFactor = WEIGHT_FACTOR[categoryWeightFor(settings, e.category)];
+    if ((e.friction ?? 0) >= 3) highFrictionCount += 1;
+    const signed = e.direction === "gives" ? e.strength : e.direction === "drains" ? -e.strength : 0;
     if (e.direction === "gives") {
       gives += e.strength;
       weightedNet += e.strength * catFactor;
       if (!topBoost || e.strength > topBoost.strength) topBoost = e;
-    } else {
+    } else if (e.direction === "drains") {
       drains += e.strength;
       weightedNet -= e.strength * catFactor;
       if (!topDrain || e.strength > topDrain.strength) topDrain = e;
     }
+    const row = kinds.get(e.kind) ?? {
+      kind: e.kind,
+      label: kindLabel(e.kind),
+      emoji: kindEmoji(e.kind),
+      net: 0,
+      count: 0,
+    };
+    row.net += signed;
+    row.count += 1;
+    kinds.set(e.kind, row);
   }
+  const byKind = ENERGY_KINDS.map((k) => kinds.get(k.id)).filter((r): r is EnergyKindRow => !!r);
+
   return {
     gives,
     drains,
@@ -160,7 +345,10 @@ export function balanceFor(
     count: todays.length,
     topBoost: topBoost?.title,
     topDrain: topDrain?.title,
+    byKind,
+    highFrictionCount,
   };
+
 }
 
 export interface EnergyFlowInput {
@@ -228,7 +416,8 @@ export function categoryTrends(entries: EnergyFactorEntry[], days = 14): EnergyT
       count: 0,
     };
     if (e.direction === "gives") row.gives += e.strength;
-    else row.drains += e.strength;
+    else if (e.direction === "drains") row.drains += e.strength;
+
     row.net = row.gives - row.drains;
     row.count += 1;
     map.set(e.category, row);
@@ -246,14 +435,15 @@ export function titleTrends(entries: EnergyFactorEntry[], days = 30): EnergyTren
     const row = map.get(key) ?? {
       key,
       label: e.title,
-      emoji: e.direction === "gives" ? "🔋" : "🪫",
+      emoji: e.direction === "gives" ? "🔋" : e.direction === "drains" ? "🪫" : "➖",
       gives: 0,
       drains: 0,
       net: 0,
       count: 0,
     };
     if (e.direction === "gives") row.gives += e.strength;
-    else row.drains += e.strength;
+    else if (e.direction === "drains") row.drains += e.strength;
+
     row.net = row.gives - row.drains;
     row.count += 1;
     map.set(key, row);
@@ -304,4 +494,43 @@ export function energyInsight(
     };
   }
   return null;
+}
+
+export interface FrictionTrendRow {
+  key: string;
+  label: string;
+  /** Genomsnittlig friktion 1–3 – hur svårt det är att komma igång. */
+  friction: number;
+  /** Genomsnittlig energipåverkan (negativt = tar energi). */
+  energy: number;
+  count: number;
+}
+
+/**
+ * Mönster där friktion och energi skiljer sig åt – t.ex. tvätt som kostar
+ * lite energi men är tungt att börja med. Grunden för framtida Flow-mönster.
+ */
+export function frictionTrends(entries: EnergyFactorEntry[], days = 30): FrictionTrendRow[] {
+  const since = Date.now() - days * 86400000;
+  const map = new Map<string, { label: string; f: number; e: number; n: number }>();
+  for (const entry of entries) {
+    if (entry.friction == null) continue;
+    if (new Date(entry.occurredAt).getTime() < since) continue;
+    const key = entry.title.toLowerCase();
+    const row = map.get(key) ?? { label: entry.title, f: 0, e: 0, n: 0 };
+    row.f += entry.friction;
+    row.e += entry.direction === "gives" ? entry.strength : entry.direction === "drains" ? -entry.strength : 0;
+    row.n += 1;
+    map.set(key, row);
+  }
+  return Array.from(map.entries())
+    .filter(([, r]) => r.n >= 2)
+    .map(([key, r]) => ({
+      key,
+      label: r.label,
+      friction: r.f / r.n,
+      energy: r.e / r.n,
+      count: r.n,
+    }))
+    .sort((a, b) => b.friction - a.friction || b.count - a.count);
 }

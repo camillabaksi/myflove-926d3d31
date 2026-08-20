@@ -190,7 +190,9 @@ export type Database = {
           category: string
           created_at: string
           direction: string
+          friction: number | null
           id: string
+          kind: string
           strength: number
           title: string
           user_id: string
@@ -199,7 +201,9 @@ export type Database = {
           category?: string
           created_at?: string
           direction?: string
+          friction?: number | null
           id?: string
+          kind?: string
           strength?: number
           title: string
           user_id: string
@@ -208,7 +212,9 @@ export type Database = {
           category?: string
           created_at?: string
           direction?: string
+          friction?: number | null
           id?: string
+          kind?: string
           strength?: number
           title?: string
           user_id?: string
@@ -221,7 +227,9 @@ export type Database = {
           counts_toward_score: boolean
           created_at: string
           direction: string
+          friction: number | null
           id: string
+          kind: string
           note: string | null
           occurred_at: string
           strength: number
@@ -233,7 +241,9 @@ export type Database = {
           counts_toward_score?: boolean
           created_at?: string
           direction?: string
+          friction?: number | null
           id?: string
+          kind?: string
           note?: string | null
           occurred_at?: string
           strength?: number
@@ -245,7 +255,9 @@ export type Database = {
           counts_toward_score?: boolean
           created_at?: string
           direction?: string
+          friction?: number | null
           id?: string
+          kind?: string
           note?: string | null
           occurred_at?: string
           strength?: number
