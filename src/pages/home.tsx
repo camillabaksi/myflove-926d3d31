@@ -281,29 +281,33 @@ export default function Home() {
           )}
         </section>
 
-        {/* Ett Flow-förslag – högst ett */}
-        {suggestion && (
-          <section
-            className="rounded-3xl border border-primary/20 bg-primary/5 p-5 shadow-soft"
-            aria-label="Flow-förslag"
+        {/* Ett Flow-förslag – samma svar som Flow → NU */}
+        <section
+          className="rounded-3xl border border-primary/20 bg-primary/5 p-5 shadow-soft"
+          aria-label="Flow-förslag"
+        >
+          <div className="flex items-center gap-2 mb-3">
+            <Sparkles size={18} className="text-primary" />
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+              Flow-förslag
+            </h2>
+          </div>
+          <p className="text-ink leading-relaxed">{suggestion.headline}</p>
+          {suggestion.task && (
+            <p className="mt-2 text-sm text-muted-foreground">
+              <span className="font-medium text-ink">{suggestion.task.title}</span>
+              {suggestion.minutes ? ` · ca ${suggestion.minutes} min` : ""}
+              {suggestion.reason ? ` – ${suggestion.reason}` : ""}
+            </p>
+          )}
+          <Link
+            href="/flow"
+            className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
           >
-            <div className="flex items-center gap-2 mb-3">
-              <Sparkles size={18} className="text-primary" />
-              <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-                Flow-förslag
-              </h2>
-            </div>
-            <p className="text-ink leading-relaxed">{suggestion.text}</p>
-            {suggestion.action && (
-              <Link
-                href={suggestion.action}
-                className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
-              >
-                Gå vidare <ArrowRight size={14} />
-              </Link>
-            )}
-          </section>
-        )}
+            {suggestion.task ? "Öppna i Flow" : "Lägg till något"} <ArrowRight size={14} />
+          </Link>
+        </section>
+
 
         {/* Lägg till – snabbknapp */}
         <TaskQuickAdd
