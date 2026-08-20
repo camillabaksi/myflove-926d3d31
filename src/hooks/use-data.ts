@@ -45,10 +45,20 @@ export interface Task {
   waitingOn?: string; // fritt fält: "vem/vad vi väntar på"
   note?: string; // fri anteckning: vad det handlar om, vad du behöver ta med
 
+  /** Förväntad energipåverkan (Att göra™): tar / ger / både och / vet inte. */
+  energyImpact?: "drains" | "gives" | "both" | "unknown";
+  /** Friktion/storlek: hur tungt det känns att komma igång. */
+  friction?: "small" | "medium" | "large";
+  /** Faktisk energipåverkan, loggad när uppgiften markerades klar. */
+  actualEnergy?: "drains" | "gives" | "both" | "unknown";
+  /** När den faktiska energin loggades. */
+  actualEnergyAt?: number;
+
   steps?: TaskStep[]; // delsteg (särskilt för ärenden och projekt)
   area?: LifeArea; // livsområde: vardag / privat / studier / jobb
   courseId?: string; // kopplad kurs (studieflödet)
   attachments?: TaskAttachment[]; // uppladdade dokument
+
   /** Smarta deadline-påminnelser: antal dagar innan dueDate som notis ska skickas */
   deadlineLeadDays?: number[];
   /** Klockslag för deadline-påminnelserna, HH:MM (default 09:00) */
