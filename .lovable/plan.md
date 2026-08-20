@@ -1,80 +1,49 @@
-# Städning av MyFloves struktur
+# Testa Min dag i en riktig inloggad session
 
-Målet: en funktion = ett hem. Ingen funktionalitet raderas – saker flyttas, slås ihop visuellt eller göms bakom expandering.
+## Vad jag hittade i projektet
 
-## 1. Dubbletter och överlappningar (verifierat i koden)
+- **Auth**: Supabase e-post/lösenord via en Clerk-kompatibel shim (`src/compat/clerk.tsx`). Hela appen ligger bakom `src/routes/_app.tsx`, som är `ssr: false` och skickar till `/sign-in` utan session. Det finns ingen dev-bypass idag – bra.
+- **Testanvändare**: det finns 20+ riktiga konton. Ett heter `test@hotmail.com` (skapat 2026-07-09, har aldrig loggat in), men det är inte skapat av oss och ska inte kapas.
+- **Ingen seed/demo-data**: inga fixtures eller `import.meta.env.DEV`-lägen finns. Enda "demo"-datan är fiktiva texter i MyFlove Insight.
+- **Datalagring**: nästan all app-data (uppgifter, rutiner, energilogg m.m.) sparas per användare i `public.user_kv` via `src/lib/cloud-storage.ts`, plus egna tabeller för påminnelser/kalender. Allt är RLS-skyddat per `user_id`, så ett testkonto kan aldrig se eller röra någon annans data.
+- **Testsession**: plattformen kan redan skapa en tillfällig, kortlivad inloggad session åt agenten för en vald användare i det här projektet. Ingen kod, inget lösenord och ingen bypass behövs för att använda den.
 
-| Överlapp | Var det finns idag | Primär framöver |
-| --- | --- | --- |
-| Dagsvy | `/hem` (725 rader, inkl. "Dagen just nu", Daily Flow, batteri), `/min-dag` (188 rader), `/kalender` dagsvy | **Min dag** (`/min-dag`) blir cockpit; kalenderns dagsvy återanvänds där |
-| Uppgifter | `/tasks` (Idag/Kommande/Klart) + samma uppgifter i hem, min dag, kalender, FlowPlan | **Min dag** visar dagen, `/tasks` blir listvy nåbar därifrån |
-| Energi | `/ma-bra`, `/energifloede`, energikartan i `/ma-bra`, `/flowscore`, Mitt batteri | **Mitt batteri** i Min dag; loggning och historik under batteriet/Insights |
-| Prioritering/hjälp | `/flowplan`, `/vad-nu`, `/fokus` (redan redirect → flowplan), `/assistant`, proaktiva förslag, Livspusslet | **Flow** (en sektion) |
-| Tankefångst | `/quickflow`, `/anteckningar`, `/dump` (redan redirect → quickflow) | **QuickFlow** primärt, Anteckningar som flik i QuickFlow |
-| Rutiner | `/daglig-rutin`, `/morgonstart` (Wake Up) | **Rutiner** med Morgonstart som avsnitt |
-| Statistik | `/statistik`, `/veckans-flow`, `/insight` | **Insights** samlar dem |
-| Hemmet | `/matlista`, `/shopping`, `/stadning`, `/finances` | Grupp **Hemma** i Mer |
-| Genvägar | Hemskärmens genvägskort + bottennavets fria platser + QuickFlow | Behåll bottennav-platser + QuickFlow; genvägskortet blir valfritt |
+## Rekommendation
 
-## 2. Rekommenderad informationsarkitektur
+Använd plattformens sessionsminting mot ett **dedikerat QA-konto som vi skapar och tar bort igen** – inte mot ditt eget konto och inte mot någon befintlig användares konto.
 
-```text
-Hem        Hälsning, batteri-sammanfattning (en rad), nästa hållpunkt,
-           1–3 saker, stor + knapp. Inget mer på första skärmen.
-Min dag    Kalender (dag/vecka) + aktiviteter/att göra + Mitt batteri
-           + dagens energibalans (expanderbart).
-QuickFlow  Fånga, sortera, Anteckningar/idébank.
-Flow       Dagens nästa steg, FlowPlan-ordning, omplanering,
-           "Vad ska jag göra nu?", Hjälp/chatt, proaktiva förslag,
-           Livspusslet som underlag.
-Mer        Studier · Jobb · Relationer/Familj/Barn · Hemma (mat, inköp,
-           städ, ekonomi) · Resor · Insights (statistik, energikarta,
-           veckans flow, FlowScore-detaljer) · Inställningar (rutiner,
-           påminnelser, tyst läge, min situation, anpassa appen, admin).
-```
+Det är den säkraste och billigaste vägen: inga kodändringar, inget lösenord i repot, ingen permanent testanvändare, ingen produktionsdata påverkas.
 
-Bottennav: Hem · Min dag · QuickFlow · Flow · Mer. De två fria platserna
-byts mot en valfri plats (position 2 eller 3) så användaren behåller sin
-anpassning utan att navet växer.
+## Så går det till
 
-## 3. Vad som slås ihop visuellt
+1. **Skapa QA-kontot** via backendens admin-API: e-post av typen `qa-minday+<datum>@myflove.test`, ett slumpgenererat engångslösenord som varken sparas i repo eller visas i chatten, e-post förbekräftad så inget riktigt mejl skickas. Kontot får inga roller och ingen hushållstillhörighet.
+2. **Mint en kortlivad session** för just det användar-id:t och kör den i webbläsaren mot förhandsvisningen. Sessionen ligger bara i sandboxen och loggas aldrig.
+3. **Kör igenom testlistan** i mobilstorlek (411 × 743, samma som din telefon):
+   - logga in och landa i appen
+   - tom dag: Min dag utan något inlagt (batteri, energibalans, tomtext ska inte krascha)
+   - lägga till aktivitet via ＋ Lägg till
+   - redigera aktivitet (tid/text) i tidslinjen
+   - markera klar
+   - ta bort aktivitet
+   - Mitt batteri: nivå, riktning, expandera till kurva
+   - dagens energibalans-mening
+   - ett Flow-förslag
+   - mobil layout: inget överfullt, inget som klipps
+4. **Rapport med skärmbilder** per steg och eventuella konsolfel.
+5. **Städa upp**: radera QA-användaren, vilket via `on delete cascade` tar bort dess rader i `user_kv` och övriga användartabeller. Efter testet finns inget testkonto kvar.
 
-- **Hem**: ta bort dubbelvisning – "Dagen just nu" och Daily Flow-kortet flyttas till Min dag; Hem behåller bara sammanfattningen.
-- **Min dag**: ett kort per lager – Batteri (med energibalans bakom expandera), Dagens tidslinje (kalender + uppgifter + rutiner + medicin), Att göra-rest.
-- **Flow**: flikar i en sida – Nästa steg · Ordning (FlowPlan) · Omplanera · Fråga Flow.
-- **Insights**: flikar – Mönster (statistik) · Energikarta · Veckan · Strategier.
-- **Hemma**: en sida med flikar Mat · Inköp · Städ · Ekonomi (befintliga sidor renderas som innehåll).
+## Vad som påverkas
 
-## 4. Bara flyttas till Mer/Inställningar
+- **Inga filer i `src/` ändras.** Ingen ny route, inget dev-läge, ingen bypass, inga hårdkodade uppgifter.
+- **Databas**: en tillfällig rad i auth-tabellen plus de rader QA-kontot själv skapar under testet. Allt raderas i steg 5.
+- **Inställningar**: inga ändringar i auth-konfiguration (ingen auto-confirm globalt, inga anonyma inloggningar).
 
-`/paminnelser`, `/daglig-rutin`, tyst läge, `/min-situation`, `/anpassa`, `/beloningar`, `/traning`, `/pomodoro`, `/friktionsindex` (feedback), admin-sidorna. Routes behålls oförändrade – bara menyplaceringen ändras.
+## Alternativ jag avråder från
 
-## 5. Kan tas bort utan att funktionalitet försvinner
+- **Använda `test@hotmail.com`**: okänd ägare, kan vara en riktig person.
+- **Använda ditt eget konto**: testdata skulle blandas med din verkliga vardag.
+- **Dev-only inloggningsknapp eller mockad auth**: kräver kod i produktionsgrenen och är precis den typ av bypass vi vill undvika.
 
-- Navposter (inte kod) för: FlowScore, Energiflöde, Må bra, Statistik, Veckans Flow, FlowPlan, Anteckningar, StudyBuddy, WorkFlow – de nås från sin nya förälder.
-- Hemskärmens genvägskort om bottennavets fria plats täcker behovet (sektionen finns kvar i Anpassa hemskärmen).
-- Inget route-filborttag i denna omgång. `/fokus` och `/dump` är redan redirects och behålls som sådana.
+## Om du hellre vill
 
-## 6. Konflikter i nuvarande navigation
-
-- `navItems` listar 40+ destinationer platt och grupperas sedan i 8 kategorier – kategorierna och "Enkelt läge" (essential-flaggan) pekar delvis åt olika håll (t.ex. `/matlista` är markerad `essential`, `/min-dag` och `/flowplan` konkurrerar om samma jobb).
-- Bottennavets slots defaultar till `/kalender` + `/assistant`, vilket dubblerar Min dag och Flow när dessa blir fasta.
-- `/calendar` → `/kalender` och `/fokus` → `/flowplan` är redirects som ska bevaras.
-- Hem, Min dag och Kalender renderar alla dagens tidslinje via olika komponenter.
-
-## 7. Implementeringsordning (en etapp per körning)
-
-1. **Navigation först, innehåll orört**: bygg om `src/components/layout.tsx` till fem destinationer + ny Mer-gruppering. Inga sidor ändras, inga routes tas bort. Lätt att rulla tillbaka.
-2. **Min dag blir cockpit**: flytta batteri, tidslinje och dagens uppgifter från `home.tsx` till `my-day.tsx` genom att återanvända befintliga komponenter (`EnergyBattery`, `DayTimeline`, `DailyFlowCard`) – ingen ny logik.
-3. **Hem bantas**: lämna hälsning, batterirad, nästa hållpunkt, 1–3 saker och + knappen. Anpassa hemskärmen behåller resten som valbart.
-4. **Flow samlas**: `/flow` som flikvy över FlowPlan, Vad nu, Assistent och förslag; gamla routes blir redirects.
-5. **Energi samlas**: Energiflöde och Energikarta renderas inuti batteriet respektive Insights; `/energifloede` och `/ma-bra` behålls som redirects till rätt flik.
-6. **Insights och Hemma samlas** på samma sätt.
-7. **Uppföljning**: changelog + `src/lib/changelog.ts`, klickgenomgång av alla gamla URL:er så inget 404:ar.
-
-## Tekniska noteringar
-
-- Ingen datamodell ändras. Alla flyttar sker på presentationsnivå genom att montera befintliga sidkomponenter i nya containers.
-- Gamla URL:er behålls som `beforeLoad`-redirects (samma mönster som `_app.calendar.tsx`) så bokmärken och push-länkar fortsätter fungera.
-- `home-sections.ts` och användarens sparade hemskärmsordning migreras mjukt: okända sektions-id:n ignoreras, nya läggs sist.
-- FlowScore, friktionsvärden och Livspusslet fortsätter beräknas exakt som idag – de får bara ingen egen menypost.
+Vill du behålla ett permanent familj-/testkonto (t.ex. för att visa appen för andra) kan vi i stället skapa ett vanligt konto via den vanliga registreringssidan, som du själv äger lösenordet till. Det är säkert men lämnar ett konto kvar – säg till om du föredrar det.
