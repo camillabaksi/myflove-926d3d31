@@ -439,7 +439,7 @@ export default function Layout({ children }: LayoutProps) {
       href: "/min-livsprofil",
       label: "Min livsprofil",
       icon: Compass,
-      hint: "Jobb, studier, föräldraledig, sjukskriven – hur livet ser ut just nu",
+      hint: "Din vardag, styrkor, svårigheter och vad du vill ha hjälp med",
     },
     {
       href: "/anpassa-hem",
