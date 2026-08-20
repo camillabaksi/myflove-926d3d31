@@ -453,6 +453,8 @@ export function useTasks() {
     unsnoozeTask,
     setTaskStatus,
     setTaskKind,
+    setTaskActualEnergy,
+
     setTaskDueDate,
     setTaskTime,
     setTaskArea,
