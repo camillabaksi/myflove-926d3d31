@@ -6,12 +6,13 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-08-19";
+export const CHANGELOG_UPDATED = "2026-08-20";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Att göra är din dagliga agenda – flikarna Idag, Kommande och Klart, snabbtillägg med när/energi/friktion, förslag från Flow och en frivillig energifråga när du bockar av (2026-08-20)",
       "Anteckningar & idébank har en egen del under Flow – öppna Anteckningar direkt från Mer-menyn, Quickflow länkar dit (2026-08-19)",
       'Flytta en anteckning tillbaka till Quickflow – knappen "Tillbaka till Quickflow" gör anteckningen till ett aktivt flow-block igen (2026-08-19)',
       "Idébanken bor i Anteckningar – gamla idéer från Quickflow flyttas automatiskt in bland dina anteckningar (2026-08-19)",

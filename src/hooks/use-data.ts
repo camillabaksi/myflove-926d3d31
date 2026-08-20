@@ -45,10 +45,20 @@ export interface Task {
   waitingOn?: string; // fritt fält: "vem/vad vi väntar på"
   note?: string; // fri anteckning: vad det handlar om, vad du behöver ta med
 
+  /** Förväntad energipåverkan (Att göra™): tar / ger / både och / vet inte. */
+  energyImpact?: "drains" | "gives" | "both" | "unknown";
+  /** Friktion/storlek: hur tungt det känns att komma igång. */
+  friction?: "small" | "medium" | "large";
+  /** Faktisk energipåverkan, loggad när uppgiften markerades klar. */
+  actualEnergy?: "drains" | "gives" | "both" | "unknown";
+  /** När den faktiska energin loggades. */
+  actualEnergyAt?: number;
+
   steps?: TaskStep[]; // delsteg (särskilt för ärenden och projekt)
   area?: LifeArea; // livsområde: vardag / privat / studier / jobb
   courseId?: string; // kopplad kurs (studieflödet)
   attachments?: TaskAttachment[]; // uppladdade dokument
+
   /** Smarta deadline-påminnelser: antal dagar innan dueDate som notis ska skickas */
   deadlineLeadDays?: number[];
   /** Klockslag för deadline-påminnelserna, HH:MM (default 09:00) */
@@ -120,6 +130,8 @@ export function useTasks() {
       steps?: string[];
       deadlineLeadDays?: number[];
       deadlineReminderTime?: string;
+      energyImpact?: Task["energyImpact"];
+      friction?: Task["friction"];
     },
   ) => {
     // Blueprint: uppgifter ska alltid landa i kalendern så inget "försvinner".
@@ -142,8 +154,11 @@ export function useTasks() {
         courseId: opts?.courseId,
         deadlineLeadDays: opts?.deadlineLeadDays,
         deadlineReminderTime: opts?.deadlineReminderTime,
+        energyImpact: opts?.energyImpact,
+        friction: opts?.friction,
         steps: (opts?.steps ?? []).map((s) => ({ id: generateId(), title: s, done: false })),
       },
+
       ...prev,
     ]);
   };
@@ -170,7 +185,11 @@ export function useTasks() {
         | "area"
         | "kind"
         | "waitingOn"
+        | "energyImpact"
+        | "friction"
+        | "actualEnergy"
       >
+
     >,
   ) => {
     setTasks((prev) =>
@@ -238,7 +257,15 @@ export function useTasks() {
     );
   };
 
+  /** Faktisk energipåverkan efter att uppgiften markerats klar – alltid frivilligt. */
+  const setTaskActualEnergy = (id: string, actualEnergy: Task["actualEnergy"]) => {
+    setTasks((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, actualEnergy, actualEnergyAt: Date.now() } : t)),
+    );
+  };
+
   const setTaskKind = (id: string, kind: TaskKind) => {
+
     setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, kind } : t)));
   };
 
@@ -426,6 +453,8 @@ export function useTasks() {
     unsnoozeTask,
     setTaskStatus,
     setTaskKind,
+    setTaskActualEnergy,
+
     setTaskDueDate,
     setTaskTime,
     setTaskArea,
