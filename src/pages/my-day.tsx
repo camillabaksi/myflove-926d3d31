@@ -15,7 +15,6 @@ import { useEnergyBattery } from "@/hooks/use-energy-battery";
 import { capacityForMode, shouldOfferReplan } from "@/lib/replan";
 import { assessToday, suggestNow } from "@/lib/flow-engine";
 import { withinCapacity, type FlowItem } from "@/lib/flow-items";
-import { itemCost } from "@/lib/energy-battery";
 import { useTasks, useReminders } from "@/hooks/use-data";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import type { Routine } from "@/pages/routines";
@@ -37,7 +36,7 @@ export default function MyDay() {
   const { activeReminders } = useReminders();
   const { flow } = useFlowScore();
   const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
-  const { reading, suggestions, items: batteryItems } = useEnergyBattery();
+  const { reading, items: batteryItems } = useEnergyBattery();
 
   const todaysTasks = useMemo(
     () => activeTasks.filter((t) => !t.dueDate || t.dueDate <= today),
