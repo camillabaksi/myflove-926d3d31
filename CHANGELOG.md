@@ -7,6 +7,10 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 
 ## [Unreleased]
 
+### Changed
+
+- **Enklare huvudnavigation** (2026-08-20): Appen har nu fem tydliga ingångar – Hem, Min dag, QuickFlow, Flow och Mer. Kalender, Att göra, FlowPlan, Vad ska jag göra nu?, Energiflöde, Må bra, FlowScore och Statistik är inte längre egna huvuddestinationer utan ligger under Min dag, Flow respektive Insights. Mer är omgrupperat i Min dag · Flow · Studier · Jobb · Familj · Hemma · Resor · Insights · Inställningar. Alla sidor, länkar och redirects fungerar precis som förut, och du kan fortfarande byta de två valfria platserna i bottenmenyn.
+
 ### Added
 
 - **Mitt batteri – din energikurva över dagen** (2026-08-20): Ett lugnt, levande batteri högst upp i kalendern och som eget block på hemskärmen visar din energinivå just nu, om den stiger eller sjunker, och när du brukar vara starkast respektive lägst. Expandera för kurvan över dagen och mjuka förslag om placering och återhämtning. Kurvan bygger på FlowScore, ditt eget energimönster, Energiflöde™ och dagens aktiviteters energipåverkan – inga nya listor att fylla i. I kalenderns dagsvy tonas timmarna svagt efter din energi.
