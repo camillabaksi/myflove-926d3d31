@@ -55,7 +55,8 @@ function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString("sv-SE", { day: "numeric", month: "short" });
 }
 
-export default function Assistant({ chatId }: { chatId?: string }) {
+/** Chatten utan sidram – används både som egen sida och som HJÄLP-läget i Flow. */
+export function AssistantContent({ chatId }: { chatId?: string }) {
   const navigate = useNavigate();
   const conversationId = chatId ?? null;
 
