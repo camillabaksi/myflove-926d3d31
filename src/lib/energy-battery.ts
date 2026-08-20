@@ -170,7 +170,7 @@ export function buildBattery(input: BatteryInput): BatteryReading {
     slots.push({
       minutes: m,
       time: minutesToTime(m),
-      level: clamp(baseAt(m) + offset + effect + (past ? flowPart : flowPart)),
+      level: clamp(baseAt(m) + offset + effect + flowPart),
       past,
     });
   }
