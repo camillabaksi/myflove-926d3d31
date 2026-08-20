@@ -99,6 +99,7 @@ const CATEGORY_HUE: Record<string, string> = {
   familyflow: "348 62% 66%",
   studyflow: "232 58% 64%",
   workflow: "212 48% 52%",
+  travelflow: "172 44% 46%",
   ovrigt: "258 12% 52%",
 };
 const catColor = (id: string, alpha?: number) => {
@@ -286,7 +287,7 @@ export default function Layout({ children }: LayoutProps) {
     },
     {
       href: "/quickflow",
-      label: "Quickflow",
+      label: "QuickFlow",
       icon: Inbox,
       hint: "Skriv av dig direkt – sortera sen",
       essential: true,
@@ -326,6 +327,18 @@ export default function Layout({ children }: LayoutProps) {
     },
     { href: "/flowscore", label: "FlowScore", icon: Gauge, hint: "Hur mycket du orkar just idag" },
     {
+      href: "/vad-nu",
+      label: "Vad ska jag göra nu?",
+      icon: Target,
+      hint: "Flow föreslår nästa steg",
+    },
+    {
+      href: "/morgonstart",
+      label: "Morgonstart",
+      icon: Sun,
+      hint: "Mjuk väckning och start på dagen",
+    },
+    {
       href: "/veckans-flow",
       label: "Veckans Flow",
       icon: CalendarDays,
@@ -342,12 +355,19 @@ export default function Layout({ children }: LayoutProps) {
     },
     { href: "/stadning", label: "Städning", icon: SprayCan, hint: "Vad som behöver göras hemma" },
     { href: "/finances", label: "Ekonomi", icon: Wallet, hint: "Räkningar och budget" },
-    { href: "/travel", label: "Resor", icon: Navigation, hint: "Buss och tåg i realtid" },
+    {
+      href: "/travel",
+      label: "Resor",
+      icon: Navigation,
+      hint: "Buss och tåg i realtid",
+      essential: true,
+    },
     {
       href: "/relationer",
       label: "Relationer",
       icon: Heart,
       hint: "Personerna som hör till ditt liv",
+      essential: true,
     },
     { href: "/familj", label: "Familj", icon: Users, hint: "Dela listor och kalender med andra" },
     { href: "/barn", label: "Barn", icon: Baby, hint: "Scheman och rutiner för barnen" },
@@ -360,11 +380,18 @@ export default function Layout({ children }: LayoutProps) {
     },
     {
       href: "/insight",
-      label: "MyFlove Insight",
+      label: "Insights",
       icon: Brain,
-      hint: "Behov → konkreta strategier (demo)",
+      hint: "Dina mönster och konkreta strategier",
+      essential: true,
     },
-    { href: "/assistant", label: "Hjälp", icon: Sparkles, hint: "Fråga Flow om vad som helst" },
+    {
+      href: "/assistant",
+      label: "Flow",
+      icon: Sparkles,
+      hint: "Prioritering, timing och hjälp när det kör ihop sig",
+      essential: true,
+    },
     {
       href: "/friktionsindex",
       label: "Feedback",
@@ -378,6 +405,7 @@ export default function Layout({ children }: LayoutProps) {
             label: "StudyFlow",
             icon: GraduationCap,
             hint: "Schema, prov och vad du ska plugga nu",
+            essential: true,
           },
           {
             href: "/studybuddy",
@@ -390,7 +418,13 @@ export default function Layout({ children }: LayoutProps) {
 
     ...(enabledAreas.includes("jobb")
       ? [
-          { href: "/jobb", label: "Jobb", icon: Briefcase, hint: "Dina arbetsuppgifter och möten" },
+          {
+            href: "/jobb",
+            label: "Jobb",
+            icon: Briefcase,
+            hint: "Dina arbetsuppgifter och möten",
+            essential: true,
+          },
           {
             href: "/workflow",
             label: "WorkFlow",
@@ -425,7 +459,8 @@ export default function Layout({ children }: LayoutProps) {
       href: "/anpassa",
       label: "Anpassa appen",
       icon: Accessibility,
-      hint: "Lugnare färger, färre saker och enkla ord",
+      hint: "Lugnare färger, färre saker, tyst läge och enkla ord",
+      essential: true,
     },
   ].map((i) => ({ ...i, label: plainLabel(i.label, npf.plainWords) }));
 
@@ -441,55 +476,17 @@ export default function Layout({ children }: LayoutProps) {
     }[] = [
       {
         id: "myflow",
-        label: "Din dag",
-        hint: "Kalender, att göra och dagliga rutiner",
+        label: "Min dag",
+        hint: "Kalender, att göra och dagens hållpunkter",
         icon: CalendarDays,
-        hrefs: [
-          "/hem",
-          "/min-dag",
-          "/daglig-rutin",
-          "/kalender",
-          "/paminnelser",
-          "/tasks",
-          "/pomodoro",
-        ],
+        hrefs: ["/min-dag", "/kalender", "/tasks", "/daglig-rutin", "/paminnelser", "/pomodoro"],
       },
       {
         id: "flowflow",
         label: "Flow",
-        hint: "FlowPlan, fokus, reflektion och AI-stöd",
+        hint: "Nästa steg, ordning, omplanering och hjälp",
         icon: Sparkles,
-        hrefs: [
-          "/flowplan",
-          "/fokus",
-          "/veckans-flow",
-          "/quickflow",
-          "/anteckningar",
-          "/assistant",
-          "/beloningar",
-          "/insight",
-        ],
-      },
-      {
-        id: "healthflow",
-        label: "Hälsa",
-        hint: "Må bra, träning och din ork",
-        icon: Heart,
-        hrefs: ["/ma-bra", "/energifloede", "/traning", "/flowscore", "/statistik"],
-      },
-      {
-        id: "homeflow",
-        label: "Hemma",
-        hint: "Mat, inköp, städning och pengar",
-        icon: House,
-        hrefs: ["/shopping", "/matlista", "/stadning", "/finances", "/travel"],
-      },
-      {
-        id: "familyflow",
-        label: "Relationer",
-        hint: "Personer du delar vardagen med",
-        icon: HeartPulse,
-        hrefs: ["/relationer", "/familj", "/barn"],
+        hrefs: ["/assistant", "/flowplan", "/vad-nu", "/quickflow", "/anteckningar", "/beloningar"],
       },
       {
         id: "studyflow",
@@ -506,13 +503,57 @@ export default function Layout({ children }: LayoutProps) {
         hrefs: ["/jobb", "/workflow"],
       },
       {
+        id: "familyflow",
+        label: "Familj",
+        hint: "Personer du delar vardagen med",
+        icon: HeartPulse,
+        hrefs: ["/relationer", "/familj", "/barn"],
+      },
+      {
+        id: "homeflow",
+        label: "Hemma",
+        hint: "Mat, inköp, städning och pengar",
+        icon: House,
+        hrefs: ["/matlista", "/shopping", "/stadning", "/finances"],
+      },
+      {
+        id: "travelflow",
+        label: "Resor",
+        hint: "Buss och tåg i realtid",
+        icon: Navigation,
+        hrefs: ["/travel"],
+      },
+      {
+        id: "healthflow",
+        label: "Insights",
+        hint: "Din energi, hälsa, mönster och statistik",
+        icon: Brain,
+        hrefs: [
+          "/insight",
+          "/ma-bra",
+          "/energifloede",
+          "/flowscore",
+          "/statistik",
+          "/veckans-flow",
+          "/traning",
+        ],
+      },
+      {
         id: "ovrigt",
-        label: "Övrigt",
-        hint: "Anpassa appen, feedback och inställningar",
+        label: "Inställningar",
+        hint: "Rutiner, min situation, anpassning och feedback",
         icon: LayoutGrid,
-        hrefs: ["/min-situation", "/anpassa", "/friktionsindex", "/admin", "/admin-statistik"],
+        hrefs: [
+          "/morgonstart",
+          "/min-situation",
+          "/anpassa",
+          "/friktionsindex",
+          "/admin",
+          "/admin-statistik",
+        ],
       },
     ];
+
     return groups
       .map((g) => ({ ...g, items: g.hrefs.map(byHref).filter(Boolean) as typeof navItems }))
       .filter((g) => g.items.length > 0);
@@ -524,7 +565,7 @@ export default function Layout({ children }: LayoutProps) {
   const situationLabel = situationSummary(situation) || "Berätta hur livet ser ut just nu";
   // Egna platser i bottennavet – du byter dem själv i "Mer".
   const [navSlots, setNavSlots] = useLocalStorage<string[]>("myflove-bottom-nav-slots", [
-    "/kalender",
+    "/min-dag",
     "/assistant",
   ]);
   const [editingNav, setEditingNav] = useState(false);
@@ -547,11 +588,10 @@ export default function Layout({ children }: LayoutProps) {
    */
   const primaryNav = useMemo(() => {
     const pick = (href: string) => navItems.find((i) => i.href === href);
-    const slot1 = pick(navSlots[0] ?? "") ?? pick("/kalender") ?? pick("/min-dag");
+    const slot1 = pick(navSlots[0] ?? "") ?? pick("/min-dag") ?? pick("/kalender");
     const slot2 = pick(navSlots[1] ?? "") ?? pick("/assistant");
     return [pick("/hem"), slot1, slot2].filter(Boolean) as typeof navItems;
   }, [navItems, navSlots]);
-
 
   return (
     <div className="min-h-[100dvh] flex flex-col bg-background md:flex-row relative">
@@ -853,7 +893,6 @@ export default function Layout({ children }: LayoutProps) {
             />
           ))}
 
-
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className={`flex flex-col items-center gap-1 rounded-2xl px-2 py-1.5 min-w-[3.7rem] press ${
@@ -1005,14 +1044,14 @@ export default function Layout({ children }: LayoutProps) {
                     {simpleMode ? "Visar bara det viktigaste" : "Visa bara det viktigaste"}
                   </button>
 
-
                   {/* Byt platser i bottenmenyn */}
                   <div className="mb-4 rounded-3xl border border-border bg-card p-4 shadow-sm">
                     <div className="flex items-center justify-between gap-2">
                       <div>
                         <p className="text-sm font-semibold">Din bottenmeny</p>
                         <p data-npf="optional" className="text-xs text-muted-foreground">
-                          Hem och QuickFlow ligger fast. Två platser väljer du själv.
+                          Hem, QuickFlow och Mer ligger fast. Två platser väljer du själv – normalt
+                          Min dag och Flow.
                         </p>
                       </div>
                       <Button
@@ -1061,15 +1100,13 @@ export default function Layout({ children }: LayoutProps) {
                           variant="ghost"
                           size="sm"
                           className="rounded-xl gap-1"
-                          onClick={() => setNavSlots(["/kalender", "/assistant"])}
+                          onClick={() => setNavSlots(["/min-dag", "/assistant"])}
                         >
                           <RotateCcw size={14} /> Återställ
                         </Button>
                       </div>
                     )}
                   </div>
-
-
 
                   <div className="grid grid-cols-2 gap-3">
                     {categories

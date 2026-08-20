@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Enklare huvudnavigation – fem ingångar: Hem, Min dag, QuickFlow, Flow och Mer, med Mer grupperat i Min dag, Flow, Studier, Jobb, Familj, Hemma, Resor, Insights och Inställningar (2026-08-20)",
       "Mitt batteri – levande energibatteri i kalendern och på hemskärmen med nivå nu, riktning, starkaste och lägsta period, kurva över dagen och förslag på placering och återhämtning (2026-08-20)",
       "Dagen just nu på hemskärmen – dagens tidslinje med hållpunkter, uppgifter, rutiner och medicintider, med markering för var på dagen du är (2026-08-20)",
       "Medicinpåminnelser bor i Påminnelser – lägg till, ändra och bocka av mediciner på samma sida som övriga påminnelser (2026-08-20)",
