@@ -999,7 +999,7 @@ export default function Layout({ children }: LayoutProps) {
                 </>
               ) : (
                 <>
-                  {/* Min situation – alltid överst i Mer */}
+                  {/* Min livsprofil – alltid överst i Mer */}
                   <Link
                     href="/min-livsprofil"
                     onClick={() => {
