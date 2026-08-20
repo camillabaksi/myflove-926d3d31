@@ -326,8 +326,14 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
               <MyFloveCard key={e.id} className="flex items-start justify-between gap-3 p-4">
                 <div className="min-w-0">
                   <div className="text-xs uppercase tracking-wider text-muted-foreground">
-                    {categoryEmoji(e.category)} {categoryLabel(e.category)} ·{" "}
-                    {e.direction === "gives" ? `🔋 +${e.strength}` : `🪫 −${e.strength}`}
+                    {kindEmoji(e.kind)} {kindLabel(e.kind)} · {categoryEmoji(e.category)}{" "}
+                    {categoryLabel(e.category)} ·{" "}
+                    {e.direction === "gives"
+                      ? `🔺 +${e.strength}`
+                      : e.direction === "neutral"
+                        ? "➖ 0"
+                        : `🔻 −${e.strength}`}
+                    {e.friction ? ` · ${frictionEmoji(e.friction)} ${frictionLabel(e.friction)}` : ""}
                   </div>
                   <div
                     className={`font-medium text-ink ${e.countsTowardScore ? "" : "opacity-60"}`}
@@ -335,6 +341,38 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
                     {e.title}
                   </div>
                   {e.note && <p className="text-sm text-muted-foreground">{e.note}</p>}
+                  <div className="mt-2 flex flex-wrap gap-1">
+                    {(["drains", "gives", "neutral"] as const).map((d) => (
+                      <button
+                        key={d}
+                        type="button"
+                        aria-label={`Ändra till ${d}`}
+                        onClick={() => updateFactor(e.id, { direction: d })}
+                        className={`rounded-full border px-2 py-0.5 text-xs ${
+                          e.direction === d
+                            ? "border-primary bg-primary/10 text-primary"
+                            : "border-border/60 text-muted-foreground"
+                        }`}
+                      >
+                        {d === "gives" ? "🔺" : d === "neutral" ? "➖" : "🔻"}
+                      </button>
+                    ))}
+                    {FRICTION_LEVELS.map((f) => (
+                      <button
+                        key={f.value}
+                        type="button"
+                        title={f.label}
+                        onClick={() => updateFactor(e.id, { friction: f.value })}
+                        className={`rounded-full border px-2 py-0.5 text-xs ${
+                          e.friction === f.value
+                            ? "border-primary bg-primary/10 text-primary"
+                            : "border-border/60 text-muted-foreground"
+                        }`}
+                      >
+                        {f.emoji}
+                      </button>
+                    ))}
+                  </div>
                 </div>
                 <div className="flex shrink-0 flex-col items-end gap-1">
                   <button
@@ -352,6 +390,7 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
                     Ta bort
                   </button>
                 </div>
+
               </MyFloveCard>
             ))}
           </div>
