@@ -156,7 +156,7 @@ export default function Home() {
   const { addTask } = useTasks();
   const { activeArea } = useActiveArea();
   const nextEvent = useNextEvent();
-  const suggestion = useSingleSuggestion(nextEvent);
+  const suggestion = useFlowSuggestion();
 
   const hour = new Date().getHours();
   const heroGradient =
