@@ -8,6 +8,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 ## [Unreleased]
 
 ### Added
+- **Att göra är MyFloves dagliga agenda** (2026-08-20): Att göra har flikarna ☀️ Idag (standard), 📅 Kommande och ✅ Klart, en snabb ＋-knapp med val för när, energi och friktion, mjuka förslag från Flow när dagen inte matchar din energi, och en frivillig fråga om faktisk energi när du bockar av. Uppgifter med tid syns även i kalendern – utan tid stannar de i Att göra.
 - **Anteckningar & idébank som egen del under Flow** (2026-08-19): Anteckningarna har fått en egen sida (/anteckningar) i Flow-gruppen i stället för att ligga inbakade i Quickflow – Quickflow länkar dit.
 - **Flytta en anteckning tillbaka till Quickflow** (2026-08-19): Varje anteckning har nu "Tillbaka till Quickflow" – tanken blir ett aktivt flow-block igen, med möjlighet att ångra.
 - **Idébanken bor i Anteckningar** (2026-08-19): Den gamla idébanken i Quickflow är borta – dina sparade idéer flyttas automatiskt in bland Anteckningar med gissat livsområde, så allt ligger på ett ställe.
