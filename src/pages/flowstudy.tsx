@@ -242,7 +242,7 @@ export default function StudyBuddyPage() {
                 className="w-full rounded-xl border border-border bg-background p-3 text-sm"
               />
               <div className="rounded-xl border border-border bg-secondary/30 p-3 space-y-2">
-                <p className="text-xs font-medium">Flow anpassar efter din studieprofil</p>
+                <p className="text-xs font-medium">Flow anpassar efter din livsprofil</p>
                 {basePlan.chips.length > 0 ? (
                   <div className="flex flex-wrap gap-1.5">
                     {basePlan.chips.map((c) => (
@@ -256,7 +256,7 @@ export default function StudyBuddyPage() {
                   </div>
                 ) : (
                   <p className="text-xs text-muted-foreground">
-                    Fyll i din studieprofil ovan så anpassas kort och frågor efter dina stödbehov.
+                    Fyll i din livsprofil ovan så anpassas kort och frågor efter dina stödbehov.
                   </p>
                 )}
                 <div className="flex flex-wrap gap-1.5 pt-1">
