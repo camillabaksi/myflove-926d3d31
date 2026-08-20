@@ -51,6 +51,7 @@ import { Route as AppFokusRouteImport } from './routes/_app.fokus'
 import { Route as AppFlowstudyRouteImport } from './routes/_app.flowstudy'
 import { Route as AppFlowscoreRouteImport } from './routes/_app.flowscore'
 import { Route as AppFlowplanRouteImport } from './routes/_app.flowplan'
+import { Route as AppFlowRouteImport } from './routes/_app.flow'
 import { Route as AppFinancesRouteImport } from './routes/_app.finances'
 import { Route as AppFamiljRouteImport } from './routes/_app.familj'
 import { Route as AppEnergifloedeRouteImport } from './routes/_app.energifloede'
@@ -283,6 +284,11 @@ const AppFlowplanRoute = AppFlowplanRouteImport.update({
   path: '/flowplan',
   getParentRoute: () => AppRoute,
 } as any)
+const AppFlowRoute = AppFlowRouteImport.update({
+  id: '/flow',
+  path: '/flow',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppFinancesRoute = AppFinancesRouteImport.update({
   id: '/finances',
   path: '/finances',
@@ -419,6 +425,7 @@ export interface FileRoutesByFullPath {
   '/energifloede': typeof AppEnergifloedeRoute
   '/familj': typeof AppFamiljRoute
   '/finances': typeof AppFinancesRoute
+  '/flow': typeof AppFlowRoute
   '/flowplan': typeof AppFlowplanRoute
   '/flowscore': typeof AppFlowscoreRoute
   '/flowstudy': typeof AppFlowstudyRoute
@@ -483,6 +490,7 @@ export interface FileRoutesByTo {
   '/energifloede': typeof AppEnergifloedeRoute
   '/familj': typeof AppFamiljRoute
   '/finances': typeof AppFinancesRoute
+  '/flow': typeof AppFlowRoute
   '/flowplan': typeof AppFlowplanRoute
   '/flowscore': typeof AppFlowscoreRoute
   '/flowstudy': typeof AppFlowstudyRoute
@@ -549,6 +557,7 @@ export interface FileRoutesById {
   '/_app/energifloede': typeof AppEnergifloedeRoute
   '/_app/familj': typeof AppFamiljRoute
   '/_app/finances': typeof AppFinancesRoute
+  '/_app/flow': typeof AppFlowRoute
   '/_app/flowplan': typeof AppFlowplanRoute
   '/_app/flowscore': typeof AppFlowscoreRoute
   '/_app/flowstudy': typeof AppFlowstudyRoute
@@ -615,6 +624,7 @@ export interface FileRouteTypes {
     | '/energifloede'
     | '/familj'
     | '/finances'
+    | '/flow'
     | '/flowplan'
     | '/flowscore'
     | '/flowstudy'
@@ -679,6 +689,7 @@ export interface FileRouteTypes {
     | '/energifloede'
     | '/familj'
     | '/finances'
+    | '/flow'
     | '/flowplan'
     | '/flowscore'
     | '/flowstudy'
@@ -744,6 +755,7 @@ export interface FileRouteTypes {
     | '/_app/energifloede'
     | '/_app/familj'
     | '/_app/finances'
+    | '/_app/flow'
     | '/_app/flowplan'
     | '/_app/flowscore'
     | '/_app/flowstudy'
@@ -1101,6 +1113,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppFlowplanRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/flow': {
+      id: '/_app/flow'
+      path: '/flow'
+      fullPath: '/flow'
+      preLoaderRoute: typeof AppFlowRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/finances': {
       id: '/_app/finances'
       path: '/finances'
@@ -1265,6 +1284,7 @@ interface AppRouteChildren {
   AppEnergifloedeRoute: typeof AppEnergifloedeRoute
   AppFamiljRoute: typeof AppFamiljRoute
   AppFinancesRoute: typeof AppFinancesRoute
+  AppFlowRoute: typeof AppFlowRoute
   AppFlowplanRoute: typeof AppFlowplanRoute
   AppFlowscoreRoute: typeof AppFlowscoreRoute
   AppFlowstudyRoute: typeof AppFlowstudyRoute
@@ -1312,6 +1332,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppEnergifloedeRoute: AppEnergifloedeRoute,
   AppFamiljRoute: AppFamiljRoute,
   AppFinancesRoute: AppFinancesRoute,
+  AppFlowRoute: AppFlowRoute,
   AppFlowplanRoute: AppFlowplanRoute,
   AppFlowscoreRoute: AppFlowscoreRoute,
   AppFlowstudyRoute: AppFlowstudyRoute,
