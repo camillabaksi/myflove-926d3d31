@@ -27,11 +27,14 @@ export default function DayTimeline({
   entries,
   isToday,
   editable = true,
+  energyByHour,
 }: {
   entries: TimelineEntry[];
   isToday: boolean;
   /** Visa ändra/ta bort direkt i tidslinjen. */
   editable?: boolean;
+  /** Mitt batteri™: energinivå 0–100 per timme, ritas som mycket svag ton. */
+  energyByHour?: Record<number, number>;
 }) {
   const [now, setNow] = useState(() => new Date());
   const [showUntimed, setShowUntimed] = useLocalStorage<boolean>(
@@ -60,9 +63,14 @@ export default function DayTimeline({
         {hours.map((h) => {
           const inHour = timed.filter((e) => Math.floor(toMinutes(e.time) / 60) === h);
           const showNowLine = isToday && nowMinutes >= h * 60 && nowMinutes < (h + 1) * 60;
+          const energy = energyByHour?.[h];
+          const tint =
+            energy == null
+              ? undefined
+              : `color-mix(in oklab, hsl(var(--primary)) ${Math.round(energy / 12)}%, transparent)`;
           if (inHour.length === 0 && !showNowLine) {
             return (
-              <div key={h} className="flex items-center gap-3">
+              <div key={h} className="flex items-center gap-3 rounded-xl" style={{ backgroundColor: tint }}>
                 <span className="w-11 shrink-0 text-right text-xs text-muted-foreground/60">
                   {String(h).padStart(2, "0")}:00
                 </span>
@@ -71,7 +79,7 @@ export default function DayTimeline({
             );
           }
           return (
-            <div key={h} className="flex gap-3">
+            <div key={h} className="flex gap-3 rounded-xl" style={{ backgroundColor: tint }}>
               <span className="w-11 shrink-0 pt-2 text-right text-xs font-medium text-muted-foreground">
                 {String(h).padStart(2, "0")}:00
               </span>

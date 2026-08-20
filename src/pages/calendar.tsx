@@ -37,6 +37,7 @@ import { useToast } from "@/hooks/use-toast";
 import CollapsibleSection from "@/components/collapsible-section";
 import DayTimeline from "@/components/day-timeline";
 import EnergyBattery from "@/components/energy-battery";
+import { useEnergyBattery } from "@/hooks/use-energy-battery";
 import { useLocalStorage } from "@/lib/storage";
 import { pictogramFor } from "@/lib/pictograms";
 import { useNpfSettings } from "@/lib/npf-mode";
@@ -131,6 +132,16 @@ export default function CalendarPage() {
   } = useChildren();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+
+  const { reading: batteryReading } = useEnergyBattery();
+  const batteryByHour = useMemo(() => {
+    const out: Record<number, number> = {};
+    for (const s of batteryReading.slots) {
+      const h = Math.floor(s.minutes / 60);
+      out[h] = Math.max(out[h] ?? 0, s.level);
+    }
+    return out;
+  }, [batteryReading.slots]);
 
   const [currentDate, setCurrentDate] = useState(new Date());
   const [view, setView] = useLocalStorage<CalView>("myflove-calendar-view", "manad");
@@ -941,6 +952,7 @@ export default function CalendarPage() {
             {view === "dag" && (
               <DayTimeline
                 isToday={selectedDateStr === todayStr}
+                energyByHour={selectedDateStr === todayStr ? batteryByHour : undefined}
                 entries={[
                   ...selectedItems.childEvents.map((e) => ({
                     id: `c-${e.id}`,
