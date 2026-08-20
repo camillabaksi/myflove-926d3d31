@@ -12,6 +12,9 @@ export type SituationId =
   | "sjukskriven"
   | "arbetssokande"
   | "mellan-arbeten"
+  | "frilans"
+  | "hemma"
+  | "praktik"
   | "annat";
 
 export interface SituationMeta {
@@ -29,7 +32,7 @@ export const SITUATION_META: Record<SituationId, SituationMeta> = {
   jobb: {
     id: "jobb",
     emoji: "💼",
-    label: "Jobb",
+    label: "Arbetar",
     blurb: "Du arbetar – heltid, deltid eller extra",
     area: "jobb",
     flowHint:
@@ -38,7 +41,7 @@ export const SITUATION_META: Record<SituationId, SituationMeta> = {
   studier: {
     id: "studier",
     emoji: "🎓",
-    label: "Studier",
+    label: "Studerar",
     blurb: "Du pluggar – kurser, program eller enstaka ämnen",
     area: "studier",
     flowHint:
@@ -63,8 +66,8 @@ export const SITUATION_META: Record<SituationId, SituationMeta> = {
   arbetssokande: {
     id: "arbetssokande",
     emoji: "🔎",
-    label: "Arbetssökande",
-    blurb: "Du söker jobb just nu",
+    label: "Söker jobb / mellan jobb",
+    blurb: "Du söker jobb eller är mellan uppdrag",
     flowHint:
       "Hjälp med struktur kring ansökningar, kontakter och rutiner – och att dagen har något mer än jobbsök.",
   },
@@ -75,6 +78,32 @@ export const SITUATION_META: Record<SituationId, SituationMeta> = {
     blurb: "En period mellan två jobb eller uppdrag",
     flowHint:
       "Perioden är tillfällig. Håll rutiner igång och föreslå en lugn balans mellan vila och förberedelse.",
+  },
+  frilans: {
+    id: "frilans",
+    emoji: "🧑‍💻",
+    label: "Frilansar / egenföretagare",
+    blurb: "Du styr mycket av arbetsdagen själv",
+    area: "jobb",
+    flowHint:
+      "Friheten är stor men gränserna otydliga. Hjälp till att avgränsa arbetsdagen och få plats för administration.",
+  },
+  hemma: {
+    id: "hemma",
+    emoji: "🏠",
+    label: "Hemma / hushåll och familj",
+    blurb: "Vardagen kretsar kring hem och familj",
+    flowHint:
+      "Mycket är återkommande och osynligt arbete. Lyft fram rutiner och glöm inte återhämtning mellan turerna.",
+  },
+  praktik: {
+    id: "praktik",
+    emoji: "🎓",
+    label: "Praktik / arbetsträning",
+    blurb: "Du är på praktik eller arbetstränar",
+    area: "jobb",
+    flowHint:
+      "Upptrappning tar energi. Håll dagarna rimliga, planera resväg och vila efter passen.",
   },
   annat: {
     id: "annat",
@@ -91,9 +120,14 @@ export const ALL_SITUATIONS: SituationId[] = [
   "foraldraledig",
   "sjukskriven",
   "arbetssokande",
-  "mellan-arbeten",
+  "frilans",
+  "hemma",
+  "praktik",
   "annat",
 ];
+
+/** Äldre situationer som inte visas i väljaren men fortfarande kan vara aktiva. */
+const LEGACY_SITUATIONS: SituationId[] = ["mellan-arbeten"];
 
 export interface SituationEntry {
   /** Aktiv just nu? Inaktiv = vilar, informationen finns kvar. */
@@ -119,7 +153,7 @@ export function isActive(state: SituationState, id: SituationId): boolean {
 }
 
 export function activeSituations(state: SituationState): SituationId[] {
-  return ALL_SITUATIONS.filter((id) => isActive(state, id));
+  return [...ALL_SITUATIONS, ...LEGACY_SITUATIONS].filter((id) => isActive(state, id));
 }
 
 /** Livsområden som situationen vill slå på. */
@@ -196,6 +230,19 @@ export function situationFocus(state: SituationState): SituationFocus {
       boosted.add("uppgift");
       boosted.add("jobb");
     }
+    if (id === "frilans") {
+      boosted.add("jobb");
+      boosted.add("uppgift");
+    }
+    if (id === "hemma") {
+      boosted.add("hemma");
+      boosted.add("barn");
+      boosted.add("relationer");
+    }
+    if (id === "praktik") {
+      boosted.add("jobb");
+      boosted.add("halsa");
+    }
     if (id === "mellan-arbeten") {
       boosted.add("uppgift");
       boosted.add("halsa");
@@ -203,7 +250,10 @@ export function situationFocus(state: SituationState): SituationFocus {
   }
 
   // Det som inte pågår just nu ska inte föreslås först.
-  if (!act.includes("jobb") && !act.includes("arbetssokande")) muted.add("jobb");
+  const worksSomehow = ["jobb", "arbetssokande", "frilans", "praktik"].some((id) =>
+    act.includes(id as SituationId),
+  );
+  if (!worksSomehow) muted.add("jobb");
   if (!act.includes("studier")) muted.add("studier");
 
   const labels = act

@@ -31,10 +31,9 @@ import { useFlowScore } from "@/hooks/use-flowscore";
 import { useFlowStudy, daysUntil, examPhase } from "@/hooks/use-flowstudy";
 import { StudyCalendarSync } from "@/components/study-calendar-sync";
 import CollapsibleSection from "@/components/collapsible-section";
-import StudyProfileCard from "@/components/study-profile-card";
-import StudySuggestions from "@/components/study-suggestions";
-import { useStudyProfile } from "@/hooks/use-study-profile";
-import { studyProfileContext } from "@/lib/study-profile";
+import LifeProfileLink from "@/components/life-profile-link";
+import { useLifeProfile } from "@/hooks/use-life-profile";
+import { lifeProfileContext, toStudyProfile } from "@/lib/life-profile";
 import { ScheduleImport } from "@/components/schedule-import";
 import { NextLectureCard } from "@/components/next-lecture-card";
 import { FlowReplanDiff } from "@/components/flow-replan-diff";
@@ -90,7 +89,7 @@ export default function StudyflowPage() {
   const [rebuild, setRebuild] = useState<ReturnType<typeof rebuildDay> | null>(null);
   const [lectureNotes, setLectureNotes] = useState("");
   const [lecturePrep, setLecturePrep] = useState("");
-  const { profile: studyProfile } = useStudyProfile();
+  const { profile: lifeProfile } = useLifeProfile();
   const [newTask, setNewTask] = useState("");
 
   const voice = useVoiceInput((t) => setLectureNotes((prev) => (prev ? `${prev} ${t}` : t)));
@@ -192,7 +191,7 @@ export default function StudyflowPage() {
     setBusyId(id);
     try {
       const res = await run({
-        data: { title, dueDate, profileContext: studyProfileContext(studyProfile) || undefined },
+        data: { title, dueDate, profileContext: lifeProfileContext(lifeProfile) || undefined },
       });
       addTaskSteps(
         id,
@@ -280,9 +279,7 @@ export default function StudyflowPage() {
             <StudiesSection />
           </TabsContent>
           <TabsContent value="nu" className="mt-4 space-y-5">
-            <StudyProfileCard />
-
-            <StudySuggestions />
+            <LifeProfileLink />
 
             <NextLectureCard />
 

@@ -20,10 +20,10 @@ import { useCourses } from "@/hooks/use-courses";
 import { useToast } from "@/hooks/use-toast";
 import { celebrateFromEvent } from "@/lib/celebrate";
 import { generateStudySet } from "@/lib/flowstudy.functions";
-import StudyProfileCard from "@/components/study-profile-card";
-import { useStudyProfile } from "@/hooks/use-study-profile";
+import LifeProfileLink from "@/components/life-profile-link";
+import { useLifeProfile } from "@/hooks/use-life-profile";
+import { lifeProfileContext, toStudyProfile } from "@/lib/life-profile";
 import {
-  studyProfileContext,
   studyMaterialPlan,
   applyEmphasis,
   EMPHASIS_META,
@@ -55,7 +55,7 @@ export default function StudyBuddyPage() {
   const { activeCourses } = useCourses();
   const { toast } = useToast();
   const run = useServerFn(generateStudySet);
-  const { profile: studyProfile } = useStudyProfile();
+  const { profile: lifeProfile } = useLifeProfile();
   const {
     sets,
     addSet,
@@ -81,7 +81,7 @@ export default function StudyBuddyPage() {
   const [addingId, setAddingId] = useState<string | null>(null);
   const [emphasis, setEmphasis] = useState<StudyEmphasis | null>(null);
 
-  const basePlan = useMemo(() => studyMaterialPlan(studyProfile), [studyProfile]);
+  const basePlan = useMemo(() => studyMaterialPlan(toStudyProfile(lifeProfile)), [lifeProfile]);
   const plan = useMemo(
     () => (emphasis ? applyEmphasis(basePlan, emphasis) : basePlan),
     [basePlan, emphasis],
@@ -120,7 +120,7 @@ export default function StudyBuddyPage() {
           course: courseName(courseId),
           text: text.trim() || undefined,
           file: filePayload,
-          profileContext: studyProfileContext(studyProfile) || undefined,
+          profileContext: lifeProfileContext(lifeProfile) || undefined,
           focus: plan.focus || undefined,
           cardCount: plan.cardCount,
           quizCount: plan.quizCount,
@@ -174,7 +174,7 @@ export default function StudyBuddyPage() {
           </div>
         </header>
 
-        <StudyProfileCard />
+        <LifeProfileLink />
 
         {(stats.dueCards > 0 || stats.dueQuestions > 0) && (
           <p className="text-sm rounded-2xl border border-primary/20 bg-primary/5 p-3">
@@ -242,7 +242,7 @@ export default function StudyBuddyPage() {
                 className="w-full rounded-xl border border-border bg-background p-3 text-sm"
               />
               <div className="rounded-xl border border-border bg-secondary/30 p-3 space-y-2">
-                <p className="text-xs font-medium">Flow anpassar efter din studieprofil</p>
+                <p className="text-xs font-medium">Flow anpassar efter din livsprofil</p>
                 {basePlan.chips.length > 0 ? (
                   <div className="flex flex-wrap gap-1.5">
                     {basePlan.chips.map((c) => (
@@ -256,7 +256,7 @@ export default function StudyBuddyPage() {
                   </div>
                 ) : (
                   <p className="text-xs text-muted-foreground">
-                    Fyll i din studieprofil ovan så anpassas kort och frågor efter dina stödbehov.
+                    Fyll i din livsprofil ovan så anpassas kort och frågor efter dina stödbehov.
                   </p>
                 )}
                 <div className="flex flex-wrap gap-1.5 pt-1">
@@ -427,7 +427,7 @@ export default function StudyBuddyPage() {
                           course: courseName(set.courseId),
                           text: payload.text,
                           file: payload.file,
-                          profileContext: studyProfileContext(studyProfile) || undefined,
+                          profileContext: lifeProfileContext(lifeProfile) || undefined,
                           cardCount: 8,
                           quizCount: 6,
                         },

@@ -73,8 +73,9 @@ import { usePushSubscriptionSync } from "@/hooks/use-push-subscription-sync";
 import { useNotificationActions } from "@/hooks/use-notification-actions";
 
 import { useIsAdmin } from "@/hooks/use-is-admin";
+import { useLifeProfile } from "@/hooks/use-life-profile";
 import { useSituation } from "@/hooks/use-situation";
-import { situationSummary } from "@/lib/situation";
+import { lifeProfileSummary } from "@/lib/life-profile";
 import ViewCollapseToggle from "@/components/view-collapse-toggle";
 
 import { useEnabledAreas } from "@/lib/life-areas";
@@ -435,10 +436,10 @@ export default function Layout({ children }: LayoutProps) {
         ]
       : []),
     {
-      href: "/min-situation",
-      label: "Min situation",
+      href: "/min-livsprofil",
+      label: "Min livsprofil",
       icon: Compass,
-      hint: "Jobb, studier, föräldraledig, sjukskriven – hur livet ser ut just nu",
+      hint: "Din vardag, styrkor, svårigheter och vad du vill ha hjälp med",
     },
     {
       href: "/anpassa-hem",
@@ -531,11 +532,11 @@ export default function Layout({ children }: LayoutProps) {
       {
         id: "ovrigt",
         label: "Inställningar",
-        hint: "Rutiner, min situation, anpassning och feedback",
+        hint: "Rutiner, min livsprofil, anpassning och feedback",
         icon: LayoutGrid,
         hrefs: [
           "/morgonstart",
-          "/min-situation",
+          "/min-livsprofil",
           "/anpassa-hem",
           "/anpassa",
           "/admin",
@@ -552,7 +553,8 @@ export default function Layout({ children }: LayoutProps) {
   const [openCategory, setOpenCategory] = useState<string | null>(null);
   const [navSearch, setNavSearch] = useState("");
   const { situation } = useSituation();
-  const situationLabel = situationSummary(situation) || "Berätta hur livet ser ut just nu";
+  const { profile: lifeProfile } = useLifeProfile();
+  const situationLabel = lifeProfileSummary(lifeProfile, situation);
   // Egna platser i bottennavet – du byter dem själv i "Mer".
   const [navSlots, setNavSlots] = useLocalStorage<string[]>("myflove-bottom-nav-slots", [
     "/min-dag",
@@ -997,9 +999,9 @@ export default function Layout({ children }: LayoutProps) {
                 </>
               ) : (
                 <>
-                  {/* Min situation – alltid överst i Mer */}
+                  {/* Min livsprofil – alltid överst i Mer */}
                   <Link
-                    href="/min-situation"
+                    href="/min-livsprofil"
                     onClick={() => {
                       setMobileMenuOpen(false);
                       setOpenCategory(null);
@@ -1010,7 +1012,7 @@ export default function Layout({ children }: LayoutProps) {
                       <Compass size={22} strokeWidth={2.2} />
                     </span>
                     <span className="min-w-0 flex-1">
-                      <span className="block text-sm font-semibold">Min situation</span>
+                      <span className="block text-sm font-semibold">Min livsprofil</span>
                       <span
                         data-npf="optional"
                         className="block truncate text-xs text-muted-foreground"

@@ -39,6 +39,7 @@ import { Route as AppPomodoroRouteImport } from './routes/_app.pomodoro'
 import { Route as AppPaminnelserRouteImport } from './routes/_app.paminnelser'
 import { Route as AppMorgonstartRouteImport } from './routes/_app.morgonstart'
 import { Route as AppMinSituationRouteImport } from './routes/_app.min-situation'
+import { Route as AppMinLivsprofilRouteImport } from './routes/_app.min-livsprofil'
 import { Route as AppMinDagRouteImport } from './routes/_app.min-dag'
 import { Route as AppMatlistaRouteImport } from './routes/_app.matlista'
 import { Route as AppMaBraRouteImport } from './routes/_app.ma-bra'
@@ -223,6 +224,11 @@ const AppMorgonstartRoute = AppMorgonstartRouteImport.update({
 const AppMinSituationRoute = AppMinSituationRouteImport.update({
   id: '/min-situation',
   path: '/min-situation',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMinLivsprofilRoute = AppMinLivsprofilRouteImport.update({
+  id: '/min-livsprofil',
+  path: '/min-livsprofil',
   getParentRoute: () => AppRoute,
 } as any)
 const AppMinDagRoute = AppMinDagRouteImport.update({
@@ -445,6 +451,7 @@ export interface FileRoutesByFullPath {
   '/ma-bra': typeof AppMaBraRoute
   '/matlista': typeof AppMatlistaRoute
   '/min-dag': typeof AppMinDagRoute
+  '/min-livsprofil': typeof AppMinLivsprofilRoute
   '/min-situation': typeof AppMinSituationRoute
   '/morgonstart': typeof AppMorgonstartRoute
   '/paminnelser': typeof AppPaminnelserRoute
@@ -511,6 +518,7 @@ export interface FileRoutesByTo {
   '/ma-bra': typeof AppMaBraRoute
   '/matlista': typeof AppMatlistaRoute
   '/min-dag': typeof AppMinDagRoute
+  '/min-livsprofil': typeof AppMinLivsprofilRoute
   '/min-situation': typeof AppMinSituationRoute
   '/morgonstart': typeof AppMorgonstartRoute
   '/paminnelser': typeof AppPaminnelserRoute
@@ -579,6 +587,7 @@ export interface FileRoutesById {
   '/_app/ma-bra': typeof AppMaBraRoute
   '/_app/matlista': typeof AppMatlistaRoute
   '/_app/min-dag': typeof AppMinDagRoute
+  '/_app/min-livsprofil': typeof AppMinLivsprofilRoute
   '/_app/min-situation': typeof AppMinSituationRoute
   '/_app/morgonstart': typeof AppMorgonstartRoute
   '/_app/paminnelser': typeof AppPaminnelserRoute
@@ -647,6 +656,7 @@ export interface FileRouteTypes {
     | '/ma-bra'
     | '/matlista'
     | '/min-dag'
+    | '/min-livsprofil'
     | '/min-situation'
     | '/morgonstart'
     | '/paminnelser'
@@ -713,6 +723,7 @@ export interface FileRouteTypes {
     | '/ma-bra'
     | '/matlista'
     | '/min-dag'
+    | '/min-livsprofil'
     | '/min-situation'
     | '/morgonstart'
     | '/paminnelser'
@@ -780,6 +791,7 @@ export interface FileRouteTypes {
     | '/_app/ma-bra'
     | '/_app/matlista'
     | '/_app/min-dag'
+    | '/_app/min-livsprofil'
     | '/_app/min-situation'
     | '/_app/morgonstart'
     | '/_app/paminnelser'
@@ -1039,6 +1051,13 @@ declare module '@tanstack/react-router' {
       path: '/min-situation'
       fullPath: '/min-situation'
       preLoaderRoute: typeof AppMinSituationRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/min-livsprofil': {
+      id: '/_app/min-livsprofil'
+      path: '/min-livsprofil'
+      fullPath: '/min-livsprofil'
+      preLoaderRoute: typeof AppMinLivsprofilRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/min-dag': {
@@ -1317,6 +1336,7 @@ interface AppRouteChildren {
   AppMaBraRoute: typeof AppMaBraRoute
   AppMatlistaRoute: typeof AppMatlistaRoute
   AppMinDagRoute: typeof AppMinDagRoute
+  AppMinLivsprofilRoute: typeof AppMinLivsprofilRoute
   AppMinSituationRoute: typeof AppMinSituationRoute
   AppMorgonstartRoute: typeof AppMorgonstartRoute
   AppPaminnelserRoute: typeof AppPaminnelserRoute
@@ -1366,6 +1386,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppMaBraRoute: AppMaBraRoute,
   AppMatlistaRoute: AppMatlistaRoute,
   AppMinDagRoute: AppMinDagRoute,
+  AppMinLivsprofilRoute: AppMinLivsprofilRoute,
   AppMinSituationRoute: AppMinSituationRoute,
   AppMorgonstartRoute: AppMorgonstartRoute,
   AppPaminnelserRoute: AppPaminnelserRoute,

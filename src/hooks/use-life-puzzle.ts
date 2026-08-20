@@ -5,12 +5,12 @@ import { useStudySchedule } from "@/hooks/use-study-schedule";
 import { useFlowScore } from "@/hooks/use-flowscore";
 import { useChildEvents } from "@/hooks/use-child-events";
 import { getArea } from "@/lib/life-areas";
-import { useWorkProfile } from "@/hooks/use-work-profile";
-import { isMeeting, workDemand, workProfileContext } from "@/lib/work-profile";
-import { useStudyProfile } from "@/hooks/use-study-profile";
+import { isMeeting, workDemand } from "@/lib/work-profile";
+import { useLifeProfile } from "@/hooks/use-life-profile";
+import { lifeProfileContext } from "@/lib/life-profile";
 import { useSituation } from "@/hooks/use-situation";
 import { situationContext } from "@/lib/situation";
-import { isBigAssignment, isExam, studyDemand, studyProfileContext } from "@/lib/study-profile";
+import { isBigAssignment, isExam, studyDemand } from "@/lib/study-profile";
 import {
   buildLifePuzzle,
   emptyAreaLoads,
@@ -44,8 +44,7 @@ export function useLifePuzzle(): {
   const { lectures } = useStudySchedule();
   const { flow, energy, mood, minutesLeft } = useFlowScore();
   const childEvents = useChildEvents();
-  const { profile: workProfile } = useWorkProfile();
-  const { profile: studyProfile } = useStudyProfile();
+  const { profile: lifeProfile } = useLifeProfile();
   const { situation } = useSituation();
 
   const input = useMemo<LifePuzzleInput>(() => {
@@ -108,9 +107,9 @@ export function useLifePuzzle(): {
 
     return {
       situationContext: situationContext(situation),
-      studyContext: studyProfileContext(studyProfile),
+      studyContext: lifeProfileContext(lifeProfile),
       studyDemand: sDemand,
-      workContext: workProfileContext(workProfile),
+      workContext: "",
       workDemand: demand,
       score: flow.score,
       load: flow.load,
@@ -132,8 +131,7 @@ export function useLifePuzzle(): {
     mood,
     minutesLeft,
     openItems.length,
-    workProfile,
-    studyProfile,
+    lifeProfile,
     situation,
   ]);
 
