@@ -124,6 +124,34 @@ const load = () =>
     }
   })());
 
+/** Tvingar en ny inläsning – används när någon loggar in eller ut. */
+const reload = () => {
+  loadPromise = null;
+  setStore({ loading: true });
+  void load();
+};
+
+// Håll storen i takt med inloggningen: loggar man in i samma flik ska
+// posterna dyka upp direkt, och loggar man ut ska de försvinna direkt.
+if (typeof window !== "undefined") {
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (event === "SIGNED_OUT") {
+      loadPromise = null;
+      setStore({ entries: [], presets: [], userId: null, loading: false });
+      return;
+    }
+    if (event === "SIGNED_IN" || event === "USER_UPDATED") {
+      const uid = session?.user?.id ?? null;
+      if (uid !== store.userId) reload();
+    }
+  });
+}
+
+/** Samma sak sparad två gånger inom en minut är nästan alltid ett dubbeltryck. */
+const DUPLICATE_WINDOW_MS = 60_000;
+
+
+
 
 /**
  * Energiflöde™ – det som ger och tar energi. Poster blir aldrig
@@ -164,6 +192,17 @@ export function useEnergyFlow(): {
     async (input: NewEnergyFactor): Promise<EnergyFactorEntry | null> => {
       const uid = store.userId;
       if (!uid) return null;
+      const occurredAt = input.occurredAt ?? new Date().toISOString();
+      // Dubblettspärr: samma aktivitet och riktning inom en minut räknas som
+      // ett dubbeltryck och sparas inte igen.
+      const dup = store.entries.find(
+        (e) =>
+          e.title.trim().toLowerCase() === input.title.trim().toLowerCase() &&
+          e.direction === input.direction &&
+          Math.abs(new Date(e.occurredAt).getTime() - new Date(occurredAt).getTime()) <
+            DUPLICATE_WINDOW_MS,
+      );
+      if (dup) return dup;
       const { data, error } = await supabase
         .from("energy_factors")
         .insert({
@@ -175,7 +214,7 @@ export function useEnergyFlow(): {
           kind: input.kind ?? "vardag",
           friction: input.friction ?? null,
           note: input.note || null,
-          occurred_at: input.occurredAt ?? new Date().toISOString(),
+          occurred_at: occurredAt,
         })
         .select(
           "id, title, direction, strength, category, kind, friction, note, counts_toward_score, occurred_at",
@@ -190,9 +229,13 @@ export function useEnergyFlow(): {
   );
 
   const removeFactor = useCallback(async (id: string) => {
-    setStore({ entries: store.entries.filter((e) => e.id !== id) });
-    await supabase.from("energy_factors").delete().eq("id", id);
+    const prev = store.entries;
+    setStore({ entries: prev.filter((e) => e.id !== id) });
+    const { error } = await supabase.from("energy_factors").delete().eq("id", id);
+    // Gick det inte att ta bort på riktigt ska posten tillbaka i vyn.
+    if (error) setStore({ entries: prev });
   }, []);
+
 
   const updateFactor = useCallback(
     async (
@@ -201,8 +244,9 @@ export function useEnergyFlow(): {
         Pick<EnergyFactorEntry, "direction" | "strength" | "friction" | "kind" | "title">
       >,
     ) => {
-      setStore({ entries: store.entries.map((e) => (e.id === id ? { ...e, ...patch } : e)) });
-      await supabase
+      const prev = store.entries;
+      setStore({ entries: prev.map((e) => (e.id === id ? { ...e, ...patch } : e)) });
+      const { error } = await supabase
         .from("energy_factors")
         .update({
           ...(patch.direction ? { direction: patch.direction } : {}),
@@ -212,16 +256,23 @@ export function useEnergyFlow(): {
           ...(patch.title ? { title: patch.title } : {}),
         })
         .eq("id", id);
+      if (error) setStore({ entries: prev });
     },
     [],
   );
 
   const toggleCounts = useCallback(async (id: string, counts: boolean) => {
+    const prev = store.entries;
     setStore({
-      entries: store.entries.map((e) => (e.id === id ? { ...e, countsTowardScore: counts } : e)),
+      entries: prev.map((e) => (e.id === id ? { ...e, countsTowardScore: counts } : e)),
     });
-    await supabase.from("energy_factors").update({ counts_toward_score: counts }).eq("id", id);
+    const { error } = await supabase
+      .from("energy_factors")
+      .update({ counts_toward_score: counts })
+      .eq("id", id);
+    if (error) setStore({ entries: prev });
   }, []);
+
 
   const addPreset = useCallback(async (input: Omit<EnergyPreset, "id">) => {
     const uid = store.userId;
