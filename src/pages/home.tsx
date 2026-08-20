@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import HomeShortcuts from "@/components/home-shortcuts";
 import { useHomeLayout, type HomeBlockId } from "@/lib/home-layout";
 import { TaskQuickAdd, type QuickAddResult } from "@/components/task-quick-add";
+import DidThisCta from "@/components/did-this-cta";
 import DidThisQuickAdd from "@/components/did-this-quick-add";
 import DayEnergyFlow from "@/components/day-energy-flow";
 import { Link } from "wouter";
