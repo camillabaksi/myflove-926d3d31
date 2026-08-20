@@ -9,7 +9,7 @@ import HelpMeModal from "@/components/help-me-modal";
 import WeatherCard from "@/components/weather-card";
 import ProactiveSuggestions from "@/components/proactive-suggestions";
 import { MyFloveSparkle } from "@/components/myflove/motion";
-import { MyFloveLinkButton } from "@/components/myflove";
+
 import QuickflowCapture from "@/components/quickflow-capture";
 import QuickflowList from "@/components/quickflow-list";
 import PersonalNote from "@/components/personal-note";
@@ -74,7 +74,6 @@ import { useSharedShoppingList } from "@/hooks/use-shared-shopping-list";
 import { getGreeting } from "@/lib/greeting";
 import IntroTour from "@/components/intro-tour";
 import { useUserProfile } from "@/hooks/use-user-profile";
-import { emptyState } from "@/lib/flow-voice";
 import { buildHelpPlan, type HelpFeelingId, type HelpPlan } from "@/lib/help-me";
 import { focusTasksForToday } from "@/lib/focus-rules";
 import { HeartHandshake, CheckCircle2, Circle, Pill, Sparkles, ArrowRight } from "lucide-react";
@@ -339,49 +338,34 @@ export default function Home() {
                 </button>
               )}
 
-              {visibleTasks.length === 0 && !currentFocus && flowFocusIds.length === 0 ? (
-                <div className="text-center py-10 px-6 bg-secondary/30 rounded-3xl border border-dashed border-border animate-fade-in">
-                  <div className="mx-auto mb-3 w-14 h-14 rounded-full bg-sage/40 flex items-center justify-center">
-                    <Sparkles size={26} className="text-primary" />
-                  </div>
-                  <p className="text-ink font-medium">{emptyState.tasks}</p>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Vill du sätta en enda sak för idag? Det räcker gott.
-                  </p>
-                  <MyFloveLinkButton href="/flowplan" variant="primary" size="sm" className="mt-4">
-                    Sätt dagens fokus
-                  </MyFloveLinkButton>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {visibleTasks.map((task, i) => (
-                    <div
-                      key={task.id}
-                      style={{ animationDelay: `${i * 60}ms` }}
-                      className="w-full flex items-center gap-3 p-4 surface-card hover:border-primary/40 hover:shadow-lifted transition-all text-left animate-fade-in"
+              <div className="space-y-3">
+                {visibleTasks.map((task, i) => (
+                  <div
+                    key={task.id}
+                    style={{ animationDelay: `${i * 60}ms` }}
+                    className="w-full flex items-center gap-3 p-4 surface-card hover:border-primary/40 hover:shadow-lifted transition-all text-left animate-fade-in"
+                  >
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        toggleTask(task.id);
+                        celebrateFromEvent(e);
+                      }}
+                      aria-label={`Klarmarkera ${task.title}`}
+                      className="flex flex-1 items-center gap-3 text-left active:scale-[0.99]"
                     >
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          toggleTask(task.id);
-                          celebrateFromEvent(e);
-                        }}
-                        aria-label={`Klarmarkera ${task.title}`}
-                        className="flex flex-1 items-center gap-3 text-left active:scale-[0.99]"
-                      >
-                        <Circle size={20} className="text-muted-foreground shrink-0" />
-                        <span className="flex-1">{task.title}</span>
-                        {task.dueDate && (
-                          <span className="text-xs text-muted-foreground shrink-0">
-                            {task.dueDate}
-                          </span>
-                        )}
-                      </button>
-                      <FlowItemActions itemId={`task-${task.id}`} size={15} />
-                    </div>
-                  ))}
-                </div>
-              )}
+                      <Circle size={20} className="text-muted-foreground shrink-0" />
+                      <span className="flex-1">{task.title}</span>
+                      {task.dueDate && (
+                        <span className="text-xs text-muted-foreground shrink-0">
+                          {task.dueDate}
+                        </span>
+                      )}
+                    </button>
+                    <FlowItemActions itemId={`task-${task.id}`} size={15} />
+                  </div>
+                ))}
+              </div>
 
               {(hiddenTaskCount > 0 || showAllTasks) && (
                 <button
