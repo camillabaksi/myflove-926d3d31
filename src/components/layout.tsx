@@ -100,6 +100,7 @@ const CATEGORY_HUE: Record<string, string> = {
   studyflow: "232 58% 64%",
   workflow: "212 48% 52%",
   travelflow: "172 44% 46%",
+  avancerat: "258 20% 48%",
   ovrigt: "258 12% 52%",
 };
 const catColor = (id: string, alpha?: number) => {
