@@ -446,6 +446,30 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
                 </p>
               </MyFloveCard>
             )}
+
+            {frictionRows.length > 0 && (
+              <MyFloveCard className="space-y-2">
+                <div className="text-sm font-medium text-ink">
+                  Tungt att komma igång med (30 dagar)
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Hög friktion behöver inte betyda hög energikostnad – det betyder att starten är
+                  svår.
+                </p>
+                {frictionRows.map((t) => (
+                  <div key={t.key} className="flex items-center justify-between text-sm">
+                    <span>
+                      {frictionEmoji(Math.round(t.avgFriction))} {t.label}
+                    </span>
+                    <span className="text-muted-foreground">
+                      friktion {t.avgFriction.toFixed(1)} · energi {t.net > 0 ? "+" : ""}
+                      {t.net}
+                    </span>
+                  </div>
+                ))}
+              </MyFloveCard>
+            )}
+
           </div>
         )}
       </CollapsibleSection>
