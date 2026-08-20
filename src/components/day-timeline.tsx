@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { FlowItemActions } from "@/components/flow-item-actions";
+import { useLocalStorage } from "@/lib/storage";
 
 export interface TimelineEntry {
   id: string;
@@ -33,6 +34,10 @@ export default function DayTimeline({
   editable?: boolean;
 }) {
   const [now, setNow] = useState(() => new Date());
+  const [showUntimed, setShowUntimed] = useLocalStorage<boolean>(
+    "myflove-timeline-show-untimed",
+    false,
+  );
 
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), 60_000);
