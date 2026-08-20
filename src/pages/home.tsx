@@ -21,6 +21,7 @@ import QuickflowTriage from "@/components/quickflow-triage";
 import FlowReset from "@/components/flow-reset";
 import DayRebuild from "@/components/day-rebuild";
 import DayTimeline, { type TimelineEntry } from "@/components/day-timeline";
+import EnergyBattery from "@/components/energy-battery";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import type { Routine } from "@/pages/routines";
 
@@ -65,7 +66,15 @@ const SECTION_AREAS: Record<string, LifeArea[]> = {
 };
 
 /** Vad som är kvar i förenklad vy – det du faktiskt behöver just nu. */
-const SIMPLE_SECTIONS = ["livspussel", "dagen", "dailyflow", "medication", "shortcuts", "help"];
+const SIMPLE_SECTIONS = [
+  "batteri",
+  "livspussel",
+  "dagen",
+  "dailyflow",
+  "medication",
+  "shortcuts",
+  "help",
+];
 
 import {
   useFocus,
@@ -336,6 +345,12 @@ export default function Home() {
         <div style={{ order: -1 }}>
           <PersonalNote />
         </div>
+
+        {showSection("batteri") && (
+          <div style={ord("batteri")}>
+            <EnergyBattery />
+          </div>
+        )}
 
         {showSection("livspussel") && (
           <HomeSection

@@ -156,6 +156,9 @@ export function buildBattery(input: BatteryInput): BatteryReading {
     .filter((x): x is { item: BatteryItem; start: number; end: number } => x !== null)
     .sort((a, b) => a.start - b.start);
 
+  // Energiflöde™ syns i den passerade delen: det har redan hänt.
+  const flowPart = flowNet * 1.5;
+
   const slots: BatterySlot[] = [];
   for (let m = BATTERY_START_HOUR * 60; m <= BATTERY_END_HOUR * 60; m += SLOT_MINUTES) {
     // Ackumulerad påverkan av allt som avslutats fram till den här punkten.
@@ -164,13 +167,10 @@ export function buildBattery(input: BatteryInput): BatteryReading {
       if (t.end <= m) effect += itemCost(t.item);
     }
     const past = m <= nowMinutes;
-    const flowPart = past ? flowNet * 1.5 : flowNet * 1.5;
-    const level = clamp(baseAt(m) + offset + effect + (past ? 0 : 0) + flowPart * 0);
     slots.push({
       minutes: m,
       time: minutesToTime(m),
-      // Historik ritas som den var; framtiden inkluderar kommande kostnader.
-      level: past ? clamp(baseAt(m) + offset + effect + flowPart * 0) : level,
+      level: clamp(baseAt(m) + offset + effect + flowPart),
       past,
     });
   }
