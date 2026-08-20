@@ -10,6 +10,8 @@ import {
   FRICTIONS,
   FRICTION_META,
   WHEN_CHOICES,
+  laterTodayTime,
+  nowTime,
   resolveWhen,
   todayISO,
   type EnergyImpact,
@@ -27,7 +29,7 @@ export interface QuickAddResult {
 
 /**
  * ＋ Lägg till – hela poängen är att det ska gå på några sekunder.
- * Skriv, tryck spara. Allt annat är frivilligt.
+ * Skriv, välj energi och föreslagen tid, tryck spara. Allt annat är frivilligt.
  */
 export function TaskQuickAdd({
   onAdd,
@@ -38,19 +40,41 @@ export function TaskQuickAdd({
 }) {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
-  const [when, setWhen] = useState<WhenChoice>("ingen");
+  const [when, setWhen] = useState<WhenChoice>("valj");
   const [date, setDate] = useState(todayISO());
-  const [time, setTime] = useState("");
+  const [time, setTime] = useState(nowTime());
   const [energy, setEnergy] = useState<EnergyImpact | undefined>();
   const [friction, setFriction] = useState<TaskFriction | undefined>();
 
   const reset = () => {
     setTitle("");
-    setWhen("ingen");
+    setWhen("valj");
     setDate(todayISO());
-    setTime("");
+    setTime(nowTime());
     setEnergy(undefined);
     setFriction(undefined);
+  };
+
+  const applyWhen = (choice: WhenChoice) => {
+    setWhen(choice);
+    switch (choice) {
+      case "nu":
+        setDate(todayISO());
+        setTime(nowTime());
+        break;
+      case "senare-idag":
+        setDate(todayISO());
+        setTime(laterTodayTime());
+        break;
+      case "ingen":
+        setDate(todayISO());
+        setTime("");
+        break;
+      case "valj":
+        setDate((d) => d || todayISO());
+        setTime((t) => t || nowTime());
+        break;
+    }
   };
 
   const save = () => {
@@ -69,6 +93,8 @@ export function TaskQuickAdd({
         ? "border-primary bg-primary/10 text-primary"
         : "border-border bg-background text-muted-foreground hover:text-foreground",
     );
+
+  const noTime = when === "ingen";
 
   return (
     <>
@@ -116,36 +142,41 @@ export function TaskQuickAdd({
                   <button
                     key={c.id}
                     type="button"
-                    onClick={() => setWhen(c.id)}
+                    onClick={() => applyWhen(c.id)}
                     className={chip(when === c.id)}
                   >
                     {c.emoji} {c.label}
                   </button>
                 ))}
               </div>
+              <div className="grid grid-cols-2 gap-2 pt-1">
+                <Input
+                  type="date"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                  disabled={noTime}
+                  className="h-11 rounded-xl bg-background text-sm disabled:opacity-50"
+                  aria-label="Datum"
+                />
+                <Input
+                  type="time"
+                  value={time}
+                  onChange={(e) => setTime(e.target.value)}
+                  disabled={noTime}
+                  className="h-11 rounded-xl bg-background text-sm disabled:opacity-50"
+                  aria-label="Föreslagen tid"
+                />
+              </div>
               {when === "valj" && (
-                <div className="grid grid-cols-2 gap-2 pt-1">
-                  <Input
-                    type="date"
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)}
-                    className="h-11 rounded-xl bg-background text-sm"
-                    aria-label="Datum"
-                  />
-                  <Input
-                    type="time"
-                    value={time}
-                    onChange={(e) => setTime(e.target.value)}
-                    className="h-11 rounded-xl bg-background text-sm"
-                    aria-label="Tid"
-                  />
-                </div>
+                <p className="text-xs text-muted-foreground">
+                  Föreslagen tid är ifylld – ändra eller lämna blankt om det inte behöver en tid.
+                </p>
               )}
             </div>
 
             <div className="space-y-2">
               <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Energi (valfritt)
+                Hur påverkar det din energi?
               </p>
               <div className="flex flex-wrap gap-2">
                 {ENERGY_IMPACTS.map((id) => (
