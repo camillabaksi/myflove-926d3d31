@@ -185,7 +185,11 @@ export function useTasks() {
         | "area"
         | "kind"
         | "waitingOn"
+        | "energyImpact"
+        | "friction"
+        | "actualEnergy"
       >
+
     >,
   ) => {
     setTasks((prev) =>
