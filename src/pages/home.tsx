@@ -20,6 +20,9 @@ import LifePuzzleCard from "@/components/life-puzzle-card";
 import QuickflowTriage from "@/components/quickflow-triage";
 import FlowReset from "@/components/flow-reset";
 import DayRebuild from "@/components/day-rebuild";
+import DayTimeline, { type TimelineEntry } from "@/components/day-timeline";
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
+import type { Routine } from "@/pages/routines";
 
 import FlowOnboarding from "@/components/flow-onboarding";
 import StreakCard from "@/components/streak-card";
@@ -111,6 +114,7 @@ export default function Home() {
   const { transactions } = useFinances();
   const { medications, isTaken, toggleTaken } = useMedications();
   const { activeItems: _shoppingItems } = useSharedShoppingList();
+  const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
 
   const [helpModalOpen, setHelpModalOpen] = useState(false);
   const [overwhelmedOpen, setOverwhelmedOpen] = useState(false);
