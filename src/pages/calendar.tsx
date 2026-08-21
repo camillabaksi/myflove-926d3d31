@@ -1034,7 +1034,7 @@ export default function CalendarPage() {
               />
             )}
 
-            <div className="space-y-3">
+            <div className={`space-y-3 ${allInDay ? "hidden" : ""}`}>
               {/* Samma händelse för flera barn (t.ex. lämning av Bella och Bianca) visas ihop. */}
               {(() => {
                 type ChildEv = (typeof selectedItems.childEvents)[number];
