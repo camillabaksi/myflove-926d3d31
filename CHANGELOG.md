@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-21 – Tillgänglighet i kalendern
+
+- Segmentknapparna 📅 Tidslinje och ✨ Allt i dagen har nu `role="tab"`, `aria-selected` och `tabindex` så skärmläsare tydligt ser vilket visningsläge som är aktivt.
+- Växlaren ligger i `role="tablist"` med beskrivande `aria-label="Visningsläge för dagen"`.
+
 ## 2026-08-21 – Tidslinje eller Allt i dagen
 
 - ✨ Allt i dagen är nu ett alternativt visningsläge i kalendern i stället för en extra lista under den vanliga vyn.
