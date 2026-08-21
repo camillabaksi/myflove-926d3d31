@@ -3,6 +3,7 @@ import HomeShortcuts from "@/components/home-shortcuts";
 import { useHomeLayout, type HomeBlockId } from "@/lib/home-layout";
 import { TaskQuickAdd, type QuickAddResult } from "@/components/task-quick-add";
 import DidThisCta from "@/components/did-this-cta";
+import TodayTasks from "@/components/today-tasks";
 import DidThisQuickAdd from "@/components/did-this-quick-add";
 import DayEnergyFlow from "@/components/day-energy-flow";
 import { Link } from "wouter";
@@ -302,6 +303,13 @@ export default function Home() {
               </div>
             )}
           </section>
+        )}
+
+        {/* Dagens uppgifter – samma kort och avbockning som i Min dag */}
+        {shows("idag") && (
+          <div style={pos("idag")}>
+            <TodayTasks />
+          </div>
         )}
 
         {/* Ett Flow-förslag – samma svar som Flow → NU */}
