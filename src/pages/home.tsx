@@ -391,7 +391,7 @@ export default function Home() {
               className="flex flex-col items-center gap-2 rounded-2xl border border-border/60 bg-card p-4 text-center shadow-soft transition-colors hover:border-primary/40 hover:bg-primary/5"
             >
               <CalendarDays size={22} className="text-primary" />
-              <span className="text-xs font-medium text-ink">Min dag</span>
+              <span className="text-xs font-medium text-ink">Idag</span>
             </Link>
             <Link
               href="/quickflow"

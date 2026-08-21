@@ -30,7 +30,7 @@ export const HOME_BLOCKS: HomeBlockMeta[] = [
   { id: "forslag", label: "Flow-förslag", hint: "Ett förslag – samma som Flow → NU" },
   { id: "lagg-till", label: "Lägg till", hint: "Snabbknapp för ny uppgift" },
   { id: "genvagar", label: "Dina genvägar", hint: "Fyra egna favoriter du väljer själv" },
-  { id: "vagar", label: "Korta vägar", hint: "Min dag · QuickFlow · Flow" },
+  { id: "vagar", label: "Korta vägar", hint: "Idag · QuickFlow · Flow" },
   { id: "omrade", label: "Områdesväljare", hint: "Vilket rum du är i" },
   { id: "gjort", label: "Lägg till det du gjorde", hint: "Snabb registrering av vardagssaker" },
   {

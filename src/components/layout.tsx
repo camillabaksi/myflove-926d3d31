@@ -260,9 +260,9 @@ export default function Layout({ children }: LayoutProps) {
     { href: "/hem", label: "Hem", icon: Home, hint: "Din överblick över dagen", essential: true },
     {
       href: "/idag",
-      label: "Min dag",
-      icon: CalendarDays,
-      hint: "Dagens plan: hållpunkter, en viktig sak och det du orkar",
+      label: "Idag",
+      icon: Heart,
+      hint: "Dagens allt – i Flow-läge eller som lista",
       essential: true,
     },
     {
@@ -314,8 +314,7 @@ export default function Layout({ children }: LayoutProps) {
       href: "/tasks",
       label: "Att göra",
       icon: CheckSquare,
-      hint: "Din lista med saker att göra",
-      essential: true,
+      hint: "Hela listan – även kommande dagar",
     },
     { href: "/flowscore", label: "FlowScore", icon: Gauge, hint: "Hur mycket du orkar just idag" },
     {
@@ -468,8 +467,8 @@ export default function Layout({ children }: LayoutProps) {
     }[] = [
       {
         id: "myflow",
-        label: "Min dag",
-        hint: "Kalender, att göra och dagens hållpunkter",
+        label: "Idag & planera",
+        hint: "Dagen, kalendern, att göra och rutiner",
         icon: CalendarDays,
         hrefs: ["/idag", "/kalender", "/tasks", "/daglig-rutin", "/paminnelser", "/pomodoro"],
       },
@@ -850,7 +849,7 @@ export default function Layout({ children }: LayoutProps) {
 
       <QuickflowFab />
 
-      {/* Mobile Bottom Bar – Hem · Min dag · QuickFlow · Flow · Mer */}
+      {/* Mobile Bottom Bar – Hem · Idag · QuickFlow · Flow · Mer */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-md border-t border-border/70 pb-[env(safe-area-inset-bottom)] z-40">
         <div className="flex items-end justify-around px-1 pt-1.5 pb-1">
           {primaryNav.slice(0, 2).map((item) => (
@@ -1043,7 +1042,7 @@ export default function Layout({ children }: LayoutProps) {
                         <p className="text-sm font-semibold">Din bottenmeny</p>
                         <p data-npf="optional" className="text-xs text-muted-foreground">
                           Hem, QuickFlow och Mer ligger fast. Två platser väljer du själv – normalt
-                          Min dag och Flow.
+                          Idag och Flow.
                         </p>
                       </div>
                       <Button
