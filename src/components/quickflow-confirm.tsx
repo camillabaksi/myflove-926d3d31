@@ -49,8 +49,12 @@ export function QuickflowConfirm({
 
   /** Spara texten precis som den är – ingen struktur påtvingad. */
   const keepAsIs = () => {
-    addQuickflow({ text, level: "tanke" });
-    log("quickflow");
+    // flushSync: dialogen stängs direkt efteråt – utan detta hinner inte
+    // state-uppdateringen (och därmed sparningen) köras innan unmount.
+    flushSync(() => {
+      addQuickflow({ text, level: "tanke" });
+      log("quickflow");
+    });
     toast.success("Jag håller det åt dig. 💙", {
       description: "Den ligger som en öppen tanke i QuickFlow.",
     });
@@ -61,27 +65,30 @@ export function QuickflowConfirm({
     const active = rows.filter((r) => r.on);
     if (active.length === 0) return keepAsIs();
 
-    for (const r of active) {
-      if (r.kind === "inkop") {
-        addShoppingItem(r.title);
-        continue;
+    flushSync(() => {
+      for (const r of active) {
+        if (r.kind === "inkop") {
+          addShoppingItem(r.title);
+          continue;
+        }
+        addTask(r.title, r.date, {
+          area: r.area,
+          ...(r.time ? { time: r.time } : {}),
+          ...(r.place ? { note: `📍 ${r.place}` } : {}),
+        });
+        if (r.remind && r.date) {
+          addReminder(r.title, r.date, r.time ?? "09:00");
+        }
       }
-      addTask(r.title, r.date, {
-        area: r.area,
-        ...(r.time ? { time: r.time } : {}),
-        ...(r.place ? { note: `📍 ${r.place}` } : {}),
-      });
-      if (r.remind && r.date) {
-        addReminder(r.title, r.date, r.time ?? "09:00");
-      }
-    }
-    log("quickflow");
-    log("planering");
+      log("quickflow");
+      log("planering");
+    });
     toast.success("Klart – jag har lagt det på plats. 💙", {
       description: active.map((r) => `${KIND_META[r.kind].emoji} ${r.title}`).join(" · "),
     });
     onDone();
   };
+
 
   if (rows.length === 0) {
     return (
