@@ -155,7 +155,12 @@ export default function CalendarPage() {
   // Globalt bildstöd (Anpassa appen) slår på symboler överallt där det finns.
   const pictoMode = pictoStored || npfSettings.pictograms;
   // ✨ Allt i dagen – utökad vy av samma dag (samma data, samma status).
-  const [allInDay, setAllInDay] = useLocalStorage<boolean>("myflove-calendar-all-in-day", false);
+  // Valet sparas per datum, så att en dag du öppnat "Allt i dagen" på kommer
+  // ihåg det nästa gång du står på just den dagen.
+  const [allInDayByDate, setAllInDayByDate] = useLocalStorage<Record<string, boolean>>(
+    "myflove-calendar-all-in-day-dates",
+    {},
+  );
 
   const [visible, setVisible] = useLocalStorage<CalCategory[]>(
     "myflove-calendar-categories",
@@ -174,6 +179,9 @@ export default function CalendarPage() {
   const [selectedDateStr, setSelectedDateStr] = useState(
     new Date().toLocaleDateString("sv-SE").split(" ")[0], // fallback format YYYY-MM-DD
   );
+  const allInDay = !!allInDayByDate[selectedDateStr];
+  const setAllInDay = (on: boolean) =>
+    setAllInDayByDate((prev) => ({ ...prev, [selectedDateStr]: on }));
   const [isAddingEvent, setIsAddingEvent] = useState(false);
   const [isAddingAny, setIsAddingAny] = useState(false);
   const [newCat, setNewCat] = useState<CalCategory>("privat");
