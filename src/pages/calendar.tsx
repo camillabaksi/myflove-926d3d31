@@ -975,7 +975,8 @@ export default function CalendarPage() {
                 </div>
               )}
 
-            {selectedItems.recurring.length > 0 && (
+            {!allInDay && selectedItems.recurring.length > 0 && (
+
               <div className="flex flex-wrap items-center gap-2 px-1">
                 <span className="text-xs uppercase tracking-wider text-muted-foreground">
                   Återkommande
