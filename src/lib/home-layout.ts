@@ -6,6 +6,7 @@ import { useCloudSyncedStorage } from "@/lib/cloud-storage";
  * Hälsningen ligger alltid överst och går inte att stänga av.
  */
 export type HomeBlockId =
+  | "checkin"
   | "batteri"
   | "nasta"
   | "idag"
@@ -24,6 +25,11 @@ export interface HomeBlockMeta {
 }
 
 export const HOME_BLOCKS: HomeBlockMeta[] = [
+  {
+    id: "checkin",
+    label: "Hur är det just nu?",
+    hint: "Snabb registrering av mående och energi",
+  },
   { id: "batteri", label: "Mitt batteri", hint: "Din energi just nu" },
   { id: "nasta", label: "Nästa", hint: "Nästa sak som händer idag" },
   { id: "idag", label: "Idag", hint: "Bocka av dagens saker och se vad du redan gjort" },

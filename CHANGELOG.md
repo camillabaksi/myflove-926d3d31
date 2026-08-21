@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-21 – Snabb registrering av mående och energi
+
+- Ny sektion ❤️ Hur är det just nu? på Hem och i ❤️ Idag – ett tryck registrerar mående (😞–😍) och ett tryck registrerar energi (🔋 1–5).
+- Mående och energi är två separata värden och kan ändras hur många gånger som helst under dagen.
+- Samma sparade värden visas i Hem och Idag – inga separata registreringar per vy. Mående sparas i befintlig måendelogg, energi i befintlig energilogg med datum och tid för framtida historik.
+- Liten ＋ Logga-meny ger snabb väg till Mående, Energi och Anteckning. Sektionen går att minimera men är öppen som standard.
+
 ## 2026-08-21 – Minimering som genomgående UX-princip
 
 - Samma minimerbara sektion (`CollapsibleSection`) används nu även på Hem (Nästa, Flow-förslag), i Flow → Idag (Dagens belastning), i ❤️ Idag (Dagens energibalans, Dagens lista) och i Min livsprofil.

@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Snabb registrering av mående och energi – ❤️ Hur är det just nu? på Hem och i ❤️ Idag: ett tryck för mående (😞–😍) och ett tryck för energi (🔋 1–5), två separata värden som går att ändra under dagen och som visas likadant i båda vyerna (2026-08-21)",
       "Minimering som genomgående UX-princip – större informationssektioner på Hem, i Flow, ❤️ Idag och Min livsprofil kan minimeras med samma pil, animation och sparade läge. Bara presentation – data, status och avbockning påverkas inte (2026-08-21)",
       "Minimerbara sektioner tillbaka – 🕒 Under klockslag, 🌿 Under dagen och ☑️ Genomfört idag går åter att minimera/expandera med samma stil som resten av appen. Valet sparas och påverkar varken data eller avbockning (2026-08-21)",
       'Tillgänglighet i kalendern – växlaren 📅 Tidslinje | ✨ Allt i dagen använder nu `role="tablist"` / `role="tab"` med `aria-selected` och rätt `tabindex`, så skärmläsare ser vilket läge som är aktivt (2026-08-21)',
