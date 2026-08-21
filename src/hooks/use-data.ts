@@ -189,7 +189,6 @@ export function useTasks() {
         | "friction"
         | "actualEnergy"
       >
-
     >,
   ) => {
     setTasks((prev) =>
@@ -265,7 +264,6 @@ export function useTasks() {
   };
 
   const setTaskKind = (id: string, kind: TaskKind) => {
-
     setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, kind } : t)));
   };
 

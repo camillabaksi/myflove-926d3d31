@@ -113,7 +113,6 @@ export const ALL_AREAS: LifeArea[] = [
 ];
 const CORE_AREAS: LifeArea[] = ALL_AREAS.filter((a) => AREA_META[a].core);
 
-
 const AREAS_KEY = "myflove-areas";
 const ONBOARDED_KEY = "myflove-areas-onboarded";
 const ACTIVE_KEY = "myflove-active-area";
