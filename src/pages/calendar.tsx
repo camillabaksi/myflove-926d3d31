@@ -179,6 +179,9 @@ export default function CalendarPage() {
   const [selectedDateStr, setSelectedDateStr] = useState(
     new Date().toLocaleDateString("sv-SE").split(" ")[0], // fallback format YYYY-MM-DD
   );
+  const allInDay = !!allInDayByDate[selectedDateStr];
+  const setAllInDay = (on: boolean) =>
+    setAllInDayByDate((prev) => ({ ...prev, [selectedDateStr]: on }));
   const [isAddingEvent, setIsAddingEvent] = useState(false);
   const [isAddingAny, setIsAddingAny] = useState(false);
   const [newCat, setNewCat] = useState<CalCategory>("privat");
