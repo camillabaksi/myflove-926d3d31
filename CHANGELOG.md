@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-21 – Startsidan i mobil
+
+- Hero-rubriken är mindre och radbryts snyggt på mobil – den krockar inte längre med den lila bakgrundsbubblan.
+- Bakgrundsbubblorna är mjukare och nedtonade i mobilstorlek.
+- Rubriker och sektionsmarginaler är anpassade för små skärmar, så sidan känns lugnare och mindre trång.
+
 ## 2026-08-21 – QuickFlow fångar klockslag
 
 - QuickFlow förstår nu "idag", "i dag" och "ikväll" – tidigare hamnade de utan datum.

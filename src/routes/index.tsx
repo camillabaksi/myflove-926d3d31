@@ -47,21 +47,22 @@ function LandingPage() {
   return (
     <main className="min-h-screen bg-[#F8F5FE] text-[#2A2140]">
       {/* ── Hero ─────────────────────────────────────────── */}
-      <section className="relative overflow-hidden px-6 pt-16 pb-20 md:pt-24 md:pb-28">
-        <div className="pointer-events-none absolute -top-40 -right-24 h-[420px] w-[420px] rounded-full bg-gradient-to-br from-[#A78BFA] to-[#7C5CE0] opacity-80 blur-sm" />
-        <div className="pointer-events-none absolute -bottom-32 -left-16 h-[320px] w-[320px] rounded-full bg-[#C4B5FD] opacity-50" />
+      <section className="relative overflow-hidden px-5 pt-14 pb-16 sm:px-6 md:pt-24 md:pb-28">
+        <div className="pointer-events-none absolute -top-32 -right-28 h-[260px] w-[260px] rounded-full bg-gradient-to-br from-[#A78BFA] to-[#7C5CE0] opacity-40 blur-2xl sm:-top-40 sm:-right-24 sm:h-[420px] sm:w-[420px] sm:opacity-80 sm:blur-sm" />
+        <div className="pointer-events-none absolute -bottom-28 -left-20 h-[220px] w-[220px] rounded-full bg-[#C4B5FD] opacity-30 blur-2xl sm:-bottom-32 sm:-left-16 sm:h-[320px] sm:w-[320px] sm:opacity-50 sm:blur-none" />
         <div className="relative mx-auto max-w-3xl text-center">
-          <p className="text-xs uppercase tracking-[0.35em] text-[#7C5CE0] font-semibold">
+          <p className="text-[11px] uppercase tracking-[0.3em] text-[#7C5CE0] font-semibold sm:text-xs sm:tracking-[0.35em]">
             MyFlove
           </p>
-          <h1 className="mt-4 font-display text-5xl md:text-7xl font-bold leading-[0.95] tracking-tight">
+          <h1 className="mt-4 text-balance font-display text-[2rem] leading-[1.1] tracking-tight font-bold sm:text-5xl sm:leading-[0.95] md:text-7xl">
             MyFlove – lugn planering för ADHD, autism och ett fullt huvud
           </h1>
 
-          <p className="mt-6 text-lg md:text-xl text-[#6B647F] max-w-xl mx-auto leading-relaxed">
+          <p className="mt-5 text-base text-[#6B647F] max-w-xl mx-auto leading-relaxed sm:mt-6 sm:text-lg md:text-xl">
             Ett lugnare hem för hjärnan – för dig som lever med ADHD, autism eller bara mycket i
-            huvudet. 💙
+            huvudet.
           </p>
+
           <div className="mt-10 flex flex-col sm:flex-row gap-3 justify-center">
             <Button
               asChild
@@ -83,12 +84,12 @@ function LandingPage() {
       </section>
 
       {/* ── Flow talar ────────────────────────────────────── */}
-      <section className="px-6 py-20 md:py-28">
+      <section className="px-5 py-14 sm:px-6 sm:py-20 md:py-28">
         <div className="mx-auto max-w-5xl">
           <p className="text-xs uppercase tracking-[0.3em] text-[#7C5CE0] font-semibold">
             Flow talar
           </p>
-          <h2 className="mt-3 font-display text-4xl md:text-5xl font-bold leading-tight">
+          <h2 className="mt-3 font-display text-3xl sm:text-4xl md:text-5xl font-bold leading-tight">
             Som en vän i fickan.
           </h2>
           <p className="mt-4 text-[#6B647F] max-w-xl">
@@ -114,12 +115,12 @@ function LandingPage() {
       </section>
 
       {/* ── Alla moduler hänger ihop ─────────────────────── */}
-      <section className="px-6 py-20 md:py-28 bg-[#F1ECFC]">
+      <section className="px-5 py-14 sm:px-6 sm:py-20 md:py-28 bg-[#F1ECFC]">
         <div className="mx-auto max-w-5xl">
           <p className="text-xs uppercase tracking-[0.3em] text-[#7C5CE0] font-semibold">
             Allt hänger ihop
           </p>
-          <h2 className="mt-3 font-display text-4xl md:text-5xl font-bold leading-tight">
+          <h2 className="mt-3 font-display text-3xl sm:text-4xl md:text-5xl font-bold leading-tight">
             En hjärna. Inte sju appar.
           </h2>
           <p className="mt-4 text-[#6B647F] max-w-2xl">
@@ -161,12 +162,12 @@ function LandingPage() {
       </section>
 
       {/* ── Scenarier ───────────────────────────────────── */}
-      <section className="px-6 py-20 md:py-28">
+      <section className="px-5 py-14 sm:px-6 sm:py-20 md:py-28">
         <div className="mx-auto max-w-5xl">
           <p className="text-xs uppercase tracking-[0.3em] text-[#7C5CE0] font-semibold">
             I vardagen
           </p>
-          <h2 className="mt-3 font-display text-4xl md:text-5xl font-bold leading-tight">
+          <h2 className="mt-3 font-display text-3xl sm:text-4xl md:text-5xl font-bold leading-tight">
             När livet skaver – finns Flow där.
           </h2>
 
@@ -204,13 +205,13 @@ function LandingPage() {
       </section>
 
       {/* ── FlowPlan ────────────────────────────────────── */}
-      <section className="px-6 py-20 md:py-28 bg-[#2A2140] text-[#FBF9FF] relative overflow-hidden">
+      <section className="px-5 py-14 sm:px-6 sm:py-20 md:py-28 bg-[#2A2140] text-[#FBF9FF] relative overflow-hidden">
         <div className="pointer-events-none absolute -top-32 -left-20 h-[300px] w-[300px] rounded-full bg-[#F5B8D0] opacity-20" />
         <div className="mx-auto max-w-5xl relative">
           <p className="text-xs uppercase tracking-[0.3em] text-[#F5B8D0] font-semibold">
             FlowPlan™
           </p>
-          <h2 className="mt-3 font-display text-4xl md:text-5xl font-bold leading-tight">
+          <h2 className="mt-3 font-display text-3xl sm:text-4xl md:text-5xl font-bold leading-tight">
             Rätt sak, i rätt ordning.
           </h2>
           <p className="mt-4 text-white/70 max-w-xl">
@@ -281,14 +282,14 @@ function LandingPage() {
       </section>
 
       {/* ── Känslan ─────────────────────────────────────── */}
-      <section className="px-6 py-20 md:py-28">
+      <section className="px-5 py-14 sm:px-6 sm:py-20 md:py-28">
         <div className="mx-auto max-w-4xl">
           <div className="grid md:grid-cols-2 gap-10 items-center">
             <div className="space-y-1">
               {["lugn.", "trygghet.", "värme.", "enkelhet.", "mindre att bära."].map((w) => (
                 <div
                   key={w}
-                  className="font-display text-4xl md:text-5xl font-bold leading-tight text-[#2A2140]"
+                  className="font-display text-3xl sm:text-4xl md:text-5xl font-bold leading-tight text-[#2A2140]"
                 >
                   {w}
                 </div>
@@ -304,14 +305,14 @@ function LandingPage() {
       </section>
 
       {/* ── Vision / avslut ─────────────────────────────── */}
-      <section className="px-6 py-24 md:py-32 bg-[#2A2140] text-[#FBF9FF] relative overflow-hidden">
+      <section className="px-5 py-16 sm:px-6 sm:py-24 md:py-32 bg-[#2A2140] text-[#FBF9FF] relative overflow-hidden">
         <div className="pointer-events-none absolute -top-40 -left-20 h-[500px] w-[500px] rounded-full bg-[#7C5CE0] opacity-30 blur-md" />
         <div className="pointer-events-none absolute -bottom-40 -right-24 h-[460px] w-[460px] rounded-full bg-[#C4B5FD] opacity-25" />
         <div className="relative mx-auto max-w-3xl text-center">
           <p className="text-xs uppercase tracking-[0.4em] text-[#F5B8D0] font-semibold">
             Vår vision
           </p>
-          <h2 className="mt-6 font-display text-4xl md:text-6xl font-bold leading-[1.05] tracking-tight">
+          <h2 className="mt-6 font-display text-3xl sm:text-4xl md:text-6xl font-bold leading-[1.05] tracking-tight">
             Vi bygger inte funktioner.
             <br />
             Vi löser vardagsfriktion.
@@ -321,7 +322,7 @@ function LandingPage() {
           </p>
           <p className="mt-10 text-white/70 text-base md:text-lg leading-relaxed max-w-xl mx-auto">
             Du öppnar inte en app. Du möter Flow – en lugn, intelligent följeslagare som hjälper dig
-            genom vardagen. 💙
+            genom vardagen.
           </p>
           <div className="mt-10">
             <Button
