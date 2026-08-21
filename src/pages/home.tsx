@@ -8,6 +8,7 @@ import DidThisQuickAdd from "@/components/did-this-quick-add";
 import DayEnergyFlow from "@/components/day-energy-flow";
 import { Link } from "wouter";
 import Layout from "@/components/layout";
+import CollapsibleSection from "@/components/collapsible-section";
 import EnergyBattery from "@/components/energy-battery";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
 import { useUserProfile } from "@/hooks/use-user-profile";
@@ -267,13 +268,16 @@ export default function Home() {
             className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
             aria-label="Nästa aktivitet"
           >
-            <div className="flex items-center gap-2 mb-3">
-              <CalendarDays size={18} className="text-primary" />
-              <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-                Nästa
-              </h2>
-            </div>
-
+            <CollapsibleSection
+              id="hem::nasta"
+              title={
+                <span className="flex items-center gap-2">
+                  <CalendarDays size={18} className="text-primary" aria-hidden="true" /> Nästa
+                </span>
+              }
+              headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
+              className="space-y-3"
+            >
             {nextEvent ? (
               <Link
                 href="/idag"
@@ -301,6 +305,7 @@ export default function Home() {
                 den upp här.
               </div>
             )}
+            </CollapsibleSection>
           </section>
         )}
 
@@ -318,12 +323,16 @@ export default function Home() {
             className="rounded-3xl border border-primary/20 bg-primary/5 p-5 shadow-soft"
             aria-label="Flow-förslag"
           >
-            <div className="flex items-center gap-2 mb-3">
-              <Sparkles size={18} className="text-primary" />
-              <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-                Flow-förslag
-              </h2>
-            </div>
+            <CollapsibleSection
+              id="hem::flow-forslag"
+              title={
+                <span className="flex items-center gap-2">
+                  <Sparkles size={18} className="text-primary" aria-hidden="true" /> Flow-förslag
+                </span>
+              }
+              headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
+              className="space-y-3"
+            >
             <p className="text-ink leading-relaxed">{suggestion.headline}</p>
             {suggestion.task && (
               <p className="mt-2 text-sm text-muted-foreground">
@@ -338,6 +347,7 @@ export default function Home() {
             >
               {suggestion.task ? "Öppna i Flow" : "Lägg till något"} <ArrowRight size={14} />
             </Link>
+            </CollapsibleSection>
           </section>
         )}
 

@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Minimering som genomgående UX-princip – större informationssektioner på Hem, i Flow, ❤️ Idag och Min livsprofil kan minimeras med samma pil, animation och sparade läge. Bara presentation – data, status och avbockning påverkas inte (2026-08-21)",
       "Minimerbara sektioner tillbaka – 🕒 Under klockslag, 🌿 Under dagen och ☑️ Genomfört idag går åter att minimera/expandera med samma stil som resten av appen. Valet sparas och påverkar varken data eller avbockning (2026-08-21)",
       "Tillgänglighet i kalendern – växlaren 📅 Tidslinje | ✨ Allt i dagen använder nu `role=\"tablist\"` / `role=\"tab\"` med `aria-selected` och rätt `tabindex`, så skärmläsare ser vilket läge som är aktivt (2026-08-21)",
       "Tidslinje eller Allt i dagen – ✨ Allt i dagen är nu ett eget visningsläge i kalendern (📅 Tidslinje | ✨ Allt i dagen) i stället för en extra lista under kalendern, så inget visas dubbelt. Avbockning synkas som vanligt med ❤️ Idag, Hem och Att göra (2026-08-21)",
