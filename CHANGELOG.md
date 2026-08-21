@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-21 – En logg per dag för mående och energi
+
+- Ändrar du dagens mående- eller energivärde flera gånger uppdateras samma post i stället för att nya loggrader skapas – även vid snabba upprepade sparningar.
+- Sparningarna körs i tur och ordning, så en dag alltid har en enda registrering per värde.
+
 ## 2026-08-21 – Mående och energi som 1–10-sliders
 
 - ❤️ Hur är det just nu? på Hem använder nu mjuka horisontella sliders 1–10 för mående (😞 → 😍) och energi (🪫 → 🔋), med valt värde tydligt visat som t.ex. 7/10.

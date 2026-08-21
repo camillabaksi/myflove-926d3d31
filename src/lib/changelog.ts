@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "En logg per dag för mående och energi – ändringar av dagens värden uppdaterar samma post i stället för att skapa nya loggrader, även vid snabba upprepade sparningar (2026-08-21)",
       "Mående och energi som 1–10-sliders – ❤️ Hur är det just nu? på Hem har mjuka sliders 1–10 för mående (😞 → 😍) och energi (🪫 → 🔋) med tydligt värde (t.ex. 7/10). Två separata värden som sparas med datum och tid och används likadant i Hem, ❤️ Idag och Flow (2026-08-21)",
       "Snabb registrering av mående och energi – ❤️ Hur är det just nu? på Hem och i ❤️ Idag: ett tryck för mående (😞–😍) och ett tryck för energi (🔋 1–5), två separata värden som går att ändra under dagen och som visas likadant i båda vyerna (2026-08-21)",
       "Minimering som genomgående UX-princip – större informationssektioner på Hem, i Flow, ❤️ Idag och Min livsprofil kan minimeras med samma pil, animation och sparade läge. Bara presentation – data, status och avbockning påverkas inte (2026-08-21)",
