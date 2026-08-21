@@ -166,6 +166,9 @@ export default function TodayPage() {
           })}
         </div>
 
+        {/* ❤️ Snabb registrering – samma värden som på Hem */}
+        <QuickCheckin />
+
         {/* 🔋 Batteriet – gemensamt för båda vyerna */}
         <EnergyBattery />
 
