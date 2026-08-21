@@ -78,10 +78,7 @@ export function useQuickCheckin() {
         if (existing) {
           return prev.map((m) => (m.id === existing.id ? { ...m, score, date: Date.now() } : m));
         }
-        return [
-          { id: Math.random().toString(36).slice(2, 11), score, date: Date.now() },
-          ...prev,
-        ];
+        return [{ id: Math.random().toString(36).slice(2, 11), score, date: Date.now() }, ...prev];
       });
     },
     [setMoods],
