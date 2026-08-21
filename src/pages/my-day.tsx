@@ -242,12 +242,36 @@ export default function MyDay() {
                 <ul className="mt-3 space-y-2">
                   {rest.slice(0, 8).map((item) => (
                     <li key={item.id}>
-                      <FlowItemCard item={item} />
+                      <FlowItemCard
+                        item={item}
+                        {...(item.completable
+                          ? { onToggle: (i: FlowItem) => toggleItem(i) }
+                          : {})}
+                      />
                     </li>
                   ))}
                 </ul>
               </details>
             )}
+            {todayDone.length > 0 && (
+              <details className="rounded-2xl bg-secondary/30 p-3">
+                <summary className="cursor-pointer text-sm font-medium text-ink">
+                  {todayDone.length} {todayDone.length === 1 ? "sak" : "saker"} genomförda idag 💙
+                </summary>
+                <ul className="mt-3 space-y-2">
+                  {todayDone.map((item) => (
+                    <li key={item.id}>
+                      <FlowItemCard
+                        item={item}
+                        className="opacity-80"
+                        onToggle={(i: FlowItem) => toggleItem(i)}
+                      />
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            )}
+
             <Link
               href="/tasks"
               className="inline-flex items-center gap-2 text-sm text-primary underline-offset-2 hover:underline"
