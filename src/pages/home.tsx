@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import HomeShortcuts from "@/components/home-shortcuts";
+import QuickCheckin from "@/components/quick-checkin";
 import { useHomeLayout, type HomeBlockId } from "@/lib/home-layout";
 import { TaskQuickAdd, type QuickAddResult } from "@/components/task-quick-add";
 import DidThisCta from "@/components/did-this-cta";
