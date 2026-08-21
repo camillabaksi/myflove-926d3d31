@@ -47,7 +47,6 @@ export function useQuickCheckin() {
   const [cloudEnergy, setCloudEnergy] = useState<EnergyLogEntry[] | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
 
-
   useEffect(() => {
     let mounted = true;
     const load = async (uid: string | null) => {
@@ -156,4 +155,3 @@ export function useQuickCheckin() {
 
   return { todayMood, todayEnergy, moodValue, energyValue, logMood, logEnergy };
 }
-
