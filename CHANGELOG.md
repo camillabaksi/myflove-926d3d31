@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-24 – Avbockat idag försvinner inte längre
+
+- Uppgifter och QuickFlow-tankar utan datum försvann tidigare helt när du bockade av dem. Nu räknas allt du bockar av idag som gjort idag och stannar kvar under "Genomfört idag" i Hem, Idag (🌊 Flow och 📋 Lista) och Flow → Idag.
+- Verifierat i webbläsaren: avbockning i 🌊 Flow, 📋 Lista, Hem och Att göra ger exakt samma status i alla vyer, åt båda hållen.
+
 ## 2026-08-23 – Min dag och Daily Flow blir ❤️ Idag
 
 - Min dag och Daily Flow är nu EN vy: **Idag**. Samma dagsdata, inga dubbla upplevelser.
