@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { flushSync } from "react-dom";
 import { toast } from "sonner";
 import { Bell, Check, MapPin, Pencil } from "lucide-react";
 import { useTasks, useReminders } from "@/hooks/use-data";
