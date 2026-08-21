@@ -886,7 +886,7 @@ export default function CalendarPage() {
         {selectedDateStr && (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <h3 className="text-xl font-medium">
+              <h3 className="min-w-0 truncate text-lg font-medium sm:text-xl">
                 {selectedDateStr === todayStr
                   ? "Idag"
                   : new Date(selectedDateStr).toLocaleDateString("sv-SE", {
@@ -895,7 +895,8 @@ export default function CalendarPage() {
                       month: "long",
                     })}
               </h3>
-              <div className="flex items-center gap-2">
+              <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
+
                 <button
                   onClick={() => setIsAddingAny(true)}
                   className="flex items-center gap-1.5 px-3 py-2 rounded-2xl text-sm font-medium border transition-colors bg-card border-border text-foreground hover:border-primary/40 hover:bg-secondary/50"
