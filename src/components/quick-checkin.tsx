@@ -1,25 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "wouter";
 import { Plus } from "lucide-react";
 import CollapsibleSection from "@/components/collapsible-section";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { cn } from "@/lib/utils";
-
-const MOODS = [
-  { score: 1, emoji: "😞", label: "Tungt" },
-  { score: 2, emoji: "😕", label: "Lite låg" },
-  { score: 3, emoji: "😐", label: "Okej" },
-  { score: 4, emoji: "🙂", label: "Bra" },
-  { score: 5, emoji: "😍", label: "Toppen" },
-];
-
-const ENERGY = [
-  { level: 1, label: "Nästan tomt" },
-  { level: 2, label: "Lågt" },
-  { level: 3, label: "Halvfullt" },
-  { level: 4, label: "Bra" },
-  { level: 5, label: "Fullt" },
-];
 
 /** Snabbmeny för framtida loggtyper – bara det som redan finns i appen. */
 const LOG_LINKS = [
@@ -28,12 +12,87 @@ const LOG_LINKS = [
   { href: "/anteckningar", emoji: "✍️", label: "Anteckning" },
 ];
 
+interface ScaleSliderProps {
+  label: string;
+  icon: string;
+  startEmoji: string;
+  endEmoji: string;
+  value: number | null;
+  onCommit: (v: number) => void;
+  accent: string;
+}
+
 /**
- * "Hur är det just nu?" – ett tryck registrerar mående respektive energi.
- * Två separata värden, går att ändra hur många gånger som helst samma dag.
+ * Mjuk 1–10-slider. Värdet sparas när användaren släpper (change),
+ * så att drag inte skapar en registrering per steg.
+ */
+function ScaleSlider({
+  label,
+  icon,
+  startEmoji,
+  endEmoji,
+  value,
+  onCommit,
+  accent,
+}: ScaleSliderProps) {
+  const [draft, setDraft] = useState<number>(value ?? 5);
+
+  useEffect(() => {
+    if (value != null) setDraft(value);
+  }, [value]);
+
+  const pct = ((draft - 1) / 9) * 100;
+
+  return (
+    <div className="space-y-2">
+      <div className="flex items-baseline justify-between gap-2">
+        <p className="text-xs font-medium text-muted-foreground">
+          <span aria-hidden>{icon}</span> {label}
+        </p>
+        <p className="text-sm font-semibold text-ink">
+          {value == null ? (
+            <span className="text-muted-foreground">{draft}/10</span>
+          ) : (
+            <>{draft}/10</>
+          )}
+        </p>
+      </div>
+
+      <div className="flex items-center gap-2">
+        <span aria-hidden className="text-lg select-none">
+          {startEmoji}
+        </span>
+        <input
+          type="range"
+          min={1}
+          max={10}
+          step={1}
+          value={draft}
+          onChange={(e) => setDraft(Number(e.target.value))}
+          onMouseUp={() => onCommit(draft)}
+          onTouchEnd={() => onCommit(draft)}
+          onKeyUp={() => onCommit(draft)}
+          aria-label={`${label} 1 till 10`}
+          aria-valuetext={`${draft} av 10`}
+          className="myflove-range h-2 w-full flex-1 cursor-pointer appearance-none rounded-full transition-all"
+          style={{
+            background: `linear-gradient(to right, hsl(var(--${accent})) 0%, hsl(var(--${accent})) ${pct}%, hsl(var(--secondary)) ${pct}%, hsl(var(--secondary)) 100%)`,
+          }}
+        />
+        <span aria-hidden className="text-lg select-none">
+          {endEmoji}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * "Hur är det just nu?" – två separata 1–10-värden för mående och energi.
+ * Går att justera hur många gånger som helst under dagen.
  */
 export default function QuickCheckin({ className }: { className?: string }) {
-  const { todayMood, todayEnergy, logMood, logEnergy } = useQuickCheckin();
+  const { moodValue, energyValue, logMood, logEnergy } = useQuickCheckin();
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -49,7 +108,7 @@ export default function QuickCheckin({ className }: { className?: string }) {
           </span>
         }
         headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
-        className="space-y-4"
+        className="space-y-5"
         actions={
           <button
             type="button"
@@ -75,62 +134,30 @@ export default function QuickCheckin({ className }: { className?: string }) {
           </div>
         )}
 
-        <div className="space-y-2">
-          <p className="text-xs font-medium text-muted-foreground">Mående</p>
-          <div className="flex items-center justify-between gap-1">
-            {MOODS.map((m) => {
-              const active = todayMood?.score === m.score;
-              return (
-                <button
-                  key={m.score}
-                  type="button"
-                  onClick={() => logMood(m.score)}
-                  aria-pressed={active}
-                  aria-label={`Mående: ${m.label}`}
-                  title={m.label}
-                  className={cn(
-                    "flex-1 rounded-2xl py-2 text-2xl transition-all hover:scale-110",
-                    active ? "bg-primary/15 ring-2 ring-primary scale-110" : "opacity-60",
-                  )}
-                >
-                  <span aria-hidden>{m.emoji}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
+        <ScaleSlider
+          label="Mående"
+          icon="❤️"
+          startEmoji="😞"
+          endEmoji="😍"
+          value={moodValue}
+          onCommit={logMood}
+          accent="primary"
+        />
 
-        <div className="space-y-2">
-          <p className="text-xs font-medium text-muted-foreground">Energi</p>
-          <div className="flex items-center justify-between gap-1">
-            {ENERGY.map((e) => {
-              const active = (todayEnergy?.level ?? 0) >= e.level;
-              const selected = todayEnergy?.level === e.level;
-              return (
-                <button
-                  key={e.level}
-                  type="button"
-                  onClick={() => void logEnergy(e.level)}
-                  aria-pressed={selected}
-                  aria-label={`Energi ${e.level} av 5: ${e.label}`}
-                  title={e.label}
-                  className={cn(
-                    "flex-1 rounded-2xl py-2 text-2xl transition-all hover:scale-110",
-                    active ? "opacity-100" : "opacity-30 grayscale",
-                    selected && "bg-primary/15 ring-2 ring-primary scale-110",
-                  )}
-                >
-                  <span aria-hidden>🔋</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
+        <ScaleSlider
+          label="Energi"
+          icon="⚡"
+          startEmoji="🪫"
+          endEmoji="🔋"
+          value={energyValue}
+          onCommit={(v) => void logEnergy(v)}
+          accent="accent"
+        />
 
         <p className="text-xs text-muted-foreground">
-          {todayMood || todayEnergy
-            ? "Sparat. Du kan ändra när du vill under dagen."
-            : "Ett tryck räcker. Inget är rätt eller fel."}
+          {moodValue != null || energyValue != null
+            ? "Sparat. Du kan justera när du vill under dagen."
+            : "Dra till det som stämmer just nu. Inget är rätt eller fel."}
         </p>
       </CollapsibleSection>
     </section>

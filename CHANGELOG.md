@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-21 – Mående och energi som 1–10-sliders
+
+- ❤️ Hur är det just nu? på Hem använder nu mjuka horisontella sliders 1–10 för mående (😞 → 😍) och energi (🪫 → 🔋), med valt värde tydligt visat som t.ex. 7/10.
+- Två helt separata värden – mående 9/10 och energi 2/10 samtidigt går bra. Båda sparas med datum och tid i befintlig måendelogg respektive energilogg.
+- Dagens registrering uppdateras i stället för att dubbletter skapas, och samma sparade värden används i Hem, ❤️ Idag och Flow.
+
 ## 2026-08-21 – Snabb registrering av mående och energi
 
 - Ny sektion ❤️ Hur är det just nu? på Hem och i ❤️ Idag – ett tryck registrerar mående (😞–😍) och ett tryck registrerar energi (🔋 1–5).

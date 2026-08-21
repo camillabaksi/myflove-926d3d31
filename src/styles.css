@@ -76,7 +76,6 @@
   --shadow-focus: 0 0 0 3px hsl(var(--ring) / 0.35);
 }
 
-
 :root {
   /* MyFlove palette: mjuk lila, vitt, rosa och mint */
   --background: 264 60% 98%;
@@ -107,7 +106,6 @@
   --input: 264 32% 92%;
   --ring: 258 68% 62%;
 
-
   --radius: 1.5rem;
 
   /* Raw brand tokens */
@@ -127,7 +125,12 @@
   --sky: 202 78% 92%;
   --sun: 44 90% 90%;
 
-  --gradient-hero: linear-gradient(135deg, hsl(264 70% 96%) 0%, hsl(276 65% 94%) 50%, hsl(327 70% 95%) 100%);
+  --gradient-hero: linear-gradient(
+    135deg,
+    hsl(264 70% 96%) 0%,
+    hsl(276 65% 94%) 50%,
+    hsl(327 70% 95%) 100%
+  );
   --shadow-soft: 0 1px 2px hsl(258 40% 30% / 0.04), 0 12px 28px -18px hsl(258 45% 35% / 0.25);
   --shadow-lifted: 0 2px 4px hsl(258 40% 30% / 0.05), 0 24px 48px -24px hsl(258 45% 35% / 0.3);
   --shadow-float-value: 0 18px 40px -20px hsl(258 45% 35% / 0.35);
@@ -184,7 +187,12 @@
   --sky: 202 26% 24%;
   --sun: 44 28% 24%;
 
-  --gradient-hero: linear-gradient(135deg, hsl(260 30% 15%) 0%, hsl(272 28% 17%) 50%, hsl(327 22% 20%) 100%);
+  --gradient-hero: linear-gradient(
+    135deg,
+    hsl(260 30% 15%) 0%,
+    hsl(272 28% 17%) 50%,
+    hsl(327 22% 20%) 100%
+  );
   --shadow-soft: 0 1px 2px hsl(0 0% 0% / 0.3), 0 12px 28px -18px hsl(0 0% 0% / 0.6);
   --shadow-lifted: 0 2px 4px hsl(0 0% 0% / 0.35), 0 24px 48px -24px hsl(0 0% 0% / 0.65);
   --shadow-float-value: 0 18px 40px -20px hsl(0 0% 0% / 0.6);
@@ -202,7 +210,12 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-display);
     font-weight: 800;
     letter-spacing: -0.025em;
@@ -319,24 +332,49 @@ html[data-npf-less="true"] [data-npf="optional"] {
    ------------------------------------------------------------------ */
 
 @keyframes myflove-fade-up {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @keyframes myflove-pop {
-  0%   { opacity: 0; transform: scale(0.96) translateY(8px); }
-  60%  { opacity: 1; transform: scale(1.01) translateY(0); }
-  100% { opacity: 1; transform: scale(1); }
+  0% {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.01) translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @keyframes myflove-breathe {
-  0%, 100% { transform: scale(1); }
-  50%      { transform: scale(1.06); }
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
 }
 
 @keyframes myflove-float {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-6px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
 }
 
 /* Hela vyn tonar mjukt in när man byter sida */
@@ -360,7 +398,9 @@ html[data-npf-less="true"] [data-npf="optional"] {
 
 /* Knapptryck: lätt scale */
 @utility press {
-  transition: transform 0.16s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.16s ease;
+  transition:
+    transform 0.16s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.16s ease;
   &:active {
     transform: scale(0.96);
   }
@@ -371,17 +411,35 @@ html[data-npf-less="true"] [data-npf="optional"] {
   & > * {
     animation: myflove-fade-up 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
-  & > *:nth-child(1) { animation-delay: 0.02s; }
-  & > *:nth-child(2) { animation-delay: 0.06s; }
-  & > *:nth-child(3) { animation-delay: 0.1s; }
-  & > *:nth-child(4) { animation-delay: 0.14s; }
-  & > *:nth-child(5) { animation-delay: 0.18s; }
-  & > *:nth-child(6) { animation-delay: 0.22s; }
-  & > *:nth-child(n + 7) { animation-delay: 0.26s; }
+  & > *:nth-child(1) {
+    animation-delay: 0.02s;
+  }
+  & > *:nth-child(2) {
+    animation-delay: 0.06s;
+  }
+  & > *:nth-child(3) {
+    animation-delay: 0.1s;
+  }
+  & > *:nth-child(4) {
+    animation-delay: 0.14s;
+  }
+  & > *:nth-child(5) {
+    animation-delay: 0.18s;
+  }
+  & > *:nth-child(6) {
+    animation-delay: 0.22s;
+  }
+  & > *:nth-child(n + 7) {
+    animation-delay: 0.26s;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .page-enter, .pop-in, .breathe, .floaty, .stagger > * {
+  .page-enter,
+  .pop-in,
+  .breathe,
+  .floaty,
+  .stagger > * {
     animation: none !important;
   }
 }
@@ -392,75 +450,184 @@ html[data-npf-less="true"] [data-npf="optional"] {
    ------------------------------------------------------------------ */
 
 @keyframes myflove-heart {
-  0%, 100% { transform: scale(1); }
-  18%      { transform: scale(1.14); }
-  32%      { transform: scale(1); }
-  48%      { transform: scale(1.08); }
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  18% {
+    transform: scale(1.14);
+  }
+  32% {
+    transform: scale(1);
+  }
+  48% {
+    transform: scale(1.08);
+  }
 }
 
 @keyframes myflove-sparkle {
-  0%, 100% { opacity: 0.25; transform: scale(0.7) rotate(0deg); }
-  50%      { opacity: 1;    transform: scale(1.1) rotate(18deg); }
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.7) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1) rotate(18deg);
+  }
 }
 
 @keyframes myflove-drift {
-  0%   { transform: translate(0, 0) scale(1); }
-  33%  { transform: translate(6px, -8px) scale(1.04); }
-  66%  { transform: translate(-5px, 5px) scale(0.98); }
-  100% { transform: translate(0, 0) scale(1); }
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(6px, -8px) scale(1.04);
+  }
+  66% {
+    transform: translate(-5px, 5px) scale(0.98);
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
 }
 
 @keyframes myflove-think {
-  0%, 100% { opacity: 0.3; transform: translateY(2px) scale(0.9); }
-  50%      { opacity: 1;   transform: translateY(-3px) scale(1); }
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: translateY(2px) scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-3px) scale(1);
+  }
 }
 
 @keyframes myflove-listen {
-  0%, 100% { transform: scaleY(0.4); }
-  50%      { transform: scaleY(1); }
+  0%,
+  100% {
+    transform: scaleY(0.4);
+  }
+  50% {
+    transform: scaleY(1);
+  }
 }
 
 @keyframes myflove-draw {
-  from { stroke-dashoffset: var(--draw-length, 240); }
-  to   { stroke-dashoffset: 0; }
+  from {
+    stroke-dashoffset: var(--draw-length, 240);
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 @keyframes myflove-fly {
-  0%   { opacity: 0; transform: translate(0, 0) scale(0.6); }
-  25%  { opacity: 1; transform: translate(0, -14px) scale(1); }
-  100% { opacity: 0; transform: translate(var(--fly-x, 0px), var(--fly-y, 120px)) scale(0.5); }
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.6);
+  }
+  25% {
+    opacity: 1;
+    transform: translate(0, -14px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--fly-x, 0px), var(--fly-y, 120px)) scale(0.5);
+  }
 }
 
 @keyframes myflove-grow-bar {
-  from { transform: scaleY(0); }
-  to   { transform: scaleY(1); }
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
 }
 
 @keyframes myflove-check {
-  from { stroke-dashoffset: 32; }
-  to   { stroke-dashoffset: 0; }
+  from {
+    stroke-dashoffset: 32;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 @keyframes myflove-gather {
-  0%   { opacity: 0; transform: translate(var(--from-x, 0px), var(--from-y, 0px)) scale(0.6); }
-  60%  { opacity: 1; transform: translate(0, 0) scale(1); }
-  100% { opacity: 0.9; transform: translate(0, 0) scale(1); }
+  0% {
+    opacity: 0;
+    transform: translate(var(--from-x, 0px), var(--from-y, 0px)) scale(0.6);
+  }
+  60% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    opacity: 0.9;
+    transform: translate(0, 0) scale(1);
+  }
 }
 
 @keyframes myflove-twinkle {
-  0%, 100% { opacity: 0.15; }
-  50%      { opacity: 0.9; }
+  0%,
+  100% {
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 0.9;
+  }
 }
 
-@utility heartbeat { animation: myflove-heart 2.8s ease-in-out infinite; }
-@utility sparkling { animation: myflove-sparkle 2.6s ease-in-out infinite; }
-@utility drifting  { animation: myflove-drift 14s ease-in-out infinite; }
-@utility twinkling { animation: myflove-twinkle 4s ease-in-out infinite; }
+@utility heartbeat {
+  animation: myflove-heart 2.8s ease-in-out infinite;
+}
+@utility sparkling {
+  animation: myflove-sparkle 2.6s ease-in-out infinite;
+}
+@utility drifting {
+  animation: myflove-drift 14s ease-in-out infinite;
+}
+@utility twinkling {
+  animation: myflove-twinkle 4s ease-in-out infinite;
+}
 
 @media (prefers-reduced-motion: reduce) {
-  .heartbeat, .sparkling, .drifting, .twinkling,
-  [data-motion="living"], [data-motion="living"] * {
+  .heartbeat,
+  .sparkling,
+  .drifting,
+  .twinkling,
+  [data-motion="living"],
+  [data-motion="living"] * {
     animation: none !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* Mjuk slider för snabbregistrering (mående/energi) */
+.myflove-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 1.4rem;
+  width: 1.4rem;
+  border-radius: 9999px;
+  background: hsl(var(--card));
+  border: 3px solid hsl(var(--primary));
+  box-shadow: 0 4px 12px hsl(var(--primary) / 0.28);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+.myflove-range::-webkit-slider-thumb:active {
+  transform: scale(1.15);
+}
+.myflove-range::-moz-range-thumb {
+  height: 1.4rem;
+  width: 1.4rem;
+  border-radius: 9999px;
+  background: hsl(var(--card));
+  border: 3px solid hsl(var(--primary));
+  box-shadow: 0 4px 12px hsl(var(--primary) / 0.28);
+  cursor: pointer;
 }
