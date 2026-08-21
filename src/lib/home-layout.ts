@@ -26,7 +26,7 @@ export interface HomeBlockMeta {
 export const HOME_BLOCKS: HomeBlockMeta[] = [
   { id: "batteri", label: "Mitt batteri", hint: "Din energi just nu" },
   { id: "nasta", label: "Nästa", hint: "Nästa sak som händer idag" },
-  { id: "idag", label: "Dagens uppgifter", hint: "Bocka av dagens uppgifter direkt här" },
+  { id: "idag", label: "Idag", hint: "Bocka av dagens saker och se vad du redan gjort" },
   { id: "forslag", label: "Flow-förslag", hint: "Ett förslag – samma som Flow → NU" },
   { id: "lagg-till", label: "Lägg till", hint: "Snabbknapp för ny uppgift" },
   { id: "genvagar", label: "Dina genvägar", hint: "Fyra egna favoriter du väljer själv" },
