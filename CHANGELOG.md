@@ -6,6 +6,7 @@
 - Samma kort och samma avbockning som i Min dag, så status är densamma överallt (Hem, Min dag, Att göra).
 - Kalenderhändelser, lektioner och rutiner visas inte som avbockningsbara – de hör hemma i tidslinjen.
 - Blocket går att stänga av eller flytta i Anpassa hemskärmen.
+- Samma lista finns nu även i Flow → Idag, så dagens uppgifter kan bockas av där utan att gå till Att göra.
 
 ## 2026-08-21 – QuickFlow sparar på riktigt
 
