@@ -21,16 +21,16 @@ function todayISO(): string {
 }
 
 /**
- * Barnens hållpunkter idag – skolschema och inlagda aktiviteter med klockslag.
+ * Barnens hållpunkter en viss dag (default idag) – skolschema och inlagda aktiviteter med klockslag.
  * Samma format som lektioner, så livspusslet kan räkna med dem.
  */
-export function useChildEvents(): ChildEvent[] {
+export function useChildEvents(dateISO?: string): ChildEvent[] {
   const { children, items } = useChildren();
   const [schedules] = useCloudSyncedStorage<Record<string, ChildScheduleEntry[]>>(SCHEDULE_KEY, {});
 
   return useMemo(() => {
-    const today = todayISO();
-    const weekday = (new Date().getDay() + 6) % 7;
+    const today = dateISO ?? todayISO();
+    const weekday = (new Date(`${today}T00:00:00`).getDay() + 6) % 7;
     const nameOf = new Map(children.map((c) => [c.id, c.name]));
     const out: ChildEvent[] = [];
 
@@ -57,5 +57,5 @@ export function useChildEvents(): ChildEvent[] {
     }
 
     return out.sort((a, b) => a.time.localeCompare(b.time));
-  }, [children, items, schedules]);
+  }, [children, items, schedules, dateISO]);
 }
