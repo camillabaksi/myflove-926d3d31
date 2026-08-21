@@ -513,7 +513,7 @@ export function useMoods() {
     trackEvent("mood", "mood_logged");
   };
 
-  return { moods, addMood };
+  return { moods, addMood, setMoods };
 }
 
 export interface Transaction {
