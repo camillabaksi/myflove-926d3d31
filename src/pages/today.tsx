@@ -5,6 +5,7 @@ import CollapsibleSection from "@/components/collapsible-section";
 import HelpHint from "@/components/help-hint";
 import DayTimeline, { type TimelineEntry } from "@/components/day-timeline";
 import EnergyBattery from "@/components/energy-battery";
+import QuickCheckin from "@/components/quick-checkin";
 import TaskQuickAdd, { type QuickAddResult } from "@/components/task-quick-add";
 import DidThisQuickAdd from "@/components/did-this-quick-add";
 import DayEnergyFlow from "@/components/day-energy-flow";
