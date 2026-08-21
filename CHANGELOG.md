@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-25 – ✨ Allt i dagen i kalendern
+
+- Kalendern har fått en utökad vy: **✨ Allt i dagen** (knapp vid dagens rubrik, syns för idag). Vanliga kalendern är oförändrad och visar fortsatt tidsbundna saker.
+- Vyn visar hela dagen: tidsatta saker under klockslag och sådant utan tid under **🌿 Under dagen** – både planerat och genomfört, med livsområdesfärg kvar även när det är avbockat.
+- Samma data och samma bock som Idag, Lista, Hem och Att göra – inga dubbletter. QuickFlow-objekt som hör till idag dyker upp automatiskt.
+- Liten sammanfattning: "✨ X aktiviteter genomförda idag".
+
 ## 2026-08-24 – Avbockat idag försvinner inte längre
 
 - Uppgifter och QuickFlow-tankar utan datum försvann tidigare helt när du bockade av dem. Nu räknas allt du bockar av idag som gjort idag och stannar kvar under "Genomfört idag" i Hem, Idag (🌊 Flow och 📋 Lista) och Flow → Idag.

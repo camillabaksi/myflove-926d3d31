@@ -36,6 +36,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { useToast } from "@/hooks/use-toast";
 import CollapsibleSection from "@/components/collapsible-section";
 import DayTimeline from "@/components/day-timeline";
+import AllInDay from "@/components/all-in-day";
 import EnergyBattery from "@/components/energy-battery";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
 import { useLocalStorage } from "@/lib/storage";
@@ -153,6 +154,9 @@ export default function CalendarPage() {
   );
   // Globalt bildstöd (Anpassa appen) slår på symboler överallt där det finns.
   const pictoMode = pictoStored || npfSettings.pictograms;
+  // ✨ Allt i dagen – utökad vy av samma dag (samma data, samma status).
+  const [allInDay, setAllInDay] = useLocalStorage<boolean>("myflove-calendar-all-in-day", false);
+
   const [visible, setVisible] = useLocalStorage<CalCategory[]>(
     "myflove-calendar-categories",
     ALL_CATEGORIES,
@@ -911,10 +915,28 @@ export default function CalendarPage() {
                   <span aria-hidden>🖼️</span>
                   Bildstöd
                 </button>
+                {selectedDateStr === todayStr && (
+                  <button
+                    onClick={() => setAllInDay(!allInDay)}
+                    aria-pressed={allInDay}
+                    title="Visa allt du ska göra och har gjort idag – inte bara tidsbundet"
+                    className={`flex items-center gap-1.5 px-3 py-2 rounded-2xl text-sm font-medium border transition-colors ${
+                      allInDay
+                        ? "bg-accent/30 border-accent/40 text-foreground"
+                        : "bg-card border-border text-muted-foreground hover:border-primary/40 hover:bg-secondary/50"
+                    }`}
+                  >
+                    <span aria-hidden>✨</span>
+                    Allt i dagen
+                  </button>
+                )}
               </div>
             </div>
 
-            {!selectedItems.focus &&
+            {selectedDateStr === todayStr && allInDay && <AllInDay />}
+
+            {!(selectedDateStr === todayStr && allInDay) &&
+              !selectedItems.focus &&
               selectedItems.tasks.length === 0 &&
               selectedItems.reminders.length === 0 &&
               selectedItems.familyEvents.length === 0 &&
