@@ -90,7 +90,9 @@ export function useQuickCheckin() {
   }, [energyEntries]);
 
   const logMood = useCallback(
-    (score: number) => {
+    (score10: number) => {
+      const score = toScale5(score10);
+      setCheckin10((prev) => ({ day: todayKey(), energy: prev?.energy, mood: score10 }));
       setMoods((prev) => {
         const existing = prev.find((m) => isToday(m.date));
         if (existing) {
@@ -99,11 +101,13 @@ export function useQuickCheckin() {
         return [{ id: Math.random().toString(36).slice(2, 11), score, date: Date.now() }, ...prev];
       });
     },
-    [setMoods],
+    [setMoods, setCheckin10],
   );
 
   const logEnergy = useCallback(
-    async (level: number) => {
+    async (level10: number) => {
+      const level = toScale5(level10);
+      setCheckin10((prev) => ({ day: todayKey(), mood: prev?.mood, energy: level10 }));
       const now = new Date().toISOString();
       if (!userId) {
         setLocalEnergy((prev) => {
@@ -136,8 +140,20 @@ export function useQuickCheckin() {
         .single();
       if (data) setCloudEnergy((prev) => [...(prev ?? []), data]);
     },
-    [userId, todayEnergy, setLocalEnergy],
+    [userId, todayEnergy, setLocalEnergy, setCheckin10],
   );
 
-  return { todayMood, todayEnergy, logMood, logEnergy };
+  const sameDay = checkin10?.day === todayKey();
+  /** Dagens visade värden på 1–10-skalan (null = inget loggat idag). */
+  const moodValue =
+    (sameDay ? checkin10?.mood : undefined) ??
+    (todayMood ? toScale10(todayMood.score) : null) ??
+    null;
+  const energyValue =
+    (sameDay ? checkin10?.energy : undefined) ??
+    (todayEnergy ? toScale10(todayEnergy.level) : null) ??
+    null;
+
+  return { todayMood, todayEnergy, moodValue, energyValue, logMood, logEnergy };
 }
+
