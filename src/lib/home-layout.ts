@@ -6,6 +6,7 @@ import { useCloudSyncedStorage } from "@/lib/cloud-storage";
  * Hälsningen ligger alltid överst och går inte att stänga av.
  */
 export type HomeBlockId =
+  | "checkin"
   | "batteri"
   | "nasta"
   | "idag"
