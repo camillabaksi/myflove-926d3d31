@@ -189,36 +189,38 @@ function TodayLayer() {
           headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
           className="space-y-4"
         >
-        <p className="text-base leading-relaxed text-foreground">{load.summary}</p>
+          <p className="text-base leading-relaxed text-foreground">{load.summary}</p>
 
-        {reading.peak && (
-          <p className="text-sm text-muted-foreground">
-            Du har starkast fokus {reading.peak.label}
-            {reading.dip ? ` och lägst ${reading.dip.label}` : ""}.
-          </p>
-        )}
+          {reading.peak && (
+            <p className="text-sm text-muted-foreground">
+              Du har starkast fokus {reading.peak.label}
+              {reading.dip ? ` och lägst ${reading.dip.label}` : ""}.
+            </p>
+          )}
 
-        {move && !handled && (
-          <div className="space-y-3 rounded-2xl bg-secondary/40 p-4">
-            <p className="text-sm text-foreground">{move.text}</p>
-            <div className="flex flex-wrap gap-2">
-              <Button
-                className="rounded-2xl"
-                onClick={() => {
-                  snoozeTask(move.task.id, 1);
-                  setHandled(true);
-                }}
-              >
-                Flytta
-              </Button>
-              <Button variant="outline" className="rounded-2xl" onClick={() => setHandled(true)}>
-                Behåll
-              </Button>
+          {move && !handled && (
+            <div className="space-y-3 rounded-2xl bg-secondary/40 p-4">
+              <p className="text-sm text-foreground">{move.text}</p>
+              <div className="flex flex-wrap gap-2">
+                <Button
+                  className="rounded-2xl"
+                  onClick={() => {
+                    snoozeTask(move.task.id, 1);
+                    setHandled(true);
+                  }}
+                >
+                  Flytta
+                </Button>
+                <Button variant="outline" className="rounded-2xl" onClick={() => setHandled(true)}>
+                  Behåll
+                </Button>
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {handled && <p className="text-sm text-muted-foreground">Tack. Dagen är uppdaterad. 💙</p>}
+          {handled && (
+            <p className="text-sm text-muted-foreground">Tack. Dagen är uppdaterad. 💙</p>
+          )}
         </CollapsibleSection>
       </section>
 

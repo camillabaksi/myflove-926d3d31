@@ -278,33 +278,33 @@ export default function Home() {
               headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
               className="space-y-3"
             >
-            {nextEvent ? (
-              <Link
-                href="/idag"
-                className="group flex items-center gap-4 rounded-2xl bg-secondary/40 p-4 transition-colors hover:bg-secondary/60"
-              >
-                <span aria-hidden className="text-2xl">
-                  {nextEvent.emoji}
-                </span>
-                <div className="min-w-0 flex-1">
-                  <p className="font-medium text-ink truncate">{nextEvent.title}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {nextEvent.time
-                      ? `kl ${nextEvent.time}${nextEvent.endTime ? `–${nextEvent.endTime}` : ""}`
-                      : "Saknar klockslag"}
-                  </p>
+              {nextEvent ? (
+                <Link
+                  href="/idag"
+                  className="group flex items-center gap-4 rounded-2xl bg-secondary/40 p-4 transition-colors hover:bg-secondary/60"
+                >
+                  <span aria-hidden className="text-2xl">
+                    {nextEvent.emoji}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="font-medium text-ink truncate">{nextEvent.title}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {nextEvent.time
+                        ? `kl ${nextEvent.time}${nextEvent.endTime ? `–${nextEvent.endTime}` : ""}`
+                        : "Saknar klockslag"}
+                    </p>
+                  </div>
+                  <ArrowRight
+                    size={18}
+                    className="shrink-0 text-muted-foreground group-hover:text-foreground transition-colors"
+                  />
+                </Link>
+              ) : (
+                <div className="rounded-2xl bg-secondary/30 p-4 text-sm text-muted-foreground">
+                  Ingen aktivitet inplanerad just nu. Lägg till en påminnelse eller uppgift så dyker
+                  den upp här.
                 </div>
-                <ArrowRight
-                  size={18}
-                  className="shrink-0 text-muted-foreground group-hover:text-foreground transition-colors"
-                />
-              </Link>
-            ) : (
-              <div className="rounded-2xl bg-secondary/30 p-4 text-sm text-muted-foreground">
-                Ingen aktivitet inplanerad just nu. Lägg till en påminnelse eller uppgift så dyker
-                den upp här.
-              </div>
-            )}
+              )}
             </CollapsibleSection>
           </section>
         )}
@@ -333,20 +333,20 @@ export default function Home() {
               headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
               className="space-y-3"
             >
-            <p className="text-ink leading-relaxed">{suggestion.headline}</p>
-            {suggestion.task && (
-              <p className="mt-2 text-sm text-muted-foreground">
-                <span className="font-medium text-ink">{suggestion.task.title}</span>
-                {suggestion.minutes ? ` · ca ${suggestion.minutes} min` : ""}
-                {suggestion.reason ? ` – ${suggestion.reason}` : ""}
-              </p>
-            )}
-            <Link
-              href="/flow"
-              className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
-            >
-              {suggestion.task ? "Öppna i Flow" : "Lägg till något"} <ArrowRight size={14} />
-            </Link>
+              <p className="text-ink leading-relaxed">{suggestion.headline}</p>
+              {suggestion.task && (
+                <p className="mt-2 text-sm text-muted-foreground">
+                  <span className="font-medium text-ink">{suggestion.task.title}</span>
+                  {suggestion.minutes ? ` · ca ${suggestion.minutes} min` : ""}
+                  {suggestion.reason ? ` – ${suggestion.reason}` : ""}
+                </p>
+              )}
+              <Link
+                href="/flow"
+                className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+              >
+                {suggestion.task ? "Öppna i Flow" : "Lägg till något"} <ArrowRight size={14} />
+              </Link>
             </CollapsibleSection>
           </section>
         )}

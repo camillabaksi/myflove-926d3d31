@@ -214,23 +214,23 @@ export default function TodayPage() {
                 headingClassName="text-lg font-semibold"
                 className="space-y-3"
               >
-              <p className="text-sm text-foreground">{load.summary}</p>
-              {reading.peak && (
-                <p className="text-xs text-muted-foreground">
-                  Starkast {reading.peak.label}
-                  {reading.dip ? ` · lägst ${reading.dip.label}` : ""}
-                </p>
-              )}
-              <div className="flex items-start gap-2 rounded-2xl bg-secondary/40 px-3 py-2 text-sm text-foreground">
-                <Sparkles size={16} className="mt-0.5 shrink-0 text-primary" />
-                <p>
-                  {suggestion.headline}
-                  {suggestion.task ? ` Börja gärna med "${suggestion.task.title}".` : ""}{" "}
-                  <Link href="/flow" className="text-primary underline-offset-2 hover:underline">
-                    Öppna Flow
-                  </Link>
-                </p>
-              </div>
+                <p className="text-sm text-foreground">{load.summary}</p>
+                {reading.peak && (
+                  <p className="text-xs text-muted-foreground">
+                    Starkast {reading.peak.label}
+                    {reading.dip ? ` · lägst ${reading.dip.label}` : ""}
+                  </p>
+                )}
+                <div className="flex items-start gap-2 rounded-2xl bg-secondary/40 px-3 py-2 text-sm text-foreground">
+                  <Sparkles size={16} className="mt-0.5 shrink-0 text-primary" />
+                  <p>
+                    {suggestion.headline}
+                    {suggestion.task ? ` Börja gärna med "${suggestion.task.title}".` : ""}{" "}
+                    <Link href="/flow" className="text-primary underline-offset-2 hover:underline">
+                      Öppna Flow
+                    </Link>
+                  </p>
+                </div>
               </CollapsibleSection>
             </section>
 
@@ -309,37 +309,37 @@ export default function TodayPage() {
               headingClassName="text-lg font-semibold"
               className="space-y-3"
             >
-            <p className="text-sm text-muted-foreground">
-              Allt som ska hända eller göras idag. Bocka av direkt här – statusen är densamma i
-              Flow, på Hem och i Att göra.
-            </p>
-            {todaysItems.length === 0 ? (
-              <p className="rounded-2xl bg-secondary/30 p-4 text-sm text-muted-foreground">
-                {todayDone.length > 0
-                  ? "Allt som hörde till idag är genomfört. Fint jobbat. 💙"
-                  : "Inget på listan idag. Släpp en tanke i QuickFlow så landar den här."}
+              <p className="text-sm text-muted-foreground">
+                Allt som ska hända eller göras idag. Bocka av direkt här – statusen är densamma i
+                Flow, på Hem och i Att göra.
               </p>
-            ) : (
-              <ul className="space-y-2">
-                {todaysItems.map((item) => (
-                  <li key={item.id}>
-                    <MyFloveTransition transitionKey={String(item.done)}>
-                      <FlowItemCard
-                        item={item}
-                        {...(item.completable ? { onToggle: toggle } : {})}
-                      />
-                    </MyFloveTransition>
-                  </li>
-                ))}
-              </ul>
-            )}
-            <DoneToday items={todayDone} onToggle={toggle} />
-            <Link
-              href="/tasks"
-              className="inline-flex items-center gap-2 text-sm text-primary underline-offset-2 hover:underline"
-            >
-              <ListOrdered size={16} /> Öppna hela Att göra (även kommande dagar)
-            </Link>
+              {todaysItems.length === 0 ? (
+                <p className="rounded-2xl bg-secondary/30 p-4 text-sm text-muted-foreground">
+                  {todayDone.length > 0
+                    ? "Allt som hörde till idag är genomfört. Fint jobbat. 💙"
+                    : "Inget på listan idag. Släpp en tanke i QuickFlow så landar den här."}
+                </p>
+              ) : (
+                <ul className="space-y-2">
+                  {todaysItems.map((item) => (
+                    <li key={item.id}>
+                      <MyFloveTransition transitionKey={String(item.done)}>
+                        <FlowItemCard
+                          item={item}
+                          {...(item.completable ? { onToggle: toggle } : {})}
+                        />
+                      </MyFloveTransition>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              <DoneToday items={todayDone} onToggle={toggle} />
+              <Link
+                href="/tasks"
+                className="inline-flex items-center gap-2 text-sm text-primary underline-offset-2 hover:underline"
+              >
+                <ListOrdered size={16} /> Öppna hela Att göra (även kommande dagar)
+              </Link>
             </CollapsibleSection>
           </section>
         )}
