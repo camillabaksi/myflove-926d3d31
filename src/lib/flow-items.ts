@@ -36,9 +36,16 @@ export interface FlowItem {
   /** Nästa lilla steg – aldrig hela berget. */
   nextStep?: string;
   done?: boolean;
+  /**
+   * Kan användaren rimligen säga "det där har jag gjort"? Då ska det gå att
+   * bocka av – oavsett om det tekniskt är en uppgift, händelse eller rutin.
+   * Rena informationsposter lämnas som false.
+   */
+  completable?: boolean;
   /** Vart användaren kan gå för att jobba med saken. */
   href?: string;
 }
+
 
 export const SOURCE_LABEL: Record<FlowItemSource, string> = {
   uppgift: "Att göra",
