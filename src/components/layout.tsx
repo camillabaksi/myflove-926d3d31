@@ -669,12 +669,12 @@ export default function Layout({ children }: LayoutProps) {
               <ArrowLeft size={22} />
             </button>
           ) : (
-            <span aria-hidden />
+            <span aria-hidden className="w-2 shrink-0" />
           )}
-          <h1 className="truncate text-center text-xl font-bold tracking-tight text-primary">
+          <h1 className="min-w-0 flex-1 truncate text-center text-xl font-bold tracking-tight text-primary">
             MyFlove
           </h1>
-          <ViewCollapseToggle className="justify-self-end" />
+          <ViewCollapseToggle />
         </header>
 
 
