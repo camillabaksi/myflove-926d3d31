@@ -1,5 +1,6 @@
 import { Link } from "wouter";
 import { ListChecks, ArrowRight } from "lucide-react";
+import CollapsibleSection from "@/components/collapsible-section";
 import { FlowItemCard } from "@/components/myflove/flow-item-card";
 import { MyFloveTransition } from "@/components/myflove/motion";
 import { useFlowItems } from "@/hooks/use-flow-items";
@@ -24,14 +25,17 @@ export function TodayTasks({ limit = 6 }: { limit?: number }) {
       className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
       aria-label="Dagens saker"
     >
-      <div className="mb-3 flex items-center gap-2">
-        <ListChecks size={18} className="text-primary" />
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-          Idag
-        </h2>
-      </div>
-
-      {shown.length === 0 ? (
+      <CollapsibleSection
+        id="dagens-saker::idag"
+        title={
+          <span className="flex items-center gap-2">
+            <ListChecks size={18} className="text-primary" aria-hidden="true" /> Idag
+          </span>
+        }
+        headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
+        className="space-y-3"
+      >
+        {shown.length === 0 ? (
         <p className="rounded-2xl bg-secondary/30 p-4 text-sm text-muted-foreground">
           {todayDone.length > 0
             ? "Allt som hörde till idag är genomfört. Fint jobbat. 💙"
@@ -53,11 +57,14 @@ export function TodayTasks({ limit = 6 }: { limit?: number }) {
       )}
 
       {todayDone.length > 0 && (
-        <details className="mt-3 rounded-2xl bg-secondary/30 p-3">
-          <summary className="cursor-pointer text-sm font-medium text-ink">
-            {todayDone.length} {todayDone.length === 1 ? "sak" : "saker"} genomförda idag 💙
-          </summary>
-          <ul className="mt-3 space-y-2">
+        <div className="mt-3 rounded-2xl bg-secondary/30 p-3">
+          <CollapsibleSection
+            id="dagens-saker::genomfort-idag"
+            title={`☑️ ${todayDone.length} ${todayDone.length === 1 ? "sak" : "saker"} genomförda idag 💙`}
+            headingClassName="text-sm font-medium text-ink"
+            defaultCollapsed
+          >
+          <ul className="space-y-2">
             {todayDone.map((item) => (
               <li key={item.id}>
                 <FlowItemCard
@@ -68,7 +75,8 @@ export function TodayTasks({ limit = 6 }: { limit?: number }) {
               </li>
             ))}
           </ul>
-        </details>
+          </CollapsibleSection>
+        </div>
       )}
 
       {todayOpen.length > shown.length && (
@@ -79,6 +87,7 @@ export function TodayTasks({ limit = 6 }: { limit?: number }) {
           Se alla ({todayOpen.length}) <ArrowRight size={14} />
         </Link>
       )}
+      </CollapsibleSection>
     </section>
   );
 }
