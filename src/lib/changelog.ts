@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Dagens uppgifter på Hem – bocka av dagens uppgifter (även de QuickFlow strukturerat) direkt från hemskärmen, med samma status i Min dag och Att göra (2026-08-21)",
       "QuickFlow sparar på riktigt – \"Godkänn allt\" och \"Spara bara texten\" hann tidigare inte spara innan rutan stängdes; nu landar uppgiften, inköpet eller tanken direkt i rätt vy (2026-08-21)",
       "Min livsprofil – en enda profil som ersätter Min jobbprofil och Min studieprofil: livssituation (flera samtidigt), anpassade följdfrågor, styrkor, svårigheter, stödbehov, vad som ger och tar energi samt hur du vill att Flow hjälper dig. Gammal profildata migreras automatiskt och Flow använder profilen som kontext (2026-08-20)",
       "Dubblettskydd i databasen – samma aktivitet med samma riktning inom samma minut sparas bara en gång, även om två flikar sparar samtidigt (2026-08-20)",

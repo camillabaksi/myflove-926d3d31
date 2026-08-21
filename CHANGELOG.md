@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-21 – Bocka av dagens uppgifter direkt på Hem
+
+- Nytt block "Dagens uppgifter" på hemskärmen: allt som hör till idag – även det QuickFlow har strukturerat – går att bocka av direkt, utan att gå till Att göra.
+- Samma kort och samma avbockning som i Min dag, så status är densamma överallt (Hem, Min dag, Att göra).
+- Kalenderhändelser, lektioner och rutiner visas inte som avbockningsbara – de hör hemma i tidslinjen.
+- Blocket går att stänga av eller flytta i Anpassa hemskärmen.
+
 ## 2026-08-21 – QuickFlow sparar på riktigt
 
 - Fix: när du tryckte "Godkänn allt" eller "Spara bara texten som den är" stängdes rutan innan sparningen hann köras – uppgiften, inköpet eller tanken försvann. Nu sparas allt innan dialogen stängs och dyker direkt upp i Att göra, Kalender, Inköp och QuickFlow.
