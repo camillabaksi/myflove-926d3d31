@@ -24,7 +24,7 @@ const ENERGY = [
 /** Snabbmeny för framtida loggtyper – bara det som redan finns i appen. */
 const LOG_LINKS = [
   { href: "/ma-bra", emoji: "❤️", label: "Mående" },
-  { href: "/energikarta", emoji: "⚡", label: "Energi" },
+  { href: "/energifloede", emoji: "⚡", label: "Energi" },
   { href: "/anteckningar", emoji: "✍️", label: "Anteckning" },
 ];
 
