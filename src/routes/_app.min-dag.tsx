@@ -1,16 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
-import Page from "@/pages/my-day";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
+/** "Min dag" och "Daily Flow" är numera en och samma vy: Idag. */
 export const Route = createFileRoute("/_app/min-dag")({
-  head: () => ({
-    meta: [
-      { title: "Min dag – MyFlove" },
-      {
-        name: "description",
-        content: "Dagens plan i lugn ordning: hållpunkter, dagens viktigaste sak och det du orkar.",
-      },
-      { name: "robots", content: "noindex, nofollow" },
-    ],
-  }),
-  component: Page,
+  beforeLoad: () => {
+    throw redirect({ to: "/idag", replace: true });
+  },
 });
