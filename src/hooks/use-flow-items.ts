@@ -51,11 +51,18 @@ export function useFlowItems(): {
 
     const isSnoozed = (until?: string) => !!until && until > today;
 
+    const isToday = (ms?: number) => {
+      if (!ms) return false;
+      const d = new Date(ms);
+      const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+      return iso === today;
+    };
+
     for (const t of tasks) {
       if (isSnoozed(t.snoozedUntil)) continue;
-      // Klara uppgifter visas bara om de hör till idag – så att dagen kan
-      // visa både det som återstår och det som redan är gjort.
-      if (t.completed && t.dueDate !== today) continue;
+      // Klara uppgifter visas bara om de hör till idag eller bockades av idag –
+      // så att dagen kan visa både det som återstår och det som redan är gjort.
+      if (t.completed && t.dueDate !== today && !isToday(t.completedAt)) continue;
       const d = t.dueDate ? daysUntilDate(t.dueDate) : undefined;
       const friction = suggestFor(t.title);
       const nextStep = t.steps?.find((s) => !s.done)?.title;
