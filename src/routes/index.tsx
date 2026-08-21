@@ -48,8 +48,9 @@ function LandingPage() {
     <main className="min-h-screen bg-[#F8F5FE] text-[#2A2140]">
       {/* ── Hero ─────────────────────────────────────────── */}
       <section className="relative overflow-hidden px-5 pt-14 pb-16 sm:px-6 md:pt-24 md:pb-28">
-        <div className="pointer-events-none absolute -top-32 -right-28 h-[260px] w-[260px] rounded-full bg-gradient-to-br from-[#A78BFA] to-[#7C5CE0] opacity-40 blur-2xl sm:-top-40 sm:-right-24 sm:h-[420px] sm:w-[420px] sm:opacity-80 sm:blur-sm" />
-        <div className="pointer-events-none absolute -bottom-28 -left-20 h-[220px] w-[220px] rounded-full bg-[#C4B5FD] opacity-30 blur-2xl sm:-bottom-32 sm:-left-16 sm:h-[320px] sm:w-[320px] sm:opacity-50 sm:blur-none" />
+        <div className="pointer-events-none absolute -top-44 -right-44 h-[240px] w-[240px] rounded-full bg-gradient-to-br from-[#A78BFA] to-[#7C5CE0] opacity-25 blur-3xl sm:-top-40 sm:-right-24 sm:h-[420px] sm:w-[420px] sm:opacity-80 sm:blur-sm" />
+        <div className="pointer-events-none absolute -bottom-40 -left-40 h-[220px] w-[220px] rounded-full bg-[#C4B5FD] opacity-20 blur-3xl sm:-bottom-32 sm:-left-16 sm:h-[320px] sm:w-[320px] sm:opacity-50 sm:blur-none" />
+
         <div className="relative mx-auto max-w-3xl text-center">
           <p className="text-[11px] uppercase tracking-[0.3em] text-[#7C5CE0] font-semibold sm:text-xs sm:tracking-[0.35em]">
             MyFlove
