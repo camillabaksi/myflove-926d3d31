@@ -97,14 +97,3 @@ export default function QuickflowFab() {
   );
 }
 
-function Btn({ onClick, children }: { onClick: () => void; children: React.ReactNode }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="w-full rounded-2xl border border-border bg-card px-4 py-3 text-left font-medium hover:border-primary/50 transition-colors"
-    >
-      {children}
-    </button>
-  );
-}
