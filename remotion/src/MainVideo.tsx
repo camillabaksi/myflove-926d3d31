@@ -24,6 +24,8 @@ import { ScenePushMobile } from "./scenes/ScenePushMobile";
 import { SceneSituation } from "./scenes/SceneSituation";
 import { SceneRelations } from "./scenes/SceneRelations";
 import { SceneControl } from "./scenes/SceneControl";
+import { SceneToday } from "./scenes/SceneToday";
+import { SceneCapture } from "./scenes/SceneCapture";
 import { SceneOutro } from "./scenes/SceneOutro";
 
 export const FPS = 30;
@@ -51,6 +53,8 @@ const S_PUSH = 270; // 9s – push & mobil
 const S_SITUATION = 240;
 const S_RELATIONS = 240;
 const S_CONTROL = 240;
+const S_TODAY = 260; // ~8.7s – ❤️ Idag + Allt i dagen
+const S_CAPTURE = 260; // ~8.7s – QuickFlow universell infångning
 const S_OUTRO = 300;
 const TRANS = 20;
 
@@ -76,6 +80,8 @@ const SCENES = [
   S_SITUATION,
   S_RELATIONS,
   S_CONTROL,
+  S_TODAY,
+  S_CAPTURE,
   S_OUTRO,
 ];
 export const TOTAL_FRAMES = SCENES.reduce((a, b) => a + b, 0) - TRANS * (SCENES.length - 1);
@@ -168,6 +174,14 @@ export const MainVideo: React.FC = () => {
         <TransitionSeries.Transition presentation={fade()} timing={timing()} />
         <TransitionSeries.Sequence durationInFrames={S_CONTROL}>
           <SceneControl />
+        </TransitionSeries.Sequence>
+        <TransitionSeries.Transition presentation={fade()} timing={timing()} />
+        <TransitionSeries.Sequence durationInFrames={S_TODAY}>
+          <SceneToday />
+        </TransitionSeries.Sequence>
+        <TransitionSeries.Transition presentation={fade()} timing={timing()} />
+        <TransitionSeries.Sequence durationInFrames={S_CAPTURE}>
+          <SceneCapture />
         </TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={fade()} timing={timing()} />
         <TransitionSeries.Sequence durationInFrames={S_OUTRO}>
