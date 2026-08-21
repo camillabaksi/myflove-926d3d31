@@ -338,21 +338,26 @@ export default function TodayPage() {
   );
 }
 
-/** Genomfört idag – samma lista i båda vyerna. */
+/** ☑️ Genomfört idag – samma lista i båda vyerna, går att minimera. */
 function DoneToday({ items, onToggle }: { items: FlowItem[]; onToggle: (i: FlowItem) => void }) {
   if (items.length === 0) return null;
   return (
-    <details className="rounded-2xl bg-secondary/30 p-3">
-      <summary className="cursor-pointer text-sm font-medium text-ink">
-        {items.length} {items.length === 1 ? "sak" : "saker"} genomförda idag 💙
-      </summary>
-      <ul className="mt-3 space-y-2">
-        {items.map((item) => (
-          <li key={item.id}>
-            <FlowItemCard item={item} className="opacity-80" onToggle={onToggle} />
-          </li>
-        ))}
-      </ul>
-    </details>
+    <div className="rounded-2xl bg-secondary/30 p-3">
+      <CollapsibleSection
+        id="idag::genomfort-idag"
+        title={`☑️ ${items.length} ${items.length === 1 ? "sak" : "saker"} genomförda idag 💙`}
+        headingClassName="text-sm font-medium text-ink"
+        className="space-y-3"
+        defaultCollapsed
+      >
+        <ul className="space-y-2">
+          {items.map((item) => (
+            <li key={item.id}>
+              <FlowItemCard item={item} className="opacity-80" onToggle={onToggle} />
+            </li>
+          ))}
+        </ul>
+      </CollapsibleSection>
+    </div>
   );
 }
