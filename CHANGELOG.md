@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-21 – Minimering som genomgående UX-princip
+
+- Samma minimerbara sektion (`CollapsibleSection`) används nu även på Hem (Nästa, Flow-förslag), i Flow → Idag (Dagens belastning), i ❤️ Idag (Dagens energibalans, Dagens lista) och i Min livsprofil.
+- Dagens saker-kortet (Hem och Flow) går att minimera, och ☑️ Genomfört idag använder samma stil som resten.
+- Inget nytt collapse-system: samma pil, animation och sparade läge per sida och rubrik. Kalenderns Tidslinje / Allt i dagen är oförändrad.
+
 ## 2026-08-21 – Minimerbara sektioner tillbaka
 
 - 🕒 Under klockslag och 🌿 Under dagen i ✨ Allt i dagen går åter att minimera/expandera.
