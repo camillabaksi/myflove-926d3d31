@@ -172,7 +172,8 @@ export function useFlowItems(): {
         ? `${qDate.getFullYear()}-${String(qDate.getMonth() + 1).padStart(2, "0")}-${String(qDate.getDate()).padStart(2, "0")}`
         : undefined;
       const qDays = qDue ? daysUntilDate(qDue) : undefined;
-      if (q.done && qDue !== today) continue;
+      const qDoneToday = !!q.done && isToday(q.doneAt);
+      if (q.done && qDue !== today && !qDoneToday) continue;
       out.push({
         id: `qf-${q.id}`,
         title: q.text,
@@ -181,8 +182,9 @@ export function useFlowItems(): {
         emoji: "💭",
         dueDate: qDue,
         daysUntil: qDays,
-        priority:
-          typeof qDays === "number"
+        priority: qDoneToday
+          ? "idag"
+          : typeof qDays === "number"
             ? priorityFor({ daysUntil: qDays })
             : q.level === "viktigt"
               ? "idag"
