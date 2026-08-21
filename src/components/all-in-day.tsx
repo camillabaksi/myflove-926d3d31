@@ -28,8 +28,8 @@ export default function AllInDay() {
     <div className="space-y-4 rounded-3xl border border-border/60 bg-card/60 p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="text-sm text-muted-foreground">
-          Hela dagen – både tidsbundet och sånt som bara ska bli gjort. Samma status som i Idag,
-          Hem och Att göra.
+          Hela dagen – både tidsbundet och sånt som bara ska bli gjort. Samma status som i Idag, Hem
+          och Att göra.
         </p>
         {doneCount > 0 && (
           <span className="rounded-pill bg-secondary/60 px-3 py-1 text-xs font-medium text-ink">

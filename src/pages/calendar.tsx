@@ -36,6 +36,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { useToast } from "@/hooks/use-toast";
 import CollapsibleSection from "@/components/collapsible-section";
 import DayTimeline from "@/components/day-timeline";
+import AllInDay from "@/components/all-in-day";
 import EnergyBattery from "@/components/energy-battery";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
 import { useLocalStorage } from "@/lib/storage";
@@ -946,8 +947,6 @@ export default function CalendarPage() {
                   Inget inplanerat denna dag.
                 </div>
               )}
-
-
 
             {selectedItems.recurring.length > 0 && (
               <div className="flex flex-wrap items-center gap-2 px-1">
