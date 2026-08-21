@@ -998,7 +998,7 @@ export default function CalendarPage() {
               </div>
             )}
 
-            {view === "dag" && (
+            {!allInDay && view === "dag" && (
               <DayTimeline
                 isToday={selectedDateStr === todayStr}
                 energyByHour={selectedDateStr === todayStr ? batteryByHour : undefined}
