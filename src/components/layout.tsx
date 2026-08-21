@@ -658,20 +658,25 @@ export default function Layout({ children }: LayoutProps) {
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col min-h-0 overflow-hidden relative">
         {/* Mobile Header */}
-        <header className="md:hidden relative flex items-center justify-center p-4 bg-background/80 backdrop-blur-md sticky top-0 z-10 border-b border-border/50">
-          {canGoBack && (
+        <header className="sticky top-0 z-10 flex items-center gap-2 border-b border-border/50 bg-background/80 p-3 backdrop-blur-md md:hidden">
+          {canGoBack ? (
             <button
               type="button"
               onClick={handleBack}
               aria-label="Gå tillbaka"
-              className="absolute left-3 p-2 rounded-full hover:bg-primary/10 text-foreground transition-colors"
+              className="justify-self-start rounded-full p-2 text-foreground transition-colors hover:bg-primary/10"
             >
               <ArrowLeft size={22} />
             </button>
+          ) : (
+            <span aria-hidden className="w-2 shrink-0" />
           )}
-          <h1 className="text-xl font-bold text-primary tracking-tight">MyFlove</h1>
-          <ViewCollapseToggle className="absolute right-3" />
+          <h1 className="min-w-0 flex-1 truncate text-center text-xl font-bold tracking-tight text-primary">
+            MyFlove
+          </h1>
+          <ViewCollapseToggle />
         </header>
+
 
         <div className="hidden md:flex items-center gap-2 px-8 pt-6">
           {primaryNav.map((item) => {

@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-21 – Smala mobilskärmar
+
+- Kalender, ❤️ Idag och inloggningen fungerar nu ner till 320 px bredd utan att något klipps av eller hamnar utanför skärmen.
+- Knappraden i kalendern (Ny händelse, Påminnelse, Bildstöd, ✨ Allt i dagen) radbryts snyggt i stället för att sticka ut.
+- Mobilens topprad har fått fast plats för tillbakaknapp, titel och Minimera-knappen; texten "Minimera allt" göms på riktigt smala skärmar.
+
 ## 2026-08-21 – Startsidan i mobil
 
 - Hero-rubriken är mindre och radbryts snyggt på mobil – den krockar inte längre med den lila bakgrundsbubblan.
