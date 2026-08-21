@@ -103,44 +103,66 @@ export function useQuickCheckin() {
     [setMoods, setCheckin10],
   );
 
+  // Håller reda på dagens rad-id direkt (utan att vänta på state-uppdatering)
+  // och serialiserar sparningar så att snabba upprepade ändringar aldrig
+  // skapar fler än en loggrad per dag.
+  const todayRowIdRef = useRef<string | null>(null);
+  const queueRef = useRef<Promise<void>>(Promise.resolve());
+
+  useEffect(() => {
+    todayRowIdRef.current = todayEnergy?.id ?? null;
+  }, [todayEnergy]);
+
   const logEnergy = useCallback(
-    async (level10: number) => {
+    (level10: number) => {
       const level = toScale5(level10);
       setCheckin10((prev) => ({ day: todayKey(), mood: prev?.mood, energy: level10 }));
-      const now = new Date().toISOString();
-      if (!userId) {
-        setLocalEnergy((prev) => {
-          const list = prev ?? [];
-          const existing = [...list].reverse().find((e) => isToday(e.logged_at));
-          if (existing) {
-            return list.map((e) => (e.id === existing.id ? { ...e, level, logged_at: now } : e));
-          }
-          return [...list, { id: Math.random().toString(36).slice(2, 11), level, logged_at: now }];
-        });
-        return;
-      }
-      const existing = todayEnergy;
-      if (existing) {
+      const run = async () => {
+        const now = new Date().toISOString();
+        if (!userId) {
+          setLocalEnergy((prev) => {
+            const list = prev ?? [];
+            const existing = [...list].reverse().find((e) => isToday(e.logged_at));
+            if (existing) {
+              return list.map((e) => (e.id === existing.id ? { ...e, level, logged_at: now } : e));
+            }
+            const id = Math.random().toString(36).slice(2, 11);
+            return [...list, { id, level, logged_at: now }];
+          });
+          return;
+        }
+        const existingId = todayRowIdRef.current;
+        if (existingId) {
+          const { data } = await supabase
+            .from("energy_logs")
+            .update({ level, logged_at: now })
+            .eq("id", existingId)
+            .select("id, level, logged_at")
+            .single();
+          setCloudEnergy((prev) =>
+            (prev ?? []).map((e) =>
+              e.id === existingId ? (data ?? { ...e, level, logged_at: now }) : e,
+            ),
+          );
+          return;
+        }
         const { data } = await supabase
           .from("energy_logs")
-          .update({ level, logged_at: now })
-          .eq("id", existing.id)
+          .insert({ user_id: userId, level })
           .select("id, level, logged_at")
           .single();
-        setCloudEnergy((prev) =>
-          (prev ?? []).map((e) => (e.id === existing.id ? (data ?? { ...e, level }) : e)),
-        );
-        return;
-      }
-      const { data } = await supabase
-        .from("energy_logs")
-        .insert({ user_id: userId, level })
-        .select("id, level, logged_at")
-        .single();
-      if (data) setCloudEnergy((prev) => [...(prev ?? []), data]);
+        if (data) {
+          todayRowIdRef.current = data.id;
+          setCloudEnergy((prev) => [...(prev ?? []), data]);
+        }
+      };
+      const next = queueRef.current.then(run, run);
+      queueRef.current = next.catch(() => undefined);
+      return next;
     },
-    [userId, todayEnergy, setLocalEnergy, setCheckin10],
+    [userId, setLocalEnergy, setCheckin10],
   );
+
 
   const sameDay = checkin10?.day === todayKey();
   /** Dagens visade värden på 1–10-skalan (null = inget loggat idag). */
