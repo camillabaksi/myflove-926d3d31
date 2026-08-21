@@ -84,12 +84,12 @@ function LandingPage() {
       </section>
 
       {/* ── Flow talar ────────────────────────────────────── */}
-      <section className="px-6 py-20 md:py-28">
+      <section className="px-5 py-14 sm:px-6 sm:py-20 md:py-28">
         <div className="mx-auto max-w-5xl">
           <p className="text-xs uppercase tracking-[0.3em] text-[#7C5CE0] font-semibold">
             Flow talar
           </p>
-          <h2 className="mt-3 font-display text-4xl md:text-5xl font-bold leading-tight">
+          <h2 className="mt-3 font-display text-3xl sm:text-4xl md:text-5xl font-bold leading-tight">
             Som en vän i fickan.
           </h2>
           <p className="mt-4 text-[#6B647F] max-w-xl">
@@ -115,12 +115,12 @@ function LandingPage() {
       </section>
 
       {/* ── Alla moduler hänger ihop ─────────────────────── */}
-      <section className="px-6 py-20 md:py-28 bg-[#F1ECFC]">
+      <section className="px-5 py-14 sm:px-6 sm:py-20 md:py-28 bg-[#F1ECFC]">
         <div className="mx-auto max-w-5xl">
           <p className="text-xs uppercase tracking-[0.3em] text-[#7C5CE0] font-semibold">
             Allt hänger ihop
           </p>
-          <h2 className="mt-3 font-display text-4xl md:text-5xl font-bold leading-tight">
+          <h2 className="mt-3 font-display text-3xl sm:text-4xl md:text-5xl font-bold leading-tight">
             En hjärna. Inte sju appar.
           </h2>
           <p className="mt-4 text-[#6B647F] max-w-2xl">
@@ -162,12 +162,12 @@ function LandingPage() {
       </section>
 
       {/* ── Scenarier ───────────────────────────────────── */}
-      <section className="px-6 py-20 md:py-28">
+      <section className="px-5 py-14 sm:px-6 sm:py-20 md:py-28">
         <div className="mx-auto max-w-5xl">
           <p className="text-xs uppercase tracking-[0.3em] text-[#7C5CE0] font-semibold">
             I vardagen
           </p>
-          <h2 className="mt-3 font-display text-4xl md:text-5xl font-bold leading-tight">
+          <h2 className="mt-3 font-display text-3xl sm:text-4xl md:text-5xl font-bold leading-tight">
             När livet skaver – finns Flow där.
           </h2>
 
@@ -205,13 +205,13 @@ function LandingPage() {
       </section>
 
       {/* ── FlowPlan ────────────────────────────────────── */}
-      <section className="px-6 py-20 md:py-28 bg-[#2A2140] text-[#FBF9FF] relative overflow-hidden">
+      <section className="px-5 py-14 sm:px-6 sm:py-20 md:py-28 bg-[#2A2140] text-[#FBF9FF] relative overflow-hidden">
         <div className="pointer-events-none absolute -top-32 -left-20 h-[300px] w-[300px] rounded-full bg-[#F5B8D0] opacity-20" />
         <div className="mx-auto max-w-5xl relative">
           <p className="text-xs uppercase tracking-[0.3em] text-[#F5B8D0] font-semibold">
             FlowPlan™
           </p>
-          <h2 className="mt-3 font-display text-4xl md:text-5xl font-bold leading-tight">
+          <h2 className="mt-3 font-display text-3xl sm:text-4xl md:text-5xl font-bold leading-tight">
             Rätt sak, i rätt ordning.
           </h2>
           <p className="mt-4 text-white/70 max-w-xl">
@@ -282,14 +282,14 @@ function LandingPage() {
       </section>
 
       {/* ── Känslan ─────────────────────────────────────── */}
-      <section className="px-6 py-20 md:py-28">
+      <section className="px-5 py-14 sm:px-6 sm:py-20 md:py-28">
         <div className="mx-auto max-w-4xl">
           <div className="grid md:grid-cols-2 gap-10 items-center">
             <div className="space-y-1">
               {["lugn.", "trygghet.", "värme.", "enkelhet.", "mindre att bära."].map((w) => (
                 <div
                   key={w}
-                  className="font-display text-4xl md:text-5xl font-bold leading-tight text-[#2A2140]"
+                  className="font-display text-3xl sm:text-4xl md:text-5xl font-bold leading-tight text-[#2A2140]"
                 >
                   {w}
                 </div>
@@ -305,14 +305,14 @@ function LandingPage() {
       </section>
 
       {/* ── Vision / avslut ─────────────────────────────── */}
-      <section className="px-6 py-24 md:py-32 bg-[#2A2140] text-[#FBF9FF] relative overflow-hidden">
+      <section className="px-5 py-16 sm:px-6 sm:py-24 md:py-32 bg-[#2A2140] text-[#FBF9FF] relative overflow-hidden">
         <div className="pointer-events-none absolute -top-40 -left-20 h-[500px] w-[500px] rounded-full bg-[#7C5CE0] opacity-30 blur-md" />
         <div className="pointer-events-none absolute -bottom-40 -right-24 h-[460px] w-[460px] rounded-full bg-[#C4B5FD] opacity-25" />
         <div className="relative mx-auto max-w-3xl text-center">
           <p className="text-xs uppercase tracking-[0.4em] text-[#F5B8D0] font-semibold">
             Vår vision
           </p>
-          <h2 className="mt-6 font-display text-4xl md:text-6xl font-bold leading-[1.05] tracking-tight">
+          <h2 className="mt-6 font-display text-3xl sm:text-4xl md:text-6xl font-bold leading-[1.05] tracking-tight">
             Vi bygger inte funktioner.
             <br />
             Vi löser vardagsfriktion.
@@ -322,7 +322,7 @@ function LandingPage() {
           </p>
           <p className="mt-10 text-white/70 text-base md:text-lg leading-relaxed max-w-xl mx-auto">
             Du öppnar inte en app. Du möter Flow – en lugn, intelligent följeslagare som hjälper dig
-            genom vardagen. 💙
+            genom vardagen.
           </p>
           <div className="mt-10">
             <Button
