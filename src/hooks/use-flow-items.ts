@@ -85,7 +85,7 @@ export function useFlowItems(): {
         id: `rem-${r.id}`,
         title: r.title,
         source: "kalender",
-        area: "vardag",
+        area: getArea(r),
         emoji: "📅",
         time: r.time,
         dueDate: r.date,
