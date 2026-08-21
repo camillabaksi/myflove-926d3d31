@@ -49,6 +49,30 @@ export const AREA_SHORTCUTS: Record<LifeArea, FlowShortcut[]> = {
     { href: "/kalender", label: "Möten", emoji: "🗓️" },
     { href: "/pomodoro", label: "Fokus", emoji: "⏱️" },
   ],
+  halsa: [
+    { href: "/ma-bra", label: "Må bra", emoji: "❤️" },
+    { href: "/daglig-rutin", label: "Rutiner & medicin", emoji: "💊" },
+    { href: "/traning", label: "Träning", emoji: "🏃" },
+    { href: "/flowscore", label: "FlowScore", emoji: "🔋" },
+  ],
+  ekonomi: [
+    { href: "/finances", label: "Ekonomi", emoji: "💰" },
+    { href: "/shopping", label: "Inköp", emoji: "🛒" },
+    { href: "/tasks", label: "Att göra", emoji: "✅" },
+    { href: "/kalender", label: "Kalender", emoji: "🗓️" },
+  ],
+  socialt: [
+    { href: "/relationer", label: "Relationer", emoji: "🤝" },
+    { href: "/kalender", label: "Kalender", emoji: "🗓️" },
+    { href: "/tasks", label: "Att göra", emoji: "✅" },
+    { href: "/min-dag", label: "Min dag", emoji: "🗓️" },
+  ],
+  egentid: [
+    { href: "/ma-bra", label: "Må bra", emoji: "🌙" },
+    { href: "/anteckningar", label: "Anteckningar", emoji: "📝" },
+    { href: "/pomodoro", label: "Fokus", emoji: "⏱️" },
+    { href: "/min-dag", label: "Min dag", emoji: "🗓️" },
+  ],
 };
 
 const PLACES: Record<string, { label: string; prompt: string; area: LifeArea }> = {

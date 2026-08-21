@@ -182,7 +182,6 @@ export const DID_SUGGESTIONS: DidSuggestion[] = [
   },
 ];
 
-
 export type EnergyCategory =
   | "somn"
   | "socialt"
@@ -314,7 +313,8 @@ export function balanceFor(
   for (const e of todays) {
     const catFactor = WEIGHT_FACTOR[categoryWeightFor(settings, e.category)];
     if ((e.friction ?? 0) >= 3) highFrictionCount += 1;
-    const signed = e.direction === "gives" ? e.strength : e.direction === "drains" ? -e.strength : 0;
+    const signed =
+      e.direction === "gives" ? e.strength : e.direction === "drains" ? -e.strength : 0;
     if (e.direction === "gives") {
       gives += e.strength;
       weightedNet += e.strength * catFactor;
@@ -348,7 +348,6 @@ export function balanceFor(
     byKind,
     highFrictionCount,
   };
-
 }
 
 export interface EnergyFlowInput {
@@ -519,7 +518,12 @@ export function frictionTrends(entries: EnergyFactorEntry[], days = 30): Frictio
     const key = entry.title.toLowerCase();
     const row = map.get(key) ?? { label: entry.title, f: 0, e: 0, n: 0 };
     row.f += entry.friction;
-    row.e += entry.direction === "gives" ? entry.strength : entry.direction === "drains" ? -entry.strength : 0;
+    row.e +=
+      entry.direction === "gives"
+        ? entry.strength
+        : entry.direction === "drains"
+          ? -entry.strength
+          : 0;
     row.n += 1;
     map.set(key, row);
   }

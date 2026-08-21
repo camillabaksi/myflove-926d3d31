@@ -25,12 +25,14 @@ export const ENERGY_IMPACT_META: Record<
 
 export const ENERGY_IMPACTS: EnergyImpact[] = ["drains", "gives", "both", "unknown"];
 
-export const FRICTION_META: Record<TaskFriction, { emoji: string; label: string; minutes: number }> =
-  {
-    small: { emoji: "🟢", label: "Litet", minutes: 10 },
-    medium: { emoji: "🟡", label: "Mellan", minutes: 30 },
-    large: { emoji: "🔴", label: "Stort", minutes: 60 },
-  };
+export const FRICTION_META: Record<
+  TaskFriction,
+  { emoji: string; label: string; minutes: number }
+> = {
+  small: { emoji: "🟢", label: "Litet", minutes: 10 },
+  medium: { emoji: "🟡", label: "Mellan", minutes: 30 },
+  large: { emoji: "🔴", label: "Stort", minutes: 60 },
+};
 
 export const FRICTIONS: TaskFriction[] = ["small", "medium", "large"];
 
@@ -126,7 +128,8 @@ export function groupAgenda(tasks: Task[], now = new Date()): AgendaGroups {
   timed.sort((a, b) => (a.time ?? "").localeCompare(b.time ?? ""));
   upcoming.sort(
     (a, b) =>
-      (a.dueDate ?? "").localeCompare(b.dueDate ?? "") || (a.time ?? "").localeCompare(b.time ?? ""),
+      (a.dueDate ?? "").localeCompare(b.dueDate ?? "") ||
+      (a.time ?? "").localeCompare(b.time ?? ""),
   );
   overdue.sort((a, b) => (b.dueDate ?? "").localeCompare(a.dueDate ?? ""));
 

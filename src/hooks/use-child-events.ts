@@ -11,6 +11,9 @@ export interface ChildEvent {
   title: string;
   childName: string;
   place?: string;
+  /** Id på barnaktiviteten när den kommer från barnens lista (kan bockas av). */
+  itemId?: string;
+  completed?: boolean;
 }
 
 function todayISO(): string {
@@ -41,10 +44,16 @@ export function useChildEvents(): ChildEvent[] {
     }
 
     for (const i of items) {
-      if (i.completed || !i.time || i.date !== today) continue;
+      if (!i.time || i.date !== today) continue;
       const childName = nameOf.get(i.child_id);
       if (!childName) continue;
-      out.push({ time: i.time.slice(0, 5), title: i.title, childName });
+      out.push({
+        time: i.time.slice(0, 5),
+        title: i.title,
+        childName,
+        itemId: i.id,
+        completed: i.completed,
+      });
     }
 
     return out.sort((a, b) => a.time.localeCompare(b.time));

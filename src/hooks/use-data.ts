@@ -189,7 +189,6 @@ export function useTasks() {
         | "friction"
         | "actualEnergy"
       >
-
     >,
   ) => {
     setTasks((prev) =>
@@ -265,7 +264,6 @@ export function useTasks() {
   };
 
   const setTaskKind = (id: string, kind: TaskKind) => {
-
     setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, kind } : t)));
   };
 
@@ -601,6 +599,7 @@ export interface Reminder {
   repeat?: RepeatMode; // default 'none'
   remindMinutesBefore?: number; // notis X min innan starttid (0 = vid start)
   note?: string; // fri anteckning om vad det gäller
+  area?: LifeArea; // livsområde – styr färgen i alla vyer
   canceled?: boolean; // avbokad – ligger kvar men ger inga notiser
 }
 
@@ -615,6 +614,7 @@ export function useReminders() {
     endTime?: string,
     remindMinutesBefore?: number,
     note?: string,
+    area?: LifeArea,
   ) => {
     setReminders([
       {
@@ -628,6 +628,7 @@ export function useReminders() {
         repeat,
         remindMinutesBefore,
         note: note?.trim() || undefined,
+        area,
       },
       ...reminders,
     ]);
@@ -652,6 +653,7 @@ export function useReminders() {
       repeat?: RepeatMode;
       remindMinutesBefore?: number | undefined;
       note?: string | undefined;
+      area?: LifeArea;
     },
   ) => {
     setReminders(

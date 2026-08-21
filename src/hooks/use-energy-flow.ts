@@ -150,9 +150,6 @@ if (typeof window !== "undefined") {
 /** Samma sak sparad två gånger inom en minut är nästan alltid ett dubbeltryck. */
 const DUPLICATE_WINDOW_MS = 60_000;
 
-
-
-
 /**
  * Energiflöde™ – det som ger och tar energi. Poster blir aldrig
  * kalenderhändelser eller uppgifter; de beskriver din kapacitet.
@@ -170,7 +167,9 @@ export function useEnergyFlow(): {
   removeFactor: (id: string) => Promise<void>;
   updateFactor: (
     id: string,
-    patch: Partial<Pick<EnergyFactorEntry, "direction" | "strength" | "friction" | "kind" | "title">>,
+    patch: Partial<
+      Pick<EnergyFactorEntry, "direction" | "strength" | "friction" | "kind" | "title">
+    >,
   ) => Promise<void>;
   toggleCounts: (id: string, counts: boolean) => Promise<void>;
   addPreset: (input: Omit<EnergyPreset, "id">) => Promise<void>;
@@ -260,7 +259,6 @@ export function useEnergyFlow(): {
     if (error) setStore({ entries: prev });
   }, []);
 
-
   const updateFactor = useCallback(
     async (
       id: string,
@@ -296,7 +294,6 @@ export function useEnergyFlow(): {
       .eq("id", id);
     if (error) setStore({ entries: prev });
   }, []);
-
 
   const addPreset = useCallback(async (input: Omit<EnergyPreset, "id">) => {
     const uid = store.userId;
@@ -334,7 +331,6 @@ export function useEnergyFlow(): {
     setStore({ presets: store.presets.filter((p) => p.id !== id) });
     await supabase.from("energy_factor_presets").delete().eq("id", id);
   }, []);
-
 
   const balance = useMemo(() => balanceFor(entries, new Date(), settings), [entries, settings]);
   const insight = useMemo(() => energyInsight(entries, balance), [entries, balance]);

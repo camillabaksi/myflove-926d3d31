@@ -260,7 +260,6 @@ export default function Home() {
           <DidThisCta />
         </div>
 
-
         {/* Nästa – nästa relevanta aktivitet */}
         {shows("nasta") && (
           <section
@@ -365,7 +364,6 @@ export default function Home() {
             <DidThisQuickAdd />
           </div>
         )}
-
 
         {/* Dagens energiflöde – faktisk belastning */}
         {shows("energifloede") && (

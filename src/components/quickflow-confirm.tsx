@@ -77,7 +77,16 @@ export function QuickflowConfirm({
           ...(r.place ? { note: `📍 ${r.place}` } : {}),
         });
         if (r.remind && r.date) {
-          addReminder(r.title, r.date, r.time ?? "09:00");
+          addReminder(
+            r.title,
+            r.date,
+            r.time ?? "09:00",
+            "none",
+            undefined,
+            undefined,
+            undefined,
+            r.area,
+          );
         }
       }
       log("quickflow");
@@ -88,7 +97,6 @@ export function QuickflowConfirm({
     });
     onDone();
   };
-
 
   if (rows.length === 0) {
     return (

@@ -84,6 +84,10 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
       barn: "/barn",
       studier: "/studyflow",
       jobb: "/workflow",
+      halsa: "/ma-bra",
+      ekonomi: "/finances",
+      socialt: "/relationer",
+      egentid: "/ma-bra",
     };
     setPlace(placeFor(home[area]));
   };

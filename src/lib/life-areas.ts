@@ -4,7 +4,16 @@
 import { useMemo } from "react";
 import { useLocalStorage } from "./storage";
 
-export type LifeArea = "vardag" | "studier" | "jobb" | "privat" | "barn";
+export type LifeArea =
+  | "vardag"
+  | "studier"
+  | "jobb"
+  | "privat"
+  | "barn"
+  | "halsa"
+  | "ekonomi"
+  | "socialt"
+  | "egentid";
 export type AreaFilter = LifeArea | "alla";
 
 export interface AreaMeta {
@@ -14,51 +23,94 @@ export interface AreaMeta {
   blurb: string;
   /** true = alltid på, kan inte stängas av */
   core?: boolean;
-  /** HSL-värde för områdets ton (matchar den lila paletten) */
+  /** HSL-värde för områdets ton (färgen betyder LIVSOMRÅDE, aldrig status) */
   hue: string;
 }
 
+/**
+ * Free-nivåns grunduppsättning: färdiga livsområden med färg, så att appen
+ * fungerar direkt utan konfigurering. Premium kan senare lägga egna områden,
+ * egna namn, emojis och färger ovanpå detta (se `src/lib/area-premium.ts`).
+ */
 export const AREA_META: Record<LifeArea, AreaMeta> = {
   vardag: {
     id: "vardag",
-    label: "Vardag",
+    label: "Hem",
     emoji: "🏠",
-    blurb: "Kalender, att göra, rutiner och påminnelser",
+    blurb: "Vardag, hushåll, rutiner och påminnelser",
     core: true,
-    hue: "258 62% 60%",
+    hue: "150 45% 42%", // grön
   },
   privat: {
     id: "privat",
-    label: "Privat",
-    emoji: "🏡",
-    blurb: "Familj, ärenden, inköp, räkningar och bokningar",
+    label: "Familj",
+    emoji: "👨‍👩‍👧",
+    blurb: "Familj, relationer, ärenden och bokningar",
     core: true,
-    hue: "327 62% 62%",
+    hue: "327 62% 62%", // rosa
   },
   studier: {
     id: "studier",
     label: "Studier",
     emoji: "🎓",
     blurb: "Kurser, inlämningar, deadlines och dokument",
-    hue: "232 58% 64%",
+    hue: "265 60% 60%", // lila
   },
   barn: {
     id: "barn",
     label: "Barn",
     emoji: "🧒",
     blurb: "Barnens aktiviteter, scheman och att göra",
-    hue: "20 70% 58%",
+    hue: "20 70% 58%", // varm korall
   },
   jobb: {
     id: "jobb",
-    label: "Jobb",
+    label: "Arbete",
     emoji: "💼",
     blurb: "Arbetsuppgifter, möten, projekt och uppföljningar",
-    hue: "212 48% 52%",
+    hue: "212 72% 52%", // blå
+  },
+  halsa: {
+    id: "halsa",
+    label: "Hälsa",
+    emoji: "❤️",
+    blurb: "Vård, medicin, träning och återhämtning",
+    hue: "28 85% 55%", // orange
+  },
+  ekonomi: {
+    id: "ekonomi",
+    label: "Ekonomi",
+    emoji: "💰",
+    blurb: "Räkningar, budget och pengar",
+    hue: "45 85% 48%", // gul
+  },
+  socialt: {
+    id: "socialt",
+    label: "Socialt",
+    emoji: "🤝",
+    blurb: "Vänner, kontakter och sociala planer",
+    hue: "350 72% 62%", // rosa/korall
+  },
+  egentid: {
+    id: "egentid",
+    label: "Egen tid",
+    emoji: "🌙",
+    blurb: "Vila, intressen och tid som bara är din",
+    hue: "285 45% 55%", // dovt lila
   },
 };
 
-export const ALL_AREAS: LifeArea[] = ["vardag", "privat", "barn", "studier", "jobb"];
+export const ALL_AREAS: LifeArea[] = [
+  "vardag",
+  "privat",
+  "barn",
+  "studier",
+  "jobb",
+  "halsa",
+  "ekonomi",
+  "socialt",
+  "egentid",
+];
 const CORE_AREAS: LifeArea[] = ALL_AREAS.filter((a) => AREA_META[a].core);
 
 const AREAS_KEY = "myflove-areas";

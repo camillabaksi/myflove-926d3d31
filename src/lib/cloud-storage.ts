@@ -102,7 +102,6 @@ export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
         }
       }
 
-
       hydratedRef.current = true;
 
       // Inget i molnet och inget lokalt att spara – gör ingenting.
@@ -143,7 +142,6 @@ export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, key]);
-
 
   const setAndStamp = useCallback(
     (v: T | ((prev: T) => T)) => {

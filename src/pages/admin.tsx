@@ -332,16 +332,32 @@ function UsersSection() {
         <table className="w-full text-sm">
           <thead className="bg-muted text-left">
             <tr>
-              <SortHeader active={sortKey === "name"} dir={sortDir} onClick={() => handleSort("name")}>
+              <SortHeader
+                active={sortKey === "name"}
+                dir={sortDir}
+                onClick={() => handleSort("name")}
+              >
                 Namn
               </SortHeader>
-              <SortHeader active={sortKey === "last_visit"} dir={sortDir} onClick={() => handleSort("last_visit")}>
+              <SortHeader
+                active={sortKey === "last_visit"}
+                dir={sortDir}
+                onClick={() => handleSort("last_visit")}
+              >
                 Senaste besök
               </SortHeader>
-              <SortHeader active={sortKey === "last_login"} dir={sortDir} onClick={() => handleSort("last_login")}>
+              <SortHeader
+                active={sortKey === "last_login"}
+                dir={sortDir}
+                onClick={() => handleSort("last_login")}
+              >
                 Senaste inloggning
               </SortHeader>
-              <SortHeader active={sortKey === "created"} dir={sortDir} onClick={() => handleSort("created")}>
+              <SortHeader
+                active={sortKey === "created"}
+                dir={sortDir}
+                onClick={() => handleSort("created")}
+              >
                 Skapad
               </SortHeader>
               <th className="p-3">Roller</th>

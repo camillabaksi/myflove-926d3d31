@@ -440,11 +440,15 @@ export function guessArea(text: string): LifeArea {
   if (/(jobb|möte|chef|kollega|kund|deadline|projekt|rapport|arbets|mejl till)/.test(t))
     return "jobb";
   if (
-    /(barn|familj|förskola|läkare|tandläkare|bank|faktura|räkning|försäkring|present|semester|kompis|vän)/.test(
+    /(läkare|tandläkare|vårdcentral|medicin|recept|sjukgymnast|träna|träning|gym|promenad|vaccin|bvc)/.test(
       t,
     )
   )
-    return "privat";
+    return "halsa";
+  if (/(faktura|räkning|bank|budget|swish|lön|försäkring|hyra|skatt)/.test(t)) return "ekonomi";
+  if (/(barn|förskola|skolan|hämta|lämna)/.test(t)) return "barn";
+  if (/(kompis|vän|fika|middag med|fest|träffa)/.test(t)) return "socialt";
+  if (/(familj|present|semester|partner|släkt)/.test(t)) return "privat";
   return "vardag";
 }
 

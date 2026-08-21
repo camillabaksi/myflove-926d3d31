@@ -185,7 +185,9 @@ export default function Tasks() {
       { title: "Steg 3 – avsluta 15 min" },
     ]);
     setExpanded((prev) => new Set(prev).add(task.id));
-    toast({ description: "Uppdelad i tre små steg. Ta ett i taget – eller kör ändå på i ett svep." });
+    toast({
+      description: "Uppdelad i tre små steg. Ta ett i taget – eller kör ändå på i ett svep.",
+    });
   };
 
   const chipBtn = (active: boolean) =>

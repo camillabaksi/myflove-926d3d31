@@ -343,7 +343,6 @@ export default function Dump() {
         >
           <QuickflowRulesSettings />
         </CollapsibleSection>
-
       </div>
     </Layout>
   );

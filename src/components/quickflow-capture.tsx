@@ -229,7 +229,6 @@ export function QuickflowCapture({ variant = "card" }: { variant?: "card" | "com
                 >
                   📝 Spara som anteckning
                 </button>
-
               </div>
 
               {customOpen && (

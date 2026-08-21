@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-22 – Allt som kan genomföras kan bockas av
+
+- Allt som hör till idag går nu att bocka av: uppgifter, kalenderhändelser, påminnelser, rutiner, lektioner, barnens hållpunkter och QuickFlow-tankar. En och samma bock, samma status överallt (Hem, Min dag, Flow → Idag, Att göra).
+- Rutiner, lektioner och schemarader bockas av per dag – de återkommer imorgon utan att bli permanent "klara".
+- Nytt: "X saker genomförda idag 💙" på Hem och i Min dag, så att dagen även visar vad du faktiskt har gjort – inte bara det som är kvar.
+- Livsområdena har egna färger som alltid visar område, aldrig status: Vardag, Privat, Barn, Studier, Jobb, Hälsa, Ekonomi, Socialt och Egen tid.
+- QuickFlow gissar livsområde bättre (hälsa, ekonomi, socialt, barn) och färgen följer med hela vägen till kalendern.
+
 ## 2026-08-21 – Bocka av dagens uppgifter direkt på Hem
 
 - Nytt block "Dagens uppgifter" på hemskärmen: allt som hör till idag – även det QuickFlow har strukturerat – går att bocka av direkt, utan att gå till Att göra.

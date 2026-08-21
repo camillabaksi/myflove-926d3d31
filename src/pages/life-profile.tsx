@@ -114,12 +114,7 @@ export default function LifeProfilePage() {
 
   const chip = (field: ListField, value: string) => toggleIn(field, value);
 
-  const text = (
-    label: string,
-    field: keyof LifeFollowups,
-    placeholder: string,
-    rows = 2,
-  ) => (
+  const text = (label: string, field: keyof LifeFollowups, placeholder: string, rows = 2) => (
     <label key={field} className="block space-y-1 text-sm">
       <span className="text-muted-foreground">{label}</span>
       <Textarea

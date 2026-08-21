@@ -56,7 +56,6 @@ export const logAnalyticsEventFn = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
-
 export type AnalyticsSummary = {
   totalSessions: number;
   activeSessions1d: number;
