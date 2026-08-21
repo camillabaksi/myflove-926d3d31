@@ -1,3 +1,4 @@
+import CollapsibleSection from "@/components/collapsible-section";
 import { useState } from "react";
 import { Check, Plus, Sparkles, User } from "lucide-react";
 import Layout from "@/components/layout";
@@ -74,9 +75,13 @@ function ChipField({
 
   return (
     <section className={card}>
-      <h2 className="font-display text-lg text-ink">{title}</h2>
-      {hint && <p className="mt-1 text-sm text-muted-foreground">{hint}</p>}
-      <div className="mt-3 flex flex-wrap gap-2">
+      <CollapsibleSection
+        title={title}
+        headingClassName="font-display text-lg text-ink"
+        {...(hint ? { description: hint } : {})}
+        className="space-y-3"
+      >
+      <div className="flex flex-wrap gap-2">
         {all.map((o) => (
           <Chip key={o} active={selected.includes(o)} onClick={() => onToggle(o)}>
             {o}
@@ -100,6 +105,7 @@ function ChipField({
           Lägg till
         </Button>
       </div>
+      </CollapsibleSection>
     </section>
   );
 }

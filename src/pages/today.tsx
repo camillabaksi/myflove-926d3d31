@@ -209,7 +209,11 @@ export default function TodayPage() {
 
             {/* ⚡ Dagens energibalans + ✨ ett förslag (från Flow-motorn) */}
             <section className="surface-card space-y-3 p-5">
-              <h2 className="text-lg font-semibold text-ink">Dagens energibalans</h2>
+              <CollapsibleSection
+                title="Dagens energibalans"
+                headingClassName="text-lg font-semibold"
+                className="space-y-3"
+              >
               <p className="text-sm text-foreground">{load.summary}</p>
               {reading.peak && (
                 <p className="text-xs text-muted-foreground">
@@ -227,6 +231,7 @@ export default function TodayPage() {
                   </Link>
                 </p>
               </div>
+              </CollapsibleSection>
             </section>
 
             <DayEnergyFlow />
@@ -299,7 +304,11 @@ export default function TodayPage() {
           </>
         ) : (
           <section className="surface-card space-y-3 p-5">
-            <h2 className="text-lg font-semibold text-ink">Dagens lista</h2>
+            <CollapsibleSection
+              title="Dagens lista"
+              headingClassName="text-lg font-semibold"
+              className="space-y-3"
+            >
             <p className="text-sm text-muted-foreground">
               Allt som ska hända eller göras idag. Bocka av direkt här – statusen är densamma i
               Flow, på Hem och i Att göra.
@@ -331,6 +340,7 @@ export default function TodayPage() {
             >
               <ListOrdered size={16} /> Öppna hela Att göra (även kommande dagar)
             </Link>
+            </CollapsibleSection>
           </section>
         )}
       </div>

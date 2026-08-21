@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import Layout from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import FocusMode from "@/components/focus-mode";
+import CollapsibleSection from "@/components/collapsible-section";
 import { AssistantContent } from "@/pages/assistant";
 import TodayTasks from "@/components/today-tasks";
 import { useTasks } from "@/hooks/use-data";
@@ -177,10 +178,18 @@ function TodayLayer() {
   return (
     <div className="space-y-5">
       <section className="surface-card space-y-4 p-6">
-        <div className="flex items-start gap-2">
-          <CalendarClock size={18} className="mt-0.5 shrink-0 text-primary" />
-          <p className="text-base leading-relaxed text-foreground">{load.summary}</p>
-        </div>
+        <CollapsibleSection
+          id="flow::dagens-belastning"
+          title={
+            <span className="flex items-center gap-2">
+              <CalendarClock size={18} className="text-primary" aria-hidden="true" /> Dagens
+              belastning
+            </span>
+          }
+          headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
+          className="space-y-4"
+        >
+        <p className="text-base leading-relaxed text-foreground">{load.summary}</p>
 
         {reading.peak && (
           <p className="text-sm text-muted-foreground">
@@ -210,6 +219,7 @@ function TodayLayer() {
         )}
 
         {handled && <p className="text-sm text-muted-foreground">Tack. Dagen är uppdaterad. 💙</p>}
+        </CollapsibleSection>
       </section>
 
       {/* Samma kort och samma avbockning som Hem, Min dag och Att göra. */}
