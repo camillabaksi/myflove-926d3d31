@@ -6,12 +6,13 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-08-21";
+export const CHANGELOG_UPDATED = "2026-08-25";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Blueprint, video och pitchdeck 3.0 – Living Blueprint 3.0, uppdaterat pitchdeck och ny marknadsföringsvideo som speglar ❤️ Idag, ✨ Allt i dagen, QuickFlow och Mitt batteri (2026-08-25)",
       "Smala mobilskärmar – Kalender, ❤️ Idag och inloggningen håller ihop ner till 320 px: knappraden radbryts, topplisten har fast plats för tillbaka/titel/Minimera och inget klipps av (2026-08-21)",
       "Startsidan i mobil – mindre hero-rubrik, mjukare bakgrundsbubblor och luftigare sektioner på små skärmar (2026-08-21)",
       "✨ Allt i dagen i kalendern – en utökad vy som visar hela dagen: tidsatta saker under klockslag och resten under 🌿 Under dagen, både planerat och genomfört, med samma data och samma bock som Idag, Hem och Att göra. Klockordning som håller, direkt uppdatering vid avbockning valet sparas per datum och vyn fungerar för valfri kalenderdag (2026-08-25)",

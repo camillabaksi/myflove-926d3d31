@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-25 – Blueprint, video och pitchdeck 3.0
+
+- Living Blueprint uppdaterad till version 3.0 med nytt kapitel 18.8 och Idag som dagens kärna (DOCX + PDF).
+- Pitchdeck v4 uppdaterat: "Nytt i version 3.0" med Idag, Allt i dagen, QuickFlow, Mitt batteri och Livsområden.
+- Ny marknadsföringsvideo (v6) med scener för ❤️ Idag och QuickFlow som universell infångning.
+
 ## 2026-08-21 – Smala mobilskärmar
 
 - Kalender, ❤️ Idag och inloggningen fungerar nu ner till 320 px bredd utan att något klipps av eller hamnar utanför skärmen.
