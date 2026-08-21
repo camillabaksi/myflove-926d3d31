@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-21 – Tidslinje eller Allt i dagen
+
+- ✨ Allt i dagen är nu ett alternativt visningsläge i kalendern i stället för en extra lista under den vanliga vyn.
+- Ny växlare 📅 Tidslinje | ✨ Allt i dagen – samma dag och samma data, bara två olika presentationer.
+- Inga dubbletter längre: när Allt i dagen är på visas den vanliga dagslistan och tidslinjen inte samtidigt.
+- Avbockning fungerar som förut och synkas med ❤️ Idag, Hem och Att göra.
+
 ## 2026-08-25 – Blueprint, video och pitchdeck 3.0
 
 - Living Blueprint uppdaterad till version 3.0 med nytt kapitel 18.8 och Idag som dagens kärna (DOCX + PDF).

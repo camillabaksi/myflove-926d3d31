@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Tidslinje eller Allt i dagen – ✨ Allt i dagen är nu ett eget visningsläge i kalendern (📅 Tidslinje | ✨ Allt i dagen) i stället för en extra lista under kalendern, så inget visas dubbelt. Avbockning synkas som vanligt med ❤️ Idag, Hem och Att göra (2026-08-21)",
       "Blueprint, video och pitchdeck 3.0 – Living Blueprint 3.0, uppdaterat pitchdeck och ny marknadsföringsvideo som speglar ❤️ Idag, ✨ Allt i dagen, QuickFlow och Mitt batteri (2026-08-25)",
       "Smala mobilskärmar – Kalender, ❤️ Idag och inloggningen håller ihop ner till 320 px: knappraden radbryts, topplisten har fast plats för tillbaka/titel/Minimera och inget klipps av (2026-08-21)",
       "Startsidan i mobil – mindre hero-rubrik, mjukare bakgrundsbubblor och luftigare sektioner på små skärmar (2026-08-21)",
