@@ -3,6 +3,7 @@ import Layout from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import FocusMode from "@/components/focus-mode";
 import { AssistantContent } from "@/pages/assistant";
+import TodayTasks from "@/components/today-tasks";
 import { useTasks } from "@/hooks/use-data";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
 import { assessToday, rankNow, suggestMove, suggestNow } from "@/lib/flow-engine";
@@ -174,40 +175,45 @@ function TodayLayer() {
   const move = useMemo(() => suggestMove(load, reading, activeTasks), [load, reading, activeTasks]);
 
   return (
-    <section className="surface-card space-y-4 p-6">
-      <div className="flex items-start gap-2">
-        <CalendarClock size={18} className="mt-0.5 shrink-0 text-primary" />
-        <p className="text-base leading-relaxed text-foreground">{load.summary}</p>
-      </div>
-
-      {reading.peak && (
-        <p className="text-sm text-muted-foreground">
-          Du har starkast fokus {reading.peak.label}
-          {reading.dip ? ` och lägst ${reading.dip.label}` : ""}.
-        </p>
-      )}
-
-      {move && !handled && (
-        <div className="space-y-3 rounded-2xl bg-secondary/40 p-4">
-          <p className="text-sm text-foreground">{move.text}</p>
-          <div className="flex flex-wrap gap-2">
-            <Button
-              className="rounded-2xl"
-              onClick={() => {
-                snoozeTask(move.task.id, 1);
-                setHandled(true);
-              }}
-            >
-              Flytta
-            </Button>
-            <Button variant="outline" className="rounded-2xl" onClick={() => setHandled(true)}>
-              Behåll
-            </Button>
-          </div>
+    <div className="space-y-5">
+      <section className="surface-card space-y-4 p-6">
+        <div className="flex items-start gap-2">
+          <CalendarClock size={18} className="mt-0.5 shrink-0 text-primary" />
+          <p className="text-base leading-relaxed text-foreground">{load.summary}</p>
         </div>
-      )}
 
-      {handled && <p className="text-sm text-muted-foreground">Tack. Dagen är uppdaterad. 💙</p>}
-    </section>
+        {reading.peak && (
+          <p className="text-sm text-muted-foreground">
+            Du har starkast fokus {reading.peak.label}
+            {reading.dip ? ` och lägst ${reading.dip.label}` : ""}.
+          </p>
+        )}
+
+        {move && !handled && (
+          <div className="space-y-3 rounded-2xl bg-secondary/40 p-4">
+            <p className="text-sm text-foreground">{move.text}</p>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                className="rounded-2xl"
+                onClick={() => {
+                  snoozeTask(move.task.id, 1);
+                  setHandled(true);
+                }}
+              >
+                Flytta
+              </Button>
+              <Button variant="outline" className="rounded-2xl" onClick={() => setHandled(true)}>
+                Behåll
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {handled && <p className="text-sm text-muted-foreground">Tack. Dagen är uppdaterad. 💙</p>}
+      </section>
+
+      {/* Samma kort och samma avbockning som Hem, Min dag och Att göra. */}
+      <TodayTasks limit={8} />
+    </div>
   );
 }
