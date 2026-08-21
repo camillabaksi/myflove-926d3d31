@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-08-21 – QuickFlow sparar på riktigt
+
+- Fix: när du tryckte "Godkänn allt" eller "Spara bara texten som den är" stängdes rutan innan sparningen hann köras – uppgiften, inköpet eller tanken försvann. Nu sparas allt innan dialogen stängs och dyker direkt upp i Att göra, Kalender, Inköp och QuickFlow.
+
 ## 2026-08-20 – Min livsprofil ersätter jobb- och studieprofilen
 
 - Ny samlad profil 👤 Min livsprofil (Mer → högst upp): livssituation, anpassade följdfrågor, styrkor, svårigheter, vad du vill ha hjälp med, vad som ger/tar energi och hur du vill att Flow hjälper dig.
