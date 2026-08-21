@@ -223,14 +223,15 @@ export default function MyDay() {
                     <MyFloveTransition transitionKey={String(item.done)}>
                       <FlowItemCard
                         item={item}
-                        {...(item.source === "uppgift"
-                          ? { onToggle: (i: FlowItem) => toggleTask(i.id.replace(/^task-/, "")) }
+                        {...(item.completable
+                          ? { onToggle: (i: FlowItem) => toggleItem(i) }
                           : {})}
                       />
                     </MyFloveTransition>
                   </li>
                 ))}
               </ul>
+
             )}
             {rest.length > 0 && (
               <details className="rounded-2xl bg-muted/50 p-3">
