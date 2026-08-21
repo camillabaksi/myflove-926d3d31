@@ -6,13 +6,14 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-08-25";
+export const CHANGELOG_UPDATED = "2026-08-21";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
       "✨ Allt i dagen i kalendern – en utökad vy som visar hela dagen: tidsatta saker under klockslag och resten under 🌿 Under dagen, både planerat och genomfört, med samma data och samma bock som Idag, Hem och Att göra. Klockordning som håller, direkt uppdatering vid avbockning valet sparas per datum och vyn fungerar för valfri kalenderdag (2026-08-25)",
+      'QuickFlow fångar klockslag – "idag", "ikväll" och rena klockslag tolkas rätt, uppgifter behåller sin tid och syns under 🕒 Under klockslag i ✨ Allt i dagen och i ❤️ Idag (2026-08-21)',
       "Avbockat idag stannar kvar under Genomfört idag – uppgifter och tankar utan datum försvinner inte längre när du bockar av dem (2026-08-24)",
       "Min dag och Daily Flow är sammanslagna till ❤️ Idag – en vy för dagen med två lägen: 🌊 Flow och 📋 Lista (2026-08-23)",
       "Allt som kan genomföras kan bockas av – uppgifter, händelser, påminnelser, rutiner, lektioner, barnens hållpunkter och QuickFlow-tankar delar samma bock och samma status i hela appen (2026-08-22)",

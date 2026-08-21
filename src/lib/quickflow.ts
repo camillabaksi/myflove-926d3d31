@@ -250,6 +250,12 @@ export function parseWhenFromText(text: string, now = new Date()): ParsedWhen | 
     }
   }
 
+  // "idag", "i dag", "ikväll", "i kväll"
+  if (/\b(idag|i\s+dag|ikv[äa]ll|i\s+kv[äa]ll)\b/.test(t)) {
+    const matched = /\bikv[äa]ll|i\s+kv[äa]ll\b/.test(t) ? "ikväll" : "idag";
+    return build(new Date(now), matched);
+  }
+
   // "imorgon", "i övermorgon"
   if (/\b(i\s*övermorgon|övermorgon)\b/.test(t)) {
     const d = new Date(now);
@@ -295,6 +301,11 @@ export function parseWhenFromText(text: string, now = new Date()): ParsedWhen | 
       };
     }
     return parsed;
+  }
+
+  // Bara ett klockslag utan datum ("ring tandläkaren 14:00") → idag.
+  if (hour !== null && timeMatch) {
+    return build(new Date(now), timeMatch[0]);
   }
 
   return null;
