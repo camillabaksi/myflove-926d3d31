@@ -304,7 +304,13 @@ export function parseWhenFromText(text: string, now = new Date()): ParsedWhen | 
     return parsed;
   }
 
+  // Bara ett klockslag utan datum ("ring tandläkaren 14:00") → idag.
+  if (hour !== null && timeMatch) {
+    return build(new Date(now), timeMatch[0]);
+  }
+
   return null;
+
 }
 
 /** "Jag vet inte – hjälp mig": MyFlove föreslår en tid som brukar funka. */
