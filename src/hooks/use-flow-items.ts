@@ -25,7 +25,7 @@ import {
  * Min dag, Flow och Att göra – använder samma funktion, så status blir
  * densamma överallt utan parallella check-off-system.
  */
-export function useFlowItems(): {
+export function useFlowItems(dateISO?: string): {
   items: FlowItem[];
   today: FlowItem[];
   /** Dagens genomförbara saker som ännu inte är gjorda. */
@@ -37,20 +37,23 @@ export function useFlowItems(): {
   const { tasks, toggleTask } = useTasks();
   const { reminders, toggleReminder } = useReminders();
   const { lectures } = useStudySchedule();
-  const childEvents = useChildEvents();
+  const targetDay = dateISO ?? todayISO();
+  const isTodayView = targetDay === todayISO();
+  const childEvents = useChildEvents(targetDay);
   const { toggleItem: toggleChildItem } = useChildren();
   const { items: quickflowItems, complete, uncomplete } = useQuickflow();
   const { suggestFor } = useFrictionLibrary();
-  const { isDone, toggleDone } = useDoneLog();
+  const { isDone, toggleDone } = useDoneLog(targetDay);
   const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
 
   const items = useMemo<FlowItem[]>(() => {
-    const today = todayISO();
-    const weekday = (new Date().getDay() + 6) % 7;
+    const today = targetDay;
+    const weekday = (new Date(`${targetDay}T00:00:00`).getDay() + 6) % 7;
     const out: FlowItem[] = [];
 
     const isSnoozed = (until?: string) => !!until && until > today;
 
+    /** Bockades något av på den dag vi tittar på? */
     const isToday = (ms?: number) => {
       if (!ms) return false;
       const d = new Date(ms);
@@ -60,6 +63,8 @@ export function useFlowItems(): {
 
     for (const t of tasks) {
       if (isSnoozed(t.snoozedUntil)) continue;
+      // En annan dag än idag visar bara det som faktiskt hör till den dagen.
+      if (!isTodayView && t.dueDate !== today) continue;
       // Klara uppgifter visas bara om de hör till idag eller bockades av idag –
       // så att dagen kan visa både det som återstår och det som redan är gjort.
       if (t.completed && t.dueDate !== today && !isToday(t.completedAt)) continue;
@@ -173,7 +178,9 @@ export function useFlowItems(): {
         : undefined;
       const qDays = qDue ? daysUntilDate(qDue) : undefined;
       const qDoneToday = !!q.done && isToday(q.doneAt);
-      if (q.done && qDue !== today && !qDoneToday) continue;
+      if (!isTodayView) {
+        if (qDue !== today) continue;
+      } else if (q.done && qDue !== today && !qDoneToday) continue;
       out.push({
         id: `qf-${q.id}`,
         title: q.text,
@@ -198,11 +205,25 @@ export function useFlowItems(): {
     }
 
     return sortFlowItems(out);
-  }, [tasks, reminders, lectures, childEvents, routines, quickflowItems, suggestFor, isDone]);
+  }, [
+    tasks,
+    reminders,
+    lectures,
+    childEvents,
+    routines,
+    quickflowItems,
+    suggestFor,
+    isDone,
+    targetDay,
+    isTodayView,
+  ]);
 
+  // "today" = det som hör till den valda dagen. För idag betyder det det som
+  // är akut eller ska göras idag; för en annan dag är allt vi samlat in redan
+  // filtrerat på just den dagen.
   const today = useMemo(
-    () => items.filter((i) => i.priority === "nu" || i.priority === "idag"),
-    [items],
+    () => (isTodayView ? items.filter((i) => i.priority === "nu" || i.priority === "idag") : items),
+    [items, isTodayView],
   );
 
   const todayOpen = useMemo(() => today.filter((i) => !i.done), [today]);
