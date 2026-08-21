@@ -925,13 +925,15 @@ export default function CalendarPage() {
                   Bildstöd
                 </button>
                 <div
-                  role="group"
+                  role="tablist"
                   aria-label="Visningsläge för dagen"
                   className="flex items-center gap-1 p-1 rounded-2xl bg-secondary/50 border border-border"
                 >
                   <button
+                    role="tab"
+                    aria-selected={!allInDay}
+                    tabIndex={!allInDay ? 0 : -1}
                     onClick={() => setAllInDay(false)}
-                    aria-pressed={!allInDay}
                     title="Visa dagens tidsbundna händelser på sina tider"
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-medium transition-colors ${
                       !allInDay
@@ -943,8 +945,10 @@ export default function CalendarPage() {
                     Tidslinje
                   </button>
                   <button
+                    role="tab"
+                    aria-selected={allInDay}
+                    tabIndex={allInDay ? 0 : -1}
                     onClick={() => setAllInDay(true)}
-                    aria-pressed={allInDay}
                     title="Visa allt som ska göras och redan är gjort den här dagen – inte bara tidsbundet"
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-medium transition-colors ${
                       allInDay
