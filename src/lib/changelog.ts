@@ -6,12 +6,15 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-08-21";
+export const CHANGELOG_UPDATED = "2026-08-22";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Allt som kan genomföras kan bockas av – uppgifter, händelser, påminnelser, rutiner, lektioner, barnens hållpunkter och QuickFlow-tankar delar samma bock och samma status i hela appen (2026-08-22)",
+      "Genomfört idag – Hem och Min dag visar även vad du faktiskt har gjort, inte bara det som är kvar (2026-08-22)",
+      "Livsområden har egna färger som visar område, aldrig status: Vardag, Privat, Barn, Studier, Jobb, Hälsa, Ekonomi, Socialt och Egen tid (2026-08-22)",
       "Dagens uppgifter på Hem och i Flow → Idag – bocka av dagens uppgifter (även de QuickFlow strukturerat) direkt från hemskärmen, med samma status i Min dag och Att göra (2026-08-21)",
       'QuickFlow sparar på riktigt – "Godkänn allt" och "Spara bara texten" hann tidigare inte spara innan rutan stängdes; nu landar uppgiften, inköpet eller tanken direkt i rätt vy (2026-08-21)',
       "Min livsprofil – en enda profil som ersätter Min jobbprofil och Min studieprofil: livssituation (flera samtidigt), anpassade följdfrågor, styrkor, svårigheter, stödbehov, vad som ger och tar energi samt hur du vill att Flow hjälper dig. Gammal profildata migreras automatiskt och Flow använder profilen som kontext (2026-08-20)",
