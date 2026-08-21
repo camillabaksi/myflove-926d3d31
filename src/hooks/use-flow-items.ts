@@ -119,9 +119,7 @@ export function useFlowItems(): {
     }
 
     for (const e of childEvents) {
-      const id = e.itemId
-        ? `childitem-${e.itemId}`
-        : `child-${e.childName}-${e.time}-${e.title}`;
+      const id = e.itemId ? `childitem-${e.itemId}` : `child-${e.childName}-${e.time}-${e.title}`;
       out.push({
         id,
         title: `${e.title} (${e.childName})`,
@@ -188,16 +186,7 @@ export function useFlowItems(): {
     }
 
     return sortFlowItems(out);
-  }, [
-    tasks,
-    reminders,
-    lectures,
-    childEvents,
-    routines,
-    quickflowItems,
-    suggestFor,
-    isDone,
-  ]);
+  }, [tasks, reminders, lectures, childEvents, routines, quickflowItems, suggestFor, isDone]);
 
   const today = useMemo(
     () => items.filter((i) => i.priority === "nu" || i.priority === "idag"),
@@ -211,7 +200,10 @@ export function useFlowItems(): {
   const toggleItem = useCallback(
     (item: FlowItem) => {
       if (!item.completable) return;
-      const [, rest] = [item.id.slice(0, item.id.indexOf("-")), item.id.slice(item.id.indexOf("-") + 1)];
+      const [, rest] = [
+        item.id.slice(0, item.id.indexOf("-")),
+        item.id.slice(item.id.indexOf("-") + 1),
+      ];
       if (item.id.startsWith("task-")) return toggleTask(rest);
       if (item.id.startsWith("rem-")) return toggleReminder(rest);
       if (item.id.startsWith("childitem-")) {

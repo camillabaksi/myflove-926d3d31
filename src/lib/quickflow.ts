@@ -452,7 +452,6 @@ export function guessArea(text: string): LifeArea {
   return "vardag";
 }
 
-
 // ---------------------------------------------------------------------------
 // Sortering: vart hör en QuickFlow-tanke egentligen hemma?
 // "köpa schampo" hör hemma i inköpslistan, "förbereda middag" i kalendern.

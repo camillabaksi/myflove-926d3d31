@@ -110,7 +110,6 @@ export default function MyDay() {
   const { keep, rest } = useMemo(
     () => withinCapacity(todaysItems, capacityForMode(flow, mode)),
     [todaysItems, flow, mode],
-
   );
   const offerReplan = shouldOfferReplan(flow.score) || chosen;
 
@@ -224,15 +223,12 @@ export default function MyDay() {
                     <MyFloveTransition transitionKey={String(item.done)}>
                       <FlowItemCard
                         item={item}
-                        {...(item.completable
-                          ? { onToggle: (i: FlowItem) => toggleItem(i) }
-                          : {})}
+                        {...(item.completable ? { onToggle: (i: FlowItem) => toggleItem(i) } : {})}
                       />
                     </MyFloveTransition>
                   </li>
                 ))}
               </ul>
-
             )}
             {rest.length > 0 && (
               <details className="rounded-2xl bg-muted/50 p-3">
@@ -244,9 +240,7 @@ export default function MyDay() {
                     <li key={item.id}>
                       <FlowItemCard
                         item={item}
-                        {...(item.completable
-                          ? { onToggle: (i: FlowItem) => toggleItem(i) }
-                          : {})}
+                        {...(item.completable ? { onToggle: (i: FlowItem) => toggleItem(i) } : {})}
                       />
                     </li>
                   ))}

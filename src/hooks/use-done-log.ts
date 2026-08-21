@@ -25,9 +25,7 @@ export function useDoneLog() {
     (id: string) => {
       setLog((prev) => {
         const current = prev?.[day] ?? [];
-        const next = current.includes(id)
-          ? current.filter((x) => x !== id)
-          : [...current, id];
+        const next = current.includes(id) ? current.filter((x) => x !== id) : [...current, id];
         // Vi behåller bara de senaste dagarna – loggen ska inte växa i evighet.
         const keep = Object.keys(prev ?? {})
           .filter((d) => d >= dayMinus(day, 14))
