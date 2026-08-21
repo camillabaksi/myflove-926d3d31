@@ -47,21 +47,22 @@ function LandingPage() {
   return (
     <main className="min-h-screen bg-[#F8F5FE] text-[#2A2140]">
       {/* ── Hero ─────────────────────────────────────────── */}
-      <section className="relative overflow-hidden px-6 pt-16 pb-20 md:pt-24 md:pb-28">
-        <div className="pointer-events-none absolute -top-40 -right-24 h-[420px] w-[420px] rounded-full bg-gradient-to-br from-[#A78BFA] to-[#7C5CE0] opacity-80 blur-sm" />
-        <div className="pointer-events-none absolute -bottom-32 -left-16 h-[320px] w-[320px] rounded-full bg-[#C4B5FD] opacity-50" />
+      <section className="relative overflow-hidden px-5 pt-14 pb-16 sm:px-6 md:pt-24 md:pb-28">
+        <div className="pointer-events-none absolute -top-32 -right-28 h-[260px] w-[260px] rounded-full bg-gradient-to-br from-[#A78BFA] to-[#7C5CE0] opacity-40 blur-2xl sm:-top-40 sm:-right-24 sm:h-[420px] sm:w-[420px] sm:opacity-80 sm:blur-sm" />
+        <div className="pointer-events-none absolute -bottom-28 -left-20 h-[220px] w-[220px] rounded-full bg-[#C4B5FD] opacity-30 blur-2xl sm:-bottom-32 sm:-left-16 sm:h-[320px] sm:w-[320px] sm:opacity-50 sm:blur-none" />
         <div className="relative mx-auto max-w-3xl text-center">
-          <p className="text-xs uppercase tracking-[0.35em] text-[#7C5CE0] font-semibold">
+          <p className="text-[11px] uppercase tracking-[0.3em] text-[#7C5CE0] font-semibold sm:text-xs sm:tracking-[0.35em]">
             MyFlove
           </p>
-          <h1 className="mt-4 font-display text-5xl md:text-7xl font-bold leading-[0.95] tracking-tight">
+          <h1 className="mt-4 text-balance font-display text-[2rem] leading-[1.1] tracking-tight font-bold sm:text-5xl sm:leading-[0.95] md:text-7xl">
             MyFlove – lugn planering för ADHD, autism och ett fullt huvud
           </h1>
 
-          <p className="mt-6 text-lg md:text-xl text-[#6B647F] max-w-xl mx-auto leading-relaxed">
+          <p className="mt-5 text-base text-[#6B647F] max-w-xl mx-auto leading-relaxed sm:mt-6 sm:text-lg md:text-xl">
             Ett lugnare hem för hjärnan – för dig som lever med ADHD, autism eller bara mycket i
-            huvudet. 💙
+            huvudet.
           </p>
+
           <div className="mt-10 flex flex-col sm:flex-row gap-3 justify-center">
             <Button
               asChild
