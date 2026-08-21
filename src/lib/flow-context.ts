@@ -50,8 +50,8 @@ export const AREA_SHORTCUTS: Record<LifeArea, FlowShortcut[]> = {
     { href: "/pomodoro", label: "Fokus", emoji: "⏱️" },
   ],
   halsa: [
-    { href: "/wellness", label: "Hälsa", emoji: "❤️" },
-    { href: "/medicin", label: "Medicin", emoji: "💊" },
+    { href: "/ma-bra", label: "Må bra", emoji: "❤️" },
+    { href: "/daglig-rutin", label: "Rutiner & medicin", emoji: "💊" },
     { href: "/traning", label: "Träning", emoji: "🏃" },
     { href: "/flowscore", label: "FlowScore", emoji: "🔋" },
   ],
@@ -68,7 +68,7 @@ export const AREA_SHORTCUTS: Record<LifeArea, FlowShortcut[]> = {
     { href: "/min-dag", label: "Min dag", emoji: "🗓️" },
   ],
   egentid: [
-    { href: "/wellness", label: "Må bra", emoji: "🌙" },
+    { href: "/ma-bra", label: "Må bra", emoji: "🌙" },
     { href: "/anteckningar", label: "Anteckningar", emoji: "📝" },
     { href: "/pomodoro", label: "Fokus", emoji: "⏱️" },
     { href: "/min-dag", label: "Min dag", emoji: "🗓️" },
