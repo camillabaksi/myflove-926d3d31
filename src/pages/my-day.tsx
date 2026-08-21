@@ -105,11 +105,12 @@ export default function MyDay() {
     });
   };
 
-  const { today: todaysItems } = useFlowItems();
+  const { todayOpen: todaysItems, todayDone, toggleItem } = useFlowItems();
   const { mode, chosen, setMode } = useReplanMode();
   const { keep, rest } = useMemo(
     () => withinCapacity(todaysItems, capacityForMode(flow, mode)),
     [todaysItems, flow, mode],
+
   );
   const offerReplan = shouldOfferReplan(flow.score) || chosen;
 
