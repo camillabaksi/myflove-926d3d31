@@ -76,7 +76,10 @@ function cleanTitle(raw: string, when: ParsedWhen | null): string {
   t = t
     .replace(/\b(?:kl\.?|klockan)\s*\d{1,2}(?:[.:]\d{2})?\b/gi, " ")
     .replace(/\b\d{1,2}[.:]\d{2}\b/g, " ")
-    .replace(/\b(idag|i dag|ikv[äa]ll|i kv[äa]ll|imorgon|i morgon|i övermorgon|övermorgon)\b/gi, " ")
+    .replace(
+      /\b(idag|i dag|ikv[äa]ll|i kv[äa]ll|imorgon|i morgon|i övermorgon|övermorgon)\b/gi,
+      " ",
+    )
     .replace(/\s+/g, " ")
     .trim()
     .replace(LEAD_FILLERS, "")
@@ -170,7 +173,6 @@ export function understand(text: string, now = new Date()): Understanding {
         : `Du skrev "${when.matched}" – jag lägger den som heldag.`,
     });
   }
-
 
   if (prep) {
     parts.push({

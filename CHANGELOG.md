@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-21 – QuickFlow fångar klockslag
+
+- QuickFlow förstår nu "idag", "i dag" och "ikväll" – tidigare hamnade de utan datum.
+- Skriver du bara ett klockslag ("Ring frisören 14:00") läggs det på idag.
+- Uppgifter behåller sitt klockslag: "Ring tandläkaren idag 14:00" blir en uppgift kl 14:00, inte en tidlös rad. Den dyker upp under 🕒 Under klockslag i ✨ Allt i dagen och på rätt tid i ❤️ Idag.
+- Inköp får renare titlar – tidsuttryck städas bort ("Handla mjölk idag 14:00" → "Mjölk").
+
 ## 2026-08-25 – ✨ Allt i dagen i kalendern
 
 - Kalendern har fått en utökad vy: **✨ Allt i dagen** (knapp vid dagens rubrik, syns för idag). Vanliga kalendern är oförändrad och visar fortsatt tidsbundna saker.
@@ -63,8 +70,6 @@
 - Dubblettspärr: samma aktivitet med samma riktning inom en minut sparas inte två gånger – dubbeltryck skapar inte längre två poster.
 - Om en borttagning eller ändring inte går igenom mot servern återställs vyn i stället för att visa ett felaktigt läge.
 
-
-
 ## 2026-08-20 – Snabbknapp "Jag gjorde något" på Hem
 
 - Ny alltid synlig snabbknapp ➕ Jag gjorde något direkt under Mitt batteri på Hem – öppnar ett 3–5 sekunders flöde: välj/skriv aktivitet → 🔻/🔺/➖ sparar direkt.
@@ -81,7 +86,6 @@
 - Registrerade aktiviteter räknas in i FlowScore, så en tom kalender läses inte längre som en lätt dag.
 - Nya mönster: "Tungt att komma igång med (30 dagar)" som visar när friktion och energikostnad skiljer sig åt.
 - Hem och Min dag har fått blocken; på Hem kan de döljas/sorteras i Anpassa hemskärmen.
-
 
 Alla betydande ändringar i detta projekt dokumenteras i denna fil.
 

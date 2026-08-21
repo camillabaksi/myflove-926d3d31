@@ -268,7 +268,6 @@ export function parseWhenFromText(text: string, now = new Date()): ParsedWhen | 
     return build(d, "imorgon");
   }
 
-
   // "på fredag", "nästa tisdag"
   const wd = t.match(
     new RegExp(`\\b(nästa|på|i)?\\s*(${Object.keys(WEEKDAY_WORDS).join("|")})\\b`),
@@ -310,7 +309,6 @@ export function parseWhenFromText(text: string, now = new Date()): ParsedWhen | 
   }
 
   return null;
-
 }
 
 /** "Jag vet inte – hjälp mig": MyFlove föreslår en tid som brukar funka. */
