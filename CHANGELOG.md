@@ -6,6 +6,7 @@
 - Vyn visar hela dagen: tidsatta saker under klockslag och sådant utan tid under **🌿 Under dagen** – både planerat och genomfört, med livsområdesfärg kvar även när det är avbockat.
 - Samma data och samma bock som Idag, Lista, Hem och Att göra – inga dubbletter. QuickFlow-objekt som hör till idag dyker upp automatiskt.
 - Liten sammanfattning: "✨ X aktiviteter genomförda idag".
+- "Allt i dagen" fungerar nu för **valfri kalenderdag**, inte bara idag: välj en dag så visas den dagens uppgifter, påminnelser, lektioner, barnens hållpunkter, rutiner och QuickFlow-objekt – med avbockning som sparas på rätt dag.
 - Tidsatta saker sorteras alltid i klockordning (även "9:00"), avbockning flyttar aldrig något, och under 🌿 Under dagen hamnar det som återstår först. Valet "Allt i dagen" sparas per datum.
 
 ## 2026-08-24 – Avbockat idag försvinner inte längre

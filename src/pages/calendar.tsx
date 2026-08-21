@@ -923,27 +923,25 @@ export default function CalendarPage() {
                   <span aria-hidden>🖼️</span>
                   Bildstöd
                 </button>
-                {selectedDateStr === todayStr && (
-                  <button
-                    onClick={() => setAllInDay(!allInDay)}
-                    aria-pressed={allInDay}
-                    title="Visa allt du ska göra och har gjort idag – inte bara tidsbundet"
-                    className={`flex items-center gap-1.5 px-3 py-2 rounded-2xl text-sm font-medium border transition-colors ${
-                      allInDay
-                        ? "bg-accent/30 border-accent/40 text-foreground"
-                        : "bg-card border-border text-muted-foreground hover:border-primary/40 hover:bg-secondary/50"
-                    }`}
-                  >
-                    <span aria-hidden>✨</span>
-                    Allt i dagen
-                  </button>
-                )}
+                <button
+                  onClick={() => setAllInDay(!allInDay)}
+                  aria-pressed={allInDay}
+                  title="Visa allt som ska göras och redan är gjort den här dagen – inte bara tidsbundet"
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-2xl text-sm font-medium border transition-colors ${
+                    allInDay
+                      ? "bg-accent/30 border-accent/40 text-foreground"
+                      : "bg-card border-border text-muted-foreground hover:border-primary/40 hover:bg-secondary/50"
+                  }`}
+                >
+                  <span aria-hidden>✨</span>
+                  Allt i dagen
+                </button>
               </div>
             </div>
 
-            {selectedDateStr === todayStr && allInDay && <AllInDay />}
+            {allInDay && <AllInDay date={selectedDateStr} isToday={selectedDateStr === todayStr} />}
 
-            {!(selectedDateStr === todayStr && allInDay) &&
+            {!allInDay &&
               !selectedItems.focus &&
               selectedItems.tasks.length === 0 &&
               selectedItems.reminders.length === 0 &&

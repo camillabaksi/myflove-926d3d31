@@ -15,9 +15,11 @@ type DoneLog = Record<string, string[]>;
  * barnens aktiviteter och Quickflow-tankar använder fortfarande sin egen
  * status. Loggen fyller bara i luckorna.
  */
-export function useDoneLog() {
+export function useDoneLog(dayISO?: string) {
   const [log, setLog] = useCloudSyncedStorage<DoneLog>(STORAGE_KEY, {});
-  const day = todayISO();
+  // Loggen kan gälla vilken kalenderdag som helst – kalendern kan bocka av
+  // saker på en annan dag än idag.
+  const day = dayISO ?? todayISO();
 
   const isDone = useCallback((id: string) => (log?.[day] ?? []).includes(id), [log, day]);
 
@@ -27,8 +29,10 @@ export function useDoneLog() {
         const current = prev?.[day] ?? [];
         const next = current.includes(id) ? current.filter((x) => x !== id) : [...current, id];
         // Vi behåller bara de senaste dagarna – loggen ska inte växa i evighet.
+        // Rensa gamla dagar, men aldrig den dag vi just nu skriver till.
+        const cutoff = dayMinus(todayISO(), 14);
         const keep = Object.keys(prev ?? {})
-          .filter((d) => d >= dayMinus(day, 14))
+          .filter((d) => d >= cutoff || d === day)
           .reduce<DoneLog>((acc, d) => ({ ...acc, [d]: prev![d]! }), {});
         return { ...keep, [day]: next };
       });

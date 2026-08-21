@@ -20,8 +20,8 @@ function minutesOf(time?: string): number {
   return Number(m[1]) * 60 + Number(m[2]);
 }
 
-export default function AllInDay() {
-  const { today, toggleItem } = useFlowItems();
+export default function AllInDay({ date, isToday = true }: { date?: string; isToday?: boolean }) {
+  const { today, toggleItem } = useFlowItems(date);
 
   const { timed, untimed, doneCount } = useMemo(() => {
     const timed: FlowItem[] = [];
@@ -42,19 +42,23 @@ export default function AllInDay() {
     <div className="space-y-4 rounded-3xl border border-border/60 bg-card/60 p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="text-sm text-muted-foreground">
-          Hela dagen – både tidsbundet och sånt som bara ska bli gjort. Samma status som i Idag, Hem
-          och Att göra.
+          {isToday
+            ? "Hela dagen – både tidsbundet och sånt som bara ska bli gjort. Samma status som i Idag, Hem och Att göra."
+            : "Hela dagen – både tidsbundet och sånt som ska bli gjort. Samma data och samma bock som i resten av appen."}
         </p>
         {doneCount > 0 && (
           <span className="rounded-pill bg-secondary/60 px-3 py-1 text-xs font-medium text-ink">
-            ✨ {doneCount} {doneCount === 1 ? "aktivitet" : "aktiviteter"} genomförda idag
+            ✨ {doneCount} {doneCount === 1 ? "aktivitet" : "aktiviteter"} genomförda{" "}
+            {isToday ? "idag" : "den här dagen"}
           </span>
         )}
       </div>
 
       {today.length === 0 && (
         <p className="rounded-2xl bg-secondary/30 p-4 text-sm text-muted-foreground">
-          Inget i dagen ännu. Släpp en tanke i QuickFlow så landar den här.
+          {isToday
+            ? "Inget i dagen ännu. Släpp en tanke i QuickFlow så landar den här."
+            : "Inget inlagt den här dagen ännu."}
         </p>
       )}
 
