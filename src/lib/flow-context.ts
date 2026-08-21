@@ -20,7 +20,7 @@ export interface FlowShortcut {
 /** Genvägar per livsområde – hämtade ur appen, inga nya menyval. */
 export const AREA_SHORTCUTS: Record<LifeArea, FlowShortcut[]> = {
   vardag: [
-    { href: "/min-dag", label: "Min dag", emoji: "🗓️" },
+    { href: "/idag", label: "Min dag", emoji: "🗓️" },
     { href: "/tasks", label: "Att göra", emoji: "✅" },
     { href: "/daglig-rutin", label: "Rutiner", emoji: "🔁" },
     { href: "/flowscore", label: "FlowScore", emoji: "🔋" },
@@ -65,19 +65,19 @@ export const AREA_SHORTCUTS: Record<LifeArea, FlowShortcut[]> = {
     { href: "/relationer", label: "Relationer", emoji: "🤝" },
     { href: "/kalender", label: "Kalender", emoji: "🗓️" },
     { href: "/tasks", label: "Att göra", emoji: "✅" },
-    { href: "/min-dag", label: "Min dag", emoji: "🗓️" },
+    { href: "/idag", label: "Min dag", emoji: "🗓️" },
   ],
   egentid: [
     { href: "/ma-bra", label: "Må bra", emoji: "🌙" },
     { href: "/anteckningar", label: "Anteckningar", emoji: "📝" },
     { href: "/pomodoro", label: "Fokus", emoji: "⏱️" },
-    { href: "/min-dag", label: "Min dag", emoji: "🗓️" },
+    { href: "/idag", label: "Min dag", emoji: "🗓️" },
   ],
 };
 
 const PLACES: Record<string, { label: string; prompt: string; area: LifeArea }> = {
   "/hem": { label: "Hem", prompt: "Vad är viktigast för mig just nu?", area: "vardag" },
-  "/min-dag": { label: "Min dag", prompt: "Hjälp mig göra dagens plan rimlig.", area: "vardag" },
+  "/idag": { label: "Min dag", prompt: "Hjälp mig göra dagens plan rimlig.", area: "vardag" },
   "/tasks": { label: "Att göra", prompt: "Hjälp mig välja vad jag ska börja med.", area: "vardag" },
   "/kalender": {
     label: "Kalendern",

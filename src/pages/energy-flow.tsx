@@ -499,7 +499,7 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
 function MyFloveLinkRow() {
   return (
     <div className="flex flex-wrap gap-2">
-      <Link href="/min-dag">
+      <Link href="/idag">
         <MyFloveButton variant="secondary">Gör planen lättare</MyFloveButton>
       </Link>
       <Link href="/flow">

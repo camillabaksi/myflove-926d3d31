@@ -288,7 +288,7 @@ export function studySuggestions(
     out.push({
       title: "Låg kapacitet idag",
       body: `Energin är ${ctx.energy ?? "låg"} och FlowScore ${ctx.flowScore}. Ett pass på ${session} minuter räcker gott idag – resten kan vänta.`,
-      href: "/min-dag",
+      href: "/idag",
       hrefLabel: "Se dagen",
     });
   }

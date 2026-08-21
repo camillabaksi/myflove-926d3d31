@@ -259,7 +259,7 @@ export default function Layout({ children }: LayoutProps) {
   const navItems: NavItem[] = [
     { href: "/hem", label: "Hem", icon: Home, hint: "Din överblick över dagen", essential: true },
     {
-      href: "/min-dag",
+      href: "/idag",
       label: "Min dag",
       icon: CalendarDays,
       hint: "Dagens plan: hållpunkter, en viktig sak och det du orkar",
@@ -471,7 +471,7 @@ export default function Layout({ children }: LayoutProps) {
         label: "Min dag",
         hint: "Kalender, att göra och dagens hållpunkter",
         icon: CalendarDays,
-        hrefs: ["/min-dag", "/kalender", "/tasks", "/daglig-rutin", "/paminnelser", "/pomodoro"],
+        hrefs: ["/idag", "/kalender", "/tasks", "/daglig-rutin", "/paminnelser", "/pomodoro"],
       },
       {
         id: "flowflow",
@@ -557,7 +557,7 @@ export default function Layout({ children }: LayoutProps) {
   const situationLabel = lifeProfileSummary(lifeProfile, situation);
   // Egna platser i bottennavet – du byter dem själv i "Mer".
   const [navSlots, setNavSlots] = useLocalStorage<string[]>("myflove-bottom-nav-slots", [
-    "/min-dag",
+    "/idag",
     "/flow",
   ]);
   const [editingNav, setEditingNav] = useState(false);
@@ -580,7 +580,7 @@ export default function Layout({ children }: LayoutProps) {
    */
   const primaryNav = useMemo(() => {
     const pick = (href: string) => navItems.find((i) => i.href === href);
-    const slot1 = pick(navSlots[0] ?? "") ?? pick("/min-dag") ?? pick("/kalender");
+    const slot1 = pick(navSlots[0] ?? "") ?? pick("/idag") ?? pick("/kalender");
     const slot2 = pick(navSlots[1] ?? "") ?? pick("/flow");
     return [pick("/hem"), slot1, slot2].filter(Boolean) as typeof navItems;
   }, [navItems, navSlots]);
@@ -1092,7 +1092,7 @@ export default function Layout({ children }: LayoutProps) {
                           variant="ghost"
                           size="sm"
                           className="rounded-xl gap-1"
-                          onClick={() => setNavSlots(["/min-dag", "/flow"])}
+                          onClick={() => setNavSlots(["/idag", "/flow"])}
                         >
                           <RotateCcw size={14} /> Återställ
                         </Button>
