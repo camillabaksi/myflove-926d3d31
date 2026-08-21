@@ -30,7 +30,6 @@ export default function QuickflowFab() {
     setSaved(false);
   };
 
-
   return (
     <>
       <button
@@ -90,7 +89,6 @@ export default function QuickflowFab() {
           {trimmed && saved && (
             <QuickflowConfirm text={trimmed} onDone={close} onCancel={() => setSaved(false)} />
           )}
-
         </DialogContent>
       </Dialog>
     </>
