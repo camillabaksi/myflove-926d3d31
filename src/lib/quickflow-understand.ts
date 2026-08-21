@@ -125,26 +125,24 @@ export function understand(text: string, now = new Date()): Understanding {
 
   const parts: UnderstoodPart[] = [];
 
-  if (when) {
-    // Datum/tid i texten → förslag på kalenderhändelse.
-    const title = cleanTitle(main, when);
-    parts.push({
-      id: newId(),
-      kind: "kalender",
-      title,
-      date: dateStr(when.at),
-      ...(when.allDay ? {} : { time: timeStr(when.at) }),
-      ...(place ? { place } : {}),
-      area,
-      why: when.hasTime
-        ? `Du skrev "${when.matched}" och ett klockslag.`
-        : `Du skrev "${when.matched}" – jag lägger den som heldag.`,
-    });
-  } else if (SHOPPING_WORDS.test(main)) {
+  // Datum/tid gäller oavsett vilken sorts sak det är – en uppgift kan ha klockslag.
+  const whenFields = when
+    ? {
+        date: dateStr(when.at),
+        ...(when.allDay ? {} : { time: timeStr(when.at) }),
+      }
+    : {};
+  const whenWhy = when
+    ? when.hasTime
+      ? ` Du skrev "${when.matched}" och ett klockslag.`
+      : ` Du skrev "${when.matched}" – ingen tid, så den ligger under dagen.`
+    : "";
+
+  if (SHOPPING_WORDS.test(main)) {
     parts.push({
       id: newId(),
       kind: "inkop",
-      title: capitalize(shoppingTitleFrom(main)),
+      title: capitalize(shoppingTitleFrom(cleanTitle(main, when))),
       area,
       why: "Det låter som något du ska köpa.",
     });
@@ -152,11 +150,27 @@ export function understand(text: string, now = new Date()): Understanding {
     parts.push({
       id: newId(),
       kind: "uppgift",
-      title: cleanTitle(main, null),
+      title: cleanTitle(main, when),
+      ...whenFields,
+      ...(place ? { place } : {}),
       area,
-      why: "Det låter som något du ska göra.",
+      why: `Det låter som något du ska göra.${whenWhy}`,
+    });
+  } else if (when) {
+    // Datum/tid i texten men inget tydligt görande → kalenderhändelse.
+    parts.push({
+      id: newId(),
+      kind: "kalender",
+      title: cleanTitle(main, when),
+      ...whenFields,
+      ...(place ? { place } : {}),
+      area,
+      why: when.hasTime
+        ? `Du skrev "${when.matched}" och ett klockslag.`
+        : `Du skrev "${when.matched}" – jag lägger den som heldag.`,
     });
   }
+
 
   if (prep) {
     parts.push({
