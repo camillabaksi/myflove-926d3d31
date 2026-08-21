@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Smala mobilskärmar – Kalender, ❤️ Idag och inloggningen håller ihop ner till 320 px: knappraden radbryts, topplisten har fast plats för tillbaka/titel/Minimera och inget klipps av (2026-08-21)",
       "Startsidan i mobil – mindre hero-rubrik, mjukare bakgrundsbubblor och luftigare sektioner på små skärmar (2026-08-21)",
       "✨ Allt i dagen i kalendern – en utökad vy som visar hela dagen: tidsatta saker under klockslag och resten under 🌿 Under dagen, både planerat och genomfört, med samma data och samma bock som Idag, Hem och Att göra. Klockordning som håller, direkt uppdatering vid avbockning valet sparas per datum och vyn fungerar för valfri kalenderdag (2026-08-25)",
       'QuickFlow fångar klockslag – "idag", "ikväll" och rena klockslag tolkas rätt, uppgifter behåller sin tid och syns under 🕒 Under klockslag i ✨ Allt i dagen och i ❤️ Idag (2026-08-21)',
