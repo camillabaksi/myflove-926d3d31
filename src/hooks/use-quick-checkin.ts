@@ -24,11 +24,29 @@ function isToday(ts: number | string): boolean {
   return d.toDateString() === now.toDateString();
 }
 
+/** Dagens exakta 1–10-värden (visning). Kanoniska 1–5 sparas i befintliga system. */
+interface Checkin10 {
+  day: string;
+  mood?: number;
+  energy?: number;
+}
+
+/** 1–10 → 1–5 (kanonisk skala i moods/energy_logs). */
+export const toScale5 = (v10: number) => Math.min(5, Math.max(1, Math.round(v10 / 2)));
+/** 1–5 → 1–10 (fallback när exakt värde saknas). */
+export const toScale10 = (v5: number) => Math.min(10, Math.max(1, Math.round(v5 * 2)));
+
+const todayKey = () => new Date().toISOString().slice(0, 10);
+
 export function useQuickCheckin() {
   const { moods, setMoods } = useMoods();
   const [localEnergy, setLocalEnergy] = useLocalStorage<EnergyLogEntry[]>("myflove-energy-log", []);
+  const [checkin10, setCheckin10] = useLocalStorage<Checkin10>("myflove-checkin-10", {
+    day: todayKey(),
+  });
   const [cloudEnergy, setCloudEnergy] = useState<EnergyLogEntry[] | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
+
 
   useEffect(() => {
     let mounted = true;
