@@ -250,6 +250,12 @@ export default function Home() {
           </div>
         </div>
 
+        {shows("checkin") && (
+          <div style={pos("checkin")}>
+            <QuickCheckin />
+          </div>
+        )}
+
         {shows("batteri") && (
           <div style={pos("batteri")}>
             <EnergyBattery />
