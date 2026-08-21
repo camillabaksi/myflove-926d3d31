@@ -14,15 +14,19 @@ export default function ViewCollapseToggle({ className = "" }: { className?: str
     <button
       type="button"
       onClick={() => setAllVisible(!allCollapsed)}
-      className={`flex items-center gap-1.5 rounded-full border border-border/60 bg-card/80 px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-muted ${className}`}
+      className={`flex shrink-0 items-center gap-1.5 rounded-full border border-border/60 bg-card/80 px-2.5 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-muted sm:px-3 ${className}`}
       title={allCollapsed ? "Visa alla vyer" : "Minimera alla vyer"}
+      aria-label={allCollapsed ? "Visa alla vyer" : "Minimera alla vyer"}
     >
       {allCollapsed ? (
         <Maximize2 size={14} aria-hidden="true" />
       ) : (
         <Minimize2 size={14} aria-hidden="true" />
       )}
-      <span>{allCollapsed ? "Visa allt" : "Minimera allt"}</span>
+      <span className="hidden min-[400px]:inline">
+        {allCollapsed ? "Visa allt" : "Minimera allt"}
+      </span>
     </button>
+
   );
 }
