@@ -12,7 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
-      "✨ Allt i dagen i kalendern – en utökad vy som visar hela dagen: tidsatta saker under klockslag och resten under 🌿 Under dagen, både planerat och genomfört, med samma data och samma bock som Idag, Hem och Att göra (2026-08-25)",
+      "✨ Allt i dagen i kalendern – en utökad vy som visar hela dagen: tidsatta saker under klockslag och resten under 🌿 Under dagen, både planerat och genomfört, med samma data och samma bock som Idag, Hem och Att göra. Klockordning som håller, direkt uppdatering vid avbockning och valet sparas per datum (2026-08-25)",
       "Avbockat idag stannar kvar under Genomfört idag – uppgifter och tankar utan datum försvinner inte längre när du bockar av dem (2026-08-24)",
       "Min dag och Daily Flow är sammanslagna till ❤️ Idag – en vy för dagen med två lägen: 🌊 Flow och 📋 Lista (2026-08-23)",
       "Allt som kan genomföras kan bockas av – uppgifter, händelser, påminnelser, rutiner, lektioner, barnens hållpunkter och QuickFlow-tankar delar samma bock och samma status i hela appen (2026-08-22)",
