@@ -677,7 +677,6 @@ export default function Layout({ children }: LayoutProps) {
           <ViewCollapseToggle />
         </header>
 
-
         <div className="hidden md:flex items-center gap-2 px-8 pt-6">
           {primaryNav.map((item) => {
             const active =

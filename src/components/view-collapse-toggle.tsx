@@ -27,6 +27,5 @@ export default function ViewCollapseToggle({ className = "" }: { className?: str
         {allCollapsed ? "Visa allt" : "Minimera allt"}
       </span>
     </button>
-
   );
 }

@@ -81,30 +81,30 @@ function ChipField({
         {...(hint ? { description: hint } : {})}
         className="space-y-3"
       >
-      <div className="flex flex-wrap gap-2">
-        {all.map((o) => (
-          <Chip key={o} active={selected.includes(o)} onClick={() => onToggle(o)}>
-            {o}
-          </Chip>
-        ))}
-      </div>
-      <div className="mt-3 flex gap-2">
-        <Input
-          value={custom}
-          onChange={(e) => setCustom(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              addCustom();
-            }
-          }}
-          placeholder="Annat – skriv eget"
-        />
-        <Button type="button" variant="secondary" onClick={addCustom}>
-          <Plus size={14} className="mr-1" aria-hidden="true" />
-          Lägg till
-        </Button>
-      </div>
+        <div className="flex flex-wrap gap-2">
+          {all.map((o) => (
+            <Chip key={o} active={selected.includes(o)} onClick={() => onToggle(o)}>
+              {o}
+            </Chip>
+          ))}
+        </div>
+        <div className="mt-3 flex gap-2">
+          <Input
+            value={custom}
+            onChange={(e) => setCustom(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                addCustom();
+              }
+            }}
+            placeholder="Annat – skriv eget"
+          />
+          <Button type="button" variant="secondary" onClick={addCustom}>
+            <Plus size={14} className="mr-1" aria-hidden="true" />
+            Lägg till
+          </Button>
+        </div>
       </CollapsibleSection>
     </section>
   );

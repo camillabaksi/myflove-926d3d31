@@ -36,57 +36,57 @@ export function TodayTasks({ limit = 6 }: { limit?: number }) {
         className="space-y-3"
       >
         {shown.length === 0 ? (
-        <p className="rounded-2xl bg-secondary/30 p-4 text-sm text-muted-foreground">
-          {todayDone.length > 0
-            ? "Allt som hörde till idag är genomfört. Fint jobbat. 💙"
-            : "Inget att bocka av just nu. Släpp en tanke i QuickFlow så landar den här."}
-        </p>
-      ) : (
-        <ul className="space-y-2">
-          {shown.map((item) => (
-            <li key={item.id}>
-              <MyFloveTransition transitionKey={String(item.done)}>
-                <FlowItemCard
-                  item={item}
-                  {...(item.completable ? { onToggle: (i: FlowItem) => toggleItem(i) } : {})}
-                />
-              </MyFloveTransition>
-            </li>
-          ))}
-        </ul>
-      )}
-
-      {todayDone.length > 0 && (
-        <div className="mt-3 rounded-2xl bg-secondary/30 p-3">
-          <CollapsibleSection
-            id="dagens-saker::genomfort-idag"
-            title={`☑️ ${todayDone.length} ${todayDone.length === 1 ? "sak" : "saker"} genomförda idag 💙`}
-            headingClassName="text-sm font-medium text-ink"
-            defaultCollapsed
-          >
+          <p className="rounded-2xl bg-secondary/30 p-4 text-sm text-muted-foreground">
+            {todayDone.length > 0
+              ? "Allt som hörde till idag är genomfört. Fint jobbat. 💙"
+              : "Inget att bocka av just nu. Släpp en tanke i QuickFlow så landar den här."}
+          </p>
+        ) : (
           <ul className="space-y-2">
-            {todayDone.map((item) => (
+            {shown.map((item) => (
               <li key={item.id}>
-                <FlowItemCard
-                  item={item}
-                  className="opacity-80"
-                  {...(item.completable ? { onToggle: (i: FlowItem) => toggleItem(i) } : {})}
-                />
+                <MyFloveTransition transitionKey={String(item.done)}>
+                  <FlowItemCard
+                    item={item}
+                    {...(item.completable ? { onToggle: (i: FlowItem) => toggleItem(i) } : {})}
+                  />
+                </MyFloveTransition>
               </li>
             ))}
           </ul>
-          </CollapsibleSection>
-        </div>
-      )}
+        )}
 
-      {todayOpen.length > shown.length && (
-        <Link
-          href="/tasks"
-          className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
-        >
-          Se alla ({todayOpen.length}) <ArrowRight size={14} />
-        </Link>
-      )}
+        {todayDone.length > 0 && (
+          <div className="mt-3 rounded-2xl bg-secondary/30 p-3">
+            <CollapsibleSection
+              id="dagens-saker::genomfort-idag"
+              title={`☑️ ${todayDone.length} ${todayDone.length === 1 ? "sak" : "saker"} genomförda idag 💙`}
+              headingClassName="text-sm font-medium text-ink"
+              defaultCollapsed
+            >
+              <ul className="space-y-2">
+                {todayDone.map((item) => (
+                  <li key={item.id}>
+                    <FlowItemCard
+                      item={item}
+                      className="opacity-80"
+                      {...(item.completable ? { onToggle: (i: FlowItem) => toggleItem(i) } : {})}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </CollapsibleSection>
+          </div>
+        )}
+
+        {todayOpen.length > shown.length && (
+          <Link
+            href="/tasks"
+            className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+          >
+            Se alla ({todayOpen.length}) <ArrowRight size={14} />
+          </Link>
+        )}
       </CollapsibleSection>
     </section>
   );

@@ -896,7 +896,6 @@ export default function CalendarPage() {
                     })}
               </h3>
               <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
-
                 <button
                   onClick={() => setIsAddingAny(true)}
                   className="flex items-center gap-1.5 px-3 py-2 rounded-2xl text-sm font-medium border transition-colors bg-card border-border text-foreground hover:border-primary/40 hover:bg-secondary/50"
@@ -965,7 +964,6 @@ export default function CalendarPage() {
 
             {allInDay && <AllInDay date={selectedDateStr} isToday={selectedDateStr === todayStr} />}
 
-
             {!allInDay &&
               !selectedItems.focus &&
               selectedItems.tasks.length === 0 &&
@@ -980,7 +978,6 @@ export default function CalendarPage() {
               )}
 
             {!allInDay && selectedItems.recurring.length > 0 && (
-
               <div className="flex flex-wrap items-center gap-2 px-1">
                 <span className="text-xs uppercase tracking-wider text-muted-foreground">
                   Återkommande
@@ -1038,237 +1035,238 @@ export default function CalendarPage() {
               />
             )}
 
-            {!allInDay && <div className="space-y-3">
-              {/* Samma händelse för flera barn (t.ex. lämning av Bella och Bianca) visas ihop. */}
-              {(() => {
-                type ChildEv = (typeof selectedItems.childEvents)[number];
-                const groups = new Map<string, ChildEv[]>();
-                for (const e of selectedItems.childEvents) {
-                  const key = `${e.title}|${e.time ?? ""}|${e.completed ? 1 : 0}`;
-                  groups.set(key, [...(groups.get(key) ?? []), e]);
-                }
-                return Array.from(groups.values());
-              })().map((group) => {
-                const e = group[0]!;
-                const names = group.map((g) => g.child?.name ?? "Barn");
-                const color = group.length > 1 ? "#a06cd5" : (e.child?.color ?? "#a06cd5");
-                return (
+            {!allInDay && (
+              <div className="space-y-3">
+                {/* Samma händelse för flera barn (t.ex. lämning av Bella och Bianca) visas ihop. */}
+                {(() => {
+                  type ChildEv = (typeof selectedItems.childEvents)[number];
+                  const groups = new Map<string, ChildEv[]>();
+                  for (const e of selectedItems.childEvents) {
+                    const key = `${e.title}|${e.time ?? ""}|${e.completed ? 1 : 0}`;
+                    groups.set(key, [...(groups.get(key) ?? []), e]);
+                  }
+                  return Array.from(groups.values());
+                })().map((group) => {
+                  const e = group[0]!;
+                  const names = group.map((g) => g.child?.name ?? "Barn");
+                  const color = group.length > 1 ? "#a06cd5" : (e.child?.color ?? "#a06cd5");
+                  return (
+                    <div
+                      key={`child-${e.id}`}
+                      className="flex items-center justify-between gap-3 p-4 bg-card border border-border rounded-2xl"
+                    >
+                      <Link href="/barn" className="flex items-center gap-4 min-w-0 flex-1">
+                        {pictoMode ? (
+                          <span className="text-3xl leading-none shrink-0" aria-hidden>
+                            {pictogramFor(e.title, "🐣")}
+                          </span>
+                        ) : (
+                          <Baby style={{ color }} size={24} />
+                        )}
+                        <div className="min-w-0">
+                          <div
+                            className="text-xs font-medium uppercase tracking-wider mb-0.5"
+                            style={{ color }}
+                          >
+                            {names.join(" & ")} {e.time && `kl ${e.time}`}
+                            {e.sharedWith.length > 0 && " · delad"}
+                          </div>
+                          <div
+                            className={`text-lg font-medium truncate ${e.completed ? "line-through opacity-60" : ""}`}
+                          >
+                            {e.title}
+                          </div>
+                        </div>
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => openChildGroupEditor(group)}
+                        className="shrink-0 text-xs font-medium px-3 py-2 rounded-full bg-secondary/60 hover:bg-secondary transition-colors"
+                      >
+                        Ändra barn
+                      </button>
+                    </div>
+                  );
+                })}
+
+                {selectedItems.familyEvents.map((e) => (
                   <div
-                    key={`child-${e.id}`}
-                    className="flex items-center justify-between gap-3 p-4 bg-card border border-border rounded-2xl"
+                    key={`fam-${e.id}`}
+                    className="flex items-center justify-between gap-4 p-4 bg-card border border-border rounded-2xl group"
                   >
-                    <Link href="/barn" className="flex items-center gap-4 min-w-0 flex-1">
+                    <div className="flex items-center gap-4">
                       {pictoMode ? (
                         <span className="text-3xl leading-none shrink-0" aria-hidden>
-                          {pictogramFor(e.title, "🐣")}
+                          {pictogramFor(e.title, "👨‍👩‍👧")}
                         </span>
                       ) : (
-                        <Baby style={{ color }} size={24} />
+                        <Users style={{ color: e.member?.color ?? "#8a9a5b" }} size={24} />
                       )}
-                      <div className="min-w-0">
+                      <div>
                         <div
                           className="text-xs font-medium uppercase tracking-wider mb-0.5"
-                          style={{ color }}
+                          style={{ color: e.member?.color ?? "#8a9a5b" }}
                         >
-                          {names.join(" & ")} {e.time && `kl ${e.time}`}
-                          {e.sharedWith.length > 0 && " · delad"}
+                          {e.member?.displayName ?? "Familj"} {e.time && `kl ${e.time}`}
                         </div>
-                        <div
-                          className={`text-lg font-medium truncate ${e.completed ? "line-through opacity-60" : ""}`}
-                        >
-                          {e.title}
-                        </div>
+                        <div className="text-lg font-medium">{e.title}</div>
                       </div>
-                    </Link>
+                    </div>
                     <button
-                      type="button"
-                      onClick={() => openChildGroupEditor(group)}
-                      className="shrink-0 text-xs font-medium px-3 py-2 rounded-full bg-secondary/60 hover:bg-secondary transition-colors"
+                      onClick={() => deleteEventMutation.mutate({ id: e.id })}
+                      aria-label="Ta bort familjehändelse"
+                      className="p-2 text-muted-foreground hover:text-destructive rounded-xl hover:bg-destructive/10 shrink-0"
                     >
-                      Ändra barn
+                      <Trash2 size={18} />
                     </button>
                   </div>
-                );
-              })}
+                ))}
 
-              {selectedItems.familyEvents.map((e) => (
-                <div
-                  key={`fam-${e.id}`}
-                  className="flex items-center justify-between gap-4 p-4 bg-card border border-border rounded-2xl group"
-                >
-                  <div className="flex items-center gap-4">
+                {selectedItems.focus && (
+                  <div className="flex items-center gap-4 p-4 bg-accent/20 border border-accent/30 rounded-2xl">
                     {pictoMode ? (
                       <span className="text-3xl leading-none shrink-0" aria-hidden>
-                        {pictogramFor(e.title, "👨‍👩‍👧")}
+                        {pictogramFor(selectedItems.focus.text, "🎯")}
                       </span>
                     ) : (
-                      <Users style={{ color: e.member?.color ?? "#8a9a5b" }} size={24} />
+                      <Target className="text-accent-foreground" size={24} />
                     )}
                     <div>
-                      <div
-                        className="text-xs font-medium uppercase tracking-wider mb-0.5"
-                        style={{ color: e.member?.color ?? "#8a9a5b" }}
-                      >
-                        {e.member?.displayName ?? "Familj"} {e.time && `kl ${e.time}`}
+                      <div className="text-xs text-accent-foreground font-medium uppercase tracking-wider mb-0.5">
+                        Viktigast idag
                       </div>
-                      <div className="text-lg font-medium">{e.title}</div>
+                      <div className="text-lg font-medium">{selectedItems.focus.text}</div>
                     </div>
                   </div>
-                  <button
-                    onClick={() => deleteEventMutation.mutate({ id: e.id })}
-                    aria-label="Ta bort familjehändelse"
-                    className="p-2 text-muted-foreground hover:text-destructive rounded-xl hover:bg-destructive/10 shrink-0"
+                )}
+
+                {selectedItems.reminders.map((r) => (
+                  <div
+                    key={r.id}
+                    className="flex items-center justify-between gap-4 p-4 bg-primary/5 border border-primary/10 rounded-2xl"
                   >
-                    <Trash2 size={18} />
-                  </button>
-                </div>
-              ))}
-
-              {selectedItems.focus && (
-                <div className="flex items-center gap-4 p-4 bg-accent/20 border border-accent/30 rounded-2xl">
-                  {pictoMode ? (
-                    <span className="text-3xl leading-none shrink-0" aria-hidden>
-                      {pictogramFor(selectedItems.focus.text, "🎯")}
-                    </span>
-                  ) : (
-                    <Target className="text-accent-foreground" size={24} />
-                  )}
-                  <div>
-                    <div className="text-xs text-accent-foreground font-medium uppercase tracking-wider mb-0.5">
-                      Viktigast idag
-                    </div>
-                    <div className="text-lg font-medium">{selectedItems.focus.text}</div>
-                  </div>
-                </div>
-              )}
-
-              {selectedItems.reminders.map((r) => (
-                <div
-                  key={r.id}
-                  className="flex items-center justify-between gap-4 p-4 bg-primary/5 border border-primary/10 rounded-2xl"
-                >
-                  <div className="flex items-center gap-4 min-w-0">
-                    {pictoMode ? (
-                      <span className="text-3xl leading-none shrink-0" aria-hidden>
-                        {pictogramFor(r.title, "🔔")}
-                      </span>
-                    ) : (
-                      <Bell className="text-primary shrink-0" size={24} />
-                    )}
-                    <div className="min-w-0">
-                      <div className="text-xs text-primary font-medium uppercase tracking-wider mb-0.5">
-                        Påminnelse {r.time && `kl ${r.time}${r.endTime ? `–${r.endTime}` : ""}`}
-                      </div>
-                      <div className="text-lg font-medium truncate">{r.title}</div>
-                      {r.note && (
-                        <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">
-                          {r.note}
-                        </p>
+                    <div className="flex items-center gap-4 min-w-0">
+                      {pictoMode ? (
+                        <span className="text-3xl leading-none shrink-0" aria-hidden>
+                          {pictogramFor(r.title, "🔔")}
+                        </span>
+                      ) : (
+                        <Bell className="text-primary shrink-0" size={24} />
                       )}
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-1 shrink-0">
-                    <button
-                      onClick={() =>
-                        setEditing({
-                          kind: "reminder",
-                          id: r.id,
-                          title: r.title,
-                          date: r.date,
-                          time: r.time ?? "",
-                          endTime: r.endTime ?? "",
-                          remind: r.remindMinutesBefore ?? null,
-                          note: r.note ?? "",
-                          area: "vardag",
-                          repeat: r.repeat ?? "none",
-                        })
-                      }
-                      aria-label="Ändra påminnelse"
-                      className="px-3 py-2 text-sm text-primary rounded-xl hover:bg-primary/10"
-                    >
-                      Ändra
-                    </button>
-                    <button
-                      onClick={() => deleteReminder(r.id)}
-                      aria-label="Ta bort påminnelse"
-                      className="p-2 text-muted-foreground hover:text-destructive rounded-xl hover:bg-destructive/10"
-                    >
-                      <Trash2 size={18} />
-                    </button>
-                  </div>
-                </div>
-              ))}
-
-              {selectedItems.tasks.map((t) => (
-                <div
-                  key={t.id}
-                  className={`flex items-center justify-between gap-4 p-4 bg-card border border-border rounded-2xl ${t.completed ? "opacity-60" : ""}`}
-                >
-                  <div className="flex items-center gap-4 min-w-0">
-                    {pictoMode ? (
-                      <span className="text-3xl leading-none shrink-0" aria-hidden>
-                        {pictogramFor(t.title, "✅")}
-                      </span>
-                    ) : (
-                      <CheckSquare
-                        className={t.completed ? "text-primary" : "text-muted-foreground"}
-                        size={24}
-                      />
-                    )}
-                    <div className="flex-1 min-w-0">
-                      {t.time && (
+                      <div className="min-w-0">
                         <div className="text-xs text-primary font-medium uppercase tracking-wider mb-0.5">
-                          kl {t.time}
-                          {t.endTime ? `–${t.endTime}` : ""}
-                          {t.reminderMinutesBefore != null &&
-                            ` · påminn ${t.reminderMinutesBefore} min innan`}
+                          Påminnelse {r.time && `kl ${r.time}${r.endTime ? `–${r.endTime}` : ""}`}
                         </div>
-                      )}
-                      <div
-                        className={`text-lg font-medium truncate ${t.completed ? "line-through text-muted-foreground" : ""}`}
-                      >
-                        {t.title}
+                        <div className="text-lg font-medium truncate">{r.title}</div>
+                        {r.note && (
+                          <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">
+                            {r.note}
+                          </p>
+                        )}
                       </div>
-                      {t.note && (
-                        <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">
-                          {t.note}
-                        </p>
-                      )}
+                    </div>
+                    <div className="flex items-center gap-1 shrink-0">
+                      <button
+                        onClick={() =>
+                          setEditing({
+                            kind: "reminder",
+                            id: r.id,
+                            title: r.title,
+                            date: r.date,
+                            time: r.time ?? "",
+                            endTime: r.endTime ?? "",
+                            remind: r.remindMinutesBefore ?? null,
+                            note: r.note ?? "",
+                            area: "vardag",
+                            repeat: r.repeat ?? "none",
+                          })
+                        }
+                        aria-label="Ändra påminnelse"
+                        className="px-3 py-2 text-sm text-primary rounded-xl hover:bg-primary/10"
+                      >
+                        Ändra
+                      </button>
+                      <button
+                        onClick={() => deleteReminder(r.id)}
+                        aria-label="Ta bort påminnelse"
+                        className="p-2 text-muted-foreground hover:text-destructive rounded-xl hover:bg-destructive/10"
+                      >
+                        <Trash2 size={18} />
+                      </button>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1 shrink-0">
-                    <button
-                      onClick={() =>
-                        setEditing({
-                          kind: "task",
-                          id: t.id,
-                          title: t.title,
-                          date: t.dueDate ?? selectedDateStr,
-                          time: t.time ?? "",
-                          endTime: t.endTime ?? "",
-                          remind: t.reminderMinutesBefore ?? null,
-                          note: t.note ?? "",
-                          area: getArea(t),
-                          repeat: "none",
-                        })
-                      }
-                      aria-label="Ändra uppgift"
-                      className="px-3 py-2 text-sm text-primary rounded-xl hover:bg-primary/10"
-                    >
-                      Ändra
-                    </button>
-                    <button
-                      onClick={() => deleteTask(t.id)}
-                      aria-label="Ta bort uppgift"
-                      className="p-2 text-muted-foreground hover:text-destructive rounded-xl hover:bg-destructive/10"
-                    >
-                      <Trash2 size={18} />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>}
+                ))}
 
+                {selectedItems.tasks.map((t) => (
+                  <div
+                    key={t.id}
+                    className={`flex items-center justify-between gap-4 p-4 bg-card border border-border rounded-2xl ${t.completed ? "opacity-60" : ""}`}
+                  >
+                    <div className="flex items-center gap-4 min-w-0">
+                      {pictoMode ? (
+                        <span className="text-3xl leading-none shrink-0" aria-hidden>
+                          {pictogramFor(t.title, "✅")}
+                        </span>
+                      ) : (
+                        <CheckSquare
+                          className={t.completed ? "text-primary" : "text-muted-foreground"}
+                          size={24}
+                        />
+                      )}
+                      <div className="flex-1 min-w-0">
+                        {t.time && (
+                          <div className="text-xs text-primary font-medium uppercase tracking-wider mb-0.5">
+                            kl {t.time}
+                            {t.endTime ? `–${t.endTime}` : ""}
+                            {t.reminderMinutesBefore != null &&
+                              ` · påminn ${t.reminderMinutesBefore} min innan`}
+                          </div>
+                        )}
+                        <div
+                          className={`text-lg font-medium truncate ${t.completed ? "line-through text-muted-foreground" : ""}`}
+                        >
+                          {t.title}
+                        </div>
+                        {t.note && (
+                          <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">
+                            {t.note}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1 shrink-0">
+                      <button
+                        onClick={() =>
+                          setEditing({
+                            kind: "task",
+                            id: t.id,
+                            title: t.title,
+                            date: t.dueDate ?? selectedDateStr,
+                            time: t.time ?? "",
+                            endTime: t.endTime ?? "",
+                            remind: t.reminderMinutesBefore ?? null,
+                            note: t.note ?? "",
+                            area: getArea(t),
+                            repeat: "none",
+                          })
+                        }
+                        aria-label="Ändra uppgift"
+                        className="px-3 py-2 text-sm text-primary rounded-xl hover:bg-primary/10"
+                      >
+                        Ändra
+                      </button>
+                      <button
+                        onClick={() => deleteTask(t.id)}
+                        aria-label="Ta bort uppgift"
+                        className="p-2 text-muted-foreground hover:text-destructive rounded-xl hover:bg-destructive/10"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
