@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-21 – Minimerbara sektioner tillbaka
+
+- 🕒 Under klockslag och 🌿 Under dagen i ✨ Allt i dagen går åter att minimera/expandera.
+- ☑️ Genomfört idag på ❤️ Idag använder samma minimerbara sektion som resten av appen.
+- Valet sparas per sida och rubrik. Minimering är bara en visningsinställning – data och avbockning påverkas inte.
+
 ## 2026-08-21 – Tillgänglighet i kalendern
 
 - Segmentknapparna 📅 Tidslinje och ✨ Allt i dagen har nu `role="tab"`, `aria-selected` och `tabindex` så skärmläsare tydligt ser vilket visningsläge som är aktivt.
