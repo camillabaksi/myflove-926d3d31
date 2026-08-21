@@ -1,29 +1,21 @@
 import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Mic, Zap } from "lucide-react";
-import { toast } from "sonner";
-import { useQuickflow } from "@/hooks/use-quickflow";
-import { useTasks, useReminders } from "@/hooks/use-data";
-import { useFlowUsage } from "@/hooks/use-daily-flow";
 import { useVoiceInput } from "@/hooks/use-voice-input";
-import { formatWhen, suggestWhen } from "@/lib/quickflow";
+import QuickflowConfirm from "@/components/quickflow-confirm";
 
 /**
- * QuickFlow – alltid en tumme bort. Skriv först, bestäm sen.
- * Användaren behöver aldrig välja kategori för att få ut något ur huvudet.
+ * QuickFlow – alltid en tumme bort. Skriv (eller prata) först, bestäm sen.
+ * Användaren behöver aldrig välja kategori för att få ut något ur huvudet;
+ * MyFlove föreslår strukturen efteråt och allt går att ändra.
  */
 export default function QuickflowFab() {
   const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
   const [saved, setSaved] = useState(false);
-  const { add } = useQuickflow();
-  const { addTask } = useTasks();
-  const { addReminder } = useReminders();
-  const { log } = useFlowUsage();
   const voice = useVoiceInput((t) => setText((prev) => (prev ? `${prev} ${t}` : t)));
 
   const trimmed = text.trim();
-  const suggestion = trimmed ? suggestWhen("snabbt", trimmed) : null;
 
   // Bottennavigationens mitt-knapp öppnar samma dialog
   useEffect(() => {
@@ -38,34 +30,6 @@ export default function QuickflowFab() {
     setSaved(false);
   };
 
-  const keep = () => {
-    add({ text: trimmed, level: "tanke" });
-    log("quickflow");
-    toast.success("Jag håller koll på det. 💙");
-    close();
-  };
-
-  const remind = () => {
-    if (!suggestion) return;
-    const d = new Date(suggestion.at);
-    addReminder(
-      trimmed,
-      d.toISOString().slice(0, 10),
-      `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`,
-    );
-    log("quickflow");
-    toast.success(`Jag säger till ${formatWhen(suggestion.at).toLowerCase()}.`, {
-      description: suggestion.why,
-    });
-    close();
-  };
-
-  const asTask = (withDate?: string) => {
-    addTask(trimmed, withDate);
-    log("quickflow");
-    toast.success(withDate ? "Inlagd i kalendern." : "Den ligger bland dina uppgifter.");
-    close();
-  };
 
   return (
     <>
