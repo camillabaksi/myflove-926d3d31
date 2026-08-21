@@ -165,7 +165,7 @@ export function buildLifePuzzle(input: LifePuzzleInput): LifePuzzle {
       title: "Jobbet tar mycket idag",
       body: "Arbetsdagen ser krävande ut. Då är det rimligt att kvällen blir liten – inte för att du är svag, utan för att orken redan gått åt.",
       suggestion: "Välj en sak till efter jobbet, och låt resten vänta.",
-      href: "/min-dag",
+      href: "/idag",
       hrefLabel: "Se kvällen",
     });
   }

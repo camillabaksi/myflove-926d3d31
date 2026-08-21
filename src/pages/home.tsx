@@ -276,7 +276,7 @@ export default function Home() {
 
             {nextEvent ? (
               <Link
-                href="/min-dag"
+                href="/idag"
                 className="group flex items-center gap-4 rounded-2xl bg-secondary/40 p-4 transition-colors hover:bg-secondary/60"
               >
                 <span aria-hidden className="text-2xl">
@@ -387,11 +387,11 @@ export default function Home() {
             className="grid grid-cols-3 gap-3"
           >
             <Link
-              href="/min-dag"
+              href="/idag"
               className="flex flex-col items-center gap-2 rounded-2xl border border-border/60 bg-card p-4 text-center shadow-soft transition-colors hover:border-primary/40 hover:bg-primary/5"
             >
               <CalendarDays size={22} className="text-primary" />
-              <span className="text-xs font-medium text-ink">Min dag</span>
+              <span className="text-xs font-medium text-ink">Idag</span>
             </Link>
             <Link
               href="/quickflow"

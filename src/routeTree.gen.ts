@@ -46,6 +46,7 @@ import { Route as AppMaBraRouteImport } from './routes/_app.ma-bra'
 import { Route as AppKalenderRouteImport } from './routes/_app.kalender'
 import { Route as AppJobbRouteImport } from './routes/_app.jobb'
 import { Route as AppInsightRouteImport } from './routes/_app.insight'
+import { Route as AppIdagRouteImport } from './routes/_app.idag'
 import { Route as AppHemRouteImport } from './routes/_app.hem'
 import { Route as AppFriktionsindexRouteImport } from './routes/_app.friktionsindex'
 import { Route as AppFokusRouteImport } from './routes/_app.fokus'
@@ -261,6 +262,11 @@ const AppInsightRoute = AppInsightRouteImport.update({
   path: '/insight',
   getParentRoute: () => AppRoute,
 } as any)
+const AppIdagRoute = AppIdagRouteImport.update({
+  id: '/idag',
+  path: '/idag',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppHemRoute = AppHemRouteImport.update({
   id: '/hem',
   path: '/hem',
@@ -445,6 +451,7 @@ export interface FileRoutesByFullPath {
   '/fokus': typeof AppFokusRoute
   '/friktionsindex': typeof AppFriktionsindexRoute
   '/hem': typeof AppHemRoute
+  '/idag': typeof AppIdagRoute
   '/insight': typeof AppInsightRoute
   '/jobb': typeof AppJobbRoute
   '/kalender': typeof AppKalenderRoute
@@ -512,6 +519,7 @@ export interface FileRoutesByTo {
   '/fokus': typeof AppFokusRoute
   '/friktionsindex': typeof AppFriktionsindexRoute
   '/hem': typeof AppHemRoute
+  '/idag': typeof AppIdagRoute
   '/insight': typeof AppInsightRoute
   '/jobb': typeof AppJobbRoute
   '/kalender': typeof AppKalenderRoute
@@ -581,6 +589,7 @@ export interface FileRoutesById {
   '/_app/fokus': typeof AppFokusRoute
   '/_app/friktionsindex': typeof AppFriktionsindexRoute
   '/_app/hem': typeof AppHemRoute
+  '/_app/idag': typeof AppIdagRoute
   '/_app/insight': typeof AppInsightRoute
   '/_app/jobb': typeof AppJobbRoute
   '/_app/kalender': typeof AppKalenderRoute
@@ -650,6 +659,7 @@ export interface FileRouteTypes {
     | '/fokus'
     | '/friktionsindex'
     | '/hem'
+    | '/idag'
     | '/insight'
     | '/jobb'
     | '/kalender'
@@ -717,6 +727,7 @@ export interface FileRouteTypes {
     | '/fokus'
     | '/friktionsindex'
     | '/hem'
+    | '/idag'
     | '/insight'
     | '/jobb'
     | '/kalender'
@@ -785,6 +796,7 @@ export interface FileRouteTypes {
     | '/_app/fokus'
     | '/_app/friktionsindex'
     | '/_app/hem'
+    | '/_app/idag'
     | '/_app/insight'
     | '/_app/jobb'
     | '/_app/kalender'
@@ -1102,6 +1114,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppInsightRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/idag': {
+      id: '/_app/idag'
+      path: '/idag'
+      fullPath: '/idag'
+      preLoaderRoute: typeof AppIdagRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/hem': {
       id: '/_app/hem'
       path: '/hem'
@@ -1330,6 +1349,7 @@ interface AppRouteChildren {
   AppFokusRoute: typeof AppFokusRoute
   AppFriktionsindexRoute: typeof AppFriktionsindexRoute
   AppHemRoute: typeof AppHemRoute
+  AppIdagRoute: typeof AppIdagRoute
   AppInsightRoute: typeof AppInsightRoute
   AppJobbRoute: typeof AppJobbRoute
   AppKalenderRoute: typeof AppKalenderRoute
@@ -1380,6 +1400,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppFokusRoute: AppFokusRoute,
   AppFriktionsindexRoute: AppFriktionsindexRoute,
   AppHemRoute: AppHemRoute,
+  AppIdagRoute: AppIdagRoute,
   AppInsightRoute: AppInsightRoute,
   AppJobbRoute: AppJobbRoute,
   AppKalenderRoute: AppKalenderRoute,

@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-23 – Min dag och Daily Flow blir ❤️ Idag
+
+- Min dag och Daily Flow är nu EN vy: **Idag**. Samma dagsdata, inga dubbla upplevelser.
+- Två visningslägen inne i Idag: 🌊 **Flow** (batteri, dagens tidslinje, energibalans, ett förslag och det som får plats) och 📋 **Lista** (allt som ska göras idag, avbockningsbart). Valet sparas.
+- Avbockningen är oförändrad och delas fortsatt av Hem, Idag, Flow och Att göra.
+- Att göra finns kvar som hela listan (även kommande dagar), men är inte längre en dubbel huvuddestination.
+- `/min-dag` skickar automatiskt vidare till `/idag`, så gamla länkar och genvägar fungerar.
+
 ## 2026-08-22 – Allt som kan genomföras kan bockas av
 
 - Allt som hör till idag går nu att bocka av: uppgifter, kalenderhändelser, påminnelser, rutiner, lektioner, barnens hållpunkter och QuickFlow-tankar. En och samma bock, samma status överallt (Hem, Min dag, Flow → Idag, Att göra).
