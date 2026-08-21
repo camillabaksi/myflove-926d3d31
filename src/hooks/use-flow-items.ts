@@ -75,7 +75,10 @@ export function useFlowItems(): {
         time: t.time,
         dueDate: t.dueDate,
         daysUntil: d,
-        priority: priorityFor({ time: t.time, daysUntil: d }),
+        priority:
+          t.completed && isToday(t.completedAt)
+            ? "idag"
+            : priorityFor({ time: t.time, daysUntil: d }),
         energy: friction?.friction,
         energyReason: friction?.reason,
         nextStep,
