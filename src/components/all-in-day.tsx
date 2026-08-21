@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import CollapsibleSection from "@/components/collapsible-section";
 import { FlowItemCard } from "@/components/myflove/flow-item-card";
 import { MyFloveTransition } from "@/components/myflove/motion";
 import { useFlowItems } from "@/hooks/use-flow-items";
@@ -63,10 +64,12 @@ export default function AllInDay({ date, isToday = true }: { date?: string; isTo
       )}
 
       {timed.length > 0 && (
-        <section className="space-y-2">
-          <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            🕒 Under klockslag
-          </h4>
+        <CollapsibleSection
+          id="allt-i-dagen::under-klockslag"
+          title="🕒 Under klockslag"
+          headingClassName="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+          className="space-y-2"
+        >
           <ul className="space-y-2">
             {timed.map((item) => (
               <li key={item.id} className="flex items-start gap-3">
@@ -85,14 +88,16 @@ export default function AllInDay({ date, isToday = true }: { date?: string; isTo
               </li>
             ))}
           </ul>
-        </section>
+        </CollapsibleSection>
       )}
 
       {untimed.length > 0 && (
-        <section className="space-y-2">
-          <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            🌿 Under dagen
-          </h4>
+        <CollapsibleSection
+          id="allt-i-dagen::under-dagen"
+          title="🌿 Under dagen"
+          headingClassName="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+          className="space-y-2"
+        >
           <ul className="space-y-2">
             {untimed.map((item) => (
               <li key={item.id}>
@@ -106,7 +111,7 @@ export default function AllInDay({ date, isToday = true }: { date?: string; isTo
               </li>
             ))}
           </ul>
-        </section>
+        </CollapsibleSection>
       )}
     </div>
   );
