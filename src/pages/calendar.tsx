@@ -924,23 +924,43 @@ export default function CalendarPage() {
                   <span aria-hidden>🖼️</span>
                   Bildstöd
                 </button>
-                <button
-                  onClick={() => setAllInDay(!allInDay)}
-                  aria-pressed={allInDay}
-                  title="Visa allt som ska göras och redan är gjort den här dagen – inte bara tidsbundet"
-                  className={`flex items-center gap-1.5 px-3 py-2 rounded-2xl text-sm font-medium border transition-colors ${
-                    allInDay
-                      ? "bg-accent/30 border-accent/40 text-foreground"
-                      : "bg-card border-border text-muted-foreground hover:border-primary/40 hover:bg-secondary/50"
-                  }`}
+                <div
+                  role="group"
+                  aria-label="Visningsläge för dagen"
+                  className="flex items-center gap-1 p-1 rounded-2xl bg-secondary/50 border border-border"
                 >
-                  <span aria-hidden>✨</span>
-                  Allt i dagen
-                </button>
+                  <button
+                    onClick={() => setAllInDay(false)}
+                    aria-pressed={!allInDay}
+                    title="Visa dagens tidsbundna händelser på sina tider"
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-medium transition-colors ${
+                      !allInDay
+                        ? "bg-card border border-border text-foreground shadow-sm"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    <span aria-hidden>📅</span>
+                    Tidslinje
+                  </button>
+                  <button
+                    onClick={() => setAllInDay(true)}
+                    aria-pressed={allInDay}
+                    title="Visa allt som ska göras och redan är gjort den här dagen – inte bara tidsbundet"
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-medium transition-colors ${
+                      allInDay
+                        ? "bg-card border border-border text-foreground shadow-sm"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    <span aria-hidden>✨</span>
+                    Allt i dagen
+                  </button>
+                </div>
               </div>
             </div>
 
             {allInDay && <AllInDay date={selectedDateStr} isToday={selectedDateStr === todayStr} />}
+
 
             {!allInDay &&
               !selectedItems.focus &&
@@ -955,7 +975,8 @@ export default function CalendarPage() {
                 </div>
               )}
 
-            {selectedItems.recurring.length > 0 && (
+            {!allInDay && selectedItems.recurring.length > 0 && (
+
               <div className="flex flex-wrap items-center gap-2 px-1">
                 <span className="text-xs uppercase tracking-wider text-muted-foreground">
                   Återkommande
@@ -977,7 +998,7 @@ export default function CalendarPage() {
               </div>
             )}
 
-            {view === "dag" && (
+            {!allInDay && view === "dag" && (
               <DayTimeline
                 isToday={selectedDateStr === todayStr}
                 energyByHour={selectedDateStr === todayStr ? batteryByHour : undefined}
@@ -1013,7 +1034,7 @@ export default function CalendarPage() {
               />
             )}
 
-            <div className="space-y-3">
+            {!allInDay && <div className="space-y-3">
               {/* Samma händelse för flera barn (t.ex. lämning av Bella och Bianca) visas ihop. */}
               {(() => {
                 type ChildEv = (typeof selectedItems.childEvents)[number];
@@ -1242,7 +1263,8 @@ export default function CalendarPage() {
                   </div>
                 </div>
               ))}
-            </div>
+            </div>}
+
           </div>
         )}
 
