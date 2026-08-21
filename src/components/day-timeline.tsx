@@ -87,7 +87,7 @@ export default function DayTimeline({
               <span className="w-11 shrink-0 pt-2 text-right text-xs font-medium text-muted-foreground">
                 {String(h).padStart(2, "0")}:00
               </span>
-              <div className="flex-1 space-y-1.5 py-1">
+              <div className="min-w-0 flex-1 space-y-1.5 py-1">
                 {showNowLine && (
                   <div className="flex items-center gap-2" aria-label="Nu">
                     <span className="h-2.5 w-2.5 rounded-full bg-primary" />
