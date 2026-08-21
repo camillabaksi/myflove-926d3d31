@@ -119,30 +119,14 @@ export default function QuickflowFab() {
               onClick={() => setSaved(true)}
               className="w-full rounded-2xl bg-primary text-primary-foreground py-3.5 font-semibold"
             >
-              Spara
+              Släpp det här hos mig
             </button>
           )}
 
           {trimmed && saved && (
-            <div className="space-y-2">
-              <p className="text-sm text-ink">Jag håller koll på det. Vad vill du göra?</p>
-              <Btn onClick={remind}>
-                ⏰ Påminn mig{suggestion ? ` – ${formatWhen(suggestion.at).toLowerCase()}` : ""}
-              </Btn>
-              <Btn onClick={() => asTask()}>📌 Gör till uppgift</Btn>
-              <Btn onClick={() => asTask(new Date().toISOString().slice(0, 10))}>
-                📅 Lägg i kalender
-              </Btn>
-              <Btn onClick={keep}>🧠 Behåll i QuickFlow</Btn>
-              <button
-                type="button"
-                onClick={keep}
-                className="w-full rounded-2xl py-3 text-sm text-muted-foreground"
-              >
-                Inte nu
-              </button>
-            </div>
+            <QuickflowConfirm text={trimmed} onDone={close} onCancel={() => setSaved(false)} />
           )}
+
         </DialogContent>
       </Dialog>
     </>
