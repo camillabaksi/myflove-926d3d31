@@ -51,11 +51,18 @@ export function useFlowItems(): {
 
     const isSnoozed = (until?: string) => !!until && until > today;
 
+    const isToday = (ms?: number) => {
+      if (!ms) return false;
+      const d = new Date(ms);
+      const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+      return iso === today;
+    };
+
     for (const t of tasks) {
       if (isSnoozed(t.snoozedUntil)) continue;
-      // Klara uppgifter visas bara om de hör till idag – så att dagen kan
-      // visa både det som återstår och det som redan är gjort.
-      if (t.completed && t.dueDate !== today) continue;
+      // Klara uppgifter visas bara om de hör till idag eller bockades av idag –
+      // så att dagen kan visa både det som återstår och det som redan är gjort.
+      if (t.completed && t.dueDate !== today && !isToday(t.completedAt)) continue;
       const d = t.dueDate ? daysUntilDate(t.dueDate) : undefined;
       const friction = suggestFor(t.title);
       const nextStep = t.steps?.find((s) => !s.done)?.title;
@@ -68,7 +75,10 @@ export function useFlowItems(): {
         time: t.time,
         dueDate: t.dueDate,
         daysUntil: d,
-        priority: priorityFor({ time: t.time, daysUntil: d }),
+        priority:
+          t.completed && isToday(t.completedAt)
+            ? "idag"
+            : priorityFor({ time: t.time, daysUntil: d }),
         energy: friction?.friction,
         energyReason: friction?.reason,
         nextStep,
@@ -162,7 +172,8 @@ export function useFlowItems(): {
         ? `${qDate.getFullYear()}-${String(qDate.getMonth() + 1).padStart(2, "0")}-${String(qDate.getDate()).padStart(2, "0")}`
         : undefined;
       const qDays = qDue ? daysUntilDate(qDue) : undefined;
-      if (q.done && qDue !== today) continue;
+      const qDoneToday = !!q.done && isToday(q.doneAt);
+      if (q.done && qDue !== today && !qDoneToday) continue;
       out.push({
         id: `qf-${q.id}`,
         title: q.text,
@@ -171,8 +182,9 @@ export function useFlowItems(): {
         emoji: "💭",
         dueDate: qDue,
         daysUntil: qDays,
-        priority:
-          typeof qDays === "number"
+        priority: qDoneToday
+          ? "idag"
+          : typeof qDays === "number"
             ? priorityFor({ daysUntil: qDays })
             : q.level === "viktigt"
               ? "idag"
