@@ -18,7 +18,6 @@ import {
   type QuickflowItem,
 } from "@/lib/quickflow";
 
-
 const PLACE_CHECK_MS = 3 * 60 * 1000;
 const NEARBY_M = 300;
 
@@ -181,7 +180,6 @@ export function QuickflowList() {
           </button>
           <button
             type="button"
-
             aria-label="Klar"
             onClick={(e) => {
               celebrateFromEvent(e);

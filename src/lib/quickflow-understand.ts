@@ -47,8 +47,7 @@ const TASK_WORDS =
 const LEAD_FILLERS =
   /^(?:\s*(?:s[åa]|och|men|jag)\s+)*(?:ska(?:ll)?|m[åa]ste|beh[öo]ver|vill)?\s*(?:jag\s+)?(?:ska(?:ll)?|m[åa]ste|beh[öo]ver)?\s*(?:iv[äa]g\s+)?(?:till|p[åa]|hos)?\s*/i;
 
-const PLACE_RE =
-  /\b(?:p[åa]|hos|vid)\s+([A-ZÅÄÖ][\wåäöÅÄÖ-]*(?:\s+[A-ZÅÄÖ][\wåäöÅÄÖ-]*)?)/;
+const PLACE_RE = /\b(?:p[åa]|hos|vid)\s+([A-ZÅÄÖ][\wåäöÅÄÖ-]*(?:\s+[A-ZÅÄÖ][\wåäöÅÄÖ-]*)?)/;
 
 const newId = () => Math.random().toString(36).slice(2, 9);
 
@@ -98,7 +97,10 @@ function splitPreparation(text: string): { main: string; prep?: string } {
   for (const re of PREP_PATTERNS) {
     const m = text.match(re);
     if (m?.index !== undefined && m[1]) {
-      const main = text.slice(0, m.index).replace(/[,\s]+$/, "").trim();
+      const main = text
+        .slice(0, m.index)
+        .replace(/[,\s]+$/, "")
+        .trim();
       const prep = m[1].replace(/[.,;\s]+$/, "").trim();
       if (prep.length > 1 && main.length > 2) return { main, prep };
       if (prep.length > 1) return { main: prep, prep: undefined };

@@ -44,7 +44,6 @@ export default function NotesPanel() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ideas.length]);
 
-
   const [draft, setDraft] = useState("");
   const [convertNote, setConvertNote] = useState<FlowNote | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);

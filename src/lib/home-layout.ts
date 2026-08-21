@@ -33,7 +33,11 @@ export const HOME_BLOCKS: HomeBlockMeta[] = [
   { id: "vagar", label: "Korta vägar", hint: "Min dag · QuickFlow · Flow" },
   { id: "omrade", label: "Områdesväljare", hint: "Vilket rum du är i" },
   { id: "gjort", label: "Lägg till det du gjorde", hint: "Snabb registrering av vardagssaker" },
-  { id: "energifloede", label: "Dagens energiflöde", hint: "Planerat · Vardag · Spontant · Återhämtning" },
+  {
+    id: "energifloede",
+    label: "Dagens energiflöde",
+    hint: "Planerat · Vardag · Spontant · Återhämtning",
+  },
 ];
 
 export interface HomeLayoutPrefs {
@@ -45,7 +49,6 @@ const DEFAULT_PREFS: HomeLayoutPrefs = {
   hidden: ["gjort"],
   order: HOME_BLOCKS.map((b) => b.id),
 };
-
 
 const STORAGE_KEY = "myflove-home-layout";
 

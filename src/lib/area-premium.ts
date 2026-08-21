@@ -15,7 +15,10 @@ import { AREA_META, type AreaMeta, type LifeArea } from "@/lib/life-areas";
 export type PlanTier = "free" | "premium";
 
 /** Vad respektive nivå får göra med livsområden. */
-export const AREA_CAPABILITIES: Record<PlanTier, { rename: boolean; recolor: boolean; custom: boolean }> = {
+export const AREA_CAPABILITIES: Record<
+  PlanTier,
+  { rename: boolean; recolor: boolean; custom: boolean }
+> = {
   free: { rename: false, recolor: false, custom: false },
   premium: { rename: true, recolor: true, custom: true },
 };

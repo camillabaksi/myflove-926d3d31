@@ -59,4 +59,3 @@ export function useChildEvents(): ChildEvent[] {
     return out.sort((a, b) => a.time.localeCompare(b.time));
   }, [children, items, schedules]);
 }
-

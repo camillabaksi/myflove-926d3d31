@@ -41,7 +41,6 @@ export function DidThisCta({ className }: { className?: string }) {
     [],
   );
 
-
   const chips = useMemo<DidSuggestion[]>(() => {
     const own: DidSuggestion[] = presets.map((p) => ({
       title: p.title,

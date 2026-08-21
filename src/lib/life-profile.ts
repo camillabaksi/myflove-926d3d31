@@ -172,13 +172,13 @@ export function hasLifeProfile(p: LifeProfile | null | undefined): boolean {
   );
   return Boolean(
     anyFollowup ||
-      p.strengths.length ||
-      p.difficulties.length ||
-      p.helpWith.length ||
-      p.energyGives.length ||
-      p.energyTakes.length ||
-      p.flowPreferences.length ||
-      p.note.trim(),
+    p.strengths.length ||
+    p.difficulties.length ||
+    p.helpWith.length ||
+    p.energyGives.length ||
+    p.energyTakes.length ||
+    p.flowPreferences.length ||
+    p.note.trim(),
   );
 }
 

@@ -294,7 +294,6 @@ export default function CleaningPage() {
           )}
         </section>
 
-
         {/* Vad du behöver */}
         <section className="rounded-3xl border border-border bg-card p-5">
           <CollapsibleSection

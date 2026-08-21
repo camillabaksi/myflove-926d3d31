@@ -84,7 +84,15 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
     }
     setSaving(true);
     try {
-      await addFactor({ title: t, direction, strength, category, kind, friction, note: note.trim() });
+      await addFactor({
+        title: t,
+        direction,
+        strength,
+        category,
+        kind,
+        friction,
+        note: note.trim(),
+      });
       setTitle("");
       setNote("");
       toast({ description: "Tack – det räknas med i din kapacitet idag." });
@@ -279,7 +287,6 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
             </div>
           </div>
 
-
           <Textarea
             value={note}
             onChange={(e) => setNote(e.target.value)}
@@ -333,7 +340,9 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
                       : e.direction === "neutral"
                         ? "➖ 0"
                         : `🔻 −${e.strength}`}
-                    {e.friction ? ` · ${frictionEmoji(e.friction)} ${frictionLabel(e.friction)}` : ""}
+                    {e.friction
+                      ? ` · ${frictionEmoji(e.friction)} ${frictionLabel(e.friction)}`
+                      : ""}
                   </div>
                   <div
                     className={`font-medium text-ink ${e.countsTowardScore ? "" : "opacity-60"}`}
@@ -390,7 +399,6 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
                     Ta bort
                   </button>
                 </div>
-
               </MyFloveCard>
             ))}
           </div>
@@ -469,7 +477,6 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
                 ))}
               </MyFloveCard>
             )}
-
           </div>
         )}
       </CollapsibleSection>

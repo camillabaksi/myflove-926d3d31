@@ -46,7 +46,6 @@ export interface FlowItem {
   href?: string;
 }
 
-
 export const SOURCE_LABEL: Record<FlowItemSource, string> = {
   uppgift: "Att göra",
   kalender: "Kalender",
