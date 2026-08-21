@@ -658,7 +658,7 @@ export default function Layout({ children }: LayoutProps) {
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col min-h-0 overflow-hidden relative">
         {/* Mobile Header */}
-        <header className="md:hidden sticky top-0 z-10 grid grid-cols-[2.5rem_minmax(0,1fr)_auto] items-center gap-2 border-b border-border/50 bg-background/80 p-3 backdrop-blur-md">
+        <header className="sticky top-0 z-10 flex items-center gap-2 border-b border-border/50 bg-background/80 p-3 backdrop-blur-md md:hidden">
           {canGoBack ? (
             <button
               type="button"
