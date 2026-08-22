@@ -264,8 +264,11 @@ export default function Home() {
         )}
 
         {/* Ständig snabbknapp: logga det du faktiskt gjorde */}
-        <div style={pos("batteri")}>
+        <div style={pos("batteri")} className="space-y-1">
           <DidThisCta />
+          <p className="text-xs text-muted-foreground">
+            Berätta vad du redan gjort – det syns bland dagens gjorda saker.
+          </p>
         </div>
 
         {/* Nästa – nästa relevanta aktivitet */}
@@ -372,6 +375,9 @@ export default function Home() {
               }}
               className="bg-primary text-primary-foreground hover:bg-primary/90"
             />
+            <p className="mt-1 text-xs text-muted-foreground">
+              Lägg till något du ska göra – med tid om du vill.
+            </p>
           </div>
         )}
 
