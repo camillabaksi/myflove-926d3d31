@@ -19,6 +19,11 @@ export const Route = createFileRoute("/")({
           "Flow håller ihop kalender, ekonomi, hälsa, familj och ärenden – så att du kan bära mindre i huvudet.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:image", content: "https://myflove.lovable.app/og-image.jpg" },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { property: "og:image:alt", content: "MyFlove – Bär mindre. Gör inte mer." },
+      { name: "twitter:image", content: "https://myflove.lovable.app/og-image.jpg" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "MyFlove – Bär mindre. Gör inte mer." },
       {
