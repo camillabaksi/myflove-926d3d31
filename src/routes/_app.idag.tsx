@@ -4,11 +4,11 @@ import Page from "@/pages/today";
 export const Route = createFileRoute("/_app/idag")({
   head: () => ({
     meta: [
-      { title: "Idag – MyFlove" },
+      { title: "Min dag – MyFlove" },
       {
         name: "description",
         content:
-          "Dagens allt på ett ställe: batteri, tidslinje, energiflöde och dagens lista – i Flow-läge eller List-läge.",
+          "Dagens allt på ett ställe: energibatteri, tidslinje, energi och dagens lista – som flöde eller lista.",
       },
       { name: "robots", content: "noindex, nofollow" },
     ],

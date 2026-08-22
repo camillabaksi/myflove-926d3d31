@@ -323,18 +323,18 @@ export default function Home() {
           </div>
         )}
 
-        {/* Ett Flow-förslag – samma svar som Flow → NU */}
+        {/* En rekommendation – samma svar som i Planera → Just nu */}
         {shows("forslag") && (
           <section
             style={pos("forslag")}
             className="rounded-3xl border border-primary/20 bg-primary/5 p-5 shadow-soft"
-            aria-label="Flow-förslag"
+            aria-label="Rekommendation just nu"
           >
             <CollapsibleSection
               id="hem::flow-forslag"
               title={
                 <span className="flex items-center gap-2">
-                  <Sparkles size={18} className="text-primary" aria-hidden="true" /> Flow-förslag
+                  <Sparkles size={18} className="text-primary" aria-hidden="true" /> Just nu
                 </span>
               }
               headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
@@ -352,7 +352,7 @@ export default function Home() {
                 href="/flow"
                 className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
               >
-                {suggestion.task ? "Öppna i Flow" : "Lägg till något"} <ArrowRight size={14} />
+                {suggestion.task ? "Öppna i Planera" : "Lägg till något"} <ArrowRight size={14} />
               </Link>
             </CollapsibleSection>
           </section>
@@ -408,7 +408,7 @@ export default function Home() {
               className="flex flex-col items-center gap-2 rounded-2xl border border-border/60 bg-card p-4 text-center shadow-soft transition-colors hover:border-primary/40 hover:bg-primary/5"
             >
               <CalendarDays size={22} className="text-primary" />
-              <span className="text-xs font-medium text-ink">Idag</span>
+              <span className="text-xs font-medium text-ink">Min dag</span>
             </Link>
             <Link
               href="/quickflow"
@@ -422,7 +422,7 @@ export default function Home() {
               className="flex flex-col items-center gap-2 rounded-2xl border border-border/60 bg-card p-4 text-center shadow-soft transition-colors hover:border-primary/40 hover:bg-primary/5"
             >
               <MessageCircle size={22} className="text-primary" />
-              <span className="text-xs font-medium text-ink">Flow</span>
+              <span className="text-xs font-medium text-ink">Planera</span>
             </Link>
           </nav>
         )}
@@ -433,7 +433,7 @@ export default function Home() {
             <AreaSwitcher size="sm" />
             <p className="text-xs text-muted-foreground">
               {activeArea === "alla"
-                ? "Flow ser hela din dag – oavsett vilket rum sakerna hör till."
+                ? "MyFlove ser hela din dag – oavsett vilket rum sakerna hör till."
                 : `Du är i ${AREA_META[activeArea].label.toLowerCase()}rummet. Resten väntar tills du vill se det.`}
             </p>
           </div>

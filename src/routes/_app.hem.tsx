@@ -8,7 +8,7 @@ export const Route = createFileRoute("/_app/hem")({
       {
         name: "description",
         content:
-          "Din lugna startskärm i MyFlove – se ditt batteri, nästa aktivitet och ett Flow-förslag på ett ögonblick.",
+          "Din lugna startskärm i MyFlove – se ditt batteri, nästa aktivitet och en rekommendation på ett ögonblick.",
       },
       { name: "robots", content: "noindex, nofollow" },
     ],
