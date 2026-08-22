@@ -424,13 +424,6 @@ export default function Home() {
           </div>
         )}
 
-        {/* Dagens energiflöde – faktisk belastning */}
-        {shows("energifloede") && (
-          <div style={pos("energifloede")}>
-            <DayEnergyFlow />
-          </div>
-        )}
-
         {/* Dina genvägar – fyra egna favoriter */}
         {shows("genvagar") && (
           <div style={pos("genvagar")}>
@@ -445,53 +438,60 @@ export default function Home() {
             aria-label="Vad behöver du just nu"
             className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft"
           >
-            <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-              Vad behöver du just nu?
-            </p>
-            <ul className="space-y-2">
-              {SITUATIONS.map((s) => (
-                <li key={s.href}>
-                  {s.didThis ? (
-                    <DidThisCta
-                      trigger={
-                        <span className="group flex w-full items-center gap-3 rounded-2xl bg-secondary/30 px-3 py-3 text-left transition-colors hover:bg-secondary/60">
-                          <span aria-hidden className="text-xl">
-                            {s.emoji}
+            <CollapsibleSection
+              id="hem::vagar"
+              title="Vad behöver du just nu?"
+              headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
+              className="space-y-3"
+            >
+              <ul className="space-y-2">
+                {SITUATIONS.map((s) => (
+                  <li key={s.href}>
+                    {s.didThis ? (
+                      <DidThisCta
+                        trigger={
+                          <span className="group flex w-full items-center gap-3 rounded-2xl bg-secondary/30 px-3 py-3 text-left transition-colors hover:bg-secondary/60">
+                            <span aria-hidden className="text-xl">
+                              {s.emoji}
+                            </span>
+                            <span className="min-w-0 flex-1">
+                              <span className="block text-sm text-ink">{s.thought}</span>
+                              <span className="block text-xs text-muted-foreground">
+                                {s.action}
+                              </span>
+                            </span>
+                            <ArrowRight
+                              size={16}
+                              className="shrink-0 text-muted-foreground transition-colors group-hover:text-foreground"
+                            />
                           </span>
-                          <span className="min-w-0 flex-1">
-                            <span className="block text-sm text-ink">{s.thought}</span>
-                            <span className="block text-xs text-muted-foreground">{s.action}</span>
-                          </span>
-                          <ArrowRight
-                            size={16}
-                            className="shrink-0 text-muted-foreground transition-colors group-hover:text-foreground"
-                          />
-                        </span>
-                      }
-                    />
-                  ) : (
-                    <Link
-                      href={s.href}
-                      className="group flex items-center gap-3 rounded-2xl bg-secondary/30 px-3 py-3 transition-colors hover:bg-secondary/60"
-                    >
-                      <span aria-hidden className="text-xl">
-                        {s.emoji}
-                      </span>
-                      <span className="min-w-0 flex-1">
-                        <span className="block text-sm text-ink">{s.thought}</span>
-                        <span className="block text-xs text-muted-foreground">{s.action}</span>
-                      </span>
-                      <ArrowRight
-                        size={16}
-                        className="shrink-0 text-muted-foreground transition-colors group-hover:text-foreground"
+                        }
                       />
-                    </Link>
-                  )}
-                </li>
-              ))}
-            </ul>
+                    ) : (
+                      <Link
+                        href={s.href}
+                        className="group flex items-center gap-3 rounded-2xl bg-secondary/30 px-3 py-3 transition-colors hover:bg-secondary/60"
+                      >
+                        <span aria-hidden className="text-xl">
+                          {s.emoji}
+                        </span>
+                        <span className="min-w-0 flex-1">
+                          <span className="block text-sm text-ink">{s.thought}</span>
+                          <span className="block text-xs text-muted-foreground">{s.action}</span>
+                        </span>
+                        <ArrowRight
+                          size={16}
+                          className="shrink-0 text-muted-foreground transition-colors group-hover:text-foreground"
+                        />
+                      </Link>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </CollapsibleSection>
           </nav>
         )}
+
 
         {/* Områdesväljare – litet, längst ner */}
         {shows("omrade") && (
