@@ -86,8 +86,9 @@ export default function EnergyBattery({ defaultOpen = false }: { defaultOpen?: b
         </span>
 
         <span className="shrink-0 text-xs text-muted-foreground">
-          {open ? "Dölj energihistorik ˄" : "Visa energihistorik ˅"}
+          {open ? "Dölj detaljer ˄" : "Visa detaljer ˅"}
         </span>
+
       </button>
 
       {/* Liten kurva alltid synlig – känslan av dagen, inte en teknisk graf */}
