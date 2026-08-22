@@ -1,7 +1,6 @@
 import { useEffect, useMemo } from "react";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 
-
 /**
  * Vilka block Hem visar och i vilken ordning.
  * Hälsningen ligger alltid överst och går inte att stänga av.
@@ -88,7 +87,11 @@ export function useHomeLayout() {
       const at = withoutFlow.indexOf("batteri");
       const nextOrder =
         at >= 0
-          ? [...withoutFlow.slice(0, at + 1), "energifloede" as HomeBlockId, ...withoutFlow.slice(at + 1)]
+          ? [
+              ...withoutFlow.slice(0, at + 1),
+              "energifloede" as HomeBlockId,
+              ...withoutFlow.slice(at + 1),
+            ]
           : currentOrder;
       return {
         order: nextOrder,
@@ -105,7 +108,6 @@ export function useHomeLayout() {
 
   const hidden = useMemo<HomeBlockId[]>(() => prefs?.hidden ?? [], [prefs?.hidden]);
   const visible = useMemo(() => order.filter((id) => !hidden.includes(id)), [order, hidden]);
-
 
   const toggle = (id: HomeBlockId) =>
     setPrefs((p) => {
