@@ -1,6 +1,15 @@
 # Changelog
 
+## 2026-08-25 – Tydligare energistruktur och språk
+
+- Min energi är nu tydligt "historik och mönster": batteriet är din energibild just nu, energihistoriken visar hur energin brukar röra sig. Ingen ny data, inget nytt system.
+- Energins historik nås från Mer under "Mina mönster" i stället för att kännas som en egen huvudfunktion. Routen `/energifloede` fungerar som förut.
+- Dagens balans förklaras nu i klartext: hur väl dagens krav matchar din energi och kapacitet – inget produktivitetsbetyg.
+- Undertexter på Hem: "Lägg till – planera något", "Jag gjorde något – registrera något du redan gjort", "QuickFlow – fånga en tanke snabbt".
+- "Jag gjorde något"-poster kan inte längre dubbleras visuellt i Hem, Min dag eller Allt i dagen.
+
 ## 2026-08-25 – Planera min dag tillbaka + Jag gjorde något i dagen
+
 
 - 📋 Planera min dag i Planera: knappen "Föreslå en ordning" ger en smart ordning på dagens uppgifter utifrån tider, ork och svårighetsgrad. Du kan flytta stegen upp/ner innan du väljer "Använd planen".
 - Den sparade ordningen visas som "Dagens ordning" i Min dag och gäller bara den dagen. Inga nya uppgifter skapas – bara en ordning på det som redan finns.
