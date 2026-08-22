@@ -204,6 +204,24 @@ export function useFlowItems(dateISO?: string): {
       });
     }
 
+    // "Jag gjorde något" – spontana saker användaren loggat. De är redan
+    // genomförda och hör till samma dag, så de syns bland dagens gjorda saker.
+    for (const e of energyEntries) {
+      const iso = (e.occurredAt ?? "").slice(0, 10);
+      if (iso !== today) continue;
+      out.push({
+        id: `gjort-${e.id}`,
+        title: e.title,
+        source: "gjort",
+        area: "vardag",
+        emoji: e.direction === "ger" ? "🌿" : "💪",
+        priority: "idag",
+        done: true,
+        completable: false,
+        href: "/energifloede",
+      });
+    }
+
     return sortFlowItems(out);
   }, [
     tasks,
@@ -212,11 +230,13 @@ export function useFlowItems(dateISO?: string): {
     childEvents,
     routines,
     quickflowItems,
+    energyEntries,
     suggestFor,
     isDone,
     targetDay,
     isTodayView,
   ]);
+
 
   // "today" = det som hör till den valda dagen. För idag betyder det det som
   // är akut eller ska göras idag; för en annan dag är allt vi samlat in redan
