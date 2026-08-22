@@ -238,7 +238,52 @@ export default function TodayPage() {
               </CollapsibleSection>
             </section>
 
+            {/* 📋 Dagens ordning – planen du valt i Planera */}
+            {dayPlan && dayPlan.steps.length > 0 && (
+              <section className="surface-card space-y-3 p-5">
+                <CollapsibleSection
+                  id="idag::dagens-ordning"
+                  title={
+                    <span className="flex items-center gap-2">
+                      <ListOrdered size={18} className="text-primary" aria-hidden="true" /> Dagens
+                      ordning
+                    </span>
+                  }
+                  headingClassName="text-lg font-semibold"
+                  className="space-y-3"
+                >
+                  {dayPlan.intro && <p className="text-sm text-foreground">{dayPlan.intro}</p>}
+                  <ol className="space-y-2">
+                    {dayPlan.steps.map((step, i) => (
+                      <li
+                        key={`${step.taskId}-${i}`}
+                        className="flex items-start gap-3 rounded-2xl bg-secondary/40 p-3"
+                      >
+                        <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
+                          {i + 1}
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <p className="font-medium text-ink">{step.title}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {step.estimatedMin ? `ca ${step.estimatedMin} min · ` : ""}
+                            {step.why}
+                          </p>
+                        </div>
+                      </li>
+                    ))}
+                  </ol>
+                  <Link
+                    href="/flow"
+                    className="inline-flex items-center gap-2 text-sm text-primary underline-offset-2 hover:underline"
+                  >
+                    <ListOrdered size={16} /> Ändra ordningen i Planera
+                  </Link>
+                </CollapsibleSection>
+              </section>
+            )}
+
             <DayEnergyFlow />
+
 
             {offerReplan && (
               <FlowReplan
