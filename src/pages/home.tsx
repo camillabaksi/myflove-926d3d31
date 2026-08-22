@@ -25,17 +25,39 @@ import { AreaSwitcher } from "@/components/area-switcher";
 import { AREA_META, useActiveArea } from "@/lib/life-areas";
 import IntroTour from "@/components/intro-tour";
 import FlowOnboarding from "@/components/flow-onboarding";
-import {
-  Plus,
-  CalendarDays,
-  Sparkles,
-  ArrowRight,
-  Clock,
-  Battery,
-  Zap,
-  MessageCircle,
-  SlidersHorizontal,
-} from "lucide-react";
+import { CalendarDays, Sparkles, ArrowRight, SlidersHorizontal } from "lucide-react";
+
+/**
+ * Fyra vanliga situationer, formulerade som användarens egen tanke.
+ * Ersätter produktnamn som "QuickFlow" och "Planera" på startsidan.
+ */
+const SITUATIONS = [
+  {
+    href: "/tasks",
+    emoji: "➕",
+    thought: "Jag behöver planera något",
+    action: "Lägg till en sak – med tid om du vill",
+  },
+  {
+    href: "/energifloede",
+    emoji: "✅",
+    thought: "Jag gjorde redan något",
+    action: "Registrera det du hunnit med",
+  },
+  {
+    href: "/flow",
+    emoji: "💜",
+    thought: "Jag vet inte vad jag ska göra nu",
+    action: "Få ett förslag i taget",
+  },
+  {
+    href: "/quickflow",
+    emoji: "⚡",
+    thought: "Jag har mycket i huvudet",
+    action: "Skriv av dig – jag sorterar sen",
+  },
+] as const;
+
 
 /**
  * Nästa relevanta aktivitet idag – påminnelser, uppgifter, rutiner,
