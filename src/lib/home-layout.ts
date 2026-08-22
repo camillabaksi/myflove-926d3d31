@@ -8,7 +8,6 @@ import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 export type HomeBlockId =
   | "checkin"
   | "batteri"
-  | "gjort-knapp"
   | "nasta"
   | "idag"
   | "forslag"
@@ -31,11 +30,6 @@ export const HOME_BLOCKS: HomeBlockMeta[] = [
     hint: "Snabb registrering av mående och energi",
   },
   { id: "batteri", label: "Mitt energibatteri", hint: "Din energi just nu" },
-  {
-    id: "gjort-knapp",
-    label: "Jag gjorde något",
-    hint: "Snabbknapp för att registrera något du redan gjort",
-  },
   { id: "nasta", label: "Nästa", hint: "Nästa sak som händer idag" },
   { id: "idag", label: "Dagens saker", hint: "Bocka av dagens saker och se vad du redan gjort" },
   { id: "forslag", label: "Rekommendation just nu", hint: "Ett förslag – samma som i Planera" },
@@ -59,7 +53,7 @@ export interface HomeLayoutPrefs {
 // De fyra snabbalternativen ("vagar") ligger högt – de täcker redan
 // "Lägg till", "Jag gjorde något" och "Lägg till det du gjorde".
 const DEFAULT_PREFS: HomeLayoutPrefs = {
-  hidden: ["gjort-knapp", "lagg-till", "energifloede", "omrade", "genvagar"],
+  hidden: ["lagg-till", "energifloede", "omrade", "genvagar"],
 
   order: [
     "checkin",
@@ -68,7 +62,6 @@ const DEFAULT_PREFS: HomeLayoutPrefs = {
     "nasta",
     "idag",
     "forslag",
-    "gjort-knapp",
     "lagg-till",
     "genvagar",
     "omrade",

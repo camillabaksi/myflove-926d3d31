@@ -1,4 +1,5 @@
 import { useState } from "react";
+import DayEnergyFlow from "@/components/day-energy-flow";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
 import { minutesToTime } from "@/lib/energy-battery";
 
@@ -35,6 +36,13 @@ export default function EnergyBattery({ defaultOpen = false }: { defaultOpen?: b
         ? "den är på väg ner"
         : "den ligger ganska jämn";
 
+  const trendSentence =
+    reading.trend === "stiger"
+      ? "Din energi ökar."
+      : reading.trend === "sjunker"
+        ? "Din energi minskar."
+        : "Din energi är stabil.";
+
   const plain = reading.overloaded
     ? `${levelWord} – och dagen ser tung ut.`
     : reading.peak
@@ -70,11 +78,16 @@ export default function EnergyBattery({ defaultOpen = false }: { defaultOpen?: b
             Mitt batteri ·{" "}
             <span className="font-semibold" style={{ color: tone }}>
               {level}%
+            </span>{" "}
+            <span aria-hidden>
+              {reading.trend === "stiger" ? "↑" : reading.trend === "sjunker" ? "↓" : "→"}
             </span>
           </span>
         </span>
 
-        <span className="shrink-0 text-xs text-muted-foreground">{open ? "Dölj" : "Visa"}</span>
+        <span className="shrink-0 text-xs text-muted-foreground">
+          {open ? "Dölj energihistorik ˄" : "Visa energihistorik ˅"}
+        </span>
       </button>
 
       {/* Liten kurva alltid synlig – känslan av dagen, inte en teknisk graf */}
@@ -89,6 +102,7 @@ export default function EnergyBattery({ defaultOpen = false }: { defaultOpen?: b
 
       {open && (
         <div className="mt-4 space-y-3 border-t border-border/50 pt-3">
+          <p className="text-sm text-ink">{trendSentence}</p>
           <div className="flex flex-wrap gap-2 text-xs">
             {reading.peak && (
               <span className="rounded-pill bg-primary/10 px-2.5 py-1 text-foreground">
@@ -114,6 +128,9 @@ export default function EnergyBattery({ defaultOpen = false }: { defaultOpen?: b
               ))}
             </ul>
           )}
+
+          {/* Samma energidata som Min energi / Energins historik */}
+          <DayEnergyFlow className="border-0 p-0 shadow-none" />
         </div>
       )}
     </section>
