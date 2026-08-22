@@ -292,9 +292,6 @@ export default function Home() {
           </div>
         )}
 
-
-
-
         {/* Nästa – nästa relevanta aktivitet */}
         {shows("nasta") && (
           <section
