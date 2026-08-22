@@ -11,7 +11,14 @@
 
 import { AREA_META, type LifeArea } from "@/lib/life-areas";
 
-export type FlowItemSource = "uppgift" | "kalender" | "lektion" | "barn" | "rutin" | "tanke";
+export type FlowItemSource =
+  | "uppgift"
+  | "kalender"
+  | "lektion"
+  | "barn"
+  | "rutin"
+  | "tanke"
+  | "gjort";
 
 export type FlowPriority = "nu" | "idag" | "snart" | "senare";
 
@@ -53,6 +60,7 @@ export const SOURCE_LABEL: Record<FlowItemSource, string> = {
   barn: "Barnen",
   rutin: "Rutin",
   tanke: "Tanke",
+  gjort: "Gjort",
 };
 
 export const PRIORITY_LABEL: Record<FlowPriority, string> = {

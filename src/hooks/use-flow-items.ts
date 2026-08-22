@@ -5,6 +5,7 @@ import { useChildEvents } from "@/hooks/use-child-events";
 import { useChildren } from "@/hooks/use-children";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { useFrictionLibrary } from "@/hooks/use-friction-library";
+import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import { useDoneLog } from "@/hooks/use-done-log";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { getArea } from "@/lib/life-areas";
@@ -43,6 +44,7 @@ export function useFlowItems(dateISO?: string): {
   const { toggleItem: toggleChildItem } = useChildren();
   const { items: quickflowItems, complete, uncomplete } = useQuickflow();
   const { suggestFor } = useFrictionLibrary();
+  const { entries: energyEntries } = useEnergyFlow();
   const { isDone, toggleDone } = useDoneLog(targetDay);
   const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
 
@@ -204,6 +206,24 @@ export function useFlowItems(dateISO?: string): {
       });
     }
 
+    // "Jag gjorde något" – spontana saker användaren loggat. De är redan
+    // genomförda och hör till samma dag, så de syns bland dagens gjorda saker.
+    for (const e of energyEntries) {
+      const iso = (e.occurredAt ?? "").slice(0, 10);
+      if (iso !== today) continue;
+      out.push({
+        id: `gjort-${e.id}`,
+        title: e.title,
+        source: "gjort",
+        area: "vardag",
+        emoji: e.direction === "gives" ? "🌿" : "💪",
+        priority: "idag",
+        done: true,
+        completable: false,
+        href: "/energifloede",
+      });
+    }
+
     return sortFlowItems(out);
   }, [
     tasks,
@@ -212,6 +232,7 @@ export function useFlowItems(dateISO?: string): {
     childEvents,
     routines,
     quickflowItems,
+    energyEntries,
     suggestFor,
     isDone,
     targetDay,

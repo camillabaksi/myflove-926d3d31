@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-25 – Planera min dag tillbaka + Jag gjorde något i dagen
+
+- 📋 Planera min dag i Planera: knappen "Föreslå en ordning" ger en smart ordning på dagens uppgifter utifrån tider, ork och svårighetsgrad. Du kan flytta stegen upp/ner innan du väljer "Använd planen".
+- Den sparade ordningen visas som "Dagens ordning" i Min dag och gäller bara den dagen. Inga nya uppgifter skapas – bara en ordning på det som redan finns.
+- "Jag gjorde något" hamnar nu i den gemensamma aktivitetsmodellen och syns bland dagens gjorda saker i Hem, Min dag och kalendern.
+- Tydligare hjälptexter på Hem för "Lägg till" och "Jag gjorde något".
+
 ## 2026-08-25 – Enklare språk i hela appen
 
 - Navigationen heter nu Hem, Min dag, QuickFlow, Planera och Mer – med QuickFlow som central snabbknapp.
