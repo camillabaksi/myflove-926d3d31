@@ -239,7 +239,6 @@ export function useFlowItems(dateISO?: string): {
     isTodayView,
   ]);
 
-
   // "today" = det som hör till den valda dagen. För idag betyder det det som
   // är akut eller ska göras idag; för en annan dag är allt vi samlat in redan
   // filtrerat på just den dagen.

@@ -13,14 +13,7 @@ import type { ScoredTask } from "@/lib/daily-flow";
 import { planFlowSequence } from "@/lib/flowplan.functions";
 import { useDayPlan, type DayPlanStep } from "@/lib/day-plan";
 import { MyFloveThinking, MyFloveTransition } from "@/components/myflove/motion";
-import {
-  Sparkles,
-  Sun,
-  MessageCircle,
-  CalendarClock,
-  Check,
-  ListOrdered,
-} from "lucide-react";
+import { Sparkles, Sun, MessageCircle, CalendarClock, Check, ListOrdered } from "lucide-react";
 
 type Layer = "nu" | "idag" | "hjalp";
 
@@ -45,9 +38,7 @@ export default function FlowPage() {
           <h1 className="flex items-center gap-2 font-display text-3xl text-ink">
             <Sparkles className="h-7 w-7 text-primary" /> Planera
           </h1>
-          <p className="mt-1 text-muted-foreground">
-            Vad är bäst just nu, och vad hinner du idag?
-          </p>
+          <p className="mt-1 text-muted-foreground">Vad är bäst just nu, och vad hinner du idag?</p>
         </header>
 
         <div
@@ -234,7 +225,6 @@ function TodayLayer() {
         </CollapsibleSection>
       </section>
 
-
       {/* 📋 Planera min dag – en smart ordning på dagens saker */}
       <PlanMyDay />
 
@@ -325,8 +315,7 @@ function PlanMyDay() {
         className="space-y-4"
       >
         <p className="text-sm text-muted-foreground">
-          Hjälp mig hitta en smart ordning för dagens saker – utifrån tider, ork och
-          svårighetsgrad.
+          Hjälp mig hitta en smart ordning för dagens saker – utifrån tider, ork och svårighetsgrad.
         </p>
 
         {activeTasks.length === 0 ? (
@@ -427,4 +416,3 @@ function PlanMyDay() {
     </section>
   );
 }
-

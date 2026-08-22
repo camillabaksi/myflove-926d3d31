@@ -286,7 +286,6 @@ export default function TodayPage() {
 
             <DayEnergyFlow />
 
-
             {offerReplan && (
               <FlowReplan
                 flow={flow}

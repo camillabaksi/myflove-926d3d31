@@ -11,7 +11,14 @@
 
 import { AREA_META, type LifeArea } from "@/lib/life-areas";
 
-export type FlowItemSource = "uppgift" | "kalender" | "lektion" | "barn" | "rutin" | "tanke" | "gjort";
+export type FlowItemSource =
+  | "uppgift"
+  | "kalender"
+  | "lektion"
+  | "barn"
+  | "rutin"
+  | "tanke"
+  | "gjort";
 
 export type FlowPriority = "nu" | "idag" | "snart" | "senare";
 
