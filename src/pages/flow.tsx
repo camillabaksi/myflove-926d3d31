@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import Layout from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import FocusMode from "@/components/focus-mode";
@@ -9,8 +10,17 @@ import { useTasks } from "@/hooks/use-data";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
 import { assessToday, rankNow, suggestMove, suggestNow } from "@/lib/flow-engine";
 import type { ScoredTask } from "@/lib/daily-flow";
+import { planFlowSequence } from "@/lib/flowplan.functions";
+import { useDayPlan, type DayPlanStep } from "@/lib/day-plan";
 import { MyFloveThinking, MyFloveTransition } from "@/components/myflove/motion";
-import { Sparkles, Sun, MessageCircle, CalendarClock, Check } from "lucide-react";
+import {
+  Sparkles,
+  Sun,
+  MessageCircle,
+  CalendarClock,
+  Check,
+  ListOrdered,
+} from "lucide-react";
 
 type Layer = "nu" | "idag" | "hjalp";
 
