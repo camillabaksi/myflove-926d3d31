@@ -1,7 +1,14 @@
 import Layout from "@/components/layout";
 import { Link } from "@tanstack/react-router";
 import { useIsAdmin } from "@/hooks/use-is-admin";
-import { Lock, Download, ArrowLeft, FileText, Film } from "lucide-react";
+import { Lock, Download, ArrowLeft, FileText, Film, BookOpen } from "lucide-react";
+
+const BLUEPRINT_VERSIONS = [
+  { version: "3.2", label: "Senaste – omstrukturerad i sex delar" },
+  { version: "3.0", label: "Navigation, Min dag och energibatteri" },
+  { version: "2.9", label: "Relationer, situation och FlowPlan" },
+  { version: "2.8", label: "Quickflow, Energiflöde och designsystem" },
+] as const;
 
 export default function PitchPage() {
   const { isAdmin, loading } = useIsAdmin();
