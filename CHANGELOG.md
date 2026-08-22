@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-22 – Bättre delning och SEO på publika sidor
+
+- Alla publika sidor (start, guide, cookies, integritet, villkor, logga in, skapa konto, glömt lösenord) har nu titel, beskrivning, canonical och sociala delningskort.
+- Ny delningsbild (og-image.jpg, 1200×630) används som förhandsvisning när en länk delas i sociala medier och chattar.
+- twitter:card är satt till summary_large_image på alla publika sidor.
+
 ## 2026-08-22 – Lugnare Hem: de fyra snabbalternativen är kärnan
 
 - De fyra snabbalternativen ("Vad behöver du just nu?") ligger nu högt på Hem, direkt efter hälsning, mående/energi och batteriet. Namn, ikoner, undertexter och destinationer är oförändrade.

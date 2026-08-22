@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Bättre delning och SEO – alla publika sidor har titel, beskrivning, canonical och ett socialt delningskort med ny förhandsbild (2026-08-22)",
       'Lugnare Hem – de fyra snabbalternativen ("Vad behöver du just nu?") ligger högt upp och är oförändrade, medan de överlappande blocken snabbknappen "Jag gjorde något", snabbfältet "Lägg till" och panelen "Lägg till det du gjorde" är dolda som standard. De går att slå på igen i Anpassa hemskärmen och befintliga layouter påverkas inte (2026-08-22)',
       '"Jag gjorde redan något" i situationskortet öppnar nu samma "Jag gjorde något"-modal som resten av appen, i stället för att länka till energihistoriken. Samma registrering, samma genomförda aktivitet, inga dubbletter (2026-08-26)',
       "Lugnare första 30 sekunder – batteriet svarar i klartext (Du har medelbra energi – den är på väg upp, starkast kl 14–16) med minikurvan alltid synlig, Hem startar med färre block, Korta vägar har blivit Vad behöver du just nu? med fyra situationer och introt är nedkortat till två kort (2026-08-22)",
