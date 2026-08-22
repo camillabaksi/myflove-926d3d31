@@ -14,9 +14,21 @@ export default function FlowOnboarding() {
   const [step, setStep] = useState<1 | 2>(1);
   const [dismissed, setDismissed] = useState(false);
 
-  // Vänta tills välkomstturen är avklarad – en sak i taget.
+  // Frågan om mål stör bara första gången. Vi väntar till andra besöket,
+  // när användaren redan sett vad appen gör.
   const [introSeen] = useLocalStorage<boolean>("myflove-intro-seen", false);
-  const open = introSeen && !done && !dismissed;
+  const [returning, setReturning] = useLocalStorage<boolean>("myflove-returning", false);
+
+  useEffect(() => {
+    if (introSeen && !returning) {
+      const t = setTimeout(() => setReturning(true), 0);
+      return () => clearTimeout(t);
+    }
+    return undefined;
+  }, [introSeen, returning, setReturning]);
+
+  const open = introSeen && returning && !done && !dismissed;
+
 
   const toggle = (id: FlowGoalId) =>
     setSelected((prev) => (prev.includes(id) ? prev.filter((g) => g !== id) : [...prev, id]));
