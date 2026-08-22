@@ -122,7 +122,13 @@ export default function EnergyBattery({ defaultOpen = false }: { defaultOpen?: b
 }
 
 /** Liten, lugn kurva över dagen med markering för var vi är nu. */
-function BatteryCurve({ reading }: { reading: ReturnType<typeof useEnergyBattery>["reading"] }) {
+function BatteryCurve({
+  reading,
+  compact = false,
+}: {
+  reading: ReturnType<typeof useEnergyBattery>["reading"];
+  compact?: boolean;
+}) {
   const slots = reading.slots;
   if (slots.length < 2) return null;
   const w = 100;
@@ -140,10 +146,11 @@ function BatteryCurve({ reading }: { reading: ReturnType<typeof useEnergyBattery
       <svg
         viewBox={`0 0 ${w} ${h}`}
         preserveAspectRatio="none"
-        className="h-20 w-full"
+        className={compact ? "h-10 w-full" : "h-20 w-full"}
         role="img"
         aria-label={`Energikurva över dagen. ${reading.summary}`}
       >
+
         <polygon
           points={`0,${h} ${points.join(" ")} ${w},${h}`}
           fill="hsl(var(--primary))"
