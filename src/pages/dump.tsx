@@ -195,6 +195,7 @@ export default function Dump() {
           </div>
           <div className="relative space-y-2">
             <h1 className="font-display text-3xl font-bold text-ink pr-14">QuickFlow</h1>
+            <p className="text-sm font-medium text-primary">Fånga en tanke snabbt</p>
             <p className="text-muted-foreground leading-relaxed">
               Få ut det ur huvudet. Skriv eller prata in allt som snurrar – huller om buller går
               bra. Jag håller det åt dig tills du orkar sortera. 💜
