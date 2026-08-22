@@ -58,11 +58,34 @@ export interface HomeLayoutPrefs {
 }
 
 // Lugn start: bara det som ger nytta direkt. Resten slås på i "Anpassa hemskärmen".
+// De fyra snabbalternativen ("vagar") ligger högt – de täcker redan
+// "Lägg till", "Jag gjorde något" och "Lägg till det du gjorde".
 const DEFAULT_PREFS: HomeLayoutPrefs = {
-  hidden: ["gjort", "energifloede", "omrade", "genvagar"],
+  hidden: [
+    "gjort-knapp",
+    "lagg-till",
+    "gjort",
+    "energifloede",
+    "omrade",
+    "genvagar",
+  ],
 
-  order: HOME_BLOCKS.map((b) => b.id),
+  order: [
+    "checkin",
+    "batteri",
+    "vagar",
+    "nasta",
+    "idag",
+    "forslag",
+    "gjort-knapp",
+    "lagg-till",
+    "gjort",
+    "genvagar",
+    "omrade",
+    "energifloede",
+  ],
 };
+
 
 const STORAGE_KEY = "myflove-home-layout";
 
