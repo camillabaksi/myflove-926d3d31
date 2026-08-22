@@ -5,6 +5,8 @@ import { useHomeLayout, type HomeBlockId } from "@/lib/home-layout";
 import { TaskQuickAdd, type QuickAddResult } from "@/components/task-quick-add";
 import DidThisCta from "@/components/did-this-cta";
 import TodayTasks from "@/components/today-tasks";
+import MedicationToday from "@/components/medication-today";
+
 import DayEnergyFlow from "@/components/day-energy-flow";
 import { Link } from "wouter";
 import Layout from "@/components/layout";
