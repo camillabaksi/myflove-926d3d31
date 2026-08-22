@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      'Hem: det separata blocket "Jag gjorde något" är borttaget – funktionen ligger kvar i snabbalternativet "Jag gjorde redan något". Mitt energibatteri är kompakt som standard och kan valfritt expandera samma energihistorik som Min energi (2026-08-22)',
       'Hem städas – "Lägg till det du gjorde" visas inte längre som separat block på Hem. Funktionen finns kvar bakom snabbalternativet "Jag gjorde redan något" i samma modal och aktivitetsmodell. De fyra snabbalternativen är oförändrade (2026-08-22)',
       "Bättre delning och SEO – alla publika sidor har titel, beskrivning, canonical och ett socialt delningskort med ny förhandsbild (2026-08-22)",
       'Lugnare Hem – de fyra snabbalternativen ("Vad behöver du just nu?") ligger högt upp och är oförändrade, medan de överlappande blocken snabbknappen "Jag gjorde något", snabbfältet "Lägg till" och panelen "Lägg till det du gjorde" är dolda som standard. De går att slå på igen i Anpassa hemskärmen och befintliga layouter påverkas inte (2026-08-22)',
