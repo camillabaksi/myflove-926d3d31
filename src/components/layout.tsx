@@ -260,9 +260,9 @@ export default function Layout({ children }: LayoutProps) {
     { href: "/hem", label: "Hem", icon: Home, hint: "Din överblick över dagen", essential: true },
     {
       href: "/idag",
-      label: "Idag",
+      label: "Min dag",
       icon: Heart,
-      hint: "Dagens allt – i Flow-läge eller som lista",
+      hint: "Vad din dag består av – och vad du gjort",
       essential: true,
     },
     {
@@ -287,7 +287,7 @@ export default function Layout({ children }: LayoutProps) {
       href: "/quickflow",
       label: "QuickFlow",
       icon: Inbox,
-      hint: "Skriv av dig direkt – sortera sen",
+      hint: "Fånga en tanke snabbt",
       essential: true,
     },
     {
@@ -316,7 +316,12 @@ export default function Layout({ children }: LayoutProps) {
       icon: CheckSquare,
       hint: "Hela listan – även kommande dagar",
     },
-    { href: "/flowscore", label: "FlowScore", icon: Gauge, hint: "Hur mycket du orkar just idag" },
+    {
+      href: "/flowscore",
+      label: "Dagens balans",
+      icon: Gauge,
+      hint: "Hur dagens krav matchar din ork",
+    },
     {
       href: "/morgonstart",
       label: "Morgonstart",
@@ -325,7 +330,7 @@ export default function Layout({ children }: LayoutProps) {
     },
     {
       href: "/veckans-flow",
-      label: "Veckans Flow",
+      label: "Veckans översikt",
       icon: CalendarDays,
       hint: "Lugn tillbakablick på veckan",
     },
@@ -365,16 +370,16 @@ export default function Layout({ children }: LayoutProps) {
     },
     {
       href: "/insight",
-      label: "Insights",
+      label: "Mina mönster",
       icon: Brain,
-      hint: "Dina mönster och konkreta strategier",
+      hint: "Vad som brukar funka för dig",
       essential: true,
     },
     {
       href: "/flow",
-      label: "Flow",
+      label: "Planera",
       icon: Sparkles,
-      hint: "Vad som är bäst att göra nu, dagens belastning och hjälp",
+      hint: "Vad är bäst just nu och vad hinner jag idag?",
       essential: true,
     },
     {
@@ -387,14 +392,14 @@ export default function Layout({ children }: LayoutProps) {
       ? [
           {
             href: "/studyflow",
-            label: "StudyFlow",
+            label: "Studier",
             icon: GraduationCap,
             hint: "Schema, prov och vad du ska plugga nu",
             essential: true,
           },
           {
             href: "/studybuddy",
-            label: "StudyBuddy",
+            label: "Studiehjälp",
             icon: Brain,
             hint: "Flashcards och quiz på ditt material",
           },
@@ -412,7 +417,7 @@ export default function Layout({ children }: LayoutProps) {
           },
           {
             href: "/workflow",
-            label: "WorkFlow",
+            label: "Jobbplanering",
             icon: Zap,
             hint: "Vad du ska göra härnäst på jobbet",
           },
@@ -474,8 +479,8 @@ export default function Layout({ children }: LayoutProps) {
       },
       {
         id: "flowflow",
-        label: "Flow",
-        hint: "Nästa steg, ordning, omplanering och hjälp",
+        label: "Planera",
+        hint: "Nästa steg, ordning, ändra planen och hjälp",
         icon: Sparkles,
         hrefs: ["/flow", "/quickflow", "/anteckningar", "/beloningar"],
       },
@@ -516,7 +521,7 @@ export default function Layout({ children }: LayoutProps) {
       },
       {
         id: "healthflow",
-        label: "Insights",
+        label: "Mina mönster",
         hint: "Din energi, hälsa, mönster och statistik",
         icon: Brain,
         hrefs: ["/insight", "/ma-bra", "/statistik", "/traning"],
@@ -524,7 +529,7 @@ export default function Layout({ children }: LayoutProps) {
       {
         id: "avancerat",
         label: "Avancerat",
-        hint: "Detaljerna bakom Flow – bara om du vill se dem",
+        hint: "Detaljerna bakom planeringen – bara om du vill se dem"",
         icon: Gauge,
         hrefs: ["/flowscore", "/veckans-flow", "/friktionsindex"],
       },
@@ -853,7 +858,7 @@ export default function Layout({ children }: LayoutProps) {
 
       <QuickflowFab />
 
-      {/* Mobile Bottom Bar – Hem · Idag · QuickFlow · Flow · Mer */}
+      {/* Mobile Bottom Bar – Hem · Min dag · QuickFlow · Planera · Mer */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-md border-t border-border/70 pb-[env(safe-area-inset-bottom)] z-40">
         <div className="flex items-end justify-around px-1 pt-1.5 pb-1">
           {primaryNav.slice(0, 2).map((item) => (
