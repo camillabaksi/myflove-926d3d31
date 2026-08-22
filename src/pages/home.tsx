@@ -287,10 +287,32 @@ export default function Home() {
         )}
 
         {shows("batteri") && (
-          <div style={pos("batteri")}>
-            <EnergyBattery />
-          </div>
+          <section style={pos("batteri")} aria-label="Mitt energibatteri">
+            <CollapsibleSection
+              id="hem::batteri"
+              title="Mitt energibatteri"
+              headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
+              className="space-y-3"
+            >
+              <EnergyBattery />
+            </CollapsibleSection>
+          </section>
         )}
+
+        {/* Energins historik – samma data som Min energi, direkt under batteriet */}
+        {shows("energifloede") && (
+          <section style={pos("energifloede")} aria-label="Energins historik">
+            <CollapsibleSection
+              id="hem::energins-historik"
+              title="Energins historik"
+              headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
+              className="space-y-3"
+            >
+              <DayEnergyFlow />
+            </CollapsibleSection>
+          </section>
+        )}
+
 
         {/* Nästa – nästa relevanta aktivitet */}
         {shows("nasta") && (
