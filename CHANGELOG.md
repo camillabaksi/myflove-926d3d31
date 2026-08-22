@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-22 – Hem städas: "Lägg till det du gjorde" är borta som separat block
+
+- Det separata blocket/fältet "Lägg till det du gjorde" (`gjort`) renderas inte längre på Hem.
+- Funktionen finns kvar bakom snabbalternativet "Jag gjorde redan något" i "Vad behöver du just nu?" och använder samma "Jag gjorde något"-modal och aktivitetsmodell.
+- Blocket är också borttaget från standardlayouten och från "Anpassa hemskärmen" som ett valbart block.
+- De fyra snabbalternativen är oförändrade: namn, ikoner, undertexter, funktion och destination.
+- Inga ändringar av aktivitetsmodellen, QuickFlow, Planera min dag eller energilogiken.
+
 ## 2026-08-22 – Bättre delning och SEO på publika sidor
 
 - Alla publika sidor (start, guide, cookies, integritet, villkor, logga in, skapa konto, glömt lösenord) har nu titel, beskrivning, canonical och sociala delningskort.

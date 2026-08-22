@@ -5,7 +5,6 @@ import { useHomeLayout, type HomeBlockId } from "@/lib/home-layout";
 import { TaskQuickAdd, type QuickAddResult } from "@/components/task-quick-add";
 import DidThisCta from "@/components/did-this-cta";
 import TodayTasks from "@/components/today-tasks";
-import DidThisQuickAdd from "@/components/did-this-quick-add";
 import DayEnergyFlow from "@/components/day-energy-flow";
 import { Link } from "wouter";
 import Layout from "@/components/layout";
@@ -407,13 +406,6 @@ export default function Home() {
             <p className="mt-1 text-xs text-muted-foreground">
               Planera något – med tid om du vill.
             </p>
-          </div>
-        )}
-
-        {/* Lägg till det du gjorde – full panel (valbar) */}
-        {shows("gjort") && (
-          <div style={pos("gjort")}>
-            <DidThisQuickAdd />
           </div>
         )}
 
