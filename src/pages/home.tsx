@@ -409,7 +409,6 @@ export default function Home() {
           </div>
         )}
 
-
         {/* Dagens energiflöde – faktisk belastning */}
         {shows("energifloede") && (
           <div style={pos("energifloede")}>
