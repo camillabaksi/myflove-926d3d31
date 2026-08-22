@@ -18,7 +18,6 @@ export type HomeBlockId =
   | "omrade"
   | "energifloede";
 
-
 export interface HomeBlockMeta {
   id: HomeBlockId;
   label: string;
