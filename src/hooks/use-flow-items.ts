@@ -5,6 +5,7 @@ import { useChildEvents } from "@/hooks/use-child-events";
 import { useChildren } from "@/hooks/use-children";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { useFrictionLibrary } from "@/hooks/use-friction-library";
+import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import { useDoneLog } from "@/hooks/use-done-log";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { getArea } from "@/lib/life-areas";
@@ -43,6 +44,7 @@ export function useFlowItems(dateISO?: string): {
   const { toggleItem: toggleChildItem } = useChildren();
   const { items: quickflowItems, complete, uncomplete } = useQuickflow();
   const { suggestFor } = useFrictionLibrary();
+  const { entries: energyEntries } = useEnergyFlow();
   const { isDone, toggleDone } = useDoneLog(targetDay);
   const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
 
