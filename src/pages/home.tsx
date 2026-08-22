@@ -436,22 +436,42 @@ export default function Home() {
             <ul className="space-y-2">
               {SITUATIONS.map((s) => (
                 <li key={s.href}>
-                  <Link
-                    href={s.href}
-                    className="group flex items-center gap-3 rounded-2xl bg-secondary/30 px-3 py-3 transition-colors hover:bg-secondary/60"
-                  >
-                    <span aria-hidden className="text-xl">
-                      {s.emoji}
-                    </span>
-                    <span className="min-w-0 flex-1">
-                      <span className="block text-sm text-ink">{s.thought}</span>
-                      <span className="block text-xs text-muted-foreground">{s.action}</span>
-                    </span>
-                    <ArrowRight
-                      size={16}
-                      className="shrink-0 text-muted-foreground transition-colors group-hover:text-foreground"
+                  {s.didThis ? (
+                    <DidThisCta
+                      trigger={
+                        <span className="group flex w-full items-center gap-3 rounded-2xl bg-secondary/30 px-3 py-3 text-left transition-colors hover:bg-secondary/60">
+                          <span aria-hidden className="text-xl">
+                            {s.emoji}
+                          </span>
+                          <span className="min-w-0 flex-1">
+                            <span className="block text-sm text-ink">{s.thought}</span>
+                            <span className="block text-xs text-muted-foreground">{s.action}</span>
+                          </span>
+                          <ArrowRight
+                            size={16}
+                            className="shrink-0 text-muted-foreground transition-colors group-hover:text-foreground"
+                          />
+                        </span>
+                      }
                     />
-                  </Link>
+                  ) : (
+                    <Link
+                      href={s.href}
+                      className="group flex items-center gap-3 rounded-2xl bg-secondary/30 px-3 py-3 transition-colors hover:bg-secondary/60"
+                    >
+                      <span aria-hidden className="text-xl">
+                        {s.emoji}
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-sm text-ink">{s.thought}</span>
+                        <span className="block text-xs text-muted-foreground">{s.action}</span>
+                      </span>
+                      <ArrowRight
+                        size={16}
+                        className="shrink-0 text-muted-foreground transition-colors group-hover:text-foreground"
+                      />
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
