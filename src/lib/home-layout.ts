@@ -59,8 +59,8 @@ const DEFAULT_PREFS: HomeLayoutPrefs = {
     "checkin",
     "batteri",
     "energifloede",
-    "vagar",
     "nasta",
+    "vagar",
     "idag",
     "forslag",
     "lagg-till",
@@ -70,8 +70,33 @@ const DEFAULT_PREFS: HomeLayoutPrefs = {
 };
 
 const STORAGE_KEY = "myflove-home-layout";
-/** Engångsflytt: Energins historik visas nu som eget block under batteriet. */
-const MIGRATION_KEY = "myflove-home-layout-migrated-energifloede";
+/** Engångsflytt: Energins historik direkt under batteriet, "Nästa" före snabbalternativen. */
+const MIGRATION_KEY = "myflove-home-layout-migrated-energifloede-v2";
+
+function normalizeOrder(order: HomeBlockId[] | undefined): HomeBlockId[] {
+  const base = order ?? DEFAULT_PREFS.order;
+  const withoutFlow = base.filter((id) => id !== "energifloede");
+  const atBattery = withoutFlow.indexOf("batteri");
+  const withFlow =
+    atBattery >= 0
+      ? [
+          ...withoutFlow.slice(0, atBattery + 1),
+          "energifloede" as HomeBlockId,
+          ...withoutFlow.slice(atBattery + 1),
+        ]
+      : base;
+
+  // Säkerställ önskad ordning mellan "nasta" och "vagar".
+  const iNasta = withFlow.indexOf("nasta");
+  const iVagar = withFlow.indexOf("vagar");
+  if (iNasta >= 0 && iVagar >= 0 && iNasta > iVagar) {
+    const next = [...withFlow];
+    next.splice(iNasta, 1);
+    next.splice(iVagar, 0, "nasta");
+    return next;
+  }
+  return withFlow;
+}
 
 export function useHomeLayout() {
   const [prefs, setPrefs] = useCloudSyncedStorage<HomeLayoutPrefs>(STORAGE_KEY, DEFAULT_PREFS);
@@ -79,26 +104,15 @@ export function useHomeLayout() {
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (window.localStorage.getItem(MIGRATION_KEY)) return;
-    if (!prefs?.hidden?.includes("energifloede")) return;
     window.localStorage.setItem(MIGRATION_KEY, "1");
     setPrefs((p) => {
-      const currentOrder = p?.order ?? DEFAULT_PREFS.order;
-      const withoutFlow = currentOrder.filter((id) => id !== "energifloede");
-      const at = withoutFlow.indexOf("batteri");
-      const nextOrder =
-        at >= 0
-          ? [
-              ...withoutFlow.slice(0, at + 1),
-              "energifloede" as HomeBlockId,
-              ...withoutFlow.slice(at + 1),
-            ]
-          : currentOrder;
+      const nextOrder = normalizeOrder(p?.order);
       return {
         order: nextOrder,
         hidden: (p?.hidden ?? []).filter((id) => id !== "energifloede"),
       };
     });
-  }, [prefs?.hidden, setPrefs]);
+  }, [setPrefs]);
 
   const order = useMemo<HomeBlockId[]>(() => {
     const valid = (prefs?.order ?? []).filter((id) => HOME_BLOCKS.some((b) => b.id === id));
