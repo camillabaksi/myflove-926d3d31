@@ -301,17 +301,23 @@ export default function Home() {
 
         {/* Energins historik – samma data som Min energi, direkt under batteriet */}
         {shows("energifloede") && (
-          <section style={pos("energifloede")} aria-label="Energins historik">
+          <section
+            style={pos("energifloede")}
+            aria-label="Energins historik"
+            className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+          >
             <CollapsibleSection
               id="hem::energins-historik"
               title="Energins historik"
               headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
               className="space-y-3"
             >
-              <DayEnergyFlow />
+              <p className="text-sm text-ink">{trendSentence}</p>
+              <DayEnergyFlow className="border-0 bg-transparent p-0 shadow-none" />
             </CollapsibleSection>
           </section>
         )}
+
 
         {/* Nästa – nästa relevanta aktivitet */}
         {shows("nasta") && (
