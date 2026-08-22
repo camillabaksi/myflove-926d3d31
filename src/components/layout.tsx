@@ -529,7 +529,7 @@ export default function Layout({ children }: LayoutProps) {
       {
         id: "avancerat",
         label: "Avancerat",
-        hint: "Detaljerna bakom planeringen – bara om du vill se dem"",
+        hint: "Detaljerna bakom planeringen – bara om du vill se dem",
         icon: Gauge,
         hrefs: ["/flowscore", "/veckans-flow", "/friktionsindex"],
       },
