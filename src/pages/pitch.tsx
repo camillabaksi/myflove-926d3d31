@@ -1,7 +1,14 @@
 import Layout from "@/components/layout";
 import { Link } from "@tanstack/react-router";
 import { useIsAdmin } from "@/hooks/use-is-admin";
-import { Lock, Download, ArrowLeft, FileText, Film } from "lucide-react";
+import { Lock, Download, ArrowLeft, FileText, Film, BookOpen } from "lucide-react";
+
+const BLUEPRINT_VERSIONS = [
+  { version: "3.2", label: "Senaste – omstrukturerad i sex delar" },
+  { version: "3.0", label: "Navigation, Min dag och energibatteri" },
+  { version: "2.9", label: "Relationer, situation och FlowPlan" },
+  { version: "2.8", label: "Quickflow, Energiflöde och designsystem" },
+] as const;
 
 export default function PitchPage() {
   const { isAdmin, loading } = useIsAdmin();
@@ -86,6 +93,44 @@ export default function PitchPage() {
               <Download size={16} /> Ladda ner PDF (3.0)
             </a>
           </div>
+        </section>
+
+        <section className="rounded-2xl border border-border bg-card p-4 space-y-3">
+          <h2 className="flex items-center gap-2 font-serif text-xl font-semibold">
+            <BookOpen size={18} className="text-primary" /> Living Blueprint
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            Ladda ner blueprinten som Word (DOCX) eller PDF – en knapp per version.
+          </p>
+          <ul className="space-y-2">
+            {BLUEPRINT_VERSIONS.map((v) => (
+              <li
+                key={v.version}
+                className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-border px-3 py-2"
+              >
+                <div>
+                  <p className="font-medium">Version {v.version}</p>
+                  <p className="text-xs text-muted-foreground">{v.label}</p>
+                </div>
+                <div className="flex gap-2">
+                  <a
+                    href={`/blueprint/MyFlove_Living_Blueprint_${v.version}.docx`}
+                    download
+                    className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:opacity-90"
+                  >
+                    <Download size={14} /> DOCX
+                  </a>
+                  <a
+                    href={`/blueprint/MyFlove_Living_Blueprint_${v.version}.pdf`}
+                    download
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-border px-3 py-1.5 text-xs font-medium hover:bg-secondary"
+                  >
+                    <Download size={14} /> PDF
+                  </a>
+                </div>
+              </li>
+            ))}
+          </ul>
         </section>
       </div>
     </Layout>
