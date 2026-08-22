@@ -377,7 +377,30 @@ export default function Home() {
           </section>
         )}
 
+        {/* Dagens medicin – samma data och samma avbockning som i Rutiner & medicin */}
+        {shows("medicin") && (
+          <section
+            style={pos("medicin")}
+            className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+            aria-label="Dagens medicin"
+          >
+            <CollapsibleSection
+              id="hem::medicin"
+              title={
+                <span className="flex items-center gap-2">
+                  <span aria-hidden>💊</span> Dagens medicin
+                </span>
+              }
+              headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
+              className="space-y-3"
+            >
+              <MedicationToday />
+            </CollapsibleSection>
+          </section>
+        )}
+
         {/* Dagens uppgifter – samma kort och avbockning som i Min dag */}
+
         {shows("idag") && (
           <div style={pos("idag")}>
             <TodayTasks />
