@@ -21,6 +21,7 @@ import { assessToday, suggestNow } from "@/lib/flow-engine";
 import { withinCapacity, type FlowItem } from "@/lib/flow-items";
 import { useTasks, useReminders } from "@/hooks/use-data";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
+import { useDayPlan } from "@/lib/day-plan";
 import type { Routine } from "@/pages/routines";
 import { CalendarDays, ListOrdered, Sparkles, Heart, Waves, ListChecks } from "lucide-react";
 import { MyFloveTransition } from "@/components/myflove/motion";
@@ -48,6 +49,7 @@ export default function TodayPage() {
   const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
   const { reading, items: batteryItems } = useEnergyBattery();
   const [view, setView] = useLocalStorage<DayView>("myflove-today-view", "flow");
+  const { plan: dayPlan } = useDayPlan();
 
   const { todayOpen: todaysItems, todayDone, toggleItem } = useFlowItems();
   const { mode, chosen, setMode } = useReplanMode();
