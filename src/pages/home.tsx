@@ -31,7 +31,15 @@ import { CalendarDays, Sparkles, ArrowRight, SlidersHorizontal } from "lucide-re
  * Fyra vanliga situationer, formulerade som användarens egen tanke.
  * Ersätter produktnamn som "QuickFlow" och "Planera" på startsidan.
  */
-const SITUATIONS = [
+interface Situation {
+  href: string;
+  emoji: string;
+  thought: string;
+  action: string;
+  didThis?: boolean;
+}
+
+const SITUATIONS: Situation[] = [
   {
     href: "/tasks",
     emoji: "➕",
@@ -39,10 +47,11 @@ const SITUATIONS = [
     action: "Lägg till en sak – med tid om du vill",
   },
   {
-    href: "/energifloede",
+    href: "#did-this",
     emoji: "✅",
     thought: "Jag gjorde redan något",
     action: "Registrera det du hunnit med",
+    didThis: true,
   },
   {
     href: "/flow",
@@ -56,7 +65,7 @@ const SITUATIONS = [
     thought: "Jag har mycket i huvudet",
     action: "Skriv av dig – jag sorterar sen",
   },
-] as const;
+];
 
 /**
  * Nästa relevanta aktivitet idag – påminnelser, uppgifter, rutiner,
@@ -435,22 +444,42 @@ export default function Home() {
             <ul className="space-y-2">
               {SITUATIONS.map((s) => (
                 <li key={s.href}>
-                  <Link
-                    href={s.href}
-                    className="group flex items-center gap-3 rounded-2xl bg-secondary/30 px-3 py-3 transition-colors hover:bg-secondary/60"
-                  >
-                    <span aria-hidden className="text-xl">
-                      {s.emoji}
-                    </span>
-                    <span className="min-w-0 flex-1">
-                      <span className="block text-sm text-ink">{s.thought}</span>
-                      <span className="block text-xs text-muted-foreground">{s.action}</span>
-                    </span>
-                    <ArrowRight
-                      size={16}
-                      className="shrink-0 text-muted-foreground transition-colors group-hover:text-foreground"
+                  {s.didThis ? (
+                    <DidThisCta
+                      trigger={
+                        <span className="group flex w-full items-center gap-3 rounded-2xl bg-secondary/30 px-3 py-3 text-left transition-colors hover:bg-secondary/60">
+                          <span aria-hidden className="text-xl">
+                            {s.emoji}
+                          </span>
+                          <span className="min-w-0 flex-1">
+                            <span className="block text-sm text-ink">{s.thought}</span>
+                            <span className="block text-xs text-muted-foreground">{s.action}</span>
+                          </span>
+                          <ArrowRight
+                            size={16}
+                            className="shrink-0 text-muted-foreground transition-colors group-hover:text-foreground"
+                          />
+                        </span>
+                      }
                     />
-                  </Link>
+                  ) : (
+                    <Link
+                      href={s.href}
+                      className="group flex items-center gap-3 rounded-2xl bg-secondary/30 px-3 py-3 transition-colors hover:bg-secondary/60"
+                    >
+                      <span aria-hidden className="text-xl">
+                        {s.emoji}
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-sm text-ink">{s.thought}</span>
+                        <span className="block text-xs text-muted-foreground">{s.action}</span>
+                      </span>
+                      <ArrowRight
+                        size={16}
+                        className="shrink-0 text-muted-foreground transition-colors group-hover:text-foreground"
+                      />
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>

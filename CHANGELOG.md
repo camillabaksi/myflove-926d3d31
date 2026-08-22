@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-26 – Snabbfix: "Jag gjorde redan något" öppnar rätt flöde
+
+- I situationskortet "Vad behöver du just nu?" öppnar valet "Jag gjorde redan något" nu samma "Jag gjorde något"-modal som resten av appen, i stället för att länka till `/energifloede`.
+- Ingen ny funktion, route eller energilogik har skapats – befintligt flöde återanvänds.
+
 ## 2026-08-22 – Lugnare första 30 sekunder
 
 - Batteriet talar klartext direkt: "Du har medelbra energi – den är på väg upp, starkast kl 14–16." Procenten är kvar men sekundär, och minikurvan syns alltid utan att man behöver öppna kortet.
