@@ -1,7 +1,7 @@
 import { useState } from "react";
-import DayEnergyFlow from "@/components/day-energy-flow";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
 import { minutesToTime } from "@/lib/energy-battery";
+
 
 /**
  * Mitt batteri™ – lugn, levande energinivå.
