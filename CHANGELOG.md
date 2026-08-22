@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-22 – Utvecklingsläge: testsession i previewen
+
+- Ny sida `/dev-session` (endast preview/dev) som skapar/återställer testkontot och loggar in automatiskt, så att klickflöden på Hem kan QA:as utan lösenord.
+- Sidan är blockerad i publicerad app och märkt `noindex`.
+
 ## 2026-08-22 – Hem: "Jag gjorde något" borta som separat block + energihistorik i batteriet
 
 - Det separata blocket "Jag gjorde något" (`gjort-knapp`) renderas inte längre på Hem och är borttaget från Anpassa hemskärmen. Funktionen finns kvar bakom snabbalternativet "Jag gjorde redan något".
