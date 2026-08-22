@@ -135,11 +135,12 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
     <div className="space-y-8">
       {showHeader && (
         <MyFloveHeader
-          title="Min energi"
-          emoji="🔋"
-          description="Vad ger och vad tar energi? Det här är inte att göra-listan – det är sådant som påverkar hur mycket du orkar."
+          title="Min energi – historik och mönster"
+          emoji="📈"
+          description="Här ser du hur energin brukar förändras: vad som ger och vad som tar. Din nivå just nu visas i Mitt energibatteri på Hem."
         />
       )}
+
 
       <DidThisQuickAdd />
 
@@ -168,12 +169,13 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
             </div>
           </div>
           <p className="text-sm text-muted-foreground">
-            Din FlowScore är {flow.score} just nu ({flow.label}).{" "}
+            Dagens balans är {flow.score} just nu ({flow.label}).{" "}
             <Link href="/flowscore" className="underline">
               Se hur den räknas
             </Link>
             .
           </p>
+
         </MyFloveCard>
 
         {insight && (
