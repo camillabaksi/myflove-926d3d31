@@ -77,8 +77,8 @@ function DevSessionPage() {
       <div className="w-full max-w-md space-y-4 rounded-3xl border border-border bg-card p-8 shadow-sm">
         <h1 className="text-xl font-semibold text-ink">Utvecklingsläge · testsession</h1>
         <p className="text-sm text-muted-foreground">
-          Skapar (eller återställer) testkontot och loggar in direkt, så att du kan QA:a
-          klickflöden på Hem utan att skriva lösenord.
+          Skapar (eller återställer) testkontot och loggar in direkt, så att du kan QA:a klickflöden
+          på Hem utan att skriva lösenord.
         </p>
         <Button className="w-full" onClick={mintSession} disabled={busy}>
           {busy ? "Arbetar …" : "Logga in som testanvändare"}
