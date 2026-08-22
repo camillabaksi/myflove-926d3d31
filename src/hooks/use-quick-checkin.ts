@@ -163,7 +163,6 @@ export function useQuickCheckin() {
     [userId, setLocalEnergy, setCheckin10],
   );
 
-
   const sameDay = checkin10?.day === todayKey();
   /** Dagens visade värden på 1–10-skalan (null = inget loggat idag). */
   const moodValue =

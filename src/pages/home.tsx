@@ -25,17 +25,38 @@ import { AreaSwitcher } from "@/components/area-switcher";
 import { AREA_META, useActiveArea } from "@/lib/life-areas";
 import IntroTour from "@/components/intro-tour";
 import FlowOnboarding from "@/components/flow-onboarding";
-import {
-  Plus,
-  CalendarDays,
-  Sparkles,
-  ArrowRight,
-  Clock,
-  Battery,
-  Zap,
-  MessageCircle,
-  SlidersHorizontal,
-} from "lucide-react";
+import { CalendarDays, Sparkles, ArrowRight, SlidersHorizontal } from "lucide-react";
+
+/**
+ * Fyra vanliga situationer, formulerade som användarens egen tanke.
+ * Ersätter produktnamn som "QuickFlow" och "Planera" på startsidan.
+ */
+const SITUATIONS = [
+  {
+    href: "/tasks",
+    emoji: "➕",
+    thought: "Jag behöver planera något",
+    action: "Lägg till en sak – med tid om du vill",
+  },
+  {
+    href: "/energifloede",
+    emoji: "✅",
+    thought: "Jag gjorde redan något",
+    action: "Registrera det du hunnit med",
+  },
+  {
+    href: "/flow",
+    emoji: "💜",
+    thought: "Jag vet inte vad jag ska göra nu",
+    action: "Få ett förslag i taget",
+  },
+  {
+    href: "/quickflow",
+    emoji: "⚡",
+    thought: "Jag har mycket i huvudet",
+    action: "Skriv av dig – jag sorterar sen",
+  },
+] as const;
 
 /**
  * Nästa relevanta aktivitet idag – påminnelser, uppgifter, rutiner,
@@ -263,13 +284,12 @@ export default function Home() {
           </div>
         )}
 
-        {/* Ständig snabbknapp: logga det du faktiskt gjorde */}
-        <div style={pos("batteri")} className="space-y-1">
-          <DidThisCta />
-          <p className="text-xs text-muted-foreground">
-            Registrera något du redan gjort – det syns bland dagens gjorda saker.
-          </p>
-        </div>
+        {/* Snabbknapp: logga det du faktiskt gjorde */}
+        {shows("gjort-knapp") && (
+          <div style={pos("gjort-knapp")}>
+            <DidThisCta />
+          </div>
+        )}
 
         {/* Nästa – nästa relevanta aktivitet */}
         {shows("nasta") && (
@@ -402,38 +422,38 @@ export default function Home() {
           </div>
         )}
 
-        {/* Korta vägar till kärnfunktionerna */}
+        {/* Vad behöver du just nu? – situationer, inte produktnamn */}
         {shows("vagar") && (
           <nav
             style={pos("vagar")}
-            aria-label="Huvuddestinationer"
-            className="grid grid-cols-3 gap-3"
+            aria-label="Vad behöver du just nu"
+            className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft"
           >
-            <Link
-              href="/idag"
-              className="flex flex-col items-center gap-2 rounded-2xl border border-border/60 bg-card p-4 text-center shadow-soft transition-colors hover:border-primary/40 hover:bg-primary/5"
-            >
-              <CalendarDays size={22} className="text-primary" />
-              <span className="text-xs font-medium text-ink">Min dag</span>
-            </Link>
-            <Link
-              href="/quickflow"
-              className="flex flex-col items-center gap-2 rounded-2xl border border-border/60 bg-card p-4 text-center shadow-soft transition-colors hover:border-primary/40 hover:bg-primary/5"
-            >
-              <Zap size={22} className="text-primary" />
-              <span className="text-xs font-medium text-ink">QuickFlow</span>
-              <span className="text-[11px] leading-tight text-muted-foreground">
-                Fånga en tanke snabbt
-              </span>
-            </Link>
-
-            <Link
-              href="/flow"
-              className="flex flex-col items-center gap-2 rounded-2xl border border-border/60 bg-card p-4 text-center shadow-soft transition-colors hover:border-primary/40 hover:bg-primary/5"
-            >
-              <MessageCircle size={22} className="text-primary" />
-              <span className="text-xs font-medium text-ink">Planera</span>
-            </Link>
+            <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+              Vad behöver du just nu?
+            </p>
+            <ul className="space-y-2">
+              {SITUATIONS.map((s) => (
+                <li key={s.href}>
+                  <Link
+                    href={s.href}
+                    className="group flex items-center gap-3 rounded-2xl bg-secondary/30 px-3 py-3 transition-colors hover:bg-secondary/60"
+                  >
+                    <span aria-hidden className="text-xl">
+                      {s.emoji}
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-sm text-ink">{s.thought}</span>
+                      <span className="block text-xs text-muted-foreground">{s.action}</span>
+                    </span>
+                    <ArrowRight
+                      size={16}
+                      className="shrink-0 text-muted-foreground transition-colors group-hover:text-foreground"
+                    />
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </nav>
         )}
 

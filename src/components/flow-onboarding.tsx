@@ -1,12 +1,12 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "wouter";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { FLOW_GOALS, useFlowPrefs, type FlowGoalId } from "@/hooks/use-daily-flow";
 import { useLocalStorage } from "@/lib/storage";
 
 /**
- * Kort onboarding första gången: vad vill du att MyFlove hjälper dig med?
- * Svaren används för att lyfta rätt saker på startsidan.
+ * Frågan "vad vill du att MyFlove hjälper dig med?".
+ * Visas först vid ett senare besök – första gången ska appen bara ge nytta.
  */
 export default function FlowOnboarding() {
   const { done, complete } = useFlowPrefs();
@@ -14,9 +14,16 @@ export default function FlowOnboarding() {
   const [step, setStep] = useState<1 | 2>(1);
   const [dismissed, setDismissed] = useState(false);
 
-  // Vänta tills välkomstturen är avklarad – en sak i taget.
-  const [introSeen] = useLocalStorage<boolean>("myflove-intro-seen", false);
-  const open = introSeen && !done && !dismissed;
+  const [visited, setVisited] = useLocalStorage<boolean>("myflove-home-visited", false);
+  // Läget vid montering avgör – annars skulle flaggan slå till i samma session.
+  const wasVisited = useRef<boolean | null>(null);
+  if (wasVisited.current === null) wasVisited.current = visited;
+
+  useEffect(() => {
+    if (!visited) setVisited(true);
+  }, [visited, setVisited]);
+
+  const open = Boolean(wasVisited.current) && !done && !dismissed;
 
   const toggle = (id: FlowGoalId) =>
     setSelected((prev) => (prev.includes(id) ? prev.filter((g) => g !== id) : [...prev, id]));

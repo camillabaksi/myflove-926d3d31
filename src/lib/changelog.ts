@@ -6,13 +6,15 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-08-25";
+export const CHANGELOG_UPDATED = "2026-08-22";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Lugnare första 30 sekunder – batteriet svarar i klartext (Du har medelbra energi – den är på väg upp, starkast kl 14–16) med minikurvan alltid synlig, Hem startar med färre block, Korta vägar har blivit Vad behöver du just nu? med fyra situationer och introt är nedkortat till två kort (2026-08-22)",
       "Tydligare energistruktur – Mitt energibatteri är din nivå just nu, Min energi blir historik och mönster (nås under Mina mönster i Mer, routen fungerar som förut) och Dagens balans förklaras i klartext som match mellan dagens krav och din kapacitet. Undertexter på Hem för Lägg till, Jag gjorde något och QuickFlow, och Jag gjorde något kan inte längre visas dubbelt (2026-08-25)",
+
       "Planera min dag tillbaka – Planera kan föreslå en ordning på dagens uppgifter (tid, ork, svårighetsgrad), du kan flytta stegen själv och den valda ordningen visas som Dagens ordning i Min dag. Jag gjorde något syns nu bland dagens gjorda saker i hela appen (2026-08-25)",
       "Enklare språk i hela appen – navigationen är Hem, Min dag, QuickFlow, Planera och Mer, och interna produktnamn är utbytta mot vardagliga ord (Dagens balans, Min energi, Ändra planen, Mina mönster, Svårighetsgrad, Studier, Studiehjälp, Jobb). Bara språk och rubriker – ingen funktionalitet ändrad (2026-08-25)",
       "En logg per dag för mående och energi – ändringar av dagens värden uppdaterar samma post i stället för att skapa nya loggrader, även vid snabba upprepade sparningar (2026-08-21)",

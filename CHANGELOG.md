@@ -1,6 +1,16 @@
 # Changelog
 
+## 2026-08-22 – Lugnare första 30 sekunder
+
+- Batteriet talar klartext direkt: "Du har medelbra energi – den är på väg upp, starkast kl 14–16." Procenten är kvar men sekundär, och minikurvan syns alltid utan att man behöver öppna kortet.
+- "Preliminär kurva – blir din egen när du loggat energi några dagar" syns nu direkt för nya användare.
+- Hem startar lugnare: energihistorik, områdesväljare och genvägar är dolda som standard och kan slås på i "Anpassa hemskärmen".
+- "Jag gjorde något" är nu ett eget block i Anpassa hemskärmen och kan flyttas eller döljas som allt annat.
+- "Korta vägar" har blivit "Vad behöver du just nu?" med fyra situationer i stället för produktnamn: Jag behöver planera något · Jag gjorde redan något · Jag vet inte vad jag ska göra nu · Jag har mycket i huvudet.
+- Introt är nedkortat till två kort, och frågan om vad du vill ha hjälp med kommer först vid ett senare besök – första gången ska appen bara ge nytta.
+
 ## 2026-08-25 – Tydligare energistruktur och språk
+
 
 - Min energi är nu tydligt "historik och mönster": batteriet är din energibild just nu, energihistoriken visar hur energin brukar röra sig. Ingen ny data, inget nytt system.
 - Energins historik nås från Mer under "Mina mönster" i stället för att kännas som en egen huvudfunktion. Routen `/energifloede` fungerar som förut.

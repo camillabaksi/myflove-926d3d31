@@ -17,7 +17,29 @@ export default function EnergyBattery({ defaultOpen = false }: { defaultOpen?: b
       : level >= 38
         ? "hsl(var(--gold, 40 80% 60%))"
         : "hsl(var(--destructive))";
-  const arrow = reading.trend === "stiger" ? "↗" : reading.trend === "sjunker" ? "↘" : "→";
+
+  // Klartext i stället för siffra: "Du har medelbra energi – den stiger fram till kl 14."
+  const levelWord =
+    level >= 75
+      ? "Du har gott om energi"
+      : level >= 55
+        ? "Du har medelbra energi"
+        : level >= 35
+          ? "Du har energi på halvfart"
+          : "Din energi är låg just nu";
+
+  const trendWord =
+    reading.trend === "stiger"
+      ? "den är på väg upp"
+      : reading.trend === "sjunker"
+        ? "den är på väg ner"
+        : "den ligger ganska jämn";
+
+  const plain = reading.overloaded
+    ? `${levelWord} – och dagen ser tung ut.`
+    : reading.peak
+      ? `${levelWord} – ${trendWord}, starkast ${reading.peak.label}.`
+      : `${levelWord} – ${trendWord}.`;
 
   return (
     <section
@@ -43,27 +65,30 @@ export default function EnergyBattery({ defaultOpen = false }: { defaultOpen?: b
         </span>
 
         <span className="min-w-0 flex-1">
-          <span className="flex items-baseline gap-2">
-            <span className="text-sm font-semibold text-ink">Mitt batteri</span>
-            <span className="text-sm font-bold" style={{ color: tone }}>
+          <span className="block text-sm font-medium leading-snug text-ink">{plain}</span>
+          <span className="mt-0.5 block text-xs text-muted-foreground">
+            Mitt batteri ·{" "}
+            <span className="font-semibold" style={{ color: tone }}>
               {level}%
             </span>
-            <span aria-hidden className="text-xs text-muted-foreground">
-              {arrow}
-            </span>
-          </span>
-          <span className="mt-0.5 block truncate text-xs text-muted-foreground">
-            {reading.summary}
           </span>
         </span>
 
         <span className="shrink-0 text-xs text-muted-foreground">{open ? "Dölj" : "Visa"}</span>
       </button>
 
+      {/* Liten kurva alltid synlig – känslan av dagen, inte en teknisk graf */}
+      <div className="mt-3">
+        <BatteryCurve reading={reading} compact={!open} />
+        {!reading.personal && (
+          <p className="mt-1 text-[11px] text-muted-foreground">
+            Preliminär kurva – blir din egen när du loggat energi några dagar.
+          </p>
+        )}
+      </div>
+
       {open && (
         <div className="mt-4 space-y-3 border-t border-border/50 pt-3">
-          <BatteryCurve reading={reading} />
-
           <div className="flex flex-wrap gap-2 text-xs">
             {reading.peak && (
               <span className="rounded-pill bg-primary/10 px-2.5 py-1 text-foreground">
@@ -73,11 +98,6 @@ export default function EnergyBattery({ defaultOpen = false }: { defaultOpen?: b
             {reading.dip && (
               <span className="rounded-pill bg-secondary/70 px-2.5 py-1 text-foreground">
                 🌙 Lägst {reading.dip.label}
-              </span>
-            )}
-            {!reading.personal && (
-              <span className="rounded-pill bg-secondary/50 px-2.5 py-1 text-muted-foreground">
-                Preliminär kurva – blir din egen när du loggat energi några dagar
               </span>
             )}
           </div>
@@ -101,7 +121,13 @@ export default function EnergyBattery({ defaultOpen = false }: { defaultOpen?: b
 }
 
 /** Liten, lugn kurva över dagen med markering för var vi är nu. */
-function BatteryCurve({ reading }: { reading: ReturnType<typeof useEnergyBattery>["reading"] }) {
+function BatteryCurve({
+  reading,
+  compact = false,
+}: {
+  reading: ReturnType<typeof useEnergyBattery>["reading"];
+  compact?: boolean;
+}) {
   const slots = reading.slots;
   if (slots.length < 2) return null;
   const w = 100;
@@ -119,7 +145,7 @@ function BatteryCurve({ reading }: { reading: ReturnType<typeof useEnergyBattery
       <svg
         viewBox={`0 0 ${w} ${h}`}
         preserveAspectRatio="none"
-        className="h-20 w-full"
+        className={compact ? "h-10 w-full" : "h-20 w-full"}
         role="img"
         aria-label={`Energikurva över dagen. ${reading.summary}`}
       >
@@ -147,11 +173,13 @@ function BatteryCurve({ reading }: { reading: ReturnType<typeof useEnergyBattery
           vectorEffect="non-scaling-stroke"
         />
       </svg>
-      <div className="flex justify-between text-[10px] text-muted-foreground">
-        <span>{slots[0].time}</span>
-        <span>{minutesToTime(slots[Math.floor(slots.length / 2)].minutes)}</span>
-        <span>{slots[slots.length - 1].time}</span>
-      </div>
+      {!compact && (
+        <div className="flex justify-between text-[10px] text-muted-foreground">
+          <span>{slots[0].time}</span>
+          <span>{minutesToTime(slots[Math.floor(slots.length / 2)].minutes)}</span>
+          <span>{slots[slots.length - 1].time}</span>
+        </div>
+      )}
     </div>
   );
 }

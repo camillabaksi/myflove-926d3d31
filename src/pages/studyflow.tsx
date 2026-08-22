@@ -309,8 +309,8 @@ export default function StudyflowPage() {
               help="Utgår från din ork idag. Siffran är ett förslag, inte ett krav."
             >
               <p className="mt-1 text-sm text-muted-foreground">
-                Anpassat efter dagens balans {flow.score} och energi {energy ? `${energy}/5` : "okänd"}{" "}
-                – ca {flow.capacityMinutes} min fokustid.
+                Anpassat efter dagens balans {flow.score} och energi{" "}
+                {energy ? `${energy}/5` : "okänd"} – ca {flow.capacityMinutes} min fokustid.
               </p>
               {capacityPlan.plan.length ? (
                 <ul className="mt-3 space-y-2">

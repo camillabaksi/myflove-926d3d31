@@ -92,14 +92,16 @@ export function FlowScoreBreakdown({
             • Fokustid: {flow.capacityMinutes} min av {minutesLeft} min kvar av dagen.
           </li>
           <li>
-            • Gräns för svårighetsgrad {flow.maxFriction}/10 – tyngre uppgifter läggs under "för tungt nu".
+            • Gräns för svårighetsgrad {flow.maxFriction}/10 – tyngre uppgifter läggs under "för
+            tungt nu".
           </li>
           <li>
             • Planen fylls med max {flow.suggestedTasks} sak{flow.suggestedTasks === 1 ? "" : "er"},
             resten hamnar i "senare idag".
           </li>
           <li>
-            • Energin påverkar även rankningen: låg energi väger upp svårighetsgrad hårdare i listan för just nu.
+            • Energin påverkar även rankningen: låg energi väger upp svårighetsgrad hårdare i listan
+            för just nu.
           </li>
         </ul>
       </div>

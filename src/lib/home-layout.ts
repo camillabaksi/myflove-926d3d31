@@ -8,6 +8,7 @@ import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 export type HomeBlockId =
   | "checkin"
   | "batteri"
+  | "gjort-knapp"
   | "nasta"
   | "idag"
   | "forslag"
@@ -31,12 +32,17 @@ export const HOME_BLOCKS: HomeBlockMeta[] = [
     hint: "Snabb registrering av mående och energi",
   },
   { id: "batteri", label: "Mitt energibatteri", hint: "Din energi just nu" },
+  {
+    id: "gjort-knapp",
+    label: "Jag gjorde något",
+    hint: "Snabbknapp för att registrera något du redan gjort",
+  },
   { id: "nasta", label: "Nästa", hint: "Nästa sak som händer idag" },
   { id: "idag", label: "Dagens saker", hint: "Bocka av dagens saker och se vad du redan gjort" },
   { id: "forslag", label: "Rekommendation just nu", hint: "Ett förslag – samma som i Planera" },
   { id: "lagg-till", label: "Lägg till", hint: "Snabbknapp för ny uppgift" },
   { id: "genvagar", label: "Dina genvägar", hint: "Fyra egna favoriter du väljer själv" },
-  { id: "vagar", label: "Korta vägar", hint: "Min dag · QuickFlow · Planera" },
+  { id: "vagar", label: "Vad behöver du just nu?", hint: "Fyra vanliga situationer" },
   { id: "omrade", label: "Områdesväljare", hint: "Vilket rum du är i" },
   { id: "gjort", label: "Lägg till det du gjorde", hint: "Snabb registrering av vardagssaker" },
   {
@@ -51,8 +57,10 @@ export interface HomeLayoutPrefs {
   order: HomeBlockId[];
 }
 
+// Lugn start: bara det som ger nytta direkt. Resten slås på i "Anpassa hemskärmen".
 const DEFAULT_PREFS: HomeLayoutPrefs = {
-  hidden: ["gjort"],
+  hidden: ["gjort", "energifloede", "omrade", "genvagar"],
+
   order: HOME_BLOCKS.map((b) => b.id),
 };
 

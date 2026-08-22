@@ -264,8 +264,8 @@ export default function WorkflowPage() {
           help="Hur mycket som är realistiskt idag utifrån din ork och tiden som är kvar."
         >
           <p className="mt-1 text-sm text-muted-foreground">
-            Anpassat efter dagens balans {flow.score} och energi {energy ? `${energy}/5` : "okänd"} – ca{" "}
-            {flow.capacityMinutes} min fokustid.
+            Anpassat efter dagens balans {flow.score} och energi {energy ? `${energy}/5` : "okänd"}{" "}
+            – ca {flow.capacityMinutes} min fokustid.
           </p>
           {capacityPlan.plan.length ? (
             <ul className="mt-3 space-y-2">
