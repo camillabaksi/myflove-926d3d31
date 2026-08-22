@@ -33,6 +33,7 @@ export const HOME_BLOCKS: HomeBlockMeta[] = [
   },
   { id: "batteri", label: "Mitt energibatteri", hint: "Din energi just nu" },
   { id: "nasta", label: "Nästa", hint: "Nästa sak som händer idag" },
+  { id: "medicin", label: "Dagens medicin", hint: "Dagens doser – bocka av med ett tryck" },
   { id: "idag", label: "Dagens saker", hint: "Bocka av dagens saker och se vad du redan gjort" },
   { id: "forslag", label: "Rekommendation just nu", hint: "Ett förslag – samma som i Planera" },
   { id: "lagg-till", label: "Lägg till", hint: "Snabbknapp för ny uppgift" },
@@ -62,6 +63,7 @@ const DEFAULT_PREFS: HomeLayoutPrefs = {
     "batteri",
     "energifloede",
     "nasta",
+    "medicin",
     "vagar",
     "idag",
     "forslag",
@@ -74,6 +76,8 @@ const DEFAULT_PREFS: HomeLayoutPrefs = {
 const STORAGE_KEY = "myflove-home-layout";
 /** Engångsflytt: Energins historik direkt under batteriet, "Nästa" före snabbalternativen. */
 const MIGRATION_KEY = "myflove-home-layout-migrated-energifloede-v2";
+/** Engångsflytt: Dagens medicin synlig direkt efter "Nästa". */
+const MEDICATION_MIGRATION_KEY = "myflove-home-layout-migrated-medicin-v1";
 
 function normalizeOrder(order: HomeBlockId[] | undefined): HomeBlockId[] {
   const base = order ?? DEFAULT_PREFS.order;
@@ -112,6 +116,24 @@ export function useHomeLayout() {
       return {
         order: nextOrder,
         hidden: (p?.hidden ?? []).filter((id) => id !== "energifloede"),
+      };
+    });
+  }, [setPrefs]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (window.localStorage.getItem(MEDICATION_MIGRATION_KEY)) return;
+    window.localStorage.setItem(MEDICATION_MIGRATION_KEY, "1");
+    setPrefs((p) => {
+      const base = (p?.order ?? DEFAULT_PREFS.order).filter((id) => id !== "medicin");
+      const iNasta = base.indexOf("nasta");
+      const next =
+        iNasta >= 0
+          ? [...base.slice(0, iNasta + 1), "medicin" as HomeBlockId, ...base.slice(iNasta + 1)]
+          : [...base, "medicin" as HomeBlockId];
+      return {
+        order: next,
+        hidden: (p?.hidden ?? []).filter((id) => id !== "medicin"),
       };
     });
   }, [setPrefs]);
