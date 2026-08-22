@@ -37,6 +37,7 @@ import { Route as AppShoppingRouteImport } from './routes/_app.shopping'
 import { Route as AppRelationerRouteImport } from './routes/_app.relationer'
 import { Route as AppQuickflowRouteImport } from './routes/_app.quickflow'
 import { Route as AppPomodoroRouteImport } from './routes/_app.pomodoro'
+import { Route as AppPitchRouteImport } from './routes/_app.pitch'
 import { Route as AppPaminnelserRouteImport } from './routes/_app.paminnelser'
 import { Route as AppMorgonstartRouteImport } from './routes/_app.morgonstart'
 import { Route as AppMinSituationRouteImport } from './routes/_app.min-situation'
@@ -216,6 +217,11 @@ const AppQuickflowRoute = AppQuickflowRouteImport.update({
 const AppPomodoroRoute = AppPomodoroRouteImport.update({
   id: '/pomodoro',
   path: '/pomodoro',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPitchRoute = AppPitchRouteImport.update({
+  id: '/pitch',
+  path: '/pitch',
   getParentRoute: () => AppRoute,
 } as any)
 const AppPaminnelserRoute = AppPaminnelserRouteImport.update({
@@ -469,6 +475,7 @@ export interface FileRoutesByFullPath {
   '/min-situation': typeof AppMinSituationRoute
   '/morgonstart': typeof AppMorgonstartRoute
   '/paminnelser': typeof AppPaminnelserRoute
+  '/pitch': typeof AppPitchRoute
   '/pomodoro': typeof AppPomodoroRoute
   '/quickflow': typeof AppQuickflowRoute
   '/relationer': typeof AppRelationerRoute
@@ -538,6 +545,7 @@ export interface FileRoutesByTo {
   '/min-situation': typeof AppMinSituationRoute
   '/morgonstart': typeof AppMorgonstartRoute
   '/paminnelser': typeof AppPaminnelserRoute
+  '/pitch': typeof AppPitchRoute
   '/pomodoro': typeof AppPomodoroRoute
   '/quickflow': typeof AppQuickflowRoute
   '/relationer': typeof AppRelationerRoute
@@ -609,6 +617,7 @@ export interface FileRoutesById {
   '/_app/min-situation': typeof AppMinSituationRoute
   '/_app/morgonstart': typeof AppMorgonstartRoute
   '/_app/paminnelser': typeof AppPaminnelserRoute
+  '/_app/pitch': typeof AppPitchRoute
   '/_app/pomodoro': typeof AppPomodoroRoute
   '/_app/quickflow': typeof AppQuickflowRoute
   '/_app/relationer': typeof AppRelationerRoute
@@ -680,6 +689,7 @@ export interface FileRouteTypes {
     | '/min-situation'
     | '/morgonstart'
     | '/paminnelser'
+    | '/pitch'
     | '/pomodoro'
     | '/quickflow'
     | '/relationer'
@@ -749,6 +759,7 @@ export interface FileRouteTypes {
     | '/min-situation'
     | '/morgonstart'
     | '/paminnelser'
+    | '/pitch'
     | '/pomodoro'
     | '/quickflow'
     | '/relationer'
@@ -819,6 +830,7 @@ export interface FileRouteTypes {
     | '/_app/min-situation'
     | '/_app/morgonstart'
     | '/_app/paminnelser'
+    | '/_app/pitch'
     | '/_app/pomodoro'
     | '/_app/quickflow'
     | '/_app/relationer'
@@ -1062,6 +1074,13 @@ declare module '@tanstack/react-router' {
       path: '/pomodoro'
       fullPath: '/pomodoro'
       preLoaderRoute: typeof AppPomodoroRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/pitch': {
+      id: '/_app/pitch'
+      path: '/pitch'
+      fullPath: '/pitch'
+      preLoaderRoute: typeof AppPitchRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/paminnelser': {
@@ -1380,6 +1399,7 @@ interface AppRouteChildren {
   AppMinSituationRoute: typeof AppMinSituationRoute
   AppMorgonstartRoute: typeof AppMorgonstartRoute
   AppPaminnelserRoute: typeof AppPaminnelserRoute
+  AppPitchRoute: typeof AppPitchRoute
   AppPomodoroRoute: typeof AppPomodoroRoute
   AppQuickflowRoute: typeof AppQuickflowRoute
   AppRelationerRoute: typeof AppRelationerRoute
@@ -1431,6 +1451,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppMinSituationRoute: AppMinSituationRoute,
   AppMorgonstartRoute: AppMorgonstartRoute,
   AppPaminnelserRoute: AppPaminnelserRoute,
+  AppPitchRoute: AppPitchRoute,
   AppPomodoroRoute: AppPomodoroRoute,
   AppQuickflowRoute: AppQuickflowRoute,
   AppRelationerRoute: AppRelationerRoute,
