@@ -28,7 +28,7 @@ export function DidThisCta({
   trigger,
 }: {
   className?: string;
-  trigger?: ReactElement<{ onClick?: () => void }>;
+  trigger?: ReactElement<{ onClick?: () => void; className?: string; children?: React.ReactNode }>;
 }) {
   const { presets, addFactor, updateFactor, removeFactor, signedIn } = useEnergyFlow();
   const { toast } = useToast();
