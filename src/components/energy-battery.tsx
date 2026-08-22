@@ -128,11 +128,9 @@ export default function EnergyBattery({ defaultOpen = false }: { defaultOpen?: b
               ))}
             </ul>
           )}
-
-          {/* Samma energidata som Min energi / Energins historik */}
-          <DayEnergyFlow className="border-0 p-0 shadow-none" />
         </div>
       )}
+
     </section>
   );
 }
