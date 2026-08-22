@@ -39,10 +39,11 @@ const SITUATIONS = [
     action: "Lägg till en sak – med tid om du vill",
   },
   {
-    href: "/energifloede",
+    href: "#did-this",
     emoji: "✅",
     thought: "Jag gjorde redan något",
     action: "Registrera det du hunnit med",
+    didThis: true,
   },
   {
     href: "/flow",
