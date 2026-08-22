@@ -175,11 +175,14 @@ function BatteryCurve({
           vectorEffect="non-scaling-stroke"
         />
       </svg>
-      <div className="flex justify-between text-[10px] text-muted-foreground">
-        <span>{slots[0].time}</span>
-        <span>{minutesToTime(slots[Math.floor(slots.length / 2)].minutes)}</span>
-        <span>{slots[slots.length - 1].time}</span>
-      </div>
+      {!compact && (
+        <div className="flex justify-between text-[10px] text-muted-foreground">
+          <span>{slots[0].time}</span>
+          <span>{minutesToTime(slots[Math.floor(slots.length / 2)].minutes)}</span>
+          <span>{slots[slots.length - 1].time}</span>
+        </div>
+      )}
+
     </div>
   );
 }
