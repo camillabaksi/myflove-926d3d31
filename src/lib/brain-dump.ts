@@ -3,6 +3,7 @@
 // get a useful "dump and sort" experience without backend infrastructure.
 
 import { detectRepeat, type RepeatMode } from "./recurrence";
+import { toISODate, todayISO } from "@/lib/day";
 
 export type DumpCategory = "task" | "shopping" | "reminder" | "idea" | "mood";
 

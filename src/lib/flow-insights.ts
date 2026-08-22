@@ -2,6 +2,7 @@
 // For now, it uses simple heuristics over locally stored activity to reinforce what's going well.
 
 import type { MoodEntry, Task, Focus } from "@/hooks/use-data";
+import { dayOf, todayISO } from "@/lib/day";
 
 function toDateString(timestamp: number): string {
   return dayOf(timestamp) ?? todayISO();

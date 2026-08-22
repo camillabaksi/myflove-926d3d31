@@ -54,6 +54,7 @@ import {
 import CollapsibleSection from "@/components/collapsible-section";
 import QuickflowRulesSettings from "@/components/quickflow-rules-settings";
 import { MyFloveListening } from "@/components/myflove/motion";
+import { todayISO } from "@/lib/day";
 
 interface SortableThought extends ParsedThought {
   id: string;

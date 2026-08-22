@@ -2,6 +2,7 @@ import { useLocalStorage } from "../lib/storage";
 import { useCloudSyncedStorage } from "../lib/cloud-storage";
 import { trackEvent } from "../lib/analytics";
 import type { LifeArea } from "../lib/life-areas";
+import { todayISO } from "@/lib/day";
 
 export interface Focus {
   text: string;

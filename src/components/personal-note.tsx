@@ -4,6 +4,7 @@ import { useTasks } from "@/hooks/use-data";
 import { useUserProfile } from "@/hooks/use-user-profile";
 import { useVisitStreak } from "@/hooks/use-visit-streak";
 import { getPersonalNote } from "@/lib/personal-messages";
+import { todayISO } from "@/lib/day";
 
 /** Liten varm rad från Flow, personlig utifrån dagen och hur det gått. */
 export default function PersonalNote() {

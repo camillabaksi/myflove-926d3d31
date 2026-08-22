@@ -37,6 +37,7 @@ import {
   useFlowMessages,
   type FlowMessage,
 } from "@/hooks/use-flow-chats";
+import { todayISO } from "@/lib/day";
 
 const todayStr = (): string => todayISO();
 

@@ -2,6 +2,7 @@
 // more personalized guidance is needed. For now it reasons over local activity data.
 
 import type { MoodEntry, Task, Focus, Reminder } from "@/hooks/use-data";
+import { dayOf, todayISO } from "@/lib/day";
 
 export interface CoachMessage {
   emoji: string;

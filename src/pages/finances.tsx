@@ -8,6 +8,7 @@ import BudgetPanel from "@/components/budget-panel";
 import { MyFloveHeader } from "@/components/myflove";
 import { MyFloveBalanceBars } from "@/components/myflove/motion";
 import CollapsibleSection from "@/components/collapsible-section";
+import { todayISO } from "@/lib/day";
 
 const CATEGORIES = ["Mat", "Boende", "Transport", "Nöje", "Övrigt"];
 

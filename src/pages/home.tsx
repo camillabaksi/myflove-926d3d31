@@ -27,6 +27,7 @@ import { AREA_META, useActiveArea } from "@/lib/life-areas";
 import IntroTour from "@/components/intro-tour";
 import FlowOnboarding from "@/components/flow-onboarding";
 import { CalendarDays, Sparkles, ArrowRight, SlidersHorizontal } from "lucide-react";
+import { todayISO } from "@/lib/day";
 
 /**
  * Fyra vanliga situationer, formulerade som användarens egen tanke.
