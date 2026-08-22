@@ -8,7 +8,7 @@ import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 export type HomeBlockId =
   | "checkin"
   | "batteri"
-  | "gjort-knapp"
+  | "nasta2placeholder_removed"
   | "nasta"
   | "idag"
   | "forslag"

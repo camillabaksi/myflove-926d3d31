@@ -292,12 +292,8 @@ export default function Home() {
           </div>
         )}
 
-        {/* Snabbknapp: logga det du faktiskt gjorde */}
-        {shows("gjort-knapp") && (
-          <div style={pos("gjort-knapp")}>
-            <DidThisCta />
-          </div>
-        )}
+
+
 
         {/* Nästa – nästa relevanta aktivitet */}
         {shows("nasta") && (
