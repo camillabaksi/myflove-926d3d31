@@ -49,7 +49,7 @@ export default function WeekFlowPage() {
     }
     const highFriction = snoozedTasks.filter((t) => estimateFriction(t) >= 7).length;
     if (highFriction >= 2) {
-      out.push("Du har flera gånger skjutit upp uppgifter med hög friktion.");
+      out.push("Du har flera gånger skjutit upp uppgifter med hög svårighetsgrad.");
     }
     const week = history.filter((h) => new Date(h.date).getTime() >= cutoff);
     if (week.length >= 3) {
@@ -72,7 +72,7 @@ export default function WeekFlowPage() {
           <div className="flex items-center gap-2">
             <CalendarRange className="text-primary" size={26} />
             <h1 className="text-3xl font-bold flex items-center gap-3">
-              Veckans Flow <MyFloveInsightGather className="shrink-0" />
+              Veckans översikt <MyFloveInsightGather className="shrink-0" />
             </h1>
           </div>
           <p className="text-muted-foreground">

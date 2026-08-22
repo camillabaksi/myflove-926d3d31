@@ -223,7 +223,7 @@ export function StudiesSection() {
         href="/studybuddy"
         className="block rounded-2xl border border-primary/25 bg-primary/5 p-4 hover:bg-primary/10 transition-colors"
       >
-        <p className="font-medium">StudyBuddy – plugga smartare</p>
+        <p className="font-medium">Studiehjälp – plugga smartare</p>
         <p className="text-sm text-muted-foreground">
           Ladda upp PDF, bilder eller text. Flow gör flashcards och quiz, kommer ihåg vad du har
           svårt för och lägger upp pluggandet inför provet.

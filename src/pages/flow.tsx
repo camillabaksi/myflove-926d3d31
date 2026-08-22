@@ -15,9 +15,9 @@ import { Sparkles, Sun, MessageCircle, CalendarClock, Check } from "lucide-react
 type Layer = "nu" | "idag" | "hjalp";
 
 const LAYERS: Array<{ id: Layer; label: string; icon: typeof Sparkles }> = [
-  { id: "nu", label: "Nu", icon: Sparkles },
-  { id: "idag", label: "Idag", icon: Sun },
-  { id: "hjalp", label: "Hjälp", icon: MessageCircle },
+  { id: "nu", label: "Just nu", icon: Sparkles },
+  { id: "idag", label: "Planera min dag", icon: Sun },
+  { id: "hjalp", label: "Fråga MyFlove", icon: MessageCircle },
 ];
 
 /**
@@ -33,16 +33,16 @@ export default function FlowPage() {
       <div className="space-y-5">
         <header>
           <h1 className="flex items-center gap-2 font-display text-3xl text-ink">
-            <Sparkles className="h-7 w-7 text-primary" /> Flow
+            <Sparkles className="h-7 w-7 text-primary" /> Planera
           </h1>
           <p className="mt-1 text-muted-foreground">
-            Vad som är bäst att göra nu – och hur dagen kan bli lättare.
+            Vad är bäst just nu, och vad hinner du idag?
           </p>
         </header>
 
         <div
           role="tablist"
-          aria-label="Flow-lager"
+          aria-label="Välj vy"
           className="grid grid-cols-3 gap-1 rounded-2xl bg-muted/60 p-1"
         >
           {LAYERS.map((l) => {

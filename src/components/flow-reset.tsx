@@ -132,7 +132,7 @@ export default function FlowReset() {
                 : "Jag tar med mig det här till imorgon och börjar neutralt."}
           </p>
           <p className="text-xs text-muted-foreground pt-1">
-            Din FlowScore på förmiddagen utgår från hur idag kändes.
+            Dagens balans på förmiddagen utgår från hur idag kändes.
           </p>
         </div>
       )}

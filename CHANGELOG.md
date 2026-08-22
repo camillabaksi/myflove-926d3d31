@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-25 – Enklare språk i hela appen
+
+- Navigationen heter nu Hem, Min dag, QuickFlow, Planera och Mer – med QuickFlow som central snabbknapp.
+- Interna produktnamn är utbytta mot vardagliga ord: FlowScore → Dagens balans, FlowPlan → Planera min dag, Energy Flow → Min energi, Flow Replan → Ändra planen, Flow Insights → Mina mönster, Friction → Svårighetsgrad, Daily Flow → Min dag, StudyFlow → Studier, StudyBuddy → Studiehjälp, WorkFlow → Jobb.
+- Sidrubriker, flikar, hjälptexter och sidtitlar följer samma språk, så samma sak heter samma sak överallt. Ingen funktionalitet eller data har ändrats.
+
 ## 2026-08-21 – En logg per dag för mående och energi
 
 - Ändrar du dagens mående- eller energivärde flera gånger uppdateras samma post i stället för att nya loggrader skapas – även vid snabba upprepade sparningar.

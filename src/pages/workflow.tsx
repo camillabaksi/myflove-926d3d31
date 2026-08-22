@@ -134,7 +134,7 @@ export default function WorkflowPage() {
         toast.success(
           d.scoreDelta === 0
             ? "Omräknat – planen står sig"
-            : `Omräknat: FlowScore ${d.scoreDelta > 0 ? "+" : ""}${d.scoreDelta}`,
+            : `Omräknat: dagens balans ${d.scoreDelta > 0 ? "+" : ""}${d.scoreDelta}`,
         );
       }
     },
@@ -206,7 +206,7 @@ export default function WorkflowPage() {
           <div className="flex items-start justify-between gap-3">
             <div>
               <h1 className={sectionTitle}>
-                <Zap className="h-5 w-5 text-gold" /> WorkFlow – MyFlove på jobbet
+                <Zap className="h-5 w-5 text-gold" /> Jobb – din planering
               </h1>
               <p className="mt-1 text-sm text-muted-foreground">
                 Du behöver inte välja bland allt. Jag säger vad som är rimligt just nu.
@@ -264,7 +264,7 @@ export default function WorkflowPage() {
           help="Hur mycket som är realistiskt idag utifrån din ork och tiden som är kvar."
         >
           <p className="mt-1 text-sm text-muted-foreground">
-            Anpassat efter FlowScore {flow.score} och energi {energy ? `${energy}/5` : "okänd"} – ca{" "}
+            Anpassat efter dagens balans {flow.score} och energi {energy ? `${energy}/5` : "okänd"} – ca{" "}
             {flow.capacityMinutes} min fokustid.
           </p>
           {capacityPlan.plan.length ? (
@@ -306,7 +306,7 @@ export default function WorkflowPage() {
                 {capacityPlan.tooHeavy.slice(0, 3).map(({ task, meta }) => (
                   <li key={task.id} className="flex items-center justify-between gap-2">
                     <span>
-                      🔴 {task.title} · friktion {meta.friction}/10
+                      🔴 {task.title} · svårighetsgrad {meta.friction}/10
                     </span>
                     <Button
                       size="sm"
@@ -364,7 +364,7 @@ export default function WorkflowPage() {
                         {PRIORITY_META[meta.priority].dot} {task.title}
                       </p>
                       <p className="mt-0.5 text-xs text-muted-foreground">
-                        {meta.minutes} min · friktion {meta.friction}/10
+                        {meta.minutes} min · svårighetsgrad {meta.friction}/10
                         {task.dueDate ? ` · deadline ${task.dueDate}` : ""}
                       </p>
 
@@ -400,7 +400,7 @@ export default function WorkflowPage() {
                         className="mt-2 text-xs text-primary underline"
                         onClick={() => setEditing(editing === task.id ? null : task.id)}
                       >
-                        {editing === task.id ? "Dölj" : "Justera tid, friktion & prioritet"}
+                        {editing === task.id ? "Dölj" : "Justera tid, svårighet & prioritet"}
                       </button>
 
                       {editing === task.id && (
@@ -436,7 +436,7 @@ export default function WorkflowPage() {
                             ))}
                           </div>
                           <label className="block text-xs text-muted-foreground">
-                            Friktion: {meta.friction}/10
+                            Svårighetsgrad: {meta.friction}/10
                             <input
                               type="range"
                               min={1}

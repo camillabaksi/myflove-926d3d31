@@ -125,7 +125,7 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
     return (
       <MyFloveEmptyState
         emoji="🔋"
-        title="Logga in för att använda Energiflöde"
+        title="Logga in för att använda Min energi"
         description="Dina energiposter sparas till ditt konto så att Flow kan förstå din kapacitet."
       />
     );
@@ -135,7 +135,7 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
     <div className="space-y-8">
       {showHeader && (
         <MyFloveHeader
-          title="Energiflöde"
+          title="Min energi"
           emoji="🔋"
           description="Vad ger och vad tar energi? Det här är inte att göra-listan – det är sådant som påverkar hur mycket du orkar."
         />
@@ -147,7 +147,7 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
 
       <CollapsibleSection
         title="Dagens balans"
-        help="Summan av det du registrerat idag. Den vägs in i din FlowScore, så planen blir rimlig i stället för för stor."
+        help="Summan av det du registrerat idag. Den vägs in i dagens balans, så planen blir rimlig i stället för för stor."
       >
         <MyFloveCard tone="lavender" className="space-y-3">
           <div className="flex items-center justify-between gap-4">
@@ -245,7 +245,7 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
           <div className="space-y-2">
             <div className="text-sm font-medium text-ink">Hur svårt var det att komma igång?</div>
             <p className="text-xs text-muted-foreground">
-              Friktion är något annat än energi – tvätt kan kosta lite energi men vara tungt att
+              Svårighetsgrad är något annat än energi – tvätt kan kosta lite energi men vara tungt att
               börja med.
             </p>
             <div className="flex flex-wrap gap-2">
@@ -461,7 +461,7 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
                   Tungt att komma igång med (30 dagar)
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Hög friktion behöver inte betyda hög energikostnad – det betyder att starten är
+                  Hög svårighetsgrad behöver inte betyda hög energikostnad – det betyder att starten är
                   svår.
                 </p>
                 {frictionRows.map((t) => (
@@ -470,7 +470,7 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
                       {frictionEmoji(Math.round(t.friction))} {t.label}
                     </span>
                     <span className="text-muted-foreground">
-                      friktion {t.friction.toFixed(1)} · energi {t.energy > 0 ? "+" : ""}
+                      svårighetsgrad {t.friction.toFixed(1)} · energi {t.energy > 0 ? "+" : ""}
                       {t.energy.toFixed(1)}
                     </span>
                   </div>

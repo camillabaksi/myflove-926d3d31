@@ -307,7 +307,7 @@ export default function InsightPage() {
                             <p className="font-medium">{s.title}</p>
                             <p className="text-sm text-muted-foreground">{s.why}</p>
                             <p className="text-xs text-muted-foreground">
-                              Friktion {s.friction}/10 · ca {s.minutes} min
+                              Svårighetsgrad {s.friction}/10 · ca {s.minutes} min
                               {fitsNow ? " · Det här verkar vara en bra uppgift att göra nu." : ""}
                             </p>
                             <Button

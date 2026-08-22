@@ -163,7 +163,7 @@ export default function StudyflowPage() {
         toast.success(
           d.scoreDelta === 0
             ? "Omräknat – planen står sig"
-            : `Omräknat: FlowScore ${d.scoreDelta > 0 ? "+" : ""}${d.scoreDelta}`,
+            : `Omräknat: dagens balans ${d.scoreDelta > 0 ? "+" : ""}${d.scoreDelta}`,
         );
       }
     },
@@ -234,7 +234,7 @@ export default function StudyflowPage() {
           <div className="flex items-start justify-between gap-3">
             <div>
               <h1 className={sectionTitle}>
-                <GraduationCap className="h-5 w-5 text-gold" /> StudyFlow – dina studier
+                <GraduationCap className="h-5 w-5 text-gold" /> Studier – din planering
               </h1>
               <p className="mt-1 text-sm text-muted-foreground">
                 Du behöver inte plugga allt. Jag säger vad som är rimligt just nu.
@@ -309,7 +309,7 @@ export default function StudyflowPage() {
               help="Utgår från din ork idag. Siffran är ett förslag, inte ett krav."
             >
               <p className="mt-1 text-sm text-muted-foreground">
-                Anpassat efter FlowScore {flow.score} och energi {energy ? `${energy}/5` : "okänd"}{" "}
+                Anpassat efter dagens balans {flow.score} och energi {energy ? `${energy}/5` : "okänd"}{" "}
                 – ca {flow.capacityMinutes} min fokustid.
               </p>
               {capacityPlan.plan.length ? (
@@ -356,7 +356,7 @@ export default function StudyflowPage() {
               )}
             </CollapsibleSection>
 
-            {/* Prov & repetition från StudyBuddy */}
+            {/* Prov & repetition från Studiehjälp */}
             <CollapsibleSection
               className={card}
               headingClassName={sectionTitle}
@@ -377,7 +377,7 @@ export default function StudyflowPage() {
                 </div>
               ) : (
                 <p className="mt-2 text-sm text-muted-foreground">
-                  Inget prov inlagt. Lägg in provdatum i StudyBuddy så planerar jag pluggandet åt
+                  Inget prov inlagt. Lägg in provdatum i Studiehjälp så planerar jag pluggandet åt
                   dig.
                 </p>
               )}
@@ -386,7 +386,7 @@ export default function StudyflowPage() {
                 repetition.
               </p>
               <Button asChild variant="secondary" className="mt-3 rounded-full">
-                <Link to="/studybuddy">Öppna StudyBuddy</Link>
+                <Link to="/studybuddy">Öppna Studiehjälp</Link>
               </Button>
             </CollapsibleSection>
 
@@ -429,7 +429,7 @@ export default function StudyflowPage() {
                             {PRIORITY_META[meta.priority].dot} {task.title}
                           </p>
                           <p className="mt-0.5 text-xs text-muted-foreground">
-                            {meta.minutes} min · friktion {meta.friction}/10
+                            {meta.minutes} min · svårighetsgrad {meta.friction}/10
                             {task.dueDate ? ` · inlämning ${task.dueDate}` : ""}
                           </p>
 
@@ -472,7 +472,7 @@ export default function StudyflowPage() {
                             className="mt-2 text-xs text-primary underline"
                             onClick={() => setEditing(editing === task.id ? null : task.id)}
                           >
-                            {editing === task.id ? "Dölj" : "Justera tid, friktion & prioritet"}
+                            {editing === task.id ? "Dölj" : "Justera tid, svårighet & prioritet"}
                           </button>
 
                           {editing === task.id && (
@@ -508,7 +508,7 @@ export default function StudyflowPage() {
                                 ))}
                               </div>
                               <label className="block text-xs text-muted-foreground">
-                                Friktion: {meta.friction}/10
+                                Svårighetsgrad: {meta.friction}/10
                                 <input
                                   type="range"
                                   min={1}

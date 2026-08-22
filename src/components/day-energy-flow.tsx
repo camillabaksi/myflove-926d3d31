@@ -96,7 +96,7 @@ export function DayEnergyFlow({
 
           {balance.highFrictionCount > 0 && (
             <p className="text-xs text-muted-foreground">
-              {balance.highFrictionCount} av dagens saker var tunga att komma igång med – friktion
+              {balance.highFrictionCount} av dagens saker var tunga att komma igång med – svårighetsgrad
               räknas separat från energi.
             </p>
           )}

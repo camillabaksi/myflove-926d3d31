@@ -340,7 +340,7 @@ export function StudyCalendarSync() {
           </div>
         ) : (
           <p className="mt-4 text-sm text-muted-foreground">
-            Inget planerat än. Lägg in en föreläsning ovan eller ett provdatum i StudyBuddy – så
+            Inget planerat än. Lägg in en föreläsning ovan eller ett provdatum i Studiehjälp – så
             fyller Flow kalendern åt dig. 💙
           </p>
         )}

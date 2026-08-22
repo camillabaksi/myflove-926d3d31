@@ -29,7 +29,7 @@ export default function EnergyFlowSettings() {
       <MyFloveCard className="space-y-3">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <div className="font-medium text-ink">Låt energiflödet påverka min FlowScore</div>
+            <div className="font-medium text-ink">Låt min energi påverka dagens balans</div>
             <p className="text-sm text-muted-foreground">
               Stänger du av räknas ingenting med. Dina poster finns kvar precis som vanligt.
             </p>

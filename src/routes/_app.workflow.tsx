@@ -4,11 +4,11 @@ import Page from "@/pages/workflow";
 export const Route = createFileRoute("/_app/workflow")({
   head: () => ({
     meta: [
-      { title: "WorkFlow – vad ska jag göra nu? | MyFlove" },
+      { title: "Jobbplanering – vad ska jag göra nu? | MyFlove" },
       {
         name: "description",
         content:
-          "WorkFlow visar vad du ska göra just nu utifrån deadline, tid, friktion och energi – och bygger om dagen när allt spårar ur.",
+          "Jobbplanering visar vad du ska göra just nu utifrån deadline, tid, svårighetsgrad och energi – och bygger om dagen när allt spårar ur.",
       },
       { name: "robots", content: "noindex, nofollow" },
     ],

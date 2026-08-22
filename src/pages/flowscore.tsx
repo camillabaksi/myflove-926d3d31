@@ -14,7 +14,7 @@ export default function FlowScorePage() {
       <div className="space-y-6">
         <header>
           <h1 className="flex items-center gap-2 font-display text-3xl text-ink">
-            <Gauge className="h-7 w-7 text-primary" /> FlowScore™
+            <Gauge className="h-7 w-7 text-primary" /> Dagens balans
           </h1>
           <p className="mt-1 text-muted-foreground">
             Vad är rimligt för dig just nu? Ingen prestation – bara en realistisk bild av dagen.
@@ -64,10 +64,10 @@ export default function FlowScorePage() {
           <CollapsibleSection
             title={
               <span className="flex items-center gap-2">
-                <Zap className="h-5 w-5 text-primary" /> Använd din FlowScore
+                <Zap className="h-5 w-5 text-primary" /> Använd dagens balans
               </span>
             }
-            id="Använd din FlowScore"
+            id="Använd dagens balans"
             help="Din nivå styr hur mycket jobb och studier föreslår. Ändras när du loggar hur du mår."
             headingClassName="font-display text-lg"
             description="Planerna i jobb och studier anpassas automatiskt efter den här nivån."
@@ -77,13 +77,13 @@ export default function FlowScorePage() {
                 href="/workflow"
                 className="flex items-center gap-2 rounded-2xl border border-border bg-background px-4 py-3 text-sm text-ink transition hover:bg-muted"
               >
-                <Briefcase className="h-4 w-4 text-primary" /> WorkFlow
+                <Briefcase className="h-4 w-4 text-primary" /> Jobb
               </Link>
               <Link
                 href="/studyflow"
                 className="flex items-center gap-2 rounded-2xl border border-border bg-background px-4 py-3 text-sm text-ink transition hover:bg-muted"
               >
-                <GraduationCap className="h-4 w-4 text-primary" /> StudyFlow
+                <GraduationCap className="h-4 w-4 text-primary" /> Studier
               </Link>
             </div>
           </CollapsibleSection>

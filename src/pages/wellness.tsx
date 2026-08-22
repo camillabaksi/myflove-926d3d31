@@ -84,7 +84,7 @@ export default function WellnessPage() {
               id="energiflode"
               title={
                 <span className="flex items-center gap-2">
-                  <Zap size={18} className="text-primary" /> Energiflöde
+                  <Zap size={18} className="text-primary" /> Min energi
                 </span>
               }
               headingClassName="text-lg font-semibold"
