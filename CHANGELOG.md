@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-22 – Living Blueprint 3.2
+
+- Blueprinten uppdaterad till version 3.2 (DOCX + PDF) och omstrukturerad i sex delar med innehållsförteckning och läsanvisning.
+- Funktionskartan speglar nuläget: Hem som lugn landningssida, Planera min dag, snabbcheck, Mitt batteri™ och blocket Rutiner & medicin.
+- Versionshistoriken kompletterad med 3.1 och 3.2, inklusive pitchvideo, pitchdeck och pitchsidan i appen.
+
 ## 2026-08-22 – Pitchsida i appen
 
 - Ny adminskyddad sida `/pitch` där pitchvideon kan spelas upp direkt i appen och pitchdecken laddas ner (PowerPoint 3.2 och PDF 3.0).
