@@ -1,5 +1,6 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
+
 
 /**
  * Vilka block Hem visar och i vilken ordning.
