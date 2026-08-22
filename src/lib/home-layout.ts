@@ -70,9 +70,31 @@ const DEFAULT_PREFS: HomeLayoutPrefs = {
 };
 
 const STORAGE_KEY = "myflove-home-layout";
+/** Engångsflytt: Energins historik visas nu som eget block under batteriet. */
+const MIGRATION_KEY = "myflove-home-layout-migrated-energifloede";
 
 export function useHomeLayout() {
   const [prefs, setPrefs] = useCloudSyncedStorage<HomeLayoutPrefs>(STORAGE_KEY, DEFAULT_PREFS);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (window.localStorage.getItem(MIGRATION_KEY)) return;
+    if (!prefs?.hidden?.includes("energifloede")) return;
+    window.localStorage.setItem(MIGRATION_KEY, "1");
+    setPrefs((p) => {
+      const currentOrder = p?.order ?? DEFAULT_PREFS.order;
+      const withoutFlow = currentOrder.filter((id) => id !== "energifloede");
+      const at = withoutFlow.indexOf("batteri");
+      const nextOrder =
+        at >= 0
+          ? [...withoutFlow.slice(0, at + 1), "energifloede" as HomeBlockId, ...withoutFlow.slice(at + 1)]
+          : currentOrder;
+      return {
+        order: nextOrder,
+        hidden: (p?.hidden ?? []).filter((id) => id !== "energifloede"),
+      };
+    });
+  }, [prefs?.hidden, setPrefs]);
 
   const order = useMemo<HomeBlockId[]>(() => {
     const valid = (prefs?.order ?? []).filter((id) => HOME_BLOCKS.some((b) => b.id === id));
@@ -82,6 +104,7 @@ export function useHomeLayout() {
 
   const hidden = useMemo<HomeBlockId[]>(() => prefs?.hidden ?? [], [prefs?.hidden]);
   const visible = useMemo(() => order.filter((id) => !hidden.includes(id)), [order, hidden]);
+
 
   const toggle = (id: HomeBlockId) =>
     setPrefs((p) => {
