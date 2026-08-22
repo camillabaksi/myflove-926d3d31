@@ -117,25 +117,39 @@ export function DidThisCta({
 
   return (
     <>
-      <button
-        type="button"
-        onClick={openModal}
-        aria-label="Lägg till det du gjorde"
-        className={cn(
-          "press group flex w-full items-center gap-3 rounded-3xl border border-primary/25 bg-primary/5 p-4 text-left shadow-soft transition-colors hover:border-primary/50 hover:bg-primary/10",
-          className,
-        )}
-      >
-        <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-primary text-primary-foreground transition-transform group-hover:scale-105 group-active:scale-95 breathe">
-          <Plus size={20} />
-        </span>
-        <span className="min-w-0">
-          <span className="block font-display font-semibold text-ink">Jag gjorde något</span>
-          <span className="block text-sm text-muted-foreground">
-            Registrera något du redan gjort
+      {trigger ? (
+        <button
+          type="button"
+          onClick={() => {
+            trigger.props.onClick?.();
+            openModal();
+          }}
+          aria-label="Lägg till det du gjorde"
+          className={trigger.props.className}
+        >
+          {trigger.props.children}
+        </button>
+      ) : (
+        <button
+          type="button"
+          onClick={openModal}
+          aria-label="Lägg till det du gjorde"
+          className={cn(
+            "press group flex w-full items-center gap-3 rounded-3xl border border-primary/25 bg-primary/5 p-4 text-left shadow-soft transition-colors hover:border-primary/50 hover:bg-primary/10",
+            className,
+          )}
+        >
+          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-primary text-primary-foreground transition-transform group-hover:scale-105 group-active:scale-95 breathe">
+            <Plus size={20} />
           </span>
-        </span>
-      </button>
+          <span className="min-w-0">
+            <span className="block font-display font-semibold text-ink">Jag gjorde något</span>
+            <span className="block text-sm text-muted-foreground">
+              Registrera något du redan gjort
+            </span>
+          </span>
+        </button>
+      )}
 
       <MyFloveModal
         open={open}
