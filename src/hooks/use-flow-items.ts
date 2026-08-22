@@ -10,6 +10,7 @@ import { useDoneLog } from "@/hooks/use-done-log";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { getArea } from "@/lib/life-areas";
 import type { Routine } from "@/pages/routines";
+import { occursOn } from "@/lib/recurrence";
 import {
   daysUntilDate,
   priorityFor,
@@ -65,6 +66,9 @@ export function useFlowItems(dateISO?: string): {
 
     for (const t of tasks) {
       if (isSnoozed(t.snoozedUntil)) continue;
+      // En uppgift hör till sitt eget datum. Ett datum längre fram får aldrig
+      // dyka upp under en tidigare dag (t.ex. 4 sep under 22 aug).
+      if (t.dueDate && t.dueDate > today) continue;
       // En annan dag än idag visar bara det som faktiskt hör till den dagen.
       if (!isTodayView && t.dueDate !== today) continue;
       // Klara uppgifter visas bara om de hör till idag eller bockades av idag –
@@ -97,7 +101,10 @@ export function useFlowItems(dateISO?: string): {
     }
 
     for (const r of reminders) {
-      if (r.date !== today || r.canceled) continue;
+      // Datumet på påminnelsen (plus ev. upprepning) avgör dagen – aldrig när
+      // den skapades. occursOn är samma logik som kalendern använder.
+      if (r.canceled) continue;
+      if (!occursOn(r.date, r.repeat, today)) continue;
       out.push({
         id: `rem-${r.id}`,
         title: r.title,
@@ -179,6 +186,8 @@ export function useFlowItems(dateISO?: string): {
         ? `${qDate.getFullYear()}-${String(qDate.getMonth() + 1).padStart(2, "0")}-${String(qDate.getDate()).padStart(2, "0")}`
         : undefined;
       const qDays = qDue ? daysUntilDate(qDue) : undefined;
+      // En tanke med påminnelse längre fram hör till den dagen, inte till idag.
+      if (qDue && qDue > today) continue;
       const qDoneToday = !!q.done && isToday(q.doneAt);
       if (!isTodayView) {
         if (qDue !== today) continue;

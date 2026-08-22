@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Layout from "@/components/layout";
+import { parseISODate } from "@/lib/day";
 import { MyFloveEmptyIllustration } from "@/components/myflove/motion";
 import { useFocus, useTasks, useReminders } from "@/hooks/use-data";
 import { useChildren } from "@/hooks/use-children";
@@ -889,7 +890,7 @@ export default function CalendarPage() {
               <h3 className="min-w-0 truncate text-lg font-medium sm:text-xl">
                 {selectedDateStr === todayStr
                   ? "Idag"
-                  : new Date(selectedDateStr).toLocaleDateString("sv-SE", {
+                  : parseISODate(selectedDateStr).toLocaleDateString("sv-SE", {
                       weekday: "long",
                       day: "numeric",
                       month: "long",
