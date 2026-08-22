@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-08-22 – Lugnare Hem: de fyra snabbalternativen är kärnan
+
+- De fyra snabbalternativen ("Vad behöver du just nu?") ligger nu högt på Hem, direkt efter hälsning, mående/energi och batteriet. Namn, ikoner, undertexter och destinationer är oförändrade.
+- Tre överlappande block är dolda i standardlayouten eftersom snabbalternativen redan täcker dem: snabbknappen "Jag gjorde något", snabbfältet "Lägg till" och panelen "Lägg till det du gjorde".
+- Blocken finns kvar och kan slås på igen i "Anpassa hemskärmen". Befintliga sparade layouter påverkas inte – ändringen gäller standardläget och återställning.
+- Ingen funktion, route, datamodell eller energilogik har ändrats.
+
+
+
 ## 2026-08-26 – Snabbfix: "Jag gjorde redan något" öppnar rätt flöde
 
 - I situationskortet "Vad behöver du just nu?" öppnar valet "Jag gjorde redan något" nu samma "Jag gjorde något"-modal som resten av appen, i stället för att länka till `/energifloede`.
