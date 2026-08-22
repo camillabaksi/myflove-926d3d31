@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      'Hem: "Energins historik" visas som eget block direkt under Mitt energibatteri med samma energidata och trendindikator, och alla Hem-sektioner kan minimeras/expanderas med sparat läge. De fyra snabbalternativen ligger i en gemensam minimerbar sektion och är oförändrade (2026-08-22)',
       "Utvecklingsläge – ny sida /dev-session i previewen skapar en testsession automatiskt så att klickflöden på Hem kan QA:as utan lösenord. Blockerad i publicerad app (2026-08-22)",
       'Hem: det separata blocket "Jag gjorde något" är borttaget – funktionen ligger kvar i snabbalternativet "Jag gjorde redan något". Mitt energibatteri är kompakt som standard och kan valfritt expandera samma energihistorik som Min energi (2026-08-22)',
       'Hem städas – "Lägg till det du gjorde" visas inte längre som separat block på Hem. Funktionen finns kvar bakom snabbalternativet "Jag gjorde redan något" i samma modal och aktivitetsmodell. De fyra snabbalternativen är oförändrade (2026-08-22)',
