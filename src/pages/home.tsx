@@ -58,7 +58,6 @@ const SITUATIONS = [
   },
 ] as const;
 
-
 /**
  * Nästa relevanta aktivitet idag – påminnelser, uppgifter, rutiner,
  * medicin och lektioner, sorterat efter klockslag.
@@ -295,7 +294,6 @@ export default function Home() {
           </div>
         )}
 
-
         {/* Nästa – nästa relevanta aktivitet */}
         {shows("nasta") && (
           <section
@@ -461,7 +459,6 @@ export default function Home() {
             </ul>
           </nav>
         )}
-
 
         {/* Områdesväljare – litet, längst ner */}
         {shows("omrade") && (

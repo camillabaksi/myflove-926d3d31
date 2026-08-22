@@ -102,7 +102,6 @@ export default function EnergyBattery({ defaultOpen = false }: { defaultOpen?: b
             )}
           </div>
 
-
           {suggestions.length > 0 && (
             <ul className="space-y-1.5">
               {suggestions.map((s) => (
@@ -150,7 +149,6 @@ function BatteryCurve({
         role="img"
         aria-label={`Energikurva över dagen. ${reading.summary}`}
       >
-
         <polygon
           points={`0,${h} ${points.join(" ")} ${w},${h}`}
           fill="hsl(var(--primary))"
@@ -182,7 +180,6 @@ function BatteryCurve({
           <span>{slots[slots.length - 1].time}</span>
         </div>
       )}
-
     </div>
   );
 }

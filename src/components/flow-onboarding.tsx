@@ -25,8 +25,6 @@ export default function FlowOnboarding() {
 
   const open = Boolean(wasVisited.current) && !done && !dismissed;
 
-
-
   const toggle = (id: FlowGoalId) =>
     setSelected((prev) => (prev.includes(id) ? prev.filter((g) => g !== id) : [...prev, id]));
 

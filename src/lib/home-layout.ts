@@ -19,7 +19,6 @@ export type HomeBlockId =
   | "gjort"
   | "energifloede";
 
-
 export interface HomeBlockMeta {
   id: HomeBlockId;
   label: string;

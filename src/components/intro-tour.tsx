@@ -21,7 +21,6 @@ const STEPS = [
   },
 ];
 
-
 export default function IntroTour() {
   const [mounted, setMounted] = useState(false);
   const [seen, setSeen] = useLocalStorage<boolean>("myflove-intro-seen", false);
