@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-22 – Medicin: snabb avcheckning från Hem
+
+- Nytt kompakt, minimerbart Hem-block "💊 Dagens medicin" som visar dagens/närmast kommande dos i stället för hela medicinlistan.
+- En dos markeras som tagen med ett enda tryck (💊 Medicin · 08:00 → ✓ Tagen), och tagna doser kan ångras ("Ej tagen").
+- Samma befintliga medicindata och samma logg som i Rutiner & medicin – ingen ny medicinmodell, ingen ny route och inga dubbletter.
+- Blocket ligger efter "Nästa" och konkurrerar inte med de fyra snabbalternativen; det kan döljas i Anpassa hemskärmen.
+
 ## 2026-08-22 – Hem: Energins historik ligger nu direkt under batteriet
 
 - Korrigerad renderingsordning på Hem: Hälsning → Hur är det just nu? → Mitt energibatteri → Energins historik → Nästa → Vad behöver du just nu? → Dagens saker → övriga block.

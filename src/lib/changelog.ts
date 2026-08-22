@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      'Medicin: nytt kompakt, minimerbart Hem-block "Dagens medicin" med ett-tryck-avbockning (Tagen/Ej tagen) för dagens och närmast kommande dos. Samma befintliga medicindata och logg som i Rutiner & medicin, ingen ny modell, route eller dubblett (2026-08-22)',
       'Hem: "Energins historik" renderas nu direkt under "Mitt energibatteri" i Hem-layouten (före "Nästa" och "Vad behöver du just nu?") genom uppdaterad blockordning och engångsmigrering. Samma befintliga komponent och energidata, inga nya modeller eller routes (2026-08-22)',
       'Hem: "Energins historik" visas som eget block direkt under Mitt energibatteri med samma energidata och trendindikator, och alla Hem-sektioner kan minimeras/expanderas med sparat läge. De fyra snabbalternativen ligger i en gemensam minimerbar sektion och är oförändrade (2026-08-22)',
       "Utvecklingsläge – ny sida /dev-session i previewen skapar en testsession automatiskt så att klickflöden på Hem kan QA:as utan lösenord. Blockerad i publicerad app (2026-08-22)",
