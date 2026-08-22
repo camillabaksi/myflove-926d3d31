@@ -6,12 +6,13 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-08-26";
+export const CHANGELOG_UPDATED = "2026-08-22";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      'Hem städas – "Lägg till det du gjorde" visas inte längre som separat block på Hem. Funktionen finns kvar bakom snabbalternativet "Jag gjorde redan något" i samma modal och aktivitetsmodell. De fyra snabbalternativen är oförändrade (2026-08-22)',
       "Bättre delning och SEO – alla publika sidor har titel, beskrivning, canonical och ett socialt delningskort med ny förhandsbild (2026-08-22)",
       'Lugnare Hem – de fyra snabbalternativen ("Vad behöver du just nu?") ligger högt upp och är oförändrade, medan de överlappande blocken snabbknappen "Jag gjorde något", snabbfältet "Lägg till" och panelen "Lägg till det du gjorde" är dolda som standard. De går att slå på igen i Anpassa hemskärmen och befintliga layouter påverkas inte (2026-08-22)',
       '"Jag gjorde redan något" i situationskortet öppnar nu samma "Jag gjorde något"-modal som resten av appen, i stället för att länka till energihistoriken. Samma registrering, samma genomförda aktivitet, inga dubbletter (2026-08-26)',
