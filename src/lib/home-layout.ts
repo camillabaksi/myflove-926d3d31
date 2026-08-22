@@ -61,14 +61,7 @@ export interface HomeLayoutPrefs {
 // De fyra snabbalternativen ("vagar") ligger högt – de täcker redan
 // "Lägg till", "Jag gjorde något" och "Lägg till det du gjorde".
 const DEFAULT_PREFS: HomeLayoutPrefs = {
-  hidden: [
-    "gjort-knapp",
-    "lagg-till",
-    "gjort",
-    "energifloede",
-    "omrade",
-    "genvagar",
-  ],
+  hidden: ["gjort-knapp", "lagg-till", "gjort", "energifloede", "omrade", "genvagar"],
 
   order: [
     "checkin",
@@ -85,7 +78,6 @@ const DEFAULT_PREFS: HomeLayoutPrefs = {
     "energifloede",
   ],
 };
-
 
 const STORAGE_KEY = "myflove-home-layout";
 
