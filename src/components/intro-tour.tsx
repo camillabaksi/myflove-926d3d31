@@ -1,36 +1,26 @@
 import { useEffect, useRef, useState } from "react";
-import { Calendar, Heart, Inbox, Sparkles, X } from "lucide-react";
+import { Heart, Sparkles, X } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useLocalStorage } from "@/lib/storage";
 
+// Kort intro: två kort, sedan är användaren igång. Resten lär man sig i appen.
 const STEPS = [
   {
     icon: Sparkles,
     tint: "bg-lavender",
-    title: "Välkommen till MyFlove",
-    body: "MyFlove finns till för att göra vardagen enklare. Du behöver inte använda allt – börja med en sak.",
-  },
-  {
-    icon: Inbox,
-    tint: "bg-mint",
-    title: "Quickflow – töm huvudet",
-    body: "Kommer du på något? Skriv in det i Quickflow direkt. Du behöver inte bestämma när eller hur. Det försvinner inte.",
-  },
-  {
-    icon: Calendar,
-    tint: "bg-sky",
-    title: "Kalender och Att göra",
-    body: "Här ligger det som har en tid. Du kan lägga till en påminnelse om du vill – annars ligger det bara kvar.",
+    title: "Släpp det du bär på",
+    body: "Skriv in det du har i huvudet – MyFlove hjälper dig sortera. Du behöver inte använda allt, börja med en sak.",
   },
   {
     icon: Heart,
     tint: "bg-blush",
-    title: "Må bra – hur mycket orkar du?",
-    body: "När du loggar hur du mår anpassas dagens förslag. Låg ork = färre saker. Det är hela idén.",
+    title: "Hur mycket orkar du idag?",
+    body: "Dra i mående och energi på startsidan när du vill. Låg ork = färre saker. Det är hela idén.",
   },
 ];
+
 
 export default function IntroTour() {
   const [mounted, setMounted] = useState(false);
