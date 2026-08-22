@@ -127,7 +127,6 @@ export function DidThisCta({ className }: { className?: string }) {
           <span className="block font-display font-semibold text-ink">Jag gjorde något</span>
           <span className="block text-sm text-muted-foreground">
             Registrera något du redan gjort
-
           </span>
         </span>
       </button>
