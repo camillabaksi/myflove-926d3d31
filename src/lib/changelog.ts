@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      'Ny adminskyddad sida "/pitch" där pitchvideon spelas upp direkt i appen och pitchdecken laddas ner (PowerPoint 3.2 och PDF 3.0), nåbar via knappen "Pitchmaterial" på adminsidan (2026-08-22)',
       "Ny pitchvideo (16:9, ca 34 s) och nytt pitchdeck 3.2 med berättelsen problem, insikt, produkt, daglig loop, varför nu och vision – i MyFloves lila designspråk (2026-08-22)",
       'Ny introvideo "Första blicken" (42 s, vertikal) för nya användare – från igenkänning till uppmaningen att ladda ner MyFlove (2026-08-22)',
       'Hem: dagens rutiner och mediciner är sammanslagna i ett gemensamt, minimerbart block längst ner på Hem, avcheckningsbart med ett tryck och sorterat efter klockslag. Samma befintliga rutin- och medicindata, inga dubbletter (2026-08-22)',

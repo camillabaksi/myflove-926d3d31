@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-22 – Pitchsida i appen
+
+- Ny adminskyddad sida `/pitch` där pitchvideon kan spelas upp direkt i appen och pitchdecken laddas ner (PowerPoint 3.2 och PDF 3.0).
+- Knapp "Pitchmaterial" i sidhuvudet på adminsidan som länkar till den nya sidan.
+- Filerna ligger under `public/pitch/`.
+
 ## 2026-08-22 – Pitchvideo och pitchdeck (v3.2)
 
 - Ny pitchvideo (1920x1080, ca 34 s) med berättelsen problem → insikt → produkt → daglig loop → varför nu → vision. Remotion-komposition `pitch` och renderskript `remotion/scripts/render-pitch.mjs`.
