@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-22 – Hem: Rutiner & medicin i ett gemensamt block längst ner
+
+- Dagens rutiner och dagens medicindoser visas nu i ett gemensamt, minimerbart block "🔁💊 Rutiner & medicin" längst ner på Hem.
+- Allt är avcheckningsbart med ett tryck (Klar) och kan ångras; listan sorteras efter klockslag.
+- Samma befintliga data som i Rutiner & medicin – rutinerna bockas av via dagens påminnelse och medicin via medicinloggen, inga dubbletter.
+- Blocket kan döljas eller flyttas i Anpassa hemskärmen.
+
 ## 2026-08-22 – Medicin: snabb avcheckning från Hem
 
 - Nytt kompakt, minimerbart Hem-block "💊 Dagens medicin" som visar dagens/närmast kommande dos i stället för hela medicinlistan.

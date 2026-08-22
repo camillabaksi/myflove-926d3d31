@@ -5,7 +5,7 @@ import { useHomeLayout, type HomeBlockId } from "@/lib/home-layout";
 import { TaskQuickAdd, type QuickAddResult } from "@/components/task-quick-add";
 import DidThisCta from "@/components/did-this-cta";
 import TodayTasks from "@/components/today-tasks";
-import MedicationToday from "@/components/medication-today";
+import RoutinesMedicationToday from "@/components/routines-medication-today";
 
 import DayEnergyFlow from "@/components/day-energy-flow";
 import { Link } from "wouter";
@@ -384,19 +384,19 @@ export default function Home() {
           <section
             style={pos("medicin")}
             className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
-            aria-label="Dagens medicin"
+            aria-label="Rutiner och medicin"
           >
             <CollapsibleSection
-              id="hem::medicin"
+              id="hem::rutiner-medicin"
               title={
                 <span className="flex items-center gap-2">
-                  <span aria-hidden>💊</span> Dagens medicin
+                  <span aria-hidden>🔁💊</span> Rutiner &amp; medicin
                 </span>
               }
               headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
               className="space-y-3"
             >
-              <MedicationToday />
+              <RoutinesMedicationToday />
             </CollapsibleSection>
           </section>
         )}
