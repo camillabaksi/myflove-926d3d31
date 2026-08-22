@@ -99,7 +99,7 @@ export function FlowScoreBreakdown({
             resten hamnar i "senare idag".
           </li>
           <li>
-            • Energin påverkar även rankningen: låg energi straffar friktion hårdare i Nu-listan.
+            • Energin påverkar även rankningen: låg energi väger upp svårighetsgrad hårdare i listan för just nu.
           </li>
         </ul>
       </div>

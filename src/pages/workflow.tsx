@@ -306,7 +306,7 @@ export default function WorkflowPage() {
                 {capacityPlan.tooHeavy.slice(0, 3).map(({ task, meta }) => (
                   <li key={task.id} className="flex items-center justify-between gap-2">
                     <span>
-                      🔴 {task.title} · friktion {meta.friction}/10
+                      🔴 {task.title} · svårighetsgrad {meta.friction}/10
                     </span>
                     <Button
                       size="sm"
@@ -364,7 +364,7 @@ export default function WorkflowPage() {
                         {PRIORITY_META[meta.priority].dot} {task.title}
                       </p>
                       <p className="mt-0.5 text-xs text-muted-foreground">
-                        {meta.minutes} min · friktion {meta.friction}/10
+                        {meta.minutes} min · svårighetsgrad {meta.friction}/10
                         {task.dueDate ? ` · deadline ${task.dueDate}` : ""}
                       </p>
 
@@ -400,7 +400,7 @@ export default function WorkflowPage() {
                         className="mt-2 text-xs text-primary underline"
                         onClick={() => setEditing(editing === task.id ? null : task.id)}
                       >
-                        {editing === task.id ? "Dölj" : "Justera tid, friktion & prioritet"}
+                        {editing === task.id ? "Dölj" : "Justera tid, svårighet & prioritet"}
                       </button>
 
                       {editing === task.id && (

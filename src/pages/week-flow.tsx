@@ -49,7 +49,7 @@ export default function WeekFlowPage() {
     }
     const highFriction = snoozedTasks.filter((t) => estimateFriction(t) >= 7).length;
     if (highFriction >= 2) {
-      out.push("Du har flera gånger skjutit upp uppgifter med hög friktion.");
+      out.push("Du har flera gånger skjutit upp uppgifter med hög svårighetsgrad.");
     }
     const week = history.filter((h) => new Date(h.date).getTime() >= cutoff);
     if (week.length >= 3) {

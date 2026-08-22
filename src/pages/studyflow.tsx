@@ -429,7 +429,7 @@ export default function StudyflowPage() {
                             {PRIORITY_META[meta.priority].dot} {task.title}
                           </p>
                           <p className="mt-0.5 text-xs text-muted-foreground">
-                            {meta.minutes} min · friktion {meta.friction}/10
+                            {meta.minutes} min · svårighetsgrad {meta.friction}/10
                             {task.dueDate ? ` · inlämning ${task.dueDate}` : ""}
                           </p>
 
@@ -472,7 +472,7 @@ export default function StudyflowPage() {
                             className="mt-2 text-xs text-primary underline"
                             onClick={() => setEditing(editing === task.id ? null : task.id)}
                           >
-                            {editing === task.id ? "Dölj" : "Justera tid, friktion & prioritet"}
+                            {editing === task.id ? "Dölj" : "Justera tid, svårighet & prioritet"}
                           </button>
 
                           {editing === task.id && (
