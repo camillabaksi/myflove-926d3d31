@@ -196,6 +196,14 @@ export default function Home() {
   const { activeArea } = useActiveArea();
   const nextEvent = useNextEvent();
   const suggestion = useFlowSuggestion();
+  const { reading } = useEnergyBattery();
+  const trendSentence =
+    reading.trend === "stiger"
+      ? "Din energi ökar. ↑"
+      : reading.trend === "sjunker"
+        ? "Din energi minskar. ↓"
+        : "Din energi är stabil. →";
+
   const { visible } = useHomeLayout();
   const shows = (id: HomeBlockId) => visible.includes(id);
   // Ordningen från "Anpassa hemskärmen" styrs via flex order.
