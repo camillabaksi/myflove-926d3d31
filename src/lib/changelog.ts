@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      'Lugnare Hem – de fyra snabbalternativen ("Vad behöver du just nu?") ligger högt upp och är oförändrade, medan de överlappande blocken snabbknappen "Jag gjorde något", snabbfältet "Lägg till" och panelen "Lägg till det du gjorde" är dolda som standard. De går att slå på igen i Anpassa hemskärmen och befintliga layouter påverkas inte (2026-08-22)',
       '"Jag gjorde redan något" i situationskortet öppnar nu samma "Jag gjorde något"-modal som resten av appen, i stället för att länka till energihistoriken. Samma registrering, samma genomförda aktivitet, inga dubbletter (2026-08-26)',
       "Lugnare första 30 sekunder – batteriet svarar i klartext (Du har medelbra energi – den är på väg upp, starkast kl 14–16) med minikurvan alltid synlig, Hem startar med färre block, Korta vägar har blivit Vad behöver du just nu? med fyra situationer och introt är nedkortat till två kort (2026-08-22)",
       "Tydligare energistruktur – Mitt energibatteri är din nivå just nu, Min energi blir historik och mönster (nås under Mina mönster i Mer, routen fungerar som förut) och Dagens balans förklaras i klartext som match mellan dagens krav och din kapacitet. Undertexter på Hem för Lägg till, Jag gjorde något och QuickFlow, och Jag gjorde något kan inte längre visas dubbelt (2026-08-25)",
