@@ -17,7 +17,29 @@ export default function EnergyBattery({ defaultOpen = false }: { defaultOpen?: b
       : level >= 38
         ? "hsl(var(--gold, 40 80% 60%))"
         : "hsl(var(--destructive))";
-  const arrow = reading.trend === "stiger" ? "↗" : reading.trend === "sjunker" ? "↘" : "→";
+
+  // Klartext i stället för siffra: "Du har medelbra energi – den stiger fram till kl 14."
+  const levelWord =
+    level >= 75
+      ? "Du har gott om energi"
+      : level >= 55
+        ? "Du har medelbra energi"
+        : level >= 35
+          ? "Du har energi på halvfart"
+          : "Din energi är låg just nu";
+
+  const trendWord =
+    reading.trend === "stiger"
+      ? "den är på väg upp"
+      : reading.trend === "sjunker"
+        ? "den är på väg ner"
+        : "den ligger ganska jämn";
+
+  const plain = reading.overloaded
+    ? `${levelWord} – och dagen ser tung ut.`
+    : reading.peak
+      ? `${levelWord} – ${trendWord}, starkast ${reading.peak.label}.`
+      : `${levelWord} – ${trendWord}.`;
 
   return (
     <section
@@ -43,22 +65,28 @@ export default function EnergyBattery({ defaultOpen = false }: { defaultOpen?: b
         </span>
 
         <span className="min-w-0 flex-1">
-          <span className="flex items-baseline gap-2">
-            <span className="text-sm font-semibold text-ink">Mitt batteri</span>
-            <span className="text-sm font-bold" style={{ color: tone }}>
+          <span className="block text-sm font-medium leading-snug text-ink">{plain}</span>
+          <span className="mt-0.5 block text-xs text-muted-foreground">
+            Mitt batteri ·{" "}
+            <span className="font-semibold" style={{ color: tone }}>
               {level}%
             </span>
-            <span aria-hidden className="text-xs text-muted-foreground">
-              {arrow}
-            </span>
-          </span>
-          <span className="mt-0.5 block truncate text-xs text-muted-foreground">
-            {reading.summary}
           </span>
         </span>
 
         <span className="shrink-0 text-xs text-muted-foreground">{open ? "Dölj" : "Visa"}</span>
       </button>
+
+      {/* Liten kurva alltid synlig – känslan av dagen, inte en teknisk graf */}
+      <div className="mt-3">
+        <BatteryCurve reading={reading} compact={!open} />
+        {!reading.personal && (
+          <p className="mt-1 text-[11px] text-muted-foreground">
+            Preliminär kurva – blir din egen när du loggat energi några dagar.
+          </p>
+        )}
+      </div>
+
 
       {open && (
         <div className="mt-4 space-y-3 border-t border-border/50 pt-3">
