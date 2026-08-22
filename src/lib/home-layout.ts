@@ -16,7 +16,6 @@ export type HomeBlockId =
   | "genvagar"
   | "vagar"
   | "omrade"
-  | "gjort"
   | "energifloede";
 
 export interface HomeBlockMeta {
@@ -44,7 +43,6 @@ export const HOME_BLOCKS: HomeBlockMeta[] = [
   { id: "genvagar", label: "Dina genvägar", hint: "Fyra egna favoriter du väljer själv" },
   { id: "vagar", label: "Vad behöver du just nu?", hint: "Fyra vanliga situationer" },
   { id: "omrade", label: "Områdesväljare", hint: "Vilket rum du är i" },
-  { id: "gjort", label: "Lägg till det du gjorde", hint: "Snabb registrering av vardagssaker" },
   {
     id: "energifloede",
     label: "Energins historik",
@@ -61,7 +59,7 @@ export interface HomeLayoutPrefs {
 // De fyra snabbalternativen ("vagar") ligger högt – de täcker redan
 // "Lägg till", "Jag gjorde något" och "Lägg till det du gjorde".
 const DEFAULT_PREFS: HomeLayoutPrefs = {
-  hidden: ["gjort-knapp", "lagg-till", "gjort", "energifloede", "omrade", "genvagar"],
+  hidden: ["gjort-knapp", "lagg-till", "energifloede", "omrade", "genvagar"],
 
   order: [
     "checkin",
@@ -72,7 +70,6 @@ const DEFAULT_PREFS: HomeLayoutPrefs = {
     "forslag",
     "gjort-knapp",
     "lagg-till",
-    "gjort",
     "genvagar",
     "omrade",
     "energifloede",
