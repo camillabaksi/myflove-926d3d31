@@ -9,6 +9,7 @@ export type HomeBlockId =
   | "checkin"
   | "batteri"
   | "nasta"
+  | "medicin"
   | "idag"
   | "forslag"
   | "lagg-till"
@@ -16,6 +17,7 @@ export type HomeBlockId =
   | "vagar"
   | "omrade"
   | "energifloede";
+
 
 export interface HomeBlockMeta {
   id: HomeBlockId;
