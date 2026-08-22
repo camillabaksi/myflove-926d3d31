@@ -15,6 +15,13 @@ import {
   WIDTH as FL_WIDTH,
   HEIGHT as FL_HEIGHT,
 } from "./FirstLook";
+import {
+  PitchVideo,
+  TOTAL_FRAMES as PITCH_FRAMES,
+  FPS as PITCH_FPS,
+  WIDTH as PITCH_WIDTH,
+  HEIGHT as PITCH_HEIGHT,
+} from "./PitchVideo";
 
 export const RemotionRoot: React.FC = () => (
   <>
@@ -41,6 +48,14 @@ export const RemotionRoot: React.FC = () => (
       fps={FL_FPS}
       width={FL_WIDTH}
       height={FL_HEIGHT}
+    />
+    <Composition
+      id="pitch"
+      component={PitchVideo}
+      durationInFrames={PITCH_FRAMES}
+      fps={PITCH_FPS}
+      width={PITCH_WIDTH}
+      height={PITCH_HEIGHT}
     />
   </>
 );

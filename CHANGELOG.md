@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-22 – Pitchvideo och pitchdeck (v3.2)
+
+- Ny pitchvideo (1920x1080, ca 34 s) med berättelsen problem → insikt → produkt → daglig loop → varför nu → vision. Remotion-komposition `pitch` och renderskript `remotion/scripts/render-pitch.mjs`.
+- Nytt pitchdeck `MyFlove_Pitchdeck_3.2_2026-08-22.pptx` (9 slides) i samma lila designspråk, med platshållare för siffror som behöver fyllas i innan pitchen.
+
 ## 2026-08-22 – Ny introvideo: "Första blicken" (nedladdnings-CTA)
 
 - Ny kort video (42 s, 1080x1920) som visar MyFlove för en helt ny användare: igenkänning, batteriet, QuickFlow, Min dag, Flow och avslutande uppmaning "Ladda ner MyFlove".
