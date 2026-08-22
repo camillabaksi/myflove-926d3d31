@@ -17,8 +17,10 @@ export default function FlowScorePage() {
             <Gauge className="h-7 w-7 text-primary" /> Dagens balans
           </h1>
           <p className="mt-1 text-muted-foreground">
-            Vad är rimligt för dig just nu? Ingen prestation – bara en realistisk bild av dagen.
+            Dagens balans visar hur väl dagens krav matchar din energi och kapacitet just nu. Det är
+            ingen prestation och inget betyg – bara en realistisk bild av vad som är rimligt.
           </p>
+
         </header>
 
         <FlowScoreCard flow={flow} minutesLeft={minutesLeft} />
