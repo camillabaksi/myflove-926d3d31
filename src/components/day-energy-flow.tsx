@@ -13,9 +13,11 @@ import { ENERGY_KINDS, isSameDay } from "@/lib/energy-flow";
 export function DayEnergyFlow({
   className,
   showLink = true,
+  showHeader = true,
 }: {
   className?: string;
   showLink?: boolean;
+  showHeader?: boolean;
 }) {
   const { entries, balance, signedIn, loading } = useEnergyFlow();
 
@@ -42,15 +44,18 @@ export function DayEnergyFlow({
       className={cn("rounded-3xl border border-border/60 bg-card p-5 shadow-soft", className)}
       aria-label="Energins historik idag"
     >
-      <div className="mb-3 flex items-center gap-2">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-          Energins historik idag
-        </h2>
-        <HelpHint label="energins historik">
-          Mönster över vad du faktiskt gjort idag – inte din nuvarande nivå. Din energibild just nu
-          är Mitt energibatteri. Minus betyder att det tog energi, plus att det gav.
-        </HelpHint>
-      </div>
+      {showHeader && (
+        <div className="mb-3 flex items-center gap-2">
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+            Energins historik idag
+          </h2>
+          <HelpHint label="energins historik">
+            Mönster över vad du faktiskt gjort idag – inte din nuvarande nivå. Din energibild just nu
+            är Mitt energibatteri. Minus betyder att det tog energi, plus att det gav.
+          </HelpHint>
+        </div>
+      )}
+
 
       {todayCount === 0 ? (
         <p className="text-sm text-muted-foreground">
