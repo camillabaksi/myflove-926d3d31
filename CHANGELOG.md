@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-22 – Ny introvideo: "Första blicken" (nedladdnings-CTA)
+
+- Ny kort video (42 s, 1080x1920) som visar MyFlove för en helt ny användare: igenkänning, batteriet, QuickFlow, Min dag, Flow och avslutande uppmaning "Ladda ner MyFlove".
+- Ny Remotion-komposition `firstlook` och renderskript `remotion/scripts/render-firstlook.mjs`.
+
 ## 2026-08-22 – Hem: Rutiner & medicin i ett gemensamt block längst ner
 
 - Dagens rutiner och dagens medicindoser visas nu i ett gemensamt, minimerbart block "🔁💊 Rutiner & medicin" längst ner på Hem.
