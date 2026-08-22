@@ -3,6 +3,7 @@
 // get a useful "dump and sort" experience without backend infrastructure.
 
 import { detectRepeat, type RepeatMode } from "./recurrence";
+import { toISODate, todayISO } from "@/lib/day";
 
 export type DumpCategory = "task" | "shopping" | "reminder" | "idea" | "mood";
 
@@ -119,9 +120,7 @@ const POSITIVE_MOOD_WORDS = [
 
 const WEEKDAYS = ["söndag", "måndag", "tisdag", "onsdag", "torsdag", "fredag", "lördag"];
 
-function toIsoDate(d: Date): string {
-  return d.toISOString().split("T")[0] as string;
-}
+const toIsoDate = (d: Date): string => toISODate(d);
 
 function resolveDate(lower: string): string | undefined {
   const today = new Date();
@@ -276,7 +275,7 @@ export function parseDump(raw: string): ParsedThought[] {
     const repeat = detectRepeat(text);
     if (repeat !== "none") {
       // "Ta medicin varje dag kl 7" hör hemma i kalendern, som återkommande.
-      const start = date ?? new Date().toISOString().split("T")[0]!;
+      const start = date ?? todayISO();
       return { text, category: "reminder" as DumpCategory, date: start, time, repeat };
     }
     return { text, category, date, time, moodScore, repeat };

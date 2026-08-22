@@ -7,6 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useLocalStorage } from "@/lib/storage";
 import { sendPushNotification } from "@/lib/push-notifications";
 import { trackEvent } from "@/lib/analytics";
+import { todayISO } from "@/lib/day";
 
 type Mode = "work" | "break";
 
@@ -22,7 +23,7 @@ function formatTime(totalSeconds: number): string {
 }
 
 function todayStr(): string {
-  return new Date().toISOString().split("T")[0] as string;
+  return todayISO();
 }
 
 export default function Pomodoro() {

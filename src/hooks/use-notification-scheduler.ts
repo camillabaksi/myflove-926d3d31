@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useTasks, useReminders } from "./use-data";
 import { sendPushNotification, getNotificationPermission } from "../lib/push-notifications";
+import { todayISO } from "@/lib/day";
 
 /**
  * Kollar varje minut om det finns uppgifter/påminnelser med tid som
@@ -18,7 +19,7 @@ export function useNotificationScheduler() {
       if (getNotificationPermission() !== "granted") return;
 
       const now = new Date();
-      const todayStr = now.toISOString().split("T")[0] as string;
+      const todayStr = todayISO(now);
       const nowMinutes = now.getHours() * 60 + now.getMinutes();
 
       const parseHM = (hm: string): number | null => {

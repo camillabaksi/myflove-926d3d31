@@ -8,10 +8,11 @@ import BudgetPanel from "@/components/budget-panel";
 import { MyFloveHeader } from "@/components/myflove";
 import { MyFloveBalanceBars } from "@/components/myflove/motion";
 import CollapsibleSection from "@/components/collapsible-section";
+import { todayISO } from "@/lib/day";
 
 const CATEGORIES = ["Mat", "Boende", "Transport", "Nöje", "Övrigt"];
 
-const todayIso = () => new Date().toISOString().split("T")[0] as string;
+const todayIso = () => todayISO();
 
 export default function Finances() {
   const { transactions, addTransaction, deleteTransaction } = useFinances();

@@ -4,6 +4,7 @@ import { useTasks } from "@/hooks/use-data";
 import { useUserProfile } from "@/hooks/use-user-profile";
 import { useVisitStreak } from "@/hooks/use-visit-streak";
 import { getPersonalNote } from "@/lib/personal-messages";
+import { todayISO } from "@/lib/day";
 
 /** Liten varm rad från Flow, personlig utifrån dagen och hur det gått. */
 export default function PersonalNote() {
@@ -16,7 +17,7 @@ export default function PersonalNote() {
   useEffect(() => setMounted(true), []);
 
   const note = useMemo(() => {
-    const today = new Date().toISOString().split("T")[0] as string;
+    const today = todayISO();
     const todays = tasks.filter((t) => !t.dueDate || t.dueDate === today);
     const day = new Date().getDay();
     return getPersonalNote({

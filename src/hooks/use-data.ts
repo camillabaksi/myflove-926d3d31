@@ -2,6 +2,7 @@ import { useLocalStorage } from "../lib/storage";
 import { useCloudSyncedStorage } from "../lib/cloud-storage";
 import { trackEvent } from "../lib/analytics";
 import type { LifeArea } from "../lib/life-areas";
+import { todayISO } from "@/lib/day";
 
 export interface Focus {
   text: string;
@@ -91,7 +92,7 @@ export function useFocus() {
     0,
   );
 
-  const getTodayDateString = () => new Date().toISOString().split("T")[0];
+  const getTodayDateString = () => todayISO();
 
   const currentFocus = focus?.date === getTodayDateString() ? focus : null;
 
@@ -113,7 +114,7 @@ export function useFocus() {
 export function useTasks() {
   const [tasks, setTasks] = useCloudSyncedStorage<Task[]>("myflow-tasks", []);
 
-  const getTodayDateString = () => new Date().toISOString().split("T")[0] as string;
+  const getTodayDateString = () => todayISO();
 
   const addTask = (
     title: string,
@@ -721,7 +722,7 @@ export function useMedications() {
   const [medications, setMedications] = useLocalStorage<Medication[]>("myflow-medications", []);
   const [log, setLog] = useLocalStorage<MedicationLogEntry[]>("myflow-medication-log", []);
 
-  const getTodayDateString = () => new Date().toISOString().split("T")[0] as string;
+  const getTodayDateString = () => todayISO();
 
   const addMedication = (name: string, times: string[], dosage?: string) => {
     setMedications([

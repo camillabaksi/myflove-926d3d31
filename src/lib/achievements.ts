@@ -1,7 +1,8 @@
 import type { MoodEntry, Task } from "@/hooks/use-data";
+import { dayOf, todayISO } from "@/lib/day";
 
 function toDateString(timestamp: number): string {
-  return new Date(timestamp).toISOString().split("T")[0] as string;
+  return dayOf(timestamp) ?? todayISO();
 }
 
 function daysBetween(a: string, b: string): number {
@@ -14,7 +15,7 @@ function getCheckinStreak(moods: MoodEntry[]): number {
     .sort()
     .reverse();
   let streak = 0;
-  let cursor = new Date().toISOString().split("T")[0] as string;
+  let cursor = todayISO();
 
   for (const day of uniqueDays) {
     const diff = daysBetween(cursor, day);

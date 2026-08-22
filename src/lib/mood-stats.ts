@@ -1,4 +1,5 @@
 import type { MoodEntry } from "@/hooks/use-data";
+import { dayOf, todayISO, toISODate } from "@/lib/day";
 
 export interface DayStat {
   date: string; // YYYY-MM-DD
@@ -8,7 +9,7 @@ export interface DayStat {
 }
 
 function toDateString(timestamp: number): string {
-  return new Date(timestamp).toISOString().split("T")[0] as string;
+  return dayOf(timestamp) ?? todayISO();
 }
 
 const WEEKDAY_LABELS = ["Sön", "Mån", "Tis", "Ons", "Tor", "Fre", "Lör"];
@@ -26,7 +27,7 @@ export function getWeeklyMoodStats(moods: MoodEntry[]): {
   for (let i = 6; i >= 0; i--) {
     const d = new Date(now);
     d.setDate(now.getDate() - i);
-    const dateStr = d.toISOString().split("T")[0] as string;
+    const dateStr = toISODate(d);
     const dayMoods = moods.filter((m) => toDateString(m.date) === dateStr);
     const avg =
       dayMoods.length > 0 ? dayMoods.reduce((sum, m) => sum + m.score, 0) / dayMoods.length : null;

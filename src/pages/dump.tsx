@@ -54,6 +54,7 @@ import {
 import CollapsibleSection from "@/components/collapsible-section";
 import QuickflowRulesSettings from "@/components/quickflow-rules-settings";
 import { MyFloveListening } from "@/components/myflove/motion";
+import { todayISO } from "@/lib/day";
 
 interface SortableThought extends ParsedThought {
   id: string;
@@ -152,7 +153,7 @@ export default function Dump() {
     else if (thought.category === "reminder") {
       addReminder(
         thought.text,
-        thought.date ?? new Date().toISOString().split("T")[0]!,
+        thought.date ?? todayISO(),
         thought.time,
         thought.repeat ?? "none",
       );
