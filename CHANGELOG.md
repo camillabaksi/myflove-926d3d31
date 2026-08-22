@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-08-22 – Blueprint-nedladdning i appen
+
+- Blueprinten kan nu laddas ner direkt från adminsidan /pitch, med en knapp för DOCX och en för PDF per version (3.2, 3.0, 2.9, 2.8).
+
 ## 2026-08-22 – Living Blueprint 3.2
 
 - Blueprinten uppdaterad till version 3.2 (DOCX + PDF) och omstrukturerad i sex delar med innehållsförteckning och läsanvisning.
