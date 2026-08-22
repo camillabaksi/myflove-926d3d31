@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-22 – Hem: Energins historik ligger nu direkt under batteriet
+
+- Korrigerad renderingsordning på Hem: Hälsning → Hur är det just nu? → Mitt energibatteri → Energins historik → Nästa → Vad behöver du just nu? → Dagens saker → övriga block.
+- "Energins historik" renderas faktiskt direkt efter "Mitt energibatteri" i Hem-layouten, inte längst ner, genom uppdaterad blockordning och en ny engångsmigrering.
+- Befintlig komponent och befintlig energidata återanvänds; ingen ny energimodell eller route har skapats.
+- Mitt energibatteri och Energins historik är fortfarande två separata minimerbara sektioner.
+- Alla andra Hem-sektioner och minimeringsfunktioner är oförändrade.
+
 ## 2026-08-22 – Hem: Energins historik under batteriet + alla block minimerbara
 
 - "Energins historik" visas åter som ett eget block direkt under "Mitt energibatteri" på Hem, med samma befintliga energidata och en enkel indikator på om energin ökar, är stabil eller minskar.
