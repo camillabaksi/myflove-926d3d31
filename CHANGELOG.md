@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-22 – Hem: Energins historik under batteriet + alla block minimerbara
+
+- "Energins historik" visas åter som ett eget block direkt under "Mitt energibatteri" på Hem, med samma befintliga energidata och en enkel indikator på om energin ökar, är stabil eller minskar.
+- Historiken ligger inte längre inne i batteriet – de är två block som kan minimeras var för sig.
+- Alla relevanta Hem-sektioner (Hur är det just nu, Mitt energibatteri, Energins historik, Nästa, Dagens saker, Just nu, Vad behöver du just nu) har samma rubrik + diskret minimera/expandera-kontroll, och valet sparas som tidigare.
+- De fyra snabbalternativen ligger i EN gemensam sektion och är oförändrade i namn, ikoner, undertexter och funktion.
+- Det separata blocket "Jag gjorde något" visas fortfarande inte på Hem.
+
 ## 2026-08-22 – Utvecklingsläge: testsession i previewen
 
 - Ny sida `/dev-session` (endast preview/dev) som skapar/återställer testkontot och loggar in automatiskt, så att klickflöden på Hem kan QA:as utan lösenord.

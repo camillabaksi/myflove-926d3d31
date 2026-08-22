@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 
 /**
@@ -53,11 +53,12 @@ export interface HomeLayoutPrefs {
 // De fyra snabbalternativen ("vagar") ligger högt – de täcker redan
 // "Lägg till", "Jag gjorde något" och "Lägg till det du gjorde".
 const DEFAULT_PREFS: HomeLayoutPrefs = {
-  hidden: ["lagg-till", "energifloede", "omrade", "genvagar"],
+  hidden: ["lagg-till", "omrade", "genvagar"],
 
   order: [
     "checkin",
     "batteri",
+    "energifloede",
     "vagar",
     "nasta",
     "idag",
@@ -65,14 +66,39 @@ const DEFAULT_PREFS: HomeLayoutPrefs = {
     "lagg-till",
     "genvagar",
     "omrade",
-    "energifloede",
   ],
 };
 
 const STORAGE_KEY = "myflove-home-layout";
+/** Engångsflytt: Energins historik visas nu som eget block under batteriet. */
+const MIGRATION_KEY = "myflove-home-layout-migrated-energifloede";
 
 export function useHomeLayout() {
   const [prefs, setPrefs] = useCloudSyncedStorage<HomeLayoutPrefs>(STORAGE_KEY, DEFAULT_PREFS);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (window.localStorage.getItem(MIGRATION_KEY)) return;
+    if (!prefs?.hidden?.includes("energifloede")) return;
+    window.localStorage.setItem(MIGRATION_KEY, "1");
+    setPrefs((p) => {
+      const currentOrder = p?.order ?? DEFAULT_PREFS.order;
+      const withoutFlow = currentOrder.filter((id) => id !== "energifloede");
+      const at = withoutFlow.indexOf("batteri");
+      const nextOrder =
+        at >= 0
+          ? [
+              ...withoutFlow.slice(0, at + 1),
+              "energifloede" as HomeBlockId,
+              ...withoutFlow.slice(at + 1),
+            ]
+          : currentOrder;
+      return {
+        order: nextOrder,
+        hidden: (p?.hidden ?? []).filter((id) => id !== "energifloede"),
+      };
+    });
+  }, [prefs?.hidden, setPrefs]);
 
   const order = useMemo<HomeBlockId[]>(() => {
     const valid = (prefs?.order ?? []).filter((id) => HOME_BLOCKS.some((b) => b.id === id));

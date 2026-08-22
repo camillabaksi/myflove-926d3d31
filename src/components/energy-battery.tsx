@@ -1,5 +1,4 @@
 import { useState } from "react";
-import DayEnergyFlow from "@/components/day-energy-flow";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
 import { minutesToTime } from "@/lib/energy-battery";
 
@@ -86,7 +85,7 @@ export default function EnergyBattery({ defaultOpen = false }: { defaultOpen?: b
         </span>
 
         <span className="shrink-0 text-xs text-muted-foreground">
-          {open ? "Dölj energihistorik ˄" : "Visa energihistorik ˅"}
+          {open ? "Dölj detaljer ˄" : "Visa detaljer ˅"}
         </span>
       </button>
 
@@ -128,9 +127,6 @@ export default function EnergyBattery({ defaultOpen = false }: { defaultOpen?: b
               ))}
             </ul>
           )}
-
-          {/* Samma energidata som Min energi / Energins historik */}
-          <DayEnergyFlow className="border-0 p-0 shadow-none" />
         </div>
       )}
     </section>

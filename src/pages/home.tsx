@@ -196,6 +196,14 @@ export default function Home() {
   const { activeArea } = useActiveArea();
   const nextEvent = useNextEvent();
   const suggestion = useFlowSuggestion();
+  const { reading } = useEnergyBattery();
+  const trendSentence =
+    reading.trend === "stiger"
+      ? "Din energi ökar. ↑"
+      : reading.trend === "sjunker"
+        ? "Din energi minskar. ↓"
+        : "Din energi är stabil. →";
+
   const { visible } = useHomeLayout();
   const shows = (id: HomeBlockId) => visible.includes(id);
   // Ordningen från "Anpassa hemskärmen" styrs via flex order.
@@ -287,9 +295,38 @@ export default function Home() {
         )}
 
         {shows("batteri") && (
-          <div style={pos("batteri")}>
-            <EnergyBattery />
-          </div>
+          <section style={pos("batteri")} aria-label="Mitt energibatteri">
+            <CollapsibleSection
+              id="hem::batteri"
+              title="Mitt energibatteri"
+              headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
+              className="space-y-3"
+            >
+              <EnergyBattery />
+            </CollapsibleSection>
+          </section>
+        )}
+
+        {/* Energins historik – samma data som Min energi, direkt under batteriet */}
+        {shows("energifloede") && (
+          <section
+            style={pos("energifloede")}
+            aria-label="Energins historik"
+            className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+          >
+            <CollapsibleSection
+              id="hem::energins-historik"
+              title="Energins historik"
+              headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
+              className="space-y-3"
+            >
+              <p className="text-sm text-ink">{trendSentence}</p>
+              <DayEnergyFlow
+                className="border-0 bg-transparent p-0 shadow-none"
+                showHeader={false}
+              />
+            </CollapsibleSection>
+          </section>
         )}
 
         {/* Nästa – nästa relevanta aktivitet */}
@@ -402,13 +439,6 @@ export default function Home() {
           </div>
         )}
 
-        {/* Dagens energiflöde – faktisk belastning */}
-        {shows("energifloede") && (
-          <div style={pos("energifloede")}>
-            <DayEnergyFlow />
-          </div>
-        )}
-
         {/* Dina genvägar – fyra egna favoriter */}
         {shows("genvagar") && (
           <div style={pos("genvagar")}>
@@ -423,51 +453,57 @@ export default function Home() {
             aria-label="Vad behöver du just nu"
             className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft"
           >
-            <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-              Vad behöver du just nu?
-            </p>
-            <ul className="space-y-2">
-              {SITUATIONS.map((s) => (
-                <li key={s.href}>
-                  {s.didThis ? (
-                    <DidThisCta
-                      trigger={
-                        <span className="group flex w-full items-center gap-3 rounded-2xl bg-secondary/30 px-3 py-3 text-left transition-colors hover:bg-secondary/60">
-                          <span aria-hidden className="text-xl">
-                            {s.emoji}
+            <CollapsibleSection
+              id="hem::vagar"
+              title="Vad behöver du just nu?"
+              headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
+              className="space-y-3"
+            >
+              <ul className="space-y-2">
+                {SITUATIONS.map((s) => (
+                  <li key={s.href}>
+                    {s.didThis ? (
+                      <DidThisCta
+                        trigger={
+                          <span className="group flex w-full items-center gap-3 rounded-2xl bg-secondary/30 px-3 py-3 text-left transition-colors hover:bg-secondary/60">
+                            <span aria-hidden className="text-xl">
+                              {s.emoji}
+                            </span>
+                            <span className="min-w-0 flex-1">
+                              <span className="block text-sm text-ink">{s.thought}</span>
+                              <span className="block text-xs text-muted-foreground">
+                                {s.action}
+                              </span>
+                            </span>
+                            <ArrowRight
+                              size={16}
+                              className="shrink-0 text-muted-foreground transition-colors group-hover:text-foreground"
+                            />
                           </span>
-                          <span className="min-w-0 flex-1">
-                            <span className="block text-sm text-ink">{s.thought}</span>
-                            <span className="block text-xs text-muted-foreground">{s.action}</span>
-                          </span>
-                          <ArrowRight
-                            size={16}
-                            className="shrink-0 text-muted-foreground transition-colors group-hover:text-foreground"
-                          />
-                        </span>
-                      }
-                    />
-                  ) : (
-                    <Link
-                      href={s.href}
-                      className="group flex items-center gap-3 rounded-2xl bg-secondary/30 px-3 py-3 transition-colors hover:bg-secondary/60"
-                    >
-                      <span aria-hidden className="text-xl">
-                        {s.emoji}
-                      </span>
-                      <span className="min-w-0 flex-1">
-                        <span className="block text-sm text-ink">{s.thought}</span>
-                        <span className="block text-xs text-muted-foreground">{s.action}</span>
-                      </span>
-                      <ArrowRight
-                        size={16}
-                        className="shrink-0 text-muted-foreground transition-colors group-hover:text-foreground"
+                        }
                       />
-                    </Link>
-                  )}
-                </li>
-              ))}
-            </ul>
+                    ) : (
+                      <Link
+                        href={s.href}
+                        className="group flex items-center gap-3 rounded-2xl bg-secondary/30 px-3 py-3 transition-colors hover:bg-secondary/60"
+                      >
+                        <span aria-hidden className="text-xl">
+                          {s.emoji}
+                        </span>
+                        <span className="min-w-0 flex-1">
+                          <span className="block text-sm text-ink">{s.thought}</span>
+                          <span className="block text-xs text-muted-foreground">{s.action}</span>
+                        </span>
+                        <ArrowRight
+                          size={16}
+                          className="shrink-0 text-muted-foreground transition-colors group-hover:text-foreground"
+                        />
+                      </Link>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </CollapsibleSection>
           </nav>
         )}
 
