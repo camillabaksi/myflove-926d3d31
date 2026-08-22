@@ -31,7 +31,15 @@ import { CalendarDays, Sparkles, ArrowRight, SlidersHorizontal } from "lucide-re
  * Fyra vanliga situationer, formulerade som användarens egen tanke.
  * Ersätter produktnamn som "QuickFlow" och "Planera" på startsidan.
  */
-const SITUATIONS = [
+interface Situation {
+  href: string;
+  emoji: string;
+  thought: string;
+  action: string;
+  didThis?: boolean;
+}
+
+const SITUATIONS: Situation[] = [
   {
     href: "/tasks",
     emoji: "➕",
@@ -57,7 +65,7 @@ const SITUATIONS = [
     thought: "Jag har mycket i huvudet",
     action: "Skriv av dig – jag sorterar sen",
   },
-] as const;
+];
 
 /**
  * Nästa relevanta aktivitet idag – påminnelser, uppgifter, rutiner,
