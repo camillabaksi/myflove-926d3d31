@@ -87,11 +87,8 @@ export default function EnergyBattery({ defaultOpen = false }: { defaultOpen?: b
         )}
       </div>
 
-
       {open && (
         <div className="mt-4 space-y-3 border-t border-border/50 pt-3">
-          <BatteryCurve reading={reading} />
-
           <div className="flex flex-wrap gap-2 text-xs">
             {reading.peak && (
               <span className="rounded-pill bg-primary/10 px-2.5 py-1 text-foreground">
@@ -103,12 +100,8 @@ export default function EnergyBattery({ defaultOpen = false }: { defaultOpen?: b
                 🌙 Lägst {reading.dip.label}
               </span>
             )}
-            {!reading.personal && (
-              <span className="rounded-pill bg-secondary/50 px-2.5 py-1 text-muted-foreground">
-                Preliminär kurva – blir din egen när du loggat energi några dagar
-              </span>
-            )}
           </div>
+
 
           {suggestions.length > 0 && (
             <ul className="space-y-1.5">
