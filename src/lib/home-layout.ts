@@ -8,6 +8,7 @@ import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 export type HomeBlockId =
   | "checkin"
   | "batteri"
+  | "gjort-knapp"
   | "nasta"
   | "idag"
   | "forslag"
@@ -17,6 +18,7 @@ export type HomeBlockId =
   | "omrade"
   | "gjort"
   | "energifloede";
+
 
 export interface HomeBlockMeta {
   id: HomeBlockId;
