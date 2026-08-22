@@ -263,13 +263,16 @@ export default function Home() {
           </div>
         )}
 
-        {/* Ständig snabbknapp: logga det du faktiskt gjorde */}
-        <div style={pos("batteri")} className="space-y-1">
-          <DidThisCta />
-          <p className="text-xs text-muted-foreground">
-            Registrera något du redan gjort – det syns bland dagens gjorda saker.
-          </p>
-        </div>
+        {/* Snabbknapp: logga det du faktiskt gjorde */}
+        {shows("gjort-knapp") && (
+          <div style={pos("gjort-knapp")} className="space-y-1">
+            <DidThisCta />
+            <p className="text-xs text-muted-foreground">
+              Registrera något du redan gjort – det syns bland dagens gjorda saker.
+            </p>
+          </div>
+        )}
+
 
         {/* Nästa – nästa relevanta aktivitet */}
         {shows("nasta") && (
