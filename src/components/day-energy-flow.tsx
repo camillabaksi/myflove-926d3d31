@@ -50,12 +50,11 @@ export function DayEnergyFlow({
             Energins historik idag
           </h2>
           <HelpHint label="energins historik">
-            Mönster över vad du faktiskt gjort idag – inte din nuvarande nivå. Din energibild just nu
-            är Mitt energibatteri. Minus betyder att det tog energi, plus att det gav.
+            Mönster över vad du faktiskt gjort idag – inte din nuvarande nivå. Din energibild just
+            nu är Mitt energibatteri. Minus betyder att det tog energi, plus att det gav.
           </HelpHint>
         </div>
       )}
-
 
       {todayCount === 0 ? (
         <p className="text-sm text-muted-foreground">
