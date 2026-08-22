@@ -69,7 +69,6 @@ const DEFAULT_PREFS: HomeLayoutPrefs = {
   ],
 };
 
-
 const STORAGE_KEY = "myflove-home-layout";
 
 export function useHomeLayout() {

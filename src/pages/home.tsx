@@ -313,7 +313,6 @@ export default function Home() {
           </section>
         )}
 
-
         {/* Nästa – nästa relevanta aktivitet */}
         {shows("nasta") && (
           <section
@@ -491,7 +490,6 @@ export default function Home() {
             </CollapsibleSection>
           </nav>
         )}
-
 
         {/* Områdesväljare – litet, längst ner */}
         {shows("omrade") && (

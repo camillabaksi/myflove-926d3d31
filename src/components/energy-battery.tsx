@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
 import { minutesToTime } from "@/lib/energy-battery";
 
-
 /**
  * Mitt batteri™ – lugn, levande energinivå.
  * Kompakt vid första anblicken; detaljer först när du vill ha dem.
@@ -88,7 +87,6 @@ export default function EnergyBattery({ defaultOpen = false }: { defaultOpen?: b
         <span className="shrink-0 text-xs text-muted-foreground">
           {open ? "Dölj detaljer ˄" : "Visa detaljer ˅"}
         </span>
-
       </button>
 
       {/* Liten kurva alltid synlig – känslan av dagen, inte en teknisk graf */}
@@ -131,7 +129,6 @@ export default function EnergyBattery({ defaultOpen = false }: { defaultOpen?: b
           )}
         </div>
       )}
-
     </section>
   );
 }
