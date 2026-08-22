@@ -44,7 +44,6 @@ export const HOME_BLOCKS: HomeBlockMeta[] = [
     label: "Energins historik",
     hint: "Mönster över dagen – batteriet är fortfarande din energibild",
   },
-
 ];
 
 export interface HomeLayoutPrefs {

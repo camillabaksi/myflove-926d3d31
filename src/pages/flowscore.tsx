@@ -20,7 +20,6 @@ export default function FlowScorePage() {
             Dagens balans visar hur väl dagens krav matchar din energi och kapacitet just nu. Det är
             ingen prestation och inget betyg – bara en realistisk bild av vad som är rimligt.
           </p>
-
         </header>
 
         <FlowScoreCard flow={flow} minutesLeft={minutesLeft} />

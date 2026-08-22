@@ -269,7 +269,6 @@ export default function Home() {
           <p className="text-xs text-muted-foreground">
             Registrera något du redan gjort – det syns bland dagens gjorda saker.
           </p>
-
         </div>
 
         {/* Nästa – nästa relevanta aktivitet */}
@@ -379,7 +378,6 @@ export default function Home() {
             <p className="mt-1 text-xs text-muted-foreground">
               Planera något – med tid om du vill.
             </p>
-
           </div>
         )}
 

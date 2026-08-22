@@ -230,7 +230,6 @@ export function useFlowItems(dateISO?: string): {
       });
     }
 
-
     return sortFlowItems(out);
   }, [
     tasks,

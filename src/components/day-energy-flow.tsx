@@ -50,7 +50,6 @@ export function DayEnergyFlow({
           Mönster över vad du faktiskt gjort idag – inte din nuvarande nivå. Din energibild just nu
           är Mitt energibatteri. Minus betyder att det tog energi, plus att det gav.
         </HelpHint>
-
       </div>
 
       {todayCount === 0 ? (
@@ -97,8 +96,8 @@ export function DayEnergyFlow({
 
           {balance.highFrictionCount > 0 && (
             <p className="text-xs text-muted-foreground">
-              {balance.highFrictionCount} av dagens saker var tunga att komma igång med – svårighetsgrad
-              räknas separat från energi.
+              {balance.highFrictionCount} av dagens saker var tunga att komma igång med –
+              svårighetsgrad räknas separat från energi.
             </p>
           )}
         </div>
