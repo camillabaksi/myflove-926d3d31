@@ -94,7 +94,7 @@ function useNextEvent(): NextEvent | null {
   const { medications, isTaken } = useMedications();
   const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
   const { lectures } = useStudySchedule();
-  const todayIso = new Date().toISOString().split("T")[0] as string;
+  const todayIso = todayISO();
   const nowMin = new Date().getHours() * 60 + new Date().getMinutes();
 
   return useMemo(() => {

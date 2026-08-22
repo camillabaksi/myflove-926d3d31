@@ -22,7 +22,7 @@ function formatTime(totalSeconds: number): string {
 }
 
 function todayStr(): string {
-  return new Date().toISOString().split("T")[0] as string;
+  return todayISO();
 }
 
 export default function Pomodoro() {

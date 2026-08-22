@@ -152,7 +152,7 @@ export default function Dump() {
     else if (thought.category === "reminder") {
       addReminder(
         thought.text,
-        thought.date ?? new Date().toISOString().split("T")[0]!,
+        thought.date ?? todayISO(),
         thought.time,
         thought.repeat ?? "none",
       );

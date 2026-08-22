@@ -18,7 +18,7 @@ export function useNotificationScheduler() {
       if (getNotificationPermission() !== "granted") return;
 
       const now = new Date();
-      const todayStr = now.toISOString().split("T")[0] as string;
+      const todayStr = todayISO(now);
       const nowMinutes = now.getHours() * 60 + now.getMinutes();
 
       const parseHM = (hm: string): number | null => {

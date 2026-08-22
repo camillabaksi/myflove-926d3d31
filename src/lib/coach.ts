@@ -11,7 +11,7 @@ export interface CoachMessage {
 }
 
 function toDateString(timestamp: number): string {
-  return new Date(timestamp).toISOString().split("T")[0] as string;
+  return dayOf(timestamp) ?? todayISO();
 }
 
 export interface CoachInput {
@@ -24,7 +24,7 @@ export interface CoachInput {
 
 export function generateCoachMessage(input: CoachInput): CoachMessage {
   const { moods, activeTasks, currentFocus, activeReminders, pomodoroTodaySessions } = input;
-  const todayStr = new Date().toISOString().split("T")[0] as string;
+  const todayStr = todayISO();
   const todayMoods = moods.filter((m) => toDateString(m.date) === todayStr);
   const lastMood = todayMoods[0];
 

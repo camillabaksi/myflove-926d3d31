@@ -16,7 +16,7 @@ export default function PersonalNote() {
   useEffect(() => setMounted(true), []);
 
   const note = useMemo(() => {
-    const today = new Date().toISOString().split("T")[0] as string;
+    const today = todayISO();
     const todays = tasks.filter((t) => !t.dueDate || t.dueDate === today);
     const day = new Date().getDay();
     return getPersonalNote({

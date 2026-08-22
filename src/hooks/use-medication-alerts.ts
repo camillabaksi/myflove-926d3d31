@@ -24,7 +24,7 @@ export function useMedicationAlerts() {
     const check = () => {
       const now = new Date();
       const nowStr = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
-      const todayStr = now.toISOString().split("T")[0] as string;
+      const todayStr = todayISO(now);
 
       const due: MedicationAlert[] = [];
       medications.forEach((med) => {

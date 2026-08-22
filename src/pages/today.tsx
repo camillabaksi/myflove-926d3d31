@@ -22,13 +22,12 @@ import { withinCapacity, type FlowItem } from "@/lib/flow-items";
 import { useTasks, useReminders } from "@/hooks/use-data";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { useDayPlan } from "@/lib/day-plan";
+import { todayISO as todayStr } from "@/lib/day";
 import type { Routine } from "@/pages/routines";
 import { CalendarDays, ListOrdered, Sparkles, Heart, Waves, ListChecks } from "lucide-react";
 import { MyFloveTransition } from "@/components/myflove/motion";
 
-function todayStr(): string {
-  return new Date().toISOString().split("T")[0] as string;
-}
+
 
 type DayView = "flow" | "lista";
 

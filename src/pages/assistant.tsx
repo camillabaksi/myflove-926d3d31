@@ -38,9 +38,7 @@ import {
   type FlowMessage,
 } from "@/hooks/use-flow-chats";
 
-function todayStr(): string {
-  return new Date().toISOString().split("T")[0] as string;
-}
+const todayStr = (): string => todayISO();
 
 const GREETING =
   "Hej, jag är Flow. Jag finns här för att avlasta – inte för att ge dig mer att göra. Vad snurrar i huvudet just nu?";

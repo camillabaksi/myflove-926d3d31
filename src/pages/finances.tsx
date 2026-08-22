@@ -11,7 +11,7 @@ import CollapsibleSection from "@/components/collapsible-section";
 
 const CATEGORIES = ["Mat", "Boende", "Transport", "Nöje", "Övrigt"];
 
-const todayIso = () => new Date().toISOString().split("T")[0] as string;
+const todayIso = () => todayISO();
 
 export default function Finances() {
   const { transactions, addTransaction, deleteTransaction } = useFinances();
