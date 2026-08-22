@@ -41,8 +41,8 @@ export const HOME_BLOCKS: HomeBlockMeta[] = [
   { id: "gjort", label: "Lägg till det du gjorde", hint: "Snabb registrering av vardagssaker" },
   {
     id: "energifloede",
-    label: "Dagens energi",
-    hint: "Planerat · Vardag · Spontant · Återhämtning",
+    label: "Energins historik",
+    hint: "Mönster över dagen – batteriet är fortfarande din energibild",
   },
 ];
 

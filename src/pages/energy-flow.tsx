@@ -135,9 +135,9 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
     <div className="space-y-8">
       {showHeader && (
         <MyFloveHeader
-          title="Min energi"
-          emoji="🔋"
-          description="Vad ger och vad tar energi? Det här är inte att göra-listan – det är sådant som påverkar hur mycket du orkar."
+          title="Min energi – historik och mönster"
+          emoji="📈"
+          description="Här ser du hur energin brukar förändras: vad som ger och vad som tar. Din nivå just nu visas i Mitt energibatteri på Hem."
         />
       )}
 
@@ -168,7 +168,7 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
             </div>
           </div>
           <p className="text-sm text-muted-foreground">
-            Din FlowScore är {flow.score} just nu ({flow.label}).{" "}
+            Dagens balans är {flow.score} just nu ({flow.label}).{" "}
             <Link href="/flowscore" className="underline">
               Se hur den räknas
             </Link>
@@ -245,8 +245,8 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
           <div className="space-y-2">
             <div className="text-sm font-medium text-ink">Hur svårt var det att komma igång?</div>
             <p className="text-xs text-muted-foreground">
-              Svårighetsgrad är något annat än energi – tvätt kan kosta lite energi men vara tungt att
-              börja med.
+              Svårighetsgrad är något annat än energi – tvätt kan kosta lite energi men vara tungt
+              att börja med.
             </p>
             <div className="flex flex-wrap gap-2">
               {FRICTION_LEVELS.map((f) => (
@@ -461,8 +461,8 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
                   Tungt att komma igång med (30 dagar)
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Hög svårighetsgrad behöver inte betyda hög energikostnad – det betyder att starten är
-                  svår.
+                  Hög svårighetsgrad behöver inte betyda hög energikostnad – det betyder att starten
+                  är svår.
                 </p>
                 {frictionRows.map((t) => (
                   <div key={t.key} className="flex items-center justify-between text-sm">

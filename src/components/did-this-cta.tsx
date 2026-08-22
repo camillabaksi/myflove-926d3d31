@@ -126,7 +126,8 @@ export function DidThisCta({ className }: { className?: string }) {
         <span className="min-w-0">
           <span className="block font-display font-semibold text-ink">Jag gjorde något</span>
           <span className="block text-sm text-muted-foreground">
-            Vad gjorde du? Tar 5 sekunder.
+            Registrera något du redan gjort
+
           </span>
         </span>
       </button>

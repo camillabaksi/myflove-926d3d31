@@ -208,9 +208,15 @@ export function useFlowItems(dateISO?: string): {
 
     // "Jag gjorde något" – spontana saker användaren loggat. De är redan
     // genomförda och hör till samma dag, så de syns bland dagens gjorda saker.
+    // Samma post kan finnas både lokalt och i molnet under en sync – därför
+    // visas varje unik post (titel + tidpunkt) bara en gång.
+    const seenGjort = new Set<string>();
     for (const e of energyEntries) {
       const iso = (e.occurredAt ?? "").slice(0, 10);
       if (iso !== today) continue;
+      const key = `${e.title.trim().toLowerCase()}|${(e.occurredAt ?? "").slice(0, 16)}`;
+      if (seenGjort.has(key)) continue;
+      seenGjort.add(key);
       out.push({
         id: `gjort-${e.id}`,
         title: e.title,

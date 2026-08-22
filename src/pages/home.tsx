@@ -267,7 +267,7 @@ export default function Home() {
         <div style={pos("batteri")} className="space-y-1">
           <DidThisCta />
           <p className="text-xs text-muted-foreground">
-            Berätta vad du redan gjort – det syns bland dagens gjorda saker.
+            Registrera något du redan gjort – det syns bland dagens gjorda saker.
           </p>
         </div>
 
@@ -376,7 +376,7 @@ export default function Home() {
               className="bg-primary text-primary-foreground hover:bg-primary/90"
             />
             <p className="mt-1 text-xs text-muted-foreground">
-              Lägg till något du ska göra – med tid om du vill.
+              Planera något – med tid om du vill.
             </p>
           </div>
         )}
@@ -422,7 +422,11 @@ export default function Home() {
             >
               <Zap size={22} className="text-primary" />
               <span className="text-xs font-medium text-ink">QuickFlow</span>
+              <span className="text-[11px] leading-tight text-muted-foreground">
+                Fånga en tanke snabbt
+              </span>
             </Link>
+
             <Link
               href="/flow"
               className="flex flex-col items-center gap-2 rounded-2xl border border-border/60 bg-card p-4 text-center shadow-soft transition-colors hover:border-primary/40 hover:bg-primary/5"

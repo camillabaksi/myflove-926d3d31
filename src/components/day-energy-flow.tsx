@@ -40,15 +40,15 @@ export function DayEnergyFlow({
   return (
     <section
       className={cn("rounded-3xl border border-border/60 bg-card p-5 shadow-soft", className)}
-      aria-label="Dagens energiflöde"
+      aria-label="Energins historik idag"
     >
       <div className="mb-3 flex items-center gap-2">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-          Dagens energiflöde
+          Energins historik idag
         </h2>
-        <HelpHint label="dagens energiflöde">
-          Summan av det du faktiskt gjort idag – inte bara det som stod i kalendern. Minus betyder
-          att det tog energi, plus att det gav.
+        <HelpHint label="energins historik">
+          Mönster över vad du faktiskt gjort idag – inte din nuvarande nivå. Din energibild just nu
+          är Mitt energibatteri. Minus betyder att det tog energi, plus att det gav.
         </HelpHint>
       </div>
 
@@ -96,8 +96,8 @@ export function DayEnergyFlow({
 
           {balance.highFrictionCount > 0 && (
             <p className="text-xs text-muted-foreground">
-              {balance.highFrictionCount} av dagens saker var tunga att komma igång med – svårighetsgrad
-              räknas separat från energi.
+              {balance.highFrictionCount} av dagens saker var tunga att komma igång med –
+              svårighetsgrad räknas separat från energi.
             </p>
           )}
         </div>
