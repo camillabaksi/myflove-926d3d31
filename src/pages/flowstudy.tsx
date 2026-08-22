@@ -166,7 +166,7 @@ export default function StudyBuddyPage() {
             <Brain size={20} />
           </div>
           <div>
-            <h1 className="text-3xl font-bold leading-tight">StudyBuddy</h1>
+            <h1 className="text-3xl font-bold leading-tight">Studiehjälp</h1>
             <p className="text-sm text-muted-foreground">
               Ladda upp materialet – Flow gör flashcards och quiz, och kommer ihåg vad du behöver
               repetera.

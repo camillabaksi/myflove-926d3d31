@@ -40,7 +40,7 @@ export function kindFromId(id: string): { kind: EditableKind; realId: string } {
 }
 
 const EXTERNAL_HOME: Record<string, { label: string; href: string }> = {
-  "lec-": { label: "schemat i StudyFlow", href: "/studyflow" },
+  "lec-": { label: "schemat i Studier", href: "/studyflow" },
   "child-": { label: "barnens schema", href: "/barn" },
   "c-": { label: "barnens schema", href: "/barn" },
   "f-": { label: "familjens kalender", href: "/familj" },

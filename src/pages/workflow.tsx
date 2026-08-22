@@ -134,7 +134,7 @@ export default function WorkflowPage() {
         toast.success(
           d.scoreDelta === 0
             ? "Omräknat – planen står sig"
-            : `Omräknat: FlowScore ${d.scoreDelta > 0 ? "+" : ""}${d.scoreDelta}`,
+            : `Omräknat: dagens balans ${d.scoreDelta > 0 ? "+" : ""}${d.scoreDelta}`,
         );
       }
     },
@@ -206,7 +206,7 @@ export default function WorkflowPage() {
           <div className="flex items-start justify-between gap-3">
             <div>
               <h1 className={sectionTitle}>
-                <Zap className="h-5 w-5 text-gold" /> WorkFlow – MyFlove på jobbet
+                <Zap className="h-5 w-5 text-gold" /> Jobb – din planering
               </h1>
               <p className="mt-1 text-sm text-muted-foreground">
                 Du behöver inte välja bland allt. Jag säger vad som är rimligt just nu.
@@ -264,7 +264,7 @@ export default function WorkflowPage() {
           help="Hur mycket som är realistiskt idag utifrån din ork och tiden som är kvar."
         >
           <p className="mt-1 text-sm text-muted-foreground">
-            Anpassat efter FlowScore {flow.score} och energi {energy ? `${energy}/5` : "okänd"} – ca{" "}
+            Anpassat efter dagens balans {flow.score} och energi {energy ? `${energy}/5` : "okänd"} – ca{" "}
             {flow.capacityMinutes} min fokustid.
           </p>
           {capacityPlan.plan.length ? (
@@ -436,7 +436,7 @@ export default function WorkflowPage() {
                             ))}
                           </div>
                           <label className="block text-xs text-muted-foreground">
-                            Friktion: {meta.friction}/10
+                            Svårighetsgrad: {meta.friction}/10
                             <input
                               type="range"
                               min={1}

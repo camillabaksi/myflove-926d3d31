@@ -125,7 +125,7 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
     return (
       <MyFloveEmptyState
         emoji="🔋"
-        title="Logga in för att använda Energiflöde"
+        title="Logga in för att använda Min energi"
         description="Dina energiposter sparas till ditt konto så att Flow kan förstå din kapacitet."
       />
     );
@@ -135,7 +135,7 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
     <div className="space-y-8">
       {showHeader && (
         <MyFloveHeader
-          title="Energiflöde"
+          title="Min energi"
           emoji="🔋"
           description="Vad ger och vad tar energi? Det här är inte att göra-listan – det är sådant som påverkar hur mycket du orkar."
         />
@@ -147,7 +147,7 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
 
       <CollapsibleSection
         title="Dagens balans"
-        help="Summan av det du registrerat idag. Den vägs in i din FlowScore, så planen blir rimlig i stället för för stor."
+        help="Summan av det du registrerat idag. Den vägs in i dagens balans, så planen blir rimlig i stället för för stor."
       >
         <MyFloveCard tone="lavender" className="space-y-3">
           <div className="flex items-center justify-between gap-4">

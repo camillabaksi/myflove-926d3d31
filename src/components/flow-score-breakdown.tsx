@@ -85,14 +85,14 @@ export function FlowScoreBreakdown({
 
       <div className="rounded-2xl border border-primary/20 bg-primary/5 p-4 text-sm text-ink">
         <p className="flex items-center gap-2 font-medium">
-          <Sparkles className="h-4 w-4 text-primary" /> Så används scoren i WorkFlow
+          <Sparkles className="h-4 w-4 text-primary" /> Så används balansen i Jobb och Studier
         </p>
         <ul className="mt-2 space-y-1 text-xs text-muted-foreground">
           <li>
             • Fokustid: {flow.capacityMinutes} min av {minutesLeft} min kvar av dagen.
           </li>
           <li>
-            • Friktionsgräns {flow.maxFriction}/10 – tyngre uppgifter läggs under "för tungt nu".
+            • Gräns för svårighetsgrad {flow.maxFriction}/10 – tyngre uppgifter läggs under "för tungt nu".
           </li>
           <li>
             • Planen fylls med max {flow.suggestedTasks} sak{flow.suggestedTasks === 1 ? "" : "er"},

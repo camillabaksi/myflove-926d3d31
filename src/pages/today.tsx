@@ -129,7 +129,7 @@ export default function TodayPage() {
       <div className="space-y-5">
         <header>
           <h1 className="flex items-center gap-2 font-display text-3xl text-ink">
-            <Heart className="h-7 w-7 text-primary" /> Idag
+            <Heart className="h-7 w-7 text-primary" /> Min dag
           </h1>
           <p className="mt-1 text-muted-foreground">
             Allt som hör till idag – på ett ställe. Välj hur du vill se det.

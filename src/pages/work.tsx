@@ -219,7 +219,7 @@ export default function WorkPage() {
     <Layout>
       <div className="space-y-8">
         <MyFloveHeader
-          title="WorkFlow"
+          title="Jobbplanering"
           emojiKey="work"
           description="Din arbetsdag – projekt, uppgifter och dokument på ett ställe."
         />

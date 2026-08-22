@@ -546,7 +546,7 @@ export default function QuickflowTriage() {
                       </Action>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      Hur mycket påverkar det din FlowScore?
+                      Hur mycket påverkar det dagens balans?
                     </p>
                     <div className="flex flex-wrap gap-2">
                       {[1, 2, 3, 4, 5].map((s) => (
