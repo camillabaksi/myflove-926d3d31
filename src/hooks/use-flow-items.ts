@@ -216,7 +216,7 @@ export function useFlowItems(dateISO?: string): {
         title: e.title,
         source: "gjort",
         area: "vardag",
-        emoji: e.direction === "ger" ? "🌿" : "💪",
+        emoji: e.direction === "gives" ? "🌿" : "💪",
         priority: "idag",
         done: true,
         completable: false,
