@@ -23,7 +23,13 @@ const DIRECTIONS: { id: EnergyDirection; emoji: string; label: string }[] = [
  * "➕ Jag gjorde något" – ständig snabbknapp på Hem.
  * Flöde: välj/skriv → tryck energi (sparas direkt) → friktion är frivilligt.
  */
-export function DidThisCta({ className }: { className?: string }) {
+export function DidThisCta({
+  className,
+  trigger,
+}: {
+  className?: string;
+  trigger?: ReactElement<{ onClick?: () => void }>;
+}) {
   const { presets, addFactor, updateFactor, removeFactor, signedIn } = useEnergyFlow();
   const { toast } = useToast();
 
