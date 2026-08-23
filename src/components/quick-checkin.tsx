@@ -18,6 +18,8 @@ interface ScaleSliderProps {
   startEmoji: string;
   endEmoji: string;
   value: number | null;
+  draft: number;
+  onDraftChange: (v: number) => void;
   onCommit: (v: number) => void;
   accent: string;
 }
@@ -32,15 +34,11 @@ function ScaleSlider({
   startEmoji,
   endEmoji,
   value,
+  draft,
+  onDraftChange,
   onCommit,
   accent,
 }: ScaleSliderProps) {
-  const [draft, setDraft] = useState<number>(value ?? 5);
-
-  useEffect(() => {
-    if (value != null) setDraft(value);
-  }, [value]);
-
   const pct = ((draft - 1) / 9) * 100;
 
   return (
@@ -68,7 +66,7 @@ function ScaleSlider({
           max={10}
           step={1}
           value={draft}
-          onChange={(e) => setDraft(Number(e.target.value))}
+          onChange={(e) => onDraftChange(Number(e.target.value))}
           onMouseUp={() => onCommit(draft)}
           onTouchEnd={() => onCommit(draft)}
           onKeyUp={() => onCommit(draft)}
@@ -86,6 +84,7 @@ function ScaleSlider({
     </div>
   );
 }
+
 
 /**
  * "Hur är det just nu?" – två separata 1–10-värden för mående och energi.
