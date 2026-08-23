@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-23 – Logga mående och energi med ett tryck
+
+- Snabbchecken på Hem har nu en tydlig "Logga"-knapp som sparar både mående och energi direkt, utan att du behöver dra i sliders eller välja något mer.
+- Den gamla "Logga"-knappen i rubriken heter nu "Mer" och visar fortsatt genvägar till Mående, Energi och Anteckning.
+
 ## 2026-08-23 – Dubbel medicinpåminnelse kl 10:00 borttagen
 
 - Spårade notisen kl 10:00: den kom från en gammal Elvanse-post kl 10:00 i medicinlistan (utöver den aktuella kl 11:30) – ingen förvarning, ingen tidszonsbugg och ingen hårdkodad standardtid.
