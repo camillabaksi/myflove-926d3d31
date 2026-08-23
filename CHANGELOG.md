@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-23 – Dubbel medicinpåminnelse kl 10:00 borttagen
+
+- Spårade notisen kl 10:00: den kom från en gammal Elvanse-post kl 10:00 i medicinlistan (utöver den aktuella kl 11:30) – ingen förvarning, ingen tidszonsbugg och ingen hårdkodad standardtid.
+- De 10 köade pushnotiserna för den gamla posten är avbokade. Inga andra påminnelser berördes och ingen kod ändrades.
+
+
 ## 2026-08-22 – Blueprint-nedladdning i appen
 
 - Blueprinten kan nu laddas ner direkt från adminsidan /pitch, med en knapp för DOCX och en för PDF per version (3.2, 3.0, 2.9, 2.8).
