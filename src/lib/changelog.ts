@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Medicinnotisen kl 10:00 spårad och åtgärdad: den kom från en gammal Elvanse-post kl 10:00 i medicinlistan (utöver den aktuella kl 11:30) – inte en förvarning, tidszonsbugg eller standardtid. De köade notiserna för den gamla posten är avbokade (2026-08-23)",
       'Blueprinten går att ladda ner direkt i appen: adminsidan /pitch listar version 3.2, 3.0, 2.9 och 2.8 med en knapp för DOCX och en för PDF per version (2026-08-22)',
       'Living Blueprint 3.2: dokumentet är omstrukturerat i sex delar med innehållsförteckning och läsanvisning, funktionskartan speglar nuläget och versionshistoriken är uppdaterad till 3.2 (2026-08-22)',
       'Ny adminskyddad sida "/pitch" där pitchvideon spelas upp direkt i appen och pitchdecken laddas ner (PowerPoint 3.2 och PDF 3.0), nåbar via knappen "Pitchmaterial" på adminsidan (2026-08-22)',
