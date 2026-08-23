@@ -93,6 +93,23 @@ function ScaleSlider({
 export default function QuickCheckin({ className }: { className?: string }) {
   const { moodValue, energyValue, logMood, logEnergy } = useQuickCheckin();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [moodDraft, setMoodDraft] = useState(moodValue ?? 5);
+  const [energyDraft, setEnergyDraft] = useState(energyValue ?? 5);
+  const [justSaved, setJustSaved] = useState(false);
+
+  useEffect(() => {
+    if (moodValue != null) setMoodDraft(moodValue);
+  }, [moodValue]);
+  useEffect(() => {
+    if (energyValue != null) setEnergyDraft(energyValue);
+  }, [energyValue]);
+
+  const logBoth = () => {
+    logMood(moodDraft);
+    void logEnergy(energyDraft);
+    setJustSaved(true);
+    window.setTimeout(() => setJustSaved(false), 2500);
+  };
 
   return (
     <section
@@ -113,9 +130,10 @@ export default function QuickCheckin({ className }: { className?: string }) {
             type="button"
             onClick={() => setMenuOpen((v) => !v)}
             aria-expanded={menuOpen}
+            aria-label="Fler ställen att logga på"
             className="inline-flex items-center gap-1 rounded-full border border-border/60 px-3 py-1 text-xs text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
           >
-            <Plus size={13} /> Logga
+            <Plus size={13} /> Mer
           </button>
         }
       >
@@ -139,6 +157,8 @@ export default function QuickCheckin({ className }: { className?: string }) {
           startEmoji="😞"
           endEmoji="😍"
           value={moodValue}
+          draft={moodDraft}
+          onDraftChange={setMoodDraft}
           onCommit={logMood}
           accent="primary"
         />
@@ -149,15 +169,26 @@ export default function QuickCheckin({ className }: { className?: string }) {
           startEmoji="🪫"
           endEmoji="🔋"
           value={energyValue}
+          draft={energyDraft}
+          onDraftChange={setEnergyDraft}
           onCommit={(v) => void logEnergy(v)}
           accent="accent"
         />
 
+        <button
+          type="button"
+          onClick={logBoth}
+          className="w-full rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-opacity hover:opacity-90"
+        >
+          {justSaved ? "Sparat ✓" : "Logga"}
+        </button>
+
         <p className="text-xs text-muted-foreground">
           {moodValue != null || energyValue != null
             ? "Sparat. Du kan justera när du vill under dagen."
-            : "Dra till det som stämmer just nu. Inget är rätt eller fel."}
+            : "Dra till det som stämmer just nu, eller tryck bara Logga. Inget är rätt eller fel."}
         </p>
+
       </CollapsibleSection>
     </section>
   );
