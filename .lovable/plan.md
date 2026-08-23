@@ -1,64 +1,37 @@
-# Hem – analys av de fyra snabbalternativen (ingen kod ändrad)
+# Medicinpåminnelsen kl 10:00 – spårning
 
-## 1. De fyra snabbalternativen
+## Kort svar
 
-De ligger i blocket "Vad behöver du just nu?" (block-id `vagar`) på Hem. Exakt som de står i koden idag:
+Det är ingen förvarning och ingen tidszonsbugg. Du har **två Elvanse-poster** i medicinlistan: en gammal **"Elvanse 50mg kl 10:00"** och din nya **"Elvanse 50 mg kl 11:30"**. Båda schemaläggs som separata pushnotiser.
 
-| Ikon | Namn (tanken) | Undertext | Leder till |
-|---|---|---|---|
-| ➕ | Jag behöver planera något | "Lägg till en sak – med tid om du vill" | `/tasks` (Att göra) |
-| ✅ | Jag gjorde redan något | "Registrera det du hunnit med" | Öppnar modalen "Jag gjorde något" direkt på Hem |
-| 💜 | Jag vet inte vad jag ska göra nu | "Få ett förslag i taget" | `/flow` (Planera) |
-| ⚡ | Jag har mycket i huvudet | "Skriv av dig – jag sorterar sen" | `/quickflow` |
+## Vad databasen visar
 
-De fungerar bra och rörs inte.
+Köade, oskickade notiser på ditt konto:
 
-## 2. Vad de täcker redan
+```text
+med:40dwl7cm4:<datum>:10:00   💊 Elvanse   "50mg – kl 10:00"    10 st, t.o.m. 2 sep
+med:6hh0xoqp5:<datum>:11:30   💊 Elvanse   "50 mg – kl 11:30"
+med:5e6klu8dl:<datum>:06:15   💊 Morgonmedicin
+```
 
-- **"Lägg till"** täcks av alternativ 1 (➕ Jag behöver planera något).
-- **"Jag gjorde något"** täcks av alternativ 2 (✅ Jag gjorde redan något) – samma modal, samma sparlogik, samma dubblettskydd.
-- **"Lägg till det du gjorde"** är samma funktion som ovan, fast som fast panel istället för modal.
+`deliver_at` för 10:00-posten är 08:00 UTC = 10:00 svensk tid, alltså korrekt omräknat. Ingen offset, ingen fallback-tid, ingen hårdkodad standardtid (det finns ingen "10:00" i koden).
 
-## 3. Varför de tre ändå syns separat
+## Svar på dina frågor
 
-Hem består av fristående block som var och en kan slås på/av i "Anpassa hemskärmen":
+1. **Vilken kod skapar 10:00-påminnelsen?** `src/hooks/use-reminder-sync.ts` (medicin-loopen som lägger 14 dagar framåt) → `syncReminder` i `src/lib/push.functions.ts` → raden i `push_reminders` → utskick av `src/routes/api/public/hooks/push-tick.ts`.
+2. **Vilken tid tror appen att medicinen är?** Både 10:00 och 11:30 – två skilda medicin-ID:n med olika tider.
+3. **Standard, fallback eller förvarning?** Ingetdera. Medicinnotiser skickas exakt på tiden (ingen lead-tid finns för medicin). 10:00 kommer från gammal data.
+4. **Andra källor?** Ja, i teorin tre: (a) medicinlistan, (b) Rutiner (`myflove-routines` – tom just nu), (c) kalenderpåminnelser (du har t.ex. "Dricka ett glas vatten kl 05:00"). Ingen av dessa skapar dubbletten just nu – det gör medicinlistan.
+5. **Varför gick den inte bort när du trodde att du tagit bort den?** Medicinlistan sparas **bara i localStorage** (`myflow-medications` i `src/hooks/use-data.ts`), inte i molnet. Om 10:00-posten togs bort på en annan enhet/webbläsare finns den kvar på den enhet som ursprungligen synkade, och avbokningen körs bara från den enheten. Redan köade rader i `push_reminders` avbokas dessutom bara medan appen är öppen på just den enheten.
 
-- `gjort-knapp` = "Jag gjorde något" som egen knapp (syns som standard).
-- `lagg-till` = snabbfältet "Lägg till" (syns som standard).
-- `gjort` = hela panelen "Lägg till det du gjorde" (avstängd som standard, men på om du själv slagit på den).
-- `vagar` = de fyra snabbalternativen (syns som standard).
+## Rekommenderad minimal fix (när du säger till)
 
-Blocken byggdes vid olika tillfällen och ingen av dem vet om de andra. Därför visas samma funktion flera gånger.
+1. Öppna Rutiner & medicin på den enhet du använder och ta bort Elvanse-posten med tiden 10:00 (behåll 11:30). Med appen öppen avbokar synken de 10 köade 10:00-notiserna automatiskt.
+2. Om posten inte syns på den enheten: avboka de 10 raderna direkt i databasen (`canceled_at` på `client_key like 'med:40dwl7cm4%'`).
 
-## 4. Dubbla vägar till samma funktion
+## Rekommenderad varaktig fix (större, valfritt)
 
-- "Jag gjorde något" finns på **tre** ställen på Hem: snabbknappen, snabbalternativ ✅, och panelen "Lägg till det du gjorde".
-- "Lägg till" finns på **två** ställen: snabbfältet och snabbalternativ ➕ (som leder till Att göra).
-- "Få ett förslag" finns på **två** ställen: kortet "Just nu" och snabbalternativ 💜.
+- Flytta `myflow-medications` + medicinloggen från `useLocalStorage` till `useCloudSyncedStorage`, så att medicinlistan är densamma på alla enheter och borttagning slår igenom överallt.
+- Låt `push-tick` hoppa över medicinnotiser vars medicin inte längre finns (kräver molnlagring enligt ovan).
 
-## 5. Rekommendation för Hem (mindre brus, inga funktioner förlorade)
-
-**Behåll:**
-- Hälsning
-- "Hur är det just nu?" (mående/energi)
-- Mitt energibatteri
-- Nästa
-- Dagens saker
-- De fyra snabbalternativen – oförändrade
-
-**Ta bort från Hem (funktionen finns kvar i snabbalternativen):**
-- Snabbknappen "Jag gjorde något" (`gjort-knapp`) → täcks av ✅
-- Snabbfältet "Lägg till" (`lagg-till`) → täcks av ➕
-- Panelen "Lägg till det du gjorde" (`gjort`) → täcks av ✅
-
-**Flytta:**
-- Kortet "Just nu" (rekommendation) – behåll bara om du vill se förslaget utan att klicka; annars räcker 💜. Förslag: stäng av på Hem, finns kvar i Planera.
-- "Energins historik" och "Områdesväljare" – ligger redan avstängda som standard, låt dem vara valbara i Anpassa hemskärmen.
-
-**Placering:** flytta de fyra snabbalternativen högre upp, direkt efter hälsning + batteri, så att Hem läses som: *hur mår jag → vad händer härnäst → vad vill jag göra*.
-
-## Teknisk not
-
-Allt ovan kan genomföras enbart genom att ändra standardvärdena i `DEFAULT_PREFS` (`src/lib/home-layout.ts`) – inga komponenter behöver tas bort, ingen navigation ändras, och användare kan slå på blocken igen i "Anpassa hemskärmen".
-
-Ingen kod är ändrad i detta steg.
+Inget är ändrat – varken kod eller data.
