@@ -66,6 +66,16 @@ function normalizeCategory(value: string): CalCategory {
   return (ALL_CATEGORIES as string[]).includes(value) ? (value as CalCategory) : "privat";
 }
 
+/** "Dag 2 av 7" för en längre period, så att man ser var i resan man är. */
+function periodDayLabel(start: string, end: string, current: string): string {
+  const day = (iso: string) => parseISODate(iso).getTime();
+  const oneDay = 86_400_000;
+  const total = Math.round((day(end) - day(start)) / oneDay) + 1;
+  const index = Math.min(Math.max(Math.round((day(current) - day(start)) / oneDay) + 1, 1), total);
+  return `dag ${index} av ${total}`;
+}
+
+
 /** Valbara påminnelser innan en händelse börjar. */
 const REMIND_OPTIONS: { value: number | null; label: string }[] = [
   { value: null, label: "Ingen" },
