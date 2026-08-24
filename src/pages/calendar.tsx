@@ -494,7 +494,11 @@ export default function CalendarPage() {
     const focus = isToday && shows("privat") ? currentFocus : null;
     const tasks = allTasks.filter((t) => t.dueDate === dateStr && shows(taskCategory(t.area)));
     const allReminders = shows("privat")
-      ? activeReminders.filter((r) => occursOn(r.date, r.repeat ?? "none", dateStr))
+      ? activeReminders.filter(
+          (r) =>
+            occursOn(r.date, r.repeat ?? "none", dateStr) ||
+            (!!r.endDate && dateStr >= r.date && dateStr <= r.endDate),
+        )
       : [];
     const familyEvents = shows("relationer") ? eventsForDate(dateStr) : [];
     const allChildEvents = shows("barn")
