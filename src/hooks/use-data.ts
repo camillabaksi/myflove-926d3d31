@@ -592,7 +592,9 @@ export type RepeatMode = "none" | "daily" | "weekdays" | "weekly";
 export interface Reminder {
   id: string;
   title: string;
-  date: string; // ISO date string YYYY-MM-DD (startdatum om återkommande)
+  date: string; // ISO date string YYYY-MM-DD (startdatum om återkommande eller period)
+  /** Slutdatum för längre perioder, t.ex. semester eller resa (YYYY-MM-DD). */
+  endDate?: string;
   time?: string; // HH:MM
   endTime?: string; // HH:MM, valfri sluttid
   completed: boolean;
