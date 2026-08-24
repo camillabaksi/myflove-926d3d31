@@ -653,6 +653,7 @@ export function useReminders() {
     patch: {
       title?: string;
       date?: string;
+      endDate?: string | undefined;
       time?: string | undefined;
       endTime?: string | undefined;
       repeat?: RepeatMode;
