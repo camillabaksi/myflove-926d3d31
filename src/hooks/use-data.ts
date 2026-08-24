@@ -618,12 +618,14 @@ export function useReminders() {
     remindMinutesBefore?: number,
     note?: string,
     area?: LifeArea,
+    endDate?: string,
   ) => {
     setReminders([
       {
         id: generateId(),
         title,
         date,
+        endDate: endDate && endDate > date ? endDate : undefined,
         time,
         endTime,
         completed: false,
