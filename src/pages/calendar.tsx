@@ -66,6 +66,16 @@ function normalizeCategory(value: string): CalCategory {
   return (ALL_CATEGORIES as string[]).includes(value) ? (value as CalCategory) : "privat";
 }
 
+/** "Dag 2 av 7" för en längre period, så att man ser var i resan man är. */
+function periodDayLabel(start: string, end: string, current: string): string {
+  const day = (iso: string) => parseISODate(iso).getTime();
+  const oneDay = 86_400_000;
+  const total = Math.round((day(end) - day(start)) / oneDay) + 1;
+  const index = Math.min(Math.max(Math.round((day(current) - day(start)) / oneDay) + 1, 1), total);
+  return `dag ${index} av ${total}`;
+}
+
+
 /** Valbara påminnelser innan en händelse börjar. */
 const REMIND_OPTIONS: { value: number | null; label: string }[] = [
   { value: null, label: "Ingen" },
@@ -191,6 +201,8 @@ export default function CalendarPage() {
   const [newAnyEndTime, setNewAnyEndTime] = useState("");
   /** Fri anteckning – vad det handlar om, vad man behöver ta med. */
   const [newAnyNote, setNewAnyNote] = useState("");
+  const [newAnyMultiDay, setNewAnyMultiDay] = useState(false);
+  const [newAnyEndDate, setNewAnyEndDate] = useState("");
 
   /** Påminnelse innan start: null = ingen, annars minuter före (0 = vid start). */
   const [newAnyRemind, setNewAnyRemind] = useState<number | null>(null);
@@ -369,12 +381,27 @@ export default function CalendarPage() {
     /** Fritextfält (familj/barn) lagrar intervallet som "09:00–10:00". */
     const timeRange = time && endTime ? `${time}–${endTime}` : newAnyTime || null;
     const note = newAnyNote.trim() || undefined;
+    const periodEnd =
+      newAnyMultiDay && newAnyEndDate && newAnyEndDate > selectedDateStr ? newAnyEndDate : undefined;
     try {
       const wantsReminder = Boolean(time) && newAnyRemind !== null;
       if (wantsReminder && getNotificationPermission() === "default") {
         await requestNotificationPermission();
       }
-      if (newCat === "relationer") {
+      if (periodEnd) {
+        // Längre perioder (semester, resa) sparas som en post som visas varje dag i intervallet.
+        addReminder(
+          title,
+          selectedDateStr,
+          time,
+          "none",
+          endTime,
+          wantsReminder ? (newAnyRemind ?? 0) : undefined,
+          note,
+          undefined,
+          periodEnd,
+        );
+      } else if (newCat === "relationer") {
         createEventMutation.mutate({
           data: { title, date: selectedDateStr, time: timeRange },
         });
@@ -418,20 +445,23 @@ export default function CalendarPage() {
       }
       // Familj- och barnhändelser bor i delade listor – lägg en personlig
       // påminnelse bredvid så att notisen faktiskt når just dig.
-      if (wantsReminder && (newCat === "relationer" || newCat === "barn")) {
+      if (!periodEnd && wantsReminder && (newCat === "relationer" || newCat === "barn")) {
         const names = kids.filter((k) => newAnyChildIds.includes(k.id)).map((k) => k.name);
         const reminderTitle =
           newCat === "barn" && names.length > 1 ? `${title} – ${names.join(" & ")}` : title;
         addReminder(reminderTitle, selectedDateStr, time, "none", endTime, newAnyRemind ?? 0, note);
       }
 
-      if (!visible.includes(newCat)) setVisible((prev) => [...prev, newCat]);
+      if (!visible.includes(periodEnd ? "privat" : newCat))
+        setVisible((prev) => [...prev, periodEnd ? "privat" : newCat]);
       setNewAnyTitle("");
       setNewAnyTime("");
       setNewAnyEndTime("");
       setNewAnyNote("");
       setNewAnyRemind(null);
       setNewAnyChildIds([]);
+      setNewAnyMultiDay(false);
+      setNewAnyEndDate("");
 
       setIsAddingAny(false);
 
@@ -494,7 +524,11 @@ export default function CalendarPage() {
     const focus = isToday && shows("privat") ? currentFocus : null;
     const tasks = allTasks.filter((t) => t.dueDate === dateStr && shows(taskCategory(t.area)));
     const allReminders = shows("privat")
-      ? activeReminders.filter((r) => occursOn(r.date, r.repeat ?? "none", dateStr))
+      ? activeReminders.filter(
+          (r) =>
+            occursOn(r.date, r.repeat ?? "none", dateStr) ||
+            (!!r.endDate && dateStr >= r.date && dateStr <= r.endDate),
+        )
       : [];
     const familyEvents = shows("relationer") ? eventsForDate(dateStr) : [];
     const allChildEvents = shows("barn")
@@ -1156,7 +1190,10 @@ export default function CalendarPage() {
                       )}
                       <div className="min-w-0">
                         <div className="text-xs text-primary font-medium uppercase tracking-wider mb-0.5">
-                          Påminnelse {r.time && `kl ${r.time}${r.endTime ? `–${r.endTime}` : ""}`}
+                          {r.endDate
+                            ? `Period · ${periodDayLabel(r.date, r.endDate, selectedDateStr)}`
+                            : "Påminnelse"}{" "}
+                          {r.time && `kl ${r.time}${r.endTime ? `–${r.endTime}` : ""}`}
                         </div>
                         <div className="text-lg font-medium truncate">{r.title}</div>
                         {r.note && (
@@ -1676,6 +1713,41 @@ export default function CalendarPage() {
                   />
                 </div>
               </div>
+
+              <div className="space-y-2 rounded-2xl border border-border/70 bg-secondary/30 p-3">
+                <label className="flex items-center gap-2 text-sm font-medium">
+                  <input
+                    type="checkbox"
+                    checked={newAnyMultiDay}
+                    onChange={(e) => {
+                      setNewAnyMultiDay(e.target.checked);
+                      if (e.target.checked && !newAnyEndDate) setNewAnyEndDate(selectedDateStr);
+                    }}
+                    className="h-4 w-4 accent-current"
+                  />
+                  Flera dagar (t.ex. semester eller resa)
+                </label>
+                {newAnyMultiDay && (
+                  <div className="space-y-1">
+                    <label className="text-sm font-medium" htmlFor="ny-slutdatum">
+                      Sista dagen
+                    </label>
+                    <Input
+                      id="ny-slutdatum"
+                      type="date"
+                      value={newAnyEndDate}
+                      min={selectedDateStr}
+                      onChange={(e) => setNewAnyEndDate(e.target.value)}
+                      className="h-12 rounded-2xl"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Perioden visas på varje dag från {selectedDateStr} till och med sista dagen.
+                    </p>
+                  </div>
+                )}
+              </div>
+
+
 
               <div className="space-y-2">
                 <label className="text-sm font-medium">Påminnelse</label>

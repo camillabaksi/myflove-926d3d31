@@ -592,7 +592,9 @@ export type RepeatMode = "none" | "daily" | "weekdays" | "weekly";
 export interface Reminder {
   id: string;
   title: string;
-  date: string; // ISO date string YYYY-MM-DD (startdatum om återkommande)
+  date: string; // ISO date string YYYY-MM-DD (startdatum om återkommande eller period)
+  /** Slutdatum för längre perioder, t.ex. semester eller resa (YYYY-MM-DD). */
+  endDate?: string;
   time?: string; // HH:MM
   endTime?: string; // HH:MM, valfri sluttid
   completed: boolean;
@@ -616,12 +618,14 @@ export function useReminders() {
     remindMinutesBefore?: number,
     note?: string,
     area?: LifeArea,
+    endDate?: string,
   ) => {
     setReminders([
       {
         id: generateId(),
         title,
         date,
+        endDate: endDate && endDate > date ? endDate : undefined,
         time,
         endTime,
         completed: false,
@@ -649,6 +653,7 @@ export function useReminders() {
     patch: {
       title?: string;
       date?: string;
+      endDate?: string | undefined;
       time?: string | undefined;
       endTime?: string | undefined;
       repeat?: RepeatMode;
@@ -661,6 +666,7 @@ export function useReminders() {
       reminders.map((r) => {
         if (r.id !== id) return r;
         const next: Reminder = { ...r, ...patch };
+        if (next.endDate && next.endDate <= next.date) next.endDate = undefined;
         if (patch.note !== undefined) next.note = patch.note.trim() || undefined;
         if (patch.time !== undefined && !patch.time) {
           next.time = undefined;
