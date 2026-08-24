@@ -1160,7 +1160,10 @@ export default function CalendarPage() {
                       )}
                       <div className="min-w-0">
                         <div className="text-xs text-primary font-medium uppercase tracking-wider mb-0.5">
-                          Påminnelse {r.time && `kl ${r.time}${r.endTime ? `–${r.endTime}` : ""}`}
+                          {r.endDate
+                            ? `Period · ${periodDayLabel(r.date, r.endDate, selectedDateStr)}`
+                            : "Påminnelse"}{" "}
+                          {r.time && `kl ${r.time}${r.endTime ? `–${r.endTime}` : ""}`}
                         </div>
                         <div className="text-lg font-medium truncate">{r.title}</div>
                         {r.note && (
