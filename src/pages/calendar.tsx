@@ -433,20 +433,23 @@ export default function CalendarPage() {
       }
       // Familj- och barnhändelser bor i delade listor – lägg en personlig
       // påminnelse bredvid så att notisen faktiskt når just dig.
-      if (wantsReminder && (newCat === "relationer" || newCat === "barn")) {
+      if (!periodEnd && wantsReminder && (newCat === "relationer" || newCat === "barn")) {
         const names = kids.filter((k) => newAnyChildIds.includes(k.id)).map((k) => k.name);
         const reminderTitle =
           newCat === "barn" && names.length > 1 ? `${title} – ${names.join(" & ")}` : title;
         addReminder(reminderTitle, selectedDateStr, time, "none", endTime, newAnyRemind ?? 0, note);
       }
 
-      if (!visible.includes(newCat)) setVisible((prev) => [...prev, newCat]);
+      if (!visible.includes(periodEnd ? "privat" : newCat))
+        setVisible((prev) => [...prev, periodEnd ? "privat" : newCat]);
       setNewAnyTitle("");
       setNewAnyTime("");
       setNewAnyEndTime("");
       setNewAnyNote("");
       setNewAnyRemind(null);
       setNewAnyChildIds([]);
+      setNewAnyMultiDay(false);
+      setNewAnyEndDate("");
 
       setIsAddingAny(false);
 
