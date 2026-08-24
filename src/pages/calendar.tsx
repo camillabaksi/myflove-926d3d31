@@ -1681,6 +1681,41 @@ export default function CalendarPage() {
                 </div>
               </div>
 
+              <div className="space-y-2 rounded-2xl border border-border/70 bg-secondary/30 p-3">
+                <label className="flex items-center gap-2 text-sm font-medium">
+                  <input
+                    type="checkbox"
+                    checked={newAnyMultiDay}
+                    onChange={(e) => {
+                      setNewAnyMultiDay(e.target.checked);
+                      if (e.target.checked && !newAnyEndDate) setNewAnyEndDate(selectedDateStr);
+                    }}
+                    className="h-4 w-4 accent-current"
+                  />
+                  Flera dagar (t.ex. semester eller resa)
+                </label>
+                {newAnyMultiDay && (
+                  <div className="space-y-1">
+                    <label className="text-sm font-medium" htmlFor="ny-slutdatum">
+                      Sista dagen
+                    </label>
+                    <Input
+                      id="ny-slutdatum"
+                      type="date"
+                      value={newAnyEndDate}
+                      min={selectedDateStr}
+                      onChange={(e) => setNewAnyEndDate(e.target.value)}
+                      className="h-12 rounded-2xl"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Perioden visas på varje dag från {selectedDateStr} till och med sista dagen.
+                    </p>
+                  </div>
+                )}
+              </div>
+
+
+
               <div className="space-y-2">
                 <label className="text-sm font-medium">Påminnelse</label>
                 {newAnyTime ? (
