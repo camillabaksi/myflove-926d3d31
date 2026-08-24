@@ -369,12 +369,27 @@ export default function CalendarPage() {
     /** Fritextfält (familj/barn) lagrar intervallet som "09:00–10:00". */
     const timeRange = time && endTime ? `${time}–${endTime}` : newAnyTime || null;
     const note = newAnyNote.trim() || undefined;
+    const periodEnd =
+      newAnyMultiDay && newAnyEndDate && newAnyEndDate > selectedDateStr ? newAnyEndDate : undefined;
     try {
       const wantsReminder = Boolean(time) && newAnyRemind !== null;
       if (wantsReminder && getNotificationPermission() === "default") {
         await requestNotificationPermission();
       }
-      if (newCat === "relationer") {
+      if (periodEnd) {
+        // Längre perioder (semester, resa) sparas som en post som visas varje dag i intervallet.
+        addReminder(
+          title,
+          selectedDateStr,
+          time,
+          "none",
+          endTime,
+          wantsReminder ? (newAnyRemind ?? 0) : undefined,
+          note,
+          undefined,
+          periodEnd,
+        );
+      } else if (newCat === "relationer") {
         createEventMutation.mutate({
           data: { title, date: selectedDateStr, time: timeRange },
         });
