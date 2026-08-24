@@ -666,6 +666,7 @@ export function useReminders() {
       reminders.map((r) => {
         if (r.id !== id) return r;
         const next: Reminder = { ...r, ...patch };
+        if (next.endDate && next.endDate <= next.date) next.endDate = undefined;
         if (patch.note !== undefined) next.note = patch.note.trim() || undefined;
         if (patch.time !== undefined && !patch.time) {
           next.time = undefined;
