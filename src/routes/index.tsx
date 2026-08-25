@@ -365,20 +365,26 @@ function FloatCard({
   className,
   time,
   delay,
+  onReact,
 }: {
   children: React.ReactNode;
   className?: string;
   time: string;
   delay: string;
+  onReact?: () => void;
 }) {
   return (
-    <div
-      className={`pop-in floaty absolute z-10 hidden max-w-[190px] rounded-2xl border border-[#2A2140]/5 bg-white/95 px-3 py-2 shadow-lg backdrop-blur sm:block ${className}`}
+    <button
+      type="button"
+      onMouseEnter={onReact}
+      onFocus={onReact}
+      onClick={onReact}
+      className={`pop-in floaty press absolute z-10 hidden max-w-[190px] rounded-2xl border border-[#2A2140]/5 bg-white/95 px-3 py-2 text-left shadow-lg backdrop-blur transition hover:border-[#7C5CE0]/30 sm:block ${className}`}
       style={{ animationDelay: delay }}
     >
       <p className="text-[10px] font-semibold tracking-widest text-[#7C5CE0] uppercase">{time}</p>
       <p className="mt-1 text-xs leading-snug text-[#2A2140]">{children}</p>
-    </div>
+    </button>
   );
 }
 
