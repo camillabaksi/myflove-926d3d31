@@ -12,6 +12,7 @@ import { assessToday, rankNow, suggestNow } from "@/lib/flow-engine";
 import { energySentence, pickFlowSlides, type FlowSlideId } from "@/lib/flow-slides";
 import type { ScoredTask } from "@/lib/daily-flow";
 import { BUILD_ID } from "@/lib/cache-busting";
+import { haptic } from "@/lib/haptics";
 
 /** Versionsmärkning för Flow-presentationen – visas i UI för verifiering. */
 export const FLOW_VERSION = "flow-2.0-character-2026-08-25";
@@ -116,10 +117,17 @@ export default function FlowDeck() {
 
   const goTo = (nextSlide: number, focusSlide = false) => {
     const clamped = Math.max(0, Math.min(slides.length - 1, nextSlide));
-    if (focusSlide && clamped !== currentSlide) shouldFocusSlide.current = true;
+    if (clamped === currentSlide) {
+      // Redan längst ut – en liten stöt i stället för ett vybyte.
+      if (nextSlide !== currentSlide) haptic("bump");
+      return;
+    }
+    if (focusSlide) shouldFocusSlide.current = true;
+    haptic("tap");
     setCelebrating(false);
     setCurrentSlide(clamped);
   };
+
 
   const next = (focusSlide = false) => goTo(currentSlide + 1, focusSlide);
   const previous = (focusSlide = false) => goTo(currentSlide - 1, focusSlide);
@@ -198,12 +206,14 @@ export default function FlowDeck() {
   };
 
   const celebrate = () => {
+    haptic("success");
     setCelebrating(true);
     window.setTimeout(() => {
       setCelebrating(false);
       setCurrentSlide((v) => Math.min(slides.length - 1, v + 1));
     }, 2200);
   };
+
 
   return (
     <section
