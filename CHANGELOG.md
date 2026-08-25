@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-25 – Förstasidan: delbara vyer, mjukare svep och tydligare fokus
+
+- Adressen minns vilken vy du är på (t.ex. /#flowplan): uppdaterar du sidan eller delar länken hamnar du på rätt vy, och bakåtknappen fungerar.
+- Svep och drag har momentum: hastigheten räknas med, tröskeln anpassas efter skärmbredd (48–120 px) och kanterna har mjukare motstånd – känns snabbare på både mobil och desktop.
+- Tydlig fokusmarkering på den aktiva vyn, korrekt tabordning (bara aktiv vy och aktiv prick nås med Tab) och läsbara etiketter som "FlowPlan – vy 8 av 10".
+
 ## 2026-08-25 – Förstasidan är nu ett slide-flöde
 
 - Startsidan (/) är inte längre en lång scrollsida: allt innehåll ligger nu i tio interaktiva slides som byts en i taget med mjuka övergångar.
