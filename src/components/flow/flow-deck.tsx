@@ -206,12 +206,14 @@ export default function FlowDeck() {
   };
 
   const celebrate = () => {
+    haptic("success");
     setCelebrating(true);
     window.setTimeout(() => {
       setCelebrating(false);
       setCurrentSlide((v) => Math.min(slides.length - 1, v + 1));
     }, 2200);
   };
+
 
   return (
     <section
