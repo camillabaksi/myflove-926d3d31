@@ -13,8 +13,11 @@ import { assessToday, rankNow, suggestNow } from "@/lib/flow-engine";
 import { energySentence, pickFlowSlides, type FlowSlideId } from "@/lib/flow-slides";
 import type { ScoredTask } from "@/lib/daily-flow";
 
+type DeckSlideId = "intro" | FlowSlideId;
+
 /**
  * Flow 2.0 – en sak i taget.
+ * En horisontell carousel: exakt EN slide syns åt gången, inget staplas vertikalt.
  * Sliderna kommer från befintlig Flow-logik (flow-engine + Mitt batteri +
  * dagens incheckning). Inga nya datamodeller, inga parallella system.
  */
@@ -47,15 +50,17 @@ export default function FlowDeck() {
 
   const load = useMemo(() => assessToday(reading, items), [reading, items]);
 
-  const slides = useMemo(
-    () =>
-      pickFlowSlides({
+  const slides = useMemo<DeckSlideId[]>(
+    () => [
+      "intro",
+      ...pickFlowSlides({
         hasCheckin: moodValue != null && energyValue != null,
         batteryNow: reading.now,
         overloaded: reading.overloaded,
         hasSuggestion: Boolean(suggestion.task),
         heavyDay: load.weight === "tung",
       }),
+    ],
     [moodValue, energyValue, reading.now, reading.overloaded, suggestion.task, load.weight],
   );
 
@@ -76,18 +81,24 @@ export default function FlowDeck() {
   const next = () => goTo(index + 1);
 
   return (
-    <section aria-label="Flow" className="space-y-3">
+    <section aria-label="Flow" className="relative space-y-3">
+      {/* Horisontell carousel – overflow hidden vertikalt, en slide i taget. */}
       <div
         ref={trackRef}
         onScroll={onScroll}
-        className="-mx-1 flex snap-x snap-mandatory overflow-x-auto scroll-smooth px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="flex h-[64vh] min-h-[400px] snap-x snap-mandatory overflow-x-auto overflow-y-hidden overscroll-x-contain scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
-        {slides.map((id) => (
-          <div key={id} className="w-full shrink-0 snap-center px-1">
+        {slides.map((id, i) => (
+          <div
+            key={`${id}-${i}`}
+            aria-hidden={i !== index}
+            className="h-full w-full shrink-0 snap-center overflow-y-auto px-0.5"
+          >
             <FlowSlide
               id={id}
               reading={reading}
               suggestion={suggestion}
+              onIntroNext={next}
               onStart={() => setFocusOpen(true)}
               onLater={() => {
                 if (suggestion.task) setSkip((s) => [...s, suggestion.task!.id]);
@@ -114,7 +125,7 @@ export default function FlowDeck() {
           <span className="flex items-center gap-1.5">
             {slides.map((id, i) => (
               <button
-                key={id}
+                key={`${id}-${i}`}
                 type="button"
                 aria-label={`Gå till ${i + 1} av ${slides.length}`}
                 aria-current={i === index}
@@ -157,21 +168,41 @@ function FlowSlide({
   id,
   reading,
   suggestion,
+  onIntroNext,
   onStart,
   onLater,
   onDone,
   onMoveTomorrow,
   onSkipSlide,
 }: {
-  id: FlowSlideId;
+  id: DeckSlideId;
   reading: ReturnType<typeof useEnergyBattery>["reading"];
   suggestion: ReturnType<typeof suggestNow>;
+  onIntroNext: () => void;
   onStart: () => void;
   onLater: () => void;
   onDone: () => void;
   onMoveTomorrow: () => void;
   onSkipSlide: () => void;
 }) {
+  if (id === "intro") {
+    return (
+      <div className="surface-card flex h-full flex-col items-center justify-center gap-5 p-6 text-center">
+        <FlowMascot size="xl" glow float className="flow-entry" />
+        <div className="space-y-2">
+          <h2 className="font-display text-2xl text-ink">Hej! Jag är Flow 💜</h2>
+          <p className="mx-auto max-w-xs text-base leading-relaxed text-muted-foreground">
+            Jag hjälper dig hitta vad som passar bäst just nu.
+          </p>
+        </div>
+        <Button className="rounded-2xl px-7" onClick={onIntroNext}>
+          Visa mig
+        </Button>
+        <p className="text-xs text-muted-foreground">Svep åt sidan för att se mer →</p>
+      </div>
+    );
+  }
+
   if (id === "checkin") {
     return (
       <SlideShell title="❤️ Hur är det just nu?" note="Det räcker att dra och trycka Logga.">
@@ -264,7 +295,7 @@ function SlideShell({
   children: React.ReactNode;
 }) {
   return (
-    <div className="surface-card space-y-4 p-5">
+    <div className="surface-card flex min-h-full flex-col gap-4 p-5">
       <div className="flex items-start gap-3">
         <FlowMascot size="xs" float />
         <div className="min-w-0">
@@ -272,7 +303,7 @@ function SlideShell({
           {note && <p className="mt-0.5 text-sm text-muted-foreground">{note}</p>}
         </div>
       </div>
-      {children}
+      <div className="space-y-4">{children}</div>
     </div>
   );
 }
