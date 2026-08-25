@@ -60,7 +60,11 @@ export function FlowMascot({
   alt?: string;
 }) {
   return (
-    <span className={cn("relative inline-flex shrink-0 items-center justify-center", className)}>
+    <span
+      data-flow-mascot
+      data-flow-mood={mood ?? (wave ? "wave" : float ? "float" : "none")}
+      className={cn("relative inline-flex shrink-0 items-center justify-center", className)}
+    >
       {glow && (
         <span
           aria-hidden
