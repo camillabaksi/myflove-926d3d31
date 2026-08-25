@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Så funkar MyFlove: ny översiktssida som kort förklarar alla funktioner och vart du går – nås från Hem och menyn (2026-08-25)",
       "Pitchsidan 3.4: pitchvideon har miniatyrbild från Flow 2.0-scenen, decket visas med förhandsbild av titelsidan, versionsmärken och en genväg till Flow live (2026-08-25)",
       "Pitchvideon 3.4: Flow syns nu även i videon – stor karaktär i Flow 2.0-scenen och med i slutbilden (2026-08-25)",
       "Blueprint 3.4 och pitchdeck 3.4: Flow syns nu i dokumenten – på framsidan, i avsnittet om Flow i appen och som en egen slide i decket (2026-08-25)",

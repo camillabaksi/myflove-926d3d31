@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-25 – Så funkar MyFlove (översikt)
+
+- Ny sida `/oversikt`: en enkel sammanfattning av allt i appen, grupperat i Börja här, Planera, Mående & energi, Hemma, Människor & resor, Studier & jobb och Gör appen till din – varje rad förklarar vad det är och länkar dit.
+- Genväg längst ner på Hem och i menyn under "Mer".
+
 ## 2026-08-25 – Pitchsidan matchar 3.4
 
 - Pitchvideon har fått en miniatyrbild (poster) från Flow 2.0-scenen i stället för en svart ruta.
