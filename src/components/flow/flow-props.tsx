@@ -94,7 +94,8 @@ export function Cushion({ className, style }: PropProps) {
 export function BreathRing({ className }: PropProps) {
   return (
     <span
- data-flow-prop="breathRing"      aria-hidden
+      data-flow-prop="breathRing"
+      aria-hidden
       className={cn(
         "flow-breath-ring pointer-events-none absolute rounded-full border-2 border-primary/40",
         className,
