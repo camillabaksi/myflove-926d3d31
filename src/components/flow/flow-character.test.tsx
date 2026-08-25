@@ -23,7 +23,11 @@ const EXPECTED: Record<
   travel: { props: [["car"], ["bus"]], moods: ["sway", "float"] },
   shopping: { props: [[], []], moods: ["sway", "bounce"] },
   walk: { props: [[], []], moods: ["sway", "bounce"] },
-  kids: { props: [[], []], moods: ["wave", "bounce"] },
+  kids: { props: [["miniFlows"], ["miniFlows"]], moods: ["wave", "bounce"] },
+  sun: { props: [["sun", "sunglasses"], ["sun", "sunglasses"]], moods: ["bounce", "cheer"] },
+  medicine: { props: [["pillBottle"], ["pillBottle"]], moods: ["nod", "calm"] },
+  water: { props: [["waterGlass"], ["waterGlass"]], moods: ["nod", "float"] },
+  laundry: { props: [["laundryBasket"], ["laundryBasket"]], moods: ["sway", "nod"] },
   energyHigh: { props: [["battery", "bolt", "stars"], ["battery", "confetti"]], moods: ["cheer", "bounce"] },
   energyLow: { props: [["battery", "zzz"], ["battery", "mug"]], moods: ["calm"] },
   mood: { props: [[], []], moods: ["pulse", "float"] },
@@ -38,7 +42,11 @@ describe("FlowCharacter – ett state i taget", () => {
   it.each(SCENES)("scen %s renderar exakt en karaktär och en maskot", (scene) => {
     const { container } = render(<FlowCharacter scene={scene} />);
     expect(container.querySelectorAll("[data-flow-character]")).toHaveLength(1);
-    expect(container.querySelectorAll("[data-flow-mascot]")).toHaveLength(1);
+    expect(
+      Array.from(container.querySelectorAll("[data-flow-mascot]")).filter(
+        (el) => !el.closest('[data-flow-prop="miniFlows"]'),
+      ),
+    ).toHaveLength(1);
     expect(container.querySelector("[data-flow-character]")).toHaveAttribute("data-flow-scene", scene);
   });
 
@@ -57,7 +65,7 @@ describe("FlowCharacter – rätt rekvisita och pose per kontext", () => {
     const spec = EXPECTED[scene];
     for (const seed of [0, 1]) {
       it(`${scene} (variant ${seed}) visar rätt prop och pose`, () => {
-        const { container } = render(<FlowCharacter scene={scene} seed={seed} energy={50} />);
+        const { container } = render(<FlowCharacter scene={scene} seed={seed} energy={50} kids={2} />);
         const root = container.querySelector("[data-flow-character]")!;
         expect(root.getAttribute("data-flow-variant")).toBe(String(seed % spec.props.length));
 
@@ -68,7 +76,9 @@ describe("FlowCharacter – rätt rekvisita och pose per kontext", () => {
           ).toBeGreaterThan(0);
         }
 
-        const mood = container.querySelector("[data-flow-mascot]")!.getAttribute("data-flow-mood");
+        const mood = Array.from(container.querySelectorAll("[data-flow-mascot]"))
+          .find((el) => !el.closest('[data-flow-prop="miniFlows"]'))!
+          .getAttribute("data-flow-mood");
         expect(spec.moods, `oväntad pose ${mood} i scen ${scene}`).toContain(mood);
       });
     }
@@ -91,6 +101,9 @@ describe("sceneForTask", () => {
     ["Handla mjölk", "shopping"],
     ["Ta en promenad", "walk"],
     ["Hämta barnen", "kids"],
+    ["Ta medicin", "medicine"],
+    ["Vika tvätt", "laundry"],
+    ["Dricka vatten", "water"],
     ["Kör till stan", "travel"],
     ["Sova en stund", "sleep"],
     ["Fika med Anna", "break"],

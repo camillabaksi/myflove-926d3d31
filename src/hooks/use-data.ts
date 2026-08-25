@@ -2,6 +2,7 @@ import { useLocalStorage } from "../lib/storage";
 import { useCloudSyncedStorage } from "../lib/cloud-storage";
 import { trackEvent } from "../lib/analytics";
 import type { LifeArea } from "../lib/life-areas";
+import { flowDone } from "@/lib/flow-signal";
 import { todayISO } from "@/lib/day";
 
 export interface Focus {
@@ -240,7 +241,10 @@ export function useTasks() {
         };
       }),
     );
-    if (task && !task.completed) trackEvent("tasks", "task_completed");
+    if (task && !task.completed) {
+      trackEvent("tasks", "task_completed");
+      flowDone(task.title);
+    }
   };
 
   const setTaskStatus = (id: string, status: TaskStatus, waitingOn?: string) => {
