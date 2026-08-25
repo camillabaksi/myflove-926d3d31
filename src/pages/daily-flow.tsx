@@ -2,8 +2,22 @@ import Layout from "@/components/layout";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { RoutinesContent } from "@/pages/routines";
 import { MedicationContent } from "@/pages/medication";
-import { Sun, Repeat, Pill } from "lucide-react";
+import { Sun, Repeat, Pill, Sunrise } from "lucide-react";
 import CollapsibleSection from "@/components/collapsible-section";
+import WakeUpCard from "@/components/wake-up-card";
+import WakeUpSettings from "@/components/wake-up-settings";
+
+function MorningContent() {
+  return (
+    <div className="space-y-5">
+      <p className="text-sm text-muted-foreground">
+        Dagen behöver inte börja perfekt. Kryssa ett steg så vet jag att du är igång.
+      </p>
+      <WakeUpCard always />
+      <WakeUpSettings />
+    </div>
+  );
+}
 
 export default function DailyFlowPage() {
   return (
