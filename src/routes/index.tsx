@@ -312,27 +312,12 @@ function LandingDeck() {
     else if (projected >= threshold) goTo(index - 1);
   };
 
-  const onKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === "ArrowRight") {
-      event.preventDefault();
-      goTo(index + 1);
-    } else if (event.key === "ArrowLeft") {
-      event.preventDefault();
-      goTo(index - 1);
-    } else if (event.key === "Home") {
-      event.preventDefault();
-      goTo(0);
-    } else if (event.key === "End") {
-      event.preventDefault();
-      goTo(total - 1);
-    }
-  };
-
   // Piltangenter fungerar även när fokus ligger på sidan i stort
   useEffect(() => {
     const onWindowKey = (event: KeyboardEvent) => {
       const target = event.target as Element | null;
       if (target?.closest?.("input, textarea, select, [contenteditable], [role='slider']")) return;
+      console.log("deckkey", event.key, index);
       if (event.key === "ArrowRight") goTo(index + 1);
       else if (event.key === "ArrowLeft") goTo(index - 1);
       else if (event.key === "Home") goTo(0);
