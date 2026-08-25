@@ -66,17 +66,22 @@ export function FlowSays({
   children,
   size = "sm",
   className,
+  wave,
+  glow,
 }: {
   children: React.ReactNode;
   size?: FlowMascotSize;
   className?: string;
+  wave?: boolean;
+  glow?: boolean;
 }) {
   return (
     <div className={cn("flex items-start gap-3", className)}>
-      <FlowMascot size={size} float />
+      <FlowMascot size={size} float={!wave} wave={wave} glow={glow} />
       <div className="rounded-3xl rounded-tl-md border border-[#2A2140]/5 bg-white px-4 py-3 text-sm leading-relaxed text-[#2A2140] shadow-sm">
         {children}
       </div>
     </div>
   );
 }
+
