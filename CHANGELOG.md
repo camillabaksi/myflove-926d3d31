@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-25 – Flow är nu sidans enda container
+
+- `/flow` visar nu endast den state-baserade Flow-containern. De tidigare vyflikarna och dashboard-sektionerna för dagens belastning, planering, uppgiftslista och chatt är borttagna från Flow-sidan men finns kvar på sina ordinarie platser.
+- Exakt en aktiv Flow-state renderas åt gången; intro är state 0 och nästa state ersätter den föregående i DOM:en via knappar eller swipe.
+
 ## 2026-08-25 – Direktlänk till en Flow-slide
 
 - `/flow` läser nu `?slide=` från URL:en (t.ex. `/flow?slide=3` eller `/flow?slide=suggestion`) och startar på rätt slide vid laddning.
