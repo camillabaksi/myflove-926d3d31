@@ -15,7 +15,7 @@ import type { ScoredTask } from "@/lib/daily-flow";
 import { BUILD_ID } from "@/lib/cache-busting";
 
 /** Versionsmärkning för Flow-presentationen – visas i UI för verifiering. */
-export const FLOW_VERSION = "single-state-2026-08-25";
+export const FLOW_VERSION = "single-container-2026-08-25";
 
 type DeckSlideId = "intro" | FlowSlideId;
 
@@ -137,13 +137,13 @@ export default function FlowDeck() {
   return (
     <section
       aria-label="Flow"
-      className="relative"
+      className="surface-card relative overflow-hidden p-4 sm:p-6"
       data-flow-version={FLOW_VERSION}
       data-flow-current-slide={currentSlide}
     >
       <div
         data-flow-state-view
-        className="touch-pan-y"
+        className="touch-pan-y motion-safe:animate-[myflove-fade-up_240ms_ease-out]"
         onPointerDown={(event) => handlePointerDown(event.clientX)}
         onPointerUp={(event) => handlePointerUp(event.clientX)}
         onPointerCancel={() => {
@@ -170,38 +170,43 @@ export default function FlowDeck() {
 
       {slides.length > 1 && (
         <div className="mt-3 flex items-center justify-center gap-4">
-          <button
+          <Button
             type="button"
+            variant="ghost"
+            size="icon"
             aria-label="Föregående"
             onClick={previous}
             disabled={currentSlide === 0}
-            className="press rounded-full p-1.5 text-muted-foreground disabled:opacity-30"
+            className="press rounded-full text-muted-foreground disabled:opacity-30"
           >
             <ChevronLeft size={18} />
-          </button>
+          </Button>
           <span className="flex items-center gap-1.5">
             {slides.map((id, i) => (
-              <button
+              <Button
                 key={`${id}-${i}`}
                 type="button"
+                variant="ghost"
                 aria-label={`Gå till ${i + 1} av ${slides.length}`}
                 aria-current={i === currentSlide}
                 onClick={() => goTo(i)}
-                className={`h-2 rounded-full transition-all ${
+                className={`h-2 min-h-0 rounded-full p-0 transition-all ${
                   i === currentSlide ? "w-5 bg-primary" : "w-2 bg-border"
                 }`}
               />
             ))}
           </span>
-          <button
+          <Button
             type="button"
+            variant="ghost"
+            size="icon"
             aria-label="Nästa"
             onClick={next}
             disabled={currentSlide === slides.length - 1}
-            className="press rounded-full p-1.5 text-muted-foreground disabled:opacity-30"
+            className="press rounded-full text-muted-foreground disabled:opacity-30"
           >
             <ChevronRight size={18} />
-          </button>
+          </Button>
         </div>
       )}
 
@@ -276,7 +281,7 @@ function FlowSlide({
 }) {
   if (id === "intro") {
     return (
-      <div className="surface-card flex h-full flex-col items-center justify-center gap-5 p-6 text-center">
+      <div className="flex min-h-[28rem] flex-col items-center justify-center gap-5 p-4 text-center">
         <FlowMascot size="xl" glow float className="flow-entry" />
         <div className="space-y-2">
           <h2 className="font-display text-2xl text-ink">Hej! Jag är Flow 💜</h2>
@@ -384,7 +389,7 @@ function SlideShell({
   children: React.ReactNode;
 }) {
   return (
-    <div className="surface-card flex min-h-full flex-col gap-4 p-5">
+    <div className="flex min-h-[28rem] flex-col justify-center gap-4 p-1 sm:p-3">
       <div className="flex items-start gap-3">
         <FlowMascot size="xs" float />
         <div className="min-w-0">
