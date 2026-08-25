@@ -3,6 +3,11 @@ import { recordUsage } from "@/lib/usage-local";
 
 const SESSION_KEY = "myflow-analytics-session-id";
 
+/**
+ * Slumpat, anonymt id som lagras lokalt i webbläsaren. Det innehåller ingen
+ * personlig information och kopplas aldrig till ett konto, en e-post eller en
+ * IP — det används bara för att räkna unika besök och återkomst.
+ */
 function getSessionId(): string {
   if (typeof window === "undefined") return "server";
   try {

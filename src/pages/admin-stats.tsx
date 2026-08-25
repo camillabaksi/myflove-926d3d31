@@ -85,8 +85,12 @@ export default function AdminStats() {
             <BarChart3 className="text-primary" /> Appstatistik
           </h1>
           <p className="text-muted-foreground">
-            Anonym, sammanslagen statistik om hur MyFlove används — ingen personlig data (mående,
-            texter osv) ingår.
+            Anonym, sammanslagen statistik om hur MyFlove används.
+          </p>
+          <p className="mt-2 text-xs text-muted-foreground bg-secondary/40 border border-border rounded-2xl p-3">
+            <strong>Integritet:</strong> vi mäter bara vilken del av appen som används och vilken
+            typ av handling som sker. Inget användar-id, ingen e-post, ingen IP och inget innehåll
+            (mående, texter, uppgifter) sparas — händelser går inte att koppla till en person.
           </p>
         </div>
 
@@ -127,6 +131,112 @@ export default function AdminStats() {
                 <p className="text-xs text-muted-foreground">Aktiva senaste 30 dagarna</p>
               </div>
             </div>
+
+            <CollapsibleSection
+              title="Nyckeltal vi mäter"
+              headingClassName="text-lg font-semibold"
+              className="bg-card p-6 rounded-3xl border border-border shadow-sm"
+              description="Sammanslagna mått som visar om appen faktiskt hjälper — helt utan personlig data."
+            >
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {[
+                  {
+                    label: "Händelser per besökare",
+                    value: `${data.avgEventsPerSession ?? 0}`,
+                    hint: "Hur mycket appen används per person",
+                  },
+                  {
+                    label: "Återkommer",
+                    value: `${data.returningRate ?? 0}%`,
+                    hint: "Andel som använt appen fler än en dag",
+                  },
+                  {
+                    label: "Dagligt bruk (DAU/MAU)",
+                    value: `${data.stickiness ?? 0}%`,
+                    hint: "Hur ofta månadens användare är inne i dag",
+                  },
+                  {
+                    label: "Delar per besökare",
+                    value: `${data.avgSectionsPerSession ?? 0}`,
+                    hint: "Hur brett appen används",
+                  },
+                  {
+                    label: "Gör något",
+                    value: `${data.actionRate ?? 0}%`,
+                    hint: "Andel som gör en handling, inte bara tittar",
+                  },
+                  {
+                    label: "Händelser (30 d)",
+                    value: `${data.totalEvents ?? 0}`,
+                    hint: "Totalt antal mätpunkter",
+                  },
+                ].map((kpi) => (
+                  <div
+                    key={kpi.label}
+                    className="rounded-2xl border border-border bg-secondary/30 p-4 space-y-1"
+                  >
+                    <p className="text-2xl font-bold">{kpi.value}</p>
+                    <p className="text-sm font-medium">{kpi.label}</p>
+                    <p className="text-xs text-muted-foreground">{kpi.hint}</p>
+                  </div>
+                ))}
+              </div>
+            </CollapsibleSection>
+
+            <CollapsibleSection
+              title="Dagliga loopen: Fånga → Planera → Göra → Reflektera"
+              headingClassName="text-lg font-semibold"
+              className="bg-card p-6 rounded-3xl border border-border shadow-sm"
+              description="Hur många anonyma besökare som når varje steg i MyFloves kärnflöde."
+            >
+              <div className="space-y-3">
+                {(data.coreLoop ?? []).map((step) => {
+                  const max = Math.max(1, ...(data.coreLoop ?? []).map((s) => s.sessions));
+                  return (
+                    <div key={step.step}>
+                      <div className="flex justify-between text-sm mb-1">
+                        <span className="font-medium">{step.step}</span>
+                        <span className="text-muted-foreground">{step.sessions} besökare</span>
+                      </div>
+                      <div className="h-2 rounded-full bg-secondary/50 overflow-hidden">
+                        <div
+                          className="h-full bg-primary rounded-full"
+                          style={{ width: `${(step.sessions / max) * 100}%` }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </CollapsibleSection>
+
+            <CollapsibleSection
+              title="Händelser per dag (senaste 14 dagarna)"
+              headingClassName="text-lg font-semibold"
+              className="bg-card p-6 rounded-3xl border border-border shadow-sm"
+            >
+              <div className="flex items-end gap-1.5 h-32">
+                {(data.dailyEvents ?? []).map((day) => {
+                  const max = Math.max(1, ...(data.dailyEvents ?? []).map((d) => d.events));
+                  return (
+                    <div
+                      key={day.date}
+                      className="flex-1 flex flex-col items-center justify-end gap-1"
+                    >
+                      <div
+                        className="w-full bg-accent rounded-t-md"
+                        style={{
+                          height: `${(day.events / max) * 100}%`,
+                          minHeight: day.events > 0 ? "4px" : "0",
+                        }}
+                        title={`${day.date}: ${day.events}`}
+                      />
+                      <span className="text-[9px] text-muted-foreground">{day.date.slice(5)}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </CollapsibleSection>
 
             <CollapsibleSection
               title="Nya registreringar (senaste 14 dagarna)"

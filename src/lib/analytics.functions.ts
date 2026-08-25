@@ -1,8 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
-import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import type { Database } from "@/integrations/supabase/types";
 
 const LogInput = z.object({
   sessionId: z.string().min(1).max(128),
@@ -10,45 +8,20 @@ const LogInput = z.object({
   action: z.string().min(1).max(64),
 });
 
-function serverClient() {
-  return createClient<Database>(process.env.SUPABASE_URL!, process.env.SUPABASE_PUBLISHABLE_KEY!, {
-    auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
-  });
-}
-
 /**
- * Best-effort: read the signed-in user from the request bearer token so
- * besök kan kopplas till konto i adminvyn. Anonyma besök loggas som förut.
+ * Anonym loggning: vi sparar ENDAST vilken del av appen som användes, vilken
+ * handling det var, ett slumpat sessions-id (roteras dygnsvis i klienten) och
+ * tidpunkt. Ingen användar-id, e-post, IP eller innehåll sparas någonsin.
  */
-async function currentUserId(): Promise<string | null> {
-  try {
-    const { getRequest } = await import("@tanstack/react-start/server");
-    const authHeader = getRequest()?.headers?.get("authorization") ?? "";
-    if (!authHeader.startsWith("Bearer ")) return null;
-    const token = authHeader.slice(7);
-    if (token.split(".").length !== 3) return null;
-    const { data, error } = await serverClient().auth.getClaims(token);
-    if (error || !data?.claims?.sub) return null;
-    return String(data.claims.sub);
-  } catch {
-    return null;
-  }
-}
-
 export const logAnalyticsEventFn = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => LogInput.parse(data))
   .handler(async ({ data }) => {
-    const userId = await currentUserId();
-    const row = {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin.from("analytics_events").insert({
       session_id: data.sessionId,
       section: data.section,
       action: data.action,
-      user_id: userId,
-    };
-    // Admin-klienten används bara för att kunna skriva ett verifierat user_id
-    // (anon-klienten har ingen auth.uid() på servern).
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { error } = await supabaseAdmin.from("analytics_events").insert(row);
+    });
     if (error) {
       // Never surface analytics errors to callers; just log server-side.
       console.warn("[analytics] insert failed:", error.message);
@@ -64,14 +37,35 @@ export type AnalyticsSummary = {
   totalUsers: number;
   newUsers7d: number;
   totalEvents: number;
+  /** Snitt antal händelser per session (engagemang). */
+  avgEventsPerSession: number;
+  /** Andel sessioner som varit aktiva fler än en dag (retention), 0-100. */
+  returningRate: number;
+  /** DAU/MAU i procent — hur ofta appen används, 0-100. */
+  stickiness: number;
+  /** Antal olika delar av appen en session använder i snitt (bredd). */
+  avgSectionsPerSession: number;
+  /** Andel sessioner som gjort minst en riktig handling (inte bara besök), 0-100. */
+  actionRate: number;
+  /** Hur många sessioner som använt varje steg i dagliga loopen. */
+  coreLoop: Array<{ step: string; sessions: number }>;
   featureUsage: Array<{ section: string; action: string; events: number; sessions: number }>;
   dailyActiveSessions: Array<{ date: string; sessions: number }>;
+  dailyEvents: Array<{ date: string; events: number }>;
   dailySignups: Array<{ date: string; users: number }>;
 };
 
 function dayKey(iso: string): string {
   return iso.slice(0, 10);
 }
+
+/** Vilka sektioner som räknas till varje steg i den dagliga loopen. */
+const CORE_LOOP: Array<{ step: string; sections: string[] }> = [
+  { step: "Fånga", sections: ["quickflow", "dump", "notes", "anteckningar"] },
+  { step: "Planera", sections: ["today", "my-day", "min-dag", "tasks", "calendar", "flowplan"] },
+  { step: "Göra", sections: ["fokus", "pomodoro", "routines", "rutiner", "cleaning", "medicin"] },
+  { step: "Reflektera", sections: ["mood", "energy", "energy-map", "wellness", "flowscore"] },
+];
 
 export const getAnalyticsSummaryFn = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
@@ -106,6 +100,11 @@ export const getAnalyticsSummaryFn = createServerFn({ method: "GET" })
     const sessions30d = new Set<string>();
     const featureMap = new Map<string, { events: number; sessions: Set<string> }>();
     const dailyMap = new Map<string, Set<string>>();
+    const dailyEventMap = new Map<string, number>();
+    const sessionDays = new Map<string, Set<string>>();
+    const sessionSections = new Map<string, Set<string>>();
+    const sessionsWithAction = new Set<string>();
+    const loopSessions = CORE_LOOP.map(() => new Set<string>());
 
     for (const row of rows) {
       const t = new Date(row.created_at).getTime();
@@ -125,6 +124,21 @@ export const getAnalyticsSummaryFn = createServerFn({ method: "GET" })
       const daySet = dailyMap.get(d) ?? new Set<string>();
       daySet.add(row.session_id);
       dailyMap.set(d, daySet);
+      dailyEventMap.set(d, (dailyEventMap.get(d) ?? 0) + 1);
+
+      const days = sessionDays.get(row.session_id) ?? new Set<string>();
+      days.add(d);
+      sessionDays.set(row.session_id, days);
+
+      const sections = sessionSections.get(row.session_id) ?? new Set<string>();
+      sections.add(row.section);
+      sessionSections.set(row.session_id, sections);
+
+      if (row.action !== "view") sessionsWithAction.add(row.session_id);
+
+      CORE_LOOP.forEach((step, i) => {
+        if (step.sections.includes(row.section)) loopSessions[i].add(row.session_id);
+      });
     }
 
     const featureUsage = Array.from(featureMap.entries()).map(([key, v]) => {
@@ -134,13 +148,24 @@ export const getAnalyticsSummaryFn = createServerFn({ method: "GET" })
 
     // Build last 14 days series (fills gaps with 0).
     const dailyActiveSessions: Array<{ date: string; sessions: number }> = [];
+    const dailyEvents: Array<{ date: string; events: number }> = [];
     for (let i = 13; i >= 0; i--) {
       const d = new Date(now - i * oneDay).toISOString().slice(0, 10);
       dailyActiveSessions.push({ date: d, sessions: dailyMap.get(d)?.size ?? 0 });
+      dailyEvents.push({ date: d, events: dailyEventMap.get(d) ?? 0 });
     }
 
-    // Count auth users via admin RPC (reliable on Lovable Cloud where the
-    // admin listUsers API can fail silently and leave totals at 0).
+    const sessionCount = sessionsAll.size;
+    const pct = (part: number, whole: number) =>
+      whole > 0 ? Math.round((part / whole) * 100) : 0;
+    const avg = (total: number, whole: number) =>
+      whole > 0 ? Math.round((total / whole) * 10) / 10 : 0;
+
+    const multiDaySessions = Array.from(sessionDays.values()).filter((d) => d.size > 1).length;
+    const sectionsTotal = Array.from(sessionSections.values()).reduce((s, v) => s + v.size, 0);
+
+    // Count auth users via admin RPC (aggregerat antal konton – inga person-
+    // uppgifter används i statistiken).
     let totalUsers = 0;
     let newUsers7d = 0;
     const signupsByDay = new Map<string, number>();
@@ -167,15 +192,22 @@ export const getAnalyticsSummaryFn = createServerFn({ method: "GET" })
     }
 
     return {
-      totalSessions: sessionsAll.size,
+      totalSessions: sessionCount,
       activeSessions1d: sessions1d.size,
       activeSessions7d: sessions7d.size,
       activeSessions30d: sessions30d.size,
       totalUsers,
       newUsers7d,
       totalEvents: rows.length,
+      avgEventsPerSession: avg(rows.length, sessionCount),
+      returningRate: pct(multiDaySessions, sessionCount),
+      stickiness: pct(sessions1d.size, sessions30d.size),
+      avgSectionsPerSession: avg(sectionsTotal, sessionCount),
+      actionRate: pct(sessionsWithAction.size, sessionCount),
+      coreLoop: CORE_LOOP.map((step, i) => ({ step: step.step, sessions: loopSessions[i].size })),
       featureUsage,
       dailyActiveSessions,
+      dailyEvents,
       dailySignups,
     };
   });

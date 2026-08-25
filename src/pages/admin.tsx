@@ -243,7 +243,7 @@ function UsersSection() {
   const qc = useQueryClient();
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
-  const [sortKey, setSortKey] = useState<SortKey>("last_visit");
+  const [sortKey, setSortKey] = useState<SortKey>("last_login");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
   const filter = { ...(from ? { from } : {}), ...(to ? { to } : {}) };
   const hasFilter = Boolean(from || to);
@@ -349,13 +349,7 @@ function UsersSection() {
               >
                 Namn
               </SortHeader>
-              <SortHeader
-                active={sortKey === "last_visit"}
-                dir={sortDir}
-                onClick={() => handleSort("last_visit")}
-              >
-                Senaste besök
-              </SortHeader>
+              <th className="p-3">Besök</th>
               <SortHeader
                 active={sortKey === "last_login"}
                 dir={sortDir}
@@ -385,8 +379,7 @@ function UsersSection() {
                     <div className="text-xs text-muted-foreground">{u.email ?? "—"}</div>
                   </td>
                   <td className="p-3 text-xs text-muted-foreground">
-                    <div>{fmtDateTime(u.last_visit_at)}</div>
-                    <div>{u.visits > 0 ? `${u.visits} händelser` : "inga besök"}</div>
+                    Anonym statistik
                   </td>
                   <td className="p-3 text-xs text-muted-foreground">
                     {fmtDateTime(u.last_sign_in_at)}

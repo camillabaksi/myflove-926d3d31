@@ -21,7 +21,6 @@ export type Database = {
           id: string
           section: string
           session_id: string
-          user_id: string | null
         }
         Insert: {
           action: string
@@ -29,7 +28,6 @@ export type Database = {
           id?: string
           section: string
           session_id: string
-          user_id?: string | null
         }
         Update: {
           action?: string
@@ -37,7 +35,6 @@ export type Database = {
           id?: string
           section?: string
           session_id?: string
-          user_id?: string | null
         }
         Relationships: []
       }

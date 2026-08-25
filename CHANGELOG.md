@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-25 – Anonym appstatistik i admin
+
+- Appstatistiken är nu helt anonym: kopplingen mellan händelser och användarkonton är borttagen i databasen, och admin visar inte längre besök per person.
+- Vi sparar bara vilken del av appen som används, vilken typ av handling det är, ett slumpat lokalt id och tidpunkt – ingen e-post, IP eller innehåll.
+- Nya nyckeltal i Appstatistik: händelser per besökare, andel återkommande, dagligt bruk (DAU/MAU), delar per besökare, andel som gör något och totalt antal händelser.
+- Nya vyer: dagliga loopen (Fånga → Planera → Göra → Reflektera) och händelser per dag, plus en tydlig integritetsnot.
+
 ## 2026-08-25 – Marknadsscenen synkad med pitchsidan
 
 - Videons marknadsscen har samma rubrik, korttexter och ordning som marknadssliden i pitchdeck 3.4.
