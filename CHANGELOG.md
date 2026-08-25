@@ -3,6 +3,7 @@
 ## 2026-08-25 – Stora Flow vid hälsningen
 
 - Den stora vinkande Flow står nu vid "Hej, jag heter Flow" högst upp, och Flow vid telefonen är liten igen.
+- Pratbubblan är en rektangulär ruta som fyller bredden: på mobil ligger den under Flow, på större skärmar bredvid – texten radbryts snyggt i stället för att pressas ihop.
 
 ## 2026-08-25 – Tydlig Tillbaka-knapp på mobil
 
