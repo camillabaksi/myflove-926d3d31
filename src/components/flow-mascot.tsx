@@ -76,12 +76,20 @@ export function FlowSays({
   glow?: boolean;
 }) {
   return (
-    <div className={cn("flex items-start gap-3", className)}>
-      <FlowMascot size={size} float={!wave} wave={wave} glow={glow} />
-      <div className="rounded-3xl rounded-tl-md border border-[#2A2140]/5 bg-white px-4 py-3 text-sm leading-relaxed text-[#2A2140] shadow-sm">
+    <div
+      className={cn(
+        "grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 text-left",
+        className,
+      )}
+    >
+      <div className="shrink-0">
+        <FlowMascot size={size} float={!wave} wave={wave} glow={glow} />
+      </div>
+      <div className="min-w-0 rounded-2xl border border-[#2A2140]/5 bg-white px-4 py-3 text-sm leading-relaxed text-pretty text-[#2A2140] shadow-sm">
         {children}
       </div>
     </div>
   );
+
 }
 
