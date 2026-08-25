@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Flow 2.0: Flow är nu en stor levande karaktär som guidar dig en sak i taget – han byter pose, rekvisita och animation efter situationen (paraply när det regnar, bok vid plugg, kaffe vid paus, batteri vid låg energi, konfetti när något blir klart), har flera alternativa poser per situation och varje vy rymmer Flow, en kort text och en åtgärd utan scroll (2026-08-25)",
       "Förstasidan: Flow har levande kroppsspråk per vy – vinkar, studsar, nickar, funderar, pulserar, jublar och andas lugnt (respekterar reducerad rörelse) (2026-08-25)",
       "Förstasidan: Flow vid hälsningen är större och står nu bredvid pratrutan även på mobil, och Flow-bilden längst ner i visionsavsnittet är borttagen (2026-08-25)",
       "Förstasidan: den stora vinkande Flow står nu vid hälsningen \"Hej, jag heter Flow\" i stället för nertill vid telefonen. Pratbubblan är nu en rektangulär ruta som fyller bredden (under Flow på mobil, bredvid på desktop) (2026-08-25)",
