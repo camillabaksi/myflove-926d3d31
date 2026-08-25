@@ -1,16 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
-import Page from "@/pages/wake-up";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
+/** Morgonstart bor numera bland Rutiner & medicin. */
 export const Route = createFileRoute("/_app/morgonstart")({
-  head: () => ({
-    meta: [
-      { title: "Morgonstart – MyFlove" },
-      {
-        name: "description",
-        content: "Mjuk uppföljning på morgonen för dig som snoozar bort alarmet.",
-      },
-      { name: "robots", content: "noindex, nofollow" },
-    ],
-  }),
-  component: Page,
+  beforeLoad: () => {
+    throw redirect({ to: "/daglig-rutin" });
+  },
 });
