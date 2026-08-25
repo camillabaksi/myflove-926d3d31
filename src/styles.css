@@ -403,21 +403,24 @@ html[data-npf-less="true"] [data-npf="optional"] {
   transform-origin: 50% 90%;
 }
 
-/* Flow-karusell: explicit layout i stället för enbart utility-klasser.
-   Tracken har en kolumn per slide och får därför aldrig falla tillbaka till
-   blocklayout där korten hamnar vertikalt under varandra. */
+/* Flow-karusell: beprövad flex/scroll-snap för iOS och Android.
+   nowrap + flex-basis 100% gör att varje slide alltid ligger på samma rad
+   och är exakt lika bred som viewporten. !important skyddar den kritiska
+   geometrin från globala/responsiva layoutregler. */
 .flow-carousel {
   position: relative;
   width: 100%;
+  max-width: 100%;
   min-width: 0;
   overflow: hidden;
 }
 
 .flow-carousel-track {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: 100%;
+  display: flex !important;
+  flex-flow: row nowrap !important;
+  align-items: stretch;
   width: 100%;
+  max-width: 100%;
   height: 64vh;
   min-height: 400px;
   overflow-x: auto;
@@ -435,6 +438,8 @@ html[data-npf-less="true"] [data-npf="optional"] {
 }
 
 .flow-carousel-slide {
+  display: block;
+  flex: 0 0 100% !important;
   box-sizing: border-box;
   width: 100%;
   min-width: 100%;

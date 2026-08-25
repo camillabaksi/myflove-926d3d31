@@ -45,7 +45,7 @@ export default function FlowDeck() {
   const scored = useMemo<ScoredTask | null>(() => {
     if (!suggestion.task) return null;
     const ranked = rankNow({ tasks: activeTasks, batteryNow: reading.now, skip });
-    return ranked.find((r) => r.task.id === suggestion.task!.id) ?? null;
+    return ranked.find((r) => r.task.id === suggestion.task?.id) ?? null;
   }, [suggestion.task, activeTasks, reading.now, skip]);
 
   const load = useMemo(() => assessToday(reading, items), [reading, items]);
@@ -81,20 +81,24 @@ export default function FlowDeck() {
   const next = () => goTo(index + 1);
 
   return (
-    <section aria-label="Flow" className="flow-carousel relative">
-      {/* Egna CSS-klasser låser spår och slides horisontellt även om utility-CSS ändras. */}
+    <section
+      aria-label="Flow"
+      className="flow-carousel relative"
+      data-flow-version="flex-nowrap-2026-08-25"
+    >
+      {/* Utility-klasser och egna regler låser samma kritiska geometri. */}
       <div
         ref={trackRef}
         onScroll={onScroll}
         data-flow-track
-        className="flow-carousel-track"
+        className="flow-carousel-track flex flex-row flex-nowrap overflow-x-auto overflow-y-hidden"
       >
         {slides.map((id, i) => (
           <div
             key={`${id}-${i}`}
             data-flow-slide
             aria-hidden={i !== index}
-            className="flow-carousel-slide"
+            className="flow-carousel-slide block w-full min-w-full max-w-full shrink-0 grow-0 basis-full"
           >
             <FlowSlide
               id={id}
@@ -103,7 +107,7 @@ export default function FlowDeck() {
               onIntroNext={next}
               onStart={() => setFocusOpen(true)}
               onLater={() => {
-                if (suggestion.task) setSkip((s) => [...s, suggestion.task!.id]);
+                if (suggestion.task) setSkip((s) => [...s, suggestion.task.id]);
               }}
               onDone={() => suggestion.task && toggleTask(suggestion.task.id)}
               onMoveTomorrow={() => suggestion.task && snoozeTask(suggestion.task.id, 1)}

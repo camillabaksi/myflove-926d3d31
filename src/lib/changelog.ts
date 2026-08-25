@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Flow på publicerad mobil: den driftsatta /flow-routen låg på en äldre bundle utan karusellens CSS. Tracken är nu flex-row nowrap och varje slide är låst till exakt 100% bredd med flex-basis, horisontell touch-scroll och snap (2026-08-25)",
       "Flow-karusellen är nu tekniskt låst i sidled med en 100%-kolumn per slide, touch-swipe och snap. Den separata intro-wrappern är borttagen så Flow-presentationen alltid är slide 1 i samma karusell (2026-08-25)",
       "Flow visar nu en slide i taget i en horisontell carousel – Flow presenterar sig först, sedan energi, förslag och återhämtning. Svep på mobil, pilar och punkter på desktop, och inget staplas vertikalt längre (2026-08-25)",
       "Flow 2.0: Flow har en egen startsida med hälsning, kort introduktion första gången och en svepbar upplevelse där Flow visar en sak i taget – incheckning, energi, förslag eller återhämtning – och väljer själv vad som är mest relevant utifrån befintlig Flow-logik och data (2026-08-25)",

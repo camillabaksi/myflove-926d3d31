@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-25 – Flow-karusell korrigerad i publicerad mobilversion
+
+- Den publicerade `/flow`-routen identifierades som en äldre bundle som saknade karusellens CSS; service workern använder ingen offline-cache och var inte orsaken.
+- Karusellen använder nu en robust `flex-row nowrap`-track med `flex: 0 0 100%` per slide, dold vertikal overflow samt horisontell touch-scroll och snap.
+- Den kritiska geometrin finns både som komponentklasser och explicit komponent-CSS, så responsiva eller överordnade layoutregler inte kan stapla sliderna.
+
 ## 2026-08-25 – Flow-karusellen låst horisontellt
 
 - Tog bort den separata `FlowGreeting`-wrappern så Flow-presentationen alltid är slide 1 i samma karusell.
