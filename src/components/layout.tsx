@@ -346,12 +346,6 @@ export default function Layout({ children }: LayoutProps) {
       hint: "Hur dagens krav matchar din ork",
     },
     {
-      href: "/morgonstart",
-      label: "Morgonstart",
-      icon: Sun,
-      hint: "Mjuk väckning och start på dagen",
-    },
-    {
       href: "/veckans-flow",
       label: "Veckans översikt",
       icon: CalendarDays,
