@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-08-25 – Flow: svep, drag och tangentbord
+
+- Flow-karusellen följer nu fingret och musen i realtid; slide byts när du dragit ungefär en femtedel av bredden eller svept snabbt, annars fjädrar vyn tillbaka.
+- Vertikala dragningar skrollar sidan som vanligt, och drag startar inte på knappar, reglage eller fält – mående- och energireglagen fungerar oförändrat.
+- Första och sista vyn har motstånd i kanten i stället för att dras fritt.
+- Tangentbord: vänster-/högerpil byter vy, Home/End går till första/sista, med tydlig fokusring på karusellen och fokus som flyttas till den nya vyn.
+- Prickarna har nu klartextetiketter ("Vy 2 av 4: Hur är det just nu?") och en live-region läser upp vybytet.
+
+
+
 ## 2026-08-25 – Flow-karusellen ligger i en riktig horisontell rad
 
 - Flow-sliderna renderas nu i ett spår med `flex flex-row` där varje slide är låst till `w-full min-w-full shrink-0`, och spåret glider i sidled med `translateX` i stället för att byta ut en enda slide i DOM:en.
