@@ -592,14 +592,15 @@ function PhonePreview() {
         </div>
       </div>
 
-      {/* Flow bredvid telefonen */}
+      {/* Flow bredvid telefonen – vinkar hej */}
       <FlowMascot
-        size="lg"
-        float
+        size="2xl"
+        wave
         glow
-        className="absolute -right-4 -bottom-2 sm:-right-8"
-        alt="Flow tittar fram vid telefonen"
+        className="absolute -right-6 -bottom-6 sm:-right-12"
+        alt="Flow vinkar hej vid telefonen"
       />
+
 
       {/* Flytande kort */}
       <FloatCard
