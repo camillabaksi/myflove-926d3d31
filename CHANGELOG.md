@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-08-25 – Marknadsnyckeltal i pitchmaterialet
+
+- Ny slide "Marknaden · Market Opportunity" i pitchdeck 3.4 med sex externa nyckeltal (140M+, ~3 %, $1,9B, $6,7B, 17,5 % CAGR, $3,06B).
+- Nytt avsnitt 3.5 "Marknad och målgrupp i siffror" i Living Blueprint 3.4 (DOCX + PDF).
+- Pitchvideon har fått en marknadsscen med samma siffror, källnot och avslutningen "MyFlove starts with ADHD — but is built for the complexity of everyday life."
+- Alla siffror är märkta som externa uppskattningar/prognoser med källnot – inga egna traction-siffror.
+
+
+
 ## 2026-08-25 – Så funkar MyFlove (översikt)
 
 - Ny sida `/oversikt`: en enkel sammanfattning av allt i appen, grupperat i Börja här, Planera, Mående & energi, Hemma, Människor & resor, Studier & jobb och Gör appen till din – varje rad förklarar vad det är och länkar dit.
