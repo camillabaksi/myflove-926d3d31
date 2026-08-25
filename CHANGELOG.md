@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-25 – Direktlänk till en Flow-slide
+
+- `/flow` läser nu `?slide=` från URL:en (t.ex. `/flow?slide=3` eller `/flow?slide=suggestion`) och startar på rätt slide vid laddning.
+- Aktuell slide skrivs tillbaka till URL:en, så länken kan delas eller laddas om och landar på samma vy.
+
 ## 2026-08-25 – Flow byggd som state-baserad en-slide-vy
 
 - Flow renderar nu bokstavligen endast aktuell slide i DOM:en; intro, incheckning, energi, förslag och återhämtning ersätter varandra via `currentSlide` i stället för att ligga sida vid sida i en CSS-karusell.
