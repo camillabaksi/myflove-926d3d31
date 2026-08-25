@@ -34,7 +34,13 @@ export default function FlowDeck() {
   const [skip, setSkip] = useState<string[]>([]);
   const [focusOpen, setFocusOpen] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const pointerStartX = useRef<number | null>(null);
+  const [dragOffset, setDragOffset] = useState(0);
+  const [dragging, setDragging] = useState(false);
+  const drag = useRef<{ x: number; y: number; time: number; axis: "none" | "x" | "y" } | null>(null);
+  const viewportRef = useRef<HTMLDivElement | null>(null);
+  const activeSlideRef = useRef<HTMLDivElement | null>(null);
+  const shouldFocusSlide = useRef(false);
+
 
   const suggestion = useMemo(
     () =>
