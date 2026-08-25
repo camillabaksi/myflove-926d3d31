@@ -16,6 +16,7 @@ const SIZES = {
   lg: "h-32 w-32",
   xl: "h-48 w-48",
   "2xl": "h-64 w-64",
+  "3xl": "h-80 w-80",
 } as const;
 
 export type FlowMascotSize = keyof typeof SIZES;
@@ -24,12 +25,15 @@ export function FlowMascot({
   size = "md",
   float = false,
   glow = false,
+  wave = false,
   className,
   alt = "Flow – MyFloves följeslagare",
 }: {
   size?: FlowMascotSize;
   float?: boolean;
   glow?: boolean;
+  /** Flow vinkar som en hälsning. */
+  wave?: boolean;
   className?: string;
   alt?: string;
 }) {
@@ -49,7 +53,8 @@ export function FlowMascot({
         className={cn(
           "object-contain drop-shadow-[0_8px_24px_rgba(124,92,224,0.25)]",
           SIZES[size],
-          float && "floaty",
+          float && !wave && "floaty",
+          wave && "wave-hello",
         )}
       />
     </span>
