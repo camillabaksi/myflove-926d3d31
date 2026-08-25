@@ -39,6 +39,15 @@ vi.mock("@/lib/flow-engine", () => ({
     minutes: 15,
   }),
 }));
+// Länkar i decket behöver ingen router i testerna.
+vi.mock("wouter", () => ({
+  Link: ({ href, children, ...rest }: { href: string; children: React.ReactNode }) => (
+    <a href={href} {...rest}>
+      {children}
+    </a>
+  ),
+  useLocation: () => ["/flow", vi.fn()],
+}));
 vi.mock("@/lib/haptics", () => ({ haptic: vi.fn() }));
 
 const FlowDeck = (await import("@/components/flow/flow-deck")).default;
