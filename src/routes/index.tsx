@@ -512,13 +512,14 @@ function Hero() {
           </div>
 
           <div className="mx-auto mt-8 max-w-md lg:mx-0">
-            <FlowSays>
+            <FlowSays size="2xl" wave glow className="items-center">
               <p className="font-semibold">Hej, jag heter Flow 💜</p>
               <p className="text-[#6B647F]">
                 Jag håller reda på dagen. Du behöver bara göra en sak i taget.
               </p>
             </FlowSays>
           </div>
+
         </div>
 
         <PhonePreview />
@@ -620,14 +621,14 @@ function PhonePreview() {
         </div>
       </div>
 
-      {/* Flow bredvid telefonen – vinkar hej */}
+      {/* Liten Flow bredvid telefonen */}
       <FlowMascot
-        size="2xl"
-        wave
-        glow
-        className="absolute -right-6 -bottom-6 sm:-right-12"
-        alt="Flow vinkar hej vid telefonen"
+        size="md"
+        float
+        className="absolute -right-2 -bottom-2 sm:-right-6"
+        alt="Flow vid telefonen"
       />
+
 
 
       {/* Flytande kort */}

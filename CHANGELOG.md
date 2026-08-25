@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-08-25 – Stora Flow vid hälsningen
+
+- Den stora vinkande Flow står nu vid "Hej, jag heter Flow" högst upp, och Flow vid telefonen är liten igen.
+
 ## 2026-08-25 – Tydlig Tillbaka-knapp på mobil
 
 - Förstasidan har nu tydliga "‹ Tillbaka"- och "Nästa ›"-knappar längst ner på mobil, så du alltid kan byta vy med ett tryck om svepet inte fungerar.

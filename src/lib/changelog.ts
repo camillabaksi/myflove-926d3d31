@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Förstasidan: den stora vinkande Flow står nu vid hälsningen \"Hej, jag heter Flow\" i stället för nertill vid telefonen (2026-08-25)",
       "Förstasidan: tydliga \"‹ Tillbaka\"- och \"Nästa ›\"-knappar längst ner på mobil, så du alltid kan byta vy med ett tryck om svepet inte fungerar (2026-08-25)",
       "Förstasidan: bakåtsvep på mobil använder nu fingrets senast säkra position även vid avbruten iOS-kantgest, faktisk dragsträcka prioriteras framför momentum och tröskeln är 28–72 px. Ett hydratiseringsfel som kunde återställa karusellen är också borttaget (2026-08-25)",
       "Förstasidan: bakåtsvep fungerar nu även när mobilens kantgest vill ta över, tröskeln är lägre (36–90 px) och pilknapparna syns även på mobil. Flow är större och vinkar som en hälsning när du kommer in (2026-08-25)",
