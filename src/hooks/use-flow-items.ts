@@ -104,17 +104,22 @@ export function useFlowItems(dateISO?: string): {
       // Datumet på påminnelsen (plus ev. upprepning) avgör dagen – aldrig när
       // den skapades. occursOn är samma logik som kalendern använder.
       if (r.canceled) continue;
-      if (!occursOn(r.date, r.repeat, today)) continue;
+      // En flerdagsperiod (t.ex. en veckas semester) hör till varje dag i
+      // intervallet – exakt som i kalendern, inte bara startdagen.
+      const inPeriod = !!r.endDate && today >= r.date && today <= r.endDate;
+      if (!occursOn(r.date, r.repeat, today) && !inPeriod) continue;
+      // Mitt i en period finns inget klockslag – bara på startdagen.
+      const time = inPeriod && today !== r.date ? undefined : r.time;
       out.push({
         id: `rem-${r.id}`,
         title: r.title,
         source: "kalender",
         area: getArea(r),
         emoji: "📅",
-        time: r.time,
+        time,
         dueDate: r.date,
         daysUntil: 0,
-        priority: priorityFor({ time: r.time, daysUntil: 0, fixed: true }),
+        priority: priorityFor({ time, daysUntil: 0, fixed: true }),
         done: r.completed,
         // En kalenderhändelse är oftast något man faktiskt genomför
         // (möte, läkarbesök, lämning) – därför går den att bocka av.
@@ -122,6 +127,7 @@ export function useFlowItems(dateISO?: string): {
         href: "/kalender",
       });
     }
+
 
     for (const l of lectures) {
       if (l.weekday !== weekday) continue;
