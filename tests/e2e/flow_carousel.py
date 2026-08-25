@@ -103,6 +103,20 @@ async def run_width(browser, width: int) -> None:
         f"{width}px: introt finns inte vertikalt under nästa slide",
     )
 
+    box = await state_view.bounding_box()
+    if box:
+        y = box["y"] + min(box["height"] / 2, 250)
+        await page.mouse.move(box["x"] + box["width"] * 0.2, y)
+        await page.mouse.down()
+        await page.mouse.move(box["x"] + box["width"] * 0.8, y, steps=8)
+        await page.mouse.up()
+        await page.wait_for_timeout(300)
+    check(
+        await slides.first.get_attribute("data-flow-slide-id") == "intro",
+        f"{width}px: högersvep går tillbaka till föregående state",
+    )
+    check(await slides.count() == 1, f"{width}px: endast EN slide efter högersvep")
+
     os.makedirs("/tmp/browser/flow-e2e", exist_ok=True)
     await page.screenshot(path=f"/tmp/browser/flow-e2e/flow-state-{width}.png")
     await context.close()
