@@ -43,23 +43,27 @@ async def restore_session(context, page) -> None:
 
 
 async def open_flow(page) -> bool:
-    await page.goto(f"{BASE}/flow", wait_until="domcontentloaded")
-    await page.wait_for_timeout(1200)
-    if "/sign-in" in page.url or "/auth" in page.url:
-        await page.goto(f"{BASE}/dev-session", wait_until="domcontentloaded")
-        button = page.get_by_role("button", name=re.compile("testanvändare", re.I))
+    for attempt in range(3):
+        await page.goto(f"{BASE}/flow", wait_until="domcontentloaded")
+        await page.wait_for_timeout(1200)
+        if "/sign-in" in page.url or "/auth" in page.url:
+            await page.goto(f"{BASE}/dev-session", wait_until="domcontentloaded")
+            button = page.get_by_role("button", name=re.compile("testanvändare", re.I))
+            try:
+                await button.first.wait_for(state="visible", timeout=20000)
+                await button.first.click()
+                await page.wait_for_url(re.compile(r"/hem"), timeout=45000)
+            except Exception as error:  # noqa: BLE001
+                print(f"  (testsession försök {attempt + 1}: {error})")
+                await page.wait_for_timeout(2500)
+                continue
+        await page.goto(f"{BASE}/flow", wait_until="domcontentloaded")
         try:
-            await button.first.wait_for(state="visible", timeout=20000)
-            await button.first.click()
-            await page.wait_for_url(re.compile(r"/hem"), timeout=45000)
-            await page.goto(f"{BASE}/flow", wait_until="domcontentloaded")
-        except Exception as error:  # noqa: BLE001
-            print("  (kunde inte skapa testsession:", error, ")")
-    try:
-        await page.locator("[data-flow-state-view]").wait_for(state="visible", timeout=20000)
-        return True
-    except Exception:
-        return False
+            await page.locator("[data-flow-state-view]").wait_for(state="visible", timeout=20000)
+            return True
+        except Exception:
+            await page.wait_for_timeout(2500)
+    return False
 
 
 def compare(actual_path: str, baseline_path: str, label: str) -> None:
