@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-25 – Flow 2.0: levande karaktär, en sak i taget
+
+- Flow är nu huvudpersonen i varje vy: maskoten tar ungefär en tredjedel av skärmen, får rekvisita (paraply, bok, laptop, kaffe, batteri, hjärta, konfetti) och egen animation utifrån situationen.
+- Flow kan överraska – varje situation har flera alternativa poser som växlar mellan vyerna.
+- Regnig dag ger en egen Flow-vy med paraplytips, baserad på väderdatan som redan finns i appen.
+- Varje vy rymmer nu Flow, en kort text och en huvudåtgärd utan intern scroll, och exakt en Flow-state renderas i DOM:en.
+- När du markerar något som klart hoppar Flow och firar innan nästa vy visas.
+
 ## 2026-08-25 – Flow lever i varje vy
 
 - Flow har nu eget kroppsspråk per vy på förstasidan: vinkar i hälsningen, studsar i telefonen, nickar när han lyssnar, funderar vid modulerna, pulserar vid FlowScore, jublar vid "Byggs just nu" och andas lugnt i Dagens Flow.
