@@ -355,7 +355,6 @@ function LandingDeck() {
         role="group"
         aria-roledescription="karusell"
         aria-label="MyFlove-presentation"
-        onKeyDown={onKeyDown}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={endDrag}
@@ -431,7 +430,6 @@ function LandingDeck() {
               aria-selected={i === index}
               tabIndex={i === index ? 0 : -1}
               onClick={() => goTo(i)}
-              onKeyDown={onKeyDown}
               aria-label={`${slide.label} – vy ${i + 1} av ${total}`}
               className={`h-2.5 rounded-full transition-all focus-visible:ring-2 focus-visible:ring-[#7C5CE0] focus-visible:ring-offset-2 focus-visible:outline-none ${
                 i === index ? "w-7 bg-[#7C5CE0]" : "w-2.5 bg-[#2A2140]/20 hover:bg-[#7C5CE0]/50"
