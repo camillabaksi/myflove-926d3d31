@@ -457,6 +457,13 @@ export default function Layout({ children }: LayoutProps) {
         ]
       : []),
     {
+      href: "/oversikt",
+      label: "Så funkar MyFlove",
+      icon: Compass,
+      hint: "Enkel sammanfattning av allt i appen – och vart du går",
+      essential: true,
+    },
+    {
       href: "/min-livsprofil",
       label: "Min livsprofil",
       icon: Compass,
