@@ -512,13 +512,14 @@ function Hero() {
           </div>
 
           <div className="mx-auto mt-8 max-w-md lg:mx-0">
-            <FlowSays>
+            <FlowSays size="2xl" wave glow className="items-center">
               <p className="font-semibold">Hej, jag heter Flow 💜</p>
               <p className="text-[#6B647F]">
                 Jag håller reda på dagen. Du behöver bara göra en sak i taget.
               </p>
             </FlowSays>
           </div>
+
         </div>
 
         <PhonePreview />
