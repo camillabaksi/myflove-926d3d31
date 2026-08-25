@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Morgonstart bor nu bland Rutiner & medicin – egen flik och eget avsnitt, gamla /morgonstart leder dit automatiskt och dubbletten i menyn är borttagen (2026-08-25)",
       "Flow överallt: Flow finns nu överst i alla vanliga vyer (att göra, kalender, medicin, barn, studier, jobb, träning, inköp m.fl.) och visar en kontext i taget – utan att dubbleras på Hem, Min dag, Flow-previewen, pitch eller admin (2026-08-25)",
       "Flow i appen: Flow finns nu på Hem och Min dag som en kontextuell följeslagare – han väljer en sak i taget utifrån medicin, väder, energi, barn och dagens nästa uppgift, har ny rekvisita (sol, solglasögon, medicinburk, vattenglas, tvättkorg, mini-Flows för barnen) och firar när du bockar av något. Flow-previewen är oförändrad (2026-08-25)",
       "Flow: automatiska tester (Vitest) säkerställer att exakt ett Flow-state visas åt gången och att varje situation ger rätt rekvisita och pose på mobilbredd – körs med npm run test (2026-08-25)",
