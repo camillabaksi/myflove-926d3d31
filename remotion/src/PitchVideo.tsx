@@ -476,19 +476,49 @@ const SceneWhyNow: React.FC = () => (
 
 const SceneMarket: React.FC = () => {
   const stats = [
-    { v: "140M+", l: "vuxna globalt med kvarstående ADHD", a: COLORS.primary },
-    { v: "~3 %", l: "av vuxna i Sverige (Socialstyrelsen)", a: COLORS.primarySoft },
-    { v: "$3,06B", l: "digital hälsa för neurodivergenta 2025", a: COLORS.gold },
-    { v: "$1,9B", l: "ADHD-appmarknad 2025", a: COLORS.primary },
-    { v: "$6,7B", l: "ADHD-appmarknad 2033", a: COLORS.primarySoft },
-    { v: "17,5 %", l: "CAGR 2025–2033", a: COLORS.gold },
+    {
+      v: "140M+",
+      l: "vuxna globalt",
+      d: "Vuxna med kvarstående ADHD (2,58 % av vuxna, ca 139,8 miljoner). Global systematisk översikt.",
+      a: COLORS.primary,
+    },
+    {
+      v: "~3 %",
+      l: "av vuxna i Sverige",
+      d: "Socialstyrelsen anger att cirka 3 % av vuxna i Sverige har ADHD.",
+      a: COLORS.primarySoft,
+    },
+    {
+      v: "$3,06B",
+      l: "digital hälsa 2025",
+      d: "Uppskattad global digital-health-marknad för neurodivergenta användare 2025.",
+      a: COLORS.gold,
+    },
+    {
+      v: "$1,9B",
+      l: "ADHD-appar 2025",
+      d: "Uppskattad global marknad för ADHD-appar 2025.",
+      a: COLORS.primary,
+    },
+    {
+      v: "$6,7B",
+      l: "ADHD-appar 2033",
+      d: "Prognostiserad global marknad för ADHD-appar 2033.",
+      a: COLORS.primarySoft,
+    },
+    {
+      v: "17,5 %",
+      l: "CAGR 2025–2033",
+      d: "Prognostiserad årlig tillväxt för ADHD-appmarknaden.",
+      a: COLORS.gold,
+    },
   ];
   return (
     <Shell>
       <div style={{ display: "flex", flexDirection: "column", gap: 30 }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           <Eyebrow>Marknaden · market opportunity</Eyebrow>
-          <Title size={64}>En stor målgrupp – och en marknad som skalar</Title>
+          <Title size={64}>En stor, växande målgrupp – och en marknad som skalar</Title>
         </div>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
           {stats.map((s, i) => (
@@ -503,7 +533,7 @@ const SceneMarket: React.FC = () => {
                 boxShadow: "0 14px 34px rgba(36,28,59,0.07)",
                 display: "flex",
                 flexDirection: "column",
-                gap: 8,
+                gap: 6,
               }}
             >
               <div style={{ width: 60, height: 10, borderRadius: 5, background: s.a }} />
@@ -511,19 +541,37 @@ const SceneMarket: React.FC = () => {
                 style={{
                   fontFamily: FONTS.display,
                   fontWeight: 800,
-                  fontSize: 46,
+                  fontSize: 44,
                   color: COLORS.ink,
                   lineHeight: 1,
                 }}
               >
                 {s.v}
               </div>
-              <div style={{ fontFamily: FONTS.body, fontSize: 20, color: COLORS.muted }}>
+              <div
+                style={{
+                  fontFamily: FONTS.body,
+                  fontWeight: 700,
+                  fontSize: 20,
+                  color: COLORS.primary,
+                }}
+              >
                 {s.l}
+              </div>
+              <div
+                style={{
+                  fontFamily: FONTS.body,
+                  fontSize: 18,
+                  lineHeight: 1.35,
+                  color: COLORS.muted,
+                }}
+              >
+                {s.d}
               </div>
             </div>
           ))}
         </div>
+
         <div
           style={{
             ...useIn(56),

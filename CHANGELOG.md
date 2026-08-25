@@ -1,6 +1,12 @@
 # Changelog
 
+## 2026-08-25 – Marknadsscenen synkad med pitchsidan
+
+- Videons marknadsscen har samma rubrik, korttexter och ordning som marknadssliden i pitchdeck 3.4.
+- Pitchsidan visar nu miniatyrer av både videons marknadsscen och deckets marknadsslide, plus titelsidan.
+
 ## 2026-08-25 – Marknadsnyckeltal i pitchmaterialet
+
 
 - Ny slide "Marknaden · Market Opportunity" i pitchdeck 3.4 med sex externa nyckeltal (140M+, ~3 %, $1,9B, $6,7B, 17,5 % CAGR, $3,06B).
 - Nytt avsnitt 3.5 "Marknad och målgrupp i siffror" i Living Blueprint 3.4 (DOCX + PDF).
