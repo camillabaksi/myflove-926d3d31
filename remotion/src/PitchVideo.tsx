@@ -297,6 +297,37 @@ const SceneProduct: React.FC = () => (
   </Shell>
 );
 
+const SceneFlow: React.FC = () => (
+  <Shell>
+    <div style={{ display: "flex", flexDirection: "column", gap: 46 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+        <Eyebrow>Flow 2.0</Eyebrow>
+        <Title size={72}>En följeslagare som säger en sak i taget</Title>
+      </div>
+      <div style={{ display: "flex", gap: 28 }}>
+        <Card
+          accent={COLORS.primary}
+          title="Levande karaktär"
+          text="Flow visar läget — regn, medicin, vila, studier eller klart."
+          delay={14}
+        />
+        <Card
+          accent={COLORS.primarySoft}
+          title="Finns i hela appen"
+          text="Samma lugna röst på Hem, Min dag och alla vyer."
+          delay={22}
+        />
+        <Card
+          accent={COLORS.gold}
+          title="Bygger på din data"
+          text="Energi, mående, medicin, barn och väder — inget nytt att fylla i."
+          delay={30}
+        />
+      </div>
+    </div>
+  </Shell>
+);
+
 const SceneHow: React.FC = () => {
   const steps = [
     { n: "1", t: "Fånga", d: "Skriv fritt i QuickFlow" },
@@ -448,6 +479,7 @@ const SCENES: { c: React.FC; d: number }[] = [
   { c: SceneProblem, d: 165 },
   { c: SceneInsight, d: 130 },
   { c: SceneProduct, d: 170 },
+  { c: SceneFlow, d: 165 },
   { c: SceneHow, d: 175 },
   { c: SceneWhyNow, d: 165 },
   { c: SceneOutro, d: 150 },
