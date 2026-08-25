@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Blueprint 3.4 och pitchdeck 3.4: Flow syns nu i dokumenten – på framsidan, i avsnittet om Flow i appen och som en egen slide i decket (2026-08-25)",
       "Blueprint 3.3, pitchdeck 3.3 och ny pitchvideo med egen Flow-scen – allt material speglar Flow i hela appen (2026-08-25)",
       "Morgonstart bor nu bland Rutiner & medicin – egen flik och eget avsnitt, gamla /morgonstart leder dit automatiskt och dubbletten i menyn är borttagen (2026-08-25)",
       "Flow överallt: Flow finns nu överst i alla vanliga vyer (att göra, kalender, medicin, barn, studier, jobb, träning, inköp m.fl.) och visar en kontext i taget – utan att dubbleras på Hem, Min dag, Flow-previewen, pitch eller admin (2026-08-25)",
