@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-25 – Automatiska tester för Flows states
+
+- Nya automatiska tester (Vitest) verifierar att exakt ett Flow-state renderas åt gången, både i karaktären och i hela Flow-vyn.
+- Varje situation testas mot rätt rekvisita och pose: paraply i regn, säng och Zzz vid sömn, kaffe vid paus, bok vid plugg, laptop vid jobb, dammsugare vid städning, kockmössa och panna vid mat, bil/buss vid resa, batteri vid låg och hög energi, konfetti när något är klart och andningsring vid återhämtning.
+- Testerna körs på mobilbredd (390 px) och kontrollerar även att Flow-scenen håller sin storlek (33svh, kvadratisk) och att prickarna matchar antalet vyer.
+- Kör dem med `npm run test`.
+
 ## 2026-08-25 – Flow får riktiga scener i /flow
 
 - Flow är nu en stor karaktär med tydlig rekvisita direkt i /flow: paraply i regn, säng och Zzz vid vila, kaffekopp vid paus, bok vid plugg, laptop vid jobb, dammsugare vid städning, kockmössa och stekpanna vid mat, bil vid resa, batteri vid låg/hög energi, konfetti när något blir klart och lugn andningsring vid återhämtning.

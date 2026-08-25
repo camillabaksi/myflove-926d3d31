@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Flow: automatiska tester (Vitest) säkerställer att exakt ett Flow-state visas åt gången och att varje situation ger rätt rekvisita och pose på mobilbredd – körs med npm run test (2026-08-25)",
       "Flow: riktiga karaktärsscener i /flow – Flow får paraply i regn, säng vid vila, kaffe vid paus, bok vid plugg, laptop vid jobb, dammsugare vid städning, kockmössa vid mat, bil vid resa, batteri vid låg/hög energi, konfetti när något blir klart och lugn andning vid återhämtning, med flera varianter per situation och utan intern scroll på mobil (2026-08-25)",
       "Flow: haptisk återkoppling vid vybyte – kort vibration när du swipar eller trycker dig till nästa vy, en liten stöt vid flödets kanter och en tydligare puls när något firas. Avstängt vid reducerad rörelse och tyst läge (2026-08-25)",
       "Flow 2.0: Flow är nu en stor levande karaktär som guidar dig en sak i taget – han byter pose, rekvisita och animation efter situationen (paraply när det regnar, bok vid plugg, kaffe vid paus, batteri vid låg energi, konfetti när något blir klart), har flera alternativa poser per situation och varje vy rymmer Flow, en kort text och en åtgärd utan scroll (2026-08-25)",
