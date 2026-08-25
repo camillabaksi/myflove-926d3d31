@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-25 – Flow får riktiga scener i /flow
+
+- Flow är nu en stor karaktär med tydlig rekvisita direkt i /flow: paraply i regn, säng och Zzz vid vila, kaffekopp vid paus, bok vid plugg, laptop vid jobb, dammsugare vid städning, kockmössa och stekpanna vid mat, bil vid resa, batteri vid låg/hög energi, konfetti när något blir klart och lugn andningsring vid återhämtning.
+- Varje situation har flera lätta varianter så Flow inte gör exakt samma sak varje gång.
+- Höjderna är justerade så att Flow, texten och huvudåtgärden ryms utan intern scroll på 375 och 390 px, med bara en Flow-state i DOM:en åt gången.
+
 ## 2026-08-25 – Haptisk återkoppling i Flow
 
 - Flow ger nu en kort vibration när du byter vy, en liten stöt när du är längst ut i flödet och en tydligare puls när något firas.
