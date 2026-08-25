@@ -312,7 +312,7 @@ function LandingDeck() {
     else if (projected >= threshold) goTo(index - 1);
   };
 
-  const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+  const onKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === "ArrowRight") {
       event.preventDefault();
       goTo(index + 1);
