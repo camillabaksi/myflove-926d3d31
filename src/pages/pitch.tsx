@@ -1,7 +1,7 @@
 import Layout from "@/components/layout";
 import { Link } from "@tanstack/react-router";
 import { useIsAdmin } from "@/hooks/use-is-admin";
-import { Lock, Download, ArrowLeft, FileText, Film, BookOpen } from "lucide-react";
+import { Lock, Download, ArrowLeft, FileText, Film, BookOpen, Sparkles } from "lucide-react";
 
 const BLUEPRINT_VERSIONS = [
   { version: "3.4", label: "Senaste – Flow syns i blueprint och pitchdeck" },
@@ -53,32 +53,62 @@ export default function PitchPage() {
         </header>
 
         <section className="rounded-2xl border border-border bg-card p-4 space-y-3">
-          <h2 className="flex items-center gap-2 font-serif text-xl font-semibold">
-            <Film size={18} className="text-primary" /> Pitchvideo
-          </h2>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h2 className="flex items-center gap-2 font-serif text-xl font-semibold">
+              <Film size={18} className="text-primary" /> Pitchvideo
+            </h2>
+            <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
+              Version 3.4 · Flow 2.0
+            </span>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            Samma Flow-karaktär som i appen och i pitchdeck 3.4 – med egen Flow 2.0-scen och
+            avslutning där Flow vinkar.
+          </p>
           <video
             controls
             playsInline
             preload="metadata"
+            poster="/pitch/myflove-pitch-3.4-poster.jpg"
             className="w-full rounded-xl bg-black aspect-video"
             src="/pitch/myflove-pitch-2026.mp4"
           />
-          <a
-            href="/pitch/myflove-pitch-2026.mp4"
-            download
-            className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
-          >
-            <Download size={16} /> Ladda ner videon (MP4)
-          </a>
+          <div className="flex flex-wrap gap-2">
+            <a
+              href="/pitch/myflove-pitch-2026.mp4"
+              download
+              className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
+            >
+              <Download size={16} /> Ladda ner videon (MP4)
+            </a>
+            <Link
+              to="/flow"
+              className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-medium hover:bg-secondary"
+            >
+              <Sparkles size={16} /> Visa Flow live
+            </Link>
+          </div>
         </section>
 
         <section className="rounded-2xl border border-border bg-card p-4 space-y-3">
-          <h2 className="flex items-center gap-2 font-serif text-xl font-semibold">
-            <FileText size={18} className="text-primary" /> Pitchdeck
-          </h2>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h2 className="flex items-center gap-2 font-serif text-xl font-semibold">
+              <FileText size={18} className="text-primary" /> Pitchdeck
+            </h2>
+            <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
+              Version 3.4
+            </span>
+          </div>
           <p className="text-sm text-muted-foreground">
-            Senaste decket (3.4) i PowerPoint-format, samt en PDF-version för snabb visning.
+            Senaste decket (3.4) med Flow på titelsidan och en egen Flow 2.0-slide – i
+            PowerPoint-format samt PDF för snabb visning.
           </p>
+          <img
+            src="/pitch/MyFlove_Pitchdeck_3.4-thumb.jpg"
+            alt="Titelsidan i MyFlove Pitchdeck 3.4 med Flow-karaktären"
+            loading="lazy"
+            className="w-full rounded-xl border border-border"
+          />
           <div className="flex flex-wrap gap-2">
             <a
               href="/pitch/MyFlove_Pitchdeck_3.4.pptx"

@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-25 – Pitchsidan matchar 3.4
+
+- Pitchvideon har fått en miniatyrbild (poster) från Flow 2.0-scenen i stället för en svart ruta.
+- Pitchdecket visas med en förhandsbild av titelsidan där Flow står med.
+- Tydliga versionsmärken (3.4) på video och deck, plus en genväg till Flow live.
+
 ## 2026-08-25 – Flow syns även i videon (3.4)
 
 - Pitchvideon har renderats om: Flow står nu som stor karaktär i Flow 2.0-scenen och vinkar med i slutbilden.
