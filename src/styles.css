@@ -809,3 +809,63 @@ html[data-npf-less="true"] [data-npf="optional"] {
   box-shadow: 0 4px 12px hsl(var(--primary) / 0.28);
   cursor: pointer;
 }
+
+/* ── Flow-rekvisita: små, lena animationer för karaktärens scener ── */
+@keyframes myflove-flow-rain {
+  0% { transform: translateY(-10%); opacity: 0; }
+  15% { opacity: 0.9; }
+  100% { transform: translateY(320%); opacity: 0; }
+}
+@keyframes myflove-flow-zzz {
+  0% { transform: translate(0, 0) scale(0.8); opacity: 0; }
+  30% { opacity: 0.9; }
+  100% { transform: translate(14px, -34px) scale(1.1); opacity: 0; }
+}
+@keyframes myflove-flow-steam {
+  0% { transform: translateY(0) scaleY(0.6); opacity: 0; }
+  40% { opacity: 0.8; }
+  100% { transform: translateY(-18px) scaleY(1.2); opacity: 0; }
+}
+@keyframes myflove-flow-confetti {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  100% { transform: translateY(340%) rotate(320deg); opacity: 0; }
+}
+@keyframes myflove-flow-breath-ring {
+  0%, 100% { transform: scale(0.86); opacity: 0.25; }
+  50% { transform: scale(1.08); opacity: 0.6; }
+}
+@keyframes myflove-flow-wiggle {
+  0%, 100% { transform: rotate(-5deg); }
+  50% { transform: rotate(5deg); }
+}
+@keyframes myflove-flow-drive {
+  0%, 100% { transform: translateX(-3%) translateY(0); }
+  50% { transform: translateX(3%) translateY(-2px); }
+}
+@keyframes myflove-flow-twinkle-star {
+  0%, 100% { transform: scale(0.7); opacity: 0.35; }
+  50% { transform: scale(1.15); opacity: 1; }
+}
+
+@utility flow-rain { animation: myflove-flow-rain 1.6s linear infinite; }
+@utility flow-zzz { animation: myflove-flow-zzz 3.2s ease-out infinite; }
+@utility flow-steam { animation: myflove-flow-steam 2.4s ease-out infinite; }
+@utility flow-confetti { animation: myflove-flow-confetti 2.6s ease-in infinite; }
+@utility flow-breath-ring { animation: myflove-flow-breath-ring 6s ease-in-out infinite; }
+@utility flow-wiggle { transform-origin: 50% 100%; animation: myflove-flow-wiggle 2.4s ease-in-out infinite; }
+@utility flow-drive { animation: myflove-flow-drive 3s ease-in-out infinite; }
+@utility flow-twinkle { animation: myflove-flow-twinkle-star 2.2s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .flow-rain,
+  .flow-zzz,
+  .flow-steam,
+  .flow-confetti,
+  .flow-breath-ring,
+  .flow-wiggle,
+  .flow-drive,
+  .flow-twinkle {
+    animation: none !important;
+  }
+}
