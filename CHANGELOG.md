@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-25 – Stabilt bakåtsvep på mobil
+
+- Bakåtsvepet använder nu fingrets senast säkra position även när iOS avbryter en kantgest, och en faktisk dragsträcka väger tyngre än brusig momentumdata.
+- Sveptröskeln är sänkt till 28–72 px och karusellen fångar gesten redan när fingret sätts ned.
+- Ett hydratiseringsfel från ett slumpmässigt citat är borttaget så karusellens läge inte längre kan återställas när sidan startar.
+
 ## 2026-08-25 – Enklare att svepa tillbaka och Flow vinkar hej
 
 - Bakåtsvep fungerar nu även när mobilens egen kantgest ville ta över: sidan blockerar webbläsarens sido-överskrollning och tröskeln för att byta vy är lägre (36–90 px).
