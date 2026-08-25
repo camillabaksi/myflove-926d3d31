@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-25 – Visuellt regressionstest för Flow-karusellen
+
+- Nytt test `tests/e2e/flow_visual_regression.py` som i 375px, 390px och 414px kontrollerar geometrin (slides på samma rad, sida vid sida, en synlig åt gången) så vertikal stapling upptäcks direkt.
+- Skärmbilder jämförs pixelvis mot sparade baselines i `tests/e2e/baselines/`; avvikelser över 2 % ger fel och en diffbild sparas i `/tmp/browser/flow-visual/`.
+- Animationer och övergångar fryses under testet, och baselines uppdateras med `--update`.
+
 ## 2026-08-25 – Cache-busting och E2E-test för Flow-karusellen
 
 - Varje build får ett unikt build-id. Vid ny version töms Cache Storage automatiskt, service workern uppdateras och sidan laddas om en gång, så den publicerade appen aldrig kan ligga kvar på en gammal bundle.
