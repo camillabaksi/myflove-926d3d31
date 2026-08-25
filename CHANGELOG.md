@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-25 – Flow syns i dokumenten (3.4)
+
+- Living Blueprint 3.4 (DOCX + PDF): Flow finns nu med som bild på framsidan och i avsnittet "Flow i appen".
+- Pitchdeck 3.4 (PPTX + PDF): Flow står på titelsidan och har fått en egen slide med 12 lägen, Flow i hela appen och haptik.
+- Pitchsidan pekar på 3.4-filerna.
+
 ## 2026-08-25 – Blueprint, pitchdeck och video 3.3
 
 - Living Blueprint 3.3 (DOCX + PDF) med nytt avsnitt om Flow i appen och Morgonstart i Rutiner & medicin.
