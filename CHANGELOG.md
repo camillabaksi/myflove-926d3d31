@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-25 – Export av adminstatistik (CSV/PDF)
+
+- Ny exportruta i Appstatistik: välj datumintervall (eller 7/30/90 dagar) och ladda ner statistiken som CSV eller PDF.
+- Exporten innehåller per dag (besökare och händelser) samt per del av appen och handling – helt anonymt, ingen personlig data.
+
 ## 2026-08-25 – Anonym appstatistik i admin
 
 - Appstatistiken är nu helt anonym: kopplingen mellan händelser och användarkonton är borttagen i databasen, och admin visar inte längre besök per person.
