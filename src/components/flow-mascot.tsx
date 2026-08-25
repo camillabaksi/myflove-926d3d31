@@ -78,18 +78,19 @@ export function FlowSays({
   return (
     <div
       className={cn(
-        "grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 text-left",
+        "grid grid-cols-1 justify-items-center gap-3 text-left sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center sm:justify-items-stretch",
         className,
       )}
     >
       <div className="shrink-0">
         <FlowMascot size={size} float={!wave} wave={wave} glow={glow} />
       </div>
-      <div className="min-w-0 rounded-2xl border border-[#2A2140]/5 bg-white px-4 py-3 text-sm leading-relaxed text-pretty text-[#2A2140] shadow-sm">
+      <div className="w-full min-w-0 rounded-2xl border border-[#2A2140]/5 bg-white px-4 py-3 text-sm leading-relaxed text-pretty text-[#2A2140] shadow-sm">
         {children}
       </div>
     </div>
   );
+
 
 }
 
