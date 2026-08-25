@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-25 – Haptisk återkoppling i Flow
+
+- Flow ger nu en kort vibration när du byter vy, en liten stöt när du är längst ut i flödet och en tydligare puls när något firas.
+- Vibrationerna är avstängda om du valt reducerad rörelse eller har tyst läge på, och används bara på enheter som stöder det.
+
 ## 2026-08-25 – Flow 2.0: levande karaktär, en sak i taget
 
 - Flow är nu huvudpersonen i varje vy: maskoten tar ungefär en tredjedel av skärmen, får rekvisita (paraply, bok, laptop, kaffe, batteri, hjärta, konfetti) och egen animation utifrån situationen.
