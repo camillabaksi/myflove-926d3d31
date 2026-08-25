@@ -62,9 +62,11 @@ export default function PitchPage() {
             </span>
           </div>
           <p className="text-sm text-muted-foreground">
-            Samma Flow-karaktär som i appen och i pitchdeck 3.4 – med egen Flow 2.0-scen och
-            avslutning där Flow vinkar.
+            Samma Flow-karaktär som i appen och i pitchdeck 3.4 – med egen Flow 2.0-scen, en
+            marknadsscen med externa nyckeltal (uppskattningar/prognoser) och avslutning där Flow
+            vinkar.
           </p>
+
           <video
             controls
             playsInline
@@ -100,9 +102,10 @@ export default function PitchPage() {
             </span>
           </div>
           <p className="text-sm text-muted-foreground">
-            Senaste decket (3.4) med Flow på titelsidan och en egen Flow 2.0-slide – i
-            PowerPoint-format samt PDF för snabb visning.
+            Senaste decket (3.4) med Flow på titelsidan, en egen Flow 2.0-slide och en marknadsslide
+            med externa nyckeltal och källnot – i PowerPoint-format samt PDF för snabb visning.
           </p>
+
           <img
             src="/pitch/MyFlove_Pitchdeck_3.4-thumb.jpg"
             alt="Titelsidan i MyFlove Pitchdeck 3.4 med Flow-karaktären"
