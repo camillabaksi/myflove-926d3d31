@@ -211,36 +211,48 @@ export default function FlowDeck() {
       data-flow-current-slide={currentSlide}
     >
       <div
+        ref={viewportRef}
         data-flow-viewport
-        className="relative w-full overflow-hidden touch-pan-y"
-        onPointerDown={(event) => handlePointerDown(event.clientX)}
-        onPointerUp={(event) => handlePointerUp(event.clientX)}
-        onPointerCancel={() => {
-          pointerStartX.current = null;
-        }}
+        tabIndex={0}
+        role="group"
+        aria-roledescription="karusell"
+        aria-label={`Flow – vy ${currentSlide + 1} av ${slides.length}`}
+        aria-describedby="flow-karusell-hjalp"
+        onKeyDown={onKeyDown}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={endDrag}
+        onPointerCancel={endDrag}
+        className="relative w-full overflow-hidden rounded-2xl outline-none touch-pan-y focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        style={{ cursor: dragging ? "grabbing" : undefined }}
       >
         <div
           data-flow-track
-          className="flex w-full flex-row items-start transition-transform duration-300 ease-out motion-reduce:transition-none"
-          style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+          className={`flex w-full flex-row items-start ${
+            dragging ? "" : "transition-transform duration-300 ease-out motion-reduce:transition-none"
+          }`}
+          style={{ transform: `translateX(calc(-${currentSlide * 100}% + ${dragOffset}px))` }}
         >
           {slides.map((id, i) => {
             const active = i === currentSlide;
             return (
               <div
                 key={`${id}-${i}`}
+                ref={active ? activeSlideRef : undefined}
                 data-flow-slide
                 data-flow-slide-id={id}
                 data-flow-slide-active={active ? "true" : "false"}
                 aria-hidden={!active}
                 inert={!active}
-                className="w-full min-w-full shrink-0 grow-0 basis-full"
+                tabIndex={active ? -1 : undefined}
+                aria-label={`${SLIDE_LABELS[id]} – vy ${i + 1} av ${slides.length}`}
+                className="w-full min-w-full shrink-0 grow-0 basis-full outline-none"
               >
                 <FlowSlide
                   id={id}
                   reading={reading}
                   suggestion={suggestion}
-                  onIntroNext={next}
+                  onIntroNext={() => next()}
                   onStart={() => setFocusOpen(true)}
                   onLater={() => {
                     const taskId = suggestion.task?.id;
@@ -248,7 +260,7 @@ export default function FlowDeck() {
                   }}
                   onDone={() => suggestion.task && toggleTask(suggestion.task.id)}
                   onMoveTomorrow={() => suggestion.task && snoozeTask(suggestion.task.id, 1)}
-                  onSkipSlide={next}
+                  onSkipSlide={() => next()}
                 />
               </div>
             );
@@ -256,6 +268,13 @@ export default function FlowDeck() {
         </div>
       </div>
 
+      <p id="flow-karusell-hjalp" className="sr-only">
+        Svep i sidled eller använd vänster- och högerpil för att byta vy. Home går till första vyn
+        och End till den sista.
+      </p>
+      <p className="sr-only" aria-live="polite">
+        {`Vy ${currentSlide + 1} av ${slides.length}: ${SLIDE_LABELS[activeSlide]}`}
+      </p>
 
       {slides.length > 1 && (
         <div className="mt-3 flex items-center justify-center gap-4">
@@ -263,23 +282,23 @@ export default function FlowDeck() {
             type="button"
             variant="ghost"
             size="icon"
-            aria-label="Föregående"
-            onClick={previous}
+            aria-label="Föregående vy"
+            onClick={() => previous()}
             disabled={currentSlide === 0}
-            className="press rounded-full text-muted-foreground disabled:opacity-30"
+            className="press min-h-11 min-w-11 rounded-full text-muted-foreground disabled:opacity-30"
           >
             <ChevronLeft size={18} />
           </Button>
-          <span className="flex items-center gap-1.5">
+          <span className="flex items-center gap-1.5" role="group" aria-label="Välj vy">
             {slides.map((id, i) => (
               <Button
                 key={`${id}-${i}`}
                 type="button"
                 variant="ghost"
-                aria-label={`Gå till ${i + 1} av ${slides.length}`}
+                aria-label={`Vy ${i + 1} av ${slides.length}: ${SLIDE_LABELS[id]}`}
                 aria-current={i === currentSlide}
                 onClick={() => goTo(i)}
-                className={`h-2 min-h-0 rounded-full p-0 transition-all ${
+                className={`h-2 min-h-0 rounded-full p-0 transition-all focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
                   i === currentSlide ? "w-5 bg-primary" : "w-2 bg-border"
                 }`}
               />
@@ -289,15 +308,16 @@ export default function FlowDeck() {
             type="button"
             variant="ghost"
             size="icon"
-            aria-label="Nästa"
-            onClick={next}
+            aria-label="Nästa vy"
+            onClick={() => next()}
             disabled={currentSlide === slides.length - 1}
-            className="press rounded-full text-muted-foreground disabled:opacity-30"
+            className="press min-h-11 min-w-11 rounded-full text-muted-foreground disabled:opacity-30"
           >
             <ChevronRight size={18} />
           </Button>
         </div>
       )}
+
 
       <FlowVersionBadge currentSlide={currentSlide} />
 
