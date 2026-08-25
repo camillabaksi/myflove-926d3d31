@@ -19,6 +19,17 @@ export const FLOW_VERSION = "swipe-keyboard-2026-08-25";
 
 type DeckSlideId = "intro" | FlowSlideId;
 
+/** Klartextnamn för skärmläsare och prickarnas etiketter. */
+const SLIDE_LABELS: Record<DeckSlideId, string> = {
+  intro: "Flow presenterar sig",
+  checkin: "Hur är det just nu?",
+  energy: "Din energi",
+  suggestion: "Förslag just nu",
+  rest: "Återhämtning",
+};
+
+
+
 
 /**
  * Flow 2.0 – en sak i taget.
