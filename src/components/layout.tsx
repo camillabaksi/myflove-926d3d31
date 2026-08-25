@@ -840,8 +840,12 @@ export default function Layout({ children }: LayoutProps) {
           style={CATEGORY_THEMES[location] as React.CSSProperties}
         >
           <div key={location} className="max-w-2xl mx-auto w-full p-4 md:p-8 page-enter">
+            {!FLOW_HIDDEN_PATHS.has(location) && (
+              <FlowCompanion stage="mini" className="mb-4" />
+            )}
             {children}
           </div>
+
           <footer className="max-w-2xl mx-auto w-full px-4 md:px-8 pt-4 pb-8 mt-8 border-t border-border/40">
             <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
               <Link
