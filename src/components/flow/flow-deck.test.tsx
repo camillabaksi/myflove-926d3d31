@@ -72,7 +72,8 @@ describe("FlowDeck – en sak i taget", () => {
   });
 
   it("startar på intro med Flows hälsningsscen", () => {
-    render(<FlowDeck />);
+    const { container } = render(<FlowDeck />);
+    console.log("DBG", document.querySelectorAll("[data-flow-slide]").length, container.querySelector("[data-flow-slide]")?.getAttribute("data-flow-slide-id"));
     expect(document.querySelector("[data-flow-slide]")).toHaveAttribute("data-flow-slide-id", "intro");
     expect(activeScene()).toBe("hello");
   });
