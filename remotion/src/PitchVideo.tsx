@@ -1,5 +1,13 @@
 import React from "react";
-import { AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate, spring } from "remotion";
+import {
+  AbsoluteFill,
+  Img,
+  staticFile,
+  useCurrentFrame,
+  useVideoConfig,
+  interpolate,
+  spring,
+} from "remotion";
 import { TransitionSeries, linearTiming } from "@remotion/transitions";
 import { fade } from "@remotion/transitions/fade";
 import { COLORS, FONTS } from "./theme";
