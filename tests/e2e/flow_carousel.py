@@ -55,10 +55,13 @@ async def run_width(browser, width: int) -> None:
     if "/sign-in" in page.url or "/auth" in page.url:
         # Ingen session: använd utvecklingslägets testkonto (endast lokalt/dev).
         await page.goto(f"{BASE}/dev-session", wait_until="domcontentloaded")
-        btn = page.get_by_role("button", name=re.compile("testsession|logga in", re.I))
-        if await btn.count():
+        btn = page.get_by_role("button", name=re.compile("testanvändare", re.I))
+        try:
+            await btn.first.wait_for(state="visible", timeout=20000)
             await btn.first.click()
             await page.wait_for_url(re.compile(r"/hem"), timeout=45000)
+        except Exception as err:  # noqa: BLE001
+            print("  (kunde inte skapa testsession:", err, ")")
         await page.goto(f"{BASE}/flow", wait_until="domcontentloaded")
 
     track = page.locator("[data-flow-track]")
