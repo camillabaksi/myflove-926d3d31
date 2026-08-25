@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Förstasidan: Flow har levande kroppsspråk per vy – vinkar, studsar, nickar, funderar, pulserar, jublar och andas lugnt (respekterar reducerad rörelse) (2026-08-25)",
       "Förstasidan: Flow vid hälsningen är större och står nu bredvid pratrutan även på mobil, och Flow-bilden längst ner i visionsavsnittet är borttagen (2026-08-25)",
       "Förstasidan: den stora vinkande Flow står nu vid hälsningen \"Hej, jag heter Flow\" i stället för nertill vid telefonen. Pratbubblan är nu en rektangulär ruta som fyller bredden (under Flow på mobil, bredvid på desktop) (2026-08-25)",
       "Förstasidan: tydliga \"‹ Tillbaka\"- och \"Nästa ›\"-knappar längst ner på mobil, så du alltid kan byta vy med ett tryck om svepet inte fungerar (2026-08-25)",

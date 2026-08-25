@@ -634,7 +634,7 @@ function PhonePreview() {
       {/* Liten Flow bredvid telefonen */}
       <FlowMascot
         size="md"
-        float
+        mood="sway"
         className="absolute -right-2 -bottom-2 sm:-right-6"
         alt="Flow vid telefonen"
       />
