@@ -179,6 +179,39 @@ export default function FlowDeck() {
   );
 }
 
+/* ── Versionsstämpel: verifiera i realtid vilken bundle mobilen kör ── */
+
+function FlowVersionBadge({
+  trackRef,
+}: {
+  trackRef: React.RefObject<HTMLDivElement | null>;
+}) {
+  const [domVersion, setDomVersion] = useState<string | null>(null);
+  const [layout, setLayout] = useState<string>("–");
+
+  useEffect(() => {
+    const section = trackRef.current?.closest("[data-flow-version]");
+    setDomVersion(section?.getAttribute("data-flow-version") ?? null);
+    const track = trackRef.current;
+    if (track) {
+      const cs = window.getComputedStyle(track);
+      const horizontal =
+        cs.display.includes("flex") && cs.flexDirection === "row";
+      setLayout(horizontal ? "horisontell ✓" : `${cs.display}/${cs.flexDirection} ✗`);
+    }
+  }, [trackRef]);
+
+  return (
+    <p
+      data-flow-version-badge
+      className="mt-3 text-center text-[10px] leading-tight text-muted-foreground/70"
+    >
+      Flow {domVersion ?? FLOW_VERSION} · build {BUILD_ID} · layout {layout}
+    </p>
+  );
+}
+
+
 /* ── En slide i taget ───────────────────────────────────────────── */
 
 function FlowSlide({
