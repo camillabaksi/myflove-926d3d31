@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-25 – Större Flow bredvid texten
+
+- Flow vid hälsningen är nu större och står alltid bredvid pratrutan, även på mobil.
+- Flow-bilden längst ner i visionsavsnittet är borttagen.
+
 ## 2026-08-25 – Stora Flow vid hälsningen
 
 - Den stora vinkande Flow står nu vid "Hej, jag heter Flow" högst upp, och Flow vid telefonen är liten igen.
