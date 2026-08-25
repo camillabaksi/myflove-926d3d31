@@ -556,7 +556,7 @@ export default function Layout({ children }: LayoutProps) {
         hint: "Rutiner, min livsprofil, anpassning och feedback",
         icon: LayoutGrid,
         hrefs: [
-          "/morgonstart",
+          
           "/min-livsprofil",
           "/anpassa-hem",
           "/anpassa",
