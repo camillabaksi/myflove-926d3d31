@@ -1,7 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { FlowMascot, FlowSays } from "@/components/flow-mascot";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -38,6 +39,93 @@ export const Route = createFileRoute("/")({
   component: LandingPage,
 });
 
+/* ── Data för demon ───────────────────────────────────────── */
+
+const NEEDS = [
+  {
+    id: "overwhelmed",
+    icon: "🧠",
+    label: "Jag är överväldigad",
+    reply: "Okej. Då börjar vi inte med allt. 💜 Vad är viktigast just nu?",
+    steps: [
+      "Flow plockar fram tre saker – resten göms undan.",
+      "Allt som kan vänta flyttas till imorgon, utan skuld.",
+      "Du får en enda knapp: börja här.",
+    ],
+  },
+  {
+    id: "start",
+    icon: "🚀",
+    label: "Jag behöver komma igång",
+    reply: "Vi tar det minsta steget först. Det räcker att börja.",
+    steps: [
+      "Flow föreslår en uppgift på 5 minuter.",
+      "En timer startar – ingen planering krävs.",
+      "När du är klar bockas den av automatiskt.",
+    ],
+  },
+  {
+    id: "plan",
+    icon: "📅",
+    label: "Jag behöver planera",
+    reply: "Säg vad som ska göras – jag lägger dem i en ordning som funkar.",
+    steps: [
+      "FlowPlan™ sorterar uppgifterna efter energi och tid.",
+      "Du ser varför ordningen ser ut som den gör.",
+      "Du kan flytta om allt själv – förslaget är bara ett förslag.",
+    ],
+  },
+  {
+    id: "empty",
+    icon: "🔋",
+    label: "Jag har noll energi",
+    reply: "Då gör vi mindre idag. Det är också ett bra beslut.",
+    steps: [
+      "Kraven sänks automatiskt när batteriet är lågt.",
+      "Flow flyttar det som inte måste göras.",
+      "Kvar blir en sak – ofta bara att vila.",
+    ],
+  },
+  {
+    id: "all",
+    icon: "✨",
+    label: "Visa mig allt",
+    reply: "Här är helheten – kalender, hem, hälsa, ekonomi och studier på ett ställe.",
+    steps: [
+      "Allt i dagen: planerat och genomfört i samma vy.",
+      "Mitt batteri visar din kapacitet – inte din prestation.",
+      "QuickFlow fångar allt du tänker på, sorteras sen.",
+    ],
+  },
+] as const;
+
+const DAILY_FLOWS = [
+  "Du behöver inte göra allt bara för att du kan göra allt.",
+  "Det blev mycket idag. Det säger inget om dig.",
+  "En sak i taget är fortfarande framåt.",
+  "Vila är också något du gör.",
+  "Det räknas, hur litet det än känns.",
+];
+
+const TIMELINE = [
+  { t: "08:00", l: "God morgon ☀️", c: "Regn ikväll – ta med paraply." },
+  { t: "08:30", l: "Lämna barnen", c: "Väskan står redan vid dörren." },
+  { t: "09:00", l: "Plugg 📚", c: "42 minuter fokus. Sen paus." },
+  { t: "10:30", l: "Paus ☕", c: "Du hann mer än du tror." },
+  { t: "12:00", l: "Lunch 🌿", c: "Ät något – batteriet tackar dig." },
+  { t: "17:30", l: "Handla 🛒", c: "Mjölk saknas hemma. Butiken ligger på vägen." },
+  { t: "21:00", l: "Varva ner 🌙", c: "Imorgon är lugnare. Jag har koll." },
+];
+
+const PHONE_ITEMS = [
+  { t: "09:00", l: "Fokustid", e: "🎯", done: false },
+  { t: "10:30", l: "Medicin", e: "💊", done: true },
+  { t: "12:00", l: "Lunch", e: "🌿", done: false },
+  { t: "17:30", l: "Handla", e: "🛒", done: false },
+];
+
+/* ── Sidan ────────────────────────────────────────────────── */
+
 function LandingPage() {
   const navigate = useNavigate();
 
@@ -50,328 +138,637 @@ function LandingPage() {
   }, [navigate]);
 
   return (
-    <main className="min-h-screen bg-[#F8F5FE] text-[#2A2140]">
-      {/* ── Hero ─────────────────────────────────────────── */}
-      <section className="relative overflow-hidden px-5 pt-14 pb-16 sm:px-6 md:pt-24 md:pb-28">
-        <div className="pointer-events-none absolute -top-44 -right-44 h-[240px] w-[240px] rounded-full bg-gradient-to-br from-[#A78BFA] to-[#7C5CE0] opacity-25 blur-3xl sm:-top-40 sm:-right-24 sm:h-[420px] sm:w-[420px] sm:opacity-80 sm:blur-sm" />
-        <div className="pointer-events-none absolute -bottom-40 -left-40 h-[220px] w-[220px] rounded-full bg-[#C4B5FD] opacity-20 blur-3xl sm:-bottom-32 sm:-left-16 sm:h-[320px] sm:w-[320px] sm:opacity-50 sm:blur-none" />
+    <main className="min-h-screen overflow-x-hidden bg-[#F8F5FE] text-[#2A2140]">
+      <Hero />
+      <NeedSection />
+      <DailyFlow />
+      <FlowScoreSection />
+      <DaySection />
+      <FlowVoice />
+      <Modules />
+      <FlowPlanSection />
+      <BuildingSection />
+      <Vision />
+      <Footer />
+    </main>
+  );
+}
 
-        <div className="relative mx-auto max-w-3xl text-center">
-          <p className="text-[11px] uppercase tracking-[0.3em] text-[#7C5CE0] font-semibold sm:text-xs sm:tracking-[0.35em]">
+/* ── Hero ─────────────────────────────────────────────────── */
+
+function Hero() {
+  return (
+    <section className="relative overflow-hidden px-5 pt-12 pb-16 sm:px-6 md:pt-20 md:pb-24">
+      <div className="pointer-events-none absolute -top-44 -right-40 h-[280px] w-[280px] rounded-full bg-gradient-to-br from-[#A78BFA] to-[#7C5CE0] opacity-25 blur-3xl sm:h-[460px] sm:w-[460px]" />
+      <div className="pointer-events-none absolute -bottom-40 -left-40 h-[240px] w-[240px] rounded-full bg-[#F5B8D0] opacity-25 blur-3xl sm:h-[360px] sm:w-[360px]" />
+
+      <div className="relative mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-[1.05fr_1fr]">
+        <div className="pop-in text-center lg:text-left">
+          <p className="text-[11px] font-semibold tracking-[0.3em] text-[#7C5CE0] uppercase sm:text-xs">
             MyFlove
           </p>
-          <h1 className="mt-4 text-balance font-display text-[2rem] leading-[1.1] tracking-tight font-bold sm:text-5xl sm:leading-[0.95] md:text-7xl">
-            MyFlove – lugn planering för ADHD, autism och ett fullt huvud
+          <h1 className="font-display mt-4 text-[2.4rem] leading-[1.05] font-bold tracking-tight text-balance sm:text-6xl md:text-7xl">
+            Bär mindre.
+            <br />
+            Gör inte mer.
           </h1>
-
-          <p className="mt-5 text-base text-[#6B647F] max-w-xl mx-auto leading-relaxed sm:mt-6 sm:text-lg md:text-xl">
-            Ett lugnare hem för hjärnan – för dig som lever med ADHD, autism eller bara mycket i
-            huvudet.
+          <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-[#6B647F] sm:text-lg lg:mx-0">
+            MyFlove är ett lugnare hem för hjärnan – för dig med ADHD, autism eller bara mycket i
+            huvudet. Flow håller ihop dagen så att du slipper göra det i huvudet.
           </p>
 
-          <div className="mt-10 flex flex-col sm:flex-row gap-3 justify-center">
+          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row lg:justify-start">
             <Button
               asChild
               size="lg"
-              className="rounded-full bg-[#7C5CE0] hover:bg-[#6A48CE] text-white shadow-lg shadow-[#7C5CE0]/25"
+              className="press rounded-full bg-[#7C5CE0] text-white shadow-lg shadow-[#7C5CE0]/25 hover:bg-[#6A48CE]"
             >
-              <Link to="/sign-up">Kom igång – gratis</Link>
+              <Link to="/sign-up">Testa MyFlove gratis</Link>
             </Button>
             <Button
               asChild
               size="lg"
               variant="outline"
-              className="rounded-full border-[#2A2140]/20 bg-white/60 backdrop-blur hover:bg-white"
+              className="press rounded-full border-[#2A2140]/15 bg-white/70 backdrop-blur hover:bg-white"
             >
-              <Link to="/sign-in">Jag har redan konto</Link>
+              <a href="#sa-funkar-det">Se hur det fungerar</a>
             </Button>
           </div>
-        </div>
-      </section>
 
-      {/* ── Flow talar ────────────────────────────────────── */}
-      <section className="px-5 py-14 sm:px-6 sm:py-20 md:py-28">
-        <div className="mx-auto max-w-5xl">
-          <p className="text-xs uppercase tracking-[0.3em] text-[#7C5CE0] font-semibold">
-            Flow talar
-          </p>
-          <h2 className="mt-3 font-display text-3xl sm:text-4xl md:text-5xl font-bold leading-tight">
-            Som en vän i fickan.
-          </h2>
-          <p className="mt-4 text-[#6B647F] max-w-xl">
-            Flow är lugn, empatisk och mänsklig. Aldrig tjatig, aldrig skuldbeläggande.
-          </p>
-
-          <div className="mt-10 space-y-5 max-w-2xl">
-            <FlowBubble>
-              <p>God morgon Camilla 💙</p>
-              <p>Det ser ut att bli regn idag. Ta gärna med ett paraply.</p>
-              <p>Glöm inte din medicin innan du går hemifrån.</p>
-            </FlowBubble>
-            <FlowBubble>
-              <p>Jag ser att du har mycket idag.</p>
-              <p>Ska vi börja med de tre viktigaste sakerna?</p>
-            </FlowBubble>
-            <FlowBubble>
-              <p>Det blev mycket idag.</p>
-              <p>Vi tar en sak i taget – börja med den enklaste.</p>
-            </FlowBubble>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Alla moduler hänger ihop ─────────────────────── */}
-      <section className="px-5 py-14 sm:px-6 sm:py-20 md:py-28 bg-[#F1ECFC]">
-        <div className="mx-auto max-w-5xl">
-          <p className="text-xs uppercase tracking-[0.3em] text-[#7C5CE0] font-semibold">
-            Allt hänger ihop
-          </p>
-          <h2 className="mt-3 font-display text-3xl sm:text-4xl md:text-5xl font-bold leading-tight">
-            En hjärna. Inte sju appar.
-          </h2>
-          <p className="mt-4 text-[#6B647F] max-w-2xl">
-            Kalender, ekonomi, hälsa, familj, inköp, ärenden och FlowPlan™ är inte separata
-            funktioner. Flow läser av allt – och hjälper dig med helheten.
-          </p>
-
-          <div className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {[
-              { i: "▤", l: "Kalender" },
-              { i: "💳", l: "Ekonomi" },
-              { i: "♥", l: "Hälsa" },
-              { i: "👪", l: "Familj" },
-              { i: "🛒", l: "Inköp" },
-              { i: "✓", l: "Ärenden" },
-              { i: "≡", l: "FlowPlan™" },
-              { i: "✦", l: "Flow AI" },
-            ].map((m) => (
-              <div
-                key={m.l}
-                className="bg-white rounded-2xl p-4 text-center shadow-sm border border-[#2A2140]/5"
-              >
-                <div className="text-2xl">{m.i}</div>
-                <div className="mt-1 text-sm font-semibold text-[#2A2140]">{m.l}</div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-8 rounded-2xl bg-white/70 border border-[#7C5CE0]/20 p-5 max-w-2xl">
-            <p className="text-sm italic text-[#2A2140] leading-relaxed">
-              "Jag såg att du har läkarbesök 14:00, saknar mjölk hemma, och att banken drar hyran
-              imorgon. Ska jag flytta träningen?"
-            </p>
-            <p className="mt-2 text-xs uppercase tracking-widest text-[#7C5CE0] font-semibold">
-              — Flow
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Scenarier ───────────────────────────────────── */}
-      <section className="px-5 py-14 sm:px-6 sm:py-20 md:py-28">
-        <div className="mx-auto max-w-5xl">
-          <p className="text-xs uppercase tracking-[0.3em] text-[#7C5CE0] font-semibold">
-            I vardagen
-          </p>
-          <h2 className="mt-3 font-display text-3xl sm:text-4xl md:text-5xl font-bold leading-tight">
-            När livet skaver – finns Flow där.
-          </h2>
-
-          <div className="mt-10 grid md:grid-cols-2 gap-4">
-            {[
-              {
-                s: "Morgonstress",
-                r: "Vi tar en sak i taget. Börja med kaffet – resten väntar.",
-              },
-              {
-                s: "Glömde paraplyet",
-                r: "Regn om 20 min. Paraplyet står vid dörren.",
-              },
-              {
-                s: "Vet inte var jag ska börja",
-                r: "Här är de tre viktigaste idag. Välj en – jag håller resten.",
-              },
-              {
-                s: "Dålig energidag",
-                r: "Idag räcker det. Vi flyttar det som inte måste göras.",
-              },
-            ].map((sc) => (
-              <div
-                key={sc.s}
-                className="rounded-3xl bg-white p-6 shadow-sm border border-[#2A2140]/5"
-              >
-                <p className="text-xs uppercase tracking-[0.25em] text-[#7C5CE0] font-semibold">
-                  {sc.s}
-                </p>
-                <p className="mt-3 font-display text-xl leading-snug text-[#2A2140]">{sc.r}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── FlowPlan ────────────────────────────────────── */}
-      <section className="px-5 py-14 sm:px-6 sm:py-20 md:py-28 bg-[#2A2140] text-[#FBF9FF] relative overflow-hidden">
-        <div className="pointer-events-none absolute -top-32 -left-20 h-[300px] w-[300px] rounded-full bg-[#F5B8D0] opacity-20" />
-        <div className="mx-auto max-w-5xl relative">
-          <p className="text-xs uppercase tracking-[0.3em] text-[#F5B8D0] font-semibold">
-            FlowPlan™
-          </p>
-          <h2 className="mt-3 font-display text-3xl sm:text-4xl md:text-5xl font-bold leading-tight">
-            Rätt sak, i rätt ordning.
-          </h2>
-          <p className="mt-4 text-white/70 max-w-xl">
-            Du säger vad som ska göras. Flow räknar ut den mest effektiva ordningen – och förklarar
-            varför.
-          </p>
-
-          <div className="mt-10 grid md:grid-cols-2 gap-8">
-            <div>
-              <p className="text-xs uppercase tracking-widest text-white/50 font-semibold">
-                Du behöver
+          <div className="mx-auto mt-8 max-w-md lg:mx-0">
+            <FlowSays>
+              <p className="font-semibold">Hej, jag heter Flow 💜</p>
+              <p className="text-[#6B647F]">
+                Jag håller reda på dagen. Du behöver bara göra en sak i taget.
               </p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {["Duscha", "Starta tvättmaskinen", "Laga middag", "Starta robotdammsugaren"].map(
-                  (t) => (
-                    <span
-                      key={t}
-                      className="px-4 py-2 rounded-full bg-white/10 border border-white/20 text-sm"
-                    >
-                      {t}
-                    </span>
-                  ),
-                )}
-              </div>
-            </div>
-
-            <div>
-              <p className="text-xs uppercase tracking-widest text-[#F5B8D0] font-semibold">
-                Flow föreslår
-              </p>
-              <div className="mt-3 space-y-2">
-                {[
-                  {
-                    n: 1,
-                    s: "Starta tvättmaskinen",
-                    w: "Går själv medan du gör annat.",
-                    t: "0 min",
-                  },
-                  { n: 2, s: "Starta robotdammsugaren", w: "Städar medan du duschar.", t: "1 min" },
-                  { n: 3, s: "Duscha", w: "Lugn stund. Ingen väntar på dig.", t: "5 min" },
-                  {
-                    n: 4,
-                    s: "Laga middag",
-                    w: "Tvätten färdig snart – hänger efter maten.",
-                    t: "25 min",
-                  },
-                ].map((st) => (
-                  <div
-                    key={st.n}
-                    className="flex items-center gap-3 rounded-2xl bg-white/[0.06] border border-white/10 p-3"
-                  >
-                    <div className="w-9 h-9 rounded-full bg-[#7C5CE0] text-white flex items-center justify-center font-display font-bold flex-shrink-0">
-                      {st.n}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="font-semibold text-sm">{st.s}</div>
-                      <div className="text-xs text-white/60">{st.w}</div>
-                    </div>
-                    <div className="text-[11px] font-semibold text-[#F5B8D0] bg-[#F5B8D0]/10 rounded-md px-2 py-1 flex-shrink-0">
-                      {st.t}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            </FlowSays>
           </div>
         </div>
-      </section>
 
-      {/* ── Känslan ─────────────────────────────────────── */}
-      <section className="px-5 py-14 sm:px-6 sm:py-20 md:py-28">
-        <div className="mx-auto max-w-4xl">
-          <div className="grid md:grid-cols-2 gap-10 items-center">
-            <div className="space-y-1">
-              {["lugn.", "trygghet.", "värme.", "enkelhet.", "mindre att bära."].map((w) => (
-                <div
-                  key={w}
-                  className="font-display text-3xl sm:text-4xl md:text-5xl font-bold leading-tight text-[#2A2140]"
-                >
-                  {w}
-                </div>
-              ))}
-            </div>
-            <p className="text-[#6B647F] text-lg leading-relaxed">
-              MyFlove handlar inte om produktivitet. Inte om prestation.
-              <br />
-              Bara om mindre mental belastning – varje dag.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Vision / avslut ─────────────────────────────── */}
-      <section className="px-5 py-16 sm:px-6 sm:py-24 md:py-32 bg-[#2A2140] text-[#FBF9FF] relative overflow-hidden">
-        <div className="pointer-events-none absolute -top-40 -left-20 h-[500px] w-[500px] rounded-full bg-[#7C5CE0] opacity-30 blur-md" />
-        <div className="pointer-events-none absolute -bottom-40 -right-24 h-[460px] w-[460px] rounded-full bg-[#C4B5FD] opacity-25" />
-        <div className="relative mx-auto max-w-3xl text-center">
-          <p className="text-xs uppercase tracking-[0.4em] text-[#F5B8D0] font-semibold">
-            Vår vision
-          </p>
-          <h2 className="mt-6 font-display text-3xl sm:text-4xl md:text-6xl font-bold leading-[1.05] tracking-tight">
-            Vi bygger inte funktioner.
-            <br />
-            Vi löser vardagsfriktion.
-          </h2>
-          <p className="mt-6 font-display text-2xl md:text-3xl italic text-[#A78BFA]">
-            Bär mindre. Gör inte mer.
-          </p>
-          <p className="mt-10 text-white/70 text-base md:text-lg leading-relaxed max-w-xl mx-auto">
-            Du öppnar inte en app. Du möter Flow – en lugn, intelligent följeslagare som hjälper dig
-            genom vardagen.
-          </p>
-          <div className="mt-10">
-            <Button
-              asChild
-              size="lg"
-              className="rounded-full bg-[#7C5CE0] hover:bg-[#6A48CE] text-white shadow-lg shadow-[#7C5CE0]/30"
-            >
-              <Link to="/sign-up">Möt Flow</Link>
-            </Button>
-          </div>
-          <p className="mt-8 text-xs text-white/40 tracking-widest">mitt-flow.lovable.app</p>
-        </div>
-      </section>
-
-      <footer className="bg-[#2A2140] text-white/60 border-t border-white/10 px-6 py-8">
-        <div className="mx-auto max-w-5xl flex flex-col sm:flex-row items-center justify-between gap-4 text-sm">
-          <p>© {new Date().getFullYear()} MyFlove</p>
-          <nav className="flex gap-5">
-            <Link to="/integritet" className="hover:text-white">
-              Integritet
-            </Link>
-            <Link to="/villkor" className="hover:text-white">
-              Villkor
-            </Link>
-            <Link to="/cookies" className="hover:text-white">
-              Cookies
-            </Link>
-          </nav>
-        </div>
-      </footer>
-    </main>
+        <PhonePreview />
+      </div>
+    </section>
   );
 }
 
-function FlowBubble({ children }: { children: React.ReactNode }) {
+function PhonePreview() {
   return (
-    <div className="flex items-start gap-3">
-      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#A78BFA] to-[#7C5CE0] text-white flex items-center justify-center font-display font-bold flex-shrink-0 shadow-md">
-        F
+    <div className="relative mx-auto w-full max-w-[340px] pt-6 pb-8 sm:max-w-[380px]">
+      <div className="pointer-events-none absolute inset-x-6 top-10 bottom-10 rounded-[3rem] bg-[#7C5CE0]/20 blur-3xl" />
+
+      {/* Telefon */}
+      <div className="relative rounded-[2.6rem] border border-[#2A2140]/10 bg-[#2A2140] p-2.5 shadow-2xl shadow-[#7C5CE0]/25">
+        <div className="overflow-hidden rounded-[2.1rem] bg-[#FBF9FF]">
+          <div className="flex items-center justify-between px-5 pt-3 pb-1 text-[10px] font-semibold text-[#6B647F]">
+            <span>08:15</span>
+            <span>MyFlove</span>
+          </div>
+
+          <div className="space-y-3 px-4 pt-2 pb-5">
+            <div className="rounded-2xl border border-[#2A2140]/5 bg-white p-3 shadow-sm">
+              <p className="text-[11px] font-semibold tracking-widest text-[#7C5CE0] uppercase">
+                Mitt batteri
+              </p>
+              <div className="mt-2 h-2.5 w-full overflow-hidden rounded-full bg-[#EDE7FB]">
+                <div className="h-full w-[58%] rounded-full bg-gradient-to-r from-[#A78BFA] to-[#7C5CE0]" />
+              </div>
+              <p className="mt-2 text-xs text-[#6B647F]">
+                Halvfullt. Räcker till det viktigaste – inte till allt.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-[#7C5CE0]/15 bg-[#F1ECFC] p-3">
+              <div className="flex items-start gap-2">
+                <FlowMascot size="xs" float />
+                <p className="text-xs leading-relaxed text-[#2A2140]">
+                  Du har 25 minuter kvar. Vill du hinna duscha eller ta det lugnt?
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              {PHONE_ITEMS.map((it, i) => (
+                <div
+                  key={it.l}
+                  className="pop-in flex items-center gap-3 rounded-2xl border border-[#2A2140]/5 bg-white px-3 py-2.5 shadow-sm"
+                  style={{ animationDelay: `${i * 120}ms` }}
+                >
+                  <span className="text-base">{it.e}</span>
+                  <div className="min-w-0 flex-1">
+                    <p
+                      className={`truncate text-sm font-semibold ${it.done ? "text-[#6B647F] line-through" : "text-[#2A2140]"}`}
+                    >
+                      {it.l}
+                    </p>
+                    <p className="text-[11px] text-[#6B647F]">{it.t}</p>
+                  </div>
+                  <span
+                    className={`grid h-6 w-6 shrink-0 place-items-center rounded-full text-xs ${
+                      it.done ? "bg-[#7C5CE0] text-white" : "border border-[#2A2140]/15 text-transparent"
+                    }`}
+                  >
+                    ✓
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
-      <div className="bg-white rounded-3xl rounded-tl-md px-5 py-4 shadow-sm border border-[#2A2140]/5 space-y-2 text-[#2A2140] leading-relaxed">
-        {children}
-      </div>
+
+      {/* Flow bredvid telefonen */}
+      <FlowMascot
+        size="lg"
+        float
+        glow
+        className="absolute -right-4 -bottom-2 sm:-right-8"
+        alt="Flow tittar fram vid telefonen"
+      />
+
+      {/* Flytande kort */}
+      <FloatCard className="-top-2 -left-3 sm:-left-10" delay="0ms" time="08:02">
+        ☔ Det regnar idag. Paraplyet ligger vid dörren.
+      </FloatCard>
+      <FloatCard className="top-1/3 -left-4 sm:-left-16" delay="600ms" time="09:00">
+        🎯 Fokustid · 42 minuter
+      </FloatCard>
+      <FloatCard className="-bottom-4 left-2 sm:-left-8" delay="1100ms" time="12:30">
+        😊 Bra jobbat! +8 Flow
+      </FloatCard>
     </div>
+  );
+}
+
+function FloatCard({
+  children,
+  className,
+  time,
+  delay,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  time: string;
+  delay: string;
+}) {
+  return (
+    <div
+      className={`pop-in floaty absolute z-10 hidden max-w-[190px] rounded-2xl border border-[#2A2140]/5 bg-white/95 px-3 py-2 shadow-lg backdrop-blur sm:block ${className}`}
+      style={{ animationDelay: delay }}
+    >
+      <p className="text-[10px] font-semibold tracking-widest text-[#7C5CE0] uppercase">{time}</p>
+      <p className="mt-1 text-xs leading-snug text-[#2A2140]">{children}</p>
+    </div>
+  );
+}
+
+/* ── Vad behöver du just nu? ──────────────────────────────── */
+
+function NeedSection() {
+  const [active, setActive] = useState<string>("overwhelmed");
+  const need = NEEDS.find((n) => n.id === active) ?? NEEDS[0];
+
+  return (
+    <section id="sa-funkar-det" className="scroll-mt-8 bg-[#F1ECFC] px-5 py-16 sm:px-6 sm:py-24">
+      <div className="mx-auto max-w-4xl">
+        <p className="text-xs font-semibold tracking-[0.3em] text-[#7C5CE0] uppercase">Prova Flow</p>
+        <h2 className="font-display mt-3 text-3xl leading-tight font-bold sm:text-4xl md:text-5xl">
+          Vad behöver du just nu?
+        </h2>
+        <p className="mt-4 max-w-xl text-[#6B647F]">
+          Välj det som stämmer – Flow svarar som i appen. Det här är en demo med exempeldata.
+        </p>
+
+        <div className="mt-8 flex flex-wrap gap-2">
+          {NEEDS.map((n) => (
+            <button
+              key={n.id}
+              type="button"
+              onClick={() => setActive(n.id)}
+              className={`press rounded-full border px-4 py-2.5 text-sm font-semibold transition ${
+                n.id === active
+                  ? "border-[#7C5CE0] bg-[#7C5CE0] text-white shadow-md shadow-[#7C5CE0]/25"
+                  : "border-[#2A2140]/10 bg-white text-[#2A2140] hover:border-[#7C5CE0]/40"
+              }`}
+              aria-pressed={n.id === active}
+            >
+              <span className="mr-1.5">{n.icon}</span>
+              {n.label}
+            </button>
+          ))}
+        </div>
+
+        <div key={need.id} className="pop-in mt-8 space-y-4">
+          <FlowSays size="md">
+            <p className="text-base leading-relaxed">{need.reply}</p>
+          </FlowSays>
+
+          <div className="grid gap-3 sm:grid-cols-3">
+            {need.steps.map((s, i) => (
+              <div
+                key={s}
+                className="pop-in rounded-3xl border border-[#2A2140]/5 bg-white p-5 shadow-sm"
+                style={{ animationDelay: `${120 + i * 110}ms` }}
+              >
+                <div className="font-display grid h-8 w-8 place-items-center rounded-full bg-[#F1ECFC] text-sm font-bold text-[#7C5CE0]">
+                  {i + 1}
+                </div>
+                <p className="mt-3 text-sm leading-relaxed text-[#2A2140]">{s}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── Dagens Flow ──────────────────────────────────────────── */
+
+function DailyFlow() {
+  const initial = useMemo(() => Math.floor(Math.random() * DAILY_FLOWS.length), []);
+  const [i, setI] = useState(0);
+  const quote = DAILY_FLOWS[(initial + i) % DAILY_FLOWS.length];
+
+  return (
+    <section className="px-5 py-14 sm:px-6 sm:py-20">
+      <div className="mx-auto max-w-3xl rounded-[2rem] border border-[#7C5CE0]/15 bg-gradient-to-br from-white to-[#F4EFFE] p-7 text-center shadow-sm sm:p-10">
+        <p className="text-xs font-semibold tracking-[0.3em] text-[#7C5CE0] uppercase">
+          Dagens Flow 💜
+        </p>
+        <FlowMascot size="md" float glow className="mt-5" />
+        <p
+          key={quote}
+          className="font-display pop-in mx-auto mt-5 max-w-xl text-2xl leading-snug font-bold text-[#2A2140] italic sm:text-3xl"
+        >
+          "{quote}"
+        </p>
+        <p className="mt-3 text-sm text-[#6B647F]">— Flow</p>
+        <button
+          type="button"
+          onClick={() => setI((v) => v + 1)}
+          className="press mt-6 rounded-full border border-[#7C5CE0]/25 bg-white px-5 py-2 text-sm font-semibold text-[#7C5CE0] hover:bg-[#F1ECFC]"
+        >
+          Ge mig en till
+        </button>
+      </div>
+    </section>
+  );
+}
+
+/* ── FlowScore ────────────────────────────────────────────── */
+
+function FlowScoreSection() {
+  return (
+    <section className="px-5 py-14 sm:px-6 sm:py-20">
+      <div className="mx-auto grid max-w-5xl items-center gap-8 md:grid-cols-2">
+        <div>
+          <p className="text-xs font-semibold tracking-[0.3em] text-[#7C5CE0] uppercase">
+            FlowScore™
+          </p>
+          <h2 className="font-display mt-3 text-3xl leading-tight font-bold sm:text-4xl">
+            Ett mått på belastning. Inte på prestation.
+          </h2>
+          <p className="mt-4 leading-relaxed text-[#6B647F]">
+            FlowScore visar hur mycket du bär just nu. Du behöver inte öka poängen – vi ska minska
+            belastningen.
+          </p>
+        </div>
+
+        <div className="rounded-[2rem] border border-[#2A2140]/5 bg-white p-7 shadow-sm">
+          <div className="flex items-end gap-3">
+            <span className="font-display text-6xl leading-none font-bold text-[#7C5CE0]">42</span>
+            <span className="pb-2 text-sm font-semibold text-[#6B647F]">FlowScore</span>
+          </div>
+          <div className="mt-4 h-3 w-full overflow-hidden rounded-full bg-[#EDE7FB]">
+            <div className="h-full w-[42%] rounded-full bg-gradient-to-r from-[#F5B8D0] to-[#7C5CE0]" />
+          </div>
+          <div className="mt-5">
+            <FlowSays>
+              <p>Du behöver inte öka poängen.</p>
+              <p className="text-[#6B647F]">Vi ska minska belastningen.</p>
+            </FlowSays>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── En MyFlove-dag ───────────────────────────────────────── */
+
+function DaySection() {
+  const [active, setActive] = useState(0);
+  const point = TIMELINE[active];
+
+  return (
+    <section className="bg-[#F1ECFC] px-5 py-16 sm:px-6 sm:py-24">
+      <div className="mx-auto max-w-5xl">
+        <p className="text-xs font-semibold tracking-[0.3em] text-[#7C5CE0] uppercase">En dag</p>
+        <h2 className="font-display mt-3 text-3xl leading-tight font-bold sm:text-4xl md:text-5xl">
+          Så ser en MyFlove-dag ut.
+        </h2>
+        <p className="mt-4 max-w-xl text-[#6B647F]">
+          Tryck på en punkt – Flow berättar vad som händer där.
+        </p>
+
+        <div className="-mx-5 mt-10 overflow-x-auto px-5 pb-2 sm:mx-0 sm:px-0">
+          <div className="relative flex min-w-max items-start gap-3">
+            <div className="absolute top-[13px] right-3 left-3 h-px bg-[#7C5CE0]/20" />
+            {TIMELINE.map((p, i) => (
+              <button
+                key={p.t}
+                type="button"
+                onMouseEnter={() => setActive(i)}
+                onFocus={() => setActive(i)}
+                onClick={() => setActive(i)}
+                className="relative z-10 w-[124px] text-left"
+                aria-pressed={i === active}
+              >
+                <span
+                  className={`block h-[26px] w-[26px] rounded-full border-4 transition ${
+                    i === active
+                      ? "scale-110 border-[#7C5CE0] bg-white"
+                      : "border-[#C4B5FD] bg-[#F1ECFC]"
+                  }`}
+                />
+                <span className="mt-3 block text-xs font-semibold text-[#7C5CE0]">{p.t}</span>
+                <span className="mt-1 block text-sm font-semibold text-[#2A2140]">{p.l}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div key={point.t} className="pop-in mt-8 max-w-xl">
+          <FlowSays size="md">
+            <p className="text-[11px] font-semibold tracking-widest text-[#7C5CE0] uppercase">
+              {point.t}
+            </p>
+            <p className="mt-1 text-base leading-relaxed">{point.c}</p>
+          </FlowSays>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── Flow talar ───────────────────────────────────────────── */
+
+function FlowVoice() {
+  return (
+    <section className="px-5 py-16 sm:px-6 sm:py-24">
+      <div className="mx-auto max-w-5xl">
+        <p className="text-xs font-semibold tracking-[0.3em] text-[#7C5CE0] uppercase">Flow talar</p>
+        <h2 className="font-display mt-3 text-3xl leading-tight font-bold sm:text-4xl md:text-5xl">
+          Som en vän i fickan.
+        </h2>
+        <p className="mt-4 max-w-xl text-[#6B647F]">
+          Flow är lugn, empatisk och mänsklig. Aldrig tjatig, aldrig skuldbeläggande.
+        </p>
+
+        <div className="mt-10 max-w-2xl space-y-5">
+          <FlowSays size="sm">
+            <p>God morgon 💙</p>
+            <p>Det ser ut att bli regn idag. Ta gärna med ett paraply.</p>
+            <p>Glöm inte din medicin innan du går hemifrån.</p>
+          </FlowSays>
+          <FlowSays size="sm">
+            <p>Jag ser att du har mycket idag.</p>
+            <p>Ska vi börja med de tre viktigaste sakerna?</p>
+          </FlowSays>
+          <FlowSays size="sm">
+            <p>Det blev mycket idag.</p>
+            <p>Vi tar en sak i taget – börja med den enklaste.</p>
+          </FlowSays>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── Moduler ──────────────────────────────────────────────── */
+
+function Modules() {
+  return (
+    <section className="bg-[#F1ECFC] px-5 py-16 sm:px-6 sm:py-24">
+      <div className="mx-auto max-w-5xl">
+        <p className="text-xs font-semibold tracking-[0.3em] text-[#7C5CE0] uppercase">
+          Allt hänger ihop
+        </p>
+        <h2 className="font-display mt-3 text-3xl leading-tight font-bold sm:text-4xl md:text-5xl">
+          En hjärna. Inte sju appar.
+        </h2>
+        <p className="mt-4 max-w-2xl text-[#6B647F]">
+          Kalender, ekonomi, hälsa, relationer, inköp, ärenden och FlowPlan™ är inte separata
+          funktioner. Flow läser av allt – och hjälper dig med helheten.
+        </p>
+
+        <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {[
+            { i: "📅", l: "Kalender" },
+            { i: "💳", l: "Ekonomi" },
+            { i: "💜", l: "Hälsa" },
+            { i: "👪", l: "Relationer" },
+            { i: "🛒", l: "Inköp" },
+            { i: "✓", l: "Ärenden" },
+            { i: "🗺️", l: "FlowPlan™" },
+            { i: "✦", l: "Flow AI" },
+          ].map((m, i) => (
+            <div
+              key={m.l}
+              className="pop-in rounded-2xl border border-[#2A2140]/5 bg-white p-4 text-center shadow-sm"
+              style={{ animationDelay: `${i * 60}ms` }}
+            >
+              <div className="text-2xl">{m.i}</div>
+              <div className="mt-1 text-sm font-semibold text-[#2A2140]">{m.l}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-8 max-w-2xl">
+          <FlowSays size="sm">
+            <p className="italic">
+              "Jag såg att du har läkarbesök 14:00, saknar mjölk hemma, och att banken drar hyran
+              imorgon. Ska jag flytta träningen?"
+            </p>
+          </FlowSays>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── FlowPlan ─────────────────────────────────────────────── */
+
+function FlowPlanSection() {
+  return (
+    <section className="relative overflow-hidden bg-[#2A2140] px-5 py-16 text-[#FBF9FF] sm:px-6 sm:py-24">
+      <div className="pointer-events-none absolute -top-32 -left-20 h-[300px] w-[300px] rounded-full bg-[#F5B8D0] opacity-20 blur-2xl" />
+      <div className="relative mx-auto max-w-5xl">
+        <p className="text-xs font-semibold tracking-[0.3em] text-[#F5B8D0] uppercase">FlowPlan™</p>
+        <h2 className="font-display mt-3 text-3xl leading-tight font-bold sm:text-4xl md:text-5xl">
+          Rätt sak, i rätt ordning.
+        </h2>
+        <p className="mt-4 max-w-xl text-white/70">
+          Du säger vad som ska göras. Flow räknar ut den mest effektiva ordningen – och förklarar
+          varför.
+        </p>
+
+        <div className="mt-10 grid gap-8 md:grid-cols-2">
+          <div>
+            <p className="text-xs font-semibold tracking-widest text-white/50 uppercase">
+              Du behöver
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {["Duscha", "Starta tvättmaskinen", "Laga middag", "Starta robotdammsugaren"].map(
+                (t) => (
+                  <span
+                    key={t}
+                    className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm"
+                  >
+                    {t}
+                  </span>
+                ),
+              )}
+            </div>
+          </div>
+
+          <div>
+            <p className="text-xs font-semibold tracking-widest text-[#F5B8D0] uppercase">
+              Flow föreslår
+            </p>
+            <div className="mt-3 space-y-2">
+              {[
+                { n: 1, s: "Starta tvättmaskinen", w: "Går själv medan du gör annat.", t: "0 min" },
+                { n: 2, s: "Starta robotdammsugaren", w: "Städar medan du duschar.", t: "1 min" },
+                { n: 3, s: "Duscha", w: "Lugn stund. Ingen väntar på dig.", t: "5 min" },
+                {
+                  n: 4,
+                  s: "Laga middag",
+                  w: "Tvätten färdig snart – hänger efter maten.",
+                  t: "25 min",
+                },
+              ].map((st) => (
+                <div
+                  key={st.n}
+                  className="pop-in flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.06] p-3"
+                  style={{ animationDelay: `${st.n * 90}ms` }}
+                >
+                  <div className="font-display flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-[#7C5CE0] font-bold text-white">
+                    {st.n}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="text-sm font-semibold">{st.s}</div>
+                    <div className="text-xs text-white/60">{st.w}</div>
+                  </div>
+                  <div className="flex-shrink-0 rounded-md bg-[#F5B8D0]/10 px-2 py-1 text-[11px] font-semibold text-[#F5B8D0]">
+                    {st.t}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── Byggs just nu ────────────────────────────────────────── */
+
+function BuildingSection() {
+  return (
+    <section className="px-5 py-16 sm:px-6 sm:py-24">
+      <div className="mx-auto max-w-4xl rounded-[2rem] border border-[#7C5CE0]/15 bg-white p-7 shadow-sm sm:p-10">
+        <div className="grid items-center gap-8 sm:grid-cols-[auto_1fr]">
+          <FlowMascot size="xl" float glow className="mx-auto" />
+          <div>
+            <p className="text-xs font-semibold tracking-[0.3em] text-[#7C5CE0] uppercase">
+              🚀 Var med från början
+            </p>
+            <h2 className="font-display mt-3 text-2xl leading-tight font-bold sm:text-3xl">
+              💜 Byggs just nu – för verkliga vardagar
+            </h2>
+            <p className="mt-4 leading-relaxed text-[#6B647F]">
+              MyFlove utvecklas för att skapa ett smartare och mer mänskligt sätt att få stöd i
+              vardagen. Du kan vara med tidigt och forma hur Flow fungerar.
+            </p>
+            <Button
+              asChild
+              size="lg"
+              className="press mt-6 rounded-full bg-[#7C5CE0] text-white shadow-lg shadow-[#7C5CE0]/25 hover:bg-[#6A48CE]"
+            >
+              <Link to="/sign-up">Testa MyFlove gratis</Link>
+            </Button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── Vision ───────────────────────────────────────────────── */
+
+function Vision() {
+  return (
+    <section className="relative overflow-hidden bg-[#2A2140] px-5 py-16 text-[#FBF9FF] sm:px-6 sm:py-24 md:py-32">
+      <div className="pointer-events-none absolute -top-40 -left-20 h-[500px] w-[500px] rounded-full bg-[#7C5CE0] opacity-30 blur-2xl" />
+      <div className="pointer-events-none absolute -right-24 -bottom-40 h-[460px] w-[460px] rounded-full bg-[#C4B5FD] opacity-20 blur-2xl" />
+      <div className="relative mx-auto max-w-3xl text-center">
+        <FlowMascot size="lg" float glow />
+        <p className="mt-6 text-xs font-semibold tracking-[0.4em] text-[#F5B8D0] uppercase">
+          Vår vision
+        </p>
+        <h2 className="font-display mt-6 text-3xl leading-[1.05] font-bold tracking-tight sm:text-4xl md:text-6xl">
+          Vi bygger inte funktioner.
+          <br />
+          Vi löser vardagsfriktion.
+        </h2>
+        <p className="font-display mt-6 text-2xl text-[#A78BFA] italic md:text-3xl">
+          Bär mindre. Gör inte mer.
+        </p>
+        <p className="mx-auto mt-8 max-w-xl text-base leading-relaxed text-white/70 md:text-lg">
+          Du öppnar inte en app. Du möter Flow – en lugn, intelligent följeslagare som hjälper dig
+          genom vardagen.
+        </p>
+        <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
+          <Button
+            asChild
+            size="lg"
+            className="press rounded-full bg-[#7C5CE0] text-white shadow-lg shadow-[#7C5CE0]/30 hover:bg-[#6A48CE]"
+          >
+            <Link to="/sign-up">Möt Flow</Link>
+          </Button>
+          <Button
+            asChild
+            size="lg"
+            variant="outline"
+            className="press rounded-full border-white/25 bg-white/10 text-white hover:bg-white/20"
+          >
+            <Link to="/sign-in">Jag har redan konto</Link>
+          </Button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="border-t border-white/10 bg-[#2A2140] px-6 py-8 text-white/60">
+      <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 text-sm sm:flex-row">
+        <p>© {new Date().getFullYear()} MyFlove</p>
+        <nav className="flex gap-5">
+          <Link to="/integritet" className="hover:text-white">
+            Integritet
+          </Link>
+          <Link to="/villkor" className="hover:text-white">
+            Villkor
+          </Link>
+          <Link to="/cookies" className="hover:text-white">
+            Cookies
+          </Link>
+        </nav>
+      </div>
+    </footer>
   );
 }
