@@ -12,6 +12,7 @@ import { assessToday, rankNow, suggestNow } from "@/lib/flow-engine";
 import { energySentence, pickFlowSlides, type FlowSlideId } from "@/lib/flow-slides";
 import type { ScoredTask } from "@/lib/daily-flow";
 import { BUILD_ID } from "@/lib/cache-busting";
+import { haptic } from "@/lib/haptics";
 
 /** Versionsmärkning för Flow-presentationen – visas i UI för verifiering. */
 export const FLOW_VERSION = "flow-2.0-character-2026-08-25";
