@@ -430,9 +430,10 @@ function FlowSlide({
   }
 
   if (id === "energy") {
-    const scene: FlowScene = reading.now >= 66 ? "energyHigh" : reading.now < 40 ? "energyLow" : "mood";
+    const scene: FlowScene =
+      reading.now >= 66 ? "energyHigh" : reading.now < 20 ? "sleep" : reading.now < 40 ? "energyLow" : "mood";
     return (
-      <SlideShell scene={scene} seed={seed} title={`Ditt batteri: ${Math.round(reading.now)} %`}>
+      <SlideShell scene={scene} seed={seed} energy={reading.now} title={`Ditt batteri: ${Math.round(reading.now)} %`}>
         <p className="text-sm text-muted-foreground">
           {energySentence(reading.now, reading.trend)}
         </p>
@@ -575,16 +576,18 @@ function SlideShell({
   scene,
   seed,
   title,
+  energy,
   children,
 }: {
   scene: FlowScene;
   seed: number;
   title: string;
+  energy?: number;
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex h-[62svh] max-h-[600px] min-h-[380px] flex-col items-center justify-between gap-3 overflow-hidden px-2 py-3 text-center">
-      <FlowCharacter scene={scene} seed={seed} />
+    <div className="flex h-[58svh] max-h-[560px] min-h-[360px] flex-col items-center justify-between gap-3 overflow-hidden px-2 py-3 text-center">
+      <FlowCharacter scene={scene} seed={seed} energy={energy} />
       <div className="flex w-full flex-1 flex-col items-center justify-center gap-3">
         <h2 className="font-display text-xl leading-snug text-balance text-ink">{title}</h2>
         {children}
