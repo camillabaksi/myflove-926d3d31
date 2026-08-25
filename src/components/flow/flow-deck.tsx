@@ -15,7 +15,7 @@ import type { ScoredTask } from "@/lib/daily-flow";
 import { BUILD_ID } from "@/lib/cache-busting";
 
 /** Versionsmärkning för Flow-presentationen – visas i UI för verifiering. */
-export const FLOW_VERSION = "single-container-2026-08-25";
+export const FLOW_VERSION = "horizontal-track-2026-08-25";
 
 type DeckSlideId = "intro" | FlowSlideId;
 
