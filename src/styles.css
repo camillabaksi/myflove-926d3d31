@@ -547,6 +547,8 @@ html[data-npf-less="true"] [data-npf="optional"] {
   .pop-in,
   .breathe,
   .floaty,
+  .wave-hello,
+
   .stagger > * {
     animation: none !important;
   }
