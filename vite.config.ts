@@ -16,6 +16,10 @@ export default defineConfig({
     // mcpPlugin() crashes on Windows due to path separator handling (\ vs /),
     // so it's disabled there while remaining active for Linux/macOS collaborators.
     plugins: [...(process.platform !== "win32" ? [mcpPlugin()] : [])],
+    // Unikt id per build – används för cache-busting av gamla bundles/service workers.
+    define: {
+      __MYFLOVE_BUILD_ID__: JSON.stringify(Date.now().toString(36)),
+    },
     resolve: {
       alias: {
         wouter: path.resolve(__dirname, "src/compat/wouter.tsx"),
