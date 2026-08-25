@@ -89,8 +89,9 @@ export default function FlowDeck() {
     <section
       aria-label="Flow"
       className="flow-carousel relative"
-      data-flow-version="flex-nowrap-2026-08-25"
+      data-flow-version={FLOW_VERSION}
     >
+
       {/* Utility-klasser och egna regler låser samma kritiska geometri. */}
       <div
         ref={trackRef}
