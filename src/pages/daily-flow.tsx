@@ -29,14 +29,18 @@ export default function DailyFlowPage() {
             <h1 className="text-3xl font-bold">Rutiner &amp; medicin</h1>
           </div>
           <p className="text-muted-foreground">
-            Dina fasta rutiner och doser. Dagens plan och förslag bor i Min dag och Flow.
+            Morgonstart, dina fasta rutiner och doser. Dagens plan och förslag bor i Min dag och
+            Flow.
           </p>
         </header>
 
         <Tabs defaultValue="both" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 h-11 rounded-2xl">
+          <TabsList className="grid w-full grid-cols-4 h-11 rounded-2xl">
             <TabsTrigger value="both" className="rounded-xl">
-              Båda
+              Alla
+            </TabsTrigger>
+            <TabsTrigger value="morgon" className="rounded-xl">
+              <Sunrise size={14} className="mr-1.5" /> Morgon
             </TabsTrigger>
             <TabsTrigger value="rutiner" className="rounded-xl">
               <Repeat size={14} className="mr-1.5" /> Rutiner
@@ -47,6 +51,18 @@ export default function DailyFlowPage() {
           </TabsList>
 
           <TabsContent value="both" className="mt-6 space-y-10">
+            <CollapsibleSection
+              title={
+                <span className="flex items-center gap-2">
+                  <Sunrise size={18} className="text-primary" /> Morgonstart
+                </span>
+              }
+              id="Morgonstart"
+              headingClassName="text-lg font-semibold"
+            >
+              <MorningContent />
+            </CollapsibleSection>
+            <div className="h-px bg-border" />
             <CollapsibleSection
               title={
                 <span className="flex items-center gap-2">
