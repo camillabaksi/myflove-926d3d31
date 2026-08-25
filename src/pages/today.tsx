@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Link } from "wouter";
 import Layout from "@/components/layout";
 import CollapsibleSection from "@/components/collapsible-section";
+import FlowCompanion from "@/components/flow/flow-companion";
 import HelpHint from "@/components/help-hint";
 import DayTimeline, { type TimelineEntry } from "@/components/day-timeline";
 import EnergyBattery from "@/components/energy-battery";
@@ -170,6 +171,9 @@ export default function TodayPage() {
 
         {/* ❤️ Snabb registrering – samma värden som på Hem */}
         <QuickCheckin />
+
+        {/* 💜 Flow – reagerar på dagens läge */}
+        <FlowCompanion stage="inline" />
 
         {/* 🔋 Batteriet – gemensamt för båda vyerna */}
         <EnergyBattery />

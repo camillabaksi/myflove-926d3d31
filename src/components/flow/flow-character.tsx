@@ -16,11 +16,16 @@ import {
   Mug,
   OpenBook,
   Pan,
+  LaundryBasket,
+  PillBottle,
   RainDrops,
   Stars,
   Steam,
+  Sun,
+  Sunglasses,
   Umbrella,
   Vacuum,
+  WaterGlass,
   Zzz,
 } from "@/components/flow/flow-props";
 
@@ -38,6 +43,10 @@ import {
 export type FlowScene =
   | "hello"
   | "rain"
+  | "sun"
+  | "medicine"
+  | "water"
+  | "laundry"
   | "sleep"
   | "break"
   | "study"
@@ -55,7 +64,27 @@ export type FlowScene =
   | "rest"
   | "think";
 
-type SceneContext = { energy: number };
+type SceneContext = { energy: number; kids: number; rain: boolean };
+
+/** Små Flow-kompisar bredvid Flow – ett per barn (max 3 i bild). */
+function MiniFlows({ count, rain }: { count: number; rain?: boolean }) {
+  const shown = Math.max(1, Math.min(3, count));
+  return (
+    <div
+      data-flow-prop="miniFlows"
+      data-flow-kids={shown}
+      className="pointer-events-none absolute bottom-[2%] right-[-4%] flex items-end gap-1"
+      aria-hidden
+    >
+      {Array.from({ length: shown }).map((_, i) => (
+        <span key={i} className="relative">
+          {rain && <Umbrella className="absolute -top-[38%] left-1/2 h-6 w-auto -translate-x-1/2 flow-sway" />}
+          <FlowMascot size="xs" mood={i % 2 === 0 ? "bounce" : "sway"} imgClassName="h-10 w-auto" />
+        </span>
+      ))}
+    </div>
+  );
+}
 
 type Variant = {
   mood: FlowMood;
@@ -107,6 +136,59 @@ const SCENES: Record<FlowScene, Variant[]> = {
         <>
           <RainDrops count={5} />
           <Umbrella className={p("left-[6%] top-[1%] h-[40%] w-auto -rotate-12 floaty")} />
+        </>
+      ),
+    },
+  ],
+
+  sun: [
+    {
+      mood: "bounce",
+      back: () => <Sun className={p("right-[4%] top-[2%] h-[26%] w-auto flow-pulse")} />,
+      front: () => <Sunglasses className={p("left-1/2 top-[36%] w-[38%] -translate-x-1/2")} />,
+    },
+    {
+      mood: "cheer",
+      back: () => <Sun className={p("left-[4%] top-[2%] h-[24%] w-auto flow-pulse")} />,
+      front: () => <Sunglasses className={p("left-1/2 top-[35%] w-[36%] -translate-x-1/2 -rotate-3")} />,
+    },
+  ],
+
+  medicine: [
+    {
+      mood: "nod",
+      front: () => <PillBottle className={p("bottom-[8%] right-[-2%] h-[42%] w-auto floaty")} />,
+    },
+    {
+      mood: "calm",
+      front: () => <PillBottle className={p("bottom-[8%] left-[-2%] h-[40%] w-auto floaty")} />,
+    },
+  ],
+
+  water: [
+    {
+      mood: "nod",
+      front: () => <WaterGlass className={p("bottom-[8%] right-[2%] h-[34%] w-auto floaty")} />,
+    },
+    {
+      mood: "float",
+      front: () => <WaterGlass className={p("bottom-[8%] left-[2%] h-[32%] w-auto floaty")} />,
+    },
+  ],
+
+  laundry: [
+    {
+      mood: "sway",
+      front: () => <LaundryBasket className={p("bottom-[4%] left-1/2 w-[58%] -translate-x-1/2")} />,
+    },
+    {
+      mood: "nod",
+      front: () => (
+        <>
+          <LaundryBasket className={p("bottom-[4%] right-[0%] w-[52%]")} />
+          <span className={p("left-[10%] top-[16%] text-2xl floaty")} aria-hidden>
+            🧺
+          </span>
         </>
       ),
     },
@@ -277,18 +359,24 @@ const SCENES: Record<FlowScene, Variant[]> = {
   kids: [
     {
       mood: "wave",
-      front: () => (
-        <span className={p("bottom-[8%] right-[8%] text-5xl floaty")} aria-hidden>
-          🎒
-        </span>
+      back: ({ rain }) => (rain ? <RainDrops count={5} /> : null),
+      front: ({ kids, rain }) => (
+        <>
+          {rain && <Umbrella className={p("left-[6%] top-[0%] h-[38%] w-auto -rotate-12 flow-sway")} />}
+          <MiniFlows count={kids} rain={rain} />
+        </>
       ),
     },
     {
       mood: "bounce",
-      front: () => (
-        <span className={p("bottom-[8%] left-[8%] text-5xl floaty")} aria-hidden>
-          🧸
-        </span>
+      back: ({ rain }) => (rain ? <RainDrops count={5} /> : null),
+      front: ({ kids, rain }) => (
+        <>
+          <span className={p("left-[6%] bottom-[10%] text-4xl floaty")} aria-hidden>
+            🎒
+          </span>
+          <MiniFlows count={kids} rain={rain} />
+        </>
       ),
     },
   ],
@@ -423,32 +511,50 @@ const SCENES: Record<FlowScene, Variant[]> = {
   ],
 };
 
+/** Scenens storlek: "hero" = Flow är huvudfokus (~35 % av skärmen), "inline" = del av ett kort. */
+export type FlowStage = "hero" | "inline" | "mini";
+
+const STAGE_CLASS: Record<FlowStage, string> = {
+  hero: "h-[33svh] max-h-[300px] min-h-[170px]",
+  inline: "h-[18svh] max-h-[150px] min-h-[104px]",
+  mini: "h-[72px] min-h-[72px]",
+};
+
 export function FlowCharacter({
   scene,
   /** Byt värde för att välja variant (t.ex. slide-index) – deterministiskt. */
   seed = 0,
   /** Batterinivå 0–100, används av energiscenerna. */
   energy = 50,
+  /** Antal barn – används av barnscenen. */
+  kids = 0,
+  /** Regn just nu – kombineras med t.ex. barnscenen. */
+  rain = false,
+  stage = "hero",
   className,
 }: {
   scene: FlowScene;
   seed?: number;
   energy?: number;
+  kids?: number;
+  rain?: boolean;
+  stage?: FlowStage;
   className?: string;
 }) {
   const list = SCENES[scene] ?? SCENES.hello;
   const index = Math.abs(Math.round(seed)) % list.length;
   const variant = useMemo(() => list[index], [list, index]);
-  const ctx: SceneContext = { energy };
+  const ctx: SceneContext = { energy, kids, rain };
 
   return (
     <div
       data-flow-character
       data-flow-scene={scene}
       data-flow-variant={index}
+      data-flow-stage={stage}
       className={cn("flex w-full items-end justify-center", className)}
     >
-      <div className="relative aspect-square h-[33svh] max-h-[300px] min-h-[170px]">
+      <div className={cn("relative aspect-square", STAGE_CLASS[stage])}>
         {variant.back?.(ctx)}
 
         <FlowMascot
@@ -469,9 +575,12 @@ export function FlowCharacter({
 export function sceneForTask(title?: string | null): FlowScene {
   const t = (title ?? "").toLowerCase();
   const has = (...words: string[]) => words.some((w) => t.includes(w));
+  if (has("medicin", "tablett", "piller", "dos")) return "medicine";
+  if (has("vatten", "dricka", "vätska")) return "water";
+  if (has("tvätt", "vika", "tvättmaskin")) return "laundry";
   if (has("plugg", "läs", "studie", "tenta", "prov", "quiz")) return "study";
   if (has("jobb", "möte", "mail", "mejl", "rapport")) return "work";
-  if (has("städ", "damms", "disk", "tvätt")) return "clean";
+  if (has("städ", "damms", "disk")) return "clean";
   if (has("laga", "mat", "middag", "frukost", "lunch")) return "cook";
   if (has("handla", "inköp", "affär", "shop")) return "shopping";
   if (has("promenad", "gå ut", "träna", "löp", "gym")) return "walk";

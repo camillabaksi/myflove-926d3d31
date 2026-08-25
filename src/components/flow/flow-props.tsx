@@ -285,3 +285,66 @@ export function Stars({ className }: PropProps) {
     </div>
   );
 }
+
+/* ── Sol, medicin, vatten och tvätt ─────────────────────────────── */
+
+export function Sunglasses({ className, style }: PropProps) {
+  return (
+    <svg data-flow-prop="sunglasses" viewBox="0 0 120 44" className={className} style={style} aria-hidden>
+      <path d="M6 10h44v12c0 8-6 14-14 14h-8c-8 0-14-6-14-14z" className="fill-ink/80" />
+      <path d="M70 10h44v12c0 8-6 14-14 14h-8c-8 0-14-6-14-14z" className="fill-ink/80" />
+      <path d="M50 16h20" className="stroke-ink/80" strokeWidth="5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function Sun({ className, style }: PropProps) {
+  return (
+    <svg data-flow-prop="sun" viewBox="0 0 100 100" className={className} style={style} aria-hidden>
+      <circle cx="50" cy="50" r="22" className="fill-accent" />
+      {Array.from({ length: 8 }).map((_, i) => (
+        <rect
+          key={i}
+          x="47"
+          y="4"
+          width="6"
+          height="14"
+          rx="3"
+          className="fill-accent/80"
+          transform={`rotate(${i * 45} 50 50)`}
+        />
+      ))}
+    </svg>
+  );
+}
+
+export function PillBottle({ className, style }: PropProps) {
+  return (
+    <svg data-flow-prop="pillBottle" viewBox="0 0 70 110" className={className} style={style} aria-hidden>
+      <rect x="18" y="4" width="34" height="16" rx="6" className="fill-border" />
+      <rect x="10" y="20" width="50" height="86" rx="12" className="fill-card stroke-primary" strokeWidth="4" />
+      <rect x="18" y="46" width="34" height="26" rx="6" className="fill-primary/25" />
+      <path d="M26 59h18M35 50v18" className="stroke-primary" strokeWidth="5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function WaterGlass({ className, style }: PropProps) {
+  return (
+    <svg data-flow-prop="waterGlass" viewBox="0 0 70 100" className={className} style={style} aria-hidden>
+      <path d="M12 6h46l-6 88H18z" className="fill-card stroke-border" strokeWidth="4" />
+      <path d="M18 44h34l-4 44H22z" className="fill-primary/45" />
+    </svg>
+  );
+}
+
+export function LaundryBasket({ className, style }: PropProps) {
+  return (
+    <svg data-flow-prop="laundryBasket" viewBox="0 0 120 90" className={className} style={style} aria-hidden>
+      <rect x="20" y="10" width="34" height="22" rx="5" className="fill-secondary" />
+      <rect x="58" y="4" width="34" height="22" rx="5" className="fill-primary/60" />
+      <path d="M10 36h100l-10 50H20z" className="fill-card stroke-border" strokeWidth="4" />
+      <path d="M30 44v34M50 44v34M70 44v34M90 44v34" className="stroke-border" strokeWidth="3" />
+    </svg>
+  );
+}
