@@ -211,3 +211,87 @@ export const getAnalyticsSummaryFn = createServerFn({ method: "GET" })
       dailySignups,
     };
   });
+
+export type AnalyticsExportRow = {
+  date: string;
+  section: string;
+  action: string;
+  events: number;
+  sessions: number;
+};
+
+export type AnalyticsExport = {
+  from: string;
+  to: string;
+  totals: { events: number; sessions: number; days: number };
+  rows: AnalyticsExportRow[];
+  daily: Array<{ date: string; sessions: number; events: number }>;
+};
+
+const ExportInput = z.object({
+  from: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  to: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+});
+
+/** Anonym export: endast datum, sektion, handling och aggregerade antal. */
+export const getAnalyticsExportFn = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => ExportInput.parse(data))
+  .handler(async ({ data, context }): Promise<AnalyticsExport> => {
+    const { data: roleRow } = await context.supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", context.userId)
+      .eq("role", "admin")
+      .maybeSingle();
+    if (!roleRow) throw new Error("Forbidden");
+
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const fromIso = new Date(`${data.from}T00:00:00.000Z`).toISOString();
+    const toIso = new Date(`${data.to}T23:59:59.999Z`).toISOString();
+
+    const { data: events, error } = await supabaseAdmin
+      .from("analytics_events")
+      .select("session_id, section, action, created_at")
+      .gte("created_at", fromIso)
+      .lte("created_at", toIso)
+      .order("created_at", { ascending: true })
+      .limit(50000);
+    if (error) throw new Error(error.message);
+
+    const rows = events ?? [];
+    const byKey = new Map<string, { events: number; sessions: Set<string> }>();
+    const byDay = new Map<string, { events: number; sessions: Set<string> }>();
+    const allSessions = new Set<string>();
+
+    for (const row of rows) {
+      const day = row.created_at.slice(0, 10);
+      const key = `${day}::${row.section}::${row.action}`;
+      const bucket = byKey.get(key) ?? { events: 0, sessions: new Set<string>() };
+      bucket.events += 1;
+      bucket.sessions.add(row.session_id);
+      byKey.set(key, bucket);
+
+      const dayBucket = byDay.get(day) ?? { events: 0, sessions: new Set<string>() };
+      dayBucket.events += 1;
+      dayBucket.sessions.add(row.session_id);
+      byDay.set(day, dayBucket);
+
+      allSessions.add(row.session_id);
+    }
+
+    return {
+      from: data.from,
+      to: data.to,
+      totals: { events: rows.length, sessions: allSessions.size, days: byDay.size },
+      rows: Array.from(byKey.entries())
+        .map(([key, v]) => {
+          const [date, section, action] = key.split("::");
+          return { date, section, action, events: v.events, sessions: v.sessions.size };
+        })
+        .sort((a, b) => a.date.localeCompare(b.date) || b.events - a.events),
+      daily: Array.from(byDay.entries())
+        .map(([date, v]) => ({ date, events: v.events, sessions: v.sessions.size }))
+        .sort((a, b) => a.date.localeCompare(b.date)),
+    };
+  });
