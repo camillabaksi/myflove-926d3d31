@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Förstasidan minns nu vilken vy du är på i adressen (t.ex. /#flowplan) så att uppdatering, delning och bakåtknappen landar rätt. Svep och drag fick momentum med skärmanpassad tröskel, och karusellen har tydlig fokusmarkering, korrekt tabordning och läsbara etiketter som \"FlowPlan – vy 8 av 10\" (2026-08-25)",
       "Förstasidan (/) är nu ett interaktivt slide-flöde i stället för en lång scrollsida: tio vyer som byts en i taget med mjuka övergångar, svep i sidled, pilknappar, piltangenter/Home/End och prickar som visar var du är (2026-08-25)",
       "Flow-karusellen kan nu dras och svepas: spåret följer fingret eller musen i realtid, byter vy vid ungefär en femtedels bredd eller ett snabbt svep och fjädrar annars tillbaka. Vertikala drag skrollar sidan, reglagen påverkas inte, och kanterna har motstånd (2026-08-25)",
       "Flow-karusellen har fullt tangentbordsstöd: vänster-/högerpil byter vy, Home/End går till första/sista, karusellen har tydlig fokusring, fokus flyttas till den nya vyn och en live-region läser upp \"Vy 2 av 4\" (2026-08-25)",
