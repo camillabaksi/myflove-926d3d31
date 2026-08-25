@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-25 – Flow finns i hela appen
+
+- Flow står nu med överst i alla vanliga vyer (att göra, kalender, medicin, barn, studier, jobb, träning, inköp med flera) som en liten kontextuell följeslagare.
+- Han visar samma sak som på Hem och Min dag – en kontext i taget – och dubbleras inte på sidor som redan har Flow (Hem, Min dag, Flow-previewen, pitch och admin).
+
 ## 2026-08-25 – Flow finns nu i den inloggade appen
 
 - Flow står med som en kontextuell följeslagare på Hem och Min dag, med samma utseende, poser och rekvisita som i Flow-previewen (previewen är oförändrad).

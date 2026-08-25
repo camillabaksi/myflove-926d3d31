@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Flow överallt: Flow finns nu överst i alla vanliga vyer (att göra, kalender, medicin, barn, studier, jobb, träning, inköp m.fl.) och visar en kontext i taget – utan att dubbleras på Hem, Min dag, Flow-previewen, pitch eller admin (2026-08-25)",
       "Flow i appen: Flow finns nu på Hem och Min dag som en kontextuell följeslagare – han väljer en sak i taget utifrån medicin, väder, energi, barn och dagens nästa uppgift, har ny rekvisita (sol, solglasögon, medicinburk, vattenglas, tvättkorg, mini-Flows för barnen) och firar när du bockar av något. Flow-previewen är oförändrad (2026-08-25)",
       "Flow: automatiska tester (Vitest) säkerställer att exakt ett Flow-state visas åt gången och att varje situation ger rätt rekvisita och pose på mobilbredd – körs med npm run test (2026-08-25)",
       "Flow: riktiga karaktärsscener i /flow – Flow får paraply i regn, säng vid vila, kaffe vid paus, bok vid plugg, laptop vid jobb, dammsugare vid städning, kockmössa vid mat, bil vid resa, batteri vid låg/hög energi, konfetti när något blir klart och lugn andning vid återhämtning, med flera varianter per situation och utan intern scroll på mobil (2026-08-25)",
