@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-25 – Flow 2.0: en personlig, svepbar Flow-upplevelse
+
+- Flow har fått en egen startsida där Flow hälsar, hoppar upp och vinkar första gången – och därefter bara en kort, lugn hälsning.
+- Första besöket visar en mycket kort introduktion i tre steg med "✨ Visa mig" och "Hoppa över".
+- Flow visar en sak i taget i en svepbar upplevelse: Hur är det just nu, Din energi, Mitt förslag och Återhämtning – med pilar och punktindikator.
+- Flow väljer själv vilken slide som är mest relevant: saknad incheckning först, återhämtning vid tung dag eller låg energi, och fokusuppgift när energin är hög.
+- Allt bygger på befintlig logik och data (Flow-motorn, Mitt batteri, dagens incheckning, befintliga uppgifter) – inga nya system eller dubbletter.
+
 ## 2026-08-25 – Flow reagerar på startsidans demo
 
 - Telefondemon i hero är nu interaktiv: uppgifterna kan bockas av och Flow svarar med en kort, lugn reaktion i pratbubblan i telefonen.

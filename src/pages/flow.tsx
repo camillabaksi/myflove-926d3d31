@@ -84,7 +84,6 @@ function NowLayer() {
   );
 }
 
-
 /* ── IDAG ───────────────────────────────────────────────────────── */
 
 function TodayLayer() {
