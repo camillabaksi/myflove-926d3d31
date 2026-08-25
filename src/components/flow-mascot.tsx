@@ -27,6 +27,7 @@ export function FlowMascot({
   glow = false,
   wave = false,
   className,
+  imgClassName,
   alt = "Flow – MyFloves följeslagare",
 }: {
   size?: FlowMascotSize;
@@ -35,6 +36,8 @@ export function FlowMascot({
   /** Flow vinkar som en hälsning. */
   wave?: boolean;
   className?: string;
+  /** Extra klasser på bilden, t.ex. responsiva storlekar. */
+  imgClassName?: string;
   alt?: string;
 }) {
   return (
@@ -55,6 +58,7 @@ export function FlowMascot({
           SIZES[size],
           float && !wave && "floaty",
           wave && "wave-hello",
+          imgClassName,
         )}
       />
     </span>

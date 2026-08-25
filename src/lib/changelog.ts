@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Förstasidan: Flow vid hälsningen är större och står nu bredvid pratrutan även på mobil, och Flow-bilden längst ner i visionsavsnittet är borttagen (2026-08-25)",
       "Förstasidan: den stora vinkande Flow står nu vid hälsningen \"Hej, jag heter Flow\" i stället för nertill vid telefonen. Pratbubblan är nu en rektangulär ruta som fyller bredden (under Flow på mobil, bredvid på desktop) (2026-08-25)",
       "Förstasidan: tydliga \"‹ Tillbaka\"- och \"Nästa ›\"-knappar längst ner på mobil, så du alltid kan byta vy med ett tryck om svepet inte fungerar (2026-08-25)",
       "Förstasidan: bakåtsvep på mobil använder nu fingrets senast säkra position även vid avbruten iOS-kantgest, faktisk dragsträcka prioriteras framför momentum och tröskeln är 28–72 px. Ett hydratiseringsfel som kunde återställa karusellen är också borttaget (2026-08-25)",

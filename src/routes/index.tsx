@@ -512,14 +512,23 @@ function Hero() {
           </div>
 
           <div className="mx-auto mt-8 w-full max-w-xl lg:mx-0">
-            <FlowSays size="2xl" wave glow>
-
-              <p className="font-semibold">Hej, jag heter Flow 💜</p>
-              <p className="text-[#6B647F]">
-                Jag håller reda på dagen. Du behöver bara göra en sak i taget.
-              </p>
-            </FlowSays>
+            <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 text-left sm:gap-5">
+              <FlowMascot
+                size="2xl"
+                wave
+                glow
+                className="shrink-0"
+                imgClassName="h-32 w-32 sm:h-48 sm:w-48 lg:h-56 lg:w-56"
+              />
+              <div className="w-full min-w-0 rounded-2xl border border-[#2A2140]/5 bg-white px-4 py-3 text-sm leading-relaxed text-pretty text-[#2A2140] shadow-sm sm:px-5 sm:py-4 sm:text-base">
+                <p className="font-semibold">Hej, jag heter Flow 💜</p>
+                <p className="text-[#6B647F]">
+                  Jag håller reda på dagen. Du behöver bara göra en sak i taget.
+                </p>
+              </div>
+            </div>
           </div>
+
 
         </div>
 
@@ -1086,7 +1095,6 @@ function Vision() {
       <div className="pointer-events-none absolute -top-40 -left-20 h-[500px] w-[500px] rounded-full bg-[#7C5CE0] opacity-30 blur-2xl" />
       <div className="pointer-events-none absolute -right-24 -bottom-40 h-[460px] w-[460px] rounded-full bg-[#C4B5FD] opacity-20 blur-2xl" />
       <div className="relative mx-auto max-w-3xl text-center">
-        <FlowMascot size="lg" float glow />
         <p className="mt-6 text-xs font-semibold tracking-[0.4em] text-[#F5B8D0] uppercase">
           Vår vision
         </p>
