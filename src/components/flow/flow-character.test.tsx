@@ -92,7 +92,7 @@ describe("sceneForTask", () => {
     ["Ta en promenad", "walk"],
     ["Hämta barnen", "kids"],
     ["Kör till stan", "travel"],
-    ["Sova middag", "sleep"],
+    ["Sova en stund", "sleep"],
     ["Fika med Anna", "break"],
     ["Något helt annat", "think"],
   ])("%s → %s", (title, expected) => {
