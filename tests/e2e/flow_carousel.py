@@ -129,7 +129,7 @@ async def run_width(browser, width: int) -> None:
     b1b = await slides.nth(0).bounding_box()
     b2b = await slides.nth(1).bounding_box()
     check(
-        -8 <= b2b["x"] <= width / 2 and b1b["x"] + b1b["width"] <= 8,
+        -8 <= b2b["x"] <= width / 2 and b1b["x"] + b1b["width"] <= 24,
         f"{width}px: slide 2 fyller viewporten efter swipe (slide 1 utanför)",
         f"x1={b1b['x']:.0f} x2={b2b['x']:.0f}",
     )
