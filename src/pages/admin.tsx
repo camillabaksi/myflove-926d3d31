@@ -385,8 +385,7 @@ function UsersSection() {
                     <div className="text-xs text-muted-foreground">{u.email ?? "—"}</div>
                   </td>
                   <td className="p-3 text-xs text-muted-foreground">
-                    <div>{fmtDateTime(u.last_visit_at)}</div>
-                    <div>{u.visits > 0 ? `${u.visits} händelser` : "inga besök"}</div>
+                    Anonym statistik
                   </td>
                   <td className="p-3 text-xs text-muted-foreground">
                     {fmtDateTime(u.last_sign_in_at)}
