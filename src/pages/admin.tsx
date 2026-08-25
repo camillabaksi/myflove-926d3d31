@@ -243,7 +243,7 @@ function UsersSection() {
   const qc = useQueryClient();
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
-  const [sortKey, setSortKey] = useState<SortKey>("last_visit");
+  const [sortKey, setSortKey] = useState<SortKey>("last_login");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
   const filter = { ...(from ? { from } : {}), ...(to ? { to } : {}) };
   const hasFilter = Boolean(from || to);
@@ -349,13 +349,7 @@ function UsersSection() {
               >
                 Namn
               </SortHeader>
-              <SortHeader
-                active={sortKey === "last_visit"}
-                dir={sortDir}
-                onClick={() => handleSort("last_visit")}
-              >
-                Senaste besök
-              </SortHeader>
+              <th className="p-3">Besök</th>
               <SortHeader
                 active={sortKey === "last_login"}
                 dir={sortDir}
