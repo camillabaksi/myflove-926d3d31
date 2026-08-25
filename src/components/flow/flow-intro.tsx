@@ -71,18 +71,8 @@ export function FlowGreeting({ children }: { children?: React.ReactNode }) {
     );
   }
 
-  return (
-    <>
-      <section className="surface-card flex items-center gap-4 p-5" aria-label="Flow">
-        <FlowMascot size="md" float glow />
-        <div className="min-w-0">
-          <h2 className="font-display text-xl text-ink">Hej! Jag är Flow 💜</h2>
-          <p className="mt-0.5 text-sm leading-relaxed text-muted-foreground">
-            Du behöver inte lista ut allt själv. Vi tar en sak i taget.
-          </p>
-        </div>
-      </section>
-      {children}
-    </>
-  );
+  // Efter första gången presenterar Flow sig i slide 1 i carousellen –
+  // inget extra kort ovanför, så sidan aldrig blir lång.
+  return <>{children}</>;
 }
+
