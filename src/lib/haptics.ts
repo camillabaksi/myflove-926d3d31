@@ -4,7 +4,7 @@
  * Respekterar "reducerad rörelse" och tyst läge – ingen vibration då.
  */
 
-import { getQuietMode } from "@/lib/quiet-mode";
+import { isQuietNow } from "@/lib/quiet-mode";
 
 export type HapticPattern = "tap" | "soft" | "bump" | "success";
 
