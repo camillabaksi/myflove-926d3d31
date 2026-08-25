@@ -140,9 +140,68 @@ async def run_width(browser, width: int) -> None:
         f"{width}px: högersvep går tillbaka",
     )
 
+    # Kort drag ska fjädra tillbaka
+    box = await viewport.bounding_box()
+    if box:
+        y = box["y"] + min(box["height"] / 2, 250)
+        await page.mouse.move(box["x"] + box["width"] * 0.6, y)
+        await page.mouse.down()
+        await page.mouse.move(box["x"] + box["width"] * 0.55, y, steps=5)
+        await page.mouse.up()
+        await page.wait_for_timeout(450)
+    check(
+        await active.first.get_attribute("data-flow-slide-id") == "intro",
+        f"{width}px: för kort drag fjädrar tillbaka",
+    )
+
+    # Tangentbord
+    await viewport.focus()
+    check(
+        await page.evaluate("() => document.activeElement?.hasAttribute('data-flow-viewport')"),
+        f"{width}px: karusellen går att fokusera",
+    )
+    await page.keyboard.press("ArrowRight")
+    await page.wait_for_timeout(400)
+    check(
+        await active.first.get_attribute("data-flow-slide-id") != "intro",
+        f"{width}px: högerpil byter vy",
+    )
+    check(
+        await page.evaluate(
+            "() => document.activeElement?.getAttribute('data-flow-slide-active') === 'true'"
+        ),
+        f"{width}px: fokus flyttas till den nya vyn",
+    )
+    await page.keyboard.press("Home")
+    await page.wait_for_timeout(400)
+    check(
+        await active.first.get_attribute("data-flow-slide-id") == "intro",
+        f"{width}px: Home går till första vyn",
+    )
+    if total > 1:
+        await page.keyboard.press("End")
+        await page.wait_for_timeout(400)
+        check(
+            await page.evaluate(
+                "() => document.querySelector('[data-flow-current-slide]')?.getAttribute('data-flow-current-slide')"
+            )
+            == str(total - 1),
+            f"{width}px: End går till sista vyn",
+        )
+        await page.keyboard.press("Home")
+        await page.wait_for_timeout(300)
+
+    check(
+        await page.evaluate(
+            "() => [...document.querySelectorAll('[data-flow-slide]')].filter(e => e.dataset.flowSlideActive !== 'true').every(e => e.hasAttribute('inert'))"
+        ),
+        f"{width}px: inaktiva slides är inerta",
+    )
+
     os.makedirs("/tmp/browser/flow-e2e", exist_ok=True)
     await page.screenshot(path=f"/tmp/browser/flow-e2e/flow-state-{width}.png")
     await context.close()
+
 
 
 
