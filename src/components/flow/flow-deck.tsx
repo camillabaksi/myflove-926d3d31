@@ -109,12 +109,14 @@ export default function FlowDeck() {
     setCurrentSlide((value) => Math.min(value, Math.max(0, slides.length - 1)));
   }, [slides.length]);
 
-  const goTo = (nextSlide: number) => {
-    setCurrentSlide(Math.max(0, Math.min(slides.length - 1, nextSlide)));
+  const goTo = (nextSlide: number, focusSlide = false) => {
+    const clamped = Math.max(0, Math.min(slides.length - 1, nextSlide));
+    if (focusSlide && clamped !== currentSlide) shouldFocusSlide.current = true;
+    setCurrentSlide(clamped);
   };
 
-  const next = () => goTo(currentSlide + 1);
-  const previous = () => goTo(currentSlide - 1);
+  const next = (focusSlide = false) => goTo(currentSlide + 1, focusSlide);
+  const previous = (focusSlide = false) => goTo(currentSlide - 1, focusSlide);
   const activeSlide = slides[currentSlide] ?? "intro";
 
   // Håll URL:en i synk så att en delad/laddad länk landar på samma slide
@@ -125,20 +127,81 @@ export default function FlowDeck() {
     window.history.replaceState(null, "", url.toString());
   }, [currentSlide, activeSlide]);
 
+  // Flytta fokus till den nya sliden vid tangentbordsnavigering
+  useEffect(() => {
+    if (!shouldFocusSlide.current) return;
+    shouldFocusSlide.current = false;
+    activeSlideRef.current?.focus({ preventScroll: true });
+  }, [currentSlide]);
 
-  const handlePointerDown = (clientX: number) => {
-    pointerStartX.current = clientX;
+  /** Drag ska inte starta på knappar, reglage eller fält. */
+  const isInteractive = (target: EventTarget | null) =>
+    target instanceof Element &&
+    Boolean(target.closest("button, a, input, textarea, select, [role='slider'], [contenteditable]"));
+
+  const onPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (slides.length < 2 || isInteractive(event.target)) return;
+    drag.current = { x: event.clientX, y: event.clientY, time: Date.now(), axis: "none" };
   };
 
-  const handlePointerUp = (clientX: number) => {
-    const startX = pointerStartX.current;
-    pointerStartX.current = null;
-    if (startX == null) return;
-    const distance = clientX - startX;
-    if (Math.abs(distance) < 45) return;
-    if (distance < 0) next();
-    else previous();
+  const onPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    const state = drag.current;
+    if (!state) return;
+    const dx = event.clientX - state.x;
+    const dy = event.clientY - state.y;
+
+    if (state.axis === "none") {
+      if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+      state.axis = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
+      if (state.axis === "y") {
+        drag.current = null;
+        return;
+      }
+      setDragging(true);
+      event.currentTarget.setPointerCapture?.(event.pointerId);
+    }
+
+    // Motstånd vid kanterna
+    const atStart = currentSlide === 0 && dx > 0;
+    const atEnd = currentSlide === slides.length - 1 && dx < 0;
+    setDragOffset(atStart || atEnd ? dx * 0.25 : dx);
   };
+
+  const endDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    const state = drag.current;
+    drag.current = null;
+    const offset = dragOffset;
+    setDragging(false);
+    setDragOffset(0);
+    if (!state || state.axis !== "x") return;
+    event.currentTarget.releasePointerCapture?.(event.pointerId);
+
+    const width = viewportRef.current?.clientWidth ?? 1;
+    const elapsed = Date.now() - state.time;
+    const quickSwipe = elapsed < 300 && Math.abs(offset) > 40;
+    if (Math.abs(offset) > width * 0.2 || quickSwipe) {
+      if (offset < 0) next();
+      else previous();
+    }
+  };
+
+  const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (isInteractive(event.target)) return;
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      next(true);
+    } else if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      previous(true);
+    } else if (event.key === "Home") {
+      event.preventDefault();
+      goTo(0, true);
+    } else if (event.key === "End") {
+      event.preventDefault();
+      goTo(slides.length - 1, true);
+    }
+  };
+
 
   return (
     <section
