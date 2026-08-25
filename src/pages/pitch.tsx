@@ -1,7 +1,7 @@
 import Layout from "@/components/layout";
 import { Link } from "@tanstack/react-router";
 import { useIsAdmin } from "@/hooks/use-is-admin";
-import { Lock, Download, ArrowLeft, FileText, Film, BookOpen } from "lucide-react";
+import { Lock, Download, ArrowLeft, FileText, Film, BookOpen, Sparkles } from "lucide-react";
 
 const BLUEPRINT_VERSIONS = [
   { version: "3.4", label: "Senaste – Flow syns i blueprint och pitchdeck" },
