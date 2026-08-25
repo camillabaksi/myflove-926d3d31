@@ -1,5 +1,10 @@
 # Changelog
 
+
+## 2026-08-25 – Morgonstart bor bland Rutiner & medicin
+
+- Morgonstart har flyttat in i "Rutiner & medicin" som en egen flik och ett eget avsnitt – en plats för morgonen, rutinerna och doserna.
+- Gamla länken /morgonstart leder nu dit automatiskt, och menyposten är borttagen så det inte finns två vägar till samma sak.
 ## 2026-08-25 – Flow finns i hela appen
 
 - Flow står nu med överst i alla vanliga vyer (att göra, kalender, medicin, barn, studier, jobb, träning, inköp med flera) som en liten kontextuell följeslagare.
