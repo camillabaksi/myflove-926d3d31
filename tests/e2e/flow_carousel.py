@@ -10,6 +10,7 @@ Verifierar i 375px och 390px viewport:
 """
 
 import asyncio
+import re
 import json
 import os
 import sys
@@ -50,6 +51,15 @@ async def run_width(browser, width: int) -> None:
     page = await context.new_page()
     await restore_session(context, page)
     await page.goto(f"{BASE}/flow", wait_until="domcontentloaded")
+    await page.wait_for_timeout(1500)
+    if "/sign-in" in page.url or "/auth" in page.url:
+        # Ingen session: använd utvecklingslägets testkonto (endast lokalt/dev).
+        await page.goto(f"{BASE}/dev-session", wait_until="domcontentloaded")
+        btn = page.get_by_role("button", name=re.compile("testsession|logga in", re.I))
+        if await btn.count():
+            await btn.first.click()
+            await page.wait_for_url(re.compile(r"/hem"), timeout=45000)
+        await page.goto(f"{BASE}/flow", wait_until="domcontentloaded")
 
     track = page.locator("[data-flow-track]")
     try:
