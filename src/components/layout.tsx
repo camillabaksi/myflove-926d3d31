@@ -564,6 +564,7 @@ export default function Layout({ children }: LayoutProps) {
         icon: LayoutGrid,
         hrefs: [
           
+          "/oversikt",
           "/min-livsprofil",
           "/anpassa-hem",
           "/anpassa",

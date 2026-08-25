@@ -27,7 +27,7 @@ import { AreaSwitcher } from "@/components/area-switcher";
 import { AREA_META, useActiveArea } from "@/lib/life-areas";
 import IntroTour from "@/components/intro-tour";
 import FlowOnboarding from "@/components/flow-onboarding";
-import { CalendarDays, Sparkles, ArrowRight, SlidersHorizontal } from "lucide-react";
+import { CalendarDays, Sparkles, ArrowRight, SlidersHorizontal, Compass } from "lucide-react";
 import { todayISO } from "@/lib/day";
 
 /**
@@ -555,7 +555,16 @@ export default function Home() {
           <AreaOnboarding />
         </div>
 
-        <div style={{ order: 99 }} className="pb-2 text-center">
+        <div
+          style={{ order: 99 }}
+          className="flex flex-wrap items-center justify-center gap-4 pb-2 text-center"
+        >
+          <Link
+            href="/oversikt"
+            className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground underline underline-offset-2"
+          >
+            <Compass size={13} /> Så funkar MyFlove
+          </Link>
           <Link
             href="/anpassa-hem"
             className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground underline underline-offset-2"
