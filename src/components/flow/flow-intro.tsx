@@ -1,0 +1,88 @@
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { FlowMascot } from "@/components/flow-mascot";
+import { useLocalStorage } from "@/lib/storage";
+
+/**
+ * Flow presenterar sig. Första gången i 2–3 korta steg,
+ * därefter bara en liten hälsning utan animation.
+ */
+
+const STEPS = [
+  {
+    title: "Hej! Jag är Flow 💜",
+    body: "Jag hjälper dig att hitta en bra väg genom dagen.",
+  },
+  {
+    title: "Jag tittar på helheten",
+    body: "Din energi, dagens saker och hur mycket du redan har gjort – och hjälper dig hitta vad som kan passa bäst just nu.",
+  },
+  {
+    title: "Du behöver inte göra allt",
+    body: "Vi tar en sak i taget, tillsammans.",
+  },
+];
+
+export function FlowGreeting({ children }: { children?: React.ReactNode }) {
+  const [seen, setSeen] = useLocalStorage<boolean>("myflove-flow-intro-seen", false);
+  const [step, setStep] = useState(0);
+
+  if (!seen) {
+    const s = STEPS[step]!;
+    return (
+      <section className="surface-card space-y-5 p-6 text-center" aria-label="Flow presenterar sig">
+        <div className="flex justify-center">
+          <FlowMascot size="xl" glow className="flow-entry" />
+        </div>
+        <div className="space-y-2">
+          <h2 className="font-display text-2xl text-ink">{s.title}</h2>
+          <p className="mx-auto max-w-sm text-base leading-relaxed text-muted-foreground">
+            {s.body}
+          </p>
+        </div>
+
+        <div className="flex items-center justify-center gap-1.5" aria-hidden>
+          {STEPS.map((_, i) => (
+            <span
+              key={i}
+              className={`h-2 rounded-full transition-all ${
+                i === step ? "w-5 bg-primary" : "w-2 bg-border"
+              }`}
+            />
+          ))}
+        </div>
+
+        <div className="flex flex-col items-center gap-2">
+          <Button
+            className="rounded-2xl px-6"
+            onClick={() => (step < STEPS.length - 1 ? setStep(step + 1) : setSeen(true))}
+          >
+            {step < STEPS.length - 1 ? "Fortsätt" : "✨ Visa mig"}
+          </Button>
+          <button
+            type="button"
+            onClick={() => setSeen(true)}
+            className="text-xs text-muted-foreground underline-offset-2 hover:underline"
+          >
+            Hoppa över
+          </button>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <>
+      <section className="surface-card flex items-center gap-4 p-5" aria-label="Flow">
+        <FlowMascot size="md" float glow />
+        <div className="min-w-0">
+          <h2 className="font-display text-xl text-ink">Hej! Jag är Flow 💜</h2>
+          <p className="mt-0.5 text-sm leading-relaxed text-muted-foreground">
+            Du behöver inte lista ut allt själv. Vi tar en sak i taget.
+          </p>
+        </div>
+      </section>
+      {children}
+    </>
+  );
+}
