@@ -4,7 +4,8 @@ import { useIsAdmin } from "@/hooks/use-is-admin";
 import { Lock, Download, ArrowLeft, FileText, Film, BookOpen } from "lucide-react";
 
 const BLUEPRINT_VERSIONS = [
-  { version: "3.2", label: "Senaste – omstrukturerad i sex delar" },
+  { version: "3.3", label: "Senaste – Flow i hela appen och Morgonstart i rutiner" },
+  { version: "3.2", label: "Omstrukturerad i sex delar" },
   { version: "3.0", label: "Navigation, Min dag och energibatteri" },
   { version: "2.9", label: "Relationer, situation och FlowPlan" },
   { version: "2.8", label: "Quickflow, Energiflöde och designsystem" },
@@ -75,22 +76,22 @@ export default function PitchPage() {
             <FileText size={18} className="text-primary" /> Pitchdeck
           </h2>
           <p className="text-sm text-muted-foreground">
-            Senaste decket (3.2) i PowerPoint-format, samt en PDF-version för snabb visning.
+            Senaste decket (3.3) i PowerPoint-format, samt en PDF-version för snabb visning.
           </p>
           <div className="flex flex-wrap gap-2">
             <a
-              href="/pitch/MyFlove_Pitchdeck_3.2.pptx"
+              href="/pitch/MyFlove_Pitchdeck_3.3.pptx"
               download
               className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
             >
-              <Download size={16} /> Ladda ner PowerPoint (3.2)
+              <Download size={16} /> Ladda ner PowerPoint (3.3)
             </a>
             <a
-              href="/pitch/MyFlove_Pitchdeck_3.0.pdf"
+              href="/pitch/MyFlove_Pitchdeck_3.3.pdf"
               download
               className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-medium hover:bg-secondary"
             >
-              <Download size={16} /> Ladda ner PDF (3.0)
+              <Download size={16} /> Ladda ner PDF (3.3)
             </a>
           </div>
         </section>

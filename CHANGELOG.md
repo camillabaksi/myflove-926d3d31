@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-25 – Blueprint, pitchdeck och video 3.3
+
+- Living Blueprint 3.3 (DOCX + PDF) med nytt avsnitt om Flow i appen och Morgonstart i Rutiner & medicin.
+- Pitchdeck 3.3 (PPTX + PDF) där Flow är ett eget produktkort och statusen är uppdaterad.
+- Ny pitchvideo med en egen Flow-scen (38 sekunder).
+- Pitchsidan pekar på de nya filerna.
+
 
 ## 2026-08-25 – Morgonstart bor bland Rutiner & medicin
 
