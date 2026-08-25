@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-08-25 – Synlig Flow-version i appen
+
+- `/flow` visar nu en liten rad längst ner med aktuell karusellversion (läst direkt från `data-flow-version` i DOM), build-id och om spåret verkligen ligger horisontellt – så att rätt bundle kan verifieras i realtid på mobilen.
+
 ## 2026-08-25 – Visuellt regressionstest för Flow-karusellen
 
 - Nytt test `tests/e2e/flow_visual_regression.py` som i 375px, 390px och 414px kontrollerar geometrin (slides på samma rad, sida vid sida, en synlig åt gången) så vertikal stapling upptäcks direkt.

@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "wouter";
 import { Check, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -12,8 +12,13 @@ import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { assessToday, rankNow, suggestNow } from "@/lib/flow-engine";
 import { energySentence, pickFlowSlides, type FlowSlideId } from "@/lib/flow-slides";
 import type { ScoredTask } from "@/lib/daily-flow";
+import { BUILD_ID } from "@/lib/cache-busting";
+
+/** Versionsmärkning för karusellens layout – visas i UI för verifiering. */
+export const FLOW_VERSION = "flex-nowrap-2026-08-25";
 
 type DeckSlideId = "intro" | FlowSlideId;
+
 
 /**
  * Flow 2.0 – en sak i taget.
@@ -84,8 +89,9 @@ export default function FlowDeck() {
     <section
       aria-label="Flow"
       className="flow-carousel relative"
-      data-flow-version="flex-nowrap-2026-08-25"
+      data-flow-version={FLOW_VERSION}
     >
+
       {/* Utility-klasser och egna regler låser samma kritiska geometri. */}
       <div
         ref={trackRef}
@@ -155,6 +161,10 @@ export default function FlowDeck() {
         </div>
       )}
 
+      <FlowVersionBadge trackRef={trackRef} />
+
+
+
       <FocusMode
         item={scored}
         open={focusOpen}
@@ -168,6 +178,39 @@ export default function FlowDeck() {
     </section>
   );
 }
+
+/* ── Versionsstämpel: verifiera i realtid vilken bundle mobilen kör ── */
+
+function FlowVersionBadge({
+  trackRef,
+}: {
+  trackRef: React.RefObject<HTMLDivElement | null>;
+}) {
+  const [domVersion, setDomVersion] = useState<string | null>(null);
+  const [layout, setLayout] = useState<string>("–");
+
+  useEffect(() => {
+    const section = trackRef.current?.closest("[data-flow-version]");
+    setDomVersion(section?.getAttribute("data-flow-version") ?? null);
+    const track = trackRef.current;
+    if (track) {
+      const cs = window.getComputedStyle(track);
+      const horizontal =
+        cs.display.includes("flex") && cs.flexDirection === "row";
+      setLayout(horizontal ? "horisontell ✓" : `${cs.display}/${cs.flexDirection} ✗`);
+    }
+  }, [trackRef]);
+
+  return (
+    <p
+      data-flow-version-badge
+      className="mt-3 text-center text-[10px] leading-tight text-muted-foreground/70"
+    >
+      Flow {domVersion ?? FLOW_VERSION} · build {BUILD_ID} · layout {layout}
+    </p>
+  );
+}
+
 
 /* ── En slide i taget ───────────────────────────────────────────── */
 
