@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-25 – Flow lever i varje vy
+
+- Flow har nu eget kroppsspråk per vy på förstasidan: vinkar i hälsningen, studsar i telefonen, nickar när han lyssnar, funderar vid modulerna, pulserar vid FlowScore, jublar vid "Byggs just nu" och andas lugnt i Dagens Flow.
+- Alla rörelser stängs av automatiskt om du valt reducerad rörelse i systemet.
+
 ## 2026-08-25 – Större Flow bredvid texten
 
 - Flow vid hälsningen är nu större och står alltid bredvid pratrutan, även på mobil.

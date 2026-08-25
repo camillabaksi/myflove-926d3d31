@@ -21,11 +21,28 @@ const SIZES = {
 
 export type FlowMascotSize = keyof typeof SIZES;
 
+/** Flows kroppsspråk – anpassas efter vilken vy han står i. */
+const MOODS = {
+  none: "",
+  wave: "wave-hello",
+  float: "floaty",
+  nod: "flow-nod",
+  bounce: "flow-bounce",
+  sway: "flow-sway",
+  think: "flow-think",
+  pulse: "flow-pulse",
+  cheer: "flow-cheer",
+  calm: "flow-calm",
+} as const;
+
+export type FlowMood = keyof typeof MOODS;
+
 export function FlowMascot({
   size = "md",
   float = false,
   glow = false,
   wave = false,
+  mood,
   className,
   imgClassName,
   alt = "Flow – MyFloves följeslagare",
@@ -35,6 +52,8 @@ export function FlowMascot({
   glow?: boolean;
   /** Flow vinkar som en hälsning. */
   wave?: boolean;
+  /** Flows kroppsspråk för vyn han står i. */
+  mood?: FlowMood;
   className?: string;
   /** Extra klasser på bilden, t.ex. responsiva storlekar. */
   imgClassName?: string;
@@ -56,8 +75,9 @@ export function FlowMascot({
         className={cn(
           "object-contain drop-shadow-[0_8px_24px_rgba(124,92,224,0.25)]",
           SIZES[size],
-          float && !wave && "floaty",
-          wave && "wave-hello",
+          mood
+            ? MOODS[mood]
+            : cn(float && !wave && "floaty", wave && "wave-hello"),
           imgClassName,
         )}
       />
@@ -72,12 +92,14 @@ export function FlowSays({
   className,
   wave,
   glow,
+  mood,
 }: {
   children: React.ReactNode;
   size?: FlowMascotSize;
   className?: string;
   wave?: boolean;
   glow?: boolean;
+  mood?: FlowMood;
 }) {
   return (
     <div
@@ -87,7 +109,7 @@ export function FlowSays({
       )}
     >
       <div className="shrink-0">
-        <FlowMascot size={size} float={!wave} wave={wave} glow={glow} />
+        <FlowMascot size={size} float={!wave} wave={wave} glow={glow} mood={mood} />
       </div>
       <div className="w-full min-w-0 rounded-2xl border border-[#2A2140]/5 bg-white px-4 py-3 text-sm leading-relaxed text-pretty text-[#2A2140] shadow-sm">
         {children}
