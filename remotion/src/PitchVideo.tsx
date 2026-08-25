@@ -479,7 +479,8 @@ const SceneOutro: React.FC = () => {
   const glow = 0.35 + Math.sin(frame / 20) * 0.08;
   return (
     <Shell dark>
-      <div style={{ display: "flex", flexDirection: "column", gap: 30 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 70 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 30, flex: 1 }}>
         <div
           style={{
             ...useIn(4),
