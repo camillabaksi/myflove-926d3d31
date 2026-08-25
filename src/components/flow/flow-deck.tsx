@@ -12,8 +12,13 @@ import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { assessToday, rankNow, suggestNow } from "@/lib/flow-engine";
 import { energySentence, pickFlowSlides, type FlowSlideId } from "@/lib/flow-slides";
 import type { ScoredTask } from "@/lib/daily-flow";
+import { BUILD_ID } from "@/lib/cache-busting";
+
+/** Versionsmärkning för karusellens layout – visas i UI för verifiering. */
+export const FLOW_VERSION = "flex-nowrap-2026-08-25";
 
 type DeckSlideId = "intro" | FlowSlideId;
+
 
 /**
  * Flow 2.0 – en sak i taget.
