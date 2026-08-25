@@ -85,8 +85,12 @@ export default function AdminStats() {
             <BarChart3 className="text-primary" /> Appstatistik
           </h1>
           <p className="text-muted-foreground">
-            Anonym, sammanslagen statistik om hur MyFlove används — ingen personlig data (mående,
-            texter osv) ingår.
+            Anonym, sammanslagen statistik om hur MyFlove används.
+          </p>
+          <p className="mt-2 text-xs text-muted-foreground bg-secondary/40 border border-border rounded-2xl p-3">
+            <strong>Integritet:</strong> vi mäter bara vilken del av appen som används och vilken
+            typ av handling som sker. Inget användar-id, ingen e-post, ingen IP och inget innehåll
+            (mående, texter, uppgifter) sparas — händelser går inte att koppla till en person.
           </p>
         </div>
 
