@@ -81,18 +81,20 @@ export default function FlowDeck() {
   const next = () => goTo(index + 1);
 
   return (
-    <section aria-label="Flow" className="relative space-y-3">
-      {/* Horisontell carousel – overflow hidden vertikalt, en slide i taget. */}
+    <section aria-label="Flow" className="flow-carousel relative">
+      {/* Egna CSS-klasser låser spår och slides horisontellt även om utility-CSS ändras. */}
       <div
         ref={trackRef}
         onScroll={onScroll}
-        className="flex h-[64vh] min-h-[400px] snap-x snap-mandatory overflow-x-auto overflow-y-hidden overscroll-x-contain scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        data-flow-track
+        className="flow-carousel-track"
       >
         {slides.map((id, i) => (
           <div
             key={`${id}-${i}`}
+            data-flow-slide
             aria-hidden={i !== index}
-            className="h-full w-full shrink-0 snap-center overflow-y-auto px-0.5"
+            className="flow-carousel-slide"
           >
             <FlowSlide
               id={id}
@@ -112,7 +114,7 @@ export default function FlowDeck() {
       </div>
 
       {slides.length > 1 && (
-        <div className="flex items-center justify-center gap-4">
+        <div className="mt-3 flex items-center justify-center gap-4">
           <button
             type="button"
             aria-label="Föregående"
