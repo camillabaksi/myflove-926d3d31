@@ -161,6 +161,10 @@ export default function FlowDeck() {
         </div>
       )}
 
+      <FlowVersionBadge trackRef={trackRef} />
+
+
+
       <FocusMode
         item={scored}
         open={focusOpen}
