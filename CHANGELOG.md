@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-25 – Enklare att svepa tillbaka och Flow vinkar hej
+
+- Bakåtsvep fungerar nu även när mobilens egen kantgest ville ta över: sidan blockerar webbläsarens sido-överskrollning och tröskeln för att byta vy är lägre (36–90 px).
+- Pilknapparna vänster/höger syns nu även på mobil, så du alltid kan gå tillbaka med ett tryck.
+- Flow är större på förstasidan och vinkar som en hälsning när du kommer in (stängs av vid reducerad rörelse).
+
 ## 2026-08-25 – Förstasidan: delbara vyer, mjukare svep och tydligare fokus
 
 - Adressen minns vilken vy du är på (t.ex. /#flowplan): uppdaterar du sidan eller delar länken hamnar du på rätt vy, och bakåtknappen fungerar.
