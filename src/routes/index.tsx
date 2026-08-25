@@ -230,6 +230,20 @@ function Hero() {
 }
 
 function PhonePreview() {
+  const [done, setDone] = useState<Record<string, boolean>>(() =>
+    Object.fromEntries(PHONE_ITEMS.map((it) => [it.l, it.done])),
+  );
+  const [say, setSay] = useState<{ text: string; key: number }>({ text: PHONE_IDLE, key: 0 });
+
+  const react = (text: string) => setSay((s) => ({ text, key: s.key + 1 }));
+
+  const toggle = (label: string) => {
+    const next = !done[label];
+    setDone((d) => ({ ...d, [label]: next }));
+    const pool = next ? PHONE_DONE_REACTIONS : PHONE_UNDONE_REACTIONS;
+    react(pool[Math.floor(Math.random() * pool.length)]);
+  };
+
   return (
     <div className="relative mx-auto w-full max-w-[340px] pt-6 pb-8 sm:max-w-[380px]">
       <div className="pointer-events-none absolute inset-x-6 top-10 bottom-10 rounded-[3rem] bg-[#7C5CE0]/20 blur-3xl" />
@@ -258,37 +272,51 @@ function PhonePreview() {
             <div className="rounded-2xl border border-[#7C5CE0]/15 bg-[#F1ECFC] p-3">
               <div className="flex items-start gap-2">
                 <FlowMascot size="xs" float />
-                <p className="text-xs leading-relaxed text-[#2A2140]">
-                  Du har 25 minuter kvar. Vill du hinna duscha eller ta det lugnt?
+                <p
+                  key={say.key}
+                  className="pop-in text-xs leading-relaxed text-[#2A2140]"
+                  aria-live="polite"
+                >
+                  {say.text}
                 </p>
               </div>
             </div>
 
             <div className="space-y-2">
-              {PHONE_ITEMS.map((it, i) => (
-                <div
-                  key={it.l}
-                  className="pop-in flex items-center gap-3 rounded-2xl border border-[#2A2140]/5 bg-white px-3 py-2.5 shadow-sm"
-                  style={{ animationDelay: `${i * 120}ms` }}
-                >
-                  <span className="text-base">{it.e}</span>
-                  <div className="min-w-0 flex-1">
-                    <p
-                      className={`truncate text-sm font-semibold ${it.done ? "text-[#6B647F] line-through" : "text-[#2A2140]"}`}
-                    >
-                      {it.l}
-                    </p>
-                    <p className="text-[11px] text-[#6B647F]">{it.t}</p>
-                  </div>
-                  <span
-                    className={`grid h-6 w-6 shrink-0 place-items-center rounded-full text-xs ${
-                      it.done ? "bg-[#7C5CE0] text-white" : "border border-[#2A2140]/15 text-transparent"
-                    }`}
+              {PHONE_ITEMS.map((it, i) => {
+                const isDone = done[it.l];
+                return (
+                  <button
+                    key={it.l}
+                    type="button"
+                    onClick={() => toggle(it.l)}
+                    onMouseEnter={() => react(it.r)}
+                    onFocus={() => react(it.r)}
+                    aria-pressed={isDone}
+                    className="press pop-in flex w-full items-center gap-3 rounded-2xl border border-[#2A2140]/5 bg-white px-3 py-2.5 text-left shadow-sm transition hover:border-[#7C5CE0]/30"
+                    style={{ animationDelay: `${i * 120}ms` }}
                   >
-                    ✓
-                  </span>
-                </div>
-              ))}
+                    <span className="text-base">{it.e}</span>
+                    <div className="min-w-0 flex-1">
+                      <p
+                        className={`truncate text-sm font-semibold ${isDone ? "text-[#6B647F] line-through" : "text-[#2A2140]"}`}
+                      >
+                        {it.l}
+                      </p>
+                      <p className="text-[11px] text-[#6B647F]">{it.t}</p>
+                    </div>
+                    <span
+                      className={`grid h-6 w-6 shrink-0 place-items-center rounded-full text-xs transition ${
+                        isDone
+                          ? "bg-[#7C5CE0] text-white"
+                          : "border border-[#2A2140]/15 text-transparent"
+                      }`}
+                    >
+                      ✓
+                    </span>
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -304,13 +332,28 @@ function PhonePreview() {
       />
 
       {/* Flytande kort */}
-      <FloatCard className="-top-2 -left-3 sm:-left-10" delay="0ms" time="08:02">
+      <FloatCard
+        className="-top-2 -left-3 sm:-left-10"
+        delay="0ms"
+        time="08:02"
+        onReact={() => react("Paraplyet ligger vid dörren – jag la det där i tanken åt dig. ☔")}
+      >
         ☔ Det regnar idag. Paraplyet ligger vid dörren.
       </FloatCard>
-      <FloatCard className="top-1/3 -left-4 sm:-left-16" delay="600ms" time="09:00">
+      <FloatCard
+        className="top-1/3 -left-4 sm:-left-16"
+        delay="600ms"
+        time="09:00"
+        onReact={() => react("Fokustid startar. Jag är tyst tills pausen. 🎯")}
+      >
         🎯 Fokustid · 42 minuter
       </FloatCard>
-      <FloatCard className="-bottom-4 left-2 sm:-left-8" delay="1100ms" time="12:30">
+      <FloatCard
+        className="-bottom-4 left-2 sm:-left-8"
+        delay="1100ms"
+        time="12:30"
+        onReact={() => react("Du gjorde mer än du tror idag. +8 Flow 💜")}
+      >
         😊 Bra jobbat! +8 Flow
       </FloatCard>
     </div>
