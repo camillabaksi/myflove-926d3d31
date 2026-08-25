@@ -144,6 +144,28 @@ const PHONE_IDLE = "Du har 25 minuter kvar. Vill du hinna duscha eller ta det lu
 
 /* ── Sidan ────────────────────────────────────────────────── */
 
+const SLIDES: { id: string; label: string; render: () => React.ReactNode }[] = [
+  { id: "hero", label: "Möt Flow", render: () => <Hero /> },
+  { id: "need", label: "Vad behöver du?", render: () => <NeedSection /> },
+  { id: "daily", label: "Dagens Flow", render: () => <DailyFlow /> },
+  { id: "flowscore", label: "FlowScore", render: () => <FlowScoreSection /> },
+  { id: "day", label: "En dag", render: () => <DaySection /> },
+  { id: "voice", label: "Flow talar", render: () => <FlowVoice /> },
+  { id: "modules", label: "Allt hänger ihop", render: () => <Modules /> },
+  { id: "flowplan", label: "FlowPlan", render: () => <FlowPlanSection /> },
+  { id: "building", label: "Byggs just nu", render: () => <BuildingSection /> },
+  {
+    id: "vision",
+    label: "Vår vision",
+    render: () => (
+      <>
+        <Vision />
+        <Footer />
+      </>
+    ),
+  },
+];
+
 function LandingPage() {
   const navigate = useNavigate();
 
@@ -155,22 +177,169 @@ function LandingPage() {
     });
   }, [navigate]);
 
+  return <LandingDeck />;
+}
+
+/* ── Slide-deck: horisontellt spår, svep + tangentbord ────── */
+
+function LandingDeck() {
+  const [index, setIndex] = useState(0);
+  const [dragOffset, setDragOffset] = useState(0);
+  const [dragging, setDragging] = useState(false);
+  const drag = useRef<{ x: number; y: number; time: number; axis: "none" | "x" | "y" } | null>(null);
+  const viewportRef = useRef<HTMLDivElement>(null);
+
+  const total = SLIDES.length;
+  const goTo = (next: number) => setIndex(Math.max(0, Math.min(total - 1, next)));
+
+  const isInteractive = (target: EventTarget | null) =>
+    target instanceof Element &&
+    Boolean(target.closest("button, a, input, textarea, select, [role='slider'], [contenteditable]"));
+
+  const onPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (isInteractive(event.target)) return;
+    drag.current = { x: event.clientX, y: event.clientY, time: Date.now(), axis: "none" };
+  };
+
+  const onPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    const state = drag.current;
+    if (!state) return;
+    const dx = event.clientX - state.x;
+    const dy = event.clientY - state.y;
+
+    if (state.axis === "none") {
+      if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+      state.axis = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
+      if (state.axis === "y") {
+        drag.current = null;
+        return;
+      }
+      setDragging(true);
+      event.currentTarget.setPointerCapture?.(event.pointerId);
+    }
+
+    const atStart = index === 0 && dx > 0;
+    const atEnd = index === total - 1 && dx < 0;
+    setDragOffset(atStart || atEnd ? dx * 0.25 : dx);
+  };
+
+  const endDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    const state = drag.current;
+    drag.current = null;
+    setDragging(false);
+    setDragOffset(0);
+    if (!state || state.axis !== "x") return;
+    const dx = event.clientX - state.x;
+    const width = viewportRef.current?.clientWidth ?? 1;
+    const fast = Date.now() - state.time < 320 && Math.abs(dx) > 40;
+    if (dx < 0 && (fast || Math.abs(dx) > width * 0.25)) goTo(index + 1);
+    else if (dx > 0 && (fast || Math.abs(dx) > width * 0.25)) goTo(index - 1);
+  };
+
+  const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      goTo(index + 1);
+    } else if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      goTo(index - 1);
+    } else if (event.key === "Home") {
+      event.preventDefault();
+      goTo(0);
+    } else if (event.key === "End") {
+      event.preventDefault();
+      goTo(total - 1);
+    }
+  };
+
   return (
-    <main className="min-h-screen overflow-x-hidden bg-[#F8F5FE] text-[#2A2140]">
-      <Hero />
-      <NeedSection />
-      <DailyFlow />
-      <FlowScoreSection />
-      <DaySection />
-      <FlowVoice />
-      <Modules />
-      <FlowPlanSection />
-      <BuildingSection />
-      <Vision />
-      <Footer />
+    <main className="relative h-[100dvh] overflow-hidden bg-[#F8F5FE] text-[#2A2140]">
+      <div
+        ref={viewportRef}
+        data-landing-viewport
+        role="region"
+        aria-roledescription="karusell"
+        aria-label="MyFlove-presentation"
+        tabIndex={0}
+        onKeyDown={onKeyDown}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={endDrag}
+        onPointerCancel={endDrag}
+        className="relative h-full w-full touch-pan-y overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-[#7C5CE0]/50"
+      >
+        <div
+          data-landing-track
+          className={`flex h-full w-full flex-row ${dragging ? "" : "transition-transform duration-500 ease-out"}`}
+          style={{ transform: `translateX(calc(${-index * 100}% + ${dragOffset}px))` }}
+        >
+          {SLIDES.map((slide, i) => {
+            const active = i === index;
+            return (
+              <section
+                key={slide.id}
+                data-landing-slide={slide.id}
+                aria-hidden={!active}
+                inert={!active}
+                aria-label={`${slide.label} (${i + 1} av ${total})`}
+                className={`h-full w-full min-w-full shrink-0 overflow-y-auto overscroll-contain pb-28 transition-opacity duration-500 ${
+                  active ? "opacity-100" : "opacity-0"
+                }`}
+              >
+                <div className="flex min-h-full flex-col justify-center">{slide.render()}</div>
+              </section>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Navigering */}
+      <button
+        type="button"
+        onClick={() => goTo(index - 1)}
+        disabled={index === 0}
+        aria-label="Föregående vy"
+        className="press absolute top-1/2 left-2 z-20 hidden h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-[#2A2140]/10 bg-white/85 text-lg shadow-lg backdrop-blur disabled:opacity-0 sm:grid"
+      >
+        ‹
+      </button>
+      <button
+        type="button"
+        onClick={() => goTo(index + 1)}
+        disabled={index === total - 1}
+        aria-label="Nästa vy"
+        className="press absolute top-1/2 right-2 z-20 hidden h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-[#2A2140]/10 bg-white/85 text-lg shadow-lg backdrop-blur disabled:opacity-0 sm:grid"
+      >
+        ›
+      </button>
+
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex flex-col items-center gap-2 bg-gradient-to-t from-[#F8F5FE] via-[#F8F5FE]/80 to-transparent pt-8 pb-4">
+        <div className="pointer-events-auto flex flex-wrap items-center justify-center gap-1.5 px-4">
+          {SLIDES.map((slide, i) => (
+            <button
+              key={slide.id}
+              type="button"
+              onClick={() => goTo(i)}
+              aria-label={`Gå till ${slide.label}`}
+              aria-current={i === index}
+              className={`h-2.5 rounded-full transition-all ${
+                i === index ? "w-7 bg-[#7C5CE0]" : "w-2.5 bg-[#2A2140]/20 hover:bg-[#7C5CE0]/50"
+              }`}
+            />
+          ))}
+        </div>
+        <p className="text-[11px] font-semibold text-[#6B647F]">
+          Svep i sidled · {index + 1} / {total}
+        </p>
+      </div>
+
+      <p aria-live="polite" className="sr-only">
+        {SLIDES[index].label}, vy {index + 1} av {total}
+      </p>
     </main>
   );
 }
+
 
 /* ── Hero ─────────────────────────────────────────────────── */
 
