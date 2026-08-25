@@ -306,7 +306,7 @@ function LandingDeck() {
     const velocity = state.velocity; // px/ms, positiv = åt höger
     // Projicerad slutposition med momentum (~200 ms utrullning)
     const projected = dx + velocity * 200;
-    const threshold = Math.min(120, Math.max(48, width * 0.2));
+    const threshold = Math.min(90, Math.max(36, width * 0.14));
 
     if (projected <= -threshold) goTo(index + 1);
     else if (projected >= threshold) goTo(index - 1);
@@ -332,7 +332,7 @@ function LandingDeck() {
 
 
   return (
-    <main className="relative h-[100dvh] overflow-hidden bg-[#F8F5FE] text-[#2A2140]">
+    <main className="relative h-[100dvh] overflow-hidden overscroll-none bg-[#F8F5FE] text-[#2A2140] [overscroll-behavior-x:none]">
       <div
         ref={viewportRef}
         data-landing-viewport
@@ -343,7 +343,7 @@ function LandingDeck() {
         onPointerMove={onPointerMove}
         onPointerUp={endDrag}
         onPointerCancel={endDrag}
-        className="relative h-full w-full touch-pan-y overflow-hidden"
+        className="relative h-full w-full touch-pan-y overflow-hidden overscroll-x-none [overscroll-behavior-x:none]"
       >
         <div
           data-landing-track
@@ -383,7 +383,7 @@ function LandingDeck() {
         disabled={index === 0}
         aria-label="Föregående vy"
         aria-controls={`slide-${SLIDES[index].id}`}
-        className="press absolute top-1/2 left-2 z-20 hidden h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-[#2A2140]/10 bg-white/85 text-lg shadow-lg backdrop-blur focus-visible:ring-2 focus-visible:ring-[#7C5CE0] focus-visible:outline-none disabled:pointer-events-none disabled:opacity-0 sm:grid"
+        className="press absolute top-1/2 left-2 z-20 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-[#2A2140]/10 bg-white/85 text-lg shadow-lg backdrop-blur focus-visible:ring-2 focus-visible:ring-[#7C5CE0] focus-visible:outline-none disabled:pointer-events-none disabled:opacity-0"
       >
         ‹
       </button>
@@ -393,7 +393,7 @@ function LandingDeck() {
         disabled={index === total - 1}
         aria-label="Nästa vy"
         aria-controls={`slide-${SLIDES[index].id}`}
-        className="press absolute top-1/2 right-2 z-20 hidden h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-[#2A2140]/10 bg-white/85 text-lg shadow-lg backdrop-blur focus-visible:ring-2 focus-visible:ring-[#7C5CE0] focus-visible:outline-none disabled:pointer-events-none disabled:opacity-0 sm:grid"
+        className="press absolute top-1/2 right-2 z-20 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-[#2A2140]/10 bg-white/85 text-lg shadow-lg backdrop-blur focus-visible:ring-2 focus-visible:ring-[#7C5CE0] focus-visible:outline-none disabled:pointer-events-none disabled:opacity-0"
       >
         ›
       </button>
