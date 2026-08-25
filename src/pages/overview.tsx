@@ -1,0 +1,63 @@
+import { Link } from "wouter";
+import Layout from "@/components/layout";
+import { APP_GUIDE } from "@/lib/app-guide";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+
+/**
+ * Översikt – en enkel sammanfattning av vad som finns i MyFlove
+ * och vart man går för att göra respektive sak.
+ */
+export default function OverviewPage() {
+  return (
+    <Layout>
+      <div className="flex flex-col gap-6">
+        <div>
+          <Link
+            href="/hem"
+            className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+          >
+            <ArrowLeft size={14} /> Till Hem
+          </Link>
+          <h1 className="mt-2 text-2xl font-bold text-ink">Så funkar MyFlove</h1>
+          <p className="text-sm text-muted-foreground">
+            Allt som finns i appen, kort förklarat. Du behöver inte använda allt – börja med det
+            översta och lägg till när du vill.
+          </p>
+        </div>
+
+        {APP_GUIDE.map((group) => (
+          <section
+            key={group.id}
+            aria-label={group.label}
+            className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+          >
+            <h2 className="flex items-center gap-2 text-base font-semibold text-ink">
+              <span aria-hidden>{group.emoji}</span> {group.label}
+            </h2>
+            <p className="mt-0.5 text-xs text-muted-foreground">{group.hint}</p>
+
+            <ul className="mt-3 space-y-2">
+              {group.entries.map((entry) => (
+                <li key={entry.href}>
+                  <Link
+                    href={entry.href}
+                    className="group flex items-center gap-3 rounded-2xl bg-secondary/30 px-3 py-3 transition-colors hover:bg-secondary/60"
+                  >
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-sm font-medium text-ink">{entry.label}</span>
+                      <span className="block text-xs text-muted-foreground">{entry.what}</span>
+                    </span>
+                    <ArrowRight
+                      size={16}
+                      className="shrink-0 text-muted-foreground transition-colors group-hover:text-foreground"
+                    />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
+      </div>
+    </Layout>
+  );
+}
