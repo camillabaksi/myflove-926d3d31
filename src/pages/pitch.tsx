@@ -62,9 +62,11 @@ export default function PitchPage() {
             </span>
           </div>
           <p className="text-sm text-muted-foreground">
-            Samma Flow-karaktär som i appen och i pitchdeck 3.4 – med egen Flow 2.0-scen och
-            avslutning där Flow vinkar.
+            Samma Flow-karaktär som i appen och i pitchdeck 3.4 – med egen Flow 2.0-scen, en
+            marknadsscen med externa nyckeltal (uppskattningar/prognoser) och avslutning där Flow
+            vinkar.
           </p>
+
           <video
             controls
             playsInline
