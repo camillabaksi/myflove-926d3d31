@@ -24,7 +24,7 @@ function allowed(): boolean {
   if (typeof navigator.vibrate !== "function") return false;
   if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return false;
   try {
-    if (getQuietMode().enabled) return false;
+    if (isQuietNow()) return false;
   } catch {
     /* tyst läge kunde inte läsas – fortsätt ändå */
   }
