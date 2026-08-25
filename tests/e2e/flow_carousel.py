@@ -74,52 +74,76 @@ async def run_width(browser, width: int) -> None:
         return
 
     slides = page.locator("[data-flow-slide]")
-    check(await slides.count() == 1, f"{width}px: exakt EN slide finns i DOM")
-    check(
-        await slides.first.get_attribute("data-flow-slide-id") == "intro",
-        f"{width}px: Flow-introt är state 0",
-    )
-    intro_text = await slides.first.inner_text()
+    track = page.locator("[data-flow-track]")
+    viewport = page.locator("[data-flow-viewport]")
 
-    state_view = page.locator("[data-flow-state-view]")
-    box = await state_view.bounding_box()
+    total = await slides.count()
+    check(total >= 1, f"{width}px: karusellen har slides", f"antal={total}")
+    check(
+        await track.evaluate("el => getComputedStyle(el).flexDirection") == "row",
+        f"{width}px: spåret är en flex-row",
+    )
+    check(
+        await viewport.evaluate("el => getComputedStyle(el).overflowX") == "hidden",
+        f"{width}px: containern har overflow-hidden",
+    )
+
+    vp_box = await viewport.bounding_box()
+    widths = await slides.evaluate_all("els => els.map(e => Math.round(e.getBoundingClientRect().width))")
+    tops = await slides.evaluate_all("els => els.map(e => Math.round(e.getBoundingClientRect().top))")
+    check(
+        vp_box is not None and all(abs(w - round(vp_box["width"])) <= 2 for w in widths),
+        f"{width}px: varje slide är exakt 100% av containern",
+        f"bredder={widths}",
+    )
+    check(
+        len(set(tops)) == 1,
+        f"{width}px: alla slides ligger på samma rad (inte staplade)",
+        f"top={tops}",
+    )
+
+    active = page.locator('[data-flow-slide][data-flow-slide-active="true"]')
+    check(await active.count() == 1, f"{width}px: exakt en synlig slide")
+    check(
+        await active.first.get_attribute("data-flow-slide-id") == "intro",
+        f"{width}px: Flow-introt är slide 1",
+    )
+
+    box = await viewport.bounding_box()
     if box:
         y = box["y"] + min(box["height"] / 2, 250)
         await page.mouse.move(box["x"] + box["width"] * 0.8, y)
         await page.mouse.down()
         await page.mouse.move(box["x"] + box["width"] * 0.2, y, steps=8)
         await page.mouse.up()
-        await page.wait_for_timeout(300)
+        await page.wait_for_timeout(450)
     else:
-        check(False, f"{width}px: state-vyn har mätbar yta")
+        check(False, f"{width}px: karusellen har mätbar yta")
 
-    check(await slides.count() == 1, f"{width}px: fortfarande EN slide efter swipe")
-    new_id = await slides.first.get_attribute("data-flow-slide-id")
-    check(new_id != "intro", f"{width}px: vänstersvep går till nästa state", f"state={new_id}")
-    new_text = await slides.first.inner_text()
-    check(new_text != intro_text, f"{width}px: nästa slide ersätter föregående")
+    new_id = await active.first.get_attribute("data-flow-slide-id")
+    check(new_id != "intro", f"{width}px: vänstersvep går till nästa slide", f"slide={new_id}")
     check(
-        await page.locator("[data-flow-state-view]").locator("text=Hej! Jag är Flow").count() == 0,
-        f"{width}px: introt finns inte vertikalt under nästa slide",
+        "matrix" in await track.evaluate("el => getComputedStyle(el).transform"),
+        f"{width}px: spåret har flyttats i sidled",
     )
 
-    box = await state_view.bounding_box()
+    box = await viewport.bounding_box()
     if box:
         y = box["y"] + min(box["height"] / 2, 250)
         await page.mouse.move(box["x"] + box["width"] * 0.2, y)
         await page.mouse.down()
         await page.mouse.move(box["x"] + box["width"] * 0.8, y, steps=8)
         await page.mouse.up()
-        await page.wait_for_timeout(300)
+        await page.wait_for_timeout(450)
     check(
-        await slides.first.get_attribute("data-flow-slide-id") == "intro",
-        f"{width}px: högersvep går tillbaka till föregående state",
+        await active.first.get_attribute("data-flow-slide-id") == "intro",
+        f"{width}px: högersvep går tillbaka",
     )
-    check(await slides.count() == 1, f"{width}px: endast EN slide efter högersvep")
 
     os.makedirs("/tmp/browser/flow-e2e", exist_ok=True)
     await page.screenshot(path=f"/tmp/browser/flow-e2e/flow-state-{width}.png")
     await context.close()
+
 
 
 async def main() -> int:
