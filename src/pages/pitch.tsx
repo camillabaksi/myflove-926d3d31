@@ -4,7 +4,8 @@ import { useIsAdmin } from "@/hooks/use-is-admin";
 import { Lock, Download, ArrowLeft, FileText, Film, BookOpen } from "lucide-react";
 
 const BLUEPRINT_VERSIONS = [
-  { version: "3.3", label: "Senaste – Flow i hela appen och Morgonstart i rutiner" },
+  { version: "3.4", label: "Senaste – Flow syns i blueprint och pitchdeck" },
+  { version: "3.3", label: "Flow i hela appen och Morgonstart i rutiner" },
   { version: "3.2", label: "Omstrukturerad i sex delar" },
   { version: "3.0", label: "Navigation, Min dag och energibatteri" },
   { version: "2.9", label: "Relationer, situation och FlowPlan" },
