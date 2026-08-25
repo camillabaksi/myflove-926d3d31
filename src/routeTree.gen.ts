@@ -13,7 +13,6 @@ import { Route as VillkorRouteImport } from './routes/villkor'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SignUpRouteImport } from './routes/sign-up'
 import { Route as SignInRouteImport } from './routes/sign-in'
-import { Route as QaFlowScenesRouteImport } from './routes/qa-flow-scenes'
 import { Route as NyttLosenordRouteImport } from './routes/nytt-losenord'
 import { Route as McpRouteImport } from './routes/mcp'
 import { Route as IntegritetRouteImport } from './routes/integritet'
@@ -98,11 +97,6 @@ const SignUpRoute = SignUpRouteImport.update({
 const SignInRoute = SignInRouteImport.update({
   id: '/sign-in',
   path: '/sign-in',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const QaFlowScenesRoute = QaFlowScenesRouteImport.update({
-  id: '/qa-flow-scenes',
-  path: '/qa-flow-scenes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NyttLosenordRoute = NyttLosenordRouteImport.update({
@@ -443,7 +437,6 @@ export interface FileRoutesByFullPath {
   '/integritet': typeof IntegritetRoute
   '/mcp': typeof McpRoute
   '/nytt-losenord': typeof NyttLosenordRoute
-  '/qa-flow-scenes': typeof QaFlowScenesRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -514,7 +507,6 @@ export interface FileRoutesByTo {
   '/integritet': typeof IntegritetRoute
   '/mcp': typeof McpRoute
   '/nytt-losenord': typeof NyttLosenordRoute
-  '/qa-flow-scenes': typeof QaFlowScenesRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -587,7 +579,6 @@ export interface FileRoutesById {
   '/integritet': typeof IntegritetRoute
   '/mcp': typeof McpRoute
   '/nytt-losenord': typeof NyttLosenordRoute
-  '/qa-flow-scenes': typeof QaFlowScenesRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -660,7 +651,6 @@ export interface FileRouteTypes {
     | '/integritet'
     | '/mcp'
     | '/nytt-losenord'
-    | '/qa-flow-scenes'
     | '/sign-in'
     | '/sign-up'
     | '/sitemap.xml'
@@ -731,7 +721,6 @@ export interface FileRouteTypes {
     | '/integritet'
     | '/mcp'
     | '/nytt-losenord'
-    | '/qa-flow-scenes'
     | '/sign-in'
     | '/sign-up'
     | '/sitemap.xml'
@@ -803,7 +792,6 @@ export interface FileRouteTypes {
     | '/integritet'
     | '/mcp'
     | '/nytt-losenord'
-    | '/qa-flow-scenes'
     | '/sign-in'
     | '/sign-up'
     | '/sitemap.xml'
@@ -876,7 +864,6 @@ export interface RootRouteChildren {
   IntegritetRoute: typeof IntegritetRoute
   McpRoute: typeof McpRoute
   NyttLosenordRoute: typeof NyttLosenordRoute
-  QaFlowScenesRoute: typeof QaFlowScenesRoute
   SignInRoute: typeof SignInRoute
   SignUpRoute: typeof SignUpRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
@@ -919,13 +906,6 @@ declare module '@tanstack/react-router' {
       path: '/sign-in'
       fullPath: '/sign-in'
       preLoaderRoute: typeof SignInRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/qa-flow-scenes': {
-      id: '/qa-flow-scenes'
-      path: '/qa-flow-scenes'
-      fullPath: '/qa-flow-scenes'
-      preLoaderRoute: typeof QaFlowScenesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/nytt-losenord': {
@@ -1501,7 +1481,6 @@ const rootRouteChildren: RootRouteChildren = {
   IntegritetRoute: IntegritetRoute,
   McpRoute: McpRoute,
   NyttLosenordRoute: NyttLosenordRoute,
-  QaFlowScenesRoute: QaFlowScenesRoute,
   SignInRoute: SignInRoute,
   SignUpRoute: SignUpRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
