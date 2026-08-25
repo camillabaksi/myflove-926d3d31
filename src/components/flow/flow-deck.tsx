@@ -1,57 +1,54 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "wouter";
-import { Check, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import QuickCheckin from "@/components/quick-checkin";
-import EnergyBattery from "@/components/energy-battery";
 import FocusMode from "@/components/focus-mode";
-import { FlowMascot } from "@/components/flow-mascot";
+import { FlowCharacter, isWetWeather, sceneForTask, type FlowScene } from "@/components/flow/flow-character";
 import { useTasks } from "@/hooks/use-data";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";
+import { useWeather } from "@/hooks/use-weather";
 import { assessToday, rankNow, suggestNow } from "@/lib/flow-engine";
 import { energySentence, pickFlowSlides, type FlowSlideId } from "@/lib/flow-slides";
 import type { ScoredTask } from "@/lib/daily-flow";
 import { BUILD_ID } from "@/lib/cache-busting";
 
 /** Versionsmärkning för Flow-presentationen – visas i UI för verifiering. */
-export const FLOW_VERSION = "swipe-keyboard-2026-08-25";
+export const FLOW_VERSION = "flow-2.0-character-2026-08-25";
 
-type DeckSlideId = "intro" | FlowSlideId;
+type DeckSlideId = "intro" | "weather" | FlowSlideId | "done";
 
 /** Klartextnamn för skärmläsare och prickarnas etiketter. */
 const SLIDE_LABELS: Record<DeckSlideId, string> = {
-  intro: "Flow presenterar sig",
+  intro: "Flow hälsar",
+  weather: "Vädret idag",
   checkin: "Hur är det just nu?",
   energy: "Din energi",
   suggestion: "Förslag just nu",
   rest: "Återhämtning",
+  done: "Klart!",
 };
 
-
-
-
 /**
- * Flow 2.0 – en sak i taget.
- * En state-baserad vy: exakt EN slide finns i DOM:en åt gången.
- * Sliderna kommer från befintlig Flow-logik (flow-engine + Mitt batteri +
- * dagens incheckning). Inga nya datamodeller, inga parallella system.
+ * Flow 2.0 – en levande karaktär, en sak i taget.
+ * Exakt EN slide renderas åt gången. All data kommer från befintlig
+ * Flow-logik (flow-engine, Mitt batteri, dagens incheckning, väder).
  */
 export default function FlowDeck() {
   const { activeTasks, toggleTask, snoozeTask } = useTasks();
   const { reading, items } = useEnergyBattery();
-  const { moodValue, energyValue } = useQuickCheckin();
+  const { moodValue, energyValue, logMood, logEnergy } = useQuickCheckin();
+  const weather = useWeather();
 
   const [skip, setSkip] = useState<string[]>([]);
   const [focusOpen, setFocusOpen] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [dragOffset, setDragOffset] = useState(0);
+  const [celebrating, setCelebrating] = useState(false);
   const [dragging, setDragging] = useState(false);
   const drag = useRef<{ x: number; y: number; time: number; axis: "none" | "x" | "y" } | null>(null);
   const viewportRef = useRef<HTMLDivElement | null>(null);
   const activeSlideRef = useRef<HTMLDivElement | null>(null);
   const shouldFocusSlide = useRef(false);
-
 
   const suggestion = useMemo(
     () =>
@@ -71,27 +68,25 @@ export default function FlowDeck() {
   }, [suggestion.task, activeTasks, reading.now, skip]);
 
   const load = useMemo(() => assessToday(reading, items), [reading, items]);
+  const rainy = isWetWeather(weather?.code);
 
-  const slides = useMemo<DeckSlideId[]>(
-    () => [
-      "intro",
-      ...pickFlowSlides({
-        hasCheckin: moodValue != null && energyValue != null,
-        batteryNow: reading.now,
-        overloaded: reading.overloaded,
-        hasSuggestion: Boolean(suggestion.task),
-        heavyDay: load.weight === "tung",
-      }),
-    ],
-    [moodValue, energyValue, reading.now, reading.overloaded, suggestion.task, load.weight],
-  );
+  const slides = useMemo<DeckSlideId[]>(() => {
+    const base = pickFlowSlides({
+      hasCheckin: moodValue != null && energyValue != null,
+      batteryNow: reading.now,
+      overloaded: reading.overloaded,
+      hasSuggestion: Boolean(suggestion.task),
+      heavyDay: load.weight === "tung",
+    });
+    return ["intro", ...(rainy ? (["weather"] as DeckSlideId[]) : []), ...base];
+  }, [moodValue, energyValue, reading.now, reading.overloaded, suggestion.task, load.weight, rainy]);
 
-  // Läs önskad startslide från URL:en (?slide=2 eller ?slide=suggestion / #slide=2)
+  // Läs önskad startslide från URL:en (?slide=2 eller ?slide=suggestion)
   const requestedSlide = useRef<string | null>(
     typeof window === "undefined"
       ? null
-      : new URLSearchParams(window.location.search).get("slide") ??
-        new URLSearchParams(window.location.hash.replace(/^#/, "")).get("slide"),
+      : (new URLSearchParams(window.location.search).get("slide") ??
+        new URLSearchParams(window.location.hash.replace(/^#/, "")).get("slide")),
   );
   const appliedInitial = useRef(false);
 
@@ -105,7 +100,6 @@ export default function FlowDeck() {
     const numeric = Number(raw);
     let index = -1;
     if (Number.isFinite(numeric) && raw.trim() !== "") {
-      // 1-baserat i URL:en för att matcha "slide 1 av N" i UI:t
       index = Math.round(numeric) - 1;
     } else {
       index = slides.indexOf(raw as DeckSlideId);
@@ -123,12 +117,13 @@ export default function FlowDeck() {
   const goTo = (nextSlide: number, focusSlide = false) => {
     const clamped = Math.max(0, Math.min(slides.length - 1, nextSlide));
     if (focusSlide && clamped !== currentSlide) shouldFocusSlide.current = true;
+    setCelebrating(false);
     setCurrentSlide(clamped);
   };
 
   const next = (focusSlide = false) => goTo(currentSlide + 1, focusSlide);
   const previous = (focusSlide = false) => goTo(currentSlide - 1, focusSlide);
-  const activeSlide = slides[currentSlide] ?? "intro";
+  const activeSlide: DeckSlideId = celebrating ? "done" : (slides[currentSlide] ?? "intro");
 
   // Håll URL:en i synk så att en delad/laddad länk landar på samma slide
   useEffect(() => {
@@ -136,9 +131,8 @@ export default function FlowDeck() {
     const url = new URL(window.location.href);
     url.searchParams.set("slide", String(currentSlide + 1));
     window.history.replaceState(null, "", url.toString());
-  }, [currentSlide, activeSlide]);
+  }, [currentSlide]);
 
-  // Flytta fokus till den nya sliden vid tangentbordsnavigering
   useEffect(() => {
     if (!shouldFocusSlide.current) return;
     shouldFocusSlide.current = false;
@@ -160,7 +154,6 @@ export default function FlowDeck() {
     if (!state) return;
     const dx = event.clientX - state.x;
     const dy = event.clientY - state.y;
-
     if (state.axis === "none") {
       if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
       state.axis = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
@@ -169,29 +162,20 @@ export default function FlowDeck() {
         return;
       }
       setDragging(true);
-      event.currentTarget.setPointerCapture?.(event.pointerId);
     }
-
-    // Motstånd vid kanterna
-    const atStart = currentSlide === 0 && dx > 0;
-    const atEnd = currentSlide === slides.length - 1 && dx < 0;
-    setDragOffset(atStart || atEnd ? dx * 0.25 : dx);
   };
 
   const endDrag = (event: React.PointerEvent<HTMLDivElement>) => {
     const state = drag.current;
     drag.current = null;
-    const offset = dragOffset;
     setDragging(false);
-    setDragOffset(0);
     if (!state || state.axis !== "x") return;
-    event.currentTarget.releasePointerCapture?.(event.pointerId);
-
+    const dx = event.clientX - state.x;
     const width = viewportRef.current?.clientWidth ?? 1;
     const elapsed = Date.now() - state.time;
-    const quickSwipe = elapsed < 300 && Math.abs(offset) > 40;
-    if (Math.abs(offset) > width * 0.2 || quickSwipe) {
-      if (offset < 0) next();
+    const quickSwipe = elapsed < 300 && Math.abs(dx) > 40;
+    if (Math.abs(dx) > width * 0.2 || quickSwipe) {
+      if (dx < 0) next();
       else previous();
     }
   };
@@ -213,11 +197,18 @@ export default function FlowDeck() {
     }
   };
 
+  const celebrate = () => {
+    setCelebrating(true);
+    window.setTimeout(() => {
+      setCelebrating(false);
+      setCurrentSlide((v) => Math.min(slides.length - 1, v + 1));
+    }, 2200);
+  };
 
   return (
     <section
       aria-label="Flow"
-      className="surface-card relative w-full overflow-hidden p-4 sm:p-6"
+      className="surface-card relative w-full overflow-hidden p-3 sm:p-5"
       data-flow-version={FLOW_VERSION}
       data-flow-current-slide={currentSlide}
     >
@@ -234,61 +225,53 @@ export default function FlowDeck() {
         onPointerMove={onPointerMove}
         onPointerUp={endDrag}
         onPointerCancel={endDrag}
-        className="relative w-full overflow-hidden rounded-2xl outline-none touch-pan-y focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        className="relative w-full overflow-hidden rounded-2xl outline-none touch-pan-y [overscroll-behavior-x:none] focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         style={{ cursor: dragging ? "grabbing" : undefined }}
       >
         <div
-          data-flow-track
-          className={`flex w-full flex-row items-start ${
-            dragging ? "" : "transition-transform duration-300 ease-out motion-reduce:transition-none"
-          }`}
-          style={{ transform: `translateX(calc(-${currentSlide * 100}% + ${dragOffset}px))` }}
+          key={`${activeSlide}-${currentSlide}`}
+          ref={activeSlideRef}
+          data-flow-slide
+          data-flow-slide-id={activeSlide}
+          data-flow-slide-active="true"
+          tabIndex={-1}
+          aria-label={`${SLIDE_LABELS[activeSlide]} – vy ${currentSlide + 1} av ${slides.length}`}
+          className="flow-entry w-full outline-none"
         >
-          {slides.map((id, i) => {
-            const active = i === currentSlide;
-            return (
-              <div
-                key={`${id}-${i}`}
-                ref={active ? activeSlideRef : undefined}
-                data-flow-slide
-                data-flow-slide-id={id}
-                data-flow-slide-active={active ? "true" : "false"}
-                aria-hidden={!active}
-                inert={!active}
-                tabIndex={active ? -1 : undefined}
-                aria-label={`${SLIDE_LABELS[id]} – vy ${i + 1} av ${slides.length}`}
-                className="w-full min-w-full shrink-0 grow-0 basis-full outline-none"
-              >
-                <FlowSlide
-                  id={id}
-                  reading={reading}
-                  suggestion={suggestion}
-                  onIntroNext={() => next()}
-                  onStart={() => setFocusOpen(true)}
-                  onLater={() => {
-                    const taskId = suggestion.task?.id;
-                    if (taskId) setSkip((value) => [...value, taskId]);
-                  }}
-                  onDone={() => suggestion.task && toggleTask(suggestion.task.id)}
-                  onMoveTomorrow={() => suggestion.task && snoozeTask(suggestion.task.id, 1)}
-                  onSkipSlide={() => next()}
-                />
-              </div>
-            );
-          })}
+          <FlowSlide
+            id={activeSlide}
+            seed={currentSlide}
+            reading={reading}
+            weather={weather}
+            suggestion={suggestion}
+            moodValue={moodValue}
+            energyValue={energyValue}
+            onLogMood={logMood}
+            onLogEnergy={logEnergy}
+            onNext={() => next()}
+            onStart={() => setFocusOpen(true)}
+            onLater={() => {
+              const taskId = suggestion.task?.id;
+              if (taskId) setSkip((value) => [...value, taskId]);
+            }}
+            onDone={() => {
+              if (suggestion.task) toggleTask(suggestion.task.id);
+              celebrate();
+            }}
+            onMoveTomorrow={() => suggestion.task && snoozeTask(suggestion.task.id, 1)}
+          />
         </div>
       </div>
 
       <p id="flow-karusell-hjalp" className="sr-only">
-        Svep i sidled eller använd vänster- och högerpil för att byta vy. Home går till första vyn
-        och End till den sista.
+        Svep i sidled eller använd vänster- och högerpil för att byta vy.
       </p>
       <p className="sr-only" aria-live="polite">
         {`Vy ${currentSlide + 1} av ${slides.length}: ${SLIDE_LABELS[activeSlide]}`}
       </p>
 
       {slides.length > 1 && (
-        <div className="mt-3 flex items-center justify-center gap-4">
+        <div className="mt-2 flex items-center justify-center gap-3">
           <Button
             type="button"
             variant="ghost"
@@ -296,7 +279,7 @@ export default function FlowDeck() {
             aria-label="Föregående vy"
             onClick={() => previous()}
             disabled={currentSlide === 0}
-            className="press min-h-11 min-w-11 rounded-full text-muted-foreground disabled:opacity-30"
+            className="press min-h-11 min-w-11 rounded-full text-muted-foreground disabled:opacity-25"
           >
             <ChevronLeft size={18} />
           </Button>
@@ -322,13 +305,12 @@ export default function FlowDeck() {
             aria-label="Nästa vy"
             onClick={() => next()}
             disabled={currentSlide === slides.length - 1}
-            className="press min-h-11 min-w-11 rounded-full text-muted-foreground disabled:opacity-30"
+            className="press min-h-11 min-w-11 rounded-full text-muted-foreground disabled:opacity-25"
           >
             <ChevronRight size={18} />
           </Button>
         </div>
       )}
-
 
       <FlowVersionBadge currentSlide={currentSlide} />
 
@@ -339,6 +321,7 @@ export default function FlowDeck() {
         onDone={(item) => {
           toggleTask(item.task.id);
           setFocusOpen(false);
+          celebrate();
         }}
         onNext={() => {
           const taskId = suggestion.task?.id;
@@ -351,106 +334,116 @@ export default function FlowDeck() {
 
 /* ── Versionsstämpel: verifiera i realtid vilken bundle mobilen kör ── */
 
-function FlowVersionBadge({
-  currentSlide,
-}: {
-  currentSlide: number;
-}) {
+function FlowVersionBadge({ currentSlide }: { currentSlide: number }) {
   const [domVersion, setDomVersion] = useState<string | null>(null);
   const [slideCount, setSlideCount] = useState(0);
-  const [visibleCount, setVisibleCount] = useState(0);
 
   useEffect(() => {
     const section = document.querySelector("[data-flow-version]");
     setDomVersion(section?.getAttribute("data-flow-version") ?? null);
     setSlideCount(section?.querySelectorAll("[data-flow-slide]").length ?? 0);
-    setVisibleCount(
-      section?.querySelectorAll('[data-flow-slide][data-flow-slide-active="true"]').length ?? 0,
-    );
   }, [currentSlide]);
 
   return (
     <p
       data-flow-version-badge
-      className="mt-3 text-center text-[10px] leading-tight text-muted-foreground/70"
+      className="mt-2 text-center text-[10px] leading-tight text-muted-foreground/70"
     >
-      Flow {domVersion ?? FLOW_VERSION} · build {BUILD_ID} · slide {currentSlide + 1} av{" "}
-      {slideCount} · {visibleCount === 1 ? "en synlig slide ✓" : `${visibleCount} synliga ✗`}
+      Flow {domVersion ?? FLOW_VERSION} · build {BUILD_ID} · vy {currentSlide + 1} ·{" "}
+      {slideCount === 1 ? "en slide i DOM ✓" : `${slideCount} slides ✗`}
     </p>
   );
-
 }
-
 
 /* ── En slide i taget ───────────────────────────────────────────── */
 
 function FlowSlide({
   id,
+  seed,
   reading,
+  weather,
   suggestion,
-  onIntroNext,
+  moodValue,
+  energyValue,
+  onLogMood,
+  onLogEnergy,
+  onNext,
   onStart,
   onLater,
   onDone,
   onMoveTomorrow,
-  onSkipSlide,
 }: {
   id: DeckSlideId;
+  seed: number;
   reading: ReturnType<typeof useEnergyBattery>["reading"];
+  weather: ReturnType<typeof useWeather>;
   suggestion: ReturnType<typeof suggestNow>;
-  onIntroNext: () => void;
+  moodValue: number | null;
+  energyValue: number | null;
+  onLogMood: (v: number) => void;
+  onLogEnergy: (v: number) => void;
+  onNext: () => void;
   onStart: () => void;
   onLater: () => void;
   onDone: () => void;
   onMoveTomorrow: () => void;
-  onSkipSlide: () => void;
 }) {
   if (id === "intro") {
     return (
-      <div className="flex min-h-[28rem] flex-col items-center justify-center gap-5 p-4 text-center">
-        <FlowMascot size="xl" glow float className="flow-entry" />
-        <div className="space-y-2">
-          <h2 className="font-display text-2xl text-ink">Hej! Jag är Flow 💜</h2>
-          <p className="mx-auto max-w-xs text-base leading-relaxed text-muted-foreground">
-            Jag hjälper dig hitta vad som passar bäst just nu.
-          </p>
-        </div>
-        <Button className="rounded-2xl px-7" onClick={onIntroNext}>
-          Visa mig
+      <SlideShell scene="hello" seed={seed} title="Hej! Jag är Flow 💜">
+        <p className="text-sm text-muted-foreground">
+          Jag hjälper dig hitta vad som passar bäst just nu.
+        </p>
+        <Button className="rounded-2xl px-7" onClick={onNext}>
+          Visa mig →
         </Button>
-        <p className="text-xs text-muted-foreground">Svep åt sidan för att se mer →</p>
-      </div>
-    );
-  }
-
-  if (id === "checkin") {
-    return (
-      <SlideShell title="❤️ Hur är det just nu?" note="Det räcker att dra och trycka Logga.">
-        <QuickCheckin />
       </SlideShell>
     );
   }
 
-  if (id === "energy") {
+  if (id === "weather") {
     return (
-      <SlideShell title="🔋 Din energi" note={energySentence(reading.now, reading.trend)}>
-        <EnergyBattery />
+      <SlideShell scene="rain" seed={seed} title="Det ser blött ut idag ☔">
+        <p className="text-sm text-muted-foreground">
+          {weather ? `${Math.round(weather.temperature)}° i ${weather.city}. ` : ""}
+          Ta med paraply när du ska iväg.
+        </p>
+        <Button className="rounded-2xl px-7" onClick={onNext}>
+          Okej!
+        </Button>
+      </SlideShell>
+    );
+  }
+
+  if (id === "checkin") {
+    return <CheckinSlide seed={seed} moodValue={moodValue} energyValue={energyValue} onLogMood={onLogMood} onLogEnergy={onLogEnergy} onNext={onNext} />;
+  }
+
+  if (id === "energy") {
+    const scene: FlowScene = reading.now >= 66 ? "energyHigh" : reading.now < 40 ? "energyLow" : "mood";
+    return (
+      <SlideShell scene={scene} seed={seed} title={`Ditt batteri: ${Math.round(reading.now)} %`}>
+        <p className="text-sm text-muted-foreground">
+          {energySentence(reading.now, reading.trend)}
+        </p>
+        <Button className="rounded-2xl px-7" onClick={onNext}>
+          Okej
+        </Button>
       </SlideShell>
     );
   }
 
   if (id === "rest") {
     return (
-      <SlideShell title="🌱 Kanske är det dags att pausa">
-        <p className="text-base leading-relaxed text-foreground">
-          Du har redan gjort mycket idag. En kort paus kan vara ett bra nästa steg.
+      <SlideShell scene="rest" seed={seed} title="Kanske dags att pausa 🌱">
+        <p className="text-sm text-muted-foreground">
+          Du har gjort mycket idag. Det är okej att göra mindre nu.
         </p>
-        <p className="text-sm text-muted-foreground">Det är okej att göra mindre just nu.</p>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap justify-center gap-2">
           <Button asChild className="rounded-2xl">
             <Link href="/pomodoro">Ta paus</Link>
           </Button>
-          <Button variant="outline" className="rounded-2xl" onClick={onSkipSlide}>
+          <Button variant="outline" className="rounded-2xl" onClick={onNext}>
             Inte nu
           </Button>
         </div>
@@ -458,46 +451,47 @@ function FlowSlide({
     );
   }
 
+  if (id === "done") {
+    return (
+      <SlideShell scene="done" seed={seed} title="Klart! Snyggt jobbat 🎉">
+        <p className="text-sm text-muted-foreground">Det där räknas. Vi tar nästa när du vill.</p>
+      </SlideShell>
+    );
+  }
+
   // suggestion
   if (!suggestion.task) {
     return (
-      <SlideShell title="🎯 Mitt förslag">
-        <p className="text-base leading-relaxed text-foreground">{suggestion.headline}</p>
+      <SlideShell scene="think" seed={seed} title="Inget måste just nu">
         <p className="text-sm text-muted-foreground">
-          Inget behöver göras just nu. Det räcker att bara vara idag. 💙
+          Det räcker att bara vara idag. 💙
         </p>
       </SlideShell>
     );
   }
 
   return (
-    <SlideShell title="🎯 Jag tror att det här passar bra nu">
-      <div className="rounded-2xl bg-secondary/40 p-4">
-        <p className="font-display text-xl text-ink">{suggestion.task.title}</p>
-        <p className="mt-1 text-sm text-muted-foreground">
-          {suggestion.reason} Ungefär {suggestion.minutes} min.
-        </p>
-      </div>
-      <div className="flex flex-wrap gap-2">
-        <Button onClick={onStart} className="rounded-2xl">
+    <SlideShell
+      scene={sceneForTask(suggestion.task.title)}
+      seed={seed}
+      title={suggestion.task.title}
+    >
+      <p className="text-sm text-muted-foreground">
+        {suggestion.reason} Ungefär {suggestion.minutes} min.
+      </p>
+      <div className="flex flex-wrap items-center justify-center gap-2">
+        <Button onClick={onStart} className="rounded-2xl px-6">
           Gör nu
         </Button>
         <Button variant="outline" className="rounded-2xl" onClick={onLater}>
           Senare
         </Button>
-        <Button variant="ghost" className="rounded-2xl" onClick={onLater}>
-          Visa något annat
-        </Button>
       </div>
-      <div className="flex flex-wrap gap-3 text-xs text-muted-foreground">
+      <div className="flex flex-wrap justify-center gap-3 text-xs text-muted-foreground">
         <button type="button" onClick={onDone} className="underline-offset-2 hover:underline">
-          <Check size={12} className="mr-1 inline" /> Redan klar
+          Redan klar
         </button>
-        <button
-          type="button"
-          onClick={onMoveTomorrow}
-          className="underline-offset-2 hover:underline"
-        >
+        <button type="button" onClick={onMoveTomorrow} className="underline-offset-2 hover:underline">
           Flytta till imorgon
         </button>
       </div>
@@ -505,25 +499,86 @@ function FlowSlide({
   );
 }
 
+/** Kort incheckning – använder befintlig logg-logik, inget nytt datalager. */
+function CheckinSlide({
+  seed,
+  moodValue,
+  energyValue,
+  onLogMood,
+  onLogEnergy,
+  onNext,
+}: {
+  seed: number;
+  moodValue: number | null;
+  energyValue: number | null;
+  onLogMood: (v: number) => void;
+  onLogEnergy: (v: number) => void;
+  onNext: () => void;
+}) {
+  const [energy, setEnergy] = useState(energyValue ?? 5);
+  const [mood, setMood] = useState(moodValue ?? 5);
+
+  return (
+    <SlideShell scene="mood" seed={seed} title="Hur är det just nu?">
+      <div className="w-full max-w-xs space-y-3 text-left">
+        <label className="block text-xs font-medium text-muted-foreground">
+          ⚡ Ork: {energy}/10
+          <input
+            type="range"
+            min={1}
+            max={10}
+            value={energy}
+            onChange={(e) => setEnergy(Number(e.target.value))}
+            className="myflove-range mt-1 h-2 w-full cursor-pointer appearance-none rounded-full bg-secondary"
+            aria-label="Ork 1 till 10"
+          />
+        </label>
+        <label className="block text-xs font-medium text-muted-foreground">
+          ❤️ Mående: {mood}/10
+          <input
+            type="range"
+            min={1}
+            max={10}
+            value={mood}
+            onChange={(e) => setMood(Number(e.target.value))}
+            className="myflove-range mt-1 h-2 w-full cursor-pointer appearance-none rounded-full bg-secondary"
+            aria-label="Mående 1 till 10"
+          />
+        </label>
+      </div>
+      <Button
+        className="rounded-2xl px-7"
+        onClick={() => {
+          void onLogEnergy(energy);
+          onLogMood(mood);
+          onNext();
+        }}
+      >
+        Logga
+      </Button>
+    </SlideShell>
+  );
+}
+
+/** Gemensam ram: Flow stor högst upp, kort text och en åtgärd. */
 function SlideShell({
+  scene,
+  seed,
   title,
-  note,
   children,
 }: {
+  scene: FlowScene;
+  seed: number;
   title: string;
-  note?: string;
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-[28rem] flex-col justify-center gap-4 p-1 sm:p-3">
-      <div className="flex items-start gap-3">
-        <FlowMascot size="xs" float />
-        <div className="min-w-0">
-          <h2 className="font-display text-lg leading-snug text-ink">{title}</h2>
-          {note && <p className="mt-0.5 text-sm text-muted-foreground">{note}</p>}
-        </div>
+    <div className="flex h-[70svh] max-h-[640px] min-h-[420px] flex-col items-center justify-between gap-3 overflow-hidden px-2 py-3 text-center">
+      <FlowCharacter scene={scene} seed={seed} />
+      <div className="flex w-full flex-1 flex-col items-center justify-center gap-3">
+        <h2 className="font-display text-xl leading-snug text-balance text-ink">{title}</h2>
+        {children}
       </div>
-      <div className="space-y-4">{children}</div>
     </div>
   );
 }
