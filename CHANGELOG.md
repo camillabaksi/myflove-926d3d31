@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-25 – Flerdagsperioder syns nu alla dagar
+
+- En period med slutdatum (t.ex. en veckas semester) visas nu varje dag i perioden även i Hem, Dagens saker, Min dag och "Allt i dagen" – inte bara på startdagen.
+- Mitt i perioden visas ingen klockslagstid; klockslaget hör till startdagen.
+
 ## 2026-08-25 – Flow är nu sidans enda container
 
 - `/flow` visar nu endast den state-baserade Flow-containern. De tidigare vyflikarna och dashboard-sektionerna för dagens belastning, planering, uppgiftslista och chatt är borttagna från Flow-sidan men finns kvar på sina ordinarie platser.
