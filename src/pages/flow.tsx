@@ -2,14 +2,14 @@ import { useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import Layout from "@/components/layout";
 import { Button } from "@/components/ui/button";
-import FocusMode from "@/components/focus-mode";
 import CollapsibleSection from "@/components/collapsible-section";
 import { AssistantContent } from "@/pages/assistant";
 import TodayTasks from "@/components/today-tasks";
 import { useTasks } from "@/hooks/use-data";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
-import { assessToday, rankNow, suggestMove, suggestNow } from "@/lib/flow-engine";
-import type { ScoredTask } from "@/lib/daily-flow";
+import FlowDeck from "@/components/flow/flow-deck";
+import { FlowGreeting } from "@/components/flow/flow-intro";
+import { assessToday, suggestMove } from "@/lib/flow-engine";
 import { planFlowSequence } from "@/lib/flowplan.functions";
 import { useDayPlan, type DayPlanStep } from "@/lib/day-plan";
 import { MyFloveThinking, MyFloveTransition } from "@/components/myflove/motion";
@@ -77,92 +77,10 @@ export default function FlowPage() {
 /* ── NU ─────────────────────────────────────────────────────────── */
 
 function NowLayer() {
-  const { activeTasks, toggleTask, snoozeTask } = useTasks();
-  const { reading } = useEnergyBattery();
-  const [skip, setSkip] = useState<string[]>([]);
-  const [focusOpen, setFocusOpen] = useState(false);
-
-  const suggestion = useMemo(
-    () =>
-      suggestNow({
-        tasks: activeTasks,
-        batteryNow: reading.now,
-        peakLabel: reading.peak?.label ?? null,
-        skip,
-      }),
-    [activeTasks, reading.now, reading.peak, skip],
-  );
-
-  const scored = useMemo<ScoredTask | null>(() => {
-    if (!suggestion.task) return null;
-    const ranked = rankNow({ tasks: activeTasks, batteryNow: reading.now, skip });
-    return ranked.find((r) => r.task.id === suggestion.task!.id) ?? null;
-  }, [suggestion.task, activeTasks, reading.now, skip]);
-
-  if (!suggestion.task) {
-    return (
-      <section className="surface-card space-y-3 p-6 text-center">
-        <MyFloveThinking />
-        <p className="text-base text-foreground">{suggestion.headline}</p>
-        <p className="text-sm text-muted-foreground">
-          Inget behöver göras just nu. Det räcker att bara vara idag. 💙
-        </p>
-      </section>
-    );
-  }
-
   return (
-    <MyFloveTransition transitionKey={suggestion.task.id}>
-      <section className="surface-card space-y-4 p-6">
-        <p className="text-base leading-relaxed text-foreground">{suggestion.headline}</p>
-
-        <div className="rounded-2xl bg-secondary/40 p-4">
-          <p className="font-display text-xl text-ink">{suggestion.task.title}</p>
-          <p className="mt-1 text-sm text-muted-foreground">
-            {suggestion.reason} Ungefär {suggestion.minutes} min.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Button onClick={() => setFocusOpen(true)} className="rounded-2xl">
-            {suggestion.ctaLabel}
-          </Button>
-          <Button
-            variant="outline"
-            className="rounded-2xl"
-            onClick={() => setSkip((s) => [...s, suggestion.task!.id])}
-          >
-            Senare
-          </Button>
-          <Button
-            variant="ghost"
-            className="rounded-2xl"
-            onClick={() => toggleTask(suggestion.task!.id)}
-          >
-            <Check size={16} className="mr-1.5" /> Redan klar
-          </Button>
-        </div>
-      </section>
-
-      <FocusMode
-        item={scored}
-        open={focusOpen}
-        onOpenChange={setFocusOpen}
-        onDone={(item) => {
-          toggleTask(item.task.id);
-          setFocusOpen(false);
-        }}
-        onNext={() => setSkip((s) => [...s, suggestion.task!.id])}
-      />
-      {/* Snooze finns kvar som mjukt alternativ, utan att ta plats visuellt. */}
-      <button
-        type="button"
-        onClick={() => snoozeTask(suggestion.task!.id, 1)}
-        className="mt-3 text-xs text-muted-foreground underline-offset-2 hover:underline"
-      >
-        Flytta den här till imorgon
-      </button>
-    </MyFloveTransition>
+    <FlowGreeting>
+      <FlowDeck />
+    </FlowGreeting>
   );
 }
 

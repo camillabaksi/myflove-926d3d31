@@ -377,6 +377,32 @@ html[data-npf-less="true"] [data-npf="optional"] {
   }
 }
 
+@keyframes myflove-flow-entry {
+  0% {
+    opacity: 0;
+    transform: translateY(14px) scale(0.92);
+  }
+  45% {
+    opacity: 1;
+    transform: translateY(-10px) scale(1.03);
+  }
+  65% {
+    transform: translateY(0) scale(1) rotate(-4deg);
+  }
+  80% {
+    transform: translateY(0) rotate(5deg);
+  }
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+/* Flow hoppar upp och vinkar – kort och mjukt */
+@utility flow-entry {
+  animation: myflove-flow-entry 1.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  transform-origin: 50% 90%;
+}
+
 /* Hela vyn tonar mjukt in när man byter sida */
 @utility page-enter {
   animation: myflove-fade-up 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -436,6 +462,7 @@ html[data-npf-less="true"] [data-npf="optional"] {
 
 @media (prefers-reduced-motion: reduce) {
   .page-enter,
+  .flow-entry,
   .pop-in,
   .breathe,
   .floaty,
