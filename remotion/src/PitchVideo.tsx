@@ -1,5 +1,13 @@
 import React from "react";
-import { AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate, spring } from "remotion";
+import {
+  AbsoluteFill,
+  Img,
+  staticFile,
+  useCurrentFrame,
+  useVideoConfig,
+  interpolate,
+  spring,
+} from "remotion";
 import { TransitionSeries, linearTiming } from "@remotion/transitions";
 import { fade } from "@remotion/transitions/fade";
 import { COLORS, FONTS } from "./theme";
@@ -297,33 +305,63 @@ const SceneProduct: React.FC = () => (
   </Shell>
 );
 
+const FlowMascot: React.FC<{ size?: number; delay?: number }> = ({
+  size = 420,
+  delay = 8,
+}) => {
+  const frame = useCurrentFrame();
+  const enter = useIn(delay, 14);
+  const bob = Math.sin(frame / 22) * 12;
+  const tilt = Math.sin(frame / 34) * 2.2;
+  return (
+    <div style={{ ...enter, position: "relative" }}>
+      <div
+        style={{
+          position: "absolute",
+          inset: -60,
+          borderRadius: "50%",
+          background: COLORS.primarySoft,
+          opacity: 0.25,
+          filter: "blur(30px)",
+        }}
+      />
+      <Img
+        src={staticFile("flow-mascot.png")}
+        style={{
+          position: "relative",
+          width: size,
+          transform: `translateY(${bob}px) rotate(${tilt}deg)`,
+          filter: "drop-shadow(0 26px 46px rgba(36,28,59,0.22))",
+        }}
+      />
+    </div>
+  );
+};
+
 const SceneFlow: React.FC = () => (
   <Shell>
-    <div style={{ display: "flex", flexDirection: "column", gap: 46 }}>
-      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-        <Eyebrow>Flow 2.0</Eyebrow>
-        <Title size={72}>En följeslagare som säger en sak i taget</Title>
+    <div style={{ display: "flex", alignItems: "center", gap: 60 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 40, flex: 1 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <Eyebrow>Flow 2.0</Eyebrow>
+          <Title size={64}>En följeslagare som säger en sak i taget</Title>
+        </div>
+        <div style={{ display: "flex", gap: 24 }}>
+          <Card
+            accent={COLORS.primary}
+            title="Levande karaktär"
+            text="12 lägen: regn, medicin, vila, studier, jobb och klart."
+            delay={14}
+          />
+          <Card
+            accent={COLORS.primarySoft}
+            title="Finns i hela appen"
+            text="Samma lugna röst på Hem, Min dag och alla vyer."
+            delay={22}
+          />
+        </div>
       </div>
-      <div style={{ display: "flex", gap: 28 }}>
-        <Card
-          accent={COLORS.primary}
-          title="Levande karaktär"
-          text="Flow visar läget — regn, medicin, vila, studier eller klart."
-          delay={14}
-        />
-        <Card
-          accent={COLORS.primarySoft}
-          title="Finns i hela appen"
-          text="Samma lugna röst på Hem, Min dag och alla vyer."
-          delay={22}
-        />
-        <Card
-          accent={COLORS.gold}
-          title="Bygger på din data"
-          text="Energi, mående, medicin, barn och väder — inget nytt att fylla i."
-          delay={30}
-        />
-      </div>
+      <FlowMascot size={520} delay={10} />
     </div>
   </Shell>
 );
@@ -441,7 +479,8 @@ const SceneOutro: React.FC = () => {
   const glow = 0.35 + Math.sin(frame / 20) * 0.08;
   return (
     <Shell dark>
-      <div style={{ display: "flex", flexDirection: "column", gap: 30 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 70 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 30, flex: 1 }}>
         <div
           style={{
             ...useIn(4),
