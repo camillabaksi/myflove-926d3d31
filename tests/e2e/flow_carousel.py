@@ -24,16 +24,29 @@ def check(ok: bool, label: str, detail: str = "") -> None:
         FAILS.append(label)
 
 
+def _session() -> dict:
+    """Session från env, annars från `lovable auth-session --json`-filen."""
+    path = os.path.expanduser("~/.cache/lovable-auth/session.json")
+    if os.environ.get("LOVABLE_BROWSER_SUPABASE_STORAGE_KEY"):
+        return {
+            "storage_key": os.environ["LOVABLE_BROWSER_SUPABASE_STORAGE_KEY"],
+            "session": json.loads(os.environ.get("LOVABLE_BROWSER_SUPABASE_SESSION_JSON") or "null"),
+            "cookies": json.loads(os.environ.get("LOVABLE_BROWSER_SUPABASE_COOKIES_JSON") or "[]"),
+        }
+    if os.path.exists(path):
+        with open(path) as handle:
+            return json.load(handle)
+    return {}
+
+
 async def restore_session(context, page) -> None:
-    cookies_json = os.environ.get("LOVABLE_BROWSER_SUPABASE_COOKIES_JSON")
-    if cookies_json:
-        await context.add_cookies([{**cookie, "url": BASE} for cookie in json.loads(cookies_json)])
+    data = _session()
+    if data.get("cookies"):
+        await context.add_cookies([{**cookie, "url": BASE} for cookie in data["cookies"]])
     await page.goto(BASE, wait_until="domcontentloaded")
-    storage_key = os.environ.get("LOVABLE_BROWSER_SUPABASE_STORAGE_KEY")
-    session_json = os.environ.get("LOVABLE_BROWSER_SUPABASE_SESSION_JSON")
-    if storage_key and session_json:
+    if data.get("storage_key") and data.get("session"):
         await page.evaluate(
-            f"localStorage.setItem({json.dumps(storage_key)}, {json.dumps(session_json)})"
+            f"localStorage.setItem({json.dumps(data['storage_key'])}, {json.dumps(json.dumps(data['session']))})"
         )
 
 
@@ -54,8 +67,9 @@ async def open_flow(page) -> bool:
                 continue
         await page.goto(f"{BASE}/flow", wait_until="domcontentloaded")
         try:
-            await page.locator("[data-flow-state-view]").wait_for(state="visible", timeout=20000)
+            await page.locator("[data-flow-viewport]").wait_for(state="visible", timeout=20000)
             return True
+
         except Exception:
             await page.wait_for_timeout(2500)
     return False
