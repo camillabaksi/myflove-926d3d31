@@ -317,7 +317,6 @@ function LandingDeck() {
     const onWindowKey = (event: KeyboardEvent) => {
       const target = event.target as Element | null;
       if (target?.closest?.("input, textarea, select, [contenteditable], [role='slider']")) return;
-      console.log("deckkey", event.key, index);
       if (event.key === "ArrowRight") goTo(index + 1);
       else if (event.key === "ArrowLeft") goTo(index - 1);
       else if (event.key === "Home") goTo(0);
