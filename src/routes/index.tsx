@@ -192,6 +192,16 @@ function LandingDeck() {
   const total = SLIDES.length;
   const goTo = (next: number) => setIndex(Math.max(0, Math.min(total - 1, next)));
 
+  // Interna länkar (t.ex. "Se hur det fungerar") kan hoppa till en vy
+  useEffect(() => {
+    const jump = (event: Event) => {
+      const detail = (event as CustomEvent<number>).detail;
+      if (typeof detail === "number") setIndex(Math.max(0, Math.min(SLIDES.length - 1, detail)));
+    };
+    window.addEventListener("myflove:landing-slide", jump);
+    return () => window.removeEventListener("myflove:landing-slide", jump);
+  }, []);
+
   const isInteractive = (target: EventTarget | null) =>
     target instanceof Element &&
     Boolean(target.closest("button, a, input, textarea, select, [role='slider'], [contenteditable]"));
