@@ -69,6 +69,36 @@ export default function FlowDeck() {
     [moodValue, energyValue, reading.now, reading.overloaded, suggestion.task, load.weight],
   );
 
+  // Läs önskad startslide från URL:en (?slide=2 eller ?slide=suggestion / #slide=2)
+  const requestedSlide = useRef<string | null>(
+    typeof window === "undefined"
+      ? null
+      : new URLSearchParams(window.location.search).get("slide") ??
+        new URLSearchParams(window.location.hash.replace(/^#/, "")).get("slide"),
+  );
+  const appliedInitial = useRef(false);
+
+  useEffect(() => {
+    if (appliedInitial.current || slides.length === 0) return;
+    const raw = requestedSlide.current;
+    if (!raw) {
+      appliedInitial.current = true;
+      return;
+    }
+    const numeric = Number(raw);
+    let index = -1;
+    if (Number.isFinite(numeric) && raw.trim() !== "") {
+      // 1-baserat i URL:en för att matcha "slide 1 av N" i UI:t
+      index = Math.round(numeric) - 1;
+    } else {
+      index = slides.indexOf(raw as DeckSlideId);
+    }
+    if (index >= 0) {
+      setCurrentSlide(Math.max(0, Math.min(slides.length - 1, index)));
+      appliedInitial.current = true;
+    }
+  }, [slides]);
+
   useEffect(() => {
     setCurrentSlide((value) => Math.min(value, Math.max(0, slides.length - 1)));
   }, [slides.length]);
@@ -80,6 +110,15 @@ export default function FlowDeck() {
   const next = () => goTo(currentSlide + 1);
   const previous = () => goTo(currentSlide - 1);
   const activeSlide = slides[currentSlide] ?? "intro";
+
+  // Håll URL:en i synk så att en delad/laddad länk landar på samma slide
+  useEffect(() => {
+    if (typeof window === "undefined" || !appliedInitial.current) return;
+    const url = new URL(window.location.href);
+    url.searchParams.set("slide", String(currentSlide + 1));
+    window.history.replaceState(null, "", url.toString());
+  }, [currentSlide, activeSlide]);
+
 
   const handlePointerDown = (clientX: number) => {
     pointerStartX.current = clientX;
