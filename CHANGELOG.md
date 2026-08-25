@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-25 – Flow reagerar på startsidans demo
+
+- Telefondemon i hero är nu interaktiv: uppgifterna kan bockas av och Flow svarar med en kort, lugn reaktion i pratbubblan i telefonen.
+- De flytande korten runt telefonen (regn, fokustid, +8 Flow) ger också korta Flow-svar vid hover, fokus eller klick.
+- Tidslinjen "Så ser en MyFlove-dag ut" har fått en extra kort mikroreaktion från Flow per punkt.
+- Endast presentation på startsidan – ingen appfunktionalitet, datamodell eller navigation ändrad.
+
+
 ## 2026-08-25 – Flow som officiell maskot + levande startsida
 
 - Flow har fått en officiell visuell referens: den runda lila figuren med kawaii-ögon, rosa kinder, hjärta på magen och glittrande stjärnor. Bilden ligger som CDN-asset och används via en gemensam komponent (`FlowMascot` / `FlowSays`) så att inga parallella varianter uppstår.
