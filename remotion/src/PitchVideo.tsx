@@ -474,7 +474,89 @@ const SceneWhyNow: React.FC = () => (
   </Shell>
 );
 
+const SceneMarket: React.FC = () => {
+  const stats = [
+    { v: "140M+", l: "vuxna globalt med kvarstående ADHD", a: COLORS.primary },
+    { v: "~3 %", l: "av vuxna i Sverige (Socialstyrelsen)", a: COLORS.primarySoft },
+    { v: "$3,06B", l: "digital hälsa för neurodivergenta 2025", a: COLORS.gold },
+    { v: "$1,9B", l: "ADHD-appmarknad 2025", a: COLORS.primary },
+    { v: "$6,7B", l: "ADHD-appmarknad 2033", a: COLORS.primarySoft },
+    { v: "17,5 %", l: "CAGR 2025–2033", a: COLORS.gold },
+  ];
+  return (
+    <Shell>
+      <div style={{ display: "flex", flexDirection: "column", gap: 30 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <Eyebrow>Marknaden · market opportunity</Eyebrow>
+          <Title size={64}>En stor målgrupp – och en marknad som skalar</Title>
+        </div>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
+          {stats.map((s, i) => (
+            <div
+              key={s.v}
+              style={{
+                ...useIn(12 + i * 6),
+                width: 500,
+                background: COLORS.cream,
+                borderRadius: 24,
+                padding: "24px 28px",
+                boxShadow: "0 14px 34px rgba(36,28,59,0.07)",
+                display: "flex",
+                flexDirection: "column",
+                gap: 8,
+              }}
+            >
+              <div style={{ width: 60, height: 10, borderRadius: 5, background: s.a }} />
+              <div
+                style={{
+                  fontFamily: FONTS.display,
+                  fontWeight: 800,
+                  fontSize: 46,
+                  color: COLORS.ink,
+                  lineHeight: 1,
+                }}
+              >
+                {s.v}
+              </div>
+              <div style={{ fontFamily: FONTS.body, fontSize: 20, color: COLORS.muted }}>
+                {s.l}
+              </div>
+            </div>
+          ))}
+        </div>
+        <div
+          style={{
+            ...useIn(56),
+            fontFamily: FONTS.body,
+            fontSize: 18,
+            color: COLORS.muted,
+            maxWidth: 1500,
+            lineHeight: 1.4,
+          }}
+        >
+          Uppskattningar och prognoser – externa marknadssiffror, inte MyFloves egna
+          traction-siffror. Källor: Global systematisk översikt (PubMed, 2021) · Socialstyrelsen ·
+          Grand View Research, ADHD Apps Market · aktuell marknadsrapport för digital hälsa för
+          neurodivergenta användare.
+        </div>
+        <div
+          style={{
+            ...useIn(64),
+            fontFamily: FONTS.display,
+            fontWeight: 700,
+            fontSize: 26,
+            color: COLORS.primary,
+          }}
+        >
+          MyFlove starts with ADHD — but is built for the complexity of everyday life.
+        </div>
+      </div>
+    </Shell>
+  );
+};
+
 const SceneOutro: React.FC = () => {
+
   const frame = useCurrentFrame();
   const glow = 0.35 + Math.sin(frame / 20) * 0.08;
   return (
