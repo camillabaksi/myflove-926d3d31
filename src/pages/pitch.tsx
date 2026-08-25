@@ -75,7 +75,19 @@ export default function PitchPage() {
             className="w-full rounded-xl bg-black aspect-video"
             src="/pitch/myflove-pitch-2026.mp4"
           />
+          <figure className="space-y-1">
+            <img
+              src="/pitch/myflove-pitch-3.4-market-thumb.jpg"
+              alt="Marknadsscenen i pitchvideon med sex nyckeltal och källnot"
+              loading="lazy"
+              className="w-full rounded-xl border border-border"
+            />
+            <figcaption className="text-xs text-muted-foreground">
+              Marknadsscenen i videon – samma layout och text som marknadssliden i decket
+            </figcaption>
+          </figure>
           <div className="flex flex-wrap gap-2">
+
             <a
               href="/pitch/myflove-pitch-2026.mp4"
               download
