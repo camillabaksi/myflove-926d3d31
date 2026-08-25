@@ -773,7 +773,7 @@ function DailyFlow() {
         <p className="text-xs font-semibold tracking-[0.3em] text-[#7C5CE0] uppercase">
           Dagens Flow 💜
         </p>
-        <FlowMascot size="md" float glow className="mt-5" />
+        <FlowMascot size="md" mood="calm" glow className="mt-5" />
         <p
           key={quote}
           className="font-display pop-in mx-auto mt-5 max-w-xl text-2xl leading-snug font-bold text-[#2A2140] italic sm:text-3xl"
@@ -1061,7 +1061,7 @@ function BuildingSection() {
     <section className="px-5 py-16 sm:px-6 sm:py-24">
       <div className="mx-auto max-w-4xl rounded-[2rem] border border-[#7C5CE0]/15 bg-white p-7 shadow-sm sm:p-10">
         <div className="grid items-center gap-8 sm:grid-cols-[auto_1fr]">
-          <FlowMascot size="xl" float glow className="mx-auto" />
+          <FlowMascot size="xl" mood="cheer" glow className="mx-auto" />
           <div>
             <p className="text-xs font-semibold tracking-[0.3em] text-[#7C5CE0] uppercase">
               🚀 Var med från början
