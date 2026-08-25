@@ -258,11 +258,15 @@ function FlowVersionBadge({
 }) {
   const [domVersion, setDomVersion] = useState<string | null>(null);
   const [slideCount, setSlideCount] = useState(0);
+  const [visibleCount, setVisibleCount] = useState(0);
 
   useEffect(() => {
     const section = document.querySelector("[data-flow-version]");
     setDomVersion(section?.getAttribute("data-flow-version") ?? null);
     setSlideCount(section?.querySelectorAll("[data-flow-slide]").length ?? 0);
+    setVisibleCount(
+      section?.querySelectorAll('[data-flow-slide][data-flow-slide-active="true"]').length ?? 0,
+    );
   }, [currentSlide]);
 
   return (
@@ -270,9 +274,11 @@ function FlowVersionBadge({
       data-flow-version-badge
       className="mt-3 text-center text-[10px] leading-tight text-muted-foreground/70"
     >
-      Flow {domVersion ?? FLOW_VERSION} · build {BUILD_ID} · slide {currentSlide + 1} · DOM {slideCount === 1 ? "en slide ✓" : `${slideCount} slides ✗`}
+      Flow {domVersion ?? FLOW_VERSION} · build {BUILD_ID} · slide {currentSlide + 1} av{" "}
+      {slideCount} · {visibleCount === 1 ? "en synlig slide ✓" : `${visibleCount} synliga ✗`}
     </p>
   );
+
 }
 
 
