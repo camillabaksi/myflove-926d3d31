@@ -605,6 +605,7 @@ const SCENES: { c: React.FC; d: number }[] = [
   { c: SceneFlow, d: 165 },
   { c: SceneHow, d: 175 },
   { c: SceneWhyNow, d: 165 },
+  { c: SceneMarket, d: 220 },
   { c: SceneOutro, d: 150 },
 ];
 
