@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-25 – Flow finns nu i den inloggade appen
+
+- Flow står med som en kontextuell följeslagare på Hem och Min dag, med samma utseende, poser och rekvisita som i Flow-previewen (previewen är oförändrad).
+- Flow väljer EN sak i taget utifrån data som redan finns: medicin som ska tas, regn eller sol, låg/hög energi, barnens dag, dagens nästa uppgift, vatten och tvätt.
+- Nya rekvisita: sol och solglasögon, medicinburk, vattenglas och tvättkorg – plus små mini-Flows som speglar antalet barn.
+- Flow firar när du bockar av något, var du än gör det i appen.
+- Storleken anpassas efter plats: stor scen som huvudfokus, mindre inuti kort – och inget täcker bottennavigeringen.
+
 ## 2026-08-25 – Automatiska tester för Flows states
 
 - Nya automatiska tester (Vitest) verifierar att exakt ett Flow-state renderas åt gången, både i karaktären och i hela Flow-vyn.
