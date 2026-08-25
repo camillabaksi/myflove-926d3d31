@@ -57,23 +57,29 @@ async def restore_session(context, page) -> None:
 
 
 async def open_flow(page) -> bool:
-    await page.goto(f"{BASE}/flow", wait_until="domcontentloaded")
-    await page.wait_for_timeout(1200)
-    if "/sign-in" in page.url or "/auth" in page.url:
-        await page.goto(f"{BASE}/dev-session", wait_until="domcontentloaded")
-        btn = page.get_by_role("button", name=re.compile("testanvändare", re.I))
-        try:
-            await btn.first.wait_for(state="visible", timeout=20000)
-            await btn.first.click()
-            await page.wait_for_url(re.compile(r"/hem"), timeout=45000)
-        except Exception as err:  # noqa: BLE001
-            print("  (kunde inte skapa testsession:", err, ")")
+    # Testsessionen kan strula tillfälligt (rate limit) – försök några gånger.
+    for attempt in range(3):
         await page.goto(f"{BASE}/flow", wait_until="domcontentloaded")
-    try:
-        await page.locator("[data-flow-track]").wait_for(state="visible", timeout=20000)
-        return True
-    except Exception:
-        return False
+        await page.wait_for_timeout(1200)
+        if "/sign-in" in page.url or "/auth" in page.url:
+            await page.goto(f"{BASE}/dev-session", wait_until="domcontentloaded")
+            btn = page.get_by_role("button", name=re.compile("testanvändare", re.I))
+            try:
+                await btn.first.wait_for(state="visible", timeout=20000)
+                await btn.first.click()
+                await page.wait_for_url(re.compile(r"/hem"), timeout=45000)
+            except Exception as err:  # noqa: BLE001
+                print(f"  (försök {attempt + 1}: kunde inte skapa testsession: {err})")
+                await page.wait_for_timeout(3000)
+                continue
+            await page.goto(f"{BASE}/flow", wait_until="domcontentloaded")
+        try:
+            await page.locator("[data-flow-track]").wait_for(state="visible", timeout=20000)
+            return True
+        except Exception:
+            await page.wait_for_timeout(3000)
+    return False
+
 
 
 async def freeze_page(page) -> None:
