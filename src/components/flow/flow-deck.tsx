@@ -14,15 +14,15 @@ import { energySentence, pickFlowSlides, type FlowSlideId } from "@/lib/flow-sli
 import type { ScoredTask } from "@/lib/daily-flow";
 import { BUILD_ID } from "@/lib/cache-busting";
 
-/** Versionsmärkning för karusellens layout – visas i UI för verifiering. */
-export const FLOW_VERSION = "flex-nowrap-2026-08-25";
+/** Versionsmärkning för Flow-presentationen – visas i UI för verifiering. */
+export const FLOW_VERSION = "single-state-2026-08-25";
 
 type DeckSlideId = "intro" | FlowSlideId;
 
 
 /**
  * Flow 2.0 – en sak i taget.
- * En horisontell carousel: exakt EN slide syns åt gången, inget staplas vertikalt.
+ * En state-baserad vy: exakt EN slide finns i DOM:en åt gången.
  * Sliderna kommer från befintlig Flow-logik (flow-engine + Mitt batteri +
  * dagens incheckning). Inga nya datamodeller, inga parallella system.
  */
@@ -33,8 +33,8 @@ export default function FlowDeck() {
 
   const [skip, setSkip] = useState<string[]>([]);
   const [focusOpen, setFocusOpen] = useState(false);
-  const [index, setIndex] = useState(0);
-  const trackRef = useRef<HTMLDivElement>(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const pointerStartX = useRef<number | null>(null);
 
   const suggestion = useMemo(
     () =>
@@ -69,59 +69,64 @@ export default function FlowDeck() {
     [moodValue, energyValue, reading.now, reading.overloaded, suggestion.task, load.weight],
   );
 
-  const goTo = (i: number) => {
-    const clamped = Math.max(0, Math.min(slides.length - 1, i));
-    setIndex(clamped);
-    const track = trackRef.current;
-    if (track) track.scrollTo({ left: clamped * track.clientWidth, behavior: "smooth" });
+  useEffect(() => {
+    setCurrentSlide((value) => Math.min(value, Math.max(0, slides.length - 1)));
+  }, [slides.length]);
+
+  const goTo = (nextSlide: number) => {
+    setCurrentSlide(Math.max(0, Math.min(slides.length - 1, nextSlide)));
   };
 
-  const onScroll = () => {
-    const track = trackRef.current;
-    if (!track || track.clientWidth === 0) return;
-    const i = Math.round(track.scrollLeft / track.clientWidth);
-    if (i !== index) setIndex(i);
+  const next = () => goTo(currentSlide + 1);
+  const previous = () => goTo(currentSlide - 1);
+  const activeSlide = slides[currentSlide] ?? "intro";
+
+  const handlePointerDown = (clientX: number) => {
+    pointerStartX.current = clientX;
   };
 
-  const next = () => goTo(index + 1);
+  const handlePointerUp = (clientX: number) => {
+    const startX = pointerStartX.current;
+    pointerStartX.current = null;
+    if (startX == null) return;
+    const distance = clientX - startX;
+    if (Math.abs(distance) < 45) return;
+    if (distance < 0) next();
+    else previous();
+  };
 
   return (
     <section
       aria-label="Flow"
-      className="flow-carousel relative"
+      className="relative"
       data-flow-version={FLOW_VERSION}
+      data-flow-current-slide={currentSlide}
     >
-
-      {/* Utility-klasser och egna regler låser samma kritiska geometri. */}
       <div
-        ref={trackRef}
-        onScroll={onScroll}
-        data-flow-track
-        className="flow-carousel-track flex flex-row flex-nowrap overflow-x-auto overflow-y-hidden"
+        data-flow-state-view
+        className="touch-pan-y"
+        onPointerDown={(event) => handlePointerDown(event.clientX)}
+        onPointerUp={(event) => handlePointerUp(event.clientX)}
+        onPointerCancel={() => {
+          pointerStartX.current = null;
+        }}
       >
-        {slides.map((id, i) => (
-          <div
-            key={`${id}-${i}`}
-            data-flow-slide
-            aria-hidden={i !== index}
-            className="flow-carousel-slide block w-full min-w-full max-w-full shrink-0 grow-0 basis-full"
-          >
-            <FlowSlide
-              id={id}
-              reading={reading}
-              suggestion={suggestion}
-              onIntroNext={next}
-              onStart={() => setFocusOpen(true)}
-              onLater={() => {
-                const taskId = suggestion.task?.id;
-                if (taskId) setSkip((s) => [...s, taskId]);
-              }}
-              onDone={() => suggestion.task && toggleTask(suggestion.task.id)}
-              onMoveTomorrow={() => suggestion.task && snoozeTask(suggestion.task.id, 1)}
-              onSkipSlide={next}
-            />
-          </div>
-        ))}
+        <div key={`${activeSlide}-${currentSlide}`} data-flow-slide data-flow-slide-id={activeSlide}>
+          <FlowSlide
+            id={activeSlide}
+            reading={reading}
+            suggestion={suggestion}
+            onIntroNext={next}
+            onStart={() => setFocusOpen(true)}
+            onLater={() => {
+              const taskId = suggestion.task?.id;
+              if (taskId) setSkip((value) => [...value, taskId]);
+            }}
+            onDone={() => suggestion.task && toggleTask(suggestion.task.id)}
+            onMoveTomorrow={() => suggestion.task && snoozeTask(suggestion.task.id, 1)}
+            onSkipSlide={next}
+          />
+        </div>
       </div>
 
       {slides.length > 1 && (
@@ -129,8 +134,8 @@ export default function FlowDeck() {
           <button
             type="button"
             aria-label="Föregående"
-            onClick={() => goTo(index - 1)}
-            disabled={index === 0}
+            onClick={previous}
+            disabled={currentSlide === 0}
             className="press rounded-full p-1.5 text-muted-foreground disabled:opacity-30"
           >
             <ChevronLeft size={18} />
@@ -141,10 +146,10 @@ export default function FlowDeck() {
                 key={`${id}-${i}`}
                 type="button"
                 aria-label={`Gå till ${i + 1} av ${slides.length}`}
-                aria-current={i === index}
+                aria-current={i === currentSlide}
                 onClick={() => goTo(i)}
                 className={`h-2 rounded-full transition-all ${
-                  i === index ? "w-5 bg-primary" : "w-2 bg-border"
+                  i === currentSlide ? "w-5 bg-primary" : "w-2 bg-border"
                 }`}
               />
             ))}
@@ -152,8 +157,8 @@ export default function FlowDeck() {
           <button
             type="button"
             aria-label="Nästa"
-            onClick={() => goTo(index + 1)}
-            disabled={index === slides.length - 1}
+            onClick={next}
+            disabled={currentSlide === slides.length - 1}
             className="press rounded-full p-1.5 text-muted-foreground disabled:opacity-30"
           >
             <ChevronRight size={18} />
@@ -161,9 +166,7 @@ export default function FlowDeck() {
         </div>
       )}
 
-      <FlowVersionBadge trackRef={trackRef} />
-
-
+      <FlowVersionBadge currentSlide={currentSlide} />
 
       <FocusMode
         item={scored}
@@ -173,7 +176,10 @@ export default function FlowDeck() {
           toggleTask(item.task.id);
           setFocusOpen(false);
         }}
-        onNext={() => suggestion.task && setSkip((s) => [...s, suggestion.task!.id])}
+        onNext={() => {
+          const taskId = suggestion.task?.id;
+          if (taskId) setSkip((value) => [...value, taskId]);
+        }}
       />
     </section>
   );
@@ -182,31 +188,25 @@ export default function FlowDeck() {
 /* ── Versionsstämpel: verifiera i realtid vilken bundle mobilen kör ── */
 
 function FlowVersionBadge({
-  trackRef,
+  currentSlide,
 }: {
-  trackRef: React.RefObject<HTMLDivElement | null>;
+  currentSlide: number;
 }) {
   const [domVersion, setDomVersion] = useState<string | null>(null);
-  const [layout, setLayout] = useState<string>("–");
+  const [slideCount, setSlideCount] = useState(0);
 
   useEffect(() => {
-    const section = trackRef.current?.closest("[data-flow-version]");
+    const section = document.querySelector("[data-flow-version]");
     setDomVersion(section?.getAttribute("data-flow-version") ?? null);
-    const track = trackRef.current;
-    if (track) {
-      const cs = window.getComputedStyle(track);
-      const horizontal =
-        cs.display.includes("flex") && cs.flexDirection === "row";
-      setLayout(horizontal ? "horisontell ✓" : `${cs.display}/${cs.flexDirection} ✗`);
-    }
-  }, [trackRef]);
+    setSlideCount(section?.querySelectorAll("[data-flow-slide]").length ?? 0);
+  }, [currentSlide]);
 
   return (
     <p
       data-flow-version-badge
       className="mt-3 text-center text-[10px] leading-tight text-muted-foreground/70"
     >
-      Flow {domVersion ?? FLOW_VERSION} · build {BUILD_ID} · layout {layout}
+      Flow {domVersion ?? FLOW_VERSION} · build {BUILD_ID} · slide {currentSlide + 1} · DOM {slideCount === 1 ? "en slide ✓" : `${slideCount} slides ✗`}
     </p>
   );
 }

@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Flow är nu en robust state-baserad en-slide-vy: endast currentSlide renderas i DOM, vänster/höger-svep byter state och Flow-introt är state 0 i stället för ett separat block eller en CSS-karusell (2026-08-25)",
       "Flow visar nu sin version, build-id och om karusellen är horisontell längst ner på sidan, så att du direkt kan se att mobilen laddat rätt bundle (2026-08-25)",
       "Visuellt regressionstest för Flow: nytt Playwright-test kontrollerar karusellens geometri i 375, 390 och 414 px och jämför skärmbilder mot sparade baselines, så att framtida CSS-ändringar inte kan stapla sliderna vertikalt utan att det upptäcks (2026-08-25)",
       "Cache-busting: varje build har ett unikt id, gamla cacher töms och service workern uppdateras automatiskt så att publicerade /flow alltid laddar senaste versionen. Nytt E2E-test verifierar karusellen i 375px och 390px (2026-08-25)",

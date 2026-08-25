@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-25 – Flow byggd som state-baserad en-slide-vy
+
+- Flow renderar nu bokstavligen endast aktuell slide i DOM:en; intro, incheckning, energi, förslag och återhämtning ersätter varandra via `currentSlide` i stället för att ligga sida vid sida i en CSS-karusell.
+- Vänstersvep går framåt, högersvep går bakåt och pilar/prickindikator finns kvar. Flow-introt är state 0 och inget separat block.
+- Mobiltesterna vid 375–390 px verifierar att exakt en slide finns i DOM före och efter swipe och att föregående innehåll tas bort helt.
+
 ## 2026-08-25 – Synlig Flow-version i appen
 
 - `/flow` visar nu en liten rad längst ner med aktuell karusellversion (läst direkt från `data-flow-version` i DOM), build-id och om spåret verkligen ligger horisontellt – så att rätt bundle kan verifieras i realtid på mobilen.

@@ -1,18 +1,7 @@
-"""Visuellt regressionstest för /flow-karusellen.
+"""Visuellt regressionstest för Flows state-baserade en-slide-vy.
 
-Skyddar mot att framtida CSS-ändringar råkar göra karusellen vertikalt staplad.
-
-Kör:
-    python3 tests/e2e/flow_visual_regression.py                 # jämför mot baseline
-    python3 tests/e2e/flow_visual_regression.py --update        # skriv om baseline
-    python3 tests/e2e/flow_visual_regression.py http://host     # annan bas-url
-
-Testet gör två saker per viewport (375, 390, 414 px):
-  1. Geometrikontroll: slides ligger på samma y-rad, sida vid sida horisontellt,
-     och bara en slide syns åt gången (misslyckas direkt vid vertikal stapling).
-  2. Pixeljämförelse mot en sparad baseline-bild i tests/e2e/baselines/.
-     Skillnad över DIFF_THRESHOLD (%) markeras som fel och en diffbild sparas
-     i /tmp/browser/flow-visual/.
+Kör med samma argument som tidigare. Testet säkerställer att exakt en slide
+finns i DOM vid 375, 390 och 414 px och jämför startvyn mot baseline.
 """
 
 import asyncio
@@ -24,18 +13,15 @@ import sys
 from PIL import Image, ImageChops
 from playwright.async_api import async_playwright
 
-ARGS = [a for a in sys.argv[1:] if not a.startswith("--")]
+ARGS = [argument for argument in sys.argv[1:] if not argument.startswith("--")]
 UPDATE = "--update" in sys.argv
 BASE = (ARGS[0] if ARGS else "http://localhost:8080").rstrip("/")
-
 WIDTHS = [375, 390, 414]
 HEIGHT = 800
-DIFF_THRESHOLD = 2.0  # procent avvikande pixlar
-
+DIFF_THRESHOLD = 2.0
 ROOT = os.path.dirname(os.path.abspath(__file__))
 BASELINE_DIR = os.path.join(ROOT, "baselines")
 OUT_DIR = "/tmp/browser/flow-visual"
-
 FAILS: list[str] = []
 
 
@@ -46,51 +32,38 @@ def check(ok: bool, label: str, detail: str = "") -> None:
 
 
 async def restore_session(context, page) -> None:
-    cj = os.environ.get("LOVABLE_BROWSER_SUPABASE_COOKIES_JSON")
-    if cj:
-        await context.add_cookies([{**c, "url": BASE} for c in json.loads(cj)])
+    cookies_json = os.environ.get("LOVABLE_BROWSER_SUPABASE_COOKIES_JSON")
+    if cookies_json:
+        await context.add_cookies([{**cookie, "url": BASE} for cookie in json.loads(cookies_json)])
     await page.goto(BASE, wait_until="domcontentloaded")
-    key = os.environ.get("LOVABLE_BROWSER_SUPABASE_STORAGE_KEY")
-    sj = os.environ.get("LOVABLE_BROWSER_SUPABASE_SESSION_JSON")
-    if key and sj:
-        await page.evaluate(f"localStorage.setItem({json.dumps(key)}, {json.dumps(sj)})")
+    storage_key = os.environ.get("LOVABLE_BROWSER_SUPABASE_STORAGE_KEY")
+    session_json = os.environ.get("LOVABLE_BROWSER_SUPABASE_SESSION_JSON")
+    if storage_key and session_json:
+        await page.evaluate(f"localStorage.setItem({json.dumps(storage_key)}, {json.dumps(session_json)})")
 
 
 async def open_flow(page) -> bool:
-    # Testsessionen kan strula tillfälligt (rate limit) – försök några gånger.
     for attempt in range(3):
         await page.goto(f"{BASE}/flow", wait_until="domcontentloaded")
         await page.wait_for_timeout(1200)
         if "/sign-in" in page.url or "/auth" in page.url:
             await page.goto(f"{BASE}/dev-session", wait_until="domcontentloaded")
-            btn = page.get_by_role("button", name=re.compile("testanvändare", re.I))
+            button = page.get_by_role("button", name=re.compile("testanvändare", re.I))
             try:
-                await btn.first.wait_for(state="visible", timeout=20000)
-                await btn.first.click()
+                await button.first.wait_for(state="visible", timeout=20000)
+                await button.first.click()
                 await page.wait_for_url(re.compile(r"/hem"), timeout=45000)
-            except Exception as err:  # noqa: BLE001
-                print(f"  (försök {attempt + 1}: kunde inte skapa testsession: {err})")
-                await page.wait_for_timeout(3000)
+            except Exception as error:  # noqa: BLE001
+                print(f"  (testsession försök {attempt + 1}: {error})")
+                await page.wait_for_timeout(2500)
                 continue
-            await page.goto(f"{BASE}/flow", wait_until="domcontentloaded")
+        await page.goto(f"{BASE}/flow", wait_until="domcontentloaded")
         try:
-            await page.locator("[data-flow-track]").wait_for(state="visible", timeout=20000)
+            await page.locator("[data-flow-state-view]").wait_for(state="visible", timeout=20000)
             return True
         except Exception:
-            await page.wait_for_timeout(3000)
+            await page.wait_for_timeout(2500)
     return False
-
-
-
-async def freeze_page(page) -> None:
-    """Stäng av animationer/övergångar så pixeljämförelsen blir stabil."""
-    await page.add_style_tag(
-        content=(
-            "*,*::before,*::after{animation:none!important;"
-            "transition:none!important;caret-color:transparent!important}"
-        )
-    )
-    await page.wait_for_timeout(400)
 
 
 def compare(actual_path: str, baseline_path: str, label: str) -> None:
@@ -99,84 +72,46 @@ def compare(actual_path: str, baseline_path: str, label: str) -> None:
         Image.open(actual_path).save(baseline_path)
         print(f"BASE  {label} — baseline skriven: {baseline_path}")
         return
-
-    a = Image.open(actual_path).convert("RGB")
-    b = Image.open(baseline_path).convert("RGB")
-    if a.size != b.size:
-        check(False, label, f"olika storlek {a.size} vs {b.size}")
+    actual = Image.open(actual_path).convert("RGB")
+    baseline = Image.open(baseline_path).convert("RGB")
+    if actual.size != baseline.size:
+        check(False, label, f"olika storlek {actual.size} vs {baseline.size}")
         return
-
-    diff = ImageChops.difference(a, b).convert("L")
-    total = a.size[0] * a.size[1]
+    diff = ImageChops.difference(actual, baseline).convert("L")
     changed = sum(count for value, count in enumerate(diff.histogram()) if value > 24)
-    pct = 100.0 * changed / total
-    ok = pct <= DIFF_THRESHOLD
-    if not ok:
-        os.makedirs(OUT_DIR, exist_ok=True)
-        diff.save(os.path.join(OUT_DIR, os.path.basename(baseline_path).replace(".png", "-diff.png")))
-    check(ok, label, f"{pct:.2f}% avvikande pixlar (gräns {DIFF_THRESHOLD}%)")
+    percent = 100.0 * changed / (actual.size[0] * actual.size[1])
+    check(percent <= DIFF_THRESHOLD, label, f"{percent:.2f}% avvikande pixlar")
 
 
 async def run_width(browser, width: int) -> None:
-    print(f"\n=== viewport {width}px ===")
     context = await browser.new_context(
-        viewport={"width": width, "height": HEIGHT},
-        has_touch=True,
-        is_mobile=True,
-        device_scale_factor=1,
+        viewport={"width": width, "height": HEIGHT}, has_touch=True, is_mobile=True
     )
     page = await context.new_page()
     await restore_session(context, page)
     if not await open_flow(page):
-        check(False, f"{width}px: Flow-karusellen renderas", f"url={page.url}")
+        check(False, f"{width}px: Flow-vyn renderas", f"url={page.url}")
         await context.close()
         return
-    check(True, f"{width}px: Flow-karusellen renderas")
-    await freeze_page(page)
-
+    await page.add_style_tag(content="*,*::before,*::after{animation:none!important;transition:none!important}")
     slides = page.locator("[data-flow-slide]")
-    count = await slides.count()
-    check(count >= 2, f"{width}px: minst 2 slides", f"antal={count}")
-
-    if count >= 2:
-        b1 = await slides.nth(0).bounding_box()
-        b2 = await slides.nth(1).bounding_box()
-        check(
-            abs(b1["y"] - b2["y"]) < 2,
-            f"{width}px: slides ligger på samma rad (ingen vertikal stapling)",
-            f"y1={b1['y']:.0f} y2={b2['y']:.0f}",
-        )
-        check(
-            b2["x"] >= b1["x"] + b1["width"] - 2,
-            f"{width}px: slide 2 ligger till höger om slide 1",
-            f"x1={b1['x']:.0f} x2={b2['x']:.0f}",
-        )
-        visible = 0
-        for i in range(count):
-            b = await slides.nth(i).bounding_box()
-            if not b:
-                continue
-            shown = min(b["x"] + b["width"], width) - max(b["x"], 0)
-            if shown > b["width"] / 2:
-                visible += 1
-        check(visible == 1, f"{width}px: endast EN slide syns", f"synliga={visible}")
-
+    check(await slides.count() == 1, f"{width}px: exakt EN slide finns i DOM")
+    check(
+        await slides.first.get_attribute("data-flow-slide-id") == "intro",
+        f"{width}px: skärmbilden visar intro-state 0",
+    )
     os.makedirs(OUT_DIR, exist_ok=True)
     actual = os.path.join(OUT_DIR, f"flow-{width}.png")
     await page.screenshot(path=actual)
-    compare(
-        actual,
-        os.path.join(BASELINE_DIR, f"flow-{width}.png"),
-        f"{width}px: visuell jämförelse mot baseline",
-    )
+    compare(actual, os.path.join(BASELINE_DIR, f"flow-{width}.png"), f"{width}px: visuell baseline")
     await context.close()
 
 
 async def main() -> int:
-    async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=True)
-        for w in WIDTHS:
-            await run_width(browser, w)
+    async with async_playwright() as playwright:
+        browser = await playwright.chromium.launch(headless=True)
+        for width in WIDTHS:
+            await run_width(browser, width)
         await browser.close()
     print("\n" + ("ALLA TESTER OK" if not FAILS else f"{len(FAILS)} FEL: {FAILS}"))
     return 1 if FAILS else 0
