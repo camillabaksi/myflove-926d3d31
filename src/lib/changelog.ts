@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Förstasidan: bakåtsvep på mobil använder nu fingrets senast säkra position även vid avbruten iOS-kantgest, faktisk dragsträcka prioriteras framför momentum och tröskeln är 28–72 px. Ett hydratiseringsfel som kunde återställa karusellen är också borttaget (2026-08-25)",
       "Förstasidan: bakåtsvep fungerar nu även när mobilens kantgest vill ta över, tröskeln är lägre (36–90 px) och pilknapparna syns även på mobil. Flow är större och vinkar som en hälsning när du kommer in (2026-08-25)",
       "Förstasidan minns nu vilken vy du är på i adressen (t.ex. /#flowplan) så att uppdatering, delning och bakåtknappen landar rätt. Svep och drag fick momentum med skärmanpassad tröskel, och karusellen har tydlig fokusmarkering, korrekt tabordning och läsbara etiketter som \"FlowPlan – vy 8 av 10\" (2026-08-25)",
       "Förstasidan (/) är nu ett interaktivt slide-flöde i stället för en lång scrollsida: tio vyer som byts en i taget med mjuka övergångar, svep i sidled, pilknappar, piltangenter/Home/End och prickar som visar var du är (2026-08-25)",

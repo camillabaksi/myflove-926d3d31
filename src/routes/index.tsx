@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { FlowMascot, FlowSays } from "@/components/flow-mascot";
@@ -261,6 +261,7 @@ function LandingDeck() {
       velocity: 0,
       axis: "none",
     };
+    event.currentTarget.setPointerCapture?.(event.pointerId);
   };
 
   const onPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
@@ -273,12 +274,14 @@ function LandingDeck() {
       if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
       state.axis = Math.abs(dx) > Math.abs(dy) * 1.2 ? "x" : "y";
       if (state.axis === "y") {
+        event.currentTarget.releasePointerCapture?.(event.pointerId);
         drag.current = null;
         return;
       }
       setDragging(true);
-      event.currentTarget.setPointerCapture?.(event.pointerId);
     }
+
+    if (event.cancelable) event.preventDefault();
 
     // Momentum: rullande hastighet i px/ms
     const now = Date.now();
@@ -301,15 +304,19 @@ function LandingDeck() {
     setDragOffset(0);
     if (!state || state.axis !== "x") return;
 
-    const dx = event.clientX - state.x;
+    // iOS kan skicka pointercancel med clientX=0 när gesten börjar nära
+    // skärmkanten. Använd därför den senast säkra positionen från move.
+    const dx = state.lastX - state.x;
     const width = viewportRef.current?.clientWidth ?? 1;
     const velocity = state.velocity; // px/ms, positiv = åt höger
     // Projicerad slutposition med momentum (~200 ms utrullning)
     const projected = dx + velocity * 200;
-    const threshold = Math.min(90, Math.max(36, width * 0.14));
+    const threshold = Math.min(72, Math.max(28, width * 0.1));
 
-    if (projected <= -threshold) goTo(index + 1);
-    else if (projected >= threshold) goTo(index - 1);
+    // Faktisk dragsträcka får alltid företräde framför ett brusigt sista
+    // hastighetsvärde. Det gör framför allt högersvep stabilt på mobil.
+    if (dx <= -threshold || (dx < 0 && projected <= -threshold)) goTo(index + 1);
+    else if (dx >= threshold || (dx > 0 && projected >= threshold)) goTo(index - 1);
   };
 
   // Piltangenter fungerar även när fokus ligger på sidan i stort
@@ -723,7 +730,8 @@ function NeedSection() {
 /* ── Dagens Flow ──────────────────────────────────────────── */
 
 function DailyFlow() {
-  const initial = useMemo(() => Math.floor(Math.random() * DAILY_FLOWS.length), []);
+  // Samma startvärde på server och klient för stabil hydrering.
+  const initial = 0;
   const [i, setI] = useState(0);
   const quote = DAILY_FLOWS[(initial + i) % DAILY_FLOWS.length];
 
