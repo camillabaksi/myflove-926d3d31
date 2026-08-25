@@ -3,12 +3,32 @@
 const VAPID_PUBLIC_KEY =
   "BPxfhVUsDs6sqHE_Ls7Ws3M1b5BJuBobkcUJnSIxEhW85C0RfU3uO-4KrNOFcAlx0APR49fx83eUVDofnQ7dAnI";
 
+/* Ingen offline-cache: alla gamla Cache Storage-poster töms så att en äldre
+   bundle aldrig kan serveras (t.ex. Flow utan karusell-CSS). */
+async function purgeAllCaches() {
+  try {
+    const keys = await caches.keys();
+    await Promise.all(keys.map((k) => caches.delete(k)));
+  } catch (_) {}
+}
+
 self.addEventListener("install", () => {
   self.skipWaiting();
 });
 
 self.addEventListener("activate", (event) => {
-  event.waitUntil(self.clients.claim());
+  event.waitUntil(
+    (async () => {
+      await purgeAllCaches();
+      await self.clients.claim();
+    })(),
+  );
+});
+
+self.addEventListener("message", (event) => {
+  const type = event.data && event.data.type;
+  if (type === "myflove-skip-waiting") self.skipWaiting();
+  if (type === "myflove-purge-caches") event.waitUntil(purgeAllCaches());
 });
 
 self.addEventListener("push", (event) => {

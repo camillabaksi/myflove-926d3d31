@@ -1,6 +1,8 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Outlet, createRootRouteWithContext, HeadContent, Scripts } from "@tanstack/react-router";
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
+
+import { initCacheBusting } from "@/lib/cache-busting";
 
 import appCss from "../styles.css?url";
 import { Toaster } from "@/components/ui/toaster";
@@ -97,6 +99,9 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  useEffect(() => {
+    initCacheBusting();
+  }, []);
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>

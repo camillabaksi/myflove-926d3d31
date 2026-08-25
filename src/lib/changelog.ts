@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Cache-busting: varje build har ett unikt id, gamla cacher töms och service workern uppdateras automatiskt så att publicerade /flow alltid laddar senaste versionen. Nytt E2E-test verifierar karusellen i 375px och 390px (2026-08-25)",
       "Flow på publicerad mobil: den driftsatta /flow-routen låg på en äldre bundle utan karusellens CSS. Tracken är nu flex-row nowrap och varje slide är låst till exakt 100% bredd med flex-basis, horisontell touch-scroll och snap (2026-08-25)",
       "Flow-karusellen är nu tekniskt låst i sidled med en 100%-kolumn per slide, touch-swipe och snap. Den separata intro-wrappern är borttagen så Flow-presentationen alltid är slide 1 i samma karusell (2026-08-25)",
       "Flow visar nu en slide i taget i en horisontell carousel – Flow presenterar sig först, sedan energi, förslag och återhämtning. Svep på mobil, pilar och punkter på desktop, och inget staplas vertikalt längre (2026-08-25)",

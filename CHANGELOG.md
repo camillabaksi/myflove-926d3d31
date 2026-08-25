@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-25 – Cache-busting och E2E-test för Flow-karusellen
+
+- Varje build får ett unikt build-id. Vid ny version töms Cache Storage automatiskt, service workern uppdateras och sidan laddas om en gång, så den publicerade appen aldrig kan ligga kvar på en gammal bundle.
+- Service workern rensar all cache vid aktivering, svarar på rensningsmeddelanden och främmande/legacy service workers avregistreras.
+- Nytt E2E-test (`tests/e2e/flow_carousel.py`) som i 375px och 390px verifierar att bara en slide syns, att slide 2 ligger till höger med samma y-position och att horisontell swipe snappar rätt.
+
 ## 2026-08-25 – Flow-karusell korrigerad i publicerad mobilversion
 
 - Den publicerade `/flow`-routen identifierades som en äldre bundle som saknade karusellens CSS; service workern använder ingen offline-cache och var inte orsaken.
