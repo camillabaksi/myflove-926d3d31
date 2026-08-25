@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-25 – Förstasidan är nu ett slide-flöde
+
+- Startsidan (/) är inte längre en lång scrollsida: allt innehåll ligger nu i tio interaktiva slides som byts en i taget med mjuka övergångar.
+- Svep i sidled på mobil, pilknappar på desktop, samt piltangenter och Home/End på tangentbordet.
+- Prickar längst ner visar var du är och tar dig direkt till valfri vy; en live-region läser upp vybytet.
+- Bara den aktiva vyn nås av skärmläsare och tangentbord (inert), och sidan i sig kan inte längre scrollas vertikalt.
+
 ## 2026-08-25 – Flow: svep, drag och tangentbord
 
 - Flow-karusellen följer nu fingret och musen i realtid; slide byts när du dragit ungefär en femtedel av bredden eller svept snabbt, annars fjädrar vyn tillbaka.
