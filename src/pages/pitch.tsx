@@ -106,12 +106,29 @@ export default function PitchPage() {
             med externa nyckeltal och källnot – i PowerPoint-format samt PDF för snabb visning.
           </p>
 
-          <img
-            src="/pitch/MyFlove_Pitchdeck_3.4-thumb.jpg"
-            alt="Titelsidan i MyFlove Pitchdeck 3.4 med Flow-karaktären"
-            loading="lazy"
-            className="w-full rounded-xl border border-border"
-          />
+          <div className="grid gap-3 sm:grid-cols-2">
+            <figure className="space-y-1">
+              <img
+                src="/pitch/MyFlove_Pitchdeck_3.4-thumb.jpg"
+                alt="Titelsidan i MyFlove Pitchdeck 3.4 med Flow-karaktären"
+                loading="lazy"
+                className="w-full rounded-xl border border-border"
+              />
+              <figcaption className="text-xs text-muted-foreground">Titelsidan med Flow</figcaption>
+            </figure>
+            <figure className="space-y-1">
+              <img
+                src="/pitch/MyFlove_Pitchdeck_3.4-market-thumb.jpg"
+                alt="Marknadssliden i MyFlove Pitchdeck 3.4 med sex nyckeltal"
+                loading="lazy"
+                className="w-full rounded-xl border border-border"
+              />
+              <figcaption className="text-xs text-muted-foreground">
+                Marknadssliden – samma layout och siffror som i videon
+              </figcaption>
+            </figure>
+          </div>
+
           <div className="flex flex-wrap gap-2">
             <a
               href="/pitch/MyFlove_Pitchdeck_3.4.pptx"
