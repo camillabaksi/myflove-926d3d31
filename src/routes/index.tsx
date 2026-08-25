@@ -309,7 +309,7 @@ function LandingDeck() {
         onClick={() => goTo(index - 1)}
         disabled={index === 0}
         aria-label="Föregående vy"
-        className="press absolute top-1/2 left-2 z-20 hidden h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-[#2A2140]/10 bg-white/85 text-lg shadow-lg backdrop-blur disabled:opacity-0 sm:grid"
+        className="press absolute top-1/2 left-2 z-20 hidden h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-[#2A2140]/10 bg-white/85 text-lg shadow-lg backdrop-blur disabled:pointer-events-none disabled:opacity-0 sm:grid"
       >
         ‹
       </button>
@@ -318,7 +318,7 @@ function LandingDeck() {
         onClick={() => goTo(index + 1)}
         disabled={index === total - 1}
         aria-label="Nästa vy"
-        className="press absolute top-1/2 right-2 z-20 hidden h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-[#2A2140]/10 bg-white/85 text-lg shadow-lg backdrop-blur disabled:opacity-0 sm:grid"
+        className="press absolute top-1/2 right-2 z-20 hidden h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-[#2A2140]/10 bg-white/85 text-lg shadow-lg backdrop-blur disabled:pointer-events-none disabled:opacity-0 sm:grid"
       >
         ›
       </button>
