@@ -573,7 +573,7 @@ function SlideShell({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex h-[70svh] max-h-[640px] min-h-[420px] flex-col items-center justify-between gap-3 overflow-hidden px-2 py-3 text-center">
+    <div className="flex h-[62svh] max-h-[600px] min-h-[380px] flex-col items-center justify-between gap-3 overflow-hidden px-2 py-3 text-center">
       <FlowCharacter scene={scene} seed={seed} />
       <div className="flex w-full flex-1 flex-col items-center justify-center gap-3">
         <h2 className="font-display text-xl leading-snug text-balance text-ink">{title}</h2>
