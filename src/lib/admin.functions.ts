@@ -170,27 +170,7 @@ export const listUsersWithRolesFn = createServerFn({ method: "GET" })
       rolesByUser.set(r.user_id, list);
     }
 
-    // Besök per användare, valfritt begränsat till ett datumintervall.
-    let visitQuery = supabaseAdmin
-      .from("analytics_events")
-      .select("user_id, created_at")
-      .not("user_id", "is", null)
-      .order("created_at", { ascending: false })
-      .limit(50000);
-    if (data?.from) visitQuery = visitQuery.gte("created_at", `${data.from}T00:00:00.000Z`);
-    if (data?.to) visitQuery = visitQuery.lte("created_at", `${data.to}T23:59:59.999Z`);
-    const { data: visitRows } = await visitQuery;
-
-    const visitStats = new Map<string, { last: string; count: number }>();
-    for (const v of visitRows ?? []) {
-      const uid = v.user_id as string;
-      const prev = visitStats.get(uid);
-      if (!prev) visitStats.set(uid, { last: v.created_at, count: 1 });
-      else {
-        prev.count += 1;
-        if (v.created_at > prev.last) prev.last = v.created_at;
-      }
-    }
+    // Besöksstatistik är helt anonym och kopplas aldrig till konton.
 
     const from = data?.from ? new Date(`${data.from}T00:00:00.000Z`).getTime() : null;
     const to = data?.to ? new Date(`${data.to}T23:59:59.999Z`).getTime() : null;
@@ -203,15 +183,14 @@ export const listUsersWithRolesFn = createServerFn({ method: "GET" })
     };
 
     const rows = (users.users ?? []).map((u) => {
-      const stats = visitStats.get(u.id);
       return {
         user_id: u.id,
         name: displayName((u.user_metadata ?? {}) as Record<string, unknown>, u.email ?? null),
         email: u.email ?? null,
         created_at: u.created_at ?? null,
         last_sign_in_at: u.last_sign_in_at ?? null,
-        last_visit_at: stats?.last ?? null,
-        visits: stats?.count ?? 0,
+        last_visit_at: null,
+        visits: 0,
         roles: rolesByUser.get(u.id) ?? [],
       };
     });
@@ -219,7 +198,7 @@ export const listUsersWithRolesFn = createServerFn({ method: "GET" })
     const filtered =
       from === null && to === null
         ? rows
-        : rows.filter((r) => r.visits > 0 || inRange(r.last_sign_in_at) || inRange(r.created_at));
+        : rows.filter((r) => inRange(r.last_sign_in_at) || inRange(r.created_at));
 
     return filtered.sort((a, b) =>
       (b.last_visit_at ?? b.last_sign_in_at ?? "").localeCompare(
