@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-25 – Flow syns även i videon (3.4)
+
+- Pitchvideon har renderats om: Flow står nu som stor karaktär i Flow 2.0-scenen och vinkar med i slutbilden.
+- Flow-scenen är omgjord till text + karaktär sida vid sida och nämner de 12 lägena.
+
 ## 2026-08-25 – Flow syns i dokumenten (3.4)
 
 - Living Blueprint 3.4 (DOCX + PDF): Flow finns nu med som bild på framsidan och i avsnittet "Flow i appen".
