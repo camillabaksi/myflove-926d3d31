@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-08-25 – Flow-karusellen ligger i en riktig horisontell rad
+
+- Flow-sliderna renderas nu i ett spår med `flex flex-row` där varje slide är låst till `w-full min-w-full shrink-0`, och spåret glider i sidled med `translateX` i stället för att byta ut en enda slide i DOM:en.
+- Yttre containern är `relative w-full overflow-hidden`, så inget kan stapla sig vertikalt.
+- Endast den aktiva sliden är tillgänglig för skärmläsare och tabbning; övriga är `aria-hidden`/`inert`.
+- Versionsstämpeln visar nu aktuell slide av totalt och att exakt en slide är synlig.
+
+
+
 ## 2026-08-25 – Flerdagsperioder syns nu alla dagar
 
 - En period med slutdatum (t.ex. en veckas semester) visas nu varje dag i perioden även i Hem, Dagens saker, Min dag och "Allt i dagen" – inte bara på startdagen.

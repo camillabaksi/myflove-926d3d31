@@ -94,12 +94,18 @@ async def run_width(browser, width: int) -> None:
         await context.close()
         return
     await page.add_style_tag(content="*,*::before,*::after{animation:none!important;transition:none!important}")
-    slides = page.locator("[data-flow-slide]")
-    check(await slides.count() == 1, f"{width}px: exakt EN slide finns i DOM")
+    active = page.locator('[data-flow-slide][data-flow-slide-active="true"]')
+    check(await active.count() == 1, f"{width}px: exakt EN synlig slide")
     check(
-        await slides.first.get_attribute("data-flow-slide-id") == "intro",
+        await page.locator("[data-flow-track]").evaluate("el => getComputedStyle(el).flexDirection")
+        == "row",
+        f"{width}px: slides ligger på en horisontell rad",
+    )
+    check(
+        await active.first.get_attribute("data-flow-slide-id") == "intro",
         f"{width}px: skärmbilden visar intro-state 0",
     )
+
     os.makedirs(OUT_DIR, exist_ok=True)
     actual = os.path.join(OUT_DIR, f"flow-{width}.png")
     await page.screenshot(path=actual)

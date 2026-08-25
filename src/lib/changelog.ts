@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Flow-karusellen ligger nu i en riktig horisontell rad: alla slides sitter sida vid sida i ett flex-row-spår där varje slide är exakt 100% brett, och spåret glider i sidled med en mjuk övergång. Yttre containern är låst med overflow-hidden så inget kan staplas vertikalt, och bara den synliga sliden nås av skärmläsare (2026-08-25)",
       "Flerdagsperioder (t.ex. semester med slutdatum) visas nu varje dag i perioden även i Hem, Dagens saker, Min dag och Allt i dagen – tidigare syntes de bara på startdagen (2026-08-25)",
       "Flow är nu sidans enda container: gamla vyflikar och vertikala dashboard-sektioner är borttagna från /flow, och exakt en aktiv state renderas åt gången med intro som state 0 (2026-08-25)",
       "Flow går nu att djuplänka: /flow?slide=3 (eller ett slide-namn) öppnar direkt rätt slide, och URL:en uppdateras när du swipar (2026-08-25)",
