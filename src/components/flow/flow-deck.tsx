@@ -164,7 +164,7 @@ export default function FlowDeck() {
                 data-flow-slide-id={id}
                 data-flow-slide-active={active ? "true" : "false"}
                 aria-hidden={!active}
-                {...(!active ? { inert: "" } : {})}
+                inert={!active}
                 className="w-full min-w-full shrink-0 grow-0 basis-full"
               >
                 <FlowSlide
