@@ -49,7 +49,7 @@ export function FlowMascot({
         className={cn(
           "object-contain drop-shadow-[0_8px_24px_rgba(124,92,224,0.25)]",
           SIZES[size],
-          float && "animate-flow-float",
+          float && "floaty",
         )}
       />
     </span>
