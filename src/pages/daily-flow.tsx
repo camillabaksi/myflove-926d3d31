@@ -88,6 +88,10 @@ export default function DailyFlowPage() {
             </CollapsibleSection>
           </TabsContent>
 
+          <TabsContent value="morgon" className="mt-6">
+            <MorningContent />
+          </TabsContent>
+
           <TabsContent value="rutiner" className="mt-6">
             <RoutinesContent showHeader={false} />
           </TabsContent>
