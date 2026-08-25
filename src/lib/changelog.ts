@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Anonym appstatistik: admin visar nu nyckeltal (händelser per besökare, återkommande, dagligt bruk, dagliga loopen) helt utan personlig data – händelser kan inte kopplas till konton (2026-08-25)",
       "Marknadsscenen i videon och marknadssliden i decket har nu samma rubrik, texter och ordning – pitchsidan visar miniatyrer av båda (2026-08-25)",
       "Marknadsnyckeltal i pitchmaterialet: ny marknadsslide i pitchdeck 3.4, avsnitt 3.5 i blueprinten och en marknadsscen i pitchvideon – externa uppskattningar och prognoser med källnot (2026-08-25)",
 
