@@ -580,7 +580,7 @@ function PhonePreview() {
 
             <div className="rounded-2xl border border-[#7C5CE0]/15 bg-[#F1ECFC] p-3">
               <div className="flex items-start gap-2">
-                <FlowMascot size="xs" float />
+                <FlowMascot size="xs" mood="bounce" />
                 <p
                   key={say.key}
                   className="pop-in text-xs leading-relaxed text-[#2A2140]"
@@ -735,7 +735,7 @@ function NeedSection() {
         </div>
 
         <div key={need.id} className="pop-in mt-8 space-y-4">
-          <FlowSays size="md">
+          <FlowSays size="md" mood="nod">
             <p className="text-base leading-relaxed">{need.reply}</p>
           </FlowSays>
 
@@ -821,7 +821,7 @@ function FlowScoreSection() {
             <div className="h-full w-[42%] rounded-full bg-gradient-to-r from-[#F5B8D0] to-[#7C5CE0]" />
           </div>
           <div className="mt-5">
-            <FlowSays>
+            <FlowSays mood="pulse">
               <p>Du behöver inte öka poängen.</p>
               <p className="text-[#6B647F]">Vi ska minska belastningen.</p>
             </FlowSays>
@@ -877,7 +877,7 @@ function DaySection() {
         </div>
 
         <div key={point.t} className="pop-in mt-8 max-w-xl">
-          <FlowSays size="md">
+          <FlowSays size="md" mood="sway">
             <p className="text-[11px] font-semibold tracking-widest text-[#7C5CE0] uppercase">
               {point.t}
             </p>
@@ -907,16 +907,16 @@ function FlowVoice() {
         </p>
 
         <div className="mt-10 max-w-2xl space-y-5">
-          <FlowSays size="sm">
+          <FlowSays size="sm" mood="wave">
             <p>God morgon 💙</p>
             <p>Det ser ut att bli regn idag. Ta gärna med ett paraply.</p>
             <p>Glöm inte din medicin innan du går hemifrån.</p>
           </FlowSays>
-          <FlowSays size="sm">
+          <FlowSays size="sm" mood="nod">
             <p>Jag ser att du har mycket idag.</p>
             <p>Ska vi börja med de tre viktigaste sakerna?</p>
           </FlowSays>
-          <FlowSays size="sm">
+          <FlowSays size="sm" mood="calm">
             <p>Det blev mycket idag.</p>
             <p>Vi tar en sak i taget – börja med den enklaste.</p>
           </FlowSays>
@@ -966,7 +966,7 @@ function Modules() {
         </div>
 
         <div className="mt-8 max-w-2xl">
-          <FlowSays size="sm">
+          <FlowSays size="sm" mood="think">
             <p className="italic">
               "Jag såg att du har läkarbesök 14:00, saknar mjölk hemma, och att banken drar hyran
               imorgon. Ska jag flytta träningen?"
