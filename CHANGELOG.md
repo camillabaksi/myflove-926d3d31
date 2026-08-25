@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-25 – Flow som officiell maskot + levande startsida
+
+- Flow har fått en officiell visuell referens: den runda lila figuren med kawaii-ögon, rosa kinder, hjärta på magen och glittrande stjärnor. Bilden ligger som CDN-asset och används via en gemensam komponent (`FlowMascot` / `FlowSays`) så att inga parallella varianter uppstår.
+- Publika startsidan (/) är omgjord till en levande presentation: hero med telefonpreview och flytande kort, interaktiv sektion "Vad behöver du just nu?", "Dagens Flow" med varierande citat, FlowScore som belastning (inte prestation), animerad tidslinje över en MyFlove-dag och avsnittet "Byggs just nu – för verkliga vardagar" istället för påhittade användarsiffror.
+- Ingen appfunktionalitet, datamodell eller navigation ändrad.
+
 ## 2026-08-23 – Logga mående och energi med ett tryck
 
 - Snabbchecken på Hem har nu en tydlig "Logga"-knapp som sparar både mående och energi direkt, utan att du behöver dra i sliders eller välja något mer.

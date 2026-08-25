@@ -6,12 +6,13 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-08-23";
+export const CHANGELOG_UPDATED = "2026-08-25";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      'Flow är nu MyFloves officiella maskot med en fast visuell referens och en gemensam komponent, och den publika startsidan är omgjord till en levande presentation med telefonpreview, interaktiv "Vad behöver du just nu?", Dagens Flow, FlowScore som belastning och en animerad dag – utan påhittade användarsiffror (2026-08-25)',
       'Snabbchecken på Hem: ny "Logga"-knapp som sparar både mående och energi direkt med ett tryck, utan att något mer behöver väljas. Rubrikknappen heter nu "Mer" och visar genvägarna till Mående, Energi och Anteckning (2026-08-23)',
       "Medicinnotisen kl 10:00 spårad och åtgärdad: den kom från en gammal Elvanse-post kl 10:00 i medicinlistan (utöver den aktuella kl 11:30) – inte en förvarning, tidszonsbugg eller standardtid. De köade notiserna för den gamla posten är avbokade (2026-08-23)",
       'Blueprinten går att ladda ner direkt i appen: adminsidan /pitch listar version 3.2, 3.0, 2.9 och 2.8 med en knapp för DOCX och en för PDF per version (2026-08-22)',
