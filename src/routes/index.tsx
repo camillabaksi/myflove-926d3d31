@@ -328,6 +328,25 @@ function LandingDeck() {
     }
   };
 
+  // Piltangenter fungerar även när fokus ligger på sidan i stort
+  useEffect(() => {
+    const onWindowKey = (event: KeyboardEvent) => {
+      const target = event.target as Element | null;
+      if (target?.closest?.("input, textarea, select, [contenteditable], [role='slider']")) return;
+      if (event.key === "ArrowRight") goTo(index + 1);
+      else if (event.key === "ArrowLeft") goTo(index - 1);
+      else if (event.key === "Home") goTo(0);
+      else if (event.key === "End") goTo(total - 1);
+      else return;
+      event.preventDefault();
+    };
+    window.addEventListener("keydown", onWindowKey);
+    return () => window.removeEventListener("keydown", onWindowKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [index, total]);
+
+
+
   return (
     <main className="relative h-[100dvh] overflow-hidden bg-[#F8F5FE] text-[#2A2140]">
       <div
