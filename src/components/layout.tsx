@@ -77,6 +77,22 @@ import { useLifeProfile } from "@/hooks/use-life-profile";
 import { useSituation } from "@/hooks/use-situation";
 import { lifeProfileSummary } from "@/lib/life-profile";
 import ViewCollapseToggle from "@/components/view-collapse-toggle";
+import FlowCompanion from "@/components/flow/flow-companion";
+
+/** Vyer som redan har Flow på sitt eget sätt – där dubblerar vi inte. */
+const FLOW_HIDDEN_PATHS = new Set([
+  "/",
+  "/hem",
+  "/idag",
+  "/flow",
+  "/pitch",
+  "/admin",
+  "/admin-statistik",
+  "/integritet",
+  "/villkor",
+  "/dev-session",
+]);
+
 
 import { useEnabledAreas } from "@/lib/life-areas";
 import { useLocalStorage } from "@/lib/storage";
