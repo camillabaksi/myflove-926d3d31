@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { FlowMascot, FlowSays } from "@/components/flow-mascot";
@@ -378,7 +378,14 @@ function Hero() {
               variant="outline"
               className="press rounded-full border-[#2A2140]/15 bg-white/70 backdrop-blur hover:bg-white"
             >
-              <a href="#sa-funkar-det">Se hur det fungerar</a>
+              <button
+                type="button"
+                onClick={() =>
+                  window.dispatchEvent(new CustomEvent("myflove:landing-slide", { detail: 1 }))
+                }
+              >
+                Se hur det fungerar
+              </button>
             </Button>
           </div>
 
