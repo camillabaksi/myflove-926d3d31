@@ -53,6 +53,8 @@ beforeEach(() => {
   checkin.energyValue = 4;
   weather = null;
   suggestionTask = null;
+  // Flow-decket speglar aktuell vy i URL:en – nollställ mellan testerna.
+  window.history.replaceState(null, "", "/flow");
 });
 
 describe("FlowDeck – en sak i taget", () => {
@@ -72,8 +74,7 @@ describe("FlowDeck – en sak i taget", () => {
   });
 
   it("startar på intro med Flows hälsningsscen", () => {
-    const { container } = render(<FlowDeck />);
-    console.log("DBG", document.querySelectorAll("[data-flow-slide]").length, container.querySelector("[data-flow-slide]")?.getAttribute("data-flow-slide-id"));
+    render(<FlowDeck />);
     expect(document.querySelector("[data-flow-slide]")).toHaveAttribute("data-flow-slide-id", "intro");
     expect(activeScene()).toBe("hello");
   });
