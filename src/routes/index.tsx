@@ -571,6 +571,9 @@ function DaySection() {
               {point.t}
             </p>
             <p className="mt-1 text-base leading-relaxed">{point.c}</p>
+            <p className="mt-2 inline-block rounded-full bg-[#F1ECFC] px-3 py-1 text-xs font-semibold text-[#7C5CE0]">
+              {point.m}
+            </p>
           </FlowSays>
         </div>
       </div>
