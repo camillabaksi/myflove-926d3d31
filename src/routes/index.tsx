@@ -512,14 +512,22 @@ function Hero() {
           </div>
 
           <div className="mx-auto mt-8 w-full max-w-xl lg:mx-0">
-            <FlowSays size="2xl" wave glow>
-
-              <p className="font-semibold">Hej, jag heter Flow 💜</p>
-              <p className="text-[#6B647F]">
-                Jag håller reda på dagen. Du behöver bara göra en sak i taget.
-              </p>
-            </FlowSays>
+            <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 text-left sm:gap-5">
+              <FlowMascot
+                size="2xl"
+                wave
+                glow
+                className="h-32 w-32 shrink-0 sm:h-48 sm:w-48"
+              />
+              <div className="w-full min-w-0 rounded-2xl border border-[#2A2140]/5 bg-white px-4 py-3 text-sm leading-relaxed text-pretty text-[#2A2140] shadow-sm sm:px-5 sm:py-4 sm:text-base">
+                <p className="font-semibold">Hej, jag heter Flow 💜</p>
+                <p className="text-[#6B647F]">
+                  Jag håller reda på dagen. Du behöver bara göra en sak i taget.
+                </p>
+              </div>
+            </div>
           </div>
+
 
         </div>
 
