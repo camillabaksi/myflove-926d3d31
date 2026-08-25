@@ -116,10 +116,17 @@ export default function FlowDeck() {
 
   const goTo = (nextSlide: number, focusSlide = false) => {
     const clamped = Math.max(0, Math.min(slides.length - 1, nextSlide));
-    if (focusSlide && clamped !== currentSlide) shouldFocusSlide.current = true;
+    if (clamped === currentSlide) {
+      // Redan längst ut – en liten stöt i stället för ett vybyte.
+      if (nextSlide !== currentSlide) haptic("bump");
+      return;
+    }
+    if (focusSlide) shouldFocusSlide.current = true;
+    haptic("tap");
     setCelebrating(false);
     setCurrentSlide(clamped);
   };
+
 
   const next = (focusSlide = false) => goTo(currentSlide + 1, focusSlide);
   const previous = (focusSlide = false) => goTo(currentSlide - 1, focusSlide);
