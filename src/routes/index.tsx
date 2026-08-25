@@ -108,21 +108,39 @@ const DAILY_FLOWS = [
 ];
 
 const TIMELINE = [
-  { t: "08:00", l: "God morgon ☀️", c: "Regn ikväll – ta med paraply." },
-  { t: "08:30", l: "Lämna barnen", c: "Väskan står redan vid dörren." },
-  { t: "09:00", l: "Plugg 📚", c: "42 minuter fokus. Sen paus." },
-  { t: "10:30", l: "Paus ☕", c: "Du hann mer än du tror." },
-  { t: "12:00", l: "Lunch 🌿", c: "Ät något – batteriet tackar dig." },
-  { t: "17:30", l: "Handla 🛒", c: "Mjölk saknas hemma. Butiken ligger på vägen." },
-  { t: "21:00", l: "Varva ner 🌙", c: "Imorgon är lugnare. Jag har koll." },
+  { t: "08:00", l: "God morgon ☀️", c: "Regn ikväll – ta med paraply.", m: "Jag har koll. 💜" },
+  { t: "08:30", l: "Lämna barnen", c: "Väskan står redan vid dörren.", m: "En sak mindre." },
+  { t: "09:00", l: "Plugg 📚", c: "42 minuter fokus. Sen paus.", m: "Jag håller tiden." },
+  { t: "10:30", l: "Paus ☕", c: "Du hann mer än du tror.", m: "Pausen räknas också." },
+  { t: "12:00", l: "Lunch 🌿", c: "Ät något – batteriet tackar dig.", m: "+ lite energi." },
+  {
+    t: "17:30",
+    l: "Handla 🛒",
+    c: "Mjölk saknas hemma. Butiken ligger på vägen.",
+    m: "Listan är redan skriven.",
+  },
+  { t: "21:00", l: "Varva ner 🌙", c: "Imorgon är lugnare. Jag har koll.", m: "Dagen är klar nu." },
 ];
 
 const PHONE_ITEMS = [
-  { t: "09:00", l: "Fokustid", e: "🎯", done: false },
-  { t: "10:30", l: "Medicin", e: "💊", done: true },
-  { t: "12:00", l: "Lunch", e: "🌿", done: false },
-  { t: "17:30", l: "Handla", e: "🛒", done: false },
+  { t: "09:00", l: "Fokustid", e: "🎯", done: false, r: "42 minuter fokus. Jag säger till när det är paus." },
+  { t: "10:30", l: "Medicin", e: "💊", done: true, r: "Redan taget idag. Bra jobbat 💜" },
+  { t: "12:00", l: "Lunch", e: "🌿", done: false, r: "Lunch laddar batteriet mer än du tror." },
+  { t: "17:30", l: "Handla", e: "🛒", done: false, r: "Mjölk står på listan. Butiken ligger på vägen." },
 ];
+
+const PHONE_DONE_REACTIONS = [
+  "Avbockat. Det räknas. 💜",
+  "Fint – en sak mindre att bära.",
+  "Klart. Jag flyttar resten framåt.",
+];
+
+const PHONE_UNDONE_REACTIONS = [
+  "Inga problem, jag lägger tillbaka den.",
+  "Den får vänta. Helt okej.",
+];
+
+const PHONE_IDLE = "Du har 25 minuter kvar. Vill du hinna duscha eller ta det lugnt?";
 
 /* ── Sidan ────────────────────────────────────────────────── */
 
