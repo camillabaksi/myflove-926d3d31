@@ -95,6 +95,8 @@ export default function AdminStats() {
           </p>
         </div>
 
+        <AnalyticsExport />
+
         {isLoading && <p className="text-muted-foreground">Laddar statistik…</p>}
         {isError && <p className="text-destructive">Kunde inte hämta statistik just nu.</p>}
 
