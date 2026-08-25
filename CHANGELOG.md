@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-25 – Flow: en slide i taget, inte en lång sida
+
+- Flow är nu en sammanhållen carousel: exakt EN slide syns åt gången och nästa slide ersätter den föregående horisontellt – inget staplas längre vertikalt.
+- Slide 1 är Flow som presenterar sig (maskoten hoppar upp, "Hej! Jag är Flow 💜" och knappen "Visa mig"), sedan energi, förslag och återhämtning när det är relevant.
+- Svep vänster/höger på mobil, diskreta pilar och punktindikator på större skärmar.
+- Hälsningskortet ovanför decket är borttaget så sidan inte blir lång. Introduktionen första gången visas precis som förut.
+- Samma befintliga Flow-logik, energi och uppgifter – ingen ny motor eller datamodell.
+
 ## 2026-08-25 – Flow 2.0: en personlig, svepbar Flow-upplevelse
 
 - Flow har fått en egen startsida där Flow hälsar, hoppar upp och vinkar första gången – och därefter bara en kort, lugn hälsning.

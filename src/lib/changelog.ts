@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Flow visar nu en slide i taget i en horisontell carousel – Flow presenterar sig först, sedan energi, förslag och återhämtning. Svep på mobil, pilar och punkter på desktop, och inget staplas vertikalt längre (2026-08-25)",
       "Flow 2.0: Flow har en egen startsida med hälsning, kort introduktion första gången och en svepbar upplevelse där Flow visar en sak i taget – incheckning, energi, förslag eller återhämtning – och väljer själv vad som är mest relevant utifrån befintlig Flow-logik och data (2026-08-25)",
       "Startsidan: Flow reagerar nu subtilt när du interagerar – telefondemons uppgifter kan bockas av med korta Flow-svar, de flytande korten ger egna reaktioner och tidslinjen har en kort mikroreaktion per punkt (2026-08-25)",
       'Flow är nu MyFloves officiella maskot med en fast visuell referens och en gemensam komponent, och den publika startsidan är omgjord till en levande presentation med telefonpreview, interaktiv "Vad behöver du just nu?", Dagens Flow, FlowScore som belastning och en animerad dag – utan påhittade användarsiffror (2026-08-25)',
