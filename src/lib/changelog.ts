@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Flow i appen: Flow finns nu på Hem och Min dag som en kontextuell följeslagare – han väljer en sak i taget utifrån medicin, väder, energi, barn och dagens nästa uppgift, har ny rekvisita (sol, solglasögon, medicinburk, vattenglas, tvättkorg, mini-Flows för barnen) och firar när du bockar av något. Flow-previewen är oförändrad (2026-08-25)",
       "Flow: automatiska tester (Vitest) säkerställer att exakt ett Flow-state visas åt gången och att varje situation ger rätt rekvisita och pose på mobilbredd – körs med npm run test (2026-08-25)",
       "Flow: riktiga karaktärsscener i /flow – Flow får paraply i regn, säng vid vila, kaffe vid paus, bok vid plugg, laptop vid jobb, dammsugare vid städning, kockmössa vid mat, bil vid resa, batteri vid låg/hög energi, konfetti när något blir klart och lugn andning vid återhämtning, med flera varianter per situation och utan intern scroll på mobil (2026-08-25)",
       "Flow: haptisk återkoppling vid vybyte – kort vibration när du swipar eller trycker dig till nästa vy, en liten stöt vid flödets kanter och en tydligare puls när något firas. Avstängt vid reducerad rörelse och tyst läge (2026-08-25)",
