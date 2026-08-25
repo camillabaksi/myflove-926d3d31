@@ -3,6 +3,7 @@ import { useGetAnalyticsSummary } from "@workspace/api-client-react";
 import { BarChart3, Users, Activity, Flame, Lock } from "lucide-react";
 import { useIsAdmin } from "@/hooks/use-is-admin";
 import CollapsibleSection from "@/components/collapsible-section";
+import AnalyticsExport from "@/components/admin/analytics-export";
 
 const SECTION_LABELS: Record<string, string> = {
   mood: "Mående",
