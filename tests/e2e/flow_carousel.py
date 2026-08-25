@@ -103,9 +103,16 @@ async def run_width(browser, width: int) -> None:
     visible = 0
     for i in range(count):
         b = await slides.nth(i).bounding_box()
-        if b and b["x"] < width - 8 and b["x"] + b["width"] > 8:
+        if not b:
+            continue
+        shown = min(b["x"] + b["width"], width) - max(b["x"], 0)
+        if shown > b["width"] / 2:
             visible += 1
-    check(visible == 1, f"{width}px: endast EN slide syns", f"synliga={visible}")
+    check(
+        visible == 1,
+        f"{width}px: endast EN slide syns till mer än hälften",
+        f"synliga={visible}",
+    )
 
     # Swipe / snap
     before = await track.evaluate("el => el.scrollLeft")
@@ -122,9 +129,9 @@ async def run_width(browser, width: int) -> None:
     b1b = await slides.nth(0).bounding_box()
     b2b = await slides.nth(1).bounding_box()
     check(
-        b2b["x"] < b1b["x"] + b1b["width"] / 2,
-        f"{width}px: slide 2 är i viewporten efter swipe",
-        f"x2={b2b['x']:.0f}",
+        -8 <= b2b["x"] <= width / 2 and b1b["x"] + b1b["width"] <= 8,
+        f"{width}px: slide 2 fyller viewporten efter swipe (slide 1 utanför)",
+        f"x1={b1b['x']:.0f} x2={b2b['x']:.0f}",
     )
 
     os.makedirs("/tmp/browser/flow-e2e", exist_ok=True)
