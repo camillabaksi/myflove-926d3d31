@@ -75,4 +75,3 @@ export function FlowGreeting({ children }: { children?: React.ReactNode }) {
   // inget extra kort ovanför, så sidan aldrig blir lång.
   return <>{children}</>;
 }
-
