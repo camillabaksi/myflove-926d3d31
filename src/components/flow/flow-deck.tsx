@@ -137,36 +137,56 @@ export default function FlowDeck() {
   return (
     <section
       aria-label="Flow"
-      className="surface-card relative overflow-hidden p-4 sm:p-6"
+      className="surface-card relative w-full overflow-hidden p-4 sm:p-6"
       data-flow-version={FLOW_VERSION}
       data-flow-current-slide={currentSlide}
     >
       <div
-        data-flow-state-view
-        className="touch-pan-y motion-safe:animate-[myflove-fade-up_240ms_ease-out]"
+        data-flow-viewport
+        className="relative w-full overflow-hidden touch-pan-y"
         onPointerDown={(event) => handlePointerDown(event.clientX)}
         onPointerUp={(event) => handlePointerUp(event.clientX)}
         onPointerCancel={() => {
           pointerStartX.current = null;
         }}
       >
-        <div key={`${activeSlide}-${currentSlide}`} data-flow-slide data-flow-slide-id={activeSlide}>
-          <FlowSlide
-            id={activeSlide}
-            reading={reading}
-            suggestion={suggestion}
-            onIntroNext={next}
-            onStart={() => setFocusOpen(true)}
-            onLater={() => {
-              const taskId = suggestion.task?.id;
-              if (taskId) setSkip((value) => [...value, taskId]);
-            }}
-            onDone={() => suggestion.task && toggleTask(suggestion.task.id)}
-            onMoveTomorrow={() => suggestion.task && snoozeTask(suggestion.task.id, 1)}
-            onSkipSlide={next}
-          />
+        <div
+          data-flow-track
+          className="flex w-full flex-row items-start transition-transform duration-300 ease-out motion-reduce:transition-none"
+          style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+        >
+          {slides.map((id, i) => {
+            const active = i === currentSlide;
+            return (
+              <div
+                key={`${id}-${i}`}
+                data-flow-slide
+                data-flow-slide-id={id}
+                data-flow-slide-active={active ? "true" : "false"}
+                aria-hidden={!active}
+                {...(!active ? { inert: "" } : {})}
+                className="w-full min-w-full shrink-0 grow-0 basis-full"
+              >
+                <FlowSlide
+                  id={id}
+                  reading={reading}
+                  suggestion={suggestion}
+                  onIntroNext={next}
+                  onStart={() => setFocusOpen(true)}
+                  onLater={() => {
+                    const taskId = suggestion.task?.id;
+                    if (taskId) setSkip((value) => [...value, taskId]);
+                  }}
+                  onDone={() => suggestion.task && toggleTask(suggestion.task.id)}
+                  onMoveTomorrow={() => suggestion.task && snoozeTask(suggestion.task.id, 1)}
+                  onSkipSlide={next}
+                />
+              </div>
+            );
+          })}
         </div>
       </div>
+
 
       {slides.length > 1 && (
         <div className="mt-3 flex items-center justify-center gap-4">
