@@ -182,24 +182,67 @@ function LandingPage() {
 
 /* ── Slide-deck: horisontellt spår, svep + tangentbord ────── */
 
+function slideIndexFromHash(hash: string) {
+  const id = hash.replace(/^#/, "");
+  const i = SLIDES.findIndex((s) => s.id === id);
+  return i >= 0 ? i : 0;
+}
+
 function LandingDeck() {
   const [index, setIndex] = useState(0);
   const [dragOffset, setDragOffset] = useState(0);
   const [dragging, setDragging] = useState(false);
-  const drag = useRef<{ x: number; y: number; time: number; axis: "none" | "x" | "y" } | null>(null);
+  const drag = useRef<{
+    x: number;
+    y: number;
+    time: number;
+    lastX: number;
+    lastTime: number;
+    velocity: number;
+    axis: "none" | "x" | "y";
+  } | null>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
+  const slideRefs = useRef<(HTMLElement | null)[]>([]);
+  const shouldFocus = useRef(false);
 
   const total = SLIDES.length;
-  const goTo = (next: number) => setIndex(Math.max(0, Math.min(total - 1, next)));
+  const goTo = (next: number, focus = true) => {
+    shouldFocus.current = focus;
+    setIndex(Math.max(0, Math.min(total - 1, next)));
+  };
+
+  // URL-synk: läs vid start och lyssna på bakåt/framåt
+  useEffect(() => {
+    setIndex(slideIndexFromHash(window.location.hash));
+    const onHash = () => setIndex(slideIndexFromHash(window.location.hash));
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
+
+  // URL-synk: skriv tillbaka aktuell vy
+  useEffect(() => {
+    const target = `#${SLIDES[index].id}`;
+    if (window.location.hash !== target) {
+      window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}${target}`);
+    }
+  }, [index]);
+
+  // Flytta fokus till aktiv vy vid navigering (inte vid första renderingen)
+  useEffect(() => {
+    if (!shouldFocus.current) return;
+    shouldFocus.current = false;
+    slideRefs.current[index]?.focus({ preventScroll: true });
+  }, [index]);
 
   // Interna länkar (t.ex. "Se hur det fungerar") kan hoppa till en vy
   useEffect(() => {
     const jump = (event: Event) => {
       const detail = (event as CustomEvent<number>).detail;
-      if (typeof detail === "number") setIndex(Math.max(0, Math.min(SLIDES.length - 1, detail)));
+      if (typeof detail === "number") goTo(detail);
     };
     window.addEventListener("myflove:landing-slide", jump);
     return () => window.removeEventListener("myflove:landing-slide", jump);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const isInteractive = (target: EventTarget | null) =>
@@ -208,7 +251,16 @@ function LandingDeck() {
 
   const onPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
     if (isInteractive(event.target)) return;
-    drag.current = { x: event.clientX, y: event.clientY, time: Date.now(), axis: "none" };
+    const now = Date.now();
+    drag.current = {
+      x: event.clientX,
+      y: event.clientY,
+      time: now,
+      lastX: event.clientX,
+      lastTime: now,
+      velocity: 0,
+      axis: "none",
+    };
   };
 
   const onPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
@@ -219,7 +271,7 @@ function LandingDeck() {
 
     if (state.axis === "none") {
       if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
-      state.axis = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
+      state.axis = Math.abs(dx) > Math.abs(dy) * 1.2 ? "x" : "y";
       if (state.axis === "y") {
         drag.current = null;
         return;
@@ -228,9 +280,18 @@ function LandingDeck() {
       event.currentTarget.setPointerCapture?.(event.pointerId);
     }
 
+    // Momentum: rullande hastighet i px/ms
+    const now = Date.now();
+    const dt = Math.max(1, now - state.lastTime);
+    const instant = (event.clientX - state.lastX) / dt;
+    state.velocity = state.velocity * 0.7 + instant * 0.3;
+    state.lastX = event.clientX;
+    state.lastTime = now;
+
     const atStart = index === 0 && dx > 0;
     const atEnd = index === total - 1 && dx < 0;
-    setDragOffset(atStart || atEnd ? dx * 0.25 : dx);
+    // Mjukt kantmotstånd som avtar med avståndet
+    setDragOffset(atStart || atEnd ? Math.sign(dx) * Math.sqrt(Math.abs(dx)) * 6 : dx);
   };
 
   const endDrag = (event: React.PointerEvent<HTMLDivElement>) => {
@@ -239,11 +300,16 @@ function LandingDeck() {
     setDragging(false);
     setDragOffset(0);
     if (!state || state.axis !== "x") return;
+
     const dx = event.clientX - state.x;
     const width = viewportRef.current?.clientWidth ?? 1;
-    const fast = Date.now() - state.time < 320 && Math.abs(dx) > 40;
-    if (dx < 0 && (fast || Math.abs(dx) > width * 0.25)) goTo(index + 1);
-    else if (dx > 0 && (fast || Math.abs(dx) > width * 0.25)) goTo(index - 1);
+    const velocity = state.velocity; // px/ms, positiv = åt höger
+    // Projicerad slutposition med momentum (~200 ms utrullning)
+    const projected = dx + velocity * 200;
+    const threshold = Math.min(120, Math.max(48, width * 0.2));
+
+    if (projected <= -threshold) goTo(index + 1);
+    else if (projected >= threshold) goTo(index - 1);
   };
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -267,16 +333,15 @@ function LandingDeck() {
       <div
         ref={viewportRef}
         data-landing-viewport
-        role="region"
+        role="group"
         aria-roledescription="karusell"
         aria-label="MyFlove-presentation"
-        tabIndex={0}
         onKeyDown={onKeyDown}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={endDrag}
         onPointerCancel={endDrag}
-        className="relative h-full w-full touch-pan-y overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-[#7C5CE0]/50"
+        className="relative h-full w-full touch-pan-y overflow-hidden"
       >
         <div
           data-landing-track
@@ -288,11 +353,17 @@ function LandingDeck() {
             return (
               <section
                 key={slide.id}
+                id={`slide-${slide.id}`}
+                ref={(el) => {
+                  slideRefs.current[i] = el;
+                }}
                 data-landing-slide={slide.id}
                 aria-hidden={!active}
                 inert={!active}
-                aria-label={`${slide.label} (${i + 1} av ${total})`}
-                className={`h-full w-full min-w-full shrink-0 overflow-y-auto overscroll-contain pb-28 transition-opacity duration-500 ${
+                tabIndex={active ? 0 : -1}
+                aria-roledescription="vy"
+                aria-label={`${slide.label} – vy ${i + 1} av ${total}`}
+                className={`h-full w-full min-w-full shrink-0 overflow-y-auto overscroll-contain pb-28 transition-opacity duration-500 outline-none focus-visible:ring-4 focus-visible:ring-[#7C5CE0]/40 focus-visible:ring-inset ${
                   active ? "opacity-100" : "opacity-0"
                 }`}
               >
@@ -309,7 +380,8 @@ function LandingDeck() {
         onClick={() => goTo(index - 1)}
         disabled={index === 0}
         aria-label="Föregående vy"
-        className="press absolute top-1/2 left-2 z-20 hidden h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-[#2A2140]/10 bg-white/85 text-lg shadow-lg backdrop-blur disabled:pointer-events-none disabled:opacity-0 sm:grid"
+        aria-controls={`slide-${SLIDES[index].id}`}
+        className="press absolute top-1/2 left-2 z-20 hidden h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-[#2A2140]/10 bg-white/85 text-lg shadow-lg backdrop-blur focus-visible:ring-2 focus-visible:ring-[#7C5CE0] focus-visible:outline-none disabled:pointer-events-none disabled:opacity-0 sm:grid"
       >
         ‹
       </button>
@@ -318,21 +390,31 @@ function LandingDeck() {
         onClick={() => goTo(index + 1)}
         disabled={index === total - 1}
         aria-label="Nästa vy"
-        className="press absolute top-1/2 right-2 z-20 hidden h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-[#2A2140]/10 bg-white/85 text-lg shadow-lg backdrop-blur disabled:pointer-events-none disabled:opacity-0 sm:grid"
+        aria-controls={`slide-${SLIDES[index].id}`}
+        className="press absolute top-1/2 right-2 z-20 hidden h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-[#2A2140]/10 bg-white/85 text-lg shadow-lg backdrop-blur focus-visible:ring-2 focus-visible:ring-[#7C5CE0] focus-visible:outline-none disabled:pointer-events-none disabled:opacity-0 sm:grid"
       >
         ›
       </button>
 
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex flex-col items-center gap-2 bg-gradient-to-t from-[#F8F5FE] via-[#F8F5FE]/80 to-transparent pt-8 pb-4">
-        <div className="pointer-events-auto flex flex-wrap items-center justify-center gap-1.5 px-4">
+        <div
+          role="tablist"
+          aria-label="Välj vy"
+          className="pointer-events-auto flex flex-wrap items-center justify-center gap-1.5 px-4"
+        >
           {SLIDES.map((slide, i) => (
             <button
               key={slide.id}
               type="button"
+              role="tab"
+              id={`tab-${slide.id}`}
+              aria-controls={`slide-${slide.id}`}
+              aria-selected={i === index}
+              tabIndex={i === index ? 0 : -1}
               onClick={() => goTo(i)}
-              aria-label={`Gå till ${slide.label}`}
-              aria-current={i === index}
-              className={`h-2.5 rounded-full transition-all ${
+              onKeyDown={onKeyDown}
+              aria-label={`${slide.label} – vy ${i + 1} av ${total}`}
+              className={`h-2.5 rounded-full transition-all focus-visible:ring-2 focus-visible:ring-[#7C5CE0] focus-visible:ring-offset-2 focus-visible:outline-none ${
                 i === index ? "w-7 bg-[#7C5CE0]" : "w-2.5 bg-[#2A2140]/20 hover:bg-[#7C5CE0]/50"
               }`}
             />
@@ -349,6 +431,7 @@ function LandingDeck() {
     </main>
   );
 }
+
 
 
 /* ── Hero ─────────────────────────────────────────────────── */
