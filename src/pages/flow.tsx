@@ -8,7 +8,6 @@ import TodayTasks from "@/components/today-tasks";
 import { useTasks } from "@/hooks/use-data";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
 import FlowDeck from "@/components/flow/flow-deck";
-import { FlowGreeting } from "@/components/flow/flow-intro";
 import { assessToday, suggestMove } from "@/lib/flow-engine";
 import { planFlowSequence } from "@/lib/flowplan.functions";
 import { useDayPlan, type DayPlanStep } from "@/lib/day-plan";
@@ -77,11 +76,7 @@ export default function FlowPage() {
 /* ── NU ─────────────────────────────────────────────────────────── */
 
 function NowLayer() {
-  return (
-    <FlowGreeting>
-      <FlowDeck />
-    </FlowGreeting>
-  );
+  return <FlowDeck />;
 }
 
 /* ── IDAG ───────────────────────────────────────────────────────── */

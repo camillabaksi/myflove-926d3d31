@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-25 – Flow-karusellen låst horisontellt
+
+- Tog bort den separata `FlowGreeting`-wrappern så Flow-presentationen alltid är slide 1 i samma karusell.
+- Karusellspåret har nu explicit CSS-grid i sidled (`grid-auto-flow: column`, en kolumn på 100% per slide), horisontell touch-scroll och obligatorisk snap.
+- Varje slide har fast 100% karusellbredd och kan inte krympa eller falla tillbaka till vertikal blocklayout.
+
 ## 2026-08-25 – Flow: en slide i taget, inte en lång sida
 
 - Flow är nu en sammanhållen carousel: exakt EN slide syns åt gången och nästa slide ersätter den föregående horisontellt – inget staplas längre vertikalt.
