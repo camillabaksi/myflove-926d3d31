@@ -509,6 +509,8 @@ const SceneOutro: React.FC = () => {
           myflove.lovable.app
         </div>
       </div>
+        <FlowMascot size={440} delay={14} />
+      </div>
     </Shell>
   );
 };
