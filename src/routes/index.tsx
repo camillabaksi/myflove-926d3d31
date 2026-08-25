@@ -621,14 +621,14 @@ function PhonePreview() {
         </div>
       </div>
 
-      {/* Flow bredvid telefonen – vinkar hej */}
+      {/* Liten Flow bredvid telefonen */}
       <FlowMascot
-        size="2xl"
-        wave
-        glow
-        className="absolute -right-6 -bottom-6 sm:-right-12"
-        alt="Flow vinkar hej vid telefonen"
+        size="md"
+        float
+        className="absolute -right-2 -bottom-2 sm:-right-6"
+        alt="Flow vid telefonen"
       />
+
 
 
       {/* Flytande kort */}
