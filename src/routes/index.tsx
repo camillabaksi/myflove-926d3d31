@@ -518,7 +518,7 @@ function Hero() {
                 wave
                 glow
                 className="shrink-0"
-                imgClassName="h-32 w-32 sm:h-48 sm:w-48 lg:h-56 lg:w-56"
+                imgClassName="h-44 w-44 sm:h-64 sm:w-64 lg:h-72 lg:w-72"
               />
               <div className="w-full min-w-0 rounded-2xl border border-[#2A2140]/5 bg-white px-4 py-3 text-sm leading-relaxed text-pretty text-[#2A2140] shadow-sm sm:px-5 sm:py-4 sm:text-base">
                 <p className="font-semibold">Hej, jag heter Flow 💜</p>
