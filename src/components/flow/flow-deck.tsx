@@ -107,7 +107,8 @@ export default function FlowDeck() {
               onIntroNext={next}
               onStart={() => setFocusOpen(true)}
               onLater={() => {
-                if (suggestion.task) setSkip((s) => [...s, suggestion.task.id]);
+                const taskId = suggestion.task?.id;
+                if (taskId) setSkip((s) => [...s, taskId]);
               }}
               onDone={() => suggestion.task && toggleTask(suggestion.task.id)}
               onMoveTomorrow={() => suggestion.task && snoozeTask(suggestion.task.id, 1)}
