@@ -297,8 +297,8 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
 
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center">
-                <Sparkles size={20} />
+              <div className="rounded-full bg-primary/10 p-1">
+                <FlowMascot size="md" wave glow className="shrink-0" />
               </div>
               <div>
                 <h1 className="text-3xl font-bold leading-tight">Flow</h1>
