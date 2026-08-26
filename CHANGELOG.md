@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-26 – Fortsätt din Flow-chatt
+
+- Flow öppnar automatiskt ditt senaste samtal så du kan fortsätta där du slutade. Vill du börja om trycker du "Ny chatt".
+- Påbörjad text sparas per samtal – lämnar du vyn ligger den kvar när du kommer tillbaka.
+
 ## 2026-08-26 – Prata med Flow
 
 - Flow-chatten har fått en tydlig ingång: "Prata med Flow" finns nu i menyn "Mer", i översikten "Så funkar MyFlove" och som knapp direkt i Flow-kortet.
