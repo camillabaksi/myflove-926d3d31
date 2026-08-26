@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Flow tar mindre plats på Hem: mini-maskoten är låst till en liten 56 px-yta så den inte kan överlappa text eller knappen \"Prata med Flow\" (2026-08-26)",
       "Flow är mindre på hemskärmen och \"Prata med Flow\" går direkt till chatten (2026-08-26)",
       "Material 3.5: pitchvideo med ny scen \"Flow lever\", Living Blueprint 3.5 och Pitchdeck 3.5 (2026-08-26)",
       "Flow följer chatten: andning, blink och blick ändras när du skriver, när Flow tänker och när svaret kommit (2026-08-26)",
