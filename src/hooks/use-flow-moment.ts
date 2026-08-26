@@ -72,14 +72,19 @@ export function useFlowMoment(): FlowMoment {
 
   const [celebrating, setCelebrating] = useState(false);
 
+  const [doneTitle, setDoneTitle] = useState<string | null>(null);
+
   useEffect(() => {
-    const onDone = () => {
+    const onDone = (e: Event) => {
+      const title = (e as CustomEvent<{ title?: string }>).detail?.title ?? null;
+      setDoneTitle(title);
       setCelebrating(true);
-      window.setTimeout(() => setCelebrating(false), 2600);
+      window.setTimeout(() => setCelebrating(false), 3200);
     };
     window.addEventListener(FLOW_DONE_EVENT, onDone);
     return () => window.removeEventListener(FLOW_DONE_EVENT, onDone);
   }, []);
+
 
   const now = new Date();
   const nowMin = now.getHours() * 60 + now.getMinutes();
