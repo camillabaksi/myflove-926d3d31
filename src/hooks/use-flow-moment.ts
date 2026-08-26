@@ -58,6 +58,18 @@ const isKidTitle = (title: string) =>
 const isOutdoorTitle = (title: string) =>
   /promenad|ut |ute|hund|träning|löp|cykel|lämna|hämta|handla|resa|buss|tåg|marknad/i.test(title);
 
+/** Vart Flow ska länka beroende på vad som är på gång. */
+const linkForTitle = (title: string): { href: string; label: string } => {
+  if (isKidTitle(title)) return { href: "/barn", label: "Barnens dag" };
+  if (/medicin|tablett|dos/i.test(title)) return { href: "/daglig-rutin", label: "Rutiner & medicin" };
+  if (/plugg|studie|tenta|prov|föreläs|lektion/i.test(title)) return { href: "/studier", label: "Studier" };
+  if (/jobb|möte|arbete|kund/i.test(title)) return { href: "/jobb", label: "Jobb" };
+  if (/träning|gym|löp|promenad/i.test(title)) return { href: "/traning", label: "Träning" };
+  if (/handla|inköp|mat/i.test(title)) return { href: "/matlista", label: "Inköpslista" };
+  return { href: "/idag", label: "Min dag" };
+};
+
+
 export function useFlowMoment(): FlowMoment {
   const { activeTasks } = useTasks();
   const { activeReminders } = useReminders();
