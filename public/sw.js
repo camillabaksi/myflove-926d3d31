@@ -25,6 +25,14 @@ self.addEventListener("activate", (event) => {
   );
 });
 
+/* Minimal fetch-hanterare: ingen cache, men krävs av webbläsarens
+   installationskriterier så att MyFlove går att lägga till på hemskärmen. */
+self.addEventListener("fetch", (event) => {
+  if (event.request.mode === "navigate") {
+    event.respondWith(fetch(event.request).catch(() => Response.error()));
+  }
+});
+
 self.addEventListener("message", (event) => {
   const type = event.data && event.data.type;
   if (type === "myflove-skip-waiting") self.skipWaiting();
