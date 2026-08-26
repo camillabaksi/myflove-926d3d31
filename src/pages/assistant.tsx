@@ -59,7 +59,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
   const navigate = useNavigate();
   const conversationId = chatId ?? null;
 
-  const { conversations, refresh, remove } = useFlowConversations();
+  const { conversations, loading: loadingConversations, refresh, remove } = useFlowConversations();
   const { messages, setMessages, loading: loadingMessages } = useFlowMessages(conversationId);
 
   const [input, setInput] = useState("");
@@ -68,6 +68,31 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
   const [historyOpen, setHistoryOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  /**
+   * Fortsätt där du slutade: när du öppnar Flow utan att välja samtal
+   * hoppar vi tillbaka in i det senaste – om du inte aktivt bad om en ny chatt.
+   */
+  useEffect(() => {
+    if (conversationId || loadingConversations || isSending) return;
+    if (typeof window === "undefined") return;
+    if (window.sessionStorage.getItem(NEW_CHAT_FLAG) === "1") return;
+    const latest = conversations[0];
+    if (!latest) return;
+    void navigate({ to: "/assistant/$chatId", params: { chatId: latest.id }, replace: true });
+  }, [conversationId, loadingConversations, conversations, isSending, navigate]);
+
+  /** Påbörjad text sparas per samtal så inget försvinner om du lämnar vyn. */
+  const draftKey = `myflove-flow-draft-${conversationId ?? "ny"}`;
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    setInput(window.localStorage.getItem(draftKey) ?? "");
+  }, [draftKey]);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (input.trim()) window.localStorage.setItem(draftKey, input);
+    else window.localStorage.removeItem(draftKey);
+  }, [draftKey, input]);
 
   const chat = useServerFn(chatWithFlow);
   const { puzzle, contextPrompt } = useLifePuzzle();
