@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-26 – Flow syns i mini-rutan
+
+- Mini-Flow använder nu en riktig liten maskotstorlek i stället för en stor bild som klipptes hårt i 56 px-ramen.
+- Rekvisita döljs i mini-läget så själva Flow alltid syns tydligt i Hem-rutan utan att överlappa texten.
+
 ## 2026-08-26 – Flow tar mindre plats på Hem
 
 - Mini-Flow på hemskärmen och i vanliga appvyer är nu låst till en liten 56 px-yta, så maskoten inte kan växa över text eller knappen "Prata med Flow".
