@@ -601,9 +601,23 @@ export default function Layout({ children }: LayoutProps) {
   // Egna platser i bottennavet – du byter dem själv i "Mer".
   const [navSlots, setNavSlots] = useLocalStorage<string[]>("myflove-bottom-nav-slots", [
     "/idag",
-    "/flow",
+    "/flowplan",
   ]);
+  // Tidigare hette platsen "Planera" men ledde till Flow-hjälpen.
+  // Nu leder den till planeringssidan – en gång, sedan bestämmer du själv.
+  const [navMigrated, setNavMigrated] = useLocalStorage<boolean>(
+    "myflove-bottom-nav-planering-v1",
+    false,
+  );
+  useEffect(() => {
+    if (navMigrated) return;
+    setNavMigrated(true);
+    if (navSlots.includes("/flow") && !navSlots.includes("/flowplan")) {
+      setNavSlots(navSlots.map((h) => (h === "/flow" ? "/flowplan" : h)));
+    }
+  }, [navMigrated, navSlots, setNavMigrated, setNavSlots]);
   const [editingNav, setEditingNav] = useState(false);
+
 
   // Enkelt läge: visar bara det viktigaste tills man själv vill se mer.
   const [simpleMode, setSimpleMode] = useLocalStorage<boolean>("myflove-simple-mode", true);
