@@ -1,9 +1,18 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import Page from "@/pages/assistant";
 
-/** Flow-chatten bor numera i Flow (lagret HJÄLP). Djuplänkar till enskilda
- *  chattar fungerar fortfarande via /assistant/$chatId. */
+/** Flow-chatten – "Prata med Flow" går direkt hit. Djuplänkar till enskilda
+ *  chattar fungerar via /assistant/$chatId. */
 export const Route = createFileRoute("/_app/assistant")({
-  beforeLoad: () => {
-    throw redirect({ to: "/flow", replace: true });
-  },
+  head: () => ({
+    meta: [
+      { title: "Prata med Flow – MyFlove" },
+      {
+        name: "description",
+        content: "Chatta med Flow, din personliga följeslagare i MyFlove.",
+      },
+      { name: "robots", content: "noindex, nofollow" },
+    ],
+  }),
+  component: Page,
 });
