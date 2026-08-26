@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { FlowMascot, FlowSays } from "@/components/flow-mascot";
 import PwaInstallButton from "@/components/pwa-install-button";
+import { track } from "@/lib/analytics";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -388,7 +389,10 @@ function LandingDeck() {
       {index < total - 1 && (
         <button
           type="button"
-          onClick={() => goTo(total - 1)}
+          onClick={() => {
+            track("onboarding_skipped", { source: "intro" });
+            goTo(total - 1);
+          }}
           aria-label="Hoppa över introt och gå till sista vyn"
           className="press absolute top-3 right-3 z-30 rounded-full border border-[#2A2140]/10 bg-white/85 px-4 py-2 text-xs font-semibold text-[#2A2140] shadow-md backdrop-blur focus-visible:ring-2 focus-visible:ring-[#7C5CE0] focus-visible:outline-none"
         >
