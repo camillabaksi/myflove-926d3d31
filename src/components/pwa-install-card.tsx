@@ -20,13 +20,18 @@ export default function PwaInstallCard({
   className?: string;
   compact?: boolean;
 }) {
-  const { installed, canPrompt, isIos, showInstallHelp, setShowInstallHelp, install } =
+  const { installed, isIos, showInstallHelp, setShowInstallHelp, install, justInstalled } =
     usePwaInstall();
 
   useEffect(() => {
     if (installed) return;
     track("install_prompt_shown", { source: compact ? "hem" : "kort" });
   }, [installed, compact]);
+
+  useEffect(() => {
+    if (justInstalled) track("install_completed", { result: "completed" });
+  }, [justInstalled]);
+
 
   const startInstall = () => {
     haptic("success");
