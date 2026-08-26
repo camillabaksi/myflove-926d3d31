@@ -1,3 +1,4 @@
+import { DeleteAccountButton } from "@/components/delete-account-button";
 import Layout from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
@@ -79,6 +80,23 @@ export default function NpfPage() {
         <Button variant="outline" className="rounded-xl gap-2" onClick={reset}>
           <RotateCcw size={16} /> Återställ till standard
         </Button>
+
+        {/* Konto – längst ner, tydligt men sekundärt. */}
+        <section
+          data-testid="account-section"
+          aria-label="Konto"
+          className="mt-10 space-y-3 rounded-3xl border border-destructive/30 bg-destructive/5 p-4"
+        >
+          <div className="space-y-1">
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+              Konto
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              Att avsluta kontot raderar din data permanent. Du får bekräfta först.
+            </p>
+          </div>
+          <DeleteAccountButton />
+        </section>
       </div>
     </Layout>
   );
