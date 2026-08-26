@@ -384,6 +384,18 @@ function LandingDeck() {
         </div>
       </div>
 
+      {/* Hoppa över introt */}
+      {index < total - 1 && (
+        <button
+          type="button"
+          onClick={() => goTo(total - 1)}
+          aria-label="Hoppa över introt och gå till sista vyn"
+          className="press absolute top-3 right-3 z-30 rounded-full border border-[#2A2140]/10 bg-white/85 px-4 py-2 text-xs font-semibold text-[#2A2140] shadow-md backdrop-blur focus-visible:ring-2 focus-visible:ring-[#7C5CE0] focus-visible:outline-none"
+        >
+          Hoppa över ›
+        </button>
+      )}
+
       {/* Navigering */}
       <button
         type="button"
