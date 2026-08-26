@@ -31,6 +31,8 @@ export default function BatteryPage() {
 
         <SimpleCheckin source="mitt-batteri" />
 
+        <DayEdgesCheckin />
+
         <section
           aria-label="Se min historik"
           className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
