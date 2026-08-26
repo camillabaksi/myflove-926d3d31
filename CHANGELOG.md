@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-08-26 – Skrivfältet i Flow-chatten går att använda igen
+
+- Skicka-knappens rad låg tidigare ovanpå textrutan och blockerade tryck/klick i nedre halvan – nu ligger knappen under fältet.
+
 ## 2026-08-26 – Lagom stor Flow i hela appen
 
 - Flow i kortläget (Min dag, Flow-inställningar) är mindre och tar inte längre över kortet.
