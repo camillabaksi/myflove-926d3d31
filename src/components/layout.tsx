@@ -78,6 +78,7 @@ import { useSituation } from "@/hooks/use-situation";
 import { lifeProfileSummary } from "@/lib/life-profile";
 import ViewCollapseToggle from "@/components/view-collapse-toggle";
 import FlowCompanion from "@/components/flow/flow-companion";
+import PwaInstallButton from "@/components/pwa-install-button";
 
 /** Vyer som redan har Flow på sitt eget sätt – där dubblerar vi inte. */
 const FLOW_HIDDEN_PATHS = new Set([
@@ -1087,6 +1088,11 @@ export default function Layout({ children }: LayoutProps) {
                     </span>
                     <ChevronRight size={18} className="shrink-0 text-muted-foreground" />
                   </Link>
+
+                  <div className="mb-4">
+                    <PwaInstallButton />
+                  </div>
+
 
                   <button
                     type="button"
