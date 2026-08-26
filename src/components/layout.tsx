@@ -282,11 +282,18 @@ export default function Layout({ children }: LayoutProps) {
       essential: true,
     },
     {
-      href: "/ma-bra",
-      label: "Må bra",
+      href: "/mitt-batteri",
+      label: "Mitt batteri",
       icon: Heart,
-      hint: "Logga hur du mår och hur mycket ork du har",
+      hint: "Din energi just nu – och en snabb incheckning",
     },
+    {
+      href: "/ma-bra",
+      label: "Energi och mående",
+      icon: Heart,
+      hint: "Snabb incheckning av ork och mående",
+    },
+
     {
       href: "/energifloede",
       label: "Energins historik",
