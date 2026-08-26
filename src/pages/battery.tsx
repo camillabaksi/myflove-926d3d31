@@ -5,6 +5,7 @@ import Layout from "@/components/layout";
 import { MyFloveHeader } from "@/components/myflove";
 import EnergyBattery from "@/components/energy-battery";
 import SimpleCheckin from "@/components/simple-checkin";
+import DayEdgesCheckin from "@/components/day-edges-checkin";
 import DayEnergyFlow from "@/components/day-energy-flow";
 import CollapsibleSection from "@/components/collapsible-section";
 import { track } from "@/lib/analytics";
