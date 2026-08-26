@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-26 – Levande Flow
+
+- Flow andas nu mjukt, blinkar i slumpad rytm och lutar sig lätt mot muspekaren – han känns som en liten levande kompis i stället för en stillbild.
+- Hjärtglöden bakom Flow pulserar lugnt.
+- Allt stängs av automatiskt om du valt mindre rörelse i systemet.
+
 ## 2026-08-26 – Flow känner dig i chatten
 
 - Flow-chatten utgår nu från din livsprofil, din nuvarande situation och de mönster Flow sett i din användning – tipsen blir mer personliga.

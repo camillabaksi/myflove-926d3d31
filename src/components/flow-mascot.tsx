@@ -1,5 +1,62 @@
+import { useEffect, useRef, useState } from "react";
 import flowAsset from "@/assets/flow-mascot.png.asset.json";
 import { cn } from "@/lib/utils";
+
+/** Slumpad blinkning – Flow blinkar som en levande varelse, inte som en metronom. */
+function useFlowBlink(enabled: boolean) {
+  const [blinking, setBlinking] = useState(false);
+  useEffect(() => {
+    if (!enabled) return;
+    if (typeof window === "undefined") return;
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+    let blinkTimer: ReturnType<typeof setTimeout>;
+    let resetTimer: ReturnType<typeof setTimeout>;
+    const schedule = () => {
+      const wait = 2600 + Math.random() * 4200;
+      blinkTimer = setTimeout(() => {
+        setBlinking(true);
+        resetTimer = setTimeout(() => {
+          setBlinking(false);
+          schedule();
+        }, 240);
+      }, wait);
+    };
+    schedule();
+    return () => {
+      clearTimeout(blinkTimer);
+      clearTimeout(resetTimer);
+    };
+  }, [enabled]);
+  return blinking;
+}
+
+/** Flow lutar sig mjukt mot pekaren – blicken följer dig. */
+function useFlowGaze(enabled: boolean) {
+  const ref = useRef<HTMLSpanElement | null>(null);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  useEffect(() => {
+    if (!enabled) return;
+    if (typeof window === "undefined") return;
+    if (!window.matchMedia?.("(pointer: fine)").matches) return;
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+    const onMove = (event: PointerEvent) => {
+      const el = ref.current;
+      if (!el) return;
+      const box = el.getBoundingClientRect();
+      if (!box.width || !box.height) return;
+      const dx = (event.clientX - (box.left + box.width / 2)) / window.innerWidth;
+      const dy = (event.clientY - (box.top + box.height / 2)) / window.innerHeight;
+      setTilt({
+        x: Math.max(-1, Math.min(1, dx * 2)),
+        y: Math.max(-1, Math.min(1, dy * 2)),
+      });
+    };
+    window.addEventListener("pointermove", onMove, { passive: true });
+    return () => window.removeEventListener("pointermove", onMove);
+  }, [enabled]);
+  return { ref, tilt };
+}
+
 
 /**
  * Flow – MyFloves officiella maskot.
@@ -43,6 +100,7 @@ export function FlowMascot({
   glow = false,
   wave = false,
   mood,
+  alive = true,
   className,
   imgClassName,
   alt = "Flow – MyFloves följeslagare",
@@ -54,38 +112,62 @@ export function FlowMascot({
   wave?: boolean;
   /** Flows kroppsspråk för vyn han står i. */
   mood?: FlowMood;
+  /** Levande detaljer: andning, blinkningar och blick som följer. */
+  alive?: boolean;
   className?: string;
   /** Extra klasser på bilden, t.ex. responsiva storlekar. */
   imgClassName?: string;
   alt?: string;
 }) {
+  const blinking = useFlowBlink(alive);
+  const { ref, tilt } = useFlowGaze(alive);
   return (
     <span
+      ref={ref}
       data-flow-mascot
       data-flow-mood={mood ?? (wave ? "wave" : float ? "float" : "none")}
+      data-flow-alive={alive ? "true" : "false"}
       className={cn("relative inline-flex shrink-0 items-center justify-center", className)}
     >
       {glow && (
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10 rounded-full bg-[#C4B5FD]/45 blur-2xl"
+          className={cn(
+            "pointer-events-none absolute inset-0 -z-10 rounded-full bg-[#C4B5FD]/45 blur-2xl",
+            alive && "flow-heart-glow",
+          )}
         />
       )}
-      <img
-        src={FLOW_MASCOT_SRC}
-        alt={alt}
-        loading="lazy"
-        decoding="async"
-        className={cn(
-          "object-contain drop-shadow-[0_8px_24px_rgba(124,92,224,0.25)]",
-          SIZES[size],
-          mood
-            ? MOODS[mood]
-            : cn(float && !wave && "floaty", wave && "wave-hello"),
-          imgClassName,
-        )}
-      />
+      <span
+        aria-hidden={false}
+        className={cn(alive && "flow-gaze inline-flex", blinking && "flow-blinking")}
+        style={
+          alive
+            ? {
+                transform: `translate3d(${tilt.x * 3}px, ${tilt.y * 2}px, 0) rotate(${tilt.x * 2}deg)`,
+              }
+            : undefined
+        }
+      >
+        <img
+          src={FLOW_MASCOT_SRC}
+          alt={alt}
+          loading="lazy"
+          decoding="async"
+          data-flow-blink={blinking ? "true" : "false"}
+          className={cn(
+            "object-contain drop-shadow-[0_8px_24px_rgba(124,92,224,0.25)]",
+            SIZES[size],
+            mood
+              ? MOODS[mood]
+              : cn(float && !wave && "floaty", wave && "wave-hello"),
+            alive && !mood && !wave && !float && "flow-breathe-body",
+            imgClassName,
+          )}
+        />
+      </span>
     </span>
+
   );
 }
 
