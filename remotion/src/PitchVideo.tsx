@@ -366,7 +366,46 @@ const SceneFlow: React.FC = () => (
   </Shell>
 );
 
+const SceneFlowAlive: React.FC = () => {
+  const frame = useCurrentFrame();
+  const breath = 1 + Math.sin(frame / 26) * 0.03;
+  return (
+    <Shell>
+      <div style={{ display: "flex", alignItems: "center", gap: 60 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 36, flex: 1 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <Eyebrow>Flow lever</Eyebrow>
+            <Title size={62}>Han andas, blinkar och följer samtalet</Title>
+          </div>
+          <Sub delay={16}>
+            Flow är inte en stillbild. Han andas mjukt, blinkar i slumpad rytm, lutar sig mot dig
+            och hjärtat glöder lugnt.
+          </Sub>
+          <div style={{ display: "flex", gap: 24 }}>
+            <Card
+              accent={COLORS.primary}
+              title="Följer chatten"
+              text="Lyssnar när du skriver, tänker djupt medan svaret kommer, andas ut när det är klart."
+              delay={22}
+            />
+            <Card
+              accent={COLORS.gold}
+              title="Din nivå"
+              text="Tyst, diskret eller aktiv – Flow-inställningarna sparas per användare."
+              delay={30}
+            />
+          </div>
+        </div>
+        <div style={{ transform: `scale(${breath})` }}>
+          <FlowMascot size={500} delay={10} />
+        </div>
+      </div>
+    </Shell>
+  );
+};
+
 const SceneHow: React.FC = () => {
+
   const steps = [
     { n: "1", t: "Fånga", d: "Skriv fritt i QuickFlow" },
     { n: "2", t: "Sortera", d: "AI placerar rätt: kalender, inköp, studier" },
