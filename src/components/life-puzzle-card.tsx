@@ -79,7 +79,7 @@ export default function LifePuzzleCard() {
 
       <div className="flex flex-col gap-2 sm:flex-row">
         <Link
-          href="/flow"
+          href="/assistant"
           className="press inline-flex flex-1 items-center justify-center gap-2 rounded-2xl bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground text-balance"
         >
           Prata med Flow om helheten

@@ -502,7 +502,7 @@ function MyFloveLinkRow() {
       <Link href="/idag">
         <MyFloveButton variant="secondary">Gör planen lättare</MyFloveButton>
       </Link>
-      <Link href="/flow">
+      <Link href="/assistant">
         <MyFloveButton variant="tertiary">Prata med Flow</MyFloveButton>
       </Link>
     </div>

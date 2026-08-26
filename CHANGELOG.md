@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-26 – Lugnare Flow på hemskärmen
+
+- Flow är mindre på hemskärmen – samma kompis, men diskretare (mini-storlek).
+- "Prata med Flow" går nu direkt till chatten i stället för till Flow-vyn – även från Livspusslet och Energiflödet.
+
 ## 2026-08-26 – Material 3.5
 
 - Pitchvideon har en ny scen, "Flow lever", som visar andning, blinkningar, blick och hur Flow följer chatten.
