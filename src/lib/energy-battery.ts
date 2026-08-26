@@ -126,6 +126,14 @@ export interface BatteryInput {
   items: BatteryItem[];
   /** Dagens viktade netto från Energiflöde™ (kan vara negativt). */
   energyFlowNet?: number;
+  /** När morgonen startar (minuter från midnatt). */
+  dayStartMinutes?: number;
+  /** När dagen slutar (minuter från midnatt). */
+  dayEndMinutes?: number;
+  /** Egen ifyllnad vid morgonens start (0–100). */
+  morningLevel?: number | null;
+  /** Egen ifyllnad vid dagens slut (0–100). */
+  eveningLevel?: number | null;
   now?: Date;
 }
 
@@ -134,14 +142,44 @@ export function buildBattery(input: BatteryInput): BatteryReading {
   const nowMinutes = now.getHours() * 60 + now.getMinutes();
   const personal = input.pattern.reliable;
 
+  const startMinutes = input.dayStartMinutes ?? BATTERY_START_HOUR * 60;
+  const endMinutes = Math.max(startMinutes + 120, input.dayEndMinutes ?? BATTERY_END_HOUR * 60);
+
   const baseAt = (minutes: number) => {
     const h = Math.floor(minutes / 60) % 24;
     const v = personal ? input.pattern.byHour[h] : null;
     return v == null ? genericLevel(h) : levelToPercent(v);
   };
 
-  // Kalibrera kurvan så att den möter dagens faktiska FlowScore just nu.
-  const offset = clamp(input.flowNow, 0, 100) - baseAt(nowMinutes);
+  // Ankare: punkter där vi vet hur det faktiskt känns. Morgonens och kvällens
+  // egna ifyllnader väger lika tungt som FlowScore just nu.
+  const anchors: { minutes: number; delta: number }[] = [];
+  if (input.morningLevel != null) {
+    anchors.push({ minutes: startMinutes, delta: clamp(input.morningLevel, 0, 100) - baseAt(startMinutes) });
+  }
+  anchors.push({ minutes: nowMinutes, delta: clamp(input.flowNow, 0, 100) - baseAt(nowMinutes) });
+  if (input.eveningLevel != null) {
+    anchors.push({ minutes: endMinutes, delta: clamp(input.eveningLevel, 0, 100) - baseAt(endMinutes) });
+  }
+  anchors.sort((a, b) => a.minutes - b.minutes);
+
+  /** Mjuk övergång mellan ankarpunkterna. */
+  const offsetAt = (m: number) => {
+    if (anchors.length === 1) return anchors[0].delta;
+    if (m <= anchors[0].minutes) return anchors[0].delta;
+    const last = anchors[anchors.length - 1];
+    if (m >= last.minutes) return last.delta;
+    for (let i = 1; i < anchors.length; i += 1) {
+      const a = anchors[i - 1];
+      const b = anchors[i];
+      if (m <= b.minutes) {
+        const span = Math.max(1, b.minutes - a.minutes);
+        const t = (m - a.minutes) / span;
+        return a.delta + (b.delta - a.delta) * t;
+      }
+    }
+    return last.delta;
+  };
 
   // Energiflöde™ har redan hänt – det syns i den passerade delen av kurvan.
   const flowNet = input.energyFlowNet ?? 0;
@@ -160,7 +198,7 @@ export function buildBattery(input: BatteryInput): BatteryReading {
   const flowPart = flowNet * 1.5;
 
   const slots: BatterySlot[] = [];
-  for (let m = BATTERY_START_HOUR * 60; m <= BATTERY_END_HOUR * 60; m += SLOT_MINUTES) {
+  for (let m = startMinutes; m <= endMinutes; m += SLOT_MINUTES) {
     // Ackumulerad påverkan av allt som avslutats fram till den här punkten.
     let effect = 0;
     for (const t of timed) {
@@ -170,7 +208,7 @@ export function buildBattery(input: BatteryInput): BatteryReading {
     slots.push({
       minutes: m,
       time: minutesToTime(m),
-      level: clamp(baseAt(m) + offset + effect + flowPart),
+      level: clamp(baseAt(m) + offsetAt(m) + effect + flowPart),
       past,
     });
   }
