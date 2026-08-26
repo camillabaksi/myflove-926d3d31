@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-26 – Flow svarar utan "invalid"-fel
+
+- Långa profiltexter och långa samtal gjorde att anropet till Flow underkändes. Kontexten kortas nu ner och de senaste 40 meddelandena skickas.
+- Samma fix i Stop-chatten, plus ett begripligt felmeddelande i stället för teknisk text.
+
 ## 2026-08-26 – Skrivfältet i Flow-chatten går att använda igen
 
 - Skicka-knappens rad låg tidigare ovanpå textrutan och blockerade tryck/klick i nedre halvan – nu ligger knappen under fältet.

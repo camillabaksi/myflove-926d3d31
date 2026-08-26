@@ -126,11 +126,11 @@ export default function StopModal({ open, onOpenChange }: StopModalProps) {
         { role: "assistant", content: "Okej, jag är här. Jag lyssnar utan att döma." },
         ...next,
       ];
+      const context = `${personalContext}\n\n${contextPrompt}${feeling ? `\nAnvändaren beskriver känslan som: ${feeling}.` : ""}`
+        .trim()
+        .slice(0, 4000);
       const { reply } = await chat({
-        data: {
-          messages: payload,
-          context: `${personalContext}\n\n${contextPrompt}${feeling ? `\nAnvändaren beskriver känslan som: ${feeling}.` : ""}`,
-        },
+        data: { messages: payload.slice(-40), context },
       });
       setMessages((m) => [...m, { role: "assistant", content: reply }]);
       if (convIdRef.current) await saveFlowMessage(convIdRef.current, "assistant", reply);
