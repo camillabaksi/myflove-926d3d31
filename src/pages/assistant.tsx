@@ -18,6 +18,7 @@ import {
 import { chatWithFlow } from "@/lib/flow-chat.functions";
 import { useTasks, useMoods, useFocus, useReminders } from "@/hooks/use-data";
 import { useLifePuzzle } from "@/hooks/use-life-puzzle";
+import { useFlowPersonalContext } from "@/hooks/use-flow-personal-context";
 import { lastPlace, placeFor, shortcutsFor, type FlowPlace } from "@/lib/flow-context";
 import {
   AREA_META,
@@ -98,6 +99,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
 
   const chat = useServerFn(chatWithFlow);
   const { puzzle, contextPrompt } = useLifePuzzle();
+  const personalContext = useFlowPersonalContext();
   const [place, setPlace] = useState<FlowPlace | null>(null);
   useEffect(() => {
     setPlace(lastPlace());
@@ -170,7 +172,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
       const { reply } = await chat({
         data: {
           messages: history.map((m) => ({ role: m.role, content: m.content })),
-          context: contextPrompt,
+          context: `${personalContext}\n\n${contextPrompt}`,
         },
       });
       setMessages((m) => [...m, { id: `tmp-a-${Date.now()}`, role: "assistant", content: reply }]);
