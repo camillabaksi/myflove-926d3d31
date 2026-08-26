@@ -57,8 +57,11 @@ describe("krypterad lokal lagring", () => {
 
   it("går inte att läsa efter utloggning utan nyckeln", async () => {
     secureSetItem("myflove-medications", JSON.stringify(["ritalin"]));
-    await new Promise((r) => setTimeout(r, 0));
-    const raw = window.localStorage.getItem("myflove-medications");
+    let raw: string | null = null;
+    for (let i = 0; i < 50 && !raw?.startsWith("enc:v1:"); i++) {
+      await new Promise((r) => setTimeout(r, 5));
+      raw = window.localStorage.getItem("myflove-medications");
+    }
 
     lockSecureLocal();
     expect(raw).not.toContain("ritalin");
