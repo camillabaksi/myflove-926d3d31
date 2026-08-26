@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import {
   Loader2,
   Send,
-  Sparkles,
   History,
   Plus,
   Trash2,
@@ -15,6 +14,7 @@ import {
   ArrowLeft,
   ChevronRight,
 } from "lucide-react";
+import { FlowMascot } from "@/components/flow-mascot";
 import { chatWithFlow } from "@/lib/flow-chat.functions";
 import { useTasks, useMoods, useFocus, useReminders } from "@/hooks/use-data";
 import { useLifePuzzle } from "@/hooks/use-life-puzzle";
