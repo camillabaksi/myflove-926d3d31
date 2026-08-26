@@ -200,7 +200,9 @@ export const listUsersWithRolesFn = createServerFn({ method: "GET" })
     const filtered =
       from === null && to === null
         ? rows
-        : rows.filter((r) => inRange(r.last_sign_in_at) || inRange(r.created_at));
+        : rows.filter(
+            (r) => inRange(r.last_visit_at) || inRange(r.last_sign_in_at) || inRange(r.created_at),
+          );
 
     return filtered.sort((a, b) =>
       (b.last_visit_at ?? b.last_sign_in_at ?? "").localeCompare(
