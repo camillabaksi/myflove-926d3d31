@@ -25,6 +25,7 @@ import { useStudySchedule } from "@/hooks/use-study-schedule";
 import { suggestNow, type NowSuggestion } from "@/lib/flow-engine";
 
 import { AreaOnboarding } from "@/components/area-onboarding";
+import PwaInstallCard from "@/components/pwa-install-card";
 import { AreaSwitcher } from "@/components/area-switcher";
 import { AREA_META, useActiveArea } from "@/lib/life-areas";
 import IntroTour from "@/components/intro-tour";
