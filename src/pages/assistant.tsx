@@ -305,6 +305,12 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                 <p className="text-sm text-muted-foreground">
                   Din andra hjärna – lugn, empatisk, aldrig dömande
                 </p>
+                <p data-npf="optional" className="mt-1 text-xs text-muted-foreground">
+                  Flow utgår från din profil och dina mönster i appen.{" "}
+                  <Link to="/min-livsprofil" className="underline underline-offset-2">
+                    Justera din profil
+                  </Link>
+                </p>
               </div>
             </div>
             <Button
