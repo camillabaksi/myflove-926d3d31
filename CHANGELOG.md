@@ -5,6 +5,8 @@
 - Flow i kortläget (Min dag, Flow-inställningar) är mindre och tar inte längre över kortet.
 - Flow i chattens rubrik är nedskalad så texten får plats bredvid.
 - Flows välkomsthälsning använder en mindre maskot.
+- Kortläget klipps och skalas korrekt, så maskoten inte kan svälla utanför sitt kort på desktop.
+- Verifierat på mobil (411 px) och desktop (1280 px): Flow syns i alla vyer och överlappar ingen text eller knapp.
 
 
 ## 2026-08-26 – Flow mini är lite större
