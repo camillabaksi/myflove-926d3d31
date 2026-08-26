@@ -199,7 +199,7 @@ const SceneHook: React.FC = () => {
   return (
     <Shell dark>
       <div style={{ display: "flex", flexDirection: "column", gap: 34 }}>
-        <Eyebrow dark>MyFlove — pitch 2026</Eyebrow>
+        <Eyebrow dark>MyFlove — pitch 2026 · v3.5</Eyebrow>
         <div style={{ transform: `scale(${pulse})`, transformOrigin: "left center" }}>
           <Title dark size={112}>
             Vardagen kraschar
@@ -690,6 +690,7 @@ const SCENES: { c: React.FC; d: number }[] = [
   { c: SceneInsight, d: 130 },
   { c: SceneProduct, d: 170 },
   { c: SceneFlow, d: 165 },
+  { c: SceneFlowAlive, d: 200 },
   { c: SceneHow, d: 175 },
   { c: SceneWhyNow, d: 165 },
   { c: SceneMarket, d: 220 },
