@@ -545,6 +545,7 @@ export function FlowCharacter({
   const index = Math.abs(Math.round(seed)) % list.length;
   const variant = useMemo(() => list[index], [list, index]);
   const ctx: SceneContext = { energy, kids, rain };
+  const isMini = stage === "mini";
 
   return (
     <div
@@ -559,17 +560,17 @@ export function FlowCharacter({
       )}
     >
       <div className={cn("relative aspect-square shrink-0", STAGE_CLASS[stage])}>
-        {variant.back?.(ctx)}
+        {!isMini && variant.back?.(ctx)}
 
         <FlowMascot
-          size="xl"
+          size={isMini ? "sm" : "xl"}
           glow
           mood={variant.mood}
           className={cn("absolute inset-0 flex items-center justify-center", variant.mascotClass)}
-          imgClassName={stage === "mini" ? "h-[108%] w-auto max-w-none" : "h-[126%] w-auto max-w-none"}
+          imgClassName={isMini ? "h-12 w-12 max-w-none object-contain" : "h-[126%] w-auto max-w-none"}
         />
 
-        {variant.front?.(ctx)}
+        {!isMini && variant.front?.(ctx)}
       </div>
     </div>
   );
