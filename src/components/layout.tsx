@@ -717,7 +717,10 @@ export default function Layout({ children }: LayoutProps) {
             Alarmljud: {alarmEnabled ? "på" : "av"}
           </Button>
           <Show when="signed-in">
-            <Button variant="outline" className="w-full rounded-xl gap-2" onClick={() => {
+            <Button
+              variant="outline"
+              className="w-full rounded-xl gap-2"
+              onClick={() => {
                 track("logout");
                 signOut();
               }}

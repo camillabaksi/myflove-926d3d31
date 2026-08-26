@@ -59,7 +59,10 @@ export default function SimpleCheckin({
   return (
     <section
       aria-label="Snabb incheckning"
-      className={cn("rounded-3xl border border-border/60 bg-card p-5 shadow-soft space-y-5", className)}
+      className={cn(
+        "rounded-3xl border border-border/60 bg-card p-5 shadow-soft space-y-5",
+        className,
+      )}
     >
       <div className="space-y-2">
         <p className="text-sm font-medium text-ink">Hur är ditt batteri idag?</p>

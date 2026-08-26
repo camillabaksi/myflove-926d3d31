@@ -32,7 +32,6 @@ export default function PwaInstallCard({
     if (justInstalled) track("install_completed", { result: "completed" });
   }, [justInstalled]);
 
-
   const startInstall = () => {
     haptic("success");
     track("install_started", { source: compact ? "hem" : "kort" });
@@ -80,7 +79,6 @@ export default function PwaInstallCard({
         <Download className="mr-2 size-4" />
         Lägg till MyFlove på hemskärmen
       </Button>
-
 
       {showInstallHelp && (
         <div className="relative rounded-2xl bg-muted/60 p-3 text-xs leading-relaxed text-muted-foreground animate-fade-in">

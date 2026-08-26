@@ -125,10 +125,22 @@ const TIMELINE = [
 ];
 
 const PHONE_ITEMS = [
-  { t: "09:00", l: "Fokustid", e: "🎯", done: false, r: "42 minuter fokus. Jag säger till när det är paus." },
+  {
+    t: "09:00",
+    l: "Fokustid",
+    e: "🎯",
+    done: false,
+    r: "42 minuter fokus. Jag säger till när det är paus.",
+  },
   { t: "10:30", l: "Medicin", e: "💊", done: true, r: "Redan taget idag. Bra jobbat 💜" },
   { t: "12:00", l: "Lunch", e: "🌿", done: false, r: "Lunch laddar batteriet mer än du tror." },
-  { t: "17:30", l: "Handla", e: "🛒", done: false, r: "Mjölk står på listan. Butiken ligger på vägen." },
+  {
+    t: "17:30",
+    l: "Handla",
+    e: "🛒",
+    done: false,
+    r: "Mjölk står på listan. Butiken ligger på vägen.",
+  },
 ];
 
 const PHONE_DONE_REACTIONS = [
@@ -225,7 +237,11 @@ function LandingDeck() {
   useEffect(() => {
     const target = `#${SLIDES[index].id}`;
     if (window.location.hash !== target) {
-      window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}${target}`);
+      window.history.replaceState(
+        null,
+        "",
+        `${window.location.pathname}${window.location.search}${target}`,
+      );
     }
   }, [index]);
 
@@ -249,7 +265,9 @@ function LandingDeck() {
 
   const isInteractive = (target: EventTarget | null) =>
     target instanceof Element &&
-    Boolean(target.closest("button, a, input, textarea, select, [role='slider'], [contenteditable]"));
+    Boolean(
+      target.closest("button, a, input, textarea, select, [role='slider'], [contenteditable]"),
+    );
 
   const onPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
     if (isInteractive(event.target)) return;
@@ -337,8 +355,6 @@ function LandingDeck() {
     return () => window.removeEventListener("keydown", onWindowKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index, total]);
-
-
 
   return (
     <main className="relative h-[100dvh] overflow-hidden overscroll-none bg-[#F8F5FE] text-[#2A2140] [overscroll-behavior-x:none]">
@@ -448,7 +464,6 @@ function LandingDeck() {
         <p className="text-[11px] font-semibold text-[#6B647F]">
           Svep i sidled · {index + 1} / {total}
         </p>
-
       </div>
 
       <p aria-live="polite" className="sr-only">
@@ -457,8 +472,6 @@ function LandingDeck() {
     </main>
   );
 }
-
-
 
 /* ── Hero ─────────────────────────────────────────────────── */
 
@@ -515,8 +528,6 @@ function Hero() {
             />
           </div>
 
-
-
           <div className="mx-auto mt-8 w-full max-w-xl lg:mx-0">
             <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 text-left sm:gap-5">
               <FlowMascot
@@ -534,8 +545,6 @@ function Hero() {
               </div>
             </div>
           </div>
-
-
         </div>
 
         <PhonePreview />
@@ -645,8 +654,6 @@ function PhonePreview() {
         alt="Flow vid telefonen"
       />
 
-
-
       {/* Flytande kort */}
       <FloatCard
         className="-top-2 -left-3 sm:-left-10"
@@ -713,7 +720,9 @@ function NeedSection() {
   return (
     <section id="sa-funkar-det" className="scroll-mt-8 bg-[#F1ECFC] px-5 py-16 sm:px-6 sm:py-24">
       <div className="mx-auto max-w-4xl">
-        <p className="text-xs font-semibold tracking-[0.3em] text-[#7C5CE0] uppercase">Prova Flow</p>
+        <p className="text-xs font-semibold tracking-[0.3em] text-[#7C5CE0] uppercase">
+          Prova Flow
+        </p>
         <h2 className="font-display mt-3 text-3xl leading-tight font-bold sm:text-4xl md:text-5xl">
           Vad behöver du just nu?
         </h2>
@@ -904,7 +913,9 @@ function FlowVoice() {
   return (
     <section className="px-5 py-16 sm:px-6 sm:py-24">
       <div className="mx-auto max-w-5xl">
-        <p className="text-xs font-semibold tracking-[0.3em] text-[#7C5CE0] uppercase">Flow talar</p>
+        <p className="text-xs font-semibold tracking-[0.3em] text-[#7C5CE0] uppercase">
+          Flow talar
+        </p>
         <h2 className="font-display mt-3 text-3xl leading-tight font-bold sm:text-4xl md:text-5xl">
           Som en vän i fickan.
         </h2>

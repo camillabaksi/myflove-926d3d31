@@ -332,7 +332,6 @@ export default function Home() {
           </div>
         )}
 
-
         {/* Energins historik – samma data som Min energi, direkt under batteriet */}
         {shows("energifloede") && (
           <section
@@ -570,7 +569,6 @@ export default function Home() {
         <div style={{ order: 98.5 }} data-testid="home-install-note" className="pt-1">
           <PwaInstallCard compact />
         </div>
-
 
         <div
           style={{ order: 99 }}
