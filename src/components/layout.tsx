@@ -393,12 +393,19 @@ export default function Layout({ children }: LayoutProps) {
       essential: true,
     },
     {
-      href: "/flow",
-      label: "Planera",
+      href: "/flowplan",
+      label: "Planering",
       icon: Sparkles,
-      hint: "Vad är bäst just nu och vad hinner jag idag?",
+      hint: "Ordningen på dagen – ändra den precis som du vill",
       essential: true,
     },
+    {
+      href: "/flow",
+      label: "Flow hjälper",
+      icon: Sparkles,
+      hint: "Flow visar en sak i taget när du vill ha sällskap",
+    },
+
     {
       href: "/friktionsindex",
       label: "Feedback",
