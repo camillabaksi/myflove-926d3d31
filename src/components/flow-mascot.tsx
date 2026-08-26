@@ -100,6 +100,7 @@ export function FlowMascot({
   glow = false,
   wave = false,
   mood,
+  alive = true,
   className,
   imgClassName,
   alt = "Flow – MyFloves följeslagare",
@@ -111,38 +112,63 @@ export function FlowMascot({
   wave?: boolean;
   /** Flows kroppsspråk för vyn han står i. */
   mood?: FlowMood;
+  /** Levande detaljer: andning, blinkningar och blick som följer. */
+  alive?: boolean;
   className?: string;
   /** Extra klasser på bilden, t.ex. responsiva storlekar. */
   imgClassName?: string;
   alt?: string;
 }) {
+  const blinking = useFlowBlink(alive);
+  const { ref, tilt } = useFlowGaze(alive);
   return (
     <span
+      ref={ref}
       data-flow-mascot
       data-flow-mood={mood ?? (wave ? "wave" : float ? "float" : "none")}
+      data-flow-alive={alive ? "true" : "false"}
       className={cn("relative inline-flex shrink-0 items-center justify-center", className)}
     >
       {glow && (
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10 rounded-full bg-[#C4B5FD]/45 blur-2xl"
+          className={cn(
+            "pointer-events-none absolute inset-0 -z-10 rounded-full bg-[#C4B5FD]/45 blur-2xl",
+            alive && "flow-heart-glow",
+          )}
         />
       )}
-      <img
-        src={FLOW_MASCOT_SRC}
-        alt={alt}
-        loading="lazy"
-        decoding="async"
-        className={cn(
-          "object-contain drop-shadow-[0_8px_24px_rgba(124,92,224,0.25)]",
-          SIZES[size],
-          mood
-            ? MOODS[mood]
-            : cn(float && !wave && "floaty", wave && "wave-hello"),
-          imgClassName,
-        )}
-      />
+      <span
+        aria-hidden={false}
+        className={cn(alive && "flow-gaze inline-flex")}
+        style={
+          alive
+            ? {
+                transform: `translate3d(${tilt.x * 3}px, ${tilt.y * 2}px, 0) rotate(${tilt.x * 2}deg)`,
+              }
+            : undefined
+        }
+      >
+        <img
+          src={FLOW_MASCOT_SRC}
+          alt={alt}
+          loading="lazy"
+          decoding="async"
+          data-flow-blink={blinking ? "true" : "false"}
+          className={cn(
+            "object-contain drop-shadow-[0_8px_24px_rgba(124,92,224,0.25)]",
+            SIZES[size],
+            mood
+              ? MOODS[mood]
+              : cn(float && !wave && "floaty", wave && "wave-hello"),
+            alive && !mood && !wave && !float && "flow-breathe-body",
+            blinking && "flow-blinking",
+            imgClassName,
+          )}
+        />
+      </span>
     </span>
+
   );
 }
 
