@@ -512,6 +512,15 @@ function Hero() {
             </Button>
           </div>
 
+          <div className="mx-auto mt-4 w-full max-w-xs lg:mx-0">
+            <PwaInstallButton
+              variant="outline"
+              className="border-[#2A2140]/15 bg-white/70 backdrop-blur hover:bg-white"
+            />
+          </div>
+
+
+
           <div className="mx-auto mt-8 w-full max-w-xl lg:mx-0">
             <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 text-left sm:gap-5">
               <FlowMascot
