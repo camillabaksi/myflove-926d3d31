@@ -152,9 +152,9 @@ export function useFlowMoment(): FlowMoment {
       return { ...base, id: "silent", scene: "rest", message: "", silent: true };
     }
 
-    /* 1. Medicin – kan stängas av i Flow-inställningarna. */
+    /* 1. Medicin – befintlig medicinlogik, kan stängas av i Flow-inställningarna. */
     if (priorities.medicin !== false)
-    /* 1. Medicin – befintlig medicinlogik, inget nytt system. */
+
     for (const med of medications) {
       for (const time of med.times ?? []) {
         const mins = toMinutes(time);
