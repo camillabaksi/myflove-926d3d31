@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-26 – Planering i bottennavet
+
+- "Planering" i bottennavet öppnar nu planeringssidan (ordningen på dagen) i stället för Flow-hjälpen.
+- Flow-hjälpen finns kvar som en egen punkt i menyn: "Flow hjälper".
+- Hade du Flow som genväg byts den en gång till Planering – sedan bestämmer du själv i "Mer".
+
 ## 2026-08-26 – Flow-inställningar följer dig mellan enheter
 
 - Dina Flow-inställningar (hjälpnivå, tidsfönster, förvarning och prioriteringar) sparas nu på ditt konto och synkas mellan mobil och dator.
