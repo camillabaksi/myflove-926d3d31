@@ -4,7 +4,8 @@ import { useIsAdmin } from "@/hooks/use-is-admin";
 import { Lock, Download, ArrowLeft, FileText, Film, BookOpen, Sparkles } from "lucide-react";
 
 const BLUEPRINT_VERSIONS = [
-  { version: "3.4", label: "Senaste – Flow syns i blueprint och pitchdeck" },
+  { version: "3.5", label: "Senaste – Levande Flow och Flow-chatten" },
+  { version: "3.4", label: "Flow syns i blueprint och pitchdeck" },
   { version: "3.3", label: "Flow i hela appen och Morgonstart i rutiner" },
   { version: "3.2", label: "Omstrukturerad i sex delar" },
   { version: "3.0", label: "Navigation, Min dag och energibatteri" },
@@ -58,26 +59,37 @@ export default function PitchPage() {
               <Film size={18} className="text-primary" /> Pitchvideo
             </h2>
             <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
-              Version 3.4 · Flow 2.0
+              Version 3.5 · Levande Flow
             </span>
           </div>
           <p className="text-sm text-muted-foreground">
-            Samma Flow-karaktär som i appen och i pitchdeck 3.4 – med egen Flow 2.0-scen, en
-            marknadsscen med externa nyckeltal (uppskattningar/prognoser) och avslutning där Flow
-            vinkar.
+            Samma Flow-karaktär som i appen och i pitchdeck 3.5 – nu med en egen scen om levande
+            Flow (andning, blinkningar, blick och chatt-synk), en marknadsscen med externa nyckeltal
+            (uppskattningar/prognoser) och avslutning där Flow vinkar.
           </p>
 
           <video
             controls
             playsInline
             preload="metadata"
-            poster="/pitch/myflove-pitch-3.4-poster.jpg"
+            poster="/pitch/myflove-pitch-3.5-poster.jpg"
             className="w-full rounded-xl bg-black aspect-video"
             src="/pitch/myflove-pitch-2026.mp4"
           />
           <figure className="space-y-1">
             <img
-              src="/pitch/myflove-pitch-3.4-market-thumb.jpg"
+              src="/pitch/myflove-pitch-3.5-flow-thumb.jpg"
+              alt="Scenen om levande Flow i pitchvideon"
+              loading="lazy"
+              className="w-full rounded-xl border border-border"
+            />
+            <figcaption className="text-xs text-muted-foreground">
+              Scenen &quot;Flow lever&quot; – andning, blick och chatt-synk
+            </figcaption>
+          </figure>
+          <figure className="space-y-1">
+            <img
+              src="/pitch/myflove-pitch-3.5-market-thumb.jpg"
               alt="Marknadsscenen i pitchvideon med sex nyckeltal och källnot"
               loading="lazy"
               className="w-full rounded-xl border border-border"
@@ -110,19 +122,20 @@ export default function PitchPage() {
               <FileText size={18} className="text-primary" /> Pitchdeck
             </h2>
             <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
-              Version 3.4
+              Version 3.5
             </span>
           </div>
           <p className="text-sm text-muted-foreground">
-            Senaste decket (3.4) med Flow på titelsidan, en egen Flow 2.0-slide och en marknadsslide
-            med externa nyckeltal och källnot – i PowerPoint-format samt PDF för snabb visning.
+            Senaste decket (3.5) med Flow på titelsidan, en egen Flow 2.0-slide, en ny slide om
+            levande Flow och en marknadsslide med externa nyckeltal och källnot – i PowerPoint-format
+            samt PDF för snabb visning.
           </p>
 
           <div className="grid gap-3 sm:grid-cols-2">
             <figure className="space-y-1">
               <img
-                src="/pitch/MyFlove_Pitchdeck_3.4-thumb.jpg"
-                alt="Titelsidan i MyFlove Pitchdeck 3.4 med Flow-karaktären"
+                src="/pitch/MyFlove_Pitchdeck_3.5-thumb.jpg"
+                alt="Titelsidan i MyFlove Pitchdeck 3.5 med Flow-karaktären"
                 loading="lazy"
                 className="w-full rounded-xl border border-border"
               />
@@ -130,31 +143,31 @@ export default function PitchPage() {
             </figure>
             <figure className="space-y-1">
               <img
-                src="/pitch/MyFlove_Pitchdeck_3.4-market-thumb.jpg"
-                alt="Marknadssliden i MyFlove Pitchdeck 3.4 med sex nyckeltal"
+                src="/pitch/MyFlove_Pitchdeck_3.5-flow-thumb.jpg"
+                alt="Sliden om levande Flow i MyFlove Pitchdeck 3.5"
                 loading="lazy"
                 className="w-full rounded-xl border border-border"
               />
               <figcaption className="text-xs text-muted-foreground">
-                Marknadssliden – samma layout och siffror som i videon
+                Sliden &quot;Flow lever&quot; – samma budskap som i videon
               </figcaption>
             </figure>
           </div>
 
           <div className="flex flex-wrap gap-2">
             <a
-              href="/pitch/MyFlove_Pitchdeck_3.4.pptx"
+              href="/pitch/MyFlove_Pitchdeck_3.5.pptx"
               download
               className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
             >
-              <Download size={16} /> Ladda ner PowerPoint (3.4)
+              <Download size={16} /> Ladda ner PowerPoint (3.5)
             </a>
             <a
-              href="/pitch/MyFlove_Pitchdeck_3.4.pdf"
+              href="/pitch/MyFlove_Pitchdeck_3.5.pdf"
               download
               className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-medium hover:bg-secondary"
             >
-              <Download size={16} /> Ladda ner PDF (3.4)
+              <Download size={16} /> Ladda ner PDF (3.5)
             </a>
           </div>
         </section>
