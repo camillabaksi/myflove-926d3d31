@@ -3,6 +3,7 @@
 ## 2026-08-26 – Lägg till på hemskärmen vid inloggning
 
 - Knappen "Lägg till MyFlove på hemskärmen" finns nu även längst ner på Logga in- och Skapa konto-sidorna.
+- Fix: knappen doldes felaktigt i förhandsvisning och helskärmsläge – appen tolkades som redan installerad. Nu syns den så länge appen inte körs installerad.
 
 ## 2026-08-26 – Lugnare energi, tydligare konto och samlad appstatistik
 
