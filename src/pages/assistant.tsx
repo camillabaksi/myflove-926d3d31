@@ -484,9 +484,9 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                 }
               }}
               placeholder="Skriv till Flow…"
-              className="w-full h-24 p-3 pb-14 bg-transparent border-none outline-none resize-none text-base"
+              className="w-full h-24 p-3 bg-transparent border-none outline-none resize-none text-base"
             />
-            <div className="flex justify-end px-2 pb-2 -mt-12 relative">
+            <div className="flex justify-end px-2 pb-1">
               <Button
                 onClick={() => void send(input)}
                 disabled={!input.trim() || isSending}
