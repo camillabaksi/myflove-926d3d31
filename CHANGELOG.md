@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-26 – Flow tar mindre plats på Hem
+
+- Mini-Flow på hemskärmen och i vanliga appvyer är nu låst till en liten 56 px-yta, så maskoten inte kan växa över text eller knappen "Prata med Flow".
+- Rekvisita och glöd beskärs i mini-läget för att Flow ska kännas närvarande men inte ligga i vägen.
+
 ## 2026-08-26 – Lugnare Flow på hemskärmen
 
 - Flow är mindre på hemskärmen – samma kompis, men diskretare (mini-storlek).
