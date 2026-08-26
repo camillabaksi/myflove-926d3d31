@@ -12,6 +12,7 @@ import { useFlowSettings } from "@/hooks/use-flow-settings";
 import { learningMessage } from "@/lib/flow-learning";
 import { todayISO } from "@/lib/day";
 import { FLOW_DONE_EVENT } from "@/lib/flow-signal";
+import { linkForPriority, priorityForTitle, withinWindow } from "@/lib/flow-priorities";
 
 /**
  * Flow i den inloggade appen.
@@ -59,15 +60,7 @@ const isOutdoorTitle = (title: string) =>
   /promenad|ut |ute|hund|träning|löp|cykel|lämna|hämta|handla|resa|buss|tåg|marknad/i.test(title);
 
 /** Vart Flow ska länka beroende på vad som är på gång. */
-const linkForTitle = (title: string): { href: string; label: string } => {
-  if (isKidTitle(title)) return { href: "/barn", label: "Barnens dag" };
-  if (/medicin|tablett|dos/i.test(title)) return { href: "/daglig-rutin", label: "Rutiner & medicin" };
-  if (/plugg|studie|tenta|prov|föreläs|lektion/i.test(title)) return { href: "/studier", label: "Studier" };
-  if (/jobb|möte|arbete|kund/i.test(title)) return { href: "/jobb", label: "Jobb" };
-  if (/träning|gym|löp|promenad/i.test(title)) return { href: "/traning", label: "Träning" };
-  if (/handla|inköp|mat/i.test(title)) return { href: "/matlista", label: "Inköpslista" };
-  return { href: "/idag", label: "Min dag" };
-};
+const linkForTitle = (title: string) => linkForPriority(priorityForTitle(title));
 
 
 export function useFlowMoment(): FlowMoment {
@@ -129,9 +122,16 @@ export function useFlowMoment(): FlowMoment {
     [activeTasks],
   );
 
+  const priorities = settings.priorities;
+  const quietFrom = settings.quietFrom;
+  const quietTo = settings.quietTo;
+  const leadMinutes = settings.leadMinutes;
+
   return useMemo<FlowMoment>(() => {
     const base = { energy, kids, rain, seed: now.getDate() };
-    const quiet = level === "tyst";
+    const outsideWindow = !withinWindow(nowMin, quietFrom, quietTo);
+    const quiet = level === "tyst" || outsideWindow;
+    const wanted = (title: string) => priorities[priorityForTitle(title)] !== false;
 
     const pick = (moment: FlowMoment): FlowMoment =>
       isDismissed(moment.id) ? { ...base, id: "silent", scene: "rest", message: "", silent: true } : moment;
@@ -152,7 +152,9 @@ export function useFlowMoment(): FlowMoment {
       return { ...base, id: "silent", scene: "rest", message: "", silent: true };
     }
 
-    /* 1. Medicin – befintlig medicinlogik, inget nytt system. */
+    /* 1. Medicin – befintlig medicinlogik, kan stängas av i Flow-inställningarna. */
+    if (priorities.medicin !== false)
+
     for (const med of medications) {
       for (const time of med.times ?? []) {
         const mins = toMinutes(time);
@@ -192,6 +194,7 @@ export function useFlowMoment(): FlowMoment {
     ]
       .filter((e): e is { title: string; mins: number } => e.mins != null)
       .filter((e) => e.mins >= nowMin - 30)
+      .filter((e) => wanted(e.title))
       .sort((a, b) => a.mins - b.mins);
 
     const next = upcoming[0];
@@ -238,7 +241,7 @@ export function useFlowMoment(): FlowMoment {
 
 
     /* 3c. Viktig tid närmar sig – förvarning i god tid, med väg till rätt vy. */
-    if (next && next.mins - nowMin > 10 && next.mins - nowMin <= 45) {
+    if (next && next.mins - nowMin > 10 && next.mins - nowMin <= Math.max(15, leadMinutes + 15)) {
       const inMins = Math.round((next.mins - nowMin) / 5) * 5;
       const clock = `${String(Math.floor(next.mins / 60)).padStart(2, "0")}:${String(next.mins % 60).padStart(2, "0")}`;
       return pick({
@@ -359,6 +362,10 @@ export function useFlowMoment(): FlowMoment {
   }, [
     celebrating,
     doneTitle,
+    priorities,
+    quietFrom,
+    quietTo,
+    leadMinutes,
 
     medications,
     activeTasks,

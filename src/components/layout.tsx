@@ -457,6 +457,12 @@ export default function Layout({ children }: LayoutProps) {
         ]
       : []),
     {
+      href: "/flow-installningar",
+      label: "Flow-inställningar",
+      icon: Sparkles,
+      hint: "Hjälpnivå, när Flow får höra av sig och vad han prioriterar",
+    },
+    {
       href: "/oversikt",
       label: "Så funkar MyFlove",
       icon: Compass,
@@ -565,6 +571,7 @@ export default function Layout({ children }: LayoutProps) {
         hrefs: [
           
           "/oversikt",
+          "/flow-installningar",
           "/min-livsprofil",
           "/anpassa-hem",
           "/anpassa",
