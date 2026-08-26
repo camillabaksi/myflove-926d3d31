@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-08-26 – Prata med Flow
+
+- Flow-chatten har fått en tydlig ingång: "Prata med Flow" finns nu i menyn "Mer", i översikten "Så funkar MyFlove" och som knapp direkt i Flow-kortet.
+
 ## 2026-08-26 – Installationsknapp på startsidan
 
 - "Hoppa över"-knapp högst upp på introt – gå direkt till sista vyn utan att svepa igenom alla slides.
