@@ -563,6 +563,33 @@ html[data-npf-less="true"] [data-npf="optional"] {
   animation: myflove-flow-calm 6s ease-in-out infinite;
 }
 
+/* Flow lever: en knappt märkbar andning + en blinkning då och då.
+   Läggs på behållaren så den kan kombineras med scenens egen stämning. */
+@keyframes myflove-flow-alive {
+  0%, 92%, 100% { transform: translateY(0) scale(1); }
+  46% { transform: translateY(-2px) scale(1.012); }
+}
+@keyframes myflove-flow-blink {
+  0%, 96%, 100% { opacity: 0; }
+  97%, 99% { opacity: 1; }
+}
+@utility flow-alive {
+  animation: myflove-flow-alive 6.5s ease-in-out infinite;
+  will-change: transform;
+}
+/* Liten reaktion när Flow får något nytt att säga. */
+@keyframes myflove-flow-notice {
+  0% { transform: scale(1) rotate(0deg); }
+  30% { transform: scale(1.06) rotate(-4deg); }
+  60% { transform: scale(1.02) rotate(3deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+@utility flow-notice {
+  animation: myflove-flow-notice 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+
+
 
 /* Knapptryck: lätt scale */
 @utility press {
@@ -616,6 +643,10 @@ html[data-npf-less="true"] [data-npf="optional"] {
   .flow-pulse,
   .flow-cheer,
   .flow-calm,
+  .flow-alive,
+  .flow-notice,
+
+
 
   .stagger > * {
     animation: none !important;

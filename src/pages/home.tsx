@@ -1,6 +1,8 @@
 import { useMemo, useState } from "react";
 import HomeShortcuts from "@/components/home-shortcuts";
 import FlowCompanion from "@/components/flow/flow-companion";
+import FlowLearningCard from "@/components/flow/flow-learning-card";
+
 import QuickCheckin from "@/components/quick-checkin";
 import { useHomeLayout, type HomeBlockId } from "@/lib/home-layout";
 import { TaskQuickAdd, type QuickAddResult } from "@/components/task-quick-add";
@@ -294,6 +296,11 @@ export default function Home() {
 
         {/* Flow finns med i appen – en kontextuell sak i taget. */}
         <FlowCompanion stage="inline" />
+
+        {/* Flow visar mjukt att han lär sig hur du fungerar. */}
+        <FlowLearningCard />
+
+
 
 
 

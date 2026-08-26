@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-26 – Flow som levande följeslagare
+
+- Flow är proaktiv: han hör av sig när energin är låg samtidigt som dagen är full, när det blir regn innan något utomhus och i god tid innan du behöver börja göra dig klar.
+- Flow lär sig dig: nytt kort på Hem visar mjukt hur väl han känner dina morgnar, tunga dagar och energidippar – helt utifrån data som redan finns i appen.
+- Flow tar aldrig över: varje mening kan viftas bort för dagen, och i Flows inställningar väljer du Tyst, Diskret eller Aktiv – eller stänger av Flow helt.
+- Flow känns levande: en knappt märkbar andning och små reaktioner, som respekterar reducerad rörelse.
+
 ## 2026-08-25 – Export av adminstatistik (CSV/PDF)
 
 - Ny exportruta i Appstatistik: välj datumintervall (eller 7/30/90 dagar) och ladda ner statistiken som CSV eller PDF.

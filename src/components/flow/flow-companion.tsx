@@ -1,7 +1,13 @@
 import { Link } from "wouter";
+import { Settings2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { FlowCharacter, type FlowStage } from "@/components/flow/flow-character";
 import { useFlowMoment } from "@/hooks/use-flow-moment";
+import { useFlowLearning } from "@/hooks/use-flow-learning";
+import { useFlowSettings, type FlowHelpLevel } from "@/hooks/use-flow-settings";
 import { haptic } from "@/lib/haptics";
 import { cn } from "@/lib/utils";
 
@@ -9,8 +15,95 @@ import { cn } from "@/lib/utils";
  * Flow i den inloggade appen – samma karaktär som i Flow-previewen,
  * men som en liten kontextuell följeslagare i vanliga vyer.
  *
- * Visar EN sak i taget och använder bara befintlig data (se useFlowMoment).
+ * Visar EN sak i taget, går alltid att vifta bort och kan tystas helt.
  */
+
+const LEVELS: Array<{ id: FlowHelpLevel; label: string; hint: string }> = [
+  { id: "tyst", label: "Tyst", hint: "Flow syns men säger inget" },
+  { id: "diskret", label: "Diskret", hint: "Bara när det spelar roll" },
+  { id: "aktiv", label: "Aktiv", hint: "Flow hör av sig oftare" },
+];
+
+function FlowSettingsPopover() {
+  const { settings, update } = useFlowSettings();
+  const knowledge = useFlowLearning();
+
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          size="icon"
+          variant="ghost"
+          className="size-7 rounded-full text-muted-foreground"
+          aria-label="Hur mycket ska Flow hjälpa till?"
+        >
+          <Settings2 className="size-4" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent align="end" className="w-72 space-y-4 rounded-2xl">
+        <div className="space-y-1">
+          <p className="text-sm font-medium">Hur mycket ska Flow hjälpa till?</p>
+          <p className="text-xs text-muted-foreground">
+            Du bestämmer. Flow ska aldrig vara i vägen.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-3 gap-1">
+          {LEVELS.map((l) => (
+            <Button
+              key={l.id}
+              size="sm"
+              variant={settings.level === l.id ? "default" : "outline"}
+              className="rounded-full text-xs"
+              onClick={() => update({ level: l.id })}
+            >
+              {l.label}
+            </Button>
+          ))}
+        </div>
+        <p className="text-xs text-muted-foreground">
+          {LEVELS.find((l) => l.id === settings.level)?.hint}
+        </p>
+
+        <div className="flex items-center justify-between gap-3">
+          <Label htmlFor="flow-learning" className="text-sm font-normal">
+            Flow får berätta vad han lär sig
+          </Label>
+          <Switch
+            id="flow-learning"
+            checked={settings.learning}
+            onCheckedChange={(v) => update({ learning: v })}
+          />
+        </div>
+
+        <div className="flex items-center justify-between gap-3">
+          <Label htmlFor="flow-enabled" className="text-sm font-normal">
+            Visa Flow i appen
+          </Label>
+          <Switch
+            id="flow-enabled"
+            checked={settings.enabled}
+            onCheckedChange={(v) => update({ enabled: v })}
+          />
+        </div>
+
+        <div className="space-y-1 rounded-xl bg-muted/50 p-3">
+          <p className="text-xs font-medium">{knowledge.label}</p>
+          <div className="h-1.5 w-full overflow-hidden rounded-full bg-background">
+            <div
+              className="h-full rounded-full bg-primary transition-all"
+              style={{ width: `${Math.max(6, knowledge.level)}%` }}
+            />
+          </div>
+          <p className="text-xs text-muted-foreground">
+            Du behöver inte lära dig hur jag fungerar. Jag lär mig hur du fungerar.
+          </p>
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+}
+
 export default function FlowCompanion({
   stage = "inline",
   className,
@@ -19,17 +112,21 @@ export default function FlowCompanion({
   className?: string;
 }) {
   const moment = useFlowMoment();
+  const { settings, dismiss } = useFlowSettings();
+
+  if (!settings.enabled) return null;
 
   return (
     <section
       data-flow-companion
+      data-flow-scene={moment.scene}
       aria-label="Flow"
       className={cn(
         "flex items-center gap-3 overflow-hidden rounded-3xl border border-border/60 bg-card p-3 shadow-sm",
         className,
       )}
     >
-      <div className="shrink-0">
+      <div className="shrink-0 flow-alive">
         <FlowCharacter
           scene={moment.scene}
           seed={moment.seed}
@@ -42,7 +139,30 @@ export default function FlowCompanion({
       </div>
 
       <div className="min-w-0 flex-1 space-y-2">
-        <p className="text-pretty text-sm leading-relaxed text-foreground">{moment.message}</p>
+        {moment.silent || !moment.message ? (
+          <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
+            Jag är här om du behöver mig.
+          </p>
+        ) : (
+          <div className="flex items-start gap-2">
+            <p className="min-w-0 flex-1 text-pretty text-sm leading-relaxed text-foreground animate-fade-in">
+              {moment.learning && <span className="mr-1">💜</span>}
+              {moment.message}
+            </p>
+            <Button
+              size="icon"
+              variant="ghost"
+              className="size-7 shrink-0 rounded-full text-muted-foreground"
+              aria-label="Inte nu, tack"
+              onClick={() => {
+                haptic("soft");
+                dismiss(moment.id);
+              }}
+            >
+              <X className="size-4" />
+            </Button>
+          </div>
+        )}
 
         <div className="flex flex-wrap items-center gap-2">
           {moment.action && (
@@ -62,6 +182,9 @@ export default function FlowCompanion({
               <Link href={moment.link.href}>{moment.link.label}</Link>
             </Button>
           )}
+          <div className="ml-auto">
+            <FlowSettingsPopover />
+          </div>
         </div>
       </div>
     </section>

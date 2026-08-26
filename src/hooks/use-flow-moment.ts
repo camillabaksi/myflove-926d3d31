@@ -6,6 +6,9 @@ import { useEnergyBattery } from "@/hooks/use-energy-battery";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { useWeather } from "@/hooks/use-weather";
 import { isWetWeather } from "@/components/flow/flow-character";
+import { useFlowLearning } from "@/hooks/use-flow-learning";
+import { useFlowSettings } from "@/hooks/use-flow-settings";
+import { learningMessage } from "@/lib/flow-learning";
 import { todayISO } from "@/lib/day";
 import { FLOW_DONE_EVENT } from "@/lib/flow-signal";
 
@@ -15,9 +18,14 @@ import { FLOW_DONE_EVENT } from "@/lib/flow-signal";
  * Väljer EN kontext åt gången ur data som redan finns i MyFlove:
  * medicin, barn, väder, dagens aktivitet, batteri och incheckning.
  * Ingen ny datamodell – bara en prioritering av det som är mest relevant nu.
+ *
+ * Flow är proaktiv men aldrig tjatig: varje mening har ett id, kan viftas
+ * bort för dagen och tystas helt i Flows inställningar.
  */
 
 export interface FlowMoment {
+  /** Stabilt id för meddelandet – används för "inte nu, tack". */
+  id: string;
   scene: FlowScene;
   /** Kort mening i Flows röst. */
   message: string;
@@ -30,6 +38,10 @@ export interface FlowMoment {
   rain: boolean;
   /** Nyckel för variantval – stabil per kontext. */
   seed: number;
+  /** Flow har inget att säga just nu (tyst läge eller bortviftat). */
+  silent?: boolean;
+  /** Meddelandet handlar om vad Flow lärt sig om dig. */
+  learning?: boolean;
 }
 
 const toMinutes = (t?: string): number | null => {
@@ -42,6 +54,8 @@ const toMinutes = (t?: string): number | null => {
 const isKidTitle = (title: string) =>
   /barn|lämna|hämta|förskola|skolan|dagis|tjejer|killar/i.test(title);
 
+const isOutdoorTitle = (title: string) =>
+  /promenad|ut |ute|hund|träning|löp|cykel|lämna|hämta|handla|resa|buss|tåg|marknad/i.test(title);
 
 export function useFlowMoment(): FlowMoment {
   const { activeTasks } = useTasks();
@@ -51,6 +65,8 @@ export function useFlowMoment(): FlowMoment {
   const { reading } = useEnergyBattery();
   const { energyValue } = useQuickCheckin();
   const weather = useWeather();
+  const knowledge = useFlowLearning();
+  const { settings, isDismissed } = useFlowSettings();
 
   const [celebrating, setCelebrating] = useState(false);
 
@@ -70,12 +86,43 @@ export function useFlowMoment(): FlowMoment {
   const sunny = weather != null && weather.code <= 1 && now.getHours() >= 7 && now.getHours() <= 19;
   const kids = children?.length ?? 0;
   const energy = Math.round(reading.now);
+  const level = settings.level;
+  const learningOn = settings.learning;
+  const knowledgeSeed = knowledge.level;
+  const insightText = useMemo(
+    () => learningMessage(knowledge, now.getDate() + now.getHours()),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [knowledge, now.getDate()],
+  );
+
+  const todaysCount = useMemo(
+    () =>
+      activeTasks.filter((t) => !t.dueDate || t.dueDate === today).length +
+      activeReminders.filter((r) => r.date === today).length,
+    [activeTasks, activeReminders, today],
+  );
+
+  const waiting = useMemo(
+    () =>
+      activeTasks.filter(
+        (t) => !t.dueDate && Date.now() - t.createdAt > 1000 * 60 * 60 * 24 * 3,
+      ).length,
+    [activeTasks],
+  );
 
   return useMemo<FlowMoment>(() => {
     const base = { energy, kids, rain, seed: now.getDate() };
+    const quiet = level === "tyst";
+
+    const pick = (moment: FlowMoment): FlowMoment =>
+      isDismissed(moment.id) ? { ...base, id: "silent", scene: "rest", message: "", silent: true } : moment;
 
     if (celebrating) {
-      return { ...base, scene: "done", message: "Snyggt! Det där är avklarat. ❤️" };
+      return { ...base, id: "done", scene: "done", message: "Klart! 🙌 En sak mindre i huvudet." };
+    }
+
+    if (quiet) {
+      return { ...base, id: "silent", scene: "rest", message: "", silent: true };
     }
 
     /* 1. Medicin – befintlig medicinlogik, inget nytt system. */
@@ -85,17 +132,29 @@ export function useFlowMoment(): FlowMoment {
         if (mins == null) continue;
         if (nowMin < mins - 10 || nowMin > mins + 120) continue;
         if (isTaken(med.id, time)) continue;
-        return {
+        return pick({
           ...base,
+          id: `med-${med.id}-${time}`,
           scene: "medicine",
           message: `Det är dags för ${med.name.toLowerCase()}.`,
           action: { label: "Jag har tagit den", run: () => toggleTaken(med.id, time) },
           link: { href: "/daglig-rutin", label: "Rutiner & medicin" },
-        };
+        });
       }
     }
 
-    /* 2. Nästa aktivitet idag – uppgifter och påminnelser som redan finns. */
+    /* 2. Morgonhälsning – Flow vinkar innan dagen börjat. */
+    if (now.getHours() < 11 && energyValue == null) {
+      return pick({
+        ...base,
+        id: `morning-${today}`,
+        scene: "hello",
+        message: "God morgon! 🌸 Hur känns dagen idag?",
+        link: { href: "/idag", label: "Checka in" },
+      });
+    }
+
+    /* 3. Nästa aktivitet idag – uppgifter och påminnelser som redan finns. */
     const upcoming = [
       ...activeTasks
         .filter((t) => (!t.dueDate || t.dueDate === today) && t.time)
@@ -109,70 +168,144 @@ export function useFlowMoment(): FlowMoment {
       .sort((a, b) => a.mins - b.mins);
 
     const next = upcoming[0];
+
+    /* 3a. Låg energi + mycket att göra – prioritera hellre än pusha. */
+    if (energy <= 45 && todaysCount >= 4) {
+      return pick({
+        ...base,
+        id: `busy-low-${today}`,
+        scene: "energyLow",
+        message: "Du har mycket idag och energin verkar vara låg. Ska vi prioritera?",
+        link: { href: "/flowplan", label: "Gör dagen snällare" },
+      });
+    }
+
+    /* 3b. Regn när du ska ut. */
+    if (rain && next && isOutdoorTitle(next.title) && next.mins - nowMin <= 180) {
+      return pick({
+        ...base,
+        id: `rain-out-${today}`,
+        scene: "rain",
+        message: "Det verkar bli regn när du ska ut. Paraply?",
+        link: { href: "/idag", label: "Min dag" },
+      });
+    }
+
+    /* 3c. Viktig tid närmar sig – förvarning i god tid. */
+    if (next && next.mins - nowMin > 15 && next.mins - nowMin <= 45) {
+      return pick({
+        ...base,
+        id: `soon-${today}-${next.mins}`,
+        scene: sceneForTask(next.title),
+        message: `Bara så du vet – du behöver börja göra dig klar om ungefär ${Math.round((next.mins - nowMin) / 5) * 5} minuter.`,
+        link: { href: "/idag", label: "Min dag" },
+      });
+    }
+
     if (next && next.mins - nowMin <= 120) {
       const time = `${String(Math.floor(next.mins / 60)).padStart(2, "0")}:${String(next.mins % 60).padStart(2, "0")}`;
       if (kids > 0 && isKidTitle(next.title)) {
-        return {
+        return pick({
           ...base,
+          id: `kids-${today}-${next.mins}`,
           scene: "kids",
           message: rain
             ? `${next.title} kl ${time} – ta med paraply. ❤️`
             : `${next.title} kl ${time}. ❤️`,
           link: { href: "/idag", label: "Min dag" },
-        };
+        });
       }
-      return {
+      return pick({
         ...base,
+        id: `next-${today}-${next.mins}`,
         scene: sceneForTask(next.title),
         message: `Härnäst: ${next.title} kl ${time}.`,
         link: { href: "/idag", label: "Min dag" },
-      };
+      });
     }
 
-    /* 3. Väder – bara när det påverkar något. */
-    if (rain) {
-      return {
+    /* 4. Saker som väntar – erbjud hjälp att sortera. */
+    if (waiting >= 3) {
+      return pick({
         ...base,
+        id: `waiting-${today}`,
+        scene: "think",
+        message:
+          "Jag hittade några saker som fortfarande väntar på dig. Vill du att jag hjälper dig sortera dem?",
+        link: { href: "/quickflow", label: "Sortera med mig" },
+      });
+    }
+
+    /* 5. Väder – bara när det påverkar något. */
+    if (rain) {
+      return pick({
+        ...base,
+        id: `rain-${today}`,
         scene: "rain",
         message: "Det regnar ute – ta med paraply om du ska ut.",
-      };
+      });
     }
     if (sunny) {
-      return { ...base, scene: "sun", message: "Sol ute – passa på att få lite ljus." };
+      return pick({
+        ...base,
+        id: `sun-${today}`,
+        scene: "sun",
+        message: "Sol ute – passa på att få lite ljus.",
+      });
     }
 
-    /* 4. Energi – batteriet du redan har. */
+    /* 6. Energi – batteriet du redan har. */
     if (energy <= 35) {
-      return {
+      return pick({
         ...base,
+        id: `energy-low-${today}`,
         scene: "energyLow",
-        message: "Batteriet är lågt. En liten sak räcker gott just nu.",
+        message: "Okej. Då tar vi det lite lugnare idag. 💜 Jag hjälper dig välja det viktigaste.",
         link: { href: "/flowscore", label: "Mitt batteri" },
-      };
+      });
     }
     if (energy >= 70) {
-      return {
+      return pick({
         ...base,
+        id: `energy-high-${today}`,
         scene: "energyHigh",
         message: "Du har bra med energi nu – bra läge för något du skjutit på.",
         link: { href: "/flowscore", label: "Mitt batteri" },
-      };
+      });
     }
 
-    /* 5. Kväll – vila och sömn. */
+    /* 7. Kväll – vila och sömn. */
     if (now.getHours() >= 21) {
-      return { ...base, scene: "sleep", message: "Dagen får landa nu. Sov gott. 🌙" };
+      return pick({
+        ...base,
+        id: `night-${today}`,
+        scene: "sleep",
+        message: "Dagen får landa nu. Sov gott. 🌙",
+      });
+    }
+
+    /* 8. Lugnt läge – då kan Flow berätta vad han börjar lära sig. */
+    if (learningOn && level === "aktiv") {
+      return pick({
+        ...base,
+        id: `learning-${today}-${knowledgeSeed}`,
+        scene: "think",
+        message: insightText,
+        learning: true,
+        link: { href: "/insight", label: "Vad jag lärt mig" },
+      });
     }
 
     if (energyValue == null) {
-      return {
+      return pick({
         ...base,
+        id: `checkin-${today}`,
         scene: "think",
         message: "Hur känns det just nu? Registrera så anpassar jag förslagen.",
-      };
+      });
     }
 
-    return { ...base, scene: "rest", message: "Lugnt läge just nu. Jag finns här." };
+    return pick({ ...base, id: "rest", scene: "rest", message: "Lugnt läge just nu. Jag finns här." });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     celebrating,
@@ -186,5 +319,12 @@ export function useFlowMoment(): FlowMoment {
     energyValue,
     nowMin,
     today,
+    todaysCount,
+    waiting,
+    level,
+    learningOn,
+    insightText,
+    knowledgeSeed,
+    isDismissed,
   ]);
 }

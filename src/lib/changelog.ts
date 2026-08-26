@@ -6,12 +6,13 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-08-25";
+export const CHANGELOG_UPDATED = "2026-08-26";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Flow som levande följeslagare: proaktiva påminnelser vid låg energi och full dag, regn innan du ska ut och förvarning innan du behöver göra dig klar – plus ett kort på Hem som visar vad Flow lärt sig om dig, och inställningar för Tyst/Diskret/Aktiv (2026-08-26)",
       "Export av adminstatistik: välj datumintervall och ladda ner anonym statistik som CSV eller PDF för egen analys (2026-08-25)",
       "Anonym appstatistik: admin visar nu nyckeltal (händelser per besökare, återkommande, dagligt bruk, dagliga loopen) helt utan personlig data – händelser kan inte kopplas till konton (2026-08-25)",
       "Marknadsscenen i videon och marknadssliden i decket har nu samma rubrik, texter och ordning – pitchsidan visar miniatyrer av båda (2026-08-25)",
