@@ -185,15 +185,19 @@ export function useFlowMoment(): FlowMoment {
     const next = upcoming[0];
 
     /* 3a. Låg energi + mycket att göra – prioritera hellre än pusha. */
-    if (energy <= 45 && todaysCount >= 4) {
+    if (energy <= 50 && todaysCount >= 4) {
+      const veryLow = energy <= 30;
       return pick({
         ...base,
         id: `busy-low-${today}`,
         scene: "energyLow",
-        message: "Du har mycket idag och energin verkar vara låg. Ska vi prioritera?",
-        link: { href: "/flowplan", label: "Gör dagen snällare" },
+        message: veryLow
+          ? `${todaysCount} saker står i dagen och energin är låg. Vi behöver inte allt idag – ska vi välja ut två?`
+          : `Du har ${todaysCount} saker idag och energin verkar lite låg. Vill du att vi prioriterar tillsammans?`,
+        link: { href: "/flowplan", label: "Prioritera med mig" },
       });
     }
+
 
     /* 3b. Regn när du ska vara utomhus – timprognos, inte bara vädret just nu. */
     const outdoor = upcoming.find(
