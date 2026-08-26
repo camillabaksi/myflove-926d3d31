@@ -597,7 +597,7 @@ html[data-npf-less="true"] [data-npf="optional"] {
 }
 @utility flow-breathe-body {
   transform-origin: 50% 92%;
-  animation: myflove-flow-breathe-body 4.2s ease-in-out infinite;
+  animation: myflove-flow-breathe-body var(--flow-breath, 4.2s) ease-in-out infinite;
   will-change: transform;
 }
 
@@ -618,8 +618,9 @@ html[data-npf-less="true"] [data-npf="optional"] {
   50% { transform: scale(1.08); opacity: 0.6; }
 }
 @utility flow-heart-glow {
-  animation: myflove-flow-heart-glow 3.8s ease-in-out infinite;
+  animation: myflove-flow-heart-glow var(--flow-glow, 3.8s) ease-in-out infinite;
 }
+
 
 /* Blicken/kroppen lutar mjukt mot pekaren. */
 @utility flow-gaze {
