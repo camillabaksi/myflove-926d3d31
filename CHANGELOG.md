@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-26 – Egen morgon och egen kväll i Mitt batteri
+
+- Du väljer själv när morgonen startar och när dagen slutar – batterikurvan börjar och slutar där.
+- Två nya ifyllnader på Mitt batteri: hur batteriet känns vid morgonstart och när dagen slutar (1–10).
+- Kurvan ankras i dina egna värden: morgonens nivå, läget just nu och kvällens nivå binds ihop mjukt.
+
+
+
 ## 2026-08-26 – Lägg till på hemskärmen vid inloggning
 
 - Knappen "Lägg till MyFlove på hemskärmen" finns nu även längst ner på Logga in- och Skapa konto-sidorna.
