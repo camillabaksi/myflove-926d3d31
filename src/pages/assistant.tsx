@@ -203,7 +203,10 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
         void navigate({ to: "/assistant/$chatId", params: { chatId: id }, replace: true });
       }
     } catch (e) {
-      const msg = e instanceof Error ? e.message : "Något gick fel. Prova igen om en stund.";
+      const raw = e instanceof Error ? e.message : "";
+      const msg = /invalid|parse|validation/i.test(raw)
+        ? "Flow kunde inte läsa meddelandet. Prova att starta en ny chatt eller skriv lite kortare."
+        : raw || "Något gick fel. Prova igen om en stund.";
       setError(msg);
     } finally {
       setIsSending(false);
