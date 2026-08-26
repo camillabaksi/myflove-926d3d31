@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
+import { installIndexedDbMock, resetIndexedDbMock } from "@/test/indexeddb-mock";
 import {
   __resetSecureLocal,
   isSensitiveKey,
@@ -10,6 +11,8 @@ import {
 
 describe("krypterad lokal lagring", () => {
   beforeEach(async () => {
+    installIndexedDbMock();
+    resetIndexedDbMock();
     window.localStorage.clear();
     __resetSecureLocal();
     await unlockSecureLocal();
