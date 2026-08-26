@@ -5,6 +5,7 @@ import { useChildren } from "@/hooks/use-children";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { useWeather } from "@/hooks/use-weather";
+import { useWeatherForecast, forecastAt, isWetHour } from "@/hooks/use-weather-forecast";
 import { isWetWeather } from "@/components/flow/flow-character";
 import { useFlowLearning } from "@/hooks/use-flow-learning";
 import { useFlowSettings } from "@/hooks/use-flow-settings";
@@ -65,6 +66,7 @@ export function useFlowMoment(): FlowMoment {
   const { reading } = useEnergyBattery();
   const { energyValue } = useQuickCheckin();
   const weather = useWeather();
+  const forecast = useWeatherForecast();
   const knowledge = useFlowLearning();
   const { settings, isDismissed } = useFlowSettings();
 
@@ -336,6 +338,7 @@ export function useFlowMoment(): FlowMoment {
     today,
     todaysCount,
     waiting,
+    forecast,
     level,
     learningOn,
     insightText,
