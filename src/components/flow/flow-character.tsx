@@ -559,7 +559,7 @@ export function FlowCharacter({
         className,
       )}
     >
-      <div className={cn("relative aspect-square shrink-0", STAGE_CLASS[stage])}>
+      <div className={cn("relative aspect-square shrink-0 overflow-hidden", STAGE_CLASS[stage])}>
         {!isMini && variant.back?.(ctx)}
 
         <FlowMascot
@@ -567,7 +567,13 @@ export function FlowCharacter({
           glow
           mood={variant.mood}
           className={cn("absolute inset-0 flex items-center justify-center", variant.mascotClass)}
-          imgClassName={isMini ? "h-[60px] w-[60px] max-w-none object-contain" : "h-[126%] w-auto max-w-none"}
+          imgClassName={
+            isMini
+              ? "h-[60px] w-[60px] max-w-none object-contain"
+              : stage === "inline"
+                ? "h-full w-full object-contain"
+                : "h-[126%] w-auto max-w-none"
+          }
         />
 
         {!isMini && variant.front?.(ctx)}
