@@ -225,16 +225,19 @@ export function useFlowMoment(): FlowMoment {
     }
 
 
-    /* 3c. Viktig tid närmar sig – förvarning i god tid. */
-    if (next && next.mins - nowMin > 15 && next.mins - nowMin <= 45) {
+    /* 3c. Viktig tid närmar sig – förvarning i god tid, med väg till rätt vy. */
+    if (next && next.mins - nowMin > 10 && next.mins - nowMin <= 45) {
+      const inMins = Math.round((next.mins - nowMin) / 5) * 5;
+      const clock = `${String(Math.floor(next.mins / 60)).padStart(2, "0")}:${String(next.mins % 60).padStart(2, "0")}`;
       return pick({
         ...base,
         id: `soon-${today}-${next.mins}`,
         scene: sceneForTask(next.title),
-        message: `Bara så du vet – du behöver börja göra dig klar om ungefär ${Math.round((next.mins - nowMin) / 5) * 5} minuter.`,
-        link: { href: "/idag", label: "Min dag" },
+        message: `${next.title} kl ${clock} – om cirka ${inMins} minuter. Börja gärna göra dig klar nu.`,
+        link: linkForTitle(next.title),
       });
     }
+
 
     if (next && next.mins - nowMin <= 120) {
       const time = `${String(Math.floor(next.mins / 60)).padStart(2, "0")}:${String(next.mins % 60).padStart(2, "0")}`;
