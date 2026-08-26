@@ -296,7 +296,7 @@ export default function Home() {
         </div>
 
         {/* Flow finns med i appen – en kontextuell sak i taget. */}
-        <FlowCompanion stage="inline" />
+        <FlowCompanion stage="mini" />
 
         {/* Alltid synlig när appen inte redan körs installerad. */}
         <PwaInstallCard />
