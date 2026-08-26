@@ -295,6 +295,11 @@ export default function Home() {
         {/* Flow finns med i appen – en kontextuell sak i taget. */}
         <FlowCompanion stage="inline" />
 
+        {/* Flow visar mjukt att han lär sig hur du fungerar. */}
+        <FlowLearningCard />
+
+
+
 
 
         {shows("checkin") && (
