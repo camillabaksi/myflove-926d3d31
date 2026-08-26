@@ -297,11 +297,29 @@ export default function Home() {
         {/* Flow finns med i appen – en kontextuell sak i taget. */}
         <FlowCompanion stage="mini" />
 
-        {/* Alltid synlig när appen inte redan körs installerad. */}
-        <PwaInstallCard />
+        {/* Mitt batteri – första centrala innehållsblocket, direkt efter Flow. */}
+        {shows("batteri") && (
+          <section style={pos("batteri")} aria-label="Mitt batteri" className="space-y-2">
+            <Link
+              href="/mitt-batteri"
+              data-testid="battery-cta"
+              onClick={() => track("battery_opened", { source: "hem" })}
+              className="group flex items-center justify-between gap-2 text-sm font-semibold uppercase tracking-wide text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Mitt batteri
+              <ArrowRight
+                size={16}
+                className="shrink-0 transition-transform group-hover:translate-x-0.5"
+              />
+            </Link>
+            <EnergyBattery />
+          </section>
+        )}
 
         {/* Flow visar mjukt att han lär sig hur du fungerar. */}
-        <FlowLearningCard />
+        <div style={{ order: 90 }}>
+          <FlowLearningCard />
+        </div>
 
         {shows("checkin") && (
           <div style={pos("checkin")}>
@@ -309,18 +327,6 @@ export default function Home() {
           </div>
         )}
 
-        {shows("batteri") && (
-          <section style={pos("batteri")} aria-label="Mitt energibatteri">
-            <CollapsibleSection
-              id="hem::batteri"
-              title="Mitt energibatteri"
-              headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
-              className="space-y-3"
-            >
-              <EnergyBattery />
-            </CollapsibleSection>
-          </section>
-        )}
 
         {/* Energins historik – samma data som Min energi, direkt under batteriet */}
         {shows("energifloede") && (
