@@ -31,6 +31,8 @@ export function useEnergyBattery(): {
   const { balance, settings } = useEnergyFlow();
   const { activeTasks } = useTasks();
   const { lectures } = useStudySchedule();
+  const { window: dayWin, todayEdges } = useDayWindow();
+
 
   const items = useMemo<BatteryItem[]>(() => {
     const today = todayISO();
