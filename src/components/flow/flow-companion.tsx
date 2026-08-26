@@ -87,6 +87,10 @@ function FlowSettingsPopover() {
           />
         </div>
 
+        <Button asChild variant="outline" size="sm" className="w-full rounded-full text-xs">
+          <Link href="/flow-installningar">Fler Flow-inställningar</Link>
+        </Button>
+
         <div className="space-y-1 rounded-xl bg-muted/50 p-3">
           <p className="text-xs font-medium">{knowledge.label}</p>
           <div className="h-1.5 w-full overflow-hidden rounded-full bg-background">
