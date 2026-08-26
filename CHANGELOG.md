@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-08-26 – Lugnare energi, tydligare konto och samlad appstatistik
+
+- Mitt batteri ligger nu högst upp på Hem (direkt efter Flow) och all "Mitt batteri"-länkning går direkt till sidan /mitt-batteri.
+- "Energi och mående" är radikalt förenklad: en snabb incheckning (batteri 1–10 + fem tydliga mående-val) först, historik och mönster bakom "Se min historik". Samma data som förut – inga dubbla registreringar. Medicin ligger kvar separat i Rutiner & medicin.
+- "Lägg till på hemskärmen" är nu en liten, diskret notering längst ner på Hem i stället för ett stort block.
+- "Avsluta konto" är borttagen från menyerna och ligger enbart längst ner under Inställningar i en tydlig men sekundär kontosektion – med bekräftelse kvar.
+- Ny central analytics-grund: ett dokumenterat event-schema (app_opened, home_viewed, battery_/mood_checkin, quickflow, task, install, logout, kontoradering m.fl.) med sanerad payload. Inget mående, ingen medicin, inga belopp och ingen fritext skickas någonsin – bara användning.
+- Nya tester för event-schemat och sanering av känsliga payloads.
+
 ## 2026-08-26 – Känslig data krypteras lokalt
 
 - Energi, mående, medicin och ekonomi sparas nu krypterade (AES-GCM) på enheten i stället för i klartext.
