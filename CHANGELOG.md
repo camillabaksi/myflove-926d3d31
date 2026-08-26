@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-08-26 – Mindre Flow på "Se Flow live"
+
+- Hero-scenen på /flow är nedskalad från 33 % till 25 % av skärmhöjden (max 230 px) och maskoten fyller 108 % i stället för 126 %, så Flow inte längre känns för stor.
+
 ## 2026-08-26 – Flow svarar utan "invalid"-fel
 
 - Långa profiltexter och långa samtal gjorde att anropet till Flow underkändes. Kontexten kortas nu ner och de senaste 40 meddelandena skickas.

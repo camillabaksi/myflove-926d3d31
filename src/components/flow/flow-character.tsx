@@ -511,11 +511,11 @@ const SCENES: Record<FlowScene, Variant[]> = {
   ],
 };
 
-/** Scenens storlek: "hero" = Flow är huvudfokus (~35 % av skärmen), "inline" = del av ett kort. */
+/** Scenens storlek: "hero" = Flow är huvudfokus (~25 % av skärmen), "inline" = del av ett kort. */
 export type FlowStage = "hero" | "inline" | "mini";
 
 const STAGE_CLASS: Record<FlowStage, string> = {
-  hero: "h-[33svh] max-h-[300px] min-h-[170px]",
+  hero: "h-[25svh] max-h-[230px] min-h-[150px]",
   inline: "h-[13svh] max-h-[112px] min-h-[84px]",
   mini: "h-[68px] min-h-[68px] max-h-[68px]",
 };
@@ -572,7 +572,7 @@ export function FlowCharacter({
               ? "h-[60px] w-[60px] max-w-none object-contain"
               : stage === "inline"
                 ? "h-full w-full object-contain"
-                : "h-[126%] w-auto max-w-none"
+                : "h-[108%] w-auto max-w-none"
           }
         />
 

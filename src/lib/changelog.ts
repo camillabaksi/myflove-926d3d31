@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Mindre Flow på \"Se Flow live\": hero-scenen är nedskalad till 25 % av skärmhöjden (max 230 px) (2026-08-26)",
       "Flow svarar utan \"invalid\"-fel: kontext och samtalslängd kortas så anropet alltid godkänns (2026-08-26)",
       "Skrivfältet i Flow-chatten går att använda igen: Skicka-knappen låg ovanpå textrutan och blockerade tryck (2026-08-26)",
       "Lagom stor Flow i hela appen: mindre maskot i kortläget (Min dag, Flow-inställningar), i chattens rubrik och i välkomsthälsningen (2026-08-26)",

@@ -84,11 +84,12 @@ describe("FlowCharacter – rätt rekvisita och pose per kontext", () => {
     }
   }
 
-  it("håller sig inom mobilscenen (33svh, kvadratisk)", () => {
+  it("håller sig inom mobilscenen (25svh, kvadratisk)", () => {
     const { container } = render(<FlowCharacter scene="rain" />);
     const stage = container.querySelector("[data-flow-character] > div")!;
     expect(stage.className).toContain("aspect-square");
-    expect(stage.className).toContain("h-[33svh]");
+    expect(stage.className).toContain("h-[25svh]");
+    expect(stage.className).toContain("max-h-[230px]");
   });
 
   it("visar själva maskoten tydligt i mini-läget utan rekvisita som tar plats", () => {
