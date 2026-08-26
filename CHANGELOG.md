@@ -2,6 +2,7 @@
 
 ## 2026-08-26 – Installationsknapp på startsidan
 
+- "Hoppa över"-knapp högst upp på introt – gå direkt till sista vyn utan att svepa igenom alla slides.
 - Knappen "Lägg till MyFlove på hemskärmen" finns nu även på startsidan, innan man skapat konto – både i hjälten högst upp och nära "Möt Flow".
 
 ## 2026-08-26 – Installationsknapp överallt
