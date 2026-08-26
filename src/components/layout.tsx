@@ -519,7 +519,7 @@ export default function Layout({ children }: LayoutProps) {
         label: "Planera",
         hint: "Nästa steg, ordning, ändra planen och hjälp",
         icon: Sparkles,
-        hrefs: ["/flow", "/quickflow", "/anteckningar", "/beloningar"],
+        hrefs: ["/flowplan", "/flow", "/quickflow", "/anteckningar", "/beloningar"],
       },
       {
         id: "studyflow",
