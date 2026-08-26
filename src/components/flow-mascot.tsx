@@ -1,5 +1,62 @@
+import { useEffect, useRef, useState } from "react";
 import flowAsset from "@/assets/flow-mascot.png.asset.json";
 import { cn } from "@/lib/utils";
+
+/** Slumpad blinkning – Flow blinkar som en levande varelse, inte som en metronom. */
+function useFlowBlink(enabled: boolean) {
+  const [blinking, setBlinking] = useState(false);
+  useEffect(() => {
+    if (!enabled) return;
+    if (typeof window === "undefined") return;
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+    let blinkTimer: ReturnType<typeof setTimeout>;
+    let resetTimer: ReturnType<typeof setTimeout>;
+    const schedule = () => {
+      const wait = 2600 + Math.random() * 4200;
+      blinkTimer = setTimeout(() => {
+        setBlinking(true);
+        resetTimer = setTimeout(() => {
+          setBlinking(false);
+          schedule();
+        }, 240);
+      }, wait);
+    };
+    schedule();
+    return () => {
+      clearTimeout(blinkTimer);
+      clearTimeout(resetTimer);
+    };
+  }, [enabled]);
+  return blinking;
+}
+
+/** Flow lutar sig mjukt mot pekaren – blicken följer dig. */
+function useFlowGaze(enabled: boolean) {
+  const ref = useRef<HTMLSpanElement | null>(null);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  useEffect(() => {
+    if (!enabled) return;
+    if (typeof window === "undefined") return;
+    if (!window.matchMedia?.("(pointer: fine)").matches) return;
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+    const onMove = (event: PointerEvent) => {
+      const el = ref.current;
+      if (!el) return;
+      const box = el.getBoundingClientRect();
+      if (!box.width || !box.height) return;
+      const dx = (event.clientX - (box.left + box.width / 2)) / window.innerWidth;
+      const dy = (event.clientY - (box.top + box.height / 2)) / window.innerHeight;
+      setTilt({
+        x: Math.max(-1, Math.min(1, dx * 2)),
+        y: Math.max(-1, Math.min(1, dy * 2)),
+      });
+    };
+    window.addEventListener("pointermove", onMove, { passive: true });
+    return () => window.removeEventListener("pointermove", onMove);
+  }, [enabled]);
+  return { ref, tilt };
+}
+
 
 /**
  * Flow – MyFloves officiella maskot.
