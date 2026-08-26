@@ -140,7 +140,7 @@ export function FlowMascot({
       )}
       <span
         aria-hidden={false}
-        className={cn(alive && "flow-gaze inline-flex")}
+        className={cn(alive && "flow-gaze inline-flex", blinking && "flow-blinking")}
         style={
           alive
             ? {
@@ -162,7 +162,6 @@ export function FlowMascot({
               ? MOODS[mood]
               : cn(float && !wave && "floaty", wave && "wave-hello"),
             alive && !mood && !wave && !float && "flow-breathe-body",
-            blinking && "flow-blinking",
             imgClassName,
           )}
         />
