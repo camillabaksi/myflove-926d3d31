@@ -633,12 +633,12 @@ export default function Layout({ children }: LayoutProps) {
 
   /**
    * Bottennavet: Hem är fast, sedan två platser du väljer själv.
-   * Standard: Kalender (hela kalendern) och Flow.
+   * Standard: Min dag och Planering.
    */
   const primaryNav = useMemo(() => {
     const pick = (href: string) => navItems.find((i) => i.href === href);
     const slot1 = pick(navSlots[0] ?? "") ?? pick("/idag") ?? pick("/kalender");
-    const slot2 = pick(navSlots[1] ?? "") ?? pick("/flow");
+    const slot2 = pick(navSlots[1] ?? "") ?? pick("/flowplan") ?? pick("/flow");
     return [pick("/hem"), slot1, slot2].filter(Boolean) as typeof navItems;
   }, [navItems, navSlots]);
 
