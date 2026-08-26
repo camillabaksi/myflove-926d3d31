@@ -25,6 +25,7 @@ import { useStudySchedule } from "@/hooks/use-study-schedule";
 import { suggestNow, type NowSuggestion } from "@/lib/flow-engine";
 
 import { AreaOnboarding } from "@/components/area-onboarding";
+import PwaInstallCard from "@/components/pwa-install-card";
 import { AreaSwitcher } from "@/components/area-switcher";
 import { AREA_META, useActiveArea } from "@/lib/life-areas";
 import IntroTour from "@/components/intro-tour";
@@ -558,9 +559,11 @@ export default function Home() {
           </div>
         )}
 
-        <div style={{ order: 98 }} className="pt-2">
+        <div style={{ order: 98 }} className="space-y-3 pt-2">
           <AreaOnboarding />
+          <PwaInstallCard />
         </div>
+
 
         <div
           style={{ order: 99 }}

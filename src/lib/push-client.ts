@@ -46,6 +46,26 @@ async function unregisterOurWorkers() {
   }
 }
 
+/**
+ * Registrerar /sw.js utan att kräva push-stöd. Behövs för att webbläsaren ska
+ * se MyFlove som installerbar (PWA-kriterier: manifest + service worker).
+ */
+export async function registerAppServiceWorker(): Promise<ServiceWorkerRegistration | null> {
+  if (typeof window === "undefined" || !("serviceWorker" in navigator)) return null;
+  if (isRefusedContext()) {
+    await unregisterOurWorkers();
+    return null;
+  }
+  try {
+    return (
+      (await navigator.serviceWorker.getRegistration(SW_PATH)) ??
+      (await navigator.serviceWorker.register(SW_PATH, { scope: "/" }))
+    );
+  } catch {
+    return null;
+  }
+}
+
 export async function ensureServiceWorker(): Promise<ServiceWorkerRegistration | null> {
   if (!pushSupported()) return null;
   if (isRefusedContext()) {
