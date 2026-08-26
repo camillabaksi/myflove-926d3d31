@@ -95,7 +95,6 @@ const FLOW_HIDDEN_PATHS = new Set([
   "/dev-session",
 ]);
 
-
 import { useEnabledAreas } from "@/lib/life-areas";
 import { useLocalStorage } from "@/lib/storage";
 import { useNpfSettings, plainLabel } from "@/lib/npf-mode";
@@ -280,7 +279,7 @@ export default function Layout({ children }: LayoutProps) {
       href: "/idag",
       label: "Min dag",
       icon: Heart,
-      hint: "Vad din dag består av – och vad du gjort",
+      hint: "Hela dagen och allt du bockat av",
       essential: true,
     },
     {
@@ -312,7 +311,7 @@ export default function Layout({ children }: LayoutProps) {
       href: "/quickflow",
       label: "QuickFlow",
       icon: Inbox,
-      hint: "Fånga en tanke snabbt",
+      hint: "Fånga något snabbt – Flow sorterar sedan",
       essential: true,
     },
     {
@@ -398,14 +397,14 @@ export default function Layout({ children }: LayoutProps) {
       href: "/flowplan",
       label: "Planering",
       icon: Sparkles,
-      hint: "Ordningen på dagen – ändra den precis som du vill",
+      hint: "Planera dagen – ordningen bestämmer du",
       essential: true,
     },
     {
       href: "/flow",
       label: "Flow hjälper",
       icon: Sparkles,
-      hint: "Flow visar en sak i taget när du vill ha sällskap",
+      hint: "Din följeslagare – förstår läget och föreslår en sak i taget",
     },
     {
       href: "/assistant",
@@ -585,7 +584,6 @@ export default function Layout({ children }: LayoutProps) {
         hint: "Rutiner, min livsprofil, anpassning och feedback",
         icon: LayoutGrid,
         hrefs: [
-          
           "/oversikt",
           "/flow-installningar",
           "/min-livsprofil",
@@ -626,7 +624,6 @@ export default function Layout({ children }: LayoutProps) {
     }
   }, [navMigrated, navSlots, setNavMigrated, setNavSlots]);
   const [editingNav, setEditingNav] = useState(false);
-
 
   // Enkelt läge: visar bara det viktigaste tills man själv vill se mer.
   const [simpleMode, setSimpleMode] = useLocalStorage<boolean>("myflove-simple-mode", true);
@@ -879,9 +876,7 @@ export default function Layout({ children }: LayoutProps) {
           style={CATEGORY_THEMES[location] as React.CSSProperties}
         >
           <div key={location} className="max-w-2xl mx-auto w-full p-4 md:p-8 page-enter">
-            {!FLOW_HIDDEN_PATHS.has(location) && (
-              <FlowCompanion stage="mini" className="mb-4" />
-            )}
+            {!FLOW_HIDDEN_PATHS.has(location) && <FlowCompanion stage="mini" className="mb-4" />}
             {children}
           </div>
 
@@ -1100,7 +1095,6 @@ export default function Layout({ children }: LayoutProps) {
                   <div className="mb-4">
                     <PwaInstallButton />
                   </div>
-
 
                   <button
                     type="button"

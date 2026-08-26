@@ -1,9 +1,8 @@
 import { Link } from "wouter";
 import Layout from "@/components/layout";
-import HomeShortcuts from "@/components/home-shortcuts";
 import { HOME_BLOCKS, useHomeLayout } from "@/lib/home-layout";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowUp, ArrowDown, Eye, EyeOff, RotateCcw } from "lucide-react";
+import { ArrowLeft, ArrowUp, ArrowDown, Eye, EyeOff, RotateCcw, PlayCircle } from "lucide-react";
 
 /**
  * Anpassa hemskärmen – välj vilka block som syns, i vilken ordning,
@@ -11,6 +10,16 @@ import { ArrowLeft, ArrowUp, ArrowDown, Eye, EyeOff, RotateCcw } from "lucide-re
  */
 export default function HomeCustomizePage() {
   const { order, hidden, toggle, move, reset } = useHomeLayout();
+
+  /** Nollställ introduktionen så den visas igen nästa gång Hem öppnas. */
+  const replayIntro = () => {
+    try {
+      window.localStorage.removeItem("myflove-intro-seen");
+    } catch {
+      /* utan lagring går det inte att spara valet – appen fungerar ändå */
+    }
+    window.location.href = "/hem";
+  };
 
   return (
     <Layout>
@@ -93,7 +102,15 @@ export default function HomeCustomizePage() {
         </section>
 
         <section className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft">
-          <HomeShortcuts />
+          <h2 className="mb-1 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+            Introduktionen
+          </h2>
+          <p className="mb-3 text-sm text-muted-foreground">
+            Vill du se den korta introduktionen igen? Den dyker upp nästa gång du öppnar Hem.
+          </p>
+          <Button variant="outline" className="rounded-xl gap-2" onClick={replayIntro}>
+            <PlayCircle size={16} /> Visa introduktionen igen
+          </Button>
         </section>
       </div>
     </Layout>

@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-08-26 – MyFlove Clean-up 1.0
+
+- Lugnare Hem: max sex block som standard (energi, "Just nu", nästa sak, kompakt dagsöversikt och en enkel väg att lägga till). Övriga block finns kvar och kan slås på i "Anpassa hemskärmen".
+- Genvägsblocket på Hem är borttaget – det länkade bara till sådant som redan finns i navigationen.
+- "Dagens saker" på Hem är nu en kompakt sammanfattning; hela planeringen och det samlade Gjort-läget bor i Min dag.
+- Tydligare roller: QuickFlow = fånga något snabbt, Flow = förstår och föreslår, Min dag/Planering = planera dagen. Rubriker, hjälptexter och knappar är justerade därefter.
+- Ett onboardinglager i taget: Flow-frågan väntar tills det korta introt är avklarat, och "Hoppa över" går direkt till Hem.
+- Introduktionen går att se igen via Anpassa hemskärmen.
+- Säkerhet: vid utloggning (och kontoradering) rensas all lokal användardata på enheten – energi, mående, medicin, ekonomi och annat privat ligger inte kvar till nästa användare. Enhetsinställningar som tema behålls.
+- Nya tester: intro + "Hoppa över", kompakt dagsöversikt, avbockning och rensning av lokal data vid utloggning.
+
 ## 2026-08-26 – Mindre Flow på "Se Flow live"
 
 - Hero-scenen på /flow är nedskalad från 33 % till 25 % av skärmhöjden (max 230 px) och maskoten fyller 108 % i stället för 126 %, så Flow inte längre känns för stor.
@@ -20,7 +31,6 @@
 - Flows välkomsthälsning använder en mindre maskot.
 - Kortläget klipps och skalas korrekt, så maskoten inte kan svälla utanför sitt kort på desktop.
 - Verifierat på mobil (411 px) och desktop (1280 px): Flow syns i alla vyer och överlappar ingen text eller knapp.
-
 
 ## 2026-08-26 – Flow mini är lite större
 
@@ -94,7 +104,6 @@
 - Knappen döljs helt när appen redan körs installerad – inget falskt "klart".
 - Flow hälsar diskret bredvid knappen: "Vill du ha mig nära till hands? 💜"
 
-
 ## 2026-08-26 – Planering i bottennavet
 
 - "Planering" i bottennavet öppnar nu planeringssidan (ordningen på dagen) i stället för Flow-hjälpen.
@@ -150,13 +159,10 @@
 
 ## 2026-08-25 – Marknadsnyckeltal i pitchmaterialet
 
-
 - Ny slide "Marknaden · Market Opportunity" i pitchdeck 3.4 med sex externa nyckeltal (140M+, ~3 %, $1,9B, $6,7B, 17,5 % CAGR, $3,06B).
 - Nytt avsnitt 3.5 "Marknad och målgrupp i siffror" i Living Blueprint 3.4 (DOCX + PDF).
 - Pitchvideon har fått en marknadsscen med samma siffror, källnot och avslutningen "MyFlove starts with ADHD — but is built for the complexity of everyday life."
 - Alla siffror är märkta som externa uppskattningar/prognoser med källnot – inga egna traction-siffror.
-
-
 
 ## 2026-08-25 – Så funkar MyFlove (översikt)
 
@@ -186,7 +192,6 @@
 - Pitchdeck 3.3 (PPTX + PDF) där Flow är ett eget produktkort och statusen är uppdaterad.
 - Ny pitchvideo med en egen Flow-scen (38 sekunder).
 - Pitchsidan pekar på de nya filerna.
-
 
 ## 2026-08-25 – Morgonstart bor bland Rutiner & medicin
 
@@ -284,16 +289,12 @@
 - Tangentbord: vänster-/högerpil byter vy, Home/End går till första/sista, med tydlig fokusring på karusellen och fokus som flyttas till den nya vyn.
 - Prickarna har nu klartextetiketter ("Vy 2 av 4: Hur är det just nu?") och en live-region läser upp vybytet.
 
-
-
 ## 2026-08-25 – Flow-karusellen ligger i en riktig horisontell rad
 
 - Flow-sliderna renderas nu i ett spår med `flex flex-row` där varje slide är låst till `w-full min-w-full shrink-0`, och spåret glider i sidled med `translateX` i stället för att byta ut en enda slide i DOM:en.
 - Yttre containern är `relative w-full overflow-hidden`, så inget kan stapla sig vertikalt.
 - Endast den aktiva sliden är tillgänglig för skärmläsare och tabbning; övriga är `aria-hidden`/`inert`.
 - Versionsstämpeln visar nu aktuell slide av totalt och att exakt en slide är synlig.
-
-
 
 ## 2026-08-25 – Flerdagsperioder syns nu alla dagar
 
@@ -367,7 +368,6 @@
 - Tidslinjen "Så ser en MyFlove-dag ut" har fått en extra kort mikroreaktion från Flow per punkt.
 - Endast presentation på startsidan – ingen appfunktionalitet, datamodell eller navigation ändrad.
 
-
 ## 2026-08-25 – Flow som officiell maskot + levande startsida
 
 - Flow har fått en officiell visuell referens: den runda lila figuren med kawaii-ögon, rosa kinder, hjärta på magen och glittrande stjärnor. Bilden ligger som CDN-asset och används via en gemensam komponent (`FlowMascot` / `FlowSays`) så att inga parallella varianter uppstår.
@@ -383,7 +383,6 @@
 
 - Spårade notisen kl 10:00: den kom från en gammal Elvanse-post kl 10:00 i medicinlistan (utöver den aktuella kl 11:30) – ingen förvarning, ingen tidszonsbugg och ingen hårdkodad standardtid.
 - De 10 köade pushnotiserna för den gamla posten är avbokade. Inga andra påminnelser berördes och ingen kod ändrades.
-
 
 ## 2026-08-22 – Blueprint-nedladdning i appen
 

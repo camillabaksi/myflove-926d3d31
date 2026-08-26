@@ -15,7 +15,14 @@ import type { FlowItem } from "@/lib/flow-items";
  * Färgen på kortet visar livsområde. Bocken visar om det är genomfört –
  * de två blandas aldrig ihop.
  */
-export function TodayTasks({ limit = 6 }: { limit?: number }) {
+export function TodayTasks({
+  limit = 6,
+  compact = false,
+}: {
+  limit?: number;
+  /** Kompakt läge (Hem): bara det som är kvar idag + väg till Min dag. */
+  compact?: boolean;
+}) {
   const { todayOpen, todayDone, toggleItem } = useFlowItems();
 
   const shown = todayOpen.slice(0, limit);
@@ -56,7 +63,7 @@ export function TodayTasks({ limit = 6 }: { limit?: number }) {
           </ul>
         )}
 
-        {todayDone.length > 0 && (
+        {!compact && todayDone.length > 0 && (
           <div className="mt-3 rounded-2xl bg-secondary/30 p-3">
             <CollapsibleSection
               id="dagens-saker::genomfort-idag"
@@ -79,13 +86,31 @@ export function TodayTasks({ limit = 6 }: { limit?: number }) {
           </div>
         )}
 
-        {todayOpen.length > shown.length && (
+        {compact && todayDone.length > 0 && (
+          <p className="mt-3 text-sm text-muted-foreground">
+            ☑️ {todayDone.length} {todayDone.length === 1 ? "sak" : "saker"} genomförda idag 💙
+          </p>
+        )}
+
+        {compact ? (
           <Link
-            href="/tasks"
+            href="/min-dag"
             className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
           >
-            Se alla ({todayOpen.length}) <ArrowRight size={14} />
+            {todayOpen.length > shown.length
+              ? `Se hela dagen (${todayOpen.length}) i Min dag`
+              : "Se hela dagen i Min dag"}{" "}
+            <ArrowRight size={14} />
           </Link>
+        ) : (
+          todayOpen.length > shown.length && (
+            <Link
+              href="/tasks"
+              className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+            >
+              Se alla ({todayOpen.length}) <ArrowRight size={14} />
+            </Link>
+          )
         )}
       </CollapsibleSection>
     </section>

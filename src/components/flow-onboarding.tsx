@@ -15,6 +15,8 @@ export default function FlowOnboarding() {
   const [dismissed, setDismissed] = useState(false);
 
   const [visited, setVisited] = useLocalStorage<boolean>("myflove-home-visited", false);
+  // Bara ett onboardinglager åt gången: introt först, den här frågan sen.
+  const [introSeen] = useLocalStorage<boolean>("myflove-intro-seen", false);
   // Läget vid montering avgör – annars skulle flaggan slå till i samma session.
   const wasVisited = useRef<boolean | null>(null);
   if (wasVisited.current === null) wasVisited.current = visited;
@@ -23,7 +25,7 @@ export default function FlowOnboarding() {
     if (!visited) setVisited(true);
   }, [visited, setVisited]);
 
-  const open = Boolean(wasVisited.current) && !done && !dismissed;
+  const open = Boolean(wasVisited.current) && introSeen && !done && !dismissed;
 
   const toggle = (id: FlowGoalId) =>
     setSelected((prev) => (prev.includes(id) ? prev.filter((g) => g !== id) : [...prev, id]));

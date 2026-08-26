@@ -4,6 +4,7 @@ import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { deleteMyAccount } from "@/lib/account.functions";
 import { supabase } from "@/integrations/supabase/client";
+import { clearLocalUserData } from "@/lib/local-data";
 
 interface Props {
   onDeleted?: () => void;
@@ -25,11 +26,7 @@ export function DeleteAccountButton({ onDeleted, size = "sm", className }: Props
       } catch {
         // ignoreras med flit – felet påverkar inte användaren
       }
-      try {
-        localStorage.clear();
-      } catch {
-        // ignoreras med flit – felet påverkar inte användaren
-      }
+      clearLocalUserData();
       onDeleted?.();
       if (typeof window !== "undefined") window.location.href = "/";
     } catch (e) {

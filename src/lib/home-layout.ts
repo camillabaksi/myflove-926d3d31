@@ -13,7 +13,6 @@ export type HomeBlockId =
   | "idag"
   | "forslag"
   | "lagg-till"
-  | "genvagar"
   | "vagar"
   | "omrade"
   | "energifloede";
@@ -40,7 +39,6 @@ export const HOME_BLOCKS: HomeBlockMeta[] = [
   { id: "idag", label: "Dagens saker", hint: "Bocka av dagens saker och se vad du redan gjort" },
   { id: "forslag", label: "Rekommendation just nu", hint: "Ett förslag – samma som i Planera" },
   { id: "lagg-till", label: "Lägg till", hint: "Snabbknapp för ny uppgift" },
-  { id: "genvagar", label: "Dina genvägar", hint: "Fyra egna favoriter du väljer själv" },
   { id: "vagar", label: "Vad behöver du just nu?", hint: "Fyra vanliga situationer" },
   { id: "omrade", label: "Områdesväljare", hint: "Vilket rum du är i" },
   {
@@ -55,56 +53,36 @@ export interface HomeLayoutPrefs {
   order: HomeBlockId[];
 }
 
-// Lugn start: bara det som ger nytta direkt. Resten slås på i "Anpassa hemskärmen".
-// De fyra snabbalternativen ("vagar") ligger högt – de täcker redan
-// "Lägg till", "Jag gjorde något" och "Lägg till det du gjorde".
-const DEFAULT_PREFS: HomeLayoutPrefs = {
-  hidden: ["lagg-till", "omrade", "genvagar"],
+// Clean-up 1.0: Hem visar max sex block. Resten slås på i "Anpassa hemskärmen".
+
+export const DEFAULT_PREFS: HomeLayoutPrefs = {
+  // Lugn start: Hem svarar på "vad behöver jag veta eller göra just nu?".
+  hidden: ["checkin", "energifloede", "medicin", "omrade", "vagar"],
 
   order: [
-    "checkin",
     "batteri",
-    "energifloede",
-    "nasta",
-    "vagar",
-    "idag",
     "forslag",
+    "nasta",
+    "idag",
     "lagg-till",
-    "genvagar",
-    "omrade",
+    "checkin",
+    "energifloede",
+    "vagar",
     "medicin",
+    "omrade",
   ],
 };
 
 const STORAGE_KEY = "myflove-home-layout";
-/** Engångsflytt: Energins historik direkt under batteriet, "Nästa" före snabbalternativen. */
-const MIGRATION_KEY = "myflove-home-layout-migrated-energifloede-v2";
-/** Engångsflytt: Dagens medicin synlig direkt efter "Nästa". */
-const MEDICATION_MIGRATION_KEY = "myflove-home-layout-migrated-medicin-v2";
+/** Clean-up 1.0: en lugnare hemskärm med max sex block – körs en gång. */
+const CLEANUP_MIGRATION_KEY = "myflove-home-layout-cleanup-1";
 
-function normalizeOrder(order: HomeBlockId[] | undefined): HomeBlockId[] {
-  const base = order ?? DEFAULT_PREFS.order;
-  const withoutFlow = base.filter((id) => id !== "energifloede");
-  const atBattery = withoutFlow.indexOf("batteri");
-  const withFlow =
-    atBattery >= 0
-      ? [
-          ...withoutFlow.slice(0, atBattery + 1),
-          "energifloede" as HomeBlockId,
-          ...withoutFlow.slice(atBattery + 1),
-        ]
-      : base;
-
-  // Säkerställ önskad ordning mellan "nasta" och "vagar".
-  const iNasta = withFlow.indexOf("nasta");
-  const iVagar = withFlow.indexOf("vagar");
-  if (iNasta >= 0 && iVagar >= 0 && iNasta > iVagar) {
-    const next = [...withFlow];
-    next.splice(iNasta, 1);
-    next.splice(iVagar, 0, "nasta");
-    return next;
-  }
-  return withFlow;
+/** Sorterar användarens ordning efter Clean-up-ordningen, okända block sist. */
+export function cleanupOrder(order: HomeBlockId[] | undefined): HomeBlockId[] {
+  const known = (order ?? []).filter((id) => HOME_BLOCKS.some((b) => b.id === id));
+  const missing = DEFAULT_PREFS.order.filter((id) => !known.includes(id));
+  const all = [...known, ...missing];
+  return [...all].sort((a, b) => DEFAULT_PREFS.order.indexOf(a) - DEFAULT_PREFS.order.indexOf(b));
 }
 
 export function useHomeLayout() {
@@ -112,29 +90,9 @@ export function useHomeLayout() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (window.localStorage.getItem(MIGRATION_KEY)) return;
-    window.localStorage.setItem(MIGRATION_KEY, "1");
-    setPrefs((p) => {
-      const nextOrder = normalizeOrder(p?.order);
-      return {
-        order: nextOrder,
-        hidden: (p?.hidden ?? []).filter((id) => id !== "energifloede"),
-      };
-    });
-  }, [setPrefs]);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (window.localStorage.getItem(MEDICATION_MIGRATION_KEY)) return;
-    window.localStorage.setItem(MEDICATION_MIGRATION_KEY, "1");
-    setPrefs((p) => {
-      // Rutiner & medicin är nu ett gemensamt block längst ner på Hem.
-      const base = (p?.order ?? DEFAULT_PREFS.order).filter((id) => id !== "medicin");
-      return {
-        order: [...base, "medicin" as HomeBlockId],
-        hidden: (p?.hidden ?? []).filter((id) => id !== "medicin"),
-      };
-    });
+    if (window.localStorage.getItem(CLEANUP_MIGRATION_KEY)) return;
+    window.localStorage.setItem(CLEANUP_MIGRATION_KEY, "1");
+    setPrefs(() => ({ order: DEFAULT_PREFS.order, hidden: DEFAULT_PREFS.hidden }));
   }, [setPrefs]);
 
   const order = useMemo<HomeBlockId[]>(() => {
