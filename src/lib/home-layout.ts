@@ -95,7 +95,6 @@ export function useHomeLayout() {
     setPrefs(() => ({ order: DEFAULT_PREFS.order, hidden: DEFAULT_PREFS.hidden }));
   }, [setPrefs]);
 
-
   const order = useMemo<HomeBlockId[]>(() => {
     const valid = (prefs?.order ?? []).filter((id) => HOME_BLOCKS.some((b) => b.id === id));
     const missing = HOME_BLOCKS.map((b) => b.id).filter((id) => !valid.includes(id));

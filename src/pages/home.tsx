@@ -303,10 +303,6 @@ export default function Home() {
         {/* Flow visar mjukt att han lär sig hur du fungerar. */}
         <FlowLearningCard />
 
-
-
-
-
         {shows("checkin") && (
           <div style={pos("checkin")}>
             <QuickCheckin />
@@ -558,7 +554,6 @@ export default function Home() {
         <div style={{ order: 98 }} className="space-y-3 pt-2">
           <AreaOnboarding />
         </div>
-
 
         <div
           style={{ order: 99 }}

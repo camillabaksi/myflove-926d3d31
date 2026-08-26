@@ -95,7 +95,6 @@ const FLOW_HIDDEN_PATHS = new Set([
   "/dev-session",
 ]);
 
-
 import { useEnabledAreas } from "@/lib/life-areas";
 import { useLocalStorage } from "@/lib/storage";
 import { useNpfSettings, plainLabel } from "@/lib/npf-mode";
@@ -585,7 +584,6 @@ export default function Layout({ children }: LayoutProps) {
         hint: "Rutiner, min livsprofil, anpassning och feedback",
         icon: LayoutGrid,
         hrefs: [
-          
           "/oversikt",
           "/flow-installningar",
           "/min-livsprofil",
@@ -626,7 +624,6 @@ export default function Layout({ children }: LayoutProps) {
     }
   }, [navMigrated, navSlots, setNavMigrated, setNavSlots]);
   const [editingNav, setEditingNav] = useState(false);
-
 
   // Enkelt läge: visar bara det viktigaste tills man själv vill se mer.
   const [simpleMode, setSimpleMode] = useLocalStorage<boolean>("myflove-simple-mode", true);
@@ -879,9 +876,7 @@ export default function Layout({ children }: LayoutProps) {
           style={CATEGORY_THEMES[location] as React.CSSProperties}
         >
           <div key={location} className="max-w-2xl mx-auto w-full p-4 md:p-8 page-enter">
-            {!FLOW_HIDDEN_PATHS.has(location) && (
-              <FlowCompanion stage="mini" className="mb-4" />
-            )}
+            {!FLOW_HIDDEN_PATHS.has(location) && <FlowCompanion stage="mini" className="mb-4" />}
             {children}
           </div>
 
@@ -1100,7 +1095,6 @@ export default function Layout({ children }: LayoutProps) {
                   <div className="mb-4">
                     <PwaInstallButton />
                   </div>
-
 
                   <button
                     type="button"
