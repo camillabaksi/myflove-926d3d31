@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-26 – Lägg till MyFlove på hemskärmen
+
+- Ny knapp på Hem: "Installera MyFlove" med riktig installationsprompt där webbläsaren stödjer den (t.ex. Android/Chrome).
+- På iPhone/iPad visas i stället en kort instruktion: tryck Dela → "Lägg till på hemskärmen".
+- Knappen döljs helt när appen redan körs installerad – inget falskt "klart".
+- Flow hälsar diskret bredvid knappen: "Vill du ha mig nära till hands? 💜"
+
+
 ## 2026-08-26 – Planering i bottennavet
 
 - "Planering" i bottennavet öppnar nu planeringssidan (ordningen på dagen) i stället för Flow-hjälpen.
