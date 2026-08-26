@@ -316,7 +316,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
             <div className="flex items-center gap-3">
               <div className="rounded-full bg-primary/10 p-1">
                 <FlowMascot
-                  size="md"
+                  size="sm"
                   wave={flowStatus === "idle"}
                   glow
                   status={flowStatus}

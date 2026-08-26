@@ -516,7 +516,7 @@ export type FlowStage = "hero" | "inline" | "mini";
 
 const STAGE_CLASS: Record<FlowStage, string> = {
   hero: "h-[33svh] max-h-[300px] min-h-[170px]",
-  inline: "h-[18svh] max-h-[150px] min-h-[104px]",
+  inline: "h-[13svh] max-h-[112px] min-h-[84px]",
   mini: "h-[68px] min-h-[68px] max-h-[68px]",
 };
 

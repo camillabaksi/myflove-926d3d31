@@ -32,7 +32,7 @@ export function FlowGreeting({ children }: { children?: React.ReactNode }) {
     return (
       <section className="surface-card space-y-5 p-6 text-center" aria-label="Flow presenterar sig">
         <div className="flex justify-center">
-          <FlowMascot size="xl" glow className="flow-entry" />
+          <FlowMascot size="lg" glow className="flow-entry" />
         </div>
         <div className="space-y-2">
           <h2 className="font-display text-2xl text-ink">{s.title}</h2>

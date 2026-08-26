@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-26 – Lagom stor Flow i hela appen
+
+- Flow i kortläget (Min dag, Flow-inställningar) är mindre och tar inte längre över kortet.
+- Flow i chattens rubrik är nedskalad så texten får plats bredvid.
+- Flows välkomsthälsning använder en mindre maskot.
+
+
 ## 2026-08-26 – Flow mini är lite större
 
 - Mini-Flow i Hem-rutan är förstorat med ett litet steg, så maskoten syns bättre utan att gå tillbaka till att överlappa knappen eller texten.
