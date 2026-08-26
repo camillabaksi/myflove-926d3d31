@@ -61,16 +61,28 @@ export function useEnergyBattery(): {
     ];
   }, [activeTasks, lectures]);
 
-  const reading = useMemo(
-    () =>
-      buildBattery({
-        pattern,
-        flowNow: flow.score,
-        items,
-        energyFlowNet: settings.enabled ? balance.weightedNet : 0,
-      }),
-    [pattern, flow.score, items, balance.weightedNet, settings.enabled],
-  );
+  const reading = useMemo(() => {
+    const { startMinutes, endMinutes } = normalizeWindow(dayWin);
+    return buildBattery({
+      pattern,
+      flowNow: flow.score,
+      items,
+      energyFlowNet: settings.enabled ? balance.weightedNet : 0,
+      dayStartMinutes: startMinutes,
+      dayEndMinutes: endMinutes,
+      morningLevel: todayEdges.morning != null ? edgeToPercent(todayEdges.morning) : null,
+      eveningLevel: todayEdges.evening != null ? edgeToPercent(todayEdges.evening) : null,
+    });
+  }, [
+    pattern,
+    flow.score,
+    items,
+    balance.weightedNet,
+    settings.enabled,
+    dayWin,
+    todayEdges.morning,
+    todayEdges.evening,
+  ]);
 
   const suggestions = useMemo(() => batterySuggestions(reading, items), [reading, items]);
 
