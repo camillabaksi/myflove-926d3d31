@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-26 – Väder i Flows tips
+
+- Flow använder nu timprognosen för dagen: när något utomhus (promenad, hämtning, träning, handling, resa) ligger i regnigt väder säger han till i god tid – "Det ser ut att regna kring 15:00 när du ska ut – ta med paraply."
+- Tipset kommer bara när det spelar roll, går att vifta bort och följer dina Flow-inställningar.
+
 ## 2026-08-26 – Flow som levande följeslagare
 
 - Flow är proaktiv: han hör av sig när energin är låg samtidigt som dagen är full, när det blir regn innan något utomhus och i god tid innan du behöver börja göra dig klar.
