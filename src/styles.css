@@ -684,10 +684,19 @@ html[data-npf-less="true"] [data-npf="optional"] {
   .flow-calm,
   .flow-alive,
   .flow-notice,
-
-
-
+  .flow-breathe-body,
+  .flow-blinking,
+  .flow-heart-glow,
   .stagger > * {
+    animation: none !important;
+  }
+  .flow-gaze {
+    transform: none !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stagger > * {
+
     animation: none !important;
   }
 }
