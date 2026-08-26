@@ -349,7 +349,7 @@ function UsersSection() {
               >
                 Namn
               </SortHeader>
-              <th className="p-3">Besök</th>
+              <th className="p-3">Senast aktiv</th>
               <SortHeader
                 active={sortKey === "last_login"}
                 dir={sortDir}
@@ -379,7 +379,7 @@ function UsersSection() {
                     <div className="text-xs text-muted-foreground">{u.email ?? "—"}</div>
                   </td>
                   <td className="p-3 text-xs text-muted-foreground">
-                    Anonym statistik
+                    {fmtDateTime(u.last_visit_at)}
                   </td>
                   <td className="p-3 text-xs text-muted-foreground">
                     {fmtDateTime(u.last_sign_in_at)}

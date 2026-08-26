@@ -189,7 +189,9 @@ export const listUsersWithRolesFn = createServerFn({ method: "GET" })
         email: u.email ?? null,
         created_at: u.created_at ?? null,
         last_sign_in_at: u.last_sign_in_at ?? null,
-        last_visit_at: null,
+        // Senast aktiv: kontot uppdateras när sessionen förnyas, dvs. när
+        // användaren faktiskt öppnar appen – även utan ny inloggning.
+        last_visit_at: u.updated_at ?? null,
         visits: 0,
         roles: rolesByUser.get(u.id) ?? [],
       };
@@ -198,7 +200,9 @@ export const listUsersWithRolesFn = createServerFn({ method: "GET" })
     const filtered =
       from === null && to === null
         ? rows
-        : rows.filter((r) => inRange(r.last_sign_in_at) || inRange(r.created_at));
+        : rows.filter(
+            (r) => inRange(r.last_visit_at) || inRange(r.last_sign_in_at) || inRange(r.created_at),
+          );
 
     return filtered.sort((a, b) =>
       (b.last_visit_at ?? b.last_sign_in_at ?? "").localeCompare(
