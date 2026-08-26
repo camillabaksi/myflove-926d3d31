@@ -18,6 +18,7 @@ import {
 import { chatWithFlow } from "@/lib/flow-chat.functions";
 import { useTasks, useMoods, useFocus, useReminders } from "@/hooks/use-data";
 import { useLifePuzzle } from "@/hooks/use-life-puzzle";
+import { useFlowPersonalContext } from "@/hooks/use-flow-personal-context";
 import { lastPlace, placeFor, shortcutsFor, type FlowPlace } from "@/lib/flow-context";
 import {
   AREA_META,
@@ -98,6 +99,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
 
   const chat = useServerFn(chatWithFlow);
   const { puzzle, contextPrompt } = useLifePuzzle();
+  const personalContext = useFlowPersonalContext();
   const [place, setPlace] = useState<FlowPlace | null>(null);
   useEffect(() => {
     setPlace(lastPlace());
@@ -170,7 +172,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
       const { reply } = await chat({
         data: {
           messages: history.map((m) => ({ role: m.role, content: m.content })),
-          context: contextPrompt,
+          context: `${personalContext}\n\n${contextPrompt}`,
         },
       });
       setMessages((m) => [...m, { id: `tmp-a-${Date.now()}`, role: "assistant", content: reply }]);
@@ -302,6 +304,12 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                 <h1 className="text-3xl font-bold leading-tight">Flow</h1>
                 <p className="text-sm text-muted-foreground">
                   Din andra hjärna – lugn, empatisk, aldrig dömande
+                </p>
+                <p data-npf="optional" className="mt-1 text-xs text-muted-foreground">
+                  Flow utgår från din profil och dina mönster i appen.{" "}
+                  <Link to="/min-livsprofil" className="underline underline-offset-2">
+                    Justera din profil
+                  </Link>
                 </p>
               </div>
             </div>

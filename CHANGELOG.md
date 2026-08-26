@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-26 – Flow känner dig i chatten
+
+- Flow-chatten utgår nu från din livsprofil, din nuvarande situation och de mönster Flow sett i din användning – tipsen blir mer personliga.
+- Flow anpassar också tonen efter din hjälpnivå (Tyst/Diskret/Aktiv). Samma kontext används i Stop-samtalen.
+- Ingen ny data samlas in – Flow använder bara det som redan finns i MyFlove, och du kan justera din profil när du vill.
+
 ## 2026-08-26 – Fortsätt din Flow-chatt
 
 - Flow öppnar automatiskt ditt senaste samtal så du kan fortsätta där du slutade. Vill du börja om trycker du "Ny chatt".

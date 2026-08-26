@@ -11,6 +11,7 @@ import { Hand, Send, Wind, Sparkles } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { chatWithFlow } from "@/lib/flow-chat.functions";
 import { useLifePuzzle } from "@/hooks/use-life-puzzle";
+import { useFlowPersonalContext } from "@/hooks/use-flow-personal-context";
 import StopBudget from "@/components/stop-budget";
 import { createFlowConversation, saveFlowMessage } from "@/hooks/use-flow-chats";
 
@@ -71,6 +72,7 @@ export default function StopModal({ open, onOpenChange }: StopModalProps) {
   const [phase, setPhase] = useState<"breathe" | "feeling" | "talk">("breathe");
   const [feeling, setFeeling] = useState<string | null>(null);
   const { contextPrompt } = useLifePuzzle();
+  const personalContext = useFlowPersonalContext();
   const [breathCount, setBreathCount] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   const convIdRef = useRef<string | null>(null);
@@ -127,7 +129,7 @@ export default function StopModal({ open, onOpenChange }: StopModalProps) {
       const { reply } = await chat({
         data: {
           messages: payload,
-          context: `${contextPrompt}${feeling ? `\nAnvändaren beskriver känslan som: ${feeling}.` : ""}`,
+          context: `${personalContext}\n\n${contextPrompt}${feeling ? `\nAnvändaren beskriver känslan som: ${feeling}.` : ""}`,
         },
       });
       setMessages((m) => [...m, { role: "assistant", content: reply }]);
