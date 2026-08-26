@@ -192,6 +192,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
         type="button"
         onClick={() => {
           setHistoryOpen(false);
+          if (typeof window !== "undefined") window.sessionStorage.setItem(NEW_CHAT_FLAG, "1");
           void navigate({ to: "/assistant" });
         }}
         className="w-full flex items-center gap-2 rounded-2xl bg-primary/10 text-primary px-3 py-2 text-sm font-medium hover:bg-primary/15 transition-colors"
