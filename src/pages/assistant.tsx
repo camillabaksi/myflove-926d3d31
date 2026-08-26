@@ -41,6 +41,8 @@ import { todayISO } from "@/lib/day";
 
 const todayStr = (): string => todayISO();
 
+const NEW_CHAT_FLAG = "myflove-flow-new-chat";
+
 const GREETING =
   "Hej, jag är Flow. Jag finns här för att avlasta – inte för att ge dig mer att göra. Vad snurrar i huvudet just nu?";
 
@@ -59,7 +61,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
   const navigate = useNavigate();
   const conversationId = chatId ?? null;
 
-  const { conversations, refresh, remove } = useFlowConversations();
+  const { conversations, loading: loadingConversations, refresh, remove } = useFlowConversations();
   const { messages, setMessages, loading: loadingMessages } = useFlowMessages(conversationId);
 
   const [input, setInput] = useState("");
@@ -68,6 +70,31 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
   const [historyOpen, setHistoryOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  /**
+   * Fortsätt där du slutade: när du öppnar Flow utan att välja samtal
+   * hoppar vi tillbaka in i det senaste – om du inte aktivt bad om en ny chatt.
+   */
+  useEffect(() => {
+    if (conversationId || loadingConversations || isSending) return;
+    if (typeof window === "undefined") return;
+    if (window.sessionStorage.getItem(NEW_CHAT_FLAG) === "1") return;
+    const latest = conversations[0];
+    if (!latest) return;
+    void navigate({ to: "/assistant/$chatId", params: { chatId: latest.id }, replace: true });
+  }, [conversationId, loadingConversations, conversations, isSending, navigate]);
+
+  /** Påbörjad text sparas per samtal så inget försvinner om du lämnar vyn. */
+  const draftKey = `myflove-flow-draft-${conversationId ?? "ny"}`;
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    setInput(window.localStorage.getItem(draftKey) ?? "");
+  }, [draftKey]);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (input.trim()) window.localStorage.setItem(draftKey, input);
+    else window.localStorage.removeItem(draftKey);
+  }, [draftKey, input]);
 
   const chat = useServerFn(chatWithFlow);
   const { puzzle, contextPrompt } = useLifePuzzle();
@@ -151,6 +178,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
       void refresh();
       // Navigera först när svaret är sparat – annars avbryts anropet av omladdningen.
       if (created) {
+        if (typeof window !== "undefined") window.sessionStorage.removeItem(NEW_CHAT_FLAG);
         void navigate({ to: "/assistant/$chatId", params: { chatId: id }, replace: true });
       }
     } catch (e) {
@@ -167,6 +195,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
         type="button"
         onClick={() => {
           setHistoryOpen(false);
+          if (typeof window !== "undefined") window.sessionStorage.setItem(NEW_CHAT_FLAG, "1");
           void navigate({ to: "/assistant" });
         }}
         className="w-full flex items-center gap-2 rounded-2xl bg-primary/10 text-primary px-3 py-2 text-sm font-medium hover:bg-primary/15 transition-colors"
@@ -192,6 +221,8 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
               type="button"
               onClick={() => {
                 setHistoryOpen(false);
+                if (typeof window !== "undefined")
+                  window.sessionStorage.removeItem(NEW_CHAT_FLAG);
                 void navigate({ to: "/assistant/$chatId", params: { chatId: c.id } });
               }}
               className="flex-1 min-w-0 text-left py-2.5"

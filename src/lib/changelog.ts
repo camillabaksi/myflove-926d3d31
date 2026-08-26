@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Flow-chatten fortsätter där du slutade: senaste samtalet öppnas automatiskt och påbörjad text sparas per samtal (2026-08-26)",
       "Prata med Flow: chatten nås nu från menyn Mer, översikten och direkt från Flow-kortet (2026-08-26)",
       "Hoppa över-knapp på startsidans intro – gå direkt till sista vyn utan att svepa igenom alla slides (2026-08-26)",
       "Installationsknappen finns nu även på startsidan innan man skapat konto – både högst upp och vid Möt Flow (2026-08-26)",
