@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Flow-inställningar synkas: hjälpnivå, tidsfönster, förvarning och prioriteringar sparas på ditt konto och följer med mellan mobil och dator (2026-08-26)",
       "Flow-inställningar: egen sida för hjälpnivå, tidsfönster för proaktiva meddelanden, förvarningstid och vilka typer av tider Flow ska prioritera (2026-08-26)",
       "Flow reagerar på din dag: prioriteringsförslag vid låg energi och full dag, förvarning cirka 30 minuter före viktiga tider med länk till rätt vy, och mjuka energianpassade reaktioner när du bockar av saker (2026-08-26)",
       "Flow och vädret: timprognosen används nu för att varna innan något utomhus hamnar i regn – med tid och paraplytips (2026-08-26)",
