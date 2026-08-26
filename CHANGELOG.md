@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-26 – Flow-inställningar
+
+- Ny sida (Mer → Flow-inställningar): hjälpnivå Tyst/Diskret/Aktiv, visa/dölj Flow och om han får berätta vad han lär sig.
+- Tidsfönster: välj tidigast och senast på dygnet som Flow får höra av sig – utanför det är han tyst.
+- Förvarning: ställ in hur långt före en viktig tid Flow säger till (5–90 minuter).
+- Prioriteringar: välj vilka typer av tider Flow håller koll på – barn, medicin, studier, jobb, träning, inköp eller övrigt.
+
 ## 2026-08-26 – Flow reagerar mjukare på din dag
 
 - Låg energi + många saker: Flow föreslår att ni prioriterar tillsammans i stället för att pusha ("Vill du att vi prioriterar tillsammans?") – och går direkt till FlowPlan.
