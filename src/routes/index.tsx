@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { FlowMascot, FlowSays } from "@/components/flow-mascot";
+import PwaInstallButton from "@/components/pwa-install-button";
 
 export const Route = createFileRoute("/")({
   head: () => ({
