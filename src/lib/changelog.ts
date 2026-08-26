@@ -12,7 +12,9 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      '"Lägg till MyFlove på hemskärmen" finns nu även på Logga in- och Skapa konto-sidorna (2026-08-26)',
       'Flow-knappen "Mitt batteri" leder till Mitt batteri-sidan i stället för dagens balans (2026-08-26)',
+
       'Lugnare energi och mående: snabb incheckning först (batteri + fem mående-val), historik bakom "Se min historik" (2026-08-26)',
       "Mitt batteri högst upp på Hem och alla länkar går direkt till Mitt batteri-sidan (2026-08-26)",
       '"Avsluta konto" finns bara längst ner under Inställningar, med bekräftelse (2026-08-26)',

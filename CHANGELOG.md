@@ -1,6 +1,11 @@
 # Changelog
 
+## 2026-08-26 – Lägg till på hemskärmen vid inloggning
+
+- Knappen "Lägg till MyFlove på hemskärmen" finns nu även längst ner på Logga in- och Skapa konto-sidorna.
+
 ## 2026-08-26 – Lugnare energi, tydligare konto och samlad appstatistik
+
 
 - Mitt batteri ligger nu högst upp på Hem (direkt efter Flow) och all "Mitt batteri"-länkning går direkt till sidan /mitt-batteri.
 - "Energi och mående" är radikalt förenklad: en snabb incheckning (batteri 1–10 + fem tydliga mående-val) först, historik och mönster bakom "Se min historik". Samma data som förut – inga dubbla registreringar. Medicin ligger kvar separat i Rutiner & medicin.
