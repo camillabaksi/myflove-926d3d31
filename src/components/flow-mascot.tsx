@@ -2,9 +2,39 @@ import { useEffect, useRef, useState } from "react";
 import flowAsset from "@/assets/flow-mascot.png.asset.json";
 import { cn } from "@/lib/utils";
 
+/**
+ * Flows samtalsstatus – styr andningstempo, blinkrytm och blick
+ * så att maskoten följer med i chatten i stället för att leva sitt eget liv.
+ */
+export type FlowStatus = "idle" | "listening" | "thinking" | "done";
+
+interface StatusTempo {
+  /** Andningens längd. */
+  breath: string;
+  /** Hjärtglödets längd. */
+  glow: string;
+  /** Väntetid mellan blinkningar (min, slumpspann). */
+  blinkMin: number;
+  blinkSpan: number;
+  /** Hur mycket blicken följer pekaren. */
+  gaze: number;
+}
+
+const STATUS_TEMPO: Record<FlowStatus, StatusTempo> = {
+  // Lugn grundpuls.
+  idle: { breath: "4.2s", glow: "3.8s", blinkMin: 2600, blinkSpan: 4200, gaze: 1 },
+  // Du skriver: Flow lutar sig fram, blinkar oftare, andas lite snabbare.
+  listening: { breath: "3.2s", glow: "2.8s", blinkMin: 1600, blinkSpan: 2200, gaze: 1.5 },
+  // Flow tänker: djupa andetag, sällsynta blinkningar, blicken vandrar bort.
+  thinking: { breath: "5.4s", glow: "1.9s", blinkMin: 4200, blinkSpan: 5200, gaze: 0.25 },
+  // Klart: kort, ljus puls.
+  done: { breath: "2.6s", glow: "1.4s", blinkMin: 1400, blinkSpan: 1600, gaze: 1.2 },
+};
+
 /** Slumpad blinkning – Flow blinkar som en levande varelse, inte som en metronom. */
-function useFlowBlink(enabled: boolean) {
+function useFlowBlink(enabled: boolean, tempo: StatusTempo) {
   const [blinking, setBlinking] = useState(false);
+  const { blinkMin, blinkSpan } = tempo;
   useEffect(() => {
     if (!enabled) return;
     if (typeof window === "undefined") return;
@@ -12,7 +42,7 @@ function useFlowBlink(enabled: boolean) {
     let blinkTimer: ReturnType<typeof setTimeout>;
     let resetTimer: ReturnType<typeof setTimeout>;
     const schedule = () => {
-      const wait = 2600 + Math.random() * 4200;
+      const wait = blinkMin + Math.random() * blinkSpan;
       blinkTimer = setTimeout(() => {
         setBlinking(true);
         resetTimer = setTimeout(() => {
@@ -26,7 +56,7 @@ function useFlowBlink(enabled: boolean) {
       clearTimeout(blinkTimer);
       clearTimeout(resetTimer);
     };
-  }, [enabled]);
+  }, [enabled, blinkMin, blinkSpan]);
   return blinking;
 }
 
@@ -56,6 +86,7 @@ function useFlowGaze(enabled: boolean) {
   }, [enabled]);
   return { ref, tilt };
 }
+
 
 
 /**
