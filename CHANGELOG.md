@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-26 – Installationsknapp överallt
+
+- Knappen "Lägg till MyFlove på hemskärmen" finns nu även i menyn "Mer", så den går att nå från alla vyer – på Android, iPhone och vanlig webbläsare.
+- Instruktionen visas i en ruta inne i appen i stället för en popup, så den fungerar även om popup-fönster är blockerade.
+
 ## 2026-08-26 – Lägg till MyFlove på hemskärmen
 
 - Installationskortet visas nu alltid tydligt direkt under Flow när appen inte redan är installerad – även innan Chrome har skickat sin installationsprompt och även i preview.
