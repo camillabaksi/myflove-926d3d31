@@ -406,6 +406,13 @@ export default function Layout({ children }: LayoutProps) {
       icon: Sparkles,
       hint: "Flow visar en sak i taget när du vill ha sällskap",
     },
+    {
+      href: "/assistant",
+      label: "Prata med Flow",
+      icon: MessageCircle,
+      hint: "Chatta med Flow när du vill prata av dig eller tänka högt",
+      essential: true,
+    },
 
     {
       href: "/friktionsindex",
