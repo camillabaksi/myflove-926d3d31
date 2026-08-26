@@ -90,6 +90,16 @@ describe("FlowCharacter – rätt rekvisita och pose per kontext", () => {
     expect(stage.className).toContain("aspect-square");
     expect(stage.className).toContain("h-[33svh]");
   });
+
+  it("visar själva maskoten tydligt i mini-läget utan rekvisita som tar plats", () => {
+    const { container } = render(<FlowCharacter scene="rain" stage="mini" />);
+    const stage = container.querySelector("[data-flow-character]")!;
+    const mascot = container.querySelector("[data-flow-mascot] img")!;
+    expect(stage).toHaveAttribute("data-flow-stage", "mini");
+    expect(mascot.className).toContain("h-12");
+    expect(container.querySelector('[data-flow-prop="umbrella"]')).toBeNull();
+    expect(container.querySelector('[data-flow-prop="rainDrops"]')).toBeNull();
+  });
 });
 
 describe("sceneForTask", () => {
