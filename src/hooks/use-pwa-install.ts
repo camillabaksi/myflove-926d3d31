@@ -30,10 +30,13 @@ export type PwaInstallState = {
 
 function isStandalone(): boolean {
   if (typeof window === "undefined") return false;
+  // I en inbäddad förhandsvisning (iframe) matchar display-mode ofta fullscreen
+  // trots att appen inte är installerad – då ska knappen fortfarande synas.
+  const embedded = window.self !== window.top;
+  if (embedded) return false;
   const navStandalone = (window.navigator as Navigator & { standalone?: boolean }).standalone;
   return (
     window.matchMedia?.("(display-mode: standalone)").matches === true ||
-    window.matchMedia?.("(display-mode: fullscreen)").matches === true ||
     navStandalone === true
   );
 }
