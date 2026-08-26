@@ -1,21 +1,62 @@
+import { useEffect } from "react";
 import { Check, Download, Menu, Share, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FlowMascot } from "@/components/flow-mascot";
 import { usePwaInstall } from "@/hooks/use-pwa-install";
 import { haptic } from "@/lib/haptics";
+import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
 /**
  * "Lägg till MyFlove på hemskärmen"
  * Riktig installationsprompt där webbläsaren stödjer den, annars en mjuk
  * instruktion för iOS/Safari. Döljs helt när appen redan är installerad.
+ * `compact` gör den till en liten, diskret notering (används längst ner på Hem).
  */
-export default function PwaInstallCard({ className }: { className?: string }) {
-  const { installed, canPrompt, isIos, showInstallHelp, setShowInstallHelp, install } =
+export default function PwaInstallCard({
+  className,
+  compact = false,
+}: {
+  className?: string;
+  compact?: boolean;
+}) {
+  const { installed, isIos, showInstallHelp, setShowInstallHelp, install, justInstalled } =
     usePwaInstall();
+
+  useEffect(() => {
+    if (installed) return;
+    track("install_prompt_shown", { source: compact ? "hem" : "kort" });
+  }, [installed, compact]);
+
+  useEffect(() => {
+    if (justInstalled) track("install_completed", { result: "completed" });
+  }, [justInstalled]);
+
+  const startInstall = () => {
+    haptic("success");
+    track("install_started", { source: compact ? "hem" : "kort" });
+    void install();
+  };
 
   // Redan installerad – ingen knapp, inget påstående om lyckad installation.
   if (installed) return null;
+
+  if (compact && !showInstallHelp) {
+    return (
+      <button
+        type="button"
+        data-pwa-install
+        onClick={startInstall}
+        className={cn(
+          "flex w-full items-center justify-center gap-2 rounded-2xl px-3 py-2 text-xs text-muted-foreground transition-colors hover:text-foreground",
+          className,
+        )}
+      >
+        <FlowMascot size="xs" mood="wave" className="size-5 shrink-0" />
+        <span>Vill du ha Flow nära till hands? Lägg till på hemskärmen</span>
+      </button>
+    );
+  }
 
   return (
     <section
@@ -34,13 +75,7 @@ export default function PwaInstallCard({ className }: { className?: string }) {
         </p>
       </div>
 
-      <Button
-        className="w-full rounded-full"
-        onClick={() => {
-          haptic("success");
-          void install();
-        }}
-      >
+      <Button className="w-full rounded-full" onClick={startInstall}>
         <Download className="mr-2 size-4" />
         Lägg till MyFlove på hemskärmen
       </Button>

@@ -41,6 +41,7 @@ import { Route as AppPitchRouteImport } from './routes/_app.pitch'
 import { Route as AppPaminnelserRouteImport } from './routes/_app.paminnelser'
 import { Route as AppOversiktRouteImport } from './routes/_app.oversikt'
 import { Route as AppMorgonstartRouteImport } from './routes/_app.morgonstart'
+import { Route as AppMittBatteriRouteImport } from './routes/_app.mitt-batteri'
 import { Route as AppMinSituationRouteImport } from './routes/_app.min-situation'
 import { Route as AppMinLivsprofilRouteImport } from './routes/_app.min-livsprofil'
 import { Route as AppMinDagRouteImport } from './routes/_app.min-dag'
@@ -239,6 +240,11 @@ const AppOversiktRoute = AppOversiktRouteImport.update({
 const AppMorgonstartRoute = AppMorgonstartRouteImport.update({
   id: '/morgonstart',
   path: '/morgonstart',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMittBatteriRoute = AppMittBatteriRouteImport.update({
+  id: '/mitt-batteri',
+  path: '/mitt-batteri',
   getParentRoute: () => AppRoute,
 } as any)
 const AppMinSituationRoute = AppMinSituationRouteImport.update({
@@ -486,6 +492,7 @@ export interface FileRoutesByFullPath {
   '/min-dag': typeof AppMinDagRoute
   '/min-livsprofil': typeof AppMinLivsprofilRoute
   '/min-situation': typeof AppMinSituationRoute
+  '/mitt-batteri': typeof AppMittBatteriRoute
   '/morgonstart': typeof AppMorgonstartRoute
   '/oversikt': typeof AppOversiktRoute
   '/paminnelser': typeof AppPaminnelserRoute
@@ -558,6 +565,7 @@ export interface FileRoutesByTo {
   '/min-dag': typeof AppMinDagRoute
   '/min-livsprofil': typeof AppMinLivsprofilRoute
   '/min-situation': typeof AppMinSituationRoute
+  '/mitt-batteri': typeof AppMittBatteriRoute
   '/morgonstart': typeof AppMorgonstartRoute
   '/oversikt': typeof AppOversiktRoute
   '/paminnelser': typeof AppPaminnelserRoute
@@ -632,6 +640,7 @@ export interface FileRoutesById {
   '/_app/min-dag': typeof AppMinDagRoute
   '/_app/min-livsprofil': typeof AppMinLivsprofilRoute
   '/_app/min-situation': typeof AppMinSituationRoute
+  '/_app/mitt-batteri': typeof AppMittBatteriRoute
   '/_app/morgonstart': typeof AppMorgonstartRoute
   '/_app/oversikt': typeof AppOversiktRoute
   '/_app/paminnelser': typeof AppPaminnelserRoute
@@ -706,6 +715,7 @@ export interface FileRouteTypes {
     | '/min-dag'
     | '/min-livsprofil'
     | '/min-situation'
+    | '/mitt-batteri'
     | '/morgonstart'
     | '/oversikt'
     | '/paminnelser'
@@ -778,6 +788,7 @@ export interface FileRouteTypes {
     | '/min-dag'
     | '/min-livsprofil'
     | '/min-situation'
+    | '/mitt-batteri'
     | '/morgonstart'
     | '/oversikt'
     | '/paminnelser'
@@ -851,6 +862,7 @@ export interface FileRouteTypes {
     | '/_app/min-dag'
     | '/_app/min-livsprofil'
     | '/_app/min-situation'
+    | '/_app/mitt-batteri'
     | '/_app/morgonstart'
     | '/_app/oversikt'
     | '/_app/paminnelser'
@@ -1126,6 +1138,13 @@ declare module '@tanstack/react-router' {
       path: '/morgonstart'
       fullPath: '/morgonstart'
       preLoaderRoute: typeof AppMorgonstartRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/mitt-batteri': {
+      id: '/_app/mitt-batteri'
+      path: '/mitt-batteri'
+      fullPath: '/mitt-batteri'
+      preLoaderRoute: typeof AppMittBatteriRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/min-situation': {
@@ -1436,6 +1455,7 @@ interface AppRouteChildren {
   AppMinDagRoute: typeof AppMinDagRoute
   AppMinLivsprofilRoute: typeof AppMinLivsprofilRoute
   AppMinSituationRoute: typeof AppMinSituationRoute
+  AppMittBatteriRoute: typeof AppMittBatteriRoute
   AppMorgonstartRoute: typeof AppMorgonstartRoute
   AppOversiktRoute: typeof AppOversiktRoute
   AppPaminnelserRoute: typeof AppPaminnelserRoute
@@ -1490,6 +1510,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppMinDagRoute: AppMinDagRoute,
   AppMinLivsprofilRoute: AppMinLivsprofilRoute,
   AppMinSituationRoute: AppMinSituationRoute,
+  AppMittBatteriRoute: AppMittBatteriRoute,
   AppMorgonstartRoute: AppMorgonstartRoute,
   AppOversiktRoute: AppOversiktRoute,
   AppPaminnelserRoute: AppPaminnelserRoute,

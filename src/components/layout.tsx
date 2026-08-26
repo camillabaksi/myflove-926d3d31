@@ -98,11 +98,10 @@ const FLOW_HIDDEN_PATHS = new Set([
 import { useEnabledAreas } from "@/lib/life-areas";
 import { useLocalStorage } from "@/lib/storage";
 import { useNpfSettings, plainLabel } from "@/lib/npf-mode";
-import { trackEvent } from "@/lib/analytics";
+import { trackEvent, track } from "@/lib/analytics";
 import { rememberPlace } from "@/lib/flow-context";
 import { Button } from "@/components/ui/button";
 import { useClerk, Show } from "@clerk/react";
-import { DeleteAccountButton } from "@/components/delete-account-button";
 
 interface LayoutProps {
   children: ReactNode;
@@ -283,11 +282,18 @@ export default function Layout({ children }: LayoutProps) {
       essential: true,
     },
     {
-      href: "/ma-bra",
-      label: "Må bra",
+      href: "/mitt-batteri",
+      label: "Mitt batteri",
       icon: Heart,
-      hint: "Logga hur du mår och hur mycket ork du har",
+      hint: "Din energi just nu – och en snabb incheckning",
     },
+    {
+      href: "/ma-bra",
+      label: "Energi och mående",
+      icon: Heart,
+      hint: "Snabb incheckning av ork och mående",
+    },
+
     {
       href: "/energifloede",
       label: "Energins historik",
@@ -711,10 +717,16 @@ export default function Layout({ children }: LayoutProps) {
             Alarmljud: {alarmEnabled ? "på" : "av"}
           </Button>
           <Show when="signed-in">
-            <Button variant="outline" className="w-full rounded-xl gap-2" onClick={() => signOut()}>
+            <Button
+              variant="outline"
+              className="w-full rounded-xl gap-2"
+              onClick={() => {
+                track("logout");
+                signOut();
+              }}
+            >
               <LogOut size={16} /> Logga ut
             </Button>
-            <DeleteAccountButton className="w-full" />
           </Show>
         </div>
       </nav>
@@ -1233,12 +1245,12 @@ export default function Layout({ children }: LayoutProps) {
                         className="rounded-xl gap-2"
                         onClick={() => {
                           setMobileMenuOpen(false);
+                          track("logout");
                           signOut();
                         }}
                       >
                         <LogOut size={16} /> Logga ut
                       </Button>
-                      <DeleteAccountButton />
                     </Show>
                   </div>
                 </>

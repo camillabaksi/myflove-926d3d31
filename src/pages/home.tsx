@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import FlowCompanion from "@/components/flow/flow-companion";
 import FlowLearningCard from "@/components/flow/flow-learning-card";
 
@@ -31,6 +31,7 @@ import IntroTour from "@/components/intro-tour";
 import FlowOnboarding from "@/components/flow-onboarding";
 import { CalendarDays, Sparkles, ArrowRight, SlidersHorizontal, Compass } from "lucide-react";
 import { todayISO } from "@/lib/day";
+import { track } from "@/lib/analytics";
 
 /**
  * Fyra vanliga situationer, formulerade som användarens egen tanke.
@@ -210,6 +211,10 @@ export default function Home() {
         ? "Din energi minskar. ↓"
         : "Din energi är stabil. →";
 
+  useEffect(() => {
+    track("home_viewed");
+  }, []);
+
   const { visible } = useHomeLayout();
   const shows = (id: HomeBlockId) => visible.includes(id);
   // Ordningen från "Anpassa hemskärmen" styrs via flex order.
@@ -297,29 +302,34 @@ export default function Home() {
         {/* Flow finns med i appen – en kontextuell sak i taget. */}
         <FlowCompanion stage="mini" />
 
-        {/* Alltid synlig när appen inte redan körs installerad. */}
-        <PwaInstallCard />
+        {/* Mitt batteri – första centrala innehållsblocket, direkt efter Flow. */}
+        {shows("batteri") && (
+          <section style={pos("batteri")} aria-label="Mitt batteri" className="space-y-2">
+            <Link
+              href="/mitt-batteri"
+              data-testid="battery-cta"
+              onClick={() => track("battery_opened", { source: "hem" })}
+              className="group flex items-center justify-between gap-2 text-sm font-semibold uppercase tracking-wide text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Mitt batteri
+              <ArrowRight
+                size={16}
+                className="shrink-0 transition-transform group-hover:translate-x-0.5"
+              />
+            </Link>
+            <EnergyBattery />
+          </section>
+        )}
 
         {/* Flow visar mjukt att han lär sig hur du fungerar. */}
-        <FlowLearningCard />
+        <div style={{ order: 90 }}>
+          <FlowLearningCard />
+        </div>
 
         {shows("checkin") && (
           <div style={pos("checkin")}>
             <QuickCheckin />
           </div>
-        )}
-
-        {shows("batteri") && (
-          <section style={pos("batteri")} aria-label="Mitt energibatteri">
-            <CollapsibleSection
-              id="hem::batteri"
-              title="Mitt energibatteri"
-              headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
-              className="space-y-3"
-            >
-              <EnergyBattery />
-            </CollapsibleSection>
-          </section>
         )}
 
         {/* Energins historik – samma data som Min energi, direkt under batteriet */}
@@ -553,6 +563,11 @@ export default function Home() {
 
         <div style={{ order: 98 }} className="space-y-3 pt-2">
           <AreaOnboarding />
+        </div>
+
+        {/* Liten, diskret notering längst ner – konkurrerar inte med dagen. */}
+        <div style={{ order: 98.5 }} data-testid="home-install-note" className="pt-1">
+          <PwaInstallCard compact />
         </div>
 
         <div
