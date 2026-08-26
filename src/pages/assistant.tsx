@@ -14,7 +14,7 @@ import {
   ArrowLeft,
   ChevronRight,
 } from "lucide-react";
-import { FlowMascot } from "@/components/flow-mascot";
+import { FlowMascot, type FlowStatus } from "@/components/flow-mascot";
 import { chatWithFlow } from "@/lib/flow-chat.functions";
 import { useTasks, useMoods, useFocus, useReminders } from "@/hooks/use-data";
 import { useLifePuzzle } from "@/hooks/use-life-puzzle";
@@ -192,6 +192,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
         },
       });
       setMessages((m) => [...m, { id: `tmp-a-${Date.now()}`, role: "assistant", content: reply }]);
+      setJustAnswered(true);
       await saveFlowMessage(id, "assistant", reply);
       void refresh();
       // Navigera först när svaret är sparat – annars avbryts anropet av omladdningen.
@@ -314,7 +315,14 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-3">
               <div className="rounded-full bg-primary/10 p-1">
-                <FlowMascot size="md" wave glow className="shrink-0" />
+                <FlowMascot
+                  size="md"
+                  wave={flowStatus === "idle"}
+                  glow
+                  status={flowStatus}
+                  mood={flowStatus === "thinking" ? "think" : flowStatus === "done" ? "cheer" : undefined}
+                  className="shrink-0"
+                />
               </div>
               <div>
                 <h1 className="text-3xl font-bold leading-tight">Flow</h1>
@@ -414,7 +422,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                     className={`flex items-end gap-2 ${m.role === "user" ? "justify-end" : "justify-start"}`}
                   >
                     {m.role !== "user" && (
-                      <FlowMascot size="sm" mood="calm" className="shrink-0" />
+                      <FlowMascot size="sm" mood="calm" status={flowStatus} className="shrink-0" />
                     )}
                     <div
                       className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
@@ -431,7 +439,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
             )}
             {isSending && (
               <div className="flex justify-start items-end gap-2">
-                <FlowMascot size="sm" mood="think" className="shrink-0" />
+                <FlowMascot size="sm" mood="think" status="thinking" className="shrink-0" />
                 <div className="bg-secondary text-muted-foreground px-4 py-2 rounded-2xl rounded-bl-sm text-sm">
                   <MyFloveThinking
                     steps={["💬", "🧠", "💜", "✨"]}
