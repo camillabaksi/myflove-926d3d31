@@ -1128,6 +1128,13 @@ function Vision() {
             <Link to="/sign-in">Jag har redan konto</Link>
           </Button>
         </div>
+        <div className="mx-auto mt-6 max-w-sm">
+          <PwaInstallButton
+            variant="outline"
+            className="border-white/25 bg-white/10 text-white hover:bg-white/20"
+          />
+          <p className="mt-2 text-xs text-white/60">Ha Flow nära till hands 💜</p>
+        </div>
       </div>
     </section>
   );
