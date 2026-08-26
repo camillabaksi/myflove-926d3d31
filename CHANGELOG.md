@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-26 – Flow-inställningar följer dig mellan enheter
+
+- Dina Flow-inställningar (hjälpnivå, tidsfönster, förvarning och prioriteringar) sparas nu på ditt konto och synkas mellan mobil och dator.
+- Fungerar även offline – ändringar sparas lokalt först och synkas när du är online igen.
+
 ## 2026-08-26 – Flow-inställningar
 
 - Ny sida (Mer → Flow-inställningar): hjälpnivå Tyst/Diskret/Aktiv, visa/dölj Flow och om han får berätta vad han lär sig.
