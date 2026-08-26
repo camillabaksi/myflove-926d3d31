@@ -313,7 +313,7 @@ export function useFlowMoment(): FlowMoment {
         id: `energy-low-${today}`,
         scene: "energyLow",
         message: "Okej. Då tar vi det lite lugnare idag. 💜 Jag hjälper dig välja det viktigaste.",
-        link: { href: "/flowscore", label: "Mitt batteri" },
+        link: { href: "/mitt-batteri", label: "Mitt batteri" },
       });
     }
     if (energy >= 70) {
@@ -322,7 +322,7 @@ export function useFlowMoment(): FlowMoment {
         id: `energy-high-${today}`,
         scene: "energyHigh",
         message: "Du har bra med energi nu – bra läge för något du skjutit på.",
-        link: { href: "/flowscore", label: "Mitt batteri" },
+        link: { href: "/mitt-batteri", label: "Mitt batteri" },
       });
     }
 
