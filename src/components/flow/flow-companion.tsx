@@ -186,6 +186,9 @@ export default function FlowCompanion({
               <Link href={moment.link.href}>{moment.link.label}</Link>
             </Button>
           )}
+          <Button asChild size="sm" variant="outline" className="rounded-full">
+            <Link href="/assistant">Prata med Flow</Link>
+          </Button>
           <div className="ml-auto">
             <FlowSettingsPopover />
           </div>
