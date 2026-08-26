@@ -4,6 +4,8 @@ import { useFlowScore } from "@/hooks/use-flowscore";
 import { useEnergyPattern } from "@/hooks/use-energy-pattern";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import { useStudySchedule } from "@/hooks/use-study-schedule";
+import { useDayWindow } from "@/hooks/use-day-window";
+import { edgeToPercent, normalizeWindow } from "@/lib/day-window";
 import {
   batterySuggestions,
   buildBattery,
@@ -29,6 +31,8 @@ export function useEnergyBattery(): {
   const { balance, settings } = useEnergyFlow();
   const { activeTasks } = useTasks();
   const { lectures } = useStudySchedule();
+  const { window: dayWin, todayEdges } = useDayWindow();
+
 
   const items = useMemo<BatteryItem[]>(() => {
     const today = todayISO();
@@ -57,16 +61,28 @@ export function useEnergyBattery(): {
     ];
   }, [activeTasks, lectures]);
 
-  const reading = useMemo(
-    () =>
-      buildBattery({
-        pattern,
-        flowNow: flow.score,
-        items,
-        energyFlowNet: settings.enabled ? balance.weightedNet : 0,
-      }),
-    [pattern, flow.score, items, balance.weightedNet, settings.enabled],
-  );
+  const reading = useMemo(() => {
+    const { startMinutes, endMinutes } = normalizeWindow(dayWin);
+    return buildBattery({
+      pattern,
+      flowNow: flow.score,
+      items,
+      energyFlowNet: settings.enabled ? balance.weightedNet : 0,
+      dayStartMinutes: startMinutes,
+      dayEndMinutes: endMinutes,
+      morningLevel: todayEdges.morning != null ? edgeToPercent(todayEdges.morning) : null,
+      eveningLevel: todayEdges.evening != null ? edgeToPercent(todayEdges.evening) : null,
+    });
+  }, [
+    pattern,
+    flow.score,
+    items,
+    balance.weightedNet,
+    settings.enabled,
+    dayWin,
+    todayEdges.morning,
+    todayEdges.evening,
+  ]);
 
   const suggestions = useMemo(() => batterySuggestions(reading, items), [reading, items]);
 
