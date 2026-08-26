@@ -588,6 +588,45 @@ html[data-npf-less="true"] [data-npf="optional"] {
   animation: myflove-flow-notice 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+/* ---- Flow lever på riktigt: andning, blink, blick och hjärtglöd ---- */
+
+/* Mjuk andning i själva kroppen (lägre amplitud än flow-alive, kan kombineras). */
+@keyframes myflove-flow-breathe-body {
+  0%, 100% { transform: scaleX(1) scaleY(1) translateY(0); }
+  50% { transform: scaleX(1.015) scaleY(0.985) translateY(1px); }
+}
+@utility flow-breathe-body {
+  transform-origin: 50% 92%;
+  animation: myflove-flow-breathe-body 4.2s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Blink: en snabb squash som läser som ett ögonlock på maskotbilden. */
+@keyframes myflove-flow-blink-squash {
+  0%, 100% { transform: scaleY(1); }
+  40% { transform: scaleY(0.9); }
+  70% { transform: scaleY(1.01); }
+}
+@utility flow-blinking {
+  transform-origin: 50% 62%;
+  animation: myflove-flow-blink-squash 0.22s ease-in-out both;
+}
+
+/* Hjärtglöd som pulserar lugnt bakom Flow. */
+@keyframes myflove-flow-heart-glow {
+  0%, 100% { transform: scale(0.92); opacity: 0.35; }
+  50% { transform: scale(1.08); opacity: 0.6; }
+}
+@utility flow-heart-glow {
+  animation: myflove-flow-heart-glow 3.8s ease-in-out infinite;
+}
+
+/* Blicken/kroppen lutar mjukt mot pekaren. */
+@utility flow-gaze {
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
 
 
 
