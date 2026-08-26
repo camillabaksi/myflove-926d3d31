@@ -120,17 +120,20 @@ export default function FlowCompanion({
 
   if (!settings.enabled) return null;
 
+  const isMini = stage === "mini";
+
   return (
     <section
       data-flow-companion
       data-flow-scene={moment.scene}
       aria-label="Flow"
       className={cn(
-        "flex items-center gap-3 overflow-hidden rounded-3xl border border-border/60 bg-card p-3 shadow-sm",
+        "flex items-center gap-3 overflow-hidden rounded-3xl border border-border/60 bg-card shadow-sm",
+        isMini ? "p-3" : "p-4",
         className,
       )}
     >
-      <div className="shrink-0 flow-alive">
+      <div className={cn("shrink-0 overflow-hidden flow-alive", isMini ? "w-14" : "w-auto")}>
         <FlowCharacter
           scene={moment.scene}
           seed={moment.seed}
@@ -138,7 +141,7 @@ export default function FlowCompanion({
           kids={moment.kids}
           rain={moment.rain}
           stage={stage}
-          className="w-auto"
+          className={isMini ? "w-14" : "w-auto"}
         />
       </div>
 
@@ -186,7 +189,7 @@ export default function FlowCompanion({
               <Link href={moment.link.href}>{moment.link.label}</Link>
             </Button>
           )}
-          <Button asChild size="sm" variant="outline" className="rounded-full">
+          <Button asChild size="sm" variant="outline" className="min-w-0 rounded-full px-3">
             <Link href="/assistant">Prata med Flow</Link>
           </Button>
           <div className="ml-auto">
