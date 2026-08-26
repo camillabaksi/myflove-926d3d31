@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-08-26 – Flow mini är lite större
+
+- Mini-Flow i Hem-rutan är förstorat med ett litet steg, så maskoten syns bättre utan att gå tillbaka till att överlappa knappen eller texten.
+
 ## 2026-08-26 – Flow syns i mini-rutan
 
 - Mini-Flow använder nu en riktig liten maskotstorlek i stället för en stor bild som klipptes hårt i 56 px-ramen.

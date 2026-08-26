@@ -517,7 +517,7 @@ export type FlowStage = "hero" | "inline" | "mini";
 const STAGE_CLASS: Record<FlowStage, string> = {
   hero: "h-[33svh] max-h-[300px] min-h-[170px]",
   inline: "h-[18svh] max-h-[150px] min-h-[104px]",
-  mini: "h-14 min-h-14 max-h-14",
+  mini: "h-[68px] min-h-[68px] max-h-[68px]",
 };
 
 export function FlowCharacter({
@@ -555,7 +555,7 @@ export function FlowCharacter({
       data-flow-stage={stage}
       className={cn(
         "flex items-end justify-center",
-        stage === "mini" ? "w-14 max-w-14 shrink-0" : "w-full",
+        stage === "mini" ? "w-[68px] max-w-[68px] shrink-0" : "w-full",
         className,
       )}
     >
@@ -567,7 +567,7 @@ export function FlowCharacter({
           glow
           mood={variant.mood}
           className={cn("absolute inset-0 flex items-center justify-center", variant.mascotClass)}
-          imgClassName={isMini ? "h-12 w-12 max-w-none object-contain" : "h-[126%] w-auto max-w-none"}
+          imgClassName={isMini ? "h-[60px] w-[60px] max-w-none object-contain" : "h-[126%] w-auto max-w-none"}
         />
 
         {!isMini && variant.front?.(ctx)}

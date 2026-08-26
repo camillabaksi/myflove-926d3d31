@@ -133,7 +133,7 @@ export default function FlowCompanion({
         className,
       )}
     >
-      <div className={cn("shrink-0 overflow-hidden flow-alive", isMini ? "w-14" : "w-auto")}>
+      <div className={cn("shrink-0 overflow-hidden flow-alive", isMini ? "w-[68px]" : "w-auto")}>
         <FlowCharacter
           scene={moment.scene}
           seed={moment.seed}
@@ -141,7 +141,7 @@ export default function FlowCompanion({
           kids={moment.kids}
           rain={moment.rain}
           stage={stage}
-          className={isMini ? "w-14" : "w-auto"}
+          className={isMini ? "w-[68px]" : "w-auto"}
         />
       </div>
 

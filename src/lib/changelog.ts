@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Flow mini är lite större: maskoten i Hem-rutan har fått ett litet storlekssteg upp så den syns bättre utan att överlappa text eller knapp (2026-08-26)",
       "Flow syns i mini-rutan: mini-läget använder nu en riktig liten maskotstorlek och döljer rekvisita så Flow syns tydligt utan överlapp (2026-08-26)",
       "Flow tar mindre plats på Hem: mini-maskoten är låst till en liten 56 px-yta så den inte kan överlappa text eller knappen \"Prata med Flow\" (2026-08-26)",
       "Flow är mindre på hemskärmen och \"Prata med Flow\" går direkt till chatten (2026-08-26)",
