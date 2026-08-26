@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-26 – Flow följer samtalet
+
+- Flow lyssnar när du skriver: snabbare andning, tätare blinkningar och blicken lutar mer mot dig.
+- När Flow tänker blir andetagen djupare, blinkningarna sällsynta och blicken vandrar uppåt – hjärtglöden pulserar snabbare.
+- När svaret kommit andas Flow ut med en kort ljus puls innan han går tillbaka till sitt lugna läge.
+
 ## 2026-08-26 – Levande Flow
 
 - Flow andas nu mjukt, blinkar i slumpad rytm och lutar sig lätt mot muspekaren – han känns som en liten levande kompis i stället för en stillbild.
