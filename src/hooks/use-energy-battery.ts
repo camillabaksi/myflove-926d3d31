@@ -4,6 +4,8 @@ import { useFlowScore } from "@/hooks/use-flowscore";
 import { useEnergyPattern } from "@/hooks/use-energy-pattern";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import { useStudySchedule } from "@/hooks/use-study-schedule";
+import { useDayWindow } from "@/hooks/use-day-window";
+import { edgeToPercent, normalizeWindow } from "@/lib/day-window";
 import {
   batterySuggestions,
   buildBattery,
