@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Installationsknappen syns alltid under Flow när MyFlove inte redan är installerad – den använder riktig Android/Chrome-prompt när den finns och visar annars rätt menyinstruktion för iPhone/iPad eller övriga webbläsare (2026-08-26)",
       "Lägg till MyFlove på hemskärmen: tydlig installationsknapp på Hem med riktig prompt i Chrome/Android och Dela-instruktion på iPhone – döljs när appen redan är installerad (2026-08-26)",
       "Planering i bottennavet: genvägen öppnar planeringssidan med dagens ordning – Flow-hjälpen finns kvar som egen punkt i menyn (2026-08-26)",
       "Flow-inställningar synkas: hjälpnivå, tidsfönster, förvarning och prioriteringar sparas på ditt konto och följer med mellan mobil och dator (2026-08-26)",

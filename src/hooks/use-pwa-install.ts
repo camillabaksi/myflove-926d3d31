@@ -17,11 +17,11 @@ export type PwaInstallState = {
   installed: boolean;
   /** Webbläsaren har gett oss en riktig installationsprompt. */
   canPrompt: boolean;
-  /** iOS/Safari – kräver Dela → Lägg till på hemskärmen. */
-  needsIosInstructions: boolean;
-  /** Användaren har öppnat iOS-instruktionen. */
-  showIosHelp: boolean;
-  setShowIosHelp: (v: boolean) => void;
+  /** iOS/iPadOS – kräver Dela → Lägg till på hemskärmen. */
+  isIos: boolean;
+  /** Användaren har öppnat installationsinstruktionen. */
+  showInstallHelp: boolean;
+  setShowInstallHelp: (v: boolean) => void;
   /** Kör installationsflödet. */
   install: () => Promise<void>;
   /** true när användaren nyss accepterade prompten. */
@@ -53,7 +53,7 @@ export function usePwaInstall(): PwaInstallState {
   const [deferred, setDeferred] = useState<BeforeInstallPromptEvent | null>(null);
   const [installed, setInstalled] = useState(false);
   const [ios, setIos] = useState(false);
-  const [showIosHelp, setShowIosHelp] = useState(false);
+  const [showInstallHelp, setShowInstallHelp] = useState(false);
   const [justInstalled, setJustInstalled] = useState(false);
 
   useEffect(() => {
@@ -95,15 +95,15 @@ export function usePwaInstall(): PwaInstallState {
       setDeferred(null);
       return;
     }
-    setShowIosHelp(true);
+    setShowInstallHelp(true);
   }, [deferred]);
 
   return {
     installed,
     canPrompt: !!deferred,
-    needsIosInstructions: ios && !deferred,
-    showIosHelp,
-    setShowIosHelp,
+    isIos: ios,
+    showInstallHelp,
+    setShowInstallHelp,
     install,
     justInstalled,
   };

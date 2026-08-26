@@ -2,6 +2,8 @@
 
 ## 2026-08-26 – Lägg till MyFlove på hemskärmen
 
+- Installationskortet visas nu alltid tydligt direkt under Flow när appen inte redan är installerad – även innan Chrome har skickat sin installationsprompt och även i preview.
+- Om den inbyggda prompten saknas visar knappen i stället rätt steg: Dela → Lägg till på hemskärmen på iPhone/iPad, eller webbläsarens meny → Installera app/Lägg till på startskärmen på andra enheter.
 - Ny knapp på Hem: "Installera MyFlove" med riktig installationsprompt där webbläsaren stödjer den (t.ex. Android/Chrome).
 - På iPhone/iPad visas i stället en kort instruktion: tryck Dela → "Lägg till på hemskärmen".
 - Knappen döljs helt när appen redan körs installerad – inget falskt "klart".
