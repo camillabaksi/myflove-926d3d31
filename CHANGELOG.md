@@ -7,6 +7,7 @@
 - "Lägg till på hemskärmen" är nu en liten, diskret notering längst ner på Hem i stället för ett stort block.
 - "Avsluta konto" är borttagen från menyerna och ligger enbart längst ner under Inställningar i en tydlig men sekundär kontosektion – med bekräftelse kvar.
 - Ny central analytics-grund: ett dokumenterat event-schema (app_opened, home_viewed, battery_/mood_checkin, quickflow, task, install, logout, kontoradering m.fl.) med sanerad payload. Inget mående, ingen medicin, inga belopp och ingen fritext skickas någonsin – bara användning.
+- Flow-knappen "Mitt batteri" (bredvid "Prata med Flow") går nu till Mitt batteri i stället för dagens balans.
 - Nya tester för event-schemat och sanering av känsliga payloads.
 
 ## 2026-08-26 – Känslig data krypteras lokalt

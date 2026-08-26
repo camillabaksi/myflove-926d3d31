@@ -12,9 +12,10 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
-      "Lugnare energi och mående: snabb incheckning först (batteri + fem mående-val), historik bakom \"Se min historik\" (2026-08-26)",
+      'Flow-knappen "Mitt batteri" leder till Mitt batteri-sidan i stället för dagens balans (2026-08-26)',
+      'Lugnare energi och mående: snabb incheckning först (batteri + fem mående-val), historik bakom "Se min historik" (2026-08-26)',
       "Mitt batteri högst upp på Hem och alla länkar går direkt till Mitt batteri-sidan (2026-08-26)",
-      "\"Avsluta konto\" finns bara längst ner under Inställningar, med bekräftelse (2026-08-26)",
+      '"Avsluta konto" finns bara längst ner under Inställningar, med bekräftelse (2026-08-26)',
       "Central appstatistik: gemensamt event-schema med sanerad payload – aldrig mående, medicin, belopp eller fritext (2026-08-26)",
       "Känslig data krypteras lokalt: energi, mående, medicin och ekonomi sparas med AES-GCM och nyckeln ligger icke-exporterbar i webbläsarens nyckellagring – vid utloggning raderas nyckeln (2026-08-26)",
       "MyFlove Clean-up 1.0: lugnare Hem med max sex block, kompakt dagsöversikt med hela dagen i Min dag, borttaget genvägsblock och tydligare roller för QuickFlow, Flow och Planering (2026-08-26)",
