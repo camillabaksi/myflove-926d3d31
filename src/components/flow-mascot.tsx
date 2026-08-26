@@ -132,6 +132,7 @@ export function FlowMascot({
   wave = false,
   mood,
   alive = true,
+  status = "idle",
   className,
   imgClassName,
   alt = "Flow – MyFloves följeslagare",
@@ -145,19 +146,32 @@ export function FlowMascot({
   mood?: FlowMood;
   /** Levande detaljer: andning, blinkningar och blick som följer. */
   alive?: boolean;
+  /** Samtalsstatus: lyssnar när du skriver, tänker vid väntan, andas ut när det är klart. */
+  status?: FlowStatus;
   className?: string;
   /** Extra klasser på bilden, t.ex. responsiva storlekar. */
   imgClassName?: string;
   alt?: string;
 }) {
-  const blinking = useFlowBlink(alive);
+  const tempo = STATUS_TEMPO[status];
+  const blinking = useFlowBlink(alive, tempo);
   const { ref, tilt } = useFlowGaze(alive);
+  // Under tänkandet vandrar blicken uppåt/bort i stället för att följa pekaren.
+  const gx = tilt.x * tempo.gaze;
+  const gy = tilt.y * tempo.gaze - (status === "thinking" ? 0.35 : 0);
   return (
     <span
       ref={ref}
       data-flow-mascot
       data-flow-mood={mood ?? (wave ? "wave" : float ? "float" : "none")}
       data-flow-alive={alive ? "true" : "false"}
+      data-flow-status={status}
+      style={
+        {
+          "--flow-breath": tempo.breath,
+          "--flow-glow": tempo.glow,
+        } as React.CSSProperties
+      }
       className={cn("relative inline-flex shrink-0 items-center justify-center", className)}
     >
       {glow && (
@@ -175,11 +189,12 @@ export function FlowMascot({
         style={
           alive
             ? {
-                transform: `translate3d(${tilt.x * 3}px, ${tilt.y * 2}px, 0) rotate(${tilt.x * 2}deg)`,
+                transform: `translate3d(${gx * 3}px, ${gy * 2}px, 0) rotate(${gx * 2}deg)`,
               }
             : undefined
         }
       >
+
         <img
           src={FLOW_MASCOT_SRC}
           alt={alt}
