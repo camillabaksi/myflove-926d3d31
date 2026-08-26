@@ -1088,6 +1088,11 @@ export default function Layout({ children }: LayoutProps) {
                     <ChevronRight size={18} className="shrink-0 text-muted-foreground" />
                   </Link>
 
+                  <div className="mb-4">
+                    <PwaInstallButton />
+                  </div>
+
+
                   <button
                     type="button"
                     onClick={() => setSimpleMode(!simpleMode)}
