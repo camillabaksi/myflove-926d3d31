@@ -148,7 +148,23 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
     inputRef.current?.focus();
   }, [isSending, conversationId]);
 
+  /** Flows kropp följer samtalet: lyssnar när du skriver, tänker vid väntan, andas ut när svaret kom. */
+  const [justAnswered, setJustAnswered] = useState(false);
+  useEffect(() => {
+    if (!justAnswered) return;
+    const t = setTimeout(() => setJustAnswered(false), 2600);
+    return () => clearTimeout(t);
+  }, [justAnswered]);
+  const flowStatus: FlowStatus = isSending
+    ? "thinking"
+    : justAnswered
+      ? "done"
+      : input.trim()
+        ? "listening"
+        : "idle";
+
   const send = async (text: string) => {
+
     const trimmed = text.trim();
     if (!trimmed || isSending) return;
     setError(null);
