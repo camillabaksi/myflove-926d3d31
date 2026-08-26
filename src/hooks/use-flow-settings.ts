@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from "react";
 import { useLocalStorage } from "@/lib/storage";
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import {
   DEFAULT_FLOW_PRIORITIES,
   type FlowPriorityKey,
@@ -51,7 +52,8 @@ interface Dismissals {
 const todayKey = () => new Date().toISOString().slice(0, 10);
 
 export function useFlowSettings() {
-  const [settings, setSettings] = useLocalStorage<FlowSettings>(KEY, DEFAULT_FLOW_SETTINGS);
+  // Följer användaren mellan enheter via user_kv (lokalt först, moln som sanning).
+  const [settings, setSettings] = useCloudSyncedStorage<FlowSettings>(KEY, DEFAULT_FLOW_SETTINGS);
   const [dismissed, setDismissed] = useLocalStorage<Dismissals>("myflove-flow-dismissed", {
     day: todayKey(),
     ids: [],
