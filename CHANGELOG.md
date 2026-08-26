@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-26 – "Senast aktiv" i adminvyn
+
+- Användarlistan visar nu "Senast aktiv" (när kontot senast använde appen) i stället för den tomma besökskolumnen.
+- "Senaste inloggning" ändras bara när någon loggar in på nytt – redan inloggade användare syns nu ändå som aktiva.
+- Datumfiltret tar även hänsyn till senaste aktivitet.
+
 ## 2026-08-26 – Egen morgon och egen kväll i Mitt batteri
 
 - Du väljer själv när morgonen startar och när dagen slutar – batterikurvan börjar och slutar där.
