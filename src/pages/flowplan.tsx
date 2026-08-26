@@ -30,7 +30,6 @@ function item2Boost(
 ) {
   return Boolean(item.deadlineBoost) || Boolean(info.get(item.taskId)?.activeNow);
 }
-import { DailyFocusCard } from "@/components/daily-focus-card";
 
 type StoredPlan = {
   plan: FlowPlanResult;
@@ -272,8 +271,6 @@ export default function FlowPlanPage() {
             </div>
           </div>
         </div>
-
-        <DailyFocusCard />
 
         <div className="surface-card p-5 space-y-5">
           <div>
