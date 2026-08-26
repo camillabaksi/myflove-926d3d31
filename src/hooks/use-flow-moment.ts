@@ -62,7 +62,6 @@ const isOutdoorTitle = (title: string) =>
 /** Vart Flow ska länka beroende på vad som är på gång. */
 const linkForTitle = (title: string) => linkForPriority(priorityForTitle(title));
 
-
 export function useFlowMoment(): FlowMoment {
   const { activeTasks } = useTasks();
   const { activeReminders } = useReminders();
@@ -90,7 +89,6 @@ export function useFlowMoment(): FlowMoment {
     return () => window.removeEventListener(FLOW_DONE_EVENT, onDone);
   }, []);
 
-
   const now = new Date();
   const nowMin = now.getHours() * 60 + now.getMinutes();
   const today = todayISO();
@@ -116,9 +114,8 @@ export function useFlowMoment(): FlowMoment {
 
   const waiting = useMemo(
     () =>
-      activeTasks.filter(
-        (t) => !t.dueDate && Date.now() - t.createdAt > 1000 * 60 * 60 * 24 * 3,
-      ).length,
+      activeTasks.filter((t) => !t.dueDate && Date.now() - t.createdAt > 1000 * 60 * 60 * 24 * 3)
+        .length,
     [activeTasks],
   );
 
@@ -134,7 +131,9 @@ export function useFlowMoment(): FlowMoment {
     const wanted = (title: string) => priorities[priorityForTitle(title)] !== false;
 
     const pick = (moment: FlowMoment): FlowMoment =>
-      isDismissed(moment.id) ? { ...base, id: "silent", scene: "rest", message: "", silent: true } : moment;
+      isDismissed(moment.id)
+        ? { ...base, id: "silent", scene: "rest", message: "", silent: true }
+        : moment;
 
     if (celebrating) {
       const what = doneTitle ? `"${doneTitle}"` : "";
@@ -147,30 +146,28 @@ export function useFlowMoment(): FlowMoment {
       return { ...base, id: "done", scene: "done", message };
     }
 
-
     if (quiet) {
       return { ...base, id: "silent", scene: "rest", message: "", silent: true };
     }
 
     /* 1. Medicin – befintlig medicinlogik, kan stängas av i Flow-inställningarna. */
     if (priorities.medicin !== false)
-
-    for (const med of medications) {
-      for (const time of med.times ?? []) {
-        const mins = toMinutes(time);
-        if (mins == null) continue;
-        if (nowMin < mins - 10 || nowMin > mins + 120) continue;
-        if (isTaken(med.id, time)) continue;
-        return pick({
-          ...base,
-          id: `med-${med.id}-${time}`,
-          scene: "medicine",
-          message: `Det är dags för ${med.name.toLowerCase()}.`,
-          action: { label: "Jag har tagit den", run: () => toggleTaken(med.id, time) },
-          link: { href: "/daglig-rutin", label: "Rutiner & medicin" },
-        });
+      for (const med of medications) {
+        for (const time of med.times ?? []) {
+          const mins = toMinutes(time);
+          if (mins == null) continue;
+          if (nowMin < mins - 10 || nowMin > mins + 120) continue;
+          if (isTaken(med.id, time)) continue;
+          return pick({
+            ...base,
+            id: `med-${med.id}-${time}`,
+            scene: "medicine",
+            message: `Det är dags för ${med.name.toLowerCase()}.`,
+            action: { label: "Jag har tagit den", run: () => toggleTaken(med.id, time) },
+            link: { href: "/daglig-rutin", label: "Rutiner & medicin" },
+          });
+        }
       }
-    }
 
     /* 2. Morgonhälsning – Flow vinkar innan dagen börjat. */
     if (now.getHours() < 11 && energyValue == null) {
@@ -213,7 +210,6 @@ export function useFlowMoment(): FlowMoment {
       });
     }
 
-
     /* 3b. Regn när du ska vara utomhus – timprognos, inte bara vädret just nu. */
     const outdoor = upcoming.find(
       (e) => isOutdoorTitle(e.title) && e.mins - nowMin <= 360 && e.mins >= nowMin - 15,
@@ -239,7 +235,6 @@ export function useFlowMoment(): FlowMoment {
       }
     }
 
-
     /* 3c. Viktig tid närmar sig – förvarning i god tid, med väg till rätt vy. */
     if (next && next.mins - nowMin > 10 && next.mins - nowMin <= Math.max(15, leadMinutes + 15)) {
       const inMins = Math.round((next.mins - nowMin) / 5) * 5;
@@ -252,7 +247,6 @@ export function useFlowMoment(): FlowMoment {
         link: linkForTitle(next.title),
       });
     }
-
 
     if (next && next.mins - nowMin <= 120) {
       const time = `${String(Math.floor(next.mins / 60)).padStart(2, "0")}:${String(next.mins % 60).padStart(2, "0")}`;
@@ -357,7 +351,12 @@ export function useFlowMoment(): FlowMoment {
       });
     }
 
-    return pick({ ...base, id: "rest", scene: "rest", message: "Lugnt läge just nu. Jag finns här." });
+    return pick({
+      ...base,
+      id: "rest",
+      scene: "rest",
+      message: "Lugnt läge just nu. Jag finns här.",
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     celebrating,
