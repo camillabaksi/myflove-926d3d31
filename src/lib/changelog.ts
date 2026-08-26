@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Flow reagerar på din dag: prioriteringsförslag vid låg energi och full dag, förvarning cirka 30 minuter före viktiga tider med länk till rätt vy, och mjuka energianpassade reaktioner när du bockar av saker (2026-08-26)",
       "Flow och vädret: timprognosen används nu för att varna innan något utomhus hamnar i regn – med tid och paraplytips (2026-08-26)",
       "Flow som levande följeslagare: proaktiva påminnelser vid låg energi och full dag, regn innan du ska ut och förvarning innan du behöver göra dig klar – plus ett kort på Hem som visar vad Flow lärt sig om dig, och inställningar för Tyst/Diskret/Aktiv (2026-08-26)",
       "Export av adminstatistik: välj datumintervall och ladda ner anonym statistik som CSV eller PDF för egen analys (2026-08-25)",
