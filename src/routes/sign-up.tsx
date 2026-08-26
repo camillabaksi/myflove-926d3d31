@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { withBackendRecovery, isBackendAsleepError } from "@/lib/backend-wake";
+import PwaInstallButton from "@/components/pwa-install-button";
+
 
 export const Route = createFileRoute("/sign-up")({
   ssr: false,
@@ -161,7 +163,11 @@ function SignUpPage() {
             Logga in
           </Link>
         </p>
+        <div className="mt-6 border-t border-border pt-4">
+          <PwaInstallButton variant="outline" />
+        </div>
       </div>
     </div>
   );
 }
+
