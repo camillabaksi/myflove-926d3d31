@@ -561,6 +561,12 @@ export default function Home() {
           <AreaOnboarding />
         </div>
 
+        {/* Liten, diskret notering längst ner – konkurrerar inte med dagen. */}
+        <div style={{ order: 98.5 }} data-testid="home-install-note" className="pt-1">
+          <PwaInstallCard compact />
+        </div>
+
+
         <div
           style={{ order: 99 }}
           className="flex flex-wrap items-center justify-center gap-4 pb-2 text-center"
