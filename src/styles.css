@@ -643,6 +643,10 @@ html[data-npf-less="true"] [data-npf="optional"] {
   .flow-pulse,
   .flow-cheer,
   .flow-calm,
+  .flow-alive,
+  .flow-notice,
+
+
 
   .stagger > * {
     animation: none !important;
