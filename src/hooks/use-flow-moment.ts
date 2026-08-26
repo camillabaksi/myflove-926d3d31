@@ -358,6 +358,8 @@ export function useFlowMoment(): FlowMoment {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     celebrating,
+    doneTitle,
+
     medications,
     activeTasks,
     activeReminders,
