@@ -393,12 +393,19 @@ export default function Layout({ children }: LayoutProps) {
       essential: true,
     },
     {
-      href: "/flow",
-      label: "Planera",
+      href: "/flowplan",
+      label: "Planering",
       icon: Sparkles,
-      hint: "Vad är bäst just nu och vad hinner jag idag?",
+      hint: "Ordningen på dagen – ändra den precis som du vill",
       essential: true,
     },
+    {
+      href: "/flow",
+      label: "Flow hjälper",
+      icon: Sparkles,
+      hint: "Flow visar en sak i taget när du vill ha sällskap",
+    },
+
     {
       href: "/friktionsindex",
       label: "Feedback",
@@ -512,7 +519,7 @@ export default function Layout({ children }: LayoutProps) {
         label: "Planera",
         hint: "Nästa steg, ordning, ändra planen och hjälp",
         icon: Sparkles,
-        hrefs: ["/flow", "/quickflow", "/anteckningar", "/beloningar"],
+        hrefs: ["/flowplan", "/flow", "/quickflow", "/anteckningar", "/beloningar"],
       },
       {
         id: "studyflow",
@@ -594,9 +601,23 @@ export default function Layout({ children }: LayoutProps) {
   // Egna platser i bottennavet – du byter dem själv i "Mer".
   const [navSlots, setNavSlots] = useLocalStorage<string[]>("myflove-bottom-nav-slots", [
     "/idag",
-    "/flow",
+    "/flowplan",
   ]);
+  // Tidigare hette platsen "Planera" men ledde till Flow-hjälpen.
+  // Nu leder den till planeringssidan – en gång, sedan bestämmer du själv.
+  const [navMigrated, setNavMigrated] = useLocalStorage<boolean>(
+    "myflove-bottom-nav-planering-v1",
+    false,
+  );
+  useEffect(() => {
+    if (navMigrated) return;
+    setNavMigrated(true);
+    if (navSlots.includes("/flow") && !navSlots.includes("/flowplan")) {
+      setNavSlots(navSlots.map((h) => (h === "/flow" ? "/flowplan" : h)));
+    }
+  }, [navMigrated, navSlots, setNavMigrated, setNavSlots]);
   const [editingNav, setEditingNav] = useState(false);
+
 
   // Enkelt läge: visar bara det viktigaste tills man själv vill se mer.
   const [simpleMode, setSimpleMode] = useLocalStorage<boolean>("myflove-simple-mode", true);
@@ -612,12 +633,12 @@ export default function Layout({ children }: LayoutProps) {
 
   /**
    * Bottennavet: Hem är fast, sedan två platser du väljer själv.
-   * Standard: Kalender (hela kalendern) och Flow.
+   * Standard: Min dag och Planering.
    */
   const primaryNav = useMemo(() => {
     const pick = (href: string) => navItems.find((i) => i.href === href);
     const slot1 = pick(navSlots[0] ?? "") ?? pick("/idag") ?? pick("/kalender");
-    const slot2 = pick(navSlots[1] ?? "") ?? pick("/flow");
+    const slot2 = pick(navSlots[1] ?? "") ?? pick("/flowplan") ?? pick("/flow");
     return [pick("/hem"), slot1, slot2].filter(Boolean) as typeof navItems;
   }, [navItems, navSlots]);
 

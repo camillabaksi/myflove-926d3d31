@@ -1,9 +1,22 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import Page from "@/pages/flowplan";
 
-/** FlowPlan™ är numera en del av Flow (lagret IDAG). Logiken lever kvar
- *  i flowplan.functions.ts och används internt. */
 export const Route = createFileRoute("/_app/flowplan")({
-  beforeLoad: () => {
-    throw redirect({ to: "/flow", replace: true });
-  },
+  head: () => ({
+    meta: [
+      { title: "Planering – ordningen på din dag | MyFlove" },
+      {
+        name: "description",
+        content:
+          "Planeringssidan visar en lugn ordning på dagens saker – och du kan alltid flytta om precis som du vill.",
+      },
+      { property: "og:title", content: "Planering – ordningen på din dag | MyFlove" },
+      {
+        property: "og:description",
+        content: "Ett förslag på ordning som du själv bestämmer över.",
+      },
+      { name: "robots", content: "noindex, nofollow" },
+    ],
+  }),
+  component: Page,
 });
