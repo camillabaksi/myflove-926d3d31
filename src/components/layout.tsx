@@ -55,6 +55,7 @@ import {
   Plus,
   Compass,
   ChevronRight,
+  MessageCircle,
 } from "lucide-react";
 import {
   isAlarmSoundEnabled,
