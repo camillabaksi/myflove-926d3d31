@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react";
-import HomeShortcuts from "@/components/home-shortcuts";
 import FlowCompanion from "@/components/flow/flow-companion";
 import FlowLearningCard from "@/components/flow/flow-learning-card";
 
@@ -47,10 +46,10 @@ interface Situation {
 
 const SITUATIONS: Situation[] = [
   {
-    href: "/tasks",
-    emoji: "➕",
-    thought: "Jag behöver planera något",
-    action: "Lägg till en sak – med tid om du vill",
+    href: "/min-dag",
+    emoji: "🗓️",
+    thought: "Jag behöver planera min dag",
+    action: "Min dag – se och planera dagen",
   },
   {
     href: "#did-this",
@@ -63,13 +62,13 @@ const SITUATIONS: Situation[] = [
     href: "/flow",
     emoji: "💜",
     thought: "Jag vet inte vad jag ska göra nu",
-    action: "Få ett förslag i taget",
+    action: "Flow hjälper dig – ett förslag i taget",
   },
   {
     href: "/quickflow",
     emoji: "⚡",
     thought: "Jag har mycket i huvudet",
-    action: "Skriv av dig – jag sorterar sen",
+    action: "QuickFlow – fånga tanken på tre sekunder",
   },
 ];
 
@@ -423,7 +422,7 @@ export default function Home() {
 
         {shows("idag") && (
           <div style={pos("idag")}>
-            <TodayTasks />
+            <TodayTasks limit={3} compact />
           </div>
         )}
 
@@ -453,10 +452,11 @@ export default function Home() {
                 </p>
               )}
               <Link
-                href="/flow"
+                href={suggestion.task ? "/min-dag" : "/quickflow"}
                 className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
               >
-                {suggestion.task ? "Öppna i Planera" : "Lägg till något"} <ArrowRight size={14} />
+                {suggestion.task ? "Planera i Min dag" : "Fånga något i QuickFlow"}{" "}
+                <ArrowRight size={14} />
               </Link>
             </CollapsibleSection>
           </section>
@@ -477,15 +477,8 @@ export default function Home() {
               className="bg-primary text-primary-foreground hover:bg-primary/90"
             />
             <p className="mt-1 text-xs text-muted-foreground">
-              Planera något – med tid om du vill.
+              Lägg till något i dagen – med tid om du vill.
             </p>
-          </div>
-        )}
-
-        {/* Dina genvägar – fyra egna favoriter */}
-        {shows("genvagar") && (
-          <div style={pos("genvagar")}>
-            <HomeShortcuts />
           </div>
         )}
 

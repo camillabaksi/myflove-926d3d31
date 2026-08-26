@@ -2,6 +2,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { User, Session } from "@supabase/supabase-js";
+import { clearLocalUserData } from "@/lib/local-data";
 
 type AuthState = {
   user: User | null;
@@ -60,6 +61,8 @@ export function useClerk() {
   return {
     signOut: async () => {
       await supabase.auth.signOut();
+      // Ingen privat data får ligga kvar på enheten till nästa användare.
+      clearLocalUserData();
       if (typeof window !== "undefined") window.location.href = "/sign-in";
     },
     openSignIn: () => {
