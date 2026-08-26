@@ -8,7 +8,11 @@
  *
  * Här samlas rensningen på ett ställe. Serverdata rörs aldrig – bara den
  * lokala kopian på just den här enheten.
+ *
+ * Det känsligaste (energi, mående, medicin, ekonomi) ligger dessutom
+ * krypterat på disken – se secure-local.ts.
  */
+import { lockSecureLocal } from "@/lib/secure-local";
 
 /** Prefix som alltid räknas som användarens egen data. */
 const USER_DATA_PREFIXES = ["myflove", "myflow", "flow-", "sb-"];
@@ -43,6 +47,8 @@ export function clearLocalUserData(): void {
   } catch {
     /* utan lagring finns inget att rensa */
   }
+
+  lockSecureLocal();
 
   try {
     window.sessionStorage.clear();

@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Känslig data krypteras lokalt: energi, mående, medicin och ekonomi sparas med AES-GCM och nyckeln ligger icke-exporterbar i webbläsarens nyckellagring – vid utloggning raderas nyckeln (2026-08-26)",
       "MyFlove Clean-up 1.0: lugnare Hem med max sex block, kompakt dagsöversikt med hela dagen i Min dag, borttaget genvägsblock och tydligare roller för QuickFlow, Flow och Planering (2026-08-26)",
       'Ett onboardinglager i taget: Flow-frågan väntar tills introt är klart, "Hoppa över" går direkt till Hem och introt kan visas igen via Anpassa hemskärmen (2026-08-26)',
       "Utloggning rensar lokal användardata på enheten – privat data ligger inte kvar till nästa användare (2026-08-26)",
