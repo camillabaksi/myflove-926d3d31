@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { FlowMascot, FlowSays } from "@/components/flow-mascot";
+import PwaInstallButton from "@/components/pwa-install-button";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -510,6 +511,15 @@ function Hero() {
               </button>
             </Button>
           </div>
+
+          <div className="mx-auto mt-4 w-full max-w-xs lg:mx-0">
+            <PwaInstallButton
+              variant="outline"
+              className="border-[#2A2140]/15 bg-white/70 backdrop-blur hover:bg-white"
+            />
+          </div>
+
+
 
           <div className="mx-auto mt-8 w-full max-w-xl lg:mx-0">
             <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 text-left sm:gap-5">
@@ -1126,6 +1136,13 @@ function Vision() {
           >
             <Link to="/sign-in">Jag har redan konto</Link>
           </Button>
+        </div>
+        <div className="mx-auto mt-6 max-w-sm">
+          <PwaInstallButton
+            variant="outline"
+            className="border-white/25 bg-white/10 text-white hover:bg-white/20"
+          />
+          <p className="mt-2 text-xs text-white/60">Ha Flow nära till hands 💜</p>
         </div>
       </div>
     </section>

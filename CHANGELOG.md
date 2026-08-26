@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-08-26 – Installationsknapp på startsidan
+
+- Knappen "Lägg till MyFlove på hemskärmen" finns nu även på startsidan, innan man skapat konto – både i hjälten högst upp och nära "Möt Flow".
+
 ## 2026-08-26 – Installationsknapp överallt
 
 - Knappen "Lägg till MyFlove på hemskärmen" finns nu även i menyn "Mer", så den går att nå från alla vyer – på Android, iPhone och vanlig webbläsare.
