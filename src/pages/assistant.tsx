@@ -385,8 +385,9 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
             ) : (
               <>
                 {messages.length === 0 && (
-                  <div className="flex justify-start">
-                    <div className="max-w-[85%] px-4 py-3 rounded-2xl rounded-bl-sm text-sm leading-relaxed bg-secondary text-foreground">
+                  <div className="flex justify-start items-end gap-2">
+                    <FlowMascot size="sm" mood="wave" className="shrink-0" />
+                    <div className="max-w-[80%] px-4 py-3 rounded-2xl rounded-bl-sm text-sm leading-relaxed bg-secondary text-foreground">
                       {GREETING}
                     </div>
                   </div>
@@ -394,10 +395,13 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                 {messages.map((m) => (
                   <div
                     key={m.id}
-                    className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
+                    className={`flex items-end gap-2 ${m.role === "user" ? "justify-end" : "justify-start"}`}
                   >
+                    {m.role !== "user" && (
+                      <FlowMascot size="sm" mood="calm" className="shrink-0" />
+                    )}
                     <div
-                      className={`max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
+                      className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
                         m.role === "user"
                           ? "bg-primary text-primary-foreground rounded-br-sm"
                           : "bg-secondary text-foreground rounded-bl-sm"
@@ -410,7 +414,8 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
               </>
             )}
             {isSending && (
-              <div className="flex justify-start">
+              <div className="flex justify-start items-end gap-2">
+                <FlowMascot size="sm" mood="think" className="shrink-0" />
                 <div className="bg-secondary text-muted-foreground px-4 py-2 rounded-2xl rounded-bl-sm text-sm">
                   <MyFloveThinking
                     steps={["💬", "🧠", "💜", "✨"]}
