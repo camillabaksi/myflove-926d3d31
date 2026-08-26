@@ -572,7 +572,7 @@ export function FlowCharacter({
               ? "h-[60px] w-[60px] max-w-none object-contain"
               : stage === "inline"
                 ? "h-full w-full object-contain"
-                : "h-[126%] w-auto max-w-none"
+                : "h-[108%] w-auto max-w-none"
           }
         />
 
