@@ -441,26 +441,6 @@ function LandingDeck() {
             />
           ))}
         </div>
-        <div className="pointer-events-auto flex items-center gap-2 px-4 sm:hidden">
-          <button
-            type="button"
-            onClick={() => goTo(index - 1)}
-            disabled={index === 0}
-            aria-label="Tillbaka till föregående vy"
-            className="press flex items-center gap-1.5 rounded-full border border-[#2A2140]/10 bg-white px-4 py-2 text-sm font-semibold text-[#2A2140] shadow-md focus-visible:ring-2 focus-visible:ring-[#7C5CE0] focus-visible:outline-none disabled:opacity-40"
-          >
-            ‹ Tillbaka
-          </button>
-          <button
-            type="button"
-            onClick={() => goTo(index + 1)}
-            disabled={index === total - 1}
-            aria-label="Nästa vy"
-            className="press flex items-center gap-1.5 rounded-full bg-[#7C5CE0] px-4 py-2 text-sm font-semibold text-white shadow-md focus-visible:ring-2 focus-visible:ring-[#7C5CE0] focus-visible:ring-offset-2 focus-visible:outline-none disabled:opacity-40"
-          >
-            Nästa ›
-          </button>
-        </div>
         <p className="text-[11px] font-semibold text-[#6B647F]">
           Svep i sidled · {index + 1} / {total}
         </p>
