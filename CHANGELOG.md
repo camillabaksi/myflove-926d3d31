@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-26 – Material 3.5
+
+- Pitchvideon har en ny scen, "Flow lever", som visar andning, blinkningar, blick och hur Flow följer chatten.
+- Living Blueprint 3.5 (Word + PDF) med nytt avsnitt om levande Flow, Flow-chatten och Flow-inställningar.
+- Pitchdeck 3.5 (PowerPoint + PDF) med en ny slide om levande Flow och uppdaterade versionstexter.
+- Pitch-sidan visar nya miniatyrer, ny affisch och nedladdningar för 3.5.
+
 ## 2026-08-26 – Flow följer samtalet
 
 - Flow lyssnar när du skriver: snabbare andning, tätare blinkningar och blicken lutar mer mot dig.
