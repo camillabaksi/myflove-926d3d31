@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import FlowCompanion from "@/components/flow/flow-companion";
 import FlowLearningCard from "@/components/flow/flow-learning-card";
 
@@ -31,6 +31,7 @@ import IntroTour from "@/components/intro-tour";
 import FlowOnboarding from "@/components/flow-onboarding";
 import { CalendarDays, Sparkles, ArrowRight, SlidersHorizontal, Compass } from "lucide-react";
 import { todayISO } from "@/lib/day";
+import { track } from "@/lib/analytics";
 
 /**
  * Fyra vanliga situationer, formulerade som användarens egen tanke.
@@ -209,6 +210,10 @@ export default function Home() {
       : reading.trend === "sjunker"
         ? "Din energi minskar. ↓"
         : "Din energi är stabil. →";
+
+  useEffect(() => {
+    track("home_viewed");
+  }, []);
 
   const { visible } = useHomeLayout();
   const shows = (id: HomeBlockId) => visible.includes(id);
