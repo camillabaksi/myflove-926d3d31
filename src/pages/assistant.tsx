@@ -41,6 +41,8 @@ import { todayISO } from "@/lib/day";
 
 const todayStr = (): string => todayISO();
 
+const NEW_CHAT_FLAG = "myflove-flow-new-chat";
+
 const GREETING =
   "Hej, jag är Flow. Jag finns här för att avlasta – inte för att ge dig mer att göra. Vad snurrar i huvudet just nu?";
 
@@ -176,6 +178,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
       void refresh();
       // Navigera först när svaret är sparat – annars avbryts anropet av omladdningen.
       if (created) {
+        if (typeof window !== "undefined") window.sessionStorage.removeItem(NEW_CHAT_FLAG);
         void navigate({ to: "/assistant/$chatId", params: { chatId: id }, replace: true });
       }
     } catch (e) {
@@ -218,6 +221,8 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
               type="button"
               onClick={() => {
                 setHistoryOpen(false);
+                if (typeof window !== "undefined")
+                  window.sessionStorage.removeItem(NEW_CHAT_FLAG);
                 void navigate({ to: "/assistant/$chatId", params: { chatId: c.id } });
               }}
               className="flex-1 min-w-0 text-left py-2.5"
