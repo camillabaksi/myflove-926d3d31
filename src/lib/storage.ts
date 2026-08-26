@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { SECURE_UNLOCK_EVENT, secureGetItem, secureSetItem } from "@/lib/secure-local";
 
 const LOCAL_STORAGE_EVENT = "myflow-local-storage";
 
@@ -8,7 +9,7 @@ function readStoredValue<T>(key: string, initialValue: T): T {
   }
 
   try {
-    const item = window.localStorage.getItem(key);
+    const item = secureGetItem(key);
     return item ? JSON.parse(item) : initialValue;
   } catch (error) {
     console.warn(`Error reading localStorage key "${key}":`, error);
@@ -29,13 +30,17 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
       setStoredValue(readStoredValue(key, initialValueRef.current));
     };
 
+    const syncAfterUnlock = () => setStoredValue(readStoredValue(key, initialValueRef.current));
+
     syncValue();
     window.addEventListener("storage", syncValue);
     window.addEventListener(LOCAL_STORAGE_EVENT, syncValue);
+    window.addEventListener(SECURE_UNLOCK_EVENT, syncAfterUnlock);
 
     return () => {
       window.removeEventListener("storage", syncValue);
       window.removeEventListener(LOCAL_STORAGE_EVENT, syncValue);
+      window.removeEventListener(SECURE_UNLOCK_EVENT, syncAfterUnlock);
     };
   }, [key]);
 
@@ -49,7 +54,7 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
           const valueToStore = value instanceof Function ? value(prev) : value;
           // Save to local storage
           if (typeof window !== "undefined") {
-            window.localStorage.setItem(key, JSON.stringify(valueToStore));
+            secureSetItem(key, JSON.stringify(valueToStore));
             window.queueMicrotask(() => {
               window.dispatchEvent(new CustomEvent(LOCAL_STORAGE_EVENT, { detail: { key } }));
             });
