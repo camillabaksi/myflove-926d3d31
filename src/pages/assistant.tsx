@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import {
   Loader2,
   Send,
-  Sparkles,
   History,
   Plus,
   Trash2,
@@ -15,6 +14,7 @@ import {
   ArrowLeft,
   ChevronRight,
 } from "lucide-react";
+import { FlowMascot } from "@/components/flow-mascot";
 import { chatWithFlow } from "@/lib/flow-chat.functions";
 import { useTasks, useMoods, useFocus, useReminders } from "@/hooks/use-data";
 import { useLifePuzzle } from "@/hooks/use-life-puzzle";
@@ -297,8 +297,8 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
 
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center">
-                <Sparkles size={20} />
+              <div className="rounded-full bg-primary/10 p-1">
+                <FlowMascot size="md" wave glow className="shrink-0" />
               </div>
               <div>
                 <h1 className="text-3xl font-bold leading-tight">Flow</h1>
@@ -385,8 +385,9 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
             ) : (
               <>
                 {messages.length === 0 && (
-                  <div className="flex justify-start">
-                    <div className="max-w-[85%] px-4 py-3 rounded-2xl rounded-bl-sm text-sm leading-relaxed bg-secondary text-foreground">
+                  <div className="flex justify-start items-end gap-2">
+                    <FlowMascot size="sm" mood="wave" className="shrink-0" />
+                    <div className="max-w-[80%] px-4 py-3 rounded-2xl rounded-bl-sm text-sm leading-relaxed bg-secondary text-foreground">
                       {GREETING}
                     </div>
                   </div>
@@ -394,10 +395,13 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                 {messages.map((m) => (
                   <div
                     key={m.id}
-                    className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
+                    className={`flex items-end gap-2 ${m.role === "user" ? "justify-end" : "justify-start"}`}
                   >
+                    {m.role !== "user" && (
+                      <FlowMascot size="sm" mood="calm" className="shrink-0" />
+                    )}
                     <div
-                      className={`max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
+                      className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
                         m.role === "user"
                           ? "bg-primary text-primary-foreground rounded-br-sm"
                           : "bg-secondary text-foreground rounded-bl-sm"
@@ -410,7 +414,8 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
               </>
             )}
             {isSending && (
-              <div className="flex justify-start">
+              <div className="flex justify-start items-end gap-2">
+                <FlowMascot size="sm" mood="think" className="shrink-0" />
                 <div className="bg-secondary text-muted-foreground px-4 py-2 rounded-2xl rounded-bl-sm text-sm">
                   <MyFloveThinking
                     steps={["💬", "🧠", "💜", "✨"]}
