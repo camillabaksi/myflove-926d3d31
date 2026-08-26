@@ -102,7 +102,6 @@ import { trackEvent } from "@/lib/analytics";
 import { rememberPlace } from "@/lib/flow-context";
 import { Button } from "@/components/ui/button";
 import { useClerk, Show } from "@clerk/react";
-import { DeleteAccountButton } from "@/components/delete-account-button";
 
 interface LayoutProps {
   children: ReactNode;
@@ -714,7 +713,6 @@ export default function Layout({ children }: LayoutProps) {
             <Button variant="outline" className="w-full rounded-xl gap-2" onClick={() => signOut()}>
               <LogOut size={16} /> Logga ut
             </Button>
-            <DeleteAccountButton className="w-full" />
           </Show>
         </div>
       </nav>
@@ -1238,7 +1236,6 @@ export default function Layout({ children }: LayoutProps) {
                       >
                         <LogOut size={16} /> Logga ut
                       </Button>
-                      <DeleteAccountButton />
                     </Show>
                   </div>
                 </>
