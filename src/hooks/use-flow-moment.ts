@@ -180,16 +180,31 @@ export function useFlowMoment(): FlowMoment {
       });
     }
 
-    /* 3b. Regn när du ska ut. */
-    if (rain && next && isOutdoorTitle(next.title) && next.mins - nowMin <= 180) {
-      return pick({
-        ...base,
-        id: `rain-out-${today}`,
-        scene: "rain",
-        message: "Det verkar bli regn när du ska ut. Paraply?",
-        link: { href: "/idag", label: "Min dag" },
-      });
+    /* 3b. Regn när du ska vara utomhus – timprognos, inte bara vädret just nu. */
+    const outdoor = upcoming.find(
+      (e) => isOutdoorTitle(e.title) && e.mins - nowMin <= 360 && e.mins >= nowMin - 15,
+    );
+    if (outdoor) {
+      const hour = Math.floor(outdoor.mins / 60);
+      const at = forecastAt(forecast, hour);
+      const wetThen = isWetHour(at) || (rain && outdoor.mins - nowMin <= 60);
+      if (wetThen) {
+        const time = `${String(hour).padStart(2, "0")}:${String(outdoor.mins % 60).padStart(2, "0")}`;
+        const chance = at?.rainChance ?? 0;
+        return pick({
+          ...base,
+          rain: true,
+          id: `rain-out-${today}-${outdoor.mins}`,
+          scene: "rain",
+          message:
+            chance >= 50 && !rain
+              ? `Det ser ut att regna kring ${time} när du ska ut – ta med paraply. ☔`
+              : `Det regnar när du ska ut kl ${time}. Paraply?`,
+          link: { href: "/idag", label: "Min dag" },
+        });
+      }
     }
+
 
     /* 3c. Viktig tid närmar sig – förvarning i god tid. */
     if (next && next.mins - nowMin > 15 && next.mins - nowMin <= 45) {
