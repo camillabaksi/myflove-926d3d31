@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { deleteMyAccount } from "@/lib/account.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { clearLocalUserData } from "@/lib/local-data";
+import { track } from "@/lib/analytics";
 
 interface Props {
   onDeleted?: () => void;
@@ -27,9 +28,11 @@ export function DeleteAccountButton({ onDeleted, size = "sm", className }: Props
         // ignoreras med flit – felet påverkar inte användaren
       }
       clearLocalUserData();
+      track("account_deleted", { result: "completed" });
       onDeleted?.();
       if (typeof window !== "undefined") window.location.href = "/";
     } catch (e) {
+      track("account_deletion_cancelled", { result: "error" });
       alert("Kunde inte radera kontot: " + (e as Error).message);
       setBusy(false);
       setConfirming(false);
@@ -42,7 +45,10 @@ export function DeleteAccountButton({ onDeleted, size = "sm", className }: Props
         variant="outline"
         size={size}
         className={`rounded-xl gap-2 text-destructive border-destructive/40 hover:bg-destructive/10 ${className ?? ""}`}
-        onClick={() => setConfirming(true)}
+        onClick={() => {
+          track("account_deletion_started", { source: "installningar" });
+          setConfirming(true);
+        }}
       >
         <Trash2 size={16} /> Avsluta konto
       </Button>
@@ -71,7 +77,10 @@ export function DeleteAccountButton({ onDeleted, size = "sm", className }: Props
           size={size}
           className="rounded-xl"
           disabled={busy}
-          onClick={() => setConfirming(false)}
+          onClick={() => {
+            track("account_deletion_cancelled", { result: "cancelled" });
+            setConfirming(false);
+          }}
         >
           Avbryt
         </Button>
