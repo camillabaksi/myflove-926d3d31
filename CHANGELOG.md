@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-26 – Flow reagerar mjukare på din dag
+
+- Låg energi + många saker: Flow föreslår att ni prioriterar tillsammans i stället för att pusha ("Vill du att vi prioriterar tillsammans?") – och går direkt till FlowPlan.
+- Viktiga tider: Flow säger till cirka 30 minuter innan, med klockslag, och länkar till rätt vy (barn, studier, jobb, träning, inköp, medicin).
+- När du bockar av något i Min dag reagerar Flow mjukt och anpassat efter din energi – lugnt när batteriet är lågt, glatt när du är i flyt.
+
 ## 2026-08-26 – Väder i Flows tips
 
 - Flow använder nu timprognosen för dagen: när något utomhus (promenad, hämtning, träning, handling, resa) ligger i regnigt väder säger han till i god tid – "Det ser ut att regna kring 15:00 när du ska ut – ta med paraply."

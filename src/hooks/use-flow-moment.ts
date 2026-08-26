@@ -58,6 +58,18 @@ const isKidTitle = (title: string) =>
 const isOutdoorTitle = (title: string) =>
   /promenad|ut |ute|hund|träning|löp|cykel|lämna|hämta|handla|resa|buss|tåg|marknad/i.test(title);
 
+/** Vart Flow ska länka beroende på vad som är på gång. */
+const linkForTitle = (title: string): { href: string; label: string } => {
+  if (isKidTitle(title)) return { href: "/barn", label: "Barnens dag" };
+  if (/medicin|tablett|dos/i.test(title)) return { href: "/daglig-rutin", label: "Rutiner & medicin" };
+  if (/plugg|studie|tenta|prov|föreläs|lektion/i.test(title)) return { href: "/studier", label: "Studier" };
+  if (/jobb|möte|arbete|kund/i.test(title)) return { href: "/jobb", label: "Jobb" };
+  if (/träning|gym|löp|promenad/i.test(title)) return { href: "/traning", label: "Träning" };
+  if (/handla|inköp|mat/i.test(title)) return { href: "/matlista", label: "Inköpslista" };
+  return { href: "/idag", label: "Min dag" };
+};
+
+
 export function useFlowMoment(): FlowMoment {
   const { activeTasks } = useTasks();
   const { activeReminders } = useReminders();
@@ -72,14 +84,19 @@ export function useFlowMoment(): FlowMoment {
 
   const [celebrating, setCelebrating] = useState(false);
 
+  const [doneTitle, setDoneTitle] = useState<string | null>(null);
+
   useEffect(() => {
-    const onDone = () => {
+    const onDone = (e: Event) => {
+      const title = (e as CustomEvent<{ title?: string }>).detail?.title ?? null;
+      setDoneTitle(title);
       setCelebrating(true);
-      window.setTimeout(() => setCelebrating(false), 2600);
+      window.setTimeout(() => setCelebrating(false), 3200);
     };
     window.addEventListener(FLOW_DONE_EVENT, onDone);
     return () => window.removeEventListener(FLOW_DONE_EVENT, onDone);
   }, []);
+
 
   const now = new Date();
   const nowMin = now.getHours() * 60 + now.getMinutes();
@@ -120,8 +137,16 @@ export function useFlowMoment(): FlowMoment {
       isDismissed(moment.id) ? { ...base, id: "silent", scene: "rest", message: "", silent: true } : moment;
 
     if (celebrating) {
-      return { ...base, id: "done", scene: "done", message: "Klart! 🙌 En sak mindre i huvudet." };
+      const what = doneTitle ? `"${doneTitle}"` : "";
+      const message =
+        energy <= 35
+          ? `${what ? `${what} är avklarat. ` : "Klart. "}Det räckte gott idag – vila lite nu. 💜`
+          : energy <= 60
+            ? `${what ? `${what} klart. ` : "Klart. "}En sak mindre i huvudet. 🌸`
+            : `${what ? `${what} – klart! ` : "Klart! "}🙌 Du är i bra flyt just nu.`;
+      return { ...base, id: "done", scene: "done", message };
     }
+
 
     if (quiet) {
       return { ...base, id: "silent", scene: "rest", message: "", silent: true };
@@ -172,15 +197,19 @@ export function useFlowMoment(): FlowMoment {
     const next = upcoming[0];
 
     /* 3a. Låg energi + mycket att göra – prioritera hellre än pusha. */
-    if (energy <= 45 && todaysCount >= 4) {
+    if (energy <= 50 && todaysCount >= 4) {
+      const veryLow = energy <= 30;
       return pick({
         ...base,
         id: `busy-low-${today}`,
         scene: "energyLow",
-        message: "Du har mycket idag och energin verkar vara låg. Ska vi prioritera?",
-        link: { href: "/flowplan", label: "Gör dagen snällare" },
+        message: veryLow
+          ? `${todaysCount} saker står i dagen och energin är låg. Vi behöver inte allt idag – ska vi välja ut två?`
+          : `Du har ${todaysCount} saker idag och energin verkar lite låg. Vill du att vi prioriterar tillsammans?`,
+        link: { href: "/flowplan", label: "Prioritera med mig" },
       });
     }
+
 
     /* 3b. Regn när du ska vara utomhus – timprognos, inte bara vädret just nu. */
     const outdoor = upcoming.find(
@@ -208,16 +237,19 @@ export function useFlowMoment(): FlowMoment {
     }
 
 
-    /* 3c. Viktig tid närmar sig – förvarning i god tid. */
-    if (next && next.mins - nowMin > 15 && next.mins - nowMin <= 45) {
+    /* 3c. Viktig tid närmar sig – förvarning i god tid, med väg till rätt vy. */
+    if (next && next.mins - nowMin > 10 && next.mins - nowMin <= 45) {
+      const inMins = Math.round((next.mins - nowMin) / 5) * 5;
+      const clock = `${String(Math.floor(next.mins / 60)).padStart(2, "0")}:${String(next.mins % 60).padStart(2, "0")}`;
       return pick({
         ...base,
         id: `soon-${today}-${next.mins}`,
         scene: sceneForTask(next.title),
-        message: `Bara så du vet – du behöver börja göra dig klar om ungefär ${Math.round((next.mins - nowMin) / 5) * 5} minuter.`,
-        link: { href: "/idag", label: "Min dag" },
+        message: `${next.title} kl ${clock} – om cirka ${inMins} minuter. Börja gärna göra dig klar nu.`,
+        link: linkForTitle(next.title),
       });
     }
+
 
     if (next && next.mins - nowMin <= 120) {
       const time = `${String(Math.floor(next.mins / 60)).padStart(2, "0")}:${String(next.mins % 60).padStart(2, "0")}`;
@@ -326,6 +358,8 @@ export function useFlowMoment(): FlowMoment {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     celebrating,
+    doneTitle,
+
     medications,
     activeTasks,
     activeReminders,
