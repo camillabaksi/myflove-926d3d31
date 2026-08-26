@@ -125,8 +125,16 @@ export function useFlowMoment(): FlowMoment {
       isDismissed(moment.id) ? { ...base, id: "silent", scene: "rest", message: "", silent: true } : moment;
 
     if (celebrating) {
-      return { ...base, id: "done", scene: "done", message: "Klart! 🙌 En sak mindre i huvudet." };
+      const what = doneTitle ? `"${doneTitle}"` : "";
+      const message =
+        energy <= 35
+          ? `${what ? `${what} är avklarat. ` : "Klart. "}Det räckte gott idag – vila lite nu. 💜`
+          : energy <= 60
+            ? `${what ? `${what} klart. ` : "Klart. "}En sak mindre i huvudet. 🌸`
+            : `${what ? `${what} – klart! ` : "Klart! "}🙌 Du är i bra flyt just nu.`;
+      return { ...base, id: "done", scene: "done", message };
     }
+
 
     if (quiet) {
       return { ...base, id: "silent", scene: "rest", message: "", silent: true };
