@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-26 – Känslig data krypteras lokalt
+
+- Energi, mående, medicin och ekonomi sparas nu krypterade (AES-GCM) på enheten i stället för i klartext.
+- Krypteringsnyckeln ligger som en icke-exporterbar nyckel i webbläsarens säkra nyckellagring – den går inte att läsa ut med JavaScript eller devtools, och innehållet är obegripligt utan den.
+- Gammal klartext från tidigare versioner krypteras automatiskt vid start.
+- Vid utloggning raderas nyckeln, så eventuella rester på disken inte går att läsa av nästa person på enheten.
+- Fungerar fortfarande offline; om webbläsaren saknar stöd (t.ex. blockerat privat läge) fortsätter appen att fungera som förut.
+
 ## 2026-08-26 – MyFlove Clean-up 1.0
 
 - Lugnare Hem: max sex block som standard (energi, "Just nu", nästa sak, kompakt dagsöversikt och en enkel väg att lägga till). Övriga block finns kvar och kan slås på i "Anpassa hemskärmen".
