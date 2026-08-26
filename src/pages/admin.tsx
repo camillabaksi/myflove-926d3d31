@@ -349,7 +349,7 @@ function UsersSection() {
               >
                 Namn
               </SortHeader>
-              <th className="p-3">Besök</th>
+              <th className="p-3">Senast aktiv</th>
               <SortHeader
                 active={sortKey === "last_login"}
                 dir={sortDir}
