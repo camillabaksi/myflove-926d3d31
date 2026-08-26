@@ -298,6 +298,9 @@ export default function Home() {
         {/* Flow finns med i appen – en kontextuell sak i taget. */}
         <FlowCompanion stage="inline" />
 
+        {/* Alltid synlig när appen inte redan körs installerad. */}
+        <PwaInstallCard />
+
         {/* Flow visar mjukt att han lär sig hur du fungerar. */}
         <FlowLearningCard />
 
@@ -561,7 +564,6 @@ export default function Home() {
 
         <div style={{ order: 98 }} className="space-y-3 pt-2">
           <AreaOnboarding />
-          <PwaInstallCard />
         </div>
 
 
