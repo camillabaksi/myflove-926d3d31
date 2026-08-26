@@ -558,9 +558,11 @@ export default function Home() {
           </div>
         )}
 
-        <div style={{ order: 98 }} className="pt-2">
+        <div style={{ order: 98 }} className="space-y-3 pt-2">
           <AreaOnboarding />
+          <PwaInstallCard />
         </div>
+
 
         <div
           style={{ order: 99 }}
