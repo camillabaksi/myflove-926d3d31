@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Upload, Sparkles, FileUp, Check, CalendarCheck, ArrowDown } from "lucide-react";
+import { Upload, Sparkles, FileUp, Check, CalendarCheck, ArrowDown, Pencil } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -24,6 +24,7 @@ export function ScheduleImport() {
   const [preview, setPreview] = useState<ParsedLecture[]>([]);
   const [busy, setBusy] = useState(false);
   const [savedCount, setSavedCount] = useState<number | null>(null);
+  const [editIdx, setEditIdx] = useState<number | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const goToSchedule = () => {
@@ -59,6 +60,7 @@ export function ScheduleImport() {
       toast.error('Hittade inga lektioner – prova "Låt Flow tolka" istället.');
       return;
     }
+    setEditIdx(null);
     setPreview(found);
     toast.success(`Hittade ${found.length} lektioner – granska och spara 💙`);
   };
