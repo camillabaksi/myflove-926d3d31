@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Bild eller PDF på schemat läses av av Flow och sparas som en fil du kan trycka på för att titta på originalet (2026-08-27)",
       "Mer-menyn börjar med Mina områden och Inställningar – Min profil och Anpassa MyFlove ligger längst ner (2026-08-27)",
       "Planering i två steg, förklarande rader på hemskärmens kort och i Mer-menyn (2026-08-27)",
       "Tydlig steg-för-steg-struktur i Min dag, QuickFlow och schemauppladdningen – numrerade steg, en sak i taget, allt går att fälla ihop (2026-08-27)",

@@ -2,7 +2,20 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
-const InputSchema = z.object({ text: z.string().min(3).max(8000) });
+const FileSchema = z.object({
+  name: z.string().max(200),
+  mime: z.string().max(100),
+  dataUrl: z.string().min(20).max(8_000_000),
+});
+
+const InputSchema = z
+  .object({
+    text: z.string().max(8000).optional(),
+    file: FileSchema.optional(),
+  })
+  .refine((v) => (v.text && v.text.trim().length >= 3) || v.file, {
+    message: "Ange text eller en fil",
+  });
 
 const LectureSchema = z.object({
   title: z.string().min(1).max(120),
@@ -15,9 +28,10 @@ const LectureSchema = z.object({
 export type ParsedScheduleLecture = z.infer<typeof LectureSchema>;
 
 const SYSTEM = `Du är Flow – MyFloves lugna AI-kompanjon.
-Du tolkar ett studieschema som användaren klistrat in och gör om det till strukturerad data.
+Du tolkar ett studieschema som användaren klistrat in, fotograferat eller laddat upp och gör om det till strukturerad data.
 
 Regler:
+- Om du får en bild eller PDF: läs av all text i schemat noggrant (även tabeller och kolumner med veckodagar).
 - weekday: 0 = måndag … 6 = söndag.
 - start/end i formatet HH:MM (24h). Saknas sluttid: lägg till 60 minuter.
 - title: kort namn på lektionen/kursen, utan tid eller sal.
@@ -25,12 +39,26 @@ Regler:
 - Ta bara med återkommande lektioner/föreläsningar, inte raster.
 - Svara ENDAST med JSON: { "lectures": [{ "title", "weekday", "start", "end", "location" }] }`;
 
+type Part =
+  | { type: "text"; text: string }
+  | { type: "image_url"; image_url: { url: string } };
+
 export const parseScheduleWithFlow = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => InputSchema.parse(data))
   .handler(async ({ data }): Promise<{ lectures: ParsedScheduleLecture[] }> => {
     const apiKey = process.env["LOVABLE_API_KEY"];
     if (!apiKey) throw new Error("Missing LOVABLE_API_KEY");
+
+    const content: Part[] = [];
+    if (data.text?.trim()) content.push({ type: "text", text: data.text });
+    if (data.file) {
+      content.push({
+        type: "text",
+        text: `Bifogad schemafil: ${data.file.name}. Läs av schemat i filen.`,
+      });
+      content.push({ type: "image_url", image_url: { url: data.file.dataUrl } });
+    }
 
     const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -40,7 +68,7 @@ export const parseScheduleWithFlow = createServerFn({ method: "POST" })
         response_format: { type: "json_object" },
         messages: [
           { role: "system", content: SYSTEM },
-          { role: "user", content: data.text },
+          { role: "user", content },
         ],
       }),
     });
@@ -53,8 +81,9 @@ export const parseScheduleWithFlow = createServerFn({ method: "POST" })
       const json = (await res.json()) as {
         choices?: Array<{ message?: { content?: string } }>;
       };
-      const content = json.choices?.[0]?.message?.content ?? "{}";
-      const parsed = JSON.parse(content) as { lectures?: unknown };
+      const raw = json.choices?.[0]?.message?.content ?? "{}";
+      const cleaned = raw.replace(/^```(?:json)?/i, "").replace(/```$/, "");
+      const parsed = JSON.parse(cleaned) as { lectures?: unknown };
       const lectures = z.array(LectureSchema).safeParse(parsed.lectures ?? []);
       return { lectures: lectures.success ? lectures.data : [] };
     } catch {

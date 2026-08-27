@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-27 – Bild på schemat läses av och sparas
+
+- Ladda upp en bild eller PDF på schemat: Flow läser av den som ett dokument och gör om den till lektioner.
+- Filen sparas under "Dina schemafiler" – tryck på den för att titta på originalet igen.
+- Går även att öppna filen i nytt fönster eller ta bort den.
+
 ## 2026-08-27 – Mer-menyn: områden och inställningar först
 
 - Mina områden och Inställningar ligger nu överst i Mer.

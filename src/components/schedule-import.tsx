@@ -1,9 +1,27 @@
 import { useRef, useState } from "react";
-import { Upload, Sparkles, FileUp, Check, CalendarCheck, ArrowDown, Pencil } from "lucide-react";
+import {
+  Upload,
+  Sparkles,
+  FileUp,
+  Check,
+  CalendarCheck,
+  ArrowDown,
+  Pencil,
+  ImageIcon,
+  FileText,
+  Trash2,
+} from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { useStudySchedule } from "@/hooks/use-study-schedule";
+import { useScheduleFiles, type ScheduleFile } from "@/hooks/use-schedule-files";
 import { WEEKDAYS } from "@/lib/study-calendar";
 import {
   dedupe,
@@ -13,19 +31,30 @@ import {
 } from "@/lib/schedule-parse";
 import { parseScheduleWithFlow } from "@/lib/schedule-import.functions";
 import CollapsibleSection from "@/components/collapsible-section";
-import { ACCEPT_SCHEDULE, isTextFile, readFileAsText } from "@/lib/file-formats";
+import {
+  ACCEPT_SCHEDULE,
+  isImageFile,
+  isPdfFile,
+  isTextFile,
+  prepareUpload,
+  readFileAsText,
+} from "@/lib/file-formats";
+
 
 const card = "rounded-3xl border border-border bg-card p-5 shadow-sm";
 const sectionTitle = "flex items-center gap-2 font-display text-lg text-ink";
 
 export function ScheduleImport() {
   const { lectures, addLecture } = useStudySchedule();
+  const { files, addFile, removeFile } = useScheduleFiles();
   const [text, setText] = useState("");
   const [preview, setPreview] = useState<ParsedLecture[]>([]);
   const [busy, setBusy] = useState(false);
   const [savedCount, setSavedCount] = useState<number | null>(null);
   const [editIdx, setEditIdx] = useState<number | null>(null);
+  const [viewFile, setViewFile] = useState<ScheduleFile | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+
 
   const goToSchedule = () => {
     const el = document.getElementById("veckoschema");
@@ -66,17 +95,45 @@ export function ScheduleImport() {
   };
 
   const handleFile = async (file: File) => {
-    if (!isTextFile(file)) {
+    if (isTextFile(file)) {
+      const content = await readFileAsText(file, 20000);
+      const isIcs = /BEGIN:VCALENDAR/i.test(content) || file.name.toLowerCase().endsWith(".ics");
+      setText(isIcs ? "" : content);
+      show(isIcs ? parseScheduleIcs(content) : parseScheduleText(content));
+      return;
+    }
+
+    if (!isImageFile(file) && !isPdfFile(file)) {
       toast.error(
-        "Den filtypen kan inte läsas direkt. Spara schemat som .ics, .txt, .csv eller klistra in texten.",
+        "Den filtypen kan inte läsas. Ladda upp en bild, PDF eller spara schemat som .ics, .txt eller .csv.",
       );
       return;
     }
-    const content = await readFileAsText(file, 20000);
-    const isIcs = /BEGIN:VCALENDAR/i.test(content) || file.name.toLowerCase().endsWith(".ics");
-    setText(isIcs ? "" : content);
-    show(isIcs ? parseScheduleIcs(content) : parseScheduleText(content));
+
+    setBusy(true);
+    try {
+      const prepared = await prepareUpload(file);
+      if (prepared.kind !== "file") return;
+      addFile(prepared.file);
+      toast.success("Filen är sparad – Flow läser av schemat…");
+      const res = await parseScheduleWithFlow({ data: { file: prepared.file } });
+      const found = dedupe(res.lectures);
+      if (!found.length) {
+        toast.error(
+          "Flow kunde inte läsa av schemat i bilden. Filen är sparad – prova en tydligare bild eller klistra in texten.",
+        );
+        return;
+      }
+      setEditIdx(null);
+      setPreview(found);
+      toast.success(`Flow läste av ${found.length} lektioner – granska och spara 💙`);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Kunde inte läsa filen.");
+    } finally {
+      setBusy(false);
+    }
   };
+
 
   const askFlow = async () => {
     if (!text.trim()) return;
@@ -125,9 +182,11 @@ export function ScheduleImport() {
         headingClassName={sectionTitle}
       >
         <p className="mt-1 text-sm text-muted-foreground">
-          Klistra in schemat som text eller ladda upp en fil (.ics, .txt, .csv, .md, .json, .html) från skolan. Flow gör om det till
-          ditt veckoschema – sen kan Flow säga vilken lektion som är nästa och var.
+          Klistra in schemat som text, ladda upp en fil (.ics, .txt, .csv) eller ta en bild/PDF på
+          schemat. Flow läser av bilden och gör om den till ditt veckoschema – filen sparas så att du
+          kan titta på originalet när du vill.
         </p>
+
 
         <div className="mt-3 flex flex-wrap items-center gap-2 rounded-2xl border border-primary/25 bg-primary/5 p-3 text-sm">
           <CalendarCheck className="h-4 w-4 shrink-0 text-primary" />
@@ -195,8 +254,10 @@ export function ScheduleImport() {
             variant="outline"
             className="rounded-full"
             onClick={() => fileRef.current?.click()}
+            disabled={busy}
           >
-            <FileUp className="mr-2 h-4 w-4" /> Ladda upp fil
+            <FileUp className="mr-2 h-4 w-4" />
+            {busy ? "Flow läser filen…" : "Ladda upp fil eller bild"}
           </Button>
           <input
             ref={fileRef}
@@ -211,6 +272,47 @@ export function ScheduleImport() {
             }}
           />
         </div>
+
+        {files.length > 0 && (
+          <div className="mt-4 rounded-2xl border border-border/70 bg-background p-3">
+            <p className="text-xs font-semibold uppercase tracking-wide text-primary">
+              Dina schemafiler
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Tryck på en fil för att titta på originalet igen.
+            </p>
+            <ul className="mt-2 space-y-1">
+              {files.map((f) => (
+                <li key={f.id} className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setViewFile(f)}
+                    className="flex flex-1 items-center gap-2 rounded-xl px-2 py-2 text-left text-sm text-ink hover:bg-muted/60"
+                  >
+                    {f.mime.startsWith("image/") ? (
+                      <ImageIcon className="h-4 w-4 shrink-0 text-primary" />
+                    ) : (
+                      <FileText className="h-4 w-4 shrink-0 text-primary" />
+                    )}
+                    <span className="flex-1 truncate">{f.name}</span>
+                    <span className="shrink-0 text-xs text-muted-foreground">
+                      {new Date(f.addedAt).toLocaleDateString("sv-SE")}
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => removeFile(f.id)}
+                    aria-label={`Ta bort ${f.name}`}
+                    className="rounded-full p-2 text-muted-foreground hover:text-destructive"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
 
         {preview.length > 0 && (
           <div className="mt-4 rounded-2xl border border-border/70 bg-background p-3">
@@ -340,7 +442,40 @@ export function ScheduleImport() {
           </div>
         )}
       </CollapsibleSection>
+
+      <Dialog open={!!viewFile} onOpenChange={(open) => !open && setViewFile(null)}>
+        <DialogContent className="max-w-3xl">
+          <DialogHeader>
+            <DialogTitle className="truncate">{viewFile?.name}</DialogTitle>
+          </DialogHeader>
+          {viewFile &&
+            (viewFile.mime.startsWith("image/") ? (
+              <img
+                src={viewFile.dataUrl}
+                alt={`Schemafil: ${viewFile.name}`}
+                className="max-h-[70vh] w-full rounded-2xl object-contain"
+              />
+            ) : (
+              <iframe
+                src={viewFile.dataUrl}
+                title={viewFile.name}
+                className="h-[70vh] w-full rounded-2xl border border-border"
+              />
+            ))}
+          {viewFile && (
+            <a
+              href={viewFile.dataUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="text-sm font-medium text-primary underline underline-offset-2"
+            >
+              Öppna i nytt fönster
+            </a>
+          )}
+        </DialogContent>
+      </Dialog>
     </section>
+
   );
 }
 
