@@ -92,17 +92,45 @@ export function ScheduleImport() {
   };
 
   const handleFile = async (file: File) => {
-    if (!isTextFile(file)) {
+    if (isTextFile(file)) {
+      const content = await readFileAsText(file, 20000);
+      const isIcs = /BEGIN:VCALENDAR/i.test(content) || file.name.toLowerCase().endsWith(".ics");
+      setText(isIcs ? "" : content);
+      show(isIcs ? parseScheduleIcs(content) : parseScheduleText(content));
+      return;
+    }
+
+    if (!isImageFile(file) && !isPdfFile(file)) {
       toast.error(
-        "Den filtypen kan inte läsas direkt. Spara schemat som .ics, .txt, .csv eller klistra in texten.",
+        "Den filtypen kan inte läsas. Ladda upp en bild, PDF eller spara schemat som .ics, .txt eller .csv.",
       );
       return;
     }
-    const content = await readFileAsText(file, 20000);
-    const isIcs = /BEGIN:VCALENDAR/i.test(content) || file.name.toLowerCase().endsWith(".ics");
-    setText(isIcs ? "" : content);
-    show(isIcs ? parseScheduleIcs(content) : parseScheduleText(content));
+
+    setBusy(true);
+    try {
+      const prepared = await prepareUpload(file);
+      if (prepared.kind !== "file") return;
+      addFile(prepared.file);
+      toast.success("Filen är sparad – Flow läser av schemat…");
+      const res = await parseScheduleWithFlow({ data: { file: prepared.file } });
+      const found = dedupe(res.lectures);
+      if (!found.length) {
+        toast.error(
+          "Flow kunde inte läsa av schemat i bilden. Filen är sparad – prova en tydligare bild eller klistra in texten.",
+        );
+        return;
+      }
+      setEditIdx(null);
+      setPreview(found);
+      toast.success(`Flow läste av ${found.length} lektioner – granska och spara 💙`);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Kunde inte läsa filen.");
+    } finally {
+      setBusy(false);
+    }
   };
+
 
   const askFlow = async () => {
     if (!text.trim()) return;
