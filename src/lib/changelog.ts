@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Förhandsvisning av uppladdat schema: tolkade lektioner visas per veckodag och tid, med markering av det som redan finns (2026-08-27)",
       "Uppladdat schema hamnar tydligt i ditt veckoschema i StudyFlow – med plats-indikator och genväg dit (2026-08-27)",
       "Fler filformat vid uppladdning i hela appen: PDF, bilder (även HEIC), textfiler och dokument – textfiler läses direkt och blir material till Flow (2026-08-27)",
       "Gemensam sanitizer för all appstatistik: bara korta tekniska etiketter släpps igenom – fritext, e-post, nummer och känsliga ord stoppas alltid (2026-08-27)",
