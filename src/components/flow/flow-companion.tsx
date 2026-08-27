@@ -9,6 +9,7 @@ import { useFlowMoment } from "@/hooks/use-flow-moment";
 import { useFlowLearning } from "@/hooks/use-flow-learning";
 import { useFlowSettings, type FlowHelpLevel } from "@/hooks/use-flow-settings";
 import { haptic } from "@/lib/haptics";
+import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
 /**
