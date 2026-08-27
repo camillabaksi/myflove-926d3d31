@@ -265,10 +265,13 @@ export default function FlowPlanPage() {
               <ListOrdered size={20} />
             </div>
             <div>
-              <h1 className="text-3xl font-bold leading-tight text-ink">FlowPlan</h1>
+              <h1 className="text-3xl font-bold leading-tight text-ink">Planering</h1>
+              <p className="text-sm font-medium text-primary">
+                Här bestämmer du ordningen på dagen
+              </p>
               <p className="text-sm text-muted-foreground">
-                Sätt dagens fokus och låt Flow föreslå en ordning som passar dagen – inte en lista
-                på allt du "borde" hinna.
+                Flow föreslår en ordning som passar dagen – du ändrar den som du vill. Vad som
+                faktiskt händer idag ser du i Min dag.
               </p>
             </div>
           </div>
