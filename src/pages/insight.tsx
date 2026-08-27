@@ -229,9 +229,10 @@ export default function InsightPage() {
         </>
       )}
 
-      {phase === "analys" && <AnalysisView onDone={() => setPhase("resultat")} />}
+      {demoMode && phase === "analys" && <AnalysisView onDone={() => setPhase("resultat")} />}
 
-      {phase === "resultat" && (
+      {demoMode && phase === "resultat" && (
+
         <div className="space-y-5">
           <div className="p-5 rounded-3xl bg-card border border-border space-y-3">
             <div className="flex items-start justify-between gap-3">
