@@ -61,6 +61,58 @@ export default function EnergyBattery({
       ? `${levelWord} – ${trendWord}, starkast ${reading.peak.label}.`
       : `${levelWord} – ${trendWord}.`;
 
+  const summary = (
+    <>
+      {/* Själva batteriet */}
+      <span className="relative flex h-7 w-14 shrink-0 items-center">
+        <span className="relative h-7 w-[52px] overflow-hidden rounded-[10px] border-2 border-border bg-secondary/50">
+          <span
+            className="absolute inset-y-0 left-0 rounded-[7px] motion-safe:transition-[width] motion-safe:duration-700 motion-safe:ease-out"
+            style={{ width: `${Math.max(4, level)}%`, backgroundColor: tone, opacity: 0.85 }}
+          />
+          <span className="motion-safe:animate-[pulse_6s_cubic-bezier(0.4,0,0.6,1)_infinite] absolute inset-0" />
+        </span>
+        <span className="ml-0.5 h-3 w-1 rounded-r-sm bg-border" />
+      </span>
+
+      <span className="min-w-0 flex-1">
+        <span className="block text-sm font-medium leading-snug text-ink">{plain}</span>
+        <span className="mt-0.5 block text-xs text-muted-foreground">
+          Mitt batteri ·{" "}
+          <span className="font-semibold" style={{ color: tone }}>
+            {level}%
+          </span>{" "}
+          <span aria-hidden>
+            {reading.trend === "stiger" ? "↑" : reading.trend === "sjunker" ? "↓" : "→"}
+          </span>
+        </span>
+      </span>
+    </>
+  );
+
+  // Hela kortet är en enda klickyta – används på Hem.
+  if (href) {
+    return (
+      <Link
+        href={href}
+        onClick={onNavigate}
+        data-testid="battery-card"
+        aria-label="Mitt batteri – öppna sidan"
+        className="press block rounded-3xl border border-border/60 bg-card p-4 shadow-soft transition-colors hover:border-primary/40"
+      >
+        <span className="flex w-full items-center gap-3 text-left">
+          {summary}
+          <span className="shrink-0 text-muted-foreground">
+            <ArrowRight size={18} aria-hidden="true" />
+          </span>
+        </span>
+        <span className="mt-3 block">
+          <BatteryCurve reading={reading} compact />
+        </span>
+      </Link>
+    );
+  }
+
   return (
     <section
       className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft"
@@ -72,35 +124,12 @@ export default function EnergyBattery({
         aria-expanded={open}
         className="flex w-full items-center gap-3 text-left"
       >
-        {/* Själva batteriet */}
-        <span className="relative flex h-7 w-14 shrink-0 items-center">
-          <span className="relative h-7 w-[52px] overflow-hidden rounded-[10px] border-2 border-border bg-secondary/50">
-            <span
-              className="absolute inset-y-0 left-0 rounded-[7px] motion-safe:transition-[width] motion-safe:duration-700 motion-safe:ease-out"
-              style={{ width: `${Math.max(4, level)}%`, backgroundColor: tone, opacity: 0.85 }}
-            />
-            <span className="motion-safe:animate-[pulse_6s_cubic-bezier(0.4,0,0.6,1)_infinite] absolute inset-0" />
-          </span>
-          <span className="ml-0.5 h-3 w-1 rounded-r-sm bg-border" />
-        </span>
-
-        <span className="min-w-0 flex-1">
-          <span className="block text-sm font-medium leading-snug text-ink">{plain}</span>
-          <span className="mt-0.5 block text-xs text-muted-foreground">
-            Mitt batteri ·{" "}
-            <span className="font-semibold" style={{ color: tone }}>
-              {level}%
-            </span>{" "}
-            <span aria-hidden>
-              {reading.trend === "stiger" ? "↑" : reading.trend === "sjunker" ? "↓" : "→"}
-            </span>
-          </span>
-        </span>
-
+        {summary}
         <span className="shrink-0 text-xs text-muted-foreground">
           {open ? "Dölj detaljer ˄" : "Visa detaljer ˅"}
         </span>
       </button>
+
 
       {/* Liten kurva alltid synlig – känslan av dagen, inte en teknisk graf */}
       <div className="mt-3">
