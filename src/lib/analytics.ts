@@ -59,15 +59,42 @@ export function trackEvent(section: string, action: string): void {
 }
 
 /**
+ * Skydd mot dubbelloggning: identiska "visnings"-event (öppnat/visat) som
+ * kommer inom kort tid räknas som ETT. Det gör att React StrictMode,
+ * omrenderingar och snabba navigeringar fram och tillbaka inte blåser upp
+ * statistiken. Riktiga handlingar (t.ex. avbockade uppgifter) dedupliceras
+ * aldrig – de ska kunna ske flera gånger.
+ */
+const VIEW_DEDUPE_MS = 2000;
+const lastSeen = new Map<string, number>();
+
+function isViewEvent(name: AnalyticsEventName): boolean {
+  return name.endsWith("_viewed") || name.endsWith("_opened");
+}
+
+/** Endast för tester: nollställer dubblettskyddet. */
+export function resetAnalyticsDedupe(): void {
+  lastSeen.clear();
+}
+
+/**
  * Det enda sättet att logga produktflöden i MyFlove.
  * Namnet måste finnas i event-schemat och payloaden saneras innan den skickas,
- * så att inget känsligt innehåll kan följa med.
+ * så att inget känsligt innehåll kan följa med. Exakt ett event skickas per
+ * anrop – den äldre trackEvent()-vägen anropas bara härifrån.
  */
 export function track(name: AnalyticsEventName, payload?: AnalyticsPayload): void {
   if (typeof window === "undefined") return;
   if (!analyticsEnabled()) return;
   const clean = sanitizePayload(payload);
   const section = eventSection(name);
+  if (isViewEvent(name)) {
+    const key = `${name}|${clean.source ?? ""}`;
+    const now = Date.now();
+    const prev = lastSeen.get(key);
+    if (prev != null && now - prev < VIEW_DEDUPE_MS) return;
+    lastSeen.set(key, now);
+  }
   try {
     getAnalyticsSink()?.({ name, section, payload: clean });
   } catch {
@@ -75,3 +102,4 @@ export function track(name: AnalyticsEventName, payload?: AnalyticsPayload): voi
   }
   trackEvent(section, name);
 }
+
