@@ -1,5 +1,6 @@
 import { logAnalyticsEventFn } from "@/lib/analytics.functions";
 import { recordUsage } from "@/lib/usage-local";
+import { sanitizeEventName } from "@/lib/analytics-sanitize";
 import {
   eventSection,
   getAnalyticsSink,
