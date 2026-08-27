@@ -643,6 +643,17 @@ export default function Layout({ children }: LayoutProps) {
   }, [navMigrated, navSlots, setNavMigrated, setNavSlots]);
   const [editingNav, setEditingNav] = useState(false);
 
+  /** Visa introduktionen igen – nollställer bara "har sett intro". */
+  const replayIntro = () => {
+    try {
+      window.localStorage.removeItem("myflove-intro-seen");
+    } catch {
+      /* utan lagring går det ändå att använda appen */
+    }
+    setMobileMenuOpen(false);
+    window.location.href = "/hem";
+  };
+
   // Enkelt läge: visar bara det viktigaste tills man själv vill se mer.
   const [simpleMode, setSimpleMode] = useLocalStorage<boolean>("myflove-simple-mode", true);
   const essentialItems = useMemo(() => navItems.filter((i) => i.essential), [navItems]);
@@ -1092,7 +1103,8 @@ export default function Layout({ children }: LayoutProps) {
                 </>
               ) : (
                 <>
-                  {/* Min livsprofil – alltid överst i Mer */}
+                  {/* Min profil */}
+                  <h3 className="mb-2 mt-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Min profil</h3>
                   <Link
                     href="/min-livsprofil"
                     onClick={() => {
@@ -1116,8 +1128,41 @@ export default function Layout({ children }: LayoutProps) {
                     <ChevronRight size={18} className="shrink-0 text-muted-foreground" />
                   </Link>
 
-                  <div className="mb-4">
-                    <PwaInstallButton />
+                  {/* Anpassa MyFlove */}
+                  <h3 className="mb-2 mt-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Anpassa MyFlove</h3>
+
+                  <div className="mb-3 space-y-2">
+                    <Link
+                      href="/anpassa-hem"
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        setOpenCategory(null);
+                      }}
+                      className="flex items-center gap-3 rounded-2xl border border-border bg-card p-3 shadow-sm"
+                    >
+                      <Home size={20} className="shrink-0 text-muted-foreground" />
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-sm font-medium">Hemskärm</span>
+                        <span data-npf="optional" className="block text-xs text-muted-foreground">
+                          Vilka block som syns på Hem och i vilken ordning
+                        </span>
+                      </span>
+                      <ChevronRight size={18} className="shrink-0 text-muted-foreground" />
+                    </Link>
+
+                    <button
+                      type="button"
+                      onClick={replayIntro}
+                      className="flex w-full items-center gap-3 rounded-2xl border border-border bg-card p-3 text-left shadow-sm"
+                    >
+                      <Sparkles size={20} className="shrink-0 text-muted-foreground" />
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-sm font-medium">Visa introduktionen igen</span>
+                        <span data-npf="optional" className="block text-xs text-muted-foreground">
+                          Gå igenom de första korten en gång till
+                        </span>
+                      </span>
+                    </button>
                   </div>
 
                   <button
@@ -1133,7 +1178,7 @@ export default function Layout({ children }: LayoutProps) {
                     {simpleMode ? "Visar bara det viktigaste" : "Visa bara det viktigaste"}
                   </button>
 
-                  {/* Byt platser i bottenmenyn */}
+                  {/* Viktiga områden – dina två egna platser i bottenmenyn */}
                   <div className="mb-4 rounded-3xl border border-border bg-card p-4 shadow-sm">
                     <div className="flex items-center justify-between gap-2">
                       <div>
@@ -1197,6 +1242,7 @@ export default function Layout({ children }: LayoutProps) {
                     )}
                   </div>
 
+                  <h3 className="mb-2 mt-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Mina områden</h3>
                   <div className="grid grid-cols-2 gap-3">
                     {categories
                       .filter((cat) =>
@@ -1235,7 +1281,13 @@ export default function Layout({ children }: LayoutProps) {
                       })}
                   </div>
 
-                  <div className="mt-6 flex flex-col items-center justify-center gap-3">
+                  <h3 className="mb-2 mt-6 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    Inställningar
+                  </h3>
+                  <div className="mb-4">
+                    <PwaInstallButton />
+                  </div>
+                  <div className="flex flex-col items-center justify-center gap-3">
                     <Link href="/anpassa" onClick={() => setMobileMenuOpen(false)}>
                       <Button variant="outline" size="sm" className="rounded-xl gap-2">
                         <Accessibility size={16} /> Anpassa appen
@@ -1264,6 +1316,9 @@ export default function Layout({ children }: LayoutProps) {
                         <LogOut size={16} /> Logga ut
                       </Button>
                     </Show>
+                    <p data-npf="optional" className="text-center text-xs text-muted-foreground">
+                      Avsluta konto finns under Anpassa appen → Konto.
+                    </p>
                   </div>
                 </>
               )}
