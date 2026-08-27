@@ -468,6 +468,29 @@ export default function InsightPage() {
         </div>
       )}
 
+      <p className="text-center text-sm">
+        {demoMode ? (
+          <Link
+            to="/insight"
+            data-testid="insight-leave-demo"
+            className="underline text-muted-foreground"
+          >
+            Tillbaka till mina egna insikter
+          </Link>
+        ) : (
+          <Link
+            to="/insight"
+            search={{ demo: "1" }}
+            data-testid="insight-open-demo"
+            className="underline text-muted-foreground"
+          >
+            Öppna demoläge med fiktiva testprofiler
+          </Link>
+        )}
+      </p>
+
+
+
       {saved.length > 0 && (
         <CollapsibleSection
           id="valda-strategier"
