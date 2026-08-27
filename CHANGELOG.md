@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-27 – Fler filformat vid uppladdning
+
+- Gemensam lista över filformat i hela appen: PDF, bilder (även HEIC/HEIF, WebP, TIFF, AVIF) och textfiler (txt, md, csv, tsv, json, html, xml, rtf, log) samt dokument som doc/docx/odt/ppt/pptx/xls/xlsx/epub.
+- Textfiler läses direkt i webbläsaren och blir material till Flow, bilder och PDF skickas som fil – övriga format ger ett vänligt tips om att spara som PDF, bild eller text.
+- Schema- och kalenderimport tar nu även .ifb, .vcs, .csv, .md, .json och .html utöver .ics.
+
 ## 2026-08-27 – Gemensam sanitizer för all statistik
 
 - All appstatistik går nu genom en enda sanitizer som bara släpper igenom korta, tekniska etiketter.
