@@ -185,7 +185,16 @@ export default function FlowCompanion({
             </Button>
           )}
           {moment.link && (
-            <Button asChild size="sm" variant="ghost" className="rounded-full">
+            <Button
+              asChild
+              size="sm"
+              variant="ghost"
+              className="rounded-full"
+              onClick={() => {
+                // Endast användning mäts – aldrig vad Flow lärt sig eller några råvärden.
+                if (moment.learning) track("flow_learning_opened", { source: "flow-companion" });
+              }}
+            >
               <Link href={moment.link.href}>{moment.link.label}</Link>
             </Button>
           )}
