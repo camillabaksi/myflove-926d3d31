@@ -23,7 +23,13 @@ export function ScheduleImport() {
   const [text, setText] = useState("");
   const [preview, setPreview] = useState<ParsedLecture[]>([]);
   const [busy, setBusy] = useState(false);
+  const [savedCount, setSavedCount] = useState<number | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+
+  const goToSchedule = () => {
+    const el = document.getElementById("veckoschema");
+    el?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   const show = (found: ParsedLecture[]) => {
     if (!found.length) {
