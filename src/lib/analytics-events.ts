@@ -13,7 +13,11 @@
 
 export const ANALYTICS_EVENTS = [
   "app_opened",
+  "signup_started",
+  "signup_completed",
+  "login",
   "onboarding_started",
+
   "onboarding_completed",
   "onboarding_skipped",
   "home_viewed",
