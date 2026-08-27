@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      'Flow-knappen "Vad jag lärt mig" mäts nu anonymt – ett event per klick, utan några råvärden om dig (2026-08-27)',
       'MyFlove Insight visar dina egna insikter från din användning; demoprofiler ligger bakom ett explicit demoläge och tomläget förklarar lugnt när Flow behöver mer tid (2026-08-27)',
       "Lugnare Mer-meny: grupperad i Min profil, Anpassa MyFlove, Mina områden och Inställningar – med genvägar till hemskärmen och introduktionen (2026-08-27)",
       "Kvalitetssäkrad statistik: varje viktig handling ger exakt ett event, vy-event dubbelskyddas och känsligt innehåll filtreras alltid bort (2026-08-27)",

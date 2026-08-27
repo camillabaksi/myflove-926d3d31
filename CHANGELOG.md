@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-27 – Statistik för "Vad jag lärt mig"
+
+- Flow-knappen "Vad jag lärt mig" loggar nu ett eget anonymt event (`flow_learning_opened`) när den öppnas.
+- Payloaden innehåller bara varifrån klicket kom – aldrig insiktstexter, energi, mående eller andra råvärden.
+- Nya tester: exakt ett event per klick, sanerad payload och inget event för Flows övriga länkar.
+
 ## 2026-08-27 – Insight visar dina egna insikter
 
 - "Vad jag lärt mig" öppnar nu MyFlove Insight med dina egna mönster från din faktiska användning – inga testprofiler.
