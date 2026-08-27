@@ -53,6 +53,7 @@ import {
   NotebookPen,
 } from "lucide-react";
 import CollapsibleSection from "@/components/collapsible-section";
+import StepSection from "@/components/step-section";
 import QuickflowRulesSettings from "@/components/quickflow-rules-settings";
 import { MyFloveListening } from "@/components/myflove/motion";
 import { todayISO } from "@/lib/day";
@@ -209,6 +210,12 @@ export default function Dump() {
         <QuickflowCapture />
 
         {!thoughts ? (
+          <StepSection
+            step={1}
+            id="quickflow::steg-fanga"
+            title="Skriv eller prata in"
+            description="Allt som snurrar – huller om buller går bra. Tryck sedan på Sortera."
+          >
           <div className="relative rounded-3xl border border-border/60 bg-card p-2 shadow-soft transition-all focus-within:ring-2 focus-within:ring-primary/20">
             <textarea
               value={rawText}
@@ -252,12 +259,14 @@ export default function Dump() {
               </Button>
             </div>
           </div>
+          </StepSection>
         ) : (
-          <CollapsibleSection
-            title="Förslag på sortering:"
+          <StepSection
+            step={2}
+            id="quickflow::steg-sortera"
+            title="Granska och spara"
+            description="Ändra var något hör hemma om Flow gissat fel – spara en i taget eller allt på en gång."
             help="Flow gissar var varje tanke hör hemma. Du bestämmer – tryck för att spara eller strunta i det."
-            headingClassName="font-semibold"
-            className="animate-in fade-in slide-in-from-bottom-4 duration-500"
           >
             <div className="space-y-3">
               {thoughts.map((thought) => {
@@ -316,7 +325,7 @@ export default function Dump() {
                 Börja om med ny dump
               </Button>
             </div>
-          </CollapsibleSection>
+          </StepSection>
         )}
 
         <InsightQuickflowHint />
