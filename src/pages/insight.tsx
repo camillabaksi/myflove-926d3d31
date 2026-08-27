@@ -102,15 +102,43 @@ export default function InsightPage() {
   const [addFlow, setAddFlow] = useState<AddFlowState | null>(null);
   const [contexts, setContexts] = useState<InsightContext[]>(["vardag"]);
 
-  const { addTask } = useTasks();
+  const { addTask, completedTasks } = useTasks();
   const { flow } = useFlowScore();
   const { saved, addStrategy, removeStrategy, hasStrategy } = useInsightStrategies();
+
+  // Demoläge (fiktiva testprofiler) nås bara explicit via ?demo=1.
+  const demoMode = useRouterState({
+    select: (s) => (s.location.search as Record<string, unknown> | undefined)?.["demo"] === "1",
+  });
+
+  const knowledge = useFlowLearning();
+  const { totalDays } = useVisitStreak();
+  const [energyLog] = useLocalStorage<unknown[]>("myflove-energy-log", []);
+
+  const personal = useMemo(
+    () =>
+      buildPersonalInsight(knowledge, {
+        activeDays: totalDays,
+        completedCount: completedTasks.length,
+        energyCount: energyLog?.length ?? 0,
+      }),
+    [knowledge, totalDays, completedTasks.length, energyLog],
+  );
+
+  useEffect(() => {
+    track("settings_opened", {
+      source: demoMode ? "insight-demo" : "insight",
+      result: personal.ready ? "completed" : "cancelled",
+    });
+    // Endast vid vy-byte – aldrig med några råvärden om användaren.
+  }, [demoMode, personal.ready]);
 
   const areas = useMemo<InsightAreaId[]>(() => {
     if (profile) return profile.areas;
     if (customNeeds.trim()) return matchAreasFromNeeds(customNeeds.split("\n"));
     return [];
   }, [profile, customNeeds]);
+
 
   const startAnalysis = (p: DemoProfile | null) => {
     setProfile(p);
