@@ -1185,7 +1185,7 @@ export default function Layout({ children }: LayoutProps) {
                   </div>
 
                   {/* Min profil */}
-                  <h3 className="mt-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Min profil</h3>
+                  <h3 className="mt-8 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Min profil</h3>
                   <p className="mb-2 text-xs text-muted-foreground/80">Vem du är och hur din vardag ser ut just nu.</p>
                   <Link
                     href="/min-livsprofil"
