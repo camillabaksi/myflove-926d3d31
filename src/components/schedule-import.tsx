@@ -327,7 +327,7 @@ export function ScheduleImport() {
               <Button className="rounded-full" onClick={save}>
                 <Check className="mr-2 h-4 w-4" /> Spara i schemat
               </Button>
-              <Button variant="ghost" className="rounded-full" onClick={() => setPreview([])}>
+              <Button variant="ghost" className="rounded-full" onClick={() => { setPreview([]); setEditIdx(null); }}>
                 Avbryt
               </Button>
             </div>
