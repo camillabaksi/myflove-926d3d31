@@ -264,78 +264,15 @@ export default function InsightPage() {
             Jag har hittat några områden som kan vara relevanta att ta hänsyn till.
           </p>
 
-          <div className="space-y-3">
-            {INSIGHT_AREAS.filter((a) => areas.includes(a.id)).map((area) => {
-              const isOpen = openArea === area.id;
-              return (
-                <div
-                  key={area.id}
-                  className="rounded-3xl bg-card border border-border overflow-hidden"
-                >
-                  <button
-                    onClick={() => setOpenArea(isOpen ? null : area.id)}
-                    className="w-full p-5 flex items-center gap-4 text-left"
-                    aria-expanded={isOpen}
-                  >
-                    <span className="text-2xl" aria-hidden>
-                      {area.emoji}
-                    </span>
-                    <span className="flex-1">
-                      <span className="block font-medium">{area.label}</span>
-                      {!isOpen && (
-                        <span className="block text-sm text-muted-foreground">{area.intro}</span>
-                      )}
-                    </span>
-                    <ChevronRight
-                      size={18}
-                      className={`text-muted-foreground transition-transform ${isOpen ? "rotate-90" : ""}`}
-                    />
-                  </button>
+          <AreaStrategies
+            areas={areas}
+            openArea={openArea}
+            setOpenArea={setOpenArea}
+            hasStrategy={hasStrategy}
+            maxFriction={flow.maxFriction}
+            onAdd={openAdd}
+          />
 
-                  {isOpen && (
-                    <div className="px-5 pb-5 space-y-3">
-                      <p className="text-sm text-muted-foreground">{area.intro}</p>
-                      <p className="font-medium text-sm">Exempel på strategier</p>
-                      {strategiesForArea(area.id).map((s) => {
-                        const added = hasStrategy(s.id);
-                        const fitsNow = s.friction <= flow.maxFriction;
-                        return (
-                          <div
-                            key={s.id}
-                            className="p-4 rounded-2xl bg-secondary/40 border border-border space-y-2"
-                          >
-                            <p className="font-medium">{s.title}</p>
-                            <p className="text-sm text-muted-foreground">{s.why}</p>
-                            <p className="text-xs text-muted-foreground">
-                              Svårighetsgrad {s.friction}/10 · ca {s.minutes} min
-                              {fitsNow ? " · Det här verkar vara en bra uppgift att göra nu." : ""}
-                            </p>
-                            <Button
-                              size="sm"
-                              variant={added ? "secondary" : "default"}
-                              className="rounded-full"
-                              disabled={added}
-                              onClick={() => openAdd(s)}
-                            >
-                              {added ? (
-                                <>
-                                  <Check size={14} /> Tillagd i MyFlow
-                                </>
-                              ) : (
-                                <>
-                                  <Plus size={14} /> Lägg till i MyFlow
-                                </>
-                              )}
-                            </Button>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
         </div>
       )}
 
