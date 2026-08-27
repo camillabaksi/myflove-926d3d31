@@ -362,6 +362,7 @@ export default function Home() {
               headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
               className="space-y-3"
             >
+              <p className="text-xs text-muted-foreground">Det som händer närmast – tryck för att se hela dagen.</p>
               {nextEvent ? (
                 <Link
                   href="/idag"
@@ -441,6 +442,7 @@ export default function Home() {
               className="space-y-3"
             >
               <p className="text-ink leading-relaxed">{suggestion.headline}</p>
+              <p className="text-xs text-muted-foreground">En sak Flow tycker passar just nu. Du väljer själv.</p>
               {suggestion.task && (
                 <p className="mt-2 text-sm text-muted-foreground">
                   <span className="font-medium text-ink">{suggestion.task.title}</span>
@@ -493,6 +495,7 @@ export default function Home() {
               className="space-y-3"
             >
               <ul className="space-y-2">
+              <p className="text-xs text-muted-foreground">Välj känslan du har just nu – Flow tar dig till rätt ställe.</p>
                 {SITUATIONS.map((s) => (
                   <li key={s.href}>
                     {s.didThis ? (

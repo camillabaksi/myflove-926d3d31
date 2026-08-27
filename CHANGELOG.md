@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-27 – Steg-för-steg, omgång 2 (Planering, Hem, Mer)
+
+- Planering är nu två tydliga steg: 1) Hur ser dagen ut, 2) Ändra ordningen (Flows förslag går att flytta om).
+- Hemskärmens kort har korta förklaringar: vad "Nästa", "Just nu" och "Vad behöver du just nu?" betyder.
+- Mer-menyns grupper har en förklarande rad var: Min profil, Anpassa MyFlove, Mina områden.
+
 ## 2026-08-27 – Tydlig steg-för-steg-struktur (NPF)
 
 - Ny gemensam stegkomponent: numrerade steg med en förklarande mening, som går att fälla ihop.
