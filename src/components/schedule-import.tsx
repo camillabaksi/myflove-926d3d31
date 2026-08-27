@@ -34,15 +34,24 @@ export function ScheduleImport() {
   const keyOf = (l: ParsedLecture) => `${l.weekday}|${l.start}|${l.title.toLowerCase()}`;
   const existingKeys = new Set(lectures.map((l) => keyOf(l as ParsedLecture)));
   const newCount = preview.filter((l) => !existingKeys.has(keyOf(l))).length;
+  const indexed = preview.map((l, idx) => ({ l, idx }));
   const grouped = Array.from(new Set(preview.map((l) => l.weekday)))
     .sort((a, b) => a - b)
     .map((weekday) => ({
       weekday,
-      items: preview
-        .filter((l) => l.weekday === weekday)
-        .slice()
-        .sort((a, b) => a.start.localeCompare(b.start)),
+      items: indexed
+        .filter((row) => row.l.weekday === weekday)
+        .sort((a, b) => a.l.start.localeCompare(b.l.start)),
     }));
+
+  const updateLecture = (idx: number, patch: Partial<ParsedLecture>) =>
+    setPreview((prev) => prev.map((l, i) => (i === idx ? { ...l, ...patch } : l)));
+
+  const removeLecture = (idx: number) => {
+    setPreview((prev) => prev.filter((_, i) => i !== idx));
+    setEditIdx(null);
+  };
+
 
 
   const show = (found: ParsedLecture[]) => {
