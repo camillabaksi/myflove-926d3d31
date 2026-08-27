@@ -31,6 +31,20 @@ export function ScheduleImport() {
     el?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
+  const keyOf = (l: ParsedLecture) => `${l.weekday}|${l.start}|${l.title.toLowerCase()}`;
+  const existingKeys = new Set(lectures.map((l) => keyOf(l as ParsedLecture)));
+  const newCount = preview.filter((l) => !existingKeys.has(keyOf(l))).length;
+  const grouped = Array.from(new Set(preview.map((l) => l.weekday)))
+    .sort((a, b) => a - b)
+    .map((weekday) => ({
+      weekday,
+      items: preview
+        .filter((l) => l.weekday === weekday)
+        .slice()
+        .sort((a, b) => a.start.localeCompare(b.start)),
+    }));
+
+
   const show = (found: ParsedLecture[]) => {
     if (!found.length) {
       toast.error('Hittade inga lektioner – prova "Låt Flow tolka" istället.');
