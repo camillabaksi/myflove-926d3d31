@@ -12,8 +12,10 @@ const moment: FlowMoment = {
 } as FlowMoment;
 
 vi.mock("wouter", () => ({
-  Link: ({ children, href }: { children: React.ReactNode; href: string }) => (
-    <a href={href}>{children}</a>
+  Link: ({ children, href, ...rest }: { children: React.ReactNode; href: string }) => (
+    <a href={href} {...rest}>
+      {children}
+    </a>
   ),
 }));
 vi.mock("@/hooks/use-flow-moment", () => ({ useFlowMoment: () => moment }));
