@@ -46,12 +46,15 @@ const sectionTitle = "flex items-center gap-2 font-display text-lg text-ink";
 
 export function ScheduleImport() {
   const { lectures, addLecture } = useStudySchedule();
+  const { files, addFile, removeFile } = useScheduleFiles();
   const [text, setText] = useState("");
   const [preview, setPreview] = useState<ParsedLecture[]>([]);
   const [busy, setBusy] = useState(false);
   const [savedCount, setSavedCount] = useState<number | null>(null);
   const [editIdx, setEditIdx] = useState<number | null>(null);
+  const [viewFile, setViewFile] = useState<ScheduleFile | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+
 
   const goToSchedule = () => {
     const el = document.getElementById("veckoschema");
