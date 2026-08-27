@@ -13,6 +13,7 @@ import {
 } from "@/lib/schedule-parse";
 import { parseScheduleWithFlow } from "@/lib/schedule-import.functions";
 import CollapsibleSection from "@/components/collapsible-section";
+import { ACCEPT_SCHEDULE, isTextFile, readFileAsText } from "@/lib/file-formats";
 
 const card = "rounded-3xl border border-border bg-card p-5 shadow-sm";
 const sectionTitle = "flex items-center gap-2 font-display text-lg text-ink";
@@ -34,7 +35,13 @@ export function ScheduleImport() {
   };
 
   const handleFile = async (file: File) => {
-    const content = await file.text();
+    if (!isTextFile(file)) {
+      toast.error(
+        "Den filtypen kan inte läsas direkt. Spara schemat som .ics, .txt, .csv eller klistra in texten.",
+      );
+      return;
+    }
+    const content = await readFileAsText(file, 20000);
     const isIcs = /BEGIN:VCALENDAR/i.test(content) || file.name.toLowerCase().endsWith(".ics");
     setText(isIcs ? "" : content);
     show(isIcs ? parseScheduleIcs(content) : parseScheduleText(content));
@@ -81,7 +88,7 @@ export function ScheduleImport() {
         headingClassName={sectionTitle}
       >
         <p className="mt-1 text-sm text-muted-foreground">
-          Klistra in schemat som text eller ladda upp en .ics-fil från skolan. Flow gör om det till
+          Klistra in schemat som text eller ladda upp en fil (.ics, .txt, .csv, .md, .json, .html) från skolan. Flow gör om det till
           ditt veckoschema – sen kan Flow säga vilken lektion som är nästa och var.
         </p>
 
@@ -121,7 +128,7 @@ export function ScheduleImport() {
           <input
             ref={fileRef}
             type="file"
-            accept=".ics,.txt,.csv,text/calendar,text/plain"
+            accept={ACCEPT_SCHEDULE}
             className="sr-only"
             aria-label="Schemafil"
             onChange={(e) => {

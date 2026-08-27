@@ -619,7 +619,7 @@ export default function CalendarPage() {
           <input
             ref={fileInputRef}
             type="file"
-            accept=".ics,text/calendar"
+            accept={ACCEPT_CALENDAR}
             className="hidden"
             onChange={(e) => {
               const f = e.target.files?.[0];
