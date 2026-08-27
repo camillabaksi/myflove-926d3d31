@@ -44,6 +44,7 @@ import { useLocalStorage } from "@/lib/storage";
 import { pictogramFor } from "@/lib/pictograms";
 import { useNpfSettings } from "@/lib/npf-mode";
 import { ALL_AREAS, AREA_META, getArea, type LifeArea } from "@/lib/life-areas";
+import { ACCEPT_CALENDAR } from "@/lib/file-formats";
 
 export type CalCategory = "privat" | "relationer" | "barn" | "jobb" | "studier";
 
