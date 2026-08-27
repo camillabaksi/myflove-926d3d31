@@ -8,6 +8,7 @@ import HelpHint from "@/components/help-hint";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { parseScheduleText } from "@/lib/schedule-parse";
 import { supabase } from "@/integrations/supabase/client";
+import { ACCEPT_DOCUMENTS } from "@/lib/file-formats";
 
 interface ScheduleFile {
   path: string;
@@ -222,7 +223,7 @@ export default function ChildSchedule({
               <input
                 ref={fileInput}
                 type="file"
-                accept="image/*,.pdf,.doc,.docx"
+                accept={ACCEPT_DOCUMENTS}
                 className="hidden"
                 onChange={(e) => onPickFile(e.target.files?.[0])}
               />

@@ -34,6 +34,7 @@ import { celebrateFromEvent } from "@/lib/celebrate";
 import CollapsibleSection from "@/components/collapsible-section";
 import ChildSchedule from "@/components/child-schedule";
 import ChildReminderSettings from "@/components/child-reminder-settings";
+import { ACCEPT_DOCUMENTS } from "@/lib/file-formats";
 
 const KIND_META: Record<ChildItemKind, { label: string; icon: typeof Baby }> = {
   activity: { label: "Aktivitet", icon: CalendarDays },
@@ -392,6 +393,7 @@ function ChildrenContent() {
                     <input
                       ref={fileInput}
                       type="file"
+                      accept={ACCEPT_DOCUMENTS}
                       aria-label="Välj dokument"
                       onChange={(e) => setPendingFile(e.target.files?.[0] ?? null)}
                       className="block w-full text-sm text-muted-foreground"

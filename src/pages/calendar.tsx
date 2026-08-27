@@ -44,6 +44,7 @@ import { useLocalStorage } from "@/lib/storage";
 import { pictogramFor } from "@/lib/pictograms";
 import { useNpfSettings } from "@/lib/npf-mode";
 import { ALL_AREAS, AREA_META, getArea, type LifeArea } from "@/lib/life-areas";
+import { ACCEPT_CALENDAR } from "@/lib/file-formats";
 
 export type CalCategory = "privat" | "relationer" | "barn" | "jobb" | "studier";
 
@@ -619,7 +620,7 @@ export default function CalendarPage() {
           <input
             ref={fileInputRef}
             type="file"
-            accept=".ics,text/calendar"
+            accept={ACCEPT_CALENDAR}
             className="hidden"
             onChange={(e) => {
               const f = e.target.files?.[0];

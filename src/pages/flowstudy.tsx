@@ -38,18 +38,10 @@ import {
   type StudySetRecord,
 } from "@/hooks/use-flowstudy";
 import CollapsibleSection from "@/components/collapsible-section";
+import { ACCEPT_DOCUMENTS, UPLOAD_HINT, prepareUpload } from "@/lib/file-formats";
 import { MyFloveThinking, MyFloveEmptyIllustration } from "@/components/myflove/motion";
 
-const MAX_FILE_MB = 8;
 
-function readAsDataUrl(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result));
-    reader.onerror = () => reject(new Error("Kunde inte läsa filen."));
-    reader.readAsDataURL(file);
-  });
-}
 
 export default function StudyBuddyPage() {
   const { activeCourses } = useCourses();
@@ -96,29 +88,25 @@ export default function StudyBuddyPage() {
     if (!text.trim() && !file) {
       toast({
         title: "Lägg till material",
-        description: "Klistra in text eller ladda upp en PDF/bild.",
+        description: `Klistra in text eller ladda upp en fil. ${UPLOAD_HINT}`,
       });
       return;
     }
     setBusy(true);
     try {
       let filePayload: { name: string; mime: string; dataUrl: string } | undefined;
+      let extraText = "";
       if (file) {
-        if (file.size > MAX_FILE_MB * 1024 * 1024) {
-          throw new Error(`Filen är för stor (max ${MAX_FILE_MB} MB).`);
-        }
-        filePayload = {
-          name: file.name,
-          mime: file.type || "application/pdf",
-          dataUrl: await readAsDataUrl(file),
-        };
+        const prepared = await prepareUpload(file);
+        if (prepared.kind === "file") filePayload = prepared.file;
+        else extraText = prepared.text;
       }
 
       const result = await run({
         data: {
           title: title.trim(),
           course: courseName(courseId),
-          text: text.trim() || undefined,
+          text: [text.trim(), extraText].filter(Boolean).join("\n\n") || undefined,
           file: filePayload,
           profileContext: lifeProfileContext(lifeProfile) || undefined,
           focus: plan.focus || undefined,
@@ -221,7 +209,7 @@ export default function StudyBuddyPage() {
                   ref={fileRef}
                   type="file"
                   hidden
-                  accept="application/pdf,image/*,text/plain"
+                  accept={ACCEPT_DOCUMENTS}
                   onChange={(e) => setFile(e.target.files?.[0] ?? null)}
                 />
                 <Button
@@ -231,7 +219,7 @@ export default function StudyBuddyPage() {
                   onClick={() => fileRef.current?.click()}
                 >
                   <Upload size={16} className="mr-2" />{" "}
-                  {file ? file.name.slice(0, 24) : "PDF eller bild"}
+                  {file ? file.name.slice(0, 24) : "Ladda upp fil"}
                 </Button>
               </div>
               <textarea
@@ -491,24 +479,23 @@ function AddMaterialForm({
     if (!text.trim() && !file) {
       toast({
         title: "Lägg till material",
-        description: "Klistra in text eller välj en PDF/bild.",
+        description: `Klistra in text eller välj en fil. ${UPLOAD_HINT}`,
       });
       return;
     }
     setBusy(true);
     try {
       let filePayload: { name: string; mime: string; dataUrl: string } | undefined;
+      let extraText = "";
       if (file) {
-        if (file.size > MAX_FILE_MB * 1024 * 1024) {
-          throw new Error(`Filen är för stor (max ${MAX_FILE_MB} MB).`);
-        }
-        filePayload = {
-          name: file.name,
-          mime: file.type || "application/pdf",
-          dataUrl: await readAsDataUrl(file),
-        };
+        const prepared = await prepareUpload(file);
+        if (prepared.kind === "file") filePayload = prepared.file;
+        else extraText = prepared.text;
       }
-      await onSubmit({ text: text.trim() || undefined, file: filePayload });
+      await onSubmit({
+        text: [text.trim(), extraText].filter(Boolean).join("\n\n") || undefined,
+        file: filePayload,
+      });
       setText("");
       setFile(null);
     } catch (err) {
@@ -542,7 +529,7 @@ function AddMaterialForm({
           ref={inputRef}
           type="file"
           hidden
-          accept="application/pdf,image/*,text/plain"
+          accept={ACCEPT_DOCUMENTS}
           onChange={(e) => setFile(e.target.files?.[0] ?? null)}
         />
         <Button
@@ -552,7 +539,7 @@ function AddMaterialForm({
           className="rounded-xl"
           onClick={() => inputRef.current?.click()}
         >
-          <Upload size={14} className="mr-2" /> {file ? file.name.slice(0, 24) : "PDF eller bild"}
+          <Upload size={14} className="mr-2" /> {file ? file.name.slice(0, 24) : "Ladda upp fil"}
         </Button>
         <Button type="submit" size="sm" className="rounded-xl" disabled={busy}>
           {busy ? (
