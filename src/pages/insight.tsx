@@ -126,12 +126,11 @@ export default function InsightPage() {
   );
 
   useEffect(() => {
-    track("settings_opened", {
-      source: demoMode ? "insight-demo" : "insight",
-      result: personal.ready ? "completed" : "cancelled",
-    });
-    // Endast vid vy-byte – aldrig med några råvärden om användaren.
+    if (demoMode) track("insight_demo_opened", { source: "insight" });
+    else track("insight_viewed", { result: personal.ready ? "completed" : "cancelled" });
+    // Bara vy och beredskapsläge – aldrig några råvärden om användaren.
   }, [demoMode, personal.ready]);
+
 
   const areas = useMemo<InsightAreaId[]>(() => {
     if (profile) return profile.areas;
