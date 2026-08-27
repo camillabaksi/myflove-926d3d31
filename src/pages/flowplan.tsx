@@ -2,6 +2,7 @@ import { track } from "@/lib/analytics";
 import { useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import Layout from "@/components/layout";
+import StepSection from "@/components/step-section";
 import { MyFloveThinking } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
 import {
@@ -277,6 +278,12 @@ export default function FlowPlanPage() {
           </div>
         </div>
 
+        <StepSection
+          step={1}
+          id="planering::steg-lage"
+          title="Hur ser dagen ut?"
+          description="Välj energi och hur mycket tid du har – sen gör Flow ett förslag."
+        >
         <div className="surface-card p-5 space-y-5">
           <div>
             <div className="flex items-center justify-between mb-2 gap-2">
@@ -387,8 +394,15 @@ export default function FlowPlanPage() {
             </div>
           )}
         </div>
+        </StepSection>
 
         {plan && (
+          <StepSection
+            step={2}
+            id="planering::steg-ordning"
+            title="Ändra ordningen"
+            description="Det här är bara ett förslag. Flytta upp och ner tills det känns rätt för dig."
+          >
           <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="flex items-center justify-between gap-3">
               <span className="text-xs text-muted-foreground">
