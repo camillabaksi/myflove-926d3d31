@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-27 – Insight visar dina egna insikter
+
+- "Vad jag lärt mig" öppnar nu MyFlove Insight med dina egna mönster från din faktiska användning – inga testprofiler.
+- Saknas underlag visas ett lugnt tomläge som förklarar att Flow behöver lära känna dig mer, med exempel på vad som kan komma – aldrig påhittade slutsatser.
+- Demoprofiler nås bara via ett explicit demoläge (länk längst ner) och är tydligt märkta som fiktiva.
+- Nya anonyma event för Insight (vy och demoläge) – inga råvärden om dig lämnar enheten.
+- Nya tester: egna insikter visas, tomläge när data saknas och att testprofiler inte läcker in i normalt läge.
+
 ## 2026-08-27 – Lugnare informationsarkitektur i Mer
 
 - Mer-menyn är grupperad i Min profil, Anpassa MyFlove, Mina områden och Inställningar – färre val i taget och tydlig hierarki.
