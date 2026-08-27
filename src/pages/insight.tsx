@@ -623,7 +623,7 @@ export default function InsightPage() {
 
       {/* Första gången: tydlig prototypinformation */}
       <Dialog
-        open={introOpen}
+        open={demoMode && introOpen}
         onOpenChange={(o) => {
           setIntroOpen(o);
           if (!o) setSeenIntro(true);
