@@ -1,9 +1,27 @@
 import { useRef, useState } from "react";
-import { Upload, Sparkles, FileUp, Check, CalendarCheck, ArrowDown, Pencil } from "lucide-react";
+import {
+  Upload,
+  Sparkles,
+  FileUp,
+  Check,
+  CalendarCheck,
+  ArrowDown,
+  Pencil,
+  ImageIcon,
+  FileText,
+  Trash2,
+} from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { useStudySchedule } from "@/hooks/use-study-schedule";
+import { useScheduleFiles, type ScheduleFile } from "@/hooks/use-schedule-files";
 import { WEEKDAYS } from "@/lib/study-calendar";
 import {
   dedupe,
@@ -13,7 +31,15 @@ import {
 } from "@/lib/schedule-parse";
 import { parseScheduleWithFlow } from "@/lib/schedule-import.functions";
 import CollapsibleSection from "@/components/collapsible-section";
-import { ACCEPT_SCHEDULE, isTextFile, readFileAsText } from "@/lib/file-formats";
+import {
+  ACCEPT_SCHEDULE,
+  isImageFile,
+  isPdfFile,
+  isTextFile,
+  prepareUpload,
+  readFileAsText,
+} from "@/lib/file-formats";
+
 
 const card = "rounded-3xl border border-border bg-card p-5 shadow-sm";
 const sectionTitle = "flex items-center gap-2 font-display text-lg text-ink";
