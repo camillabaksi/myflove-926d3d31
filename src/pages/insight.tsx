@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
+import { Link, useRouterState } from "@tanstack/react-router";
 import { Brain, Check, ChevronRight, Info, Plus, Sparkles, X } from "lucide-react";
 import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -26,9 +28,14 @@ import {
   type InsightStrategy,
   type StrategyNudge,
 } from "@/lib/insight";
+import { buildPersonalInsight, INSIGHT_EXAMPLES } from "@/lib/insight-personal";
+import { useFlowLearning } from "@/hooks/use-flow-learning";
+import { useVisitStreak } from "@/hooks/use-visit-streak";
+import { track } from "@/lib/analytics";
 import CollapsibleSection from "@/components/collapsible-section";
 import InsightApplySetting from "@/components/insight-apply-setting";
 import { MyFloveInsightGather } from "@/components/myflove/motion";
+
 
 const ANALYSIS_STEPS = [
   "Identifierar styrkor",
@@ -84,6 +91,94 @@ interface AddFlowState {
   anchor: string;
 }
 
+/** Behovsområden med strategiförslag – används både i den personliga vyn och i demoläget. */
+function AreaStrategies({
+  areas,
+  openArea,
+  setOpenArea,
+  hasStrategy,
+  maxFriction,
+  onAdd,
+}: {
+  areas: InsightAreaId[];
+  openArea: InsightAreaId | null;
+  setOpenArea: (id: InsightAreaId | null) => void;
+  hasStrategy: (id: string) => boolean;
+  maxFriction: number;
+  onAdd: (s: InsightStrategy) => void;
+}) {
+  return (
+    <div className="space-y-3">
+      {INSIGHT_AREAS.filter((a) => areas.includes(a.id)).map((area) => {
+        const isOpen = openArea === area.id;
+        return (
+          <div key={area.id} className="rounded-3xl bg-card border border-border overflow-hidden">
+            <button
+              onClick={() => setOpenArea(isOpen ? null : area.id)}
+              className="w-full p-5 flex items-center gap-4 text-left"
+              aria-expanded={isOpen}
+            >
+              <span className="text-2xl" aria-hidden>
+                {area.emoji}
+              </span>
+              <span className="flex-1">
+                <span className="block font-medium">{area.label}</span>
+                {!isOpen && <span className="block text-sm text-muted-foreground">{area.intro}</span>}
+              </span>
+              <ChevronRight
+                size={18}
+                className={`text-muted-foreground transition-transform ${isOpen ? "rotate-90" : ""}`}
+              />
+            </button>
+
+            {isOpen && (
+              <div className="px-5 pb-5 space-y-3">
+                <p className="text-sm text-muted-foreground">{area.intro}</p>
+                <p className="font-medium text-sm">Exempel på strategier</p>
+                {strategiesForArea(area.id).map((s) => {
+                  const added = hasStrategy(s.id);
+                  const fitsNow = s.friction <= maxFriction;
+                  return (
+                    <div
+                      key={s.id}
+                      className="p-4 rounded-2xl bg-secondary/40 border border-border space-y-2"
+                    >
+                      <p className="font-medium">{s.title}</p>
+                      <p className="text-sm text-muted-foreground">{s.why}</p>
+                      <p className="text-xs text-muted-foreground">
+                        Svårighetsgrad {s.friction}/10 · ca {s.minutes} min
+                        {fitsNow ? " · Det här verkar vara en bra uppgift att göra nu." : ""}
+                      </p>
+                      <Button
+                        size="sm"
+                        variant={added ? "secondary" : "default"}
+                        className="rounded-full"
+                        disabled={added}
+                        onClick={() => onAdd(s)}
+                      >
+                        {added ? (
+                          <>
+                            <Check size={14} /> Tillagd i MyFlow
+                          </>
+                        ) : (
+                          <>
+                            <Plus size={14} /> Lägg till i MyFlow
+                          </>
+                        )}
+                      </Button>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+
 export default function InsightPage() {
   const [seenIntro, setSeenIntro] = useLocalStorage<boolean>("myflove-insight-intro", false);
   const [introOpen, setIntroOpen] = useState(!seenIntro);
@@ -95,15 +190,42 @@ export default function InsightPage() {
   const [addFlow, setAddFlow] = useState<AddFlowState | null>(null);
   const [contexts, setContexts] = useState<InsightContext[]>(["vardag"]);
 
-  const { addTask } = useTasks();
+  const { addTask, completedTasks } = useTasks();
   const { flow } = useFlowScore();
   const { saved, addStrategy, removeStrategy, hasStrategy } = useInsightStrategies();
+
+  // Demoläge (fiktiva testprofiler) nås bara explicit via ?demo=1.
+  const demoMode = useRouterState({
+    select: (s) => (s.location.search as Record<string, unknown> | undefined)?.["demo"] === "1",
+  });
+
+  const knowledge = useFlowLearning();
+  const { totalDays } = useVisitStreak();
+  const [energyLog] = useLocalStorage<unknown[]>("myflove-energy-log", []);
+
+  const personal = useMemo(
+    () =>
+      buildPersonalInsight(knowledge, {
+        activeDays: totalDays,
+        completedCount: completedTasks.length,
+        energyCount: energyLog?.length ?? 0,
+      }),
+    [knowledge, totalDays, completedTasks.length, energyLog],
+  );
+
+  useEffect(() => {
+    if (demoMode) track("insight_demo_opened", { source: "insight" });
+    else track("insight_viewed", { result: personal.ready ? "completed" : "cancelled" });
+    // Bara vy och beredskapsläge – aldrig några råvärden om användaren.
+  }, [demoMode, personal.ready]);
+
 
   const areas = useMemo<InsightAreaId[]>(() => {
     if (profile) return profile.areas;
     if (customNeeds.trim()) return matchAreasFromNeeds(customNeeds.split("\n"));
     return [];
   }, [profile, customNeeds]);
+
 
   const startAnalysis = (p: DemoProfile | null) => {
     setProfile(p);
@@ -167,8 +289,77 @@ export default function InsightPage() {
         </div>
       </header>
 
-      {phase === "start" && (
+      {!demoMode && (
+        <section data-testid="insight-personal" className="space-y-5">
+          <div className="p-5 rounded-3xl bg-card border border-border space-y-3">
+            <p className="font-medium">Vad Flow lärt sig om dig</p>
+            <p className="text-sm text-muted-foreground">{personal.label}</p>
+            <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
+              <div
+                className="h-full rounded-full bg-primary transition-all duration-700"
+                style={{ width: `${Math.max(6, personal.level)}%` }}
+              />
+            </div>
+          </div>
+
+          {personal.ready ? (
+            <>
+              <ul data-testid="insight-personal-list" className="space-y-3">
+                {personal.insights.map((i) => (
+                  <li
+                    key={i.id}
+                    className="p-4 rounded-2xl bg-secondary/40 border border-border leading-relaxed"
+                  >
+                    {i.text}
+                  </li>
+                ))}
+              </ul>
+
+              {personal.areas.length > 0 && (
+                <>
+                  <p className="leading-relaxed">
+                    Utifrån det här kan de här områdena vara relevanta för dig just nu.
+                  </p>
+                  <AreaStrategies
+                    areas={personal.areas}
+                    openArea={openArea}
+                    setOpenArea={setOpenArea}
+                    hasStrategy={hasStrategy}
+                    maxFriction={flow.maxFriction}
+                    onAdd={openAdd}
+                  />
+                </>
+              )}
+            </>
+          ) : (
+            <div
+              data-testid="insight-empty"
+              className="p-5 rounded-3xl bg-card border border-border space-y-3"
+            >
+              <p className="leading-relaxed">
+                Jag har inte lärt känna dig tillräckligt ännu. Använd MyFlove några dagar så börjar
+                mönstren synas – jag hittar inte på något innan dess. 💜
+              </p>
+              <p className="text-sm font-medium">Exempel på vad som kan komma längre fram</p>
+              <ul className="space-y-1.5 text-sm text-muted-foreground">
+                {INSIGHT_EXAMPLES.map((e) => (
+                  <li key={e}>· {e}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </section>
+      )}
+
+      {demoMode && phase === "start" && (
         <>
+          <div className="p-5 rounded-3xl bg-amber-500/10 border border-border">
+            <p className="text-sm leading-relaxed">
+              <strong>Demoläge.</strong> Här visas fiktiva testprofiler – inget av detta är din egen
+              data.
+            </p>
+          </div>
+
           <div className="p-5 rounded-3xl bg-card border border-border">
             <p className="leading-relaxed">
               Insight hjälper dig att omvandla information om behov och styrkor till konkreta
@@ -229,9 +420,10 @@ export default function InsightPage() {
         </>
       )}
 
-      {phase === "analys" && <AnalysisView onDone={() => setPhase("resultat")} />}
+      {demoMode && phase === "analys" && <AnalysisView onDone={() => setPhase("resultat")} />}
 
-      {phase === "resultat" && (
+      {demoMode && phase === "resultat" && (
+
         <div className="space-y-5">
           <div className="p-5 rounded-3xl bg-card border border-border space-y-3">
             <div className="flex items-start justify-between gap-3">
@@ -264,80 +456,41 @@ export default function InsightPage() {
             Jag har hittat några områden som kan vara relevanta att ta hänsyn till.
           </p>
 
-          <div className="space-y-3">
-            {INSIGHT_AREAS.filter((a) => areas.includes(a.id)).map((area) => {
-              const isOpen = openArea === area.id;
-              return (
-                <div
-                  key={area.id}
-                  className="rounded-3xl bg-card border border-border overflow-hidden"
-                >
-                  <button
-                    onClick={() => setOpenArea(isOpen ? null : area.id)}
-                    className="w-full p-5 flex items-center gap-4 text-left"
-                    aria-expanded={isOpen}
-                  >
-                    <span className="text-2xl" aria-hidden>
-                      {area.emoji}
-                    </span>
-                    <span className="flex-1">
-                      <span className="block font-medium">{area.label}</span>
-                      {!isOpen && (
-                        <span className="block text-sm text-muted-foreground">{area.intro}</span>
-                      )}
-                    </span>
-                    <ChevronRight
-                      size={18}
-                      className={`text-muted-foreground transition-transform ${isOpen ? "rotate-90" : ""}`}
-                    />
-                  </button>
+          <AreaStrategies
+            areas={areas}
+            openArea={openArea}
+            setOpenArea={setOpenArea}
+            hasStrategy={hasStrategy}
+            maxFriction={flow.maxFriction}
+            onAdd={openAdd}
+          />
 
-                  {isOpen && (
-                    <div className="px-5 pb-5 space-y-3">
-                      <p className="text-sm text-muted-foreground">{area.intro}</p>
-                      <p className="font-medium text-sm">Exempel på strategier</p>
-                      {strategiesForArea(area.id).map((s) => {
-                        const added = hasStrategy(s.id);
-                        const fitsNow = s.friction <= flow.maxFriction;
-                        return (
-                          <div
-                            key={s.id}
-                            className="p-4 rounded-2xl bg-secondary/40 border border-border space-y-2"
-                          >
-                            <p className="font-medium">{s.title}</p>
-                            <p className="text-sm text-muted-foreground">{s.why}</p>
-                            <p className="text-xs text-muted-foreground">
-                              Svårighetsgrad {s.friction}/10 · ca {s.minutes} min
-                              {fitsNow ? " · Det här verkar vara en bra uppgift att göra nu." : ""}
-                            </p>
-                            <Button
-                              size="sm"
-                              variant={added ? "secondary" : "default"}
-                              className="rounded-full"
-                              disabled={added}
-                              onClick={() => openAdd(s)}
-                            >
-                              {added ? (
-                                <>
-                                  <Check size={14} /> Tillagd i MyFlow
-                                </>
-                              ) : (
-                                <>
-                                  <Plus size={14} /> Lägg till i MyFlow
-                                </>
-                              )}
-                            </Button>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
         </div>
       )}
+
+      <p className="text-center text-sm">
+        {demoMode ? (
+          <Link
+            to="/insight"
+            search={{ demo: undefined }}
+            data-testid="insight-leave-demo"
+            className="underline text-muted-foreground"
+          >
+            Tillbaka till mina egna insikter
+          </Link>
+        ) : (
+          <Link
+            to="/insight"
+            search={{ demo: "1" }}
+            data-testid="insight-open-demo"
+            className="underline text-muted-foreground"
+          >
+            Öppna demoläge med fiktiva testprofiler
+          </Link>
+        )}
+      </p>
+
+
 
       {saved.length > 0 && (
         <CollapsibleSection
@@ -471,7 +624,7 @@ export default function InsightPage() {
 
       {/* Första gången: tydlig prototypinformation */}
       <Dialog
-        open={introOpen}
+        open={demoMode && introOpen}
         onOpenChange={(o) => {
           setIntroOpen(o);
           if (!o) setSeenIntro(true);
