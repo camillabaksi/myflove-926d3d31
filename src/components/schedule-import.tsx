@@ -442,7 +442,40 @@ export function ScheduleImport() {
           </div>
         )}
       </CollapsibleSection>
+
+      <Dialog open={!!viewFile} onOpenChange={(open) => !open && setViewFile(null)}>
+        <DialogContent className="max-w-3xl">
+          <DialogHeader>
+            <DialogTitle className="truncate">{viewFile?.name}</DialogTitle>
+          </DialogHeader>
+          {viewFile &&
+            (viewFile.mime.startsWith("image/") ? (
+              <img
+                src={viewFile.dataUrl}
+                alt={`Schemafil: ${viewFile.name}`}
+                className="max-h-[70vh] w-full rounded-2xl object-contain"
+              />
+            ) : (
+              <iframe
+                src={viewFile.dataUrl}
+                title={viewFile.name}
+                className="h-[70vh] w-full rounded-2xl border border-border"
+              />
+            ))}
+          {viewFile && (
+            <a
+              href={viewFile.dataUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="text-sm font-medium text-primary underline underline-offset-2"
+            >
+              Öppna i nytt fönster
+            </a>
+          )}
+        </DialogContent>
+      </Dialog>
     </section>
+
   );
 }
 
