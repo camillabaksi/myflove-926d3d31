@@ -229,6 +229,11 @@ function LandingDeck() {
     track("onboarding_started", { source: "intro" });
   }, []);
 
+  // Sista vyn = introt är genomgånget.
+  useEffect(() => {
+    if (index === total - 1) track("onboarding_completed", { source: "intro" });
+  }, [index, total]);
+
   // URL-synk: läs vid start och lyssna på bakåt/framåt
   useEffect(() => {
     setIndex(slideIndexFromHash(window.location.hash));
