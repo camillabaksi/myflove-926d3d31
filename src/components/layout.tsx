@@ -1103,6 +1103,87 @@ export default function Layout({ children }: LayoutProps) {
                 </>
               ) : (
                 <>
+
+                  <h3 className="mt-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Mina områden</h3>
+                  <p className="mb-2 text-xs text-muted-foreground/80">Allt som hör till studier, jobb, hem och relationer.</p>
+                  <div className="grid grid-cols-2 gap-3">
+                    {categories
+                      .filter((cat) =>
+                        simpleMode ? cat.items.some((i) => i.essential) : cat.items.length > 0,
+                      )
+                      .map((cat) => {
+                        const Icon = cat.icon;
+                        return (
+                          <button
+                            key={cat.id}
+                            type="button"
+                            onClick={() => setOpenCategory(cat.id)}
+                            style={{
+                              backgroundColor: catColor(cat.id, 0.12),
+                              borderColor: catColor(cat.id, 0.35),
+                              color: catColor(cat.id),
+                            }}
+                            className="flex flex-col items-center justify-center gap-2 rounded-3xl p-4 text-center border shadow-sm transition-all duration-200 active:scale-95"
+                          >
+                            <span
+                              className="inline-flex h-12 w-12 items-center justify-center rounded-2xl"
+                              style={{ backgroundColor: catColor(cat.id, 0.18) }}
+                              aria-hidden="true"
+                            >
+                              <Icon size={26} />
+                            </span>
+                            <span className="text-sm font-medium leading-tight">{cat.label}</span>
+                            <span
+                              data-npf="optional"
+                              className="text-[11px] leading-snug opacity-70"
+                            >
+                              {cat.hint}
+                            </span>
+                          </button>
+                        );
+                      })}
+                  </div>
+
+                  <h3 className="mb-2 mt-6 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    Inställningar
+                  </h3>
+                  <div className="mb-4">
+                    <PwaInstallButton />
+                  </div>
+                  <div className="flex flex-col items-center justify-center gap-3">
+                    <Link href="/anpassa" onClick={() => setMobileMenuOpen(false)}>
+                      <Button variant="outline" size="sm" className="rounded-xl gap-2">
+                        <Accessibility size={16} /> Anpassa appen
+                      </Button>
+                    </Link>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="rounded-xl gap-2"
+                      onClick={toggleAlarm}
+                    >
+                      {alarmEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
+                      Alarmljud: {alarmEnabled ? "på" : "av"}
+                    </Button>
+                    <Show when="signed-in">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="rounded-xl gap-2"
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          track("logout");
+                          signOut();
+                        }}
+                      >
+                        <LogOut size={16} /> Logga ut
+                      </Button>
+                    </Show>
+                    <p data-npf="optional" className="text-center text-xs text-muted-foreground">
+                      Avsluta konto finns under Anpassa appen → Konto.
+                    </p>
+                  </div>
+
                   {/* Min profil */}
                   <h3 className="mt-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Min profil</h3>
                   <p className="mb-2 text-xs text-muted-foreground/80">Vem du är och hur din vardag ser ut just nu.</p>
@@ -1242,86 +1323,6 @@ export default function Layout({ children }: LayoutProps) {
                         </Button>
                       </div>
                     )}
-                  </div>
-
-                  <h3 className="mt-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Mina områden</h3>
-                  <p className="mb-2 text-xs text-muted-foreground/80">Allt som hör till studier, jobb, hem och relationer.</p>
-                  <div className="grid grid-cols-2 gap-3">
-                    {categories
-                      .filter((cat) =>
-                        simpleMode ? cat.items.some((i) => i.essential) : cat.items.length > 0,
-                      )
-                      .map((cat) => {
-                        const Icon = cat.icon;
-                        return (
-                          <button
-                            key={cat.id}
-                            type="button"
-                            onClick={() => setOpenCategory(cat.id)}
-                            style={{
-                              backgroundColor: catColor(cat.id, 0.12),
-                              borderColor: catColor(cat.id, 0.35),
-                              color: catColor(cat.id),
-                            }}
-                            className="flex flex-col items-center justify-center gap-2 rounded-3xl p-4 text-center border shadow-sm transition-all duration-200 active:scale-95"
-                          >
-                            <span
-                              className="inline-flex h-12 w-12 items-center justify-center rounded-2xl"
-                              style={{ backgroundColor: catColor(cat.id, 0.18) }}
-                              aria-hidden="true"
-                            >
-                              <Icon size={26} />
-                            </span>
-                            <span className="text-sm font-medium leading-tight">{cat.label}</span>
-                            <span
-                              data-npf="optional"
-                              className="text-[11px] leading-snug opacity-70"
-                            >
-                              {cat.hint}
-                            </span>
-                          </button>
-                        );
-                      })}
-                  </div>
-
-                  <h3 className="mb-2 mt-6 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                    Inställningar
-                  </h3>
-                  <div className="mb-4">
-                    <PwaInstallButton />
-                  </div>
-                  <div className="flex flex-col items-center justify-center gap-3">
-                    <Link href="/anpassa" onClick={() => setMobileMenuOpen(false)}>
-                      <Button variant="outline" size="sm" className="rounded-xl gap-2">
-                        <Accessibility size={16} /> Anpassa appen
-                      </Button>
-                    </Link>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="rounded-xl gap-2"
-                      onClick={toggleAlarm}
-                    >
-                      {alarmEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
-                      Alarmljud: {alarmEnabled ? "på" : "av"}
-                    </Button>
-                    <Show when="signed-in">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="rounded-xl gap-2"
-                        onClick={() => {
-                          setMobileMenuOpen(false);
-                          track("logout");
-                          signOut();
-                        }}
-                      >
-                        <LogOut size={16} /> Logga ut
-                      </Button>
-                    </Show>
-                    <p data-npf="optional" className="text-center text-xs text-muted-foreground">
-                      Avsluta konto finns under Anpassa appen → Konto.
-                    </p>
                   </div>
                 </>
               )}
