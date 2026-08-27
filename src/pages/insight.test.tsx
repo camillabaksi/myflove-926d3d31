@@ -68,7 +68,8 @@ describe("MyFlove Insight", () => {
   it("läcker inte testprofiler i normalt användarläge", () => {
     render(<InsightPage />);
     expect(screen.queryByText(/exempelprofil/i)).toBeNull();
-    expect(screen.queryByText(/testprofil/i)).toBeNull();
+    expect(screen.queryByText(/Skapa en egen testprofil/i)).toBeNull();
+    expect(screen.queryByText(/Fiktivt underlag/i)).toBeNull();
     expect(screen.getByTestId("insight-open-demo")).toBeTruthy();
   });
 
