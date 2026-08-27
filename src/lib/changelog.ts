@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Planering i två steg, förklarande rader på hemskärmens kort och i Mer-menyn (2026-08-27)",
       "Tydlig steg-för-steg-struktur i Min dag, QuickFlow och schemauppladdningen – numrerade steg, en sak i taget, allt går att fälla ihop (2026-08-27)",
       "Redigera tolkade lektioner direkt i förhandsvisningen – ändra dag, tid, namn och plats eller ta bort innan du sparar (2026-08-27)",
       "Förhandsvisning av uppladdat schema: tolkade lektioner visas per veckodag och tid, med markering av det som redan finns (2026-08-27)",
