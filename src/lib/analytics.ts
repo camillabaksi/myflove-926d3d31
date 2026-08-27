@@ -1,5 +1,6 @@
 import { logAnalyticsEventFn } from "@/lib/analytics.functions";
 import { recordUsage } from "@/lib/usage-local";
+import { sanitizeEventName } from "@/lib/analytics-sanitize";
 import {
   eventSection,
   getAnalyticsSink,
@@ -51,12 +52,18 @@ export function analyticsEnabled(): boolean {
 export function trackEvent(section: string, action: string): void {
   if (typeof window === "undefined") return;
   if (!analyticsEnabled()) return;
-  recordUsage(section);
+  const safeSection = sanitizeEventName(section);
+  const safeAction = sanitizeEventName(action);
+  if (!safeSection || !safeAction) return;
+  recordUsage(safeSection);
   const sessionId = getSessionId();
-  logAnalyticsEventFn({ data: { sessionId, section, action } }).catch(() => {
-    // Analytics must never disrupt the user experience.
-  });
+  logAnalyticsEventFn({ data: { sessionId, section: safeSection, action: safeAction } }).catch(
+    () => {
+      // Analytics must never disrupt the user experience.
+    },
+  );
 }
+
 
 /**
  * Skydd mot dubbelloggning: identiska "visnings"-event (öppnat/visat) som

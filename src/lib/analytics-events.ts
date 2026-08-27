@@ -11,6 +11,9 @@
  *   utan att någon komponent behöver skrivas om.
  */
 
+import { sanitizeCount, sanitizeLabel } from "@/lib/analytics-sanitize";
+
+
 export const ANALYTICS_EVENTS = [
   "app_opened",
   "signup_started",
@@ -129,21 +132,21 @@ export function sanitizePayload(payload?: AnalyticsPayload): AnalyticsPayload {
     const value = (payload as Record<string, unknown>)[key];
     if (value == null) continue;
     if (key === "count") {
-      const n = Number(value);
-      if (Number.isFinite(n)) clean.count = Math.max(0, Math.min(999, Math.round(n)));
+      const n = sanitizeCount(value);
+      if (n != null) clean.count = n;
       continue;
     }
-    if (typeof value !== "string") continue;
-    const short = value.trim().slice(0, 32);
-    if (!short) continue;
+    const label = sanitizeLabel(value);
+    if (!label) continue;
     if (key === "result") {
-      if (short === "completed" || short === "cancelled" || short === "error") clean.result = short;
+      if (label === "completed" || label === "cancelled" || label === "error") clean.result = label;
       continue;
     }
-    clean[key as "source" | "method"] = short;
+    clean[key as "source" | "method"] = label;
   }
   return clean;
 }
+
 
 export interface AnalyticsSinkEvent {
   name: AnalyticsEventName;

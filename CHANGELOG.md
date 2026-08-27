@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-27 – Gemensam sanitizer för all statistik
+
+- All appstatistik går nu genom en enda sanitizer som bara släpper igenom korta, tekniska etiketter.
+- Fritext, e-post, länkar, telefonnummer, personnummer, belopp och ord som mående, energi eller medicin stoppas alltid – både i payload och i event-/sektionsnamn.
+- Nya tester för sanitizern: godkända etiketter, stoppade råvärden, begränsat antal och att payload-saneringen använder samma väg ut.
+
 ## 2026-08-27 – Statistik för "Vad jag lärt mig"
 
 - Flow-knappen "Vad jag lärt mig" loggar nu ett eget anonymt event (`flow_learning_opened`) när den öppnas.
