@@ -1,11 +1,15 @@
 import { describe, it, expect, vi } from "vitest";
+import type { ReactNode } from "react";
 
-// Länkar testas som ren markup – routern behövs inte för den här kontrollen.
+// Länkar testas som vanlig markup – routern behövs inte för den här kontrollen.
 vi.mock("wouter", () => ({
-  Link: ({ href, children, ...rest }: never) =>
-    // eslint-disable-next-line jsx-a11y/anchor-has-content
-    ({ type: "a", props: { href, children, ...(rest as object) }, key: null } as never),
+  Link: ({ href, children, ...rest }: { href: string; children: ReactNode }) => (
+    <a href={href} {...rest}>
+      {children}
+    </a>
+  ),
 }));
+
 import { render, screen } from "@testing-library/react";
 import EnergyBattery from "@/components/energy-battery";
 
