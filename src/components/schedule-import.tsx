@@ -252,8 +252,10 @@ export function ScheduleImport() {
             variant="outline"
             className="rounded-full"
             onClick={() => fileRef.current?.click()}
+            disabled={busy}
           >
-            <FileUp className="mr-2 h-4 w-4" /> Ladda upp fil
+            <FileUp className="mr-2 h-4 w-4" />
+            {busy ? "Flow läser filen…" : "Ladda upp fil eller bild"}
           </Button>
           <input
             ref={fileRef}
@@ -268,6 +270,47 @@ export function ScheduleImport() {
             }}
           />
         </div>
+
+        {files.length > 0 && (
+          <div className="mt-4 rounded-2xl border border-border/70 bg-background p-3">
+            <p className="text-xs font-semibold uppercase tracking-wide text-primary">
+              Dina schemafiler
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Tryck på en fil för att titta på originalet igen.
+            </p>
+            <ul className="mt-2 space-y-1">
+              {files.map((f) => (
+                <li key={f.id} className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setViewFile(f)}
+                    className="flex flex-1 items-center gap-2 rounded-xl px-2 py-2 text-left text-sm text-ink hover:bg-muted/60"
+                  >
+                    {f.mime.startsWith("image/") ? (
+                      <ImageIcon className="h-4 w-4 shrink-0 text-primary" />
+                    ) : (
+                      <FileText className="h-4 w-4 shrink-0 text-primary" />
+                    )}
+                    <span className="flex-1 truncate">{f.name}</span>
+                    <span className="shrink-0 text-xs text-muted-foreground">
+                      {new Date(f.addedAt).toLocaleDateString("sv-SE")}
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => removeFile(f.id)}
+                    aria-label={`Ta bort ${f.name}`}
+                    className="rounded-full p-2 text-muted-foreground hover:text-destructive"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
 
         {preview.length > 0 && (
           <div className="mt-4 rounded-2xl border border-border/70 bg-background p-3">
