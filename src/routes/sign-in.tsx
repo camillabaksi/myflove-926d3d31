@@ -9,7 +9,6 @@ import { useToast } from "@/hooks/use-toast";
 import { withBackendRecovery, isBackendAsleepError } from "@/lib/backend-wake";
 import PwaInstallButton from "@/components/pwa-install-button";
 
-
 export const Route = createFileRoute("/sign-in")({
   head: () => ({
     meta: [
@@ -135,4 +134,3 @@ function SignInPage() {
     </div>
   );
 }
-

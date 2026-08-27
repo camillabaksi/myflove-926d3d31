@@ -102,4 +102,3 @@ export function track(name: AnalyticsEventName, payload?: AnalyticsPayload): voi
   }
   trackEvent(section, name);
 }
-

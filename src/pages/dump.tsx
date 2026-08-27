@@ -157,12 +157,7 @@ export default function Dump() {
     if (thought.category === "task") addTask(thought.text);
     else if (thought.category === "shopping") addItem(thought.text);
     else if (thought.category === "reminder") {
-      addReminder(
-        thought.text,
-        thought.date ?? todayISO(),
-        thought.time,
-        thought.repeat ?? "none",
-      );
+      addReminder(thought.text, thought.date ?? todayISO(), thought.time, thought.repeat ?? "none");
     } else if (thought.category === "mood") {
       addMood(thought.moodScore ?? 3, thought.text);
     } else {

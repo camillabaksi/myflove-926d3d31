@@ -29,8 +29,6 @@ import type { Routine } from "@/pages/routines";
 import { CalendarDays, ListOrdered, Sparkles, Heart, Waves, ListChecks } from "lucide-react";
 import { MyFloveTransition } from "@/components/myflove/motion";
 
-
-
 type DayView = "flow" | "lista";
 
 /**
