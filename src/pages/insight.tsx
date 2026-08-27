@@ -28,9 +28,14 @@ import {
   type InsightStrategy,
   type StrategyNudge,
 } from "@/lib/insight";
+import { buildPersonalInsight, INSIGHT_EXAMPLES } from "@/lib/insight-personal";
+import { useFlowLearning } from "@/hooks/use-flow-learning";
+import { useVisitStreak } from "@/hooks/use-visit-streak";
+import { track } from "@/lib/analytics";
 import CollapsibleSection from "@/components/collapsible-section";
 import InsightApplySetting from "@/components/insight-apply-setting";
 import { MyFloveInsightGather } from "@/components/myflove/motion";
+
 
 const ANALYSIS_STEPS = [
   "Identifierar styrkor",
