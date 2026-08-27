@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-27 – Tydlig steg-för-steg-struktur (NPF)
+
+- Ny gemensam stegkomponent: numrerade steg med en förklarande mening, som går att fälla ihop.
+- Min dag är nu 1) Så mår du just nu, 2) Dagens plan, 3) Lägg till i dagen, 4) Det som får plats idag – energibalansen ligger sist och hopfälld.
+- QuickFlow visar tydligt steg 1 Skriv eller prata in och steg 2 Granska och spara.
+- Schemauppladdningen är uppdelad i steg 1 Klistra in/ladda upp, steg 2 Granska och ändra, steg 3 Spara.
+- Inga funktioner har tagits bort – bara ordningen och språket är lugnare.
+
 ## 2026-08-27 – Redigera tolkade lektioner före sparning
 
 - Klicka på en lektion i förhandsvisningen för att ändra veckodag, start- och sluttid, namn och plats.
