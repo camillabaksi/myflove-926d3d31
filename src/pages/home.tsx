@@ -362,8 +362,8 @@ export default function Home() {
               headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
               className="space-y-3"
             >
-              {nextEvent ? (
               <p className="text-xs text-muted-foreground">Det som händer närmast – tryck för att se hela dagen.</p>
+              {nextEvent ? (
                 <Link
                   href="/idag"
                   className="group flex items-center gap-4 rounded-2xl bg-secondary/40 p-4 transition-colors hover:bg-secondary/60"
