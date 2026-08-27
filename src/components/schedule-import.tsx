@@ -80,7 +80,13 @@ export function ScheduleImport() {
     });
     setPreview([]);
     setText("");
-    toast.success(added ? `${added} lektioner ligger nu i ditt schema` : "Allt fanns redan 💙");
+    setSavedCount(added);
+    toast.success(
+      added
+        ? `${added} lektioner ligger nu i ditt veckoschema (Schema & kalender)`
+        : "Allt fanns redan i ditt veckoschema 💙",
+    );
+    goToSchedule();
   };
 
   return (
