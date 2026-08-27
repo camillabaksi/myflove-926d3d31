@@ -106,9 +106,9 @@ export default function EnergyBattery({
             <ArrowRight size={18} aria-hidden="true" />
           </span>
         </span>
-        <span className="mt-3 block">
+        <div className="mt-3">
           <BatteryCurve reading={reading} compact />
-        </span>
+        </div>
       </Link>
     );
   }
