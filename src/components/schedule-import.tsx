@@ -187,22 +187,38 @@ export function ScheduleImport() {
         {preview.length > 0 && (
           <div className="mt-4 rounded-2xl border border-border/70 bg-background p-3">
             <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-              Granska innan du sparar
+              Förhandsvisning – granska innan du sparar
             </p>
-            <ul className="mt-2 space-y-1 text-sm text-ink">
-              {preview.map((l, i) => (
-                <li key={`${l.weekday}-${l.start}-${i}`} className="flex gap-2">
-                  <span className="w-10 shrink-0 text-muted-foreground">{WEEKDAYS[l.weekday]}</span>
-                  <span className="w-24 shrink-0 text-muted-foreground">
-                    {l.start}–{l.end}
-                  </span>
-                  <span className="flex-1">
-                    {l.title}
-                    {l.location ? ` · ${l.location}` : ""}
-                  </span>
-                </li>
+            <p className="mt-1 text-xs text-muted-foreground">
+              {preview.length} lektioner tolkade
+              {newCount !== preview.length ? ` · ${newCount} nya, ${preview.length - newCount} finns redan` : ""}
+            </p>
+            <div className="mt-3 space-y-3">
+              {grouped.map(({ weekday, items }) => (
+                <div key={weekday}>
+                  <p className="text-xs font-semibold uppercase tracking-wide text-primary">
+                    {WEEKDAYS[weekday]}
+                  </p>
+                  <ul className="mt-1 space-y-1 text-sm text-ink">
+                    {items.map((l, i) => (
+                      <li key={`${l.weekday}-${l.start}-${i}`} className="flex gap-2">
+                        <span className="w-24 shrink-0 tabular-nums text-muted-foreground">
+                          {l.start}–{l.end}
+                        </span>
+                        <span className="flex-1">
+                          {l.title}
+                          {l.location ? ` · ${l.location}` : ""}
+                        </span>
+                        {existingKeys.has(keyOf(l)) && (
+                          <span className="shrink-0 text-xs text-muted-foreground">finns redan</span>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               ))}
-            </ul>
+            </div>
+
             <div className="mt-3 flex gap-2">
               <Button className="rounded-full" onClick={save}>
                 <Check className="mr-2 h-4 w-4" /> Spara i schemat
