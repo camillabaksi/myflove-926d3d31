@@ -81,7 +81,7 @@ export default function HomeCustomizePage() {
                   <div className="flex items-center gap-1">
                     <button
                       type="button"
-                      onClick={() => move(id, -1)}
+                      onClick={() => moveBlock(id, -1)}
                       disabled={idx === 0}
                       className="rounded-lg bg-secondary p-2 text-foreground disabled:opacity-30"
                       aria-label={`Flytta upp ${meta.label}`}
@@ -90,7 +90,7 @@ export default function HomeCustomizePage() {
                     </button>
                     <button
                       type="button"
-                      onClick={() => move(id, 1)}
+                      onClick={() => moveBlock(id, 1)}
                       disabled={idx === order.length - 1}
                       className="rounded-lg bg-secondary p-2 text-foreground disabled:opacity-30"
                       aria-label={`Flytta ner ${meta.label}`}
@@ -99,7 +99,7 @@ export default function HomeCustomizePage() {
                     </button>
                     <button
                       type="button"
-                      onClick={() => toggle(id)}
+                      onClick={() => toggleBlock(id)}
                       className={`rounded-lg p-2 ${
                         isHidden
                           ? "bg-secondary text-muted-foreground"
