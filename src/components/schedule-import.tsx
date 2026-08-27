@@ -162,6 +162,9 @@ export function ScheduleImport() {
           </div>
         )}
 
+        <p className="mt-4 text-xs font-semibold uppercase tracking-wide text-primary">
+          Steg 1 · Klistra in eller ladda upp
+        </p>
         <Textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
@@ -211,8 +214,8 @@ export function ScheduleImport() {
 
         {preview.length > 0 && (
           <div className="mt-4 rounded-2xl border border-border/70 bg-background p-3">
-            <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-              Förhandsvisning – granska innan du sparar
+            <p className="text-xs font-semibold uppercase tracking-wide text-primary">
+              Steg 2 · Granska och ändra
             </p>
             <p className="mt-1 text-xs text-muted-foreground">
               {preview.length} lektioner tolkade
@@ -323,7 +326,10 @@ export function ScheduleImport() {
             </div>
 
 
-            <div className="mt-3 flex gap-2">
+            <p className="mt-4 text-xs font-semibold uppercase tracking-wide text-primary">
+              Steg 3 · Spara
+            </p>
+            <div className="mt-2 flex gap-2">
               <Button className="rounded-full" onClick={save}>
                 <Check className="mr-2 h-4 w-4" /> Spara i schemat
               </Button>
