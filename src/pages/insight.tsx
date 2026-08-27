@@ -472,6 +472,7 @@ export default function InsightPage() {
         {demoMode ? (
           <Link
             to="/insight"
+            search={{ demo: undefined }}
             data-testid="insight-leave-demo"
             className="underline text-muted-foreground"
           >
