@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Upload, Sparkles, FileUp, Check } from "lucide-react";
+import { Upload, Sparkles, FileUp, Check, CalendarCheck, ArrowDown } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -23,7 +23,13 @@ export function ScheduleImport() {
   const [text, setText] = useState("");
   const [preview, setPreview] = useState<ParsedLecture[]>([]);
   const [busy, setBusy] = useState(false);
+  const [savedCount, setSavedCount] = useState<number | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+
+  const goToSchedule = () => {
+    const el = document.getElementById("veckoschema");
+    el?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   const show = (found: ParsedLecture[]) => {
     if (!found.length) {
@@ -74,7 +80,13 @@ export function ScheduleImport() {
     });
     setPreview([]);
     setText("");
-    toast.success(added ? `${added} lektioner ligger nu i ditt schema` : "Allt fanns redan 💙");
+    setSavedCount(added);
+    toast.success(
+      added
+        ? `${added} lektioner ligger nu i ditt veckoschema (Schema & kalender)`
+        : "Allt fanns redan i ditt veckoschema 💙",
+    );
+    goToSchedule();
   };
 
   return (
@@ -91,6 +103,39 @@ export function ScheduleImport() {
           Klistra in schemat som text eller ladda upp en fil (.ics, .txt, .csv, .md, .json, .html) från skolan. Flow gör om det till
           ditt veckoschema – sen kan Flow säga vilken lektion som är nästa och var.
         </p>
+
+        <div className="mt-3 flex flex-wrap items-center gap-2 rounded-2xl border border-primary/25 bg-primary/5 p-3 text-sm">
+          <CalendarCheck className="h-4 w-4 shrink-0 text-primary" />
+          <span className="text-ink">
+            Sparas i <strong>ditt veckoschema</strong> här i StudyFlow
+            {lectures.length > 0 ? ` · ${lectures.length} lektioner just nu` : ""}
+          </span>
+          <button
+            type="button"
+            onClick={goToSchedule}
+            className="ml-auto inline-flex items-center gap-1 rounded-full px-2 py-1 font-medium text-primary underline underline-offset-2"
+          >
+            Visa veckoschemat <ArrowDown className="h-3.5 w-3.5" />
+          </button>
+        </div>
+
+        {savedCount !== null && (
+          <div className="mt-3 flex flex-wrap items-center gap-2 rounded-2xl border border-border/70 bg-background p-3 text-sm text-ink">
+            <Check className="h-4 w-4 shrink-0 text-primary" />
+            <span>
+              {savedCount > 0
+                ? `${savedCount} lektioner sparade i veckoschemat.`
+                : "Lektionerna fanns redan i veckoschemat."}
+            </span>
+            <button
+              type="button"
+              onClick={goToSchedule}
+              className="ml-auto inline-flex items-center gap-1 rounded-full px-2 py-1 font-medium text-primary underline underline-offset-2"
+            >
+              Gå till veckoschemat <ArrowDown className="h-3.5 w-3.5" />
+            </button>
+          </div>
+        )}
 
         <Textarea
           value={text}

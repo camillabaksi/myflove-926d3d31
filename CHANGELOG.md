@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-27 – Tydlig plats för uppladdat schema
+
+- Schemauppladdningen i StudyFlow visar nu tydligt att lektionerna sparas i ditt veckoschema, med antal lektioner du redan har.
+- Ny länk "Visa veckoschemat" som scrollar direkt till Schema & kalender – både före och efter att du sparat.
+- Efter sparning visas en bekräftelse med hur många lektioner som lades till och en genväg till veckoschemat.
+
 ## 2026-08-27 – Fler filformat vid uppladdning
 
 - Gemensam lista över filformat i hela appen: PDF, bilder (även HEIC/HEIF, WebP, TIFF, AVIF) och textfiler (txt, md, csv, tsv, json, html, xml, rtf, log) samt dokument som doc/docx/odt/ppt/pptx/xls/xlsx/epub.

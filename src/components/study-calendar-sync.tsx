@@ -118,7 +118,7 @@ export function StudyCalendarSync() {
   }, [plan]);
 
   return (
-    <section className={card}>
+    <section id="veckoschema" className={`${card} scroll-mt-24`}>
       <CollapsibleSection
         title={
           <span className="inline-flex items-center gap-2">
