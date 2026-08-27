@@ -219,33 +219,6 @@ export default function TodayPage() {
               <DidThisQuickAdd />
             </StepSection>
 
-            {/* Extra – energibalans och ett förslag, hopfällt tills du vill se det */}
-            <StepSection
-              step={5}
-              id="idag::steg-energibalans"
-              title="Dagens energibalans"
-              description="Hur dagen belastar dig – och ett förslag från Flow."
-              defaultCollapsed
-            >
-              <p className="text-sm text-foreground">{load.summary}</p>
-              {reading.peak && (
-                <p className="text-xs text-muted-foreground">
-                  Starkast {reading.peak.label}
-                  {reading.dip ? ` · lägst ${reading.dip.label}` : ""}
-                </p>
-              )}
-              <div className="flex items-start gap-2 rounded-2xl bg-secondary/40 px-3 py-2 text-sm text-foreground">
-                <Sparkles size={16} className="mt-0.5 shrink-0 text-primary" />
-                <p>
-                  {suggestion.headline}
-                  {suggestion.task ? ` Börja gärna med "${suggestion.task.title}".` : ""}{" "}
-                  <Link href="/flow" className="text-primary underline-offset-2 hover:underline">
-                    Öppna Flow
-                  </Link>
-                </p>
-              </div>
-            </StepSection>
-
 
             {/* 📋 Dagens ordning – planen du valt i Planera */}
             {dayPlan && dayPlan.steps.length > 0 && (
@@ -305,13 +278,13 @@ export default function TodayPage() {
               />
             )}
 
-            {/* Nu → Nästa → Senare, samma data och samma avbockning som listan */}
-            <section className="surface-card p-5">
-              <CollapsibleSection
-                title="Det som får plats idag"
-                headingClassName="text-lg font-semibold"
-                className="space-y-3"
-              >
+            {/* Steg 4 – Nu → Nästa → Senare */}
+            <StepSection
+              step={4}
+              id="idag::steg-far-plats"
+              title="Det som får plats idag"
+              help={'MyFlove väljer utifrån din kapacitet just nu. Det som inte får plats försvinner inte – det ligger kvar under "Resten kan vänta".'}
+            >
                 <p className="text-sm text-muted-foreground">
                   Samlat från hela ditt liv – uppgifter, deadlines, lektioner, barnens dag och
                   tankar du lagt i Quickflow.
@@ -356,8 +329,34 @@ export default function TodayPage() {
                   </details>
                 )}
                 <DoneToday items={todayDone} onToggle={toggle} />
-              </CollapsibleSection>
-            </section>
+            </StepSection>
+
+            {/* Extra – energibalans och ett förslag, hopfällt tills du vill se det */}
+            <StepSection
+              step={5}
+              id="idag::steg-energibalans"
+              title="Dagens energibalans"
+              description="Hur dagen belastar dig – och ett förslag från Flow."
+              defaultCollapsed
+            >
+              <p className="text-sm text-foreground">{load.summary}</p>
+              {reading.peak && (
+                <p className="text-xs text-muted-foreground">
+                  Starkast {reading.peak.label}
+                  {reading.dip ? ` · lägst ${reading.dip.label}` : ""}
+                </p>
+              )}
+              <div className="flex items-start gap-2 rounded-2xl bg-secondary/40 px-3 py-2 text-sm text-foreground">
+                <Sparkles size={16} className="mt-0.5 shrink-0 text-primary" />
+                <p>
+                  {suggestion.headline}
+                  {suggestion.task ? ` Börja gärna med "${suggestion.task.title}".` : ""}{" "}
+                  <Link href="/flow" className="text-primary underline-offset-2 hover:underline">
+                    Öppna Flow
+                  </Link>
+                </p>
+              </div>
+            </StepSection>
           </>
         ) : (
           <section className="surface-card space-y-3 p-5">
