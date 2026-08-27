@@ -5,7 +5,6 @@ import Layout from "@/components/layout";
 import CollapsibleSection from "@/components/collapsible-section";
 import StepSection from "@/components/step-section";
 import FlowCompanion from "@/components/flow/flow-companion";
-import HelpHint from "@/components/help-hint";
 import DayTimeline, { type TimelineEntry } from "@/components/day-timeline";
 import EnergyBattery from "@/components/energy-battery";
 import QuickCheckin from "@/components/quick-checkin";
