@@ -167,8 +167,77 @@ export default function InsightPage() {
         </div>
       </header>
 
-      {phase === "start" && (
+      {!demoMode && (
+        <section data-testid="insight-personal" className="space-y-5">
+          <div className="p-5 rounded-3xl bg-card border border-border space-y-3">
+            <p className="font-medium">Vad Flow lärt sig om dig</p>
+            <p className="text-sm text-muted-foreground">{personal.label}</p>
+            <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
+              <div
+                className="h-full rounded-full bg-primary transition-all duration-700"
+                style={{ width: `${Math.max(6, personal.level)}%` }}
+              />
+            </div>
+          </div>
+
+          {personal.ready ? (
+            <>
+              <ul data-testid="insight-personal-list" className="space-y-3">
+                {personal.insights.map((i) => (
+                  <li
+                    key={i.id}
+                    className="p-4 rounded-2xl bg-secondary/40 border border-border leading-relaxed"
+                  >
+                    {i.text}
+                  </li>
+                ))}
+              </ul>
+
+              {personal.areas.length > 0 && (
+                <>
+                  <p className="leading-relaxed">
+                    Utifrån det här kan de här områdena vara relevanta för dig just nu.
+                  </p>
+                  <AreaStrategies
+                    areas={personal.areas}
+                    openArea={openArea}
+                    setOpenArea={setOpenArea}
+                    hasStrategy={hasStrategy}
+                    maxFriction={flow.maxFriction}
+                    onAdd={openAdd}
+                  />
+                </>
+              )}
+            </>
+          ) : (
+            <div
+              data-testid="insight-empty"
+              className="p-5 rounded-3xl bg-card border border-border space-y-3"
+            >
+              <p className="leading-relaxed">
+                Jag har inte lärt känna dig tillräckligt ännu. Använd MyFlove några dagar så börjar
+                mönstren synas – jag hittar inte på något innan dess. 💜
+              </p>
+              <p className="text-sm font-medium">Exempel på vad som kan komma längre fram</p>
+              <ul className="space-y-1.5 text-sm text-muted-foreground">
+                {INSIGHT_EXAMPLES.map((e) => (
+                  <li key={e}>· {e}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </section>
+      )}
+
+      {demoMode && phase === "start" && (
         <>
+          <div className="p-5 rounded-3xl bg-amber-500/10 border border-border">
+            <p className="text-sm leading-relaxed">
+              <strong>Demoläge.</strong> Här visas fiktiva testprofiler – inget av detta är din egen
+              data.
+            </p>
+          </div>
+
           <div className="p-5 rounded-3xl bg-card border border-border">
             <p className="leading-relaxed">
               Insight hjälper dig att omvandla information om behov och styrkor till konkreta
