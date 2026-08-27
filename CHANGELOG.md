@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-27 – Redigera tolkade lektioner före sparning
+
+- Klicka på en lektion i förhandsvisningen för att ändra veckodag, start- och sluttid, namn och plats.
+- Du kan ta bort enskilda lektioner innan du sparar i schemat.
+- Ändringarna gäller direkt i förhandsvisningen och sparas först när du trycker "Spara i schemat".
+
 ## 2026-08-27 – Förhandsvisning av tolkat schema
 
 - Innan du sparar visas nu de tolkade lektionerna grupperade per veckodag, sorterade på tid.
