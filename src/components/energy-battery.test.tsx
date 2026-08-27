@@ -1,4 +1,11 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
+
+// Länkar testas som ren markup – routern behövs inte för den här kontrollen.
+vi.mock("wouter", () => ({
+  Link: ({ href, children, ...rest }: never) =>
+    // eslint-disable-next-line jsx-a11y/anchor-has-content
+    ({ type: "a", props: { href, children, ...(rest as object) }, key: null } as never),
+}));
 import { render, screen } from "@testing-library/react";
 import EnergyBattery from "@/components/energy-battery";
 
