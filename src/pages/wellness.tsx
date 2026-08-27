@@ -12,7 +12,6 @@ import CollapsibleSection from "@/components/collapsible-section";
 import { Button } from "@/components/ui/button";
 import StopModal from "@/components/stop-modal";
 import SimpleCheckin from "@/components/simple-checkin";
-import EnergyBattery from "@/components/energy-battery";
 import { MyFloveBreathing, MyFloveHeart } from "@/components/myflove/motion";
 import { track } from "@/lib/analytics";
 
@@ -42,8 +41,6 @@ export default function WellnessPage() {
         </div>
 
         <SimpleCheckin source="ma-bra" />
-
-        <EnergyBattery />
 
         <Link
           href="/mitt-batteri"

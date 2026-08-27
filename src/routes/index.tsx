@@ -225,6 +225,10 @@ function LandingDeck() {
     setIndex(Math.max(0, Math.min(total - 1, next)));
   };
 
+  useEffect(() => {
+    track("onboarding_started", { source: "intro" });
+  }, []);
+
   // URL-synk: läs vid start och lyssna på bakåt/framåt
   useEffect(() => {
     setIndex(slideIndexFromHash(window.location.hash));

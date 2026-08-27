@@ -1,3 +1,4 @@
+import { track } from "@/lib/analytics";
 import { useState } from "react";
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
@@ -73,6 +74,7 @@ function SignInPage() {
       });
       return;
     }
+    track("login", { result: "completed" });
     const target = safeNext(next);
     window.location.href = target;
   }

@@ -245,6 +245,8 @@ export function useTasks() {
     if (task && !task.completed) {
       track("task_completed", { source: "app" });
       flowDone(task.title);
+    } else if (task) {
+      track("task_reopened", { source: "app" });
     }
   };
 

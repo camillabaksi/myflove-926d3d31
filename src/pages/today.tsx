@@ -1,3 +1,4 @@
+import { track } from "@/lib/analytics";
 import { useMemo } from "react";
 import { Link } from "wouter";
 import Layout from "@/components/layout";
@@ -42,6 +43,10 @@ type DayView = "flow" | "lista";
  *  📋 Lista – allt som ska göras idag, avbockningsbart.
  */
 export default function TodayPage() {
+  useEffect(() => {
+    track("my_day_viewed", { source: "sida" });
+  }, []);
+
   const today = todayStr();
   const { activeTasks, addTask } = useTasks();
   const { activeReminders } = useReminders();
