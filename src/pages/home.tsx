@@ -299,30 +299,21 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Flow finns med i appen – en kontextuell sak i taget. */}
-        <FlowCompanion stage="mini" />
-
-        {/* Mitt batteri – första centrala innehållsblocket, direkt efter Flow. */}
+        {/* Mitt batteri – högst upp och ett enda helt klickbart kort. */}
         {shows("batteri") && (
           <section style={pos("batteri")} aria-label="Mitt batteri" className="space-y-2">
-            <Link
-              href="/mitt-batteri"
-              data-testid="battery-cta"
-              onClick={() => track("battery_opened", { source: "hem" })}
-              className="group flex items-center justify-between gap-2 text-sm font-semibold uppercase tracking-wide text-muted-foreground transition-colors hover:text-foreground"
-            >
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
               Mitt batteri
-              <ArrowRight
-                size={16}
-                className="shrink-0 transition-transform group-hover:translate-x-0.5"
-              />
-            </Link>
-            <EnergyBattery />
+            </h2>
+            <EnergyBattery
+              href="/mitt-batteri"
+              onNavigate={() => track("battery_opened", { source: "hem" })}
+            />
           </section>
         )}
 
         {/* Flow visar mjukt att han lär sig hur du fungerar. */}
-        <div style={{ order: 90 }}>
+        <div style={{ order: 98.45 }}>
           <FlowLearningCard />
         </div>
 
@@ -563,6 +554,11 @@ export default function Home() {
 
         <div style={{ order: 98 }} className="space-y-3 pt-2">
           <AreaOnboarding />
+        </div>
+
+        {/* Flow – diskret notering längst ner, konkurrerar inte med dagen. */}
+        <div style={{ order: 98.4 }} data-testid="home-flow-note" className="pt-1">
+          <FlowCompanion stage="mini" />
         </div>
 
         {/* Liten, diskret notering längst ner – konkurrerar inte med dagen. */}
