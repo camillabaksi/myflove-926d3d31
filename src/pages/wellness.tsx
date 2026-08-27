@@ -9,16 +9,14 @@ import { EnergyFlowContent } from "@/pages/energy-flow";
 import { Smile, Battery, Hand, Zap, ArrowRight } from "lucide-react";
 
 import CollapsibleSection from "@/components/collapsible-section";
-import { Button } from "@/components/ui/button";
 import StopModal from "@/components/stop-modal";
 import SimpleCheckin from "@/components/simple-checkin";
-import { MyFloveBreathing, MyFloveHeart } from "@/components/myflove/motion";
 import { track } from "@/lib/analytics";
 
 /**
- * Energi och mående – en snabb mänsklig incheckning först.
- * Allt avancerat (historik, mönster, energiflöde) ligger kvar men bakom
- * "Se min historik", så första vyn har så få val som möjligt.
+ * Energi och mående – en enda sak: "Hur är det just nu?".
+ * Öppna → ange energi och mående → klart. Allt annat (historik, mönster,
+ * energiflöde och paus) ligger kvar men sekundärt, bakom "Se historik".
  * Medicin hör inte hit – den ligger kvar i Rutiner & medicin.
  */
 export default function WellnessPage() {
@@ -27,50 +25,48 @@ export default function WellnessPage() {
 
   return (
     <Layout>
-      <div className="space-y-6">
+      <div className="space-y-5">
         <MyFloveHeader
-          title="Energi och mående"
+          title="Hur är det just nu?"
           emojiKey="wellness"
-          description="En snabb incheckning – det tar några sekunder."
+          description="Ange energi och mående – sedan är du klar."
         />
-
-        <div className="flex justify-center">
-          <MyFloveBreathing size={76} mood="calm">
-            <MyFloveHeart size={30} mood="calm" />
-          </MyFloveBreathing>
-        </div>
 
         <SimpleCheckin source="ma-bra" />
 
-        <Link
-          href="/mitt-batteri"
-          data-testid="battery-cta"
-          onClick={() => track("battery_opened", { source: "ma-bra" })}
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
-        >
-          Öppna Mitt batteri <ArrowRight size={14} />
-        </Link>
+        {/* Sekundärt: fördjupning och paus – små länkar, inga extra kort. */}
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
+          <Link
+            href="/mitt-batteri"
+            data-testid="battery-cta"
+            onClick={() => track("battery_opened", { source: "ma-bra" })}
+            className="inline-flex items-center gap-1.5 font-medium text-primary hover:underline"
+          >
+            Öppna Mitt batteri <ArrowRight size={14} />
+          </Link>
 
-        <Button
-          onClick={() => setStopOpen(true)}
-          variant="outline"
-          className="w-full h-12 rounded-2xl font-medium"
-        >
-          <Hand size={18} className="mr-2" aria-hidden="true" />
-          Stop – ta en paus först
-        </Button>
-        <StopModal open={stopOpen} onOpenChange={setStopOpen} />
+          {!showHistory && (
+            <button
+              type="button"
+              data-testid="show-history"
+              onClick={() => setShowHistory(true)}
+              className="text-muted-foreground underline underline-offset-2 hover:text-foreground"
+            >
+              Se historik
+            </button>
+          )}
 
-        {!showHistory ? (
           <button
             type="button"
-            data-testid="show-history"
-            onClick={() => setShowHistory(true)}
-            className="w-full rounded-2xl border border-border/60 bg-card px-4 py-3 text-sm text-muted-foreground shadow-soft transition-colors hover:text-foreground"
+            onClick={() => setStopOpen(true)}
+            className="inline-flex items-center gap-1.5 text-muted-foreground underline underline-offset-2 hover:text-foreground"
           >
-            Se min historik
+            <Hand size={14} aria-hidden="true" /> Stop – ta en paus först
           </button>
-        ) : (
+        </div>
+        <StopModal open={stopOpen} onOpenChange={setStopOpen} />
+
+        {showHistory && (
           <div data-testid="wellness-history" className="space-y-4">
             <Tabs defaultValue="mood" className="w-full">
               <TabsList className="grid w-full grid-cols-3 h-11 rounded-2xl">
