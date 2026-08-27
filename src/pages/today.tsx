@@ -1,5 +1,5 @@
 import { track } from "@/lib/analytics";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { Link } from "wouter";
 import Layout from "@/components/layout";
 import CollapsibleSection from "@/components/collapsible-section";

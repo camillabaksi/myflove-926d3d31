@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 
-const logSpy = vi.fn(() => Promise.resolve({ ok: true }));
+const logSpy = vi.fn((_args: unknown) => Promise.resolve({ ok: true }));
 vi.mock("@/lib/analytics.functions", () => ({
   logAnalyticsEventFn: (args: unknown) => logSpy(args as never),
 }));
@@ -75,8 +75,7 @@ describe("analytics: exakt ett event per handling", () => {
       email: "a@b.se",
     } as never);
     expect(sink[0]!.payload).toEqual({ source: "ma-bra" });
-    const sent = logSpy.mock.calls[0]![0] as { data: Record<string, unknown> };
-    expect(JSON.stringify(sent)).not.toMatch(/concerta|dåligt|4200|a@b\.se/);
+    expect(JSON.stringify(logSpy.mock.calls)).not.toMatch(/concerta|dåligt|4200|a@b\.se/);
   });
 
   it("respekterar användarens avstängning av statistik", () => {
