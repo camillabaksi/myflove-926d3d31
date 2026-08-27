@@ -524,6 +524,7 @@ export default function FlowPlanPage() {
               {plan.note}
             </div>
           </div>
+          </StepSection>
         )}
       </div>
     </Layout>
