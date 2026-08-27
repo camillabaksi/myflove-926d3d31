@@ -76,3 +76,16 @@ export function sanitizeCount(value: unknown): number | null {
 export function isSafeLabel(value: unknown): boolean {
   return sanitizeLabel(value) !== null;
 }
+
+/**
+ * Sanering av event- och sektionsnamn (t.ex. "mood_checkin_completed").
+ * Dessa kommer alltid från appens fasta schema, så ordfiltret gäller inte –
+ * men formatet valideras ändå så att inget fritt värde kan smita ut.
+ */
+const NAME_PATTERN = /^[a-z0-9_-]{1,64}$/;
+
+export function sanitizeEventName(value: unknown): string | null {
+  if (typeof value !== "string") return null;
+  const trimmed = value.trim().toLowerCase();
+  return NAME_PATTERN.test(trimmed) ? trimmed : null;
+}
