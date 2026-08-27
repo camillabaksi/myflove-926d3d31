@@ -1,14 +1,27 @@
 import { useState } from "react";
+import { Link } from "wouter";
+import { ArrowRight } from "lucide-react";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
 import { minutesToTime } from "@/lib/energy-battery";
 
 /**
  * Mitt batteri™ – lugn, levande energinivå.
  * Kompakt vid första anblicken; detaljer först när du vill ha dem.
+ * Med `href` blir hela kortet en klickyta som leder till Mitt batteri-sidan
+ * (används på Hem, där kortet ska vara en enda tydlig knapp).
  */
-export default function EnergyBattery({ defaultOpen = false }: { defaultOpen?: boolean }) {
+export default function EnergyBattery({
+  defaultOpen = false,
+  href,
+  onNavigate,
+}: {
+  defaultOpen?: boolean;
+  href?: string;
+  onNavigate?: () => void;
+}) {
   const { reading, suggestions } = useEnergyBattery();
   const [open, setOpen] = useState(defaultOpen);
+
 
   const level = Math.round(reading.now);
   const tone =
