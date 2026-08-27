@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
+import { Link, useRouterState } from "@tanstack/react-router";
 import { Brain, Check, ChevronRight, Info, Plus, Sparkles, X } from "lucide-react";
 import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
