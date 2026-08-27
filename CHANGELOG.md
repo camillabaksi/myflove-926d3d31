@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-27 – Analytics- och UX-kvalitetssäkring
+
+- Energi och mående är nu bara snabb incheckning + länk vidare; batterivyn ligger enbart på Mitt batteri (dubbletten borttagen).
+- Ett event per handling: uppgifter, mående, påminnelser och planer loggas nu på ett enda ställe i datalagret – den äldre loggvägen anropas bara via track().
+- Dubbelskydd för vy-event (öppnat/visat) så omrenderingar inte blåser upp statistiken.
+- Nya event täcker skapa konto, inloggning, intro, app-start, Flow, QuickFlow, Min dag, planering, påminnelser och inställningar.
+- Nya tester verifierar att varje centralt event loggas exakt en gång och att känsligt innehåll alltid filtreras bort.
+
 ## 2026-08-26 – "Senast aktiv" i adminvyn
 
 - Användarlistan visar nu "Senast aktiv" (när kontot senast använde appen) i stället för den tomma besökskolumnen.
@@ -12,8 +20,6 @@
 - Två nya ifyllnader på Mitt batteri: hur batteriet känns vid morgonstart och när dagen slutar (1–10).
 - Kurvan ankras i dina egna värden: morgonens nivå, läget just nu och kvällens nivå binds ihop mjukt.
 
-
-
 ## 2026-08-26 – Lägg till på hemskärmen vid inloggning
 
 - Knappen "Lägg till MyFlove på hemskärmen" finns nu även längst ner på Logga in- och Skapa konto-sidorna.
@@ -21,12 +27,11 @@
 
 ## 2026-08-26 – Lugnare energi, tydligare konto och samlad appstatistik
 
-
 - Mitt batteri ligger nu högst upp på Hem (direkt efter Flow) och all "Mitt batteri"-länkning går direkt till sidan /mitt-batteri.
 - "Energi och mående" är radikalt förenklad: en snabb incheckning (batteri 1–10 + fem tydliga mående-val) först, historik och mönster bakom "Se min historik". Samma data som förut – inga dubbla registreringar. Medicin ligger kvar separat i Rutiner & medicin.
 - "Lägg till på hemskärmen" är nu en liten, diskret notering längst ner på Hem i stället för ett stort block.
 - "Avsluta konto" är borttagen från menyerna och ligger enbart längst ner under Inställningar i en tydlig men sekundär kontosektion – med bekräftelse kvar.
-- Ny central analytics-grund: ett dokumenterat event-schema (app_opened, home_viewed, battery_/mood_checkin, quickflow, task, install, logout, kontoradering m.fl.) med sanerad payload. Inget mående, ingen medicin, inga belopp och ingen fritext skickas någonsin – bara användning.
+- Ny central analytics-grund: ett dokumenterat event-schema (app*opened, home_viewed, battery*/mood_checkin, quickflow, task, install, logout, kontoradering m.fl.) med sanerad payload. Inget mående, ingen medicin, inga belopp och ingen fritext skickas någonsin – bara användning.
 - Flow-knappen "Mitt batteri" (bredvid "Prata med Flow") går nu till Mitt batteri i stället för dagens balans.
 - Nya tester för event-schemat och sanering av känsliga payloads.
 
