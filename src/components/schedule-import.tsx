@@ -182,9 +182,11 @@ export function ScheduleImport() {
         headingClassName={sectionTitle}
       >
         <p className="mt-1 text-sm text-muted-foreground">
-          Klistra in schemat som text eller ladda upp en fil (.ics, .txt, .csv, .md, .json, .html) från skolan. Flow gör om det till
-          ditt veckoschema – sen kan Flow säga vilken lektion som är nästa och var.
+          Klistra in schemat som text, ladda upp en fil (.ics, .txt, .csv) eller ta en bild/PDF på
+          schemat. Flow läser av bilden och gör om den till ditt veckoschema – filen sparas så att du
+          kan titta på originalet när du vill.
         </p>
+
 
         <div className="mt-3 flex flex-wrap items-center gap-2 rounded-2xl border border-primary/25 bg-primary/5 p-3 text-sm">
           <CalendarCheck className="h-4 w-4 shrink-0 text-primary" />
