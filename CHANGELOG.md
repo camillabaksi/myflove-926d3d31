@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-27 – Lugnare informationsarkitektur i Mer
+
+- Mer-menyn är grupperad i Min profil, Anpassa MyFlove, Mina områden och Inställningar – färre val i taget och tydlig hierarki.
+- "Anpassa hemskärmen" och "Visa introduktionen igen" nås nu direkt från Mer.
+- "Lägg till på hemskärmen" ligger under Inställningar, tillsammans med Anpassa appen och Logga ut; Avsluta konto finns kvar under Anpassa appen → Konto.
+- Anpassa hemskärmen loggar nu (anonymt) att den öppnats och att block visats/dolts eller flyttats.
+- Nytt test säkerställer att batterikortet på Hem är en enda klickyta till Mitt batteri.
+
 ## 2026-08-27 – Analytics- och UX-kvalitetssäkring
 
 - Energi och mående är nu bara snabb incheckning + länk vidare; batterivyn ligger enbart på Mitt batteri (dubbletten borttagen).
