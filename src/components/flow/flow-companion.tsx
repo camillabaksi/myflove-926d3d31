@@ -9,6 +9,7 @@ import { useFlowMoment } from "@/hooks/use-flow-moment";
 import { useFlowLearning } from "@/hooks/use-flow-learning";
 import { useFlowSettings, type FlowHelpLevel } from "@/hooks/use-flow-settings";
 import { haptic } from "@/lib/haptics";
+import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
 /**
@@ -185,7 +186,16 @@ export default function FlowCompanion({
             </Button>
           )}
           {moment.link && (
-            <Button asChild size="sm" variant="ghost" className="rounded-full">
+            <Button
+              asChild
+              size="sm"
+              variant="ghost"
+              className="rounded-full"
+              onClick={() => {
+                // Endast användning mäts – aldrig vad Flow lärt sig eller några råvärden.
+                if (moment.learning) track("flow_learning_opened", { source: "flow-companion" });
+              }}
+            >
               <Link href={moment.link.href}>{moment.link.label}</Link>
             </Button>
           )}
