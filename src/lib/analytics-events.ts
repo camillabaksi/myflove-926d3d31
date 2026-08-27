@@ -11,6 +11,9 @@
  *   utan att någon komponent behöver skrivas om.
  */
 
+import { sanitizeCount, sanitizeLabel } from "@/lib/analytics-sanitize";
+
+
 export const ANALYTICS_EVENTS = [
   "app_opened",
   "signup_started",
