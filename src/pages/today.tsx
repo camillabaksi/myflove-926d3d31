@@ -1,4 +1,5 @@
-import { useMemo } from "react";
+import { track } from "@/lib/analytics";
+import { useMemo, useEffect } from "react";
 import { Link } from "wouter";
 import Layout from "@/components/layout";
 import CollapsibleSection from "@/components/collapsible-section";
@@ -28,8 +29,6 @@ import type { Routine } from "@/pages/routines";
 import { CalendarDays, ListOrdered, Sparkles, Heart, Waves, ListChecks } from "lucide-react";
 import { MyFloveTransition } from "@/components/myflove/motion";
 
-
-
 type DayView = "flow" | "lista";
 
 /**
@@ -42,6 +41,10 @@ type DayView = "flow" | "lista";
  *  📋 Lista – allt som ska göras idag, avbockningsbart.
  */
 export default function TodayPage() {
+  useEffect(() => {
+    track("my_day_viewed", { source: "sida" });
+  }, []);
+
   const today = todayStr();
   const { activeTasks, addTask } = useTasks();
   const { activeReminders } = useReminders();

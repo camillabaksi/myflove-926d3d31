@@ -6,12 +6,14 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-08-26";
+export const CHANGELOG_UPDATED = "2026-08-27";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Kvalitetssäkrad statistik: varje viktig handling ger exakt ett event, vy-event dubbelskyddas och känsligt innehåll filtreras alltid bort (2026-08-27)",
+      "Energi och mående visar bara snabb incheckning och en länk till historiken – detaljerad batterivy finns på Mitt batteri (2026-08-27)",
       'Adminvyn visar "Senast aktiv" per konto – redan inloggade användare syns nu som aktiva även utan ny inloggning (2026-08-26)',
       "Egen morgon och egen kväll i Mitt batteri: du fyller i när morgonen startar, när dagen slutar och hur batteriet känns vid båda tidpunkterna – kurvan ankras i dina egna värden (2026-08-26)",
       '"Lägg till MyFlove på hemskärmen" finns nu även på Logga in- och Skapa konto-sidorna – och doldes tidigare felaktigt i förhandsvisning/helskärm (2026-08-26)',

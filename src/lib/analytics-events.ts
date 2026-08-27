@@ -13,7 +13,11 @@
 
 export const ANALYTICS_EVENTS = [
   "app_opened",
+  "signup_started",
+  "signup_completed",
+  "login",
   "onboarding_started",
+
   "onboarding_completed",
   "onboarding_skipped",
   "home_viewed",
@@ -67,7 +71,11 @@ export interface AnalyticsPayload {
 /** Vilken del av appen ett event hör till (används i statistikvyerna). */
 const EVENT_SECTION: Record<AnalyticsEventName, string> = {
   app_opened: "app",
+  signup_started: "konto",
+  signup_completed: "konto",
+  login: "konto",
   onboarding_started: "onboarding",
+
   onboarding_completed: "onboarding",
   onboarding_skipped: "onboarding",
   home_viewed: "hem",

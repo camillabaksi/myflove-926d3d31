@@ -259,6 +259,18 @@ export default function Layout({ children }: LayoutProps) {
     if (next) playAlarmPreview();
   };
 
+  // Ett app_opened per webbläsarsession (inte per navigering).
+  useEffect(() => {
+    try {
+      if (window.sessionStorage.getItem("myflove-app-opened") !== "1") {
+        window.sessionStorage.setItem("myflove-app-opened", "1");
+        track("app_opened");
+      }
+    } catch {
+      // Statistik får aldrig störa appen.
+    }
+  }, []);
+
   useEffect(() => {
     const section = SECTION_BY_PATH[location] ?? (location.replace(/^\//, "") || "home");
     trackEvent(section, "view");

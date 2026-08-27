@@ -1,3 +1,4 @@
+import { track } from "@/lib/analytics";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 
@@ -95,6 +96,10 @@ export default function Dump() {
   const { toast } = useToast();
 
   useEffect(() => {
+    track("quickflow_opened", { source: "sida" });
+  }, []);
+
+  useEffect(() => {
     const SpeechRecognitionCtor =
       (window as unknown as SpeechRecognitionWindow).SpeechRecognition ||
       (window as unknown as SpeechRecognitionWindow).webkitSpeechRecognition;
@@ -146,17 +151,13 @@ export default function Dump() {
   };
 
   const addSingle = (thought: SortableThought) => {
+    track("quickflow_created", { source: "quickflow", method: thought.category });
     // Landar tanken någon annanstans? Ta bort ev. dubblett i Quickflow-listan.
     if (thought.category !== "idea") absorbQuickflow(thought.text);
     if (thought.category === "task") addTask(thought.text);
     else if (thought.category === "shopping") addItem(thought.text);
     else if (thought.category === "reminder") {
-      addReminder(
-        thought.text,
-        thought.date ?? todayISO(),
-        thought.time,
-        thought.repeat ?? "none",
-      );
+      addReminder(thought.text, thought.date ?? todayISO(), thought.time, thought.repeat ?? "none");
     } else if (thought.category === "mood") {
       addMood(thought.moodScore ?? 3, thought.text);
     } else {
@@ -174,6 +175,7 @@ export default function Dump() {
   const addAll = () => {
     if (!thoughts) return;
     thoughts.filter((t) => !t.added).forEach((t) => addSingle(t));
+    track("quickflow_completed", { source: "quickflow", result: "completed" });
     toast({ description: getRandomEncouragement() });
   };
 

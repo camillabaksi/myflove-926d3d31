@@ -1,6 +1,6 @@
 import { useLocalStorage } from "../lib/storage";
 import { useCloudSyncedStorage } from "../lib/cloud-storage";
-import { trackEvent } from "../lib/analytics";
+import { trackEvent, track } from "../lib/analytics";
 import type { LifeArea } from "../lib/life-areas";
 import { flowDone } from "@/lib/flow-signal";
 import { todayISO } from "@/lib/day";
@@ -163,6 +163,7 @@ export function useTasks() {
 
       ...prev,
     ]);
+    track("task_created", { source: "app" });
   };
 
   /** Fri anteckning på en uppgift – tom text tar bort anteckningen. */
@@ -242,8 +243,10 @@ export function useTasks() {
       }),
     );
     if (task && !task.completed) {
-      trackEvent("tasks", "task_completed");
+      track("task_completed", { source: "app" });
       flowDone(task.title);
+    } else if (task) {
+      track("task_reopened", { source: "app" });
     }
   };
 
@@ -515,7 +518,8 @@ export function useMoods() {
 
   const addMood = (score: number, note: string) => {
     setMoods([{ id: generateId(), score, note, date: Date.now() }, ...moods]);
-    trackEvent("mood", "mood_logged");
+    // Ett event per registrering – aldrig själva måendevärdet eller texten.
+    track("mood_checkin_completed", { source: "mande", method: "formular" });
   };
 
   return { moods, addMood, setMoods };
@@ -641,11 +645,13 @@ export function useReminders() {
       },
       ...reminders,
     ]);
-    trackEvent("calendar", "reminder_added");
+    track("reminder_created", { source: "app" });
   };
 
   const toggleReminder = (id: string) => {
+    const before = reminders.find((r) => r.id === id);
     setReminders(reminders.map((r) => (r.id === id ? { ...r, completed: !r.completed } : r)));
+    if (before && !before.completed) track("reminder_completed", { source: "app" });
   };
 
   const deleteReminder = (id: string) => {

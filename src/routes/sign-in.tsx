@@ -1,3 +1,4 @@
+import { track } from "@/lib/analytics";
 import { useState } from "react";
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
@@ -7,7 +8,6 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { withBackendRecovery, isBackendAsleepError } from "@/lib/backend-wake";
 import PwaInstallButton from "@/components/pwa-install-button";
-
 
 export const Route = createFileRoute("/sign-in")({
   head: () => ({
@@ -73,6 +73,7 @@ function SignInPage() {
       });
       return;
     }
+    track("login", { result: "completed" });
     const target = safeNext(next);
     window.location.href = target;
   }
@@ -133,4 +134,3 @@ function SignInPage() {
     </div>
   );
 }
-

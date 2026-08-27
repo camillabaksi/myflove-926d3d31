@@ -1,3 +1,4 @@
+import { track } from "@/lib/analytics";
 import { useState } from "react";
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
@@ -7,7 +8,6 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { withBackendRecovery, isBackendAsleepError } from "@/lib/backend-wake";
 import PwaInstallButton from "@/components/pwa-install-button";
-
 
 export const Route = createFileRoute("/sign-up")({
   ssr: false,
@@ -67,6 +67,7 @@ function SignUpPage() {
       return;
     }
     setLoading(true);
+    track("signup_started", { source: "skapa-konto" });
     const target = safeNext(next);
     const redirectUrl = `${window.location.origin}${target}`;
     const { error } = await withBackendRecovery(
@@ -91,6 +92,7 @@ function SignUpPage() {
       return;
     }
 
+    track("signup_completed", { result: "completed" });
     toast({ title: "Konto skapat", description: "Du kan logga in nu." });
     navigate({ to: "/sign-in", search: { next: target } });
   }
@@ -170,4 +172,3 @@ function SignUpPage() {
     </div>
   );
 }
-

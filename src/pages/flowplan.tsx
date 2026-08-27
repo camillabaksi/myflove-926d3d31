@@ -1,3 +1,4 @@
+import { track } from "@/lib/analytics";
 import { useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import Layout from "@/components/layout";
@@ -189,6 +190,7 @@ export default function FlowPlanPage() {
         },
       });
       setPlan(result);
+      track("plan_created", { source: "flowplan", result: "completed" });
       // Förankra planens uppgifter i dagens kalender så inget "försvinner".
       const today = new Date().toISOString().split("T")[0] as string;
       for (const item of result.plan) {

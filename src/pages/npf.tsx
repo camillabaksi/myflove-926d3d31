@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { track } from "@/lib/analytics";
 import { DeleteAccountButton } from "@/components/delete-account-button";
 import Layout from "@/components/layout";
 import { Button } from "@/components/ui/button";
@@ -42,6 +44,10 @@ const ROWS: Row[] = [
 ];
 
 export default function NpfPage() {
+  useEffect(() => {
+    track("settings_opened", { source: "anpassa" });
+  }, []);
+
   const { settings, update, reset } = useNpfSettings();
 
   return (
