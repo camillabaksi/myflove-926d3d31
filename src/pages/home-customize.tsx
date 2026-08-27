@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import { Link } from "wouter";
 import Layout from "@/components/layout";
+import { track } from "@/lib/analytics";
 import { HOME_BLOCKS, useHomeLayout } from "@/lib/home-layout";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowUp, ArrowDown, Eye, EyeOff, RotateCcw, PlayCircle } from "lucide-react";
@@ -10,6 +12,20 @@ import { ArrowLeft, ArrowUp, ArrowDown, Eye, EyeOff, RotateCcw, PlayCircle } fro
  */
 export default function HomeCustomizePage() {
   const { order, hidden, toggle, move, reset } = useHomeLayout();
+
+  useEffect(() => {
+    track("settings_opened", { source: "hemskarm" });
+  }, []);
+
+  /** Ett event per anpassning – aldrig vilket innehåll blocket visar. */
+  const toggleBlock = (id: Parameters<typeof toggle>[0]) => {
+    track("settings_opened", { source: "hemskarm", method: "visa-dolj" });
+    toggle(id);
+  };
+  const moveBlock = (id: Parameters<typeof move>[0], dir: -1 | 1) => {
+    track("settings_opened", { source: "hemskarm", method: "ordning" });
+    move(id, dir);
+  };
 
   /** Nollställ introduktionen så den visas igen nästa gång Hem öppnas. */
   const replayIntro = () => {
