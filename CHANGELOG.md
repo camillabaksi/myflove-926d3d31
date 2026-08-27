@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-27 – Mer-menyn: områden och inställningar först
+
+- Mina områden och Inställningar ligger nu överst i Mer.
+- Min profil och Anpassa MyFlove (hemskärm, introduktion, bottenmeny) har flyttats längst ner, i samma inbördes ordning.
+
 ## 2026-08-27 – Steg-för-steg, omgång 2 (Planering, Hem, Mer)
 
 - Planering är nu två tydliga steg: 1) Hur ser dagen ut, 2) Ändra ordningen (Flows förslag går att flytta om).
