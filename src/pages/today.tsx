@@ -3,6 +3,7 @@ import { useMemo, useEffect } from "react";
 import { Link } from "wouter";
 import Layout from "@/components/layout";
 import CollapsibleSection from "@/components/collapsible-section";
+import StepSection from "@/components/step-section";
 import FlowCompanion from "@/components/flow/flow-companion";
 import HelpHint from "@/components/help-hint";
 import DayTimeline, { type TimelineEntry } from "@/components/day-timeline";
@@ -288,10 +289,6 @@ export default function TodayPage() {
                 <p className="text-sm text-muted-foreground">
                   Samlat från hela ditt liv – uppgifter, deadlines, lektioner, barnens dag och
                   tankar du lagt i Quickflow.
-                  <HelpHint label="det som får plats">
-                    MyFlove väljer utifrån din kapacitet just nu. Det som inte får plats försvinner
-                    inte – det ligger kvar under "Resten kan vänta".
-                  </HelpHint>
                 </p>
                 {keep.length === 0 ? (
                   <p className="text-sm text-muted-foreground">
@@ -359,12 +356,11 @@ export default function TodayPage() {
             </StepSection>
           </>
         ) : (
-          <section className="surface-card space-y-3 p-5">
-            <CollapsibleSection
-              title="Dagens lista"
-              headingClassName="text-lg font-semibold"
-              className="space-y-3"
-            >
+          <StepSection
+            step={2}
+            id="idag::steg-lista"
+            title="Dagens lista"
+          >
               <p className="text-sm text-muted-foreground">
                 Allt som ska hända eller göras idag. Bocka av direkt här – statusen är densamma i
                 Flow, på Hem och i Att göra.
@@ -396,8 +392,7 @@ export default function TodayPage() {
               >
                 <ListOrdered size={16} /> Öppna hela Att göra (även kommande dagar)
               </Link>
-            </CollapsibleSection>
-          </section>
+          </StepSection>
         )}
       </div>
     </Layout>
