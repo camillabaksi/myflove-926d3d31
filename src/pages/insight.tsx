@@ -1,6 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Brain, Check, ChevronRight, Info, Plus, Sparkles, X } from "lucide-react";
+import {
+  ArrowLeft,
+  Brain,
+  Check,
+  ChevronRight,
+  Home,
+  Info,
+  Plus,
+  Sparkles,
+  X,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -279,14 +289,33 @@ export default function InsightPage() {
         }}
       >
         <div className="flex items-start gap-3">
+          <button
+            type="button"
+            onClick={() => {
+              if (window.history.length > 1) window.history.back();
+              else window.location.assign("/hem");
+            }}
+            aria-label="Tillbaka"
+            className="press mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-pill bg-card/70 text-ink"
+          >
+            <ArrowLeft size={18} strokeWidth={2.2} />
+          </button>
           <MyFloveInsightGather emoji="🧠" />
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <h1 className="font-display text-2xl font-bold text-ink">MyFlove Insight</h1>
             <p className="mt-1 text-sm text-muted-foreground">
               Förstå behov. Hitta strategier. Gör vardagen enklare.
             </p>
           </div>
+          <Link
+            to="/hem"
+            aria-label="Till hem"
+            className="press mt-0.5 inline-flex h-9 shrink-0 items-center gap-1 rounded-pill bg-card/70 px-3 text-xs font-medium text-ink"
+          >
+            <Home size={14} /> Hem
+          </Link>
         </div>
+
       </header>
 
       {!demoMode && (
