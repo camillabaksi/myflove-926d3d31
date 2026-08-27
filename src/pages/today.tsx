@@ -173,79 +173,79 @@ export default function TodayPage() {
           })}
         </div>
 
-        {/* ❤️ Snabb registrering – samma värden som på Hem */}
-        <QuickCheckin />
-
-        {/* 💜 Flow – reagerar på dagens läge */}
-        <FlowCompanion stage="inline" />
-
-        {/* 🔋 Batteriet – gemensamt för båda vyerna */}
-        <EnergyBattery />
-
-        {/* ✅ Snabb inmatning */}
-        <TaskQuickAdd onAdd={handleQuickAdd} />
+        {/* Steg 1 – hur du mår just nu */}
+        <StepSection
+          step={1}
+          id="idag::steg-mabra"
+          title="Så mår du just nu"
+          description="Fyll i hur du känner dig – resten av dagen anpassas efter det."
+        >
+          <QuickCheckin />
+          <EnergyBattery />
+          <FlowCompanion stage="inline" />
+        </StepSection>
 
         {view === "flow" ? (
           <>
-            {/* 🏠 Lägg till det du gjorde – vardagen som kalendern missar */}
-            <DidThisQuickAdd />
-
-            {/* 📅 Dagens plan */}
-            <section className="surface-card p-5">
-              <CollapsibleSection
-                title="Dagens plan"
-                headingClassName="text-lg font-semibold"
-                className="space-y-3"
+            {/* Steg 2 – dagens plan */}
+            <StepSection
+              step={2}
+              id="idag::steg-plan"
+              title="Dagens plan"
+              description="Allt som hör till idag – händelser, uppgifter och rutiner."
+              help="Tryck på en rad för att ändra tid, text eller ta bort den. Saker utan klockslag ligger samlade längst ner."
+            >
+              {entries.length > 0 ? (
+                <DayTimeline entries={entries} isToday energyByHour={energyByHour} />
+              ) : (
+                <p className="text-sm text-muted-foreground">Inget bokat idag. Hela dagen är din.</p>
+              )}
+              <Link
+                href="/kalender"
+                className="inline-flex items-center gap-2 text-sm text-primary underline-offset-2 hover:underline"
               >
-                <p className="flex items-start gap-2 text-sm text-muted-foreground">
-                  Allt som hör till idag – händelser, uppgifter och rutiner.
-                  <HelpHint label="dagens plan">
-                    Tryck på en rad för att ändra tid, text eller ta bort den. Saker utan klockslag
-                    ligger samlade längst ner.
-                  </HelpHint>
+                <CalendarDays size={16} /> Öppna kalendern (dag/vecka/månad)
+              </Link>
+            </StepSection>
+
+            {/* Steg 3 – lägg till något i dagen */}
+            <StepSection
+              step={3}
+              id="idag::steg-lagg-till"
+              title="Lägg till i dagen"
+              description="Något nytt – eller något du redan hunnit med."
+            >
+              <TaskQuickAdd onAdd={handleQuickAdd} />
+              <DidThisQuickAdd />
+            </StepSection>
+
+            {/* Extra – energibalans och ett förslag, hopfällt tills du vill se det */}
+            <StepSection
+              step={5}
+              id="idag::steg-energibalans"
+              title="Dagens energibalans"
+              description="Hur dagen belastar dig – och ett förslag från Flow."
+              defaultCollapsed
+            >
+              <p className="text-sm text-foreground">{load.summary}</p>
+              {reading.peak && (
+                <p className="text-xs text-muted-foreground">
+                  Starkast {reading.peak.label}
+                  {reading.dip ? ` · lägst ${reading.dip.label}` : ""}
                 </p>
-                {entries.length > 0 ? (
-                  <DayTimeline entries={entries} isToday energyByHour={energyByHour} />
-                ) : (
-                  <p className="text-sm text-muted-foreground">
-                    Inget bokat idag. Hela dagen är din.
-                  </p>
-                )}
-                <Link
-                  href="/kalender"
-                  className="inline-flex items-center gap-2 text-sm text-primary underline-offset-2 hover:underline"
-                >
-                  <CalendarDays size={16} /> Öppna kalendern (dag/vecka/månad)
-                </Link>
-              </CollapsibleSection>
-            </section>
+              )}
+              <div className="flex items-start gap-2 rounded-2xl bg-secondary/40 px-3 py-2 text-sm text-foreground">
+                <Sparkles size={16} className="mt-0.5 shrink-0 text-primary" />
+                <p>
+                  {suggestion.headline}
+                  {suggestion.task ? ` Börja gärna med "${suggestion.task.title}".` : ""}{" "}
+                  <Link href="/flow" className="text-primary underline-offset-2 hover:underline">
+                    Öppna Flow
+                  </Link>
+                </p>
+              </div>
+            </StepSection>
 
-            {/* ⚡ Dagens energibalans + ✨ ett förslag (från Flow-motorn) */}
-            <section className="surface-card space-y-3 p-5">
-              <CollapsibleSection
-                title="Dagens energibalans"
-                headingClassName="text-lg font-semibold"
-                className="space-y-3"
-              >
-                <p className="text-sm text-foreground">{load.summary}</p>
-                {reading.peak && (
-                  <p className="text-xs text-muted-foreground">
-                    Starkast {reading.peak.label}
-                    {reading.dip ? ` · lägst ${reading.dip.label}` : ""}
-                  </p>
-                )}
-                <div className="flex items-start gap-2 rounded-2xl bg-secondary/40 px-3 py-2 text-sm text-foreground">
-                  <Sparkles size={16} className="mt-0.5 shrink-0 text-primary" />
-                  <p>
-                    {suggestion.headline}
-                    {suggestion.task ? ` Börja gärna med "${suggestion.task.title}".` : ""}{" "}
-                    <Link href="/flow" className="text-primary underline-offset-2 hover:underline">
-                      Öppna Flow
-                    </Link>
-                  </p>
-                </div>
-              </CollapsibleSection>
-            </section>
 
             {/* 📋 Dagens ordning – planen du valt i Planera */}
             {dayPlan && dayPlan.steps.length > 0 && (
