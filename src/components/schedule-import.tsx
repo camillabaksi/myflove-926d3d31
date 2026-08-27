@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Upload, Sparkles, FileUp, Check } from "lucide-react";
+import { Upload, Sparkles, FileUp, Check, CalendarCheck, ArrowDown } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
