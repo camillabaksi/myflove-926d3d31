@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-27 – Förhandsvisning av tolkat schema
+
+- Innan du sparar visas nu de tolkade lektionerna grupperade per veckodag, sorterade på tid.
+- Sammanfattning högst upp: hur många lektioner som hittades, hur många som är nya och hur många som redan finns.
+- Lektioner som redan ligger i veckoschemat märks med "finns redan" så du slipper dubbletter.
+
 ## 2026-08-27 – Tydlig plats för uppladdat schema
 
 - Schemauppladdningen i StudyFlow visar nu tydligt att lektionerna sparas i ditt veckoschema, med antal lektioner du redan har.
