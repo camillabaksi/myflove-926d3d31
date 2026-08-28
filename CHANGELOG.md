@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-28 – Pitchmaterial 3.6
+
+- Uppdaterat Living Blueprint, pitchdeck och pitchvideo till version 3.6.
+- Nytt fokus i materialet: Lugnare helhet, färre val, tydligare vägar och levande Flow.
+- Pitchsidan använder nu 3.6-filerna för video, PowerPoint, PDF och blueprint.
+
 ## 2026-08-28 – Subtil sidövergång
 
 - Infört en gemensam fade-transition vid riktiga sidbyten: tonar ut cirka 160 ms och tonar in cirka 220 ms.
