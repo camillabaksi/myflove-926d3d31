@@ -110,6 +110,38 @@ export default function NpfPage() {
           <RotateCcw size={16} /> Återställ till standard
         </Button>
 
+        {/* Integritet – anonym användningsstatistik (speglar cookiepolicyn). */}
+        <section aria-label="Integritet" className="mt-10 space-y-3">
+          <div className="flex items-center gap-2 text-primary">
+            <BarChart3 size={18} />
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+              Integritet
+            </h2>
+          </div>
+          <label className="surface-card flex items-start justify-between gap-4 p-4 cursor-pointer">
+            <span className="space-y-1">
+              <span className="block font-medium">Dela anonym användningsstatistik</span>
+              <span className="block text-sm text-muted-foreground">
+                Hjälper oss förstå vilka funktioner som används – helt anonymt, utan personuppgifter
+                eller innehåll. Inga marknads- eller tredjepartscookies.{" "}
+                <Link to="/cookies" className="underline underline-offset-2">
+                  Läs mer i cookiepolicyn
+                </Link>
+                .
+              </span>
+            </span>
+            <Switch
+              checked={!statsOptOut}
+              onCheckedChange={(shareStats) => toggleStats(!shareStats)}
+              aria-label="Dela anonym användningsstatistik"
+            />
+          </label>
+          <p className="text-xs text-muted-foreground">
+            Ändringen gäller direkt. Nödvändig lagring (inloggning, dina inställningar och data)
+            påverkas aldrig.
+          </p>
+        </section>
+
         {/* Konto – längst ner, tydligt men sekundärt. */}
         <section
           data-testid="account-section"
