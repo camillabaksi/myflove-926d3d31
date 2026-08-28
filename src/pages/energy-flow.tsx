@@ -40,9 +40,10 @@ import {
 
 interface Props {
   showHeader?: boolean;
+  showDayFlow?: boolean;
 }
 
-export function EnergyFlowContent({ showHeader = true }: Props) {
+export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Props) {
   const {
     entries,
     presets,
@@ -143,7 +144,7 @@ export function EnergyFlowContent({ showHeader = true }: Props) {
 
       <DidThisQuickAdd />
 
-      <DayEnergyFlow showLink={false} />
+      {showDayFlow && <DayEnergyFlow showLink={false} />}
 
       <CollapsibleSection
         title="Dagens balans"
