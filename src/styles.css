@@ -949,3 +949,17 @@ html[data-npf-less="true"] [data-npf="optional"] {
     animation: none !important;
   }
 }
+
+/* Lugn mikroanimation vid sidbyte (Hem, Hälsa, Idag, Planera m.fl.) */
+@keyframes myflove-page-enter {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+.page-transition {
+  animation: myflove-page-enter 240ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-transition { animation: none; }
+}
