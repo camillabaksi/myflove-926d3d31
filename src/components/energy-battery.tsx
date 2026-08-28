@@ -83,7 +83,7 @@ export default function EnergyBattery({
         <span className="mt-0.5 block text-xs text-muted-foreground">
           Mitt batteri ·{" "}
           <span className="font-semibold" style={{ color: tone }}>
-            {level}%
+            {shownLevel}%
           </span>{" "}
           <span aria-hidden>
             {reading.trend === "stiger" ? "↑" : reading.trend === "sjunker" ? "↓" : "→"}
