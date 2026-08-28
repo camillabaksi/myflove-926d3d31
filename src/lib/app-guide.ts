@@ -60,7 +60,7 @@ export const APP_GUIDE: GuideGroup[] = [
       {
         href: "/mitt-batteri",
         label: "Mitt batteri",
-        what: "Logga humör och ork på några sekunder",
+        what: "Checka in ork och mående på några sekunder",
       },
       {
         href: "/energifloede",
