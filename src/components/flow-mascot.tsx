@@ -197,7 +197,11 @@ export function FlowMascot({
       )}
       <span
         aria-hidden={false}
-        className={cn(alive && "flow-gaze inline-flex", blinking && "flow-blinking")}
+        className={cn(
+          alive && "flow-gaze inline-flex",
+          blinking && "flow-blinking",
+          bump && "absolute inset-0 inline-flex items-center justify-center",
+        )}
         style={
           alive
             ? {
@@ -215,12 +219,15 @@ export function FlowMascot({
           className={cn(
             "object-contain drop-shadow-[0_8px_24px_rgba(124,92,224,0.25)]",
             SIZES[size],
+            // Skalas i mitten – rutan runtom står stilla.
+            bump && "origin-center scale-125",
             mood ? MOODS[mood] : cn(float && !wave && "floaty", wave && "wave-hello"),
             alive && !mood && !wave && !float && "flow-breathe-body",
             imgClassName,
           )}
         />
       </span>
+
     </span>
   );
 }
