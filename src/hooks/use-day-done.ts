@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { useDoneLog } from "@/hooks/use-done-log";
-import { useMedications, useReminders } from "@/hooks/use-data";
+import { useMedications } from "@/hooks/use-data";
 import { useTraining } from "@/hooks/use-training";
 import { routineOccursOn, type Routine } from "@/pages/routines";
 import { medicationOccursOn } from "@/lib/medications";
