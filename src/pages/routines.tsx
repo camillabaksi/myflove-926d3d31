@@ -5,6 +5,14 @@ import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { useReminders } from "@/hooks/use-data";
 import { useToast } from "@/hooks/use-toast";
 import { Plus, Trash2, Repeat, Clock, Sparkles } from "lucide-react";
+import { REPEAT_LABELS, occursOn, type RepeatMode } from "@/lib/recurrence";
+
+const REPEAT_OPTIONS: Array<{ value: RepeatMode; label: string }> = [
+  { value: "daily", label: "Varje dag" },
+  { value: "weekdays", label: "Vardagar" },
+  { value: "weekly", label: "Varje vecka" },
+  { value: "none", label: "En gång" },
+];
 
 export interface Routine {
   id: string;
@@ -12,6 +20,17 @@ export interface Routine {
   time: string; // HH:MM
   enabled: boolean;
   createdAt: number;
+  /** Hur ofta rutinen sker. Saknas = varje dag (gammal data). */
+  repeat?: RepeatMode;
+  /** Startdatum (YYYY-MM-DD). Krävs för engångsrutiner. */
+  startDate?: string;
+}
+
+/** Sker rutinen den här dagen? */
+export function routineOccursOn(routine: Routine, dateStr: string): boolean {
+  const repeat = routine.repeat ?? "daily";
+  if (repeat === "daily" && !routine.startDate) return true;
+  return occursOn(routine.startDate ?? dateStr, repeat, dateStr);
 }
 
 const generateId = () => Math.random().toString(36).slice(2, 11);
@@ -36,6 +55,8 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
   const { toast } = useToast();
   const [title, setTitle] = useState("");
   const [time, setTime] = useState("");
+  const [repeat, setRepeat] = useState<RepeatMode>("daily");
+  const [startDate, setStartDate] = useState(() => todayIso());
 
   // Auto-materialize today's reminders from enabled routines (once per day per routine)
   useEffect(() => {
@@ -48,6 +69,7 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
     let created = 0;
     for (const r of routines) {
       if (!r.enabled) continue;
+      if (!routineOccursOn(r, today)) continue;
       const exists = reminders.some(
         (rem) => rem.date === today && rem.time === r.time && rem.title === r.title,
       );
@@ -71,11 +93,20 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
     setRoutines((prev) =>
       [
         ...prev,
-        { id: generateId(), title: title.trim(), time, enabled: true, createdAt: Date.now() },
+        {
+          id: generateId(),
+          title: title.trim(),
+          time,
+          enabled: true,
+          createdAt: Date.now(),
+          repeat,
+          ...(repeat === "daily" ? {} : { startDate }),
+        },
       ].sort((a, b) => a.time.localeCompare(b.time)),
     );
     setTitle("");
     setTime("");
+    setRepeat("daily");
     toast({ description: "Rutin sparad – dyker upp i morgondagens dag också 🌱" });
   };
 
@@ -84,7 +115,14 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
     setRoutines((prev) =>
       [
         ...prev,
-        { id: generateId(), title: s.title, time: s.time, enabled: true, createdAt: Date.now() },
+        {
+          id: generateId(),
+          title: s.title,
+          time: s.time,
+          enabled: true,
+          createdAt: Date.now(),
+          repeat: "daily" as RepeatMode,
+        },
       ].sort((a, b) => a.time.localeCompare(b.time)),
     );
   };
@@ -129,6 +167,7 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
     let created = 0;
     for (const r of routines) {
       if (!r.enabled) continue;
+      if (!routineOccursOn(r, today)) continue;
       const exists = reminders.some(
         (rem) => rem.date === today && rem.time === r.time && rem.title === r.title,
       );
@@ -180,6 +219,38 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
             className="p-3 rounded-xl bg-secondary/50 border-transparent focus:border-primary focus:ring-1 focus:ring-primary outline-none text-base"
           />
         </div>
+        <div className="space-y-2">
+          <p className="text-sm font-medium text-muted-foreground">Hur ofta?</p>
+          <div className="flex flex-wrap gap-2">
+            {REPEAT_OPTIONS.map((opt) => (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={() => setRepeat(opt.value)}
+                aria-pressed={repeat === opt.value}
+                className={`px-3 py-2 rounded-xl border text-sm transition-all ${
+                  repeat === opt.value
+                    ? "bg-primary/10 border-primary/40 text-primary"
+                    : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
+                }`}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+          {repeat !== "daily" && (
+            <label className="flex items-center gap-2 text-sm text-muted-foreground">
+              {repeat === "none" ? "Datum" : "Startdatum"}
+              <input
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                className="p-2 rounded-xl bg-secondary/50 border border-transparent focus:border-primary focus:ring-1 focus:ring-primary outline-none text-sm"
+              />
+            </label>
+          )}
+        </div>
+
         <Button type="submit" className="w-full h-12 rounded-xl">
           <Plus size={18} className="mr-2" /> Lägg till rutin
         </Button>
@@ -243,7 +314,14 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-medium truncate">{r.title}</p>
-                  <p className="text-xs text-muted-foreground">Varje dag</p>
+                  <p className="text-xs text-muted-foreground">
+                    {REPEAT_LABELS[r.repeat ?? "daily"]}
+                    {r.repeat === "none" && r.startDate
+                      ? ` ${r.startDate}`
+                      : r.repeat && r.repeat !== "daily" && r.startDate
+                        ? ` från ${r.startDate}`
+                        : ""}
+                  </p>
                 </div>
                 <input
                   type="time"
