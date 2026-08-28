@@ -132,3 +132,16 @@ export function recallPrefix(insightText?: string | null): string | null {
   if (!trimmed) return null;
   return `Jag minns: ${trimmed.charAt(0).toLowerCase()}${trimmed.slice(1)}`;
 }
+
+/**
+ * Flows röst om vad han lärt sig – språket följer den faktiska
+ * inlärningsnivån (0–100) och antalet verkliga insikter. Aldrig påhittat:
+ * utan insikter säger Flow bara att han fortfarande lär känna dig.
+ */
+export function learningVoice(level: number, insightCount: number): string {
+  if (insightCount === 0) return "Jag lär fortfarande känna dig.";
+  if (level < 15) return "Jag har börjat lägga märke till några små saker om dig.";
+  if (level < 40) return "Jag börjar förstå dina mönster.";
+  if (level < 70) return "Jag har upptäckt ett mönster i hur din vardag hänger ihop.";
+  return "Jag minns hur din energi och din vardag brukar hänga ihop.";
+}
