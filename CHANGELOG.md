@@ -1,12 +1,15 @@
 # Changelog
 
-## 2026-08-28 – Levande men lugn polish
+## 2026-08-28 – Slutstädning efter QA
 
-- Avbockning ger en liten engångsreaktion på bocken – ingen konfetti, inga poäng.
-- Batteriet slutade pulsera i bakgrunden; det rör sig bara när värdet faktiskt ändras.
-- "Flow lär känna dig" använder nu ett språk som följer din faktiska inlärningsnivå – från "Jag lär fortfarande känna dig" till "Jag minns…" – och insikterna tonar in mjukt.
-- Kväll + lågt batteri ger en lugnare mening på Hem.
-- Allt respekterar reducerad rörelse. Ingen navigation, data eller lagring har ändrats.
+- Rutiner använder nu samma dagsbaserade genomförandelogg i Hem, Idag och Flow; äldre rutinstatus migreras automatiskt.
+- Återkommande rutiner filtreras konsekvent efter valt datum även i dagens Flow-lista.
+- Flow och FlowPlan har separata och tydliga sidtitlar; FlowPlan finns också i appguiden.
+- Insight-demoläget kräver nu explicit demoläge och servervaliderad admin-roll.
+- "Energins historik" är inte längre en separat ingång i Hälsa utan nås från Mitt batteri.
+
+
+## 2026-08-28 – Levande men lugn polish
 
 
 ## 2026-08-28 – Städad struktur: en plats för varje sak

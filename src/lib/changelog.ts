@@ -10,6 +10,16 @@ export const CHANGELOG_UPDATED = "2026-08-28";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Slutstädning efter QA",
+    items: [
+      "Rutiner använder samma dagsbaserade genomförandelogg i Hem, Idag och Flow; äldre rutinstatus migreras automatiskt (2026-08-28)",
+      "Återkommande rutiner filtreras konsekvent efter valt datum även i dagens Flow-lista (2026-08-28)",
+      "Flow och FlowPlan har separata sidtitlar och FlowPlan finns i appguiden (2026-08-28)",
+      "Insight-demoläget kräver explicit demoläge och servervaliderad admin-roll (2026-08-28)",
+      "Energins historik är inte längre en separat ingång i Hälsa utan nås från Mitt batteri (2026-08-28)",
+    ],
+  },
+  {
     title: "Levande men lugn polish",
     items: [
       "Liten engångsreaktion på bocken när något blir klart – ingen konfetti, inga poäng (2026-08-28)",
