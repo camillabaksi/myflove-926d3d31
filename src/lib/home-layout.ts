@@ -36,7 +36,7 @@ export const HOME_BLOCKS: HomeBlockMeta[] = [
     label: "Rutiner & medicin",
     hint: "Dagens rutiner och doser – bocka av med ett tryck",
   },
-  { id: "idag", label: "Dagens saker", hint: "Bocka av dagens saker och se vad du redan gjort" },
+  { id: "idag", label: "Dagens översikt", hint: "Kort sammanfattning – hela listan finns i Min dag" },
   { id: "forslag", label: "Rekommendation just nu", hint: "Ett förslag – samma som i Planera" },
   { id: "lagg-till", label: "Lägg till", hint: "Snabbknapp för ny uppgift" },
   { id: "vagar", label: "Vad behöver du just nu?", hint: "Fyra vanliga situationer" },
