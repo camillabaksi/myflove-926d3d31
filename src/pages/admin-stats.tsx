@@ -6,6 +6,7 @@ import CollapsibleSection from "@/components/collapsible-section";
 import AnalyticsExport from "@/components/admin/analytics-export";
 
 const SECTION_LABELS: Record<string, string> = {
+  page: "Sidvisning",
   mood: "Mående",
   dump: "Dumping",
   calendar: "Kalender",
@@ -79,6 +80,7 @@ export default function AdminStats() {
     .sort((a, b) => b.events - a.events);
 
   const maxViews = Math.max(1, ...viewsBySection.map((row) => row.events));
+  const maxPageViews = Math.max(1, ...pageViews.map((row) => row.events));
   const maxDaily = Math.max(1, ...(data?.dailyActiveSessions ?? []).map((d) => d.sessions));
   const maxSignups = Math.max(1, ...(data?.dailySignups ?? []).map((d) => d.users));
 
