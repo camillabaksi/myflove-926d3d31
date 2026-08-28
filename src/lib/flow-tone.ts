@@ -67,6 +67,8 @@ export function homeContextLine(ctx: HomeContext): string {
       : "Du är snart klar för idag. Resten kan få vänta.";
   }
   if (batteryTone(battery) === "verylow") return "Vi tar det lugnt idag.";
+  if (hour >= 18 && batteryTone(battery) === "low")
+    return "Det börjar bli kväll och batteriet är lågt. Vi kan göra resten enkelt.";
   if (completedToday >= 3) return "Du har fått flera saker gjorda idag. ❤️";
   if (batteryTone(battery) === "low" && remainingToday > 0)
     return "Det verkar vara lite ont om batteri idag. En sak i taget.";
