@@ -9,7 +9,8 @@ import appCss from "../styles.css?url";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { PageTransition } from "@/components/page-transition";
+
+
 
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
@@ -113,9 +114,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <PageTransition>
-          <Outlet />
-        </PageTransition>
+        <Outlet />
         <Toaster />
         <Sonner />
       </TooltipProvider>

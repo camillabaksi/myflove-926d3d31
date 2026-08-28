@@ -950,29 +950,30 @@ html[data-npf-less="true"] [data-npf="optional"] {
   }
 }
 
-/* Lugn sidövergång: ut ~160 ms, in ~220 ms. Endast vid sidbyte. */
-@keyframes myflove-page-enter {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes myflove-page-leave {
+/* Lugn fade enbart vid route-navigation via TanStack View Transitions. */
+@keyframes myflove-view-fade-out {
   from { opacity: 1; }
   to { opacity: 0; }
 }
 
-.page-transition {
-  animation: myflove-page-enter 220ms ease-in-out;
+@keyframes myflove-view-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-.page-transition-out {
-  animation: myflove-page-leave 160ms ease-in-out forwards;
+::view-transition-old(root) {
+  animation: myflove-view-fade-out 170ms ease-in-out both;
+}
+
+::view-transition-new(root) {
+  animation: myflove-view-fade-in 220ms ease-in-out both;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .page-transition,
-  .page-transition-out { animation: none; opacity: 1; }
+  ::view-transition-old(root),
+  ::view-transition-new(root) { animation: none; }
 }
+
 
 
 /* Liten engångsreaktion när något bockas av – ingen loop, ingen konfetti. */
