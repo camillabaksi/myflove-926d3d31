@@ -17,6 +17,8 @@ export function MedicationContent({ showHeader = true }: MedicationContentProps)
   const [name, setName] = useState("");
   const [dosage, setDosage] = useState("");
   const [times, setTimes] = useState<string[]>([""]);
+  const [repeat, setRepeat] = useState<RepeatMode>("daily");
+  const [startDate, setStartDate] = useState(() => new Date().toISOString().slice(0, 10));
 
   const updateTime = (index: number, value: string) => {
     setTimes((prev) => prev.map((t, i) => (i === index ? value : t)));
@@ -29,10 +31,17 @@ export function MedicationContent({ showHeader = true }: MedicationContentProps)
     e.preventDefault();
     const validTimes = times.filter((t) => t.trim() !== "");
     if (name.trim() === "" || validTimes.length === 0) return;
-    addMedication(name.trim(), validTimes, dosage.trim() || undefined);
+    addMedication(
+      name.trim(),
+      validTimes,
+      dosage.trim() || undefined,
+      repeat,
+      repeat === "daily" ? undefined : startDate,
+    );
     setName("");
     setDosage("");
     setTimes([""]);
+    setRepeat("daily");
     toast({ description: "Medicin tillagd 💊" });
   };
 
