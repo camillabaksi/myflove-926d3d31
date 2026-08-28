@@ -80,11 +80,11 @@ export const APP_GUIDE: GuideGroup[] = [
   {
     id: "hemma",
     emoji: "🏡",
-    label: "Hemma",
-    hint: "Mat, inköp, städ och pengar",
+    label: "Hem",
+    hint: "Mat, inköp, städning och pengar",
     entries: [
       { href: "/matlista", label: "Matlista", what: "Veckans mat – egen eller delad" },
-      { href: "/shopping", label: "Inköp", what: "Inköpslista du kan dela med andra" },
+      { href: "/shopping", label: "Inköpslista", what: "Inköpslista du kan dela med andra" },
       { href: "/stadning", label: "Städning", what: "Vad som behöver göras hemma" },
       { href: "/finances", label: "Ekonomi", what: "Räkningar och budget" },
     ],
