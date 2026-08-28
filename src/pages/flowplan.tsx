@@ -22,6 +22,7 @@ import { planFlowSequence, type FlowPlanResult } from "@/lib/flowplan.functions"
 import { useTasks, useFocus } from "@/hooks/use-data";
 import { supabase } from "@/integrations/supabase/client";
 import { useLocalStorage } from "@/lib/storage";
+import WhyHint from "@/components/why-hint";
 
 type DeadlineInfo = { daysUntilDue: number; hasReminder: boolean; activeNow: boolean };
 
@@ -271,9 +272,14 @@ export default function FlowPlanPage() {
                 Här bestämmer du ordningen på dagen
               </p>
               <p className="text-sm text-muted-foreground">
-                Flow föreslår en ordning som passar dagen – du ändrar den som du vill. Vad som
-                faktiskt händer idag ser du i Idag.
+                Planera utifrån vad du har ork till – inte bara vad som behöver göras. Flow föreslår
+                en ordning, du ändrar den som du vill.
               </p>
+              <div className="mt-1">
+                <WhyHint label="planera">
+                  Planering kan hjälpa dig använda din energi på sådant som är viktigt för dig.
+                </WhyHint>
+              </div>
             </div>
           </div>
         </div>

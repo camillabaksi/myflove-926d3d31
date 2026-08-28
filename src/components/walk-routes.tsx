@@ -61,7 +61,6 @@ export default function WalkRoutesSection() {
   const optsRef = useRef({ mode, minutes, km });
   optsRef.current = { mode, minutes, km };
 
-
   const findRoutes = useCallback(
     async (opts?: { fresh?: boolean; silent?: boolean }) => {
       if (typeof navigator === "undefined" || !navigator.geolocation) {
@@ -149,7 +148,7 @@ export default function WalkRoutesSection() {
           <RouteIcon size={18} className="text-primary" /> Promenadvägar nära dig
         </>
       }
-      description="Säg hur länge eller hur långt du vill gå – Flow föreslår gångbara vägar i olika riktningar och öppnar dem i kartan."
+      description="Hitta en promenad som passar din energi just nu. Säg hur länge eller hur långt du vill gå – Flow föreslår gångbara vägar och öppnar dem i kartan."
       help="Flow använder din plats för att hitta gångvägar, stigar och lugna gator åt olika håll. Förslagen är rundor tur och retur, öppna dem i Google Maps för vägbeskrivning."
     >
       {advice && (
@@ -300,8 +299,8 @@ export default function WalkRoutesSection() {
           </div>
 
           <p className="mt-3 text-xs text-muted-foreground">
-            Rundtur: du startar och slutar på samma plats. Vändpunkten ligger {selectedRoute.bearing}{" "}
-            – Google Maps visar vägen dit och tillbaka.
+            Rundtur: du startar och slutar på samma plats. Vändpunkten ligger{" "}
+            {selectedRoute.bearing} – Google Maps visar vägen dit och tillbaka.
           </p>
 
           <Button asChild className="mt-3 w-full rounded-xl gap-2">
@@ -381,7 +380,6 @@ export default function WalkRoutesSection() {
           })}
         </ul>
       )}
-
 
       {routes && routes.length === 0 && (
         <p className="text-sm text-muted-foreground">

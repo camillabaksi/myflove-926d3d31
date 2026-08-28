@@ -4,6 +4,9 @@ import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import type { EnergyCategory } from "@/lib/energy-flow";
 import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
+import WhyHint from "@/components/why-hint";
+import { useFlowLearning } from "@/hooks/use-flow-learning";
+import { benefitVoice } from "@/lib/flow-tone";
 
 const MOODS = [
   { score10: 2, emoji: "😢", label: "Tungt" },
@@ -46,6 +49,8 @@ export default function SimpleCheckin({
 }) {
   const { moodValue, energyValue, logMood, logEnergy } = useQuickCheckin();
   const { addFactor } = useEnergyFlow();
+  const knowledge = useFlowLearning();
+  const benefit = benefitVoice(knowledge.level, knowledge.insights.length);
   const [battery, setBattery] = useState(energyValue ?? 6);
   const [mood, setMood] = useState<number | null>(moodValue);
   const [factors, setFactors] = useState<string[]>([]);
@@ -101,7 +106,13 @@ export default function SimpleCheckin({
       )}
     >
       <div className="space-y-2">
-        <p className="text-sm font-medium text-ink">Hur är ditt batteri just nu?</p>
+        <div className="flex items-center justify-between gap-2">
+          <p className="text-sm font-medium text-ink">Hur är ditt batteri just nu?</p>
+          <WhyHint label="logga energi">
+            Det hjälper Flow se vad som brukar ge eller ta energi för dig.
+          </WhyHint>
+        </div>
+        <p className="text-xs text-muted-foreground">{benefit}</p>
         <div className="flex gap-1.5">
           {LEVELS.map((l) => (
             <button
@@ -128,8 +139,16 @@ export default function SimpleCheckin({
       </div>
 
       <div className="space-y-2">
-        <p className="text-sm font-medium text-ink">
-          Hur mår du? <span className="font-normal text-muted-foreground">(valfritt)</span>
+        <div className="flex items-center justify-between gap-2">
+          <p className="text-sm font-medium text-ink">
+            Hur mår du? <span className="font-normal text-muted-foreground">(valfritt)</span>
+          </p>
+          <WhyHint label="logga mående">
+            Det hjälper Flow förstå om ditt mående och din energi brukar hänga ihop för dig.
+          </WhyHint>
+        </div>
+        <p className="text-xs text-muted-foreground">
+          Flow lär sig hur energi och mående hänger ihop för dig. Du kan hoppa över.
         </p>
         <div className="flex justify-between gap-1">
           {MOODS.map((m) => (
@@ -196,11 +215,13 @@ export default function SimpleCheckin({
         onClick={save}
         className="w-full rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-opacity hover:opacity-90"
       >
-        {saved ? "Sparat ✓" : "Spara incheckning"}
+        {saved ? "💜 Tack" : "Spara incheckning"}
       </button>
 
-      <p className="text-xs text-muted-foreground">
-        Inget är rätt eller fel. Du kan ändra dagens värde när du vill.
+      <p aria-live="polite" className="text-xs text-muted-foreground">
+        {saved
+          ? "💜 Tack. Det hjälper mig att förstå dig bättre."
+          : "Inget är rätt eller fel. Du kan ändra dagens värde när du vill."}
       </p>
     </section>
   );

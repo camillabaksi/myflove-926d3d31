@@ -10,6 +10,16 @@ export const CHANGELOG_UPDATED = "2026-08-28";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Tydlig nytta med loggning",
+    items: [
+      "Incheckningen visar kort vad du får tillbaka, anpassat efter hur väl Flow känner dig (2026-08-28)",
+      "Diskret ⓘ Varför? på energi, mående och planering – bara där nyttan inte är självklar (2026-08-28)",
+      "Mänsklig bekräftelse efter sparad incheckning i stället för teknisk text (2026-08-28)",
+      "Promenader beskrivs utifrån nyttan: en promenad som passar din energi just nu (2026-08-28)",
+      "Befintlig Flow-learning återanvänds – inga påhittade mönster och ingen ny datamodell (2026-08-28)",
+    ],
+  },
+  {
     title: "Pitchmaterial 3.6",
     items: [
       "Living Blueprint, pitchdeck och pitchvideo är uppdaterade till version 3.6 (2026-08-28)",
@@ -88,7 +98,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     items: [
       "Liten engångsreaktion på bocken när något blir klart – ingen konfetti, inga poäng (2026-08-28)",
       "Batteriet pulserar inte längre i bakgrunden; det rör sig bara när värdet ändras (2026-08-28)",
-      "\"Flow lär känna dig\" följer din faktiska inlärningsnivå i språket och tonar in insikterna mjukt (2026-08-28)",
+      '"Flow lär känna dig" följer din faktiska inlärningsnivå i språket och tonar in insikterna mjukt (2026-08-28)',
       "Kväll kombinerat med lågt batteri ger en lugnare mening på Hem (2026-08-28)",
     ],
   },
@@ -97,7 +107,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     items: [
       "QuickFlow är en egen ingång i menyn i stället för en underrubrik i Planera (2026-08-28)",
       "Flow-inställningar finns bara på ett ställe: Inställningar → Flow (2026-08-28)",
-      "\"Att göra\" heter nu \"Alla uppgifter\" – hela listan framåt, dagens saker bor i Idag (2026-08-28)",
+      '"Att göra" heter nu "Alla uppgifter" – hela listan framåt, dagens saker bor i Idag (2026-08-28)',
       "Hälsa: dubbla ingångar till Mitt batteri borttagna – energi, mående och sömn checkas in på ett ställe (2026-08-28)",
       "Gamla länkar leder fortfarande vidare till rätt vy, ingen data eller funktion borttagen (2026-08-28)",
     ],
@@ -111,7 +121,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Flow känns levande",
     items: [
-      "Flows ton anpassas efter batteriet – från \"bra läge för den större saken\" till \"vi behöver inte pressa idag\" (2026-08-28)",
+      'Flows ton anpassas efter batteriet – från "bra läge för den större saken" till "vi behöver inte pressa idag" (2026-08-28)',
       "Flow reagerar när något blir klart och frågar ibland om du vill ta nästa eller pausa (2026-08-28)",
       "Missade saker möts utan skuld, med Flytta till imorgon som ett klick (2026-08-28)",
       "Hem säger olika saker beroende på tid, energi och hur dagen gått – utan nya kort (2026-08-28)",
@@ -151,7 +161,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Besöksanalys",
     items: [
-      'Sidvisningar loggas anonymt vid varje navigering – se hur många som öppnar den delade länken och vilka sidor de besöker (2026-08-28)',
+      "Sidvisningar loggas anonymt vid varje navigering – se hur många som öppnar den delade länken och vilka sidor de besöker (2026-08-28)",
       'Admin-vyn visar "Mest besökta sidor" med visningar per sida och unika besökare (2026-08-28)',
     ],
   },

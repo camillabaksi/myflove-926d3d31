@@ -122,6 +122,7 @@ export default function QuickCheckin({ className }: { className?: string }) {
             <span aria-hidden>❤️</span> Hur är det just nu?
           </span>
         }
+        description="Det här hjälper Flow förstå hur din energi förändras under dagen och vad som brukar påverka dig."
         headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
         className="space-y-5"
         actions={
@@ -182,10 +183,12 @@ export default function QuickCheckin({ className }: { className?: string }) {
           {justSaved ? "Sparat ✓" : "Logga"}
         </button>
 
-        <p className="text-xs text-muted-foreground">
-          {moodValue != null || energyValue != null
-            ? "Sparat. Du kan justera när du vill under dagen."
-            : "Dra till det som stämmer just nu, eller tryck bara Logga. Inget är rätt eller fel."}
+        <p aria-live="polite" className="text-xs text-muted-foreground">
+          {justSaved
+            ? "💜 Tack. Det hjälper mig att förstå dig bättre."
+            : moodValue != null || energyValue != null
+              ? "Du kan justera när du vill under dagen."
+              : "Dra till det som stämmer just nu, eller tryck bara Logga. Inget är rätt eller fel."}
         </p>
       </CollapsibleSection>
     </section>
