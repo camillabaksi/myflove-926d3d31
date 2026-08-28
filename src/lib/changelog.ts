@@ -10,6 +10,16 @@ export const CHANGELOG_UPDATED = "2026-08-28";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Städad struktur: en plats för varje sak",
+    items: [
+      "QuickFlow är en egen ingång i menyn i stället för en underrubrik i Planera (2026-08-28)",
+      "Flow-inställningar finns bara på ett ställe: Inställningar → Flow (2026-08-28)",
+      "\"Att göra\" heter nu \"Alla uppgifter\" – hela listan framåt, dagens saker bor i Idag (2026-08-28)",
+      "Hälsa: dubbla ingångar till Mitt batteri borttagna – energi, mående och sömn checkas in på ett ställe (2026-08-28)",
+      "Gamla länkar leder fortfarande vidare till rätt vy, ingen data eller funktion borttagen (2026-08-28)",
+    ],
+  },
+  {
     title: "Lugn sidbytesanimation",
     items: [
       "Sidbyte mellan Hälsa, Idag och Planera (och övriga sidor) fadar in mjukt med ett litet lyft – och respekterar reducerad rörelse (2026-08-28)",

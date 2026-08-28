@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-08-28 – Städad struktur: en plats för varje sak
+
+- QuickFlow ligger inte längre inuti Planera i menyn – det är en egen ingång: "Fånga något snabbt".
+- Flow-inställningar fanns på två ställen i menyn. Nu finns de bara under Inställningar → Flow (funktionen är oförändrad).
+- "Att göra" heter nu "Alla uppgifter" och beskrivs som hela listan framåt – dagens saker bor i Idag. Samma uppgifter, ingen ny lista.
+- Hälsa: korten "Energi & mående" och "Sömn & vila" ledde båda till Mitt batteri. De är borttagna – Mitt batteri högst upp är den enda ingången till energi, mående och sömn.
+- Gamla länkar (/min-dag, /ma-bra, /vad-nu, /fokus, /morgonstart, /dump) fortsätter leda vidare till rätt ställe.
+- Inga funktioner, data eller Flow-beteenden har tagits bort.
+
 ## 2026-08-28 – Lugn sidbytesanimation
 
 - Sidbyte (mellan t.ex. Hälsa, Idag och Planera) har nu en kort, mjuk fade med ett litet lyft (~240 ms) så övergången känns smidig utan att vara påträngande.
