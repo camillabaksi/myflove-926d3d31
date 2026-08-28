@@ -4,7 +4,7 @@ import Page from "@/pages/today";
 export const Route = createFileRoute("/_app/idag")({
   head: () => ({
     meta: [
-      { title: "Min dag – MyFlove" },
+      { title: "Idag – hela dagens lista | MyFlove" },
       {
         name: "description",
         content:
