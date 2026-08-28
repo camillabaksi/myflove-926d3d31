@@ -182,10 +182,12 @@ export default function QuickCheckin({ className }: { className?: string }) {
           {justSaved ? "Sparat ✓" : "Logga"}
         </button>
 
-        <p className="text-xs text-muted-foreground">
-          {moodValue != null || energyValue != null
-            ? "Sparat. Du kan justera när du vill under dagen."
-            : "Dra till det som stämmer just nu, eller tryck bara Logga. Inget är rätt eller fel."}
+        <p aria-live="polite" className="text-xs text-muted-foreground">
+          {justSaved
+            ? "💜 Tack. Det hjälper mig att förstå dig bättre."
+            : moodValue != null || energyValue != null
+              ? "Du kan justera när du vill under dagen."
+              : "Dra till det som stämmer just nu, eller tryck bara Logga. Inget är rätt eller fel."}
         </p>
       </CollapsibleSection>
     </section>
