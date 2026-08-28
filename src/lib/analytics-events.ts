@@ -13,7 +13,6 @@
 
 import { sanitizeCount, sanitizeLabel } from "@/lib/analytics-sanitize";
 
-
 export const ANALYTICS_EVENTS = [
   "app_opened",
   "signup_started",
@@ -172,7 +171,6 @@ export function sanitizePayload(payload?: AnalyticsPayload): AnalyticsPayload {
   }
   return clean;
 }
-
 
 export interface AnalyticsSinkEvent {
   name: AnalyticsEventName;
