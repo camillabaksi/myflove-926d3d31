@@ -10,6 +10,17 @@ export const CHANGELOG_UPDATED = "2026-08-28";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Spara samtal med Flow",
+    items: [
+      "Samtalslista i Prata med Flow med [+ Nytt samtal] högst upp (2026-08-28)",
+      "Flera separata samtal med eget id – öppna och fortsätt ett gammalt samtal (2026-08-28)",
+      "Relativa datum: Idag, Igår, I förrgår (2026-08-28)",
+      "Byt namn och ta bort samtal med enkel bekräftelse (2026-08-28)",
+      "Korta automatiska titlar från samtalets innehåll (2026-08-28)",
+      "Sparade samtal är historik – inte Flows långsiktiga lärande (2026-08-28)",
+    ],
+  },
+  {
     title: "Äkta insikter och rekommendationer",
     items: [
       "Insikter visas bara när de syns i din egen data – annars ett lugnt tomläge (2026-08-28)",

@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-08-28 – Spara samtal med Flow
+
+- "Prata med Flow" har nu en tydlig samtalslista: [+ Nytt samtal] högst upp och "Mina samtal" under, senast använda först.
+- Varje samtal är separat med eget id – nya samtal blandas aldrig ihop med gamla, och du kan fortsätta där du slutade.
+- Datum visas mänskligt: Idag, Igår, I förrgår – annars vanligt datum.
+- ⋯ ger Byt namn och Ta bort samtal, med enkel bekräftelse innan radering.
+- Automatiska, korta titlar från samtalets första meddelande – aldrig "Chat 1". Utan innehåll heter samtalet "Nytt samtal".
+- Tomt läge: "💜 Prata med Flow – Du kan börja ett nytt samtal när du vill."
+- Sparade samtal påverkar inte Flows långsiktiga lärande; det är fortsatt två skilda saker.
+- Påbörjad text sparas i sessionslagring i stället för klartext på disken och rensas vid utloggning.
+
 ## 2026-08-28 – Äkta insikter och rekommendationer
 
 - "Hitta mitt flow" visar bara mönster som faktiskt syns i din egen data – ingen generisk uppmuntran längre när underlag saknas.
@@ -8,7 +19,6 @@
 - Avklarade uppgifter räknas nu på när de faktiskt blev klara (completedAt), inte när de skapades.
 - Dagens fokus visas bara när det gäller idag.
 - Tomläge i stället för påhittad slutsats: "Jag har inte tillräckligt underlag ännu."
-
 
 ## 2026-08-28 – Tydlig nytta med loggning
 
