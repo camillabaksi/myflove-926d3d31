@@ -614,7 +614,7 @@ export default function Layout({ children }: LayoutProps) {
         label: "Flow",
         hint: "Förstå, hjälpa och föreslå",
         icon: MessageCircle,
-        hrefs: ["/flow", "/assistant", "/flow-installningar"],
+        hrefs: ["/flow", "/assistant"],
       },
       {
         id: "avancerat",
