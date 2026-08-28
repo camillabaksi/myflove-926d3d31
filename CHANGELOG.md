@@ -3,7 +3,7 @@
 ## 2026-08-28 – En plats för energi, tydligare roller
 
 - "Energi och mående" och "Mitt batteri" var samma sak på två ställen. Nu bor incheckningen, dagens kurva, Stop-pausen och historiken (mående, energi, flöde) på **Mitt batteri** – /ma-bra går dit automatiskt.
-- Menyn har en rad i stället för två för energi, och länkar från Flow, Planering, FlowScore och appguiden pekar på Mitt batteri.
+- Menyn har en rad i stället för två för energi. Förtydligande: **bara energi-/måendeingångar** (incheckning, energi- och måendekort, energihistorik-genvägar och gamla /ma-bra) pekar på Mitt batteri. Flow, Planering, FlowScore, Prata med Flow, appguiden och QuickFlow behåller sina egna sidor.
 - Tydligare roller i menyn: Min dag (vad som händer), Planering (ordningen), Flow hjälper (förslaget), Prata med Flow (samtalet).
 
 
