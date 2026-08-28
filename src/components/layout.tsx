@@ -111,6 +111,7 @@ interface LayoutProps {
 const CATEGORY_HUE: Record<string, string> = {
   myflow: "258 62% 60%",
   flowflow: "285 52% 58%",
+  quickflow: "38 82% 56%",
   healthflow: "327 62% 62%",
   insightflow: "285 52% 58%",
   flowhelp: "258 62% 60%",
@@ -360,9 +361,9 @@ export default function Layout({ children }: LayoutProps) {
 
     {
       href: "/tasks",
-      label: "Att göra",
+      label: "Alla uppgifter",
       icon: CheckSquare,
-      hint: "Hela listan – även kommande dagar",
+      hint: "Hela listan framåt – dagens saker bor i Idag",
     },
     {
       href: "/flowscore",
@@ -551,7 +552,14 @@ export default function Layout({ children }: LayoutProps) {
         label: "Planera",
         hint: "Bestäm och ordna vad som ska hända",
         icon: Sparkles,
-        hrefs: ["/flowplan", "/tasks", "/quickflow", "/anteckningar"],
+        hrefs: ["/flowplan", "/tasks"],
+      },
+      {
+        id: "quickflow",
+        label: "QuickFlow",
+        hint: "Fånga något snabbt – sortera sedan",
+        icon: Inbox,
+        hrefs: ["/quickflow", "/anteckningar"],
       },
       {
         id: "healthflow",
@@ -607,7 +615,7 @@ export default function Layout({ children }: LayoutProps) {
         label: "Flow",
         hint: "Förstå, hjälpa och föreslå",
         icon: MessageCircle,
-        hrefs: ["/flow", "/assistant", "/flow-installningar"],
+        hrefs: ["/flow", "/assistant"],
       },
       {
         id: "avancerat",

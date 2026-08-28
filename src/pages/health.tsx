@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "wouter";
-import { ArrowRight, Battery, Dumbbell, Pill, Zap, Moon } from "lucide-react";
+import { ArrowRight, Battery, Dumbbell, Pill, Zap } from "lucide-react";
 import Layout from "@/components/layout";
 import { MyFloveHeader } from "@/components/myflove";
 import EnergyBattery from "@/components/energy-battery";
@@ -18,12 +18,6 @@ const AREAS: {
   what: string;
 }[] = [
   {
-    href: "/mitt-batteri",
-    icon: Battery,
-    title: "Energi & mående",
-    what: "Checka in på några sekunder. Här bor dagens kurva och historiken.",
-  },
-  {
     href: "/traning",
     icon: Dumbbell,
     title: "Träning & promenader",
@@ -34,12 +28,6 @@ const AREAS: {
     icon: Pill,
     title: "Rutiner & medicin",
     what: "Morgonstart, fasta rutiner och dagens doser.",
-  },
-  {
-    href: "/mitt-batteri",
-    icon: Moon,
-    title: "Sömn & vila",
-    what: "Dagens början och slut loggar du i Mitt batteri.",
   },
   {
     href: "/energifloede",
@@ -63,7 +51,13 @@ export default function HealthPage() {
           description="Hur du mår – energi, träning, medicin och vila på ett ställe."
         />
 
-        <EnergyBattery href="/mitt-batteri" />
+        <div className="space-y-2">
+          <EnergyBattery href="/mitt-batteri" />
+          <p className="text-xs text-muted-foreground">
+            Energi, mående, sömn och dagens början och slut checkar du in här – Mitt batteri är
+            enda stället du behöver.
+          </p>
+        </div>
 
         <ul className="space-y-3">
           {AREAS.map((a) => {

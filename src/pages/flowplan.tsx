@@ -359,7 +359,7 @@ export default function FlowPlanPage() {
 
             <div className="text-sm text-muted-foreground">
               {activeTasks.length === 0
-                ? "Du har inga aktiva uppgifter just nu – lägg till några under Att göra först."
+                ? "Du har inga aktiva uppgifter just nu – lägg till några under Alla uppgifter först."
                 : `${activeTasks.length} aktiv${activeTasks.length === 1 ? "" : "a"} uppgift${
                     activeTasks.length === 1 ? "" : "er"
                   } tas med i planeringen.`}
