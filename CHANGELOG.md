@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-28 – Lugn sidbytesanimation
+
+- Sidbyte (mellan t.ex. Hälsa, Idag och Planera) har nu en kort, mjuk fade med ett litet lyft (~240 ms) så övergången känns smidig utan att vara påträngande.
+- Animationen stängs av automatiskt om du valt reducerad rörelse.
+
 ## 2026-08-28 – Flow känns levande: kontextuell ton, reaktioner och mjuka rörelser
 
 - Flows ton följer batteriet: bra energi, lagom, låg och mycket låg ger olika förslag – aldrig krav, aldrig skuld.

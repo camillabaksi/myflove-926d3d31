@@ -10,6 +10,12 @@ export const CHANGELOG_UPDATED = "2026-08-28";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Lugn sidbytesanimation",
+    items: [
+      "Sidbyte mellan Hälsa, Idag och Planera (och övriga sidor) fadar in mjukt med ett litet lyft – och respekterar reducerad rörelse (2026-08-28)",
+    ],
+  },
+  {
     title: "Flow känns levande",
     items: [
       "Flows ton anpassas efter batteriet – från \"bra läge för den större saken\" till \"vi behöver inte pressa idag\" (2026-08-28)",
