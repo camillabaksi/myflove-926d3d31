@@ -50,7 +50,7 @@ export const AREA_SHORTCUTS: Record<LifeArea, FlowShortcut[]> = {
     { href: "/pomodoro", label: "Fokus", emoji: "⏱️" },
   ],
   halsa: [
-    { href: "/ma-bra", label: "Må bra", emoji: "❤️" },
+    { href: "/mitt-batteri", label: "Mitt batteri", emoji: "❤️" },
     { href: "/daglig-rutin", label: "Rutiner & medicin", emoji: "💊" },
     { href: "/traning", label: "Träning", emoji: "🏃" },
     { href: "/flowscore", label: "FlowScore", emoji: "🔋" },
@@ -68,7 +68,7 @@ export const AREA_SHORTCUTS: Record<LifeArea, FlowShortcut[]> = {
     { href: "/idag", label: "Idag", emoji: "❤️" },
   ],
   egentid: [
-    { href: "/ma-bra", label: "Må bra", emoji: "🌙" },
+    { href: "/mitt-batteri", label: "Mitt batteri", emoji: "🌙" },
     { href: "/anteckningar", label: "Anteckningar", emoji: "📝" },
     { href: "/pomodoro", label: "Fokus", emoji: "⏱️" },
     { href: "/idag", label: "Idag", emoji: "❤️" },
@@ -97,8 +97,8 @@ const PLACES: Record<string, { label: string; prompt: string; area: LifeArea }> 
   },
   "/jobb": { label: "Jobb", prompt: "Hjälp mig prioritera på jobbet idag.", area: "jobb" },
   "/workflow": { label: "Jobb", prompt: "Vad tar jag härnäst på jobbet?", area: "jobb" },
-  "/ma-bra": {
-    label: "Må bra",
+  "/mitt-batteri": {
+    label: "Mitt batteri",
     prompt: "Jag känner så här idag – vad är rimligt?",
     area: "vardag",
   },

@@ -53,7 +53,7 @@ export const APP_GUIDE: GuideGroup[] = [
     label: "Mående & energi",
     hint: "Hur du mår och hur mycket ork du har",
     entries: [
-      { href: "/ma-bra", label: "Må bra", what: "Logga humör och ork på några sekunder" },
+      { href: "/mitt-batteri", label: "Mitt batteri", what: "Logga humör och ork på några sekunder" },
       { href: "/energifloede", label: "Energins historik", what: "Vad som brukar ge och ta energi" },
       { href: "/traning", label: "Träning", what: "Rörelse i lagom dos" },
       { href: "/statistik", label: "Statistik", what: "Dina mönster över tid" },

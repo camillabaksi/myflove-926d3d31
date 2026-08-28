@@ -309,7 +309,7 @@ export default function FlowPlanPage() {
               )}
               {!energyAuto && (
                 <Link
-                  to="/ma-bra"
+                  to="/mitt-batteri"
                   className="text-xs text-primary hover:underline flex items-center gap-1"
                 >
                   <Battery size={12} /> Logga energi

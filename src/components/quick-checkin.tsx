@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 /** Snabbmeny för framtida loggtyper – bara det som redan finns i appen. */
 const LOG_LINKS = [
-  { href: "/ma-bra", emoji: "❤️", label: "Mående" },
+  { href: "/mitt-batteri", emoji: "❤️", label: "Mående" },
   { href: "/energifloede", emoji: "⚡", label: "Energi" },
   { href: "/anteckningar", emoji: "✍️", label: "Anteckning" },
 ];

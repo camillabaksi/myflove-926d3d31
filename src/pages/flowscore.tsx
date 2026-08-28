@@ -26,7 +26,7 @@ export default function FlowScorePage() {
 
         <div className="grid grid-cols-3 gap-3">
           <Link
-            href="/ma-bra"
+            href="/mitt-batteri"
             className="rounded-2xl border border-border bg-card p-4 text-center transition hover:bg-muted"
           >
             <p className="text-xs uppercase tracking-wide text-muted-foreground">Energi</p>
@@ -41,7 +41,7 @@ export default function FlowScorePage() {
             </p>
           </Link>
           <Link
-            href="/ma-bra"
+            href="/mitt-batteri"
             className="rounded-2xl border border-border bg-card p-4 text-center transition hover:bg-muted"
           >
             <p className="text-xs uppercase tracking-wide text-muted-foreground">Mående</p>
