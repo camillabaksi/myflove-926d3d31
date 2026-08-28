@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-08-28";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Enklare huvudkategorier",
+    items: [
+      "Ny samlad Hälsa-vy (/halsa) med energi och mående, träning och promenader, rutiner och medicin, sömn och energihistorik (2026-08-28)",
+      'Genomgående språk: "Idag" (hela dagens lista) och "Planera" (bestäm och ordna) ersätter Min dag och Planering (2026-08-28)',
+      "Menyn omgrupperad efter Idag, Planera, Hälsa, Flow och Mina mönster – utan att någon funktion eller rutt tagits bort (2026-08-28)",
+      "Nya anonyma händelser: health_viewed, today_viewed, planning_viewed, flow_viewed (2026-08-28)",
+    ],
+  },
+  {
     title: "Promenader nära dig",
     items: [
       "Flow föreslår promenadlängd utifrån batterinivån, du väljer alltid själv (2026-08-28)",
