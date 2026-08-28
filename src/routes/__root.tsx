@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Outlet, createRootRouteWithContext, HeadContent, Scripts } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { Outlet, createRootRouteWithContext, HeadContent, Scripts, useRouterState } from "@tanstack/react-router";
+import { useEffect, type ReactNode } from "react";
 
 import { initCacheBusting } from "@/lib/cache-busting";
 import { trackPageView } from "@/lib/analytics";
