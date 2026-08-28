@@ -453,7 +453,7 @@ export default function Home() {
                 </p>
               )}
               <Link
-                href={suggestion.task ? "/min-dag" : "/quickflow"}
+                href={suggestion.task ? "/idag" : "/quickflow"}
                 className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
               >
                 {suggestion.task ? "Planera i Min dag" : "Fånga något i QuickFlow"}{" "}
