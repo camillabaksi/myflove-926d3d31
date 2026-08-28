@@ -2,7 +2,11 @@ import { useEffect, useRef } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { useTasks, useMedications, useReminders } from "@/hooks/use-data";
-import { syncReminder, cancelReminder } from "@/lib/push.functions";
+import { syncReminder, cancelReminder, reconcileReminders } from "@/lib/push.functions";
+import {
+  MEDICATION_REMINDER_PREFIX,
+  medicationReminderKey,
+} from "@/lib/medications";
 import { getCurrentSubscription } from "@/lib/push-client";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import type { Routine } from "@/pages/routines";
@@ -31,7 +35,7 @@ function combineDateTime(date: string, time: string): Date | null {
 
 export function useReminderSync() {
   const { tasks } = useTasks();
-  const { medications, isTaken } = useMedications();
+  const { medications, isTaken, ready: medsReady } = useMedications();
   const { reminders } = useReminders();
   const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
   const { openItems: quickflowItems } = useQuickflow();
@@ -45,6 +49,7 @@ export function useReminderSync() {
   const { state: adaptiveLead } = useAdaptiveLead();
   const syncFn = useServerFn(syncReminder);
   const cancelFn = useServerFn(cancelReminder);
+  const reconcileFn = useServerFn(reconcileReminders);
   const lastKeys = useRef<Set<string>>(new Set());
 
   // Signatur över allt som ska trigga en ny synk (uppgifter, medicin,
@@ -59,6 +64,7 @@ export function useReminderSync() {
       (t.deadlineLeadDays ?? []).join(","),
       t.deadlineReminderTime,
     ]),
+    medsReady,
     medications.map((m) => [m.id, m.name, m.dosage, m.times.join(",")]),
     reminders.map((r) => [r.id, r.completed, r.date, r.time, r.repeat]),
     routines.map((r) => [r.id, r.title, r.time, r.enabled]),
@@ -159,7 +165,7 @@ export function useReminderSync() {
             if (!when) continue;
             if (date === medDates[0] && isTaken(med.id, time, date)) continue;
             if (when.getTime() < now + 30_000) continue;
-            const key = `med:${med.id}:${date}:${time}`;
+            const key = medicationReminderKey(med.id, date, time);
             desired.set(key, {
               clientKey: key,
               kind: "medication",
@@ -387,6 +393,23 @@ export function useReminderSync() {
       }
 
       lastKeys.current = new Set(desired.keys());
+
+      // Medicin: städa bort köade notiser som inte längre motsvarar en aktiv
+      // medicin. Detta gäller även rader som schemalades i en tidigare session
+      // eller innan medicinen togs bort – annars kan notiser fortsätta komma
+      // fast listan är tom. Görs bara när medicindatan är inläst/migrerad.
+      if (medsReady) {
+        const medKeys = [...desired.keys()].filter((k) =>
+          k.startsWith(MEDICATION_REMINDER_PREFIX),
+        );
+        try {
+          await reconcileFn({
+            data: { prefix: MEDICATION_REMINDER_PREFIX, keepKeys: medKeys },
+          });
+        } catch (err) {
+          console.error("[reminder-sync] reconcile medication", err);
+        }
+      }
     })();
     return () => {
       alive = false;
