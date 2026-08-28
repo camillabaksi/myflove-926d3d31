@@ -416,13 +416,14 @@ export default function Home() {
           </section>
         )}
 
-        {/* Dagens uppgifter – samma kort och avbockning som i Min dag */}
+        {/* Dagens översikt – bara en sammanfattning. Hela listan bor i Min dag. */}
 
         {shows("idag") && (
           <div style={pos("idag")}>
-            <TodayTasks limit={3} compact />
+            <DaySummary />
           </div>
         )}
+
 
         {/* En rekommendation – samma svar som i Planera → Just nu */}
         {shows("forslag") && (
