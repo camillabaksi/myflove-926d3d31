@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-28 – Medicinlistan och medicinpåminnelserna läser samma data
+
+- Medicinlistan har nu en enda källa (`myflove-medications`). Gamla nycklar (`myflow-medications`, `myflow-medication-log`) migreras in automatiskt, utan dubbletter.
+- Gamla format tolkas säkert: enkel tid, saknat id och rena textposter blir riktiga mediciner.
+- Köade medicinnotiser som inte längre motsvarar en aktiv medicin avbokas på servern – de kan inte längre komma när listan är tom.
+- Loggrader för borttagna mediciner rensas bort.
+- Medicindata fortsätter vara krypterad lokalt och rensas vid utloggning.
+
 ## 2026-08-27 – Bild på schemat läses av och sparas
 
 - Ladda upp en bild eller PDF på schemat: Flow läser av den som ett dokument och gör om den till lektioner.

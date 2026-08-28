@@ -138,6 +138,45 @@ export const cancelReminder = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
+/**
+ * Städar bort köade påminnelser som inte längre hör till något aktivt objekt.
+ * Används framför allt för medicin: tas en medicin bort (eller finns den inte
+ * längre i listan) ska inga gamla notiser fortsätta skickas – även om de
+ * schemalades i en tidigare session.
+ */
+const ReconcileSchema = z.object({
+  prefix: z.string().min(1).max(40),
+  keepKeys: z.array(z.string().min(1).max(200)).max(2000),
+});
+
+export const reconcileReminders = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => ReconcileSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    const { supabase, userId } = context;
+    const { data: rows, error } = await supabase
+      .from("push_reminders")
+      .select("client_key")
+      .eq("user_id", userId)
+      .is("delivered_at", null)
+      .is("canceled_at", null)
+      .like("client_key", `${data.prefix}%`);
+    if (error) throw new Error(error.message);
+
+    const keep = new Set(data.keepKeys);
+    const stale = (rows ?? []).map((r) => r.client_key).filter((k) => !keep.has(k));
+    if (stale.length === 0) return { canceled: 0 };
+
+    const { error: cancelError } = await supabase
+      .from("push_reminders")
+      .update({ canceled_at: new Date().toISOString() })
+      .eq("user_id", userId)
+      .is("delivered_at", null)
+      .in("client_key", stale);
+    if (cancelError) throw new Error(cancelError.message);
+    return { canceled: stale.length };
+  });
+
 // ---- Preferences ------------------------------------------------------------
 
 // Tåligt schema: klienten kan skicka hela raden (med null-värden) utan att
