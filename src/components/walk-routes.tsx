@@ -275,13 +275,15 @@ export default function WalkRoutesSection() {
 
       {routes && routes.length > 0 && selectedRoute && (
         <div className="rounded-2xl border border-border/70 p-4">
-          <button
+          <Button
             type="button"
+            variant="ghost"
+            size="sm"
             onClick={() => setSelected(null)}
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-ink hover:underline"
+            className="px-0 text-ink hover:underline"
           >
             <ArrowLeft size={14} /> Tillbaka till förslagen
-          </button>
+          </Button>
 
           <p className="mt-3 font-medium text-ink">{selectedRoute.name}</p>
           <p className="text-sm text-muted-foreground">
