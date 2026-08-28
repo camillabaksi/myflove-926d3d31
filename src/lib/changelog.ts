@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      'Tydlig Flow på Hem: kortet heter nu "Flow lär känna dig" med den riktiga maskoten, och "Just nu" är signerat Flow · just nu – samma funktioner, tydligare vem som hjälper dig (2026-08-28)',
       "Energi och mående bor nu bara på Mitt batteri – incheckning, dagens kurva, paus och historik på ett ställe, med tydligare roller för Min dag, Planering, Flow hjälper och Prata med Flow (2026-08-28)",
       "Dubblettstädning: Hem visar en kort dagsöversikt i stället för samma uppgifter som Min dag, incheckning och energikurva bor bara i Mitt batteri och alla dagslänkar går till samma vy (2026-08-28)",
       "Enklare snabbincheckning: batteri 1–5 med ett tryck, valfritt mående och valfria påverkansfaktorer (sömn, stress, ljud, mat, socialt, kroppen) som sparas i energiflödet (2026-08-28)",
