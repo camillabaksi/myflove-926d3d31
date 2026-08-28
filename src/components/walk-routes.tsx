@@ -16,14 +16,26 @@ import { suggestWalkRoutes, type WalkRoute } from "@/lib/walk-routes.functions";
 import { useToast } from "@/hooks/use-toast";
 import { useWeather } from "@/hooks/use-weather";
 import { weatherAdvice } from "@/lib/weather-advice";
+import { useEnergyBattery } from "@/hooks/use-energy-battery";
 
 const MINUTES = [15, 30, 45, 60, 90];
 const KM = [2, 3, 5, 8];
+
+/** Flows förslag på promenadlängd utifrån batterinivån just nu. */
+function suggestedMinutes(battery: number): number {
+  if (battery < 25) return 15;
+  if (battery < 45) return 25;
+  if (battery < 70) return 40;
+  return 60;
+}
 
 export default function WalkRoutesSection() {
   const run = useServerFn(suggestWalkRoutes);
   const { toast } = useToast();
   const advice = weatherAdvice(useWeather());
+  const { reading } = useEnergyBattery();
+  const battery = Math.round(reading.now);
+  const flowMinutes = suggestedMinutes(battery);
 
   const [mode, setMode] = useState<"tid" | "avstånd">("tid");
   const [minutes, setMinutes] = useState(30);
@@ -32,9 +44,11 @@ export default function WalkRoutesSection() {
   const [routes, setRoutes] = useState<WalkRoute[] | null>(null);
   const [target, setTarget] = useState<{ km: number; minutes: number } | null>(null);
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [selected, setSelected] = useState<string | null>(null);
   const [updatedAt, setUpdatedAt] = useState<Date | null>(null);
   const optsRef = useRef({ mode, minutes, km });
   optsRef.current = { mode, minutes, km };
+
 
   const findRoutes = useCallback(
     async (opts?: { fresh?: boolean; silent?: boolean }) => {
