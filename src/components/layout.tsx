@@ -551,7 +551,14 @@ export default function Layout({ children }: LayoutProps) {
         label: "Planera",
         hint: "Bestäm och ordna vad som ska hända",
         icon: Sparkles,
-        hrefs: ["/flowplan", "/tasks", "/quickflow", "/anteckningar"],
+        hrefs: ["/flowplan", "/tasks"],
+      },
+      {
+        id: "quickflow",
+        label: "QuickFlow",
+        hint: "Fånga något snabbt – sortera sedan",
+        icon: Inbox,
+        hrefs: ["/quickflow", "/anteckningar"],
       },
       {
         id: "healthflow",
