@@ -304,6 +304,35 @@ export default function AdminStats() {
             </CollapsibleSection>
 
             <CollapsibleSection
+              title="Mest besökta sidor"
+              headingClassName="text-lg font-semibold"
+              className="bg-card p-6 rounded-3xl border border-border shadow-sm"
+              description="Varje sidvisning i appen loggas anonymt — här ser du vilka sidor besökarna faktiskt öppnar."
+            >
+              {pageViews.length === 0 && (
+                <p className="text-sm text-muted-foreground">Ingen data än.</p>
+              )}
+              <div className="space-y-3">
+                {pageViews.map((row) => (
+                  <div key={row.action}>
+                    <div className="flex justify-between text-sm mb-1">
+                      <span className="font-medium">/{row.action}</span>
+                      <span className="text-muted-foreground">
+                        {row.events} visningar · {row.sessions} besökare
+                      </span>
+                    </div>
+                    <div className="h-2 rounded-full bg-secondary/50 overflow-hidden">
+                      <div
+                        className="h-full bg-primary rounded-full"
+                        style={{ width: `${(row.events / maxPageViews) * 100}%` }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CollapsibleSection>
+
+            <CollapsibleSection
               title="Funktioner som faktiskt används"
               headingClassName="text-lg font-semibold"
               className="bg-card p-6 rounded-3xl border border-border shadow-sm"
