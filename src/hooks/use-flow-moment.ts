@@ -13,6 +13,8 @@ import { learningMessage } from "@/lib/flow-learning";
 import { todayISO } from "@/lib/day";
 import { FLOW_DONE_EVENT } from "@/lib/flow-signal";
 import { linkForPriority, priorityForTitle, withinWindow } from "@/lib/flow-priorities";
+import { batteryLine, completionReaction, missedTaskLine } from "@/lib/flow-tone";
+import { track } from "@/lib/analytics";
 
 /**
  * Flow i den inloggade appen.
@@ -63,7 +65,7 @@ const isOutdoorTitle = (title: string) =>
 const linkForTitle = (title: string) => linkForPriority(priorityForTitle(title));
 
 export function useFlowMoment(): FlowMoment {
-  const { activeTasks } = useTasks();
+  const { activeTasks, updateTask, toggleTask } = useTasks();
   const { activeReminders } = useReminders();
   const { medications, isTaken, toggleTaken } = useMedications();
   const { children } = useChildren();
@@ -136,14 +138,21 @@ export function useFlowMoment(): FlowMoment {
         : moment;
 
     if (celebrating) {
-      const what = doneTitle ? `"${doneTitle}"` : "";
-      const message =
-        energy <= 35
-          ? `${what ? `${what} är avklarat. ` : "Klart. "}Det räckte gott idag – vila lite nu. 💜`
-          : energy <= 60
-            ? `${what ? `${what} klart. ` : "Klart. "}En sak mindre i huvudet. 🌸`
-            : `${what ? `${what} – klart! ` : "Klart! "}🙌 Du är i bra flyt just nu.`;
-      return { ...base, id: "done", scene: "done", message };
+      /* Flows reaktion när något blir klart – varm, kort och kontextberoende. */
+      const reaction = completionReaction({
+        title: doneTitle,
+        battery: energy,
+        remainingToday: Math.max(0, todaysCount),
+      });
+      return {
+        ...base,
+        id: "done",
+        scene: "done",
+        message: reaction.followUp
+          ? `${reaction.message} ${reaction.followUp}`
+          : reaction.message,
+        link: { href: "/idag", label: "Idag" },
+      };
     }
 
     if (quiet) {
@@ -270,6 +279,33 @@ export function useFlowMoment(): FlowMoment {
       });
     }
 
+    /* 3d. Något passerade utan att bli gjort – aldrig skuld, alltid en väg vidare. */
+    const missed = activeTasks
+      .filter((t) => t.dueDate === today && t.time)
+      .map((t) => ({ task: t, mins: toMinutes(t.time) }))
+      .filter((e): e is { task: (typeof activeTasks)[number]; mins: number } => e.mins != null)
+      .filter((e) => nowMin - e.mins >= 45 && nowMin - e.mins <= 600)
+      .filter((e) => wanted(e.task.title))
+      .sort((a, b) => a.mins - b.mins)[0];
+
+    if (missed) {
+      const tomorrow = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
+      return pick({
+        ...base,
+        id: `missed-${missed.task.id}-${today}`,
+        scene: energy <= 45 ? "energyLow" : "think",
+        message: missedTaskLine(missed.task.title, energy),
+        action: {
+          label: "Flytta till imorgon",
+          run: () => {
+            track("flow_missed_task_action", { source: "flow", method: "flytta" });
+            updateTask(missed.task.id, { dueDate: tomorrow });
+          },
+        },
+        link: { href: "/idag", label: "Hantera i Idag" },
+      });
+    }
+
     /* 4. Saker som väntar – erbjud hjälp att sortera. */
     if (waiting >= 3) {
       return pick({
@@ -306,7 +342,7 @@ export function useFlowMoment(): FlowMoment {
         ...base,
         id: `energy-low-${today}`,
         scene: "energyLow",
-        message: "Okej. Då tar vi det lite lugnare idag. 💜 Jag hjälper dig välja det viktigaste.",
+        message: batteryLine(energy),
         link: { href: "/mitt-batteri", label: "Mitt batteri" },
       });
     }
@@ -315,7 +351,7 @@ export function useFlowMoment(): FlowMoment {
         ...base,
         id: `energy-high-${today}`,
         scene: "energyHigh",
-        message: "Du har bra med energi nu – bra läge för något du skjutit på.",
+        message: batteryLine(energy),
         link: { href: "/mitt-batteri", label: "Mitt batteri" },
       });
     }
@@ -378,6 +414,8 @@ export function useFlowMoment(): FlowMoment {
     today,
     todaysCount,
     waiting,
+    updateTask,
+    toggleTask,
     forecast,
     level,
     learningOn,
