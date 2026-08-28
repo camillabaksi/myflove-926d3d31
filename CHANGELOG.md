@@ -1282,3 +1282,9 @@ Initial baseline av MyFlove — ett svenskspråkigt "lugnt livsflöde"-dashboard
 - **AI-assistent (Flow)** (2026-07-23): Chattbaserad assistent med MCP-verktyg.
 - **Molnsynk** (2026-07-23): Offline-first lagring med best-effort synk.
 - **Juridiskt** (2026-07-23): Integritetspolicy, villkor och cookies.
+
+## 2026-08-28 – Gradvis förklarande copy
+
+- Förklaringar om nyttan anpassas nu efter befintlig Flow learning level.
+- Nya användare får enklare, fullständiga budskap; återkommande användare får kortare eller ingen upprepning.
+- Energi, mående, planering, promenader och medicin använder samma gradvisa språk utan nya datakrav.
