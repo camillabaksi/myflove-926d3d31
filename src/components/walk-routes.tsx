@@ -239,16 +239,50 @@ export default function WalkRoutesSection() {
         </p>
       )}
 
-      {routes && routes.length > 0 && (
+      {routes && routes.length > 0 && selectedRoute && (
+        <div className="rounded-2xl border border-border/70 p-4">
+          <button
+            type="button"
+            onClick={() => setSelected(null)}
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-ink hover:underline"
+          >
+            <ArrowLeft size={14} /> Tillbaka till förslagen
+          </button>
+
+          <p className="mt-3 font-medium text-ink">{selectedRoute.name}</p>
+          <p className="text-sm text-muted-foreground">
+            {selectedRoute.distanceKm} km · ca {selectedRoute.minutes} min · {selectedRoute.kind}
+          </p>
+
+          <div className="mt-3 overflow-hidden rounded-xl border border-border/70">
+            <iframe
+              title={`Karta för ${selectedRoute.name}`}
+              src={embedMapSrc(selectedRoute)}
+              loading="lazy"
+              className="h-56 w-full border-0"
+            />
+          </div>
+
+          <p className="mt-3 text-xs text-muted-foreground">
+            Rundtur: du startar och slutar på samma plats. Vändpunkten ligger {selectedRoute.bearing}{" "}
+            – Google Maps visar vägen dit och tillbaka.
+          </p>
+
+          <Button asChild className="mt-3 w-full rounded-xl gap-2">
+            <a href={selectedRoute.mapsUrl} target="_blank" rel="noopener noreferrer">
+              Öppna i Google Maps <ExternalLink size={16} />
+            </a>
+          </Button>
+          <p className="mt-2 text-xs text-muted-foreground">
+            Öppnas i Google Maps-appen om du har den, annars i webbläsaren.
+          </p>
+        </div>
+      )}
+
+      {routes && routes.length > 0 && !selectedRoute && (
         <ul className="space-y-3">
           {routes.map((r) => {
             const open = expanded === r.id;
-            const d = 0.012 + r.distanceKm * 0.0035;
-            const minLat = Math.min(r.startLat, r.lat) - d;
-            const maxLat = Math.max(r.startLat, r.lat) + d;
-            const minLon = Math.min(r.startLon, r.lon) - d * 2;
-            const maxLon = Math.max(r.startLon, r.lon) + d * 2;
-            const mapSrc = `https://www.openstreetmap.org/export/embed.html?bbox=${minLon}%2C${minLat}%2C${maxLon}%2C${maxLat}&layer=mapnik&marker=${r.lat}%2C${r.lon}`;
             return (
               <li key={r.id} className="rounded-2xl border border-border/70 p-4">
                 <div className="flex items-start justify-between gap-3">
@@ -292,26 +326,26 @@ export default function WalkRoutesSection() {
                   <div className="mt-3 overflow-hidden rounded-xl border border-border/70">
                     <iframe
                       title={`Karta för ${r.name}`}
-                      src={mapSrc}
+                      src={embedMapSrc(r)}
                       loading="lazy"
                       className="h-44 w-full border-0"
                     />
                   </div>
                 )}
 
-                <a
-                  href={r.mapsUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
+                <Button
+                  variant="outline"
+                  onClick={() => setSelected(r.id)}
+                  className="mt-3 w-full rounded-xl"
                 >
-                  Öppna i Google Maps <ExternalLink size={14} />
-                </a>
+                  Välj den här promenaden
+                </Button>
               </li>
             );
           })}
         </ul>
       )}
+
 
       {routes && routes.length === 0 && (
         <p className="text-sm text-muted-foreground">
