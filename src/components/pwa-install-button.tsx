@@ -49,7 +49,7 @@ export default function PwaInstallButton({
         <DialogContent className="rounded-3xl sm:max-w-sm">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <FlowMascot size="xs" mood="wave" />
+              <FlowMascot size="xs" mood="wave" bump />
               Så lägger du till MyFlove
             </DialogTitle>
             <DialogDescription>

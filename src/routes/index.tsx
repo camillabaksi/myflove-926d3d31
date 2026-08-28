@@ -604,7 +604,7 @@ function PhonePreview() {
 
             <div className="rounded-2xl border border-[#7C5CE0]/15 bg-[#F1ECFC] p-3">
               <div className="flex items-start gap-2">
-                <FlowMascot size="xs" mood="bounce" />
+                <FlowMascot size="xs" mood="bounce" bump />
                 <p
                   key={say.key}
                   className="pop-in text-xs leading-relaxed text-[#2A2140]"

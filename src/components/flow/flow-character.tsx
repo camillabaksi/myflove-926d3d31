@@ -593,7 +593,7 @@ export function FlowCharacter({
           className={cn("absolute inset-0 flex items-center justify-center", variant.mascotClass)}
           imgClassName={
             isMini
-              ? "h-[60px] w-[60px] max-w-none object-contain"
+              ? "h-[68px] w-[68px] max-w-none object-contain"
               : stage === "inline"
                 ? "h-full w-full object-contain"
                 : "h-[108%] w-auto max-w-none"

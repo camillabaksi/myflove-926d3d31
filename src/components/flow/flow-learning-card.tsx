@@ -25,7 +25,7 @@ export default function FlowLearningCard({ className }: { className?: string }) 
       className={cn("rounded-3xl border border-primary/15 bg-primary/5 p-4 shadow-sm", className)}
     >
       <div className="flex items-center gap-3">
-        <FlowMascot size="sm" mood="calm" className="flow-alive shrink-0" />
+        <FlowMascot size="sm" mood="calm" bump className="flow-alive shrink-0" />
         <div className="min-w-0 flex-1">
           <p className="text-sm font-semibold">Flow lär känna dig</p>
           <p className="text-xs text-muted-foreground">{knowledge.label}</p>

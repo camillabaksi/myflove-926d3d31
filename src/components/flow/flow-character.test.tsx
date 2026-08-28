@@ -97,7 +97,7 @@ describe("FlowCharacter – rätt rekvisita och pose per kontext", () => {
     const stage = container.querySelector("[data-flow-character]")!;
     const mascot = container.querySelector("[data-flow-mascot] img")!;
     expect(stage).toHaveAttribute("data-flow-stage", "mini");
-    expect(mascot.className).toContain("h-[60px]");
+    expect(mascot.className).toContain("h-[68px]");
     expect(container.querySelector('[data-flow-prop="umbrella"]')).toBeNull();
     expect(container.querySelector('[data-flow-prop="rainDrops"]')).toBeNull();
   });

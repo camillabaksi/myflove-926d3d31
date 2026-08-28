@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-08-28";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Flow syns tydligare utan att flytta något",
+    items: [
+      "Flow är optiskt större på små platser utan att ändra layoutrutan (2026-08-28)",
+      "Chatten, Hem, installationskortet och Flow lär sig använder samma finjustering (2026-08-28)",
+      "Mini-scenen visar Flow i 68 px inuti sin fasta 80 px-ruta (2026-08-28)",
+      "Tester verifierar layoutneutral förstoring och uppdaterad mini-storlek (2026-08-28)",
+    ],
+  },
+  {
     title: "Flow-närvaro, minimerbara block och smart tillbaka",
     items: [
       "Flow-maskoten är något större där den redan visas – samma maskot och identitet (2026-08-28)",

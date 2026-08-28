@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-28 – Flow syns tydligare utan att flytta något
+
+- Flow är optiskt större på små platser (Hem, chatten, installationskortet, Flow lär sig) via en ny `bump`-variant – rutan i layouten är låst så text, radhöjd och spacing står stilla.
+- Flow i chattens sidhuvud, meddelandelistan och tänker-läget använder samma finjustering.
+- Mini-scenen i Flow-karaktären visar maskoten i 68 px inuti sin 80 px-ruta.
+- Nya tester `src/components/flow-mascot.test.tsx` verifierar att den optiska förstoringen inte ändrar layoutrutan; snapshot-storleken i `flow-character.test.tsx` är uppdaterad.
+
+
 ## 2026-08-28 – Flow-närvaro, minimerbara block och smart tillbaka
 
 - Flow-maskoten är något större på de platser där den redan visas (mini 80 px, inline och hero något högre) – samma maskot, samma identitet.
