@@ -164,3 +164,56 @@ export function benefitVoice(level: number, insightCount: number): string {
     return "Jag börjar se ett mönster i hur din energi förändras – det du berättar gör det tydligare.";
   return "Det du berättar hjälper mig föreslå rätt sorts saker vid rätt tid för dig.";
 }
+
+/** Ämnen där nyttan behöver förklaras för nya användare. */
+export type ExplainerTopic = "energi" | "maende" | "planering" | "promenad" | "medicin";
+
+const EXPLAINERS: Record<ExplainerTopic, { intro: string; growing: string; light: string }> = {
+  energi: {
+    intro:
+      "Det här hjälper Flow förstå hur din energi förändras under dagen – och vad som brukar ge eller ta energi för dig.",
+    growing: "Ju mer du berättar, desto tydligare ser jag vad som påverkar din energi.",
+    light: "Bra att veta hur du ligger till just nu.",
+  },
+  maende: {
+    intro:
+      "Flow lär sig om ditt mående och din energi brukar hänga ihop för dig. Du kan hoppa över.",
+    growing: "Det här gör bilden av dina dagar lite tydligare. Valfritt.",
+    light: "Valfritt.",
+  },
+  planering: {
+    intro:
+      "Planera utifrån vad du har ork till – inte bara vad som behöver göras. Flow föreslår en ordning, du ändrar den som du vill.",
+    growing: "Flow föreslår en ordning som passar din ork idag – du ändrar den som du vill.",
+    light: "Du ändrar ordningen som du vill.",
+  },
+  promenad: {
+    intro:
+      "Hitta en promenad som passar din energi just nu. Säg hur länge du vill gå, så föreslår Flow vägar nära dig.",
+    growing: "Förslagen anpassas efter hur mycket ork du har just nu.",
+    light: "Välj längd, så föreslår Flow en runda.",
+  },
+  medicin: {
+    intro:
+      "Bocka av när du tagit dem – då slipper du hålla tiderna i huvudet, och Flow kan påminna dig när det passar din dag.",
+    growing: "Avbockningen gör att påminnelserna kan passa din dag bättre.",
+    light: "",
+  },
+};
+
+/**
+ * Gradvis förklarande copy. Nya användare får hela meningen, användare som
+ * kommit en bit får en kortare, och den som redan känner appen får ingenting
+ * alls – så att samma förklaring inte upprepas gång på gång.
+ */
+export function explainerVoice(
+  topic: ExplainerTopic,
+  level: number,
+  insightCount: number,
+): string | null {
+  const copy = EXPLAINERS[topic];
+  if (level < 20 && insightCount === 0) return copy.intro;
+  if (level < 45) return copy.growing;
+  if (level < 70) return copy.light || null;
+  return null;
+}
