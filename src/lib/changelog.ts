@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Dubblettstädning: Hem visar en kort dagsöversikt i stället för samma uppgifter som Min dag, incheckning och energikurva bor bara i Mitt batteri och alla dagslänkar går till samma vy (2026-08-28)",
       "Enklare snabbincheckning: batteri 1–5 med ett tryck, valfritt mående och valfria påverkansfaktorer (sömn, stress, ljud, mat, socialt, kroppen) som sparas i energiflödet (2026-08-28)",
       "Flow på Hem länkar direkt till Mina mönster med \"Se vad jag har upptäckt\" (2026-08-28)",
       "Medicinlistan och medicinpåminnelserna läser exakt samma data – gamla nycklar migreras utan dubbletter och notiser för borttagna mediciner avbokas (2026-08-28)",

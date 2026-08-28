@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-28 – Dubblettstädning: en sak, ett ställe
+
+- Hem visar nu "Dagens översikt" som en kort sammanfattning (antal saker, klara, kvar) i stället för samma uppgiftskort som redan syns under "Nästa" och i Min dag.
+- Min dag är den enda platsen med hela dagens lista. Hem länkar dit i stället för att upprepa den.
+- Incheckning och energikurva har tagits bort ur Min dag – Mitt batteri är primär plats, Min dag visar bara batteristatusen som en klickbar rad.
+- Alla länkar till dagen går nu till samma route (/idag) i stället för att blanda /min-dag och /idag.
+
 ## 2026-08-28 – Enklare incheckning och tydligare mönster
 
 - Snabb incheckning är nu 1–5 på batteriet med ett tryck, mående är valfritt och du kan markera vad som påverkar dig (Sömn, Stress, Ljud/intryck, Mat, Socialt, Kroppen, Annat). Faktorerna sparas i ditt energiflöde.
