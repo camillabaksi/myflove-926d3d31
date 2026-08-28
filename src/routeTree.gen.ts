@@ -52,6 +52,7 @@ import { Route as AppJobbRouteImport } from './routes/_app.jobb'
 import { Route as AppInsightRouteImport } from './routes/_app.insight'
 import { Route as AppIdagRouteImport } from './routes/_app.idag'
 import { Route as AppHemRouteImport } from './routes/_app.hem'
+import { Route as AppHalsaRouteImport } from './routes/_app.halsa'
 import { Route as AppFriktionsindexRouteImport } from './routes/_app.friktionsindex'
 import { Route as AppFokusRouteImport } from './routes/_app.fokus'
 import { Route as AppFlowstudyRouteImport } from './routes/_app.flowstudy'
@@ -297,6 +298,11 @@ const AppHemRoute = AppHemRouteImport.update({
   path: '/hem',
   getParentRoute: () => AppRoute,
 } as any)
+const AppHalsaRoute = AppHalsaRouteImport.update({
+  id: '/halsa',
+  path: '/halsa',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppFriktionsindexRoute = AppFriktionsindexRouteImport.update({
   id: '/friktionsindex',
   path: '/friktionsindex',
@@ -482,6 +488,7 @@ export interface FileRoutesByFullPath {
   '/flowstudy': typeof AppFlowstudyRoute
   '/fokus': typeof AppFokusRoute
   '/friktionsindex': typeof AppFriktionsindexRoute
+  '/halsa': typeof AppHalsaRoute
   '/hem': typeof AppHemRoute
   '/idag': typeof AppIdagRoute
   '/insight': typeof AppInsightRoute
@@ -555,6 +562,7 @@ export interface FileRoutesByTo {
   '/flowstudy': typeof AppFlowstudyRoute
   '/fokus': typeof AppFokusRoute
   '/friktionsindex': typeof AppFriktionsindexRoute
+  '/halsa': typeof AppHalsaRoute
   '/hem': typeof AppHemRoute
   '/idag': typeof AppIdagRoute
   '/insight': typeof AppInsightRoute
@@ -630,6 +638,7 @@ export interface FileRoutesById {
   '/_app/flowstudy': typeof AppFlowstudyRoute
   '/_app/fokus': typeof AppFokusRoute
   '/_app/friktionsindex': typeof AppFriktionsindexRoute
+  '/_app/halsa': typeof AppHalsaRoute
   '/_app/hem': typeof AppHemRoute
   '/_app/idag': typeof AppIdagRoute
   '/_app/insight': typeof AppInsightRoute
@@ -705,6 +714,7 @@ export interface FileRouteTypes {
     | '/flowstudy'
     | '/fokus'
     | '/friktionsindex'
+    | '/halsa'
     | '/hem'
     | '/idag'
     | '/insight'
@@ -778,6 +788,7 @@ export interface FileRouteTypes {
     | '/flowstudy'
     | '/fokus'
     | '/friktionsindex'
+    | '/halsa'
     | '/hem'
     | '/idag'
     | '/insight'
@@ -852,6 +863,7 @@ export interface FileRouteTypes {
     | '/_app/flowstudy'
     | '/_app/fokus'
     | '/_app/friktionsindex'
+    | '/_app/halsa'
     | '/_app/hem'
     | '/_app/idag'
     | '/_app/insight'
@@ -1217,6 +1229,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppHemRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/halsa': {
+      id: '/_app/halsa'
+      path: '/halsa'
+      fullPath: '/halsa'
+      preLoaderRoute: typeof AppHalsaRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/friktionsindex': {
       id: '/_app/friktionsindex'
       path: '/friktionsindex'
@@ -1445,6 +1464,7 @@ interface AppRouteChildren {
   AppFlowstudyRoute: typeof AppFlowstudyRoute
   AppFokusRoute: typeof AppFokusRoute
   AppFriktionsindexRoute: typeof AppFriktionsindexRoute
+  AppHalsaRoute: typeof AppHalsaRoute
   AppHemRoute: typeof AppHemRoute
   AppIdagRoute: typeof AppIdagRoute
   AppInsightRoute: typeof AppInsightRoute
@@ -1500,6 +1520,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppFlowstudyRoute: AppFlowstudyRoute,
   AppFokusRoute: AppFokusRoute,
   AppFriktionsindexRoute: AppFriktionsindexRoute,
+  AppHalsaRoute: AppHalsaRoute,
   AppHemRoute: AppHemRoute,
   AppIdagRoute: AppIdagRoute,
   AppInsightRoute: AppInsightRoute,
