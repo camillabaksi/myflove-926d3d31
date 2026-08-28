@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-08-28";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Pitchmaterial 3.6",
+    items: [
+      "Living Blueprint, pitchdeck och pitchvideo är uppdaterade till version 3.6 (2026-08-28)",
+      "Materialet fokuserar på Lugnare helhet, färre val, tydligare vägar och levande Flow (2026-08-28)",
+      "Pitchsidan använder nu 3.6-filerna för video, PowerPoint, PDF och blueprint (2026-08-28)",
+    ],
+  },
+  {
     title: "Subtil sidövergång",
     items: [
       "Gemensam fade vid riktiga sidbyten: ut cirka 160 ms och in cirka 220 ms (2026-08-28)",

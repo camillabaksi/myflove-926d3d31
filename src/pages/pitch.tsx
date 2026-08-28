@@ -4,7 +4,8 @@ import { useIsAdmin } from "@/hooks/use-is-admin";
 import { Lock, Download, ArrowLeft, FileText, Film, BookOpen, Sparkles } from "lucide-react";
 
 const BLUEPRINT_VERSIONS = [
-  { version: "3.5", label: "Senaste – Levande Flow och Flow-chatten" },
+  { version: "3.6", label: "Senaste – Lugnare helhet, tydligare vägar och levande Flow" },
+  { version: "3.5", label: "Levande Flow och Flow-chatten" },
   { version: "3.4", label: "Flow syns i blueprint och pitchdeck" },
   { version: "3.3", label: "Flow i hela appen och Morgonstart i rutiner" },
   { version: "3.2", label: "Omstrukturerad i sex delar" },
@@ -59,27 +60,27 @@ export default function PitchPage() {
               <Film size={18} className="text-primary" /> Pitchvideo
             </h2>
             <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
-              Version 3.5 · Levande Flow
+              Version 3.6 · Lugnare helhet
             </span>
           </div>
           <p className="text-sm text-muted-foreground">
-            Samma Flow-karaktär som i appen och i pitchdeck 3.5 – nu med en egen scen om levande
-            Flow (andning, blinkningar, blick och chatt-synk), en marknadsscen med externa nyckeltal
-            (uppskattningar/prognoser) och avslutning där Flow vinkar.
+            Version 3.6 samlar MyFloves lugnare helhet: färre val, tydligare vägar och Flow som
+            levande följeslagare. Videon visar också Flow-synk, marknadsnyckeltal och den nya
+            avslutande versionstiteln.
           </p>
 
           <video
             controls
             playsInline
             preload="metadata"
-            poster="/pitch/myflove-pitch-3.5-poster.jpg"
+            poster="/pitch/myflove-pitch-3.6-poster.jpg"
             className="w-full rounded-xl bg-black aspect-video"
-            src="/pitch/myflove-pitch-2026.mp4"
+            src="/pitch/myflove-pitch-3.6.mp4"
           />
           <figure className="space-y-1">
             <img
-              src="/pitch/myflove-pitch-3.5-flow-thumb.jpg"
-              alt="Scenen om levande Flow i pitchvideon"
+              src="/pitch/myflove-pitch-3.6-flow-thumb.jpg"
+              alt="Scenen om levande Flow i pitchvideon version 3.6"
               loading="lazy"
               className="w-full rounded-xl border border-border"
             />
@@ -89,8 +90,8 @@ export default function PitchPage() {
           </figure>
           <figure className="space-y-1">
             <img
-              src="/pitch/myflove-pitch-3.5-market-thumb.jpg"
-              alt="Marknadsscenen i pitchvideon med sex nyckeltal och källnot"
+              src="/pitch/myflove-pitch-3.6-market-thumb.jpg"
+              alt="Marknadsscenen i pitchvideon version 3.6 med nyckeltal och källnot"
               loading="lazy"
               className="w-full rounded-xl border border-border"
             />
@@ -99,9 +100,8 @@ export default function PitchPage() {
             </figcaption>
           </figure>
           <div className="flex flex-wrap gap-2">
-
             <a
-              href="/pitch/myflove-pitch-2026.mp4"
+              href="/pitch/myflove-pitch-3.6.mp4"
               download
               className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
             >
@@ -122,20 +122,20 @@ export default function PitchPage() {
               <FileText size={18} className="text-primary" /> Pitchdeck
             </h2>
             <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
-              Version 3.5
+              Version 3.6 · Lugnare helhet
             </span>
           </div>
           <p className="text-sm text-muted-foreground">
-            Senaste decket (3.5) med Flow på titelsidan, en egen Flow 2.0-slide, en ny slide om
-            levande Flow och en marknadsslide med externa nyckeltal och källnot – i PowerPoint-format
-            samt PDF för snabb visning.
+            Senaste decket (3.6) visar hur en lugnare helhet skapar färre val, tydligare vägar och
+            mer plats för Flow – med Flow 2.0, levande följeslagare och marknadsnyckeltal i både
+            PowerPoint-format och PDF.
           </p>
 
           <div className="grid gap-3 sm:grid-cols-2">
             <figure className="space-y-1">
               <img
-                src="/pitch/MyFlove_Pitchdeck_3.5-thumb.jpg"
-                alt="Titelsidan i MyFlove Pitchdeck 3.5 med Flow-karaktären"
+                src="/pitch/MyFlove_Pitchdeck_3.6-thumb.jpg"
+                alt="Titelsidan i MyFlove Pitchdeck 3.6 med Flow-karaktären"
                 loading="lazy"
                 className="w-full rounded-xl border border-border"
               />
@@ -143,8 +143,8 @@ export default function PitchPage() {
             </figure>
             <figure className="space-y-1">
               <img
-                src="/pitch/MyFlove_Pitchdeck_3.5-flow-thumb.jpg"
-                alt="Sliden om levande Flow i MyFlove Pitchdeck 3.5"
+                src="/pitch/MyFlove_Pitchdeck_3.6-flow-thumb.jpg"
+                alt="Sliden om levande Flow i MyFlove Pitchdeck 3.6"
                 loading="lazy"
                 className="w-full rounded-xl border border-border"
               />
@@ -156,18 +156,18 @@ export default function PitchPage() {
 
           <div className="flex flex-wrap gap-2">
             <a
-              href="/pitch/MyFlove_Pitchdeck_3.5.pptx"
+              href="/pitch/MyFlove_Pitchdeck_3.6.pptx"
               download
               className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
             >
-              <Download size={16} /> Ladda ner PowerPoint (3.5)
+              <Download size={16} /> Ladda ner PowerPoint (3.6)
             </a>
             <a
-              href="/pitch/MyFlove_Pitchdeck_3.5.pdf"
+              href="/pitch/MyFlove_Pitchdeck_3.6.pdf"
               download
               className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-medium hover:bg-secondary"
             >
-              <Download size={16} /> Ladda ner PDF (3.5)
+              <Download size={16} /> Ladda ner PDF (3.6)
             </a>
           </div>
         </section>
