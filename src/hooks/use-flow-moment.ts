@@ -338,7 +338,7 @@ export function useFlowMoment(): FlowMoment {
         scene: "think",
         message: insightText,
         learning: true,
-        link: { href: "/insight", label: "Vad jag lärt mig" },
+        link: { href: "/insight", label: "Mina mönster" },
       });
     }
 
