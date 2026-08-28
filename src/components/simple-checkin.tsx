@@ -101,7 +101,13 @@ export default function SimpleCheckin({
       )}
     >
       <div className="space-y-2">
-        <p className="text-sm font-medium text-ink">Hur är ditt batteri just nu?</p>
+        <div className="flex items-center justify-between gap-2">
+          <p className="text-sm font-medium text-ink">Hur är ditt batteri just nu?</p>
+          <WhyHint label="logga energi">
+            Det hjälper Flow se vad som brukar ge eller ta energi för dig.
+          </WhyHint>
+        </div>
+        <p className="text-xs text-muted-foreground">{benefit}</p>
         <div className="flex gap-1.5">
           {LEVELS.map((l) => (
             <button
