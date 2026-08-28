@@ -52,26 +52,18 @@ export default function RoutinesMedicationToday() {
       const match = reminders.find(
         (rem) => rem.date === todayIso && rem.time === r.time && rem.title === r.title,
       );
-      const localKey = `${todayIso}:${r.id}`;
-      const done = match ? !!match.completed : (routineDone ?? []).includes(localKey);
+      const routineKey = `routine-${r.id}`;
+      const done = isDone(routineKey) || (match ? !!match.completed : false);
       list.push({
-        key: `routine-${r.id}`,
+        key: routineKey,
         kind: "rutin",
         title: r.title,
         time: r.time,
         minutes: minutesOf(r.time),
         done,
         toggle: () => {
-          if (match) {
-            toggleReminder(match.id);
-          } else {
-            setRoutineDone((prev) => {
-              const arr = prev ?? [];
-              return arr.includes(localKey)
-                ? arr.filter((x) => x !== localKey)
-                : [...arr, localKey];
-            });
-          }
+          toggleDone(routineKey);
+          if (match && match.completed) toggleReminder(match.id);
           if (!done) toast({ description: `🔁 ${r.title} – klart. ${getRandomEncouragement()}` });
         },
       });
