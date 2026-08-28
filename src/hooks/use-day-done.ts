@@ -2,7 +2,8 @@ import { useMemo } from "react";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { useMedications, useReminders } from "@/hooks/use-data";
 import { useTraining } from "@/hooks/use-training";
-import type { Routine } from "@/pages/routines";
+import { routineOccursOn, type Routine } from "@/pages/routines";
+import { medicationOccursOn } from "@/lib/medications";
 
 export interface DayDoneLine {
   emoji: string;
@@ -25,7 +26,7 @@ export function useDayDone(): { lines: DayDoneLine[]; anything: boolean } {
   return useMemo(() => {
     const today = todayIso();
 
-    const activeRoutines = routines.filter((r) => r.enabled);
+    const activeRoutines = routines.filter((r) => r.enabled && routineOccursOn(r, today));
     const routineTitles = new Set(activeRoutines.map((r) => r.title));
     const routinesDone = reminders.filter(
       (r) => r.date === today && r.completed && routineTitles.has(r.title),
@@ -34,7 +35,7 @@ export function useDayDone(): { lines: DayDoneLine[]; anything: boolean } {
     let doses = 0;
     let dosesTaken = 0;
     for (const med of medications) {
-      if (!medicationOccursOn(med, todayIso)) continue;
+      if (!medicationOccursOn(med, today)) continue;
       for (const time of med.times) {
         doses += 1;
         if (isTaken(med.id, time, today)) dosesTaken += 1;
