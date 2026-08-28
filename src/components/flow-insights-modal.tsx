@@ -35,21 +35,36 @@ export default function FlowInsightsModal({ open, onOpenChange }: FlowInsightsMo
             Hitta mitt flow
           </DialogTitle>
           <DialogDescription>
-            En snabb titt på vad som gått bra på sistone, baserat på dina egna aktiviteter.
+            Bara sådant som syns i din egen data. Finns inget underlag säger jag hellre inget.
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-3 py-2">
-          {insights.map((insight, idx) => (
-            <div
-              key={idx}
-              className="flex items-start gap-3 p-4 bg-secondary/40 border border-border rounded-2xl animate-in fade-in slide-in-from-bottom-2"
-              style={{ animationDelay: `${idx * 100}ms` }}
-            >
-              <span className="text-2xl shrink-0">{insight.emoji}</span>
-              <p className="text-foreground leading-relaxed">{insight.text}</p>
+          {insights.length === 0 ? (
+            <div className="p-4 bg-secondary/40 border border-border rounded-2xl">
+              <p className="text-foreground leading-relaxed">
+                Jag har inte tillräckligt underlag ännu för att säga något om dina mönster.
+              </p>
+              <p className="text-sm text-muted-foreground mt-2">
+                Några incheckningar av mående eller avklarade uppgifter räcker – sedan börjar jag se
+                sammanhangen.
+              </p>
             </div>
-          ))}
+          ) : (
+            insights.map((insight, idx) => (
+              <div
+                key={idx}
+                className="flex items-start gap-3 p-4 bg-secondary/40 border border-border rounded-2xl animate-in fade-in slide-in-from-bottom-2"
+                style={{ animationDelay: `${idx * 100}ms` }}
+              >
+                <span className="text-2xl shrink-0">{insight.emoji}</span>
+                <div>
+                  <p className="text-foreground leading-relaxed">{insight.text}</p>
+                  <p className="text-xs text-muted-foreground mt-1">Bygger på {insight.basis}</p>
+                </div>
+              </div>
+            ))
+          )}
         </div>
 
         <Button onClick={() => onOpenChange(false)} className="w-full h-12 rounded-2xl mt-2">
