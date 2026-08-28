@@ -66,12 +66,7 @@ export const APP_GUIDE: GuideGroup[] = [
       {
         href: "/mitt-batteri",
         label: "Mitt batteri",
-        what: "Checka in ork och mående på några sekunder",
-      },
-      {
-        href: "/energifloede",
-        label: "Energins historik",
-        what: "Vad som brukar ge och ta energi",
+        what: "Checka in ork och mående på några sekunder – historik finns där",
       },
       { href: "/traning", label: "Träning & promenader", what: "Rörelse i lagom dos" },
       {
