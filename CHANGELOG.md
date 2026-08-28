@@ -8,7 +8,6 @@
 - Promenader beskrivs utifrån nyttan: hitta en promenad som passar din energi just nu.
 - Ingen ny insikts- eller datamodell: befintlig Flow-learning används, och inga mönster visas utan verklig data.
 
-
 ## 2026-08-28 – Pitchmaterial 3.6
 
 - Uppdaterat Living Blueprint, pitchdeck och pitchvideo till version 3.6.
@@ -35,7 +34,6 @@
 - Mini-scenen i Flow-karaktären visar maskoten i 68 px inuti sin 80 px-ruta.
 - Nya tester `src/components/flow-mascot.test.tsx` verifierar att den optiska förstoringen inte ändrar layoutrutan; snapshot-storleken i `flow-character.test.tsx` är uppdaterad.
 
-
 ## 2026-08-28 – Flow-närvaro, minimerbara block och smart tillbaka
 
 - Flow-maskoten är något större på de platser där den redan visas (mini 80 px, inline och hero något högre) – samma maskot, samma identitet.
@@ -53,14 +51,11 @@
 - Befintliga sidor, routes, data och funktioner är oförändrade: `/shopping` och `/stadning` fungerar som tidigare.
 - Hälsa, Idag, Planera, Flow, Mitt batteri och QuickFlow är oförändrade.
 
-
-
 - "Hur är ditt batteri just nu?" (snabb incheckning) är nu den primära funktionen högst upp på Mitt batteri.
 - Dagens batteri/översikt, morgon/kväll och dagens energiflöde ligger direkt efter incheckningen.
 - Historiken (mående, energi och flöde) är flyttad längre ner som sekundär funktion.
 - Ingen data, funktion eller Flow-logik har tagits bort; samma komponenter återanvänds.
 - Dagens energiflöde renderas inte längre dubbelt inuti historiken.
-
 
 ## 2026-08-28 – Slutstädning efter QA
 
@@ -70,9 +65,7 @@
 - Insight-demoläget kräver nu explicit demoläge och servervaliderad admin-roll.
 - "Energins historik" är inte längre en separat ingång i Hälsa utan nås från Mitt batteri.
 
-
 ## 2026-08-28 – Levande men lugn polish
-
 
 ## 2026-08-28 – Städad struktur: en plats för varje sak
 
@@ -131,7 +124,6 @@
 - Admin-vyn (Appstatistik) har fått blocket "Mest besökta sidor" med visningar per sida och unika besökare.
 - Samma integritetsskydd som övrig statistik: inga användar-id, e-post, IP eller innehåll – bara vilken sida som öppnades. Respekterar användarens avstängning av anonym statistik.
 
-
 ## 2026-08-28 – Tydlig Flow på Hem
 
 - Flow-lärandekortet heter nu "Flow lär känna dig" och visar den riktiga Flow-maskoten tydligt, med texten "Jag börjar se mönster i hur din energi, dina aktiviteter och din vardag hänger ihop."
@@ -150,7 +142,6 @@
 - "Energi och mående" och "Mitt batteri" var samma sak på två ställen. Nu bor incheckningen, dagens kurva, Stop-pausen och historiken (mående, energi, flöde) på **Mitt batteri** – /ma-bra går dit automatiskt.
 - Menyn har en rad i stället för två för energi. Förtydligande: **bara energi-/måendeingångar** (incheckning, energi- och måendekort, energihistorik-genvägar och gamla /ma-bra) pekar på Mitt batteri. Flow, Planering, FlowScore, Prata med Flow, appguiden och QuickFlow behåller sina egna sidor.
 - Tydligare roller i menyn: Min dag (vad som händer), Planering (ordningen), Flow hjälper (förslaget), Prata med Flow (samtalet).
-
 
 ## 2026-08-28 – Dubblettstädning: en sak, ett ställe
 
