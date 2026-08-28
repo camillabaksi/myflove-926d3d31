@@ -87,8 +87,6 @@ function useFlowGaze(enabled: boolean) {
   return { ref, tilt };
 }
 
-
-
 /**
  * Flow – MyFloves officiella maskot.
  * Bilden i src/assets/flow-mascot.png.asset.json är source of truth.
@@ -194,7 +192,6 @@ export function FlowMascot({
             : undefined
         }
       >
-
         <img
           src={FLOW_MASCOT_SRC}
           alt={alt}
@@ -204,16 +201,13 @@ export function FlowMascot({
           className={cn(
             "object-contain drop-shadow-[0_8px_24px_rgba(124,92,224,0.25)]",
             SIZES[size],
-            mood
-              ? MOODS[mood]
-              : cn(float && !wave && "floaty", wave && "wave-hello"),
+            mood ? MOODS[mood] : cn(float && !wave && "floaty", wave && "wave-hello"),
             alive && !mood && !wave && !float && "flow-breathe-body",
             imgClassName,
           )}
         />
       </span>
     </span>
-
   );
 }
 
@@ -248,7 +242,4 @@ export function FlowSays({
       </div>
     </div>
   );
-
-
 }
-

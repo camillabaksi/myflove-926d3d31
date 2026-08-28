@@ -334,7 +334,6 @@ export default function Home() {
               />
             </CollapsibleSection>
           </section>
-
         )}
 
         {/* Flow – en liten notering längst ner, konkurrerar inte med dagen. */}

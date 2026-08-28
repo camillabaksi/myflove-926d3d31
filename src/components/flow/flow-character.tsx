@@ -78,7 +78,9 @@ function MiniFlows({ count, rain }: { count: number; rain?: boolean }) {
     >
       {Array.from({ length: shown }).map((_, i) => (
         <span key={i} className="relative">
-          {rain && <Umbrella className="absolute -top-[38%] left-1/2 h-6 w-auto -translate-x-1/2 flow-sway" />}
+          {rain && (
+            <Umbrella className="absolute -top-[38%] left-1/2 h-6 w-auto -translate-x-1/2 flow-sway" />
+          )}
           <FlowMascot size="xs" mood={i % 2 === 0 ? "bounce" : "sway"} imgClassName="h-10 w-auto" />
         </span>
       ))}
@@ -150,7 +152,9 @@ const SCENES: Record<FlowScene, Variant[]> = {
     {
       mood: "cheer",
       back: () => <Sun className={p("left-[4%] top-[2%] h-[24%] w-auto flow-pulse")} />,
-      front: () => <Sunglasses className={p("left-1/2 top-[35%] w-[36%] -translate-x-1/2 -rotate-3")} />,
+      front: () => (
+        <Sunglasses className={p("left-1/2 top-[35%] w-[36%] -translate-x-1/2 -rotate-3")} />
+      ),
     },
   ],
 
@@ -204,7 +208,9 @@ const SCENES: Record<FlowScene, Variant[]> = {
     {
       mood: "calm",
       mascotClass: "-rotate-[72deg] translate-y-[6%]",
-      back: () => <BedFrame className={p("bottom-[4%] left-1/2 w-[96%] -translate-x-1/2 -scale-x-100")} />,
+      back: () => (
+        <BedFrame className={p("bottom-[4%] left-1/2 w-[96%] -translate-x-1/2 -scale-x-100")} />
+      ),
       front: () => (
         <>
           <Zzz className="left-[12%] top-[16%] h-16 w-16" />
@@ -310,11 +316,15 @@ const SCENES: Record<FlowScene, Variant[]> = {
   travel: [
     {
       mood: "sway",
-      front: () => <Car className={p("bottom-[2%] left-1/2 w-[92%] -translate-x-1/2 flow-drive")} />,
+      front: () => (
+        <Car className={p("bottom-[2%] left-1/2 w-[92%] -translate-x-1/2 flow-drive")} />
+      ),
     },
     {
       mood: "float",
-      front: () => <Bus className={p("bottom-[2%] left-1/2 w-[94%] -translate-x-1/2 flow-drive")} />,
+      front: () => (
+        <Bus className={p("bottom-[2%] left-1/2 w-[94%] -translate-x-1/2 flow-drive")} />
+      ),
     },
   ],
 
@@ -362,7 +372,9 @@ const SCENES: Record<FlowScene, Variant[]> = {
       back: ({ rain }) => (rain ? <RainDrops count={5} /> : null),
       front: ({ kids, rain }) => (
         <>
-          {rain && <Umbrella className={p("left-[6%] top-[0%] h-[38%] w-auto -rotate-12 flow-sway")} />}
+          {rain && (
+            <Umbrella className={p("left-[6%] top-[0%] h-[38%] w-auto -rotate-12 flow-sway")} />
+          )}
           <MiniFlows count={kids} rain={rain} />
         </>
       ),
@@ -387,7 +399,10 @@ const SCENES: Record<FlowScene, Variant[]> = {
       back: () => <Stars />,
       front: ({ energy }) => (
         <>
-          <Battery level={Math.max(70, energy)} className={p("bottom-[6%] right-[-2%] h-[52%] w-auto")} />
+          <Battery
+            level={Math.max(70, energy)}
+            className={p("bottom-[6%] right-[-2%] h-[52%] w-auto")}
+          />
           <Bolt className={p("right-[7%] bottom-[30%] h-[18%] w-auto flow-pulse")} />
         </>
       ),
@@ -396,7 +411,10 @@ const SCENES: Record<FlowScene, Variant[]> = {
       mood: "bounce",
       back: () => <Confetti count={8} />,
       front: ({ energy }) => (
-        <Battery level={Math.max(70, energy)} className={p("bottom-[6%] left-[-2%] h-[52%] w-auto")} />
+        <Battery
+          level={Math.max(70, energy)}
+          className={p("bottom-[6%] left-[-2%] h-[52%] w-auto")}
+        />
       ),
     },
   ],
@@ -407,7 +425,10 @@ const SCENES: Record<FlowScene, Variant[]> = {
       mascotClass: "-rotate-6",
       front: ({ energy }) => (
         <>
-          <Battery level={Math.min(30, energy)} className={p("bottom-[6%] right-[-2%] h-[52%] w-auto")} />
+          <Battery
+            level={Math.min(30, energy)}
+            className={p("bottom-[6%] right-[-2%] h-[52%] w-auto")}
+          />
           <Zzz className="left-[14%] top-[18%] h-14 w-14" />
         </>
       ),
@@ -417,7 +438,10 @@ const SCENES: Record<FlowScene, Variant[]> = {
       mascotClass: "rotate-6",
       front: ({ energy }) => (
         <>
-          <Battery level={Math.min(30, energy)} className={p("bottom-[6%] left-[-2%] h-[50%] w-auto")} />
+          <Battery
+            level={Math.min(30, energy)}
+            className={p("bottom-[6%] left-[-2%] h-[50%] w-auto")}
+          />
           <Mug className={p("bottom-[8%] right-[0%] h-[22%] w-auto")} />
         </>
       ),
