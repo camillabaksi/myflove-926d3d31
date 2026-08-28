@@ -35,6 +35,7 @@ export default function MedicationToday({ limit = 3 }: { limit?: number }) {
   const { pending, done } = useMemo(() => {
     const all: Dose[] = [];
     for (const med of medications) {
+      if (!medicationOccursOn(med, todayIso)) continue;
       for (const time of med.times) {
         all.push({
           key: `${med.id}:${time}`,

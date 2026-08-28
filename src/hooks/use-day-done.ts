@@ -34,6 +34,7 @@ export function useDayDone(): { lines: DayDoneLine[]; anything: boolean } {
     let doses = 0;
     let dosesTaken = 0;
     for (const med of medications) {
+      if (!medicationOccursOn(med, todayIso)) continue;
       for (const time of med.times) {
         doses += 1;
         if (isTaken(med.id, time, today)) dosesTaken += 1;
