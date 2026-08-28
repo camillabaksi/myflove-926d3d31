@@ -123,6 +123,38 @@ export function MedicationContent({ showHeader = true }: MedicationContentProps)
           </button>
         </div>
 
+        <div className="space-y-2">
+          <p className="text-sm font-medium text-muted-foreground">Hur ofta?</p>
+          <div className="flex flex-wrap gap-2">
+            {REPEAT_OPTIONS.map((opt) => (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={() => setRepeat(opt.value)}
+                aria-pressed={repeat === opt.value}
+                className={`px-3 py-2 rounded-xl border text-sm transition-all ${
+                  repeat === opt.value
+                    ? "bg-primary/10 border-primary/40 text-primary"
+                    : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
+                }`}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+          {repeat !== "daily" && (
+            <label className="flex items-center gap-2 text-sm text-muted-foreground">
+              {repeat === "none" ? "Datum" : "Startdatum"}
+              <input
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                className="p-2 rounded-xl bg-secondary/50 border border-transparent focus:border-primary focus:ring-1 focus:ring-primary outline-none text-sm"
+              />
+            </label>
+          )}
+        </div>
+
         <Button type="submit" className="w-full h-12 rounded-xl">
           <Plus size={18} className="mr-2" /> Spara medicin
         </Button>
