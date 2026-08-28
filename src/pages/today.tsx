@@ -387,7 +387,7 @@ export default function TodayPage() {
               href="/tasks"
               className="inline-flex items-center gap-2 text-sm text-primary underline-offset-2 hover:underline"
             >
-              <ListOrdered size={16} /> Öppna hela Att göra (även kommande dagar)
+              <ListOrdered size={16} /> Öppna alla uppgifter (kommande dagar)
             </Link>
           </StepSection>
         )}
