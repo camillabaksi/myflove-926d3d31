@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-08-28 – Tydlig nytta med loggning
+
+- Incheckningen på Mitt batteri visar kort vad du får tillbaka, och texten följer hur väl Flow redan känner dig.
+- Ny diskret "ⓘ Varför?" på energi, mående och planering – bara där nyttan inte är självklar.
+- Bekräftelse efter sparad incheckning är nu mänsklig: "💜 Tack. Det hjälper mig att förstå dig bättre."
+- Promenader beskrivs utifrån nyttan: hitta en promenad som passar din energi just nu.
+- Ingen ny insikts- eller datamodell: befintlig Flow-learning används, och inga mönster visas utan verklig data.
+
+
 ## 2026-08-28 – Pitchmaterial 3.6
 
 - Uppdaterat Living Blueprint, pitchdeck och pitchvideo till version 3.6.
