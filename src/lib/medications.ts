@@ -26,6 +26,18 @@ export interface Medication {
   dosage?: string;
   times: string[]; // HH:MM, sorterade
   createdAt: number;
+  /** Hur ofta medicinen tas. Saknas = varje dag (gammal data). */
+  repeat?: RepeatMode;
+  /** Startdatum (YYYY-MM-DD). Krävs för engångsdoser. */
+  startDate?: string;
+}
+
+/** Ska medicinen tas den här dagen? */
+export function medicationOccursOn(med: Medication, dateStr: string): boolean {
+  const repeat = med.repeat ?? "daily";
+  if (repeat === "daily" && !med.startDate) return true;
+  const start = med.startDate ?? dateStr;
+  return occursOn(start, repeat, dateStr);
 }
 
 export interface MedicationLogEntry {
