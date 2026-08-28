@@ -62,7 +62,7 @@ export function useDoneLog(dayISO?: string) {
         const cutoff = dayMinus(todayISO(), 14);
         const keep = Object.keys(prev ?? {})
           .filter((d) => d >= cutoff || d === day)
-          .reduce<DoneLog>((acc, d) => ({ ...acc, [d]: prev![d]! }), {});
+          .reduce<DoneLog>((acc, d) => ({ ...acc, [d]: prev?.[d] ?? [] }), {});
         return { ...keep, [day]: next };
       });
     },

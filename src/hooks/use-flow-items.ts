@@ -168,7 +168,7 @@ export function useFlowItems(dateISO?: string): {
     }
 
     for (const r of routines ?? []) {
-      if (!r.enabled || !r.time) continue;
+      if (!r.enabled || !r.time || !routineOccursOn(r, targetDay)) continue;
       const id = `routine-${r.id}`;
       out.push({
         id,
