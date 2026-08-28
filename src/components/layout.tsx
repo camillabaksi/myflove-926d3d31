@@ -582,7 +582,7 @@ export default function Layout({ children }: LayoutProps) {
         label: "Mina mönster",
         hint: "Din energi, hälsa, mönster och statistik",
         icon: Brain,
-        hrefs: ["/insight", "/ma-bra", "/energifloede", "/statistik", "/traning"],
+        hrefs: ["/insight", "/mitt-batteri", "/energifloede", "/statistik", "/traning"],
       },
       {
         id: "avancerat",
