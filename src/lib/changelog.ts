@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-08-28";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Av/på-knapp för anonym statistik",
+    items: [
+      "Synlig av/på-knapp för anonym användningsstatistik under Anpassa appen → Integritet (2026-08-28)",
+      "Kopplad till opt-out-flaggan – avstängning gäller direkt (2026-08-28)",
+      "Cookiepolicyn pekar på var knappen finns (2026-08-28)",
+    ],
+  },
+  {
     title: "Uppdaterade juridiska dokument",
     items: [
       "Integritetspolicy, villkor och cookiepolicy speglar dagens funktioner (2026-08-28)",
