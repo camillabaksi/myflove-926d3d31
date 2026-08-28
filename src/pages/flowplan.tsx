@@ -23,6 +23,7 @@ import { useTasks, useFocus } from "@/hooks/use-data";
 import { supabase } from "@/integrations/supabase/client";
 import { useLocalStorage } from "@/lib/storage";
 import WhyHint from "@/components/why-hint";
+import { useFlowExplainer } from "@/hooks/use-flow-explainer";
 
 type DeadlineInfo = { daysUntilDue: number; hasReminder: boolean; activeNow: boolean };
 
@@ -76,6 +77,8 @@ function timeAgo(iso: string) {
 }
 
 export default function FlowPlanPage() {
+  const { explain } = useFlowExplainer();
+  const planExplainer = explain("planering");
   const { activeTasks, toggleTask, setTaskDueDate } = useTasks();
   const { currentFocus } = useFocus();
   const [energy, setEnergy] = useState<Energy>("medium");
@@ -271,10 +274,7 @@ export default function FlowPlanPage() {
               <p className="text-sm font-medium text-primary">
                 Här bestämmer du ordningen på dagen
               </p>
-              <p className="text-sm text-muted-foreground">
-                Planera utifrån vad du har ork till – inte bara vad som behöver göras. Flow föreslår
-                en ordning, du ändrar den som du vill.
-              </p>
+              {planExplainer && <p className="text-sm text-muted-foreground">{planExplainer}</p>}
               <div className="mt-1">
                 <WhyHint label="planera">
                   Planering kan hjälpa dig använda din energi på sådant som är viktigt för dig.

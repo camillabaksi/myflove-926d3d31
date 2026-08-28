@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-08-28";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Gradvis förklarande copy",
+    items: [
+      "Förklaringar om nyttan anpassas efter befintlig Flow learning level (2026-08-28)",
+      "Nya användare får enklare budskap; återkommande användare får kortare eller ingen upprepning (2026-08-28)",
+      "Energi, mående, planering, promenader och medicin använder samma gradvisa språk (2026-08-28)",
+    ],
+  },
+  {
     title: "Tydlig nytta med loggning",
     items: [
       "Incheckningen visar kort vad du får tillbaka, anpassat efter hur väl Flow känner dig (2026-08-28)",

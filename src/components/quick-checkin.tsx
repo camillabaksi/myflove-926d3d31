@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import { Plus } from "lucide-react";
 import CollapsibleSection from "@/components/collapsible-section";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";
+import { useFlowExplainer } from "@/hooks/use-flow-explainer";
 import { cn } from "@/lib/utils";
 
 /** Snabbmeny för framtida loggtyper – bara det som redan finns i appen. */
@@ -91,6 +92,7 @@ function ScaleSlider({
  */
 export default function QuickCheckin({ className }: { className?: string }) {
   const { moodValue, energyValue, logMood, logEnergy } = useQuickCheckin();
+  const { explain } = useFlowExplainer();
   const [menuOpen, setMenuOpen] = useState(false);
   const [moodDraft, setMoodDraft] = useState(moodValue ?? 5);
   const [energyDraft, setEnergyDraft] = useState(energyValue ?? 5);
@@ -122,7 +124,7 @@ export default function QuickCheckin({ className }: { className?: string }) {
             <span aria-hidden>❤️</span> Hur är det just nu?
           </span>
         }
-        description="Det här hjälper Flow förstå hur din energi förändras under dagen och vad som brukar påverka dig."
+        description={explain("energi") ?? undefined}
         headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
         className="space-y-5"
         actions={

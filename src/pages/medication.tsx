@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useFlowExplainer } from "@/hooks/use-flow-explainer";
 import Layout from "@/components/layout";
 import { MyFloveEmptyIllustration } from "@/components/myflove/motion";
 import { useMedications } from "@/hooks/use-data";
@@ -20,6 +21,8 @@ interface MedicationContentProps {
 }
 
 export function MedicationContent({ showHeader = true }: MedicationContentProps) {
+  const { explain } = useFlowExplainer();
+  const medExplainer = explain("medicin");
   const { medications, addMedication, deleteMedication, isTaken, toggleTaken } = useMedications();
   const { toast } = useToast();
   const [name, setName] = useState("");
@@ -66,8 +69,8 @@ export function MedicationContent({ showHeader = true }: MedicationContentProps)
         <div>
           <h1 className="text-3xl font-bold mb-2">Medicinpåminnelser</h1>
           <p className="text-muted-foreground">
-            Lägg till dina mediciner och bocka av när du tagit dem – då slipper du hålla tiderna i
-            huvudet, och Flow kan påminna dig när det passar din dag.
+            Lägg till dina mediciner och bocka av när du tagit dem.
+            {medExplainer ? ` ${medExplainer}` : ""}
           </p>
         </div>
       )}
