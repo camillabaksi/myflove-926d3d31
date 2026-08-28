@@ -7,7 +7,7 @@ import { useFlowSettings } from "@/hooks/use-flow-settings";
 import { cn } from "@/lib/utils";
 
 /**
- * "Jag lär mig hur du fungerar."
+ * "Flow lär känna dig."
  * Visar mjukt hur väl Flow känner dig och ett par saker han lagt märke till.
  * Ingen ny insamling – allt kommer från data som redan finns i MyFlove.
  */
@@ -20,13 +20,14 @@ export default function FlowLearningCard({ className }: { className?: string }) 
   return (
     <section
       data-flow-learning
-      aria-label="Vad Flow lärt sig om dig"
-      className={cn("rounded-3xl border border-border/60 bg-card p-4 shadow-sm", className)}
+      aria-label="Flow lär känna dig"
+      className={cn("rounded-3xl border border-primary/15 bg-primary/5 p-4 shadow-sm", className)}
     >
       <div className="flex items-center gap-3">
-        <FlowMascot size="xs" mood="calm" className="flow-alive" />
+        <FlowMascot size="sm" mood="calm" className="flow-alive shrink-0" />
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-medium">{knowledge.label}</p>
+          <p className="text-sm font-semibold">Flow lär känna dig</p>
+          <p className="text-xs text-muted-foreground">{knowledge.label}</p>
           <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-muted">
             <div
               className="h-full rounded-full bg-primary transition-all duration-700"
@@ -35,6 +36,10 @@ export default function FlowLearningCard({ className }: { className?: string }) 
           </div>
         </div>
       </div>
+
+      <p className="mt-3 text-pretty text-sm leading-relaxed text-muted-foreground">
+        Jag börjar se mönster i hur din energi, dina aktiviteter och din vardag hänger ihop.
+      </p>
 
       <ul className="mt-3 space-y-1.5">
         {knowledge.insights.slice(0, 3).map((i) => (
