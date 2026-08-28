@@ -186,7 +186,6 @@ export default function TodayPage() {
           <FlowCompanion stage="mini" />
         </StepSection>
 
-
         {view === "flow" ? (
           <>
             {/* Steg 2 – dagens plan */}
@@ -200,7 +199,9 @@ export default function TodayPage() {
               {entries.length > 0 ? (
                 <DayTimeline entries={entries} isToday energyByHour={energyByHour} />
               ) : (
-                <p className="text-sm text-muted-foreground">Inget bokat idag. Hela dagen är din.</p>
+                <p className="text-sm text-muted-foreground">
+                  Inget bokat idag. Hela dagen är din.
+                </p>
               )}
               <Link
                 href="/kalender"
@@ -220,7 +221,6 @@ export default function TodayPage() {
               <TaskQuickAdd onAdd={handleQuickAdd} />
               <DidThisQuickAdd />
             </StepSection>
-
 
             {/* 📋 Dagens ordning – planen du valt i Planera */}
             {dayPlan && dayPlan.steps.length > 0 && (
@@ -283,48 +283,50 @@ export default function TodayPage() {
               step={4}
               id="idag::steg-far-plats"
               title="Det som får plats idag"
-              help={'MyFlove väljer utifrån din kapacitet just nu. Det som inte får plats försvinner inte – det ligger kvar under "Resten kan vänta".'}
+              help={
+                'MyFlove väljer utifrån din kapacitet just nu. Det som inte får plats försvinner inte – det ligger kvar under "Resten kan vänta".'
+              }
             >
+              <p className="text-sm text-muted-foreground">
+                Samlat från hela ditt liv – uppgifter, deadlines, lektioner, barnens dag och tankar
+                du lagt i Quickflow.
+              </p>
+              {keep.length === 0 ? (
                 <p className="text-sm text-muted-foreground">
-                  Samlat från hela ditt liv – uppgifter, deadlines, lektioner, barnens dag och
-                  tankar du lagt i Quickflow.
+                  Inga uppgifter väntar. Det räcker att bara vara idag. 💙
                 </p>
-                {keep.length === 0 ? (
-                  <p className="text-sm text-muted-foreground">
-                    Inga uppgifter väntar. Det räcker att bara vara idag. 💙
-                  </p>
-                ) : (
-                  <ul className="space-y-2">
-                    {keep.map((item) => (
+              ) : (
+                <ul className="space-y-2">
+                  {keep.map((item) => (
+                    <li key={item.id}>
+                      <MyFloveTransition transitionKey={String(item.done)}>
+                        <FlowItemCard
+                          item={item}
+                          {...(item.completable ? { onToggle: toggle } : {})}
+                        />
+                      </MyFloveTransition>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {rest.length > 0 && (
+                <details className="rounded-2xl bg-muted/50 p-3">
+                  <summary className="cursor-pointer text-sm font-medium text-ink">
+                    Resten kan vänta ({rest.length})
+                  </summary>
+                  <ul className="mt-3 space-y-2">
+                    {rest.slice(0, 8).map((item) => (
                       <li key={item.id}>
-                        <MyFloveTransition transitionKey={String(item.done)}>
-                          <FlowItemCard
-                            item={item}
-                            {...(item.completable ? { onToggle: toggle } : {})}
-                          />
-                        </MyFloveTransition>
+                        <FlowItemCard
+                          item={item}
+                          {...(item.completable ? { onToggle: toggle } : {})}
+                        />
                       </li>
                     ))}
                   </ul>
-                )}
-                {rest.length > 0 && (
-                  <details className="rounded-2xl bg-muted/50 p-3">
-                    <summary className="cursor-pointer text-sm font-medium text-ink">
-                      Resten kan vänta ({rest.length})
-                    </summary>
-                    <ul className="mt-3 space-y-2">
-                      {rest.slice(0, 8).map((item) => (
-                        <li key={item.id}>
-                          <FlowItemCard
-                            item={item}
-                            {...(item.completable ? { onToggle: toggle } : {})}
-                          />
-                        </li>
-                      ))}
-                    </ul>
-                  </details>
-                )}
-                <DoneToday items={todayDone} onToggle={toggle} />
+                </details>
+              )}
+              <DoneToday items={todayDone} onToggle={toggle} />
             </StepSection>
 
             {/* Extra – energibalans och ett förslag, hopfällt tills du vill se det */}
@@ -355,42 +357,38 @@ export default function TodayPage() {
             </StepSection>
           </>
         ) : (
-          <StepSection
-            step={2}
-            id="idag::steg-lista"
-            title="Dagens lista"
-          >
-              <p className="text-sm text-muted-foreground">
-                Allt som ska hända eller göras idag. Bocka av direkt här – statusen är densamma i
-                Flow, på Hem och i Att göra.
+          <StepSection step={2} id="idag::steg-lista" title="Dagens lista">
+            <p className="text-sm text-muted-foreground">
+              Allt som ska hända eller göras idag. Bocka av direkt här – statusen är densamma i
+              Flow, på Hem och i Att göra.
+            </p>
+            {todaysItems.length === 0 ? (
+              <p className="rounded-2xl bg-secondary/30 p-4 text-sm text-muted-foreground">
+                {todayDone.length > 0
+                  ? "Allt som hörde till idag är genomfört. Fint jobbat. 💙"
+                  : "Inget på listan idag. Släpp en tanke i QuickFlow så landar den här."}
               </p>
-              {todaysItems.length === 0 ? (
-                <p className="rounded-2xl bg-secondary/30 p-4 text-sm text-muted-foreground">
-                  {todayDone.length > 0
-                    ? "Allt som hörde till idag är genomfört. Fint jobbat. 💙"
-                    : "Inget på listan idag. Släpp en tanke i QuickFlow så landar den här."}
-                </p>
-              ) : (
-                <ul className="space-y-2">
-                  {todaysItems.map((item) => (
-                    <li key={item.id}>
-                      <MyFloveTransition transitionKey={String(item.done)}>
-                        <FlowItemCard
-                          item={item}
-                          {...(item.completable ? { onToggle: toggle } : {})}
-                        />
-                      </MyFloveTransition>
-                    </li>
-                  ))}
-                </ul>
-              )}
-              <DoneToday items={todayDone} onToggle={toggle} />
-              <Link
-                href="/tasks"
-                className="inline-flex items-center gap-2 text-sm text-primary underline-offset-2 hover:underline"
-              >
-                <ListOrdered size={16} /> Öppna hela Att göra (även kommande dagar)
-              </Link>
+            ) : (
+              <ul className="space-y-2">
+                {todaysItems.map((item) => (
+                  <li key={item.id}>
+                    <MyFloveTransition transitionKey={String(item.done)}>
+                      <FlowItemCard
+                        item={item}
+                        {...(item.completable ? { onToggle: toggle } : {})}
+                      />
+                    </MyFloveTransition>
+                  </li>
+                ))}
+              </ul>
+            )}
+            <DoneToday items={todayDone} onToggle={toggle} />
+            <Link
+              href="/tasks"
+              className="inline-flex items-center gap-2 text-sm text-primary underline-offset-2 hover:underline"
+            >
+              <ListOrdered size={16} /> Öppna hela Att göra (även kommande dagar)
+            </Link>
           </StepSection>
         )}
       </div>
