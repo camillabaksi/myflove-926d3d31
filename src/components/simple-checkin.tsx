@@ -134,8 +134,16 @@ export default function SimpleCheckin({
       </div>
 
       <div className="space-y-2">
-        <p className="text-sm font-medium text-ink">
-          Hur mår du? <span className="font-normal text-muted-foreground">(valfritt)</span>
+        <div className="flex items-center justify-between gap-2">
+          <p className="text-sm font-medium text-ink">
+            Hur mår du? <span className="font-normal text-muted-foreground">(valfritt)</span>
+          </p>
+          <WhyHint label="logga mående">
+            Det hjälper Flow förstå om ditt mående och din energi brukar hänga ihop för dig.
+          </WhyHint>
+        </div>
+        <p className="text-xs text-muted-foreground">
+          Flow lär sig hur energi och mående hänger ihop för dig. Du kan hoppa över.
         </p>
         <div className="flex justify-between gap-1">
           {MOODS.map((m) => (
