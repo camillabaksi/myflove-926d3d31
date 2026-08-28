@@ -58,6 +58,20 @@ export default function NpfPage() {
   }, []);
 
   const { settings, update, reset } = useNpfSettings();
+  const [statsOptOut, setStatsOptOut] = useState<boolean>(readAnalyticsOptOut);
+
+  const toggleStats = (optOut: boolean) => {
+    setStatsOptOut(optOut);
+    try {
+      if (optOut) {
+        window.localStorage.setItem(ANALYTICS_OPT_OUT_KEY, "1");
+      } else {
+        window.localStorage.removeItem(ANALYTICS_OPT_OUT_KEY);
+      }
+    } catch {
+      /* privat läge – valet gäller bara för den här sessionen */
+    }
+  };
 
   return (
     <Layout>
