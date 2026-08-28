@@ -111,6 +111,7 @@ interface LayoutProps {
 const CATEGORY_HUE: Record<string, string> = {
   myflow: "258 62% 60%",
   flowflow: "285 52% 58%",
+  quickflow: "38 82% 56%",
   healthflow: "327 62% 62%",
   insightflow: "285 52% 58%",
   flowhelp: "258 62% 60%",

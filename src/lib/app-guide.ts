@@ -41,7 +41,11 @@ export const APP_GUIDE: GuideGroup[] = [
     hint: "Bestäm och ordna vad som ska hända",
     entries: [
       { href: "/kalender", label: "Kalender", what: "Alla tider på en plats, med filter per rum" },
-      { href: "/tasks", label: "Att göra", what: "Dina uppgifter, med tid och energinivå" },
+      {
+        href: "/tasks",
+        label: "Alla uppgifter",
+        what: "Hela listan framåt – dagens saker bor i Idag",
+      },
       { href: "/paminnelser", label: "Påminnelser", what: "Notiser och alarm som knuffar dig" },
       {
         href: "/daglig-rutin",

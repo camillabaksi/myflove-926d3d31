@@ -589,9 +589,9 @@ export default function Tasks() {
               ✅
             </span>
             <div className="min-w-0">
-              <h1 className="font-display text-2xl font-bold text-ink">Att göra</h1>
+              <h1 className="font-display text-2xl font-bold text-ink">Alla uppgifter</h1>
               <p className="mt-1 text-sm text-muted-foreground">
-                Allt du behöver, vill eller planerar – samlat. Du bestämmer takten.
+                Hela listan framåt – samma uppgifter som i Idag, Planera och Hem.
               </p>
             </div>
           </div>
