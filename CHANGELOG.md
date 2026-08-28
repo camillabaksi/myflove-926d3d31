@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-28 – Uppdaterade juridiska dokument
+
+- Integritetspolicy, användarvillkor och cookiepolicy uppdaterade till dagens app (senast uppdaterad 28 augusti 2026).
+- Integritet: hälsodata som särskild kategori med uttryckligt samtycke, sparade Flow-samtal, push-prenumeration, Google-inloggning, delat innehåll i hushåll, barns uppgifter samt att innehåll inte används för att träna AI-modeller.
+- Radering: självbetjäning i appen (Inställningar → Avsluta konto) och att lokal data och krypteringsnyckel rensas vid utloggning.
+- Villkor: Flow är inte diagnos eller behandling, appen är inte medicinteknisk, påminnelser är stöd och inte garanti, delning med andra, ARN och tvingande konsumenträtt.
+- Cookies: krypterad lokal lagring (AES-GCM med nyckel i IndexedDB), sessionslagring för chattutkast och avidentifierad statistik utan innehåll.
+
 ## 2026-08-28 – Spara samtal med Flow
 
 - "Prata med Flow" har nu en tydlig samtalslista: [+ Nytt samtal] högst upp och "Mina samtal" under, senast använda först.

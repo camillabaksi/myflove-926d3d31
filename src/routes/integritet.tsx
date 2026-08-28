@@ -154,7 +154,6 @@ function PrivacyPage() {
   );
 }
 
-
 export function LegalShell({
   title,
   updated,
