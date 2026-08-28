@@ -4,7 +4,18 @@ import { useNavigate } from "@tanstack/react-router";
 import Layout from "@/components/layout";
 import { MyFloveThinking } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
-import { Loader2, Send, History, Plus, Trash2, X, ArrowLeft, ChevronRight } from "lucide-react";
+import {
+  Loader2,
+  Send,
+  History,
+  Plus,
+  Trash2,
+  X,
+  ArrowLeft,
+  ChevronRight,
+  MoreHorizontal,
+  Pencil,
+} from "lucide-react";
 import { FlowMascot, type FlowStatus } from "@/components/flow-mascot";
 import { chatWithFlow } from "@/lib/flow-chat.functions";
 import { useTasks, useMoods, useFocus, useReminders } from "@/hooks/use-data";
@@ -30,6 +41,8 @@ import {
   type FlowMessage,
 } from "@/hooks/use-flow-chats";
 import { todayISO } from "@/lib/day";
+import { relativeDayLabel } from "@/lib/flow-chat-history";
+import { track } from "@/lib/analytics";
 
 const todayStr = (): string => todayISO();
 
@@ -44,22 +57,28 @@ const QUICK_PROMPTS = [
   "Vad borde jag börja med?",
 ];
 
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("sv-SE", { day: "numeric", month: "short" });
-}
-
 /** Chatten utan sidram – används både som egen sida och som HJÄLP-läget i Flow. */
 export function AssistantContent({ chatId }: { chatId?: string }) {
   const navigate = useNavigate();
   const conversationId = chatId ?? null;
 
-  const { conversations, loading: loadingConversations, refresh, remove } = useFlowConversations();
+  const {
+    conversations,
+    loading: loadingConversations,
+    refresh,
+    remove,
+    rename,
+  } = useFlowConversations();
   const { messages, setMessages, loading: loadingMessages } = useFlowMessages(conversationId);
 
   const [input, setInput] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [menuFor, setMenuFor] = useState<string | null>(null);
+  const [renamingId, setRenamingId] = useState<string | null>(null);
+  const [renameValue, setRenameValue] = useState("");
+  const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -76,16 +95,20 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
     void navigate({ to: "/assistant/$chatId", params: { chatId: latest.id }, replace: true });
   }, [conversationId, loadingConversations, conversations, isSending, navigate]);
 
-  /** Påbörjad text sparas per samtal så inget försvinner om du lämnar vyn. */
+  /**
+   * Påbörjad text sparas per samtal så inget försvinner om du lämnar vyn.
+   * Den ligger i sessionStorage – aldrig i klartext på disken – och rensas
+   * automatiskt vid utloggning (clearLocalUserData tömmer sessionStorage).
+   */
   const draftKey = `myflove-flow-draft-${conversationId ?? "ny"}`;
   useEffect(() => {
     if (typeof window === "undefined") return;
-    setInput(window.localStorage.getItem(draftKey) ?? "");
+    setInput(window.sessionStorage.getItem(draftKey) ?? "");
   }, [draftKey]);
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (input.trim()) window.localStorage.setItem(draftKey, input);
-    else window.localStorage.removeItem(draftKey);
+    if (input.trim()) window.sessionStorage.setItem(draftKey, input);
+    else window.sessionStorage.removeItem(draftKey);
   }, [draftKey, input]);
 
   const chat = useServerFn(chatWithFlow);
@@ -203,60 +226,164 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
     }
   };
 
+  const openConversation = (id: string) => {
+    setHistoryOpen(false);
+    setMenuFor(null);
+    if (typeof window !== "undefined") window.sessionStorage.removeItem(NEW_CHAT_FLAG);
+    track("flow_conversation_opened", { source: "assistant" });
+    void navigate({ to: "/assistant/$chatId", params: { chatId: id } });
+  };
+
   const historyList = (
-    <div className="space-y-2">
+    <div className="space-y-2" data-testid="flow-chat-history">
       <button
         type="button"
         onClick={() => {
           setHistoryOpen(false);
+          setMenuFor(null);
           if (typeof window !== "undefined") window.sessionStorage.setItem(NEW_CHAT_FLAG, "1");
           void navigate({ to: "/assistant" });
         }}
-        className="w-full flex items-center gap-2 rounded-2xl bg-primary/10 text-primary px-3 py-2 text-sm font-medium hover:bg-primary/15 transition-colors"
+        className="w-full flex items-center gap-2 rounded-2xl bg-primary/10 text-primary px-3 py-2.5 text-sm font-semibold hover:bg-primary/15 transition-colors"
       >
-        <Plus size={16} /> Ny chatt
+        <Plus size={16} /> Nytt samtal
       </button>
 
       {conversations.length === 0 ? (
-        <p className="text-xs text-muted-foreground px-1 py-2">
-          Dina samtal sparas här så du kan läsa dem igen när du vill.
-        </p>
+        <div className="rounded-2xl border border-border px-3 py-4 text-center">
+          <p className="text-sm font-medium">💜 Prata med Flow</p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Du kan börja ett nytt samtal när du vill.
+          </p>
+        </div>
       ) : (
-        conversations.map((c) => (
-          <div
-            key={c.id}
-            className={`group flex items-center gap-1 rounded-2xl border px-2 transition-colors ${
-              c.id === conversationId
-                ? "border-primary/50 bg-primary/5"
-                : "border-border hover:border-primary/30"
-            }`}
-          >
-            <button
-              type="button"
-              onClick={() => {
-                setHistoryOpen(false);
-                if (typeof window !== "undefined") window.sessionStorage.removeItem(NEW_CHAT_FLAG);
-                void navigate({ to: "/assistant/$chatId", params: { chatId: c.id } });
-              }}
-              className="flex-1 min-w-0 text-left py-2.5"
+        <>
+          <p className="px-1 pt-2 text-xs uppercase tracking-wide text-muted-foreground">
+            Mina samtal
+          </p>
+          {conversations.map((c) => (
+            <div
+              key={c.id}
+              className={`rounded-2xl border transition-colors ${
+                c.id === conversationId
+                  ? "border-primary/50 bg-primary/5"
+                  : "border-border hover:border-primary/30"
+              }`}
             >
-              <p className="text-sm truncate">{c.title}</p>
-              <p className="text-[11px] text-muted-foreground">{formatDate(c.updated_at)}</p>
-            </button>
-            <button
-              type="button"
-              aria-label={`Ta bort ${c.title}`}
-              onClick={() => {
-                void remove(c.id);
-                if (c.id === conversationId) void navigate({ to: "/assistant" });
-              }}
-              className="p-2 rounded-xl text-muted-foreground hover:text-destructive shrink-0"
-            >
-              <Trash2 size={15} />
-            </button>
-          </div>
-        ))
+              {renamingId === c.id ? (
+                <form
+                  className="flex items-center gap-1 p-2"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    void rename(c.id, renameValue);
+                    setRenamingId(null);
+                  }}
+                >
+                  <input
+                    autoFocus
+                    value={renameValue}
+                    aria-label="Nytt namn på samtalet"
+                    onChange={(e) => setRenameValue(e.target.value)}
+                    className="min-w-0 flex-1 rounded-xl border border-border bg-background px-2 py-1.5 text-sm"
+                  />
+                  <Button type="submit" size="sm" className="rounded-xl">
+                    Spara
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="ghost"
+                    className="rounded-xl"
+                    onClick={() => setRenamingId(null)}
+                  >
+                    Avbryt
+                  </Button>
+                </form>
+              ) : (
+                <div className="flex items-center gap-1 px-2">
+                  <button
+                    type="button"
+                    onClick={() => openConversation(c.id)}
+                    className="flex-1 min-w-0 text-left py-2.5"
+                  >
+                    <p className="text-sm truncate">{c.title}</p>
+                    <p className="text-[11px] text-muted-foreground">
+                      {relativeDayLabel(c.updated_at)}
+                    </p>
+                  </button>
+                  <button
+                    type="button"
+                    aria-label={`Fler val för ${c.title}`}
+                    aria-expanded={menuFor === c.id}
+                    onClick={() => setMenuFor((m) => (m === c.id ? null : c.id))}
+                    className="p-2 rounded-xl text-muted-foreground hover:text-foreground shrink-0"
+                  >
+                    <MoreHorizontal size={16} />
+                  </button>
+                </div>
+              )}
+
+              {menuFor === c.id && renamingId !== c.id && (
+                <div className="flex flex-wrap gap-2 border-t border-border/60 px-2 py-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setRenameValue(c.title);
+                      setRenamingId(c.id);
+                      setMenuFor(null);
+                    }}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs font-medium"
+                  >
+                    <Pencil size={13} /> Byt namn
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setConfirmDelete(c.id)}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-destructive/30 px-3 py-1.5 text-xs font-medium text-destructive"
+                  >
+                    <Trash2 size={13} /> Ta bort samtal
+                  </button>
+                </div>
+              )}
+
+              {confirmDelete === c.id && (
+                <div className="border-t border-border/60 px-3 py-2">
+                  <p className="text-xs text-muted-foreground">
+                    Ta bort “{c.title}” permanent? Andra samtal påverkas inte.
+                  </p>
+                  <div className="mt-2 flex gap-2">
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      className="rounded-xl"
+                      onClick={() => {
+                        setConfirmDelete(null);
+                        setMenuFor(null);
+                        void remove(c.id);
+                        if (c.id === conversationId) void navigate({ to: "/assistant" });
+                      }}
+                    >
+                      Ja, ta bort
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="rounded-xl"
+                      onClick={() => setConfirmDelete(null)}
+                    >
+                      Avbryt
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </>
       )}
+      <p data-npf="optional" className="px-1 pt-1 text-[11px] text-muted-foreground">
+        Sparade samtal är bara din historik – de blir inte automatiskt en del av vad Flow lär sig om
+        dig.
+      </p>
     </div>
   );
 
@@ -423,7 +550,13 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                     className={`flex items-end gap-2 ${m.role === "user" ? "justify-end" : "justify-start"}`}
                   >
                     {m.role !== "user" && (
-                      <FlowMascot size="sm" mood="calm" status={flowStatus} bump className="shrink-0" />
+                      <FlowMascot
+                        size="sm"
+                        mood="calm"
+                        status={flowStatus}
+                        bump
+                        className="shrink-0"
+                      />
                     )}
                     <div
                       className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${

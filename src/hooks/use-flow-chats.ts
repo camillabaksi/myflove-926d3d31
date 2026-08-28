@@ -1,5 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { track } from "@/lib/analytics";
+import {
+  makeConversationTitle,
+  normalizeConversationTitle,
+  sortConversations,
+} from "@/lib/flow-chat-history";
 
 export type FlowRole = "user" | "assistant";
 
@@ -15,12 +21,12 @@ export interface FlowMessage {
   content: string;
 }
 
-function makeTitle(text: string): string {
-  const clean = text.trim().replace(/\s+/g, " ");
-  return clean.length > 48 ? `${clean.slice(0, 48)}…` : clean || "Ny chatt";
-}
-
-/** Lista över användarens sparade Flow-chattar. */
+/**
+ * Lista över användarens sparade Flow-chattar.
+ *
+ * Bara titel och senaste aktivitet hämtas här – själva meddelandena laddas
+ * först när ett samtal öppnas (se useFlowMessages).
+ */
 export function useFlowConversations() {
   const [conversations, setConversations] = useState<FlowConversation[]>([]);
   const [loading, setLoading] = useState(true);
@@ -31,7 +37,7 @@ export function useFlowConversations() {
       .select("id, title, updated_at")
       .order("updated_at", { ascending: false })
       .limit(100);
-    setConversations((data as FlowConversation[]) ?? []);
+    setConversations(sortConversations((data as FlowConversation[]) ?? []));
     setLoading(false);
   }, []);
 
@@ -43,12 +49,24 @@ export function useFlowConversations() {
     async (id: string) => {
       setConversations((c) => c.filter((x) => x.id !== id));
       await supabase.from("flow_conversations").delete().eq("id", id);
+      track("flow_conversation_deleted", { source: "assistant" });
       void refresh();
     },
     [refresh],
   );
 
-  return { conversations, loading, refresh, remove };
+  const rename = useCallback(
+    async (id: string, title: string) => {
+      const clean = normalizeConversationTitle(title);
+      setConversations((c) => c.map((x) => (x.id === id ? { ...x, title: clean } : x)));
+      await supabase.from("flow_conversations").update({ title: clean }).eq("id", id);
+      track("flow_conversation_renamed", { source: "assistant" });
+      void refresh();
+    },
+    [refresh],
+  );
+
+  return { conversations, loading, refresh, remove, rename };
 }
 
 /** Meddelanden i en specifik chatt. */
@@ -89,10 +107,11 @@ export async function createFlowConversation(firstMessage: string): Promise<stri
   if (!uid) return null;
   const { data, error } = await supabase
     .from("flow_conversations")
-    .insert({ user_id: uid, title: makeTitle(firstMessage) })
+    .insert({ user_id: uid, title: makeConversationTitle(firstMessage) })
     .select("id")
     .single();
   if (error) return null;
+  track("flow_conversation_created", { source: "assistant" });
   return data.id as string;
 }
 
