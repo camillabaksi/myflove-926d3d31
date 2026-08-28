@@ -25,6 +25,8 @@ export default function EnergyBattery({
 
 
   const level = Math.round(reading.now);
+  // Siffran räknas mjukt upp/ner när energin ändras (hoppar direkt vid reducerad rörelse).
+  const shownLevel = Math.round(useAnimatedNumber(level));
   const tone =
     level >= 66
       ? "hsl(var(--primary))"
