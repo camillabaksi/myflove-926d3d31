@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-28 – Hemskärmen: lugn överblick utan dubbletter
+
+- Snabbincheckningen och "Energins historik" har tagits bort från Hem. Batterikortet är den enda energibilden där, och hela incheckningen/historiken bor i **Mitt batteri**.
+- "Just nu" upprepar inte längre samma sak som redan står under "Nästa" – Flow visar då bara sin rekommendation.
+- Bara en Flow-notering längst ner på Hem (den som visar vad Flow lärt sig om just dig och länkar till Mina mönster).
+- Hem visar fortfarande "Dagens översikt" som siffror – hela listan bor i Min dag, och alla vyer pekar på samma underliggande uppgift.
+
 ## 2026-08-28 – En plats för energi, tydligare roller
 
 - "Energi och mående" och "Mitt batteri" var samma sak på två ställen. Nu bor incheckningen, dagens kurva, Stop-pausen och historiken (mående, energi, flöde) på **Mitt batteri** – /ma-bra går dit automatiskt.
