@@ -65,7 +65,7 @@ const isOutdoorTitle = (title: string) =>
 const linkForTitle = (title: string) => linkForPriority(priorityForTitle(title));
 
 export function useFlowMoment(): FlowMoment {
-  const { activeTasks, updateTask, toggleTask } = useTasks();
+  const { activeTasks, updateTask } = useTasks();
   const { activeReminders } = useReminders();
   const { medications, isTaken, toggleTaken } = useMedications();
   const { children } = useChildren();
@@ -415,7 +415,6 @@ export function useFlowMoment(): FlowMoment {
     todaysCount,
     waiting,
     updateTask,
-    toggleTask,
     forecast,
     level,
     learningOn,
