@@ -94,12 +94,12 @@ export default function RoutinesMedicationToday() {
   }, [
     routines,
     reminders,
-    routineDone,
     medications,
     isTaken,
     toggleTaken,
     toggleReminder,
-    setRoutineDone,
+    isDone,
+    toggleDone,
     toast,
     todayIso,
   ]);
