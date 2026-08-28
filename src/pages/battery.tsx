@@ -17,8 +17,9 @@ import { track } from "@/lib/analytics";
 
 /**
  * Mitt batteri – den enda platsen för energi och mående.
- * Här bor incheckningen (tidigare även på /ma-bra), dagens kurva och
- * historiken. Samma data som på Hem (useEnergyBattery), ingen ny modell.
+ * Hierarki: 1) Snabb incheckning, 2) Nuvarande batteri/översikt,
+ * 3) Dagens energiflöde, 4) Historik som sekundär funktion längst ner.
+ * Samma data som tidigare, bara tydligare ordning.
  */
 export default function BatteryPage() {
   const [stopOpen, setStopOpen] = useState(false);
@@ -36,11 +37,15 @@ export default function BatteryPage() {
           description="Din energi och ditt mående – checka in och se hur dagen brukar se ut."
         />
 
-        <EnergyBattery defaultOpen />
-
+        {/* 1. Primär incheckning */}
         <SimpleCheckin source="mitt-batteri" />
 
+        {/* 2. Nuvarande batteri och dagskurva */}
+        <EnergyBattery defaultOpen />
+
+        {/* 3. Morgon/kväll och dagens energiflöde */}
         <DayEdgesCheckin />
+        <DayEnergyFlow />
 
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
           <button
@@ -53,6 +58,7 @@ export default function BatteryPage() {
         </div>
         <StopModal open={stopOpen} onOpenChange={setStopOpen} />
 
+        {/* 4. Historik – sekundär, längst ner */}
         <section
           aria-label="Se min historik"
           className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
@@ -67,8 +73,6 @@ export default function BatteryPage() {
             headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
             className="space-y-4"
           >
-            <DayEnergyFlow className="border-0 bg-transparent p-0 shadow-none" showHeader={false} />
-
             <Tabs defaultValue="mood" className="w-full" data-testid="battery-history">
               <TabsList className="grid w-full grid-cols-3 h-11 rounded-2xl">
                 <TabsTrigger value="mood" className="rounded-xl text-xs">
@@ -91,7 +95,7 @@ export default function BatteryPage() {
               </TabsContent>
 
               <TabsContent value="flow" className="mt-6">
-                <EnergyFlowContent showHeader={false} />
+                <EnergyFlowContent showHeader={false} showDayFlow={false} />
               </TabsContent>
             </Tabs>
 
