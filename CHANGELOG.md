@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-08-28 – Äkta insikter och rekommendationer
+
+- "Hitta mitt flow" visar bara mönster som faktiskt syns i din egen data – ingen generisk uppmuntran längre när underlag saknas.
+- Varje insikt visar vad den bygger på, t.ex. antal incheckningar och snittvärde.
+- Måendetrend kräver minst tre incheckningar den senaste veckan; en enstaka logg blir aldrig ett mönster.
+- Avklarade uppgifter räknas nu på när de faktiskt blev klara (completedAt), inte när de skapades.
+- Dagens fokus visas bara när det gäller idag.
+- Tomläge i stället för påhittad slutsats: "Jag har inte tillräckligt underlag ännu."
+
+
 ## 2026-08-28 – Tydlig nytta med loggning
 
 - Incheckningen på Mitt batteri visar kort vad du får tillbaka, och texten följer hur väl Flow redan känner dig.
