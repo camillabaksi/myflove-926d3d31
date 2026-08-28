@@ -6,7 +6,7 @@ import QuickCheckin from "@/components/quick-checkin";
 import { useHomeLayout, type HomeBlockId } from "@/lib/home-layout";
 import { TaskQuickAdd, type QuickAddResult } from "@/components/task-quick-add";
 import DidThisCta from "@/components/did-this-cta";
-import TodayTasks from "@/components/today-tasks";
+import { useFlowItems } from "@/hooks/use-flow-items";
 import RoutinesMedicationToday from "@/components/routines-medication-today";
 
 import DayEnergyFlow from "@/components/day-energy-flow";
