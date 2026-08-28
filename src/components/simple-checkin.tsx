@@ -46,6 +46,8 @@ export default function SimpleCheckin({
 }) {
   const { moodValue, energyValue, logMood, logEnergy } = useQuickCheckin();
   const { addFactor } = useEnergyFlow();
+  const knowledge = useFlowLearning();
+  const benefit = benefitVoice(knowledge.level, knowledge.insights.length);
   const [battery, setBattery] = useState(energyValue ?? 6);
   const [mood, setMood] = useState<number | null>(moodValue);
   const [factors, setFactors] = useState<string[]>([]);
