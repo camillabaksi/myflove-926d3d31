@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-28 – Tydlig Flow på Hem
+
+- Flow-lärandekortet heter nu "Flow lär känna dig" och visar den riktiga Flow-maskoten tydligt, med texten "Jag börjar se mönster i hur din energi, dina aktiviteter och din vardag hänger ihop."
+- "Just nu" är nu signerat Flow ("Flow · just nu") med maskoten i rubriken – det är tydligt att förslaget kommer från Flow, inte ett generiskt kort.
+- Ingen ny funktion eller navigation – bara tydligare presentation. Rollerna är oförändrade: Min dag = vad som händer, Planering = ordningen, Flow = förslaget, Prata med Flow = samtalet, QuickFlow = fånga.
+
 ## 2026-08-28 – Hemskärmen: lugn överblick utan dubbletter
 
 - Snabbincheckningen och "Energins historik" har tagits bort från Hem. Batterikortet är den enda energibilden där, och hela incheckningen/historiken bor i **Mitt batteri**.
