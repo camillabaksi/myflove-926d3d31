@@ -592,3 +592,38 @@ export default function Home() {
     </Layout>
   );
 }
+
+/**
+ * Dagens översikt på Hem – bara en sammanfattning i siffror.
+ * Hela listan (och avbockningen) bor i Min dag, så samma sak aldrig
+ * visas som två kort på startsidan.
+ */
+function DaySummary() {
+  const { todayOpen, todayDone } = useFlowItems();
+  const total = todayOpen.length + todayDone.length;
+
+  return (
+    <section
+      className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+      aria-label="Dagens översikt"
+    >
+      <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+        Dagens översikt
+      </h2>
+      <p className="mt-2 text-ink">
+        {total === 0
+          ? "Inget inplanerat idag ännu."
+          : `${total} ${total === 1 ? "sak" : "saker"} idag · ${todayDone.length} ${
+              todayDone.length === 1 ? "klar" : "klara"
+            } · ${todayOpen.length} kvar`}
+      </p>
+      <Link
+        href="/idag"
+        className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+      >
+        Se hela dagen i Min dag <ArrowRight size={14} />
+      </Link>
+    </section>
+  );
+}
+
