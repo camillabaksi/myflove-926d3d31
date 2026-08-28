@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-28 – Av/på-knapp för anonym statistik
+
+- Ny synlig inställning under Anpassa appen → Integritet: "Dela anonym användningsstatistik" med av/på-knapp.
+- Knappen kopplad till befintliga opt-out-flaggan (`myflove-analytics-opt-out`) – avstängningen gäller direkt och inga fler händelser skickas.
+- Länk till cookiepolicyn direkt från inställningen; cookiepolicyn pekar nu på var knappen finns.
+- Nödvändig lagring (inloggning, inställningar, data) påverkas aldrig av valet.
+
 ## 2026-08-28 – Uppdaterade juridiska dokument
 
 - Integritetspolicy, användarvillkor och cookiepolicy uppdaterade till dagens app (senast uppdaterad 28 augusti 2026).

@@ -76,8 +76,9 @@ function CookiesPage() {
       <h2>Ditt val</h2>
       <p>
         Eftersom vi bara använder tekniskt nödvändig lagring behöver vi inte fråga om samtycke
-        enligt LEK. Du kan alltid rensa lagringen i din webbläsare, logga ut (då rensas den lokala
-        datan på enheten), eller radera ditt konto helt i appen.
+        enligt LEK. Den anonyma användningsstatistiken kan du när som helst stänga av under{" "}
+        <strong>Anpassa appen → Integritet</strong>. Du kan också rensa lagringen i din webbläsare,
+        logga ut (då rensas den lokala datan på enheten), eller radera ditt konto helt i appen.
       </p>
     </LegalShell>
   );

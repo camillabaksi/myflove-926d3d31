@@ -1,11 +1,20 @@
-import { useEffect } from "react";
-import { track } from "@/lib/analytics";
+import { useEffect, useState } from "react";
+import { ANALYTICS_OPT_OUT_KEY, track } from "@/lib/analytics";
 import { DeleteAccountButton } from "@/components/delete-account-button";
 import Layout from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { RotateCcw, Accessibility } from "lucide-react";
+import { RotateCcw, Accessibility, BarChart3 } from "lucide-react";
 import { useNpfSettings, type NpfSettings } from "@/lib/npf-mode";
+import { Link } from "@tanstack/react-router";
+
+function readAnalyticsOptOut(): boolean {
+  try {
+    return window.localStorage.getItem(ANALYTICS_OPT_OUT_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
 
 type Row = {
   key: keyof NpfSettings;
@@ -49,6 +58,20 @@ export default function NpfPage() {
   }, []);
 
   const { settings, update, reset } = useNpfSettings();
+  const [statsOptOut, setStatsOptOut] = useState<boolean>(readAnalyticsOptOut);
+
+  const toggleStats = (optOut: boolean) => {
+    setStatsOptOut(optOut);
+    try {
+      if (optOut) {
+        window.localStorage.setItem(ANALYTICS_OPT_OUT_KEY, "1");
+      } else {
+        window.localStorage.removeItem(ANALYTICS_OPT_OUT_KEY);
+      }
+    } catch {
+      /* privat läge – valet gäller bara för den här sessionen */
+    }
+  };
 
   return (
     <Layout>
@@ -86,6 +109,38 @@ export default function NpfPage() {
         <Button variant="outline" className="rounded-xl gap-2" onClick={reset}>
           <RotateCcw size={16} /> Återställ till standard
         </Button>
+
+        {/* Integritet – anonym användningsstatistik (speglar cookiepolicyn). */}
+        <section aria-label="Integritet" className="mt-10 space-y-3">
+          <div className="flex items-center gap-2 text-primary">
+            <BarChart3 size={18} />
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+              Integritet
+            </h2>
+          </div>
+          <label className="surface-card flex items-start justify-between gap-4 p-4 cursor-pointer">
+            <span className="space-y-1">
+              <span className="block font-medium">Dela anonym användningsstatistik</span>
+              <span className="block text-sm text-muted-foreground">
+                Hjälper oss förstå vilka funktioner som används – helt anonymt, utan personuppgifter
+                eller innehåll. Inga marknads- eller tredjepartscookies.{" "}
+                <Link to="/cookies" className="underline underline-offset-2">
+                  Läs mer i cookiepolicyn
+                </Link>
+                .
+              </span>
+            </span>
+            <Switch
+              checked={!statsOptOut}
+              onCheckedChange={(shareStats) => toggleStats(!shareStats)}
+              aria-label="Dela anonym användningsstatistik"
+            />
+          </label>
+          <p className="text-xs text-muted-foreground">
+            Ändringen gäller direkt. Nödvändig lagring (inloggning, dina inställningar och data)
+            påverkas aldrig.
+          </p>
+        </section>
 
         {/* Konto – längst ner, tydligt men sekundärt. */}
         <section
