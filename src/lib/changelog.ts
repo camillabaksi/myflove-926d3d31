@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-08-28";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Stop-paus flyttar till Mer",
+    items: [
+      "Stop-paus är nu en egen post under Mer → Hälsa med egen ikon 🛑 (2026-08-28)",
+      "Egen sida /stop-paus – samma funktion och logik som tidigare (2026-08-28)",
+      "Stänger du pausen kommer du tillbaka dit du faktiskt kom ifrån (2026-08-28)",
+      "Dubbletten på Mitt batteri är borttagen (2026-08-28)",
+    ],
+  },
+  {
     title: "Flow syns tydligare utan att flytta något",
     items: [
       "Flow är optiskt större på små platser utan att ändra layoutrutan (2026-08-28)",

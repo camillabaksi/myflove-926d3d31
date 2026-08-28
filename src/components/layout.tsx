@@ -56,6 +56,7 @@ import {
   Compass,
   ChevronRight,
   MessageCircle,
+  Hand,
 } from "lucide-react";
 import {
   isAlarmSoundEnabled,
@@ -314,6 +315,13 @@ export default function Layout({ children }: LayoutProps) {
       icon: Zap,
       hint: "Mönster: vad som brukar ge och ta energi",
     },
+    {
+      href: "/stop-paus",
+      label: "Stop-paus",
+      icon: Hand,
+      hint: "🛑 En paus mellan impuls och beslut",
+      essential: true,
+    },
 
     {
       href: "/traning",
@@ -561,7 +569,7 @@ export default function Layout({ children }: LayoutProps) {
         label: "Hälsa",
         hint: "Energi, mående, träning, medicin och vila",
         icon: HeartPulse,
-        hrefs: ["/halsa", "/mitt-batteri", "/traning", "/daglig-rutin", "/energifloede"],
+        hrefs: ["/halsa", "/mitt-batteri", "/stop-paus", "/traning", "/daglig-rutin", "/energifloede"],
       },
       {
         id: "studyflow",
