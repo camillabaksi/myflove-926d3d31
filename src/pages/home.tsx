@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import FlowLearningCard from "@/components/flow/flow-learning-card";
+import { FlowMascot } from "@/components/flow-mascot";
 
 import { useHomeLayout, type HomeBlockId } from "@/lib/home-layout";
 import { TaskQuickAdd, type QuickAddResult } from "@/components/task-quick-add";
@@ -394,18 +395,19 @@ export default function Home() {
           </div>
         )}
 
-        {/* En rekommendation – samma svar som i Planera → Just nu */}
+        {/* Flow just nu – samma förslag som i Planering, tydligt signerat Flow */}
         {shows("forslag") && (
           <section
             style={pos("forslag")}
             className="rounded-3xl border border-primary/20 bg-primary/5 p-5 shadow-soft"
-            aria-label="Rekommendation just nu"
+            aria-label="Flows förslag just nu"
           >
             <CollapsibleSection
               id="hem::flow-forslag"
               title={
                 <span className="flex items-center gap-2">
-                  <Sparkles size={18} className="text-primary" aria-hidden="true" /> Just nu
+                  <FlowMascot size="xs" mood="nod" className="flow-alive" alt="" />
+                  <Sparkles size={16} className="text-primary" aria-hidden="true" /> Flow · just nu
                 </span>
               }
               headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
@@ -413,7 +415,7 @@ export default function Home() {
             >
               <p className="text-ink leading-relaxed">{suggestion.headline}</p>
               <p className="text-xs text-muted-foreground">
-                En sak Flow tycker passar just nu. Du väljer själv.
+                Det här tror jag skulle passa bäst just nu. Du väljer själv.
               </p>
               {suggestion.task && !samsomNasta && (
                 <p className="mt-2 text-sm text-muted-foreground">
