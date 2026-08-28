@@ -12,6 +12,7 @@ import {
   X,
 } from "lucide-react";
 import { toast } from "sonner";
+import { useSmartBack } from "@/hooks/use-smart-back";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -280,6 +281,8 @@ export default function InsightPage() {
     });
   };
 
+  const goBack = useSmartBack("/hem");
+
   const toggleContext = (c: InsightContext) =>
     setContexts((prev) => (prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c]));
 
@@ -295,10 +298,7 @@ export default function InsightPage() {
         <div className="flex items-start gap-3">
           <button
             type="button"
-            onClick={() => {
-              if (window.history.length > 1) window.history.back();
-              else window.location.assign("/hem");
-            }}
+            onClick={goBack}
             aria-label="Tillbaka"
             className="press mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-pill bg-card/70 text-ink"
           >

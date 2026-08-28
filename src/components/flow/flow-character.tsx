@@ -515,9 +515,9 @@ const SCENES: Record<FlowScene, Variant[]> = {
 export type FlowStage = "hero" | "inline" | "mini";
 
 const STAGE_CLASS: Record<FlowStage, string> = {
-  hero: "h-[25svh] max-h-[230px] min-h-[150px]",
-  inline: "h-[13svh] max-h-[112px] min-h-[84px]",
-  mini: "h-[68px] min-h-[68px] max-h-[68px]",
+  hero: "h-[27svh] max-h-[260px] min-h-[168px]",
+  inline: "h-[15svh] max-h-[128px] min-h-[96px]",
+  mini: "h-[80px] min-h-[80px] max-h-[80px]",
 };
 
 export function FlowCharacter({
@@ -555,7 +555,7 @@ export function FlowCharacter({
       data-flow-stage={stage}
       className={cn(
         "flex items-end justify-center",
-        stage === "mini" ? "w-[68px] max-w-[68px] shrink-0" : "w-full",
+        stage === "mini" ? "w-[80px] max-w-[80px] shrink-0" : "w-full",
         className,
       )}
     >

@@ -322,14 +322,19 @@ export default function Home() {
         {/* Mitt batteri – högst upp och ett enda helt klickbart kort. */}
         {shows("batteri") && (
           <section style={pos("batteri")} aria-label="Mitt batteri" className="space-y-2">
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-              Mitt batteri
-            </h2>
-            <EnergyBattery
-              href="/mitt-batteri"
-              onNavigate={() => track("battery_opened", { source: "hem" })}
-            />
+            <CollapsibleSection
+              id="hem::mitt-batteri"
+              title="Mitt batteri"
+              headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
+              className="space-y-2"
+            >
+              <EnergyBattery
+                href="/mitt-batteri"
+                onNavigate={() => track("battery_opened", { source: "hem" })}
+              />
+            </CollapsibleSection>
           </section>
+
         )}
 
         {/* Flow – en liten notering längst ner, konkurrerar inte med dagen. */}

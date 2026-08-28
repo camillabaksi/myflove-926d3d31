@@ -98,11 +98,11 @@ function useFlowGaze(enabled: boolean) {
 export const FLOW_MASCOT_SRC = flowAsset.url;
 
 const SIZES = {
-  xs: "h-8 w-8",
-  sm: "h-12 w-12",
-  md: "h-20 w-20",
-  lg: "h-32 w-32",
-  xl: "h-48 w-48",
+  xs: "h-10 w-10",
+  sm: "h-14 w-14",
+  md: "h-24 w-24",
+  lg: "h-36 w-36",
+  xl: "h-52 w-52",
   "2xl": "h-64 w-64",
   "3xl": "h-80 w-80",
 } as const;

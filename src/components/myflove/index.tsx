@@ -5,10 +5,12 @@
  * blir identiska i hela appen.
  */
 import * as React from "react";
-import { Link } from "wouter";
-import { ArrowLeft, type LucideIcon } from "lucide-react";
+import { Link, useLocation } from "wouter";
+import { ArrowLeft, ChevronDown, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MYFLOVE_EMOJI, type MyFloveEmojiKey } from "@/lib/myflove-emoji";
+import { useCollapsible } from "@/lib/collapse-store";
+import { useSmartBack } from "@/hooks/use-smart-back";
 
 /* ------------------------------------------------------------------ */
 /* Emoji – samma storlekar och samma lilla liv överallt                */
@@ -217,6 +219,9 @@ export function MyFloveSection({
   action,
   className,
   children,
+  collapsible = false,
+  collapseId,
+  defaultCollapsed = false,
 }: {
   title: string;
   emoji?: string;
@@ -225,28 +230,64 @@ export function MyFloveSection({
   action?: React.ReactNode;
   className?: string;
   children: React.ReactNode;
+  /** Låt användaren minimera/maximera innehållet. Valet sparas lokalt. */
+  collapsible?: boolean;
+  /** Eget id om rubriken inte är unik på sidan. */
+  collapseId?: string;
+  defaultCollapsed?: boolean;
 }) {
+  const [path] = useLocation();
+  const storeId = collapsible ? `${path}::${(collapseId ?? title).slice(0, 60)}` : null;
+  const { collapsed, toggle } = useCollapsible(storeId, defaultCollapsed);
+
+  const heading = (
+    <div className="flex min-w-0 items-start gap-2">
+      {collapsible && (
+        <ChevronDown
+          size={16}
+          aria-hidden="true"
+          className={cn(
+            "mt-1.5 shrink-0 text-muted-foreground transition-transform duration-200",
+            collapsed && "-rotate-90",
+          )}
+        />
+      )}
+      <MyFloveEmoji
+        {...(emoji ? { emoji } : {})}
+        {...(emojiKey ? { name: emojiKey } : {})}
+        size="sm"
+        className="mt-0.5"
+      />
+      <div className="min-w-0 text-left">
+        <h2 className="font-display text-lg font-bold leading-tight text-ink">{title}</h2>
+        {description && <p className="text-sm text-muted-foreground">{description}</p>}
+      </div>
+    </div>
+  );
+
   return (
     <section className={cn("space-y-3", className)}>
       <div className="flex items-start justify-between gap-3">
-        <div className="flex min-w-0 items-start gap-2">
-          <MyFloveEmoji
-            {...(emoji ? { emoji } : {})}
-            {...(emojiKey ? { name: emojiKey } : {})}
-            size="sm"
-            className="mt-0.5"
-          />
-          <div className="min-w-0">
-            <h2 className="font-display text-lg font-bold leading-tight text-ink">{title}</h2>
-            {description && <p className="text-sm text-muted-foreground">{description}</p>}
-          </div>
-        </div>
+        {collapsible ? (
+          <button
+            type="button"
+            onClick={toggle}
+            aria-expanded={!collapsed}
+            className="flex min-w-0 flex-1 items-start"
+            title={collapsed ? "Visa" : "Minimera"}
+          >
+            {heading}
+          </button>
+        ) : (
+          heading
+        )}
         {action}
       </div>
-      {children}
+      {(!collapsible || !collapsed) && children}
     </section>
   );
 }
+
 
 /* ------------------------------------------------------------------ */
 /* Sidhuvud – samma struktur på alla sekundära sidor                   */
@@ -259,6 +300,7 @@ export function MyFloveHeader({
   description,
   action,
   back = true,
+  backTo = "/hem",
   children,
   className,
 }: {
@@ -268,9 +310,12 @@ export function MyFloveHeader({
   description?: string;
   action?: React.ReactNode;
   back?: boolean;
+  /** Vart Tillbaka går om sidan öppnats direkt (ingen historik). */
+  backTo?: string;
   children?: React.ReactNode;
   className?: string;
 }) {
+  const goBack = useSmartBack(backTo);
   return (
     <header
       className={cn("rounded-3xl border border-border/60 p-5 shadow-soft page-enter", className)}
@@ -283,7 +328,7 @@ export function MyFloveHeader({
         {back && (
           <button
             type="button"
-            onClick={() => window.history.back()}
+            onClick={goBack}
             aria-label="Tillbaka"
             className="press mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-pill bg-card/70 text-ink"
           >

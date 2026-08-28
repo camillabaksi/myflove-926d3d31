@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Link } from "wouter";
 import { cn } from "@/lib/utils";
-import HelpHint from "@/components/help-hint";
+import CollapsibleSection from "@/components/collapsible-section";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import { ENERGY_KINDS, isSameDay } from "@/lib/energy-flow";
 
@@ -39,23 +39,8 @@ export function DayEnergyFlow({
 
   if (!signedIn || loading) return null;
 
-  return (
-    <section
-      className={cn("rounded-3xl border border-border/60 bg-card p-5 shadow-soft", className)}
-      aria-label="Energins historik idag"
-    >
-      {showHeader && (
-        <div className="mb-3 flex items-center gap-2">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-            Energins historik idag
-          </h2>
-          <HelpHint label="energins historik">
-            Mönster över vad du faktiskt gjort idag – inte din nuvarande nivå. Din energibild just
-            nu är Mitt energibatteri. Minus betyder att det tog energi, plus att det gav.
-          </HelpHint>
-        </div>
-      )}
-
+  const body = (
+    <>
       {todayCount === 0 ? (
         <p className="text-sm text-muted-foreground">
           Inget registrerat idag än. Lägg till något du gjort så syns dagens riktiga belastning här.
@@ -114,6 +99,32 @@ export function DayEnergyFlow({
         >
           Se hela energiflödet
         </Link>
+      )}
+    </>
+  );
+
+  return (
+    <section
+      className={cn("rounded-3xl border border-border/60 bg-card p-5 shadow-soft", className)}
+      aria-label="Energins historik idag"
+    >
+      {showHeader ? (
+        <CollapsibleSection
+          id="energins-historik-idag"
+          title="Energins historik idag"
+          headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
+          className="space-y-3"
+          help={
+            <>
+              Mönster över vad du faktiskt gjort idag – inte din nuvarande nivå. Din energibild just
+              nu är Mitt energibatteri. Minus betyder att det tog energi, plus att det gav.
+            </>
+          }
+        >
+          {body}
+        </CollapsibleSection>
+      ) : (
+        body
       )}
     </section>
   );

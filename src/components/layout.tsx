@@ -220,6 +220,7 @@ const CATEGORY_THEMES: Record<string, Record<string, string>> = {
 };
 
 import QuickflowFab from "@/components/quickflow-fab";
+import { useSmartBack } from "@/hooks/use-smart-back";
 
 export default function Layout({ children }: LayoutProps) {
   const [location] = useLocation();
@@ -242,16 +243,10 @@ export default function Layout({ children }: LayoutProps) {
 
   // Använd TanStack-routerns faktiska location så tillbakaknappen alltid
   // synkar med appens historik – även vid djupa länkar eller SPA-navigering.
+  const goBack = useSmartBack("/hem");
   const tanstackLocation = router.state.location.pathname;
   const canGoBack = tanstackLocation !== "/";
-  const handleBack = () => {
-    if (typeof window === "undefined") return;
-    if (router.history.length > 1) {
-      router.history.back();
-    } else {
-      router.navigate({ to: "/hem" });
-    }
-  };
+  const handleBack = goBack;
 
   const [alarmEnabled, setAlarmEnabledState] = useState<boolean>(() => isAlarmSoundEnabled());
   useEffect(() => subscribeAlarmPref((v) => setAlarmEnabledState(v)), []);
