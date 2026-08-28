@@ -173,17 +173,21 @@ export default function TodayPage() {
           })}
         </div>
 
-        {/* Steg 1 – hur du mår just nu */}
+        {/* Steg 1 – hur du mår just nu. Incheckningen bor i Mitt batteri,
+            här visas bara statusen som en klickbar sammanfattning. */}
         <StepSection
           step={1}
           id="idag::steg-mabra"
           title="Så mår du just nu"
-          description="Fyll i hur du känner dig – resten av dagen anpassas efter det."
+          description="Energin styr dagens förslag – öppna Mitt batteri om du vill checka in."
         >
-          <QuickCheckin />
-          <EnergyBattery />
-          <FlowCompanion stage="inline" />
+          <EnergyBattery
+            href="/mitt-batteri"
+            onNavigate={() => track("battery_opened", { source: "min-dag" })}
+          />
+          <FlowCompanion stage="mini" />
         </StepSection>
+
 
         {view === "flow" ? (
           <>
