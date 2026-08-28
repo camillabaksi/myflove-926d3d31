@@ -22,8 +22,9 @@ const SENSITIVE_KEYS = new Set<string>([
   "myflove-daily-checkin",
   "myflove-wake-steps",
   "myflow-moods",
-  // Medicin
+  // Medicin (kanoniska nycklar + gamla som migreras bort)
   "myflove-medications",
+  "myflove-medication-log",
   "myflow-medications",
   "myflow-medication-log",
   // Ekonomi
