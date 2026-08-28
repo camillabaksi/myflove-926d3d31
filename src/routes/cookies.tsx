@@ -33,7 +33,7 @@ export const Route = createFileRoute("/cookies")({
 
 function CookiesPage() {
   return (
-    <LegalShell title="Cookies & lokal lagring" updated="18 juli 2026">
+    <LegalShell title="Cookies & lokal lagring" updated="28 augusti 2026">
       <p>
         MyFlove är byggd för att vara lugn – även tekniskt. Vi använder inga marknadscookies, inga
         tredjepartsspårare och inga annonsnätverk.
@@ -43,16 +43,26 @@ function CookiesPage() {
       <ul>
         <li>
           <strong>Nödvändig lokal lagring (localStorage):</strong> för att komma ihåg dig som
-          inloggad, dina inställningar (t.ex. genvägar och volym) och lokala uppgifter som matlista
-          och FlowPlan.
+          inloggad, dina inställningar (t.ex. genvägar, textstorlek och tema) och lokala uppgifter
+          som matlista och FlowPlan.
+        </li>
+        <li>
+          <strong>Krypterad lokal lagring:</strong> det känsligaste – energi, mående, medicin och
+          ekonomi – sparas krypterat (AES-GCM) med en nyckel i enhetens säkra lagring (IndexedDB).
+          Vid utloggning raderas nyckeln och den lokala datan.
+        </li>
+        <li>
+          <strong>Sessionslagring:</strong> tillfälligt, t.ex. påbörjad text i en chatt med Flow.
+          Den försvinner när du stänger fliken eller loggar ut.
         </li>
         <li>
           <strong>Sessionscookie från vår auth-leverantör:</strong> för att hålla dig inloggad på
           ett säkert sätt.
         </li>
         <li>
-          <strong>Anonym användningsstatistik:</strong> aggregerad information om vilka funktioner
-          som används, utan att koppla det till en identifierbar person i marknadsföringssyfte.
+          <strong>Avidentifierad användningsstatistik:</strong> aggregerad information om vilka
+          funktioner som används. Innehåll filtreras bort – vi skickar aldrig text, mående-värden,
+          belopp eller medicinnamn.
         </li>
       </ul>
 
@@ -66,8 +76,10 @@ function CookiesPage() {
       <h2>Ditt val</h2>
       <p>
         Eftersom vi bara använder tekniskt nödvändig lagring behöver vi inte fråga om samtycke
-        enligt LEK. Du kan alltid rensa lagringen i din webbläsare, eller radera ditt konto helt.
+        enligt LEK. Du kan alltid rensa lagringen i din webbläsare, logga ut (då rensas den lokala
+        datan på enheten), eller radera ditt konto helt i appen.
       </p>
     </LegalShell>
   );
 }
+
