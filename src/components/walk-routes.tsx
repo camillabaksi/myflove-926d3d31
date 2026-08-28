@@ -61,7 +61,6 @@ export default function WalkRoutesSection() {
   const optsRef = useRef({ mode, minutes, km });
   optsRef.current = { mode, minutes, km };
 
-
   const findRoutes = useCallback(
     async (opts?: { fresh?: boolean; silent?: boolean }) => {
       if (typeof navigator === "undefined" || !navigator.geolocation) {
@@ -300,8 +299,8 @@ export default function WalkRoutesSection() {
           </div>
 
           <p className="mt-3 text-xs text-muted-foreground">
-            Rundtur: du startar och slutar på samma plats. Vändpunkten ligger {selectedRoute.bearing}{" "}
-            – Google Maps visar vägen dit och tillbaka.
+            Rundtur: du startar och slutar på samma plats. Vändpunkten ligger{" "}
+            {selectedRoute.bearing} – Google Maps visar vägen dit och tillbaka.
           </p>
 
           <Button asChild className="mt-3 w-full rounded-xl gap-2">
@@ -381,7 +380,6 @@ export default function WalkRoutesSection() {
           })}
         </ul>
       )}
-
 
       {routes && routes.length === 0 && (
         <p className="text-sm text-muted-foreground">
