@@ -98,7 +98,15 @@ export function normalizeMedications(raw: unknown): Medication[] {
     const id =
       typeof rec.id === "string" && rec.id.trim() ? rec.id.trim() : fallbackId(name, times);
     const createdAt = typeof rec.createdAt === "number" ? rec.createdAt : 0;
-    out.push({ id, name, dosage, times, createdAt });
+    const repeat: RepeatMode =
+      rec.repeat === "none" || rec.repeat === "weekdays" || rec.repeat === "weekly"
+        ? rec.repeat
+        : "daily";
+    const startDate =
+      typeof rec.startDate === "string" && /^\d{4}-\d{2}-\d{2}$/.test(rec.startDate.slice(0, 10))
+        ? rec.startDate.slice(0, 10)
+        : undefined;
+    out.push({ id, name, dosage, times, createdAt, repeat, startDate });
   }
   return dedupeMedications(out);
 }
