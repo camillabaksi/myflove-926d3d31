@@ -35,10 +35,10 @@ export default function RoutinesMedicationToday() {
   const { medications, isTaken, toggleTaken } = useMedications();
   const { reminders, toggleReminder } = useReminders();
   const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
-  const [routineDone, setRoutineDone] = useCloudSyncedStorage<string[]>(
-    "myflove-routines-done",
-    [],
-  );
+  // Rutiner bockas av i den gemensamma genomförandeloggen – samma status
+  // som i Idag, Flow och "Nästa" på Hem.
+  const { isDone, toggleDone } = useDoneLog();
+
   const { toast } = useToast();
   const todayIso = new Date().toISOString().slice(0, 10);
   const nowMin = new Date().getHours() * 60 + new Date().getMinutes();
