@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-08-28 – Flow känns levande: kontextuell ton, reaktioner och mjuka rörelser
+
+- Flows ton följer batteriet: bra energi, lagom, låg och mycket låg ger olika förslag – aldrig krav, aldrig skuld.
+- Flow reagerar när något blir klart ("Yes! Den är klar. 👏") och frågar ibland om du vill ta nästa eller pausa – inte varje gång.
+- Missade saker möts med värme: "Det blev inte riktigt som planerat. ❤️" med knapparna Flytta till imorgon eller hantera i Idag.
+- Hem är dynamisk utan nya kort: samma hälsningsyta säger olika saker på morgonen, mitt i dagen, vid låg energi, efter flera avklarade saker och på kvällen.
+- Batteriprocenten räknas upp mjukt i stället för att hoppa – och står stilla direkt om du valt reducerad rörelse.
+- Nya anonyma händelser: flow_task_completion_reaction, flow_missed_task_shown, flow_missed_task_action samt flow_suggestion_shown/accepted/rejected (inga energivärden eller texter skickas).
+- Ingen ny navigation, inga nya kategorier och inga nya funktioner – Hälsa, Idag, Planera, QuickFlow, Flow och Mina mönster är oförändrade.
+
 ## 2026-08-28 – Menyn: beskrivningstexterna alltid synliga
 
 - Fix: Beskrivningarna under kategorierna och menyvalen ("Vad som händer idag", "Energi, mående, träning …") försvann när "Färre saker"-läget var på. Nu syns förklaringstexterna alltid i menyn – de är en del av att hitta rätt, inte extra brus.

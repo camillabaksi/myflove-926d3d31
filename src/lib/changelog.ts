@@ -10,6 +10,17 @@ export const CHANGELOG_UPDATED = "2026-08-28";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Flow känns levande",
+    items: [
+      "Flows ton anpassas efter batteriet – från \"bra läge för den större saken\" till \"vi behöver inte pressa idag\" (2026-08-28)",
+      "Flow reagerar när något blir klart och frågar ibland om du vill ta nästa eller pausa (2026-08-28)",
+      "Missade saker möts utan skuld, med Flytta till imorgon som ett klick (2026-08-28)",
+      "Hem säger olika saker beroende på tid, energi och hur dagen gått – utan nya kort (2026-08-28)",
+      "Batteriprocenten animeras mjukt och respekterar reducerad rörelse (2026-08-28)",
+      "Nya anonyma händelser: flow_task_completion_reaction, flow_missed_task_shown, flow_missed_task_action (2026-08-28)",
+    ],
+  },
+  {
     title: "Menyn: beskrivningar alltid synliga",
     items: [
       'Fix: Kategoriernas och menyvalens förklaringstexter döljdes av "Färre saker"-läget – nu syns de alltid (2026-08-28)',
