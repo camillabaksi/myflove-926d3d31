@@ -67,11 +67,15 @@ export default function AdminStats() {
   }
 
   const viewsBySection = (data?.featureUsage ?? [])
-    .filter((row) => row.action === "view")
+    .filter((row) => row.action === "view" && row.section !== "page")
+    .sort((a, b) => b.events - a.events);
+
+  const pageViews = (data?.featureUsage ?? [])
+    .filter((row) => row.section === "page")
     .sort((a, b) => b.events - a.events);
 
   const otherActions = (data?.featureUsage ?? [])
-    .filter((row) => row.action !== "view")
+    .filter((row) => row.action !== "view" && row.section !== "page")
     .sort((a, b) => b.events - a.events);
 
   const maxViews = Math.max(1, ...viewsBySection.map((row) => row.events));
