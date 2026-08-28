@@ -30,6 +30,8 @@ import FlowOnboarding from "@/components/flow-onboarding";
 import { CalendarDays, Sparkles, ArrowRight, SlidersHorizontal, Compass } from "lucide-react";
 import { todayISO } from "@/lib/day";
 import { track } from "@/lib/analytics";
+import { homeContextLine } from "@/lib/flow-tone";
+import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 
 /**
  * Fyra vanliga situationer, formulerade som användarens egen tanke.
@@ -202,6 +204,24 @@ export default function Home() {
   const { activeArea } = useActiveArea();
   const nextEvent = useNextEvent();
   const suggestion = useFlowSuggestion();
+  const { reading } = useEnergyBattery();
+  const { energyValue } = useQuickCheckin();
+  const { tasks, activeTasks } = useTasks();
+  const todayIso = todayISO();
+
+  /* Hem säger olika saker beroende på dagen – samma kort, levande innehåll. */
+  const completedToday = tasks.filter(
+    (t) => t.completed && t.completedAt != null && new Date(t.completedAt).toISOString().slice(0, 10) === todayIso,
+  ).length;
+  const remainingToday = activeTasks.filter((t) => !t.dueDate || t.dueDate === todayIso).length;
+  const contextLine = homeContextLine({
+    hour: new Date().getHours(),
+    battery: Math.round(reading.now),
+    completedToday,
+    remainingToday,
+    nextTitle: nextEvent?.title ?? null,
+    checkedIn: energyValue != null,
+  });
   /* Samma sak ska aldrig visas både som "Nästa" och som Flows förslag. */
   const samsomNasta =
     !!suggestion.task &&
@@ -249,7 +269,7 @@ export default function Home() {
 
           <div className="relative space-y-2">
             <h1 className="text-3xl sm:text-4xl font-bold text-ink pr-14">{greeting.title}</h1>
-            <p className="text-muted-foreground">{greeting.subtitle}</p>
+            <p className="text-muted-foreground animate-fade-in">{contextLine}</p>
             {editingName ? (
               <form
                 onSubmit={(e) => {
