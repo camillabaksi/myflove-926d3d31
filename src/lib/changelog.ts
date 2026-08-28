@@ -6,12 +6,13 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-08-27";
+export const CHANGELOG_UPDATED = "2026-08-28";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Medicinlistan och medicinpåminnelserna läser exakt samma data – gamla nycklar migreras utan dubbletter och notiser för borttagna mediciner avbokas (2026-08-28)",
       "Bild eller PDF på schemat läses av av Flow och sparas som en fil du kan trycka på för att titta på originalet (2026-08-27)",
       "Mer-menyn börjar med Mina områden och Inställningar – Min profil och Anpassa MyFlove ligger längst ner (2026-08-27)",
       "Planering i två steg, förklarande rader på hemskärmens kort och i Mer-menyn (2026-08-27)",
