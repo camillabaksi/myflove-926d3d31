@@ -10,6 +10,16 @@ export const CHANGELOG_UPDATED = "2026-08-28";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Äkta insikter och rekommendationer",
+    items: [
+      "Insikter visas bara när de syns i din egen data – annars ett lugnt tomläge (2026-08-28)",
+      "Varje insikt visar sitt underlag, t.ex. antal incheckningar och snitt (2026-08-28)",
+      "Måendetrend kräver minst tre incheckningar senaste veckan (2026-08-28)",
+      "Avklarade uppgifter räknas på completedAt i stället för createdAt (2026-08-28)",
+      "Dagens fokus visas bara när det gäller idag (2026-08-28)",
+    ],
+  },
+  {
     title: "Gradvis förklarande copy",
     items: [
       "Förklaringar om nyttan anpassas efter befintlig Flow learning level (2026-08-28)",
