@@ -4,6 +4,9 @@ import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import type { EnergyCategory } from "@/lib/energy-flow";
 import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
+import WhyHint from "@/components/why-hint";
+import { useFlowLearning } from "@/hooks/use-flow-learning";
+import { benefitVoice } from "@/lib/flow-tone";
 
 const MOODS = [
   { score10: 2, emoji: "😢", label: "Tungt" },
