@@ -5,6 +5,7 @@ import { track } from "@/lib/analytics";
 import { useFlowLearning } from "@/hooks/use-flow-learning";
 import { useFlowSettings } from "@/hooks/use-flow-settings";
 import { cn } from "@/lib/utils";
+import { learningVoice } from "@/lib/flow-tone";
 
 /**
  * "Flow lär känna dig."
