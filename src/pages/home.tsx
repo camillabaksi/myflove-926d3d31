@@ -1,15 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
-import FlowCompanion from "@/components/flow/flow-companion";
 import FlowLearningCard from "@/components/flow/flow-learning-card";
 
-import QuickCheckin from "@/components/quick-checkin";
 import { useHomeLayout, type HomeBlockId } from "@/lib/home-layout";
 import { TaskQuickAdd, type QuickAddResult } from "@/components/task-quick-add";
 import DidThisCta from "@/components/did-this-cta";
 import { useFlowItems } from "@/hooks/use-flow-items";
 import RoutinesMedicationToday from "@/components/routines-medication-today";
 
-import DayEnergyFlow from "@/components/day-energy-flow";
 import { Link } from "wouter";
 import Layout from "@/components/layout";
 import CollapsibleSection from "@/components/collapsible-section";
@@ -204,13 +201,11 @@ export default function Home() {
   const { activeArea } = useActiveArea();
   const nextEvent = useNextEvent();
   const suggestion = useFlowSuggestion();
-  const { reading } = useEnergyBattery();
-  const trendSentence =
-    reading.trend === "stiger"
-      ? "Din energi ökar. ↑"
-      : reading.trend === "sjunker"
-        ? "Din energi minskar. ↓"
-        : "Din energi är stabil. →";
+  /* Samma sak ska aldrig visas både som "Nästa" och som Flows förslag. */
+  const samsomNasta =
+    !!suggestion.task &&
+    !!nextEvent &&
+    suggestion.task.title.trim().toLowerCase() === nextEvent.title.trim().toLowerCase();
 
   useEffect(() => {
     track("home_viewed");
@@ -313,38 +308,10 @@ export default function Home() {
           </section>
         )}
 
-        {/* Flow visar mjukt att han lär sig hur du fungerar. */}
-        <div style={{ order: 98.45 }}>
+        {/* Flow – en liten notering längst ner, konkurrerar inte med dagen. */}
+        <div style={{ order: 98.4 }} data-testid="home-flow-note" className="pt-1">
           <FlowLearningCard />
         </div>
-
-        {shows("checkin") && (
-          <div style={pos("checkin")}>
-            <QuickCheckin />
-          </div>
-        )}
-
-        {/* Energins historik – samma data som Min energi, direkt under batteriet */}
-        {shows("energifloede") && (
-          <section
-            style={pos("energifloede")}
-            aria-label="Energins historik"
-            className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
-          >
-            <CollapsibleSection
-              id="hem::energins-historik"
-              title="Energins historik"
-              headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
-              className="space-y-3"
-            >
-              <p className="text-sm text-ink">{trendSentence}</p>
-              <DayEnergyFlow
-                className="border-0 bg-transparent p-0 shadow-none"
-                showHeader={false}
-              />
-            </CollapsibleSection>
-          </section>
-        )}
 
         {/* Nästa – nästa relevanta aktivitet */}
         {shows("nasta") && (
@@ -448,7 +415,7 @@ export default function Home() {
               <p className="text-xs text-muted-foreground">
                 En sak Flow tycker passar just nu. Du väljer själv.
               </p>
-              {suggestion.task && (
+              {suggestion.task && !samsomNasta && (
                 <p className="mt-2 text-sm text-muted-foreground">
                   <span className="font-medium text-ink">{suggestion.task.title}</span>
                   {suggestion.minutes ? ` · ca ${suggestion.minutes} min` : ""}
@@ -564,11 +531,6 @@ export default function Home() {
 
         <div style={{ order: 98 }} className="space-y-3 pt-2">
           <AreaOnboarding />
-        </div>
-
-        {/* Flow – diskret notering längst ner, konkurrerar inte med dagen. */}
-        <div style={{ order: 98.4 }} data-testid="home-flow-note" className="pt-1">
-          <FlowCompanion stage="mini" />
         </div>
 
         {/* Liten, diskret notering längst ner – konkurrerar inte med dagen. */}

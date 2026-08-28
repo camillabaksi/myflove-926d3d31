@@ -16,6 +16,12 @@ describe("hemskärmens standardlayout (Clean-up 1.0)", () => {
     expect(HOME_BLOCKS.some((b) => (b.id as string) === "genvagar")).toBe(false);
   });
 
+  it("har inga energidubbletter kvar – de bor i Mitt batteri", () => {
+    const ids = HOME_BLOCKS.map((b) => b.id as string);
+    expect(ids).not.toContain("checkin");
+    expect(ids).not.toContain("energifloede");
+  });
+
   it("sorterar en gammal ordning till Clean-up-ordningen", () => {
     const gammal = ["omrade", "idag", "batteri"] as HomeBlockId[];
     const sorterad = cleanupOrder(gammal);

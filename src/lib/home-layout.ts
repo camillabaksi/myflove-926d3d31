@@ -6,7 +6,6 @@ import { useCloudSyncedStorage } from "@/lib/cloud-storage";
  * Hälsningen ligger alltid överst och går inte att stänga av.
  */
 export type HomeBlockId =
-  | "checkin"
   | "batteri"
   | "nasta"
   | "medicin"
@@ -14,8 +13,7 @@ export type HomeBlockId =
   | "forslag"
   | "lagg-till"
   | "vagar"
-  | "omrade"
-  | "energifloede";
+  | "omrade";
 
 export interface HomeBlockMeta {
   id: HomeBlockId;
@@ -24,11 +22,6 @@ export interface HomeBlockMeta {
 }
 
 export const HOME_BLOCKS: HomeBlockMeta[] = [
-  {
-    id: "checkin",
-    label: "Hur är det just nu?",
-    hint: "Snabb registrering av mående och energi",
-  },
   { id: "batteri", label: "Mitt energibatteri", hint: "Din energi just nu" },
   { id: "nasta", label: "Nästa", hint: "Nästa sak som händer idag" },
   {
@@ -45,11 +38,6 @@ export const HOME_BLOCKS: HomeBlockMeta[] = [
   { id: "lagg-till", label: "Lägg till", hint: "Snabbknapp för ny uppgift" },
   { id: "vagar", label: "Vad behöver du just nu?", hint: "Fyra vanliga situationer" },
   { id: "omrade", label: "Områdesväljare", hint: "Vilket rum du är i" },
-  {
-    id: "energifloede",
-    label: "Energins historik",
-    hint: "Mönster över dagen – batteriet är fortfarande din energibild",
-  },
 ];
 
 export interface HomeLayoutPrefs {
@@ -61,7 +49,7 @@ export interface HomeLayoutPrefs {
 
 export const DEFAULT_PREFS: HomeLayoutPrefs = {
   // Lugn start: Hem svarar på "vad behöver jag veta eller göra just nu?".
-  hidden: ["checkin", "energifloede", "medicin", "omrade", "vagar"],
+  hidden: ["medicin", "omrade", "vagar"],
 
   order: [
     "batteri",
@@ -69,8 +57,6 @@ export const DEFAULT_PREFS: HomeLayoutPrefs = {
     "nasta",
     "idag",
     "lagg-till",
-    "checkin",
-    "energifloede",
     "vagar",
     "medicin",
     "omrade",
