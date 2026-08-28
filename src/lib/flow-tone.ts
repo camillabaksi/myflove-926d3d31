@@ -67,6 +67,8 @@ export function homeContextLine(ctx: HomeContext): string {
       : "Du är snart klar för idag. Resten kan få vänta.";
   }
   if (batteryTone(battery) === "verylow") return "Vi tar det lugnt idag.";
+  if (hour >= 18 && batteryTone(battery) === "low")
+    return "Det börjar bli kväll och batteriet är lågt. Vi kan göra resten enkelt.";
   if (completedToday >= 3) return "Du har fått flera saker gjorda idag. ❤️";
   if (batteryTone(battery) === "low" && remainingToday > 0)
     return "Det verkar vara lite ont om batteri idag. En sak i taget.";
@@ -131,4 +133,17 @@ export function recallPrefix(insightText?: string | null): string | null {
   const trimmed = insightText.trim();
   if (!trimmed) return null;
   return `Jag minns: ${trimmed.charAt(0).toLowerCase()}${trimmed.slice(1)}`;
+}
+
+/**
+ * Flows röst om vad han lärt sig – språket följer den faktiska
+ * inlärningsnivån (0–100) och antalet verkliga insikter. Aldrig påhittat:
+ * utan insikter säger Flow bara att han fortfarande lär känna dig.
+ */
+export function learningVoice(level: number, insightCount: number): string {
+  if (insightCount === 0) return "Jag lär fortfarande känna dig.";
+  if (level < 15) return "Jag har börjat lägga märke till några små saker om dig.";
+  if (level < 40) return "Jag börjar förstå dina mönster.";
+  if (level < 70) return "Jag har upptäckt ett mönster i hur din vardag hänger ihop.";
+  return "Jag minns hur din energi och din vardag brukar hänga ihop.";
 }

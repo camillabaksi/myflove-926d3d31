@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "wouter";
 import { CheckCircle2, Circle, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -28,11 +29,14 @@ export function FlowItemCard({
   const when = describeWhen(item);
   const energy = describeEnergy(item.energy);
   const meta = AREA_META[item.area];
+  // Engångsreaktion när man bockar av – ingen loop, ingen konfetti.
+  const [justToggled, setJustToggled] = useState(false);
 
   return (
     <div
       className={cn(
-        "rounded-3xl border border-border/60 bg-card p-4 shadow-soft transition-colors",
+        "rounded-3xl border border-border/60 bg-card p-4 shadow-soft transition-all duration-300",
+        item.done && "opacity-90",
         className,
       )}
       style={{ borderLeft: `4px solid ${areaColor(item.area)}` }}
@@ -41,12 +45,16 @@ export function FlowItemCard({
         {onToggle ? (
           <button
             type="button"
-            onClick={() => onToggle(item)}
+            onClick={() => {
+              setJustToggled(true);
+              window.setTimeout(() => setJustToggled(false), 320);
+              onToggle(item);
+            }}
             aria-label={item.done ? `Ångra ${item.title}` : `Klarmarkera ${item.title}`}
             className="press mt-0.5 shrink-0"
           >
             {item.done ? (
-              <CheckCircle2 size={20} className="text-primary" />
+              <CheckCircle2 size={20} className={cn("text-primary", justToggled && "check-pop")} />
             ) : (
               <Circle size={20} className="text-muted-foreground" />
             )}

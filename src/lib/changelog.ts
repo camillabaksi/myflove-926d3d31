@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-08-28";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Levande men lugn polish",
+    items: [
+      "Liten engångsreaktion på bocken när något blir klart – ingen konfetti, inga poäng (2026-08-28)",
+      "Batteriet pulserar inte längre i bakgrunden; det rör sig bara när värdet ändras (2026-08-28)",
+      "\"Flow lär känna dig\" följer din faktiska inlärningsnivå i språket och tonar in insikterna mjukt (2026-08-28)",
+      "Kväll kombinerat med lågt batteri ger en lugnare mening på Hem (2026-08-28)",
+    ],
+  },
+  {
     title: "Städad struktur: en plats för varje sak",
     items: [
       "QuickFlow är en egen ingång i menyn i stället för en underrubrik i Planera (2026-08-28)",

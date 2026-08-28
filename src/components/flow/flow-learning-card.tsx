@@ -5,6 +5,7 @@ import { track } from "@/lib/analytics";
 import { useFlowLearning } from "@/hooks/use-flow-learning";
 import { useFlowSettings } from "@/hooks/use-flow-settings";
 import { cn } from "@/lib/utils";
+import { learningVoice } from "@/lib/flow-tone";
 
 /**
  * "Flow lär känna dig."
@@ -37,13 +38,17 @@ export default function FlowLearningCard({ className }: { className?: string }) 
         </div>
       </div>
 
-      <p className="mt-3 text-pretty text-sm leading-relaxed text-muted-foreground">
-        Jag börjar se mönster i hur din energi, dina aktiviteter och din vardag hänger ihop.
+      <p className="reveal-soft mt-3 text-pretty text-sm leading-relaxed text-muted-foreground">
+        {learningVoice(knowledge.level, knowledge.insights.length)}
       </p>
 
       <ul className="mt-3 space-y-1.5">
-        {knowledge.insights.slice(0, 3).map((i) => (
-          <li key={i.id} className="text-pretty text-sm leading-relaxed text-muted-foreground">
+        {knowledge.insights.slice(0, 3).map((i, index) => (
+          <li
+            key={i.id}
+            className="reveal-soft text-pretty text-sm leading-relaxed text-muted-foreground"
+            style={{ animationDelay: `${80 + index * 70}ms` }}
+          >
             {i.text}
           </li>
         ))}

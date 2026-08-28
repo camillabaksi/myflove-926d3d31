@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-08-28 – Levande men lugn polish
+
+- Avbockning ger en liten engångsreaktion på bocken – ingen konfetti, inga poäng.
+- Batteriet slutade pulsera i bakgrunden; det rör sig bara när värdet faktiskt ändras.
+- "Flow lär känna dig" använder nu ett språk som följer din faktiska inlärningsnivå – från "Jag lär fortfarande känna dig" till "Jag minns…" – och insikterna tonar in mjukt.
+- Kväll + lågt batteri ger en lugnare mening på Hem.
+- Allt respekterar reducerad rörelse. Ingen navigation, data eller lagring har ändrats.
+
+
 ## 2026-08-28 – Städad struktur: en plats för varje sak
 
 - QuickFlow ligger inte längre inuti Planera i menyn – det är en egen ingång: "Fånga något snabbt".
