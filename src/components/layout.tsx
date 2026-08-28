@@ -290,7 +290,7 @@ export default function Layout({ children }: LayoutProps) {
       href: "/idag",
       label: "Min dag",
       icon: Heart,
-      hint: "Vad som händer idag – dagen i en lista",
+      hint: "Vad som händer idag – hela dagens lista",
       essential: true,
     },
     {
@@ -409,20 +409,20 @@ export default function Layout({ children }: LayoutProps) {
       href: "/flowplan",
       label: "Planering",
       icon: Sparkles,
-      hint: "Planera dagen – ordningen på dagens saker",
+      hint: "Ordningen: i vilken ordning dagens saker passar bäst",
       essential: true,
     },
     {
       href: "/flow",
       label: "Flow hjälper",
       icon: Sparkles,
-      hint: "Förstår läget, prioriterar och föreslår en sak i taget",
+      hint: "Förslaget: en sak i taget när du kört fast",
     },
     {
       href: "/assistant",
       label: "Prata med Flow",
       icon: MessageCircle,
-      hint: "Chatta med Flow när du vill prata av dig eller tänka högt",
+      hint: "Samtalet: prata av dig eller tänk högt med Flow",
       essential: true,
     },
 
