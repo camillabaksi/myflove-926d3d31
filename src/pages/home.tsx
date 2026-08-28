@@ -406,7 +406,7 @@ export default function Home() {
               id="hem::flow-forslag"
               title={
                 <span className="flex items-center gap-2">
-                  <FlowMascot size="xs" mood="nod" className="flow-alive" aria-hidden="true" />
+                  <FlowMascot size="xs" mood="nod" className="flow-alive" alt="" />
                   <Sparkles size={16} className="text-primary" aria-hidden="true" /> Flow · just nu
                 </span>
               }
