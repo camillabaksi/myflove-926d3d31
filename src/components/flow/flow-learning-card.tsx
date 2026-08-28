@@ -1,4 +1,7 @@
+import { Link } from "wouter";
+import { ArrowRight } from "lucide-react";
 import { FlowMascot } from "@/components/flow-mascot";
+import { track } from "@/lib/analytics";
 import { useFlowLearning } from "@/hooks/use-flow-learning";
 import { useFlowSettings } from "@/hooks/use-flow-settings";
 import { cn } from "@/lib/utils";
