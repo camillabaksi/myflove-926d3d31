@@ -7,10 +7,8 @@ import StepSection from "@/components/step-section";
 import FlowCompanion from "@/components/flow/flow-companion";
 import DayTimeline, { type TimelineEntry } from "@/components/day-timeline";
 import EnergyBattery from "@/components/energy-battery";
-import QuickCheckin from "@/components/quick-checkin";
 import TaskQuickAdd, { type QuickAddResult } from "@/components/task-quick-add";
 import DidThisQuickAdd from "@/components/did-this-quick-add";
-import DayEnergyFlow from "@/components/day-energy-flow";
 import { FlowItemCard } from "@/components/myflove/flow-item-card";
 import { FlowReplan } from "@/components/flow-replan";
 import { useFlowScore } from "@/hooks/use-flowscore";
@@ -267,8 +265,6 @@ export default function TodayPage() {
                 </CollapsibleSection>
               </section>
             )}
-
-            <DayEnergyFlow />
 
             {offerReplan && (
               <FlowReplan
