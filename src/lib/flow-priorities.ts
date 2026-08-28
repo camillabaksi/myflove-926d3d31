@@ -59,7 +59,7 @@ export function linkForPriority(key: FlowPriorityKey): { href: string; label: st
     case "inkop":
       return { href: "/matlista", label: "Inköpslista" };
     default:
-      return { href: "/idag", label: "Min dag" };
+      return { href: "/idag", label: "Idag" };
   }
 }
 

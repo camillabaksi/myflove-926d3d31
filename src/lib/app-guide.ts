@@ -24,7 +24,7 @@ export const APP_GUIDE: GuideGroup[] = [
     hint: "Det du använder varje dag",
     entries: [
       { href: "/hem", label: "Hem", what: "Din överblick: nästa sak, energi och genvägar" },
-      { href: "/idag", label: "Min dag", what: "Allt som händer idag – och det du redan gjort" },
+      { href: "/idag", label: "Idag", what: "Allt som händer idag – och det du redan gjort" },
       { href: "/flow", label: "Flow hjälper", what: "Ett förslag i taget när du kört fast" },
       {
         href: "/assistant",
@@ -38,7 +38,7 @@ export const APP_GUIDE: GuideGroup[] = [
     id: "planera",
     emoji: "🗓️",
     label: "Planera",
-    hint: "Tider, uppgifter och rutiner",
+    hint: "Bestäm och ordna vad som ska hända",
     entries: [
       { href: "/kalender", label: "Kalender", what: "Alla tider på en plats, med filter per rum" },
       { href: "/tasks", label: "Att göra", what: "Dina uppgifter, med tid och energinivå" },
@@ -52,11 +52,12 @@ export const APP_GUIDE: GuideGroup[] = [
     ],
   },
   {
-    id: "mabra",
-    emoji: "💜",
-    label: "Mående & energi",
-    hint: "Hur du mår och hur mycket ork du har",
+    id: "halsa",
+    emoji: "❤️",
+    label: "Hälsa",
+    hint: "Energi, mående, träning, medicin och vila",
     entries: [
+      { href: "/halsa", label: "Hälsa", what: "Ingången till allt som rör hur du mår" },
       {
         href: "/mitt-batteri",
         label: "Mitt batteri",
@@ -67,7 +68,12 @@ export const APP_GUIDE: GuideGroup[] = [
         label: "Energins historik",
         what: "Vad som brukar ge och ta energi",
       },
-      { href: "/traning", label: "Träning", what: "Rörelse i lagom dos" },
+      { href: "/traning", label: "Träning & promenader", what: "Rörelse i lagom dos" },
+      {
+        href: "/daglig-rutin",
+        label: "Rutiner & medicin",
+        what: "Morgonstart, fasta rutiner och dagens doser",
+      },
       { href: "/statistik", label: "Statistik", what: "Dina mönster över tid" },
     ],
   },

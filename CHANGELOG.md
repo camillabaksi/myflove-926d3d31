@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-08-28 – Enklare huvudkategorier: Hem, Hälsa, Idag, Planera, QuickFlow, Flow, Mina mönster
+
+- Ny samlad **Hälsa** (/halsa): energi och mående, träning och promenader, rutiner och medicin, sömn/vila och energins historik – en ingång, samma data som förut.
+- "Min dag" heter nu genomgående **Idag** och är den enda kompletta dagslistan.
+- "Planering" heter nu **Planera** och äger schemaläggning och ordning – på samma uppgiftsdata som Idag.
+- Menyn är omgrupperad efter den nya mentala modellen: Idag, Planera, Hälsa, Flow, Mina mönster – plus Hemma, Familj, Studier, Jobb, Resor och Inställningar.
+- Nya anonyma statistikhändelser: health_viewed, today_viewed, planning_viewed och flow_viewed (inga hälsovärden skickas).
+- Inga rutter borttagna: /mitt-batteri, /ma-bra, /min-dag och övriga gamla länkar fungerar som förut.
+
 ## 2026-08-28 – Promenader: välj rutt och öppna i Google Maps
 
 - Flow föreslår en promenadlängd utifrån batterinivån just nu, medan användaren alltid väljer själv.

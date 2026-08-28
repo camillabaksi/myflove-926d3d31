@@ -112,6 +112,8 @@ const CATEGORY_HUE: Record<string, string> = {
   myflow: "258 62% 60%",
   flowflow: "285 52% 58%",
   healthflow: "327 62% 62%",
+  insightflow: "285 52% 58%",
+  flowhelp: "258 62% 60%",
   homeflow: "196 48% 52%",
   familyflow: "348 62% 66%",
   studyflow: "232 58% 64%",
@@ -152,6 +154,9 @@ const SECTION_BY_PATH: Record<string, string> = {
   "/matlista": "matlista",
   "/stadning": "stadning",
   "/insight": "insight",
+  "/halsa": "halsa",
+  "/idag": "idag",
+  "/traning": "traning",
 };
 
 /**
@@ -288,9 +293,16 @@ export default function Layout({ children }: LayoutProps) {
     { href: "/hem", label: "Hem", icon: Home, hint: "Din överblick över dagen", essential: true },
     {
       href: "/idag",
-      label: "Min dag",
-      icon: Heart,
+      label: "Idag",
+      icon: CalendarDays,
       hint: "Vad som händer idag – hela dagens lista",
+      essential: true,
+    },
+    {
+      href: "/halsa",
+      label: "Hälsa",
+      icon: HeartPulse,
+      hint: "Energi, mående, träning, medicin och vila",
       essential: true,
     },
     {
@@ -407,7 +419,7 @@ export default function Layout({ children }: LayoutProps) {
     },
     {
       href: "/flowplan",
-      label: "Planering",
+      label: "Planera",
       icon: Sparkles,
       hint: "Ordningen: i vilken ordning dagens saker passar bäst",
       essential: true,
@@ -529,17 +541,24 @@ export default function Layout({ children }: LayoutProps) {
     }[] = [
       {
         id: "myflow",
-        label: "Idag & planera",
-        hint: "Dagen, kalendern, att göra och rutiner",
+        label: "Idag",
+        hint: "Vad som händer idag – hela dagens lista",
         icon: CalendarDays,
-        hrefs: ["/idag", "/kalender", "/tasks", "/daglig-rutin", "/paminnelser", "/pomodoro"],
+        hrefs: ["/idag", "/kalender", "/paminnelser", "/pomodoro"],
       },
       {
         id: "flowflow",
         label: "Planera",
-        hint: "Nästa steg, ordning, ändra planen och hjälp",
+        hint: "Bestäm och ordna vad som ska hända",
         icon: Sparkles,
-        hrefs: ["/flowplan", "/flow", "/quickflow", "/anteckningar", "/beloningar"],
+        hrefs: ["/flowplan", "/tasks", "/quickflow", "/anteckningar"],
+      },
+      {
+        id: "healthflow",
+        label: "Hälsa",
+        hint: "Energi, mående, träning, medicin och vila",
+        icon: HeartPulse,
+        hrefs: ["/halsa", "/mitt-batteri", "/traning", "/daglig-rutin", "/energifloede"],
       },
       {
         id: "studyflow",
@@ -577,11 +596,18 @@ export default function Layout({ children }: LayoutProps) {
         hrefs: ["/travel"],
       },
       {
-        id: "healthflow",
+        id: "insightflow",
         label: "Mina mönster",
-        hint: "Din energi, hälsa, mönster och statistik",
+        hint: "Vad Flow har lärt sig om dig",
         icon: Brain,
-        hrefs: ["/insight", "/mitt-batteri", "/energifloede", "/statistik", "/traning"],
+        hrefs: ["/insight", "/statistik", "/beloningar"],
+      },
+      {
+        id: "flowhelp",
+        label: "Flow",
+        hint: "Förstå, hjälpa och föreslå",
+        icon: MessageCircle,
+        hrefs: ["/flow", "/assistant", "/flow-installningar"],
       },
       {
         id: "avancerat",
@@ -662,7 +688,7 @@ export default function Layout({ children }: LayoutProps) {
 
   /**
    * Bottennavet: Hem är fast, sedan två platser du väljer själv.
-   * Standard: Min dag och Planering.
+   * Standard: Idag och Planera.
    */
   const primaryNav = useMemo(() => {
     const pick = (href: string) => navItems.find((i) => i.href === href);
@@ -948,7 +974,7 @@ export default function Layout({ children }: LayoutProps) {
 
       <QuickflowFab />
 
-      {/* Mobile Bottom Bar – Hem · Min dag · QuickFlow · Planera · Mer */}
+      {/* Mobile Bottom Bar – Hem · Idag · QuickFlow · Planera · Mer */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-md border-t border-border/70 pb-[env(safe-area-inset-bottom)] z-40">
         <div className="flex items-end justify-around px-1 pt-1.5 pb-1">
           {primaryNav.slice(0, 2).map((item) => (

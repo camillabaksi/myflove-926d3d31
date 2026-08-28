@@ -230,7 +230,7 @@ export function useFlowMoment(): FlowMoment {
             chance >= 50 && !rain
               ? `Det ser ut att regna kring ${time} när du ska ut – ta med paraply. ☔`
               : `Det regnar när du ska ut kl ${time}. Paraply?`,
-          link: { href: "/idag", label: "Min dag" },
+          link: { href: "/idag", label: "Idag" },
         });
       }
     }
@@ -258,7 +258,7 @@ export function useFlowMoment(): FlowMoment {
           message: rain
             ? `${next.title} kl ${time} – ta med paraply. ❤️`
             : `${next.title} kl ${time}. ❤️`,
-          link: { href: "/idag", label: "Min dag" },
+          link: { href: "/idag", label: "Idag" },
         });
       }
       return pick({
@@ -266,7 +266,7 @@ export function useFlowMoment(): FlowMoment {
         id: `next-${today}-${next.mins}`,
         scene: sceneForTask(next.title),
         message: `Härnäst: ${next.title} kl ${time}.`,
-        link: { href: "/idag", label: "Min dag" },
+        link: { href: "/idag", label: "Idag" },
       });
     }
 
