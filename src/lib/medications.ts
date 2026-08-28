@@ -12,6 +12,9 @@
  * fortsätter rensas vid utloggning (prefixet `myflove-`).
  */
 import { secureGetItem, secureSetItem } from "@/lib/secure-local";
+import { occursOn, type RepeatMode } from "@/lib/recurrence";
+
+export type { RepeatMode };
 
 export const MEDICATIONS_KEY = "myflove-medications";
 export const MEDICATION_LOG_KEY = "myflove-medication-log";
