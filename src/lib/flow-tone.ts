@@ -147,3 +147,20 @@ export function learningVoice(level: number, insightCount: number): string {
   if (level < 70) return "Jag har upptäckt ett mönster i hur din vardag hänger ihop.";
   return "Jag minns hur din energi och din vardag brukar hänga ihop.";
 }
+
+/**
+ * Varför det kan vara värt att berätta något – språket följer hur väl Flow
+ * redan känner användaren. Aldrig ett krav och aldrig ett påstått mönster:
+ * utan verkliga insikter säger Flow bara att han fortfarande lär känna dig.
+ */
+export function benefitVoice(level: number, insightCount: number): string {
+  if (insightCount === 0) {
+    return level < 15
+      ? "Jag lär fortfarande känna dig. Det du berättar hjälper mig förstå din vardag."
+      : "Det du berättar hjälper mig förstå vad som brukar fungera för dig.";
+  }
+  if (level < 40) return "Det du berättar gör att jag börjar se vad som brukar påverka dig.";
+  if (level < 70)
+    return "Jag börjar se ett mönster i hur din energi förändras – det du berättar gör det tydligare.";
+  return "Det du berättar hjälper mig föreslå rätt sorts saker vid rätt tid för dig.";
+}
