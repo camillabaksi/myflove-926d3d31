@@ -10,20 +10,43 @@ import {
   ExternalLink,
   ChevronDown,
   RefreshCw,
+  ArrowLeft,
 } from "lucide-react";
 import CollapsibleSection from "@/components/collapsible-section";
 import { suggestWalkRoutes, type WalkRoute } from "@/lib/walk-routes.functions";
 import { useToast } from "@/hooks/use-toast";
 import { useWeather } from "@/hooks/use-weather";
 import { weatherAdvice } from "@/lib/weather-advice";
+import { useEnergyBattery } from "@/hooks/use-energy-battery";
 
 const MINUTES = [15, 30, 45, 60, 90];
 const KM = [2, 3, 5, 8];
+
+/** Förhandsvisning i MyFlove innan användaren lämnar appen. */
+function embedMapSrc(r: WalkRoute): string {
+  const d = 0.012 + r.distanceKm * 0.0035;
+  const minLat = Math.min(r.startLat, r.lat) - d;
+  const maxLat = Math.max(r.startLat, r.lat) + d;
+  const minLon = Math.min(r.startLon, r.lon) - d * 2;
+  const maxLon = Math.max(r.startLon, r.lon) + d * 2;
+  return `https://www.openstreetmap.org/export/embed.html?bbox=${minLon}%2C${minLat}%2C${maxLon}%2C${maxLat}&layer=mapnik&marker=${r.lat}%2C${r.lon}`;
+}
+
+/** Flows förslag på promenadlängd utifrån batterinivån just nu. */
+function suggestedMinutes(battery: number): number {
+  if (battery < 25) return 15;
+  if (battery < 45) return 25;
+  if (battery < 70) return 40;
+  return 60;
+}
 
 export default function WalkRoutesSection() {
   const run = useServerFn(suggestWalkRoutes);
   const { toast } = useToast();
   const advice = weatherAdvice(useWeather());
+  const { reading } = useEnergyBattery();
+  const battery = Math.round(reading.now);
+  const flowMinutes = suggestedMinutes(battery);
 
   const [mode, setMode] = useState<"tid" | "avstånd">("tid");
   const [minutes, setMinutes] = useState(30);
@@ -32,9 +55,12 @@ export default function WalkRoutesSection() {
   const [routes, setRoutes] = useState<WalkRoute[] | null>(null);
   const [target, setTarget] = useState<{ km: number; minutes: number } | null>(null);
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [selected, setSelected] = useState<string | null>(null);
   const [updatedAt, setUpdatedAt] = useState<Date | null>(null);
+  const selectedRoute = routes?.find((r) => r.id === selected) ?? null;
   const optsRef = useRef({ mode, minutes, km });
   optsRef.current = { mode, minutes, km };
+
 
   const findRoutes = useCallback(
     async (opts?: { fresh?: boolean; silent?: boolean }) => {
@@ -60,6 +86,7 @@ export default function WalkRoutesSection() {
             });
             setRoutes(res.routes);
             setExpanded(res.routes[0]?.id ?? null);
+            setSelected(null);
             setTarget({ km: res.targetKm, minutes: res.targetMinutes });
             setUpdatedAt(new Date());
             if (res.routes.length === 0 && !opts?.silent) {
@@ -134,6 +161,27 @@ export default function WalkRoutesSection() {
           {advice.emoji} {advice.outdoor}
         </p>
       )}
+
+      <div className="rounded-2xl border border-primary/30 bg-primary/5 p-3">
+        <p className="text-sm font-medium text-ink">💡 Flow föreslår</p>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Du har {battery} % batteri idag. En lugn promenad på ungefär {flowMinutes} minuter nära
+          dig kan passa bra – men du väljer själv.
+        </p>
+        <Button
+          variant="outline"
+          className="mt-2 rounded-xl"
+          disabled={loading}
+          onClick={() => {
+            setMode("tid");
+            setMinutes(flowMinutes);
+            optsRef.current = { mode: "tid", minutes: flowMinutes, km };
+            void findRoutes();
+          }}
+        >
+          Visa promenaden
+        </Button>
+      </div>
 
       <div className="flex flex-wrap gap-2">
         {(["tid", "avstånd"] as const).map((m) => (
@@ -225,16 +273,52 @@ export default function WalkRoutesSection() {
         </p>
       )}
 
-      {routes && routes.length > 0 && (
+      {routes && routes.length > 0 && selectedRoute && (
+        <div className="rounded-2xl border border-border/70 p-4">
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => setSelected(null)}
+            className="px-0 text-ink hover:underline"
+          >
+            <ArrowLeft size={14} /> Tillbaka till förslagen
+          </Button>
+
+          <p className="mt-3 font-medium text-ink">{selectedRoute.name}</p>
+          <p className="text-sm text-muted-foreground">
+            {selectedRoute.distanceKm} km · ca {selectedRoute.minutes} min · {selectedRoute.kind}
+          </p>
+
+          <div className="mt-3 overflow-hidden rounded-xl border border-border/70">
+            <iframe
+              title={`Karta för ${selectedRoute.name}`}
+              src={embedMapSrc(selectedRoute)}
+              loading="lazy"
+              className="h-56 w-full border-0"
+            />
+          </div>
+
+          <p className="mt-3 text-xs text-muted-foreground">
+            Rundtur: du startar och slutar på samma plats. Vändpunkten ligger {selectedRoute.bearing}{" "}
+            – Google Maps visar vägen dit och tillbaka.
+          </p>
+
+          <Button asChild className="mt-3 w-full rounded-xl gap-2">
+            <a href={selectedRoute.mapsUrl} target="_blank" rel="noopener noreferrer">
+              Öppna i Google Maps <ExternalLink size={16} />
+            </a>
+          </Button>
+          <p className="mt-2 text-xs text-muted-foreground">
+            Öppnas i Google Maps-appen om du har den, annars i webbläsaren.
+          </p>
+        </div>
+      )}
+
+      {routes && routes.length > 0 && !selectedRoute && (
         <ul className="space-y-3">
           {routes.map((r) => {
             const open = expanded === r.id;
-            const d = 0.012 + r.distanceKm * 0.0035;
-            const minLat = Math.min(r.startLat, r.lat) - d;
-            const maxLat = Math.max(r.startLat, r.lat) + d;
-            const minLon = Math.min(r.startLon, r.lon) - d * 2;
-            const maxLon = Math.max(r.startLon, r.lon) + d * 2;
-            const mapSrc = `https://www.openstreetmap.org/export/embed.html?bbox=${minLon}%2C${minLat}%2C${maxLon}%2C${maxLat}&layer=mapnik&marker=${r.lat}%2C${r.lon}`;
             return (
               <li key={r.id} className="rounded-2xl border border-border/70 p-4">
                 <div className="flex items-start justify-between gap-3">
@@ -278,26 +362,26 @@ export default function WalkRoutesSection() {
                   <div className="mt-3 overflow-hidden rounded-xl border border-border/70">
                     <iframe
                       title={`Karta för ${r.name}`}
-                      src={mapSrc}
+                      src={embedMapSrc(r)}
                       loading="lazy"
                       className="h-44 w-full border-0"
                     />
                   </div>
                 )}
 
-                <a
-                  href={r.mapsUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
+                <Button
+                  variant="outline"
+                  onClick={() => setSelected(r.id)}
+                  className="mt-3 w-full rounded-xl"
                 >
-                  Öppna i Google Maps <ExternalLink size={14} />
-                </a>
+                  Välj den här promenaden
+                </Button>
               </li>
             );
           })}
         </ul>
       )}
+
 
       {routes && routes.length === 0 && (
         <p className="text-sm text-muted-foreground">

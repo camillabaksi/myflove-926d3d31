@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-28 – Promenader: välj rutt och öppna i Google Maps
+
+- Flow föreslår en promenadlängd utifrån batterinivån just nu, medan användaren alltid väljer själv.
+- En rekommenderad rutt kan väljas för en tydlig detaljvy med MyFloves egen kartförhandsvisning, längd och ungefärlig tid.
+- "Öppna i Google Maps" skickar med den aktuella positionen som start och destination samt den riktiga vändpunkten som waypoint för rundtur – appen öppnas om den finns, annars webbläsaren.
+- En tydlig "Tillbaka till förslagen"-knapp gör det enkelt att välja en annan promenad.
+
 ## 2026-08-28 – Mediciner och rutiner: återkommande eller en gång
 
 - När du lägger till en medicin eller rutin väljer du nu **Varje dag**, **Vardagar**, **Varje vecka** eller **En gång** – med datum för det som bara ska hända en gång.

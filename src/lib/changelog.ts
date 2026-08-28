@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-08-28";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Promenader nära dig",
+    items: [
+      "Flow föreslår promenadlängd utifrån batterinivån, du väljer alltid själv (2026-08-28)",
+      "Välj en rutt för att se MyFloves kartförhandsvisning och öppna samma rundtur i Google Maps med riktig startpunkt och vändpunkt (2026-08-28)",
+    ],
+  },
+  {
     title: "Rutiner & medicin",
     items: [
       "Mediciner och rutiner kan vara återkommande (varje dag, vardagar, varje vecka) eller en gång med datum (2026-08-28)",
