@@ -314,6 +314,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                   wave={flowStatus === "idle"}
                   glow
                   status={flowStatus}
+                  bump
                   mood={
                     flowStatus === "thinking"
                       ? "think"
@@ -410,7 +411,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
               <>
                 {messages.length === 0 && (
                   <div className="flex justify-start items-end gap-2">
-                    <FlowMascot size="sm" mood="wave" className="shrink-0" />
+                    <FlowMascot size="sm" mood="wave" bump className="shrink-0" />
                     <div className="max-w-[80%] px-4 py-3 rounded-2xl rounded-bl-sm text-sm leading-relaxed bg-secondary text-foreground">
                       {GREETING}
                     </div>
@@ -422,7 +423,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                     className={`flex items-end gap-2 ${m.role === "user" ? "justify-end" : "justify-start"}`}
                   >
                     {m.role !== "user" && (
-                      <FlowMascot size="sm" mood="calm" status={flowStatus} className="shrink-0" />
+                      <FlowMascot size="sm" mood="calm" status={flowStatus} bump className="shrink-0" />
                     )}
                     <div
                       className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
@@ -439,7 +440,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
             )}
             {isSending && (
               <div className="flex justify-start items-end gap-2">
-                <FlowMascot size="sm" mood="think" status="thinking" className="shrink-0" />
+                <FlowMascot size="sm" mood="think" status="thinking" bump className="shrink-0" />
                 <div className="bg-secondary text-muted-foreground px-4 py-2 rounded-2xl rounded-bl-sm text-sm">
                   <MyFloveThinking
                     steps={["💬", "🧠", "💜", "✨"]}
