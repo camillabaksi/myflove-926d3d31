@@ -378,7 +378,7 @@ export default function Layout({ children }: LayoutProps) {
       hint: "Lugn tillbakablick på veckan",
     },
     { href: "/pomodoro", label: "Timer", icon: Timer, hint: "Jobba en stund, ta paus" },
-    { href: "/shopping", label: "Inköp", icon: ShoppingBag, hint: "Inköpslista du kan dela" },
+    { href: "/shopping", label: "Inköpslista", icon: ShoppingBag, hint: "Inköpslista du kan dela" },
     {
       href: "/matlista",
       label: "Matlista",
@@ -591,7 +591,7 @@ export default function Layout({ children }: LayoutProps) {
       },
       {
         id: "homeflow",
-        label: "Hemma",
+        label: "Hem",
         hint: "Mat, inköp, städning och pengar",
         icon: House,
         hrefs: ["/matlista", "/shopping", "/stadning", "/finances"],
