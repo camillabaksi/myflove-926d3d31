@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useMedications } from "./use-data";
+import { medicationOccursOn } from "@/lib/medications";
 import { sendPushNotification } from "@/lib/push-notifications";
 import { todayISO } from "@/lib/day";
 
@@ -19,7 +20,9 @@ export function useMedicationAlerts() {
   const notifiedRef = useRef<Set<string>>(new Set());
   const dismissedRef = useRef<Set<string>>(new Set());
 
-  const medsKey = medications.map((m) => `${m.id}:${m.times.join(",")}`).join("|");
+  const medsKey = medications
+    .map((m) => `${m.id}:${m.times.join(",")}:${m.repeat ?? "daily"}:${m.startDate ?? ""}`)
+    .join("|");
 
   useEffect(() => {
     const check = () => {
@@ -29,6 +32,7 @@ export function useMedicationAlerts() {
 
       const due: MedicationAlert[] = [];
       medications.forEach((med) => {
+        if (!medicationOccursOn(med, todayStr)) return;
         med.times.forEach((time) => {
           if (time <= nowStr && !isTaken(med.id, time, todayStr)) {
             const key = `${med.id}:${time}:${todayStr}`;

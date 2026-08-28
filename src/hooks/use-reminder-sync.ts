@@ -3,10 +3,14 @@ import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { useTasks, useMedications, useReminders } from "@/hooks/use-data";
 import { syncReminder, cancelReminder, reconcileReminders } from "@/lib/push.functions";
-import { MEDICATION_REMINDER_PREFIX, medicationReminderKey } from "@/lib/medications";
+import {
+  MEDICATION_REMINDER_PREFIX,
+  medicationReminderKey,
+  medicationOccursOn,
+} from "@/lib/medications";
 import { getCurrentSubscription } from "@/lib/push-client";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
-import type { Routine } from "@/pages/routines";
+import { routineOccursOn, type Routine } from "@/pages/routines";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { useStudySchedule } from "@/hooks/use-study-schedule";
 import { useChildren } from "@/hooks/use-children";
@@ -62,9 +66,9 @@ export function useReminderSync() {
       t.deadlineReminderTime,
     ]),
     medsReady,
-    medications.map((m) => [m.id, m.name, m.dosage, m.times.join(",")]),
+    medications.map((m) => [m.id, m.name, m.dosage, m.times.join(","), m.repeat, m.startDate]),
     reminders.map((r) => [r.id, r.completed, r.date, r.time, r.repeat]),
-    routines.map((r) => [r.id, r.title, r.time, r.enabled]),
+    routines.map((r) => [r.id, r.title, r.time, r.enabled, r.repeat, r.startDate]),
     quickflowItems.map((q) => [q.id, q.text, q.remindAt, q.done]),
     lectures.map((l) => [l.id, l.title, l.weekday, l.start, l.location]),
     studySettings.lectureReminderMinutes,
@@ -158,6 +162,7 @@ export function useReminderSync() {
       for (const med of medications) {
         for (const time of med.times) {
           for (const date of medDates) {
+            if (!medicationOccursOn(med, date)) continue;
             const when = combineDateTime(date, time);
             if (!when) continue;
             if (date === medDates[0] && isTaken(med.id, time, date)) continue;
@@ -219,6 +224,7 @@ export function useReminderSync() {
       for (const routine of routines) {
         if (!routine.enabled || !routine.time) continue;
         for (const date of horizonDates) {
+          if (!routineOccursOn(routine, date)) continue;
           const when = combineDateTime(date, routine.time);
           if (!when) continue;
           if (when.getTime() < now + 30_000) continue;

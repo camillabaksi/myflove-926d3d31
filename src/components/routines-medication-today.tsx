@@ -5,7 +5,8 @@ import { useMedications, useReminders } from "@/hooks/use-data";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { useToast } from "@/hooks/use-toast";
 import { getRandomEncouragement } from "@/lib/encouragements";
-import type { Routine } from "@/pages/routines";
+import { routineOccursOn, type Routine } from "@/pages/routines";
+import { medicationOccursOn } from "@/lib/medications";
 
 /**
  * 🔁💊 Rutiner & medicin – ett gemensamt, ihopfällbart block längst ner på Hem.
@@ -45,6 +46,7 @@ export default function RoutinesMedicationToday() {
 
     for (const r of routines ?? []) {
       if (!r.enabled || !r.time) continue;
+      if (!routineOccursOn(r, todayIso)) continue;
       const match = reminders.find(
         (rem) => rem.date === todayIso && rem.time === r.time && rem.title === r.title,
       );
@@ -74,6 +76,7 @@ export default function RoutinesMedicationToday() {
     }
 
     for (const med of medications) {
+      if (!medicationOccursOn(med, todayIso)) continue;
       for (const time of med.times) {
         const taken = isTaken(med.id, time);
         list.push({

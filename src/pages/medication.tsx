@@ -6,6 +6,14 @@ import { Button } from "@/components/ui/button";
 import { Pill, Plus, Trash2, Check, Clock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { getRandomEncouragement } from "@/lib/encouragements";
+import { REPEAT_LABELS, type RepeatMode } from "@/lib/recurrence";
+
+const REPEAT_OPTIONS: Array<{ value: RepeatMode; label: string }> = [
+  { value: "daily", label: "Varje dag" },
+  { value: "weekdays", label: "Vardagar" },
+  { value: "weekly", label: "Varje vecka" },
+  { value: "none", label: "En gång" },
+];
 
 interface MedicationContentProps {
   showHeader?: boolean;
@@ -17,6 +25,8 @@ export function MedicationContent({ showHeader = true }: MedicationContentProps)
   const [name, setName] = useState("");
   const [dosage, setDosage] = useState("");
   const [times, setTimes] = useState<string[]>([""]);
+  const [repeat, setRepeat] = useState<RepeatMode>("daily");
+  const [startDate, setStartDate] = useState(() => new Date().toISOString().slice(0, 10));
 
   const updateTime = (index: number, value: string) => {
     setTimes((prev) => prev.map((t, i) => (i === index ? value : t)));
@@ -29,10 +39,17 @@ export function MedicationContent({ showHeader = true }: MedicationContentProps)
     e.preventDefault();
     const validTimes = times.filter((t) => t.trim() !== "");
     if (name.trim() === "" || validTimes.length === 0) return;
-    addMedication(name.trim(), validTimes, dosage.trim() || undefined);
+    addMedication(
+      name.trim(),
+      validTimes,
+      dosage.trim() || undefined,
+      repeat,
+      repeat === "daily" ? undefined : startDate,
+    );
     setName("");
     setDosage("");
     setTimes([""]);
+    setRepeat("daily");
     toast({ description: "Medicin tillagd 💊" });
   };
 
@@ -106,6 +123,38 @@ export function MedicationContent({ showHeader = true }: MedicationContentProps)
           </button>
         </div>
 
+        <div className="space-y-2">
+          <p className="text-sm font-medium text-muted-foreground">Hur ofta?</p>
+          <div className="flex flex-wrap gap-2">
+            {REPEAT_OPTIONS.map((opt) => (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={() => setRepeat(opt.value)}
+                aria-pressed={repeat === opt.value}
+                className={`px-3 py-2 rounded-xl border text-sm transition-all ${
+                  repeat === opt.value
+                    ? "bg-primary/10 border-primary/40 text-primary"
+                    : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
+                }`}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+          {repeat !== "daily" && (
+            <label className="flex items-center gap-2 text-sm text-muted-foreground">
+              {repeat === "none" ? "Datum" : "Startdatum"}
+              <input
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                className="p-2 rounded-xl bg-secondary/50 border border-transparent focus:border-primary focus:ring-1 focus:ring-primary outline-none text-sm"
+              />
+            </label>
+          )}
+        </div>
+
         <Button type="submit" className="w-full h-12 rounded-xl">
           <Plus size={18} className="mr-2" /> Spara medicin
         </Button>
@@ -130,7 +179,15 @@ export function MedicationContent({ showHeader = true }: MedicationContentProps)
                   </div>
                   <div>
                     <p className="font-medium">{med.name}</p>
-                    {med.dosage && <p className="text-sm text-muted-foreground">{med.dosage}</p>}
+                    <p className="text-sm text-muted-foreground">
+                      {med.dosage ? `${med.dosage} · ` : ""}
+                      {REPEAT_LABELS[med.repeat ?? "daily"]}
+                      {med.repeat === "none" && med.startDate
+                        ? ` ${med.startDate}`
+                        : med.repeat && med.repeat !== "daily" && med.startDate
+                          ? ` från ${med.startDate}`
+                          : ""}
+                    </p>
                   </div>
                 </div>
                 <button

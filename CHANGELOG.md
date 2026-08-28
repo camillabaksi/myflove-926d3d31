@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-28 – Mediciner och rutiner: återkommande eller en gång
+
+- När du lägger till en medicin eller rutin väljer du nu **Varje dag**, **Vardagar**, **Varje vecka** eller **En gång** – med datum för det som bara ska hända en gång.
+- Påminnelserna följer valet: engångsdoser och veckorutiner schemaläggs bara de dagar de faktiskt gäller.
+- Dagens listor (Hem, Min dag, Rutiner & medicin) visar bara det som gäller i dag, och kortet visar hur ofta det återkommer.
+- Befintliga mediciner och rutiner fortsätter som varje dag – inget behöver göras om.
+
 ## 2026-08-28 – Besöksanalys: sidvisningar
 
 - Varje sidvisning loggas nu anonymt (sektion "page", t.ex. /hem, /idag, /pitch) – du ser hur många som öppnar den delade länken och vilka sidor de besöker.

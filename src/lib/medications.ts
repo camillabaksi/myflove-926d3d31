@@ -12,6 +12,9 @@
  * fortsätter rensas vid utloggning (prefixet `myflove-`).
  */
 import { secureGetItem, secureSetItem } from "@/lib/secure-local";
+import { occursOn, type RepeatMode } from "@/lib/recurrence";
+
+export type { RepeatMode };
 
 export const MEDICATIONS_KEY = "myflove-medications";
 export const MEDICATION_LOG_KEY = "myflove-medication-log";
@@ -26,6 +29,18 @@ export interface Medication {
   dosage?: string;
   times: string[]; // HH:MM, sorterade
   createdAt: number;
+  /** Hur ofta medicinen tas. Saknas = varje dag (gammal data). */
+  repeat?: RepeatMode;
+  /** Startdatum (YYYY-MM-DD). Krävs för engångsdoser. */
+  startDate?: string;
+}
+
+/** Ska medicinen tas den här dagen? */
+export function medicationOccursOn(med: Medication, dateStr: string): boolean {
+  const repeat = med.repeat ?? "daily";
+  if (repeat === "daily" && !med.startDate) return true;
+  const start = med.startDate ?? dateStr;
+  return occursOn(start, repeat, dateStr);
 }
 
 export interface MedicationLogEntry {
@@ -83,13 +98,21 @@ export function normalizeMedications(raw: unknown): Medication[] {
     const id =
       typeof rec.id === "string" && rec.id.trim() ? rec.id.trim() : fallbackId(name, times);
     const createdAt = typeof rec.createdAt === "number" ? rec.createdAt : 0;
-    out.push({ id, name, dosage, times, createdAt });
+    const repeat: RepeatMode =
+      rec.repeat === "none" || rec.repeat === "weekdays" || rec.repeat === "weekly"
+        ? rec.repeat
+        : "daily";
+    const startDate =
+      typeof rec.startDate === "string" && /^\d{4}-\d{2}-\d{2}$/.test(rec.startDate.slice(0, 10))
+        ? rec.startDate.slice(0, 10)
+        : undefined;
+    out.push({ id, name, dosage, times, createdAt, repeat, startDate });
   }
   return dedupeMedications(out);
 }
 
 function signature(med: Medication): string {
-  return `${med.name.toLowerCase().trim()}|${med.times.join(",")}`;
+  return `${med.name.toLowerCase().trim()}|${med.times.join(",")}|${med.repeat ?? "daily"}|${med.startDate ?? ""}`;
 }
 
 /** Tar bort dubbletter både på id och på namn+tider (samma medicin två gånger). */

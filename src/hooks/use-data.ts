@@ -752,10 +752,24 @@ export function useMedications() {
 
   const getTodayDateString = () => todayISO();
 
-  const addMedication = (name: string, times: string[], dosage?: string) => {
+  const addMedication = (
+    name: string,
+    times: string[],
+    dosage?: string,
+    repeat: Medication["repeat"] = "daily",
+    startDate?: string,
+  ) => {
     setMedications(
       dedupeMedications([
-        { id: generateId(), name, dosage, times: [...times].sort(), createdAt: Date.now() },
+        {
+          id: generateId(),
+          name,
+          dosage,
+          times: [...times].sort(),
+          createdAt: Date.now(),
+          repeat,
+          ...(startDate ? { startDate } : {}),
+        },
         ...medications,
       ]),
     );

@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Link } from "wouter";
 import { Check, ArrowRight, Undo2 } from "lucide-react";
 import { useMedications } from "@/hooks/use-data";
+import { medicationOccursOn } from "@/lib/medications";
 import { useToast } from "@/hooks/use-toast";
 import { getRandomEncouragement } from "@/lib/encouragements";
 
@@ -31,10 +32,12 @@ export default function MedicationToday({ limit = 3 }: { limit?: number }) {
   const { medications, isTaken, toggleTaken } = useMedications();
   const { toast } = useToast();
   const nowMin = new Date().getHours() * 60 + new Date().getMinutes();
+  const todayIso = new Date().toISOString().slice(0, 10);
 
   const { pending, done } = useMemo(() => {
     const all: Dose[] = [];
     for (const med of medications) {
+      if (!medicationOccursOn(med, todayIso)) continue;
       for (const time of med.times) {
         all.push({
           key: `${med.id}:${time}`,
@@ -53,7 +56,7 @@ export default function MedicationToday({ limit = 3 }: { limit?: number }) {
       done: all.filter((d) => d.taken),
     };
     // isTaken läser samma logg som toggleTaken uppdaterar
-  }, [medications, isTaken]);
+  }, [medications, isTaken, todayIso]);
 
   // Visa bara det som är relevant nu: försenade doser först, sedan närmast kommande.
   const relevant = useMemo(() => {

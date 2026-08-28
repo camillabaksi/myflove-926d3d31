@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-08-28";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Rutiner & medicin",
+    items: [
+      "Mediciner och rutiner kan vara återkommande (varje dag, vardagar, varje vecka) eller en gång med datum (2026-08-28)",
+      "Påminnelser och dagens listor följer valet – engångsdoser dyker bara upp den dag de gäller (2026-08-28)",
+    ],
+  },
+  {
     title: "Besöksanalys",
     items: [
       'Sidvisningar loggas anonymt vid varje navigering – se hur många som öppnar den delade länken och vilka sidor de besöker (2026-08-28)',
