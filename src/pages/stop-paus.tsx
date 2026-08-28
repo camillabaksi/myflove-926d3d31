@@ -1,0 +1,42 @@
+import { useState } from "react";
+import { Hand } from "lucide-react";
+import Layout from "@/components/layout";
+import { MyFloveHeader } from "@/components/myflove";
+import StopModal from "@/components/stop-modal";
+import { useSmartBack } from "@/hooks/use-smart-back";
+
+/**
+ * Stop-paus – en egen sida under Mer.
+ * Samma funktion och logik som tidigare (StopModal), bara en egen plats.
+ * Stängs → tillbaka via routerhistoriken.
+ */
+export default function StopPausPage() {
+  const [open, setOpen] = useState(true);
+  const goBack = useSmartBack("/hem");
+
+  return (
+    <Layout>
+      <div className="space-y-6">
+        <MyFloveHeader
+          title="Stop-paus"
+          emojiKey="wellness"
+          description="En paus mellan impuls och beslut – andas, sätt ord, välj."
+        />
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-soft"
+        >
+          <Hand size={16} aria-hidden="true" /> Öppna Stop-paus
+        </button>
+        <StopModal
+          open={open}
+          onOpenChange={(next) => {
+            setOpen(next);
+            if (!next) goBack();
+          }}
+        />
+      </div>
+    </Layout>
+  );
+}

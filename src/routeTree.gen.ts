@@ -31,6 +31,7 @@ import { Route as AppTasksRouteImport } from './routes/_app.tasks'
 import { Route as AppStudyflowRouteImport } from './routes/_app.studyflow'
 import { Route as AppStudybuddyRouteImport } from './routes/_app.studybuddy'
 import { Route as AppStudierRouteImport } from './routes/_app.studier'
+import { Route as AppStopPausRouteImport } from './routes/_app.stop-paus'
 import { Route as AppStatistikRouteImport } from './routes/_app.statistik'
 import { Route as AppStadningRouteImport } from './routes/_app.stadning'
 import { Route as AppShoppingRouteImport } from './routes/_app.shopping'
@@ -191,6 +192,11 @@ const AppStudybuddyRoute = AppStudybuddyRouteImport.update({
 const AppStudierRoute = AppStudierRouteImport.update({
   id: '/studier',
   path: '/studier',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppStopPausRoute = AppStopPausRouteImport.update({
+  id: '/stop-paus',
+  path: '/stop-paus',
   getParentRoute: () => AppRoute,
 } as any)
 const AppStatistikRoute = AppStatistikRouteImport.update({
@@ -510,6 +516,7 @@ export interface FileRoutesByFullPath {
   '/shopping': typeof AppShoppingRoute
   '/stadning': typeof AppStadningRoute
   '/statistik': typeof AppStatistikRoute
+  '/stop-paus': typeof AppStopPausRoute
   '/studier': typeof AppStudierRoute
   '/studybuddy': typeof AppStudybuddyRoute
   '/studyflow': typeof AppStudyflowRoute
@@ -584,6 +591,7 @@ export interface FileRoutesByTo {
   '/shopping': typeof AppShoppingRoute
   '/stadning': typeof AppStadningRoute
   '/statistik': typeof AppStatistikRoute
+  '/stop-paus': typeof AppStopPausRoute
   '/studier': typeof AppStudierRoute
   '/studybuddy': typeof AppStudybuddyRoute
   '/studyflow': typeof AppStudyflowRoute
@@ -660,6 +668,7 @@ export interface FileRoutesById {
   '/_app/shopping': typeof AppShoppingRoute
   '/_app/stadning': typeof AppStadningRoute
   '/_app/statistik': typeof AppStatistikRoute
+  '/_app/stop-paus': typeof AppStopPausRoute
   '/_app/studier': typeof AppStudierRoute
   '/_app/studybuddy': typeof AppStudybuddyRoute
   '/_app/studyflow': typeof AppStudyflowRoute
@@ -736,6 +745,7 @@ export interface FileRouteTypes {
     | '/shopping'
     | '/stadning'
     | '/statistik'
+    | '/stop-paus'
     | '/studier'
     | '/studybuddy'
     | '/studyflow'
@@ -810,6 +820,7 @@ export interface FileRouteTypes {
     | '/shopping'
     | '/stadning'
     | '/statistik'
+    | '/stop-paus'
     | '/studier'
     | '/studybuddy'
     | '/studyflow'
@@ -885,6 +896,7 @@ export interface FileRouteTypes {
     | '/_app/shopping'
     | '/_app/stadning'
     | '/_app/statistik'
+    | '/_app/stop-paus'
     | '/_app/studier'
     | '/_app/studybuddy'
     | '/_app/studyflow'
@@ -1080,6 +1092,13 @@ declare module '@tanstack/react-router' {
       path: '/studier'
       fullPath: '/studier'
       preLoaderRoute: typeof AppStudierRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/stop-paus': {
+      id: '/_app/stop-paus'
+      path: '/stop-paus'
+      fullPath: '/stop-paus'
+      preLoaderRoute: typeof AppStopPausRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/statistik': {
@@ -1486,6 +1505,7 @@ interface AppRouteChildren {
   AppShoppingRoute: typeof AppShoppingRoute
   AppStadningRoute: typeof AppStadningRoute
   AppStatistikRoute: typeof AppStatistikRoute
+  AppStopPausRoute: typeof AppStopPausRoute
   AppStudierRoute: typeof AppStudierRoute
   AppStudybuddyRoute: typeof AppStudybuddyRoute
   AppStudyflowRoute: typeof AppStudyflowRoute
@@ -1542,6 +1562,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppShoppingRoute: AppShoppingRoute,
   AppStadningRoute: AppStadningRoute,
   AppStatistikRoute: AppStatistikRoute,
+  AppStopPausRoute: AppStopPausRoute,
   AppStudierRoute: AppStudierRoute,
   AppStudybuddyRoute: AppStudybuddyRoute,
   AppStudyflowRoute: AppStudyflowRoute,
