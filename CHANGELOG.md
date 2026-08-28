@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-28 – Stop-paus flyttar till Mer
+
+- Stop-paus är nu en egen tydlig post under Mer → Hälsa med egen ikon (🛑 Stop-paus) – direkt åtkomlig utan väg via Mitt batteri.
+- Ny sida `/stop-paus` som öppnar samma StopModal-funktion och logik som tidigare – inga nya funktioner eller datamodeller.
+- När pausen stängs används routerhistoriken (useSmartBack) så du kommer tillbaka dit du faktiskt kom ifrån.
+- Dubbletten på Mitt batteri ("Stop – ta en paus först") är borttagen – bara en plats för Stop-paus.
+
 ## 2026-08-28 – Flow syns tydligare utan att flytta något
 
 - Flow är optiskt större på små platser (Hem, chatten, installationskortet, Flow lär sig) via en ny `bump`-variant – rutan i layouten är låst så text, radhöjd och spacing står stilla.
