@@ -297,14 +297,9 @@ export default function Layout({ children }: LayoutProps) {
       href: "/mitt-batteri",
       label: "Mitt batteri",
       icon: Heart,
-      hint: "Din energi just nu – och en snabb incheckning",
+      hint: "Energi och mående – checka in på några sekunder",
     },
-    {
-      href: "/ma-bra",
-      label: "Energi och mående",
-      icon: Heart,
-      hint: "Snabb incheckning av ork och mående",
-    },
+
 
     {
       href: "/energifloede",
