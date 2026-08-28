@@ -19,7 +19,6 @@ const todayIso = () => new Date().toISOString().slice(0, 10);
  */
 export function useDayDone(): { lines: DayDoneLine[]; anything: boolean } {
   const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
-  const { reminders } = useReminders();
   const { isDone } = useDoneLog();
   const { medications, isTaken } = useMedications();
   const { doneToday: sessionsDone, stepsToday, state: trainingState } = useTraining();
