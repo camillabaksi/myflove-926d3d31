@@ -1156,12 +1156,7 @@ export default function Layout({ children }: LayoutProps) {
                               <Icon size={26} />
                             </span>
                             <span className="text-sm font-medium leading-tight">{cat.label}</span>
-                            <span
-                              data-npf="optional"
-                              className="text-[11px] leading-snug opacity-70"
-                            >
-                              {cat.hint}
-                            </span>
+                            <span className="text-[11px] leading-snug opacity-70">{cat.hint}</span>
                           </button>
                         );
                       })}
@@ -1395,7 +1390,6 @@ function NavRow({
       <span className="min-w-0">
         <span className="block text-sm font-medium leading-tight">{item.label}</span>
         <span
-          data-npf="optional"
           className={`block text-xs leading-snug ${isActive ? "opacity-80" : "text-muted-foreground"}`}
         >
           {item.hint}

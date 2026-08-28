@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-08-28 – Menyn: beskrivningstexterna alltid synliga
+
+- Fix: Beskrivningarna under kategorierna och menyvalen ("Vad som händer idag", "Energi, mående, träning …") försvann när "Färre saker"-läget var på. Nu syns förklaringstexterna alltid i menyn – de är en del av att hitta rätt, inte extra brus.
+
 ## 2026-08-28 – Enklare huvudkategorier: Hem, Hälsa, Idag, Planera, QuickFlow, Flow, Mina mönster
 
 - Ny samlad **Hälsa** (/halsa): energi och mående, träning och promenader, rutiner och medicin, sömn/vila och energins historik – en ingång, samma data som förut.

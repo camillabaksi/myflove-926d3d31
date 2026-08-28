@@ -10,6 +10,12 @@ export const CHANGELOG_UPDATED = "2026-08-28";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Menyn: beskrivningar alltid synliga",
+    items: [
+      'Fix: Kategoriernas och menyvalens förklaringstexter döljdes av "Färre saker"-läget – nu syns de alltid (2026-08-28)',
+    ],
+  },
+  {
     title: "Enklare huvudkategorier",
     items: [
       "Ny samlad Hälsa-vy (/halsa) med energi och mående, träning och promenader, rutiner och medicin, sömn och energihistorik (2026-08-28)",
