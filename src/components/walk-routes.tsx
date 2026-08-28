@@ -10,6 +10,7 @@ import {
   ExternalLink,
   ChevronDown,
   RefreshCw,
+  ArrowLeft,
 } from "lucide-react";
 import CollapsibleSection from "@/components/collapsible-section";
 import { suggestWalkRoutes, type WalkRoute } from "@/lib/walk-routes.functions";
@@ -20,6 +21,16 @@ import { useEnergyBattery } from "@/hooks/use-energy-battery";
 
 const MINUTES = [15, 30, 45, 60, 90];
 const KM = [2, 3, 5, 8];
+
+/** Förhandsvisning i MyFlove innan användaren lämnar appen. */
+function embedMapSrc(r: WalkRoute): string {
+  const d = 0.012 + r.distanceKm * 0.0035;
+  const minLat = Math.min(r.startLat, r.lat) - d;
+  const maxLat = Math.max(r.startLat, r.lat) + d;
+  const minLon = Math.min(r.startLon, r.lon) - d * 2;
+  const maxLon = Math.max(r.startLon, r.lon) + d * 2;
+  return `https://www.openstreetmap.org/export/embed.html?bbox=${minLon}%2C${minLat}%2C${maxLon}%2C${maxLat}&layer=mapnik&marker=${r.lat}%2C${r.lon}`;
+}
 
 /** Flows förslag på promenadlängd utifrån batterinivån just nu. */
 function suggestedMinutes(battery: number): number {
@@ -46,6 +57,7 @@ export default function WalkRoutesSection() {
   const [expanded, setExpanded] = useState<string | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
   const [updatedAt, setUpdatedAt] = useState<Date | null>(null);
+  const selectedRoute = routes?.find((r) => r.id === selected) ?? null;
   const optsRef = useRef({ mode, minutes, km });
   optsRef.current = { mode, minutes, km };
 
@@ -74,6 +86,7 @@ export default function WalkRoutesSection() {
             });
             setRoutes(res.routes);
             setExpanded(res.routes[0]?.id ?? null);
+            setSelected(null);
             setTarget({ km: res.targetKm, minutes: res.targetMinutes });
             setUpdatedAt(new Date());
             if (res.routes.length === 0 && !opts?.silent) {
@@ -148,6 +161,27 @@ export default function WalkRoutesSection() {
           {advice.emoji} {advice.outdoor}
         </p>
       )}
+
+      <div className="rounded-2xl border border-primary/30 bg-primary/5 p-3">
+        <p className="text-sm font-medium text-ink">💡 Flow föreslår</p>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Du har {battery} % batteri idag. En lugn promenad på ungefär {flowMinutes} minuter nära
+          dig kan passa bra – men du väljer själv.
+        </p>
+        <Button
+          variant="outline"
+          className="mt-2 rounded-xl"
+          disabled={loading}
+          onClick={() => {
+            setMode("tid");
+            setMinutes(flowMinutes);
+            optsRef.current = { mode: "tid", minutes: flowMinutes, km };
+            void findRoutes();
+          }}
+        >
+          Visa promenaden
+        </Button>
+      </div>
 
       <div className="flex flex-wrap gap-2">
         {(["tid", "avstånd"] as const).map((m) => (
