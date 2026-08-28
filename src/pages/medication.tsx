@@ -182,9 +182,11 @@ export function MedicationContent({ showHeader = true }: MedicationContentProps)
                     <p className="text-sm text-muted-foreground">
                       {med.dosage ? `${med.dosage} · ` : ""}
                       {REPEAT_LABELS[med.repeat ?? "daily"]}
-                      {med.repeat && med.repeat !== "daily" && med.startDate
-                        ? ` från ${med.startDate}`
-                        : ""}
+                      {med.repeat === "none" && med.startDate
+                        ? ` ${med.startDate}`
+                        : med.repeat && med.repeat !== "daily" && med.startDate
+                          ? ` från ${med.startDate}`
+                          : ""}
                     </p>
                   </div>
                 </div>
