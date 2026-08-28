@@ -32,7 +32,7 @@ export const Route = createFileRoute("/integritet")({
 
 function PrivacyPage() {
   return (
-    <LegalShell title="Integritetspolicy" updated="18 juli 2026">
+    <LegalShell title="Integritetspolicy" updated="28 augusti 2026">
       <p>
         MyFlove är byggd för att minska mental belastning – och det gäller även dina
         personuppgifter. Vi samlar in så lite som möjligt, förklarar varför, och du bestämmer alltid
@@ -50,18 +50,39 @@ function PrivacyPage() {
       <ul>
         <li>
           <strong>Kontouppgifter:</strong> e-postadress och krypterat lösenord när du skapar konto.
+          Loggar du in med Google får vi din e-postadress och ditt namn från Google.
         </li>
         <li>
-          <strong>Innehåll du skapar:</strong> uppgifter, humör, energinivåer, matlistor,
-          kalenderposter och reflektioner – lagras kopplat till ditt konto.
+          <strong>Innehåll du skapar:</strong> uppgifter, rutiner, kalenderposter, anteckningar,
+          inköpslistor, matlistor, studie- och jobbmaterial samt reflektioner – lagras kopplat till
+          ditt konto.
         </li>
         <li>
-          <strong>Enhets- och användningsdata:</strong> anonymiserad statistik om vilka funktioner
-          som används, för att kunna förbättra appen.
+          <strong>Hälsorelaterad information (särskild kategori):</strong> energi, mående, medicin
+          och liknande som du själv väljer att logga. Den behandlas bara för att du uttryckligen
+          valt att använda funktionen, och de känsligaste posterna lagras dessutom krypterat lokalt
+          på din enhet (AES-GCM, med nyckeln i enhetens säkra lagring).
         </li>
         <li>
-          <strong>Plats (frivilligt):</strong> ungefärlig plats används endast för väder och
-          reseinformation, direkt i din enhet – vi lagrar den inte.
+          <strong>Samtal med Flow:</strong> sparade chattar med AI-följeslagaren Flow lagras kopplat
+          till ditt konto tills du raderar dem. Påbörjad text ligger bara kvar under sessionen.
+        </li>
+        <li>
+          <strong>Delat innehåll:</strong> om du använder hushåll/relationer delas det du aktivt
+          delar (t.ex. inköpslista och kalender) med de personer du bjudit in.
+        </li>
+        <li>
+          <strong>Enhets- och användningsdata:</strong> avidentifierad statistik om vilka funktioner
+          som används. Vi filtrerar bort innehåll – aldrig text, mående-värden, belopp eller
+          medicinnamn.
+        </li>
+        <li>
+          <strong>Notiser (frivilligt):</strong> en teknisk push-prenumeration för din enhet, så att
+          påminnelser kan levereras.
+        </li>
+        <li>
+          <strong>Plats (frivilligt):</strong> ungefärlig plats används endast för väder, promenader
+          och reseinformation, direkt i din enhet – vi lagrar den inte.
         </li>
       </ul>
 
@@ -71,11 +92,14 @@ function PrivacyPage() {
           <strong>Avtal:</strong> för att leverera tjänsten du valt att använda.
         </li>
         <li>
-          <strong>Samtycke:</strong> för valfria funktioner som notifikationer, plats och
-          AI-assistent.
+          <strong>Uttryckligt samtycke:</strong> för hälsorelaterad loggning (energi, mående,
+          medicin) enligt artikel 9.2 a GDPR.
         </li>
         <li>
-          <strong>Berättigat intresse:</strong> för säkerhet, felsökning och anonymiserad
+          <strong>Samtycke:</strong> för valfria funktioner som notiser, plats och AI-assistent.
+        </li>
+        <li>
+          <strong>Berättigat intresse:</strong> för säkerhet, felsökning och avidentifierad
           produktstatistik.
         </li>
       </ul>
@@ -84,13 +108,17 @@ function PrivacyPage() {
       <p>
         Uppgifterna lagras hos vår molnleverantör inom EU (Supabase / AWS Europe). AI-svar genereras
         via Lovable AI Gateway och skickas då i förekommande fall till underleverantörer såsom
-        Google (Gemini). Inga uppgifter säljs vidare.
+        Google (Gemini) – bland annat den text du skriver till Flow och material du laddar upp för
+        tolkning (t.ex. schemabilder). Kartlänkar öppnas hos Google Maps först när du själv klickar.
+        Inga uppgifter säljs vidare, och ditt innehåll används inte för att träna AI-modeller.
       </p>
 
       <h2>Hur länge vi sparar</h2>
       <p>
         Ditt konto och tillhörande innehåll sparas så länge du har ett aktivt konto. Du kan när som
-        helst radera hela ditt konto och all data via{" "}
+        helst radera enskilda poster, enskilda Flow-samtal eller hela ditt konto med all data direkt
+        i appen under Inställningar → Avsluta konto. Vid utloggning rensas dessutom den lokala
+        kopian på enheten och den lokala krypteringsnyckeln raderas. Behöver du hjälp når du oss på{" "}
         <a href="mailto:camillabaksi@hotmail.com">camillabaksi@hotmail.com</a>.
       </p>
 
@@ -102,6 +130,13 @@ function PrivacyPage() {
         <li>Rätt att återkalla samtycke när som helst.</li>
         <li>Rätt att lämna klagomål till Integritetsskyddsmyndigheten (IMY).</li>
       </ul>
+
+      <h2>Barns uppgifter</h2>
+      <p>
+        Du kan lägga in barns scheman och aktiviteter för att få ihop familjens vardag. Lägg bara in
+        det som behövs, och undvik känsliga detaljer om andra personer. Du ansvarar för uppgifter om
+        andra som du väljer att spara.
+      </p>
 
       <h2>Cookies och lokal lagring</h2>
       <p>

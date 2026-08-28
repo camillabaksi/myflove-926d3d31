@@ -10,6 +10,16 @@ export const CHANGELOG_UPDATED = "2026-08-28";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Uppdaterade juridiska dokument",
+    items: [
+      "Integritetspolicy, villkor och cookiepolicy speglar dagens funktioner (2026-08-28)",
+      "Hälsodata beskrivs som särskild kategori med uttryckligt samtycke (2026-08-28)",
+      "Sparade Flow-samtal, notiser, Google-inloggning och delning beskrivs (2026-08-28)",
+      "Radering i appen samt rensning av lokal data och krypteringsnyckel vid utloggning (2026-08-28)",
+      "Cookiepolicyn beskriver krypterad lokal lagring och sessionsutkast (2026-08-28)",
+    ],
+  },
+  {
     title: "Spara samtal med Flow",
     items: [
       "Samtalslista i Prata med Flow med [+ Nytt samtal] högst upp (2026-08-28)",
