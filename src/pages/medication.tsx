@@ -179,7 +179,13 @@ export function MedicationContent({ showHeader = true }: MedicationContentProps)
                   </div>
                   <div>
                     <p className="font-medium">{med.name}</p>
-                    {med.dosage && <p className="text-sm text-muted-foreground">{med.dosage}</p>}
+                    <p className="text-sm text-muted-foreground">
+                      {med.dosage ? `${med.dosage} · ` : ""}
+                      {REPEAT_LABELS[med.repeat ?? "daily"]}
+                      {med.repeat && med.repeat !== "daily" && med.startDate
+                        ? ` från ${med.startDate}`
+                        : ""}
+                    </p>
                   </div>
                 </div>
                 <button
