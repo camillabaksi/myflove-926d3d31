@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-28 – Besöksanalys: sidvisningar
+
+- Varje sidvisning loggas nu anonymt (sektion "page", t.ex. /hem, /idag, /pitch) – du ser hur många som öppnar den delade länken och vilka sidor de besöker.
+- Admin-vyn (Appstatistik) har fått blocket "Mest besökta sidor" med visningar per sida och unika besökare.
+- Samma integritetsskydd som övrig statistik: inga användar-id, e-post, IP eller innehåll – bara vilken sida som öppnades. Respekterar användarens avstängning av anonym statistik.
+
+
 ## 2026-08-28 – Tydlig Flow på Hem
 
 - Flow-lärandekortet heter nu "Flow lär känna dig" och visar den riktiga Flow-maskoten tydligt, med texten "Jag börjar se mönster i hur din energi, dina aktiviteter och din vardag hänger ihop."

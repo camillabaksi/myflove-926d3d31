@@ -1,8 +1,9 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Outlet, createRootRouteWithContext, HeadContent, Scripts } from "@tanstack/react-router";
+import { Outlet, createRootRouteWithContext, HeadContent, Scripts, useRouterState } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
 import { initCacheBusting } from "@/lib/cache-busting";
+import { trackPageView } from "@/lib/analytics";
 
 import appCss from "../styles.css?url";
 import { Toaster } from "@/components/ui/toaster";
@@ -99,9 +100,14 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
   useEffect(() => {
     initCacheBusting();
   }, []);
+  // Besöksanalys: logga varje sidvisning anonymt (sektion "page").
+  useEffect(() => {
+    trackPageView(pathname);
+  }, [pathname]);
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>

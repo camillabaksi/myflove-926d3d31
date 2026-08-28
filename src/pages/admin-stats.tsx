@@ -6,6 +6,7 @@ import CollapsibleSection from "@/components/collapsible-section";
 import AnalyticsExport from "@/components/admin/analytics-export";
 
 const SECTION_LABELS: Record<string, string> = {
+  page: "Sidvisning",
   mood: "Mående",
   dump: "Dumping",
   calendar: "Kalender",
@@ -67,14 +68,19 @@ export default function AdminStats() {
   }
 
   const viewsBySection = (data?.featureUsage ?? [])
-    .filter((row) => row.action === "view")
+    .filter((row) => row.action === "view" && row.section !== "page")
+    .sort((a, b) => b.events - a.events);
+
+  const pageViews = (data?.featureUsage ?? [])
+    .filter((row) => row.section === "page")
     .sort((a, b) => b.events - a.events);
 
   const otherActions = (data?.featureUsage ?? [])
-    .filter((row) => row.action !== "view")
+    .filter((row) => row.action !== "view" && row.section !== "page")
     .sort((a, b) => b.events - a.events);
 
   const maxViews = Math.max(1, ...viewsBySection.map((row) => row.events));
+  const maxPageViews = Math.max(1, ...pageViews.map((row) => row.events));
   const maxDaily = Math.max(1, ...(data?.dailyActiveSessions ?? []).map((d) => d.sessions));
   const maxSignups = Math.max(1, ...(data?.dailySignups ?? []).map((d) => d.users));
 
@@ -290,6 +296,35 @@ export default function AdminStats() {
                       <div
                         className="h-full bg-primary rounded-full"
                         style={{ width: `${(row.events / maxViews) * 100}%` }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CollapsibleSection>
+
+            <CollapsibleSection
+              title="Mest besökta sidor"
+              headingClassName="text-lg font-semibold"
+              className="bg-card p-6 rounded-3xl border border-border shadow-sm"
+              description="Varje sidvisning i appen loggas anonymt — här ser du vilka sidor besökarna faktiskt öppnar."
+            >
+              {pageViews.length === 0 && (
+                <p className="text-sm text-muted-foreground">Ingen data än.</p>
+              )}
+              <div className="space-y-3">
+                {pageViews.map((row) => (
+                  <div key={row.action}>
+                    <div className="flex justify-between text-sm mb-1">
+                      <span className="font-medium">/{row.action}</span>
+                      <span className="text-muted-foreground">
+                        {row.events} visningar · {row.sessions} besökare
+                      </span>
+                    </div>
+                    <div className="h-2 rounded-full bg-secondary/50 overflow-hidden">
+                      <div
+                        className="h-full bg-primary rounded-full"
+                        style={{ width: `${(row.events / maxPageViews) * 100}%` }}
                       />
                     </div>
                   </div>

@@ -85,6 +85,33 @@ export function resetAnalyticsDedupe(): void {
 }
 
 /**
+ * Spårar en sidvisning (besöksanalys). Anropas automatiskt vid varje
+ * navigering i appen. Sökvägen mappas om till en säker, anonym etikett
+ * (t.ex. "/mitt-batteri" → "mitt-batteri", "/" → "start") och dedupliceras
+ * så att samma sida inte loggas flera gånger i rad.
+ */
+const lastTrackedPath = { value: "" as string, at: 0 };
+
+export function trackPageView(pathname: string): void {
+  if (typeof window === "undefined") return;
+  if (!analyticsEnabled()) return;
+  const slug =
+    pathname === "/"
+      ? "start"
+      : pathname
+          .replace(/^\/+|\/+$/g, "")
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .slice(0, 48);
+  if (!slug || !sanitizeEventName(slug)) return;
+  const now = Date.now();
+  if (lastTrackedPath.value === slug && now - lastTrackedPath.at < VIEW_DEDUPE_MS) return;
+  lastTrackedPath.value = slug;
+  lastTrackedPath.at = now;
+  trackEvent("page", slug);
+}
+
+/**
  * Det enda sättet att logga produktflöden i MyFlove.
  * Namnet måste finnas i event-schemat och payloaden saneras innan den skickas,
  * så att inget känsligt innehåll kan följa med. Exakt ett event skickas per
