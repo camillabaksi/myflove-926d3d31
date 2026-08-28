@@ -122,6 +122,7 @@ export default function QuickCheckin({ className }: { className?: string }) {
             <span aria-hidden>❤️</span> Hur är det just nu?
           </span>
         }
+        description="Det här hjälper Flow förstå hur din energi förändras under dagen och vad som brukar påverka dig."
         headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
         className="space-y-5"
         actions={
