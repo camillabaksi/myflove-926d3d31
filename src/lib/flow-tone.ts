@@ -71,7 +71,8 @@ export function homeContextLine(ctx: HomeContext): string {
   if (batteryTone(battery) === "low" && remainingToday > 0)
     return "Det verkar vara lite ont om batteri idag. En sak i taget.";
   if (nextTitle) return `Du är mitt i dagen. Nästa är ${nextTitle.toLowerCase()}.`;
-  if (remainingToday === 0 && completedToday > 0) return "Inget mer inplanerat just nu. Fint jobbat.";
+  if (remainingToday === 0 && completedToday > 0)
+    return "Inget mer inplanerat just nu. Fint jobbat.";
   if (remainingToday > 0)
     return `Det är ${remainingToday} ${remainingToday === 1 ? "sak" : "saker"} kvar. Vi behöver inte ta alla nu.`;
   return "Lugnt läge just nu. Jag finns här.";

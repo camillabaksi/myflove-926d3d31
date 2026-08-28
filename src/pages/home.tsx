@@ -211,7 +211,10 @@ export default function Home() {
 
   /* Hem säger olika saker beroende på dagen – samma kort, levande innehåll. */
   const completedToday = tasks.filter(
-    (t) => t.completed && t.completedAt != null && new Date(t.completedAt).toISOString().slice(0, 10) === todayIso,
+    (t) =>
+      t.completed &&
+      t.completedAt != null &&
+      new Date(t.completedAt).toISOString().slice(0, 10) === todayIso,
   ).length;
   const remainingToday = activeTasks.filter((t) => !t.dueDate || t.dueDate === todayIso).length;
   const contextLine = homeContextLine({

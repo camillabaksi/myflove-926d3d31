@@ -148,9 +148,7 @@ export function useFlowMoment(): FlowMoment {
         ...base,
         id: "done",
         scene: "done",
-        message: reaction.followUp
-          ? `${reaction.message} ${reaction.followUp}`
-          : reaction.message,
+        message: reaction.followUp ? `${reaction.message} ${reaction.followUp}` : reaction.message,
         link: { href: "/idag", label: "Idag" },
       };
     }

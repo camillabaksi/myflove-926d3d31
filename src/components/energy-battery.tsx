@@ -23,7 +23,6 @@ export default function EnergyBattery({
   const { reading, suggestions } = useEnergyBattery();
   const [open, setOpen] = useState(defaultOpen);
 
-
   const level = Math.round(reading.now);
   // Siffran räknas mjukt upp/ner när energin ändras (hoppar direkt vid reducerad rörelse).
   const shownLevel = Math.round(useAnimatedNumber(level));
@@ -132,7 +131,6 @@ export default function EnergyBattery({
           {open ? "Dölj detaljer ˄" : "Visa detaljer ˅"}
         </span>
       </button>
-
 
       {/* Liten kurva alltid synlig – känslan av dagen, inte en teknisk graf */}
       <div className="mt-3">
