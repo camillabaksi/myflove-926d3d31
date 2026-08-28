@@ -6,6 +6,14 @@ import { Button } from "@/components/ui/button";
 import { Pill, Plus, Trash2, Check, Clock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { getRandomEncouragement } from "@/lib/encouragements";
+import { REPEAT_LABELS, type RepeatMode } from "@/lib/recurrence";
+
+const REPEAT_OPTIONS: Array<{ value: RepeatMode; label: string }> = [
+  { value: "daily", label: "Varje dag" },
+  { value: "weekdays", label: "Vardagar" },
+  { value: "weekly", label: "Varje vecka" },
+  { value: "none", label: "En gång" },
+];
 
 interface MedicationContentProps {
   showHeader?: boolean;
