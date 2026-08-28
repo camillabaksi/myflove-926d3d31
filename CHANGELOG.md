@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-08-28 – Flow-närvaro, minimerbara block och smart tillbaka
+
+- Flow-maskoten är något större på de platser där den redan visas (mini 80 px, inline och hero något högre) – samma maskot, samma identitet.
+- Flows små rörelser är fortsatt sparsamma och situationsbaserade och respekterar `prefers-reduced-motion`.
+- "Mitt batteri" på Hem och "Energins historik idag" går nu att minimera/maximera med samma chevron-kontroll som övriga block.
+- Minimerat läge kommer ihåg sig lokalt per sida (endast UI-preferens, ingen data påverkas).
+- Ny delad hook `useSmartBack` – Tillbaka följer appens riktiga routerhistorik och faller bara tillbaka till Hem vid direktladdning.
+- Tillbaka-knapparna i sidhuvudet, layouten och Insight använder nu samma logik, utan egen parallell historik.
+
 ## 2026-08-28 – Hem-kategorin: Inköpslista och Städning
 
 - Inköpslista och Städning ligger nu tydligt under huvudkategorin **Hem** i menyn.

@@ -1,17 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import {
-  ArrowLeft,
-  Brain,
-  Check,
-  ChevronRight,
-  Home,
-  Info,
-  Plus,
-  Sparkles,
-  X,
-} from "lucide-react";
+import { ArrowLeft, Brain, Check, ChevronRight, Home, Info, Plus, Sparkles, X } from "lucide-react";
 import { toast } from "sonner";
+import { useSmartBack } from "@/hooks/use-smart-back";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -46,7 +37,6 @@ import { track } from "@/lib/analytics";
 import CollapsibleSection from "@/components/collapsible-section";
 import InsightApplySetting from "@/components/insight-apply-setting";
 import { MyFloveInsightGather } from "@/components/myflove/motion";
-
 
 const ANALYSIS_STEPS = [
   "Identifierar styrkor",
@@ -134,7 +124,9 @@ function AreaStrategies({
               </span>
               <span className="flex-1">
                 <span className="block font-medium">{area.label}</span>
-                {!isOpen && <span className="block text-sm text-muted-foreground">{area.intro}</span>}
+                {!isOpen && (
+                  <span className="block text-sm text-muted-foreground">{area.intro}</span>
+                )}
               </span>
               <ChevronRight
                 size={18}
@@ -189,7 +181,6 @@ function AreaStrategies({
   );
 }
 
-
 export default function InsightPage() {
   const [seenIntro, setSeenIntro] = useLocalStorage<boolean>("myflove-insight-intro", false);
   const [introOpen, setIntroOpen] = useState(!seenIntro);
@@ -233,13 +224,11 @@ export default function InsightPage() {
     // Bara vy och beredskapsläge – aldrig några råvärden om användaren.
   }, [demoMode, personal.ready]);
 
-
   const areas = useMemo<InsightAreaId[]>(() => {
     if (profile) return profile.areas;
     if (customNeeds.trim()) return matchAreasFromNeeds(customNeeds.split("\n"));
     return [];
   }, [profile, customNeeds]);
-
 
   const startAnalysis = (p: DemoProfile | null) => {
     setProfile(p);
@@ -280,6 +269,8 @@ export default function InsightPage() {
     });
   };
 
+  const goBack = useSmartBack("/hem");
+
   const toggleContext = (c: InsightContext) =>
     setContexts((prev) => (prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c]));
 
@@ -295,10 +286,7 @@ export default function InsightPage() {
         <div className="flex items-start gap-3">
           <button
             type="button"
-            onClick={() => {
-              if (window.history.length > 1) window.history.back();
-              else window.location.assign("/hem");
-            }}
+            onClick={goBack}
             aria-label="Tillbaka"
             className="press mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-pill bg-card/70 text-ink"
           >
@@ -319,7 +307,6 @@ export default function InsightPage() {
             <Home size={14} /> Hem
           </Link>
         </div>
-
       </header>
 
       {!demoMode && (
@@ -456,7 +443,6 @@ export default function InsightPage() {
       {demoMode && phase === "analys" && <AnalysisView onDone={() => setPhase("resultat")} />}
 
       {demoMode && phase === "resultat" && (
-
         <div className="space-y-5">
           <div className="p-5 rounded-3xl bg-card border border-border space-y-3">
             <div className="flex items-start justify-between gap-3">
@@ -497,7 +483,6 @@ export default function InsightPage() {
             maxFriction={flow.maxFriction}
             onAdd={openAdd}
           />
-
         </div>
       )}
 
@@ -522,8 +507,6 @@ export default function InsightPage() {
           </Link>
         ) : null}
       </p>
-
-
 
       {saved.length > 0 && (
         <CollapsibleSection

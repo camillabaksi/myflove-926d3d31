@@ -16,6 +16,7 @@ const state = {
 vi.mock("@tanstack/react-router", () => ({
   Link: ({ children, ...rest }: { children: React.ReactNode }) => <a {...rest}>{children}</a>,
   useNavigate: () => vi.fn(),
+  useRouter: () => ({ history: { canGoBack: () => false, length: 1, back: vi.fn() }, navigate: vi.fn() }),
   useRouterState: ({ select }: { select: (s: unknown) => unknown }) =>
     select({ location: { search: state.demo ? { demo: "1" } : {} } }),
 }));

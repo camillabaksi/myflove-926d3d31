@@ -10,6 +10,16 @@ export const CHANGELOG_UPDATED = "2026-08-28";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Flow-närvaro, minimerbara block och smart tillbaka",
+    items: [
+      "Flow-maskoten är något större där den redan visas – samma maskot och identitet (2026-08-28)",
+      "Flows rörelser är fortsatt sparsamma och respekterar prefers-reduced-motion (2026-08-28)",
+      "Mitt batteri på Hem och Energins historik idag går att minimera och maximera (2026-08-28)",
+      "Minimerat läge kommer ihåg sig lokalt per sida och påverkar aldrig din data (2026-08-28)",
+      "Tillbaka följer appens riktiga historik och faller bara tillbaka till Hem vid direktladdning (2026-08-28)",
+    ],
+  },
+  {
     title: "Hem-kategorin: Inköpslista och Städning",
     items: [
       "Inköpslista och Städning ligger nu tydligt under huvudkategorin Hem i menyn (2026-08-28)",
