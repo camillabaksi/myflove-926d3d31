@@ -148,7 +148,7 @@ export default function WalkRoutesSection() {
           <RouteIcon size={18} className="text-primary" /> Promenadvägar nära dig
         </>
       }
-      description="Hitta en promenad som passar din energi just nu. Säg hur länge eller hur långt du vill gå – Flow föreslår gångbara vägar och öppnar dem i kartan."
+      description={walkExplainer ?? undefined}
       help="Flow använder din plats för att hitta gångvägar, stigar och lugna gator åt olika håll. Förslagen är rundor tur och retur, öppna dem i Google Maps för vägbeskrivning."
     >
       {advice && (
