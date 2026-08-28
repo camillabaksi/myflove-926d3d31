@@ -112,7 +112,7 @@ export function normalizeMedications(raw: unknown): Medication[] {
 }
 
 function signature(med: Medication): string {
-  return `${med.name.toLowerCase().trim()}|${med.times.join(",")}`;
+  return `${med.name.toLowerCase().trim()}|${med.times.join(",")}|${med.repeat ?? "daily"}|${med.startDate ?? ""}`;
 }
 
 /** Tar bort dubbletter både på id och på namn+tider (samma medicin två gånger). */
