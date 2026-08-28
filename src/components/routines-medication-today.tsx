@@ -3,10 +3,12 @@ import { Link } from "wouter";
 import { Check, ArrowRight, Undo2, Repeat, Pill } from "lucide-react";
 import { useMedications, useReminders } from "@/hooks/use-data";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
+import { useDoneLog } from "@/hooks/use-done-log";
 import { useToast } from "@/hooks/use-toast";
 import { getRandomEncouragement } from "@/lib/encouragements";
 import { routineOccursOn, type Routine } from "@/pages/routines";
 import { medicationOccursOn } from "@/lib/medications";
+
 
 /**
  * 🔁💊 Rutiner & medicin – ett gemensamt, ihopfällbart block längst ner på Hem.
@@ -33,10 +35,10 @@ export default function RoutinesMedicationToday() {
   const { medications, isTaken, toggleTaken } = useMedications();
   const { reminders, toggleReminder } = useReminders();
   const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
-  const [routineDone, setRoutineDone] = useCloudSyncedStorage<string[]>(
-    "myflove-routines-done",
-    [],
-  );
+  // Rutiner bockas av i den gemensamma genomförandeloggen – samma status
+  // som i Idag, Flow och "Nästa" på Hem.
+  const { isDone, toggleDone } = useDoneLog();
+
   const { toast } = useToast();
   const todayIso = new Date().toISOString().slice(0, 10);
   const nowMin = new Date().getHours() * 60 + new Date().getMinutes();
@@ -50,26 +52,18 @@ export default function RoutinesMedicationToday() {
       const match = reminders.find(
         (rem) => rem.date === todayIso && rem.time === r.time && rem.title === r.title,
       );
-      const localKey = `${todayIso}:${r.id}`;
-      const done = match ? !!match.completed : (routineDone ?? []).includes(localKey);
+      const routineKey = `routine-${r.id}`;
+      const done = isDone(routineKey) || (match ? !!match.completed : false);
       list.push({
-        key: `routine-${r.id}`,
+        key: routineKey,
         kind: "rutin",
         title: r.title,
         time: r.time,
         minutes: minutesOf(r.time),
         done,
         toggle: () => {
-          if (match) {
-            toggleReminder(match.id);
-          } else {
-            setRoutineDone((prev) => {
-              const arr = prev ?? [];
-              return arr.includes(localKey)
-                ? arr.filter((x) => x !== localKey)
-                : [...arr, localKey];
-            });
-          }
+          toggleDone(routineKey);
+          if (match) toggleReminder(match.id);
           if (!done) toast({ description: `🔁 ${r.title} – klart. ${getRandomEncouragement()}` });
         },
       });
@@ -100,12 +94,12 @@ export default function RoutinesMedicationToday() {
   }, [
     routines,
     reminders,
-    routineDone,
     medications,
     isTaken,
     toggleTaken,
     toggleReminder,
-    setRoutineDone,
+    isDone,
+    toggleDone,
     toast,
     todayIso,
   ]);

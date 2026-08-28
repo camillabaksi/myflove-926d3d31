@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "wouter";
-import { ArrowRight, Battery, Dumbbell, Pill, Zap } from "lucide-react";
+import { ArrowRight, Battery, Dumbbell, Pill } from "lucide-react";
 import Layout from "@/components/layout";
 import { MyFloveHeader } from "@/components/myflove";
 import EnergyBattery from "@/components/energy-battery";
@@ -9,7 +9,8 @@ import { track } from "@/lib/analytics";
 /**
  * ❤️ Hälsa – ett samlat hem för allt som handlar om hur du mår.
  * Sidan äger ingen egen data: den länkar vidare till de befintliga
- * vyerna (Mitt batteri, Träning, Rutiner & medicin, Energins historik).
+ * vyerna (Mitt batteri, Träning och Rutiner & medicin). Energihistoriken
+ * finns redan som en flik inne i Mitt batteri och är inte en egen ingång här.
  */
 const AREAS: {
   href: string;
@@ -28,12 +29,6 @@ const AREAS: {
     icon: Pill,
     title: "Rutiner & medicin",
     what: "Morgonstart, fasta rutiner och dagens doser.",
-  },
-  {
-    href: "/energifloede",
-    icon: Zap,
-    title: "Energins historik",
-    what: "Vad som brukar ge och ta energi över tid.",
   },
 ];
 

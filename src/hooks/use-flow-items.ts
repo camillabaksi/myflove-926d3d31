@@ -9,8 +9,9 @@ import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import { useDoneLog } from "@/hooks/use-done-log";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { getArea } from "@/lib/life-areas";
-import type { Routine } from "@/pages/routines";
+import { routineOccursOn, type Routine } from "@/pages/routines";
 import { occursOn } from "@/lib/recurrence";
+
 import {
   daysUntilDate,
   priorityFor,
@@ -167,7 +168,7 @@ export function useFlowItems(dateISO?: string): {
     }
 
     for (const r of routines ?? []) {
-      if (!r.enabled || !r.time) continue;
+      if (!r.enabled || !r.time || !routineOccursOn(r, targetDay)) continue;
       const id = `routine-${r.id}`;
       out.push({
         id,

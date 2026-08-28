@@ -41,6 +41,7 @@ import {
 import { buildPersonalInsight, INSIGHT_EXAMPLES } from "@/lib/insight-personal";
 import { useFlowLearning } from "@/hooks/use-flow-learning";
 import { useVisitStreak } from "@/hooks/use-visit-streak";
+import { useIsAdmin } from "@/hooks/use-is-admin";
 import { track } from "@/lib/analytics";
 import CollapsibleSection from "@/components/collapsible-section";
 import InsightApplySetting from "@/components/insight-apply-setting";
@@ -204,10 +205,13 @@ export default function InsightPage() {
   const { flow } = useFlowScore();
   const { saved, addStrategy, removeStrategy, hasStrategy } = useInsightStrategies();
 
-  // Demoläge (fiktiva testprofiler) nås bara explicit via ?demo=1.
-  const demoMode = useRouterState({
+  // Demoläge är en adminfunktion och kräver både explicit URL-flagga och
+  // servervaliderad admin-roll. Vanliga användare kan aldrig öppna testprofiler.
+  const { isAdmin, loading: adminLoading } = useIsAdmin();
+  const requestedDemoMode = useRouterState({
     select: (s) => (s.location.search as Record<string, unknown> | undefined)?.["demo"] === "1",
   });
+  const demoMode = requestedDemoMode && isAdmin && !adminLoading;
 
   const knowledge = useFlowLearning();
   const { totalDays } = useVisitStreak();
@@ -507,7 +511,7 @@ export default function InsightPage() {
           >
             Tillbaka till mina egna insikter
           </Link>
-        ) : (
+        ) : isAdmin && !adminLoading ? (
           <Link
             to="/insight"
             search={{ demo: "1" }}
@@ -516,7 +520,7 @@ export default function InsightPage() {
           >
             Öppna demoläge med fiktiva testprofiler
           </Link>
-        )}
+        ) : null}
       </p>
 
 
