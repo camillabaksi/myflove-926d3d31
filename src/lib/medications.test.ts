@@ -22,6 +22,8 @@ const med = (over: Partial<Medication> = {}): Medication => ({
 
 describe("medicin – en källa för lista och påminnelser", () => {
   beforeEach(async () => {
+    // Låt eventuella asynkrona krypteringsskrivningar från förra testet landa.
+    await new Promise((r) => setTimeout(r, 20));
     installIndexedDbMock();
     resetIndexedDbMock();
     window.localStorage.clear();
