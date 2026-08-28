@@ -274,9 +274,7 @@ export default function FlowPlanPage() {
               <p className="text-sm font-medium text-primary">
                 Här bestämmer du ordningen på dagen
               </p>
-              {planExplainer && (
-                <p className="text-sm text-muted-foreground">{planExplainer}</p>
-              )}
+              {planExplainer && <p className="text-sm text-muted-foreground">{planExplainer}</p>}
               <div className="mt-1">
                 <WhyHint label="planera">
                   Planering kan hjälpa dig använda din energi på sådant som är viktigt för dig.

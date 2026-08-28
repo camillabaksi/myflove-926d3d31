@@ -112,9 +112,7 @@ export default function SimpleCheckin({
             Det hjälper Flow se vad som brukar ge eller ta energi för dig.
           </WhyHint>
         </div>
-        {energyExplainer && (
-          <p className="text-xs text-muted-foreground">{energyExplainer}</p>
-        )}
+        {energyExplainer && <p className="text-xs text-muted-foreground">{energyExplainer}</p>}
         <div className="flex gap-1.5">
           {LEVELS.map((l) => (
             <button
