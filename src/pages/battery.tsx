@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link } from "wouter";
-import { ArrowRight, LineChart, Hand, Smile, Battery, Zap } from "lucide-react";
+import { ArrowRight, LineChart, Smile, Battery, Zap } from "lucide-react";
 import Layout from "@/components/layout";
 import { MyFloveHeader } from "@/components/myflove";
 import EnergyBattery from "@/components/energy-battery";
@@ -8,7 +8,6 @@ import SimpleCheckin from "@/components/simple-checkin";
 import DayEdgesCheckin from "@/components/day-edges-checkin";
 import DayEnergyFlow from "@/components/day-energy-flow";
 import CollapsibleSection from "@/components/collapsible-section";
-import StopModal from "@/components/stop-modal";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { MoodContent } from "@/pages/mood";
 import { EnergyContent } from "@/pages/energy-map";
@@ -20,10 +19,9 @@ import { track } from "@/lib/analytics";
  * Hierarki: 1) Snabb incheckning, 2) Nuvarande batteri/översikt,
  * 3) Dagens energiflöde, 4) Historik som sekundär funktion längst ner.
  * Samma data som tidigare, bara tydligare ordning.
+ * Stop-paus har flyttat till Mer → Stop-paus.
  */
 export default function BatteryPage() {
-  const [stopOpen, setStopOpen] = useState(false);
-
   useEffect(() => {
     track("battery_opened", { source: "sida" });
   }, []);
@@ -47,16 +45,6 @@ export default function BatteryPage() {
         <DayEdgesCheckin />
         <DayEnergyFlow />
 
-        <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
-          <button
-            type="button"
-            onClick={() => setStopOpen(true)}
-            className="inline-flex items-center gap-1.5 text-muted-foreground underline underline-offset-2 hover:text-foreground"
-          >
-            <Hand size={14} aria-hidden="true" /> Stop – ta en paus först
-          </button>
-        </div>
-        <StopModal open={stopOpen} onOpenChange={setStopOpen} />
 
         {/* 4. Historik – sekundär, längst ner */}
         <section
