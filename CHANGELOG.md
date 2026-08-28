@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-28 – Enklare incheckning och tydligare mönster
+
+- Snabb incheckning är nu 1–5 på batteriet med ett tryck, mående är valfritt och du kan markera vad som påverkar dig (Sömn, Stress, Ljud/intryck, Mat, Socialt, Kroppen, Annat). Faktorerna sparas i ditt energiflöde.
+- Flow-kortet på Hem har en tydlig länk: "Se vad jag har upptäckt" – går direkt till Mina mönster.
+- Flows lärande-länk heter nu "Mina mönster" i stället för "Vad jag lärt mig".
+- Fler mätpunkter i appstatistiken (fånga → förstå → planera → börja → klart → lär) utan känsligt innehåll.
+
 ## 2026-08-28 – Medicinlistan och medicinpåminnelserna läser samma data
 
 - Medicinlistan har nu en enda källa (`myflove-medications`). Gamla nycklar (`myflow-medications`, `myflow-medication-log`) migreras in automatiskt, utan dubbletter.
