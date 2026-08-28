@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
+import { useDoneLog } from "@/hooks/use-done-log";
 import { useMedications, useReminders } from "@/hooks/use-data";
 import { useTraining } from "@/hooks/use-training";
 import { routineOccursOn, type Routine } from "@/pages/routines";
@@ -19,6 +20,7 @@ const todayIso = () => new Date().toISOString().slice(0, 10);
 export function useDayDone(): { lines: DayDoneLine[]; anything: boolean } {
   const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
   const { reminders } = useReminders();
+  const { isDone } = useDoneLog();
   const { medications, isTaken } = useMedications();
   const { doneToday: sessionsDone, stepsToday, state: trainingState } = useTraining();
   const stepGoal = trainingState.stepGoal;
@@ -27,10 +29,7 @@ export function useDayDone(): { lines: DayDoneLine[]; anything: boolean } {
     const today = todayIso();
 
     const activeRoutines = routines.filter((r) => r.enabled && routineOccursOn(r, today));
-    const routineTitles = new Set(activeRoutines.map((r) => r.title));
-    const routinesDone = reminders.filter(
-      (r) => r.date === today && r.completed && routineTitles.has(r.title),
-    ).length;
+    const routinesDone = activeRoutines.filter((routine) => isDone(`routine-${routine.id}`)).length;
 
     let doses = 0;
     let dosesTaken = 0;
@@ -66,5 +65,5 @@ export function useDayDone(): { lines: DayDoneLine[]; anything: boolean } {
     }
 
     return { lines, anything: lines.length > 0 };
-  }, [routines, reminders, medications, isTaken, sessionsDone.length, stepsToday, stepGoal]);
+  }, [routines, reminders, isDone, medications, isTaken, sessionsDone.length, stepsToday, stepGoal]);
 }

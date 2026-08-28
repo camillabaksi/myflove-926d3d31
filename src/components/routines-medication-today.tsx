@@ -63,7 +63,7 @@ export default function RoutinesMedicationToday() {
         done,
         toggle: () => {
           toggleDone(routineKey);
-          if (match && match.completed) toggleReminder(match.id);
+          if (match) toggleReminder(match.id);
           if (!done) toast({ description: `🔁 ${r.title} – klart. ${getRandomEncouragement()}` });
         },
       });
