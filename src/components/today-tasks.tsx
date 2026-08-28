@@ -9,7 +9,7 @@ import type { FlowItem } from "@/lib/flow-items";
 /**
  * Dagens saker direkt på hemskärmen – allt som användaren faktiskt ska
  * genomföra idag: uppgifter, händelser, barnens hållpunkter, rutiner,
- * lektioner och tankar. Samma kort och samma avbockning som i Min dag och
+ * lektioner och tankar. Samma kort och samma avbockning som i Idag och
  * Flow, så status alltid är densamma i hela appen.
  *
  * Färgen på kortet visar livsområde. Bocken visar om det är genomfört –
@@ -98,8 +98,8 @@ export function TodayTasks({
             className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
           >
             {todayOpen.length > shown.length
-              ? `Se hela dagen (${todayOpen.length}) i Min dag`
-              : "Se hela dagen i Min dag"}{" "}
+              ? `Se hela dagen (${todayOpen.length}) i Idag`
+              : "Se hela dagen i Idag"}{" "}
             <ArrowRight size={14} />
           </Link>
         ) : (

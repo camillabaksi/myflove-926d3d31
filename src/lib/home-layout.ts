@@ -32,7 +32,7 @@ export const HOME_BLOCKS: HomeBlockMeta[] = [
   {
     id: "idag",
     label: "Dagens översikt",
-    hint: "Kort sammanfattning – hela listan finns i Min dag",
+    hint: "Kort sammanfattning – hela listan finns i Idag",
   },
   { id: "forslag", label: "Rekommendation just nu", hint: "Ett förslag – samma som i Planera" },
   { id: "lagg-till", label: "Lägg till", hint: "Snabbknapp för ny uppgift" },

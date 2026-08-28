@@ -49,7 +49,7 @@ const SITUATIONS: Situation[] = [
 
     emoji: "🗓️",
     thought: "Jag behöver planera min dag",
-    action: "Min dag – se och planera dagen",
+    action: "Idag – hela dagens lista",
   },
   {
     href: "#did-this",
@@ -176,7 +176,7 @@ function useNextEvent(): NextEvent | null {
 
 /**
  * Ett enda Flow-förslag – hämtat från samma motor som Flow → NU,
- * så att Hem, Min dag och Flow alltid säger samma sak.
+ * så att Hem, Idag och Flow alltid säger samma sak.
  */
 function useFlowSuggestion(): NowSuggestion {
   const { reading } = useEnergyBattery();
@@ -387,7 +387,7 @@ export default function Home() {
           </section>
         )}
 
-        {/* Dagens översikt – bara en sammanfattning. Hela listan bor i Min dag. */}
+        {/* Dagens översikt – bara en sammanfattning. Hela listan bor i Idag. */}
 
         {shows("idag") && (
           <div style={pos("idag")}>
@@ -395,7 +395,7 @@ export default function Home() {
           </div>
         )}
 
-        {/* Flow just nu – samma förslag som i Planering, tydligt signerat Flow */}
+        {/* Flow just nu – samma förslag som i Planera, tydligt signerat Flow */}
         {shows("forslag") && (
           <section
             style={pos("forslag")}
@@ -428,7 +428,7 @@ export default function Home() {
                 href={suggestion.task ? "/idag" : "/quickflow"}
                 className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
               >
-                {suggestion.task ? "Planera i Min dag" : "Fånga något i QuickFlow"}{" "}
+                {suggestion.task ? "Planera i Idag" : "Fånga något i QuickFlow"}{" "}
                 <ArrowRight size={14} />
               </Link>
             </CollapsibleSection>
@@ -590,7 +590,7 @@ function DaySummary() {
         href="/idag"
         className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
       >
-        Se hela dagen i Min dag <ArrowRight size={14} />
+        Se hela dagen i Idag <ArrowRight size={14} />
       </Link>
     </section>
   );

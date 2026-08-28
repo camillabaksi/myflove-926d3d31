@@ -10,7 +10,7 @@ import FlowDeck from "@/components/flow/flow-deck";
  */
 export default function FlowPage() {
   useEffect(() => {
-    track("flow_opened", { source: "sida" });
+    track("flow_viewed", { source: "sida" });
   }, []);
 
   return (

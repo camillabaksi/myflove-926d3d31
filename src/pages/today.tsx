@@ -40,7 +40,7 @@ type DayView = "flow" | "lista";
  */
 export default function TodayPage() {
   useEffect(() => {
-    track("my_day_viewed", { source: "sida" });
+    track("today_viewed", { source: "sida" });
   }, []);
 
   const today = todayStr();
@@ -132,11 +132,11 @@ export default function TodayPage() {
       <div className="space-y-5">
         <header>
           <h1 className="flex items-center gap-2 font-display text-3xl text-ink">
-            <Heart className="h-7 w-7 text-primary" /> Min dag
+            <Heart className="h-7 w-7 text-primary" /> Idag
           </h1>
           <p className="mt-1 text-sm font-medium text-primary">Vad som händer idag</p>
           <p className="mt-0.5 text-muted-foreground">
-            Allt som hör till idag – på ett ställe. Vill du ändra ordningen gör du det i Planering.
+            Allt som hör till idag – på ett ställe. Vill du ändra ordningen gör du det i Planera.
           </p>
         </header>
 
@@ -181,7 +181,7 @@ export default function TodayPage() {
         >
           <EnergyBattery
             href="/mitt-batteri"
-            onNavigate={() => track("battery_opened", { source: "min-dag" })}
+            onNavigate={() => track("battery_opened", { source: "idag" })}
           />
           <FlowCompanion stage="mini" />
         </StepSection>
