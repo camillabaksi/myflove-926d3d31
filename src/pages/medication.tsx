@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useFlowExplainer } from "@/hooks/use-flow-explainer";
 import Layout from "@/components/layout";
 import { MyFloveEmptyIllustration } from "@/components/myflove/motion";
 import { useMedications } from "@/hooks/use-data";
@@ -20,6 +21,8 @@ interface MedicationContentProps {
 }
 
 export function MedicationContent({ showHeader = true }: MedicationContentProps) {
+  const { explain } = useFlowExplainer();
+  const medExplainer = explain("medicin");
   const { medications, addMedication, deleteMedication, isTaken, toggleTaken } = useMedications();
   const { toast } = useToast();
   const [name, setName] = useState("");

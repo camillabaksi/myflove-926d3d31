@@ -17,6 +17,7 @@ import { suggestWalkRoutes, type WalkRoute } from "@/lib/walk-routes.functions";
 import { useToast } from "@/hooks/use-toast";
 import { useWeather } from "@/hooks/use-weather";
 import { weatherAdvice } from "@/lib/weather-advice";
+import { useFlowExplainer } from "@/hooks/use-flow-explainer";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
 
 const MINUTES = [15, 30, 45, 60, 90];
@@ -42,6 +43,8 @@ function suggestedMinutes(battery: number): number {
 
 export default function WalkRoutesSection() {
   const run = useServerFn(suggestWalkRoutes);
+  const { explain } = useFlowExplainer();
+  const walkExplainer = explain("promenad");
   const { toast } = useToast();
   const advice = weatherAdvice(useWeather());
   const { reading } = useEnergyBattery();

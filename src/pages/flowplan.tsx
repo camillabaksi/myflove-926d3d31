@@ -77,6 +77,8 @@ function timeAgo(iso: string) {
 }
 
 export default function FlowPlanPage() {
+  const { explain } = useFlowExplainer();
+  const planExplainer = explain("planering");
   const { activeTasks, toggleTask, setTaskDueDate } = useTasks();
   const { currentFocus } = useFocus();
   const [energy, setEnergy] = useState<Energy>("medium");
