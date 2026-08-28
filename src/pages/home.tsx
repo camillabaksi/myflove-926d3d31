@@ -47,7 +47,8 @@ interface Situation {
 
 const SITUATIONS: Situation[] = [
   {
-    href: "/min-dag",
+    href: "/idag",
+
     emoji: "🗓️",
     thought: "Jag behöver planera min dag",
     action: "Min dag – se och planera dagen",
