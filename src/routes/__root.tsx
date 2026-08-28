@@ -111,12 +111,13 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <div key={pathname} className="page-transition">
+        <PageTransition>
           <Outlet />
-        </div>
+        </PageTransition>
         <Toaster />
         <Sonner />
       </TooltipProvider>
     </QueryClientProvider>
   );
+
 }
