@@ -43,7 +43,11 @@ export const APP_GUIDE: GuideGroup[] = [
       { href: "/kalender", label: "Kalender", what: "Alla tider på en plats, med filter per rum" },
       { href: "/tasks", label: "Att göra", what: "Dina uppgifter, med tid och energinivå" },
       { href: "/paminnelser", label: "Påminnelser", what: "Notiser och alarm som knuffar dig" },
-      { href: "/daglig-rutin", label: "Rutiner & medicin", what: "Morgonstart, rutiner och medicin" },
+      {
+        href: "/daglig-rutin",
+        label: "Rutiner & medicin",
+        what: "Morgonstart, rutiner och medicin",
+      },
       { href: "/pomodoro", label: "Timer", what: "Jobba en stund, ta paus" },
     ],
   },
@@ -53,8 +57,16 @@ export const APP_GUIDE: GuideGroup[] = [
     label: "Mående & energi",
     hint: "Hur du mår och hur mycket ork du har",
     entries: [
-      { href: "/mitt-batteri", label: "Mitt batteri", what: "Logga humör och ork på några sekunder" },
-      { href: "/energifloede", label: "Energins historik", what: "Vad som brukar ge och ta energi" },
+      {
+        href: "/mitt-batteri",
+        label: "Mitt batteri",
+        what: "Logga humör och ork på några sekunder",
+      },
+      {
+        href: "/energifloede",
+        label: "Energins historik",
+        what: "Vad som brukar ge och ta energi",
+      },
       { href: "/traning", label: "Träning", what: "Rörelse i lagom dos" },
       { href: "/statistik", label: "Statistik", what: "Dina mönster över tid" },
     ],
@@ -102,7 +114,11 @@ export const APP_GUIDE: GuideGroup[] = [
     hint: "Anpassning och profil",
     entries: [
       { href: "/min-livsprofil", label: "Min livsprofil", what: "Din vardag, styrkor och behov" },
-      { href: "/anpassa-hem", label: "Anpassa hemskärmen", what: "Välj block, ordning och genvägar" },
+      {
+        href: "/anpassa-hem",
+        label: "Anpassa hemskärmen",
+        what: "Välj block, ordning och genvägar",
+      },
       { href: "/anpassa", label: "Anpassa appen", what: "Lugnare färger, färre saker, tyst läge" },
       { href: "/insight", label: "Insight", what: "Testa strategier och se vad som funkar" },
     ],

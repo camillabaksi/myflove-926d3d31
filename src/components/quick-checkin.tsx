@@ -85,7 +85,6 @@ function ScaleSlider({
   );
 }
 
-
 /**
  * "Hur är det just nu?" – två separata 1–10-värden för mående och energi.
  * Går att justera hur många gånger som helst under dagen.
@@ -188,7 +187,6 @@ export default function QuickCheckin({ className }: { className?: string }) {
             ? "Sparat. Du kan justera när du vill under dagen."
             : "Dra till det som stämmer just nu, eller tryck bara Logga. Inget är rätt eller fel."}
         </p>
-
       </CollapsibleSection>
     </section>
   );

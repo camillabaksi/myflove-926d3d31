@@ -127,7 +127,7 @@ const catColor = (id: string, alpha?: number) => {
 
 const SECTION_BY_PATH: Record<string, string> = {
   "/": "home",
-  "/ma-bra": "ma-bra",
+  "/mitt-batteri": "mitt-batteri",
   "/energifloede": "energifloede",
   "/daglig-rutin": "daglig-rutin",
   "/quickflow": "quickflow",
@@ -187,7 +187,7 @@ const T = {
 };
 
 const CATEGORY_THEMES: Record<string, Record<string, string>> = {
-  "/ma-bra": T.sage,
+  "/mitt-batteri": T.sage,
   "/energifloede": T.sage,
   "/daglig-rutin": T.terracotta,
   "/pomodoro": T.terracotta,
@@ -299,7 +299,6 @@ export default function Layout({ children }: LayoutProps) {
       icon: Heart,
       hint: "Energi och mående – checka in på några sekunder",
     },
-
 
     {
       href: "/energifloede",
@@ -1098,9 +1097,12 @@ export default function Layout({ children }: LayoutProps) {
                 </>
               ) : (
                 <>
-
-                  <h3 className="mt-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Mina områden</h3>
-                  <p className="mb-2 text-xs text-muted-foreground/80">Allt som hör till studier, jobb, hem och relationer.</p>
+                  <h3 className="mt-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    Mina områden
+                  </h3>
+                  <p className="mb-2 text-xs text-muted-foreground/80">
+                    Allt som hör till studier, jobb, hem och relationer.
+                  </p>
                   <div className="grid grid-cols-2 gap-3">
                     {categories
                       .filter((cat) =>
@@ -1180,8 +1182,12 @@ export default function Layout({ children }: LayoutProps) {
                   </div>
 
                   {/* Min profil */}
-                  <h3 className="mt-8 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Min profil</h3>
-                  <p className="mb-2 text-xs text-muted-foreground/80">Vem du är och hur din vardag ser ut just nu.</p>
+                  <h3 className="mt-8 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    Min profil
+                  </h3>
+                  <p className="mb-2 text-xs text-muted-foreground/80">
+                    Vem du är och hur din vardag ser ut just nu.
+                  </p>
                   <Link
                     href="/min-livsprofil"
                     onClick={() => {
@@ -1206,8 +1212,12 @@ export default function Layout({ children }: LayoutProps) {
                   </Link>
 
                   {/* Anpassa MyFlove */}
-                  <h3 className="mt-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Anpassa MyFlove</h3>
-                  <p className="mb-2 text-xs text-muted-foreground/80">Bestäm vad du ser på hemskärmen och i menyn.</p>
+                  <h3 className="mt-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    Anpassa MyFlove
+                  </h3>
+                  <p className="mb-2 text-xs text-muted-foreground/80">
+                    Bestäm vad du ser på hemskärmen och i menyn.
+                  </p>
 
                   <div className="mb-3 space-y-2">
                     <Link

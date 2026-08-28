@@ -284,116 +284,116 @@ export default function FlowPlanPage() {
           title="Hur ser dagen ut?"
           description="Välj energi och hur mycket tid du har – sen gör Flow ett förslag."
         >
-        <div className="surface-card p-5 space-y-5">
-          <div>
-            <div className="flex items-center justify-between mb-2 gap-2">
-              <label className="text-sm font-medium">Hur är energin just nu?</label>
-              {energyAuto && !energyManual && (
-                <span className="text-xs text-muted-foreground flex items-center gap-1">
-                  <Battery size={12} className="text-primary" />
-                  Från Energikarta ({LEVEL_LABELS[energyAuto.level]}, {timeAgo(energyAuto.loggedAt)}
-                  )
-                </span>
-              )}
-              {energyAuto && energyManual && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setEnergyManual(false);
-                    setEnergy(levelToEnergy(energyAuto.level));
-                  }}
-                  className="text-xs text-primary hover:underline"
-                >
-                  Använd loggad energi
-                </button>
-              )}
-              {!energyAuto && (
-                <Link
-                  to="/mitt-batteri"
-                  className="text-xs text-primary hover:underline flex items-center gap-1"
-                >
-                  <Battery size={12} /> Logga energi
-                </Link>
-              )}
+          <div className="surface-card p-5 space-y-5">
+            <div>
+              <div className="flex items-center justify-between mb-2 gap-2">
+                <label className="text-sm font-medium">Hur är energin just nu?</label>
+                {energyAuto && !energyManual && (
+                  <span className="text-xs text-muted-foreground flex items-center gap-1">
+                    <Battery size={12} className="text-primary" />
+                    Från Energikarta ({LEVEL_LABELS[energyAuto.level]},{" "}
+                    {timeAgo(energyAuto.loggedAt)})
+                  </span>
+                )}
+                {energyAuto && energyManual && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEnergyManual(false);
+                      setEnergy(levelToEnergy(energyAuto.level));
+                    }}
+                    className="text-xs text-primary hover:underline"
+                  >
+                    Använd loggad energi
+                  </button>
+                )}
+                {!energyAuto && (
+                  <Link
+                    to="/mitt-batteri"
+                    className="text-xs text-primary hover:underline flex items-center gap-1"
+                  >
+                    <Battery size={12} /> Logga energi
+                  </Link>
+                )}
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                {(Object.keys(ENERGY_LABELS) as Energy[]).map((e) => (
+                  <button
+                    key={e}
+                    onClick={() => {
+                      setEnergy(e);
+                      setEnergyManual(true);
+                    }}
+                    className={`px-3 py-3 rounded-2xl border text-sm text-left transition-colors ${
+                      energy === e
+                        ? "border-primary bg-primary/10 text-primary"
+                        : "border-border bg-background hover:bg-secondary"
+                    }`}
+                  >
+                    {ENERGY_LABELS[e]}
+                  </button>
+                ))}
+              </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-              {(Object.keys(ENERGY_LABELS) as Energy[]).map((e) => (
-                <button
-                  key={e}
-                  onClick={() => {
-                    setEnergy(e);
-                    setEnergyManual(true);
-                  }}
-                  className={`px-3 py-3 rounded-2xl border text-sm text-left transition-colors ${
-                    energy === e
-                      ? "border-primary bg-primary/10 text-primary"
-                      : "border-border bg-background hover:bg-secondary"
-                  }`}
-                >
-                  {ENERGY_LABELS[e]}
-                </button>
-              ))}
+
+            <div>
+              <label className="text-sm font-medium mb-2 flex items-center gap-2">
+                <Clock size={14} /> Ungefär hur mycket tid har du?
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {[30, 60, 120, 240, 480].map((m) => (
+                  <button
+                    key={m}
+                    onClick={() => setTimeAvailable(m)}
+                    className={`px-4 py-2 rounded-full text-sm border transition-colors ${
+                      timeAvailable === m
+                        ? "border-primary bg-primary/10 text-primary"
+                        : "border-border bg-background hover:bg-secondary"
+                    }`}
+                  >
+                    {m < 60 ? `${m} min` : `${m / 60} h`}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
 
-          <div>
-            <label className="text-sm font-medium mb-2 flex items-center gap-2">
-              <Clock size={14} /> Ungefär hur mycket tid har du?
-            </label>
-            <div className="flex flex-wrap gap-2">
-              {[30, 60, 120, 240, 480].map((m) => (
-                <button
-                  key={m}
-                  onClick={() => setTimeAvailable(m)}
-                  className={`px-4 py-2 rounded-full text-sm border transition-colors ${
-                    timeAvailable === m
-                      ? "border-primary bg-primary/10 text-primary"
-                      : "border-border bg-background hover:bg-secondary"
-                  }`}
-                >
-                  {m < 60 ? `${m} min` : `${m / 60} h`}
-                </button>
-              ))}
+            <div className="text-sm text-muted-foreground">
+              {activeTasks.length === 0
+                ? "Du har inga aktiva uppgifter just nu – lägg till några under Att göra först."
+                : `${activeTasks.length} aktiv${activeTasks.length === 1 ? "" : "a"} uppgift${
+                    activeTasks.length === 1 ? "" : "er"
+                  } tas med i planeringen.`}
             </div>
-          </div>
 
-          <div className="text-sm text-muted-foreground">
-            {activeTasks.length === 0
-              ? "Du har inga aktiva uppgifter just nu – lägg till några under Att göra först."
-              : `${activeTasks.length} aktiv${activeTasks.length === 1 ? "" : "a"} uppgift${
-                  activeTasks.length === 1 ? "" : "er"
-                } tas med i planeringen.`}
-          </div>
-
-          {loading && (
-            <MyFloveThinking
-              steps={["📋", "⚡", "🎯", "✨"]}
-              label="Jag lägger uppgifterna i en ordning som håller…"
-            />
-          )}
-
-          <Button
-            onClick={handlePlan}
-            disabled={!canPlan}
-            className="rounded-2xl h-11 px-5 bg-primary hover:bg-primary/90 text-primary-foreground w-full sm:w-auto"
-          >
-            {loading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Flow planerar…
-              </>
-            ) : (
-              <>
-                <Sparkles className="mr-2 h-4 w-4" /> Skapa min FlowPlan
-              </>
+            {loading && (
+              <MyFloveThinking
+                steps={["📋", "⚡", "🎯", "✨"]}
+                label="Jag lägger uppgifterna i en ordning som håller…"
+              />
             )}
-          </Button>
 
-          {error && (
-            <div className="text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-2xl px-3 py-2">
-              {error}
-            </div>
-          )}
-        </div>
+            <Button
+              onClick={handlePlan}
+              disabled={!canPlan}
+              className="rounded-2xl h-11 px-5 bg-primary hover:bg-primary/90 text-primary-foreground w-full sm:w-auto"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Flow planerar…
+                </>
+              ) : (
+                <>
+                  <Sparkles className="mr-2 h-4 w-4" /> Skapa min FlowPlan
+                </>
+              )}
+            </Button>
+
+            {error && (
+              <div className="text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-2xl px-3 py-2">
+                {error}
+              </div>
+            )}
+          </div>
         </StepSection>
 
         {plan && (
@@ -403,127 +403,127 @@ export default function FlowPlanPage() {
             title="Ändra ordningen"
             description="Det här är bara ett förslag. Flytta upp och ner tills det känns rätt för dig."
           >
-          <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="flex items-center justify-between gap-3">
-              <span className="text-xs text-muted-foreground">
-                {isSuggestion ? "Flows förslag" : "Din plan"}
-                {" · "}
-                {storedPlan?.date === new Date().toISOString().split("T")[0]
-                  ? "idag"
-                  : storedPlan?.date}
-                {hasCustomOrder ? " · du har ändrat ordningen" : ""}
-              </span>
-              <div className="flex items-center gap-3">
-                {hasCustomOrder && (
+            <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-xs text-muted-foreground">
+                  {isSuggestion ? "Flows förslag" : "Din plan"}
+                  {" · "}
+                  {storedPlan?.date === new Date().toISOString().split("T")[0]
+                    ? "idag"
+                    : storedPlan?.date}
+                  {hasCustomOrder ? " · du har ändrat ordningen" : ""}
+                </span>
+                <div className="flex items-center gap-3">
+                  {hasCustomOrder && (
+                    <button
+                      onClick={resetOrder}
+                      className="text-xs text-muted-foreground hover:text-foreground"
+                    >
+                      Tillbaka till Flows ordning
+                    </button>
+                  )}
                   <button
-                    onClick={resetOrder}
-                    className="text-xs text-muted-foreground hover:text-foreground"
+                    onClick={() => setPlan(null)}
+                    className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1"
                   >
-                    Tillbaka till Flows ordning
+                    <RotateCcw size={12} /> Rensa
                   </button>
-                )}
-                <button
-                  onClick={() => setPlan(null)}
-                  className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1"
-                >
-                  <RotateCcw size={12} /> Rensa
-                </button>
-              </div>
-            </div>
-            <div className="p-4 bg-primary/5 border border-primary/20 rounded-2xl">
-              <p className="text-sm leading-relaxed">{plan.intro}</p>
-            </div>
-
-            <div className="space-y-3">
-              {orderedItems.map((item, idx) => {
-                const title = taskById.get(item.taskId);
-                if (!title) return null;
-                const info = deadlineInfo.get(item.taskId);
-                const boosted = item2Boost(item, deadlineInfo);
-                return (
-                  <div key={item.taskId} className="surface-card p-4 flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 font-medium text-sm">
-                      {idx + 1}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-baseline justify-between gap-3">
-                        <p className="font-medium">{title}</p>
-                        <span className="text-xs text-muted-foreground shrink-0">
-                          ~{item.estimatedMin} min
-                        </span>
-                      </div>
-                      {boosted && info && (
-                        <p className="mt-1.5 inline-flex items-center gap-1.5 text-xs font-medium text-primary bg-primary/10 border border-primary/20 rounded-full px-2.5 py-1">
-                          <BellRing size={12} />
-                          {info.daysUntilDue < 0
-                            ? `Deadline passerad – prioriterad idag`
-                            : info.daysUntilDue === 0
-                              ? "Deadline idag – prioriterad först"
-                              : `Deadline om ${info.daysUntilDue} dag${info.daysUntilDue === 1 ? "" : "ar"} – påminnelsen har gått igång`}
-                        </p>
-                      )}
-                      <p className="text-sm text-muted-foreground mt-1">{item.why}</p>
-                      <button
-                        onClick={() => toggleTask(item.taskId)}
-                        className="text-xs text-primary hover:underline mt-2"
-                      >
-                        Markera som klar
-                      </button>
-                    </div>
-                    <div className="flex flex-col gap-1 shrink-0">
-                      <button
-                        type="button"
-                        aria-label={`Flytta upp: ${title}`}
-                        onClick={() => move(item.taskId, -1)}
-                        disabled={idx === 0}
-                        className="w-8 h-8 rounded-full bg-secondary text-muted-foreground flex items-center justify-center hover:text-primary transition-colors disabled:opacity-30"
-                      >
-                        <ArrowUp size={15} />
-                      </button>
-                      <button
-                        type="button"
-                        aria-label={`Flytta ner: ${title}`}
-                        onClick={() => move(item.taskId, 1)}
-                        disabled={idx === orderedItems.length - 1}
-                        className="w-8 h-8 rounded-full bg-secondary text-muted-foreground flex items-center justify-center hover:text-primary transition-colors disabled:opacity-30"
-                      >
-                        <ArrowDown size={15} />
-                      </button>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            {isSuggestion && (
-              <div className="surface-card p-4 space-y-3">
-                <p className="text-sm text-muted-foreground">
-                  Det här är bara ett förslag. Flytta upp och ner tills ordningen känns rätt – säg
-                  sedan ja, eller be Flow föreslå på nytt.
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  <Button
-                    onClick={acceptPlan}
-                    className="rounded-2xl h-10 px-4 bg-primary hover:bg-primary/90 text-primary-foreground"
-                  >
-                    <Check className="mr-2 h-4 w-4" /> Ja, kör den här ordningen
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={handlePlan}
-                    disabled={!canPlan}
-                    className="rounded-2xl h-10 px-4"
-                  >
-                    <Sparkles className="mr-2 h-4 w-4" /> Föreslå på nytt
-                  </Button>
                 </div>
               </div>
-            )}
+              <div className="p-4 bg-primary/5 border border-primary/20 rounded-2xl">
+                <p className="text-sm leading-relaxed">{plan.intro}</p>
+              </div>
 
-            <div className="p-4 bg-secondary/60 rounded-2xl text-sm text-muted-foreground leading-relaxed">
-              {plan.note}
+              <div className="space-y-3">
+                {orderedItems.map((item, idx) => {
+                  const title = taskById.get(item.taskId);
+                  if (!title) return null;
+                  const info = deadlineInfo.get(item.taskId);
+                  const boosted = item2Boost(item, deadlineInfo);
+                  return (
+                    <div key={item.taskId} className="surface-card p-4 flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 font-medium text-sm">
+                        {idx + 1}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-baseline justify-between gap-3">
+                          <p className="font-medium">{title}</p>
+                          <span className="text-xs text-muted-foreground shrink-0">
+                            ~{item.estimatedMin} min
+                          </span>
+                        </div>
+                        {boosted && info && (
+                          <p className="mt-1.5 inline-flex items-center gap-1.5 text-xs font-medium text-primary bg-primary/10 border border-primary/20 rounded-full px-2.5 py-1">
+                            <BellRing size={12} />
+                            {info.daysUntilDue < 0
+                              ? `Deadline passerad – prioriterad idag`
+                              : info.daysUntilDue === 0
+                                ? "Deadline idag – prioriterad först"
+                                : `Deadline om ${info.daysUntilDue} dag${info.daysUntilDue === 1 ? "" : "ar"} – påminnelsen har gått igång`}
+                          </p>
+                        )}
+                        <p className="text-sm text-muted-foreground mt-1">{item.why}</p>
+                        <button
+                          onClick={() => toggleTask(item.taskId)}
+                          className="text-xs text-primary hover:underline mt-2"
+                        >
+                          Markera som klar
+                        </button>
+                      </div>
+                      <div className="flex flex-col gap-1 shrink-0">
+                        <button
+                          type="button"
+                          aria-label={`Flytta upp: ${title}`}
+                          onClick={() => move(item.taskId, -1)}
+                          disabled={idx === 0}
+                          className="w-8 h-8 rounded-full bg-secondary text-muted-foreground flex items-center justify-center hover:text-primary transition-colors disabled:opacity-30"
+                        >
+                          <ArrowUp size={15} />
+                        </button>
+                        <button
+                          type="button"
+                          aria-label={`Flytta ner: ${title}`}
+                          onClick={() => move(item.taskId, 1)}
+                          disabled={idx === orderedItems.length - 1}
+                          className="w-8 h-8 rounded-full bg-secondary text-muted-foreground flex items-center justify-center hover:text-primary transition-colors disabled:opacity-30"
+                        >
+                          <ArrowDown size={15} />
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {isSuggestion && (
+                <div className="surface-card p-4 space-y-3">
+                  <p className="text-sm text-muted-foreground">
+                    Det här är bara ett förslag. Flytta upp och ner tills ordningen känns rätt – säg
+                    sedan ja, eller be Flow föreslå på nytt.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <Button
+                      onClick={acceptPlan}
+                      className="rounded-2xl h-10 px-4 bg-primary hover:bg-primary/90 text-primary-foreground"
+                    >
+                      <Check className="mr-2 h-4 w-4" /> Ja, kör den här ordningen
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={handlePlan}
+                      disabled={!canPlan}
+                      className="rounded-2xl h-10 px-4"
+                    >
+                      <Sparkles className="mr-2 h-4 w-4" /> Föreslå på nytt
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              <div className="p-4 bg-secondary/60 rounded-2xl text-sm text-muted-foreground leading-relaxed">
+                {plan.note}
+              </div>
             </div>
-          </div>
           </StepSection>
         )}
       </div>
