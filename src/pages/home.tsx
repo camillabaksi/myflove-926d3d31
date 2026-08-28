@@ -6,7 +6,7 @@ import QuickCheckin from "@/components/quick-checkin";
 import { useHomeLayout, type HomeBlockId } from "@/lib/home-layout";
 import { TaskQuickAdd, type QuickAddResult } from "@/components/task-quick-add";
 import DidThisCta from "@/components/did-this-cta";
-import TodayTasks from "@/components/today-tasks";
+import { useFlowItems } from "@/hooks/use-flow-items";
 import RoutinesMedicationToday from "@/components/routines-medication-today";
 
 import DayEnergyFlow from "@/components/day-energy-flow";
@@ -47,7 +47,8 @@ interface Situation {
 
 const SITUATIONS: Situation[] = [
   {
-    href: "/min-dag",
+    href: "/idag",
+
     emoji: "🗓️",
     thought: "Jag behöver planera min dag",
     action: "Min dag – se och planera dagen",
@@ -362,7 +363,9 @@ export default function Home() {
               headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
               className="space-y-3"
             >
-              <p className="text-xs text-muted-foreground">Det som händer närmast – tryck för att se hela dagen.</p>
+              <p className="text-xs text-muted-foreground">
+                Det som händer närmast – tryck för att se hela dagen.
+              </p>
               {nextEvent ? (
                 <Link
                   href="/idag"
@@ -416,11 +419,11 @@ export default function Home() {
           </section>
         )}
 
-        {/* Dagens uppgifter – samma kort och avbockning som i Min dag */}
+        {/* Dagens översikt – bara en sammanfattning. Hela listan bor i Min dag. */}
 
         {shows("idag") && (
           <div style={pos("idag")}>
-            <TodayTasks limit={3} compact />
+            <DaySummary />
           </div>
         )}
 
@@ -442,7 +445,9 @@ export default function Home() {
               className="space-y-3"
             >
               <p className="text-ink leading-relaxed">{suggestion.headline}</p>
-              <p className="text-xs text-muted-foreground">En sak Flow tycker passar just nu. Du väljer själv.</p>
+              <p className="text-xs text-muted-foreground">
+                En sak Flow tycker passar just nu. Du väljer själv.
+              </p>
               {suggestion.task && (
                 <p className="mt-2 text-sm text-muted-foreground">
                   <span className="font-medium text-ink">{suggestion.task.title}</span>
@@ -451,7 +456,7 @@ export default function Home() {
                 </p>
               )}
               <Link
-                href={suggestion.task ? "/min-dag" : "/quickflow"}
+                href={suggestion.task ? "/idag" : "/quickflow"}
                 className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
               >
                 {suggestion.task ? "Planera i Min dag" : "Fånga något i QuickFlow"}{" "}
@@ -495,7 +500,9 @@ export default function Home() {
               className="space-y-3"
             >
               <ul className="space-y-2">
-              <p className="text-xs text-muted-foreground">Välj känslan du har just nu – Flow tar dig till rätt ställe.</p>
+                <p className="text-xs text-muted-foreground">
+                  Välj känslan du har just nu – Flow tar dig till rätt ställe.
+                </p>
                 {SITUATIONS.map((s) => (
                   <li key={s.href}>
                     {s.didThis ? (
@@ -588,5 +595,39 @@ export default function Home() {
         </div>
       </div>
     </Layout>
+  );
+}
+
+/**
+ * Dagens översikt på Hem – bara en sammanfattning i siffror.
+ * Hela listan (och avbockningen) bor i Min dag, så samma sak aldrig
+ * visas som två kort på startsidan.
+ */
+function DaySummary() {
+  const { todayOpen, todayDone } = useFlowItems();
+  const total = todayOpen.length + todayDone.length;
+
+  return (
+    <section
+      className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+      aria-label="Dagens översikt"
+    >
+      <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+        Dagens översikt
+      </h2>
+      <p className="mt-2 text-ink">
+        {total === 0
+          ? "Inget inplanerat idag ännu."
+          : `${total} ${total === 1 ? "sak" : "saker"} idag · ${todayDone.length} ${
+              todayDone.length === 1 ? "klar" : "klara"
+            } · ${todayOpen.length} kvar`}
+      </p>
+      <Link
+        href="/idag"
+        className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+      >
+        Se hela dagen i Min dag <ArrowRight size={14} />
+      </Link>
+    </section>
   );
 }

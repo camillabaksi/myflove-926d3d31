@@ -94,7 +94,7 @@ export function TodayTasks({
 
         {compact ? (
           <Link
-            href="/min-dag"
+            href="/idag"
             className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
           >
             {todayOpen.length > shown.length
