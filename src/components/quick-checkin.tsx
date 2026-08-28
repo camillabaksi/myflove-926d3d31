@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 /** Snabbmeny för framtida loggtyper – bara det som redan finns i appen. */
 const LOG_LINKS = [
-  { href: "/ma-bra", emoji: "❤️", label: "Mående" },
+  { href: "/mitt-batteri", emoji: "❤️", label: "Mående" },
   { href: "/energifloede", emoji: "⚡", label: "Energi" },
   { href: "/anteckningar", emoji: "✍️", label: "Anteckning" },
 ];
@@ -84,7 +84,6 @@ function ScaleSlider({
     </div>
   );
 }
-
 
 /**
  * "Hur är det just nu?" – två separata 1–10-värden för mående och energi.
@@ -188,7 +187,6 @@ export default function QuickCheckin({ className }: { className?: string }) {
             ? "Sparat. Du kan justera när du vill under dagen."
             : "Dra till det som stämmer just nu, eller tryck bara Logga. Inget är rätt eller fel."}
         </p>
-
       </CollapsibleSection>
     </section>
   );

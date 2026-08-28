@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-28 – En plats för energi, tydligare roller
+
+- "Energi och mående" och "Mitt batteri" var samma sak på två ställen. Nu bor incheckningen, dagens kurva, Stop-pausen och historiken (mående, energi, flöde) på **Mitt batteri** – /ma-bra går dit automatiskt.
+- Menyn har en rad i stället för två för energi, och länkar från Flow, Planering, FlowScore och appguiden pekar på Mitt batteri.
+- Tydligare roller i menyn: Min dag (vad som händer), Planering (ordningen), Flow hjälper (förslaget), Prata med Flow (samtalet).
+
+
 ## 2026-08-28 – Dubblettstädning: en sak, ett ställe
 
 - Hem visar nu "Dagens översikt" som en kort sammanfattning (antal saker, klara, kvar) i stället för samma uppgiftskort som redan syns under "Nästa" och i Min dag.

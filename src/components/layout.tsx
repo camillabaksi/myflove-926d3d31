@@ -127,7 +127,7 @@ const catColor = (id: string, alpha?: number) => {
 
 const SECTION_BY_PATH: Record<string, string> = {
   "/": "home",
-  "/ma-bra": "ma-bra",
+  "/mitt-batteri": "mitt-batteri",
   "/energifloede": "energifloede",
   "/daglig-rutin": "daglig-rutin",
   "/quickflow": "quickflow",
@@ -187,7 +187,7 @@ const T = {
 };
 
 const CATEGORY_THEMES: Record<string, Record<string, string>> = {
-  "/ma-bra": T.sage,
+  "/mitt-batteri": T.sage,
   "/energifloede": T.sage,
   "/daglig-rutin": T.terracotta,
   "/pomodoro": T.terracotta,
@@ -290,20 +290,14 @@ export default function Layout({ children }: LayoutProps) {
       href: "/idag",
       label: "Min dag",
       icon: Heart,
-      hint: "Vad som händer idag – dagen i en lista",
+      hint: "Vad som händer idag – hela dagens lista",
       essential: true,
     },
     {
       href: "/mitt-batteri",
       label: "Mitt batteri",
       icon: Heart,
-      hint: "Din energi just nu – och en snabb incheckning",
-    },
-    {
-      href: "/ma-bra",
-      label: "Energi och mående",
-      icon: Heart,
-      hint: "Snabb incheckning av ork och mående",
+      hint: "Energi och mående – checka in på några sekunder",
     },
 
     {
@@ -415,20 +409,20 @@ export default function Layout({ children }: LayoutProps) {
       href: "/flowplan",
       label: "Planering",
       icon: Sparkles,
-      hint: "Planera dagen – ordningen på dagens saker",
+      hint: "Ordningen: i vilken ordning dagens saker passar bäst",
       essential: true,
     },
     {
       href: "/flow",
       label: "Flow hjälper",
       icon: Sparkles,
-      hint: "Förstår läget, prioriterar och föreslår en sak i taget",
+      hint: "Förslaget: en sak i taget när du kört fast",
     },
     {
       href: "/assistant",
       label: "Prata med Flow",
       icon: MessageCircle,
-      hint: "Chatta med Flow när du vill prata av dig eller tänka högt",
+      hint: "Samtalet: prata av dig eller tänk högt med Flow",
       essential: true,
     },
 
@@ -587,7 +581,7 @@ export default function Layout({ children }: LayoutProps) {
         label: "Mina mönster",
         hint: "Din energi, hälsa, mönster och statistik",
         icon: Brain,
-        hrefs: ["/insight", "/ma-bra", "/energifloede", "/statistik", "/traning"],
+        hrefs: ["/insight", "/mitt-batteri", "/energifloede", "/statistik", "/traning"],
       },
       {
         id: "avancerat",
@@ -1103,9 +1097,12 @@ export default function Layout({ children }: LayoutProps) {
                 </>
               ) : (
                 <>
-
-                  <h3 className="mt-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Mina områden</h3>
-                  <p className="mb-2 text-xs text-muted-foreground/80">Allt som hör till studier, jobb, hem och relationer.</p>
+                  <h3 className="mt-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    Mina områden
+                  </h3>
+                  <p className="mb-2 text-xs text-muted-foreground/80">
+                    Allt som hör till studier, jobb, hem och relationer.
+                  </p>
                   <div className="grid grid-cols-2 gap-3">
                     {categories
                       .filter((cat) =>
@@ -1185,8 +1182,12 @@ export default function Layout({ children }: LayoutProps) {
                   </div>
 
                   {/* Min profil */}
-                  <h3 className="mt-8 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Min profil</h3>
-                  <p className="mb-2 text-xs text-muted-foreground/80">Vem du är och hur din vardag ser ut just nu.</p>
+                  <h3 className="mt-8 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    Min profil
+                  </h3>
+                  <p className="mb-2 text-xs text-muted-foreground/80">
+                    Vem du är och hur din vardag ser ut just nu.
+                  </p>
                   <Link
                     href="/min-livsprofil"
                     onClick={() => {
@@ -1211,8 +1212,12 @@ export default function Layout({ children }: LayoutProps) {
                   </Link>
 
                   {/* Anpassa MyFlove */}
-                  <h3 className="mt-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Anpassa MyFlove</h3>
-                  <p className="mb-2 text-xs text-muted-foreground/80">Bestäm vad du ser på hemskärmen och i menyn.</p>
+                  <h3 className="mt-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    Anpassa MyFlove
+                  </h3>
+                  <p className="mb-2 text-xs text-muted-foreground/80">
+                    Bestäm vad du ser på hemskärmen och i menyn.
+                  </p>
 
                   <div className="mb-3 space-y-2">
                     <Link

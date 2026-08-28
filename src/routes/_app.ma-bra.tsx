@@ -1,16 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
-import Page from "@/pages/wellness";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
+/** "Energi och mående" bor numera i Mitt batteri – en enda plats för incheckning. */
 export const Route = createFileRoute("/_app/ma-bra")({
-  head: () => ({
-    meta: [
-      { title: "Må bra – MyFlove" },
-      {
-        name: "description",
-        content: "Logga humör och energi på ett ställe och se dina mönster över tid.",
-      },
-      { name: "robots", content: "noindex, nofollow" },
-    ],
-  }),
-  component: Page,
+  beforeLoad: () => {
+    throw redirect({ to: "/mitt-batteri", replace: true });
+  },
 });

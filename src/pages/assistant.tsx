@@ -4,16 +4,7 @@ import { useNavigate } from "@tanstack/react-router";
 import Layout from "@/components/layout";
 import { MyFloveThinking } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
-import {
-  Loader2,
-  Send,
-  History,
-  Plus,
-  Trash2,
-  X,
-  ArrowLeft,
-  ChevronRight,
-} from "lucide-react";
+import { Loader2, Send, History, Plus, Trash2, X, ArrowLeft, ChevronRight } from "lucide-react";
 import { FlowMascot, type FlowStatus } from "@/components/flow-mascot";
 import { chatWithFlow } from "@/lib/flow-chat.functions";
 import { useTasks, useMoods, useFocus, useReminders } from "@/hooks/use-data";
@@ -112,10 +103,10 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
       barn: "/barn",
       studier: "/studyflow",
       jobb: "/workflow",
-      halsa: "/ma-bra",
+      halsa: "/mitt-batteri",
       ekonomi: "/finances",
       socialt: "/relationer",
-      egentid: "/ma-bra",
+      egentid: "/mitt-batteri",
     };
     setPlace(placeFor(home[area]));
   };
@@ -164,7 +155,6 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
         : "idle";
 
   const send = async (text: string) => {
-
     const trimmed = text.trim();
     if (!trimmed || isSending) return;
     setError(null);
@@ -245,8 +235,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
               type="button"
               onClick={() => {
                 setHistoryOpen(false);
-                if (typeof window !== "undefined")
-                  window.sessionStorage.removeItem(NEW_CHAT_FLAG);
+                if (typeof window !== "undefined") window.sessionStorage.removeItem(NEW_CHAT_FLAG);
                 void navigate({ to: "/assistant/$chatId", params: { chatId: c.id } });
               }}
               className="flex-1 min-w-0 text-left py-2.5"
@@ -325,7 +314,13 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                   wave={flowStatus === "idle"}
                   glow
                   status={flowStatus}
-                  mood={flowStatus === "thinking" ? "think" : flowStatus === "done" ? "cheer" : undefined}
+                  mood={
+                    flowStatus === "thinking"
+                      ? "think"
+                      : flowStatus === "done"
+                        ? "cheer"
+                        : undefined
+                  }
                   className="shrink-0"
                 />
               </div>

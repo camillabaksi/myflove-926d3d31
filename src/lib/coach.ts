@@ -43,7 +43,7 @@ export function generateCoachMessage(input: CoachInput): CoachMessage {
       emoji: "👋",
       text: "Du har inte checkat in ditt mående idag än. Ett par sekunder räcker för att sätta ord på hur du har det.",
       ctaLabel: "Checka in mående",
-      ctaHref: "/ma-bra",
+      ctaHref: "/mitt-batteri",
     };
   }
 

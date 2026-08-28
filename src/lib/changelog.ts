@@ -12,9 +12,10 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Daglig loop",
     items: [
+      "Energi och mående bor nu bara på Mitt batteri – incheckning, dagens kurva, paus och historik på ett ställe, med tydligare roller för Min dag, Planering, Flow hjälper och Prata med Flow (2026-08-28)",
       "Dubblettstädning: Hem visar en kort dagsöversikt i stället för samma uppgifter som Min dag, incheckning och energikurva bor bara i Mitt batteri och alla dagslänkar går till samma vy (2026-08-28)",
       "Enklare snabbincheckning: batteri 1–5 med ett tryck, valfritt mående och valfria påverkansfaktorer (sömn, stress, ljud, mat, socialt, kroppen) som sparas i energiflödet (2026-08-28)",
-      "Flow på Hem länkar direkt till Mina mönster med \"Se vad jag har upptäckt\" (2026-08-28)",
+      'Flow på Hem länkar direkt till Mina mönster med "Se vad jag har upptäckt" (2026-08-28)',
       "Medicinlistan och medicinpåminnelserna läser exakt samma data – gamla nycklar migreras utan dubbletter och notiser för borttagna mediciner avbokas (2026-08-28)",
       "Bild eller PDF på schemat läses av av Flow och sparas som en fil du kan trycka på för att titta på originalet (2026-08-27)",
       "Mer-menyn börjar med Mina områden och Inställningar – Min profil och Anpassa MyFlove ligger längst ner (2026-08-27)",
