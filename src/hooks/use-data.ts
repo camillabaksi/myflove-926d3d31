@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocalStorage } from "../lib/storage";
 import { useCloudSyncedStorage } from "../lib/cloud-storage";
 import { trackEvent, track } from "../lib/analytics";
@@ -11,6 +11,7 @@ import {
   MEDICATION_LOG_KEY,
   dedupeMedications,
   migrateMedicationStorage,
+  mergeMedicationLog,
   type Medication,
   type MedicationLogEntry,
 } from "@/lib/medications";
@@ -733,22 +734,45 @@ export function useReminders() {
 export type { Medication, MedicationLogEntry } from "@/lib/medications";
 
 export function useMedications() {
-  const [medications, setMedications] = useLocalStorage<Medication[]>(MEDICATIONS_KEY, []);
-  const [log, setLog] = useLocalStorage<MedicationLogEntry[]>(MEDICATION_LOG_KEY, []);
+  // Medicin och medicinlogg synkas till molnet (som rutinerna) så att listan
+  // finns kvar efter utloggning och på andra enheter. Lokalt ligger den kvar
+  // krypterad via secure-local, så appen fungerar offline.
+  const [medications, setMedications] = useCloudSyncedStorage<Medication[]>(MEDICATIONS_KEY, []);
+  const [log, setLog] = useCloudSyncedStorage<MedicationLogEntry[]>(MEDICATION_LOG_KEY, []);
   const [ready, setReady] = useState(false);
+
+  const medsRef = useRef(medications);
+  medsRef.current = medications;
+  const logRef = useRef(log);
+  logRef.current = log;
 
   // Migrera gamla nycklar/format en gång per session – och igen när den
   // krypterade lagringen låsts upp (då blir gammal data först läsbar).
+  // Det som hittas lokalt lyfts upp i molnet så att det aldrig försvinner igen.
   useEffect(() => {
     if (typeof window === "undefined") return;
     const run = () => {
-      migrateMedicationStorage();
+      const result = migrateMedicationStorage();
+      if (
+        result.medications.length > 0 &&
+        JSON.stringify(result.medications) !== JSON.stringify(medsRef.current)
+      ) {
+        setMedications(dedupeMedications([...medsRef.current, ...result.medications]));
+      }
+      if (
+        result.log.length > 0 &&
+        JSON.stringify(result.log) !== JSON.stringify(logRef.current)
+      ) {
+        setLog(mergeMedicationLog(logRef.current, result.log));
+      }
       setReady(true);
     };
     void unlockSecureLocal().then(run).catch(run);
     window.addEventListener(SECURE_UNLOCK_EVENT, run);
     return () => window.removeEventListener(SECURE_UNLOCK_EVENT, run);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
 
   const getTodayDateString = () => todayISO();
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-28 – Mediciner sparas i molnet
+
+- Medicinlistan och medicinloggen synkas nu till ditt konto (som rutinerna) i stället för att bara ligga på enheten.
+- Listan finns därför kvar efter utloggning och följer med till andra enheter.
+- Befintlig lokal medicindata lyfts automatiskt upp till kontot första gången appen öppnas.
+
 ## 2026-08-28 – Av/på-knapp för anonym statistik
 
 - Ny synlig inställning under Anpassa appen → Integritet: "Dela anonym användningsstatistik" med av/på-knapp.

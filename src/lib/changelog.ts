@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-08-28";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Mediciner sparas i molnet",
+    items: [
+      "Medicinlista och medicinlogg synkas till kontot, precis som rutinerna (2026-08-28)",
+      "Listan finns kvar efter utloggning och på andra enheter (2026-08-28)",
+      "Lokal medicindata lyfts automatiskt upp till kontot (2026-08-28)",
+    ],
+  },
+  {
     title: "Av/på-knapp för anonym statistik",
     items: [
       "Synlig av/på-knapp för anonym användningsstatistik under Anpassa appen → Integritet (2026-08-28)",
