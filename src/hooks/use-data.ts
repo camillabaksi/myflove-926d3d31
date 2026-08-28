@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocalStorage } from "../lib/storage";
 import { useCloudSyncedStorage } from "../lib/cloud-storage";
 import { trackEvent, track } from "../lib/analytics";
@@ -11,6 +11,7 @@ import {
   MEDICATION_LOG_KEY,
   dedupeMedications,
   migrateMedicationStorage,
+  mergeMedicationLog,
   type Medication,
   type MedicationLogEntry,
 } from "@/lib/medications";
