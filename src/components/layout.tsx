@@ -360,9 +360,9 @@ export default function Layout({ children }: LayoutProps) {
 
     {
       href: "/tasks",
-      label: "Att göra",
+      label: "Alla uppgifter",
       icon: CheckSquare,
-      hint: "Hela listan – även kommande dagar",
+      hint: "Hela listan framåt – dagens saker bor i Idag",
     },
     {
       href: "/flowscore",
