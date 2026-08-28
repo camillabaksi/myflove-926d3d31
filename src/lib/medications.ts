@@ -221,8 +221,9 @@ export function medicationIdFromReminderKey(clientKey: string): string | null {
   if (!clientKey.startsWith(MEDICATION_REMINDER_PREFIX)) return null;
   const rest = clientKey.slice(MEDICATION_REMINDER_PREFIX.length);
   const parts = rest.split(":");
-  if (parts.length < 3) return null;
-  return parts.slice(0, parts.length - 3).concat(parts[parts.length - 3]).join(":") || null;
+  // <id>:<datum>:<hh>:<mm> – de tre sista delarna är datum och tid.
+  if (parts.length < 4) return null;
+  return parts.slice(0, parts.length - 3).join(":") || null;
 }
 
 /**
