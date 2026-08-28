@@ -1,4 +1,7 @@
+import { Link } from "wouter";
+import { ArrowRight } from "lucide-react";
 import { FlowMascot } from "@/components/flow-mascot";
+import { track } from "@/lib/analytics";
 import { useFlowLearning } from "@/hooks/use-flow-learning";
 import { useFlowSettings } from "@/hooks/use-flow-settings";
 import { cn } from "@/lib/utils";
@@ -40,6 +43,14 @@ export default function FlowLearningCard({ className }: { className?: string }) 
           </li>
         ))}
       </ul>
+
+      <Link
+        href="/insight"
+        onClick={() => track("flow_learning_opened", { source: "hem" })}
+        className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+      >
+        Se vad jag har upptäckt <ArrowRight size={14} aria-hidden="true" />
+      </Link>
 
       <p className="mt-3 text-xs text-muted-foreground/80">
         Du behöver inte lära dig hur jag fungerar. Jag lär mig hur du fungerar. 💜

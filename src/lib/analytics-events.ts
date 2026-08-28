@@ -13,7 +13,6 @@
 
 import { sanitizeCount, sanitizeLabel } from "@/lib/analytics-sanitize";
 
-
 export const ANALYTICS_EVENTS = [
   "app_opened",
   "signup_started",
@@ -29,16 +28,29 @@ export const ANALYTICS_EVENTS = [
   "flow_learning_opened",
   "quickflow_opened",
   "quickflow_created",
+  "quickflow_planned",
   "quickflow_completed",
   "battery_opened",
   "battery_checkin_started",
   "battery_checkin_completed",
+  "battery_checked",
+  "battery_logged",
   "mood_checkin_started",
   "mood_checkin_completed",
+  "mood_logged",
   "my_day_viewed",
   "task_created",
+  "task_started",
   "task_completed",
+  "task_postponed",
   "task_reopened",
+  "focus_started",
+  "focus_completed",
+  "flow_suggestion_shown",
+  "flow_suggestion_accepted",
+  "flow_suggestion_rejected",
+  "day_replanned",
+  "insight_action_taken",
   "plan_created",
   "plan_updated",
   "reminder_created",
@@ -90,16 +102,29 @@ const EVENT_SECTION: Record<AnalyticsEventName, string> = {
   flow_learning_opened: "flow",
   quickflow_opened: "quickflow",
   quickflow_created: "quickflow",
+  quickflow_planned: "quickflow",
   quickflow_completed: "quickflow",
   battery_opened: "batteri",
   battery_checkin_started: "batteri",
   battery_checkin_completed: "batteri",
+  battery_checked: "batteri",
+  battery_logged: "batteri",
   mood_checkin_started: "mood",
   mood_checkin_completed: "mood",
+  mood_logged: "mood",
   my_day_viewed: "min-dag",
   task_created: "tasks",
+  task_started: "tasks",
   task_completed: "tasks",
+  task_postponed: "tasks",
   task_reopened: "tasks",
+  focus_started: "fokus",
+  focus_completed: "fokus",
+  flow_suggestion_shown: "flow",
+  flow_suggestion_accepted: "flow",
+  flow_suggestion_rejected: "flow",
+  day_replanned: "flowplan",
+  insight_action_taken: "insight",
   plan_created: "flowplan",
   plan_updated: "flowplan",
   reminder_created: "paminnelser",
@@ -146,7 +171,6 @@ export function sanitizePayload(payload?: AnalyticsPayload): AnalyticsPayload {
   }
   return clean;
 }
-
 
 export interface AnalyticsSinkEvent {
   name: AnalyticsEventName;
