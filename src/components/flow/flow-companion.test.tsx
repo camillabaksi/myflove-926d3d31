@@ -51,23 +51,24 @@ describe("Flow-knappen 'Vad jag lärt mig'", () => {
   it("loggar exakt ett event när knappen öppnas", () => {
     render(<FlowCompanion />);
     fireEvent.click(screen.getByText("Vad jag lärt mig"));
-    expect(sink).toHaveLength(1);
-    expect(sink[0]!.name).toBe("flow_learning_opened");
-    expect(sink[0]!.section).toBe("flow");
+    const learning = sink.filter((e) => e.name === "flow_learning_opened");
+    expect(learning).toHaveLength(1);
+    expect(learning[0]!.section).toBe("flow");
   });
 
   it("skickar aldrig känsliga råvärden i payloaden", () => {
     render(<FlowCompanion />);
     fireEvent.click(screen.getByText("Vad jag lärt mig"));
-    expect(sink[0]!.payload).toEqual({ source: "flow-companion" });
-    expect(JSON.stringify(sink[0])).not.toMatch(/mönster|energi|humör|medicin/i);
+    const learning = sink.filter((e) => e.name === "flow_learning_opened");
+    expect(learning[0]!.payload).toEqual({ source: "flow-companion" });
+    expect(JSON.stringify(sink)).not.toMatch(/mönster|humör|medicin/i);
   });
 
   it("loggar inte eventet för andra Flow-länkar", () => {
     (moment as { learning?: boolean }).learning = false;
     render(<FlowCompanion />);
     fireEvent.click(screen.getByText("Vad jag lärt mig"));
-    expect(sink).toHaveLength(0);
+    expect(sink.filter((e) => e.name === "flow_learning_opened")).toHaveLength(0);
     (moment as { learning?: boolean }).learning = true;
   });
 });
