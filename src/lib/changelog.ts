@@ -10,6 +10,16 @@ export const CHANGELOG_UPDATED = "2026-08-28";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Tydlig nytta med loggning",
+    items: [
+      "Incheckningen visar kort vad du får tillbaka, anpassat efter hur väl Flow känner dig (2026-08-28)",
+      "Diskret ⓘ Varför? på energi, mående och planering – bara där nyttan inte är självklar (2026-08-28)",
+      "Mänsklig bekräftelse efter sparad incheckning i stället för teknisk text (2026-08-28)",
+      "Promenader beskrivs utifrån nyttan: en promenad som passar din energi just nu (2026-08-28)",
+      "Befintlig Flow-learning återanvänds – inga påhittade mönster och ingen ny datamodell (2026-08-28)",
+    ],
+  },
+  {
     title: "Pitchmaterial 3.6",
     items: [
       "Living Blueprint, pitchdeck och pitchvideo är uppdaterade till version 3.6 (2026-08-28)",
