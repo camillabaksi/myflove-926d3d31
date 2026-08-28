@@ -3,10 +3,12 @@ import { Link } from "wouter";
 import { Check, ArrowRight, Undo2, Repeat, Pill } from "lucide-react";
 import { useMedications, useReminders } from "@/hooks/use-data";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
+import { useDoneLog } from "@/hooks/use-done-log";
 import { useToast } from "@/hooks/use-toast";
 import { getRandomEncouragement } from "@/lib/encouragements";
 import { routineOccursOn, type Routine } from "@/pages/routines";
 import { medicationOccursOn } from "@/lib/medications";
+
 
 /**
  * 🔁💊 Rutiner & medicin – ett gemensamt, ihopfällbart block längst ner på Hem.
