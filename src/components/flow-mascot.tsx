@@ -131,6 +131,7 @@ export function FlowMascot({
   mood,
   alive = true,
   status = "idle",
+  bump = false,
   className,
   imgClassName,
   alt = "Flow – MyFloves följeslagare",
@@ -146,6 +147,11 @@ export function FlowMascot({
   alive?: boolean;
   /** Samtalsstatus: lyssnar när du skriver, tänker vid väntan, andas ut när det är klart. */
   status?: FlowStatus;
+  /**
+   * Gör Flow optiskt större utan att ta mer plats: platsen i layouten
+   * behåller sin storlek och bilden skalas inuti rutan.
+   */
+  bump?: boolean;
   className?: string;
   /** Extra klasser på bilden, t.ex. responsiva storlekar. */
   imgClassName?: string;
@@ -164,14 +170,22 @@ export function FlowMascot({
       data-flow-mood={mood ?? (wave ? "wave" : float ? "float" : "none")}
       data-flow-alive={alive ? "true" : "false"}
       data-flow-status={status}
+      data-flow-bump={bump ? "true" : "false"}
       style={
         {
           "--flow-breath": tempo.breath,
           "--flow-glow": tempo.glow,
         } as React.CSSProperties
       }
-      className={cn("relative inline-flex shrink-0 items-center justify-center", className)}
+      className={cn(
+        "relative inline-flex shrink-0 items-center justify-center",
+        // Rutan i layouten är låst till storleken, så en större bild
+        // aldrig knuffar text eller ändrar radhöjd.
+        bump && cn(SIZES[size], "overflow-visible"),
+        className,
+      )}
     >
+
       {glow && (
         <span
           aria-hidden
