@@ -1,6 +1,14 @@
 # Changelog
 
-## 2026-08-28 – Mitt batteri: tydligare hierarki
+## 2026-08-28 – Hem-kategorin: Inköpslista och Städning
+
+- Inköpslista och Städning ligger nu tydligt under huvudkategorin **Hem** i menyn.
+- Kategorin heter **Hem** (tidigare "Hemma") för att matcha den nya mentala modellen.
+- Navigationsetiketten för `/shopping` är **Inköpslista** så den stämmer överens med sidan.
+- Befintliga sidor, routes, data och funktioner är oförändrade: `/shopping` och `/stadning` fungerar som tidigare.
+- Hälsa, Idag, Planera, Flow, Mitt batteri och QuickFlow är oförändrade.
+
+
 
 - "Hur är ditt batteri just nu?" (snabb incheckning) är nu den primära funktionen högst upp på Mitt batteri.
 - Dagens batteri/översikt, morgon/kväll och dagens energiflöde ligger direkt efter incheckningen.

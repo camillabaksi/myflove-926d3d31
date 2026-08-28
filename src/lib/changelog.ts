@@ -10,6 +10,16 @@ export const CHANGELOG_UPDATED = "2026-08-28";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Hem-kategorin: Inköpslista och Städning",
+    items: [
+      "Inköpslista och Städning ligger nu tydligt under huvudkategorin Hem i menyn (2026-08-28)",
+      "Kategorin heter Hem (tidigare Hemma) för att matcha den nya mentala modellen (2026-08-28)",
+      "Navigationsetiketten för /shopping är Inköpslista så den stämmer överens med sidan (2026-08-28)",
+      "Befintliga sidor, routes, data och funktioner är oförändrade; /shopping och /stadning fungerar som tidigare (2026-08-28)",
+      "Hälsa, Idag, Planera, Flow, Mitt batteri och QuickFlow är oförändrade (2026-08-28)",
+    ],
+  },
+  {
     title: "Mitt batteri: tydligare hierarki",
     items: [
       "Hur är ditt batteri just nu? är nu den primära funktionen högst upp på Mitt batteri (2026-08-28)",
