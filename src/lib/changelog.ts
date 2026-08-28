@@ -10,6 +10,16 @@ export const CHANGELOG_UPDATED = "2026-08-28";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Mitt batteri: tydligare hierarki",
+    items: [
+      "Hur är ditt batteri just nu? är nu den primära funktionen högst upp på Mitt batteri (2026-08-28)",
+      "Dagens batteri/översikt, morgon/kväll och dagens energiflöde ligger direkt efter incheckningen (2026-08-28)",
+      "Historiken (mående, energi och flöde) är flyttad längre ner som sekundär funktion (2026-08-28)",
+      "Ingen data, funktion eller Flow-logik har tagits bort; samma komponenter återanvänds (2026-08-28)",
+      "Dagens energiflöde renderas inte längre dubbelt inuti historiken (2026-08-28)",
+    ],
+  },
+  {
     title: "Slutstädning efter QA",
     items: [
       "Rutiner använder samma dagsbaserade genomförandelogg i Hem, Idag och Flow; äldre rutinstatus migreras automatiskt (2026-08-28)",

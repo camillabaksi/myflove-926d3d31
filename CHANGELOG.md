@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-08-28 – Mitt batteri: tydligare hierarki
+
+- "Hur är ditt batteri just nu?" (snabb incheckning) är nu den primära funktionen högst upp på Mitt batteri.
+- Dagens batteri/översikt, morgon/kväll och dagens energiflöde ligger direkt efter incheckningen.
+- Historiken (mående, energi och flöde) är flyttad längre ner som sekundär funktion.
+- Ingen data, funktion eller Flow-logik har tagits bort; samma komponenter återanvänds.
+- Dagens energiflöde renderas inte längre dubbelt inuti historiken.
+
+
 ## 2026-08-28 – Slutstädning efter QA
 
 - Rutiner använder nu samma dagsbaserade genomförandelogg i Hem, Idag och Flow; äldre rutinstatus migreras automatiskt.
