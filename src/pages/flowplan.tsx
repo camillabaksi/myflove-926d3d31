@@ -22,6 +22,7 @@ import { planFlowSequence, type FlowPlanResult } from "@/lib/flowplan.functions"
 import { useTasks, useFocus } from "@/hooks/use-data";
 import { supabase } from "@/integrations/supabase/client";
 import { useLocalStorage } from "@/lib/storage";
+import WhyHint from "@/components/why-hint";
 
 type DeadlineInfo = { daysUntilDue: number; hasReminder: boolean; activeNow: boolean };
 
