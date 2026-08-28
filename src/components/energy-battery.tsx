@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "wouter";
 import { ArrowRight } from "lucide-react";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
+import { useAnimatedNumber } from "@/hooks/use-animated-number";
 import { minutesToTime } from "@/lib/energy-battery";
 
 /**
@@ -22,8 +23,9 @@ export default function EnergyBattery({
   const { reading, suggestions } = useEnergyBattery();
   const [open, setOpen] = useState(defaultOpen);
 
-
   const level = Math.round(reading.now);
+  // Siffran räknas mjukt upp/ner när energin ändras (hoppar direkt vid reducerad rörelse).
+  const shownLevel = Math.round(useAnimatedNumber(level));
   const tone =
     level >= 66
       ? "hsl(var(--primary))"
@@ -80,7 +82,7 @@ export default function EnergyBattery({
         <span className="mt-0.5 block text-xs text-muted-foreground">
           Mitt batteri ·{" "}
           <span className="font-semibold" style={{ color: tone }}>
-            {level}%
+            {shownLevel}%
           </span>{" "}
           <span aria-hidden>
             {reading.trend === "stiger" ? "↑" : reading.trend === "sjunker" ? "↓" : "→"}
@@ -129,7 +131,6 @@ export default function EnergyBattery({
           {open ? "Dölj detaljer ˄" : "Visa detaljer ˅"}
         </span>
       </button>
-
 
       {/* Liten kurva alltid synlig – känslan av dagen, inte en teknisk graf */}
       <div className="mt-3">

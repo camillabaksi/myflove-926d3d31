@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { Link } from "wouter";
 import { Settings2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -118,6 +119,17 @@ export default function FlowCompanion({
 }) {
   const moment = useFlowMoment();
   const { settings, dismiss } = useFlowSettings();
+  const shownRef = useRef<string | null>(null);
+
+  /* Endast användning mäts: vilket slags förslag som visades, aldrig innehållet. */
+  useEffect(() => {
+    if (!settings.enabled || moment.silent || !moment.message) return;
+    if (shownRef.current === moment.id) return;
+    shownRef.current = moment.id;
+    track("flow_suggestion_shown", { source: moment.scene });
+    if (moment.id.startsWith("missed-")) track("flow_missed_task_shown", { source: "flow" });
+    if (moment.id === "done") track("flow_task_completion_reaction", { source: "flow" });
+  }, [moment.id, moment.scene, moment.silent, moment.message, settings.enabled]);
 
   if (!settings.enabled) return null;
 
@@ -164,6 +176,7 @@ export default function FlowCompanion({
               aria-label="Inte nu, tack"
               onClick={() => {
                 haptic("soft");
+                track("flow_suggestion_rejected", { source: moment.scene });
                 dismiss(moment.id);
               }}
             >
@@ -179,6 +192,7 @@ export default function FlowCompanion({
               className="rounded-full"
               onClick={() => {
                 haptic("success");
+                track("flow_suggestion_accepted", { source: moment.scene });
                 moment.action?.run();
               }}
             >
