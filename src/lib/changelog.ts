@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-08-28";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Subtil sidövergång",
+    items: [
+      "Gemensam fade vid riktiga sidbyten: ut cirka 160 ms och in cirka 220 ms (2026-08-28)",
+      "Lokala interaktioner, modaler, kollapsning, Flow och QuickFlow påverkas inte (2026-08-28)",
+      "prefers-reduced-motion stänger av övergångsanimeringen utan att ändra navigation eller historik (2026-08-28)",
+    ],
+  },
+  {
     title: "Stop-paus flyttar till Mer",
     items: [
       "Stop-paus är nu en egen post under Mer → Hälsa med egen ikon 🛑 (2026-08-28)",

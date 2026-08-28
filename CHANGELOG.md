@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-28 – Subtil sidövergång
+
+- Infört en gemensam fade-transition vid riktiga sidbyten: tonar ut cirka 160 ms och tonar in cirka 220 ms.
+- Lokala interaktioner, modaler, kollapsning, Flow och QuickFlow påverkas inte av sidövergången.
+- `prefers-reduced-motion` stänger av övergångsanimeringen utan att ändra navigation eller historik.
+
 ## 2026-08-28 – Stop-paus flyttar till Mer
 
 - Stop-paus är nu en egen tydlig post under Mer → Hälsa med egen ikon (🛑 Stop-paus) – direkt åtkomlig utan väg via Mitt batteri.

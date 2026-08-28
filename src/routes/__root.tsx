@@ -10,6 +10,9 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
+
+
+
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
@@ -111,12 +114,11 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <div key={pathname} className="page-transition">
-          <Outlet />
-        </div>
+        <Outlet />
         <Toaster />
         <Sonner />
       </TooltipProvider>
     </QueryClientProvider>
   );
+
 }
