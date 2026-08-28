@@ -720,31 +720,35 @@ export function useReminders() {
   };
 }
 
-export interface Medication {
-  id: string;
-  name: string;
-  dosage?: string;
-  times: string[]; // HH:MM, sorted
-  createdAt: number;
-}
-
-export interface MedicationLogEntry {
-  medId: string;
-  time: string; // HH:MM scheduled time
-  date: string; // ISO date string YYYY-MM-DD
-}
+export type { Medication, MedicationLogEntry } from "@/lib/medications";
 
 export function useMedications() {
-  const [medications, setMedications] = useLocalStorage<Medication[]>("myflow-medications", []);
-  const [log, setLog] = useLocalStorage<MedicationLogEntry[]>("myflow-medication-log", []);
+  const [medications, setMedications] = useLocalStorage<Medication[]>(MEDICATIONS_KEY, []);
+  const [log, setLog] = useLocalStorage<MedicationLogEntry[]>(MEDICATION_LOG_KEY, []);
+  const [ready, setReady] = useState(false);
+
+  // Migrera gamla nycklar/format en gång per session – och igen när den
+  // krypterade lagringen låsts upp (då blir gammal data först läsbar).
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const run = () => {
+      migrateMedicationStorage();
+      setReady(true);
+    };
+    void unlockSecureLocal().then(run).catch(run);
+    window.addEventListener(SECURE_UNLOCK_EVENT, run);
+    return () => window.removeEventListener(SECURE_UNLOCK_EVENT, run);
+  }, []);
 
   const getTodayDateString = () => todayISO();
 
   const addMedication = (name: string, times: string[], dosage?: string) => {
-    setMedications([
-      { id: generateId(), name, dosage, times: [...times].sort(), createdAt: Date.now() },
-      ...medications,
-    ]);
+    setMedications(
+      dedupeMedications([
+        { id: generateId(), name, dosage, times: [...times].sort(), createdAt: Date.now() },
+        ...medications,
+      ]),
+    );
   };
 
   const deleteMedication = (id: string) => {
@@ -765,8 +769,9 @@ export function useMedications() {
     }
   };
 
-  return { medications, addMedication, deleteMedication, isTaken, toggleTaken, log };
+  return { medications, addMedication, deleteMedication, isTaken, toggleTaken, log, ready };
 }
+
 
 export interface DumpIdea {
   id: string;
