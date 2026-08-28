@@ -1,11 +1,20 @@
-import { useEffect } from "react";
-import { track } from "@/lib/analytics";
+import { useEffect, useState } from "react";
+import { ANALYTICS_OPT_OUT_KEY, track } from "@/lib/analytics";
 import { DeleteAccountButton } from "@/components/delete-account-button";
 import Layout from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { RotateCcw, Accessibility } from "lucide-react";
+import { RotateCcw, Accessibility, BarChart3 } from "lucide-react";
 import { useNpfSettings, type NpfSettings } from "@/lib/npf-mode";
+import { Link } from "@tanstack/react-router";
+
+function readAnalyticsOptOut(): boolean {
+  try {
+    return window.localStorage.getItem(ANALYTICS_OPT_OUT_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
 
 type Row = {
   key: keyof NpfSettings;
