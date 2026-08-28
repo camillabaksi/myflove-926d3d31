@@ -782,7 +782,6 @@ export function useMedications() {
   return { medications, addMedication, deleteMedication, isTaken, toggleTaken, log, ready };
 }
 
-
 export interface DumpIdea {
   id: string;
   text: string;

@@ -3,10 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { useTasks, useMedications, useReminders } from "@/hooks/use-data";
 import { syncReminder, cancelReminder, reconcileReminders } from "@/lib/push.functions";
-import {
-  MEDICATION_REMINDER_PREFIX,
-  medicationReminderKey,
-} from "@/lib/medications";
+import { MEDICATION_REMINDER_PREFIX, medicationReminderKey } from "@/lib/medications";
 import { getCurrentSubscription } from "@/lib/push-client";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import type { Routine } from "@/pages/routines";
@@ -399,9 +396,7 @@ export function useReminderSync() {
       // eller innan medicinen togs bort – annars kan notiser fortsätta komma
       // fast listan är tom. Görs bara när medicindatan är inläst/migrerad.
       if (medsReady) {
-        const medKeys = [...desired.keys()].filter((k) =>
-          k.startsWith(MEDICATION_REMINDER_PREFIX),
-        );
+        const medKeys = [...desired.keys()].filter((k) => k.startsWith(MEDICATION_REMINDER_PREFIX));
         try {
           await reconcileFn({
             data: { prefix: MEDICATION_REMINDER_PREFIX, keepKeys: medKeys },

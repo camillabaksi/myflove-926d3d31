@@ -78,8 +78,10 @@ export function normalizeMedications(raw: unknown): Medication[] {
       new Set(rawTimes.map(normalizeTime).filter((t): t is string => t !== null)),
     ).sort();
 
-    const dosage = typeof rec.dosage === "string" && rec.dosage.trim() ? rec.dosage.trim() : undefined;
-    const id = typeof rec.id === "string" && rec.id.trim() ? rec.id.trim() : fallbackId(name, times);
+    const dosage =
+      typeof rec.dosage === "string" && rec.dosage.trim() ? rec.dosage.trim() : undefined;
+    const id =
+      typeof rec.id === "string" && rec.id.trim() ? rec.id.trim() : fallbackId(name, times);
     const createdAt = typeof rec.createdAt === "number" ? rec.createdAt : 0;
     out.push({ id, name, dosage, times, createdAt });
   }
