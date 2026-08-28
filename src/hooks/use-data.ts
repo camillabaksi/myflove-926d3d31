@@ -1,9 +1,19 @@
+import { useEffect, useState } from "react";
 import { useLocalStorage } from "../lib/storage";
 import { useCloudSyncedStorage } from "../lib/cloud-storage";
 import { trackEvent, track } from "../lib/analytics";
 import type { LifeArea } from "../lib/life-areas";
 import { flowDone } from "@/lib/flow-signal";
 import { todayISO } from "@/lib/day";
+import { SECURE_UNLOCK_EVENT, unlockSecureLocal } from "@/lib/secure-local";
+import {
+  MEDICATIONS_KEY,
+  MEDICATION_LOG_KEY,
+  dedupeMedications,
+  migrateMedicationStorage,
+  type Medication,
+  type MedicationLogEntry,
+} from "@/lib/medications";
 
 export interface Focus {
   text: string;
