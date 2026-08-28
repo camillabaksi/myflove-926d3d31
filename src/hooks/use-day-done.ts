@@ -64,5 +64,5 @@ export function useDayDone(): { lines: DayDoneLine[]; anything: boolean } {
     }
 
     return { lines, anything: lines.length > 0 };
-  }, [routines, reminders, isDone, medications, isTaken, sessionsDone.length, stepsToday, stepGoal]);
+  }, [routines, isDone, medications, isTaken, sessionsDone.length, stepsToday, stepGoal]);
 }
