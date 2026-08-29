@@ -38,7 +38,7 @@ const SLIDE_LABELS: Record<DeckSlideId, string> = {
 export default function FlowDeck() {
   const { activeTasks, toggleTask, snoozeTask } = useTasks();
   const { reading, items } = useEnergyBattery();
-  const { moodValue, energyValue, logMood, logEnergy } = useQuickCheckin();
+  const { moodValue, energyValue } = useQuickCheckin();
   const weather = useWeather();
 
   const [skip, setSkip] = useState<string[]>([]);
@@ -254,10 +254,6 @@ export default function FlowDeck() {
             reading={reading}
             weather={weather}
             suggestion={suggestion}
-            moodValue={moodValue}
-            energyValue={energyValue}
-            onLogMood={logMood}
-            onLogEnergy={logEnergy}
             onNext={() => next()}
             onStart={() => setFocusOpen(true)}
             onLater={() => {
@@ -373,10 +369,6 @@ function FlowSlide({
   reading,
   weather,
   suggestion,
-  moodValue,
-  energyValue,
-  onLogMood,
-  onLogEnergy,
   onNext,
   onStart,
   onLater,
@@ -388,10 +380,6 @@ function FlowSlide({
   reading: ReturnType<typeof useEnergyBattery>["reading"];
   weather: ReturnType<typeof useWeather>;
   suggestion: ReturnType<typeof suggestNow>;
-  moodValue: number | null;
-  energyValue: number | null;
-  onLogMood: (v: number) => void;
-  onLogEnergy: (v: number) => void;
   onNext: () => void;
   onStart: () => void;
   onLater: () => void;
