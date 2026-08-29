@@ -2,7 +2,12 @@ import Layout from "@/components/layout";
 import { Link } from "wouter";
 import { Gauge, Zap, Briefcase, GraduationCap } from "lucide-react";
 import { FlowScoreCard } from "@/components/flow-score-card";
-import { MyFloveBlock, MyFloveBlockGrid, MyFloveStat } from "@/components/myflove/block";
+import {
+  MyFloveBlock,
+  MyFloveStat,
+  MyFlovePageGrid,
+  MyFloveWide,
+} from "@/components/myflove/block";
 import { useFlowScore } from "@/hooks/use-flowscore";
 import { MyFloveEnergyDots } from "@/components/myflove/motion";
 import CollapsibleSection from "@/components/collapsible-section";
