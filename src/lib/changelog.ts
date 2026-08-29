@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: '"Varför?" överallt och Lägg till på hemskärmen',
+    items: [
+      'Gemensam "Varför?"-komponent i sidhuvudet med samma utseende och beteende i hela appen (2026-08-29)',
+      '"Varför?" finns nu på Mitt batteri, Hälsa, Min energi, QuickFlow, Påminnelser och Insight (2026-08-29)',
+      '"Lägg till på hemskärmen" är tillbaka som tydlig rad i Mer, med riktig installationsprompt och iOS-instruktion (2026-08-29)',
+    ],
+  },
+  {
     title: "Nya Blueprint-, pitchdeck- och videomaterial 3.7",
     items: [
       "Living Blueprint, pitchdeck och pitchvideo är uppdaterade till nytt material i version 3.7 (2026-08-29)",
