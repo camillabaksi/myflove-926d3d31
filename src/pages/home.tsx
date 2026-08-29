@@ -26,7 +26,15 @@ import { AreaSwitcher } from "@/components/area-switcher";
 import { AREA_META, useActiveArea } from "@/lib/life-areas";
 import IntroTour from "@/components/intro-tour";
 import FlowOnboarding from "@/components/flow-onboarding";
-import { CalendarDays, ArrowRight, SlidersHorizontal, Compass, Check, Plus } from "lucide-react";
+import {
+  CalendarDays,
+  ArrowRight,
+  SlidersHorizontal,
+  Compass,
+  Check,
+  Plus,
+  Pill,
+} from "lucide-react";
 import { todayISO } from "@/lib/day";
 import { track } from "@/lib/analytics";
 import { homeContextLine } from "@/lib/flow-tone";
@@ -249,11 +257,7 @@ export default function Home() {
               title="Rutiner & medicin"
               titleText="Rutiner och medicin"
               area="halsa"
-              visual={
-                <span aria-hidden className="text-3xl leading-none">
-                  💊
-                </span>
-              }
+              icon={Pill}
               subtitle="Dagens rutiner och doser"
               status="Idag"
               tone="blush"
@@ -281,14 +285,9 @@ export default function Home() {
               area="kalender"
               icon={CalendarDays}
               subtitle="Ditt nästa steg"
+              // Samma rytm som övriga kort: kort värde + en rad förklaring.
+              status="Se dagen"
               summary={suggestion.headline}
-              // Osynlig hållare som bevarar samma vertikala rytm som blocken
-              // med en synlig statusrad (t.ex. Mitt batteri / Flow-lär-känna-dig).
-              status={
-                <span aria-hidden="true" className="invisible select-none">
-                  {"\u00A0"}
-                </span>
-              }
               tone="lavender"
               surface="lavender"
               href="/kalender"

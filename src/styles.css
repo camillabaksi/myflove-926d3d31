@@ -51,8 +51,12 @@
   --color-sky: hsl(var(--sky));
   --color-sun: hsl(var(--sun));
 
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Plus Jakarta Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans:
+    "Nunito Sans", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Noto Color Emoji";
+  --font-display:
+    "Nunito Sans", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Noto Color Emoji";
 
   /* Rundningar – hela appen utgår från --radius (1.5rem) */
   --radius-xs: calc(var(--radius) - 12px);

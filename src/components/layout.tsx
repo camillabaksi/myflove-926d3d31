@@ -99,7 +99,7 @@ const FLOW_HIDDEN_PATHS = new Set([
 import { useEnabledAreas } from "@/lib/life-areas";
 import { useLocalStorage } from "@/lib/storage";
 import { useNpfSettings, plainLabel } from "@/lib/npf-mode";
-import { trackEvent, track } from "@/lib/analytics";
+import { track } from "@/lib/analytics";
 import { rememberPlace } from "@/lib/flow-context";
 import { Button } from "@/components/ui/button";
 import { useClerk, Show } from "@clerk/react";
@@ -127,38 +127,6 @@ const CATEGORY_HUE: Record<string, string> = {
 const catColor = (id: string, alpha?: number) => {
   const hue = CATEGORY_HUE[id] ?? "220 10% 42%";
   return alpha === undefined ? `hsl(${hue})` : `hsl(${hue} / ${alpha})`;
-};
-
-const SECTION_BY_PATH: Record<string, string> = {
-  "/": "home",
-  "/mitt-batteri": "mitt-batteri",
-  "/energifloede": "energifloede",
-  "/daglig-rutin": "daglig-rutin",
-  "/quickflow": "quickflow",
-  "/anteckningar": "anteckningar",
-  "/kalender": "calendar",
-  "/fokus": "fokus",
-  "/tasks": "tasks",
-  "/pomodoro": "pomodoro",
-  "/shopping": "shopping",
-  "/finances": "finances",
-  "/travel": "travel",
-  "/statistik": "statistik",
-  "/beloningar": "beloningar",
-  "/assistant": "assistant",
-  "/flow": "flow",
-  "/flowplan": "flowplan",
-  "/flowscore": "flowscore",
-  "/admin-statistik": "admin",
-  "/admin": "admin",
-  "/friktionsindex": "friktionsindex",
-  "/familj": "familj",
-  "/matlista": "matlista",
-  "/stadning": "stadning",
-  "/insight": "insight",
-  "/halsa": "halsa",
-  "/idag": "idag",
-  "/traning": "traning",
 };
 
 /**
@@ -273,9 +241,9 @@ export default function Layout({ children }: LayoutProps) {
     }
   }, []);
 
+  // Sidvisningar loggas på EN plats (trackPageView i __root) så att samma
+  // navigering aldrig räknas två gånger. Här minns vi bara var användaren är.
   useEffect(() => {
-    const section = SECTION_BY_PATH[location] ?? (location.replace(/^\//, "") || "home");
-    trackEvent(section, "view");
     rememberPlace(location);
   }, [location]);
 
