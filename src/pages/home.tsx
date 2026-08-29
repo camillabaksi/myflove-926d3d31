@@ -55,11 +55,11 @@ interface Situation {
 
 const SITUATIONS: Situation[] = [
   {
-    href: "/idag",
+    href: "/flowplan",
 
     emoji: "🗓️",
     thought: "Jag behöver planera min dag",
-    action: "Idag – hela dagens lista",
+    action: "Planera – ett förslag på dagens ordning",
   },
   {
     href: "#did-this",
