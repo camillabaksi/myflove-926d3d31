@@ -91,20 +91,24 @@ export function useQuickCheckin() {
   /**
    * Loggar dagens mående. `note` är användarens egna ord om vad som påverkar –
    * frivilligt och sparas på samma måendepost (befintlig datamodell).
+   * Med `replaceNote` ersätts texten helt (tom text rensar) – används när
+   * användaren redigerar dagens loggning i Mitt batteri.
    */
   const logMood = useCallback(
-    (score10: number, note?: string) => {
+    (score10: number, note?: string, replaceNote = false) => {
       const score = toScale5(score10);
       const text = note?.trim() ? note.trim() : undefined;
       setCheckin10((prev) => ({ day: todayKey(), energy: prev?.energy, mood: score10 }));
       setMoods((prev) => {
         const existing = prev.find((m) => isToday(m.date));
         if (existing) {
-          return prev.map((m) =>
-            m.id === existing.id
-              ? { ...m, score, date: Date.now(), ...(text ? { note: text } : {}) }
-              : m,
-          );
+          return prev.map((m) => {
+            if (m.id !== existing.id) return m;
+            const next: MoodEntry = { ...m, score, date: Date.now() };
+            if (replaceNote ? !text : false) delete next.note;
+            else if (text) next.note = text;
+            return next;
+          });
         }
         return [
           {
