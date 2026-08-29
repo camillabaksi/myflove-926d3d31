@@ -53,7 +53,7 @@ export default function FlowSettingsPage() {
         </header>
       </MyFloveWide>
 
-      <Card className="rounded-3xl">
+      <Card className="rounded-3xl xl:col-span-2">
         <CardHeader>
           <CardTitle className="text-base">Hjälpnivå</CardTitle>
           <CardDescription>Hur mycket plats Flow får ta i vardagen.</CardDescription>
@@ -155,7 +155,8 @@ export default function FlowSettingsPage() {
         </CardContent>
       </Card>
 
-      <Card className="rounded-3xl">
+      <MyFloveWide>
+        <Card className="rounded-3xl">
         <CardHeader>
           <CardTitle className="text-base">Vad ska Flow prioritera?</CardTitle>
           <CardDescription>
@@ -180,7 +181,8 @@ export default function FlowSettingsPage() {
             </div>
           ))}
         </CardContent>
-      </Card>
+        </Card>
+      </MyFloveWide>
 
       <MyFloveWide>
         <div className="flex flex-wrap items-center gap-2">
