@@ -427,65 +427,29 @@ export default function Home() {
 
         {/* Vad behöver du just nu? – situationer, inte produktnamn */}
         {shows("vagar") && (
-          <nav
-            style={pos("vagar")}
-            aria-label="Vad behöver du just nu"
-            className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft"
-          >
-            <CollapsibleSection
-              id="hem::vagar"
+          <nav style={pos("vagar")} aria-label="Vad behöver du just nu">
+            <MyFloveBlock
               title="Vad behöver du just nu?"
-              headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
-              className="space-y-3"
+              subtitle="Välj en väg – Flow tar dig till rätt ställe"
+              collapsible
+              collapseId="hem::vagar"
+              tone="lavender"
+              surface="lavender"
             >
               <ul className="space-y-2">
-                <p className="text-xs text-muted-foreground">
-                  Välj känslan du har just nu – Flow tar dig till rätt ställe.
-                </p>
                 {SITUATIONS.map((s) => (
                   <li key={s.href}>
                     {s.didThis ? (
                       <DidThisCta
-                        trigger={
-                          <span className="group flex w-full items-center gap-3 rounded-2xl bg-secondary/30 px-3 py-3 text-left transition-colors hover:bg-secondary/60">
-                            <span aria-hidden className="text-xl">
-                              {s.emoji}
-                            </span>
-                            <span className="min-w-0 flex-1">
-                              <span className="block text-sm text-ink">{s.thought}</span>
-                              <span className="block text-xs text-muted-foreground">
-                                {s.action}
-                              </span>
-                            </span>
-                            <ArrowRight
-                              size={16}
-                              className="shrink-0 text-muted-foreground transition-colors group-hover:text-foreground"
-                            />
-                          </span>
-                        }
+                        trigger={<span className="group flex w-full items-center gap-3 rounded-2xl bg-card/70 px-3 py-3 text-left transition-colors hover:bg-card"><span aria-hidden className="text-xl">{s.emoji}</span><span className="min-w-0 flex-1"><span className="block text-sm text-ink">{s.thought}</span><span className="block text-xs text-muted-foreground">{s.action}</span></span><ArrowRight size={16} className="shrink-0 text-muted-foreground group-hover:text-foreground" /></span>}
                       />
                     ) : (
-                      <Link
-                        href={s.href}
-                        className="group flex items-center gap-3 rounded-2xl bg-secondary/30 px-3 py-3 transition-colors hover:bg-secondary/60"
-                      >
-                        <span aria-hidden className="text-xl">
-                          {s.emoji}
-                        </span>
-                        <span className="min-w-0 flex-1">
-                          <span className="block text-sm text-ink">{s.thought}</span>
-                          <span className="block text-xs text-muted-foreground">{s.action}</span>
-                        </span>
-                        <ArrowRight
-                          size={16}
-                          className="shrink-0 text-muted-foreground transition-colors group-hover:text-foreground"
-                        />
-                      </Link>
+                      <Link href={s.href} className="group flex items-center gap-3 rounded-2xl bg-card/70 px-3 py-3 transition-colors hover:bg-card"><span aria-hidden className="text-xl">{s.emoji}</span><span className="min-w-0 flex-1"><span className="block text-sm text-ink">{s.thought}</span><span className="block text-xs text-muted-foreground">{s.action}</span></span><ArrowRight size={16} className="shrink-0 text-muted-foreground group-hover:text-foreground" /></Link>
                     )}
                   </li>
                 ))}
               </ul>
-            </CollapsibleSection>
+            </MyFloveBlock>
           </nav>
         )}
 
@@ -542,26 +506,24 @@ function DaySummary() {
   const total = todayOpen.length + todayDone.length;
 
   return (
-    <section
-      className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
-      aria-label="Dagens översikt"
+    <MyFloveBlock
+      title="Dagens översikt"
+      subtitle="En snabb sammanfattning av det som väntar"
+      icon={CalendarDays}
+      tone="sky"
+      surface="sky"
+      status={total === 0 ? "Inget inplanerat ännu" : `${total} ${total === 1 ? "sak" : "saker"} idag`}
+      collapsible
+      collapseId="hem::dagens-oversikt"
     >
-      <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-        Dagens översikt
-      </h2>
-      <p className="mt-2 text-ink">
+      <p className="text-ink">
         {total === 0
           ? "Inget inplanerat idag ännu."
-          : `${total} ${total === 1 ? "sak" : "saker"} idag · ${todayDone.length} ${
-              todayDone.length === 1 ? "klar" : "klara"
-            } · ${todayOpen.length} kvar`}
+          : `${total} ${total === 1 ? "sak" : "saker"} idag · ${todayDone.length} ${todayDone.length === 1 ? "klar" : "klara"} · ${todayOpen.length} kvar`}
       </p>
-      <Link
-        href="/idag"
-        className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
-      >
+      <Link href="/idag" className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline">
         Se hela dagen i Idag <ArrowRight size={14} />
       </Link>
-    </section>
+    </MyFloveBlock>
   );
 }

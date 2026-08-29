@@ -37,14 +37,14 @@ export default function BatteryPage() {
           description="Din energi och ditt mående – checka in och se hur dagen brukar se ut."
         />
 
-        {/* 1. Primär incheckning – den enda loggningsplatsen */}
-        <SimpleCheckin source="mitt-batteri" />
+        {/* 1. Primär incheckning + nu-läge – samma befintliga dataväg */}
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">
+          <SimpleCheckin source="mitt-batteri" />
+          <EnergyBattery defaultOpen />
+        </div>
 
         {/* 2. Dagens tidsstämplade observationer – förändring över dagen */}
         <BatteryToday />
-
-        {/* 3. Nuvarande batteri och dagskurva */}
-        <EnergyBattery defaultOpen />
 
         {/* 3. Morgon/kväll och dagens energiflöde */}
         <DayEdgesCheckin />
