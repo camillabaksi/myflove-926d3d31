@@ -25,6 +25,7 @@ export function FlowReplan({
   onChange,
   keepCount,
   restCount,
+  className,
 }: {
   flow: FlowScore;
   items: FlowItem[];
@@ -33,11 +34,14 @@ export function FlowReplan({
   onChange: (mode: ReplanMode) => void;
   keepCount: number;
   restCount: number;
+  className?: string;
 }) {
   const suggested = suggestedMode(flow.score);
 
   return (
-    <section className="rounded-3xl border border-border/60 bg-lavender/60 p-5 shadow-soft">
+    <section
+      className={cn("rounded-3xl border border-border/60 bg-lavender/60 p-5 shadow-soft", className)}
+    >
       <h2 className="flex items-center gap-2 font-display text-lg text-ink">
         <RefreshCw size={18} className="text-primary" /> Ska vi lägga om dagen?
         <HelpHint label="omplanering">

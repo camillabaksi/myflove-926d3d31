@@ -131,7 +131,7 @@ export default function TodayPage() {
   return (
     <Layout>
       <MyFlovePageGrid>
-        <MyFloveWide as="header">
+        <MyFloveWide>
           <h1 className="flex items-center gap-2 font-display text-3xl text-ink">
             <Heart className="h-7 w-7 text-primary" /> Idag
           </h1>
