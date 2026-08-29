@@ -179,11 +179,10 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
             </div>
           </div>
           <p className="text-sm text-muted-foreground">
-            Dagens balans är {flow.score} just nu ({flow.label}).{" "}
+            Balans just nu: {flow.score} ({flow.label}).{" "}
             <Link href="/flowscore" className="underline">
-              Se hur den räknas
+              Så räknas den
             </Link>
-            .
           </p>
         </MyFloveCard>
 
@@ -198,6 +197,7 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
       <CollapsibleSection
         className="xl:col-span-2"
         title="Lägg till något som påverkar"
+        defaultCollapsed
         help="Skriv vad som helst som påverkar din energi – sömn, ljud, en konflikt, egentid, en promenad. Det blir aldrig en kalenderhändelse."
       >
         <MyFloveCard className="space-y-4">
@@ -332,6 +332,7 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
       <CollapsibleSection
         className="xl:col-span-2"
         title="Idag"
+        defaultCollapsed
         help="Allt du registrerat idag. Du kan stänga av påverkan på enstaka poster utan att ta bort dem."
       >
         {today.length === 0 ? (
@@ -421,6 +422,7 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
       <CollapsibleSection
         className="xl:col-span-2"
         title="Mönster över tid"
+        defaultCollapsed
         help="Enkla sammanställningar av dina egna poster. Ingen värdering – bara vad du själv har registrerat."
       >
         {catTrends.length === 0 ? (
@@ -462,9 +464,9 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
                 <p className="text-xs text-muted-foreground">
                   Något som återkommer och tar mycket?{" "}
                   <Link href="/friktionsindex" className="underline">
-                    Lägg in det i friktionsbiblioteket
-                  </Link>{" "}
-                  så tas det med i hur uppgifter rankas.
+                    Lägg det i friktionsbiblioteket
+                  </Link>
+                  .
                 </p>
               </MyFloveCard>
             )}
@@ -475,8 +477,7 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
                   Tungt att komma igång med (30 dagar)
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Hög svårighetsgrad behöver inte betyda hög energikostnad – det betyder att starten
-                  är svår.
+                  Svår start behöver inte betyda hög kostnad.
                 </p>
                 {frictionRows.map((t) => (
                   <div key={t.key} className="flex items-center justify-between text-sm">
@@ -498,6 +499,7 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
       <MyFloveWide>
         <CollapsibleSection
           title="Hur mycket får det påverka?"
+          defaultCollapsed
           help="Du bestämmer själv. Du kan stänga av påverkan helt, eller ställa in vikten för varje energifaktor för sig."
         >
           <EnergyFlowSettings />
