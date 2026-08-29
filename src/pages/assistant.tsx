@@ -16,6 +16,7 @@ import {
   ChevronRight,
   MoreHorizontal,
   Pencil,
+  MessageCircle,
 } from "lucide-react";
 import { FlowMascot, type FlowStatus } from "@/components/flow-mascot";
 import { chatWithFlow } from "@/lib/flow-chat.functions";

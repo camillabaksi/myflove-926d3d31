@@ -44,6 +44,7 @@ export interface MyFloveBlockProps {
   span?: boolean;
   className?: string;
   bodyClassName?: string;
+  "data-testid"?: string;
   children?: React.ReactNode;
 }
 
@@ -72,6 +73,7 @@ export function MyFloveBlock({
   span,
   className,
   bodyClassName,
+  "data-testid": dataTestId,
   children,
 }: MyFloveBlockProps) {
   const [path] = useLocation();
@@ -107,6 +109,7 @@ export function MyFloveBlock({
 
   return (
     <section
+      data-testid={dataTestId}
       className={cn(
         "flex flex-col gap-4 rounded-3xl border border-border/60 p-5 shadow-soft",
         surface ? SURFACE[surface] : "bg-card",
