@@ -170,9 +170,7 @@ export function ExpandableBlock({
                     <h2 className="font-display text-lg font-bold leading-tight text-ink">
                       {title}
                     </h2>
-                    {subtitle && (
-                      <p className="mt-0.5 text-sm text-muted-foreground">{subtitle}</p>
-                    )}
+                    {subtitle && <p className="mt-0.5 text-sm text-muted-foreground">{subtitle}</p>}
                   </div>
                   <button
                     type="button"
