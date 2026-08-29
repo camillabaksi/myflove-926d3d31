@@ -10,9 +10,9 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
-    title: "Hem: Flow-kortet leder till Kalender, maskoten större",
+    title: "Hem: Flow-kortet döps om till Kalender",
     items: [
-      "Flow · just nu (Ditt nästa steg) navigerar nu till Kalender (/kalender) i stället för Flow (2026-08-29)",
+      "Kortet som tidigare hette Flow · just nu heter nu Kalender och leder till Kalender (/kalender) (2026-08-29)",
       "Nästa navigerar tillbaka till Idag (/idag) (2026-08-29)",
       "Flow-maskoten i godmorgon-kortet är förstorad från sm till md (2026-08-29)",
       "Endast presentation och navigation – data, logik och övrig funktionalitet är oförändrad (2026-08-29)",
