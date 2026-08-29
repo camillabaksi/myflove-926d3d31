@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-29 – Städning: typsnitt, statistik och konsekventa kort
+
+- Nunito Sans är nu appens enda typsnitt (tokens + fontladdning), med emoji-fallback.
+- Sidvisningar loggas på EN plats (`trackPageView` i root) – den dubbla loggningen i layouten är borttagen, så statistiken inte dubbelräknas.
+- `/insight` renderas nu i appens delade skal, så bottennavigation och back-navigation fungerar där också.
+- Hem: Kalender-kortet visar kort värde ("Se dagen") + en rad förklaring, och Rutiner & medicin använder Lucide-ikon i stället för emoji – samma kortspråk som övriga block.
+
 ## 2026-08-29 – Planera: fullbreddsblock i stället för smal vertikal layout
 
 - Steg 1 (”Hur ser dagen ut?”) och Steg 2 (”Ändra ordningen”) spänner nu över hela raden via `span`, så formulär och lista får hela ytans bredd i stället för att klämmas vertikalt i en halv kolumn.
@@ -11,7 +18,6 @@
 - Endast presentation – navigation, data och funktionalitet är oförändrade.
 
 ## 2026-08-29 – Hem: Kalender-blocket utan "Jag finns här"
-
 
 - Tog bort statusraden "Jag finns här" från Hem-blocket Kalender. Kortet visar nu bara titel, undertitel och Flows förslagstext.
 - Endast presentation – navigation, data och funktionalitet är oförändrade.
@@ -45,13 +51,11 @@
 - Flow-maskoten i godmorgon-kortet är förstorad från `sm` till `md`.
 - Endast presentation och navigation – data, logik och övrig funktionalitet är oförändrad.
 
-
 ## 2026-08-29 – Hem: Nästa leder till Kalender, Flow-blocket större
 
 - "Nästa" navigerar nu till Kalender (/kalender) i stället för Idag – eftersom det redan finns en Idag-widget.
 - "Flow · just nu" är nu ett fullbrett block högt upp på Hem med större Flow-maskot.
 - Endast presentation och navigation – data, logik och övrig funktionalitet är oförändrad.
-
 
 ## 2026-08-29 – Hem: Flow-, Insikter- och Nästa-korten leder nu vidare
 
@@ -60,14 +64,12 @@
 - "Flow · just nu" navigerar till Flow (/flow).
 - ExpandableBlock har fått ett href-läge: kortet blir en länk med samma komprimerade design (som Mitt batteri). Ingen information försvinner – innehållet bor på målsidorna.
 
-
 ## 2026-08-29 – Hem: centrerad blockdesign enligt ny referens
 
 - Komprimerade block är nu centrerade: cirkulär färgad ikon upptill, rubrik + kort underrubrik, streck och stort värde i områdets färg, samt rund pilknapp uppe till höger.
 - Mitt batteri-kortet och Dagens översikt följer samma centrerade stil.
 - Hälsokortet överst visar nu Flow-maskoten i stället för en emoji.
 - Expanderad vy, all data, navigation och funktionalitet är oförändrade.
-
 
 ## 2026-08-29 – Samma blockdesign på övriga sidor
 
@@ -76,7 +78,6 @@
 - Sidorna använder MyFlovePageGrid med MyFloveWide för innehåll som behöver full bredd (formulär, listor, grafer) – samma symmetri som Hem och Hälsa.
 - Endast presentation – data, logik, navigation och funktionalitet är oförändrade.
 
-
 ## 2026-08-29 – Samma blockpolish på Hälsa, Planera och Kalender
 
 - Hälsa: Träning- och Rutiner-korten följer nu Hem-blockens formspråk – rounded-3xl, mjuk halsa-border, min-height 9rem, ikon + rubrik + kort underrubrik + pil uppe till höger. Kortare underrubriker.
@@ -84,7 +85,6 @@
 - Planera: stegblocken (Hur ser dagen ut?, Ändra ordningen) får planeraområdets mjuka blå/lila border.
 - Kalender: kalenderkortet och import/export-knapparna får kalenderområdets mjuka rosa/lila border och samma skugga som övriga block.
 - Endast presentation – data, logik och navigation är oförändrade.
-
 
 ## 2026-08-29 – Hemskärmen: polish och symmetri
 
@@ -96,14 +96,12 @@
 - Kortare underrubriker utan avklippt text: "Nästa viktiga sak", "Ditt nästa steg".
 - Endast presentation – data, loggning, navigation och logik är oförändrade.
 
-
 ## 2026-08-29 – Tre riktade UI/UX-korrigeringar
 
 - Hem: "Dagens översikt" navigerar nu direkt till befintliga Idag-vyn (ingen ny route); tillbaka fungerar som vanligt. Blocket är en komprimerad widget: ikon + "3/5" + "2 kvar".
 - Historik → Mående: "Hitta mitt flow" är omdesignad till samma blockspråk – rundat lavenderkort med ikon + kort rubrik. Funktionen (Flow-insikter) är oförändrad.
 - Historik → Flöde: sektionerna "Lägg till något som påverkar", "Idag", "Mönster över tid" och "Hur mycket får det påverka?" är komprimerade som standard och expanderar vid tryck; långa förklaringstexter är kortade.
 - Endast presentation – data, stores, navigation och logik är oförändrade.
-
 
 ## 2026-08-29 – Hem i samma designspråk som Hälsa
 
