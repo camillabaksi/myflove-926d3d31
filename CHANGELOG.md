@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-29 – Widget-minimalism på fler dashboard-sidor
+
+- Idag: "Dagens ordning" är nu en komprimerad widget (ikon + antal steg + etiketten "Ordning"); hela planen med steg, tider och länk till Planera finns kvar i expanderad vy.
+- Kalender: batterikortet använder samma widget-läge som Hem – stor ikon + procent, tryck öppnar Mitt batteri.
+- Mitt batteri: historikblocket är en komprimerad widget ("Historik") som expanderar i sidans flöde med flikarna Mående/Energi/Flöde oförändrade.
+- Endast presentation: data, stores, navigation och logik är oförändrade.
+
 ## 2026-08-29 – Widget-läge: minimalistiska komprimerade block
 
 - Komprimerade block på Hem visar nu bara stor ikon/illustration + ETT värde (t.ex. 🔋 58 %, ✓ 4/7, 📅 13:00) – rubrik, underrubrik och förklaringar har flyttats till den expanderade vyn.
