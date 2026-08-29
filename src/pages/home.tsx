@@ -361,20 +361,20 @@ export default function Home() {
           </div>
         )}
 
-        {/* Nästa – nästa relevanta aktivitet */}
+        {/* Nästa – nästa relevanta aktivitet, leder till Kalender */}
         {shows("nasta") && (
           <section className="min-w-0" style={pos("nasta")} aria-label="Nästa aktivitet">
             <ExpandableBlock
               title="Nästa"
               titleText="Nästa"
-              area="idag"
+              area="kalender"
               icon={CalendarDays}
               subtitle="Nästa viktiga sak"
               status={nextEvent ? nextEvent.time : "–"}
               summary={nextEvent ? nextEvent.title : "Inget inplanerat just nu"}
-              tone="sky"
-              surface="sky"
-              href="/idag"
+              tone="blush"
+              surface="blush"
+              href="/kalender"
             />
           </section>
         )}
