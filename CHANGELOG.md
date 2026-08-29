@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-29 – Hem: centrerad blockdesign enligt ny referens
+
+- Komprimerade block är nu centrerade: cirkulär färgad ikon upptill, rubrik + kort underrubrik, streck och stort värde i områdets färg, samt rund pilknapp uppe till höger.
+- Mitt batteri-kortet och Dagens översikt följer samma centrerade stil.
+- Hälsokortet överst visar nu Flow-maskoten i stället för en emoji.
+- Expanderad vy, all data, navigation och funktionalitet är oförändrade.
+
+
 ## 2026-08-29 – Samma blockdesign på övriga sidor
 
 - MyFloves gemensamma blockspråk (tvåkolumns-grid, mjuka rundade kort, områdesfärgade borders) är nu applicerat på övriga sidor: Matlista, Träning, Stop-paus, Quickflow, Relationer, Barn, Familj, Ekonomi, Resor, Timer (Pomodoro), Belöningar, Veckans flow, Studyflow, Jobb, Workflow, Daglig rutin, Friktionsindex, Livsprofil och Statistik.

@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Hem: centrerad blockdesign enligt ny referens",
+    items: [
+      "Komprimerade block är centrerade: cirkulär ikon, rubrik + underrubrik, streck, stort värde i områdesfärg och rund pilknapp (2026-08-29)",
+      "Mitt batteri och Dagens översikt följer samma centrerade stil; hälsokortet visar Flow-maskoten (2026-08-29)",
+      "Endast presentation – data, logik, navigation och funktionalitet är oförändrade (2026-08-29)",
+    ],
+  },
+  {
     title: "Samma blockdesign på övriga sidor",
     items: [
       "Gemensamt blockspråk (tvåkolumns-grid, mjuka rundade kort, områdesfärgade borders) på Matlista, Träning, Stop-paus, Quickflow, Relationer, Barn, Familj, Ekonomi, Resor, Timer, Belöningar, Veckans flow, Studyflow, Jobb, Workflow, Daglig rutin, Friktionsindex, Livsprofil och Statistik (2026-08-29)",
