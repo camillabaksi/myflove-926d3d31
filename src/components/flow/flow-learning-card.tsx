@@ -22,10 +22,13 @@ export default function FlowLearningCard({ className }: { className?: string }) 
     <section
       data-flow-learning
       aria-label="Flow lär känna dig"
-      className={cn("rounded-3xl border border-primary/15 bg-primary/5 p-4 shadow-sm", className)}
+      className={cn(
+        "min-w-0 rounded-3xl border border-primary/15 bg-primary/5 p-3 shadow-sm sm:p-4",
+        className,
+      )}
     >
-      <div className="flex items-center gap-3">
-        <FlowMascot size="sm" mood="calm" bump className="flow-alive shrink-0" />
+      <div className="flex min-w-0 flex-col items-start gap-2 min-[380px]:flex-row min-[380px]:items-center sm:gap-3">
+        <FlowMascot size="xs" mood="calm" bump className="flow-alive shrink-0" />
         <div className="min-w-0 flex-1">
           <p className="text-sm font-semibold">Flow lär känna dig</p>
           <p className="text-xs text-muted-foreground">{knowledge.label}</p>

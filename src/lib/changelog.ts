@@ -17,6 +17,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
       "MyFlovePageGrid ger två kolumner även på 320–412 px, tre på tablet och fyra på desktop; MyFloveWide ger enskilda breda block hela raden (2026-08-29)",
       "Hem, Hälsa och Mitt batteri visar flera lämpliga block samtidigt på mobil, medan grafer, formulär och långa texter använder hela bredden utan sidoscroll (2026-08-29)",
       "Planera, Kalender, Energi/Flow, listor, påminnelser, rutiner, medicin och inställningar använder samma blockramverk (2026-08-29)",
+      "Mobilkorten har kompakt padding och storlek, medan läsintensivt innehåll uttryckligen spänner båda kolumnerna (2026-08-29)",
     ],
   },
   {
