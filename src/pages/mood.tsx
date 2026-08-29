@@ -182,7 +182,8 @@ export function MoodContent({ showHeader = true, readOnly = false }: MoodContent
 export default function Mood() {
   return (
     <Layout>
-      <MoodContent />
+      {/* Read-only även som fristående sida: ny loggning sker bara i Mitt batteri. */}
+      <MoodContent readOnly />
     </Layout>
   );
 }

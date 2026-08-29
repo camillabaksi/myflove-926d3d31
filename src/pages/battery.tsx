@@ -5,6 +5,7 @@ import Layout from "@/components/layout";
 import { MyFloveHeader } from "@/components/myflove";
 import EnergyBattery from "@/components/energy-battery";
 import SimpleCheckin from "@/components/simple-checkin";
+import BatteryToday from "@/components/battery-today";
 import DayEdgesCheckin from "@/components/day-edges-checkin";
 import DayEnergyFlow from "@/components/day-energy-flow";
 import CollapsibleSection from "@/components/collapsible-section";
@@ -35,10 +36,13 @@ export default function BatteryPage() {
           description="Din energi och ditt mående – checka in och se hur dagen brukar se ut."
         />
 
-        {/* 1. Primär incheckning */}
+        {/* 1. Primär incheckning – den enda loggningsplatsen */}
         <SimpleCheckin source="mitt-batteri" />
 
-        {/* 2. Nuvarande batteri och dagskurva */}
+        {/* 2. Dagens tidsstämplade observationer – förändring över dagen */}
+        <BatteryToday />
+
+        {/* 3. Nuvarande batteri och dagskurva */}
         <EnergyBattery defaultOpen />
 
         {/* 3. Morgon/kväll och dagens energiflöde */}

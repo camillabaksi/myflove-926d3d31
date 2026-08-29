@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-29 – Flera observationer per dag i Mitt batteri
+
+- Varje loggning av energi/mående blir nu en egen tidsstämplad observation – tidigare värden skrivs aldrig över.
+- Ny vy "Idag i Mitt batteri" visar hur energi och mående förändrats under dagen (08:15 · 30 % → 13:40 · 55 % …), med din fritext vid varje tillfälle.
+- Mitt batteri är fortfarande den enda loggningsplatsen; den fristående måendesidan är nu read-only och hänvisar dit.
+- Logga så ofta du vill: morgon, eftermiddag, kväll – allt samlas i samma lugna bild av dagen.
+
 ## 2026-08-29 – Redigera dagens loggning i Mitt batteri
 
 - Dagens energi- och måendeloggning går nu att ändra direkt i samma vy: Mitt batteri fyller i dagens värden och din sparade fritext automatiskt.

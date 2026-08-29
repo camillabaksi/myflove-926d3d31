@@ -8,8 +8,9 @@ import { useLocalStorage } from "@/lib/storage";
  * Mående återanvänder befintliga moods (myflow-moods) och energi
  * återanvänder befintliga energy_logs – inga nya system.
  *
- * Dagens värde går alltid att ändra: senaste registreringen samma dag
- * uppdateras i stället för att en ny rad läggs till.
+ * Flera observationer per dag: varje loggning blir en egen tidsstämplad
+ * observation – tidigare värden skrivs aldrig över. Energi och mående
+ * kan därmed förändras över dagen (morgon → eftermiddag → kväll).
  */
 
 export interface EnergyLogEntry {
@@ -78,61 +79,49 @@ export function useQuickCheckin() {
 
   const energyEntries = cloudEnergy ?? localEnergy;
 
-  const todayMood = useMemo<MoodEntry | null>(
-    () => moods.find((m) => isToday(m.date)) ?? null,
+  /** Alla dagens måendeobservationer, äldst → nyast. */
+  const todayMoods = useMemo<MoodEntry[]>(
+    () => moods.filter((m) => isToday(m.date)).sort((a, b) => a.date - b.date),
     [moods],
   );
 
-  const todayEnergy = useMemo<EnergyLogEntry | null>(() => {
-    const todays = energyEntries.filter((e) => isToday(e.logged_at));
-    return todays.length > 0 ? (todays[todays.length - 1] as EnergyLogEntry) : null;
-  }, [energyEntries]);
+  /** Alla dagens energiobservationer, äldst → nyast. */
+  const todayEnergyEntries = useMemo<EnergyLogEntry[]>(
+    () => energyEntries.filter((e) => isToday(e.logged_at)),
+    [energyEntries],
+  );
+
+  const todayMood = todayMoods.length > 0 ? todayMoods[todayMoods.length - 1] : null;
+
+  const todayEnergy =
+    todayEnergyEntries.length > 0 ? todayEnergyEntries[todayEnergyEntries.length - 1] : null;
 
   /**
-   * Loggar dagens mående. `note` är användarens egna ord om vad som påverkar –
-   * frivilligt och sparas på samma måendepost (befintlig datamodell).
-   * Med `replaceNote` ersätts texten helt (tom text rensar) – används när
-   * användaren redigerar dagens loggning i Mitt batteri.
+   * Loggar en ny måendeobservation. `note` är användarens egna ord om vad som
+   * påverkar – frivilligt och sparas på observationen (befintlig datamodell).
+   * Varje anrop skapar en egen tidsstämplad post; inget skrivs över.
    */
   const logMood = useCallback(
-    (score10: number, note?: string, replaceNote = false) => {
+    (score10: number, note?: string) => {
       const score = toScale5(score10);
       const text = note?.trim() ? note.trim() : undefined;
       setCheckin10((prev) => ({ day: todayKey(), energy: prev?.energy, mood: score10 }));
-      setMoods((prev) => {
-        const existing = prev.find((m) => isToday(m.date));
-        if (existing) {
-          return prev.map((m) => {
-            if (m.id !== existing.id) return m;
-            const next: MoodEntry = { ...m, score, date: Date.now() };
-            if (replaceNote && !text) delete next.note;
-            else if (text) next.note = text;
-            return next;
-          });
-        }
-        return [
-          {
-            id: Math.random().toString(36).slice(2, 11),
-            score,
-            date: Date.now(),
-            ...(text ? { note: text } : {}),
-          },
-          ...prev,
-        ];
-      });
+      setMoods((prev) => [
+        {
+          id: Math.random().toString(36).slice(2, 11),
+          score,
+          date: Date.now(),
+          ...(text ? { note: text } : {}),
+        },
+        ...prev,
+      ]);
     },
     [setMoods, setCheckin10],
   );
 
-  // Håller reda på dagens rad-id direkt (utan att vänta på state-uppdatering)
-  // och serialiserar sparningar så att snabba upprepade ändringar aldrig
-  // skapar fler än en loggrad per dag.
-  const todayRowIdRef = useRef<string | null>(null);
+  // Serialiserar sparningar så att snabba upprepade loggningar alltid
+  // blir separata, tidsstämplade observationer – aldrig överskrivning.
   const queueRef = useRef<Promise<void>>(Promise.resolve());
-
-  useEffect(() => {
-    todayRowIdRef.current = todayEnergy?.id ?? null;
-  }, [todayEnergy]);
 
   const logEnergy = useCallback(
     (level10: number) => {
@@ -141,30 +130,10 @@ export function useQuickCheckin() {
       const run = async () => {
         const now = new Date().toISOString();
         if (!userId) {
-          setLocalEnergy((prev) => {
-            const list = prev ?? [];
-            const existing = [...list].reverse().find((e) => isToday(e.logged_at));
-            if (existing) {
-              return list.map((e) => (e.id === existing.id ? { ...e, level, logged_at: now } : e));
-            }
-            const id = Math.random().toString(36).slice(2, 11);
-            return [...list, { id, level, logged_at: now }];
-          });
-          return;
-        }
-        const existingId = todayRowIdRef.current;
-        if (existingId) {
-          const { data } = await supabase
-            .from("energy_logs")
-            .update({ level, logged_at: now })
-            .eq("id", existingId)
-            .select("id, level, logged_at")
-            .single();
-          setCloudEnergy((prev) =>
-            (prev ?? []).map((e) =>
-              e.id === existingId ? (data ?? { ...e, level, logged_at: now }) : e,
-            ),
-          );
+          setLocalEnergy((prev) => [
+            ...(prev ?? []),
+            { id: Math.random().toString(36).slice(2, 11), level, logged_at: now },
+          ]);
           return;
         }
         const { data } = await supabase
@@ -173,7 +142,6 @@ export function useQuickCheckin() {
           .select("id, level, logged_at")
           .single();
         if (data) {
-          todayRowIdRef.current = data.id;
           setCloudEnergy((prev) => [...(prev ?? []), data]);
         }
       };
@@ -195,5 +163,14 @@ export function useQuickCheckin() {
     (todayEnergy ? toScale10(todayEnergy.level) : null) ??
     null;
 
-  return { todayMood, todayEnergy, moodValue, energyValue, logMood, logEnergy };
+  return {
+    todayMood,
+    todayEnergy,
+    todayMoods,
+    todayEnergyEntries,
+    moodValue,
+    energyValue,
+    logMood,
+    logEnergy,
+  };
 }
