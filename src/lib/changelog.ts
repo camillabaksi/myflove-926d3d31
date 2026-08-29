@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Publicerad: myflove.lovable.app uppdaterad",
+    items: [
+      "MyFlove publicerades till https://myflove.lovable.app (2026-08-29)",
+      "Live-sidan visar nu senaste blueprint, pitchdeck och pitchvideo i version 3.7 (2026-08-29)",
+      "Publiceringen inkluderar senaste designen, 'Varför?'-förklaringar och Lägg till på hemskärmen (2026-08-29)",
+    ],
+  },
+  {
     title: '"Varför?" överallt och Lägg till på hemskärmen',
     items: [
       'Gemensam "Varför?"-komponent i sidhuvudet med samma utseende och beteende i hela appen (2026-08-29)',

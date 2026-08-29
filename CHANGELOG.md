@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-29 – Publicerad: myflove.lovable.app uppdaterad
+
+- Den senaste versionen av MyFlove publicerades till `https://myflove.lovable.app`.
+- Live-sidan visar nu senaste blueprint, pitchdeck och pitchvideo i version 3.7.
+- Inkluderar alla senaste design- och UX-ändringar: blocklayout, mjuka borders, "Varför?"-förklaringar och Lägg till på hemskärmen.
+
 ## 2026-08-29 – "Varför?" överallt och Lägg till på hemskärmen
 
 - Sidhuvudet (`MyFloveHeader`) har nu ett gemensamt `why`-stöd, så alla "Varför?"-förklaringar ser likadana ut och beter sig likadant.
