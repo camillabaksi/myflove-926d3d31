@@ -3,12 +3,8 @@ import { Link } from "wouter";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import FocusMode from "@/components/focus-mode";
-import {
-  FlowCharacter,
-  isWetWeather,
-  sceneForTask,
-  type FlowScene,
-} from "@/components/flow/flow-character";
+import { FlowCharacter, type FlowScene } from "@/components/flow/flow-character";
+import { isWetWeather, sceneForTask } from "@/components/flow/scenes";
 import { useTasks } from "@/hooks/use-data";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";

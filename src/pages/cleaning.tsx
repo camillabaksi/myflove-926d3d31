@@ -46,7 +46,7 @@ export default function CleaningPage() {
 
   const room = CLEAN_ROOMS.find((r) => r.id === roomId)!;
   const listKey = `${roomId}:${mode}`;
-  const hiddenIds = hidden[listKey] ?? [];
+  const hiddenIds = useMemo(() => hidden[listKey] ?? [], [hidden, listKey]);
   const steps = useMemo(
     () => [
       ...room.steps[mode].filter((s) => !hiddenIds.includes(s.id)),
