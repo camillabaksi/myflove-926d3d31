@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-08-29 – En enda plats för energi & mående
+
+- Mitt batteri är nu den enda platsen där du loggar energi och mående: Hem → Mitt batteri → Logga energi & mående.
+- Hem visar batteriet tydligt med en direktknapp – men loggar inget själv.
+- Dubbla loggningsvägar borttagna: den oanvända snabbincheckningen, Flows egna reglage och QuickFlows energipanel hänvisar nu till Mitt batteri.
+- Du kan skriva med egna ord om vad som påverkar dig – frivilligt, sparas med dagens mående.
+- Flow kan använda din text som kontext, men ställer aldrig diagnoser.
+- Måendehistoriken är read-only; nya loggar görs i Mitt batteri.
+
 ## 2026-08-29 – Hälsologgning hålls skild från Min dag och kalendern
 
 - Ny regel i koden: energi, sömn, mående och kroppsliga observationer är data – de blir aldrig automatiskt en uppgift, kalenderpost eller påminnelse.
