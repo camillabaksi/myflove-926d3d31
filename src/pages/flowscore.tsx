@@ -11,7 +11,6 @@ import {
 import { useFlowScore } from "@/hooks/use-flowscore";
 import { MyFloveEnergyDots } from "@/components/myflove/motion";
 
-
 export default function FlowScorePage() {
   const { flow, energy, mood, minutesLeft } = useFlowScore();
 
