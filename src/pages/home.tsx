@@ -417,20 +417,19 @@ export default function Home() {
         {/* Flow just nu – samma förslag som i Planera, tydligt signerat Flow */}
         {shows("forslag") && (
           <section className="min-w-0" style={pos("forslag")} aria-label="Flows förslag just nu">
-            <MyFloveBlock
-              title={
-                <span className="flex items-center gap-2">
-                  <FlowMascot size="xs" mood="nod" bump className="flow-alive" alt="" />
-                  <Sparkles size={16} className="text-primary" aria-hidden="true" /> Flow · just nu
-                </span>
-              }
+            <ExpandableBlock
+              title="Flow · just nu"
+              titleText="Flow just nu"
+              visual={<FlowMascot size="xs" mood="nod" bump className="flow-alive" alt="" />}
               subtitle="Ett lugnt förslag – du väljer själv"
-              collapsible
-              collapseId="hem::flow-forslag"
+              summary={suggestion.headline}
               tone="lavender"
               surface="lavender"
             >
-              <p className="leading-relaxed text-ink">{suggestion.headline}</p>
+              <p className="leading-relaxed text-ink">
+                <Sparkles size={16} className="mr-1 inline text-primary" aria-hidden="true" />
+                {suggestion.headline}
+              </p>
               {suggestion.task && !samsomNasta && (
                 <p className="text-sm text-muted-foreground">
                   <span className="font-medium text-ink">{suggestion.task.title}</span>
@@ -445,7 +444,8 @@ export default function Home() {
                 {suggestion.task ? "Planera i Idag" : "Fånga något i QuickFlow"}{" "}
                 <ArrowRight size={14} />
               </Link>
-            </MyFloveBlock>
+            </ExpandableBlock>
+
           </section>
         )}
 
