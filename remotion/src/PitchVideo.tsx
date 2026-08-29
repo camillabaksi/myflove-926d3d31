@@ -469,7 +469,7 @@ const SceneHow: React.FC = () => {
               >
                 {s.d}
               </div>
-            </div>
+            </InView>
           ))}
         </div>
       </div>
@@ -610,7 +610,7 @@ const SceneMarket: React.FC = () => {
               >
                 {s.d}
               </div>
-            </div>
+            </InView>
           ))}
         </div>
 
