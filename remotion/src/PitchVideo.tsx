@@ -206,7 +206,7 @@ const SceneHook: React.FC = () => {
   return (
     <Shell dark>
       <div style={{ display: "flex", flexDirection: "column", gap: 34 }}>
-        <Eyebrow dark>MyFlove — pitch 2026 · v3.5</Eyebrow>
+        <Eyebrow dark>MyFlove — pitch 2026 · v3.7</Eyebrow>
         <div style={{ transform: `scale(${pulse})`, transformOrigin: "left center" }}>
           <Title dark size={112}>
             Vardagen kraschar
@@ -215,8 +215,7 @@ const SceneHook: React.FC = () => {
           </Title>
         </div>
         <Sub dark delay={20}>
-          Den kraschar när hjärnan får bära allt själv: tider, mediciner, barn, jobb, studier,
-          energi.
+          Den kraschar när hjärnan får bära allt själv: tider, ansvar, relationer, energi.
         </Sub>
       </div>
     </Shell>
@@ -286,25 +285,25 @@ const SceneProduct: React.FC = () => (
     <div style={{ display: "flex", flexDirection: "column", gap: 46 }}>
       <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
         <Eyebrow>Produkten</Eyebrow>
-        <Title size={72}>Ett lugnt system för hela livet</Title>
+        <Title size={72}>Ett lugnt system för hela vardagen</Title>
       </div>
       <div style={{ display: "flex", gap: 28 }}>
         <Card
           accent={COLORS.primary}
           title="Mitt batteri"
-          text="Energin loggas enkelt och styr dagens förslag."
+          text="Energi och mående loggas på ett enda ställe."
           delay={14}
         />
         <Card
           accent={COLORS.primarySoft}
           title="QuickFlow"
-          text="Fånga allt i en ruta — appen sorterar rätt."
+          text="Få tanken ur huvudet direkt – sortera senare."
           delay={22}
         />
         <Card
           accent={COLORS.gold}
-          title="Min dag"
-          text="En tidslinje: nästa steg, medicin, rutiner."
+          title="Idag"
+          text="Aktiviteter, uppgifter och dagens ordning samlat."
           delay={30}
         />
       </div>
@@ -347,20 +346,20 @@ const SceneFlow: React.FC = () => (
     <div style={{ display: "flex", alignItems: "center", gap: 60 }}>
       <div style={{ display: "flex", flexDirection: "column", gap: 40, flex: 1 }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          <Eyebrow>Flow 2.0</Eyebrow>
+          <Eyebrow>Flow</Eyebrow>
           <Title size={64}>En följeslagare som säger en sak i taget</Title>
         </div>
         <div style={{ display: "flex", gap: 24 }}>
           <Card
             accent={COLORS.primary}
             title="Levande karaktär"
-            text="12 lägen: regn, medicin, vila, studier, jobb och klart."
+            text="Flow ger lugna, situationsnära förslag utan att ta över."
             delay={14}
           />
           <Card
             accent={COLORS.primarySoft}
             title="Finns i hela appen"
-            text="Samma lugna röst på Hem, Min dag och alla vyer."
+            text="Samma trygga ton på Hem, Idag, planering och hjälp."
             delay={22}
           />
         </div>
@@ -378,12 +377,12 @@ const SceneFlowAlive: React.FC = () => {
       <div style={{ display: "flex", alignItems: "center", gap: 60 }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 36, flex: 1 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            <Eyebrow>Flow lever</Eyebrow>
-            <Title size={62}>Han andas, blinkar och följer samtalet</Title>
+            <Eyebrow>Flow i vardagen</Eyebrow>
+            <Title size={62}>En levande guide som håller tonen lugn</Title>
           </div>
           <Sub delay={16}>
-            Flow är inte en stillbild. Han andas mjukt, blinkar i slumpad rytm, lutar sig mot dig
-            och hjärtat glöder lugnt.
+            Flow är en återkommande karaktär i appen: synlig när det hjälper, diskret när det behövs
+            och alltid lätt att stänga av.
           </Sub>
           <div style={{ display: "flex", gap: 24 }}>
             <Card
@@ -411,9 +410,9 @@ const SceneFlowAlive: React.FC = () => {
 const SceneHow: React.FC = () => {
   const steps = [
     { n: "1", t: "Fånga", d: "Skriv fritt i QuickFlow" },
-    { n: "2", t: "Sortera", d: "AI placerar rätt: kalender, inköp, studier" },
-    { n: "3", t: "Anpassa", d: "Dagen planeras efter batteriet" },
-    { n: "4", t: "Lära", d: "Friktion och energi ger bättre förslag" },
+    { n: "2", t: "Förstå", d: "Se vad som är viktigt och möjligt" },
+    { n: "3", t: "Planera", d: "Ändra ordningen efter din kapacitet" },
+    { n: "4", t: "Fortsätt", d: "Ta nästa rimliga steg utan skuld" },
   ];
   return (
     <Shell>
@@ -485,8 +484,8 @@ const SceneWhyNow: React.FC = () => (
         Diagnoser ökar. Stödet gör det inte.
       </Title>
       <Sub dark delay={16}>
-        AI gör det för första gången möjligt att ge personligt, tålmodigt stöd i vardagen — till en
-        kostnad som skalar.
+        Personliga digitala stöd kan göra det lättare att få lugn vägledning i vardagen – med
+        användaren i kontroll över förslag, data och tempo.
       </Sub>
       <div
         style={{
@@ -521,38 +520,32 @@ const SceneMarket: React.FC = () => {
     {
       v: "140M+",
       l: "vuxna globalt",
-      d: "Vuxna med kvarstående ADHD (2,58 % av vuxna, ca 139,8 miljoner). Global systematisk översikt.",
+      d: "Extern uppskattning baserad på 2,58 % vuxenprevalens.",
       a: COLORS.primary,
     },
     {
       v: "~3 %",
-      l: "av vuxna i Sverige",
-      d: "Socialstyrelsen anger att cirka 3 % av vuxna i Sverige har ADHD.",
+      l: "vuxna i Sverige",
+      d: "Extern uppskattning från Socialstyrelsen.",
       a: COLORS.primarySoft,
-    },
-    {
-      v: "$3,06B",
-      l: "digital hälsa 2025",
-      d: "Uppskattad global digital-health-marknad för neurodivergenta användare 2025.",
-      a: COLORS.gold,
     },
     {
       v: "$1,9B",
       l: "ADHD-appar 2025",
-      d: "Uppskattad global marknad för ADHD-appar 2025.",
-      a: COLORS.primary,
+      d: "Extern uppskattning av global appmarknad.",
+      a: COLORS.gold,
     },
     {
       v: "$6,7B",
       l: "ADHD-appar 2033",
-      d: "Prognostiserad global marknad för ADHD-appar 2033.",
-      a: COLORS.primarySoft,
+      d: "Extern marknadsprognos – inte MyFloves intäkt.",
+      a: COLORS.primary,
     },
     {
       v: "17,5 %",
       l: "CAGR 2025–2033",
-      d: "Prognostiserad årlig tillväxt för ADHD-appmarknaden.",
-      a: COLORS.gold,
+      d: "Extern prognos för appmarknadens årliga tillväxt.",
+      a: COLORS.primarySoft,
     },
   ];
   return (
