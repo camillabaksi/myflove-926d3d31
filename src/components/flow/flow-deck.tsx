@@ -426,7 +426,7 @@ function FlowSlide({
   }
 
   if (id === "checkin") {
-    return <CheckinSlide seed={seed} moodValue={moodValue} energyValue={energyValue} onLogMood={onLogMood} onLogEnergy={onLogEnergy} onNext={onNext} />;
+    return <CheckinSlide seed={seed} onNext={onNext} />;
   }
 
   if (id === "energy") {
@@ -511,62 +511,24 @@ function FlowSlide({
 }
 
 /** Kort incheckning – använder befintlig logg-logik, inget nytt datalager. */
-function CheckinSlide({
-  seed,
-  moodValue,
-  energyValue,
-  onLogMood,
-  onLogEnergy,
-  onNext,
-}: {
-  seed: number;
-  moodValue: number | null;
-  energyValue: number | null;
-  onLogMood: (v: number) => void;
-  onLogEnergy: (v: number) => void;
-  onNext: () => void;
-}) {
-  const [energy, setEnergy] = useState(energyValue ?? 5);
-  const [mood, setMood] = useState(moodValue ?? 5);
-
+/**
+ * Incheckning i Flow är enbart en hänvisning: all loggning av energi och
+ * mående sker på den enda kanoniska platsen – Mitt batteri.
+ */
+function CheckinSlide({ seed, onNext }: { seed: number; onNext: () => void }) {
   return (
     <SlideShell scene="mood" seed={seed} title="Hur är det just nu?">
-      <div className="w-full max-w-xs space-y-3 text-left">
-        <label className="block text-xs font-medium text-muted-foreground">
-          ⚡ Ork: {energy}/10
-          <input
-            type="range"
-            min={1}
-            max={10}
-            value={energy}
-            onChange={(e) => setEnergy(Number(e.target.value))}
-            className="myflove-range mt-1 h-2 w-full cursor-pointer appearance-none rounded-full bg-secondary"
-            aria-label="Ork 1 till 10"
-          />
-        </label>
-        <label className="block text-xs font-medium text-muted-foreground">
-          ❤️ Mående: {mood}/10
-          <input
-            type="range"
-            min={1}
-            max={10}
-            value={mood}
-            onChange={(e) => setMood(Number(e.target.value))}
-            className="myflove-range mt-1 h-2 w-full cursor-pointer appearance-none rounded-full bg-secondary"
-            aria-label="Mående 1 till 10"
-          />
-        </label>
+      <p className="text-sm text-muted-foreground">
+        Vill du berätta hur du mår? Det gör du i Mitt batteri.
+      </p>
+      <div className="flex flex-wrap justify-center gap-2">
+        <Button asChild className="rounded-2xl px-6">
+          <Link href="/mitt-batteri">Logga energi &amp; mående</Link>
+        </Button>
+        <Button variant="outline" className="rounded-2xl" onClick={onNext}>
+          Inte nu
+        </Button>
       </div>
-      <Button
-        className="rounded-2xl px-7"
-        onClick={() => {
-          void onLogEnergy(energy);
-          onLogMood(mood);
-          onNext();
-        }}
-      >
-        Logga
-      </Button>
     </SlideShell>
   );
 }
