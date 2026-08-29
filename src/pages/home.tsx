@@ -422,26 +422,8 @@ export default function Home() {
               summary={suggestion.headline}
               tone="lavender"
               surface="lavender"
-            >
-              <p className="leading-relaxed text-ink">
-                <Sparkles size={16} className="mr-1 inline text-primary" aria-hidden="true" />
-                {suggestion.headline}
-              </p>
-              {suggestion.task && !samsomNasta && (
-                <p className="text-sm text-muted-foreground">
-                  <span className="font-medium text-ink">{suggestion.task.title}</span>
-                  {suggestion.minutes ? ` · ca ${suggestion.minutes} min` : ""}
-                  {suggestion.reason ? ` – ${suggestion.reason}` : ""}
-                </p>
-              )}
-              <Link
-                href={suggestion.task ? "/idag" : "/quickflow"}
-                className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
-              >
-                {suggestion.task ? "Planera i Idag" : "Fånga något i QuickFlow"}{" "}
-                <ArrowRight size={14} />
-              </Link>
-            </ExpandableBlock>
+              href="/flow"
+            />
           </section>
         )}
 
