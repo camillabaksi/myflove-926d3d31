@@ -419,6 +419,7 @@ export default function FlowPlanPage() {
             tone="sky"
             surface="sky"
             area="planera"
+            span
             collapsible
             collapseId="planering::steg-ordning"
           >
