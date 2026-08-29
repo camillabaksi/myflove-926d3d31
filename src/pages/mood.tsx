@@ -21,9 +21,11 @@ const EMOJIS = [
 
 interface MoodContentProps {
   showHeader?: boolean;
+  /** Historikläge: visar tidigare loggar utan eget loggningsformulär. */
+  readOnly?: boolean;
 }
 
-export function MoodContent({ showHeader = true }: MoodContentProps) {
+export function MoodContent({ showHeader = true, readOnly = false }: MoodContentProps) {
   const { moods, addMood } = useMoods();
   const { toast } = useToast();
   const [selectedScore, setSelectedScore] = useState<number | null>(null);
@@ -56,6 +58,15 @@ export function MoodContent({ showHeader = true }: MoodContentProps) {
     <div className="space-y-10">
       {showHeader && <MoodHeader />}
 
+      {readOnly ? (
+        <div
+          className="rounded-3xl border border-border/60 bg-card p-5 text-sm text-muted-foreground"
+          data-testid="mood-history-readonly"
+        >
+          Här ser du dina tidigare loggar. Vill du logga nytt gör du det under{" "}
+          <span className="font-medium text-ink">Mitt batteri → Logga energi &amp; mående</span>.
+        </div>
+      ) : (
       <div className="bg-card p-6 md:p-8 rounded-3xl shadow-sm border border-border">
         {justSaved ? (
           <div className="text-center py-8 animate-in fade-in zoom-in duration-500">
@@ -105,6 +116,7 @@ export function MoodContent({ showHeader = true }: MoodContentProps) {
           </div>
         )}
       </div>
+      )}
 
       <button
         type="button"
