@@ -323,7 +323,7 @@ export default function Home() {
         {/* Mitt batteri – högst upp och ett enda helt klickbart kort. */}
         {shows("batteri") && (
           <section
-            className="min-w-0 xl:col-span-2"
+            className="min-w-0"
             style={pos("batteri")}
             aria-label="Mitt batteri"
           >

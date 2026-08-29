@@ -35,7 +35,7 @@ export default function StepSection({
   children,
 }: StepSectionProps) {
   return (
-    <section className={cn("surface-card p-5", className)}>
+    <section className={cn("surface-card min-w-0 p-3 sm:p-5", className)}>
       <CollapsibleSection
         id={id ?? `steg-${step}-${title.slice(0, 30)}`}
         defaultCollapsed={defaultCollapsed}

@@ -176,6 +176,7 @@ export default function TodayPage() {
             här visas bara statusen som en klickbar sammanfattning. */}
         <StepSection
           step={1}
+          className="col-span-full"
           id="idag::steg-mabra"
           title="Så mår du just nu"
           description="Energin styr dagens förslag – öppna Mitt batteri om du vill checka in."
@@ -192,7 +193,7 @@ export default function TodayPage() {
             {/* Steg 2 – dagens plan */}
             <StepSection
               step={2}
-              className="md:col-span-2 xl:col-span-2"
+              className="col-span-full md:col-span-2 xl:col-span-2"
               id="idag::steg-plan"
               title="Dagens plan"
               description="Allt som hör till idag – händelser, uppgifter och rutiner."
@@ -265,7 +266,7 @@ export default function TodayPage() {
 
             {offerReplan && (
               <FlowReplan
-                className="md:col-span-2"
+                className="col-span-full md:col-span-2"
                 flow={flow}
                 items={todaysItems}
                 mode={mode}
@@ -279,7 +280,7 @@ export default function TodayPage() {
             {/* Steg 4 – Nu → Nästa → Senare */}
             <StepSection
               step={4}
-              className="md:col-span-2 xl:col-span-2"
+              className="col-span-full md:col-span-2 xl:col-span-2"
               id="idag::steg-far-plats"
               title="Det som får plats idag"
               help={
@@ -358,7 +359,7 @@ export default function TodayPage() {
         ) : (
           <StepSection
             step={2}
-            className="md:col-span-2 xl:col-span-2"
+            className="col-span-full md:col-span-2 xl:col-span-2"
             id="idag::steg-lista"
             title="Dagens lista"
           >
