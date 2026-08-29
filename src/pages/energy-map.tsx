@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Layout from "@/components/layout";
 import { Button } from "@/components/ui/button";
+import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { supabase } from "@/integrations/supabase/client";
 import { Battery, Loader2, Sparkles } from "lucide-react";
 import {
@@ -148,34 +149,39 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
   }
 
   return (
-    <div className="space-y-6">
+    <MyFlovePageGrid>
       {showHeader && (
-        <header className="space-y-1">
-          <div className="flex items-center gap-2">
-            <Battery className="text-primary" size={28} />
-            <h1 className="text-2xl font-semibold tracking-tight">Energikarta</h1>
-          </div>
-          <p className="text-sm text-muted-foreground">
-            Logga hur du känner dig just nu. Flow lär sig när på dygnet du har mest att ge – och när
-            du behöver vila.
-          </p>
-        </header>
+        <MyFloveWide>
+          <header className="space-y-1">
+            <div className="flex items-center gap-2">
+              <Battery className="text-primary" size={28} />
+              <h1 className="text-2xl font-semibold tracking-tight">Energikarta</h1>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Logga hur du känner dig just nu. Flow lär sig när på dygnet du har mest att ge – och när
+              du behöver vila.
+            </p>
+          </header>
+        </MyFloveWide>
       )}
 
       {!userId && !loading && (
-        <div className="rounded-2xl bg-card border border-border p-4 text-sm text-muted-foreground">
-          Logga in för att spara din energi över tid.
-        </div>
+        <MyFloveWide>
+          <div className="rounded-2xl bg-card border border-border p-4 text-sm text-muted-foreground">
+            Logga in för att spara din energi över tid.
+          </div>
+        </MyFloveWide>
       )}
 
       {userId && (
-        <CollapsibleSection
-          title="Hur känns det just nu?"
-          help="Tryck på en nivå. Det tar två sekunder och styr hur mycket appen föreslår idag."
-          headingClassName="font-medium"
-          description="Välj det som passar närmast – det finns inga fel svar."
-          className="rounded-2xl bg-card border border-border p-5 shadow-sm"
-        >
+        <MyFloveWide>
+          <CollapsibleSection
+            title="Hur känns det just nu?"
+            help="Tryck på en nivå. Det tar två sekunder och styr hur mycket appen föreslår idag."
+            headingClassName="font-medium"
+            description="Välj det som passar närmast – det finns inga fel svar."
+            className="rounded-2xl bg-card border border-border p-5 shadow-sm"
+          >
           <div className="grid grid-cols-5 gap-2">
             {[1, 2, 3, 4, 5].map((lvl) => {
               const active = selected === lvl;
@@ -222,14 +228,17 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
               </div>
             </div>
           )}
-          {error && <p className="text-sm text-destructive">{error}</p>}
-        </CollapsibleSection>
+            {error && <p className="text-sm text-destructive">{error}</p>}
+          </CollapsibleSection>
+        </MyFloveWide>
       )}
 
       {loading ? (
-        <div className="flex items-center justify-center py-12 text-muted-foreground">
-          <Loader2 className="animate-spin" size={20} />
-        </div>
+        <MyFloveWide>
+          <div className="flex items-center justify-center py-12 text-muted-foreground">
+            <Loader2 className="animate-spin" size={20} />
+          </div>
+        </MyFloveWide>
       ) : (
         <>
           <CollapsibleSection
@@ -311,7 +320,7 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
           </CollapsibleSection>
         </>
       )}
-    </div>
+    </MyFlovePageGrid>
   );
 }
 
