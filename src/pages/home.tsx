@@ -276,7 +276,7 @@ export default function Home() {
           <div className="pointer-events-none absolute -top-20 -right-16 h-40 w-40 rounded-full bg-blush opacity-60 blur-md" />
           <div className="pointer-events-none absolute -bottom-16 -left-10 h-32 w-32 rounded-full bg-mint opacity-50 blur-[2px]" />
           <div className="pointer-events-none absolute right-4 top-4 select-none" aria-hidden>
-            <FlowMascot size="sm" mood="calm" className="flow-alive" alt="" />
+            <FlowMascot size="md" mood="calm" className="flow-alive" alt="" />
           </div>
 
           <div className="relative space-y-2">
@@ -374,7 +374,7 @@ export default function Home() {
               summary={nextEvent ? nextEvent.title : "Inget inplanerat just nu"}
               tone="blush"
               surface="blush"
-              href="/kalender"
+              href="/idag"
             />
           </section>
         )}
@@ -426,7 +426,7 @@ export default function Home() {
               summary={suggestion.headline}
               tone="lavender"
               surface="lavender"
-              href="/flow"
+              href="/kalender"
             />
           </MyFloveWide>
         )}
