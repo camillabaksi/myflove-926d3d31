@@ -333,7 +333,7 @@ export default function CleaningPage() {
               )}
             </CollapsibleSection>
           </section>
-        </MyFloveWide>
+        </div>
 
         <MyFloveWide>
           <p className="flex items-center justify-center gap-2 pb-4 text-center text-sm text-muted-foreground">

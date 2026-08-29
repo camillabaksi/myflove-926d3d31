@@ -640,9 +640,9 @@ export default function CalendarPage() {
           </p>
         </MyFloveWide>
 
-        <MyFloveWide>
+        <div className="min-w-0">
           <EnergyBattery />
-        </MyFloveWide>
+        </div>
 
         <MyFloveWide>
           <div className="bg-card rounded-3xl border border-border shadow-sm overflow-hidden">
