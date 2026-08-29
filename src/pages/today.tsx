@@ -3,6 +3,7 @@ import { useMemo, useEffect } from "react";
 import { Link } from "wouter";
 import Layout from "@/components/layout";
 import CollapsibleSection from "@/components/collapsible-section";
+import { MyFloveBlock } from "@/components/myflove/block";
 import StepSection from "@/components/step-section";
 import FlowCompanion from "@/components/flow/flow-companion";
 import DayTimeline, { type TimelineEntry } from "@/components/day-timeline";
@@ -224,46 +225,25 @@ export default function TodayPage() {
 
             {/* 📋 Dagens ordning – planen du valt i Planera */}
             {dayPlan && dayPlan.steps.length > 0 && (
-              <section className="surface-card space-y-3 p-5">
-                <CollapsibleSection
-                  id="idag::dagens-ordning"
-                  title={
-                    <span className="flex items-center gap-2">
-                      <ListOrdered size={18} className="text-primary" aria-hidden="true" /> Dagens
-                      ordning
-                    </span>
-                  }
-                  headingClassName="text-lg font-semibold"
-                  className="space-y-3"
-                >
-                  {dayPlan.intro && <p className="text-sm text-foreground">{dayPlan.intro}</p>}
-                  <ol className="space-y-2">
-                    {dayPlan.steps.map((step, i) => (
-                      <li
-                        key={`${step.taskId}-${i}`}
-                        className="flex items-start gap-3 rounded-2xl bg-secondary/40 p-3"
-                      >
-                        <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
-                          {i + 1}
-                        </span>
-                        <div className="min-w-0 flex-1">
-                          <p className="font-medium text-ink">{step.title}</p>
-                          <p className="text-xs text-muted-foreground">
-                            {step.estimatedMin ? `ca ${step.estimatedMin} min · ` : ""}
-                            {step.why}
-                          </p>
-                        </div>
-                      </li>
-                    ))}
-                  </ol>
-                  <Link
-                    href="/flow"
-                    className="inline-flex items-center gap-2 text-sm text-primary underline-offset-2 hover:underline"
-                  >
-                    <ListOrdered size={16} /> Ändra ordningen i Planera
-                  </Link>
-                </CollapsibleSection>
-              </section>
+              <MyFloveBlock
+                title="Dagens ordning"
+                subtitle="Planen du valt i Planera"
+                icon={ListOrdered}
+                tone="lavender"
+                collapsible
+                collapseId="idag::dagens-ordning"
+              >
+                {dayPlan.intro && <p className="text-sm text-foreground">{dayPlan.intro}</p>}
+                <ol className="space-y-2">
+                  {dayPlan.steps.map((step, i) => (
+                    <li key={`${step.taskId}-${i}`} className="flex items-start gap-3 rounded-2xl bg-secondary/40 p-3">
+                      <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">{i + 1}</span>
+                      <div className="min-w-0 flex-1"><p className="font-medium text-ink">{step.title}</p><p className="text-xs text-muted-foreground">{step.estimatedMin ? `ca ${step.estimatedMin} min · ` : ""}{step.why}</p></div>
+                    </li>
+                  ))}
+                </ol>
+                <Link href="/flow" className="inline-flex items-center gap-2 text-sm text-primary underline-offset-2 hover:underline"><ListOrdered size={16} /> Ändra ordningen i Planera</Link>
+              </MyFloveBlock>
             )}
 
             {offerReplan && (
@@ -400,22 +380,20 @@ export default function TodayPage() {
 function DoneToday({ items, onToggle }: { items: FlowItem[]; onToggle: (i: FlowItem) => void }) {
   if (items.length === 0) return null;
   return (
-    <div className="rounded-2xl bg-secondary/30 p-3">
-      <CollapsibleSection
-        id="idag::genomfort-idag"
-        title={`☑️ ${items.length} ${items.length === 1 ? "sak" : "saker"} genomförda idag 💙`}
-        headingClassName="text-sm font-medium text-ink"
-        className="space-y-3"
-        defaultCollapsed
-      >
-        <ul className="space-y-2">
-          {items.map((item) => (
-            <li key={item.id}>
-              <FlowItemCard item={item} className="opacity-80" onToggle={onToggle} />
-            </li>
-          ))}
-        </ul>
-      </CollapsibleSection>
-    </div>
+    <MyFloveBlock
+      title={`Genomfört idag · ${items.length}`}
+      subtitle="Det du redan hunnit med"
+      collapsible
+      collapseId="idag::genomfort-idag"
+      defaultCollapsed
+      tone="mint"
+      surface="mint"
+    >
+      <ul className="space-y-2">
+        {items.map((item) => (
+          <li key={item.id}><FlowItemCard item={item} className="opacity-80" onToggle={onToggle} /></li>
+        ))}
+      </ul>
+    </MyFloveBlock>
   );
 }

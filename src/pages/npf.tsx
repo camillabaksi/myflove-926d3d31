@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ANALYTICS_OPT_OUT_KEY, track } from "@/lib/analytics";
 import { DeleteAccountButton } from "@/components/delete-account-button";
 import Layout from "@/components/layout";
+import { MyFloveBlock } from "@/components/myflove/block";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { RotateCcw, Accessibility, BarChart3 } from "lucide-react";
@@ -87,77 +88,32 @@ export default function NpfPage() {
           </p>
         </header>
 
-        <div className="space-y-3">
-          {ROWS.map((row) => (
-            <label
-              key={row.key}
-              className="surface-card flex items-start justify-between gap-4 p-4 cursor-pointer"
-            >
-              <span className="space-y-1">
-                <span className="block font-medium">{row.title}</span>
-                <span className="block text-sm text-muted-foreground">{row.text}</span>
-              </span>
-              <Switch
-                checked={settings[row.key]}
-                onCheckedChange={(v) => update({ [row.key]: v } as Partial<NpfSettings>)}
-                aria-label={row.title}
-              />
-            </label>
-          ))}
-        </div>
+        <MyFloveBlock title="Dina val" subtitle="Välj hur mycket du vill se och höra" icon={Accessibility} tone="lavender" surface="lavender" collapsible collapseId="anpassa::val">
+          <div className="space-y-3">
+            {ROWS.map((row) => (
+              <label key={row.key} className="flex cursor-pointer items-start justify-between gap-4 rounded-2xl border border-border/50 bg-card/70 p-4">
+                <span className="space-y-1"><span className="block font-medium">{row.title}</span><span className="block text-sm text-muted-foreground">{row.text}</span></span>
+                <Switch checked={settings[row.key]} onCheckedChange={(v) => update({ [row.key]: v } as Partial<NpfSettings>)} aria-label={row.title} />
+              </label>
+            ))}
+          </div>
+        </MyFloveBlock>
 
         <Button variant="outline" className="rounded-xl gap-2" onClick={reset}>
           <RotateCcw size={16} /> Återställ till standard
         </Button>
 
-        {/* Integritet – anonym användningsstatistik (speglar cookiepolicyn). */}
-        <section aria-label="Integritet" className="mt-10 space-y-3">
-          <div className="flex items-center gap-2 text-primary">
-            <BarChart3 size={18} />
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-              Integritet
-            </h2>
-          </div>
-          <label className="surface-card flex items-start justify-between gap-4 p-4 cursor-pointer">
-            <span className="space-y-1">
-              <span className="block font-medium">Dela anonym användningsstatistik</span>
-              <span className="block text-sm text-muted-foreground">
-                Hjälper oss förstå vilka funktioner som används – helt anonymt, utan personuppgifter
-                eller innehåll. Inga marknads- eller tredjepartscookies.{" "}
-                <Link to="/cookies" className="underline underline-offset-2">
-                  Läs mer i cookiepolicyn
-                </Link>
-                .
-              </span>
-            </span>
-            <Switch
-              checked={!statsOptOut}
-              onCheckedChange={(shareStats) => toggleStats(!shareStats)}
-              aria-label="Dela anonym användningsstatistik"
-            />
+        <MyFloveBlock title="Integritet" subtitle="Anonym statistik, utan personuppgifter eller innehåll" icon={BarChart3} tone="sky" surface="sky" collapsible collapseId="anpassa::integritet">
+          <label className="flex cursor-pointer items-start justify-between gap-4 rounded-2xl border border-border/50 bg-card/70 p-4">
+            <span className="space-y-1"><span className="block font-medium">Dela anonym användningsstatistik</span><span className="block text-sm text-muted-foreground">Hjälper oss förstå vilka funktioner som används – helt anonymt. Inga marknads- eller tredjepartscookies. <Link to="/cookies" className="underline underline-offset-2">Läs mer i cookiepolicyn</Link>.</span></span>
+            <Switch checked={!statsOptOut} onCheckedChange={(shareStats) => toggleStats(!shareStats)} aria-label="Dela anonym användningsstatistik" />
           </label>
-          <p className="text-xs text-muted-foreground">
-            Ändringen gäller direkt. Nödvändig lagring (inloggning, dina inställningar och data)
-            påverkas aldrig.
-          </p>
-        </section>
+          <p className="text-xs text-muted-foreground">Ändringen gäller direkt. Nödvändig lagring påverkas aldrig.</p>
+        </MyFloveBlock>
 
-        {/* Konto – längst ner, tydligt men sekundärt. */}
-        <section
-          data-testid="account-section"
-          aria-label="Konto"
-          className="mt-10 space-y-3 rounded-3xl border border-destructive/30 bg-destructive/5 p-4"
-        >
-          <div className="space-y-1">
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-              Konto
-            </h2>
-            <p className="text-sm text-muted-foreground">
-              Att avsluta kontot raderar din data permanent. Du får bekräfta först.
-            </p>
-          </div>
+        <MyFloveBlock title="Konto" subtitle="Att avsluta kontot raderar din data permanent" icon={Accessibility} tone="blush" surface="blush" className="border-destructive/30" data-testid="account-section">
           <DeleteAccountButton />
-        </section>
+        </MyFloveBlock>
       </div>
     </Layout>
   );

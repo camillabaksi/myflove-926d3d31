@@ -1,16 +1,13 @@
 import { useState } from "react";
+import { ArrowRight, BatteryCharging, ChevronDown, Gauge, Sparkles } from "lucide-react";
 import { Link } from "wouter";
-import { ArrowRight } from "lucide-react";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
+import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { useAnimatedNumber } from "@/hooks/use-animated-number";
 import { minutesToTime } from "@/lib/energy-battery";
+import { MyFloveBlock, MyFloveStat } from "@/components/myflove/block";
 
-/**
- * Mitt batteri™ – lugn, levande energinivå.
- * Kompakt vid första anblicken; detaljer först när du vill ha dem.
- * Med `href` blir hela kortet en klickyta som leder till Mitt batteri-sidan
- * (används på Hem, där kortet ska vara en enda tydlig knapp).
- */
+/** Mitt batteri – översikt över nu-läget och den befintliga energikurvan. */
 export default function EnergyBattery({
   defaultOpen = false,
   href,
@@ -21,133 +18,57 @@ export default function EnergyBattery({
   onNavigate?: () => void;
 }) {
   const { reading, suggestions } = useEnergyBattery();
+  const { moodValue } = useQuickCheckin();
   const [open, setOpen] = useState(defaultOpen);
-
   const level = Math.round(reading.now);
-  // Siffran räknas mjukt upp/ner när energin ändras (hoppar direkt vid reducerad rörelse).
   const shownLevel = Math.round(useAnimatedNumber(level));
-  const tone =
-    level >= 66
-      ? "hsl(var(--primary))"
-      : level >= 38
-        ? "hsl(var(--gold, 40 80% 60%))"
-        : "hsl(var(--destructive))";
-
-  // Klartext i stället för siffra: "Du har medelbra energi – den stiger fram till kl 14."
   const levelWord =
     level >= 75
-      ? "Du har gott om energi"
+      ? "Gott om energi"
       : level >= 55
-        ? "Du har medelbra energi"
+        ? "Medelbra energi"
         : level >= 35
-          ? "Du har energi på halvfart"
-          : "Din energi är låg just nu";
-
+          ? "Energi på halvfart"
+          : "Låg energi just nu";
   const trendWord =
     reading.trend === "stiger"
-      ? "den är på väg upp"
+      ? "på väg upp"
       : reading.trend === "sjunker"
-        ? "den är på väg ner"
-        : "den ligger ganska jämn";
-
-  const trendSentence =
-    reading.trend === "stiger"
-      ? "Din energi ökar."
-      : reading.trend === "sjunker"
-        ? "Din energi minskar."
-        : "Din energi är stabil.";
-
-  const plain = reading.overloaded
-    ? `${levelWord} – och dagen ser tung ut.`
-    : reading.peak
-      ? `${levelWord} – ${trendWord}, starkast ${reading.peak.label}.`
-      : `${levelWord} – ${trendWord}.`;
-
-  const summary = (
+        ? "på väg ner"
+        : "ganska jämn";
+  const content = (
     <>
-      {/* Själva batteriet */}
-      <span className="relative flex h-7 w-14 shrink-0 items-center">
-        <span className="relative h-7 w-[52px] overflow-hidden rounded-[10px] border-2 border-border bg-secondary/50">
-          <span
-            className="absolute inset-y-0 left-0 rounded-[7px] motion-safe:transition-[width] motion-safe:duration-700 motion-safe:ease-out"
-            style={{ width: `${Math.max(4, level)}%`, backgroundColor: tone, opacity: 0.85 }}
-          />
-        </span>
-        <span className="ml-0.5 h-3 w-1 rounded-r-sm bg-border" />
-      </span>
-
-      <span className="min-w-0 flex-1">
-        <span className="block text-sm font-medium leading-snug text-ink">{plain}</span>
-        <span className="mt-0.5 block text-xs text-muted-foreground">
-          Mitt batteri ·{" "}
-          <span className="font-semibold" style={{ color: tone }}>
-            {shownLevel}%
-          </span>{" "}
-          <span aria-hidden>
-            {reading.trend === "stiger" ? "↑" : reading.trend === "sjunker" ? "↓" : "→"}
-          </span>
-        </span>
-      </span>
-    </>
-  );
-
-  // Hela kortet är en enda klickyta – används på Hem.
-  if (href) {
-    return (
-      <Link
-        href={href}
-        onClick={onNavigate}
-        data-testid="battery-card"
-        aria-label="Mitt batteri – öppna sidan"
-        className="press block rounded-3xl border border-border/60 bg-card p-4 shadow-soft transition-colors hover:border-primary/40"
-      >
-        <span className="flex w-full items-center gap-3 text-left">
-          {summary}
-          <span className="shrink-0 text-muted-foreground">
-            <ArrowRight size={18} aria-hidden="true" />
-          </span>
-        </span>
-        <div className="mt-3">
-          <BatteryCurve reading={reading} compact />
-        </div>
-        <span className="mt-3 flex items-center justify-between gap-2 rounded-2xl bg-primary/10 px-3 py-2">
-          <span className="text-sm font-semibold text-ink">Logga energi &amp; mående</span>
-          <span className="text-xs text-muted-foreground">Vad påverkar dig idag?</span>
-        </span>
-      </Link>
-    );
-  }
-
-  return (
-    <section
-      className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft"
-      aria-label="Mitt batteri"
-    >
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        aria-expanded={open}
-        className="flex w-full items-center gap-3 text-left"
-      >
-        {summary}
-        <span className="shrink-0 text-xs text-muted-foreground">
-          {open ? "Dölj detaljer ˄" : "Visa detaljer ˅"}
-        </span>
-      </button>
-
-      {/* Liten kurva alltid synlig – känslan av dagen, inte en teknisk graf */}
-      <div className="mt-3">
-        <BatteryCurve reading={reading} compact={!open} />
-        {!reading.personal && (
-          <p className="mt-1 text-[11px] text-muted-foreground">
-            Preliminär kurva – blir din egen när du loggat energi några dagar.
-          </p>
-        )}
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <MyFloveStat
+          label="Energi"
+          value={`${shownLevel}%`}
+          hint={`${levelWord} · ${trendWord}`}
+          icon={BatteryCharging}
+          tone="sun"
+        />
+        <MyFloveStat
+          label="Mående"
+          value={moodValue != null ? `${Math.round(moodValue / 2)}/5` : "–"}
+          hint={moodValue != null ? "Senaste registrerade värde" : "Logga ett mående när du vill"}
+          icon={Gauge}
+          tone="blush"
+        />
       </div>
-
+      <BatteryCurve reading={reading} compact={false} />
+      {!reading.personal && (
+        <p className="text-xs text-muted-foreground">
+          Preliminär kurva – blir din egen när du loggat energi några dagar.
+        </p>
+      )}
       {open && (
-        <div className="mt-4 space-y-3 border-t border-border/50 pt-3">
-          <p className="text-sm text-ink">{trendSentence}</p>
+        <div className="space-y-3 border-t border-border/50 pt-3">
+          <p className="text-sm text-ink">
+            {reading.trend === "stiger"
+              ? "Din energi ökar."
+              : reading.trend === "sjunker"
+                ? "Din energi minskar."
+                : "Din energi är stabil."}
+          </p>
           <div className="flex flex-wrap gap-2 text-xs">
             {reading.peak && (
               <span className="rounded-pill bg-primary/10 px-2.5 py-1 text-foreground">
@@ -160,14 +81,10 @@ export default function EnergyBattery({
               </span>
             )}
           </div>
-
           {suggestions.length > 0 && (
             <ul className="space-y-1.5">
               {suggestions.map((s) => (
-                <li
-                  key={s.id}
-                  className="rounded-2xl bg-secondary/40 px-3 py-2 text-xs text-foreground"
-                >
+                <li key={s.id} className="rounded-2xl bg-secondary/40 px-3 py-2 text-xs text-foreground">
                   {s.text}
                 </li>
               ))}
@@ -175,11 +92,52 @@ export default function EnergyBattery({
           )}
         </div>
       )}
-    </section>
+    </>
+  );
+
+  return (
+    <MyFloveBlock
+      title="Just nu"
+      subtitle="Din energi och ditt mående – det senaste du loggat"
+      icon={BatteryCharging}
+      tone="sun"
+      surface="sun"
+      action={
+        !href && (
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            aria-expanded={open}
+            aria-label={open ? "Dölj detaljer" : "Visa detaljer"}
+            className="press grid h-9 w-9 place-items-center rounded-pill bg-card/70 text-ink"
+          >
+            <ChevronDown size={17} className={open ? "rotate-180" : ""} aria-hidden="true" />
+          </button>
+        )
+      }
+      footer={
+        href ? (
+          <Link
+            href={href}
+            onClick={onNavigate}
+            className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
+          >
+            Logga energi &amp; mående <ArrowRight size={16} />
+          </Link>
+        ) : (
+          <span className="inline-flex items-center gap-2 text-xs text-muted-foreground">
+            <Sparkles size={14} className="text-primary" /> Varje loggning blir en egen observation
+          </span>
+        )
+      }
+      collapsible={false}
+    >
+      {content}
+    </MyFloveBlock>
   );
 }
 
-/** Liten, lugn kurva över dagen med markering för var vi är nu. */
+/** Liten, lugn kurva över dagen med befintlig energiberäkning. */
 function BatteryCurve({
   reading,
   compact = false,
@@ -204,15 +162,11 @@ function BatteryCurve({
       <svg
         viewBox={`0 0 ${w} ${h}`}
         preserveAspectRatio="none"
-        className={compact ? "h-10 w-full" : "h-20 w-full"}
+        className={compact ? "h-10 w-full" : "h-24 w-full"}
         role="img"
         aria-label={`Energikurva över dagen. ${reading.summary}`}
       >
-        <polygon
-          points={`0,${h} ${points.join(" ")} ${w},${h}`}
-          fill="hsl(var(--primary))"
-          opacity={0.12}
-        />
+        <polygon points={`0,${h} ${points.join(" ")} ${w},${h}`} fill="hsl(var(--primary))" opacity={0.12} />
         <polyline
           points={points.join(" ")}
           fill="none"

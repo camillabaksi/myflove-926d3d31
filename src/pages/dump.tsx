@@ -1,6 +1,8 @@
 import { track } from "@/lib/analytics";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
+import { MyFloveBlock } from "@/components/myflove/block";
+
 
 // Minimala typer för webbläsarens SpeechRecognition (saknas i TS lib.dom).
 type SpeechRecognitionStreamEvent = {
@@ -188,24 +190,17 @@ export default function Dump() {
   return (
     <Layout>
       <div className="space-y-8">
-        <div className="relative overflow-hidden rounded-3xl border border-border/60 bg-card p-6 shadow-lifted pop-in">
-          <div className="pointer-events-none absolute -top-16 -right-12 h-36 w-36 rounded-full bg-lavender opacity-70 blur-md" />
-          <div className="pointer-events-none absolute -bottom-14 -left-10 h-28 w-28 rounded-full bg-mint opacity-60 blur-[2px]" />
-          <div
-            className="pointer-events-none absolute right-6 top-6 select-none text-4xl breathe"
-            aria-hidden
-          >
-            💭
-          </div>
-          <div className="relative space-y-2">
-            <h1 className="font-display text-3xl font-bold text-ink pr-14">QuickFlow</h1>
-            <p className="text-sm font-medium text-primary">Fånga en tanke snabbt</p>
-            <p className="text-muted-foreground leading-relaxed">
-              Få ut det ur huvudet. Skriv eller prata in allt som snurrar – huller om buller går
-              bra. Jag håller det åt dig tills du orkar sortera. 💜
-            </p>
-          </div>
-        </div>
+        <MyFloveBlock
+          title="QuickFlow"
+          subtitle="Fånga en tanke snabbt"
+          eyebrow="Fånga"
+          icon={Sparkles}
+          tone="sun"
+          surface="sun"
+          className="pop-in"
+        >
+          <p className="leading-relaxed text-muted-foreground">Få ut det ur huvudet. Skriv eller prata in allt som snurrar – huller om buller går bra. Jag håller det åt dig tills du orkar sortera.</p>
+        </MyFloveBlock>
 
         <QuickflowCapture />
 
@@ -331,17 +326,9 @@ export default function Dump() {
         <InsightQuickflowHint />
         <QuickflowList />
 
-        <Link
-          to="/anteckningar"
-          className="surface-card mt-4 flex items-center gap-3 p-4 text-left hover:border-primary/40"
-        >
+        <Link to="/anteckningar" className="surface-card mt-4 flex items-center gap-3 p-4 text-left hover:border-primary/40">
           <NotebookPen size={20} className="text-primary" />
-          <span className="flex-1">
-            <span className="block font-semibold text-ink">Anteckningar &amp; idébank</span>
-            <span className="block text-sm text-muted-foreground">
-              Tankar utan krav bor i en egen del under Flow.
-            </span>
-          </span>
+          <span className="min-w-0 flex-1"><span className="block font-semibold text-ink">Anteckningar &amp; idébank</span><span className="block text-sm text-muted-foreground">Tankar utan krav bor i en egen del under Flow.</span></span>
         </Link>
 
         <CollapsibleSection

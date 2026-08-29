@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useNavigate } from "@tanstack/react-router";
 import Layout from "@/components/layout";
+import { MyFloveBlock } from "@/components/myflove/block";
 import { MyFloveThinking } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,6 +16,7 @@ import {
   ChevronRight,
   MoreHorizontal,
   Pencil,
+  MessageCircle,
 } from "lucide-react";
 import { FlowMascot, type FlowStatus } from "@/components/flow-mascot";
 import { chatWithFlow } from "@/lib/flow-chat.functions";
@@ -521,15 +523,12 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
             </div>
           )}
 
-          <div className="p-4 bg-card border border-border rounded-2xl">
-            <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">Idag</p>
+          <MyFloveBlock title="Idag" subtitle="En liten lägesbild från Flow" icon={Sparkles} tone="lavender" surface="lavender" collapsible collapseId="assistant::idag">
             <p className="text-sm leading-snug">{coachMessage.text}</p>
-          </div>
+          </MyFloveBlock>
 
-          <div
-            ref={scrollRef}
-            className="bg-card border border-border rounded-3xl p-4 space-y-4 max-h-[55vh] overflow-y-auto"
-          >
+          <MyFloveBlock title="Samtal" subtitle="Skriv när du vill – Flow lyssnar" icon={MessageCircle} tone="lavender" surface="plain" className="p-4" bodyClassName="space-y-4" collapsible collapseId="assistant::samtal">
+            <div ref={scrollRef} className="max-h-[55vh] space-y-4 overflow-y-auto">
             {loadingMessages ? (
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Loader2 className="w-4 h-4 animate-spin" /> Hämtar samtalet…
@@ -588,7 +587,8 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                 {error}
               </div>
             )}
-          </div>
+            </div>
+          </MyFloveBlock>
 
           {messages.length === 0 && (
             <div className="flex flex-wrap gap-2">
