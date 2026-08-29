@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-29 – Hem: Nästa leder till Kalender, Flow-blocket större
+
+- "Nästa" navigerar nu till Kalender (/kalender) i stället för Idag – eftersom det redan finns en Idag-widget.
+- "Flow · just nu" är nu ett fullbrett block högt upp på Hem med större Flow-maskot.
+- Endast presentation och navigation – data, logik och övrig funktionalitet är oförändrad.
+
+
 ## 2026-08-29 – Hem: Flow-, Insikter- och Nästa-korten leder nu vidare
 
 - "Flow lär känna dig" navigerar till Insikter (/insight) – samma mål som kortets egen länk.

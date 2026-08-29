@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Hem: Nästa leder till Kalender, Flow-blocket större",
+    items: [
+      "Nästa navigerar nu till Kalender (/kalender) i stället för Idag – det finns redan en Idag-widget (2026-08-29)",
+      "Flow · just nu är nu ett fullbrett block högt upp på Hem med större Flow-maskot (2026-08-29)",
+      "Endast presentation och navigation – data, logik och övrig funktionalitet är oförändrad (2026-08-29)",
+    ],
+  },
+  {
     title: "Hem: Flow-, Insikter- och Nästa-korten leder nu vidare",
     items: [
       "Flow lär känna dig → Insikter, Nästa → Idag, Flow just nu → Flow (2026-08-29)",

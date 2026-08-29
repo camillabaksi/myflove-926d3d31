@@ -361,20 +361,20 @@ export default function Home() {
           </div>
         )}
 
-        {/* Nästa – nästa relevanta aktivitet */}
+        {/* Nästa – nästa relevanta aktivitet, leder till Kalender */}
         {shows("nasta") && (
           <section className="min-w-0" style={pos("nasta")} aria-label="Nästa aktivitet">
             <ExpandableBlock
               title="Nästa"
               titleText="Nästa"
-              area="idag"
+              area="kalender"
               icon={CalendarDays}
               subtitle="Nästa viktiga sak"
               status={nextEvent ? nextEvent.time : "–"}
               summary={nextEvent ? nextEvent.title : "Inget inplanerat just nu"}
-              tone="sky"
-              surface="sky"
-              href="/idag"
+              tone="blush"
+              surface="blush"
+              href="/kalender"
             />
           </section>
         )}
@@ -409,14 +409,18 @@ export default function Home() {
           </div>
         )}
 
-        {/* Flow just nu – samma förslag som i Planera, tydligt signerat Flow */}
+        {/* Flow just nu – större, fullbrett block högt upp */}
         {shows("forslag") && (
-          <section className="min-w-0" style={pos("forslag")} aria-label="Flows förslag just nu">
+          <MyFloveWide
+            style={{ order: 0.5 }}
+            className="min-w-0"
+            aria-label="Flows förslag just nu"
+          >
             <ExpandableBlock
               title="Flow · just nu"
               titleText="Flow just nu"
               area="flow"
-              visual={<FlowMascot size="xs" mood="nod" bump className="flow-alive" alt="" />}
+              visual={<FlowMascot size="sm" mood="nod" bump className="flow-alive" alt="" />}
               subtitle="Ditt nästa steg"
               status="Jag finns här"
               summary={suggestion.headline}
@@ -424,7 +428,7 @@ export default function Home() {
               surface="lavender"
               href="/flow"
             />
-          </section>
+          </MyFloveWide>
         )}
 
         {/* Lägg till i dagen – samma blockspråk: komprimerat kort som öppnar sig */}
