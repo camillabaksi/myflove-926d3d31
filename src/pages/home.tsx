@@ -372,7 +372,7 @@ export default function Home() {
               titleText="Nästa"
               area="idag"
               icon={CalendarDays}
-              subtitle="Nästa viktiga sak idag"
+              subtitle="Nästa viktiga sak"
               status={nextEvent ? nextEvent.time : "–"}
               summary={nextEvent ? nextEvent.title : "Inget inplanerat just nu"}
               tone="sky"
@@ -447,7 +447,7 @@ export default function Home() {
               titleText="Flow just nu"
               area="flow"
               visual={<FlowMascot size="xs" mood="nod" bump className="flow-alive" alt="" />}
-              subtitle="Ditt nästa steg, anpassat efter dig"
+              subtitle="Ditt nästa steg"
               status="Jag finns här"
               summary={suggestion.headline}
               tone="lavender"
