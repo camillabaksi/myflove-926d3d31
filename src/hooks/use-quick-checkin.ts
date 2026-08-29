@@ -8,8 +8,9 @@ import { useLocalStorage } from "@/lib/storage";
  * Mående återanvänder befintliga moods (myflow-moods) och energi
  * återanvänder befintliga energy_logs – inga nya system.
  *
- * Dagens värde går alltid att ändra: senaste registreringen samma dag
- * uppdateras i stället för att en ny rad läggs till.
+ * Flera observationer per dag: varje loggning blir en egen tidsstämplad
+ * observation – tidigare värden skrivs aldrig över. Energi och mående
+ * kan därmed förändras över dagen (morgon → eftermiddag → kväll).
  */
 
 export interface EnergyLogEntry {
@@ -89,37 +90,24 @@ export function useQuickCheckin() {
   }, [energyEntries]);
 
   /**
-   * Loggar dagens mående. `note` är användarens egna ord om vad som påverkar –
-   * frivilligt och sparas på samma måendepost (befintlig datamodell).
-   * Med `replaceNote` ersätts texten helt (tom text rensar) – används när
-   * användaren redigerar dagens loggning i Mitt batteri.
+   * Loggar en ny måendeobservation. `note` är användarens egna ord om vad som
+   * påverkar – frivilligt och sparas på observationen (befintlig datamodell).
+   * Varje anrop skapar en egen tidsstämplad post; inget skrivs över.
    */
   const logMood = useCallback(
-    (score10: number, note?: string, replaceNote = false) => {
+    (score10: number, note?: string) => {
       const score = toScale5(score10);
       const text = note?.trim() ? note.trim() : undefined;
       setCheckin10((prev) => ({ day: todayKey(), energy: prev?.energy, mood: score10 }));
-      setMoods((prev) => {
-        const existing = prev.find((m) => isToday(m.date));
-        if (existing) {
-          return prev.map((m) => {
-            if (m.id !== existing.id) return m;
-            const next: MoodEntry = { ...m, score, date: Date.now() };
-            if (replaceNote && !text) delete next.note;
-            else if (text) next.note = text;
-            return next;
-          });
-        }
-        return [
-          {
-            id: Math.random().toString(36).slice(2, 11),
-            score,
-            date: Date.now(),
-            ...(text ? { note: text } : {}),
-          },
-          ...prev,
-        ];
-      });
+      setMoods((prev) => [
+        {
+          id: Math.random().toString(36).slice(2, 11),
+          score,
+          date: Date.now(),
+          ...(text ? { note: text } : {}),
+        },
+        ...prev,
+      ]);
     },
     [setMoods, setCheckin10],
   );
