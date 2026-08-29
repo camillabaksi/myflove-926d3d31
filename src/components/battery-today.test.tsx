@@ -28,8 +28,18 @@ describe("BatteryToday – dagens observationer", () => {
         { id: "e2", level: 4, logged_at: new Date("2026-08-29T13:40:00").toISOString() },
       ],
       todayMoods: [
-        { id: "m1", score: 2, note: "Sovit bara 4 timmar.", date: new Date("2026-08-29T08:15:00").getTime() },
-        { id: "m2", score: 4, note: "Känner mig bättre.", date: new Date("2026-08-29T13:40:00").getTime() },
+        {
+          id: "m1",
+          score: 2,
+          note: "Sovit bara 4 timmar.",
+          date: new Date("2026-08-29T08:15:00").getTime(),
+        },
+        {
+          id: "m2",
+          score: 4,
+          note: "Känner mig bättre.",
+          date: new Date("2026-08-29T13:40:00").getTime(),
+        },
       ],
     };
     render(<BatteryToday />);

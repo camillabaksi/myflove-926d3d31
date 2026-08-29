@@ -16,13 +16,13 @@ vi.mock("@/integrations/supabase/client", () => ({
   },
 }));
 vi.mock("@/lib/storage", () => ({
-  useLocalStorage: <T,>(_key: string, initial: T) => useState<T>(initial),
+  useLocalStorage: <T>(_key: string, initial: T) => useState<T>(initial),
 }));
 vi.mock("@/hooks/use-data", () => ({
   useMoods: () => {
-    const [moods, setMoods] = useState<{ id: string; score: number; note?: string; date: number }[]>(
-      [],
-    );
+    const [moods, setMoods] = useState<
+      { id: string; score: number; note?: string; date: number }[]
+    >([]);
     return { moods, setMoods };
   },
 }));
@@ -41,8 +41,12 @@ describe("useQuickCheckin – flera observationer per dag", () => {
     expect(result.current.todayMoods[1].note).toBe("Har varit ute och känner mig bättre.");
     expect(result.current.todayMoods[2].note).toBeUndefined();
     // Äldst → nyast, med riktiga tidsstämplar.
-    expect(result.current.todayMoods[0].date).toBeLessThanOrEqual(result.current.todayMoods[1].date);
-    expect(result.current.todayMoods[1].date).toBeLessThanOrEqual(result.current.todayMoods[2].date);
+    expect(result.current.todayMoods[0].date).toBeLessThanOrEqual(
+      result.current.todayMoods[1].date,
+    );
+    expect(result.current.todayMoods[1].date).toBeLessThanOrEqual(
+      result.current.todayMoods[2].date,
+    );
     // Tidigare observationer skrivs inte över.
     expect(result.current.todayMoods[0].score).toBe(toScale5(4));
     expect(result.current.todayMoods[1].score).toBe(toScale5(8));
