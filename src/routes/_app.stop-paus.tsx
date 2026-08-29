@@ -7,7 +7,8 @@ export const Route = createFileRoute("/_app/stop-paus")({
       { title: "Stop-paus – MyFlove" },
       {
         name: "description",
-        content: "En paus mellan impuls och beslut – andas, sätt ord på känslan och välj i lugn och ro.",
+        content:
+          "En paus mellan impuls och beslut – andas, sätt ord på känslan och välj i lugn och ro.",
       },
       { name: "robots", content: "noindex, nofollow" },
     ],

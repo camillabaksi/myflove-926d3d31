@@ -129,7 +129,6 @@ export function useFlowItems(dateISO?: string): {
       });
     }
 
-
     for (const l of lectures) {
       if (l.weekday !== weekday) continue;
       const id = `lec-${l.id}`;

@@ -759,10 +759,7 @@ export function useMedications() {
       ) {
         setMedications(dedupeMedications([...medsRef.current, ...result.medications]));
       }
-      if (
-        result.log.length > 0 &&
-        JSON.stringify(result.log) !== JSON.stringify(logRef.current)
-      ) {
+      if (result.log.length > 0 && JSON.stringify(result.log) !== JSON.stringify(logRef.current)) {
         setLog(mergeMedicationLog(logRef.current, result.log));
       }
       setReady(true);
@@ -772,7 +769,6 @@ export function useMedications() {
     return () => window.removeEventListener(SECURE_UNLOCK_EVENT, run);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
 
   const getTodayDateString = () => todayISO();
 
