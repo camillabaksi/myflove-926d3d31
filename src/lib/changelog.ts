@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Anpassa appen: symmetriskt rutnät",
+    items: [
+      "Blocken i Anpassa appen sträcker sig lika högt inom varje rad för ett symmetriskt rutnät (2026-08-29)",
+      "Grid-komponenten använder items-stretch som standard för jämna blockhöjder i hela appen (2026-08-29)",
+    ],
+  },
+  {
     title: "Anpassa appen: block sida vid sida med mindre text",
     items: [
       "Inställningarna är uppdelade i mindre block som ligger sida vid sida i rutnätet (2026-08-29)",
