@@ -66,7 +66,7 @@ export function MoodContent({ showHeader = true, readOnly = false }: MoodContent
       {readOnly ? (
         <MyFloveWide>
           <div
-            className="rounded-3xl border border-border/60 bg-card p-5 text-sm text-muted-foreground"
+            className="rounded-3xl border-2 border-border/60 bg-card p-5 text-sm text-muted-foreground"
             data-testid="mood-history-readonly"
           >
             Här ser du dina tidigare loggar. Vill du logga nytt gör du det under{" "}
@@ -130,7 +130,7 @@ export function MoodContent({ showHeader = true, readOnly = false }: MoodContent
       <button
         type="button"
         onClick={() => setFlowInsightsOpen(true)}
-        className="press flex w-full flex-col items-center justify-center gap-1.5 rounded-3xl border border-border/60 bg-lavender/60 px-3 py-6 text-center shadow-soft transition-shadow hover:shadow-lifted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+        className="press flex w-full flex-col items-center justify-center gap-1.5 rounded-3xl border-2 border-border/60 bg-lavender/60 px-3 py-6 text-center shadow-soft transition-shadow hover:shadow-lifted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
       >
         <span className="grid h-12 w-12 place-items-center rounded-2xl bg-primary/10 text-primary">
           <Sparkles size={24} />

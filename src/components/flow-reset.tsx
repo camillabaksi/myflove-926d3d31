@@ -54,7 +54,7 @@ export default function FlowReset() {
 
   return (
     <div
-      className="relative overflow-hidden rounded-3xl border border-border/60 p-5 shadow-soft space-y-5 pop-in"
+      className="relative overflow-hidden rounded-3xl border-2 border-border/60 p-5 shadow-soft space-y-5 pop-in"
       style={{
         backgroundImage:
           "linear-gradient(135deg, hsl(var(--lavender)) 0%, hsl(var(--cream)) 60%, hsl(var(--sky) / 0.8) 100%)",
@@ -81,7 +81,7 @@ export default function FlowReset() {
                   toast("Tack för att du berättade. 💙");
                 }}
                 aria-pressed={active}
-                className={`press flex flex-col items-center gap-2 rounded-3xl border px-2 py-4 transition-colors ${
+                className={`press flex flex-col items-center gap-2 rounded-3xl border-2 px-2 py-4 transition-colors ${
                   active
                     ? "border-primary bg-card shadow-soft"
                     : "border-transparent bg-card/70 hover:bg-card"

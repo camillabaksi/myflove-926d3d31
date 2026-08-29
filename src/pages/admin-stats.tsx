@@ -109,32 +109,32 @@ export default function AdminStats() {
         {data && (
           <>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              <div className="bg-card p-5 rounded-3xl border border-border shadow-sm space-y-1">
+              <div className="bg-card p-5 rounded-3xl border-2 border-border shadow-sm space-y-1">
                 <Users size={20} className="text-primary" />
                 <p className="text-2xl font-bold">{data.totalUsers ?? 0}</p>
                 <p className="text-xs text-muted-foreground">Registrerade användare</p>
               </div>
-              <div className="bg-card p-5 rounded-3xl border border-border shadow-sm space-y-1">
+              <div className="bg-card p-5 rounded-3xl border-2 border-border shadow-sm space-y-1">
                 <Users size={20} className="text-primary" />
                 <p className="text-2xl font-bold">{data.newUsers7d ?? 0}</p>
                 <p className="text-xs text-muted-foreground">Nya senaste 7 dagarna</p>
               </div>
-              <div className="bg-card p-5 rounded-3xl border border-border shadow-sm space-y-1">
+              <div className="bg-card p-5 rounded-3xl border-2 border-border shadow-sm space-y-1">
                 <Activity size={20} className="text-primary" />
                 <p className="text-2xl font-bold">{data.totalSessions}</p>
                 <p className="text-xs text-muted-foreground">Besökare (30 d)</p>
               </div>
-              <div className="bg-card p-5 rounded-3xl border border-border shadow-sm space-y-1">
+              <div className="bg-card p-5 rounded-3xl border-2 border-border shadow-sm space-y-1">
                 <Activity size={20} className="text-primary" />
                 <p className="text-2xl font-bold">{data.activeSessions1d}</p>
                 <p className="text-xs text-muted-foreground">Aktiva idag</p>
               </div>
-              <div className="bg-card p-5 rounded-3xl border border-border shadow-sm space-y-1">
+              <div className="bg-card p-5 rounded-3xl border-2 border-border shadow-sm space-y-1">
                 <Activity size={20} className="text-primary" />
                 <p className="text-2xl font-bold">{data.activeSessions7d}</p>
                 <p className="text-xs text-muted-foreground">Aktiva senaste 7 dagarna</p>
               </div>
-              <div className="bg-card p-5 rounded-3xl border border-border shadow-sm space-y-1">
+              <div className="bg-card p-5 rounded-3xl border-2 border-border shadow-sm space-y-1">
                 <Flame size={20} className="text-primary" />
                 <p className="text-2xl font-bold">{data.activeSessions30d}</p>
                 <p className="text-xs text-muted-foreground">Aktiva senaste 30 dagarna</p>
@@ -144,7 +144,7 @@ export default function AdminStats() {
             <CollapsibleSection
               title="Nyckeltal vi mäter"
               headingClassName="text-lg font-semibold"
-              className="bg-card p-6 rounded-3xl border border-border shadow-sm"
+              className="bg-card p-6 rounded-3xl border-2 border-border shadow-sm"
               description="Sammanslagna mått som visar om appen faktiskt hjälper — helt utan personlig data."
             >
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -195,7 +195,7 @@ export default function AdminStats() {
             <CollapsibleSection
               title="Dagliga loopen: Fånga → Planera → Göra → Reflektera"
               headingClassName="text-lg font-semibold"
-              className="bg-card p-6 rounded-3xl border border-border shadow-sm"
+              className="bg-card p-6 rounded-3xl border-2 border-border shadow-sm"
               description="Hur många anonyma besökare som når varje steg i MyFloves kärnflöde."
             >
               <div className="space-y-3">
@@ -222,7 +222,7 @@ export default function AdminStats() {
             <CollapsibleSection
               title="Händelser per dag (senaste 14 dagarna)"
               headingClassName="text-lg font-semibold"
-              className="bg-card p-6 rounded-3xl border border-border shadow-sm"
+              className="bg-card p-6 rounded-3xl border-2 border-border shadow-sm"
             >
               <div className="flex items-end gap-1.5 h-32">
                 {(data.dailyEvents ?? []).map((day) => {
@@ -250,7 +250,7 @@ export default function AdminStats() {
             <CollapsibleSection
               title="Nya registreringar (senaste 14 dagarna)"
               headingClassName="text-lg font-semibold"
-              className="bg-card p-6 rounded-3xl border border-border shadow-sm"
+              className="bg-card p-6 rounded-3xl border-2 border-border shadow-sm"
             >
               {(data.dailySignups ?? []).length === 0 && (
                 <p className="text-sm text-muted-foreground">Ingen data än.</p>
@@ -278,7 +278,7 @@ export default function AdminStats() {
             <CollapsibleSection
               title="Mest använda delar av appen"
               headingClassName="text-lg font-semibold"
-              className="bg-card p-6 rounded-3xl border border-border shadow-sm"
+              className="bg-card p-6 rounded-3xl border-2 border-border shadow-sm"
             >
               {viewsBySection.length === 0 && (
                 <p className="text-sm text-muted-foreground">Ingen data än.</p>
@@ -306,7 +306,7 @@ export default function AdminStats() {
             <CollapsibleSection
               title="Mest besökta sidor"
               headingClassName="text-lg font-semibold"
-              className="bg-card p-6 rounded-3xl border border-border shadow-sm"
+              className="bg-card p-6 rounded-3xl border-2 border-border shadow-sm"
               description="Varje sidvisning i appen loggas anonymt — här ser du vilka sidor besökarna faktiskt öppnar."
             >
               {pageViews.length === 0 && (
@@ -335,7 +335,7 @@ export default function AdminStats() {
             <CollapsibleSection
               title="Funktioner som faktiskt används"
               headingClassName="text-lg font-semibold"
-              className="bg-card p-6 rounded-3xl border border-border shadow-sm"
+              className="bg-card p-6 rounded-3xl border-2 border-border shadow-sm"
               description="Konkreta handlingar (inte bara besök) — visar vad som fungerar bra och vad som knappt rörs."
             >
               {otherActions.length === 0 && (
@@ -361,7 +361,7 @@ export default function AdminStats() {
             <CollapsibleSection
               title="Aktiva användare per dag (senaste 14 dagarna)"
               headingClassName="text-lg font-semibold"
-              className="bg-card p-6 rounded-3xl border border-border shadow-sm"
+              className="bg-card p-6 rounded-3xl border-2 border-border shadow-sm"
             >
               {(data.dailyActiveSessions ?? []).length === 0 && (
                 <p className="text-sm text-muted-foreground">Ingen data än.</p>

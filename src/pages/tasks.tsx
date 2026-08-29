@@ -580,7 +580,7 @@ export default function Tasks() {
       <MyFlovePageGrid className="page-enter">
         <MyFloveWide>
           <div
-            className="rounded-3xl border border-border/60 p-5 shadow-soft"
+            className="rounded-3xl border-2 border-border/60 p-5 shadow-soft"
             style={{
               backgroundImage:
                 "linear-gradient(135deg, hsl(var(--lavender)) 0%, hsl(var(--cream)) 60%, hsl(var(--blush) / 0.8) 100%)",
@@ -643,7 +643,7 @@ export default function Tasks() {
           <MyFloveWide>
             <div className="space-y-6">
               {suggestion && (
-                <div className="rounded-3xl border border-primary/20 bg-primary/5 p-4">
+                <div className="rounded-3xl border-2 border-primary/20 bg-primary/5 p-4">
                   <div className="flex items-start gap-2">
                     <Sparkles size={18} className="mt-0.5 shrink-0 text-primary" />
                     <div className="min-w-0">

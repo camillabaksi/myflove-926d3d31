@@ -480,7 +480,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
 
           {place && (
             <div
-              className="rounded-3xl border p-4"
+              className="rounded-3xl border-2 p-4"
               style={{
                 backgroundColor: areaTint(place.area, 0.1),
                 borderColor: areaTint(place.area, 0.3),

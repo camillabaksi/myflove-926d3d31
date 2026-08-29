@@ -63,7 +63,7 @@ export default function PwaInstallCard({
       data-pwa-install
       aria-label="Lägg till MyFlove på hemskärmen"
       className={cn(
-        "rounded-3xl border border-primary/20 bg-card p-4 shadow-lifted space-y-3",
+        "rounded-3xl border-2 border-primary/20 bg-card p-4 shadow-lifted space-y-3",
         className,
       )}
     >

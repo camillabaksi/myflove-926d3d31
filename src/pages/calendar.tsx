@@ -645,7 +645,7 @@ export default function CalendarPage() {
         </div>
 
         <MyFloveWide>
-          <div className="bg-card rounded-3xl border area-border shadow-soft overflow-hidden">
+          <div className="bg-card rounded-3xl border-2 area-border shadow-soft overflow-hidden">
             <div className="p-6 pb-2">
               <CollapsibleSection
                 title={periodLabel}

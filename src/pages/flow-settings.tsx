@@ -34,7 +34,7 @@ export default function FlowSettingsPage() {
       </MyFloveWide>
 
       <MyFloveWide>
-        <header className="flex items-center gap-4 rounded-3xl border border-border/60 bg-card p-4 shadow-sm">
+        <header className="flex items-center gap-4 rounded-3xl border-2 border-border/60 bg-card p-4 shadow-sm">
           <div className="shrink-0">
             <FlowCharacter
               scene="hello"

@@ -58,7 +58,7 @@ export default function HomeCustomizePage() {
           </Button>
         </div>
 
-        <section className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft">
+        <section className="rounded-3xl border-2 border-border/60 bg-card p-4 shadow-soft">
           <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
             Block på Hem
           </h2>
@@ -117,7 +117,7 @@ export default function HomeCustomizePage() {
           </ul>
         </section>
 
-        <section className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft">
+        <section className="rounded-3xl border-2 border-border/60 bg-card p-4 shadow-soft">
           <h2 className="mb-1 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
             Introduktionen
           </h2>

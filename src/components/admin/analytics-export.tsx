@@ -134,7 +134,7 @@ export default function AnalyticsExport() {
   }
 
   return (
-    <div className="bg-card p-6 rounded-3xl border border-border shadow-sm space-y-4">
+    <div className="bg-card p-6 rounded-3xl border-2 border-border shadow-sm space-y-4">
       <div>
         <h2 className="text-lg font-semibold">Exportera statistik</h2>
         <p className="text-sm text-muted-foreground">

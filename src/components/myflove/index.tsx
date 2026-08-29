@@ -201,7 +201,7 @@ export function MyFloveCard({
   return (
     <div
       className={cn(
-        "rounded-3xl border border-border/60 p-5 shadow-soft pop-in",
+        "rounded-3xl border-2 border-border/60 p-5 shadow-soft pop-in",
         tone && tone !== "plain" ? TONE_BG[tone].split(" ")[0] : "bg-card",
         className,
       )}
@@ -323,7 +323,7 @@ export function MyFloveHeader({
     <header
       {...areaProps(area)}
       className={cn(
-        "rounded-3xl border border-border/60 p-5 shadow-soft page-enter",
+        "rounded-3xl border-2 border-border/60 p-5 shadow-soft page-enter",
         area ? "area-hero area-border" : "",
         className,
       )}
@@ -415,7 +415,7 @@ export function MyFloveEmptyState({
   return (
     <div
       className={cn(
-        "flex flex-col items-center gap-3 rounded-3xl border border-dashed border-border/70 bg-card/60 px-6 py-10 text-center pop-in",
+        "flex flex-col items-center gap-3 rounded-3xl border-2 border-dashed border-border/70 bg-card/60 px-6 py-10 text-center pop-in",
         className,
       )}
     >

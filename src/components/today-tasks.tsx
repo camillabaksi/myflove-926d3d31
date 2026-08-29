@@ -29,7 +29,7 @@ export function TodayTasks({
 
   return (
     <section
-      className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+      className="rounded-3xl border-2 border-border/60 bg-card p-5 shadow-soft"
       aria-label="Dagens saker"
     >
       <CollapsibleSection

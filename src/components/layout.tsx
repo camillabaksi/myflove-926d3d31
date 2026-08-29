@@ -1233,7 +1233,7 @@ export default function Layout({ children }: LayoutProps) {
                       setMobileMenuOpen(false);
                       setOpenCategory(null);
                     }}
-                    className="mb-4 flex items-center gap-3 rounded-3xl border border-primary/30 bg-primary/10 p-4 shadow-sm press"
+                    className="mb-4 flex items-center gap-3 rounded-3xl border-2 border-primary/30 bg-primary/10 p-4 shadow-sm press"
                   >
                     <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary/15 text-primary">
                       <Compass size={22} strokeWidth={2.2} />
@@ -1306,7 +1306,7 @@ export default function Layout({ children }: LayoutProps) {
                   </button>
 
                   {/* Viktiga områden – dina två egna platser i bottenmenyn */}
-                  <div className="mb-4 rounded-3xl border border-border bg-card p-4 shadow-sm">
+                  <div className="mb-4 rounded-3xl border-2 border-border bg-card p-4 shadow-sm">
                     <div className="flex items-center justify-between gap-2">
                       <div>
                         <p className="text-sm font-semibold">Din bottenmeny</p>

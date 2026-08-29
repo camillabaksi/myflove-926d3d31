@@ -192,7 +192,7 @@ export default function CleaningPage() {
 
         {/* Översikt */}
         <section
-          className="rounded-3xl border p-5"
+          className="rounded-3xl border-2 p-5"
           style={{ borderColor: tint(0.3), backgroundColor: tint(0.07) }}
         >
           <CollapsibleSection
@@ -266,7 +266,7 @@ export default function CleaningPage() {
 
         {/* Lägg till eget steg */}
         <div className="min-w-0">
-          <section className="rounded-3xl border border-border bg-card p-4 space-y-3">
+          <section className="rounded-3xl border-2 border-border bg-card p-4 space-y-3">
             <p className="text-sm font-medium text-foreground">Lägg till eget steg</p>
             <div className="flex flex-wrap gap-2">
               <Input
@@ -305,7 +305,7 @@ export default function CleaningPage() {
 
         {/* Vad du behöver */}
         <div className="min-w-0">
-          <section className="rounded-3xl border border-border bg-card p-5">
+          <section className="rounded-3xl border-2 border-border bg-card p-5">
             <CollapsibleSection
               title={
                 <span className="flex items-center gap-2">

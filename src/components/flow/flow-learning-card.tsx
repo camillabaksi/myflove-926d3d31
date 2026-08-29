@@ -84,7 +84,7 @@ export default function FlowLearningCard({
       data-flow-learning
       aria-label="Flow lär känna dig"
       className={cn(
-        "min-w-0 rounded-3xl border border-primary/15 bg-primary/5 p-3 shadow-sm sm:p-4",
+        "min-w-0 rounded-3xl border-2 border-primary/15 bg-primary/5 p-3 shadow-sm sm:p-4",
         className,
       )}
     >
