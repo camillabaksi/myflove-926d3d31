@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import FlowLearningCard from "@/components/flow/flow-learning-card";
 import { FlowMascot } from "@/components/flow-mascot";
+import { MyFloveBlock } from "@/components/myflove/block";
 
 import { useHomeLayout, type HomeBlockId } from "@/lib/home-layout";
 import { TaskQuickAdd, type QuickAddResult } from "@/components/task-quick-add";
