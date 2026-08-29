@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-08-29 – Hem: planera-väg rättad
+
+- "Vad behöver du just nu? – Jag behöver planera min dag" leder nu till `/flowplan` (Planera) istället för att duplicera Idag-genvägen.
+
 ## 2026-08-29 – Mer: strukturerade sektioner längst ner
 
 - Mer-sidans nedre del är nu grupperad i fyra tydliga sektioner: Min profil, Anpassa MyFlove, Kom igång och Ljud & konto – varje med rubrik och kort förklaring.

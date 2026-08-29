@@ -10,6 +10,12 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Hem: 'Jag behöver planera min dag' leder till Planera",
+    items: [
+      "Situationsvalet pekade på Idag trots att dagens översikt redan har ett eget kort – valet leder nu till /flowplan (2026-08-29)",
+    ],
+  },
+  {
     title: "Mer: strukturerade sektioner längst ner",
     items: [
       "Mer-sidan är grupperad i Min profil, Anpassa MyFlove, Kom igång och Ljud & konto (2026-08-29)",
