@@ -220,9 +220,7 @@ const SceneHook: React.FC = () => (
   <Shell>
     <Eyebrow>Känner du igen dig?</Eyebrow>
     <Title>{"Huvudet är fullt.\nDagen har redan\nbörjat."}</Title>
-    <Sub delay={16}>
-      {"Tvätten. Medicinen. Mejlet.\nAllt ligger kvar i huvudet – samtidigt."}
-    </Sub>
+    <Sub delay={16}>{"Tvätten. Medicinen. Mejlet.\nAllt ligger kvar i huvudet – samtidigt."}</Sub>
   </Shell>
 );
 
@@ -403,8 +401,7 @@ const SCENES: Array<{ c: React.FC; d: number }> = [
   { c: SceneCta, d: 240 },
 ];
 
-export const TOTAL_FRAMES =
-  SCENES.reduce((a, s) => a + s.d, 0) - TRANS * (SCENES.length - 1);
+export const TOTAL_FRAMES = SCENES.reduce((a, s) => a + s.d, 0) - TRANS * (SCENES.length - 1);
 
 export const FirstLookVideo: React.FC = () => (
   <AbsoluteFill style={{ backgroundColor: COLORS.bg }}>

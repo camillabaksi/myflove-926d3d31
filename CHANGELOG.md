@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-29 – Widget-läge: minimalistiska komprimerade block
+
+- Komprimerade block på Hem visar nu bara stor ikon/illustration + ETT värde (t.ex. 🔋 58 %, ✓ 4/7, 📅 13:00) – rubrik, underrubrik och förklaringar har flyttats till den expanderade vyn.
+- `ExpandableBlock` har fått ett `widget`-läge: komprimerat är en luftig widget, vid tryck expanderar samma kort i sidans flöde med rubrik och allt innehåll kvar.
+- Batterikortet på Hem är en egen widget-länk (ikon + procent); Flow-noteringen är ett widget-block med maskoten och allt läroinnehåll i expanderad vy.
+- Områdesfärgerna bär informationsvärdet i stället för text; ingen "tryck här"-copy finns kvar i komprimerat läge.
+- Endast presentation: data, stores, navigation, routes, Flow-logik och hälsoregler är oförändrade.
+
 ## 2026-08-29 – Områdesfärger som visuell röd tråd
 
 - Varje huvudområde har nu en egen mjuk färgidentitet: Hälsa (teal/salvia), Flow (lila), Idag (blå), Planera (blå/lila), Hem (varm persika), Återhämtning (gul) och Kalender (rosa/lila).

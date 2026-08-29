@@ -43,6 +43,15 @@ export interface ExpandableBlockProps {
   surface?: MyFloveTone;
   /** Områdets färgidentitet – se src/lib/areas.ts. */
   area?: AreaId;
+  /**
+   * Widget-läge: komprimerad vy visar ENDAST stor ikon/illustration +
+   * ETT stort värde (status) + eventuellt en mycket kort etikett.
+   * Rubrik, underrubrik och all övrig information flyttas till den
+   * expanderade vyn. Tänk widget – inte informationskort.
+   */
+  widget?: boolean;
+  /** Mycket kort etikett under värdet i widget-läge, t.ex. "Flow". */
+  label?: string;
   className?: string;
   "data-testid"?: string;
   /** Hela innehållet – visas när kortet är expanderat. */
@@ -60,12 +69,14 @@ export function ExpandableBlock({
   tone = "lavender",
   surface,
   area,
+  widget = false,
+  label,
   className,
   "data-testid": dataTestId,
   children,
 }: ExpandableBlockProps) {
   const [open, setOpen] = React.useState(false);
-  const label = titleText ?? (typeof title === "string" ? title : "block");
+  const ariaLabel = titleText ?? (typeof title === "string" ? title : "block");
   const sectionRef = React.useRef<HTMLElement | null>(null);
   const triggerRef = React.useRef<HTMLButtonElement | null>(null);
 
@@ -75,7 +86,7 @@ export function ExpandableBlock({
   React.useEffect(() => {
     if (!open) return;
     const onPop = () => setOpen(false);
-    window.history.pushState({ myfloveExpanded: label }, "");
+    window.history.pushState({ myfloveExpanded: ariaLabel }, "");
     window.addEventListener("popstate", onPop);
 
     const onKey = (e: KeyboardEvent) => {
@@ -86,9 +97,9 @@ export function ExpandableBlock({
     return () => {
       window.removeEventListener("popstate", onPop);
       window.removeEventListener("keydown", onKey);
-      if (window.history.state?.myfloveExpanded === label) window.history.back();
+      if (window.history.state?.myfloveExpanded === ariaLabel) window.history.back();
     };
-  }, [open, label]);
+  }, [open, ariaLabel]);
 
   const toggle = () => {
     setOpen((prev) => {
@@ -123,47 +134,89 @@ export function ExpandableBlock({
         ref={triggerRef}
         onClick={toggle}
         aria-expanded={open}
-        aria-label={open ? `Minimera ${label}` : `Öppna ${label}`}
-        className="press flex w-full min-w-0 flex-col gap-2 rounded-3xl p-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:p-5"
-      >
-        <div className="flex min-w-0 items-start gap-2.5">
-          {visual ??
-            (icon && (
-              <MyFloveIcon
-                icon={icon}
-                tone={tone}
-                size="sm"
-                className={area ? "area-bg-soft area-text" : undefined}
-              />
-            ))}
-          <div className="min-w-0 flex-1">
-            <h2 className="font-display text-base font-bold leading-tight text-ink">{title}</h2>
-            {subtitle && (
-              <p className={cn("mt-0.5 text-xs text-muted-foreground", !open && "line-clamp-2")}>
-                {subtitle}
-              </p>
-            )}
-          </div>
-          <ChevronDown
-            size={18}
-            aria-hidden="true"
-            className={cn(
-              "mt-0.5 shrink-0 text-muted-foreground transition-transform duration-200 motion-reduce:transition-none",
-              !open && "-rotate-90",
-            )}
-          />
-        </div>
-
-        {!open && status != null && (
-          <div className="font-display text-lg font-bold leading-tight text-ink">{status}</div>
+        aria-label={open ? `Minimera ${ariaLabel}` : `Öppna ${ariaLabel}`}
+        className={cn(
+          "press flex w-full min-w-0 flex-col gap-2 rounded-3xl text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+          widget && !open
+            ? "items-center justify-center gap-1.5 px-3 py-6 text-center"
+            : "p-3 sm:p-5",
         )}
-        {!open && summary != null && (
-          <div className="line-clamp-2 text-sm text-muted-foreground">{summary}</div>
+      >
+        {widget && !open ? (
+          <>
+            {/* Widget-läge: stor ikon + ETT värde + ev. kort etikett. Inget mer. */}
+            <span aria-hidden="true" className="grid place-items-center text-3xl leading-none">
+              {visual ??
+                (icon && (
+                  <MyFloveIcon
+                    icon={icon}
+                    tone={tone}
+                    size="lg"
+                    className={area ? "area-bg-soft area-text" : undefined}
+                  />
+                ))}
+            </span>
+            {status != null && (
+              <span className="font-display text-2xl font-bold leading-none text-ink">
+                {status}
+              </span>
+            )}
+            {(label ?? (typeof title === "string" ? title : null)) && (
+              <span className="text-xs font-medium text-muted-foreground">
+                {label ?? (title as string)}
+              </span>
+            )}
+          </>
+        ) : (
+          <>
+            <div className="flex min-w-0 items-start gap-2.5">
+              {visual ??
+                (icon && (
+                  <MyFloveIcon
+                    icon={icon}
+                    tone={tone}
+                    size="sm"
+                    className={area ? "area-bg-soft area-text" : undefined}
+                  />
+                ))}
+              <div className="min-w-0 flex-1">
+                <h2 className="font-display text-base font-bold leading-tight text-ink">{title}</h2>
+                {subtitle && (
+                  <p
+                    className={cn("mt-0.5 text-xs text-muted-foreground", !open && "line-clamp-2")}
+                  >
+                    {subtitle}
+                  </p>
+                )}
+              </div>
+              <ChevronDown
+                size={18}
+                aria-hidden="true"
+                className={cn(
+                  "mt-0.5 shrink-0 text-muted-foreground transition-transform duration-200 motion-reduce:transition-none",
+                  !open && "-rotate-90",
+                )}
+              />
+            </div>
+
+            {!open && status != null && (
+              <div className="font-display text-lg font-bold leading-tight text-ink">{status}</div>
+            )}
+            {!open && summary != null && (
+              <div className="line-clamp-2 text-sm text-muted-foreground">{summary}</div>
+            )}
+          </>
         )}
       </button>
 
       {open && (
         <div className="min-w-0 w-full space-y-4 border-t border-border/50 p-3 animate-fade-in motion-reduce:animate-none sm:p-5">
+          {widget && (
+            <div className="space-y-0.5">
+              <h2 className="font-display text-base font-bold leading-tight text-ink">{title}</h2>
+              {subtitle && <p className="text-xs text-muted-foreground">{subtitle}</p>}
+            </div>
+          )}
           {children}
         </div>
       )}

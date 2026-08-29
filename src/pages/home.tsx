@@ -29,11 +29,19 @@ import { AreaSwitcher } from "@/components/area-switcher";
 import { AREA_META, useActiveArea } from "@/lib/life-areas";
 import IntroTour from "@/components/intro-tour";
 import FlowOnboarding from "@/components/flow-onboarding";
-import { CalendarDays, Sparkles, ArrowRight, SlidersHorizontal, Compass } from "lucide-react";
+import {
+  CalendarDays,
+  Sparkles,
+  ArrowRight,
+  SlidersHorizontal,
+  Compass,
+  Check,
+} from "lucide-react";
 import { todayISO } from "@/lib/day";
 import { track } from "@/lib/analytics";
 import { homeContextLine } from "@/lib/flow-tone";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";
+import { useFlowSettings } from "@/hooks/use-flow-settings";
 
 /**
  * Fyra vanliga situationer, formulerade som användarens egen tanke.
@@ -209,6 +217,7 @@ export default function Home() {
   const { reading } = useEnergyBattery();
   const { energyValue } = useQuickCheckin();
   const { tasks, activeTasks } = useTasks();
+  const { settings: flowSettings } = useFlowSettings();
   const todayIso = todayISO();
 
   /* Hem säger olika saker beroende på dagen – samma kort, levande innehåll. */
@@ -325,20 +334,35 @@ export default function Home() {
         {shows("batteri") && (
           <section className="min-w-0" style={pos("batteri")} aria-label="Mitt batteri">
             <EnergyBattery
+              widget
               href="/mitt-batteri"
               onNavigate={() => track("battery_opened", { source: "hem" })}
             />
           </section>
         )}
 
-        {/* Flow – en liten notering längst ner, konkurrerar inte med dagen. */}
-        <div
-          style={{ order: visible.indexOf("batteri") + 0.5 }}
-          data-testid="home-flow-note"
-          className="min-w-0"
-        >
-          <FlowLearningCard />
-        </div>
+        {/* Flow – en liten notering, konkurrerar inte med dagen. */}
+        {flowSettings.enabled && flowSettings.learning && (
+          <div
+            style={{ order: visible.indexOf("batteri") + 0.5 }}
+            data-testid="home-flow-note"
+            className="min-w-0"
+          >
+            <ExpandableBlock
+              title="Flow lär känna dig"
+              titleText="Flow lär känna dig"
+              area="flow"
+              widget
+              label="Insikter"
+              visual={<FlowMascot size="xs" mood="calm" bump className="flow-alive" alt="" />}
+              subtitle="Sådant Flow lagt märke till – inget du behöver göra"
+              tone="lavender"
+              surface="lavender"
+            >
+              <FlowLearningCard bare />
+            </ExpandableBlock>
+          </div>
+        )}
 
         {/* Nästa – nästa relevanta aktivitet */}
         {shows("nasta") && (
@@ -348,9 +372,10 @@ export default function Home() {
               titleText="Nästa"
               area="idag"
               icon={CalendarDays}
-              subtitle="Det som händer närmast"
-              status={nextEvent ? `${nextEvent.time}` : "Inget bokat"}
-              summary={nextEvent ? nextEvent.title : "Inget inplanerat just nu"}
+              widget
+              label="Nästa"
+              subtitle={nextEvent ? nextEvent.title : "Det som händer närmast"}
+              status={nextEvent ? nextEvent.time : "–"}
               tone="sky"
               surface="sky"
             >
@@ -392,13 +417,14 @@ export default function Home() {
               title="Rutiner & medicin"
               titleText="Rutiner och medicin"
               area="halsa"
+              widget
+              label="Rutiner"
               visual={
-                <span aria-hidden className="text-xl">
-                  🔁💊
+                <span aria-hidden className="text-3xl leading-none">
+                  💊
                 </span>
               }
               subtitle="Det som hjälper dagen att hålla ihop"
-              summary="Öppna för att bocka av dagens rutiner och medicin"
               tone="blush"
               surface="blush"
             >
@@ -422,9 +448,10 @@ export default function Home() {
               title="Flow · just nu"
               titleText="Flow just nu"
               area="flow"
+              widget
+              label="Flow"
               visual={<FlowMascot size="xs" mood="nod" bump className="flow-alive" alt="" />}
               subtitle="Ett lugnt förslag – du väljer själv"
-              summary={suggestion.headline}
               tone="lavender"
               surface="lavender"
             >
@@ -475,9 +502,12 @@ export default function Home() {
           <nav className="min-w-0" style={pos("vagar")} aria-label="Vad behöver du just nu">
             <ExpandableBlock
               title="Vad behöver du just nu?"
+              titleText="Vad behöver du just nu"
               area="hem"
+              widget
+              label="Välj väg"
+              icon={Compass}
               subtitle="Välj en väg – Flow tar dig till rätt ställe"
-              summary="Fyra vanliga situationer"
               tone="lavender"
               surface="lavender"
             >
@@ -585,16 +615,13 @@ function DaySummary() {
     <ExpandableBlock
       title="Dagens översikt"
       area="idag"
+      widget
+      label="Idag"
       subtitle="En snabb sammanfattning av det som väntar"
-      icon={CalendarDays}
+      icon={Check}
       tone="sky"
       surface="sky"
-      status={total === 0 ? "Inget ännu" : `${total} ${total === 1 ? "sak" : "saker"}`}
-      summary={
-        total === 0
-          ? "Inget inplanerat idag"
-          : `${todayDone.length} klara · ${todayOpen.length} kvar`
-      }
+      status={total === 0 ? "0" : `${todayDone.length}/${total}`}
     >
       <p className="text-ink">
         {total === 0

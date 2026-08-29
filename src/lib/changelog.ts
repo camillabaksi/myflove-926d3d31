@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Widget-läge: minimalistiska komprimerade block",
+    items: [
+      "Komprimerade block på Hem visar bara stor ikon + ett värde; rubrik och förklaringar bor i den expanderade vyn (2026-08-29)",
+      "ExpandableBlock har fått ett widget-läge – luftig komprimerad widget som expanderar på plats i sidans flöde (2026-08-29)",
+      "Batterikortet på Hem är en widget-länk (ikon + procent) och Flow-noteringen ett widget-block med maskoten (2026-08-29)",
+      "Områdesfärgen bär informationsvärdet i stället för text; endast presentation är ändrad (2026-08-29)",
+    ],
+  },
+  {
     title: "Områdesfärger som visuell röd tråd",
     items: [
       "Varje huvudområde har en egen mjuk färgidentitet: Hälsa, Flow, Idag, Planera, Hem, Återhämtning och Kalender (2026-08-29)",

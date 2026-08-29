@@ -36,6 +36,15 @@ function useIn(delay: number, damping = 18) {
   } as React.CSSProperties;
 }
 
+const InView: React.FC<{
+  delay: number;
+  style?: React.CSSProperties;
+  children: React.ReactNode;
+}> = ({ delay, style, children }) => {
+  const anim = useIn(delay);
+  return <div style={{ ...anim, ...style }}>{children}</div>;
+};
+
 const Shell: React.FC<{ children: React.ReactNode; dark?: boolean }> = ({
   children,
   dark = false,
@@ -43,9 +52,7 @@ const Shell: React.FC<{ children: React.ReactNode; dark?: boolean }> = ({
   const frame = useCurrentFrame();
   const drift = Math.sin(frame / 50) * 12;
   return (
-    <AbsoluteFill
-      style={{ background: dark ? COLORS.ink : COLORS.bg, overflow: "hidden" }}
-    >
+    <AbsoluteFill style={{ background: dark ? COLORS.ink : COLORS.bg, overflow: "hidden" }}>
       <div
         style={{
           position: "absolute",
@@ -229,10 +236,10 @@ const SceneProblem: React.FC = () => {
         <Title size={78}>Verktygen är byggda för kalendrar — inte för människor.</Title>
         <div style={{ display: "flex", flexDirection: "column", gap: 18, marginTop: 6 }}>
           {items.map((t, i) => (
-            <div
+            <InView
               key={t}
+              delay={24 + i * 8}
               style={{
-                ...useIn(24 + i * 8),
                 display: "flex",
                 alignItems: "center",
                 gap: 20,
@@ -251,7 +258,7 @@ const SceneProblem: React.FC = () => {
                 }}
               />
               {t}
-            </div>
+            </InView>
           ))}
         </div>
       </div>
@@ -305,10 +312,7 @@ const SceneProduct: React.FC = () => (
   </Shell>
 );
 
-const FlowMascot: React.FC<{ size?: number; delay?: number }> = ({
-  size = 420,
-  delay = 8,
-}) => {
+const FlowMascot: React.FC<{ size?: number; delay?: number }> = ({ size = 420, delay = 8 }) => {
   const frame = useCurrentFrame();
   const enter = useIn(delay, 14);
   const bob = Math.sin(frame / 22) * 12;
@@ -405,7 +409,6 @@ const SceneFlowAlive: React.FC = () => {
 };
 
 const SceneHow: React.FC = () => {
-
   const steps = [
     { n: "1", t: "Fånga", d: "Skriv fritt i QuickFlow" },
     { n: "2", t: "Sortera", d: "AI placerar rätt: kalender, inköp, studier" },
@@ -421,10 +424,10 @@ const SceneHow: React.FC = () => {
         </div>
         <div style={{ display: "flex", gap: 22 }}>
           {steps.map((s, i) => (
-            <div
+            <InView
               key={s.n}
+              delay={14 + i * 7}
               style={{
-                ...useIn(14 + i * 7),
                 flex: 1,
                 background: COLORS.cream,
                 borderRadius: 26,
@@ -466,7 +469,7 @@ const SceneHow: React.FC = () => {
               >
                 {s.d}
               </div>
-            </div>
+            </InView>
           ))}
         </div>
       </div>
@@ -482,8 +485,8 @@ const SceneWhyNow: React.FC = () => (
         Diagnoser ökar. Stödet gör det inte.
       </Title>
       <Sub dark delay={16}>
-        AI gör det för första gången möjligt att ge personligt, tålmodigt stöd i vardagen — till
-        en kostnad som skalar.
+        AI gör det för första gången möjligt att ge personligt, tålmodigt stöd i vardagen — till en
+        kostnad som skalar.
       </Sub>
       <div
         style={{
@@ -561,10 +564,10 @@ const SceneMarket: React.FC = () => {
         </div>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
           {stats.map((s, i) => (
-            <div
+            <InView
               key={s.v}
+              delay={12 + i * 6}
               style={{
-                ...useIn(12 + i * 6),
                 width: 500,
                 background: COLORS.cream,
                 borderRadius: 24,
@@ -607,7 +610,7 @@ const SceneMarket: React.FC = () => {
               >
                 {s.d}
               </div>
-            </div>
+            </InView>
           ))}
         </div>
 
@@ -643,41 +646,40 @@ const SceneMarket: React.FC = () => {
 };
 
 const SceneOutro: React.FC = () => {
-
   const frame = useCurrentFrame();
   const glow = 0.35 + Math.sin(frame / 20) * 0.08;
   return (
     <Shell dark>
       <div style={{ display: "flex", alignItems: "center", gap: 70 }}>
-      <div style={{ display: "flex", flexDirection: "column", gap: 30, flex: 1 }}>
-        <div
-          style={{
-            ...useIn(4),
-            width: 120,
-            height: 18,
-            borderRadius: 9,
-            background: COLORS.primary,
-            boxShadow: `0 0 90px rgba(124,92,224,${glow})`,
-          }}
-        />
-        <Title dark size={104}>
-          MyFlove
-        </Title>
-        <Sub dark delay={16}>
-          Ett lugnare sätt att få vardagen att hålla ihop.
-        </Sub>
-        <div
-          style={{
-            ...useIn(26),
-            fontFamily: FONTS.body,
-            fontSize: 28,
-            color: COLORS.primarySoft,
-            letterSpacing: 1,
-          }}
-        >
-          myflove.lovable.app
+        <div style={{ display: "flex", flexDirection: "column", gap: 30, flex: 1 }}>
+          <div
+            style={{
+              ...useIn(4),
+              width: 120,
+              height: 18,
+              borderRadius: 9,
+              background: COLORS.primary,
+              boxShadow: `0 0 90px rgba(124,92,224,${glow})`,
+            }}
+          />
+          <Title dark size={104}>
+            MyFlove
+          </Title>
+          <Sub dark delay={16}>
+            Ett lugnare sätt att få vardagen att hålla ihop.
+          </Sub>
+          <div
+            style={{
+              ...useIn(26),
+              fontFamily: FONTS.body,
+              fontSize: 28,
+              color: COLORS.primarySoft,
+              letterSpacing: 1,
+            }}
+          >
+            myflove.lovable.app
+          </div>
         </div>
-      </div>
         <FlowMascot size={440} delay={14} />
       </div>
     </Shell>
@@ -697,8 +699,7 @@ const SCENES: { c: React.FC; d: number }[] = [
   { c: SceneOutro, d: 150 },
 ];
 
-export const TOTAL_FRAMES =
-  SCENES.reduce((a, s) => a + s.d, 0) - TRANS * (SCENES.length - 1);
+export const TOTAL_FRAMES = SCENES.reduce((a, s) => a + s.d, 0) - TRANS * (SCENES.length - 1);
 
 export const PitchVideo: React.FC = () => (
   <TransitionSeries>

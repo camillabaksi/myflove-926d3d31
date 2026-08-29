@@ -12,21 +12,21 @@ import { learningVoice } from "@/lib/flow-tone";
  * Visar mjukt hur väl Flow känner dig och ett par saker han lagt märke till.
  * Ingen ny insamling – allt kommer från data som redan finns i MyFlove.
  */
-export default function FlowLearningCard({ className }: { className?: string }) {
+export default function FlowLearningCard({
+  className,
+  bare = false,
+}: {
+  className?: string;
+  /** Rendera bara innehållet – används inuti ExpandableBlock på Hem. */
+  bare?: boolean;
+}) {
   const knowledge = useFlowLearning();
   const { settings } = useFlowSettings();
 
   if (!settings.enabled || !settings.learning) return null;
 
-  return (
-    <section
-      data-flow-learning
-      aria-label="Flow lär känna dig"
-      className={cn(
-        "min-w-0 rounded-3xl border border-primary/15 bg-primary/5 p-3 shadow-sm sm:p-4",
-        className,
-      )}
-    >
+  const inner = (
+    <>
       <div className="flex min-w-0 flex-col items-start gap-2 min-[380px]:flex-row min-[380px]:items-center sm:gap-3">
         <FlowMascot size="xs" mood="calm" bump className="flow-alive shrink-0" />
         <div className="min-w-0 flex-1">
@@ -68,6 +68,27 @@ export default function FlowLearningCard({ className }: { className?: string }) 
       <p className="mt-3 text-xs text-muted-foreground/80">
         Du behöver inte lära dig hur jag fungerar. Jag lär mig hur du fungerar. 💜
       </p>
+    </>
+  );
+
+  if (bare) {
+    return (
+      <div data-flow-learning aria-label="Flow lär känna dig" className={cn("min-w-0", className)}>
+        {inner}
+      </div>
+    );
+  }
+
+  return (
+    <section
+      data-flow-learning
+      aria-label="Flow lär känna dig"
+      className={cn(
+        "min-w-0 rounded-3xl border border-primary/15 bg-primary/5 p-3 shadow-sm sm:p-4",
+        className,
+      )}
+    >
+      {inner}
     </section>
   );
 }
