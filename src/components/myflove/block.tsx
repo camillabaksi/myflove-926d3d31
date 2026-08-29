@@ -142,8 +142,8 @@ export function MyFloveBlock({
 }
 
 /**
- * Responsivt rutnät för block. Mycket smala skärmar = en kolumn;
- * vanliga mobiler = två kolumner där relaterade block ligger bredvid varandra.
+ * Responsivt rutnät för block. Smala skärmar = en kolumn;
+ * bredare mobiler = två kolumner där relaterade block ligger bredvid varandra.
  */
 export function MyFloveBlockGrid({
   className,
@@ -155,7 +155,7 @@ export function MyFloveBlockGrid({
   return (
     <div
       className={cn(
-        "grid grid-cols-1 items-start gap-3 min-[380px]:grid-cols-2 sm:gap-4",
+        "grid grid-cols-1 items-start gap-3 min-[560px]:grid-cols-2 sm:gap-4",
         className,
       )}
     >
@@ -166,8 +166,8 @@ export function MyFloveBlockGrid({
 
 /**
  * Sidlayout för hela appen – ett riktigt dashboard-grid.
- * Två kolumner redan på vanlig mobilbredd och tre från xl,
- * med automatisk fallback till en kolumn på mycket smala skärmar.
+ * Två kolumner från en läsbar mobilbredd och tre från xl,
+ * med automatisk fallback till en kolumn på smala skärmar.
  * Innehåll som behöver mer plats wrappas i <MyFloveWide>.
  */
 export function MyFlovePageGrid({
@@ -183,7 +183,7 @@ export function MyFlovePageGrid({
     <div
       style={style}
       className={cn(
-        "grid min-w-0 grid-cols-1 items-start gap-4 min-[380px]:grid-cols-2 md:gap-5 xl:grid-cols-3",
+        "grid min-w-0 grid-cols-1 items-start gap-4 min-[560px]:grid-cols-2 md:gap-5 xl:grid-cols-3",
         className,
       )}
     >
@@ -194,8 +194,8 @@ export function MyFlovePageGrid({
 
 /**
  * Innehåll som behöver mer plats i ett MyFlovePageGrid.
- * `span="full"` (standard) tar hela raden, `span="wide"` tar två av tre/fyra
- * kolumner så att layouten kan variera i storlek och kännas levande.
+ * `span="full"` (standard) tar hela raden, `span="wide"` tar två kolumner
+ * på stora skärmar så att layouten kan variera i storlek och kännas levande.
  */
 export function MyFloveWide({
   className,
