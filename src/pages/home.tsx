@@ -296,8 +296,8 @@ export default function Home() {
           </MyFloveWide>
         )}
 
-
         {/* Lägg till i dagen – samma blockspråk: komprimerat kort som öppnar sig */}
+
         {shows("lagg-till") && (
           <section className="min-w-0" style={pos("lagg-till")} aria-label="Lägg till i dagen">
             <ExpandableBlock
