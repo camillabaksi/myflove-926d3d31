@@ -610,14 +610,14 @@ export default function CalendarPage() {
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="flex items-center gap-2 px-4 py-2.5 bg-card border border-border rounded-2xl text-sm font-medium hover:bg-secondary transition-colors"
+              className="flex items-center gap-2 px-4 py-2.5 bg-card border area-border rounded-2xl text-sm font-medium shadow-soft hover:bg-secondary transition-colors"
             >
               <Upload size={16} />
               Importera från telefonens kalender
             </button>
             <button
               onClick={handleExportAll}
-              className="flex items-center gap-2 px-4 py-2.5 bg-card border border-border rounded-2xl text-sm font-medium hover:bg-secondary transition-colors"
+              className="flex items-center gap-2 px-4 py-2.5 bg-card border area-border rounded-2xl text-sm font-medium shadow-soft hover:bg-secondary transition-colors"
             >
               <Download size={16} />
               Exportera till kalender (.ics)
@@ -645,7 +645,7 @@ export default function CalendarPage() {
         </div>
 
         <MyFloveWide>
-          <div className="bg-card rounded-3xl border border-border shadow-sm overflow-hidden">
+          <div className="bg-card rounded-3xl border area-border shadow-soft overflow-hidden">
             <div className="p-6 pb-2">
               <CollapsibleSection
                 title={periodLabel}
