@@ -26,7 +26,7 @@ import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { useDayPlan } from "@/lib/day-plan";
 import { todayISO as todayStr } from "@/lib/day";
 import type { Routine } from "@/lib/recurrence";
-import { CalendarDays, ListOrdered, Sparkles, Heart, Waves, ListChecks } from "lucide-react";
+import { CalendarDays, ListOrdered, Sparkles, Heart, Waves, ListChecks, Plus } from "lucide-react";
 import { MyFloveTransition } from "@/components/myflove/motion";
 
 type DayView = "flow" | "lista";
@@ -215,16 +215,21 @@ export default function TodayPage() {
               </Link>
             </StepSection>
 
-            {/* Steg 3 – lägg till något i dagen */}
-            <StepSection
-              step={3}
-              id="idag::steg-lagg-till"
+            {/* Steg 3 – lägg till något i dagen, samma blockspråk som övriga kort */}
+            <ExpandableBlock
               title="Lägg till i dagen"
-              description="Något nytt – eller något du redan hunnit med."
+              subtitle="Något nytt – eller något du redan hunnit med"
+              icon={Plus}
+              tone="mint"
+              surface="mint"
+              area="idag"
+              widget
+              label="Lägg till"
+              status="+"
             >
               <TaskQuickAdd onAdd={handleQuickAdd} />
               <DidThisQuickAdd />
-            </StepSection>
+            </ExpandableBlock>
 
             {/* 📋 Dagens ordning – planen du valt i Planera */}
             {dayPlan && dayPlan.steps.length > 0 && (
