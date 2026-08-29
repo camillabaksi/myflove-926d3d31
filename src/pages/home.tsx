@@ -346,6 +346,7 @@ export default function Home() {
             <ExpandableBlock
               title="Nästa"
               titleText="Nästa"
+              area="idag"
               icon={CalendarDays}
               subtitle="Det som händer närmast"
               status={nextEvent ? `${nextEvent.time}` : "Inget bokat"}
@@ -390,6 +391,7 @@ export default function Home() {
             <ExpandableBlock
               title="Rutiner & medicin"
               titleText="Rutiner och medicin"
+              area="halsa"
               visual={
                 <span aria-hidden className="text-xl">
                   🔁💊
@@ -419,6 +421,7 @@ export default function Home() {
             <ExpandableBlock
               title="Flow · just nu"
               titleText="Flow just nu"
+              area="flow"
               visual={<FlowMascot size="xs" mood="nod" bump className="flow-alive" alt="" />}
               subtitle="Ett lugnt förslag – du väljer själv"
               summary={suggestion.headline}
@@ -472,6 +475,7 @@ export default function Home() {
           <nav className="min-w-0" style={pos("vagar")} aria-label="Vad behöver du just nu">
             <ExpandableBlock
               title="Vad behöver du just nu?"
+              area="hem"
               subtitle="Välj en väg – Flow tar dig till rätt ställe"
               summary="Fyra vanliga situationer"
               tone="lavender"
@@ -580,6 +584,7 @@ function DaySummary() {
   return (
     <ExpandableBlock
       title="Dagens översikt"
+      area="idag"
       subtitle="En snabb sammanfattning av det som väntar"
       icon={CalendarDays}
       tone="sky"

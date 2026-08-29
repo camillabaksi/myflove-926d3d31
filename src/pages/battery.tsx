@@ -34,6 +34,7 @@ export default function BatteryPage() {
       <MyFlovePageGrid>
         <MyFloveWide>
           <MyFloveHeader
+            area="halsa"
             title="Mitt batteri"
             emojiKey="wellness"
             description="Din energi och ditt mående – checka in och se hur dagen brukar se ut."

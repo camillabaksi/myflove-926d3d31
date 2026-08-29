@@ -44,6 +44,7 @@ export default function HealthPage() {
         <MyFloveWide>
           <MyFloveHeader
             title="Hälsa"
+            area="halsa"
             emojiKey="wellness"
             description="Hur du mår – energi, träning, medicin och vila på ett ställe."
           />
