@@ -45,7 +45,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     items: [
       "Energi, sömn, mående och kroppsliga observationer blir aldrig automatiskt uppgifter eller kalenderposter (2026-08-29)",
       "QuickFlow föreslår hälsotexter som energi-/måendelogg i stället för kalender (2026-08-29)",
-      "Aktiviteter som \"boka läkare\" och \"träning kl 18\" fungerar precis som förut (2026-08-29)",
+      'Aktiviteter som "boka läkare" och "träning kl 18" fungerar precis som förut (2026-08-29)',
       "Egen statistikhändelse för hälsologgning – utan värden (2026-08-29)",
     ],
   },

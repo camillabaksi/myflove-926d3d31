@@ -224,9 +224,11 @@ export function secureSetItem(key: string, value: string): void {
   }
   try {
     if (cryptoKey) {
-      void encrypt(value).then((encrypted) => {
-        if (cache.get(key) === value) window.localStorage.setItem(key, encrypted);
-      }).catch(() => undefined);
+      void encrypt(value)
+        .then((encrypted) => {
+          if (cache.get(key) === value) window.localStorage.setItem(key, encrypted);
+        })
+        .catch(() => undefined);
     } else {
       window.localStorage.setItem(key, value);
     }

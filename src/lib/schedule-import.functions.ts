@@ -39,9 +39,7 @@ Regler:
 - Ta bara med återkommande lektioner/föreläsningar, inte raster.
 - Svara ENDAST med JSON: { "lectures": [{ "title", "weekday", "start", "end", "location" }] }`;
 
-type Part =
-  | { type: "text"; text: string }
-  | { type: "image_url"; image_url: { url: string } };
+type Part = { type: "text"; text: string } | { type: "image_url"; image_url: { url: string } };
 
 export const parseScheduleWithFlow = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])

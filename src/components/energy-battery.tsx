@@ -136,12 +136,7 @@ export default function EnergyBattery({
   );
 
   return href ? (
-    <Link
-      href={href}
-      onClick={onNavigate}
-      data-testid="battery-card"
-      className="block"
-    >
+    <Link href={href} onClick={onNavigate} data-testid="battery-card" className="block">
       {block}
     </Link>
   ) : (

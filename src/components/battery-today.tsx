@@ -125,51 +125,53 @@ export default function BatteryToday() {
               <span>Mående idag</span>
             </div>
             <ol className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {observations.map((o) => {
-              const part = partOfDay(o.ts);
-              return (
-                <li
-                  key={o.key}
-                  className="reveal-soft flex flex-col gap-3 rounded-2xl border border-border/50 bg-secondary/30 p-4"
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="flex items-center gap-1.5 text-sm font-semibold text-ink">
-                      <Clock size={14} aria-hidden="true" className="text-muted-foreground" />
-                      {timeOf(o.ts)}
-                    </span>
-                    <span className={`rounded-pill px-2.5 py-0.5 text-xs font-medium ${part.tone}`}>
-                      {part.label} <span aria-hidden>{part.emoji}</span>
-                    </span>
-                  </div>
+              {observations.map((o) => {
+                const part = partOfDay(o.ts);
+                return (
+                  <li
+                    key={o.key}
+                    className="reveal-soft flex flex-col gap-3 rounded-2xl border border-border/50 bg-secondary/30 p-4"
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="flex items-center gap-1.5 text-sm font-semibold text-ink">
+                        <Clock size={14} aria-hidden="true" className="text-muted-foreground" />
+                        {timeOf(o.ts)}
+                      </span>
+                      <span
+                        className={`rounded-pill px-2.5 py-0.5 text-xs font-medium ${part.tone}`}
+                      >
+                        {part.label} <span aria-hidden>{part.emoji}</span>
+                      </span>
+                    </div>
 
-                  <div className="flex items-center gap-4">
-                    {o.energyPct != null && <EnergyRing pct={o.energyPct} />}
-                    {o.mood != null && (
-                      <div className="flex flex-col items-center leading-none">
-                        <span aria-hidden className="text-3xl">
-                          {MOOD_EMOJI[o.mood] ?? "😐"}
-                        </span>
-                        <span className="mt-1 font-display text-sm font-bold text-ink">
-                          {o.mood}/5
-                        </span>
-                        <span className="text-[10px] text-muted-foreground">Mående</span>
-                      </div>
+                    <div className="flex items-center gap-4">
+                      {o.energyPct != null && <EnergyRing pct={o.energyPct} />}
+                      {o.mood != null && (
+                        <div className="flex flex-col items-center leading-none">
+                          <span aria-hidden className="text-3xl">
+                            {MOOD_EMOJI[o.mood] ?? "😐"}
+                          </span>
+                          <span className="mt-1 font-display text-sm font-bold text-ink">
+                            {o.mood}/5
+                          </span>
+                          <span className="text-[10px] text-muted-foreground">Mående</span>
+                        </div>
+                      )}
+                    </div>
+
+                    {o.note && (
+                      <p className="flex items-start gap-2 rounded-xl bg-card/80 p-2.5 text-sm text-ink">
+                        <NotebookPen
+                          size={14}
+                          aria-hidden="true"
+                          className="mt-0.5 shrink-0 text-muted-foreground"
+                        />
+                        <span className="min-w-0">{o.note}</span>
+                      </p>
                     )}
-                  </div>
-
-                  {o.note && (
-                    <p className="flex items-start gap-2 rounded-xl bg-card/80 p-2.5 text-sm text-ink">
-                      <NotebookPen
-                        size={14}
-                        aria-hidden="true"
-                        className="mt-0.5 shrink-0 text-muted-foreground"
-                      />
-                      <span className="min-w-0">{o.note}</span>
-                    </p>
-                  )}
-                </li>
-              );
-            })}
+                  </li>
+                );
+              })}
             </ol>
           </>
         )}
