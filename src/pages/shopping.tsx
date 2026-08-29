@@ -70,7 +70,7 @@ function StoreLocations() {
   };
 
   return (
-    <div className="pt-8 border-t border-border">
+    <div className="pt-6 border-t border-border">
       <CollapsibleSection
         title={
           <span className="flex items-center gap-2">
@@ -79,23 +79,25 @@ function StoreLocations() {
           </span>
         }
         headingClassName="text-xl font-semibold"
-        description="Spara en butik där du är just nu, så påminner vi dig om det som är kvar på listan nästa gång du är i närheten. Välj själv hur nära du ska vara."
+        description="Påminn mig när jag är nära en butik."
       >
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Input
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="T.ex. ICA Kvantum"
-            className="h-12 rounded-2xl"
+            className="h-12 min-w-0 flex-1 rounded-2xl"
           />
           <Button
             onClick={handleAddStore}
             disabled={!name.trim() || locating || !geolocationSupported}
             className="h-12 px-4 rounded-2xl shrink-0"
+            aria-label="Spara butiken där du är nu"
           >
             {locating ? <Loader2 className="animate-spin" size={20} /> : <LocateFixed size={20} />}
           </Button>
         </div>
+
         {!geolocationSupported && (
           <p className="text-xs text-muted-foreground">
             Platsdelning stöds inte i denna webbläsare.
