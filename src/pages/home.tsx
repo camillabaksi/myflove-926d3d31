@@ -353,10 +353,9 @@ export default function Home() {
               title="Flow lär känna dig"
               titleText="Flow lär känna dig"
               area="flow"
-              widget
-              label="Insikter"
               visual={<FlowMascot size="xs" mood="calm" bump className="flow-alive" alt="" />}
-              subtitle="Sådant Flow lagt märke till – inget du behöver göra"
+              subtitle="Små mönster Flow lagt märke till"
+              status="Insikter"
               tone="lavender"
               surface="lavender"
             >
@@ -373,10 +372,9 @@ export default function Home() {
               titleText="Nästa"
               area="idag"
               icon={CalendarDays}
-              widget
-              label="Nästa"
-              subtitle={nextEvent ? nextEvent.title : "Det som händer närmast"}
+              subtitle="Nästa viktiga sak idag"
               status={nextEvent ? nextEvent.time : "–"}
+              summary={nextEvent ? nextEvent.title : "Inget inplanerat just nu"}
               tone="sky"
               surface="sky"
             >
@@ -418,14 +416,13 @@ export default function Home() {
               title="Rutiner & medicin"
               titleText="Rutiner och medicin"
               area="halsa"
-              widget
-              label="Rutiner"
               visual={
                 <span aria-hidden className="text-3xl leading-none">
                   💊
                 </span>
               }
-              subtitle="Det som hjälper dagen att hålla ihop"
+              subtitle="Dagens rutiner och doser"
+              status="Idag"
               tone="blush"
               surface="blush"
             >
@@ -449,10 +446,10 @@ export default function Home() {
               title="Flow · just nu"
               titleText="Flow just nu"
               area="flow"
-              widget
-              label="Flow"
               visual={<FlowMascot size="xs" mood="nod" bump className="flow-alive" alt="" />}
-              subtitle="Ett lugnt förslag – du väljer själv"
+              subtitle="Ditt nästa steg, anpassat efter dig"
+              status="Jag finns här"
+              summary={suggestion.headline}
               tone="lavender"
               surface="lavender"
             >
@@ -485,10 +482,9 @@ export default function Home() {
               title="Lägg till i dagen"
               titleText="Lägg till i dagen"
               area="hem"
-              widget
-              label="Lägg till"
               icon={Plus}
-              subtitle="Något nytt eller något du redan hunnit med."
+              subtitle="Lägg till det du behöver"
+              status="Något nytt?"
               tone="mint"
               surface="mint"
             >
@@ -518,10 +514,9 @@ export default function Home() {
               title="Vad behöver du just nu?"
               titleText="Vad behöver du just nu"
               area="hem"
-              widget
-              label="Välj väg"
               icon={Compass}
-              subtitle="Välj en väg – Flow tar dig till rätt ställe"
+              subtitle="Fyra vanliga situationer"
+              status="Välj väg"
               tone="lavender"
               surface="lavender"
             >
@@ -629,13 +624,14 @@ function DaySummary() {
     <ExpandableBlock
       title="Dagens översikt"
       area="idag"
-      widget
-      label="Idag"
-      subtitle="En snabb sammanfattning av det som väntar"
+      subtitle="Det här är kvar idag"
       icon={Check}
       tone="sky"
       surface="sky"
-      status={total === 0 ? "0" : `${todayDone.length}/${total}`}
+      status={total === 0 ? "Inget inplanerat" : `${todayDone.length} av ${total} klart`}
+      summary={
+        total === 0 ? "Lägg till något när du vill" : `${todayOpen.length} kvar att göra`
+      }
     >
       <p className="text-ink">
         {total === 0
