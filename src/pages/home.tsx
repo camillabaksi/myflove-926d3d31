@@ -409,16 +409,16 @@ export default function Home() {
           </div>
         )}
 
-        {/* Flow just nu – större, fullbrett block högt upp */}
+        {/* Kalender – större, fullbrett block högt upp */}
         {shows("forslag") && (
           <MyFloveWide
             style={{ order: 0.5 }}
             className="min-w-0"
-            aria-label="Flows förslag just nu"
+            aria-label="Kalender"
           >
             <ExpandableBlock
-              title="Flow · just nu"
-              titleText="Flow just nu"
+              title="Kalender"
+              titleText="Kalender"
               area="flow"
               visual={<FlowMascot size="sm" mood="nod" bump className="flow-alive" alt="" />}
               subtitle="Ditt nästa steg"
