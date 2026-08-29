@@ -192,7 +192,7 @@ export default function TodayPage() {
             {/* Steg 2 – dagens plan */}
             <StepSection
               step={2}
-              className="md:col-span-2"
+              className="md:col-span-2 xl:col-span-2"
               id="idag::steg-plan"
               title="Dagens plan"
               description="Allt som hör till idag – händelser, uppgifter och rutiner."
@@ -279,7 +279,7 @@ export default function TodayPage() {
             {/* Steg 4 – Nu → Nästa → Senare */}
             <StepSection
               step={4}
-              className="md:col-span-2"
+              className="md:col-span-2 xl:col-span-2"
               id="idag::steg-far-plats"
               title="Det som får plats idag"
               help={
@@ -358,7 +358,7 @@ export default function TodayPage() {
         ) : (
           <StepSection
             step={2}
-            className="md:col-span-2"
+            className="md:col-span-2 xl:col-span-2"
             id="idag::steg-lista"
             title="Dagens lista"
           >
