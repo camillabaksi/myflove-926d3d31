@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Layout from "@/components/layout";
+import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { parseISODate } from "@/lib/day";
 import { MyFloveEmptyIllustration } from "@/components/myflove/motion";
 import { useFocus, useTasks, useReminders } from "@/hooks/use-data";
@@ -595,14 +596,17 @@ export default function CalendarPage() {
 
   return (
     <Layout>
-      <div className="space-y-8">
+      <MyFlovePageGrid>
+        <MyFloveWide>
         <div>
           <h1 className="text-3xl font-bold mb-2">Kalender</h1>
           <p className="text-muted-foreground">
             Översikt över dina dagar. Inga stressiga detaljer.
           </p>
         </div>
+        </MyFloveWide>
 
+        <MyFloveWide>
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => fileInputRef.current?.click()}
@@ -634,9 +638,13 @@ export default function CalendarPage() {
           Tips: exportera i telefonens kalender som .ics och importera här för att få in dina möten
           i MyFlove.
         </p>
+        </MyFloveWide>
 
+        <MyFloveWide>
         <EnergyBattery />
+        </MyFloveWide>
 
+        <MyFloveWide>
         <div className="bg-card rounded-3xl border border-border shadow-sm overflow-hidden">
           <div className="p-6 pb-2">
             <CollapsibleSection
@@ -1860,7 +1868,7 @@ export default function CalendarPage() {
             </div>
           </DialogContent>
         </Dialog>
-      </div>
+      </MyFlovePageGrid>
     </Layout>
   );
 }
