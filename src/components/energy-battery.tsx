@@ -18,6 +18,7 @@ export default function EnergyBattery({
   onNavigate?: () => void;
 }) {
   const { reading, suggestions } = useEnergyBattery();
+  const { moodValue } = useQuickCheckin();
   const [open, setOpen] = useState(defaultOpen);
   const level = Math.round(reading.now);
   const shownLevel = Math.round(useAnimatedNumber(level));
