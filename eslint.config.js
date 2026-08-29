@@ -15,6 +15,8 @@ export default tseslint.config(
       "src/routes/mcp.ts",
       "src/routes/\\[.mcp\\]/**",
       "src/routes/\\[.well-known\\]/**",
+      // Autogenererade Supabase-klientfiler – ska aldrig redigeras för hand.
+      "src/integrations/supabase/**",
     ],
   },
   {
