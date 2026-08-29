@@ -97,8 +97,7 @@ export default function BatteryPage() {
             >
               Mer om vad som ger och tar energi <ArrowRight size={14} />
             </Link>
-          </ExpandableBlock>
-        </MyFloveWide>
+        </ExpandableBlock>
       </MyFlovePageGrid>
     </Layout>
   );
