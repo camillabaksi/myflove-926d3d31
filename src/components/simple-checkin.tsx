@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Pencil, Sparkles } from "lucide-react";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import type { EnergyCategory } from "@/lib/energy-flow";
@@ -6,6 +7,7 @@ import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 import WhyHint from "@/components/why-hint";
 import { useFlowExplainer } from "@/hooks/use-flow-explainer";
+import { MyFloveBlock } from "@/components/myflove/block";
 
 const MOODS = [
   { score10: 2, emoji: "😢", label: "Tungt" },
@@ -23,7 +25,6 @@ const LEVELS = [
   { step: 5, emoji: "🔋", label: "Fullt" },
 ];
 
-/** Valfria snabbval: "Vad påverkar dig just nu?" – sparas som energifaktorer. */
 const FACTORS: { id: string; label: string; emoji: string; category: EnergyCategory }[] = [
   { id: "somn", label: "Sömn", emoji: "😴", category: "somn" },
   { id: "stress", label: "Stress", emoji: "🌪️", category: "stress" },
@@ -34,11 +35,7 @@ const FACTORS: { id: string; label: string; emoji: string; category: EnergyCateg
   { id: "annat", label: "Annat", emoji: "✨", category: "annat" },
 ];
 
-/**
- * Snabb incheckning: "Hur är ditt batteri just nu?" + valfritt mående och
- * vad som påverkar. Ingenting är obligatoriskt utom batteriet.
- * Sparas i befintlig data (energy_logs, moods, energy_factors) – ingen ny modell.
- */
+/** Den enda platsen där energi och mående loggas: Mitt batteri. */
 export default function SimpleCheckin({
   className,
   source = "ma-bra",
@@ -64,9 +61,6 @@ export default function SimpleCheckin({
   useEffect(() => {
     if (moodValue != null) setMood(moodValue);
   }, [moodValue]);
-
-  // Text som skickats hit från t.ex. QuickFlow (?note=…) fyller i fältet,
-  // så att loggningen ändå sker på den enda kanoniska platsen.
   useEffect(() => {
     if (typeof window === "undefined") return;
     const incoming = new URLSearchParams(window.location.search).get("note");
@@ -84,14 +78,11 @@ export default function SimpleCheckin({
     track("battery_checkin_completed", { source, method: "knapp", result: "completed" });
     track("battery_logged", { source, method: "knapp" });
     const text = note.trim();
-    // Fritexten hör ihop med måendet – sparas på befintlig måendepost.
     if (mood != null || text) {
-      // Varje sparning är en egen tidsstämplad observation – inget skrivs över.
       logMood(mood ?? Math.max(1, Math.min(10, battery)), text || undefined);
       track("mood_checkin_completed", { source, method: "emoji", result: "completed" });
       track("mood_logged", { source, method: "emoji" });
     }
-    // Hälsoobservationer sparas bara som energidata – aldrig som aktivitet.
     if (factors.length > 0) {
       track("health_factor_logged", { source, method: "knapp", count: factors.length });
     }
@@ -115,17 +106,25 @@ export default function SimpleCheckin({
   const step = Math.max(1, Math.min(5, Math.round(battery / 2)));
 
   return (
-    <section
-      aria-label="Logga energi och mående"
-      data-testid="battery-log-form"
-      className={cn(
-        "rounded-3xl border border-border/60 bg-card p-5 shadow-soft space-y-5",
-        className,
-      )}
+    <MyFloveBlock
+      title="Logga just nu"
+      subtitle="Berätta hur du mår och vad som påverkar dig – helt frivilligt utom energin."
+      eyebrow="Logga"
+      icon={Pencil}
+      tone="lavender"
+      surface="lavender"
+      className={cn("h-full", className)}
+      footer={
+        <p aria-live="polite" className="text-center text-xs text-muted-foreground">
+          {saved
+            ? "Tack – din observation är sparad."
+            : "Logga så ofta du vill – varje sparning blir en egen observation i din dag."}
+        </p>
+      }
     >
       <div className="space-y-2">
         <div className="flex items-center justify-between gap-2">
-          <p className="text-sm font-medium text-ink">Hur är ditt batteri just nu?</p>
+          <p className="text-sm font-semibold text-ink">Energi</p>
           <WhyHint label="logga energi">
             Det hjälper Flow se vad som brukar ge eller ta energi för dig.
           </WhyHint>
@@ -146,7 +145,7 @@ export default function SimpleCheckin({
                 "flex flex-1 flex-col items-center gap-1 rounded-2xl border p-2 transition-all",
                 step === l.step
                   ? "border-primary bg-primary/10 scale-[1.03]"
-                  : "border-transparent bg-secondary/50 opacity-75 hover:opacity-100",
+                  : "border-transparent bg-card/80 opacity-75 hover:opacity-100",
               )}
             >
               <span className="text-xl">{l.emoji}</span>
@@ -158,8 +157,8 @@ export default function SimpleCheckin({
 
       <div className="space-y-2">
         <div className="flex items-center justify-between gap-2">
-          <p className="text-sm font-medium text-ink">
-            Hur mår du? <span className="font-normal text-muted-foreground">(valfritt)</span>
+          <p className="text-sm font-semibold text-ink">
+            Mående <span className="font-normal text-muted-foreground">(valfritt)</span>
           </p>
           <WhyHint label="logga mående">
             Det hjälper Flow förstå om ditt mående och din energi brukar hänga ihop för dig.
@@ -180,8 +179,8 @@ export default function SimpleCheckin({
               className={cn(
                 "flex flex-1 flex-col items-center gap-1 rounded-2xl p-2 transition-all",
                 mood === m.score10
-                  ? "bg-primary/10 scale-105"
-                  : "opacity-70 hover:bg-secondary hover:opacity-100",
+                  ? "bg-card shadow-soft scale-105"
+                  : "opacity-70 hover:bg-card hover:opacity-100",
               )}
             >
               <span className="text-2xl">{m.emoji}</span>
@@ -192,9 +191,8 @@ export default function SimpleCheckin({
       </div>
 
       <div className="space-y-2">
-        <p className="text-sm font-medium text-ink">
-          Vad påverkar dig just nu?{" "}
-          <span className="font-normal text-muted-foreground">(valfritt)</span>
+        <p className="text-sm font-semibold text-ink">
+          Vad påverkar dig just nu? <span className="font-normal text-muted-foreground">(valfritt)</span>
         </p>
         <div className="flex flex-wrap gap-2">
           {FACTORS.map((f) => {
@@ -213,27 +211,23 @@ export default function SimpleCheckin({
                   "rounded-pill border px-3 py-1.5 text-sm transition-all",
                   on
                     ? "border-primary bg-primary/10 text-ink"
-                    : "border-border/60 bg-secondary/40 text-muted-foreground hover:text-foreground",
+                    : "border-border/60 bg-card/70 text-muted-foreground hover:text-foreground",
                 )}
               >
-                <span aria-hidden className="mr-1">
-                  {f.emoji}
-                </span>
+                <span aria-hidden className="mr-1">{f.emoji}</span>
                 {f.label}
               </button>
             );
           })}
         </div>
         <label className="block space-y-1">
-          <span className="text-xs text-muted-foreground">
-            Vill du skriva med egna ord? (valfritt)
-          </span>
+          <span className="text-xs text-muted-foreground">Vill du skriva med egna ord? (valfritt)</span>
           <textarea
             value={note}
             onChange={(e) => setNote(e.target.value)}
             rows={3}
             placeholder="T.ex. ”Sovit bara 4 timmar och är dessutom sjuk.”"
-            className="w-full resize-none rounded-2xl border border-border/60 bg-secondary/40 p-3 text-sm text-ink outline-none transition-colors focus:border-primary"
+            className="w-full resize-none rounded-2xl border border-border/60 bg-card/70 p-3 text-sm text-ink outline-none transition-colors focus:border-primary"
           />
         </label>
       </div>
@@ -241,16 +235,11 @@ export default function SimpleCheckin({
       <button
         type="button"
         onClick={save}
-        className="w-full rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-opacity hover:opacity-90"
+        className="flex min-h-11 w-full items-center justify-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-opacity hover:opacity-90"
       >
-        {saved ? "💜 Tack" : "Logga energi & mående"}
+        <Sparkles size={16} aria-hidden="true" />
+        {saved ? "Tack" : "Logga energi & mående"}
       </button>
-
-      <p aria-live="polite" className="text-xs text-muted-foreground">
-        {saved
-          ? "💜 Tack. Det hjälper mig att förstå dig bättre."
-          : "Logga så ofta du vill – varje sparning blir en egen observation i din dag."}
-      </p>
-    </section>
+    </MyFloveBlock>
   );
 }
