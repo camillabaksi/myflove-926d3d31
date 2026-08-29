@@ -411,11 +411,7 @@ export default function Home() {
 
         {/* Kalender – större, fullbrett block högt upp */}
         {shows("forslag") && (
-          <MyFloveWide
-            style={{ order: 0.5 }}
-            className="min-w-0"
-            aria-label="Kalender"
-          >
+          <MyFloveWide style={{ order: 0.5 }} className="min-w-0" aria-label="Kalender">
             <ExpandableBlock
               title="Kalender"
               titleText="Kalender"
