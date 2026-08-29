@@ -3,6 +3,19 @@ import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { MyFloveBlock } from "@/components/myflove/block";
 import { buildObservations } from "@/lib/battery-observations";
 
+const MOOD_EMOJI: Record<number, string> = { 1: "😢", 2: "😕", 3: "😐", 4: "🙂", 5: "😄" };
+
+const timeOf = (ts: number | string) =>
+  new Intl.DateTimeFormat("sv-SE", { hour: "2-digit", minute: "2-digit" }).format(new Date(ts));
+
+/** Morgon / Eftermiddag / Kväll – enkel orientering, inte en bedömning. */
+function partOfDay(ts: number | string): { label: string; emoji: string; tone: string } {
+  const h = new Date(ts).getHours();
+  if (h < 12) return { label: "Morgon", emoji: "🌤️", tone: "bg-sun/60 text-ink" };
+  if (h < 18) return { label: "Eftermiddag", emoji: "☀️", tone: "bg-blush/60 text-ink" };
+  return { label: "Kväll", emoji: "🌙", tone: "bg-lavender/80 text-ink" };
+}
+
 /** Ring som visar energin – lugn, mjuk och läsbar utan färg som enda signal. */
 function EnergyRing({ pct }: { pct: number }) {
   const size = 72;
