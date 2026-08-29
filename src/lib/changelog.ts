@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Samma blockpolish på Hälsa, Planera och Kalender",
+    items: [
+      "Hälsa: Träning- och Rutiner-korten följer Hem-blockens formspråk med mjuk border och pil (2026-08-29)",
+      "Planera: stegblocken bär planeraområdets mjuka border (2026-08-29)",
+      "Kalender: kalenderkort och import/export-knappar bär kalenderområdets mjuka border (2026-08-29)",
+      "Endast presentation – data, logik och navigation är oförändrade (2026-08-29)",
+    ],
+  },
+  {
     title: "Hemskärmen: polish och symmetri",
     items: [
       "Tydligare områdesborders i varje blocks egen färg – mjuka men synliga mot pastellen (2026-08-29)",

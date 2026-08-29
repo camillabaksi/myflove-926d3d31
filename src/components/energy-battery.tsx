@@ -141,6 +141,7 @@ export default function EnergyBattery({
       icon={BatteryCharging}
       tone="sun"
       surface="sun"
+      area="halsa"
       action={
         !href && (
           <button

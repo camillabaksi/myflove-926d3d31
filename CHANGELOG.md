@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-08-29 – Samma blockpolish på Hälsa, Planera och Kalender
+
+- Hälsa: Träning- och Rutiner-korten följer nu Hem-blockens formspråk – rounded-3xl, mjuk halsa-border, min-height 9rem, ikon + rubrik + kort underrubrik + pil uppe till höger. Kortare underrubriker.
+- Hälsa/Mitt batteri: batteriblocket bär nu hälsaområdets border även i fullvy.
+- Planera: stegblocken (Hur ser dagen ut?, Ändra ordningen) får planeraområdets mjuka blå/lila border.
+- Kalender: kalenderkortet och import/export-knapparna får kalenderområdets mjuka rosa/lila border och samma skugga som övriga block.
+- Endast presentation – data, logik och navigation är oförändrade.
+
+
 ## 2026-08-29 – Hemskärmen: polish och symmetri
 
 - Tydligare områdesborders: varje blocks border följer sin färgidentitet (batteri = varm/gul, Flow = lila, Idag/Nästa = blå, Lägg till = mint) och är synligare mot pastellbakgrunden.
