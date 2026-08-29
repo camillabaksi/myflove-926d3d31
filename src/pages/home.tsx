@@ -275,11 +275,8 @@ export default function Home() {
         >
           <div className="pointer-events-none absolute -top-20 -right-16 h-40 w-40 rounded-full bg-blush opacity-60 blur-md" />
           <div className="pointer-events-none absolute -bottom-16 -left-10 h-32 w-32 rounded-full bg-mint opacity-50 blur-[2px]" />
-          <div
-            className="pointer-events-none absolute top-6 right-6 text-4xl breathe select-none"
-            aria-hidden
-          >
-            💜
+          <div className="pointer-events-none absolute right-4 top-4 select-none" aria-hidden>
+            <FlowMascot size="sm" mood="calm" className="flow-alive" alt="" />
           </div>
 
           <div className="relative space-y-2">
@@ -631,31 +628,37 @@ function DaySummary() {
       data-testid="home-day-summary"
       aria-label={`Dagens översikt, ${todayDone.length} av ${total} klart. Öppna Idag.`}
       {...areaProps("idag")}
-      className="press area-border flex min-h-[9rem] min-w-0 flex-col gap-2 rounded-3xl border bg-sky/50 p-3 shadow-soft transition-shadow hover:shadow-lifted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:p-5"
+      className="press area-border relative flex min-h-[9rem] min-w-0 flex-col items-center gap-2.5 rounded-3xl border bg-sky/50 p-4 text-center shadow-soft transition-shadow hover:shadow-lifted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:p-5"
     >
-      <span className="flex min-w-0 items-start gap-2.5">
-        <MyFloveIcon icon={Check} tone="sky" size="sm" className="area-bg-soft area-text" />
-        <span className="min-w-0 flex-1">
-          <span className="block font-display text-base font-bold leading-tight text-ink">
-            Idag
-          </span>
-          <span className="block text-xs text-muted-foreground">Det här är kvar idag</span>
+      <MyFloveIcon
+        icon={Check}
+        tone="sky"
+        size="lg"
+        className="area-bg-soft area-text rounded-full"
+      />
+      <span className="min-w-0">
+        <span className="block font-display text-base font-bold leading-tight text-ink">
+          Idag
         </span>
-        <ArrowRight
-          size={16}
-          aria-hidden="true"
-          className="mt-0.5 shrink-0 text-muted-foreground"
-        />
+        <span className="block text-xs text-muted-foreground">Det här är kvar idag</span>
       </span>
-      <span className="font-display text-3xl font-bold leading-none text-ink">
-        {total === 0 ? "0" : `${todayDone.length}/${total}`}
+      <span className="w-full space-y-1 border-t border-border/50 pt-3">
+        <span className="area-text block font-display text-3xl font-bold leading-none">
+          {total === 0 ? "0" : `${todayDone.length}/${total}`}
+        </span>
+        <span className="area-text block text-sm font-medium">
+          {total === 0
+            ? "Inget inplanerat"
+            : total === todayDone.length
+              ? "Allt klart"
+              : `${todayOpen.length} kvar`}
+        </span>
       </span>
-      <span className="text-sm text-muted-foreground">
-        {total === 0
-          ? "Inget inplanerat"
-          : total === todayDone.length
-            ? "Allt klart"
-            : `${todayOpen.length} kvar`}
+      <span
+        aria-hidden="true"
+        className="area-bg-soft area-text absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full"
+      >
+        <ArrowRight size={15} />
       </span>
     </Link>
   );
