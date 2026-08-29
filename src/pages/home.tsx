@@ -637,9 +637,7 @@ function DaySummary() {
         className="area-bg-soft area-text rounded-full"
       />
       <span className="min-w-0">
-        <span className="block font-display text-base font-bold leading-tight text-ink">
-          Idag
-        </span>
+        <span className="block font-display text-base font-bold leading-tight text-ink">Idag</span>
         <span className="block text-xs text-muted-foreground">Det här är kvar idag</span>
       </span>
       <span className="w-full space-y-1 border-t border-border/50 pt-3">
