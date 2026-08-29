@@ -342,16 +342,13 @@ export default function Home() {
         {/* Nästa – nästa relevanta aktivitet */}
         {shows("nasta") && (
           <section className="min-w-0" style={pos("nasta")} aria-label="Nästa aktivitet">
-            <MyFloveBlock
-              title={
-                <span className="flex items-center gap-2">
-                  <CalendarDays size={18} className="text-primary" aria-hidden="true" /> Nästa
-                </span>
-              }
+            <ExpandableBlock
+              title="Nästa"
+              titleText="Nästa"
+              icon={CalendarDays}
               subtitle="Det som händer närmast"
-              collapsible
-              collapseId="hem::nasta"
-              status={nextEvent ? `${nextEvent.time} · ${nextEvent.title}` : "Inget bokat just nu"}
+              status={nextEvent ? `${nextEvent.time}` : "Inget bokat"}
+              summary={nextEvent ? nextEvent.title : "Inget inplanerat just nu"}
               tone="sky"
               surface="sky"
             >
@@ -382,7 +379,8 @@ export default function Home() {
                   den upp här.
                 </p>
               )}
-            </MyFloveBlock>
+            </ExpandableBlock>
+
           </section>
         )}
 
