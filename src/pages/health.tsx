@@ -59,33 +59,36 @@ export default function HealthPage() {
 
         <MyFloveWide>
           <ul className="grid grid-cols-2 items-start gap-3">
-          {AREAS.map((a) => {
-            const Icon = a.icon;
-            return (
-              <li key={a.title} className="min-w-0">
-                <Link
-                  href={a.href}
-                  className="surface-card flex h-full min-w-0 flex-col items-start gap-2 p-3 transition-colors hover:bg-secondary/40 sm:flex-row sm:gap-3 sm:p-4"
-                >
-                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary">
-                    <Icon size={20} />
-                  </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block font-medium text-ink">{a.title}</span>
-                    <span className="block text-sm text-muted-foreground">{a.what}</span>
-                  </span>
-                   <ArrowRight size={16} className="mt-1 hidden shrink-0 text-muted-foreground sm:block" />
-                </Link>
-              </li>
-            );
-          })}
+            {AREAS.map((a) => {
+              const Icon = a.icon;
+              return (
+                <li key={a.title} className="min-w-0">
+                  <Link
+                    href={a.href}
+                    className="surface-card flex h-full min-w-0 flex-col items-start gap-2 p-3 transition-colors hover:bg-secondary/40 sm:flex-row sm:gap-3 sm:p-4"
+                  >
+                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary">
+                      <Icon size={20} />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block font-medium text-ink">{a.title}</span>
+                      <span className="block text-sm text-muted-foreground">{a.what}</span>
+                    </span>
+                    <ArrowRight
+                      size={16}
+                      className="mt-1 hidden shrink-0 text-muted-foreground sm:block"
+                    />
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </MyFloveWide>
 
         <MyFloveWide>
           <p className="text-sm text-muted-foreground">
-            Allt du fyller i här är samma information som Flow använder för att föreslå saker – inget
-            dubbellagras.
+            Allt du fyller i här är samma information som Flow använder för att föreslå saker –
+            inget dubbellagras.
           </p>
         </MyFloveWide>
       </MyFlovePageGrid>

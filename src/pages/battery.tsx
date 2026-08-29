@@ -71,34 +71,34 @@ export default function BatteryPage() {
             collapseId="batteri::historik"
             bodyClassName="space-y-4"
           >
-          <Tabs defaultValue="mood" className="w-full" data-testid="battery-history">
-            <TabsList className="grid h-11 w-full grid-cols-3 rounded-2xl">
-              <TabsTrigger value="mood" className="rounded-xl text-xs">
-                <Smile size={14} className="mr-1" /> Mående
-              </TabsTrigger>
-              <TabsTrigger value="energy" className="rounded-xl text-xs">
-                <Battery size={14} className="mr-1" /> Energi
-              </TabsTrigger>
-              <TabsTrigger value="flow" className="rounded-xl text-xs">
-                <Zap size={14} className="mr-1" /> Flöde
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent value="mood" className="mt-6">
-              <MoodContent showHeader={false} readOnly />
-            </TabsContent>
-            <TabsContent value="energy" className="mt-6">
-              <EnergyContent showHeader={false} />
-            </TabsContent>
-            <TabsContent value="flow" className="mt-6">
-              <EnergyFlowContent showHeader={false} showDayFlow={false} />
-            </TabsContent>
-          </Tabs>
-          <Link
-            href="/energifloede"
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
-          >
-            Mer om vad som ger och tar energi <ArrowRight size={14} />
-          </Link>
+            <Tabs defaultValue="mood" className="w-full" data-testid="battery-history">
+              <TabsList className="grid h-11 w-full grid-cols-3 rounded-2xl">
+                <TabsTrigger value="mood" className="rounded-xl text-xs">
+                  <Smile size={14} className="mr-1" /> Mående
+                </TabsTrigger>
+                <TabsTrigger value="energy" className="rounded-xl text-xs">
+                  <Battery size={14} className="mr-1" /> Energi
+                </TabsTrigger>
+                <TabsTrigger value="flow" className="rounded-xl text-xs">
+                  <Zap size={14} className="mr-1" /> Flöde
+                </TabsTrigger>
+              </TabsList>
+              <TabsContent value="mood" className="mt-6">
+                <MoodContent showHeader={false} readOnly />
+              </TabsContent>
+              <TabsContent value="energy" className="mt-6">
+                <EnergyContent showHeader={false} />
+              </TabsContent>
+              <TabsContent value="flow" className="mt-6">
+                <EnergyFlowContent showHeader={false} showDayFlow={false} />
+              </TabsContent>
+            </Tabs>
+            <Link
+              href="/energifloede"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+            >
+              Mer om vad som ger och tar energi <ArrowRight size={14} />
+            </Link>
           </MyFloveBlock>
         </MyFloveWide>
       </MyFlovePageGrid>

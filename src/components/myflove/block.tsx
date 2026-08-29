@@ -239,7 +239,7 @@ export function MyFloveStat({
   return (
     <div
       className={cn(
-         "flex min-w-0 flex-1 flex-col gap-1.5 rounded-2xl border border-border/50 p-3 sm:p-4",
+        "flex min-w-0 flex-1 flex-col gap-1.5 rounded-2xl border border-border/50 p-3 sm:p-4",
         SURFACE[tone],
         className,
       )}
@@ -249,7 +249,9 @@ export function MyFloveStat({
         {label}
       </span>
       {value != null && (
-         <span className="font-display text-2xl font-bold leading-none text-ink sm:text-3xl">{value}</span>
+        <span className="font-display text-2xl font-bold leading-none text-ink sm:text-3xl">
+          {value}
+        </span>
       )}
       {children}
       {hint && <span className="text-xs text-muted-foreground">{hint}</span>}
