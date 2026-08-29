@@ -1,6 +1,12 @@
 # Changelog
 
+## 2026-08-29 – Hem: Kalender-blocket får samma vertikala rytm som andra block
+
+- Lade till en osynlig statushållare i Kalender-blocket så att marginaler och vertikal spacing matchar de andra blocken nu när statusraden är borta.
+- Endast presentation – navigation, data och funktionalitet är oförändrade.
+
 ## 2026-08-29 – Hem: Kalender-blocket utan "Jag finns här"
+
 
 - Tog bort statusraden "Jag finns här" från Hem-blocket Kalender. Kortet visar nu bara titel, undertitel och Flows förslagstext.
 - Endast presentation – navigation, data och funktionalitet är oförändrade.
