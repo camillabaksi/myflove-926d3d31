@@ -36,6 +36,15 @@ function useIn(delay: number, damping = 18) {
   } as React.CSSProperties;
 }
 
+const InView: React.FC<{ delay: number; style?: React.CSSProperties; children: React.ReactNode }> = ({
+  delay,
+  style,
+  children,
+}) => {
+  const anim = useIn(delay);
+  return <div style={{ ...anim, ...style }}>{children}</div>;
+};
+
 const Shell: React.FC<{ children: React.ReactNode; dark?: boolean }> = ({
   children,
   dark = false,
@@ -415,10 +424,10 @@ const SceneHow: React.FC = () => {
         </div>
         <div style={{ display: "flex", gap: 22 }}>
           {steps.map((s, i) => (
-            <div
+            <InView
               key={s.n}
+              delay={14 + i * 7}
               style={{
-                ...useIn(14 + i * 7),
                 flex: 1,
                 background: COLORS.cream,
                 borderRadius: 26,
@@ -555,10 +564,10 @@ const SceneMarket: React.FC = () => {
         </div>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
           {stats.map((s, i) => (
-            <div
+            <InView
               key={s.v}
+              delay={12 + i * 6}
               style={{
-                ...useIn(12 + i * 6),
                 width: 500,
                 background: COLORS.cream,
                 borderRadius: 24,
