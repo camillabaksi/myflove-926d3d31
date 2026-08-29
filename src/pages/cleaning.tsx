@@ -301,10 +301,10 @@ export default function CleaningPage() {
               </button>
             )}
           </section>
-        </MyFloveWide>
+        </div>
 
         {/* Vad du behöver */}
-        <MyFloveWide>
+        <div className="min-w-0">
           <section className="rounded-3xl border border-border bg-card p-5">
             <CollapsibleSection
               title={
