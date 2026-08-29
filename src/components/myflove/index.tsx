@@ -300,6 +300,7 @@ export function MyFloveHeader({
   action,
   back = true,
   backTo = "/hem",
+  area,
   children,
   className,
 }: {
@@ -311,18 +312,30 @@ export function MyFloveHeader({
   back?: boolean;
   /** Vart Tillbaka går om sidan öppnats direkt (ingen historik). */
   backTo?: string;
+  /** Områdets färgidentitet – se src/lib/areas.ts. */
+  area?: AreaId;
   children?: React.ReactNode;
   className?: string;
 }) {
   const goBack = useSmartBack(backTo);
   return (
     <header
-      className={cn("rounded-3xl border border-border/60 p-5 shadow-soft page-enter", className)}
-      style={{
-        backgroundImage:
-          "linear-gradient(135deg, hsl(var(--lavender)) 0%, hsl(var(--cream)) 60%, hsl(var(--blush) / 0.8) 100%)",
-      }}
+      {...areaProps(area)}
+      className={cn(
+        "rounded-3xl border border-border/60 p-5 shadow-soft page-enter",
+        area ? "area-hero area-border" : "",
+        className,
+      )}
+      {...(area
+        ? {}
+        : {
+            style: {
+              backgroundImage:
+                "linear-gradient(135deg, hsl(var(--lavender)) 0%, hsl(var(--cream)) 60%, hsl(var(--blush) / 0.8) 100%)",
+            },
+          })}
     >
+
       <div className="flex items-start gap-3">
         {back && (
           <button
