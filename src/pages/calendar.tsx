@@ -638,7 +638,7 @@ export default function CalendarPage() {
             Tips: exportera i telefonens kalender som .ics och importera här för att få in dina
             möten i MyFlove.
           </p>
-        </MyFloveWide>
+        </div>
 
         <div className="min-w-0">
           <EnergyBattery />
