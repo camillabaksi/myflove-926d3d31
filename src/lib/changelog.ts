@@ -6,9 +6,18 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-08-28";
+export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  {
+    title: "Hälsologgning skild från Min dag och kalendern",
+    items: [
+      "Energi, sömn, mående och kroppsliga observationer blir aldrig automatiskt uppgifter eller kalenderposter (2026-08-29)",
+      "QuickFlow föreslår hälsotexter som energi-/måendelogg i stället för kalender (2026-08-29)",
+      "Aktiviteter som \"boka läkare\" och \"träning kl 18\" fungerar precis som förut (2026-08-29)",
+      "Egen statistikhändelse för hälsologgning – utan värden (2026-08-29)",
+    ],
+  },
   {
     title: "Mediciner sparas i molnet",
     items: [

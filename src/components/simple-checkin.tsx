@@ -79,6 +79,10 @@ export default function SimpleCheckin({
       track("mood_checkin_completed", { source, method: "emoji", result: "completed" });
       track("mood_logged", { source, method: "emoji" });
     }
+    // Hälsoobservationer sparas bara som energidata – aldrig som aktivitet.
+    if (factors.length > 0) {
+      track("health_factor_logged", { source, method: "knapp", count: factors.length });
+    }
     for (const id of factors) {
       const f = FACTORS.find((x) => x.id === id);
       if (!f) continue;

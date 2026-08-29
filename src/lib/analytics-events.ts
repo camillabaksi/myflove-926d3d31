@@ -42,6 +42,8 @@ export const ANALYTICS_EVENTS = [
   "mood_checkin_started",
   "mood_checkin_completed",
   "mood_logged",
+  /** Hälsoobservation registrerad (sömn, stress, kropp …). Aldrig ett värde – bara att det hände. */
+  "health_factor_logged",
   "my_day_viewed",
   "task_created",
   "task_started",
@@ -127,6 +129,7 @@ const EVENT_SECTION: Record<AnalyticsEventName, string> = {
   mood_checkin_started: "mood",
   mood_checkin_completed: "mood",
   mood_logged: "mood",
+  health_factor_logged: "halsa",
   my_day_viewed: "min-dag",
   task_created: "tasks",
   task_started: "tasks",
