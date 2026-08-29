@@ -571,7 +571,7 @@ export default function Tasks() {
             </div>
           </div>
         )}
-      </MyFlovePageGrid>
+      </div>
     );
   };
 
@@ -579,259 +579,259 @@ export default function Tasks() {
     <Layout>
       <MyFlovePageGrid className="page-enter">
         <MyFloveWide>
-        <div
-          className="rounded-3xl border border-border/60 p-5 shadow-soft"
-          style={{
-            backgroundImage:
-              "linear-gradient(135deg, hsl(var(--lavender)) 0%, hsl(var(--cream)) 60%, hsl(var(--blush) / 0.8) 100%)",
-          }}
-        >
-          <div className="flex items-start gap-3">
-            <span aria-hidden className="text-3xl leading-none">
-              ✅
-            </span>
-            <div className="min-w-0">
-              <h1 className="font-display text-2xl font-bold text-ink">Alla uppgifter</h1>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Hela listan framåt – samma uppgifter som i Idag, Planera och Hem.
-              </p>
+          <div
+            className="rounded-3xl border border-border/60 p-5 shadow-soft"
+            style={{
+              backgroundImage:
+                "linear-gradient(135deg, hsl(var(--lavender)) 0%, hsl(var(--cream)) 60%, hsl(var(--blush) / 0.8) 100%)",
+            }}
+          >
+            <div className="flex items-start gap-3">
+              <span aria-hidden className="text-3xl leading-none">
+                ✅
+              </span>
+              <div className="min-w-0">
+                <h1 className="font-display text-2xl font-bold text-ink">Alla uppgifter</h1>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Hela listan framåt – samma uppgifter som i Idag, Planera och Hem.
+                </p>
+              </div>
             </div>
+            <AreaSwitcher className="mt-4" size="sm" />
+            {activeArea !== "alla" && (
+              <p className="text-xs text-muted-foreground mt-2">
+                Du är i {AREA_META[activeArea].label.toLowerCase()}srummet. Nya saker hamnar här.
+              </p>
+            )}
           </div>
-          <AreaSwitcher className="mt-4" size="sm" />
-          {activeArea !== "alla" && (
-            <p className="text-xs text-muted-foreground mt-2">
-              Du är i {AREA_META[activeArea].label.toLowerCase()}srummet. Nya saker hamnar här.
-            </p>
-          )}
-        </div>
         </MyFloveWide>
 
         <MyFloveWide>
-        <TaskQuickAdd onAdd={handleQuickAdd} />
+          <TaskQuickAdd onAdd={handleQuickAdd} />
         </MyFloveWide>
 
         <MyFloveWide>
-        {/* Flikar: Idag är standardvyn */}
-        <div className="flex gap-2">
-          {TABS.map((t) => {
-            const count =
-              t.id === "idag"
-                ? todayCount
-                : t.id === "kommande"
-                  ? agenda.upcoming.length
-                  : areaDone.length;
-            return (
-              <button
-                key={t.id}
-                type="button"
-                onClick={() => setTab(t.id)}
-                className={`press flex-1 rounded-pill px-3 py-2 text-sm font-semibold transition-colors ${
-                  tab === t.id
-                    ? "bg-primary text-primary-foreground shadow-soft"
-                    : "bg-lavender text-ink hover:bg-lavender/70"
-                }`}
-              >
-                {t.emoji} {t.label}
-                {count > 0 && <span className="ml-1 opacity-70">{count}</span>}
-              </button>
-            );
-          })}
-        </div>
+          {/* Flikar: Idag är standardvyn */}
+          <div className="flex gap-2">
+            {TABS.map((t) => {
+              const count =
+                t.id === "idag"
+                  ? todayCount
+                  : t.id === "kommande"
+                    ? agenda.upcoming.length
+                    : areaDone.length;
+              return (
+                <button
+                  key={t.id}
+                  type="button"
+                  onClick={() => setTab(t.id)}
+                  className={`press flex-1 rounded-pill px-3 py-2 text-sm font-semibold transition-colors ${
+                    tab === t.id
+                      ? "bg-primary text-primary-foreground shadow-soft"
+                      : "bg-lavender text-ink hover:bg-lavender/70"
+                  }`}
+                >
+                  {t.emoji} {t.label}
+                  {count > 0 && <span className="ml-1 opacity-70">{count}</span>}
+                </button>
+              );
+            })}
+          </div>
         </MyFloveWide>
 
         {tab === "idag" && (
           <MyFloveWide>
-          <div className="space-y-6">
-            {suggestion && (
-              <div className="rounded-3xl border border-primary/20 bg-primary/5 p-4">
-                <div className="flex items-start gap-2">
-                  <Sparkles size={18} className="mt-0.5 shrink-0 text-primary" />
-                  <div className="min-w-0">
-                    <p className="text-sm font-semibold text-ink">{suggestion.headline}</p>
-                    <p className="mt-1 text-sm text-muted-foreground">{suggestion.body}</p>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      <Link
-                        href="/flow"
-                        className="press rounded-pill bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground"
-                      >
-                        Låt Flow föreslå en ordning
-                      </Link>
-                      <span className="rounded-pill border border-border bg-background px-3 py-1.5 text-xs text-muted-foreground">
-                        Du bestämmer – gör ändå om du vill
-                      </span>
+            <div className="space-y-6">
+              {suggestion && (
+                <div className="rounded-3xl border border-primary/20 bg-primary/5 p-4">
+                  <div className="flex items-start gap-2">
+                    <Sparkles size={18} className="mt-0.5 shrink-0 text-primary" />
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold text-ink">{suggestion.headline}</p>
+                      <p className="mt-1 text-sm text-muted-foreground">{suggestion.body}</p>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        <Link
+                          href="/flow"
+                          className="press rounded-pill bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground"
+                        >
+                          Låt Flow föreslå en ordning
+                        </Link>
+                        <span className="rounded-pill border border-border bg-background px-3 py-1.5 text-xs text-muted-foreground">
+                          Du bestämmer – gör ändå om du vill
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {agenda.overdue.length > 0 && (
-              <CollapsibleSection
-                className="space-y-3"
-                headingClassName="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2"
-                title={
-                  <>
-                    <AlertCircle size={14} /> Från tidigare
-                  </>
-                }
-                help="Sånt som låg på en dag som passerat. Flytta eller gör – inget skäl till skam."
-              >
-                {agenda.overdue.map(renderTask)}
-              </CollapsibleSection>
-            )}
+              {agenda.overdue.length > 0 && (
+                <CollapsibleSection
+                  className="space-y-3"
+                  headingClassName="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2"
+                  title={
+                    <>
+                      <AlertCircle size={14} /> Från tidigare
+                    </>
+                  }
+                  help="Sånt som låg på en dag som passerat. Flytta eller gör – inget skäl till skam."
+                >
+                  {agenda.overdue.map(renderTask)}
+                </CollapsibleSection>
+              )}
 
-            {agenda.timed.length > 0 && (
-              <CollapsibleSection
-                className="space-y-3"
-                headingClassName="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2"
-                title={
-                  <>
-                    <Clock size={14} /> Med tid idag
-                  </>
-                }
-                help="Hållpunkter med klockslag. De syns även i kalendern."
-              >
-                {agenda.timed.map(renderTask)}
-              </CollapsibleSection>
-            )}
+              {agenda.timed.length > 0 && (
+                <CollapsibleSection
+                  className="space-y-3"
+                  headingClassName="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2"
+                  title={
+                    <>
+                      <Clock size={14} /> Med tid idag
+                    </>
+                  }
+                  help="Hållpunkter med klockslag. De syns även i kalendern."
+                >
+                  {agenda.timed.map(renderTask)}
+                </CollapsibleSection>
+              )}
 
-            {agenda.untimed.length > 0 && (
-              <CollapsibleSection
-                className="space-y-3"
-                headingClassName="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2"
-                title={
-                  <>
-                    <Sun size={14} /> Ingen specifik tid
-                  </>
-                }
-                help="Sånt du vill få gjort idag, men som inte är låst till en tid."
-              >
-                {agenda.untimed.map(renderTask)}
-              </CollapsibleSection>
-            )}
+              {agenda.untimed.length > 0 && (
+                <CollapsibleSection
+                  className="space-y-3"
+                  headingClassName="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2"
+                  title={
+                    <>
+                      <Sun size={14} /> Ingen specifik tid
+                    </>
+                  }
+                  help="Sånt du vill få gjort idag, men som inte är låst till en tid."
+                >
+                  {agenda.untimed.map(renderTask)}
+                </CollapsibleSection>
+              )}
 
-            {todayCount === 0 && (
-              <div className="text-center py-16 text-muted-foreground border-2 border-dashed border-border rounded-3xl">
-                <MyFloveEmptyIllustration kind="default" className="mb-2 block" />
-                <p className="text-lg">Inget inplanerat idag.</p>
-                <p className="text-sm mt-2 opacity-70">Det är också ett fullt giltigt schema.</p>
-              </div>
-            )}
+              {todayCount === 0 && (
+                <div className="text-center py-16 text-muted-foreground border-2 border-dashed border-border rounded-3xl">
+                  <MyFloveEmptyIllustration kind="default" className="mb-2 block" />
+                  <p className="text-lg">Inget inplanerat idag.</p>
+                  <p className="text-sm mt-2 opacity-70">Det är också ett fullt giltigt schema.</p>
+                </div>
+              )}
 
-            {snoozedTasks.length > 0 && (
-              <CollapsibleSection
-                className="space-y-3 pt-6 border-t border-border"
-                headingClassName="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2"
-                title={
-                  <>
-                    <Moon size={16} /> Undanstoppat ett tag
-                  </>
-                }
-                help="Sådant du skjutit upp. Tryck för att ta tillbaka det när du orkar."
-              >
-                {snoozedTasks.map((task) => (
-                  <div
-                    key={task.id}
-                    className="flex items-center justify-between p-4 bg-secondary/30 border border-dashed border-border rounded-2xl"
-                  >
-                    <div className="flex flex-col">
-                      <span className="text-lg text-muted-foreground">{task.title}</span>
-                      <span className="text-sm text-muted-foreground flex items-center gap-1.5 mt-0.5">
-                        <CalendarIcon size={16} />
-                        Syns igen {task.snoozedUntil}
-                      </span>
-                    </div>
-                    <button
-                      onClick={() => unsnoozeTask(task.id)}
-                      className="p-3 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-xl transition-colors"
-                      aria-label="Visa igen nu"
+              {snoozedTasks.length > 0 && (
+                <CollapsibleSection
+                  className="space-y-3 pt-6 border-t border-border"
+                  headingClassName="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2"
+                  title={
+                    <>
+                      <Moon size={16} /> Undanstoppat ett tag
+                    </>
+                  }
+                  help="Sådant du skjutit upp. Tryck för att ta tillbaka det när du orkar."
+                >
+                  {snoozedTasks.map((task) => (
+                    <div
+                      key={task.id}
+                      className="flex items-center justify-between p-4 bg-secondary/30 border border-dashed border-border rounded-2xl"
                     >
-                      <RotateCcw size={20} />
-                    </button>
-                  </div>
-                ))}
-              </CollapsibleSection>
-            )}
-          </div>
+                      <div className="flex flex-col">
+                        <span className="text-lg text-muted-foreground">{task.title}</span>
+                        <span className="text-sm text-muted-foreground flex items-center gap-1.5 mt-0.5">
+                          <CalendarIcon size={16} />
+                          Syns igen {task.snoozedUntil}
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => unsnoozeTask(task.id)}
+                        className="p-3 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-xl transition-colors"
+                        aria-label="Visa igen nu"
+                      >
+                        <RotateCcw size={20} />
+                      </button>
+                    </div>
+                  ))}
+                </CollapsibleSection>
+              )}
+            </div>
           </MyFloveWide>
         )}
 
         {tab === "kommande" && (
           <MyFloveWide>
-          <div className="space-y-3">
-            {agenda.upcoming.length === 0 ? (
-              <div className="text-center py-16 text-muted-foreground border-2 border-dashed border-border rounded-3xl">
-                <MyFloveEmptyIllustration kind="default" className="mb-2 block" />
-                <p className="text-lg">Inget framåt just nu.</p>
-                <p className="text-sm mt-2 opacity-70">
-                  Lägg till något med datum så dyker det upp här och i kalendern.
-                </p>
-              </div>
-            ) : (
-              Object.entries(
-                agenda.upcoming.reduce<Record<string, Task[]>>((acc, t) => {
-                  const key = t.dueDate ?? "";
-                  (acc[key] ??= []).push(t);
-                  return acc;
-                }, {}),
-              ).map(([day, list]) => (
-                <div key={day} className="space-y-3">
-                  <p className="pl-2 text-sm font-semibold text-muted-foreground flex items-center gap-2">
-                    <CalendarClock size={14} /> {describeDay(day)}
+            <div className="space-y-3">
+              {agenda.upcoming.length === 0 ? (
+                <div className="text-center py-16 text-muted-foreground border-2 border-dashed border-border rounded-3xl">
+                  <MyFloveEmptyIllustration kind="default" className="mb-2 block" />
+                  <p className="text-lg">Inget framåt just nu.</p>
+                  <p className="text-sm mt-2 opacity-70">
+                    Lägg till något med datum så dyker det upp här och i kalendern.
                   </p>
-                  {list.map(renderTask)}
                 </div>
-              ))
-            )}
-          </div>
+              ) : (
+                Object.entries(
+                  agenda.upcoming.reduce<Record<string, Task[]>>((acc, t) => {
+                    const key = t.dueDate ?? "";
+                    (acc[key] ??= []).push(t);
+                    return acc;
+                  }, {}),
+                ).map(([day, list]) => (
+                  <div key={day} className="space-y-3">
+                    <p className="pl-2 text-sm font-semibold text-muted-foreground flex items-center gap-2">
+                      <CalendarClock size={14} /> {describeDay(day)}
+                    </p>
+                    {list.map(renderTask)}
+                  </div>
+                ))
+              )}
+            </div>
           </MyFloveWide>
         )}
 
         {tab === "klart" && (
           <MyFloveWide>
-          <div className="space-y-3">
-            {areaDone.length === 0 ? (
-              <div className="text-center py-16 text-muted-foreground border-2 border-dashed border-border rounded-3xl">
-                <p className="text-lg">Inget avbockat än.</p>
-                <p className="text-sm mt-2 opacity-70">Det första kryssen kommer.</p>
-              </div>
-            ) : (
-              areaDone.map((task) => (
-                <div
-                  key={task.id}
-                  className="flex items-center justify-between p-4 bg-card/50 border border-border/50 rounded-2xl opacity-80"
-                >
-                  <button
-                    onClick={() => handleToggle(task)}
-                    className="flex items-center gap-4 flex-1 text-left"
-                  >
-                    <div className="text-primary shrink-0">
-                      <CheckCircle2 size={28} className="fill-primary/20" strokeWidth={2} />
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-lg line-through">{task.title}</span>
-                      <span className="text-xs text-muted-foreground">
-                        {task.dueDate ? describeDay(task.dueDate) : "Ingen dag"}
-                        {task.actualEnergy
-                          ? ` · ${ENERGY_IMPACT_META[task.actualEnergy].emoji} ${ENERGY_IMPACT_META[task.actualEnergy].doneLabel}`
-                          : ""}
-                      </span>
-                    </div>
-                  </button>
-                  <button
-                    onClick={() => deleteTask(task.id)}
-                    className="p-3 text-muted-foreground hover:text-destructive rounded-xl transition-colors"
-                    aria-label="Ta bort"
-                  >
-                    <Trash2 size={20} />
-                  </button>
+            <div className="space-y-3">
+              {areaDone.length === 0 ? (
+                <div className="text-center py-16 text-muted-foreground border-2 border-dashed border-border rounded-3xl">
+                  <p className="text-lg">Inget avbockat än.</p>
+                  <p className="text-sm mt-2 opacity-70">Det första kryssen kommer.</p>
                 </div>
-              ))
-             )}
-           </div>
-           </MyFloveWide>
-         )}
-       </div>
+              ) : (
+                areaDone.map((task) => (
+                  <div
+                    key={task.id}
+                    className="flex items-center justify-between p-4 bg-card/50 border border-border/50 rounded-2xl opacity-80"
+                  >
+                    <button
+                      onClick={() => handleToggle(task)}
+                      className="flex items-center gap-4 flex-1 text-left"
+                    >
+                      <div className="text-primary shrink-0">
+                        <CheckCircle2 size={28} className="fill-primary/20" strokeWidth={2} />
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-lg line-through">{task.title}</span>
+                        <span className="text-xs text-muted-foreground">
+                          {task.dueDate ? describeDay(task.dueDate) : "Ingen dag"}
+                          {task.actualEnergy
+                            ? ` · ${ENERGY_IMPACT_META[task.actualEnergy].emoji} ${ENERGY_IMPACT_META[task.actualEnergy].doneLabel}`
+                            : ""}
+                        </span>
+                      </div>
+                    </button>
+                    <button
+                      onClick={() => deleteTask(task.id)}
+                      className="p-3 text-muted-foreground hover:text-destructive rounded-xl transition-colors"
+                      aria-label="Ta bort"
+                    >
+                      <Trash2 size={20} />
+                    </button>
+                  </div>
+                ))
+              )}
+            </div>
+          </MyFloveWide>
+        )}
+      </MyFlovePageGrid>
 
       <TaskEnergyPrompt
         task={energyPrompt}
