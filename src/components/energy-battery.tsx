@@ -50,24 +50,27 @@ export default function EnergyBattery({
         data-testid="battery-card"
         data-area="halsa"
         aria-label={`Mitt batteri, ${shownLevel} procent. Öppna för att logga energi och mående.`}
-        className="press relative flex min-h-[9rem] min-w-0 flex-col gap-2 rounded-3xl border border-[hsl(var(--area-aterhamtning)/0.45)] bg-sun/50 p-3 shadow-soft transition-shadow hover:shadow-lifted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:p-5"
+        className="press relative flex min-h-[9rem] min-w-0 flex-col items-center gap-2.5 rounded-3xl border border-[hsl(var(--area-aterhamtning)/0.45)] bg-sun/50 p-4 text-center shadow-soft transition-shadow hover:shadow-lifted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:p-5"
       >
-        <span className="flex min-w-0 items-start gap-2.5">
-          <MyFloveIcon icon={BatteryCharging} tone="sun" size="sm" />
-          <span className="min-w-0 flex-1">
-            <span className="block font-display text-base font-bold leading-tight text-ink">
-              Mitt batteri
-            </span>
-            <span className="block text-xs text-muted-foreground">Energi och mående</span>
+        <MyFloveIcon icon={BatteryCharging} tone="sun" size="lg" className="rounded-full" />
+        <span className="min-w-0">
+          <span className="block font-display text-base font-bold leading-tight text-ink">
+            Mitt batteri
           </span>
-          <ArrowRight
-            size={16}
-            aria-hidden="true"
-            className="mt-0.5 shrink-0 text-muted-foreground"
-          />
+          <span className="block text-xs text-muted-foreground">Energi och mående</span>
         </span>
-        <span className="font-display text-3xl font-bold leading-none text-ink">{shownLevel}%</span>
-        <span className="text-sm text-muted-foreground">{levelWord}</span>
+        <span className="w-full space-y-1 border-t border-border/50 pt-3">
+          <span className="block font-display text-3xl font-bold leading-none text-ink">
+            {shownLevel}%
+          </span>
+          <span className="block text-sm font-medium text-gold">{levelWord}</span>
+        </span>
+        <span
+          aria-hidden="true"
+          className="absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full bg-sun text-gold"
+        >
+          <ArrowRight size={15} />
+        </span>
       </Link>
     );
   }

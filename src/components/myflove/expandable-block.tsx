@@ -11,7 +11,7 @@
  * presentation.
  */
 import * as React from "react";
-import { ChevronDown, type LucideIcon } from "lucide-react";
+import { ArrowRight, ChevronDown, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MyFloveIcon, type MyFloveTone } from "@/components/myflove";
 import { areaProps, type AreaId } from "@/lib/areas";
@@ -136,10 +136,12 @@ export function ExpandableBlock({
         aria-expanded={open}
         aria-label={open ? `Minimera ${ariaLabel}` : `Öppna ${ariaLabel}`}
         className={cn(
-          "press flex w-full min-w-0 flex-col gap-2 rounded-3xl text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+          "press relative flex w-full min-w-0 flex-col gap-2 rounded-3xl text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
           widget && !open
             ? "items-center justify-center gap-1.5 px-3 py-6 text-center"
-            : "p-3 sm:p-5",
+            : !open
+              ? "items-center gap-2.5 p-4 text-center sm:p-5"
+              : "p-3 sm:p-5",
         )}
       >
         {widget && !open ? (
@@ -167,6 +169,53 @@ export function ExpandableBlock({
               </span>
             )}
           </>
+        ) : !open ? (
+          <>
+            {/* Komprimerat: centrerad cirkelikon, rubrik, streck, stort värde. */}
+            <span aria-hidden="true" className="grid place-items-center">
+              {visual ??
+                (icon && (
+                  <MyFloveIcon
+                    icon={icon}
+                    tone={tone}
+                    size="lg"
+                    className={cn("rounded-full", area && "area-bg-soft area-text")}
+                  />
+                ))}
+            </span>
+            <div className="min-w-0">
+              <h2 className="font-display text-base font-bold leading-tight text-ink">{title}</h2>
+              {subtitle && (
+                <p className="mt-0.5 line-clamp-2 text-xs text-muted-foreground">{subtitle}</p>
+              )}
+            </div>
+            {(status != null || summary != null) && (
+              <div className="w-full space-y-1 border-t border-border/50 pt-3">
+                {status != null && (
+                  <div
+                    className={cn(
+                      "font-display text-2xl font-bold leading-tight",
+                      area ? "area-text" : "text-ink",
+                    )}
+                  >
+                    {status}
+                  </div>
+                )}
+                {summary != null && (
+                  <div className="line-clamp-2 text-sm text-muted-foreground">{summary}</div>
+                )}
+              </div>
+            )}
+            <span
+              aria-hidden="true"
+              className={cn(
+                "absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full",
+                area ? "area-bg-soft area-text" : "bg-card/70 text-muted-foreground",
+              )}
+            >
+              <ArrowRight size={15} />
+            </span>
+          </>
         ) : (
           <>
             <div className="flex min-w-0 items-start gap-2.5">
@@ -181,30 +230,14 @@ export function ExpandableBlock({
                 ))}
               <div className="min-w-0 flex-1">
                 <h2 className="font-display text-base font-bold leading-tight text-ink">{title}</h2>
-                {subtitle && (
-                  <p
-                    className={cn("mt-0.5 text-xs text-muted-foreground", !open && "line-clamp-2")}
-                  >
-                    {subtitle}
-                  </p>
-                )}
+                {subtitle && <p className="mt-0.5 text-xs text-muted-foreground">{subtitle}</p>}
               </div>
               <ChevronDown
                 size={18}
                 aria-hidden="true"
-                className={cn(
-                  "mt-0.5 shrink-0 text-muted-foreground transition-transform duration-200 motion-reduce:transition-none",
-                  !open && "-rotate-90",
-                )}
+                className="mt-0.5 shrink-0 rotate-180 text-muted-foreground transition-transform duration-200 motion-reduce:transition-none"
               />
             </div>
-
-            {!open && status != null && (
-              <div className="font-display text-3xl font-bold leading-none text-ink">{status}</div>
-            )}
-            {!open && summary != null && (
-              <div className="line-clamp-2 text-sm text-muted-foreground">{summary}</div>
-            )}
           </>
         )}
       </button>
