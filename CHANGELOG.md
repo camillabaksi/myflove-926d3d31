@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-29 – Anpassa appen: block sida vid sida med mindre text
+
+- Inställningarna är nu uppdelade i mindre block (Mindre på skärmen, Lättare att använda, Integritet, Konto) som ligger sida vid sida i rutnätet.
+- Varje reglage visar bara en kort rubrik – långa förklaringar är borttagna så korten blir lättare att skanna.
+- Samma blockdesign, rundning, border och färgsystem som resten av appen.
+
 ## 2026-08-29 – Hem: planera-väg rättad
 
 - "Vad behöver du just nu? – Jag behöver planera min dag" leder nu till `/flowplan` (Planera) istället för att duplicera Idag-genvägen.
