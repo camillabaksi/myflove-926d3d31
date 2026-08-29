@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import FlowLearningCard from "@/components/flow/flow-learning-card";
 import { FlowMascot } from "@/components/flow-mascot";
-import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
+import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
+import { ExpandableBlock } from "@/components/myflove/expandable-block";
 
 import { useHomeLayout, type HomeBlockId } from "@/lib/home-layout";
 import { TaskQuickAdd, type QuickAddResult } from "@/components/task-quick-add";
@@ -472,11 +473,10 @@ export default function Home() {
         {/* Vad behöver du just nu? – situationer, inte produktnamn */}
         {shows("vagar") && (
           <nav className="min-w-0" style={pos("vagar")} aria-label="Vad behöver du just nu">
-            <MyFloveBlock
+            <ExpandableBlock
               title="Vad behöver du just nu?"
               subtitle="Välj en väg – Flow tar dig till rätt ställe"
-              collapsible
-              collapseId="hem::vagar"
+              summary="Fyra vanliga situationer"
               tone="lavender"
               surface="lavender"
             >
@@ -524,7 +524,7 @@ export default function Home() {
                   </li>
                 ))}
               </ul>
-            </MyFloveBlock>
+            </ExpandableBlock>
           </nav>
         )}
 
@@ -581,17 +581,16 @@ function DaySummary() {
   const total = todayOpen.length + todayDone.length;
 
   return (
-    <MyFloveBlock
+    <ExpandableBlock
       title="Dagens översikt"
       subtitle="En snabb sammanfattning av det som väntar"
       icon={CalendarDays}
       tone="sky"
       surface="sky"
-      status={
-        total === 0 ? "Inget inplanerat ännu" : `${total} ${total === 1 ? "sak" : "saker"} idag`
+      status={total === 0 ? "Inget ännu" : `${total} ${total === 1 ? "sak" : "saker"}`}
+      summary={
+        total === 0 ? "Inget inplanerat idag" : `${todayDone.length} klara · ${todayOpen.length} kvar`
       }
-      collapsible
-      collapseId="hem::dagens-oversikt"
     >
       <p className="text-ink">
         {total === 0
@@ -604,6 +603,6 @@ function DaySummary() {
       >
         Se hela dagen i Idag <ArrowRight size={14} />
       </Link>
-    </MyFloveBlock>
+    </ExpandableBlock>
   );
 }
