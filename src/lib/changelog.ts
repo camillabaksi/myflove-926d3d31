@@ -10,6 +10,12 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Redigera dagens loggning",
+    items: [
+      "Ändra dagens energi, mående och fritext direkt i Mitt batteri – samma logg uppdateras (2026-08-29)",
+    ],
+  },
+  {
     title: "En enda plats för energi & mående",
     items: [
       "Mitt batteri är den enda loggningsvägen: Hem → Mitt batteri → Logga energi & mående (2026-08-29)",

@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-29 – Redigera dagens loggning i Mitt batteri
+
+- Dagens energi- och måendeloggning går nu att ändra direkt i samma vy: Mitt batteri fyller i dagens värden och din sparade fritext automatiskt.
+- Knappen visar "Uppdatera dagens loggning" när du redan loggat – samma logg uppdateras, ingen ny skapas.
+- Fritexten kan ändras eller rensas helt; historiken förblir read-only.
+
 ## 2026-08-29 – En enda plats för energi & mående
 
 - Mitt batteri är nu den enda platsen där du loggar energi och mående: Hem → Mitt batteri → Logga energi & mående.
