@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-29 – Anpassa appen: symmetriskt rutnät
+
+- Blocken i Anpassa appen sträcker sig nu lika högt inom varje rad, så rutnätet ser symmetriskt och balanserat ut.
+- Underliggande grid-komponent (`MyFlovePageGrid` / `MyFloveBlockGrid`) använder `items-stretch` som standard, vilket ger jämna blockhöjder i hela appen.
+
 ## 2026-08-29 – Anpassa appen: block sida vid sida med mindre text
 
 - Inställningarna är nu uppdelade i mindre block (Mindre på skärmen, Lättare att använda, Integritet, Konto) som ligger sida vid sida i rutnätet.

@@ -121,8 +121,9 @@ export function MyFloveBlock({
     <section
       data-testid={dataTestId}
       {...areaProps(area)}
+      data-expanded={!collapsed}
       className={cn(
-        "flex min-w-0 flex-col gap-3 rounded-3xl border-2 border-border/60 p-3 shadow-soft sm:gap-4 sm:p-5",
+        "flex min-w-0 h-full flex-col gap-3 rounded-3xl border-2 border-border/60 p-3 shadow-soft sm:gap-4 sm:p-5",
         area && "area-border",
         surface ? SURFACE[surface] : "bg-card",
         span && "col-span-full",
@@ -169,7 +170,7 @@ export function MyFloveBlockGrid({
   return (
     <div
       className={cn(
-        "grid min-w-0 grid-cols-2 items-start gap-3 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4 [&>*:has([data-expanded='true'])]:col-span-full",
+        "grid min-w-0 grid-cols-2 items-stretch gap-3 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4 [&>*:has([data-expanded='true'])]:col-span-full",
         className,
       )}
     >
@@ -200,7 +201,7 @@ export function MyFlovePageGrid({
       style={style}
       {...areaProps(area)}
       className={cn(
-        "grid min-w-0 grid-cols-2 items-start gap-3 md:grid-cols-3 md:gap-5 xl:grid-cols-4 [&>*:has([data-expanded='true'])]:col-span-full",
+        "grid min-w-0 grid-cols-2 items-stretch gap-3 md:grid-cols-3 md:gap-5 xl:grid-cols-4 [&>*:has([data-expanded='true'])]:col-span-full",
         className,
       )}
     >
