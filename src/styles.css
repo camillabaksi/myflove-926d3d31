@@ -136,10 +136,10 @@
   --shadow-float-value: 0 18px 40px -20px hsl(258 45% 35% / 0.35);
 
   /* Kantlinjer – gemensamma stilar för kort, avdelare och fokus */
-  --border-hairline: 1px solid hsl(var(--border) / 0.7);
-  --border-strong: 1px solid hsl(var(--border));
-  --border-dashed: 1px dashed hsl(var(--border));
-  --border-accent: 1px solid hsl(var(--primary) / 0.35);
+  --border-hairline: 2px solid hsl(var(--border) / 0.7);
+  --border-strong: 2px solid hsl(var(--border));
+  --border-dashed: 2px dashed hsl(var(--border));
+  --border-accent: 2px solid hsl(var(--primary) / 0.35);
 }
 
 .dark {
@@ -237,7 +237,7 @@
 
 @utility surface-hero {
   background-image: var(--gradient-hero);
-  border: 1px solid hsl(var(--border) / 0.6);
+  border: 2px solid hsl(var(--border) / 0.6);
   border-radius: calc(var(--radius) + 0.5rem);
   box-shadow: var(--shadow-lifted);
 }
