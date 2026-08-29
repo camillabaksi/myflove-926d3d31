@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Hem i samma designspråk som Hälsa",
+    items: [
+      "Komprimerade hemblock visar rubrik, kort underrubrik och aktuellt värde i stället för bara ikon + ett ord (2026-08-29)",
+      "Blocken är större, luftigare och pastellfärgade efter områdesfärgerna – samma visuella språk som Hälsa (2026-08-29)",
+      "Tryck expanderar fortfarande bara det blocket på plats; tvåkolumnsrutnätet på mobil är kvar (2026-08-29)",
+      "Endast presentation – data, loggning, navigation och Flow-logik är oförändrade (2026-08-29)",
+    ],
+  },
+  {
     title: "Hem återställt som samlad överblick",
     items: [
       "Alla hemblock visas igen som komprimerade widgets – batteri, Flow, Nästa, Dagens översikt, rutiner, vägar och områdesväljare (2026-08-29)",
