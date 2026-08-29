@@ -17,59 +17,61 @@ export default function FlowScorePage() {
 
   return (
     <Layout>
-      <div className="space-y-6">
-        <header>
-          <h1 className="flex items-center gap-2 font-display text-3xl text-ink">
-            <Gauge className="h-7 w-7 text-primary" /> Dagens balans
-          </h1>
-          <p className="mt-1 text-muted-foreground">
-            Dagens balans visar hur väl dagens krav matchar din energi och kapacitet just nu. Det är
-            ingen prestation och inget betyg – bara en realistisk bild av vad som är rimligt.
-          </p>
-        </header>
+      <MyFlovePageGrid>
+        <MyFloveWide>
+          <header>
+            <h1 className="flex items-center gap-2 font-display text-3xl text-ink">
+              <Gauge className="h-7 w-7 text-primary" /> Dagens balans
+            </h1>
+            <p className="mt-1 text-muted-foreground">
+              Dagens balans visar hur väl dagens krav matchar din energi och kapacitet just nu. Det
+              är ingen prestation och inget betyg – bara en realistisk bild av vad som är rimligt.
+            </p>
+          </header>
+        </MyFloveWide>
 
-        <MyFloveBlock
-          title="Dagens FlowScore"
-          subtitle="En ögonblicksbild av vad som är rimligt idag"
-          icon={Gauge}
-          tone="lavender"
-          surface="lavender"
-        >
-          <FlowScoreCard flow={flow} minutesLeft={minutesLeft} />
-        </MyFloveBlock>
+        <MyFloveWide span="wide">
+          <MyFloveBlock
+            title="Dagens FlowScore"
+            subtitle="En ögonblicksbild av vad som är rimligt idag"
+            icon={Gauge}
+            tone="lavender"
+            surface="lavender"
+          >
+            <FlowScoreCard flow={flow} minutesLeft={minutesLeft} />
+          </MyFloveBlock>
+        </MyFloveWide>
 
-        <MyFloveBlockGrid>
-          <Link href="/mitt-batteri">
-            <MyFloveStat
-              label="Energi"
-              value={
-                energy ? (
-                  <span className="flex items-center gap-2">
-                    {energy}/5 <MyFloveEnergyDots value={energy} />
-                  </span>
-                ) : (
-                  "–"
-                )
-              }
-              hint="Öppna Mitt batteri för att logga"
-              tone="sun"
-            />
-          </Link>
-          <Link href="/mitt-batteri">
-            <MyFloveStat
-              label="Mående"
-              value={mood ? `${mood}/5` : "–"}
-              hint="Senaste registrerade värde"
-              tone="blush"
-            />
-          </Link>
+        <Link href="/mitt-batteri" className="min-w-0">
           <MyFloveStat
-            label="Kvar av dagen"
-            value={`${Math.floor(minutesLeft / 60)} h ${minutesLeft % 60} min`}
-            hint="Tiden som återstår"
-            tone="sky"
+            label="Energi"
+            value={
+              energy ? (
+                <span className="flex items-center gap-2">
+                  {energy}/5 <MyFloveEnergyDots value={energy} />
+                </span>
+              ) : (
+                "–"
+              )
+            }
+            hint="Öppna Mitt batteri för att logga"
+            tone="sun"
           />
-        </MyFloveBlockGrid>
+        </Link>
+        <Link href="/mitt-batteri" className="min-w-0">
+          <MyFloveStat
+            label="Mående"
+            value={mood ? `${mood}/5` : "–"}
+            hint="Senaste registrerade värde"
+            tone="blush"
+          />
+        </Link>
+        <MyFloveStat
+          label="Kvar av dagen"
+          value={`${Math.floor(minutesLeft / 60)} h ${minutesLeft % 60} min`}
+          hint="Tiden som återstår"
+          tone="sky"
+        />
 
         <MyFloveBlock
           title={
@@ -98,7 +100,7 @@ export default function FlowScorePage() {
             </Link>
           </div>
         </MyFloveBlock>
-      </div>
+      </MyFlovePageGrid>
     </Layout>
   );
 }
