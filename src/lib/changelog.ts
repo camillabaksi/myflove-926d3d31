@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Hem återställt som samlad överblick",
+    items: [
+      "Alla hemblock visas igen som komprimerade widgets – batteri, Flow, Nästa, Dagens översikt, rutiner, vägar och områdesväljare (2026-08-29)",
+      "Lägg till i dagen är nu ett block: komprimerat kort som öppnar snabbtillägg och Jag gjorde något (2026-08-29)",
+      "Ingen funktion eller information borttagen – endast informationshierarki och presentation (2026-08-29)",
+    ],
+  },
+  {
     title: "Widget-minimalism på fler dashboard-sidor",
     items: [
       "Idag: Dagens ordning är en komprimerad widget (ikon + antal) med hela planen i expanderad vy (2026-08-29)",

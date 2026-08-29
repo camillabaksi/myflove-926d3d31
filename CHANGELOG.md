@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-29 – Hem återställt som samlad överblick
+
+- Alla hemblock visas igen som komprimerade widgets: Mitt batteri, Flow, Nästa, Dagens översikt, Lägg till i dagen, Rutiner & medicin, Vad behöver du just nu och områdesväljaren.
+- "Lägg till i dagen" följer nu samma blockspråk – komprimerat kort (＋ Lägg till) som öppnar snabbtillägg och "Jag gjorde något" när man trycker.
+- Inget innehåll är borttaget; information har bara flyttats från långa listor till kompakt block → tryck → expandera.
+
+
 ## 2026-08-29 – Widget-minimalism på fler dashboard-sidor
 
 - Idag: "Dagens ordning" är nu en komprimerad widget (ikon + antal steg + etiketten "Ordning"); hela planen med steg, tider och länk till Planera finns kvar i expanderad vy.

@@ -36,6 +36,7 @@ import {
   SlidersHorizontal,
   Compass,
   Check,
+  Plus,
 } from "lucide-react";
 import { todayISO } from "@/lib/day";
 import { track } from "@/lib/analytics";
@@ -477,24 +478,37 @@ export default function Home() {
           </section>
         )}
 
-        {/* Lägg till – snabbknapp */}
+        {/* Lägg till i dagen – samma blockspråk: komprimerat kort som öppnar sig */}
         {shows("lagg-till") && (
-          <MyFloveWide style={pos("lagg-till")}>
-            <TaskQuickAdd
-              onAdd={(result: QuickAddResult) => {
-                addTask(result.title, result.dueDate, {
-                  time: result.time,
-                  energyImpact: result.energyImpact,
-                  friction: result.friction,
-                  area: activeArea === "alla" ? "vardag" : activeArea,
-                });
-              }}
-              className="bg-primary text-primary-foreground hover:bg-primary/90"
-            />
-            <p className="mt-1 text-xs text-muted-foreground">
-              Lägg till något i dagen – med tid om du vill.
-            </p>
-          </MyFloveWide>
+          <section className="min-w-0" style={pos("lagg-till")} aria-label="Lägg till i dagen">
+            <ExpandableBlock
+              title="Lägg till i dagen"
+              titleText="Lägg till i dagen"
+              area="hem"
+              widget
+              label="Lägg till"
+              icon={Plus}
+              subtitle="Något nytt eller något du redan hunnit med."
+              tone="mint"
+              surface="mint"
+            >
+              <TaskQuickAdd
+                onAdd={(result: QuickAddResult) => {
+                  addTask(result.title, result.dueDate, {
+                    time: result.time,
+                    energyImpact: result.energyImpact,
+                    friction: result.friction,
+                    area: activeArea === "alla" ? "vardag" : activeArea,
+                  });
+                }}
+                className="bg-primary text-primary-foreground hover:bg-primary/90"
+              />
+              <p className="mt-1 text-xs text-muted-foreground">
+                Lägg till något i dagen – med tid om du vill.
+              </p>
+              <DidThisCta />
+            </ExpandableBlock>
+          </section>
         )}
 
         {/* Vad behöver du just nu? – situationer, inte produktnamn */}
