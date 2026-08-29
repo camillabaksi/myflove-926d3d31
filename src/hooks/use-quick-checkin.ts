@@ -79,15 +79,22 @@ export function useQuickCheckin() {
 
   const energyEntries = cloudEnergy ?? localEnergy;
 
-  const todayMood = useMemo<MoodEntry | null>(
-    () => moods.find((m) => isToday(m.date)) ?? null,
+  /** Alla dagens måendeobservationer, äldst → nyast. */
+  const todayMoods = useMemo<MoodEntry[]>(
+    () => moods.filter((m) => isToday(m.date)).sort((a, b) => a.date - b.date),
     [moods],
   );
 
-  const todayEnergy = useMemo<EnergyLogEntry | null>(() => {
-    const todays = energyEntries.filter((e) => isToday(e.logged_at));
-    return todays.length > 0 ? (todays[todays.length - 1] as EnergyLogEntry) : null;
-  }, [energyEntries]);
+  /** Alla dagens energiobservationer, äldst → nyast. */
+  const todayEnergyEntries = useMemo<EnergyLogEntry[]>(
+    () => energyEntries.filter((e) => isToday(e.logged_at)),
+    [energyEntries],
+  );
+
+  const todayMood = todayMoods.length > 0 ? todayMoods[todayMoods.length - 1] : null;
+
+  const todayEnergy =
+    todayEnergyEntries.length > 0 ? todayEnergyEntries[todayEnergyEntries.length - 1] : null;
 
   /**
    * Loggar en ny måendeobservation. `note` är användarens egna ord om vad som
@@ -156,5 +163,14 @@ export function useQuickCheckin() {
     (todayEnergy ? toScale10(todayEnergy.level) : null) ??
     null;
 
-  return { todayMood, todayEnergy, moodValue, energyValue, logMood, logEnergy };
+  return {
+    todayMood,
+    todayEnergy,
+    todayMoods,
+    todayEnergyEntries,
+    moodValue,
+    energyValue,
+    logMood,
+    logEnergy,
+  };
 }
