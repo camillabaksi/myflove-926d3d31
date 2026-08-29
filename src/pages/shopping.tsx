@@ -357,7 +357,6 @@ export default function Shopping() {
                 </CollapsibleSection>
               </div>
             )}
-
           </div>
         </MyFloveWide>
 

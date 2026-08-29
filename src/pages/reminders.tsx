@@ -275,7 +275,6 @@ export default function RemindersPage() {
           </div>
         </MyFloveBlock>
 
-
         <MyFloveWide>
           <form
             onSubmit={handleAdd}

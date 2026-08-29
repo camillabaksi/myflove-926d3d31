@@ -150,7 +150,6 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
         <DidThisQuickAdd />
       </MyFloveWide>
 
-
       {showDayFlow && (
         <MyFloveWide>
           <DayEnergyFlow showLink={false} />
