@@ -11,6 +11,8 @@ import { cn } from "@/lib/utils";
 import { MYFLOVE_EMOJI, type MyFloveEmojiKey } from "@/lib/myflove-emoji";
 import { useCollapsible } from "@/lib/collapse-store";
 import { useSmartBack } from "@/hooks/use-smart-back";
+import { areaProps, type AreaId } from "@/lib/areas";
+
 
 /* ------------------------------------------------------------------ */
 /* Emoji – samma storlekar och samma lilla liv överallt                */
