@@ -458,12 +458,14 @@ export default function Layout({ children }: LayoutProps) {
             label: "Adminöversikt",
             icon: Shield,
             hint: "Roller, åtkomst och rapporter",
+            essential: true,
           },
           {
             href: "/admin-statistik",
             label: "Appstatistik",
             icon: BarChart3,
             hint: "Besökare och användning",
+            essential: true,
           },
         ]
       : []),
@@ -611,7 +613,6 @@ export default function Layout({ children }: LayoutProps) {
         icon: LayoutGrid,
         hrefs: ["/admin", "/admin-statistik"],
       },
-
     ];
 
     return groups
@@ -649,7 +650,6 @@ export default function Layout({ children }: LayoutProps) {
     setMobileMenuOpen(false);
     setOpenCategory(null);
   };
-
 
   /** Visa introduktionen igen – nollställer bara "har sett intro". */
   const replayIntro = () => {
@@ -1248,7 +1248,6 @@ export default function Layout({ children }: LayoutProps) {
                     <PwaInstallButton />
                   </div>
 
-
                   {/* Viktiga områden – dina två egna platser i bottenmenyn */}
                   <div className="mb-4 rounded-3xl border-2 border-border bg-card p-4 shadow-sm">
                     <div className="flex items-center justify-between gap-2">
@@ -1256,7 +1255,7 @@ export default function Layout({ children }: LayoutProps) {
                         <p className="text-sm font-semibold">Din bottenmeny</p>
                         <p data-npf="optional" className="text-xs text-muted-foreground">
                           Hem, QuickFlow och Mer ligger fast. Två platser väljer du själv – normalt
-                          Idag och Flow.
+                          Idag och Planera.
                         </p>
                       </div>
                       <Button
@@ -1305,7 +1304,7 @@ export default function Layout({ children }: LayoutProps) {
                           variant="ghost"
                           size="sm"
                           className="rounded-xl gap-1"
-                          onClick={() => setNavSlots(["/idag", "/flow"])}
+                          onClick={() => setNavSlots(["/idag", "/flowplan"])}
                         >
                           <RotateCcw size={14} /> Återställ
                         </Button>
@@ -1323,6 +1322,35 @@ export default function Layout({ children }: LayoutProps) {
 }
 
 /** En rad i menyn: ikon, namn och en förklaring i klartext. */
+/** Knapp i inställningar – samma utseende som NavRow men utan länk. */
+function SettingAction({
+  icon: Icon,
+  label,
+  hint,
+  onClick,
+}: {
+  icon: typeof Home;
+  label: string;
+  hint: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="flex w-full items-center gap-3 rounded-2xl border border-border bg-card p-3 text-left shadow-sm transition-colors press"
+    >
+      <span className="shrink-0">
+        <Icon size={22} strokeWidth={2} />
+      </span>
+      <span className="min-w-0">
+        <span className="block text-sm font-medium leading-tight">{label}</span>
+        <span className="block text-xs leading-snug text-muted-foreground">{hint}</span>
+      </span>
+    </button>
+  );
+}
+
 function NavRow({
   item,
   isActive,
