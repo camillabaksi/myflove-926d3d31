@@ -54,6 +54,7 @@ export default function SimpleCheckin({
   const [battery, setBattery] = useState(energyValue ?? 6);
   const [mood, setMood] = useState<number | null>(moodValue);
   const [factors, setFactors] = useState<string[]>([]);
+  const [note, setNote] = useState("");
   const [saved, setSaved] = useState(false);
   const [started, setStarted] = useState(false);
 
@@ -63,6 +64,14 @@ export default function SimpleCheckin({
   useEffect(() => {
     if (moodValue != null) setMood(moodValue);
   }, [moodValue]);
+
+  // Text som skickats hit från t.ex. QuickFlow (?note=…) fyller i fältet,
+  // så att loggningen ändå sker på den enda kanoniska platsen.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const incoming = new URLSearchParams(window.location.search).get("note");
+    if (incoming) setNote(incoming);
+  }, []);
 
   const markStarted = (kind: "battery" | "mood") => {
     if (started) return;
@@ -74,8 +83,10 @@ export default function SimpleCheckin({
     void logEnergy(battery);
     track("battery_checkin_completed", { source, method: "knapp", result: "completed" });
     track("battery_logged", { source, method: "knapp" });
-    if (mood != null) {
-      logMood(mood);
+    const text = note.trim();
+    // Fritexten hör ihop med måendet – sparas på befintlig måendepost.
+    if (mood != null || text) {
+      logMood(mood ?? Math.max(1, Math.min(10, battery)), text || undefined);
       track("mood_checkin_completed", { source, method: "emoji", result: "completed" });
       track("mood_logged", { source, method: "emoji" });
     }
@@ -96,10 +107,12 @@ export default function SimpleCheckin({
     }
     setSaved(true);
     setFactors([]);
+    setNote("");
     window.setTimeout(() => setSaved(false), 2500);
   };
 
   const step = Math.max(1, Math.min(5, Math.round(battery / 2)));
+
 
   return (
     <section
