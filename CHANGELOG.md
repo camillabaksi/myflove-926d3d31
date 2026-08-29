@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-29 – Planera: fullbreddsblock i stället för smal vertikal layout
+
+- Steg 1 (”Hur ser dagen ut?”) och Steg 2 (”Ändra ordningen”) spänner nu över hela raden via `span`, så formulär och lista får hela ytans bredd i stället för att klämmas vertikalt i en halv kolumn.
+- Energivalen ligger i tre kolumner även på mobil nu när blocket är fullbrett.
+
 ## 2026-08-29 – Hem: Kalender-blocket får samma vertikala rytm som andra block
 
 - Lade till en osynlig statushållare i Kalender-blocket så att marginaler och vertikal spacing matchar de andra blocken nu när statusraden är borta.

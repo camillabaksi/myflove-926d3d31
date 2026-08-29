@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Planera: fullbreddsblock i stället för smal vertikal layout",
+    items: [
+      "Steg 1 och Steg 2 i Planera spänner nu över hela raden, så formulär och lista får hela ytans bredd i stället för att klämmas vertikalt i en halv kolumn (2026-08-29)",
+      "Energivalen ligger i tre kolumner även på mobil (2026-08-29)",
+    ],
+  },
+  {
     title: "Hem: Kalender-blocket får samma vertikala rytm som andra block",
     items: [
       "Lade till en osynlig statushållare i Kalender-blocket så att avstånden och korthöjden matchar de andra blocken nu när statusraden är borta (2026-08-29)",

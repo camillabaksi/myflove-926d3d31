@@ -294,6 +294,7 @@ export default function FlowPlanPage() {
           tone="lavender"
           surface="lavender"
           area="planera"
+          span
           collapsible
           collapseId="planering::steg-lage"
         >
@@ -329,7 +330,7 @@ export default function FlowPlanPage() {
                   </Link>
                 )}
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <div className="grid grid-cols-3 gap-2">
                 {(Object.keys(ENERGY_LABELS) as Energy[]).map((e) => (
                   <button
                     key={e}
@@ -418,6 +419,7 @@ export default function FlowPlanPage() {
             tone="sky"
             surface="sky"
             area="planera"
+            span
             collapsible
             collapseId="planering::steg-ordning"
           >
