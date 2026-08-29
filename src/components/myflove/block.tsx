@@ -111,7 +111,7 @@ export function MyFloveBlock({
       className={cn(
         "flex flex-col gap-4 rounded-3xl border border-border/60 p-5 shadow-soft",
         surface ? SURFACE[surface] : "bg-card",
-        span && "sm:col-span-2",
+        span && "col-span-full",
         className,
       )}
     >
@@ -153,7 +153,12 @@ export function MyFloveBlockGrid({
   children: React.ReactNode;
 }) {
   return (
-    <div className={cn("grid grid-cols-1 gap-4 sm:grid-cols-2 sm:items-start", className)}>
+    <div
+      className={cn(
+        "grid grid-cols-1 items-start gap-3 min-[380px]:grid-cols-2 sm:gap-4",
+        className,
+      )}
+    >
       {children}
     </div>
   );
