@@ -48,8 +48,8 @@ export default function EnergyBattery({
         />
         <MyFloveStat
           label="Mående"
-          value={reading.mood != null ? `${Math.round(reading.mood)}/5` : "–"}
-          hint={reading.mood != null ? "Senaste registrerade värde" : "Logga ett mående när du vill"}
+          value={moodValue != null ? `${Math.round(moodValue / 2)}/5` : "–"}
+          hint={moodValue != null ? "Senaste registrerade värde" : "Logga ett mående när du vill"}
           icon={Gauge}
           tone="blush"
         />
