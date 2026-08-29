@@ -1310,7 +1310,7 @@ export default function Layout({ children }: LayoutProps) {
                       hint="Gå igenom de första korten en gång till"
                       onClick={replayIntro}
                     />
-                    <PwaInstallButton />
+                    <PwaInstallButton row />
                   </div>
 
                   {/* Ljud & konto */}

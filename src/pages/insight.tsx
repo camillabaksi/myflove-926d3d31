@@ -38,6 +38,7 @@ import { track } from "@/lib/analytics";
 import CollapsibleSection from "@/components/collapsible-section";
 import InsightApplySetting from "@/components/insight-apply-setting";
 import { MyFloveInsightGather } from "@/components/myflove/motion";
+import WhyHint from "@/components/why-hint";
 
 const ANALYSIS_STEPS = [
   "Identifierar styrkor",
@@ -300,6 +301,12 @@ export default function InsightPage() {
               <p className="mt-1 text-sm text-muted-foreground">
                 Förstå behov. Hitta strategier. Gör vardagen enklare.
               </p>
+              <div className="mt-2">
+                <WhyHint label="insikter">
+                  När du loggar över tid kan Flow hjälpa dig upptäcka vad som brukar ge eller ta
+                  energi.
+                </WhyHint>
+              </div>
             </div>
             <Link
               to="/hem"

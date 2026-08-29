@@ -12,6 +12,7 @@ import { MYFLOVE_EMOJI, type MyFloveEmojiKey } from "@/lib/myflove-emoji";
 import { useCollapsible } from "@/lib/collapse-store";
 import { useSmartBack } from "@/hooks/use-smart-back";
 import { areaProps, type AreaId } from "@/lib/areas";
+import WhyHint from "@/components/why-hint";
 
 /* ------------------------------------------------------------------ */
 /* Emoji – samma storlekar och samma lilla liv överallt                */
@@ -298,6 +299,7 @@ export function MyFloveHeader({
   emojiKey,
   emoji,
   description,
+  why,
   action,
   back = true,
   backTo = "/hem",
@@ -309,6 +311,8 @@ export function MyFloveHeader({
   emojiKey?: MyFloveEmojiKey;
   emoji?: string;
   description?: string;
+  /** Kort "Varför?"-förklaring: vad användaren får tillbaka av funktionen. */
+  why?: React.ReactNode;
   action?: React.ReactNode;
   back?: boolean;
   /** Vart Tillbaka går om sidan öppnats direkt (ingen historik). */
@@ -358,7 +362,13 @@ export function MyFloveHeader({
         <div className="min-w-0 flex-1">
           <h1 className="font-display text-2xl font-bold leading-tight text-ink">{title}</h1>
           {description && <p className="mt-1 text-sm text-muted-foreground">{description}</p>}
+          {why && (
+            <div className="mt-2">
+              <WhyHint label={title.toLowerCase()}>{why}</WhyHint>
+            </div>
+          )}
         </div>
+
         {action}
       </div>
       {children && <div className="mt-4">{children}</div>}

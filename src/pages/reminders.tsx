@@ -14,6 +14,7 @@ import {
 } from "@/lib/push-notifications";
 import { useToast } from "@/hooks/use-toast";
 import { BellRing, Plus, Trash2, Undo2, Pencil, Check, X, CalendarClock } from "lucide-react";
+import WhyHint from "@/components/why-hint";
 
 const todayIso = () => new Date().toISOString().slice(0, 10);
 
@@ -241,6 +242,9 @@ export default function RemindersPage() {
             <p className="text-muted-foreground">
               Lägg till, ändra eller avboka. Aktiva påminnelser ger en notis när det är dags.
             </p>
+            <WhyHint label="påminnelser">
+              Påminnelser ska avlasta minnet – inte skapa fler saker att hålla reda på.
+            </WhyHint>
           </header>
         </MyFloveWide>
 

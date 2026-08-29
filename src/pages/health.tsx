@@ -47,6 +47,7 @@ export default function HealthPage() {
             area="halsa"
             emojiKey="wellness"
             description="Hur du mår – energi, träning, medicin och vila på ett ställe."
+            why="Allt om ditt mående ligger samlat här, så att dagens lista slipper blandas ihop med hur du känner dig."
           />
         </MyFloveWide>
 

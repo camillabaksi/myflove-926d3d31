@@ -142,6 +142,7 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
             title="Min energi – historik och mönster"
             emoji="📈"
             description="Se vad som ger och tar energi över tid. Din nivå just nu finns i Mitt batteri."
+            why="När du loggar över tid kan Flow hjälpa dig upptäcka vad som brukar ge eller ta energi."
           />
         </MyFloveWide>
       )}
