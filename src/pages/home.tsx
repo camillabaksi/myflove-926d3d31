@@ -387,20 +387,22 @@ export default function Home() {
         {/* Dagens medicin – samma data och samma avbockning som i Rutiner & medicin */}
         {shows("medicin") && (
           <section className="min-w-0" style={pos("medicin")} aria-label="Rutiner och medicin">
-            <MyFloveBlock
-              title={
-                <span className="flex items-center gap-2">
-                  <span aria-hidden>🔁💊</span> Rutiner &amp; medicin
+            <ExpandableBlock
+              title="Rutiner & medicin"
+              titleText="Rutiner och medicin"
+              visual={
+                <span aria-hidden className="text-xl">
+                  🔁💊
                 </span>
               }
               subtitle="Det som hjälper dagen att hålla ihop"
-              collapsible
-              collapseId="hem::rutiner-medicin"
+              summary="Öppna för att bocka av dagens rutiner och medicin"
               tone="blush"
               surface="blush"
             >
               <RoutinesMedicationToday />
-            </MyFloveBlock>
+            </ExpandableBlock>
+
           </section>
         )}
 
