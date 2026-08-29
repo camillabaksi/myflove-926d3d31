@@ -10,7 +10,7 @@ import {
 } from "@/components/myflove/block";
 import { useFlowScore } from "@/hooks/use-flowscore";
 import { MyFloveEnergyDots } from "@/components/myflove/motion";
-import CollapsibleSection from "@/components/collapsible-section";
+
 
 export default function FlowScorePage() {
   const { flow, energy, mood, minutesLeft } = useFlowScore();

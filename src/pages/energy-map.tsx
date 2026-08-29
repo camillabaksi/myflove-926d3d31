@@ -158,8 +158,8 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
               <h1 className="text-2xl font-semibold tracking-tight">Energikarta</h1>
             </div>
             <p className="text-sm text-muted-foreground">
-              Logga hur du känner dig just nu. Flow lär sig när på dygnet du har mest att ge – och när
-              du behöver vila.
+              Logga hur du känner dig just nu. Flow lär sig när på dygnet du har mest att ge – och
+              när du behöver vila.
             </p>
           </header>
         </MyFloveWide>
@@ -182,52 +182,52 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
             description="Välj det som passar närmast – det finns inga fel svar."
             className="rounded-2xl bg-card border border-border p-5 shadow-sm"
           >
-          <div className="grid grid-cols-5 gap-2">
-            {[1, 2, 3, 4, 5].map((lvl) => {
-              const active = selected === lvl;
-              return (
-                <button
-                  key={lvl}
-                  type="button"
-                  onClick={() => setSelected(lvl)}
-                  className={`flex flex-col items-center justify-center gap-1 rounded-2xl border p-3 transition-all ${
-                    active
-                      ? "bg-primary text-primary-foreground border-primary shadow-sm scale-[1.02]"
-                      : "bg-secondary/40 border-transparent hover:bg-secondary"
-                  }`}
-                >
-                  <span className="text-2xl leading-none">{LEVEL_EMOJI[lvl]}</span>
-                  <span className="text-[11px] leading-tight">{LEVEL_LABELS[lvl]}</span>
-                </button>
-              );
-            })}
-          </div>
-          {selected !== null && (
-            <div className="space-y-3 animate-in fade-in slide-in-from-top-1">
-              <MyFloveEnergyDots value={selected} className="justify-center pt-1" />
-              <textarea
-                value={note}
-                onChange={(e) => setNote(e.target.value)}
-                placeholder="Något som påverkade? (valfritt)"
-                className="w-full rounded-xl border border-border bg-background p-3 text-sm resize-none"
-                rows={2}
-              />
-              <div className="flex gap-2">
-                <Button onClick={handleSave} disabled={saving} className="flex-1">
-                  {saving ? <Loader2 className="animate-spin" size={16} /> : "Spara"}
-                </Button>
-                <Button
-                  variant="ghost"
-                  onClick={() => {
-                    setSelected(null);
-                    setNote("");
-                  }}
-                >
-                  Avbryt
-                </Button>
-              </div>
+            <div className="grid grid-cols-5 gap-2">
+              {[1, 2, 3, 4, 5].map((lvl) => {
+                const active = selected === lvl;
+                return (
+                  <button
+                    key={lvl}
+                    type="button"
+                    onClick={() => setSelected(lvl)}
+                    className={`flex flex-col items-center justify-center gap-1 rounded-2xl border p-3 transition-all ${
+                      active
+                        ? "bg-primary text-primary-foreground border-primary shadow-sm scale-[1.02]"
+                        : "bg-secondary/40 border-transparent hover:bg-secondary"
+                    }`}
+                  >
+                    <span className="text-2xl leading-none">{LEVEL_EMOJI[lvl]}</span>
+                    <span className="text-[11px] leading-tight">{LEVEL_LABELS[lvl]}</span>
+                  </button>
+                );
+              })}
             </div>
-          )}
+            {selected !== null && (
+              <div className="space-y-3 animate-in fade-in slide-in-from-top-1">
+                <MyFloveEnergyDots value={selected} className="justify-center pt-1" />
+                <textarea
+                  value={note}
+                  onChange={(e) => setNote(e.target.value)}
+                  placeholder="Något som påverkade? (valfritt)"
+                  className="w-full rounded-xl border border-border bg-background p-3 text-sm resize-none"
+                  rows={2}
+                />
+                <div className="flex gap-2">
+                  <Button onClick={handleSave} disabled={saving} className="flex-1">
+                    {saving ? <Loader2 className="animate-spin" size={16} /> : "Spara"}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    onClick={() => {
+                      setSelected(null);
+                      setNote("");
+                    }}
+                  >
+                    Avbryt
+                  </Button>
+                </div>
+              </div>
+            )}
             {error && <p className="text-sm text-destructive">{error}</p>}
           </CollapsibleSection>
         </MyFloveWide>
@@ -313,8 +313,8 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
                     <div className="mt-4 flex items-start gap-2 rounded-xl bg-secondary/40 p-3 text-sm">
                       <Sparkles size={16} className="text-primary shrink-0 mt-0.5" />
                       <p className="leading-snug">
-                        Du är oftast som mest på runt <strong>{peakHour.hour}</strong> och lägre kring{" "}
-                        <strong>{lowHour.hour}</strong>. Planera det tunga när kroppen är med.
+                        Du är oftast som mest på runt <strong>{peakHour.hour}</strong> och lägre
+                        kring <strong>{lowHour.hour}</strong>. Planera det tunga när kroppen är med.
                       </p>
                     </div>
                   )}
