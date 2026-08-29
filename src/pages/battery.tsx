@@ -58,16 +58,17 @@ export default function BatteryPage() {
           <DayEnergyFlow />
         </MyFloveWide>
 
-        {/* 4. Historik – sekundär, längst ner */}
-        <MyFloveWide>
-          <ExpandableBlock
-            title="Se min historik"
-            titleText="Se min historik"
-            subtitle="Tidigare mående, energi och energiflöde"
-            icon={LineChart}
-            tone="lavender"
-            summary="Mående, energi och flöde över tid"
-          >
+        {/* 4. Historik – sekundär, längst ner. Widget-komprimerad; expanderar i flödet. */}
+        <ExpandableBlock
+          title="Se min historik"
+          titleText="Se min historik"
+          subtitle="Tidigare mående, energi och energiflöde"
+          icon={LineChart}
+          tone="lavender"
+          area="halsa"
+          widget
+          label="Historik"
+        >
             <Tabs defaultValue="mood" className="w-full" data-testid="battery-history">
               <TabsList className="grid h-11 w-full grid-cols-3 rounded-2xl">
                 <TabsTrigger value="mood" className="rounded-xl text-xs">
