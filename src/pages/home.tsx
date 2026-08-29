@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import FlowLearningCard from "@/components/flow/flow-learning-card";
 import { FlowMascot } from "@/components/flow-mascot";
-import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
+import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
+import { ExpandableBlock } from "@/components/myflove/expandable-block";
 
 import { useHomeLayout, type HomeBlockId } from "@/lib/home-layout";
 import { TaskQuickAdd, type QuickAddResult } from "@/components/task-quick-add";
@@ -342,16 +343,13 @@ export default function Home() {
         {/* Nästa – nästa relevanta aktivitet */}
         {shows("nasta") && (
           <section className="min-w-0" style={pos("nasta")} aria-label="Nästa aktivitet">
-            <MyFloveBlock
-              title={
-                <span className="flex items-center gap-2">
-                  <CalendarDays size={18} className="text-primary" aria-hidden="true" /> Nästa
-                </span>
-              }
+            <ExpandableBlock
+              title="Nästa"
+              titleText="Nästa"
+              icon={CalendarDays}
               subtitle="Det som händer närmast"
-              collapsible
-              collapseId="hem::nasta"
-              status={nextEvent ? `${nextEvent.time} · ${nextEvent.title}` : "Inget bokat just nu"}
+              status={nextEvent ? `${nextEvent.time}` : "Inget bokat"}
+              summary={nextEvent ? nextEvent.title : "Inget inplanerat just nu"}
               tone="sky"
               surface="sky"
             >
@@ -382,27 +380,28 @@ export default function Home() {
                   den upp här.
                 </p>
               )}
-            </MyFloveBlock>
+            </ExpandableBlock>
           </section>
         )}
 
         {/* Dagens medicin – samma data och samma avbockning som i Rutiner & medicin */}
         {shows("medicin") && (
           <section className="min-w-0" style={pos("medicin")} aria-label="Rutiner och medicin">
-            <MyFloveBlock
-              title={
-                <span className="flex items-center gap-2">
-                  <span aria-hidden>🔁💊</span> Rutiner &amp; medicin
+            <ExpandableBlock
+              title="Rutiner & medicin"
+              titleText="Rutiner och medicin"
+              visual={
+                <span aria-hidden className="text-xl">
+                  🔁💊
                 </span>
               }
               subtitle="Det som hjälper dagen att hålla ihop"
-              collapsible
-              collapseId="hem::rutiner-medicin"
+              summary="Öppna för att bocka av dagens rutiner och medicin"
               tone="blush"
               surface="blush"
             >
               <RoutinesMedicationToday />
-            </MyFloveBlock>
+            </ExpandableBlock>
           </section>
         )}
 
@@ -417,20 +416,19 @@ export default function Home() {
         {/* Flow just nu – samma förslag som i Planera, tydligt signerat Flow */}
         {shows("forslag") && (
           <section className="min-w-0" style={pos("forslag")} aria-label="Flows förslag just nu">
-            <MyFloveBlock
-              title={
-                <span className="flex items-center gap-2">
-                  <FlowMascot size="xs" mood="nod" bump className="flow-alive" alt="" />
-                  <Sparkles size={16} className="text-primary" aria-hidden="true" /> Flow · just nu
-                </span>
-              }
+            <ExpandableBlock
+              title="Flow · just nu"
+              titleText="Flow just nu"
+              visual={<FlowMascot size="xs" mood="nod" bump className="flow-alive" alt="" />}
               subtitle="Ett lugnt förslag – du väljer själv"
-              collapsible
-              collapseId="hem::flow-forslag"
+              summary={suggestion.headline}
               tone="lavender"
               surface="lavender"
             >
-              <p className="leading-relaxed text-ink">{suggestion.headline}</p>
+              <p className="leading-relaxed text-ink">
+                <Sparkles size={16} className="mr-1 inline text-primary" aria-hidden="true" />
+                {suggestion.headline}
+              </p>
               {suggestion.task && !samsomNasta && (
                 <p className="text-sm text-muted-foreground">
                   <span className="font-medium text-ink">{suggestion.task.title}</span>
@@ -445,7 +443,7 @@ export default function Home() {
                 {suggestion.task ? "Planera i Idag" : "Fånga något i QuickFlow"}{" "}
                 <ArrowRight size={14} />
               </Link>
-            </MyFloveBlock>
+            </ExpandableBlock>
           </section>
         )}
 
@@ -472,11 +470,10 @@ export default function Home() {
         {/* Vad behöver du just nu? – situationer, inte produktnamn */}
         {shows("vagar") && (
           <nav className="min-w-0" style={pos("vagar")} aria-label="Vad behöver du just nu">
-            <MyFloveBlock
+            <ExpandableBlock
               title="Vad behöver du just nu?"
               subtitle="Välj en väg – Flow tar dig till rätt ställe"
-              collapsible
-              collapseId="hem::vagar"
+              summary="Fyra vanliga situationer"
               tone="lavender"
               surface="lavender"
             >
@@ -524,7 +521,7 @@ export default function Home() {
                   </li>
                 ))}
               </ul>
-            </MyFloveBlock>
+            </ExpandableBlock>
           </nav>
         )}
 
@@ -581,17 +578,18 @@ function DaySummary() {
   const total = todayOpen.length + todayDone.length;
 
   return (
-    <MyFloveBlock
+    <ExpandableBlock
       title="Dagens översikt"
       subtitle="En snabb sammanfattning av det som väntar"
       icon={CalendarDays}
       tone="sky"
       surface="sky"
-      status={
-        total === 0 ? "Inget inplanerat ännu" : `${total} ${total === 1 ? "sak" : "saker"} idag`
+      status={total === 0 ? "Inget ännu" : `${total} ${total === 1 ? "sak" : "saker"}`}
+      summary={
+        total === 0
+          ? "Inget inplanerat idag"
+          : `${todayDone.length} klara · ${todayOpen.length} kvar`
       }
-      collapsible
-      collapseId="hem::dagens-oversikt"
     >
       <p className="text-ink">
         {total === 0
@@ -604,6 +602,6 @@ function DaySummary() {
       >
         Se hela dagen i Idag <ArrowRight size={14} />
       </Link>
-    </MyFloveBlock>
+    </ExpandableBlock>
   );
 }

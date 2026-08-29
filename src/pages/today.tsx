@@ -4,6 +4,7 @@ import { Link } from "wouter";
 import Layout from "@/components/layout";
 import CollapsibleSection from "@/components/collapsible-section";
 import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
+import { ExpandableBlock } from "@/components/myflove/expandable-block";
 import StepSection from "@/components/step-section";
 import FlowCompanion from "@/components/flow/flow-companion";
 import DayTimeline, { type TimelineEntry } from "@/components/day-timeline";
@@ -227,13 +228,13 @@ export default function TodayPage() {
 
             {/* 📋 Dagens ordning – planen du valt i Planera */}
             {dayPlan && dayPlan.steps.length > 0 && (
-              <MyFloveBlock
+              <ExpandableBlock
                 title="Dagens ordning"
                 subtitle="Planen du valt i Planera"
                 icon={ListOrdered}
                 tone="lavender"
-                collapsible
-                collapseId="idag::dagens-ordning"
+                status={`${dayPlan.steps.length} steg`}
+                summary={dayPlan.steps[0]?.title}
               >
                 {dayPlan.intro && <p className="text-sm text-foreground">{dayPlan.intro}</p>}
                 <ol className="space-y-2">
@@ -261,7 +262,7 @@ export default function TodayPage() {
                 >
                   <ListOrdered size={16} /> Ändra ordningen i Planera
                 </Link>
-              </MyFloveBlock>
+              </ExpandableBlock>
             )}
 
             {offerReplan && (
