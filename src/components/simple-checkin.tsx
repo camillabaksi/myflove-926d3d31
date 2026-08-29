@@ -257,13 +257,19 @@ export default function SimpleCheckin({
         onClick={save}
         className="w-full rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-opacity hover:opacity-90"
       >
-        {saved ? "💜 Tack" : "Logga energi & mående"}
+        {saved
+          ? "💜 Tack"
+          : hasLoggedToday
+            ? "Uppdatera dagens loggning"
+            : "Logga energi & mående"}
       </button>
 
       <p aria-live="polite" className="text-xs text-muted-foreground">
         {saved
           ? "💜 Tack. Det hjälper mig att förstå dig bättre."
-          : "Inget är rätt eller fel. Du kan ändra dagens värde när du vill."}
+          : hasLoggedToday
+            ? "Du har redan loggat idag – justera här så uppdateras samma logg."
+            : "Inget är rätt eller fel. Du kan ändra dagens värde när du vill."}
       </p>
     </section>
   );
