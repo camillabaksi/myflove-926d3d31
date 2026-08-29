@@ -293,6 +293,7 @@ export default function FlowPlanPage() {
           icon={ListOrdered}
           tone="lavender"
           surface="lavender"
+          area="planera"
           collapsible
           collapseId="planering::steg-lage"
         >
@@ -416,6 +417,7 @@ export default function FlowPlanPage() {
             icon={ListOrdered}
             tone="sky"
             surface="sky"
+            area="planera"
             collapsible
             collapseId="planering::steg-ordning"
           >

@@ -23,13 +23,13 @@ const AREAS: {
     href: "/traning",
     icon: Dumbbell,
     title: "Träning & promenader",
-    what: "Pass efter din ork – och promenadrutter nära dig.",
+    what: "Pass efter din ork.",
   },
   {
     href: "/daglig-rutin",
     icon: Pill,
     title: "Rutiner & medicin",
-    what: "Morgonstart, fasta rutiner och dagens doser.",
+    what: "Rutiner och dagens doser.",
   },
 ];
 
@@ -59,26 +59,27 @@ export default function HealthPage() {
         </MyFloveWide>
 
         <MyFloveWide>
-          <ul className="grid grid-cols-2 items-start gap-3">
+          <ul className="grid grid-cols-2 items-stretch gap-3">
             {AREAS.map((a) => {
               const Icon = a.icon;
               return (
                 <li key={a.title} className="min-w-0">
                   <Link
                     href={a.href}
-                    className="surface-card flex h-full min-w-0 flex-col items-start gap-2 p-3 transition-colors hover:bg-secondary/40 sm:flex-row sm:gap-3 sm:p-4"
+                    className="press area-border flex h-full min-h-[9rem] min-w-0 flex-col gap-2 rounded-3xl border bg-card p-3 shadow-soft transition-shadow hover:shadow-lifted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:p-4"
                   >
-                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary">
-                      <Icon size={20} />
+                    <span className="flex min-w-0 items-start gap-2.5">
+                      <span className="area-bg-soft area-text grid h-10 w-10 shrink-0 place-items-center rounded-xl">
+                        <Icon size={20} />
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block font-display text-base font-bold leading-tight text-ink">
+                          {a.title}
+                        </span>
+                        <span className="block text-xs text-muted-foreground">{a.what}</span>
+                      </span>
+                      <ArrowRight size={16} className="mt-0.5 shrink-0 text-muted-foreground" />
                     </span>
-                    <span className="min-w-0 flex-1">
-                      <span className="block font-medium text-ink">{a.title}</span>
-                      <span className="block text-sm text-muted-foreground">{a.what}</span>
-                    </span>
-                    <ArrowRight
-                      size={16}
-                      className="mt-1 hidden shrink-0 text-muted-foreground sm:block"
-                    />
                   </Link>
                 </li>
               );
