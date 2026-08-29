@@ -637,7 +637,11 @@ function DaySummary() {
         {total === 0 ? "0" : `${todayDone.length}/${total}`}
       </span>
       <span className="text-xs font-medium text-muted-foreground">
-        {total === 0 ? "Idag" : total === todayDone.length ? "Allt klart" : `${todayOpen.length} kvar`}
+        {total === 0
+          ? "Idag"
+          : total === todayDone.length
+            ? "Allt klart"
+            : `${todayOpen.length} kvar`}
       </span>
     </Link>
   );
