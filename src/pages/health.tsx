@@ -78,10 +78,7 @@ export default function HealthPage() {
                         </span>
                         <span className="block text-xs text-muted-foreground">{a.what}</span>
                       </span>
-                      <ArrowRight
-                        size={16}
-                        className="mt-0.5 shrink-0 text-muted-foreground"
-                      />
+                      <ArrowRight size={16} className="mt-0.5 shrink-0 text-muted-foreground" />
                     </span>
                   </Link>
                 </li>
