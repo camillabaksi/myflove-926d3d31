@@ -124,7 +124,7 @@ export function ExpandableBlock({
       className={cn(
         "flex min-w-0 flex-col rounded-3xl border border-border/60 shadow-soft transition-shadow",
         area && "area-border",
-        open ? "col-span-full w-full shadow-lifted" : "min-h-[7rem]",
+        open ? "col-span-full w-full shadow-lifted" : "min-h-[9rem]",
         surface ? SURFACE[surface] : "bg-card",
         className,
       )}
@@ -157,7 +157,7 @@ export function ExpandableBlock({
                 ))}
             </span>
             {status != null && (
-              <span className="font-display text-2xl font-bold leading-none text-ink">
+              <span className="font-display text-3xl font-bold leading-none text-ink">
                 {status}
               </span>
             )}
@@ -200,7 +200,7 @@ export function ExpandableBlock({
             </div>
 
             {!open && status != null && (
-              <div className="font-display text-2xl font-bold leading-none text-ink">{status}</div>
+              <div className="font-display text-3xl font-bold leading-none text-ink">{status}</div>
             )}
             {!open && summary != null && (
               <div className="line-clamp-2 text-sm text-muted-foreground">{summary}</div>

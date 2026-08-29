@@ -1259,7 +1259,7 @@ html[data-npf-less="true"] [data-npf="optional"] {
 }
 
 @utility area-border {
-  border-color: hsl(var(--area, var(--primary)) / 0.28);
+  border-color: hsl(var(--area, var(--primary)) / 0.45);
 }
 
 @utility area-dot {
