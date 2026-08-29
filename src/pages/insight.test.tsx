@@ -16,7 +16,10 @@ const state = {
 vi.mock("@tanstack/react-router", () => ({
   Link: ({ children, ...rest }: { children: React.ReactNode }) => <a {...rest}>{children}</a>,
   useNavigate: () => vi.fn(),
-  useRouter: () => ({ history: { canGoBack: () => false, length: 1, back: vi.fn() }, navigate: vi.fn() }),
+  useRouter: () => ({
+    history: { canGoBack: () => false, length: 1, back: vi.fn() },
+    navigate: vi.fn(),
+  }),
   useRouterState: ({ select }: { select: (s: unknown) => unknown }) =>
     select({ location: { search: state.demo ? { demo: "1" } : {} } }),
 }));
@@ -33,9 +36,15 @@ vi.mock("@/hooks/use-insight", () => ({
   }),
 }));
 vi.mock("@/hooks/use-flow-learning", () => ({ useFlowLearning: () => state.knowledge }));
-vi.mock("@/hooks/use-visit-streak", () => ({ useVisitStreak: () => ({ totalDays: state.totalDays }) }));
-vi.mock("@/hooks/use-is-admin", () => ({ useIsAdmin: () => ({ isAdmin: state.demo, loading: false }) }));
-vi.mock("@/lib/storage", () => ({ useLocalStorage: (_k: string, init: unknown) => [init, vi.fn()] }));
+vi.mock("@/hooks/use-visit-streak", () => ({
+  useVisitStreak: () => ({ totalDays: state.totalDays }),
+}));
+vi.mock("@/hooks/use-is-admin", () => ({
+  useIsAdmin: () => ({ isAdmin: state.demo, loading: false }),
+}));
+vi.mock("@/lib/storage", () => ({
+  useLocalStorage: (_k: string, init: unknown) => [init, vi.fn()],
+}));
 vi.mock("@/lib/analytics", () => ({ track: vi.fn() }));
 
 const { default: InsightPage } = await import("@/pages/insight");

@@ -49,9 +49,7 @@ export default function PitchPage() {
 
         <header className="space-y-1">
           <h1 className="text-3xl font-serif font-bold">Pitchmaterial</h1>
-          <p className="text-muted-foreground">
-            Spela upp pitchvideon och ladda ner pitchdecken.
-          </p>
+          <p className="text-muted-foreground">Spela upp pitchvideon och ladda ner pitchdecken.</p>
         </header>
 
         <section className="rounded-2xl border border-border bg-card p-4 space-y-3">

@@ -569,7 +569,14 @@ export default function Layout({ children }: LayoutProps) {
         label: "Hälsa",
         hint: "Energi, mående, träning, medicin och vila",
         icon: HeartPulse,
-        hrefs: ["/halsa", "/mitt-batteri", "/stop-paus", "/traning", "/daglig-rutin", "/energifloede"],
+        hrefs: [
+          "/halsa",
+          "/mitt-batteri",
+          "/stop-paus",
+          "/traning",
+          "/daglig-rutin",
+          "/energifloede",
+        ],
       },
       {
         id: "studyflow",

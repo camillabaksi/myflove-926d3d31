@@ -339,7 +339,11 @@ export default function Home() {
         {shows("nasta") && (
           <section style={pos("nasta")} aria-label="Nästa aktivitet">
             <MyFloveBlock
-              title={<span className="flex items-center gap-2"><CalendarDays size={18} className="text-primary" aria-hidden="true" /> Nästa</span>}
+              title={
+                <span className="flex items-center gap-2">
+                  <CalendarDays size={18} className="text-primary" aria-hidden="true" /> Nästa
+                </span>
+              }
               subtitle="Det som händer närmast"
               collapsible
               collapseId="hem::nasta"
@@ -348,16 +352,31 @@ export default function Home() {
               surface="sky"
             >
               {nextEvent ? (
-                <Link href="/idag" className="group flex items-center gap-4 rounded-2xl bg-card/70 p-4 transition-colors hover:bg-card">
-                  <span aria-hidden className="text-2xl">{nextEvent.emoji}</span>
+                <Link
+                  href="/idag"
+                  className="group flex items-center gap-4 rounded-2xl bg-card/70 p-4 transition-colors hover:bg-card"
+                >
+                  <span aria-hidden className="text-2xl">
+                    {nextEvent.emoji}
+                  </span>
                   <div className="min-w-0 flex-1">
                     <p className="truncate font-medium text-ink">{nextEvent.title}</p>
-                    <p className="text-sm text-muted-foreground">{nextEvent.time ? `kl ${nextEvent.time}${nextEvent.endTime ? `–${nextEvent.endTime}` : ""}` : "Saknar klockslag"}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {nextEvent.time
+                        ? `kl ${nextEvent.time}${nextEvent.endTime ? `–${nextEvent.endTime}` : ""}`
+                        : "Saknar klockslag"}
+                    </p>
                   </div>
-                  <ArrowRight size={18} className="shrink-0 text-muted-foreground group-hover:text-foreground" />
+                  <ArrowRight
+                    size={18}
+                    className="shrink-0 text-muted-foreground group-hover:text-foreground"
+                  />
                 </Link>
               ) : (
-                <p className="rounded-2xl bg-card/70 p-4 text-sm text-muted-foreground">Ingen aktivitet inplanerad just nu. Lägg till en påminnelse eller uppgift så dyker den upp här.</p>
+                <p className="rounded-2xl bg-card/70 p-4 text-sm text-muted-foreground">
+                  Ingen aktivitet inplanerad just nu. Lägg till en påminnelse eller uppgift så dyker
+                  den upp här.
+                </p>
               )}
             </MyFloveBlock>
           </section>
@@ -367,7 +386,11 @@ export default function Home() {
         {shows("medicin") && (
           <section style={pos("medicin")} aria-label="Rutiner och medicin">
             <MyFloveBlock
-              title={<span className="flex items-center gap-2"><span aria-hidden>🔁💊</span> Rutiner &amp; medicin</span>}
+              title={
+                <span className="flex items-center gap-2">
+                  <span aria-hidden>🔁💊</span> Rutiner &amp; medicin
+                </span>
+              }
               subtitle="Det som hjälper dagen att hålla ihop"
               collapsible
               collapseId="hem::rutiner-medicin"
@@ -391,7 +414,12 @@ export default function Home() {
         {shows("forslag") && (
           <section style={pos("forslag")} aria-label="Flows förslag just nu">
             <MyFloveBlock
-              title={<span className="flex items-center gap-2"><FlowMascot size="xs" mood="nod" bump className="flow-alive" alt="" /><Sparkles size={16} className="text-primary" aria-hidden="true" /> Flow · just nu</span>}
+              title={
+                <span className="flex items-center gap-2">
+                  <FlowMascot size="xs" mood="nod" bump className="flow-alive" alt="" />
+                  <Sparkles size={16} className="text-primary" aria-hidden="true" /> Flow · just nu
+                </span>
+              }
               subtitle="Ett lugnt förslag – du väljer själv"
               collapsible
               collapseId="hem::flow-forslag"
@@ -399,8 +427,20 @@ export default function Home() {
               surface="lavender"
             >
               <p className="leading-relaxed text-ink">{suggestion.headline}</p>
-              {suggestion.task && !samsomNasta && <p className="text-sm text-muted-foreground"><span className="font-medium text-ink">{suggestion.task.title}</span>{suggestion.minutes ? ` · ca ${suggestion.minutes} min` : ""}{suggestion.reason ? ` – ${suggestion.reason}` : ""}</p>}
-              <Link href={suggestion.task ? "/idag" : "/quickflow"} className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline">{suggestion.task ? "Planera i Idag" : "Fånga något i QuickFlow"} <ArrowRight size={14} /></Link>
+              {suggestion.task && !samsomNasta && (
+                <p className="text-sm text-muted-foreground">
+                  <span className="font-medium text-ink">{suggestion.task.title}</span>
+                  {suggestion.minutes ? ` · ca ${suggestion.minutes} min` : ""}
+                  {suggestion.reason ? ` – ${suggestion.reason}` : ""}
+                </p>
+              )}
+              <Link
+                href={suggestion.task ? "/idag" : "/quickflow"}
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+              >
+                {suggestion.task ? "Planera i Idag" : "Fånga något i QuickFlow"}{" "}
+                <ArrowRight size={14} />
+              </Link>
             </MyFloveBlock>
           </section>
         )}
@@ -441,10 +481,41 @@ export default function Home() {
                   <li key={s.href}>
                     {s.didThis ? (
                       <DidThisCta
-                        trigger={<span className="group flex w-full items-center gap-3 rounded-2xl bg-card/70 px-3 py-3 text-left transition-colors hover:bg-card"><span aria-hidden className="text-xl">{s.emoji}</span><span className="min-w-0 flex-1"><span className="block text-sm text-ink">{s.thought}</span><span className="block text-xs text-muted-foreground">{s.action}</span></span><ArrowRight size={16} className="shrink-0 text-muted-foreground group-hover:text-foreground" /></span>}
+                        trigger={
+                          <span className="group flex w-full items-center gap-3 rounded-2xl bg-card/70 px-3 py-3 text-left transition-colors hover:bg-card">
+                            <span aria-hidden className="text-xl">
+                              {s.emoji}
+                            </span>
+                            <span className="min-w-0 flex-1">
+                              <span className="block text-sm text-ink">{s.thought}</span>
+                              <span className="block text-xs text-muted-foreground">
+                                {s.action}
+                              </span>
+                            </span>
+                            <ArrowRight
+                              size={16}
+                              className="shrink-0 text-muted-foreground group-hover:text-foreground"
+                            />
+                          </span>
+                        }
                       />
                     ) : (
-                      <Link href={s.href} className="group flex items-center gap-3 rounded-2xl bg-card/70 px-3 py-3 transition-colors hover:bg-card"><span aria-hidden className="text-xl">{s.emoji}</span><span className="min-w-0 flex-1"><span className="block text-sm text-ink">{s.thought}</span><span className="block text-xs text-muted-foreground">{s.action}</span></span><ArrowRight size={16} className="shrink-0 text-muted-foreground group-hover:text-foreground" /></Link>
+                      <Link
+                        href={s.href}
+                        className="group flex items-center gap-3 rounded-2xl bg-card/70 px-3 py-3 transition-colors hover:bg-card"
+                      >
+                        <span aria-hidden className="text-xl">
+                          {s.emoji}
+                        </span>
+                        <span className="min-w-0 flex-1">
+                          <span className="block text-sm text-ink">{s.thought}</span>
+                          <span className="block text-xs text-muted-foreground">{s.action}</span>
+                        </span>
+                        <ArrowRight
+                          size={16}
+                          className="shrink-0 text-muted-foreground group-hover:text-foreground"
+                        />
+                      </Link>
                     )}
                   </li>
                 ))}
@@ -512,7 +583,9 @@ function DaySummary() {
       icon={CalendarDays}
       tone="sky"
       surface="sky"
-      status={total === 0 ? "Inget inplanerat ännu" : `${total} ${total === 1 ? "sak" : "saker"} idag`}
+      status={
+        total === 0 ? "Inget inplanerat ännu" : `${total} ${total === 1 ? "sak" : "saker"} idag`
+      }
       collapsible
       collapseId="hem::dagens-oversikt"
     >
@@ -521,7 +594,10 @@ function DaySummary() {
           ? "Inget inplanerat idag ännu."
           : `${total} ${total === 1 ? "sak" : "saker"} idag · ${todayDone.length} ${todayDone.length === 1 ? "klar" : "klara"} · ${todayOpen.length} kvar`}
       </p>
-      <Link href="/idag" className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline">
+      <Link
+        href="/idag"
+        className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+      >
         Se hela dagen i Idag <ArrowRight size={14} />
       </Link>
     </MyFloveBlock>

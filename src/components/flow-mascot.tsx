@@ -185,7 +185,6 @@ export function FlowMascot({
         className,
       )}
     >
-
       {glow && (
         <span
           aria-hidden
@@ -227,7 +226,6 @@ export function FlowMascot({
           )}
         />
       </span>
-
     </span>
   );
 }

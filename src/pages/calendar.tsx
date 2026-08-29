@@ -76,7 +76,6 @@ function periodDayLabel(start: string, end: string, current: string): string {
   return `dag ${index} av ${total}`;
 }
 
-
 /** Valbara påminnelser innan en händelse börjar. */
 const REMIND_OPTIONS: { value: number | null; label: string }[] = [
   { value: null, label: "Ingen" },
@@ -383,7 +382,9 @@ export default function CalendarPage() {
     const timeRange = time && endTime ? `${time}–${endTime}` : newAnyTime || null;
     const note = newAnyNote.trim() || undefined;
     const periodEnd =
-      newAnyMultiDay && newAnyEndDate && newAnyEndDate > selectedDateStr ? newAnyEndDate : undefined;
+      newAnyMultiDay && newAnyEndDate && newAnyEndDate > selectedDateStr
+        ? newAnyEndDate
+        : undefined;
     try {
       const wantsReminder = Boolean(time) && newAnyRemind !== null;
       if (wantsReminder && getNotificationPermission() === "default") {
@@ -1747,8 +1748,6 @@ export default function CalendarPage() {
                   </div>
                 )}
               </div>
-
-
 
               <div className="space-y-2">
                 <label className="text-sm font-medium">Påminnelse</label>

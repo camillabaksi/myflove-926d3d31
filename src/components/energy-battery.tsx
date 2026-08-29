@@ -84,7 +84,10 @@ export default function EnergyBattery({
           {suggestions.length > 0 && (
             <ul className="space-y-1.5">
               {suggestions.map((s) => (
-                <li key={s.id} className="rounded-2xl bg-secondary/40 px-3 py-2 text-xs text-foreground">
+                <li
+                  key={s.id}
+                  className="rounded-2xl bg-secondary/40 px-3 py-2 text-xs text-foreground"
+                >
                   {s.text}
                 </li>
               ))}
@@ -166,7 +169,11 @@ function BatteryCurve({
         role="img"
         aria-label={`Energikurva över dagen. ${reading.summary}`}
       >
-        <polygon points={`0,${h} ${points.join(" ")} ${w},${h}`} fill="hsl(var(--primary))" opacity={0.12} />
+        <polygon
+          points={`0,${h} ${points.join(" ")} ${w},${h}`}
+          fill="hsl(var(--primary))"
+          opacity={0.12}
+        />
         <polyline
           points={points.join(" ")}
           fill="none"

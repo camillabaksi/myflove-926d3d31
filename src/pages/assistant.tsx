@@ -523,70 +523,88 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
             </div>
           )}
 
-          <MyFloveBlock title="Idag" subtitle="En liten lägesbild från Flow" icon={MessageCircle} tone="lavender" surface="lavender" collapsible collapseId="assistant::idag">
+          <MyFloveBlock
+            title="Idag"
+            subtitle="En liten lägesbild från Flow"
+            icon={MessageCircle}
+            tone="lavender"
+            surface="lavender"
+            collapsible
+            collapseId="assistant::idag"
+          >
             <p className="text-sm leading-snug">{coachMessage.text}</p>
           </MyFloveBlock>
 
-          <MyFloveBlock title="Samtal" subtitle="Skriv när du vill – Flow lyssnar" icon={MessageCircle} tone="lavender" surface="plain" className="p-4" bodyClassName="space-y-4" collapsible collapseId="assistant::samtal">
+          <MyFloveBlock
+            title="Samtal"
+            subtitle="Skriv när du vill – Flow lyssnar"
+            icon={MessageCircle}
+            tone="lavender"
+            surface="plain"
+            className="p-4"
+            bodyClassName="space-y-4"
+            collapsible
+            collapseId="assistant::samtal"
+          >
             <div ref={scrollRef} className="max-h-[55vh] space-y-4 overflow-y-auto">
-            {loadingMessages ? (
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Loader2 className="w-4 h-4 animate-spin" /> Hämtar samtalet…
-              </div>
-            ) : (
-              <>
-                {messages.length === 0 && (
-                  <div className="flex justify-start items-end gap-2">
-                    <FlowMascot size="sm" mood="wave" bump className="shrink-0" />
-                    <div className="max-w-[80%] px-4 py-3 rounded-2xl rounded-bl-sm text-sm leading-relaxed bg-secondary text-foreground">
-                      {GREETING}
-                    </div>
-                  </div>
-                )}
-                {messages.map((m) => (
-                  <div
-                    key={m.id}
-                    className={`flex items-end gap-2 ${m.role === "user" ? "justify-end" : "justify-start"}`}
-                  >
-                    {m.role !== "user" && (
-                      <FlowMascot
-                        size="sm"
-                        mood="calm"
-                        status={flowStatus}
-                        bump
-                        className="shrink-0"
-                      />
-                    )}
-                    <div
-                      className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
-                        m.role === "user"
-                          ? "bg-primary text-primary-foreground rounded-br-sm"
-                          : "bg-secondary text-foreground rounded-bl-sm"
-                      }`}
-                    >
-                      {m.content}
-                    </div>
-                  </div>
-                ))}
-              </>
-            )}
-            {isSending && (
-              <div className="flex justify-start items-end gap-2">
-                <FlowMascot size="sm" mood="think" status="thinking" bump className="shrink-0" />
-                <div className="bg-secondary text-muted-foreground px-4 py-2 rounded-2xl rounded-bl-sm text-sm">
-                  <MyFloveThinking
-                    steps={["💬", "🧠", "💜", "✨"]}
-                    label="Flow tänker…"
-                    className="py-1"
-                  />
+              {loadingMessages ? (
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Loader2 className="w-4 h-4 animate-spin" /> Hämtar samtalet…
                 </div>
-              </div>
-            )}
-            {error && (
-              <div className="text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-xl px-3 py-2">
-                {error}
-              </div>
-            )}
+              ) : (
+                <>
+                  {messages.length === 0 && (
+                    <div className="flex justify-start items-end gap-2">
+                      <FlowMascot size="sm" mood="wave" bump className="shrink-0" />
+                      <div className="max-w-[80%] px-4 py-3 rounded-2xl rounded-bl-sm text-sm leading-relaxed bg-secondary text-foreground">
+                        {GREETING}
+                      </div>
+                    </div>
+                  )}
+                  {messages.map((m) => (
+                    <div
+                      key={m.id}
+                      className={`flex items-end gap-2 ${m.role === "user" ? "justify-end" : "justify-start"}`}
+                    >
+                      {m.role !== "user" && (
+                        <FlowMascot
+                          size="sm"
+                          mood="calm"
+                          status={flowStatus}
+                          bump
+                          className="shrink-0"
+                        />
+                      )}
+                      <div
+                        className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
+                          m.role === "user"
+                            ? "bg-primary text-primary-foreground rounded-br-sm"
+                            : "bg-secondary text-foreground rounded-bl-sm"
+                        }`}
+                      >
+                        {m.content}
+                      </div>
+                    </div>
+                  ))}
+                </>
+              )}
+              {isSending && (
+                <div className="flex justify-start items-end gap-2">
+                  <FlowMascot size="sm" mood="think" status="thinking" bump className="shrink-0" />
+                  <div className="bg-secondary text-muted-foreground px-4 py-2 rounded-2xl rounded-bl-sm text-sm">
+                    <MyFloveThinking
+                      steps={["💬", "🧠", "💜", "✨"]}
+                      label="Flow tänker…"
+                      className="py-1"
+                    />
+                  </div>
+                </div>
+              )}
+              {error && (
+                <div className="text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-xl px-3 py-2">
+                  {error}
+                </div>
+              )}
             </div>
           </MyFloveBlock>
 

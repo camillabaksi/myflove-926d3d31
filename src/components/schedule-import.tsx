@@ -14,12 +14,7 @@ import {
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useStudySchedule } from "@/hooks/use-study-schedule";
 import { useScheduleFiles, type ScheduleFile } from "@/hooks/use-schedule-files";
 import { WEEKDAYS } from "@/lib/study-calendar";
@@ -40,7 +35,6 @@ import {
   readFileAsText,
 } from "@/lib/file-formats";
 
-
 const card = "rounded-3xl border border-border bg-card p-5 shadow-sm";
 const sectionTitle = "flex items-center gap-2 font-display text-lg text-ink";
 
@@ -54,7 +48,6 @@ export function ScheduleImport() {
   const [editIdx, setEditIdx] = useState<number | null>(null);
   const [viewFile, setViewFile] = useState<ScheduleFile | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
-
 
   const goToSchedule = () => {
     const el = document.getElementById("veckoschema");
@@ -81,8 +74,6 @@ export function ScheduleImport() {
     setPreview((prev) => prev.filter((_, i) => i !== idx));
     setEditIdx(null);
   };
-
-
 
   const show = (found: ParsedLecture[]) => {
     if (!found.length) {
@@ -134,7 +125,6 @@ export function ScheduleImport() {
     }
   };
 
-
   const askFlow = async () => {
     if (!text.trim()) return;
     setBusy(true);
@@ -183,10 +173,9 @@ export function ScheduleImport() {
       >
         <p className="mt-1 text-sm text-muted-foreground">
           Klistra in schemat som text, ladda upp en fil (.ics, .txt, .csv) eller ta en bild/PDF på
-          schemat. Flow läser av bilden och gör om den till ditt veckoschema – filen sparas så att du
-          kan titta på originalet när du vill.
+          schemat. Flow läser av bilden och gör om den till ditt veckoschema – filen sparas så att
+          du kan titta på originalet när du vill.
         </p>
-
 
         <div className="mt-3 flex flex-wrap items-center gap-2 rounded-2xl border border-primary/25 bg-primary/5 p-3 text-sm">
           <CalendarCheck className="h-4 w-4 shrink-0 text-primary" />
@@ -313,7 +302,6 @@ export function ScheduleImport() {
           </div>
         )}
 
-
         {preview.length > 0 && (
           <div className="mt-4 rounded-2xl border border-border/70 bg-background p-3">
             <p className="text-xs font-semibold uppercase tracking-wide text-primary">
@@ -321,7 +309,9 @@ export function ScheduleImport() {
             </p>
             <p className="mt-1 text-xs text-muted-foreground">
               {preview.length} lektioner tolkade
-              {newCount !== preview.length ? ` · ${newCount} nya, ${preview.length - newCount} finns redan` : ""}
+              {newCount !== preview.length
+                ? ` · ${newCount} nya, ${preview.length - newCount} finns redan`
+                : ""}
             </p>
             <p className="mt-1 text-xs text-muted-foreground">
               Klicka på en lektion för att ändra dag, tid eller namn innan du sparar.
@@ -335,13 +325,18 @@ export function ScheduleImport() {
                   <ul className="mt-1 space-y-1 text-sm text-ink">
                     {items.map(({ l, idx }) =>
                       editIdx === idx ? (
-                        <li key={idx} className="rounded-xl border border-primary/40 bg-primary/5 p-2">
+                        <li
+                          key={idx}
+                          className="rounded-xl border border-primary/40 bg-primary/5 p-2"
+                        >
                           <div className="flex flex-wrap gap-2">
                             <select
                               className="h-9 rounded-lg border border-border bg-background px-2 text-sm"
                               aria-label="Veckodag"
                               value={l.weekday}
-                              onChange={(e) => updateLecture(idx, { weekday: Number(e.target.value) })}
+                              onChange={(e) =>
+                                updateLecture(idx, { weekday: Number(e.target.value) })
+                              }
                             >
                               {WEEKDAYS.map((d, w) => (
                                 <option key={d} value={w}>
@@ -370,7 +365,9 @@ export function ScheduleImport() {
                             maxLength={120}
                             className="mt-2 h-9 w-full rounded-lg border border-border bg-background px-2 text-sm"
                             value={l.title}
-                            onChange={(e) => updateLecture(idx, { title: e.target.value.slice(0, 120) })}
+                            onChange={(e) =>
+                              updateLecture(idx, { title: e.target.value.slice(0, 120) })
+                            }
                           />
                           <input
                             type="text"
@@ -379,7 +376,9 @@ export function ScheduleImport() {
                             placeholder="Plats (valfritt)"
                             className="mt-2 h-9 w-full rounded-lg border border-border bg-background px-2 text-sm"
                             value={l.location ?? ""}
-                            onChange={(e) => updateLecture(idx, { location: e.target.value.slice(0, 80) })}
+                            onChange={(e) =>
+                              updateLecture(idx, { location: e.target.value.slice(0, 80) })
+                            }
                           />
                           <div className="mt-2 flex gap-2">
                             <Button
@@ -415,7 +414,9 @@ export function ScheduleImport() {
                               {l.location ? ` · ${l.location}` : ""}
                             </span>
                             {existingKeys.has(keyOf(l)) && (
-                              <span className="shrink-0 text-xs text-muted-foreground">finns redan</span>
+                              <span className="shrink-0 text-xs text-muted-foreground">
+                                finns redan
+                              </span>
                             )}
                             <Pencil className="h-3.5 w-3.5 shrink-0 self-center text-muted-foreground" />
                           </button>
@@ -427,7 +428,6 @@ export function ScheduleImport() {
               ))}
             </div>
 
-
             <p className="mt-4 text-xs font-semibold uppercase tracking-wide text-primary">
               Steg 3 · Spara
             </p>
@@ -435,7 +435,14 @@ export function ScheduleImport() {
               <Button className="rounded-full" onClick={save}>
                 <Check className="mr-2 h-4 w-4" /> Spara i schemat
               </Button>
-              <Button variant="ghost" className="rounded-full" onClick={() => { setPreview([]); setEditIdx(null); }}>
+              <Button
+                variant="ghost"
+                className="rounded-full"
+                onClick={() => {
+                  setPreview([]);
+                  setEditIdx(null);
+                }}
+              >
                 Avbryt
               </Button>
             </div>
@@ -475,7 +482,6 @@ export function ScheduleImport() {
         </DialogContent>
       </Dialog>
     </section>
-
   );
 }
 

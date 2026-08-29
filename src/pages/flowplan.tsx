@@ -234,7 +234,9 @@ export default function FlowPlanPage() {
           ...suggestedOrder.filter((id) => !custom.includes(id)),
         ]
       : suggestedOrder;
-    return ids.map((id) => byId.get(id)).filter((item): item is FlowPlanResult["plan"][number] => item !== undefined);
+    return ids
+      .map((id) => byId.get(id))
+      .filter((item): item is FlowPlanResult["plan"][number] => item !== undefined);
   }, [plan, storedPlan?.customOrder, suggestedOrder]);
 
   const hasCustomOrder = (storedPlan?.customOrder ?? []).length > 0;

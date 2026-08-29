@@ -10,8 +10,18 @@ import { fireEvent, render, screen } from "@testing-library/react";
 const toggleTask = vi.fn();
 const snoozeTask = vi.fn();
 
-const battery = { now: 70, peak: null as null | { label: string }, overloaded: false, trend: "jamn" as const };
-const checkin = { moodValue: 4 as number | null, energyValue: 4 as number | null, logMood: vi.fn(), logEnergy: vi.fn() };
+const battery = {
+  now: 70,
+  peak: null as null | { label: string },
+  overloaded: false,
+  trend: "jamn" as const,
+};
+const checkin = {
+  moodValue: 4 as number | null,
+  energyValue: 4 as number | null,
+  logMood: vi.fn(),
+  logEnergy: vi.fn(),
+};
 let weather: { temperature: number; city: string; code: number } | null = null;
 let suggestionTask: { id: string; title: string } | null = null;
 
@@ -71,7 +81,10 @@ describe("FlowDeck – en sak i taget", () => {
     const { container } = render(<FlowDeck />);
     expect(container.querySelectorAll("[data-flow-slide]")).toHaveLength(1);
     expect(container.querySelectorAll("[data-flow-character]")).toHaveLength(1);
-    expect(container.querySelector("[data-flow-slide]")).toHaveAttribute("data-flow-slide-active", "true");
+    expect(container.querySelector("[data-flow-slide]")).toHaveAttribute(
+      "data-flow-slide-active",
+      "true",
+    );
   });
 
   it("behåller exakt en slide efter att man bläddrar framåt", () => {
@@ -84,7 +97,10 @@ describe("FlowDeck – en sak i taget", () => {
 
   it("startar på intro med Flows hälsningsscen", () => {
     render(<FlowDeck />);
-    expect(document.querySelector("[data-flow-slide]")).toHaveAttribute("data-flow-slide-id", "intro");
+    expect(document.querySelector("[data-flow-slide]")).toHaveAttribute(
+      "data-flow-slide-id",
+      "intro",
+    );
     expect(activeScene()).toBe("hello");
   });
 
@@ -92,7 +108,10 @@ describe("FlowDeck – en sak i taget", () => {
     weather = { temperature: 12, city: "Stockholm", code: 61 };
     render(<FlowDeck />);
     fireEvent.click(screen.getByLabelText("Nästa vy"));
-    expect(document.querySelector("[data-flow-slide]")).toHaveAttribute("data-flow-slide-id", "weather");
+    expect(document.querySelector("[data-flow-slide]")).toHaveAttribute(
+      "data-flow-slide-id",
+      "weather",
+    );
     expect(activeScene()).toBe("rain");
     expect(document.querySelectorAll('[data-flow-prop="umbrella"]').length).toBeGreaterThan(0);
     expect(document.querySelectorAll("[data-flow-character]")).toHaveLength(1);
@@ -111,7 +130,10 @@ describe("FlowDeck – en sak i taget", () => {
     battery.overloaded = true;
     render(<FlowDeck />);
     fireEvent.click(screen.getByLabelText("Nästa vy"));
-    expect(document.querySelector("[data-flow-slide]")).toHaveAttribute("data-flow-slide-id", "rest");
+    expect(document.querySelector("[data-flow-slide]")).toHaveAttribute(
+      "data-flow-slide-id",
+      "rest",
+    );
     expect(activeScene()).toBe("rest");
     expect(document.querySelectorAll('[data-flow-prop="breathRing"]').length).toBeGreaterThan(0);
   });
@@ -121,10 +143,17 @@ describe("FlowDeck – en sak i taget", () => {
     render(<FlowDeck />);
     const nextButton = screen.getByLabelText("Nästa vy");
     for (let i = 0; i < 6; i++) {
-      if (document.querySelector("[data-flow-slide]")?.getAttribute("data-flow-slide-id") === "suggestion") break;
+      if (
+        document.querySelector("[data-flow-slide]")?.getAttribute("data-flow-slide-id") ===
+        "suggestion"
+      )
+        break;
       fireEvent.click(nextButton);
     }
-    expect(document.querySelector("[data-flow-slide]")).toHaveAttribute("data-flow-slide-id", "suggestion");
+    expect(document.querySelector("[data-flow-slide]")).toHaveAttribute(
+      "data-flow-slide-id",
+      "suggestion",
+    );
     expect(activeScene()).toBe("clean");
     expect(document.querySelectorAll('[data-flow-prop="vacuum"]').length).toBeGreaterThan(0);
     expect(document.querySelectorAll("[data-flow-character]")).toHaveLength(1);

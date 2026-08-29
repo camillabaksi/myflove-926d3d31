@@ -49,8 +49,8 @@ export default function HealthPage() {
         <div className="space-y-2">
           <EnergyBattery href="/mitt-batteri" />
           <p className="text-xs text-muted-foreground">
-            Energi, mående, sömn och dagens början och slut checkar du in här – Mitt batteri är
-            enda stället du behöver.
+            Energi, mående, sömn och dagens början och slut checkar du in här – Mitt batteri är enda
+            stället du behöver.
           </p>
         </div>
 

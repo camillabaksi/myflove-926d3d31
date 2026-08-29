@@ -32,7 +32,10 @@ export default function DayEdgesCheckin({ className }: { className?: string }) {
   return (
     <section
       aria-label="Morgon och kväll"
-      className={cn("space-y-4 rounded-3xl border border-border/60 bg-card p-5 shadow-soft", className)}
+      className={cn(
+        "space-y-4 rounded-3xl border border-border/60 bg-card p-5 shadow-soft",
+        className,
+      )}
     >
       <div>
         <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">

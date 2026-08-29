@@ -52,7 +52,11 @@ export default function BatteryPage() {
 
         {/* 4. Historik – sekundär, längst ner */}
         <MyFloveBlock
-          title={<span className="flex items-center gap-2"><LineChart size={18} className="text-primary" aria-hidden="true" /> Se min historik</span>}
+          title={
+            <span className="flex items-center gap-2">
+              <LineChart size={18} className="text-primary" aria-hidden="true" /> Se min historik
+            </span>
+          }
           subtitle="Tidigare mående, energi och energiflöde"
           icon={LineChart}
           tone="lavender"
@@ -62,15 +66,32 @@ export default function BatteryPage() {
         >
           <Tabs defaultValue="mood" className="w-full" data-testid="battery-history">
             <TabsList className="grid h-11 w-full grid-cols-3 rounded-2xl">
-              <TabsTrigger value="mood" className="rounded-xl text-xs"><Smile size={14} className="mr-1" /> Mående</TabsTrigger>
-              <TabsTrigger value="energy" className="rounded-xl text-xs"><Battery size={14} className="mr-1" /> Energi</TabsTrigger>
-              <TabsTrigger value="flow" className="rounded-xl text-xs"><Zap size={14} className="mr-1" /> Flöde</TabsTrigger>
+              <TabsTrigger value="mood" className="rounded-xl text-xs">
+                <Smile size={14} className="mr-1" /> Mående
+              </TabsTrigger>
+              <TabsTrigger value="energy" className="rounded-xl text-xs">
+                <Battery size={14} className="mr-1" /> Energi
+              </TabsTrigger>
+              <TabsTrigger value="flow" className="rounded-xl text-xs">
+                <Zap size={14} className="mr-1" /> Flöde
+              </TabsTrigger>
             </TabsList>
-            <TabsContent value="mood" className="mt-6"><MoodContent showHeader={false} readOnly /></TabsContent>
-            <TabsContent value="energy" className="mt-6"><EnergyContent showHeader={false} /></TabsContent>
-            <TabsContent value="flow" className="mt-6"><EnergyFlowContent showHeader={false} showDayFlow={false} /></TabsContent>
+            <TabsContent value="mood" className="mt-6">
+              <MoodContent showHeader={false} readOnly />
+            </TabsContent>
+            <TabsContent value="energy" className="mt-6">
+              <EnergyContent showHeader={false} />
+            </TabsContent>
+            <TabsContent value="flow" className="mt-6">
+              <EnergyFlowContent showHeader={false} showDayFlow={false} />
+            </TabsContent>
           </Tabs>
-          <Link href="/energifloede" className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline">Mer om vad som ger och tar energi <ArrowRight size={14} /></Link>
+          <Link
+            href="/energifloede"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+          >
+            Mer om vad som ger och tar energi <ArrowRight size={14} />
+          </Link>
         </MyFloveBlock>
       </div>
     </Layout>

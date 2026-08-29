@@ -9,7 +9,6 @@ import { getRandomEncouragement } from "@/lib/encouragements";
 import { routineOccursOn, type Routine } from "@/pages/routines";
 import { medicationOccursOn } from "@/lib/medications";
 
-
 /**
  * 🔁💊 Rutiner & medicin – ett gemensamt, ihopfällbart block längst ner på Hem.
  * Samma data som i "Rutiner & medicin": inga dubbletter, en bock här är en bock där.

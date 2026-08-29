@@ -132,9 +132,7 @@ export default function BatteryToday() {
                       <Clock size={14} aria-hidden="true" className="text-muted-foreground" />
                       {timeOf(o.ts)}
                     </span>
-                    <span
-                      className={`rounded-pill px-2.5 py-0.5 text-xs font-medium ${part.tone}`}
-                    >
+                    <span className={`rounded-pill px-2.5 py-0.5 text-xs font-medium ${part.tone}`}>
                       {part.label} <span aria-hidden>{part.emoji}</span>
                     </span>
                   </div>
