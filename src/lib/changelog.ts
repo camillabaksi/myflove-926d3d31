@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Komprimerade och expanderbara block",
+    items: [
+      "Informationsrika block visar en lugn sammanfattning först och öppnar samma innehåll i en fokuserad vy vid tryck (2026-08-29)",
+      "Stäng, Escape och Androids bakåtknapp återför användaren till samma block med återställd fokus och scrollposition (2026-08-29)",
+      "Reduced motion respekteras utan ändrad funktionalitet, data eller navigation (2026-08-29)",
+    ],
+  },
+  {
     title: "Responsivt blocksystem",
     items: [
       "Ett gemensamt CSS-grid placerar lämpliga block bredvid varandra i stället för att stapla varje sektion som en hel rad (2026-08-29)",

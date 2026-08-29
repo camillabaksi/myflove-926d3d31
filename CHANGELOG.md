@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-29 – Komprimerade och expanderbara block
+
+- Informationsrika block visar nu en lugn sammanfattning först och öppnar samma innehåll i en fokuserad vy vid tryck.
+- Den expanderade vyn kan stängas med Stäng, Escape eller Androids bakåtknapp; fokus och scrollposition återställs till samma block.
+- Reduced motion respekteras utan att ändra funktionalitet, data, navigation eller befintliga användarflöden.
+
 ## 2026-08-29 – Responsivt blocksystem
 
 - MyFlove använder ett gemensamt CSS-grid som aktivt placerar lämpliga block bredvid varandra i stället för att stapla varje sektion som en hel rad.
