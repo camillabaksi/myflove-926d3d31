@@ -3,7 +3,12 @@ import { Link } from "wouter";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import FocusMode from "@/components/focus-mode";
-import { FlowCharacter, isWetWeather, sceneForTask, type FlowScene } from "@/components/flow/flow-character";
+import {
+  FlowCharacter,
+  isWetWeather,
+  sceneForTask,
+  type FlowScene,
+} from "@/components/flow/flow-character";
 import { useTasks } from "@/hooks/use-data";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";
@@ -46,7 +51,9 @@ export default function FlowDeck() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [celebrating, setCelebrating] = useState(false);
   const [dragging, setDragging] = useState(false);
-  const drag = useRef<{ x: number; y: number; time: number; axis: "none" | "x" | "y" } | null>(null);
+  const drag = useRef<{ x: number; y: number; time: number; axis: "none" | "x" | "y" } | null>(
+    null,
+  );
   const viewportRef = useRef<HTMLDivElement | null>(null);
   const activeSlideRef = useRef<HTMLDivElement | null>(null);
   const shouldFocusSlide = useRef(false);
@@ -80,14 +87,22 @@ export default function FlowDeck() {
       heavyDay: load.weight === "tung",
     });
     return ["intro", ...(rainy ? (["weather"] as DeckSlideId[]) : []), ...base];
-  }, [moodValue, energyValue, reading.now, reading.overloaded, suggestion.task, load.weight, rainy]);
+  }, [
+    moodValue,
+    energyValue,
+    reading.now,
+    reading.overloaded,
+    suggestion.task,
+    load.weight,
+    rainy,
+  ]);
 
   // Läs önskad startslide från URL:en (?slide=2 eller ?slide=suggestion)
   const requestedSlide = useRef<string | null>(
     typeof window === "undefined"
       ? null
       : (new URLSearchParams(window.location.search).get("slide") ??
-        new URLSearchParams(window.location.hash.replace(/^#/, "")).get("slide")),
+          new URLSearchParams(window.location.hash.replace(/^#/, "")).get("slide")),
   );
   const appliedInitial = useRef(false);
 
@@ -128,7 +143,6 @@ export default function FlowDeck() {
     setCurrentSlide(clamped);
   };
 
-
   const next = (focusSlide = false) => goTo(currentSlide + 1, focusSlide);
   const previous = (focusSlide = false) => goTo(currentSlide - 1, focusSlide);
   const activeSlide: DeckSlideId = celebrating ? "done" : (slides[currentSlide] ?? "intro");
@@ -150,7 +164,9 @@ export default function FlowDeck() {
   /** Drag ska inte starta på knappar, reglage eller fält. */
   const isInteractive = (target: EventTarget | null) =>
     target instanceof Element &&
-    Boolean(target.closest("button, a, input, textarea, select, [role='slider'], [contenteditable]"));
+    Boolean(
+      target.closest("button, a, input, textarea, select, [role='slider'], [contenteditable]"),
+    );
 
   const onPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
     if (slides.length < 2 || isInteractive(event.target)) return;
@@ -213,7 +229,6 @@ export default function FlowDeck() {
       setCurrentSlide((v) => Math.min(slides.length - 1, v + 1));
     }, 2200);
   };
-
 
   return (
     <section
@@ -419,9 +434,20 @@ function FlowSlide({
 
   if (id === "energy") {
     const scene: FlowScene =
-      reading.now >= 66 ? "energyHigh" : reading.now < 20 ? "sleep" : reading.now < 40 ? "energyLow" : "mood";
+      reading.now >= 66
+        ? "energyHigh"
+        : reading.now < 20
+          ? "sleep"
+          : reading.now < 40
+            ? "energyLow"
+            : "mood";
     return (
-      <SlideShell scene={scene} seed={seed} energy={reading.now} title={`Ditt batteri: ${Math.round(reading.now)} %`}>
+      <SlideShell
+        scene={scene}
+        seed={seed}
+        energy={reading.now}
+        title={`Ditt batteri: ${Math.round(reading.now)} %`}
+      >
         <p className="text-sm text-muted-foreground">
           {energySentence(reading.now, reading.trend)}
         </p>
@@ -462,9 +488,7 @@ function FlowSlide({
   if (!suggestion.task) {
     return (
       <SlideShell scene="think" seed={seed} title="Inget måste just nu">
-        <p className="text-sm text-muted-foreground">
-          Det räcker att bara vara idag. 💙
-        </p>
+        <p className="text-sm text-muted-foreground">Det räcker att bara vara idag. 💙</p>
       </SlideShell>
     );
   }
@@ -490,7 +514,11 @@ function FlowSlide({
         <button type="button" onClick={onDone} className="underline-offset-2 hover:underline">
           Redan klar
         </button>
-        <button type="button" onClick={onMoveTomorrow} className="underline-offset-2 hover:underline">
+        <button
+          type="button"
+          onClick={onMoveTomorrow}
+          className="underline-offset-2 hover:underline"
+        >
           Flytta till imorgon
         </button>
       </div>

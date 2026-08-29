@@ -67,7 +67,7 @@ export function useFlowPersonalContext(): string {
       );
     }
 
-    lines.push(TONE[settings.level] ?? TONE['diskret'] ?? "");
+    lines.push(TONE[settings.level] ?? TONE["diskret"] ?? "");
 
     return lines.filter(Boolean).join("\n");
   }, [name, profile, situation, knowledge, settings.level, moods]);

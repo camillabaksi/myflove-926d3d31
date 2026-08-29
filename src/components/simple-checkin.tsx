@@ -113,7 +113,6 @@ export default function SimpleCheckin({
 
   const step = Math.max(1, Math.min(5, Math.round(battery / 2)));
 
-
   return (
     <section
       aria-label="Logga energi och mående"
@@ -245,7 +244,6 @@ export default function SimpleCheckin({
       >
         {saved ? "💜 Tack" : "Logga energi & mående"}
       </button>
-
 
       <p aria-live="polite" className="text-xs text-muted-foreground">
         {saved

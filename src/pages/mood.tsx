@@ -67,55 +67,57 @@ export function MoodContent({ showHeader = true, readOnly = false }: MoodContent
           <span className="font-medium text-ink">Mitt batteri → Logga energi &amp; mående</span>.
         </div>
       ) : (
-      <div className="bg-card p-6 md:p-8 rounded-3xl shadow-sm border border-border">
-        {justSaved ? (
-          <div className="text-center py-8 animate-in fade-in zoom-in duration-500">
-            <div className="text-5xl mb-4">💚</div>
-            <h2 className="text-xl font-medium">Tack för att du checkade in</h2>
-            <p className="text-muted-foreground mt-2">Det är värdefullt att lyssna på sig själv.</p>
-          </div>
-        ) : (
-          <div className="space-y-8 animate-in fade-in">
-            <div className="flex justify-between md:justify-center md:gap-6">
-              {EMOJIS.map((item) => (
-                <button
-                  key={item.score}
-                  onClick={() => setSelectedScore(item.score)}
-                  className={`flex flex-col items-center gap-2 p-2 rounded-2xl transition-all ${
-                    selectedScore === item.score
-                      ? "bg-primary/10 scale-110"
-                      : "hover:bg-secondary opacity-70 hover:opacity-100 grayscale-[0.5] hover:grayscale-0"
-                  }`}
-                >
-                  <span className="text-4xl md:text-5xl drop-shadow-sm">{item.emoji}</span>
-                  <span
-                    className={`text-xs md:text-sm font-medium ${selectedScore === item.score ? "text-primary" : "text-muted-foreground"}`}
-                  >
-                    {item.label}
-                  </span>
-                </button>
-              ))}
+        <div className="bg-card p-6 md:p-8 rounded-3xl shadow-sm border border-border">
+          {justSaved ? (
+            <div className="text-center py-8 animate-in fade-in zoom-in duration-500">
+              <div className="text-5xl mb-4">💚</div>
+              <h2 className="text-xl font-medium">Tack för att du checkade in</h2>
+              <p className="text-muted-foreground mt-2">
+                Det är värdefullt att lyssna på sig själv.
+              </p>
             </div>
-
-            {selectedScore !== null && (
-              <div className="space-y-4 animate-in fade-in slide-in-from-top-4 duration-300">
-                <textarea
-                  value={note}
-                  onChange={(e) => setNote(e.target.value)}
-                  placeholder="Vill du skriva en kort rad om varför? (Valfritt)"
-                  className="w-full h-24 p-4 rounded-2xl bg-secondary/50 border-transparent focus:border-primary focus:ring-1 focus:ring-primary outline-none resize-none transition-all text-base"
-                />
-                <Button
-                  onClick={handleSave}
-                  className="w-full h-14 rounded-2xl text-lg font-medium shadow-sm"
-                >
-                  Spara mående
-                </Button>
+          ) : (
+            <div className="space-y-8 animate-in fade-in">
+              <div className="flex justify-between md:justify-center md:gap-6">
+                {EMOJIS.map((item) => (
+                  <button
+                    key={item.score}
+                    onClick={() => setSelectedScore(item.score)}
+                    className={`flex flex-col items-center gap-2 p-2 rounded-2xl transition-all ${
+                      selectedScore === item.score
+                        ? "bg-primary/10 scale-110"
+                        : "hover:bg-secondary opacity-70 hover:opacity-100 grayscale-[0.5] hover:grayscale-0"
+                    }`}
+                  >
+                    <span className="text-4xl md:text-5xl drop-shadow-sm">{item.emoji}</span>
+                    <span
+                      className={`text-xs md:text-sm font-medium ${selectedScore === item.score ? "text-primary" : "text-muted-foreground"}`}
+                    >
+                      {item.label}
+                    </span>
+                  </button>
+                ))}
               </div>
-            )}
-          </div>
-        )}
-      </div>
+
+              {selectedScore !== null && (
+                <div className="space-y-4 animate-in fade-in slide-in-from-top-4 duration-300">
+                  <textarea
+                    value={note}
+                    onChange={(e) => setNote(e.target.value)}
+                    placeholder="Vill du skriva en kort rad om varför? (Valfritt)"
+                    className="w-full h-24 p-4 rounded-2xl bg-secondary/50 border-transparent focus:border-primary focus:ring-1 focus:ring-primary outline-none resize-none transition-all text-base"
+                  />
+                  <Button
+                    onClick={handleSave}
+                    className="w-full h-14 rounded-2xl text-lg font-medium shadow-sm"
+                  >
+                    Spara mående
+                  </Button>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       )}
 
       <button

@@ -120,7 +120,6 @@ export function useQuickCheckin() {
     [setMoods, setCheckin10],
   );
 
-
   // Håller reda på dagens rad-id direkt (utan att vänta på state-uppdatering)
   // och serialiserar sparningar så att snabba upprepade ändringar aldrig
   // skapar fler än en loggrad per dag.

@@ -45,7 +45,6 @@ export default function BatteryPage() {
         <DayEdgesCheckin />
         <DayEnergyFlow />
 
-
         {/* 4. Historik – sekundär, längst ner */}
         <section
           aria-label="Se min historik"

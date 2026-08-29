@@ -72,7 +72,6 @@ export default function EnergyBattery({
             className="absolute inset-y-0 left-0 rounded-[7px] motion-safe:transition-[width] motion-safe:duration-700 motion-safe:ease-out"
             style={{ width: `${Math.max(4, level)}%`, backgroundColor: tone, opacity: 0.85 }}
           />
-          
         </span>
         <span className="ml-0.5 h-3 w-1 rounded-r-sm bg-border" />
       </span>
@@ -118,7 +117,6 @@ export default function EnergyBattery({
       </Link>
     );
   }
-
 
   return (
     <section
