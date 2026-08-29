@@ -41,8 +41,11 @@ export interface MyFloveBlockProps {
   defaultCollapsed?: boolean;
   /** Mjuk pastellton i stället för vit kortyta. */
   surface?: MyFloveTone;
+  /** Områdets färgidentitet – se src/lib/areas.ts. */
+  area?: AreaId;
   /** Låt blocket spänna över båda kolumnerna i ett MyFloveBlockGrid. */
   span?: boolean;
+
   className?: string;
   bodyClassName?: string;
   "data-testid"?: string;
