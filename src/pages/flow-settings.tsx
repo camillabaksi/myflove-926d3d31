@@ -53,7 +53,7 @@ export default function FlowSettingsPage() {
         </header>
       </MyFloveWide>
 
-      <Card className="rounded-3xl">
+      <Card className="rounded-3xl xl:col-span-2">
         <CardHeader>
           <CardTitle className="text-base">Hjälpnivå</CardTitle>
           <CardDescription>Hur mycket plats Flow får ta i vardagen.</CardDescription>
@@ -155,32 +155,34 @@ export default function FlowSettingsPage() {
         </CardContent>
       </Card>
 
-      <Card className="rounded-3xl">
-        <CardHeader>
-          <CardTitle className="text-base">Vad ska Flow prioritera?</CardTitle>
-          <CardDescription>
-            Välj vilka typer av tider Flow håller extra koll på. Resten ligger kvar i appen som
-            vanligt.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          {FLOW_PRIORITIES.map((p) => (
-            <div key={p.key} className="flex items-start justify-between gap-3">
-              <div className="space-y-0.5">
-                <Label htmlFor={`flow-p-${p.key}`} className="text-sm font-normal">
-                  {p.label}
-                </Label>
-                <p className="text-xs text-muted-foreground">{p.hint}</p>
+      <MyFloveWide>
+        <Card className="rounded-3xl">
+          <CardHeader>
+            <CardTitle className="text-base">Vad ska Flow prioritera?</CardTitle>
+            <CardDescription>
+              Välj vilka typer av tider Flow håller extra koll på. Resten ligger kvar i appen som
+              vanligt.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {FLOW_PRIORITIES.map((p) => (
+              <div key={p.key} className="flex items-start justify-between gap-3">
+                <div className="space-y-0.5">
+                  <Label htmlFor={`flow-p-${p.key}`} className="text-sm font-normal">
+                    {p.label}
+                  </Label>
+                  <p className="text-xs text-muted-foreground">{p.hint}</p>
+                </div>
+                <Switch
+                  id={`flow-p-${p.key}`}
+                  checked={settings.priorities[p.key] !== false}
+                  onCheckedChange={(v) => togglePriority(p.key, v)}
+                />
               </div>
-              <Switch
-                id={`flow-p-${p.key}`}
-                checked={settings.priorities[p.key] !== false}
-                onCheckedChange={(v) => togglePriority(p.key, v)}
-              />
-            </div>
-          ))}
-        </CardContent>
-      </Card>
+            ))}
+          </CardContent>
+        </Card>
+      </MyFloveWide>
 
       <MyFloveWide>
         <div className="flex flex-wrap items-center gap-2">

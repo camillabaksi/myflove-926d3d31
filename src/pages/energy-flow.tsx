@@ -145,9 +145,9 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
         </MyFloveWide>
       )}
 
-      <MyFloveWide>
+      <div className="min-w-0">
         <DidThisQuickAdd />
-      </MyFloveWide>
+      </div>
 
       {showDayFlow && (
         <MyFloveWide>
@@ -195,6 +195,7 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
       </CollapsibleSection>
 
       <CollapsibleSection
+        className="xl:col-span-2"
         title="Lägg till något som påverkar"
         help="Skriv vad som helst som påverkar din energi – sömn, ljud, en konflikt, egentid, en promenad. Det blir aldrig en kalenderhändelse."
       >
@@ -328,6 +329,7 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
       </CollapsibleSection>
 
       <CollapsibleSection
+        className="xl:col-span-2"
         title="Idag"
         help="Allt du registrerat idag. Du kan stänga av påverkan på enstaka poster utan att ta bort dem."
       >
@@ -416,6 +418,7 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
       </CollapsibleSection>
 
       <CollapsibleSection
+        className="xl:col-span-2"
         title="Mönster över tid"
         help="Enkla sammanställningar av dina egna poster. Ingen värdering – bara vad du själv har registrerat."
       >

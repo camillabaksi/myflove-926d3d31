@@ -265,7 +265,7 @@ export default function CleaningPage() {
         </MyFloveWide>
 
         {/* Lägg till eget steg */}
-        <MyFloveWide>
+        <div className="min-w-0">
           <section className="rounded-3xl border border-border bg-card p-4 space-y-3">
             <p className="text-sm font-medium text-foreground">Lägg till eget steg</p>
             <div className="flex flex-wrap gap-2">
@@ -301,10 +301,10 @@ export default function CleaningPage() {
               </button>
             )}
           </section>
-        </MyFloveWide>
+        </div>
 
         {/* Vad du behöver */}
-        <MyFloveWide>
+        <div className="min-w-0">
           <section className="rounded-3xl border border-border bg-card p-5">
             <CollapsibleSection
               title={
@@ -333,7 +333,7 @@ export default function CleaningPage() {
               )}
             </CollapsibleSection>
           </section>
-        </MyFloveWide>
+        </div>
 
         <MyFloveWide>
           <p className="flex items-center justify-center gap-2 pb-4 text-center text-sm text-muted-foreground">

@@ -280,7 +280,7 @@ export default function Shopping() {
           )}
         </MyFloveWide>
 
-        <MyFloveWide>
+        <MyFloveWide span="wide">
           <div className="space-y-6">
             {activeItems.length === 0 && completedItems.length === 0 && (
               <div className="text-center py-16 text-muted-foreground border-2 border-dashed border-border rounded-3xl">
@@ -352,9 +352,9 @@ export default function Shopping() {
           </div>
         </MyFloveWide>
 
-        <MyFloveWide>
+        <div className="min-w-0">
           <StoreLocations />
-        </MyFloveWide>
+        </div>
       </MyFlovePageGrid>
     </Layout>
   );

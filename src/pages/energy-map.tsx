@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Layout from "@/components/layout";
 import { Button } from "@/components/ui/button";
+import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { supabase } from "@/integrations/supabase/client";
 import { Battery, Loader2, Sparkles } from "lucide-react";
 import {
@@ -148,170 +149,182 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
   }
 
   return (
-    <div className="space-y-6">
+    <MyFlovePageGrid>
       {showHeader && (
-        <header className="space-y-1">
-          <div className="flex items-center gap-2">
-            <Battery className="text-primary" size={28} />
-            <h1 className="text-2xl font-semibold tracking-tight">Energikarta</h1>
-          </div>
-          <p className="text-sm text-muted-foreground">
-            Logga hur du känner dig just nu. Flow lär sig när på dygnet du har mest att ge – och när
-            du behöver vila.
-          </p>
-        </header>
+        <MyFloveWide>
+          <header className="space-y-1">
+            <div className="flex items-center gap-2">
+              <Battery className="text-primary" size={28} />
+              <h1 className="text-2xl font-semibold tracking-tight">Energikarta</h1>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Logga hur du känner dig just nu. Flow lär sig när på dygnet du har mest att ge – och
+              när du behöver vila.
+            </p>
+          </header>
+        </MyFloveWide>
       )}
 
       {!userId && !loading && (
-        <div className="rounded-2xl bg-card border border-border p-4 text-sm text-muted-foreground">
-          Logga in för att spara din energi över tid.
-        </div>
+        <MyFloveWide>
+          <div className="rounded-2xl bg-card border border-border p-4 text-sm text-muted-foreground">
+            Logga in för att spara din energi över tid.
+          </div>
+        </MyFloveWide>
       )}
 
       {userId && (
-        <CollapsibleSection
-          title="Hur känns det just nu?"
-          help="Tryck på en nivå. Det tar två sekunder och styr hur mycket appen föreslår idag."
-          headingClassName="font-medium"
-          description="Välj det som passar närmast – det finns inga fel svar."
-          className="rounded-2xl bg-card border border-border p-5 shadow-sm"
-        >
-          <div className="grid grid-cols-5 gap-2">
-            {[1, 2, 3, 4, 5].map((lvl) => {
-              const active = selected === lvl;
-              return (
-                <button
-                  key={lvl}
-                  type="button"
-                  onClick={() => setSelected(lvl)}
-                  className={`flex flex-col items-center justify-center gap-1 rounded-2xl border p-3 transition-all ${
-                    active
-                      ? "bg-primary text-primary-foreground border-primary shadow-sm scale-[1.02]"
-                      : "bg-secondary/40 border-transparent hover:bg-secondary"
-                  }`}
-                >
-                  <span className="text-2xl leading-none">{LEVEL_EMOJI[lvl]}</span>
-                  <span className="text-[11px] leading-tight">{LEVEL_LABELS[lvl]}</span>
-                </button>
-              );
-            })}
-          </div>
-          {selected !== null && (
-            <div className="space-y-3 animate-in fade-in slide-in-from-top-1">
-              <MyFloveEnergyDots value={selected} className="justify-center pt-1" />
-              <textarea
-                value={note}
-                onChange={(e) => setNote(e.target.value)}
-                placeholder="Något som påverkade? (valfritt)"
-                className="w-full rounded-xl border border-border bg-background p-3 text-sm resize-none"
-                rows={2}
-              />
-              <div className="flex gap-2">
-                <Button onClick={handleSave} disabled={saving} className="flex-1">
-                  {saving ? <Loader2 className="animate-spin" size={16} /> : "Spara"}
-                </Button>
-                <Button
-                  variant="ghost"
-                  onClick={() => {
-                    setSelected(null);
-                    setNote("");
-                  }}
-                >
-                  Avbryt
-                </Button>
-              </div>
+        <MyFloveWide>
+          <CollapsibleSection
+            title="Hur känns det just nu?"
+            help="Tryck på en nivå. Det tar två sekunder och styr hur mycket appen föreslår idag."
+            headingClassName="font-medium"
+            description="Välj det som passar närmast – det finns inga fel svar."
+            className="rounded-2xl bg-card border border-border p-5 shadow-sm"
+          >
+            <div className="grid grid-cols-5 gap-2">
+              {[1, 2, 3, 4, 5].map((lvl) => {
+                const active = selected === lvl;
+                return (
+                  <button
+                    key={lvl}
+                    type="button"
+                    onClick={() => setSelected(lvl)}
+                    className={`flex flex-col items-center justify-center gap-1 rounded-2xl border p-3 transition-all ${
+                      active
+                        ? "bg-primary text-primary-foreground border-primary shadow-sm scale-[1.02]"
+                        : "bg-secondary/40 border-transparent hover:bg-secondary"
+                    }`}
+                  >
+                    <span className="text-2xl leading-none">{LEVEL_EMOJI[lvl]}</span>
+                    <span className="text-[11px] leading-tight">{LEVEL_LABELS[lvl]}</span>
+                  </button>
+                );
+              })}
             </div>
-          )}
-          {error && <p className="text-sm text-destructive">{error}</p>}
-        </CollapsibleSection>
+            {selected !== null && (
+              <div className="space-y-3 animate-in fade-in slide-in-from-top-1">
+                <MyFloveEnergyDots value={selected} className="justify-center pt-1" />
+                <textarea
+                  value={note}
+                  onChange={(e) => setNote(e.target.value)}
+                  placeholder="Något som påverkade? (valfritt)"
+                  className="w-full rounded-xl border border-border bg-background p-3 text-sm resize-none"
+                  rows={2}
+                />
+                <div className="flex gap-2">
+                  <Button onClick={handleSave} disabled={saving} className="flex-1">
+                    {saving ? <Loader2 className="animate-spin" size={16} /> : "Spara"}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    onClick={() => {
+                      setSelected(null);
+                      setNote("");
+                    }}
+                  >
+                    Avbryt
+                  </Button>
+                </div>
+              </div>
+            )}
+            {error && <p className="text-sm text-destructive">{error}</p>}
+          </CollapsibleSection>
+        </MyFloveWide>
       )}
 
       {loading ? (
-        <div className="flex items-center justify-center py-12 text-muted-foreground">
-          <Loader2 className="animate-spin" size={20} />
-        </div>
+        <MyFloveWide>
+          <div className="flex items-center justify-center py-12 text-muted-foreground">
+            <Loader2 className="animate-spin" size={20} />
+          </div>
+        </MyFloveWide>
       ) : (
         <>
-          <CollapsibleSection
-            title="Idag"
-            headingClassName="font-medium"
-            description={
-              todayLogs.length === 0
-                ? "Ingen loggning idag än – lägg en när det passar."
-                : `${todayLogs.length} loggning${todayLogs.length === 1 ? "" : "ar"} idag.`
-            }
-            className="rounded-2xl bg-card border border-border p-5 shadow-sm"
-          >
-            {todayLogs.length > 0 && (
-              <div className="h-48">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={todayLogs} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
-                    <XAxis dataKey="time" tick={{ fontSize: 11 }} />
-                    <YAxis domain={[0, 5]} ticks={[1, 2, 3, 4, 5]} tick={{ fontSize: 11 }} />
-                    <Tooltip
-                      formatter={(v: number) => [`${v} – ${LEVEL_LABELS[v]}`, "Energi"]}
-                      contentStyle={{ borderRadius: 12, fontSize: 12 }}
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="level"
-                      stroke="hsl(var(--primary))"
-                      strokeWidth={2.5}
-                      dot={{ r: 4, fill: "hsl(var(--primary))" }}
-                      activeDot={{ r: 6 }}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-            )}
-          </CollapsibleSection>
-
-          <CollapsibleSection
-            title="Din vecka i snitt"
-            help="Ser du ett mönster? Använd det för att lägga tunga saker när du brukar orka."
-            headingClassName="font-medium"
-            description="Snittenergi per timme, senaste 7 dagarna."
-            className="rounded-2xl bg-card border border-border p-5 shadow-sm"
-          >
-            {hourAverages.length === 0 ? (
-              <p className="text-sm text-muted-foreground py-6 text-center">
-                Logga några gånger så börjar din karta ta form.
-              </p>
-            ) : (
-              <>
+          <MyFloveWide span="wide">
+            <CollapsibleSection
+              title="Idag"
+              headingClassName="font-medium"
+              description={
+                todayLogs.length === 0
+                  ? "Ingen loggning idag än – lägg en när det passar."
+                  : `${todayLogs.length} loggning${todayLogs.length === 1 ? "" : "ar"} idag.`
+              }
+              className="rounded-2xl bg-card border border-border p-5 shadow-sm"
+            >
+              {todayLogs.length > 0 && (
                 <div className="h-48">
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart
-                      data={hourAverages}
-                      margin={{ top: 8, right: 8, left: -20, bottom: 0 }}
-                    >
+                    <LineChart data={todayLogs} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
                       <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
-                      <XAxis dataKey="hour" tick={{ fontSize: 10 }} interval="preserveStartEnd" />
+                      <XAxis dataKey="time" tick={{ fontSize: 11 }} />
                       <YAxis domain={[0, 5]} ticks={[1, 2, 3, 4, 5]} tick={{ fontSize: 11 }} />
                       <Tooltip
-                        formatter={(v: number) => [v, "Snitt"]}
+                        formatter={(v: number) => [`${v} – ${LEVEL_LABELS[v]}`, "Energi"]}
                         contentStyle={{ borderRadius: 12, fontSize: 12 }}
                       />
-                      <Bar dataKey="avg" fill="hsl(var(--primary))" radius={[6, 6, 0, 0]} />
-                    </BarChart>
+                      <Line
+                        type="monotone"
+                        dataKey="level"
+                        stroke="hsl(var(--primary))"
+                        strokeWidth={2.5}
+                        dot={{ r: 4, fill: "hsl(var(--primary))" }}
+                        activeDot={{ r: 6 }}
+                      />
+                    </LineChart>
                   </ResponsiveContainer>
                 </div>
-                {peakHour && lowHour && peakHour.hour !== lowHour.hour && (
-                  <div className="mt-4 flex items-start gap-2 rounded-xl bg-secondary/40 p-3 text-sm">
-                    <Sparkles size={16} className="text-primary shrink-0 mt-0.5" />
-                    <p className="leading-snug">
-                      Du är oftast som mest på runt <strong>{peakHour.hour}</strong> och lägre kring{" "}
-                      <strong>{lowHour.hour}</strong>. Planera det tunga när kroppen är med.
-                    </p>
+              )}
+            </CollapsibleSection>
+          </MyFloveWide>
+
+          <MyFloveWide span="wide">
+            <CollapsibleSection
+              title="Din vecka i snitt"
+              help="Ser du ett mönster? Använd det för att lägga tunga saker när du brukar orka."
+              headingClassName="font-medium"
+              description="Snittenergi per timme, senaste 7 dagarna."
+              className="rounded-2xl bg-card border border-border p-5 shadow-sm"
+            >
+              {hourAverages.length === 0 ? (
+                <p className="text-sm text-muted-foreground py-6 text-center">
+                  Logga några gånger så börjar din karta ta form.
+                </p>
+              ) : (
+                <>
+                  <div className="h-48">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart
+                        data={hourAverages}
+                        margin={{ top: 8, right: 8, left: -20, bottom: 0 }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
+                        <XAxis dataKey="hour" tick={{ fontSize: 10 }} interval="preserveStartEnd" />
+                        <YAxis domain={[0, 5]} ticks={[1, 2, 3, 4, 5]} tick={{ fontSize: 11 }} />
+                        <Tooltip
+                          formatter={(v: number) => [v, "Snitt"]}
+                          contentStyle={{ borderRadius: 12, fontSize: 12 }}
+                        />
+                        <Bar dataKey="avg" fill="hsl(var(--primary))" radius={[6, 6, 0, 0]} />
+                      </BarChart>
+                    </ResponsiveContainer>
                   </div>
-                )}
-              </>
-            )}
-          </CollapsibleSection>
+                  {peakHour && lowHour && peakHour.hour !== lowHour.hour && (
+                    <div className="mt-4 flex items-start gap-2 rounded-xl bg-secondary/40 p-3 text-sm">
+                      <Sparkles size={16} className="text-primary shrink-0 mt-0.5" />
+                      <p className="leading-snug">
+                        Du är oftast som mest på runt <strong>{peakHour.hour}</strong> och lägre
+                        kring <strong>{lowHour.hour}</strong>. Planera det tunga när kroppen är med.
+                      </p>
+                    </div>
+                  )}
+                </>
+              )}
+            </CollapsibleSection>
+          </MyFloveWide>
         </>
       )}
-    </div>
+    </MyFlovePageGrid>
   );
 }
 

@@ -606,7 +606,7 @@ export default function CalendarPage() {
           </div>
         </MyFloveWide>
 
-        <MyFloveWide>
+        <div className="min-w-0 space-y-3">
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => fileInputRef.current?.click()}
@@ -638,11 +638,11 @@ export default function CalendarPage() {
             Tips: exportera i telefonens kalender som .ics och importera här för att få in dina
             möten i MyFlove.
           </p>
-        </MyFloveWide>
+        </div>
 
-        <MyFloveWide>
+        <div className="min-w-0">
           <EnergyBattery />
-        </MyFloveWide>
+        </div>
 
         <MyFloveWide>
           <div className="bg-card rounded-3xl border border-border shadow-sm overflow-hidden">

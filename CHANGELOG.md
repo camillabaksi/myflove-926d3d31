@@ -2,9 +2,10 @@
 
 ## 2026-08-29 – Responsivt blocksystem
 
-- Hem är nu ett dashboard: Mitt batteri och "Flow lär känna dig" ligger sida vid sida, följt av Just nu/Nästa och övriga block i två kolumner.
-- Nya layoutkomponenter `MyFlovePageGrid` och `MyFloveWide` ger samma blockrutnät på Hem, Idag, Hälsa och Mitt batteri.
-- Långa texter, formulär, tidslinjer och grafer använder fortsatt hela bredden; på små skärmar blir allt en kolumn utan sidoscroll.
+- MyFlove använder ett gemensamt CSS-grid som aktivt placerar lämpliga block bredvid varandra i stället för att stapla varje sektion som en hel rad.
+- Hem visar ett varierat dashboard-grid med batteri/Flow, sammanfattningar och nästa steg sida vid sida; bredare ytor används där grafer och tidslinjer behöver det.
+- `MyFlovePageGrid` använder två kolumner från 380 px, tre på stora skärmar och `MyFloveWide` för fullbredds- eller breda block.
+- Långa texter, formulär, tidslinjer och grafer använder fortsatt hela bredden; mycket smala skärmar faller tillbaka till en kolumn utan sidoscroll.
 - Resterande vyer – Planera, Kalender, Energi/Flow, listor, påminnelser, rutiner, medicin och inställningar – använder nu samma responsiva blockramverk.
 - Endast layout – funktioner, data, logik, navigation och tester är oförändrade.
 
