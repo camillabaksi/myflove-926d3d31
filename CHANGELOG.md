@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-29 – Städning: kompaktare Påminnelser, energihistorik och listor
+
+- Påminnelser: "Aviseringar" är nu ett kompakt kort – kort status och knapp på samma rad i stället för höga textstycken.
+- Min energi: "Lägg till det du gjorde" är fullbrett, så tidsval och aktivitetschips ligger sida vid sida i stället för i en smal vertikal kolumn. Hero-texten är kortare.
+- Inköpslista: alla rader har samma höjd och padding, ikoner i samma storlek, status till vänster och papperskorg till höger. Avklarade rader har diskret genomstrykning med bibehållen kontrast.
+- Sparade butiker: kortare underrubrik ("Påminn mig när jag är nära en butik.") och input + platsknapp på samma rad som wrappar snyggt på små skärmar.
+
 ## 2026-08-29 – Städning: typsnitt, statistik och konsekventa kort
 
 - Nunito Sans är nu appens enda typsnitt (tokens + fontladdning), med emoji-fallback.

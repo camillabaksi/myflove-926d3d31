@@ -141,14 +141,14 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
             area="halsa"
             title="Min energi – historik och mönster"
             emoji="📈"
-            description="Här ser du hur energin brukar förändras: vad som ger och vad som tar. Din nivå just nu visas i Mitt energibatteri på Hem."
+            description="Se vad som ger och tar energi över tid. Din nivå just nu finns i Mitt batteri."
           />
         </MyFloveWide>
       )}
 
-      <div className="min-w-0">
+      <MyFloveWide>
         <DidThisQuickAdd />
-      </div>
+      </MyFloveWide>
 
       {showDayFlow && (
         <MyFloveWide>

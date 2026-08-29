@@ -70,7 +70,7 @@ function StoreLocations() {
   };
 
   return (
-    <div className="pt-8 border-t border-border">
+    <div className="pt-6 border-t border-border">
       <CollapsibleSection
         title={
           <span className="flex items-center gap-2">
@@ -79,23 +79,25 @@ function StoreLocations() {
           </span>
         }
         headingClassName="text-xl font-semibold"
-        description="Spara en butik där du är just nu, så påminner vi dig om det som är kvar på listan nästa gång du är i närheten. Välj själv hur nära du ska vara."
+        description="Påminn mig när jag är nära en butik."
       >
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Input
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="T.ex. ICA Kvantum"
-            className="h-12 rounded-2xl"
+            className="h-12 min-w-0 flex-1 rounded-2xl"
           />
           <Button
             onClick={handleAddStore}
             disabled={!name.trim() || locating || !geolocationSupported}
             className="h-12 px-4 rounded-2xl shrink-0"
+            aria-label="Spara butiken där du är nu"
           >
             {locating ? <Loader2 className="animate-spin" size={20} /> : <LocateFixed size={20} />}
           </Button>
         </div>
+
         {!geolocationSupported && (
           <p className="text-xs text-muted-foreground">
             Platsdelning stöds inte i denna webbläsare.
@@ -295,23 +297,23 @@ export default function Shopping() {
                 {activeItems.map((item) => (
                   <div
                     key={item.id}
-                    className="group flex items-center justify-between p-3 px-4 bg-card border border-border rounded-2xl hover:border-primary/30 transition-colors"
+                    className="group flex min-h-14 items-center justify-between gap-2 rounded-2xl border border-border bg-card px-4 py-2.5 transition-colors hover:border-primary/30"
                   >
                     <button
                       onClick={() => handleToggle(item)}
-                      className="flex items-center gap-4 flex-1 text-left"
+                      className="flex min-w-0 flex-1 items-center gap-3 text-left"
                     >
-                      <div className="text-muted-foreground group-hover:text-primary transition-colors">
-                        <Circle size={26} strokeWidth={1.5} />
+                      <div className="shrink-0 text-muted-foreground transition-colors group-hover:text-primary">
+                        <Circle size={22} strokeWidth={1.5} />
                       </div>
-                      <span className="text-lg">{item.title}</span>
+                      <span className="min-w-0 flex-1 text-base">{item.title}</span>
                     </button>
                     <button
                       onClick={() => deleteItem(item.id)}
-                      className="p-2 text-muted-foreground hover:text-destructive rounded-xl transition-colors md:opacity-0 group-hover:opacity-100"
+                      className="shrink-0 rounded-xl p-2 text-muted-foreground transition-colors hover:text-destructive"
                       aria-label="Ta bort"
                     >
-                      <Trash2 size={22} />
+                      <Trash2 size={20} />
                     </button>
                   </div>
                 ))}
@@ -325,28 +327,33 @@ export default function Shopping() {
                   help="Sådant du redan lagt i vagnen. Ligger kvar tills du rensar listan."
                   headingClassName="text-sm font-medium text-muted-foreground uppercase tracking-wider"
                 >
-                  {completedItems.map((item) => (
-                    <div
-                      key={item.id}
-                      className="flex items-center justify-between p-3 px-4 bg-card/50 border border-border/50 rounded-2xl opacity-60"
-                    >
-                      <button
-                        onClick={() => handleToggle(item)}
-                        className="flex items-center gap-4 flex-1 text-left"
+                  <div className="space-y-2">
+                    {completedItems.map((item) => (
+                      <div
+                        key={item.id}
+                        className="flex min-h-14 items-center justify-between gap-2 rounded-2xl border border-border/60 bg-card/70 px-4 py-2.5"
                       >
-                        <div className="text-primary">
-                          <CheckCircle2 size={26} className="fill-primary/20" strokeWidth={2} />
-                        </div>
-                        <span className="text-lg line-through">{item.title}</span>
-                      </button>
-                      <button
-                        onClick={() => deleteItem(item.id)}
-                        className="p-2 text-muted-foreground hover:text-destructive rounded-xl transition-colors"
-                      >
-                        <Trash2 size={20} />
-                      </button>
-                    </div>
-                  ))}
+                        <button
+                          onClick={() => handleToggle(item)}
+                          className="flex min-w-0 flex-1 items-center gap-3 text-left"
+                        >
+                          <div className="shrink-0 text-primary">
+                            <CheckCircle2 size={22} className="fill-primary/20" strokeWidth={2} />
+                          </div>
+                          <span className="min-w-0 flex-1 text-base text-muted-foreground line-through decoration-muted-foreground/50">
+                            {item.title}
+                          </span>
+                        </button>
+                        <button
+                          onClick={() => deleteItem(item.id)}
+                          className="shrink-0 rounded-xl p-2 text-muted-foreground transition-colors hover:text-destructive"
+                          aria-label="Ta bort"
+                        >
+                          <Trash2 size={20} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
                 </CollapsibleSection>
               </div>
             )}
