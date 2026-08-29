@@ -257,11 +257,7 @@ export default function SimpleCheckin({
         onClick={save}
         className="w-full rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-opacity hover:opacity-90"
       >
-        {saved
-          ? "💜 Tack"
-          : hasLoggedToday
-            ? "Uppdatera dagens loggning"
-            : "Logga energi & mående"}
+        {saved ? "💜 Tack" : hasLoggedToday ? "Uppdatera dagens loggning" : "Logga energi & mående"}
       </button>
 
       <p aria-live="polite" className="text-xs text-muted-foreground">
