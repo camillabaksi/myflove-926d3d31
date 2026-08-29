@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Hem: Flow-, Insikter- och Nästa-korten leder nu vidare",
+    items: [
+      "Flow lär känna dig → Insikter, Nästa → Idag, Flow just nu → Flow (2026-08-29)",
+      "ExpandableBlock har fått ett href-läge – samma komprimerade design, men kortet navigerar i stället för att expandera (2026-08-29)",
+    ],
+  },
+  {
     title: "Hem: centrerad blockdesign enligt ny referens",
     items: [
       "Komprimerade block är centrerade: cirkulär ikon, rubrik + underrubrik, streck, stort värde i områdesfärg och rund pilknapp (2026-08-29)",

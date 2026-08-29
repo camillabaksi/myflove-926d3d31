@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-29 – Hem: Flow-, Insikter- och Nästa-korten leder nu vidare
+
+- "Flow lär känna dig" navigerar till Insikter (/insight) – samma mål som kortets egen länk.
+- "Nästa" navigerar till Idag (/idag) där aktiviteten visas i sin helhet.
+- "Flow · just nu" navigerar till Flow (/flow).
+- ExpandableBlock har fått ett href-läge: kortet blir en länk med samma komprimerade design (som Mitt batteri). Ingen information försvinner – innehållet bor på målsidorna.
+
+
 ## 2026-08-29 – Hem: centrerad blockdesign enligt ny referens
 
 - Komprimerade block är nu centrerade: cirkulär färgad ikon upptill, rubrik + kort underrubrik, streck och stort värde i områdets färg, samt rund pilknapp uppe till höger.

@@ -11,6 +11,7 @@
  * presentation.
  */
 import * as React from "react";
+import { Link } from "wouter";
 import { ArrowRight, ChevronDown, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MyFloveIcon, type MyFloveTone } from "@/components/myflove";
@@ -52,6 +53,14 @@ export interface ExpandableBlockProps {
   widget?: boolean;
   /** Mycket kort etikett under värdet i widget-läge, t.ex. "Flow". */
   label?: string;
+  /**
+   * Om href sätts är hela det komprimerade kortet en länk som navigerar –
+   * som Mitt batteri-kortet. Expansion används då inte; fullständigt
+   * innehåll bor på målsidan.
+   */
+  href?: string;
+  /** Körs när länkkortet trycks (t.ex. spårning). */
+  onNavigate?: () => void;
   className?: string;
   "data-testid"?: string;
   /** Hela innehållet – visas när kortet är expanderat. */
@@ -71,6 +80,8 @@ export function ExpandableBlock({
   area,
   widget = false,
   label,
+  href,
+  onNavigate,
   className,
   "data-testid": dataTestId,
   children,
@@ -114,6 +125,77 @@ export function ExpandableBlock({
       return next;
     });
   };
+
+  // Länkläge: hela kortet navigerar (som Mitt batteri-kortet). Samma
+  // komprimerade design, men ingen expansion.
+  if (href) {
+    return (
+      <section
+        ref={sectionRef}
+        data-testid={dataTestId}
+        data-expanded="false"
+        {...areaProps(area)}
+        className={cn(
+          "flex min-w-0 flex-col rounded-3xl border border-border/60 shadow-soft transition-shadow hover:shadow-lifted",
+          area && "area-border",
+          "min-h-[9rem]",
+          surface ? SURFACE[surface] : "bg-card",
+          className,
+        )}
+      >
+        <Link
+          href={href}
+          onClick={onNavigate}
+          aria-label={`Öppna ${ariaLabel}`}
+          className="press relative flex w-full min-w-0 flex-1 flex-col items-center gap-2.5 rounded-3xl p-4 text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:p-5"
+        >
+          <span aria-hidden="true" className="grid place-items-center">
+            {visual ??
+              (icon && (
+                <MyFloveIcon
+                  icon={icon}
+                  tone={tone}
+                  size="lg"
+                  className={cn("rounded-full", area && "area-bg-soft area-text")}
+                />
+              ))}
+          </span>
+          <div className="min-w-0">
+            <h2 className="font-display text-base font-bold leading-tight text-ink">{title}</h2>
+            {subtitle && (
+              <p className="mt-0.5 line-clamp-2 text-xs text-muted-foreground">{subtitle}</p>
+            )}
+          </div>
+          {(status != null || summary != null) && (
+            <div className="w-full space-y-1 border-t border-border/50 pt-3">
+              {status != null && (
+                <div
+                  className={cn(
+                    "font-display text-2xl font-bold leading-tight",
+                    area ? "area-text" : "text-ink",
+                  )}
+                >
+                  {status}
+                </div>
+              )}
+              {summary != null && (
+                <div className="line-clamp-2 text-sm text-muted-foreground">{summary}</div>
+              )}
+            </div>
+          )}
+          <span
+            aria-hidden="true"
+            className={cn(
+              "absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full",
+              area ? "area-bg-soft area-text" : "bg-card/70 text-muted-foreground",
+            )}
+          >
+            <ArrowRight size={15} />
+          </span>
+        </Link>
+      </section>
+    );
+  }
 
   return (
     <section
