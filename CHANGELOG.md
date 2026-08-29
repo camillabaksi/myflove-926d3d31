@@ -7,6 +7,7 @@
 - `MyFlovePageGrid` använder två kolumner som standard även på 320–412 px, tre på tablet och fyra på desktop; `MyFloveWide` ger enskilda breda block hela raden.
 - Hem, Hälsa och Mitt batteri visar flera lämpliga block samtidigt på mobil, medan långa formulär, tidslinjer och grafer fortsatt använder hela bredden utan sidoscroll.
 - Resterande vyer – Planera, Kalender, Energi/Flow, listor, påminnelser, rutiner, medicin och inställningar – använder nu samma responsiva blockramverk.
+- Mobilkorten har kompakt padding och storlek, medan innehåll som behöver läsbredd uttryckligen spänner båda kolumnerna.
 - Endast layout – funktioner, data, logik, navigation och tester är oförändrade.
 
 ## 2026-08-29 – Ren kodbas (lint-städning)
