@@ -571,7 +571,7 @@ export default function Tasks() {
             </div>
           </div>
         )}
-      </MyFlovePageGrid>
+      </div>
     );
   };
 
