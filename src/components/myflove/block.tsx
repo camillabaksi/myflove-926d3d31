@@ -1,0 +1,198 @@
+/**
+ * MyFlove-blocket – appens ENDA kortmönster.
+ *
+ * Alla sidor ska använda <MyFloveBlock> i stället för egna kortvarianter, så
+ * att rundningar, padding, skuggor, rubriker och minimering ser likadana ut
+ * överallt. Blocket bygger vidare på befintliga tokens (--radius, shadow-soft,
+ * surface-card) och befintlig minimerings-persistens (useCollapsible).
+ *
+ * Ett block kan innehålla: ikon, rubrik, underrubrik, viktigast först,
+ * sekundärt efter, en tydlig CTA i foten och expandera/minimera.
+ */
+import * as React from "react";
+import { ChevronDown, type LucideIcon } from "lucide-react";
+import { useLocation } from "wouter";
+import { cn } from "@/lib/utils";
+import { useCollapsible } from "@/lib/collapse-store";
+import { MyFloveIcon, type MyFloveTone } from "@/components/myflove";
+
+export interface MyFloveBlockProps {
+  /** Rubrik – kort och i du-form. */
+  title: React.ReactNode;
+  /** En mening som förklarar vad blocket är till för. */
+  subtitle?: React.ReactNode;
+  /** Liten etikett ovanför rubriken, t.ex. "LOGGA". */
+  eyebrow?: React.ReactNode;
+  /** Ikon i rubrikraden – samma ikonsystem som resten av appen. */
+  icon?: LucideIcon;
+  /** Färgton på ikonrutan. */
+  tone?: MyFloveTone;
+  /** Knapp eller liknande längst till höger i rubrikraden. */
+  action?: React.ReactNode;
+  /** Viktigaste statusen – syns även när blocket är minimerat. */
+  status?: React.ReactNode;
+  /** Tydlig CTA eller länk längst ner i blocket. */
+  footer?: React.ReactNode;
+  /** Låt användaren minimera/maximera. Läget sparas per sida (befintlig store). */
+  collapsible?: boolean;
+  /** Eget id om rubriken inte är unik på sidan. */
+  collapseId?: string;
+  defaultCollapsed?: boolean;
+  /** Mjuk pastellton i stället för vit kortyta. */
+  surface?: MyFloveTone;
+  /** Låt blocket spänna över båda kolumnerna i ett MyFloveBlockGrid. */
+  span?: boolean;
+  className?: string;
+  bodyClassName?: string;
+  children?: React.ReactNode;
+}
+
+const SURFACE: Record<MyFloveTone, string> = {
+  lavender: "bg-lavender/60",
+  blush: "bg-blush/50",
+  mint: "bg-mint/50",
+  sky: "bg-sky/50",
+  sun: "bg-sun/50",
+  plain: "bg-card",
+};
+
+export function MyFloveBlock({
+  title,
+  subtitle,
+  eyebrow,
+  icon,
+  tone = "lavender",
+  action,
+  status,
+  footer,
+  collapsible = false,
+  collapseId,
+  defaultCollapsed = false,
+  surface,
+  span,
+  className,
+  bodyClassName,
+  children,
+}: MyFloveBlockProps) {
+  const [path] = useLocation();
+  const key = collapseId ?? (typeof title === "string" ? title : "block");
+  const storeId = collapsible ? `${path}::${key.slice(0, 60)}` : null;
+  const { collapsed, toggle } = useCollapsible(storeId, defaultCollapsed);
+
+  const heading = (
+    <div className="flex min-w-0 flex-1 items-start gap-3 text-left">
+      {icon && <MyFloveIcon icon={icon} tone={tone} size="sm" />}
+      <div className="min-w-0 flex-1">
+        {eyebrow && (
+          <span className="mb-1 inline-flex rounded-pill bg-primary/10 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-primary">
+            {eyebrow}
+          </span>
+        )}
+        <h2 className="font-display text-base font-bold leading-tight text-ink">{title}</h2>
+        {subtitle && <p className="mt-0.5 text-sm text-muted-foreground">{subtitle}</p>}
+        {status && collapsed && <div className="mt-1.5 text-sm text-ink">{status}</div>}
+      </div>
+      {collapsible && (
+        <ChevronDown
+          size={18}
+          aria-hidden="true"
+          className={cn(
+            "mt-1 shrink-0 text-muted-foreground transition-transform duration-200",
+            collapsed && "-rotate-90",
+          )}
+        />
+      )}
+    </div>
+  );
+
+  return (
+    <section
+      className={cn(
+        "flex flex-col gap-4 rounded-3xl border border-border/60 p-5 shadow-soft",
+        surface ? SURFACE[surface] : "bg-card",
+        span && "sm:col-span-2",
+        className,
+      )}
+    >
+      <div className="flex items-start gap-3">
+        {collapsible ? (
+          <button
+            type="button"
+            onClick={toggle}
+            aria-expanded={!collapsed}
+            title={collapsed ? "Visa mer" : "Minimera"}
+            className="press flex min-w-0 flex-1 items-start"
+          >
+            {heading}
+          </button>
+        ) : (
+          heading
+        )}
+        {action && <div className="shrink-0">{action}</div>}
+      </div>
+
+      {!collapsed && children && (
+        <div className={cn("min-w-0 space-y-3", bodyClassName)}>{children}</div>
+      )}
+
+      {!collapsed && footer && <div className="mt-auto pt-1">{footer}</div>}
+    </section>
+  );
+}
+
+/**
+ * Responsivt rutnät för block. Mobil = en kolumn (viktigast först),
+ * större skärmar = två kolumner där relaterade block ligger bredvid varandra.
+ */
+export function MyFloveBlockGrid({
+  className,
+  children,
+}: {
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className={cn("grid grid-cols-1 gap-4 sm:grid-cols-2 sm:items-start", className)}>
+      {children}
+    </div>
+  );
+}
+
+/** Liten statsruta inuti ett block – stort tal, liten etikett. */
+export function MyFloveStat({
+  label,
+  value,
+  hint,
+  icon: Icon,
+  tone = "lavender",
+  className,
+  children,
+}: {
+  label: React.ReactNode;
+  value?: React.ReactNode;
+  hint?: React.ReactNode;
+  icon?: LucideIcon;
+  tone?: MyFloveTone;
+  className?: string;
+  children?: React.ReactNode;
+}) {
+  return (
+    <div
+      className={cn(
+        "flex min-w-0 flex-1 flex-col gap-1.5 rounded-2xl border border-border/50 p-4",
+        SURFACE[tone],
+        className,
+      )}
+    >
+      <span className="flex items-center gap-1.5 text-sm font-semibold text-ink">
+        {Icon && <Icon size={15} strokeWidth={2.2} aria-hidden="true" className="text-primary" />}
+        {label}
+      </span>
+      {value != null && (
+        <span className="font-display text-3xl font-bold leading-none text-ink">{value}</span>
+      )}
+      {children}
+      {hint && <span className="text-xs text-muted-foreground">{hint}</span>}
+    </div>
+  );
+}
