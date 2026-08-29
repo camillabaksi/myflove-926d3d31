@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-29 – Tre riktade UI/UX-korrigeringar
+
+- Hem: "Dagens översikt" navigerar nu direkt till befintliga Idag-vyn (ingen ny route); tillbaka fungerar som vanligt. Blocket är en komprimerad widget: ikon + "3/5" + "2 kvar".
+- Historik → Mående: "Hitta mitt flow" är omdesignad till samma blockspråk – rundat lavenderkort med ikon + kort rubrik. Funktionen (Flow-insikter) är oförändrad.
+- Historik → Flöde: sektionerna "Lägg till något som påverkar", "Idag", "Mönster över tid" och "Hur mycket får det påverka?" är komprimerade som standard och expanderar vid tryck; långa förklaringstexter är kortade.
+- Endast presentation – data, stores, navigation och logik är oförändrade.
+
+
 ## 2026-08-29 – Hem i samma designspråk som Hälsa
 
 - Hemblocken har nu tre informationsnivåer i komprimerat läge: rubrik, kort underrubrik (3–8 ord) och aktuellt värde – t.ex. "Mitt batteri · Energi och mående · 33 % · Låg energi just nu".

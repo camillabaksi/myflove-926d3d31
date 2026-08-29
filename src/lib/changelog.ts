@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Tre riktade UI/UX-korrigeringar",
+    items: [
+      "Hem: Dagens översikt navigerar nu direkt till befintliga Idag-vyn (2026-08-29)",
+      "Historik → Mående: Hitta mitt flow följer nu blocksystemet – ikon + kort rubrik, samma funktion (2026-08-29)",
+      "Historik → Flöde: sektionerna är komprimerade som standard med kortare texter; tryck visar hela innehållet (2026-08-29)",
+      "Endast presentation – data, stores, navigation och logik är oförändrade (2026-08-29)",
+    ],
+  },
+  {
     title: "Hem i samma designspråk som Hälsa",
     items: [
       "Komprimerade hemblock visar rubrik, kort underrubrik och aktuellt värde i stället för bara ikon + ett ord (2026-08-29)",
