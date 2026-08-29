@@ -15,7 +15,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
       "Informationsrika block visar en lugn sammanfattning först och öppnar samma innehåll i en fokuserad vy vid tryck (2026-08-29)",
       "Stäng, Escape och Androids bakåtknapp återför användaren till samma block med återställd fokus och scrollposition (2026-08-29)",
       "Reduced motion respekteras utan ändrad funktionalitet, data eller navigation (2026-08-29)",
-      "Maximerade block renderas via portal utanför gridet och täcker alltid hela skärmbredden, även från en tvåkolumnsrad – utan horisontell scroll på 320–412 px (2026-08-29)",
+      "Block expanderar på plats i sidans flöde som accordion-kort och tar hela innehållsbredden, i stället för att öppnas som separat helskärmsvy – utan horisontell scroll på 320–412 px (2026-08-29)",
     ],
   },
   {
