@@ -81,7 +81,12 @@ export function useQuickCheckin() {
 
   /** Alla dagens måendeobservationer, äldst → nyast. */
   const todayMoods = useMemo<MoodEntry[]>(
-    () => moods.filter((m) => isToday(m.date)).sort((a, b) => a.date - b.date),
+    () =>
+      moods
+        .filter((m) => isToday(m.date))
+        .map((m, idx) => ({ m, idx }))
+        .sort((a, b) => a.m.date - b.m.date || b.idx - a.idx)
+        .map(({ m }) => m),
     [moods],
   );
 
