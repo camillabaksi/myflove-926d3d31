@@ -492,17 +492,17 @@ export default function Home() {
               tone="mint"
               surface="mint"
             >
-            <TaskQuickAdd
-              onAdd={(result: QuickAddResult) => {
-                addTask(result.title, result.dueDate, {
-                  time: result.time,
-                  energyImpact: result.energyImpact,
-                  friction: result.friction,
-                  area: activeArea === "alla" ? "vardag" : activeArea,
-                });
-              }}
-              className="bg-primary text-primary-foreground hover:bg-primary/90"
-            />
+              <TaskQuickAdd
+                onAdd={(result: QuickAddResult) => {
+                  addTask(result.title, result.dueDate, {
+                    time: result.time,
+                    energyImpact: result.energyImpact,
+                    friction: result.friction,
+                    area: activeArea === "alla" ? "vardag" : activeArea,
+                  });
+                }}
+                className="bg-primary text-primary-foreground hover:bg-primary/90"
+              />
               <p className="mt-1 text-xs text-muted-foreground">
                 Lägg till något i dagen – med tid om du vill.
               </p>
