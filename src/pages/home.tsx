@@ -629,9 +629,7 @@ function DaySummary() {
       tone="sky"
       surface="sky"
       status={total === 0 ? "Inget inplanerat" : `${todayDone.length} av ${total} klart`}
-      summary={
-        total === 0 ? "Lägg till något när du vill" : `${todayOpen.length} kvar att göra`
-      }
+      summary={total === 0 ? "Lägg till något när du vill" : `${todayOpen.length} kvar att göra`}
     >
       <p className="text-ink">
         {total === 0

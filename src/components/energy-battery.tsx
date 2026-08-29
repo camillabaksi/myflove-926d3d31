@@ -67,7 +67,6 @@ export default function EnergyBattery({
     );
   }
 
-
   const content = (
     <>
       <div className="grid grid-cols-1 gap-2 @min-[240px]:grid-cols-2 sm:gap-3">
