@@ -40,7 +40,10 @@ export function FlowReplan({
 
   return (
     <section
-      className={cn("rounded-3xl border border-border/60 bg-lavender/60 p-5 shadow-soft", className)}
+      className={cn(
+        "rounded-3xl border border-border/60 bg-lavender/60 p-5 shadow-soft",
+        className,
+      )}
     >
       <h2 className="flex items-center gap-2 font-display text-lg text-ink">
         <RefreshCw size={18} className="text-primary" /> Ska vi lägga om dagen?

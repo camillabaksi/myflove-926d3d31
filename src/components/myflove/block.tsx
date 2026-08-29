@@ -200,7 +200,6 @@ export function MyFloveWide({
   );
 }
 
-
 /** Liten statsruta inuti ett block – stort tal, liten etikett. */
 export function MyFloveStat({
   label,

@@ -538,7 +538,6 @@ export default function Home() {
                 : `Du är i ${AREA_META[activeArea].label.toLowerCase()}rummet. Resten väntar tills du vill se det.`}
             </p>
           </MyFloveWide>
-
         )}
 
         <MyFloveWide style={{ order: 98 }} className="space-y-3 pt-2">
