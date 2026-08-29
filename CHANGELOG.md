@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-08-29 – Stabilare sortering av dagens måendeobservationer
+
+- Dagens måendeobservationer sorteras nu kronologiskt även när flera loggningar har samma tidsstämpel, så ordningen blir förutsägbar i Mitt batteri och historiken.
+- Testerna för `useQuickCheckin` väntar nu ut asynkrona tillståndsuppdateringar innan verifiering, vilket tar bort den sporadiska testflaken.
+
+## 2026-08-29 – Hem: Kalender-ikon i stället för Flow-maskot, nästa-block bort
+
+- Hem-blocket "Kalender" (tidigare "Flow · just nu") använder nu en kalender-ikon (CalendarDays) och områdesidentiteten "kalender" i stället för Flow-maskoten.
+- "Nästa" / "Nästa viktiga sak" är borttaget från Hem – samma information finns redan i Idag.
+- Inga funktionella eller dataändringar; endast presentation och hemlayout.
+
 ## 2026-08-29 – Idag: Lägg till i dagen följer blockspråket
 
 - Steg 3 "Lägg till i dagen" på Idag är nu ett komprimerat, expanderbart block (ExpandableBlock) med ikon, etikett och status – samma designspråk som övriga kort.

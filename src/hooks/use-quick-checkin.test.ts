@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { renderHook, act } from "@testing-library/react";
+import { renderHook, act, waitFor } from "@testing-library/react";
 import { useState } from "react";
 
 // Utan inloggad användare sparas energi lokalt – perfekt för att testa
@@ -30,26 +30,30 @@ vi.mock("@/hooks/use-data", () => ({
 import { useQuickCheckin, toScale5 } from "@/hooks/use-quick-checkin";
 
 describe("useQuickCheckin – flera observationer per dag", () => {
-  it("varje måendeloggning blir en egen tidsstämplad observation", () => {
+  it("varje måendeloggning blir en egen tidsstämplad observation", async () => {
     const { result } = renderHook(() => useQuickCheckin());
     act(() => result.current.logMood(4, "Jag sov bara 4 timmar."));
     act(() => result.current.logMood(8, "Har varit ute och känner mig bättre."));
     act(() => result.current.logMood(6));
 
-    expect(result.current.todayMoods).toHaveLength(3);
-    expect(result.current.todayMoods[0].note).toBe("Jag sov bara 4 timmar.");
-    expect(result.current.todayMoods[1].note).toBe("Har varit ute och känner mig bättre.");
-    expect(result.current.todayMoods[2].note).toBeUndefined();
-    // Äldst → nyast, med riktiga tidsstämplar.
-    expect(result.current.todayMoods[0].date).toBeLessThanOrEqual(
-      result.current.todayMoods[1].date,
-    );
-    expect(result.current.todayMoods[1].date).toBeLessThanOrEqual(
-      result.current.todayMoods[2].date,
-    );
-    // Tidigare observationer skrivs inte över.
-    expect(result.current.todayMoods[0].score).toBe(toScale5(4));
-    expect(result.current.todayMoods[1].score).toBe(toScale5(8));
+    await waitFor(() => {
+      expect(result.current.todayMoods).toHaveLength(3);
+    });
+    await waitFor(() => {
+      expect(result.current.todayMoods[0].note).toBe("Jag sov bara 4 timmar.");
+      expect(result.current.todayMoods[1].note).toBe("Har varit ute och känner mig bättre.");
+      expect(result.current.todayMoods[2].note).toBeUndefined();
+      // Äldst → nyast, med riktiga tidsstämplar.
+      expect(result.current.todayMoods[0].date).toBeLessThanOrEqual(
+        result.current.todayMoods[1].date,
+      );
+      expect(result.current.todayMoods[1].date).toBeLessThanOrEqual(
+        result.current.todayMoods[2].date,
+      );
+      // Tidigare observationer skrivs inte över.
+      expect(result.current.todayMoods[0].score).toBe(toScale5(4));
+      expect(result.current.todayMoods[1].score).toBe(toScale5(8));
+    });
   });
 
   it("varje energiloggning blir en egen observation (inga överskrivningar)", async () => {

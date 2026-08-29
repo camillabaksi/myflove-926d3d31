@@ -10,6 +10,21 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Stabilare sortering av dagens måendeobservationer",
+    items: [
+      "Dagens måendeobservationer sorteras nu kronologiskt även när flera loggningar har samma tidsstämpel, så ordningen blir förutsägbar i Mitt batteri och historiken (2026-08-29)",
+      "Testerna för useQuickCheckin väntar ut asynkrona tillståndsuppdateringar innan verifiering, vilket tar bort den sporadiska testflaken (2026-08-29)",
+    ],
+  },
+  {
+    title: "Hem: Kalender-ikon i stället för Flow-maskot, nästa-block bort",
+    items: [
+      "Hem-blocket Kalender (tidigare Flow · just nu) använder nu en kalender-ikon och områdesidentiteten kalender i stället för Flow-maskoten (2026-08-29)",
+      "Nästa / Nästa viktiga sak är borttaget från Hem – samma information finns redan i Idag (2026-08-29)",
+      "Endast presentation och hemlayout – ingen funktions- eller dataändring (2026-08-29)",
+    ],
+  },
+  {
     title: "Idag: Lägg till i dagen följer blockspråket",
     items: [
       "Steg 3 Lägg till i dagen på Idag är nu ett komprimerat, expanderbart block med ikon, etikett och status – samma designspråk som övriga kort (2026-08-29)",

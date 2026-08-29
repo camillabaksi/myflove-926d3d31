@@ -7,7 +7,6 @@ import { useCloudSyncedStorage } from "@/lib/cloud-storage";
  */
 export type HomeBlockId =
   | "batteri"
-  | "nasta"
   | "medicin"
   | "idag"
   | "forslag"
@@ -23,7 +22,6 @@ export interface HomeBlockMeta {
 
 export const HOME_BLOCKS: HomeBlockMeta[] = [
   { id: "batteri", label: "Mitt energibatteri", hint: "Din energi just nu" },
-  { id: "nasta", label: "Nästa", hint: "Nästa sak som händer idag" },
   {
     id: "medicin",
     label: "Rutiner & medicin",
@@ -52,7 +50,7 @@ export const DEFAULT_PREFS: HomeLayoutPrefs = {
   // widgets. Ingen information göms – den ligger i expanderat läge.
   hidden: [],
 
-  order: ["batteri", "forslag", "nasta", "idag", "lagg-till", "vagar", "medicin", "omrade"],
+  order: ["batteri", "forslag", "idag", "lagg-till", "vagar", "medicin", "omrade"],
 };
 
 const STORAGE_KEY = "myflove-home-layout";

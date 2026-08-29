@@ -8,8 +8,8 @@ describe("hemskärmens standardlayout (samlad överblick)", () => {
     expect(visible).toHaveLength(HOME_BLOCKS.length);
   });
 
-  it("prioriterar energi, rekommendation, nästa, dagen och infångning", () => {
-    expect(visible.slice(0, 5)).toEqual(["batteri", "forslag", "nasta", "idag", "lagg-till"]);
+  it("prioriterar energi, rekommendation, dagen, infångning och vägar", () => {
+    expect(visible.slice(0, 5)).toEqual(["batteri", "forslag", "idag", "lagg-till", "vagar"]);
   });
 
   it("har inget genvägsblock kvar", () => {

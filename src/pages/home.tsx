@@ -17,10 +17,7 @@ import EnergyBattery from "@/components/energy-battery";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
 import { useUserProfile } from "@/hooks/use-user-profile";
 import { getGreeting } from "@/lib/greeting";
-import { useTasks, useReminders, useMedications, type Task, type Reminder } from "@/hooks/use-data";
-import { useCloudSyncedStorage } from "@/lib/cloud-storage";
-import type { Routine } from "@/lib/recurrence";
-import { useStudySchedule } from "@/hooks/use-study-schedule";
+import { useTasks } from "@/hooks/use-data";
 import { suggestNow, type NowSuggestion } from "@/lib/flow-engine";
 
 import { AreaOnboarding } from "@/components/area-onboarding";
@@ -29,15 +26,7 @@ import { AreaSwitcher } from "@/components/area-switcher";
 import { AREA_META, useActiveArea } from "@/lib/life-areas";
 import IntroTour from "@/components/intro-tour";
 import FlowOnboarding from "@/components/flow-onboarding";
-import {
-  CalendarDays,
-  Sparkles,
-  ArrowRight,
-  SlidersHorizontal,
-  Compass,
-  Check,
-  Plus,
-} from "lucide-react";
+import { CalendarDays, ArrowRight, SlidersHorizontal, Compass, Check, Plus } from "lucide-react";
 import { todayISO } from "@/lib/day";
 import { track } from "@/lib/analytics";
 import { homeContextLine } from "@/lib/flow-tone";
@@ -86,108 +75,6 @@ const SITUATIONS: Situation[] = [
 ];
 
 /**
- * Nästa relevanta aktivitet idag – påminnelser, uppgifter, rutiner,
- * medicin och lektioner, sorterat efter klockslag.
- */
-interface NextEvent {
-  id: string;
-  title: string;
-  time: string;
-  endTime?: string;
-  emoji: string;
-  source: "påminnelse" | "uppgift" | "rutin" | "medicin" | "lektion";
-}
-
-function parseTime(t?: string): number | null {
-  if (!t) return null;
-  const [h, m] = t.split(":").map(Number);
-  if (Number.isNaN(h) || Number.isNaN(m)) return null;
-  return h * 60 + m;
-}
-
-function useNextEvent(): NextEvent | null {
-  const { activeReminders } = useReminders();
-  const { activeTasks } = useTasks();
-  const { medications, isTaken } = useMedications();
-  const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
-  const { lectures } = useStudySchedule();
-  const todayIso = todayISO();
-  const nowMin = new Date().getHours() * 60 + new Date().getMinutes();
-
-  return useMemo(() => {
-    const list: NextEvent[] = [];
-
-    for (const r of activeReminders) {
-      if (r.date !== todayIso || !r.time) continue;
-      list.push({
-        id: `rem-${r.id}`,
-        title: r.title,
-        time: r.time,
-        endTime: r.endTime,
-        emoji: "🔔",
-        source: "påminnelse",
-      });
-    }
-
-    for (const t of activeTasks) {
-      if (t.dueDate && t.dueDate !== todayIso) continue;
-      if (!t.time) continue;
-      list.push({
-        id: `task-${t.id}`,
-        title: t.title,
-        time: t.time,
-        endTime: t.endTime,
-        emoji: "✅",
-        source: "uppgift",
-      });
-    }
-
-    for (const r of routines ?? []) {
-      if (!r.enabled || !r.time) continue;
-      list.push({
-        id: `routine-${r.id}`,
-        title: r.title,
-        time: r.time,
-        emoji: "🔁",
-        source: "rutin",
-      });
-    }
-
-    for (const med of medications) {
-      for (const time of med.times) {
-        if (isTaken(med.id, time)) continue;
-        list.push({
-          id: `med-${med.id}-${time}`,
-          title: med.name,
-          time,
-          emoji: "💊",
-          source: "medicin",
-        });
-      }
-    }
-
-    const weekday = (new Date().getDay() + 6) % 7;
-    for (const l of lectures.filter((x) => x.weekday === weekday)) {
-      list.push({
-        id: `lecture-${l.id}`,
-        title: l.title,
-        time: l.start,
-        endTime: l.end,
-        emoji: "🎓",
-        source: "lektion",
-      });
-    }
-
-    const future = list
-      .map((e) => ({ e, min: parseTime(e.time) ?? 0 }))
-      .filter(({ min }) => min > nowMin)
-      .sort((a, b) => a.min - b.min);
-
-    return future[0]?.e ?? null;
-  }, [activeReminders, activeTasks, medications, isTaken, routines, lectures, todayIso, nowMin]);
-}
-
-/**
  * Ett enda Flow-förslag – hämtat från samma motor som Flow → NU,
  * så att Hem, Idag och Flow alltid säger samma sak.
  */
@@ -213,7 +100,6 @@ export default function Home() {
   const [nameDraft, setNameDraft] = useState(name);
   const { addTask } = useTasks();
   const { activeArea } = useActiveArea();
-  const nextEvent = useNextEvent();
   const suggestion = useFlowSuggestion();
   const { reading } = useEnergyBattery();
   const { energyValue } = useQuickCheckin();
@@ -234,14 +120,9 @@ export default function Home() {
     battery: Math.round(reading.now),
     completedToday,
     remainingToday,
-    nextTitle: nextEvent?.title ?? null,
+    nextTitle: null,
     checkedIn: energyValue != null,
   });
-  /* Samma sak ska aldrig visas både som "Nästa" och som Flows förslag. */
-  const samsomNasta =
-    !!suggestion.task &&
-    !!nextEvent &&
-    suggestion.task.title.trim().toLowerCase() === nextEvent.title.trim().toLowerCase();
 
   useEffect(() => {
     track("home_viewed");
@@ -361,24 +242,6 @@ export default function Home() {
           </div>
         )}
 
-        {/* Nästa – nästa relevanta aktivitet, leder till Kalender */}
-        {shows("nasta") && (
-          <section className="min-w-0" style={pos("nasta")} aria-label="Nästa aktivitet">
-            <ExpandableBlock
-              title="Nästa"
-              titleText="Nästa"
-              area="kalender"
-              icon={CalendarDays}
-              subtitle="Nästa viktiga sak"
-              status={nextEvent ? nextEvent.time : "–"}
-              summary={nextEvent ? nextEvent.title : "Inget inplanerat just nu"}
-              tone="blush"
-              surface="blush"
-              href="/idag"
-            />
-          </section>
-        )}
-
         {/* Dagens medicin – samma data och samma avbockning som i Rutiner & medicin */}
         {shows("medicin") && (
           <section className="min-w-0" style={pos("medicin")} aria-label="Rutiner och medicin">
@@ -415,8 +278,8 @@ export default function Home() {
             <ExpandableBlock
               title="Kalender"
               titleText="Kalender"
-              area="flow"
-              visual={<FlowMascot size="sm" mood="nod" bump className="flow-alive" alt="" />}
+              area="kalender"
+              icon={CalendarDays}
               subtitle="Ditt nästa steg"
               status="Jag finns här"
               summary={suggestion.headline}
