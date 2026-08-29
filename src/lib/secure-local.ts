@@ -219,15 +219,20 @@ export function secureSetItem(key: string, value: string): void {
   }
 
   cache.set(key, value);
-  void (async () => {
-    await unlockSecureLocal();
-    try {
-      if (cache.get(key) !== value) return; // en nyare skrivning hann före
-      window.localStorage.setItem(key, cryptoKey ? await encrypt(value) : value);
-    } catch {
-      /* utan lagring behåller vi bara minnesvärdet */
+  if (!ready && hasCrypto()) {
+    void unlockSecureLocal();
+  }
+  try {
+    if (cryptoKey) {
+      void encrypt(value).then((encrypted) => {
+        if (cache.get(key) === value) window.localStorage.setItem(key, encrypted);
+      }).catch(() => undefined);
+    } else {
+      window.localStorage.setItem(key, value);
     }
-  })();
+  } catch {
+    /* utan lagring behåller vi bara minnesvärdet */
+  }
 }
 
 /**
