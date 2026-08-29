@@ -458,12 +458,14 @@ export default function Layout({ children }: LayoutProps) {
             label: "Adminöversikt",
             icon: Shield,
             hint: "Roller, åtkomst och rapporter",
+            essential: true,
           },
           {
             href: "/admin-statistik",
             label: "Appstatistik",
             icon: BarChart3,
             hint: "Besökare och användning",
+            essential: true,
           },
         ]
       : []),
@@ -602,20 +604,14 @@ export default function Layout({ children }: LayoutProps) {
         icon: Gauge,
         hrefs: ["/flowscore", "/veckans-flow", "/friktionsindex"],
       },
+      // Inställningar har en egen sektion längre ner i "Mer" – därför ligger
+      // de inte som kategori här. Admin är det enda som blir kvar som grupp.
       {
-        id: "ovrigt",
-        label: "Inställningar",
-        hint: "Rutiner, min livsprofil, anpassning och feedback",
+        id: "admin",
+        label: "Admin",
+        hint: "Roller, åtkomst och appstatistik",
         icon: LayoutGrid,
-        hrefs: [
-          "/oversikt",
-          "/flow-installningar",
-          "/min-livsprofil",
-          "/anpassa-hem",
-          "/anpassa",
-          "/admin",
-          "/admin-statistik",
-        ],
+        hrefs: ["/admin", "/admin-statistik"],
       },
     ];
 
@@ -648,6 +644,12 @@ export default function Layout({ children }: LayoutProps) {
     }
   }, [navMigrated, navSlots, setNavMigrated, setNavSlots]);
   const [editingNav, setEditingNav] = useState(false);
+
+  /** Stänger "Mer" och nollställer vilken kategori som var öppen. */
+  const closeMenu = () => {
+    setMobileMenuOpen(false);
+    setOpenCategory(null);
+  };
 
   /** Visa introduktionen igen – nollställer bara "har sett intro". */
   const replayIntro = () => {
@@ -1148,130 +1150,103 @@ export default function Layout({ children }: LayoutProps) {
                       })}
                   </div>
 
-                  <h3 className="mb-2 mt-6 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  {/*
+                    En enda plats för inställningar. Varje funktion har exakt en
+                    primär väg in – inga dubbletter i kategorierna ovanför.
+                  */}
+                  <h3 className="mb-1 mt-6 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                     Inställningar
                   </h3>
-                  <div className="mb-4">
-                    <PwaInstallButton />
-                  </div>
-                  <div className="flex flex-col items-center justify-center gap-3">
-                    <Link href="/anpassa" onClick={() => setMobileMenuOpen(false)}>
-                      <Button variant="outline" size="sm" className="rounded-xl gap-2">
-                        <Accessibility size={16} /> Anpassa appen
-                      </Button>
-                    </Link>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="rounded-xl gap-2"
+                  <p className="mb-2 text-xs text-muted-foreground/80">
+                    Allt du kan ställa in – på ett ställe.
+                  </p>
+
+                  <div className="mb-4 space-y-2">
+                    <NavRow
+                      item={{
+                        href: "/anpassa",
+                        label: "Anpassa appen",
+                        icon: Accessibility,
+                        hint: "Lugnare färger, färre saker, tyst läge och enkla ord",
+                      }}
+                      isActive={location === "/anpassa"}
+                      onClick={closeMenu}
+                    />
+                    <NavRow
+                      item={{
+                        href: "/anpassa-hem",
+                        label: "Hemskärm",
+                        icon: Home,
+                        hint: "Vilka block som syns på Hem och i vilken ordning",
+                      }}
+                      isActive={location === "/anpassa-hem"}
+                      onClick={closeMenu}
+                    />
+                    <NavRow
+                      item={{
+                        href: "/flow-installningar",
+                        label: "Flow-inställningar",
+                        icon: Sparkles,
+                        hint: "Hjälpnivå, när Flow hör av sig och vad han prioriterar",
+                      }}
+                      isActive={location === "/flow-installningar"}
+                      onClick={closeMenu}
+                    />
+                    <NavRow
+                      item={{
+                        href: "/min-livsprofil",
+                        label: "Min livsprofil",
+                        icon: Compass,
+                        hint: situationLabel,
+                      }}
+                      isActive={location === "/min-livsprofil"}
+                      onClick={closeMenu}
+                    />
+                    <NavRow
+                      item={{
+                        href: "/oversikt",
+                        label: "Så funkar MyFlove",
+                        icon: Compass,
+                        hint: "Enkel sammanfattning av allt i appen – och vart du går",
+                      }}
+                      isActive={location === "/oversikt"}
+                      onClick={closeMenu}
+                    />
+                    <SettingAction
+                      icon={Sparkles}
+                      label="Visa introduktionen igen"
+                      hint="Gå igenom de första korten en gång till"
+                      onClick={replayIntro}
+                    />
+                    <SettingAction
+                      icon={alarmEnabled ? Volume2 : VolumeX}
+                      label={`Alarmljud: ${alarmEnabled ? "på" : "av"}`}
+                      hint="Ljudsignal när en påminnelse går"
                       onClick={toggleAlarm}
-                    >
-                      {alarmEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
-                      Alarmljud: {alarmEnabled ? "på" : "av"}
-                    </Button>
+                    />
+                    <SettingAction
+                      icon={simpleMode ? Check : LayoutGrid}
+                      label={simpleMode ? "Visar bara det viktigaste" : "Visar allt i menyn"}
+                      hint="Bestäm hur mycket som syns i Mer"
+                      onClick={() => setSimpleMode(!simpleMode)}
+                    />
                     <Show when="signed-in">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="rounded-xl gap-2"
+                      <SettingAction
+                        icon={LogOut}
+                        label="Logga ut"
+                        hint="Avsluta konto finns under Anpassa appen → Konto"
                         onClick={() => {
                           setMobileMenuOpen(false);
                           track("logout");
                           signOut();
                         }}
-                      >
-                        <LogOut size={16} /> Logga ut
-                      </Button>
+                      />
                     </Show>
-                    <p data-npf="optional" className="text-center text-xs text-muted-foreground">
-                      Avsluta konto finns under Anpassa appen → Konto.
-                    </p>
                   </div>
 
-                  {/* Min profil */}
-                  <h3 className="mt-8 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                    Min profil
-                  </h3>
-                  <p className="mb-2 text-xs text-muted-foreground/80">
-                    Vem du är och hur din vardag ser ut just nu.
-                  </p>
-                  <Link
-                    href="/min-livsprofil"
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      setOpenCategory(null);
-                    }}
-                    className="mb-4 flex items-center gap-3 rounded-3xl border-2 border-primary/30 bg-primary/10 p-4 shadow-sm press"
-                  >
-                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary/15 text-primary">
-                      <Compass size={22} strokeWidth={2.2} />
-                    </span>
-                    <span className="min-w-0 flex-1">
-                      <span className="block text-sm font-semibold">Min livsprofil</span>
-                      <span
-                        data-npf="optional"
-                        className="block truncate text-xs text-muted-foreground"
-                      >
-                        {situationLabel}
-                      </span>
-                    </span>
-                    <ChevronRight size={18} className="shrink-0 text-muted-foreground" />
-                  </Link>
-
-                  {/* Anpassa MyFlove */}
-                  <h3 className="mt-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                    Anpassa MyFlove
-                  </h3>
-                  <p className="mb-2 text-xs text-muted-foreground/80">
-                    Bestäm vad du ser på hemskärmen och i menyn.
-                  </p>
-
-                  <div className="mb-3 space-y-2">
-                    <Link
-                      href="/anpassa-hem"
-                      onClick={() => {
-                        setMobileMenuOpen(false);
-                        setOpenCategory(null);
-                      }}
-                      className="flex items-center gap-3 rounded-2xl border border-border bg-card p-3 shadow-sm"
-                    >
-                      <Home size={20} className="shrink-0 text-muted-foreground" />
-                      <span className="min-w-0 flex-1">
-                        <span className="block text-sm font-medium">Hemskärm</span>
-                        <span data-npf="optional" className="block text-xs text-muted-foreground">
-                          Vilka block som syns på Hem och i vilken ordning
-                        </span>
-                      </span>
-                      <ChevronRight size={18} className="shrink-0 text-muted-foreground" />
-                    </Link>
-
-                    <button
-                      type="button"
-                      onClick={replayIntro}
-                      className="flex w-full items-center gap-3 rounded-2xl border border-border bg-card p-3 text-left shadow-sm"
-                    >
-                      <Sparkles size={20} className="shrink-0 text-muted-foreground" />
-                      <span className="min-w-0 flex-1">
-                        <span className="block text-sm font-medium">Visa introduktionen igen</span>
-                        <span data-npf="optional" className="block text-xs text-muted-foreground">
-                          Gå igenom de första korten en gång till
-                        </span>
-                      </span>
-                    </button>
+                  <div className="mb-4">
+                    <PwaInstallButton />
                   </div>
-
-                  <button
-                    type="button"
-                    onClick={() => setSimpleMode(!simpleMode)}
-                    className={`mb-4 inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
-                      simpleMode
-                        ? "border-primary bg-primary/12 text-primary"
-                        : "border-border bg-card text-muted-foreground"
-                    }`}
-                  >
-                    <Check size={14} />
-                    {simpleMode ? "Visar bara det viktigaste" : "Visa bara det viktigaste"}
-                  </button>
 
                   {/* Viktiga områden – dina två egna platser i bottenmenyn */}
                   <div className="mb-4 rounded-3xl border-2 border-border bg-card p-4 shadow-sm">
@@ -1280,7 +1255,7 @@ export default function Layout({ children }: LayoutProps) {
                         <p className="text-sm font-semibold">Din bottenmeny</p>
                         <p data-npf="optional" className="text-xs text-muted-foreground">
                           Hem, QuickFlow och Mer ligger fast. Två platser väljer du själv – normalt
-                          Idag och Flow.
+                          Idag och Planera.
                         </p>
                       </div>
                       <Button
@@ -1329,7 +1304,7 @@ export default function Layout({ children }: LayoutProps) {
                           variant="ghost"
                           size="sm"
                           className="rounded-xl gap-1"
-                          onClick={() => setNavSlots(["/idag", "/flow"])}
+                          onClick={() => setNavSlots(["/idag", "/flowplan"])}
                         >
                           <RotateCcw size={14} /> Återställ
                         </Button>
@@ -1347,6 +1322,35 @@ export default function Layout({ children }: LayoutProps) {
 }
 
 /** En rad i menyn: ikon, namn och en förklaring i klartext. */
+/** Knapp i inställningar – samma utseende som NavRow men utan länk. */
+function SettingAction({
+  icon: Icon,
+  label,
+  hint,
+  onClick,
+}: {
+  icon: typeof Home;
+  label: string;
+  hint: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="flex w-full items-center gap-3 rounded-2xl border border-border bg-card p-3 text-left shadow-sm transition-colors press"
+    >
+      <span className="shrink-0">
+        <Icon size={22} strokeWidth={2} />
+      </span>
+      <span className="min-w-0">
+        <span className="block text-sm font-medium leading-tight">{label}</span>
+        <span className="block text-xs leading-snug text-muted-foreground">{hint}</span>
+      </span>
+    </button>
+  );
+}
+
 function NavRow({
   item,
   isActive,

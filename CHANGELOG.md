@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-29 – Mer/Inställningar: en primär väg in per funktion
+
+- Kartlade hela Mer-flödet och tog bort dubbletterna: Anpassa appen, Hemskärm och Min livsprofil fanns tidigare både som kategori, pillerknapp och eget kort.
+- Kategorin "Inställningar" i områdesrutnätet är borttagen – inställningar bor nu i en enda sektion längst ner i Mer. Admin har en egen kategori.
+- Alla inställningsrader (Anpassa appen, Hemskärm, Flow-inställningar, Min livsprofil, Så funkar MyFlove, Visa introduktionen igen, Alarmljud, Enkelt läge, Logga ut) har samma höjd, ikonstorlek, spacing och beteende.
+- Sökningen i Mer hittar fortfarande alla sidor som tidigare.
+- Fix: bottenmenyns "Återställ" och hjälptexten pekar nu på Idag + Planera, som är det faktiska standardläget.
+
 ## 2026-08-29 – Städning: kompaktare Påminnelser, energihistorik och listor
 
 - Påminnelser: "Aviseringar" är nu ett kompakt kort – kort status och knapp på samma rad i stället för höga textstycken.
