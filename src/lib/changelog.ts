@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Ren kodbas (lint-städning)",
+    items: [
+      "Alla lint-varningar åtgärdade – hjälpfunktioner flyttade till egna moduler och hook-beroenden memoiserade (2026-08-29)",
+      "Autogenererade Supabase-filer exkluderas från linting; ingen funktionell förändring (2026-08-29)",
+    ],
+  },
+  {
     title: "Samlad MyFlove-design",
     items: [
       "Gemensamma block, rubriker, ytor och minimering används nu konsekvent i appens centrala vyer (2026-08-29)",

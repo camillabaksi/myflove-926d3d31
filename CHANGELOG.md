@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-29 – Ren kodbas (lint-städning)
+
+- Alla lint-varningar åtgärdade: hjälpfunktioner flyttade ur komponentfiler till egna moduler (`scenes.ts`, `recurrence.ts`, `battery-observations.ts`) och hook-beroenden memoiserade.
+- Autogenererade Supabase-filer exkluderas från linting – de redigeras aldrig för hand.
+- Ingen funktionell förändring; alla 207 tester, typkontroll och produktionsbygge passerar.
+
 ## 2026-08-29 – Samlad MyFlove-design
 
 - Gemensamma block, rubriker, ytor och minimering används nu konsekvent i appens centrala vyer.
