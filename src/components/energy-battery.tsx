@@ -98,7 +98,7 @@ export default function EnergyBattery({
     </>
   );
 
-  return (
+  const block = (
     <MyFloveBlock
       title="Just nu"
       subtitle="Din energi och ditt mående – det senaste du loggat"
@@ -120,13 +120,9 @@ export default function EnergyBattery({
       }
       footer={
         href ? (
-          <Link
-            href={href}
-            onClick={onNavigate}
-            className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
-          >
+          <span className="inline-flex items-center gap-2 text-sm font-semibold text-primary">
             Logga energi &amp; mående <ArrowRight size={16} />
-          </Link>
+          </span>
         ) : (
           <span className="inline-flex items-center gap-2 text-xs text-muted-foreground">
             <Sparkles size={14} className="text-primary" /> Varje loggning blir en egen observation
@@ -137,6 +133,19 @@ export default function EnergyBattery({
     >
       {content}
     </MyFloveBlock>
+  );
+
+  return href ? (
+    <Link
+      href={href}
+      onClick={onNavigate}
+      data-testid="battery-card"
+      className="block"
+    >
+      {block}
+    </Link>
+  ) : (
+    block
   );
 }
 

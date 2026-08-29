@@ -113,6 +113,7 @@ export default function SimpleCheckin({
       icon={Pencil}
       tone="lavender"
       surface="lavender"
+      data-testid="battery-log-form"
       className={cn("h-full", className)}
       footer={
         <p aria-live="polite" className="text-center text-xs text-muted-foreground">

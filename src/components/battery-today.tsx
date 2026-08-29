@@ -119,7 +119,12 @@ export default function BatteryToday() {
             Inga observationer än idag. Din första loggning ovan börjar måla dagens bild. 💜
           </p>
         ) : (
-          <ol className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <>
+            <div className="mb-3 flex flex-wrap gap-x-5 gap-y-1 text-xs font-semibold text-muted-foreground">
+              <span>Energi idag</span>
+              <span>Mående idag</span>
+            </div>
+            <ol className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {observations.map((o) => {
               const part = partOfDay(o.ts);
               return (
@@ -165,7 +170,8 @@ export default function BatteryToday() {
                 </li>
               );
             })}
-          </ol>
+            </ol>
+          </>
         )}
       </div>
     </MyFloveBlock>
