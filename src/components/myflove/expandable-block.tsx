@@ -64,6 +64,12 @@ export function ExpandableBlock({
   const label = titleText ?? (typeof title === "string" ? title : "block");
   const closeRef = React.useRef<HTMLButtonElement | null>(null);
   const triggerRef = React.useRef<HTMLButtonElement | null>(null);
+  const scrollPositionRef = React.useRef(0);
+
+  const openBlock = React.useCallback(() => {
+    scrollPositionRef.current = window.scrollY;
+    setOpen(true);
+  }, []);
 
   // Bakåtknappen (t.ex. Android) stänger den maximerade vyn i stället för
   // att lämna sidan. Vi lägger bara till ett tillfälligt history-läge medan
@@ -89,7 +95,8 @@ export function ExpandableBlock({
       window.removeEventListener("keydown", onKey);
       document.body.style.overflow = prevOverflow;
       if (window.history.state?.myfloveExpanded === label) window.history.back();
-      trigger?.focus();
+      trigger?.focus({ preventScroll: true });
+      window.scrollTo(0, scrollPositionRef.current);
     };
   }, [open, label]);
 
@@ -98,7 +105,7 @@ export function ExpandableBlock({
       <button
         type="button"
         ref={triggerRef}
-        onClick={() => setOpen(true)}
+        onClick={openBlock}
         aria-expanded={open}
         aria-label={`Öppna ${label}`}
         data-testid={dataTestId}
