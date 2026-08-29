@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Samlad MyFlove-design",
+    items: [
+      "Gemensamma block, rubriker, ytor och minimering används nu konsekvent i appens centrala vyer (2026-08-29)",
+      "Hem, Mitt batteri, Idag, Planera, Flow, QuickFlow och Anpassa appen följer samma lugna visuella rytm (2026-08-29)",
+      "Befintliga funktioner, navigation, data och logik är oförändrade (2026-08-29)",
+    ],
+  },
+  {
     title: "Flera observationer per dag",
     items: [
       "Varje loggning i Mitt batteri blir en egen tidsstämplad observation (2026-08-29)",

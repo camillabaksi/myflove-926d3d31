@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-29 – Samlad MyFlove-design
+
+- Gemensamma block, rubriker, ytor och minimering används nu konsekvent i appens centrala vyer.
+- Hem, Mitt batteri, Idag, Planera, Flow, QuickFlow och Anpassa appen följer samma lugna visuella rytm.
+- Befintliga funktioner, navigation, data och logik är oförändrade.
+
 ## 2026-08-29 – Flera observationer per dag i Mitt batteri
 
 - Varje loggning av energi/mående blir nu en egen tidsstämplad observation – tidigare värden skrivs aldrig över.
