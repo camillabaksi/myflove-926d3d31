@@ -831,7 +831,7 @@ export default function Tasks() {
            </div>
            </MyFloveWide>
          )}
-       </div>
+       </MyFlovePageGrid>
 
       <TaskEnergyPrompt
         task={energyPrompt}
