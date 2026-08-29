@@ -102,9 +102,7 @@ export default function NpfPage() {
               <Accessibility size={22} />
               <h1 className="text-2xl font-bold">Anpassa appen</h1>
             </div>
-            <p className="text-muted-foreground">
-              Välj hur MyFlove ska se ut och kännas.
-            </p>
+            <p className="text-muted-foreground">Välj hur MyFlove ska se ut och kännas.</p>
           </header>
         </MyFloveWide>
 
