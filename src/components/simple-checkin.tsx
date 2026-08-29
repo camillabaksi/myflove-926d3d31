@@ -116,7 +116,8 @@ export default function SimpleCheckin({
 
   return (
     <section
-      aria-label="Snabb incheckning"
+      aria-label="Logga energi och mående"
+      data-testid="battery-log-form"
       className={cn(
         "rounded-3xl border border-border/60 bg-card p-5 shadow-soft space-y-5",
         className,
