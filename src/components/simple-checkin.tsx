@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import type { EnergyCategory } from "@/lib/energy-flow";
@@ -243,15 +243,13 @@ export default function SimpleCheckin({
         onClick={save}
         className="w-full rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-opacity hover:opacity-90"
       >
-        {saved ? "💜 Tack" : hasLoggedToday ? "Uppdatera dagens loggning" : "Logga energi & mående"}
+        {saved ? "💜 Tack" : "Logga energi & mående"}
       </button>
 
       <p aria-live="polite" className="text-xs text-muted-foreground">
         {saved
           ? "💜 Tack. Det hjälper mig att förstå dig bättre."
-          : hasLoggedToday
-            ? "Du har redan loggat idag – justera här så uppdateras samma logg."
-            : "Inget är rätt eller fel. Du kan ändra dagens värde när du vill."}
+          : "Logga så ofta du vill – varje sparning blir en egen observation i din dag."}
       </p>
     </section>
   );
