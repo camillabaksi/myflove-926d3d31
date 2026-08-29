@@ -294,6 +294,7 @@ export default function FlowPlanPage() {
           tone="lavender"
           surface="lavender"
           area="planera"
+          span
           collapsible
           collapseId="planering::steg-lage"
         >
