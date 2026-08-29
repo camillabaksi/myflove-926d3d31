@@ -252,7 +252,29 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
               }
               className="rounded-2xl bg-card border border-border p-5 shadow-sm"
             >
-...
+              {todayLogs.length > 0 && (
+                <div className="h-48">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={todayLogs} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
+                      <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
+                      <XAxis dataKey="time" tick={{ fontSize: 11 }} />
+                      <YAxis domain={[0, 5]} ticks={[1, 2, 3, 4, 5]} tick={{ fontSize: 11 }} />
+                      <Tooltip
+                        formatter={(v: number) => [`${v} – ${LEVEL_LABELS[v]}`, "Energi"]}
+                        contentStyle={{ borderRadius: 12, fontSize: 12 }}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="level"
+                        stroke="hsl(var(--primary))"
+                        strokeWidth={2.5}
+                        dot={{ r: 4, fill: "hsl(var(--primary))" }}
+                        activeDot={{ r: 6 }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              )}
             </CollapsibleSection>
           </MyFloveWide>
 
@@ -264,7 +286,40 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
               description="Snittenergi per timme, senaste 7 dagarna."
               className="rounded-2xl bg-card border border-border p-5 shadow-sm"
             >
-...
+              {hourAverages.length === 0 ? (
+                <p className="text-sm text-muted-foreground py-6 text-center">
+                  Logga några gånger så börjar din karta ta form.
+                </p>
+              ) : (
+                <>
+                  <div className="h-48">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart
+                        data={hourAverages}
+                        margin={{ top: 8, right: 8, left: -20, bottom: 0 }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
+                        <XAxis dataKey="hour" tick={{ fontSize: 10 }} interval="preserveStartEnd" />
+                        <YAxis domain={[0, 5]} ticks={[1, 2, 3, 4, 5]} tick={{ fontSize: 11 }} />
+                        <Tooltip
+                          formatter={(v: number) => [v, "Snitt"]}
+                          contentStyle={{ borderRadius: 12, fontSize: 12 }}
+                        />
+                        <Bar dataKey="avg" fill="hsl(var(--primary))" radius={[6, 6, 0, 0]} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                  {peakHour && lowHour && peakHour.hour !== lowHour.hour && (
+                    <div className="mt-4 flex items-start gap-2 rounded-xl bg-secondary/40 p-3 text-sm">
+                      <Sparkles size={16} className="text-primary shrink-0 mt-0.5" />
+                      <p className="leading-snug">
+                        Du är oftast som mest på runt <strong>{peakHour.hour}</strong> och lägre kring{" "}
+                        <strong>{lowHour.hour}</strong>. Planera det tunga när kroppen är med.
+                      </p>
+                    </div>
+                  )}
+                </>
+              )}
             </CollapsibleSection>
           </MyFloveWide>
         </>
