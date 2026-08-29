@@ -1,59 +1,7 @@
 import { Clock, NotebookPen } from "lucide-react";
-import { useQuickCheckin, toScale10 } from "@/hooks/use-quick-checkin";
-import type { MoodEntry } from "@/hooks/use-data";
-import type { EnergyLogEntry } from "@/hooks/use-quick-checkin";
+import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { MyFloveBlock } from "@/components/myflove/block";
-
-const MOOD_EMOJI: Record<number, string> = { 1: "😢", 2: "😕", 3: "😐", 4: "🙂", 5: "😄" };
-
-const timeOf = (ts: number | string) =>
-  new Intl.DateTimeFormat("sv-SE", { hour: "2-digit", minute: "2-digit" }).format(new Date(ts));
-
-/** Morgon / Eftermiddag / Kväll – enkel orientering, inte en bedömning. */
-function partOfDay(ts: number | string): { label: string; emoji: string; tone: string } {
-  const h = new Date(ts).getHours();
-  if (h < 12) return { label: "Morgon", emoji: "🌤️", tone: "bg-sun/60 text-ink" };
-  if (h < 18) return { label: "Eftermiddag", emoji: "☀️", tone: "bg-blush/60 text-ink" };
-  return { label: "Kväll", emoji: "🌙", tone: "bg-lavender/80 text-ink" };
-}
-
-type Observation = {
-  key: string;
-  ts: number;
-  energyPct?: number;
-  mood?: number;
-  note?: string;
-};
-
-/**
- * Slår ihop dagens energi- och måendeobservationer till kort per tidpunkt.
- * Poster inom samma minut hör ihop (samma sparning i formuläret ovanför).
- * Ingen ny datakälla – bara en presentation av befintliga observationer.
- */
-export function buildObservations(
-  energy: EnergyLogEntry[],
-  moods: MoodEntry[],
-  windowMs = 90_000,
-): Observation[] {
-  const out: Observation[] = [];
-  const rest = [...moods];
-
-  for (const e of energy) {
-    const ts = new Date(e.logged_at).getTime();
-    const i = rest.findIndex((m) => Math.abs(m.date - ts) <= windowMs);
-    const paired = i >= 0 ? rest.splice(i, 1)[0] : undefined;
-    out.push({
-      key: e.id,
-      ts,
-      energyPct: Math.min(100, toScale10(e.level) * 10),
-      ...(paired ? { mood: paired.score, ...(paired.note ? { note: paired.note } : {}) } : {}),
-    });
-  }
-  for (const m of rest) {
-    out.push({ key: m.id, ts: m.date, mood: m.score, ...(m.note ? { note: m.note } : {}) });
-  }
-  return out.sort((a, b) => a.ts - b.ts);
-}
+import { buildObservations } from "@/lib/battery-observations";
 
 /** Ring som visar energin – lugn, mjuk och läsbar utan färg som enda signal. */
 function EnergyRing({ pct }: { pct: number }) {
