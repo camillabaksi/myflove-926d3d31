@@ -159,6 +159,47 @@ export function MyFloveBlockGrid({
   );
 }
 
+/**
+ * Sidlayout för hela appen – samma blockrutnät överallt.
+ * En kolumn på små skärmar, två kolumner från md och uppåt.
+ * Innehåll som behöver hela bredden wrappas i <MyFloveWide>.
+ */
+export function MyFlovePageGrid({
+  className,
+  style,
+  children,
+}: {
+  className?: string;
+  style?: React.CSSProperties;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      style={style}
+      className={cn(
+        "grid min-w-0 grid-cols-1 gap-4 md:grid-cols-2 md:items-start md:gap-5",
+        className,
+      )}
+    >
+      {children}
+    </div>
+  );
+}
+
+/** Innehåll som ska spänna över hela bredden i ett MyFlovePageGrid. */
+export function MyFloveWide({
+  className,
+  style,
+  children,
+  ...rest
+}: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div {...rest} style={style} className={cn("min-w-0 md:col-span-2", className)}>
+      {children}
+    </div>
+  );
+}
+
 /** Liten statsruta inuti ett block – stort tal, liten etikett. */
 export function MyFloveStat({
   label,

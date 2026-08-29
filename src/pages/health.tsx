@@ -54,14 +54,14 @@ export default function HealthPage() {
           </p>
         </div>
 
-        <ul className="space-y-3">
+        <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:items-start">
           {AREAS.map((a) => {
             const Icon = a.icon;
             return (
-              <li key={a.title}>
+              <li key={a.title} className="min-w-0">
                 <Link
                   href={a.href}
-                  className="surface-card flex items-start gap-3 p-4 transition-colors hover:bg-secondary/40"
+                  className="surface-card flex h-full items-start gap-3 p-4 transition-colors hover:bg-secondary/40"
                 >
                   <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary">
                     <Icon size={20} />

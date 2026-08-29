@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Responsivt blocksystem",
+    items: [
+      "Hem är nu ett dashboard med block sida vid sida – batteri, Flow, Just nu och Nästa (2026-08-29)",
+      "Nya layoutkomponenter ger samma blockrutnät på Hem, Idag, Hälsa och Mitt batteri (2026-08-29)",
+      "Grafer, formulär och långa texter använder hela bredden; en kolumn på små skärmar (2026-08-29)",
+    ],
+  },
+  {
     title: "Ren kodbas (lint-städning)",
     items: [
       "Alla lint-varningar åtgärdade – hjälpfunktioner flyttade till egna moduler och hook-beroenden memoiserade (2026-08-29)",

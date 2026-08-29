@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import FlowLearningCard from "@/components/flow/flow-learning-card";
 import { FlowMascot } from "@/components/flow-mascot";
-import { MyFloveBlock } from "@/components/myflove/block";
+import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 
 import { useHomeLayout, type HomeBlockId } from "@/lib/home-layout";
 import { TaskQuickAdd, type QuickAddResult } from "@/components/task-quick-add";
@@ -256,9 +256,9 @@ export default function Home() {
       <IntroTour />
       <FlowOnboarding />
 
-      <div className="flex flex-col gap-6">
+      <MyFlovePageGrid className="gap-5">
         {/* Hero: välkommen, namn, kort undertext */}
-        <div
+        <MyFloveWide
           className="relative overflow-hidden rounded-3xl p-6 shadow-lifted border border-border/60 pop-in"
           style={{ background: heroGradient }}
         >
@@ -318,11 +318,11 @@ export default function Home() {
               </button>
             )}
           </div>
-        </div>
+        </MyFloveWide>
 
         {/* Mitt batteri – högst upp och ett enda helt klickbart kort. */}
         {shows("batteri") && (
-          <section style={pos("batteri")} aria-label="Mitt batteri">
+          <section className="min-w-0" style={pos("batteri")} aria-label="Mitt batteri">
             <EnergyBattery
               href="/mitt-batteri"
               onNavigate={() => track("battery_opened", { source: "hem" })}
@@ -331,13 +331,17 @@ export default function Home() {
         )}
 
         {/* Flow – en liten notering längst ner, konkurrerar inte med dagen. */}
-        <div style={{ order: 98.4 }} data-testid="home-flow-note" className="pt-1">
+        <div
+          style={{ order: visible.indexOf("batteri") + 0.5 }}
+          data-testid="home-flow-note"
+          className="min-w-0"
+        >
           <FlowLearningCard />
         </div>
 
         {/* Nästa – nästa relevanta aktivitet */}
         {shows("nasta") && (
-          <section style={pos("nasta")} aria-label="Nästa aktivitet">
+          <section className="min-w-0" style={pos("nasta")} aria-label="Nästa aktivitet">
             <MyFloveBlock
               title={
                 <span className="flex items-center gap-2">
@@ -384,7 +388,7 @@ export default function Home() {
 
         {/* Dagens medicin – samma data och samma avbockning som i Rutiner & medicin */}
         {shows("medicin") && (
-          <section style={pos("medicin")} aria-label="Rutiner och medicin">
+          <section className="min-w-0" style={pos("medicin")} aria-label="Rutiner och medicin">
             <MyFloveBlock
               title={
                 <span className="flex items-center gap-2">
@@ -405,14 +409,14 @@ export default function Home() {
         {/* Dagens översikt – bara en sammanfattning. Hela listan bor i Idag. */}
 
         {shows("idag") && (
-          <div style={pos("idag")}>
+          <div className="min-w-0" style={pos("idag")}>
             <DaySummary />
           </div>
         )}
 
         {/* Flow just nu – samma förslag som i Planera, tydligt signerat Flow */}
         {shows("forslag") && (
-          <section style={pos("forslag")} aria-label="Flows förslag just nu">
+          <section className="min-w-0" style={pos("forslag")} aria-label="Flows förslag just nu">
             <MyFloveBlock
               title={
                 <span className="flex items-center gap-2">
@@ -447,7 +451,7 @@ export default function Home() {
 
         {/* Lägg till – snabbknapp */}
         {shows("lagg-till") && (
-          <div style={pos("lagg-till")}>
+          <MyFloveWide style={pos("lagg-till")}>
             <TaskQuickAdd
               onAdd={(result: QuickAddResult) => {
                 addTask(result.title, result.dueDate, {
@@ -462,12 +466,12 @@ export default function Home() {
             <p className="mt-1 text-xs text-muted-foreground">
               Lägg till något i dagen – med tid om du vill.
             </p>
-          </div>
+          </MyFloveWide>
         )}
 
         {/* Vad behöver du just nu? – situationer, inte produktnamn */}
         {shows("vagar") && (
-          <nav style={pos("vagar")} aria-label="Vad behöver du just nu">
+          <nav className="min-w-0" style={pos("vagar")} aria-label="Vad behöver du just nu">
             <MyFloveBlock
               title="Vad behöver du just nu?"
               subtitle="Välj en väg – Flow tar dig till rätt ställe"
@@ -526,26 +530,26 @@ export default function Home() {
 
         {/* Områdesväljare – litet, längst ner */}
         {shows("omrade") && (
-          <div style={pos("omrade")} className="space-y-2 pt-2">
+          <MyFloveWide style={pos("omrade")} className="space-y-2 pt-2">
             <AreaSwitcher size="sm" />
             <p className="text-xs text-muted-foreground">
               {activeArea === "alla"
                 ? "MyFlove ser hela din dag – oavsett vilket rum sakerna hör till."
                 : `Du är i ${AREA_META[activeArea].label.toLowerCase()}rummet. Resten väntar tills du vill se det.`}
             </p>
-          </div>
+          </MyFloveWide>
         )}
 
-        <div style={{ order: 98 }} className="space-y-3 pt-2">
+        <MyFloveWide style={{ order: 98 }} className="space-y-3 pt-2">
           <AreaOnboarding />
-        </div>
+        </MyFloveWide>
 
         {/* Liten, diskret notering längst ner – konkurrerar inte med dagen. */}
-        <div style={{ order: 98.5 }} data-testid="home-install-note" className="pt-1">
+        <MyFloveWide style={{ order: 98.5 }} data-testid="home-install-note" className="pt-1">
           <PwaInstallCard compact />
-        </div>
+        </MyFloveWide>
 
-        <div
+        <MyFloveWide
           style={{ order: 99 }}
           className="flex flex-wrap items-center justify-center gap-4 pb-2 text-center"
         >
@@ -561,8 +565,8 @@ export default function Home() {
           >
             <SlidersHorizontal size={13} /> Anpassa hemskärmen
           </Link>
-        </div>
-      </div>
+        </MyFloveWide>
+      </MyFlovePageGrid>
     </Layout>
   );
 }
