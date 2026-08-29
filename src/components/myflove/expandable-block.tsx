@@ -70,6 +70,7 @@ export function ExpandableBlock({
   // vyn är öppen och tar bort det igen när den stängs.
   React.useEffect(() => {
     if (!open) return;
+    const trigger = triggerRef.current;
     const onPop = () => setOpen(false);
     window.history.pushState({ myfloveExpanded: label }, "");
     window.addEventListener("popstate", onPop);
@@ -88,7 +89,7 @@ export function ExpandableBlock({
       window.removeEventListener("keydown", onKey);
       document.body.style.overflow = prevOverflow;
       if (window.history.state?.myfloveExpanded === label) window.history.back();
-      triggerRef.current?.focus();
+      trigger?.focus();
     };
   }, [open, label]);
 
