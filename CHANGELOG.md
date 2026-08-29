@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-29 – Nya Blueprint-, pitchdeck- och videomaterial 3.7
+
+- Living Blueprint 3.7 beskriver MyFloves aktuella produktkarta: Flow som följeslagare, Mitt batteri som enda hälsologgning, Idag som aktivitetsnav och det gemensamma blocksystemet.
+- Pitchdeck 3.7 och pitchvideo 3.7 är nytt material med en sammanhållen berättelse om MyFlove – inte en omstart av produkten.
+- Externa marknadsuppskattningar är tydligt märkta som uppskattningar och prognoser; inga påhittade traction-siffror presenteras.
+- Pitchsidan visar och länkar till 3.7-filerna för DOCX, PDF, PowerPoint och MP4.
+
 ## 2026-08-29 – Anpassa appen: symmetriskt rutnät
 
 - Blocken i Anpassa appen sträcker sig nu lika högt inom varje rad, så rutnätet ser symmetriskt och balanserat ut.

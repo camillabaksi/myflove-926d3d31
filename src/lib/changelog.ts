@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Nya Blueprint-, pitchdeck- och videomaterial 3.7",
+    items: [
+      "Living Blueprint, pitchdeck och pitchvideo är uppdaterade till nytt material i version 3.7 (2026-08-29)",
+      "Materialet beskriver aktuell produktkarta, Flow som följeslagare, Mitt batteri som enda hälsologgning och Idag som aktivitetsnav (2026-08-29)",
+      "Pitchsidan använder 3.7-filer för video, PowerPoint, PDF och blueprint; externa marknadstal är tydligt märkta (2026-08-29)",
+    ],
+  },
+  {
     title: "Anpassa appen: symmetriskt rutnät",
     items: [
       "Blocken i Anpassa appen sträcker sig lika högt inom varje rad för ett symmetriskt rutnät (2026-08-29)",
