@@ -11,7 +11,6 @@
  */
 import * as React from "react";
 import { ChevronDown, type LucideIcon } from "lucide-react";
-import { useLocation } from "wouter";
 import { cn } from "@/lib/utils";
 import { useCollapsible } from "@/lib/collapse-store";
 import { MyFloveIcon, type MyFloveTone } from "@/components/myflove";
