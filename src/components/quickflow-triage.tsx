@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
+import { Link } from "wouter";
 import { Undo2, Wand2 } from "lucide-react";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { useTasks, useReminders, useDumpIdeas } from "@/hooks/use-data";
@@ -24,7 +25,6 @@ import { resolveDestination, titleForRule } from "@/lib/quickflow-rules";
 import { useNotes } from "@/hooks/use-notes";
 import { useRelations } from "@/hooks/use-relations";
 import { guessRelation, relationTag } from "@/lib/relations";
-import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import { useChildren } from "@/hooks/use-children";
 import { FlowItemActions } from "@/components/flow-item-actions";
 import { useSituation } from "@/hooks/use-situation";
@@ -48,7 +48,6 @@ export default function QuickflowTriage() {
   const { addNote } = useNotes();
 
   const { people: relationPeople } = useRelations();
-  const { addFactor } = useEnergyFlow();
   const { children, addItem: addChildItem } = useChildren();
   const { situation } = useSituation();
   // Situationen är levande: aktiverar/pausar man något ändras förslagen direkt.
@@ -58,7 +57,6 @@ export default function QuickflowTriage() {
   /** Vilken tanke som väntar på svar om energin gav eller tog. */
   const [energyFor, setEnergyFor] = useState<string | null>(null);
   /** Riktning vald i energipanelen – nästa steg är hur mycket den påverkar. */
-  const [energyDir, setEnergyDir] = useState<"gives" | "drains">("drains");
   /** Vilken tanke som väntar på "vilket barn och vad blir det?". */
   const [childFor, setChildFor] = useState<string | null>(null);
   const [childPick, setChildPick] = useState<string | null>(null);
@@ -239,17 +237,6 @@ export default function QuickflowTriage() {
     complete(item.id);
     log("planering");
     toast.success(`Den ligger nu i ${AREA_META[area].label}.`);
-  };
-
-  const toEnergy = async (item: QuickflowItem, direction: "gives" | "drains", strength: number) => {
-    await addFactor({ title: titleOf(item), direction, strength, category: "annat" });
-    complete(item.id);
-    setEnergyFor(null);
-    toast.success(
-      direction === "gives"
-        ? "Sparad som något som ger energi. 🔋"
-        : "Sparad som något som tar energi. 🪫",
-    );
   };
 
   /** Barn: tanken landar hos rätt barn, som aktivitet, uppgift eller anteckning. */
