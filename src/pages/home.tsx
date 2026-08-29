@@ -477,9 +477,20 @@ export default function Home() {
           </section>
         )}
 
-        {/* Lägg till – snabbknapp */}
+        {/* Lägg till i dagen – samma blockspråk: komprimerat kort som öppnar sig */}
         {shows("lagg-till") && (
-          <MyFloveWide style={pos("lagg-till")}>
+          <section className="min-w-0" style={pos("lagg-till")} aria-label="Lägg till i dagen">
+            <ExpandableBlock
+              title="Lägg till i dagen"
+              titleText="Lägg till i dagen"
+              area="hem"
+              widget
+              label="Lägg till"
+              icon={Plus}
+              subtitle="Något nytt eller något du redan hunnit med."
+              tone="mint"
+              surface="mint"
+            >
             <TaskQuickAdd
               onAdd={(result: QuickAddResult) => {
                 addTask(result.title, result.dueDate, {
