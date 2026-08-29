@@ -130,15 +130,14 @@ export function MoodContent({ showHeader = true, readOnly = false }: MoodContent
       <button
         type="button"
         onClick={() => setFlowInsightsOpen(true)}
-        className="w-full flex items-center gap-4 p-5 bg-card border border-border rounded-2xl shadow-sm hover:border-primary/40 transition-colors text-left"
+        className="press flex w-full flex-col items-center justify-center gap-1.5 rounded-3xl border border-border/60 bg-lavender/60 px-3 py-6 text-center shadow-soft transition-shadow hover:shadow-lifted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
       >
-        <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
+        <span className="grid h-12 w-12 place-items-center rounded-2xl bg-primary/10 text-primary">
           <Sparkles size={24} />
-        </div>
-        <div>
-          <p className="font-medium">Hitta mitt flow</p>
-          <p className="text-sm text-muted-foreground">Se vad som gått bra på sistone</p>
-        </div>
+        </span>
+        <span className="font-display text-base font-bold leading-tight text-ink">
+          Hitta mitt flow
+        </span>
       </button>
 
       {moods.length > 0 && (

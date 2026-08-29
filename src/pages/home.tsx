@@ -611,37 +611,34 @@ export default function Home() {
   );
 }
 
+import { MyFloveIcon } from "@/components/myflove";
+import { areaProps } from "@/lib/areas";
+
 /**
  * Dagens översikt på Hem – bara en sammanfattning i siffror.
- * Hela listan (och avbockningen) bor i Min dag, så samma sak aldrig
- * visas som två kort på startsidan.
+ * Hela listan (och avbockningen) bor i Idag, så samma sak aldrig
+ * visas som två kort på startsidan. Klick går till befintliga Idag-vyn.
  */
 function DaySummary() {
   const { todayOpen, todayDone } = useFlowItems();
   const total = todayOpen.length + todayDone.length;
 
+  // Komprimerat widget-block som navigerar direkt till befintliga Idag-vyn.
   return (
-    <ExpandableBlock
-      title="Dagens översikt"
-      area="idag"
-      subtitle="Det här är kvar idag"
-      icon={Check}
-      tone="sky"
-      surface="sky"
-      status={total === 0 ? "Inget inplanerat" : `${todayDone.length} av ${total} klart`}
-      summary={total === 0 ? "Lägg till något när du vill" : `${todayOpen.length} kvar att göra`}
+    <Link
+      href="/idag"
+      data-testid="home-day-summary"
+      aria-label="Öppna Idag – dagens fullständiga översikt"
+      {...areaProps("idag")}
+      className="press area-border flex min-h-[7rem] min-w-0 flex-col items-center justify-center gap-1.5 rounded-3xl border border-border/60 bg-sky/50 px-3 py-6 text-center shadow-soft transition-shadow hover:shadow-lifted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
     >
-      <p className="text-ink">
-        {total === 0
-          ? "Inget inplanerat idag ännu."
-          : `${total} ${total === 1 ? "sak" : "saker"} idag · ${todayDone.length} ${todayDone.length === 1 ? "klar" : "klara"} · ${todayOpen.length} kvar`}
-      </p>
-      <Link
-        href="/idag"
-        className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
-      >
-        Se hela dagen i Idag <ArrowRight size={14} />
-      </Link>
-    </ExpandableBlock>
+      <MyFloveIcon icon={Check} tone="sky" size="lg" className="area-bg-soft area-text" />
+      <span className="font-display text-2xl font-bold leading-none text-ink">
+        {total === 0 ? "0" : `${todayDone.length}/${total}`}
+      </span>
+      <span className="text-xs font-medium text-muted-foreground">
+        {total === 0 ? "Idag" : total === todayDone.length ? "Allt klart" : `${todayOpen.length} kvar`}
+      </span>
+    </Link>
   );
 }
