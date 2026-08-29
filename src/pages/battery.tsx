@@ -43,11 +43,13 @@ export default function BatteryPage() {
           <EnergyBattery defaultOpen />
         </div>
 
-        {/* 2. Dagens tidsstämplade observationer – förändring över dagen */}
-        <BatteryToday />
+        {/* 2. Dagens tidsstämplade observationer + morgon/kväll */}
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">
+          <BatteryToday />
+          <DayEdgesCheckin />
+        </div>
 
-        {/* 3. Morgon/kväll och dagens energiflöde */}
-        <DayEdgesCheckin />
+        {/* 3. Dagens energiflöde – graf, hela bredden */}
         <DayEnergyFlow />
 
         {/* 4. Historik – sekundär, längst ner */}
