@@ -1151,17 +1151,39 @@ export default function Layout({ children }: LayoutProps) {
                   </div>
 
                   {/*
-                    En enda plats för inställningar. Varje funktion har exakt en
-                    primär väg in – inga dubbletter i kategorierna ovanför.
+                    En enda plats för inställningar, grupperat i tydliga sektioner.
+                    Varje funktion har exakt en primär väg in – inga dubbletter
+                    i kategorierna ovanför.
                   */}
+
+                  {/* Min profil */}
                   <h3 className="mb-1 mt-6 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                    Inställningar
+                    Min profil
                   </h3>
                   <p className="mb-2 text-xs text-muted-foreground/80">
-                    Allt du kan ställa in – på ett ställe.
+                    Vem du är och hur din vardag ser ut just nu.
                   </p>
+                  <div className="mb-5 space-y-2">
+                    <NavRow
+                      item={{
+                        href: "/min-livsprofil",
+                        label: "Min livsprofil",
+                        icon: Compass,
+                        hint: situationLabel,
+                      }}
+                      isActive={location === "/min-livsprofil"}
+                      onClick={closeMenu}
+                    />
+                  </div>
 
-                  <div className="mb-4 space-y-2">
+                  {/* Anpassa MyFlove */}
+                  <h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    Anpassa MyFlove
+                  </h3>
+                  <p className="mb-2 text-xs text-muted-foreground/80">
+                    Bestäm vad du ser på hemskärmen, i menyn och hur Flow hjälper dig.
+                  </p>
+                  <div className="mb-3 space-y-2">
                     <NavRow
                       item={{
                         href: "/anpassa",
@@ -1192,64 +1214,16 @@ export default function Layout({ children }: LayoutProps) {
                       isActive={location === "/flow-installningar"}
                       onClick={closeMenu}
                     />
-                    <NavRow
-                      item={{
-                        href: "/min-livsprofil",
-                        label: "Min livsprofil",
-                        icon: Compass,
-                        hint: situationLabel,
-                      }}
-                      isActive={location === "/min-livsprofil"}
-                      onClick={closeMenu}
-                    />
-                    <NavRow
-                      item={{
-                        href: "/oversikt",
-                        label: "Så funkar MyFlove",
-                        icon: Compass,
-                        hint: "Enkel sammanfattning av allt i appen – och vart du går",
-                      }}
-                      isActive={location === "/oversikt"}
-                      onClick={closeMenu}
-                    />
-                    <SettingAction
-                      icon={Sparkles}
-                      label="Visa introduktionen igen"
-                      hint="Gå igenom de första korten en gång till"
-                      onClick={replayIntro}
-                    />
-                    <SettingAction
-                      icon={alarmEnabled ? Volume2 : VolumeX}
-                      label={`Alarmljud: ${alarmEnabled ? "på" : "av"}`}
-                      hint="Ljudsignal när en påminnelse går"
-                      onClick={toggleAlarm}
-                    />
                     <SettingAction
                       icon={simpleMode ? Check : LayoutGrid}
                       label={simpleMode ? "Visar bara det viktigaste" : "Visar allt i menyn"}
                       hint="Bestäm hur mycket som syns i Mer"
                       onClick={() => setSimpleMode(!simpleMode)}
                     />
-                    <Show when="signed-in">
-                      <SettingAction
-                        icon={LogOut}
-                        label="Logga ut"
-                        hint="Avsluta konto finns under Anpassa appen → Konto"
-                        onClick={() => {
-                          setMobileMenuOpen(false);
-                          track("logout");
-                          signOut();
-                        }}
-                      />
-                    </Show>
                   </div>
 
-                  <div className="mb-4">
-                    <PwaInstallButton />
-                  </div>
-
-                  {/* Viktiga områden – dina två egna platser i bottenmenyn */}
-                  <div className="mb-4 rounded-3xl border-2 border-border bg-card p-4 shadow-sm">
+                  {/* Din bottenmeny – hör hemma under Anpassa MyFlove */}
+                  <div className="mb-5 rounded-3xl border-2 border-border bg-card p-4 shadow-sm">
                     <div className="flex items-center justify-between gap-2">
                       <div>
                         <p className="text-sm font-semibold">Din bottenmeny</p>
@@ -1310,6 +1284,61 @@ export default function Layout({ children }: LayoutProps) {
                         </Button>
                       </div>
                     )}
+                  </div>
+
+                  {/* Kom igång */}
+                  <h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    Kom igång
+                  </h3>
+                  <p className="mb-2 text-xs text-muted-foreground/80">
+                    Lär känna appen och lägg den på hemskärmen.
+                  </p>
+                  <div className="mb-5 space-y-2">
+                    <NavRow
+                      item={{
+                        href: "/oversikt",
+                        label: "Så funkar MyFlove",
+                        icon: Compass,
+                        hint: "Enkel sammanfattning av allt i appen – och vart du går",
+                      }}
+                      isActive={location === "/oversikt"}
+                      onClick={closeMenu}
+                    />
+                    <SettingAction
+                      icon={Sparkles}
+                      label="Visa introduktionen igen"
+                      hint="Gå igenom de första korten en gång till"
+                      onClick={replayIntro}
+                    />
+                    <PwaInstallButton />
+                  </div>
+
+                  {/* Ljud & konto */}
+                  <h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    Ljud &amp; konto
+                  </h3>
+                  <p className="mb-2 text-xs text-muted-foreground/80">
+                    Ljudsignaler och ditt konto.
+                  </p>
+                  <div className="space-y-2">
+                    <SettingAction
+                      icon={alarmEnabled ? Volume2 : VolumeX}
+                      label={`Alarmljud: ${alarmEnabled ? "på" : "av"}`}
+                      hint="Ljudsignal när en påminnelse går"
+                      onClick={toggleAlarm}
+                    />
+                    <Show when="signed-in">
+                      <SettingAction
+                        icon={LogOut}
+                        label="Logga ut"
+                        hint="Avsluta konto finns under Anpassa appen → Konto"
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          track("logout");
+                          signOut();
+                        }}
+                      />
+                    </Show>
                   </div>
                 </>
               )}

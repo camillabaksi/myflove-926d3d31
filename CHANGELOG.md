@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-29 – Mer: strukturerade sektioner längst ner
+
+- Mer-sidans nedre del är nu grupperad i fyra tydliga sektioner: Min profil, Anpassa MyFlove, Kom igång och Ljud & konto – varje med rubrik och kort förklaring.
+- "Din bottenmeny" ligger under Anpassa MyFlove där den hör hemma, och "Installera appen" (PWA) ligger i listan under Kom igång.
+- Alla rader och kort har samma höjd, spacing, ikonplacering och beteende som tidigare – ingen funktion är flyttad till ny route eller borttagen.
+
 ## 2026-08-29 – Mer/Inställningar: en primär väg in per funktion
 
 - Kartlade hela Mer-flödet och tog bort dubbletterna: Anpassa appen, Hemskärm och Min livsprofil fanns tidigare både som kategori, pillerknapp och eget kort.
