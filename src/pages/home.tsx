@@ -282,12 +282,20 @@ export default function Home() {
               icon={CalendarDays}
               subtitle="Ditt nästa steg"
               summary={suggestion.headline}
+              // Osynlig hållare som bevarar samma vertikala rytm som blocken
+              // med en synlig statusrad (t.ex. Mitt batteri / Flow-lär-känna-dig).
+              status={
+                <span aria-hidden="true" className="invisible select-none">
+                  {"\u00A0"}
+                </span>
+              }
               tone="lavender"
               surface="lavender"
               href="/kalender"
             />
           </MyFloveWide>
         )}
+
 
         {/* Lägg till i dagen – samma blockspråk: komprimerat kort som öppnar sig */}
         {shows("lagg-till") && (
