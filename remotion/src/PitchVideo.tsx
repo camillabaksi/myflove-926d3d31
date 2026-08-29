@@ -36,11 +36,11 @@ function useIn(delay: number, damping = 18) {
   } as React.CSSProperties;
 }
 
-const InView: React.FC<{ delay: number; style?: React.CSSProperties; children: React.ReactNode }> = ({
-  delay,
-  style,
-  children,
-}) => {
+const InView: React.FC<{
+  delay: number;
+  style?: React.CSSProperties;
+  children: React.ReactNode;
+}> = ({ delay, style, children }) => {
   const anim = useIn(delay);
   return <div style={{ ...anim, ...style }}>{children}</div>;
 };
@@ -236,10 +236,10 @@ const SceneProblem: React.FC = () => {
         <Title size={78}>Verktygen är byggda för kalendrar — inte för människor.</Title>
         <div style={{ display: "flex", flexDirection: "column", gap: 18, marginTop: 6 }}>
           {items.map((t, i) => (
-            <div
+            <InView
               key={t}
+              delay={24 + i * 8}
               style={{
-                ...useIn(24 + i * 8),
                 display: "flex",
                 alignItems: "center",
                 gap: 20,
@@ -258,7 +258,7 @@ const SceneProblem: React.FC = () => {
                 }}
               />
               {t}
-            </div>
+            </InView>
           ))}
         </div>
       </div>
