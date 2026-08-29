@@ -75,7 +75,7 @@ export default function BatteryPage() {
               </TabsList>
 
               <TabsContent value="mood" className="mt-6">
-                <MoodContent showHeader={false} />
+                <MoodContent showHeader={false} readOnly />
               </TabsContent>
 
               <TabsContent value="energy" className="mt-6">

@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { useUserProfile } from "@/hooks/use-user-profile";
+import { useMoods } from "@/hooks/use-data";
 import { useFlowLearning } from "@/hooks/use-flow-learning";
 import { useFlowSettings } from "@/hooks/use-flow-settings";
 import { useLifeProfile } from "@/hooks/use-life-profile";
@@ -24,6 +25,7 @@ export function useFlowPersonalContext(): string {
   const { settings } = useFlowSettings();
   const { profile } = useLifeProfile();
   const { situation } = useSituation();
+  const { moods } = useMoods();
 
   return useMemo(() => {
     const lines: string[] = ["Om användaren (personlig kontext, inte regler):"];
@@ -34,6 +36,20 @@ export function useFlowPersonalContext(): string {
 
     const sit = situationContext(situation);
     if (sit) lines.push(sit);
+
+    // Användarens egna ord från Mitt batteri – kontext, aldrig diagnos.
+    const week = Date.now() - 7 * 24 * 60 * 60 * 1000;
+    const notes = moods
+      .filter((m) => m.date >= week && m.note?.trim())
+      .slice(0, 3)
+      .map((m) => `- Du har berättat: ”${m.note?.trim()}”`);
+    if (notes.length) {
+      lines.push("Användarens egna ord om sitt mående den senaste veckan:");
+      lines.push(...notes);
+      lines.push(
+        "Detta är användarens egen beskrivning, inte en diagnos. Dra inga medicinska slutsatser och ställ inga diagnoser – säg hellre 'du har berättat att…' och anpassa dagens förslag varsamt.",
+      );
+    }
 
     if (knowledge.insights.length) {
       lines.push(
@@ -54,5 +70,5 @@ export function useFlowPersonalContext(): string {
     lines.push(TONE[settings.level] ?? TONE['diskret'] ?? "");
 
     return lines.filter(Boolean).join("\n");
-  }, [name, profile, situation, knowledge, settings.level]);
+  }, [name, profile, situation, knowledge, settings.level, moods]);
 }
