@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ANALYTICS_OPT_OUT_KEY, track } from "@/lib/analytics";
 import { DeleteAccountButton } from "@/components/delete-account-button";
 import Layout from "@/components/layout";
+import { MyFloveBlock } from "@/components/myflove/block";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { RotateCcw, Accessibility, BarChart3 } from "lucide-react";
