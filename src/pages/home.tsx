@@ -502,10 +502,12 @@ export default function Home() {
               }}
               className="bg-primary text-primary-foreground hover:bg-primary/90"
             />
-            <p className="mt-1 text-xs text-muted-foreground">
-              Lägg till något i dagen – med tid om du vill.
-            </p>
-          </MyFloveWide>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Lägg till något i dagen – med tid om du vill.
+              </p>
+              <DidThisCta />
+            </ExpandableBlock>
+          </section>
         )}
 
         {/* Vad behöver du just nu? – situationer, inte produktnamn */}
