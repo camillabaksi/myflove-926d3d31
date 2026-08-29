@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-29 – Hem: Flow-kortet leder till Kalender, maskoten större
+
+- "Flow · just nu" (underrubrik "Ditt nästa steg") navigerar nu till Kalender (/kalender) i stället för Flow.
+- "Nästa" navigerar tillbaka till Idag (/idag).
+- Flow-maskoten i godmorgon-kortet är förstorad från `sm` till `md`.
+- Endast presentation och navigation – data, logik och övrig funktionalitet är oförändrad.
+
+
 ## 2026-08-29 – Hem: Nästa leder till Kalender, Flow-blocket större
 
 - "Nästa" navigerar nu till Kalender (/kalender) i stället för Idag – eftersom det redan finns en Idag-widget.
