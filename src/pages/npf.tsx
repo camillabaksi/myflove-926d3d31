@@ -34,16 +34,16 @@ type ToggleRow = {
 };
 
 const SEE_LESS: ToggleRow[] = [
-  { key: "less", title: "Färre saker", icon: Eye },
-  { key: "calm", title: "Lugnare färger", icon: Sparkles },
-  { key: "stillness", title: "Ingen rörelse", icon: MonitorSmartphone },
+  { key: "less", title: "Färre saker" },
+  { key: "calm", title: "Lugnare färger" },
+  { key: "stillness", title: "Ingen rörelse" },
 ];
 
 const EASIER: ToggleRow[] = [
-  { key: "plainWords", title: "Enkla ord", icon: Type },
-  { key: "roomy", title: "Större knappar", icon: Hand },
-  { key: "largeText", title: "Större text", icon: Type },
-  { key: "pictograms", title: "Bildstöd", icon: ImageIcon },
+  { key: "plainWords", title: "Enkla ord" },
+  { key: "roomy", title: "Större knappar" },
+  { key: "largeText", title: "Större text" },
+  { key: "pictograms", title: "Bildstöd" },
 ];
 
 function ToggleRowView({
@@ -55,13 +55,9 @@ function ToggleRowView({
   checked: boolean;
   onCheckedChange: (v: boolean) => void;
 }) {
-  const Icon = row.icon;
   return (
     <label className="flex cursor-pointer items-center justify-between gap-3 rounded-2xl border border-border/50 bg-card/70 p-3">
-      <span className="flex min-w-0 items-center gap-2.5">
-        {Icon && <Icon size={16} className="shrink-0 text-primary" aria-hidden="true" />}
-        <span className="min-w-0 font-medium text-ink">{row.title}</span>
-      </span>
+      <span className="min-w-0 font-medium text-ink">{row.title}</span>
       <Switch
         checked={checked}
         onCheckedChange={onCheckedChange}
