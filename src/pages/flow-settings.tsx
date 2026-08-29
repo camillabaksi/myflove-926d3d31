@@ -1,4 +1,5 @@
 import { Link } from "wouter";
+import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { ArrowLeft, RotateCcw, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -20,33 +21,37 @@ export default function FlowSettingsPage() {
   const { settings, update, togglePriority, reset } = useFlowSettings();
 
   return (
-    <div className="mx-auto w-full max-w-2xl space-y-5 pb-24">
-      <div className="flex items-center gap-2">
-        <Button asChild variant="ghost" size="sm" className="rounded-full">
-          <Link href="/hem">
-            <ArrowLeft className="mr-1 size-4" />
-            Tillbaka
-          </Link>
-        </Button>
-      </div>
+    <MyFlovePageGrid className="mx-auto w-full max-w-4xl pb-24">
+      <MyFloveWide>
+        <div className="flex items-center gap-2">
+          <Button asChild variant="ghost" size="sm" className="rounded-full">
+            <Link href="/hem">
+              <ArrowLeft className="mr-1 size-4" />
+              Tillbaka
+            </Link>
+          </Button>
+        </div>
+      </MyFloveWide>
 
-      <header className="flex items-center gap-4 rounded-3xl border border-border/60 bg-card p-4 shadow-sm">
-        <div className="shrink-0">
-          <FlowCharacter
-            scene="hello"
-            seed={3}
-            energy={settings.enabled ? 70 : 30}
-            stage="inline"
-          />
-        </div>
-        <div className="space-y-1">
-          <h1 className="text-xl font-semibold">Flow-inställningar</h1>
-          <p className="text-sm text-muted-foreground">
-            Du bestämmer hur mycket Flow får säga, när han får höra av sig och vad han ska hålla
-            koll på. Inget av det här ändrar dina uppgifter.
-          </p>
-        </div>
-      </header>
+      <MyFloveWide>
+        <header className="flex items-center gap-4 rounded-3xl border border-border/60 bg-card p-4 shadow-sm">
+          <div className="shrink-0">
+            <FlowCharacter
+              scene="hello"
+              seed={3}
+              energy={settings.enabled ? 70 : 30}
+              stage="inline"
+            />
+          </div>
+          <div className="space-y-1">
+            <h1 className="text-xl font-semibold">Flow-inställningar</h1>
+            <p className="text-sm text-muted-foreground">
+              Du bestämmer hur mycket Flow får säga, när han får höra av sig och vad han ska hålla
+              koll på. Inget av det här ändrar dina uppgifter.
+            </p>
+          </div>
+        </header>
+      </MyFloveWide>
 
       <Card className="rounded-3xl">
         <CardHeader>
@@ -177,18 +182,20 @@ export default function FlowSettingsPage() {
         </CardContent>
       </Card>
 
-      <div className="flex flex-wrap items-center gap-2">
-        <Button variant="outline" className="rounded-2xl" onClick={reset}>
-          <RotateCcw className="mr-2 size-4" />
-          Återställ till standard
-        </Button>
-        <Button asChild variant="ghost" className="rounded-2xl">
-          <Link href="/flow">
-            <Sparkles className="mr-2 size-4" />
-            Se Flow live
-          </Link>
-        </Button>
-      </div>
-    </div>
+      <MyFloveWide>
+        <div className="flex flex-wrap items-center gap-2">
+          <Button variant="outline" className="rounded-2xl" onClick={reset}>
+            <RotateCcw className="mr-2 size-4" />
+            Återställ till standard
+          </Button>
+          <Button asChild variant="ghost" className="rounded-2xl">
+            <Link href="/flow">
+              <Sparkles className="mr-2 size-4" />
+              Se Flow live
+            </Link>
+          </Button>
+        </div>
+      </MyFloveWide>
+    </MyFlovePageGrid>
   );
 }
