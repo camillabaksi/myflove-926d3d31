@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { MyFloveBlock } from "@/components/myflove/block";
 
-
 // Minimala typer för webbläsarens SpeechRecognition (saknas i TS lib.dom).
 type SpeechRecognitionStreamEvent = {
   resultIndex: number;
@@ -199,7 +198,10 @@ export default function Dump() {
           surface="sun"
           className="pop-in"
         >
-          <p className="leading-relaxed text-muted-foreground">Få ut det ur huvudet. Skriv eller prata in allt som snurrar – huller om buller går bra. Jag håller det åt dig tills du orkar sortera.</p>
+          <p className="leading-relaxed text-muted-foreground">
+            Få ut det ur huvudet. Skriv eller prata in allt som snurrar – huller om buller går bra.
+            Jag håller det åt dig tills du orkar sortera.
+          </p>
         </MyFloveBlock>
 
         <QuickflowCapture />
@@ -211,49 +213,49 @@ export default function Dump() {
             title="Skriv eller prata in"
             description="Allt som snurrar – huller om buller går bra. Tryck sedan på Sortera."
           >
-          <div className="relative rounded-3xl border border-border/60 bg-card p-2 shadow-soft transition-all focus-within:ring-2 focus-within:ring-primary/20">
-            <textarea
-              value={rawText}
-              onChange={(e) => setRawText(e.target.value)}
-              placeholder="T.ex. 'Handla mjölk. Ringa tandläkaren imorgon. Kanske börja måla om vardagsrummet någon gång...'"
-              className="h-48 w-full resize-none border-none bg-transparent p-4 pb-16 text-lg outline-none"
-            />
-            {(isListening || rawText.trim().length > 0) && (
-              <MyFloveListening
-                active={isListening || rawText.trim().length > 0}
-                label={isListening ? "Jag lyssnar..." : "Jag följer med."}
-                className="absolute right-4 top-4"
+            <div className="relative rounded-3xl border border-border/60 bg-card p-2 shadow-soft transition-all focus-within:ring-2 focus-within:ring-primary/20">
+              <textarea
+                value={rawText}
+                onChange={(e) => setRawText(e.target.value)}
+                placeholder="T.ex. 'Handla mjölk. Ringa tandläkaren imorgon. Kanske börja måla om vardagsrummet någon gång...'"
+                className="h-48 w-full resize-none border-none bg-transparent p-4 pb-16 text-lg outline-none"
               />
-            )}
-            <div className="absolute bottom-3 right-3 left-3 flex justify-between items-center gap-2">
-              {voiceSupported ? (
-                <button
-                  type="button"
-                  onClick={toggleListening}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
-                    isListening
-                      ? "bg-destructive/10 text-destructive"
-                      : "bg-secondary text-muted-foreground hover:bg-secondary/70"
-                  }`}
-                >
-                  {isListening ? <Square size={16} /> : <Mic size={16} />}
-                  {isListening ? "Lyssnar..." : "Tala in"}
-                </button>
-              ) : (
-                <span className="text-xs text-muted-foreground px-2">
-                  Röstinmatning stöds inte i denna webbläsare
-                </span>
+              {(isListening || rawText.trim().length > 0) && (
+                <MyFloveListening
+                  active={isListening || rawText.trim().length > 0}
+                  label={isListening ? "Jag lyssnar..." : "Jag följer med."}
+                  className="absolute right-4 top-4"
+                />
               )}
-              <Button
-                onClick={handleSort}
-                disabled={!rawText.trim()}
-                className="rounded-xl shadow-sm h-10 px-6"
-              >
-                <Sparkles className="mr-2 h-4 w-4" />
-                Sortera
-              </Button>
+              <div className="absolute bottom-3 right-3 left-3 flex justify-between items-center gap-2">
+                {voiceSupported ? (
+                  <button
+                    type="button"
+                    onClick={toggleListening}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
+                      isListening
+                        ? "bg-destructive/10 text-destructive"
+                        : "bg-secondary text-muted-foreground hover:bg-secondary/70"
+                    }`}
+                  >
+                    {isListening ? <Square size={16} /> : <Mic size={16} />}
+                    {isListening ? "Lyssnar..." : "Tala in"}
+                  </button>
+                ) : (
+                  <span className="text-xs text-muted-foreground px-2">
+                    Röstinmatning stöds inte i denna webbläsare
+                  </span>
+                )}
+                <Button
+                  onClick={handleSort}
+                  disabled={!rawText.trim()}
+                  className="rounded-xl shadow-sm h-10 px-6"
+                >
+                  <Sparkles className="mr-2 h-4 w-4" />
+                  Sortera
+                </Button>
+              </div>
             </div>
-          </div>
           </StepSection>
         ) : (
           <StepSection
@@ -326,9 +328,17 @@ export default function Dump() {
         <InsightQuickflowHint />
         <QuickflowList />
 
-        <Link to="/anteckningar" className="surface-card mt-4 flex items-center gap-3 p-4 text-left hover:border-primary/40">
+        <Link
+          to="/anteckningar"
+          className="surface-card mt-4 flex items-center gap-3 p-4 text-left hover:border-primary/40"
+        >
           <NotebookPen size={20} className="text-primary" />
-          <span className="min-w-0 flex-1"><span className="block font-semibold text-ink">Anteckningar &amp; idébank</span><span className="block text-sm text-muted-foreground">Tankar utan krav bor i en egen del under Flow.</span></span>
+          <span className="min-w-0 flex-1">
+            <span className="block font-semibold text-ink">Anteckningar &amp; idébank</span>
+            <span className="block text-sm text-muted-foreground">
+              Tankar utan krav bor i en egen del under Flow.
+            </span>
+          </span>
         </Link>
 
         <CollapsibleSection

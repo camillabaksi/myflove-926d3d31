@@ -29,8 +29,7 @@ export default function DailyFlowPage() {
             <h1 className="text-3xl font-bold">Rutiner &amp; medicin</h1>
           </div>
           <p className="text-muted-foreground">
-            Morgonstart, dina fasta rutiner och doser. Dagens plan och förslag bor i Idag och
-            Flow.
+            Morgonstart, dina fasta rutiner och doser. Dagens plan och förslag bor i Idag och Flow.
           </p>
         </header>
 

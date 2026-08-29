@@ -88,12 +88,30 @@ export default function NpfPage() {
           </p>
         </header>
 
-        <MyFloveBlock title="Dina val" subtitle="Välj hur mycket du vill se och höra" icon={Accessibility} tone="lavender" surface="lavender" collapsible collapseId="anpassa::val">
+        <MyFloveBlock
+          title="Dina val"
+          subtitle="Välj hur mycket du vill se och höra"
+          icon={Accessibility}
+          tone="lavender"
+          surface="lavender"
+          collapsible
+          collapseId="anpassa::val"
+        >
           <div className="space-y-3">
             {ROWS.map((row) => (
-              <label key={row.key} className="flex cursor-pointer items-start justify-between gap-4 rounded-2xl border border-border/50 bg-card/70 p-4">
-                <span className="space-y-1"><span className="block font-medium">{row.title}</span><span className="block text-sm text-muted-foreground">{row.text}</span></span>
-                <Switch checked={settings[row.key]} onCheckedChange={(v) => update({ [row.key]: v } as Partial<NpfSettings>)} aria-label={row.title} />
+              <label
+                key={row.key}
+                className="flex cursor-pointer items-start justify-between gap-4 rounded-2xl border border-border/50 bg-card/70 p-4"
+              >
+                <span className="space-y-1">
+                  <span className="block font-medium">{row.title}</span>
+                  <span className="block text-sm text-muted-foreground">{row.text}</span>
+                </span>
+                <Switch
+                  checked={settings[row.key]}
+                  onCheckedChange={(v) => update({ [row.key]: v } as Partial<NpfSettings>)}
+                  aria-label={row.title}
+                />
               </label>
             ))}
           </div>
@@ -103,15 +121,47 @@ export default function NpfPage() {
           <RotateCcw size={16} /> Återställ till standard
         </Button>
 
-        <MyFloveBlock title="Integritet" subtitle="Anonym statistik, utan personuppgifter eller innehåll" icon={BarChart3} tone="sky" surface="sky" collapsible collapseId="anpassa::integritet">
+        <MyFloveBlock
+          title="Integritet"
+          subtitle="Anonym statistik, utan personuppgifter eller innehåll"
+          icon={BarChart3}
+          tone="sky"
+          surface="sky"
+          collapsible
+          collapseId="anpassa::integritet"
+        >
           <label className="flex cursor-pointer items-start justify-between gap-4 rounded-2xl border border-border/50 bg-card/70 p-4">
-            <span className="space-y-1"><span className="block font-medium">Dela anonym användningsstatistik</span><span className="block text-sm text-muted-foreground">Hjälper oss förstå vilka funktioner som används – helt anonymt. Inga marknads- eller tredjepartscookies. <Link to="/cookies" className="underline underline-offset-2">Läs mer i cookiepolicyn</Link>.</span></span>
-            <Switch checked={!statsOptOut} onCheckedChange={(shareStats) => toggleStats(!shareStats)} aria-label="Dela anonym användningsstatistik" />
+            <span className="space-y-1">
+              <span className="block font-medium">Dela anonym användningsstatistik</span>
+              <span className="block text-sm text-muted-foreground">
+                Hjälper oss förstå vilka funktioner som används – helt anonymt. Inga marknads- eller
+                tredjepartscookies.{" "}
+                <Link to="/cookies" className="underline underline-offset-2">
+                  Läs mer i cookiepolicyn
+                </Link>
+                .
+              </span>
+            </span>
+            <Switch
+              checked={!statsOptOut}
+              onCheckedChange={(shareStats) => toggleStats(!shareStats)}
+              aria-label="Dela anonym användningsstatistik"
+            />
           </label>
-          <p className="text-xs text-muted-foreground">Ändringen gäller direkt. Nödvändig lagring påverkas aldrig.</p>
+          <p className="text-xs text-muted-foreground">
+            Ändringen gäller direkt. Nödvändig lagring påverkas aldrig.
+          </p>
         </MyFloveBlock>
 
-        <MyFloveBlock title="Konto" subtitle="Att avsluta kontot raderar din data permanent" icon={Accessibility} tone="blush" surface="blush" className="border-destructive/30" data-testid="account-section">
+        <MyFloveBlock
+          title="Konto"
+          subtitle="Att avsluta kontot raderar din data permanent"
+          icon={Accessibility}
+          tone="blush"
+          surface="blush"
+          className="border-destructive/30"
+          data-testid="account-section"
+        >
           <DeleteAccountButton />
         </MyFloveBlock>
       </div>

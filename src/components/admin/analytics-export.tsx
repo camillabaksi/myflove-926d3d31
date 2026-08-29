@@ -1,10 +1,7 @@
 import { useState } from "react";
 import { Download, FileText, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import {
-  getAnalyticsExportFn,
-  type AnalyticsExport,
-} from "@/lib/analytics.functions";
+import { getAnalyticsExportFn, type AnalyticsExport } from "@/lib/analytics.functions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -190,19 +187,10 @@ export default function AnalyticsExport() {
       </div>
       <div className="flex flex-wrap gap-2">
         <Button type="button" onClick={() => run("csv")} disabled={busy !== null}>
-          {busy === "csv" ? (
-            <Loader2 className="animate-spin" size={16} />
-          ) : (
-            <Download size={16} />
-          )}
+          {busy === "csv" ? <Loader2 className="animate-spin" size={16} /> : <Download size={16} />}
           Exportera CSV
         </Button>
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => run("pdf")}
-          disabled={busy !== null}
-        >
+        <Button type="button" variant="outline" onClick={() => run("pdf")} disabled={busy !== null}>
           {busy === "pdf" ? <Loader2 className="animate-spin" size={16} /> : <FileText size={16} />}
           Exportera PDF
         </Button>

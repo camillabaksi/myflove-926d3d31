@@ -1,9 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-  ANALYTICS_EVENTS,
-  sanitizePayload,
-  type AnalyticsEventName,
-} from "@/lib/analytics-events";
+import { ANALYTICS_EVENTS, sanitizePayload, type AnalyticsEventName } from "@/lib/analytics-events";
 
 describe("analytics-schemat", () => {
   it("innehåller de flöden vi mäter", () => {

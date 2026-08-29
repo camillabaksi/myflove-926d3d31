@@ -84,7 +84,10 @@ export default function EnergyBattery({
           {suggestions.length > 0 && (
             <ul className="space-y-1.5">
               {suggestions.map((s) => (
-                <li key={s.id} className="rounded-2xl bg-secondary/40 px-3 py-2 text-xs text-foreground">
+                <li
+                  key={s.id}
+                  className="rounded-2xl bg-secondary/40 px-3 py-2 text-xs text-foreground"
+                >
                   {s.text}
                 </li>
               ))}
@@ -95,7 +98,7 @@ export default function EnergyBattery({
     </>
   );
 
-  return (
+  const block = (
     <MyFloveBlock
       title="Just nu"
       subtitle="Din energi och ditt mående – det senaste du loggat"
@@ -117,13 +120,9 @@ export default function EnergyBattery({
       }
       footer={
         href ? (
-          <Link
-            href={href}
-            onClick={onNavigate}
-            className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
-          >
+          <span className="inline-flex items-center gap-2 text-sm font-semibold text-primary">
             Logga energi &amp; mående <ArrowRight size={16} />
-          </Link>
+          </span>
         ) : (
           <span className="inline-flex items-center gap-2 text-xs text-muted-foreground">
             <Sparkles size={14} className="text-primary" /> Varje loggning blir en egen observation
@@ -134,6 +133,14 @@ export default function EnergyBattery({
     >
       {content}
     </MyFloveBlock>
+  );
+
+  return href ? (
+    <Link href={href} onClick={onNavigate} data-testid="battery-card" className="block">
+      {block}
+    </Link>
+  ) : (
+    block
   );
 }
 
@@ -166,7 +173,11 @@ function BatteryCurve({
         role="img"
         aria-label={`Energikurva över dagen. ${reading.summary}`}
       >
-        <polygon points={`0,${h} ${points.join(" ")} ${w},${h}`} fill="hsl(var(--primary))" opacity={0.12} />
+        <polygon
+          points={`0,${h} ${points.join(" ")} ${w},${h}`}
+          fill="hsl(var(--primary))"
+          opacity={0.12}
+        />
         <polyline
           points={points.join(" ")}
           fill="none"

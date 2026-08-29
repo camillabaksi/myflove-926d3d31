@@ -64,7 +64,6 @@ export function trackEvent(section: string, action: string): void {
   );
 }
 
-
 /**
  * Skydd mot dubbelloggning: identiska "visnings"-event (öppnat/visat) som
  * kommer inom kort tid räknas som ETT. Det gör att React StrictMode,

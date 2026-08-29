@@ -41,8 +41,6 @@ import CollapsibleSection from "@/components/collapsible-section";
 import { ACCEPT_DOCUMENTS, UPLOAD_HINT, prepareUpload } from "@/lib/file-formats";
 import { MyFloveThinking, MyFloveEmptyIllustration } from "@/components/myflove/motion";
 
-
-
 export default function StudyBuddyPage() {
   const { activeCourses } = useCourses();
   const { toast } = useToast();

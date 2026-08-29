@@ -38,7 +38,8 @@ async function refreshServiceWorkers(): Promise<void> {
   try {
     const regs = await navigator.serviceWorker.getRegistrations();
     for (const reg of regs) {
-      const url = reg.active?.scriptURL || reg.waiting?.scriptURL || reg.installing?.scriptURL || "";
+      const url =
+        reg.active?.scriptURL || reg.waiting?.scriptURL || reg.installing?.scriptURL || "";
       if (url && !url.endsWith(SW_PATH)) {
         // Främmande/legacy worker: får aldrig ligga kvar och cacha bundles.
         await reg.unregister();

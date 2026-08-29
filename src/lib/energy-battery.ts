@@ -155,11 +155,17 @@ export function buildBattery(input: BatteryInput): BatteryReading {
   // egna ifyllnader väger lika tungt som FlowScore just nu.
   const anchors: { minutes: number; delta: number }[] = [];
   if (input.morningLevel != null) {
-    anchors.push({ minutes: startMinutes, delta: clamp(input.morningLevel, 0, 100) - baseAt(startMinutes) });
+    anchors.push({
+      minutes: startMinutes,
+      delta: clamp(input.morningLevel, 0, 100) - baseAt(startMinutes),
+    });
   }
   anchors.push({ minutes: nowMinutes, delta: clamp(input.flowNow, 0, 100) - baseAt(nowMinutes) });
   if (input.eveningLevel != null) {
-    anchors.push({ minutes: endMinutes, delta: clamp(input.eveningLevel, 0, 100) - baseAt(endMinutes) });
+    anchors.push({
+      minutes: endMinutes,
+      delta: clamp(input.eveningLevel, 0, 100) - baseAt(endMinutes),
+    });
   }
   anchors.sort((a, b) => a.minutes - b.minutes);
 

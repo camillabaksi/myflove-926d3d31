@@ -11,7 +11,6 @@
  */
 import * as React from "react";
 import { ChevronDown, type LucideIcon } from "lucide-react";
-import { useLocation } from "wouter";
 import { cn } from "@/lib/utils";
 import { useCollapsible } from "@/lib/collapse-store";
 import { MyFloveIcon, type MyFloveTone } from "@/components/myflove";
@@ -76,9 +75,8 @@ export function MyFloveBlock({
   "data-testid": dataTestId,
   children,
 }: MyFloveBlockProps) {
-  const [path] = useLocation();
   const key = collapseId ?? (typeof title === "string" ? title : "block");
-  const storeId = collapsible ? `${path}::${key.slice(0, 60)}` : null;
+  const storeId = collapsible ? `myflove-block::${key.slice(0, 60)}` : null;
   const { collapsed, toggle } = useCollapsible(storeId, defaultCollapsed);
 
   const heading = (

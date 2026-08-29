@@ -8,31 +8,76 @@ import { FlowCharacter, sceneForTask, type FlowScene } from "@/components/flow/f
  */
 
 /** Rekvisita som måste finnas + tillåtna poser, per situation. */
-const EXPECTED: Record<
-  FlowScene,
-  { props: string[][]; moods: string[] }
-> = {
+const EXPECTED: Record<FlowScene, { props: string[][]; moods: string[] }> = {
   hello: { props: [[], []], moods: ["wave", "bounce"] },
-  rain: { props: [["umbrella", "rainDrops"], ["umbrella", "rainDrops"]], moods: ["sway", "nod"] },
-  sleep: { props: [["bedFrame", "zzz"], ["bedFrame", "zzz"]], moods: ["calm"] },
-  break: { props: [["mug", "steam"], ["mug", "steam"]], moods: ["calm", "float"] },
+  rain: {
+    props: [
+      ["umbrella", "rainDrops"],
+      ["umbrella", "rainDrops"],
+    ],
+    moods: ["sway", "nod"],
+  },
+  sleep: {
+    props: [
+      ["bedFrame", "zzz"],
+      ["bedFrame", "zzz"],
+    ],
+    moods: ["calm"],
+  },
+  break: {
+    props: [
+      ["mug", "steam"],
+      ["mug", "steam"],
+    ],
+    moods: ["calm", "float"],
+  },
   study: { props: [["openBook"], ["openBook", "glasses"]], moods: ["nod", "think"] },
   work: { props: [["laptop"], ["laptop"]], moods: ["nod", "think"] },
   clean: { props: [["vacuum"], ["vacuum"]], moods: ["sway", "bounce"] },
-  cook: { props: [["chefHat", "pan"], ["chefHat", "pan"]], moods: ["sway", "nod"] },
+  cook: {
+    props: [
+      ["chefHat", "pan"],
+      ["chefHat", "pan"],
+    ],
+    moods: ["sway", "nod"],
+  },
   travel: { props: [["car"], ["bus"]], moods: ["sway", "float"] },
   shopping: { props: [[], []], moods: ["sway", "bounce"] },
   walk: { props: [[], []], moods: ["sway", "bounce"] },
   kids: { props: [["miniFlows"], ["miniFlows"]], moods: ["wave", "bounce"] },
-  sun: { props: [["sun", "sunglasses"], ["sun", "sunglasses"]], moods: ["bounce", "cheer"] },
+  sun: {
+    props: [
+      ["sun", "sunglasses"],
+      ["sun", "sunglasses"],
+    ],
+    moods: ["bounce", "cheer"],
+  },
   medicine: { props: [["pillBottle"], ["pillBottle"]], moods: ["nod", "calm"] },
   water: { props: [["waterGlass"], ["waterGlass"]], moods: ["nod", "float"] },
   laundry: { props: [["laundryBasket"], ["laundryBasket"]], moods: ["sway", "nod"] },
-  energyHigh: { props: [["battery", "bolt", "stars"], ["battery", "confetti"]], moods: ["cheer", "bounce"] },
-  energyLow: { props: [["battery", "zzz"], ["battery", "mug"]], moods: ["calm"] },
+  energyHigh: {
+    props: [
+      ["battery", "bolt", "stars"],
+      ["battery", "confetti"],
+    ],
+    moods: ["cheer", "bounce"],
+  },
+  energyLow: {
+    props: [
+      ["battery", "zzz"],
+      ["battery", "mug"],
+    ],
+    moods: ["calm"],
+  },
   mood: { props: [[], []], moods: ["pulse", "float"] },
   done: { props: [["confetti", "stars"], ["confetti"]], moods: ["cheer", "bounce"] },
-  rest: { props: [["breathRing", "cushion"], ["breathRing", "cushion"]], moods: ["calm"] },
+  rest: {
+    props: [
+      ["breathRing", "cushion"],
+      ["breathRing", "cushion"],
+    ],
+    moods: ["calm"],
+  },
   think: { props: [[], []], moods: ["think", "nod"] },
 };
 
@@ -47,14 +92,20 @@ describe("FlowCharacter – ett state i taget", () => {
         (el) => !el.closest('[data-flow-prop="miniFlows"]'),
       ),
     ).toHaveLength(1);
-    expect(container.querySelector("[data-flow-character]")).toHaveAttribute("data-flow-scene", scene);
+    expect(container.querySelector("[data-flow-character]")).toHaveAttribute(
+      "data-flow-scene",
+      scene,
+    );
   });
 
   it("visar aldrig två scener samtidigt när scenen byts", () => {
     const { container, rerender } = render(<FlowCharacter scene="rain" />);
     rerender(<FlowCharacter scene="work" />);
     expect(container.querySelectorAll("[data-flow-character]")).toHaveLength(1);
-    expect(container.querySelector("[data-flow-character]")).toHaveAttribute("data-flow-scene", "work");
+    expect(container.querySelector("[data-flow-character]")).toHaveAttribute(
+      "data-flow-scene",
+      "work",
+    );
     expect(container.querySelector('[data-flow-prop="umbrella"]')).toBeNull();
     expect(container.querySelector('[data-flow-prop="laptop"]')).not.toBeNull();
   });
@@ -65,7 +116,9 @@ describe("FlowCharacter – rätt rekvisita och pose per kontext", () => {
     const spec = EXPECTED[scene];
     for (const seed of [0, 1]) {
       it(`${scene} (variant ${seed}) visar rätt prop och pose`, () => {
-        const { container } = render(<FlowCharacter scene={scene} seed={seed} energy={50} kids={2} />);
+        const { container } = render(
+          <FlowCharacter scene={scene} seed={seed} energy={50} kids={2} />,
+        );
         const root = container.querySelector("[data-flow-character]")!;
         expect(root.getAttribute("data-flow-variant")).toBe(String(seed % spec.props.length));
 

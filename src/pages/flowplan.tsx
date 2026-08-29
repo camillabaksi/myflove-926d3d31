@@ -2,7 +2,6 @@ import { track } from "@/lib/analytics";
 import { useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import Layout from "@/components/layout";
-import StepSection from "@/components/step-section";
 import { MyFloveBlock } from "@/components/myflove/block";
 import { MyFloveThinking } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
@@ -234,7 +233,9 @@ export default function FlowPlanPage() {
           ...suggestedOrder.filter((id) => !custom.includes(id)),
         ]
       : suggestedOrder;
-    return ids.map((id) => byId.get(id)).filter((item): item is FlowPlanResult["plan"][number] => item !== undefined);
+    return ids
+      .map((id) => byId.get(id))
+      .filter((item): item is FlowPlanResult["plan"][number] => item !== undefined);
   }, [plan, storedPlan?.customOrder, suggestedOrder]);
 
   const hasCustomOrder = (storedPlan?.customOrder ?? []).length > 0;
@@ -285,11 +286,15 @@ export default function FlowPlanPage() {
           </div>
         </div>
 
-        <StepSection
-          step={1}
-          id="planering::steg-lage"
+        <MyFloveBlock
           title="Hur ser dagen ut?"
-          description="Välj energi och hur mycket tid du har – sen gör Flow ett förslag."
+          subtitle="Välj energi och tid – Flow ger ett förslag"
+          eyebrow="Steg 1"
+          icon={ListOrdered}
+          tone="lavender"
+          surface="lavender"
+          collapsible
+          collapseId="planering::steg-lage"
         >
           <div className="surface-card p-5 space-y-5">
             <div>
@@ -401,14 +406,18 @@ export default function FlowPlanPage() {
               </div>
             )}
           </div>
-        </StepSection>
+        </MyFloveBlock>
 
         {plan && (
-          <StepSection
-            step={2}
-            id="planering::steg-ordning"
+          <MyFloveBlock
             title="Ändra ordningen"
-            description="Det här är bara ett förslag. Flytta upp och ner tills det känns rätt för dig."
+            subtitle="Det här är bara ett förslag – flytta tills det känns rätt"
+            eyebrow="Steg 2"
+            icon={ListOrdered}
+            tone="sky"
+            surface="sky"
+            collapsible
+            collapseId="planering::steg-ordning"
           >
             <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
               <div className="flex items-center justify-between gap-3">
@@ -531,7 +540,7 @@ export default function FlowPlanPage() {
                 {plan.note}
               </div>
             </div>
-          </StepSection>
+          </MyFloveBlock>
         )}
       </div>
     </Layout>

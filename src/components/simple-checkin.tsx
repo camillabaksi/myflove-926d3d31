@@ -113,6 +113,7 @@ export default function SimpleCheckin({
       icon={Pencil}
       tone="lavender"
       surface="lavender"
+      data-testid="battery-log-form"
       className={cn("h-full", className)}
       footer={
         <p aria-live="polite" className="text-center text-xs text-muted-foreground">
@@ -192,7 +193,8 @@ export default function SimpleCheckin({
 
       <div className="space-y-2">
         <p className="text-sm font-semibold text-ink">
-          Vad påverkar dig just nu? <span className="font-normal text-muted-foreground">(valfritt)</span>
+          Vad påverkar dig just nu?{" "}
+          <span className="font-normal text-muted-foreground">(valfritt)</span>
         </p>
         <div className="flex flex-wrap gap-2">
           {FACTORS.map((f) => {
@@ -214,14 +216,18 @@ export default function SimpleCheckin({
                     : "border-border/60 bg-card/70 text-muted-foreground hover:text-foreground",
                 )}
               >
-                <span aria-hidden className="mr-1">{f.emoji}</span>
+                <span aria-hidden className="mr-1">
+                  {f.emoji}
+                </span>
                 {f.label}
               </button>
             );
           })}
         </div>
         <label className="block space-y-1">
-          <span className="text-xs text-muted-foreground">Vill du skriva med egna ord? (valfritt)</span>
+          <span className="text-xs text-muted-foreground">
+            Vill du skriva med egna ord? (valfritt)
+          </span>
           <textarea
             value={note}
             onChange={(e) => setNote(e.target.value)}

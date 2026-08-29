@@ -236,13 +236,29 @@ export default function TodayPage() {
                 {dayPlan.intro && <p className="text-sm text-foreground">{dayPlan.intro}</p>}
                 <ol className="space-y-2">
                   {dayPlan.steps.map((step, i) => (
-                    <li key={`${step.taskId}-${i}`} className="flex items-start gap-3 rounded-2xl bg-secondary/40 p-3">
-                      <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">{i + 1}</span>
-                      <div className="min-w-0 flex-1"><p className="font-medium text-ink">{step.title}</p><p className="text-xs text-muted-foreground">{step.estimatedMin ? `ca ${step.estimatedMin} min · ` : ""}{step.why}</p></div>
+                    <li
+                      key={`${step.taskId}-${i}`}
+                      className="flex items-start gap-3 rounded-2xl bg-secondary/40 p-3"
+                    >
+                      <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
+                        {i + 1}
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <p className="font-medium text-ink">{step.title}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {step.estimatedMin ? `ca ${step.estimatedMin} min · ` : ""}
+                          {step.why}
+                        </p>
+                      </div>
                     </li>
                   ))}
                 </ol>
-                <Link href="/flow" className="inline-flex items-center gap-2 text-sm text-primary underline-offset-2 hover:underline"><ListOrdered size={16} /> Ändra ordningen i Planera</Link>
+                <Link
+                  href="/flow"
+                  className="inline-flex items-center gap-2 text-sm text-primary underline-offset-2 hover:underline"
+                >
+                  <ListOrdered size={16} /> Ändra ordningen i Planera
+                </Link>
               </MyFloveBlock>
             )}
 
@@ -391,7 +407,9 @@ function DoneToday({ items, onToggle }: { items: FlowItem[]; onToggle: (i: FlowI
     >
       <ul className="space-y-2">
         {items.map((item) => (
-          <li key={item.id}><FlowItemCard item={item} className="opacity-80" onToggle={onToggle} /></li>
+          <li key={item.id}>
+            <FlowItemCard item={item} className="opacity-80" onToggle={onToggle} />
+          </li>
         ))}
       </ul>
     </MyFloveBlock>

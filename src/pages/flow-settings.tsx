@@ -32,13 +32,18 @@ export default function FlowSettingsPage() {
 
       <header className="flex items-center gap-4 rounded-3xl border border-border/60 bg-card p-4 shadow-sm">
         <div className="shrink-0">
-          <FlowCharacter scene="hello" seed={3} energy={settings.enabled ? 70 : 30} stage="inline" />
+          <FlowCharacter
+            scene="hello"
+            seed={3}
+            energy={settings.enabled ? 70 : 30}
+            stage="inline"
+          />
         </div>
         <div className="space-y-1">
           <h1 className="text-xl font-semibold">Flow-inställningar</h1>
           <p className="text-sm text-muted-foreground">
-            Du bestämmer hur mycket Flow får säga, när han får höra av sig och vad han ska hålla koll
-            på. Inget av det här ändrar dina uppgifter.
+            Du bestämmer hur mycket Flow får säga, när han får höra av sig och vad han ska hålla
+            koll på. Inget av det här ändrar dina uppgifter.
           </p>
         </div>
       </header>

@@ -51,16 +51,7 @@ export const DEFAULT_PREFS: HomeLayoutPrefs = {
   // Lugn start: Hem svarar på "vad behöver jag veta eller göra just nu?".
   hidden: ["medicin", "omrade", "vagar"],
 
-  order: [
-    "batteri",
-    "forslag",
-    "nasta",
-    "idag",
-    "lagg-till",
-    "vagar",
-    "medicin",
-    "omrade",
-  ],
+  order: ["batteri", "forslag", "nasta", "idag", "lagg-till", "vagar", "medicin", "omrade"],
 };
 
 const STORAGE_KEY = "myflove-home-layout";
