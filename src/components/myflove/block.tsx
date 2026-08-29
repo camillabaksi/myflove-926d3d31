@@ -13,7 +13,9 @@ import * as React from "react";
 import { ChevronDown, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCollapsible } from "@/lib/collapse-store";
+import { areaProps, type AreaId } from "@/lib/areas";
 import { MyFloveIcon, type MyFloveTone } from "@/components/myflove";
+
 
 export interface MyFloveBlockProps {
   /** Rubrik – kort och i du-form. */
