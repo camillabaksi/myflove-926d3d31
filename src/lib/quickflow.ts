@@ -3,6 +3,7 @@
 // bestämma vad något är – bara skriva/prata in det. MyFlove håller det.
 
 import type { LifeArea } from "./life-areas";
+import { isHealthObservation } from "./health-logging";
 
 export type QuickflowLevel = "snabbt" | "viktigt" | "tanke";
 
