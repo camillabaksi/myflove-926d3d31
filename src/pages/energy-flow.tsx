@@ -145,9 +145,9 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
         </MyFloveWide>
       )}
 
-      <MyFloveWide>
+      <div className="min-w-0">
         <DidThisQuickAdd />
-      </MyFloveWide>
+      </div>
 
       {showDayFlow && (
         <MyFloveWide>

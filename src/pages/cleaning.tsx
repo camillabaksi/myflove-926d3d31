@@ -265,7 +265,7 @@ export default function CleaningPage() {
         </MyFloveWide>
 
         {/* Lägg till eget steg */}
-        <MyFloveWide>
+        <div className="min-w-0">
           <section className="rounded-3xl border border-border bg-card p-4 space-y-3">
             <p className="text-sm font-medium text-foreground">Lägg till eget steg</p>
             <div className="flex flex-wrap gap-2">
