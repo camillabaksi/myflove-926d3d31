@@ -223,6 +223,18 @@ export default function SimpleCheckin({
             );
           })}
         </div>
+        <label className="block space-y-1">
+          <span className="text-xs text-muted-foreground">
+            Vill du skriva med egna ord? (valfritt)
+          </span>
+          <textarea
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            rows={3}
+            placeholder="T.ex. ”Sovit bara 4 timmar och är dessutom sjuk.”"
+            className="w-full resize-none rounded-2xl border border-border/60 bg-secondary/40 p-3 text-sm text-ink outline-none transition-colors focus:border-primary"
+          />
+        </label>
       </div>
 
       <button
@@ -230,8 +242,9 @@ export default function SimpleCheckin({
         onClick={save}
         className="w-full rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-opacity hover:opacity-90"
       >
-        {saved ? "💜 Tack" : "Spara incheckning"}
+        {saved ? "💜 Tack" : "Logga energi & mående"}
       </button>
+
 
       <p aria-live="polite" className="text-xs text-muted-foreground">
         {saved
