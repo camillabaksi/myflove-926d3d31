@@ -10,6 +10,16 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Städning: kompaktare Påminnelser, energihistorik och listor",
+    items: [
+      "Påminnelser: Aviseringar är ett kompakt kort med status och knapp på samma rad (2026-08-29)",
+      "Min energi: Lägg till det du gjorde är fullbrett med chips sida vid sida (2026-08-29)",
+      "Inköpslista: alla rader har samma höjd, padding och ikonstorlek (2026-08-29)",
+      "Sparade butiker: kortare text och input + platsknapp på samma rad (2026-08-29)",
+    ],
+  },
+  {
+
     title: "Städning: typsnitt, statistik och konsekventa kort",
     items: [
       "Nunito Sans är nu appens enda typsnitt, med emoji-fallback (2026-08-29)",
