@@ -3,7 +3,7 @@ import { useMemo, useEffect } from "react";
 import { Link } from "wouter";
 import Layout from "@/components/layout";
 import CollapsibleSection from "@/components/collapsible-section";
-import { MyFloveBlock } from "@/components/myflove/block";
+import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import StepSection from "@/components/step-section";
 import FlowCompanion from "@/components/flow/flow-companion";
 import DayTimeline, { type TimelineEntry } from "@/components/day-timeline";
@@ -130,8 +130,8 @@ export default function TodayPage() {
 
   return (
     <Layout>
-      <div className="space-y-5">
-        <header>
+      <MyFlovePageGrid>
+        <MyFloveWide as="header">
           <h1 className="flex items-center gap-2 font-display text-3xl text-ink">
             <Heart className="h-7 w-7 text-primary" /> Idag
           </h1>
@@ -139,10 +139,10 @@ export default function TodayPage() {
           <p className="mt-0.5 text-muted-foreground">
             Allt som hör till idag – på ett ställe. Vill du ändra ordningen gör du det i Planera.
           </p>
-        </header>
+        </MyFloveWide>
 
         {/* 🌊 Flow / 📋 Lista – två vyer av samma dag */}
-        <div
+        <MyFloveWide
           role="tablist"
           aria-label="Visningsläge för dagen"
           className="grid grid-cols-2 gap-1 rounded-2xl bg-muted/60 p-1"
@@ -170,7 +170,7 @@ export default function TodayPage() {
               </button>
             );
           })}
-        </div>
+        </MyFloveWide>
 
         {/* Steg 1 – hur du mår just nu. Incheckningen bor i Mitt batteri,
             här visas bara statusen som en klickbar sammanfattning. */}
@@ -192,6 +192,7 @@ export default function TodayPage() {
             {/* Steg 2 – dagens plan */}
             <StepSection
               step={2}
+              className="md:col-span-2"
               id="idag::steg-plan"
               title="Dagens plan"
               description="Allt som hör till idag – händelser, uppgifter och rutiner."
@@ -264,6 +265,7 @@ export default function TodayPage() {
 
             {offerReplan && (
               <FlowReplan
+                className="md:col-span-2"
                 flow={flow}
                 items={todaysItems}
                 mode={mode}
@@ -277,6 +279,7 @@ export default function TodayPage() {
             {/* Steg 4 – Nu → Nästa → Senare */}
             <StepSection
               step={4}
+              className="md:col-span-2"
               id="idag::steg-far-plats"
               title="Det som får plats idag"
               help={
@@ -353,7 +356,12 @@ export default function TodayPage() {
             </StepSection>
           </>
         ) : (
-          <StepSection step={2} id="idag::steg-lista" title="Dagens lista">
+          <StepSection
+            step={2}
+            className="md:col-span-2"
+            id="idag::steg-lista"
+            title="Dagens lista"
+          >
             <p className="text-sm text-muted-foreground">
               Allt som ska hända eller göras idag. Bocka av direkt här – statusen är densamma i
               Flow, på Hem och i Att göra.
@@ -387,7 +395,7 @@ export default function TodayPage() {
             </Link>
           </StepSection>
         )}
-      </div>
+      </MyFlovePageGrid>
     </Layout>
   );
 }
