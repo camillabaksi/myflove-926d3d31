@@ -644,6 +644,13 @@ export default function Layout({ children }: LayoutProps) {
   }, [navMigrated, navSlots, setNavMigrated, setNavSlots]);
   const [editingNav, setEditingNav] = useState(false);
 
+  /** Stänger "Mer" och nollställer vilken kategori som var öppen. */
+  const closeMenu = () => {
+    setMobileMenuOpen(false);
+    setOpenCategory(null);
+  };
+
+
   /** Visa introduktionen igen – nollställer bara "har sett intro". */
   const replayIntro = () => {
     try {
