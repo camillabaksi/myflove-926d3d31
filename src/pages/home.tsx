@@ -409,14 +409,18 @@ export default function Home() {
           </div>
         )}
 
-        {/* Flow just nu – samma förslag som i Planera, tydligt signerat Flow */}
+        {/* Flow just nu – större, fullbrett block högt upp */}
         {shows("forslag") && (
-          <section className="min-w-0" style={pos("forslag")} aria-label="Flows förslag just nu">
+          <MyFloveWide
+            style={{ order: 0.5 }}
+            className="min-w-0"
+            aria-label="Flows förslag just nu"
+          >
             <ExpandableBlock
               title="Flow · just nu"
               titleText="Flow just nu"
               area="flow"
-              visual={<FlowMascot size="xs" mood="nod" bump className="flow-alive" alt="" />}
+              visual={<FlowMascot size="sm" mood="nod" bump className="flow-alive" alt="" />}
               subtitle="Ditt nästa steg"
               status="Jag finns här"
               summary={suggestion.headline}
@@ -424,7 +428,7 @@ export default function Home() {
               surface="lavender"
               href="/flow"
             />
-          </section>
+          </MyFloveWide>
         )}
 
         {/* Lägg till i dagen – samma blockspråk: komprimerat kort som öppnar sig */}
