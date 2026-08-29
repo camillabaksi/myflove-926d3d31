@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "wouter";
 import Layout from "@/components/layout";
+import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { MyFloveEmptyIllustration } from "@/components/myflove/motion";
 import { useTasks, Task, TaskKind, TaskStatus } from "@/hooks/use-data";
 import { useFlowScore } from "@/hooks/use-flowscore";
@@ -570,13 +571,14 @@ export default function Tasks() {
             </div>
           </div>
         )}
-      </div>
+      </MyFlovePageGrid>
     );
   };
 
   return (
     <Layout>
-      <div className="space-y-6 page-enter">
+      <MyFlovePageGrid className="page-enter">
+        <MyFloveWide>
         <div
           className="rounded-3xl border border-border/60 p-5 shadow-soft"
           style={{
@@ -602,9 +604,13 @@ export default function Tasks() {
             </p>
           )}
         </div>
+        </MyFloveWide>
 
+        <MyFloveWide>
         <TaskQuickAdd onAdd={handleQuickAdd} />
+        </MyFloveWide>
 
+        <MyFloveWide>
         {/* Flikar: Idag är standardvyn */}
         <div className="flex gap-2">
           {TABS.map((t) => {
@@ -631,8 +637,10 @@ export default function Tasks() {
             );
           })}
         </div>
+        </MyFloveWide>
 
         {tab === "idag" && (
+          <MyFloveWide>
           <div className="space-y-6">
             {suggestion && (
               <div className="rounded-3xl border border-primary/20 bg-primary/5 p-4">
@@ -745,9 +753,11 @@ export default function Tasks() {
               </CollapsibleSection>
             )}
           </div>
+          </MyFloveWide>
         )}
 
         {tab === "kommande" && (
+          <MyFloveWide>
           <div className="space-y-3">
             {agenda.upcoming.length === 0 ? (
               <div className="text-center py-16 text-muted-foreground border-2 border-dashed border-border rounded-3xl">
@@ -774,9 +784,11 @@ export default function Tasks() {
               ))
             )}
           </div>
+          </MyFloveWide>
         )}
 
         {tab === "klart" && (
+          <MyFloveWide>
           <div className="space-y-3">
             {areaDone.length === 0 ? (
               <div className="text-center py-16 text-muted-foreground border-2 border-dashed border-border rounded-3xl">
@@ -815,10 +827,11 @@ export default function Tasks() {
                   </button>
                 </div>
               ))
-            )}
-          </div>
-        )}
-      </div>
+             )}
+           </div>
+           </MyFloveWide>
+         )}
+       </div>
 
       <TaskEnergyPrompt
         task={energyPrompt}

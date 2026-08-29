@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Layout from "@/components/layout";
+import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { MyFloveEmptyIllustration } from "@/components/myflove/motion";
 import { MyFloveHeader } from "@/components/myflove";
 import {
@@ -209,144 +210,152 @@ export default function Shopping() {
 
   return (
     <Layout>
-      <div className="space-y-8">
-        <div>
-          <MyFloveHeader
-            title="Inköpslista"
-            emojiKey="shopping"
-            description="Vad behöver du handla? Släpp tanken på att komma ihåg allt."
-          />
-          {canShare ? (
-            <div className="mt-3 flex flex-wrap items-center gap-2">
-              <div className="inline-flex rounded-full bg-muted p-1">
-                <button
-                  type="button"
-                  onClick={() => setMode("shared")}
-                  className={`px-3 py-1.5 text-sm rounded-full transition ${mode === "shared" ? "bg-card shadow-sm text-primary" : "text-muted-foreground"}`}
-                >
-                  Delad med familjen
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setMode("personal")}
-                  className={`px-3 py-1.5 text-sm rounded-full transition ${mode === "personal" ? "bg-card shadow-sm text-primary" : "text-muted-foreground"}`}
-                >
-                  Bara min lista
-                </button>
-              </div>
-              <span className="text-sm text-muted-foreground inline-flex items-center gap-1.5">
-                <Users size={14} />
-                {isShared ? "Alla i familjen ser den här listan" : "Bara du ser den här listan"}
-              </span>
-            </div>
-          ) : null}
-        </div>
-
-        <form onSubmit={handleSubmit} className="flex gap-3">
-          <Input
-            value={newItem}
-            onChange={(e) => setNewItem(e.target.value)}
-            placeholder="T.ex. Mjölk, toalettpapper..."
-            className="h-14 rounded-2xl text-lg bg-card border-border shadow-sm px-6"
-          />
-          {voiceSupported && (
-            <Button
-              type="button"
-              variant={isListening ? "destructive" : "outline"}
-              onClick={toggleListening}
-              className="h-14 px-4 rounded-2xl shadow-sm shrink-0"
-              aria-label={isListening ? "Sluta lyssna" : "Lägg till med rösten"}
-              title={isListening ? "Sluta lyssna" : "Lägg till med rösten"}
-            >
-              {isListening ? <Square size={22} /> : <Mic size={22} />}
-            </Button>
-          )}
-          <Button
-            type="submit"
-            disabled={!newItem.trim()}
-            className="h-14 px-6 rounded-2xl shadow-sm shrink-0"
-          >
-            <Plus size={24} />
-          </Button>
-        </form>
-        {!voiceSupported && (
-          <p className="text-xs text-muted-foreground -mt-4">
-            Röstinmatning stöds inte i denna webbläsare, men du kan alltid skriva.
-          </p>
-        )}
-
-        <div className="space-y-6">
-          {activeItems.length === 0 && completedItems.length === 0 && (
-            <div className="text-center py-16 text-muted-foreground border-2 border-dashed border-border rounded-3xl">
-              <MyFloveEmptyIllustration kind="default" className="mb-2 block" />
-              <p className="text-lg">Inget att handla just nu.</p>
-            </div>
-          )}
-
-          {activeItems.length > 0 && (
-            <div className="space-y-2">
-              {activeItems.map((item) => (
-                <div
-                  key={item.id}
-                  className="group flex items-center justify-between p-3 px-4 bg-card border border-border rounded-2xl hover:border-primary/30 transition-colors"
-                >
+      <MyFlovePageGrid>
+        <MyFloveWide>
+          <div>
+            <MyFloveHeader
+              title="Inköpslista"
+              emojiKey="shopping"
+              description="Vad behöver du handla? Släpp tanken på att komma ihåg allt."
+            />
+            {canShare ? (
+              <div className="mt-3 flex flex-wrap items-center gap-2">
+                <div className="inline-flex rounded-full bg-muted p-1">
                   <button
-                    onClick={() => handleToggle(item)}
-                    className="flex items-center gap-4 flex-1 text-left"
+                    type="button"
+                    onClick={() => setMode("shared")}
+                    className={`px-3 py-1.5 text-sm rounded-full transition ${mode === "shared" ? "bg-card shadow-sm text-primary" : "text-muted-foreground"}`}
                   >
-                    <div className="text-muted-foreground group-hover:text-primary transition-colors">
-                      <Circle size={26} strokeWidth={1.5} />
-                    </div>
-                    <span className="text-lg">{item.title}</span>
+                    Delad med familjen
                   </button>
                   <button
-                    onClick={() => deleteItem(item.id)}
-                    className="p-2 text-muted-foreground hover:text-destructive rounded-xl transition-colors md:opacity-0 group-hover:opacity-100"
-                    aria-label="Ta bort"
+                    type="button"
+                    onClick={() => setMode("personal")}
+                    className={`px-3 py-1.5 text-sm rounded-full transition ${mode === "personal" ? "bg-card shadow-sm text-primary" : "text-muted-foreground"}`}
                   >
-                    <Trash2 size={22} />
+                    Bara min lista
                   </button>
                 </div>
-              ))}
-            </div>
-          )}
+                <span className="text-sm text-muted-foreground inline-flex items-center gap-1.5">
+                  <Users size={14} />
+                  {isShared ? "Alla i familjen ser den här listan" : "Bara du ser den här listan"}
+                </span>
+              </div>
+            ) : null}
+          </div>
+        </MyFloveWide>
 
-          {completedItems.length > 0 && (
-            <div className="pt-6 border-t border-border">
-              <CollapsibleSection
-                title="I korgen"
-                help="Sådant du redan lagt i vagnen. Ligger kvar tills du rensar listan."
-                headingClassName="text-sm font-medium text-muted-foreground uppercase tracking-wider"
+        <MyFloveWide>
+          <form onSubmit={handleSubmit} className="flex gap-3">
+            <Input
+              value={newItem}
+              onChange={(e) => setNewItem(e.target.value)}
+              placeholder="T.ex. Mjölk, toalettpapper..."
+              className="h-14 rounded-2xl text-lg bg-card border-border shadow-sm px-6"
+            />
+            {voiceSupported && (
+              <Button
+                type="button"
+                variant={isListening ? "destructive" : "outline"}
+                onClick={toggleListening}
+                className="h-14 px-4 rounded-2xl shadow-sm shrink-0"
+                aria-label={isListening ? "Sluta lyssna" : "Lägg till med rösten"}
+                title={isListening ? "Sluta lyssna" : "Lägg till med rösten"}
               >
-                {completedItems.map((item) => (
+                {isListening ? <Square size={22} /> : <Mic size={22} />}
+              </Button>
+            )}
+            <Button
+              type="submit"
+              disabled={!newItem.trim()}
+              className="h-14 px-6 rounded-2xl shadow-sm shrink-0"
+            >
+              <Plus size={24} />
+            </Button>
+          </form>
+          {!voiceSupported && (
+            <p className="text-xs text-muted-foreground -mt-4">
+              Röstinmatning stöds inte i denna webbläsare, men du kan alltid skriva.
+            </p>
+          )}
+        </MyFloveWide>
+
+        <MyFloveWide>
+          <div className="space-y-6">
+            {activeItems.length === 0 && completedItems.length === 0 && (
+              <div className="text-center py-16 text-muted-foreground border-2 border-dashed border-border rounded-3xl">
+                <MyFloveEmptyIllustration kind="default" className="mb-2 block" />
+                <p className="text-lg">Inget att handla just nu.</p>
+              </div>
+            )}
+
+            {activeItems.length > 0 && (
+              <div className="space-y-2">
+                {activeItems.map((item) => (
                   <div
                     key={item.id}
-                    className="flex items-center justify-between p-3 px-4 bg-card/50 border border-border/50 rounded-2xl opacity-60"
+                    className="group flex items-center justify-between p-3 px-4 bg-card border border-border rounded-2xl hover:border-primary/30 transition-colors"
                   >
                     <button
                       onClick={() => handleToggle(item)}
                       className="flex items-center gap-4 flex-1 text-left"
                     >
-                      <div className="text-primary">
-                        <CheckCircle2 size={26} className="fill-primary/20" strokeWidth={2} />
+                      <div className="text-muted-foreground group-hover:text-primary transition-colors">
+                        <Circle size={26} strokeWidth={1.5} />
                       </div>
-                      <span className="text-lg line-through">{item.title}</span>
+                      <span className="text-lg">{item.title}</span>
                     </button>
                     <button
                       onClick={() => deleteItem(item.id)}
-                      className="p-2 text-muted-foreground hover:text-destructive rounded-xl transition-colors"
+                      className="p-2 text-muted-foreground hover:text-destructive rounded-xl transition-colors md:opacity-0 group-hover:opacity-100"
+                      aria-label="Ta bort"
                     >
-                      <Trash2 size={20} />
+                      <Trash2 size={22} />
                     </button>
                   </div>
                 ))}
-              </CollapsibleSection>
-            </div>
-          )}
-        </div>
+              </div>
+            )}
 
-        <StoreLocations />
-      </div>
+            {completedItems.length > 0 && (
+              <div className="pt-6 border-t border-border">
+                <CollapsibleSection
+                  title="I korgen"
+                  help="Sådant du redan lagt i vagnen. Ligger kvar tills du rensar listan."
+                  headingClassName="text-sm font-medium text-muted-foreground uppercase tracking-wider"
+                >
+                  {completedItems.map((item) => (
+                    <div
+                      key={item.id}
+                      className="flex items-center justify-between p-3 px-4 bg-card/50 border border-border/50 rounded-2xl opacity-60"
+                    >
+                      <button
+                        onClick={() => handleToggle(item)}
+                        className="flex items-center gap-4 flex-1 text-left"
+                      >
+                        <div className="text-primary">
+                          <CheckCircle2 size={26} className="fill-primary/20" strokeWidth={2} />
+                        </div>
+                        <span className="text-lg line-through">{item.title}</span>
+                      </button>
+                      <button
+                        onClick={() => deleteItem(item.id)}
+                        className="p-2 text-muted-foreground hover:text-destructive rounded-xl transition-colors"
+                      >
+                        <Trash2 size={20} />
+                      </button>
+                    </div>
+                  ))}
+                </CollapsibleSection>
+              </div>
+            )}
+          </div>
+        </MyFloveWide>
+
+        <MyFloveWide>
+          <StoreLocations />
+        </MyFloveWide>
+      </MyFlovePageGrid>
     </Layout>
   );
 }

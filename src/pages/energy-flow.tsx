@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "wouter";
 import Layout from "@/components/layout";
+import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import CollapsibleSection from "@/components/collapsible-section";
 import EnergyFlowSettings from "@/components/energy-flow-settings";
 import DidThisQuickAdd from "@/components/did-this-quick-add";
@@ -133,18 +134,26 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
   }
 
   return (
-    <div className="space-y-8">
+    <MyFlovePageGrid>
       {showHeader && (
-        <MyFloveHeader
-          title="Min energi – historik och mönster"
-          emoji="📈"
-          description="Här ser du hur energin brukar förändras: vad som ger och vad som tar. Din nivå just nu visas i Mitt energibatteri på Hem."
-        />
+        <MyFloveWide>
+          <MyFloveHeader
+            title="Min energi – historik och mönster"
+            emoji="📈"
+            description="Här ser du hur energin brukar förändras: vad som ger och vad som tar. Din nivå just nu visas i Mitt energibatteri på Hem."
+          />
+        </MyFloveWide>
       )}
 
-      <DidThisQuickAdd />
+      <MyFloveWide>
+        <DidThisQuickAdd />
+      </MyFloveWide>
 
-      {showDayFlow && <DayEnergyFlow showLink={false} />}
+      {showDayFlow && (
+        <MyFloveWide>
+          <DayEnergyFlow showLink={false} />
+        </MyFloveWide>
+      )}
 
       <CollapsibleSection
         title="Dagens balans"
@@ -482,17 +491,19 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
         )}
       </CollapsibleSection>
 
-      <CollapsibleSection
-        title="Hur mycket får det påverka?"
-        help="Du bestämmer själv. Du kan stänga av påverkan helt, eller ställa in vikten för varje energifaktor för sig."
-      >
-        <EnergyFlowSettings />
-        <p className="mt-3 text-sm text-muted-foreground">
-          Energiflödet skapar aldrig kalenderhändelser eller uppgifter. Det beskriver bara din
-          kapacitet.
-        </p>
-      </CollapsibleSection>
-    </div>
+      <MyFloveWide>
+        <CollapsibleSection
+          title="Hur mycket får det påverka?"
+          help="Du bestämmer själv. Du kan stänga av påverkan helt, eller ställa in vikten för varje energifaktor för sig."
+        >
+          <EnergyFlowSettings />
+          <p className="mt-3 text-sm text-muted-foreground">
+            Energiflödet skapar aldrig kalenderhändelser eller uppgifter. Det beskriver bara din
+            kapacitet.
+          </p>
+        </CollapsibleSection>
+      </MyFloveWide>
+    </MyFlovePageGrid>
   );
 }
 

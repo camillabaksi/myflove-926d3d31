@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import Layout from "@/components/layout";
+import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { MyFloveFloatingElement } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -129,15 +130,17 @@ export default function CleaningPage() {
 
   return (
     <Layout>
-      <div className="mx-auto max-w-3xl px-4 py-6 space-y-6">
-        <header>
-          <h1 className="font-display text-3xl font-bold text-foreground flex items-center gap-3">
-            Städning <MyFloveFloatingElement tone="mint" size={18} />
-          </h1>
-          <p className="mt-1 text-muted-foreground text-sm">
-            Välj rum och läge. Kryssa av i din takt – allt räknas.
-          </p>
-        </header>
+      <MyFlovePageGrid className="mx-auto max-w-5xl px-4 py-6">
+        <MyFloveWide>
+          <header>
+            <h1 className="font-display text-3xl font-bold text-foreground flex items-center gap-3">
+              Städning <MyFloveFloatingElement tone="mint" size={18} />
+            </h1>
+            <p className="mt-1 text-muted-foreground text-sm">
+              Välj rum och läge. Kryssa av i din takt – allt räknas.
+            </p>
+          </header>
+        </MyFloveWide>
 
         {/* Läge */}
         <div className="grid grid-cols-2 gap-3">
@@ -159,31 +162,33 @@ export default function CleaningPage() {
         </div>
 
         {/* Rum */}
-        <div className="flex flex-wrap gap-2">
-          {CLEAN_ROOMS.map((r) => {
-            const active = r.id === roomId;
-            return (
-              <button
-                key={r.id}
-                onClick={() => setRoomId(r.id)}
-                aria-pressed={active}
-                className="rounded-full border px-4 py-2 text-sm font-medium transition"
-                style={
-                  active
-                    ? {
-                        color: `hsl(${r.hue})`,
-                        backgroundColor: `hsl(${r.hue} / 0.14)`,
-                        borderColor: `hsl(${r.hue} / 0.4)`,
-                      }
-                    : { borderColor: `hsl(${r.hue} / 0.3)` }
-                }
-              >
-                <span className="mr-1.5">{r.emoji}</span>
-                {r.label}
-              </button>
-            );
-          })}
-        </div>
+        <MyFloveWide>
+          <div className="flex flex-wrap gap-2">
+            {CLEAN_ROOMS.map((r) => {
+              const active = r.id === roomId;
+              return (
+                <button
+                  key={r.id}
+                  onClick={() => setRoomId(r.id)}
+                  aria-pressed={active}
+                  className="rounded-full border px-4 py-2 text-sm font-medium transition"
+                  style={
+                    active
+                      ? {
+                          color: `hsl(${r.hue})`,
+                          backgroundColor: `hsl(${r.hue} / 0.14)`,
+                          borderColor: `hsl(${r.hue} / 0.4)`,
+                        }
+                      : { borderColor: `hsl(${r.hue} / 0.3)` }
+                  }
+                >
+                  <span className="mr-1.5">{r.emoji}</span>
+                  {r.label}
+                </button>
+              );
+            })}
+          </div>
+        </MyFloveWide>
 
         {/* Översikt */}
         <section
@@ -216,119 +221,127 @@ export default function CleaningPage() {
         </section>
 
         {/* Steg */}
-        <ul className="space-y-2">
-          {steps.map((s) => {
-            const checked = isDone(s.id);
-            return (
-              <li
-                key={s.id}
-                className={`flex items-start gap-3 rounded-2xl border border-border bg-card p-4 ${checked ? "opacity-60" : ""}`}
-              >
-                <Checkbox
-                  checked={checked}
-                  onClick={(e) => toggle(s.id, e)}
-                  aria-label={s.label}
-                  className="mt-0.5"
-                />
-                <div className="min-w-0 flex-1">
-                  <div className={`font-medium text-foreground ${checked ? "line-through" : ""}`}>
-                    {s.label}
-                  </div>
-                  <div className="mt-0.5 text-xs text-muted-foreground">
-                    {s.minutes} min
-                    {s.needs.length > 0 && ` · ${s.needs.join(", ")}`}
-                  </div>
-                  {checked && done[key(s.id)] && (
-                    <div className="mt-1 text-[11px] text-muted-foreground">
-                      Klart {done[key(s.id)]}
-                    </div>
-                  )}
-                </div>
-                <button
-                  type="button"
-                  onClick={() => removeStep(s.id)}
-                  aria-label={`Ta bort ${s.label}`}
-                  className="shrink-0 rounded-full p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
+        <MyFloveWide>
+          <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            {steps.map((s) => {
+              const checked = isDone(s.id);
+              return (
+                <li
+                  key={s.id}
+                  className={`flex items-start gap-3 rounded-2xl border border-border bg-card p-4 ${checked ? "opacity-60" : ""}`}
                 >
-                  <X className="h-4 w-4" />
-                </button>
-              </li>
-            );
-          })}
-        </ul>
+                  <Checkbox
+                    checked={checked}
+                    onClick={(e) => toggle(s.id, e)}
+                    aria-label={s.label}
+                    className="mt-0.5"
+                  />
+                  <div className="min-w-0 flex-1">
+                    <div className={`font-medium text-foreground ${checked ? "line-through" : ""}`}>
+                      {s.label}
+                    </div>
+                    <div className="mt-0.5 text-xs text-muted-foreground">
+                      {s.minutes} min
+                      {s.needs.length > 0 && ` · ${s.needs.join(", ")}`}
+                    </div>
+                    {checked && done[key(s.id)] && (
+                      <div className="mt-1 text-[11px] text-muted-foreground">
+                        Klart {done[key(s.id)]}
+                      </div>
+                    )}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => removeStep(s.id)}
+                    aria-label={`Ta bort ${s.label}`}
+                    className="shrink-0 rounded-full p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </MyFloveWide>
 
         {/* Lägg till eget steg */}
-        <section className="rounded-3xl border border-border bg-card p-4 space-y-3">
-          <p className="text-sm font-medium text-foreground">Lägg till eget steg</p>
-          <div className="flex flex-wrap gap-2">
-            <Input
-              value={newLabel}
-              onChange={(e) => setNewLabel(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") addStep();
-              }}
-              placeholder="T.ex. Vattna blommorna"
-              aria-label="Vad vill du lägga till?"
-              className="min-w-[10rem] flex-1"
-            />
-            <Input
-              value={newMinutes}
-              onChange={(e) => setNewMinutes(e.target.value)}
-              inputMode="numeric"
-              aria-label="Minuter"
-              className="w-20"
-            />
-            <Button onClick={addStep} disabled={!newLabel.trim()} className="gap-1.5">
-              <Plus className="h-4 w-4" />
-              Lägg till
-            </Button>
-          </div>
-          {hiddenIds.length > 0 && (
-            <button
-              type="button"
-              onClick={restoreSteps}
-              className="text-xs text-primary hover:underline"
-            >
-              Visa borttagna standardsteg igen ({hiddenIds.length})
-            </button>
-          )}
-        </section>
+        <MyFloveWide>
+          <section className="rounded-3xl border border-border bg-card p-4 space-y-3">
+            <p className="text-sm font-medium text-foreground">Lägg till eget steg</p>
+            <div className="flex flex-wrap gap-2">
+              <Input
+                value={newLabel}
+                onChange={(e) => setNewLabel(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") addStep();
+                }}
+                placeholder="T.ex. Vattna blommorna"
+                aria-label="Vad vill du lägga till?"
+                className="min-w-[10rem] flex-1"
+              />
+              <Input
+                value={newMinutes}
+                onChange={(e) => setNewMinutes(e.target.value)}
+                inputMode="numeric"
+                aria-label="Minuter"
+                className="w-20"
+              />
+              <Button onClick={addStep} disabled={!newLabel.trim()} className="gap-1.5">
+                <Plus className="h-4 w-4" />
+                Lägg till
+              </Button>
+            </div>
+            {hiddenIds.length > 0 && (
+              <button
+                type="button"
+                onClick={restoreSteps}
+                className="text-xs text-primary hover:underline"
+              >
+                Visa borttagna standardsteg igen ({hiddenIds.length})
+              </button>
+            )}
+          </section>
+        </MyFloveWide>
 
         {/* Vad du behöver */}
-        <section className="rounded-3xl border border-border bg-card p-5">
-          <CollapsibleSection
-            title={
-              <span className="flex items-center gap-2">
-                <ShoppingBasket className="h-5 w-5 text-primary" />
-                Det här behöver du
-              </span>
-            }
-            id="Det här behöver du"
-            help="Grejer som behövs för dagens städning. Saknas något kan du lägga det på inköpslistan."
-            headingClassName="font-display text-lg font-bold"
-          >
-            {supplies.length === 0 ? (
-              <p className="text-sm text-muted-foreground">Inget särskilt – bara du 💛</p>
-            ) : (
-              <ul className="flex flex-wrap gap-2">
-                {supplies.map((item) => (
-                  <li
-                    key={item}
-                    className="rounded-full border border-border bg-background px-3 py-1.5 text-sm text-foreground"
-                  >
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </CollapsibleSection>
-        </section>
+        <MyFloveWide>
+          <section className="rounded-3xl border border-border bg-card p-5">
+            <CollapsibleSection
+              title={
+                <span className="flex items-center gap-2">
+                  <ShoppingBasket className="h-5 w-5 text-primary" />
+                  Det här behöver du
+                </span>
+              }
+              id="Det här behöver du"
+              help="Grejer som behövs för dagens städning. Saknas något kan du lägga det på inköpslistan."
+              headingClassName="font-display text-lg font-bold"
+            >
+              {supplies.length === 0 ? (
+                <p className="text-sm text-muted-foreground">Inget särskilt – bara du 💛</p>
+              ) : (
+                <ul className="flex flex-wrap gap-2">
+                  {supplies.map((item) => (
+                    <li
+                      key={item}
+                      className="rounded-full border border-border bg-background px-3 py-1.5 text-sm text-foreground"
+                    >
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </CollapsibleSection>
+          </section>
+        </MyFloveWide>
 
-        <p className="flex items-center justify-center gap-2 pb-4 text-center text-sm text-muted-foreground">
-          <Sparkles className="h-4 w-4" />
-          Du behöver inte göra allt. Ett steg räcker idag.
-        </p>
-      </div>
+        <MyFloveWide>
+          <p className="flex items-center justify-center gap-2 pb-4 text-center text-sm text-muted-foreground">
+            <Sparkles className="h-4 w-4" />
+            Du behöver inte göra allt. Ett steg räcker idag.
+          </p>
+        </MyFloveWide>
+      </MyFlovePageGrid>
     </Layout>
   );
 }

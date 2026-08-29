@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Layout from "@/components/layout";
+import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { useMoods } from "@/hooks/use-data";
 import { Button } from "@/components/ui/button";
 import FlowInsightsModal from "@/components/flow-insights-modal";
@@ -55,17 +56,23 @@ export function MoodContent({ showHeader = true, readOnly = false }: MoodContent
     }).format(new Date(timestamp));
 
   return (
-    <div className="space-y-10">
-      {showHeader && <MoodHeader />}
+    <MyFlovePageGrid>
+      {showHeader && (
+        <MyFloveWide>
+          <MoodHeader />
+        </MyFloveWide>
+      )}
 
       {readOnly ? (
-        <div
-          className="rounded-3xl border border-border/60 bg-card p-5 text-sm text-muted-foreground"
-          data-testid="mood-history-readonly"
-        >
-          Här ser du dina tidigare loggar. Vill du logga nytt gör du det under{" "}
-          <span className="font-medium text-ink">Mitt batteri → Logga energi &amp; mående</span>.
-        </div>
+        <MyFloveWide>
+          <div
+            className="rounded-3xl border border-border/60 bg-card p-5 text-sm text-muted-foreground"
+            data-testid="mood-history-readonly"
+          >
+            Här ser du dina tidigare loggar. Vill du logga nytt gör du det under{" "}
+            <span className="font-medium text-ink">Mitt batteri → Logga energi &amp; mående</span>.
+          </div>
+        </MyFloveWide>
       ) : (
         <div className="bg-card p-6 md:p-8 rounded-3xl shadow-sm border border-border">
           {justSaved ? (
@@ -135,47 +142,51 @@ export function MoodContent({ showHeader = true, readOnly = false }: MoodContent
       </button>
 
       {moods.length > 0 && (
-        <CollapsibleSection
-          title="Tidigare incheckningar"
-          help="Dina tidigare loggar. Mönstren här används för att anpassa dagens förslag."
-          headingClassName="text-xl font-semibold"
-          actions={
-            moods.length > 3 && (
-              <button
-                type="button"
-                onClick={() => setShowAllMoods((v) => !v)}
-                aria-expanded={showAllMoods}
-                className="text-sm font-medium text-primary hover:underline shrink-0"
-              >
-                {showAllMoods ? "Visa färre" : `Visa alla (${moods.length})`}
-              </button>
-            )
-          }
-        >
-          <div className="space-y-3">
-            {(showAllMoods ? moods : moods.slice(0, 3)).map((mood) => {
-              const emoji = EMOJIS.find((e) => e.score === mood.score)?.emoji;
-              return (
-                <div
-                  key={mood.id}
-                  className="bg-card p-4 rounded-2xl border border-border shadow-sm flex items-start gap-4"
+        <MyFloveWide>
+          <CollapsibleSection
+            title="Tidigare incheckningar"
+            help="Dina tidigare loggar. Mönstren här används för att anpassa dagens förslag."
+            headingClassName="text-xl font-semibold"
+            actions={
+              moods.length > 3 && (
+                <button
+                  type="button"
+                  onClick={() => setShowAllMoods((v) => !v)}
+                  aria-expanded={showAllMoods}
+                  className="text-sm font-medium text-primary hover:underline shrink-0"
                 >
-                  <div className="text-3xl shrink-0 pt-1">{emoji}</div>
-                  <div className="flex-1">
-                    <p className="text-sm text-muted-foreground capitalize mb-1">
-                      {formatDate(mood.date)}
-                    </p>
-                    {mood.note && <p className="text-foreground leading-relaxed">{mood.note}</p>}
+                  {showAllMoods ? "Visa färre" : `Visa alla (${moods.length})`}
+                </button>
+              )
+            }
+          >
+            <div className="space-y-3">
+              {(showAllMoods ? moods : moods.slice(0, 3)).map((mood) => {
+                const emoji = EMOJIS.find((e) => e.score === mood.score)?.emoji;
+                return (
+                  <div
+                    key={mood.id}
+                    className="bg-card p-4 rounded-2xl border border-border shadow-sm flex items-start gap-4"
+                  >
+                    <div className="text-3xl shrink-0 pt-1">{emoji}</div>
+                    <div className="flex-1">
+                      <p className="text-sm text-muted-foreground capitalize mb-1">
+                        {formatDate(mood.date)}
+                      </p>
+                      {mood.note && <p className="text-foreground leading-relaxed">{mood.note}</p>}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
-        </CollapsibleSection>
+                );
+              })}
+            </div>
+          </CollapsibleSection>
+        </MyFloveWide>
       )}
 
-      <FlowInsightsModal open={flowInsightsOpen} onOpenChange={setFlowInsightsOpen} />
-    </div>
+      <MyFloveWide>
+        <FlowInsightsModal open={flowInsightsOpen} onOpenChange={setFlowInsightsOpen} />
+      </MyFloveWide>
+    </MyFlovePageGrid>
   );
 }
 

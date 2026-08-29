@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import Layout from "@/components/layout";
+import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { track } from "@/lib/analytics";
 import FlowDeck from "@/components/flow/flow-deck";
 
@@ -15,9 +16,13 @@ export default function FlowPage() {
 
   return (
     <Layout>
-      <main className="mx-auto w-full max-w-xl" aria-label="Flow – vad passar bäst just nu">
-        <FlowDeck />
-      </main>
+      <MyFlovePageGrid>
+        <MyFloveWide>
+          <main className="mx-auto w-full max-w-xl" aria-label="Flow – vad passar bäst just nu">
+            <FlowDeck />
+          </main>
+        </MyFloveWide>
+      </MyFlovePageGrid>
     </Layout>
   );
 }

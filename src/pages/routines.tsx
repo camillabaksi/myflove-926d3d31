@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Layout from "@/components/layout";
+import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { Button } from "@/components/ui/button";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { useReminders } from "@/hooks/use-data";
@@ -168,172 +169,180 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
   const sorted = [...routines].sort((a, b) => a.time.localeCompare(b.time));
 
   return (
-    <div className="space-y-8">
+    <MyFlovePageGrid>
       {showHeader && (
-        <div>
-          <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
-            <Repeat size={26} className="text-primary" /> Rutiner
-          </h1>
-          <p className="text-muted-foreground">
-            Dina dagliga hållpunkter. Läggs automatiskt in i kalendern varje dag och skickar
-            påminnelse om notiser är på.
-          </p>
-        </div>
+        <MyFloveWide>
+          <div>
+            <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
+              <Repeat size={26} className="text-primary" /> Rutiner
+            </h1>
+            <p className="text-muted-foreground">
+              Dina dagliga hållpunkter. Läggs automatiskt in i kalendern varje dag och skickar
+              påminnelse om notiser är på.
+            </p>
+          </div>
+        </MyFloveWide>
       )}
 
-      <form
-        onSubmit={handleAdd}
-        className="bg-card p-5 rounded-2xl border border-border shadow-sm space-y-3"
-      >
-        <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-3">
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="T.ex. Borsta tänderna"
-            className="p-3 rounded-xl bg-secondary/50 border-transparent focus:border-primary focus:ring-1 focus:ring-primary outline-none text-base"
-          />
-          <input
-            type="time"
-            value={time}
-            onChange={(e) => setTime(e.target.value)}
-            className="p-3 rounded-xl bg-secondary/50 border-transparent focus:border-primary focus:ring-1 focus:ring-primary outline-none text-base"
-          />
-        </div>
-        <div className="space-y-2">
-          <p className="text-sm font-medium text-muted-foreground">Hur ofta?</p>
-          <div className="flex flex-wrap gap-2">
-            {REPEAT_OPTIONS.map((opt) => (
-              <button
-                key={opt.value}
-                type="button"
-                onClick={() => setRepeat(opt.value)}
-                aria-pressed={repeat === opt.value}
-                className={`px-3 py-2 rounded-xl border text-sm transition-all ${
-                  repeat === opt.value
-                    ? "bg-primary/10 border-primary/40 text-primary"
-                    : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
-                }`}
-              >
-                {opt.label}
-              </button>
-            ))}
-          </div>
-          {repeat !== "daily" && (
-            <label className="flex items-center gap-2 text-sm text-muted-foreground">
-              {repeat === "none" ? "Datum" : "Startdatum"}
-              <input
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                className="p-2 rounded-xl bg-secondary/50 border border-transparent focus:border-primary focus:ring-1 focus:ring-primary outline-none text-sm"
-              />
-            </label>
-          )}
-        </div>
-
-        <Button type="submit" className="w-full h-12 rounded-xl">
-          <Plus size={18} className="mr-2" /> Lägg till rutin
-        </Button>
-      </form>
-
-      <div className="bg-secondary/30 p-4 rounded-2xl border border-border/50">
-        <p className="text-sm font-medium mb-3 flex items-center gap-2">
-          <Sparkles size={16} className="text-primary" /> Snabbstart – klicka för att lägga till
-        </p>
-        <div className="flex flex-wrap gap-2">
-          {SUGGESTIONS.map((s) => {
-            const already = routines.some((r) => r.title === s.title && r.time === s.time);
-            return (
-              <button
-                key={`${s.title}-${s.time}`}
-                type="button"
-                disabled={already}
-                onClick={() => addSuggestion(s)}
-                className={`px-3 py-2 rounded-xl border text-sm transition-all ${
-                  already
-                    ? "bg-primary/10 border-primary/30 text-primary cursor-default"
-                    : "bg-background border-border hover:border-primary/40"
-                }`}
-              >
-                {s.title} · {s.time}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {sorted.length === 0 ? (
-        <div className="border-2 border-dashed border-border rounded-2xl p-10 text-center">
-          <Repeat size={32} className="mx-auto mb-3 text-muted-foreground" />
-          <p className="text-muted-foreground">
-            Inga rutiner än – börja smått, t.ex. bara medicin på morgonen.
-          </p>
-        </div>
-      ) : (
-        <>
-          <div className="flex items-center justify-between">
-            <p className="text-sm text-muted-foreground">
-              {sorted.filter((r) => r.enabled).length} aktiva av {sorted.length}
-            </p>
-            <Button variant="outline" size="sm" onClick={addAllForToday} className="rounded-xl">
-              Lägg in i dag nu
-            </Button>
+      <MyFloveWide>
+        <form
+          onSubmit={handleAdd}
+          className="bg-card p-5 rounded-2xl border border-border shadow-sm space-y-3"
+        >
+          <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-3">
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="T.ex. Borsta tänderna"
+              className="p-3 rounded-xl bg-secondary/50 border-transparent focus:border-primary focus:ring-1 focus:ring-primary outline-none text-base"
+            />
+            <input
+              type="time"
+              value={time}
+              onChange={(e) => setTime(e.target.value)}
+              className="p-3 rounded-xl bg-secondary/50 border-transparent focus:border-primary focus:ring-1 focus:ring-primary outline-none text-base"
+            />
           </div>
           <div className="space-y-2">
-            {sorted.map((r) => (
-              <div
-                key={r.id}
-                className={`flex items-center gap-3 p-4 rounded-2xl border shadow-sm ${
-                  r.enabled
-                    ? "bg-card border-border"
-                    : "bg-secondary/30 border-border/50 opacity-70"
-                }`}
-              >
-                <div className="w-11 h-11 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                  <Clock size={20} />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium truncate">{r.title}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {REPEAT_LABELS[r.repeat ?? "daily"]}
-                    {r.repeat === "none" && r.startDate
-                      ? ` ${r.startDate}`
-                      : r.repeat && r.repeat !== "daily" && r.startDate
-                        ? ` från ${r.startDate}`
-                        : ""}
-                  </p>
-                </div>
-                <input
-                  type="time"
-                  value={r.time}
-                  onChange={(e) => updateTime(r.id, e.target.value)}
-                  className="p-2 rounded-lg bg-secondary/50 border border-transparent focus:border-primary focus:ring-1 focus:ring-primary outline-none text-sm w-[6.5rem]"
-                  aria-label={`Ändra tid för ${r.title}`}
-                />
-                <label className="inline-flex items-center gap-2 cursor-pointer select-none">
-                  <input
-                    type="checkbox"
-                    checked={r.enabled}
-                    onChange={() => toggleEnabled(r.id)}
-                    className="w-4 h-4 accent-primary"
-                  />
-                  <span className="text-xs text-muted-foreground">På</span>
-                </label>
+            <p className="text-sm font-medium text-muted-foreground">Hur ofta?</p>
+            <div className="flex flex-wrap gap-2">
+              {REPEAT_OPTIONS.map((opt) => (
                 <button
+                  key={opt.value}
                   type="button"
-                  onClick={() => remove(r.id)}
-                  className="p-2 text-muted-foreground hover:text-destructive rounded-lg"
-                  aria-label="Ta bort rutin"
+                  onClick={() => setRepeat(opt.value)}
+                  aria-pressed={repeat === opt.value}
+                  className={`px-3 py-2 rounded-xl border text-sm transition-all ${
+                    repeat === opt.value
+                      ? "bg-primary/10 border-primary/40 text-primary"
+                      : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
+                  }`}
                 >
-                  <Trash2 size={18} />
+                  {opt.label}
                 </button>
-              </div>
-            ))}
+              ))}
+            </div>
+            {repeat !== "daily" && (
+              <label className="flex items-center gap-2 text-sm text-muted-foreground">
+                {repeat === "none" ? "Datum" : "Startdatum"}
+                <input
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  className="p-2 rounded-xl bg-secondary/50 border border-transparent focus:border-primary focus:ring-1 focus:ring-primary outline-none text-sm"
+                />
+              </label>
+            )}
           </div>
-        </>
-      )}
-    </div>
+
+          <Button type="submit" className="w-full h-12 rounded-xl">
+            <Plus size={18} className="mr-2" /> Lägg till rutin
+          </Button>
+        </form>
+      </MyFloveWide>
+
+      <MyFloveWide>
+        <div className="bg-secondary/30 p-4 rounded-2xl border border-border/50">
+          <p className="text-sm font-medium mb-3 flex items-center gap-2">
+            <Sparkles size={16} className="text-primary" /> Snabbstart – klicka för att lägga till
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {SUGGESTIONS.map((s) => {
+              const already = routines.some((r) => r.title === s.title && r.time === s.time);
+              return (
+                <button
+                  key={`${s.title}-${s.time}`}
+                  type="button"
+                  disabled={already}
+                  onClick={() => addSuggestion(s)}
+                  className={`px-3 py-2 rounded-xl border text-sm transition-all ${
+                    already
+                      ? "bg-primary/10 border-primary/30 text-primary cursor-default"
+                      : "bg-background border-border hover:border-primary/40"
+                  }`}
+                >
+                  {s.title} · {s.time}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </MyFloveWide>
+
+      <MyFloveWide>
+        {sorted.length === 0 ? (
+          <div className="border-2 border-dashed border-border rounded-2xl p-10 text-center">
+            <Repeat size={32} className="mx-auto mb-3 text-muted-foreground" />
+            <p className="text-muted-foreground">
+              Inga rutiner än – börja smått, t.ex. bara medicin på morgonen.
+            </p>
+          </div>
+        ) : (
+          <>
+            <div className="flex items-center justify-between">
+              <p className="text-sm text-muted-foreground">
+                {sorted.filter((r) => r.enabled).length} aktiva av {sorted.length}
+              </p>
+              <Button variant="outline" size="sm" onClick={addAllForToday} className="rounded-xl">
+                Lägg in i dag nu
+              </Button>
+            </div>
+            <div className="space-y-2">
+              {sorted.map((r) => (
+                <div
+                  key={r.id}
+                  className={`flex items-center gap-3 p-4 rounded-2xl border shadow-sm ${
+                    r.enabled
+                      ? "bg-card border-border"
+                      : "bg-secondary/30 border-border/50 opacity-70"
+                  }`}
+                >
+                  <div className="w-11 h-11 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                    <Clock size={20} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium truncate">{r.title}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {REPEAT_LABELS[r.repeat ?? "daily"]}
+                      {r.repeat === "none" && r.startDate
+                        ? ` ${r.startDate}`
+                        : r.repeat && r.repeat !== "daily" && r.startDate
+                          ? ` från ${r.startDate}`
+                          : ""}
+                    </p>
+                  </div>
+                  <input
+                    type="time"
+                    value={r.time}
+                    onChange={(e) => updateTime(r.id, e.target.value)}
+                    className="p-2 rounded-lg bg-secondary/50 border border-transparent focus:border-primary focus:ring-1 focus:ring-primary outline-none text-sm w-[6.5rem]"
+                    aria-label={`Ändra tid för ${r.title}`}
+                  />
+                  <label className="inline-flex items-center gap-2 cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      checked={r.enabled}
+                      onChange={() => toggleEnabled(r.id)}
+                      className="w-4 h-4 accent-primary"
+                    />
+                    <span className="text-xs text-muted-foreground">På</span>
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => remove(r.id)}
+                    className="p-2 text-muted-foreground hover:text-destructive rounded-lg"
+                    aria-label="Ta bort rutin"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+      </MyFloveWide>
+    </MyFlovePageGrid>
   );
 }
 

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import Layout from "@/components/layout";
+import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import CollapsibleSection from "@/components/collapsible-section";
 import { Button } from "@/components/ui/button";
 import { useReminders, type Reminder, type RepeatMode } from "@/hooks/use-data";
@@ -231,18 +232,24 @@ export default function RemindersPage() {
 
   return (
     <Layout>
-      <div className="space-y-6">
-        <header className="space-y-1">
-          <h1 className="flex items-center gap-2 font-display text-3xl text-ink">
-            <BellRing className="h-7 w-7 text-primary" /> Påminnelser
-          </h1>
-          <p className="text-muted-foreground">
-            Lägg till, ändra eller avboka. Aktiva påminnelser ger en notis när det är dags.
-          </p>
-        </header>
+      <MyFlovePageGrid>
+        <MyFloveWide>
+          <header className="space-y-1">
+            <h1 className="flex items-center gap-2 font-display text-3xl text-ink">
+              <BellRing className="h-7 w-7 text-primary" /> Påminnelser
+            </h1>
+            <p className="text-muted-foreground">
+              Lägg till, ändra eller avboka. Aktiva påminnelser ger en notis när det är dags.
+            </p>
+          </header>
+        </MyFloveWide>
 
-        <section className="space-y-3 rounded-2xl border border-border bg-card p-5 shadow-sm">
-          <h2 className="text-lg font-semibold">Aviseringar</h2>
+        <MyFloveBlock
+          title="Aviseringar"
+          subtitle="Notiser när det är dags"
+          icon={BellRing}
+          surface="lavender"
+        >
           {permission === "granted" ? (
             <p className="text-sm text-muted-foreground">
               Notiser är påslagna på den här enheten. Du får en signal när en aktiv påminnelse
@@ -273,144 +280,148 @@ export default function RemindersPage() {
             Push-notiser når dig även när appen är stängd. Avbokade påminnelser skickar aldrig
             något.
           </p>
-        </section>
+        </MyFloveBlock>
 
-        <form
-          onSubmit={handleAdd}
-          className="space-y-3 rounded-2xl border border-border bg-card p-5 shadow-sm"
-        >
-          <input
-            className={inputClass}
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="Vad ska du påminnas om?"
-          />
-          <div className="grid grid-cols-2 gap-2">
+        <MyFloveWide>
+          <form
+            onSubmit={handleAdd}
+            className="space-y-3 rounded-2xl border border-border bg-card p-5 shadow-sm"
+          >
             <input
               className={inputClass}
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Vad ska du påminnas om?"
             />
+            <div className="grid grid-cols-2 gap-2">
+              <input
+                className={inputClass}
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+              />
+              <input
+                className={inputClass}
+                type="time"
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <select
+                className={inputClass}
+                value={repeat}
+                onChange={(e) => setRepeat(e.target.value as RepeatMode)}
+                aria-label="Upprepning"
+              >
+                <option value="none">Ingen upprepning</option>
+                <option value="daily">Varje dag</option>
+                <option value="weekdays">Vardagar</option>
+                <option value="weekly">Varje vecka</option>
+              </select>
+              <select
+                className={inputClass}
+                value={lead}
+                onChange={(e) => setLead(Number(e.target.value))}
+                aria-label="Förvarning"
+              >
+                <option value={0}>Notis på tiden</option>
+                <option value={5}>5 min innan</option>
+                <option value={15}>15 min innan</option>
+                <option value={30}>30 min innan</option>
+                <option value={60}>1 timme innan</option>
+              </select>
+            </div>
             <input
               className={inputClass}
-              type="time"
-              value={time}
-              onChange={(e) => setTime(e.target.value)}
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              placeholder="Anteckning (valfritt)"
             />
-          </div>
-          <div className="grid grid-cols-2 gap-2">
-            <select
-              className={inputClass}
-              value={repeat}
-              onChange={(e) => setRepeat(e.target.value as RepeatMode)}
-              aria-label="Upprepning"
+            <Button type="submit" className="h-12 w-full rounded-xl">
+              <Plus size={18} className="mr-2" /> Lägg till påminnelse
+            </Button>
+          </form>
+        </MyFloveWide>
+
+        <MyFloveWide>
+          <section className="surface-card p-5">
+            <CollapsibleSection
+              title={`Aktiva (${active.length})`}
+              id="Aktiva påminnelser"
+              headingClassName="text-lg font-semibold"
+              className="space-y-3"
             >
-              <option value="none">Ingen upprepning</option>
-              <option value="daily">Varje dag</option>
-              <option value="weekdays">Vardagar</option>
-              <option value="weekly">Varje vecka</option>
-            </select>
-            <select
-              className={inputClass}
-              value={lead}
-              onChange={(e) => setLead(Number(e.target.value))}
-              aria-label="Förvarning"
+              {active.length === 0 ? (
+                <p className="text-sm text-muted-foreground">Inga aktiva påminnelser just nu.</p>
+              ) : (
+                <ul className="space-y-3">
+                  {active.map((r) => (
+                    <ReminderRow
+                      key={r.id}
+                      reminder={r}
+                      onSave={(patch) => {
+                        updateReminder(r.id, patch);
+                        toast({ description: "Ändringen är sparad" });
+                      }}
+                      onCancel={() => {
+                        cancelReminder(r.id);
+                        toast({ description: "Påminnelsen är avbokad" });
+                      }}
+                      onRestore={() => restoreReminder(r.id)}
+                      onDelete={() => deleteReminder(r.id)}
+                    />
+                  ))}
+                </ul>
+              )}
+            </CollapsibleSection>
+          </section>
+
+          <section className="surface-card p-5">
+            <CollapsibleSection
+              title="Medicinpåminnelser"
+              id="Medicinpåminnelser"
+              headingClassName="text-lg font-semibold"
+              className="space-y-3"
             >
-              <option value={0}>Notis på tiden</option>
-              <option value={5}>5 min innan</option>
-              <option value={15}>15 min innan</option>
-              <option value={30}>30 min innan</option>
-              <option value={60}>1 timme innan</option>
-            </select>
-          </div>
-          <input
-            className={inputClass}
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-            placeholder="Anteckning (valfritt)"
-          />
-          <Button type="submit" className="h-12 w-full rounded-xl">
-            <Plus size={18} className="mr-2" /> Lägg till påminnelse
-          </Button>
-        </form>
+              <p className="text-sm text-muted-foreground">
+                Dina mediciner och tider bor här tillsammans med övriga påminnelser. Bocka av när du
+                tagit dem.
+              </p>
+              <MedicationContent showHeader={false} />
+            </CollapsibleSection>
+          </section>
 
-        <section className="surface-card p-5">
-          <CollapsibleSection
-            title={`Aktiva (${active.length})`}
-            id="Aktiva påminnelser"
-            headingClassName="text-lg font-semibold"
-            className="space-y-3"
-          >
-            {active.length === 0 ? (
-              <p className="text-sm text-muted-foreground">Inga aktiva påminnelser just nu.</p>
-            ) : (
-              <ul className="space-y-3">
-                {active.map((r) => (
-                  <ReminderRow
-                    key={r.id}
-                    reminder={r}
-                    onSave={(patch) => {
-                      updateReminder(r.id, patch);
-                      toast({ description: "Ändringen är sparad" });
-                    }}
-                    onCancel={() => {
-                      cancelReminder(r.id);
-                      toast({ description: "Påminnelsen är avbokad" });
-                    }}
-                    onRestore={() => restoreReminder(r.id)}
-                    onDelete={() => deleteReminder(r.id)}
-                  />
-                ))}
-              </ul>
-            )}
-          </CollapsibleSection>
-        </section>
-
-        <section className="surface-card p-5">
-          <CollapsibleSection
-            title="Medicinpåminnelser"
-            id="Medicinpåminnelser"
-            headingClassName="text-lg font-semibold"
-            className="space-y-3"
-          >
-            <p className="text-sm text-muted-foreground">
-              Dina mediciner och tider bor här tillsammans med övriga påminnelser. Bocka av när du
-              tagit dem.
-            </p>
-            <MedicationContent showHeader={false} />
-          </CollapsibleSection>
-        </section>
-
-        <section className="surface-card p-5">
-          <CollapsibleSection
-            title={`Avbokade (${canceled.length})`}
-            id="Avbokade påminnelser"
-            headingClassName="text-lg font-semibold"
-            className="space-y-3"
-          >
-            {canceled.length === 0 ? (
-              <p className="text-sm text-muted-foreground">Inget avbokat.</p>
-            ) : (
-              <ul className="space-y-3">
-                {canceled.map((r) => (
-                  <ReminderRow
-                    key={r.id}
-                    reminder={r}
-                    onSave={(patch) => updateReminder(r.id, patch)}
-                    onCancel={() => cancelReminder(r.id)}
-                    onRestore={() => {
-                      restoreReminder(r.id);
-                      toast({ description: "Påminnelsen är aktiv igen" });
-                    }}
-                    onDelete={() => deleteReminder(r.id)}
-                  />
-                ))}
-              </ul>
-            )}
-          </CollapsibleSection>
-        </section>
-      </div>
+          <section className="surface-card p-5">
+            <CollapsibleSection
+              title={`Avbokade (${canceled.length})`}
+              id="Avbokade påminnelser"
+              headingClassName="text-lg font-semibold"
+              className="space-y-3"
+            >
+              {canceled.length === 0 ? (
+                <p className="text-sm text-muted-foreground">Inget avbokat.</p>
+              ) : (
+                <ul className="space-y-3">
+                  {canceled.map((r) => (
+                    <ReminderRow
+                      key={r.id}
+                      reminder={r}
+                      onSave={(patch) => updateReminder(r.id, patch)}
+                      onCancel={() => cancelReminder(r.id)}
+                      onRestore={() => {
+                        restoreReminder(r.id);
+                        toast({ description: "Påminnelsen är aktiv igen" });
+                      }}
+                      onDelete={() => deleteReminder(r.id)}
+                    />
+                  ))}
+                </ul>
+              )}
+            </CollapsibleSection>
+          </section>
+        </MyFloveWide>
+      </MyFlovePageGrid>
     </Layout>
   );
 }

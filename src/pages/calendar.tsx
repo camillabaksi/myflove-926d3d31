@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Layout from "@/components/layout";
+import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { parseISODate } from "@/lib/day";
 import { MyFloveEmptyIllustration } from "@/components/myflove/motion";
 import { useFocus, useTasks, useReminders } from "@/hooks/use-data";
@@ -595,1219 +596,1230 @@ export default function CalendarPage() {
 
   return (
     <Layout>
-      <div className="space-y-8">
-        <div>
-          <h1 className="text-3xl font-bold mb-2">Kalender</h1>
-          <p className="text-muted-foreground">
-            Översikt över dina dagar. Inga stressiga detaljer.
-          </p>
-        </div>
+      <MyFlovePageGrid>
+        <MyFloveWide>
+          <div>
+            <h1 className="text-3xl font-bold mb-2">Kalender</h1>
+            <p className="text-muted-foreground">
+              Översikt över dina dagar. Inga stressiga detaljer.
+            </p>
+          </div>
+        </MyFloveWide>
 
-        <div className="flex flex-wrap gap-2">
-          <button
-            onClick={() => fileInputRef.current?.click()}
-            className="flex items-center gap-2 px-4 py-2.5 bg-card border border-border rounded-2xl text-sm font-medium hover:bg-secondary transition-colors"
-          >
-            <Upload size={16} />
-            Importera från telefonens kalender
-          </button>
-          <button
-            onClick={handleExportAll}
-            className="flex items-center gap-2 px-4 py-2.5 bg-card border border-border rounded-2xl text-sm font-medium hover:bg-secondary transition-colors"
-          >
-            <Download size={16} />
-            Exportera till kalender (.ics)
-          </button>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept={ACCEPT_CALENDAR}
-            className="hidden"
-            onChange={(e) => {
-              const f = e.target.files?.[0];
-              if (f) handleImportFile(f);
-              e.target.value = "";
-            }}
-          />
-        </div>
-        <p className="text-xs text-muted-foreground -mt-4">
-          Tips: exportera i telefonens kalender som .ics och importera här för att få in dina möten
-          i MyFlove.
-        </p>
-
-        <EnergyBattery />
-
-        <div className="bg-card rounded-3xl border border-border shadow-sm overflow-hidden">
-          <div className="p-6 pb-2">
-            <CollapsibleSection
-              title={periodLabel}
-              id="månadsöversikt"
-              help="Välj månad, vecka eller dag – och kryssa i vilka kategorier du vill se."
-              headingClassName="text-xl font-medium capitalize"
-              actions={
-                <div className="flex items-center gap-1">
-                  <button
-                    onClick={stepBack}
-                    aria-label="Föregående"
-                    className="p-2 hover:bg-secondary rounded-xl transition-colors"
-                  >
-                    <ChevronLeft size={24} />
-                  </button>
-                  <button
-                    onClick={stepForward}
-                    aria-label="Nästa"
-                    className="p-2 hover:bg-secondary rounded-xl transition-colors"
-                  >
-                    <ChevronRight size={24} />
-                  </button>
-                </div>
-              }
+        <MyFloveWide>
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="flex items-center gap-2 px-4 py-2.5 bg-card border border-border rounded-2xl text-sm font-medium hover:bg-secondary transition-colors"
             >
-              <div className="flex flex-wrap items-center gap-2 pt-2">
-                <div
-                  role="group"
-                  aria-label="Välj vy"
-                  className="inline-flex items-center gap-1 rounded-full border border-border/60 bg-secondary/40 p-1"
-                >
-                  {(
-                    [
-                      ["manad", "Månad"],
-                      ["vecka", "Vecka"],
-                      ["dag", "Dag"],
-                    ] as const
-                  ).map(([id, label]) => (
-                    <button
-                      key={id}
-                      type="button"
-                      onClick={() => {
-                        setView(id);
-                        if (id !== "manad" && selectedDateStr)
-                          setCurrentDate(new Date(`${selectedDateStr}T12:00:00`));
-                      }}
-                      aria-pressed={view === id}
-                      className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
-                        view === id
-                          ? "bg-primary text-primary-foreground shadow-sm"
-                          : "text-muted-foreground hover:text-foreground"
-                      }`}
-                    >
-                      {label}
-                    </button>
-                  ))}
-                </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    const now = new Date();
-                    setCurrentDate(now);
-                    setSelectedDateStr(fmtDate(now));
-                  }}
-                  className="rounded-full border border-border/60 px-3 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground"
-                >
-                  Idag
-                </button>
-              </div>
+              <Upload size={16} />
+              Importera från telefonens kalender
+            </button>
+            <button
+              onClick={handleExportAll}
+              className="flex items-center gap-2 px-4 py-2.5 bg-card border border-border rounded-2xl text-sm font-medium hover:bg-secondary transition-colors"
+            >
+              <Download size={16} />
+              Exportera till kalender (.ics)
+            </button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept={ACCEPT_CALENDAR}
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) handleImportFile(f);
+                e.target.value = "";
+              }}
+            />
+          </div>
+          <p className="text-xs text-muted-foreground -mt-4">
+            Tips: exportera i telefonens kalender som .ics och importera här för att få in dina
+            möten i MyFlove.
+          </p>
+        </MyFloveWide>
 
-              <div
-                className="flex flex-wrap items-center gap-2 pt-3"
-                role="group"
-                aria-label="Visa kategorier"
+        <MyFloveWide>
+          <EnergyBattery />
+        </MyFloveWide>
+
+        <MyFloveWide>
+          <div className="bg-card rounded-3xl border border-border shadow-sm overflow-hidden">
+            <div className="p-6 pb-2">
+              <CollapsibleSection
+                title={periodLabel}
+                id="månadsöversikt"
+                help="Välj månad, vecka eller dag – och kryssa i vilka kategorier du vill se."
+                headingClassName="text-xl font-medium capitalize"
+                actions={
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={stepBack}
+                      aria-label="Föregående"
+                      className="p-2 hover:bg-secondary rounded-xl transition-colors"
+                    >
+                      <ChevronLeft size={24} />
+                    </button>
+                    <button
+                      onClick={stepForward}
+                      aria-label="Nästa"
+                      className="p-2 hover:bg-secondary rounded-xl transition-colors"
+                    >
+                      <ChevronRight size={24} />
+                    </button>
+                  </div>
+                }
               >
-                {CATEGORIES.map((c) => {
-                  const active = shows(c.id);
-                  return (
-                    <button
-                      key={c.id}
-                      type="button"
-                      onClick={() => toggleCategory(c.id)}
-                      aria-pressed={active}
-                      className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
-                        active ? "text-foreground" : "text-muted-foreground/60 border-border/50"
-                      }`}
-                      style={
-                        active
-                          ? { backgroundColor: `${c.color}22`, borderColor: `${c.color}66` }
-                          : undefined
-                      }
-                    >
-                      <span
-                        className="w-2 h-2 rounded-full"
-                        style={{
-                          backgroundColor: active ? c.color : "hsl(var(--muted-foreground))",
-                        }}
-                      />
-                      {c.label}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {view === "manad" && (
-                <div className="pt-2">
-                  <div className="grid grid-cols-7 gap-1 mb-2 text-center text-sm font-medium text-muted-foreground">
-                    <div>Må</div>
-                    <div>Ti</div>
-                    <div>On</div>
-                    <div>To</div>
-                    <div>Fr</div>
-                    <div>Lö</div>
-                    <div>Sö</div>
-                  </div>
-
-                  <div className="grid grid-cols-7 gap-1">
-                    {days.map((dateStr, index) => {
-                      if (!dateStr) {
-                        return <div key={`empty-${index}`} className="aspect-square" />;
-                      }
-
-                      const dNum = parseInt(dateStr.split("-")[2], 10);
-                      const isSelected = dateStr === selectedDateStr;
-                      const isToday = dateStr === todayStr;
-                      const items = getItemsForDate(dateStr);
-                      const hasItems =
-                        items.focus ||
-                        items.tasks.length > 0 ||
-                        items.reminders.length > 0 ||
-                        items.familyEvents.length > 0 ||
-                        items.childEvents.length > 0 ||
-                        items.recurring.length > 0;
-
-                      return (
-                        <button
-                          key={dateStr}
-                          onClick={() => setSelectedDateStr(dateStr)}
-                          className={`aspect-square flex flex-col items-center justify-center rounded-2xl relative transition-all ${
-                            isSelected
-                              ? "bg-primary text-primary-foreground shadow-sm scale-105 z-10 font-bold"
-                              : isToday
-                                ? "bg-primary/10 text-primary font-bold"
-                                : "hover:bg-secondary text-foreground"
-                          }`}
-                        >
-                          <span className="text-lg">{dNum}</span>
-                          {hasItems && (
-                            <div className="absolute bottom-1.5 flex gap-1">
-                              {items.focus && (
-                                <div
-                                  className={`w-1.5 h-1.5 rounded-full ${isSelected ? "bg-white" : "bg-accent"}`}
-                                />
-                              )}
-                              {items.reminders.length > 0 && (
-                                <div
-                                  className={`w-1.5 h-1.5 rounded-full ${isSelected ? "bg-white/80" : "bg-primary"}`}
-                                />
-                              )}
-                              {items.tasks.length > 0 && (
-                                <div
-                                  className={`w-1.5 h-1.5 rounded-full ${isSelected ? "bg-white/60" : "bg-muted-foreground"}`}
-                                />
-                              )}
-                              {items.childEvents.slice(0, 3).map((e, i) => (
-                                <div
-                                  key={`child-${i}`}
-                                  className="w-1.5 h-1.5 rounded-full"
-                                  style={{
-                                    backgroundColor: isSelected
-                                      ? "white"
-                                      : (e.child?.color ?? "#a06cd5"),
-                                  }}
-                                />
-                              ))}
-                              {items.familyEvents.slice(0, 3).map((e, i) => (
-                                <div
-                                  key={`fam-${i}`}
-                                  className="w-1.5 h-1.5 rounded-full"
-                                  style={{
-                                    backgroundColor: isSelected
-                                      ? "white"
-                                      : (e.member?.color ?? "#8a9a5b"),
-                                  }}
-                                />
-                              ))}
-                              {items.recurring.length > 0 && (
-                                <div
-                                  className={`w-1 h-1 rounded-full ${isSelected ? "bg-white/50" : "bg-muted-foreground/40"}`}
-                                  title="Återkommande"
-                                />
-                              )}
-                            </div>
-                          )}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-
-              {view === "vecka" && (
-                <div className="pt-2 grid grid-cols-1 sm:grid-cols-7 gap-2">
-                  {weekDays.map((dateStr) => {
-                    const d = new Date(`${dateStr}T12:00:00`);
-                    const items = getItemsForDate(dateStr);
-                    const entries = [
-                      ...items.childEvents.map((e) => ({
-                        id: `c-${e.id}`,
-                        title: e.title,
-                        time: e.time ?? "",
-                        color: e.child?.color ?? "#a06cd5",
-                      })),
-                      ...items.familyEvents.map((e) => ({
-                        id: `f-${e.id}`,
-                        title: e.title,
-                        time: e.time ?? "",
-                        color: e.member?.color ?? "#8a9a5b",
-                      })),
-                      ...items.reminders.map((r) => ({
-                        id: `r-${r.id}`,
-                        title: r.title,
-                        time: r.time ?? "",
-                        color: "hsl(var(--primary))",
-                      })),
-                      ...items.tasks.map((t) => ({
-                        id: `t-${t.id}`,
-                        title: t.title,
-                        time: t.time ?? "",
-                        color: "hsl(var(--muted-foreground))",
-                      })),
-                    ].sort((a, b) => (a.time || "99").localeCompare(b.time || "99"));
-                    const isSelected = dateStr === selectedDateStr;
-                    return (
+                <div className="flex flex-wrap items-center gap-2 pt-2">
+                  <div
+                    role="group"
+                    aria-label="Välj vy"
+                    className="inline-flex items-center gap-1 rounded-full border border-border/60 bg-secondary/40 p-1"
+                  >
+                    {(
+                      [
+                        ["manad", "Månad"],
+                        ["vecka", "Vecka"],
+                        ["dag", "Dag"],
+                      ] as const
+                    ).map(([id, label]) => (
                       <button
-                        key={dateStr}
-                        onClick={() => setSelectedDateStr(dateStr)}
-                        className={`text-left rounded-2xl border p-2 min-h-24 transition-colors ${
-                          isSelected
-                            ? "border-primary bg-primary/5"
-                            : "border-border hover:bg-secondary"
+                        key={id}
+                        type="button"
+                        onClick={() => {
+                          setView(id);
+                          if (id !== "manad" && selectedDateStr)
+                            setCurrentDate(new Date(`${selectedDateStr}T12:00:00`));
+                        }}
+                        aria-pressed={view === id}
+                        className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
+                          view === id
+                            ? "bg-primary text-primary-foreground shadow-sm"
+                            : "text-muted-foreground hover:text-foreground"
                         }`}
                       >
-                        <div
-                          className={`text-xs font-medium mb-1 ${dateStr === todayStr ? "text-primary" : "text-muted-foreground"}`}
-                        >
-                          {d.toLocaleDateString("sv-SE", { weekday: "short", day: "numeric" })}
-                        </div>
-                        <div className="space-y-1">
-                          {entries.slice(0, 4).map((e) => (
-                            <div
-                              key={e.id}
-                              className="flex items-center gap-1.5 text-xs text-foreground"
-                            >
-                              <span
-                                className="w-1.5 h-1.5 rounded-full shrink-0"
-                                style={{ backgroundColor: e.color }}
-                              />
-                              <span className="truncate">
-                                {e.time && `${e.time} `}
-                                {e.title}
-                              </span>
-                            </div>
-                          ))}
-                          {entries.length > 4 && (
-                            <div className="text-xs text-muted-foreground">
-                              +{entries.length - 4} till
-                            </div>
-                          )}
-                          {entries.length === 0 && (
-                            <div className="text-xs text-muted-foreground/60">–</div>
-                          )}
-                        </div>
+                        {label}
                       </button>
-                    );
-                  })}
+                    ))}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const now = new Date();
+                      setCurrentDate(now);
+                      setSelectedDateStr(fmtDate(now));
+                    }}
+                    className="rounded-full border border-border/60 px-3 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground"
+                  >
+                    Idag
+                  </button>
                 </div>
-              )}
-            </CollapsibleSection>
-          </div>
-        </div>
 
-        {selectedDateStr && (
-          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-4">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <h3 className="min-w-0 truncate text-lg font-medium sm:text-xl">
-                {selectedDateStr === todayStr
-                  ? "Idag"
-                  : parseISODate(selectedDateStr).toLocaleDateString("sv-SE", {
-                      weekday: "long",
-                      day: "numeric",
-                      month: "long",
-                    })}
-              </h3>
-              <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
-                <button
-                  onClick={() => setIsAddingAny(true)}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-2xl text-sm font-medium border transition-colors bg-card border-border text-foreground hover:border-primary/40 hover:bg-secondary/50"
-                >
-                  <Plus size={16} className="text-primary" />
-                  Ny händelse
-                </button>
-                <button
-                  onClick={() => setIsAddingReminder(true)}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-2xl text-sm font-medium border transition-colors bg-card border-border text-foreground hover:border-primary/40 hover:bg-secondary/50"
-                >
-                  <Plus size={16} className="text-primary" />
-                  Påminnelse
-                </button>
-                <button
-                  onClick={() => setPictoMode(!pictoMode)}
-                  aria-pressed={pictoMode}
-                  title="Visa stora symboler för varje händelse"
-                  className={`flex items-center gap-1.5 px-3 py-2 rounded-2xl text-sm font-medium border transition-colors ${
-                    pictoMode
-                      ? "bg-accent/30 border-accent/40 text-foreground"
-                      : "bg-card border-border text-muted-foreground hover:border-primary/40 hover:bg-secondary/50"
-                  }`}
-                >
-                  <span aria-hidden>🖼️</span>
-                  Bildstöd
-                </button>
                 <div
-                  role="tablist"
-                  aria-label="Visningsläge för dagen"
-                  className="flex items-center gap-1 p-1 rounded-2xl bg-secondary/50 border border-border"
+                  className="flex flex-wrap items-center gap-2 pt-3"
+                  role="group"
+                  aria-label="Visa kategorier"
                 >
-                  <button
-                    role="tab"
-                    aria-selected={!allInDay}
-                    tabIndex={!allInDay ? 0 : -1}
-                    onClick={() => setAllInDay(false)}
-                    title="Visa dagens tidsbundna händelser på sina tider"
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-medium transition-colors ${
-                      !allInDay
-                        ? "bg-card border border-border text-foreground shadow-sm"
-                        : "text-muted-foreground hover:text-foreground"
-                    }`}
-                  >
-                    <span aria-hidden>📅</span>
-                    Tidslinje
-                  </button>
-                  <button
-                    role="tab"
-                    aria-selected={allInDay}
-                    tabIndex={allInDay ? 0 : -1}
-                    onClick={() => setAllInDay(true)}
-                    title="Visa allt som ska göras och redan är gjort den här dagen – inte bara tidsbundet"
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-medium transition-colors ${
-                      allInDay
-                        ? "bg-card border border-border text-foreground shadow-sm"
-                        : "text-muted-foreground hover:text-foreground"
-                    }`}
-                  >
-                    <span aria-hidden>✨</span>
-                    Allt i dagen
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {allInDay && <AllInDay date={selectedDateStr} isToday={selectedDateStr === todayStr} />}
-
-            {!allInDay &&
-              !selectedItems.focus &&
-              selectedItems.tasks.length === 0 &&
-              selectedItems.reminders.length === 0 &&
-              selectedItems.familyEvents.length === 0 &&
-              selectedItems.childEvents.length === 0 &&
-              selectedItems.recurring.length === 0 && (
-                <div className="text-center py-10 bg-card/50 border border-border/50 rounded-3xl text-muted-foreground">
-                  <MyFloveEmptyIllustration kind="calendar" className="mb-2 block" />
-                  Inget inplanerat denna dag.
-                </div>
-              )}
-
-            {!allInDay && selectedItems.recurring.length > 0 && (
-              <div className="flex flex-wrap items-center gap-2 px-1">
-                <span className="text-xs uppercase tracking-wider text-muted-foreground">
-                  Återkommande
-                </span>
-                {selectedItems.recurring.map((r) => (
-                  <span
-                    key={r.id}
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary/60 border border-border/50 text-xs text-muted-foreground"
-                  >
-                    <span
-                      className="w-1.5 h-1.5 rounded-full"
-                      style={{ backgroundColor: r.color ?? "hsl(var(--primary))" }}
-                    />
-                    {pictoMode && <span aria-hidden>{pictogramFor(r.title, "🔁")}</span>}
-                    {r.title}
-                    {r.time && ` · ${r.time}`}
-                  </span>
-                ))}
-              </div>
-            )}
-
-            {!allInDay && view === "dag" && (
-              <DayTimeline
-                isToday={selectedDateStr === todayStr}
-                energyByHour={selectedDateStr === todayStr ? batteryByHour : undefined}
-                entries={[
-                  ...selectedItems.childEvents.map((e) => ({
-                    id: `c-${e.id}`,
-                    title: e.title,
-                    time: e.time ?? "",
-                    color: e.child?.color ?? "#a06cd5",
-                    emoji: pictoMode ? pictogramFor(e.title, "🐣") : undefined,
-                  })),
-                  ...selectedItems.familyEvents.map((e) => ({
-                    id: `f-${e.id}`,
-                    title: e.title,
-                    time: e.time ?? "",
-                    color: e.member?.color ?? "#8a9a5b",
-                    emoji: pictoMode ? pictogramFor(e.title, "👨‍👩‍👧") : undefined,
-                  })),
-                  ...selectedItems.reminders.map((r) => ({
-                    id: `r-${r.id}`,
-                    title: r.title,
-                    time: r.time ?? "",
-                    emoji: pictoMode ? pictogramFor(r.title, "🔔") : undefined,
-                  })),
-                  ...selectedItems.tasks.map((t) => ({
-                    id: `t-${t.id}`,
-                    title: t.title,
-                    time: t.time ?? "",
-                    endTime: t.endTime,
-                    emoji: pictoMode ? pictogramFor(t.title, "✅") : undefined,
-                  })),
-                ]}
-              />
-            )}
-
-            {!allInDay && (
-              <div className="space-y-3">
-                {/* Samma händelse för flera barn (t.ex. lämning av Bella och Bianca) visas ihop. */}
-                {(() => {
-                  type ChildEv = (typeof selectedItems.childEvents)[number];
-                  const groups = new Map<string, ChildEv[]>();
-                  for (const e of selectedItems.childEvents) {
-                    const key = `${e.title}|${e.time ?? ""}|${e.completed ? 1 : 0}`;
-                    groups.set(key, [...(groups.get(key) ?? []), e]);
-                  }
-                  return Array.from(groups.values());
-                })().map((group) => {
-                  const e = group[0]!;
-                  const names = group.map((g) => g.child?.name ?? "Barn");
-                  const color = group.length > 1 ? "#a06cd5" : (e.child?.color ?? "#a06cd5");
-                  return (
-                    <div
-                      key={`child-${e.id}`}
-                      className="flex items-center justify-between gap-3 p-4 bg-card border border-border rounded-2xl"
-                    >
-                      <Link href="/barn" className="flex items-center gap-4 min-w-0 flex-1">
-                        {pictoMode ? (
-                          <span className="text-3xl leading-none shrink-0" aria-hidden>
-                            {pictogramFor(e.title, "🐣")}
-                          </span>
-                        ) : (
-                          <Baby style={{ color }} size={24} />
-                        )}
-                        <div className="min-w-0">
-                          <div
-                            className="text-xs font-medium uppercase tracking-wider mb-0.5"
-                            style={{ color }}
-                          >
-                            {names.join(" & ")} {e.time && `kl ${e.time}`}
-                            {e.sharedWith.length > 0 && " · delad"}
-                          </div>
-                          <div
-                            className={`text-lg font-medium truncate ${e.completed ? "line-through opacity-60" : ""}`}
-                          >
-                            {e.title}
-                          </div>
-                        </div>
-                      </Link>
-                      <button
-                        type="button"
-                        onClick={() => openChildGroupEditor(group)}
-                        className="shrink-0 text-xs font-medium px-3 py-2 rounded-full bg-secondary/60 hover:bg-secondary transition-colors"
-                      >
-                        Ändra barn
-                      </button>
-                    </div>
-                  );
-                })}
-
-                {selectedItems.familyEvents.map((e) => (
-                  <div
-                    key={`fam-${e.id}`}
-                    className="flex items-center justify-between gap-4 p-4 bg-card border border-border rounded-2xl group"
-                  >
-                    <div className="flex items-center gap-4">
-                      {pictoMode ? (
-                        <span className="text-3xl leading-none shrink-0" aria-hidden>
-                          {pictogramFor(e.title, "👨‍👩‍👧")}
-                        </span>
-                      ) : (
-                        <Users style={{ color: e.member?.color ?? "#8a9a5b" }} size={24} />
-                      )}
-                      <div>
-                        <div
-                          className="text-xs font-medium uppercase tracking-wider mb-0.5"
-                          style={{ color: e.member?.color ?? "#8a9a5b" }}
-                        >
-                          {e.member?.displayName ?? "Familj"} {e.time && `kl ${e.time}`}
-                        </div>
-                        <div className="text-lg font-medium">{e.title}</div>
-                      </div>
-                    </div>
-                    <button
-                      onClick={() => deleteEventMutation.mutate({ id: e.id })}
-                      aria-label="Ta bort familjehändelse"
-                      className="p-2 text-muted-foreground hover:text-destructive rounded-xl hover:bg-destructive/10 shrink-0"
-                    >
-                      <Trash2 size={18} />
-                    </button>
-                  </div>
-                ))}
-
-                {selectedItems.focus && (
-                  <div className="flex items-center gap-4 p-4 bg-accent/20 border border-accent/30 rounded-2xl">
-                    {pictoMode ? (
-                      <span className="text-3xl leading-none shrink-0" aria-hidden>
-                        {pictogramFor(selectedItems.focus.text, "🎯")}
-                      </span>
-                    ) : (
-                      <Target className="text-accent-foreground" size={24} />
-                    )}
-                    <div>
-                      <div className="text-xs text-accent-foreground font-medium uppercase tracking-wider mb-0.5">
-                        Viktigast idag
-                      </div>
-                      <div className="text-lg font-medium">{selectedItems.focus.text}</div>
-                    </div>
-                  </div>
-                )}
-
-                {selectedItems.reminders.map((r) => (
-                  <div
-                    key={r.id}
-                    className="flex items-center justify-between gap-4 p-4 bg-primary/5 border border-primary/10 rounded-2xl"
-                  >
-                    <div className="flex items-center gap-4 min-w-0">
-                      {pictoMode ? (
-                        <span className="text-3xl leading-none shrink-0" aria-hidden>
-                          {pictogramFor(r.title, "🔔")}
-                        </span>
-                      ) : (
-                        <Bell className="text-primary shrink-0" size={24} />
-                      )}
-                      <div className="min-w-0">
-                        <div className="text-xs text-primary font-medium uppercase tracking-wider mb-0.5">
-                          {r.endDate
-                            ? `Period · ${periodDayLabel(r.date, r.endDate, selectedDateStr)}`
-                            : "Påminnelse"}{" "}
-                          {r.time && `kl ${r.time}${r.endTime ? `–${r.endTime}` : ""}`}
-                        </div>
-                        <div className="text-lg font-medium truncate">{r.title}</div>
-                        {r.note && (
-                          <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">
-                            {r.note}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-1 shrink-0">
-                      <button
-                        onClick={() =>
-                          setEditing({
-                            kind: "reminder",
-                            id: r.id,
-                            title: r.title,
-                            date: r.date,
-                            time: r.time ?? "",
-                            endTime: r.endTime ?? "",
-                            remind: r.remindMinutesBefore ?? null,
-                            note: r.note ?? "",
-                            area: "vardag",
-                            repeat: r.repeat ?? "none",
-                          })
-                        }
-                        aria-label="Ändra påminnelse"
-                        className="px-3 py-2 text-sm text-primary rounded-xl hover:bg-primary/10"
-                      >
-                        Ändra
-                      </button>
-                      <button
-                        onClick={() => deleteReminder(r.id)}
-                        aria-label="Ta bort påminnelse"
-                        className="p-2 text-muted-foreground hover:text-destructive rounded-xl hover:bg-destructive/10"
-                      >
-                        <Trash2 size={18} />
-                      </button>
-                    </div>
-                  </div>
-                ))}
-
-                {selectedItems.tasks.map((t) => (
-                  <div
-                    key={t.id}
-                    className={`flex items-center justify-between gap-4 p-4 bg-card border border-border rounded-2xl ${t.completed ? "opacity-60" : ""}`}
-                  >
-                    <div className="flex items-center gap-4 min-w-0">
-                      {pictoMode ? (
-                        <span className="text-3xl leading-none shrink-0" aria-hidden>
-                          {pictogramFor(t.title, "✅")}
-                        </span>
-                      ) : (
-                        <CheckSquare
-                          className={t.completed ? "text-primary" : "text-muted-foreground"}
-                          size={24}
-                        />
-                      )}
-                      <div className="flex-1 min-w-0">
-                        {t.time && (
-                          <div className="text-xs text-primary font-medium uppercase tracking-wider mb-0.5">
-                            kl {t.time}
-                            {t.endTime ? `–${t.endTime}` : ""}
-                            {t.reminderMinutesBefore != null &&
-                              ` · påminn ${t.reminderMinutesBefore} min innan`}
-                          </div>
-                        )}
-                        <div
-                          className={`text-lg font-medium truncate ${t.completed ? "line-through text-muted-foreground" : ""}`}
-                        >
-                          {t.title}
-                        </div>
-                        {t.note && (
-                          <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">
-                            {t.note}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-1 shrink-0">
-                      <button
-                        onClick={() =>
-                          setEditing({
-                            kind: "task",
-                            id: t.id,
-                            title: t.title,
-                            date: t.dueDate ?? selectedDateStr,
-                            time: t.time ?? "",
-                            endTime: t.endTime ?? "",
-                            remind: t.reminderMinutesBefore ?? null,
-                            note: t.note ?? "",
-                            area: getArea(t),
-                            repeat: "none",
-                          })
-                        }
-                        aria-label="Ändra uppgift"
-                        className="px-3 py-2 text-sm text-primary rounded-xl hover:bg-primary/10"
-                      >
-                        Ändra
-                      </button>
-                      <button
-                        onClick={() => deleteTask(t.id)}
-                        aria-label="Ta bort uppgift"
-                        className="p-2 text-muted-foreground hover:text-destructive rounded-xl hover:bg-destructive/10"
-                      >
-                        <Trash2 size={18} />
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        <Dialog open={isAddingReminder} onOpenChange={setIsAddingReminder}>
-          <DialogContent className="rounded-3xl">
-            <DialogHeader>
-              <DialogTitle>Ny påminnelse</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4 pt-2">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Vad ska du komma ihåg?</label>
-                <Input
-                  value={newReminderTitle}
-                  onChange={(e) => setNewReminderTitle(e.target.value)}
-                  placeholder="T.ex. Möte med chefen"
-                  className="h-12 rounded-2xl"
-                  autoFocus
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Tid (valfritt)</label>
-                <Input
-                  type="time"
-                  value={newReminderTime}
-                  onChange={(e) => setNewReminderTime(e.target.value)}
-                  className="h-12 rounded-2xl"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Upprepa</label>
-                <div className="grid grid-cols-2 gap-2">
-                  {(
-                    [
-                      ["none", "Bara en gång"],
-                      ["daily", "Varje dag"],
-                      ["weekdays", "Vardagar"],
-                      ["weekly", "Varje vecka"],
-                    ] as const
-                  ).map(([val, label]) => (
-                    <button
-                      key={val}
-                      type="button"
-                      onClick={() => setNewReminderRepeat(val)}
-                      className={`h-11 rounded-2xl text-sm font-medium border transition-all ${
-                        newReminderRepeat === val
-                          ? "bg-primary text-primary-foreground border-primary"
-                          : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
-                      }`}
-                    >
-                      {label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <Button
-                onClick={async () => {
-                  if (!newReminderTitle.trim() || !selectedDateStr) return;
-                  if (newReminderTime && getNotificationPermission() === "default") {
-                    await requestNotificationPermission();
-                  }
-                  addReminder(
-                    newReminderTitle.trim(),
-                    selectedDateStr,
-                    newReminderTime || undefined,
-                    newReminderRepeat,
-                  );
-                  setNewReminderTitle("");
-                  setNewReminderTime("");
-                  setNewReminderRepeat("none");
-                  setIsAddingReminder(false);
-                }}
-                disabled={!newReminderTitle.trim()}
-                className="w-full h-12 rounded-2xl"
-              >
-                Lägg till
-              </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
-
-        <Dialog open={isAddingEvent} onOpenChange={setIsAddingEvent}>
-          <DialogContent className="rounded-3xl">
-            <DialogHeader>
-              <DialogTitle>Ny familjehändelse</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4 pt-2">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Titel</label>
-                <Input
-                  value={newEventTitle}
-                  onChange={(e) => setNewEventTitle(e.target.value)}
-                  placeholder="T.ex. Fotbollsträning"
-                  className="h-12 rounded-2xl"
-                  autoFocus
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Tid (valfritt)</label>
-                <Input
-                  type="time"
-                  value={newEventTime}
-                  onChange={(e) => setNewEventTime(e.target.value)}
-                  className="h-12 rounded-2xl"
-                />
-              </div>
-              <Button
-                onClick={handleAddEvent}
-                disabled={!newEventTitle.trim() || createEventMutation.isPending}
-                className="w-full h-12 rounded-2xl"
-              >
-                Lägg till
-              </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
-
-        <Dialog open={!!editing} onOpenChange={(open) => !open && setEditing(null)}>
-          <DialogContent className="rounded-3xl">
-            <DialogHeader>
-              <DialogTitle>
-                {editing?.kind === "task" ? "Ändra uppgift" : "Ändra påminnelse"}
-              </DialogTitle>
-            </DialogHeader>
-            {editing && (
-              <div className="space-y-4 pt-2 max-h-[70vh] overflow-y-auto pr-1">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Vad gäller det?</label>
-                  <Input
-                    value={editing.title}
-                    onChange={(e) => setEditing({ ...editing, title: e.target.value })}
-                    className="h-12 rounded-2xl"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Datum</label>
-                  <Input
-                    type="date"
-                    value={editing.date}
-                    onChange={(e) => setEditing({ ...editing, date: e.target.value })}
-                    className="h-12 rounded-2xl"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Börjar (valfritt)</label>
-                    <Input
-                      type="time"
-                      value={editing.time}
-                      onChange={(e) => setEditing({ ...editing, time: e.target.value })}
-                      className="h-12 rounded-2xl"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Slutar (valfritt)</label>
-                    <Input
-                      type="time"
-                      value={editing.endTime}
-                      onChange={(e) => setEditing({ ...editing, endTime: e.target.value })}
-                      className="h-12 rounded-2xl"
-                      disabled={!editing.time}
-                    />
-                  </div>
-                </div>
-
-                {editing.time && (
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Påminnelse</label>
-                    <div className="grid grid-cols-3 gap-2">
-                      {REMIND_OPTIONS.map((opt) => (
-                        <button
-                          key={String(opt.value)}
-                          type="button"
-                          onClick={() => setEditing({ ...editing, remind: opt.value })}
-                          className={`h-11 rounded-2xl text-xs font-medium border transition-all ${
-                            editing.remind === opt.value
-                              ? "bg-primary text-primary-foreground border-primary"
-                              : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
-                          }`}
-                        >
-                          {opt.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {editing.kind === "task" && (
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Vart hör det hemma?</label>
-                    <div className="grid grid-cols-2 gap-2">
-                      {ALL_AREAS.map((a) => (
-                        <button
-                          key={a}
-                          type="button"
-                          onClick={() => setEditing({ ...editing, area: a })}
-                          className={`h-11 rounded-2xl text-sm font-medium border transition-all ${
-                            editing.area === a
-                              ? "bg-primary text-primary-foreground border-primary"
-                              : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
-                          }`}
-                        >
-                          {AREA_META[a].emoji} {AREA_META[a].label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {editing.kind === "reminder" && (
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Upprepa</label>
-                    <div className="grid grid-cols-2 gap-2">
-                      {(
-                        [
-                          ["none", "Bara en gång"],
-                          ["daily", "Varje dag"],
-                          ["weekdays", "Vardagar"],
-                          ["weekly", "Varje vecka"],
-                        ] as const
-                      ).map(([val, label]) => (
-                        <button
-                          key={val}
-                          type="button"
-                          onClick={() => setEditing({ ...editing, repeat: val })}
-                          className={`h-11 rounded-2xl text-sm font-medium border transition-all ${
-                            editing.repeat === val
-                              ? "bg-primary text-primary-foreground border-primary"
-                              : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
-                          }`}
-                        >
-                          {label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Anteckning (valfritt)</label>
-                  <textarea
-                    value={editing.note}
-                    onChange={(e) => setEditing({ ...editing, note: e.target.value })}
-                    rows={2}
-                    placeholder="Skriv vad det gäller, vad du behöver ta med…"
-                    className="w-full rounded-2xl border border-border bg-background p-3 text-sm outline-none focus:border-primary"
-                  />
-                </div>
-
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      if (editing.kind === "reminder") deleteReminder(editing.id);
-                      else deleteTask(editing.id);
-                      setEditing(null);
-                      toast({ description: "Borttagen." });
-                    }}
-                    className="flex-1 h-12 rounded-2xl text-destructive"
-                  >
-                    <Trash2 size={16} className="mr-2" /> Ta bort
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      const time = editing.time || undefined;
-                      if (editing.kind === "reminder") {
-                        updateReminder(editing.id, {
-                          title: editing.title.trim() || "Påminnelse",
-                          date: editing.date,
-                          time,
-                          endTime: time ? editing.endTime || undefined : undefined,
-                          repeat: editing.repeat,
-                          remindMinutesBefore: time ? (editing.remind ?? undefined) : undefined,
-                          note: editing.note,
-                        });
-                      } else {
-                        updateTask(editing.id, {
-                          title: editing.title,
-                          dueDate: editing.date,
-                          time,
-                          endTime: time ? editing.endTime || undefined : undefined,
-                          reminderMinutesBefore: time ? (editing.remind ?? undefined) : undefined,
-                          area: editing.area,
-                          note: editing.note,
-                        });
-                      }
-                      setEditing(null);
-                      toast({ description: "Sparat ✨" });
-                    }}
-                    className="flex-1 h-12 rounded-2xl"
-                  >
-                    Spara
-                  </Button>
-                </div>
-              </div>
-            )}
-          </DialogContent>
-        </Dialog>
-
-        <Dialog open={isAddingAny} onOpenChange={setIsAddingAny}>
-          <DialogContent className="rounded-3xl max-h-[85vh] overflow-y-auto">
-            <DialogHeader className="text-left">
-              <DialogTitle className="pr-8 text-left">Ny händelse</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-5 pt-1">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Kategori</label>
-                <div className="grid grid-cols-3 gap-2">
                   {CATEGORIES.map((c) => {
-                    const disabled =
-                      (c.id === "relationer" && !hasHousehold) ||
-                      (c.id === "barn" && kids.length === 0);
+                    const active = shows(c.id);
                     return (
                       <button
                         key={c.id}
                         type="button"
-                        disabled={disabled}
-                        onClick={() => setNewCat(c.id)}
-                        title={disabled ? "Kräver familj respektive barn i appen" : undefined}
-                        className={`w-full h-11 px-2 rounded-2xl text-sm font-medium border transition-all disabled:opacity-40 ${
-                          newCat === c.id
-                            ? "text-white border-transparent"
-                            : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
+                        onClick={() => toggleCategory(c.id)}
+                        aria-pressed={active}
+                        className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
+                          active ? "text-foreground" : "text-muted-foreground/60 border-border/50"
                         }`}
-                        style={newCat === c.id ? { backgroundColor: c.color } : undefined}
+                        style={
+                          active
+                            ? { backgroundColor: `${c.color}22`, borderColor: `${c.color}66` }
+                            : undefined
+                        }
                       >
+                        <span
+                          className="w-2 h-2 rounded-full"
+                          style={{
+                            backgroundColor: active ? c.color : "hsl(var(--muted-foreground))",
+                          }}
+                        />
                         {c.label}
                       </button>
                     );
                   })}
                 </div>
-              </div>
 
-              {newCat === "barn" && kids.length > 0 && (
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Vilka barn?</label>
-                  <div className="flex flex-wrap gap-2">
-                    {kids.map((k) => {
-                      const selected =
-                        newAnyChildIds.length > 0
-                          ? newAnyChildIds.includes(k.id)
-                          : k.id === kids[0]?.id;
+                {view === "manad" && (
+                  <div className="pt-2">
+                    <div className="grid grid-cols-7 gap-1 mb-2 text-center text-sm font-medium text-muted-foreground">
+                      <div>Må</div>
+                      <div>Ti</div>
+                      <div>On</div>
+                      <div>To</div>
+                      <div>Fr</div>
+                      <div>Lö</div>
+                      <div>Sö</div>
+                    </div>
+
+                    <div className="grid grid-cols-7 gap-1">
+                      {days.map((dateStr, index) => {
+                        if (!dateStr) {
+                          return <div key={`empty-${index}`} className="aspect-square" />;
+                        }
+
+                        const dNum = parseInt(dateStr.split("-")[2], 10);
+                        const isSelected = dateStr === selectedDateStr;
+                        const isToday = dateStr === todayStr;
+                        const items = getItemsForDate(dateStr);
+                        const hasItems =
+                          items.focus ||
+                          items.tasks.length > 0 ||
+                          items.reminders.length > 0 ||
+                          items.familyEvents.length > 0 ||
+                          items.childEvents.length > 0 ||
+                          items.recurring.length > 0;
+
+                        return (
+                          <button
+                            key={dateStr}
+                            onClick={() => setSelectedDateStr(dateStr)}
+                            className={`aspect-square flex flex-col items-center justify-center rounded-2xl relative transition-all ${
+                              isSelected
+                                ? "bg-primary text-primary-foreground shadow-sm scale-105 z-10 font-bold"
+                                : isToday
+                                  ? "bg-primary/10 text-primary font-bold"
+                                  : "hover:bg-secondary text-foreground"
+                            }`}
+                          >
+                            <span className="text-lg">{dNum}</span>
+                            {hasItems && (
+                              <div className="absolute bottom-1.5 flex gap-1">
+                                {items.focus && (
+                                  <div
+                                    className={`w-1.5 h-1.5 rounded-full ${isSelected ? "bg-white" : "bg-accent"}`}
+                                  />
+                                )}
+                                {items.reminders.length > 0 && (
+                                  <div
+                                    className={`w-1.5 h-1.5 rounded-full ${isSelected ? "bg-white/80" : "bg-primary"}`}
+                                  />
+                                )}
+                                {items.tasks.length > 0 && (
+                                  <div
+                                    className={`w-1.5 h-1.5 rounded-full ${isSelected ? "bg-white/60" : "bg-muted-foreground"}`}
+                                  />
+                                )}
+                                {items.childEvents.slice(0, 3).map((e, i) => (
+                                  <div
+                                    key={`child-${i}`}
+                                    className="w-1.5 h-1.5 rounded-full"
+                                    style={{
+                                      backgroundColor: isSelected
+                                        ? "white"
+                                        : (e.child?.color ?? "#a06cd5"),
+                                    }}
+                                  />
+                                ))}
+                                {items.familyEvents.slice(0, 3).map((e, i) => (
+                                  <div
+                                    key={`fam-${i}`}
+                                    className="w-1.5 h-1.5 rounded-full"
+                                    style={{
+                                      backgroundColor: isSelected
+                                        ? "white"
+                                        : (e.member?.color ?? "#8a9a5b"),
+                                    }}
+                                  />
+                                ))}
+                                {items.recurring.length > 0 && (
+                                  <div
+                                    className={`w-1 h-1 rounded-full ${isSelected ? "bg-white/50" : "bg-muted-foreground/40"}`}
+                                    title="Återkommande"
+                                  />
+                                )}
+                              </div>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {view === "vecka" && (
+                  <div className="pt-2 grid grid-cols-1 sm:grid-cols-7 gap-2">
+                    {weekDays.map((dateStr) => {
+                      const d = new Date(`${dateStr}T12:00:00`);
+                      const items = getItemsForDate(dateStr);
+                      const entries = [
+                        ...items.childEvents.map((e) => ({
+                          id: `c-${e.id}`,
+                          title: e.title,
+                          time: e.time ?? "",
+                          color: e.child?.color ?? "#a06cd5",
+                        })),
+                        ...items.familyEvents.map((e) => ({
+                          id: `f-${e.id}`,
+                          title: e.title,
+                          time: e.time ?? "",
+                          color: e.member?.color ?? "#8a9a5b",
+                        })),
+                        ...items.reminders.map((r) => ({
+                          id: `r-${r.id}`,
+                          title: r.title,
+                          time: r.time ?? "",
+                          color: "hsl(var(--primary))",
+                        })),
+                        ...items.tasks.map((t) => ({
+                          id: `t-${t.id}`,
+                          title: t.title,
+                          time: t.time ?? "",
+                          color: "hsl(var(--muted-foreground))",
+                        })),
+                      ].sort((a, b) => (a.time || "99").localeCompare(b.time || "99"));
+                      const isSelected = dateStr === selectedDateStr;
                       return (
                         <button
-                          key={k.id}
-                          type="button"
-                          aria-pressed={selected}
-                          onClick={() =>
-                            setNewAnyChildIds((prev) => {
-                              const base = prev.length > 0 ? prev : kids[0]?.id ? [kids[0].id] : [];
-                              return base.includes(k.id)
-                                ? base.filter((id) => id !== k.id)
-                                : [...base, k.id];
-                            })
-                          }
-                          className={`px-3 py-2 rounded-full text-sm font-medium border transition-all ${
-                            selected
-                              ? "text-white border-transparent"
-                              : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
+                          key={dateStr}
+                          onClick={() => setSelectedDateStr(dateStr)}
+                          className={`text-left rounded-2xl border p-2 min-h-24 transition-colors ${
+                            isSelected
+                              ? "border-primary bg-primary/5"
+                              : "border-border hover:bg-secondary"
                           }`}
-                          style={selected ? { backgroundColor: k.color } : undefined}
                         >
-                          {selected ? "✓ " : ""}
-                          {k.name}
+                          <div
+                            className={`text-xs font-medium mb-1 ${dateStr === todayStr ? "text-primary" : "text-muted-foreground"}`}
+                          >
+                            {d.toLocaleDateString("sv-SE", { weekday: "short", day: "numeric" })}
+                          </div>
+                          <div className="space-y-1">
+                            {entries.slice(0, 4).map((e) => (
+                              <div
+                                key={e.id}
+                                className="flex items-center gap-1.5 text-xs text-foreground"
+                              >
+                                <span
+                                  className="w-1.5 h-1.5 rounded-full shrink-0"
+                                  style={{ backgroundColor: e.color }}
+                                />
+                                <span className="truncate">
+                                  {e.time && `${e.time} `}
+                                  {e.title}
+                                </span>
+                              </div>
+                            ))}
+                            {entries.length > 4 && (
+                              <div className="text-xs text-muted-foreground">
+                                +{entries.length - 4} till
+                              </div>
+                            )}
+                            {entries.length === 0 && (
+                              <div className="text-xs text-muted-foreground/60">–</div>
+                            )}
+                          </div>
                         </button>
                       );
                     })}
                   </div>
-                  <p className="text-xs text-muted-foreground">
-                    Välj ett eller flera barn – t.ex. lämning av både Bella och Bianca blir en och
-                    samma händelse.
-                  </p>
+                )}
+              </CollapsibleSection>
+            </div>
+          </div>
+
+          {selectedDateStr && (
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <h3 className="min-w-0 truncate text-lg font-medium sm:text-xl">
+                  {selectedDateStr === todayStr
+                    ? "Idag"
+                    : parseISODate(selectedDateStr).toLocaleDateString("sv-SE", {
+                        weekday: "long",
+                        day: "numeric",
+                        month: "long",
+                      })}
+                </h3>
+                <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
+                  <button
+                    onClick={() => setIsAddingAny(true)}
+                    className="flex items-center gap-1.5 px-3 py-2 rounded-2xl text-sm font-medium border transition-colors bg-card border-border text-foreground hover:border-primary/40 hover:bg-secondary/50"
+                  >
+                    <Plus size={16} className="text-primary" />
+                    Ny händelse
+                  </button>
+                  <button
+                    onClick={() => setIsAddingReminder(true)}
+                    className="flex items-center gap-1.5 px-3 py-2 rounded-2xl text-sm font-medium border transition-colors bg-card border-border text-foreground hover:border-primary/40 hover:bg-secondary/50"
+                  >
+                    <Plus size={16} className="text-primary" />
+                    Påminnelse
+                  </button>
+                  <button
+                    onClick={() => setPictoMode(!pictoMode)}
+                    aria-pressed={pictoMode}
+                    title="Visa stora symboler för varje händelse"
+                    className={`flex items-center gap-1.5 px-3 py-2 rounded-2xl text-sm font-medium border transition-colors ${
+                      pictoMode
+                        ? "bg-accent/30 border-accent/40 text-foreground"
+                        : "bg-card border-border text-muted-foreground hover:border-primary/40 hover:bg-secondary/50"
+                    }`}
+                  >
+                    <span aria-hidden>🖼️</span>
+                    Bildstöd
+                  </button>
+                  <div
+                    role="tablist"
+                    aria-label="Visningsläge för dagen"
+                    className="flex items-center gap-1 p-1 rounded-2xl bg-secondary/50 border border-border"
+                  >
+                    <button
+                      role="tab"
+                      aria-selected={!allInDay}
+                      tabIndex={!allInDay ? 0 : -1}
+                      onClick={() => setAllInDay(false)}
+                      title="Visa dagens tidsbundna händelser på sina tider"
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-medium transition-colors ${
+                        !allInDay
+                          ? "bg-card border border-border text-foreground shadow-sm"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      <span aria-hidden>📅</span>
+                      Tidslinje
+                    </button>
+                    <button
+                      role="tab"
+                      aria-selected={allInDay}
+                      tabIndex={allInDay ? 0 : -1}
+                      onClick={() => setAllInDay(true)}
+                      title="Visa allt som ska göras och redan är gjort den här dagen – inte bara tidsbundet"
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-medium transition-colors ${
+                        allInDay
+                          ? "bg-card border border-border text-foreground shadow-sm"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      <span aria-hidden>✨</span>
+                      Allt i dagen
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {allInDay && (
+                <AllInDay date={selectedDateStr} isToday={selectedDateStr === todayStr} />
+              )}
+
+              {!allInDay &&
+                !selectedItems.focus &&
+                selectedItems.tasks.length === 0 &&
+                selectedItems.reminders.length === 0 &&
+                selectedItems.familyEvents.length === 0 &&
+                selectedItems.childEvents.length === 0 &&
+                selectedItems.recurring.length === 0 && (
+                  <div className="text-center py-10 bg-card/50 border border-border/50 rounded-3xl text-muted-foreground">
+                    <MyFloveEmptyIllustration kind="calendar" className="mb-2 block" />
+                    Inget inplanerat denna dag.
+                  </div>
+                )}
+
+              {!allInDay && selectedItems.recurring.length > 0 && (
+                <div className="flex flex-wrap items-center gap-2 px-1">
+                  <span className="text-xs uppercase tracking-wider text-muted-foreground">
+                    Återkommande
+                  </span>
+                  {selectedItems.recurring.map((r) => (
+                    <span
+                      key={r.id}
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary/60 border border-border/50 text-xs text-muted-foreground"
+                    >
+                      <span
+                        className="w-1.5 h-1.5 rounded-full"
+                        style={{ backgroundColor: r.color ?? "hsl(var(--primary))" }}
+                      />
+                      {pictoMode && <span aria-hidden>{pictogramFor(r.title, "🔁")}</span>}
+                      {r.title}
+                      {r.time && ` · ${r.time}`}
+                    </span>
+                  ))}
                 </div>
               )}
 
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Vad händer?</label>
-                <Input
-                  value={newAnyTitle}
-                  onChange={(e) => setNewAnyTitle(e.target.value)}
-                  placeholder="T.ex. Tandläkare"
-                  className="h-12 rounded-2xl"
-                  autoFocus
+              {!allInDay && view === "dag" && (
+                <DayTimeline
+                  isToday={selectedDateStr === todayStr}
+                  energyByHour={selectedDateStr === todayStr ? batteryByHour : undefined}
+                  entries={[
+                    ...selectedItems.childEvents.map((e) => ({
+                      id: `c-${e.id}`,
+                      title: e.title,
+                      time: e.time ?? "",
+                      color: e.child?.color ?? "#a06cd5",
+                      emoji: pictoMode ? pictogramFor(e.title, "🐣") : undefined,
+                    })),
+                    ...selectedItems.familyEvents.map((e) => ({
+                      id: `f-${e.id}`,
+                      title: e.title,
+                      time: e.time ?? "",
+                      color: e.member?.color ?? "#8a9a5b",
+                      emoji: pictoMode ? pictogramFor(e.title, "👨‍👩‍👧") : undefined,
+                    })),
+                    ...selectedItems.reminders.map((r) => ({
+                      id: `r-${r.id}`,
+                      title: r.title,
+                      time: r.time ?? "",
+                      emoji: pictoMode ? pictogramFor(r.title, "🔔") : undefined,
+                    })),
+                    ...selectedItems.tasks.map((t) => ({
+                      id: `t-${t.id}`,
+                      title: t.title,
+                      time: t.time ?? "",
+                      endTime: t.endTime,
+                      emoji: pictoMode ? pictogramFor(t.title, "✅") : undefined,
+                    })),
+                  ]}
                 />
-              </div>
+              )}
 
-              <div className="grid grid-cols-2 gap-3">
+              {!allInDay && (
+                <div className="space-y-3">
+                  {/* Samma händelse för flera barn (t.ex. lämning av Bella och Bianca) visas ihop. */}
+                  {(() => {
+                    type ChildEv = (typeof selectedItems.childEvents)[number];
+                    const groups = new Map<string, ChildEv[]>();
+                    for (const e of selectedItems.childEvents) {
+                      const key = `${e.title}|${e.time ?? ""}|${e.completed ? 1 : 0}`;
+                      groups.set(key, [...(groups.get(key) ?? []), e]);
+                    }
+                    return Array.from(groups.values());
+                  })().map((group) => {
+                    const e = group[0]!;
+                    const names = group.map((g) => g.child?.name ?? "Barn");
+                    const color = group.length > 1 ? "#a06cd5" : (e.child?.color ?? "#a06cd5");
+                    return (
+                      <div
+                        key={`child-${e.id}`}
+                        className="flex items-center justify-between gap-3 p-4 bg-card border border-border rounded-2xl"
+                      >
+                        <Link href="/barn" className="flex items-center gap-4 min-w-0 flex-1">
+                          {pictoMode ? (
+                            <span className="text-3xl leading-none shrink-0" aria-hidden>
+                              {pictogramFor(e.title, "🐣")}
+                            </span>
+                          ) : (
+                            <Baby style={{ color }} size={24} />
+                          )}
+                          <div className="min-w-0">
+                            <div
+                              className="text-xs font-medium uppercase tracking-wider mb-0.5"
+                              style={{ color }}
+                            >
+                              {names.join(" & ")} {e.time && `kl ${e.time}`}
+                              {e.sharedWith.length > 0 && " · delad"}
+                            </div>
+                            <div
+                              className={`text-lg font-medium truncate ${e.completed ? "line-through opacity-60" : ""}`}
+                            >
+                              {e.title}
+                            </div>
+                          </div>
+                        </Link>
+                        <button
+                          type="button"
+                          onClick={() => openChildGroupEditor(group)}
+                          className="shrink-0 text-xs font-medium px-3 py-2 rounded-full bg-secondary/60 hover:bg-secondary transition-colors"
+                        >
+                          Ändra barn
+                        </button>
+                      </div>
+                    );
+                  })}
+
+                  {selectedItems.familyEvents.map((e) => (
+                    <div
+                      key={`fam-${e.id}`}
+                      className="flex items-center justify-between gap-4 p-4 bg-card border border-border rounded-2xl group"
+                    >
+                      <div className="flex items-center gap-4">
+                        {pictoMode ? (
+                          <span className="text-3xl leading-none shrink-0" aria-hidden>
+                            {pictogramFor(e.title, "👨‍👩‍👧")}
+                          </span>
+                        ) : (
+                          <Users style={{ color: e.member?.color ?? "#8a9a5b" }} size={24} />
+                        )}
+                        <div>
+                          <div
+                            className="text-xs font-medium uppercase tracking-wider mb-0.5"
+                            style={{ color: e.member?.color ?? "#8a9a5b" }}
+                          >
+                            {e.member?.displayName ?? "Familj"} {e.time && `kl ${e.time}`}
+                          </div>
+                          <div className="text-lg font-medium">{e.title}</div>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => deleteEventMutation.mutate({ id: e.id })}
+                        aria-label="Ta bort familjehändelse"
+                        className="p-2 text-muted-foreground hover:text-destructive rounded-xl hover:bg-destructive/10 shrink-0"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </div>
+                  ))}
+
+                  {selectedItems.focus && (
+                    <div className="flex items-center gap-4 p-4 bg-accent/20 border border-accent/30 rounded-2xl">
+                      {pictoMode ? (
+                        <span className="text-3xl leading-none shrink-0" aria-hidden>
+                          {pictogramFor(selectedItems.focus.text, "🎯")}
+                        </span>
+                      ) : (
+                        <Target className="text-accent-foreground" size={24} />
+                      )}
+                      <div>
+                        <div className="text-xs text-accent-foreground font-medium uppercase tracking-wider mb-0.5">
+                          Viktigast idag
+                        </div>
+                        <div className="text-lg font-medium">{selectedItems.focus.text}</div>
+                      </div>
+                    </div>
+                  )}
+
+                  {selectedItems.reminders.map((r) => (
+                    <div
+                      key={r.id}
+                      className="flex items-center justify-between gap-4 p-4 bg-primary/5 border border-primary/10 rounded-2xl"
+                    >
+                      <div className="flex items-center gap-4 min-w-0">
+                        {pictoMode ? (
+                          <span className="text-3xl leading-none shrink-0" aria-hidden>
+                            {pictogramFor(r.title, "🔔")}
+                          </span>
+                        ) : (
+                          <Bell className="text-primary shrink-0" size={24} />
+                        )}
+                        <div className="min-w-0">
+                          <div className="text-xs text-primary font-medium uppercase tracking-wider mb-0.5">
+                            {r.endDate
+                              ? `Period · ${periodDayLabel(r.date, r.endDate, selectedDateStr)}`
+                              : "Påminnelse"}{" "}
+                            {r.time && `kl ${r.time}${r.endTime ? `–${r.endTime}` : ""}`}
+                          </div>
+                          <div className="text-lg font-medium truncate">{r.title}</div>
+                          {r.note && (
+                            <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">
+                              {r.note}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1 shrink-0">
+                        <button
+                          onClick={() =>
+                            setEditing({
+                              kind: "reminder",
+                              id: r.id,
+                              title: r.title,
+                              date: r.date,
+                              time: r.time ?? "",
+                              endTime: r.endTime ?? "",
+                              remind: r.remindMinutesBefore ?? null,
+                              note: r.note ?? "",
+                              area: "vardag",
+                              repeat: r.repeat ?? "none",
+                            })
+                          }
+                          aria-label="Ändra påminnelse"
+                          className="px-3 py-2 text-sm text-primary rounded-xl hover:bg-primary/10"
+                        >
+                          Ändra
+                        </button>
+                        <button
+                          onClick={() => deleteReminder(r.id)}
+                          aria-label="Ta bort påminnelse"
+                          className="p-2 text-muted-foreground hover:text-destructive rounded-xl hover:bg-destructive/10"
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+
+                  {selectedItems.tasks.map((t) => (
+                    <div
+                      key={t.id}
+                      className={`flex items-center justify-between gap-4 p-4 bg-card border border-border rounded-2xl ${t.completed ? "opacity-60" : ""}`}
+                    >
+                      <div className="flex items-center gap-4 min-w-0">
+                        {pictoMode ? (
+                          <span className="text-3xl leading-none shrink-0" aria-hidden>
+                            {pictogramFor(t.title, "✅")}
+                          </span>
+                        ) : (
+                          <CheckSquare
+                            className={t.completed ? "text-primary" : "text-muted-foreground"}
+                            size={24}
+                          />
+                        )}
+                        <div className="flex-1 min-w-0">
+                          {t.time && (
+                            <div className="text-xs text-primary font-medium uppercase tracking-wider mb-0.5">
+                              kl {t.time}
+                              {t.endTime ? `–${t.endTime}` : ""}
+                              {t.reminderMinutesBefore != null &&
+                                ` · påminn ${t.reminderMinutesBefore} min innan`}
+                            </div>
+                          )}
+                          <div
+                            className={`text-lg font-medium truncate ${t.completed ? "line-through text-muted-foreground" : ""}`}
+                          >
+                            {t.title}
+                          </div>
+                          {t.note && (
+                            <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">
+                              {t.note}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1 shrink-0">
+                        <button
+                          onClick={() =>
+                            setEditing({
+                              kind: "task",
+                              id: t.id,
+                              title: t.title,
+                              date: t.dueDate ?? selectedDateStr,
+                              time: t.time ?? "",
+                              endTime: t.endTime ?? "",
+                              remind: t.reminderMinutesBefore ?? null,
+                              note: t.note ?? "",
+                              area: getArea(t),
+                              repeat: "none",
+                            })
+                          }
+                          aria-label="Ändra uppgift"
+                          className="px-3 py-2 text-sm text-primary rounded-xl hover:bg-primary/10"
+                        >
+                          Ändra
+                        </button>
+                        <button
+                          onClick={() => deleteTask(t.id)}
+                          aria-label="Ta bort uppgift"
+                          className="p-2 text-muted-foreground hover:text-destructive rounded-xl hover:bg-destructive/10"
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          <Dialog open={isAddingReminder} onOpenChange={setIsAddingReminder}>
+            <DialogContent className="rounded-3xl">
+              <DialogHeader>
+                <DialogTitle>Ny påminnelse</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4 pt-2">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Starttid (valfritt)</label>
+                  <label className="text-sm font-medium">Vad ska du komma ihåg?</label>
+                  <Input
+                    value={newReminderTitle}
+                    onChange={(e) => setNewReminderTitle(e.target.value)}
+                    placeholder="T.ex. Möte med chefen"
+                    className="h-12 rounded-2xl"
+                    autoFocus
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Tid (valfritt)</label>
                   <Input
                     type="time"
-                    value={newAnyTime}
-                    onChange={(e) => setNewAnyTime(e.target.value)}
+                    value={newReminderTime}
+                    onChange={(e) => setNewReminderTime(e.target.value)}
                     className="h-12 rounded-2xl"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Sluttid (valfritt)</label>
+                  <label className="text-sm font-medium">Upprepa</label>
+                  <div className="grid grid-cols-2 gap-2">
+                    {(
+                      [
+                        ["none", "Bara en gång"],
+                        ["daily", "Varje dag"],
+                        ["weekdays", "Vardagar"],
+                        ["weekly", "Varje vecka"],
+                      ] as const
+                    ).map(([val, label]) => (
+                      <button
+                        key={val}
+                        type="button"
+                        onClick={() => setNewReminderRepeat(val)}
+                        className={`h-11 rounded-2xl text-sm font-medium border transition-all ${
+                          newReminderRepeat === val
+                            ? "bg-primary text-primary-foreground border-primary"
+                            : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
+                        }`}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <Button
+                  onClick={async () => {
+                    if (!newReminderTitle.trim() || !selectedDateStr) return;
+                    if (newReminderTime && getNotificationPermission() === "default") {
+                      await requestNotificationPermission();
+                    }
+                    addReminder(
+                      newReminderTitle.trim(),
+                      selectedDateStr,
+                      newReminderTime || undefined,
+                      newReminderRepeat,
+                    );
+                    setNewReminderTitle("");
+                    setNewReminderTime("");
+                    setNewReminderRepeat("none");
+                    setIsAddingReminder(false);
+                  }}
+                  disabled={!newReminderTitle.trim()}
+                  className="w-full h-12 rounded-2xl"
+                >
+                  Lägg till
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+
+          <Dialog open={isAddingEvent} onOpenChange={setIsAddingEvent}>
+            <DialogContent className="rounded-3xl">
+              <DialogHeader>
+                <DialogTitle>Ny familjehändelse</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4 pt-2">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Titel</label>
+                  <Input
+                    value={newEventTitle}
+                    onChange={(e) => setNewEventTitle(e.target.value)}
+                    placeholder="T.ex. Fotbollsträning"
+                    className="h-12 rounded-2xl"
+                    autoFocus
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Tid (valfritt)</label>
                   <Input
                     type="time"
-                    value={newAnyEndTime}
-                    onChange={(e) => setNewAnyEndTime(e.target.value)}
-                    disabled={!newAnyTime}
+                    value={newEventTime}
+                    onChange={(e) => setNewEventTime(e.target.value)}
                     className="h-12 rounded-2xl"
                   />
                 </div>
+                <Button
+                  onClick={handleAddEvent}
+                  disabled={!newEventTitle.trim() || createEventMutation.isPending}
+                  className="w-full h-12 rounded-2xl"
+                >
+                  Lägg till
+                </Button>
               </div>
+            </DialogContent>
+          </Dialog>
 
-              <div className="space-y-2 rounded-2xl border border-border/70 bg-secondary/30 p-3">
-                <label className="flex items-center gap-2 text-sm font-medium">
-                  <input
-                    type="checkbox"
-                    checked={newAnyMultiDay}
-                    onChange={(e) => {
-                      setNewAnyMultiDay(e.target.checked);
-                      if (e.target.checked && !newAnyEndDate) setNewAnyEndDate(selectedDateStr);
-                    }}
-                    className="h-4 w-4 accent-current"
-                  />
-                  Flera dagar (t.ex. semester eller resa)
-                </label>
-                {newAnyMultiDay && (
-                  <div className="space-y-1">
-                    <label className="text-sm font-medium" htmlFor="ny-slutdatum">
-                      Sista dagen
-                    </label>
+          <Dialog open={!!editing} onOpenChange={(open) => !open && setEditing(null)}>
+            <DialogContent className="rounded-3xl">
+              <DialogHeader>
+                <DialogTitle>
+                  {editing?.kind === "task" ? "Ändra uppgift" : "Ändra påminnelse"}
+                </DialogTitle>
+              </DialogHeader>
+              {editing && (
+                <div className="space-y-4 pt-2 max-h-[70vh] overflow-y-auto pr-1">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Vad gäller det?</label>
                     <Input
-                      id="ny-slutdatum"
-                      type="date"
-                      value={newAnyEndDate}
-                      min={selectedDateStr}
-                      onChange={(e) => setNewAnyEndDate(e.target.value)}
+                      value={editing.title}
+                      onChange={(e) => setEditing({ ...editing, title: e.target.value })}
                       className="h-12 rounded-2xl"
                     />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Datum</label>
+                    <Input
+                      type="date"
+                      value={editing.date}
+                      onChange={(e) => setEditing({ ...editing, date: e.target.value })}
+                      className="h-12 rounded-2xl"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Börjar (valfritt)</label>
+                      <Input
+                        type="time"
+                        value={editing.time}
+                        onChange={(e) => setEditing({ ...editing, time: e.target.value })}
+                        className="h-12 rounded-2xl"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Slutar (valfritt)</label>
+                      <Input
+                        type="time"
+                        value={editing.endTime}
+                        onChange={(e) => setEditing({ ...editing, endTime: e.target.value })}
+                        className="h-12 rounded-2xl"
+                        disabled={!editing.time}
+                      />
+                    </div>
+                  </div>
+
+                  {editing.time && (
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Påminnelse</label>
+                      <div className="grid grid-cols-3 gap-2">
+                        {REMIND_OPTIONS.map((opt) => (
+                          <button
+                            key={String(opt.value)}
+                            type="button"
+                            onClick={() => setEditing({ ...editing, remind: opt.value })}
+                            className={`h-11 rounded-2xl text-xs font-medium border transition-all ${
+                              editing.remind === opt.value
+                                ? "bg-primary text-primary-foreground border-primary"
+                                : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
+                            }`}
+                          >
+                            {opt.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {editing.kind === "task" && (
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Vart hör det hemma?</label>
+                      <div className="grid grid-cols-2 gap-2">
+                        {ALL_AREAS.map((a) => (
+                          <button
+                            key={a}
+                            type="button"
+                            onClick={() => setEditing({ ...editing, area: a })}
+                            className={`h-11 rounded-2xl text-sm font-medium border transition-all ${
+                              editing.area === a
+                                ? "bg-primary text-primary-foreground border-primary"
+                                : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
+                            }`}
+                          >
+                            {AREA_META[a].emoji} {AREA_META[a].label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {editing.kind === "reminder" && (
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Upprepa</label>
+                      <div className="grid grid-cols-2 gap-2">
+                        {(
+                          [
+                            ["none", "Bara en gång"],
+                            ["daily", "Varje dag"],
+                            ["weekdays", "Vardagar"],
+                            ["weekly", "Varje vecka"],
+                          ] as const
+                        ).map(([val, label]) => (
+                          <button
+                            key={val}
+                            type="button"
+                            onClick={() => setEditing({ ...editing, repeat: val })}
+                            className={`h-11 rounded-2xl text-sm font-medium border transition-all ${
+                              editing.repeat === val
+                                ? "bg-primary text-primary-foreground border-primary"
+                                : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
+                            }`}
+                          >
+                            {label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Anteckning (valfritt)</label>
+                    <textarea
+                      value={editing.note}
+                      onChange={(e) => setEditing({ ...editing, note: e.target.value })}
+                      rows={2}
+                      placeholder="Skriv vad det gäller, vad du behöver ta med…"
+                      className="w-full rounded-2xl border border-border bg-background p-3 text-sm outline-none focus:border-primary"
+                    />
+                  </div>
+
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        if (editing.kind === "reminder") deleteReminder(editing.id);
+                        else deleteTask(editing.id);
+                        setEditing(null);
+                        toast({ description: "Borttagen." });
+                      }}
+                      className="flex-1 h-12 rounded-2xl text-destructive"
+                    >
+                      <Trash2 size={16} className="mr-2" /> Ta bort
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        const time = editing.time || undefined;
+                        if (editing.kind === "reminder") {
+                          updateReminder(editing.id, {
+                            title: editing.title.trim() || "Påminnelse",
+                            date: editing.date,
+                            time,
+                            endTime: time ? editing.endTime || undefined : undefined,
+                            repeat: editing.repeat,
+                            remindMinutesBefore: time ? (editing.remind ?? undefined) : undefined,
+                            note: editing.note,
+                          });
+                        } else {
+                          updateTask(editing.id, {
+                            title: editing.title,
+                            dueDate: editing.date,
+                            time,
+                            endTime: time ? editing.endTime || undefined : undefined,
+                            reminderMinutesBefore: time ? (editing.remind ?? undefined) : undefined,
+                            area: editing.area,
+                            note: editing.note,
+                          });
+                        }
+                        setEditing(null);
+                        toast({ description: "Sparat ✨" });
+                      }}
+                      className="flex-1 h-12 rounded-2xl"
+                    >
+                      Spara
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </DialogContent>
+          </Dialog>
+
+          <Dialog open={isAddingAny} onOpenChange={setIsAddingAny}>
+            <DialogContent className="rounded-3xl max-h-[85vh] overflow-y-auto">
+              <DialogHeader className="text-left">
+                <DialogTitle className="pr-8 text-left">Ny händelse</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-5 pt-1">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Kategori</label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {CATEGORIES.map((c) => {
+                      const disabled =
+                        (c.id === "relationer" && !hasHousehold) ||
+                        (c.id === "barn" && kids.length === 0);
+                      return (
+                        <button
+                          key={c.id}
+                          type="button"
+                          disabled={disabled}
+                          onClick={() => setNewCat(c.id)}
+                          title={disabled ? "Kräver familj respektive barn i appen" : undefined}
+                          className={`w-full h-11 px-2 rounded-2xl text-sm font-medium border transition-all disabled:opacity-40 ${
+                            newCat === c.id
+                              ? "text-white border-transparent"
+                              : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
+                          }`}
+                          style={newCat === c.id ? { backgroundColor: c.color } : undefined}
+                        >
+                          {c.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {newCat === "barn" && kids.length > 0 && (
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Vilka barn?</label>
+                    <div className="flex flex-wrap gap-2">
+                      {kids.map((k) => {
+                        const selected =
+                          newAnyChildIds.length > 0
+                            ? newAnyChildIds.includes(k.id)
+                            : k.id === kids[0]?.id;
+                        return (
+                          <button
+                            key={k.id}
+                            type="button"
+                            aria-pressed={selected}
+                            onClick={() =>
+                              setNewAnyChildIds((prev) => {
+                                const base =
+                                  prev.length > 0 ? prev : kids[0]?.id ? [kids[0].id] : [];
+                                return base.includes(k.id)
+                                  ? base.filter((id) => id !== k.id)
+                                  : [...base, k.id];
+                              })
+                            }
+                            className={`px-3 py-2 rounded-full text-sm font-medium border transition-all ${
+                              selected
+                                ? "text-white border-transparent"
+                                : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
+                            }`}
+                            style={selected ? { backgroundColor: k.color } : undefined}
+                          >
+                            {selected ? "✓ " : ""}
+                            {k.name}
+                          </button>
+                        );
+                      })}
+                    </div>
                     <p className="text-xs text-muted-foreground">
-                      Perioden visas på varje dag från {selectedDateStr} till och med sista dagen.
+                      Välj ett eller flera barn – t.ex. lämning av både Bella och Bianca blir en och
+                      samma händelse.
                     </p>
                   </div>
                 )}
-              </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Påminnelse</label>
-                {newAnyTime ? (
-                  <>
-                    <div className="grid grid-cols-3 gap-2">
-                      {REMIND_OPTIONS.map((opt) => (
-                        <button
-                          key={String(opt.value)}
-                          type="button"
-                          onClick={() => setNewAnyRemind(opt.value)}
-                          className={`w-full h-11 px-2 rounded-2xl text-sm font-medium border transition-all ${
-                            newAnyRemind === opt.value
-                              ? "bg-primary text-primary-foreground border-transparent"
-                              : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
-                          }`}
-                        >
-                          {opt.label}
-                        </button>
-                      ))}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Vad händer?</label>
+                  <Input
+                    value={newAnyTitle}
+                    onChange={(e) => setNewAnyTitle(e.target.value)}
+                    placeholder="T.ex. Tandläkare"
+                    className="h-12 rounded-2xl"
+                    autoFocus
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Starttid (valfritt)</label>
+                    <Input
+                      type="time"
+                      value={newAnyTime}
+                      onChange={(e) => setNewAnyTime(e.target.value)}
+                      className="h-12 rounded-2xl"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Sluttid (valfritt)</label>
+                    <Input
+                      type="time"
+                      value={newAnyEndTime}
+                      onChange={(e) => setNewAnyEndTime(e.target.value)}
+                      disabled={!newAnyTime}
+                      className="h-12 rounded-2xl"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2 rounded-2xl border border-border/70 bg-secondary/30 p-3">
+                  <label className="flex items-center gap-2 text-sm font-medium">
+                    <input
+                      type="checkbox"
+                      checked={newAnyMultiDay}
+                      onChange={(e) => {
+                        setNewAnyMultiDay(e.target.checked);
+                        if (e.target.checked && !newAnyEndDate) setNewAnyEndDate(selectedDateStr);
+                      }}
+                      className="h-4 w-4 accent-current"
+                    />
+                    Flera dagar (t.ex. semester eller resa)
+                  </label>
+                  {newAnyMultiDay && (
+                    <div className="space-y-1">
+                      <label className="text-sm font-medium" htmlFor="ny-slutdatum">
+                        Sista dagen
+                      </label>
+                      <Input
+                        id="ny-slutdatum"
+                        type="date"
+                        value={newAnyEndDate}
+                        min={selectedDateStr}
+                        onChange={(e) => setNewAnyEndDate(e.target.value)}
+                        className="h-12 rounded-2xl"
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Perioden visas på varje dag från {selectedDateStr} till och med sista dagen.
+                      </p>
                     </div>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Påminnelse</label>
+                  {newAnyTime ? (
+                    <>
+                      <div className="grid grid-cols-3 gap-2">
+                        {REMIND_OPTIONS.map((opt) => (
+                          <button
+                            key={String(opt.value)}
+                            type="button"
+                            onClick={() => setNewAnyRemind(opt.value)}
+                            className={`w-full h-11 px-2 rounded-2xl text-sm font-medium border transition-all ${
+                              newAnyRemind === opt.value
+                                ? "bg-primary text-primary-foreground border-transparent"
+                                : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
+                            }`}
+                          >
+                            {opt.label}
+                          </button>
+                        ))}
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        Du får en notis innan händelsen börjar – om du vill.
+                      </p>
+                    </>
+                  ) : (
                     <p className="text-xs text-muted-foreground">
-                      Du får en notis innan händelsen börjar – om du vill.
+                      Ange en starttid ovan så kan du välja påminnelse.
                     </p>
-                  </>
-                ) : (
-                  <p className="text-xs text-muted-foreground">
-                    Ange en starttid ovan så kan du välja påminnelse.
-                  </p>
-                )}
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium" htmlFor="ny-anteckning">
+                    Anteckning (valfritt)
+                  </label>
+                  <textarea
+                    id="ny-anteckning"
+                    value={newAnyNote}
+                    onChange={(e) => setNewAnyNote(e.target.value)}
+                    rows={3}
+                    placeholder="T.ex. ta med remiss, adress, vad mötet gäller"
+                    className="w-full rounded-2xl border border-border bg-card p-3 text-base outline-none focus:border-primary"
+                  />
+                </div>
+
+                <p className="text-xs text-muted-foreground">
+                  Läggs in på {selectedDateStr === todayStr ? "idag" : selectedDateStr}.
+                </p>
+
+                <Button
+                  onClick={handleAddAny}
+                  disabled={!newAnyTitle.trim()}
+                  className="w-full h-12 rounded-2xl"
+                >
+                  Lägg till
+                </Button>
               </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium" htmlFor="ny-anteckning">
-                  Anteckning (valfritt)
-                </label>
-                <textarea
-                  id="ny-anteckning"
-                  value={newAnyNote}
-                  onChange={(e) => setNewAnyNote(e.target.value)}
-                  rows={3}
-                  placeholder="T.ex. ta med remiss, adress, vad mötet gäller"
-                  className="w-full rounded-2xl border border-border bg-card p-3 text-base outline-none focus:border-primary"
-                />
-              </div>
-
-              <p className="text-xs text-muted-foreground">
-                Läggs in på {selectedDateStr === todayStr ? "idag" : selectedDateStr}.
-              </p>
-
-              <Button
-                onClick={handleAddAny}
-                disabled={!newAnyTitle.trim()}
-                className="w-full h-12 rounded-2xl"
-              >
-                Lägg till
-              </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
+            </DialogContent>
+          </Dialog>
+        </MyFloveWide>
 
         {/* Ändra vilka barn som ingår i en redan sparad, sammanfogad händelse. */}
         <Dialog open={!!editChildGroup} onOpenChange={(open) => !open && setEditChildGroup(null)}>
@@ -1860,7 +1872,7 @@ export default function CalendarPage() {
             </div>
           </DialogContent>
         </Dialog>
-      </div>
+      </MyFlovePageGrid>
     </Layout>
   );
 }

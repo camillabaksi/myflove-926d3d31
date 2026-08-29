@@ -2,7 +2,7 @@ import { track } from "@/lib/analytics";
 import { useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import Layout from "@/components/layout";
-import { MyFloveBlock } from "@/components/myflove/block";
+import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { MyFloveThinking } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
 import {
@@ -265,8 +265,8 @@ export default function FlowPlanPage() {
 
   return (
     <Layout>
-      <div className="space-y-8">
-        <div>
+      <MyFlovePageGrid>
+        <MyFloveWide>
           <div className="flex items-center gap-3 mb-2">
             <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center">
               <ListOrdered size={20} />
@@ -284,7 +284,7 @@ export default function FlowPlanPage() {
               </div>
             </div>
           </div>
-        </div>
+        </MyFloveWide>
 
         <MyFloveBlock
           title="Hur ser dagen ut?"
@@ -542,7 +542,7 @@ export default function FlowPlanPage() {
             </div>
           </MyFloveBlock>
         )}
-      </div>
+      </MyFlovePageGrid>
     </Layout>
   );
 }

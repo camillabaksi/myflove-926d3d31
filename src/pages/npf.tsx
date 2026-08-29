@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { ANALYTICS_OPT_OUT_KEY, track } from "@/lib/analytics";
 import { DeleteAccountButton } from "@/components/delete-account-button";
 import Layout from "@/components/layout";
-import { MyFloveBlock } from "@/components/myflove/block";
+import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { RotateCcw, Accessibility, BarChart3 } from "lucide-react";
@@ -76,17 +76,19 @@ export default function NpfPage() {
 
   return (
     <Layout>
-      <div className="space-y-6">
-        <header className="space-y-2">
-          <div className="flex items-center gap-2 text-primary">
-            <Accessibility size={22} />
-            <h1 className="text-2xl font-bold">Anpassa appen</h1>
-          </div>
-          <p className="text-muted-foreground">
-            Välj hur mycket du vill se och höra. Dina val sparas och ligger kvar tills du ändrar
-            dem.
-          </p>
-        </header>
+      <MyFlovePageGrid>
+        <MyFloveWide>
+          <header className="space-y-2">
+            <div className="flex items-center gap-2 text-primary">
+              <Accessibility size={22} />
+              <h1 className="text-2xl font-bold">Anpassa appen</h1>
+            </div>
+            <p className="text-muted-foreground">
+              Välj hur mycket du vill se och höra. Dina val sparas och ligger kvar tills du ändrar
+              dem.
+            </p>
+          </header>
+        </MyFloveWide>
 
         <MyFloveBlock
           title="Dina val"
@@ -117,9 +119,11 @@ export default function NpfPage() {
           </div>
         </MyFloveBlock>
 
-        <Button variant="outline" className="rounded-xl gap-2" onClick={reset}>
-          <RotateCcw size={16} /> Återställ till standard
-        </Button>
+        <MyFloveWide>
+          <Button variant="outline" className="rounded-xl gap-2" onClick={reset}>
+            <RotateCcw size={16} /> Återställ till standard
+          </Button>
+        </MyFloveWide>
 
         <MyFloveBlock
           title="Integritet"
@@ -164,7 +168,7 @@ export default function NpfPage() {
         >
           <DeleteAccountButton />
         </MyFloveBlock>
-      </div>
+      </MyFlovePageGrid>
     </Layout>
   );
 }
