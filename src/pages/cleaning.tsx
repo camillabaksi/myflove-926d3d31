@@ -130,7 +130,7 @@ export default function CleaningPage() {
 
   return (
     <Layout>
-      <MyFlovePageGrid className="mx-auto max-w-5xl px-4 py-6">
+      <MyFlovePageGrid area="hem" className="mx-auto max-w-5xl px-4 py-6">
         <MyFloveWide>
           <header>
             <h1 className="font-display text-3xl font-bold text-foreground flex items-center gap-3">
