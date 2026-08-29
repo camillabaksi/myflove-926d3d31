@@ -602,6 +602,9 @@ export function guessDestination(item: {
 }): QuickflowDestination {
   const t = item.text.toLowerCase();
   if (ENERGY_WORDS.test(t)) return "energi";
+  // Hälsoobservationer är loggning, aldrig en aktivitet: de föreslås som
+  // energi-/måendelogg i stället för kalender eller uppgift.
+  if (isHealthObservation(item.text)) return "energi";
   if (SHOPPING_WORDS.test(t) && !/(ring|boka|betala)/.test(t)) return "inkop";
   if (parseWhenFromText(item.text)) return "kalender";
   if (/(kl \d|klockan)/.test(t)) return "kalender";
