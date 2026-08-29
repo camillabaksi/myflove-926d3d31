@@ -602,21 +602,16 @@ export default function Layout({ children }: LayoutProps) {
         icon: Gauge,
         hrefs: ["/flowscore", "/veckans-flow", "/friktionsindex"],
       },
+      // Inställningar har en egen sektion längre ner i "Mer" – därför ligger
+      // de inte som kategori här. Admin är det enda som blir kvar som grupp.
       {
-        id: "ovrigt",
-        label: "Inställningar",
-        hint: "Rutiner, min livsprofil, anpassning och feedback",
+        id: "admin",
+        label: "Admin",
+        hint: "Roller, åtkomst och appstatistik",
         icon: LayoutGrid,
-        hrefs: [
-          "/oversikt",
-          "/flow-installningar",
-          "/min-livsprofil",
-          "/anpassa-hem",
-          "/anpassa",
-          "/admin",
-          "/admin-statistik",
-        ],
+        hrefs: ["/admin", "/admin-statistik"],
       },
+
     ];
 
     return groups
