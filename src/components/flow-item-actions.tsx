@@ -15,7 +15,7 @@ import { useTasks, useReminders } from "@/hooks/use-data";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { ALL_AREAS, AREA_META, type LifeArea } from "@/lib/life-areas";
-import type { Routine } from "@/pages/routines";
+import type { Routine } from "@/lib/recurrence";
 
 /**
  * Ändra eller ta bort – samma två knappar överallt i MyFlove.

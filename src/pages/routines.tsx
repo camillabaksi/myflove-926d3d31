@@ -5,7 +5,7 @@ import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { useReminders } from "@/hooks/use-data";
 import { useToast } from "@/hooks/use-toast";
 import { Plus, Trash2, Repeat, Clock, Sparkles } from "lucide-react";
-import { REPEAT_LABELS, occursOn, type RepeatMode } from "@/lib/recurrence";
+import { REPEAT_LABELS, routineOccursOn, type RepeatMode, type Routine } from "@/lib/recurrence";
 
 const REPEAT_OPTIONS: Array<{ value: RepeatMode; label: string }> = [
   { value: "daily", label: "Varje dag" },
@@ -13,25 +13,6 @@ const REPEAT_OPTIONS: Array<{ value: RepeatMode; label: string }> = [
   { value: "weekly", label: "Varje vecka" },
   { value: "none", label: "En gång" },
 ];
-
-export interface Routine {
-  id: string;
-  title: string;
-  time: string; // HH:MM
-  enabled: boolean;
-  createdAt: number;
-  /** Hur ofta rutinen sker. Saknas = varje dag (gammal data). */
-  repeat?: RepeatMode;
-  /** Startdatum (YYYY-MM-DD). Krävs för engångsrutiner. */
-  startDate?: string;
-}
-
-/** Sker rutinen den här dagen? */
-export function routineOccursOn(routine: Routine, dateStr: string): boolean {
-  const repeat = routine.repeat ?? "daily";
-  if (repeat === "daily" && !routine.startDate) return true;
-  return occursOn(routine.startDate ?? dateStr, repeat, dateStr);
-}
 
 const generateId = () => Math.random().toString(36).slice(2, 11);
 const todayIso = () => new Date().toISOString().slice(0, 10);

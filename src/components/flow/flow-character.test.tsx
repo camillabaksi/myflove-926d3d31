@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { render } from "@testing-library/react";
-import { FlowCharacter, sceneForTask, type FlowScene } from "@/components/flow/flow-character";
+import { FlowCharacter, type FlowScene } from "@/components/flow/flow-character";
+import { sceneForTask } from "@/components/flow/scenes";
 
 /**
  * Verifierar att Flow alltid visar EXAKT ett state åt gången

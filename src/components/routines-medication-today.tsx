@@ -6,7 +6,7 @@ import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { useDoneLog } from "@/hooks/use-done-log";
 import { useToast } from "@/hooks/use-toast";
 import { getRandomEncouragement } from "@/lib/encouragements";
-import { routineOccursOn, type Routine } from "@/pages/routines";
+import { routineOccursOn, type Routine } from "@/lib/recurrence";
 import { medicationOccursOn } from "@/lib/medications";
 
 /**

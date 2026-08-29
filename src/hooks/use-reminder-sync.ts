@@ -10,7 +10,7 @@ import {
 } from "@/lib/medications";
 import { getCurrentSubscription } from "@/lib/push-client";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
-import { routineOccursOn, type Routine } from "@/pages/routines";
+import { routineOccursOn, type Routine } from "@/lib/recurrence";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { useStudySchedule } from "@/hooks/use-study-schedule";
 import { useChildren } from "@/hooks/use-children";
