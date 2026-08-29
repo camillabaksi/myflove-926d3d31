@@ -125,9 +125,7 @@ export function ExpandableBlock({
           <div className="min-w-0 flex-1">
             <h2 className="font-display text-base font-bold leading-tight text-ink">{title}</h2>
             {subtitle && (
-              <p
-                className={cn("mt-0.5 text-xs text-muted-foreground", !open && "line-clamp-2")}
-              >
+              <p className={cn("mt-0.5 text-xs text-muted-foreground", !open && "line-clamp-2")}>
                 {subtitle}
               </p>
             )}
