@@ -136,10 +136,12 @@ export function ExpandableBlock({
         aria-expanded={open}
         aria-label={open ? `Minimera ${ariaLabel}` : `Öppna ${ariaLabel}`}
         className={cn(
-          "press flex w-full min-w-0 flex-col gap-2 rounded-3xl text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+          "press relative flex w-full min-w-0 flex-col gap-2 rounded-3xl text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
           widget && !open
             ? "items-center justify-center gap-1.5 px-3 py-6 text-center"
-            : "p-3 sm:p-5",
+            : !open
+              ? "items-center gap-2.5 p-4 text-center sm:p-5"
+              : "p-3 sm:p-5",
         )}
       >
         {widget && !open ? (
