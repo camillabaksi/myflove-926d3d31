@@ -105,7 +105,7 @@ export function useQuickCheckin() {
           return prev.map((m) => {
             if (m.id !== existing.id) return m;
             const next: MoodEntry = { ...m, score, date: Date.now() };
-            if (replaceNote ? !text : false) delete next.note;
+            if (replaceNote && !text) delete next.note;
             else if (text) next.note = text;
             return next;
           });
