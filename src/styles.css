@@ -1003,3 +1003,97 @@ html[data-npf-less="true"] [data-npf="optional"] {
     animation: none;
   }
 }
+
+/* ------------------------------------------------------------------ */
+/* Områdesfärger – en visuell röd tråd per område                      */
+/* Färgerna sätts centralt här och i src/lib/areas.ts. Ett element med */
+/* data-area="halsa" får --area/--area-soft, som utilities nedan läser.*/
+/* ------------------------------------------------------------------ */
+
+:root {
+  --area-halsa: 168 42% 42%;
+  --area-halsa-soft: 168 45% 92%;
+  --area-flow: 258 68% 62%;
+  --area-flow-soft: 264 72% 93%;
+  --area-idag: 212 68% 54%;
+  --area-idag-soft: 202 78% 92%;
+  --area-planera: 238 62% 62%;
+  --area-planera-soft: 236 70% 93%;
+  --area-hem: 22 78% 58%;
+  --area-hem-soft: 26 84% 92%;
+  --area-aterhamtning: 42 82% 52%;
+  --area-aterhamtning-soft: 44 90% 90%;
+  --area-kalender: 322 62% 60%;
+  --area-kalender-soft: 335 78% 93%;
+}
+
+.dark {
+  --area-halsa: 168 45% 62%;
+  --area-halsa-soft: 168 20% 22%;
+  --area-flow: 258 78% 72%;
+  --area-flow-soft: 264 26% 24%;
+  --area-idag: 212 70% 68%;
+  --area-idag-soft: 212 24% 24%;
+  --area-planera: 238 65% 74%;
+  --area-planera-soft: 238 24% 25%;
+  --area-hem: 22 78% 68%;
+  --area-hem-soft: 22 26% 24%;
+  --area-aterhamtning: 42 80% 66%;
+  --area-aterhamtning-soft: 42 26% 23%;
+  --area-kalender: 322 62% 72%;
+  --area-kalender-soft: 330 24% 25%;
+}
+
+[data-area="halsa"] {
+  --area: var(--area-halsa);
+  --area-soft: var(--area-halsa-soft);
+}
+[data-area="flow"] {
+  --area: var(--area-flow);
+  --area-soft: var(--area-flow-soft);
+}
+[data-area="idag"] {
+  --area: var(--area-idag);
+  --area-soft: var(--area-idag-soft);
+}
+[data-area="planera"] {
+  --area: var(--area-planera);
+  --area-soft: var(--area-planera-soft);
+}
+[data-area="hem"] {
+  --area: var(--area-hem);
+  --area-soft: var(--area-hem-soft);
+}
+[data-area="aterhamtning"] {
+  --area: var(--area-aterhamtning);
+  --area-soft: var(--area-aterhamtning-soft);
+}
+[data-area="kalender"] {
+  --area: var(--area-kalender);
+  --area-soft: var(--area-kalender-soft);
+}
+
+@utility area-text {
+  color: hsl(var(--area, var(--primary)));
+}
+
+@utility area-bg-soft {
+  background-color: hsl(var(--area-soft, var(--lavender)));
+}
+
+@utility area-border {
+  border-color: hsl(var(--area, var(--primary)) / 0.28);
+}
+
+@utility area-dot {
+  background-color: hsl(var(--area, var(--primary)));
+}
+
+@utility area-hero {
+  background-image: linear-gradient(
+    135deg,
+    hsl(var(--area-soft, var(--lavender))) 0%,
+    hsl(var(--cream)) 62%,
+    hsl(var(--area, var(--primary)) / 0.16) 100%
+  );
+}
