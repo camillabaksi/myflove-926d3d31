@@ -8,8 +8,6 @@
 - Sökningen i Mer hittar fortfarande alla sidor som tidigare.
 - Fix: bottenmenyns "Återställ" och hjälptexten pekar nu på Idag + Planera, som är det faktiska standardläget.
 
-
-
 ## 2026-08-29 – Städning: kompaktare Påminnelser, energihistorik och listor
 
 - Påminnelser: "Aviseringar" är nu ett kompakt kort – kort status och knapp på samma rad i stället för höga textstycken.

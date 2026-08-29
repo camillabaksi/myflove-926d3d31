@@ -19,7 +19,6 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     ],
   },
   {
-
     title: "Städning: kompaktare Påminnelser, energihistorik och listor",
     items: [
       "Påminnelser: Aviseringar är ett kompakt kort med status och knapp på samma rad (2026-08-29)",
