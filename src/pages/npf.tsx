@@ -154,7 +154,7 @@ export default function NpfPage() {
           collapseId="anpassa::integritet"
         >
           <label className="flex cursor-pointer items-center justify-between gap-3 rounded-2xl border border-border/50 bg-card/70 p-3">
-            <span className="min-w-0 font-medium text-ink">Anonym användningsstatistik</span>
+            <span className="min-w-0 font-medium text-ink">Dela statistik</span>
             <Switch
               checked={!statsOptOut}
               onCheckedChange={(shareStats) => toggleStats(!shareStats)}
