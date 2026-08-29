@@ -45,7 +45,6 @@ export default function BatteryPage() {
         <DayEdgesCheckin />
         <DayEnergyFlow />
 
-
         {/* 4. Historik – sekundär, längst ner */}
         <section
           aria-label="Se min historik"
@@ -75,7 +74,7 @@ export default function BatteryPage() {
               </TabsList>
 
               <TabsContent value="mood" className="mt-6">
-                <MoodContent showHeader={false} />
+                <MoodContent showHeader={false} readOnly />
               </TabsContent>
 
               <TabsContent value="energy" className="mt-6">

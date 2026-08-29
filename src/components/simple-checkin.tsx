@@ -54,6 +54,7 @@ export default function SimpleCheckin({
   const [battery, setBattery] = useState(energyValue ?? 6);
   const [mood, setMood] = useState<number | null>(moodValue);
   const [factors, setFactors] = useState<string[]>([]);
+  const [note, setNote] = useState("");
   const [saved, setSaved] = useState(false);
   const [started, setStarted] = useState(false);
 
@@ -63,6 +64,14 @@ export default function SimpleCheckin({
   useEffect(() => {
     if (moodValue != null) setMood(moodValue);
   }, [moodValue]);
+
+  // Text som skickats hit från t.ex. QuickFlow (?note=…) fyller i fältet,
+  // så att loggningen ändå sker på den enda kanoniska platsen.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const incoming = new URLSearchParams(window.location.search).get("note");
+    if (incoming) setNote(incoming);
+  }, []);
 
   const markStarted = (kind: "battery" | "mood") => {
     if (started) return;
@@ -74,8 +83,10 @@ export default function SimpleCheckin({
     void logEnergy(battery);
     track("battery_checkin_completed", { source, method: "knapp", result: "completed" });
     track("battery_logged", { source, method: "knapp" });
-    if (mood != null) {
-      logMood(mood);
+    const text = note.trim();
+    // Fritexten hör ihop med måendet – sparas på befintlig måendepost.
+    if (mood != null || text) {
+      logMood(mood ?? Math.max(1, Math.min(10, battery)), text || undefined);
       track("mood_checkin_completed", { source, method: "emoji", result: "completed" });
       track("mood_logged", { source, method: "emoji" });
     }
@@ -96,6 +107,7 @@ export default function SimpleCheckin({
     }
     setSaved(true);
     setFactors([]);
+    setNote("");
     window.setTimeout(() => setSaved(false), 2500);
   };
 
@@ -103,7 +115,8 @@ export default function SimpleCheckin({
 
   return (
     <section
-      aria-label="Snabb incheckning"
+      aria-label="Logga energi och mående"
+      data-testid="battery-log-form"
       className={cn(
         "rounded-3xl border border-border/60 bg-card p-5 shadow-soft space-y-5",
         className,
@@ -210,6 +223,18 @@ export default function SimpleCheckin({
             );
           })}
         </div>
+        <label className="block space-y-1">
+          <span className="text-xs text-muted-foreground">
+            Vill du skriva med egna ord? (valfritt)
+          </span>
+          <textarea
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            rows={3}
+            placeholder="T.ex. ”Sovit bara 4 timmar och är dessutom sjuk.”"
+            className="w-full resize-none rounded-2xl border border-border/60 bg-secondary/40 p-3 text-sm text-ink outline-none transition-colors focus:border-primary"
+          />
+        </label>
       </div>
 
       <button
@@ -217,7 +242,7 @@ export default function SimpleCheckin({
         onClick={save}
         className="w-full rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-opacity hover:opacity-90"
       >
-        {saved ? "💜 Tack" : "Spara incheckning"}
+        {saved ? "💜 Tack" : "Logga energi & mående"}
       </button>
 
       <p aria-live="polite" className="text-xs text-muted-foreground">

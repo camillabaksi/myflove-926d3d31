@@ -3,7 +3,12 @@ import { Link } from "wouter";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import FocusMode from "@/components/focus-mode";
-import { FlowCharacter, isWetWeather, sceneForTask, type FlowScene } from "@/components/flow/flow-character";
+import {
+  FlowCharacter,
+  isWetWeather,
+  sceneForTask,
+  type FlowScene,
+} from "@/components/flow/flow-character";
 import { useTasks } from "@/hooks/use-data";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";
@@ -38,7 +43,7 @@ const SLIDE_LABELS: Record<DeckSlideId, string> = {
 export default function FlowDeck() {
   const { activeTasks, toggleTask, snoozeTask } = useTasks();
   const { reading, items } = useEnergyBattery();
-  const { moodValue, energyValue, logMood, logEnergy } = useQuickCheckin();
+  const { moodValue, energyValue } = useQuickCheckin();
   const weather = useWeather();
 
   const [skip, setSkip] = useState<string[]>([]);
@@ -46,7 +51,9 @@ export default function FlowDeck() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [celebrating, setCelebrating] = useState(false);
   const [dragging, setDragging] = useState(false);
-  const drag = useRef<{ x: number; y: number; time: number; axis: "none" | "x" | "y" } | null>(null);
+  const drag = useRef<{ x: number; y: number; time: number; axis: "none" | "x" | "y" } | null>(
+    null,
+  );
   const viewportRef = useRef<HTMLDivElement | null>(null);
   const activeSlideRef = useRef<HTMLDivElement | null>(null);
   const shouldFocusSlide = useRef(false);
@@ -80,14 +87,22 @@ export default function FlowDeck() {
       heavyDay: load.weight === "tung",
     });
     return ["intro", ...(rainy ? (["weather"] as DeckSlideId[]) : []), ...base];
-  }, [moodValue, energyValue, reading.now, reading.overloaded, suggestion.task, load.weight, rainy]);
+  }, [
+    moodValue,
+    energyValue,
+    reading.now,
+    reading.overloaded,
+    suggestion.task,
+    load.weight,
+    rainy,
+  ]);
 
   // Läs önskad startslide från URL:en (?slide=2 eller ?slide=suggestion)
   const requestedSlide = useRef<string | null>(
     typeof window === "undefined"
       ? null
       : (new URLSearchParams(window.location.search).get("slide") ??
-        new URLSearchParams(window.location.hash.replace(/^#/, "")).get("slide")),
+          new URLSearchParams(window.location.hash.replace(/^#/, "")).get("slide")),
   );
   const appliedInitial = useRef(false);
 
@@ -128,7 +143,6 @@ export default function FlowDeck() {
     setCurrentSlide(clamped);
   };
 
-
   const next = (focusSlide = false) => goTo(currentSlide + 1, focusSlide);
   const previous = (focusSlide = false) => goTo(currentSlide - 1, focusSlide);
   const activeSlide: DeckSlideId = celebrating ? "done" : (slides[currentSlide] ?? "intro");
@@ -150,7 +164,9 @@ export default function FlowDeck() {
   /** Drag ska inte starta på knappar, reglage eller fält. */
   const isInteractive = (target: EventTarget | null) =>
     target instanceof Element &&
-    Boolean(target.closest("button, a, input, textarea, select, [role='slider'], [contenteditable]"));
+    Boolean(
+      target.closest("button, a, input, textarea, select, [role='slider'], [contenteditable]"),
+    );
 
   const onPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
     if (slides.length < 2 || isInteractive(event.target)) return;
@@ -214,7 +230,6 @@ export default function FlowDeck() {
     }, 2200);
   };
 
-
   return (
     <section
       aria-label="Flow"
@@ -254,10 +269,6 @@ export default function FlowDeck() {
             reading={reading}
             weather={weather}
             suggestion={suggestion}
-            moodValue={moodValue}
-            energyValue={energyValue}
-            onLogMood={logMood}
-            onLogEnergy={logEnergy}
             onNext={() => next()}
             onStart={() => setFocusOpen(true)}
             onLater={() => {
@@ -373,10 +384,6 @@ function FlowSlide({
   reading,
   weather,
   suggestion,
-  moodValue,
-  energyValue,
-  onLogMood,
-  onLogEnergy,
   onNext,
   onStart,
   onLater,
@@ -388,10 +395,6 @@ function FlowSlide({
   reading: ReturnType<typeof useEnergyBattery>["reading"];
   weather: ReturnType<typeof useWeather>;
   suggestion: ReturnType<typeof suggestNow>;
-  moodValue: number | null;
-  energyValue: number | null;
-  onLogMood: (v: number) => void;
-  onLogEnergy: (v: number) => void;
   onNext: () => void;
   onStart: () => void;
   onLater: () => void;
@@ -426,14 +429,25 @@ function FlowSlide({
   }
 
   if (id === "checkin") {
-    return <CheckinSlide seed={seed} moodValue={moodValue} energyValue={energyValue} onLogMood={onLogMood} onLogEnergy={onLogEnergy} onNext={onNext} />;
+    return <CheckinSlide seed={seed} onNext={onNext} />;
   }
 
   if (id === "energy") {
     const scene: FlowScene =
-      reading.now >= 66 ? "energyHigh" : reading.now < 20 ? "sleep" : reading.now < 40 ? "energyLow" : "mood";
+      reading.now >= 66
+        ? "energyHigh"
+        : reading.now < 20
+          ? "sleep"
+          : reading.now < 40
+            ? "energyLow"
+            : "mood";
     return (
-      <SlideShell scene={scene} seed={seed} energy={reading.now} title={`Ditt batteri: ${Math.round(reading.now)} %`}>
+      <SlideShell
+        scene={scene}
+        seed={seed}
+        energy={reading.now}
+        title={`Ditt batteri: ${Math.round(reading.now)} %`}
+      >
         <p className="text-sm text-muted-foreground">
           {energySentence(reading.now, reading.trend)}
         </p>
@@ -474,9 +488,7 @@ function FlowSlide({
   if (!suggestion.task) {
     return (
       <SlideShell scene="think" seed={seed} title="Inget måste just nu">
-        <p className="text-sm text-muted-foreground">
-          Det räcker att bara vara idag. 💙
-        </p>
+        <p className="text-sm text-muted-foreground">Det räcker att bara vara idag. 💙</p>
       </SlideShell>
     );
   }
@@ -502,7 +514,11 @@ function FlowSlide({
         <button type="button" onClick={onDone} className="underline-offset-2 hover:underline">
           Redan klar
         </button>
-        <button type="button" onClick={onMoveTomorrow} className="underline-offset-2 hover:underline">
+        <button
+          type="button"
+          onClick={onMoveTomorrow}
+          className="underline-offset-2 hover:underline"
+        >
           Flytta till imorgon
         </button>
       </div>
@@ -511,62 +527,24 @@ function FlowSlide({
 }
 
 /** Kort incheckning – använder befintlig logg-logik, inget nytt datalager. */
-function CheckinSlide({
-  seed,
-  moodValue,
-  energyValue,
-  onLogMood,
-  onLogEnergy,
-  onNext,
-}: {
-  seed: number;
-  moodValue: number | null;
-  energyValue: number | null;
-  onLogMood: (v: number) => void;
-  onLogEnergy: (v: number) => void;
-  onNext: () => void;
-}) {
-  const [energy, setEnergy] = useState(energyValue ?? 5);
-  const [mood, setMood] = useState(moodValue ?? 5);
-
+/**
+ * Incheckning i Flow är enbart en hänvisning: all loggning av energi och
+ * mående sker på den enda kanoniska platsen – Mitt batteri.
+ */
+function CheckinSlide({ seed, onNext }: { seed: number; onNext: () => void }) {
   return (
     <SlideShell scene="mood" seed={seed} title="Hur är det just nu?">
-      <div className="w-full max-w-xs space-y-3 text-left">
-        <label className="block text-xs font-medium text-muted-foreground">
-          ⚡ Ork: {energy}/10
-          <input
-            type="range"
-            min={1}
-            max={10}
-            value={energy}
-            onChange={(e) => setEnergy(Number(e.target.value))}
-            className="myflove-range mt-1 h-2 w-full cursor-pointer appearance-none rounded-full bg-secondary"
-            aria-label="Ork 1 till 10"
-          />
-        </label>
-        <label className="block text-xs font-medium text-muted-foreground">
-          ❤️ Mående: {mood}/10
-          <input
-            type="range"
-            min={1}
-            max={10}
-            value={mood}
-            onChange={(e) => setMood(Number(e.target.value))}
-            className="myflove-range mt-1 h-2 w-full cursor-pointer appearance-none rounded-full bg-secondary"
-            aria-label="Mående 1 till 10"
-          />
-        </label>
+      <p className="text-sm text-muted-foreground">
+        Vill du berätta hur du mår? Det gör du i Mitt batteri.
+      </p>
+      <div className="flex flex-wrap justify-center gap-2">
+        <Button asChild className="rounded-2xl px-6">
+          <Link href="/mitt-batteri">Logga energi &amp; mående</Link>
+        </Button>
+        <Button variant="outline" className="rounded-2xl" onClick={onNext}>
+          Inte nu
+        </Button>
       </div>
-      <Button
-        className="rounded-2xl px-7"
-        onClick={() => {
-          void onLogEnergy(energy);
-          onLogMood(mood);
-          onNext();
-        }}
-      >
-        Logga
-      </Button>
     </SlideShell>
   );
 }

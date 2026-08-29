@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "En enda plats för energi & mående",
+    items: [
+      "Mitt batteri är den enda loggningsvägen: Hem → Mitt batteri → Logga energi & mående (2026-08-29)",
+      "Dubbla loggningsformulär i Flow, QuickFlow och historiken borttagna (2026-08-29)",
+      "Fritext om vad som påverkar dig – frivilligt, sparas med dagens mående (2026-08-29)",
+      "Flow använder texten som kontext utan att dra medicinska slutsatser (2026-08-29)",
+    ],
+  },
+  {
     title: "Hälsologgning skild från Min dag och kalendern",
     items: [
       "Energi, sömn, mående och kroppsliga observationer blir aldrig automatiskt uppgifter eller kalenderposter (2026-08-29)",

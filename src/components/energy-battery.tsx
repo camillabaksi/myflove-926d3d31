@@ -72,7 +72,6 @@ export default function EnergyBattery({
             className="absolute inset-y-0 left-0 rounded-[7px] motion-safe:transition-[width] motion-safe:duration-700 motion-safe:ease-out"
             style={{ width: `${Math.max(4, level)}%`, backgroundColor: tone, opacity: 0.85 }}
           />
-          
         </span>
         <span className="ml-0.5 h-3 w-1 rounded-r-sm bg-border" />
       </span>
@@ -111,6 +110,10 @@ export default function EnergyBattery({
         <div className="mt-3">
           <BatteryCurve reading={reading} compact />
         </div>
+        <span className="mt-3 flex items-center justify-between gap-2 rounded-2xl bg-primary/10 px-3 py-2">
+          <span className="text-sm font-semibold text-ink">Logga energi &amp; mående</span>
+          <span className="text-xs text-muted-foreground">Vad påverkar dig idag?</span>
+        </span>
       </Link>
     );
   }

@@ -88,16 +88,33 @@ export function useQuickCheckin() {
     return todays.length > 0 ? (todays[todays.length - 1] as EnergyLogEntry) : null;
   }, [energyEntries]);
 
+  /**
+   * Loggar dagens mående. `note` är användarens egna ord om vad som påverkar –
+   * frivilligt och sparas på samma måendepost (befintlig datamodell).
+   */
   const logMood = useCallback(
-    (score10: number) => {
+    (score10: number, note?: string) => {
       const score = toScale5(score10);
+      const text = note?.trim() ? note.trim() : undefined;
       setCheckin10((prev) => ({ day: todayKey(), energy: prev?.energy, mood: score10 }));
       setMoods((prev) => {
         const existing = prev.find((m) => isToday(m.date));
         if (existing) {
-          return prev.map((m) => (m.id === existing.id ? { ...m, score, date: Date.now() } : m));
+          return prev.map((m) =>
+            m.id === existing.id
+              ? { ...m, score, date: Date.now(), ...(text ? { note: text } : {}) }
+              : m,
+          );
         }
-        return [{ id: Math.random().toString(36).slice(2, 11), score, date: Date.now() }, ...prev];
+        return [
+          {
+            id: Math.random().toString(36).slice(2, 11),
+            score,
+            date: Date.now(),
+            ...(text ? { note: text } : {}),
+          },
+          ...prev,
+        ];
       });
     },
     [setMoods, setCheckin10],

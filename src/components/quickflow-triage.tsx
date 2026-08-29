@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
+import { Link } from "wouter";
 import { Undo2, Wand2 } from "lucide-react";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { useTasks, useReminders, useDumpIdeas } from "@/hooks/use-data";
@@ -24,7 +25,6 @@ import { resolveDestination, titleForRule } from "@/lib/quickflow-rules";
 import { useNotes } from "@/hooks/use-notes";
 import { useRelations } from "@/hooks/use-relations";
 import { guessRelation, relationTag } from "@/lib/relations";
-import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import { useChildren } from "@/hooks/use-children";
 import { FlowItemActions } from "@/components/flow-item-actions";
 import { useSituation } from "@/hooks/use-situation";
@@ -48,7 +48,6 @@ export default function QuickflowTriage() {
   const { addNote } = useNotes();
 
   const { people: relationPeople } = useRelations();
-  const { addFactor } = useEnergyFlow();
   const { children, addItem: addChildItem } = useChildren();
   const { situation } = useSituation();
   // Situationen är levande: aktiverar/pausar man något ändras förslagen direkt.
@@ -58,7 +57,6 @@ export default function QuickflowTriage() {
   /** Vilken tanke som väntar på svar om energin gav eller tog. */
   const [energyFor, setEnergyFor] = useState<string | null>(null);
   /** Riktning vald i energipanelen – nästa steg är hur mycket den påverkar. */
-  const [energyDir, setEnergyDir] = useState<"gives" | "drains">("drains");
   /** Vilken tanke som väntar på "vilket barn och vad blir det?". */
   const [childFor, setChildFor] = useState<string | null>(null);
   const [childPick, setChildPick] = useState<string | null>(null);
@@ -239,17 +237,6 @@ export default function QuickflowTriage() {
     complete(item.id);
     log("planering");
     toast.success(`Den ligger nu i ${AREA_META[area].label}.`);
-  };
-
-  const toEnergy = async (item: QuickflowItem, direction: "gives" | "drains", strength: number) => {
-    await addFactor({ title: titleOf(item), direction, strength, category: "annat" });
-    complete(item.id);
-    setEnergyFor(null);
-    toast.success(
-      direction === "gives"
-        ? "Sparad som något som ger energi. 🔋"
-        : "Sparad som något som tar energi. 🪫",
-    );
   };
 
   /** Barn: tanken landar hos rätt barn, som aktivitet, uppgift eller anteckning. */
@@ -530,30 +517,18 @@ export default function QuickflowTriage() {
                   })}
                 </div>
                 {energyFor === item.id ? (
-                  <div className="space-y-2">
-                    <div className="flex flex-wrap gap-2">
-                      <Action
-                        highlight={energyDir === "gives"}
-                        onClick={() => setEnergyDir("gives")}
-                      >
-                        🔋 Gav energi
-                      </Action>
-                      <Action
-                        highlight={energyDir === "drains"}
-                        onClick={() => setEnergyDir("drains")}
-                      >
-                        🪫 Tog energi
-                      </Action>
-                    </div>
+                  <div className="space-y-2" data-testid="quickflow-energy-handoff">
                     <p className="text-xs text-muted-foreground">
-                      Hur mycket påverkar det dagens balans?
+                      Energi och mående loggar du på ett enda ställe – i Mitt batteri.
                     </p>
                     <div className="flex flex-wrap gap-2">
-                      {[1, 2, 3, 4, 5].map((s) => (
-                        <Action key={s} onClick={() => void toEnergy(item, energyDir, s)}>
-                          {"▪".repeat(s)} {s}
-                        </Action>
-                      ))}
+                      <Link
+                        href={`/mitt-batteri?note=${encodeURIComponent(titleOf(item))}`}
+                        onClick={() => complete(item.id)}
+                        className="press rounded-pill border border-primary bg-primary/10 px-3 py-1 text-xs font-medium text-primary"
+                      >
+                        Logga energi &amp; mående
+                      </Link>
                       <Action onClick={() => setEnergyFor(null)}>Avbryt</Action>
                     </div>
                   </div>
