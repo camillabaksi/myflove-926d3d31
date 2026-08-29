@@ -1585,3 +1585,8 @@ Initial baseline av MyFlove — ett svenskspråkigt "lugnt livsflöde"-dashboard
 - Förklaringar om nyttan anpassas nu efter befintlig Flow learning level.
 - Nya användare får enklare, fullständiga budskap; återkommande användare får kortare eller ingen upprepning.
 - Energi, mående, planering, promenader och medicin använder samma gradvisa språk utan nya datakrav.
+
+## 2026-08-29 – Städning följer appens layout
+
+- Städningssidan använder nu samma MyFlove-block, 2px-borders och rundningar som resten av appen.
+- Översikt, material, steg och eget steg ligger i symmetriska block i det gemensamma rutnätet.

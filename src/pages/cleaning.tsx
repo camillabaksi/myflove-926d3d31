@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import Layout from "@/components/layout";
-import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
+import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { MyFloveFloatingElement } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -17,8 +17,7 @@ import {
   totalMinutes,
   type CleanMode,
 } from "@/lib/cleaning";
-import { Clock, RotateCcw, Sparkles, ShoppingBasket, Plus, X } from "lucide-react";
-import CollapsibleSection from "@/components/collapsible-section";
+import { Clock, RotateCcw, Sparkles, ShoppingBasket, Plus, X, ListChecks } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
 const todayIso = () => new Date().toISOString().slice(0, 10);
@@ -149,7 +148,7 @@ export default function CleaningPage() {
               key={m}
               onClick={() => setMode(m)}
               aria-pressed={mode === m}
-              className={`rounded-2xl border p-4 text-left transition ${
+              className={`rounded-2xl border-2 p-4 text-left transition ${
                 mode === m
                   ? "border-primary bg-primary/10"
                   : "border-border bg-card hover:bg-accent/40"
@@ -191,149 +190,152 @@ export default function CleaningPage() {
         </MyFloveWide>
 
         {/* Översikt */}
-        <section
-          className="rounded-3xl border-2 p-5"
-          style={{ borderColor: tint(0.3), backgroundColor: tint(0.07) }}
+        <MyFloveBlock
+          title={`${room.emoji} ${room.label} – ${CLEAN_MODE_LABEL[mode].toLowerCase()}`}
+          subtitle={
+            minutesLeft > 0
+              ? `Ca ${minutesLeft} min kvar · ${completed.length}/${steps.length} klart`
+              : "Allt avklarat 🌟"
+          }
+          icon={Clock}
+          tone="mint"
+          action={
+            <Button variant="ghost" size="sm" onClick={resetRoom} className="shrink-0">
+              <RotateCcw className="mr-1.5 h-4 w-4" />
+              Nollställ
+            </Button>
+          }
+          className="h-full"
         >
-          <CollapsibleSection
-            title={`${room.emoji} ${room.label} – ${CLEAN_MODE_LABEL[mode].toLowerCase()}`}
-            id="Översikt"
-            headingClassName="font-display text-xl font-bold"
-            actions={
-              <Button variant="ghost" size="sm" onClick={resetRoom} className="shrink-0">
-                <RotateCcw className="mr-1.5 h-4 w-4" />
-                Nollställ
-              </Button>
-            }
-          >
-            <p className="flex items-center gap-1.5 text-sm text-muted-foreground -mt-2">
-              <Clock className="h-4 w-4" />
-              {minutesLeft > 0 ? `Ca ${minutesLeft} min kvar` : "Allt avklarat"} ·{" "}
-              {completed.length}/{steps.length} klart
-            </p>
-            <div className="mt-4 h-2 w-full overflow-hidden rounded-full bg-muted">
-              <div
-                className="h-full rounded-full transition-all"
-                style={{ width: `${pct}%`, backgroundColor: `hsl(${room.hue})` }}
-              />
-            </div>
-          </CollapsibleSection>
-        </section>
+          <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-muted">
+            <div
+              className="h-full rounded-full transition-all"
+              style={{ width: `${pct}%`, backgroundColor: `hsl(${room.hue})` }}
+            />
+          </div>
+        </MyFloveBlock>
+
+        {/* Vad du behöver */}
+        <MyFloveBlock
+          title="Det här behöver du"
+          subtitle="Grejer för dagens städning"
+          icon={ShoppingBasket}
+          tone="sky"
+          className="h-full"
+        >
+          {supplies.length === 0 ? (
+            <p className="text-sm text-muted-foreground">Inget särskilt – bara du 💛</p>
+          ) : (
+            <ul className="flex flex-wrap gap-2">
+              {supplies.map((item) => (
+                <li
+                  key={item}
+                  className="rounded-full border border-border bg-background px-3 py-1.5 text-sm text-foreground"
+                >
+                  {item}
+                </li>
+              ))}
+            </ul>
+          )}
+        </MyFloveBlock>
 
         {/* Steg */}
         <MyFloveWide>
-          <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-            {steps.map((s) => {
-              const checked = isDone(s.id);
-              return (
-                <li
-                  key={s.id}
-                  className={`flex items-start gap-3 rounded-2xl border border-border bg-card p-4 ${checked ? "opacity-60" : ""}`}
-                >
-                  <Checkbox
-                    checked={checked}
-                    onClick={(e) => toggle(s.id, e)}
-                    aria-label={s.label}
-                    className="mt-0.5"
-                  />
-                  <div className="min-w-0 flex-1">
-                    <div className={`font-medium text-foreground ${checked ? "line-through" : ""}`}>
-                      {s.label}
-                    </div>
-                    <div className="mt-0.5 text-xs text-muted-foreground">
-                      {s.minutes} min
-                      {s.needs.length > 0 && ` · ${s.needs.join(", ")}`}
-                    </div>
-                    {checked && done[key(s.id)] && (
-                      <div className="mt-1 text-[11px] text-muted-foreground">
-                        Klart {done[key(s.id)]}
-                      </div>
-                    )}
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => removeStep(s.id)}
-                    aria-label={`Ta bort ${s.label}`}
-                    className="shrink-0 rounded-full p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
+          <MyFloveBlock
+            title="Steg att kryssa av"
+            subtitle="Bocka i din takt – allt räknas"
+            icon={ListChecks}
+            tone="lavender"
+          >
+            <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+              {steps.map((s) => {
+                const checked = isDone(s.id);
+                return (
+                  <li
+                    key={s.id}
+                    className={`flex items-start gap-3 rounded-2xl border border-border bg-background p-4 ${checked ? "opacity-60" : ""}`}
                   >
-                    <X className="h-4 w-4" />
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
+                    <Checkbox
+                      checked={checked}
+                      onClick={(e) => toggle(s.id, e)}
+                      aria-label={s.label}
+                      className="mt-0.5"
+                    />
+                    <div className="min-w-0 flex-1">
+                      <div
+                        className={`font-medium text-foreground ${checked ? "line-through" : ""}`}
+                      >
+                        {s.label}
+                      </div>
+                      <div className="mt-0.5 text-xs text-muted-foreground">
+                        {s.minutes} min
+                        {s.needs.length > 0 && ` · ${s.needs.join(", ")}`}
+                      </div>
+                      {checked && done[key(s.id)] && (
+                        <div className="mt-1 text-[11px] text-muted-foreground">
+                          Klart {done[key(s.id)]}
+                        </div>
+                      )}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => removeStep(s.id)}
+                      aria-label={`Ta bort ${s.label}`}
+                      className="shrink-0 rounded-full p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </MyFloveBlock>
         </MyFloveWide>
 
         {/* Lägg till eget steg */}
-        <div className="min-w-0">
-          <section className="rounded-3xl border-2 border-border bg-card p-4 space-y-3">
-            <p className="text-sm font-medium text-foreground">Lägg till eget steg</p>
-            <div className="flex flex-wrap gap-2">
-              <Input
-                value={newLabel}
-                onChange={(e) => setNewLabel(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") addStep();
-                }}
-                placeholder="T.ex. Vattna blommorna"
-                aria-label="Vad vill du lägga till?"
-                className="min-w-[10rem] flex-1"
-              />
-              <Input
-                value={newMinutes}
-                onChange={(e) => setNewMinutes(e.target.value)}
-                inputMode="numeric"
-                aria-label="Minuter"
-                className="w-20"
-              />
-              <Button onClick={addStep} disabled={!newLabel.trim()} className="gap-1.5">
-                <Plus className="h-4 w-4" />
-                Lägg till
-              </Button>
-            </div>
-            {hiddenIds.length > 0 && (
-              <button
-                type="button"
-                onClick={restoreSteps}
-                className="text-xs text-primary hover:underline"
-              >
-                Visa borttagna standardsteg igen ({hiddenIds.length})
-              </button>
-            )}
-          </section>
-        </div>
-
-        {/* Vad du behöver */}
-        <div className="min-w-0">
-          <section className="rounded-3xl border-2 border-border bg-card p-5">
-            <CollapsibleSection
-              title={
-                <span className="flex items-center gap-2">
-                  <ShoppingBasket className="h-5 w-5 text-primary" />
-                  Det här behöver du
-                </span>
-              }
-              id="Det här behöver du"
-              help="Grejer som behövs för dagens städning. Saknas något kan du lägga det på inköpslistan."
-              headingClassName="font-display text-lg font-bold"
-            >
-              {supplies.length === 0 ? (
-                <p className="text-sm text-muted-foreground">Inget särskilt – bara du 💛</p>
-              ) : (
-                <ul className="flex flex-wrap gap-2">
-                  {supplies.map((item) => (
-                    <li
-                      key={item}
-                      className="rounded-full border border-border bg-background px-3 py-1.5 text-sm text-foreground"
-                    >
-                      {item}
-                    </li>
-                  ))}
-                </ul>
+        <MyFloveWide>
+          <MyFloveBlock
+            title="Lägg till eget steg"
+            subtitle="Dina egna steg sparas per rum och läge"
+            icon={Plus}
+            tone="blush"
+          >
+            <div className="space-y-3">
+              <div className="flex flex-wrap gap-2">
+                <Input
+                  value={newLabel}
+                  onChange={(e) => setNewLabel(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") addStep();
+                  }}
+                  placeholder="T.ex. Vattna blommorna"
+                  aria-label="Vad vill du lägga till?"
+                  className="min-w-[10rem] flex-1"
+                />
+                <Input
+                  value={newMinutes}
+                  onChange={(e) => setNewMinutes(e.target.value)}
+                  inputMode="numeric"
+                  aria-label="Minuter"
+                  className="w-20"
+                />
+                <Button onClick={addStep} disabled={!newLabel.trim()} className="gap-1.5">
+                  <Plus className="h-4 w-4" />
+                  Lägg till
+                </Button>
+              </div>
+              {hiddenIds.length > 0 && (
+                <button
+                  type="button"
+                  onClick={restoreSteps}
+                  className="text-xs text-primary hover:underline"
+                >
+                  Visa borttagna standardsteg igen ({hiddenIds.length})
+                </button>
               )}
-            </CollapsibleSection>
-          </section>
-        </div>
+            </div>
+          </MyFloveBlock>
+        </MyFloveWide>
 
         <MyFloveWide>
           <p className="flex items-center justify-center gap-2 pb-4 text-center text-sm text-muted-foreground">

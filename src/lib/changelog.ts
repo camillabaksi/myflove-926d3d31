@@ -957,6 +957,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
       "Kontextuella hjälptexter med i-knapp på alla kort (2026-08-14)",
       "Tillbakaknapp baserad på historik (2026-08-14)",
       "SEO: sidspecifika og-taggar, JSON-LD, sitemap och robots.txt (2026-08-14)",
+      "Städning: samma blocklayout och rundningar som övriga appen (2026-08-29)",
     ],
   },
 ];
