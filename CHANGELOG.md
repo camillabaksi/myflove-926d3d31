@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-29 – Samma blockdesign på övriga sidor
+
+- MyFloves gemensamma blockspråk (tvåkolumns-grid, mjuka rundade kort, områdesfärgade borders) är nu applicerat på övriga sidor: Matlista, Träning, Stop-paus, Quickflow, Relationer, Barn, Familj, Ekonomi, Resor, Timer (Pomodoro), Belöningar, Veckans flow, Studyflow, Jobb, Workflow, Daglig rutin, Friktionsindex, Livsprofil och Statistik.
+- Påminnelser: blocken bär nu idag-områdets mjuka border.
+- Sidorna använder MyFlovePageGrid med MyFloveWide för innehåll som behöver full bredd (formulär, listor, grafer) – samma symmetri som Hem och Hälsa.
+- Endast presentation – data, logik, navigation och funktionalitet är oförändrade.
+
+
 ## 2026-08-29 – Samma blockpolish på Hälsa, Planera och Kalender
 
 - Hälsa: Träning- och Rutiner-korten följer nu Hem-blockens formspråk – rounded-3xl, mjuk halsa-border, min-height 9rem, ikon + rubrik + kort underrubrik + pil uppe till höger. Kortare underrubriker.
