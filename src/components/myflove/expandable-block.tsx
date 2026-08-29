@@ -11,7 +11,7 @@
  * presentation.
  */
 import * as React from "react";
-import { ChevronDown, type LucideIcon } from "lucide-react";
+import { ArrowRight, ChevronDown, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MyFloveIcon, type MyFloveTone } from "@/components/myflove";
 import { areaProps, type AreaId } from "@/lib/areas";
