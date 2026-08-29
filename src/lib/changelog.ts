@@ -12,9 +12,9 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Responsivt blocksystem",
     items: [
-      "Hem är nu ett dashboard med block sida vid sida – batteri, Flow, Just nu och Nästa (2026-08-29)",
-      "Nya layoutkomponenter ger samma blockrutnät på Hem, Idag, Hälsa och Mitt batteri (2026-08-29)",
-      "Grafer, formulär och långa texter använder hela bredden; en kolumn på små skärmar (2026-08-29)",
+      "Hem använder ett faktiskt CSS-grid med batteri, Flow, Just nu och Nästa sida vid sida (2026-08-29)",
+      "MyFlovePageGrid ger två kolumner från 380 px, tre på stora skärmar och MyFloveWide ger breda/fullbreda block (2026-08-29)",
+      "Grafer, formulär och långa texter använder hela bredden; mycket smala skärmar faller tillbaka till en kolumn (2026-08-29)",
       "Planera, Kalender, Energi/Flow, listor, påminnelser, rutiner, medicin och inställningar använder samma blockramverk (2026-08-29)",
     ],
   },

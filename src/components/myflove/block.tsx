@@ -142,8 +142,8 @@ export function MyFloveBlock({
 }
 
 /**
- * Responsivt rutnät för block. Mobil = en kolumn (viktigast först),
- * större skärmar = två kolumner där relaterade block ligger bredvid varandra.
+ * Responsivt rutnät för block. Mycket smala skärmar = en kolumn;
+ * vanliga mobiler = två kolumner där relaterade block ligger bredvid varandra.
  */
 export function MyFloveBlockGrid({
   className,
@@ -166,7 +166,7 @@ export function MyFloveBlockGrid({
 
 /**
  * Sidlayout för hela appen – ett riktigt dashboard-grid.
- * Två kolumner redan på vanlig mobilbredd, tre från lg och fyra från xl,
+ * Två kolumner redan på vanlig mobilbredd och tre från xl,
  * med automatisk fallback till en kolumn på mycket smala skärmar.
  * Innehåll som behöver mer plats wrappas i <MyFloveWide>.
  */
@@ -183,7 +183,7 @@ export function MyFlovePageGrid({
     <div
       style={style}
       className={cn(
-        "grid min-w-0 grid-cols-1 items-start gap-4 min-[380px]:grid-cols-2 md:gap-5 lg:grid-cols-3 xl:grid-cols-4",
+        "grid min-w-0 grid-cols-1 items-start gap-4 min-[380px]:grid-cols-2 md:gap-5 xl:grid-cols-3",
         className,
       )}
     >
@@ -210,7 +210,7 @@ export function MyFloveWide({
       style={style}
       className={cn(
         "min-w-0",
-        span === "wide" ? "col-span-full lg:col-span-2" : "col-span-full",
+        span === "wide" ? "col-span-full xl:col-span-2" : "col-span-full",
         className,
       )}
     >
