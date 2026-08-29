@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import Layout from "@/components/layout";
+import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import CollapsibleSection from "@/components/collapsible-section";
 import { Button } from "@/components/ui/button";
 import { useReminders, type Reminder, type RepeatMode } from "@/hooks/use-data";
@@ -231,7 +232,8 @@ export default function RemindersPage() {
 
   return (
     <Layout>
-      <div className="space-y-6">
+      <MyFlovePageGrid>
+        <MyFloveWide>
         <header className="space-y-1">
           <h1 className="flex items-center gap-2 font-display text-3xl text-ink">
             <BellRing className="h-7 w-7 text-primary" /> Påminnelser
@@ -240,9 +242,9 @@ export default function RemindersPage() {
             Lägg till, ändra eller avboka. Aktiva påminnelser ger en notis när det är dags.
           </p>
         </header>
+        </MyFloveWide>
 
-        <section className="space-y-3 rounded-2xl border border-border bg-card p-5 shadow-sm">
-          <h2 className="text-lg font-semibold">Aviseringar</h2>
+        <MyFloveBlock rounded-2xl border border-border bg-card p-5 shadow-sm">
           {permission === "granted" ? (
             <p className="text-sm text-muted-foreground">
               Notiser är påslagna på den här enheten. Du får en signal när en aktiv påminnelse
@@ -273,8 +275,9 @@ export default function RemindersPage() {
             Push-notiser når dig även när appen är stängd. Avbokade påminnelser skickar aldrig
             något.
           </p>
-        </section>
+        </MyFloveBlock>
 
+        <MyFloveWide>
         <form
           onSubmit={handleAdd}
           className="space-y-3 rounded-2xl border border-border bg-card p-5 shadow-sm"
@@ -334,7 +337,9 @@ export default function RemindersPage() {
             <Plus size={18} className="mr-2" /> Lägg till påminnelse
           </Button>
         </form>
+        </MyFloveWide>
 
+        <MyFloveWide>
         <section className="surface-card p-5">
           <CollapsibleSection
             title={`Aktiva (${active.length})`}
@@ -410,7 +415,8 @@ export default function RemindersPage() {
             )}
           </CollapsibleSection>
         </section>
-      </div>
+        </MyFloveWide>
+      </MyFlovePageGrid>
     </Layout>
   );
 }
