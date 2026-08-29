@@ -50,7 +50,7 @@ export default function EnergyBattery({
         data-testid="battery-card"
         data-area="halsa"
         aria-label={`Mitt batteri, ${shownLevel} procent. Öppna för att logga energi och mående.`}
-        className="press relative flex min-h-[9rem] min-w-0 flex-col items-center gap-2.5 rounded-3xl border border-[hsl(var(--area-aterhamtning)/0.45)] bg-sun/50 p-4 text-center shadow-soft transition-shadow hover:shadow-lifted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:p-5"
+        className="press relative flex min-h-[9rem] min-w-0 flex-col items-center gap-2.5 rounded-3xl border-2 border-[hsl(var(--area-aterhamtning)/0.45)] bg-sun/50 p-4 text-center shadow-soft transition-shadow hover:shadow-lifted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:p-5"
       >
         <MyFloveIcon icon={BatteryCharging} tone="sun" size="lg" className="rounded-full" />
         <span className="min-w-0">
