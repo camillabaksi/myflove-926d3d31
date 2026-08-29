@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-08-29 – Hemskärmen: polish och symmetri
+
+- Tydligare områdesborders: varje blocks border följer sin färgidentitet (batteri = varm/gul, Flow = lila, Idag/Nästa = blå, Lägg till = mint) och är synligare mot pastellbakgrunden.
+- Harmoniserade blockhöjder: komprimerade block delar min-height (9rem) så tvåkolumnsgriddet känns symmetriskt; samma rundning (rounded-3xl) och padding överallt.
+- Visuell hierarki: huvudvärdet (t.ex. "56 %", "10:30", "1/3") är nu text-3xl och det största i varje block.
+- Konsekvent ikonplacering: ikon + rubrik + underrubrik överst till vänster, pil/chevron diskret uppe till höger i alla klickbara block (även Mitt batteri och Idag).
+- "Dagens översikt"-blocket heter nu "Idag" och följer samma kortstruktur som Mitt batteri.
+- Kortare underrubriker utan avklippt text: "Nästa viktiga sak", "Ditt nästa steg".
+- Endast presentation – data, loggning, navigation och logik är oförändrade.
+
+
 ## 2026-08-29 – Tre riktade UI/UX-korrigeringar
 
 - Hem: "Dagens översikt" navigerar nu direkt till befintliga Idag-vyn (ingen ny route); tillbaka fungerar som vanligt. Blocket är en komprimerad widget: ikon + "3/5" + "2 kvar".

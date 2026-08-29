@@ -372,7 +372,7 @@ export default function Home() {
               titleText="Nästa"
               area="idag"
               icon={CalendarDays}
-              subtitle="Nästa viktiga sak idag"
+              subtitle="Nästa viktiga sak"
               status={nextEvent ? nextEvent.time : "–"}
               summary={nextEvent ? nextEvent.title : "Inget inplanerat just nu"}
               tone="sky"
@@ -447,7 +447,7 @@ export default function Home() {
               titleText="Flow just nu"
               area="flow"
               visual={<FlowMascot size="xs" mood="nod" bump className="flow-alive" alt="" />}
-              subtitle="Ditt nästa steg, anpassat efter dig"
+              subtitle="Ditt nästa steg"
               status="Jag finns här"
               summary={suggestion.headline}
               tone="lavender"
@@ -623,22 +623,36 @@ function DaySummary() {
   const { todayOpen, todayDone } = useFlowItems();
   const total = todayOpen.length + todayDone.length;
 
-  // Komprimerat widget-block som navigerar direkt till befintliga Idag-vyn.
+  // Komprimerat block i samma formspråk som Mitt batteri – klick går till
+  // befintliga Idag-vyn.
   return (
     <Link
       href="/idag"
       data-testid="home-day-summary"
-      aria-label="Öppna Idag – dagens fullständiga översikt"
+      aria-label={`Dagens översikt, ${todayDone.length} av ${total} klart. Öppna Idag.`}
       {...areaProps("idag")}
-      className="press area-border flex min-h-[7rem] min-w-0 flex-col items-center justify-center gap-1.5 rounded-3xl border border-border/60 bg-sky/50 px-3 py-6 text-center shadow-soft transition-shadow hover:shadow-lifted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+      className="press area-border flex min-h-[9rem] min-w-0 flex-col gap-2 rounded-3xl border bg-sky/50 p-3 shadow-soft transition-shadow hover:shadow-lifted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:p-5"
     >
-      <MyFloveIcon icon={Check} tone="sky" size="lg" className="area-bg-soft area-text" />
-      <span className="font-display text-2xl font-bold leading-none text-ink">
+      <span className="flex min-w-0 items-start gap-2.5">
+        <MyFloveIcon icon={Check} tone="sky" size="sm" className="area-bg-soft area-text" />
+        <span className="min-w-0 flex-1">
+          <span className="block font-display text-base font-bold leading-tight text-ink">
+            Idag
+          </span>
+          <span className="block text-xs text-muted-foreground">Det här är kvar idag</span>
+        </span>
+        <ArrowRight
+          size={16}
+          aria-hidden="true"
+          className="mt-0.5 shrink-0 text-muted-foreground"
+        />
+      </span>
+      <span className="font-display text-3xl font-bold leading-none text-ink">
         {total === 0 ? "0" : `${todayDone.length}/${total}`}
       </span>
-      <span className="text-xs font-medium text-muted-foreground">
+      <span className="text-sm text-muted-foreground">
         {total === 0
-          ? "Idag"
+          ? "Inget inplanerat"
           : total === todayDone.length
             ? "Allt klart"
             : `${todayOpen.length} kvar`}

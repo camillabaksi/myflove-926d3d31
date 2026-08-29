@@ -10,6 +10,18 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Hemskärmen: polish och symmetri",
+    items: [
+      "Tydligare områdesborders i varje blocks egen färg – mjuka men synliga mot pastellen (2026-08-29)",
+      "Harmoniserade blockhöjder, samma rundning och padding – griddet känns symmetriskt (2026-08-29)",
+      "Huvudvärdet är nu störst i varje block (text-3xl): 56 %, 10:30, 1/3 (2026-08-29)",
+      "Konsekvent ikon- och pilplacering i alla klickbara block, även Mitt batteri och Idag (2026-08-29)",
+      "Dagens översikt-blocket heter Idag och följer samma kortstruktur som Mitt batteri (2026-08-29)",
+      "Kortare underrubriker utan avklippt text (2026-08-29)",
+      "Endast presentation – data, loggning, navigation och logik är oförändrade (2026-08-29)",
+    ],
+  },
+  {
     title: "Tre riktade UI/UX-korrigeringar",
     items: [
       "Hem: Dagens översikt navigerar nu direkt till befintliga Idag-vyn (2026-08-29)",
