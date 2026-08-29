@@ -1,6 +1,8 @@
 import { track } from "@/lib/analytics";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
+import { MyFloveBlock } from "@/components/myflove/block";
+
 
 // Minimala typer för webbläsarens SpeechRecognition (saknas i TS lib.dom).
 type SpeechRecognitionStreamEvent = {
