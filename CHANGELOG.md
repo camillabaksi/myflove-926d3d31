@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-29 – Hälsologgning hålls skild från Min dag och kalendern
+
+- Ny regel i koden: energi, sömn, mående och kroppsliga observationer är data – de blir aldrig automatiskt en uppgift, kalenderpost eller påminnelse.
+- QuickFlow tolkar nu hälsotexter ("sov 5 timmar", "huvudvärk idag", "kroppen påverkar") som energi-/måendelogg i stället för kalender.
+- Aktiviteter påverkas inte: "boka läkare", "träning kl 18" och liknande hamnar kvar som aktiviteter, och du kan alltid välja destination själv.
+- Egen statistikhändelse för hälsologgning (utan värden) så att loggning aldrig blandas ihop med skapade uppgifter.
+- Nya tester som säkerställer separationen.
+
 ## 2026-08-28 – Mediciner sparas i molnet
 
 - Medicinlistan och medicinloggen synkas nu till ditt konto (som rutinerna) i stället för att bara ligga på enheten.
