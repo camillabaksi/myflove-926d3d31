@@ -26,7 +26,7 @@ import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { useDayPlan } from "@/lib/day-plan";
 import { todayISO as todayStr } from "@/lib/day";
 import type { Routine } from "@/lib/recurrence";
-import { CalendarDays, ListOrdered, Sparkles, Heart, Waves, ListChecks } from "lucide-react";
+import { CalendarDays, ListOrdered, Sparkles, Heart, Waves, ListChecks, Plus } from "lucide-react";
 import { MyFloveTransition } from "@/components/myflove/motion";
 
 type DayView = "flow" | "lista";
@@ -222,7 +222,7 @@ export default function TodayPage() {
               icon={Plus}
               tone="mint"
               surface="mint"
-              area="vardag"
+              area="idag"
               widget
               label="Lägg till"
               status="+"
