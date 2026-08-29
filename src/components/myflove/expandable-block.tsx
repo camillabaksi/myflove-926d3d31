@@ -14,6 +14,7 @@ import * as React from "react";
 import { ChevronDown, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MyFloveIcon, type MyFloveTone } from "@/components/myflove";
+import { areaProps, type AreaId } from "@/lib/areas";
 
 const SURFACE: Record<MyFloveTone, string> = {
   lavender: "bg-lavender/60",
@@ -40,6 +41,8 @@ export interface ExpandableBlockProps {
   visual?: React.ReactNode;
   tone?: MyFloveTone;
   surface?: MyFloveTone;
+  /** Områdets färgidentitet – se src/lib/areas.ts. */
+  area?: AreaId;
   className?: string;
   "data-testid"?: string;
   /** Hela innehållet – visas när kortet är expanderat. */
@@ -56,6 +59,7 @@ export function ExpandableBlock({
   visual,
   tone = "lavender",
   surface,
+  area,
   className,
   "data-testid": dataTestId,
   children,
@@ -105,8 +109,10 @@ export function ExpandableBlock({
       ref={sectionRef}
       data-testid={dataTestId}
       data-expanded={open ? "true" : "false"}
+      {...areaProps(area)}
       className={cn(
         "flex min-w-0 flex-col rounded-3xl border border-border/60 shadow-soft transition-shadow",
+        area && "area-border",
         open ? "col-span-full w-full shadow-lifted" : "min-h-[7rem]",
         surface ? SURFACE[surface] : "bg-card",
         className,
@@ -121,7 +127,15 @@ export function ExpandableBlock({
         className="press flex w-full min-w-0 flex-col gap-2 rounded-3xl p-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:p-5"
       >
         <div className="flex min-w-0 items-start gap-2.5">
-          {visual ?? (icon && <MyFloveIcon icon={icon} tone={tone} size="sm" />)}
+          {visual ??
+            (icon && (
+              <MyFloveIcon
+                icon={icon}
+                tone={tone}
+                size="sm"
+                className={area ? "area-bg-soft area-text" : undefined}
+              />
+            ))}
           <div className="min-w-0 flex-1">
             <h2 className="font-display text-base font-bold leading-tight text-ink">{title}</h2>
             {subtitle && (

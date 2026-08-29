@@ -18,6 +18,7 @@ export default function StopPausPage() {
     <Layout>
       <div className="space-y-6">
         <MyFloveHeader
+          area="aterhamtning"
           title="Stop-paus"
           emojiKey="wellness"
           description="En paus mellan impuls och beslut – andas, sätt ord, välj."

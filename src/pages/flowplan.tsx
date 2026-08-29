@@ -265,7 +265,7 @@ export default function FlowPlanPage() {
 
   return (
     <Layout>
-      <MyFlovePageGrid>
+      <MyFlovePageGrid area="planera">
         <MyFloveWide>
           <div className="flex items-center gap-3 mb-2">
             <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center">

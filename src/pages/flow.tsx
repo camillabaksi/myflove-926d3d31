@@ -16,7 +16,7 @@ export default function FlowPage() {
 
   return (
     <Layout>
-      <MyFlovePageGrid>
+      <MyFlovePageGrid area="flow">
         <MyFloveWide>
           <main className="mx-auto w-full max-w-xl" aria-label="Flow – vad passar bäst just nu">
             <FlowDeck />

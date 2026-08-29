@@ -138,6 +138,7 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
       {showHeader && (
         <MyFloveWide>
           <MyFloveHeader
+            area="halsa"
             title="Min energi – historik och mönster"
             emoji="📈"
             description="Här ser du hur energin brukar förändras: vad som ger och vad som tar. Din nivå just nu visas i Mitt energibatteri på Hem."

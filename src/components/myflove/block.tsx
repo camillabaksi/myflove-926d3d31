@@ -13,6 +13,7 @@ import * as React from "react";
 import { ChevronDown, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCollapsible } from "@/lib/collapse-store";
+import { areaProps, type AreaId } from "@/lib/areas";
 import { MyFloveIcon, type MyFloveTone } from "@/components/myflove";
 
 export interface MyFloveBlockProps {
@@ -39,8 +40,11 @@ export interface MyFloveBlockProps {
   defaultCollapsed?: boolean;
   /** Mjuk pastellton i stället för vit kortyta. */
   surface?: MyFloveTone;
+  /** Områdets färgidentitet – se src/lib/areas.ts. */
+  area?: AreaId;
   /** Låt blocket spänna över båda kolumnerna i ett MyFloveBlockGrid. */
   span?: boolean;
+
   className?: string;
   bodyClassName?: string;
   "data-testid"?: string;
@@ -69,6 +73,7 @@ export function MyFloveBlock({
   collapseId,
   defaultCollapsed = false,
   surface,
+  area,
   span,
   className,
   bodyClassName,
@@ -81,7 +86,14 @@ export function MyFloveBlock({
 
   const heading = (
     <div className="flex min-w-0 flex-1 items-start gap-3 text-left">
-      {icon && <MyFloveIcon icon={icon} tone={tone} size="sm" />}
+      {icon && (
+        <MyFloveIcon
+          icon={icon}
+          tone={tone}
+          size="sm"
+          className={area ? "area-bg-soft area-text" : undefined}
+        />
+      )}
       <div className="min-w-0 flex-1">
         {eyebrow && (
           <span className="mb-1 inline-flex rounded-pill bg-primary/10 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-primary">
@@ -108,8 +120,10 @@ export function MyFloveBlock({
   return (
     <section
       data-testid={dataTestId}
+      {...areaProps(area)}
       className={cn(
         "flex min-w-0 flex-col gap-3 rounded-3xl border border-border/60 p-3 shadow-soft sm:gap-4 sm:p-5",
+        area && "area-border",
         surface ? SURFACE[surface] : "bg-card",
         span && "col-span-full",
         className,
@@ -172,15 +186,19 @@ export function MyFloveBlockGrid({
 export function MyFlovePageGrid({
   className,
   style,
+  area,
   children,
 }: {
   className?: string;
   style?: React.CSSProperties;
+  /** Områdets färgidentitet – se src/lib/areas.ts. */
+  area?: AreaId;
   children: React.ReactNode;
 }) {
   return (
     <div
       style={style}
+      {...areaProps(area)}
       className={cn(
         "grid min-w-0 grid-cols-2 items-start gap-3 md:grid-cols-3 md:gap-5 xl:grid-cols-4 [&>*:has([data-expanded='true'])]:col-span-full",
         className,

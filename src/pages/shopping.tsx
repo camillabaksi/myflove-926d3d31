@@ -210,10 +210,11 @@ export default function Shopping() {
 
   return (
     <Layout>
-      <MyFlovePageGrid>
+      <MyFlovePageGrid area="hem">
         <MyFloveWide>
           <div>
             <MyFloveHeader
+              area="hem"
               title="Inköpslista"
               emojiKey="shopping"
               description="Vad behöver du handla? Släpp tanken på att komma ihåg allt."
