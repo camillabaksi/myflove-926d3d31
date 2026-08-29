@@ -129,6 +129,7 @@ const EVENT_SECTION: Record<AnalyticsEventName, string> = {
   mood_checkin_started: "mood",
   mood_checkin_completed: "mood",
   mood_logged: "mood",
+  health_factor_logged: "halsa",
   my_day_viewed: "min-dag",
   task_created: "tasks",
   task_started: "tasks",
