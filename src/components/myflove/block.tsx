@@ -109,7 +109,7 @@ export function MyFloveBlock({
     <section
       data-testid={dataTestId}
       className={cn(
-        "flex flex-col gap-4 rounded-3xl border border-border/60 p-5 shadow-soft",
+        "flex min-w-0 flex-col gap-3 rounded-3xl border border-border/60 p-3 shadow-soft sm:gap-4 sm:p-5",
         surface ? SURFACE[surface] : "bg-card",
         span && "col-span-full",
         className,
@@ -142,8 +142,8 @@ export function MyFloveBlock({
 }
 
 /**
- * Responsivt rutnät för block. Smala skärmar = en kolumn;
- * bredare mobiler = två kolumner där relaterade block ligger bredvid varandra.
+ * Responsivt rutnät för block. Två kolumner är standard även på mobil;
+ * varje enskilt innehåll som behöver bredd får uttryckligen spänna hela raden.
  */
 export function MyFloveBlockGrid({
   className,
@@ -155,7 +155,7 @@ export function MyFloveBlockGrid({
   return (
     <div
       className={cn(
-        "grid grid-cols-1 items-start gap-3 min-[560px]:grid-cols-2 sm:gap-4",
+        "grid min-w-0 grid-cols-2 items-start gap-3 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4",
         className,
       )}
     >
@@ -166,8 +166,7 @@ export function MyFloveBlockGrid({
 
 /**
  * Sidlayout för hela appen – ett riktigt dashboard-grid.
- * Två kolumner från en läsbar mobilbredd och tre från xl,
- * med automatisk fallback till en kolumn på smala skärmar.
+ * Två kolumner från minsta mobilbredd, tre på tablet och fyra på desktop.
  * Innehåll som behöver mer plats wrappas i <MyFloveWide>.
  */
 export function MyFlovePageGrid({
@@ -183,7 +182,7 @@ export function MyFlovePageGrid({
     <div
       style={style}
       className={cn(
-        "grid min-w-0 grid-cols-1 items-start gap-4 min-[560px]:grid-cols-2 md:gap-5 xl:grid-cols-3",
+        "grid min-w-0 grid-cols-2 items-start gap-3 md:grid-cols-3 md:gap-5 xl:grid-cols-4",
         className,
       )}
     >
@@ -240,7 +239,7 @@ export function MyFloveStat({
   return (
     <div
       className={cn(
-        "flex min-w-0 flex-1 flex-col gap-1.5 rounded-2xl border border-border/50 p-4",
+        "flex min-w-0 flex-1 flex-col gap-1.5 rounded-2xl border border-border/50 p-3 sm:p-4",
         SURFACE[tone],
         className,
       )}
@@ -250,7 +249,9 @@ export function MyFloveStat({
         {label}
       </span>
       {value != null && (
-        <span className="font-display text-3xl font-bold leading-none text-ink">{value}</span>
+        <span className="font-display text-2xl font-bold leading-none text-ink sm:text-3xl">
+          {value}
+        </span>
       )}
       {children}
       {hint && <span className="text-xs text-muted-foreground">{hint}</span>}

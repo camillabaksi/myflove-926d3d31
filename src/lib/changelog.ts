@@ -14,8 +14,8 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     items: [
       "Ett gemensamt CSS-grid placerar lämpliga block bredvid varandra i stället för att stapla varje sektion som en hel rad (2026-08-29)",
       "Hem visar ett varierat dashboard-grid med batteri/Flow, sammanfattningar och nästa steg sida vid sida (2026-08-29)",
-      "MyFlovePageGrid ger en kolumn på smala mobiler, två från 560 px, tre på stora skärmar och MyFloveWide ger breda/fullbreda block (2026-08-29)",
-      "Grafer, formulär och långa texter använder hela bredden; smala skärmar faller tillbaka till en kolumn (2026-08-29)",
+      "MyFlovePageGrid ger två kolumner även på 320–412 px, tre på tablet och fyra på desktop; MyFloveWide ger enskilda breda block hela raden (2026-08-29)",
+      "Hem, Hälsa och Mitt batteri visar flera lämpliga block samtidigt på mobil, medan grafer, formulär och långa texter använder hela bredden utan sidoscroll (2026-08-29)",
       "Planera, Kalender, Energi/Flow, listor, påminnelser, rutiner, medicin och inställningar använder samma blockramverk (2026-08-29)",
     ],
   },
