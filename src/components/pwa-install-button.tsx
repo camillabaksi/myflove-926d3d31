@@ -21,29 +21,55 @@ export default function PwaInstallButton({
   className,
   label = "Lägg till MyFlove på hemskärmen",
   variant = "default",
+  row = false,
+  hint = "Öppna MyFlove snabbare när du behöver Flow.",
 }: {
   className?: string;
   label?: string;
   variant?: "default" | "outline" | "ghost" | "secondary";
+  /** Visa som inställningsrad (rubrik + underrubrik) i Mer/Inställningar. */
+  row?: boolean;
+  hint?: string;
 }) {
   const { installed, isIos, showInstallHelp, setShowInstallHelp, install } = usePwaInstall();
 
   if (installed) return null;
 
+  const start = () => {
+    haptic("success");
+    void install();
+  };
+
   return (
     <>
-      <Button
-        type="button"
-        variant={variant}
-        className={cn("w-full rounded-full", className)}
-        onClick={() => {
-          haptic("success");
-          void install();
-        }}
-      >
-        <Download className="mr-2 size-4" />
-        {label}
-      </Button>
+      {row ? (
+        <button
+          type="button"
+          onClick={start}
+          className={cn(
+            "press flex w-full items-center gap-3 rounded-2xl border border-border bg-card p-3 text-left shadow-sm transition-colors",
+            className,
+          )}
+        >
+          <span className="shrink-0">
+            <Download size={22} strokeWidth={2} />
+          </span>
+          <span className="min-w-0">
+            <span className="block text-sm font-medium leading-tight">Lägg till på hemskärmen</span>
+            <span className="block text-xs leading-snug text-muted-foreground">{hint}</span>
+          </span>
+        </button>
+      ) : (
+        <Button
+          type="button"
+          variant={variant}
+          className={cn("w-full rounded-full", className)}
+          onClick={start}
+        >
+          <Download className="mr-2 size-4" />
+          {label}
+        </Button>
+      )}
 
       <Dialog open={showInstallHelp} onOpenChange={setShowInstallHelp}>
         <DialogContent className="rounded-3xl sm:max-w-sm">

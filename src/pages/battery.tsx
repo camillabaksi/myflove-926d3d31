@@ -38,6 +38,7 @@ export default function BatteryPage() {
             title="Mitt batteri"
             emojiKey="wellness"
             description="Din energi och ditt mående – checka in och se hur dagen brukar se ut."
+            why="Vi frågar för att Flow ska kunna anpassa dagens krav efter hur mycket ork du faktiskt har – inte efter hur mycket du borde ha."
           />
         </MyFloveWide>
 

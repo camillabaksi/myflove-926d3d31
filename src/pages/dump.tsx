@@ -58,6 +58,7 @@ import StepSection from "@/components/step-section";
 import QuickflowRulesSettings from "@/components/quickflow-rules-settings";
 import { MyFloveListening } from "@/components/myflove/motion";
 import { todayISO } from "@/lib/day";
+import WhyHint from "@/components/why-hint";
 
 interface SortableThought extends ParsedThought {
   id: string;
@@ -204,6 +205,12 @@ export default function Dump() {
                 Få ut det ur huvudet. Skriv eller prata in allt som snurrar – huller om buller går
                 bra. Jag håller det åt dig tills du orkar sortera.
               </p>
+              <div className="mt-3">
+                <WhyHint label="quickflow">
+                  När huvudet är fullt ska det vara lätt att få nästa steg utan att behöva planera
+                  allt själv.
+                </WhyHint>
+              </div>
             </MyFloveBlock>
 
             <QuickflowCapture />

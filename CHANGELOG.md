@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-08-29 – "Varför?" överallt och Lägg till på hemskärmen
+
+- Sidhuvudet (`MyFloveHeader`) har nu ett gemensamt `why`-stöd, så alla "Varför?"-förklaringar ser likadana ut och beter sig likadant.
+- Korta, varma "Varför?"-förklaringar finns nu på Mitt batteri, Hälsa, Min energi (historik), QuickFlow, Påminnelser och Insight – utöver Planera.
+- "Lägg till på hemskärmen" visas som en tydlig inställningsrad i Mer med underrubriken "Öppna MyFlove snabbare när du behöver Flow." Riktig installationsprompt används där webbläsaren stödjer den, iOS får steg-för-steg och knappen döljs helt när appen redan är installerad.
+- QA i mobilvy (390 px): Hem, Mitt batteri, Hälsa, QuickFlow, Påminnelser, Min energi, Insight, Planera, Idag och Kalender renderar utan horisontell scroll eller trasiga routes.
+
+
+
 ## 2026-08-29 – Nya Blueprint-, pitchdeck- och videomaterial 3.7
 
 - Living Blueprint 3.7 beskriver MyFloves aktuella produktkarta: Flow som följeslagare, Mitt batteri som enda hälsologgning, Idag som aktivitetsnav och det gemensamma blocksystemet.
