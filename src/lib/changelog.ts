@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Flera observationer per dag",
+    items: [
+      "Varje loggning i Mitt batteri blir en egen tidsstämplad observation (2026-08-29)",
+      "Idag-vy visar energi och mående över dagen med fritext (2026-08-29)",
+      "Fristående måendesidan är read-only – loggning sker i Mitt batteri (2026-08-29)",
+    ],
+  },
+  {
     title: "Redigera dagens loggning",
     items: [
       "Ändra dagens energi, mående och fritext direkt i Mitt batteri – samma logg uppdateras (2026-08-29)",

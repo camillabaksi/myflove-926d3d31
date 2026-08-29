@@ -52,7 +52,7 @@ describe("Mitt batteri – den kanoniska loggningsvyn", () => {
     expect(logEnergy).toHaveBeenCalledTimes(1);
   });
 
-  it("sparar fritexten tillsammans med måendet i befintlig datamodell", () => {
+  it("sparar fritexten tillsammans med observationen i befintlig datamodell", () => {
     render(<SimpleCheckin />);
     fireEvent.change(screen.getByPlaceholderText(/Sovit bara 4 timmar/i), {
       target: { value: "Jag sov bara 4 timmar och är dessutom sjuk." },
@@ -61,7 +61,6 @@ describe("Mitt batteri – den kanoniska loggningsvyn", () => {
     expect(logMood).toHaveBeenCalledWith(
       expect.any(Number),
       "Jag sov bara 4 timmar och är dessutom sjuk.",
-      true,
     );
   });
 
@@ -75,34 +74,21 @@ describe("Mitt batteri – den kanoniska loggningsvyn", () => {
     expect(serialized).not.toContain("sjuk");
   });
 
-  it("redigerar dagens loggning: laddar sparad fritext och visar uppdateringsläge", () => {
+  it("flera loggningar samma dag är tillåtna – formuläret blockeras aldrig", () => {
+    // Användaren har redan loggat i morse.
     checkinState = {
-      moodValue: 6,
-      energyValue: 4,
-      todayMood: { id: "m1", score: 3, note: "Sovit dåligt flera nätter.", date: Date.now() },
+      moodValue: 4,
+      energyValue: 6,
+      todayMood: { id: "m1", score: 2, note: "Tung morgon.", date: Date.now() },
     };
     render(<SimpleCheckin />);
-    const field = screen.getByPlaceholderText(/Sovit bara 4 timmar/i) as HTMLTextAreaElement;
-    expect(field.value).toBe("Sovit dåligt flera nätter.");
-    const button = screen.getByRole("button", { name: /Uppdatera dagens loggning/i });
-    fireEvent.change(field, { target: { value: "Ändrat: sov bättre i natt." } });
+    // Samma knapp, inget "du har redan loggat"-läge.
+    const button = screen.getByRole("button", { name: /^Logga energi & mående$/i });
+    expect(button).toBeTruthy();
+    expect(screen.queryByText(/redan loggat/i)).toBeNull();
     fireEvent.click(button);
-    expect(logMood).toHaveBeenCalledWith(expect.any(Number), "Ändrat: sov bättre i natt.", true);
-    // Samma logg uppdateras – inget nytt separat flöde skapas.
     expect(logEnergy).toHaveBeenCalledTimes(1);
-  });
-
-  it("låter användaren rensa fritexten vid redigering", () => {
-    checkinState = {
-      moodValue: 6,
-      energyValue: 4,
-      todayMood: { id: "m1", score: 3, note: "Bråkat hemma.", date: Date.now() },
-    };
-    render(<SimpleCheckin />);
-    const field = screen.getByPlaceholderText(/Sovit bara 4 timmar/i);
-    fireEvent.change(field, { target: { value: "" } });
-    fireEvent.click(screen.getByRole("button", { name: /Uppdatera dagens loggning/i }));
-    // Tom text skickas som undefined + replaceNote så att gamla texten tas bort.
-    expect(logMood).toHaveBeenCalledWith(expect.any(Number), undefined, true);
+    // Formuläret är direkt redo för nästa observation.
+    expect(screen.getByRole("button", { name: /Logga energi & mående|Tack/i })).toBeTruthy();
   });
 });
