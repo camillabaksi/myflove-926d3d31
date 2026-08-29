@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Samma blockdesign på övriga sidor",
+    items: [
+      "Gemensamt blockspråk (tvåkolumns-grid, mjuka rundade kort, områdesfärgade borders) på Matlista, Träning, Stop-paus, Quickflow, Relationer, Barn, Familj, Ekonomi, Resor, Timer, Belöningar, Veckans flow, Studyflow, Jobb, Workflow, Daglig rutin, Friktionsindex, Livsprofil och Statistik (2026-08-29)",
+      "Påminnelser: blocken bär nu idag-områdets mjuka border (2026-08-29)",
+      "Endast presentation – data, logik, navigation och funktionalitet är oförändrade (2026-08-29)",
+    ],
+  },
+  {
     title: "Samma blockpolish på Hälsa, Planera och Kalender",
     items: [
       "Hälsa: Träning- och Rutiner-korten följer Hem-blockens formspråk med mjuk border och pil (2026-08-29)",

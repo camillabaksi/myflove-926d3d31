@@ -1,4 +1,5 @@
 import Layout from "@/components/layout";
+import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { MyFloveCelebration } from "@/components/myflove/motion";
 import { useMoods, useTasks, useFocus, useMedications } from "@/hooks/use-data";
 import { useLocalStorage } from "@/lib/storage";
@@ -24,51 +25,55 @@ export default function Achievements() {
 
   return (
     <Layout>
-      <div className="space-y-8">
-        <div>
-          <h1 className="text-3xl font-bold mb-2">Belöningar</h1>
-          <p className="text-muted-foreground">
-            {unlockedCount} av {achievements.length} upplåsta — varje litet steg räknas.
-          </p>
-          <div className="mt-3">
-            {unlockedCount > 0 && (
-              <MyFloveCelebration
-                level={unlockedCount >= 6 ? 3 : unlockedCount >= 3 ? 2 : 1}
-                message="Du har samlat på dig fler små steg än du tror."
-              />
-            )}
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {achievements.map((achievement) => (
-            <div
-              key={achievement.id}
-              className={`flex items-center gap-4 p-5 rounded-2xl border shadow-sm transition-all ${
-                achievement.unlocked
-                  ? "bg-card border-primary/30"
-                  : "bg-secondary/30 border-border opacity-60"
-              }`}
-            >
-              <div
-                className={`w-14 h-14 rounded-full flex items-center justify-center shrink-0 text-2xl ${
-                  achievement.unlocked ? "bg-primary/10" : "bg-secondary"
-                }`}
-              >
-                {achievement.unlocked ? (
-                  achievement.emoji
-                ) : (
-                  <Lock size={22} className="text-muted-foreground" />
+      <MyFlovePageGrid area="aterhamtning">
+        <MyFloveWide>
+          <div className="space-y-8">
+            <div>
+              <h1 className="text-3xl font-bold mb-2">Belöningar</h1>
+              <p className="text-muted-foreground">
+                {unlockedCount} av {achievements.length} upplåsta — varje litet steg räknas.
+              </p>
+              <div className="mt-3">
+                {unlockedCount > 0 && (
+                  <MyFloveCelebration
+                    level={unlockedCount >= 6 ? 3 : unlockedCount >= 3 ? 2 : 1}
+                    message="Du har samlat på dig fler små steg än du tror."
+                  />
                 )}
               </div>
-              <div>
-                <p className="font-medium">{achievement.title}</p>
-                <p className="text-sm text-muted-foreground">{achievement.description}</p>
-              </div>
             </div>
-          ))}
-        </div>
-      </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {achievements.map((achievement) => (
+                <div
+                  key={achievement.id}
+                  className={`flex items-center gap-4 p-5 rounded-2xl border shadow-sm transition-all ${
+                    achievement.unlocked
+                      ? "bg-card border-primary/30"
+                      : "bg-secondary/30 border-border opacity-60"
+                  }`}
+                >
+                  <div
+                    className={`w-14 h-14 rounded-full flex items-center justify-center shrink-0 text-2xl ${
+                      achievement.unlocked ? "bg-primary/10" : "bg-secondary"
+                    }`}
+                  >
+                    {achievement.unlocked ? (
+                      achievement.emoji
+                    ) : (
+                      <Lock size={22} className="text-muted-foreground" />
+                    )}
+                  </div>
+                  <div>
+                    <p className="font-medium">{achievement.title}</p>
+                    <p className="text-sm text-muted-foreground">{achievement.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </MyFloveWide>
+      </MyFlovePageGrid>
     </Layout>
   );
 }
