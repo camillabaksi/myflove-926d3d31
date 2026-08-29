@@ -323,20 +323,10 @@ export default function Home() {
         {/* Mitt batteri – högst upp och ett enda helt klickbart kort. */}
         {shows("batteri") && (
           <section style={pos("batteri")} aria-label="Mitt batteri">
-            <MyFloveBlock
-              title="Mitt batteri"
-              subtitle="Din energi och ditt mående just nu"
-              collapsible
-              collapseId="hem::mitt-batteri"
-              status={`${Math.round(reading.now)}% energi`}
-              tone="sun"
-              surface="sun"
-            >
-              <EnergyBattery
-                href="/mitt-batteri"
-                onNavigate={() => track("battery_opened", { source: "hem" })}
-              />
-            </MyFloveBlock>
+            <EnergyBattery
+              href="/mitt-batteri"
+              onNavigate={() => track("battery_opened", { source: "hem" })}
+            />
           </section>
         )}
 
