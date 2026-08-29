@@ -11,6 +11,7 @@
  * presentation.
  */
 import * as React from "react";
+import { createPortal } from "react-dom";
 import { ChevronRight, X, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MyFloveIcon, type MyFloveTone } from "@/components/myflove";
@@ -138,48 +139,59 @@ export function ExpandableBlock({
         )}
       </button>
 
-      {open && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label={label}
-          className="fixed inset-0 z-50 flex flex-col bg-background/80 backdrop-blur-sm animate-fade-in motion-reduce:animate-none"
-        >
-          <button
-            type="button"
-            aria-hidden="true"
-            tabIndex={-1}
-            onClick={() => setOpen(false)}
-            className="absolute inset-0 h-full w-full cursor-default"
-          />
-          <div className="relative mx-auto flex h-full w-full max-w-3xl flex-col overflow-hidden p-2 sm:p-4">
-            <div
-              className={cn(
-                "flex min-h-0 flex-1 flex-col rounded-3xl border border-border/60 shadow-lifted animate-scale-in motion-reduce:animate-none",
-                surface ? SURFACE[surface] : "bg-card",
-              )}
-            >
-              <div className="flex items-start gap-3 border-b border-border/50 p-4">
-                {visual ?? (icon && <MyFloveIcon icon={icon} tone={tone} size="sm" />)}
-                <div className="min-w-0 flex-1">
-                  <h2 className="font-display text-lg font-bold leading-tight text-ink">{title}</h2>
-                  {subtitle && <p className="mt-0.5 text-sm text-muted-foreground">{subtitle}</p>}
+      {open &&
+        // Portal till <body>: annars kan en ancestor med transform/filter
+        // (t.ex. sidans fade-animation) göra "fixed" relativ till gridcellen
+        // och det maximerade blocket ärver kolumnbredden.
+        createPortal(
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label={label}
+            className="fixed inset-0 z-50 flex h-[100dvh] w-screen max-w-none flex-col overflow-x-hidden bg-background/80 backdrop-blur-sm animate-fade-in motion-reduce:animate-none"
+          >
+            <button
+              type="button"
+              aria-hidden="true"
+              tabIndex={-1}
+              onClick={() => setOpen(false)}
+              className="absolute inset-0 h-full w-full cursor-default"
+            />
+            <div className="relative mx-auto flex h-full w-full max-w-3xl flex-col overflow-hidden p-2 sm:p-4">
+              <div
+                className={cn(
+                  "flex min-h-0 w-full flex-1 flex-col rounded-3xl border border-border/60 shadow-lifted animate-scale-in motion-reduce:animate-none",
+                  surface ? SURFACE[surface] : "bg-card",
+                )}
+              >
+                <div className="flex items-start gap-3 border-b border-border/50 p-4">
+                  {visual ?? (icon && <MyFloveIcon icon={icon} tone={tone} size="sm" />)}
+                  <div className="min-w-0 flex-1">
+                    <h2 className="font-display text-lg font-bold leading-tight text-ink">
+                      {title}
+                    </h2>
+                    {subtitle && (
+                      <p className="mt-0.5 text-sm text-muted-foreground">{subtitle}</p>
+                    )}
+                  </div>
+                  <button
+                    type="button"
+                    ref={closeRef}
+                    onClick={() => setOpen(false)}
+                    aria-label="Stäng"
+                    className="press flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border/60 bg-card text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  >
+                    <X size={18} aria-hidden="true" />
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  ref={closeRef}
-                  onClick={() => setOpen(false)}
-                  aria-label="Stäng"
-                  className="press flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border/60 bg-card text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                >
-                  <X size={18} aria-hidden="true" />
-                </button>
+                <div className="min-w-0 w-full flex-1 space-y-4 overflow-y-auto overflow-x-hidden p-4">
+                  {children}
+                </div>
               </div>
-              <div className="min-w-0 flex-1 space-y-4 overflow-y-auto p-4">{children}</div>
             </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body,
+        )}
     </>
   );
 }
