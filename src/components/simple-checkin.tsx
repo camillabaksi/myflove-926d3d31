@@ -46,7 +46,7 @@ export default function SimpleCheckin({
   className?: string;
   source?: string;
 }) {
-  const { moodValue, energyValue, todayMood, logMood, logEnergy } = useQuickCheckin();
+  const { moodValue, energyValue, logMood, logEnergy } = useQuickCheckin();
   const { addFactor } = useEnergyFlow();
   const { explain } = useFlowExplainer();
   const energyExplainer = explain("energi");
@@ -73,20 +73,6 @@ export default function SimpleCheckin({
     if (incoming) setNote(incoming);
   }, []);
 
-  // Redigering: ladda dagens sparade fritext i fältet (en gång, skriver
-  // aldrig över det användaren redan börjat skriva eller ?note=).
-  const notePrefilledRef = useRef(false);
-  useEffect(() => {
-    if (notePrefilledRef.current || note !== "") return;
-    const existing = todayMood?.note;
-    if (existing) {
-      setNote(existing);
-      notePrefilledRef.current = true;
-    }
-  }, [todayMood, note]);
-
-  const hasLoggedToday = moodValue != null || energyValue != null;
-
   const markStarted = (kind: "battery" | "mood") => {
     if (started) return;
     setStarted(true);
@@ -100,8 +86,8 @@ export default function SimpleCheckin({
     const text = note.trim();
     // Fritexten hör ihop med måendet – sparas på befintlig måendepost.
     if (mood != null || text) {
-      // replaceNote: redigering ersätter dagens text (tom text rensar).
-      logMood(mood ?? Math.max(1, Math.min(10, battery)), text || undefined, true);
+      // Varje sparning är en egen tidsstämplad observation – inget skrivs över.
+      logMood(mood ?? Math.max(1, Math.min(10, battery)), text || undefined);
       track("mood_checkin_completed", { source, method: "emoji", result: "completed" });
       track("mood_logged", { source, method: "emoji" });
     }
