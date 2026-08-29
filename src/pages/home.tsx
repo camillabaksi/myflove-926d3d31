@@ -355,9 +355,9 @@ export default function Home() {
               status="Insikter"
               tone="lavender"
               surface="lavender"
-            >
-              <FlowLearningCard bare />
-            </ExpandableBlock>
+              href="/insight"
+              onNavigate={() => track("flow_learning_opened", { source: "hem" })}
+            />
           </div>
         )}
 
@@ -374,35 +374,8 @@ export default function Home() {
               summary={nextEvent ? nextEvent.title : "Inget inplanerat just nu"}
               tone="sky"
               surface="sky"
-            >
-              {nextEvent ? (
-                <Link
-                  href="/idag"
-                  className="group flex items-center gap-4 rounded-2xl bg-card/70 p-4 transition-colors hover:bg-card"
-                >
-                  <span aria-hidden className="text-2xl">
-                    {nextEvent.emoji}
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate font-medium text-ink">{nextEvent.title}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {nextEvent.time
-                        ? `kl ${nextEvent.time}${nextEvent.endTime ? `–${nextEvent.endTime}` : ""}`
-                        : "Saknar klockslag"}
-                    </p>
-                  </div>
-                  <ArrowRight
-                    size={18}
-                    className="shrink-0 text-muted-foreground group-hover:text-foreground"
-                  />
-                </Link>
-              ) : (
-                <p className="rounded-2xl bg-card/70 p-4 text-sm text-muted-foreground">
-                  Ingen aktivitet inplanerad just nu. Lägg till en påminnelse eller uppgift så dyker
-                  den upp här.
-                </p>
-              )}
-            </ExpandableBlock>
+              href="/idag"
+            />
           </section>
         )}
 
