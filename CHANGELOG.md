@@ -1,11 +1,17 @@
 # Changelog
 
+## 2026-08-29 – Hem i samma designspråk som Hälsa
+
+- Hemblocken har nu tre informationsnivåer i komprimerat läge: rubrik, kort underrubrik (3–8 ord) och aktuellt värde – t.ex. "Mitt batteri · Energi och mående · 33 % · Låg energi just nu".
+- Widget-minimalismen (bara ikon + ett ord) är borta från Hem; blocken är större, luftigare och pastellfärgade enligt områdesfärgerna, precis som Hälsa.
+- Tryck expanderar fortfarande endast det blocket på plats med mjuk animation, och stängning återgår till samma position.
+- Tvåkolumnsrutnätet på mobil, data, stores, loggning, routes och Flow-logik är oförändrade.
+
 ## 2026-08-29 – Hem återställt som samlad överblick
 
 - Alla hemblock visas igen som komprimerade widgets: Mitt batteri, Flow, Nästa, Dagens översikt, Lägg till i dagen, Rutiner & medicin, Vad behöver du just nu och områdesväljaren.
 - "Lägg till i dagen" följer nu samma blockspråk – komprimerat kort (＋ Lägg till) som öppnar snabbtillägg och "Jag gjorde något" när man trycker.
 - Inget innehåll är borttaget; information har bara flyttats från långa listor till kompakt block → tryck → expandera.
-
 
 ## 2026-08-29 – Widget-minimalism på fler dashboard-sidor
 
