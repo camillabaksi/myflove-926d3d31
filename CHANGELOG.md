@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-29 – Responsivt blocksystem
+
+- Hem är nu ett dashboard: Mitt batteri och "Flow lär känna dig" ligger sida vid sida, följt av Just nu/Nästa och övriga block i två kolumner.
+- Nya layoutkomponenter `MyFlovePageGrid` och `MyFloveWide` ger samma blockrutnät på Hem, Idag, Hälsa och Mitt batteri.
+- Långa texter, formulär, tidslinjer och grafer använder fortsatt hela bredden; på små skärmar blir allt en kolumn utan sidoscroll.
+- Endast layout – funktioner, data, logik, navigation och tester är oförändrade (207/207 gröna).
+
 ## 2026-08-29 – Ren kodbas (lint-städning)
 
 - Alla lint-varningar åtgärdade: hjälpfunktioner flyttade ur komponentfiler till egna moduler (`scenes.ts`, `recurrence.ts`, `battery-observations.ts`) och hook-beroenden memoiserade.
