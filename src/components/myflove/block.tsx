@@ -155,7 +155,7 @@ export function MyFloveBlockGrid({
   return (
     <div
       className={cn(
-        "grid min-w-0 grid-cols-2 items-start gap-3 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4",
+        "grid min-w-0 grid-cols-2 items-start gap-3 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4 [&>*:has([data-expanded='true'])]:col-span-full",
         className,
       )}
     >
@@ -182,7 +182,7 @@ export function MyFlovePageGrid({
     <div
       style={style}
       className={cn(
-        "grid min-w-0 grid-cols-2 items-start gap-3 md:grid-cols-3 md:gap-5 xl:grid-cols-4",
+        "grid min-w-0 grid-cols-2 items-start gap-3 md:grid-cols-3 md:gap-5 xl:grid-cols-4 [&>*:has([data-expanded='true'])]:col-span-full",
         className,
       )}
     >
