@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Mer: strukturerade sektioner längst ner",
+    items: [
+      "Mer-sidan är grupperad i Min profil, Anpassa MyFlove, Kom igång och Ljud & konto (2026-08-29)",
+      "Din bottenmeny ligger under Anpassa MyFlove; Installera appen ligger under Kom igång (2026-08-29)",
+    ],
+  },
+  {
     title: "Mer/Inställningar: en primär väg in per funktion",
     items: [
       "Dubbletterna i Mer är borta – Anpassa appen, Hemskärm och Min livsprofil finns nu på ett ställe (2026-08-29)",
