@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import {
   EMPTY_FOLLOWUPS,
@@ -25,11 +25,14 @@ export function useLifeProfile() {
   const [legacyStudy] = useCloudSyncedStorage<StudyProfile>(LEGACY_STUDY_KEY, EMPTY_STUDY_PROFILE);
   const migratedRef = useRef(false);
 
-  const profile: LifeProfile = {
-    ...EMPTY_LIFE_PROFILE,
-    ...stored,
-    followups: { ...EMPTY_FOLLOWUPS, ...(stored?.followups ?? {}) },
-  };
+  const profile: LifeProfile = useMemo(
+    () => ({
+      ...EMPTY_LIFE_PROFILE,
+      ...stored,
+      followups: { ...EMPTY_FOLLOWUPS, ...(stored?.followups ?? {}) },
+    }),
+    [stored],
+  );
 
   // Migrera gammal jobb-/studieprofil en gång, när den faktiskt innehåller något.
   useEffect(() => {

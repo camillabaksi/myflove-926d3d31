@@ -24,7 +24,7 @@ import { useTasks, useReminders } from "@/hooks/use-data";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { useDayPlan } from "@/lib/day-plan";
 import { todayISO as todayStr } from "@/lib/day";
-import type { Routine } from "@/pages/routines";
+import type { Routine } from "@/lib/recurrence";
 import { CalendarDays, ListOrdered, Sparkles, Heart, Waves, ListChecks } from "lucide-react";
 import { MyFloveTransition } from "@/components/myflove/motion";
 

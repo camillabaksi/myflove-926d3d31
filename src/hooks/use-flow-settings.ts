@@ -69,7 +69,8 @@ export function useFlowSettings() {
   );
 
   const update = useCallback(
-    (patch: Partial<FlowSettings>) => setSettings((prev) => ({ ...DEFAULT_FLOW_SETTINGS, ...prev, ...patch })),
+    (patch: Partial<FlowSettings>) =>
+      setSettings((prev) => ({ ...DEFAULT_FLOW_SETTINGS, ...prev, ...patch })),
     [setSettings],
   );
 

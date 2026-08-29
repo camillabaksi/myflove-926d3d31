@@ -53,3 +53,22 @@ export function detectRepeat(text: string): RepeatMode {
     return "weekly";
   return "none";
 }
+
+export interface Routine {
+  id: string;
+  title: string;
+  time: string; // HH:MM
+  enabled: boolean;
+  createdAt: number;
+  /** Hur ofta rutinen sker. Saknas = varje dag (gammal data). */
+  repeat?: RepeatMode;
+  /** Startdatum (YYYY-MM-DD). Krävs för engångsrutiner. */
+  startDate?: string;
+}
+
+/** Sker rutinen den här dagen? */
+export function routineOccursOn(routine: Routine, dateStr: string): boolean {
+  const repeat = routine.repeat ?? "daily";
+  if (repeat === "daily" && !routine.startDate) return true;
+  return occursOn(routine.startDate ?? dateStr, repeat, dateStr);
+}

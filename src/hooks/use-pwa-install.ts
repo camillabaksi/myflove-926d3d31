@@ -36,17 +36,14 @@ function isStandalone(): boolean {
   if (embedded) return false;
   const navStandalone = (window.navigator as Navigator & { standalone?: boolean }).standalone;
   return (
-    window.matchMedia?.("(display-mode: standalone)").matches === true ||
-    navStandalone === true
+    window.matchMedia?.("(display-mode: standalone)").matches === true || navStandalone === true
   );
 }
 
 function isIosSafari(): boolean {
   if (typeof window === "undefined") return false;
   const ua = window.navigator.userAgent;
-  const iOS =
-    /iPad|iPhone|iPod/.test(ua) ||
-    (ua.includes("Macintosh") && "ontouchend" in document); // iPadOS
+  const iOS = /iPad|iPhone|iPod/.test(ua) || (ua.includes("Macintosh") && "ontouchend" in document); // iPadOS
   if (!iOS) return false;
   // Chrome/Firefox på iOS kan inte heller installera – samma instruktion gäller.
   return true;

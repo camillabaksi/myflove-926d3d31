@@ -9,7 +9,7 @@ import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import { useDoneLog } from "@/hooks/use-done-log";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { getArea } from "@/lib/life-areas";
-import { routineOccursOn, type Routine } from "@/pages/routines";
+import { routineOccursOn, type Routine } from "@/lib/recurrence";
 import { occursOn } from "@/lib/recurrence";
 
 import {
@@ -128,7 +128,6 @@ export function useFlowItems(dateISO?: string): {
         href: "/kalender",
       });
     }
-
 
     for (const l of lectures) {
       if (l.weekday !== weekday) continue;

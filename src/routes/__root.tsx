@@ -1,5 +1,11 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Outlet, createRootRouteWithContext, HeadContent, Scripts, useRouterState } from "@tanstack/react-router";
+import {
+  Outlet,
+  createRootRouteWithContext,
+  HeadContent,
+  Scripts,
+  useRouterState,
+} from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
 import { initCacheBusting } from "@/lib/cache-busting";
@@ -9,9 +15,6 @@ import appCss from "../styles.css?url";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-
-
-
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
@@ -120,5 +123,4 @@ function RootComponent() {
       </TooltipProvider>
     </QueryClientProvider>
   );
-
 }

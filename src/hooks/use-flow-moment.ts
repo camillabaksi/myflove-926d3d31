@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
-import { sceneForTask, type FlowScene } from "@/components/flow/flow-character";
+import { sceneForTask } from "@/components/flow/scenes";
+import type { FlowScene } from "@/components/flow/flow-character";
 import { useTasks, useReminders, useMedications } from "@/hooks/use-data";
 import { useChildren } from "@/hooks/use-children";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { useWeather } from "@/hooks/use-weather";
 import { useWeatherForecast, forecastAt, isWetHour } from "@/hooks/use-weather-forecast";
-import { isWetWeather } from "@/components/flow/flow-character";
+import { isWetWeather } from "@/components/flow/scenes";
 import { useFlowLearning } from "@/hooks/use-flow-learning";
 import { useFlowSettings } from "@/hooks/use-flow-settings";
 import { learningMessage } from "@/lib/flow-learning";

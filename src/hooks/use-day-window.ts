@@ -24,19 +24,26 @@ export function useDayWindow() {
   const todayEdges = useMemo<DayEdgeEntry>(() => edges?.[today] ?? {}, [edges, today]);
 
   const setWindow = useCallback(
-    (next: Partial<DayWindow>) => setWindowRaw((prev) => ({ ...DEFAULT_DAY_WINDOW, ...prev, ...next })),
+    (next: Partial<DayWindow>) =>
+      setWindowRaw((prev) => ({ ...DEFAULT_DAY_WINDOW, ...prev, ...next })),
     [setWindowRaw],
   );
 
   const setMorning = useCallback(
     (value: number) =>
-      setEdges((prev) => ({ ...(prev ?? {}), [today]: { ...(prev?.[today] ?? {}), morning: value } })),
+      setEdges((prev) => ({
+        ...(prev ?? {}),
+        [today]: { ...(prev?.[today] ?? {}), morning: value },
+      })),
     [setEdges, today],
   );
 
   const setEvening = useCallback(
     (value: number) =>
-      setEdges((prev) => ({ ...(prev ?? {}), [today]: { ...(prev?.[today] ?? {}), evening: value } })),
+      setEdges((prev) => ({
+        ...(prev ?? {}),
+        [today]: { ...(prev?.[today] ?? {}), evening: value },
+      })),
     [setEdges, today],
   );
 

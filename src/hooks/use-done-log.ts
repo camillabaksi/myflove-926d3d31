@@ -51,7 +51,6 @@ export function useDoneLog(dayISO?: string) {
 
   const isDone = useCallback((id: string) => (log?.[day] ?? []).includes(id), [log, day]);
 
-
   const toggleDone = useCallback(
     (id: string) => {
       setLog((prev) => {

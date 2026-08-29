@@ -3,7 +3,7 @@ import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { useDoneLog } from "@/hooks/use-done-log";
 import { useMedications } from "@/hooks/use-data";
 import { useTraining } from "@/hooks/use-training";
-import { routineOccursOn, type Routine } from "@/pages/routines";
+import { routineOccursOn, type Routine } from "@/lib/recurrence";
 import { medicationOccursOn } from "@/lib/medications";
 
 export interface DayDoneLine {

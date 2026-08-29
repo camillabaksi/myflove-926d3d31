@@ -18,7 +18,7 @@ import { useUserProfile } from "@/hooks/use-user-profile";
 import { getGreeting } from "@/lib/greeting";
 import { useTasks, useReminders, useMedications, type Task, type Reminder } from "@/hooks/use-data";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
-import type { Routine } from "@/pages/routines";
+import type { Routine } from "@/lib/recurrence";
 import { useStudySchedule } from "@/hooks/use-study-schedule";
 import { suggestNow, type NowSuggestion } from "@/lib/flow-engine";
 

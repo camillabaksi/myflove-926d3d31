@@ -6,8 +6,16 @@ import { cleanup } from "@testing-library/react";
 export const MOBILE_WIDTH = 390;
 export const MOBILE_HEIGHT = 844;
 
-Object.defineProperty(window, "innerWidth", { writable: true, configurable: true, value: MOBILE_WIDTH });
-Object.defineProperty(window, "innerHeight", { writable: true, configurable: true, value: MOBILE_HEIGHT });
+Object.defineProperty(window, "innerWidth", {
+  writable: true,
+  configurable: true,
+  value: MOBILE_WIDTH,
+});
+Object.defineProperty(window, "innerHeight", {
+  writable: true,
+  configurable: true,
+  value: MOBILE_HEIGHT,
+});
 
 if (!window.matchMedia) {
   window.matchMedia = ((query: string) => ({
