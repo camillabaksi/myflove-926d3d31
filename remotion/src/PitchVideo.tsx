@@ -43,9 +43,7 @@ const Shell: React.FC<{ children: React.ReactNode; dark?: boolean }> = ({
   const frame = useCurrentFrame();
   const drift = Math.sin(frame / 50) * 12;
   return (
-    <AbsoluteFill
-      style={{ background: dark ? COLORS.ink : COLORS.bg, overflow: "hidden" }}
-    >
+    <AbsoluteFill style={{ background: dark ? COLORS.ink : COLORS.bg, overflow: "hidden" }}>
       <div
         style={{
           position: "absolute",
@@ -305,10 +303,7 @@ const SceneProduct: React.FC = () => (
   </Shell>
 );
 
-const FlowMascot: React.FC<{ size?: number; delay?: number }> = ({
-  size = 420,
-  delay = 8,
-}) => {
+const FlowMascot: React.FC<{ size?: number; delay?: number }> = ({ size = 420, delay = 8 }) => {
   const frame = useCurrentFrame();
   const enter = useIn(delay, 14);
   const bob = Math.sin(frame / 22) * 12;
@@ -405,7 +400,6 @@ const SceneFlowAlive: React.FC = () => {
 };
 
 const SceneHow: React.FC = () => {
-
   const steps = [
     { n: "1", t: "Fånga", d: "Skriv fritt i QuickFlow" },
     { n: "2", t: "Sortera", d: "AI placerar rätt: kalender, inköp, studier" },
@@ -482,8 +476,8 @@ const SceneWhyNow: React.FC = () => (
         Diagnoser ökar. Stödet gör det inte.
       </Title>
       <Sub dark delay={16}>
-        AI gör det för första gången möjligt att ge personligt, tålmodigt stöd i vardagen — till
-        en kostnad som skalar.
+        AI gör det för första gången möjligt att ge personligt, tålmodigt stöd i vardagen — till en
+        kostnad som skalar.
       </Sub>
       <div
         style={{
@@ -643,41 +637,40 @@ const SceneMarket: React.FC = () => {
 };
 
 const SceneOutro: React.FC = () => {
-
   const frame = useCurrentFrame();
   const glow = 0.35 + Math.sin(frame / 20) * 0.08;
   return (
     <Shell dark>
       <div style={{ display: "flex", alignItems: "center", gap: 70 }}>
-      <div style={{ display: "flex", flexDirection: "column", gap: 30, flex: 1 }}>
-        <div
-          style={{
-            ...useIn(4),
-            width: 120,
-            height: 18,
-            borderRadius: 9,
-            background: COLORS.primary,
-            boxShadow: `0 0 90px rgba(124,92,224,${glow})`,
-          }}
-        />
-        <Title dark size={104}>
-          MyFlove
-        </Title>
-        <Sub dark delay={16}>
-          Ett lugnare sätt att få vardagen att hålla ihop.
-        </Sub>
-        <div
-          style={{
-            ...useIn(26),
-            fontFamily: FONTS.body,
-            fontSize: 28,
-            color: COLORS.primarySoft,
-            letterSpacing: 1,
-          }}
-        >
-          myflove.lovable.app
+        <div style={{ display: "flex", flexDirection: "column", gap: 30, flex: 1 }}>
+          <div
+            style={{
+              ...useIn(4),
+              width: 120,
+              height: 18,
+              borderRadius: 9,
+              background: COLORS.primary,
+              boxShadow: `0 0 90px rgba(124,92,224,${glow})`,
+            }}
+          />
+          <Title dark size={104}>
+            MyFlove
+          </Title>
+          <Sub dark delay={16}>
+            Ett lugnare sätt att få vardagen att hålla ihop.
+          </Sub>
+          <div
+            style={{
+              ...useIn(26),
+              fontFamily: FONTS.body,
+              fontSize: 28,
+              color: COLORS.primarySoft,
+              letterSpacing: 1,
+            }}
+          >
+            myflove.lovable.app
+          </div>
         </div>
-      </div>
         <FlowMascot size={440} delay={14} />
       </div>
     </Shell>
@@ -697,8 +690,7 @@ const SCENES: { c: React.FC; d: number }[] = [
   { c: SceneOutro, d: 150 },
 ];
 
-export const TOTAL_FRAMES =
-  SCENES.reduce((a, s) => a + s.d, 0) - TRANS * (SCENES.length - 1);
+export const TOTAL_FRAMES = SCENES.reduce((a, s) => a + s.d, 0) - TRANS * (SCENES.length - 1);
 
 export const PitchVideo: React.FC = () => (
   <TransitionSeries>

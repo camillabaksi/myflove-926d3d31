@@ -6,16 +6,20 @@ import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { useAnimatedNumber } from "@/hooks/use-animated-number";
 import { minutesToTime } from "@/lib/energy-battery";
 import { MyFloveBlock, MyFloveStat } from "@/components/myflove/block";
+import { MyFloveIcon } from "@/components/myflove";
 
 /** Mitt batteri – översikt över nu-läget och den befintliga energikurvan. */
 export default function EnergyBattery({
   defaultOpen = false,
   href,
   onNavigate,
+  widget = false,
 }: {
   defaultOpen?: boolean;
   href?: string;
   onNavigate?: () => void;
+  /** Widget-läge på Hem: stor ikon + batterinivå, inget mer. */
+  widget?: boolean;
 }) {
   const { reading, suggestions } = useEnergyBattery();
   const { moodValue } = useQuickCheckin();
@@ -36,6 +40,28 @@ export default function EnergyBattery({
       : reading.trend === "sjunker"
         ? "på väg ner"
         : "ganska jämn";
+
+  // Widget-läge (Hem): stor ikon + batterinivå, inget mer. Hela kortet är en länk.
+  if (widget && href) {
+    return (
+      <Link
+        href={href}
+        onClick={onNavigate}
+        data-testid="battery-card"
+        aria-label={`Mitt batteri, ${shownLevel} procent. Öppna för att logga energi och mående.`}
+        className="press block rounded-3xl border border-border/60 bg-sun/50 shadow-soft transition-shadow hover:shadow-lifted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+      >
+        <span className="flex flex-col items-center justify-center gap-1.5 px-3 py-6 text-center">
+          <MyFloveIcon icon={BatteryCharging} tone="sun" size="lg" />
+          <span className="font-display text-2xl font-bold leading-none text-ink">
+            {shownLevel}%
+          </span>
+          <span className="text-xs font-medium text-muted-foreground">Mitt batteri</span>
+        </span>
+      </Link>
+    );
+  }
+
   const content = (
     <>
       <div className="grid grid-cols-1 gap-2 @min-[240px]:grid-cols-2 sm:gap-3">
