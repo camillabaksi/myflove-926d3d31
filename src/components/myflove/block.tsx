@@ -74,6 +74,7 @@ export function MyFloveBlock({
   collapseId,
   defaultCollapsed = false,
   surface,
+  area,
   span,
   className,
   bodyClassName,
@@ -86,7 +87,14 @@ export function MyFloveBlock({
 
   const heading = (
     <div className="flex min-w-0 flex-1 items-start gap-3 text-left">
-      {icon && <MyFloveIcon icon={icon} tone={tone} size="sm" />}
+      {icon && (
+        <MyFloveIcon
+          icon={icon}
+          tone={tone}
+          size="sm"
+          className={area ? "area-bg-soft area-text" : undefined}
+        />
+      )}
       <div className="min-w-0 flex-1">
         {eyebrow && (
           <span className="mb-1 inline-flex rounded-pill bg-primary/10 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-primary">
@@ -113,8 +121,10 @@ export function MyFloveBlock({
   return (
     <section
       data-testid={dataTestId}
+      {...areaProps(area)}
       className={cn(
         "flex min-w-0 flex-col gap-3 rounded-3xl border border-border/60 p-3 shadow-soft sm:gap-4 sm:p-5",
+        area && "area-border",
         surface ? SURFACE[surface] : "bg-card",
         span && "col-span-full",
         className,
