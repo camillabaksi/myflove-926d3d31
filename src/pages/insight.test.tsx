@@ -23,6 +23,10 @@ vi.mock("@tanstack/react-router", () => ({
   useRouterState: ({ select }: { select: (s: unknown) => unknown }) =>
     select({ location: { search: state.demo ? { demo: "1" } : {} } }),
 }));
+// Sidan renderas i appens delade skal; skalet testas separat.
+vi.mock("@/components/layout", () => ({
+  default: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+}));
 vi.mock("@/hooks/use-data", () => ({
   useTasks: () => ({ addTask: vi.fn(), completedTasks: state.completed }),
 }));

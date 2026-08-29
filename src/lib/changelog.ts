@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Städning: typsnitt, statistik och konsekventa kort",
+    items: [
+      "Nunito Sans är nu appens enda typsnitt, med emoji-fallback (2026-08-29)",
+      "Sidvisningar loggas på en enda plats så statistiken inte dubbelräknas (2026-08-29)",
+      "Insikter renderas i appens delade skal med bottennavigation och back (2026-08-29)",
+      "Hem: Kalender-kortet och Rutiner & medicin följer samma kortspråk som övriga block (2026-08-29)",
+    ],
+  },
+  {
     title: "Planera: fullbreddsblock i stället för smal vertikal layout",
     items: [
       "Steg 1 och Steg 2 i Planera spänner nu över hela raden, så formulär och lista får hela ytans bredd i stället för att klämmas vertikalt i en halv kolumn (2026-08-29)",
