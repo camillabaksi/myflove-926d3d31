@@ -13,7 +13,7 @@ function timeAgo(ts: number) {
 export function FlowReplanDiff({ diff, onClose }: { diff: FlowDiff; onClose: () => void }) {
   const up = diff.scoreDelta > 0;
   return (
-    <div className="rounded-3xl border border-primary/30 bg-primary/5 p-5">
+    <div className="rounded-3xl border-2 border-primary/30 bg-primary/5 p-5">
       <div className="flex items-start justify-between gap-3">
         <div>
           <h3 className="flex items-center gap-2 font-display text-lg text-ink">

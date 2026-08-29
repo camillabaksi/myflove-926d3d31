@@ -50,7 +50,7 @@ export function InsightQuickflowHint() {
   };
 
   return (
-    <div className="p-5 rounded-3xl border border-primary/30 bg-primary/5 space-y-3">
+    <div className="p-5 rounded-3xl border-2 border-primary/30 bg-primary/5 space-y-3">
       <div className="flex items-start gap-3">
         <Sparkles size={18} className="text-primary mt-0.5 shrink-0" />
         <div className="flex-1">

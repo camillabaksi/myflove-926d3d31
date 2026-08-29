@@ -583,7 +583,7 @@ function DaySummary() {
       data-testid="home-day-summary"
       aria-label={`Dagens översikt, ${todayDone.length} av ${total} klart. Öppna Idag.`}
       {...areaProps("idag")}
-      className="press area-border relative flex min-h-[9rem] min-w-0 flex-col items-center gap-2.5 rounded-3xl border bg-sky/50 p-4 text-center shadow-soft transition-shadow hover:shadow-lifted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:p-5"
+      className="press area-border relative flex min-h-[9rem] min-w-0 flex-col items-center gap-2.5 rounded-3xl border-2 bg-sky/50 p-4 text-center shadow-soft transition-shadow hover:shadow-lifted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:p-5"
     >
       <MyFloveIcon
         icon={Check}

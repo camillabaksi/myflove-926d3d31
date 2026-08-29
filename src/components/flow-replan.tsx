@@ -41,7 +41,7 @@ export function FlowReplan({
   return (
     <section
       className={cn(
-        "rounded-3xl border border-border/60 bg-lavender/60 p-5 shadow-soft",
+        "rounded-3xl border-2 border-border/60 bg-lavender/60 p-5 shadow-soft",
         className,
       )}
     >

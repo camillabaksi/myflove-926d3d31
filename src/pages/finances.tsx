@@ -99,7 +99,7 @@ export default function Finances() {
               </div>
             </div>
 
-            <div className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft">
+            <div className="rounded-3xl border-2 border-border/60 bg-card p-5 shadow-soft">
               <p className="mb-3 text-sm font-semibold text-ink">Balans den här månaden</p>
               <MyFloveBalanceBars
                 bars={[
@@ -112,7 +112,7 @@ export default function Finances() {
 
             <BudgetPanel transactions={transactions} categories={CATEGORIES} />
 
-            <div className="bg-card p-6 rounded-3xl border border-border shadow-sm">
+            <div className="bg-card p-6 rounded-3xl border-2 border-border shadow-sm">
               <CollapsibleSection
                 title="Ny transaktion"
                 help="Här skriver du in pengar in eller ut. Välj typ, skriv summa och vad det gällde – det räcker."

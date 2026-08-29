@@ -247,7 +247,7 @@ export default function Travel() {
 
             <form
               onSubmit={handleSearch}
-              className="bg-card p-6 rounded-3xl border border-border shadow-sm space-y-4"
+              className="bg-card p-6 rounded-3xl border-2 border-border shadow-sm space-y-4"
             >
               <div className="relative">
                 <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground">

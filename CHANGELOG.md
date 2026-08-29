@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-29 – Tjockare kantlinjer på samtliga kort
+
+- Alla kort med blocklayouten har nu 2px-borders i stället för 1px – gemensamma border-tokens (`--border-hairline`, `--border-strong`, `--border-dashed`, `--border-accent`), hero-ytan och alla `rounded-3xl`-kort i sidor och komponenter.
+- Inre avdelare (`border-t`-linjer) är oförändrade.
+- Endast presentation – data, logik och navigation är oförändrade.
+
 ## 2026-08-29 – Hem: Flow-kortet döps om till Kalender
 
 - Kortet som tidigare hette "Flow · just nu" heter nu "Kalender" och leder till Kalender (/kalender).

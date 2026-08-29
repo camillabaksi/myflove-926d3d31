@@ -135,7 +135,7 @@ export function DidThisCta({
           onClick={openModal}
           aria-label="Lägg till det du gjorde"
           className={cn(
-            "press group flex w-full items-center gap-3 rounded-3xl border border-primary/25 bg-primary/5 p-4 text-left shadow-soft transition-colors hover:border-primary/50 hover:bg-primary/10",
+            "press group flex w-full items-center gap-3 rounded-3xl border-2 border-primary/25 bg-primary/5 p-4 text-left shadow-soft transition-colors hover:border-primary/50 hover:bg-primary/10",
             className,
           )}
         >

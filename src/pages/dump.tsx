@@ -215,7 +215,7 @@ export default function Dump() {
                 title="Skriv eller prata in"
                 description="Allt som snurrar – huller om buller går bra. Tryck sedan på Sortera."
               >
-                <div className="relative rounded-3xl border border-border/60 bg-card p-2 shadow-soft transition-all focus-within:ring-2 focus-within:ring-primary/20">
+                <div className="relative rounded-3xl border-2 border-border/60 bg-card p-2 shadow-soft transition-all focus-within:ring-2 focus-within:ring-primary/20">
                   <textarea
                     value={rawText}
                     onChange={(e) => setRawText(e.target.value)}

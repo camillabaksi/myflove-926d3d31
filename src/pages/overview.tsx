@@ -29,7 +29,7 @@ export default function OverviewPage() {
           <section
             key={group.id}
             aria-label={group.label}
-            className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+            className="rounded-3xl border-2 border-border/60 bg-card p-5 shadow-soft"
           >
             <h2 className="flex items-center gap-2 text-base font-semibold text-ink">
               <span aria-hidden>{group.emoji}</span> {group.label}

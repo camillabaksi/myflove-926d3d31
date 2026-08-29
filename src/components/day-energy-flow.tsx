@@ -105,7 +105,7 @@ export function DayEnergyFlow({
 
   return (
     <section
-      className={cn("rounded-3xl border border-border/60 bg-card p-5 shadow-soft", className)}
+      className={cn("rounded-3xl border-2 border-border/60 bg-card p-5 shadow-soft", className)}
       aria-label="Energins historik idag"
     >
       {showHeader ? (

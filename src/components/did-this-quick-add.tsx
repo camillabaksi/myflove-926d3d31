@@ -116,7 +116,7 @@ export function DidThisQuickAdd({ className }: { className?: string }) {
   return (
     <section
       className={cn(
-        "rounded-3xl border border-border/60 bg-card p-5 shadow-soft space-y-3",
+        "rounded-3xl border-2 border-border/60 bg-card p-5 shadow-soft space-y-3",
         className,
       )}
       aria-label="Lägg till det du gjorde"

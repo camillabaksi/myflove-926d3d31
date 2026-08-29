@@ -147,7 +147,7 @@ export default function BudgetPanel({
   const periodLabel = period === "day" ? "idag" : period === "week" ? "denna vecka" : "denna månad";
 
   return (
-    <section className="bg-card p-6 rounded-3xl border border-border shadow-sm space-y-5">
+    <section className="bg-card p-6 rounded-3xl border-2 border-border shadow-sm space-y-5">
       <CollapsibleSection
         title={
           <span className="inline-flex items-center gap-3">

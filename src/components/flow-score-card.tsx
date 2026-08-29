@@ -15,7 +15,7 @@ export function FlowScoreCard({
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="rounded-3xl border border-border bg-card p-5 shadow-sm">
+    <div className="rounded-3xl border-2 border-border bg-card p-5 shadow-sm">
       <div className="flex items-start gap-4">
         <div className="relative grid h-16 w-16 shrink-0 place-items-center rounded-full border-4 border-sage/50">
           <span className={`font-display text-xl ${scoreTone(flow.score)}`}>{flow.score}</span>

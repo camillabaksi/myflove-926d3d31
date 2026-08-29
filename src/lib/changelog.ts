@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Tjockare kantlinjer på samtliga kort",
+    items: [
+      "Alla kort med blocklayouten har nu 2px-borders i stället för 1px – gemensamma border-tokens, hero-ytan och alla rounded-3xl-kort (2026-08-29)",
+      "Inre avdelare är oförändrade; endast presentation, ingen funktionsändring (2026-08-29)",
+    ],
+  },
+  {
     title: "Hem: Flow-kortet döps om till Kalender",
     items: [
       "Kortet som tidigare hette Flow · just nu heter nu Kalender och leder till Kalender (/kalender) (2026-08-29)",

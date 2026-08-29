@@ -22,7 +22,7 @@ import {
   type ListField,
 } from "@/lib/life-profile";
 
-const card = "rounded-3xl border border-border bg-card p-5 shadow-sm";
+const card = "rounded-3xl border-2 border-border bg-card p-5 shadow-sm";
 
 function Chip({
   active,

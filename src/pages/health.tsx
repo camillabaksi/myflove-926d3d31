@@ -66,7 +66,7 @@ export default function HealthPage() {
                 <li key={a.title} className="min-w-0">
                   <Link
                     href={a.href}
-                    className="press area-border flex h-full min-h-[9rem] min-w-0 flex-col gap-2 rounded-3xl border bg-card p-3 shadow-soft transition-shadow hover:shadow-lifted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:p-4"
+                    className="press area-border flex h-full min-h-[9rem] min-w-0 flex-col gap-2 rounded-3xl border-2 bg-card p-3 shadow-soft transition-shadow hover:shadow-lifted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:p-4"
                   >
                     <span className="flex min-w-0 items-start gap-2.5">
                       <span className="area-bg-soft area-text grid h-10 w-10 shrink-0 place-items-center rounded-xl">

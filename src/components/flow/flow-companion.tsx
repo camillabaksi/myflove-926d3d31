@@ -141,7 +141,7 @@ export default function FlowCompanion({
       data-flow-scene={moment.scene}
       aria-label="Flow"
       className={cn(
-        "flex items-center gap-3 overflow-hidden rounded-3xl border border-border/60 bg-card shadow-sm",
+        "flex items-center gap-3 overflow-hidden rounded-3xl border-2 border-border/60 bg-card shadow-sm",
         isMini ? "p-3" : "p-4",
         className,
       )}
