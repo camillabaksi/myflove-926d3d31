@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Anpassa appen: block sida vid sida med mindre text",
+    items: [
+      "Inställningarna är uppdelade i mindre block som ligger sida vid sida i rutnätet (2026-08-29)",
+      "Varje reglage visar bara en kort rubrik – långa förklaringar är borttagna (2026-08-29)",
+      "Samma blockdesign, rundning, border och färgsystem som resten av appen (2026-08-29)",
+    ],
+  },
+  {
     title: "Hem: 'Jag behöver planera min dag' leder till Planera",
     items: [
       "Situationsvalet pekade på Idag trots att dagens översikt redan har ett eget kort – valet leder nu till /flowplan (2026-08-29)",
