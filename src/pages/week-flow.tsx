@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import Layout from "@/components/layout";
+import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { MyFloveInsightGather } from "@/components/myflove/motion";
 import { CalendarRange } from "lucide-react";
 import { useTasks } from "@/hooks/use-data";
@@ -67,60 +68,64 @@ export default function WeekFlowPage() {
 
   return (
     <Layout>
-      <div className="space-y-6">
-        <header className="space-y-1">
-          <div className="flex items-center gap-2">
-            <CalendarRange className="text-primary" size={26} />
-            <h1 className="text-3xl font-bold flex items-center gap-3">
-              Veckans översikt <MyFloveInsightGather className="shrink-0" />
-            </h1>
+      <MyFlovePageGrid area="planera">
+        <MyFloveWide>
+          <div className="space-y-6">
+            <header className="space-y-1">
+              <div className="flex items-center gap-2">
+                <CalendarRange className="text-primary" size={26} />
+                <h1 className="text-3xl font-bold flex items-center gap-3">
+                  Veckans översikt <MyFloveInsightGather className="shrink-0" />
+                </h1>
+              </div>
+              <p className="text-muted-foreground">
+                En lugn tillbakablick på din vecka. Inget mål, inga poäng.
+              </p>
+            </header>
+
+            <section className="surface-card p-5 space-y-2">
+              <h2 className="font-semibold text-ink">Din vecka</h2>
+              <ul className="text-sm text-muted-foreground space-y-1">
+                <li>✓ {doneCount} saker genomförda</li>
+                <li>↻ {snoozedTasks.length} omplanerade</li>
+                <li>⚡ {capturedCount} saker fångade i QuickFlow</li>
+                <li>🗑️ {removedCount} saker som hanterades eller togs bort</li>
+              </ul>
+            </section>
+
+            <section className="surface-card p-5 space-y-2">
+              <h2 className="font-semibold text-ink">Vad hjälpte dig mest?</h2>
+              {usageRows.length === 0 ? (
+                <p className="text-sm text-muted-foreground">
+                  Ännu för lite data. Jag börjar lära mig hur du fungerar bäst.
+                </p>
+              ) : (
+                <ul className="text-sm text-muted-foreground space-y-1">
+                  {usageRows.map((k) => (
+                    <li key={k}>
+                      {USAGE_META[k].emoji} {USAGE_META[k].label} användes {weekCounts[k]} gånger
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+
+            {patterns.length > 0 && (
+              <section className="surface-card p-5 space-y-2">
+                <h2 className="font-semibold text-ink">Jag börjar lära mig hur du fungerar bäst</h2>
+                <ul className="text-sm text-muted-foreground space-y-1">
+                  {patterns.map((p) => (
+                    <li key={p}>· {p}</li>
+                  ))}
+                </ul>
+                <p className="text-xs text-muted-foreground/80">
+                  Det här är observationer från din egen användning – inget annat.
+                </p>
+              </section>
+            )}
           </div>
-          <p className="text-muted-foreground">
-            En lugn tillbakablick på din vecka. Inget mål, inga poäng.
-          </p>
-        </header>
-
-        <section className="surface-card p-5 space-y-2">
-          <h2 className="font-semibold text-ink">Din vecka</h2>
-          <ul className="text-sm text-muted-foreground space-y-1">
-            <li>✓ {doneCount} saker genomförda</li>
-            <li>↻ {snoozedTasks.length} omplanerade</li>
-            <li>⚡ {capturedCount} saker fångade i QuickFlow</li>
-            <li>🗑️ {removedCount} saker som hanterades eller togs bort</li>
-          </ul>
-        </section>
-
-        <section className="surface-card p-5 space-y-2">
-          <h2 className="font-semibold text-ink">Vad hjälpte dig mest?</h2>
-          {usageRows.length === 0 ? (
-            <p className="text-sm text-muted-foreground">
-              Ännu för lite data. Jag börjar lära mig hur du fungerar bäst.
-            </p>
-          ) : (
-            <ul className="text-sm text-muted-foreground space-y-1">
-              {usageRows.map((k) => (
-                <li key={k}>
-                  {USAGE_META[k].emoji} {USAGE_META[k].label} användes {weekCounts[k]} gånger
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-
-        {patterns.length > 0 && (
-          <section className="surface-card p-5 space-y-2">
-            <h2 className="font-semibold text-ink">Jag börjar lära mig hur du fungerar bäst</h2>
-            <ul className="text-sm text-muted-foreground space-y-1">
-              {patterns.map((p) => (
-                <li key={p}>· {p}</li>
-              ))}
-            </ul>
-            <p className="text-xs text-muted-foreground/80">
-              Det här är observationer från din egen användning – inget annat.
-            </p>
-          </section>
-        )}
-      </div>
+        </MyFloveWide>
+      </MyFlovePageGrid>
     </Layout>
   );
 }

@@ -2,6 +2,7 @@ import { useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useClerk, Show } from "@clerk/react";
 import Layout from "@/components/layout";
+import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { MyFloveEmptyIllustration } from "@/components/myflove/motion";
 import { REPEAT_LABELS, type RepeatMode } from "@/lib/recurrence";
 import { Button } from "@/components/ui/button";
@@ -620,28 +621,32 @@ export default function ChildrenPage() {
 
   return (
     <Layout>
-      <div className="space-y-8">
-        <div>
-          <h1 className="text-3xl font-bold mb-2 text-ink">Barn</h1>
-          <p className="text-muted-foreground">
-            Allt som rör barnen på ett ställe – privat för dig, delat bara när du vill.
-          </p>
-        </div>
+      <MyFlovePageGrid area="hem">
+        <MyFloveWide>
+          <div className="space-y-8">
+            <div>
+              <h1 className="text-3xl font-bold mb-2 text-ink">Barn</h1>
+              <p className="text-muted-foreground">
+                Allt som rör barnen på ett ställe – privat för dig, delat bara när du vill.
+              </p>
+            </div>
 
-        <Show when="signed-out">
-          <div className="max-w-md mx-auto text-center py-16 surface-card border-dashed bg-card/60 space-y-4">
-            <Baby className="mx-auto text-muted-foreground" size={40} />
-            <p className="text-lg">Logga in för att använda barn-delen.</p>
-            <Button onClick={() => openSignIn()} className="rounded-2xl h-12 px-8">
-              Logga in
-            </Button>
+            <Show when="signed-out">
+              <div className="max-w-md mx-auto text-center py-16 surface-card border-dashed bg-card/60 space-y-4">
+                <Baby className="mx-auto text-muted-foreground" size={40} />
+                <p className="text-lg">Logga in för att använda barn-delen.</p>
+                <Button onClick={() => openSignIn()} className="rounded-2xl h-12 px-8">
+                  Logga in
+                </Button>
+              </div>
+            </Show>
+
+            <Show when="signed-in">
+              <ChildrenContent />
+            </Show>
           </div>
-        </Show>
-
-        <Show when="signed-in">
-          <ChildrenContent />
-        </Show>
-      </div>
+        </MyFloveWide>
+      </MyFlovePageGrid>
     </Layout>
   );
 }

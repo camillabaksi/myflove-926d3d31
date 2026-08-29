@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Hand } from "lucide-react";
 import Layout from "@/components/layout";
 import { MyFloveHeader } from "@/components/myflove";
+import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import StopModal from "@/components/stop-modal";
 import { useSmartBack } from "@/hooks/use-smart-back";
 
@@ -16,28 +17,32 @@ export default function StopPausPage() {
 
   return (
     <Layout>
-      <div className="space-y-6">
-        <MyFloveHeader
-          area="aterhamtning"
-          title="Stop-paus"
-          emojiKey="wellness"
-          description="En paus mellan impuls och beslut – andas, sätt ord, välj."
-        />
-        <button
-          type="button"
-          onClick={() => setOpen(true)}
-          className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-soft"
-        >
-          <Hand size={16} aria-hidden="true" /> Öppna Stop-paus
-        </button>
-        <StopModal
-          open={open}
-          onOpenChange={(next) => {
-            setOpen(next);
-            if (!next) goBack();
-          }}
-        />
-      </div>
+      <MyFlovePageGrid area="halsa">
+        <MyFloveWide>
+          <div className="space-y-6">
+            <MyFloveHeader
+              area="aterhamtning"
+              title="Stop-paus"
+              emojiKey="wellness"
+              description="En paus mellan impuls och beslut – andas, sätt ord, välj."
+            />
+            <button
+              type="button"
+              onClick={() => setOpen(true)}
+              className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-soft"
+            >
+              <Hand size={16} aria-hidden="true" /> Öppna Stop-paus
+            </button>
+            <StopModal
+              open={open}
+              onOpenChange={(next) => {
+                setOpen(next);
+                if (!next) goBack();
+              }}
+            />
+          </div>
+        </MyFloveWide>
+      </MyFlovePageGrid>
     </Layout>
   );
 }

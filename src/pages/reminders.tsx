@@ -232,7 +232,7 @@ export default function RemindersPage() {
 
   return (
     <Layout>
-      <MyFlovePageGrid>
+      <MyFlovePageGrid area="idag">
         <MyFloveWide>
           <header className="space-y-1">
             <h1 className="flex items-center gap-2 font-display text-3xl text-ink">
@@ -249,6 +249,7 @@ export default function RemindersPage() {
           subtitle="Notiser när det är dags"
           icon={BellRing}
           surface="lavender"
+          area="idag"
         >
           {permission === "granted" ? (
             <p className="text-sm text-muted-foreground">

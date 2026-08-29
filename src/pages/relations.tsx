@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { Plus, Trash2, Pencil, Check, X, Zap } from "lucide-react";
 import Layout from "@/components/layout";
+import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { MyFloveHeart } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -321,19 +322,23 @@ function RelationsContent() {
 export default function RelationsPage() {
   return (
     <Layout>
-      <div className="space-y-8">
-        <div>
-          <h1 className="mb-2 flex items-center gap-2 text-3xl font-bold">
-            <MyFloveHeart size={26} /> Relationer
-          </h1>
-          <p className="text-muted-foreground">
-            Människorna – och djuren – som hör till ditt liv. Flow använder dem som kontext i
-            Quickflow, kalender, uppgifter och påminnelser, men gissar aldrig vad någon betyder för
-            dig.
-          </p>
-        </div>
-        <RelationsContent />
-      </div>
+      <MyFlovePageGrid area="hem">
+        <MyFloveWide>
+          <div className="space-y-8">
+            <div>
+              <h1 className="mb-2 flex items-center gap-2 text-3xl font-bold">
+                <MyFloveHeart size={26} /> Relationer
+              </h1>
+              <p className="text-muted-foreground">
+                Människorna – och djuren – som hör till ditt liv. Flow använder dem som kontext i
+                Quickflow, kalender, uppgifter och påminnelser, men gissar aldrig vad någon betyder
+                för dig.
+              </p>
+            </div>
+            <RelationsContent />
+          </div>
+        </MyFloveWide>
+      </MyFlovePageGrid>
     </Layout>
   );
 }

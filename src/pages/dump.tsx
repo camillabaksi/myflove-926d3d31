@@ -1,7 +1,7 @@
 import { track } from "@/lib/analytics";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { MyFloveBlock } from "@/components/myflove/block";
+import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 
 // Minimala typer för webbläsarens SpeechRecognition (saknas i TS lib.dom).
 type SpeechRecognitionStreamEvent = {
@@ -188,172 +188,178 @@ export default function Dump() {
 
   return (
     <Layout>
-      <div className="space-y-8">
-        <MyFloveBlock
-          title="QuickFlow"
-          subtitle="Fånga en tanke snabbt"
-          eyebrow="Fånga"
-          icon={Sparkles}
-          tone="sun"
-          surface="sun"
-          className="pop-in"
-        >
-          <p className="leading-relaxed text-muted-foreground">
-            Få ut det ur huvudet. Skriv eller prata in allt som snurrar – huller om buller går bra.
-            Jag håller det åt dig tills du orkar sortera.
-          </p>
-        </MyFloveBlock>
+      <MyFlovePageGrid>
+        <MyFloveWide>
+          <div className="space-y-8">
+            <MyFloveBlock
+              title="QuickFlow"
+              subtitle="Fånga en tanke snabbt"
+              eyebrow="Fånga"
+              icon={Sparkles}
+              tone="sun"
+              surface="sun"
+              className="pop-in"
+            >
+              <p className="leading-relaxed text-muted-foreground">
+                Få ut det ur huvudet. Skriv eller prata in allt som snurrar – huller om buller går
+                bra. Jag håller det åt dig tills du orkar sortera.
+              </p>
+            </MyFloveBlock>
 
-        <QuickflowCapture />
+            <QuickflowCapture />
 
-        {!thoughts ? (
-          <StepSection
-            step={1}
-            id="quickflow::steg-fanga"
-            title="Skriv eller prata in"
-            description="Allt som snurrar – huller om buller går bra. Tryck sedan på Sortera."
-          >
-            <div className="relative rounded-3xl border border-border/60 bg-card p-2 shadow-soft transition-all focus-within:ring-2 focus-within:ring-primary/20">
-              <textarea
-                value={rawText}
-                onChange={(e) => setRawText(e.target.value)}
-                placeholder="T.ex. 'Handla mjölk. Ringa tandläkaren imorgon. Kanske börja måla om vardagsrummet någon gång...'"
-                className="h-48 w-full resize-none border-none bg-transparent p-4 pb-16 text-lg outline-none"
-              />
-              {(isListening || rawText.trim().length > 0) && (
-                <MyFloveListening
-                  active={isListening || rawText.trim().length > 0}
-                  label={isListening ? "Jag lyssnar..." : "Jag följer med."}
-                  className="absolute right-4 top-4"
-                />
-              )}
-              <div className="absolute bottom-3 right-3 left-3 flex justify-between items-center gap-2">
-                {voiceSupported ? (
-                  <button
-                    type="button"
-                    onClick={toggleListening}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
-                      isListening
-                        ? "bg-destructive/10 text-destructive"
-                        : "bg-secondary text-muted-foreground hover:bg-secondary/70"
-                    }`}
-                  >
-                    {isListening ? <Square size={16} /> : <Mic size={16} />}
-                    {isListening ? "Lyssnar..." : "Tala in"}
-                  </button>
-                ) : (
-                  <span className="text-xs text-muted-foreground px-2">
-                    Röstinmatning stöds inte i denna webbläsare
-                  </span>
-                )}
-                <Button
-                  onClick={handleSort}
-                  disabled={!rawText.trim()}
-                  className="rounded-xl shadow-sm h-10 px-6"
-                >
-                  <Sparkles className="mr-2 h-4 w-4" />
-                  Sortera
-                </Button>
-              </div>
-            </div>
-          </StepSection>
-        ) : (
-          <StepSection
-            step={2}
-            id="quickflow::steg-sortera"
-            title="Granska och spara"
-            description="Ändra var något hör hemma om Flow gissat fel – spara en i taget eller allt på en gång."
-            help="Flow gissar var varje tanke hör hemma. Du bestämmer – tryck för att spara eller strunta i det."
-          >
-            <div className="space-y-3">
-              {thoughts.map((thought) => {
-                const Icon = CATEGORY_ICONS[thought.category];
-                return (
-                  <div
-                    key={thought.id}
-                    className="bg-card p-4 rounded-2xl border border-border shadow-sm flex flex-wrap items-center gap-3"
-                  >
-                    <div className="w-9 h-9 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                      <Icon size={18} />
-                    </div>
-                    <p className="flex-1 min-w-[10rem] text-foreground">{thought.text}</p>
-                    {thought.category === "reminder" &&
-                      (thought.date ||
-                        thought.time ||
-                        (thought.repeat && thought.repeat !== "none")) && (
-                        <span className="text-xs text-muted-foreground bg-secondary/50 px-2 py-1 rounded-lg">
-                          {thought.repeat && thought.repeat !== "none"
-                            ? REPEAT_LABELS[thought.repeat]
-                            : (thought.date ?? "Idag")}
-                          {thought.time ? ` kl ${thought.time}` : ""}
-                        </span>
-                      )}
-                    <select
-                      value={thought.category}
-                      onChange={(e) => updateCategory(thought.id, e.target.value as DumpCategory)}
-                      disabled={thought.added}
-                      className="text-sm border border-border rounded-xl px-2 py-1.5 bg-secondary/50 outline-none"
-                    >
-                      {CATEGORY_OPTIONS.map((cat) => (
-                        <option key={cat} value={cat}>
-                          {CATEGORY_LABELS[cat]}
-                        </option>
-                      ))}
-                    </select>
+            {!thoughts ? (
+              <StepSection
+                step={1}
+                id="quickflow::steg-fanga"
+                title="Skriv eller prata in"
+                description="Allt som snurrar – huller om buller går bra. Tryck sedan på Sortera."
+              >
+                <div className="relative rounded-3xl border border-border/60 bg-card p-2 shadow-soft transition-all focus-within:ring-2 focus-within:ring-primary/20">
+                  <textarea
+                    value={rawText}
+                    onChange={(e) => setRawText(e.target.value)}
+                    placeholder="T.ex. 'Handla mjölk. Ringa tandläkaren imorgon. Kanske börja måla om vardagsrummet någon gång...'"
+                    className="h-48 w-full resize-none border-none bg-transparent p-4 pb-16 text-lg outline-none"
+                  />
+                  {(isListening || rawText.trim().length > 0) && (
+                    <MyFloveListening
+                      active={isListening || rawText.trim().length > 0}
+                      label={isListening ? "Jag lyssnar..." : "Jag följer med."}
+                      className="absolute right-4 top-4"
+                    />
+                  )}
+                  <div className="absolute bottom-3 right-3 left-3 flex justify-between items-center gap-2">
+                    {voiceSupported ? (
+                      <button
+                        type="button"
+                        onClick={toggleListening}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
+                          isListening
+                            ? "bg-destructive/10 text-destructive"
+                            : "bg-secondary text-muted-foreground hover:bg-secondary/70"
+                        }`}
+                      >
+                        {isListening ? <Square size={16} /> : <Mic size={16} />}
+                        {isListening ? "Lyssnar..." : "Tala in"}
+                      </button>
+                    ) : (
+                      <span className="text-xs text-muted-foreground px-2">
+                        Röstinmatning stöds inte i denna webbläsare
+                      </span>
+                    )}
                     <Button
-                      variant={thought.added ? "secondary" : "ghost"}
-                      size="sm"
-                      onClick={() => addSingle(thought)}
-                      disabled={thought.added}
-                      className={`shrink-0 rounded-xl ${thought.added ? "text-primary" : "text-primary hover:bg-primary/10"}`}
+                      onClick={handleSort}
+                      disabled={!rawText.trim()}
+                      className="rounded-xl shadow-sm h-10 px-6"
                     >
-                      {thought.added ? <Check size={16} /> : "Lägg till"}
+                      <Sparkles className="mr-2 h-4 w-4" />
+                      Sortera
                     </Button>
                   </div>
-                );
-              })}
-            </div>
+                </div>
+              </StepSection>
+            ) : (
+              <StepSection
+                step={2}
+                id="quickflow::steg-sortera"
+                title="Granska och spara"
+                description="Ändra var något hör hemma om Flow gissat fel – spara en i taget eller allt på en gång."
+                help="Flow gissar var varje tanke hör hemma. Du bestämmer – tryck för att spara eller strunta i det."
+              >
+                <div className="space-y-3">
+                  {thoughts.map((thought) => {
+                    const Icon = CATEGORY_ICONS[thought.category];
+                    return (
+                      <div
+                        key={thought.id}
+                        className="bg-card p-4 rounded-2xl border border-border shadow-sm flex flex-wrap items-center gap-3"
+                      >
+                        <div className="w-9 h-9 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                          <Icon size={18} />
+                        </div>
+                        <p className="flex-1 min-w-[10rem] text-foreground">{thought.text}</p>
+                        {thought.category === "reminder" &&
+                          (thought.date ||
+                            thought.time ||
+                            (thought.repeat && thought.repeat !== "none")) && (
+                            <span className="text-xs text-muted-foreground bg-secondary/50 px-2 py-1 rounded-lg">
+                              {thought.repeat && thought.repeat !== "none"
+                                ? REPEAT_LABELS[thought.repeat]
+                                : (thought.date ?? "Idag")}
+                              {thought.time ? ` kl ${thought.time}` : ""}
+                            </span>
+                          )}
+                        <select
+                          value={thought.category}
+                          onChange={(e) =>
+                            updateCategory(thought.id, e.target.value as DumpCategory)
+                          }
+                          disabled={thought.added}
+                          className="text-sm border border-border rounded-xl px-2 py-1.5 bg-secondary/50 outline-none"
+                        >
+                          {CATEGORY_OPTIONS.map((cat) => (
+                            <option key={cat} value={cat}>
+                              {CATEGORY_LABELS[cat]}
+                            </option>
+                          ))}
+                        </select>
+                        <Button
+                          variant={thought.added ? "secondary" : "ghost"}
+                          size="sm"
+                          onClick={() => addSingle(thought)}
+                          disabled={thought.added}
+                          className={`shrink-0 rounded-xl ${thought.added ? "text-primary" : "text-primary hover:bg-primary/10"}`}
+                        >
+                          {thought.added ? <Check size={16} /> : "Lägg till"}
+                        </Button>
+                      </div>
+                    );
+                  })}
+                </div>
 
-            <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-border">
-              <Button onClick={addAll} className="rounded-xl flex-1">
-                Lägg till allt som är kvar
-              </Button>
-              <Button variant="outline" onClick={startOver} className="rounded-xl flex-1">
-                Börja om med ny dump
-              </Button>
-            </div>
-          </StepSection>
-        )}
+                <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-border">
+                  <Button onClick={addAll} className="rounded-xl flex-1">
+                    Lägg till allt som är kvar
+                  </Button>
+                  <Button variant="outline" onClick={startOver} className="rounded-xl flex-1">
+                    Börja om med ny dump
+                  </Button>
+                </div>
+              </StepSection>
+            )}
 
-        <InsightQuickflowHint />
-        <QuickflowList />
+            <InsightQuickflowHint />
+            <QuickflowList />
 
-        <Link
-          to="/anteckningar"
-          className="surface-card mt-4 flex items-center gap-3 p-4 text-left hover:border-primary/40"
-        >
-          <NotebookPen size={20} className="text-primary" />
-          <span className="min-w-0 flex-1">
-            <span className="block font-semibold text-ink">Anteckningar &amp; idébank</span>
-            <span className="block text-sm text-muted-foreground">
-              Tankar utan krav bor i en egen del under Flow.
-            </span>
-          </span>
-        </Link>
+            <Link
+              to="/anteckningar"
+              className="surface-card mt-4 flex items-center gap-3 p-4 text-left hover:border-primary/40"
+            >
+              <NotebookPen size={20} className="text-primary" />
+              <span className="min-w-0 flex-1">
+                <span className="block font-semibold text-ink">Anteckningar &amp; idébank</span>
+                <span className="block text-sm text-muted-foreground">
+                  Tankar utan krav bor i en egen del under Flow.
+                </span>
+              </span>
+            </Link>
 
-        <CollapsibleSection
-          title={
-            <span className="flex items-center gap-2">
-              <Sparkles size={20} /> Mina sorteringsregler
-            </span>
-          }
-          id="QuickFlow-regler"
-          headingClassName="font-semibold"
-          className="pt-4"
-        >
-          <QuickflowRulesSettings />
-        </CollapsibleSection>
-      </div>
+            <CollapsibleSection
+              title={
+                <span className="flex items-center gap-2">
+                  <Sparkles size={20} /> Mina sorteringsregler
+                </span>
+              }
+              id="QuickFlow-regler"
+              headingClassName="font-semibold"
+              className="pt-4"
+            >
+              <QuickflowRulesSettings />
+            </CollapsibleSection>
+          </div>
+        </MyFloveWide>
+      </MyFlovePageGrid>
     </Layout>
   );
 }

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import Layout from "@/components/layout";
+import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { MyFloveThinking } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -404,920 +405,952 @@ export default function TrainingPage() {
 
   return (
     <Layout>
-      <div className="max-w-3xl mx-auto px-4 py-6 space-y-6">
-        <header className="space-y-2">
-          {view !== "overview" && (
-            <button
-              type="button"
-              onClick={() => setView("overview")}
-              className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-ink"
-            >
-              <ChevronLeft size={16} /> Tillbaka till översikten
-            </button>
-          )}
-          <h1 className="text-3xl font-bold text-ink flex items-center gap-2">
-            <Dumbbell className="text-primary" />{" "}
-            {view === "overview"
-              ? "Träning"
-              : (SECTIONS.find((s) => s.id === view)?.label ?? "Träning")}
-          </h1>
-          <p className="text-muted-foreground">
-            {view === "overview"
-              ? "Välj en del i taget – du behöver inte se allt på en gång."
-              : (SECTIONS.find((s) => s.id === view)?.desc ?? "")}
-          </p>
-        </header>
-
-        {view === "overview" && (
-          <div className="grid gap-3 sm:grid-cols-2">
-            {SECTIONS.map((s) => {
-              const Icon = s.icon;
-              return (
+      <MyFlovePageGrid area="halsa">
+        <MyFloveWide>
+          <div className="max-w-3xl mx-auto px-4 py-6 space-y-6">
+            <header className="space-y-2">
+              {view !== "overview" && (
                 <button
-                  key={s.id}
                   type="button"
-                  onClick={() => setView(s.id)}
-                  className="surface-card p-4 text-left transition hover:opacity-90"
+                  onClick={() => setView("overview")}
+                  className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-ink"
                 >
-                  <div className="flex items-start gap-3">
-                    <span
-                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
-                      style={{ backgroundColor: `hsl(${s.hue} / 0.14)`, color: `hsl(${s.hue})` }}
-                    >
-                      <Icon size={20} />
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="font-semibold text-ink">{s.label}</span>
-                        <ChevronRight size={16} className="shrink-0 text-muted-foreground" />
-                      </div>
-                      <p className="text-xs text-muted-foreground">{s.desc}</p>
-                      <p className="mt-1 text-sm font-medium text-ink">{summary[s.id]}</p>
-                    </div>
-                  </div>
+                  <ChevronLeft size={16} /> Tillbaka till översikten
                 </button>
-              );
-            })}
-          </div>
-        )}
-
-        {view === "steg" && (
-          <CollapsibleSection
-            className="surface-card p-5"
-            headingClassName="text-lg font-semibold text-ink flex items-center gap-2"
-            title={
-              <>
-                <Footprints size={18} className="text-primary" /> Steg idag
-              </>
-            }
-            help="Steg hämtade från mobilens hälsoapp. Ingen siffra? Då är kopplingen inte påslagen än."
-            actions={
-              <Button
-                variant="outline"
-                size="sm"
-                className="rounded-xl gap-2"
-                onClick={() => syncSteps()}
-                disabled={syncing}
-              >
-                {syncing ? <Loader2 size={16} className="animate-spin" /> : <RefreshCw size={16} />}
-                Hämta från hälsoappen
-              </Button>
-            }
-          >
-            <div>
-              <div className="flex items-end justify-between mb-2">
-                <span className="text-3xl font-bold text-ink">
-                  {stepsToday.toLocaleString("sv-SE")}
-                </span>
-                <span className="text-sm text-muted-foreground">
-                  mål {state.stepGoal.toLocaleString("sv-SE")}
-                </span>
-              </div>
-              <div className="h-3 rounded-full bg-muted overflow-hidden">
-                <div
-                  className="h-full rounded-full bg-primary transition-all"
-                  style={{ width: `${stepPct}%` }}
-                />
-              </div>
-            </div>
-
-            <div className="flex items-end gap-2 h-24">
-              {week.map((d) => (
-                <div key={d.date} className="flex-1 flex flex-col items-center gap-1">
-                  <div
-                    className="w-full rounded-t-lg bg-primary/30"
-                    style={{ height: `${Math.max(4, (d.steps / maxSteps) * 72)}px` }}
-                    title={`${d.steps} steg`}
-                  />
-                  <span className="text-[10px] text-muted-foreground">
-                    {new Date(d.date + "T00:00:00")
-                      .toLocaleDateString("sv-SE", { weekday: "short" })
-                      .slice(0, 2)}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            <div className="flex flex-wrap gap-2 items-center">
-              <Input
-                type="number"
-                inputMode="numeric"
-                placeholder="Steg manuellt"
-                value={manualSteps}
-                onChange={(e) => setManualSteps(e.target.value)}
-                className="w-40 rounded-xl"
-              />
-              <Button
-                variant="secondary"
-                className="rounded-xl"
-                onClick={() => {
-                  const n = Number(manualSteps);
-                  if (!Number.isFinite(n) || n <= 0) return;
-                  setSteps(n);
-                  setManualSteps("");
-                }}
-              >
-                Spara
-              </Button>
-              <Input
-                type="number"
-                inputMode="numeric"
-                value={state.stepGoal}
-                onChange={(e) => setStepGoal(Number(e.target.value) || 7000)}
-                className="w-32 rounded-xl"
-                aria-label="Stegmål"
-              />
-              <span className="text-sm text-muted-foreground flex items-center gap-1">
-                <Target size={14} /> stegmål
-              </span>
-            </div>
-
-            {/* Statuspanel för stegsynk */}
-            <div className="rounded-2xl border border-border/70 bg-muted/40 p-4 space-y-3">
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex items-start gap-2">
-                  <span
-                    aria-hidden
-                    className={`mt-1.5 h-2.5 w-2.5 rounded-full shrink-0 ${
-                      syncing
-                        ? "bg-amber-500 animate-pulse"
-                        : syncError
-                          ? "bg-destructive"
-                          : lastSyncAt
-                            ? "bg-primary"
-                            : "bg-muted-foreground/50"
-                    }`}
-                  />
-                  <div className="space-y-0.5">
-                    <p className="text-sm font-medium text-ink">
-                      {syncing
-                        ? "Synkar steg…"
-                        : !healthChecked
-                          ? "Kontrollerar hälsoapp…"
-                          : healthAvailable
-                            ? syncError
-                              ? "Synk misslyckades"
-                              : "Kopplad till hälsoappen"
-                            : "Manuellt läge"}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {lastSyncAt
-                        ? `Senast uppdaterad ${formatSyncTime(lastSyncAt)}${syncedDays ? ` · ${syncedDays} dagar hämtade` : ""}`
-                        : healthAvailable
-                          ? "Ingen synk gjord ännu."
-                          : "Stegen sparas från det du fyller i nedan."}
-                    </p>
-                  </div>
-                </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="rounded-xl gap-2 shrink-0"
-                  onClick={() => syncSteps()}
-                  disabled={syncing}
-                >
-                  {syncing ? (
-                    <Loader2 size={16} className="animate-spin" />
-                  ) : (
-                    <RefreshCw size={16} />
-                  )}
-                  Hämta om
-                </Button>
-              </div>
-
-              {syncError && (
-                <div className="flex items-start gap-2 rounded-xl bg-destructive/10 p-3 text-xs text-destructive">
-                  <AlertTriangle size={14} className="mt-0.5 shrink-0" />
-                  <div className="space-y-2">
-                    <p>{syncError}</p>
-                    {healthAvailable && (
-                      <button
-                        type="button"
-                        onClick={() => void openHealthSettings()}
-                        className="underline underline-offset-2 font-medium"
-                      >
-                        Öppna hälsoinställningar
-                      </button>
-                    )}
-                  </div>
-                </div>
               )}
-
-              {healthChecked && !healthAvailable && (
-                <p className="text-xs text-muted-foreground flex items-start gap-2">
-                  <Smartphone size={14} className="mt-0.5 shrink-0" />
-                  Automatisk stegräkning läses från Apple Hälsa eller Health Connect när du använder
-                  MyFlove som app i mobilen. I webbläsaren fyller du i stegen själv.
-                </p>
-              )}
-            </div>
-          </CollapsibleSection>
-        )}
-
-        {view === "plan" && (
-          <CollapsibleSection
-            className="surface-card p-5"
-            headingClassName="text-lg font-semibold text-ink flex items-center gap-2"
-            title={
-              <>
-                <CalendarRange size={18} className="text-primary" /> Din veckoplan
-              </>
-            }
-            help="Pass fördelade över veckan. Du kan byta dag eller hoppa över utan att något går sönder."
-            description="Målen anpassas efter vad du faktiskt gjorde – och hur veckan kändes."
-            actions={
-              <Button
-                variant="outline"
-                size="sm"
-                className="rounded-xl gap-2 shrink-0"
-                onClick={() => {
-                  regenerateWeeklyPlan();
-                  toast({
-                    title: "Veckoplanen är uppdaterad",
-                    description: "Målen är justerade efter din senaste vecka.",
-                  });
-                }}
-              >
-                <Sparkles size={16} /> Uppdatera
-              </Button>
-            }
-          >
-            {weeklyPlan ? (
-              <>
-                <div className="grid gap-3 sm:grid-cols-3">
-                  <div className="rounded-2xl border border-border/70 bg-muted/40 p-4">
-                    <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                      Steg per dag
-                    </p>
-                    <p className="text-2xl font-bold text-ink">
-                      {weeklyPlan.stepTarget.toLocaleString("sv-SE")}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      snitt förra veckan {weeklyPlan.basis.avgSteps.toLocaleString("sv-SE")}
-                    </p>
-                  </div>
-                  <div className="rounded-2xl border border-border/70 bg-muted/40 p-4">
-                    <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                      Vardagsmotion
-                    </p>
-                    <p className="text-2xl font-bold text-ink">{weeklyPlan.movementTarget} min</p>
-                    <p className="text-xs text-muted-foreground">
-                      snitt förra veckan {weeklyPlan.basis.avgMovement} min
-                    </p>
-                  </div>
-                  <div className="rounded-2xl border border-border/70 bg-muted/40 p-4">
-                    <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                      Pass denna vecka
-                    </p>
-                    <p className="text-2xl font-bold text-ink">
-                      {sessionsThisWeek}/{weeklyPlan.sessionTarget}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {weeklyPlan.basis.doneSessions} pass förra perioden
-                    </p>
-                  </div>
-                </div>
-
-                <div className="rounded-2xl border border-primary/25 bg-primary/5 p-4 text-sm text-ink">
-                  {weeklyPlan.note}
-                </div>
-              </>
-            ) : (
-              <p className="text-sm text-muted-foreground">
-                Ingen plan ännu. Tryck på <strong>Uppdatera</strong> så bygger vi en utifrån dina
-                senaste dagar.
+              <h1 className="text-3xl font-bold text-ink flex items-center gap-2">
+                <Dumbbell className="text-primary" />{" "}
+                {view === "overview"
+                  ? "Träning"
+                  : (SECTIONS.find((s) => s.id === view)?.label ?? "Träning")}
+              </h1>
+              <p className="text-muted-foreground">
+                {view === "overview"
+                  ? "Välj en del i taget – du behöver inte se allt på en gång."
+                  : (SECTIONS.find((s) => s.id === view)?.desc ?? "")}
               </p>
-            )}
+            </header>
 
-            <div className="space-y-2">
-              <p className="text-sm font-medium text-ink">Hur känns nivån just nu?</p>
-              <div className="flex flex-wrap gap-2">
-                {(Object.keys(FEEDBACK_LABEL) as WeekFeedback[]).map((f) => {
-                  const active = weekFeedback === f;
+            {view === "overview" && (
+              <div className="grid gap-3 sm:grid-cols-2">
+                {SECTIONS.map((s) => {
+                  const Icon = s.icon;
                   return (
-                    <Button
-                      key={f}
+                    <button
+                      key={s.id}
                       type="button"
-                      variant={active ? "default" : "outline"}
-                      size="sm"
-                      className="rounded-xl"
-                      onClick={() => {
-                        setWeekFeedback(f);
-                        toast({
-                          title: "Tack – jag justerar",
-                          description: "Tryck på Uppdatera för att räkna om veckans mål.",
-                        });
-                      }}
-                      aria-pressed={active}
+                      onClick={() => setView(s.id)}
+                      className="surface-card p-4 text-left transition hover:opacity-90"
                     >
-                      {FEEDBACK_LABEL[f]}
-                    </Button>
+                      <div className="flex items-start gap-3">
+                        <span
+                          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+                          style={{
+                            backgroundColor: `hsl(${s.hue} / 0.14)`,
+                            color: `hsl(${s.hue})`,
+                          }}
+                        >
+                          <Icon size={20} />
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="font-semibold text-ink">{s.label}</span>
+                            <ChevronRight size={16} className="shrink-0 text-muted-foreground" />
+                          </div>
+                          <p className="text-xs text-muted-foreground">{s.desc}</p>
+                          <p className="mt-1 text-sm font-medium text-ink">{summary[s.id]}</p>
+                        </div>
+                      </div>
+                    </button>
                   );
                 })}
               </div>
-            </div>
-          </CollapsibleSection>
-        )}
+            )}
 
-        {view === "motion" && (
-          <CollapsibleSection
-            className="surface-card p-5"
-            headingClassName="text-lg font-semibold text-ink flex items-center gap-2"
-            title={
-              <>
-                <Footprints size={18} className="text-primary" /> Vardagsmotion
-              </>
-            }
-            description="Allt räknas. Små rörelser flera gånger om dagen gör mer för måendet än ett perfekt pass du aldrig blir av med."
-            actions={
-              movementStreak > 1 && (
-                <span className="shrink-0 rounded-xl bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-                  {movementStreak} dagar i rad
-                </span>
-              )
-            }
-          >
-            <div>
-              <div className="flex items-end justify-between mb-2">
-                <span className="text-2xl font-bold text-ink">{movementMinutes} min idag</span>
-                <span className="text-sm text-muted-foreground">mål {movementGoal} min</span>
-              </div>
-              <div className="h-3 rounded-full bg-muted overflow-hidden">
-                <div
-                  className="h-full rounded-full bg-primary transition-all"
-                  style={{ width: `${movementPct}%` }}
-                />
-              </div>
-            </div>
-
-            <div className="rounded-2xl border border-primary/25 bg-primary/5 p-4">
-              <p className="text-xs uppercase tracking-wide text-primary">
-                Dagens minsta möjliga steg
-              </p>
-              <p className="font-semibold text-ink">
-                {tipOfDay.label} · {tipOfDay.minutes} min
-              </p>
-              <p className="text-sm text-muted-foreground">{tipOfDay.hint}</p>
-            </div>
-
-            <div className="grid gap-2 sm:grid-cols-2">
-              {MOVEMENT_IDEAS.map((m) => {
-                const done = movementToday.includes(m.id);
-                const hue = MOVEMENT_TAG_HUE[m.tag];
-                return (
-                  <button
-                    key={m.id}
-                    type="button"
-                    onClick={(e) => {
-                      if (!done) celebrateFromEvent(e);
-                      toggleMovement(m.id);
-                    }}
-                    className="rounded-2xl border p-3 text-left transition hover:opacity-90"
-                    style={{
-                      backgroundColor: done ? `hsl(${hue} / 0.14)` : "transparent",
-                      borderColor: `hsl(${hue} / ${done ? 0.5 : 0.25})`,
-                    }}
-                    aria-pressed={done}
-                  >
-                    <div className="flex items-start justify-between gap-2">
-                      <div>
-                        <div
-                          className="text-[11px] uppercase tracking-wide"
-                          style={{ color: `hsl(${hue})` }}
-                        >
-                          {MOVEMENT_TAG_LABEL[m.tag]} · {m.minutes} min
-                        </div>
-                        <div className="font-medium text-ink">{m.label}</div>
-                        <div className="text-xs text-muted-foreground">{m.hint}</div>
-                      </div>
-                      {done ? (
-                        <CheckCircle2 size={20} className="shrink-0 text-primary" />
-                      ) : (
-                        <Circle size={20} className="shrink-0 text-muted-foreground" />
-                      )}
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-
-            <div className="flex flex-wrap items-center gap-2">
-              <Input
-                type="number"
-                inputMode="numeric"
-                value={movementGoal}
-                onChange={(e) => setMovementGoal(Number(e.target.value) || 20)}
-                className="w-28 rounded-xl"
-                aria-label="Mål för vardagsmotion i minuter"
-              />
-              <span className="text-sm text-muted-foreground flex items-center gap-1">
-                <Target size={14} /> minuter vardagsmotion per dag
-              </span>
-            </div>
-
-            <div className="flex items-end gap-2">
-              {movementWeek.map((d) => {
-                const mins = d.ids.reduce((s, id) => s + (movementById(id)?.minutes ?? 0), 0);
-                return (
-                  <div key={d.date} className="flex-1 flex flex-col items-center gap-1">
-                    <div
-                      className="w-full rounded-t-lg bg-primary/30"
-                      style={{
-                        height: `${Math.max(4, Math.min(1, mins / Math.max(movementGoal, 1)) * 48)}px`,
-                      }}
-                      title={`${mins} min`}
-                    />
-                    <span className="text-[10px] text-muted-foreground">
-                      {new Date(d.date + "T00:00:00")
-                        .toLocaleDateString("sv-SE", { weekday: "short" })
-                        .slice(0, 2)}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-          </CollapsibleSection>
-        )}
-
-        {view === "program" && (
-          <>
-            <CollapsibleSection
-              className="surface-card p-5"
-              headingClassName="text-lg font-semibold text-ink"
-              title="Ditt mål"
-              help="Vad du tränar mot. Passen anpassas efter målet och hur mycket du orkar."
-            >
-              <div ref={settingsRef as React.RefObject<HTMLDivElement>} />
-              <Input
-                placeholder="T.ex. bli starkare i ryggen och orka springa 5 km"
-                value={goal}
-                onChange={(e) => setGoal(e.target.value)}
-                className="rounded-xl"
-              />
-
-              <div className="flex flex-wrap gap-2">
-                {FOCUS.map((f) => (
-                  <button
-                    key={f.id}
-                    type="button"
-                    onClick={() => setFocus(f.id)}
-                    className={`rounded-xl border px-3 py-1.5 text-sm transition ${
-                      focus === f.id
-                        ? "bg-primary text-primary-foreground border-primary"
-                        : "border-border text-ink"
-                    }`}
-                  >
-                    {f.label}
-                  </button>
-                ))}
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <label className="text-sm text-muted-foreground">
-                  Dagar/vecka
-                  <Input
-                    type="number"
-                    min={1}
-                    max={7}
-                    value={daysPerWeek}
-                    onChange={(e) =>
-                      setDaysPerWeek(Math.min(7, Math.max(1, Number(e.target.value) || 3)))
-                    }
-                    className="rounded-xl mt-1"
-                  />
-                </label>
-                <label className="text-sm text-muted-foreground">
-                  Minuter/pass
-                  <Input
-                    type="number"
-                    min={10}
-                    max={180}
-                    value={minutes}
-                    onChange={(e) =>
-                      setMinutes(Math.min(180, Math.max(10, Number(e.target.value) || 45)))
-                    }
-                    className="rounded-xl mt-1"
-                  />
-                </label>
-              </div>
-
-              <div className="flex flex-wrap gap-2">
-                {LEVELS.map((l) => (
-                  <button
-                    key={l}
-                    type="button"
-                    onClick={() => setLevel(l)}
-                    className={`rounded-xl border px-3 py-1.5 text-sm capitalize transition ${
-                      level === l
-                        ? "bg-primary text-primary-foreground border-primary"
-                        : "border-border text-ink"
-                    }`}
-                  >
-                    {l}
-                  </button>
-                ))}
-              </div>
-
-              <Input
-                placeholder="Utrustning (gym, hantlar, inget alls…)"
-                value={equipment}
-                onChange={(e) => setEquipment(e.target.value)}
-                className="rounded-xl"
-              />
-              <Input
-                placeholder="Något att ta hänsyn till? (t.ex. ont i knät, låg energi)"
-                value={limitations}
-                onChange={(e) => setLimitations(e.target.value)}
-                className="rounded-xl"
-              />
-
-              {loading && (
-                <MyFloveThinking
-                  steps={["🏃", "⚡", "📋", "✨"]}
-                  label="Jag sätter ihop ett pass som passar dig…"
-                />
-              )}
-
-              <Button
-                onClick={handleGenerate}
-                disabled={loading}
-                className="rounded-xl gap-2 w-full"
-              >
-                {loading ? <Loader2 size={16} className="animate-spin" /> : <Sparkles size={16} />}
-                {state.program ? "Gör ett nytt program" : "Skapa mitt program"}
-              </Button>
-            </CollapsibleSection>
-
-            {/* Programmet */}
-            {state.program && (
+            {view === "steg" && (
               <CollapsibleSection
                 className="surface-card p-5"
-                headingClassName="text-lg font-semibold text-ink"
-                title="Din vecka"
-                description={state.program.intro}
+                headingClassName="text-lg font-semibold text-ink flex items-center gap-2"
+                title={
+                  <>
+                    <Footprints size={18} className="text-primary" /> Steg idag
+                  </>
+                }
+                help="Steg hämtade från mobilens hälsoapp. Ingen siffra? Då är kopplingen inte påslagen än."
                 actions={
-                  <Button variant="ghost" size="sm" className="rounded-xl" onClick={clearProgram}>
-                    Rensa
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="rounded-xl gap-2"
+                    onClick={() => syncSteps()}
+                    disabled={syncing}
+                  >
+                    {syncing ? (
+                      <Loader2 size={16} className="animate-spin" />
+                    ) : (
+                      <RefreshCw size={16} />
+                    )}
+                    Hämta från hälsoappen
                   </Button>
                 }
               >
-                <div className="flex flex-wrap gap-2">
+                <div>
+                  <div className="flex items-end justify-between mb-2">
+                    <span className="text-3xl font-bold text-ink">
+                      {stepsToday.toLocaleString("sv-SE")}
+                    </span>
+                    <span className="text-sm text-muted-foreground">
+                      mål {state.stepGoal.toLocaleString("sv-SE")}
+                    </span>
+                  </div>
+                  <div className="h-3 rounded-full bg-muted overflow-hidden">
+                    <div
+                      className="h-full rounded-full bg-primary transition-all"
+                      style={{ width: `${stepPct}%` }}
+                    />
+                  </div>
+                </div>
+
+                <div className="flex items-end gap-2 h-24">
+                  {week.map((d) => (
+                    <div key={d.date} className="flex-1 flex flex-col items-center gap-1">
+                      <div
+                        className="w-full rounded-t-lg bg-primary/30"
+                        style={{ height: `${Math.max(4, (d.steps / maxSteps) * 72)}px` }}
+                        title={`${d.steps} steg`}
+                      />
+                      <span className="text-[10px] text-muted-foreground">
+                        {new Date(d.date + "T00:00:00")
+                          .toLocaleDateString("sv-SE", { weekday: "short" })
+                          .slice(0, 2)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex flex-wrap gap-2 items-center">
+                  <Input
+                    type="number"
+                    inputMode="numeric"
+                    placeholder="Steg manuellt"
+                    value={manualSteps}
+                    onChange={(e) => setManualSteps(e.target.value)}
+                    className="w-40 rounded-xl"
+                  />
                   <Button
-                    variant="outline"
-                    size="sm"
-                    className="rounded-xl gap-2"
-                    onClick={handleEditProgram}
+                    variant="secondary"
+                    className="rounded-xl"
+                    onClick={() => {
+                      const n = Number(manualSteps);
+                      if (!Number.isFinite(n) || n <= 0) return;
+                      setSteps(n);
+                      setManualSteps("");
+                    }}
                   >
-                    <Pencil size={15} /> Redigera programmet
+                    Spara
                   </Button>
+                  <Input
+                    type="number"
+                    inputMode="numeric"
+                    value={state.stepGoal}
+                    onChange={(e) => setStepGoal(Number(e.target.value) || 7000)}
+                    className="w-32 rounded-xl"
+                    aria-label="Stegmål"
+                  />
+                  <span className="text-sm text-muted-foreground flex items-center gap-1">
+                    <Target size={14} /> stegmål
+                  </span>
+                </div>
+
+                {/* Statuspanel för stegsynk */}
+                <div className="rounded-2xl border border-border/70 bg-muted/40 p-4 space-y-3">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-start gap-2">
+                      <span
+                        aria-hidden
+                        className={`mt-1.5 h-2.5 w-2.5 rounded-full shrink-0 ${
+                          syncing
+                            ? "bg-amber-500 animate-pulse"
+                            : syncError
+                              ? "bg-destructive"
+                              : lastSyncAt
+                                ? "bg-primary"
+                                : "bg-muted-foreground/50"
+                        }`}
+                      />
+                      <div className="space-y-0.5">
+                        <p className="text-sm font-medium text-ink">
+                          {syncing
+                            ? "Synkar steg…"
+                            : !healthChecked
+                              ? "Kontrollerar hälsoapp…"
+                              : healthAvailable
+                                ? syncError
+                                  ? "Synk misslyckades"
+                                  : "Kopplad till hälsoappen"
+                                : "Manuellt läge"}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {lastSyncAt
+                            ? `Senast uppdaterad ${formatSyncTime(lastSyncAt)}${syncedDays ? ` · ${syncedDays} dagar hämtade` : ""}`
+                            : healthAvailable
+                              ? "Ingen synk gjord ännu."
+                              : "Stegen sparas från det du fyller i nedan."}
+                        </p>
+                      </div>
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="rounded-xl gap-2 shrink-0"
+                      onClick={() => syncSteps()}
+                      disabled={syncing}
+                    >
+                      {syncing ? (
+                        <Loader2 size={16} className="animate-spin" />
+                      ) : (
+                        <RefreshCw size={16} />
+                      )}
+                      Hämta om
+                    </Button>
+                  </div>
+
+                  {syncError && (
+                    <div className="flex items-start gap-2 rounded-xl bg-destructive/10 p-3 text-xs text-destructive">
+                      <AlertTriangle size={14} className="mt-0.5 shrink-0" />
+                      <div className="space-y-2">
+                        <p>{syncError}</p>
+                        {healthAvailable && (
+                          <button
+                            type="button"
+                            onClick={() => void openHealthSettings()}
+                            className="underline underline-offset-2 font-medium"
+                          >
+                            Öppna hälsoinställningar
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {healthChecked && !healthAvailable && (
+                    <p className="text-xs text-muted-foreground flex items-start gap-2">
+                      <Smartphone size={14} className="mt-0.5 shrink-0" />
+                      Automatisk stegräkning läses från Apple Hälsa eller Health Connect när du
+                      använder MyFlove som app i mobilen. I webbläsaren fyller du i stegen själv.
+                    </p>
+                  )}
+                </div>
+              </CollapsibleSection>
+            )}
+
+            {view === "plan" && (
+              <CollapsibleSection
+                className="surface-card p-5"
+                headingClassName="text-lg font-semibold text-ink flex items-center gap-2"
+                title={
+                  <>
+                    <CalendarRange size={18} className="text-primary" /> Din veckoplan
+                  </>
+                }
+                help="Pass fördelade över veckan. Du kan byta dag eller hoppa över utan att något går sönder."
+                description="Målen anpassas efter vad du faktiskt gjorde – och hur veckan kändes."
+                actions={
                   <Button
                     variant="outline"
                     size="sm"
-                    className="rounded-xl gap-2"
-                    onClick={handleRecreate}
-                    disabled={loading || !state.goal}
+                    className="rounded-xl gap-2 shrink-0"
+                    onClick={() => {
+                      regenerateWeeklyPlan();
+                      toast({
+                        title: "Veckoplanen är uppdaterad",
+                        description: "Målen är justerade efter din senaste vecka.",
+                      });
+                    }}
+                  >
+                    <Sparkles size={16} /> Uppdatera
+                  </Button>
+                }
+              >
+                {weeklyPlan ? (
+                  <>
+                    <div className="grid gap-3 sm:grid-cols-3">
+                      <div className="rounded-2xl border border-border/70 bg-muted/40 p-4">
+                        <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                          Steg per dag
+                        </p>
+                        <p className="text-2xl font-bold text-ink">
+                          {weeklyPlan.stepTarget.toLocaleString("sv-SE")}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          snitt förra veckan {weeklyPlan.basis.avgSteps.toLocaleString("sv-SE")}
+                        </p>
+                      </div>
+                      <div className="rounded-2xl border border-border/70 bg-muted/40 p-4">
+                        <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                          Vardagsmotion
+                        </p>
+                        <p className="text-2xl font-bold text-ink">
+                          {weeklyPlan.movementTarget} min
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          snitt förra veckan {weeklyPlan.basis.avgMovement} min
+                        </p>
+                      </div>
+                      <div className="rounded-2xl border border-border/70 bg-muted/40 p-4">
+                        <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                          Pass denna vecka
+                        </p>
+                        <p className="text-2xl font-bold text-ink">
+                          {sessionsThisWeek}/{weeklyPlan.sessionTarget}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {weeklyPlan.basis.doneSessions} pass förra perioden
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl border border-primary/25 bg-primary/5 p-4 text-sm text-ink">
+                      {weeklyPlan.note}
+                    </div>
+                  </>
+                ) : (
+                  <p className="text-sm text-muted-foreground">
+                    Ingen plan ännu. Tryck på <strong>Uppdatera</strong> så bygger vi en utifrån
+                    dina senaste dagar.
+                  </p>
+                )}
+
+                <div className="space-y-2">
+                  <p className="text-sm font-medium text-ink">Hur känns nivån just nu?</p>
+                  <div className="flex flex-wrap gap-2">
+                    {(Object.keys(FEEDBACK_LABEL) as WeekFeedback[]).map((f) => {
+                      const active = weekFeedback === f;
+                      return (
+                        <Button
+                          key={f}
+                          type="button"
+                          variant={active ? "default" : "outline"}
+                          size="sm"
+                          className="rounded-xl"
+                          onClick={() => {
+                            setWeekFeedback(f);
+                            toast({
+                              title: "Tack – jag justerar",
+                              description: "Tryck på Uppdatera för att räkna om veckans mål.",
+                            });
+                          }}
+                          aria-pressed={active}
+                        >
+                          {FEEDBACK_LABEL[f]}
+                        </Button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </CollapsibleSection>
+            )}
+
+            {view === "motion" && (
+              <CollapsibleSection
+                className="surface-card p-5"
+                headingClassName="text-lg font-semibold text-ink flex items-center gap-2"
+                title={
+                  <>
+                    <Footprints size={18} className="text-primary" /> Vardagsmotion
+                  </>
+                }
+                description="Allt räknas. Små rörelser flera gånger om dagen gör mer för måendet än ett perfekt pass du aldrig blir av med."
+                actions={
+                  movementStreak > 1 && (
+                    <span className="shrink-0 rounded-xl bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+                      {movementStreak} dagar i rad
+                    </span>
+                  )
+                }
+              >
+                <div>
+                  <div className="flex items-end justify-between mb-2">
+                    <span className="text-2xl font-bold text-ink">{movementMinutes} min idag</span>
+                    <span className="text-sm text-muted-foreground">mål {movementGoal} min</span>
+                  </div>
+                  <div className="h-3 rounded-full bg-muted overflow-hidden">
+                    <div
+                      className="h-full rounded-full bg-primary transition-all"
+                      style={{ width: `${movementPct}%` }}
+                    />
+                  </div>
+                </div>
+
+                <div className="rounded-2xl border border-primary/25 bg-primary/5 p-4">
+                  <p className="text-xs uppercase tracking-wide text-primary">
+                    Dagens minsta möjliga steg
+                  </p>
+                  <p className="font-semibold text-ink">
+                    {tipOfDay.label} · {tipOfDay.minutes} min
+                  </p>
+                  <p className="text-sm text-muted-foreground">{tipOfDay.hint}</p>
+                </div>
+
+                <div className="grid gap-2 sm:grid-cols-2">
+                  {MOVEMENT_IDEAS.map((m) => {
+                    const done = movementToday.includes(m.id);
+                    const hue = MOVEMENT_TAG_HUE[m.tag];
+                    return (
+                      <button
+                        key={m.id}
+                        type="button"
+                        onClick={(e) => {
+                          if (!done) celebrateFromEvent(e);
+                          toggleMovement(m.id);
+                        }}
+                        className="rounded-2xl border p-3 text-left transition hover:opacity-90"
+                        style={{
+                          backgroundColor: done ? `hsl(${hue} / 0.14)` : "transparent",
+                          borderColor: `hsl(${hue} / ${done ? 0.5 : 0.25})`,
+                        }}
+                        aria-pressed={done}
+                      >
+                        <div className="flex items-start justify-between gap-2">
+                          <div>
+                            <div
+                              className="text-[11px] uppercase tracking-wide"
+                              style={{ color: `hsl(${hue})` }}
+                            >
+                              {MOVEMENT_TAG_LABEL[m.tag]} · {m.minutes} min
+                            </div>
+                            <div className="font-medium text-ink">{m.label}</div>
+                            <div className="text-xs text-muted-foreground">{m.hint}</div>
+                          </div>
+                          {done ? (
+                            <CheckCircle2 size={20} className="shrink-0 text-primary" />
+                          ) : (
+                            <Circle size={20} className="shrink-0 text-muted-foreground" />
+                          )}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  <Input
+                    type="number"
+                    inputMode="numeric"
+                    value={movementGoal}
+                    onChange={(e) => setMovementGoal(Number(e.target.value) || 20)}
+                    className="w-28 rounded-xl"
+                    aria-label="Mål för vardagsmotion i minuter"
+                  />
+                  <span className="text-sm text-muted-foreground flex items-center gap-1">
+                    <Target size={14} /> minuter vardagsmotion per dag
+                  </span>
+                </div>
+
+                <div className="flex items-end gap-2">
+                  {movementWeek.map((d) => {
+                    const mins = d.ids.reduce((s, id) => s + (movementById(id)?.minutes ?? 0), 0);
+                    return (
+                      <div key={d.date} className="flex-1 flex flex-col items-center gap-1">
+                        <div
+                          className="w-full rounded-t-lg bg-primary/30"
+                          style={{
+                            height: `${Math.max(4, Math.min(1, mins / Math.max(movementGoal, 1)) * 48)}px`,
+                          }}
+                          title={`${mins} min`}
+                        />
+                        <span className="text-[10px] text-muted-foreground">
+                          {new Date(d.date + "T00:00:00")
+                            .toLocaleDateString("sv-SE", { weekday: "short" })
+                            .slice(0, 2)}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </CollapsibleSection>
+            )}
+
+            {view === "program" && (
+              <>
+                <CollapsibleSection
+                  className="surface-card p-5"
+                  headingClassName="text-lg font-semibold text-ink"
+                  title="Ditt mål"
+                  help="Vad du tränar mot. Passen anpassas efter målet och hur mycket du orkar."
+                >
+                  <div ref={settingsRef as React.RefObject<HTMLDivElement>} />
+                  <Input
+                    placeholder="T.ex. bli starkare i ryggen och orka springa 5 km"
+                    value={goal}
+                    onChange={(e) => setGoal(e.target.value)}
+                    className="rounded-xl"
+                  />
+
+                  <div className="flex flex-wrap gap-2">
+                    {FOCUS.map((f) => (
+                      <button
+                        key={f.id}
+                        type="button"
+                        onClick={() => setFocus(f.id)}
+                        className={`rounded-xl border px-3 py-1.5 text-sm transition ${
+                          focus === f.id
+                            ? "bg-primary text-primary-foreground border-primary"
+                            : "border-border text-ink"
+                        }`}
+                      >
+                        {f.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <label className="text-sm text-muted-foreground">
+                      Dagar/vecka
+                      <Input
+                        type="number"
+                        min={1}
+                        max={7}
+                        value={daysPerWeek}
+                        onChange={(e) =>
+                          setDaysPerWeek(Math.min(7, Math.max(1, Number(e.target.value) || 3)))
+                        }
+                        className="rounded-xl mt-1"
+                      />
+                    </label>
+                    <label className="text-sm text-muted-foreground">
+                      Minuter/pass
+                      <Input
+                        type="number"
+                        min={10}
+                        max={180}
+                        value={minutes}
+                        onChange={(e) =>
+                          setMinutes(Math.min(180, Math.max(10, Number(e.target.value) || 45)))
+                        }
+                        className="rounded-xl mt-1"
+                      />
+                    </label>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2">
+                    {LEVELS.map((l) => (
+                      <button
+                        key={l}
+                        type="button"
+                        onClick={() => setLevel(l)}
+                        className={`rounded-xl border px-3 py-1.5 text-sm capitalize transition ${
+                          level === l
+                            ? "bg-primary text-primary-foreground border-primary"
+                            : "border-border text-ink"
+                        }`}
+                      >
+                        {l}
+                      </button>
+                    ))}
+                  </div>
+
+                  <Input
+                    placeholder="Utrustning (gym, hantlar, inget alls…)"
+                    value={equipment}
+                    onChange={(e) => setEquipment(e.target.value)}
+                    className="rounded-xl"
+                  />
+                  <Input
+                    placeholder="Något att ta hänsyn till? (t.ex. ont i knät, låg energi)"
+                    value={limitations}
+                    onChange={(e) => setLimitations(e.target.value)}
+                    className="rounded-xl"
+                  />
+
+                  {loading && (
+                    <MyFloveThinking
+                      steps={["🏃", "⚡", "📋", "✨"]}
+                      label="Jag sätter ihop ett pass som passar dig…"
+                    />
+                  )}
+
+                  <Button
+                    onClick={handleGenerate}
+                    disabled={loading}
+                    className="rounded-xl gap-2 w-full"
                   >
                     {loading ? (
-                      <Loader2 size={15} className="animate-spin" />
+                      <Loader2 size={16} className="animate-spin" />
                     ) : (
-                      <RefreshCw size={15} />
+                      <Sparkles size={16} />
                     )}
-                    Skapa om med samma inställningar
+                    {state.program ? "Gör ett nytt program" : "Skapa mitt program"}
+                  </Button>
+                </CollapsibleSection>
+
+                {/* Programmet */}
+                {state.program && (
+                  <CollapsibleSection
+                    className="surface-card p-5"
+                    headingClassName="text-lg font-semibold text-ink"
+                    title="Din vecka"
+                    description={state.program.intro}
+                    actions={
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="rounded-xl"
+                        onClick={clearProgram}
+                      >
+                        Rensa
+                      </Button>
+                    }
+                  >
+                    <div className="flex flex-wrap gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="rounded-xl gap-2"
+                        onClick={handleEditProgram}
+                      >
+                        <Pencil size={15} /> Redigera programmet
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="rounded-xl gap-2"
+                        onClick={handleRecreate}
+                        disabled={loading || !state.goal}
+                      >
+                        {loading ? (
+                          <Loader2 size={15} className="animate-spin" />
+                        ) : (
+                          <RefreshCw size={15} />
+                        )}
+                        Skapa om med samma inställningar
+                      </Button>
+                    </div>
+
+                    <ul className="space-y-3">
+                      {state.program.sessions.map((s, i) => {
+                        const done = doneToday.includes(i);
+                        const hue = TYPE_TINT[s.type] ?? "205 45% 34%";
+                        return (
+                          <li
+                            key={`${s.day}-${i}`}
+                            className="rounded-2xl border p-4"
+                            style={{
+                              backgroundColor: `hsl(${hue} / 0.08)`,
+                              borderColor: `hsl(${hue} / 0.3)`,
+                            }}
+                          >
+                            <div className="flex items-start justify-between gap-3">
+                              <div>
+                                <div
+                                  className="text-xs uppercase tracking-wide"
+                                  style={{ color: `hsl(${hue})` }}
+                                >
+                                  {s.day} · {s.type}
+                                  {s.minutes ? ` · ${s.minutes} min` : ""}
+                                </div>
+                                <div className="font-semibold text-ink">{s.title}</div>
+                              </div>
+                              <div className="flex shrink-0 items-center gap-2">
+                                <button
+                                  type="button"
+                                  aria-label="Ändra passet"
+                                  onClick={() => openEditSession(i)}
+                                  className="text-muted-foreground hover:text-ink"
+                                >
+                                  <Pencil size={17} />
+                                </button>
+                                <button
+                                  type="button"
+                                  aria-label="Ta bort passet"
+                                  onClick={() => {
+                                    removeSession(i);
+                                    toast({ title: "Passet är borttaget" });
+                                  }}
+                                  className="text-muted-foreground hover:text-destructive"
+                                >
+                                  <Trash2 size={17} />
+                                </button>
+                                <button
+                                  type="button"
+                                  aria-label={done ? "Markera som ej klar" : "Markera som klar"}
+                                  onClick={(e) => {
+                                    if (!done) celebrateFromEvent(e);
+                                    toggleSessionDone(i);
+                                  }}
+                                  className="shrink-0 text-primary"
+                                >
+                                  {done ? (
+                                    <CheckCircle2 size={22} />
+                                  ) : (
+                                    <Circle size={22} className="text-muted-foreground" />
+                                  )}
+                                </button>
+                              </div>
+                            </div>
+                            {s.exercises.length > 0 && (
+                              <ul className="mt-2 space-y-1 text-sm text-ink/80">
+                                {s.exercises.map((ex, j) => (
+                                  <li key={j}>• {ex}</li>
+                                ))}
+                              </ul>
+                            )}
+                          </li>
+                        );
+                      })}
+                    </ul>
+
+                    <Button
+                      variant="outline"
+                      className="rounded-xl gap-2 w-full"
+                      onClick={openAddSession}
+                    >
+                      <Plus size={16} /> Lägg till pass
+                    </Button>
+
+                    <p className="text-sm text-muted-foreground">{state.program.note}</p>
+                  </CollapsibleSection>
+                )}
+              </>
+            )}
+
+            {view === "promenad" && <WalkRoutesSection />}
+
+            {view === "vikt" && (
+              <CollapsibleSection
+                className="surface-card p-5"
+                headingClassName="text-lg font-semibold text-ink flex items-center gap-2"
+                title={
+                  <>
+                    <Scale size={18} className="text-primary" /> Vikt & viktnedgång
+                  </>
+                }
+                description="Väg dig när det känns bra – inte varje dag. Kurvan över tid säger mer än en enskild morgon."
+              >
+                <div className="grid gap-3 sm:grid-cols-3">
+                  <div className="rounded-2xl border border-border/70 bg-muted/40 p-4">
+                    <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                      Senaste vikt
+                    </p>
+                    <p className="text-2xl font-bold text-ink">
+                      {latestWeight ? `${latestWeight.kg} kg` : "–"}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {latestWeight
+                        ? new Date(latestWeight.date + "T00:00:00").toLocaleDateString("sv-SE", {
+                            day: "numeric",
+                            month: "short",
+                          })
+                        : "Ingen vikt inlagd ännu"}
+                    </p>
+                  </div>
+                  <div className="rounded-2xl border border-border/70 bg-muted/40 p-4">
+                    <p className="text-xs uppercase tracking-wide text-muted-foreground">Målvikt</p>
+                    <p className="text-2xl font-bold text-ink">
+                      {weightGoal ? `${weightGoal} kg` : "–"}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {weightGoal && latestWeight
+                        ? `${Math.abs(Math.round((latestWeight.kg - weightGoal) * 10) / 10)} kg kvar`
+                        : "Sätt ett mål om du vill"}
+                    </p>
+                  </div>
+                  <div className="rounded-2xl border border-border/70 bg-muted/40 p-4">
+                    <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                      Förändring
+                    </p>
+                    <p className="text-2xl font-bold text-ink">
+                      {weightChange === null
+                        ? "–"
+                        : `${weightChange > 0 ? "+" : ""}${weightChange} kg`}
+                    </p>
+                    <p className="text-xs text-muted-foreground">sedan första mätningen</p>
+                  </div>
+                </div>
+
+                <div className="rounded-2xl border border-border/70 p-4 space-y-3">
+                  <p className="text-sm font-medium text-ink">Registrera en vägning</p>
+                  <div className="grid gap-2 sm:grid-cols-2">
+                    <Input
+                      type="number"
+                      step="0.1"
+                      inputMode="decimal"
+                      placeholder="Vikt (kg)"
+                      value={weightInput}
+                      onChange={(e) => setWeightInput(e.target.value)}
+                      className="rounded-xl"
+                      aria-label="Vikt i kg"
+                    />
+                    <Input
+                      type="date"
+                      value={weightDate}
+                      max={new Date().toISOString().slice(0, 10)}
+                      onChange={(e) => setWeightDate(e.target.value)}
+                      className="rounded-xl"
+                      aria-label="Datum för vägningen"
+                    />
+                  </div>
+                  <Input
+                    placeholder="Notering (valfritt) – t.ex. sov dåligt, tränat mycket"
+                    value={weightNote}
+                    onChange={(e) => setWeightNote(e.target.value)}
+                    className="rounded-xl"
+                    aria-label="Notering"
+                  />
+                  <Button
+                    variant="secondary"
+                    className="rounded-xl"
+                    onClick={() => {
+                      const n = Number(weightInput.replace(",", "."));
+                      if (!Number.isFinite(n) || n <= 0) {
+                        toast({
+                          title: "Fyll i vikten",
+                          description: "Skriv en vikt i kilo först.",
+                        });
+                        return;
+                      }
+                      const date = weightDate || new Date().toISOString().slice(0, 10);
+                      setWeight(n, date, weightNote);
+                      setWeightInput("");
+                      setWeightNote("");
+                      toast({ title: "Sparat", description: `Vikten är loggad för ${date}.` });
+                    }}
+                  >
+                    Spara vägning
                   </Button>
                 </div>
 
-                <ul className="space-y-3">
-                  {state.program.sessions.map((s, i) => {
-                    const done = doneToday.includes(i);
-                    const hue = TYPE_TINT[s.type] ?? "205 45% 34%";
-                    return (
-                      <li
-                        key={`${s.day}-${i}`}
-                        className="rounded-2xl border p-4"
-                        style={{
-                          backgroundColor: `hsl(${hue} / 0.08)`,
-                          borderColor: `hsl(${hue} / 0.3)`,
-                        }}
-                      >
-                        <div className="flex items-start justify-between gap-3">
-                          <div>
-                            <div
-                              className="text-xs uppercase tracking-wide"
-                              style={{ color: `hsl(${hue})` }}
-                            >
-                              {s.day} · {s.type}
-                              {s.minutes ? ` · ${s.minutes} min` : ""}
-                            </div>
-                            <div className="font-semibold text-ink">{s.title}</div>
-                          </div>
-                          <div className="flex shrink-0 items-center gap-2">
-                            <button
-                              type="button"
-                              aria-label="Ändra passet"
-                              onClick={() => openEditSession(i)}
-                              className="text-muted-foreground hover:text-ink"
-                            >
-                              <Pencil size={17} />
-                            </button>
-                            <button
-                              type="button"
-                              aria-label="Ta bort passet"
-                              onClick={() => {
-                                removeSession(i);
-                                toast({ title: "Passet är borttaget" });
-                              }}
-                              className="text-muted-foreground hover:text-destructive"
-                            >
-                              <Trash2 size={17} />
-                            </button>
-                            <button
-                              type="button"
-                              aria-label={done ? "Markera som ej klar" : "Markera som klar"}
-                              onClick={(e) => {
-                                if (!done) celebrateFromEvent(e);
-                                toggleSessionDone(i);
-                              }}
-                              className="shrink-0 text-primary"
-                            >
-                              {done ? (
-                                <CheckCircle2 size={22} />
-                              ) : (
-                                <Circle size={22} className="text-muted-foreground" />
-                              )}
-                            </button>
-                          </div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <Input
+                    type="text"
+                    inputMode="decimal"
+                    placeholder="Målvikt"
+                    value={weightGoalInput}
+                    onChange={(e) => setWeightGoalInput(e.target.value)}
+                    className="w-32 rounded-xl"
+                    aria-label="Målvikt i kg"
+                  />
+                  <Button
+                    variant="secondary"
+                    className="rounded-xl"
+                    onClick={() => {
+                      const raw = weightGoalInput.trim();
+                      if (!raw) {
+                        setWeightGoal(null);
+                        toast({ title: "Målvikt borttagen" });
+                        return;
+                      }
+                      const n = Number(raw.replace(",", "."));
+                      if (!Number.isFinite(n) || n < 20 || n > 400) {
+                        toast({
+                          title: "Kontrollera målvikten",
+                          description: "Ange ett tal mellan 20 och 400 kg.",
+                        });
+                        return;
+                      }
+                      setWeightGoal(n);
+                      setWeightGoalInput(String(Math.round(n * 10) / 10));
+                      toast({
+                        title: "Målvikt sparad",
+                        description: `${Math.round(n * 10) / 10} kg`,
+                      });
+                    }}
+                  >
+                    Spara målvikt
+                  </Button>
+                  <span className="text-sm text-muted-foreground flex items-center gap-1">
+                    <Target size={14} /> målvikt
+                  </span>
+                </div>
+
+                {weights.length > 1 && (
+                  <div className="flex items-end gap-1 h-28">
+                    {weights.slice(-14).map((w) => {
+                      const min = Math.min(...weights.slice(-14).map((x) => x.kg));
+                      const max = Math.max(...weights.slice(-14).map((x) => x.kg));
+                      const span = Math.max(1, max - min);
+                      return (
+                        <div key={w.date} className="flex-1 flex flex-col items-center gap-1">
+                          <div
+                            className="w-full rounded-t-lg bg-primary/30"
+                            style={{ height: `${16 + ((w.kg - min) / span) * 60}px` }}
+                            title={`${w.kg} kg`}
+                          />
+                          <span className="text-[10px] text-muted-foreground">
+                            {new Date(w.date + "T00:00:00").toLocaleDateString("sv-SE", {
+                              day: "numeric",
+                              month: "numeric",
+                            })}
+                          </span>
                         </div>
-                        {s.exercises.length > 0 && (
-                          <ul className="mt-2 space-y-1 text-sm text-ink/80">
-                            {s.exercises.map((ex, j) => (
-                              <li key={j}>• {ex}</li>
-                            ))}
-                          </ul>
-                        )}
-                      </li>
-                    );
-                  })}
-                </ul>
+                      );
+                    })}
+                  </div>
+                )}
 
-                <Button
-                  variant="outline"
-                  className="rounded-xl gap-2 w-full"
-                  onClick={openAddSession}
-                >
-                  <Plus size={16} /> Lägg till pass
-                </Button>
+                <div className="space-y-2">
+                  <p className="text-sm font-medium text-ink">Vikthistorik</p>
+                  {weights.length === 0 ? (
+                    <p className="text-sm text-muted-foreground">
+                      Inga vägningar än. Din första registrering hamnar här.
+                    </p>
+                  ) : (
+                    <ul className="divide-y divide-border/70 rounded-2xl border border-border/70">
+                      {[...weights].reverse().map((w, i, arr) => {
+                        const prev = arr[i + 1];
+                        const diff = prev ? Math.round((w.kg - prev.kg) * 10) / 10 : null;
+                        return (
+                          <li key={w.date} className="flex items-start gap-3 p-3">
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium text-ink">
+                                {w.kg} kg
+                                {diff !== null && diff !== 0 && (
+                                  <span className="ml-2 text-xs text-muted-foreground">
+                                    {diff > 0 ? "+" : ""}
+                                    {diff} kg
+                                  </span>
+                                )}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                {new Date(w.date + "T00:00:00").toLocaleDateString("sv-SE", {
+                                  weekday: "short",
+                                  day: "numeric",
+                                  month: "long",
+                                })}
+                              </p>
+                              {w.note && (
+                                <p className="text-sm text-muted-foreground mt-1 break-words">
+                                  {w.note}
+                                </p>
+                              )}
+                            </div>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="rounded-xl text-muted-foreground"
+                              onClick={() => {
+                                removeWeight(w.date);
+                                toast({ title: "Borttagen", description: "Vägningen är raderad." });
+                              }}
+                            >
+                              Ta bort
+                            </Button>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}
+                </div>
 
-                <p className="text-sm text-muted-foreground">{state.program.note}</p>
+                <p className="text-xs text-muted-foreground">
+                  MyFlove ger inga kost- eller kaloriråd. Prata med vården om du behöver stöd med
+                  kost eller hälsa.
+                </p>
               </CollapsibleSection>
             )}
-          </>
-        )}
-
-        {view === "promenad" && <WalkRoutesSection />}
-
-        {view === "vikt" && (
-          <CollapsibleSection
-            className="surface-card p-5"
-            headingClassName="text-lg font-semibold text-ink flex items-center gap-2"
-            title={
-              <>
-                <Scale size={18} className="text-primary" /> Vikt & viktnedgång
-              </>
-            }
-            description="Väg dig när det känns bra – inte varje dag. Kurvan över tid säger mer än en enskild morgon."
-          >
-            <div className="grid gap-3 sm:grid-cols-3">
-              <div className="rounded-2xl border border-border/70 bg-muted/40 p-4">
-                <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                  Senaste vikt
-                </p>
-                <p className="text-2xl font-bold text-ink">
-                  {latestWeight ? `${latestWeight.kg} kg` : "–"}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {latestWeight
-                    ? new Date(latestWeight.date + "T00:00:00").toLocaleDateString("sv-SE", {
-                        day: "numeric",
-                        month: "short",
-                      })
-                    : "Ingen vikt inlagd ännu"}
-                </p>
-              </div>
-              <div className="rounded-2xl border border-border/70 bg-muted/40 p-4">
-                <p className="text-xs uppercase tracking-wide text-muted-foreground">Målvikt</p>
-                <p className="text-2xl font-bold text-ink">
-                  {weightGoal ? `${weightGoal} kg` : "–"}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {weightGoal && latestWeight
-                    ? `${Math.abs(Math.round((latestWeight.kg - weightGoal) * 10) / 10)} kg kvar`
-                    : "Sätt ett mål om du vill"}
-                </p>
-              </div>
-              <div className="rounded-2xl border border-border/70 bg-muted/40 p-4">
-                <p className="text-xs uppercase tracking-wide text-muted-foreground">Förändring</p>
-                <p className="text-2xl font-bold text-ink">
-                  {weightChange === null ? "–" : `${weightChange > 0 ? "+" : ""}${weightChange} kg`}
-                </p>
-                <p className="text-xs text-muted-foreground">sedan första mätningen</p>
-              </div>
-            </div>
-
-            <div className="rounded-2xl border border-border/70 p-4 space-y-3">
-              <p className="text-sm font-medium text-ink">Registrera en vägning</p>
-              <div className="grid gap-2 sm:grid-cols-2">
-                <Input
-                  type="number"
-                  step="0.1"
-                  inputMode="decimal"
-                  placeholder="Vikt (kg)"
-                  value={weightInput}
-                  onChange={(e) => setWeightInput(e.target.value)}
-                  className="rounded-xl"
-                  aria-label="Vikt i kg"
-                />
-                <Input
-                  type="date"
-                  value={weightDate}
-                  max={new Date().toISOString().slice(0, 10)}
-                  onChange={(e) => setWeightDate(e.target.value)}
-                  className="rounded-xl"
-                  aria-label="Datum för vägningen"
-                />
-              </div>
-              <Input
-                placeholder="Notering (valfritt) – t.ex. sov dåligt, tränat mycket"
-                value={weightNote}
-                onChange={(e) => setWeightNote(e.target.value)}
-                className="rounded-xl"
-                aria-label="Notering"
-              />
-              <Button
-                variant="secondary"
-                className="rounded-xl"
-                onClick={() => {
-                  const n = Number(weightInput.replace(",", "."));
-                  if (!Number.isFinite(n) || n <= 0) {
-                    toast({ title: "Fyll i vikten", description: "Skriv en vikt i kilo först." });
-                    return;
-                  }
-                  const date = weightDate || new Date().toISOString().slice(0, 10);
-                  setWeight(n, date, weightNote);
-                  setWeightInput("");
-                  setWeightNote("");
-                  toast({ title: "Sparat", description: `Vikten är loggad för ${date}.` });
-                }}
-              >
-                Spara vägning
-              </Button>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-2">
-              <Input
-                type="text"
-                inputMode="decimal"
-                placeholder="Målvikt"
-                value={weightGoalInput}
-                onChange={(e) => setWeightGoalInput(e.target.value)}
-                className="w-32 rounded-xl"
-                aria-label="Målvikt i kg"
-              />
-              <Button
-                variant="secondary"
-                className="rounded-xl"
-                onClick={() => {
-                  const raw = weightGoalInput.trim();
-                  if (!raw) {
-                    setWeightGoal(null);
-                    toast({ title: "Målvikt borttagen" });
-                    return;
-                  }
-                  const n = Number(raw.replace(",", "."));
-                  if (!Number.isFinite(n) || n < 20 || n > 400) {
-                    toast({
-                      title: "Kontrollera målvikten",
-                      description: "Ange ett tal mellan 20 och 400 kg.",
-                    });
-                    return;
-                  }
-                  setWeightGoal(n);
-                  setWeightGoalInput(String(Math.round(n * 10) / 10));
-                  toast({ title: "Målvikt sparad", description: `${Math.round(n * 10) / 10} kg` });
-                }}
-              >
-                Spara målvikt
-              </Button>
-              <span className="text-sm text-muted-foreground flex items-center gap-1">
-                <Target size={14} /> målvikt
-              </span>
-            </div>
-
-            {weights.length > 1 && (
-              <div className="flex items-end gap-1 h-28">
-                {weights.slice(-14).map((w) => {
-                  const min = Math.min(...weights.slice(-14).map((x) => x.kg));
-                  const max = Math.max(...weights.slice(-14).map((x) => x.kg));
-                  const span = Math.max(1, max - min);
-                  return (
-                    <div key={w.date} className="flex-1 flex flex-col items-center gap-1">
-                      <div
-                        className="w-full rounded-t-lg bg-primary/30"
-                        style={{ height: `${16 + ((w.kg - min) / span) * 60}px` }}
-                        title={`${w.kg} kg`}
-                      />
-                      <span className="text-[10px] text-muted-foreground">
-                        {new Date(w.date + "T00:00:00").toLocaleDateString("sv-SE", {
-                          day: "numeric",
-                          month: "numeric",
-                        })}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-
-            <div className="space-y-2">
-              <p className="text-sm font-medium text-ink">Vikthistorik</p>
-              {weights.length === 0 ? (
-                <p className="text-sm text-muted-foreground">
-                  Inga vägningar än. Din första registrering hamnar här.
-                </p>
-              ) : (
-                <ul className="divide-y divide-border/70 rounded-2xl border border-border/70">
-                  {[...weights].reverse().map((w, i, arr) => {
-                    const prev = arr[i + 1];
-                    const diff = prev ? Math.round((w.kg - prev.kg) * 10) / 10 : null;
-                    return (
-                      <li key={w.date} className="flex items-start gap-3 p-3">
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-ink">
-                            {w.kg} kg
-                            {diff !== null && diff !== 0 && (
-                              <span className="ml-2 text-xs text-muted-foreground">
-                                {diff > 0 ? "+" : ""}
-                                {diff} kg
-                              </span>
-                            )}
-                          </p>
-                          <p className="text-xs text-muted-foreground">
-                            {new Date(w.date + "T00:00:00").toLocaleDateString("sv-SE", {
-                              weekday: "short",
-                              day: "numeric",
-                              month: "long",
-                            })}
-                          </p>
-                          {w.note && (
-                            <p className="text-sm text-muted-foreground mt-1 break-words">
-                              {w.note}
-                            </p>
-                          )}
-                        </div>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="rounded-xl text-muted-foreground"
-                          onClick={() => {
-                            removeWeight(w.date);
-                            toast({ title: "Borttagen", description: "Vägningen är raderad." });
-                          }}
-                        >
-                          Ta bort
-                        </Button>
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
-            </div>
-
-            <p className="text-xs text-muted-foreground">
-              MyFlove ger inga kost- eller kaloriråd. Prata med vården om du behöver stöd med kost
-              eller hälsa.
-            </p>
-          </CollapsibleSection>
-        )}
-      </div>
+          </div>
+        </MyFloveWide>
+      </MyFlovePageGrid>
 
       <Dialog open={sessionEdit !== null} onOpenChange={(o) => !o && setSessionEdit(null)}>
         <DialogContent className="rounded-2xl">

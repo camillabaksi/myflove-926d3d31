@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Layout from "@/components/layout";
+import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { MyFloveFloatingElement } from "@/components/myflove/motion";
 import { useSharedShoppingList } from "@/hooks/use-shared-shopping-list";
 import { useLocalStorage } from "@/lib/storage";
@@ -260,199 +261,205 @@ export default function MealPlannerPage() {
 
   return (
     <Layout>
-      <div className="space-y-6">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <h1 className="text-3xl font-bold mb-1 flex items-center gap-3">
-              Veckomatlista <MyFloveFloatingElement tone="sun" size={18} />
-            </h1>
-            <p className="text-sm text-muted-foreground">
-              Planera veckans måltider – för dig själv eller hela familjen.
-            </p>
-            <span className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-xs text-secondary-foreground">
-              <ShoppingCart size={12} />
-              {isShared
-                ? "Varor skickas till familjens inköpslista"
-                : "Varor skickas till din egen inköpslista"}
-            </span>
-          </div>
-          <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
-            <UtensilsCrossed size={20} />
-          </div>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Button onClick={suggestWeek} className="rounded-2xl h-11">
-            <Sparkles className="mr-2" size={16} />
-            Föreslå veckan från favoriter
-          </Button>
-          {plans.length > 0 && (
-            <Button
-              onClick={sendWeekToShoppingList}
-              variant="secondary"
-              className="rounded-2xl h-11"
-            >
-              <ShoppingCart className="mr-2" size={16} />
-              Skicka hela veckan till inköpslistan
-            </Button>
-          )}
-        </div>
-
-        {(favorites.length > 0 || recent.length > 0) && (
-          <div className="bg-card border border-border rounded-3xl p-5 shadow-sm space-y-4">
-            {favorites.length > 0 && (
-              <CollapsibleSection
-                title={
-                  <span className="flex items-center gap-2">
-                    <Star size={16} className="fill-gold text-gold" /> Mina favoriter
-                  </span>
-                }
-                help="Rätter du markerat med stjärna. Tryck på en för att lägga den på idag."
-                headingClassName="font-medium"
-                className="space-y-2"
-              >
-                <div className="flex flex-wrap gap-2">
-                  {favorites.map((r) => (
-                    <span
-                      key={r.id}
-                      className="inline-flex items-center gap-1 rounded-full border border-gold/40 bg-gold/10 pl-3 pr-1 py-1 text-sm"
-                    >
-                      <button
-                        type="button"
-                        onClick={() => applyRecipeToday(r)}
-                        className="hover:underline"
-                      >
-                        {r.dish}
-                      </button>
-                      <button
-                        type="button"
-                        aria-label={`Ta bort ${r.dish} från favoriter`}
-                        onClick={() => toggleFavorite(r.dish)}
-                        className="p-1 text-muted-foreground hover:text-destructive"
-                      >
-                        <Trash2 size={13} />
-                      </button>
-                    </span>
-                  ))}
-                </div>
-              </CollapsibleSection>
-            )}
-            {recent.length > 0 && (
-              <CollapsibleSection
-                title={
-                  <span className="flex items-center gap-2">
-                    <History size={16} /> Från tidigare veckor
-                  </span>
-                }
-                help="Sådant ni ätit förut. Bra när huvudet är tomt och middagen ska bestämmas."
-                headingClassName="font-medium"
-                className="space-y-2"
-              >
-                <div className="flex flex-wrap gap-2">
-                  {recent.slice(0, 12).map((r) => (
-                    <span
-                      key={r.id}
-                      className="inline-flex items-center gap-1 rounded-full border border-border bg-secondary/50 pl-3 pr-1 py-1 text-sm"
-                    >
-                      <button
-                        type="button"
-                        onClick={() => applyRecipeToday(r)}
-                        className="hover:underline"
-                      >
-                        {r.dish}
-                        {r.useCount > 1 && (
-                          <span className="ml-1 text-xs text-muted-foreground">×{r.useCount}</span>
-                        )}
-                      </button>
-                      <button
-                        type="button"
-                        aria-label={`Spara ${r.dish} som favorit`}
-                        onClick={() => toggleFavorite(r.dish, r.ingredients)}
-                        className="p-1 text-muted-foreground hover:text-gold"
-                      >
-                        <Star size={13} />
-                      </button>
-                      <button
-                        type="button"
-                        aria-label={`Ta bort ${r.dish} ur historiken`}
-                        onClick={() => removeRecipe(r.id)}
-                        className="p-1 text-muted-foreground hover:text-destructive"
-                      >
-                        <Trash2 size={13} />
-                      </button>
-                    </span>
-                  ))}
-                </div>
-              </CollapsibleSection>
-            )}
-          </div>
-        )}
-
-        <div className="space-y-4">
-          {WEEKDAYS.map((day, weekday) => (
-            <div
-              key={slotKey(weekday, "day")}
-              className="bg-card border border-border rounded-3xl p-5 shadow-sm space-y-3"
-            >
-              <h3 className="font-medium text-lg">{day}</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                {MEAL_TYPES.map((mealType) => {
-                  const plan = findPlan(weekday, mealType);
-                  return (
-                    <div
-                      key={mealType}
-                      className="border border-border/60 rounded-2xl p-3 hover:border-primary/40 transition-colors"
-                    >
-                      <div className="text-xs uppercase tracking-wider text-muted-foreground mb-1">
-                        {mealType}
-                      </div>
-                      <button
-                        onClick={() =>
-                          setEditing({
-                            weekday,
-                            mealType,
-                            dish: plan?.dish ?? "",
-                            ingredients: plan?.ingredients.join(", ") ?? "",
-                          })
-                        }
-                        className="text-left w-full"
-                      >
-                        <div
-                          className={`text-sm ${
-                            plan?.dish ? "font-medium" : "text-muted-foreground italic"
-                          }`}
-                        >
-                          {plan?.dish || "Lägg till maträtt"}
-                        </div>
-                      </button>
-                      {plan && plan.ingredients.length > 0 && (
-                        <button
-                          onClick={() => sendToShoppingList(plan.ingredients)}
-                          className="mt-2 flex items-center gap-1.5 text-xs text-primary hover:underline"
-                        >
-                          <ShoppingCart size={14} />
-                          Till inköpslista
-                        </button>
-                      )}
-                    </div>
-                  );
-                })}
+      <MyFlovePageGrid area="hem">
+        <MyFloveWide>
+          <div className="space-y-6">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <h1 className="text-3xl font-bold mb-1 flex items-center gap-3">
+                  Veckomatlista <MyFloveFloatingElement tone="sun" size={18} />
+                </h1>
+                <p className="text-sm text-muted-foreground">
+                  Planera veckans måltider – för dig själv eller hela familjen.
+                </p>
+                <span className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-xs text-secondary-foreground">
+                  <ShoppingCart size={12} />
+                  {isShared
+                    ? "Varor skickas till familjens inköpslista"
+                    : "Varor skickas till din egen inköpslista"}
+                </span>
+              </div>
+              <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                <UtensilsCrossed size={20} />
               </div>
             </div>
-          ))}
-        </div>
 
-        {editing && (
-          <EditSlotDialog
-            slot={editing}
-            onSave={(dish, ingredients) =>
-              upsertPlan(editing.weekday, editing.mealType, dish, ingredients)
-            }
-            onDelete={() => deletePlan(editing.weekday, editing.mealType)}
-            onClose={() => setEditing(null)}
-          />
-        )}
-      </div>
+            <div className="flex flex-wrap gap-2">
+              <Button onClick={suggestWeek} className="rounded-2xl h-11">
+                <Sparkles className="mr-2" size={16} />
+                Föreslå veckan från favoriter
+              </Button>
+              {plans.length > 0 && (
+                <Button
+                  onClick={sendWeekToShoppingList}
+                  variant="secondary"
+                  className="rounded-2xl h-11"
+                >
+                  <ShoppingCart className="mr-2" size={16} />
+                  Skicka hela veckan till inköpslistan
+                </Button>
+              )}
+            </div>
+
+            {(favorites.length > 0 || recent.length > 0) && (
+              <div className="bg-card border border-border rounded-3xl p-5 shadow-sm space-y-4">
+                {favorites.length > 0 && (
+                  <CollapsibleSection
+                    title={
+                      <span className="flex items-center gap-2">
+                        <Star size={16} className="fill-gold text-gold" /> Mina favoriter
+                      </span>
+                    }
+                    help="Rätter du markerat med stjärna. Tryck på en för att lägga den på idag."
+                    headingClassName="font-medium"
+                    className="space-y-2"
+                  >
+                    <div className="flex flex-wrap gap-2">
+                      {favorites.map((r) => (
+                        <span
+                          key={r.id}
+                          className="inline-flex items-center gap-1 rounded-full border border-gold/40 bg-gold/10 pl-3 pr-1 py-1 text-sm"
+                        >
+                          <button
+                            type="button"
+                            onClick={() => applyRecipeToday(r)}
+                            className="hover:underline"
+                          >
+                            {r.dish}
+                          </button>
+                          <button
+                            type="button"
+                            aria-label={`Ta bort ${r.dish} från favoriter`}
+                            onClick={() => toggleFavorite(r.dish)}
+                            className="p-1 text-muted-foreground hover:text-destructive"
+                          >
+                            <Trash2 size={13} />
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                  </CollapsibleSection>
+                )}
+                {recent.length > 0 && (
+                  <CollapsibleSection
+                    title={
+                      <span className="flex items-center gap-2">
+                        <History size={16} /> Från tidigare veckor
+                      </span>
+                    }
+                    help="Sådant ni ätit förut. Bra när huvudet är tomt och middagen ska bestämmas."
+                    headingClassName="font-medium"
+                    className="space-y-2"
+                  >
+                    <div className="flex flex-wrap gap-2">
+                      {recent.slice(0, 12).map((r) => (
+                        <span
+                          key={r.id}
+                          className="inline-flex items-center gap-1 rounded-full border border-border bg-secondary/50 pl-3 pr-1 py-1 text-sm"
+                        >
+                          <button
+                            type="button"
+                            onClick={() => applyRecipeToday(r)}
+                            className="hover:underline"
+                          >
+                            {r.dish}
+                            {r.useCount > 1 && (
+                              <span className="ml-1 text-xs text-muted-foreground">
+                                ×{r.useCount}
+                              </span>
+                            )}
+                          </button>
+                          <button
+                            type="button"
+                            aria-label={`Spara ${r.dish} som favorit`}
+                            onClick={() => toggleFavorite(r.dish, r.ingredients)}
+                            className="p-1 text-muted-foreground hover:text-gold"
+                          >
+                            <Star size={13} />
+                          </button>
+                          <button
+                            type="button"
+                            aria-label={`Ta bort ${r.dish} ur historiken`}
+                            onClick={() => removeRecipe(r.id)}
+                            className="p-1 text-muted-foreground hover:text-destructive"
+                          >
+                            <Trash2 size={13} />
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                  </CollapsibleSection>
+                )}
+              </div>
+            )}
+
+            <div className="space-y-4">
+              {WEEKDAYS.map((day, weekday) => (
+                <div
+                  key={slotKey(weekday, "day")}
+                  className="bg-card border border-border rounded-3xl p-5 shadow-sm space-y-3"
+                >
+                  <h3 className="font-medium text-lg">{day}</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    {MEAL_TYPES.map((mealType) => {
+                      const plan = findPlan(weekday, mealType);
+                      return (
+                        <div
+                          key={mealType}
+                          className="border border-border/60 rounded-2xl p-3 hover:border-primary/40 transition-colors"
+                        >
+                          <div className="text-xs uppercase tracking-wider text-muted-foreground mb-1">
+                            {mealType}
+                          </div>
+                          <button
+                            onClick={() =>
+                              setEditing({
+                                weekday,
+                                mealType,
+                                dish: plan?.dish ?? "",
+                                ingredients: plan?.ingredients.join(", ") ?? "",
+                              })
+                            }
+                            className="text-left w-full"
+                          >
+                            <div
+                              className={`text-sm ${
+                                plan?.dish ? "font-medium" : "text-muted-foreground italic"
+                              }`}
+                            >
+                              {plan?.dish || "Lägg till maträtt"}
+                            </div>
+                          </button>
+                          {plan && plan.ingredients.length > 0 && (
+                            <button
+                              onClick={() => sendToShoppingList(plan.ingredients)}
+                              className="mt-2 flex items-center gap-1.5 text-xs text-primary hover:underline"
+                            >
+                              <ShoppingCart size={14} />
+                              Till inköpslista
+                            </button>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {editing && (
+              <EditSlotDialog
+                slot={editing}
+                onSave={(dish, ingredients) =>
+                  upsertPlan(editing.weekday, editing.mealType, dish, ingredients)
+                }
+                onDelete={() => deletePlan(editing.weekday, editing.mealType)}
+                onClose={() => setEditing(null)}
+              />
+            )}
+          </div>
+        </MyFloveWide>
+      </MyFlovePageGrid>
     </Layout>
   );
 }

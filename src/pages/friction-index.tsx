@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import Layout from "@/components/layout";
+import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { Flame, Plus, ThumbsUp, Loader2, AlertTriangle } from "lucide-react";
@@ -249,222 +250,226 @@ export default function FrictionIndexPage() {
 
   return (
     <Layout>
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
-            <Flame className="text-primary" /> Feedback & förslag
-          </h1>
-          <p className="text-muted-foreground">
-            Lämna feedback, förslag eller rapportera saker som skaver. Varje friktion bedöms på tre
-            skalor – <strong>påverkan</strong>, <strong>frekvens</strong> och{" "}
-            <strong>mental belastning</strong> (1–5 vardera) – som ger en totalpoäng 3–15. Röster
-            används som tiebreaker.
-          </p>
-          <div className="mt-3 flex flex-wrap gap-2 text-xs">
-            <span className="px-2 py-1 rounded-full border bg-destructive/15 text-destructive border-destructive/30">
-              Kritisk 13–15
-            </span>
-            <span className="px-2 py-1 rounded-full border bg-orange-100 text-orange-800 border-orange-200">
-              Hög 10–12
-            </span>
-            <span className="px-2 py-1 rounded-full border bg-amber-100 text-amber-800 border-amber-200">
-              Medel 6–9
-            </span>
-            <span className="px-2 py-1 rounded-full border bg-secondary text-muted-foreground border-border">
-              Låg 3–5
-            </span>
-          </div>
-        </div>
-
-        {error && (
-          <div className="bg-destructive/10 text-destructive rounded-2xl p-3 text-sm flex items-center gap-2">
-            <AlertTriangle size={16} /> {error}
-          </div>
-        )}
-
-        <div className="flex justify-end">
-          <Button onClick={() => setShowForm((s) => !s)} className="rounded-full">
-            <Plus size={16} className="mr-1" /> {showForm ? "Stäng" : "Lämna feedback"}
-          </Button>
-        </div>
-
-        {showForm && (
-          <form
-            onSubmit={submit}
-            className="bg-card border border-border rounded-3xl p-5 space-y-4 shadow-sm"
-          >
+      <MyFlovePageGrid area="flow">
+        <MyFloveWide>
+          <div className="space-y-6">
             <div>
-              <label className="text-sm font-medium block mb-1">Vad skaver?</label>
-              <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                required
-                maxLength={140}
-                placeholder="T.ex. Svårt att hitta knappen för att lägga till mående"
-                className="w-full rounded-2xl border border-border bg-background p-3 text-sm"
-              />
+              <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
+                <Flame className="text-primary" /> Feedback & förslag
+              </h1>
+              <p className="text-muted-foreground">
+                Lämna feedback, förslag eller rapportera saker som skaver. Varje friktion bedöms på
+                tre skalor – <strong>påverkan</strong>, <strong>frekvens</strong> och{" "}
+                <strong>mental belastning</strong> (1–5 vardera) – som ger en totalpoäng 3–15.
+                Röster används som tiebreaker.
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2 text-xs">
+                <span className="px-2 py-1 rounded-full border bg-destructive/15 text-destructive border-destructive/30">
+                  Kritisk 13–15
+                </span>
+                <span className="px-2 py-1 rounded-full border bg-orange-100 text-orange-800 border-orange-200">
+                  Hög 10–12
+                </span>
+                <span className="px-2 py-1 rounded-full border bg-amber-100 text-amber-800 border-amber-200">
+                  Medel 6–9
+                </span>
+                <span className="px-2 py-1 rounded-full border bg-secondary text-muted-foreground border-border">
+                  Låg 3–5
+                </span>
+              </div>
             </div>
-            <div>
-              <label className="text-sm font-medium block mb-1">Beskriv gärna mer</label>
-              <textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                rows={3}
-                maxLength={2000}
-                placeholder="När händer det? Vad förväntade du dig?"
-                className="w-full rounded-2xl border border-border bg-background p-3 text-sm"
-              />
+
+            {error && (
+              <div className="bg-destructive/10 text-destructive rounded-2xl p-3 text-sm flex items-center gap-2">
+                <AlertTriangle size={16} /> {error}
+              </div>
+            )}
+
+            <div className="flex justify-end">
+              <Button onClick={() => setShowForm((s) => !s)} className="rounded-full">
+                <Plus size={16} className="mr-1" /> {showForm ? "Stäng" : "Lämna feedback"}
+              </Button>
             </div>
-            <div>
-              <label className="text-sm font-medium block mb-1">Kategori</label>
-              <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="w-full rounded-2xl border border-border bg-background p-3 text-sm"
+
+            {showForm && (
+              <form
+                onSubmit={submit}
+                className="bg-card border border-border rounded-3xl p-5 space-y-4 shadow-sm"
               >
-                {CATEGORIES.map((c) => (
-                  <option key={c.value} value={c.value}>
-                    {c.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              {(
-                [
-                  {
-                    label: "Påverkan",
-                    hint: "Hur stort är problemet?",
-                    value: impact,
-                    setter: setImpact,
-                  },
-                  {
-                    label: "Frekvens",
-                    hint: "Hur ofta händer det?",
-                    value: frequency,
-                    setter: setFrequency,
-                  },
-                  {
-                    label: "Mental belastning",
-                    hint: "Hur mycket stjäl det energi?",
-                    value: mentalLoad,
-                    setter: setMentalLoad,
-                  },
-                ] as const
-              ).map((axis) => (
-                <div key={axis.label}>
-                  <label className="text-sm font-medium block mb-1">{axis.label} (1–5)</label>
+                <div>
+                  <label className="text-sm font-medium block mb-1">Vad skaver?</label>
+                  <input
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    required
+                    maxLength={140}
+                    placeholder="T.ex. Svårt att hitta knappen för att lägga till mående"
+                    className="w-full rounded-2xl border border-border bg-background p-3 text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium block mb-1">Beskriv gärna mer</label>
+                  <textarea
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    rows={3}
+                    maxLength={2000}
+                    placeholder="När händer det? Vad förväntade du dig?"
+                    className="w-full rounded-2xl border border-border bg-background p-3 text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium block mb-1">Kategori</label>
                   <select
-                    value={axis.value}
-                    onChange={(e) => axis.setter(Number(e.target.value))}
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
                     className="w-full rounded-2xl border border-border bg-background p-3 text-sm"
                   >
-                    {[1, 2, 3, 4, 5].map((n) => (
-                      <option key={n} value={n}>
-                        {n} – {SCALE_LABELS[n]}
+                    {CATEGORIES.map((c) => (
+                      <option key={c.value} value={c.value}>
+                        {c.label}
                       </option>
                     ))}
                   </select>
-                  <p className="text-[11px] text-muted-foreground mt-1">{axis.hint}</p>
                 </div>
-              ))}
-            </div>
 
-            <div className="text-xs text-muted-foreground bg-secondary/40 rounded-xl px-3 py-2">
-              Totalpoäng blir{" "}
-              <strong className="text-foreground">{impact + frequency + mentalLoad}</strong> –{" "}
-              {priorityFor(impact + frequency + mentalLoad).label} prioritet.
-            </div>
-            <Button type="submit" disabled={saving || !title.trim()} className="rounded-full">
-              {saving ? <Loader2 size={16} className="animate-spin mr-1" /> : null} Spara
-            </Button>
-          </form>
-        )}
-
-        {loading ? (
-          <p className="text-muted-foreground text-sm">Laddar…</p>
-        ) : ranked.length === 0 ? (
-          <div className="bg-card border border-border rounded-3xl p-8 text-center text-muted-foreground text-sm">
-            Inget friktion loggat än. Lägg till första punkten ovan.
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {ranked.map(({ item, votes: v, total, priority }) => {
-              const mine = myVotes.has(item.id);
-              const isReporter = userId === item.reporter_id;
-              return (
-                <div
-                  key={item.id}
-                  className="bg-card border border-border rounded-3xl p-4 shadow-sm space-y-2"
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap mb-1">
-                        <span
-                          className={`text-xs px-2 py-0.5 rounded-full border ${priority.className}`}
-                        >
-                          {priority.label} · {total} p
-                        </span>
-                        <span
-                          className={`text-xs px-2 py-0.5 rounded-full ${STATUS_COLORS[item.status]}`}
-                        >
-                          {STATUS_LABELS[item.status]}
-                        </span>
-                        <span className="text-xs text-muted-foreground">
-                          {CATEGORIES.find((c) => c.value === item.category)?.label ??
-                            item.category}
-                        </span>
-                      </div>
-                      <h3 className="font-medium">{item.title}</h3>
-                      {item.description && (
-                        <p className="text-sm text-muted-foreground mt-1 whitespace-pre-wrap">
-                          {item.description}
-                        </p>
-                      )}
-                    </div>
-                    <div className="flex flex-col items-center gap-1 shrink-0">
-                      <button
-                        type="button"
-                        onClick={() => toggleVote(item.id)}
-                        className={`flex flex-col items-center px-3 py-2 rounded-2xl border transition-colors ${
-                          mine
-                            ? "bg-primary text-primary-foreground border-primary"
-                            : "bg-background text-foreground border-border hover:bg-secondary"
-                        }`}
-                        aria-label={mine ? "Ta bort röst" : "Rösta upp"}
-                      >
-                        <ThumbsUp size={16} />
-                        <span className="text-xs font-medium mt-0.5">{v}</span>
-                      </button>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between text-xs text-muted-foreground pt-1 border-t border-border">
-                    <span>
-                      Påverkan {item.impact} · frekvens {item.frequency ?? 3} · mental{" "}
-                      {item.mental_load ?? 3} · röster {v}
-                    </span>
-                    {isReporter ? (
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  {(
+                    [
+                      {
+                        label: "Påverkan",
+                        hint: "Hur stort är problemet?",
+                        value: impact,
+                        setter: setImpact,
+                      },
+                      {
+                        label: "Frekvens",
+                        hint: "Hur ofta händer det?",
+                        value: frequency,
+                        setter: setFrequency,
+                      },
+                      {
+                        label: "Mental belastning",
+                        hint: "Hur mycket stjäl det energi?",
+                        value: mentalLoad,
+                        setter: setMentalLoad,
+                      },
+                    ] as const
+                  ).map((axis) => (
+                    <div key={axis.label}>
+                      <label className="text-sm font-medium block mb-1">{axis.label} (1–5)</label>
                       <select
-                        value={item.status}
-                        onChange={(e) => updateStatus(item.id, e.target.value as Status)}
-                        className="rounded-full bg-background border border-border px-2 py-1 text-xs"
+                        value={axis.value}
+                        onChange={(e) => axis.setter(Number(e.target.value))}
+                        className="w-full rounded-2xl border border-border bg-background p-3 text-sm"
                       >
-                        {(Object.keys(STATUS_LABELS) as Status[]).map((s) => (
-                          <option key={s} value={s}>
-                            {STATUS_LABELS[s]}
+                        {[1, 2, 3, 4, 5].map((n) => (
+                          <option key={n} value={n}>
+                            {n} – {SCALE_LABELS[n]}
                           </option>
                         ))}
                       </select>
-                    ) : null}
-                  </div>
+                      <p className="text-[11px] text-muted-foreground mt-1">{axis.hint}</p>
+                    </div>
+                  ))}
                 </div>
-              );
-            })}
+
+                <div className="text-xs text-muted-foreground bg-secondary/40 rounded-xl px-3 py-2">
+                  Totalpoäng blir{" "}
+                  <strong className="text-foreground">{impact + frequency + mentalLoad}</strong> –{" "}
+                  {priorityFor(impact + frequency + mentalLoad).label} prioritet.
+                </div>
+                <Button type="submit" disabled={saving || !title.trim()} className="rounded-full">
+                  {saving ? <Loader2 size={16} className="animate-spin mr-1" /> : null} Spara
+                </Button>
+              </form>
+            )}
+
+            {loading ? (
+              <p className="text-muted-foreground text-sm">Laddar…</p>
+            ) : ranked.length === 0 ? (
+              <div className="bg-card border border-border rounded-3xl p-8 text-center text-muted-foreground text-sm">
+                Inget friktion loggat än. Lägg till första punkten ovan.
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {ranked.map(({ item, votes: v, total, priority }) => {
+                  const mine = myVotes.has(item.id);
+                  const isReporter = userId === item.reporter_id;
+                  return (
+                    <div
+                      key={item.id}
+                      className="bg-card border border-border rounded-3xl p-4 shadow-sm space-y-2"
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap mb-1">
+                            <span
+                              className={`text-xs px-2 py-0.5 rounded-full border ${priority.className}`}
+                            >
+                              {priority.label} · {total} p
+                            </span>
+                            <span
+                              className={`text-xs px-2 py-0.5 rounded-full ${STATUS_COLORS[item.status]}`}
+                            >
+                              {STATUS_LABELS[item.status]}
+                            </span>
+                            <span className="text-xs text-muted-foreground">
+                              {CATEGORIES.find((c) => c.value === item.category)?.label ??
+                                item.category}
+                            </span>
+                          </div>
+                          <h3 className="font-medium">{item.title}</h3>
+                          {item.description && (
+                            <p className="text-sm text-muted-foreground mt-1 whitespace-pre-wrap">
+                              {item.description}
+                            </p>
+                          )}
+                        </div>
+                        <div className="flex flex-col items-center gap-1 shrink-0">
+                          <button
+                            type="button"
+                            onClick={() => toggleVote(item.id)}
+                            className={`flex flex-col items-center px-3 py-2 rounded-2xl border transition-colors ${
+                              mine
+                                ? "bg-primary text-primary-foreground border-primary"
+                                : "bg-background text-foreground border-border hover:bg-secondary"
+                            }`}
+                            aria-label={mine ? "Ta bort röst" : "Rösta upp"}
+                          >
+                            <ThumbsUp size={16} />
+                            <span className="text-xs font-medium mt-0.5">{v}</span>
+                          </button>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between text-xs text-muted-foreground pt-1 border-t border-border">
+                        <span>
+                          Påverkan {item.impact} · frekvens {item.frequency ?? 3} · mental{" "}
+                          {item.mental_load ?? 3} · röster {v}
+                        </span>
+                        {isReporter ? (
+                          <select
+                            value={item.status}
+                            onChange={(e) => updateStatus(item.id, e.target.value as Status)}
+                            className="rounded-full bg-background border border-border px-2 py-1 text-xs"
+                          >
+                            {(Object.keys(STATUS_LABELS) as Status[]).map((s) => (
+                              <option key={s} value={s}>
+                                {STATUS_LABELS[s]}
+                              </option>
+                            ))}
+                          </select>
+                        ) : null}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
-        )}
-      </div>
+        </MyFloveWide>
+      </MyFlovePageGrid>
     </Layout>
   );
 }

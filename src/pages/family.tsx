@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useUser, useClerk, Show } from "@clerk/react";
 import Layout from "@/components/layout";
+import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { MyFloveHeart } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -325,30 +326,34 @@ export default function FamilyPage() {
 
   return (
     <Layout>
-      <div className="space-y-8">
-        <div>
-          <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
-            <MyFloveHeart size={26} /> Familj
-          </h1>
-          <p className="text-muted-foreground">
-            Skapa eller gå med i en familj för att dela kalender och matlista.
-          </p>
-        </div>
+      <MyFlovePageGrid area="hem">
+        <MyFloveWide>
+          <div className="space-y-8">
+            <div>
+              <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
+                <MyFloveHeart size={26} /> Familj
+              </h1>
+              <p className="text-muted-foreground">
+                Skapa eller gå med i en familj för att dela kalender och matlista.
+              </p>
+            </div>
 
-        <Show when="signed-out">
-          <div className="max-w-md mx-auto text-center py-16 bg-card/50 border-2 border-dashed border-border rounded-3xl space-y-4">
-            <Users className="mx-auto text-muted-foreground" size={40} />
-            <p className="text-lg">Logga in för att komma åt familjefunktioner.</p>
-            <Button onClick={() => openSignIn()} className="rounded-2xl h-12 px-8">
-              Logga in
-            </Button>
+            <Show when="signed-out">
+              <div className="max-w-md mx-auto text-center py-16 bg-card/50 border-2 border-dashed border-border rounded-3xl space-y-4">
+                <Users className="mx-auto text-muted-foreground" size={40} />
+                <p className="text-lg">Logga in för att komma åt familjefunktioner.</p>
+                <Button onClick={() => openSignIn()} className="rounded-2xl h-12 px-8">
+                  Logga in
+                </Button>
+              </div>
+            </Show>
+
+            <Show when="signed-in">
+              <FamilyContent />
+            </Show>
           </div>
-        </Show>
-
-        <Show when="signed-in">
-          <FamilyContent />
-        </Show>
-      </div>
+        </MyFloveWide>
+      </MyFlovePageGrid>
     </Layout>
   );
 }
