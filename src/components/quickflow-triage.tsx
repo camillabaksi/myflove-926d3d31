@@ -530,30 +530,18 @@ export default function QuickflowTriage() {
                   })}
                 </div>
                 {energyFor === item.id ? (
-                  <div className="space-y-2">
-                    <div className="flex flex-wrap gap-2">
-                      <Action
-                        highlight={energyDir === "gives"}
-                        onClick={() => setEnergyDir("gives")}
-                      >
-                        🔋 Gav energi
-                      </Action>
-                      <Action
-                        highlight={energyDir === "drains"}
-                        onClick={() => setEnergyDir("drains")}
-                      >
-                        🪫 Tog energi
-                      </Action>
-                    </div>
+                  <div className="space-y-2" data-testid="quickflow-energy-handoff">
                     <p className="text-xs text-muted-foreground">
-                      Hur mycket påverkar det dagens balans?
+                      Energi och mående loggar du på ett enda ställe – i Mitt batteri.
                     </p>
                     <div className="flex flex-wrap gap-2">
-                      {[1, 2, 3, 4, 5].map((s) => (
-                        <Action key={s} onClick={() => void toEnergy(item, energyDir, s)}>
-                          {"▪".repeat(s)} {s}
-                        </Action>
-                      ))}
+                      <Link
+                        href={`/mitt-batteri?note=${encodeURIComponent(titleOf(item))}`}
+                        onClick={() => complete(item.id)}
+                        className="press rounded-pill border border-primary bg-primary/10 px-3 py-1 text-xs font-medium text-primary"
+                      >
+                        Logga energi &amp; mående
+                      </Link>
                       <Action onClick={() => setEnergyFor(null)}>Avbryt</Action>
                     </div>
                   </div>
