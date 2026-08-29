@@ -281,7 +281,6 @@ export default function Home() {
               area="kalender"
               icon={CalendarDays}
               subtitle="Ditt nästa steg"
-              status="Jag finns här"
               summary={suggestion.headline}
               tone="lavender"
               surface="lavender"
