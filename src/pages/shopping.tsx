@@ -210,7 +210,7 @@ export default function Shopping() {
 
   return (
     <Layout>
-      <MyFlovePageGrid>
+      <MyFlovePageGrid area="hem">
         <MyFloveWide>
           <div>
             <MyFloveHeader

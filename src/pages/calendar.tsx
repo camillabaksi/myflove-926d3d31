@@ -596,7 +596,7 @@ export default function CalendarPage() {
 
   return (
     <Layout>
-      <MyFlovePageGrid>
+      <MyFlovePageGrid area="kalender">
         <MyFloveWide>
           <div>
             <h1 className="text-3xl font-bold mb-2">Kalender</h1>

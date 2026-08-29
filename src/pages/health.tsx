@@ -40,7 +40,7 @@ export default function HealthPage() {
 
   return (
     <Layout>
-      <MyFlovePageGrid>
+      <MyFlovePageGrid area="halsa">
         <MyFloveWide>
           <MyFloveHeader
             title="Hälsa"
