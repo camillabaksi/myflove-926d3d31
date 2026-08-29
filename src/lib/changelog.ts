@@ -10,12 +10,20 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Hem: Kalender-blocket får samma vertikala rytm som andra block",
+    items: [
+      "Lade till en osynlig statushållare i Kalender-blocket så att avstånden och korthöjden matchar de andra blocken nu när statusraden är borta (2026-08-29)",
+      "Endast presentation – navigation, data och funktionalitet är oförändrade (2026-08-29)",
+    ],
+  },
+  {
     title: "Hem: Kalender-blocket utan 'Jag finns här'",
     items: [
       "Tog bort statusraden 'Jag finns här' från Hem-blocket Kalender – kortet visar nu titel, undertitel och Flows förslagstext (2026-08-29)",
       "Endast presentation – navigation, data och funktionalitet är oförändrade (2026-08-29)",
     ],
   },
+
   {
     title: "Stabilare sortering av dagens måendeobservationer",
     items: [
