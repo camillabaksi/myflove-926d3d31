@@ -200,7 +200,7 @@ export function ExpandableBlock({
             </div>
 
             {!open && status != null && (
-              <div className="font-display text-lg font-bold leading-tight text-ink">{status}</div>
+              <div className="font-display text-2xl font-bold leading-none text-ink">{status}</div>
             )}
             {!open && summary != null && (
               <div className="line-clamp-2 text-sm text-muted-foreground">{summary}</div>
