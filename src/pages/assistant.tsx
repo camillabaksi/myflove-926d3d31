@@ -523,7 +523,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
             </div>
           )}
 
-          <MyFloveBlock title="Idag" subtitle="En liten lägesbild från Flow" icon={Sparkles} tone="lavender" surface="lavender" collapsible collapseId="assistant::idag">
+          <MyFloveBlock title="Idag" subtitle="En liten lägesbild från Flow" icon={MessageCircle} tone="lavender" surface="lavender" collapsible collapseId="assistant::idag">
             <p className="text-sm leading-snug">{coachMessage.text}</p>
           </MyFloveBlock>
 
