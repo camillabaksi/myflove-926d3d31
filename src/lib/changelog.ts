@@ -10,6 +10,16 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Mer/Inställningar: en primär väg in per funktion",
+    items: [
+      "Dubbletterna i Mer är borta – Anpassa appen, Hemskärm och Min livsprofil finns nu på ett ställe (2026-08-29)",
+      "Inställningar samlas i en egen sektion; admin har en egen kategori (2026-08-29)",
+      "Alla inställningsrader har samma höjd, ikonstorlek och beteende (2026-08-29)",
+      "Bottenmenyns återställning pekar på Idag + Planera, som är standard (2026-08-29)",
+    ],
+  },
+  {
+
     title: "Städning: kompaktare Påminnelser, energihistorik och listor",
     items: [
       "Påminnelser: Aviseringar är ett kompakt kort med status och knapp på samma rad (2026-08-29)",
