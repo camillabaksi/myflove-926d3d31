@@ -111,9 +111,14 @@ export default function EnergyBattery({
         <div className="mt-3">
           <BatteryCurve reading={reading} compact />
         </div>
+        <span className="mt-3 flex items-center justify-between gap-2 rounded-2xl bg-primary/10 px-3 py-2">
+          <span className="text-sm font-semibold text-ink">Logga energi &amp; mående</span>
+          <span className="text-xs text-muted-foreground">Vad påverkar dig idag?</span>
+        </span>
       </Link>
     );
   }
+
 
   return (
     <section
