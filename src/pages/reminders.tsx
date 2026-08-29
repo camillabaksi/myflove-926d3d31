@@ -246,42 +246,35 @@ export default function RemindersPage() {
 
         <MyFloveBlock
           title="Aviseringar"
-          subtitle="Notiser när det är dags"
+          subtitle="Notis när det är dags"
           icon={BellRing}
           surface="lavender"
           area="idag"
         >
-          {permission === "granted" ? (
-            <p className="text-sm text-muted-foreground">
-              Notiser är påslagna på den här enheten. Du får en signal när en aktiv påminnelse
-              inträffar.
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <p className="min-w-0 flex-1 text-sm text-muted-foreground">
+              {permission === "granted"
+                ? "Notiser är på på den här enheten."
+                : permission === "unsupported"
+                  ? "Webbläsaren stödjer inte notiser."
+                  : permission === "denied"
+                    ? "Notiser är blockerade i webbläsaren."
+                    : "Slå på notiser så påminner appen dig."}
             </p>
-          ) : permission === "unsupported" ? (
-            <p className="text-sm text-muted-foreground">
-              Den här webbläsaren stödjer inte notiser.
-            </p>
-          ) : permission === "denied" ? (
-            <p className="text-sm text-muted-foreground">
-              Notiser är blockerade. Tillåt notiser för MyFlove i webbläsarens inställningar.
-            </p>
-          ) : (
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">
-                Slå på notiser så påminner appen dig när tiden är inne.
-              </p>
-              <Button onClick={askPermission} className="h-11 rounded-xl">
+            {permission === "default" && (
+              <Button onClick={askPermission} className="h-10 shrink-0 rounded-xl">
                 Tillåt notiser
               </Button>
-            </div>
-          )}
-          <div className="pt-1">
-            <EnablePushButton />
+            )}
           </div>
-          <p className="text-xs text-muted-foreground">
-            Push-notiser når dig även när appen är stängd. Avbokade påminnelser skickar aldrig
-            något.
-          </p>
+          <div className="flex flex-wrap items-center gap-2">
+            <EnablePushButton />
+            <p className="min-w-0 flex-1 text-xs text-muted-foreground">
+              Push når dig även när appen är stängd. Avbokade påminnelser skickar aldrig något.
+            </p>
+          </div>
         </MyFloveBlock>
+
 
         <MyFloveWide>
           <form
