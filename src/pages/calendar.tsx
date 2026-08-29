@@ -606,7 +606,7 @@ export default function CalendarPage() {
           </div>
         </MyFloveWide>
 
-        <MyFloveWide>
+        <div className="min-w-0 space-y-3">
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => fileInputRef.current?.click()}
