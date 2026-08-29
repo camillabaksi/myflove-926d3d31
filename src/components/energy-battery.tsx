@@ -41,26 +41,32 @@ export default function EnergyBattery({
         ? "på väg ner"
         : "ganska jämn";
 
-  // Widget-läge (Hem): stor ikon + batterinivå, inget mer. Hela kortet är en länk.
+  // Hem-läge: rubrik + kort underrubrik + aktuellt värde. Hela kortet är en länk.
   if (widget && href) {
     return (
       <Link
         href={href}
         onClick={onNavigate}
         data-testid="battery-card"
+        data-area="halsa"
         aria-label={`Mitt batteri, ${shownLevel} procent. Öppna för att logga energi och mående.`}
-        className="press block rounded-3xl border border-border/60 bg-sun/50 shadow-soft transition-shadow hover:shadow-lifted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+        className="press flex h-full min-w-0 flex-col gap-2 rounded-3xl border border-border/60 bg-sun/50 p-4 shadow-soft transition-shadow hover:shadow-lifted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:p-5"
       >
-        <span className="flex flex-col items-center justify-center gap-1.5 px-3 py-6 text-center">
-          <MyFloveIcon icon={BatteryCharging} tone="sun" size="lg" />
-          <span className="font-display text-2xl font-bold leading-none text-ink">
-            {shownLevel}%
+        <span className="flex min-w-0 items-start gap-2.5">
+          <MyFloveIcon icon={BatteryCharging} tone="sun" size="sm" />
+          <span className="min-w-0 flex-1">
+            <span className="block font-display text-base font-bold leading-tight text-ink">
+              Mitt batteri
+            </span>
+            <span className="block text-xs text-muted-foreground">Energi och mående</span>
           </span>
-          <span className="text-xs font-medium text-muted-foreground">Mitt batteri</span>
         </span>
+        <span className="font-display text-3xl font-bold leading-none text-ink">{shownLevel}%</span>
+        <span className="text-sm text-muted-foreground">{levelWord}</span>
       </Link>
     );
   }
+
 
   const content = (
     <>
