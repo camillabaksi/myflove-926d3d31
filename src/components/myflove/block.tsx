@@ -165,9 +165,10 @@ export function MyFloveBlockGrid({
 }
 
 /**
- * Sidlayout för hela appen – samma blockrutnät överallt.
- * En kolumn på små skärmar, två kolumner från md och uppåt.
- * Innehåll som behöver hela bredden wrappas i <MyFloveWide>.
+ * Sidlayout för hela appen – ett riktigt dashboard-grid.
+ * Två kolumner redan på vanlig mobilbredd, tre från lg och fyra från xl,
+ * med automatisk fallback till en kolumn på mycket smala skärmar.
+ * Innehåll som behöver mer plats wrappas i <MyFloveWide>.
  */
 export function MyFlovePageGrid({
   className,
@@ -182,7 +183,7 @@ export function MyFlovePageGrid({
     <div
       style={style}
       className={cn(
-        "grid min-w-0 grid-cols-1 gap-4 md:grid-cols-2 md:items-start md:gap-5",
+        "grid min-w-0 grid-cols-1 items-start gap-4 min-[380px]:grid-cols-2 md:gap-5 lg:grid-cols-3 xl:grid-cols-4",
         className,
       )}
     >
@@ -191,15 +192,28 @@ export function MyFlovePageGrid({
   );
 }
 
-/** Innehåll som ska spänna över hela bredden i ett MyFlovePageGrid. */
+/**
+ * Innehåll som behöver mer plats i ett MyFlovePageGrid.
+ * `span="full"` (standard) tar hela raden, `span="wide"` tar två av tre/fyra
+ * kolumner så att layouten kan variera i storlek och kännas levande.
+ */
 export function MyFloveWide({
   className,
   style,
+  span = "full",
   children,
   ...rest
-}: React.HTMLAttributes<HTMLDivElement>) {
+}: React.HTMLAttributes<HTMLDivElement> & { span?: "full" | "wide" }) {
   return (
-    <div {...rest} style={style} className={cn("min-w-0 md:col-span-2", className)}>
+    <div
+      {...rest}
+      style={style}
+      className={cn(
+        "min-w-0",
+        span === "wide" ? "col-span-full lg:col-span-2" : "col-span-full",
+        className,
+      )}
+    >
       {children}
     </div>
   );
