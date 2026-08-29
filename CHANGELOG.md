@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-29 – Områdesfärger som visuell röd tråd
+
+- Varje huvudområde har nu en egen mjuk färgidentitet: Hälsa (teal/salvia), Flow (lila), Idag (blå), Planera (blå/lila), Hem (varm persika), Återhämtning (gul) och Kalender (rosa/lila).
+- Färgerna definieras centralt som design tokens i `src/styles.css` och mappas i `src/lib/areas.ts`, så att ett områdes färg kan bytas på ett enda ställe.
+- Sidhuvuden, blockramar och blockikoner tar upp områdets färg via `data-area` och nya utilities (`area-text`, `area-bg-soft`, `area-border`, `area-hero`).
+- Färg är aldrig enda informationsbäraren – ikon, rubrik och text är oförändrade, liksom kontrast, reduced motion och tillgänglighet.
+- Endast presentation: data, stores, navigation, routes, Flow-logik, hälsologik och tester är oförändrade.
+
 ## 2026-08-29 – Komprimerade och expanderbara block
 
 - Informationsrika block visar nu en lugn sammanfattning först och öppnar samma innehåll i en fokuserad vy vid tryck.

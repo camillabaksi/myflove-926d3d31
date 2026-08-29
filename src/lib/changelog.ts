@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Områdesfärger som visuell röd tråd",
+    items: [
+      "Varje huvudområde har en egen mjuk färgidentitet: Hälsa, Flow, Idag, Planera, Hem, Återhämtning och Kalender (2026-08-29)",
+      "Färgerna bor centralt som design tokens i styles.css och mappas i src/lib/areas.ts, så en områdesfärg kan bytas på ett ställe (2026-08-29)",
+      "Sidhuvuden, blockramar och ikoner följer områdets färg via data-area och nya utilities (2026-08-29)",
+      "Färg är aldrig enda informationsbäraren; kontrast, reduced motion och tillgänglighet är oförändrade (2026-08-29)",
+    ],
+  },
+  {
     title: "Komprimerade och expanderbara block",
     items: [
       "Informationsrika block visar en lugn sammanfattning först och öppnar samma innehåll i en fokuserad vy vid tryck (2026-08-29)",
