@@ -51,7 +51,7 @@ describe("hälsologgning är data, inte aktivitet", () => {
     // aktiviteter tolkas fortfarande som aktiviteter.
     expect(guessDestination({ text: "boka läkare" })).toBe("kalender");
     expect(guessDestination({ text: "träning kl 18" })).toBe("kalender");
-    expect(guessDestination({ text: "ring vårdcentralen" })).toBe("kalender");
+    expect(guessDestination({ text: "ring vårdcentralen" })).toBe("uppgift");
     expect(DESTINATION_AREA["halsa"]).toBeDefined();
   });
 

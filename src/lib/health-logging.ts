@@ -21,7 +21,7 @@ const ACTIVITY_INTENT =
 
 /** Ord som betyder "det här är något jag registrerar om mig själv". */
 const HEALTH_OBSERVATION =
-  /(sov \d|sovit|sömn|somna|vaknade|trött|utmattad|orkade inte|orkeslös|energi\s*\d|låg energi|hög energi|batteriet|mår (bra|dåligt|sådär)|mående|nedstämd|ångest|stress(ad|en)?\b|överbelast|huvudvärk|migrän|illamående|yr\b|smärta|värk|ont i|kroppen|kroppslig|återhämt|vilade|vilat|krasch|överstimulerad|för mycket ljud|infektion|feber|mens)/;
+  /(sov \d|sovit|sömn|somna|vaknade|trött|utmattad|orkade inte|orkeslös|energi\s*\d|låg energi|hög energi|batteriet|mår (bra|dåligt|sådär)|mående|nedstämd|ångest|stress(ad|en)?\b|överbelast|huvudvärk|migrän|illamående|yr\b|smärta|värk|ont i|kropp\\w*|återhämt|vilade|vilat|krasch|överstimulerad|för mycket ljud|infektion|feber|mens)/;
 
 /**
  * Är texten en hälsoobservation (loggning) snarare än en aktivitet?
