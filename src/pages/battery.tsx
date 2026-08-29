@@ -3,7 +3,8 @@ import { Link } from "wouter";
 import { ArrowRight, LineChart, Smile, Battery, Zap } from "lucide-react";
 import Layout from "@/components/layout";
 import { MyFloveHeader } from "@/components/myflove";
-import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
+import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
+import { ExpandableBlock } from "@/components/myflove/expandable-block";
 import EnergyBattery from "@/components/energy-battery";
 import SimpleCheckin from "@/components/simple-checkin";
 import BatteryToday from "@/components/battery-today";
@@ -58,18 +59,13 @@ export default function BatteryPage() {
 
         {/* 4. Historik – sekundär, längst ner */}
         <MyFloveWide>
-          <MyFloveBlock
-            title={
-              <span className="flex items-center gap-2">
-                <LineChart size={18} className="text-primary" aria-hidden="true" /> Se min historik
-              </span>
-            }
+          <ExpandableBlock
+            title="Se min historik"
+            titleText="Se min historik"
             subtitle="Tidigare mående, energi och energiflöde"
             icon={LineChart}
             tone="lavender"
-            collapsible
-            collapseId="batteri::historik"
-            bodyClassName="space-y-4"
+            summary="Mående, energi och flöde över tid"
           >
             <Tabs defaultValue="mood" className="w-full" data-testid="battery-history">
               <TabsList className="grid h-11 w-full grid-cols-3 rounded-2xl">
@@ -99,7 +95,7 @@ export default function BatteryPage() {
             >
               Mer om vad som ger och tar energi <ArrowRight size={14} />
             </Link>
-          </MyFloveBlock>
+          </ExpandableBlock>
         </MyFloveWide>
       </MyFlovePageGrid>
     </Layout>

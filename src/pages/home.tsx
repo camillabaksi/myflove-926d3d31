@@ -381,7 +381,6 @@ export default function Home() {
                 </p>
               )}
             </ExpandableBlock>
-
           </section>
         )}
 
@@ -403,7 +402,6 @@ export default function Home() {
             >
               <RoutinesMedicationToday />
             </ExpandableBlock>
-
           </section>
         )}
 
@@ -446,7 +444,6 @@ export default function Home() {
                 <ArrowRight size={14} />
               </Link>
             </ExpandableBlock>
-
           </section>
         )}
 
@@ -589,7 +586,9 @@ function DaySummary() {
       surface="sky"
       status={total === 0 ? "Inget ännu" : `${total} ${total === 1 ? "sak" : "saker"}`}
       summary={
-        total === 0 ? "Inget inplanerat idag" : `${todayDone.length} klara · ${todayOpen.length} kvar`
+        total === 0
+          ? "Inget inplanerat idag"
+          : `${todayDone.length} klara · ${todayOpen.length} kvar`
       }
     >
       <p className="text-ink">
