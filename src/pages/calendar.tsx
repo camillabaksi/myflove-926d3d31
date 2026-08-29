@@ -641,7 +641,7 @@ export default function CalendarPage() {
         </div>
 
         <div className="min-w-0">
-          <EnergyBattery />
+          <EnergyBattery widget href="/mitt-batteri" />
         </div>
 
         <MyFloveWide>

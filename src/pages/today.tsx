@@ -233,8 +233,10 @@ export default function TodayPage() {
                 subtitle="Planen du valt i Planera"
                 icon={ListOrdered}
                 tone="lavender"
-                status={`${dayPlan.steps.length} steg`}
-                summary={dayPlan.steps[0]?.title}
+                area="planera"
+                widget
+                label="Ordning"
+                status={`${dayPlan.steps.length}`}
               >
                 {dayPlan.intro && <p className="text-sm text-foreground">{dayPlan.intro}</p>}
                 <ol className="space-y-2">
