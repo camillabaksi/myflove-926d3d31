@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ArrowRight, BatteryCharging, ChevronDown, Gauge, Sparkles } from "lucide-react";
 import { Link } from "wouter";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
+import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { useAnimatedNumber } from "@/hooks/use-animated-number";
 import { minutesToTime } from "@/lib/energy-battery";
 import { MyFloveBlock, MyFloveStat } from "@/components/myflove/block";
