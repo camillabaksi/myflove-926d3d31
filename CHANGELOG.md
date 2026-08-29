@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-29 – Hem: Kalender-blocket utan "Jag finns här"
+
+- Tog bort statusraden "Jag finns här" från Hem-blocket Kalender. Kortet visar nu bara titel, undertitel och Flows förslagstext.
+- Endast presentation – navigation, data och funktionalitet är oförändrade.
+
 ## 2026-08-29 – Stabilare sortering av dagens måendeobservationer
 
 - Dagens måendeobservationer sorteras nu kronologiskt även när flera loggningar har samma tidsstämpel, så ordningen blir förutsägbar i Mitt batteri och historiken.

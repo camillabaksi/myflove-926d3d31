@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Hem: Kalender-blocket utan 'Jag finns här'",
+    items: [
+      "Tog bort statusraden 'Jag finns här' från Hem-blocket Kalender – kortet visar nu titel, undertitel och Flows förslagstext (2026-08-29)",
+      "Endast presentation – navigation, data och funktionalitet är oförändrade (2026-08-29)",
+    ],
+  },
+  {
     title: "Stabilare sortering av dagens måendeobservationer",
     items: [
       "Dagens måendeobservationer sorteras nu kronologiskt även när flera loggningar har samma tidsstämpel, så ordningen blir förutsägbar i Mitt batteri och historiken (2026-08-29)",
