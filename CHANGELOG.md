@@ -5,7 +5,7 @@
 - Informationsrika block visar nu en lugn sammanfattning först och öppnar samma innehåll i en fokuserad vy vid tryck.
 - Den expanderade vyn kan stängas med Stäng, Escape eller Androids bakåtknapp; fokus och scrollposition återställs till samma block.
 - Reduced motion respekteras utan att ändra funktionalitet, data, navigation eller befintliga användarflöden.
-- Maximerade block renderas nu via en portal utanför gridet, så de alltid täcker hela skärmbredden även när det komprimerade kortet ligger i en tvåkolumnsrad – verifierat utan horisontell scroll på 320–412 px.
+- Block expanderar nu på plats i sidans flöde som ett accordion-kort i stället för att öppnas som en helskärmsvy: kortet växer mjukt, tar hela innehållsbredden (col-span-full) och kollapsar tillbaka till exakt samma ruta i tvåkolumnsrutnätet – verifierat utan horisontell scroll på 320–412 px.
 
 ## 2026-08-29 – Responsivt blocksystem
 
