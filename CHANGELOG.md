@@ -4,8 +4,8 @@
 
 - MyFlove använder ett gemensamt CSS-grid som aktivt placerar lämpliga block bredvid varandra i stället för att stapla varje sektion som en hel rad.
 - Hem visar ett varierat dashboard-grid med batteri/Flow, sammanfattningar och nästa steg sida vid sida; bredare ytor används där grafer och tidslinjer behöver det.
-- `MyFlovePageGrid` använder en kolumn på smala mobiler, två från 560 px, tre på stora skärmar och `MyFloveWide` för fullbredds- eller breda block.
-- Långa texter, formulär, tidslinjer och grafer använder fortsatt hela bredden; smala skärmar faller tillbaka till en kolumn utan sidoscroll.
+- `MyFlovePageGrid` använder två kolumner som standard även på 320–412 px, tre på tablet och fyra på desktop; `MyFloveWide` ger enskilda breda block hela raden.
+- Hem, Hälsa och Mitt batteri visar flera lämpliga block samtidigt på mobil, medan långa formulär, tidslinjer och grafer fortsatt använder hela bredden utan sidoscroll.
 - Resterande vyer – Planera, Kalender, Energi/Flow, listor, påminnelser, rutiner, medicin och inställningar – använder nu samma responsiva blockramverk.
 - Endast layout – funktioner, data, logik, navigation och tester är oförändrade.
 

@@ -3,7 +3,7 @@ import { Link } from "wouter";
 import { ArrowRight, LineChart, Smile, Battery, Zap } from "lucide-react";
 import Layout from "@/components/layout";
 import { MyFloveHeader } from "@/components/myflove";
-import { MyFloveBlock } from "@/components/myflove/block";
+import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import EnergyBattery from "@/components/energy-battery";
 import SimpleCheckin from "@/components/simple-checkin";
 import BatteryToday from "@/components/battery-today";
@@ -30,42 +30,47 @@ export default function BatteryPage() {
 
   return (
     <Layout>
-      <div className="space-y-6">
-        <MyFloveHeader
-          title="Mitt batteri"
-          emojiKey="wellness"
-          description="Din energi och ditt mående – checka in och se hur dagen brukar se ut."
-        />
+      <MyFlovePageGrid>
+        <MyFloveWide>
+          <MyFloveHeader
+            title="Mitt batteri"
+            emojiKey="wellness"
+            description="Din energi och ditt mående – checka in och se hur dagen brukar se ut."
+          />
+        </MyFloveWide>
 
         {/* 1. Primär incheckning + nu-läge – samma befintliga dataväg */}
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">
+        <MyFloveWide className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">
           <SimpleCheckin source="mitt-batteri" />
           <EnergyBattery defaultOpen />
-        </div>
+        </MyFloveWide>
 
         {/* 2. Dagens tidsstämplade observationer + morgon/kväll */}
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">
+        <MyFloveWide className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">
           <BatteryToday />
           <DayEdgesCheckin />
-        </div>
+        </MyFloveWide>
 
         {/* 3. Dagens energiflöde – graf, hela bredden */}
-        <DayEnergyFlow />
+        <MyFloveWide>
+          <DayEnergyFlow />
+        </MyFloveWide>
 
         {/* 4. Historik – sekundär, längst ner */}
-        <MyFloveBlock
-          title={
-            <span className="flex items-center gap-2">
-              <LineChart size={18} className="text-primary" aria-hidden="true" /> Se min historik
-            </span>
-          }
-          subtitle="Tidigare mående, energi och energiflöde"
-          icon={LineChart}
-          tone="lavender"
-          collapsible
-          collapseId="batteri::historik"
-          bodyClassName="space-y-4"
-        >
+        <MyFloveWide>
+          <MyFloveBlock
+            title={
+              <span className="flex items-center gap-2">
+                <LineChart size={18} className="text-primary" aria-hidden="true" /> Se min historik
+              </span>
+            }
+            subtitle="Tidigare mående, energi och energiflöde"
+            icon={LineChart}
+            tone="lavender"
+            collapsible
+            collapseId="batteri::historik"
+            bodyClassName="space-y-4"
+          >
           <Tabs defaultValue="mood" className="w-full" data-testid="battery-history">
             <TabsList className="grid h-11 w-full grid-cols-3 rounded-2xl">
               <TabsTrigger value="mood" className="rounded-xl text-xs">
@@ -94,8 +99,9 @@ export default function BatteryPage() {
           >
             Mer om vad som ger och tar energi <ArrowRight size={14} />
           </Link>
-        </MyFloveBlock>
-      </div>
+          </MyFloveBlock>
+        </MyFloveWide>
+      </MyFlovePageGrid>
     </Layout>
   );
 }
