@@ -215,16 +215,21 @@ export default function TodayPage() {
               </Link>
             </StepSection>
 
-            {/* Steg 3 – lägg till något i dagen */}
-            <StepSection
-              step={3}
-              id="idag::steg-lagg-till"
+            {/* Steg 3 – lägg till något i dagen, samma blockspråk som övriga kort */}
+            <ExpandableBlock
               title="Lägg till i dagen"
-              description="Något nytt – eller något du redan hunnit med."
+              subtitle="Något nytt – eller något du redan hunnit med"
+              icon={Plus}
+              tone="mint"
+              surface="mint"
+              area="vardag"
+              widget
+              label="Lägg till"
+              status="+"
             >
               <TaskQuickAdd onAdd={handleQuickAdd} />
               <DidThisQuickAdd />
-            </StepSection>
+            </ExpandableBlock>
 
             {/* 📋 Dagens ordning – planen du valt i Planera */}
             {dayPlan && dayPlan.steps.length > 0 && (
