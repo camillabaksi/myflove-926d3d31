@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-29 – Idag: Lägg till i dagen följer blockspråket
+
+- Steg 3 "Lägg till i dagen" på Idag är nu ett komprimerat, expanderbart block (ExpandableBlock) med ikon, etikett och status – samma designspråk som övriga kort.
+- Innehållet (TaskQuickAdd och DidThisQuickAdd) är oförändrat och ligger i den expanderade vyn.
+
 ## 2026-08-29 – Tjockare kantlinjer på samtliga kort
 
 - Alla kort med blocklayouten har nu 2px-borders i stället för 1px – gemensamma border-tokens (`--border-hairline`, `--border-strong`, `--border-dashed`, `--border-accent`), hero-ytan och alla `rounded-3xl`-kort i sidor och komponenter.

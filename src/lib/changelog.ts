@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Idag: Lägg till i dagen följer blockspråket",
+    items: [
+      "Steg 3 Lägg till i dagen på Idag är nu ett komprimerat, expanderbart block med ikon, etikett och status – samma designspråk som övriga kort (2026-08-29)",
+      "Innehållet (snabb-tillägg och gjorde-detta) är oförändrat i expanderad vy (2026-08-29)",
+    ],
+  },
+  {
     title: "Tjockare kantlinjer på samtliga kort",
     items: [
       "Alla kort med blocklayouten har nu 2px-borders i stället för 1px – gemensamma border-tokens, hero-ytan och alla rounded-3xl-kort (2026-08-29)",
