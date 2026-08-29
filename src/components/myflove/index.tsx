@@ -13,7 +13,6 @@ import { useCollapsible } from "@/lib/collapse-store";
 import { useSmartBack } from "@/hooks/use-smart-back";
 import { areaProps, type AreaId } from "@/lib/areas";
 
-
 /* ------------------------------------------------------------------ */
 /* Emoji – samma storlekar och samma lilla liv överallt                */
 /* ------------------------------------------------------------------ */
@@ -337,7 +336,6 @@ export function MyFloveHeader({
             },
           })}
     >
-
       <div className="flex items-start gap-3">
         {back && (
           <button

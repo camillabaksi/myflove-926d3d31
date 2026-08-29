@@ -16,7 +16,6 @@ import { useCollapsible } from "@/lib/collapse-store";
 import { areaProps, type AreaId } from "@/lib/areas";
 import { MyFloveIcon, type MyFloveTone } from "@/components/myflove";
 
-
 export interface MyFloveBlockProps {
   /** Rubrik – kort och i du-form. */
   title: React.ReactNode;

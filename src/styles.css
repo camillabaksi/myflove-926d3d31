@@ -504,36 +504,83 @@ html[data-npf-less="true"] [data-npf="optional"] {
 
 /* Flow-stämningar: maskoten anpassar sitt kroppsspråk efter vyn */
 @keyframes myflove-flow-nod {
-  0%, 100% { transform: rotate(0deg) translateY(0); }
-  25% { transform: rotate(-4deg) translateY(2px); }
-  60% { transform: rotate(5deg) translateY(-3px); }
+  0%,
+  100% {
+    transform: rotate(0deg) translateY(0);
+  }
+  25% {
+    transform: rotate(-4deg) translateY(2px);
+  }
+  60% {
+    transform: rotate(5deg) translateY(-3px);
+  }
 }
 @keyframes myflove-flow-bounce {
-  0%, 100% { transform: translateY(0) scale(1); }
-  40% { transform: translateY(-14px) scale(1.05, 0.95); }
-  70% { transform: translateY(0) scale(0.96, 1.04); }
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  40% {
+    transform: translateY(-14px) scale(1.05, 0.95);
+  }
+  70% {
+    transform: translateY(0) scale(0.96, 1.04);
+  }
 }
 @keyframes myflove-flow-sway {
-  0%, 100% { transform: translateX(-6px) rotate(-5deg); }
-  50% { transform: translateX(6px) rotate(5deg); }
+  0%,
+  100% {
+    transform: translateX(-6px) rotate(-5deg);
+  }
+  50% {
+    transform: translateX(6px) rotate(5deg);
+  }
 }
 @keyframes myflove-flow-think {
-  0%, 100% { transform: rotate(-7deg) translateY(0); }
-  50% { transform: rotate(-7deg) translateY(-5px); }
+  0%,
+  100% {
+    transform: rotate(-7deg) translateY(0);
+  }
+  50% {
+    transform: rotate(-7deg) translateY(-5px);
+  }
 }
 @keyframes myflove-flow-pulse {
-  0%, 100% { transform: scale(1); filter: drop-shadow(0 8px 24px rgba(124, 92, 224, 0.25)); }
-  50% { transform: scale(1.07); filter: drop-shadow(0 12px 32px rgba(244, 114, 182, 0.4)); }
+  0%,
+  100% {
+    transform: scale(1);
+    filter: drop-shadow(0 8px 24px rgba(124, 92, 224, 0.25));
+  }
+  50% {
+    transform: scale(1.07);
+    filter: drop-shadow(0 12px 32px rgba(244, 114, 182, 0.4));
+  }
 }
 @keyframes myflove-flow-cheer {
-  0%, 100% { transform: rotate(0deg) scale(1); }
-  20% { transform: rotate(-10deg) scale(1.06) translateY(-8px); }
-  50% { transform: rotate(10deg) scale(1.06) translateY(-10px); }
-  75% { transform: rotate(-4deg) scale(1.02) translateY(-2px); }
+  0%,
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+  20% {
+    transform: rotate(-10deg) scale(1.06) translateY(-8px);
+  }
+  50% {
+    transform: rotate(10deg) scale(1.06) translateY(-10px);
+  }
+  75% {
+    transform: rotate(-4deg) scale(1.02) translateY(-2px);
+  }
 }
 @keyframes myflove-flow-calm {
-  0%, 100% { transform: translateY(0) scale(1); opacity: 0.95; }
-  50% { transform: translateY(-8px) scale(1.03); opacity: 1; }
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.95;
+  }
+  50% {
+    transform: translateY(-8px) scale(1.03);
+    opacity: 1;
+  }
 }
 
 @utility flow-nod {
@@ -566,12 +613,25 @@ html[data-npf-less="true"] [data-npf="optional"] {
 /* Flow lever: en knappt märkbar andning + en blinkning då och då.
    Läggs på behållaren så den kan kombineras med scenens egen stämning. */
 @keyframes myflove-flow-alive {
-  0%, 92%, 100% { transform: translateY(0) scale(1); }
-  46% { transform: translateY(-2px) scale(1.012); }
+  0%,
+  92%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  46% {
+    transform: translateY(-2px) scale(1.012);
+  }
 }
 @keyframes myflove-flow-blink {
-  0%, 96%, 100% { opacity: 0; }
-  97%, 99% { opacity: 1; }
+  0%,
+  96%,
+  100% {
+    opacity: 0;
+  }
+  97%,
+  99% {
+    opacity: 1;
+  }
 }
 @utility flow-alive {
   animation: myflove-flow-alive 6.5s ease-in-out infinite;
@@ -579,10 +639,18 @@ html[data-npf-less="true"] [data-npf="optional"] {
 }
 /* Liten reaktion när Flow får något nytt att säga. */
 @keyframes myflove-flow-notice {
-  0% { transform: scale(1) rotate(0deg); }
-  30% { transform: scale(1.06) rotate(-4deg); }
-  60% { transform: scale(1.02) rotate(3deg); }
-  100% { transform: scale(1) rotate(0deg); }
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  30% {
+    transform: scale(1.06) rotate(-4deg);
+  }
+  60% {
+    transform: scale(1.02) rotate(3deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
 }
 @utility flow-notice {
   animation: myflove-flow-notice 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -592,8 +660,13 @@ html[data-npf-less="true"] [data-npf="optional"] {
 
 /* Mjuk andning i själva kroppen (lägre amplitud än flow-alive, kan kombineras). */
 @keyframes myflove-flow-breathe-body {
-  0%, 100% { transform: scaleX(1) scaleY(1) translateY(0); }
-  50% { transform: scaleX(1.015) scaleY(0.985) translateY(1px); }
+  0%,
+  100% {
+    transform: scaleX(1) scaleY(1) translateY(0);
+  }
+  50% {
+    transform: scaleX(1.015) scaleY(0.985) translateY(1px);
+  }
 }
 @utility flow-breathe-body {
   transform-origin: 50% 92%;
@@ -603,9 +676,16 @@ html[data-npf-less="true"] [data-npf="optional"] {
 
 /* Blink: en snabb squash som läser som ett ögonlock på maskotbilden. */
 @keyframes myflove-flow-blink-squash {
-  0%, 100% { transform: scaleY(1); }
-  40% { transform: scaleY(0.9); }
-  70% { transform: scaleY(1.01); }
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  40% {
+    transform: scaleY(0.9);
+  }
+  70% {
+    transform: scaleY(1.01);
+  }
 }
 @utility flow-blinking {
   transform-origin: 50% 62%;
@@ -614,22 +694,24 @@ html[data-npf-less="true"] [data-npf="optional"] {
 
 /* Hjärtglöd som pulserar lugnt bakom Flow. */
 @keyframes myflove-flow-heart-glow {
-  0%, 100% { transform: scale(0.92); opacity: 0.35; }
-  50% { transform: scale(1.08); opacity: 0.6; }
+  0%,
+  100% {
+    transform: scale(0.92);
+    opacity: 0.35;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 0.6;
+  }
 }
 @utility flow-heart-glow {
   animation: myflove-flow-heart-glow var(--flow-glow, 3.8s) ease-in-out infinite;
 }
 
-
 /* Blicken/kroppen lutar mjukt mot pekaren. */
 @utility flow-gaze {
   transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
-
-
-
-
 
 /* Knapptryck: lätt scale */
 @utility press {
@@ -697,7 +779,6 @@ html[data-npf-less="true"] [data-npf="optional"] {
 }
 @media (prefers-reduced-motion: reduce) {
   .stagger > * {
-
     animation: none !important;
   }
 }
@@ -892,50 +973,123 @@ html[data-npf-less="true"] [data-npf="optional"] {
 
 /* ── Flow-rekvisita: små, lena animationer för karaktärens scener ── */
 @keyframes myflove-flow-rain {
-  0% { transform: translateY(-10%); opacity: 0; }
-  15% { opacity: 0.9; }
-  100% { transform: translateY(320%); opacity: 0; }
+  0% {
+    transform: translateY(-10%);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(320%);
+    opacity: 0;
+  }
 }
 @keyframes myflove-flow-zzz {
-  0% { transform: translate(0, 0) scale(0.8); opacity: 0; }
-  30% { opacity: 0.9; }
-  100% { transform: translate(14px, -34px) scale(1.1); opacity: 0; }
+  0% {
+    transform: translate(0, 0) scale(0.8);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate(14px, -34px) scale(1.1);
+    opacity: 0;
+  }
 }
 @keyframes myflove-flow-steam {
-  0% { transform: translateY(0) scaleY(0.6); opacity: 0; }
-  40% { opacity: 0.8; }
-  100% { transform: translateY(-18px) scaleY(1.2); opacity: 0; }
+  0% {
+    transform: translateY(0) scaleY(0.6);
+    opacity: 0;
+  }
+  40% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-18px) scaleY(1.2);
+    opacity: 0;
+  }
 }
 @keyframes myflove-flow-confetti {
-  0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-  10% { opacity: 1; }
-  100% { transform: translateY(340%) rotate(320deg); opacity: 0; }
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(340%) rotate(320deg);
+    opacity: 0;
+  }
 }
 @keyframes myflove-flow-breath-ring {
-  0%, 100% { transform: scale(0.86); opacity: 0.25; }
-  50% { transform: scale(1.08); opacity: 0.6; }
+  0%,
+  100% {
+    transform: scale(0.86);
+    opacity: 0.25;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 0.6;
+  }
 }
 @keyframes myflove-flow-wiggle {
-  0%, 100% { transform: rotate(-5deg); }
-  50% { transform: rotate(5deg); }
+  0%,
+  100% {
+    transform: rotate(-5deg);
+  }
+  50% {
+    transform: rotate(5deg);
+  }
 }
 @keyframes myflove-flow-drive {
-  0%, 100% { transform: translateX(-3%) translateY(0); }
-  50% { transform: translateX(3%) translateY(-2px); }
+  0%,
+  100% {
+    transform: translateX(-3%) translateY(0);
+  }
+  50% {
+    transform: translateX(3%) translateY(-2px);
+  }
 }
 @keyframes myflove-flow-twinkle-star {
-  0%, 100% { transform: scale(0.7); opacity: 0.35; }
-  50% { transform: scale(1.15); opacity: 1; }
+  0%,
+  100% {
+    transform: scale(0.7);
+    opacity: 0.35;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
 }
 
-@utility flow-rain { animation: myflove-flow-rain 1.6s linear infinite; }
-@utility flow-zzz { animation: myflove-flow-zzz 3.2s ease-out infinite; }
-@utility flow-steam { animation: myflove-flow-steam 2.4s ease-out infinite; }
-@utility flow-confetti { animation: myflove-flow-confetti 2.6s ease-in infinite; }
-@utility flow-breath-ring { animation: myflove-flow-breath-ring 6s ease-in-out infinite; }
-@utility flow-wiggle { transform-origin: 50% 100%; animation: myflove-flow-wiggle 2.4s ease-in-out infinite; }
-@utility flow-drive { animation: myflove-flow-drive 3s ease-in-out infinite; }
-@utility flow-twinkle { animation: myflove-flow-twinkle-star 2.2s ease-in-out infinite; }
+@utility flow-rain {
+  animation: myflove-flow-rain 1.6s linear infinite;
+}
+@utility flow-zzz {
+  animation: myflove-flow-zzz 3.2s ease-out infinite;
+}
+@utility flow-steam {
+  animation: myflove-flow-steam 2.4s ease-out infinite;
+}
+@utility flow-confetti {
+  animation: myflove-flow-confetti 2.6s ease-in infinite;
+}
+@utility flow-breath-ring {
+  animation: myflove-flow-breath-ring 6s ease-in-out infinite;
+}
+@utility flow-wiggle {
+  transform-origin: 50% 100%;
+  animation: myflove-flow-wiggle 2.4s ease-in-out infinite;
+}
+@utility flow-drive {
+  animation: myflove-flow-drive 3s ease-in-out infinite;
+}
+@utility flow-twinkle {
+  animation: myflove-flow-twinkle-star 2.2s ease-in-out infinite;
+}
 
 @media (prefers-reduced-motion: reduce) {
   .flow-rain,
@@ -952,13 +1106,21 @@ html[data-npf-less="true"] [data-npf="optional"] {
 
 /* Lugn fade enbart vid route-navigation via TanStack View Transitions. */
 @keyframes myflove-view-fade-out {
-  from { opacity: 1; }
-  to { opacity: 0; }
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
 
 @keyframes myflove-view-fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 ::view-transition-old(root) {
@@ -971,16 +1133,25 @@ html[data-npf-less="true"] [data-npf="optional"] {
 
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-old(root),
-  ::view-transition-new(root) { animation: none; }
+  ::view-transition-new(root) {
+    animation: none;
+  }
 }
-
-
 
 /* Liten engångsreaktion när något bockas av – ingen loop, ingen konfetti. */
 @keyframes myflove-check-pop {
-  0% { transform: scale(0.8); opacity: 0.6; }
-  60% { transform: scale(1.12); opacity: 1; }
-  100% { transform: scale(1); opacity: 1; }
+  0% {
+    transform: scale(0.8);
+    opacity: 0.6;
+  }
+  60% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .check-pop {
@@ -989,8 +1160,14 @@ html[data-npf-less="true"] [data-npf="optional"] {
 
 /* Mjuk uppenbarelse av text/insikter – körs en gång, aldrig i loop. */
 @keyframes myflove-reveal-soft {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .reveal-soft {

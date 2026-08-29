@@ -11,14 +11,7 @@
  * Färg är aldrig enda informationsbäraren – rubrik och ikon finns alltid.
  */
 
-export type AreaId =
-  | "halsa"
-  | "flow"
-  | "idag"
-  | "planera"
-  | "hem"
-  | "aterhamtning"
-  | "kalender";
+export type AreaId = "halsa" | "flow" | "idag" | "planera" | "hem" | "aterhamtning" | "kalender";
 
 export interface AreaMeta {
   id: AreaId;
