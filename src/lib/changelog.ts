@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-08-29";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Widget-minimalism på fler dashboard-sidor",
+    items: [
+      "Idag: Dagens ordning är en komprimerad widget (ikon + antal) med hela planen i expanderad vy (2026-08-29)",
+      "Kalender: batterikortet använder widget-läget – ikon + procent, tryck öppnar Mitt batteri (2026-08-29)",
+      "Mitt batteri: historiken är en komprimerad widget som expanderar i flödet med oförändrade flikar (2026-08-29)",
+      "Endast presentation – data, stores, navigation och logik är oförändrade (2026-08-29)",
+    ],
+  },
+  {
     title: "Widget-läge: minimalistiska komprimerade block",
     items: [
       "Komprimerade block på Hem visar bara stor ikon + ett värde; rubrik och förklaringar bor i den expanderade vyn (2026-08-29)",
