@@ -48,15 +48,16 @@ export interface HomeLayoutPrefs {
 // Clean-up 1.0: Hem visar max sex block. Resten slås på i "Anpassa hemskärmen".
 
 export const DEFAULT_PREFS: HomeLayoutPrefs = {
-  // Lugn start: Hem svarar på "vad behöver jag veta eller göra just nu?".
-  hidden: ["medicin", "omrade", "vagar"],
+  // Hem är appens samlade överblick igen: alla block syns som komprimerade
+  // widgets. Ingen information göms – den ligger i expanderat läge.
+  hidden: [],
 
   order: ["batteri", "forslag", "nasta", "idag", "lagg-till", "vagar", "medicin", "omrade"],
 };
 
 const STORAGE_KEY = "myflove-home-layout";
-/** Clean-up 1.0: en lugnare hemskärm med max sex block – körs en gång. */
-const CLEANUP_MIGRATION_KEY = "myflove-home-layout-cleanup-1";
+/** Återställning: Hem visar åter allt innehåll som block – körs en gång. */
+const CLEANUP_MIGRATION_KEY = "myflove-home-layout-restore-1";
 
 /** Sorterar användarens ordning efter Clean-up-ordningen, okända block sist. */
 export function cleanupOrder(order: HomeBlockId[] | undefined): HomeBlockId[] {
