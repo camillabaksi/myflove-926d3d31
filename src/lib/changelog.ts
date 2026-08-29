@@ -19,7 +19,6 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     ],
   },
   {
-
     title: "Städning: typsnitt, statistik och konsekventa kort",
     items: [
       "Nunito Sans är nu appens enda typsnitt, med emoji-fallback (2026-08-29)",

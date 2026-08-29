@@ -7,8 +7,6 @@
 - Inköpslista: alla rader har samma höjd och padding, ikoner i samma storlek, status till vänster och papperskorg till höger. Avklarade rader har diskret genomstrykning med bibehållen kontrast.
 - Sparade butiker: kortare underrubrik ("Påminn mig när jag är nära en butik.") och input + platsknapp på samma rad som wrappar snyggt på små skärmar.
 
-
-
 ## 2026-08-29 – Städning: typsnitt, statistik och konsekventa kort
 
 - Nunito Sans är nu appens enda typsnitt (tokens + fontladdning), med emoji-fallback.
