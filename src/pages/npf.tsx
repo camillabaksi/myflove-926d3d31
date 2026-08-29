@@ -5,17 +5,7 @@ import Layout from "@/components/layout";
 import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import {
-  RotateCcw,
-  Accessibility,
-  BarChart3,
-  Eye,
-  Sparkles,
-  Type,
-  Hand,
-  ImageIcon,
-  MonitorSmartphone,
-} from "lucide-react";
+import { RotateCcw, Accessibility, BarChart3 } from "lucide-react";
 import { useNpfSettings, type NpfSettings } from "@/lib/npf-mode";
 import { Link } from "@tanstack/react-router";
 
