@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import Layout from "@/components/layout";
-import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
+import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import CollapsibleSection from "@/components/collapsible-section";
 import { Button } from "@/components/ui/button";
 import { useReminders, type Reminder, type RepeatMode } from "@/hooks/use-data";
@@ -244,7 +244,12 @@ export default function RemindersPage() {
         </header>
         </MyFloveWide>
 
-        <MyFloveBlock rounded-2xl border border-border bg-card p-5 shadow-sm">
+        <MyFloveBlock
+          title="Aviseringar"
+          subtitle="Notiser när det är dags"
+          icon={BellRing}
+          surface="lavender"
+        >
           {permission === "granted" ? (
             <p className="text-sm text-muted-foreground">
               Notiser är påslagna på den här enheten. Du får en signal när en aktiv påminnelse

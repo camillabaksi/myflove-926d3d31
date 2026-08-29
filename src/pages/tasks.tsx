@@ -570,7 +570,6 @@ export default function Tasks() {
               </form>
             </div>
           </div>
-          </MyFloveWide>
         )}
       </MyFlovePageGrid>
     );
@@ -828,10 +827,11 @@ export default function Tasks() {
                   </button>
                 </div>
               ))
-            )}
-          </div>
-        )}
-      </div>
+             )}
+           </div>
+           </MyFloveWide>
+         )}
+       </div>
 
       <TaskEnergyPrompt
         task={energyPrompt}
