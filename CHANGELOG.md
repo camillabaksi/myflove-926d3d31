@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-08-30 – Kalender blir navet för dagens planering
+
+- Kalender är nu appens enda primära plats för dagens planering, med tre flikar: **Idag**, **Kalender** och **Lägg till**. Varje flik har en egen adress (`/idag`, `/kalender`, `/lagg-till`) så länkar och bakåtknappen fungerar som vanligt.
+- **Lägg till** är den gemensamma vägen in: ny aktivitet, "jag gjorde redan något" samt tydliga rader till påminnelse, rutin, medicin och barnens dag.
+- Hem är åter en ren översikt: Mitt batteri, Flow, insikter, Min dag och QuickFlow. Duplicerade genvägar (Kalender-kortet, "Lägg till i dagen" och "Jag gjorde redan något") är borttagna. Min dag visar t.ex. "6 av 7 klara · 1 kvar" och öppnar Kalender · Idag.
+- Ny energilogik: en planerad aktivitet ändrar aldrig energin av sig själv. När du bockar av något frågar MyFlove frivilligt hur det påverkade dig – Gav energi, Tog lite energi, Tog mycket energi eller Vet inte. "Vet inte" loggar ingenting.
+- Planerad aktivitet, genomförd aktivitet och energilogg hålls isär i datamodellen; energiposten skapas bara med faktisk användaråterkoppling.
+- En diskret "Varför?"-förklaring finns i energifrågan.
+
 ## 2026-08-29 – Publicerad: myflove.lovable.app uppdaterad
 
 - Den senaste versionen av MyFlove publicerades till `https://myflove.lovable.app`.

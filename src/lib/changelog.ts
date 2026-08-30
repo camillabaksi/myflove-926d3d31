@@ -6,9 +6,19 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-08-29";
+export const CHANGELOG_UPDATED = "2026-08-30";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  {
+    title: "Kalender blir navet för dagens planering",
+    items: [
+      "Kalender har nu tre flikar: Idag, Kalender och Lägg till – med egna adresser (2026-08-30)",
+      "Lägg till är gemensam väg in för aktivitet, påminnelse, rutin, medicin och barnens dag (2026-08-30)",
+      "Hem är en ren översikt igen; duplicerade dagsgenvägar är borttagna och Min dag öppnar Kalender · Idag (2026-08-30)",
+      "Planerad aktivitet ändrar aldrig energin automatiskt – energi loggas bara när du själv svarar efter att något är klart (2026-08-30)",
+      "Planerad aktivitet, genomförd aktivitet och energilogg hålls isär i datamodellen (2026-08-30)",
+    ],
+  },
   {
     title: "Publicerad: myflove.lovable.app uppdaterad",
     items: [

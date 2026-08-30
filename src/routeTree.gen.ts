@@ -48,6 +48,7 @@ import { Route as AppMinLivsprofilRouteImport } from './routes/_app.min-livsprof
 import { Route as AppMinDagRouteImport } from './routes/_app.min-dag'
 import { Route as AppMatlistaRouteImport } from './routes/_app.matlista'
 import { Route as AppMaBraRouteImport } from './routes/_app.ma-bra'
+import { Route as AppLaggTillRouteImport } from './routes/_app.lagg-till'
 import { Route as AppKalenderRouteImport } from './routes/_app.kalender'
 import { Route as AppJobbRouteImport } from './routes/_app.jobb'
 import { Route as AppInsightRouteImport } from './routes/_app.insight'
@@ -279,6 +280,11 @@ const AppMaBraRoute = AppMaBraRouteImport.update({
   path: '/ma-bra',
   getParentRoute: () => AppRoute,
 } as any)
+const AppLaggTillRoute = AppLaggTillRouteImport.update({
+  id: '/lagg-till',
+  path: '/lagg-till',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppKalenderRoute = AppKalenderRouteImport.update({
   id: '/kalender',
   path: '/kalender',
@@ -500,6 +506,7 @@ export interface FileRoutesByFullPath {
   '/insight': typeof AppInsightRoute
   '/jobb': typeof AppJobbRoute
   '/kalender': typeof AppKalenderRoute
+  '/lagg-till': typeof AppLaggTillRoute
   '/ma-bra': typeof AppMaBraRoute
   '/matlista': typeof AppMatlistaRoute
   '/min-dag': typeof AppMinDagRoute
@@ -575,6 +582,7 @@ export interface FileRoutesByTo {
   '/insight': typeof AppInsightRoute
   '/jobb': typeof AppJobbRoute
   '/kalender': typeof AppKalenderRoute
+  '/lagg-till': typeof AppLaggTillRoute
   '/ma-bra': typeof AppMaBraRoute
   '/matlista': typeof AppMatlistaRoute
   '/min-dag': typeof AppMinDagRoute
@@ -652,6 +660,7 @@ export interface FileRoutesById {
   '/_app/insight': typeof AppInsightRoute
   '/_app/jobb': typeof AppJobbRoute
   '/_app/kalender': typeof AppKalenderRoute
+  '/_app/lagg-till': typeof AppLaggTillRoute
   '/_app/ma-bra': typeof AppMaBraRoute
   '/_app/matlista': typeof AppMatlistaRoute
   '/_app/min-dag': typeof AppMinDagRoute
@@ -729,6 +738,7 @@ export interface FileRouteTypes {
     | '/insight'
     | '/jobb'
     | '/kalender'
+    | '/lagg-till'
     | '/ma-bra'
     | '/matlista'
     | '/min-dag'
@@ -804,6 +814,7 @@ export interface FileRouteTypes {
     | '/insight'
     | '/jobb'
     | '/kalender'
+    | '/lagg-till'
     | '/ma-bra'
     | '/matlista'
     | '/min-dag'
@@ -880,6 +891,7 @@ export interface FileRouteTypes {
     | '/_app/insight'
     | '/_app/jobb'
     | '/_app/kalender'
+    | '/_app/lagg-till'
     | '/_app/ma-bra'
     | '/_app/matlista'
     | '/_app/min-dag'
@@ -1213,6 +1225,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppMaBraRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/lagg-till': {
+      id: '/_app/lagg-till'
+      path: '/lagg-till'
+      fullPath: '/lagg-till'
+      preLoaderRoute: typeof AppLaggTillRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/kalender': {
       id: '/_app/kalender'
       path: '/kalender'
@@ -1489,6 +1508,7 @@ interface AppRouteChildren {
   AppInsightRoute: typeof AppInsightRoute
   AppJobbRoute: typeof AppJobbRoute
   AppKalenderRoute: typeof AppKalenderRoute
+  AppLaggTillRoute: typeof AppLaggTillRoute
   AppMaBraRoute: typeof AppMaBraRoute
   AppMatlistaRoute: typeof AppMatlistaRoute
   AppMinDagRoute: typeof AppMinDagRoute
@@ -1546,6 +1566,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppInsightRoute: AppInsightRoute,
   AppJobbRoute: AppJobbRoute,
   AppKalenderRoute: AppKalenderRoute,
+  AppLaggTillRoute: AppLaggTillRoute,
   AppMaBraRoute: AppMaBraRoute,
   AppMatlistaRoute: AppMatlistaRoute,
   AppMinDagRoute: AppMinDagRoute,

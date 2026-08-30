@@ -25,6 +25,11 @@ export const APP_GUIDE: GuideGroup[] = [
     entries: [
       { href: "/hem", label: "Hem", what: "Din överblick: nästa sak, energi och genvägar" },
       { href: "/idag", label: "Idag", what: "Allt som händer idag – och det du redan gjort" },
+      {
+        href: "/lagg-till",
+        label: "Lägg till",
+        what: "Vägen in för aktivitet, påminnelse, rutin eller medicin",
+      },
       { href: "/flow", label: "Flow hjälper", what: "Ett förslag i taget när du kört fast" },
       {
         href: "/flowplan",
