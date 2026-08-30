@@ -425,17 +425,24 @@ export function MyFloveEmptyState({
   return (
     <div
       className={cn(
-        "flex flex-col items-center gap-3 rounded-3xl border-2 border-dashed border-border/70 bg-card/60 px-6 py-10 text-center pop-in",
+        // Kompakt och horisontell så fort det finns bredd – inget högt "torn".
+        "flex flex-col items-center gap-3 rounded-3xl border-2 border-dashed border-border/70 bg-card/60 px-5 py-7 text-center pop-in",
+        "sm:flex-row sm:items-center sm:gap-4 sm:px-6 sm:py-5 sm:text-left",
         className,
       )}
     >
-      <MyFloveEmoji emoji={emoji} size="xl" motion="breathe" />
-      <p className="font-display text-base font-bold text-ink">{title}</p>
-      {description && <p className="max-w-xs text-sm text-muted-foreground">{description}</p>}
-      {action}
+      <MyFloveEmoji emoji={emoji} size="xl" motion="breathe" className="shrink-0" />
+      <div className="min-w-0 sm:flex-1">
+        <p className="font-display text-base font-bold text-ink">{title}</p>
+        {description && (
+          <p className="mt-0.5 max-w-prose text-sm text-muted-foreground">{description}</p>
+        )}
+      </div>
+      {action && <div className="shrink-0">{action}</div>}
     </div>
   );
 }
+
 
 export function MyFloveLoading({
   label = "En sekund...",
