@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import Layout from "@/components/layout";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { parseISODate } from "@/lib/day";
 import { MyFloveEmptyIllustration } from "@/components/myflove/motion";
@@ -132,7 +131,7 @@ function useFamilyEventsByDate() {
   return { eventsForDate, hasHousehold: !!household?.id, isSignedIn: !!isSignedIn };
 }
 
-export default function CalendarPage() {
+export function CalendarContent() {
   const { currentFocus } = useFocus();
   const { activeTasks, completedTasks, deleteTask, addTask, updateTask } = useTasks();
   const { activeReminders, addReminder, deleteReminder, updateReminder } = useReminders();
@@ -595,7 +594,6 @@ export default function CalendarPage() {
       };
 
   return (
-    <Layout>
       <MyFlovePageGrid area="kalender">
         <MyFloveWide>
           <div>
@@ -1873,6 +1871,5 @@ export default function CalendarPage() {
           </DialogContent>
         </Dialog>
       </MyFlovePageGrid>
-    </Layout>
   );
 }

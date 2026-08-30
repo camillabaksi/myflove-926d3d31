@@ -1,7 +1,6 @@
 import { track } from "@/lib/analytics";
 import { useMemo, useEffect } from "react";
 import { Link } from "wouter";
-import Layout from "@/components/layout";
 import CollapsibleSection from "@/components/collapsible-section";
 import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { ExpandableBlock } from "@/components/myflove/expandable-block";
@@ -40,7 +39,7 @@ type DayView = "flow" | "lista";
  *  🌊 Flow  – den levande dagen: nu, energi och nästa steg.
  *  📋 Lista – allt som ska göras idag, avbockningsbart.
  */
-export default function TodayPage() {
+export function TodayContent() {
   useEffect(() => {
     track("today_viewed", { source: "sida" });
   }, []);
@@ -130,7 +129,6 @@ export default function TodayPage() {
   const toggle = (i: FlowItem) => toggleItem(i);
 
   return (
-    <Layout>
       <MyFlovePageGrid area="idag">
         <MyFloveWide>
           <h1 className="flex items-center gap-2 font-display text-3xl text-ink">
@@ -405,7 +403,6 @@ export default function TodayPage() {
           </StepSection>
         )}
       </MyFlovePageGrid>
-    </Layout>
   );
 }
 
