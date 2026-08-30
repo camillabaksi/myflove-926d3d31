@@ -214,29 +214,8 @@ export function TodayContent() {
                   Inget bokat idag. Hela dagen är din.
                 </p>
               )}
-              <Link
-                href="/kalender"
-                className="inline-flex items-center gap-2 text-sm text-primary underline-offset-2 hover:underline"
-              >
-                <CalendarDays size={16} /> Öppna kalendern (dag/vecka/månad)
-              </Link>
             </StepSection>
 
-            {/* Steg 3 – lägg till något i dagen, samma blockspråk som övriga kort */}
-            <ExpandableBlock
-              title="Lägg till i dagen"
-              subtitle="Något nytt – eller något du redan hunnit med"
-              icon={Plus}
-              tone="mint"
-              surface="mint"
-              area="idag"
-              widget
-              label="Lägg till"
-              status="+"
-            >
-              <TaskQuickAdd onAdd={handleQuickAdd} />
-              <DidThisQuickAdd />
-            </ExpandableBlock>
 
             {/* 📋 Dagens ordning – planen du valt i Planera */}
             {dayPlan && dayPlan.steps.length > 0 && (
