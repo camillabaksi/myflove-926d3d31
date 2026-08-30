@@ -126,6 +126,63 @@ export function ExpandableBlock({
     });
   };
 
+  /**
+   * Komprimerat innehåll. Smala kort (t.ex. mobilens tvåkolumnsrutnät)
+   * staplar innehållet, men så fort kortet får utrymme (container ≥ 20rem)
+   * läggs ikon, text och status på EN horisontell rad i stället för ett
+   * högt "torn". Ren presentation – ingen logik ändras.
+   */
+  const compact = (
+    <>
+      <span aria-hidden="true" className="grid shrink-0 place-items-center">
+        {visual ??
+          (icon && (
+            <MyFloveIcon
+              icon={icon}
+              tone={tone}
+              size="lg"
+              className={cn("rounded-full", area && "area-bg-soft area-text")}
+            />
+          ))}
+      </span>
+      <div className="min-w-0 @min-[20rem]:flex-1">
+        <h2 className="font-display text-base font-bold leading-tight text-ink">{title}</h2>
+        {subtitle && (
+          <p className="mt-0.5 line-clamp-2 text-xs text-muted-foreground">{subtitle}</p>
+        )}
+      </div>
+      {(status != null || summary != null) && (
+        <div className="w-full space-y-1 border-t border-border/50 pt-3 @min-[20rem]:w-auto @min-[20rem]:max-w-[45%] @min-[20rem]:shrink-0 @min-[20rem]:border-0 @min-[20rem]:pt-0 @min-[20rem]:text-right">
+          {status != null && (
+            <div
+              className={cn(
+                "font-display text-2xl font-bold leading-tight",
+                area ? "area-text" : "text-ink",
+              )}
+            >
+              {status}
+            </div>
+          )}
+          {summary != null && (
+            <div className="line-clamp-2 text-sm text-muted-foreground">{summary}</div>
+          )}
+        </div>
+      )}
+      <span
+        aria-hidden="true"
+        className={cn(
+          "absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full @min-[20rem]:static @min-[20rem]:shrink-0",
+          area ? "area-bg-soft area-text" : "bg-card/70 text-muted-foreground",
+        )}
+      >
+        <ArrowRight size={15} />
+      </span>
+    </>
+  );
+
+  const compactLayout =
+    "press relative flex w-full min-w-0 flex-col items-center gap-2.5 rounded-3xl p-4 text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:p-5 @min-[20rem]:flex-row @min-[20rem]:items-center @min-[20rem]:gap-4 @min-[20rem]:text-left";
+
   // Länkläge: hela kortet navigerar (som Mitt batteri-kortet). Samma
   // komprimerade design, men ingen expansion.
   if (href) {
@@ -136,9 +193,9 @@ export function ExpandableBlock({
         data-expanded="false"
         {...areaProps(area)}
         className={cn(
-          "flex min-w-0 flex-col rounded-3xl border-2 border-border/60 shadow-soft transition-shadow hover:shadow-lifted",
+          "@container flex min-w-0 flex-col rounded-3xl border-2 border-border/60 shadow-soft transition-shadow hover:shadow-lifted",
           area && "area-border",
-          "min-h-[9rem]",
+          "min-h-[9rem] @min-[20rem]:min-h-0",
           surface ? SURFACE[surface] : "bg-card",
           className,
         )}
@@ -147,55 +204,14 @@ export function ExpandableBlock({
           href={href}
           onClick={onNavigate}
           aria-label={`Öppna ${ariaLabel}`}
-          className="press relative flex w-full min-w-0 flex-1 flex-col items-center gap-2.5 rounded-3xl p-4 text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:p-5"
+          className={cn(compactLayout, "flex-1")}
         >
-          <span aria-hidden="true" className="grid place-items-center">
-            {visual ??
-              (icon && (
-                <MyFloveIcon
-                  icon={icon}
-                  tone={tone}
-                  size="lg"
-                  className={cn("rounded-full", area && "area-bg-soft area-text")}
-                />
-              ))}
-          </span>
-          <div className="min-w-0">
-            <h2 className="font-display text-base font-bold leading-tight text-ink">{title}</h2>
-            {subtitle && (
-              <p className="mt-0.5 line-clamp-2 text-xs text-muted-foreground">{subtitle}</p>
-            )}
-          </div>
-          {(status != null || summary != null) && (
-            <div className="w-full space-y-1 border-t border-border/50 pt-3">
-              {status != null && (
-                <div
-                  className={cn(
-                    "font-display text-2xl font-bold leading-tight",
-                    area ? "area-text" : "text-ink",
-                  )}
-                >
-                  {status}
-                </div>
-              )}
-              {summary != null && (
-                <div className="line-clamp-2 text-sm text-muted-foreground">{summary}</div>
-              )}
-            </div>
-          )}
-          <span
-            aria-hidden="true"
-            className={cn(
-              "absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full",
-              area ? "area-bg-soft area-text" : "bg-card/70 text-muted-foreground",
-            )}
-          >
-            <ArrowRight size={15} />
-          </span>
+          {compact}
         </Link>
       </section>
     );
   }
+
 
   return (
     <section
