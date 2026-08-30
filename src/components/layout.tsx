@@ -518,7 +518,7 @@ export default function Layout({ children }: LayoutProps) {
         label: "Idag",
         hint: "Vad som händer idag – hela dagens lista",
         icon: CalendarDays,
-        hrefs: ["/idag", "/kalender", "/paminnelser", "/pomodoro"],
+        hrefs: ["/idag", "/kalender", "/lagg-till", "/paminnelser", "/pomodoro"],
       },
       {
         id: "flowflow",
