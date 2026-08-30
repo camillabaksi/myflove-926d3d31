@@ -25,13 +25,7 @@ import { AreaSwitcher } from "@/components/area-switcher";
 import { AREA_META, useActiveArea } from "@/lib/life-areas";
 import IntroTour from "@/components/intro-tour";
 import FlowOnboarding from "@/components/flow-onboarding";
-import {
-  ArrowRight,
-  SlidersHorizontal,
-  Compass,
-  Check,
-  Pill,
-} from "lucide-react";
+import { ArrowRight, SlidersHorizontal, Compass, Check, Pill } from "lucide-react";
 import { todayISO } from "@/lib/day";
 import { track } from "@/lib/analytics";
 import { homeContextLine } from "@/lib/flow-tone";

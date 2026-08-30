@@ -51,8 +51,8 @@ export function AddToDay() {
       >
         <TaskQuickAdd onAdd={handleAdd} />
         <p className="text-xs text-muted-foreground">
-          En planerad aktivitet är bara en plan. Den påverkar inte din energi förrän du markerat
-          den som genomförd och sagt hur den kändes.
+          En planerad aktivitet är bara en plan. Den påverkar inte din energi förrän du markerat den
+          som genomförd och sagt hur den kändes.
         </p>
       </MyFloveBlock>
 
