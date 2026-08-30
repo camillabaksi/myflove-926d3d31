@@ -5,7 +5,6 @@ import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { ExpandableBlock } from "@/components/myflove/expandable-block";
 
 import { useHomeLayout, type HomeBlockId } from "@/lib/home-layout";
-import { TaskQuickAdd, type QuickAddResult } from "@/components/task-quick-add";
 import DidThisCta from "@/components/did-this-cta";
 import { useFlowItems } from "@/hooks/use-flow-items";
 import RoutinesMedicationToday from "@/components/routines-medication-today";
@@ -27,12 +26,10 @@ import { AREA_META, useActiveArea } from "@/lib/life-areas";
 import IntroTour from "@/components/intro-tour";
 import FlowOnboarding from "@/components/flow-onboarding";
 import {
-  CalendarDays,
   ArrowRight,
   SlidersHorizontal,
   Compass,
   Check,
-  Plus,
   Pill,
 } from "lucide-react";
 import { todayISO } from "@/lib/day";
@@ -99,9 +96,7 @@ export default function Home() {
   const greeting = getGreeting({ name, lastVisit });
   const [editingName, setEditingName] = useState(false);
   const [nameDraft, setNameDraft] = useState(name);
-  const { addTask } = useTasks();
   const { activeArea } = useActiveArea();
-  const suggestion = useFlowSuggestion();
   const { reading } = useEnergyBattery();
   const { energyValue } = useQuickCheckin();
   const { tasks, activeTasks } = useTasks();
