@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import Page from "@/pages/calendar";
+import DayHub from "@/pages/day-hub";
 
 export const Route = createFileRoute("/_app/kalender")({
   head: () => ({
@@ -12,5 +12,5 @@ export const Route = createFileRoute("/_app/kalender")({
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
-  component: Page,
+  component: () => <DayHub tab="kalender" />,
 });
