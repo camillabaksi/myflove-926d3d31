@@ -27,7 +27,7 @@ const TABS: { id: DayTab; href: string; label: string; icon: typeof Heart }[] = 
  */
 export function DayHub({ tab }: { tab: DayTab }) {
   useEffect(() => {
-    track("day_hub_viewed", { tab });
+    track("day_hub_viewed", { source: tab });
   }, [tab]);
 
   return (
