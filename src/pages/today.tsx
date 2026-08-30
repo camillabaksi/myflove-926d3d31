@@ -126,7 +126,15 @@ export function TodayContent() {
     });
   };
 
-  const toggle = (i: FlowItem) => toggleItem(i);
+  // Planerad → genomförd → (frivillig) faktisk energipåverkan.
+  // Ingen energi loggas automatiskt; först när användaren svarar i dialogen.
+  const [energyItem, setEnergyItem] = useState<FlowItem | null>(null);
+
+  const toggle = (i: FlowItem) => {
+    const wasDone = i.done;
+    toggleItem(i);
+    if (!wasDone && i.completable) setEnergyItem(i);
+  };
 
   return (
       <MyFlovePageGrid area="idag">
@@ -402,6 +410,7 @@ export function TodayContent() {
             </Link>
           </StepSection>
         )}
+      <ActivityEnergyPrompt item={energyItem} onClose={() => setEnergyItem(null)} />
       </MyFlovePageGrid>
   );
 }
