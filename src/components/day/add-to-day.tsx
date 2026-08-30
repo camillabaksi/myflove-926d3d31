@@ -62,7 +62,7 @@ export function AddToDay() {
         tone="lavender"
         surface="lavender"
         className="col-span-full md:col-span-2"
-        actions={
+        action={
           <WhyHint label="vi frågar om energin">
             Vi frågar hur något påverkade dig för att Flow över tid ska kunna förstå vad som ger och
             tar energi för just dig.
