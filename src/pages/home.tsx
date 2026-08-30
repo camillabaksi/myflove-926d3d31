@@ -62,13 +62,6 @@ const SITUATIONS: Situation[] = [
     action: "Planera – ett förslag på dagens ordning",
   },
   {
-    href: "#did-this",
-    emoji: "✅",
-    thought: "Jag gjorde redan något",
-    action: "Registrera det du hunnit med",
-    didThis: true,
-  },
-  {
     href: "/flow",
     emoji: "💜",
     thought: "Jag vet inte vad jag ska göra nu",
@@ -276,58 +269,6 @@ export default function Home() {
           </div>
         )}
 
-        {/* Kalender – större, fullbrett block högt upp */}
-        {shows("forslag") && (
-          <MyFloveWide style={{ order: 0.5 }} className="min-w-0" aria-label="Kalender">
-            <ExpandableBlock
-              title="Kalender"
-              titleText="Kalender"
-              area="kalender"
-              icon={CalendarDays}
-              subtitle="Ditt nästa steg"
-              // Samma rytm som övriga kort: kort värde + en rad förklaring.
-              status="Se dagen"
-              summary={suggestion.headline}
-              tone="lavender"
-              surface="lavender"
-              href="/kalender"
-            />
-          </MyFloveWide>
-        )}
-
-        {/* Lägg till i dagen – samma blockspråk: komprimerat kort som öppnar sig */}
-
-        {shows("lagg-till") && (
-          <section className="min-w-0" style={pos("lagg-till")} aria-label="Lägg till i dagen">
-            <ExpandableBlock
-              title="Lägg till i dagen"
-              titleText="Lägg till i dagen"
-              area="hem"
-              icon={Plus}
-              subtitle="Lägg till det du behöver"
-              status="Något nytt?"
-              tone="mint"
-              surface="mint"
-            >
-              <TaskQuickAdd
-                onAdd={(result: QuickAddResult) => {
-                  addTask(result.title, result.dueDate, {
-                    time: result.time,
-                    energyImpact: result.energyImpact,
-                    friction: result.friction,
-                    area: activeArea === "alla" ? "vardag" : activeArea,
-                  });
-                }}
-                className="bg-primary text-primary-foreground hover:bg-primary/90"
-              />
-              <p className="mt-1 text-xs text-muted-foreground">
-                Lägg till något i dagen – med tid om du vill.
-              </p>
-              <DidThisCta />
-            </ExpandableBlock>
-          </section>
-        )}
-
         {/* Vad behöver du just nu? – situationer, inte produktnamn */}
         {shows("vagar") && (
           <nav className="min-w-0" style={pos("vagar")} aria-label="Vad behöver du just nu">
@@ -450,7 +391,7 @@ function DaySummary() {
     <Link
       href="/idag"
       data-testid="home-day-summary"
-      aria-label={`Dagens översikt, ${todayDone.length} av ${total} klart. Öppna Idag.`}
+      aria-label={`Min dag, ${todayDone.length} av ${total} klart. Öppna Kalender – Idag.`}
       {...areaProps("idag")}
       className="press area-border relative flex min-h-[9rem] min-w-0 flex-col items-center gap-2.5 rounded-3xl border-2 bg-sky/50 p-4 text-center shadow-soft transition-shadow hover:shadow-lifted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:p-5"
     >
@@ -461,8 +402,10 @@ function DaySummary() {
         className="area-bg-soft area-text rounded-full"
       />
       <span className="min-w-0">
-        <span className="block font-display text-base font-bold leading-tight text-ink">Idag</span>
-        <span className="block text-xs text-muted-foreground">Det här är kvar idag</span>
+        <span className="block font-display text-base font-bold leading-tight text-ink">
+          Min dag
+        </span>
+        <span className="block text-xs text-muted-foreground">Öppna Kalender · Idag</span>
       </span>
       <span className="w-full space-y-1 border-t border-border/50 pt-3">
         <span className="area-text block font-display text-3xl font-bold leading-none">
@@ -473,7 +416,7 @@ function DaySummary() {
             ? "Inget inplanerat"
             : total === todayDone.length
               ? "Allt klart"
-              : `${todayOpen.length} kvar`}
+              : `${todayDone.length} av ${total} klara · ${todayOpen.length} kvar`}
         </span>
       </span>
       <span
