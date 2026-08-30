@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-08-30";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Global designregel: inga onödigt vertikala textblock",
+    items: [
+      "Kort visar ikon, rubrik och status på samma rad så fort det finns bredd – annars staplas de som förut (2026-08-30)",
+      "Widget-kort blir horisontella i breda ytor i stället för höga torn (2026-08-30)",
+      "Tomma lägen är kompaktare med ikon, text och knapp på samma rad (2026-08-30)",
+    ],
+  },
+  {
+
     title: "Kalender blir navet för dagens planering",
     items: [
       "Kalender har nu tre flikar: Idag, Kalender och Lägg till – med egna adresser (2026-08-30)",
