@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-08-30 – Global designregel: inga onödigt vertikala textblock
+
+- Alla kort som bygger på `ExpandableBlock` växlar nu automatiskt till en horisontell rad (ikon · rubrik + kort text · status · pil) så snart kortet har utrymme, tack vare container queries. Smala kort på liten mobil staplar fortfarande innehållet.
+- Widget-korten blir också horisontella i breda ytor i stället för höga torn, och minimihöjden på 9 rem gäller bara i smala kolumner.
+- `MyFloveEmptyState` är kompaktare och lägger ikon, text och knapp på samma rad från `sm` och uppåt.
+- Ändringarna är rent presentation – ingen data-, navigations- eller produktlogik har ändrats.
+
+
+
 ## 2026-08-30 – Kalender blir navet för dagens planering
 
 - Kalender är nu appens enda primära plats för dagens planering, med tre flikar: **Idag**, **Kalender** och **Lägg till**. Varje flik har en egen adress (`/idag`, `/kalender`, `/lagg-till`) så länkar och bakåtknappen fungerar som vanligt.
