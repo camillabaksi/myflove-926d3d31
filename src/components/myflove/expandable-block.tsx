@@ -220,9 +220,9 @@ export function ExpandableBlock({
       data-expanded={open ? "true" : "false"}
       {...areaProps(area)}
       className={cn(
-        "flex min-w-0 flex-col rounded-3xl border-2 border-border/60 shadow-soft transition-shadow",
+        "@container flex min-w-0 flex-col rounded-3xl border-2 border-border/60 shadow-soft transition-shadow",
         area && "area-border",
-        open ? "col-span-full w-full shadow-lifted" : "min-h-[9rem]",
+        open ? "col-span-full w-full shadow-lifted" : "min-h-[9rem] @min-[20rem]:min-h-0",
         surface ? SURFACE[surface] : "bg-card",
         className,
       )}
@@ -236,16 +236,19 @@ export function ExpandableBlock({
         className={cn(
           "press relative flex w-full min-w-0 flex-col gap-2 rounded-3xl text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
           widget && !open
-            ? "items-center justify-center gap-1.5 px-3 py-6 text-center"
+            ? "items-center justify-center gap-1.5 px-3 py-6 text-center @min-[20rem]:flex-row @min-[20rem]:justify-start @min-[20rem]:gap-3 @min-[20rem]:px-4 @min-[20rem]:py-4 @min-[20rem]:text-left"
             : !open
-              ? "items-center gap-2.5 p-4 text-center sm:p-5"
+              ? compactLayout
               : "p-3 sm:p-5",
         )}
       >
         {widget && !open ? (
           <>
             {/* Widget-läge: stor ikon + ETT värde + ev. kort etikett. Inget mer. */}
-            <span aria-hidden="true" className="grid place-items-center text-3xl leading-none">
+            <span
+              aria-hidden="true"
+              className="grid shrink-0 place-items-center text-3xl leading-none"
+            >
               {visual ??
                 (icon && (
                   <MyFloveIcon
@@ -262,57 +265,14 @@ export function ExpandableBlock({
               </span>
             )}
             {(label ?? (typeof title === "string" ? title : null)) && (
-              <span className="text-xs font-medium text-muted-foreground">
+              <span className="min-w-0 truncate text-xs font-medium text-muted-foreground">
                 {label ?? (title as string)}
               </span>
             )}
           </>
         ) : !open ? (
-          <>
-            {/* Komprimerat: centrerad cirkelikon, rubrik, streck, stort värde. */}
-            <span aria-hidden="true" className="grid place-items-center">
-              {visual ??
-                (icon && (
-                  <MyFloveIcon
-                    icon={icon}
-                    tone={tone}
-                    size="lg"
-                    className={cn("rounded-full", area && "area-bg-soft area-text")}
-                  />
-                ))}
-            </span>
-            <div className="min-w-0">
-              <h2 className="font-display text-base font-bold leading-tight text-ink">{title}</h2>
-              {subtitle && (
-                <p className="mt-0.5 line-clamp-2 text-xs text-muted-foreground">{subtitle}</p>
-              )}
-            </div>
-            {(status != null || summary != null) && (
-              <div className="w-full space-y-1 border-t border-border/50 pt-3">
-                {status != null && (
-                  <div
-                    className={cn(
-                      "font-display text-2xl font-bold leading-tight",
-                      area ? "area-text" : "text-ink",
-                    )}
-                  >
-                    {status}
-                  </div>
-                )}
-                {summary != null && (
-                  <div className="line-clamp-2 text-sm text-muted-foreground">{summary}</div>
-                )}
-              </div>
-            )}
-            <span
-              aria-hidden="true"
-              className={cn(
-                "absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full",
-                area ? "area-bg-soft area-text" : "bg-card/70 text-muted-foreground",
-              )}
-            >
-              <ArrowRight size={15} />
-            </span>
+          compact
+
           </>
         ) : (
           <>
