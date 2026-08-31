@@ -1,6 +1,11 @@
 import { useCallback } from "react";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
-import { sortPriority, type PriorityBucket, type PriorityTask } from "@/lib/quickflow-priority";
+import {
+  sortPriority,
+  splitTasks,
+  type PriorityBucket,
+  type PriorityTask,
+} from "@/lib/quickflow-priority";
 
 const STORAGE_KEY = "myflove-quickflow-priority";
 
@@ -16,20 +21,60 @@ export function usePriorityList() {
 
   const replace = useCallback((next: PriorityTask[]) => setItems(sortPriority(next)), [setItems]);
 
+  /** Lägger till en eller flera saker – fritext delas upp automatiskt. */
   const add = useCallback(
     (title: string, bucket: PriorityBucket = "kan-vanta") => {
-      const t = title.trim();
-      if (!t) return;
-      setItems((prev) => [
-        ...(prev ?? []),
-        {
-          id: newId(),
-          title: t,
-          bucket,
-          order: (prev?.length ?? 0) + 1,
-          createdAt: Date.now(),
-        },
-      ]);
+      const titles = splitTasks(title);
+      const parts = titles.length > 0 ? titles : [title.trim()].filter(Boolean);
+      if (parts.length === 0) return;
+      setItems((prev) => {
+        const base = prev ?? [];
+        const now = Date.now();
+        return [
+          ...base,
+          ...parts.map((t, i) => ({
+            id: newId(),
+            title: t,
+            bucket,
+            order: base.length + i + 1,
+            createdAt: now,
+          })),
+        ];
+      });
+    },
+    [setItems],
+  );
+
+  /**
+   * Delar upp en sak som innehåller flera händelser i enskilda saker.
+   * Returnerar antalet nya saker (1 = gick inte att dela).
+   */
+  const splitItem = useCallback(
+    (id: string) => {
+      let count = 1;
+      setItems((prev) => {
+        const base = prev ?? [];
+        const item = base.find((i) => i.id === id);
+        if (!item) return base;
+        const parts = splitTasks(item.title);
+        if (parts.length < 2) return base;
+        count = parts.length;
+        const now = Date.now();
+        return base.flatMap((i) =>
+          i.id === id
+            ? parts.map((t, k) => ({
+                ...i,
+                id: k === 0 ? i.id : newId(),
+                title: t,
+                order: i.order + k * 0.001,
+                why: undefined,
+                clarify: undefined,
+                createdAt: now,
+              }))
+            : [i],
+        );
+      });
+      return count;
     },
     [setItems],
   );
@@ -68,5 +113,16 @@ export function usePriorityList() {
   const openItems = sortPriority((items ?? []).filter((i) => !i.done));
   const doneItems = (items ?? []).filter((i) => i.done);
 
-  return { items: items ?? [], openItems, doneItems, add, update, remove, move, replace, clear };
+  return {
+    items: items ?? [],
+    openItems,
+    doneItems,
+    add,
+    update,
+    remove,
+    move,
+    replace,
+    clear,
+    splitItem,
+  };
 }
