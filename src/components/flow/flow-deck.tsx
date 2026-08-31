@@ -563,7 +563,9 @@ function SlideShell({
     <div className="flex min-h-[280px] flex-col items-center justify-center gap-4 overflow-hidden px-3 py-4 text-center">
       <FlowCharacter scene={scene} seed={seed} energy={energy} stage="compact" />
       <div className="flex w-full flex-col items-center justify-center gap-2">
-        <h2 className="font-display text-lg leading-snug text-balance text-ink sm:text-xl">{title}</h2>
+        <h2 className="font-display text-lg leading-snug text-balance text-ink sm:text-xl">
+          {title}
+        </h2>
         {children}
       </div>
     </div>
