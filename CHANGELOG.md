@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-08-31 – Min energi följer MyFloves designspråk
+
+- "Min energi – historik och mönster" är ombyggd med appens vanliga block, rundningar, borders och spacing.
+- Dagens balans är ett kort med tre kompakta värden som får plats på mobil, och Flows reflektion visas som ett mjukt Flow-kort.
+- Idag visar varje registrering som en horisontell rad med påverkan, svårighetsgrad och små ikonknappar för ta bort.
+- Mönster över tid och Dina återkommande faktorer visas som rena rader i stället för smala kolumner, med "Varför?" bredvid rubriken.
+- All loggning, beräkning och synk är oförändrad – det här är enbart en presentationsändring.
+
+
+
 ## 2026-08-31 – Välj själv vilka dagar programmet läggs på
 
 - "Dagar/vecka" i Ditt mål är nu veckodags-chips (Mån–Sön) i stället för en siffra.

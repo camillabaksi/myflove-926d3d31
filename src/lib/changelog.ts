@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-08-31";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Min energi följer MyFloves designspråk",
+    items: [
+      "Historik- och mönstersidan är ombyggd med appens vanliga block, rundningar och spacing (2026-08-31)",
+      "Dagens balans, Idag och Mönster över tid visas horisontellt och får plats på mobil (2026-08-31)",
+      "Flows reflektion visas som ett mjukt Flow-kort – all loggning och beräkning är oförändrad (2026-08-31)",
+    ],
+  },
+  {
     title: "Välj själv vilka dagar programmet läggs på",
     items: [
       "Träningsmålet har veckodags-chips i stället för antal dagar per vecka (2026-08-31)",
