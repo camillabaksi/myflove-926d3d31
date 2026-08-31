@@ -7,6 +7,8 @@ import { useLifeProfile } from "@/hooks/use-life-profile";
 import { useSituation } from "@/hooks/use-situation";
 import { lifeProfileContext } from "@/lib/life-profile";
 import { situationContext } from "@/lib/situation";
+import { useQuickCheckin } from "@/hooks/use-quick-checkin";
+import { checkinContext } from "@/lib/flow-checkin-context";
 
 const TONE: Record<string, string> = {
   tyst: "Användaren vill ha få ord. Svara kort och bara på det som frågas.",
