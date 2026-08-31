@@ -41,6 +41,7 @@ import { useQuickflow } from "@/hooks/use-quickflow";
 import QuickflowList from "@/components/quickflow-list";
 import InsightQuickflowHint from "@/components/insight-quickflow-hint";
 import QuickflowCapture from "@/components/quickflow-capture";
+import QuickflowPriority from "@/components/quickflow-priority";
 import {
   Mic,
   Square,
@@ -214,6 +215,8 @@ export default function Dump() {
             </MyFloveBlock>
 
             <QuickflowCapture />
+
+            <QuickflowPriority />
 
             {!thoughts ? (
               <StepSection
