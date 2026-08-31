@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-08-31";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Välj själv vilka dagar programmet läggs på",
+    items: [
+      "Träningsmålet har veckodags-chips i stället för antal dagar per vecka (2026-08-31)",
+      "Programmet läggs ut på exakt de dagar du valt och dagarna sparas med målet (2026-08-31)",
+    ],
+  },
+  {
     title: '"Visa bara det viktigaste" är av tills du själv slår på det',
     items: [
       "Enkelt läge i Mer-menyn är nu av som standard – det slås bara på när du själv väljer det (2026-08-31)",

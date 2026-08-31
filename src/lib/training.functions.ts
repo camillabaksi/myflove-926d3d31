@@ -8,6 +8,7 @@ const InputSchema = z.object({
   daysPerWeek: z.number().int().min(1).max(7),
   minutesPerSession: z.number().int().min(10).max(180),
   level: z.enum(["nybörjare", "van", "erfaren"]),
+  days: z.array(z.string().max(20)).max(7).optional(),
   equipment: z.string().max(300).optional(),
   limitations: z.string().max(500).optional(),
 });
@@ -97,6 +98,9 @@ export const generateTrainingProgram = createServerFn({ method: "POST" })
       `Dagar per vecka: ${data.daysPerWeek}`,
       `Tid per pass: ${data.minutesPerSession} minuter`,
       `Nivå: ${data.level}`,
+      data.days?.length
+        ? `Träningsdagar (använd exakt dessa som "day"): ${data.days.join(", ")}`
+        : null,
       data.equipment ? `Utrustning: ${data.equipment}` : null,
       data.limitations ? `Begränsningar: ${data.limitations}` : null,
       "",

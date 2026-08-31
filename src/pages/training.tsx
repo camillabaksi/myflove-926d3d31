@@ -176,6 +176,16 @@ export default function TrainingPage() {
   const [goal, setGoal] = useState(state.goal?.goal ?? "");
   const [focus, setFocus] = useState<TrainingGoal["focus"]>(state.goal?.focus ?? "blandat");
   const [daysPerWeek, setDaysPerWeek] = useState(state.goal?.daysPerWeek ?? 3);
+  const [preferredDays, setPreferredDays] = useState<string[]>(
+    state.goal?.days ?? ["Måndag", "Onsdag", "Fredag"],
+  );
+  const togglePreferredDay = (day: string) =>
+    setPreferredDays((prev) => {
+      const next = prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day];
+      const sorted = WEEKDAYS.filter((d) => next.includes(d));
+      if (sorted.length > 0) setDaysPerWeek(sorted.length);
+      return sorted;
+    });
   const [minutes, setMinutes] = useState(state.goal?.minutesPerSession ?? 45);
   const [level, setLevel] = useState<TrainingGoal["level"]>(state.goal?.level ?? "nybörjare");
   const [equipment, setEquipment] = useState(state.goal?.equipment ?? "");
@@ -324,7 +334,21 @@ export default function TrainingPage() {
     setLoading(true);
     try {
       const program = await run({ data: payload });
-      saveProgram(payload, program);
+      const wanted = payload.days ?? [];
+      // Lägg passen på exakt de dagar användaren valt (viloapass behåller sin dag).
+      const adjusted =
+        wanted.length > 0
+          ? {
+              ...program,
+              sessions: (() => {
+                let i = 0;
+                return program.sessions.map((s) =>
+                  s.type === "vila" ? s : { ...s, day: wanted[i++ % wanted.length]! },
+                );
+              })(),
+            }
+          : program;
+      saveProgram(payload, adjusted);
       toast({ title: successTitle, description: program.intro });
     } catch (err) {
       toast({
@@ -343,6 +367,8 @@ export default function TrainingPage() {
     setGoal(g.goal);
     setFocus(g.focus);
     setDaysPerWeek(g.daysPerWeek);
+    if (g.days?.length) setPreferredDays(g.days);
+
     setMinutes(g.minutesPerSession);
     setLevel(g.level);
     setEquipment(g.equipment ?? "");
@@ -364,12 +390,17 @@ export default function TrainingPage() {
       toast({ title: "Berätta vad du vill", description: "Skriv ditt mål med träningen först." });
       return;
     }
+    if (preferredDays.length === 0) {
+      toast({ title: "Välj dagar", description: "Markera minst en träningsdag." });
+      return;
+    }
     const payload: TrainingGoal = {
       goal: goal.trim(),
       focus,
-      daysPerWeek,
+      daysPerWeek: preferredDays.length,
       minutesPerSession: minutes,
       level,
+      days: preferredDays,
       ...(equipment.trim() ? { equipment: equipment.trim() } : {}),
       ...(limitations.trim() ? { limitations: limitations.trim() } : {}),
     };
@@ -927,20 +958,38 @@ export default function TrainingPage() {
                     ))}
                   </div>
 
+                  <fieldset>
+                    <legend className="text-sm text-muted-foreground">
+                      Träningsdagar – välj de dagar som passar dig
+                    </legend>
+                    <div className="mt-1 flex flex-wrap gap-1.5">
+                      {WEEKDAYS.map((day) => {
+                        const active = preferredDays.includes(day);
+                        return (
+                          <button
+                            key={day}
+                            type="button"
+                            aria-pressed={active}
+                            onClick={() => togglePreferredDay(day)}
+                            className={`min-h-11 rounded-xl border px-3 text-sm transition ${
+                              active
+                                ? "border-primary bg-primary text-primary-foreground"
+                                : "border-border text-ink hover:bg-muted"
+                            }`}
+                          >
+                            {day.slice(0, 3)}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      {preferredDays.length > 0
+                        ? `${preferredDays.length} pass i veckan: ${preferredDays.join(", ")}`
+                        : "Välj minst en dag."}
+                    </p>
+                  </fieldset>
+
                   <div className="grid grid-cols-2 gap-3">
-                    <label className="text-sm text-muted-foreground">
-                      Dagar/vecka
-                      <Input
-                        type="number"
-                        min={1}
-                        max={7}
-                        value={daysPerWeek}
-                        onChange={(e) =>
-                          setDaysPerWeek(Math.min(7, Math.max(1, Number(e.target.value) || 3)))
-                        }
-                        className="rounded-xl mt-1"
-                      />
-                    </label>
                     <label className="text-sm text-muted-foreground">
                       Minuter/pass
                       <Input
