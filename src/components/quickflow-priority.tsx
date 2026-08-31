@@ -35,6 +35,8 @@ import {
   type PriorityBucket,
   type PriorityTask,
 } from "@/lib/quickflow-priority";
+import { clarifyQuickflowTask } from "@/lib/quickflow-clarify.functions";
+import { heuristicClarify, ENERGY_LEVEL_META } from "@/lib/quickflow-clarify";
 import { prioritizeQuickflow } from "@/lib/quickflow-priority.functions";
 import type { FlowItem } from "@/lib/flow-items";
 import { cn } from "@/lib/utils";
@@ -51,6 +53,7 @@ export function QuickflowPriority() {
   const { toast } = useToast();
   const navigate = useNavigate();
   const run = useServerFn(prioritizeQuickflow);
+  const clarify = useServerFn(clarifyQuickflowTask);
 
   const [raw, setRaw] = useState("");
   const [busy, setBusy] = useState(false);
@@ -58,6 +61,8 @@ export function QuickflowPriority() {
   const [newTitle, setNewTitle] = useState("");
   const [reorder, setReorder] = useState(false);
   const [askEnergyFor, setAskEnergyFor] = useState<FlowItem | null>(null);
+  const [clarifyingId, setClarifyingId] = useState<string | null>(null);
+  const [expandedClarificationId, setExpandedClarificationId] = useState<string | null>(null);
 
   const energyPercent = reading?.now;
   const hint = useMemo(() => energyHint(energyPercent), [energyPercent]);
@@ -87,6 +92,25 @@ export function QuickflowPriority() {
     } finally {
       setBusy(false);
       setRaw("");
+    }
+  };
+
+  const clarifyTask = async (item: PriorityTask) => {
+    if (item.clarify) {
+      setExpandedClarificationId((current) => (current === item.id ? null : item.id));
+      return;
+    }
+
+    setClarifyingId(item.id);
+    try {
+      const result = await clarify({ data: { title: item.title, energyPercent } });
+      update(item.id, { clarify: result });
+      setExpandedClarificationId(item.id);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Flow kunde inte förtydliga uppgiften just nu.";
+      toast({ description: message });
+    } finally {
+      setClarifyingId(null);
     }
   };
 
@@ -181,60 +205,77 @@ export function QuickflowPriority() {
                     {meta.emoji} {meta.label}
                   </p>
                   {rows.map((item) => (
-                    <div
-                      key={item.id}
-                      className="flex flex-wrap items-center gap-2 rounded-2xl border-2 border-border bg-card p-3"
-                    >
-                      <span className="min-w-[8rem] flex-1">
-                        <span className="block font-medium text-foreground">{item.title}</span>
-                        {item.why && (
-                          <span className="block text-xs text-muted-foreground">{item.why}</span>
-                        )}
-                      </span>
+                    <div key={item.id} className="rounded-2xl border-2 border-border bg-card p-3">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="min-w-[8rem] flex-1">
+                          <span className="block font-medium text-foreground">{item.title}</span>
+                          {item.why && (
+                            <span className="block text-xs text-muted-foreground">{item.why}</span>
+                          )}
+                        </span>
 
-                      {reorder ? (
-                        <span className="flex flex-wrap items-center gap-1">
-                          {BUCKETS.map((b) => (
-                            <button
-                              key={b}
-                              type="button"
-                              onClick={() => update(item.id, { bucket: b })}
-                              className={cn(
-                                "press rounded-full border-2 px-2 py-1 text-xs",
-                                item.bucket === b
-                                  ? "border-primary text-primary"
-                                  : "border-border text-muted-foreground",
-                              )}
-                              aria-label={BUCKET_META[b].label}
+                        {reorder ? (
+                          <span className="flex flex-wrap items-center gap-1">
+                            {BUCKETS.map((b) => (
+                              <button
+                                key={b}
+                                type="button"
+                                onClick={() => update(item.id, { bucket: b })}
+                                className={cn(
+                                  "press rounded-full border-2 px-2 py-1 text-xs",
+                                  item.bucket === b
+                                    ? "border-primary text-primary"
+                                    : "border-border text-muted-foreground",
+                                )}
+                                aria-label={BUCKET_META[b].label}
+                              >
+                                {BUCKET_META[b].emoji}
+                              </button>
+                            ))}
+                            <IconBtn label="Flytta upp" onClick={() => move(item.id, -1)}>
+                              <ArrowUp size={16} />
+                            </IconBtn>
+                            <IconBtn label="Flytta ner" onClick={() => move(item.id, 1)}>
+                              <ArrowDown size={16} />
+                            </IconBtn>
+                          </span>
+                        ) : (
+                          <span className="flex flex-wrap items-center gap-1">
+                            <IconBtn
+                              label={item.clarify ? "Visa förtydligande" : "Förtydliga uppgiften"}
+                              onClick={() => clarifyTask(item)}
                             >
-                              {BUCKET_META[b].emoji}
-                            </button>
-                          ))}
-                          <IconBtn label="Flytta upp" onClick={() => move(item.id, -1)}>
-                            <ArrowUp size={16} />
-                          </IconBtn>
-                          <IconBtn label="Flytta ner" onClick={() => move(item.id, 1)}>
-                            <ArrowDown size={16} />
-                          </IconBtn>
-                        </span>
-                      ) : (
-                        <span className="flex flex-wrap items-center gap-1">
-                          <IconBtn
-                            label="Börja med denna"
-                            onClick={() => navigate({ to: "/fokus" })}
-                          >
-                            <Play size={16} />
-                          </IconBtn>
-                          <IconBtn label="Klar" onClick={() => markDone(item)}>
-                            <Check size={16} />
-                          </IconBtn>
-                          <IconBtn label="Planera den" onClick={() => planIt(item)}>
-                            <CalendarPlus size={16} />
-                          </IconBtn>
-                          <IconBtn label="Ta bort" onClick={() => remove(item.id)}>
-                            <Trash2 size={16} />
-                          </IconBtn>
-                        </span>
+                              {clarifyingId === item.id ? (
+                                <Loader2 size={16} className="animate-spin" />
+                              ) : item.clarify && expandedClarificationId === item.id ? (
+                                <ChevronUp size={16} />
+                              ) : item.clarify ? (
+                                <ChevronDown size={16} />
+                              ) : (
+                                <CircleHelp size={16} />
+                              )}
+                            </IconBtn>
+                            <IconBtn
+                              label="Börja med denna"
+                              onClick={() => navigate({ to: "/fokus" })}
+                            >
+                              <Play size={16} />
+                            </IconBtn>
+                            <IconBtn label="Klar" onClick={() => markDone(item)}>
+                              <Check size={16} />
+                            </IconBtn>
+                            <IconBtn label="Planera den" onClick={() => planIt(item)}>
+                              <CalendarPlus size={16} />
+                            </IconBtn>
+                            <IconBtn label="Ta bort" onClick={() => remove(item.id)}>
+                              <Trash2 size={16} />
+                            </IconBtn>
+                          </span>
+                        )}
+                      </div>
+
+                      {item.clarify && expandedClarificationId === item.id && (
+                        <ClarificationPanel clarification={item.clarify} />
                       )}
                     </div>
                   ))}
@@ -275,6 +316,32 @@ export function QuickflowPriority() {
 
       <ActivityEnergyPrompt item={askEnergyFor} onClose={() => setAskEnergyFor(null)} />
     </>
+  );
+}
+
+function ClarificationPanel({ clarification }: { clarification: PriorityTask["clarify"] }) {
+  if (!clarification) return null;
+  const energyMeta = ENERGY_LEVEL_META[clarification.energyLevel];
+
+  return (
+    <div className="mt-3 grid gap-3 rounded-2xl border-2 border-border/70 bg-muted/30 p-3 text-sm sm:grid-cols-2">
+      <div className="space-y-1 sm:col-span-2">
+        <p className="font-medium text-foreground">Varför?</p>
+        <p className="text-muted-foreground">{clarification.why}</p>
+      </div>
+      <div className="space-y-1">
+        <p className="font-medium text-foreground">Energi</p>
+        <p className="flex items-center gap-2 text-muted-foreground">
+          <span className={cn("h-2.5 w-2.5 rounded-full", energyMeta.dot)} aria-hidden="true" />
+          {energyMeta.label}
+        </p>
+        <p className="text-xs text-muted-foreground">{clarification.energyNote}</p>
+      </div>
+      <div className="space-y-1">
+        <p className="font-medium text-foreground">Börja här</p>
+        <p className="text-muted-foreground">{clarification.firstStep}</p>
+      </div>
+    </div>
   );
 }
 
