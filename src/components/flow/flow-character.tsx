@@ -588,18 +588,20 @@ export function FlowCharacter({
         {!isMini && variant.back?.(ctx)}
 
         <FlowMascot
-          size={isMini ? "sm" : stage === "compact" ? "lg" : "xl"}
+          size={isMini ? "sm" : stage === "compact" ? "md" : "xl"}
           glow
           mood={variant.mood}
-          className={cn("absolute inset-0 flex items-center justify-center", variant.mascotClass)}
+          className={cn(
+            "absolute inset-0 flex items-center justify-center",
+            stage === "compact" && "p-1",
+            variant.mascotClass,
+          )}
           imgClassName={
             isMini
               ? "h-[68px] w-[68px] max-w-none object-contain"
-              : stage === "inline"
-                ? "h-full w-full object-contain"
-                : stage === "compact"
-                  ? "h-[100%] w-auto max-w-none object-contain"
-                  : "h-[108%] w-auto max-w-none"
+              : stage === "inline" || stage === "compact"
+                ? "h-full max-h-full w-full object-contain"
+                : "h-[108%] w-auto max-w-none"
           }
         />
 
