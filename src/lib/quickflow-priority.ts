@@ -74,9 +74,7 @@ export function heuristicPriority(titles: string[], energyPercent?: number): Pri
       why = "Känns viktigt att få ur världen.";
     } else if (LIGHT.some((w) => t.includes(w))) {
       score = low ? 1 : high ? 2 : 1;
-      why = low
-        ? "Liten sak – går att göra även med lite energi."
-        : "Liten sak som går snabbt.";
+      why = low ? "Liten sak – går att göra även med lite energi." : "Liten sak som går snabbt.";
     } else if (HEAVY.some((w) => t.includes(w))) {
       score = low ? 3 : high ? 1 : 2;
       why = low
