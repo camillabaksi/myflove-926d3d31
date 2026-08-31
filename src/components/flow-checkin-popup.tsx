@@ -8,7 +8,14 @@ import { useFlowCheckin, type CheckinSlot } from "@/hooks/use-flow-checkin";
 
 const COPY: Record<
   CheckinSlot,
-  { title: string; lines: string[]; cta: string; emoji: string; source: string }
+  {
+    title: string;
+    lines: string[];
+    cta: string;
+    emoji: string;
+    source: string;
+    presetFactors?: string[];
+  }
 > = {
   morgon: {
     title: "God morgon! 💜",
@@ -16,6 +23,8 @@ const COPY: Record<
     cta: "Logga hur jag mår",
     emoji: "🌅",
     source: "flow-checkin-morgon",
+    // Morgonens sömnfråga blir en påverkansfaktor på observationen.
+    presetFactors: ["somn"],
   },
   dag: {
     title: "Hej igen! 💜",
