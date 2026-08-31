@@ -74,7 +74,11 @@ export default function FlowCheckinPopup() {
             <DialogDescription className="sr-only">
               Din incheckning sparas som en vanlig energi- och måendeobservation.
             </DialogDescription>
-            <SimpleCheckin source={copy.source} onSaved={close} />
+            <SimpleCheckin
+              source={copy.source}
+              presetFactors={copy.presetFactors}
+              onSaved={close}
+            />
           </>
         ) : (
           <div className="flex flex-col items-center gap-4 text-center">
