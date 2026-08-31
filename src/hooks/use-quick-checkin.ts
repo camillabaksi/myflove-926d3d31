@@ -39,6 +39,9 @@ export const toScale10 = (v5: number) => Math.min(10, Math.max(1, Math.round(v5 
 
 const todayKey = () => new Date().toISOString().slice(0, 10);
 
+/** Energiloggar gjorda utan inloggning – flyttas till energy_logs vid login. */
+const PENDING_ENERGY_KEY = "myflove-energy-pending";
+
 export function useQuickCheckin() {
   const { moods, setMoods } = useMoods();
   // Kontobunden källa är energy_logs. Den lokala listan är enbart en cache
