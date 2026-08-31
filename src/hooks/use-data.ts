@@ -524,8 +524,12 @@ export function useActiveShoppingItemCount(): number {
   return items.filter((t) => !t.completed).length;
 }
 
+/**
+ * Mående – kontobunden källa (user_kv "myflow-moods", samma nyckel som
+ * MCP-verktyget log_mood). Lokal lagring är bara cache/offline-läge.
+ */
 export function useMoods() {
-  const [moods, setMoods] = useLocalStorage<MoodEntry[]>("myflow-moods", []);
+  const [moods, setMoods] = useCloudSyncedList<MoodEntry>("myflow-moods");
 
   const addMood = (score: number, note: string) => {
     setMoods([{ id: generateId(), score, note, date: Date.now() }, ...moods]);
