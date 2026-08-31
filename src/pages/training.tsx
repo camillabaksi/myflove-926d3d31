@@ -374,12 +374,17 @@ export default function TrainingPage() {
       toast({ title: "Berätta vad du vill", description: "Skriv ditt mål med träningen först." });
       return;
     }
+    if (preferredDays.length === 0) {
+      toast({ title: "Välj dagar", description: "Markera minst en träningsdag." });
+      return;
+    }
     const payload: TrainingGoal = {
       goal: goal.trim(),
       focus,
-      daysPerWeek,
+      daysPerWeek: preferredDays.length,
       minutesPerSession: minutes,
       level,
+      days: preferredDays,
       ...(equipment.trim() ? { equipment: equipment.trim() } : {}),
       ...(limitations.trim() ? { limitations: limitations.trim() } : {}),
     };
