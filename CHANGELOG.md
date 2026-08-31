@@ -1693,3 +1693,8 @@ Initial baseline av MyFlove — ett svenskspråkigt "lugnt livsflöde"-dashboard
 
 - Städningssidan använder nu samma MyFlove-block, 2px-borders och rundningar som resten av appen.
 - Översikt, material, steg och eget steg ligger i symmetriska block i det gemensamma rutnätet.
+
+## 2026-08-31 – QuickFlow räknar med batteriet
+
+- Batterivärdet från Mitt batteri visas i QuickFlow och påverkar prioriteringen mer nyanserat: lätt före tungt vid lågt batteri, tungt tidigt vid högt.
+- Fallback-prioriteringen väger viktighet, brådska och energinivå även utan AI.

@@ -13,6 +13,16 @@ describe("quickflow-priority", () => {
     expect(idx("Diska")).toBeLessThan(idx("Storstäda"));
   });
 
+  it("räknar med batteriet: tunga saker tidigare när energin är hög", () => {
+    const idx = (list: ReturnType<typeof heuristicPriority>, t: string) =>
+      list.findIndex((i) => i.title === t);
+    const low = heuristicPriority(["Städa", "Tvätta"], 20);
+    expect(idx(low, "Tvätta")).toBeLessThan(idx(low, "Städa"));
+    const high = heuristicPriority(["Städa", "Tvätta"], 90);
+    expect(idx(high, "Städa")).toBeLessThan(idx(high, "Tvätta"));
+    expect(high.find((i) => i.title === "Städa")?.why).toContain("batteriet är högt");
+  });
+
   it("lägger brådskande saker i Gör nu", () => {
     const res = heuristicPriority(["Betala räkningen", "Vattna blommor"], 60);
     expect(res[0]?.bucket).toBe("nu");

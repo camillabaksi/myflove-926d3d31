@@ -172,7 +172,17 @@ export function QuickflowPriority() {
         collapseId="quickflow::prioritera"
       >
         <div className="space-y-4">
-          <p className="text-sm text-muted-foreground">{hint}</p>
+          <div className="flex flex-wrap items-center gap-2">
+            {typeof energyPercent === "number" && (
+              <span
+                className="inline-flex items-center gap-1 rounded-full border-2 border-border/60 bg-card px-2.5 py-1 text-xs font-medium"
+                aria-label={`Ditt batteri just nu: ${Math.round(energyPercent)} procent`}
+              >
+                🔋 {Math.round(energyPercent)} %
+              </span>
+            )}
+            <p className="text-sm text-muted-foreground">{hint}</p>
+          </div>
 
           <textarea
             value={raw}
