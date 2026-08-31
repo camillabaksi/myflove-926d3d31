@@ -12,7 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Fix: länkar i expanderade kort navigerar igen",
     items: [
-      "Länkar inuti expanderade kort (t.ex. Planera, Flow, QuickFlow från Hem) avbröts av kortets historik-hantering – nu fungerar de (2026-08-31)",
+      "Menykort med länkar använder nu routerns vanliga historik, så Planera, Flow och QuickFlow från Hem inte längre avbryts av kortets Android-bakåtlogik (2026-08-31)",
       "Texten sa fyra situationer fast listan har tre (2026-08-31)",
     ],
   },
