@@ -174,7 +174,7 @@ export function useQuickCheckin() {
       queueRef.current = next.catch(() => undefined);
       return next;
     },
-    [userId, setLocalEnergy, setCheckin10],
+    [userId, setLocalEnergy, setPendingEnergy, setCheckin10],
   );
 
   const sameDay = checkin10?.day === todayKey();
