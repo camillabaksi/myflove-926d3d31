@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-08-31";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "QuickFlow: planera med din egen tid",
+    items: [
+      "Planera den låter dig välja idag, imorgon eller datum – med eller utan tid (2026-08-31)",
+      "Flow sätter aldrig tider eller deadlines åt dig (2026-08-31)",
+    ],
+  },
+  {
     title: "QuickFlow: dela upp i enskilda saker",
     items: [
       "En sak med flera händelser kan delas upp i enskilda saker direkt i listan (2026-08-31)",
