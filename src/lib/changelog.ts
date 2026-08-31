@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-08-31";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Bottennavigationen sitter alltid fast längst ner",
+    items: [
+      "Layout-roten är exakt en skärmhöjd med låst ytterscroll så bottennaven aldrig åker upp när man scrollar (2026-08-31)",
+      "Gummibands-scroll i mobila webbvyer blockeras så fasta element håller sig kvar vid botten (2026-08-31)",
+    ],
+  },
+  {
     title: "Flow-hjälparen är mindre och tydligare",
     items: [
       "Maskoten i Flow-hjälparen visas i en kompakt scenstorlek så att den inte tar över vyn (2026-08-31)",

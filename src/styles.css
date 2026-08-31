@@ -207,6 +207,12 @@
     border-color: hsl(var(--border));
   }
 
+  html,
+  body {
+    /* Hindra gummibands-scroll i webbvyer så fasta element (bottennav) aldrig åker med */
+    overscroll-behavior-y: none;
+  }
+
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));

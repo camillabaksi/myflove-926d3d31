@@ -687,7 +687,7 @@ export default function Layout({ children }: LayoutProps) {
   }, [navItems, navSlots]);
 
   return (
-    <div className="min-h-[100dvh] flex flex-col bg-background md:flex-row relative">
+    <div className="h-[100dvh] overflow-hidden overscroll-none flex flex-col bg-background md:flex-row relative">
       {/* Desktop Sidebar */}
       <nav className="hidden md:flex flex-col w-64 border-r border-border bg-card p-4 shrink-0 overflow-y-auto">
         <div className="mb-8 px-4 py-2">
