@@ -155,10 +155,9 @@ export function useQuickCheckin() {
       const run = async () => {
         const now = new Date().toISOString();
         if (!userId) {
-          setLocalEnergy((prev) => [
-            ...(prev ?? []),
-            { id: Math.random().toString(36).slice(2, 11), level, logged_at: now },
-          ]);
+          const entry = { id: Math.random().toString(36).slice(2, 11), level, logged_at: now };
+          setPendingEnergy((prev) => [...(prev ?? []), entry]);
+          setLocalEnergy((prev) => [...(prev ?? []), entry]);
           return;
         }
         const { data } = await supabase
@@ -168,6 +167,7 @@ export function useQuickCheckin() {
           .single();
         if (data) {
           setCloudEnergy((prev) => [...(prev ?? []), data]);
+          setLocalEnergy((prev) => [...(prev ?? []), data]);
         }
       };
       const next = queueRef.current.then(run, run);
