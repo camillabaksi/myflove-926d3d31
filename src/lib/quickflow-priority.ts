@@ -7,6 +7,8 @@
  * fallback + typer och används av hooken och UI:t.
  */
 
+import type { TaskClarification } from "./quickflow-clarify";
+
 export type PriorityBucket = "nu" | "sedan" | "om-du-orkar" | "kan-vanta";
 
 export interface PriorityTask {
@@ -16,6 +18,8 @@ export interface PriorityTask {
   /** Kort förklaring från Flow – aldrig en påhittad deadline. */
   why?: string;
   order: number;
+  /** Flows förtydligande: varför + energiuppskattning + första steg. */
+  clarify?: TaskClarification;
   done?: boolean;
   doneAt?: number;
   createdAt: number;

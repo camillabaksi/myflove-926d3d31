@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-08-31";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "QuickFlow: förtydliga varje uppgift",
+    items: [
+      "Varje sak i Min lista just nu kan få en kort förklaring, energiuppskattning och ett första steg från Flow (2026-08-31)",
+      "Förtydligandet utgår från Mitt batteri och är ett stöd – det skapar inga tider, deadlines eller kalenderhändelser (2026-08-31)",
+    ],
+  },
+  {
     title: 'QuickFlow: "Jag har mycket på en gång"',
     items: [
       "Skriv in flera saker samtidigt utan tider – Flow prioriterar dem i fyra lugna nivåer (2026-08-31)",
