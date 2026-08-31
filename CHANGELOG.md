@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-31 – QuickFlow: "Jag har mycket på en gång"
+
+- Skriv in flera saker i ett enda fält – en per rad eller separerade med komma/och. Inga tider, datum eller kalenderhändelser krävs.
+- Flow sorterar dem i Gör nu, Gör sedan, Om du orkar och Kan vänta med en kort förklaring till varje – och hittar aldrig på deadlines.
+- Prioriteringen tar hänsyn till din nivå i Mitt batteri: små viktiga saker först när energin är låg, det tyngsta först när den är hög.
+- "Min lista just nu" ligger kvar: börja med en sak, bocka av, ändra ordning eller nivå, lägg till nytt och ta bort.
+- Klart-markering frågar (frivilligt) hur det påverkade energin via den befintliga energiloggningen. "Planera den" skickar saken vidare till Planera – annars skapas ingen kalenderhändelse eller påminnelse.
+
 ## 2026-08-31 – Min energi följer MyFloves designspråk
 
 - "Min energi – historik och mönster" är ombyggd med appens vanliga block, rundningar, borders och spacing.
@@ -7,8 +15,6 @@
 - Idag visar varje registrering som en horisontell rad med påverkan, svårighetsgrad och små ikonknappar för ta bort.
 - Mönster över tid och Dina återkommande faktorer visas som rena rader i stället för smala kolumner, med "Varför?" bredvid rubriken.
 - All loggning, beräkning och synk är oförändrad – det här är enbart en presentationsändring.
-
-
 
 ## 2026-08-31 – Välj själv vilka dagar programmet läggs på
 
@@ -50,14 +56,12 @@
 - "Hoppa över" stänger utan skuld och respekteras resten av tidsfönstret. En befintlig observation i tidsfönstret suppressar en ny popup.
 - Varför?-förklaringen beskriver kort hur flera observationer hjälper Flow att se förändringar över dagen. Hälsokontext skapar aldrig aktiviteter, kalenderposter eller påminnelser.
 
-
 ## 2026-08-31 – Mående, energi och ekonomi är nu kontobundna
 
 - Mående (`myflow-moods`) och ekonomi (`myflow-finances`) sparas kontobundet i `user_kv` via nya `useCloudSyncedList` – samma nyckel som MCP-verktyget `log_mood` redan använder, alltså en enda source of truth. Befintlig lokal data slås ihop per id efter inloggning, så inget skrivs över och inga dubbletter skapas.
 - Energiloggar har `energy_logs` som source of truth. `myflove-energy-log` är nu enbart en lokal cache som speglar molnet (60 dagar) för insikter och mönster. Loggningar gjorda utan inloggning hamnar i `myflove-energy-pending` och flyttas upp till kontot vid nästa inloggning.
 - Efter utloggning rensas den lokala krypterade kopian som tidigare, men allt hämtas tillbaka vid inloggning: energi, mående, fritext/orsak och ekonomi överlever logga ut → logga in.
 - Fritext och "vad påverkar" sparas fortsatt på måendeobservationen som hälsokontext – aldrig som aktivitet, kalenderpost eller påminnelse.
-
 
 ## 2026-08-31 – Namn och morgon/kväll-batteri stannar kvar vid utloggning
 
@@ -74,8 +78,6 @@
 - Widget-korten blir också horisontella i breda ytor i stället för höga torn, och minimihöjden på 9 rem gäller bara i smala kolumner.
 - `MyFloveEmptyState` är kompaktare och lägger ikon, text och knapp på samma rad från `sm` och uppåt.
 - Ändringarna är rent presentation – ingen data-, navigations- eller produktlogik har ändrats.
-
-
 
 ## 2026-08-30 – Kalender blir navet för dagens planering
 
@@ -98,8 +100,6 @@
 - Korta, varma "Varför?"-förklaringar finns nu på Mitt batteri, Hälsa, Min energi (historik), QuickFlow, Påminnelser och Insight – utöver Planera.
 - "Lägg till på hemskärmen" visas som en tydlig inställningsrad i Mer med underrubriken "Öppna MyFlove snabbare när du behöver Flow." Riktig installationsprompt används där webbläsaren stödjer den, iOS får steg-för-steg och knappen döljs helt när appen redan är installerad.
 - QA i mobilvy (390 px): Hem, Mitt batteri, Hälsa, QuickFlow, Påminnelser, Min energi, Insight, Planera, Idag och Kalender renderar utan horisontell scroll eller trasiga routes.
-
-
 
 ## 2026-08-29 – Nya Blueprint-, pitchdeck- och videomaterial 3.7
 

@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-08-31";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: 'QuickFlow: "Jag har mycket på en gång"',
+    items: [
+      "Skriv in flera saker samtidigt utan tider – Flow prioriterar dem i fyra lugna nivåer (2026-08-31)",
+      "Prioriteringen utgår från din nivå i Mitt batteri och hittar aldrig på deadlines (2026-08-31)",
+      "Min lista just nu: börja, bocka av, ändra ordning, lägg till och ta bort (2026-08-31)",
+      "Klart-markering kan kopplas till den befintliga energiloggningen – ingen kalenderhändelse skapas automatiskt (2026-08-31)",
+    ],
+  },
+  {
     title: "Min energi följer MyFloves designspråk",
     items: [
       "Historik- och mönstersidan är ombyggd med appens vanliga block, rundningar och spacing (2026-08-31)",
