@@ -127,7 +127,6 @@ export function QuickflowCapture({ variant = "card" }: { variant?: "card" | "com
     });
   };
 
-
   return (
     <>
       <button
@@ -178,7 +177,6 @@ export function QuickflowCapture({ variant = "card" }: { variant?: "card" | "com
           </DialogHeader>
 
           <div className="min-w-0 space-y-4">
-
             <div className="relative">
               <textarea
                 autoFocus
@@ -278,7 +276,11 @@ export function QuickflowCapture({ variant = "card" }: { variant?: "card" | "com
                 </ul>
 
                 <div className="grid gap-2 pt-1">
-                  <Button type="button" onClick={approveAndPrioritize} className="w-full rounded-xl">
+                  <Button
+                    type="button"
+                    onClick={approveAndPrioritize}
+                    className="w-full rounded-xl"
+                  >
                     <Sparkles size={16} className="mr-2" /> Godkänn och prioritera
                   </Button>
                   <Button
@@ -292,8 +294,6 @@ export function QuickflowCapture({ variant = "card" }: { variant?: "card" | "com
                 </div>
               </div>
             )}
-
-
 
             <div className="space-y-2">
               <p className="text-xs uppercase tracking-wide text-muted-foreground">

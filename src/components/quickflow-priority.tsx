@@ -242,7 +242,6 @@ export function QuickflowPriority() {
               </WhyHint>
             </div>
 
-
             {BUCKETS.map((bucket) => {
               const rows = openItems.filter((i) => i.bucket === bucket);
               if (rows.length === 0) return null;
