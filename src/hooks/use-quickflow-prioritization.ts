@@ -13,7 +13,7 @@ import { usePriorityList } from "@/hooks/use-priority-list";
 export function useQuickflowPrioritization() {
   const run = useServerFn(prioritizeQuickflow);
   const { reading } = useEnergyBattery();
-  const { replace, setIntro } = usePriorityList();
+  const { merge, setIntro } = usePriorityList();
 
   const prioritizeTitles = useCallback(
     async (titles: string[]) => {
@@ -23,23 +23,23 @@ export function useQuickflowPrioritization() {
       const now = Date.now();
       try {
         const result = await run({ data: { titles: clean, energyPercent } });
-        replace(
+        merge(
           result.items.map((it, i) => ({
             id: `${now}-${i}`,
             title: it.title,
             bucket: it.bucket,
             why: it.why,
-            order: i,
+            order: now + i,
             createdAt: now,
           })),
         );
         setIntro(result.intro);
       } catch {
-        replace(heuristicPriority(clean, energyPercent));
+        merge(heuristicPriority(clean, energyPercent));
         setIntro("Jag sorterade dem så gott jag kunde. Du får gärna ändra ordningen.");
       }
     },
-    [run, reading?.now, replace, setIntro],
+    [run, reading?.now, merge, setIntro],
   );
 
   return { prioritizeTitles, energyPercent: reading?.now };
