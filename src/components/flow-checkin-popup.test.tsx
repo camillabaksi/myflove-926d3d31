@@ -63,9 +63,7 @@ describe("Flows mjuka check-in-popup", () => {
     await waitFor(() => expect(screen.getByText("Hej igen! 💜")).toBeInTheDocument());
     await user.click(screen.getByRole("button", { name: "Hoppa över" }));
 
-    await waitFor(() =>
-      expect(screen.queryByTestId("flow-checkin-popup")).not.toBeInTheDocument(),
-    );
+    await waitFor(() => expect(screen.queryByTestId("flow-checkin-popup")).not.toBeInTheDocument());
     expect(window.localStorage.getItem(SEEN_KEY)).toContain("dag");
 
     view.unmount();
