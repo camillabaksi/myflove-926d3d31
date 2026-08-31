@@ -266,7 +266,7 @@ export default function Home() {
               titleText="Vad behöver du just nu"
               area="hem"
               icon={Compass}
-              subtitle="Fyra vanliga situationer"
+              subtitle="Tre vanliga situationer"
               status="Välj väg"
               tone="lavender"
               surface="lavender"

@@ -97,6 +97,7 @@ export function ExpandableBlock({
   React.useEffect(() => {
     if (!open) return;
     const onPop = () => setOpen(false);
+    const openedPath = window.location.pathname;
     window.history.pushState({ myfloveExpanded: ariaLabel }, "");
     window.addEventListener("popstate", onPop);
 
@@ -108,7 +109,15 @@ export function ExpandableBlock({
     return () => {
       window.removeEventListener("popstate", onPop);
       window.removeEventListener("keydown", onKey);
-      if (window.history.state?.myfloveExpanded === ariaLabel) window.history.back();
+      // Rensa bara det tillfälliga history-läget om vi fortfarande är kvar på
+      // samma sida. Om kortet avmonteras för att en länk inuti navigerade
+      // vidare får vi INTE hoppa tillbaka – då ogörs navigationen.
+      if (
+        window.history.state?.myfloveExpanded === ariaLabel &&
+        window.location.pathname === openedPath
+      ) {
+        window.history.back();
+      }
     };
   }, [open, ariaLabel]);
 
