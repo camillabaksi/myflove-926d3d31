@@ -10,6 +10,12 @@ export const CHANGELOG_UPDATED = "2026-08-31";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Namn och morgon/kväll-batteri stannar kvar vid utloggning",
+    items: [
+      "Ditt namn, dagens tidsramar och morgon-/kvällsvärdena i Mitt batteri räknas nu som enhetsdata och rensas inte när du loggar ut (2026-08-31)",
+    ],
+  },
+  {
     title: "Fix: länkar i expanderade kort navigerar igen",
     items: [
       "Menykort med länkar använder nu routerns vanliga historik, så Planera, Flow och QuickFlow från Hem inte längre avbryts av kortets Android-bakåtlogik (2026-08-31)",
