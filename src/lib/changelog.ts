@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-08-31";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Flow ser dagens check-ins i sin kontext",
+    items: [
+      "Flows personliga kontext visar dagens morgon-, dag- och kvällscheck-ins med tid, energi, mående och eventuell fritext från befintlig loggning (2026-08-31)",
+      "Ingen separat check-in-datakälla skapas och hälsologgning blir inte aktivitet eller kalenderpost (2026-08-31)",
+    ],
+  },
+  {
     title: "Flow bjuder in till mjuka check-ins under dagen",
     items: [
       "En frivillig popup kan visas en gång per tidsfönster och använder den centrala loggningen för energi och mående (2026-08-31)",
