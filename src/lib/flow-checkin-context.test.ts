@@ -22,8 +22,8 @@ const energy = (hour: number, level: number): EnergyLogEntry => ({
 describe("checkinContext", () => {
   it("samlar dagens morgon-, dag- och kvällscheck-ins från befintliga observationer", () => {
     const context = checkinContext(
-      [mood(8, 3, "Lite seg efter natten"), mood(13, 4)],
-      [energy(8, 2), energy(13, 4), energy(19, 3)],
+      [mood(13, 4), mood(8, 3, "Lite seg efter natten")],
+      [energy(19, 3), energy(13, 4), energy(8, 2)],
       now,
     );
 
@@ -32,6 +32,16 @@ describe("checkinContext", () => {
     expect(context).toContain("Egna ord: ”Lite seg efter natten”");
     expect(context).toContain("Dag (kl. 13:15): energi 4/5, mående 4/5");
     expect(context).toContain("Kväll (kl. 19:15): energi 3/5");
+  });
+
+  it("väljer den senaste observationen när ett tidsfönster innehåller flera loggningar", () => {
+    const context = checkinContext(
+      [mood(9, 2), mood(10, 5)],
+      [energy(10, 4), energy(9, 1)],
+      now,
+    );
+
+    expect(context).toContain("Morgon (kl. 10:15): energi 4/5, mående 5/5");
   });
 
   it("ignorerar observationer från andra dagar och visar en trygg tomstatus", () => {
