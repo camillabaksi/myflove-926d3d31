@@ -549,8 +549,9 @@ export interface Transaction {
   date: number; // timestamp
 }
 
+/** Ekonomi – kontobunden källa (user_kv "myflow-finances"). */
 export function useFinances() {
-  const [transactions, setTransactions] = useLocalStorage<Transaction[]>("myflow-finances", []);
+  const [transactions, setTransactions] = useCloudSyncedList<Transaction>("myflow-finances");
 
   const addTransaction = (transaction: Omit<Transaction, "id" | "date"> & { date?: number }) => {
     setTransactions([
