@@ -14,10 +14,7 @@ const newId = () => Math.random().toString(36).slice(2, 11);
 export function usePriorityList() {
   const [items, setItems] = useCloudSyncedStorage<PriorityTask[]>(STORAGE_KEY, []);
 
-  const replace = useCallback(
-    (next: PriorityTask[]) => setItems(sortPriority(next)),
-    [setItems],
-  );
+  const replace = useCallback((next: PriorityTask[]) => setItems(sortPriority(next)), [setItems]);
 
   const add = useCallback(
     (title: string, bucket: PriorityBucket = "kan-vanta") => {

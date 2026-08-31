@@ -216,7 +216,10 @@ export function QuickflowPriority() {
                         </span>
                       ) : (
                         <span className="flex flex-wrap items-center gap-1">
-                          <IconBtn label="Börja med denna" onClick={() => navigate({ to: "/fokus" })}>
+                          <IconBtn
+                            label="Börja med denna"
+                            onClick={() => navigate({ to: "/fokus" })}
+                          >
                             <Play size={16} />
                           </IconBtn>
                           <IconBtn label="Klar" onClick={() => markDone(item)}>
