@@ -169,12 +169,16 @@ export function QuickflowCapture({ variant = "card" }: { variant?: "card" | "com
           if (!o) reset();
         }}
       >
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-h-[85dvh] max-w-[720px] overflow-y-auto overflow-x-hidden">
           <DialogHeader>
-            <DialogTitle>Vad vill du att jag håller åt dig?</DialogTitle>
+            <DialogTitle>Vad vill du få ur huvudet?</DialogTitle>
+            <p className="text-sm text-muted-foreground">
+              Få ut det ur huvudet. Jag håller koll – skriv flera saker om du vill.
+            </p>
           </DialogHeader>
 
-          <div className="space-y-4">
+          <div className="min-w-0 space-y-4">
+
             <div className="relative">
               <textarea
                 autoFocus
