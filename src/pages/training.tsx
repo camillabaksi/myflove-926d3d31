@@ -937,21 +937,40 @@ export default function TrainingPage() {
                     ))}
                   </div>
 
+                  <fieldset>
+                    <legend className="text-sm text-muted-foreground">
+                      Träningsdagar – välj de dagar som passar dig
+                    </legend>
+                    <div className="mt-1 flex flex-wrap gap-1.5">
+                      {WEEKDAYS.map((day) => {
+                        const active = preferredDays.includes(day);
+                        return (
+                          <button
+                            key={day}
+                            type="button"
+                            aria-pressed={active}
+                            onClick={() => togglePreferredDay(day)}
+                            className={`min-h-11 rounded-xl border px-3 text-sm transition ${
+                              active
+                                ? "border-primary bg-primary text-primary-foreground"
+                                : "border-border text-ink hover:bg-muted"
+                            }`}
+                          >
+                            {day.slice(0, 3)}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      {preferredDays.length > 0
+                        ? `${preferredDays.length} pass i veckan: ${preferredDays.join(", ")}`
+                        : "Välj minst en dag."}
+                    </p>
+                  </fieldset>
+
                   <div className="grid grid-cols-2 gap-3">
                     <label className="text-sm text-muted-foreground">
-                      Dagar/vecka
-                      <Input
-                        type="number"
-                        min={1}
-                        max={7}
-                        value={daysPerWeek}
-                        onChange={(e) =>
-                          setDaysPerWeek(Math.min(7, Math.max(1, Number(e.target.value) || 3)))
-                        }
-                        className="rounded-xl mt-1"
-                      />
-                    </label>
-                    <label className="text-sm text-muted-foreground">
+
                       Minuter/pass
                       <Input
                         type="number"
