@@ -28,6 +28,7 @@ export function useFlowPersonalContext(): string {
   const { profile } = useLifeProfile();
   const { situation } = useSituation();
   const { moods } = useMoods();
+  const { todayEnergyEntries } = useQuickCheckin();
 
   return useMemo(() => {
     const lines: string[] = ["Om användaren (personlig kontext, inte regler):"];
@@ -38,6 +39,8 @@ export function useFlowPersonalContext(): string {
 
     const sit = situationContext(situation);
     if (sit) lines.push(sit);
+
+    lines.push(checkinContext(moods, todayEnergyEntries));
 
     // Användarens egna ord från Mitt batteri – kontext, aldrig diagnos.
     const week = Date.now() - 7 * 24 * 60 * 60 * 1000;
@@ -72,5 +75,5 @@ export function useFlowPersonalContext(): string {
     lines.push(TONE[settings.level] ?? TONE["diskret"] ?? "");
 
     return lines.filter(Boolean).join("\n");
-  }, [name, profile, situation, knowledge, settings.level, moods]);
+  }, [name, profile, situation, knowledge, settings.level, moods, todayEnergyEntries]);
 }
