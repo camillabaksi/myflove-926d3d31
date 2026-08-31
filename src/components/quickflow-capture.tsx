@@ -328,14 +328,14 @@ export function QuickflowCapture({ variant = "card" }: { variant?: "card" | "com
               <p className="text-xs uppercase tracking-wide text-muted-foreground">
                 ⏰ När ska jag påminna dig?
               </p>
-              <div className="flex flex-wrap gap-2">
+              <div className="grid gap-2 sm:grid-cols-2">
                 {WHEN_PRESETS.map((preset) => (
                   <button
                     key={preset.id}
                     type="button"
                     disabled={!text.trim()}
                     onClick={() => save({ remindAt: preset.compute() ?? undefined })}
-                    className="rounded-full border border-border bg-card px-4 py-2 text-sm hover:border-primary disabled:opacity-40"
+                    className="w-full rounded-full border border-border bg-card px-4 py-2 text-sm hover:border-primary disabled:opacity-40"
                   >
                     {preset.label}
                   </button>
@@ -348,7 +348,7 @@ export function QuickflowCapture({ variant = "card" }: { variant?: "card" | "com
                     setCustomOpen((v) => !v);
                     if (!customValue) setCustomValue(toLocalInputValue(Date.now() + 3_600_000));
                   }}
-                  className="rounded-full border border-border bg-card px-4 py-2 text-sm hover:border-primary disabled:opacity-40"
+                  className="w-full rounded-full border border-border bg-card px-4 py-2 text-sm hover:border-primary disabled:opacity-40"
                 >
                   På ett datum
                 </button>
@@ -359,7 +359,7 @@ export function QuickflowCapture({ variant = "card" }: { variant?: "card" | "com
                     setCustomOpen(false);
                     setPlaceOpen((v) => !v);
                   }}
-                  className="rounded-full border border-border bg-card px-4 py-2 text-sm hover:border-primary disabled:opacity-40"
+                  className="w-full rounded-full border border-border bg-card px-4 py-2 text-sm hover:border-primary disabled:opacity-40"
                 >
                   <MapPin size={13} className="inline mr-1 -mt-0.5" />
                   När jag kommer till en plats
@@ -368,7 +368,7 @@ export function QuickflowCapture({ variant = "card" }: { variant?: "card" | "com
                   type="button"
                   disabled={!text.trim()}
                   onClick={() => save({})}
-                  className="rounded-full border border-sage bg-sage/30 px-4 py-2 text-sm hover:border-primary disabled:opacity-40"
+                  className="w-full rounded-full border border-sage bg-sage/30 px-4 py-2 text-sm hover:border-primary disabled:opacity-40"
                 >
                   💭 Bara spara tanken
                 </button>
@@ -376,7 +376,7 @@ export function QuickflowCapture({ variant = "card" }: { variant?: "card" | "com
                   type="button"
                   disabled={!text.trim()}
                   onClick={saveAsNote}
-                  className="rounded-full border border-border bg-card px-4 py-2 text-sm hover:border-primary disabled:opacity-40"
+                  className="w-full rounded-full border border-border bg-card px-4 py-2 text-sm hover:border-primary disabled:opacity-40"
                 >
                   📝 Spara som anteckning
                 </button>
