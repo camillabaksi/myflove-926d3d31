@@ -41,12 +41,21 @@ const todayKey = () => new Date().toISOString().slice(0, 10);
 
 export function useQuickCheckin() {
   const { moods, setMoods } = useMoods();
+  // Kontobunden källa är energy_logs. Den lokala listan är enbart en cache
+  // som andra vyer (insikter, mönster) läser – aldrig source of truth.
   const [localEnergy, setLocalEnergy] = useLocalStorage<EnergyLogEntry[]>("myflove-energy-log", []);
+  // Loggningar gjorda utan inloggning väntar här tills de kan flyttas upp.
+  const [pendingEnergy, setPendingEnergy] = useLocalStorage<EnergyLogEntry[]>(
+    PENDING_ENERGY_KEY,
+    [],
+  );
   const [checkin10, setCheckin10] = useLocalStorage<Checkin10>("myflove-checkin-10", {
     day: todayKey(),
   });
   const [cloudEnergy, setCloudEnergy] = useState<EnergyLogEntry[] | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
+  const pendingRef = useRef(pendingEnergy);
+  pendingRef.current = pendingEnergy;
 
   useEffect(() => {
     let mounted = true;
@@ -57,7 +66,16 @@ export function useQuickCheckin() {
         setCloudEnergy(null);
         return;
       }
+      // Migrera loggningar som gjordes innan inloggning.
+      const pending = pendingRef.current ?? [];
+      if (pending.length > 0) {
+        const { error } = await supabase
+          .from("energy_logs")
+          .insert(pending.map((e) => ({ user_id: uid, level: e.level, logged_at: e.logged_at })));
+        if (!error) setPendingEnergy([]);
+      }
       const since = new Date();
+      since.setDate(since.getDate() - 60);
       since.setHours(0, 0, 0, 0);
       const { data } = await supabase
         .from("energy_logs")
@@ -65,7 +83,9 @@ export function useQuickCheckin() {
         .eq("user_id", uid)
         .gte("logged_at", since.toISOString())
         .order("logged_at", { ascending: true });
-      if (mounted) setCloudEnergy(data ?? []);
+      if (!mounted) return;
+      setCloudEnergy(data ?? []);
+      if (data) setLocalEnergy(data);
     };
     void supabase.auth.getUser().then(({ data }) => load(data.user?.id ?? null));
     const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
