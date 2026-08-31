@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-31 – Bottennavigationen sitter alltid fast längst ner
+
+- Appens layout-root är nu exakt en skärmhöjd (`h-[100dvh]`, `overflow-hidden`, `overscroll-none`) så dokumentet aldrig kan scrolla under bottennaven.
+- `overscroll-behavior-y: none` på html/body stoppar gummibands-scroll i mobila webbvyer som tidigare kunde få den fasta bottennaven att åka med uppåt.
+- Verifierat på /hem, /kalender och /anpassa: naven ligger kvar vid botten vid scroll medan innehållet scrollar inuti som vanligt.
+
 ## 2026-08-31 – Flow-hjälparen är mindre och tydligare
 
 - Maskoten i "Flow hjälper" är nu kompaktare (ny `compact`-scenstorlek) så att den inte dominerar vyn.
