@@ -61,15 +61,7 @@ const LEVELS: TrainingGoal["level"][] = ["nybörjare", "van", "erfaren"];
 const LAST_SYNC_KEY = "myflove.steps.lastSync";
 
 /** Veckodagar för pass-schemat – måndag först. */
-const WEEKDAYS = [
-  "Måndag",
-  "Tisdag",
-  "Onsdag",
-  "Torsdag",
-  "Fredag",
-  "Lördag",
-  "Söndag",
-] as const;
+const WEEKDAYS = ["Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag", "Söndag"] as const;
 
 type TrainingView = "overview" | "steg" | "plan" | "motion" | "program" | "vikt" | "promenad";
 
@@ -238,7 +230,10 @@ export default function TrainingPage() {
   const saveSessionEdit = () => {
     if (!sessionEdit) return;
     if (!sessionEdit.title.trim() || sessionEdit.days.length === 0) {
-      toast({ title: "Fyll i dag och namn", description: "Passet behöver minst en dag och ett namn." });
+      toast({
+        title: "Fyll i dag och namn",
+        description: "Passet behöver minst en dag och ett namn.",
+      });
       return;
     }
     const mins = Number(sessionEdit.minutes);
