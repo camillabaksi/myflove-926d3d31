@@ -33,12 +33,28 @@ export function QuickflowCapture({ variant = "card" }: { variant?: "card" | "com
   const [customOpen, setCustomOpen] = useState(false);
   const [customValue, setCustomValue] = useState("");
   const [placeOpen, setPlaceOpen] = useState(false);
+  /** Användarens egen version av uppdelningen – null = Flows förslag gäller. */
+  const [edited, setEdited] = useState<string[] | null>(null);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editingValue, setEditingValue] = useState("");
   const { add } = useQuickflow();
   const { addNote } = useNotes();
   const { savedStores } = useSavedStores();
+  const { add: addToPriority } = usePriorityList();
+  const navigate = useNavigate();
   const voice = useVoiceInput((t) => setText((prev) => (prev ? `${prev} ${t}` : t)));
 
   const suggestion = useMemo(() => (text.trim() ? suggestWhen(level, text) : null), [text, level]);
+
+  const detected = useMemo(() => splitTasks(text), [text]);
+  const items = edited ?? detected;
+  const isMulti = items.length > 1;
+
+  // Ny text = nytt förslag från Flow.
+  useEffect(() => {
+    setEdited(null);
+    setEditingIndex(null);
+  }, [text]);
 
   const reset = () => {
     setText("");
@@ -46,24 +62,57 @@ export function QuickflowCapture({ variant = "card" }: { variant?: "card" | "com
     setCustomOpen(false);
     setCustomValue("");
     setPlaceOpen(false);
+    setEdited(null);
+    setEditingIndex(null);
+  };
+
+  const removeItem = (index: number) => {
+    setEdited(items.filter((_, i) => i !== index));
+    setEditingIndex(null);
+  };
+
+  const saveEdit = () => {
+    if (editingIndex === null) return;
+    const value = editingValue.trim();
+    setEdited(items.map((t, i) => (i === editingIndex ? value || t : t)));
+    setEditingIndex(null);
   };
 
   const save = (opts: { remindAt?: number; placeId?: string; placeName?: string }) => {
-    const trimmed = text.trim();
-    if (!trimmed) return;
-    const { merged } = add({ text: trimmed, level, ...opts });
+    const titles = items.length > 0 ? items : [text.trim()].filter(Boolean);
+    if (titles.length === 0) return;
+    let mergedAny = false;
+    titles.forEach((title) => {
+      const { merged } = add({ text: title, level, ...opts });
+      if (merged) mergedAny = true;
+    });
     setOpen(false);
     reset();
     toast.success(
-      merged ? "Den fanns redan – jag slog ihop dem. 💙" : "Lugn. Jag håller det åt dig. 💙",
+      mergedAny ? "Några fanns redan – jag slog ihop dem. 💙" : "Lugn. Jag håller det åt dig. 💙",
       {
         description: opts.remindAt
           ? `Jag säger till ${formatWhen(opts.remindAt).toLowerCase()}.`
           : opts.placeName
             ? `Jag knuffar dig när du är nära ${opts.placeName}.`
-            : "Den ligger som en öppen tanke – jag frågar dig senare.",
+            : titles.length > 1
+              ? `${titles.length} saker ligger som öppna tankar – jag frågar dig senare.`
+              : "Den ligger som en öppen tanke – jag frågar dig senare.",
       },
     );
+  };
+
+  /** Godkänn uppdelningen och låt Flow föreslå en ordning – inga tider skapas. */
+  const approveAndPrioritize = () => {
+    const titles = items.filter(Boolean);
+    if (titles.length === 0) return;
+    titles.forEach((title) => addToPriority(title));
+    setOpen(false);
+    reset();
+    toast.success(`${titles.length} saker är ute ur huvudet. 💙`, {
+      description: "De ligger i din lista – Flow hjälper dig prioritera.",
+    });
+    void navigate({ to: "/quickflow" });
   };
 
   /** Tanken får bara finnas – den landar direkt bland anteckningarna. */
@@ -77,6 +126,7 @@ export function QuickflowCapture({ variant = "card" }: { variant?: "card" | "com
       description: "Du hittar den under Anteckningar i Quickflow – gör något av den när du vill.",
     });
   };
+
 
   return (
     <>
