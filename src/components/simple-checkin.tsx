@@ -39,9 +39,11 @@ const FACTORS: { id: string; label: string; emoji: string; category: EnergyCateg
 export default function SimpleCheckin({
   className,
   source = "ma-bra",
+  onSaved,
 }: {
   className?: string;
   source?: string;
+  onSaved?: () => void;
 }) {
   const { moodValue, energyValue, logMood, logEnergy } = useQuickCheckin();
   const { addFactor } = useEnergyFlow();
@@ -100,6 +102,7 @@ export default function SimpleCheckin({
     setSaved(true);
     setFactors([]);
     setNote("");
+    onSaved?.();
     window.setTimeout(() => setSaved(false), 2500);
   };
 

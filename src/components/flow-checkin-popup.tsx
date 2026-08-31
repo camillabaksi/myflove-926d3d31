@@ -1,0 +1,107 @@
+import { useEffect, useState } from "react";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { FlowMascot } from "@/components/flow-mascot";
+import SimpleCheckin from "@/components/simple-checkin";
+import WhyHint from "@/components/why-hint";
+import { useFlowCheckin, type CheckinSlot } from "@/hooks/use-flow-checkin";
+
+const COPY: Record<
+  CheckinSlot,
+  { title: string; lines: string[]; cta: string; emoji: string; source: string }
+> = {
+  morgon: {
+    title: "God morgon! 💜",
+    lines: ["Hur mår du idag?", "Hur var natten?"],
+    cta: "Logga hur jag mår",
+    emoji: "🌅",
+    source: "flow-checkin-morgon",
+  },
+  dag: {
+    title: "Hej igen! 💜",
+    lines: ["Hur går dagen än så länge?"],
+    cta: "Checka in",
+    emoji: "☀️",
+    source: "flow-checkin-dag",
+  },
+  kvall: {
+    title: "God kväll! 💜",
+    lines: ["Bra jobbat idag.", "Vad har du för känsla efter den här dagen?"],
+    cta: "Checka in",
+    emoji: "🌙",
+    source: "flow-checkin-kvall",
+  },
+};
+
+/**
+ * Flows mjuka incheckning tre gånger om dagen. Popupen är en inbjudan –
+ * all loggning sker i den befintliga centrala energi- & måendeloggningen.
+ */
+export default function FlowCheckinPopup() {
+  const { slot, open, dismiss } = useFlowCheckin();
+  const [logging, setLogging] = useState(false);
+
+  useEffect(() => {
+    if (!open) setLogging(false);
+  }, [open]);
+
+  if (!slot) return null;
+  const copy = COPY[slot];
+
+  const close = () => {
+    setLogging(false);
+    dismiss();
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={(v) => !v && close()}>
+      <DialogContent
+        data-testid="flow-checkin-popup"
+        className="max-h-[85vh] w-[calc(100%-2rem)] max-w-md overflow-y-auto rounded-3xl border-2 border-border/60 bg-card p-5 shadow-lifted sm:p-6"
+      >
+        {logging ? (
+          <>
+            <DialogTitle className="sr-only">Logga energi och mående</DialogTitle>
+            <DialogDescription className="sr-only">
+              Din incheckning sparas som en vanlig energi- och måendeobservation.
+            </DialogDescription>
+            <SimpleCheckin source={copy.source} onSaved={close} />
+          </>
+        ) : (
+          <div className="flex flex-col items-center gap-4 text-center">
+            <FlowMascot size="md" />
+            <div className="space-y-1">
+              <DialogTitle className="font-display text-xl font-bold text-ink">
+                {copy.title}
+              </DialogTitle>
+              <DialogDescription className="text-base text-muted-foreground">
+                {copy.lines.join(" ")}
+              </DialogDescription>
+            </div>
+            <Button
+              type="button"
+              onClick={() => setLogging(true)}
+              className="min-h-12 w-full rounded-2xl px-4 text-base font-semibold shadow-soft"
+            >
+              <span aria-hidden>{copy.emoji}</span>
+              {copy.cta}
+            </Button>
+            <WhyHint label="Flow frågar vid olika tider">
+              Vi frågar vid olika tider för att se hur din energi och ditt mående förändras under
+              dagen. Med tiden kan Flow hjälpa dig att upptäcka vad som brukar påverka dig.
+            </WhyHint>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={close}
+              className="text-sm text-muted-foreground underline-offset-2 hover:underline"
+            >
+              Hoppa över
+            </Button>
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+}

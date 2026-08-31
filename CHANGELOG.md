@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-31 – Flow bjuder in till mjuka check-ins under dagen
+
+- Flow kan en gång per tidsfönster (morgon 06–11, dag 11–17, kväll 17–23) öppna en diskret popup med en frivillig check-in.
+- Popupen använder den befintliga centrala "Logga energi & mående"-vägen; ingen separat energi-, mående- eller aktivitetskälla skapas.
+- "Hoppa över" stänger utan skuld och respekteras resten av tidsfönstret. En befintlig observation i tidsfönstret suppressar en ny popup.
+- Varför?-förklaringen beskriver kort hur flera observationer hjälper Flow att se förändringar över dagen. Hälsokontext skapar aldrig aktiviteter, kalenderposter eller påminnelser.
+
+
 ## 2026-08-31 – Mående, energi och ekonomi är nu kontobundna
 
 - Mående (`myflow-moods`) och ekonomi (`myflow-finances`) sparas kontobundet i `user_kv` via nya `useCloudSyncedList` – samma nyckel som MCP-verktyget `log_mood` redan använder, alltså en enda source of truth. Befintlig lokal data slås ihop per id efter inloggning, så inget skrivs över och inga dubbletter skapas.

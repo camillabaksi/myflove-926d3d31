@@ -80,6 +80,7 @@ import { useSituation } from "@/hooks/use-situation";
 import { lifeProfileSummary } from "@/lib/life-profile";
 import ViewCollapseToggle from "@/components/view-collapse-toggle";
 import FlowCompanion from "@/components/flow/flow-companion";
+import FlowCheckinPopup from "@/components/flow-checkin-popup";
 import PwaInstallButton from "@/components/pwa-install-button";
 
 /** Vyer som redan har Flow på sitt eget sätt – där dubblerar vi inte. */
@@ -920,6 +921,7 @@ export default function Layout({ children }: LayoutProps) {
         >
           <div key={location} className="max-w-6xl mx-auto w-full p-4 md:p-8 page-enter">
             {!FLOW_HIDDEN_PATHS.has(location) && <FlowCompanion stage="mini" className="mb-4" />}
+            <FlowCheckinPopup />
             {children}
           </div>
 
