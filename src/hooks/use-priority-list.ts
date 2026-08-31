@@ -23,6 +23,26 @@ export function usePriorityList() {
 
   const replace = useCallback((next: PriorityTask[]) => setItems(sortPriority(next)), [setItems]);
 
+  /**
+   * Slår ihop nya prioriterade saker med befintliga – bevarar öppna och
+   * klara poster (inkl. doneAt) istället för att skriva över hela listan.
+   * Dubbletter (samma titel, ej klar) ersätts av den nya versionen.
+   */
+  const merge = useCallback(
+    (next: PriorityTask[]) =>
+      setItems((prev) => {
+        const base = prev ?? [];
+        const newKeys = new Set(
+          next.map((i) => normalizeQuickflowText(i.title)).filter(Boolean),
+        );
+        const kept = base.filter(
+          (i) => i.done || !newKeys.has(normalizeQuickflowText(i.title)),
+        );
+        return sortPriority([...kept, ...next]);
+      }),
+    [setItems],
+  );
+
   /** Lägger till en eller flera saker – fritext delas upp automatiskt. */
   const add = useCallback(
     (title: string, bucket: PriorityBucket = "kan-vanta") => {
