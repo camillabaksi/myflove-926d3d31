@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-08-31";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Mående, energi och ekonomi är nu kontobundna",
+    items: [
+      "Mående och ekonomi sparas på ditt konto och finns kvar när du loggar in igen – lokal data migreras utan dubbletter (2026-08-31)",
+      "Energiloggar sparas alltid på kontot; loggningar utan inloggning flyttas upp automatiskt vid nästa inloggning (2026-08-31)",
+      "Fritext om vad som påverkar dig sparas som hälsokontext – aldrig som aktivitet eller påminnelse (2026-08-31)",
+    ],
+  },
+  {
     title: "Namn och morgon/kväll-batteri stannar kvar vid utloggning",
     items: [
       "Ditt namn, dagens tidsramar och morgon-/kvällsvärdena i Mitt batteri räknas nu som enhetsdata och rensas inte när du loggar ut (2026-08-31)",
