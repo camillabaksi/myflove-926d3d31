@@ -234,7 +234,14 @@ export function QuickflowPriority() {
           collapseId="quickflow::min-lista"
         >
           <div className="space-y-4">
-            {intro && <p className="text-sm text-muted-foreground">{intro}</p>}
+            <div className="flex flex-wrap items-center gap-2">
+              {intro && <p className="min-w-0 flex-1 text-sm text-muted-foreground">{intro}</p>}
+              <WhyHint label="prioriteringen">
+                Flow hjälper dig att sortera när allt känns lika viktigt. Prioriteringen bygger på
+                vad som verkar viktigt, brådskande och möjligt utifrån din energi just nu.
+              </WhyHint>
+            </div>
+
 
             {BUCKETS.map((bucket) => {
               const rows = openItems.filter((i) => i.bucket === bucket);
