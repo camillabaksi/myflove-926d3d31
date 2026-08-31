@@ -6,9 +6,16 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-08-30";
+export const CHANGELOG_UPDATED = "2026-08-31";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  {
+    title: "Fix: länkar i expanderade kort navigerar igen",
+    items: [
+      "Länkar inuti expanderade kort (t.ex. Planera, Flow, QuickFlow från Hem) avbröts av kortets historik-hantering – nu fungerar de (2026-08-31)",
+      "Texten sa fyra situationer fast listan har tre (2026-08-31)",
+    ],
+  },
   {
     title: "Global designregel: inga onödigt vertikala textblock",
     items: [
