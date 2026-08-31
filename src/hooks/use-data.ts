@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocalStorage } from "../lib/storage";
 import { useCloudSyncedStorage } from "../lib/cloud-storage";
+import { useCloudSyncedList } from "../lib/cloud-list";
 import { trackEvent, track } from "../lib/analytics";
 import type { LifeArea } from "../lib/life-areas";
 import { flowDone } from "@/lib/flow-signal";
@@ -524,8 +525,12 @@ export function useActiveShoppingItemCount(): number {
   return items.filter((t) => !t.completed).length;
 }
 
+/**
+ * Mående – kontobunden källa (user_kv "myflow-moods", samma nyckel som
+ * MCP-verktyget log_mood). Lokal lagring är bara cache/offline-läge.
+ */
 export function useMoods() {
-  const [moods, setMoods] = useLocalStorage<MoodEntry[]>("myflow-moods", []);
+  const [moods, setMoods] = useCloudSyncedList<MoodEntry>("myflow-moods");
 
   const addMood = (score: number, note: string) => {
     setMoods([{ id: generateId(), score, note, date: Date.now() }, ...moods]);
@@ -545,8 +550,9 @@ export interface Transaction {
   date: number; // timestamp
 }
 
+/** Ekonomi – kontobunden källa (user_kv "myflow-finances"). */
 export function useFinances() {
-  const [transactions, setTransactions] = useLocalStorage<Transaction[]>("myflow-finances", []);
+  const [transactions, setTransactions] = useCloudSyncedList<Transaction>("myflow-finances");
 
   const addTransaction = (transaction: Omit<Transaction, "id" | "date"> & { date?: number }) => {
     setTransactions([

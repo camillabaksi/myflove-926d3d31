@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-31 – Mående, energi och ekonomi är nu kontobundna
+
+- Mående (`myflow-moods`) och ekonomi (`myflow-finances`) sparas kontobundet i `user_kv` via nya `useCloudSyncedList` – samma nyckel som MCP-verktyget `log_mood` redan använder, alltså en enda source of truth. Befintlig lokal data slås ihop per id efter inloggning, så inget skrivs över och inga dubbletter skapas.
+- Energiloggar har `energy_logs` som source of truth. `myflove-energy-log` är nu enbart en lokal cache som speglar molnet (60 dagar) för insikter och mönster. Loggningar gjorda utan inloggning hamnar i `myflove-energy-pending` och flyttas upp till kontot vid nästa inloggning.
+- Efter utloggning rensas den lokala krypterade kopian som tidigare, men allt hämtas tillbaka vid inloggning: energi, mående, fritext/orsak och ekonomi överlever logga ut → logga in.
+- Fritext och "vad påverkar" sparas fortsatt på måendeobservationen som hälsokontext – aldrig som aktivitet, kalenderpost eller påminnelse.
+
+
 ## 2026-08-31 – Namn och morgon/kväll-batteri stannar kvar vid utloggning
 
 - Ditt namn (`myflove-preferred-name`), dagens tidsramar (`myflove-day-window`) och morgon-/kvällsvärdena i Mitt batteri (`myflove-day-edges`) läggs till i enhetsnycklarna i `clearLocalUserData` – de rensas inte längre när du loggar ut, så appen känns igen dig vid nästa besök på samma enhet.
