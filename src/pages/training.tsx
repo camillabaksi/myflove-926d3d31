@@ -367,6 +367,8 @@ export default function TrainingPage() {
     setGoal(g.goal);
     setFocus(g.focus);
     setDaysPerWeek(g.daysPerWeek);
+    if (g.days?.length) setPreferredDays(g.days);
+
     setMinutes(g.minutesPerSession);
     setLevel(g.level);
     setEquipment(g.equipment ?? "");
