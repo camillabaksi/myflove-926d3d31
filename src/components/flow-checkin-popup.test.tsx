@@ -30,6 +30,7 @@ describe("Flows mjuka check-in-popup", () => {
     atHour(8);
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
     render(<FlowCheckinPopup />);
+    await vi.advanceTimersByTimeAsync(2000);
 
     await waitFor(() => expect(screen.getByTestId("flow-checkin-popup")).toBeInTheDocument());
     expect(screen.getByText("God morgon! 💜")).toBeInTheDocument();
@@ -42,6 +43,7 @@ describe("Flows mjuka check-in-popup", () => {
   it("visar kvällens text på kvällen", async () => {
     atHour(20);
     render(<FlowCheckinPopup />);
+    await vi.advanceTimersByTimeAsync(2000);
     await waitFor(() => expect(screen.getByText("God kväll! 💜")).toBeInTheDocument());
   });
 
@@ -56,6 +58,7 @@ describe("Flows mjuka check-in-popup", () => {
     atHour(13);
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
     const view = render(<FlowCheckinPopup />);
+    await vi.advanceTimersByTimeAsync(2000);
 
     await waitFor(() => expect(screen.getByText("Hej igen! 💜")).toBeInTheDocument());
     await user.click(screen.getByRole("button", { name: "Hoppa över" }));
