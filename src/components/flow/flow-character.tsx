@@ -605,7 +605,6 @@ export function FlowCharacter({
           }
         />
 
-
         {!isMini && variant.front?.(ctx)}
       </div>
     </div>
