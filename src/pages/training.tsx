@@ -60,6 +60,17 @@ const FOCUS: { id: TrainingGoal["focus"]; label: string }[] = [
 const LEVELS: TrainingGoal["level"][] = ["nybörjare", "van", "erfaren"];
 const LAST_SYNC_KEY = "myflove.steps.lastSync";
 
+/** Veckodagar för pass-schemat – måndag först. */
+const WEEKDAYS = [
+  "Måndag",
+  "Tisdag",
+  "Onsdag",
+  "Torsdag",
+  "Fredag",
+  "Lördag",
+  "Söndag",
+] as const;
+
 type TrainingView = "overview" | "steg" | "plan" | "motion" | "program" | "vikt" | "promenad";
 
 const SECTIONS: {
@@ -182,7 +193,7 @@ export default function TrainingPage() {
 
   const [sessionEdit, setSessionEdit] = useState<{
     index: number | null;
-    day: string;
+    days: string[];
     title: string;
     type: TrainingSession["type"];
     minutes: string;
@@ -192,7 +203,7 @@ export default function TrainingPage() {
   const openAddSession = () =>
     setSessionEdit({
       index: null,
-      day: "Måndag",
+      days: ["Måndag"],
       title: "",
       type: "styrka",
       minutes: "45",
@@ -204,7 +215,7 @@ export default function TrainingPage() {
     if (!s) return;
     setSessionEdit({
       index,
-      day: s.day,
+      days: [WEEKDAYS.includes(s.day as (typeof WEEKDAYS)[number]) ? s.day : "Måndag"],
       title: s.title,
       type: s.type,
       minutes: s.minutes ? String(s.minutes) : "",
@@ -212,15 +223,26 @@ export default function TrainingPage() {
     });
   };
 
+  const toggleSessionDay = (day: string) => {
+    if (!sessionEdit) return;
+    // Vid redigering av ett befintligt pass gäller en dag i taget.
+    if (sessionEdit.index !== null) {
+      setSessionEdit({ ...sessionEdit, days: [day] });
+      return;
+    }
+    const has = sessionEdit.days.includes(day);
+    const days = has ? sessionEdit.days.filter((d) => d !== day) : [...sessionEdit.days, day];
+    setSessionEdit({ ...sessionEdit, days });
+  };
+
   const saveSessionEdit = () => {
     if (!sessionEdit) return;
-    if (!sessionEdit.title.trim() || !sessionEdit.day.trim()) {
-      toast({ title: "Fyll i dag och namn", description: "Passet behöver en dag och ett namn." });
+    if (!sessionEdit.title.trim() || sessionEdit.days.length === 0) {
+      toast({ title: "Fyll i dag och namn", description: "Passet behöver minst en dag och ett namn." });
       return;
     }
     const mins = Number(sessionEdit.minutes);
-    const session: TrainingSession = {
-      day: sessionEdit.day.trim(),
+    const base: Omit<TrainingSession, "day"> = {
       title: sessionEdit.title.trim(),
       type: sessionEdit.type,
       ...(Number.isFinite(mins) && mins > 0 ? { minutes: Math.round(mins) } : {}),
@@ -230,10 +252,16 @@ export default function TrainingPage() {
         .filter(Boolean),
     };
     if (sessionEdit.index === null) {
-      addSession(session);
-      toast({ title: "Passet är tillagt" });
+      // Skapa ett pass per vald dag – samma innehåll, flera dagar.
+      for (const day of sessionEdit.days) addSession({ ...base, day });
+      toast({
+        title:
+          sessionEdit.days.length > 1
+            ? `${sessionEdit.days.length} pass tillagda`
+            : "Passet är tillagt",
+      });
     } else {
-      updateSession(sessionEdit.index, session);
+      updateSession(sessionEdit.index, { ...base, day: sessionEdit.days[0]! });
       toast({ title: "Passet är ändrat" });
     }
     setSessionEdit(null);
