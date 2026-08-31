@@ -33,9 +33,7 @@ export function checkinContext(
   const lines: string[] = [];
 
   for (const slot of SLOTS) {
-    const m = moods
-      .filter((x) => slotOf(x.date, now) === slot)
-      .sort((a, b) => a.date - b.date);
+    const m = moods.filter((x) => slotOf(x.date, now) === slot).sort((a, b) => a.date - b.date);
     const e = energy
       .filter((x) => slotOf(x.logged_at, now) === slot)
       .sort((a, b) => Date.parse(a.logged_at) - Date.parse(b.logged_at));
