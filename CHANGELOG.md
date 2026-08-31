@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-31 – Flow-hjälparen är mindre och tydligare
+
+- Maskoten i "Flow hjälper" är nu kompaktare (ny `compact`-scenstorlek) så att den inte dominerar vyn.
+- Slide-ytan har fått mindre vertikal höjd och tätare spacing, vilket gör Flow-karusellen lugnare och lättare att läsa.
+
 ## 2026-08-31 – Flow ser dagens check-ins i sin kontext
 
 - Flows personliga kontext innehåller nu dagens morgon-, dag- och kvällscheck-ins från den befintliga energi- och måendeloggen.
