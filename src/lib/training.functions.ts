@@ -8,6 +8,7 @@ const InputSchema = z.object({
   daysPerWeek: z.number().int().min(1).max(7),
   minutesPerSession: z.number().int().min(10).max(180),
   level: z.enum(["nybörjare", "van", "erfaren"]),
+  days: z.array(z.string().max(20)).max(7).optional(),
   equipment: z.string().max(300).optional(),
   limitations: z.string().max(500).optional(),
 });
