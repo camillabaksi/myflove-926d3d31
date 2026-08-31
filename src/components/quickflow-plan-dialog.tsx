@@ -63,13 +63,15 @@ export function QuickflowPlanDialog({
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onCancel()}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-h-[85dvh] max-w-md overflow-y-auto">
         <DialogHeader>
           <DialogTitle>När vill du göra den?</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4">
-          <p className="text-sm text-muted-foreground">{title}</p>
+          <p className="max-h-32 overflow-y-auto break-words text-sm text-muted-foreground">
+            {title}
+          </p>
 
           <div className="flex flex-wrap gap-2">
             <button type="button" className={chip(day === "idag")} onClick={() => pickDay("idag")}>

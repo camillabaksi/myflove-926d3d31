@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-31 – QuickFlow: flera saker blir flera aktiviteter
+
+- "Planera den" delar nu upp text som innehåller flera saker i enskilda aktiviteter i stället för att spara allt som en enda.
+- Fler skiljeord känns igen vid uppdelning (sen, sedan, dessutom).
+- Dialogrutor scrollar nu vid mycket text, så hela innehållet och knapparna alltid syns.
+
+
+
 ## 2026-08-31 – QuickFlow: planera med din egen tid
 
 - "Planera den" öppnar nu ett litet val: idag, imorgon eller valfritt datum – med eller utan tid.

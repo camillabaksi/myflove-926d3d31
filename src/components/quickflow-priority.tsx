@@ -144,17 +144,23 @@ export function QuickflowPriority() {
   const confirmPlan = (choice: PlanChoice) => {
     const item = planFor;
     if (!item) return;
-    addTask(item.title, choice.dueDate, {
-      time: choice.time,
-      area: guessArea(item.title),
-    });
+    // Innehåller texten flera saker? Lägg in dem som enskilda aktiviteter.
+    const parts = splitTasks(item.title);
+    const titles = parts.length > 1 ? parts : [item.title];
+    titles.forEach((t) =>
+      addTask(t, choice.dueDate, {
+        time: choice.time,
+        area: guessArea(t),
+      }),
+    );
     remove(item.id);
     setPlanFor(null);
     const day = choice.dueDate === todayISO() ? "idag" : choice.dueDate;
+    const what = titles.length > 1 ? `${titles.length} saker inlagda` : "Inlagd";
     toast({
       description: choice.time
-        ? `Inlagd i kalendern ${day} kl ${choice.time}.`
-        : `Inlagd i kalendern ${day} – utan tid.`,
+        ? `${what} i kalendern ${day} kl ${choice.time}.`
+        : `${what} i kalendern ${day} – utan tid.`,
     });
     navigate({ to: "/kalender" });
   };

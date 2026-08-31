@@ -34,7 +34,10 @@ export function MyFloveModal({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className={cn("rounded-3xl border-border/60 bg-card p-6 shadow-lifted", className)}
+        className={cn(
+          "max-h-[85dvh] overflow-y-auto rounded-3xl border-border/60 bg-card p-6 shadow-lifted",
+          className,
+        )}
       >
         <DialogHeader>
           <DialogTitle className="font-display text-xl font-bold text-ink">
