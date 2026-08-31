@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-31 – Välj själv vilka dagar programmet läggs på
+
+- "Dagar/vecka" i Ditt mål är nu veckodags-chips (Mån–Sön) i stället för en siffra.
+- Programmet skapas på exakt de dagar du valt – Flow får dina dagar och passen läggs ut på dem.
+- Dina valda dagar sparas med målet och fylls i igen när du redigerar programmet.
+
 ## 2026-08-31 – "Visa bara det viktigaste" är av tills du själv slår på det
 
 - Enkelt läge i Mer-menyn är nu AV som standard i stället för PÅ.
