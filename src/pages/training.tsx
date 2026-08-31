@@ -1389,15 +1389,37 @@ export default function TrainingPage() {
           </DialogHeader>
           {sessionEdit && (
             <div className="space-y-3">
+              <fieldset>
+                <legend className="text-sm text-muted-foreground">
+                  {sessionEdit.index === null ? "Dagar – välj en eller flera" : "Dag"}
+                </legend>
+                <div className="mt-1 flex flex-wrap gap-1.5">
+                  {WEEKDAYS.map((day) => {
+                    const active = sessionEdit.days.includes(day);
+                    return (
+                      <button
+                        key={day}
+                        type="button"
+                        aria-pressed={active}
+                        onClick={() => toggleSessionDay(day)}
+                        className={`min-h-11 rounded-xl border px-3 text-sm transition ${
+                          active
+                            ? "border-primary bg-primary text-primary-foreground"
+                            : "border-border text-ink hover:bg-muted"
+                        }`}
+                      >
+                        {day.slice(0, 3)}
+                      </button>
+                    );
+                  })}
+                </div>
+                {sessionEdit.index === null && sessionEdit.days.length > 1 && (
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Samma pass läggs på {sessionEdit.days.length} dagar.
+                  </p>
+                )}
+              </fieldset>
               <div className="grid grid-cols-2 gap-3">
-                <label className="text-sm text-muted-foreground">
-                  Dag
-                  <Input
-                    value={sessionEdit.day}
-                    onChange={(e) => setSessionEdit({ ...sessionEdit, day: e.target.value })}
-                    className="rounded-xl mt-1"
-                  />
-                </label>
                 <label className="text-sm text-muted-foreground">
                   Minuter
                   <Input
