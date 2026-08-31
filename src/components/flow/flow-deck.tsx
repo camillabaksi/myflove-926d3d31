@@ -229,7 +229,7 @@ export default function FlowDeck() {
   return (
     <section
       aria-label="Flow"
-      className="surface-card relative w-full overflow-hidden p-3 sm:p-5"
+      className="surface-card relative w-full overflow-hidden p-2 sm:p-4"
       data-flow-version={FLOW_VERSION}
       data-flow-current-slide={currentSlide}
     >
