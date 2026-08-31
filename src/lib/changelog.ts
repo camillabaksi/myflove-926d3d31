@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-08-31";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "QuickFlow: nya dumpar skriver inte över listan",
+    items: [
+      "Nya prioriterade saker slås ihop med befintliga istället för att ersätta hela listan (2026-08-31)",
+      "Klara och öppna poster bevaras – dubbletter av samma sak uppdateras (2026-08-31)",
+    ],
+  },
+  {
     title: "QuickFlow: EN ingång, ett flöde",
     items: [
       "En enda ingång: Skriv eller prata med Flow – dubletterna Kom ihåg, Prioritera och Skriv eller prata in är borta (2026-08-31)",

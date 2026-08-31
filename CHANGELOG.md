@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-31 – QuickFlow: nya dumpar skriver inte längre över listan
+
+- "Godkänn och prioritera" slog tidigare ut hela "Min lista just nu" – inklusive saker du redan hunnit bocka av.
+- Nu slås nya prioriterade saker ihop med befintliga: öppna och klara poster bevaras, och dubbletter av samma sak ersätts av den nya versionen.
+
 ## 2026-08-31 – QuickFlow: EN ingång, ett flöde
 
 - QuickFlow-sidan är förenklad: "Kom ihåg", "Prioritera" och "Skriv eller prata in" är borta – kvar finns en enda ingång: "＋ Skriv eller prata med Flow".
