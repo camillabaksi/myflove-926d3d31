@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-31 – QuickFlow: förtydliga varje uppgift
+
+- Varje sak i "Min lista just nu" har nu en diskret Flow-knapp för att se varför uppgiften kan vara värd att göra, uppskattad energinivå och ett litet första steg.
+- Förtydligandet använder Mitt batteri som kontext och sparas tillsammans med QuickFlow-listan – ingen separat loggning, tid, deadline eller kalenderhändelse skapas.
+- Om AI inte är tillgänglig visas ett lugnt lokalt förtydligande i stället.
+
 ## 2026-08-31 – QuickFlow: "Jag har mycket på en gång"
 
 - Skriv in flera saker i ett enda fält – en per rad eller separerade med komma/och. Inga tider, datum eller kalenderhändelser krävs.
@@ -7,6 +13,7 @@
 - Prioriteringen tar hänsyn till din nivå i Mitt batteri: små viktiga saker först när energin är låg, det tyngsta först när den är hög.
 - "Min lista just nu" ligger kvar: börja med en sak, bocka av, ändra ordning eller nivå, lägg till nytt och ta bort.
 - Klart-markering frågar (frivilligt) hur det påverkade energin via den befintliga energiloggningen. "Planera den" skickar saken vidare till Planera – annars skapas ingen kalenderhändelse eller påminnelse.
+
 
 ## 2026-08-31 – Min energi följer MyFloves designspråk
 
