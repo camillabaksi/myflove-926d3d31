@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-08-31";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Välj flera dagar för ett träningspass",
+    items: [
+      "Pass-dialogen har veckodags-chips – välj en eller flera dagar när du lägger till ett pass (2026-08-31)",
+      "Samma pass skapas på alla valda dagar; vid redigering väljs en dag (2026-08-31)",
+    ],
+  },
+  {
     title: "Bottennavigationen sitter alltid fast längst ner",
     items: [
       "Layout-roten är exakt en skärmhöjd med låst ytterscroll så bottennaven aldrig åker upp när man scrollar (2026-08-31)",

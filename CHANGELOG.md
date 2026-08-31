@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-31 – Välj flera dagar för ett träningspass
+
+- Pass-dialogen i Träning har nu veckodags-chips (Mån–Sön) i stället för fritext för dagen.
+- När du lägger till ett pass kan du välja flera dagar – samma pass skapas på varje vald dag.
+- Vid redigering av ett befintligt pass väljs en dag, och befintliga pass med annan dagtext mappas till närmaste veckodag.
+
 ## 2026-08-31 – Bottennavigationen sitter alltid fast längst ner
 
 - Appens layout-root är nu exakt en skärmhöjd (`h-[100dvh]`, `overflow-hidden`, `overscroll-none`) så dokumentet aldrig kan scrolla under bottennaven.
