@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-31 – QuickFlow: planera med din egen tid
+
+- "Planera den" öppnar nu ett litet val: idag, imorgon eller valfritt datum – med eller utan tid.
+- Saken hamnar i kalendern precis som du valt. Flow föreslår aldrig tider eller deadlines själv.
+
 ## 2026-08-31 – QuickFlow: dela upp i enskilda saker
 
 - Saker som innehåller flera händelser kan nu delas upp i enskilda saker med en knapp direkt i "Min lista just nu".
