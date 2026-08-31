@@ -37,10 +37,12 @@ describe("checkinContext", () => {
   it("ignorerar observationer från andra dagar och visar en trygg tomstatus", () => {
     const yesterday = new Date(2026, 7, 30, 9, 0, 0);
     expect(checkinContext([mood(9, 5)], [energy(9, 5)], now)).toContain("Morgon");
-    expect(checkinContext(
-      [{ id: "old", score: 5, date: yesterday.getTime() }],
-      [{ id: "old-energy", level: 5, logged_at: yesterday.toISOString() }],
-      now,
-    )).toContain("inte checkat in i dag ännu");
+    expect(
+      checkinContext(
+        [{ id: "old", score: 5, date: yesterday.getTime() }],
+        [{ id: "old-energy", level: 5, logged_at: yesterday.toISOString() }],
+        now,
+      ),
+    ).toContain("inte checkat in i dag ännu");
   });
 });
