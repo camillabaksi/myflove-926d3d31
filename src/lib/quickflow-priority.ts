@@ -18,6 +18,8 @@ export interface PriorityTask {
   /** Kort förklaring från Flow – aldrig en påhittad deadline. */
   why?: string;
   order: number;
+  /** Flows förtydligande: varför + energiuppskattning + första steg. */
+  clarify?: TaskClarification;
   done?: boolean;
   doneAt?: number;
   createdAt: number;
