@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-08-31";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "QuickFlow: dela upp i enskilda saker",
+    items: [
+      "En sak med flera händelser kan delas upp i enskilda saker direkt i listan (2026-08-31)",
+      "Lägg till-fältet delar automatiskt upp flera saker som skrivs in samtidigt (2026-08-31)",
+    ],
+  },
+  {
     title: "QuickFlow: förtydliga varje uppgift",
     items: [
       "Varje sak i Min lista just nu kan få en kort förklaring, energiuppskattning och ett första steg från Flow (2026-08-31)",

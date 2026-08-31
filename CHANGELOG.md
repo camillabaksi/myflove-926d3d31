@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-31 – QuickFlow: dela upp i enskilda saker
+
+- Saker som innehåller flera händelser kan nu delas upp i enskilda saker med en knapp direkt i "Min lista just nu".
+- Fältet "Lägg till något" delar automatiskt upp flera saker som skrivs in på en gång.
+- Uppdelningen skapar inga tider, deadlines, påminnelser eller kalenderhändelser.
+
 ## 2026-08-31 – QuickFlow: förtydliga varje uppgift
 
 - Varje sak i "Min lista just nu" har nu en diskret Flow-knapp för att se varför uppgiften kan vara värd att göra, uppskattad energinivå och ett litet första steg.
