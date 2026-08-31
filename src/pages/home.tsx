@@ -33,7 +33,7 @@ import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { useFlowSettings } from "@/hooks/use-flow-settings";
 
 /**
- * Fyra vanliga situationer, formulerade som användarens egen tanke.
+ * Tre vanliga situationer, formulerade som användarens egen tanke.
  * Ersätter produktnamn som "QuickFlow" och "Planera" på startsidan.
  */
 interface Situation {
