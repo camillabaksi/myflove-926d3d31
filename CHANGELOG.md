@@ -14,7 +14,6 @@
 - "Min lista just nu" ligger kvar: börja med en sak, bocka av, ändra ordning eller nivå, lägg till nytt och ta bort.
 - Klart-markering frågar (frivilligt) hur det påverkade energin via den befintliga energiloggningen. "Planera den" skickar saken vidare till Planera – annars skapas ingen kalenderhändelse eller påminnelse.
 
-
 ## 2026-08-31 – Min energi följer MyFloves designspråk
 
 - "Min energi – historik och mönster" är ombyggd med appens vanliga block, rundningar, borders och spacing.

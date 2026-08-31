@@ -107,7 +107,8 @@ export function QuickflowPriority() {
       update(item.id, { clarify: result });
       setExpandedClarificationId(item.id);
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Flow kunde inte förtydliga uppgiften just nu.";
+      const message =
+        error instanceof Error ? error.message : "Flow kunde inte förtydliga uppgiften just nu.";
       toast({ description: message });
     } finally {
       setClarifyingId(null);
