@@ -8,6 +8,7 @@ import {
 } from "@/lib/quickflow-priority";
 
 const STORAGE_KEY = "myflove-quickflow-priority";
+const INTRO_KEY = "myflove-quickflow-priority-intro";
 
 const newId = () => Math.random().toString(36).slice(2, 11);
 
@@ -18,6 +19,7 @@ const newId = () => Math.random().toString(36).slice(2, 11);
  */
 export function usePriorityList() {
   const [items, setItems] = useCloudSyncedStorage<PriorityTask[]>(STORAGE_KEY, []);
+  const [intro, setIntro] = useCloudSyncedStorage<string | null>(INTRO_KEY, null);
 
   const replace = useCallback((next: PriorityTask[]) => setItems(sortPriority(next)), [setItems]);
 
@@ -117,6 +119,8 @@ export function usePriorityList() {
     items: items ?? [],
     openItems,
     doneItems,
+    intro,
+    setIntro,
     add,
     update,
     remove,

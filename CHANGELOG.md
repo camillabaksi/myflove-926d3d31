@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-31 – QuickFlow: EN ingång, ett flöde
+
+- QuickFlow-sidan är förenklad: "Kom ihåg", "Prioritera" och "Skriv eller prata in" är borta – kvar finns en enda ingång: "＋ Skriv eller prata med Flow".
+- Flödet är alltid detsamma: dumpa allt → Flow delar upp i separata saker → du granskar, redigerar eller tar bort → Flow föreslår en ordning (utan hittade tider) → du godkänner.
+- Bottennavigeringens +, desktopknappen och QuickFlow-sidan öppnar nu exakt samma dialog och samma logik – inga parallella QuickFlow-flöden finns kvar.
+- Prioriteringsförslaget och "Varför?"-förklaringen ligger i "Min lista just nu" tillsammans med ditt batteri från Mitt batteri.
+
 ## 2026-08-31 – QuickFlow: ett brain dump blir flera uppgifter
 
 - "Kom ihåg"-rutan delar nu upp texten i separata uppgifter och visar "Så här har jag förstått det" innan något sparas.

@@ -190,6 +190,7 @@ const CATEGORY_THEMES: Record<string, Record<string, string>> = {
 };
 
 import QuickflowFab from "@/components/quickflow-fab";
+import QuickflowCapture from "@/components/quickflow-capture";
 import { useSmartBack } from "@/hooks/use-smart-back";
 
 export default function Layout({ children }: LayoutProps) {
@@ -977,6 +978,9 @@ export default function Layout({ children }: LayoutProps) {
       </main>
 
       <QuickflowFab />
+      {/* EN QuickFlow-dialog för hela appen – bottennav, FAB och hemskärmens +
+          öppnar alla samma flöde via händelsen "myflove:quickflow". */}
+      <QuickflowCapture variant="global" />
 
       {/* Mobile Bottom Bar – Hem · Idag · QuickFlow · Planera · Mer */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-md border-t border-border/70 pb-[env(safe-area-inset-bottom)] z-40">

@@ -9,7 +9,6 @@ import {
   ChevronDown,
   ChevronUp,
   CircleHelp,
-  ListChecks,
   Loader2,
   Play,
   Plus,
@@ -32,36 +31,29 @@ import {
   BUCKETS,
   BUCKET_META,
   energyHint,
-  heuristicPriority,
   splitTasks,
-  type PriorityBucket,
   type PriorityTask,
 } from "@/lib/quickflow-priority";
 import { todayISO } from "@/lib/task-agenda";
 import { clarifyQuickflowTask } from "@/lib/quickflow-clarify.functions";
-import { heuristicClarify, ENERGY_LEVEL_META } from "@/lib/quickflow-clarify";
-import { prioritizeQuickflow } from "@/lib/quickflow-priority.functions";
+import { ENERGY_LEVEL_META } from "@/lib/quickflow-clarify";
 import type { FlowItem } from "@/lib/flow-items";
 import { cn } from "@/lib/utils";
-import { track } from "@/lib/analytics";
 
 /**
- * "Jag har mycket på en gång" – flera saker in i ett fält, Flow sorterar dem
- * i fyra nivåer. Inga tider, inga datum, ingen kalenderhändelse.
+ * "Min lista just nu" – resultatet av QuickFlow-flödet. Uppgifterna kommer
+ * från den gemensamma fånga-dialogen (skriv/prata → uppdelning → godkänn)
+ * och prioriteringen körs av samma motor överallt.
  */
 export function QuickflowPriority() {
-  const { openItems, doneItems, add, update, remove, move, replace, clear, splitItem } =
+  const { openItems, doneItems, intro, add, update, remove, move, clear, splitItem } =
     usePriorityList();
   const { reading } = useEnergyBattery();
   const { addTask } = useTasks();
   const { toast } = useToast();
   const navigate = useNavigate();
-  const run = useServerFn(prioritizeQuickflow);
   const clarify = useServerFn(clarifyQuickflowTask);
 
-  const [raw, setRaw] = useState("");
-  const [busy, setBusy] = useState(false);
-  const [intro, setIntro] = useState<string | null>(null);
   const [newTitle, setNewTitle] = useState("");
   const [reorder, setReorder] = useState(false);
   const [askEnergyFor, setAskEnergyFor] = useState<FlowItem | null>(null);
@@ -71,34 +63,6 @@ export function QuickflowPriority() {
 
   const energyPercent = reading?.now;
   const hint = useMemo(() => energyHint(energyPercent), [energyPercent]);
-
-  const prioritize = async () => {
-    const titles = splitTasks(raw);
-    if (titles.length === 0) return;
-    setBusy(true);
-    track("quickflow_created", { source: "quickflow", method: "prioritera" });
-    const now = Date.now();
-    try {
-      const result = await run({ data: { titles, energyPercent } });
-      replace(
-        result.items.map((it, i) => ({
-          id: `${now}-${i}`,
-          title: it.title,
-          bucket: it.bucket,
-          why: it.why,
-          order: i,
-          createdAt: now,
-        })),
-      );
-      setIntro(result.intro);
-    } catch {
-      replace(heuristicPriority(titles, energyPercent));
-      setIntro("Jag sorterade dem så gott jag kunde. Du får gärna ändra ordningen.");
-    } finally {
-      setBusy(false);
-      setRaw("");
-    }
-  };
 
   const clarifyTask = async (item: PriorityTask) => {
     if (item.clarify) {
@@ -167,58 +131,11 @@ export function QuickflowPriority() {
 
   return (
     <>
-      <MyFloveBlock
-        title="Jag har mycket på en gång"
-        subtitle="Berätta vad du behöver få gjort, så hjälper Flow dig att prioritera."
-        eyebrow="Prioritera"
-        icon={ListChecks}
-        tone="lavender"
-        surface="lavender"
-        collapsible
-        collapseId="quickflow::prioritera"
-      >
-        <div className="space-y-4">
-          <div className="flex flex-wrap items-center gap-2">
-            {typeof energyPercent === "number" && (
-              <span
-                className="inline-flex items-center gap-1 rounded-full border-2 border-border/60 bg-card px-2.5 py-1 text-xs font-medium"
-                aria-label={`Ditt batteri just nu: ${Math.round(energyPercent)} procent`}
-              >
-                🔋 {Math.round(energyPercent)} %
-              </span>
-            )}
-            <p className="text-sm text-muted-foreground">{hint}</p>
-          </div>
-
-          <textarea
-            value={raw}
-            onChange={(e) => setRaw(e.target.value)}
-            placeholder="T.ex. Tvätta, handla, svara läraren, hämta paket, betala räkningen – en per rad går också bra."
-            className="h-28 w-full resize-none rounded-2xl border-2 border-border/60 bg-card p-4 text-base outline-none focus:ring-2 focus:ring-primary/20"
-          />
-
-          <div className="flex flex-wrap items-center gap-2">
-            <Button onClick={prioritize} disabled={busy || !raw.trim()} className="rounded-xl">
-              {busy ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              ) : (
-                <Sparkles className="mr-2 h-4 w-4" />
-              )}
-              Hjälp mig prioritera
-            </Button>
-            <WhyHint label="varför frågar vi?">
-              Du behöver inte planera allt just nu. Flow sorterar det viktigaste först – inga tider,
-              inga kalenderhändelser skapas.
-            </WhyHint>
-          </div>
-        </div>
-      </MyFloveBlock>
-
       {(openItems.length > 0 || doneItems.length > 0) && (
         <MyFloveBlock
           title="Min lista just nu"
           subtitle="Ingen tid, ingen deadline. Bara ordning."
-          eyebrow="🌿 Flow hjälper dig prioritera"
+          eyebrow="Flows förslag"
           icon={Sparkles}
           tone="mint"
           action={
@@ -230,12 +147,22 @@ export function QuickflowPriority() {
               ↕ {reorder ? "Klar" : "Ändra ordning"}
             </button>
           }
-          collapsible
-          collapseId="quickflow::min-lista"
         >
           <div className="space-y-4">
             <div className="flex flex-wrap items-center gap-2">
-              {intro && <p className="min-w-0 flex-1 text-sm text-muted-foreground">{intro}</p>}
+              {typeof energyPercent === "number" && (
+                <span
+                  className="inline-flex items-center gap-1 rounded-full border-2 border-border/60 bg-card px-2.5 py-1 text-xs font-medium"
+                  aria-label={`Ditt batteri just nu: ${Math.round(energyPercent)} procent`}
+                >
+                  🔋 {Math.round(energyPercent)} %
+                </span>
+              )}
+              {intro ? (
+                <p className="min-w-0 flex-1 text-sm text-muted-foreground">{intro}</p>
+              ) : (
+                <p className="min-w-0 flex-1 text-sm text-muted-foreground">{hint}</p>
+              )}
               <WhyHint label="prioriteringen">
                 Flow hjälper dig att sortera när allt känns lika viktigt. Prioriteringen bygger på
                 vad som verkar viktigt, brådskande och möjligt utifrån din energi just nu.

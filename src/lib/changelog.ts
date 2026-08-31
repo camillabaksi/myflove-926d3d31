@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-08-31";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "QuickFlow: EN ingång, ett flöde",
+    items: [
+      "En enda ingång: Skriv eller prata med Flow – dubletterna Kom ihåg, Prioritera och Skriv eller prata in är borta (2026-08-31)",
+      "Bottennavens +, desktopknappen och sidan öppnar samma dialog och logik (2026-08-31)",
+      "Dumpa → Flow delar upp → du granskar → Flow föreslår ordning → du godkänner, utan hittade tider (2026-08-31)",
+    ],
+  },
+  {
     title: "QuickFlow: ett brain dump blir flera uppgifter",
     items: [
       "Kom ihåg-rutan delar upp texten och visar Så här har jag förstått det (2026-08-31)",
