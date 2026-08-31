@@ -176,6 +176,16 @@ export default function TrainingPage() {
   const [goal, setGoal] = useState(state.goal?.goal ?? "");
   const [focus, setFocus] = useState<TrainingGoal["focus"]>(state.goal?.focus ?? "blandat");
   const [daysPerWeek, setDaysPerWeek] = useState(state.goal?.daysPerWeek ?? 3);
+  const [preferredDays, setPreferredDays] = useState<string[]>(
+    state.goal?.days ?? ["Måndag", "Onsdag", "Fredag"],
+  );
+  const togglePreferredDay = (day: string) =>
+    setPreferredDays((prev) => {
+      const next = prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day];
+      const sorted = WEEKDAYS.filter((d) => next.includes(d));
+      if (sorted.length > 0) setDaysPerWeek(sorted.length);
+      return sorted;
+    });
   const [minutes, setMinutes] = useState(state.goal?.minutesPerSession ?? 45);
   const [level, setLevel] = useState<TrainingGoal["level"]>(state.goal?.level ?? "nybörjare");
   const [equipment, setEquipment] = useState(state.goal?.equipment ?? "");
