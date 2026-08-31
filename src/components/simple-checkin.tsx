@@ -39,9 +39,14 @@ const FACTORS: { id: string; label: string; emoji: string; category: EnergyCateg
 export default function SimpleCheckin({
   className,
   source = "ma-bra",
+  onSaved,
+  presetFactors,
 }: {
   className?: string;
   source?: string;
+  onSaved?: () => void;
+  /** Förvald påverkansfaktor, t.ex. sömn på morgonen. Går alltid att ändra. */
+  presetFactors?: string[];
 }) {
   const { moodValue, energyValue, logMood, logEnergy } = useQuickCheckin();
   const { addFactor } = useEnergyFlow();
@@ -50,7 +55,7 @@ export default function SimpleCheckin({
   const moodExplainer = explain("maende");
   const [battery, setBattery] = useState(energyValue ?? 6);
   const [mood, setMood] = useState<number | null>(moodValue);
-  const [factors, setFactors] = useState<string[]>([]);
+  const [factors, setFactors] = useState<string[]>(presetFactors ?? []);
   const [note, setNote] = useState("");
   const [saved, setSaved] = useState(false);
   const [started, setStarted] = useState(false);
@@ -100,6 +105,7 @@ export default function SimpleCheckin({
     setSaved(true);
     setFactors([]);
     setNote("");
+    onSaved?.();
     window.setTimeout(() => setSaved(false), 2500);
   };
 

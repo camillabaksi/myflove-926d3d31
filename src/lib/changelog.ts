@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-08-31";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Flow bjuder in till mjuka check-ins under dagen",
+    items: [
+      "En frivillig popup kan visas en gång per tidsfönster och använder den centrala loggningen för energi och mående (2026-08-31)",
+      "Hoppa över respekteras resten av tidsfönstret; en befintlig observation stoppar en ny identisk fråga (2026-08-31)",
+    ],
+  },
+  {
     title: "Mående, energi och ekonomi är nu kontobundna",
     items: [
       "Mående och ekonomi sparas på ditt konto och finns kvar när du loggar in igen – lokal data migreras utan dubbletter (2026-08-31)",
