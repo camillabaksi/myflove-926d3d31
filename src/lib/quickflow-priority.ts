@@ -38,7 +38,7 @@ export function bucketRank(b: PriorityBucket): number {
   return BUCKETS.indexOf(b);
 }
 
-const SPLIT = /\n|;|,| och | samt |·|•/gi;
+const SPLIT = /\n|;|,| och | samt | sen | sedan | dessutom |·|•/gi;
 
 /** Delar upp fritext i flera saker – en per rad eller separerade med komma/och. */
 export function splitTasks(raw: string): string[] {
