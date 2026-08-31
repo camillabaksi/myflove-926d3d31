@@ -204,6 +204,97 @@ export function QuickflowCapture({ variant = "card" }: { variant?: "card" | "com
               )}
             </div>
 
+            {isMulti && (
+              <div className="space-y-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                    Så här har jag förstått det
+                  </p>
+                  <WhyHint label="uppdelningen">
+                    Flow delar upp texten i separata saker så att inget klumpas ihop. Du kan ändra,
+                    ta bort eller lägga till – du bestämmer.
+                  </WhyHint>
+                </div>
+
+                <ul className="space-y-2">
+                  {items.map((title, index) => (
+                    <li
+                      key={`${title}-${index}`}
+                      className="flex min-w-0 items-center gap-2 rounded-2xl border-2 border-border bg-card p-2.5"
+                    >
+                      {editingIndex === index ? (
+                        <>
+                          <Input
+                            autoFocus
+                            value={editingValue}
+                            onChange={(e) => setEditingValue(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") {
+                                e.preventDefault();
+                                saveEdit();
+                              }
+                            }}
+                            className="h-10 min-w-0 flex-1 rounded-xl"
+                            aria-label="Redigera uppgiften"
+                          />
+                          <Button
+                            type="button"
+                            size="sm"
+                            onClick={saveEdit}
+                            className="h-10 shrink-0 rounded-xl"
+                          >
+                            Spara
+                          </Button>
+                        </>
+                      ) : (
+                        <>
+                          <Check size={16} className="shrink-0 text-primary" aria-hidden="true" />
+                          <span className="min-w-0 flex-1 break-words text-sm text-foreground">
+                            {title}
+                          </span>
+                          <button
+                            type="button"
+                            aria-label={`Redigera ${title}`}
+                            onClick={() => {
+                              setEditingIndex(index);
+                              setEditingValue(title);
+                            }}
+                            className="press flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-border text-muted-foreground hover:border-primary hover:text-primary"
+                          >
+                            <Pencil size={15} />
+                          </button>
+                          <button
+                            type="button"
+                            aria-label={`Ta bort ${title}`}
+                            onClick={() => removeItem(index)}
+                            className="press flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-border text-muted-foreground hover:border-destructive hover:text-destructive"
+                          >
+                            <Trash2 size={15} />
+                          </button>
+                        </>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="grid gap-2 pt-1">
+                  <Button type="button" onClick={approveAndPrioritize} className="w-full rounded-xl">
+                    <Sparkles size={16} className="mr-2" /> Godkänn och prioritera
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={saveAsNote}
+                    className="w-full rounded-xl"
+                  >
+                    Spara bara texten
+                  </Button>
+                </div>
+              </div>
+            )}
+
+
+
             <div className="space-y-2">
               <p className="text-xs uppercase tracking-wide text-muted-foreground">
                 Hur känns det?
