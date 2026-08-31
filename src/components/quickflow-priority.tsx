@@ -255,8 +255,10 @@ export function QuickflowPriority() {
                   {rows.map((item) => (
                     <div key={item.id} className="rounded-2xl border-2 border-border bg-card p-3">
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="min-w-[8rem] flex-1">
-                          <span className="block font-medium text-foreground">{item.title}</span>
+                        <span className="min-w-[8rem] flex-1 basis-full sm:basis-0">
+                          <span className="block break-words font-medium text-foreground">
+                            {item.title}
+                          </span>
                           {item.why && (
                             <span className="block text-xs text-muted-foreground">{item.why}</span>
                           )}
