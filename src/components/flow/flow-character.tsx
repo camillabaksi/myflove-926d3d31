@@ -535,11 +535,12 @@ const SCENES: Record<FlowScene, Variant[]> = {
   ],
 };
 
-/** Scenens storlek: "hero" = Flow är huvudfokus (~25 % av skärmen), "inline" = del av ett kort. */
-export type FlowStage = "hero" | "inline" | "mini";
+/** Scenens storlek: "hero" = Flow är huvudfokus (~25 % av skärmen), "inline" = del av ett kort, "compact" = balanserad för karusell. */
+export type FlowStage = "hero" | "compact" | "inline" | "mini";
 
 const STAGE_CLASS: Record<FlowStage, string> = {
   hero: "h-[27svh] max-h-[260px] min-h-[168px]",
+  compact: "h-[18svh] max-h-[168px] min-h-[112px]",
   inline: "h-[15svh] max-h-[128px] min-h-[96px]",
   mini: "h-[80px] min-h-[80px] max-h-[80px]",
 };
@@ -587,7 +588,7 @@ export function FlowCharacter({
         {!isMini && variant.back?.(ctx)}
 
         <FlowMascot
-          size={isMini ? "sm" : "xl"}
+          size={isMini ? "sm" : stage === "compact" ? "lg" : "xl"}
           glow
           mood={variant.mood}
           className={cn("absolute inset-0 flex items-center justify-center", variant.mascotClass)}
@@ -596,7 +597,9 @@ export function FlowCharacter({
               ? "h-[68px] w-[68px] max-w-none object-contain"
               : stage === "inline"
                 ? "h-full w-full object-contain"
-                : "h-[108%] w-auto max-w-none"
+                : stage === "compact"
+                  ? "h-[100%] w-auto max-w-none object-contain"
+                  : "h-[108%] w-auto max-w-none"
           }
         />
 
