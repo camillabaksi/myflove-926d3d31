@@ -991,7 +991,6 @@ export default function TrainingPage() {
 
                   <div className="grid grid-cols-2 gap-3">
                     <label className="text-sm text-muted-foreground">
-
                       Minuter/pass
                       <Input
                         type="number"

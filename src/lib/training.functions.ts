@@ -98,7 +98,9 @@ export const generateTrainingProgram = createServerFn({ method: "POST" })
       `Dagar per vecka: ${data.daysPerWeek}`,
       `Tid per pass: ${data.minutesPerSession} minuter`,
       `Nivå: ${data.level}`,
-      data.days?.length ? `Träningsdagar (använd exakt dessa som "day"): ${data.days.join(", ")}` : null,
+      data.days?.length
+        ? `Träningsdagar (använd exakt dessa som "day"): ${data.days.join(", ")}`
+        : null,
       data.equipment ? `Utrustning: ${data.equipment}` : null,
       data.limitations ? `Begränsningar: ${data.limitations}` : null,
       "",
