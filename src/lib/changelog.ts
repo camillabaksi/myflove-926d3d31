@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-08-31";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "QuickFlow: flera saker blir flera aktiviteter",
+    items: [
+      "Planera den delar upp text med flera saker i enskilda aktiviteter (2026-08-31)",
+      "Dialogrutor scrollar vid mycket text så hela rutan syns (2026-08-31)",
+    ],
+  },
+  {
     title: "QuickFlow räknar med batteriet",
     items: [
       "Prioriteringen väger viktighet, brådska och ditt batteri från Mitt batteri (2026-08-31)",
