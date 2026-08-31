@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
+import { normalizeQuickflowText } from "@/lib/quickflow";
 import {
   sortPriority,
   splitTasks,
@@ -146,6 +147,7 @@ export function usePriorityList() {
     remove,
     move,
     replace,
+    merge,
     clear,
     splitItem,
   };
