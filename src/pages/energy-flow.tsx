@@ -1,15 +1,26 @@
 import { useMemo, useState } from "react";
 import { Link } from "wouter";
+import {
+  Activity,
+  BarChart3,
+  CalendarClock,
+  Plus,
+  Repeat,
+  Scale,
+  Settings2,
+  Sparkles,
+  Trash2,
+  X,
+} from "lucide-react";
 import Layout from "@/components/layout";
-import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
-import CollapsibleSection from "@/components/collapsible-section";
+import { MyFlovePageGrid, MyFloveWide, MyFloveBlock } from "@/components/myflove/block";
 import EnergyFlowSettings from "@/components/energy-flow-settings";
 import DidThisQuickAdd from "@/components/did-this-quick-add";
 import DayEnergyFlow from "@/components/day-energy-flow";
+import WhyHint from "@/components/why-hint";
 
 import {
   MyFloveButton,
-  MyFloveCard,
   MyFloveChip,
   MyFloveEmptyState,
   MyFloveHeader,
@@ -44,14 +55,61 @@ interface Props {
   showDayFlow?: boolean;
 }
 
+/** Liten horisontell nyckeltalsruta – används i Dagens balans. */
+function BalanceStat({
+  emoji,
+  label,
+  value,
+}: {
+  emoji: string;
+  label: string;
+  value: string;
+}) {
+  return (
+    <div className="min-w-0 rounded-2xl bg-card/70 px-2 py-3 text-center">
+      <div className="text-lg leading-none" aria-hidden>
+        {emoji}
+      </div>
+      <div className="mt-1 truncate text-[11px] font-medium text-muted-foreground">{label}</div>
+      <div className="font-display text-xl font-bold leading-tight text-ink">{value}</div>
+    </div>
+  );
+}
+
+/** En rad i mönstersektionerna – ikon/etikett vänster, värde höger. */
+function TrendRow({
+  emoji,
+  label,
+  value,
+  hint,
+}: {
+  emoji: string;
+  label: string;
+  value: string;
+  hint?: string;
+}) {
+  return (
+    <div className="flex min-w-0 items-center justify-between gap-3 rounded-2xl bg-secondary/40 px-3 py-2">
+      <span className="flex min-w-0 items-center gap-2 text-sm text-ink">
+        <span aria-hidden className="shrink-0">
+          {emoji}
+        </span>
+        <span className="truncate">{label}</span>
+      </span>
+      <span className="shrink-0 text-right text-sm text-muted-foreground">
+        {value}
+        {hint && <span className="block text-[11px]">{hint}</span>}
+      </span>
+    </div>
+  );
+}
+
 export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Props) {
   const {
     entries,
     presets,
     balance,
     insight,
-    settings,
-    setSettings,
     loading,
     signedIn,
     addFactor,
@@ -134,15 +192,15 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
   }
 
   return (
-    <MyFlovePageGrid>
+    <MyFlovePageGrid area="halsa" className="pb-24">
       {showHeader && (
         <MyFloveWide>
           <MyFloveHeader
             area="halsa"
             title="Min energi – historik och mönster"
             emoji="📈"
-            description="Se vad som ger och tar energi över tid. Din nivå just nu finns i Mitt batteri."
-            why="När du loggar över tid kan Flow hjälpa dig upptäcka vad som brukar ge eller ta energi."
+            description="Se vad som brukar ge och ta energi över tid."
+            why="Genom att logga vad som påverkar dig kan Flow upptäcka mönster över tid. Det handlar inte om att göra rätt eller fel – utan om att förstå vad som fungerar för just dig."
           />
         </MyFloveWide>
       )}
@@ -157,51 +215,172 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
         </MyFloveWide>
       )}
 
-      <CollapsibleSection
-        title="Dagens balans"
-        help="Summan av det du registrerat idag. Den vägs in i dagens balans, så planen blir rimlig i stället för för stor."
-      >
-        <MyFloveCard tone="lavender" className="space-y-3">
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <div className="text-sm text-muted-foreground">Gett energi</div>
-              <div className="font-display text-2xl font-bold text-ink">🔋 +{balance.gives}</div>
-            </div>
-            <div>
-              <div className="text-sm text-muted-foreground">Tagit energi</div>
-              <div className="font-display text-2xl font-bold text-ink">🪫 −{balance.drains}</div>
-            </div>
-            <div>
-              <div className="text-sm text-muted-foreground">Netto</div>
-              <div className="font-display text-2xl font-bold text-ink">
-                {balance.net > 0 ? "+" : ""}
-                {balance.net}
-              </div>
-            </div>
+      <MyFloveWide span="wide">
+        <MyFloveBlock
+          area="halsa"
+          icon={Scale}
+          title="Dagens balans"
+          subtitle="Vad har gett och tagit energi idag?"
+          collapsible
+          status={`Netto ${balance.net > 0 ? "+" : ""}${balance.net}`}
+        >
+          <div className="grid grid-cols-3 gap-2">
+            <BalanceStat emoji="🔋" label="Gett energi" value={`+${balance.gives}`} />
+            <BalanceStat emoji="🪫" label="Tagit energi" value={`−${balance.drains}`} />
+            <BalanceStat
+              emoji="⚖️"
+              label="Netto"
+              value={`${balance.net > 0 ? "+" : ""}${balance.net}`}
+            />
           </div>
-          <p className="text-sm text-muted-foreground">
-            Balans just nu: {flow.score} ({flow.label}).{" "}
+          <p className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+            <span>
+              Balans just nu: <span className="font-semibold text-ink">{flow.score}</span> (
+              {flow.label})
+            </span>
             <Link href="/flowscore" className="underline">
               Så räknas den
             </Link>
           </p>
-        </MyFloveCard>
+        </MyFloveBlock>
+      </MyFloveWide>
 
-        {insight && (
-          <MyFloveCard tone="blush" className="mt-3 space-y-3">
-            <p className="text-sm text-ink">{insight.message}</p>
+      {insight && (
+        <MyFloveWide span="wide">
+          <MyFloveBlock
+            surface="blush"
+            tone="blush"
+            icon={Sparkles}
+            title="Flow ser ett möjligt mönster"
+            subtitle="En reflektion, inte en slutsats."
+          >
+            <p className="text-sm leading-relaxed text-ink">{insight.message}</p>
             {insight.suggestLighterPlan && <MyFloveLinkRow />}
-          </MyFloveCard>
-        )}
-      </CollapsibleSection>
+          </MyFloveBlock>
+        </MyFloveWide>
+      )}
 
-      <CollapsibleSection
-        className="xl:col-span-2"
-        title="Lägg till något som påverkar"
-        defaultCollapsed
-        help="Skriv vad som helst som påverkar din energi – sömn, ljud, en konflikt, egentid, en promenad. Det blir aldrig en kalenderhändelse."
-      >
-        <MyFloveCard className="space-y-4">
+      <MyFloveWide>
+        <MyFloveBlock
+          area="halsa"
+          icon={CalendarClock}
+          title="Idag"
+          subtitle="Det här har påverkat din energi."
+          collapsible
+          status={`${today.length} registrerat`}
+        >
+          {today.length === 0 ? (
+            <MyFloveEmptyState
+              emoji="🌤️"
+              title="Inget registrerat idag"
+              description="Lägg till en sak som gett eller tagit energi – det räcker med en."
+            />
+          ) : (
+            <ul className="space-y-2">
+              {today.map((e) => (
+                <li
+                  key={e.id}
+                  className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2 rounded-2xl bg-secondary/40 px-3 py-2"
+                >
+                  <span
+                    className={`min-w-0 flex-1 truncate text-sm font-medium text-ink ${
+                      e.countsTowardScore ? "" : "opacity-60"
+                    }`}
+                  >
+                    {kindEmoji(e.kind)} {e.title}
+                  </span>
+
+                  <span className="shrink-0 text-xs text-muted-foreground">
+                    {categoryEmoji(e.category)} {categoryLabel(e.category)}
+                  </span>
+
+                  <span className="flex shrink-0 items-center gap-1">
+                    {(["drains", "neutral", "gives"] as const).map((d) => (
+                      <button
+                        key={d}
+                        type="button"
+                        aria-label={`Ändra påverkan till ${
+                          d === "gives" ? "gav energi" : d === "neutral" ? "neutralt" : "tog energi"
+                        }`}
+                        onClick={() => updateFactor(e.id, { direction: d })}
+                        className={`press rounded-full border px-2 py-0.5 text-xs ${
+                          e.direction === d
+                            ? "border-primary bg-primary/10 text-primary"
+                            : "border-border/60 text-muted-foreground"
+                        }`}
+                      >
+                        {d === "gives" ? "🔺" : d === "neutral" ? "➖" : "🔻"}
+                      </button>
+                    ))}
+                    <span className="ml-0.5 text-xs text-muted-foreground">
+                      {e.direction === "gives"
+                        ? `+${e.strength}`
+                        : e.direction === "neutral"
+                          ? "0"
+                          : `−${e.strength}`}
+                    </span>
+                  </span>
+
+                  <span className="flex shrink-0 items-center gap-1">
+                    {FRICTION_LEVELS.map((f) => (
+                      <button
+                        key={f.value}
+                        type="button"
+                        title={f.label}
+                        aria-label={`Svårighetsgrad ${f.label}`}
+                        onClick={() => updateFactor(e.id, { friction: f.value })}
+                        className={`press rounded-full border px-2 py-0.5 text-xs ${
+                          e.friction === f.value
+                            ? "border-primary bg-primary/10 text-primary"
+                            : "border-border/60 text-muted-foreground"
+                        }`}
+                      >
+                        {f.emoji}
+                      </button>
+                    ))}
+                  </span>
+
+                  <span className="ml-auto flex shrink-0 items-center gap-1">
+                    <button
+                      type="button"
+                      title={e.countsTowardScore ? "Räkna inte med" : "Räkna med"}
+                      aria-label={e.countsTowardScore ? "Räkna inte med" : "Räkna med"}
+                      onClick={() => toggleCounts(e.id, !e.countsTowardScore)}
+                      className="press grid h-8 w-8 place-items-center rounded-full text-muted-foreground hover:text-ink"
+                    >
+                      {e.countsTowardScore ? <X size={14} /> : <Plus size={14} />}
+                    </button>
+                    <button
+                      type="button"
+                      title="Ta bort"
+                      aria-label={`Ta bort ${e.title}`}
+                      onClick={() => removeFactor(e.id)}
+                      className="press grid h-8 w-8 place-items-center rounded-full text-muted-foreground hover:text-destructive"
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  </span>
+
+                  {e.note && (
+                    <p className="w-full text-xs text-muted-foreground">{e.note}</p>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+        </MyFloveBlock>
+      </MyFloveWide>
+
+      <MyFloveWide>
+        <MyFloveBlock
+          area="halsa"
+          icon={Activity}
+          title="Lägg till något som påverkar"
+          subtitle="Sömn, ljud, en konflikt, egen tid eller en promenad."
+          collapsible
+          defaultCollapsed
+          status="Öppna för att skriva fritt"
+        >
           {presets.length > 0 && (
             <div className="space-y-2">
               <div className="text-sm font-medium text-ink">Snabbknappar</div>
@@ -215,9 +394,9 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
                       type="button"
                       aria-label={`Ta bort snabbknappen ${p.title}`}
                       onClick={() => removePreset(p.id)}
-                      className="text-xs text-muted-foreground hover:text-ink"
+                      className="press grid h-7 w-7 place-items-center rounded-full text-muted-foreground hover:text-ink"
                     >
-                      ✕
+                      <X size={12} />
                     </button>
                   </span>
                 ))}
@@ -232,23 +411,31 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
             className="h-12 rounded-2xl"
           />
 
-          <div className="flex flex-wrap gap-2">
-            <MyFloveChip active={direction === "drains"} onClick={() => setDirection("drains")}>
-              🔻 Tar energi
-            </MyFloveChip>
-            <MyFloveChip active={direction === "gives"} onClick={() => setDirection("gives")}>
-              🔺 Ger energi
-            </MyFloveChip>
-            <MyFloveChip active={direction === "neutral"} onClick={() => setDirection("neutral")}>
-              ➖ Neutral
-            </MyFloveChip>
+          <div className="space-y-2">
+            <div className="text-sm font-medium text-ink">Hur påverkade det din energi?</div>
+            <div className="flex flex-wrap gap-2">
+              <MyFloveChip active={direction === "drains"} onClick={() => setDirection("drains")}>
+                🔻 Tog energi
+              </MyFloveChip>
+              <MyFloveChip active={direction === "neutral"} onClick={() => setDirection("neutral")}>
+                ➖ Neutralt
+              </MyFloveChip>
+              <MyFloveChip active={direction === "gives"} onClick={() => setDirection("gives")}>
+                🔺 Gav energi
+              </MyFloveChip>
+            </div>
           </div>
 
           <div className="space-y-2">
             <div className="text-sm font-medium text-ink">Hur mycket?</div>
             <div className="flex flex-wrap gap-2">
               {[1, 2, 3, 4, 5].map((n) => (
-                <MyFloveChip key={n} active={strength === n} onClick={() => setStrength(n)}>
+                <MyFloveChip
+                  key={n}
+                  active={strength === n}
+                  onClick={() => setStrength(n)}
+                  className="min-w-11"
+                >
                   {n}
                 </MyFloveChip>
               ))}
@@ -256,11 +443,13 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
           </div>
 
           <div className="space-y-2">
-            <div className="text-sm font-medium text-ink">Hur svårt var det att komma igång?</div>
-            <p className="text-xs text-muted-foreground">
-              Svårighetsgrad är något annat än energi – tvätt kan kosta lite energi men vara tungt
-              att börja med.
-            </p>
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="text-sm font-medium text-ink">Hur svårt var det att komma igång?</div>
+              <WhyHint label="svårighetsgrad">
+                Svårighetsgrad är något annat än energi – tvätt kan kosta lite energi men vara tungt
+                att börja med.
+              </WhyHint>
+            </div>
             <div className="flex flex-wrap gap-2">
               {FRICTION_LEVELS.map((f) => (
                 <MyFloveChip
@@ -308,12 +497,12 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
             rows={2}
           />
 
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap items-center gap-3">
             <MyFloveButton onClick={save} disabled={saving}>
               {saving ? "Sparar…" : "Lägg till"}
             </MyFloveButton>
-            <MyFloveButton
-              variant="secondary"
+            <button
+              type="button"
               onClick={async () => {
                 const t = title.trim();
                 if (!t) {
@@ -323,192 +512,128 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
                 await addPreset({ title: t, direction, strength, category, kind, friction });
                 toast({ description: "Sparad som snabbknapp." });
               }}
+              className="text-xs font-medium text-muted-foreground underline underline-offset-2 hover:text-ink"
             >
               Spara som snabbknapp
-            </MyFloveButton>
+            </button>
           </div>
-        </MyFloveCard>
-      </CollapsibleSection>
+        </MyFloveBlock>
+      </MyFloveWide>
 
-      <CollapsibleSection
-        className="xl:col-span-2"
-        title="Idag"
-        defaultCollapsed
-        help="Allt du registrerat idag. Du kan stänga av påverkan på enstaka poster utan att ta bort dem."
-      >
-        {today.length === 0 ? (
-          <MyFloveEmptyState
-            emoji="🌤️"
-            title="Inget registrerat idag"
-            description="Lägg till en sak som gett eller tagit energi – det räcker med en."
-          />
-        ) : (
-          <div className="space-y-2">
-            {today.map((e) => (
-              <MyFloveCard key={e.id} className="flex items-start justify-between gap-3 p-4">
-                <div className="min-w-0">
-                  <div className="text-xs uppercase tracking-wider text-muted-foreground">
-                    {kindEmoji(e.kind)} {kindLabel(e.kind)} · {categoryEmoji(e.category)}{" "}
-                    {categoryLabel(e.category)} ·{" "}
-                    {e.direction === "gives"
-                      ? `🔺 +${e.strength}`
-                      : e.direction === "neutral"
-                        ? "➖ 0"
-                        : `🔻 −${e.strength}`}
-                    {e.friction
-                      ? ` · ${frictionEmoji(e.friction)} ${frictionLabel(e.friction)}`
-                      : ""}
-                  </div>
-                  <div
-                    className={`font-medium text-ink ${e.countsTowardScore ? "" : "opacity-60"}`}
-                  >
-                    {e.title}
-                  </div>
-                  {e.note && <p className="text-sm text-muted-foreground">{e.note}</p>}
-                  <div className="mt-2 flex flex-wrap gap-1">
-                    {(["drains", "gives", "neutral"] as const).map((d) => (
-                      <button
-                        key={d}
-                        type="button"
-                        aria-label={`Ändra till ${d}`}
-                        onClick={() => updateFactor(e.id, { direction: d })}
-                        className={`rounded-full border px-2 py-0.5 text-xs ${
-                          e.direction === d
-                            ? "border-primary bg-primary/10 text-primary"
-                            : "border-border/60 text-muted-foreground"
-                        }`}
-                      >
-                        {d === "gives" ? "🔺" : d === "neutral" ? "➖" : "🔻"}
-                      </button>
-                    ))}
-                    {FRICTION_LEVELS.map((f) => (
-                      <button
-                        key={f.value}
-                        type="button"
-                        title={f.label}
-                        onClick={() => updateFactor(e.id, { friction: f.value })}
-                        className={`rounded-full border px-2 py-0.5 text-xs ${
-                          e.friction === f.value
-                            ? "border-primary bg-primary/10 text-primary"
-                            : "border-border/60 text-muted-foreground"
-                        }`}
-                      >
-                        {f.emoji}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className="flex shrink-0 flex-col items-end gap-1">
-                  <button
-                    type="button"
-                    onClick={() => toggleCounts(e.id, !e.countsTowardScore)}
-                    className="text-xs font-medium text-muted-foreground hover:text-ink"
-                  >
-                    {e.countsTowardScore ? "Räkna inte med" : "Räkna med"}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => removeFactor(e.id)}
-                    className="text-xs text-muted-foreground hover:text-ink"
-                  >
-                    Ta bort
-                  </button>
-                </div>
-              </MyFloveCard>
-            ))}
-          </div>
-        )}
-      </CollapsibleSection>
-
-      <CollapsibleSection
-        className="xl:col-span-2"
-        title="Mönster över tid"
-        defaultCollapsed
-        help="Enkla sammanställningar av dina egna poster. Ingen värdering – bara vad du själv har registrerat."
-      >
-        {catTrends.length === 0 ? (
-          <MyFloveEmptyState
-            emoji="📈"
-            title="Mönstren dyker upp efter hand"
-            description="När du registrerat några poster visar jag vad som oftast ger och tar energi."
-          />
-        ) : (
-          <div className="space-y-4">
-            <MyFloveCard className="space-y-2">
-              <div className="text-sm font-medium text-ink">Senaste 14 dagarna</div>
+      <MyFloveWide span="wide">
+        <MyFloveBlock
+          area="halsa"
+          icon={BarChart3}
+          title="Mönster över tid"
+          subtitle="Vad brukar påverka din energi?"
+          collapsible
+          defaultCollapsed
+          status={`${catTrends.length} områden`}
+          action={
+            <WhyHint label="mönster över tid">
+              Enkla sammanställningar av dina egna poster. Ingen värdering – bara vad du själv har
+              registrerat.
+            </WhyHint>
+          }
+        >
+          {catTrends.length === 0 ? (
+            <MyFloveEmptyState
+              emoji="📈"
+              title="Mönstren dyker upp efter hand"
+              description="När du registrerat några poster visar jag vad som oftast ger och tar energi."
+            />
+          ) : (
+            <div className="space-y-2">
+              <p className="text-xs text-muted-foreground">Senaste 14 dagarna</p>
               {catTrends.map((t) => (
-                <div key={t.key} className="flex items-center justify-between text-sm">
-                  <span>
-                    {t.emoji} {t.label}
-                  </span>
-                  <span className={t.net >= 0 ? "text-ink" : "text-muted-foreground"}>
-                    {t.net > 0 ? "+" : ""}
-                    {t.net} · {t.count} gånger
-                  </span>
-                </div>
+                <TrendRow
+                  key={t.key}
+                  emoji={t.emoji}
+                  label={t.label}
+                  value={`${t.net > 0 ? "+" : ""}${t.net} energi · ${t.count} ${
+                    t.count === 1 ? "gång" : "gånger"
+                  }`}
+                />
               ))}
-            </MyFloveCard>
+            </div>
+          )}
+        </MyFloveBlock>
+      </MyFloveWide>
 
-            {nameTrends.length > 0 && (
-              <MyFloveCard className="space-y-2">
-                <div className="text-sm font-medium text-ink">
-                  Dina återkommande faktorer (30 dagar)
-                </div>
-                {nameTrends.map((t) => (
-                  <div key={t.key} className="flex items-center justify-between text-sm">
-                    <span>
-                      {t.emoji} {t.label}
-                    </span>
-                    <span className="text-muted-foreground">{t.count} gånger</span>
-                  </div>
-                ))}
-                <p className="text-xs text-muted-foreground">
-                  Något som återkommer och tar mycket?{" "}
-                  <Link href="/friktionsindex" className="underline">
-                    Lägg det i friktionsbiblioteket
-                  </Link>
-                  .
-                </p>
-              </MyFloveCard>
-            )}
+      {nameTrends.length > 0 && (
+        <MyFloveWide span="wide">
+          <MyFloveBlock
+            area="halsa"
+            icon={Repeat}
+            title="Dina återkommande faktorer"
+            subtitle="Det här återkommer ofta i dina loggningar."
+            collapsible
+            defaultCollapsed
+            status={`${nameTrends.length} faktorer`}
+          >
+            <div className="space-y-2">
+              {nameTrends.map((t) => (
+                <TrendRow
+                  key={t.key}
+                  emoji={t.emoji}
+                  label={t.label}
+                  value={`${t.count} ${t.count === 1 ? "gång" : "gånger"}`}
+                />
+              ))}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Något som återkommer och tar mycket?{" "}
+              <Link href="/friktionsindex" className="underline">
+                Lägg det i friktionsbiblioteket
+              </Link>
+              .
+            </p>
+          </MyFloveBlock>
+        </MyFloveWide>
+      )}
 
-            {frictionRows.length > 0 && (
-              <MyFloveCard className="space-y-2">
-                <div className="text-sm font-medium text-ink">
-                  Tungt att komma igång med (30 dagar)
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  Svår start behöver inte betyda hög kostnad.
-                </p>
-                {frictionRows.map((t) => (
-                  <div key={t.key} className="flex items-center justify-between text-sm">
-                    <span>
-                      {frictionEmoji(Math.round(t.friction))} {t.label}
-                    </span>
-                    <span className="text-muted-foreground">
-                      svårighetsgrad {t.friction.toFixed(1)} · energi {t.energy > 0 ? "+" : ""}
-                      {t.energy.toFixed(1)}
-                    </span>
-                  </div>
-                ))}
-              </MyFloveCard>
-            )}
-          </div>
-        )}
-      </CollapsibleSection>
+      {frictionRows.length > 0 && (
+        <MyFloveWide span="wide">
+          <MyFloveBlock
+            area="halsa"
+            icon={Activity}
+            title="Tungt att komma igång med"
+            subtitle="Svår start behöver inte betyda hög kostnad."
+            collapsible
+            defaultCollapsed
+            status={`${frictionRows.length} saker`}
+          >
+            <div className="space-y-2">
+              {frictionRows.map((t) => (
+                <TrendRow
+                  key={t.key}
+                  emoji={frictionEmoji(Math.round(t.friction))}
+                  label={t.label}
+                  value={`svårighet ${t.friction.toFixed(1)}`}
+                  hint={`energi ${t.energy > 0 ? "+" : ""}${t.energy.toFixed(1)}`}
+                />
+              ))}
+            </div>
+          </MyFloveBlock>
+        </MyFloveWide>
+      )}
 
       <MyFloveWide>
-        <CollapsibleSection
+        <MyFloveBlock
+          area="halsa"
+          icon={Settings2}
           title="Hur mycket får det påverka?"
+          subtitle="Du bestämmer själv hur mycket energiflödet väger in."
+          collapsible
           defaultCollapsed
-          help="Du bestämmer själv. Du kan stänga av påverkan helt, eller ställa in vikten för varje energifaktor för sig."
+          status="Öppna inställningar"
         >
           <EnergyFlowSettings />
-          <p className="mt-3 text-sm text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             Energiflödet skapar aldrig kalenderhändelser eller uppgifter. Det beskriver bara din
             kapacitet.
           </p>
-        </CollapsibleSection>
+        </MyFloveBlock>
       </MyFloveWide>
     </MyFlovePageGrid>
   );
