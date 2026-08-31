@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-31 – QuickFlow: ett brain dump blir flera uppgifter
+
+- "Kom ihåg"-rutan delar nu upp texten i separata uppgifter och visar "Så här har jag förstått det" innan något sparas.
+- Du kan redigera eller ta bort varje punkt, godkänna och prioritera, eller bara spara texten.
+- Modalen är ombyggd för mobil: full bredd minus marginal, inget kapas åt höger och knapparna ligger under varandra.
+- Prioriteringen har fått en liten "Varför?" som förklarar hur Flow tänker.
+
 ## 2026-08-31 – QuickFlow: flera saker blir flera aktiviteter
 
 - "Planera den" delar nu upp text som innehåller flera saker i enskilda aktiviteter i stället för att spara allt som en enda.
