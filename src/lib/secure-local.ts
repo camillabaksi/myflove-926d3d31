@@ -17,6 +17,7 @@
 const SENSITIVE_KEYS = new Set<string>([
   // Energi & mående
   "myflove-energy-log",
+  "myflove-energy-pending",
   "myflove-energy-flow",
   "myflove-checkin-10",
   "myflove-daily-checkin",
