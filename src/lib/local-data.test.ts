@@ -25,8 +25,14 @@ describe("lokal användardata", () => {
     expect(isUserDataKey("myflove-day-edges")).toBe(false);
 
     window.localStorage.setItem("myflove-preferred-name", "Camilla");
-    window.localStorage.setItem("myflove-day-window", JSON.stringify({ start: "07:00", end: "22:00" }));
-    window.localStorage.setItem("myflove-day-edges", JSON.stringify({ "2026-08-31": { morning: 6, evening: 3 } }));
+    window.localStorage.setItem(
+      "myflove-day-window",
+      JSON.stringify({ start: "07:00", end: "22:00" }),
+    );
+    window.localStorage.setItem(
+      "myflove-day-edges",
+      JSON.stringify({ "2026-08-31": { morning: 6, evening: 3 } }),
+    );
     window.localStorage.setItem("myflove-medications", JSON.stringify(["ritalin"]));
 
     clearLocalUserData();

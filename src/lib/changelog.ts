@@ -31,7 +31,6 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     ],
   },
   {
-
     title: "Kalender blir navet för dagens planering",
     items: [
       "Kalender har nu tre flikar: Idag, Kalender och Lägg till – med egna adresser (2026-08-30)",
