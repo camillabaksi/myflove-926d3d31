@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-08-31";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "QuickFlow: ett brain dump blir flera uppgifter",
+    items: [
+      "Kom ihåg-rutan delar upp texten och visar Så här har jag förstått det (2026-08-31)",
+      "Du kan redigera, ta bort och godkänna punkterna innan de sparas (2026-08-31)",
+      "Modalen får plats på mobilskärmen – inget kapas åt höger (2026-08-31)",
+    ],
+  },
+  {
     title: "QuickFlow: flera saker blir flera aktiviteter",
     items: [
       "Planera den delar upp text med flera saker i enskilda aktiviteter (2026-08-31)",
