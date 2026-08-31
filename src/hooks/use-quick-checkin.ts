@@ -98,7 +98,7 @@ export function useQuickCheckin() {
       mounted = false;
       sub.subscription.unsubscribe();
     };
-  }, []);
+  }, [setLocalEnergy, setPendingEnergy]);
 
   const energyEntries = cloudEnergy ?? localEnergy;
 
