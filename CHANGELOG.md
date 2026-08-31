@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-31 – Flow ser dagens check-ins i sin kontext
+
+- Flows personliga kontext innehåller nu dagens morgon-, dag- och kvällscheck-ins från den befintliga energi- och måendeloggen.
+- Flow får tid, energi, mående och användarens eventuella fritext – utan att skapa en ny datakälla eller blanda ihop hälsologgning med aktiviteter.
+
 ## 2026-08-31 – Flow bjuder in till mjuka check-ins under dagen
 
 - Flow kan en gång per tidsfönster (morgon 06–11, dag 11–17, kväll 17–23) öppna en diskret popup med en frivillig check-in.
