@@ -1,10 +1,16 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "@tanstack/react-router";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Mic, Plus, Sparkles, MapPin } from "lucide-react";
+import { Check, Mic, Pencil, Plus, Sparkles, MapPin, Trash2 } from "lucide-react";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import WhyHint from "@/components/why-hint";
 import { useVoiceInput } from "@/hooks/use-voice-input";
 import { useSavedStores } from "@/hooks/use-data";
 import { useQuickflow } from "@/hooks/use-quickflow";
+import { usePriorityList } from "@/hooks/use-priority-list";
+import { splitTasks } from "@/lib/quickflow-priority";
 import { useNotes } from "@/hooks/use-notes";
 import {
   LEVEL_META,
@@ -27,12 +33,28 @@ export function QuickflowCapture({ variant = "card" }: { variant?: "card" | "com
   const [customOpen, setCustomOpen] = useState(false);
   const [customValue, setCustomValue] = useState("");
   const [placeOpen, setPlaceOpen] = useState(false);
+  /** Användarens egen version av uppdelningen – null = Flows förslag gäller. */
+  const [edited, setEdited] = useState<string[] | null>(null);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editingValue, setEditingValue] = useState("");
   const { add } = useQuickflow();
   const { addNote } = useNotes();
   const { savedStores } = useSavedStores();
+  const { add: addToPriority } = usePriorityList();
+  const navigate = useNavigate();
   const voice = useVoiceInput((t) => setText((prev) => (prev ? `${prev} ${t}` : t)));
 
   const suggestion = useMemo(() => (text.trim() ? suggestWhen(level, text) : null), [text, level]);
+
+  const detected = useMemo(() => splitTasks(text), [text]);
+  const items = edited ?? detected;
+  const isMulti = items.length > 1;
+
+  // Ny text = nytt förslag från Flow.
+  useEffect(() => {
+    setEdited(null);
+    setEditingIndex(null);
+  }, [text]);
 
   const reset = () => {
     setText("");
@@ -40,24 +62,57 @@ export function QuickflowCapture({ variant = "card" }: { variant?: "card" | "com
     setCustomOpen(false);
     setCustomValue("");
     setPlaceOpen(false);
+    setEdited(null);
+    setEditingIndex(null);
+  };
+
+  const removeItem = (index: number) => {
+    setEdited(items.filter((_, i) => i !== index));
+    setEditingIndex(null);
+  };
+
+  const saveEdit = () => {
+    if (editingIndex === null) return;
+    const value = editingValue.trim();
+    setEdited(items.map((t, i) => (i === editingIndex ? value || t : t)));
+    setEditingIndex(null);
   };
 
   const save = (opts: { remindAt?: number; placeId?: string; placeName?: string }) => {
-    const trimmed = text.trim();
-    if (!trimmed) return;
-    const { merged } = add({ text: trimmed, level, ...opts });
+    const titles = items.length > 0 ? items : [text.trim()].filter(Boolean);
+    if (titles.length === 0) return;
+    let mergedAny = false;
+    titles.forEach((title) => {
+      const { merged } = add({ text: title, level, ...opts });
+      if (merged) mergedAny = true;
+    });
     setOpen(false);
     reset();
     toast.success(
-      merged ? "Den fanns redan – jag slog ihop dem. 💙" : "Lugn. Jag håller det åt dig. 💙",
+      mergedAny ? "Några fanns redan – jag slog ihop dem. 💙" : "Lugn. Jag håller det åt dig. 💙",
       {
         description: opts.remindAt
           ? `Jag säger till ${formatWhen(opts.remindAt).toLowerCase()}.`
           : opts.placeName
             ? `Jag knuffar dig när du är nära ${opts.placeName}.`
-            : "Den ligger som en öppen tanke – jag frågar dig senare.",
+            : titles.length > 1
+              ? `${titles.length} saker ligger som öppna tankar – jag frågar dig senare.`
+              : "Den ligger som en öppen tanke – jag frågar dig senare.",
       },
     );
+  };
+
+  /** Godkänn uppdelningen och låt Flow föreslå en ordning – inga tider skapas. */
+  const approveAndPrioritize = () => {
+    const titles = items.filter(Boolean);
+    if (titles.length === 0) return;
+    titles.forEach((title) => addToPriority(title));
+    setOpen(false);
+    reset();
+    toast.success(`${titles.length} saker är ute ur huvudet. 💙`, {
+      description: "De ligger i din lista – Flow hjälper dig prioritera.",
+    });
+    void navigate({ to: "/quickflow" });
   };
 
   /** Tanken får bara finnas – den landar direkt bland anteckningarna. */
@@ -113,12 +168,15 @@ export function QuickflowCapture({ variant = "card" }: { variant?: "card" | "com
           if (!o) reset();
         }}
       >
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-h-[85dvh] max-w-[720px] overflow-y-auto overflow-x-hidden">
           <DialogHeader>
-            <DialogTitle>Vad vill du att jag håller åt dig?</DialogTitle>
+            <DialogTitle>Vad vill du få ur huvudet?</DialogTitle>
+            <p className="text-sm text-muted-foreground">
+              Få ut det ur huvudet. Jag håller koll – skriv flera saker om du vill.
+            </p>
           </DialogHeader>
 
-          <div className="space-y-4">
+          <div className="min-w-0 space-y-4">
             <div className="relative">
               <textarea
                 autoFocus
@@ -143,6 +201,99 @@ export function QuickflowCapture({ variant = "card" }: { variant?: "card" | "com
                 </button>
               )}
             </div>
+
+            {isMulti && (
+              <div className="space-y-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                    Så här har jag förstått det
+                  </p>
+                  <WhyHint label="uppdelningen">
+                    Flow delar upp texten i separata saker så att inget klumpas ihop. Du kan ändra,
+                    ta bort eller lägga till – du bestämmer.
+                  </WhyHint>
+                </div>
+
+                <ul className="space-y-2">
+                  {items.map((title, index) => (
+                    <li
+                      key={`${title}-${index}`}
+                      className="flex min-w-0 items-center gap-2 rounded-2xl border-2 border-border bg-card p-2.5"
+                    >
+                      {editingIndex === index ? (
+                        <>
+                          <Input
+                            autoFocus
+                            value={editingValue}
+                            onChange={(e) => setEditingValue(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") {
+                                e.preventDefault();
+                                saveEdit();
+                              }
+                            }}
+                            className="h-10 min-w-0 flex-1 rounded-xl"
+                            aria-label="Redigera uppgiften"
+                          />
+                          <Button
+                            type="button"
+                            size="sm"
+                            onClick={saveEdit}
+                            className="h-10 shrink-0 rounded-xl"
+                          >
+                            Spara
+                          </Button>
+                        </>
+                      ) : (
+                        <>
+                          <Check size={16} className="shrink-0 text-primary" aria-hidden="true" />
+                          <span className="min-w-0 flex-1 break-words text-sm text-foreground">
+                            {title}
+                          </span>
+                          <button
+                            type="button"
+                            aria-label={`Redigera ${title}`}
+                            onClick={() => {
+                              setEditingIndex(index);
+                              setEditingValue(title);
+                            }}
+                            className="press flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-border text-muted-foreground hover:border-primary hover:text-primary"
+                          >
+                            <Pencil size={15} />
+                          </button>
+                          <button
+                            type="button"
+                            aria-label={`Ta bort ${title}`}
+                            onClick={() => removeItem(index)}
+                            className="press flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-border text-muted-foreground hover:border-destructive hover:text-destructive"
+                          >
+                            <Trash2 size={15} />
+                          </button>
+                        </>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="grid gap-2 pt-1">
+                  <Button
+                    type="button"
+                    onClick={approveAndPrioritize}
+                    className="w-full rounded-xl"
+                  >
+                    <Sparkles size={16} className="mr-2" /> Godkänn och prioritera
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={saveAsNote}
+                    className="w-full rounded-xl"
+                  >
+                    Spara bara texten
+                  </Button>
+                </div>
+              </div>
+            )}
 
             <div className="space-y-2">
               <p className="text-xs uppercase tracking-wide text-muted-foreground">
@@ -177,14 +328,14 @@ export function QuickflowCapture({ variant = "card" }: { variant?: "card" | "com
               <p className="text-xs uppercase tracking-wide text-muted-foreground">
                 ⏰ När ska jag påminna dig?
               </p>
-              <div className="flex flex-wrap gap-2">
+              <div className="grid gap-2 sm:grid-cols-2">
                 {WHEN_PRESETS.map((preset) => (
                   <button
                     key={preset.id}
                     type="button"
                     disabled={!text.trim()}
                     onClick={() => save({ remindAt: preset.compute() ?? undefined })}
-                    className="rounded-full border border-border bg-card px-4 py-2 text-sm hover:border-primary disabled:opacity-40"
+                    className="w-full rounded-full border border-border bg-card px-4 py-2 text-sm hover:border-primary disabled:opacity-40"
                   >
                     {preset.label}
                   </button>
@@ -197,7 +348,7 @@ export function QuickflowCapture({ variant = "card" }: { variant?: "card" | "com
                     setCustomOpen((v) => !v);
                     if (!customValue) setCustomValue(toLocalInputValue(Date.now() + 3_600_000));
                   }}
-                  className="rounded-full border border-border bg-card px-4 py-2 text-sm hover:border-primary disabled:opacity-40"
+                  className="w-full rounded-full border border-border bg-card px-4 py-2 text-sm hover:border-primary disabled:opacity-40"
                 >
                   På ett datum
                 </button>
@@ -208,7 +359,7 @@ export function QuickflowCapture({ variant = "card" }: { variant?: "card" | "com
                     setCustomOpen(false);
                     setPlaceOpen((v) => !v);
                   }}
-                  className="rounded-full border border-border bg-card px-4 py-2 text-sm hover:border-primary disabled:opacity-40"
+                  className="w-full rounded-full border border-border bg-card px-4 py-2 text-sm hover:border-primary disabled:opacity-40"
                 >
                   <MapPin size={13} className="inline mr-1 -mt-0.5" />
                   När jag kommer till en plats
@@ -217,7 +368,7 @@ export function QuickflowCapture({ variant = "card" }: { variant?: "card" | "com
                   type="button"
                   disabled={!text.trim()}
                   onClick={() => save({})}
-                  className="rounded-full border border-sage bg-sage/30 px-4 py-2 text-sm hover:border-primary disabled:opacity-40"
+                  className="w-full rounded-full border border-sage bg-sage/30 px-4 py-2 text-sm hover:border-primary disabled:opacity-40"
                 >
                   💭 Bara spara tanken
                 </button>
@@ -225,7 +376,7 @@ export function QuickflowCapture({ variant = "card" }: { variant?: "card" | "com
                   type="button"
                   disabled={!text.trim()}
                   onClick={saveAsNote}
-                  className="rounded-full border border-border bg-card px-4 py-2 text-sm hover:border-primary disabled:opacity-40"
+                  className="w-full rounded-full border border-border bg-card px-4 py-2 text-sm hover:border-primary disabled:opacity-40"
                 >
                   📝 Spara som anteckning
                 </button>
