@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-08-31";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "QuickFlow räknar med batteriet",
+    items: [
+      "Prioriteringen väger viktighet, brådska och ditt batteri från Mitt batteri (2026-08-31)",
+      "Batterivärdet syns i QuickFlow och styr ordningen även utan AI (2026-08-31)",
+    ],
+  },
+  {
     title: "QuickFlow: planera med din egen tid",
     items: [
       "Planera den låter dig välja idag, imorgon eller datum – med eller utan tid (2026-08-31)",

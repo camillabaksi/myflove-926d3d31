@@ -56,11 +56,14 @@ const HEAVY = ["städa", "storstäd", "flytta", "deklaration", "renovera", "pack
 const LIGHT = ["diska", "tvätta", "vattna", "posta", "hämta", "sortera"];
 
 /**
- * Lugn fallback när AI inte är tillgänglig: viktigt/brådskande först,
- * lätta saker prioriteras upp när energin är låg.
+ * Lugn fallback när AI inte är tillgänglig: viktighet och brådska först,
+ * och batterinivån från Mitt batteri påverkar ordningen – lätta saker
+ * prioriteras upp när energin är låg, tunga saker tidigt när den är hög.
  */
 export function heuristicPriority(titles: string[], energyPercent?: number): PriorityTask[] {
-  const low = typeof energyPercent === "number" && energyPercent < 40;
+  const hasEnergy = typeof energyPercent === "number";
+  const low = hasEnergy && (energyPercent as number) < 40;
+  const high = hasEnergy && (energyPercent as number) > 70;
   const now = Date.now();
   const scored = titles.map((title, i) => {
     const t = title.toLowerCase();
@@ -70,11 +73,15 @@ export function heuristicPriority(titles: string[], energyPercent?: number): Pri
       score = 0;
       why = "Känns viktigt att få ur världen.";
     } else if (LIGHT.some((w) => t.includes(w))) {
-      score = low ? 1 : 2;
+      score = low ? 1 : high ? 2 : 1;
       why = low ? "Liten sak – går att göra även med lite energi." : "Liten sak som går snabbt.";
     } else if (HEAVY.some((w) => t.includes(w))) {
-      score = low ? 3 : 1;
-      why = low ? "Tung sak – den får gärna vänta idag." : "Kräver lite mer av dig.";
+      score = low ? 3 : high ? 1 : 2;
+      why = low
+        ? "Tung sak – den får gärna vänta medan batteriet är lågt."
+        : high
+          ? "Kräver mer av dig – bra läge nu när batteriet är högt."
+          : "Kräver lite mer av dig.";
     }
     return { title, score, why, i };
   });
