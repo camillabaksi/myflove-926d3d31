@@ -545,7 +545,7 @@ function CheckinSlide({ seed, onNext }: { seed: number; onNext: () => void }) {
   );
 }
 
-/** Gemensam ram: Flow stor högst upp, kort text och en åtgärd. */
+/** Gemensam ram: Flow kompakt högst upp, tydlig text och en åtgärd. */
 function SlideShell({
   scene,
   seed,
@@ -560,10 +560,10 @@ function SlideShell({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex h-[58svh] max-h-[560px] min-h-[360px] flex-col items-center justify-between gap-3 overflow-hidden px-2 py-3 text-center">
-      <FlowCharacter scene={scene} seed={seed} energy={energy} />
-      <div className="flex w-full flex-1 flex-col items-center justify-center gap-3">
-        <h2 className="font-display text-xl leading-snug text-balance text-ink">{title}</h2>
+    <div className="flex min-h-[280px] flex-col items-center justify-center gap-4 overflow-hidden px-3 py-4 text-center">
+      <FlowCharacter scene={scene} seed={seed} energy={energy} stage="compact" />
+      <div className="flex w-full flex-col items-center justify-center gap-2">
+        <h2 className="font-display text-lg leading-snug text-balance text-ink sm:text-xl">{title}</h2>
         {children}
       </div>
     </div>
