@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-08-31";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Flow-hjälparen är mindre och tydligare",
+    items: [
+      "Maskoten i Flow-hjälparen visas i en kompakt scenstorlek så att den inte tar över vyn (2026-08-31)",
+      "Slide-ytan har mindre vertikal höjd och tätare spacing för ett lugnare, mer lättläst flöde (2026-08-31)",
+    ],
+  },
+  {
     title: "Flow ser dagens check-ins i sin kontext",
     items: [
       "Flows personliga kontext visar dagens morgon-, dag- och kvällscheck-ins med tid, energi, mående och eventuell fritext från befintlig loggning (2026-08-31)",
