@@ -334,7 +334,21 @@ export default function TrainingPage() {
     setLoading(true);
     try {
       const program = await run({ data: payload });
-      saveProgram(payload, program);
+      const wanted = payload.days ?? [];
+      // Lägg passen på exakt de dagar användaren valt (viloapass behåller sin dag).
+      const adjusted =
+        wanted.length > 0
+          ? {
+              ...program,
+              sessions: (() => {
+                let i = 0;
+                return program.sessions.map((s) =>
+                  s.type === "vila" ? s : { ...s, day: wanted[i++ % wanted.length]! },
+                );
+              })(),
+            }
+          : program;
+      saveProgram(payload, adjusted);
       toast({ title: successTitle, description: program.intro });
     } catch (err) {
       toast({
