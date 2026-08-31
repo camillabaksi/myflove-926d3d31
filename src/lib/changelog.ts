@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-08-31";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: '"Visa bara det viktigaste" är av tills du själv slår på det',
+    items: [
+      "Enkelt läge i Mer-menyn är nu av som standard – det slås bara på när du själv väljer det (2026-08-31)",
+      "Tidigare automatiskt sparat på-läge rensas om valet aldrig gjorts aktivt (2026-08-31)",
+    ],
+  },
+  {
     title: "Välj flera dagar för ett träningspass",
     items: [
       "Pass-dialogen har veckodags-chips – välj en eller flera dagar när du lägger till ett pass (2026-08-31)",

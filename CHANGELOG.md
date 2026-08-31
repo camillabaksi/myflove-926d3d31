@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-31 – "Visa bara det viktigaste" är av tills du själv slår på det
+
+- Enkelt läge i Mer-menyn är nu AV som standard i stället för PÅ.
+- Tidigare sparat standardvärde rensas automatiskt – läget aktiveras bara när du själv trycker på knappen.
+
 ## 2026-08-31 – Välj flera dagar för ett träningspass
 
 - Pass-dialogen i Träning har nu veckodags-chips (Mån–Sön) i stället för fritext för dagen.

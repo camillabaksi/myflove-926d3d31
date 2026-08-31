@@ -663,8 +663,22 @@ export default function Layout({ children }: LayoutProps) {
     window.location.href = "/hem";
   };
 
-  // Enkelt läge: visar bara det viktigaste tills man själv vill se mer.
-  const [simpleMode, setSimpleMode] = useLocalStorage<boolean>("myflove-simple-mode", true);
+  // Enkelt läge: AV som standard – slås bara på om användaren själv väljer det.
+  // Tidigare versioner sparade "true" som standard; rensa det om valet aldrig gjorts aktivt.
+  const [simpleModeChosen, setSimpleModeChosen] = useLocalStorage<boolean>(
+    "myflove-simple-mode-chosen",
+    false,
+  );
+  const [simpleModeRaw, setSimpleModeRaw] = useLocalStorage<boolean>("myflove-simple-mode", false);
+  useEffect(() => {
+    if (!simpleModeChosen && simpleModeRaw) setSimpleModeRaw(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const simpleMode = simpleModeChosen && simpleModeRaw;
+  const setSimpleMode = (value: boolean) => {
+    setSimpleModeChosen(true);
+    setSimpleModeRaw(value);
+  };
   const essentialItems = useMemo(() => navItems.filter((i) => i.essential), [navItems]);
 
   const searchResults = useMemo(() => {
