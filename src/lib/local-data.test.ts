@@ -19,6 +19,24 @@ describe("lokal användardata", () => {
     expect(isUserDataKey("cookie-consent")).toBe(false);
   });
 
+  it("lämnar namn och morgon/kväll-batteri kvar vid utloggning", () => {
+    expect(isUserDataKey("myflove-preferred-name")).toBe(false);
+    expect(isUserDataKey("myflove-day-window")).toBe(false);
+    expect(isUserDataKey("myflove-day-edges")).toBe(false);
+
+    window.localStorage.setItem("myflove-preferred-name", "Camilla");
+    window.localStorage.setItem("myflove-day-window", JSON.stringify({ start: "07:00", end: "22:00" }));
+    window.localStorage.setItem("myflove-day-edges", JSON.stringify({ "2026-08-31": { morning: 6, evening: 3 } }));
+    window.localStorage.setItem("myflove-medications", JSON.stringify(["ritalin"]));
+
+    clearLocalUserData();
+
+    expect(window.localStorage.getItem("myflove-preferred-name")).toBe("Camilla");
+    expect(window.localStorage.getItem("myflove-day-window")).not.toBeNull();
+    expect(window.localStorage.getItem("myflove-day-edges")).not.toBeNull();
+    expect(window.localStorage.getItem("myflove-medications")).toBeNull();
+  });
+
   it("rensar privat data vid utloggning men behåller enhetsinställningar", () => {
     window.localStorage.setItem("myflove-energy-flow", JSON.stringify([{ mood: 2 }]));
     window.localStorage.setItem("myflove-medications", JSON.stringify(["ritalin"]));

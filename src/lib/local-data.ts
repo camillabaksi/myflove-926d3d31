@@ -22,6 +22,12 @@ const DEVICE_KEYS = new Set<string>([
   "myflove-alarm-enabled",
   "myflove-theme",
   "myflove-text-size",
+  // Namn och dagens ramar (morgon/kväll-batteri) är personliga men ska
+  // stanna kvar på enheten även efter utloggning – de är inte känsliga
+  // hälso- eller ekonomidata och gör appen varmare vid nästa besök.
+  "myflove-preferred-name",
+  "myflove-day-window",
+  "myflove-day-edges",
 ]);
 
 export function isUserDataKey(key: string): boolean {

@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-08-31 – Namn och morgon/kväll-batteri stannar kvar vid utloggning
+
+- Ditt namn (`myflove-preferred-name`), dagens tidsramar (`myflove-day-window`) och morgon-/kvällsvärdena i Mitt batteri (`myflove-day-edges`) läggs till i enhetsnycklarna i `clearLocalUserData` – de rensas inte längre när du loggar ut, så appen känns igen dig vid nästa besök på samma enhet.
+
 ## 2026-08-31 – Fix: länkar i expanderade kort navigerar igen
 
 - Klick på länkar inuti ett expanderat kort (t.ex. "Vad behöver du just nu?" på Hem) navigerade aldrig iväg: kortets tillfälliga historik-läge för Android-bakåtknappen kunde ogöra navigationen när kortet avmonterades. Menykort med länkar använder nu enbart routerns vanliga historik, medan vanliga innehållskort fortfarande kan stängas med bakåtknappen.
