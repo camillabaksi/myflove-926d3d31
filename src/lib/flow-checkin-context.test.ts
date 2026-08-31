@@ -35,11 +35,7 @@ describe("checkinContext", () => {
   });
 
   it("väljer den senaste observationen när ett tidsfönster innehåller flera loggningar", () => {
-    const context = checkinContext(
-      [mood(9, 2), mood(10, 5)],
-      [energy(10, 4), energy(9, 1)],
-      now,
-    );
+    const context = checkinContext([mood(9, 2), mood(10, 5)], [energy(10, 4), energy(9, 1)], now);
 
     expect(context).toContain("Morgon (kl. 10:15): energi 4/5, mående 5/5");
   });
