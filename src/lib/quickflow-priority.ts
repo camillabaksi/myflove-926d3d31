@@ -7,6 +7,8 @@
  * fallback + typer och används av hooken och UI:t.
  */
 
+import type { TaskClarification } from "./quickflow-clarify";
+
 export type PriorityBucket = "nu" | "sedan" | "om-du-orkar" | "kan-vanta";
 
 export interface PriorityTask {
