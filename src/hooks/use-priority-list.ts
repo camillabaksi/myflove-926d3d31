@@ -113,5 +113,16 @@ export function usePriorityList() {
   const openItems = sortPriority((items ?? []).filter((i) => !i.done));
   const doneItems = (items ?? []).filter((i) => i.done);
 
-  return { items: items ?? [], openItems, doneItems, add, update, remove, move, replace, clear, splitItem };
+  return {
+    items: items ?? [],
+    openItems,
+    doneItems,
+    add,
+    update,
+    remove,
+    move,
+    replace,
+    clear,
+    splitItem,
+  };
 }

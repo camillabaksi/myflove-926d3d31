@@ -13,6 +13,7 @@ import {
   Loader2,
   Play,
   Plus,
+  Scissors,
   Sparkles,
   Trash2,
 } from "lucide-react";
@@ -47,7 +48,8 @@ import { track } from "@/lib/analytics";
  * i fyra nivåer. Inga tider, inga datum, ingen kalenderhändelse.
  */
 export function QuickflowPriority() {
-  const { openItems, doneItems, add, update, remove, move, replace, clear } = usePriorityList();
+  const { openItems, doneItems, add, update, remove, move, replace, clear, splitItem } =
+    usePriorityList();
   const { reading } = useEnergyBattery();
   const { addTask } = useTasks();
   const { toast } = useToast();
@@ -125,6 +127,14 @@ export function QuickflowPriority() {
       emoji: guessEmoji(item.title, "snabbt"),
       priority: "idag",
       completable: true,
+    });
+  };
+
+  const splitIt = (item: PriorityTask) => {
+    const count = splitItem(item.id);
+    toast({
+      description:
+        count > 1 ? `Uppdelad i ${count} enskilda saker.` : "Den här går inte att dela upp mer.",
     });
   };
 
@@ -265,6 +275,14 @@ export function QuickflowPriority() {
                             <IconBtn label="Klar" onClick={() => markDone(item)}>
                               <Check size={16} />
                             </IconBtn>
+                            {splitTasks(item.title).length > 1 && (
+                              <IconBtn
+                                label="Dela upp i enskilda saker"
+                                onClick={() => splitIt(item)}
+                              >
+                                <Scissors size={16} />
+                              </IconBtn>
+                            )}
                             <IconBtn label="Planera den" onClick={() => planIt(item)}>
                               <CalendarPlus size={16} />
                             </IconBtn>
@@ -295,7 +313,7 @@ export function QuickflowPriority() {
               <Input
                 value={newTitle}
                 onChange={(e) => setNewTitle(e.target.value)}
-                placeholder="Lägg till något"
+                placeholder="Lägg till något – flera går bra, separera med komma"
                 className="h-11 min-w-[10rem] flex-1 rounded-xl"
               />
               <Button type="submit" variant="outline" className="h-11 rounded-xl">
