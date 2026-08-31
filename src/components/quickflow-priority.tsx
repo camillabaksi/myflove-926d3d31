@@ -22,6 +22,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import WhyHint from "@/components/why-hint";
 import ActivityEnergyPrompt from "@/components/activity-energy-prompt";
+import QuickflowPlanDialog, { type PlanChoice } from "@/components/quickflow-plan-dialog";
 import { usePriorityList } from "@/hooks/use-priority-list";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
 import { useTasks } from "@/hooks/use-data";
@@ -36,6 +37,7 @@ import {
   type PriorityBucket,
   type PriorityTask,
 } from "@/lib/quickflow-priority";
+import { todayISO } from "@/lib/task-agenda";
 import { clarifyQuickflowTask } from "@/lib/quickflow-clarify.functions";
 import { heuristicClarify, ENERGY_LEVEL_META } from "@/lib/quickflow-clarify";
 import { prioritizeQuickflow } from "@/lib/quickflow-priority.functions";
@@ -65,6 +67,7 @@ export function QuickflowPriority() {
   const [askEnergyFor, setAskEnergyFor] = useState<FlowItem | null>(null);
   const [clarifyingId, setClarifyingId] = useState<string | null>(null);
   const [expandedClarificationId, setExpandedClarificationId] = useState<string | null>(null);
+  const [planFor, setPlanFor] = useState<PriorityTask | null>(null);
 
   const energyPercent = reading?.now;
   const hint = useMemo(() => energyHint(energyPercent), [energyPercent]);
@@ -138,11 +141,22 @@ export function QuickflowPriority() {
     });
   };
 
-  const planIt = (item: PriorityTask) => {
-    addTask(item.title);
+  const confirmPlan = (choice: PlanChoice) => {
+    const item = planFor;
+    if (!item) return;
+    addTask(item.title, choice.dueDate, {
+      time: choice.time,
+      area: guessArea(item.title),
+    });
     remove(item.id);
-    toast({ description: "Skickad till Planera – du väljer själv när den ska ligga." });
-    navigate({ to: "/idag" });
+    setPlanFor(null);
+    const day = choice.dueDate === todayISO() ? "idag" : choice.dueDate;
+    toast({
+      description: choice.time
+        ? `Inlagd i kalendern ${day} kl ${choice.time}.`
+        : `Inlagd i kalendern ${day} – utan tid.`,
+    });
+    navigate({ to: "/kalender" });
   };
 
   return (
@@ -283,7 +297,7 @@ export function QuickflowPriority() {
                                 <Scissors size={16} />
                               </IconBtn>
                             )}
-                            <IconBtn label="Planera den" onClick={() => planIt(item)}>
+                            <IconBtn label="Planera den" onClick={() => setPlanFor(item)}>
                               <CalendarPlus size={16} />
                             </IconBtn>
                             <IconBtn label="Ta bort" onClick={() => remove(item.id)}>
@@ -332,6 +346,13 @@ export function QuickflowPriority() {
           </div>
         </MyFloveBlock>
       )}
+
+      <QuickflowPlanDialog
+        open={planFor !== null}
+        title={planFor?.title ?? ""}
+        onCancel={() => setPlanFor(null)}
+        onConfirm={confirmPlan}
+      />
 
       <ActivityEnergyPrompt item={askEnergyFor} onClose={() => setAskEnergyFor(null)} />
     </>
