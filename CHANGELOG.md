@@ -2,7 +2,7 @@
 
 ## 2026-08-31 – Fix: länkar i expanderade kort navigerar igen
 
-- Klick på länkar inuti ett expanderat kort (t.ex. "Vad behöver du just nu?" på Hem) navigerade aldrig iväg: kortets tillfälliga historik-läge för Android-bakåtknappen ogjorde navigationen när kortet avmonterades. Nu rensas historik-läget bara om du fortfarande är kvar på samma sida – länkar till Planera, Flow och QuickFlow fungerar igen.
+- Klick på länkar inuti ett expanderat kort (t.ex. "Vad behöver du just nu?" på Hem) navigerade aldrig iväg: kortets tillfälliga historik-läge för Android-bakåtknappen kunde ogöra navigationen när kortet avmonterades. Menykort med länkar använder nu enbart routerns vanliga historik, medan vanliga innehållskort fortfarande kan stängas med bakåtknappen.
 - Texten i "Vad behöver du just nu?" sa felaktigt "Fyra vanliga situationer" fast listan har tre – nu står det tre.
 
 ## 2026-08-30 – Global designregel: inga onödigt vertikala textblock

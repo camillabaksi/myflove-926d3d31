@@ -96,10 +96,18 @@ export function ExpandableBlock({
   // öppet och tas bort igen när det stängs.
   React.useEffect(() => {
     if (!open) return;
+    const containsNavigation = sectionRef.current?.querySelector("a[href]") != null;
     const onPop = () => setOpen(false);
     const openedPath = window.location.pathname;
-    window.history.pushState({ myfloveExpanded: ariaLabel }, "");
-    window.addEventListener("popstate", onPop);
+
+    // Menykort med riktiga länkar ska följa routerns vanliga historik. Ett
+    // extra history-läge här kan annars hinna backa bort navigationen när
+    // kortet avmonteras. Vanliga innehållskort behåller Android-bakåt för
+    // att kollapsa på plats.
+    if (!containsNavigation) {
+      window.history.pushState({ myfloveExpanded: ariaLabel }, "");
+      window.addEventListener("popstate", onPop);
+    }
 
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpen(false);
@@ -107,12 +115,13 @@ export function ExpandableBlock({
     window.addEventListener("keydown", onKey);
 
     return () => {
-      window.removeEventListener("popstate", onPop);
+      if (!containsNavigation) window.removeEventListener("popstate", onPop);
       window.removeEventListener("keydown", onKey);
       // Rensa bara det tillfälliga history-läget om vi fortfarande är kvar på
       // samma sida. Om kortet avmonteras för att en länk inuti navigerade
       // vidare får vi INTE hoppa tillbaka – då ogörs navigationen.
       if (
+        !containsNavigation &&
         window.history.state?.myfloveExpanded === ariaLabel &&
         window.location.pathname === openedPath
       ) {
