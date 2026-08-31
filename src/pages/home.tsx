@@ -33,7 +33,7 @@ import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { useFlowSettings } from "@/hooks/use-flow-settings";
 
 /**
- * Fyra vanliga situationer, formulerade som användarens egen tanke.
+ * Tre vanliga situationer, formulerade som användarens egen tanke.
  * Ersätter produktnamn som "QuickFlow" och "Planera" på startsidan.
  */
 interface Situation {
@@ -266,7 +266,7 @@ export default function Home() {
               titleText="Vad behöver du just nu"
               area="hem"
               icon={Compass}
-              subtitle="Fyra vanliga situationer"
+              subtitle="Tre vanliga situationer"
               status="Välj väg"
               tone="lavender"
               surface="lavender"
