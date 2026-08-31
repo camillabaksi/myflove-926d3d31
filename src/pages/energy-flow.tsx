@@ -56,15 +56,7 @@ interface Props {
 }
 
 /** Liten horisontell nyckeltalsruta – används i Dagens balans. */
-function BalanceStat({
-  emoji,
-  label,
-  value,
-}: {
-  emoji: string;
-  label: string;
-  value: string;
-}) {
+function BalanceStat({ emoji, label, value }: { emoji: string; label: string; value: string }) {
   return (
     <div className="min-w-0 rounded-2xl bg-card/70 px-2 py-3 text-center">
       <div className="text-lg leading-none" aria-hidden>
@@ -361,9 +353,7 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
                     </button>
                   </span>
 
-                  {e.note && (
-                    <p className="w-full text-xs text-muted-foreground">{e.note}</p>
-                  )}
+                  {e.note && <p className="w-full text-xs text-muted-foreground">{e.note}</p>}
                 </li>
               ))}
             </ul>
