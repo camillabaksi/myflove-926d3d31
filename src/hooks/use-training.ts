@@ -17,6 +17,8 @@ export interface TrainingGoal {
   daysPerWeek: number;
   minutesPerSession: number;
   level: "nybörjare" | "van" | "erfaren";
+  /** Valda veckodagar för passen, t.ex. ["Måndag","Torsdag"] */
+  days?: string[];
   equipment?: string;
   limitations?: string;
 }
