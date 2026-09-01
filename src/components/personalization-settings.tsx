@@ -84,8 +84,7 @@ export function PersonalizationSettings() {
           })}
         </div>
         <p className="mt-3 text-xs text-muted-foreground">
-          Temat ändrar bara appens känsla. Färger som betyder något – energi, status, varning och
-          bekräftelse – ser likadana ut i alla teman.
+          Energi- och varningsfärger ser likadana ut i alla teman.
         </p>
       </MyFloveBlock>
 
@@ -96,7 +95,9 @@ export function PersonalizationSettings() {
         tone="mint"
         surface="mint"
         collapsible
+        defaultCollapsed
         collapseId="anpassa::alarmsignal"
+        status={activeSound ? `Valt: ${activeSound.label}` : undefined}
         data-testid="personalization-sound"
       >
         <div className="space-y-2">
