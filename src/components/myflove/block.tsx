@@ -123,7 +123,7 @@ export function MyFloveBlock({
       {...areaProps(area)}
       data-expanded={!collapsed}
       className={cn(
-        "flex min-w-0 h-full flex-col gap-3 rounded-3xl border-2 border-border/60 p-3 shadow-soft sm:gap-4 sm:p-5",
+        "flex min-w-0 h-auto flex-col gap-3 rounded-3xl border-2 border-border/60 p-3 shadow-soft data-[expanded='false']:min-h-[10rem] data-[expanded='false']:max-h-[12rem] data-[expanded='false']:justify-center sm:gap-4 sm:p-5",
         area && "area-border",
         surface ? SURFACE[surface] : "bg-card",
         span && "col-span-full",
