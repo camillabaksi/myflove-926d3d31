@@ -49,7 +49,7 @@ export function QuickflowPriority() {
   const { openItems, doneItems, intro, add, update, remove, move, clear, splitItem } =
     usePriorityList();
   const { reading } = useEnergyBattery();
-  const { addTask } = useTasks();
+  const { tasks, addTask, updateTask } = useTasks();
   const { toast } = useToast();
   const navigate = useNavigate();
   const clarify = useServerFn(clarifyQuickflowTask);
@@ -108,23 +108,32 @@ export function QuickflowPriority() {
   const confirmPlan = (choice: PlanChoice) => {
     const item = planFor;
     if (!item) return;
-    // Innehåller texten flera saker? Lägg in dem som enskilda aktiviteter.
-    const parts = splitTasks(item.title);
-    const titles = parts.length > 1 ? parts : [item.title];
-    titles.forEach((t) =>
-      addTask(t, choice.dueDate, {
+    const linkedTask = tasks.find((task) => task.quickflowId === item.id);
+    if (linkedTask) {
+      // Planering ändrar den gemensamma posten – den får aldrig kopieras.
+      updateTask(linkedTask.id, {
+        dueDate: choice.dueDate,
         time: choice.time,
-        area: guessArea(t),
-      }),
-    );
-    remove(item.id);
+        endTime: undefined,
+        reminderMinutesBefore: undefined,
+      });
+    } else {
+      // Skydd för äldre data som ännu inte hunnit migreras till Idag.
+      addTask(item.title, choice.dueDate, {
+        id: item.id,
+        quickflowId: item.id,
+        quickflowBucket: item.bucket,
+        quickflowOrder: item.order,
+        area: guessArea(item.title),
+        time: choice.time,
+      });
+    }
     setPlanFor(null);
     const day = choice.dueDate === todayISO() ? "idag" : choice.dueDate;
-    const what = titles.length > 1 ? `${titles.length} saker inlagda` : "Inlagd";
     toast({
       description: choice.time
-        ? `${what} i kalendern ${day} kl ${choice.time}.`
-        : `${what} i kalendern ${day} – utan tid.`,
+        ? `Planerad i kalendern ${day} kl ${choice.time}.`
+        : `Planerad i kalendern ${day} – utan tid.`,
     });
     navigate({ to: "/kalender" });
   };

@@ -134,23 +134,32 @@ export function useTasks() {
 
   useEffect(() => {
     const onQuickflowSync = (event: Event) => {
-      const detail = (event as CustomEvent<{
-        source?: string;
-        id?: string;
-        patch?: { title?: string; done?: boolean; doneAt?: number; bucket?: Task["quickflowBucket"]; order?: number };
-      }>).detail;
+      const detail = (
+        event as CustomEvent<{
+          source?: string;
+          id?: string;
+          patch?: {
+            title?: string;
+            done?: boolean;
+            doneAt?: number;
+            bucket?: Task["quickflowBucket"];
+            order?: number;
+          };
+        }>
+      ).detail;
       if (detail?.source !== "priority" || !detail.id || !detail.patch) return;
+      const quickflowId = detail.id;
+      const patch = detail.patch;
       setTasks((prev) =>
         prev.map((task) => {
-          if (task.quickflowId !== detail.id) return task;
-          const patch = detail.patch;
+          if (task.quickflowId !== quickflowId) return task;
           return {
             ...task,
             ...(patch.title !== undefined ? { title: patch.title } : {}),
             ...(patch.done !== undefined
               ? {
                   completed: patch.done,
-                  completedAt: patch.done ? patch.doneAt ?? Date.now() : undefined,
+                  completedAt: patch.done ? (patch.doneAt ?? Date.now()) : undefined,
                   status: patch.done ? "klart" : "pagar",
                 }
               : {}),

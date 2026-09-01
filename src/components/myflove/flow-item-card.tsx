@@ -82,11 +82,11 @@ export function FlowItemCard({
             </span>
             {when && <span className="rounded-pill bg-lavender px-2 py-0.5 text-ink">{when}</span>}
             <span className="inline-flex items-center gap-1 rounded-pill bg-muted px-2 py-0.5 text-muted-foreground">
-              {item.quickflowId && item.source === "uppgift" && item.priority === "nu" && (
-                <span className={`h-2 w-2 rounded-full ${BUCKET_META.nu.dot}`} aria-hidden="true" />
-              )}
-              {item.quickflowId && item.source === "uppgift" && item.priority === "idag" && (
-                <span className={`h-2 w-2 rounded-full ${BUCKET_META.sedan.dot}`} aria-hidden="true" />
+              {item.quickflowBucket && (
+                <span
+                  className={`h-2 w-2 rounded-full ${BUCKET_META[item.quickflowBucket].dot}`}
+                  aria-hidden="true"
+                />
               )}
               {PRIORITY_LABEL[item.priority]}
             </span>

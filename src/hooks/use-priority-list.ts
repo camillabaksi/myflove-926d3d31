@@ -33,17 +33,13 @@ export function usePriorityList() {
     (next: PriorityTask[]) =>
       setItems((prev) => {
         const base = prev ?? [];
-        const newKeys = new Set(
-          next.map((i) => normalizeQuickflowText(i.title)).filter(Boolean),
-        );
+        const newKeys = new Set(next.map((i) => normalizeQuickflowText(i.title)).filter(Boolean));
         const existingOpen = new Map(
           base
             .filter((item) => !item.done)
             .map((item) => [normalizeQuickflowText(item.title), item]),
         );
-        const kept = base.filter(
-          (i) => i.done || !newKeys.has(normalizeQuickflowText(i.title)),
-        );
+        const kept = base.filter((i) => i.done || !newKeys.has(normalizeQuickflowText(i.title)));
         const merged = next.map((item) => {
           const existing = existingOpen.get(normalizeQuickflowText(item.title));
           return existing ? { ...item, id: existing.id } : item;
@@ -113,11 +109,13 @@ export function usePriorityList() {
 
   useEffect(() => {
     const onTaskSync = (event: Event) => {
-      const detail = (event as CustomEvent<{
-        source?: string;
-        id?: string;
-        patch?: Partial<PriorityTask>;
-      }>).detail;
+      const detail = (
+        event as CustomEvent<{
+          source?: string;
+          id?: string;
+          patch?: Partial<PriorityTask>;
+        }>
+      ).detail;
       if (detail?.source !== "task" || !detail.id || !detail.patch) return;
       setItems((prev) =>
         (prev ?? []).map((item) => (item.id === detail.id ? { ...item, ...detail.patch } : item)),

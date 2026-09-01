@@ -102,6 +102,7 @@ export function useFlowItems(dateISO?: string): {
         energyReason: friction?.reason,
         nextStep,
         quickflowId: t.quickflowId,
+        quickflowBucket: t.quickflowBucket,
         order: t.quickflowOrder,
         done: t.completed,
         completable: true,
