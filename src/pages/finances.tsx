@@ -109,7 +109,7 @@ export default function Finances() {
         </MyFloveWide>
 
         <MyFloveWide>
-          <MyFloveBlock title="Ny transaktion">
+          <div className="rounded-3xl border-2 border-border/60 bg-card p-3 sm:p-5 shadow-soft">
             <CollapsibleSection
               title="Ny transaktion"
               help="Här skriver du in pengar in eller ut. Välj typ, skriv summa och vad det gällde – det räcker."
@@ -222,7 +222,7 @@ export default function Finances() {
 
         {transactions.length > 0 && (
           <MyFloveWide>
-            <MyFloveBlock title="Senaste transaktioner">
+            <div className="rounded-3xl border-2 border-border/60 bg-card p-3 sm:p-5 shadow-soft">
               <CollapsibleSection
                 title="Senaste transaktioner"
                 help="De tio senaste sakerna du lagt in. Bra för att snabbt se vart pengarna tog vägen."
@@ -273,7 +273,7 @@ export default function Finances() {
                   ))}
                 </div>
               </CollapsibleSection>
-            </MyFloveBlock>
+            </div>
           </MyFloveWide>
         )}
       </MyFlovePageGrid>
