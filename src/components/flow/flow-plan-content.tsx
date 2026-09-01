@@ -542,8 +542,3 @@ export function FlowPlanContent() {
     </MyFlovePageGrid>
   );
 }
-
-/** Egen adress för planeringsläget – renderar den gemensamma Flow-vyn. */
-export default function FlowPlanPage() {
-  return <FlowView initialTab="planera" />;
-}

@@ -4,8 +4,8 @@ import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { track } from "@/lib/analytics";
 import FlowDeck from "@/components/flow/flow-deck";
 import FlowTabs, { type FlowTab } from "@/components/flow/flow-tabs";
-import { FlowPlanContent } from "@/pages/flowplan";
-import { AssistantContent } from "@/pages/assistant";
+import { FlowPlanContent } from "@/components/flow/flow-plan-content";
+import { AssistantContent } from "@/components/flow/assistant-content";
 
 /**
  * En enda Flow-vy: hjälpen, planeringen och chatten är lägen i samma sida.

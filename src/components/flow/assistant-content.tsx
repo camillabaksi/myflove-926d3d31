@@ -676,7 +676,3 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
     </>
   );
 }
-
-export default function Assistant({ chatId }: { chatId?: string }) {
-  return <FlowView initialTab="chatt" chatId={chatId} />;
-}
