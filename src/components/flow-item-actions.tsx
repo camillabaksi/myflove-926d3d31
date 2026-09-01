@@ -176,7 +176,7 @@ function FlowItemEditDialog({ itemId, onClose }: { itemId: string; onClose: () =
       note: "",
       area: "vardag" as LifeArea,
     };
-  }, [source, kind, priorityItems, thoughts, tasks, reminders]);
+  }, [source, kind]);
 
   const [form, setForm] = useState(
     initial ?? { title: "", date: "", time: "", endTime: "", note: "", area: "vardag" as LifeArea },
