@@ -120,4 +120,3 @@ export async function migratePendingEnergy(
 
   return { migrated, remaining, inserted };
 }
-
