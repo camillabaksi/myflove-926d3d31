@@ -18,6 +18,7 @@ export type FlowItemSource =
   | "barn"
   | "rutin"
   | "tanke"
+  | "quickflow"
   | "gjort";
 
 export type FlowPriority = "nu" | "idag" | "snart" | "senare";
@@ -43,6 +44,8 @@ export interface FlowItem {
   /** Nästa lilla steg – aldrig hela berget. */
   nextStep?: string;
   done?: boolean;
+  /** Användarens egen ordning (QuickFlow) – lägre nummer först. */
+  order?: number;
   /**
    * Kan användaren rimligen säga "det där har jag gjort"? Då ska det gå att
    * bocka av – oavsett om det tekniskt är en uppgift, händelse eller rutin.
@@ -60,6 +63,7 @@ export const SOURCE_LABEL: Record<FlowItemSource, string> = {
   barn: "Barnen",
   rutin: "Rutin",
   tanke: "Tanke",
+  quickflow: "QuickFlow",
   gjort: "Gjort",
 };
 
@@ -131,6 +135,8 @@ export function sortFlowItems(items: FlowItem[]): FlowItem[] {
   return [...items].sort((a, b) => {
     const p = PRIORITY_RANK[a.priority] - PRIORITY_RANK[b.priority];
     if (p !== 0) return p;
+    if (typeof a.order === "number" && typeof b.order === "number" && a.order !== b.order)
+      return a.order - b.order;
     if (a.time && b.time) return a.time.localeCompare(b.time);
     if (a.time) return -1;
     if (b.time) return 1;
