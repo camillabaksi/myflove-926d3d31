@@ -153,7 +153,7 @@ export function PersonalizationSettings() {
         status={activeFormat ? `Valt: ${activeFormat.label}` : undefined}
         data-testid="personalization-format"
       >
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
           {ALARM_FORMATS.map((format) => {
             const active = personalization.alarmFormat === format.id;
             return (
@@ -163,12 +163,12 @@ export function PersonalizationSettings() {
                 onClick={() => chooseFormat(format.id)}
                 aria-pressed={active}
                 className={cn(
-                  "flex items-center gap-2 rounded-2xl border-2 bg-card/70 p-3 text-left text-sm font-medium text-ink transition",
+                  "flex aspect-square h-auto min-h-[5.5rem] flex-col items-start gap-2 rounded-2xl border-2 bg-card/70 p-3 text-left text-sm font-medium text-ink transition",
                   active ? "border-primary" : "border-border/50 hover:border-border",
                 )}
               >
-                <span aria-hidden>{format.icon}</span>
-                <span className="min-w-0 truncate">{format.label}</span>
+                <span aria-hidden className="text-lg leading-none">{format.icon}</span>
+                <span className="min-w-0 leading-tight">{format.label}</span>
               </button>
             );
           })}
