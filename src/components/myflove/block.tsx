@@ -100,9 +100,15 @@ export function MyFloveBlock({
             {eyebrow}
           </span>
         )}
-        <h2 className="font-display text-base font-bold leading-tight text-ink line-clamp-1">{title}</h2>
-        {subtitle && <p className="mt-0.5 text-sm text-muted-foreground line-clamp-1">{subtitle}</p>}
-        {status && collapsed && <div className="mt-1.5 text-sm text-ink line-clamp-1">{status}</div>}
+        <h2 className="font-display text-base font-bold leading-tight text-ink line-clamp-1">
+          {title}
+        </h2>
+        {subtitle && (
+          <p className="mt-0.5 text-sm text-muted-foreground line-clamp-1">{subtitle}</p>
+        )}
+        {status && collapsed && (
+          <div className="mt-1.5 text-sm text-ink line-clamp-1">{status}</div>
+        )}
       </div>
       {collapsible && (
         <ChevronDown
