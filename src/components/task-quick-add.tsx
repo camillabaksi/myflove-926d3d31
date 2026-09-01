@@ -149,7 +149,7 @@ export function TaskQuickAdd({
                   </button>
                 ))}
               </div>
-              <div className="grid grid-cols-2 gap-2 pt-1">
+              <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2 pt-1">
                 <Input
                   type="date"
                   value={date}

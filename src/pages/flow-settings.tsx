@@ -107,7 +107,7 @@ export default function FlowSettingsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-3">
             <div className="space-y-1.5">
               <Label htmlFor="flow-from" className="text-sm font-normal">
                 Tidigast

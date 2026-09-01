@@ -1343,7 +1343,7 @@ export function CalendarContent() {
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium">Upprepa</label>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2">
                   {(
                     [
                       ["none", "Bara en gång"],
@@ -1457,7 +1457,7 @@ export function CalendarContent() {
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2">
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Börjar (valfritt)</label>
                     <Input
@@ -1504,7 +1504,7 @@ export function CalendarContent() {
                 {editing.kind === "task" && (
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Vart hör det hemma?</label>
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2">
                       {ALL_AREAS.map((a) => (
                         <button
                           key={a}
@@ -1526,7 +1526,7 @@ export function CalendarContent() {
                 {editing.kind === "reminder" && (
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Upprepa</label>
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2">
                       {(
                         [
                           ["none", "Bara en gång"],
@@ -1700,7 +1700,7 @@ export function CalendarContent() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-3">
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Starttid (valfritt)</label>
                   <Input

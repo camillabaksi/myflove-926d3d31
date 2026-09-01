@@ -108,7 +108,7 @@ export default function AdminStats() {
 
         {data && (
           <>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] md:grid-cols-3 gap-4">
               <div className="bg-card p-5 rounded-3xl border-2 border-border shadow-sm space-y-1">
                 <Users size={20} className="text-primary" />
                 <p className="text-2xl font-bold">{data.totalUsers ?? 0}</p>
@@ -147,7 +147,7 @@ export default function AdminStats() {
               className="bg-card p-6 rounded-3xl border-2 border-border shadow-sm"
               description="Sammanslagna mått som visar om appen faktiskt hjälper — helt utan personlig data."
             >
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] md:grid-cols-3 gap-4">
                 {[
                   {
                     label: "Händelser per besökare",

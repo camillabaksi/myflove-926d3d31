@@ -270,7 +270,7 @@ function FlowItemEditDialog({ itemId, onClose }: { itemId: string; onClose: () =
             </label>
 
             {(kind === "uppgift" || kind === "kalender") && (
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-3">
                 <label className="space-y-1 text-sm">
                   <span className="text-muted-foreground">Datum</span>
                   <Input

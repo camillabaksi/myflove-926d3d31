@@ -142,7 +142,7 @@ export default function CleaningPage() {
         </MyFloveWide>
 
         {/* Läge */}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-3">
           {(["vardag", "stor"] as CleanMode[]).map((m) => (
             <button
               key={m}

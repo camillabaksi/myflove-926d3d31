@@ -79,7 +79,7 @@ function ReminderRow({
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Vad gäller det?"
         />
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2">
           <input
             className={inputClass}
             type="date"
@@ -290,7 +290,7 @@ export default function RemindersPage() {
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Vad ska du påminnas om?"
             />
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2">
               <input
                 className={inputClass}
                 type="date"
@@ -304,7 +304,7 @@ export default function RemindersPage() {
                 onChange={(e) => setTime(e.target.value)}
               />
             </div>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2">
               <select
                 className={inputClass}
                 value={repeat}

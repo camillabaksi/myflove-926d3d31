@@ -199,7 +199,7 @@ export default function Pomodoro() {
               </div>
 
               {!isRunning && (
-                <div className="grid grid-cols-2 gap-6 w-full pt-2 animate-in fade-in">
+                <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-6 w-full pt-2 animate-in fade-in">
                   <div className="flex flex-col items-center gap-2">
                     <p className="text-sm text-muted-foreground">Fokus (min)</p>
                     <div className="flex items-center gap-3">

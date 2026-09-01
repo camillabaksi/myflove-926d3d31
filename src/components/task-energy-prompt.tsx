@@ -65,7 +65,7 @@ export function TaskEnergyPrompt({
             {ENERGY_IMPACT_META[expected].label.toLowerCase()} innan.
           </p>
         )}
-        <div className="grid grid-cols-2 gap-2 pt-1">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2 pt-1">
           {ENERGY_IMPACTS.map((id) => (
             <button
               key={id}

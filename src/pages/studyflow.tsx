@@ -270,7 +270,7 @@ export default function StudyflowPage() {
             </header>
 
             <Tabs defaultValue="nu" className="w-full">
-              <TabsList className="grid w-full grid-cols-2 rounded-full">
+              <TabsList className="grid w-full grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] rounded-full">
                 <TabsTrigger value="nu" className="rounded-full">
                   Plugga nu
                 </TabsTrigger>

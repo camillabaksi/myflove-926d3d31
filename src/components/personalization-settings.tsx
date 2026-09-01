@@ -144,7 +144,7 @@ export function PersonalizationSettings() {
         collapseId="anpassa::alarmformat"
         data-testid="personalization-format"
       >
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2">
           {ALARM_FORMATS.map((format) => {
             const active = personalization.alarmFormat === format.id;
             return (

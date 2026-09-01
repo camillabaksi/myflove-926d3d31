@@ -727,7 +727,7 @@ export default function Layout({ children }: LayoutProps) {
                 {cat.label}
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-3">
                 {cat.items.map((item) => {
                   const isActive = location === item.href;
                   const Icon = item.icon;
@@ -1139,7 +1139,7 @@ export default function Layout({ children }: LayoutProps) {
                   <p className="mb-2 text-xs text-muted-foreground/80">
                     Allt som hör till studier, jobb, hem och relationer.
                   </p>
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-3">
                     {categories
                       .filter((cat) =>
                         simpleMode ? cat.items.some((i) => i.essential) : cat.items.length > 0,
