@@ -86,7 +86,6 @@ export const CLOUD_USER_DATA_KEYS = new Set([
   "myflove-courses",
   "myflove-done-log",
   "myflove-daily-checkin",
-  "myflove-flow-reset",
   "myflove-situation",
   "myflove-work-projects",
   "myflove-flowstudy",
@@ -103,7 +102,12 @@ export const CLOUD_USER_DATA_KEYS = new Set([
   "myflove-area-customization",
   "myflove-home-layout",
   "myflove-relations",
+  "myflove-energy-flow-settings",
+  "myflove-cleaning-done",
+  "myflove-cleaning-custom",
+  "myflove-cleaning-hidden",
 ]);
+
 /** Lista över nycklar som hanteras av molnsynken (device-nyckel, rensas ej). */
 export const CLOUD_KEYS_REGISTRY = "myflove-cloud-keys";
 

@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-01";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Flow följer adressen och all lokal data skyddas",
+    items: [
+      "Flow-flikarna navigerar via adressen, så uppdatering, delning och bakåtknappen öppnar samma läge som du valde (2026-09-01)",
+      "Manifestet över molnsynkade nycklar täcker även städning och energiinställningar, och ett test larmar om en ny nyckel glöms bort (2026-09-01)",
+      "Utloggning behåller osynkad data även om sidans hook aldrig hann monteras i sessionen (2026-09-01)",
+    ],
+  },
+  {
     title: "Flow samlar hjälp, planering och chatt",
     items: [
       "Flow, FlowPlan och Assistant visas som lägen i samma vy med flikarna Flow, Planera och Chatta (2026-09-01)",
