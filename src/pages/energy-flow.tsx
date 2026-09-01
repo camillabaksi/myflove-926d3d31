@@ -216,7 +216,7 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
           collapsible
           status={`Netto ${balance.net > 0 ? "+" : ""}${balance.net}`}
         >
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,7rem),1fr))] gap-2">
             <BalanceStat emoji="🔋" label="Gett energi" value={`+${balance.gives}`} />
             <BalanceStat emoji="🪫" label="Tagit energi" value={`−${balance.drains}`} />
             <BalanceStat

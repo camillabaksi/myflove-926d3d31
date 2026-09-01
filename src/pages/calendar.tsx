@@ -1115,7 +1115,7 @@ export function CalendarContent() {
                             {e.sharedWith.length > 0 && " · delad"}
                           </div>
                           <div
-                            className={`text-lg font-medium truncate ${e.completed ? "line-through opacity-60" : ""}`}
+                            className={`text-lg font-medium line-clamp-2 break-words ${e.completed ? "line-through opacity-60" : ""}`}
                           >
                             {e.title}
                           </div>
@@ -1203,7 +1203,9 @@ export function CalendarContent() {
                             : "Påminnelse"}{" "}
                           {r.time && `kl ${r.time}${r.endTime ? `–${r.endTime}` : ""}`}
                         </div>
-                        <div className="text-lg font-medium truncate">{r.title}</div>
+                        <div className="text-lg font-medium line-clamp-2 break-words">
+                          {r.title}
+                        </div>
                         {r.note && (
                           <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">
                             {r.note}
@@ -1269,7 +1271,7 @@ export function CalendarContent() {
                           </div>
                         )}
                         <div
-                          className={`text-lg font-medium truncate ${t.completed ? "line-through text-muted-foreground" : ""}`}
+                          className={`text-lg font-medium line-clamp-2 break-words ${t.completed ? "line-through text-muted-foreground" : ""}`}
                         >
                           {t.title}
                         </div>

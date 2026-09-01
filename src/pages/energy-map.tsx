@@ -182,7 +182,7 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
             description="Välj det som passar närmast – det finns inga fel svar."
             className="rounded-2xl bg-card border border-border p-5 shadow-sm"
           >
-            <div className="grid grid-cols-5 gap-2">
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,4.5rem),1fr))] gap-2">
               {[1, 2, 3, 4, 5].map((lvl) => {
                 const active = selected === lvl;
                 return (

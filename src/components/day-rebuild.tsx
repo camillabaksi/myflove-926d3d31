@@ -123,7 +123,7 @@ export default function DayRebuild() {
               >
                 <span>{PRIORITY_DOT[item.priority]}</span>
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium text-ink truncate">{item.task.title}</p>
+                  <p className="font-medium text-ink line-clamp-2 break-words">{item.task.title}</p>
                   <p className="text-xs text-muted-foreground">
                     {item.minutes} min · {FRICTION_LABEL(item.friction)}
                   </p>
