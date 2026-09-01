@@ -1,10 +1,10 @@
 import { useState } from "react";
 import Layout from "@/components/layout";
-import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
+import { MyFlovePageGrid, MyFloveWide, MyFloveBlock, MyFloveStat } from "@/components/myflove/block";
 import { useFinances, Transaction } from "@/hooks/use-data";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus, Trash2, TrendingDown, TrendingUp } from "lucide-react";
+import { Plus, Trash2, TrendingDown, TrendingUp, Wallet } from "lucide-react";
 import BudgetPanel from "@/components/budget-panel";
 import { MyFloveHeader } from "@/components/myflove";
 import { MyFloveBalanceBars } from "@/components/myflove/motion";
@@ -77,161 +77,161 @@ export default function Finances() {
     <Layout>
       <MyFlovePageGrid area="hem">
         <MyFloveWide>
-          <div className="space-y-8">
-            <MyFloveHeader
-              title="Din ekonomi"
-              emojiKey="finance"
-              description="Den här månaden – inkomster, utgifter och det som är på väg."
+          <MyFloveHeader
+            title="Din ekonomi"
+            emojiKey="finance"
+            description="Den här månaden – inkomster, utgifter och det som är på väg."
+          />
+        </MyFloveWide>
+
+        <MyFloveWide>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+            <MyFloveStat label="Inkomster" value={`+${totalIncome} kr`} />
+            <MyFloveStat label="Utgifter" value={`-${totalExpense} kr`} />
+            <MyFloveStat label="Kvar" value={`${balance} kr`} tone="lavender" className="col-span-2 sm:col-span-1" />
+          </div>
+        </MyFloveWide>
+
+        <MyFloveWide>
+          <MyFloveBlock title="Balans den här månaden" icon={Wallet}>
+            <MyFloveBalanceBars
+              bars={[
+                { label: "In", value: totalIncome, tone: "mint" },
+                { label: "Ut", value: totalExpense, tone: "blush" },
+                { label: "Kvar", value: Math.max(0, balance), tone: "primary" },
+              ]}
             />
+          </MyFloveBlock>
+        </MyFloveWide>
 
-            <div className="grid grid-cols-3 gap-4">
-              <div className="bg-card p-4 rounded-2xl border border-border shadow-sm flex flex-col items-center justify-center text-center">
-                <span className="text-sm text-muted-foreground mb-1">Inkomster</span>
-                <span className="text-xl font-semibold text-primary">+{totalIncome} kr</span>
-              </div>
-              <div className="bg-card p-4 rounded-2xl border border-border shadow-sm flex flex-col items-center justify-center text-center">
-                <span className="text-sm text-muted-foreground mb-1">Utgifter</span>
-                <span className="text-xl font-semibold text-destructive">-{totalExpense} kr</span>
-              </div>
-              <div className="bg-primary/10 p-4 rounded-2xl border border-primary/20 shadow-sm flex flex-col items-center justify-center text-center">
-                <span className="text-sm text-primary mb-1">Kvar</span>
-                <span className="text-xl font-bold text-primary">{balance} kr</span>
-              </div>
-            </div>
+        <MyFloveWide>
+          <BudgetPanel transactions={transactions} categories={CATEGORIES} />
+        </MyFloveWide>
 
-            <div className="rounded-3xl border-2 border-border/60 bg-card p-5 shadow-soft">
-              <p className="mb-3 text-sm font-semibold text-ink">Balans den här månaden</p>
-              <MyFloveBalanceBars
-                bars={[
-                  { label: "In", value: totalIncome, tone: "mint" },
-                  { label: "Ut", value: totalExpense, tone: "blush" },
-                  { label: "Kvar", value: Math.max(0, balance), tone: "primary" },
-                ]}
-              />
-            </div>
+        <MyFloveWide>
+          <MyFloveBlock title="Ny transaktion">
+            <CollapsibleSection
+              title="Ny transaktion"
+              help="Här skriver du in pengar in eller ut. Välj typ, skriv summa och vad det gällde – det räcker."
+            >
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="flex bg-secondary/50 p-1 rounded-xl">
+                  <button
+                    type="button"
+                    onClick={() => setType("expense")}
+                    className={`flex-1 py-2 px-4 rounded-lg font-medium transition-all ${type === "expense" ? "bg-background shadow-soft text-foreground" : "text-muted-foreground"}`}
+                  >
+                    Utgift
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setType("income")}
+                    className={`flex-1 py-2 px-4 rounded-lg font-medium transition-all ${type === "income" ? "bg-background shadow-soft text-foreground" : "text-muted-foreground"}`}
+                  >
+                    Inkomst
+                  </button>
+                </div>
 
-            <BudgetPanel transactions={transactions} categories={CATEGORIES} />
-
-            <div className="bg-card p-6 rounded-3xl border-2 border-border shadow-sm">
-              <CollapsibleSection
-                title="Ny transaktion"
-                help="Här skriver du in pengar in eller ut. Välj typ, skriv summa och vad det gällde – det räcker."
-              >
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="flex bg-secondary/50 p-1 rounded-xl">
-                    <button
-                      type="button"
-                      onClick={() => setType("expense")}
-                      className={`flex-1 py-2 px-4 rounded-lg font-medium transition-all ${type === "expense" ? "bg-background shadow-sm text-foreground" : "text-muted-foreground"}`}
-                    >
-                      Utgift
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setType("income")}
-                      className={`flex-1 py-2 px-4 rounded-lg font-medium transition-all ${type === "income" ? "bg-background shadow-sm text-foreground" : "text-muted-foreground"}`}
-                    >
-                      Inkomst
-                    </button>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Belopp (kr)</label>
+                    <Input
+                      type="number"
+                      value={amount}
+                      onChange={(e) => setAmount(e.target.value)}
+                      placeholder="0"
+                      className="h-14 text-lg rounded-2xl"
+                      required
+                      min="1"
+                    />
                   </div>
 
-                  <div className="space-y-4">
+                  {type === "expense" && (
                     <div>
-                      <label className="block text-sm font-medium mb-1">Belopp (kr)</label>
-                      <Input
-                        type="number"
-                        value={amount}
-                        onChange={(e) => setAmount(e.target.value)}
-                        placeholder="0"
-                        className="h-14 text-lg rounded-2xl"
-                        required
-                        min="1"
-                      />
+                      <label className="block text-sm font-medium mb-1">Kategori</label>
+                      <div className="flex flex-wrap gap-2">
+                        {CATEGORIES.map((cat) => (
+                          <button
+                            key={cat}
+                            type="button"
+                            onClick={() => setCategory(cat)}
+                            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+                              category === cat
+                                ? "bg-primary text-primary-foreground"
+                                : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                            }`}
+                          >
+                            {cat}
+                          </button>
+                        ))}
+                      </div>
                     </div>
+                  )}
 
-                    {type === "expense" && (
-                      <div>
-                        <label className="block text-sm font-medium mb-1">Kategori</label>
-                        <div className="flex flex-wrap gap-2">
-                          {CATEGORIES.map((cat) => (
-                            <button
-                              key={cat}
-                              type="button"
-                              onClick={() => setCategory(cat)}
-                              className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
-                                category === cat
-                                  ? "bg-primary text-primary-foreground"
-                                  : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-                              }`}
-                            >
-                              {cat}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {type === "expense" && (
-                      <div>
-                        <label className="block text-sm font-medium mb-1">Status</label>
-                        <div className="flex bg-secondary/50 p-1 rounded-xl mb-3">
-                          <button
-                            type="button"
-                            onClick={() => setBillStatus("paid")}
-                            className={`flex-1 py-2 px-4 rounded-lg font-medium transition-all ${billStatus === "paid" ? "bg-background shadow-sm text-foreground" : "text-muted-foreground"}`}
-                          >
-                            Redan betald
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => setBillStatus("upcoming")}
-                            className={`flex-1 py-2 px-4 rounded-lg font-medium transition-all ${billStatus === "upcoming" ? "bg-background shadow-sm text-foreground" : "text-muted-foreground"}`}
-                          >
-                            Kommande räkning
-                          </button>
-                        </div>
-                        {billStatus === "upcoming" && (
-                          <Input
-                            type="date"
-                            value={billDate}
-                            onChange={(e) => setBillDate(e.target.value)}
-                            className="h-12 rounded-xl"
-                          />
-                        )}
-                      </div>
-                    )}
-
+                  {type === "expense" && (
                     <div>
-                      <label className="block text-sm font-medium mb-1">
-                        Anteckning (frivillig)
-                      </label>
-                      <Input
-                        value={note}
-                        onChange={(e) => setNote(e.target.value)}
-                        placeholder="T.ex. ICA, Hyra..."
-                        className="h-12 rounded-xl"
-                      />
+                      <label className="block text-sm font-medium mb-1">Status</label>
+                      <div className="flex bg-secondary/50 p-1 rounded-xl mb-3">
+                        <button
+                          type="button"
+                          onClick={() => setBillStatus("paid")}
+                          className={`flex-1 py-2 px-4 rounded-lg font-medium transition-all ${billStatus === "paid" ? "bg-background shadow-soft text-foreground" : "text-muted-foreground"}`}
+                        >
+                          Redan betald
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setBillStatus("upcoming")}
+                          className={`flex-1 py-2 px-4 rounded-lg font-medium transition-all ${billStatus === "upcoming" ? "bg-background shadow-soft text-foreground" : "text-muted-foreground"}`}
+                        >
+                          Kommande räkning
+                        </button>
+                      </div>
+                      {billStatus === "upcoming" && (
+                        <Input
+                          type="date"
+                          value={billDate}
+                          onChange={(e) => setBillDate(e.target.value)}
+                          className="h-12 rounded-xl"
+                        />
+                      )}
                     </div>
+                  )}
+
+                  <div>
+                    <label className="block text-sm font-medium mb-1">
+                      Anteckning (frivillig)
+                    </label>
+                    <Input
+                      value={note}
+                      onChange={(e) => setNote(e.target.value)}
+                      placeholder="T.ex. ICA, Hyra..."
+                      className="h-12 rounded-xl"
+                    />
                   </div>
+                </div>
 
-                  <Button type="submit" className="w-full h-14 rounded-2xl text-lg font-medium">
-                    <Plus className="mr-2" size={24} />
-                    Lägg till
-                  </Button>
-                </form>
-              </CollapsibleSection>
-            </div>
+                <Button type="submit" className="w-full h-14 rounded-2xl text-lg font-medium">
+                  <Plus className="mr-2" size={24} />
+                  Lägg till
+                </Button>
+              </form>
+            </CollapsibleSection>
+          </MyFloveBlock>
+        </MyFloveWide>
 
-            {transactions.length > 0 && (
+        {transactions.length > 0 && (
+          <MyFloveWide>
+            <MyFloveBlock title="Senaste transaktioner">
               <CollapsibleSection
                 title="Senaste transaktioner"
                 help="De tio senaste sakerna du lagt in. Bra för att snabbt se vart pengarna tog vägen."
               >
-                <div className="space-y-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {transactions.slice(0, 10).map((t) => (
                     <div
                       key={t.id}
-                      className="flex items-center justify-between p-4 bg-card border border-border rounded-2xl shadow-sm"
+                      className="flex items-center justify-between p-4 bg-card border border-border rounded-2xl shadow-soft"
                     >
                       <div className="flex items-center gap-4">
                         <div
@@ -273,9 +273,9 @@ export default function Finances() {
                   ))}
                 </div>
               </CollapsibleSection>
-            )}
-          </div>
-        </MyFloveWide>
+            </MyFloveBlock>
+          </MyFloveWide>
+        )}
       </MyFlovePageGrid>
     </Layout>
   );
