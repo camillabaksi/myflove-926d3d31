@@ -51,7 +51,7 @@ export function linkForPriority(key: FlowPriorityKey): { href: string; label: st
     case "medicin":
       return { href: "/daglig-rutin", label: "Rutiner & medicin" };
     case "studier":
-      return { href: "/studier", label: "Studier" };
+      return { href: "/studyflow", label: "Studier" };
     case "jobb":
       return { href: "/jobb", label: "Jobb" };
     case "traning":

@@ -104,8 +104,8 @@ export interface MoodEntry {
 const generateId = () => Math.random().toString(36).substr(2, 9);
 
 export function useFocus() {
-  const [focus, setFocus] = useLocalStorage<Focus | null>("myflow-focus", null);
-  const [completedCount, setCompletedCount] = useLocalStorage<number>(
+  const [focus, setFocus] = useCloudSyncedStorage<Focus | null>("myflow-focus", null);
+  const [completedCount, setCompletedCount] = useCloudSyncedStorage<number>(
     "myflow-focus-completed-count",
     0,
   );
@@ -594,7 +594,7 @@ export function useTasks() {
 }
 
 export function useShoppingList() {
-  const [items, setItems] = useLocalStorage<ShoppingItem[]>("myflow-shopping", []);
+  const [items, setItems] = useCloudSyncedStorage<ShoppingItem[]>("myflow-shopping", []);
 
   const addItem = (title: string) => {
     setItems((prev) => [
@@ -623,7 +623,7 @@ export function useShoppingList() {
 // list (see use-shared-shopping-list.ts) so proximity alerts and the dashboard
 // shortcut always have a source of truth even for users without a family.
 export function useActiveShoppingItemCount(): number {
-  const [items] = useLocalStorage<ShoppingItem[]>("myflow-shopping", []);
+  const [items] = useCloudSyncedStorage<ShoppingItem[]>("myflow-shopping", []);
   return items.filter((t) => !t.completed).length;
 }
 
@@ -931,7 +931,7 @@ export interface DumpIdea {
 }
 
 export function useDumpIdeas() {
-  const [ideas, setIdeas] = useLocalStorage<DumpIdea[]>("myflow-dump-ideas", []);
+  const [ideas, setIdeas] = useCloudSyncedStorage<DumpIdea[]>("myflow-dump-ideas", []);
 
   const addIdea = (text: string) => {
     setIdeas([{ id: generateId(), text, createdAt: Date.now() }, ...ideas]);
@@ -968,7 +968,10 @@ export const STORE_RADIUS_OPTIONS: { meters: number; label: string; hint: string
 ];
 
 export function useSavedStores() {
-  const [savedStores, setSavedStores] = useLocalStorage<SavedStore[]>("myflow-saved-stores", []);
+  const [savedStores, setSavedStores] = useCloudSyncedStorage<SavedStore[]>(
+    "myflow-saved-stores",
+    [],
+  );
 
   const addSavedStore = (name: string, lat: number, lon: number) => {
     setSavedStores((prev) => [
@@ -1013,7 +1016,7 @@ export interface SavedTrip {
 }
 
 export function useSavedTrips() {
-  const [savedTrips, setSavedTrips] = useLocalStorage<SavedTrip[]>("myflow-saved-trips", []);
+  const [savedTrips, setSavedTrips] = useCloudSyncedStorage<SavedTrip[]>("myflow-saved-trips", []);
 
   const addSavedTrip = (label: string, from: string, to: string) => {
     setSavedTrips([{ id: generateId(), label, from, to, createdAt: Date.now() }, ...savedTrips]);

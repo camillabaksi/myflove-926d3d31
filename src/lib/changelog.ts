@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-01";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Kritiska data-, genvägs- och mobilfixar",
+    items: [
+      "Osynkad lokal användardata och väntande energiloggar skyddas vid utloggning med bekräftad molnsynk, retry och idempotent migrering (2026-09-01)",
+      "QuickFlow-, studie- och push-CTA:er går direkt till kanoniska routes och kalenderdialoger/bottom sheets får säker mobilhöjd med intern scroll (2026-09-01)",
+    ],
+  },
+  {
     title: "Blockrubriken får ikon ovanför text",
     items: [
       "Ikonen i varje MyFlove-block ligger längst upp till vänster med rubrik, underrubrik och sammanfattning under (2026-09-01)",
