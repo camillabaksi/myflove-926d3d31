@@ -108,7 +108,6 @@ describe("lokal användardata", () => {
     expect(window.localStorage.getItem("myflove-cleaning-done")).not.toBeNull();
   });
 
-
   it("rensar allt vid kontoradering", async () => {
     window.localStorage.setItem("myflove-medications", JSON.stringify(["ritalin"]));
     window.localStorage.setItem("myflove-medications__updated_at", String(Date.now()));

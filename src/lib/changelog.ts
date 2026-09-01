@@ -18,7 +18,6 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     ],
   },
   {
-
     title: "Flow samlar hjälp, planering och chatt",
     items: [
       "Flow, FlowPlan och Assistant visas som lägen i samma vy med flikarna Flow, Planera och Chatta (2026-09-01)",
