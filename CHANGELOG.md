@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-01 – Blocken är mer fyrkantiga och horisontella
+
+- Kollapsade block är tillbaka som kompakta kort (cirka 10 rem höga) i stället för avlånga rektanglar.
+- Rubrik, underrubrik och sammanfattning håller sig på en rad så texten inte trycks ihop vertikalt.
+- Rutnätet låter blocken växa horisontellt och anpassa sig efter bredden i stället för att sträckas till den högsta kolumnen.
+
 ## 2026-09-01 – Anpassa-sidan visar bara det viktigaste
 
 - Inställningsblocken (tema, alarm, integritet m.fl.) är minimerade som standard och visar bara rubrik, underrubrik och en kort sammanfattning av ditt val.
