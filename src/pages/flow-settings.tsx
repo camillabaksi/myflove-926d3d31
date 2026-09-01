@@ -1,8 +1,7 @@
 import { Link } from "wouter";
-import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
+import { MyFlovePageGrid, MyFloveWide, MyFloveBlock } from "@/components/myflove/block";
 import { ArrowLeft, RotateCcw, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
@@ -34,7 +33,7 @@ export default function FlowSettingsPage() {
       </MyFloveWide>
 
       <MyFloveWide>
-        <header className="flex items-center gap-4 rounded-3xl border-2 border-border/60 bg-card p-4 shadow-sm">
+        <header className="flex items-center gap-4 rounded-3xl border-2 border-border/60 bg-card p-4 shadow-soft">
           <div className="shrink-0">
             <FlowCharacter
               scene="hello"
@@ -53,12 +52,8 @@ export default function FlowSettingsPage() {
         </header>
       </MyFloveWide>
 
-      <Card className="rounded-3xl xl:col-span-2">
-        <CardHeader>
-          <CardTitle className="text-base">Hjälpnivå</CardTitle>
-          <CardDescription>Hur mycket plats Flow får ta i vardagen.</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
+      <MyFloveWide span="wide">
+        <MyFloveBlock title="Hjälpnivå" subtitle="Hur mycket plats Flow får ta i vardagen.">
           <div className="flex items-center justify-between gap-3">
             <Label htmlFor="flow-enabled" className="text-sm font-normal">
               Visa Flow i appen
@@ -70,7 +65,7 @@ export default function FlowSettingsPage() {
             />
           </div>
 
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
             {LEVELS.map((l) => (
               <Button
                 key={l.id}
@@ -96,17 +91,14 @@ export default function FlowSettingsPage() {
               onCheckedChange={(v) => update({ learning: v })}
             />
           </div>
-        </CardContent>
-      </Card>
+        </MyFloveBlock>
+      </MyFloveWide>
 
-      <Card className="rounded-3xl">
-        <CardHeader>
-          <CardTitle className="text-base">När får Flow höra av sig?</CardTitle>
-          <CardDescription>
-            Utanför det här fönstret är Flow tyst – han finns kvar men säger inget själv.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
+      <MyFloveWide span="wide">
+        <MyFloveBlock
+          title="När får Flow höra av sig?"
+          subtitle="Utanför det här fönstret är Flow tyst – han finns kvar men säger inget själv."
+        >
           <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-3">
             <div className="space-y-1.5">
               <Label htmlFor="flow-from" className="text-sm font-normal">
@@ -152,36 +144,30 @@ export default function FlowSettingsPage() {
               till rätt vy.
             </p>
           </div>
-        </CardContent>
-      </Card>
+        </MyFloveBlock>
+      </MyFloveWide>
 
       <MyFloveWide>
-        <Card className="rounded-3xl">
-          <CardHeader>
-            <CardTitle className="text-base">Vad ska Flow prioritera?</CardTitle>
-            <CardDescription>
-              Välj vilka typer av tider Flow håller extra koll på. Resten ligger kvar i appen som
-              vanligt.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {FLOW_PRIORITIES.map((p) => (
-              <div key={p.key} className="flex items-start justify-between gap-3">
-                <div className="space-y-0.5">
-                  <Label htmlFor={`flow-p-${p.key}`} className="text-sm font-normal">
-                    {p.label}
-                  </Label>
-                  <p className="text-xs text-muted-foreground">{p.hint}</p>
-                </div>
-                <Switch
-                  id={`flow-p-${p.key}`}
-                  checked={settings.priorities[p.key] !== false}
-                  onCheckedChange={(v) => togglePriority(p.key, v)}
-                />
+        <MyFloveBlock
+          title="Vad ska Flow prioritera?"
+          subtitle="Välj vilka typer av tider Flow håller extra koll på. Resten ligger kvar i appen som vanligt."
+        >
+          {FLOW_PRIORITIES.map((p) => (
+            <div key={p.key} className="flex items-start justify-between gap-3">
+              <div className="space-y-0.5">
+                <Label htmlFor={`flow-p-${p.key}`} className="text-sm font-normal">
+                  {p.label}
+                </Label>
+                <p className="text-xs text-muted-foreground">{p.hint}</p>
               </div>
-            ))}
-          </CardContent>
-        </Card>
+              <Switch
+                id={`flow-p-${p.key}`}
+                checked={settings.priorities[p.key] !== false}
+                onCheckedChange={(v) => togglePriority(p.key, v)}
+              />
+            </div>
+          ))}
+        </MyFloveBlock>
       </MyFloveWide>
 
       <MyFloveWide>
