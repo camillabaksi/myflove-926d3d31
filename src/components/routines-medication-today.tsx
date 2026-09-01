@@ -141,7 +141,9 @@ export default function RoutinesMedicationToday() {
                     <Pill size={18} className="shrink-0 text-primary" aria-hidden />
                   )}
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium text-ink">{item.title}</p>
+                    <p className="line-clamp-2 break-words text-sm font-medium text-ink">
+                      {item.title}
+                    </p>
                     <p className="text-xs text-muted-foreground">
                       kl {item.time}
                       {item.meta ? ` · ${item.meta}` : ""}

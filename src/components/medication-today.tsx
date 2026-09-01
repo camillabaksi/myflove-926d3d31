@@ -103,7 +103,9 @@ export default function MedicationToday({ limit = 3 }: { limit?: number }) {
                     💊
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium text-ink">{dose.name}</p>
+                    <p className="line-clamp-2 break-words text-sm font-medium text-ink">
+                      {dose.name}
+                    </p>
                     <p className="text-xs text-muted-foreground">
                       kl {dose.time}
                       {dose.dosage ? ` · ${dose.dosage}` : ""}

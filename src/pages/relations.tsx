@@ -139,8 +139,10 @@ function PersonRow({
       <div className="flex items-center gap-2">
         <span className="text-lg">{relationTypeMeta(person.type).emoji}</span>
         <div className="min-w-0 flex-1">
-          <p className="truncate font-medium text-ink">{person.name}</p>
-          {person.note && <p className="truncate text-xs text-muted-foreground">{person.note}</p>}
+          <p className="line-clamp-2 break-words font-medium text-ink">{person.name}</p>
+          {person.note && (
+            <p className="line-clamp-2 break-words text-xs text-muted-foreground">{person.note}</p>
+          )}
         </div>
         <button
           type="button"

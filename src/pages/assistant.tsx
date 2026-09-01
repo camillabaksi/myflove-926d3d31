@@ -308,7 +308,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                     onClick={() => openConversation(c.id)}
                     className="flex-1 min-w-0 text-left py-2.5"
                   >
-                    <p className="text-sm truncate">{c.title}</p>
+                    <p className="text-sm line-clamp-2 break-words">{c.title}</p>
                     <p className="text-[11px] text-muted-foreground">
                       {relativeDayLabel(c.updated_at)}
                     </p>
