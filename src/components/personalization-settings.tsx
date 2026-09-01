@@ -167,7 +167,9 @@ export function PersonalizationSettings() {
                   active ? "border-primary" : "border-border/50 hover:border-border",
                 )}
               >
-                <span aria-hidden className="text-lg leading-none">{format.icon}</span>
+                <span aria-hidden className="text-lg leading-none">
+                  {format.icon}
+                </span>
                 <span className="min-w-0 leading-tight">{format.label}</span>
               </button>
             );
