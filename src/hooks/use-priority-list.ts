@@ -36,10 +36,19 @@ export function usePriorityList() {
         const newKeys = new Set(
           next.map((i) => normalizeQuickflowText(i.title)).filter(Boolean),
         );
+        const existingOpen = new Map(
+          base
+            .filter((item) => !item.done)
+            .map((item) => [normalizeQuickflowText(item.title), item]),
+        );
         const kept = base.filter(
           (i) => i.done || !newKeys.has(normalizeQuickflowText(i.title)),
         );
-        return sortPriority([...kept, ...next]);
+        const merged = next.map((item) => {
+          const existing = existingOpen.get(normalizeQuickflowText(item.title));
+          return existing ? { ...item, id: existing.id } : item;
+        });
+        return sortPriority([...kept, ...merged]);
       }),
     [setItems],
   );

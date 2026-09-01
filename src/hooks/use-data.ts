@@ -216,7 +216,7 @@ export function useTasks() {
         endTime: opts?.endTime,
         reminderMinutesBefore: opts?.reminderMinutesBefore,
         kind: opts?.kind ?? "uppgift",
-        status: opts?.waitingOn ? "vantar" : "pagar",
+        status: opts?.completed ? "klart" : opts?.waitingOn ? "vantar" : "pagar",
         waitingOn: opts?.waitingOn,
         note: opts?.note?.trim() || undefined,
         area: opts?.area ?? "vardag",
