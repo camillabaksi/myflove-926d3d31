@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-01";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Blocken är mer fyrkantiga och horisontella",
+    items: [
+      "Kollapsade block är tillbaka som kompakta kort (cirka 10 rem höga) i stället för avlånga rektanglar (2026-09-01)",
+      "Rubrik, underrubrik och sammanfattning håller sig på en rad så texten inte trycks ihop vertikalt (2026-09-01)",
+      "Rutnätet låter blocken växa horisontellt och anpassa sig efter bredden i stället för att sträckas till den högsta kolumnen (2026-09-01)",
+    ],
+  },
+  {
     title: "Anpassa-sidan visar bara det viktigaste",
     items: [
       "Inställningsblocken är minimerade som standard med rubrik, underrubrik och en kort sammanfattning av ditt val (2026-09-01)",
