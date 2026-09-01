@@ -171,7 +171,7 @@ export function MyFloveBlockGrid({
   return (
     <div
       className={cn(
-        "grid min-w-0 grid-cols-2 items-stretch gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4 [&>*]:min-w-0 [&>*:has([data-expanded='true'])]:col-span-full",
+        "grid min-w-0 grid-cols-2 items-start gap-3 auto-rows-min sm:gap-4 md:grid-cols-3 xl:grid-cols-4 [&>*]:min-w-0 [&>*:has([data-expanded='true'])]:col-span-full",
         className,
       )}
     >
