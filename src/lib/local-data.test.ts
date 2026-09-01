@@ -98,6 +98,17 @@ describe("lokal användardata", () => {
     expect(window.localStorage.getItem("myflove-medications")).not.toBeNull();
   });
 
+  it("skyddar osynkad data även när sidans hook aldrig hunnit registrera nyckeln", async () => {
+    // Inget register: hooken monterades i en tidigare session.
+    window.localStorage.setItem("myflove-cleaning-done", JSON.stringify({ kok: "2026-09-01" }));
+    window.localStorage.setItem("myflove-cleaning-done__updated_at", String(Date.now()));
+
+    await clearLocalUserData();
+
+    expect(window.localStorage.getItem("myflove-cleaning-done")).not.toBeNull();
+  });
+
+
   it("rensar allt vid kontoradering", async () => {
     window.localStorage.setItem("myflove-medications", JSON.stringify(["ritalin"]));
     window.localStorage.setItem("myflove-medications__updated_at", String(Date.now()));
