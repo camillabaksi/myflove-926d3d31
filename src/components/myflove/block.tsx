@@ -85,7 +85,7 @@ export function MyFloveBlock({
   const { collapsed, toggle } = useCollapsible(storeId, defaultCollapsed);
 
   const heading = (
-    <div className="flex min-w-0 flex-1 items-start gap-3 text-left">
+    <div className="flex min-w-0 flex-1 items-center gap-3 text-left">
       {icon && (
         <MyFloveIcon
           icon={icon}
@@ -100,16 +100,22 @@ export function MyFloveBlock({
             {eyebrow}
           </span>
         )}
-        <h2 className="font-display text-base font-bold leading-tight text-ink">{title}</h2>
-        {subtitle && <p className="mt-0.5 text-sm text-muted-foreground">{subtitle}</p>}
-        {status && collapsed && <div className="mt-1.5 text-sm text-ink">{status}</div>}
+        <h2 className="font-display text-base font-bold leading-tight text-ink line-clamp-1">
+          {title}
+        </h2>
+        {subtitle && (
+          <p className="mt-0.5 text-sm text-muted-foreground line-clamp-1">{subtitle}</p>
+        )}
+        {status && collapsed && (
+          <div className="mt-1.5 text-sm text-ink line-clamp-1">{status}</div>
+        )}
       </div>
       {collapsible && (
         <ChevronDown
           size={18}
           aria-hidden="true"
           className={cn(
-            "mt-1 shrink-0 text-muted-foreground transition-transform duration-200",
+            "shrink-0 self-center text-muted-foreground transition-transform duration-200",
             collapsed && "-rotate-90",
           )}
         />
@@ -123,7 +129,7 @@ export function MyFloveBlock({
       {...areaProps(area)}
       data-expanded={!collapsed}
       className={cn(
-        "flex min-w-0 h-full flex-col gap-3 rounded-3xl border-2 border-border/60 p-3 shadow-soft sm:gap-4 sm:p-5",
+        "flex min-w-0 h-auto flex-col gap-3 rounded-3xl border-2 border-border/60 p-3 shadow-soft data-[expanded='false']:min-h-[10rem] data-[expanded='false']:max-h-[12rem] data-[expanded='false']:justify-center sm:gap-4 sm:p-5",
         area && "area-border",
         surface ? SURFACE[surface] : "bg-card",
         span && "col-span-full",
@@ -171,7 +177,7 @@ export function MyFloveBlockGrid({
   return (
     <div
       className={cn(
-        "grid min-w-0 grid-cols-2 items-stretch gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4 [&>*]:min-w-0 [&>*:has([data-expanded='true'])]:col-span-full",
+        "grid min-w-0 grid-cols-2 items-start gap-3 auto-rows-min sm:gap-4 md:grid-cols-3 xl:grid-cols-4 [&>*]:min-w-0 [&>*:has([data-expanded='true'])]:col-span-full",
         className,
       )}
     >
@@ -202,7 +208,7 @@ export function MyFlovePageGrid({
       style={style}
       {...areaProps(area)}
       className={cn(
-        "grid min-w-0 grid-cols-2 items-stretch gap-3 md:grid-cols-3 md:gap-5 xl:grid-cols-4 [&>*]:min-w-0 [&>*:has([data-expanded='true'])]:col-span-full",
+        "grid min-w-0 grid-cols-2 items-start gap-3 auto-rows-min md:grid-cols-3 md:gap-5 xl:grid-cols-4 [&>*]:min-w-0 [&>*:has([data-expanded='true'])]:col-span-full",
         className,
       )}
     >
