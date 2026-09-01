@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-01";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Din MyFlove: tema och alarm",
+    items: [
+      "Samlad sektion för färgtema, alarmsignal och alarmformat i Anpassa appen (2026-09-01)",
+      "Valen sparas på enheten och finns kvar efter omladdning eller utloggning (2026-09-01)",
+      "Semantiska färger för energi, status och varning påverkas inte av temat (2026-09-01)",
+    ],
+  },
+
+  {
     title: "QuickFlow landar direkt i Idag",
     items: [
       "Varje godkänd QuickFlow-post skapas direkt som dagens gemensamma uppgift med samma ID (2026-09-01)",

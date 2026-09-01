@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-01 – Din MyFlove: tema och alarm
+
+- Anpassa appen har fått en samlad sektion för färgtema, alarmsignal och alarmformat.
+- Valen sparas på enheten och finns kvar efter omladdning eller utloggning.
+- Temat ändrar bara identitetsfärger; semantiska färger för energi, status och varning påverkas inte.
+
 ## 2026-09-01 – QuickFlow landar direkt i Idag
 
 - Varje godkänd QuickFlow-post skapas direkt som dagens gemensamma uppgift med samma ID.
