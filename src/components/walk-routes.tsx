@@ -331,7 +331,7 @@ export default function WalkRoutesSection() {
                   <MapPin size={16} className="shrink-0 text-primary" />
                 </div>
 
-                <div className="mt-3 grid grid-cols-3 gap-2 text-center">
+                <div className="mt-3 grid grid-cols-[repeat(auto-fit,minmax(min(100%,6.5rem),1fr))] gap-2 text-center">
                   <div className="rounded-xl bg-muted/40 p-2">
                     <p className="text-[11px] text-muted-foreground">Längd</p>
                     <p className="text-sm font-semibold text-ink">{r.distanceKm} km</p>
