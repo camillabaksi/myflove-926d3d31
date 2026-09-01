@@ -35,15 +35,15 @@ const sheetVariants = cva(
   {
     variants: {
       side: {
-        top: "inset-x-0 top-0 max-h-[85dvh] overflow-y-auto border-b data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top",
+        top: "inset-x-0 top-0 max-h-[85dvh] max-w-[calc(100vw-2rem)] min-w-0 overflow-y-auto border-b data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top",
         // Bottenpanelen ska alltid rymmas på mobil: max 85% av synlig höjd,
         // egen scroll och extra botten-padding för hemknapp/safe-area så att
         // knappar aldrig hamnar utanför skärmen.
         bottom:
-          "inset-x-0 bottom-0 max-h-[85dvh] overflow-y-auto border-t pb-[calc(1.5rem+env(safe-area-inset-bottom))] data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom",
-        left: "inset-y-0 left-0 h-full w-3/4 overflow-y-auto border-r data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm",
+          "inset-x-0 bottom-0 max-h-[85dvh] max-w-[calc(100vw-2rem)] min-w-0 overflow-y-auto border-t pb-[calc(1.5rem+env(safe-area-inset-bottom))] data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom",
+        left: "inset-y-0 left-0 h-full max-h-[100dvh] w-3/4 min-w-0 max-w-[calc(100vw-2rem)] overflow-y-auto border-r pb-[calc(1rem+env(safe-area-inset-bottom))] data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm",
         right:
-          "inset-y-0 right-0 h-full w-3/4 overflow-y-auto border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm",
+          "inset-y-0 right-0 h-full max-h-[100dvh] w-3/4 min-w-0 max-w-[calc(100vw-2rem)] overflow-y-auto border-l pb-[calc(1rem+env(safe-area-inset-bottom))] data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm",
       },
     },
     defaultVariants: {

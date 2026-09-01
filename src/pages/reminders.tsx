@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import Layout from "@/components/layout";
+import { MyFloveHeader } from "@/components/myflove";
 import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import CollapsibleSection from "@/components/collapsible-section";
 import { Button } from "@/components/ui/button";
@@ -14,7 +15,6 @@ import {
 } from "@/lib/push-notifications";
 import { useToast } from "@/hooks/use-toast";
 import { BellRing, Plus, Trash2, Undo2, Pencil, Check, X, CalendarClock } from "lucide-react";
-import WhyHint from "@/components/why-hint";
 
 const todayIso = () => new Date().toISOString().slice(0, 10);
 
@@ -72,7 +72,7 @@ function ReminderRow({
 
   if (editing) {
     return (
-      <li className="rounded-2xl border border-border bg-card p-4 shadow-sm space-y-3">
+      <li className="rounded-2xl border border-border bg-card p-4 shadow-soft space-y-3">
         <input
           className={inputClass}
           value={title}
@@ -125,7 +125,7 @@ function ReminderRow({
 
   return (
     <li
-      className={`rounded-2xl border border-border bg-card p-4 shadow-sm ${canceled ? "opacity-70" : ""}`}
+      className={`rounded-2xl border border-border bg-card p-4 shadow-soft ${canceled ? "opacity-70" : ""}`}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
@@ -235,17 +235,12 @@ export default function RemindersPage() {
     <Layout>
       <MyFlovePageGrid area="idag">
         <MyFloveWide>
-          <header className="space-y-1">
-            <h1 className="flex items-center gap-2 font-display text-3xl text-ink">
-              <BellRing className="h-7 w-7 text-primary" /> Påminnelser
-            </h1>
-            <p className="text-muted-foreground">
-              Lägg till, ändra eller avboka. Aktiva påminnelser ger en notis när det är dags.
-            </p>
-            <WhyHint label="påminnelser">
-              Påminnelser ska avlasta minnet – inte skapa fler saker att hålla reda på.
-            </WhyHint>
-          </header>
+          <MyFloveHeader
+            title="Påminnelser"
+            emojiKey="reminder"
+            description="Lägg till, ändra eller avboka. Aktiva påminnelser ger en notis när det är dags."
+            why="Påminnelser ska avlasta minnet – inte skapa fler saker att hålla reda på."
+          />
         </MyFloveWide>
 
         <MyFloveBlock
@@ -280,10 +275,8 @@ export default function RemindersPage() {
         </MyFloveBlock>
 
         <MyFloveWide>
-          <form
-            onSubmit={handleAdd}
-            className="space-y-3 rounded-2xl border border-border bg-card p-5 shadow-sm"
-          >
+          <MyFloveBlock title="Ny påminnelse" subtitle="Fyll i vad och när" icon={Plus}>
+          <form onSubmit={handleAdd} className="space-y-3">
             <input
               className={inputClass}
               value={title}
@@ -339,14 +332,15 @@ export default function RemindersPage() {
               <Plus size={18} className="mr-2" /> Lägg till påminnelse
             </Button>
           </form>
+          </MyFloveBlock>
         </MyFloveWide>
 
         <MyFloveWide>
-          <section className="surface-card p-5">
+          <MyFloveBlock title={`Aktiva (${active.length})`} icon={BellRing}>
             <CollapsibleSection
               title={`Aktiva (${active.length})`}
               id="Aktiva påminnelser"
-              headingClassName="text-lg font-semibold"
+              headingClassName="sr-only"
               className="space-y-3"
             >
               {active.length === 0 ? (
@@ -372,13 +366,13 @@ export default function RemindersPage() {
                 </ul>
               )}
             </CollapsibleSection>
-          </section>
+          </MyFloveBlock>
 
-          <section className="surface-card p-5">
+          <MyFloveBlock title="Medicinpåminnelser" icon={BellRing} surface="mint">
             <CollapsibleSection
               title="Medicinpåminnelser"
               id="Medicinpåminnelser"
-              headingClassName="text-lg font-semibold"
+              headingClassName="sr-only"
               className="space-y-3"
             >
               <p className="text-sm text-muted-foreground">
@@ -387,13 +381,13 @@ export default function RemindersPage() {
               </p>
               <MedicationContent showHeader={false} />
             </CollapsibleSection>
-          </section>
+          </MyFloveBlock>
 
-          <section className="surface-card p-5">
+          <MyFloveBlock title={`Avbokade (${canceled.length})`} icon={BellRing} surface="plain">
             <CollapsibleSection
               title={`Avbokade (${canceled.length})`}
               id="Avbokade påminnelser"
-              headingClassName="text-lg font-semibold"
+              headingClassName="sr-only"
               className="space-y-3"
             >
               {canceled.length === 0 ? (
@@ -416,7 +410,7 @@ export default function RemindersPage() {
                 </ul>
               )}
             </CollapsibleSection>
-          </section>
+          </MyFloveBlock>
         </MyFloveWide>
       </MyFlovePageGrid>
     </Layout>
