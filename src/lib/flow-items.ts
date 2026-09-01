@@ -43,6 +43,8 @@ export interface FlowItem {
   energyReason?: string;
   /** Nästa lilla steg – aldrig hela berget. */
   nextStep?: string;
+  /** Gemensamt ID när posten kommer från QuickFlow. */
+  quickflowId?: string;
   done?: boolean;
   /** Användarens egen ordning (QuickFlow) – lägre nummer först. */
   order?: number;

@@ -68,6 +68,11 @@ export interface Task {
   /** När den faktiska energin loggades. */
   actualEnergyAt?: number;
 
+  /** Koppling till QuickFlows gemensamma uppgiftspost. */
+  quickflowId?: string;
+  quickflowBucket?: "nu" | "sedan" | "om-du-orkar" | "kan-vanta";
+  quickflowOrder?: number;
+
   steps?: TaskStep[]; // delsteg (särskilt för ärenden och projekt)
   area?: LifeArea; // livsområde: vardag / privat / studier / jobb
   courseId?: string; // kopplad kurs (studieflödet)
@@ -127,12 +132,59 @@ export function useFocus() {
 export function useTasks() {
   const [tasks, setTasks] = useCloudSyncedStorage<Task[]>("myflow-tasks", []);
 
+  useEffect(() => {
+    const onQuickflowSync = (event: Event) => {
+      const detail = (event as CustomEvent<{
+        source?: string;
+        id?: string;
+        patch?: { title?: string; done?: boolean; doneAt?: number; bucket?: Task["quickflowBucket"]; order?: number };
+      }>).detail;
+      if (detail?.source !== "priority" || !detail.id || !detail.patch) return;
+      setTasks((prev) =>
+        prev.map((task) => {
+          if (task.quickflowId !== detail.id) return task;
+          const patch = detail.patch;
+          return {
+            ...task,
+            ...(patch.title !== undefined ? { title: patch.title } : {}),
+            ...(patch.done !== undefined
+              ? {
+                  completed: patch.done,
+                  completedAt: patch.done ? patch.doneAt ?? Date.now() : undefined,
+                  status: patch.done ? "klart" : "pagar",
+                }
+              : {}),
+            ...(patch.bucket !== undefined ? { quickflowBucket: patch.bucket } : {}),
+            ...(patch.order !== undefined ? { quickflowOrder: patch.order } : {}),
+          };
+        }),
+      );
+    };
+    const onQuickflowDelete = (event: Event) => {
+      const detail = (event as CustomEvent<{ source?: string; id?: string }>).detail;
+      if (detail?.source !== "priority" || !detail.id) return;
+      setTasks((prev) => prev.filter((task) => task.quickflowId !== detail.id));
+    };
+    window.addEventListener("myflove:quickflow-sync", onQuickflowSync);
+    window.addEventListener("myflove:quickflow-delete", onQuickflowDelete);
+    return () => {
+      window.removeEventListener("myflove:quickflow-sync", onQuickflowSync);
+      window.removeEventListener("myflove:quickflow-delete", onQuickflowDelete);
+    };
+  }, [setTasks]);
+
   const getTodayDateString = () => todayISO();
 
   const addTask = (
     title: string,
     dueDate?: string,
     opts?: {
+      id?: string;
+      quickflowId?: string;
+      quickflowBucket?: Task["quickflowBucket"];
+      quickflowOrder?: number;
+      completed?: boolean;
+      completedAt?: number;
       kind?: TaskKind;
       waitingOn?: string;
       note?: string;
@@ -152,16 +204,20 @@ export function useTasks() {
     // Om inget datum anges kopplas uppgiften till idag.
     setTasks((prev) => [
       {
-        id: generateId(),
+        id: opts?.id ?? generateId(),
         title,
-        completed: false,
+        completed: opts?.completed ?? false,
+        completedAt: opts?.completed ? (opts.completedAt ?? Date.now()) : undefined,
         createdAt: Date.now(),
+        quickflowId: opts?.quickflowId,
+        quickflowBucket: opts?.quickflowBucket,
+        quickflowOrder: opts?.quickflowOrder,
         dueDate: dueDate ?? getTodayDateString(),
         time: opts?.time,
         endTime: opts?.endTime,
         reminderMinutesBefore: opts?.reminderMinutesBefore,
         kind: opts?.kind ?? "uppgift",
-        status: opts?.waitingOn ? "vantar" : "pagar",
+        status: opts?.completed ? "klart" : opts?.waitingOn ? "vantar" : "pagar",
         waitingOn: opts?.waitingOn,
         note: opts?.note?.trim() || undefined,
         area: opts?.area ?? "vardag",
@@ -203,9 +259,13 @@ export function useTasks() {
         | "energyImpact"
         | "friction"
         | "actualEnergy"
+        | "quickflowId"
+        | "quickflowBucket"
+        | "quickflowOrder"
       >
     >,
   ) => {
+    const task = tasks.find((t) => t.id === id);
     setTasks((prev) =>
       prev.map((t) => {
         if (t.id !== id) return t;
@@ -220,6 +280,19 @@ export function useTasks() {
         return next;
       }),
     );
+    if (task?.quickflowId && typeof window !== "undefined") {
+      const syncPatch: { title?: string; bucket?: Task["quickflowBucket"]; order?: number } = {};
+      if (patch.title !== undefined) syncPatch.title = patch.title.trim() || task.title;
+      if (patch.quickflowBucket !== undefined) syncPatch.bucket = patch.quickflowBucket;
+      if (patch.quickflowOrder !== undefined) syncPatch.order = patch.quickflowOrder;
+      if (Object.keys(syncPatch).length > 0) {
+        window.dispatchEvent(
+          new CustomEvent("myflove:quickflow-sync", {
+            detail: { source: "task", id: task.quickflowId, patch: syncPatch },
+          }),
+        );
+      }
+    }
   };
 
   const setTaskDueDate = (id: string, dueDate: string) => {
@@ -242,10 +315,10 @@ export function useTasks() {
 
   const toggleTask = (id: string) => {
     const task = tasks.find((t) => t.id === id);
+    const nowCompleted = task ? !task.completed : false;
     setTasks((prev) =>
       prev.map((t) => {
         if (t.id !== id) return t;
-        const nowCompleted = !t.completed;
         return {
           ...t,
           completed: nowCompleted,
@@ -254,6 +327,18 @@ export function useTasks() {
         };
       }),
     );
+    if (task && task.quickflowId && typeof window !== "undefined") {
+      const completedAt = nowCompleted ? Date.now() : undefined;
+      window.dispatchEvent(
+        new CustomEvent("myflove:quickflow-sync", {
+          detail: {
+            source: "task",
+            id: task.quickflowId,
+            patch: { done: nowCompleted, doneAt: completedAt },
+          },
+        }),
+      );
+    }
     if (task && !task.completed) {
       track("task_completed", { source: "app" });
       flowDone(task.title);
@@ -433,7 +518,15 @@ export function useTasks() {
   };
 
   const deleteTask = (id: string) => {
+    const task = tasks.find((t) => t.id === id);
     setTasks((prev) => prev.filter((t) => t.id !== id));
+    if (task?.quickflowId && typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent("myflove:quickflow-delete", {
+          detail: { source: "task", id: task.quickflowId },
+        }),
+      );
+    }
   };
 
   const snoozeTask = (id: string, days: number) => {
