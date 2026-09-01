@@ -140,10 +140,11 @@ export function useTasks() {
         patch?: { title?: string; done?: boolean; doneAt?: number; bucket?: Task["quickflowBucket"]; order?: number };
       }>).detail;
       if (detail?.source !== "priority" || !detail.id || !detail.patch) return;
+      const quickflowId = detail.id;
+      const patch = detail.patch;
       setTasks((prev) =>
         prev.map((task) => {
-          if (task.quickflowId !== detail.id) return task;
-          const patch = detail.patch;
+          if (task.quickflowId !== quickflowId) return task;
           return {
             ...task,
             ...(patch.title !== undefined ? { title: patch.title } : {}),
