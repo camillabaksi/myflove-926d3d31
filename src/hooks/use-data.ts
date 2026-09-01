@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useLocalStorage } from "../lib/storage";
 import { useCloudSyncedStorage } from "../lib/cloud-storage";
 import { useCloudSyncedList } from "../lib/cloud-list";
-import { trackEvent, track } from "../lib/analytics";
+import { track } from "../lib/analytics";
 import type { LifeArea } from "../lib/life-areas";
 import { flowDone } from "@/lib/flow-signal";
 import { todayISO } from "@/lib/day";
