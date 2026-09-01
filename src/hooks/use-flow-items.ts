@@ -91,13 +91,18 @@ export function useFlowItems(dateISO?: string): {
         time: t.time,
         dueDate: t.dueDate,
         daysUntil: d,
-        priority:
-          t.completed && isToday(t.completedAt)
+        priority: t.quickflowId
+          ? t.quickflowBucket === "nu"
+            ? "nu"
+            : "idag"
+          : t.completed && isToday(t.completedAt)
             ? "idag"
             : priorityFor({ time: t.time, daysUntil: d }),
         energy: friction?.friction,
         energyReason: friction?.reason,
         nextStep,
+        quickflowId: t.quickflowId,
+        order: t.quickflowOrder,
         done: t.completed,
         completable: true,
         href:
@@ -225,24 +230,22 @@ export function useFlowItems(dateISO?: string): {
       });
     }
 
-    // QuickFlow-listan är inte en egen ö: samma post som ligger i "Min lista
-    // just nu" visas här i dagens genomförandelista. Ett id, ett state – att
-    // bocka av på ena stället ändrar den andra vyn direkt.
-    const seenTitles = new Set(out.map((i) => normalizeQuickflowText(i.title)).filter(Boolean));
+    // QuickFlow-poster har samma gemensamma ID som uppgiften i Idag.
+    // Äldre poster utan brygga visas fortfarande tills de har migrerats.
+    const linkedQuickflowIds = new Set(tasks.flatMap((task) => task.quickflowId ?? []));
     for (const p of priorityItems) {
       // Redan klara poster hör bara till den dag de bockades av.
       if (p.done && !isToday(p.doneAt)) continue;
       if (!isTodayView && !p.done) continue;
-      const key = normalizeQuickflowText(p.title);
-      // Finns saken redan som uppgift, tanke eller händelse? Visa den en gång.
-      if (key && seenTitles.has(key)) continue;
-      if (key) seenTitles.add(key);
+      // Den riktiga task-raden ovan är den enda visningen när bryggan finns.
+      if (linkedQuickflowIds.has(p.id)) continue;
       out.push({
-        id: `prio-${p.id}`,
+        id: `prio-${p.id`,
         title: p.title,
         source: "quickflow",
         area: "vardag",
         emoji: "⚡",
+        quickflowId: p.id,
         priority: p.bucket === "nu" ? "nu" : "idag",
         order: bucketRank(p.bucket) * 1000 + p.order,
         nextStep: p.clarify?.firstStep ?? undefined,
