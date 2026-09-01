@@ -1,22 +1,28 @@
-import { Link } from "@tanstack/react-router";
 import { ListOrdered, MessageCircle, Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export type FlowTab = "flow" | "planera" | "chatt";
 
-const TABS: { id: FlowTab; to: string; label: string; icon: typeof Sparkles }[] = [
-  { id: "flow", to: "/flow", label: "Flow", icon: Sparkles },
-  { id: "planera", to: "/flowplan", label: "Planera", icon: ListOrdered },
-  { id: "chatt", to: "/assistant", label: "Chatta", icon: MessageCircle },
+const TABS: { id: FlowTab; label: string; icon: typeof Sparkles }[] = [
+  { id: "flow", label: "Flow", icon: Sparkles },
+  { id: "planera", label: "Planera", icon: ListOrdered },
+  { id: "chatt", label: "Chatta", icon: MessageCircle },
 ];
 
 /**
- * En enda ingång till Flow. Hjälp, planering och chatt är lägen i samma
- * upplevelse – varje läge har kvar sin egen adress så länkar och bakåtknapp
- * fortsätter fungera.
+ * Lägesväljare i Flow-vyn. Hjälp, planering och chatt visas i samma vy –
+ * byte av läge sker direkt utan att lämna sidan.
  */
-export default function FlowTabs({ active }: { active: FlowTab }) {
+export default function FlowTabs({
+  active,
+  onChange,
+}: {
+  active: FlowTab;
+  onChange: (tab: FlowTab) => void;
+}) {
   return (
-    <nav
+    <div
+      role="tablist"
       aria-label="Flow"
       className="mb-4 grid grid-cols-3 gap-1 rounded-3xl border-2 border-border bg-muted/50 p-1"
     >
@@ -24,19 +30,22 @@ export default function FlowTabs({ active }: { active: FlowTab }) {
         const Icon = tab.icon;
         const isActive = tab.id === active;
         return (
-          <Link
+          <Button
             key={tab.id}
-            to={tab.to}
-            aria-current={isActive ? "page" : undefined}
-            className={`flex min-w-0 items-center justify-center gap-1.5 rounded-2xl px-3 py-2.5 text-sm font-medium transition-colors ${
-              isActive ? "bg-card text-ink shadow-soft" : "text-muted-foreground hover:text-ink"
+            type="button"
+            variant="ghost"
+            role="tab"
+            aria-selected={isActive}
+            onClick={() => onChange(tab.id)}
+            className={`h-auto min-w-0 justify-center gap-1.5 rounded-2xl px-3 py-2.5 text-sm font-medium transition-colors hover:bg-transparent hover:text-ink ${
+              isActive ? "bg-card text-ink shadow-soft hover:bg-card" : "text-muted-foreground"
             }`}
           >
             <Icon size={16} aria-hidden />
             <span className="truncate">{tab.label}</span>
-          </Link>
+          </Button>
         );
       })}
-    </nav>
+    </div>
   );
 }
