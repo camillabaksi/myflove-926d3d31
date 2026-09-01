@@ -102,7 +102,14 @@ export function useQuickCheckin() {
       if (pending.length > 0 && !migratingRef.current) {
         migratingRef.current = true;
         try {
-          const result = await migratePendingEnergy(uid, pending, data);
+          // Äldre poster utan UUID får ett eget stabilt id som sparas lokalt
+          // INNAN något skickas upp – så blir en avbruten migrering säker.
+          const { entries, changed } = ensurePendingUuids(pending);
+          if (changed) {
+            pendingRef.current = entries;
+            setPendingEnergy(entries);
+          }
+          const result = await migratePendingEnergy(uid, entries, data);
           if (!mounted) return;
           // Behåll exakt det som inte bekräftats – aldrig en blank rensning.
           setPendingEnergy(result.remaining);
