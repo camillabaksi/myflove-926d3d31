@@ -100,7 +100,13 @@ export default function NpfPage() {
           tone="lavender"
           surface="lavender"
           collapsible
+          defaultCollapsed
           collapseId="anpassa::se-mindre"
+          status={
+            SEE_LESS.filter((r) => settings[r.key]).length > 0
+              ? `${SEE_LESS.filter((r) => settings[r.key]).length} av ${SEE_LESS.length} på`
+              : "Allt visas"
+          }
         >
           <div className="space-y-2">
             {SEE_LESS.map((row) => (
@@ -121,7 +127,13 @@ export default function NpfPage() {
           tone="mint"
           surface="mint"
           collapsible
+          defaultCollapsed
           collapseId="anpassa::lattare"
+          status={
+            EASIER.filter((r) => settings[r.key]).length > 0
+              ? `${EASIER.filter((r) => settings[r.key]).length} av ${EASIER.length} på`
+              : "Standardläge"
+          }
         >
           <div className="space-y-2">
             {EASIER.map((row) => (
@@ -151,7 +163,9 @@ export default function NpfPage() {
           tone="sky"
           surface="sky"
           collapsible
+          defaultCollapsed
           collapseId="anpassa::integritet"
+          status={statsOptOut ? "Delning av" : "Delning på"}
         >
           <label className="flex cursor-pointer items-center justify-between gap-3 rounded-2xl border border-border/50 bg-card/70 p-3">
             <span className="min-w-0 font-medium text-ink">Dela statistik</span>
