@@ -45,6 +45,8 @@ export interface FlowItem {
   nextStep?: string;
   /** Gemensamt ID när posten kommer från QuickFlow. */
   quickflowId?: string;
+  /** Facket som styr den synliga prioriteringsfärgen. */
+  quickflowBucket?: "nu" | "sedan" | "om-du-orkar" | "kan-vanta";
   done?: boolean;
   /** Användarens egen ordning (QuickFlow) – lägre nummer först. */
   order?: number;
