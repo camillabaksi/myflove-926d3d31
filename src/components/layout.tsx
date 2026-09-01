@@ -65,6 +65,7 @@ import {
   playAlarmPreview,
   initAlarmAudioUnlock,
 } from "@/lib/push-notifications";
+import { initPersonalization } from "@/lib/personalization";
 import { useCommuteAlerts } from "@/hooks/use-commute-alerts";
 import { useMedicationAlerts } from "@/hooks/use-medication-alerts";
 import { useShoppingProximityAlerts } from "@/hooks/use-shopping-proximity-alerts";
@@ -223,6 +224,7 @@ export default function Layout({ children }: LayoutProps) {
   useEffect(() => subscribeAlarmPref((v) => setAlarmEnabledState(v)), []);
   useEffect(() => {
     initAlarmAudioUnlock();
+    initPersonalization();
   }, []);
   const toggleAlarm = () => {
     const next = !alarmEnabled;

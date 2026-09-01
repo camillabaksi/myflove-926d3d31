@@ -1,4 +1,6 @@
 import { isQuietNow } from "@/lib/quiet-mode";
+import { buildAlarmWav } from "@/lib/alarm-sounds";
+import { getAlarmFormat, getAlarmSoundId, type AlarmSoundId } from "@/lib/personalization";
 export type NotificationPermissionState = "granted" | "denied" | "default" | "unsupported";
 
 const ALARM_PREF_KEY = "myflow-alarm-sound-enabled";
@@ -63,76 +65,25 @@ export function subscribeAlarmPref(cb: (enabled: boolean) => void): () => void {
 
 let audioEl: HTMLAudioElement | null = null;
 let audioUrl: string | null = null;
+let audioSoundId: AlarmSoundId | null = null;
 let unlockBound = false;
 let unlocked = false;
 
-/** Bygger en WAV-blob med tre mjuka pip (880 / 1046 / 880 Hz). */
-function buildAlarmWav(): Blob {
-  const sampleRate = 44100;
-  const beeps = [
-    { start: 0.0, freq: 880, dur: 0.28 },
-    { start: 0.35, freq: 1046, dur: 0.28 },
-    { start: 0.7, freq: 880, dur: 0.32 },
-  ];
-  const totalSeconds = 1.1;
-  const totalSamples = Math.floor(sampleRate * totalSeconds);
-  const samples = new Float32Array(totalSamples);
-
-  for (const beep of beeps) {
-    const startSample = Math.floor(beep.start * sampleRate);
-    const durSamples = Math.floor(beep.dur * sampleRate);
-    const attack = Math.floor(0.02 * sampleRate);
-    const release = Math.floor(0.08 * sampleRate);
-    for (let i = 0; i < durSamples; i++) {
-      const idx = startSample + i;
-      if (idx >= totalSamples) break;
-      let env = 1;
-      if (i < attack) env = i / attack;
-      else if (i > durSamples - release) env = Math.max(0, (durSamples - i) / release);
-      const t = i / sampleRate;
-      samples[idx] += Math.sin(2 * Math.PI * beep.freq * t) * env * 0.35;
-    }
-  }
-
-  // Encode as 16-bit PCM WAV
-  const buffer = new ArrayBuffer(44 + samples.length * 2);
-  const view = new DataView(buffer);
-  const writeStr = (o: number, s: string) => {
-    for (let i = 0; i < s.length; i++) view.setUint8(o + i, s.charCodeAt(i));
-  };
-  writeStr(0, "RIFF");
-  view.setUint32(4, 36 + samples.length * 2, true);
-  writeStr(8, "WAVE");
-  writeStr(12, "fmt ");
-  view.setUint32(16, 16, true);
-  view.setUint16(20, 1, true);
-  view.setUint16(22, 1, true);
-  view.setUint32(24, sampleRate, true);
-  view.setUint32(28, sampleRate * 2, true);
-  view.setUint16(32, 2, true);
-  view.setUint16(34, 16, true);
-  writeStr(36, "data");
-  view.setUint32(40, samples.length * 2, true);
-  let offset = 44;
-  for (let i = 0; i < samples.length; i++) {
-    const s = Math.max(-1, Math.min(1, samples[i]));
-    view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
-    offset += 2;
-  }
-  return new Blob([buffer], { type: "audio/wav" });
-}
-
-function ensureAudio(): HTMLAudioElement | null {
+/** Bygger (eller byter) ljudelementet till vald signal. */
+function ensureAudio(soundId?: AlarmSoundId): HTMLAudioElement | null {
   if (typeof window === "undefined") return null;
-  if (!audioEl) {
-    try {
-      audioUrl = URL.createObjectURL(buildAlarmWav());
-      audioEl = new Audio(audioUrl);
-      audioEl.preload = "auto";
-      audioEl.load();
-    } catch {
-      audioEl = null;
-    }
+  const wanted = soundId ?? getAlarmSoundId();
+  if (audioEl && audioSoundId === wanted) return audioEl;
+  try {
+    if (audioUrl) URL.revokeObjectURL(audioUrl);
+    audioUrl = URL.createObjectURL(buildAlarmWav(wanted));
+    audioEl = new Audio(audioUrl);
+    audioEl.preload = "auto";
+    audioEl.load();
+    audioSoundId = wanted;
+  } catch {
+    audioEl = null;
+    audioSoundId = null;
   }
   return audioEl;
 }
@@ -170,7 +121,20 @@ export function initAlarmAudioUnlock(): void {
   window.addEventListener("click", unlock);
 }
 
+function vibrateAlarm(): void {
+  if (typeof navigator === "undefined" || typeof navigator.vibrate !== "function") return;
+  try {
+    navigator.vibrate([180, 90, 180]);
+  } catch {
+    // ignore
+  }
+}
+
 export function playAlarmSound(): void {
+  const format = getAlarmFormat();
+  if (format === "tyst") return;
+  if (format === "vibration" || format === "bada") vibrateAlarm();
+  if (format === "vibration") return;
   if (!isAlarmSoundEnabled()) return;
   const el = ensureAudio();
   if (!el) return;
@@ -186,8 +150,8 @@ export function playAlarmSound(): void {
 }
 
 /** Kort testljud för preferens-UI (spelar även när alarm är avstängt). */
-export function playAlarmPreview(): void {
-  const el = ensureAudio();
+export function playAlarmPreview(soundId?: AlarmSoundId): void {
+  const el = ensureAudio(soundId);
   if (!el) return;
   try {
     el.currentTime = 0;
