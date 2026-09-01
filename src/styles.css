@@ -230,7 +230,44 @@
     font-weight: 800;
     letter-spacing: -0.025em;
   }
+
+  /* GLOBAL LAYOUTSTANDARD – ingen "tvingad vertikal text".
+     Ord får aldrig kapas bokstav för bokstav bara för att ytan är smal. */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  li,
+  span,
+  a,
+  label,
+  button {
+    word-break: normal;
+    overflow-wrap: normal;
+    hyphens: manual;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Väldigt långa ord (länkar, e-post) får brytas – men bara de. */
+  .break-words,
+  .break-all {
+    overflow-wrap: anywhere;
+  }
 }
+
 
 @utility surface-card {
   background-color: hsl(var(--card));
