@@ -41,7 +41,14 @@ supabase.auth.onAuthStateChange(() => {
  * inte radera den lokala kopian (se local-data.ts).
  */
 const SYNCED_SUFFIX = "__synced_at";
-/** Alla nycklar som migrerats från lokal lagring till molnsynk. */
+/**
+ * Alla lagringsnycklar som kan ligga i user_kv.
+ *
+ * Detta är medvetet en statisk manifestlista och inte bara ett runtime-register:
+ * en sida kan ha skrivit osynkad data i en tidigare session utan att dess hook
+ * monteras före utloggning. Registryt nedan behålls som bakåtkompatibel extra
+ * information, men den här listan är det säkra skyddet mot pre-mount-race.
+ */
 export const CLOUD_USER_DATA_KEYS = new Set([
   "myflow-tasks",
   "myflow-reminders",
@@ -52,14 +59,50 @@ export const CLOUD_USER_DATA_KEYS = new Set([
   "myflow-dump-ideas",
   "myflow-saved-stores",
   "myflow-saved-trips",
+  "myflow-finances",
   "myflove-flow-usage",
+  "myflove-flow-prefs",
+  "myflove-flow-reset",
   "myflove-quickflow",
   "myflove-quickflow-priority",
+  "myflove-quickflow-priority-intro",
+  "myflove-quickflow-rules",
   "myflove-notes",
   "myflove-medications",
   "myflove-medication-log",
   "myflove-budget",
-  "myflow-finances",
+  "myflove-routines",
+  "myflove-routines-done",
+  "myflove-training",
+  "myflove-workflow-meta",
+  "myflove-workflow-endofday",
+  "myflove-workflow-settings",
+  "myflove-studyflow-meta",
+  "myflove-studyflow-endofday",
+  "myflove-studyflow-settings",
+  "myflove-study-lectures",
+  "myflove-study-schedule-settings",
+  "myflove-study-schedule-auto",
+  "myflove-courses",
+  "myflove-done-log",
+  "myflove-daily-checkin",
+  "myflove-flow-reset",
+  "myflove-situation",
+  "myflove-work-projects",
+  "myflove-flowstudy",
+  "myflove-life-profile",
+  "myflove-work-profile",
+  "myflove-study-profile",
+  "myflove-meal-favorites",
+  "myflove-replan-mode",
+  "myflove-child-schedules",
+  "myflove-child-reminders",
+  "myflove-insight-strategies",
+  "myflove-day-plan",
+  "myflove-adaptive-lead",
+  "myflove-area-customization",
+  "myflove-home-layout",
+  "myflove-relations",
 ]);
 /** Lista över nycklar som hanteras av molnsynken (device-nyckel, rensas ej). */
 export const CLOUD_KEYS_REGISTRY = "myflove-cloud-keys";
