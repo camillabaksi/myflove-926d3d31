@@ -115,7 +115,7 @@ export function QuickflowPriority() {
         dueDate: choice.dueDate,
         time: choice.time,
         endTime: undefined,
-        reminderMinutesBefore: undefined,
+        reminderMinutesBefore: choice.reminderMinutesBefore,
       });
     } else {
       // Skydd för äldre data som ännu inte hunnit migreras till Idag.
@@ -126,13 +126,15 @@ export function QuickflowPriority() {
         quickflowOrder: item.order,
         area: guessArea(item.title),
         time: choice.time,
+        reminderMinutesBefore: choice.reminderMinutesBefore,
       });
     }
     setPlanFor(null);
     const day = choice.dueDate === todayISO() ? "idag" : choice.dueDate;
+    const reminder = choice.reminderMinutesBefore !== undefined ? " med egen påminnelse." : ".";
     toast({
       description: choice.time
-        ? `Planerad i kalendern ${day} kl ${choice.time}.`
+        ? `Planerad i kalendern ${day} kl ${choice.time}${reminder}`
         : `Planerad i kalendern ${day} – utan tid.`,
     });
     navigate({ to: "/kalender" });

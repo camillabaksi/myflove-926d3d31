@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-01";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "QuickFlow-uppgifter får egna påminnelser",
+    items: [
+      "Varje QuickFlow-uppgift kan få en egen signal när du väljer tid under Planera den (2026-09-01)",
+      "Påminnelsen sparas på samma uppgift i Idag och Kalender utan dubbletter (2026-09-01)",
+      "Utan tid finns ingen påminnelse – Flow hittar inte på ett klockslag (2026-09-01)",
+    ],
+  },
+
+  {
     title: "Din MyFlove: tema och alarm",
     items: [
       "Samlad sektion för färgtema, alarmsignal och alarmformat i Anpassa appen (2026-09-01)",

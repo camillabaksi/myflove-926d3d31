@@ -2,6 +2,13 @@ import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import WhyHint from "@/components/why-hint";
 import { todayISO, nowTime } from "@/lib/task-agenda";
 import { cn } from "@/lib/utils";
@@ -9,6 +16,8 @@ import { cn } from "@/lib/utils";
 export interface PlanChoice {
   dueDate: string;
   time?: string;
+  /** Valfri signal före uppgiftens klockslag. */
+  reminderMinutesBefore?: number;
 }
 
 const addDays = (iso: string, days: number) => {
@@ -19,9 +28,18 @@ const addDays = (iso: string, days: number) => {
 
 type DayChoice = "idag" | "imorgon" | "valj";
 
+const REMINDER_OPTIONS = [
+  { value: "none", label: "Ingen påminnelse" },
+  { value: "0", label: "Vid start" },
+  { value: "10", label: "10 min innan" },
+  { value: "30", label: "30 min innan" },
+  { value: "60", label: "1 timme innan" },
+  { value: "1440", label: "1 dag innan" },
+] as const;
+
 /**
- * "Planera den" – användaren väljer själv dag och (frivilligt) tid.
- * Flow föreslår aldrig en tid åt dig och skapar aldrig en deadline.
+ * "Planera den" – användaren väljer själv dag, tid och eventuell påminnelse.
+ * Flow föreslår aldrig en tid eller påminnelse åt dig och skapar aldrig en deadline.
  */
 export function QuickflowPlanDialog({
   open,
@@ -38,6 +56,7 @@ export function QuickflowPlanDialog({
   const [date, setDate] = useState(todayISO());
   const [withTime, setWithTime] = useState(false);
   const [time, setTime] = useState(nowTime());
+  const [reminder, setReminder] = useState<string>("none");
 
   useEffect(() => {
     if (!open) return;
@@ -45,6 +64,7 @@ export function QuickflowPlanDialog({
     setDate(todayISO());
     setWithTime(false);
     setTime(nowTime());
+    setReminder("none");
   }, [open]);
 
   const pickDay = (choice: DayChoice) => {
@@ -69,9 +89,7 @@ export function QuickflowPlanDialog({
         </DialogHeader>
 
         <div className="space-y-4">
-          <p className="max-h-32 overflow-y-auto break-words text-sm text-muted-foreground">
-            {title}
-          </p>
+          <p className="max-h-32 overflow-y-auto text-sm text-muted-foreground">{title}</p>
 
           <div className="flex flex-wrap gap-2">
             <button type="button" className={chip(day === "idag")} onClick={() => pickDay("idag")}>
@@ -103,7 +121,10 @@ export function QuickflowPlanDialog({
             <button
               type="button"
               className={chip(!withTime)}
-              onClick={() => setWithTime(false)}
+              onClick={() => {
+                setWithTime(false);
+                setReminder("none");
+              }}
               aria-pressed={!withTime}
             >
               Ingen tid
@@ -127,9 +148,30 @@ export function QuickflowPlanDialog({
             )}
           </div>
 
+          {withTime && (
+            <label className="block space-y-1.5 text-sm">
+              <span className="font-medium text-foreground">Egen påminnelse</span>
+              <Select value={reminder} onValueChange={setReminder}>
+                <SelectTrigger aria-label="Påminnelse" className="h-11 rounded-xl">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {REMINDER_OPTIONS.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <span className="block text-xs text-muted-foreground">
+                Signalen gäller bara den här QuickFlow-uppgiften.
+              </span>
+            </label>
+          )}
+
           <WhyHint label="varför väljer du själv?">
-            Flow sätter aldrig tider eller deadlines åt dig. Du bestämmer om saken bara ska ligga på
-            en dag eller ha en tid.
+            Flow sätter aldrig tider, deadlines eller påminnelser åt dig. Du bestämmer om saken bara
+            ska ligga på en dag, ha en tid eller även ge en egen signal.
           </WhyHint>
 
           <div className="flex flex-wrap gap-2">
@@ -139,6 +181,8 @@ export function QuickflowPlanDialog({
                 onConfirm({
                   dueDate: day === "valj" ? date || todayISO() : date,
                   time: withTime ? time : undefined,
+                  reminderMinutesBefore:
+                    withTime && reminder !== "none" ? Number(reminder) : undefined,
                 })
               }
             >

@@ -212,7 +212,6 @@ export function MyFlovePageGrid({
   );
 }
 
-
 /**
  * Innehåll som behöver mer plats i ett MyFlovePageGrid.
  * `span="full"` (standard) tar hela raden, `span="wide"` tar två kolumner
