@@ -157,10 +157,9 @@ export function MyFloveBlock({
 }
 
 /**
- * Responsivt rutnät för block – innehållsmedvetet.
- * Kolumnerna skapas med auto-fit + minmax, så ett block aldrig blir smalare
- * än ~16rem. På 360–390px betyder det en kolumn (stapla KORT, inte ord),
- * och fler kolumner så fort det finns riktig plats.
+ * Responsivt rutnät för block – två kolumner på mobil, fler på större
+ * skärmar. Block som behöver mer plats (eller är expanderade) spänner
+ * över hela raden via col-span-full.
  */
 export function MyFloveBlockGrid({
   className,
@@ -172,7 +171,7 @@ export function MyFloveBlockGrid({
   return (
     <div
       className={cn(
-        "grid min-w-0 grid-cols-[repeat(auto-fit,minmax(min(100%,16rem),1fr))] items-stretch gap-3 sm:gap-4 [&>*]:min-w-0 [&>*:has([data-expanded='true'])]:col-span-full",
+        "grid min-w-0 grid-cols-2 items-stretch gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4 [&>*]:min-w-0 [&>*:has([data-expanded='true'])]:col-span-full",
         className,
       )}
     >
@@ -182,9 +181,9 @@ export function MyFloveBlockGrid({
 }
 
 /**
- * Sidlayout för hela appen – ett innehållsmedvetet dashboard-grid.
- * Samma regel som ovan: kolumnerna kollapsar när de inte längre rymmer
- * läsbar text. Innehåll som behöver mer plats wrappas i <MyFloveWide>.
+ * Sidlayout för hela appen – två kolumner på mobil, tre på md och fyra
+ * på xl. Innehåll som behöver mer plats wrappas i <MyFloveWide>, och
+ * expanderade block tar hela raden automatiskt.
  */
 export function MyFlovePageGrid({
   className,
@@ -203,7 +202,7 @@ export function MyFlovePageGrid({
       style={style}
       {...areaProps(area)}
       className={cn(
-        "grid min-w-0 grid-cols-[repeat(auto-fit,minmax(min(100%,17rem),1fr))] items-stretch gap-3 md:gap-5 [&>*]:min-w-0 [&>*:has([data-expanded='true'])]:col-span-full",
+        "grid min-w-0 grid-cols-2 items-stretch gap-3 md:grid-cols-3 md:gap-5 xl:grid-cols-4 [&>*]:min-w-0 [&>*:has([data-expanded='true'])]:col-span-full",
         className,
       )}
     >

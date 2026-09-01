@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-01 – Blocken ligger två i bredd igen
+
+- Sid- och blockrutnäten går tillbaka till två kolumner redan på mobil, med tre kolumner på mellanstora skärmar och fyra på stora.
+- Block som behöver mer plats – eller som du expanderar – tar hela raden, så du får ett större block bredvid två mindre när det passar.
+- Inga avlånga fullbreddsblock med ihoptryckt text längre.
+
 ## 2026-09-01 – QuickFlow-uppgifter får egna påminnelser
 
 - När du väljer "Med tid" under "Planera den" kan varje QuickFlow-uppgift få en egen påminnelse: vid start, 10/30 minuter, en timme eller en dag innan.

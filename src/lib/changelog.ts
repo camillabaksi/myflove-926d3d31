@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-01";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Blocken ligger två i bredd igen",
+    items: [
+      "Rutnätet visar två block i bredd på mobil, tre på mellanstora och fyra på stora skärmar (2026-09-01)",
+      "Block som behöver mer plats tar hela raden – ett större block bredvid två mindre (2026-09-01)",
+      "Inga avlånga fullbreddsblock med ihoptryckt text (2026-09-01)",
+    ],
+  },
+  {
     title: "QuickFlow-uppgifter får egna påminnelser",
     items: [
       "Varje QuickFlow-uppgift kan få en egen signal när du väljer tid under Planera den (2026-09-01)",
