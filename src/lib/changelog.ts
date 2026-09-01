@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-01";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Anpassa-sidan visar bara det viktigaste",
+    items: [
+      "Inställningsblocken är minimerade som standard med rubrik, underrubrik och en kort sammanfattning av ditt val (2026-09-01)",
+      "Alla val – teman, ljud och brytare – syns först när du öppnar blocket (2026-09-01)",
+    ],
+  },
+  {
     title: "Blocken ligger två i bredd igen",
     items: [
       "Rutnätet visar två block i bredd på mobil, tre på mellanstora och fyra på stora skärmar (2026-09-01)",

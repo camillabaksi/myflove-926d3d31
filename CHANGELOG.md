@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-01 – Anpassa-sidan visar bara det viktigaste
+
+- Inställningsblocken (tema, alarm, integritet m.fl.) är minimerade som standard och visar bara rubrik, underrubrik och en kort sammanfattning av ditt val.
+- Detaljerna – alla teman, ljud och brytare – syns först när du öppnar blocket.
+
 ## 2026-09-01 – Blocken ligger två i bredd igen
 
 - Sid- och blockrutnäten går tillbaka till två kolumner redan på mobil, med tre kolumner på mellanstora skärmar och fyra på stora.
