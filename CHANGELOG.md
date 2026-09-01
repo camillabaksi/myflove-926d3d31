@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-01 – QuickFlow landar direkt i Idag
+
+- Varje godkänd QuickFlow-post skapas direkt som dagens gemensamma uppgift med samma ID.
+- Äldre prioriterade poster migreras automatiskt en gång utan dubbletter.
+- Planera den ändrar nu samma uppgift i stället för att skapa en kopia.
+
 ## 2026-09-01 – QuickFlow och Idag delar samma uppgifter
 
 - Godkända QuickFlow-poster visas nu automatiskt i Idag utan att tid eller kalenderhändelse krävs.
