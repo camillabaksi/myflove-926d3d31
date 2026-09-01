@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-01 – QuickFlow-uppgifter får egna påminnelser
+
+- När du väljer "Med tid" under "Planera den" kan varje QuickFlow-uppgift få en egen påminnelse: vid start, 10/30 minuter, en timme eller en dag innan.
+- Påminnelsen sparas på samma gemensamma uppgift som visas i Idag och Kalender – inga kopior skapas.
+- Utan tid finns ingen påminnelse, så Flow hittar inte på ett klockslag åt dig.
+
+
 ## 2026-09-01 – Din MyFlove: tema och alarm
 
 - Anpassa appen har fått en samlad sektion för färgtema, alarmsignal och alarmformat.
