@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-01 – Kritiska data-, genvägs- och mobilfixar
+
+- Osynkad lokal användardata och väntande energiloggar skyddas vid utloggning, med bekräftad molnsynk, retry och idempotent migrering.
+- QuickFlow-, studie- och push-CTA:er går direkt till kanoniska routes och kalenderdialoger/bottom sheets får säker mobilhöjd med intern scroll.
+
 ## 2026-09-01 – Blockrubriken får ikon ovanför text
 
 - Ikonen i varje MyFlove-block ligger nu längst upp till vänster, med rubrik, underrubrik och sammanfattning under.

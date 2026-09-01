@@ -27,7 +27,8 @@ export function DeleteAccountButton({ onDeleted, size = "sm", className }: Props
       } catch {
         // ignoreras med flit – felet påverkar inte användaren
       }
-      clearLocalUserData();
+      // Kontot är raderat – då finns inget moln att spara till, allt lokalt bort.
+      await clearLocalUserData({ force: true });
       track("account_deleted", { result: "completed" });
       onDeleted?.();
       if (typeof window !== "undefined") window.location.href = "/";

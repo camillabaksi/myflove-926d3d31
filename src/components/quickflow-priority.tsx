@@ -244,7 +244,7 @@ export function QuickflowPriority() {
                             </IconBtn>
                             <IconBtn
                               label="Börja med denna"
-                              onClick={() => navigate({ to: "/fokus" })}
+                              onClick={() => navigate({ to: "/flow" })}
                             >
                               <Play size={16} />
                             </IconBtn>

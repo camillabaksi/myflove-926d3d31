@@ -60,9 +60,11 @@ export function useUser() {
 export function useClerk() {
   return {
     signOut: async () => {
+      // Städa FÖRE utloggningen: så länge sessionen lever kan det som ligger
+      // i synkkön skrivas upp och bekräftas. Det som molnet inte bekräftar
+      // ligger kvar lokalt och synkas vid nästa inloggning.
+      await clearLocalUserData();
       await supabase.auth.signOut();
-      // Ingen privat data får ligga kvar på enheten till nästa användare.
-      clearLocalUserData();
       if (typeof window !== "undefined") window.location.href = "/sign-in";
     },
     openSignIn: () => {

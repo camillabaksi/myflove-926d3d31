@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useMoods, type MoodEntry } from "@/hooks/use-data";
 import { useLocalStorage } from "@/lib/storage";
+import { PENDING_ENERGY_KEY, migratePendingEnergy } from "@/lib/energy-pending";
 
 /**
  * Snabb självregistrering av mående och energi.
@@ -40,7 +41,10 @@ export const toScale10 = (v5: number) => Math.min(10, Math.max(1, Math.round(v5 
 const todayKey = () => new Date().toISOString().slice(0, 10);
 
 /** Energiloggar gjorda utan inloggning – flyttas till energy_logs vid login. */
-const PENDING_ENERGY_KEY = "myflove-energy-pending";
+export { PENDING_ENERGY_KEY };
+
+/** Hur ofta vi försöker igen så länge det finns poster som inte kommit upp. */
+const RETRY_INTERVAL_MS = 60_000;
 
 export function useQuickCheckin() {
   const { moods, setMoods } = useMoods();
@@ -59,44 +63,81 @@ export function useQuickCheckin() {
   const [userId, setUserId] = useState<string | null>(null);
   const pendingRef = useRef(pendingEnergy);
   pendingRef.current = pendingEnergy;
+  const userIdRef = useRef<string | null>(null);
+  const migratingRef = useRef(false);
 
   useEffect(() => {
     let mounted = true;
+
+    /**
+     * Läser molnets loggar och flyttar upp det som väntar lokalt.
+     * Migreringen är idempotent (jämför mot befintliga poster) och tar bara
+     * bort en lokal post när molnet bekräftat just den posten.
+     */
     const load = async (uid: string | null) => {
       if (!mounted) return;
       setUserId(uid);
+      userIdRef.current = uid;
       if (!uid) {
         setCloudEnergy(null);
         return;
       }
-      // Migrera loggningar som gjordes innan inloggning.
-      const pending = pendingRef.current ?? [];
-      if (pending.length > 0) {
-        const { error } = await supabase
-          .from("energy_logs")
-          .insert(pending.map((e) => ({ user_id: uid, level: e.level, logged_at: e.logged_at })));
-        if (!error) setPendingEnergy([]);
-      }
       const since = new Date();
       since.setDate(since.getDate() - 60);
       since.setHours(0, 0, 0, 0);
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("energy_logs")
         .select("id, level, logged_at")
         .eq("user_id", uid)
         .gte("logged_at", since.toISOString())
         .order("logged_at", { ascending: true });
       if (!mounted) return;
-      setCloudEnergy(data ?? []);
-      if (data) setLocalEnergy(data);
+
+      // Kunde vi inte läsa molnet rör vi inte de väntande posterna – de
+      // ligger kvar och försöks igen vid nästa tillfälle.
+      if (error || !data) return;
+
+      let rows = data;
+      const pending = pendingRef.current ?? [];
+      if (pending.length > 0 && !migratingRef.current) {
+        migratingRef.current = true;
+        try {
+          const result = await migratePendingEnergy(uid, pending, data);
+          if (!mounted) return;
+          // Behåll exakt det som inte bekräftats – aldrig en blank rensning.
+          setPendingEnergy(result.remaining);
+          if (result.inserted.length > 0) {
+            rows = [...rows, ...result.inserted].sort(
+              (a, b) => new Date(a.logged_at).getTime() - new Date(b.logged_at).getTime(),
+            );
+          }
+        } finally {
+          migratingRef.current = false;
+        }
+      }
+
+      if (!mounted) return;
+      setCloudEnergy(rows);
+      setLocalEnergy(rows);
     };
+
+    const retry = () => {
+      if ((pendingRef.current ?? []).length === 0) return;
+      if (!userIdRef.current) return;
+      void load(userIdRef.current);
+    };
+
     void supabase.auth.getUser().then(({ data }) => load(data.user?.id ?? null));
     const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
       void load(session?.user?.id ?? null);
     });
+    window.addEventListener("online", retry);
+    const timer = window.setInterval(retry, RETRY_INTERVAL_MS);
     return () => {
       mounted = false;
       sub.subscription.unsubscribe();
+      window.removeEventListener("online", retry);
+      window.clearInterval(timer);
     };
   }, [setLocalEnergy, setPendingEnergy]);
 
@@ -157,22 +198,28 @@ export function useQuickCheckin() {
       setCheckin10((prev) => ({ day: todayKey(), mood: prev?.mood, energy: level10 }));
       const run = async () => {
         const now = new Date().toISOString();
+        const local = { id: Math.random().toString(36).slice(2, 11), level, logged_at: now };
         if (!userId) {
-          const entry = { id: Math.random().toString(36).slice(2, 11), level, logged_at: now };
-          setPendingEnergy((prev) => [...(prev ?? []), entry]);
-          setLocalEnergy((prev) => [...(prev ?? []), entry]);
+          setPendingEnergy((prev) => [...(prev ?? []), local]);
+          setLocalEnergy((prev) => [...(prev ?? []), local]);
           return;
         }
-        const { data } = await supabase
+        const { data, error } = await supabase
           .from("energy_logs")
-          .insert({ user_id: userId, level })
+          .insert({ user_id: userId, level, logged_at: now })
           .select("id, level, logged_at")
           .single();
-        if (data) {
-          setCloudEnergy((prev) => [...(prev ?? []), data]);
-          setLocalEnergy((prev) => [...(prev ?? []), data]);
+        if (error || !data) {
+          // Offline eller serverfel – lägg den i kön i stället för att
+          // tappa loggningen. Migreringen är idempotent och kör om.
+          setPendingEnergy((prev) => [...(prev ?? []), local]);
+          setLocalEnergy((prev) => [...(prev ?? []), local]);
+          return;
         }
+        setCloudEnergy((prev) => [...(prev ?? []), data]);
+        setLocalEnergy((prev) => [...(prev ?? []), data]);
       };
+
       const next = queueRef.current.then(run, run);
       queueRef.current = next.catch(() => undefined);
       return next;

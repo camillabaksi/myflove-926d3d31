@@ -241,9 +241,20 @@ export function secureSetItem(key: string, value: string): void {
 /**
  * Låser lagringen igen (utloggning): klartexten i minnet försvinner och
  * enhetens nyckel raderas, så eventuella rester på disken blir oläsbara.
+ *
+ * `keep` är nycklar som måste överleva utloggningen därför att de ännu inte
+ * är säkert migrerade till kontot (t.ex. energiloggar gjorda utloggad). För
+ * dem behålls både klartextcachen och krypteringsnyckeln – annars skulle
+ * datan bli oläsbar och därmed förlorad.
  */
-export function lockSecureLocal(): void {
+export function lockSecureLocal(keep: string[] = []): void {
+  const kept = keep.filter((k) => cache.has(k)).map((k) => [k, cache.get(k) ?? null] as const);
   cache.clear();
+  if (kept.length > 0) {
+    for (const [k, v] of kept) cache.set(k, v);
+    // Nyckeln måste finnas kvar för att den sparade datan ska gå att läsa.
+    return;
+  }
   cryptoKey = null;
   ready = null;
   if (typeof indexedDB === "undefined") return;

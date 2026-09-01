@@ -256,7 +256,7 @@ export const Route = createFileRoute("/api/public/hooks/push-tick")({
             const r = await sendPushTo(s, {
               title: note.title,
               body: note.body,
-              url: "/morgonstart",
+              url: "/daglig-rutin",
               tag: `wake-${localDate}`,
               requireInteraction: note.requireInteraction,
               vibrate: note.vibrate,

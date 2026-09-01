@@ -1317,7 +1317,7 @@ export function CalendarContent() {
         )}
 
         <Dialog open={isAddingReminder} onOpenChange={setIsAddingReminder}>
-          <DialogContent className="rounded-3xl">
+          <DialogContent className="max-h-[85dvh] overflow-y-auto rounded-3xl">
             <DialogHeader>
               <DialogTitle>Ny påminnelse</DialogTitle>
             </DialogHeader>
@@ -1394,7 +1394,7 @@ export function CalendarContent() {
         </Dialog>
 
         <Dialog open={isAddingEvent} onOpenChange={setIsAddingEvent}>
-          <DialogContent className="rounded-3xl">
+          <DialogContent className="max-h-[85dvh] overflow-y-auto rounded-3xl">
             <DialogHeader>
               <DialogTitle>Ny familjehändelse</DialogTitle>
             </DialogHeader>
@@ -1430,7 +1430,7 @@ export function CalendarContent() {
         </Dialog>
 
         <Dialog open={!!editing} onOpenChange={(open) => !open && setEditing(null)}>
-          <DialogContent className="rounded-3xl">
+          <DialogContent className="max-h-[85dvh] overflow-y-auto rounded-3xl">
             <DialogHeader>
               <DialogTitle>
                 {editing?.kind === "task" ? "Ändra uppgift" : "Ändra påminnelse"}
@@ -1818,7 +1818,7 @@ export function CalendarContent() {
 
       {/* Ändra vilka barn som ingår i en redan sparad, sammanfogad händelse. */}
       <Dialog open={!!editChildGroup} onOpenChange={(open) => !open && setEditChildGroup(null)}>
-        <DialogContent className="rounded-3xl">
+        <DialogContent className="max-h-[85dvh] overflow-y-auto rounded-3xl">
           <DialogHeader>
             <DialogTitle>Vilka barn ingår?</DialogTitle>
           </DialogHeader>

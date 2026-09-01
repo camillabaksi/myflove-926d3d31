@@ -72,7 +72,7 @@ export const USAGE_META: Record<FlowUsageKind, { emoji: string; label: string }>
 };
 
 export function useFlowUsage() {
-  const [events, setEvents] = useLocalStorage<FlowUsageEvent[]>("myflove-flow-usage", []);
+  const [events, setEvents] = useCloudSyncedStorage<FlowUsageEvent[]>("myflove-flow-usage", []);
 
   const log = useCallback(
     (kind: FlowUsageKind) => {
