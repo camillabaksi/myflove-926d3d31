@@ -172,7 +172,7 @@ export function MyFloveBlockGrid({
   return (
     <div
       className={cn(
-        "grid min-w-0 grid-cols-[repeat(auto-fit,minmax(min(100%,16rem),1fr))] items-stretch gap-3 sm:gap-4 [&>*]:min-w-0 [&>*:has([data-expanded='true'])]:col-span-full",
+        "grid min-w-0 grid-cols-2 items-stretch gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4 [&>*]:min-w-0 [&>*:has([data-expanded='true'])]:col-span-full",
         className,
       )}
     >
@@ -203,7 +203,7 @@ export function MyFlovePageGrid({
       style={style}
       {...areaProps(area)}
       className={cn(
-        "grid min-w-0 grid-cols-[repeat(auto-fit,minmax(min(100%,17rem),1fr))] items-stretch gap-3 md:gap-5 [&>*]:min-w-0 [&>*:has([data-expanded='true'])]:col-span-full",
+        "grid min-w-0 grid-cols-2 items-stretch gap-3 md:grid-cols-3 md:gap-5 xl:grid-cols-4 [&>*]:min-w-0 [&>*:has([data-expanded='true'])]:col-span-full",
         className,
       )}
     >
