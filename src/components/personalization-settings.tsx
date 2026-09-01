@@ -55,7 +55,7 @@ export function PersonalizationSettings() {
         status={activeTheme ? `Valt: ${activeTheme.label}` : undefined}
         data-testid="personalization-theme"
       >
-        <div className="flex flex-wrap gap-2">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
           {THEMES.map((theme) => {
             const active = personalization.theme === theme.id;
             return (
@@ -68,7 +68,7 @@ export function PersonalizationSettings() {
                 aria-label={`Tema ${theme.label}`}
                 title={theme.label}
                 className={cn(
-                  "h-auto rounded-full border-2 bg-card/80 py-1.5 pl-1.5 pr-3 text-sm transition hover:bg-card",
+                  "h-auto min-h-[5.5rem] flex-col items-start gap-2 rounded-2xl border-2 bg-card/80 p-3 text-sm transition hover:bg-card",
                   active ? "border-primary" : "border-border/60 hover:border-border",
                 )}
               >
@@ -78,7 +78,7 @@ export function PersonalizationSettings() {
                 >
                   {active ? <Check size={13} className="text-white" /> : null}
                 </span>
-                <span className="font-medium text-ink">{theme.label}</span>
+                <span className="font-medium leading-tight text-ink">{theme.label}</span>
               </Button>
             );
           })}
