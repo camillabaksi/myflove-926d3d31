@@ -239,7 +239,12 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
       </MyFloveWide>
 
       <MyFloveWide>
-        <MyFloveBlock title="Snabbstart" icon={Sparkles} subtitle="Klicka för att lägga till" surface="lavender">
+        <MyFloveBlock
+          title="Snabbstart"
+          icon={Sparkles}
+          subtitle="Klicka för att lägga till"
+          surface="lavender"
+        >
           <div className="flex flex-wrap gap-2">
             {SUGGESTIONS.map((s) => {
               const already = routines.some((r) => r.title === s.title && r.time === s.time);

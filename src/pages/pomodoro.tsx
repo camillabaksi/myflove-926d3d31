@@ -7,7 +7,7 @@ import { Play, Pause, RotateCcw, Brain, Coffee, Minus, Plus } from "lucide-react
 import { useToast } from "@/hooks/use-toast";
 import { useLocalStorage } from "@/lib/storage";
 import { sendPushNotification } from "@/lib/push-notifications";
-import { trackEvent } from "@/lib/analytics";
+import { track } from "@/lib/analytics";
 import { todayISO } from "@/lib/day";
 
 type Mode = "work" | "break";
@@ -74,7 +74,7 @@ export default function Pomodoro() {
         prev.date === date ? { date, count: prev.count + 1 } : { date, count: 1 },
       );
       setTotalSessions((prev) => prev + 1);
-      trackEvent("pomodoro", "session_completed");
+      track("focus_completed", { source: "pomodoro" });
       toast({ description: "Bra jobbat! Dags för en paus 🌿" });
       sendPushNotification("Fokuspasset är klart", { body: "Dags för en paus." });
       setMode("break");
