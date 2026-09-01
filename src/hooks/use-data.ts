@@ -249,10 +249,10 @@ export function useTasks() {
 
   const toggleTask = (id: string) => {
     const task = tasks.find((t) => t.id === id);
+    const nowCompleted = task ? !task.completed : false;
     setTasks((prev) =>
       prev.map((t) => {
         if (t.id !== id) return t;
-        const nowCompleted = !t.completed;
         return {
           ...t,
           completed: nowCompleted,
@@ -261,6 +261,16 @@ export function useTasks() {
         };
       }),
     );
+    if (task && task.quickflowId) {
+      window.dispatchEvent(
+        new CustomEvent("myflove:quickflow-sync", {
+          detail: {
+            id: task.quickflowId,
+            patch: { done: nowCompleted, doneAt: nowCompleted ? Date.now() : undefined },
+          },
+        }),
+      );
+    }
     if (task && !task.completed) {
       track("task_completed", { source: "app" });
       flowDone(task.title);
