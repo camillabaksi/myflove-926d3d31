@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { normalizeQuickflowText } from "@/lib/quickflow";
 import {
@@ -102,18 +102,72 @@ export function usePriorityList() {
     [setItems],
   );
 
+  useEffect(() => {
+    const onTaskSync = (event: Event) => {
+      const detail = (event as CustomEvent<{
+        source?: string;
+        id?: string;
+        patch?: Partial<PriorityTask>;
+      }>).detail;
+      if (detail?.source !== "task" || !detail.id || !detail.patch) return;
+      setItems((prev) =>
+        (prev ?? []).map((item) => (item.id === detail.id ? { ...item, ...detail.patch } : item)),
+      );
+    };
+    const onTaskDelete = (event: Event) => {
+      const detail = (event as CustomEvent<{ source?: string; id?: string }>).detail;
+      if (detail?.source !== "task" || !detail.id) return;
+      setItems((prev) => (prev ?? []).filter((item) => item.id !== detail.id));
+    };
+    window.addEventListener("myflove:quickflow-sync", onTaskSync);
+    window.addEventListener("myflove:quickflow-delete", onTaskDelete);
+    return () => {
+      window.removeEventListener("myflove:quickflow-sync", onTaskSync);
+      window.removeEventListener("myflove:quickflow-delete", onTaskDelete);
+    };
+  }, [setItems]);
+
   const update = useCallback(
-    (id: string, patch: Partial<PriorityTask>) =>
-      setItems((prev) => (prev ?? []).map((i) => (i.id === id ? { ...i, ...patch } : i))),
+    (id: string, patch: Partial<PriorityTask>) => {
+      setItems((prev) => (prev ?? []).map((i) => (i.id === id ? { ...i, ...patch } : i)));
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(
+          new CustomEvent("myflove:quickflow-sync", {
+            detail: { source: "priority", id, patch },
+          }),
+        );
+      }
+    },
     [setItems],
   );
 
   const remove = useCallback(
-    (id: string) => setItems((prev) => (prev ?? []).filter((i) => i.id !== id)),
+    (id: string) => {
+      setItems((prev) => (prev ?? []).filter((i) => i.id !== id));
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(
+          new CustomEvent("myflove:quickflow-delete", {
+            detail: { source: "priority", id },
+          }),
+        );
+      }
+    },
     [setItems],
   );
 
-  const clear = useCallback(() => setItems([]), [setItems]);
+  const clear = useCallback(() => {
+    const ids = (items ?? []).map((item) => item.id);
+    setItems([]);
+    if (typeof window !== "undefined") {
+      ids.forEach((id) =>
+        window.dispatchEvent(
+          new CustomEvent("myflove:quickflow-delete", {
+            detail: { source: "priority", id },
+          }),
+        ),
+      );
+    }
+  }, [items, setItems]);
 
   /** Flytta en sak upp/ned i den sorterade listan – användaren bestämmer alltid. */
   const move = useCallback(

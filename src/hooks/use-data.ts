@@ -327,12 +327,13 @@ export function useTasks() {
       }),
     );
     if (task && task.quickflowId && typeof window !== "undefined") {
+      const completedAt = nowCompleted ? Date.now() : undefined;
       window.dispatchEvent(
         new CustomEvent("myflove:quickflow-sync", {
           detail: {
             source: "task",
             id: task.quickflowId,
-            patch: { done: nowCompleted, doneAt: nowCompleted ? Date.now() : undefined },
+            patch: { done: nowCompleted, doneAt: completedAt },
           },
         }),
       );
