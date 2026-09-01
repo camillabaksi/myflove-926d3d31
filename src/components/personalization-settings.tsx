@@ -53,15 +53,16 @@ export function PersonalizationSettings() {
           {THEMES.map((theme) => {
             const active = personalization.theme === theme.id;
             return (
-              <button
+              <Button
                 key={theme.id}
                 type="button"
+                variant="ghost"
                 onClick={() => chooseTheme(theme.id)}
                 aria-pressed={active}
                 aria-label={`Tema ${theme.label}`}
                 title={theme.label}
                 className={cn(
-                  "flex items-center gap-2 rounded-full border-2 bg-card/80 py-1.5 pl-1.5 pr-3 text-sm transition",
+                  "h-auto rounded-full border-2 bg-card/80 py-1.5 pl-1.5 pr-3 text-sm transition hover:bg-card",
                   active ? "border-primary" : "border-border/60 hover:border-border",
                 )}
               >
@@ -72,7 +73,7 @@ export function PersonalizationSettings() {
                   {active ? <Check size={13} className="text-white" /> : null}
                 </span>
                 <span className="font-medium text-ink">{theme.label}</span>
-              </button>
+              </Button>
             );
           })}
         </div>
