@@ -10,10 +10,10 @@ export const CHANGELOG_UPDATED = "2026-09-01";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
-    title: "Valknappar med ikon ovanför text",
+    title: "Blockrubriken får ikon ovanför text",
     items: [
-      "Tema- och alarmformat-knapparna i Anpassa appen har ikonen längst upp till vänster och texten under (2026-09-01)",
-      "Knapparna är mer fyrkantiga och ligger i ett jämnt rutnät – två i bredd på mobil och fyra på större skärmar (2026-09-01)",
+      "Ikonen i varje MyFlove-block ligger längst upp till vänster med rubrik, underrubrik och sammanfattning under (2026-09-01)",
+      "Chevron för expandera/minimera sitter uppe till höger på samma rad som ikonen (2026-09-01)",
     ],
   },
   {
