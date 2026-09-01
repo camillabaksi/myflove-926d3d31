@@ -1,6 +1,13 @@
 # Changelog
 
+## 2026-09-01 – Flow följer adressen och all lokal data skyddas
+
+- Flow-flikarna navigerar via adressen, så uppdatering, delning och bakåtknappen öppnar samma läge som du valde.
+- Manifestet över molnsynkade nycklar täcker nu även städning och energiinställningar, och ett nytt test larmar om en ny nyckel glöms bort.
+- Utloggning behåller osynkad data även om sidans hook aldrig hann monteras i sessionen.
+
 ## 2026-09-01 – Flow samlar hjälp, planering och chatt
+
 
 - Flow, FlowPlan och Assistant visas som lägen i samma vy med flikarna Flow, Planera och Chatta.
 - De äldre adresserna finns kvar och öppnar motsvarande läge, utan att skapa separata kopior av innehållet.
