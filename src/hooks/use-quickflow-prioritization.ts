@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { prioritizeQuickflow } from "@/lib/quickflow-priority.functions";
-import { heuristicPriority, type PriorityTask } from "@/lib/quickflow-priority";
+import { heuristicPriority } from "@/lib/quickflow-priority";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
 import { usePriorityList } from "@/hooks/use-priority-list";
 import { useTasks } from "@/hooks/use-data";
@@ -31,6 +31,7 @@ export function useQuickflowPrioritization() {
         quickflowBucket: item.bucket,
         quickflowOrder: item.order,
         completed: item.done,
+        completedAt: item.doneAt,
         area: "vardag",
       });
     });

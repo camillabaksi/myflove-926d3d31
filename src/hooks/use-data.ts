@@ -184,6 +184,7 @@ export function useTasks() {
       quickflowBucket?: Task["quickflowBucket"];
       quickflowOrder?: number;
       completed?: boolean;
+      completedAt?: number;
       kind?: TaskKind;
       waitingOn?: string;
       note?: string;
@@ -206,7 +207,7 @@ export function useTasks() {
         id: opts?.id ?? generateId(),
         title,
         completed: opts?.completed ?? false,
-        completedAt: opts?.completed ? Date.now() : undefined,
+        completedAt: opts?.completed ? (opts.completedAt ?? Date.now()) : undefined,
         createdAt: Date.now(),
         quickflowId: opts?.quickflowId,
         quickflowBucket: opts?.quickflowBucket,

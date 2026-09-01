@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "wouter";
 import { CheckCircle2, Circle, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { BUCKET_META } from "@/lib/quickflow-priority";
 import { FlowItemActions } from "@/components/flow-item-actions";
 import { areaChipStyle, areaColor, AREA_META } from "@/lib/life-areas";
 import {
@@ -80,7 +81,13 @@ export function FlowItemCard({
               {SOURCE_LABEL[item.source]}
             </span>
             {when && <span className="rounded-pill bg-lavender px-2 py-0.5 text-ink">{when}</span>}
-            <span className="rounded-pill bg-muted px-2 py-0.5 text-muted-foreground">
+            <span className="inline-flex items-center gap-1 rounded-pill bg-muted px-2 py-0.5 text-muted-foreground">
+              {item.quickflowId && item.source === "uppgift" && item.priority === "nu" && (
+                <span className={`h-2 w-2 rounded-full ${BUCKET_META.nu.dot}`} aria-hidden="true" />
+              )}
+              {item.quickflowId && item.source === "uppgift" && item.priority === "idag" && (
+                <span className={`h-2 w-2 rounded-full ${BUCKET_META.sedan.dot}`} aria-hidden="true" />
+              )}
               {PRIORITY_LABEL[item.priority]}
             </span>
             {energy && (
