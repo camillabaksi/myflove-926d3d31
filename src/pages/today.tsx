@@ -171,7 +171,7 @@ export function TodayContent() {
               aria-selected={active}
               onClick={() => setView(v.id)}
               className={`flex items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-sm font-medium transition-colors ${
-                active ? "bg-card text-ink shadow-sm" : "text-muted-foreground"
+                active ? "bg-card text-ink shadow-soft" : "text-muted-foreground"
               }`}
             >
               <Icon size={16} /> {v.label}
