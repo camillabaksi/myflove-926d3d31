@@ -109,9 +109,9 @@ export default function Finances() {
         </MyFloveWide>
 
         <MyFloveWide>
-          <div className="rounded-3xl border-2 border-border/60 bg-card p-3 sm:p-5 shadow-soft">
+          <MyFloveBlock title="Ny transaktion" icon={Plus}>
             <CollapsibleSection
-              title="Ny transaktion"
+              title="Lägg till"
               help="Här skriver du in pengar in eller ut. Välj typ, skriv summa och vad det gällde – det räcker."
             >
               <form onSubmit={handleSubmit} className="space-y-6">
