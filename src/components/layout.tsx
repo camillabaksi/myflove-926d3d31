@@ -397,21 +397,20 @@ export default function Layout({ children }: LayoutProps) {
       href: "/flowplan",
       label: "Planera",
       icon: Sparkles,
-      hint: "Ordningen: i vilken ordning dagens saker passar bäst",
-      essential: true,
+      hint: "Planeringsläget i Flow – ordna dagens saker",
     },
     {
       href: "/flow",
-      label: "Flow hjälper",
+      label: "Flow",
       icon: Sparkles,
-      hint: "Förslaget: en sak i taget när du kört fast",
+      hint: "Hjälp, planering och chatt på ett ställe",
+      essential: true,
     },
     {
       href: "/assistant",
-      label: "Prata med Flow",
+      label: "Chatta med Flow",
       icon: MessageCircle,
-      hint: "Samtalet: prata av dig eller tänk högt med Flow",
-      essential: true,
+      hint: "Chatten i Flow",
     },
 
     {
@@ -526,10 +525,10 @@ export default function Layout({ children }: LayoutProps) {
       },
       {
         id: "flowflow",
-        label: "Planera",
-        hint: "Bestäm och ordna vad som ska hända",
+        label: "Flow",
+        hint: "Hjälp, planering och chatt på ett ställe",
         icon: Sparkles,
-        hrefs: ["/flowplan", "/tasks"],
+        hrefs: ["/flow", "/tasks"],
       },
       {
         id: "quickflow",
@@ -593,13 +592,6 @@ export default function Layout({ children }: LayoutProps) {
         hint: "Vad Flow har lärt sig om dig",
         icon: Brain,
         hrefs: ["/insight", "/statistik", "/beloningar"],
-      },
-      {
-        id: "flowhelp",
-        label: "Flow",
-        hint: "Förstå, hjälpa och föreslå",
-        icon: MessageCircle,
-        hrefs: ["/flow", "/assistant"],
       },
       {
         id: "avancerat",

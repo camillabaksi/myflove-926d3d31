@@ -3,6 +3,8 @@ import { useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import Layout from "@/components/layout";
 import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
+import { MyFloveHeader } from "@/components/myflove";
+import FlowTabs from "@/components/flow/flow-tabs";
 import { MyFloveThinking } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
 import {
@@ -265,25 +267,19 @@ export default function FlowPlanPage() {
 
   return (
     <Layout>
+      <FlowTabs active="planera" />
       <MyFlovePageGrid area="planera">
         <MyFloveWide>
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center">
-              <ListOrdered size={20} />
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold leading-tight text-ink">Planera</h1>
-              <p className="text-sm font-medium text-primary">
-                Här bestämmer du ordningen på dagen
-              </p>
-              {planExplainer && <p className="text-sm text-muted-foreground">{planExplainer}</p>}
-              <div className="mt-1">
-                <WhyHint label="planera">
-                  Planering kan hjälpa dig använda din energi på sådant som är viktigt för dig.
-                </WhyHint>
-              </div>
-            </div>
-          </div>
+          <MyFloveHeader
+            title="Planera"
+            emojiKey="flowplan"
+            description={`Här bestämmer du ordningen på dagen${planExplainer ? ` ${planExplainer}` : ""}`}
+            why={
+              <WhyHint label="planera">
+                Planering kan hjälpa dig använda din energi på sådant som är viktigt för dig.
+              </WhyHint>
+            }
+          />
         </MyFloveWide>
 
         <MyFloveBlock

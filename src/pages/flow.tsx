@@ -3,12 +3,9 @@ import Layout from "@/components/layout";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { track } from "@/lib/analytics";
 import FlowDeck from "@/components/flow/flow-deck";
+import FlowTabs from "@/components/flow/flow-tabs";
 
-/**
- * Flow – en enda state-baserad upplevelse.
- * Planering, dagsöversikt och chatt finns kvar på sina ordinarie platser;
- * denna route visar endast den aktiva Flow-vyn.
- */
+/** Flow är den gemensamma ingången till hjälp, planering och chatt. */
 export default function FlowPage() {
   useEffect(() => {
     track("flow_viewed", { source: "sida" });
@@ -16,6 +13,7 @@ export default function FlowPage() {
 
   return (
     <Layout>
+      <FlowTabs active="flow" />
       <MyFlovePageGrid area="flow">
         <MyFloveWide>
           <main className="mx-auto w-full max-w-xl" aria-label="Flow – vad passar bäst just nu">

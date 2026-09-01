@@ -3,6 +3,8 @@ import { useServerFn } from "@tanstack/react-start";
 import { useNavigate } from "@tanstack/react-router";
 import Layout from "@/components/layout";
 import { MyFloveBlock } from "@/components/myflove/block";
+import { MyFloveHeader } from "@/components/myflove";
+import FlowTabs from "@/components/flow/flow-tabs";
 import { MyFloveThinking } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
 import {
@@ -391,6 +393,30 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
 
   return (
     <>
+      <FlowTabs active="chatt" />
+      <MyFloveHeader
+        title="Chatta med Flow"
+        emojiKey="assistant"
+        description="Din andra hjärna – lugn, empatisk, aldrig dömande"
+        action={
+          <Button
+            variant="outline"
+            size="sm"
+            className="shrink-0 rounded-xl lg:hidden"
+            onClick={() => setHistoryOpen(true)}
+          >
+            <History size={16} className="mr-1" />
+            Historik
+          </Button>
+        }
+      >
+        <p data-npf="optional" className="text-xs text-muted-foreground">
+          Flow utgår från din profil och dina mönster i appen.{" "}
+          <Link to="/min-livsprofil" className="underline underline-offset-2">
+            Justera din profil
+          </Link>
+        </p>
+      </MyFloveHeader>
       <div className="lg:grid lg:grid-cols-[260px_1fr] lg:gap-6">
         <aside className="hidden lg:block">
           <p className="text-xs uppercase tracking-wide text-muted-foreground mb-2">Historik</p>
@@ -435,47 +461,25 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
             <span className="font-medium text-foreground">Flow</span>
           </nav>
 
-          <div className="flex items-start justify-between gap-3">
-            <div className="flex items-center gap-3">
-              <div className="rounded-full bg-primary/10 p-1">
-                <FlowMascot
-                  size="sm"
-                  wave={flowStatus === "idle"}
-                  glow
-                  status={flowStatus}
-                  bump
-                  mood={
-                    flowStatus === "thinking"
-                      ? "think"
-                      : flowStatus === "done"
-                        ? "cheer"
-                        : undefined
-                  }
-                  className="shrink-0"
-                />
-              </div>
-              <div>
-                <h1 className="text-3xl font-bold leading-tight">Flow</h1>
-                <p className="text-sm text-muted-foreground">
-                  Din andra hjärna – lugn, empatisk, aldrig dömande
-                </p>
-                <p data-npf="optional" className="mt-1 text-xs text-muted-foreground">
-                  Flow utgår från din profil och dina mönster i appen.{" "}
-                  <Link to="/min-livsprofil" className="underline underline-offset-2">
-                    Justera din profil
-                  </Link>
-                </p>
-              </div>
-            </div>
-            <Button
-              variant="outline"
+          <div className="flex items-center gap-3 rounded-2xl border border-border bg-muted/40 p-3">
+            <FlowMascot
               size="sm"
-              className="rounded-xl lg:hidden shrink-0"
-              onClick={() => setHistoryOpen(true)}
-            >
-              <History size={16} className="mr-1" />
-              Historik
-            </Button>
+              wave={flowStatus === "idle"}
+              glow
+              status={flowStatus}
+              bump
+              mood={
+                flowStatus === "thinking"
+                  ? "think"
+                  : flowStatus === "done"
+                    ? "cheer"
+                    : undefined
+              }
+              className="shrink-0"
+            />
+            <p className="text-sm text-muted-foreground">
+              {flowStatus === "thinking" ? "Flow tänker…" : "Flow lyssnar när du behöver det."}
+            </p>
           </div>
 
           {place && (
