@@ -606,7 +606,7 @@ export function useShoppingList() {
   const toggleItem = (id: string) => {
     const item = items.find((t) => t.id === id);
     setItems(items.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t)));
-    if (item && !item.completed) trackEvent("shopping", "item_bought");
+    if (item && !item.completed) track("shopping_item_completed");
   };
 
   const deleteItem = (id: string) => {
@@ -665,7 +665,7 @@ export function useFinances() {
       },
       ...transactions,
     ]);
-    trackEvent("finances", "transaction_added");
+    track("transaction_added");
   };
 
   const deleteTransaction = (id: string) => {
@@ -699,7 +699,7 @@ export function useBudget() {
     if (amount === null || !Number.isFinite(amount) || amount <= 0) delete next.total[period];
     else next.total[period] = amount;
     setBudget(next);
-    trackEvent("finances", "budget_set");
+    track("budget_set");
   };
 
   const setCategory = (category: string, period: BudgetPeriod, amount: number | null) => {
@@ -708,7 +708,7 @@ export function useBudget() {
     else cats[category]![period] = amount;
     if (Object.keys(cats[category] ?? {}).length === 0) delete cats[category];
     setBudget({ ...safe, categories: cats });
-    trackEvent("finances", "budget_set");
+    track("budget_set");
   };
 
   return { budget: safe, setTotal, setCategory };
@@ -917,7 +917,7 @@ export function useMedications() {
       setLog(log.filter((l) => !(l.medId === medId && l.time === time && l.date === date)));
     } else {
       setLog([...log, { medId, time, date }]);
-      trackEvent("medicin", "dose_taken");
+      track("medication_taken");
     }
   };
 
@@ -935,7 +935,7 @@ export function useDumpIdeas() {
 
   const addIdea = (text: string) => {
     setIdeas([{ id: generateId(), text, createdAt: Date.now() }, ...ideas]);
-    trackEvent("dump", "idea_saved");
+    track("note_created");
   };
 
   const deleteIdea = (id: string) => {
