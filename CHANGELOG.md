@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-01 – Inga trånga kort kvar
+
+- Statistik- och valrutor (ekonomi, budget, energiflöde, energikarta, promenader) wrappar nu i stället för att pressas ihop på smala skärmar.
+- Flikraden i Daglig rutin bryter till flera rader i stället för att kapa etiketterna.
+- Titlar på aktiviteter, rutiner, mediciner och kontakter radbryts på två rader i stället för att klippas av.
+
 ## 2026-09-01 – QuickFlow-uppgifter får egna påminnelser
 
 - När du väljer "Med tid" under "Planera den" kan varje QuickFlow-uppgift få en egen påminnelse: vid start, 10/30 minuter, en timme eller en dag innan.
