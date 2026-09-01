@@ -147,7 +147,7 @@ function buttonClasses({
 }: ButtonBaseProps) {
   return cn(
     "press inline-flex items-center justify-center gap-2 rounded-pill font-semibold transition-colors disabled:opacity-50 disabled:pointer-events-none",
-    "text-center leading-tight text-balance break-words [&_svg]:shrink-0",
+    "text-center leading-tight whitespace-normal [&_svg]:shrink-0",
     size === "sm" ? "min-h-9 px-4 py-1.5 text-sm" : "min-h-11 px-5 py-2 text-sm",
     BUTTON_VARIANT[variant],
     fullWidth && "w-full",
