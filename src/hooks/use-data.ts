@@ -134,11 +134,19 @@ export function useTasks() {
 
   useEffect(() => {
     const onQuickflowSync = (event: Event) => {
-      const detail = (event as CustomEvent<{
-        source?: string;
-        id?: string;
-        patch?: { title?: string; done?: boolean; doneAt?: number; bucket?: Task["quickflowBucket"]; order?: number };
-      }>).detail;
+      const detail = (
+        event as CustomEvent<{
+          source?: string;
+          id?: string;
+          patch?: {
+            title?: string;
+            done?: boolean;
+            doneAt?: number;
+            bucket?: Task["quickflowBucket"];
+            order?: number;
+          };
+        }>
+      ).detail;
       if (detail?.source !== "priority" || !detail.id || !detail.patch) return;
       const quickflowId = detail.id;
       const patch = detail.patch;
@@ -151,7 +159,7 @@ export function useTasks() {
             ...(patch.done !== undefined
               ? {
                   completed: patch.done,
-                  completedAt: patch.done ? patch.doneAt ?? Date.now() : undefined,
+                  completedAt: patch.done ? (patch.doneAt ?? Date.now()) : undefined,
                   status: patch.done ? "klart" : "pagar",
                 }
               : {}),

@@ -86,7 +86,10 @@ export function FlowItemCard({
                 <span className={`h-2 w-2 rounded-full ${BUCKET_META.nu.dot}`} aria-hidden="true" />
               )}
               {item.quickflowId && item.source === "uppgift" && item.priority === "idag" && (
-                <span className={`h-2 w-2 rounded-full ${BUCKET_META.sedan.dot}`} aria-hidden="true" />
+                <span
+                  className={`h-2 w-2 rounded-full ${BUCKET_META.sedan.dot}`}
+                  aria-hidden="true"
+                />
               )}
               {PRIORITY_LABEL[item.priority]}
             </span>
