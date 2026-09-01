@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-01 – Valknappar med ikon ovanför text
+
+- Tema- och alarmformat-knapparna i Anpassa appen är nu mer fyrkantiga med ikonen längst upp till vänster och texten under.
+- Knapparna ligger i ett jämnt rutnät – två i bredd på mobil och fyra på större skärmar.
+
 ## 2026-09-01 – Blocken är mer fyrkantiga och horisontella
 
 - Kollapsade block är tillbaka som kompakta kort (cirka 10 rem höga) i stället för avlånga rektanglar.
