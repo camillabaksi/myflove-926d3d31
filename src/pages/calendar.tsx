@@ -1482,7 +1482,7 @@ export function CalendarContent() {
                 {editing.time && (
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Påminnelse</label>
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
                       {REMIND_OPTIONS.map((opt) => (
                         <button
                           key={String(opt.value)}
@@ -1614,14 +1614,14 @@ export function CalendarContent() {
         </Dialog>
 
         <Dialog open={isAddingAny} onOpenChange={setIsAddingAny}>
-          <DialogContent className="rounded-3xl max-h-[85vh] overflow-y-auto">
+          <DialogContent className="max-h-[85dvh] overflow-y-auto rounded-3xl">
             <DialogHeader className="text-left">
               <DialogTitle className="pr-8 text-left">Ny händelse</DialogTitle>
             </DialogHeader>
             <div className="space-y-5 pt-1">
               <div className="space-y-2">
                 <label className="text-sm font-medium">Kategori</label>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
                   {CATEGORIES.map((c) => {
                     const disabled =
                       (c.id === "relationer" && !hasHousehold) ||
@@ -1635,7 +1635,7 @@ export function CalendarContent() {
                         title={disabled ? "Kräver familj respektive barn i appen" : undefined}
                         className={`w-full h-11 px-2 rounded-2xl text-sm font-medium border transition-all disabled:opacity-40 ${
                           newCat === c.id
-                            ? "text-white border-transparent"
+                            ? "text-primary-foreground border-transparent"
                             : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
                         }`}
                         style={newCat === c.id ? { backgroundColor: c.color } : undefined}
@@ -1671,7 +1671,7 @@ export function CalendarContent() {
                           }
                           className={`px-3 py-2 rounded-full text-sm font-medium border transition-all ${
                             selected
-                              ? "text-white border-transparent"
+                              ? "text-primary-foreground border-transparent"
                               : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
                           }`}
                           style={selected ? { backgroundColor: k.color } : undefined}
@@ -1759,7 +1759,7 @@ export function CalendarContent() {
                 <label className="text-sm font-medium">Påminnelse</label>
                 {newAnyTime ? (
                   <>
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
                       {REMIND_OPTIONS.map((opt) => (
                         <button
                           key={String(opt.value)}
@@ -1842,7 +1842,7 @@ export function CalendarContent() {
                     }
                     className={`px-3 py-2 rounded-full text-sm font-medium border transition-all ${
                       selected
-                        ? "text-white border-transparent"
+                        ? "text-primary-foreground border-transparent"
                         : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
                     }`}
                     style={selected ? { backgroundColor: k.color } : undefined}

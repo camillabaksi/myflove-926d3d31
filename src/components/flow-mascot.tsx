@@ -256,7 +256,7 @@ export function FlowSays({
       <div className="shrink-0">
         <FlowMascot size={size} float={!wave} wave={wave} glow={glow} mood={mood} />
       </div>
-      <div className="w-full min-w-0 rounded-2xl border border-[#2A2140]/5 bg-white px-4 py-3 text-sm leading-relaxed text-pretty text-[#2A2140] shadow-sm">
+      <div className="w-full min-w-0 rounded-2xl border border-border bg-card px-4 py-3 text-sm leading-relaxed text-pretty text-ink shadow-soft">
         {children}
       </div>
     </div>
