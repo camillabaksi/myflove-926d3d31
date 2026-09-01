@@ -8,7 +8,11 @@ vi.mock("@/integrations/supabase/client", () => ({
   supabase: {
     from: () => ({
       select: () => ({
-        eq: () => Promise.resolve({ data: cloudRows.map(({ id, level, logged_at }) => ({ id, level, logged_at })), error: null }),
+        eq: () =>
+          Promise.resolve({
+            data: cloudRows.map(({ id, level, logged_at }) => ({ id, level, logged_at })),
+            error: null,
+          }),
       }),
       upsert: (payload: { id: string; level: number; logged_at: string; user_id: string }) => ({
         select: () => ({
@@ -29,9 +33,8 @@ vi.mock("@/integrations/supabase/client", () => ({
   },
 }));
 
-const { ensurePendingUuids, isUuid, splitAlreadyMigrated, migratePendingEnergy } = await import(
-  "@/lib/energy-pending"
-);
+const { ensurePendingUuids, isUuid, splitAlreadyMigrated, migratePendingEnergy } =
+  await import("@/lib/energy-pending");
 
 beforeEach(() => {
   cloudRows.length = 0;
@@ -52,8 +55,16 @@ describe("väntande energiloggar", () => {
 
   it("hoppar över poster vars id redan finns i molnet", () => {
     const pending = [
-      { id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa", level: 3, logged_at: "2026-09-01T10:00:00.000Z" },
-      { id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb", level: 4, logged_at: "2026-09-01T11:00:00.000Z" },
+      {
+        id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+        level: 3,
+        logged_at: "2026-09-01T10:00:00.000Z",
+      },
+      {
+        id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+        level: 4,
+        logged_at: "2026-09-01T11:00:00.000Z",
+      },
     ];
     const { toInsert, alreadyThere } = splitAlreadyMigrated(pending, [{ id: pending[0].id }]);
     expect(alreadyThere.map((e) => e.id)).toEqual([pending[0].id]);
@@ -71,7 +82,9 @@ describe("väntande energiloggar", () => {
     expect(result.remaining).toHaveLength(0);
     expect(cloudRows).toHaveLength(2);
     expect(new Set(cloudRows.map((r) => r.id)).size).toBe(2);
-    expect(cloudRows.every((r) => r.logged_at === "2026-09-01T10:00:00.000Z" && r.level === 3)).toBe(true);
+    expect(
+      cloudRows.every((r) => r.logged_at === "2026-09-01T10:00:00.000Z" && r.level === 3),
+    ).toBe(true);
   });
 
   // TEST 2

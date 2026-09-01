@@ -99,8 +99,7 @@ export async function migratePendingEnergy(
   pending: PendingEnergyEntry[],
   cloud: { id?: string }[],
 ): Promise<MigrationResult> {
-  if (pending.length === 0)
-    return { migrated: [], remaining: [], inserted: [], normalized: [] };
+  if (pending.length === 0) return { migrated: [], remaining: [], inserted: [], normalized: [] };
 
   const { entries } = ensurePendingUuids(pending);
 
