@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-01";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Inga trånga kort kvar",
+    items: [
+      "Statistik- och valrutor wrappar i stället för att pressas ihop på smala skärmar (2026-09-01)",
+      "Flikraden i Daglig rutin bryter till flera rader i stället för att kapa etiketter (2026-09-01)",
+      "Titlar radbryts på två rader i stället för att klippas av (2026-09-01)",
+    ],
+  },
+
+  {
     title: "QuickFlow-uppgifter får egna påminnelser",
     items: [
       "Varje QuickFlow-uppgift kan få en egen signal när du väljer tid under Planera den (2026-09-01)",
