@@ -248,7 +248,8 @@ export function useFlowItems(dateISO?: string): {
         priority: p.bucket === "nu" ? "nu" : "idag",
         order: bucketRank(p.bucket) * 1000 + p.order,
         nextStep: p.clarify?.firstStep ?? undefined,
-        energy: p.clarify?.energy === "tung" ? 8 : p.clarify?.energy === "latt" ? 3 : undefined,
+        energy:
+          p.clarify?.energyLevel === "stor" ? 8 : p.clarify?.energyLevel === "liten" ? 3 : undefined,
         energyReason: p.why,
         done: !!p.done,
         completable: true,
