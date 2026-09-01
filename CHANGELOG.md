@@ -1,10 +1,14 @@
 # Changelog
 
+## 2026-09-01 – Flow samlar hjälp, planering och chatt
+
+- Flow, FlowPlan och Assistant visas som lägen i samma vy med flikarna Flow, Planera och Chatta.
+- De äldre adresserna finns kvar och öppnar motsvarande läge, utan att skapa separata kopior av innehållet.
+
 ## 2026-09-01 – Äldre energiposter får egna stabila id:n
 
 - Väntande energiloggar utan UUID får ett eget id som sparas lokalt innan de skickas upp, så två identiska historiska observationer aldrig slås ihop.
 - Migreringen skriver alltid med upsert på id, vilket gör den säker att köra om efter nätfel, avbrott eller utloggning utan dubbletter.
-
 
 ## 2026-09-01 – Kritiska data-, genvägs- och mobilfixar
 
@@ -38,7 +42,6 @@
 - När du väljer "Med tid" under "Planera den" kan varje QuickFlow-uppgift få en egen påminnelse: vid start, 10/30 minuter, en timme eller en dag innan.
 - Påminnelsen sparas på samma gemensamma uppgift som visas i Idag och Kalender – inga kopior skapas.
 - Utan tid finns ingen påminnelse, så Flow hittar inte på ett klockslag åt dig.
-
 
 ## 2026-09-01 – Din MyFlove: tema och alarm
 

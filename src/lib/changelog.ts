@@ -10,12 +10,20 @@ export const CHANGELOG_UPDATED = "2026-09-01";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Flow samlar hjälp, planering och chatt",
+    items: [
+      "Flow, FlowPlan och Assistant visas som lägen i samma vy med flikarna Flow, Planera och Chatta (2026-09-01)",
+      "De äldre adresserna finns kvar och öppnar motsvarande läge utan separata kopior av innehållet (2026-09-01)",
+    ],
+  },
+  {
     title: "Äldre energiposter får egna stabila id:n",
     items: [
       "Väntande energiloggar utan UUID får ett eget id som sparas lokalt innan de skickas upp, så två identiska historiska observationer aldrig slås ihop (2026-09-01)",
       "Migreringen skriver alltid med upsert på id och är därför säker att köra om efter nätfel, avbrott eller utloggning (2026-09-01)",
     ],
   },
+
   {
     title: "Kritiska data-, genvägs- och mobilfixar",
     items: [
