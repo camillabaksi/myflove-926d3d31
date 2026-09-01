@@ -131,8 +131,7 @@ export function QuickflowPriority() {
     }
     setPlanFor(null);
     const day = choice.dueDate === todayISO() ? "idag" : choice.dueDate;
-    const reminder =
-      choice.reminderMinutesBefore !== undefined ? " med egen påminnelse." : ".";
+    const reminder = choice.reminderMinutesBefore !== undefined ? " med egen påminnelse." : ".";
     toast({
       description: choice.time
         ? `Planerad i kalendern ${day} kl ${choice.time}${reminder}`
