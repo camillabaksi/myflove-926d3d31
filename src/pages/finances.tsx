@@ -1,6 +1,11 @@
 import { useState } from "react";
 import Layout from "@/components/layout";
-import { MyFlovePageGrid, MyFloveWide, MyFloveBlock, MyFloveStat } from "@/components/myflove/block";
+import {
+  MyFlovePageGrid,
+  MyFloveWide,
+  MyFloveBlock,
+  MyFloveStat,
+} from "@/components/myflove/block";
 import { useFinances, Transaction } from "@/hooks/use-data";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -88,7 +93,12 @@ export default function Finances() {
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
             <MyFloveStat label="Inkomster" value={`+${totalIncome} kr`} />
             <MyFloveStat label="Utgifter" value={`-${totalExpense} kr`} />
-            <MyFloveStat label="Kvar" value={`${balance} kr`} tone="lavender" className="col-span-2 sm:col-span-1" />
+            <MyFloveStat
+              label="Kvar"
+              value={`${balance} kr`}
+              tone="lavender"
+              className="col-span-2 sm:col-span-1"
+            />
           </div>
         </MyFloveWide>
 
@@ -199,9 +209,7 @@ export default function Finances() {
                   )}
 
                   <div>
-                    <label className="block text-sm font-medium mb-1">
-                      Anteckning (frivillig)
-                    </label>
+                    <label className="block text-sm font-medium mb-1">Anteckning (frivillig)</label>
                     <Input
                       value={note}
                       onChange={(e) => setNote(e.target.value)}

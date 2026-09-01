@@ -276,62 +276,62 @@ export default function RemindersPage() {
 
         <MyFloveWide>
           <MyFloveBlock title="Ny påminnelse" subtitle="Fyll i vad och när" icon={Plus}>
-          <form onSubmit={handleAdd} className="space-y-3">
-            <input
-              className={inputClass}
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Vad ska du påminnas om?"
-            />
-            <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2">
+            <form onSubmit={handleAdd} className="space-y-3">
               <input
                 className={inputClass}
-                type="date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Vad ska du påminnas om?"
               />
+              <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2">
+                <input
+                  className={inputClass}
+                  type="date"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                />
+                <input
+                  className={inputClass}
+                  type="time"
+                  value={time}
+                  onChange={(e) => setTime(e.target.value)}
+                />
+              </div>
+              <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2">
+                <select
+                  className={inputClass}
+                  value={repeat}
+                  onChange={(e) => setRepeat(e.target.value as RepeatMode)}
+                  aria-label="Upprepning"
+                >
+                  <option value="none">Ingen upprepning</option>
+                  <option value="daily">Varje dag</option>
+                  <option value="weekdays">Vardagar</option>
+                  <option value="weekly">Varje vecka</option>
+                </select>
+                <select
+                  className={inputClass}
+                  value={lead}
+                  onChange={(e) => setLead(Number(e.target.value))}
+                  aria-label="Förvarning"
+                >
+                  <option value={0}>Notis på tiden</option>
+                  <option value={5}>5 min innan</option>
+                  <option value={15}>15 min innan</option>
+                  <option value={30}>30 min innan</option>
+                  <option value={60}>1 timme innan</option>
+                </select>
+              </div>
               <input
                 className={inputClass}
-                type="time"
-                value={time}
-                onChange={(e) => setTime(e.target.value)}
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                placeholder="Anteckning (valfritt)"
               />
-            </div>
-            <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2">
-              <select
-                className={inputClass}
-                value={repeat}
-                onChange={(e) => setRepeat(e.target.value as RepeatMode)}
-                aria-label="Upprepning"
-              >
-                <option value="none">Ingen upprepning</option>
-                <option value="daily">Varje dag</option>
-                <option value="weekdays">Vardagar</option>
-                <option value="weekly">Varje vecka</option>
-              </select>
-              <select
-                className={inputClass}
-                value={lead}
-                onChange={(e) => setLead(Number(e.target.value))}
-                aria-label="Förvarning"
-              >
-                <option value={0}>Notis på tiden</option>
-                <option value={5}>5 min innan</option>
-                <option value={15}>15 min innan</option>
-                <option value={30}>30 min innan</option>
-                <option value={60}>1 timme innan</option>
-              </select>
-            </div>
-            <input
-              className={inputClass}
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
-              placeholder="Anteckning (valfritt)"
-            />
-            <Button type="submit" className="h-12 w-full rounded-xl">
-              <Plus size={18} className="mr-2" /> Lägg till påminnelse
-            </Button>
-          </form>
+              <Button type="submit" className="h-12 w-full rounded-xl">
+                <Plus size={18} className="mr-2" /> Lägg till påminnelse
+              </Button>
+            </form>
           </MyFloveBlock>
         </MyFloveWide>
 

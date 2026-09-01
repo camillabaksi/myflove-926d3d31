@@ -469,11 +469,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
               status={flowStatus}
               bump
               mood={
-                flowStatus === "thinking"
-                  ? "think"
-                  : flowStatus === "done"
-                    ? "cheer"
-                    : undefined
+                flowStatus === "thinking" ? "think" : flowStatus === "done" ? "cheer" : undefined
               }
               className="shrink-0"
             />
