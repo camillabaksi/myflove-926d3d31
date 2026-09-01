@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { RotateCcw, Accessibility, BarChart3, Eye, Hand } from "lucide-react";
 import { useNpfSettings, type NpfSettings } from "@/lib/npf-mode";
+import { PersonalizationSettings } from "@/components/personalization-settings";
 import { Link } from "@tanstack/react-router";
 
 function readAnalyticsOptOut(): boolean {
@@ -133,6 +134,15 @@ export default function NpfPage() {
             ))}
           </div>
         </MyFloveBlock>
+
+        <MyFloveWide>
+          <header className="space-y-1">
+            <h2 className="text-lg font-bold text-ink">Din MyFlove</h2>
+            <p className="text-sm text-muted-foreground">Gör appen lite mer till din.</p>
+          </header>
+        </MyFloveWide>
+
+        <PersonalizationSettings />
 
         <MyFloveBlock
           title="Integritet"

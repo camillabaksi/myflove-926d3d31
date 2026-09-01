@@ -8,7 +8,8 @@ export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
 export const CHANGELOG_UPDATED = "2026-09-01";
 
-export const CHANGELOG_SECTIONS: ChangelogSection[] = [  {
+export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  {
     title: "QuickFlow landar direkt i Idag",
     items: [
       "Varje godkänd QuickFlow-post skapas direkt som dagens gemensamma uppgift med samma ID (2026-09-01)",

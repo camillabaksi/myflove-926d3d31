@@ -28,6 +28,9 @@ const DEVICE_KEYS = new Set<string>([
   "myflove-preferred-name",
   "myflove-day-window",
   "myflove-day-edges",
+  // Personalisering: tema, alarmsignal och alarmformat hör till enheten.
+  "myflove-alarm-sound",
+  "myflove-alarm-format",
 ]);
 
 export function isUserDataKey(key: string): boolean {
