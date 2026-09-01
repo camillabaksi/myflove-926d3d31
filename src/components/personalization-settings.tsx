@@ -36,6 +36,10 @@ export function PersonalizationSettings() {
     if (id === "vibration" || id === "bada") haptic("success");
   };
 
+  const activeTheme = THEMES.find((t) => t.id === personalization.theme);
+  const activeSound = ALARM_SOUNDS.find((s) => s.id === personalization.alarmSound);
+  const activeFormat = ALARM_FORMATS.find((f) => f.id === personalization.alarmFormat);
+
   return (
     <>
       <MyFloveBlock
@@ -46,7 +50,9 @@ export function PersonalizationSettings() {
         tone="lavender"
         surface="lavender"
         collapsible
+        defaultCollapsed
         collapseId="anpassa::tema"
+        status={activeTheme ? `Valt: ${activeTheme.label}` : undefined}
         data-testid="personalization-theme"
       >
         <div className="flex flex-wrap gap-2">
