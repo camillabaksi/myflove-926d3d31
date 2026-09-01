@@ -1,9 +1,9 @@
 # Changelog
 
-## 2026-09-01 – Valknappar med ikon ovanför text
+## 2026-09-01 – Blockrubriken får ikon ovanför text
 
-- Tema- och alarmformat-knapparna i Anpassa appen är nu mer fyrkantiga med ikonen längst upp till vänster och texten under.
-- Knapparna ligger i ett jämnt rutnät – två i bredd på mobil och fyra på större skärmar.
+- Ikonen i varje MyFlove-block ligger nu längst upp till vänster, med rubrik, underrubrik och sammanfattning under.
+- Chevron för att expandera/minimera sitter uppe till höger på samma rad som ikonen.
 
 ## 2026-09-01 – Blocken är mer fyrkantiga och horisontella
 
