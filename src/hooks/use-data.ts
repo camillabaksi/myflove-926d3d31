@@ -136,6 +136,8 @@ export function useTasks() {
     title: string,
     dueDate?: string,
     opts?: {
+      id?: string;
+      quickflowId?: string;
       kind?: TaskKind;
       waitingOn?: string;
       note?: string;
@@ -155,10 +157,11 @@ export function useTasks() {
     // Om inget datum anges kopplas uppgiften till idag.
     setTasks((prev) => [
       {
-        id: generateId(),
+        id: opts?.id ?? generateId(),
         title,
         completed: false,
         createdAt: Date.now(),
+        quickflowId: opts?.quickflowId,
         dueDate: dueDate ?? getTodayDateString(),
         time: opts?.time,
         endTime: opts?.endTime,
