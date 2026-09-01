@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-01 – QuickFlow och Idag delar samma uppgifter
+
+- Godkända QuickFlow-poster visas nu automatiskt i Idag utan att tid eller kalenderhändelse krävs.
+- Idag och QuickFlow använder samma post och status: avbockning, prioriteringsordning, redigering och borttagning följer med mellan vyerna.
+- Befintliga poster i dagens lista visas inte dubbelt när de redan finns i QuickFlow.
+
 ## 2026-08-31 – QuickFlow: nya dumpar skriver inte längre över listan
 
 - "Godkänn och prioritera" slog tidigare ut hela "Min lista just nu" – inklusive saker du redan hunnit bocka av.
@@ -24,8 +30,6 @@
 - "Planera den" delar nu upp text som innehåller flera saker i enskilda aktiviteter i stället för att spara allt som en enda.
 - Fler skiljeord känns igen vid uppdelning (sen, sedan, dessutom).
 - Dialogrutor scrollar nu vid mycket text, så hela innehållet och knapparna alltid syns.
-
-
 
 ## 2026-08-31 – QuickFlow: planera med din egen tid
 

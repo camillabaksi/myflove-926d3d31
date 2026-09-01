@@ -6,9 +6,17 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-08-31";
+export const CHANGELOG_UPDATED = "2026-09-01";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  {
+    title: "QuickFlow och Idag delar samma uppgifter",
+    items: [
+      "Godkända QuickFlow-poster visas automatiskt i Idag utan krav på tid eller kalenderhändelse (2026-09-01)",
+      "Samma status, ordning, redigering och borttagning används i båda vyerna (2026-09-01)",
+      "Befintliga poster dedupliceras i dagens lista (2026-09-01)",
+    ],
+  },
   {
     title: "QuickFlow: nya dumpar skriver inte över listan",
     items: [
