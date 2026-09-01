@@ -209,6 +209,7 @@ export function useTasks() {
         | "energyImpact"
         | "friction"
         | "actualEnergy"
+        | "quickflowId"
       >
     >,
   ) => {
