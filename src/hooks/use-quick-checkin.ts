@@ -198,7 +198,13 @@ export function useQuickCheckin() {
       setCheckin10((prev) => ({ day: todayKey(), mood: prev?.mood, energy: level10 }));
       const run = async () => {
         const now = new Date().toISOString();
-        const local = { id: Math.random().toString(36).slice(2, 11), level, logged_at: now };
+        // Stabilt id (UUID när webbläsaren stöder det) så att en post som
+        // ligger i kön kan skrivas upp idempotent, utan dubbletter vid retry.
+        const id =
+          typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+            ? crypto.randomUUID()
+            : Math.random().toString(36).slice(2, 11);
+        const local = { id, level, logged_at: now };
         if (!userId) {
           setPendingEnergy((prev) => [...(prev ?? []), local]);
           setLocalEnergy((prev) => [...(prev ?? []), local]);
