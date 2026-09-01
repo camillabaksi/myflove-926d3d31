@@ -4,6 +4,9 @@ import { useStudySchedule } from "@/hooks/use-study-schedule";
 import { useChildEvents } from "@/hooks/use-child-events";
 import { useChildren } from "@/hooks/use-children";
 import { useQuickflow } from "@/hooks/use-quickflow";
+import { usePriorityList } from "@/hooks/use-priority-list";
+import { normalizeQuickflowText } from "@/lib/quickflow";
+import { bucketRank } from "@/lib/quickflow-priority";
 import { useFrictionLibrary } from "@/hooks/use-friction-library";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import { useDoneLog } from "@/hooks/use-done-log";
@@ -45,6 +48,7 @@ export function useFlowItems(dateISO?: string): {
   const childEvents = useChildEvents(targetDay);
   const { toggleItem: toggleChildItem } = useChildren();
   const { items: quickflowItems, complete, uncomplete } = useQuickflow();
+  const { items: priorityItems, update: updatePriority } = usePriorityList();
   const { suggestFor } = useFrictionLibrary();
   const { entries: energyEntries } = useEnergyFlow();
   const { isDone, toggleDone } = useDoneLog(targetDay);
@@ -221,6 +225,40 @@ export function useFlowItems(dateISO?: string): {
       });
     }
 
+    // QuickFlow-listan är inte en egen ö: samma post som ligger i "Min lista
+    // just nu" visas här i dagens genomförandelista. Ett id, ett state – att
+    // bocka av på ena stället ändrar den andra vyn direkt.
+    const seenTitles = new Set(out.map((i) => normalizeQuickflowText(i.title)).filter(Boolean));
+    for (const p of priorityItems) {
+      // Redan klara poster hör bara till den dag de bockades av.
+      if (p.done && !isToday(p.doneAt)) continue;
+      if (!isTodayView && !p.done) continue;
+      const key = normalizeQuickflowText(p.title);
+      // Finns saken redan som uppgift, tanke eller händelse? Visa den en gång.
+      if (key && seenTitles.has(key)) continue;
+      if (key) seenTitles.add(key);
+      out.push({
+        id: `prio-${p.id}`,
+        title: p.title,
+        source: "quickflow",
+        area: "vardag",
+        emoji: "⚡",
+        priority: p.bucket === "nu" ? "nu" : "idag",
+        order: bucketRank(p.bucket) * 1000 + p.order,
+        nextStep: p.clarify?.firstStep ?? undefined,
+        energy:
+          p.clarify?.energyLevel === "stor"
+            ? 8
+            : p.clarify?.energyLevel === "liten"
+              ? 3
+              : undefined,
+        energyReason: p.why,
+        done: !!p.done,
+        completable: true,
+        href: "/quickflow",
+      });
+    }
+
     // "Jag gjorde något" – spontana saker användaren loggat. De är redan
     // genomförda och hör till samma dag, så de syns bland dagens gjorda saker.
     // Samma post kan finnas både lokalt och i molnet under en sync – därför
@@ -253,6 +291,7 @@ export function useFlowItems(dateISO?: string): {
     childEvents,
     routines,
     quickflowItems,
+    priorityItems,
     energyEntries,
     suggestFor,
     isDone,
@@ -285,6 +324,14 @@ export function useFlowItems(dateISO?: string): {
         void toggleChildItem(rest, !item.done);
         return;
       }
+      if (item.id.startsWith("prio-")) {
+        const pid = item.id.slice(5);
+        updatePriority(
+          pid,
+          item.done ? { done: false, doneAt: undefined } : { done: true, doneAt: Date.now() },
+        );
+        return;
+      }
       if (item.id.startsWith("qf-")) {
         if (item.done) uncomplete(rest);
         else complete(rest);
@@ -293,7 +340,7 @@ export function useFlowItems(dateISO?: string): {
       // Rutiner, lektioner och schemarader: dagsbaserad genomförandelogg.
       toggleDone(item.id);
     },
-    [toggleTask, toggleReminder, toggleChildItem, complete, uncomplete, toggleDone],
+    [toggleTask, toggleReminder, toggleChildItem, complete, uncomplete, toggleDone, updatePriority],
   );
 
   return { items, today, todayOpen, todayDone, toggleItem };

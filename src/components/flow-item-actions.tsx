@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useTasks, useReminders } from "@/hooks/use-data";
 import { useQuickflow } from "@/hooks/use-quickflow";
+import { usePriorityList } from "@/hooks/use-priority-list";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { ALL_AREAS, AREA_META, type LifeArea } from "@/lib/life-areas";
 import type { Routine } from "@/lib/recurrence";
@@ -25,13 +26,14 @@ import type { Routine } from "@/lib/recurrence";
  * barnens hållpunkter) ändras där de hör hemma – då visar vi vart man går.
  */
 
-export type EditableKind = "uppgift" | "kalender" | "tanke" | "rutin" | "extern";
+export type EditableKind = "uppgift" | "kalender" | "tanke" | "quickflow" | "rutin" | "extern";
 
 /** Vilken sorts sak ett id pekar på: "task-123", "rem-9", "qf-a1", "routine-x". */
 export function kindFromId(id: string): { kind: EditableKind; realId: string } {
   if (id.startsWith("task-")) return { kind: "uppgift", realId: id.slice(5) };
   if (id.startsWith("rem-")) return { kind: "kalender", realId: id.slice(4) };
   if (id.startsWith("qf-")) return { kind: "tanke", realId: id.slice(3) };
+  if (id.startsWith("prio-")) return { kind: "quickflow", realId: id.slice(5) };
   if (id.startsWith("routine-")) return { kind: "rutin", realId: id.slice(8) };
   // Kalendervyn använder kortare prefix för samma saker.
   if (id.startsWith("t-")) return { kind: "uppgift", realId: id.slice(2) };
@@ -103,15 +105,21 @@ function FlowItemEditDialog({ itemId, onClose }: { itemId: string; onClose: () =
   const { tasks, updateTask, deleteTask } = useTasks();
   const { reminders, updateReminder, deleteReminder } = useReminders();
   const { items: thoughts, update: updateThought, remove: removeThought } = useQuickflow();
+  const {
+    items: priorityItems,
+    update: updatePriority,
+    remove: removePriority,
+  } = usePriorityList();
   const [routines, setRoutines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
 
   const source = useMemo(() => {
     if (kind === "uppgift") return tasks.find((t) => t.id === realId) ?? null;
     if (kind === "kalender") return reminders.find((r) => r.id === realId) ?? null;
     if (kind === "tanke") return thoughts.find((t) => t.id === realId) ?? null;
+    if (kind === "quickflow") return priorityItems.find((p) => p.id === realId) ?? null;
     if (kind === "rutin") return (routines ?? []).find((r) => r.id === realId) ?? null;
     return null;
-  }, [kind, realId, tasks, reminders, thoughts, routines]);
+  }, [kind, realId, tasks, reminders, thoughts, priorityItems, routines]);
 
   const initial = useMemo(() => {
     if (!source) return null;
@@ -134,6 +142,17 @@ function FlowItemEditDialog({ itemId, onClose }: { itemId: string; onClose: () =
         time: r.time ?? "",
         endTime: r.endTime ?? "",
         note: r.note ?? "",
+        area: "vardag" as LifeArea,
+      };
+    }
+    if (kind === "quickflow") {
+      const p = source as (typeof priorityItems)[number];
+      return {
+        title: p.title,
+        date: "",
+        time: "",
+        endTime: "",
+        note: "",
         area: "vardag" as LifeArea,
       };
     }
@@ -188,6 +207,8 @@ function FlowItemEditDialog({ itemId, onClose }: { itemId: string; onClose: () =
         endTime: form.endTime || undefined,
         note: form.note,
       });
+    } else if (kind === "quickflow") {
+      updatePriority(realId, { title });
     } else if (kind === "tanke") {
       updateThought(realId, { text: title, area: form.area });
     } else if (kind === "rutin") {
@@ -202,6 +223,7 @@ function FlowItemEditDialog({ itemId, onClose }: { itemId: string; onClose: () =
   const remove = () => {
     if (kind === "uppgift") deleteTask(realId);
     else if (kind === "kalender") deleteReminder(realId);
+    else if (kind === "quickflow") removePriority(realId);
     else if (kind === "tanke") removeThought(realId);
     else if (kind === "rutin") setRoutines((prev) => (prev ?? []).filter((r) => r.id !== realId));
     toast.success("Borttagen");
