@@ -198,7 +198,7 @@ export default function BudgetPanel({
 
           <Bar spent={Math.max(0, net)} budget={total ?? 0} />
 
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,6.5rem),1fr))] gap-2 text-center">
+          <div className="grid grid-cols-3 gap-2 text-center">
             <div className="rounded-xl bg-secondary/50 py-2">
               <p className="text-xs text-muted-foreground">Utgifter</p>
               <p className="text-sm font-semibold">-{spent} kr</p>

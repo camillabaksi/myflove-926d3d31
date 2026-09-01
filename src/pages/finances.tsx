@@ -84,7 +84,7 @@ export default function Finances() {
               description="Den här månaden – inkomster, utgifter och det som är på väg."
             />
 
-            <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,8.5rem),1fr))] gap-4">
+            <div className="grid grid-cols-3 gap-4">
               <div className="bg-card p-4 rounded-2xl border border-border shadow-sm flex flex-col items-center justify-center text-center">
                 <span className="text-sm text-muted-foreground mb-1">Inkomster</span>
                 <span className="text-xl font-semibold text-primary">+{totalIncome} kr</span>

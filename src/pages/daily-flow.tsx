@@ -38,7 +38,7 @@ export default function DailyFlowPage() {
             </header>
 
             <Tabs defaultValue="both" className="w-full">
-              <TabsList className="grid h-auto w-full grid-cols-[repeat(auto-fit,minmax(min(100%,7rem),1fr))] gap-1 rounded-2xl">
+              <TabsList className="grid w-full grid-cols-4 h-11 rounded-2xl">
                 <TabsTrigger value="both" className="rounded-xl">
                   Alla
                 </TabsTrigger>

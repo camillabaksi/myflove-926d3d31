@@ -302,7 +302,7 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
                     <Clock size={20} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium line-clamp-2 break-words">{r.title}</p>
+                    <p className="font-medium truncate">{r.title}</p>
                     <p className="text-xs text-muted-foreground">
                       {REPEAT_LABELS[r.repeat ?? "daily"]}
                       {r.repeat === "none" && r.startDate
