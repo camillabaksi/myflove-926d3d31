@@ -148,7 +148,9 @@ export function PersonalizationSettings() {
         tone="sun"
         surface="sun"
         collapsible
+        defaultCollapsed
         collapseId="anpassa::alarmformat"
+        status={activeFormat ? `Valt: ${activeFormat.label}` : undefined}
         data-testid="personalization-format"
       >
         <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2">
