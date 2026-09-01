@@ -68,6 +68,9 @@ export interface Task {
   /** När den faktiska energin loggades. */
   actualEnergyAt?: number;
 
+  /** Koppling till QuickFlows gemensamma uppgiftspost. */
+  quickflowId?: string;
+
   steps?: TaskStep[]; // delsteg (särskilt för ärenden och projekt)
   area?: LifeArea; // livsområde: vardag / privat / studier / jobb
   courseId?: string; // kopplad kurs (studieflödet)
