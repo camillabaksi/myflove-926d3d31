@@ -240,7 +240,7 @@ export function useFlowItems(dateISO?: string): {
       // Den riktiga task-raden ovan är den enda visningen när bryggan finns.
       if (linkedQuickflowIds.has(p.id)) continue;
       out.push({
-        id: `prio-${p.id`,
+        id: `prio-${p.id}`,
         title: p.title,
         source: "quickflow",
         area: "vardag",

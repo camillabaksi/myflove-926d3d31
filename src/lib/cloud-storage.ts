@@ -39,7 +39,6 @@ supabase.auth.onAuthStateChange(() => {
  */
 export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
   const [value, setValue] = useLocalStorage<T>(key, initialValue);
-  const [ready, setReady] = useState(false);
   const hydratedRef = useRef(false);
   const dirtyRef = useRef(false);
   const initialRef = useRef(initialValue);
