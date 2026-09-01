@@ -2,7 +2,11 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useMoods, type MoodEntry } from "@/hooks/use-data";
 import { useLocalStorage } from "@/lib/storage";
-import { PENDING_ENERGY_KEY, migratePendingEnergy } from "@/lib/energy-pending";
+import {
+  PENDING_ENERGY_KEY,
+  ensurePendingUuids,
+  migratePendingEnergy,
+} from "@/lib/energy-pending";
 
 /**
  * Snabb självregistrering av mående och energi.
