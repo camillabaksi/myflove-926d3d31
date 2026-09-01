@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-01 – Äldre energiposter får egna stabila id:n
+
+- Väntande energiloggar utan UUID får ett eget id som sparas lokalt innan de skickas upp, så två identiska historiska observationer aldrig slås ihop.
+- Migreringen skriver alltid med upsert på id, vilket gör den säker att köra om efter nätfel, avbrott eller utloggning utan dubbletter.
+
+
 ## 2026-09-01 – Kritiska data-, genvägs- och mobilfixar
 
 - Osynkad lokal användardata och väntande energiloggar skyddas vid utloggning, med bekräftad molnsynk, retry och idempotent migrering.

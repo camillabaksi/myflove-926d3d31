@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-01";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Äldre energiposter får egna stabila id:n",
+    items: [
+      "Väntande energiloggar utan UUID får ett eget id som sparas lokalt innan de skickas upp, så två identiska historiska observationer aldrig slås ihop (2026-09-01)",
+      "Migreringen skriver alltid med upsert på id och är därför säker att köra om efter nätfel, avbrott eller utloggning (2026-09-01)",
+    ],
+  },
+  {
     title: "Kritiska data-, genvägs- och mobilfixar",
     items: [
       "Osynkad lokal användardata och väntande energiloggar skyddas vid utloggning med bekräftad molnsynk, retry och idempotent migrering (2026-09-01)",
