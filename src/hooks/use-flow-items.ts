@@ -228,9 +228,7 @@ export function useFlowItems(dateISO?: string): {
     // QuickFlow-listan är inte en egen ö: samma post som ligger i "Min lista
     // just nu" visas här i dagens genomförandelista. Ett id, ett state – att
     // bocka av på ena stället ändrar den andra vyn direkt.
-    const seenTitles = new Set(
-      out.map((i) => normalizeQuickflowText(i.title)).filter(Boolean),
-    );
+    const seenTitles = new Set(out.map((i) => normalizeQuickflowText(i.title)).filter(Boolean));
     for (const p of priorityItems) {
       // Redan klara poster hör bara till den dag de bockades av.
       if (p.done && !isToday(p.doneAt)) continue;
@@ -249,7 +247,11 @@ export function useFlowItems(dateISO?: string): {
         order: bucketRank(p.bucket) * 1000 + p.order,
         nextStep: p.clarify?.firstStep ?? undefined,
         energy:
-          p.clarify?.energyLevel === "stor" ? 8 : p.clarify?.energyLevel === "liten" ? 3 : undefined,
+          p.clarify?.energyLevel === "stor"
+            ? 8
+            : p.clarify?.energyLevel === "liten"
+              ? 3
+              : undefined,
         energyReason: p.why,
         done: !!p.done,
         completable: true,
@@ -324,9 +326,10 @@ export function useFlowItems(dateISO?: string): {
       }
       if (item.id.startsWith("prio-")) {
         const pid = item.id.slice(5);
-        updatePriority(pid, item.done
-          ? { done: false, doneAt: undefined }
-          : { done: true, doneAt: Date.now() });
+        updatePriority(
+          pid,
+          item.done ? { done: false, doneAt: undefined } : { done: true, doneAt: Date.now() },
+        );
         return;
       }
       if (item.id.startsWith("qf-")) {
@@ -337,15 +340,7 @@ export function useFlowItems(dateISO?: string): {
       // Rutiner, lektioner och schemarader: dagsbaserad genomförandelogg.
       toggleDone(item.id);
     },
-    [
-      toggleTask,
-      toggleReminder,
-      toggleChildItem,
-      complete,
-      uncomplete,
-      toggleDone,
-      updatePriority,
-    ],
+    [toggleTask, toggleReminder, toggleChildItem, complete, uncomplete, toggleDone, updatePriority],
   );
 
   return { items, today, todayOpen, todayDone, toggleItem };

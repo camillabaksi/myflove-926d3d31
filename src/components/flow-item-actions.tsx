@@ -26,13 +26,7 @@ import type { Routine } from "@/lib/recurrence";
  * barnens hållpunkter) ändras där de hör hemma – då visar vi vart man går.
  */
 
-export type EditableKind =
-  | "uppgift"
-  | "kalender"
-  | "tanke"
-  | "quickflow"
-  | "rutin"
-  | "extern";
+export type EditableKind = "uppgift" | "kalender" | "tanke" | "quickflow" | "rutin" | "extern";
 
 /** Vilken sorts sak ett id pekar på: "task-123", "rem-9", "qf-a1", "routine-x". */
 export function kindFromId(id: string): { kind: EditableKind; realId: string } {
