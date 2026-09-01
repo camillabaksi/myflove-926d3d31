@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-01 – Blockrubriken får ikon ovanför text
+
+- Ikonen i varje MyFlove-block ligger nu längst upp till vänster, med rubrik, underrubrik och sammanfattning under.
+- Chevron för att expandera/minimera sitter uppe till höger på samma rad som ikonen.
+
 ## 2026-09-01 – Blocken är mer fyrkantiga och horisontella
 
 - Kollapsade block är tillbaka som kompakta kort (cirka 10 rem höga) i stället för avlånga rektanglar.

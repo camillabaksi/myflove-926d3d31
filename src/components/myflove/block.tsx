@@ -85,15 +85,27 @@ export function MyFloveBlock({
   const { collapsed, toggle } = useCollapsible(storeId, defaultCollapsed);
 
   const heading = (
-    <div className="flex min-w-0 flex-1 items-center gap-3 text-left">
-      {icon && (
-        <MyFloveIcon
-          icon={icon}
-          tone={tone}
-          size="sm"
-          className={area ? "area-bg-soft area-text" : undefined}
-        />
-      )}
+    <div className="flex min-w-0 flex-1 flex-col items-start gap-2 text-left">
+      <div className="flex w-full items-start justify-between gap-2">
+        {icon && (
+          <MyFloveIcon
+            icon={icon}
+            tone={tone}
+            size="sm"
+            className={area ? "area-bg-soft area-text" : undefined}
+          />
+        )}
+        {collapsible && (
+          <ChevronDown
+            size={18}
+            aria-hidden="true"
+            className={cn(
+              "shrink-0 text-muted-foreground transition-transform duration-200",
+              collapsed && "-rotate-90",
+            )}
+          />
+        )}
+      </div>
       <div className="min-w-0 flex-1">
         {eyebrow && (
           <span className="mb-1 inline-flex rounded-pill bg-primary/10 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-primary">
@@ -110,16 +122,6 @@ export function MyFloveBlock({
           <div className="mt-1.5 text-sm text-ink line-clamp-1">{status}</div>
         )}
       </div>
-      {collapsible && (
-        <ChevronDown
-          size={18}
-          aria-hidden="true"
-          className={cn(
-            "shrink-0 self-center text-muted-foreground transition-transform duration-200",
-            collapsed && "-rotate-90",
-          )}
-        />
-      )}
     </div>
   );
 

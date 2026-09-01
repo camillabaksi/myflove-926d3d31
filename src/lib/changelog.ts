@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-01";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Blockrubriken får ikon ovanför text",
+    items: [
+      "Ikonen i varje MyFlove-block ligger längst upp till vänster med rubrik, underrubrik och sammanfattning under (2026-09-01)",
+      "Chevron för expandera/minimera sitter uppe till höger på samma rad som ikonen (2026-09-01)",
+    ],
+  },
+  {
     title: "Blocken är mer fyrkantiga och horisontella",
     items: [
       "Kollapsade block är tillbaka som kompakta kort (cirka 10 rem höga) i stället för avlånga rektanglar (2026-09-01)",
