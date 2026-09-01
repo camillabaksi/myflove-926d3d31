@@ -320,7 +320,7 @@ export default function ChildSchedule({
               placeholder="Ämne, t.ex. Matematik"
               className="h-11 rounded-2xl"
             />
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2">
               <Input
                 type="time"
                 value={start}

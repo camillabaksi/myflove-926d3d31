@@ -989,7 +989,7 @@ export default function TrainingPage() {
                     </p>
                   </fieldset>
 
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-3">
                     <label className="text-sm text-muted-foreground">
                       Minuter/pass
                       <Input
@@ -1463,7 +1463,7 @@ export default function TrainingPage() {
                   </p>
                 )}
               </fieldset>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-3">
                 <label className="text-sm text-muted-foreground">
                   Minuter
                   <Input

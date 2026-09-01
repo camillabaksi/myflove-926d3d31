@@ -46,7 +46,7 @@ export default function DayEdgesCheckin({ className }: { className?: string }) {
         </p>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-3">
         <label className="space-y-1 text-xs text-muted-foreground">
           Morgonen startar
           <input

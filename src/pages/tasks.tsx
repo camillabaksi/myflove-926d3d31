@@ -407,7 +407,7 @@ export default function Tasks() {
             )}
 
             {/* Datum, tider och påminnelse */}
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2">
               <div className="space-y-1.5">
                 <label
                   className="text-xs font-medium text-muted-foreground"

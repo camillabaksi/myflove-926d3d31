@@ -153,7 +153,7 @@ export function TodayContent() {
       <MyFloveWide
         role="tablist"
         aria-label="Visningsläge för dagen"
-        className="grid grid-cols-2 gap-1 rounded-2xl bg-muted/60 p-1"
+        className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-1 rounded-2xl bg-muted/60 p-1"
       >
         {(
           [

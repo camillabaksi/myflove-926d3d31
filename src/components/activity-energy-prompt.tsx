@@ -74,7 +74,7 @@ export function ActivityEnergyPrompt({
           Vi frågar hur aktiviteten påverkade dig för att Flow över tid ska kunna förstå vad som ger
           och tar energi för just dig. Svaret är alltid frivilligt.
         </WhyHint>
-        <div className="grid grid-cols-2 gap-2 pt-1">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2 pt-1">
           {CHOICES.map((c) => (
             <button
               key={c.id}

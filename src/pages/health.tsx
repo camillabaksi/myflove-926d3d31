@@ -60,7 +60,7 @@ export default function HealthPage() {
         </MyFloveWide>
 
         <MyFloveWide>
-          <ul className="grid grid-cols-2 items-stretch gap-3">
+          <ul className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] items-stretch gap-3">
             {AREAS.map((a) => {
               const Icon = a.icon;
               return (
