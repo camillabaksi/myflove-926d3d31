@@ -13,7 +13,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     title: "Investerar-/demokonto med exempeldata",
     items: [
       "Ett markerat demokonto fylls automatiskt en gång med syntetisk QuickFlow, dagsplan, rutiner, mående och energi (2026-09-02)",
-      "Diskret markering \"Demokonto · Exempeldata\" i appen, och demoanvändning räknas inte in i besöks- eller användarstatistiken (2026-09-02)",
+      'Diskret markering "Demokonto · Exempeldata" i appen, och demoanvändning räknas inte in i besöks- eller användarstatistiken (2026-09-02)',
       "Demokontot är en vanlig användare med normal behörighet – inga nya roller och inga lösenord i koden (2026-09-02)",
     ],
   },
