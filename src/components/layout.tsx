@@ -747,29 +747,31 @@ export default function Layout({ children }: LayoutProps) {
         </div>
         <div className="mt-auto pt-3 pb-1 space-y-1.5">
           <Link href="/anpassa">
-            <Button variant="outline" className="w-full rounded-xl gap-2">
-              <Accessibility size={16} /> Anpassa appen
+            <Button variant="outline" size="sm" className="w-full rounded-lg gap-2">
+              <Accessibility size={15} /> Anpassa appen
             </Button>
           </Link>
           <Button
             variant="outline"
-            className="w-full rounded-xl gap-2"
+            size="sm"
+            className="w-full rounded-lg gap-2"
             onClick={toggleAlarm}
             title={alarmEnabled ? "Stäng av alarmljud" : "Slå på alarmljud"}
           >
-            {alarmEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
+            {alarmEnabled ? <Volume2 size={15} /> : <VolumeX size={15} />}
             Alarmljud: {alarmEnabled ? "på" : "av"}
           </Button>
           <Show when="signed-in">
             <Button
               variant="outline"
-              className="w-full rounded-xl gap-2"
+              size="sm"
+              className="w-full rounded-lg gap-2"
               onClick={() => {
                 track("logout");
                 signOut();
               }}
             >
-              <LogOut size={16} /> Logga ut
+              <LogOut size={15} /> Logga ut
             </Button>
           </Show>
         </div>
