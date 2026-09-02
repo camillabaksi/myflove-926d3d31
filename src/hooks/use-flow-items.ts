@@ -16,6 +16,7 @@ import { routineOccursOn, type Routine } from "@/lib/recurrence";
 import { occursOn } from "@/lib/recurrence";
 
 import {
+  completedBelongsToDay,
   daysUntilDate,
   priorityFor,
   sortFlowItems,
