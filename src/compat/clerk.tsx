@@ -3,6 +3,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { User, Session } from "@supabase/supabase-js";
 import { clearLocalUserData } from "@/lib/local-data";
+import { setDemoSession } from "@/lib/demo-account";
 
 type AuthState = {
   user: User | null;
@@ -64,6 +65,7 @@ export function useClerk() {
       // i synkkön skrivas upp och bekräftas. Det som molnet inte bekräftar
       // ligger kvar lokalt och synkas vid nästa inloggning.
       await clearLocalUserData();
+      setDemoSession(false);
       await supabase.auth.signOut();
       if (typeof window !== "undefined") window.location.href = "/sign-in";
     },
