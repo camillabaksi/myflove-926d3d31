@@ -19,29 +19,35 @@ describe("lokal användardata", () => {
     expect(isUserDataKey("cookie-consent")).toBe(false);
   });
 
-  it("lämnar namn och morgon/kväll-batteri kvar vid utloggning", async () => {
-    expect(isUserDataKey("myflove-preferred-name")).toBe(false);
-    expect(isUserDataKey("myflove-day-window")).toBe(false);
-    expect(isUserDataKey("myflove-day-edges")).toBe(false);
+  it("rensar kontosynkat namn och morgon/kväll-batteri vid utloggning", async () => {
+    expect(isUserDataKey("myflove-preferred-name")).toBe(true);
+    expect(isUserDataKey("myflove-day-window")).toBe(true);
+    expect(isUserDataKey("myflove-day-edges")).toBe(true);
 
-    window.localStorage.setItem("myflove-preferred-name", "Camilla");
+    window.localStorage.setItem("myflove-preferred-name", JSON.stringify("Camilla"));
+    window.localStorage.setItem("myflove-preferred-name__updated_at", "100");
+    window.localStorage.setItem("myflove-preferred-name__synced_at", "100");
     window.localStorage.setItem(
       "myflove-day-window",
       JSON.stringify({ start: "07:00", end: "22:00" }),
     );
+    window.localStorage.setItem("myflove-day-window__updated_at", "100");
+    window.localStorage.setItem("myflove-day-window__synced_at", "100");
     window.localStorage.setItem(
       "myflove-day-edges",
       JSON.stringify({ "2026-08-31": { morning: 6, evening: 3 } }),
     );
+    window.localStorage.setItem("myflove-day-edges__updated_at", "100");
+    window.localStorage.setItem("myflove-day-edges__synced_at", "100");
     window.localStorage.setItem("myflove-medications", JSON.stringify(["ritalin"]));
     window.localStorage.setItem("myflove-medications__updated_at", "100");
     window.localStorage.setItem("myflove-medications__synced_at", "100");
 
     await clearLocalUserData();
 
-    expect(window.localStorage.getItem("myflove-preferred-name")).toBe("Camilla");
-    expect(window.localStorage.getItem("myflove-day-window")).not.toBeNull();
-    expect(window.localStorage.getItem("myflove-day-edges")).not.toBeNull();
+    expect(window.localStorage.getItem("myflove-preferred-name")).toBeNull();
+    expect(window.localStorage.getItem("myflove-day-window")).toBeNull();
+    expect(window.localStorage.getItem("myflove-day-edges")).toBeNull();
     expect(window.localStorage.getItem("myflove-medications")).toBeNull();
   });
 
