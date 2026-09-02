@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-02 – Avklarade poster stannar på sitt datum
+
+- En avklarad kalenderpost eller uppgift med datum visas nu alltid på sitt planerade datum – den flyttas inte längre till dagens "Min dag" när den bockas av.
+- Historiska avklarade poster ligger kvar i kalendern på sitt ursprungliga datum; återkommande händelser och flerdagsperioder fungerar som förut.
+- Poster helt utan datum (fria tankar och inbox-uppgifter) hör fortfarande till den dag de bockades av, beräknat i lokal tid.
+
+
 ## 2026-09-02 – Kompakt desktop-layout
 
 - Vänster sidonavigation på desktop är nu kompakt: smalare kolumn, horisontella länkrader med ikon + text i stället för stora fyrkantiga kort, mindre rubriker och knappar.
