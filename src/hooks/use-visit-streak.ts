@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from "react";
-import { useLocalStorage } from "@/lib/storage";
+
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 
 const KEY = "myflove-visit-days";
 const MAX_DAYS = 120;
@@ -19,7 +20,7 @@ function dayKeyOffset(offset: number): string {
  * Vi visar "dagar i rad" och "dagar den här veckan", aldrig missade dagar.
  */
 export function useVisitStreak() {
-  const [days, setDays] = useLocalStorage<string[]>(KEY, []);
+  const [days, setDays] = useCloudSyncedStorage<string[]>(KEY, []);
 
   useEffect(() => {
     const today = todayKey();

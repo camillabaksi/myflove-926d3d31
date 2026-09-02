@@ -1,18 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { useServerFn } from "@tanstack/react-start";
 import { Check, Sunrise, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getPushPreferences } from "@/lib/push.functions";
 import { acknowledgeWake } from "@/lib/push.functions";
 import { playGentleWake, type GentleWakeHandle } from "@/lib/gentle-wake-sound";
-import {
-  DEFAULT_WAKE_STEPS,
-  getWakeStepsDoneToday,
-  hhmmToMinutes,
-  localDateKey,
-  localMinutesOfDay,
-  setWakeStepsDoneToday,
-} from "@/lib/wake-up";
+import { DEFAULT_WAKE_STEPS, hhmmToMinutes, localDateKey, localMinutesOfDay } from "@/lib/wake-up";
 
 type Prefs = {
   wake_enabled?: boolean | null;
@@ -30,13 +24,16 @@ export function WakeUpCard({ always = false }: { always?: boolean }) {
   const loadFn = useServerFn(getPushPreferences);
   const ackFn = useServerFn(acknowledgeWake);
   const [prefs, setPrefs] = useState<Prefs | null>(null);
-  const [done, setDone] = useState<string[]>([]);
-  const [acked, setAcked] = useState(false);
   const dateKey = useMemo(() => localDateKey(), []);
+  const [wakeState, setWakeState] = useCloudSyncedStorage<{ date: string; done: string[] }>(
+    "myflove-wake-steps",
+    { date: dateKey, done: [] },
+  );
+  const done = wakeState.date === dateKey ? wakeState.done : [];
+  const [acked, setAcked] = useState(false);
 
   useEffect(() => {
     let alive = true;
-    setDone(getWakeStepsDoneToday(dateKey));
     (async () => {
       try {
         const data = (await loadFn()) as Prefs;
@@ -89,8 +86,7 @@ export function WakeUpCard({ always = false }: { always?: boolean }) {
 
   const toggleStep = (id: string) => {
     const next = done.includes(id) ? done.filter((d) => d !== id) : [...done, id];
-    setDone(next);
-    setWakeStepsDoneToday(dateKey, next);
+    setWakeState({ date: dateKey, done: next });
     if (!acked && next.length > 0) void ack();
   };
 

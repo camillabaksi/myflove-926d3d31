@@ -3,7 +3,8 @@ import Layout from "@/components/layout";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { MyFloveFloatingElement } from "@/components/myflove/motion";
 import { useSharedShoppingList } from "@/hooks/use-shared-shopping-list";
-import { useLocalStorage } from "@/lib/storage";
+
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { UtensilsCrossed, ShoppingCart, Trash2, Star, Sparkles, History } from "lucide-react";
@@ -176,7 +177,7 @@ function EditSlotDialog({
 }
 
 export default function MealPlannerPage() {
-  const [plans, setPlans] = useLocalStorage<MealPlan[]>("myflow-meal-plans", []);
+  const [plans, setPlans] = useCloudSyncedStorage<MealPlan[]>("myflow-meal-plans", []);
   const { addItem, isShared } = useSharedShoppingList();
   const { toast } = useToast();
   const [editing, setEditing] = useState<EditingSlot | null>(null);

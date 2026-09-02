@@ -2,7 +2,8 @@
 // Användaren får separata rum för olika delar av livet, men Flow ser helheten.
 
 import { useMemo } from "react";
-import { useLocalStorage } from "./storage";
+
+import { useCloudSyncedStorage } from "./cloud-storage";
 
 export type LifeArea =
   | "vardag"
@@ -119,8 +120,8 @@ const ACTIVE_KEY = "myflove-active-area";
 
 /** Vilka livsområden användaren valt vid onboarding. Vardag + Privat är alltid på. */
 export function useEnabledAreas() {
-  const [stored, setStored] = useLocalStorage<LifeArea[]>(AREAS_KEY, CORE_AREAS);
-  const [onboarded, setOnboarded] = useLocalStorage<boolean>(ONBOARDED_KEY, false);
+  const [stored, setStored] = useCloudSyncedStorage<LifeArea[]>(AREAS_KEY, CORE_AREAS);
+  const [onboarded, setOnboarded] = useCloudSyncedStorage<boolean>(ONBOARDED_KEY, false);
 
   const enabled = useMemo(() => {
     const set = new Set<LifeArea>([...CORE_AREAS, ...stored.filter((a) => AREA_META[a])]);
@@ -149,7 +150,7 @@ export function useEnabledAreas() {
 
 /** Vilket rum användaren tittar i just nu. "alla" = Flow ser helheten. */
 export function useActiveArea() {
-  const [active, setActive] = useLocalStorage<AreaFilter>(ACTIVE_KEY, "alla");
+  const [active, setActive] = useCloudSyncedStorage<AreaFilter>(ACTIVE_KEY, "alla");
   const { enabled } = useEnabledAreas();
 
   const safeActive: AreaFilter = active !== "alla" && !enabled.includes(active) ? "alla" : active;

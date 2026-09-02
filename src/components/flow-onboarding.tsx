@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "wouter";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { FLOW_GOALS, useFlowPrefs, type FlowGoalId } from "@/hooks/use-daily-flow";
-import { useLocalStorage } from "@/lib/storage";
+
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 
 /**
  * Frågan "vad vill du att MyFlove hjälper dig med?".
@@ -14,9 +15,9 @@ export default function FlowOnboarding() {
   const [step, setStep] = useState<1 | 2>(1);
   const [dismissed, setDismissed] = useState(false);
 
-  const [visited, setVisited] = useLocalStorage<boolean>("myflove-home-visited", false);
+  const [visited, setVisited] = useCloudSyncedStorage<boolean>("myflove-home-visited", false);
   // Bara ett onboardinglager åt gången: introt först, den här frågan sen.
-  const [introSeen] = useLocalStorage<boolean>("myflove-intro-seen", false);
+  const [introSeen] = useCloudSyncedStorage<boolean>("myflove-intro-seen", false);
   // Läget vid montering avgör – annars skulle flaggan slå till i samma session.
   const wasVisited = useRef<boolean | null>(null);
   if (wasVisited.current === null) wasVisited.current = visited;

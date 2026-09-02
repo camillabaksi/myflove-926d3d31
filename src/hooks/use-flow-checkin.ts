@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useLocalStorage } from "@/lib/storage";
+
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 
 /** Tre mjuka tidsfönster under dagen. Popupen visas max en gång per fönster. */
@@ -36,7 +37,7 @@ const inSlot = (ts: number | string, slot: CheckinSlot) => {
  */
 export function useFlowCheckin() {
   const { todayMoods, todayEnergyEntries } = useQuickCheckin();
-  const [seen, setSeen] = useLocalStorage<SeenState>("myflove-flow-checkin-seen", {
+  const [seen, setSeen] = useCloudSyncedStorage<SeenState>("myflove-flow-checkin-seen", {
     day: dayKey(),
     slots: {},
   });

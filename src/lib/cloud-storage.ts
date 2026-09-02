@@ -106,6 +106,19 @@ export const CLOUD_USER_DATA_KEYS = new Set([
   "myflove-cleaning-done",
   "myflove-cleaning-custom",
   "myflove-cleaning-hidden",
+  "myflove-npf-mode",
+  "myflove-view-mode",
+  "myflove-day-window",
+  "myflove-day-edges",
+  "myflove-schedule-files",
+  "myflove-energy-log",
+  "myflove-energy-pending",
+  "myflove-checkin-10",
+  "myflove-meal-favorites",
+  "myflove-visit-days",
+  "myflove-wake-steps",
+  "myflove-insight-strategies",
+  "myflove-quiet-mode",
 ]);
 
 /** Lista över nycklar som hanteras av molnsynken (device-nyckel, rensas ej). */

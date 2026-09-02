@@ -16,7 +16,7 @@ import {
 import { useTasks } from "@/hooks/use-data";
 import { useFlowScore } from "@/hooks/use-flowscore";
 import { useInsightStrategies } from "@/hooks/use-insight";
-import { useLocalStorage } from "@/lib/storage";
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import {
   AREA_BY_ID,
   CONTEXTS,
@@ -184,7 +184,7 @@ function AreaStrategies({
 }
 
 export default function InsightPage() {
-  const [seenIntro, setSeenIntro] = useLocalStorage<boolean>("myflove-insight-intro", false);
+  const [seenIntro, setSeenIntro] = useCloudSyncedStorage<boolean>("myflove-insight-intro", false);
   const [introOpen, setIntroOpen] = useState(!seenIntro);
   const [profile, setProfile] = useState<DemoProfile | null>(null);
   const [customNeeds, setCustomNeeds] = useState("");
@@ -208,7 +208,7 @@ export default function InsightPage() {
 
   const knowledge = useFlowLearning();
   const { totalDays } = useVisitStreak();
-  const [energyLog] = useLocalStorage<unknown[]>("myflove-energy-log", []);
+  const [energyLog] = useCloudSyncedStorage<unknown[]>("myflove-energy-log", []);
 
   const personal = useMemo(
     () =>

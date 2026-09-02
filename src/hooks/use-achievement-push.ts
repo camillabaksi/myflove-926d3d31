@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useMoods, useTasks, useFocus, useMedications } from "@/hooks/use-data";
-import { useLocalStorage } from "@/lib/storage";
+
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { getAchievements } from "@/lib/achievements";
 import { sendPushNotification } from "@/lib/push-notifications";
 
@@ -15,8 +16,8 @@ export function useAchievementPush(): void {
   const { completedTasks } = useTasks();
   const { completedFocusCount } = useFocus();
   const { log } = useMedications();
-  const [pomodoroTotalSessions] = useLocalStorage<number>("myflow-pomodoro-total-sessions", 0);
-  const [seen, setSeen] = useLocalStorage<string[]>(SEEN_KEY, []);
+  const [pomodoroTotalSessions] = useCloudSyncedStorage<number>("myflow-pomodoro-total-sessions", 0);
+  const [seen, setSeen] = useCloudSyncedStorage<string[]>(SEEN_KEY, []);
   const initialized = useRef(false);
 
   const achievements = getAchievements({

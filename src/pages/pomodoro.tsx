@@ -5,7 +5,8 @@ import { useReducedMotion } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
 import { Play, Pause, RotateCcw, Brain, Coffee, Minus, Plus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useLocalStorage } from "@/lib/storage";
+
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { sendPushNotification } from "@/lib/push-notifications";
 import { track } from "@/lib/analytics";
 import { todayISO } from "@/lib/day";
@@ -29,16 +30,14 @@ function todayStr(): string {
 
 export default function Pomodoro() {
   const { toast } = useToast();
-  const [prefs, setPrefs] = useLocalStorage<PomodoroPrefs>("myflow-pomodoro-prefs", {
+  const [prefs, setPrefs] = useCloudSyncedStorage<PomodoroPrefs>("myflow-pomodoro-prefs", {
     workMinutes: 25,
     breakMinutes: 5,
   });
-  const [sessionLog, setSessionLog] = useLocalStorage<{ date: string; count: number }>(
-    "myflow-pomodoro-sessions",
+  const [sessionLog, setSessionLog] = useCloudSyncedStorage<{ date: string; count: number }>("myflow-pomodoro-sessions",
     { date: todayStr(), count: 0 },
   );
-  const [totalSessions, setTotalSessions] = useLocalStorage<number>(
-    "myflow-pomodoro-total-sessions",
+  const [totalSessions, setTotalSessions] = useCloudSyncedStorage<number>("myflow-pomodoro-total-sessions",
     0,
   );
 

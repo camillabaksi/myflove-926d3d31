@@ -22,7 +22,8 @@ import { Link } from "@tanstack/react-router";
 import { planFlowSequence, type FlowPlanResult } from "@/lib/flowplan.functions";
 import { useTasks, useFocus } from "@/hooks/use-data";
 import { supabase } from "@/integrations/supabase/client";
-import { useLocalStorage } from "@/lib/storage";
+
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import WhyHint from "@/components/why-hint";
 import { useFlowExplainer } from "@/hooks/use-flow-explainer";
 
@@ -86,7 +87,7 @@ export function FlowPlanContent() {
   const [energyAuto, setEnergyAuto] = useState<{ level: number; loggedAt: string } | null>(null);
   const [energyManual, setEnergyManual] = useState(false);
   const [timeAvailable, setTimeAvailable] = useState<number>(120);
-  const [storedPlan, setStoredPlan] = useLocalStorage<StoredPlan | null>("myflow-flowplan", null);
+  const [storedPlan, setStoredPlan] = useCloudSyncedStorage<StoredPlan | null>("myflow-flowplan", null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

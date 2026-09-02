@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from "react";
-import { useLocalStorage } from "@/lib/storage";
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
+
 import {
   DEFAULT_DAY_WINDOW,
   dayKey,
@@ -10,15 +11,15 @@ import {
 
 /**
  * Dagens ramar: när morgonen startar, när dagen slutar och hur
- * batteriet kändes vid de två tidpunkterna. Sparas lokalt (krypterat
- * som övrig energidata) – ingen ny tabell behövs.
+ * batteriet kändes vid de två tidpunkterna. Sparas per konto och fungerar
+ * fortfarande offline via samma lokala cache.
  */
 export function useDayWindow() {
-  const [window, setWindowRaw] = useLocalStorage<DayWindow>(
+  const [window, setWindowRaw] = useCloudSyncedStorage<DayWindow>(
     "myflove-day-window",
     DEFAULT_DAY_WINDOW,
   );
-  const [edges, setEdges] = useLocalStorage<DayEdges>("myflove-day-edges", {});
+  const [edges, setEdges] = useCloudSyncedStorage<DayEdges>("myflove-day-edges", {});
 
   const today = dayKey();
   const todayEdges = useMemo<DayEdgeEntry>(() => edges?.[today] ?? {}, [edges, today]);

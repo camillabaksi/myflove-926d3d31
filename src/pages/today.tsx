@@ -17,7 +17,7 @@ import { useFlowScore } from "@/hooks/use-flowscore";
 import { useFlowItems } from "@/hooks/use-flow-items";
 import { useReplanMode } from "@/hooks/use-replan";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
-import { useLocalStorage } from "@/lib/storage";
+
 import { capacityForMode, shouldOfferReplan } from "@/lib/replan";
 import { assessToday, suggestNow } from "@/lib/flow-engine";
 import { withinCapacity, type FlowItem } from "@/lib/flow-items";
@@ -51,7 +51,7 @@ export function TodayContent() {
   const { flow } = useFlowScore();
   const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
   const { reading, items: batteryItems } = useEnergyBattery();
-  const [view, setView] = useLocalStorage<DayView>("myflove-today-view", "flow");
+  const [view, setView] = useCloudSyncedStorage<DayView>("myflove-today-view", "flow");
   const { plan: dayPlan } = useDayPlan();
 
   const { todayOpen: todaysItems, todayDone, toggleItem } = useFlowItems();

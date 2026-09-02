@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { FlowItemActions } from "@/components/flow-item-actions";
-import { useLocalStorage } from "@/lib/storage";
+
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 
 export interface TimelineEntry {
   id: string;
@@ -37,8 +38,7 @@ export default function DayTimeline({
   energyByHour?: Record<number, number>;
 }) {
   const [now, setNow] = useState(() => new Date());
-  const [showUntimed, setShowUntimed] = useLocalStorage<boolean>(
-    "myflove-timeline-show-untimed",
+  const [showUntimed, setShowUntimed] = useCloudSyncedStorage<boolean>("myflove-timeline-show-untimed",
     false,
   );
 
