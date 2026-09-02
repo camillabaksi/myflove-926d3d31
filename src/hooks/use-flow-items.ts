@@ -16,6 +16,7 @@ import { routineOccursOn, type Routine } from "@/lib/recurrence";
 import { occursOn } from "@/lib/recurrence";
 
 import {
+  completedBelongsToDay,
   daysUntilDate,
   priorityFor,
   sortFlowItems,
@@ -76,9 +77,9 @@ export function useFlowItems(dateISO?: string): {
       if (t.dueDate && t.dueDate > today) continue;
       // En annan dag än idag visar bara det som faktiskt hör till den dagen.
       if (!isTodayView && t.dueDate !== today) continue;
-      // Klara uppgifter visas bara om de hör till idag eller bockades av idag –
-      // så att dagen kan visa både det som återstår och det som redan är gjort.
-      if (t.completed && t.dueDate !== today && !isToday(t.completedAt)) continue;
+      // Klara uppgifter hör till sitt PLANERADE datum – inte till dagen de
+      // bockades av. Bara datumlösa uppgifter visas på avbockningsdagen.
+      if (t.completed && !completedBelongsToDay(today, t.dueDate, t.completedAt)) continue;
       const d = t.dueDate ? daysUntilDate(t.dueDate) : undefined;
       const friction = suggestFor(t.title);
       const nextStep = t.steps?.find((s) => !s.done)?.title;
@@ -207,7 +208,7 @@ export function useFlowItems(dateISO?: string): {
       const qDoneToday = !!q.done && isToday(q.doneAt);
       if (!isTodayView) {
         if (qDue !== today) continue;
-      } else if (q.done && qDue !== today && !qDoneToday) continue;
+      } else if (q.done && !completedBelongsToDay(today, qDue, q.doneAt)) continue;
       out.push({
         id: `qf-${q.id}`,
         title: q.text,
