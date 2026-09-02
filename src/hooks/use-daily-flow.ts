@@ -1,6 +1,5 @@
 import { useCallback, useMemo } from "react";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
-import { useLocalStorage } from "@/lib/storage";
 import { todayISO, type DailyCheckin, type TimeAvailability } from "@/lib/daily-flow";
 
 /* ── Dagens incheckning ──────────────────────────────────────────── */

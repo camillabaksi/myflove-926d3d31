@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { useLocalStorage } from "../lib/storage";
 import { useCloudSyncedStorage } from "../lib/cloud-storage";
 import { useCloudSyncedList } from "../lib/cloud-list";
 import { track } from "../lib/analytics";

@@ -58,7 +58,7 @@ export function useQuickCheckin() {
     PENDING_ENERGY_KEY,
     [],
   );
-  const [checkin10, setCheckin10] = useLocalStorage<Checkin10>("myflove-checkin-10", {
+  const [checkin10, setCheckin10] = useCloudSyncedStorage<Checkin10>("myflove-checkin-10", {
     day: todayKey(),
   });
   const [cloudEnergy, setCloudEnergy] = useState<EnergyLogEntry[] | null>(null);
