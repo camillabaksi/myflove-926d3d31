@@ -207,7 +207,7 @@ export function useFlowItems(dateISO?: string): {
       const qDoneToday = !!q.done && isToday(q.doneAt);
       if (!isTodayView) {
         if (qDue !== today) continue;
-      } else if (q.done && qDue !== today && !qDoneToday) continue;
+      } else if (q.done && !completedBelongsToDay(today, qDue, q.doneAt)) continue;
       out.push({
         id: `qf-${q.id}`,
         title: q.text,
