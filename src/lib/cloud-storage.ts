@@ -74,6 +74,8 @@ export const CLOUD_USER_DATA_KEYS = new Set([
   "myflove-preferred-name",
   "myflove-day-window",
   "myflove-day-edges",
+  "myflow-tasks",
+  "myflow-reminders",
   "myflow-moods",
   "myflow-shopping",
   "myflow-focus",
