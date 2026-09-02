@@ -52,4 +52,3 @@ export function setDemoSession(active: boolean): void {
     /* utan lagring får sessionen bara inte demoflaggan */
   }
 }
-
