@@ -6,9 +6,17 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-09-01";
+export const CHANGELOG_UPDATED = "2026-09-02";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  {
+    title: "Investerar-/demokonto med exempeldata",
+    items: [
+      "Ett markerat demokonto fylls automatiskt en gång med syntetisk QuickFlow, dagsplan, rutiner, mående och energi (2026-09-02)",
+      "Diskret markering \"Demokonto · Exempeldata\" i appen, och demoanvändning räknas inte in i besöks- eller användarstatistiken (2026-09-02)",
+      "Demokontot är en vanlig användare med normal behörighet – inga nya roller och inga lösenord i koden (2026-09-02)",
+    ],
+  },
   {
     title: "Flow följer adressen och all lokal data skyddas",
     items: [

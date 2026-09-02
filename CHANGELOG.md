@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-02 – Investerar-/demokonto med exempeldata
+
+- Ett markerat demokonto fylls automatiskt en gång med syntetisk QuickFlow, dagsplan, rutiner, mående och energi, så att en visning kan börja direkt i QuickFlow → Flow → prioritering → Min dag.
+- Appen visar en diskret markering "Demokonto · Exempeldata" och demoanvändningen räknas inte in i besöks- eller användarstatistiken.
+- Kontot är en helt vanlig användare med normal behörighet: inga nya roller, inga lösenord i koden och ingen åtkomst till andra användares data.
+
+
 ## 2026-09-01 – Flow följer adressen och all lokal data skyddas
 
 - Flow-flikarna navigerar via adressen, så uppdatering, delning och bakåtknappen öppnar samma läge som du valde.
