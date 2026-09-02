@@ -1,4 +1,5 @@
 import { track } from "@/lib/analytics";
+import { isDemoUser, setDemoSession } from "@/lib/demo-account";
 import { useState } from "react";
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
@@ -57,7 +58,7 @@ function SignInPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
-    const { error } = await withBackendRecovery(
+    const { data, error } = await withBackendRecovery(
       () => supabase.auth.signInWithPassword({ email, password }),
       (status) => setWaking(status === "waking"),
     );
@@ -73,6 +74,7 @@ function SignInPage() {
       });
       return;
     }
+    setDemoSession(isDemoUser(data.user));
     track("login", { result: "completed" });
     const target = safeNext(next);
     window.location.href = target;

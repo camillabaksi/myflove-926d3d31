@@ -1,11 +1,8 @@
-import { useDemoAccount } from "@/hooks/use-demo-account";
-
 /**
  * Diskret markering av investerar-/demokontot. Använder befintliga tokens
  * och stör varken layout, bottennav eller safe-area.
  */
-export default function DemoBanner() {
-  const { isDemo } = useDemoAccount();
+export default function DemoBanner({ isDemo }: { isDemo: boolean }) {
   if (!isDemo) return null;
 
   return (
@@ -20,3 +17,4 @@ export default function DemoBanner() {
     </div>
   );
 }
+

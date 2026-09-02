@@ -47,9 +47,9 @@ export function isDemoSession(): boolean {
 export function setDemoSession(active: boolean): void {
   if (typeof window === "undefined") return;
   try {
-    if (active) window.localStorage.setItem(DEMO_SESSION_KEY, "1");
-    else window.localStorage.removeItem(DEMO_SESSION_KEY);
+    window.localStorage.setItem(DEMO_SESSION_KEY, active ? "1" : "0");
   } catch {
     /* utan lagring får sessionen bara inte demoflaggan */
   }
 }
+
