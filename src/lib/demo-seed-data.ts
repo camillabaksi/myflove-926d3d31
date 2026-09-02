@@ -293,7 +293,6 @@ export function buildDemoSeed(now: Date = new Date()): DemoSeed {
       "myflove-routines": routines,
       "myflow-moods": moods,
       "myflove-daily-checkin": checkins,
-      "myflove-checkin-10": { day: today, mood: 6, energy: 6 },
     },
     energy,
   };
