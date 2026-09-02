@@ -163,13 +163,13 @@ export const getAnalyticsSummaryFn = createServerFn({ method: "GET" })
     const multiDaySessions = Array.from(sessionDays.values()).filter((d) => d.size > 1).length;
     const sectionsTotal = Array.from(sessionSections.values()).reduce((s, v) => s + v.size, 0);
 
-    // Count auth users via admin RPC (aggregerat antal konton – inga person-
-    // uppgifter används i statistiken).
+    // Count auth users via the privileged RPC after the admin role check above.
+    // The function is no longer callable by ordinary signed-in clients.
     let totalUsers = 0;
     let newUsers7d = 0;
     const signupsByDay = new Map<string, number>();
     try {
-      const { data: stats, error: sErr } = await context.supabase.rpc("admin_user_stats");
+      const { data: stats, error: sErr } = await supabaseAdmin.rpc("admin_user_stats");
       if (sErr) throw sErr;
       const row = Array.isArray(stats) ? stats[0] : stats;
       if (row) {

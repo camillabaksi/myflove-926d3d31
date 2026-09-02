@@ -1,4 +1,5 @@
 import { logAnalyticsEventFn } from "@/lib/analytics.functions";
+import { isDemoSession } from "@/lib/demo-account";
 import { recordUsage } from "@/lib/usage-local";
 import { sanitizeEventName } from "@/lib/analytics-sanitize";
 import {
@@ -51,6 +52,7 @@ export function analyticsEnabled(): boolean {
  */
 export function trackEvent(section: string, action: string): void {
   if (typeof window === "undefined") return;
+  if (isDemoSession()) return;
   if (!analyticsEnabled()) return;
   const safeSection = sanitizeEventName(section);
   const safeAction = sanitizeEventName(action);
@@ -118,6 +120,7 @@ export function trackPageView(pathname: string): void {
  */
 export function track(name: AnalyticsEventName, payload?: AnalyticsPayload): void {
   if (typeof window === "undefined") return;
+  if (isDemoSession()) return;
   if (!analyticsEnabled()) return;
   const clean = sanitizePayload(payload);
   const section = eventSection(name);

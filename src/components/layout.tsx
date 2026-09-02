@@ -82,6 +82,8 @@ import { lifeProfileSummary } from "@/lib/life-profile";
 import ViewCollapseToggle from "@/components/view-collapse-toggle";
 import FlowCompanion from "@/components/flow/flow-companion";
 import FlowCheckinPopup from "@/components/flow-checkin-popup";
+import DemoBanner from "@/components/demo-banner";
+import { useDemoAccount } from "@/hooks/use-demo-account";
 import PwaInstallButton from "@/components/pwa-install-button";
 
 /** Vyer som redan har Flow på sitt eget sätt – där dubblerar vi inte. */
@@ -210,6 +212,7 @@ export default function Layout({ children }: LayoutProps) {
   useNotificationActions();
 
   const { isAdmin } = useIsAdmin();
+  const { isDemo } = useDemoAccount();
   const { enabled: enabledAreas } = useEnabledAreas();
   const { settings: npf } = useNpfSettings();
 
@@ -774,6 +777,8 @@ export default function Layout({ children }: LayoutProps) {
 
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col min-h-0 overflow-hidden relative">
+        <DemoBanner isDemo={isDemo} />
+
         {/* Mobile Header */}
         <header className="sticky top-0 z-10 flex items-center gap-2 border-b border-border/50 bg-background/80 p-3 backdrop-blur-md md:hidden">
           {canGoBack ? (
