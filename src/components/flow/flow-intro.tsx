@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { FlowMascot } from "@/components/flow-mascot";
-import { useLocalStorage } from "@/lib/storage";
+
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 
 /**
  * Flow presenterar sig. Första gången i 2–3 korta steg,
@@ -24,7 +25,7 @@ const STEPS = [
 ];
 
 export function FlowGreeting({ children }: { children?: React.ReactNode }) {
-  const [seen, setSeen] = useLocalStorage<boolean>("myflove-flow-intro-seen", false);
+  const [seen, setSeen] = useCloudSyncedStorage<boolean>("myflove-flow-intro-seen", false);
   const [step, setStep] = useState(0);
 
   if (!seen) {

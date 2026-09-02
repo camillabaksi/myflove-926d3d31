@@ -2,7 +2,8 @@ import { useMemo, useState } from "react";
 import { RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import { useTasks } from "@/hooks/use-data";
-import { useLocalStorage } from "@/lib/storage";
+
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { useDailyCheckin, useFlowUsage } from "@/hooks/use-daily-flow";
 import { useFlowScore } from "@/hooks/use-flowscore";
 import {
@@ -26,7 +27,7 @@ export default function DayRebuild() {
   const { checkin } = useDailyCheckin();
   const { flow } = useFlowScore();
   const { log } = useFlowUsage();
-  const [dismissed, setDismissed] = useLocalStorage<string>("myflove-rebuild-dismissed", "");
+  const [dismissed, setDismissed] = useCloudSyncedStorage<string>("myflove-rebuild-dismissed", "");
   const [plan, setPlan] = useState<ScoredTask[] | null>(null);
 
   const today = todayISO();

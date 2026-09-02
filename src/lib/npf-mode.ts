@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 
 /**
  * NPF-läge – globala tillgänglighetsval som gäller hela appen.
@@ -32,28 +33,10 @@ export const NPF_DEFAULTS: NpfSettings = {
 };
 
 const KEY = "myflove-npf-mode";
-const listeners = new Set<() => void>();
 
+/** Läser bara standardvärdet utanför React; den riktiga inställningen synkas per konto. */
 export function readNpfSettings(): NpfSettings {
-  if (typeof window === "undefined") return NPF_DEFAULTS;
-  try {
-    const raw = window.localStorage.getItem(KEY);
-    if (!raw) return NPF_DEFAULTS;
-    return { ...NPF_DEFAULTS, ...(JSON.parse(raw) as Partial<NpfSettings>) };
-  } catch {
-    return NPF_DEFAULTS;
-  }
-}
-
-function write(next: NpfSettings) {
-  if (typeof window === "undefined") return;
-  try {
-    window.localStorage.setItem(KEY, JSON.stringify(next));
-  } catch {
-    /* ingen lagring – valet gäller bara denna session */
-  }
-  applyToDocument(next);
-  listeners.forEach((l) => l());
+  return NPF_DEFAULTS;
 }
 
 /** Sätter data-attribut på <html> så CSS kan styra hela appen. */
@@ -87,23 +70,18 @@ export function plainLabel(label: string, enabled: boolean): string {
 }
 
 export function useNpfSettings() {
-  const [settings, setSettings] = useState<NpfSettings>(NPF_DEFAULTS);
+  const [settings, setSettings] = useCloudSyncedStorage<NpfSettings>(KEY, NPF_DEFAULTS);
 
   useEffect(() => {
-    const sync = () => setSettings(readNpfSettings());
-    sync();
-    applyToDocument(readNpfSettings());
-    listeners.add(sync);
-    return () => {
-      listeners.delete(sync);
-    };
-  }, []);
+    applyToDocument(settings);
+  }, [settings]);
 
-  const update = useCallback((patch: Partial<NpfSettings>) => {
-    write({ ...readNpfSettings(), ...patch });
-  }, []);
+  const update = useCallback(
+    (patch: Partial<NpfSettings>) => setSettings((current) => ({ ...current, ...patch })),
+    [setSettings],
+  );
 
-  const reset = useCallback(() => write(NPF_DEFAULTS), []);
+  const reset = useCallback(() => setSettings(NPF_DEFAULTS), [setSettings]);
 
   return { settings, update, reset };
 }

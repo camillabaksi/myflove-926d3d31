@@ -34,7 +34,8 @@ import {
   type LifeArea,
 } from "@/lib/life-areas";
 import { Link } from "@tanstack/react-router";
-import { useLocalStorage } from "@/lib/storage";
+
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { generateCoachMessage } from "@/lib/coach";
 import {
   createFlowConversation,
@@ -141,7 +142,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
   const { moods } = useMoods();
   const { currentFocus } = useFocus();
   const { activeReminders } = useReminders();
-  const [sessionLog] = useLocalStorage<{ date: string; count: number }>(
+  const [sessionLog] = useCloudSyncedStorage<{ date: string; count: number }>(
     "myflow-pomodoro-sessions",
     {
       date: todayStr(),

@@ -2,6 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useMoods, type MoodEntry } from "@/hooks/use-data";
 import { useLocalStorage } from "@/lib/storage";
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
+
 import { PENDING_ENERGY_KEY, ensurePendingUuids, migratePendingEnergy } from "@/lib/energy-pending";
 
 /**
@@ -50,13 +52,16 @@ export function useQuickCheckin() {
   const { moods, setMoods } = useMoods();
   // Kontobunden källa är energy_logs. Den lokala listan är enbart en cache
   // som andra vyer (insikter, mönster) läser – aldrig source of truth.
-  const [localEnergy, setLocalEnergy] = useLocalStorage<EnergyLogEntry[]>("myflove-energy-log", []);
+  const [localEnergy, setLocalEnergy] = useCloudSyncedStorage<EnergyLogEntry[]>(
+    "myflove-energy-log",
+    [],
+  );
   // Loggningar gjorda utan inloggning väntar här tills de kan flyttas upp.
   const [pendingEnergy, setPendingEnergy] = useLocalStorage<EnergyLogEntry[]>(
     PENDING_ENERGY_KEY,
     [],
   );
-  const [checkin10, setCheckin10] = useLocalStorage<Checkin10>("myflove-checkin-10", {
+  const [checkin10, setCheckin10] = useCloudSyncedStorage<Checkin10>("myflove-checkin-10", {
     day: todayKey(),
   });
   const [cloudEnergy, setCloudEnergy] = useState<EnergyLogEntry[] | null>(null);

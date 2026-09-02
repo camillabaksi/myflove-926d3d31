@@ -2,7 +2,7 @@ import Layout from "@/components/layout";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { MyFloveCelebration } from "@/components/myflove/motion";
 import { useMoods, useTasks, useFocus, useMedications } from "@/hooks/use-data";
-import { useLocalStorage } from "@/lib/storage";
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { getAchievements } from "@/lib/achievements";
 import { Lock } from "lucide-react";
 
@@ -11,7 +11,10 @@ export default function Achievements() {
   const { completedTasks } = useTasks();
   const { completedFocusCount } = useFocus();
   const { log } = useMedications();
-  const [pomodoroTotalSessions] = useLocalStorage<number>("myflow-pomodoro-total-sessions", 0);
+  const [pomodoroTotalSessions] = useCloudSyncedStorage<number>(
+    "myflow-pomodoro-total-sessions",
+    0,
+  );
 
   const achievements = getAchievements({
     moods,

@@ -40,7 +40,8 @@ import DayTimeline from "@/components/day-timeline";
 import AllInDay from "@/components/all-in-day";
 import EnergyBattery from "@/components/energy-battery";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
-import { useLocalStorage } from "@/lib/storage";
+
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { pictogramFor } from "@/lib/pictograms";
 import { useNpfSettings } from "@/lib/npf-mode";
 import { ALL_AREAS, AREA_META, getArea, type LifeArea } from "@/lib/life-areas";
@@ -156,10 +157,10 @@ export function CalendarContent() {
   }, [batteryReading.slots]);
 
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [view, setView] = useLocalStorage<CalView>("myflove-calendar-view", "manad");
+  const [view, setView] = useCloudSyncedStorage<CalView>("myflove-calendar-view", "manad");
   /** Bildstöd: stora symboler per händelse i dagsvyn. */
   const { settings: npfSettings } = useNpfSettings();
-  const [pictoStored, setPictoMode] = useLocalStorage<boolean>(
+  const [pictoStored, setPictoMode] = useCloudSyncedStorage<boolean>(
     "myflove-calendar-pictograms",
     false,
   );
@@ -168,12 +169,12 @@ export function CalendarContent() {
   // ✨ Allt i dagen – utökad vy av samma dag (samma data, samma status).
   // Valet sparas per datum, så att en dag du öppnat "Allt i dagen" på kommer
   // ihåg det nästa gång du står på just den dagen.
-  const [allInDayByDate, setAllInDayByDate] = useLocalStorage<Record<string, boolean>>(
+  const [allInDayByDate, setAllInDayByDate] = useCloudSyncedStorage<Record<string, boolean>>(
     "myflove-calendar-all-in-day-dates",
     {},
   );
 
-  const [visible, setVisible] = useLocalStorage<CalCategory[]>(
+  const [visible, setVisible] = useCloudSyncedStorage<CalCategory[]>(
     "myflove-calendar-categories",
     ALL_CATEGORIES,
   );

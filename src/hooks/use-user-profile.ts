@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 
 const NAME_KEY = "myflove-preferred-name";
 const LAST_VISIT_KEY = "myflove-last-visit";
@@ -13,10 +14,9 @@ function deriveFromEmail(email?: string | null): string {
 }
 
 export function useUserProfile() {
-  const [name, setNameState] = useState<string>(() => {
-    if (typeof window === "undefined") return "";
-    return localStorage.getItem(NAME_KEY) ?? "";
-  });
+  // Namnet följer kontot mellan enheter. Last visit är däremot en lokal
+  // hälsningssignal för just den här enheten och synkas inte.
+  const [name, setNameState] = useCloudSyncedStorage<string>(NAME_KEY, "");
   const [lastVisit, setLastVisit] = useState<number | null>(() => {
     if (typeof window === "undefined") return null;
     const raw = localStorage.getItem(LAST_VISIT_KEY);
@@ -26,7 +26,7 @@ export function useUserProfile() {
   useEffect(() => {
     let active = true;
     async function loadFromAuth() {
-      if (localStorage.getItem(NAME_KEY)) return;
+      if (name) return;
       const { data } = await supabase.auth.getUser();
       const meta = data.user?.user_metadata ?? {};
       const candidate =
@@ -37,7 +37,7 @@ export function useUserProfile() {
         deriveFromEmail(data.user?.email);
       if (active && candidate) setNameState(candidate);
     }
-    loadFromAuth();
+    void loadFromAuth();
     // Bump last-visit timestamp on mount, but keep old value for greeting logic.
     const prev = localStorage.getItem(LAST_VISIT_KEY);
     if (prev) setLastVisit(Number(prev));
@@ -45,13 +45,10 @@ export function useUserProfile() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [name, setNameState]);
 
   const setName = (value: string) => {
-    const trimmed = value.trim();
-    if (trimmed) localStorage.setItem(NAME_KEY, trimmed);
-    else localStorage.removeItem(NAME_KEY);
-    setNameState(trimmed);
+    setNameState(value.trim());
   };
 
   return { name, setName, lastVisit };

@@ -3,7 +3,8 @@ import { Heart, Sparkles, X } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { useLocalStorage } from "@/lib/storage";
+
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { isDemoSession } from "@/lib/demo-account";
 
 // Kort intro: två kort, sedan är användaren igång. Resten lär man sig i appen.
@@ -24,7 +25,7 @@ const STEPS = [
 
 export default function IntroTour() {
   const [mounted, setMounted] = useState(false);
-  const [seen, setSeen] = useLocalStorage<boolean>("myflove-intro-seen", false);
+  const [seen, setSeen] = useCloudSyncedStorage<boolean>("myflove-intro-seen", false);
   const [step, setStep] = useState(0);
   const trackRef = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();

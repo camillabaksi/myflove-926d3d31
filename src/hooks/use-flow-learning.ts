@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useTasks, useReminders } from "@/hooks/use-data";
 import { useChildren } from "@/hooks/use-children";
 import { useVisitStreak } from "@/hooks/use-visit-streak";
-import { useLocalStorage } from "@/lib/storage";
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { analyzeFlow, type FlowKnowledge } from "@/lib/flow-learning";
 
 interface StoredEnergy {
@@ -20,7 +20,7 @@ export function useFlowLearning(): FlowKnowledge {
   const { activeReminders } = useReminders();
   const { children } = useChildren();
   const { totalDays } = useVisitStreak();
-  const [energyLog] = useLocalStorage<StoredEnergy[]>("myflove-energy-log", []);
+  const [energyLog] = useCloudSyncedStorage<StoredEnergy[]>("myflove-energy-log", []);
 
   return useMemo(
     () =>

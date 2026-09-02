@@ -1,20 +1,17 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { BellOff, Bell } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import {
   DEFAULT_QUIET_STATE,
   QUIET_PAUSE_OPTIONS,
-  QuietModeState,
-  getQuietMode,
+  type QuietModeState,
   isQuietNow,
-  pauseRemindersFor,
-  resumeReminders,
-  setQuietMode,
-  subscribeQuietMode,
 } from "@/lib/quiet-mode";
 
 function formatRemaining(until: number): string {
@@ -29,31 +26,26 @@ function formatRemaining(until: number): string {
 
 /** Tyst läge – pausa alla påminnelser en stund eller varje natt. */
 export function QuietModeSettings() {
-  const [state, setState] = useState<QuietModeState>(DEFAULT_QUIET_STATE);
+  const [state, setState] = useCloudSyncedStorage<QuietModeState>(
+    "myflove-quiet-mode",
+    DEFAULT_QUIET_STATE,
+  );
   const [, setTick] = useState(0);
 
-  useEffect(() => {
-    setState(getQuietMode());
-    const unsubscribe = subscribeQuietMode(setState);
-    const interval = setInterval(() => setTick((t) => t + 1), 30000);
-    return () => {
-      unsubscribe();
-      clearInterval(interval);
-    };
-  }, []);
-
+  const update = (patch: Partial<QuietModeState>) =>
+    setState((current) => ({ ...current, ...patch }));
   const paused = state.pausedUntil > Date.now();
   const quiet = isQuietNow(state);
 
   const handlePause = (minutes: number) => {
-    setState(pauseRemindersFor(minutes));
+    update({ pausedUntil: Date.now() + minutes * 60 * 1000 });
     toast({
       description: `Tyst läge på i ${minutes >= 60 ? `${minutes / 60} h` : `${minutes} min`}. Inga påminnelser stör dig.`,
     });
   };
 
   const handleResume = () => {
-    setState(resumeReminders());
+    update({ pausedUntil: 0 });
     toast({ description: "Tyst läge av – påminnelserna är igång igen." });
   };
 
@@ -109,7 +101,7 @@ export function QuietModeSettings() {
           <Switch
             id="quiet-schedule"
             checked={state.scheduleEnabled}
-            onCheckedChange={(checked) => setState(setQuietMode({ scheduleEnabled: checked }))}
+            onCheckedChange={(checked) => update({ scheduleEnabled: checked })}
           />
         </div>
         {state.scheduleEnabled && (
@@ -122,7 +114,7 @@ export function QuietModeSettings() {
                 id="quiet-start"
                 type="time"
                 value={state.scheduleStart}
-                onChange={(e) => setState(setQuietMode({ scheduleStart: e.target.value }))}
+                onChange={(e) => update({ scheduleStart: e.target.value })}
                 className="h-11 rounded-xl"
               />
             </div>
@@ -134,7 +126,7 @@ export function QuietModeSettings() {
                 id="quiet-end"
                 type="time"
                 value={state.scheduleEnd}
-                onChange={(e) => setState(setQuietMode({ scheduleEnd: e.target.value }))}
+                onChange={(e) => update({ scheduleEnd: e.target.value })}
                 className="h-11 rounded-xl"
               />
             </div>
