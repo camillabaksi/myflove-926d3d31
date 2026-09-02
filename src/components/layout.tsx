@@ -701,28 +701,28 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className="h-[100dvh] overflow-hidden overscroll-none flex flex-col bg-background md:flex-row relative">
       {/* Desktop Sidebar */}
-      <nav className="hidden md:flex flex-col w-64 border-r border-border bg-card p-4 shrink-0 overflow-y-auto">
-        <div className="mb-8 px-4 py-2">
-          <h1 className="text-2xl font-bold text-primary tracking-tight">MyFlove</h1>
+      <nav className="hidden md:flex flex-col w-52 border-r border-border bg-card p-3 shrink-0 overflow-y-auto">
+        <div className="mb-4 px-2 py-1">
+          <h1 className="text-xl font-bold text-primary tracking-tight">MyFlove</h1>
         </div>
-        <div className="space-y-5">
+        <div className="space-y-4">
           {categories.map((cat) => (
             <div key={cat.id}>
               <div
-                className="flex items-center gap-2 px-1 mb-2 text-xs font-semibold uppercase tracking-wider"
+                className="flex items-center gap-1.5 px-1 mb-1 text-[11px] font-semibold uppercase tracking-wider"
                 style={{ color: catColor(cat.id) }}
               >
                 <span
-                  className="inline-flex h-6 w-6 items-center justify-center rounded-lg"
+                  className="inline-flex h-5 w-5 items-center justify-center rounded-md"
                   style={{ backgroundColor: catColor(cat.id, 0.14) }}
                   aria-hidden="true"
                 >
-                  <cat.icon size={14} />
+                  <cat.icon size={12} />
                 </span>
                 {cat.label}
               </div>
 
-              <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-3">
+              <div className="space-y-0.5">
                 {cat.items.map((item) => {
                   const isActive = location === item.href;
                   const Icon = item.icon;
@@ -730,14 +730,14 @@ export default function Layout({ children }: LayoutProps) {
                     <Link
                       key={item.href}
                       href={item.href}
-                      className={`aspect-square flex flex-col items-center justify-center gap-2 rounded-2xl p-2 text-center transition-all duration-200 ${
+                      className={`flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-left text-sm transition-colors duration-150 ${
                         isActive
                           ? "bg-primary text-primary-foreground font-medium shadow-sm"
-                          : "bg-secondary/40 text-muted-foreground hover:bg-secondary hover:text-foreground"
+                          : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                       }`}
                     >
-                      <Icon size={24} strokeWidth={isActive ? 2.5 : 2} />
-                      <span className="text-xs leading-tight">{item.label}</span>
+                      <Icon size={16} strokeWidth={isActive ? 2.5 : 2} className="shrink-0" />
+                      <span className="truncate leading-tight">{item.label}</span>
                     </Link>
                   );
                 })}
@@ -745,7 +745,7 @@ export default function Layout({ children }: LayoutProps) {
             </div>
           ))}
         </div>
-        <div className="mt-auto pt-4 pb-2 space-y-2">
+        <div className="mt-auto pt-3 pb-1 space-y-1.5">
           <Link href="/anpassa">
             <Button variant="outline" className="w-full rounded-xl gap-2">
               <Accessibility size={16} /> Anpassa appen
