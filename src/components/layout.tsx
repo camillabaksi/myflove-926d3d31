@@ -801,7 +801,7 @@ export default function Layout({ children }: LayoutProps) {
           <ViewCollapseToggle />
         </header>
 
-        <div className="hidden md:flex items-center gap-2 px-8 pt-6">
+        <div className="hidden md:flex items-center gap-1.5 px-6 pt-4">
           {primaryNav.map((item) => {
             const active =
               item.href === "/flow"
@@ -812,13 +812,13 @@ export default function Layout({ children }: LayoutProps) {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[13px] font-medium transition-colors ${
                   active
                     ? "bg-primary text-primary-foreground shadow-sm"
                     : "bg-card text-muted-foreground border border-border hover:text-foreground"
                 }`}
               >
-                <Icon size={16} />
+                <Icon size={14} />
                 {item.label}
               </Link>
             );
@@ -826,13 +826,13 @@ export default function Layout({ children }: LayoutProps) {
           <button
             type="button"
             onClick={() => window.dispatchEvent(new CustomEvent("myflove:quickflow"))}
-            className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-4 py-2 text-sm font-medium text-primary transition-transform active:scale-95"
+            className="inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/10 px-3 py-1.5 text-[13px] font-medium text-primary transition-transform active:scale-95"
           >
-            <Plus size={16} /> QuickFlow
+            <Plus size={14} /> QuickFlow
           </button>
         </div>
 
-        <div className="hidden md:flex items-center justify-between px-8 pt-4">
+        <div className="hidden md:flex items-center justify-between px-6 pt-2">
           {canGoBack ? (
             <Button
               variant="ghost"
