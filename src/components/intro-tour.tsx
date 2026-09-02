@@ -4,6 +4,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useLocalStorage } from "@/lib/storage";
+import { isDemoSession } from "@/lib/demo-account";
 
 // Kort intro: två kort, sedan är användaren igång. Resten lär man sig i appen.
 const STEPS = [
@@ -30,7 +31,8 @@ export default function IntroTour() {
 
   useEffect(() => setMounted(true), []);
 
-  if (!mounted || seen) return null;
+  // Demokontot hoppar alltid över intron – investeraren ska se appen direkt.
+  if (!mounted || seen || isDemoSession()) return null;
 
   const isLast = step === STEPS.length - 1;
 

@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-02";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Demokontot aktiverat för direkt inloggning",
+    items: [
+      "Demokontots e-post (investor@myflove.se) är bekräftad i inloggningssystemet – direkt inloggning utan e-poststeg, utan att några andra konton eller globala inställningar påverkas (2026-09-02)",
+      "Demokontot hoppar automatiskt över introturen så att visningen börjar direkt på hemskärmen (2026-09-02)",
+    ],
+  },
+  {
     title: "Investerar-/demokonto med exempeldata",
     items: [
       "Ett markerat demokonto fylls automatiskt en gång med syntetisk QuickFlow, dagsplan, rutiner, mående och energi (2026-09-02)",
