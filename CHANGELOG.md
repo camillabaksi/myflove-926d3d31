@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-09-02 – Kontosynk för personliga inställningar
+
+- Föredraget visningsnamn och dagsramar (morgon/kväll) följer nu det inloggade kontot via befintlig offline-first-molnsynk.
+- Utloggning rensar dessa kontobundna värden från enheten, medan rena enhetsval, cache och sessionssignaler lämnas lokala.
+- Ingen ny datamodell eller parallell lagringslösning införs.
+
+
+
 ## 2026-09-02 – Avklarade poster stannar på sitt datum
 
 - En avklarad kalenderpost eller uppgift med datum visas nu alltid på sitt planerade datum – den flyttas inte längre till dagens "Min dag" när den bockas av.

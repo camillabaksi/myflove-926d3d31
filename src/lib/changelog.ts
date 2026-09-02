@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-02";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Kontosynk för personliga inställningar",
+    items: [
+      "Föredraget visningsnamn och dagsramar följer det inloggade kontot via befintlig offline-first-molnsynk (2026-09-02)",
+      "Utloggning rensar kontobundna värden från enheten medan enhetsval, cache och sessionssignaler förblir lokala (2026-09-02)",
+    ],
+  },
+  {
     title: "Avklarade poster stannar på sitt datum",
     items: [
       "Avklarade kalenderposter och uppgifter med datum visas på sitt planerade datum i stället för att hoppa till dagens Min dag (2026-09-02)",

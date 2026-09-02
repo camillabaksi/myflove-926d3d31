@@ -24,12 +24,8 @@ const DEVICE_KEYS = new Set<string>([
   "myflove-alarm-enabled",
   "myflove-theme",
   "myflove-text-size",
-  // Namn och dagens ramar (morgon/kväll-batteri) är personliga men ska
-  // stanna kvar på enheten även efter utloggning – de är inte känsliga
-  // hälso- eller ekonomidata och gör appen varmare vid nästa besök.
-  "myflove-preferred-name",
-  "myflove-day-window",
-  "myflove-day-edges",
+  // Konto- och dagsdata synkas via useCloudSyncedStorage och ska därför
+  // inte ligga kvar när nästa person loggar in på samma enhet.
   // Personalisering: tema, alarmsignal och alarmformat hör till enheten.
   "myflove-alarm-sound",
   "myflove-alarm-format",
