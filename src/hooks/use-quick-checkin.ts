@@ -52,7 +52,10 @@ export function useQuickCheckin() {
   const { moods, setMoods } = useMoods();
   // Kontobunden källa är energy_logs. Den lokala listan är enbart en cache
   // som andra vyer (insikter, mönster) läser – aldrig source of truth.
-  const [localEnergy, setLocalEnergy] = useCloudSyncedStorage<EnergyLogEntry[]>("myflove-energy-log", []);
+  const [localEnergy, setLocalEnergy] = useCloudSyncedStorage<EnergyLogEntry[]>(
+    "myflove-energy-log",
+    [],
+  );
   // Loggningar gjorda utan inloggning väntar här tills de kan flyttas upp.
   const [pendingEnergy, setPendingEnergy] = useLocalStorage<EnergyLogEntry[]>(
     PENDING_ENERGY_KEY,

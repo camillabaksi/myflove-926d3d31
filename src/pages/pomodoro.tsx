@@ -34,10 +34,12 @@ export default function Pomodoro() {
     workMinutes: 25,
     breakMinutes: 5,
   });
-  const [sessionLog, setSessionLog] = useCloudSyncedStorage<{ date: string; count: number }>("myflow-pomodoro-sessions",
+  const [sessionLog, setSessionLog] = useCloudSyncedStorage<{ date: string; count: number }>(
+    "myflow-pomodoro-sessions",
     { date: todayStr(), count: 0 },
   );
-  const [totalSessions, setTotalSessions] = useCloudSyncedStorage<number>("myflow-pomodoro-total-sessions",
+  const [totalSessions, setTotalSessions] = useCloudSyncedStorage<number>(
+    "myflow-pomodoro-total-sessions",
     0,
   );
 

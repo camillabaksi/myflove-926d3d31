@@ -1,7 +1,6 @@
 import { useCallback, useEffect } from "react";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 
-
 /**
  * NPF-läge – globala tillgänglighetsval som gäller hela appen.
  * Valen sparas lokalt och ligger kvar tills användaren ändrar dem.

@@ -1,9 +1,6 @@
 import { useCallback } from "react";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 
-
-
-
 /**
  * Uppladdade schemafiler (bild/PDF) sparas lokalt så att man kan
  * trycka på dem och titta på originalet igen.

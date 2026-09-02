@@ -38,7 +38,8 @@ export default function DayTimeline({
   energyByHour?: Record<number, number>;
 }) {
   const [now, setNow] = useState(() => new Date());
-  const [showUntimed, setShowUntimed] = useCloudSyncedStorage<boolean>("myflove-timeline-show-untimed",
+  const [showUntimed, setShowUntimed] = useCloudSyncedStorage<boolean>(
+    "myflove-timeline-show-untimed",
     false,
   );
 

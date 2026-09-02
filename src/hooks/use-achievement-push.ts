@@ -16,7 +16,10 @@ export function useAchievementPush(): void {
   const { completedTasks } = useTasks();
   const { completedFocusCount } = useFocus();
   const { log } = useMedications();
-  const [pomodoroTotalSessions] = useCloudSyncedStorage<number>("myflow-pomodoro-total-sessions", 0);
+  const [pomodoroTotalSessions] = useCloudSyncedStorage<number>(
+    "myflow-pomodoro-total-sessions",
+    0,
+  );
   const [seen, setSeen] = useCloudSyncedStorage<string[]>(SEEN_KEY, []);
   const initialized = useRef(false);
 

@@ -5,7 +5,6 @@ import { useVisitStreak } from "@/hooks/use-visit-streak";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { analyzeFlow, type FlowKnowledge } from "@/lib/flow-learning";
 
-
 interface StoredEnergy {
   id: string;
   level: number;

@@ -142,7 +142,8 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
   const { moods } = useMoods();
   const { currentFocus } = useFocus();
   const { activeReminders } = useReminders();
-  const [sessionLog] = useCloudSyncedStorage<{ date: string; count: number }>("myflow-pomodoro-sessions",
+  const [sessionLog] = useCloudSyncedStorage<{ date: string; count: number }>(
+    "myflow-pomodoro-sessions",
     {
       date: todayStr(),
       count: 0,

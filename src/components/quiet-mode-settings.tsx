@@ -7,7 +7,12 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
-import { DEFAULT_QUIET_STATE, QUIET_PAUSE_OPTIONS, type QuietModeState, isQuietNow } from "@/lib/quiet-mode";
+import {
+  DEFAULT_QUIET_STATE,
+  QUIET_PAUSE_OPTIONS,
+  type QuietModeState,
+  isQuietNow,
+} from "@/lib/quiet-mode";
 
 function formatRemaining(until: number): string {
   const minutes = Math.max(0, Math.ceil((until - Date.now()) / 60000));
@@ -27,7 +32,8 @@ export function QuietModeSettings() {
   );
   const [, setTick] = useState(0);
 
-  const update = (patch: Partial<QuietModeState>) => setState((current) => ({ ...current, ...patch }));
+  const update = (patch: Partial<QuietModeState>) =>
+    setState((current) => ({ ...current, ...patch }));
   const paused = state.pausedUntil > Date.now();
   const quiet = isQuietNow(state);
 

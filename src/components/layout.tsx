@@ -632,7 +632,8 @@ export default function Layout({ children }: LayoutProps) {
   ]);
   // Tidigare hette platsen "Planera" men ledde till Flow-hjälpen.
   // Nu leder den till planeringssidan – en gång, sedan bestämmer du själv.
-  const [navMigrated, setNavMigrated] = useCloudSyncedStorage<boolean>("myflove-bottom-nav-planering-v1",
+  const [navMigrated, setNavMigrated] = useCloudSyncedStorage<boolean>(
+    "myflove-bottom-nav-planering-v1",
     false,
   );
   useEffect(() => {
@@ -663,10 +664,14 @@ export default function Layout({ children }: LayoutProps) {
 
   // Enkelt läge: AV som standard – slås bara på om användaren själv väljer det.
   // Tidigare versioner sparade "true" som standard; rensa det om valet aldrig gjorts aktivt.
-  const [simpleModeChosen, setSimpleModeChosen] = useCloudSyncedStorage<boolean>("myflove-simple-mode-chosen",
+  const [simpleModeChosen, setSimpleModeChosen] = useCloudSyncedStorage<boolean>(
+    "myflove-simple-mode-chosen",
     false,
   );
-  const [simpleModeRaw, setSimpleModeRaw] = useCloudSyncedStorage<boolean>("myflove-simple-mode", false);
+  const [simpleModeRaw, setSimpleModeRaw] = useCloudSyncedStorage<boolean>(
+    "myflove-simple-mode",
+    false,
+  );
   useEffect(() => {
     if (!simpleModeChosen && simpleModeRaw) setSimpleModeRaw(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps

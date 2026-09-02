@@ -11,7 +11,10 @@ export default function Achievements() {
   const { completedTasks } = useTasks();
   const { completedFocusCount } = useFocus();
   const { log } = useMedications();
-  const [pomodoroTotalSessions] = useCloudSyncedStorage<number>("myflow-pomodoro-total-sessions", 0);
+  const [pomodoroTotalSessions] = useCloudSyncedStorage<number>(
+    "myflow-pomodoro-total-sessions",
+    0,
+  );
 
   const achievements = getAchievements({
     moods,

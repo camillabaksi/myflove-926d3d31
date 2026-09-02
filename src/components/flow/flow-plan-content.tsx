@@ -87,7 +87,10 @@ export function FlowPlanContent() {
   const [energyAuto, setEnergyAuto] = useState<{ level: number; loggedAt: string } | null>(null);
   const [energyManual, setEnergyManual] = useState(false);
   const [timeAvailable, setTimeAvailable] = useState<number>(120);
-  const [storedPlan, setStoredPlan] = useCloudSyncedStorage<StoredPlan | null>("myflow-flowplan", null);
+  const [storedPlan, setStoredPlan] = useCloudSyncedStorage<StoredPlan | null>(
+    "myflow-flowplan",
+    null,
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
