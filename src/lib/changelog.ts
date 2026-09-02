@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-02";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Avklarade poster stannar på sitt datum",
+    items: [
+      "Avklarade kalenderposter och uppgifter med datum visas på sitt planerade datum i stället för att hoppa till dagens Min dag (2026-09-02)",
+      "Historiken ligger kvar på ursprungsdatumet i kalendern; återkommande händelser och flerdagsperioder är oförändrade (2026-09-02)",
+      "Datumlösa tankar och uppgifter hör fortfarande till dagen de bockades av, i lokal tid (2026-09-02)",
+    ],
+  },
+  {
     title: "Kompakt desktop-layout",
     items: [
       "Vänster sidonavigation på desktop är kompakt: smalare kolumn med horisontella länkrader (ikon + text) i stället för stora fyrkantiga kort (2026-09-02)",
