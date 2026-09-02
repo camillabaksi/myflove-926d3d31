@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-02 – Demokontot aktiverat för direkt inloggning
+
+- Demokontots e-post (investor@myflove.se) är bekräftad i inloggningssystemet, så visningskontot loggar in direkt utan e-poststeg. Inga andra konton eller globala inställningar påverkas.
+- Demokontot hoppar automatiskt över introturen – visningen börjar direkt på hemskärmen med exempeldatan.
+
+
 ## 2026-09-02 – Investerar-/demokonto med exempeldata
 
 - Ett markerat demokonto fylls automatiskt en gång med syntetisk QuickFlow, dagsplan, rutiner, mående och energi, så att en visning kan börja direkt i QuickFlow → Flow → prioritering → Min dag.
