@@ -82,6 +82,7 @@ import { lifeProfileSummary } from "@/lib/life-profile";
 import ViewCollapseToggle from "@/components/view-collapse-toggle";
 import FlowCompanion from "@/components/flow/flow-companion";
 import FlowCheckinPopup from "@/components/flow-checkin-popup";
+import DemoBanner from "@/components/demo-banner";
 import PwaInstallButton from "@/components/pwa-install-button";
 
 /** Vyer som redan har Flow på sitt eget sätt – där dubblerar vi inte. */
