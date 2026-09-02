@@ -88,6 +88,27 @@ export function daysUntilDate(due: string, now = new Date()): number {
   return Math.round((new Date(`${due}T00:00:00`).getTime() - start) / 86_400_000);
 }
 
+/**
+ * Vilken dag hör en AVKLARAD sak till?
+ *
+ * Regeln: har saken ett planerat datum (kalenderpost, uppgift med datum) styr
+ * ALLTID det datumet var den visas – även efter att den bockats av. Bara saker
+ * helt utan datum (fria tankar, inbox-uppgifter) hör till dagen de gjordes.
+ * Det gör att "APT på förskolan 2026-08-25" ligger kvar den 25 augusti i stället
+ * för att hoppa in i Min dag den dag man kryssade i den.
+ */
+export function completedBelongsToDay(
+  day: string,
+  scheduledDate?: string,
+  completedAt?: number,
+): boolean {
+  if (scheduledDate) return scheduledDate === day;
+  if (!completedAt) return false;
+  const d = new Date(completedAt);
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}` === day;
+}
+
 /** Prioritet utifrån tid och deadline – inte utifrån hur duktig man är. */
 export function priorityFor(opts: {
   time?: string;
