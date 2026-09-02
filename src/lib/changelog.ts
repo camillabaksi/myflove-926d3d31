@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-02";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Kompakt desktop-layout",
+    items: [
+      "Vänster sidonavigation på desktop är kompakt: smalare kolumn med horisontella länkrader (ikon + text) i stället för stora fyrkantiga kort (2026-09-02)",
+      "Toppnavigationens piller är mindre på desktop – lägre höjd, mindre padding och gap, anpassade för mus (2026-09-02)",
+      "Innehållsytan får mer plats på desktop; mobilens touchstorlekar, bottennavigering och safe-area är oförändrade (2026-09-02)",
+    ],
+  },
+  {
     title: "Demokontot aktiverat för direkt inloggning",
     items: [
       "Demokontots e-post (investor@myflove.se) är bekräftad i inloggningssystemet – direkt inloggning utan e-poststeg, utan att några andra konton eller globala inställningar påverkas (2026-09-02)",

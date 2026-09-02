@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-02 – Kompakt desktop-layout
+
+- Vänster sidonavigation på desktop är nu kompakt: smalare kolumn, horisontella länkrader med ikon + text i stället för stora fyrkantiga kort, mindre rubriker och knappar.
+- Toppnavigationens piller (Hem, Idag, Planera, QuickFlow) är mindre på desktop – lägre höjd, mindre padding och gap, anpassade för mus i stället för touch.
+- Innehållsytan får mer plats på desktop genom minskade marginaler. Mobilens touchvänliga storlekar, bottennavigering och safe-area är oförändrade.
+
+
 ## 2026-09-02 – Demokontot aktiverat för direkt inloggning
 
 - Demokontots e-post (investor@myflove.se) är bekräftad i inloggningssystemet, så visningskontot loggar in direkt utan e-poststeg. Inga andra konton eller globala inställningar påverkas.

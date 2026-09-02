@@ -701,28 +701,28 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className="h-[100dvh] overflow-hidden overscroll-none flex flex-col bg-background md:flex-row relative">
       {/* Desktop Sidebar */}
-      <nav className="hidden md:flex flex-col w-64 border-r border-border bg-card p-4 shrink-0 overflow-y-auto">
-        <div className="mb-8 px-4 py-2">
-          <h1 className="text-2xl font-bold text-primary tracking-tight">MyFlove</h1>
+      <nav className="hidden md:flex flex-col w-52 border-r border-border bg-card p-3 shrink-0 overflow-y-auto">
+        <div className="mb-4 px-2 py-1">
+          <h1 className="text-xl font-bold text-primary tracking-tight">MyFlove</h1>
         </div>
-        <div className="space-y-5">
+        <div className="space-y-4">
           {categories.map((cat) => (
             <div key={cat.id}>
               <div
-                className="flex items-center gap-2 px-1 mb-2 text-xs font-semibold uppercase tracking-wider"
+                className="flex items-center gap-1.5 px-1 mb-1 text-[11px] font-semibold uppercase tracking-wider"
                 style={{ color: catColor(cat.id) }}
               >
                 <span
-                  className="inline-flex h-6 w-6 items-center justify-center rounded-lg"
+                  className="inline-flex h-5 w-5 items-center justify-center rounded-md"
                   style={{ backgroundColor: catColor(cat.id, 0.14) }}
                   aria-hidden="true"
                 >
-                  <cat.icon size={14} />
+                  <cat.icon size={12} />
                 </span>
                 {cat.label}
               </div>
 
-              <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-3">
+              <div className="space-y-0.5">
                 {cat.items.map((item) => {
                   const isActive = location === item.href;
                   const Icon = item.icon;
@@ -730,14 +730,14 @@ export default function Layout({ children }: LayoutProps) {
                     <Link
                       key={item.href}
                       href={item.href}
-                      className={`aspect-square flex flex-col items-center justify-center gap-2 rounded-2xl p-2 text-center transition-all duration-200 ${
+                      className={`flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-left text-sm transition-colors duration-150 ${
                         isActive
                           ? "bg-primary text-primary-foreground font-medium shadow-sm"
-                          : "bg-secondary/40 text-muted-foreground hover:bg-secondary hover:text-foreground"
+                          : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                       }`}
                     >
-                      <Icon size={24} strokeWidth={isActive ? 2.5 : 2} />
-                      <span className="text-xs leading-tight">{item.label}</span>
+                      <Icon size={16} strokeWidth={isActive ? 2.5 : 2} className="shrink-0" />
+                      <span className="truncate leading-tight">{item.label}</span>
                     </Link>
                   );
                 })}
@@ -745,31 +745,33 @@ export default function Layout({ children }: LayoutProps) {
             </div>
           ))}
         </div>
-        <div className="mt-auto pt-4 pb-2 space-y-2">
+        <div className="mt-auto pt-3 pb-1 space-y-1.5">
           <Link href="/anpassa">
-            <Button variant="outline" className="w-full rounded-xl gap-2">
-              <Accessibility size={16} /> Anpassa appen
+            <Button variant="outline" size="sm" className="w-full rounded-lg gap-2">
+              <Accessibility size={15} /> Anpassa appen
             </Button>
           </Link>
           <Button
             variant="outline"
-            className="w-full rounded-xl gap-2"
+            size="sm"
+            className="w-full rounded-lg gap-2"
             onClick={toggleAlarm}
             title={alarmEnabled ? "Stäng av alarmljud" : "Slå på alarmljud"}
           >
-            {alarmEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
+            {alarmEnabled ? <Volume2 size={15} /> : <VolumeX size={15} />}
             Alarmljud: {alarmEnabled ? "på" : "av"}
           </Button>
           <Show when="signed-in">
             <Button
               variant="outline"
-              className="w-full rounded-xl gap-2"
+              size="sm"
+              className="w-full rounded-lg gap-2"
               onClick={() => {
                 track("logout");
                 signOut();
               }}
             >
-              <LogOut size={16} /> Logga ut
+              <LogOut size={15} /> Logga ut
             </Button>
           </Show>
         </div>
@@ -799,7 +801,7 @@ export default function Layout({ children }: LayoutProps) {
           <ViewCollapseToggle />
         </header>
 
-        <div className="hidden md:flex items-center gap-2 px-8 pt-6">
+        <div className="hidden md:flex items-center gap-1.5 px-6 pt-4">
           {primaryNav.map((item) => {
             const active =
               item.href === "/flow"
@@ -810,13 +812,13 @@ export default function Layout({ children }: LayoutProps) {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[13px] font-medium transition-colors ${
                   active
                     ? "bg-primary text-primary-foreground shadow-sm"
                     : "bg-card text-muted-foreground border border-border hover:text-foreground"
                 }`}
               >
-                <Icon size={16} />
+                <Icon size={14} />
                 {item.label}
               </Link>
             );
@@ -824,13 +826,13 @@ export default function Layout({ children }: LayoutProps) {
           <button
             type="button"
             onClick={() => window.dispatchEvent(new CustomEvent("myflove:quickflow"))}
-            className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-4 py-2 text-sm font-medium text-primary transition-transform active:scale-95"
+            className="inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/10 px-3 py-1.5 text-[13px] font-medium text-primary transition-transform active:scale-95"
           >
-            <Plus size={16} /> QuickFlow
+            <Plus size={14} /> QuickFlow
           </button>
         </div>
 
-        <div className="hidden md:flex items-center justify-between px-8 pt-4">
+        <div className="hidden md:flex items-center justify-between px-6 pt-2">
           {canGoBack ? (
             <Button
               variant="ghost"
@@ -847,7 +849,7 @@ export default function Layout({ children }: LayoutProps) {
         </div>
 
         {alerts.length > 0 && (
-          <div className="px-4 pt-4 md:px-8 md:pt-6 space-y-2">
+          <div className="px-4 pt-4 md:px-6 md:pt-4 space-y-2">
             {alerts.map((alert) => (
               <div
                 key={alert.tripId}
@@ -877,7 +879,7 @@ export default function Layout({ children }: LayoutProps) {
         )}
 
         {medicationAlerts.length > 0 && (
-          <div className="px-4 pt-4 md:px-8 md:pt-6 space-y-2">
+          <div className="px-4 pt-4 md:px-6 md:pt-4 space-y-2">
             {medicationAlerts.map((alert) => (
               <div
                 key={alert.key}
@@ -904,7 +906,7 @@ export default function Layout({ children }: LayoutProps) {
         )}
 
         {proximityAlerts.length > 0 && (
-          <div className="px-4 pt-4 md:px-8 md:pt-6 space-y-2">
+          <div className="px-4 pt-4 md:px-6 md:pt-4 space-y-2">
             {proximityAlerts.map((alert) => (
               <div
                 key={alert.storeId}
@@ -933,13 +935,13 @@ export default function Layout({ children }: LayoutProps) {
           className="flex-1 overflow-y-auto pb-24 md:pb-8"
           style={CATEGORY_THEMES[location] as React.CSSProperties}
         >
-          <div key={location} className="max-w-6xl mx-auto w-full p-4 md:p-8 page-enter">
+          <div key={location} className="max-w-6xl mx-auto w-full p-4 md:p-6 page-enter">
             {!FLOW_HIDDEN_PATHS.has(location) && <FlowCompanion stage="mini" className="mb-4" />}
             <FlowCheckinPopup />
             {children}
           </div>
 
-          <footer className="max-w-6xl mx-auto w-full px-4 md:px-8 pt-4 pb-8 mt-8 border-t border-border/40">
+          <footer className="max-w-6xl mx-auto w-full px-4 md:px-6 pt-4 pb-8 mt-8 border-t border-border/40">
             <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
               <Link
                 href="/integritet"
