@@ -55,9 +55,13 @@ export function TodayContent() {
 
   const { todayOpen: todaysItems, todayDone, toggleItem } = useFlowItems();
   const { mode, chosen, setMode } = useReplanMode();
+  const untimedTodayItems = useMemo(
+    () => todaysItems.filter((item) => !item.time),
+    [todaysItems],
+  );
   const { keep, rest } = useMemo(
-    () => withinCapacity(todaysItems, capacityForMode(flow, mode)),
-    [todaysItems, flow, mode],
+    () => withinCapacity(untimedTodayItems, capacityForMode(flow, mode)),
+    [untimedTodayItems, flow, mode],
   );
   const offerReplan = shouldOfferReplan(flow.score) || chosen;
 
@@ -126,7 +130,6 @@ export function TodayContent() {
       }),
     [activeTasks, reading.now, reading.peak],
   );
-
 
   // Planerad → genomförd → (frivillig) faktisk energipåverkan.
   // Ingen energi loggas automatiskt; först när användaren svarar i dialogen.
@@ -406,4 +409,3 @@ export function TodayContent() {
     </MyFlovePageGrid>
   );
 }
-
