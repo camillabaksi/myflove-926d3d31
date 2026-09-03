@@ -51,7 +51,6 @@ import {
   Gauge,
   ArrowLeft,
   Accessibility,
-  
   Compass,
   ChevronRight,
   MessageCircle,
