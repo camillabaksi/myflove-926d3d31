@@ -37,7 +37,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { useToast } from "@/hooks/use-toast";
 import CollapsibleSection from "@/components/collapsible-section";
 import DayTimeline from "@/components/day-timeline";
-import TaskQuickAdd, { type QuickAddResult } from "@/components/task-quick-add";
+import { QuickAddInline, type QuickAddResult } from "@/components/task-quick-add";
 import AllInDay from "@/components/all-in-day";
 import EnergyBattery from "@/components/energy-battery";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
@@ -187,6 +187,8 @@ export function CalendarContent() {
   // Den förenklade dagvyn är kalenderns enda primära dagpresentation.
   const allInDay = true;
   const [isAddingEvent, setIsAddingEvent] = useState(false);
+  // Inline lägg-till-flöde för den valda dagen – ingen separat dialog.
+  const [quickAddOpen, setQuickAddOpen] = useState(false);
   const [newEventTitle, setNewEventTitle] = useState("");
   const [newEventTime, setNewEventTime] = useState("");
   const [isAddingReminder, setIsAddingReminder] = useState(false);
