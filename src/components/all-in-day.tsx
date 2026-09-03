@@ -5,20 +5,51 @@ import { MyFloveTransition } from "@/components/myflove/motion";
 import { useFlowItems } from "@/hooks/use-flow-items";
 import type { FlowItem } from "@/lib/flow-items";
 
-/**
- * ✨ Allt i dagen – ett andra perspektiv på samma dag.
- *
- * Vanliga kalendern svarar på "När händer mina tidsbundna saker?".
- * Den här vyn svarar på "Vad består min dag faktiskt av?" – allt som ska
- * göras eller redan är gjort idag, hämtat från exakt samma data (useFlowItems)
- * som Idag, Lista, Hem och Att göra. Inga dubbletter, ingen egen status:
- * avbockning här är samma avbockning som överallt annars.
- */
 /** "9:00", "09:00" och "9.00" blir samma minutvärde – annars sorteras text. */
 function minutesOf(time?: string): number {
   const m = time?.match(/^(\d{1,2})[:.](\d{2})$/);
   if (!m) return Number.POSITIVE_INFINITY;
   return Number(m[1]) * 60 + Number(m[2]);
+}
+
+/**
+ * Kalenderposter är viktiga, men de ska inte räknas som användarens egna
+ * aktivitetslista. Vanliga uppgifter, QuickFlow-tankar och spontant gjort är
+ * huvudflödet; tider, barn, påminnelser och rutiner får en egen sekundär vy.
+ */
+function isPrimaryActivity(item: FlowItem): boolean {
+  return (
+    item.source === "uppgift" ||
+    item.source === "tanke" ||
+    item.source === "quickflow" ||
+    item.source === "gjort"
+  );
+}
+
+function ItemList({
+  items,
+  toggleItem,
+  muted = false,
+}: {
+  items: FlowItem[];
+  toggleItem: (item: FlowItem) => void;
+  muted?: boolean;
+}) {
+  return (
+    <ul className="space-y-2">
+      {items.map((item) => (
+        <li key={item.id}>
+          <MyFloveTransition transitionKey={String(item.done)}>
+            <FlowItemCard
+              item={item}
+              className={muted || item.done ? "opacity-80" : undefined}
+              {...(item.completable ? { onToggle: toggleItem } : {})}
+            />
+          </MyFloveTransition>
+        </li>
+      ))}
+    </ul>
+  );
 }
 
 export default function AllInDay({
@@ -32,33 +63,49 @@ export default function AllInDay({
 }) {
   const { today, toggleItem } = useFlowItems(date);
 
-  const { timed, doneUntimed, openUntimed, doneCount } = useMemo(() => {
+  const { timed, doneUntimed, openUntimed, secondary, doneCount } = useMemo(() => {
     const timed: FlowItem[] = [];
     const doneUntimed: FlowItem[] = [];
     const openUntimed: FlowItem[] = [];
+    const secondary: FlowItem[] = [];
+
     for (const item of today) {
-      if (item.time) timed.push(item);
-      else if (item.done) doneUntimed.push(item);
-      else openUntimed.push(item);
+      if (!isPrimaryActivity(item)) {
+        secondary.push(item);
+      } else if (item.time) {
+        timed.push(item);
+      } else if (item.done) {
+        doneUntimed.push(item);
+      } else {
+        openUntimed.push(item);
+      }
     }
+
     timed.sort(
       (a, b) => minutesOf(a.time) - minutesOf(b.time) || a.title.localeCompare(b.title, "sv"),
     );
+    secondary.sort(
+      (a, b) => minutesOf(a.time) - minutesOf(b.time) || a.title.localeCompare(b.title, "sv"),
+    );
+
     return {
       timed,
       doneUntimed,
       openUntimed,
-      doneCount: today.filter((i) => i.done).length,
+      secondary,
+      doneCount: doneUntimed.length,
     };
   }, [today]);
+
+  const hasAnything = today.length > 0 || hasCalendarEvents;
 
   return (
     <div className="space-y-4 rounded-3xl border-2 border-border/60 bg-card/60 p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="text-sm text-muted-foreground">
           {isToday
-            ? "Det du gjort först, tiderna efteråt. Samma aktiviteter och status som i Min dag."
-            : "Det du gjorde och tiderna för den här dagen – från samma aktivitetsdata."}
+            ? "Det du gjort först, tiderna efteråt. Kalenderposter visas separat."
+            : "Det du gjorde och planerade den här dagen – kalenderposter visas separat."}
         </p>
         {doneCount > 0 && (
           <span className="rounded-pill bg-secondary/60 px-3 py-1 text-xs font-medium text-ink">
@@ -68,7 +115,7 @@ export default function AllInDay({
         )}
       </div>
 
-      {today.length === 0 && !hasCalendarEvents && (
+      {!hasAnything && (
         <p className="rounded-2xl bg-secondary/30 p-4 text-sm text-muted-foreground">
           {isToday
             ? "Inget i dagen ännu. Lägg till något när det passar."
@@ -83,19 +130,7 @@ export default function AllInDay({
         className="space-y-2"
       >
         {doneUntimed.length > 0 ? (
-          <ul className="space-y-2">
-            {doneUntimed.map((item) => (
-              <li key={item.id}>
-                <MyFloveTransition transitionKey={String(item.done)}>
-                  <FlowItemCard
-                    item={item}
-                    className="opacity-80"
-                    {...(item.completable ? { onToggle: toggleItem } : {})}
-                  />
-                </MyFloveTransition>
-              </li>
-            ))}
-          </ul>
+          <ItemList items={doneUntimed} toggleItem={toggleItem} muted />
         ) : (
           <p className="rounded-2xl bg-secondary/30 p-3 text-sm text-muted-foreground">
             Inget markerat som gjort den här dagen ännu.
@@ -110,18 +145,7 @@ export default function AllInDay({
           headingClassName="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
           className="space-y-2"
         >
-          <ul className="space-y-2">
-            {openUntimed.map((item) => (
-              <li key={item.id}>
-                <MyFloveTransition transitionKey={String(item.done)}>
-                  <FlowItemCard
-                    item={item}
-                    {...(item.completable ? { onToggle: toggleItem } : {})}
-                  />
-                </MyFloveTransition>
-              </li>
-            ))}
-          </ul>
+          <ItemList items={openUntimed} toggleItem={toggleItem} />
         </CollapsibleSection>
       )}
 
@@ -150,6 +174,21 @@ export default function AllInDay({
               </li>
             ))}
           </ul>
+        </CollapsibleSection>
+      )}
+
+      {secondary.length > 0 && (
+        <CollapsibleSection
+          id="allt-i-dagen::kalenderposter"
+          title="Kalenderposter"
+          headingClassName="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+          className="space-y-2"
+        >
+          <p className="text-sm text-muted-foreground">
+            Barn, påminnelser, rutiner och andra hållpunkter – viktiga, men inte en del av din
+            aktivitetsräkning.
+          </p>
+          <ItemList items={secondary} toggleItem={toggleItem} muted />
         </CollapsibleSection>
       )}
     </div>

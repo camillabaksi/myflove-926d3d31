@@ -14,8 +14,10 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     items: [
       "En gemensam Lägg till-väg skiljer på Jag gjorde detta och Jag ska göra detta utan krav på kategori, prioritet eller energi (2026-09-03)",
       "Min dag och Kalendern visar först aktiviteter utan klockslag som faktiskt är gjorda och därefter Tider (2026-09-03)",
+      "Kalenderns dagvy har en fast ordning: gjort, planerat, tider och därefter sekundära kalenderposter (2026-09-03)",
       "Tidsbestämda aktiviteter visas bara under Tider idag och upprepas inte i kapacitetsdelen (2026-09-03)",
       "Kalenderns lägg-till-väg använder valt datum och delade kalenderhändelser ligger i en egen sekundär sektion (2026-09-03)",
+      "Det gamla generella Ny händelse-flödet är borttaget ur dagvyn; specialflöden för påminnelser, familj och barn finns kvar (2026-09-03)",
       "Att markera något som klart flyttar aldrig aktiviteten till idag; completedAt sparas separat och QuickFlow-hydrering skapar inga dubbletter (2026-09-03)",
     ],
   },
