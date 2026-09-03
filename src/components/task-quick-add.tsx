@@ -25,32 +25,39 @@ type AddMode = "done" | "planned";
 export function TaskQuickAdd({
   onAdd,
   className,
+  defaultDate,
+  label = "Lägg till",
 }: {
   onAdd: (result: QuickAddResult) => void;
   className?: string;
+  /** Förvalt datum, t.ex. dagen man står på i kalendern. */
+  defaultDate?: string;
+  label?: string;
 }) {
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState<AddMode | null>(null);
   const [title, setTitle] = useState("");
-  const [date, setDate] = useState(todayISO());
+  const baseDate =
+    defaultDate && /^\d{4}-\d{2}-\d{2}$/.test(defaultDate) ? defaultDate : todayISO();
+  const [date, setDate] = useState(baseDate);
   const [time, setTime] = useState("");
 
   const reset = () => {
     setMode(null);
     setTitle("");
-    setDate(todayISO());
+    setDate(baseDate);
     setTime("");
   };
 
   const chooseMode = (nextMode: AddMode) => {
     setMode(nextMode);
-    setDate(todayISO());
+    setDate(baseDate);
     setTime("");
   };
 
   const save = () => {
     const trimmed = title.trim();
-    const safeDate = /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : todayISO();
+    const safeDate = /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : baseDate;
     if (!trimmed || !mode) return;
     onAdd({
       title: trimmed.slice(0, 240),
@@ -75,13 +82,16 @@ export function TaskQuickAdd({
     <>
       <Button
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          setDate(baseDate);
+          setOpen(true);
+        }}
         className={cn("h-12 w-full rounded-2xl text-base shadow-soft", className)}
       >
         <span aria-hidden className="text-xl leading-none">
           +
         </span>
-        Lägg till
+        {label}
       </Button>
 
       <Dialog
@@ -170,14 +180,15 @@ export function TaskQuickAdd({
                     type="button"
                     variant="outline"
                     size="sm"
-                    onClick={() => setDate(todayISO())}
+                    onClick={() => setDate(baseDate)}
                     className={cn(
                       "rounded-full",
-                      date === todayISO() && "border-primary text-primary",
+                      date === baseDate && "border-primary text-primary",
                     )}
                   >
-                    Idag
+                    {baseDate === todayISO() ? "Idag" : "Vald dag"}
                   </Button>
+
                   <Input
                     type="date"
                     value={date}
