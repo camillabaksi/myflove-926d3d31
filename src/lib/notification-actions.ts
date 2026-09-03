@@ -7,10 +7,13 @@
  * klickades medan appen var stängd.
  */
 
-export type NotificationActionType = "done" | "snooze";
+export type NotificationActionType = "done" | "snooze" | "skip";
 
 export interface QueuedNotificationAction {
-  /** Nyckel på formen `task:<id>`, `reminder:<id>` eller `quickflow:<id>`. */
+  /**
+   * Nyckel på formen `task:<id>`, `reminder:<id>`, `quickflow:<id>`
+   * eller `med:<medId>:<datum>:<HH:MM>`.
+   */
   itemKey: string;
   action: NotificationActionType;
   at: number;
@@ -24,7 +27,7 @@ export const SNOOZE_MINUTES = 10;
 /** Notiser med de här prefixen får snabbval. */
 export function supportsQuickActions(itemKey: string | undefined): boolean {
   if (!itemKey) return false;
-  return /^(task|deadline|reminder|quickflow):/.test(itemKey);
+  return /^(task|deadline|reminder|quickflow|med):/.test(itemKey);
 }
 
 export function enqueueNotificationAction(itemKey: string, action: NotificationActionType): void {
@@ -75,7 +78,7 @@ export function captureActionFromUrl(): boolean {
   const url = new URL(window.location.href);
   const itemKey = url.searchParams.get("notis");
   const action = url.searchParams.get("atgard");
-  if (!itemKey || (action !== "done" && action !== "snooze")) return false;
+  if (!itemKey || (action !== "done" && action !== "snooze" && action !== "skip")) return false;
   enqueueNotificationAction(itemKey, action);
   url.searchParams.delete("notis");
   url.searchParams.delete("atgard");

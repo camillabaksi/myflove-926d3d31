@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-03";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Snabbval direkt i medicinpåminnelser",
+    items: [
+      "Medicinnotiser (push) har tre knappar: \u201dTagit\u201d, \u201d10 min\u201d (ny påminnelse) och \u201dHoppa över\u201d – fungerar även när appen är stängd (2026-09-03)",
+      "Larmbannern i appen har samma val: \u201dTagen\u201d bockar av dosen direkt, \u201d10 min\u201d påminner igen, krysset hoppar över idag (2026-09-03)",
+    ],
+  },
+  {
     title: "Genomfört hamnar på rätt dag",
     items: [
       "QuickFlow-poster som blir uppgifter behåller dagen de faktiskt gjordes i stället för att få dagens datum (2026-09-03)",
