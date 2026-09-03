@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-03";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Balanserad Hem-layout och tydligare Flow-maskot",
+    items: [
+      "Hem har ett balanserat desktop-grid med fullbredds-hero, två jämnstora block överst och tre jämnstora block under (2026-09-03)",
+      "Flow-maskoten är tydligare i hälsningshero-sektionen på desktop; mobilens tidigare storlek och touchlayout är återställda (2026-09-03)",
+    ],
+  },
+  {
     title: "Pitchdeck 4.0 för investerarpresentation",
     items: [
       "Pitchdeck 4.0 behåller MyFloves visuella identitet och kompletterar v3.7 med founder/kompetens, byggd produkt och strukturerad validering (2026-09-03)",
