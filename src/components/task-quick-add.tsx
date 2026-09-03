@@ -282,10 +282,7 @@ export function QuickAddInline({
 
   return (
     <div
-      className={cn(
-        "space-y-3 rounded-3xl border-2 border-primary/25 bg-primary/5 p-4",
-        className,
-      )}
+      className={cn("space-y-3 rounded-3xl border-2 border-primary/25 bg-primary/5 p-4", className)}
     >
       <div className="flex items-center justify-between gap-2">
         <p className="text-sm font-semibold text-ink">
