@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-03";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Genomfört hamnar på rätt dag",
+    items: [
+      "QuickFlow-poster som blir uppgifter behåller dagen de faktiskt gjordes i stället för att få dagens datum (2026-09-03)",
+      'Felaktiga rader flyttas automatiskt tillbaka till sin riktiga dag, så "Genomfört idag" bara visar dagens saker (2026-09-03)',
+    ],
+  },
+  {
     title: "Balanserad Hem-layout och tydligare Flow-maskot",
     items: [
       "Hem har ett balanserat desktop-grid med fullbredds-hero, två jämnstora block överst och tre jämnstora block under (2026-09-03)",
