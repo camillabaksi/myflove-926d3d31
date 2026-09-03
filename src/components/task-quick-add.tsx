@@ -55,7 +55,6 @@ export function TaskQuickAdd({
     setTime("");
   };
 
-
   const save = () => {
     const trimmed = title.trim();
     const safeDate = /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : baseDate;
@@ -94,7 +93,6 @@ export function TaskQuickAdd({
         </span>
         {label}
       </Button>
-
 
       <Dialog
         open={open}
@@ -183,7 +181,10 @@ export function TaskQuickAdd({
                     variant="outline"
                     size="sm"
                     onClick={() => setDate(baseDate)}
-                    className={cn("rounded-full", date === baseDate && "border-primary text-primary")}
+                    className={cn(
+                      "rounded-full",
+                      date === baseDate && "border-primary text-primary",
+                    )}
                   >
                     {baseDate === todayISO() ? "Idag" : "Vald dag"}
                   </Button>

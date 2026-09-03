@@ -1033,7 +1033,9 @@ export function CalendarContent() {
                     headingClassName="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
                     className="space-y-2"
                   >
-                    <p className="text-sm text-muted-foreground">Delade händelser och återkommande hållpunkter.</p>
+                    <p className="text-sm text-muted-foreground">
+                      Delade händelser och återkommande hållpunkter.
+                    </p>
                     <ul className="space-y-2">
                       {selectedItems.familyEvents.map((event) => (
                         <li

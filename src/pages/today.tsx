@@ -55,10 +55,7 @@ export function TodayContent() {
 
   const { todayOpen: todaysItems, todayDone, toggleItem } = useFlowItems();
   const { mode, chosen, setMode } = useReplanMode();
-  const untimedTodayItems = useMemo(
-    () => todaysItems.filter((item) => !item.time),
-    [todaysItems],
-  );
+  const untimedTodayItems = useMemo(() => todaysItems.filter((item) => !item.time), [todaysItems]);
   const { keep, rest } = useMemo(
     () => withinCapacity(untimedTodayItems, capacityForMode(flow, mode)),
     [untimedTodayItems, flow, mode],
