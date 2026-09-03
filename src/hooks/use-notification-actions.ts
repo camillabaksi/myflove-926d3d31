@@ -108,11 +108,11 @@ export function useNotificationActions() {
       }
 
       if (kind === "med") {
-        // Nyckeln är `med:<medId>:<datum>:<HH:MM>` – tiden innehåller kolon,
-        // så dela upp från slutet i stället.
+        // Nyckeln är `med:<medId>:<datum|snooze>:<HH>:<MM>[:...]` – tiden
+        // innehåller kolon, så plocka timme/minut med fasta positioner.
         const parts = itemKey.split(":");
         const medId = parts[1];
-        const time = parts.slice(-2).join(":");
+        const time = `${parts[3]}:${parts[4]}`;
         const med = s.medications.find((m) => m.id === medId);
         const label = med
           ? `${med.name}${med.dosage ? ` (${med.dosage})` : ""} – ${time}`
