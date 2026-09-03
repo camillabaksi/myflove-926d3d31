@@ -25,28 +25,35 @@ type AddMode = "done" | "planned";
 export function TaskQuickAdd({
   onAdd,
   className,
+  defaultDate,
+  label = "Lägg till",
 }: {
   onAdd: (result: QuickAddResult) => void;
   className?: string;
+  /** Förvalt datum, t.ex. dagen man står på i kalendern. */
+  defaultDate?: string;
+  label?: string;
 }) {
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState<AddMode | null>(null);
   const [title, setTitle] = useState("");
-  const [date, setDate] = useState(todayISO());
+  const baseDate = defaultDate && /^\d{4}-\d{2}-\d{2}$/.test(defaultDate) ? defaultDate : todayISO();
+  const [date, setDate] = useState(baseDate);
   const [time, setTime] = useState("");
 
   const reset = () => {
     setMode(null);
     setTitle("");
-    setDate(todayISO());
+    setDate(baseDate);
     setTime("");
   };
 
   const chooseMode = (nextMode: AddMode) => {
     setMode(nextMode);
-    setDate(todayISO());
+    setDate(baseDate);
     setTime("");
   };
+
 
   const save = () => {
     const trimmed = title.trim();
