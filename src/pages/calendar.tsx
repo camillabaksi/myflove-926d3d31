@@ -37,6 +37,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { useToast } from "@/hooks/use-toast";
 import CollapsibleSection from "@/components/collapsible-section";
 import DayTimeline from "@/components/day-timeline";
+import TaskQuickAdd, { type QuickAddResult } from "@/components/task-quick-add";
 import AllInDay from "@/components/all-in-day";
 import EnergyBattery from "@/components/energy-battery";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
@@ -371,6 +372,14 @@ export function CalendarContent() {
         date: selectedDateStr,
         time: newEventTime || null,
       },
+    });
+  };
+
+  const handleQuickAdd = (result: QuickAddResult) => {
+    addTask(result.title, result.dueDate, {
+      time: result.time,
+      completed: result.completed,
+      completedAt: result.completedAt,
     });
   };
 
@@ -943,13 +952,12 @@ export function CalendarContent() {
                     })}
               </h3>
               <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
-                <button
-                  onClick={() => setIsAddingAny(true)}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-2xl text-sm font-medium border transition-colors bg-card border-border text-foreground hover:border-primary/40 hover:bg-secondary/50"
-                >
-                  <Plus size={16} className="text-primary" />
-                  Ny händelse
-                </button>
+                <TaskQuickAdd
+                  onAdd={handleQuickAdd}
+                  defaultDate={selectedDateStr}
+                  label="Lägg till aktivitet"
+                  className="h-auto w-full rounded-2xl border border-primary/30 bg-primary/10 px-3 py-2 text-sm shadow-none hover:bg-primary/15 sm:w-auto"
+                />
                 <button
                   onClick={() => setIsAddingReminder(true)}
                   className="flex items-center gap-1.5 px-3 py-2 rounded-2xl text-sm font-medium border transition-colors bg-card border-border text-foreground hover:border-primary/40 hover:bg-secondary/50"
@@ -1009,7 +1017,57 @@ export function CalendarContent() {
               </div>
             </div>
 
-            {allInDay && <AllInDay date={selectedDateStr} isToday={selectedDateStr === todayStr} />}
+            {allInDay && (
+              <>
+                <AllInDay
+                  date={selectedDateStr}
+                  isToday={selectedDateStr === todayStr}
+                  hasCalendarEvents={
+                    selectedItems.familyEvents.length > 0 || selectedItems.recurring.length > 0
+                  }
+                />
+                {(selectedItems.familyEvents.length > 0 || selectedItems.recurring.length > 0) && (
+                  <CollapsibleSection
+                    id="kalenderdagen::kalenderhandelser"
+                    title="Kalenderhändelser"
+                    headingClassName="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+                    className="space-y-2"
+                  >
+                    <p className="text-sm text-muted-foreground">Delade händelser och återkommande hållpunkter.</p>
+                    <ul className="space-y-2">
+                      {selectedItems.familyEvents.map((event) => (
+                        <li
+                          key={`family-day-${event.id}`}
+                          className="flex items-center gap-3 rounded-2xl border border-border/60 bg-secondary/30 px-3 py-2.5"
+                        >
+                          <Users className="h-5 w-5 shrink-0 text-primary" />
+                          <span className="min-w-0 flex-1 text-sm font-medium text-foreground">
+                            {event.title}
+                          </span>
+                          <span className="shrink-0 text-xs text-muted-foreground">
+                            {event.time ? `kl ${event.time}` : "utan tid"}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                    {selectedItems.recurring.length > 0 && (
+                      <div className="flex flex-wrap gap-2 pt-1">
+                        {selectedItems.recurring.map((event) => (
+                          <span
+                            key={`recurring-day-${event.id}`}
+                            className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-secondary/50 px-2.5 py-1 text-xs text-muted-foreground"
+                          >
+                            <span aria-hidden>↻</span>
+                            {event.title}
+                            {event.time && ` · ${event.time}`}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </CollapsibleSection>
+                )}
+              </>
+            )}
 
             {!allInDay &&
               !selectedItems.focus &&

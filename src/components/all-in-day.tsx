@@ -21,7 +21,15 @@ function minutesOf(time?: string): number {
   return Number(m[1]) * 60 + Number(m[2]);
 }
 
-export default function AllInDay({ date, isToday = true }: { date?: string; isToday?: boolean }) {
+export default function AllInDay({
+  date,
+  isToday = true,
+  hasCalendarEvents = false,
+}: {
+  date?: string;
+  isToday?: boolean;
+  hasCalendarEvents?: boolean;
+}) {
   const { today, toggleItem } = useFlowItems(date);
 
   const { timed, doneUntimed, openUntimed, doneCount } = useMemo(() => {
@@ -60,21 +68,19 @@ export default function AllInDay({ date, isToday = true }: { date?: string; isTo
         )}
       </div>
 
-      {today.length === 0 && (
+      {today.length === 0 && !hasCalendarEvents && (
         <p className="rounded-2xl bg-secondary/30 p-4 text-sm text-muted-foreground">
-          {isToday
-            ? "Inget i dagen ännu. Släpp en tanke i QuickFlow så landar den här."
-            : "Inget inlagt den här dagen ännu."}
+          {isToday ? "Inget i dagen ännu. Lägg till något när det passar." : "Inget inlagt den här dagen ännu."}
         </p>
       )}
 
-      {doneUntimed.length > 0 && (
-        <CollapsibleSection
-          id="allt-i-dagen::det-har-gjorde"
-          title="✓ Det här gjorde du"
-          headingClassName="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
-          className="space-y-2"
-        >
+      <CollapsibleSection
+        id="allt-i-dagen::det-har-gjorde"
+        title="✓ Det här gjorde du"
+        headingClassName="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+        className="space-y-2"
+      >
+        {doneUntimed.length > 0 ? (
           <ul className="space-y-2">
             {doneUntimed.map((item) => (
               <li key={item.id}>
@@ -88,8 +94,12 @@ export default function AllInDay({ date, isToday = true }: { date?: string; isTo
               </li>
             ))}
           </ul>
-        </CollapsibleSection>
-      )}
+        ) : (
+          <p className="rounded-2xl bg-secondary/30 p-3 text-sm text-muted-foreground">
+            Inget markerat som gjort den här dagen ännu.
+          </p>
+        )}
+      </CollapsibleSection>
 
       {openUntimed.length > 0 && (
         <CollapsibleSection

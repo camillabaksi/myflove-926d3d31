@@ -14,7 +14,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     items: [
       "Tidsbestämda aktiviteter visas bara under Tider idag och upprepas inte i kapacitetsdelen (2026-09-03)",
       "En gemensam Lägg till-väg skiljer på Jag gjorde detta och Jag ska göra detta utan krav på kategori, prioritet eller energi (2026-09-03)",
-      "Min dag visar först aktiviteter utan klockslag som faktiskt är gjorda och därefter Tider idag; kalendern behåller samma datumseparering (2026-09-03)",
+      "Min dag och Kalendern visar först aktiviteter utan klockslag som faktiskt är gjorda och därefter Tider; Kalenderns lägg-till-väg använder valt datum (2026-09-03)",
       "QuickFlow-hydrering återanvänder befintliga aktiviteter utan att skapa dubbletter eller skriva över valt datum och completedAt (2026-09-03)",
     ],
   },
