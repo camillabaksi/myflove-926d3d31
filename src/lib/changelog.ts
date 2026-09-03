@@ -13,7 +13,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     title: "Genomfört hamnar på rätt dag",
     items: [
       "QuickFlow-poster som blir uppgifter behåller dagen de faktiskt gjordes i stället för att få dagens datum (2026-09-03)",
-      "Felaktiga rader flyttas automatiskt tillbaka till sin riktiga dag, så \"Genomfört idag\" bara visar dagens saker (2026-09-03)",
+      'Felaktiga rader flyttas automatiskt tillbaka till sin riktiga dag, så "Genomfört idag" bara visar dagens saker (2026-09-03)',
     ],
   },
   {

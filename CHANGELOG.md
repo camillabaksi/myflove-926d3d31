@@ -5,7 +5,6 @@
 - QuickFlow-poster som blir uppgifter behåller nu den dag de faktiskt gjordes i stället för att få dagens datum.
 - Redan felaktiga rader flyttas automatiskt tillbaka till sin riktiga dag, så "Genomfört idag" bara visar det som gjordes idag.
 
-
 ## 2026-09-03 – Balanserad Hem-layout och tydligare Flow-maskot
 
 - Hem har nu ett balanserat desktop-grid: hero i full bredd, två jämnstora huvudblock och tre jämnstora block på nästa rad utan onödiga tomrum.
@@ -17,14 +16,11 @@
 - Nya slides täcker affärsmodell, differentiering, go-to-market, kapitalbehov/användning och roadmap utan påhittade siffror eller priser.
 - Marknadssiffrorna är fortsatt märkta som externa uppskattningar; PowerPoint, PDF och förhandsbild finns på pitchsidan.
 
-
 ## 2026-09-02 – Kontosynk för personliga inställningar
 
 - Föredraget visningsnamn och dagsramar (morgon/kväll) följer nu det inloggade kontot via befintlig offline-first-molnsynk.
 - Utloggning rensar dessa kontobundna värden från enheten, medan rena enhetsval, cache och sessionssignaler lämnas lokala.
 - Ingen ny datamodell eller parallell lagringslösning införs.
-
-
 
 ## 2026-09-02 – Avklarade poster stannar på sitt datum
 
@@ -32,26 +28,22 @@
 - Historiska avklarade poster ligger kvar i kalendern på sitt ursprungliga datum; återkommande händelser och flerdagsperioder fungerar som förut.
 - Poster helt utan datum (fria tankar och inbox-uppgifter) hör fortfarande till den dag de bockades av, beräknat i lokal tid.
 
-
 ## 2026-09-02 – Kompakt desktop-layout
 
 - Vänster sidonavigation på desktop är nu kompakt: smalare kolumn, horisontella länkrader med ikon + text i stället för stora fyrkantiga kort, mindre rubriker och knappar.
 - Toppnavigationens piller (Hem, Idag, Planera, QuickFlow) är mindre på desktop – lägre höjd, mindre padding och gap, anpassade för mus i stället för touch.
 - Innehållsytan får mer plats på desktop genom minskade marginaler. Mobilens touchvänliga storlekar, bottennavigering och safe-area är oförändrade.
 
-
 ## 2026-09-02 – Demokontot aktiverat för direkt inloggning
 
 - Demokontots e-post (investor@myflove.se) är bekräftad i inloggningssystemet, så visningskontot loggar in direkt utan e-poststeg. Inga andra konton eller globala inställningar påverkas.
 - Demokontot hoppar automatiskt över introturen – visningen börjar direkt på hemskärmen med exempeldatan.
-
 
 ## 2026-09-02 – Investerar-/demokonto med exempeldata
 
 - Ett markerat demokonto fylls automatiskt en gång med syntetisk QuickFlow, dagsplan, rutiner, mående och energi, så att en visning kan börja direkt i QuickFlow → Flow → prioritering → Min dag.
 - Appen visar en diskret markering "Demokonto · Exempeldata" och demoanvändningen räknas inte in i besöks- eller användarstatistiken.
 - Kontot är en helt vanlig användare med normal behörighet: inga nya roller, inga lösenord i koden och ingen åtkomst till andra användares data.
-
 
 ## 2026-09-01 – Flow följer adressen och all lokal data skyddas
 
@@ -60,7 +52,6 @@
 - Utloggning behåller osynkad data även om sidans hook aldrig hann monteras i sessionen.
 
 ## 2026-09-01 – Flow samlar hjälp, planering och chatt
-
 
 - Flow, FlowPlan och Assistant visas som lägen i samma vy med flikarna Flow, Planera och Chatta.
 - De äldre adresserna finns kvar och öppnar motsvarande läge, utan att skapa separata kopior av innehållet.
