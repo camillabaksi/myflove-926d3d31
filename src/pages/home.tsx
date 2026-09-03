@@ -388,54 +388,61 @@ import { MyFloveIcon } from "@/components/myflove";
 import { areaProps } from "@/lib/areas";
 
 /**
- * Dagens översikt på Hem – bara en sammanfattning i siffror.
- * Hela listan (och avbockningen) bor i Idag, så samma sak aldrig
- * visas som två kort på startsidan. Klick går till befintliga Idag-vyn.
+ * Kalender på Hem – kalendern först. Tre tydliga vägar (Min dag, Vecka,
+ * Månad) öppnar rätt vy direkt, och "+ Lägg till" är en stor, synlig knapp.
+ * Listan och avbockningen bor kvar i Idag/Kalendern – inget dubbleras här.
  */
-function DaySummary() {
-  const { todayOpen, todayDone } = useFlowItems();
-  const total = todayOpen.length + todayDone.length;
+function CalendarSummary() {
+  const [, setCalView] = useCloudSyncedStorage<"manad" | "vecka" | "dag">(
+    "myflove-calendar-view",
+    "manad",
+  );
 
-  // Komprimerat block i samma formspråk som Mitt batteri – klick går till
-  // befintliga Idag-vyn.
+  const views = [
+    { href: "/idag", label: "Min dag", onClick: undefined },
+    { href: "/kalender", label: "Vecka", onClick: () => setCalView("vecka") },
+    { href: "/kalender", label: "Månad", onClick: () => setCalView("manad") },
+  ] as const;
+
   return (
-    <Link
-      href="/idag"
-      data-testid="home-day-summary"
-      aria-label={`Min dag, ${todayDone.length} av ${total} klart. Öppna Kalender – Idag.`}
-      {...areaProps("idag")}
-      className="press area-border relative flex min-h-[9rem] min-w-0 flex-col items-center gap-2.5 rounded-3xl border-2 bg-sky/50 p-4 text-center shadow-soft transition-shadow hover:shadow-lifted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:p-5"
+    <section
+      data-testid="home-calendar-summary"
+      aria-label="Kalender"
+      {...areaProps("kalender")}
+      className="area-border min-w-0 space-y-3 rounded-3xl border-2 bg-sky/50 p-4 shadow-soft sm:p-5"
     >
-      <MyFloveIcon
-        icon={Check}
-        tone="sky"
-        size="lg"
-        className="area-bg-soft area-text rounded-full"
-      />
-      <span className="min-w-0">
-        <span className="block font-display text-base font-bold leading-tight text-ink">
-          Min dag
-        </span>
-        <span className="block text-xs text-muted-foreground">Öppna Kalender · Idag</span>
-      </span>
-      <span className="w-full space-y-1 border-t border-border/50 pt-3">
-        <span className="area-text block font-display text-3xl font-bold leading-none">
-          {total === 0 ? "0" : `${todayDone.length}/${total}`}
-        </span>
-        <span className="area-text block text-sm font-medium">
-          {total === 0
-            ? "Inget inplanerat"
-            : total === todayDone.length
-              ? "Allt klart"
-              : `${todayDone.length} av ${total} klara · ${todayOpen.length} kvar`}
-        </span>
-      </span>
-      <span
-        aria-hidden="true"
-        className="area-bg-soft area-text absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full"
+      <div className="flex items-center gap-3">
+        <MyFloveIcon
+          icon={CalendarDays}
+          tone="sky"
+          size="lg"
+          className="area-bg-soft area-text rounded-full"
+        />
+        <div className="min-w-0">
+          <p className="font-display text-base font-bold leading-tight text-ink">Kalender</p>
+          <p className="text-xs text-muted-foreground">Se dagen, veckan eller månaden</p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-3 gap-1 rounded-2xl bg-card/70 p-1">
+        {views.map((v) => (
+          <Link
+            key={v.label}
+            href={v.href}
+            onClick={v.onClick}
+            className="press rounded-xl px-2 py-2 text-center text-sm font-medium text-ink transition-colors hover:bg-secondary"
+          >
+            {v.label}
+          </Link>
+        ))}
+      </div>
+
+      <Link
+        href="/lagg-till"
+        className="press flex items-center justify-center gap-2 rounded-2xl bg-primary px-4 py-3.5 font-display text-base font-bold text-primary-foreground shadow-lifted transition-shadow hover:shadow-lifted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
       >
-        <ArrowRight size={15} />
-      </span>
-    </Link>
+        <Plus size={20} strokeWidth={2.5} aria-hidden /> Lägg till
+      </Link>
+    </section>
   );
 }
