@@ -127,7 +127,6 @@ export function TodayContent() {
     [activeTasks, reading.now, reading.peak],
   );
 
-
   // Planerad → genomförd → (frivillig) faktisk energipåverkan.
   // Ingen energi loggas automatiskt; först när användaren svarar i dialogen.
   const [energyItem, setEnergyItem] = useState<FlowItem | null>(null);
@@ -406,4 +405,3 @@ export function TodayContent() {
     </MyFlovePageGrid>
   );
 }
-
