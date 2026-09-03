@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 import { useMedications } from "./use-data";
 import { medicationOccursOn } from "@/lib/medications";
 import { sendPushNotification } from "@/lib/push-notifications";
+import { syncReminder } from "@/lib/push.functions";
 import { todayISO } from "@/lib/day";
 
 export interface MedicationAlert {
@@ -13,12 +15,15 @@ export interface MedicationAlert {
 }
 
 const POLL_INTERVAL_MS = 60 * 1000;
+const SNOOZE_MINUTES = 10;
 
 export function useMedicationAlerts() {
-  const { medications, isTaken } = useMedications();
+  const { medications, isTaken, toggleTaken } = useMedications();
   const [alerts, setAlerts] = useState<MedicationAlert[]>([]);
   const notifiedRef = useRef<Set<string>>(new Set());
   const dismissedRef = useRef<Set<string>>(new Set());
+  // Nyckel -> tidsstämpel då larmet ska dyka upp igen efter "skjut upp".
+  const snoozedRef = useRef<Map<string, number>>(new Map());
 
   const medsKey = medications
     .map((m) => `${m.id}:${m.times.join(",")}:${m.repeat ?? "daily"}:${m.startDate ?? ""}`)
