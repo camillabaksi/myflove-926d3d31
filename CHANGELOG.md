@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-03 – Snabbval direkt i medicinpåminnelser
+
+- Medicinnotiser (push) har nu tre knappar: "Tagit", "10 min" (ny påminnelse) och "Hoppa över" – valen fungerar även när appen är stängd.
+- Larmbannern i appen har fått samma val: "Tagen" bockar av dosen direkt, "10 min" döljer larmet och påminner igen, och krysset hoppar över dosen idag.
+
 ## 2026-09-03 – Genomfört hamnar på rätt dag
 
 - QuickFlow-poster som blir uppgifter behåller nu den dag de faktiskt gjordes i stället för att få dagens datum.
