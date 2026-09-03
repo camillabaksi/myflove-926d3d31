@@ -867,6 +867,18 @@ export function CalendarContent() {
               </div>
             </div>
 
+            {quickAddOpen && (
+              <QuickAddInline
+                key={selectedDateStr}
+                date={selectedDateStr}
+                onAdd={(result) => {
+                  handleQuickAdd(result);
+                  setQuickAddOpen(false);
+                }}
+                onClose={() => setQuickAddOpen(false)}
+              />
+            )}
+
             {allInDay && (
               <>
                 <AllInDay
