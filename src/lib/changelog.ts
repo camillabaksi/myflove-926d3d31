@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-03";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Live-synk mellan enheter",
+    items: [
+      "Kalender, Min dag och QuickFlow uppdateras automatiskt när samma konto ändras på en annan enhet (2026-09-03)",
+      "Batteri och energiflöde läser in nya energiloggar, energifaktorer och sparade val utan omladdning (2026-09-03)",
+      "Befintlig kontosynk och datamodell återanvänds; inkommande ändringar skapar inga dubbletter (2026-09-03)",
+    ],
+  },
+  {
     title: "Lägg till direkt på dagen",
     items: [
       "I Kalender (Min dag, Vecka och Månad) öppnas lägg-till-flödet inline på den valda dagen – ingen separat dialog (2026-09-03)",

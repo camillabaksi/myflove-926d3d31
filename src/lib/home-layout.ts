@@ -43,13 +43,12 @@ const STORAGE_KEY = "myflove-home-layout";
  */
 const CLEANUP_MIGRATION_KEY = "myflove-home-layout-restore-2";
 
-/** Filtrerar bort okända block och sorterar efter standardordningen. */
+/** Filtrerar bort gamla block och återställer sekundärblockens standardordning. */
 export function cleanupOrder(order: HomeBlockId[] | undefined): HomeBlockId[] {
-  const known = (order ?? []).filter((id): id is HomeBlockId =>
-    HOME_BLOCKS.some((b) => b.id === id),
+  const known = new Set(
+    (order ?? []).filter((id): id is HomeBlockId => HOME_BLOCKS.some((b) => b.id === id)),
   );
-  const missing = DEFAULT_PREFS.order.filter((id) => !known.includes(id));
-  return [...known, ...missing];
+  return DEFAULT_PREFS.order.filter((id) => known.has(id));
 }
 
 export function useHomeLayout() {
