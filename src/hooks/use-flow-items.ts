@@ -72,9 +72,9 @@ export function useFlowItems(dateISO?: string): {
 
     for (const t of tasks) {
       if (isSnoozed(t.snoozedUntil)) continue;
-      // En uppgift hör till sitt eget datum. Ett datum längre fram får aldrig
-      // dyka upp under en tidigare dag (t.ex. 4 sep under 22 aug).
-      if (t.dueDate && t.dueDate > today) continue;
+      // En uppgift hör till sitt eget datum. Min dag visar bara dagens datum;
+      // en äldre post blir inte automatiskt en del av idag när den är sen.
+      if (isTodayView && t.dueDate && t.dueDate !== today) continue;
       // En annan dag än idag visar bara det som faktiskt hör till den dagen.
       if (!isTodayView && t.dueDate !== today) continue;
       // Klara uppgifter hör till sitt PLANERADE datum – inte till dagen de

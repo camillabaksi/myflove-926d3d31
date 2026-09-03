@@ -24,19 +24,24 @@ function minutesOf(time?: string): number {
 export default function AllInDay({ date, isToday = true }: { date?: string; isToday?: boolean }) {
   const { today, toggleItem } = useFlowItems(date);
 
-  const { timed, untimed, doneCount } = useMemo(() => {
+  const { timed, doneUntimed, openUntimed, doneCount } = useMemo(() => {
     const timed: FlowItem[] = [];
-    const untimed: FlowItem[] = [];
-    for (const item of today) (item.time ? timed : untimed).push(item);
-    // Tidsatta saker ligger alltid i klockordning – även när tiden är skriven
-    // som "9:00" istället för "09:00". Avbockning ändrar aldrig ordningen,
-    // så inget hoppar runt när du bockar av.
+    const doneUntimed: FlowItem[] = [];
+    const openUntimed: FlowItem[] = [];
+    for (const item of today) {
+      if (item.time) timed.push(item);
+      else if (item.done) doneUntimed.push(item);
+      else openUntimed.push(item);
+    }
     timed.sort(
       (a, b) => minutesOf(a.time) - minutesOf(b.time) || a.title.localeCompare(b.title, "sv"),
     );
-    // Under dagen: det som återstår först, det du redan gjort sist.
-    untimed.sort((a, b) => Number(!!a.done) - Number(!!b.done));
-    return { timed, untimed, doneCount: today.filter((i) => i.done).length };
+    return {
+      timed,
+      doneUntimed,
+      openUntimed,
+      doneCount: today.filter((i) => i.done).length,
+    };
   }, [today]);
 
   return (
@@ -44,12 +49,12 @@ export default function AllInDay({ date, isToday = true }: { date?: string; isTo
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="text-sm text-muted-foreground">
           {isToday
-            ? "Hela dagen – både tidsbundet och sånt som bara ska bli gjort. Samma status som i Idag, Hem och Att göra."
-            : "Hela dagen – både tidsbundet och sånt som ska bli gjort. Samma data och samma bock som i resten av appen."}
+            ? "Det du gjort först, tiderna efteråt. Samma aktiviteter och status som i Min dag."
+            : "Det du gjorde och tiderna för den här dagen – från samma aktivitetsdata."}
         </p>
         {doneCount > 0 && (
           <span className="rounded-pill bg-secondary/60 px-3 py-1 text-xs font-medium text-ink">
-            ✨ {doneCount} {doneCount === 1 ? "aktivitet" : "aktiviteter"} genomförda{" "}
+            {doneCount} {doneCount === 1 ? "sak" : "saker"} gjorda{" "}
             {isToday ? "idag" : "den här dagen"}
           </span>
         )}
@@ -63,10 +68,55 @@ export default function AllInDay({ date, isToday = true }: { date?: string; isTo
         </p>
       )}
 
+      {doneUntimed.length > 0 && (
+        <CollapsibleSection
+          id="allt-i-dagen::det-har-gjorde"
+          title="✓ Det här gjorde du"
+          headingClassName="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+          className="space-y-2"
+        >
+          <ul className="space-y-2">
+            {doneUntimed.map((item) => (
+              <li key={item.id}>
+                <MyFloveTransition transitionKey={String(item.done)}>
+                  <FlowItemCard
+                    item={item}
+                    className="opacity-80"
+                    {...(item.completable ? { onToggle: toggleItem } : {})}
+                  />
+                </MyFloveTransition>
+              </li>
+            ))}
+          </ul>
+        </CollapsibleSection>
+      )}
+
+      {openUntimed.length > 0 && (
+        <CollapsibleSection
+          id="allt-i-dagen::ska-goras"
+          title="○ Ska göras"
+          headingClassName="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+          className="space-y-2"
+        >
+          <ul className="space-y-2">
+            {openUntimed.map((item) => (
+              <li key={item.id}>
+                <MyFloveTransition transitionKey={String(item.done)}>
+                  <FlowItemCard
+                    item={item}
+                    {...(item.completable ? { onToggle: toggleItem } : {})}
+                  />
+                </MyFloveTransition>
+              </li>
+            ))}
+          </ul>
+        </CollapsibleSection>
+      )}
+
       {timed.length > 0 && (
         <CollapsibleSection
-          id="allt-i-dagen::under-klockslag"
-          title="🕒 Under klockslag"
+          id="allt-i-dagen::tider"
+          title="🕒 Tider"
           headingClassName="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
           className="space-y-2"
         >
@@ -85,29 +135,6 @@ export default function AllInDay({ date, isToday = true }: { date?: string; isTo
                     />
                   </MyFloveTransition>
                 </div>
-              </li>
-            ))}
-          </ul>
-        </CollapsibleSection>
-      )}
-
-      {untimed.length > 0 && (
-        <CollapsibleSection
-          id="allt-i-dagen::under-dagen"
-          title="🌿 Under dagen"
-          headingClassName="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
-          className="space-y-2"
-        >
-          <ul className="space-y-2">
-            {untimed.map((item) => (
-              <li key={item.id}>
-                <MyFloveTransition transitionKey={String(item.done)}>
-                  <FlowItemCard
-                    item={item}
-                    className={item.done ? "opacity-80" : undefined}
-                    {...(item.completable ? { onToggle: toggleItem } : {})}
-                  />
-                </MyFloveTransition>
               </li>
             ))}
           </ul>

@@ -208,37 +208,66 @@ export function useTasks() {
       friction?: Task["friction"];
     },
   ) => {
-    // Blueprint: uppgifter ska alltid landa i kalendern så inget "försvinner".
-    // Om inget datum anges kopplas uppgiften till idag.
-    setTasks((prev) => [
-      {
-        id: opts?.id ?? generateId(),
-        title,
-        completed: opts?.completed ?? false,
-        completedAt: opts?.completed ? (opts.completedAt ?? Date.now()) : undefined,
-        createdAt: Date.now(),
-        quickflowId: opts?.quickflowId,
-        quickflowBucket: opts?.quickflowBucket,
-        quickflowOrder: opts?.quickflowOrder,
-        dueDate: dueDate ?? getTodayDateString(),
-        time: opts?.time,
-        endTime: opts?.endTime,
-        reminderMinutesBefore: opts?.reminderMinutesBefore,
-        kind: opts?.kind ?? "uppgift",
-        status: opts?.completed ? "klart" : opts?.waitingOn ? "vantar" : "pagar",
-        waitingOn: opts?.waitingOn,
-        note: opts?.note?.trim() || undefined,
-        area: opts?.area ?? "vardag",
-        courseId: opts?.courseId,
-        deadlineLeadDays: opts?.deadlineLeadDays,
-        deadlineReminderTime: opts?.deadlineReminderTime,
-        energyImpact: opts?.energyImpact,
-        friction: opts?.friction,
-        steps: (opts?.steps ?? []).map((s) => ({ id: generateId(), title: s, done: false })),
-      },
+    const cleanTitle = title.trim().slice(0, 240);
+    if (!cleanTitle) return;
+    const id = opts?.id ?? generateId();
+    const completedAt = opts?.completed ? (opts.completedAt ?? Date.now()) : undefined;
+    const targetDate = dueDate ?? getTodayDateString();
 
-      ...prev,
-    ]);
+    setTasks((prev) => {
+      // QuickFlow kan hydrera flera gånger. Återanvänd samma rad och ändra
+      // bara status/prioritering – aldrig det valda datumet eller completedAt.
+      const existingIndex = opts?.quickflowId
+        ? prev.findIndex((task) => task.quickflowId === opts.quickflowId || task.id === id)
+        : prev.findIndex((task) => task.id === id);
+      if (existingIndex >= 0 && opts?.quickflowId) {
+        return prev.map((task, index) =>
+          index === existingIndex
+            ? {
+                ...task,
+                title: cleanTitle,
+                completed: opts.completed ?? task.completed,
+                completedAt: opts.completed ? (task.completedAt ?? completedAt) : task.completedAt,
+                quickflowBucket: opts.quickflowBucket ?? task.quickflowBucket,
+                quickflowOrder: opts.quickflowOrder ?? task.quickflowOrder,
+              }
+            : task,
+        );
+      }
+
+      return [
+        {
+          id,
+          title: cleanTitle,
+          completed: opts?.completed ?? false,
+          completedAt,
+          createdAt: Date.now(),
+          quickflowId: opts?.quickflowId,
+          quickflowBucket: opts?.quickflowBucket,
+          quickflowOrder: opts?.quickflowOrder,
+          dueDate: targetDate,
+          time: opts?.time,
+          endTime: opts?.endTime,
+          reminderMinutesBefore: opts?.reminderMinutesBefore,
+          kind: opts?.kind ?? "uppgift",
+          status: opts?.completed ? "klart" : opts?.waitingOn ? "vantar" : "pagar",
+          waitingOn: opts?.waitingOn,
+          note: opts?.note?.trim() || undefined,
+          area: opts?.area ?? "vardag",
+          courseId: opts?.courseId,
+          deadlineLeadDays: opts?.deadlineLeadDays,
+          deadlineReminderTime: opts?.deadlineReminderTime,
+          energyImpact: opts?.energyImpact,
+          friction: opts?.friction,
+          steps: (opts?.steps ?? []).map((step) => ({
+            id: generateId(),
+            title: step,
+            done: false,
+          })),
+        },
+        ...prev,
+      ];
+    });
     track("task_created", { source: "app" });
   };
 
@@ -324,19 +353,19 @@ export function useTasks() {
   const toggleTask = (id: string) => {
     const task = tasks.find((t) => t.id === id);
     const nowCompleted = task ? !task.completed : false;
+    const completedAt = nowCompleted ? Date.now() : undefined;
     setTasks((prev) =>
       prev.map((t) => {
         if (t.id !== id) return t;
         return {
           ...t,
           completed: nowCompleted,
-          completedAt: nowCompleted ? Date.now() : undefined,
+          completedAt,
           status: nowCompleted ? "klart" : "pagar",
         };
       }),
     );
     if (task && task.quickflowId && typeof window !== "undefined") {
-      const completedAt = nowCompleted ? Date.now() : undefined;
       window.dispatchEvent(
         new CustomEvent("myflove:quickflow-sync", {
           detail: {

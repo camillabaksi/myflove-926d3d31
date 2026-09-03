@@ -191,7 +191,8 @@ export function CalendarContent() {
   const [selectedDateStr, setSelectedDateStr] = useState(
     new Date().toLocaleDateString("sv-SE").split(" ")[0], // fallback format YYYY-MM-DD
   );
-  const allInDay = !!allInDayByDate[selectedDateStr];
+  // Dagsvyn börjar med det som faktiskt gjorts; tidslinjen är sekundär.
+  const allInDay = allInDayByDate[selectedDateStr] ?? true;
   const setAllInDay = (on: boolean) =>
     setAllInDayByDate((prev) => ({ ...prev, [selectedDateStr]: on }));
   const [isAddingEvent, setIsAddingEvent] = useState(false);
@@ -525,6 +526,8 @@ export function CalendarContent() {
   const getItemsForDate = (dateStr: string) => {
     const isToday = dateStr === todayStr;
     const focus = isToday && shows("privat") ? currentFocus : null;
+    // En aktivitet visas alltid på sitt valda datum. Statusändring påverkar
+    // bara completed/completedAt och kan aldrig flytta posten till idag.
     const tasks = allTasks.filter((t) => t.dueDate === dateStr && shows(taskCategory(t.area)));
     const allReminders = shows("privat")
       ? activeReminders.filter(
