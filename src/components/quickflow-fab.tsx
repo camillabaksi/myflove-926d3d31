@@ -1,4 +1,4 @@
-import { Zap } from "lucide-react";
+import { Brain } from "lucide-react";
 
 /**
  * QuickFlow-knappen på desktop – öppnar samma QuickFlow-flöde som allt annat
@@ -12,7 +12,7 @@ export default function QuickflowFab() {
       aria-label="QuickFlow – få ut det ur huvudet"
       className="hidden md:inline-flex fixed right-4 bottom-8 z-40 items-center gap-2 rounded-full bg-primary text-primary-foreground px-5 py-3.5 font-semibold shadow-lifted press"
     >
-      <Zap size={18} /> QuickFlow
+      <Brain size={18} /> QuickFlow
     </button>
   );
 }

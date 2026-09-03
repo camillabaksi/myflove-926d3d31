@@ -10,6 +10,12 @@ export const CHANGELOG_UPDATED = "2026-09-03";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "QuickFlow får hjärnikon",
+    items: [
+      "QuickFlow visas nu med en hjärnikon i sidomenyn, bottenmenyn, toppmenyn, den flytande knappen och fångstryten (2026-09-03)",
+    ],
+  },
+  {
     title: "Live-synk mellan enheter",
     items: [
       "Kalender, Min dag och QuickFlow uppdateras automatiskt när samma konto ändras på en annan enhet (2026-09-03)",

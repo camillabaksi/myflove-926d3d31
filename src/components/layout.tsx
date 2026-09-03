@@ -18,7 +18,6 @@ import {
   Pill,
   BarChart3,
   Trophy,
-  Inbox,
   Users,
   UtensilsCrossed,
   MapPin,
@@ -319,7 +318,7 @@ export default function Layout({ children }: LayoutProps) {
     {
       href: "/quickflow",
       label: "QuickFlow",
-      icon: Inbox,
+      icon: Brain,
       hint: "Fånga något snabbt – sortera sedan",
       essential: true,
     },
@@ -543,7 +542,7 @@ export default function Layout({ children }: LayoutProps) {
         id: "quickflow",
         label: "QuickFlow",
         hint: "Fånga något snabbt – sortera sedan",
-        icon: Inbox,
+        icon: Brain,
         hrefs: ["/quickflow", "/anteckningar"],
       },
       {
@@ -837,7 +836,7 @@ export default function Layout({ children }: LayoutProps) {
             onClick={() => window.dispatchEvent(new CustomEvent("myflove:quickflow"))}
             className="inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/10 px-3 py-1.5 text-[13px] font-medium text-primary transition-transform active:scale-95"
           >
-            <Plus size={14} /> QuickFlow
+            <Brain size={14} /> QuickFlow
           </button>
         </div>
 

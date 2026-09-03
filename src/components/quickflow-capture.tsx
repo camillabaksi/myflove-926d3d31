@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Check, Loader2, Mic, Pencil, Plus, Sparkles, MapPin, Trash2 } from "lucide-react";
+import { Brain, Check, Loader2, Mic, Pencil, Sparkles, MapPin, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -172,11 +172,11 @@ export function QuickflowCapture({
                 : "w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0"
             }
           >
-            <Plus size={24} />
+            <Brain size={24} />
           </span>
           {variant === "compact" ? (
             <>
-              <Plus size={16} /> Skriv eller prata
+              <Brain size={16} /> Skriv eller prata
             </>
           ) : (
             <span className="flex-1 min-w-0">
