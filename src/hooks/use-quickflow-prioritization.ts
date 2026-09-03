@@ -5,7 +5,7 @@ import { heuristicPriority } from "@/lib/quickflow-priority";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
 import { usePriorityList } from "@/hooks/use-priority-list";
 import { useTasks } from "@/hooks/use-data";
-import { todayISO } from "@/lib/day";
+import { dayOf, todayISO } from "@/lib/day";
 
 /**
  * EN prioriteringsmotor för QuickFlow – används av både fånga-dialogen
