@@ -4,12 +4,13 @@
 
 - En gemensam Lägg till-väg skiljer på "Jag gjorde detta" och "Jag ska göra detta" utan krav på kategori, prioritet eller energi.
 - Min dag och Kalendern prioriterar "Det här gjorde du" utan klockslag och visar "Tider" separat.
+- Kalenderns dagvy använder alltid samma enkla ordning: gjort, planerat, tider och därefter sekundära kalenderposter.
 - Kalenderns gemensamma Lägg till-väg använder det valda kalenderdatumet och delade kalenderhändelser visas i en egen sekundär sektion.
+- Det gamla generella "Ny händelse"-flödet är borttaget ur dagvyn; vanliga aktiviteter går via den gemensamma Lägg till-vägen och specialflödena finns kvar.
 - Valda datum, stabila aktivitets-ID:n och completedAt hålls separata genom QuickFlow-hydrering, sync, omladdning och navigation.
 - Att markera något som klart flyttar aldrig aktiviteten till dagens datum – completedAt sparas som egen metadata.
 
 ## 2026-09-03 – Snabbval direkt i medicinpåminnelser
-
 
 - Medicinnotiser (push) har nu tre knappar: "Tagit", "10 min" (ny påminnelse) och "Hoppa över" – valen fungerar även när appen är stängd.
 - Larmbannern i appen har fått samma val: "Tagen" bockar av dosen direkt, "10 min" döljer larmet och påminner igen, och krysset hoppar över dosen idag.

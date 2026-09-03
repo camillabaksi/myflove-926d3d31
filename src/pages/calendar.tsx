@@ -167,14 +167,6 @@ export function CalendarContent() {
   );
   // Globalt bildstöd (Anpassa appen) slår på symboler överallt där det finns.
   const pictoMode = pictoStored || npfSettings.pictograms;
-  // ✨ Allt i dagen – utökad vy av samma dag (samma data, samma status).
-  // Valet sparas per datum, så att en dag du öppnat "Allt i dagen" på kommer
-  // ihåg det nästa gång du står på just den dagen.
-  const [allInDayByDate, setAllInDayByDate] = useCloudSyncedStorage<Record<string, boolean>>(
-    "myflove-calendar-all-in-day-dates",
-    {},
-  );
-
   const [visible, setVisible] = useCloudSyncedStorage<CalCategory[]>(
     "myflove-calendar-categories",
     ALL_CATEGORIES,
@@ -192,25 +184,9 @@ export function CalendarContent() {
   const [selectedDateStr, setSelectedDateStr] = useState(
     new Date().toLocaleDateString("sv-SE").split(" ")[0], // fallback format YYYY-MM-DD
   );
-  // Dagsvyn börjar med det som faktiskt gjorts; tidslinjen är sekundär.
-  const allInDay = allInDayByDate[selectedDateStr] ?? true;
-  const setAllInDay = (on: boolean) =>
-    setAllInDayByDate((prev) => ({ ...prev, [selectedDateStr]: on }));
+  // Den förenklade dagvyn är kalenderns enda primära dagpresentation.
+  const allInDay = true;
   const [isAddingEvent, setIsAddingEvent] = useState(false);
-  const [isAddingAny, setIsAddingAny] = useState(false);
-  const [newCat, setNewCat] = useState<CalCategory>("privat");
-  const [newAnyTitle, setNewAnyTitle] = useState("");
-  const [newAnyTime, setNewAnyTime] = useState("");
-  const [newAnyEndTime, setNewAnyEndTime] = useState("");
-  /** Fri anteckning – vad det handlar om, vad man behöver ta med. */
-  const [newAnyNote, setNewAnyNote] = useState("");
-  const [newAnyMultiDay, setNewAnyMultiDay] = useState(false);
-  const [newAnyEndDate, setNewAnyEndDate] = useState("");
-
-  /** Påminnelse innan start: null = ingen, annars minuter före (0 = vid start). */
-  const [newAnyRemind, setNewAnyRemind] = useState<number | null>(null);
-  /** Flera barn kan ingå i samma händelse, t.ex. lämning av både Bella och Bianca. */
-  const [newAnyChildIds, setNewAnyChildIds] = useState<string[]>([]);
   const [newEventTitle, setNewEventTitle] = useState("");
   const [newEventTime, setNewEventTime] = useState("");
   const [isAddingReminder, setIsAddingReminder] = useState(false);
@@ -381,107 +357,6 @@ export function CalendarContent() {
       completed: result.completed,
       completedAt: result.completedAt,
     });
-  };
-
-  /** Skapar en händelse i vald kategori på vald dag. */
-  const handleAddAny = async () => {
-    const title = newAnyTitle.trim();
-    if (!title || !selectedDateStr) return;
-    const time = newAnyTime || undefined;
-    const endTime = newAnyEndTime || undefined;
-    /** Fritextfält (familj/barn) lagrar intervallet som "09:00–10:00". */
-    const timeRange = time && endTime ? `${time}–${endTime}` : newAnyTime || null;
-    const note = newAnyNote.trim() || undefined;
-    const periodEnd =
-      newAnyMultiDay && newAnyEndDate && newAnyEndDate > selectedDateStr
-        ? newAnyEndDate
-        : undefined;
-    try {
-      const wantsReminder = Boolean(time) && newAnyRemind !== null;
-      if (wantsReminder && getNotificationPermission() === "default") {
-        await requestNotificationPermission();
-      }
-      if (periodEnd) {
-        // Längre perioder (semester, resa) sparas som en post som visas varje dag i intervallet.
-        addReminder(
-          title,
-          selectedDateStr,
-          time,
-          "none",
-          endTime,
-          wantsReminder ? (newAnyRemind ?? 0) : undefined,
-          note,
-          undefined,
-          periodEnd,
-        );
-      } else if (newCat === "relationer") {
-        createEventMutation.mutate({
-          data: { title, date: selectedDateStr, time: timeRange },
-        });
-      } else if (newCat === "barn") {
-        const childIds =
-          newAnyChildIds.length > 0 ? newAnyChildIds : kids[0]?.id ? [kids[0].id] : [];
-        if (childIds.length === 0) {
-          toast({ description: "Lägg till ett barn först på sidan Barn.", variant: "destructive" });
-          return;
-        }
-        // Flera barn i samma händelse: posten hamnar i varje barns schema,
-        // men det räknas som en händelse i kalendern och en påminnelse till dig.
-        for (const childId of childIds) {
-          await addChildItem({
-            childId,
-            kind: "activity",
-            title,
-            date: selectedDateStr,
-            time: timeRange ?? undefined,
-            notes: note,
-          });
-        }
-      } else if (newCat === "jobb" || newCat === "studier") {
-        addTask(title, selectedDateStr, {
-          time,
-          endTime,
-          note,
-          area: newCat,
-          reminderMinutesBefore: wantsReminder ? (newAnyRemind ?? 0) : undefined,
-        });
-      } else {
-        addReminder(
-          title,
-          selectedDateStr,
-          time,
-          "none",
-          endTime,
-          wantsReminder ? (newAnyRemind ?? 0) : undefined,
-          note,
-        );
-      }
-      // Familj- och barnhändelser bor i delade listor – lägg en personlig
-      // påminnelse bredvid så att notisen faktiskt når just dig.
-      if (!periodEnd && wantsReminder && (newCat === "relationer" || newCat === "barn")) {
-        const names = kids.filter((k) => newAnyChildIds.includes(k.id)).map((k) => k.name);
-        const reminderTitle =
-          newCat === "barn" && names.length > 1 ? `${title} – ${names.join(" & ")}` : title;
-        addReminder(reminderTitle, selectedDateStr, time, "none", endTime, newAnyRemind ?? 0, note);
-      }
-
-      if (!visible.includes(periodEnd ? "privat" : newCat))
-        setVisible((prev) => [...prev, periodEnd ? "privat" : newCat]);
-      setNewAnyTitle("");
-      setNewAnyTime("");
-      setNewAnyEndTime("");
-      setNewAnyNote("");
-      setNewAnyRemind(null);
-      setNewAnyChildIds([]);
-      setNewAnyMultiDay(false);
-      setNewAnyEndDate("");
-
-      setIsAddingAny(false);
-
-      toast({ description: "Händelsen är inlagd i kalendern." });
-    } catch {
-      toast({ description: "Kunde inte spara händelsen. Försök igen.", variant: "destructive" });
-    }
   };
 
   const stepBack = () => {
@@ -978,42 +853,9 @@ export function CalendarContent() {
                   <span aria-hidden>🖼️</span>
                   Bildstöd
                 </button>
-                <div
-                  role="tablist"
-                  aria-label="Visningsläge för dagen"
-                  className="flex items-center gap-1 p-1 rounded-2xl bg-secondary/50 border border-border"
-                >
-                  <button
-                    role="tab"
-                    aria-selected={!allInDay}
-                    tabIndex={!allInDay ? 0 : -1}
-                    onClick={() => setAllInDay(false)}
-                    title="Visa dagens tidsbundna händelser på sina tider"
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-medium transition-colors ${
-                      !allInDay
-                        ? "bg-card border border-border text-foreground shadow-sm"
-                        : "text-muted-foreground hover:text-foreground"
-                    }`}
-                  >
-                    <span aria-hidden>📅</span>
-                    Tidslinje
-                  </button>
-                  <button
-                    role="tab"
-                    aria-selected={allInDay}
-                    tabIndex={allInDay ? 0 : -1}
-                    onClick={() => setAllInDay(true)}
-                    title="Visa allt som ska göras och redan är gjort den här dagen – inte bara tidsbundet"
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-medium transition-colors ${
-                      allInDay
-                        ? "bg-card border border-border text-foreground shadow-sm"
-                        : "text-muted-foreground hover:text-foreground"
-                    }`}
-                  >
-                    <span aria-hidden>✨</span>
-                    Allt i dagen
-                  </button>
-                </div>
+                <span className="rounded-full border border-primary/20 bg-primary/5 px-3 py-1.5 text-xs font-medium text-primary">
+                  Gjort först · tider efteråt
+                </span>
               </div>
             </div>
 
@@ -1674,208 +1516,6 @@ export function CalendarContent() {
                 </div>
               </div>
             )}
-          </DialogContent>
-        </Dialog>
-
-        <Dialog open={isAddingAny} onOpenChange={setIsAddingAny}>
-          <DialogContent className="max-h-[85dvh] overflow-y-auto rounded-3xl">
-            <DialogHeader className="text-left">
-              <DialogTitle className="pr-8 text-left">Ny händelse</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-5 pt-1">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Kategori</label>
-                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                  {CATEGORIES.map((c) => {
-                    const disabled =
-                      (c.id === "relationer" && !hasHousehold) ||
-                      (c.id === "barn" && kids.length === 0);
-                    return (
-                      <button
-                        key={c.id}
-                        type="button"
-                        disabled={disabled}
-                        onClick={() => setNewCat(c.id)}
-                        title={disabled ? "Kräver familj respektive barn i appen" : undefined}
-                        className={`w-full h-11 px-2 rounded-2xl text-sm font-medium border transition-all disabled:opacity-40 ${
-                          newCat === c.id
-                            ? "text-primary-foreground border-transparent"
-                            : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
-                        }`}
-                        style={newCat === c.id ? { backgroundColor: c.color } : undefined}
-                      >
-                        {c.label}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {newCat === "barn" && kids.length > 0 && (
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Vilka barn?</label>
-                  <div className="flex flex-wrap gap-2">
-                    {kids.map((k) => {
-                      const selected =
-                        newAnyChildIds.length > 0
-                          ? newAnyChildIds.includes(k.id)
-                          : k.id === kids[0]?.id;
-                      return (
-                        <button
-                          key={k.id}
-                          type="button"
-                          aria-pressed={selected}
-                          onClick={() =>
-                            setNewAnyChildIds((prev) => {
-                              const base = prev.length > 0 ? prev : kids[0]?.id ? [kids[0].id] : [];
-                              return base.includes(k.id)
-                                ? base.filter((id) => id !== k.id)
-                                : [...base, k.id];
-                            })
-                          }
-                          className={`px-3 py-2 rounded-full text-sm font-medium border transition-all ${
-                            selected
-                              ? "text-primary-foreground border-transparent"
-                              : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
-                          }`}
-                          style={selected ? { backgroundColor: k.color } : undefined}
-                        >
-                          {selected ? "✓ " : ""}
-                          {k.name}
-                        </button>
-                      );
-                    })}
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    Välj ett eller flera barn – t.ex. lämning av både Bella och Bianca blir en och
-                    samma händelse.
-                  </p>
-                </div>
-              )}
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Vad händer?</label>
-                <Input
-                  value={newAnyTitle}
-                  onChange={(e) => setNewAnyTitle(e.target.value)}
-                  placeholder="T.ex. Tandläkare"
-                  className="h-12 rounded-2xl"
-                  autoFocus
-                />
-              </div>
-
-              <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-3">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Starttid (valfritt)</label>
-                  <Input
-                    type="time"
-                    value={newAnyTime}
-                    onChange={(e) => setNewAnyTime(e.target.value)}
-                    className="h-12 rounded-2xl"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Sluttid (valfritt)</label>
-                  <Input
-                    type="time"
-                    value={newAnyEndTime}
-                    onChange={(e) => setNewAnyEndTime(e.target.value)}
-                    disabled={!newAnyTime}
-                    className="h-12 rounded-2xl"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2 rounded-2xl border border-border/70 bg-secondary/30 p-3">
-                <label className="flex items-center gap-2 text-sm font-medium">
-                  <input
-                    type="checkbox"
-                    checked={newAnyMultiDay}
-                    onChange={(e) => {
-                      setNewAnyMultiDay(e.target.checked);
-                      if (e.target.checked && !newAnyEndDate) setNewAnyEndDate(selectedDateStr);
-                    }}
-                    className="h-4 w-4 accent-current"
-                  />
-                  Flera dagar (t.ex. semester eller resa)
-                </label>
-                {newAnyMultiDay && (
-                  <div className="space-y-1">
-                    <label className="text-sm font-medium" htmlFor="ny-slutdatum">
-                      Sista dagen
-                    </label>
-                    <Input
-                      id="ny-slutdatum"
-                      type="date"
-                      value={newAnyEndDate}
-                      min={selectedDateStr}
-                      onChange={(e) => setNewAnyEndDate(e.target.value)}
-                      className="h-12 rounded-2xl"
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      Perioden visas på varje dag från {selectedDateStr} till och med sista dagen.
-                    </p>
-                  </div>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Påminnelse</label>
-                {newAnyTime ? (
-                  <>
-                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                      {REMIND_OPTIONS.map((opt) => (
-                        <button
-                          key={String(opt.value)}
-                          type="button"
-                          onClick={() => setNewAnyRemind(opt.value)}
-                          className={`w-full h-11 px-2 rounded-2xl text-sm font-medium border transition-all ${
-                            newAnyRemind === opt.value
-                              ? "bg-primary text-primary-foreground border-transparent"
-                              : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
-                          }`}
-                        >
-                          {opt.label}
-                        </button>
-                      ))}
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      Du får en notis innan händelsen börjar – om du vill.
-                    </p>
-                  </>
-                ) : (
-                  <p className="text-xs text-muted-foreground">
-                    Ange en starttid ovan så kan du välja påminnelse.
-                  </p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium" htmlFor="ny-anteckning">
-                  Anteckning (valfritt)
-                </label>
-                <textarea
-                  id="ny-anteckning"
-                  value={newAnyNote}
-                  onChange={(e) => setNewAnyNote(e.target.value)}
-                  rows={3}
-                  placeholder="T.ex. ta med remiss, adress, vad mötet gäller"
-                  className="w-full rounded-2xl border border-border bg-card p-3 text-base outline-none focus:border-primary"
-                />
-              </div>
-
-              <p className="text-xs text-muted-foreground">
-                Läggs in på {selectedDateStr === todayStr ? "idag" : selectedDateStr}.
-              </p>
-
-              <Button
-                onClick={handleAddAny}
-                disabled={!newAnyTitle.trim()}
-                className="w-full h-12 rounded-2xl"
-              >
-                Lägg till
-              </Button>
-            </div>
           </DialogContent>
         </Dialog>
       </MyFloveWide>
