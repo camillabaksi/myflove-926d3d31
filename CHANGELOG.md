@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-03 – Lägg till direkt på dagen
+
+- I Kalender (Min dag, Vecka och Månad) öppnas lägg-till-flödet nu inline på den valda dagen – ingen separat dialog.
+- Datumet är låst till den dag man klickat på; bara "Jag gjorde detta"/"Jag ska göra detta", vad och valfri tid behöver väljas.
+
 ## 2026-09-03 – Kalender först på Hem
 
 - Hem-blocket "Min dag" är ersatt av "Kalender": tre tydliga vägar (Min dag, Vecka, Månad) öppnar rätt vy direkt.

@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-03";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Lägg till direkt på dagen",
+    items: [
+      "I Kalender (Min dag, Vecka och Månad) öppnas lägg-till-flödet inline på den valda dagen – ingen separat dialog (2026-09-03)",
+      "Datumet är låst till dagen man klickat på; bara Jag gjorde detta/Jag ska göra detta, vad och valfri tid behöver väljas (2026-09-03)",
+    ],
+  },
+  {
     title: "Kalender först på Hem",
     items: [
       "Hem-blocket Min dag är nu Kalender med tre tydliga vägar: Min dag, Vecka och Månad öppnar rätt vy direkt (2026-09-03)",

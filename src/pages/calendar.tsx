@@ -37,7 +37,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { useToast } from "@/hooks/use-toast";
 import CollapsibleSection from "@/components/collapsible-section";
 import DayTimeline from "@/components/day-timeline";
-import TaskQuickAdd, { type QuickAddResult } from "@/components/task-quick-add";
+import { QuickAddInline, type QuickAddResult } from "@/components/task-quick-add";
 import AllInDay from "@/components/all-in-day";
 import EnergyBattery from "@/components/energy-battery";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
@@ -187,6 +187,8 @@ export function CalendarContent() {
   // Den förenklade dagvyn är kalenderns enda primära dagpresentation.
   const allInDay = true;
   const [isAddingEvent, setIsAddingEvent] = useState(false);
+  // Inline lägg-till-flöde för den valda dagen – ingen separat dialog.
+  const [quickAddOpen, setQuickAddOpen] = useState(false);
   const [newEventTitle, setNewEventTitle] = useState("");
   const [newEventTime, setNewEventTime] = useState("");
   const [isAddingReminder, setIsAddingReminder] = useState(false);
@@ -827,12 +829,18 @@ export function CalendarContent() {
                     })}
               </h3>
               <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
-                <TaskQuickAdd
-                  onAdd={handleQuickAdd}
-                  defaultDate={selectedDateStr}
-                  label="Lägg till aktivitet"
-                  className="h-auto w-full rounded-2xl border border-primary/30 bg-primary/10 px-3 py-2 text-sm shadow-none hover:bg-primary/15 sm:w-auto"
-                />
+                <button
+                  type="button"
+                  onClick={() => setQuickAddOpen((prev) => !prev)}
+                  aria-expanded={quickAddOpen}
+                  className={`flex items-center gap-1.5 rounded-2xl border px-3 py-2 text-sm font-semibold transition-colors ${
+                    quickAddOpen
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-primary/30 bg-primary/10 text-primary hover:bg-primary/15"
+                  }`}
+                >
+                  <Plus size={16} /> Lägg till
+                </button>
                 <button
                   onClick={() => setIsAddingReminder(true)}
                   className="flex items-center gap-1.5 px-3 py-2 rounded-2xl text-sm font-medium border transition-colors bg-card border-border text-foreground hover:border-primary/40 hover:bg-secondary/50"
@@ -858,6 +866,18 @@ export function CalendarContent() {
                 </span>
               </div>
             </div>
+
+            {quickAddOpen && (
+              <QuickAddInline
+                key={selectedDateStr}
+                date={selectedDateStr}
+                onAdd={(result) => {
+                  handleQuickAdd(result);
+                  setQuickAddOpen(false);
+                }}
+                onClose={() => setQuickAddOpen(false)}
+              />
+            )}
 
             {allInDay && (
               <>
