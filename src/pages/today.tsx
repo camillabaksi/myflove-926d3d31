@@ -55,9 +55,13 @@ export function TodayContent() {
 
   const { todayOpen: todaysItems, todayDone, toggleItem } = useFlowItems();
   const { mode, chosen, setMode } = useReplanMode();
+  const untimedTodayItems = useMemo(
+    () => todaysItems.filter((item) => !item.time),
+    [todaysItems],
+  );
   const { keep, rest } = useMemo(
-    () => withinCapacity(todaysItems, capacityForMode(flow, mode)),
-    [todaysItems, flow, mode],
+    () => withinCapacity(untimedTodayItems, capacityForMode(flow, mode)),
+    [untimedTodayItems, flow, mode],
   );
   const offerReplan = shouldOfferReplan(flow.score) || chosen;
 

@@ -7,12 +7,10 @@
 - Kalenderns dagsvy visar "Det här gjorde du" före "Tider"; valda datum och completedAt hålls separata.
 - QuickFlow-hydrering återanvänder befintliga aktiviteter utan dubbletter eller överskrivna datum.
 
-## 2026-09-03 – Förenklat aktivitetsflöde
+## 2026-09-03 – Tidsbestämda aktiviteter visas bara bland tider
 
-- En gemensam Lägg till-väg skiljer på "Jag gjorde detta" och "Jag ska göra detta".
-- Min dag prioriterar det användaren faktiskt gjort utan klockslag och visar tider separat.
-- Kalenderns dagsvy visar "Det här gjorde du" före "Tider"; valda datum och completedAt hålls separata.
-- QuickFlow-hydrering återanvänder befintliga aktiviteter utan dubbletter eller överskrivna datum.
+- Kapacitetsdelen på Idag tar bara med aktiviteter utan klockslag, så en tidsbestämd aktivitet inte visas både där och under "Tider idag".
+
 
 ## 2026-09-03 – Snabbval direkt i medicinpåminnelser
 
