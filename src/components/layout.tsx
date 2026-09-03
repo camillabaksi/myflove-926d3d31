@@ -18,7 +18,6 @@ import {
   Pill,
   BarChart3,
   Trophy,
-  Inbox,
   Users,
   UtensilsCrossed,
   MapPin,
