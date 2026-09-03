@@ -59,12 +59,18 @@ self.addEventListener("push", (event) => {
 
   const itemKey = data.itemKey;
   const quickActions =
-    itemKey && /^(task|deadline|reminder|quickflow):/.test(itemKey)
+    itemKey && /^med:/.test(itemKey)
       ? [
-          { action: "done", title: "✓ Klart" },
+          { action: "done", title: "✓ Tagit" },
           { action: "snooze", title: "⏰ 10 min" },
+          { action: "skip", title: "Hoppa över" },
         ]
-      : [];
+      : itemKey && /^(task|deadline|reminder|quickflow):/.test(itemKey)
+        ? [
+            { action: "done", title: "✓ Klart" },
+            { action: "snooze", title: "⏰ 10 min" },
+          ]
+        : [];
 
   const options = {
     body: data.body,
@@ -147,7 +153,7 @@ self.addEventListener("notificationclick", (event) => {
             if (action && itemKey) {
               // Appen är redan igång: utför snabbvalet utan att flytta användaren.
               client.postMessage({ type: "myflove-notification-action", itemKey, action });
-              if (action === "done" || action === "snooze") return;
+              if (action === "done" || action === "snooze" || action === "skip") return;
             }
             await client.focus();
             if ("navigate" in client) await client.navigate(targetUrl);
