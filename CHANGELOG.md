@@ -3,7 +3,7 @@
 ## 2026-09-03 – Balanserad Hem-layout och tydligare Flow-maskot
 
 - Hem har nu ett balanserat desktop-grid: hero i full bredd, två jämnstora huvudblock och tre jämnstora block på nästa rad utan onödiga tomrum.
-- Flow-maskoten är tydligare i hälsningshero-sektionen, medan mobilens layout och touchstorlekar lämnas oförändrade.
+- Flow-maskoten är tydligare i hälsningshero-sektionen på desktop, medan mobilens tidigare storlek och touchlayout är återställda.
 
 ## 2026-09-03 – Pitchdeck 4.0 för investerarpresentation
 

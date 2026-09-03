@@ -13,7 +13,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     title: "Balanserad Hem-layout och tydligare Flow-maskot",
     items: [
       "Hem har ett balanserat desktop-grid med fullbredds-hero, två jämnstora block överst och tre jämnstora block under (2026-09-03)",
-      "Flow-maskoten är tydligare i hälsningshero-sektionen; mobilens layout och touchstorlekar är oförändrade (2026-09-03)",
+      "Flow-maskoten är tydligare i hälsningshero-sektionen på desktop; mobilens tidigare storlek och touchlayout är återställda (2026-09-03)",
     ],
   },
   {
