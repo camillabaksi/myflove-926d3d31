@@ -46,7 +46,7 @@ export function TodayContent() {
   }, []);
 
   const today = todayStr();
-  const { activeTasks, addTask } = useTasks();
+  const { activeTasks, completedTasks, addTask } = useTasks();
   const { activeReminders } = useReminders();
   const { flow } = useFlowScore();
   const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
@@ -63,8 +63,8 @@ export function TodayContent() {
   const offerReplan = shouldOfferReplan(flow.score) || chosen;
 
   const todaysTasks = useMemo(
-    () => activeTasks.filter((task) => !task.dueDate || task.dueDate === today),
-    [activeTasks, today],
+    () => [...activeTasks, ...completedTasks].filter((task) => !task.dueDate || task.dueDate === today),
+    [activeTasks, completedTasks, today],
   );
   const doneActivities = useMemo(
     () => todaysTasks.filter((task) => task.completed && isUntimedActivity(task)),
