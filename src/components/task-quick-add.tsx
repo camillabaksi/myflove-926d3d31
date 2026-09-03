@@ -18,6 +18,14 @@ export interface QuickAddResult {
 
 type AddMode = "done" | "planned";
 
+const choiceClass = (active: boolean) =>
+  cn(
+    "h-auto min-h-12 justify-start rounded-2xl border px-4 py-3 text-left",
+    active
+      ? "border-primary bg-primary/10 text-primary"
+      : "border-border bg-background text-foreground hover:bg-secondary/60",
+  );
+
 /**
  * MyFloves enda enkla aktivitetsflöde: fånga det som redan hänt eller det som
  * ska hända. All annan information är frivillig och hör hemma senare.
