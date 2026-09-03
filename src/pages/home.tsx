@@ -6,7 +6,7 @@ import { ExpandableBlock } from "@/components/myflove/expandable-block";
 
 import { useHomeLayout, type HomeBlockId } from "@/lib/home-layout";
 import DidThisCta from "@/components/did-this-cta";
-import { useFlowItems } from "@/hooks/use-flow-items";
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import RoutinesMedicationToday from "@/components/routines-medication-today";
 
 import { Link } from "wouter";
@@ -25,7 +25,7 @@ import { AreaSwitcher } from "@/components/area-switcher";
 import { AREA_META, useActiveArea } from "@/lib/life-areas";
 import IntroTour from "@/components/intro-tour";
 import FlowOnboarding from "@/components/flow-onboarding";
-import { ArrowRight, SlidersHorizontal, Compass, Check, Pill } from "lucide-react";
+import { ArrowRight, SlidersHorizontal, Compass, CalendarDays, Plus, Pill } from "lucide-react";
 import { todayISO } from "@/lib/day";
 import { track } from "@/lib/analytics";
 import { homeContextLine } from "@/lib/flow-tone";
@@ -267,11 +267,12 @@ export default function Home() {
           </section>
         )}
 
-        {/* Dagens översikt – bara en sammanfattning. Hela listan bor i Idag. */}
+        {/* Kalender – kalendern först, med tydliga vägar till Min dag,
+            vecka och månad, plus en synlig Lägg till-knapp. */}
 
         {shows("idag") && (
           <div className="min-w-0 xl:col-span-2" style={pos("idag")}>
-            <DaySummary />
+            <CalendarSummary />
           </div>
         )}
 
