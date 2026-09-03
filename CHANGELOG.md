@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-03 – QuickFlow får hjärnikon
+
+- QuickFlow visas nu med en hjärnikon (hjärnans inkorg) i sidomenyn, bottenmenyn, toppmenyn, den flytande knappen och fångstryten – istället för plus/blixt/inkorg.
+
 ## 2026-09-03 – Live-synk mellan enheter
 
 - Kalender, Min dag och QuickFlow uppdateras automatiskt när samma konto ändras på en annan enhet.
