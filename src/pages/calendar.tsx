@@ -525,6 +525,8 @@ export function CalendarContent() {
   const getItemsForDate = (dateStr: string) => {
     const isToday = dateStr === todayStr;
     const focus = isToday && shows("privat") ? currentFocus : null;
+    // Aktiviteterna behåller sitt valda datum även när de är klara.
+    // Tidsatta poster visas separat från "Det här gjorde du" i dagsvyn.
     const tasks = allTasks.filter((t) => t.dueDate === dateStr && shows(taskCategory(t.area)));
     const allReminders = shows("privat")
       ? activeReminders.filter(
