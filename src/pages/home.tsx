@@ -141,14 +141,17 @@ export default function Home() {
       <MyFlovePageGrid className="gap-5 xl:grid-cols-6">
         {/* Hero: välkommen, namn, kort undertext */}
         <MyFloveWide
-           className="relative overflow-hidden rounded-3xl border border-border/60 p-6 pr-28 shadow-lifted pop-in sm:pr-36"
-           style={{ background: heroGradient }}
-         >
-           <div className="pointer-events-none absolute -top-20 -right-16 h-40 w-40 rounded-full bg-blush opacity-60 blur-md" />
-           <div className="pointer-events-none absolute -bottom-16 -left-10 h-32 w-32 rounded-full bg-mint opacity-50 blur-[2px]" />
-           <div className="pointer-events-none absolute right-4 top-1 select-none sm:right-8" aria-hidden>
-             <FlowMascot size="lg" mood="calm" className="flow-alive" alt="" />
-           </div>
+          className="relative overflow-hidden rounded-3xl border border-border/60 p-6 pr-28 shadow-lifted pop-in sm:pr-36"
+          style={{ background: heroGradient }}
+        >
+          <div className="pointer-events-none absolute -top-20 -right-16 h-40 w-40 rounded-full bg-blush opacity-60 blur-md" />
+          <div className="pointer-events-none absolute -bottom-16 -left-10 h-32 w-32 rounded-full bg-mint opacity-50 blur-[2px]" />
+          <div
+            className="pointer-events-none absolute right-4 top-1 select-none sm:right-8"
+            aria-hidden
+          >
+            <FlowMascot size="lg" mood="calm" className="flow-alive" alt="" />
+          </div>
 
           <div className="relative space-y-2">
             <h1 className="text-3xl sm:text-4xl font-bold text-ink pr-14">{greeting.title}</h1>
@@ -201,7 +204,11 @@ export default function Home() {
 
         {/* Mitt batteri – högst upp och ett enda helt klickbart kort. */}
         {shows("batteri") && (
-          <section className="min-w-0 xl:col-span-3" style={pos("batteri")} aria-label="Mitt batteri">
+          <section
+            className="min-w-0 xl:col-span-3"
+            style={pos("batteri")}
+            aria-label="Mitt batteri"
+          >
             <EnergyBattery
               widget
               href="/mitt-batteri"
@@ -215,7 +222,7 @@ export default function Home() {
           <div
             style={{ order: visible.indexOf("batteri") + 0.5 }}
             data-testid="home-flow-note"
-             className="min-w-0 xl:col-span-3"
+            className="min-w-0 xl:col-span-3"
           >
             <ExpandableBlock
               title="Flow lär känna dig"
@@ -234,7 +241,11 @@ export default function Home() {
 
         {/* Dagens medicin – samma data och samma avbockning som i Rutiner & medicin */}
         {shows("medicin") && (
-          <section className="min-w-0 xl:col-span-2" style={pos("medicin")} aria-label="Rutiner och medicin">
+          <section
+            className="min-w-0 xl:col-span-2"
+            style={pos("medicin")}
+            aria-label="Rutiner och medicin"
+          >
             <ExpandableBlock
               title="Rutiner & medicin"
               titleText="Rutiner och medicin"
@@ -260,7 +271,11 @@ export default function Home() {
 
         {/* Vad behöver du just nu? – situationer, inte produktnamn */}
         {shows("vagar") && (
-          <nav className="min-w-0 xl:col-span-2" style={pos("vagar")} aria-label="Vad behöver du just nu">
+          <nav
+            className="min-w-0 xl:col-span-2"
+            style={pos("vagar")}
+            aria-label="Vad behöver du just nu"
+          >
             <ExpandableBlock
               title="Vad behöver du just nu?"
               titleText="Vad behöver du just nu"
