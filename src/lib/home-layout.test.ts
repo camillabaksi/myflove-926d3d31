@@ -1,19 +1,21 @@
 import { describe, it, expect } from "vitest";
 import { DEFAULT_PREFS, HOME_BLOCKS, cleanupOrder, type HomeBlockId } from "@/lib/home-layout";
 
-describe("hemskärmens standardlayout (samlad överblick)", () => {
+describe("hemskärmens standardlayout (fyra fasta widgets)", () => {
   const visible = DEFAULT_PREFS.order.filter((id) => !DEFAULT_PREFS.hidden.includes(id));
 
-  it("visar alla hemblock som standard – inget innehåll göms bort", () => {
+  it("visar alla anpassningsbara block som standard – inget göms bort", () => {
     expect(visible).toHaveLength(HOME_BLOCKS.length);
   });
 
-  it("prioriterar energi, rekommendation, dagen, infångning och vägar", () => {
-    expect(visible.slice(0, 5)).toEqual(["batteri", "forslag", "idag", "lagg-till", "vagar"]);
-  });
-
-  it("har inget genvägsblock kvar", () => {
-    expect(HOME_BLOCKS.some((b) => (b.id as string) === "genvagar")).toBe(false);
+  it("har bara sekundära block kvar – de fyra widgetarna är fasta och bor i home.tsx", () => {
+    const ids = HOME_BLOCKS.map((b) => b.id as string);
+    expect(ids).not.toContain("batteri");
+    expect(ids).not.toContain("forslag");
+    expect(ids).not.toContain("idag");
+    expect(ids).not.toContain("lagg-till");
+    expect(ids).not.toContain("vagar");
+    expect(ids).not.toContain("genvagar");
   });
 
   it("har inga energidubbletter kvar – de bor i Mitt batteri", () => {
@@ -22,11 +24,10 @@ describe("hemskärmens standardlayout (samlad överblick)", () => {
     expect(ids).not.toContain("energifloede");
   });
 
-  it("sorterar en gammal ordning till Clean-up-ordningen", () => {
-    const gammal = ["omrade", "idag", "batteri"] as HomeBlockId[];
+  it("filtrerar bort okända block ur en gammal sparad ordning", () => {
+    const gammal = ["omrade", "idag", "batteri", "vagar", "medicin"] as HomeBlockId[];
     const sorterad = cleanupOrder(gammal);
-    expect(sorterad.indexOf("batteri")).toBeLessThan(sorterad.indexOf("idag"));
-    expect(sorterad.indexOf("idag")).toBeLessThan(sorterad.indexOf("omrade"));
+    expect(sorterad).toEqual(["medicin", "omrade"]);
     expect(sorterad).toHaveLength(HOME_BLOCKS.length);
   });
 });

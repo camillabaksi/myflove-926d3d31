@@ -23,6 +23,8 @@ export const ANALYTICS_EVENTS = [
   "onboarding_completed",
   "onboarding_skipped",
   "home_viewed",
+  /** Tryck på en av Hems fyra primära widgets (kalender, quickflow, batteri, logga). */
+  "home_widget_opened",
   "health_viewed",
   "today_viewed",
   "day_hub_viewed",
@@ -116,6 +118,7 @@ const EVENT_SECTION: Record<AnalyticsEventName, string> = {
   onboarding_completed: "onboarding",
   onboarding_skipped: "onboarding",
   home_viewed: "hem",
+  home_widget_opened: "hem",
   health_viewed: "halsa",
   today_viewed: "idag",
   day_hub_viewed: "idag",

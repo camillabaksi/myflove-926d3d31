@@ -1,23 +1,17 @@
-import { useEffect, useMemo, useState } from "react";
-import FlowLearningCard from "@/components/flow/flow-learning-card";
+import { useEffect, useState } from "react";
 import { FlowMascot } from "@/components/flow-mascot";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { ExpandableBlock } from "@/components/myflove/expandable-block";
 
 import { useHomeLayout, type HomeBlockId } from "@/lib/home-layout";
-import DidThisCta from "@/components/did-this-cta";
-import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import RoutinesMedicationToday from "@/components/routines-medication-today";
 
 import { Link } from "wouter";
 import Layout from "@/components/layout";
-import CollapsibleSection from "@/components/collapsible-section";
-import EnergyBattery from "@/components/energy-battery";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
 import { useUserProfile } from "@/hooks/use-user-profile";
 import { getGreeting } from "@/lib/greeting";
 import { useTasks } from "@/hooks/use-data";
-import { suggestNow, type NowSuggestion } from "@/lib/flow-engine";
 
 import { AreaOnboarding } from "@/components/area-onboarding";
 import PwaInstallCard from "@/components/pwa-install-card";
@@ -25,65 +19,85 @@ import { AreaSwitcher } from "@/components/area-switcher";
 import { AREA_META, useActiveArea } from "@/lib/life-areas";
 import IntroTour from "@/components/intro-tour";
 import FlowOnboarding from "@/components/flow-onboarding";
-import { ArrowRight, SlidersHorizontal, Compass, CalendarDays, Plus, Pill } from "lucide-react";
+import {
+  SlidersHorizontal,
+  Compass,
+  CalendarDays,
+  Brain,
+  BatteryMedium,
+  HeartPulse,
+  Pill,
+  type LucideIcon,
+} from "lucide-react";
 import { todayISO } from "@/lib/day";
 import { track } from "@/lib/analytics";
 import { homeContextLine } from "@/lib/flow-tone";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { useFlowSettings } from "@/hooks/use-flow-settings";
+import type { AreaId } from "@/lib/areas";
+import type { MyFloveTone } from "@/components/myflove";
 
 /**
- * Tre vanliga situationer, formulerade som användarens egen tanke.
- * Ersätter produktnamn som "QuickFlow" och "Planera" på startsidan.
+ * Hem = "Vad vill jag göra just nu?"
+ *
+ * Fyra primära widgets – inget annat konkurrerar visuellt med dem. Varje
+ * widget är en ren genväg in i en befintlig funktion (ingen ny datamodell):
+ * Kalender, QuickFlow (hjärnans inkorg), Mitt batteri och Logga energi &
+ * mående. Sekundärt innehåll (rutiner/medicin, områdesväljare) ligger under.
  */
-interface Situation {
+interface HomeWidget {
+  id: string;
   href: string;
-  emoji: string;
-  thought: string;
-  action: string;
-  didThis?: boolean;
+  icon: LucideIcon;
+  title: string;
+  subtitle: string;
+  area: AreaId;
+  tone: MyFloveTone;
+  surface: MyFloveTone;
 }
 
-const SITUATIONS: Situation[] = [
+const HOME_WIDGETS: HomeWidget[] = [
   {
-    href: "/flowplan",
-
-    emoji: "🗓️",
-    thought: "Jag behöver planera min dag",
-    action: "Planera – ett förslag på dagens ordning",
+    id: "kalender",
+    href: "/kalender",
+    icon: CalendarDays,
+    title: "Kalender",
+    subtitle: "Se och lägg till",
+    area: "kalender",
+    tone: "sky",
+    surface: "sky",
   },
   {
-    href: "/flow",
-    emoji: "💜",
-    thought: "Jag vet inte vad jag ska göra nu",
-    action: "Flow hjälper dig – ett förslag i taget",
-  },
-  {
+    id: "quickflow",
     href: "/quickflow",
-    emoji: "⚡",
-    thought: "Jag har mycket i huvudet",
-    action: "QuickFlow – fånga tanken på tre sekunder",
+    icon: Brain,
+    title: "QuickFlow",
+    subtitle: "Få ur dig det som snurrar",
+    area: "flow",
+    tone: "lavender",
+    surface: "lavender",
+  },
+  {
+    id: "batteri",
+    href: "/mitt-batteri",
+    icon: BatteryMedium,
+    title: "Mitt batteri",
+    subtitle: "Din energi just nu",
+    area: "aterhamtning",
+    tone: "sun",
+    surface: "sun",
+  },
+  {
+    id: "logga",
+    href: "/mitt-batteri",
+    icon: HeartPulse,
+    title: "Logga energi & mående",
+    subtitle: "Hur är det just nu?",
+    area: "halsa",
+    tone: "mint",
+    surface: "mint",
   },
 ];
-
-/**
- * Ett enda Flow-förslag – hämtat från samma motor som Flow → NU,
- * så att Hem, Idag och Flow alltid säger samma sak.
- */
-function useFlowSuggestion(): NowSuggestion {
-  const { reading } = useEnergyBattery();
-  const { activeTasks } = useTasks();
-
-  return useMemo(
-    () =>
-      suggestNow({
-        tasks: activeTasks,
-        batteryNow: reading.now,
-        peakLabel: reading.peak?.label ?? null,
-      }),
-    [activeTasks, reading.now, reading.peak],
-  );
-}
 
 export default function Home() {
   const { name, setName, lastVisit } = useUserProfile();
@@ -120,8 +134,7 @@ export default function Home() {
 
   const { visible } = useHomeLayout();
   const shows = (id: HomeBlockId) => visible.includes(id);
-  // Ordningen från "Anpassa hemskärmen" styrs via flex order.
-  const pos = (id: HomeBlockId) => ({ order: visible.indexOf(id) });
+  const pos = (id: HomeBlockId) => ({ order: visible.indexOf(id) + 10 });
 
   const hour = new Date().getHours();
   const heroGradient =
@@ -208,28 +221,35 @@ export default function Home() {
           </div>
         </MyFloveWide>
 
-        {/* Mitt batteri – högst upp och ett enda helt klickbart kort. */}
-        {shows("batteri") && (
-          <section
-            className="min-w-0 xl:col-span-3"
-            style={pos("batteri")}
-            aria-label="Mitt batteri"
-          >
-            <EnergyBattery
-              widget
-              href="/mitt-batteri"
-              onNavigate={() => track("battery_opened", { source: "hem" })}
-            />
-          </section>
-        )}
-
-        {/* Flow – en liten notering, konkurrerar inte med dagen. */}
-        {flowSettings.enabled && flowSettings.learning && (
+        {/* De fyra primära widgetarna – balanserad 2x2, hela kortet klickbart. */}
+        <MyFloveWide style={{ order: 1 }} className="min-w-0">
           <div
-            style={{ order: visible.indexOf("batteri") + 0.5 }}
-            data-testid="home-flow-note"
-            className="min-w-0 xl:col-span-3"
+            className="grid grid-cols-2 gap-3 sm:gap-4"
+            data-testid="home-widgets"
+            aria-label="Vad vill du göra just nu?"
           >
+            {HOME_WIDGETS.map((w) => (
+              <ExpandableBlock
+                key={w.id}
+                title={w.title}
+                titleText={w.title}
+                subtitle={w.subtitle}
+                status={w.id === "batteri" ? `${Math.round(reading.now)}%` : undefined}
+                icon={w.icon}
+                tone={w.tone}
+                surface={w.surface}
+                area={w.area}
+                href={w.href}
+                onNavigate={() => track("home_widget_opened", { widget: w.id })}
+                data-testid={`home-widget-${w.id}`}
+              />
+            ))}
+          </div>
+        </MyFloveWide>
+
+        {/* Flow – en liten notering, konkurrerar inte med widgetarna. */}
+        {flowSettings.enabled && flowSettings.learning && (
+          <div style={{ order: 2 }} data-testid="home-flow-note" className="min-w-0 xl:col-span-6">
             <ExpandableBlock
               title="Flow lär känna dig"
               titleText="Flow lär känna dig"
@@ -248,7 +268,7 @@ export default function Home() {
         {/* Dagens medicin – samma data och samma avbockning som i Rutiner & medicin */}
         {shows("medicin") && (
           <section
-            className="min-w-0 xl:col-span-2"
+            className="min-w-0 xl:col-span-3"
             style={pos("medicin")}
             aria-label="Rutiner och medicin"
           >
@@ -267,80 +287,6 @@ export default function Home() {
           </section>
         )}
 
-        {/* Kalender – kalendern först, med tydliga vägar till Min dag,
-            vecka och månad, plus en synlig Lägg till-knapp. */}
-
-        {shows("idag") && (
-          <div className="min-w-0 xl:col-span-2" style={pos("idag")}>
-            <CalendarSummary />
-          </div>
-        )}
-
-        {/* Vad behöver du just nu? – situationer, inte produktnamn */}
-        {shows("vagar") && (
-          <nav
-            className="min-w-0 xl:col-span-2"
-            style={pos("vagar")}
-            aria-label="Vad behöver du just nu"
-          >
-            <ExpandableBlock
-              title="Vad behöver du just nu?"
-              titleText="Vad behöver du just nu"
-              area="hem"
-              icon={Compass}
-              subtitle="Tre vanliga situationer"
-              status="Välj väg"
-              tone="lavender"
-              surface="lavender"
-            >
-              <ul className="space-y-2">
-                {SITUATIONS.map((s) => (
-                  <li key={s.href}>
-                    {s.didThis ? (
-                      <DidThisCta
-                        trigger={
-                          <span className="group flex w-full items-center gap-3 rounded-2xl bg-card/70 px-3 py-3 text-left transition-colors hover:bg-card">
-                            <span aria-hidden className="text-xl">
-                              {s.emoji}
-                            </span>
-                            <span className="min-w-0 flex-1">
-                              <span className="block text-sm text-ink">{s.thought}</span>
-                              <span className="block text-xs text-muted-foreground">
-                                {s.action}
-                              </span>
-                            </span>
-                            <ArrowRight
-                              size={16}
-                              className="shrink-0 text-muted-foreground group-hover:text-foreground"
-                            />
-                          </span>
-                        }
-                      />
-                    ) : (
-                      <Link
-                        href={s.href}
-                        className="group flex items-center gap-3 rounded-2xl bg-card/70 px-3 py-3 transition-colors hover:bg-card"
-                      >
-                        <span aria-hidden className="text-xl">
-                          {s.emoji}
-                        </span>
-                        <span className="min-w-0 flex-1">
-                          <span className="block text-sm text-ink">{s.thought}</span>
-                          <span className="block text-xs text-muted-foreground">{s.action}</span>
-                        </span>
-                        <ArrowRight
-                          size={16}
-                          className="shrink-0 text-muted-foreground group-hover:text-foreground"
-                        />
-                      </Link>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </ExpandableBlock>
-          </nav>
-        )}
-
         {/* Områdesväljare – litet, längst ner */}
         {shows("omrade") && (
           <MyFloveWide style={pos("omrade")} className="space-y-2 pt-2">
@@ -357,7 +303,7 @@ export default function Home() {
           <AreaOnboarding />
         </MyFloveWide>
 
-        {/* Liten, diskret notering längst ner – konkurrerar inte med dagen. */}
+        {/* Liten, diskret notering längst ner – konkurrerar inte med widgetarna. */}
         <MyFloveWide style={{ order: 98.5 }} data-testid="home-install-note" className="pt-1">
           <PwaInstallCard compact />
         </MyFloveWide>
@@ -381,68 +327,5 @@ export default function Home() {
         </MyFloveWide>
       </MyFlovePageGrid>
     </Layout>
-  );
-}
-
-import { MyFloveIcon } from "@/components/myflove";
-import { areaProps } from "@/lib/areas";
-
-/**
- * Kalender på Hem – kalendern först. Tre tydliga vägar (Min dag, Vecka,
- * Månad) öppnar rätt vy direkt, och "+ Lägg till" är en stor, synlig knapp.
- * Listan och avbockningen bor kvar i Idag/Kalendern – inget dubbleras här.
- */
-function CalendarSummary() {
-  const [, setCalView] = useCloudSyncedStorage<"manad" | "vecka" | "dag">(
-    "myflove-calendar-view",
-    "manad",
-  );
-
-  const views = [
-    { href: "/idag", label: "Min dag", onClick: undefined },
-    { href: "/kalender", label: "Vecka", onClick: () => setCalView("vecka") },
-    { href: "/kalender", label: "Månad", onClick: () => setCalView("manad") },
-  ] as const;
-
-  return (
-    <section
-      data-testid="home-calendar-summary"
-      aria-label="Kalender"
-      {...areaProps("kalender")}
-      className="area-border min-w-0 space-y-3 rounded-3xl border-2 bg-sky/50 p-4 shadow-soft sm:p-5"
-    >
-      <div className="flex items-center gap-3">
-        <MyFloveIcon
-          icon={CalendarDays}
-          tone="sky"
-          size="lg"
-          className="area-bg-soft area-text rounded-full"
-        />
-        <div className="min-w-0">
-          <p className="font-display text-base font-bold leading-tight text-ink">Kalender</p>
-          <p className="text-xs text-muted-foreground">Se dagen, veckan eller månaden</p>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-3 gap-1 rounded-2xl bg-card/70 p-1">
-        {views.map((v) => (
-          <Link
-            key={v.label}
-            href={v.href}
-            onClick={v.onClick}
-            className="press rounded-xl px-2 py-2 text-center text-sm font-medium text-ink transition-colors hover:bg-secondary"
-          >
-            {v.label}
-          </Link>
-        ))}
-      </div>
-
-      <Link
-        href="/lagg-till"
-        className="press flex items-center justify-center gap-2 rounded-2xl bg-primary px-4 py-3.5 font-display text-base font-bold text-primary-foreground shadow-lifted transition-shadow hover:shadow-lifted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-      >
-        <Plus size={20} strokeWidth={2.5} aria-hidden /> Lägg till
-      </Link>
-    </section>
   );
 }
