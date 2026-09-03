@@ -57,7 +57,7 @@ export function TaskQuickAdd({
 
   const save = () => {
     const trimmed = title.trim();
-    const safeDate = /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : todayISO();
+    const safeDate = /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : baseDate;
     if (!trimmed || !mode) return;
     onAdd({
       title: trimmed.slice(0, 240),
@@ -82,14 +82,18 @@ export function TaskQuickAdd({
     <>
       <Button
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          setDate(baseDate);
+          setOpen(true);
+        }}
         className={cn("h-12 w-full rounded-2xl text-base shadow-soft", className)}
       >
         <span aria-hidden className="text-xl leading-none">
           +
         </span>
-        Lägg till
+        {label}
       </Button>
+
 
       <Dialog
         open={open}
