@@ -407,26 +407,3 @@ export function TodayContent() {
   );
 }
 
-/** ☑️ Genomfört idag – samma lista i båda vyerna, går att minimera. */
-function DoneToday({ items, onToggle }: { items: FlowItem[]; onToggle: (i: FlowItem) => void }) {
-  if (items.length === 0) return null;
-  return (
-    <MyFloveBlock
-      title={`Genomfört idag · ${items.length}`}
-      subtitle="Det du redan hunnit med"
-      collapsible
-      collapseId="idag::genomfort-idag"
-      defaultCollapsed
-      tone="mint"
-      surface="mint"
-    >
-      <ul className="space-y-2">
-        {items.map((item) => (
-          <li key={item.id}>
-            <FlowItemCard item={item} className="opacity-80" onToggle={onToggle} />
-          </li>
-        ))}
-      </ul>
-    </MyFloveBlock>
-  );
-}
