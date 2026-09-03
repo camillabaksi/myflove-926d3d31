@@ -2,7 +2,7 @@ import { track } from "@/lib/analytics";
 import { useMemo, useEffect, useState } from "react";
 import { Link } from "wouter";
 import CollapsibleSection from "@/components/collapsible-section";
-import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
+import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { ExpandableBlock } from "@/components/myflove/expandable-block";
 import StepSection from "@/components/step-section";
 import ActivityEnergyPrompt from "@/components/activity-energy-prompt";

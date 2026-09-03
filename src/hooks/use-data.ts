@@ -353,19 +353,19 @@ export function useTasks() {
   const toggleTask = (id: string) => {
     const task = tasks.find((t) => t.id === id);
     const nowCompleted = task ? !task.completed : false;
+    const completedAt = nowCompleted ? Date.now() : undefined;
     setTasks((prev) =>
       prev.map((t) => {
         if (t.id !== id) return t;
         return {
           ...t,
           completed: nowCompleted,
-          completedAt: nowCompleted ? Date.now() : undefined,
+          completedAt,
           status: nowCompleted ? "klart" : "pagar",
         };
       }),
     );
     if (task && task.quickflowId && typeof window !== "undefined") {
-      const completedAt = nowCompleted ? Date.now() : undefined;
       window.dispatchEvent(
         new CustomEvent("myflove:quickflow-sync", {
           detail: {

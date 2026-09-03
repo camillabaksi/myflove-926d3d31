@@ -79,7 +79,11 @@ export default function AllInDay({ date, isToday = true }: { date?: string; isTo
             {doneUntimed.map((item) => (
               <li key={item.id}>
                 <MyFloveTransition transitionKey={String(item.done)}>
-                  <FlowItemCard item={item} className="opacity-80" />
+                  <FlowItemCard
+                    item={item}
+                    className="opacity-80"
+                    {...(item.completable ? { onToggle: toggleItem } : {})}
+                  />
                 </MyFloveTransition>
               </li>
             ))}
