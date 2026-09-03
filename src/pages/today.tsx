@@ -10,7 +10,6 @@ import FlowCompanion from "@/components/flow/flow-companion";
 import DayTimeline, { type TimelineEntry } from "@/components/day-timeline";
 import EnergyBattery from "@/components/energy-battery";
 import TaskQuickAdd, { type QuickAddResult } from "@/components/task-quick-add";
-import DidThisQuickAdd from "@/components/did-this-quick-add";
 import { FlowItemCard } from "@/components/myflove/flow-item-card";
 import { FlowReplan } from "@/components/flow-replan";
 import { useFlowScore } from "@/hooks/use-flowscore";
@@ -26,7 +25,7 @@ import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { useDayPlan } from "@/lib/day-plan";
 import { todayISO as todayStr } from "@/lib/day";
 import type { Routine } from "@/lib/recurrence";
-import { CalendarDays, ListOrdered, Sparkles, Heart, Waves, ListChecks, Plus } from "lucide-react";
+import { CalendarDays, ListOrdered, Sparkles, Heart, Waves, ListChecks } from "lucide-react";
 import { MyFloveTransition } from "@/components/myflove/motion";
 
 type DayView = "flow" | "lista";
@@ -63,37 +62,33 @@ export function TodayContent() {
   const offerReplan = shouldOfferReplan(flow.score) || chosen;
 
   const todaysTasks = useMemo(
-    () => activeTasks.filter((t) => !t.dueDate || t.dueDate <= today),
+    () => activeTasks.filter((task) => !task.dueDate || task.dueDate === today),
     [activeTasks, today],
+  );
+  const doneActivities = useMemo(
+    () => todaysTasks.filter((task) => task.completed && !task.time),
+    [todaysTasks],
+  );
+  const timedTasks = useMemo(
+    () => todaysTasks.filter((task) => !!task.time),
+    [todaysTasks],
   );
 
   const entries = useMemo<TimelineEntry[]>(() => {
     const list: TimelineEntry[] = [];
     for (const r of activeReminders) {
       if (r.date !== today) continue;
-      list.push({
-        id: `rem-${r.id}`,
-        title: r.title,
-        time: r.time ?? "",
-        endTime: r.endTime,
-        emoji: "📅",
-      });
+      list.push({ id: `rem-${r.id}`, title: r.title, time: r.time ?? "", endTime: r.endTime, emoji: "📅" });
     }
-    for (const t of todaysTasks) {
-      list.push({
-        id: `task-${t.id}`,
-        title: t.title,
-        time: t.time ?? "",
-        endTime: t.endTime,
-        emoji: "✅",
-      });
+    for (const t of timedTasks) {
+      list.push({ id: `task-${t.id}`, title: t.title, time: t.time ?? "", endTime: t.endTime, emoji: "✅" });
     }
     for (const r of routines ?? []) {
       if (!r.enabled || !r.time) continue;
       list.push({ id: `routine-${r.id}`, title: r.title, time: r.time, emoji: "🔁" });
     }
     return list;
-  }, [activeReminders, todaysTasks, routines, today]);
+  }, [activeReminders, timedTasks, routines, today]);
 
   /** Mycket svag energiton bakom timmarna – samma kurva som batteriet. */
   const energyByHour = useMemo(() => {
@@ -122,6 +117,8 @@ export function TodayContent() {
   const handleQuickAdd = (r: QuickAddResult) => {
     addTask(r.title, r.dueDate, {
       time: r.time,
+      completed: r.completed,
+      completedAt: r.completedAt,
       energyImpact: r.energyImpact,
       friction: r.friction,
     });
@@ -198,19 +195,40 @@ export function TodayContent() {
 
       {view === "flow" ? (
         <>
-          {/* Steg 2 – dagens plan */}
+          {/* Primärt: dagens faktiska arbete, utan krav på klockslag. */}
           <StepSection
             step={2}
             className="col-span-full md:col-span-2 xl:col-span-2"
-            id="idag::steg-plan"
-            title="Dagens plan"
-            description="Allt som hör till idag – händelser, uppgifter och rutiner."
-            help="Tryck på en rad för att ändra tid, text eller ta bort den. Saker utan klockslag ligger samlade längst ner."
+            id="idag::det-har-gjort"
+            title="Det här har du gjort idag"
+            description={`Du har gjort ${doneActivities.length} ${doneActivities.length === 1 ? "sak" : "saker"} idag.`}
+          >
+            {doneActivities.length > 0 ? (
+              <ul className="space-y-2">
+                {doneActivities.map((task) => (
+                  <li key={task.id} className="flex items-center gap-3 rounded-2xl bg-secondary/40 px-3 py-2.5">
+                    <span aria-hidden className="text-primary">✓</span>
+                    <span className="min-w-0 flex-1 text-sm font-medium text-ink">{task.title}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-sm text-muted-foreground">Det du bär och gör får ta plats här.</p>
+            )}
+          </StepSection>
+
+          {/* Sekundärt: bara sådant som faktiskt har en tid. */}
+          <StepSection
+            step={3}
+            className="col-span-full md:col-span-2 xl:col-span-2"
+            id="idag::tider"
+            title="Tider idag"
+            description="Det tidsbestämda – resten av dagen behöver ingen klocka."
           >
             {entries.length > 0 ? (
               <DayTimeline entries={entries} isToday energyByHour={energyByHour} />
             ) : (
-              <p className="text-sm text-muted-foreground">Inget bokat idag. Hela dagen är din.</p>
+              <p className="text-sm text-muted-foreground">Inga tider idag.</p>
             )}
           </StepSection>
 
@@ -355,32 +373,19 @@ export function TodayContent() {
           title="Dagens lista"
         >
           <p className="text-sm text-muted-foreground">
-            Allt som ska hända eller göras idag. Bocka av direkt här – statusen är densamma i Flow,
-            på Hem och i Att göra.
+            Samma dag, samma aktiviteter – även sådant som inte behöver en tid.
           </p>
-          {todaysItems.length === 0 ? (
-            <p className="rounded-2xl bg-secondary/30 p-4 text-sm text-muted-foreground">
-              {todayDone.length > 0
-                ? "Allt som hörde till idag är genomfört. Fint jobbat. 💙"
-                : "Inget på listan idag. Släpp en tanke i QuickFlow så landar den här."}
-            </p>
-          ) : (
-            <ul className="space-y-2">
-              {todaysItems.map((item) => (
-                <li key={item.id}>
-                  <MyFloveTransition transitionKey={String(item.done)}>
-                    <FlowItemCard item={item} {...(item.completable ? { onToggle: toggle } : {})} />
-                  </MyFloveTransition>
-                </li>
-              ))}
-            </ul>
-          )}
-          <DoneToday items={todayDone} onToggle={toggle} />
-          <Link
-            href="/tasks"
-            className="inline-flex items-center gap-2 text-sm text-primary underline-offset-2 hover:underline"
-          >
-            <ListOrdered size={16} /> Öppna alla uppgifter (kommande dagar)
+          <ul className="space-y-2">
+            {[...todaysItems, ...todayDone].map((item) => (
+              <li key={item.id}>
+                <MyFloveTransition transitionKey={String(item.done)}>
+                  <FlowItemCard item={item} {...(item.completable ? { onToggle: toggle } : {})} />
+                </MyFloveTransition>
+              </li>
+            ))}
+          </ul>
+          <Link href="/tasks" className="inline-flex items-center gap-2 text-sm text-primary underline-offset-2 hover:underline">
+            <ListOrdered size={16} /> Öppna alla uppgifter
           </Link>
         </StepSection>
       )}

@@ -28,13 +28,9 @@ export default function AllInDay({ date, isToday = true }: { date?: string; isTo
     const timed: FlowItem[] = [];
     const untimed: FlowItem[] = [];
     for (const item of today) (item.time ? timed : untimed).push(item);
-    // Tidsatta saker ligger alltid i klockordning – även när tiden är skriven
-    // som "9:00" istället för "09:00". Avbockning ändrar aldrig ordningen,
-    // så inget hoppar runt när du bockar av.
     timed.sort(
       (a, b) => minutesOf(a.time) - minutesOf(b.time) || a.title.localeCompare(b.title, "sv"),
     );
-    // Under dagen: det som återstår först, det du redan gjort sist.
     untimed.sort((a, b) => Number(!!a.done) - Number(!!b.done));
     return { timed, untimed, doneCount: today.filter((i) => i.done).length };
   }, [today]);

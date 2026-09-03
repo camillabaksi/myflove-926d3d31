@@ -141,6 +141,8 @@ export default function Tasks() {
   const handleQuickAdd = (result: QuickAddResult) => {
     addTask(result.title, result.dueDate, {
       time: result.time,
+      completed: result.completed,
+      completedAt: result.completedAt,
       energyImpact: result.energyImpact,
       friction: result.friction,
       area: defaultAreaFor(activeArea),
