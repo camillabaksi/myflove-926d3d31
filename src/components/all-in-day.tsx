@@ -45,7 +45,8 @@ export default function AllInDay({ date, isToday = true }: { date?: string; isTo
         </p>
         {doneCount > 0 && (
           <span className="rounded-pill bg-secondary/60 px-3 py-1 text-xs font-medium text-ink">
-            {doneCount} {doneCount === 1 ? "sak" : "saker"} gjorda {isToday ? "idag" : "den här dagen"}
+            {doneCount} {doneCount === 1 ? "sak" : "saker"} gjorda{" "}
+            {isToday ? "idag" : "den här dagen"}
           </span>
         )}
       </div>

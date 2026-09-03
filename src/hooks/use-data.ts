@@ -211,9 +211,7 @@ export function useTasks() {
     const cleanTitle = title.trim().slice(0, 240);
     if (!cleanTitle) return;
     const id = opts?.id ?? generateId();
-    const completedAt = opts?.completed
-      ? (opts.completedAt ?? Date.now())
-      : undefined;
+    const completedAt = opts?.completed ? (opts.completedAt ?? Date.now()) : undefined;
     const targetDate = dueDate ?? getTodayDateString();
 
     setTasks((prev) => {

@@ -93,7 +93,9 @@ export function TaskQuickAdd({
       >
         <DialogContent className="max-w-md rounded-3xl">
           <DialogHeader>
-            <DialogTitle>{mode ? "Vad vill du lägga till?" : "Vad vill du lägga till?"}</DialogTitle>
+            <DialogTitle>
+              {mode ? "Vad vill du lägga till?" : "Vad vill du lägga till?"}
+            </DialogTitle>
           </DialogHeader>
 
           {!mode ? (
@@ -169,7 +171,10 @@ export function TaskQuickAdd({
                     variant="outline"
                     size="sm"
                     onClick={() => setDate(todayISO())}
-                    className={cn("rounded-full", date === todayISO() && "border-primary text-primary")}
+                    className={cn(
+                      "rounded-full",
+                      date === todayISO() && "border-primary text-primary",
+                    )}
                   >
                     Idag
                   </Button>

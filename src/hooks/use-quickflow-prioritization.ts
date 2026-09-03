@@ -44,7 +44,6 @@ export function useQuickflowPrioritization() {
     });
   }, [priorityItems, tasks, addTask]);
 
-
   const prioritizeTitles = useCallback(
     async (titles: string[]) => {
       const clean = titles.map((t) => t.trim()).filter(Boolean);

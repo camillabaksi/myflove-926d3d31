@@ -7,7 +7,6 @@
 - Kalenderns dagsvy visar "Det här gjorde du" före "Tider"; valda datum och completedAt hålls separata.
 - QuickFlow-hydrering återanvänder befintliga aktiviteter utan dubbletter eller överskrivna datum.
 
-
 ## 2026-09-03 – Förenklat aktivitetsflöde
 
 - En gemensam Lägg till-väg skiljer på "Jag gjorde detta" och "Jag ska göra detta".

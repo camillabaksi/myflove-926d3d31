@@ -63,7 +63,8 @@ export function TodayContent() {
   const offerReplan = shouldOfferReplan(flow.score) || chosen;
 
   const todaysTasks = useMemo(
-    () => [...activeTasks, ...completedTasks].filter((task) => !task.dueDate || task.dueDate === today),
+    () =>
+      [...activeTasks, ...completedTasks].filter((task) => !task.dueDate || task.dueDate === today),
     [activeTasks, completedTasks, today],
   );
   const doneActivities = useMemo(
@@ -79,10 +80,22 @@ export function TodayContent() {
     const list: TimelineEntry[] = [];
     for (const r of activeReminders) {
       if (r.date !== today) continue;
-      list.push({ id: `rem-${r.id}`, title: r.title, time: r.time ?? "", endTime: r.endTime, emoji: "📅" });
+      list.push({
+        id: `rem-${r.id}`,
+        title: r.title,
+        time: r.time ?? "",
+        endTime: r.endTime,
+        emoji: "📅",
+      });
     }
     for (const t of timedTasks) {
-      list.push({ id: `task-${t.id}`, title: t.title, time: t.time ?? "", endTime: t.endTime, emoji: "✅" });
+      list.push({
+        id: `task-${t.id}`,
+        title: t.title,
+        time: t.time ?? "",
+        endTime: t.endTime,
+        emoji: "✅",
+      });
     }
     for (const r of routines ?? []) {
       if (!r.enabled || !r.time) continue;
@@ -207,9 +220,16 @@ export function TodayContent() {
             {doneActivities.length > 0 ? (
               <ul className="space-y-2">
                 {doneActivities.map((task) => (
-                  <li key={task.id} className="flex items-center gap-3 rounded-2xl bg-secondary/40 px-3 py-2.5">
-                    <span aria-hidden className="text-primary">✓</span>
-                    <span className="min-w-0 flex-1 text-sm font-medium text-ink">{task.title}</span>
+                  <li
+                    key={task.id}
+                    className="flex items-center gap-3 rounded-2xl bg-secondary/40 px-3 py-2.5"
+                  >
+                    <span aria-hidden className="text-primary">
+                      ✓
+                    </span>
+                    <span className="min-w-0 flex-1 text-sm font-medium text-ink">
+                      {task.title}
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -385,7 +405,10 @@ export function TodayContent() {
               </li>
             ))}
           </ul>
-          <Link href="/tasks" className="inline-flex items-center gap-2 text-sm text-primary underline-offset-2 hover:underline">
+          <Link
+            href="/tasks"
+            className="inline-flex items-center gap-2 text-sm text-primary underline-offset-2 hover:underline"
+          >
             <ListOrdered size={16} /> Öppna alla uppgifter
           </Link>
         </StepSection>
