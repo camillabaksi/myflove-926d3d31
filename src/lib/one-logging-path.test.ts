@@ -17,7 +17,8 @@ describe("En enda plats för energi & mående", () => {
   it("Hem visar batteriet och leder till samma centrala vy", () => {
     const home = read("src/pages/home.tsx");
     expect(home).toContain("EnergyBattery");
-    expect(home).toContain('href="/mitt-batteri"');
+    // Hem-widgetarna länkar till samma centrala vy (href kommer från HOME_WIDGETS).
+    expect(home).toContain('"/mitt-batteri"');
     // Hem har inget eget loggningsformulär.
     expect(home).not.toContain("simple-checkin");
     expect(home).not.toContain("logEnergy");
