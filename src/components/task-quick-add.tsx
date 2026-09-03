@@ -2,34 +2,25 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
-import {
-  ENERGY_IMPACTS,
-  ENERGY_IMPACT_META,
-  FRICTIONS,
-  FRICTION_META,
-  WHEN_CHOICES,
-  laterTodayTime,
-  nowTime,
-  resolveWhen,
-  todayISO,
-  type EnergyImpact,
-  type TaskFriction,
-  type WhenChoice,
-} from "@/lib/task-agenda";
+import { todayISO, type TaskFriction, type EnergyImpact } from "@/lib/task-agenda";
 
 export interface QuickAddResult {
   title: string;
-  dueDate?: string;
+  dueDate: string;
   time?: string;
+  completed: boolean;
+  completedAt?: number;
+  /** Behålls i resultatet för bakåtkompatibilitet med befintliga anrop. */
   energyImpact?: EnergyImpact;
   friction?: TaskFriction;
 }
 
+type AddMode = "done" | "planned";
+
 /**
- * ＋ Lägg till – hela poängen är att det ska gå på några sekunder.
- * Skriv, välj energi och föreslagen tid, tryck spara. Allt annat är frivilligt.
+ * MyFloves enda enkla aktivitetsflöde: fånga det som redan hänt eller det som
+ * ska hända. All annan information är frivillig och hör hemma senare.
  */
 export function TaskQuickAdd({
   onAdd,
@@ -39,184 +30,188 @@ export function TaskQuickAdd({
   className?: string;
 }) {
   const [open, setOpen] = useState(false);
+  const [mode, setMode] = useState<AddMode | null>(null);
   const [title, setTitle] = useState("");
-  const [when, setWhen] = useState<WhenChoice>("valj");
   const [date, setDate] = useState(todayISO());
-  const [time, setTime] = useState(nowTime());
-  const [energy, setEnergy] = useState<EnergyImpact | undefined>();
-  const [friction, setFriction] = useState<TaskFriction | undefined>();
+  const [time, setTime] = useState("");
 
   const reset = () => {
+    setMode(null);
     setTitle("");
-    setWhen("valj");
     setDate(todayISO());
-    setTime(nowTime());
-    setEnergy(undefined);
-    setFriction(undefined);
+    setTime("");
   };
 
-  const applyWhen = (choice: WhenChoice) => {
-    setWhen(choice);
-    switch (choice) {
-      case "nu":
-        setDate(todayISO());
-        setTime(nowTime());
-        break;
-      case "senare-idag":
-        setDate(todayISO());
-        setTime(laterTodayTime());
-        break;
-      case "ingen":
-        setDate(todayISO());
-        setTime("");
-        break;
-      case "valj":
-        setDate((d) => d || todayISO());
-        setTime((t) => t || nowTime());
-        break;
-    }
+  const chooseMode = (nextMode: AddMode) => {
+    setMode(nextMode);
+    setDate(todayISO());
+    setTime("");
   };
 
   const save = () => {
     const trimmed = title.trim();
-    if (!trimmed) return;
-    const resolved = resolveWhen(when, { date, time });
-    onAdd({ title: trimmed, ...resolved, energyImpact: energy, friction });
+    const safeDate = /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : todayISO();
+    if (!trimmed || !mode) return;
+    onAdd({
+      title: trimmed.slice(0, 240),
+      dueDate: safeDate,
+      time: time || undefined,
+      completed: mode === "done",
+      completedAt: mode === "done" ? Date.now() : undefined,
+    });
     setOpen(false);
     reset();
   };
 
-  const chip = (active: boolean) =>
+  const choiceClass = (active: boolean) =>
     cn(
-      "press rounded-pill border px-3 py-2 text-sm font-medium transition-colors",
+      "h-auto min-h-12 justify-start rounded-2xl border px-4 py-3 text-left",
       active
         ? "border-primary bg-primary/10 text-primary"
-        : "border-border bg-background text-muted-foreground hover:text-foreground",
+        : "border-border bg-background text-foreground hover:bg-secondary/60",
     );
-
-  const noTime = when === "ingen";
 
   return (
     <>
       <Button
         type="button"
         onClick={() => setOpen(true)}
-        className={cn("h-14 w-full rounded-2xl text-base shadow-soft", className)}
+        className={cn("h-12 w-full rounded-2xl text-base shadow-soft", className)}
       >
-        <Plus size={22} className="mr-2" /> Lägg till
+        <span aria-hidden className="text-xl leading-none">
+          +
+        </span>
+        Lägg till
       </Button>
 
       <Dialog
         open={open}
-        onOpenChange={(o) => {
-          setOpen(o);
-          if (!o) reset();
+        onOpenChange={(nextOpen) => {
+          setOpen(nextOpen);
+          if (!nextOpen) reset();
         }}
       >
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-md rounded-3xl">
           <DialogHeader>
-            <DialogTitle>Vad vill du göra?</DialogTitle>
+            <DialogTitle>{mode ? "Vad vill du lägga till?" : "Vad vill du lägga till?"}</DialogTitle>
           </DialogHeader>
 
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              save();
-            }}
-            className="space-y-4"
-          >
-            <Input
-              autoFocus
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="T.ex. Plugga inför provet"
-              className="h-14 rounded-2xl border-transparent bg-secondary/50 text-lg"
-            />
+          {!mode ? (
+            <div className="grid gap-2 pt-2">
+              <Button
+                type="button"
+                variant="outline"
+                className={choiceClass(false)}
+                onClick={() => chooseMode("done")}
+              >
+                <span aria-hidden className="text-lg">
+                  ✓
+                </span>
+                <span>
+                  <span className="block font-semibold">Jag gjorde detta</span>
+                  <span className="block text-xs font-normal text-muted-foreground">
+                    Syns bland det du gjort på valt datum.
+                  </span>
+                </span>
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                className={choiceClass(false)}
+                onClick={() => chooseMode("planned")}
+              >
+                <span aria-hidden className="text-lg">
+                  ○
+                </span>
+                <span>
+                  <span className="block font-semibold">Jag ska göra detta</span>
+                  <span className="block text-xs font-normal text-muted-foreground">
+                    Läggs som planerad aktivitet på valt datum.
+                  </span>
+                </span>
+              </Button>
+            </div>
+          ) : (
+            <form
+              onSubmit={(event) => {
+                event.preventDefault();
+                save();
+              }}
+              className="space-y-4 pt-2"
+            >
+              <div className="flex items-center justify-between gap-2 rounded-2xl bg-secondary/50 px-3 py-2 text-sm">
+                <span className="font-medium text-foreground">
+                  {mode === "done" ? "✓ Jag gjorde detta" : "○ Jag ska göra detta"}
+                </span>
+                <Button type="button" variant="ghost" size="sm" onClick={() => setMode(null)}>
+                  Byt
+                </Button>
+              </div>
 
-            <div className="space-y-2">
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                När?
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {WHEN_CHOICES.map((c) => (
-                  <button
-                    key={c.id}
-                    type="button"
-                    onClick={() => applyWhen(c.id)}
-                    className={chip(when === c.id)}
-                  >
-                    {c.emoji} {c.label}
-                  </button>
-                ))}
-              </div>
-              <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2 pt-1">
-                <Input
-                  type="date"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  disabled={noTime}
-                  className="h-11 rounded-xl bg-background text-sm disabled:opacity-50"
-                  aria-label="Datum"
-                />
-                <Input
-                  type="time"
-                  value={time}
-                  onChange={(e) => setTime(e.target.value)}
-                  disabled={noTime}
-                  className="h-11 rounded-xl bg-background text-sm disabled:opacity-50"
-                  aria-label="Föreslagen tid"
-                />
-              </div>
-              {when === "valj" && (
-                <p className="text-xs text-muted-foreground">
-                  Föreslagen tid är ifylld – ändra eller lämna blankt om det inte behöver en tid.
+              <Input
+                autoFocus
+                required
+                maxLength={240}
+                value={title}
+                onChange={(event) => setTitle(event.target.value)}
+                placeholder={mode === "done" ? "T.ex. Tvättade barnens kläder" : "T.ex. Möte"}
+                className="h-12 rounded-2xl bg-secondary/50 text-base"
+                aria-label="Vad"
+              />
+
+              <div className="space-y-2">
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  När?
                 </p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Hur påverkar det din energi?
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {ENERGY_IMPACTS.map((id) => (
-                  <button
-                    key={id}
+                <div className="flex items-center gap-2">
+                  <Button
                     type="button"
-                    onClick={() => setEnergy(energy === id ? undefined : id)}
-                    className={chip(energy === id)}
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setDate(todayISO())}
+                    className={cn("rounded-full", date === todayISO() && "border-primary text-primary")}
                   >
-                    {ENERGY_IMPACT_META[id].emoji} {ENERGY_IMPACT_META[id].label}
-                  </button>
-                ))}
+                    Idag
+                  </Button>
+                  <Input
+                    type="date"
+                    value={date}
+                    onChange={(event) => setDate(event.target.value)}
+                    className="h-10 min-w-0 flex-1 rounded-xl bg-background text-sm"
+                    aria-label="Datum"
+                  />
+                </div>
               </div>
-            </div>
 
-            <div className="space-y-2">
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Storlek (valfritt)
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {FRICTIONS.map((id) => (
-                  <button
-                    key={id}
+              <div className="space-y-2">
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Tid? <span className="font-normal normal-case tracking-normal">(valfritt)</span>
+                </p>
+                <div className="flex items-center gap-2">
+                  <Input
+                    type="time"
+                    value={time}
+                    onChange={(event) => setTime(event.target.value)}
+                    className="h-10 min-w-0 flex-1 rounded-xl bg-background text-sm"
+                    aria-label="Tid"
+                  />
+                  <Button
                     type="button"
-                    onClick={() => setFriction(friction === id ? undefined : id)}
-                    className={chip(friction === id)}
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setTime("")}
+                    className={cn("rounded-full", !time && "border-primary text-primary")}
                   >
-                    {FRICTION_META[id].emoji} {FRICTION_META[id].label}
-                  </button>
-                ))}
+                    Ingen tid
+                  </Button>
+                </div>
               </div>
-            </div>
 
-            <Button type="submit" disabled={!title.trim()} className="h-12 w-full rounded-2xl">
-              Spara
-            </Button>
-            <p className="text-center text-xs text-muted-foreground">
-              Du behöver inte fylla i något mer. Det går att ändra när som helst.
-            </p>
-          </form>
+              <Button type="submit" disabled={!title.trim()} className="h-12 w-full rounded-2xl">
+                Spara
+              </Button>
+            </form>
+          )}
         </DialogContent>
       </Dialog>
     </>

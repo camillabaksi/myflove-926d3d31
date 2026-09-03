@@ -44,18 +44,6 @@ export function useQuickflowPrioritization() {
     });
   }, [priorityItems, tasks, addTask]);
 
-  // Engångsreparation av redan felaktiga rader: en avklarad uppgift som
-  // fått dagens datum trots att den bockades av en annan dag flyttas
-  // tillbaka till sin riktiga dag.
-  useEffect(() => {
-    for (const task of tasks) {
-      if (!task.quickflowId || !task.completed || !task.completedAt) continue;
-      const realDay = dayOf(task.completedAt);
-      if (realDay && task.dueDate && task.dueDate !== realDay && task.dueDate >= realDay) {
-        updateTask(task.id, { dueDate: realDay });
-      }
-    }
-  }, [tasks, updateTask]);
 
   const prioritizeTitles = useCallback(
     async (titles: string[]) => {
