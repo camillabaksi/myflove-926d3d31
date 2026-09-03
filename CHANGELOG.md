@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-03 – Live-synk mellan enheter
+
+- Kalender, Min dag och QuickFlow uppdateras automatiskt när samma konto ändras på en annan enhet.
+- Batteri och energiflöde läser också in nya energiloggar, energifaktorer och sparade val utan omladdning.
+- Den befintliga kontosynken och datamodellen återanvänds; inkommande ändringar skapar inga dubbletter.
+
 ## 2026-09-03 – Lägg till direkt på dagen
 
 - I Kalender (Min dag, Vecka och Månad) öppnas lägg-till-flödet nu inline på den valda dagen – ingen separat dialog.

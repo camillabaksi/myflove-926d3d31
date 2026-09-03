@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef } from "react";
 import { useLocalStorage } from "@/lib/storage";
 import { supabase } from "@/integrations/supabase/client";
+import { subscribeToAccountTable } from "@/lib/account-realtime";
 import type { User } from "@supabase/supabase-js";
 
 const META_SUFFIX = "__updated_at";
@@ -218,6 +219,7 @@ export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
   const [value, setValue] = useLocalStorage<T>(key, initialValue);
   const hydratedRef = useRef(false);
   const dirtyRef = useRef(false);
+  const localRevisionRef = useRef(0);
   const initialRef = useRef(initialValue);
   const valueRef = useRef(value);
   valueRef.current = value;
@@ -260,13 +262,17 @@ export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
     const user = await getSyncUser();
     if (!user) return;
     const stamp = Date.now();
+    const revision = localRevisionRef.current;
     setLocalUpdatedAt(stamp);
     const { error } = await supabase.from("user_kv").upsert({
       user_id: user.id,
       key,
       value: valueRef.current as never,
     });
-    if (!error) setLocalSyncedAt(stamp);
+    if (!error) {
+      setLocalSyncedAt(stamp);
+      if (localRevisionRef.current === revision) dirtyRef.current = false;
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key]);
 
@@ -343,6 +349,38 @@ export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
     };
   }, [value, key, pushNow]);
 
+  // Liveuppdatering mellan öppna enheter. Inkommande värden går via den
+  // vanliga localStorage-cachen men markeras inte som lokala ändringar.
+  useEffect(() => {
+    let unsubscribe: (() => void) | undefined;
+    let cancelled = false;
+    void getSyncUser().then((user) => {
+      if (!user || cancelled) return;
+      unsubscribe = subscribeToAccountTable("user_kv", user.id, (payload) => {
+        if (payload.new.key !== key && payload.old.key !== key) return;
+        const cloudUpdatedAt = String(payload.new.updated_at ?? "");
+        const cloudTs = cloudUpdatedAt ? new Date(cloudUpdatedAt).getTime() : 0;
+        if (dirtyRef.current || (cloudTs > 0 && cloudTs <= getLocalUpdatedAt())) return;
+        if (payload.eventType === "DELETE") {
+          setValue(initialRef.current);
+          return;
+        }
+        if (payload.new.value === undefined) return;
+        setValue(payload.new.value as T);
+        if (cloudTs > 0) {
+          setLocalUpdatedAt(cloudTs);
+          setLocalSyncedAt(cloudTs);
+        }
+      });
+    });
+    return () => {
+      cancelled = true;
+      unsubscribe?.();
+    };
+    // Local helpers are stable for the lifetime of this hook instance.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key, setValue]);
+
   // Nätet kom tillbaka – försök igen med det som inte hunnit bekräftas.
   useEffect(() => {
     const retry = () => {
@@ -355,6 +393,7 @@ export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
   const setAndStamp = useCallback(
     (v: T | ((prev: T) => T)) => {
       dirtyRef.current = true;
+      localRevisionRef.current += 1;
       setLocalUpdatedAt(Date.now());
       setValue(v);
     },

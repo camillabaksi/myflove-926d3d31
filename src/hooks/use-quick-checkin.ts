@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { getSyncUser } from "@/lib/cloud-storage";
 import { useMoods, type MoodEntry } from "@/hooks/use-data";
 import { useLocalStorage } from "@/lib/storage";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
+import { subscribeToAccountTable } from "@/lib/account-realtime";
 
 import { PENDING_ENERGY_KEY, ensurePendingUuids, migratePendingEnergy } from "@/lib/energy-pending";
 
@@ -143,11 +145,20 @@ export function useQuickCheckin() {
     const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
       void load(session?.user?.id ?? null);
     });
+    let stopRealtime: (() => void) | undefined;
+    void getSyncUser().then((user) => {
+      const uid = user?.id;
+      if (!uid || !mounted) return;
+      stopRealtime = subscribeToAccountTable("energy_logs", uid, () => {
+        void load(uid);
+      });
+    });
     window.addEventListener("online", retry);
     const timer = window.setInterval(retry, RETRY_INTERVAL_MS);
     return () => {
       mounted = false;
       sub.subscription.unsubscribe();
+      stopRealtime?.();
       window.removeEventListener("online", retry);
       window.clearInterval(timer);
     };

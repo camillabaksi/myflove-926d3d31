@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useSyncExternalStore } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useCloudSyncedStorage } from "@/lib/cloud-storage";
+import { useCloudSyncedStorage, getSyncUser } from "@/lib/cloud-storage";
+import { subscribeToAccountTable } from "@/lib/account-realtime";
 import {
   balanceFor,
   DEFAULT_ENERGY_FLOW_SETTINGS,
@@ -186,6 +187,21 @@ export function useEnergyFlow(): {
   useEffect(() => {
     void load();
   }, []);
+
+  // Håll energiflödet uppdaterat när en annan inloggad enhet ändrar poster.
+  useEffect(() => {
+    if (!userId) return;
+    const stopFactors = subscribeToAccountTable("energy_factors", userId, () => {
+      reload();
+    });
+    const stopPresets = subscribeToAccountTable("energy_factor_presets", userId, () => {
+      reload();
+    });
+    return () => {
+      stopFactors();
+      stopPresets();
+    };
+  }, [userId]);
 
   const addFactor = useCallback(
     async (input: NewEnergyFactor): Promise<EnergyFactorEntry | null> => {

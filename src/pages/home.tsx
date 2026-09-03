@@ -240,7 +240,7 @@ export default function Home() {
                 surface={w.surface}
                 area={w.area}
                 href={w.href}
-                onNavigate={() => track("home_widget_opened", { widget: w.id })}
+                onNavigate={() => track("home_widget_opened", { source: w.id })}
                 data-testid={`home-widget-${w.id}`}
               />
             ))}
