@@ -70,7 +70,9 @@ export default function AllInDay({
 
       {today.length === 0 && !hasCalendarEvents && (
         <p className="rounded-2xl bg-secondary/30 p-4 text-sm text-muted-foreground">
-          {isToday ? "Inget i dagen ännu. Lägg till något när det passar." : "Inget inlagt den här dagen ännu."}
+          {isToday
+            ? "Inget i dagen ännu. Lägg till något när det passar."
+            : "Inget inlagt den här dagen ännu."}
         </p>
       )}
 
