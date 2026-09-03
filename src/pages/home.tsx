@@ -147,7 +147,7 @@ export default function Home() {
            <div className="pointer-events-none absolute -top-20 -right-16 h-40 w-40 rounded-full bg-blush opacity-60 blur-md" />
            <div className="pointer-events-none absolute -bottom-16 -left-10 h-32 w-32 rounded-full bg-mint opacity-50 blur-[2px]" />
            <div className="pointer-events-none absolute right-4 top-1 select-none sm:right-8" aria-hidden>
-             <FlowMascot size="xl" mood="calm" className="flow-alive" alt="" />
+             <FlowMascot size="lg" mood="calm" className="flow-alive" alt="" />
            </div>
 
           <div className="relative space-y-2">
