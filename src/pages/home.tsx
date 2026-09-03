@@ -142,22 +142,22 @@ export default function Home() {
         {/* Hero: välkommen, namn, kort undertext */}
         <MyFloveWide
           className="relative overflow-hidden rounded-3xl border border-border/60 p-6 shadow-lifted pop-in sm:pr-36"
-           style={{ background: heroGradient }}
-         >
-           <div className="pointer-events-none absolute -top-20 -right-16 h-40 w-40 rounded-full bg-blush opacity-60 blur-md" />
-           <div className="pointer-events-none absolute -bottom-16 -left-10 h-32 w-32 rounded-full bg-mint opacity-50 blur-[2px]" />
-           <div
-             className="pointer-events-none absolute right-4 top-1 select-none sm:right-8"
-             aria-hidden
-           >
-             <FlowMascot
-               size="md"
-               imgClassName="sm:h-36 sm:w-36"
-               mood="calm"
-               className="flow-alive"
-               alt=""
-             />
-           </div>
+          style={{ background: heroGradient }}
+        >
+          <div className="pointer-events-none absolute -top-20 -right-16 h-40 w-40 rounded-full bg-blush opacity-60 blur-md" />
+          <div className="pointer-events-none absolute -bottom-16 -left-10 h-32 w-32 rounded-full bg-mint opacity-50 blur-[2px]" />
+          <div
+            className="pointer-events-none absolute right-4 top-1 select-none sm:right-8"
+            aria-hidden
+          >
+            <FlowMascot
+              size="md"
+              imgClassName="sm:h-36 sm:w-36"
+              mood="calm"
+              className="flow-alive"
+              alt=""
+            />
+          </div>
 
           <div className="relative space-y-2">
             <h1 className="text-3xl sm:text-4xl font-bold text-ink pr-14">{greeting.title}</h1>
