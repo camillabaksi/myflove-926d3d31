@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-03 – Kalender först på Hem
+
+- Hem-blocket "Min dag" är ersatt av "Kalender": tre tydliga vägar (Min dag, Vecka, Månad) öppnar rätt vy direkt.
+- En stor, synlig "+ Lägg till"-knapp i blocket leder till den gemensamma lägg-till-vägen.
+
 ## 2026-09-03 – Förenklat aktivitetsflöde
 
 - En gemensam Lägg till-väg skiljer på "Jag gjorde detta" och "Jag ska göra detta" utan krav på kategori, prioritet eller energi.

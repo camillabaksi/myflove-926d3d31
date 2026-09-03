@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-03";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Kalender först på Hem",
+    items: [
+      "Hem-blocket Min dag är nu Kalender med tre tydliga vägar: Min dag, Vecka och Månad öppnar rätt vy direkt (2026-09-03)",
+      "En stor, synlig Lägg till-knapp i Hem-blocket leder till den gemensamma lägg-till-vägen (2026-09-03)",
+    ],
+  },
+  {
     title: "Aktiviteter visar vad du faktiskt gjort",
     items: [
       "En gemensam Lägg till-väg skiljer på Jag gjorde detta och Jag ska göra detta utan krav på kategori, prioritet eller energi (2026-09-03)",
