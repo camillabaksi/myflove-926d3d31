@@ -120,19 +120,19 @@ export default function PitchPage() {
               <FileText size={18} className="text-primary" /> Pitchdeck
             </h2>
             <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
-              Version 3.7 · En enda lugn väg
+              Version 4.0 · Investor upgrade
             </span>
           </div>
           <p className="text-sm text-muted-foreground">
-            Det nya decket (3.7) berättar om MyFloves aktuella produktkarta, kärnloop och tydliga
-            gräns mellan Hälsa och aktiviteter – med externa marknadsuppskattningar tydligt märkta.
+            Pitchdecket (4.0) behåller MyFloves lugna kärna och kompletterar produktberättelsen med founder,
+            validering, affärsmodell, differentiering, go-to-market, kapital och roadmap.
           </p>
 
           <div className="grid gap-3 sm:grid-cols-2">
             <figure className="space-y-1">
               <img
-                src="/pitch/MyFlove_Pitchdeck_3.7-thumb.jpg"
-                alt="Titelsidan i MyFlove Pitchdeck 3.7 med Flow-karaktären"
+                src="/pitch/MyFlove_Pitchdeck_4.0-thumb.jpg"
+                alt="Titelsidan i MyFlove Pitchdeck 4.0 med Flow-karaktären"
                 loading="lazy"
                 className="w-full rounded-xl border border-border"
               />
@@ -140,31 +140,31 @@ export default function PitchPage() {
             </figure>
             <figure className="space-y-1">
               <img
-                src="/pitch/MyFlove_Pitchdeck_3.7-thumb.jpg"
-                alt="Förhandsbild av MyFlove Pitchdeck 3.7"
+                src="/pitch/MyFlove_Pitchdeck_4.0-thumb.jpg"
+                alt="Förhandsbild av MyFlove Pitchdeck 4.0"
                 loading="lazy"
                 className="w-full rounded-xl border border-border"
               />
               <figcaption className="text-xs text-muted-foreground">
-                Nytt material: produkt, kärnloop och riktning
+                Investor upgrade: byggt, validering och nästa steg
               </figcaption>
             </figure>
           </div>
 
           <div className="flex flex-wrap gap-2">
             <a
-              href="/pitch/MyFlove_Pitchdeck_3.7.pptx"
+              href="/pitch/MyFlove_Pitchdeck_4.0.pptx"
               download
               className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
             >
-              <Download size={16} /> Ladda ner PowerPoint (3.7)
+              <Download size={16} /> Ladda ner PowerPoint (4.0)
             </a>
             <a
-              href="/pitch/MyFlove_Pitchdeck_3.7.pdf"
+              href="/pitch/MyFlove_Pitchdeck_4.0.pdf"
               download
               className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-medium hover:bg-secondary"
             >
-              <Download size={16} /> Ladda ner PDF (3.7)
+              <Download size={16} /> Ladda ner PDF (4.0)
             </a>
           </div>
         </section>

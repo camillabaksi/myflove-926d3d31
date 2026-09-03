@@ -6,9 +6,17 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-09-02";
+export const CHANGELOG_UPDATED = "2026-09-03";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  {
+    title: "Pitchdeck 4.0 för investerarpresentation",
+    items: [
+      "Pitchdeck 4.0 behåller MyFloves visuella identitet och kompletterar v3.7 med founder/kompetens, byggd produkt och strukturerad validering (2026-09-03)",
+      "Affärsmodell, differentiering, go-to-market, kapital och roadmap är tydligt uppdelade utan påhittade siffror eller priser (2026-09-03)",
+      "Marknadssiffror är fortsatt märkta som externa uppskattningar och PowerPoint, PDF samt förhandsbild finns på pitchsidan (2026-09-03)",
+    ],
+  },
   {
     title: "Kontosynk för personliga inställningar",
     items: [

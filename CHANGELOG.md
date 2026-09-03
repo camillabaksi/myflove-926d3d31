@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-03 – Pitchdeck 4.0 för investerarpresentation
+
+- Pitchdeck 4.0 behåller MyFloves visuella identitet och utökar v3.7 med founder/kompetens, vad som faktiskt är byggt, strukturerad validering och tydliga "to be validated"-markeringar.
+- Nya slides täcker affärsmodell, differentiering, go-to-market, kapitalbehov/användning och roadmap utan påhittade siffror eller priser.
+- Marknadssiffrorna är fortsatt märkta som externa uppskattningar; PowerPoint, PDF och förhandsbild finns på pitchsidan.
+
+
 ## 2026-09-02 – Kontosynk för personliga inställningar
 
 - Föredraget visningsnamn och dagsramar (morgon/kväll) följer nu det inloggade kontot via befintlig offline-first-molnsynk.
