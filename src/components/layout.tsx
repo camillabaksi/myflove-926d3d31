@@ -887,23 +887,41 @@ export default function Layout({ children }: LayoutProps) {
             {medicationAlerts.map((alert) => (
               <div
                 key={alert.key}
-                className="flex items-center justify-between gap-3 bg-gold/15 border border-gold/30 text-ink rounded-2xl px-4 py-3 shadow-sm animate-in fade-in slide-in-from-top-2"
+                className="flex flex-wrap items-center justify-between gap-3 bg-gold/15 border border-gold/30 text-ink rounded-2xl px-4 py-3 shadow-sm animate-in fade-in slide-in-from-top-2"
               >
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 min-w-0">
                   <Pill size={20} className="shrink-0" />
-                  <p className="text-sm font-medium">
+                  <p className="text-sm font-medium truncate">
                     Dags att ta <strong>{alert.name}</strong>
                     {alert.dosage ? ` (${alert.dosage})` : ""} – {alert.time}
                   </p>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => dismissMedicationAlert(alert)}
-                  aria-label="Stäng varning"
-                  className="shrink-0 p-1.5 rounded-full hover:bg-gold/25"
-                >
-                  <X size={18} />
-                </button>
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => takeMedicationAlert(alert)}
+                    aria-label={`Markera ${alert.name} ${alert.time} som tagen`}
+                    className="inline-flex items-center gap-1 rounded-pill bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-opacity hover:opacity-90"
+                  >
+                    <Check size={13} /> Tagen
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => snoozeMedicationAlert(alert)}
+                    aria-label={`Påminn om ${alert.name} igen om 10 minuter`}
+                    className="inline-flex items-center gap-1 rounded-pill bg-secondary px-3 py-1.5 text-xs font-medium text-ink transition-opacity hover:opacity-80"
+                  >
+                    ⏰ 10 min
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => dismissMedicationAlert(alert)}
+                    aria-label={`Hoppa över ${alert.name} ${alert.time} idag`}
+                    className="shrink-0 p-1.5 rounded-full hover:bg-gold/25"
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
               </div>
             ))}
           </div>
