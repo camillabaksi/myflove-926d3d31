@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-03";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Aktiviteter visar vad du faktiskt gjort",
+    items: [
+      "En gemensam Lägg till-väg skiljer på Jag gjorde detta och Jag ska göra detta utan krav på kategori, prioritet eller energi (2026-09-03)",
+      "Min dag visar först aktiviteter utan klockslag som faktiskt är gjorda och därefter Tider idag; kalendern behåller samma datumseparering (2026-09-03)",
+      "QuickFlow-hydrering återanvänder befintliga aktiviteter utan att skapa dubbletter eller skriva över valt datum och completedAt (2026-09-03)",
+    ],
+  },
+  {
     title: "Snabbval direkt i medicinpåminnelser",
     items: [
       "Medicinnotiser (push) har tre knappar: \u201dTagit\u201d, \u201d10 min\u201d (ny påminnelse) och \u201dHoppa över\u201d – fungerar även när appen är stängd (2026-09-03)",

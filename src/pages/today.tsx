@@ -24,6 +24,7 @@ import { useTasks, useReminders } from "@/hooks/use-data";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { useDayPlan } from "@/lib/day-plan";
 import { todayISO as todayStr } from "@/lib/day";
+import { isUntimedActivity } from "@/lib/activity-semantics";
 import type { Routine } from "@/lib/recurrence";
 import { CalendarDays, ListOrdered, Sparkles, Heart, Waves, ListChecks } from "lucide-react";
 import { MyFloveTransition } from "@/components/myflove/motion";
@@ -66,11 +67,11 @@ export function TodayContent() {
     [activeTasks, today],
   );
   const doneActivities = useMemo(
-    () => todaysTasks.filter((task) => task.completed && !task.time),
+    () => todaysTasks.filter((task) => task.completed && isUntimedActivity(task)),
     [todaysTasks],
   );
   const timedTasks = useMemo(
-    () => todaysTasks.filter((task) => !!task.time),
+    () => todaysTasks.filter((task) => !isUntimedActivity(task)),
     [todaysTasks],
   );
 
