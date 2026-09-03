@@ -13,6 +13,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     title: "QuickFlow får hjärnikon",
     items: [
       "QuickFlow visas nu med en hjärnikon i sidomenyn, bottenmenyn, toppmenyn, den flytande knappen och fångstryten (2026-09-03)",
+      "Även den runda QuickFlow-knappen i bottennavigeringen visar nu hjärnan istället för ett plus (2026-09-03)",
     ],
   },
   {

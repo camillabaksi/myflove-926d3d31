@@ -3,6 +3,7 @@
 ## 2026-09-03 – QuickFlow får hjärnikon
 
 - QuickFlow visas nu med en hjärnikon (hjärnans inkorg) i sidomenyn, bottenmenyn, toppmenyn, den flytande knappen och fångstryten – istället för plus/blixt/inkorg.
+- Även den runda QuickFlow-knappen i bottennavigeringen visar nu hjärnan istället för ett plus.
 
 ## 2026-09-03 – Live-synk mellan enheter
 
