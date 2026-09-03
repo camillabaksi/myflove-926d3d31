@@ -16,16 +16,23 @@ export function useQuickflowPrioritization() {
   const run = useServerFn(prioritizeQuickflow);
   const { reading } = useEnergyBattery();
   const { items: priorityItems, merge, setIntro } = usePriorityList();
-  const { tasks, addTask } = useTasks();
+  const { tasks, addTask, updateTask } = useTasks();
 
   // Prioriteringslistan är bakåtkompatibel lagring, men varje post ska också
   // finnas som samma uppgift i Idag. ID:t återanvänds så ingen textmatchning
   // behövs och ändringar kan synkas i båda riktningarna.
+  //
+  // Datumet får ALDRIG bli "idag" bara för att bryggan råkar köra idag. En
+  // sak som gjordes i tisdags hör till tisdagen – annars hamnar gamla saker
+  // under "Genomfört idag".
   useEffect(() => {
     const linkedIds = new Set(tasks.map((task) => task.quickflowId));
     priorityItems.forEach((item) => {
+      const day = item.done
+        ? (dayOf(item.doneAt) ?? dayOf(item.createdAt) ?? todayISO())
+        : todayISO();
       if (linkedIds.has(item.id)) return;
-      addTask(item.title, todayISO(), {
+      addTask(item.title, day, {
         id: item.id,
         quickflowId: item.id,
         quickflowBucket: item.bucket,
@@ -36,6 +43,19 @@ export function useQuickflowPrioritization() {
       });
     });
   }, [priorityItems, tasks, addTask]);
+
+  // Engångsreparation av redan felaktiga rader: en avklarad uppgift som
+  // fått dagens datum trots att den bockades av en annan dag flyttas
+  // tillbaka till sin riktiga dag.
+  useEffect(() => {
+    for (const task of tasks) {
+      if (!task.quickflowId || !task.completed || !task.completedAt) continue;
+      const realDay = dayOf(task.completedAt);
+      if (realDay && task.dueDate && task.dueDate !== realDay && task.dueDate >= realDay) {
+        updateTask(task.id, { dueDate: realDay });
+      }
+    }
+  }, [tasks, updateTask]);
 
   const prioritizeTitles = useCallback(
     async (titles: string[]) => {
