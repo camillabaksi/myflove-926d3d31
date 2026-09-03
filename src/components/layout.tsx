@@ -203,7 +203,12 @@ export default function Layout({ children }: LayoutProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { signOut } = useClerk();
   const { alerts, dismissAlert } = useCommuteAlerts();
-  const { alerts: medicationAlerts, dismissAlert: dismissMedicationAlert } = useMedicationAlerts();
+  const {
+    alerts: medicationAlerts,
+    dismissAlert: dismissMedicationAlert,
+    takeAlert: takeMedicationAlert,
+    snoozeAlert: snoozeMedicationAlert,
+  } = useMedicationAlerts();
   const { alerts: proximityAlerts, dismissAlert: dismissProximityAlert } =
     useShoppingProximityAlerts();
   useNotificationScheduler();
