@@ -85,7 +85,9 @@ export function useMedicationAlerts() {
     const deliverAt = new Date(Date.now() + SNOOZE_MINUTES * 60_000).toISOString();
     syncReminder({
       data: {
-        clientKey: `medsnooze:${alert.medId}:${Date.now()}`,
+        // Börjar med `med:` så att även den snoozade pushnotisen får
+        // snabbvalsknapparna (Tagit / 10 min / Hoppa över).
+        clientKey: `med:${alert.medId}:snooze:${alert.time}:${Date.now()}`,
         kind: "medication",
         title: "💊 Dags att ta medicin",
         body: `${alert.name}${alert.dosage ? ` (${alert.dosage})` : ""} – ${alert.time}`,

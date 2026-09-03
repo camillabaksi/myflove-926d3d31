@@ -126,7 +126,8 @@ export function useNotificationActions() {
           const deliverAt = new Date(Date.now() + SNOOZE_MINUTES * 60_000).toISOString();
           syncReminder({
             data: {
-              clientKey: `medsnooze:${medId}:${Date.now()}`,
+              // Börjar med `med:` så även snoozade notiser får snabbvalen.
+              clientKey: `med:${medId}:snooze:${time}:${Date.now()}`,
               kind: "medication",
               title: "💊 Dags att ta medicin",
               body: label,
