@@ -124,8 +124,8 @@ export default function PitchPage() {
             </span>
           </div>
           <p className="text-sm text-muted-foreground">
-            Pitchdecket (4.0) behåller MyFloves lugna kärna och kompletterar produktberättelsen med founder,
-            validering, affärsmodell, differentiering, go-to-market, kapital och roadmap.
+            Pitchdecket (4.0) behåller MyFloves lugna kärna och kompletterar produktberättelsen med
+            founder, validering, affärsmodell, differentiering, go-to-market, kapital och roadmap.
           </p>
 
           <div className="grid gap-3 sm:grid-cols-2">
