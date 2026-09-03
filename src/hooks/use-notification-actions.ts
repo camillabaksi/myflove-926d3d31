@@ -1,7 +1,8 @@
 import { useEffect, useRef } from "react";
 import { toast } from "sonner";
-import { useTasks, useReminders } from "@/hooks/use-data";
+import { useTasks, useReminders, useMedications } from "@/hooks/use-data";
 import { useQuickflow } from "@/hooks/use-quickflow";
+import { syncReminder } from "@/lib/push.functions";
 import {
   captureActionFromUrl,
   clearNotificationActions,
