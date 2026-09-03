@@ -181,14 +181,12 @@ export function TaskQuickAdd({
                     type="button"
                     variant="outline"
                     size="sm"
-                    onClick={() => setDate(todayISO())}
-                    className={cn(
-                      "rounded-full",
-                      date === todayISO() && "border-primary text-primary",
-                    )}
+                    onClick={() => setDate(baseDate)}
+                    className={cn("rounded-full", date === baseDate && "border-primary text-primary")}
                   >
-                    Idag
+                    {baseDate === todayISO() ? "Idag" : "Vald dag"}
                   </Button>
+
                   <Input
                     type="date"
                     value={date}
