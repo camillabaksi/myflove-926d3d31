@@ -24,15 +24,24 @@ function minutesOf(time?: string): number {
 export default function AllInDay({ date, isToday = true }: { date?: string; isToday?: boolean }) {
   const { today, toggleItem } = useFlowItems(date);
 
-  const { timed, untimed, doneCount } = useMemo(() => {
+  const { timed, doneUntimed, openUntimed, doneCount } = useMemo(() => {
     const timed: FlowItem[] = [];
-    const untimed: FlowItem[] = [];
-    for (const item of today) (item.time ? timed : untimed).push(item);
+    const doneUntimed: FlowItem[] = [];
+    const openUntimed: FlowItem[] = [];
+    for (const item of today) {
+      if (item.time) timed.push(item);
+      else if (item.done) doneUntimed.push(item);
+      else openUntimed.push(item);
+    }
     timed.sort(
       (a, b) => minutesOf(a.time) - minutesOf(b.time) || a.title.localeCompare(b.title, "sv"),
     );
-    untimed.sort((a, b) => Number(!!a.done) - Number(!!b.done));
-    return { timed, untimed, doneCount: today.filter((i) => i.done).length };
+    return {
+      timed,
+      doneUntimed,
+      openUntimed,
+      doneCount: today.filter((i) => i.done).length,
+    };
   }, [today]);
 
   return (
@@ -59,7 +68,7 @@ export default function AllInDay({ date, isToday = true }: { date?: string; isTo
         </p>
       )}
 
-      {untimed.length > 0 && (
+      {doneUntimed.length > 0 && (
         <CollapsibleSection
           id="allt-i-dagen::det-har-gjorde"
           title="✓ Det här gjorde du"
@@ -67,12 +76,30 @@ export default function AllInDay({ date, isToday = true }: { date?: string; isTo
           className="space-y-2"
         >
           <ul className="space-y-2">
-            {untimed.map((item) => (
+            {doneUntimed.map((item) => (
+              <li key={item.id}>
+                <MyFloveTransition transitionKey={String(item.done)}>
+                  <FlowItemCard item={item} className="opacity-80" />
+                </MyFloveTransition>
+              </li>
+            ))}
+          </ul>
+        </CollapsibleSection>
+      )}
+
+      {openUntimed.length > 0 && (
+        <CollapsibleSection
+          id="allt-i-dagen::ska-goras"
+          title="○ Ska göras"
+          headingClassName="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+          className="space-y-2"
+        >
+          <ul className="space-y-2">
+            {openUntimed.map((item) => (
               <li key={item.id}>
                 <MyFloveTransition transitionKey={String(item.done)}>
                   <FlowItemCard
                     item={item}
-                    className={item.done ? "opacity-80" : undefined}
                     {...(item.completable ? { onToggle: toggleItem } : {})}
                   />
                 </MyFloveTransition>

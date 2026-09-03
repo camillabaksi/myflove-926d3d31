@@ -9,7 +9,6 @@ import ActivityEnergyPrompt from "@/components/activity-energy-prompt";
 import FlowCompanion from "@/components/flow/flow-companion";
 import DayTimeline, { type TimelineEntry } from "@/components/day-timeline";
 import EnergyBattery from "@/components/energy-battery";
-import TaskQuickAdd, { type QuickAddResult } from "@/components/task-quick-add";
 import { FlowItemCard } from "@/components/myflove/flow-item-card";
 import { FlowReplan } from "@/components/flow-replan";
 import { useFlowScore } from "@/hooks/use-flowscore";
@@ -46,7 +45,7 @@ export function TodayContent() {
   }, []);
 
   const today = todayStr();
-  const { activeTasks, completedTasks, addTask } = useTasks();
+  const { activeTasks, completedTasks } = useTasks();
   const { activeReminders } = useReminders();
   const { flow } = useFlowScore();
   const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
@@ -128,15 +127,6 @@ export function TodayContent() {
     [activeTasks, reading.now, reading.peak],
   );
 
-  const handleQuickAdd = (r: QuickAddResult) => {
-    addTask(r.title, r.dueDate, {
-      time: r.time,
-      completed: r.completed,
-      completedAt: r.completedAt,
-      energyImpact: r.energyImpact,
-      friction: r.friction,
-    });
-  };
 
   // Planerad → genomförd → (frivillig) faktisk energipåverkan.
   // Ingen energi loggas automatiskt; först när användaren svarar i dialogen.
@@ -356,7 +346,6 @@ export function TodayContent() {
                 </ul>
               </details>
             )}
-            <DoneToday items={todayDone} onToggle={toggle} />
           </StepSection>
 
           {/* Extra – energibalans och ett förslag, hopfällt tills du vill se det */}
