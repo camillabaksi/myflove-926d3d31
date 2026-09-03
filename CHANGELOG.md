@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-03 – Genomfört hamnar på rätt dag
+
+- QuickFlow-poster som blir uppgifter behåller nu den dag de faktiskt gjordes i stället för att få dagens datum.
+- Redan felaktiga rader flyttas automatiskt tillbaka till sin riktiga dag, så "Genomfört idag" bara visar det som gjordes idag.
+
+
 ## 2026-09-03 – Balanserad Hem-layout och tydligare Flow-maskot
 
 - Hem har nu ett balanserat desktop-grid: hero i full bredd, två jämnstora huvudblock och tre jämnstora block på nästa rad utan onödiga tomrum.
