@@ -37,7 +37,8 @@ export function TaskQuickAdd({
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState<AddMode | null>(null);
   const [title, setTitle] = useState("");
-  const baseDate = defaultDate && /^\d{4}-\d{2}-\d{2}$/.test(defaultDate) ? defaultDate : todayISO();
+  const baseDate =
+    defaultDate && /^\d{4}-\d{2}-\d{2}$/.test(defaultDate) ? defaultDate : todayISO();
   const [date, setDate] = useState(baseDate);
   const [time, setTime] = useState("");
 
