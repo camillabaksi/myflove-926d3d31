@@ -78,14 +78,6 @@ export function TaskQuickAdd({
     reset();
   };
 
-  const choiceClass = (active: boolean) =>
-    cn(
-      "h-auto min-h-12 justify-start rounded-2xl border px-4 py-3 text-left",
-      active
-        ? "border-primary bg-primary/10 text-primary"
-        : "border-border bg-background text-foreground hover:bg-secondary/60",
-    );
-
   return (
     <>
       <Button
