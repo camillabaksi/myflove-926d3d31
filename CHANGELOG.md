@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-03 – Balanserad Hem-layout och tydligare Flow-maskot
+
+- Hem har nu ett balanserat desktop-grid: hero i full bredd, två jämnstora huvudblock och tre jämnstora block på nästa rad utan onödiga tomrum.
+- Flow-maskoten är tydligare i hälsningshero-sektionen, medan mobilens layout och touchstorlekar lämnas oförändrade.
+
 ## 2026-09-03 – Pitchdeck 4.0 för investerarpresentation
 
 - Pitchdeck 4.0 behåller MyFloves visuella identitet och utökar v3.7 med founder/kompetens, vad som faktiskt är byggt, strukturerad validering och tydliga "to be validated"-markeringar.
