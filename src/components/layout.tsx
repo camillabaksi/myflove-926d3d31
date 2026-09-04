@@ -1085,8 +1085,8 @@ export default function Layout({ children }: LayoutProps) {
             <div className="flex justify-between items-center p-4 border-b border-border/50">
               <h2 className="text-lg font-medium text-muted-foreground">
                 {openCategory
-                  ? (categories.find((c) => c.id === openCategory)?.label ?? "Mer")
-                  : "Mer"}
+                  ? (categories.find((c) => c.id === openCategory)?.label ?? t("Mer"))
+                  : t("Mer")}
               </h2>
               <button
                 onClick={() => {
