@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-04 – MyFlove lär sig din vardag
+
+- Startsidan visar nu "Din vardag" – vilka veckodagar som brukar bli fullast, vilka som brukar vara lugnast och vilka aktiviteter som brukar ta mer energi.
+- Allt bygger på dina egna aktiviteter och energiloggar de senaste åtta veckorna – ingen ny data samlas in och inget visas förrän underlaget räcker.
+
 ## 2026-09-04 – Samma lugna design i hela appen
 
 - Alla sidhuvuden använder nu startsidans mjuka gradient, rundning och skugga – med samma varma ton som följer tiden på dygnet.
