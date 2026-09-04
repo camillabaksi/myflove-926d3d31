@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-04";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Appstatistiken visar rätt antal användare igen",
+    items: [
+      "Registrerade användare, nya senaste 7 dagarna och registreringsdiagrammet visade 0 trots att nya användare fanns – databasfunktionen avvisade serverns anrop (2026-09-04)",
+      "Funktionen tillåter nu serverns säkra anrop men är helt stängd för direktanrop från vanliga konton (2026-09-04)",
+      "Verifierat inloggad i webbläsaren: statistiken visar rätt antal (2026-09-04)",
+    ],
+  },
+  {
     title: "Städningssidan följer appens layout",
     items: [
       "Städningssidan har samma sidhuvud som övriga sidor, med tillbaka-knapp, emoji och mjuk gradient (2026-09-04)",
