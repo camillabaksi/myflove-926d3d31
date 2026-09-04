@@ -7,6 +7,13 @@
  * eller en synlig nyckel.
  */
 
+import { EN_QUICKFLOW } from "@/lib/i18n-dicts/quickflow";
+import { EN_CALENDAR } from "@/lib/i18n-dicts/calendar";
+import { EN_BATTERY } from "@/lib/i18n-dicts/battery";
+import { EN_HISTORY } from "@/lib/i18n-dicts/history";
+import { EN_NOTES } from "@/lib/i18n-dicts/notes";
+import { EN_ADMIN } from "@/lib/i18n-dicts/admin";
+
 export type Lang = "sv" | "en";
 
 export const LANGUAGE_KEY = "myflove-language";
