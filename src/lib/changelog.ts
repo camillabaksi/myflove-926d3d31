@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-04";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Städningssidan följer appens layout",
+    items: [
+      "Städningssidan har samma sidhuvud som övriga sidor, med tillbaka-knapp, emoji och mjuk gradient (2026-09-04)",
+      "Lägesval, översiktskort och \"Det här behöver du\" tar hela bredden igen – inget kläms ihop eller trunkeras (2026-09-04)",
+    ],
+  },
+  {
     title: "Läsbar appstatistik och tydligare adminöversikt",
     items: [
       "Appstatistiken visar begripliga svenska namn på alla delar och handlingar i stället för tekniska koder (2026-09-04)",

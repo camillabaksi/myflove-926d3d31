@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import Layout from "@/components/layout";
 import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
-import { MyFloveFloatingElement } from "@/components/myflove/motion";
+import { MyFloveHeader } from "@/components/myflove";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
@@ -129,36 +129,36 @@ export default function CleaningPage() {
 
   return (
     <Layout>
-      <MyFlovePageGrid area="hem" className="mx-auto max-w-5xl px-4 py-6">
+      <MyFlovePageGrid area="hem">
         <MyFloveWide>
-          <header>
-            <h1 className="font-display text-3xl font-bold text-foreground flex items-center gap-3">
-              Städning <MyFloveFloatingElement tone="mint" size={18} />
-            </h1>
-            <p className="mt-1 text-muted-foreground text-sm">
-              Välj rum och läge. Kryssa av i din takt – allt räknas.
-            </p>
-          </header>
+          <MyFloveHeader
+            area="hem"
+            title="Städning"
+            emoji="🧹"
+            description="Välj rum och läge. Kryssa av i din takt – allt räknas."
+          />
         </MyFloveWide>
 
         {/* Läge */}
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-3">
-          {(["vardag", "stor"] as CleanMode[]).map((m) => (
-            <button
-              key={m}
-              onClick={() => setMode(m)}
-              aria-pressed={mode === m}
-              className={`rounded-2xl border-2 p-4 text-left transition ${
-                mode === m
-                  ? "border-primary bg-primary/10"
-                  : "border-border bg-card hover:bg-accent/40"
-              }`}
-            >
-              <div className="font-semibold text-foreground">{CLEAN_MODE_LABEL[m]}</div>
-              <div className="mt-1 text-xs text-muted-foreground">{CLEAN_MODE_BLURB[m]}</div>
-            </button>
-          ))}
-        </div>
+        <MyFloveWide>
+          <div className="grid grid-cols-2 gap-3">
+            {(["vardag", "stor"] as CleanMode[]).map((m) => (
+              <button
+                key={m}
+                onClick={() => setMode(m)}
+                aria-pressed={mode === m}
+                className={`min-w-0 rounded-2xl border-2 p-4 text-left transition ${
+                  mode === m
+                    ? "border-primary bg-primary/10"
+                    : "border-border bg-card hover:bg-accent/40"
+                }`}
+              >
+                <div className="font-semibold text-foreground">{CLEAN_MODE_LABEL[m]}</div>
+                <div className="mt-1 text-xs text-muted-foreground">{CLEAN_MODE_BLURB[m]}</div>
+              </button>
+            ))}
+          </div>
+        </MyFloveWide>
 
         {/* Rum */}
         <MyFloveWide>
@@ -190,54 +190,56 @@ export default function CleaningPage() {
         </MyFloveWide>
 
         {/* Översikt */}
-        <MyFloveBlock
-          title={`${room.emoji} ${room.label} – ${CLEAN_MODE_LABEL[mode].toLowerCase()}`}
-          subtitle={
-            minutesLeft > 0
-              ? `Ca ${minutesLeft} min kvar · ${completed.length}/${steps.length} klart`
-              : "Allt avklarat 🌟"
-          }
-          icon={Clock}
-          tone="mint"
-          action={
-            <Button variant="ghost" size="sm" onClick={resetRoom} className="shrink-0">
-              <RotateCcw className="mr-1.5 h-4 w-4" />
-              Nollställ
-            </Button>
-          }
-          className="h-full"
-        >
-          <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-muted">
-            <div
-              className="h-full rounded-full transition-all"
-              style={{ width: `${pct}%`, backgroundColor: `hsl(${room.hue})` }}
-            />
-          </div>
-        </MyFloveBlock>
+        <MyFloveWide>
+          <MyFloveBlock
+            title={`${room.emoji} ${room.label} – ${CLEAN_MODE_LABEL[mode].toLowerCase()}`}
+            subtitle={
+              minutesLeft > 0
+                ? `Ca ${minutesLeft} min kvar · ${completed.length}/${steps.length} klart`
+                : "Allt avklarat 🌟"
+            }
+            icon={Clock}
+            tone="mint"
+            action={
+              <Button variant="ghost" size="sm" onClick={resetRoom} className="shrink-0">
+                <RotateCcw className="mr-1.5 h-4 w-4" />
+                Nollställ
+              </Button>
+            }
+          >
+            <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-muted">
+              <div
+                className="h-full rounded-full transition-all"
+                style={{ width: `${pct}%`, backgroundColor: `hsl(${room.hue})` }}
+              />
+            </div>
+          </MyFloveBlock>
+        </MyFloveWide>
 
         {/* Vad du behöver */}
-        <MyFloveBlock
-          title="Det här behöver du"
-          subtitle="Grejer för dagens städning"
-          icon={ShoppingBasket}
-          tone="sky"
-          className="h-full"
-        >
-          {supplies.length === 0 ? (
-            <p className="text-sm text-muted-foreground">Inget särskilt – bara du 💛</p>
-          ) : (
-            <ul className="flex flex-wrap gap-2">
-              {supplies.map((item) => (
-                <li
-                  key={item}
-                  className="rounded-full border border-border bg-background px-3 py-1.5 text-sm text-foreground"
-                >
-                  {item}
-                </li>
-              ))}
-            </ul>
-          )}
-        </MyFloveBlock>
+        <MyFloveWide>
+          <MyFloveBlock
+            title="Det här behöver du"
+            subtitle="Grejer för dagens städning"
+            icon={ShoppingBasket}
+            tone="sky"
+          >
+            {supplies.length === 0 ? (
+              <p className="text-sm text-muted-foreground">Inget särskilt – bara du 💛</p>
+            ) : (
+              <ul className="flex flex-wrap gap-2">
+                {supplies.map((item) => (
+                  <li
+                    key={item}
+                    className="rounded-full border border-border bg-background px-3 py-1.5 text-sm text-foreground"
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </MyFloveBlock>
+        </MyFloveWide>
 
         {/* Steg */}
         <MyFloveWide>
