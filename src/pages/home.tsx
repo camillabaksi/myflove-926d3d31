@@ -261,20 +261,20 @@ export default function Home() {
           </section>
         </MyFloveWide>
 
-        {/* Idag – bara det som är relevant idag, max 5 saker. */}
-        <MyFloveWide style={{ order: 2 }} className="min-w-0">
+        {/* Idag – tider och saker, som i mockupen. */}
+        <MyFloveWide style={{ order: 3 }} className="min-w-0">
           <section
             aria-label="Idag"
             data-testid="home-today"
-            className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft"
+            className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
           >
             <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
               <h2 className="truncate text-base font-semibold text-ink">Idag</h2>
               <Link
                 href="/idag"
-                className="shrink-0 inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+                className="shrink-0 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
               >
-                Visa hela dagen <ArrowRight size={13} />
+                Visa dagsschema <ChevronRight size={15} />
               </Link>
             </div>
             {todayEntries.length === 0 ? (
@@ -282,23 +282,28 @@ export default function Home() {
                 Inget inlagt för idag ännu. Det är också helt okej.
               </p>
             ) : (
-              <ul className="mt-3 space-y-2">
+              <ul className="mt-2">
                 {todayEntries.map((e) => (
-                  <li
-                    key={e.id}
-                    className="grid grid-cols-[3.4rem_minmax(0,1fr)] items-start gap-3 rounded-2xl bg-lavender/25 px-3 py-2"
-                  >
-                    <span className="shrink-0 text-sm font-semibold tabular-nums text-primary">
-                      {e.time ?? "–"}
-                    </span>
-                    <span className="min-w-0">
-                      <span className="block truncate text-sm font-medium text-ink">{e.title}</span>
-                      {e.note && (
-                        <span className="block truncate text-xs text-muted-foreground">
-                          {e.note}
+                  <li key={e.id}>
+                    <Link
+                      href="/idag"
+                      className="grid grid-cols-[3.2rem_minmax(0,1fr)_auto] items-center gap-3 border-b border-border/40 px-1 py-3 last:border-b-0"
+                    >
+                      <span className="shrink-0 text-sm font-semibold tabular-nums text-muted-foreground">
+                        {e.time ?? "–"}
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block truncate text-sm font-semibold text-ink">
+                          {e.title}
                         </span>
-                      )}
-                    </span>
+                        {e.note && (
+                          <span className="block truncate text-xs text-muted-foreground">
+                            {e.note}
+                          </span>
+                        )}
+                      </span>
+                      <ChevronRight size={18} className="shrink-0 text-muted-foreground" />
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -307,7 +312,7 @@ export default function Home() {
         </MyFloveWide>
 
         {/* Från ditt huvud – senaste QuickFlow-tankarna. */}
-        <MyFloveWide style={{ order: 3 }} className="min-w-0">
+        <MyFloveWide style={{ order: 4 }} className="min-w-0">
           <section
             aria-label="Från ditt huvud"
             data-testid="home-quickflow-latest"
