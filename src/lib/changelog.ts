@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-04";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Investerarmaterial version 4.1",
+    items: [
+      "Investerarsida, Living Blueprint, pitchdeck och pitchvideo delar nu samma version: 4.1 (2026-09-04)",
+      "Ny pitchvideo 4.1: enkel start → Quickflow → Batteriet → Kalendern → energihistorik → veckoöversikt → adaptiv personalisering (2026-09-04)",
+      "Pitchdeck 4.1: Batteriet som enkel ork-check-in, gemensam neutral start och datumkorrekta aktiviteter (2026-09-04)",
+      "Living Blueprint 4.1 med de sex nya produktprinciperna och uppdaterad produktkarta (2026-09-04)",
+    ],
+  },
+  {
     title: "Din vecka, historik och energi per aktivitet",
     items: [
       "💜 Din vecka på söndagar – lugn sammanfattning av veckan som varit (2026-09-04)",

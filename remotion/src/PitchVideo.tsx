@@ -13,14 +13,22 @@ import { fade } from "@remotion/transitions/fade";
 import { COLORS, FONTS } from "./theme";
 
 /**
- * MyFlove – Pitchvideo (16:9) för investerare/partners.
- * Problem → insikt → produkt → hur det funkar → varför nu → vision.
+ * MyFlove – Pitchvideo 4.1 (16:9) för investerare/partners.
+ * Gemensam enkel start → Quickflow → Batteriet → Kalendern → energipåverkan
+ * → historik → söndagens veckoöversikt → adaptiv personalisering → investerarcase.
  */
 export const FPS = 30;
 export const WIDTH = 1920;
 export const HEIGHT = 1080;
 
 const TRANS = 15;
+
+const ENERGY = {
+  green: "#6FBF7E",
+  yellow: "#E5C15D",
+  orange: "#E39A5F",
+  red: "#DE6E6E",
+};
 
 function useIn(delay: number, damping = 18) {
   const frame = useCurrentFrame();
@@ -198,6 +206,36 @@ const Card: React.FC<{
   </div>
 );
 
+const FlowMascot: React.FC<{ size?: number; delay?: number }> = ({ size = 420, delay = 8 }) => {
+  const frame = useCurrentFrame();
+  const enter = useIn(delay, 14);
+  const bob = Math.sin(frame / 22) * 12;
+  const tilt = Math.sin(frame / 34) * 2.2;
+  return (
+    <div style={{ ...enter, position: "relative" }}>
+      <div
+        style={{
+          position: "absolute",
+          inset: -60,
+          borderRadius: "50%",
+          background: COLORS.primarySoft,
+          opacity: 0.25,
+          filter: "blur(30px)",
+        }}
+      />
+      <Img
+        src={staticFile("flow-mascot.png")}
+        style={{
+          position: "relative",
+          width: size,
+          transform: `translateY(${bob}px) rotate(${tilt}deg)`,
+          filter: "drop-shadow(0 26px 46px rgba(36,28,59,0.22))",
+        }}
+      />
+    </div>
+  );
+};
+
 /* ---------------- Scenes ---------------- */
 
 const SceneHook: React.FC = () => {
@@ -206,7 +244,7 @@ const SceneHook: React.FC = () => {
   return (
     <Shell dark>
       <div style={{ display: "flex", flexDirection: "column", gap: 34 }}>
-        <Eyebrow dark>MyFlove — pitch 2026 · v3.7</Eyebrow>
+        <Eyebrow dark>MyFlove — pitch 2026 · v4.1</Eyebrow>
         <div style={{ transform: `scale(${pulse})`, transformOrigin: "left center" }}>
           <Title dark size={112}>
             Vardagen kraschar
@@ -226,7 +264,7 @@ const SceneProblem: React.FC = () => {
   const items = [
     "Kalendern säger vad. Inte om du orkar.",
     "To do-listan växer när energin sjunker.",
-    "Appar löser en bit — ingen ser helheten.",
+    "Komplexa formulär skapar mer belastning – inte mindre.",
   ];
   return (
     <Shell>
@@ -274,152 +312,265 @@ const SceneInsight: React.FC = () => (
         inte bara efter tid.
       </Title>
       <Sub delay={18}>
-        MyFlove är byggt utifrån NPF-vardag: låg tröskel, inget skäll, alltid en väg vidare.
+        Bär mindre. Gör inte mer. MyFlove gör analysen bakom kulisserna – du svarar bara enkelt.
       </Sub>
     </div>
   </Shell>
 );
 
-const SceneProduct: React.FC = () => (
+const SceneStart: React.FC = () => (
   <Shell>
     <div style={{ display: "flex", flexDirection: "column", gap: 46 }}>
       <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-        <Eyebrow>Produkten</Eyebrow>
-        <Title size={72}>Ett lugnt system för hela vardagen</Title>
+        <Eyebrow>En gemensam start</Eyebrow>
+        <Title size={70}>En enkel och lugn startsida – samma för alla</Title>
+        <Sub delay={12}>
+          Inga antaganden om diagnoser, familj eller behov. Tre primära funktioner:
+        </Sub>
       </div>
       <div style={{ display: "flex", gap: 28 }}>
         <Card
           accent={COLORS.primary}
-          title="Mitt batteri"
-          text="Energi och mående loggas på ett enda ställe."
-          delay={14}
+          title="Quickflow"
+          text="Få ner tanken direkt – utan att kategorisera eller planera."
+          delay={16}
         />
         <Card
           accent={COLORS.primarySoft}
-          title="QuickFlow"
-          text="Få tanken ur huvudet direkt – sortera senare."
-          delay={22}
+          title="Batteriet"
+          text="En enkel check-in: hur mycket ork har du idag?"
+          delay={24}
         />
         <Card
           accent={COLORS.gold}
-          title="Idag"
-          text="Aktiviteter, uppgifter och dagens ordning samlat."
-          delay={30}
+          title="Kalendern"
+          text="Rätt sak på rätt dag – dag, vecka och månad."
+          delay={32}
         />
       </div>
     </div>
   </Shell>
 );
 
-const FlowMascot: React.FC<{ size?: number; delay?: number }> = ({ size = 420, delay = 8 }) => {
+const BatteryRow: React.FC<{
+  label: string;
+  fill: number;
+  color: string;
+  delay: number;
+}> = ({ label, fill, color, delay }) => {
   const frame = useCurrentFrame();
-  const enter = useIn(delay, 14);
-  const bob = Math.sin(frame / 22) * 12;
-  const tilt = Math.sin(frame / 34) * 2.2;
+  const { fps } = useVideoConfig();
+  const s = spring({ frame: frame - delay - 8, fps, config: { damping: 200 } });
   return (
-    <div style={{ ...enter, position: "relative" }}>
+    <InView
+      delay={delay}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 28,
+        background: COLORS.cream,
+        borderRadius: 22,
+        padding: "22px 30px",
+        boxShadow: "0 14px 34px rgba(36,28,59,0.07)",
+      }}
+    >
       <div
         style={{
-          position: "absolute",
-          inset: -60,
-          borderRadius: "50%",
-          background: COLORS.primarySoft,
-          opacity: 0.25,
-          filter: "blur(30px)",
+          fontFamily: FONTS.display,
+          fontWeight: 700,
+          fontSize: 30,
+          color: COLORS.ink,
+          width: 300,
         }}
-      />
-      <Img
-        src={staticFile("flow-mascot.png")}
+      >
+        {label}
+      </div>
+      <div
         style={{
-          position: "relative",
-          width: size,
-          transform: `translateY(${bob}px) rotate(${tilt}deg)`,
-          filter: "drop-shadow(0 26px 46px rgba(36,28,59,0.22))",
+          flex: 1,
+          height: 26,
+          borderRadius: 13,
+          background: "rgba(36,28,59,0.08)",
+          overflow: "hidden",
         }}
-      />
-    </div>
+      >
+        <div
+          style={{
+            width: `${fill * interpolate(s, [0, 1], [0, 1]) * 100}%`,
+            height: "100%",
+            borderRadius: 13,
+            background: color,
+          }}
+        />
+      </div>
+    </InView>
   );
 };
 
-const SceneFlow: React.FC = () => (
+const SceneBattery: React.FC = () => (
   <Shell>
-    <div style={{ display: "flex", alignItems: "center", gap: 60 }}>
-      <div style={{ display: "flex", flexDirection: "column", gap: 40, flex: 1 }}>
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          <Eyebrow>Flow</Eyebrow>
-          <Title size={64}>En följeslagare som säger en sak i taget</Title>
-        </div>
-        <div style={{ display: "flex", gap: 24 }}>
-          <Card
-            accent={COLORS.primary}
-            title="Levande karaktär"
-            text="Flow ger lugna, situationsnära förslag utan att ta över."
-            delay={14}
-          />
-          <Card
-            accent={COLORS.primarySoft}
-            title="Finns i hela appen"
-            text="Samma trygga ton på Hem, Idag, planering och hjälp."
-            delay={22}
-          />
-        </div>
+    <div style={{ display: "flex", flexDirection: "column", gap: 34 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+        <Eyebrow>Batteriet</Eyebrow>
+        <Title size={66}>”Hur mycket ork har du idag?”</Title>
+        <Sub delay={10}>Fyra svar. Inga skalor, inga formulär.</Sub>
       </div>
-      <FlowMascot size={520} delay={10} />
+      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+        <BatteryRow label="Mycket" fill={1} color={ENERGY.green} delay={16} />
+        <BatteryRow label="Okej" fill={0.66} color={ENERGY.yellow} delay={23} />
+        <BatteryRow label="Lite" fill={0.35} color={ENERGY.orange} delay={30} />
+        <BatteryRow label="Nästan slut" fill={0.12} color={ENERGY.red} delay={37} />
+      </div>
+      <div
+        style={{
+          ...useIn(48),
+          fontFamily: FONTS.body,
+          fontSize: 24,
+          color: COLORS.muted,
+        }}
+      >
+        Måendet är separat: ”Hur känns det just nu?” – fem enkla känslolägen.
+      </div>
     </div>
   </Shell>
 );
 
-const SceneFlowAlive: React.FC = () => {
-  const frame = useCurrentFrame();
-  const breath = 1 + Math.sin(frame / 26) * 0.03;
-  return (
-    <Shell>
-      <div style={{ display: "flex", alignItems: "center", gap: 60 }}>
-        <div style={{ display: "flex", flexDirection: "column", gap: 36, flex: 1 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            <Eyebrow>Flow i vardagen</Eyebrow>
-            <Title size={62}>En levande guide som håller tonen lugn</Title>
-          </div>
-          <Sub delay={16}>
-            Flow är en återkommande karaktär i appen: synlig när det hjälper, diskret när det behövs
-            och alltid lätt att stänga av.
-          </Sub>
-          <div style={{ display: "flex", gap: 24 }}>
-            <Card
-              accent={COLORS.primary}
-              title="Följer chatten"
-              text="Lyssnar när du skriver, tänker djupt medan svaret kommer, andas ut när det är klart."
-              delay={22}
-            />
-            <Card
-              accent={COLORS.gold}
-              title="Din nivå"
-              text="Tyst, diskret eller aktiv – Flow-inställningarna sparas per användare."
-              delay={30}
-            />
-          </div>
-        </div>
-        <div style={{ transform: `scale(${breath})` }}>
-          <FlowMascot size={500} delay={10} />
-        </div>
+const SceneCalendar: React.FC = () => (
+  <Shell>
+    <div style={{ display: "flex", flexDirection: "column", gap: 46 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+        <Eyebrow>Kalendern & datumlogik</Eyebrow>
+        <Title size={70}>Rätt aktivitet på rätt dag</Title>
+        <Sub delay={12}>
+          Varje förekomst är en egen datuminstans – flyttas något lämnas inga spökposter kvar.
+        </Sub>
       </div>
-    </Shell>
-  );
-};
+      <div style={{ display: "flex", gap: 28 }}>
+        <Card
+          accent={COLORS.primary}
+          title="Fem statusar"
+          text="Planerad, pågående, genomförd, inställd och flyttad."
+          delay={16}
+        />
+        <Card
+          accent={COLORS.primarySoft}
+          title="Flytt utan spökposter"
+          text="Den gamla dagens planering räknas aldrig som genomförd."
+          delay={24}
+        />
+        <Card
+          accent={COLORS.gold}
+          title="Egen energipåverkan"
+          text="Varje instans har egen status och egen energipåverkan."
+          delay={32}
+        />
+      </div>
+    </div>
+  </Shell>
+);
 
-const SceneHow: React.FC = () => {
+const EnergyChip: React.FC<{ label: string; color: string; delay: number }> = ({
+  label,
+  color,
+  delay,
+}) => (
+  <InView
+    delay={delay}
+    style={{
+      display: "flex",
+      alignItems: "center",
+      gap: 16,
+      background: COLORS.cream,
+      borderRadius: 999,
+      padding: "20px 34px",
+      boxShadow: "0 14px 34px rgba(36,28,59,0.07)",
+      fontFamily: FONTS.display,
+      fontWeight: 700,
+      fontSize: 27,
+      color: COLORS.ink,
+    }}
+  >
+    <div style={{ width: 22, height: 22, borderRadius: 11, background: color }} />
+    {label}
+  </InView>
+);
+
+const SceneEnergy: React.FC = () => (
+  <Shell>
+    <div style={{ display: "flex", flexDirection: "column", gap: 40 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+        <Eyebrow>Efter en genomförd aktivitet</Eyebrow>
+        <Title size={66}>Vad gav energi – och vad tog den?</Title>
+        <Sub delay={10}>Ett frivilligt svar med ett klick. Aldrig ett krav.</Sub>
+      </div>
+      <div style={{ display: "flex", gap: 22, flexWrap: "wrap" }}>
+        <EnergyChip label="Gav energi" color={ENERGY.green} delay={18} />
+        <EnergyChip label="Neutral" color={ENERGY.yellow} delay={25} />
+        <EnergyChip label="Tog lite energi" color={ENERGY.orange} delay={32} />
+        <EnergyChip label="Tog mycket energi" color={ENERGY.red} delay={39} />
+      </div>
+      <div
+        style={{
+          ...useIn(50),
+          fontFamily: FONTS.body,
+          fontSize: 25,
+          lineHeight: 1.45,
+          color: COLORS.muted,
+          maxWidth: 1100,
+        }}
+      >
+        Historiken visar svaren per faktisk aktivitet och datum. Förväntad och faktisk
+        energipåverkan är två separata datapunkter – ingen tvingas fylla i båda.
+      </div>
+    </div>
+  </Shell>
+);
+
+const SceneWeek: React.FC = () => (
+  <Shell>
+    <div style={{ display: "flex", flexDirection: "column", gap: 44 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+        <Eyebrow>Veckoöversikt</Eyebrow>
+        <Title size={70}>Din vecka – varje söndag</Title>
+        <Sub delay={10}>En enkel sammanfattning byggd på faktisk data. Aldrig påhittade mönster.</Sub>
+      </div>
+      <div style={{ display: "flex", gap: 28 }}>
+        <Card
+          accent={COLORS.primary}
+          title="Vad som hänt"
+          text="Aktiviteter, Quickflow, ork och mående under veckan."
+          delay={16}
+        />
+        <Card
+          accent={COLORS.primarySoft}
+          title="Trender när datan räcker"
+          text="Ork- och måendetrender visas bara med tillräckligt underlag."
+          delay={24}
+        />
+        <Card
+          accent={COLORS.gold}
+          title="Försiktiga reflektioner"
+          text="Handlingsinriktade förslag inför nästa vecka – utan skuld."
+          delay={32}
+        />
+      </div>
+    </div>
+  </Shell>
+);
+
+const SceneAdaptive: React.FC = () => {
   const steps = [
-    { n: "1", t: "Fånga", d: "Skriv fritt i QuickFlow" },
-    { n: "2", t: "Förstå", d: "Se vad som är viktigt och möjligt" },
-    { n: "3", t: "Planera", d: "Ändra ordningen efter din kapacitet" },
-    { n: "4", t: "Fortsätt", d: "Ta nästa rimliga steg utan skuld" },
+    { n: "1", t: "Gemensam grund", d: "Samma enkla upplevelse för alla från dag ett" },
+    { n: "2", t: "Du ger signaler", d: "Det du fyller i, använder och registrerar" },
+    { n: "3", t: "MyFlove lär sig", d: "Mönster byggs bara på din faktiska data" },
+    { n: "4", t: "Upplevelsen anpassas", d: "Gradvis personalisering – i din takt" },
   ];
   return (
     <Shell>
       <div style={{ display: "flex", flexDirection: "column", gap: 44 }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-          <Eyebrow>Så funkar det</Eyebrow>
-          <Title size={72}>En daglig loop som lär sig dig</Title>
+          <Eyebrow>Adaptiv personalisering</Eyebrow>
+          <Title size={70}>En app som lär sig din vardag</Title>
         </div>
         <div style={{ display: "flex", gap: 22 }}>
           {steps.map((s, i) => (
@@ -659,7 +810,7 @@ const SceneOutro: React.FC = () => {
             MyFlove
           </Title>
           <Sub dark delay={16}>
-            Ett lugnare sätt att få vardagen att hålla ihop.
+            Bär mindre. Gör inte mer.
           </Sub>
           <div
             style={{
@@ -670,7 +821,7 @@ const SceneOutro: React.FC = () => {
               letterSpacing: 1,
             }}
           >
-            myflove.lovable.app
+            myflove.lovable.app · version 4.1
           </div>
         </div>
         <FlowMascot size={440} delay={14} />
@@ -681,14 +832,16 @@ const SceneOutro: React.FC = () => {
 
 const SCENES: { c: React.FC; d: number }[] = [
   { c: SceneHook, d: 140 },
-  { c: SceneProblem, d: 165 },
-  { c: SceneInsight, d: 130 },
-  { c: SceneProduct, d: 170 },
-  { c: SceneFlow, d: 165 },
-  { c: SceneFlowAlive, d: 200 },
-  { c: SceneHow, d: 175 },
-  { c: SceneWhyNow, d: 165 },
-  { c: SceneMarket, d: 220 },
+  { c: SceneProblem, d: 160 },
+  { c: SceneInsight, d: 125 },
+  { c: SceneStart, d: 170 },
+  { c: SceneBattery, d: 175 },
+  { c: SceneCalendar, d: 165 },
+  { c: SceneEnergy, d: 180 },
+  { c: SceneWeek, d: 160 },
+  { c: SceneAdaptive, d: 175 },
+  { c: SceneWhyNow, d: 150 },
+  { c: SceneMarket, d: 215 },
   { c: SceneOutro, d: 150 },
 ];
 

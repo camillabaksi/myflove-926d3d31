@@ -10,3 +10,4 @@
 - [x] Kontosynka för kvarvarande inloggad användardata och personliga inställningar
 - [x] Live-synk mellan enheter för kalender, Min dag, QuickFlow och energi (2026-09-03)
 - [x] Veckoöversikt på söndagar, datumkorrekt aktivitetslogik och historik med energipåverkan (2026-09-04)
+- [x] Investerarmaterial version 4.1: pitchvideo, pitchdeck, Living Blueprint och investerarsida i samma version (2026-09-04)
