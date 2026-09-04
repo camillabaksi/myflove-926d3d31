@@ -224,8 +224,14 @@ export default function Home() {
           </div>
         </MyFloveWide>
 
+        {/* Flow – binder ihop Quickflow, Batteriet och Kalendern. En sak i taget. */}
+        <MyFloveWide style={{ order: 0 }} className="min-w-0">
+          <FlowHomeCard />
+        </MyFloveWide>
+
         {/* Tre huvudkort: Quickflow, Batteriet, Kalendern.
             Alla börjar i samma ordning – den anpassas först när MyFlove sett
+
             tillräckligt mycket av din egen användning. */}
         <MyFloveWide style={{ order: 1 }} className="min-w-0">
           <div
