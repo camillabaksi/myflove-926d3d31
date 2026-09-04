@@ -21,12 +21,8 @@ export function useEverydayPatterns(): EverydayPatterns & { lines: string[] } {
 
   return useMemo(() => {
     const activities = [
-      ...tasks
-        .filter((t) => t.dueDate)
-        .map((t) => ({ title: t.title, date: t.dueDate as string })),
-      ...reminders
-        .filter((r) => !r.canceled)
-        .map((r) => ({ title: r.title, date: r.date })),
+      ...tasks.filter((t) => t.dueDate).map((t) => ({ title: t.title, date: t.dueDate as string })),
+      ...reminders.filter((r) => !r.canceled).map((r) => ({ title: r.title, date: r.date })),
     ];
     const patterns = buildEverydayPatterns({
       activities,

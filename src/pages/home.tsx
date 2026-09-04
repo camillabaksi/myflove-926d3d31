@@ -38,6 +38,7 @@ import { useFlowSettings } from "@/hooks/use-flow-settings";
 import { useFeatureUsage, type FeatureId } from "@/lib/feature-usage";
 import { orkFromValue10 } from "@/lib/ork";
 import { heroGradient } from "@/lib/hero-gradient";
+import { useEverydayPatterns } from "@/hooks/use-everyday-patterns";
 
 /**
  * Hem = en lugn personlig kontrollpanel.
@@ -66,6 +67,7 @@ export default function Home() {
   const { activeReminders } = useReminders();
   const { openItems } = useQuickflow();
   const { settings: flowSettings } = useFlowSettings();
+  const patterns = useEverydayPatterns();
   const { record: recordFeature, order: featureOrder, adaptive, top } = useFeatureUsage();
   const todayIso = todayISO();
 
@@ -433,8 +435,6 @@ export default function Home() {
             </section>
           </MyFloveWide>
         )}
-
-
 
         {/* Liten insikt – bara när Flow faktiskt har något att säga. */}
         {flowSettings.enabled && flowSettings.learning && (

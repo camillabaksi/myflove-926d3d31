@@ -196,9 +196,7 @@ export function buildEverydayPatterns(input: {
     for (const [word, days] of keywordDays) {
       if (days.size < 3) continue;
       const withDays = [...days].map((d) => dayEnergy.get(d)!);
-      const withoutDays = [...dayEnergy.entries()]
-        .filter(([d]) => !days.has(d))
-        .map(([, v]) => v);
+      const withoutDays = [...dayEnergy.entries()].filter(([d]) => !days.has(d)).map(([, v]) => v);
       if (withoutDays.length < 3) continue;
       const average = mean(withDays);
       const baseline = mean(withoutDays);
