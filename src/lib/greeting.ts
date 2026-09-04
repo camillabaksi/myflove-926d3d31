@@ -57,7 +57,13 @@ export type Greeting = {
   subtitle: string;
 };
 
-export function getGreeting(opts?: { name?: string | null; lastVisit?: number | null }): Greeting {
+export function getGreeting(opts?: {
+  name?: string | null;
+  lastVisit?: number | null;
+  lang?: Lang;
+}): Greeting {
+  const lang: Lang = opts?.lang === "en" ? "en" : "sv";
+  const tr = (s: string) => translate(s, lang);
   const name = opts?.name?.trim() || "";
   const hour = new Date().getHours();
   const slot = slotFor(hour);
