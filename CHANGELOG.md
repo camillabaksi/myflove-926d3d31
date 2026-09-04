@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-09-04 – Helhetsgenomgång: historiken visar avbockade aktiviteter rätt
+
+- En engångsaktivitet som bockas av en annan dag än den planerade visas nu som genomförd på sin planerade dag i historiken, med den faktiska dagen sparad separat. Tidigare kunde den ligga kvar som "planerad" för alltid.
+- Flyttade aktiviteter ligger fortfarande kvar bara på sitt nya datum – de räknas aldrig som genomförda på ursprungsdagen.
+- Stabilare testkörning: komponenttester med simulerad klocka får mer marginal så hela sviten inte blir slumpmässigt röd.
+
+
+
 ## 2026-09-04 – Quickflow: flera saker eller en hel tanketömning
 
 - Quickflow kan fortfarande fånga flera saker i samma text – och nu även längre texter utan att de delas sönder.
