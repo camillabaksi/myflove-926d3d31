@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-04 – Större Flow på startsidan
+
+- Flow syns tydligare i morgonhälsningen på hem-sidan: maskoten är större och texten har fått mer luft runt sig.
+
 ## 2026-09-04 – Energiloggning påverkar bara batteriet
 
 - Det du loggar som energi- eller måendepåverkan hamnar inte längre i kalendern eller dagens lista – det påverkar batteriet, energihistoriken och mönstren.
