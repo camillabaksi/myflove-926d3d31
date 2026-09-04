@@ -25,9 +25,10 @@ import {
   CalendarDays,
   Brain,
   BatteryMedium,
-  HeartPulse,
+  Heart,
   Pill,
   ArrowRight,
+  ChevronRight,
   Sparkles,
 } from "lucide-react";
 import { todayISO } from "@/lib/day";
@@ -56,7 +57,7 @@ export default function Home() {
   const [editingName, setEditingName] = useState(false);
   const [nameDraft, setNameDraft] = useState(name);
   const { activeArea } = useActiveArea();
-  const { reading, suggestions } = useEnergyBattery();
+  const { reading } = useEnergyBattery();
   const { energyValue } = useQuickCheckin();
   const { activeTasks } = useTasks();
   const { activeReminders } = useReminders();
@@ -77,7 +78,7 @@ export default function Home() {
       .slice(0, 5);
   }, [activeReminders, activeTasks, todayIso]);
 
-  const nextTimed = todayEntries.filter((e) => e.time).slice(0, 3);
+  
   const battery = Math.round(reading.now);
   const batteryLine =
     battery >= 70
@@ -132,7 +133,7 @@ export default function Home() {
             <h1 className="text-2xl sm:text-3xl font-bold text-ink">
               {name ? `Hej ${name}!` : "Hej!"} <span aria-hidden>💜</span>
             </h1>
-            <p className="text-sm text-muted-foreground">Vad behöver du just nu?</p>
+            <p className="text-sm text-muted-foreground">Du gör ett fantastiskt jobb!</p>
             {editingName ? (
               <form
                 onSubmit={(e) => {
@@ -179,10 +180,10 @@ export default function Home() {
           </div>
         </MyFloveWide>
 
-        {/* Tre huvudkort: QuickFlow, Batteriet, Kalendern. */}
+        {/* Tre huvudkort: Quickflow, Batteriet, Kalendern – som i mockupen. */}
         <MyFloveWide style={{ order: 1 }} className="min-w-0">
           <div
-            className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4"
+            className="grid grid-cols-3 gap-2.5 sm:gap-4"
             data-testid="home-widgets"
             aria-label="Vad vill du göra just nu?"
           >
@@ -190,68 +191,91 @@ export default function Home() {
               type="button"
               onClick={openQuickflow}
               data-testid="home-widget-quickflow"
-              className="group flex min-h-[112px] w-full flex-col justify-between rounded-3xl border border-border/60 bg-lavender/60 p-4 text-left shadow-soft transition hover:shadow-lifted"
+              className="group flex min-h-[104px] flex-col items-center justify-center gap-1.5 rounded-3xl border border-border/60 bg-card p-3 text-center shadow-soft transition hover:shadow-lifted"
             >
-              <span className="flex items-center gap-2">
-                <Brain className="h-6 w-6 shrink-0 text-primary" aria-hidden />
-                <span className="truncate text-base font-semibold text-ink">Quickflow</span>
-              </span>
-              <span className="mt-2 block text-sm text-muted-foreground">
-                Få ner det ur huvudet
-              </span>
-              <span className="mt-1 block text-xs text-muted-foreground/80">
-                Skriv eller tala in – sortera senare.
-              </span>
+              <Brain className="h-7 w-7 text-primary" aria-hidden />
+              <span className="text-sm font-semibold text-ink">Quickflow</span>
+              <span className="text-xs text-muted-foreground leading-snug">Få ner det snabbt</span>
             </button>
 
-            <ExpandableBlock
-              title="Ditt batteri"
-              titleText="Ditt batteri"
-              subtitle="Hur mycket har du kvar idag?"
-              status={`${battery}%`}
-              summary={batteryLine}
-              icon={BatteryMedium}
-              tone="sun"
-              surface="sun"
-              area="aterhamtning"
+            <Link
               href="/mitt-batteri"
-              onNavigate={() => track("home_widget_opened", { source: "batteri" })}
+              onClick={() => track("home_widget_opened", { source: "batteri" })}
               data-testid="home-widget-batteri"
-            />
+              className="flex min-h-[104px] flex-col items-center justify-center gap-1.5 rounded-3xl border border-border/60 bg-card p-3 text-center shadow-soft transition hover:shadow-lifted"
+            >
+              <BatteryMedium className="h-7 w-7 text-primary" aria-hidden />
+              <span className="text-sm font-semibold text-ink">Batteriet</span>
+              <span className="text-xs text-muted-foreground leading-snug">
+                Din energi idag · {battery}%
+              </span>
+            </Link>
 
-            <ExpandableBlock
-              title="Kalendern"
-              titleText="Kalendern"
-              subtitle="Din dag på ett ställe"
-              status={nextTimed[0]?.time ?? "Idag"}
-              summary={
-                nextTimed[0] ? nextTimed[0].title : "Inget tidsatt idag – lägg till när du vill."
-              }
-              icon={CalendarDays}
-              tone="sky"
-              surface="sky"
-              area="kalender"
+            <Link
               href="/kalender"
-              onNavigate={() => track("home_widget_opened", { source: "kalender" })}
+              onClick={() => track("home_widget_opened", { source: "kalender" })}
               data-testid="home-widget-kalender"
-            />
+              className="flex min-h-[104px] flex-col items-center justify-center gap-1.5 rounded-3xl border border-border/60 bg-card p-3 text-center shadow-soft transition hover:shadow-lifted"
+            >
+              <CalendarDays className="h-7 w-7 text-primary" aria-hidden />
+              <span className="text-sm font-semibold text-ink">Kalendern</span>
+              <span className="text-xs text-muted-foreground leading-snug">Din överblick</span>
+            </Link>
           </div>
         </MyFloveWide>
 
-        {/* Idag – bara det som är relevant idag, max 5 saker. */}
+        {/* Ditt batteri – stort, lugnt, som i mockupen. */}
         <MyFloveWide style={{ order: 2 }} className="min-w-0">
+          <section
+            aria-label="Ditt batteri"
+            data-testid="home-recovery"
+            className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+          >
+            <h2 className="text-base font-semibold text-ink">Ditt batteri</h2>
+            <div className="mt-3 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4">
+              <div className="flex items-center gap-3 rounded-2xl bg-lavender/30 px-4 py-3">
+                <BatteryMedium
+                  className="h-10 w-10 text-primary"
+                  aria-hidden
+                  strokeWidth={1.75}
+                />
+                <div>
+                  <span className="block text-3xl font-bold tabular-nums text-ink leading-none">
+                    {battery}%
+                  </span>
+                  <span className="mt-1 block text-sm text-muted-foreground">Gott jobbat!</span>
+                </div>
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm text-ink">Du har {battery}% energi</p>
+                <p className="mt-0.5 text-xs text-muted-foreground">{batteryLine}</p>
+              </div>
+            </div>
+            <Link
+              href="/mitt-batteri"
+              onClick={() => track("home_widget_opened", { source: "logga" })}
+              className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+            >
+              {energyValue != null ? "Tips för mer energi" : "Logga energi & mående"}{" "}
+              <ArrowRight size={14} />
+            </Link>
+          </section>
+        </MyFloveWide>
+
+        {/* Idag – tider och saker, som i mockupen. */}
+        <MyFloveWide style={{ order: 3 }} className="min-w-0">
           <section
             aria-label="Idag"
             data-testid="home-today"
-            className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft"
+            className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
           >
             <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
               <h2 className="truncate text-base font-semibold text-ink">Idag</h2>
               <Link
                 href="/idag"
-                className="shrink-0 inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+                className="shrink-0 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
               >
-                Visa hela dagen <ArrowRight size={13} />
+                Visa dagsschema <ChevronRight size={15} />
               </Link>
             </div>
             {todayEntries.length === 0 ? (
@@ -259,23 +283,28 @@ export default function Home() {
                 Inget inlagt för idag ännu. Det är också helt okej.
               </p>
             ) : (
-              <ul className="mt-3 space-y-2">
+              <ul className="mt-2">
                 {todayEntries.map((e) => (
-                  <li
-                    key={e.id}
-                    className="grid grid-cols-[3.4rem_minmax(0,1fr)] items-start gap-3 rounded-2xl bg-lavender/25 px-3 py-2"
-                  >
-                    <span className="shrink-0 text-sm font-semibold tabular-nums text-primary">
-                      {e.time ?? "–"}
-                    </span>
-                    <span className="min-w-0">
-                      <span className="block truncate text-sm font-medium text-ink">{e.title}</span>
-                      {e.note && (
-                        <span className="block truncate text-xs text-muted-foreground">
-                          {e.note}
+                  <li key={e.id}>
+                    <Link
+                      href="/idag"
+                      className="grid grid-cols-[3.2rem_minmax(0,1fr)_auto] items-center gap-3 border-b border-border/40 px-1 py-3 last:border-b-0"
+                    >
+                      <span className="shrink-0 text-sm font-semibold tabular-nums text-muted-foreground">
+                        {e.time ?? "–"}
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block truncate text-sm font-semibold text-ink">
+                          {e.title}
                         </span>
-                      )}
-                    </span>
+                        {e.note && (
+                          <span className="block truncate text-xs text-muted-foreground">
+                            {e.note}
+                          </span>
+                        )}
+                      </span>
+                      <ChevronRight size={18} className="shrink-0 text-muted-foreground" />
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -284,7 +313,7 @@ export default function Home() {
         </MyFloveWide>
 
         {/* Från ditt huvud – senaste QuickFlow-tankarna. */}
-        <MyFloveWide style={{ order: 3 }} className="min-w-0">
+        <MyFloveWide style={{ order: 4 }} className="min-w-0">
           <section
             aria-label="Från ditt huvud"
             data-testid="home-quickflow-latest"
@@ -316,50 +345,19 @@ export default function Home() {
           </section>
         </MyFloveWide>
 
-        {/* Batteri & återhämtning – lugna förslag, aldrig pekpinnar. */}
-        <MyFloveWide style={{ order: 4 }} className="min-w-0">
+        {/* Uppmuntrande citat – lugnt avslut, som i mockupen. */}
+        <MyFloveWide style={{ order: 5 }} className="min-w-0">
           <section
-            aria-label="Ditt batteri och återhämtning"
-            data-testid="home-recovery"
-            className="rounded-3xl border border-border/60 bg-mint/25 p-4 shadow-soft"
+            aria-label="Dagens tanke"
+            className="rounded-3xl border border-border/60 bg-lavender/25 p-5 shadow-soft"
           >
-            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
-              <h2 className="truncate text-base font-semibold text-ink">
-                <span aria-hidden>💜</span> Ditt batteri
-              </h2>
-              <span className="shrink-0 text-lg font-bold tabular-nums text-primary">
-                {battery}%
-              </span>
-            </div>
-            <p className="mt-1 text-sm text-muted-foreground">{batteryLine}</p>
-            {suggestions.length > 0 && (
-              <>
-                <p className="mt-3 text-xs font-medium text-ink">Kanske dags för en paus?</p>
-                <ul className="mt-1.5 space-y-1">
-                  {suggestions.slice(0, 3).map((s) => (
-                    <li key={s.id} className="text-sm text-muted-foreground">
-                      {s.text}
-                    </li>
-                  ))}
-                </ul>
-              </>
-            )}
-            <div className="mt-3 flex flex-wrap gap-3">
-              <Link
-                href="/mitt-batteri"
-                className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
-                onClick={() => track("home_widget_opened", { source: "batteri" })}
-              >
-                <BatteryMedium size={13} /> Öppna batteriet
-              </Link>
-              <Link
-                href="/mitt-batteri"
-                className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
-                onClick={() => track("home_widget_opened", { source: "logga" })}
-              >
-                <HeartPulse size={13} />{" "}
-                {energyValue != null ? "Uppdatera hur du mår" : "Logga energi & mående"}
-              </Link>
+            <div className="flex items-start gap-3">
+              <Heart className="mt-0.5 h-6 w-6 shrink-0 text-primary" aria-hidden />
+              <p className="text-sm text-ink leading-relaxed">
+                Små steg varje dag
+                <br />
+                skapar stora förändringar.
+              </p>
             </div>
           </section>
         </MyFloveWide>

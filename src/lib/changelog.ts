@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-04";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Startsidan matchar ny design (mockup)",
+    items: [
+      "Tre huvudkort i en rad med centrerad ikon: Quickflow, Batteriet (med procent) och Kalendern (2026-09-04)",
+      "Stort Ditt batteri-kort med tydlig siffra, lugn hälsning och länk till tips (2026-09-04)",
+      "Idag-sektionen har radlayout med tid, titel, anteckning, pil och länk till dagsschemat (2026-09-04)",
+      "Nytt citatkort med hjärta: Små steg varje dag skapar stora förändringar (2026-09-04)",
+    ],
+  },
+  {
     title: "Ny startsida: lugn personlig kontrollpanel",
     items: [
       "Liten hero med hälsning och tre huvudkort: Quickflow, Ditt batteri och Kalendern (2026-09-04)",
