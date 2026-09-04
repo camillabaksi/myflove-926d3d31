@@ -1,3 +1,5 @@
+import { translate, type Lang } from "@/lib/i18n";
+
 // Warm, friend-like greetings. Picks a variant based on time of day, first
 // name, and how long since the user was last here — with light rotation so
 // it doesn't feel canned.
