@@ -44,6 +44,9 @@ const SNOOZE_OPTIONS = [
 export function QuickflowList() {
   const { items, openItems, complete, uncomplete, remove, snooze, update } = useQuickflow();
   const { addNote } = useNotes();
+  const { folders } = useNoteFolders();
+  const { addReminder } = useReminders();
+  const { recordAction, topAction, topFolderId } = useQuickflowHabits();
 
   const { savedStores } = useSavedStores();
   const [now, setNow] = useState(() => Date.now());
