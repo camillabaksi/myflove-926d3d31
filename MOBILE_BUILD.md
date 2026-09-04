@@ -155,3 +155,59 @@ För native-bygget:
 
 Första gången användaren trycker **Hämta steg** visas systemets
 behörighetsdialog. Nekas den öppnar appen hälsoinställningarna automatiskt.
+
+---
+
+## Android App Bundle (.aab) — uppdaterat 2026-09-04
+
+Native Android-projektet ligger nu i `android/` i repot (paket `app.myflove.mobile`,
+versionName `4.1`, versionCode `1`). `webDir` pekar på `mobile-webroot/` — en liten
+fallback-sida, eftersom appen laddar den publicerade webben via `server.url`.
+
+### 1. Skapa din keystore (en gång, lokalt — commit den ALDRIG)
+
+```bash
+keytool -genkey -v -keystore ~/myflove-release.jks -keyalg RSA \
+  -keysize 2048 -validity 10000 -alias myflove
+```
+
+Skapa `android/keystore.properties` (git-ignorerad):
+
+```properties
+storeFile=/absolut/sokvag/till/myflove-release.jks
+storePassword=...
+keyAlias=myflove
+keyPassword=...
+```
+
+Alternativt sätt miljövariablerna `MYFLOVE_KEYSTORE_FILE`, `MYFLOVE_KEYSTORE_PASSWORD`,
+`MYFLOVE_KEY_ALIAS`, `MYFLOVE_KEY_PASSWORD` (för CI).
+
+### 2. Bygg bundlen
+
+```bash
+bun install
+bun run cap:sync
+bun run android:aab
+```
+
+Resultat: `android/app/build/outputs/bundle/release/app-release.aab`
+
+Utan keystore byggs bundlen osignerad — då måste du signera via Play App Signing
+eller Android Studio (**Build → Generate Signed Bundle / APK → Android App Bundle**).
+
+### 3. Google Play Console
+
+1. Skapa appen med paketnamn `app.myflove.mobile`.
+2. Aktivera **Play App Signing** (rekommenderat) och ladda upp din upload-key.
+3. Ladda upp `.aab` till ett **Internt test**-spår för testning.
+4. Fyll i datasäkerhetsformuläret: appen samlar konto-/hälsodata (steg) och
+   länka integritetspolicyn `https://myflove.lovable.app/integritet`.
+5. Health Connect-behörigheten (`READ_STEPS`) kräver en skriftlig motivering i
+   Play Console-formuläret för hälsodata.
+
+### 4. Vid varje ny release
+
+Höj `versionCode` (och ev. `versionName`) i `android/app/build.gradle`, kör
+`bun run cap:sync` och bygg om. Rena webbändringar kräver ingen ny release —
+appen hämtar den publicerade webben vid start.

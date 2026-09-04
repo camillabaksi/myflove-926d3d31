@@ -12,7 +12,7 @@ import type { CapacitorConfig } from "@capacitor/cli";
 const config: CapacitorConfig = {
   appId: "app.myflove.mobile",
   appName: "MyFlove",
-  webDir: "dist",
+  webDir: "mobile-webroot",
   server: {
     url: "https://myflove.lovable.app",
     cleartext: false,
