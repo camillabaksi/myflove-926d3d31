@@ -171,12 +171,113 @@ export default function NotesPanel() {
         </button>
       </form>
 
-      {openNotes.length === 0 ? (
+      <div className="surface-card space-y-3 p-4">
+        <div className="flex flex-wrap items-center gap-2">
+          <Chip onClick={() => setActiveFolder("all")} highlight={activeFolder === "all"}>
+            Alla
+          </Chip>
+          {folders.map((folder) => (
+            <Chip
+              key={folder.id}
+              onClick={() => setActiveFolder(folder.id)}
+              highlight={activeFolder === folder.id}
+            >
+              {folder.emoji} {folder.name}
+            </Chip>
+          ))}
+          <Chip onClick={() => setActiveFolder("none")} highlight={activeFolder === "none"}>
+            Utan mapp
+          </Chip>
+          <button
+            type="button"
+            onClick={() => setShowFolderManager((v) => !v)}
+            className="ml-auto inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-2 text-xs text-muted-foreground hover:border-primary/50"
+          >
+            <FolderPlus size={14} /> Mina mappar
+          </button>
+        </div>
+
+        {showFolderManager && (
+          <div className="space-y-3 border-t border-border/60 pt-3">
+            <p className="text-xs text-muted-foreground">
+              Mapparna är helt dina. Skapa, byt namn eller ta bort – anteckningarna finns kvar.
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <select
+                value={newFolderEmoji}
+                onChange={(e) => setNewFolderEmoji(e.target.value)}
+                aria-label="Välj ikon"
+                className="rounded-xl border border-border bg-card px-2 py-2 text-sm outline-none"
+              >
+                {FOLDER_EMOJIS.map((emoji) => (
+                  <option key={emoji} value={emoji}>
+                    {emoji}
+                  </option>
+                ))}
+              </select>
+              <input
+                value={newFolderName}
+                onChange={(e) => setNewFolderName(e.target.value)}
+                placeholder="Ny mapp, t.ex. Familj"
+                className="min-w-[10rem] flex-1 rounded-2xl border border-border bg-card px-3 py-2 text-sm outline-none focus:border-primary/50"
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  createFolder(newFolderName, newFolderEmoji);
+                  setNewFolderName("");
+                }}
+                disabled={!newFolderName.trim()}
+                className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-40"
+              >
+                <Plus size={16} /> Skapa
+              </button>
+            </div>
+
+            {folders.length === 0 && (
+              <div className="flex flex-wrap gap-2">
+                {FOLDER_SUGGESTIONS.map((s) => (
+                  <Chip key={s.name} onClick={() => createFolder(s.name, s.emoji)}>
+                    {s.emoji} {s.name}
+                  </Chip>
+                ))}
+              </div>
+            )}
+
+            {folders.map((folder) => (
+              <div key={folder.id} className="flex items-center gap-2">
+                <input
+                  value={folder.name}
+                  onChange={(e) => renameFolder(folder.id, { name: e.target.value })}
+                  aria-label={`Byt namn på ${folder.name}`}
+                  className="flex-1 rounded-xl border border-border bg-card px-3 py-1.5 text-sm outline-none focus:border-primary/50"
+                />
+                <button
+                  type="button"
+                  aria-label={`Ta bort mappen ${folder.name}`}
+                  onClick={() => {
+                    removeFolder(folder.id);
+                    if (activeFolder === folder.id) setActiveFolder("all");
+                    toast("Mappen är borttagen – anteckningarna ligger kvar utan mapp.");
+                  }}
+                  className="text-muted-foreground hover:text-destructive"
+                >
+                  <Trash2 size={16} />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {visibleNotes.length === 0 ? (
         <p className="text-sm text-muted-foreground">
-          Inga anteckningar än. Det du sparar här får bara finnas.
+          {openNotes.length === 0
+            ? "Inga anteckningar än. Det du sparar här får bara finnas."
+            : "Inget i den här mappen än."}
         </p>
       ) : (
-        openNotes.map((note) => {
+        visibleNotes.map((note) => {
           const suggestion = suggestForNote(note);
           return (
             <div key={note.id} className="surface-card p-4 space-y-3">
