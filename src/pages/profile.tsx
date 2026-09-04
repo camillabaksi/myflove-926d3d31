@@ -260,6 +260,45 @@ export default function ProfilePage() {
           </form>
         </MyFloveWide>
 
+        {/* Språk – svenska eller engelska, byts direkt */}
+        <MyFloveWide className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft">
+          <div className="flex items-center gap-2">
+            <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+              <Languages size={18} />
+            </span>
+            <div>
+              <h2 className="text-base font-semibold text-ink">{t("Språk")}</h2>
+              <p className="text-xs text-muted-foreground">
+                {t("Appens språk – texterna byts direkt.")}
+              </p>
+            </div>
+          </div>
+          <div
+            className="mt-3 flex flex-wrap gap-2"
+            role="radiogroup"
+            aria-label={t("Välj språk för appen")}
+          >
+            {LANGUAGES.map((l) => (
+              <button
+                key={l.value}
+                type="button"
+                role="radio"
+                aria-checked={lang === l.value}
+                onClick={() => setLang(l.value)}
+                data-testid={`profile-lang-${l.value}`}
+                className={`flex items-center gap-2 rounded-2xl border px-4 py-2 text-sm font-medium transition ${
+                  lang === l.value
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-border/60 bg-background/60 text-ink hover:bg-muted/40"
+                }`}
+              >
+                <span aria-hidden>{l.flag}</span> {l.label}
+                {lang === l.value && <Check size={14} />}
+              </button>
+            ))}
+          </div>
+        </MyFloveWide>
+
         {/* Livsprofilen bor nu här – en enda profil, inga dubbla vägar */}
         <MyFloveWide className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft">
           <LifeProfileSections />
