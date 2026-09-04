@@ -398,6 +398,44 @@ export default function Home() {
           </section>
         </MyFloveWide>
 
+        {/* Din vardag – vad MyFlove lärt sig av dina egna aktiviteter och loggar. */}
+        {patterns.ready && (
+          <MyFloveWide style={{ order: 4.5 }} className="min-w-0">
+            <section
+              aria-label="Det här har MyFlove lärt sig om din vardag"
+              data-testid="home-everyday-patterns"
+              className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+            >
+              <div className="flex items-start gap-3">
+                <FlowMascot size="xs" mood="calm" className="mt-0.5 shrink-0 flow-alive" alt="" />
+                <div className="min-w-0 flex-1">
+                  <h2 className="text-base font-semibold text-ink">Din vardag</h2>
+                  <p className="mt-0.5 text-xs text-muted-foreground">
+                    Det här har MyFlove lärt sig av dina egna dagar
+                  </p>
+                  <ul className="mt-3 space-y-2">
+                    {patterns.lines.map((line) => (
+                      <li key={line} className="flex items-start gap-2 text-sm text-ink">
+                        <Sparkles size={14} className="mt-0.5 shrink-0 text-primary" aria-hidden />
+                        <span className="min-w-0">{line}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <Link
+                    href="/insight"
+                    onClick={() => track("home_widget_opened", { source: "insight" })}
+                    className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+                  >
+                    Se fler mönster <ArrowRight size={14} />
+                  </Link>
+                </div>
+              </div>
+            </section>
+          </MyFloveWide>
+        )}
+
+
+
         {/* Liten insikt – bara när Flow faktiskt har något att säga. */}
         {flowSettings.enabled && flowSettings.learning && (
           <div style={{ order: 5 }} data-testid="home-flow-note" className="min-w-0 xl:col-span-6">
