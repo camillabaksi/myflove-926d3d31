@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-09-04 – Startsidan matchar ny design (mockup)
+
+- Tre huvudkort i en rad med centrerad ikon, rubrik och kort undertext: Quickflow, Batteriet (visar aktuell procent) och Kalendern.
+- Nytt stort "Ditt batteri"-kort med tydlig procentsiffra, lugn hälsning och länk till tips/loggning.
+- "Idag"-sektionen fick mockupens radlayout med tid, titel, anteckning och pil, samt länk "Visa dagsschema".
+- Nytt uppmuntrande citatkort ("Små steg varje dag skapar stora förändringar") med hjärtikon längst bland huvudkorten.
+- Hälsningen säger nu "Du gör ett fantastiskt jobb!" – samma varma ton som i mockupen.
+
 ## 2026-09-04 – Ny startsida: lugn personlig kontrollpanel
 
 - Hem har nu en liten hero ("Hej! 💜 – Vad behöver du just nu?") följd av tre huvudkort: Quickflow, Ditt batteri och Kalendern.
