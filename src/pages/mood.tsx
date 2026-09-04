@@ -8,6 +8,7 @@ import { Sparkles } from "lucide-react";
 import { getRandomEncouragement } from "@/lib/encouragements";
 import { useToast } from "@/hooks/use-toast";
 import { getGreeting } from "@/lib/greeting";
+import { useLang } from "@/hooks/use-language";
 import { MyFloveHeart } from "@/components/myflove/motion";
 import { useUserProfile } from "@/hooks/use-user-profile";
 import CollapsibleSection from "@/components/collapsible-section";
@@ -200,7 +201,8 @@ export default function Mood() {
 
 function MoodHeader() {
   const { name, lastVisit } = useUserProfile();
-  const g = getGreeting({ name, lastVisit });
+  const { lang } = useLang();
+  const g = getGreeting({ name, lastVisit, lang });
   return (
     <div>
       <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
