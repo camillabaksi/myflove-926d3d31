@@ -75,14 +75,14 @@ export function getGreeting(opts?: {
     ? `${salutation}, ${name}${ending ? " " + ending : ""}`
     : `${salutation}${ending ? " " + ending : ""}`;
 
-  let subtitle = "Här är en lugn överblick över idag.";
+  let subtitle = tr("Här är en lugn överblick över idag.");
   const last = opts?.lastVisit ?? null;
   if (!last) {
-    subtitle = pick(FIRST_TIME_LINES, seed);
+    subtitle = tr(pick(FIRST_TIME_LINES, seed));
   } else {
     const daysAway = Math.floor((Date.now() - last) / (24 * 60 * 60 * 1000));
-    if (daysAway >= 3) subtitle = pick(AWAY_LINES, seed);
-    else if (daysAway >= 1) subtitle = pick(RETURN_LINES, seed);
+    if (daysAway >= 3) subtitle = tr(pick(AWAY_LINES, seed));
+    else if (daysAway >= 1) subtitle = tr(pick(RETURN_LINES, seed));
   }
 
   return { title, subtitle };
