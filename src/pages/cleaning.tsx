@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import Layout from "@/components/layout";
 import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
-import { MyFloveFloatingElement } from "@/components/myflove/motion";
+import { MyFloveHeader } from "@/components/myflove";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
@@ -129,36 +129,36 @@ export default function CleaningPage() {
 
   return (
     <Layout>
-      <MyFlovePageGrid area="hem" className="mx-auto max-w-5xl px-4 py-6">
+      <MyFlovePageGrid area="hem">
         <MyFloveWide>
-          <header>
-            <h1 className="font-display text-3xl font-bold text-foreground flex items-center gap-3">
-              Städning <MyFloveFloatingElement tone="mint" size={18} />
-            </h1>
-            <p className="mt-1 text-muted-foreground text-sm">
-              Välj rum och läge. Kryssa av i din takt – allt räknas.
-            </p>
-          </header>
+          <MyFloveHeader
+            area="hem"
+            title="Städning"
+            emoji="🧹"
+            description="Välj rum och läge. Kryssa av i din takt – allt räknas."
+          />
         </MyFloveWide>
 
         {/* Läge */}
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-3">
-          {(["vardag", "stor"] as CleanMode[]).map((m) => (
-            <button
-              key={m}
-              onClick={() => setMode(m)}
-              aria-pressed={mode === m}
-              className={`rounded-2xl border-2 p-4 text-left transition ${
-                mode === m
-                  ? "border-primary bg-primary/10"
-                  : "border-border bg-card hover:bg-accent/40"
-              }`}
-            >
-              <div className="font-semibold text-foreground">{CLEAN_MODE_LABEL[m]}</div>
-              <div className="mt-1 text-xs text-muted-foreground">{CLEAN_MODE_BLURB[m]}</div>
-            </button>
-          ))}
-        </div>
+        <MyFloveWide>
+          <div className="grid grid-cols-2 gap-3">
+            {(["vardag", "stor"] as CleanMode[]).map((m) => (
+              <button
+                key={m}
+                onClick={() => setMode(m)}
+                aria-pressed={mode === m}
+                className={`min-w-0 rounded-2xl border-2 p-4 text-left transition ${
+                  mode === m
+                    ? "border-primary bg-primary/10"
+                    : "border-border bg-card hover:bg-accent/40"
+                }`}
+              >
+                <div className="font-semibold text-foreground">{CLEAN_MODE_LABEL[m]}</div>
+                <div className="mt-1 text-xs text-muted-foreground">{CLEAN_MODE_BLURB[m]}</div>
+              </button>
+            ))}
+          </div>
+        </MyFloveWide>
 
         {/* Rum */}
         <MyFloveWide>
