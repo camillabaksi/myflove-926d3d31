@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { useTasks, useMedications, useReminders } from "@/hooks/use-data";
@@ -107,8 +107,10 @@ export function useReminderSync() {
       if (!alive || !sub) return;
 
       const now = Date.now();
-      // Timed tasks: today + tomorrow. Medications: daily for 14 days ahead.
-      const taskDates = [todayIso(0), todayIso(1)];
+      // Uppgifter, medicin och påminnelser schemaläggs 14 dagar framåt så att
+      // notiser kommer även om appen inte öppnas på flera dagar.
+      const taskDates: string[] = [];
+      for (let i = 0; i < 14; i++) taskDates.push(todayIso(i));
       const medDates: string[] = [];
       for (let i = 0; i < 14; i++) medDates.push(todayIso(i));
       const desired = new Map<
@@ -434,5 +436,5 @@ export function useReminderSync() {
       alive = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [syncSignature]);
+  }, [syncSignature, resyncTick]);
 }
