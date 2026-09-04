@@ -334,6 +334,11 @@ export default function NotesPanel() {
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-ink break-words">{note.text}</p>
                     <p className="text-xs text-muted-foreground">
+                      {note.folderId
+                        ? `${folders.find((f) => f.id === note.folderId)?.emoji ?? "📁"} ${
+                            folders.find((f) => f.id === note.folderId)?.name ?? "Mapp"
+                          } · `
+                        : ""}
                       {note.area ? `${AREA_META[note.area].label} · ` : ""}
                       Ingen deadline, inget krav.
                     </p>
