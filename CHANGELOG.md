@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-09-04 – Investerarmaterial version 4.1
+
+- Allt investerarmaterial är nu samlat under samma versionsnummer: 4.1. Investerarsidan, Living Blueprint, pitchdecket och pitchvideon beskriver samma produktläge.
+- Ny pitchvideo 4.1 (60 sek): gemensam enkel startsida → Quickflow → Batteriet med fyra ork-nivåer → Kalendern och datumlogiken → energipåverkan efter aktivitet → historik → söndagens veckoöversikt → adaptiv personalisering → marknad och investerarcase.
+- Nytt pitchdeck 4.1 (23 slides, PPTX + PDF): samma visuella identitet som 4.0 men med den nya kärnan – Batteriet som enkel ork-check-in (inte ett mätsystem), gemensam neutral start, datumkorrekta aktiviteter, energihistorik och veckoöversikt. Validering, affärsmodell, go-to-market, kapital och roadmap följer med från 4.0.
+- Ny Living Blueprint 4.1 (DOCX + PDF): utgår från 3.7:s struktur och design, med de sex nya produktprinciperna och en uppdaterad produktkarta. 4.1 är den samlade aktuella produktdefinitionen.
+- Investerarsidan (/pitch) visar version 4.1 med ny video, nya miniatyrer och nedladdningslänkar för deck 4.1 och blueprint 4.1. Äldre versioner ligger kvar i versionslistan.
+
 ## 2026-09-04 – Din vecka, historik och energi per aktivitet
 
 - 💜 Din vecka: på söndagar visar startsidan en lugn sammanfattning av veckan – antal aktiviteter, Quickflow-saker, ork och mående, plus milda förslag inför nästa vecka. Inget hittas på: saknas underlag säger MyFlove bara att den fortfarande lär sig.
