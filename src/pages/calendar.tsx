@@ -47,6 +47,7 @@ import { pictogramFor } from "@/lib/pictograms";
 import { useNpfSettings } from "@/lib/npf-mode";
 import { ALL_AREAS, AREA_META, getArea, type LifeArea } from "@/lib/life-areas";
 import { ACCEPT_CALENDAR } from "@/lib/file-formats";
+import { useLang } from "@/hooks/use-language";
 
 export type CalCategory = "privat" | "relationer" | "barn" | "jobb" | "studier";
 
@@ -70,12 +71,12 @@ function normalizeCategory(value: string): CalCategory {
 }
 
 /** "Dag 2 av 7" för en längre period, så att man ser var i resan man är. */
-function periodDayLabel(start: string, end: string, current: string): string {
+function periodDayLabel(start: string, end: string, current: string, t: (s: string) => string): string {
   const day = (iso: string) => parseISODate(iso).getTime();
   const oneDay = 86_400_000;
   const total = Math.round((day(end) - day(start)) / oneDay) + 1;
   const index = Math.min(Math.max(Math.round((day(current) - day(start)) / oneDay) + 1, 1), total);
-  return `dag ${index} av ${total}`;
+  return `${t("dag")} ${index} ${t("av")} ${total}`;
 }
 
 /** Valbara påminnelser innan en händelse börjar. */
@@ -134,6 +135,7 @@ function useFamilyEventsByDate() {
 }
 
 export function CalendarContent() {
+  const { t, locale } = useLang();
   const { currentFocus } = useFocus();
   const { activeTasks, completedTasks, deleteTask, addTask, updateTask } = useTasks();
   const { activeReminders, addReminder, deleteReminder, updateReminder } = useReminders();
@@ -487,9 +489,9 @@ export function CalendarContent() {
     <MyFlovePageGrid area="kalender">
       <MyFloveWide>
         <div>
-          <h1 className="text-3xl font-bold mb-2">Kalender</h1>
+          <h1 className="text-3xl font-bold mb-2">{t("Kalender")}</h1>
           <p className="text-muted-foreground">
-            Översikt över dina dagar. Inga stressiga detaljer.
+            {t("Översikt över dina dagar. Inga stressiga detaljer.")}
           </p>
         </div>
       </MyFloveWide>
@@ -501,14 +503,14 @@ export function CalendarContent() {
             className="flex items-center gap-2 px-4 py-2.5 bg-card border area-border rounded-2xl text-sm font-medium shadow-soft hover:bg-secondary transition-colors"
           >
             <Upload size={16} />
-            Importera från telefonens kalender
+            {t("Importera från telefonens kalender")}
           </button>
           <button
             onClick={handleExportAll}
             className="flex items-center gap-2 px-4 py-2.5 bg-card border area-border rounded-2xl text-sm font-medium shadow-soft hover:bg-secondary transition-colors"
           >
             <Download size={16} />
-            Exportera till kalender (.ics)
+            {t("Exportera till kalender (.ics)")}
           </button>
           <input
             ref={fileInputRef}
@@ -523,8 +525,9 @@ export function CalendarContent() {
           />
         </div>
         <p className="text-xs text-muted-foreground -mt-4">
-          Tips: exportera i telefonens kalender som .ics och importera här för att få in dina möten
-          i MyFlove.
+          {t(
+            "Tips: exportera i telefonens kalender som .ics och importera här för att få in dina möten i MyFlove.",
+          )}
         </p>
       </div>
 
@@ -538,20 +541,20 @@ export function CalendarContent() {
             <CollapsibleSection
               title={periodLabel}
               id="månadsöversikt"
-              help="Välj månad, vecka eller dag – och kryssa i vilka kategorier du vill se."
+              help={t("Välj månad, vecka eller dag – och kryssa i vilka kategorier du vill se.")}
               headingClassName="text-xl font-medium capitalize"
               actions={
                 <div className="flex items-center gap-1">
                   <button
                     onClick={stepBack}
-                    aria-label="Föregående"
+                    aria-label={t("Föregående")}
                     className="p-2 hover:bg-secondary rounded-xl transition-colors"
                   >
                     <ChevronLeft size={24} />
                   </button>
                   <button
                     onClick={stepForward}
-                    aria-label="Nästa"
+                    aria-label={t("Nästa")}
                     className="p-2 hover:bg-secondary rounded-xl transition-colors"
                   >
                     <ChevronRight size={24} />
@@ -562,7 +565,7 @@ export function CalendarContent() {
               <div className="flex flex-wrap items-center gap-2 pt-2">
                 <div
                   role="group"
-                  aria-label="Välj vy"
+                  aria-label={t("Välj vy")}
                   className="inline-flex items-center gap-1 rounded-full border border-border/60 bg-secondary/40 p-1"
                 >
                   {(
@@ -587,7 +590,7 @@ export function CalendarContent() {
                           : "text-muted-foreground hover:text-foreground"
                       }`}
                     >
-                      {label}
+                      {t(label)}
                     </button>
                   ))}
                 </div>
@@ -600,14 +603,14 @@ export function CalendarContent() {
                   }}
                   className="rounded-full border border-border/60 px-3 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground"
                 >
-                  Idag
+                  {t("Idag")}
                 </button>
               </div>
 
               <div
                 className="flex flex-wrap items-center gap-2 pt-3"
                 role="group"
-                aria-label="Visa kategorier"
+                aria-label={t("Visa kategorier")}
               >
                 {CATEGORIES.map((c) => {
                   const active = shows(c.id);
@@ -632,7 +635,7 @@ export function CalendarContent() {
                           backgroundColor: active ? c.color : "hsl(var(--muted-foreground))",
                         }}
                       />
-                      {c.label}
+                      {t(c.label)}
                     </button>
                   );
                 })}
@@ -641,13 +644,13 @@ export function CalendarContent() {
               {view === "manad" && (
                 <div className="pt-2">
                   <div className="grid grid-cols-7 gap-1 mb-2 text-center text-sm font-medium text-muted-foreground">
-                    <div>Må</div>
-                    <div>Ti</div>
-                    <div>On</div>
-                    <div>To</div>
-                    <div>Fr</div>
-                    <div>Lö</div>
-                    <div>Sö</div>
+                    <div>{t("Må")}</div>
+                    <div>{t("Ti")}</div>
+                    <div>{t("On")}</div>
+                    <div>{t("To")}</div>
+                    <div>{t("Fr")}</div>
+                    <div>{t("Lö")}</div>
+                    <div>{t("Sö")}</div>
                   </div>
 
                   <div className="grid grid-cols-7 gap-1">
@@ -723,7 +726,7 @@ export function CalendarContent() {
                               {items.recurring.length > 0 && (
                                 <div
                                   className={`w-1 h-1 rounded-full ${isSelected ? "bg-white/50" : "bg-muted-foreground/40"}`}
-                                  title="Återkommande"
+                                  title={t("Återkommande")}
                                 />
                               )}
                             </div>
@@ -780,7 +783,7 @@ export function CalendarContent() {
                         <div
                           className={`text-xs font-medium mb-1 ${dateStr === todayStr ? "text-primary" : "text-muted-foreground"}`}
                         >
-                          {d.toLocaleDateString("sv-SE", { weekday: "short", day: "numeric" })}
+                          {d.toLocaleDateString(locale, { weekday: "short", day: "numeric" })}
                         </div>
                         <div className="space-y-1">
                           {entries.slice(0, 4).map((e) => (
@@ -800,7 +803,7 @@ export function CalendarContent() {
                           ))}
                           {entries.length > 4 && (
                             <div className="text-xs text-muted-foreground">
-                              +{entries.length - 4} till
+                              +{entries.length - 4} {t("till")}
                             </div>
                           )}
                           {entries.length === 0 && (
@@ -821,8 +824,8 @@ export function CalendarContent() {
             <div className="flex flex-wrap items-center justify-between gap-3">
               <h3 className="min-w-0 truncate text-lg font-medium sm:text-xl">
                 {selectedDateStr === todayStr
-                  ? "Idag"
-                  : parseISODate(selectedDateStr).toLocaleDateString("sv-SE", {
+                  ? t("Idag")
+                  : parseISODate(selectedDateStr).toLocaleDateString(locale, {
                       weekday: "long",
                       day: "numeric",
                       month: "long",
@@ -839,19 +842,19 @@ export function CalendarContent() {
                       : "border-primary/30 bg-primary/10 text-primary hover:bg-primary/15"
                   }`}
                 >
-                  <Plus size={16} /> Lägg till
+                  <Plus size={16} /> {t("Lägg till")}
                 </button>
                 <button
                   onClick={() => setIsAddingReminder(true)}
                   className="flex items-center gap-1.5 px-3 py-2 rounded-2xl text-sm font-medium border transition-colors bg-card border-border text-foreground hover:border-primary/40 hover:bg-secondary/50"
                 >
                   <Plus size={16} className="text-primary" />
-                  Påminnelse
+                  {t("Påminnelse")}
                 </button>
                 <button
                   onClick={() => setPictoMode(!pictoMode)}
                   aria-pressed={pictoMode}
-                  title="Visa stora symboler för varje händelse"
+                  title={t("Visa stora symboler för varje händelse")}
                   className={`flex items-center gap-1.5 px-3 py-2 rounded-2xl text-sm font-medium border transition-colors ${
                     pictoMode
                       ? "bg-accent/30 border-accent/40 text-foreground"
@@ -859,10 +862,10 @@ export function CalendarContent() {
                   }`}
                 >
                   <span aria-hidden>🖼️</span>
-                  Bildstöd
+                  {t("Bildstöd")}
                 </button>
                 <span className="rounded-full border border-primary/20 bg-primary/5 px-3 py-1.5 text-xs font-medium text-primary">
-                  Gjort först · tider efteråt
+                  {t("Gjort först · tider efteråt")}
                 </span>
               </div>
             </div>
@@ -891,12 +894,12 @@ export function CalendarContent() {
                 {(selectedItems.familyEvents.length > 0 || selectedItems.recurring.length > 0) && (
                   <CollapsibleSection
                     id="kalenderdagen::kalenderhandelser"
-                    title="Kalenderhändelser"
+                    title={t("Kalenderhändelser")}
                     headingClassName="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
                     className="space-y-2"
                   >
                     <p className="text-sm text-muted-foreground">
-                      Delade händelser och återkommande hållpunkter.
+                      {t("Delade händelser och återkommande hållpunkter.")}
                     </p>
                     <ul className="space-y-2">
                       {selectedItems.familyEvents.map((event) => (
@@ -909,7 +912,7 @@ export function CalendarContent() {
                             {event.title}
                           </span>
                           <span className="shrink-0 text-xs text-muted-foreground">
-                            {event.time ? `kl ${event.time}` : "utan tid"}
+                            {event.time ? `${t("kl")} ${event.time}` : t("utan tid")}
                           </span>
                         </li>
                       ))}
@@ -942,14 +945,14 @@ export function CalendarContent() {
               selectedItems.recurring.length === 0 && (
                 <div className="text-center py-10 bg-card/50 border border-border/50 rounded-3xl text-muted-foreground">
                   <MyFloveEmptyIllustration kind="calendar" className="mb-2 block" />
-                  Inget inplanerat denna dag.
+                  {t("Inget inplanerat denna dag.")}
                 </div>
               )}
 
             {!allInDay && selectedItems.recurring.length > 0 && (
               <div className="flex flex-wrap items-center gap-2 px-1">
                 <span className="text-xs uppercase tracking-wider text-muted-foreground">
-                  Återkommande
+                  {t("Återkommande")}
                 </span>
                 {selectedItems.recurring.map((r) => (
                   <span
@@ -1017,7 +1020,7 @@ export function CalendarContent() {
                   return Array.from(groups.values());
                 })().map((group) => {
                   const e = group[0]!;
-                  const names = group.map((g) => g.child?.name ?? "Barn");
+                  const names = group.map((g) => g.child?.name ?? t("Barn"));
                   const color = group.length > 1 ? "#a06cd5" : (e.child?.color ?? "#a06cd5");
                   return (
                     <div
@@ -1037,8 +1040,8 @@ export function CalendarContent() {
                             className="text-xs font-medium uppercase tracking-wider mb-0.5"
                             style={{ color }}
                           >
-                            {names.join(" & ")} {e.time && `kl ${e.time}`}
-                            {e.sharedWith.length > 0 && " · delad"}
+                            {names.join(" & ")} {e.time && `${t("kl")} ${e.time}`}
+                            {e.sharedWith.length > 0 && ` · ${t("delad")}`}
                           </div>
                           <div
                             className={`text-lg font-medium truncate ${e.completed ? "line-through opacity-60" : ""}`}
@@ -1052,7 +1055,7 @@ export function CalendarContent() {
                         onClick={() => openChildGroupEditor(group)}
                         className="shrink-0 text-xs font-medium px-3 py-2 rounded-full bg-secondary/60 hover:bg-secondary transition-colors"
                       >
-                        Ändra barn
+                        {t("Ändra barn")}
                       </button>
                     </div>
                   );
@@ -1076,14 +1079,14 @@ export function CalendarContent() {
                           className="text-xs font-medium uppercase tracking-wider mb-0.5"
                           style={{ color: e.member?.color ?? "#8a9a5b" }}
                         >
-                          {e.member?.displayName ?? "Familj"} {e.time && `kl ${e.time}`}
+                          {e.member?.displayName ?? t("Familj")} {e.time && `${t("kl")} ${e.time}`}
                         </div>
                         <div className="text-lg font-medium">{e.title}</div>
                       </div>
                     </div>
                     <button
                       onClick={() => deleteEventMutation.mutate({ id: e.id })}
-                      aria-label="Ta bort familjehändelse"
+                      aria-label={t("Ta bort familjehändelse")}
                       className="p-2 text-muted-foreground hover:text-destructive rounded-xl hover:bg-destructive/10 shrink-0"
                     >
                       <Trash2 size={18} />
@@ -1102,7 +1105,7 @@ export function CalendarContent() {
                     )}
                     <div>
                       <div className="text-xs text-accent-foreground font-medium uppercase tracking-wider mb-0.5">
-                        Viktigast idag
+                        {t("Viktigast idag")}
                       </div>
                       <div className="text-lg font-medium">{selectedItems.focus.text}</div>
                     </div>
@@ -1125,7 +1128,7 @@ export function CalendarContent() {
                       <div className="min-w-0">
                         <div className="text-xs text-primary font-medium uppercase tracking-wider mb-0.5">
                           {r.endDate
-                            ? `Period · ${periodDayLabel(r.date, r.endDate, selectedDateStr)}`
+                            ? `${t("Period")} · ${periodDayLabel(r.date, r.endDate, selectedDateStr, t)}`
                             : "Påminnelse"}{" "}
                           {r.time && `kl ${r.time}${r.endTime ? `–${r.endTime}` : ""}`}
                         </div>
@@ -1153,14 +1156,14 @@ export function CalendarContent() {
                             repeat: r.repeat ?? "none",
                           })
                         }
-                        aria-label="Ändra påminnelse"
+                        aria-label={t("Ändra påminnelse")}
                         className="px-3 py-2 text-sm text-primary rounded-xl hover:bg-primary/10"
                       >
-                        Ändra
+                        {t("Ändra")}
                       </button>
                       <button
                         onClick={() => deleteReminder(r.id)}
-                        aria-label="Ta bort påminnelse"
+                        aria-label={t("Ta bort påminnelse")}
                         className="p-2 text-muted-foreground hover:text-destructive rounded-xl hover:bg-destructive/10"
                       >
                         <Trash2 size={18} />
@@ -1169,39 +1172,39 @@ export function CalendarContent() {
                   </div>
                 ))}
 
-                {selectedItems.tasks.map((t) => (
+                {selectedItems.tasks.map((task) => (
                   <div
-                    key={t.id}
-                    className={`flex items-center justify-between gap-4 p-4 bg-card border border-border rounded-2xl ${t.completed ? "opacity-60" : ""}`}
+                    key={task.id}
+                    className={`flex items-center justify-between gap-4 p-4 bg-card border border-border rounded-2xl ${task.completed ? "opacity-60" : ""}`}
                   >
                     <div className="flex items-center gap-4 min-w-0">
                       {pictoMode ? (
                         <span className="text-3xl leading-none shrink-0" aria-hidden>
-                          {pictogramFor(t.title, "✅")}
+                          {pictogramFor(task.title, "✅")}
                         </span>
                       ) : (
                         <CheckSquare
-                          className={t.completed ? "text-primary" : "text-muted-foreground"}
+                          className={task.completed ? "text-primary" : "text-muted-foreground"}
                           size={24}
                         />
                       )}
                       <div className="flex-1 min-w-0">
-                        {t.time && (
+                        {task.time && (
                           <div className="text-xs text-primary font-medium uppercase tracking-wider mb-0.5">
-                            kl {t.time}
-                            {t.endTime ? `–${t.endTime}` : ""}
-                            {t.reminderMinutesBefore != null &&
-                              ` · påminn ${t.reminderMinutesBefore} min innan`}
+                            {t("kl")} {task.time}
+                            {task.endTime ? `–${task.endTime}` : ""}
+                            {task.reminderMinutesBefore != null &&
+                              ` · ${t("påminn")} ${task.reminderMinutesBefore} ${t("min innan")}`}
                           </div>
                         )}
                         <div
-                          className={`text-lg font-medium truncate ${t.completed ? "line-through text-muted-foreground" : ""}`}
+                          className={`text-lg font-medium truncate ${task.completed ? "line-through text-muted-foreground" : ""}`}
                         >
-                          {t.title}
+                          {task.title}
                         </div>
-                        {t.note && (
+                        {task.note && (
                           <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">
-                            {t.note}
+                            {task.note}
                           </p>
                         )}
                       </div>
@@ -1211,25 +1214,25 @@ export function CalendarContent() {
                         onClick={() =>
                           setEditing({
                             kind: "task",
-                            id: t.id,
-                            title: t.title,
-                            date: t.dueDate ?? selectedDateStr,
-                            time: t.time ?? "",
-                            endTime: t.endTime ?? "",
-                            remind: t.reminderMinutesBefore ?? null,
-                            note: t.note ?? "",
-                            area: getArea(t),
+                            id: task.id,
+                            title: task.title,
+                            date: task.dueDate ?? selectedDateStr,
+                            time: task.time ?? "",
+                            endTime: task.endTime ?? "",
+                            remind: task.reminderMinutesBefore ?? null,
+                            note: task.note ?? "",
+                            area: getArea(task),
                             repeat: "none",
                           })
                         }
-                        aria-label="Ändra uppgift"
+                        aria-label={t("Ändra uppgift")}
                         className="px-3 py-2 text-sm text-primary rounded-xl hover:bg-primary/10"
                       >
-                        Ändra
+                        {t("Ändra")}
                       </button>
                       <button
-                        onClick={() => deleteTask(t.id)}
-                        aria-label="Ta bort uppgift"
+                        onClick={() => deleteTask(task.id)}
+                        aria-label={t("Ta bort uppgift")}
                         className="p-2 text-muted-foreground hover:text-destructive rounded-xl hover:bg-destructive/10"
                       >
                         <Trash2 size={18} />
@@ -1245,21 +1248,21 @@ export function CalendarContent() {
         <Dialog open={isAddingReminder} onOpenChange={setIsAddingReminder}>
           <DialogContent className="max-h-[85dvh] overflow-y-auto rounded-3xl">
             <DialogHeader>
-              <DialogTitle>Ny påminnelse</DialogTitle>
+              <DialogTitle>{t("Ny påminnelse")}</DialogTitle>
             </DialogHeader>
             <div className="space-y-4 pt-2">
               <div className="space-y-2">
-                <label className="text-sm font-medium">Vad ska du komma ihåg?</label>
+                <label className="text-sm font-medium">{t("Vad ska du komma ihåg?")}</label>
                 <Input
                   value={newReminderTitle}
                   onChange={(e) => setNewReminderTitle(e.target.value)}
-                  placeholder="T.ex. Möte med chefen"
+                  placeholder={t("T.ex. Möte med chefen")}
                   className="h-12 rounded-2xl"
                   autoFocus
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">Tid (valfritt)</label>
+                <label className="text-sm font-medium">{t("Tid (valfritt)")}</label>
                 <Input
                   type="time"
                   value={newReminderTime}
@@ -1268,7 +1271,7 @@ export function CalendarContent() {
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">Upprepa</label>
+                <label className="text-sm font-medium">{t("Upprepa")}</label>
                 <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2">
                   {(
                     [
@@ -1288,7 +1291,7 @@ export function CalendarContent() {
                           : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
                       }`}
                     >
-                      {label}
+                      {t(label)}
                     </button>
                   ))}
                 </div>
@@ -1313,7 +1316,7 @@ export function CalendarContent() {
                 disabled={!newReminderTitle.trim()}
                 className="w-full h-12 rounded-2xl"
               >
-                Lägg till
+                {t("Lägg till")}
               </Button>
             </div>
           </DialogContent>
@@ -1322,21 +1325,21 @@ export function CalendarContent() {
         <Dialog open={isAddingEvent} onOpenChange={setIsAddingEvent}>
           <DialogContent className="max-h-[85dvh] overflow-y-auto rounded-3xl">
             <DialogHeader>
-              <DialogTitle>Ny familjehändelse</DialogTitle>
+              <DialogTitle>{t("Ny familjehändelse")}</DialogTitle>
             </DialogHeader>
             <div className="space-y-4 pt-2">
               <div className="space-y-2">
-                <label className="text-sm font-medium">Titel</label>
+                <label className="text-sm font-medium">{t("Titel")}</label>
                 <Input
                   value={newEventTitle}
                   onChange={(e) => setNewEventTitle(e.target.value)}
-                  placeholder="T.ex. Fotbollsträning"
+                  placeholder={t("T.ex. Fotbollsträning")}
                   className="h-12 rounded-2xl"
                   autoFocus
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">Tid (valfritt)</label>
+                <label className="text-sm font-medium">{t("Tid (valfritt)")}</label>
                 <Input
                   type="time"
                   value={newEventTime}
@@ -1349,7 +1352,7 @@ export function CalendarContent() {
                 disabled={!newEventTitle.trim() || createEventMutation.isPending}
                 className="w-full h-12 rounded-2xl"
               >
-                Lägg till
+                {t("Lägg till")}
               </Button>
             </div>
           </DialogContent>
@@ -1359,13 +1362,13 @@ export function CalendarContent() {
           <DialogContent className="max-h-[85dvh] overflow-y-auto rounded-3xl">
             <DialogHeader>
               <DialogTitle>
-                {editing?.kind === "task" ? "Ändra uppgift" : "Ändra påminnelse"}
+                {editing?.kind === "task" ? t("Ändra uppgift") : t("Ändra påminnelse")}
               </DialogTitle>
             </DialogHeader>
             {editing && (
               <div className="space-y-4 pt-2 max-h-[70vh] overflow-y-auto pr-1">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Vad gäller det?</label>
+                  <label className="text-sm font-medium">{t("Vad gäller det?")}</label>
                   <Input
                     value={editing.title}
                     onChange={(e) => setEditing({ ...editing, title: e.target.value })}
@@ -1374,7 +1377,7 @@ export function CalendarContent() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Datum</label>
+                  <label className="text-sm font-medium">{t("Datum")}</label>
                   <Input
                     type="date"
                     value={editing.date}
@@ -1385,7 +1388,7 @@ export function CalendarContent() {
 
                 <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Börjar (valfritt)</label>
+                    <label className="text-sm font-medium">{t("Börjar (valfritt)")}</label>
                     <Input
                       type="time"
                       value={editing.time}
@@ -1394,7 +1397,7 @@ export function CalendarContent() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Slutar (valfritt)</label>
+                    <label className="text-sm font-medium">{t("Slutar (valfritt)")}</label>
                     <Input
                       type="time"
                       value={editing.endTime}
@@ -1407,7 +1410,7 @@ export function CalendarContent() {
 
                 {editing.time && (
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Påminnelse</label>
+                    <label className="text-sm font-medium">{t("Påminnelse")}</label>
                     <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
                       {REMIND_OPTIONS.map((opt) => (
                         <button
@@ -1420,7 +1423,7 @@ export function CalendarContent() {
                               : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
                           }`}
                         >
-                          {opt.label}
+                          {t(opt.label)}
                         </button>
                       ))}
                     </div>
@@ -1442,7 +1445,7 @@ export function CalendarContent() {
                               : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
                           }`}
                         >
-                          {AREA_META[a].emoji} {AREA_META[a].label}
+                          {AREA_META[a].emoji} {t(AREA_META[a].label)}
                         </button>
                       ))}
                     </div>
@@ -1451,7 +1454,7 @@ export function CalendarContent() {
 
                 {editing.kind === "reminder" && (
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Upprepa</label>
+                    <label className="text-sm font-medium">{t("Upprepa")}</label>
                     <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2">
                       {(
                         [
@@ -1471,7 +1474,7 @@ export function CalendarContent() {
                               : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
                           }`}
                         >
-                          {label}
+                          {t(label)}
                         </button>
                       ))}
                     </div>
@@ -1479,12 +1482,12 @@ export function CalendarContent() {
                 )}
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Anteckning (valfritt)</label>
+                  <label className="text-sm font-medium">{t("Anteckning (valfritt)")}</label>
                   <textarea
                     value={editing.note}
                     onChange={(e) => setEditing({ ...editing, note: e.target.value })}
                     rows={2}
-                    placeholder="Skriv vad det gäller, vad du behöver ta med…"
+                    placeholder={t("Skriv vad det gäller, vad du behöver ta med…")}
                     className="w-full rounded-2xl border border-border bg-background p-3 text-sm outline-none focus:border-primary"
                   />
                 </div>
@@ -1496,11 +1499,11 @@ export function CalendarContent() {
                       if (editing.kind === "reminder") deleteReminder(editing.id);
                       else deleteTask(editing.id);
                       setEditing(null);
-                      toast({ description: "Borttagen." });
+                      toast({ description: t("Borttagen.") });
                     }}
                     className="flex-1 h-12 rounded-2xl text-destructive"
                   >
-                    <Trash2 size={16} className="mr-2" /> Ta bort
+                    <Trash2 size={16} className="mr-2" /> {t("Ta bort")}
                   </Button>
                   <Button
                     onClick={() => {
@@ -1527,11 +1530,11 @@ export function CalendarContent() {
                         });
                       }
                       setEditing(null);
-                      toast({ description: "Sparat ✨" });
+                      toast({ description: t("Sparat ✨") });
                     }}
                     className="flex-1 h-12 rounded-2xl"
                   >
-                    Spara
+                    {t("Spara")}
                   </Button>
                 </div>
               </div>
@@ -1544,12 +1547,12 @@ export function CalendarContent() {
       <Dialog open={!!editChildGroup} onOpenChange={(open) => !open && setEditChildGroup(null)}>
         <DialogContent className="max-h-[85dvh] overflow-y-auto rounded-3xl">
           <DialogHeader>
-            <DialogTitle>Vilka barn ingår?</DialogTitle>
+            <DialogTitle>{t("Vilka barn ingår?")}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <p className="text-sm text-muted-foreground">
               {editChildGroup?.title}
-              {editChildGroup?.time ? ` · kl ${editChildGroup.time}` : ""}
+              {editChildGroup?.time ? ` · ${t("kl")} ${editChildGroup.time}` : ""}
             </p>
             <div className="flex flex-wrap gap-2">
               {kids.map((k) => {
@@ -1578,15 +1581,16 @@ export function CalendarContent() {
               })}
             </div>
             <p className="text-xs text-muted-foreground">
-              Lägg till eller ta bort barn – händelsen finns kvar, den flyttar bara in i rätt barns
-              schema.
+              {t(
+                "Lägg till eller ta bort barn – händelsen finns kvar, den flyttar bara in i rätt barns schema.",
+              )}
             </p>
             <Button
               onClick={saveChildGroup}
               disabled={savingChildGroup}
               className="w-full h-12 rounded-2xl"
             >
-              {savingChildGroup ? "Sparar…" : "Spara"}
+              {savingChildGroup ? t("Sparar…") : t("Spara")}
             </Button>
           </div>
         </DialogContent>

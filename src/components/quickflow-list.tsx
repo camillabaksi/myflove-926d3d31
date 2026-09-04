@@ -8,6 +8,7 @@ import { useQuickflowHabits, type QuickflowAction } from "@/hooks/use-quickflow-
 import { useReminders } from "@/hooks/use-data";
 import { todayISO } from "@/lib/day";
 import CollapsibleSection from "@/components/collapsible-section";
+import { useLang } from "@/hooks/use-language";
 import { useSavedStores } from "@/hooks/use-data";
 import { sendPushNotification } from "@/lib/push-notifications";
 import { FlowItemActions } from "@/components/flow-item-actions";
@@ -42,6 +43,7 @@ const SNOOZE_OPTIONS = [
 ];
 
 export function QuickflowList() {
+  const { t } = useLang();
   const { items, openItems, complete, uncomplete, remove, snooze, update } = useQuickflow();
   const { addNote } = useNotes();
   const { folders } = useNoteFolders();
@@ -153,19 +155,19 @@ export function QuickflowList() {
               </>
             ) : item.placeName ? (
               <>
-                <MapPin size={13} /> När du är nära {item.placeName}
+                <MapPin size={13} /> {t("När du är nära")} {item.placeName}
               </>
             ) : (
-              <>💭 Öppen tanke</>
+              <>💭 {t("Öppen tanke")}</>
             )}
             {item.level === "viktigt" && (
               <span className="ml-1 rounded-full border border-destructive/30 bg-destructive/10 text-destructive px-2 py-0.5 text-[11px]">
-                {LEVEL_META.viktigt.label}
+                {t(LEVEL_META.viktigt.label)}
               </span>
             )}
             {(item.mergedCount ?? 0) > 0 && (
               <span className="ml-1 rounded-full border border-border bg-secondary/60 px-2 py-0.5 text-[11px] text-muted-foreground">
-                Sammanfogad ×{(item.mergedCount ?? 0) + 1}
+                {t("Sammanfogad ×")}{(item.mergedCount ?? 0) + 1}
               </span>
             )}
           </p>
@@ -174,12 +176,12 @@ export function QuickflowList() {
           <FlowItemActions itemId={`qf-${item.id}`} only="edit" size={15} />
           <button
             type="button"
-            aria-label="Spara som anteckning"
-            title="Spara som anteckning"
+            aria-label={t("Spara som anteckning")}
+            title={t("Spara som anteckning")}
             onClick={() => {
               addNote(item.text, guessArea(item.text));
               remove(item.id);
-              toast.success("Sparad bland dina anteckningar. 📝");
+              toast.success(t("Sparad bland dina anteckningar. 📝"));
             }}
             className="w-9 h-9 rounded-full bg-secondary text-muted-foreground flex items-center justify-center hover:text-primary transition-colors"
           >
@@ -187,7 +189,7 @@ export function QuickflowList() {
           </button>
           <button
             type="button"
-            aria-label="Klar"
+            aria-label={t("Klar")}
             onClick={(e) => {
               celebrateFromEvent(e);
               complete(item.id);
@@ -198,7 +200,7 @@ export function QuickflowList() {
           </button>
           <button
             type="button"
-            aria-label="Ta bort"
+            aria-label={t("Ta bort")}
             onClick={() => remove(item.id)}
             className="w-9 h-9 rounded-full bg-secondary text-muted-foreground flex items-center justify-center hover:text-destructive transition-colors"
           >
@@ -227,7 +229,7 @@ export function QuickflowList() {
             onClick={() => setSnoozeFor(null)}
             className="rounded-full px-3 py-1.5 text-xs text-muted-foreground hover:underline"
           >
-            <X size={12} className="inline -mt-0.5" /> Avbryt
+            <X size={12} className="inline -mt-0.5" /> {t("Avbryt")}
           </button>
         </div>
       )}
@@ -242,7 +244,7 @@ export function QuickflowList() {
     const actions: { key: QuickflowAction; label: string; onClick: () => void }[] = [
       {
         key: "paminn",
-        label: "🔔 Påminn mig senare",
+        label: t("🔔 Påminn mig senare"),
         onClick: () => {
           setSnoozeFor(item.id);
           recordAction("paminn");
@@ -250,17 +252,17 @@ export function QuickflowList() {
       },
       {
         key: "kalender",
-        label: "📅 Lägg i kalendern",
+        label: t("📅 Lägg i kalendern"),
         onClick: () => {
           addReminder(item.text, todayISO(), "09:00");
           remove(item.id);
           recordAction("kalender");
-          toast.success("Den ligger i kalendern idag kl 09:00 – ändra när du vill.");
+          toast.success(t("Den ligger i kalendern idag kl 09:00 – ändra när du vill."));
         },
       },
       {
         key: "klart",
-        label: "✓ Markera som klart",
+        label: t("✓ Markera som klart"),
         onClick: () => {
           complete(item.id);
           recordAction("klart");
@@ -268,7 +270,7 @@ export function QuickflowList() {
       },
       {
         key: "mapp",
-        label: "📁 Flytta till en mapp",
+        label: t("📁 Flytta till en mapp"),
         onClick: () => {
           const folder = folders.find((f) => f.id === topFolderId) ?? folders[0];
           addNote(item.text, guessArea(item.text));
@@ -277,14 +279,14 @@ export function QuickflowList() {
           remove(item.id);
           toast.success(
             folder
-              ? `Sparad bland anteckningarna – välj mapp ${folder.emoji} ${folder.name} där.`
-              : "Sparad bland anteckningarna – där kan du skapa en mapp.",
+              ? `${t("Sparad bland anteckningarna – välj mapp")} ${folder.emoji} ${folder.name} ${t("där.")}`
+              : t("Sparad bland anteckningarna – där kan du skapa en mapp."),
           );
         },
       },
       {
         key: "bort",
-        label: "🗑️ Jag behöver inte detta längre",
+        label: t("🗑️ Jag behöver inte detta längre"),
         onClick: () => {
           remove(item.id);
           recordAction("bort");
@@ -300,7 +302,7 @@ export function QuickflowList() {
     return (
       <div className="rounded-2xl bg-secondary/50 border border-border p-3 space-y-2">
         <p className="text-sm text-ink">
-          Det här har blivit liggande – vill du göra något med det?
+          {t("Det här har blivit liggande – vill du göra något med det?")}
         </p>
         <div className="flex flex-wrap gap-2">
           {sorted.map((action, index) => (
@@ -322,7 +324,7 @@ export function QuickflowList() {
             onClick={() => update(item.id, { askedAt: Date.now() })}
             className="rounded-full px-4 py-1.5 text-xs text-muted-foreground hover:underline"
           >
-            Låt den ligga kvar
+            {t("Låt den ligga kvar")}
           </button>
         </div>
       </div>
@@ -336,17 +338,19 @@ export function QuickflowList() {
         title={
           <span className="inline-flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-destructive animate-pulse" />
-            Du bad mig komma ihåg
+            {t("Du bad mig komma ihåg")}
           </span>
         }
-        help="Allt du skrivit i Quickflow. Välj om det ska bli en uppgift, en tid i kalendern – eller bara ligga kvar."
+        help={t(
+          "Allt du skrivit i Quickflow. Välj om det ska bli en uppgift, en tid i kalendern – eller bara ligga kvar.",
+        )}
         headingClassName="text-xl font-semibold"
-        description="Ingenting här försvinner av sig självt. Jag håller det åt dig. 💙"
+        description={t("Ingenting här försvinner av sig självt. Jag håller det åt dig. 💙")}
       >
         {needsAnswer.length > 0 && (
           <div className="space-y-3">
             <p className="text-sm text-ink">
-              Du har något i Quickflow som verkar ha blivit liggande 💜
+              {t("Du har något i Quickflow som verkar ha blivit liggande 💜")}
             </p>
             {needsAnswer.map((item) => renderRow(item, renderStaleActions(item)))}
           </div>
@@ -355,7 +359,7 @@ export function QuickflowList() {
         {(upcoming.length > 0 || placeUpcoming.length > 0) && (
           <div className="space-y-3">
             <p className="text-xs uppercase tracking-wide text-muted-foreground">
-              Sparade till senare
+              {t("Sparade till senare")}
             </p>
             {[...upcoming, ...placeUpcoming].map((item) =>
               renderRow(
@@ -369,14 +373,14 @@ export function QuickflowList() {
                     }}
                     className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 text-primary px-3 py-1.5 text-xs font-medium hover:bg-primary hover:text-primary-foreground transition-colors"
                   >
-                    <Check size={13} /> Hanterad – göm den
+                    <Check size={13} /> {t("Hanterad – göm den")}
                   </button>
                   <button
                     type="button"
                     onClick={() => setSnoozeFor(item.id === snoozeFor ? null : item.id)}
                     className="text-xs text-muted-foreground hover:text-foreground underline underline-offset-2"
                   >
-                    Flytta till en annan tid
+                    {t("Flytta till en annan tid")}
                   </button>
                 </div>,
               ),
@@ -386,7 +390,7 @@ export function QuickflowList() {
 
         {thoughts.length > 0 && (
           <div className="space-y-3">
-            <p className="text-xs uppercase tracking-wide text-muted-foreground">Öppna tankar</p>
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">{t("Öppna tankar")}</p>
             {thoughts.map((item) =>
               renderRow(
                 item,
@@ -395,7 +399,7 @@ export function QuickflowList() {
                   onClick={() => setSnoozeFor(item.id === snoozeFor ? null : item.id)}
                   className="text-xs text-primary hover:underline"
                 >
-                  Vill du lägga in en tid för den här?
+                  {t("Vill du lägga in en tid för den här?")}
                 </button>,
               ),
             )}
@@ -405,7 +409,7 @@ export function QuickflowList() {
         {recentlyCompleted.length > 0 && (
           <div className="space-y-3 pt-2 border-t border-border/60">
             <p className="text-xs uppercase tracking-wide text-muted-foreground">
-              Nyligen hanterade – råkat du trycka fel?
+              {t("Nyligen hanterade – råkat du trycka fel?")}
             </p>
             {recentlyCompleted.map((item) => (
               <div key={item.id} className="surface-card p-4 flex items-center gap-3">
@@ -414,20 +418,20 @@ export function QuickflowList() {
                   <p className="font-medium text-ink line-through opacity-70">{item.text}</p>
                   <p className="text-xs text-muted-foreground">
                     {item.remindAt
-                      ? `Var sparad till ${formatWhen(item.remindAt, new Date(now))}`
-                      : "Markerades som hanterad"}
+                      ? `${t("Var sparad till")} ${formatWhen(item.remindAt, new Date(now))}`
+                      : t("Markerades som hanterad")}
                   </p>
                 </div>
                 <button
                   type="button"
-                  aria-label="Ångra"
+                  aria-label={t("Ångra")}
                   onClick={() => {
                     uncomplete(item.id);
-                    toast.success("Ångrad – tanken är tillbaka i QuickFlow. 💜");
+                    toast.success(t("Ångrad – tanken är tillbaka i QuickFlow. 💜"));
                   }}
                   className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 text-primary px-3 py-1.5 text-xs font-medium hover:bg-primary hover:text-primary-foreground transition-colors"
                 >
-                  <Undo2 size={13} /> Ångra
+                  <Undo2 size={13} /> {t("Ångra")}
                 </button>
               </div>
             ))}

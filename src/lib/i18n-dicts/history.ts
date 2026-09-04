@@ -33,6 +33,7 @@ export const EN_HISTORY: Record<string, string> = {
   "Den här veckan, i lugn takt": "This week, at a calm pace",
   Aktiviteter: "Activities",
   Quickflow: "Quickflow",
+  saker: "things",
   Ork: "Energy",
   Mående: "Mood",
   "Inför nästa vecka 💜": "For next week 💜",

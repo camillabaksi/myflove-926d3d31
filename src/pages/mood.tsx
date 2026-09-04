@@ -28,6 +28,7 @@ interface MoodContentProps {
 }
 
 export function MoodContent({ showHeader = true, readOnly = false }: MoodContentProps) {
+  const { t, locale } = useLang();
   const { moods, addMood } = useMoods();
   const { toast } = useToast();
   const [selectedScore, setSelectedScore] = useState<number | null>(null);
@@ -48,7 +49,7 @@ export function MoodContent({ showHeader = true, readOnly = false }: MoodContent
   };
 
   const formatDate = (timestamp: number) =>
-    new Intl.DateTimeFormat("sv-SE", {
+    new Intl.DateTimeFormat(locale, {
       weekday: "short",
       month: "short",
       day: "numeric",
@@ -70,8 +71,8 @@ export function MoodContent({ showHeader = true, readOnly = false }: MoodContent
             className="rounded-3xl border-2 border-border/60 bg-card p-5 text-sm text-muted-foreground"
             data-testid="mood-history-readonly"
           >
-            Här ser du dina tidigare loggar. Vill du logga nytt gör du det under{" "}
-            <span className="font-medium text-ink">Mitt batteri → Logga energi &amp; mående</span>.
+            {t("Här ser du dina tidigare loggar. Vill du logga nytt gör du det under")}{" "}
+            <span className="font-medium text-ink">{t("Mitt batteri → Logga energi & mående")}</span>.
           </div>
         </MyFloveWide>
       ) : (
@@ -79,9 +80,9 @@ export function MoodContent({ showHeader = true, readOnly = false }: MoodContent
           {justSaved ? (
             <div className="text-center py-8 animate-in fade-in zoom-in duration-500">
               <div className="text-5xl mb-4">💚</div>
-              <h2 className="text-xl font-medium">Tack för att du checkade in</h2>
+              <h2 className="text-xl font-medium">{t("Tack för att du checkade in")}</h2>
               <p className="text-muted-foreground mt-2">
-                Det är värdefullt att lyssna på sig själv.
+                {t("Det är värdefullt att lyssna på sig själv.")}
               </p>
             </div>
           ) : (
@@ -112,14 +113,14 @@ export function MoodContent({ showHeader = true, readOnly = false }: MoodContent
                   <textarea
                     value={note}
                     onChange={(e) => setNote(e.target.value)}
-                    placeholder="Vill du skriva en kort rad om varför? (Valfritt)"
+                    placeholder={t("Vill du skriva en kort rad om varför? (Valfritt)")}
                     className="w-full h-24 p-4 rounded-2xl bg-secondary/50 border-transparent focus:border-primary focus:ring-1 focus:ring-primary outline-none resize-none transition-all text-base"
                   />
                   <Button
                     onClick={handleSave}
                     className="w-full h-14 rounded-2xl text-lg font-medium shadow-sm"
                   >
-                    Spara mående
+                    {t("Spara mående")}
                   </Button>
                 </div>
               )}
@@ -137,15 +138,15 @@ export function MoodContent({ showHeader = true, readOnly = false }: MoodContent
           <Sparkles size={24} />
         </span>
         <span className="font-display text-base font-bold leading-tight text-ink">
-          Hitta mitt flow
+          {t("Hitta mitt flow")}
         </span>
       </button>
 
       {moods.length > 0 && (
         <MyFloveWide>
           <CollapsibleSection
-            title="Tidigare incheckningar"
-            help="Dina tidigare loggar. Mönstren här används för att anpassa dagens förslag."
+            title={t("Tidigare incheckningar")}
+            help={t("Dina tidigare loggar. Mönstren här används för att anpassa dagens förslag.")}
             headingClassName="text-xl font-semibold"
             actions={
               moods.length > 3 && (
@@ -155,7 +156,7 @@ export function MoodContent({ showHeader = true, readOnly = false }: MoodContent
                   aria-expanded={showAllMoods}
                   className="text-sm font-medium text-primary hover:underline shrink-0"
                 >
-                  {showAllMoods ? "Visa färre" : `Visa alla (${moods.length})`}
+                  {showAllMoods ? t("Visa färre") : `${t("Visa alla")} (${moods.length})`}
                 </button>
               )
             }
@@ -201,7 +202,7 @@ export default function Mood() {
 
 function MoodHeader() {
   const { name, lastVisit } = useUserProfile();
-  const { lang } = useLang();
+  const { lang, t } = useLang();
   const g = getGreeting({ name, lastVisit, lang });
   return (
     <div>
@@ -209,7 +210,7 @@ function MoodHeader() {
         <MyFloveHeart size={26} /> {g.title}
       </h1>
       <p className="text-muted-foreground">
-        Hur känns det i kroppen och knoppen just nu? Ingen dömer dig här.
+        {t("Hur känns det i kroppen och knoppen just nu? Ingen dömer dig här.")}
       </p>
     </div>
   );

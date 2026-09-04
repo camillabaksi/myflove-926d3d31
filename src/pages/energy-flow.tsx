@@ -18,6 +18,7 @@ import EnergyFlowSettings from "@/components/energy-flow-settings";
 import DidThisQuickAdd from "@/components/did-this-quick-add";
 import DayEnergyFlow from "@/components/day-energy-flow";
 import WhyHint from "@/components/why-hint";
+import { useLang } from "@/hooks/use-language";
 
 import {
   MyFloveButton,
@@ -113,6 +114,7 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
   } = useEnergyFlow();
   const { flow } = useFlowScore();
   const { toast } = useToast();
+  const { t } = useLang();
 
   const [title, setTitle] = useState("");
   const [direction, setDirection] = useState<EnergyDirection>("drains");
@@ -131,7 +133,7 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
   const save = async () => {
     const t = title.trim();
     if (!t) {
-      toast({ description: "Skriv vad det gäller – t.ex. dålig sömn eller en promenad." });
+      toast({ description: t("Skriv vad det gäller – t.ex. dålig sömn eller en promenad.") });
       return;
     }
     setSaving(true);
@@ -147,9 +149,9 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
       });
       setTitle("");
       setNote("");
-      toast({ description: "Tack – det räknas med i din kapacitet idag." });
+      toast({ description: t("Tack – det räknas med i din kapacitet idag.") });
     } catch {
-      toast({ description: "Kunde inte spara just nu. Försök igen.", variant: "destructive" });
+      toast({ description: t("Kunde inte spara just nu. Försök igen."), variant: "destructive" });
     } finally {
       setSaving(false);
     }
@@ -165,20 +167,20 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
         kind: p.kind,
         friction: p.friction,
       });
-      toast({ description: `${p.title} tillagd.` });
+      toast({ description: `${p.title} ${t("tillagd.")}` });
     } catch {
-      toast({ description: "Kunde inte spara just nu.", variant: "destructive" });
+      toast({ description: t("Kunde inte spara just nu."), variant: "destructive" });
     }
   };
 
-  if (loading) return <MyFloveLoading label="Hämtar ditt energiflöde..." />;
+  if (loading) return <MyFloveLoading label={t("Hämtar ditt energiflöde...")} />;
 
   if (!signedIn) {
     return (
       <MyFloveEmptyState
         emoji="🔋"
-        title="Logga in för att använda Min energi"
-        description="Dina energiposter sparas till ditt konto så att Flow kan förstå din kapacitet."
+        title={t("Logga in för att använda Min energi")}
+        description={t("Dina energiposter sparas till ditt konto så att Flow kan förstå din kapacitet.")}
       />
     );
   }
@@ -189,10 +191,12 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
         <MyFloveWide>
           <MyFloveHeader
             area="halsa"
-            title="Min energi – historik och mönster"
+            title={t("Min energi – historik och mönster")}
             emoji="📈"
-            description="Se vad som brukar ge och ta energi över tid."
-            why="Genom att logga vad som påverkar dig kan Flow upptäcka mönster över tid. Det handlar inte om att göra rätt eller fel – utan om att förstå vad som fungerar för just dig."
+            description={t("Se vad som brukar ge och ta energi över tid.")}
+            why={t(
+              "Genom att logga vad som påverkar dig kan Flow upptäcka mönster över tid. Det handlar inte om att göra rätt eller fel – utan om att förstå vad som fungerar för just dig.",
+            )}
           />
         </MyFloveWide>
       )}
@@ -211,27 +215,27 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
         <MyFloveBlock
           area="halsa"
           icon={Scale}
-          title="Dagens balans"
-          subtitle="Vad har gett och tagit energi idag?"
+          title={t("Dagens balans")}
+          subtitle={t("Vad har gett och tagit energi idag?")}
           collapsible
-          status={`Netto ${balance.net > 0 ? "+" : ""}${balance.net}`}
+          status={`${t("Netto")} ${balance.net > 0 ? "+" : ""}${balance.net}`}
         >
           <div className="grid grid-cols-3 gap-2">
-            <BalanceStat emoji="🔋" label="Gett energi" value={`+${balance.gives}`} />
-            <BalanceStat emoji="🪫" label="Tagit energi" value={`−${balance.drains}`} />
+            <BalanceStat emoji="🔋" label={t("Gett energi")} value={`+${balance.gives}`} />
+            <BalanceStat emoji="🪫" label={t("Tagit energi")} value={`−${balance.drains}`} />
             <BalanceStat
               emoji="⚖️"
-              label="Netto"
+              label={t("Netto")}
               value={`${balance.net > 0 ? "+" : ""}${balance.net}`}
             />
           </div>
           <p className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
             <span>
-              Balans just nu: <span className="font-semibold text-ink">{flow.score}</span> (
+              {t("Balans just nu:")} <span className="font-semibold text-ink">{flow.score}</span> (
               {flow.label})
             </span>
             <Link href="/flowscore" className="underline">
-              Så räknas den
+              {t("Så räknas den")}
             </Link>
           </p>
         </MyFloveBlock>
@@ -243,8 +247,8 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
             surface="blush"
             tone="blush"
             icon={Sparkles}
-            title="Flow ser ett möjligt mönster"
-            subtitle="En reflektion, inte en slutsats."
+            title={t("Flow ser ett möjligt mönster")}
+            subtitle={t("En reflektion, inte en slutsats.")}
           >
             <p className="text-sm leading-relaxed text-ink">{insight.message}</p>
             {insight.suggestLighterPlan && <MyFloveLinkRow />}
@@ -256,16 +260,16 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
         <MyFloveBlock
           area="halsa"
           icon={CalendarClock}
-          title="Idag"
-          subtitle="Det här har påverkat din energi."
+          title={t("Idag")}
+          subtitle={t("Det här har påverkat din energi.")}
           collapsible
-          status={`${today.length} registrerat`}
+          status={`${today.length} ${t("registrerat")}`}
         >
           {today.length === 0 ? (
             <MyFloveEmptyState
               emoji="🌤️"
-              title="Inget registrerat idag"
-              description="Lägg till en sak som gett eller tagit energi – det räcker med en."
+              title={t("Inget registrerat idag")}
+              description={t("Lägg till en sak som gett eller tagit energi – det räcker med en.")}
             />
           ) : (
             <ul className="space-y-2">
@@ -318,8 +322,8 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
                       <button
                         key={f.value}
                         type="button"
-                        title={f.label}
-                        aria-label={`Svårighetsgrad ${f.label}`}
+                        title={t(f.label)}
+                        aria-label={`${t("Svårighetsgrad")} ${t(f.label)}`}
                         onClick={() => updateFactor(e.id, { friction: f.value })}
                         className={`press rounded-full border px-2 py-0.5 text-xs ${
                           e.friction === f.value
@@ -335,8 +339,8 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
                   <span className="ml-auto flex shrink-0 items-center gap-1">
                     <button
                       type="button"
-                      title={e.countsTowardScore ? "Räkna inte med" : "Räkna med"}
-                      aria-label={e.countsTowardScore ? "Räkna inte med" : "Räkna med"}
+                      title={e.countsTowardScore ? t("Räkna inte med") : t("Räkna med")}
+                      aria-label={e.countsTowardScore ? t("Räkna inte med") : t("Räkna med")}
                       onClick={() => toggleCounts(e.id, !e.countsTowardScore)}
                       className="press grid h-8 w-8 place-items-center rounded-full text-muted-foreground hover:text-ink"
                     >
@@ -344,8 +348,8 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
                     </button>
                     <button
                       type="button"
-                      title="Ta bort"
-                      aria-label={`Ta bort ${e.title}`}
+                      title={t("Ta bort")}
+                      aria-label={`${t("Ta bort")} ${e.title}`}
                       onClick={() => removeFactor(e.id)}
                       className="press grid h-8 w-8 place-items-center rounded-full text-muted-foreground hover:text-destructive"
                     >
@@ -365,15 +369,15 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
         <MyFloveBlock
           area="halsa"
           icon={Activity}
-          title="Lägg till något som påverkar"
-          subtitle="Sömn, ljud, en konflikt, egen tid eller en promenad."
+          title={t("Lägg till något som påverkar")}
+          subtitle={t("Sömn, ljud, en konflikt, egen tid eller en promenad.")}
           collapsible
           defaultCollapsed
-          status="Öppna för att skriva fritt"
+          status={t("Öppna för att skriva fritt")}
         >
           {presets.length > 0 && (
             <div className="space-y-2">
-              <div className="text-sm font-medium text-ink">Snabbknappar</div>
+              <div className="text-sm font-medium text-ink">{t("Snabbknappar")}</div>
               <div className="flex flex-wrap gap-2">
                 {presets.map((p) => (
                   <span key={p.id} className="inline-flex items-center gap-1">
@@ -382,7 +386,7 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
                     </MyFloveChip>
                     <button
                       type="button"
-                      aria-label={`Ta bort snabbknappen ${p.title}`}
+                      aria-label={`${t("Ta bort snabbknappen")} ${p.title}`}
                       onClick={() => removePreset(p.id)}
                       className="press grid h-7 w-7 place-items-center rounded-full text-muted-foreground hover:text-ink"
                     >
@@ -397,27 +401,27 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
           <Input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="T.ex. dålig sömn, promenad, stökigt möte"
+            placeholder={t("T.ex. dålig sömn, promenad, stökigt möte")}
             className="h-12 rounded-2xl"
           />
 
           <div className="space-y-2">
-            <div className="text-sm font-medium text-ink">Hur påverkade det din energi?</div>
+            <div className="text-sm font-medium text-ink">{t("Hur påverkade det din energi?")}</div>
             <div className="flex flex-wrap gap-2">
               <MyFloveChip active={direction === "drains"} onClick={() => setDirection("drains")}>
-                🔻 Tog energi
+                🔻 {t("Tog energi")}
               </MyFloveChip>
               <MyFloveChip active={direction === "neutral"} onClick={() => setDirection("neutral")}>
-                ➖ Neutralt
+                ➖ {t("Neutralt")}
               </MyFloveChip>
               <MyFloveChip active={direction === "gives"} onClick={() => setDirection("gives")}>
-                🔺 Gav energi
+                🔺 {t("Gav energi")}
               </MyFloveChip>
             </div>
           </div>
 
           <div className="space-y-2">
-            <div className="text-sm font-medium text-ink">Hur mycket?</div>
+            <div className="text-sm font-medium text-ink">{t("Hur mycket?")}</div>
             <div className="flex flex-wrap gap-2">
               {[1, 2, 3, 4, 5].map((n) => (
                 <MyFloveChip
@@ -434,10 +438,11 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
 
           <div className="space-y-2">
             <div className="flex flex-wrap items-center gap-2">
-              <div className="text-sm font-medium text-ink">Hur svårt var det att komma igång?</div>
-              <WhyHint label="svårighetsgrad">
-                Svårighetsgrad är något annat än energi – tvätt kan kosta lite energi men vara tungt
-                att börja med.
+              <div className="text-sm font-medium text-ink">{t("Hur svårt var det att komma igång?")}</div>
+              <WhyHint label={t("svårighetsgrad")}>
+                {t(
+                  "Svårighetsgrad är något annat än energi – tvätt kan kosta lite energi men vara tungt att börja med.",
+                )}
               </WhyHint>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -447,25 +452,25 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
                   active={friction === f.value}
                   onClick={() => setFriction(f.value)}
                 >
-                  {f.emoji} {f.label}
+                  {f.emoji} {t(f.label)}
                 </MyFloveChip>
               ))}
             </div>
           </div>
 
           <div className="space-y-2">
-            <div className="text-sm font-medium text-ink">Var kom det ifrån?</div>
+            <div className="text-sm font-medium text-ink">{t("Var kom det ifrån?")}</div>
             <div className="flex flex-wrap gap-2">
               {ENERGY_KINDS.map((k) => (
                 <MyFloveChip key={k.id} active={kind === k.id} onClick={() => setKind(k.id)}>
-                  {k.emoji} {k.label}
+                  {k.emoji} {t(k.label)}
                 </MyFloveChip>
               ))}
             </div>
           </div>
 
           <div className="space-y-2">
-            <div className="text-sm font-medium text-ink">Vad handlar det om?</div>
+            <div className="text-sm font-medium text-ink">{t("Vad handlar det om?")}</div>
             <div className="flex flex-wrap gap-2">
               {ENERGY_CATEGORIES.map((c) => (
                 <MyFloveChip
@@ -473,7 +478,7 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
                   active={category === c.id}
                   onClick={() => setCategory(c.id)}
                 >
-                  {c.emoji} {c.label}
+                  {c.emoji} {t(c.label)}
                 </MyFloveChip>
               ))}
             </div>
@@ -482,29 +487,29 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
           <Textarea
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            placeholder="Anteckning (frivilligt)"
+            placeholder={t("Anteckning (frivilligt)")}
             className="rounded-2xl"
             rows={2}
           />
 
           <div className="flex flex-wrap items-center gap-3">
             <MyFloveButton onClick={save} disabled={saving}>
-              {saving ? "Sparar…" : "Lägg till"}
+              {saving ? t("Sparar…") : t("Lägg till")}
             </MyFloveButton>
             <button
               type="button"
               onClick={async () => {
                 const t = title.trim();
                 if (!t) {
-                  toast({ description: "Skriv en titel först, så sparar jag den som snabbknapp." });
+                  toast({ description: t("Skriv en titel först, så sparar jag den som snabbknapp.") });
                   return;
                 }
                 await addPreset({ title: t, direction, strength, category, kind, friction });
-                toast({ description: "Sparad som snabbknapp." });
+                toast({ description: t("Sparad som snabbknapp.") });
               }}
               className="text-xs font-medium text-muted-foreground underline underline-offset-2 hover:text-ink"
             >
-              Spara som snabbknapp
+              {t("Spara som snabbknapp")}
             </button>
           </div>
         </MyFloveBlock>

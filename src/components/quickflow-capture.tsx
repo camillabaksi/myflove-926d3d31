@@ -19,6 +19,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import WhyHint from "@/components/why-hint";
+import { useLang } from "@/hooks/use-language";
 import { useVoiceInput } from "@/hooks/use-voice-input";
 import { useSavedStores } from "@/hooks/use-data";
 import { useQuickflow } from "@/hooks/use-quickflow";
@@ -53,6 +54,7 @@ export function QuickflowCapture({
 }: {
   variant?: "card" | "compact" | "global";
 }) {
+  const { t } = useLang();
   const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
   const [level, setLevel] = useState<QuickflowLevel>("snabbt");
@@ -146,8 +148,10 @@ export function QuickflowCapture({
     setOpen(false);
     reset();
     toast.success(
-      titles.length > 1 ? `${titles.length} saker är ute ur huvudet. 💙` : "Ute ur huvudet. 💙",
-      { description: "De ligger i din lista – Flow har föreslagit en ordning." },
+      titles.length > 1
+        ? `${titles.length} ${t("saker är ute ur huvudet. 💙")}`
+        : t("Ute ur huvudet. 💙"),
+      { description: t("De ligger i din lista – Flow har föreslagit en ordning.") },
     );
     void navigate({ to: "/quickflow" });
   };
@@ -163,15 +167,15 @@ export function QuickflowCapture({
     setOpen(false);
     reset();
     toast.success(
-      mergedAny ? "Några fanns redan – jag slog ihop dem. 💙" : "Lugn. Jag håller det åt dig. 💙",
+      mergedAny ? t("Några fanns redan – jag slog ihop dem. 💙") : t("Lugn. Jag håller det åt dig. 💙"),
       {
         description: opts.remindAt
           ? `Jag säger till ${formatWhen(opts.remindAt).toLowerCase()}.`
           : opts.placeName
             ? `Jag knuffar dig när du är nära ${opts.placeName}.`
             : titles.length > 1
-              ? `${titles.length} saker ligger som öppna tankar – jag frågar dig senare.`
-              : "Den ligger som en öppen tanke – jag frågar dig senare.",
+              ? `${titles.length} ${t("saker ligger som öppna tankar – jag frågar dig senare.")}`
+              : t("Den ligger som en öppen tanke – jag frågar dig senare."),
       },
     );
   };
@@ -188,10 +192,12 @@ export function QuickflowCapture({
     setOpen(false);
     reset();
     const folder = folders.find((f) => f.id === folderId);
-    toast.success("Sparad som anteckning. 📝", {
+    toast.success(t("Sparad som anteckning. 📝"), {
       description: folder
         ? `Den ligger i ${folder.emoji} ${folder.name} – hela texten är kvar.`
-        : "Hela texten är kvar. Du hittar den under Anteckningar – lägg den i en mapp när du vill.",
+        : t(
+            "Hela texten är kvar. Du hittar den under Anteckningar – lägg den i en mapp när du vill.",
+          ),
     });
   };
 
@@ -219,15 +225,15 @@ export function QuickflowCapture({
           </span>
           {variant === "compact" ? (
             <>
-              <Brain size={16} /> Skriv eller prata
+              <Brain size={16} /> {t("Skriv eller prata")}
             </>
           ) : (
             <span className="flex-1 min-w-0">
               <span className="block text-lg font-semibold text-ink">
-                ＋ Skriv eller prata med Flow
+                {t("＋ Skriv eller prata med Flow")}
               </span>
               <span className="block text-sm text-muted-foreground">
-                Dumpa allt – Flow delar upp och hjälper dig prioritera.
+                {t("Dumpa allt – Flow delar upp och hjälper dig prioritera.")}
               </span>
             </span>
           )}
@@ -243,9 +249,9 @@ export function QuickflowCapture({
       >
         <DialogContent className="max-h-[85dvh] max-w-[720px] overflow-y-auto overflow-x-hidden">
           <DialogHeader>
-            <DialogTitle>Vad behöver du få ur huvudet?</DialogTitle>
+            <DialogTitle>{t("Vad behöver du få ur huvudet?")}</DialogTitle>
             <p className="text-sm text-muted-foreground">
-              Skriv eller prata fritt. Flow sorterar och hjälper dig prioritera.
+              {t("Skriv eller prata fritt. Flow sorterar och hjälper dig prioritera.")}
             </p>
           </DialogHeader>
 
@@ -256,14 +262,14 @@ export function QuickflowCapture({
                 value={text}
                 onChange={(e) => setText(e.target.value)}
                 rows={3}
-                placeholder="T.ex. Hämta barnen, handla, ring skolan, tvätta och fixa inför imorgon"
+                placeholder={t("T.ex. Hämta barnen, handla, ring skolan, tvätta och fixa inför imorgon")}
                 className="w-full rounded-2xl border border-border bg-background p-3 pr-12 text-base outline-none focus:border-primary"
               />
               {voice.isSupported && (
                 <button
                   type="button"
                   onClick={voice.toggleListening}
-                  aria-label={voice.isListening ? "Sluta lyssna" : "Prata in"}
+                  aria-label={voice.isListening ? t("Sluta lyssna") : t("Prata in")}
                   className={`absolute right-2 top-2 w-9 h-9 rounded-full flex items-center justify-center transition-colors ${
                     voice.isListening
                       ? "bg-destructive text-destructive-foreground animate-pulse"
@@ -281,10 +287,10 @@ export function QuickflowCapture({
                   <NotebookPen size={16} className="mt-0.5 shrink-0 text-primary" />
                   <span>
                     <span className="block font-semibold">
-                      Det här ser ut som en längre anteckning.
+                      {t("Det här ser ut som en längre anteckning.")}
                     </span>
                     <span className="block text-muted-foreground">
-                      Vill du spara den som en anteckning? Hela texten behålls som den är.
+                      {t("Vill du spara den som en anteckning? Hela texten behålls som den är.")}
                     </span>
                   </span>
                 </p>
@@ -294,7 +300,7 @@ export function QuickflowCapture({
                     onClick={() => saveAsNote()}
                     className="w-full rounded-xl sm:flex-1"
                   >
-                    📝 Spara som anteckning
+                    {t("📝 Spara som anteckning")}
                   </Button>
                   <Button
                     type="button"
@@ -302,7 +308,7 @@ export function QuickflowCapture({
                     onClick={() => setLongChoice("keep")}
                     className="w-full rounded-xl sm:flex-1"
                   >
-                    Behåll i Quickflow
+                    {t("Behåll i Quickflow")}
                   </Button>
                 </div>
               </div>
@@ -313,11 +319,12 @@ export function QuickflowCapture({
                 {items.length > 1 && (
                   <div className="flex flex-wrap items-center gap-2">
                     <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                      Så här har jag förstått det
+                      {t("Så här har jag förstått det")}
                     </p>
                     <WhyHint label="uppdelningen">
-                      Flow delar upp texten i separata saker så att inget klumpas ihop. Du kan ändra
-                      eller ta bort – du bestämmer.
+                      {t(
+                        "Flow delar upp texten i separata saker så att inget klumpas ihop. Du kan ändra eller ta bort – du bestämmer.",
+                      )}
                     </WhyHint>
                   </div>
                 )}
@@ -341,7 +348,7 @@ export function QuickflowCapture({
                               }
                             }}
                             className="h-10 min-w-0 flex-1 rounded-xl"
-                            aria-label="Redigera uppgiften"
+                            aria-label={t("Redigera uppgiften")}
                           />
                           <Button
                             type="button"
@@ -349,7 +356,7 @@ export function QuickflowCapture({
                             onClick={saveEdit}
                             className="h-10 shrink-0 rounded-xl"
                           >
-                            Spara
+                            {t("Spara")}
                           </Button>
                         </>
                       ) : (
@@ -360,7 +367,7 @@ export function QuickflowCapture({
                           </span>
                           <button
                             type="button"
-                            aria-label={`Redigera ${title}`}
+                            aria-label={`${t("Redigera")} ${title}`}
                             onClick={() => {
                               setEditingIndex(index);
                               setEditingValue(title);
@@ -372,7 +379,7 @@ export function QuickflowCapture({
                           {items.length > 1 && (
                             <button
                               type="button"
-                              aria-label={`Ta bort ${title}`}
+                              aria-label={`${t("Ta bort")} ${title}`}
                               onClick={() => removeItem(index)}
                               className="press flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-border text-muted-foreground hover:border-destructive hover:text-destructive"
                             >
@@ -386,7 +393,7 @@ export function QuickflowCapture({
                 </ul>
 
                 <p className="pt-1 text-xs uppercase tracking-wide text-muted-foreground">
-                  Vad vill du göra med det här?
+                  {t("Vad vill du göra med det här?")}
                 </p>
                 <div className="grid gap-2 sm:grid-cols-2">
                   <Button
@@ -400,7 +407,7 @@ export function QuickflowCapture({
                     ) : (
                       <Zap size={16} className="mr-2" />
                     )}
-                    Saker att göra
+                    {t("Saker att göra")}
                   </Button>
                   <Button
                     type="button"
@@ -408,7 +415,7 @@ export function QuickflowCapture({
                     onClick={() => saveAsNote()}
                     className="w-full justify-start rounded-xl"
                   >
-                    <NotebookPen size={16} className="mr-2" /> Spara som anteckning
+                    <NotebookPen size={16} className="mr-2" /> {t("Spara som anteckning")}
                   </Button>
                   <Button
                     type="button"
@@ -420,7 +427,7 @@ export function QuickflowCapture({
                     aria-expanded={folderOpen}
                     className="w-full justify-start rounded-xl"
                   >
-                    <FolderOpen size={16} className="mr-2" /> Lägg i mapp
+                    <FolderOpen size={16} className="mr-2" /> {t("Lägg i mapp")}
                   </Button>
                   <Button
                     type="button"
@@ -431,19 +438,20 @@ export function QuickflowCapture({
                     }}
                     className="w-full justify-start rounded-xl"
                   >
-                    <Clock size={16} className="mr-2" /> Påminn mig senare
+                    <Clock size={16} className="mr-2" /> {t("Påminn mig senare")}
                   </Button>
                 </div>
 
                 {folderOpen && (
                   <div className="space-y-2 rounded-2xl border border-border bg-card p-3">
                     <p className="text-xs text-muted-foreground">
-                      Sparas som anteckning i vald mapp – hela texten behålls.
+                      {t("Sparas som anteckning i vald mapp – hela texten behålls.")}
                     </p>
                     {folders.length === 0 ? (
                       <p className="text-sm text-muted-foreground">
-                        Du har inga mappar än. Spara den som anteckning nu och skapa mappar under
-                        Anteckningar när du vill.
+                        {t(
+                          "Du har inga mappar än. Spara den som anteckning nu och skapa mappar under Anteckningar när du vill.",
+                        )}
                       </p>
                     ) : (
                       <div className="flex flex-wrap gap-2">
@@ -463,7 +471,7 @@ export function QuickflowCapture({
                 )}
 
                 <p className="text-xs text-muted-foreground">
-                  Inga tider eller deadlines skapas – bara en ordning du kan ändra.
+                  {t("Inga tider eller deadlines skapas – bara en ordning du kan ändra.")}
                 </p>
 
               </div>
@@ -476,14 +484,14 @@ export function QuickflowCapture({
                   onClick={() => setMoreOpen((v) => !v)}
                   className="text-sm text-muted-foreground underline underline-offset-4"
                 >
-                  {moreOpen ? "Dölj fler val" : "Fler val – påminnelse eller anteckning"}
+                  {moreOpen ? t("Dölj fler val") : t("Fler val – påminnelse eller anteckning")}
                 </button>
 
                 {moreOpen && (
                   <div className="space-y-4">
                     <div className="space-y-2">
                       <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                        Hur känns det?
+                        {t("Hur känns det?")}
                       </p>
                       <div className="grid gap-2">
                         {(Object.keys(LEVEL_META) as QuickflowLevel[]).map((key) => {
@@ -501,9 +509,9 @@ export function QuickflowCapture({
                             >
                               <span className="text-lg leading-none">{meta.emoji}</span>
                               <span>
-                                <span className="block text-sm font-medium">{meta.label}</span>
+                                <span className="block text-sm font-medium">{t(meta.label)}</span>
                                 <span className="block text-xs text-muted-foreground">
-                                  {meta.hint}
+                                  {t(meta.hint)}
                                 </span>
                               </span>
                             </button>
@@ -514,7 +522,7 @@ export function QuickflowCapture({
 
                     <div className="space-y-2">
                       <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                        ⏰ När ska jag påminna dig?
+                        {t("⏰ När ska jag påminna dig?")}
                       </p>
                       <div className="grid gap-2 sm:grid-cols-2">
                         {WHEN_PRESETS.map((preset) => (
@@ -524,7 +532,7 @@ export function QuickflowCapture({
                             onClick={() => save({ remindAt: preset.compute() ?? undefined })}
                             className="w-full rounded-full border border-border bg-card px-4 py-2 text-sm hover:border-primary"
                           >
-                            {preset.label}
+                            {t(preset.label)}
                           </button>
                         ))}
                         <button
@@ -537,7 +545,7 @@ export function QuickflowCapture({
                           }}
                           className="w-full rounded-full border border-border bg-card px-4 py-2 text-sm hover:border-primary"
                         >
-                          På ett datum
+                          {t("På ett datum")}
                         </button>
                         <button
                           type="button"
@@ -548,21 +556,21 @@ export function QuickflowCapture({
                           className="w-full rounded-full border border-border bg-card px-4 py-2 text-sm hover:border-primary"
                         >
                           <MapPin size={13} className="inline mr-1 -mt-0.5" />
-                          När jag kommer till en plats
+                          {t("När jag kommer till en plats")}
                         </button>
                         <button
                           type="button"
                           onClick={() => save({})}
                           className="w-full rounded-full border border-sage bg-sage/30 px-4 py-2 text-sm hover:border-primary"
                         >
-                          💭 Bara spara tanken
+                          {t("💭 Bara spara tanken")}
                         </button>
                         <button
                           type="button"
                           onClick={() => saveAsNote()}
                           className="w-full rounded-full border border-border bg-card px-4 py-2 text-sm hover:border-primary"
                         >
-                          📝 Spara som anteckning
+                          {t("📝 Spara som anteckning")}
                         </button>
                       </div>
 
@@ -582,7 +590,7 @@ export function QuickflowCapture({
                             }}
                             className="rounded-full bg-primary text-primary-foreground px-4 py-2 text-sm font-medium"
                           >
-                            Spara
+                            {t("Spara")}
                           </button>
                         </div>
                       )}
@@ -591,8 +599,9 @@ export function QuickflowCapture({
                         <div className="space-y-2 pt-1">
                           {savedStores.length === 0 ? (
                             <p className="text-xs text-muted-foreground">
-                              Du har inga sparade platser än. Lägg till en plats under Inköp, så kan
-                              jag knuffa dig när du är i närheten.
+                              {t(
+                                "Du har inga sparade platser än. Lägg till en plats under Inköp, så kan jag knuffa dig när du är i närheten.",
+                              )}
                             </p>
                           ) : (
                             <div className="flex flex-wrap gap-2">
@@ -621,7 +630,7 @@ export function QuickflowCapture({
                           <Sparkles size={16} className="text-primary mt-0.5 shrink-0" />
                           <span>
                             <span className="block text-sm font-medium text-ink">
-                              Jag vet inte – hjälp mig
+                              {t("Jag vet inte – hjälp mig")}
                             </span>
                             <span className="block text-xs text-muted-foreground">
                               Jag föreslår {formatWhen(suggestion.at).toLowerCase()}.{" "}

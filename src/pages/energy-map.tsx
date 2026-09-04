@@ -17,6 +17,7 @@ import {
 } from "recharts";
 import CollapsibleSection from "@/components/collapsible-section";
 import { MyFloveEnergyDots } from "@/components/myflove/motion";
+import { useLang } from "@/hooks/use-language";
 
 interface EnergyLog {
   id: string;
@@ -31,6 +32,14 @@ const LEVEL_LABELS: Record<number, string> = {
   3: "Ok",
   4: "På",
   5: "Fullt laddad",
+};
+
+const LEVEL_LABELS_EN: Record<number, string> = {
+  1: "Empty",
+  2: "Low",
+  3: "Ok",
+  4: "On",
+  5: "Fully charged",
 };
 
 const LEVEL_EMOJI: Record<number, string> = {
@@ -50,6 +59,8 @@ interface EnergyContentProps {
 }
 
 export function EnergyContent({ showHeader = true }: EnergyContentProps) {
+  const { t, lang, locale } = useLang();
+  const levelLabels = lang === "en" ? LEVEL_LABELS_EN : LEVEL_LABELS;
   const [logs, setLogs] = useState<EnergyLog[]>([]);
   const [userId, setUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -92,7 +103,7 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
     return logs
       .filter((l) => new Date(l.logged_at) >= start)
       .map((l) => ({
-        time: new Date(l.logged_at).toLocaleTimeString("sv-SE", {
+        time: new Date(l.logged_at).toLocaleTimeString(locale, {
           hour: "2-digit",
           minute: "2-digit",
         }),
@@ -155,11 +166,12 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
           <header className="space-y-1">
             <div className="flex items-center gap-2">
               <Battery className="text-primary" size={28} />
-              <h1 className="text-2xl font-semibold tracking-tight">Energikarta</h1>
+              <h1 className="text-2xl font-semibold tracking-tight">{t("Energikarta")}</h1>
             </div>
             <p className="text-sm text-muted-foreground">
-              Logga hur du känner dig just nu. Flow lär sig när på dygnet du har mest att ge – och
-              när du behöver vila.
+              {t(
+                "Logga hur du känner dig just nu. Flow lär sig när på dygnet du har mest att ge – och när du behöver vila.",
+              )}
             </p>
           </header>
         </MyFloveWide>
@@ -168,7 +180,7 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
       {!userId && !loading && (
         <MyFloveWide>
           <div className="rounded-2xl bg-card border border-border p-4 text-sm text-muted-foreground">
-            Logga in för att spara din energi över tid.
+            {t("Logga in för att spara din energi över tid.")}
           </div>
         </MyFloveWide>
       )}
@@ -176,10 +188,10 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
       {userId && (
         <MyFloveWide>
           <CollapsibleSection
-            title="Hur känns det just nu?"
-            help="Tryck på en nivå. Det tar två sekunder och styr hur mycket appen föreslår idag."
+            title={t("Hur känns det just nu?")}
+            help={t("Tryck på en nivå. Det tar två sekunder och styr hur mycket appen föreslår idag.")}
             headingClassName="font-medium"
-            description="Välj det som passar närmast – det finns inga fel svar."
+            description={t("Välj det som passar närmast – det finns inga fel svar.")}
             className="rounded-2xl bg-card border border-border p-5 shadow-sm"
           >
             <div className="grid grid-cols-5 gap-2">
@@ -197,7 +209,7 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
                     }`}
                   >
                     <span className="text-2xl leading-none">{LEVEL_EMOJI[lvl]}</span>
-                    <span className="text-[11px] leading-tight">{LEVEL_LABELS[lvl]}</span>
+                    <span className="text-[11px] leading-tight">{levelLabels[lvl]}</span>
                   </button>
                 );
               })}
@@ -208,13 +220,13 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
                 <textarea
                   value={note}
                   onChange={(e) => setNote(e.target.value)}
-                  placeholder="Något som påverkade? (valfritt)"
+                  placeholder={t("Något som påverkade? (valfritt)")}
                   className="w-full rounded-xl border border-border bg-background p-3 text-sm resize-none"
                   rows={2}
                 />
                 <div className="flex gap-2">
                   <Button onClick={handleSave} disabled={saving} className="flex-1">
-                    {saving ? <Loader2 className="animate-spin" size={16} /> : "Spara"}
+                    {saving ? <Loader2 className="animate-spin" size={16} /> : t("Spara")}
                   </Button>
                   <Button
                     variant="ghost"
@@ -223,7 +235,7 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
                       setNote("");
                     }}
                   >
-                    Avbryt
+                    {t("Avbryt")}
                   </Button>
                 </div>
               </div>
@@ -243,12 +255,12 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
         <>
           <MyFloveWide span="wide">
             <CollapsibleSection
-              title="Idag"
+              title={t("Idag")}
               headingClassName="font-medium"
               description={
                 todayLogs.length === 0
-                  ? "Ingen loggning idag än – lägg en när det passar."
-                  : `${todayLogs.length} loggning${todayLogs.length === 1 ? "" : "ar"} idag.`
+                  ? t("Ingen loggning idag än – lägg en när det passar.")
+                  : `${todayLogs.length} ${todayLogs.length === 1 ? t("loggning idag.") : t("loggningar idag.")}`
               }
               className="rounded-2xl bg-card border border-border p-5 shadow-sm"
             >
@@ -260,7 +272,7 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
                       <XAxis dataKey="time" tick={{ fontSize: 11 }} />
                       <YAxis domain={[0, 5]} ticks={[1, 2, 3, 4, 5]} tick={{ fontSize: 11 }} />
                       <Tooltip
-                        formatter={(v: number) => [`${v} – ${LEVEL_LABELS[v]}`, "Energi"]}
+                        formatter={(v: number) => [`${v} – ${levelLabels[v]}`, t("Energi")]}
                         contentStyle={{ borderRadius: 12, fontSize: 12 }}
                       />
                       <Line
@@ -280,15 +292,15 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
 
           <MyFloveWide span="wide">
             <CollapsibleSection
-              title="Din vecka i snitt"
-              help="Ser du ett mönster? Använd det för att lägga tunga saker när du brukar orka."
+              title={t("Din vecka i snitt")}
+              help={t("Ser du ett mönster? Använd det för att lägga tunga saker när du brukar orka.")}
               headingClassName="font-medium"
-              description="Snittenergi per timme, senaste 7 dagarna."
+              description={t("Snittenergi per timme, senaste 7 dagarna.")}
               className="rounded-2xl bg-card border border-border p-5 shadow-sm"
             >
               {hourAverages.length === 0 ? (
                 <p className="text-sm text-muted-foreground py-6 text-center">
-                  Logga några gånger så börjar din karta ta form.
+                  {t("Logga några gånger så börjar din karta ta form.")}
                 </p>
               ) : (
                 <>
@@ -302,7 +314,7 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
                         <XAxis dataKey="hour" tick={{ fontSize: 10 }} interval="preserveStartEnd" />
                         <YAxis domain={[0, 5]} ticks={[1, 2, 3, 4, 5]} tick={{ fontSize: 11 }} />
                         <Tooltip
-                          formatter={(v: number) => [v, "Snitt"]}
+                          formatter={(v: number) => [v, t("Snitt")]}
                           contentStyle={{ borderRadius: 12, fontSize: 12 }}
                         />
                         <Bar dataKey="avg" fill="hsl(var(--primary))" radius={[6, 6, 0, 0]} />
@@ -313,8 +325,8 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
                     <div className="mt-4 flex items-start gap-2 rounded-xl bg-secondary/40 p-3 text-sm">
                       <Sparkles size={16} className="text-primary shrink-0 mt-0.5" />
                       <p className="leading-snug">
-                        Du är oftast som mest på runt <strong>{peakHour.hour}</strong> och lägre
-                        kring <strong>{lowHour.hour}</strong>. Planera det tunga när kroppen är med.
+                        {t("Du är oftast som mest på runt")} <strong>{peakHour.hour}</strong> {t("och lägre")}{" "}
+                        {t("kring")} <strong>{lowHour.hour}</strong>{t(". Planera det tunga när kroppen är med.")}
                       </p>
                     </div>
                   )}

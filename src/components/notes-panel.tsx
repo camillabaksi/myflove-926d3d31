@@ -27,12 +27,14 @@ import {
   type QuickflowDestination,
 } from "@/lib/quickflow";
 import { ALL_AREAS, AREA_META, type LifeArea } from "@/lib/life-areas";
+import { useLang } from "@/hooks/use-language";
 
 /**
  * Anteckningar – det du bara ville få ur huvudet.
  * Inget krav, ingen deadline. Flow föreslår, du bestämmer.
  */
 export default function NotesPanel() {
+  const { t } = useLang();
   const { openNotes, updateNote, removeNote, addNote } = useNotes();
   const { addTask } = useTasks();
   const { addReminder } = useReminders();
@@ -50,8 +52,11 @@ export default function NotesPanel() {
     clearIdeas();
     toast.success(
       count === 1
-        ? "Din gamla idé ligger nu bland anteckningarna."
-        : `Dina ${count} gamla idéer ligger nu bland anteckningarna.`,
+        ? t("Din gamla idé ligger nu bland anteckningarna.")
+        : t("Dina {{count}} gamla idéer ligger nu bland anteckningarna.").replace(
+            "{{count}}",
+            String(count),
+          ),
     );
     // Körs en gång när idéerna hunnit laddas.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -74,17 +79,23 @@ export default function NotesPanel() {
     updateNote(note.id, { folderId });
     if (folderId) recordAction("mapp", folderId);
     const folder = folders.find((f) => f.id === folderId);
-    toast.success(folder ? `Flyttad till ${folder.emoji} ${folder.name}.` : "Ligger utan mapp nu.");
+    toast.success(
+      folder
+        ? `${t("Flyttad till")} ${folder.emoji} ${folder.name}.`
+        : t("Ligger utan mapp nu."),
+    );
   };
 
   const createFolder = (name: string, emoji: string) => {
     if (!name.trim()) return;
     if (folders.some((f) => f.name.toLowerCase() === name.trim().toLowerCase())) {
-      toast("Du har redan en mapp med det namnet.");
+      toast(t("Du har redan en mapp med det namnet."));
       return;
     }
     addFolder(name, emoji);
-    toast.success(`Mappen ${emoji} ${name.trim()} är skapad.`);
+    toast.success(
+      t("Mappen {{name}} är skapad.").replace("{{name}}", `${emoji} ${name.trim()}`),
+    );
   };
 
   const startEdit = (note: FlowNote) => {
@@ -104,15 +115,15 @@ export default function NotesPanel() {
     if (!text) return;
     updateNote(note.id, { text, area: editArea === "" ? undefined : editArea });
     cancelEdit();
-    toast.success("Anteckningen är uppdaterad. 💜");
+    toast.success(t("Anteckningen är uppdaterad. 💜"));
   };
 
   const deleteNote = (note: FlowNote) => {
     removeNote(note.id);
     if (editingId === note.id) cancelEdit();
-    toast("Anteckningen är borttagen.", {
+    toast(t("Anteckningen är borttagen."), {
       action: {
-        label: "Ångra",
+        label: t("Ångra"),
         onClick: () => addNote(note.text, note.area),
       },
     });
@@ -127,7 +138,12 @@ export default function NotesPanel() {
     else if (d === "paminnelse") addReminder(note.text, today(), "09:00");
     else return;
     updateNote(note.id, { convertedAt: Date.now(), convertedTo: d });
-    toast.success(`Anteckningen blev ${DESTINATION_META[d].label.toLowerCase()}.`);
+    toast.success(
+      t("Anteckningen blev {{target}}.").replace(
+        "{{target}}",
+        t(DESTINATION_META[d].label).toLowerCase(),
+      ),
+    );
   };
 
   /** Tillbaka till Quickflow – anteckningen blir ett aktivt flow-block igen. */
@@ -135,9 +151,9 @@ export default function NotesPanel() {
     addQuickflow({ text: note.text, level: "tanke" });
     removeNote(note.id);
     if (editingId === note.id) cancelEdit();
-    toast.success("Tanken ligger i Quickflow igen. 💜", {
+    toast.success(t("Tanken ligger i Quickflow igen. 💜"), {
       action: {
-        label: "Ångra",
+        label: t("Ångra"),
         onClick: () => addNote(note.text, note.area),
       },
     });
@@ -161,28 +177,28 @@ export default function NotesPanel() {
           if (!draft.trim()) return;
           addNote(draft);
           setDraft("");
-          toast.success("Sparad som anteckning – inget krav på åtgärd. 💜");
+          toast.success(t("Sparad som anteckning – inget krav på åtgärd. 💜"));
         }}
         className="surface-card p-4 flex flex-wrap gap-2"
       >
         <input
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
-          placeholder="Skriv en anteckning – bara för att få ut det"
+          placeholder={t("Skriv en anteckning – bara för att få ut det")}
           className="flex-1 min-w-[12rem] rounded-2xl border border-border bg-card px-3 py-2 text-sm outline-none focus:border-primary/50"
         />
         <button
           type="submit"
           className="rounded-full bg-primary text-primary-foreground px-4 py-2 text-sm font-semibold inline-flex items-center gap-2"
         >
-          <NotebookPen size={16} /> Spara
+          <NotebookPen size={16} /> {t("Spara")}
         </button>
       </form>
 
       <div className="surface-card space-y-3 p-4">
         <div className="flex flex-wrap items-center gap-2">
           <Chip onClick={() => setActiveFolder("all")} highlight={activeFolder === "all"}>
-            Alla
+            {t("Alla")}
           </Chip>
           {folders.map((folder) => (
             <Chip
@@ -194,27 +210,29 @@ export default function NotesPanel() {
             </Chip>
           ))}
           <Chip onClick={() => setActiveFolder("none")} highlight={activeFolder === "none"}>
-            Utan mapp
+            {t("Utan mapp")}
           </Chip>
           <button
             type="button"
             onClick={() => setShowFolderManager((v) => !v)}
             className="ml-auto inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-2 text-xs text-muted-foreground hover:border-primary/50"
           >
-            <FolderPlus size={14} /> Mina mappar
+            <FolderPlus size={14} /> {t("Mina mappar")}
           </button>
         </div>
 
         {showFolderManager && (
           <div className="space-y-3 border-t border-border/60 pt-3">
             <p className="text-xs text-muted-foreground">
-              Mapparna är helt dina. Skapa, byt namn eller ta bort – anteckningarna finns kvar.
+              {t(
+                "Mapparna är helt dina. Skapa, byt namn eller ta bort – anteckningarna finns kvar.",
+              )}
             </p>
             <div className="flex flex-wrap gap-2">
               <select
                 value={newFolderEmoji}
                 onChange={(e) => setNewFolderEmoji(e.target.value)}
-                aria-label="Välj ikon"
+                aria-label={t("Välj ikon")}
                 className="rounded-xl border border-border bg-card px-2 py-2 text-sm outline-none"
               >
                 {FOLDER_EMOJIS.map((emoji) => (
@@ -226,7 +244,7 @@ export default function NotesPanel() {
               <input
                 value={newFolderName}
                 onChange={(e) => setNewFolderName(e.target.value)}
-                placeholder="Ny mapp, t.ex. Familj"
+                placeholder={t("Ny mapp, t.ex. Familj")}
                 className="min-w-[10rem] flex-1 rounded-2xl border border-border bg-card px-3 py-2 text-sm outline-none focus:border-primary/50"
               />
               <button
@@ -238,7 +256,7 @@ export default function NotesPanel() {
                 disabled={!newFolderName.trim()}
                 className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-40"
               >
-                <Plus size={16} /> Skapa
+                <Plus size={16} /> {t("Skapa")}
               </button>
             </div>
 
@@ -257,16 +275,16 @@ export default function NotesPanel() {
                 <input
                   value={folder.name}
                   onChange={(e) => renameFolder(folder.id, { name: e.target.value })}
-                  aria-label={`Byt namn på ${folder.name}`}
+                  aria-label={`${t("Byt namn på")} ${folder.name}`}
                   className="flex-1 rounded-xl border border-border bg-card px-3 py-1.5 text-sm outline-none focus:border-primary/50"
                 />
                 <button
                   type="button"
-                  aria-label={`Ta bort mappen ${folder.name}`}
+                  aria-label={`${t("Ta bort mappen")} ${folder.name}`}
                   onClick={() => {
                     removeFolder(folder.id);
                     if (activeFolder === folder.id) setActiveFolder("all");
-                    toast("Mappen är borttagen – anteckningarna ligger kvar utan mapp.");
+                    toast(t("Mappen är borttagen – anteckningarna ligger kvar utan mapp."));
                   }}
                   className="text-muted-foreground hover:text-destructive"
                 >
@@ -281,8 +299,8 @@ export default function NotesPanel() {
       {visibleNotes.length === 0 ? (
         <p className="text-sm text-muted-foreground">
           {openNotes.length === 0
-            ? "Inga anteckningar än. Det du sparar här får bara finnas."
-            : "Inget i den här mappen än."}
+            ? t("Inga anteckningar än. Det du sparar här får bara finnas.")
+            : t("Inget i den här mappen än.")}
         </p>
       ) : (
         visibleNotes.map((note) => {
@@ -303,10 +321,10 @@ export default function NotesPanel() {
                     onChange={(e) => setEditArea(e.target.value as LifeArea | "")}
                     className="rounded-xl border border-border bg-card px-3 py-2 text-sm outline-none"
                   >
-                    <option value="">Inget livsområde</option>
+                    <option value="">{t("Inget livsområde")}</option>
                     {ALL_AREAS.map((area) => (
                       <option key={area} value={area}>
-                        {AREA_META[area].label}
+                        {t(AREA_META[area].label)}
                       </option>
                     ))}
                   </select>
@@ -317,14 +335,14 @@ export default function NotesPanel() {
                       disabled={!editText.trim()}
                       className="rounded-full bg-primary text-primary-foreground px-4 py-2 text-sm font-semibold inline-flex items-center gap-2 disabled:opacity-40"
                     >
-                      <Check size={16} /> Spara ändring
+                      <Check size={16} /> {t("Spara ändring")}
                     </button>
                     <button
                       type="button"
                       onClick={cancelEdit}
                       className="rounded-full border border-border bg-card px-4 py-2 text-sm inline-flex items-center gap-2"
                     >
-                      <X size={16} /> Avbryt
+                      <X size={16} /> {t("Avbryt")}
                     </button>
                   </div>
                 </div>
@@ -336,23 +354,25 @@ export default function NotesPanel() {
                     <p className="text-xs text-muted-foreground">
                       {note.folderId
                         ? `${folders.find((f) => f.id === note.folderId)?.emoji ?? "📁"} ${
-                            folders.find((f) => f.id === note.folderId)?.name ?? "Mapp"
+                            folders.find((f) => f.id === note.folderId)?.name ?? t("Mapp")
                           } · `
                         : ""}
-                      {note.area ? `${AREA_META[note.area].label} · ` : ""}
-                      Ingen deadline, inget krav.
+                      {note.area ? `${t(AREA_META[note.area].label)} · ` : ""}
+                      {t("Ingen deadline, inget krav.")}
                     </p>
                     {suggestion && (
                       <p className="text-xs text-primary">
-                        Det här skulle kunna bli {DESTINATION_META[suggestion].label.toLowerCase()}{" "}
-                        – om du vill.
+                        {t("Det här skulle kunna bli {{target}} – om du vill.").replace(
+                          "{{target}}",
+                          t(DESTINATION_META[suggestion].label).toLowerCase(),
+                        )}
                       </p>
                     )}
                   </div>
                   <button
                     type="button"
                     onClick={() => startEdit(note)}
-                    aria-label="Redigera anteckning"
+                    aria-label={t("Redigera anteckning")}
                     className="text-muted-foreground hover:text-primary"
                   >
                     <Pencil size={16} />
@@ -360,7 +380,7 @@ export default function NotesPanel() {
                   <button
                     type="button"
                     onClick={() => deleteNote(note)}
-                    aria-label="Ta bort anteckning"
+                    aria-label={t("Ta bort anteckning")}
                     className="text-muted-foreground hover:text-destructive"
                   >
                     <Trash2 size={16} />
@@ -374,18 +394,18 @@ export default function NotesPanel() {
                   onClick={() => setConvertNote(note)}
                   className="w-full rounded-full bg-primary text-primary-foreground px-4 py-2 text-sm font-semibold inline-flex items-center justify-center gap-2"
                 >
-                  <Wand2 size={16} /> Omvandla till …
+                  <Wand2 size={16} /> {t("Omvandla till …")}
                 </button>
                 <button
                   type="button"
                   onClick={() => backToQuickflow(note)}
                   className="w-full rounded-full border border-border bg-card px-4 py-2 text-sm font-medium inline-flex items-center justify-center gap-2"
                 >
-                  <Undo2 size={16} /> Tillbaka till Quickflow
+                  <Undo2 size={16} /> {t("Tillbaka till Quickflow")}
                 </button>
                 {folders.length > 0 && (
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-xs text-muted-foreground">Lägg i mapp:</span>
+                    <span className="text-xs text-muted-foreground">{t("Lägg i mapp:")}</span>
                     {folders.map((folder) => (
                       <Chip
                         key={folder.id}
@@ -408,9 +428,9 @@ export default function NotesPanel() {
                       key={d}
                       onClick={() => convert(note, d)}
                       highlight={d === suggestion}
-                      title={DESTINATION_META[d].hint}
+                      title={t(DESTINATION_META[d].hint)}
                     >
-                      {DESTINATION_META[d].emoji} {DESTINATION_META[d].label}
+                      {DESTINATION_META[d].emoji} {t(DESTINATION_META[d].label)}
                     </Chip>
                   ))}
                 </div>
@@ -454,10 +474,10 @@ function Chip({
       type="button"
       onClick={onClick}
       title={title}
-      className={`rounded-full border px-3.5 py-2 text-sm font-medium transition-colors ${
+      className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
         highlight
           ? "border-primary bg-primary/10 text-primary"
-          : "border-border bg-card hover:border-primary/50"
+          : "border-border bg-card text-muted-foreground hover:border-primary/50"
       }`}
     >
       {children}
