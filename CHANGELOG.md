@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-05 – Mappar för anteckningar och mjukare Quickflow
+
+- Anteckningar kan nu sorteras i egna mappar. Skapa, byt namn eller ta bort mappar – anteckningarna finns kvar oavsett. Filtrera på Alla, en mapp eller Utan mapp.
+- Förslag på mappar (Hem, Familj, Jobb, Studier, Idéer, Viktigt) när du inte har några egna än.
+- Quickflow frågar mjukare om saker som blivit liggande: "Det här har blivit liggande – vill du göra något med det?" med alternativen påminn senare, lägg i kalendern, markera som klart, flytta till en mapp, ta bort – eller låt den ligga kvar.
+- MyFlove lär sig vilket alternativ du oftast väljer och lägger det först nästa gång.
+
 ## 2026-09-04 – Investerarmaterial version 4.1
 
 - Allt investerarmaterial är nu samlat under samma versionsnummer: 4.1. Investerarsidan, Living Blueprint, pitchdecket och pitchvideon beskriver samma produktläge.
