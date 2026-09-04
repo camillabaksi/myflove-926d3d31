@@ -8,7 +8,6 @@ import { usePriorityList } from "@/hooks/use-priority-list";
 import { normalizeQuickflowText } from "@/lib/quickflow";
 import { bucketRank } from "@/lib/quickflow-priority";
 import { useFrictionLibrary } from "@/hooks/use-friction-library";
-import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import { useDoneLog } from "@/hooks/use-done-log";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { getArea } from "@/lib/life-areas";
@@ -51,7 +50,6 @@ export function useFlowItems(dateISO?: string): {
   const { items: quickflowItems, complete, uncomplete } = useQuickflow();
   const { items: priorityItems, update: updatePriority } = usePriorityList();
   const { suggestFor } = useFrictionLibrary();
-  const { entries: energyEntries } = useEnergyFlow();
   const { isDone, toggleDone } = useDoneLog(targetDay);
   const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
 
@@ -277,7 +275,6 @@ export function useFlowItems(dateISO?: string): {
     routines,
     quickflowItems,
     priorityItems,
-    energyEntries,
     suggestFor,
     isDone,
     targetDay,
