@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Pencil, Sparkles } from "lucide-react";
+import { Pencil, Sparkles, ChevronDown } from "lucide-react";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import type { EnergyCategory } from "@/lib/energy-flow";
@@ -9,21 +9,9 @@ import WhyHint from "@/components/why-hint";
 import { useFlowExplainer } from "@/hooks/use-flow-explainer";
 import { MyFloveBlock } from "@/components/myflove/block";
 
-const MOODS = [
-  { score10: 2, emoji: "😢", label: "Tungt" },
-  { score10: 4, emoji: "😕", label: "Låg" },
-  { score10: 6, emoji: "😐", label: "Okej" },
-  { score10: 8, emoji: "🙂", label: "Bra" },
-  { score10: 10, emoji: "😄", label: "Toppen" },
-];
+import { ORK_LEVELS, MOOD_FACES, orkFromValue10 } from "@/lib/ork";
 
-const LEVELS = [
-  { step: 1, emoji: "🪫", label: "Nästan slut" },
-  { step: 2, emoji: "🔋", label: "Lågt" },
-  { step: 3, emoji: "🔋", label: "Halvfullt" },
-  { step: 4, emoji: "🔋", label: "Bra" },
-  { step: 5, emoji: "🔋", label: "Fullt" },
-];
+const MOODS = MOOD_FACES;
 
 const FACTORS: { id: string; label: string; emoji: string; category: EnergyCategory }[] = [
   { id: "somn", label: "Sömn", emoji: "😴", category: "somn" },
