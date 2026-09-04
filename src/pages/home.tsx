@@ -10,6 +10,7 @@ import { Link } from "wouter";
 import Layout from "@/components/layout";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
 import { useUserProfile } from "@/hooks/use-user-profile";
+import { useLang } from "@/hooks/use-language";
 import { useTasks, useReminders } from "@/hooks/use-data";
 import { useQuickflow } from "@/hooks/use-quickflow";
 
@@ -63,6 +64,7 @@ interface TodayEntry {
 
 export default function Home() {
   const { name, setName, lastVisit: _lastVisit } = useUserProfile();
+  const { t } = useLang();
   const [editingName, setEditingName] = useState(false);
   const [nameDraft, setNameDraft] = useState(name);
   const { activeArea } = useActiveArea();
@@ -96,10 +98,10 @@ export default function Home() {
   const orkLabel = orkFromValue10(energyValue)?.label ?? null;
   const batteryLine =
     battery >= 70
-      ? "Du har gott om kraft kvar idag."
+      ? t("Du har gott om kraft kvar idag.")
       : battery >= 40
-        ? "Du har lite kvar att ge idag."
-        : "Ganska tomt just nu – ta det lugnt.";
+        ? t("Du har lite kvar att ge idag.")
+        : t("Ganska tomt just nu – ta det lugnt.");
 
   /** Samma tre kort för alla – ordningen anpassas först när data finns. */
   const FEATURE_CARDS: Record<
@@ -108,22 +110,22 @@ export default function Home() {
   > = {
     quickflow: {
       id: "quickflow",
-      title: "Quickflow",
-      subtitle: "Få ner det snabbt",
+      title: t("Quickflow"),
+      subtitle: t("Få ner det snabbt"),
       href: "/quickflow",
       icon: Brain,
     },
     batteri: {
       id: "batteri",
-      title: "Batteriet",
-      subtitle: orkLabel ? `Din ork idag · ${orkLabel}` : "Hur mycket ork har du?",
+      title: t("Batteriet"),
+      subtitle: orkLabel ? `${t("Din ork idag")} · ${orkLabel}` : t("Hur mycket ork har du?"),
       href: "/mitt-batteri",
       icon: BatteryMedium,
     },
     kalender: {
       id: "kalender",
-      title: "Kalendern",
-      subtitle: "Din överblick",
+      title: t("Kalendern"),
+      subtitle: t("Din överblick"),
       href: "/kalender",
       icon: CalendarDays,
     },
@@ -134,10 +136,10 @@ export default function Home() {
   const adaptiveNote =
     adaptive && top
       ? top === "quickflow"
-        ? "Du använder Quickflow mest, så den ligger först här nu."
+        ? t("Du använder Quickflow mest, så den ligger först här nu.")
         : top === "kalender"
-          ? "Du använder kalendern mest, så den ligger först här nu."
-          : "Du checkar in i batteriet ofta, så det ligger först här nu."
+          ? t("Du använder kalendern mest, så den ligger först här nu.")
+          : t("Du checkar in i batteriet ofta, så det ligger först här nu.")
       : null;
 
   const openQuickflow = () => {
@@ -176,9 +178,9 @@ export default function Home() {
 
           <div className="relative min-w-0 pr-24 space-y-1">
             <h1 className="text-2xl sm:text-3xl font-bold text-ink">
-              {name ? `Hej ${name}!` : "Hej!"} <span aria-hidden>💜</span>
+              {name ? `${t("Hej")} ${name}!` : t("Hej!")} <span aria-hidden>💜</span>
             </h1>
-            <p className="text-sm text-muted-foreground">Du gör ett fantastiskt jobb!</p>
+            <p className="text-sm text-muted-foreground">{t("Du gör ett fantastiskt jobb!")}</p>
             {editingName ? (
               <form
                 onSubmit={(e) => {
@@ -192,12 +194,12 @@ export default function Home() {
                   autoFocus
                   value={nameDraft}
                   onChange={(e) => setNameDraft(e.target.value)}
-                  placeholder="Vad ska jag kalla dig?"
+                  placeholder={t("Vad ska jag kalla dig?")}
                   className="rounded-full bg-background/80 border border-border px-3 py-1 text-sm min-w-0"
                   maxLength={32}
                 />
                 <button type="submit" className="text-xs font-medium text-primary hover:underline">
-                  Spara
+                  {t("Spara")}
                 </button>
                 <button
                   type="button"
@@ -207,7 +209,7 @@ export default function Home() {
                   }}
                   className="text-xs text-muted-foreground hover:underline"
                 >
-                  Avbryt
+                  {t("Avbryt")}
                 </button>
               </form>
             ) : (
@@ -219,7 +221,7 @@ export default function Home() {
                 }}
                 className="text-xs text-muted-foreground/80 hover:text-foreground underline underline-offset-2"
               >
-                {name ? "Byt namn" : "Vad ska jag kalla dig?"}
+                {name ? t("Byt namn") : t("Vad ska jag kalla dig?")}
               </button>
             )}
           </div>
@@ -238,7 +240,7 @@ export default function Home() {
           <div
             className="grid grid-cols-3 gap-2.5 sm:gap-4"
             data-testid="home-widgets"
-            aria-label="Vad vill du göra just nu?"
+            aria-label={t("Vad vill du göra just nu?")}
           >
             {featureCards.map((card) =>
               card.id === "quickflow" ? (
@@ -283,11 +285,11 @@ export default function Home() {
         {/* Ditt batteri – stort, lugnt, som i mockupen. */}
         <MyFloveWide style={{ order: 2 }} className="min-w-0">
           <section
-            aria-label="Ditt batteri"
+            aria-label={t("Ditt batteri")}
             data-testid="home-recovery"
             className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
           >
-            <h2 className="text-base font-semibold text-ink">Ditt batteri</h2>
+            <h2 className="text-base font-semibold text-ink">{t("Ditt batteri")}</h2>
             <div className="mt-3 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4">
               <div className="flex items-center gap-3 rounded-2xl bg-lavender/30 px-4 py-3">
                 <BatteryMedium className="h-10 w-10 text-primary" aria-hidden strokeWidth={1.75} />
@@ -295,11 +297,13 @@ export default function Home() {
                   <span className="block text-3xl font-bold tabular-nums text-ink leading-none">
                     {battery}%
                   </span>
-                  <span className="mt-1 block text-sm text-muted-foreground">Gott jobbat!</span>
+                  <span className="mt-1 block text-sm text-muted-foreground">{t("Gott jobbat!")}</span>
                 </div>
               </div>
               <div className="min-w-0">
-                <p className="text-sm text-ink">Du har {battery}% energi</p>
+                <p className="text-sm text-ink">
+                  {t("Du har")} {battery}% {t("energi")}
+                </p>
                 <p className="mt-0.5 text-xs text-muted-foreground">{batteryLine}</p>
               </div>
             </div>
@@ -308,7 +312,7 @@ export default function Home() {
               onClick={() => track("home_widget_opened", { source: "logga" })}
               className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
             >
-              {energyValue != null ? "Tips för mer energi" : "Logga energi & mående"}{" "}
+              {energyValue != null ? t("Tips för mer energi") : t("Logga energi & mående")}{" "}
               <ArrowRight size={14} />
             </Link>
           </section>
@@ -317,22 +321,22 @@ export default function Home() {
         {/* Idag – tider och saker, som i mockupen. */}
         <MyFloveWide style={{ order: 3 }} className="min-w-0">
           <section
-            aria-label="Idag"
+            aria-label={t("Idag")}
             data-testid="home-today"
             className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
           >
             <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
-              <h2 className="truncate text-base font-semibold text-ink">Idag</h2>
+              <h2 className="truncate text-base font-semibold text-ink">{t("Idag")}</h2>
               <Link
                 href="/idag"
                 className="shrink-0 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
               >
-                Visa dagsschema <ChevronRight size={15} />
+                {t("Visa dagsschema")} <ChevronRight size={15} />
               </Link>
             </div>
             {todayEntries.length === 0 ? (
               <p className="mt-3 text-sm text-muted-foreground">
-                Inget inlagt för idag ännu. Det är också helt okej.
+                {t("Inget inlagt för idag ännu. Det är också helt okej.")}
               </p>
             ) : (
               <ul className="mt-2">
@@ -367,22 +371,22 @@ export default function Home() {
         {/* Från ditt huvud – senaste QuickFlow-tankarna. */}
         <MyFloveWide style={{ order: 4 }} className="min-w-0">
           <section
-            aria-label="Från ditt huvud"
+            aria-label={t("Från ditt huvud")}
             data-testid="home-quickflow-latest"
             className="rounded-3xl border border-border/60 bg-lavender/25 p-4 shadow-soft"
           >
             <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
-              <h2 className="truncate text-base font-semibold text-ink">Från ditt huvud</h2>
+              <h2 className="truncate text-base font-semibold text-ink">{t("Från ditt huvud")}</h2>
               <Link
                 href="/quickflow"
                 className="shrink-0 inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
               >
-                Visa alla <ArrowRight size={13} />
+                {t("Visa alla")} <ArrowRight size={13} />
               </Link>
             </div>
             {openItems.length === 0 ? (
               <p className="mt-3 text-sm text-muted-foreground">
-                Inget som snurrar just nu – tryck på Quickflow när något dyker upp.
+                {t("Inget som snurrar just nu – tryck på Quickflow när något dyker upp.")}
               </p>
             ) : (
               <ul className="mt-3 space-y-1.5">
@@ -400,15 +404,15 @@ export default function Home() {
         {/* Uppmuntrande citat – lugnt avslut, som i mockupen. */}
         <MyFloveWide style={{ order: 5 }} className="min-w-0">
           <section
-            aria-label="Dagens tanke"
+            aria-label={t("Dagens tanke")}
             className="rounded-3xl border border-border/60 bg-lavender/25 p-5 shadow-soft"
           >
             <div className="flex items-start gap-3">
               <Heart className="mt-0.5 h-6 w-6 shrink-0 text-primary" aria-hidden />
               <p className="text-sm text-ink leading-relaxed">
-                Små steg varje dag
+                {t("Små steg varje dag")}
                 <br />
-                skapar stora förändringar.
+                {t("skapar stora förändringar.")}
               </p>
             </div>
           </section>
@@ -425,16 +429,16 @@ export default function Home() {
         {patterns.ready && (
           <MyFloveWide style={{ order: 4.5 }} className="min-w-0">
             <section
-              aria-label="Det här har MyFlove lärt sig om din vardag"
+              aria-label={t("Det här har MyFlove lärt sig om din vardag")}
               data-testid="home-everyday-patterns"
               className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
             >
               <div className="flex items-start gap-3">
                 <FlowMascot size="xs" mood="calm" className="mt-0.5 shrink-0 flow-alive" alt="" />
                 <div className="min-w-0 flex-1">
-                  <h2 className="text-base font-semibold text-ink">Din vardag</h2>
+                  <h2 className="text-base font-semibold text-ink">{t("Din vardag")}</h2>
                   <p className="mt-0.5 text-xs text-muted-foreground">
-                    Det här har MyFlove lärt sig av dina egna dagar
+                    {t("Det här har MyFlove lärt sig av dina egna dagar")}
                   </p>
                   <ul className="mt-3 space-y-2">
                     {patterns.lines.map((line) => (
@@ -449,7 +453,7 @@ export default function Home() {
                     onClick={() => track("home_widget_opened", { source: "insight" })}
                     className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
                   >
-                    Se fler mönster <ArrowRight size={14} />
+                    {t("Se fler mönster")} <ArrowRight size={14} />
                   </Link>
                 </div>
               </div>
@@ -461,12 +465,12 @@ export default function Home() {
         {flowSettings.enabled && flowSettings.learning && (
           <div style={{ order: 5 }} data-testid="home-flow-note" className="min-w-0 xl:col-span-6">
             <ExpandableBlock
-              title="MyFlove har lagt märke till…"
-              titleText="MyFlove har lagt märke till"
+              title={t("MyFlove har lagt märke till…")}
+              titleText={t("MyFlove har lagt märke till")}
               area="flow"
               visual={<FlowMascot size="xs" mood="calm" bump className="flow-alive" alt="" />}
-              subtitle="Små mönster i din egen data"
-              status="Insikter"
+              subtitle={t("Små mönster i din egen data")}
+              status={t("Insikter")}
               tone="lavender"
               surface="lavender"
               href="/insight"
@@ -480,15 +484,15 @@ export default function Home() {
           <section
             className="min-w-0 xl:col-span-3"
             style={pos("medicin")}
-            aria-label="Rutiner och medicin"
+            aria-label={t("Rutiner och medicin")}
           >
             <ExpandableBlock
-              title="Rutiner & medicin"
-              titleText="Rutiner och medicin"
+              title={t("Rutiner & medicin")}
+              titleText={t("Rutiner och medicin")}
               area="halsa"
               icon={Pill}
-              subtitle="Dagens rutiner och doser"
-              status="Idag"
+              subtitle={t("Dagens rutiner och doser")}
+              status={t("Idag")}
               tone="blush"
               surface="blush"
             >
@@ -503,7 +507,7 @@ export default function Home() {
             <AreaSwitcher size="sm" />
             <p className="text-xs text-muted-foreground">
               {activeArea === "alla"
-                ? "MyFlove ser hela din dag – oavsett vilket rum sakerna hör till."
+                ? t("MyFlove ser hela din dag – oavsett vilket rum sakerna hör till.")
                 : `Du är i ${AREA_META[activeArea].label.toLowerCase()}rummet. Resten väntar tills du vill se det.`}
             </p>
           </MyFloveWide>
@@ -526,13 +530,13 @@ export default function Home() {
             href="/oversikt"
             className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground underline underline-offset-2"
           >
-            <Compass size={13} /> Så funkar MyFlove
+            <Compass size={13} /> {t("Så funkar MyFlove")}
           </Link>
           <Link
             href="/anpassa-hem"
             className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground underline underline-offset-2"
           >
-            <SlidersHorizontal size={13} /> Anpassa hemskärmen
+            <SlidersHorizontal size={13} /> {t("Anpassa hemskärmen")}
           </Link>
         </MyFloveWide>
       </MyFlovePageGrid>

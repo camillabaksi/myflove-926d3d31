@@ -1,3 +1,5 @@
+import { translate, type Lang } from "@/lib/i18n";
+
 // Warm, friend-like greetings. Picks a variant based on time of day, first
 // name, and how long since the user was last here — with light rotation so
 // it doesn't feel canned.
@@ -57,26 +59,32 @@ export type Greeting = {
   subtitle: string;
 };
 
-export function getGreeting(opts?: { name?: string | null; lastVisit?: number | null }): Greeting {
+export function getGreeting(opts?: {
+  name?: string | null;
+  lastVisit?: number | null;
+  lang?: Lang;
+}): Greeting {
+  const lang: Lang = opts?.lang === "en" ? "en" : "sv";
+  const tr = (s: string) => translate(s, lang);
   const name = opts?.name?.trim() || "";
   const hour = new Date().getHours();
   const slot = slotFor(hour);
   const seed = daySeed() + hour;
 
-  const salutation = pick(SALUTATIONS[slot], seed);
+  const salutation = tr(pick(SALUTATIONS[slot], seed));
   const ending = pick(SOFT_ENDINGS, seed + 3);
   const title = name
     ? `${salutation}, ${name}${ending ? " " + ending : ""}`
     : `${salutation}${ending ? " " + ending : ""}`;
 
-  let subtitle = "Här är en lugn överblick över idag.";
+  let subtitle = tr("Här är en lugn överblick över idag.");
   const last = opts?.lastVisit ?? null;
   if (!last) {
-    subtitle = pick(FIRST_TIME_LINES, seed);
+    subtitle = tr(pick(FIRST_TIME_LINES, seed));
   } else {
     const daysAway = Math.floor((Date.now() - last) / (24 * 60 * 60 * 1000));
-    if (daysAway >= 3) subtitle = pick(AWAY_LINES, seed);
-    else if (daysAway >= 1) subtitle = pick(RETURN_LINES, seed);
+    if (daysAway >= 3) subtitle = tr(pick(AWAY_LINES, seed));
+    else if (daysAway >= 1) subtitle = tr(pick(RETURN_LINES, seed));
   }
 
   return { title, subtitle };

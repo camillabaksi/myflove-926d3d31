@@ -104,6 +104,7 @@ import { useEnabledAreas } from "@/lib/life-areas";
 
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { useNpfSettings, plainLabel } from "@/lib/npf-mode";
+import { useLang } from "@/hooks/use-language";
 import { track } from "@/lib/analytics";
 import { rememberPlace } from "@/lib/flow-context";
 import { Button } from "@/components/ui/button";
@@ -223,6 +224,7 @@ export default function Layout({ children }: LayoutProps) {
   const { isDemo } = useDemoAccount();
   const { enabled: enabledAreas } = useEnabledAreas();
   const { settings: npf } = useNpfSettings();
+  const { t } = useLang();
 
   // Använd TanStack-routerns faktiska location så tillbakaknappen alltid
   // synkar med appens historik – även vid djupa länkar eller SPA-navigering.
@@ -521,7 +523,7 @@ export default function Layout({ children }: LayoutProps) {
       hint: "Lugnare färger, färre saker, tyst läge och enkla ord",
       essential: true,
     },
-  ].map((i) => ({ ...i, label: plainLabel(i.label, npf.plainWords) }));
+  ].map((i) => ({ ...i, label: t(plainLabel(i.label, npf.plainWords)), hint: t(i.hint) }));
 
   // Kategorier – gör navigationen lugnare genom att gruppera sektionerna.
   const categories = useMemo(() => {
@@ -629,9 +631,14 @@ export default function Layout({ children }: LayoutProps) {
     ];
 
     return groups
-      .map((g) => ({ ...g, items: g.hrefs.map(byHref).filter(Boolean) as typeof navItems }))
+      .map((g) => ({
+        ...g,
+        label: t(g.label),
+        hint: t(g.hint),
+        items: g.hrefs.map(byHref).filter(Boolean) as typeof navItems,
+      }))
       .filter((g) => g.items.length > 0);
-  }, [navItems]);
+  }, [navItems, t]);
 
   const [openCategory, setOpenCategory] = useState<string | null>(null);
   const [navSearch, setNavSearch] = useState("");
@@ -1066,7 +1073,7 @@ export default function Layout({ children }: LayoutProps) {
             >
               <Menu size={22} strokeWidth={mobileMenuOpen ? 2.6 : 2} />
             </span>
-            <span className="text-[10px] font-medium">Mer</span>
+            <span className="text-[10px] font-medium">{t("Mer")}</span>
           </button>
         </div>
       </nav>
@@ -1078,8 +1085,8 @@ export default function Layout({ children }: LayoutProps) {
             <div className="flex justify-between items-center p-4 border-b border-border/50">
               <h2 className="text-lg font-medium text-muted-foreground">
                 {openCategory
-                  ? (categories.find((c) => c.id === openCategory)?.label ?? "Mer")
-                  : "Mer"}
+                  ? (categories.find((c) => c.id === openCategory)?.label ?? t("Mer"))
+                  : t("Mer")}
               </h2>
               <button
                 onClick={() => {

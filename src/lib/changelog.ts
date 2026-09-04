@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-04";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Svenska och engelska i MyFlove",
+    items: [
+      "Ny språkväljare i Min profil – Svenska eller English, sparat på kontot (2026-09-04)",
+      "Navigation, hälsningar och hela startsidan byter språk direkt (2026-09-04)",
+      "Flow-rösten (tomma vyer, bekräftelser, fel och uppmuntran) finns översatt (2026-09-04)",
+      "Svenska är källspråket – saknad översättning visar svensk text i stället för tom ruta (2026-09-04)",
+    ],
+  },
+  {
     title: "Appstatistiken visar rätt antal användare igen",
     items: [
       "Registrerade användare, nya senaste 7 dagarna och registreringsdiagrammet visade 0 trots att nya användare fanns – databasfunktionen avvisade serverns anrop (2026-09-04)",

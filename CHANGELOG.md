@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-04 – Svenska och engelska i MyFlove
+
+- Ny språkväljare i Min profil: Svenska eller English. Valet sparas på kontot och följer med mellan enheter.
+- Navigationen (menyer, kategorier och bottennavet), hälsningarna och hela startsidan byter språk direkt.
+- Flow-rösten (tomma vyer, bekräftelser, felmeddelanden och uppmuntran) finns nu översatt.
+- Svenska är fortfarande källspråket – saknas en översättning visas den svenska texten i stället för en tom ruta.
+
 ## 2026-09-04 – Appstatistiken visar rätt antal användare igen
 
 - "Registrerade användare", "Nya senaste 7 dagarna" och registreringsdiagrammet visade 0 trots att nya användare fanns. Orsaken var att databasfunktionen som räknar användare avvisade serverns anrop.
