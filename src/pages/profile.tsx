@@ -182,7 +182,10 @@ export default function ProfilePage() {
                         aria-label={`Ta bort ${child.name}`}
                         onClick={() => {
                           void deleteChild(child.id).then(() =>
-                            toast({ title: "Borttaget", description: `${child.name} är borttagen.` }),
+                            toast({
+                              title: "Borttaget",
+                              description: `${child.name} är borttagen.`,
+                            }),
                           );
                         }}
                       >
