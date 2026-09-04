@@ -145,6 +145,14 @@ export default function NotesPanel() {
 
   const CONVERSIONS: QuickflowDestination[] = ["paminnelse", "inkop", "studier", "jobb"];
 
+  const visibleNotes = openNotes.filter((n) =>
+    activeFolder === "all"
+      ? true
+      : activeFolder === "none"
+        ? !n.folderId
+        : n.folderId === activeFolder,
+  );
+
   return (
     <div className="space-y-3">
       <form
