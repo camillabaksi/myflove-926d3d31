@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-04";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Android-projekt redo för Google Play",
+    items: [
+      "Native Android-projekt skapat med paketnamn app.myflove.mobile och version 4.1 (2026-09-04)",
+      "Release-signering via lokal keystore.properties eller miljövariabler – inga nycklar i repot (2026-09-04)",
+      "Behörigheter för notiser, vibration och steg tillagda i manifestet (2026-09-04)",
+      "Nya kommandon för att synka, öppna och bygga .aab (2026-09-04)",
+    ],
+  },
+  {
     title: "Hela appen på engelska",
     items: [
       "Quickflow, Kalender/Idag, Mitt batteri och Mående, Historik, Veckoöversikten, Anteckningar och mappar samt adminöversikten byter språk (2026-09-04)",
