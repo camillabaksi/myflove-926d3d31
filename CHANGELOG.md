@@ -12,7 +12,7 @@
 
 - Native Android-projektet (`android/`) är nu skapat med paketnamnet `app.myflove.mobile` och versionsnamn 4.1.
 - Release-signering läses från en lokal `android/keystore.properties` eller miljövariabler – inga nycklar ligger i repot.
-- Behörigheter för notiser, vibration och steg (Health Connect) finns i manifestet.
+- Behörigheter för notiser och vibration finns i manifestet.
 - Nya kommandon: `npm run cap:sync`, `npm run android:open` och `npm run android:aab`.
 - `webDir` pekar på en liten `mobile-webroot/`-fallback eftersom appen laddar den publicerade webben via `server.url`.
 
