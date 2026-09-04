@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-04 – Flow som följeslagare på startsidan
+
+- Flow möter dig på hem-sidan med en kort fråga: "Hej 💜 Vad behöver du just nu?" och tre–fyra enkla val: Få ur mig något, Kolla min dag, Kolla min ork och Hjälp mig välja.
+- Flow reagerar på din faktiska data: låg ork ger färre val, en genomförd aktivitet frågar hur den påverkade orken, en Quickflow-post som blivit liggande får varsamma alternativ (lägg i kalendern, påminn mig, flytta till mapp, klar, inte längre relevant) och på söndagar lyfts veckan som varit.
+- Ordningen på valen följer det du faktiskt använder mest, och den handling du oftast väljer för liggande saker hamnar först.
+- Flow kan alltid stängas, håller sig till en sak i taget och skapar ingen egen data – allt bygger på Quickflow, kalendern, batteriet och historiken som redan finns.
+
 ## 2026-09-04 – Större Flow på startsidan
 
 - Flow syns tydligare i morgonhälsningen på hem-sidan: maskoten är större och texten har fått mer luft runt sig.

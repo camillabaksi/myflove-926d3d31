@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-04";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Flow som följeslagare på startsidan",
+    items: [
+      "Flow möter dig på hem-sidan med en kort fråga och tre–fyra enkla val: Få ur mig något, Kolla min dag, Kolla min ork, Hjälp mig välja (2026-09-04)",
+      "Flow reagerar på din egen data: låg ork ger färre val, genomförd aktivitet frågar om energipåverkan, liggande Quickflow-poster får varsamma alternativ och söndagar lyfter veckoöversikten (2026-09-04)",
+      "Valen ordnas efter vad du faktiskt använder mest – och Flow går alltid att stänga (2026-09-04)",
+    ],
+  },
+  {
     title: "Större Flow på startsidan",
     items: [
       "Flow syns tydligare i morgonhälsningen på hem-sidan – maskoten är större och texten får mer luft (2026-09-04)",
