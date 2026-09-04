@@ -25,9 +25,10 @@ import {
   CalendarDays,
   Brain,
   BatteryMedium,
-  HeartPulse,
+  Heart,
   Pill,
   ArrowRight,
+  ChevronRight,
   Sparkles,
 } from "lucide-react";
 import { todayISO } from "@/lib/day";
