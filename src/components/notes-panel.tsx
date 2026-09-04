@@ -63,6 +63,30 @@ export default function NotesPanel() {
   const [editText, setEditText] = useState("");
   const [editArea, setEditArea] = useState<LifeArea | "">("");
 
+  const { folders, addFolder, renameFolder, removeFolder } = useNoteFolders();
+  const { recordAction, topFolderId } = useQuickflowHabits();
+  const [activeFolder, setActiveFolder] = useState<string | "all" | "none">("all");
+  const [showFolderManager, setShowFolderManager] = useState(false);
+  const [newFolderName, setNewFolderName] = useState("");
+  const [newFolderEmoji, setNewFolderEmoji] = useState("📁");
+
+  const moveToFolder = (note: FlowNote, folderId: string | undefined) => {
+    updateNote(note.id, { folderId });
+    if (folderId) recordAction("mapp", folderId);
+    const folder = folders.find((f) => f.id === folderId);
+    toast.success(folder ? `Flyttad till ${folder.emoji} ${folder.name}.` : "Ligger utan mapp nu.");
+  };
+
+  const createFolder = (name: string, emoji: string) => {
+    if (!name.trim()) return;
+    if (folders.some((f) => f.name.toLowerCase() === name.trim().toLowerCase())) {
+      toast("Du har redan en mapp med det namnet.");
+      return;
+    }
+    addFolder(name, emoji);
+    toast.success(`Mappen ${emoji} ${name.trim()} är skapad.`);
+  };
+
   const startEdit = (note: FlowNote) => {
     setEditingId(note.id);
     setEditText(note.text);
