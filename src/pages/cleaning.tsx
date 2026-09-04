@@ -193,52 +193,53 @@ export default function CleaningPage() {
         <MyFloveWide>
           <MyFloveBlock
             title={`${room.emoji} ${room.label} – ${CLEAN_MODE_LABEL[mode].toLowerCase()}`}
-          subtitle={
-            minutesLeft > 0
-              ? `Ca ${minutesLeft} min kvar · ${completed.length}/${steps.length} klart`
-              : "Allt avklarat 🌟"
-          }
-          icon={Clock}
-          tone="mint"
-          action={
-            <Button variant="ghost" size="sm" onClick={resetRoom} className="shrink-0">
-              <RotateCcw className="mr-1.5 h-4 w-4" />
-              Nollställ
-            </Button>
-          }
-          className="h-full"
-        >
-          <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-muted">
-            <div
-              className="h-full rounded-full transition-all"
-              style={{ width: `${pct}%`, backgroundColor: `hsl(${room.hue})` }}
-            />
-          </div>
-        </MyFloveBlock>
+            subtitle={
+              minutesLeft > 0
+                ? `Ca ${minutesLeft} min kvar · ${completed.length}/${steps.length} klart`
+                : "Allt avklarat 🌟"
+            }
+            icon={Clock}
+            tone="mint"
+            action={
+              <Button variant="ghost" size="sm" onClick={resetRoom} className="shrink-0">
+                <RotateCcw className="mr-1.5 h-4 w-4" />
+                Nollställ
+              </Button>
+            }
+          >
+            <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-muted">
+              <div
+                className="h-full rounded-full transition-all"
+                style={{ width: `${pct}%`, backgroundColor: `hsl(${room.hue})` }}
+              />
+            </div>
+          </MyFloveBlock>
+        </MyFloveWide>
 
         {/* Vad du behöver */}
-        <MyFloveBlock
-          title="Det här behöver du"
-          subtitle="Grejer för dagens städning"
-          icon={ShoppingBasket}
-          tone="sky"
-          className="h-full"
-        >
-          {supplies.length === 0 ? (
-            <p className="text-sm text-muted-foreground">Inget särskilt – bara du 💛</p>
-          ) : (
-            <ul className="flex flex-wrap gap-2">
-              {supplies.map((item) => (
-                <li
-                  key={item}
-                  className="rounded-full border border-border bg-background px-3 py-1.5 text-sm text-foreground"
-                >
-                  {item}
-                </li>
-              ))}
-            </ul>
-          )}
-        </MyFloveBlock>
+        <MyFloveWide>
+          <MyFloveBlock
+            title="Det här behöver du"
+            subtitle="Grejer för dagens städning"
+            icon={ShoppingBasket}
+            tone="sky"
+          >
+            {supplies.length === 0 ? (
+              <p className="text-sm text-muted-foreground">Inget särskilt – bara du 💛</p>
+            ) : (
+              <ul className="flex flex-wrap gap-2">
+                {supplies.map((item) => (
+                  <li
+                    key={item}
+                    className="rounded-full border border-border bg-background px-3 py-1.5 text-sm text-foreground"
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </MyFloveBlock>
+        </MyFloveWide>
 
         {/* Steg */}
         <MyFloveWide>
