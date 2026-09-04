@@ -16,6 +16,7 @@ import { MoodContent } from "@/pages/mood";
 import { EnergyContent } from "@/pages/energy-map";
 import { EnergyFlowContent } from "@/pages/energy-flow";
 import { track } from "@/lib/analytics";
+import { useUserProfile } from "@/hooks/use-user-profile";
 
 /**
  * Mitt batteri – den enda platsen för energi och mående.
@@ -25,6 +26,7 @@ import { track } from "@/lib/analytics";
  * Stop-paus har flyttat till Mer → Stop-paus.
  */
 export default function BatteryPage() {
+  const { name } = useUserProfile();
   useEffect(() => {
     track("battery_opened", { source: "sida" });
   }, []);
@@ -35,7 +37,7 @@ export default function BatteryPage() {
         <MyFloveWide>
           <MyFloveHeader
             area="halsa"
-            title="Mitt batteri"
+            title={name ? `${name}s batteri` : "Mitt batteri"}
             emojiKey="wellness"
             description="Din energi och ditt mående – checka in och se hur dagen brukar se ut."
             why="Vi frågar för att Flow ska kunna anpassa dagens krav efter hur mycket ork du faktiskt har – inte efter hur mycket du borde ha."

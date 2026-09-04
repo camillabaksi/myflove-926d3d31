@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-04";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Min profil: namn och barn",
+    items: [
+      "Ny profilsida där du sätter ditt namn och lägger till barnens namn och färger (2026-09-04)",
+      "Namnet styr Hej-hälsningen på startsidan och rubriken på Mitt batteri, synkat mellan enheter (2026-09-04)",
+      "Barnen återanvänder den befintliga barnfunktionen – ingen ny datamodell (2026-09-04)",
+    ],
+  },
+  {
     title: "Enklare frågor och adaptiv personalisering",
     items: [
       "En enda energifråga: Hur mycket ork har du idag? med fyra svar – ingen procent eller skattningsskala (2026-09-04)",
