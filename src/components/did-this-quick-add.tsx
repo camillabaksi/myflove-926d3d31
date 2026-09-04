@@ -6,6 +6,7 @@ import HelpHint from "@/components/help-hint";
 import { useToast } from "@/hooks/use-toast";
 import { useVoiceInput } from "@/hooks/use-voice-input";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
+import { track } from "@/lib/analytics";
 import {
   DID_SUGGESTIONS,
   FRICTION_LEVELS,

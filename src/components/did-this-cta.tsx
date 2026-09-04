@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { MyFloveModal } from "@/components/myflove/modal";
 import { useToast } from "@/hooks/use-toast";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
+import { track } from "@/lib/analytics";
 import {
   DID_SUGGESTIONS,
   FRICTION_LEVELS,
