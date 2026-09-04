@@ -519,34 +519,35 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
         <MyFloveBlock
           area="halsa"
           icon={BarChart3}
-          title="Mönster över tid"
-          subtitle="Vad brukar påverka din energi?"
+          title={t("Mönster över tid")}
+          subtitle={t("Vad brukar påverka din energi?")}
           collapsible
           defaultCollapsed
-          status={`${catTrends.length} områden`}
+          status={`${catTrends.length} ${t("områden")}`}
           action={
-            <WhyHint label="mönster över tid">
-              Enkla sammanställningar av dina egna poster. Ingen värdering – bara vad du själv har
-              registrerat.
+            <WhyHint label={t("mönster över tid")}>
+              {t(
+                "Enkla sammanställningar av dina egna poster. Ingen värdering – bara vad du själv har registrerat.",
+              )}
             </WhyHint>
           }
         >
           {catTrends.length === 0 ? (
             <MyFloveEmptyState
               emoji="📈"
-              title="Mönstren dyker upp efter hand"
-              description="När du registrerat några poster visar jag vad som oftast ger och tar energi."
+              title={t("Mönstren dyker upp efter hand")}
+              description={t("När du registrerat några poster visar jag vad som oftast ger och tar energi.")}
             />
           ) : (
             <div className="space-y-2">
-              <p className="text-xs text-muted-foreground">Senaste 14 dagarna</p>
-              {catTrends.map((t) => (
+              <p className="text-xs text-muted-foreground">{t("Senaste 14 dagarna")}</p>
+              {catTrends.map((row) => (
                 <TrendRow
-                  key={t.key}
-                  emoji={t.emoji}
-                  label={t.label}
-                  value={`${t.net > 0 ? "+" : ""}${t.net} energi · ${t.count} ${
-                    t.count === 1 ? "gång" : "gånger"
+                  key={row.key}
+                  emoji={row.emoji}
+                  label={t(row.label)}
+                  value={`${row.net > 0 ? "+" : ""}${row.net} ${t("energi")} · ${row.count} ${
+                    row.count === 1 ? t("gång") : t("gånger")
                   }`}
                 />
               ))}
@@ -560,26 +561,26 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
           <MyFloveBlock
             area="halsa"
             icon={Repeat}
-            title="Dina återkommande faktorer"
-            subtitle="Det här återkommer ofta i dina loggningar."
+            title={t("Dina återkommande faktorer")}
+            subtitle={t("Det här återkommer ofta i dina loggningar.")}
             collapsible
             defaultCollapsed
-            status={`${nameTrends.length} faktorer`}
+            status={`${nameTrends.length} ${t("faktorer")}`}
           >
             <div className="space-y-2">
-              {nameTrends.map((t) => (
+              {nameTrends.map((row) => (
                 <TrendRow
-                  key={t.key}
-                  emoji={t.emoji}
-                  label={t.label}
-                  value={`${t.count} ${t.count === 1 ? "gång" : "gånger"}`}
+                  key={row.key}
+                  emoji={row.emoji}
+                  label={row.label}
+                  value={`${row.count} ${row.count === 1 ? t("gång") : t("gånger")}`}
                 />
               ))}
             </div>
             <p className="text-xs text-muted-foreground">
-              Något som återkommer och tar mycket?{" "}
+              {t("Något som återkommer och tar mycket?")}{" "}
               <Link href="/friktionsindex" className="underline">
-                Lägg det i friktionsbiblioteket
+                {t("Lägg det i friktionsbiblioteket")}
               </Link>
               .
             </p>
@@ -592,20 +593,20 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
           <MyFloveBlock
             area="halsa"
             icon={Activity}
-            title="Tungt att komma igång med"
-            subtitle="Svår start behöver inte betyda hög kostnad."
+            title={t("Tungt att komma igång med")}
+            subtitle={t("Svår start behöver inte betyda hög kostnad.")}
             collapsible
             defaultCollapsed
-            status={`${frictionRows.length} saker`}
+            status={`${frictionRows.length} ${t("saker")}`}
           >
             <div className="space-y-2">
-              {frictionRows.map((t) => (
+              {frictionRows.map((row) => (
                 <TrendRow
-                  key={t.key}
-                  emoji={frictionEmoji(Math.round(t.friction))}
-                  label={t.label}
-                  value={`svårighet ${t.friction.toFixed(1)}`}
-                  hint={`energi ${t.energy > 0 ? "+" : ""}${t.energy.toFixed(1)}`}
+                  key={row.key}
+                  emoji={frictionEmoji(Math.round(row.friction))}
+                  label={row.label}
+                  value={`${t("svårighet")} ${row.friction.toFixed(1)}`}
+                  hint={`${t("energi")} ${row.energy > 0 ? "+" : ""}${row.energy.toFixed(1)}`}
                 />
               ))}
             </div>
@@ -617,16 +618,17 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
         <MyFloveBlock
           area="halsa"
           icon={Settings2}
-          title="Hur mycket får det påverka?"
-          subtitle="Du bestämmer själv hur mycket energiflödet väger in."
+          title={t("Hur mycket får det påverka?")}
+          subtitle={t("Du bestämmer själv hur mycket energiflödet väger in.")}
           collapsible
           defaultCollapsed
-          status="Öppna inställningar"
+          status={t("Öppna inställningar")}
         >
           <EnergyFlowSettings />
           <p className="text-sm text-muted-foreground">
-            Energiflödet skapar aldrig kalenderhändelser eller uppgifter. Det beskriver bara din
-            kapacitet.
+            {t(
+              "Energiflödet skapar aldrig kalenderhändelser eller uppgifter. Det beskriver bara din kapacitet.",
+            )}
           </p>
         </MyFloveBlock>
       </MyFloveWide>
@@ -636,13 +638,14 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
 
 /** Erbjudandet att göra planen lättare – går till befintlig omplanering. */
 function MyFloveLinkRow() {
+  const { t } = useLang();
   return (
     <div className="flex flex-wrap gap-2">
       <Link href="/idag">
-        <MyFloveButton variant="secondary">Gör planen lättare</MyFloveButton>
+        <MyFloveButton variant="secondary">{t("Gör planen lättare")}</MyFloveButton>
       </Link>
       <Link href="/assistant">
-        <MyFloveButton variant="tertiary">Prata med Flow</MyFloveButton>
+        <MyFloveButton variant="tertiary">{t("Prata med Flow")}</MyFloveButton>
       </Link>
     </div>
   );

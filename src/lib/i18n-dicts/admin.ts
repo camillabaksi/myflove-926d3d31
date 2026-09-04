@@ -26,6 +26,7 @@ export const EN_ADMIN: Record<string, string> = {
   "Från:": "From:",
   "Status:": "Status:",
   "Ta bort": "Delete",
+  "Ta bort rapport \"{title}\"?": "Delete report \"{title}\"?",
   "Från": "From",
   "Till": "To",
   "Rensa filter": "Clear filter",
@@ -40,6 +41,7 @@ export const EN_ADMIN: Record<string, string> = {
   "Roller": "Roles",
   "Åtgärd": "Action",
   "Ta bort admin": "Remove admin",
+  "Ta bort admin-roll från {email}?": "Remove admin role from {email}?",
   "Gör till admin": "Make admin",
 
   // src/pages/admin-stats.tsx
