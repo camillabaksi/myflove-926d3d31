@@ -35,22 +35,22 @@ export function DayHub({ tab }: { tab: DayTab }) {
   return (
     <Layout>
       <nav
-        aria-label="Dagens planering"
+        aria-label={t("Dagens planering")}
         className="mb-4 grid grid-cols-3 gap-1 rounded-3xl border-2 border-border bg-muted/50 p-1"
       >
-        {TABS.map((t) => {
-          const Icon = t.icon;
-          const active = t.id === tab;
+        {TABS.map((tabItem) => {
+          const Icon = tabItem.icon;
+          const active = tabItem.id === tab;
           return (
             <Link
-              key={t.id}
-              href={t.href}
+              key={tabItem.id}
+              href={tabItem.href}
               aria-current={active ? "page" : undefined}
               className={`flex items-center justify-center gap-1.5 rounded-2xl px-3 py-2.5 text-sm font-medium transition-colors ${
                 active ? "bg-card text-ink shadow-soft" : "text-muted-foreground hover:text-ink"
               }`}
             >
-              <Icon size={16} aria-hidden /> {t(t_label(t))}
+              <Icon size={16} aria-hidden /> {t(tabItem.label)}
             </Link>
           );
         })}
