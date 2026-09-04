@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-04";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Samma lugna design i hela appen",
+    items: [
+      "Alla sidhuvuden följer startsidans mjuka gradient, rundning och skugga (2026-09-04)",
+      "Kort och block har samma tunna kant som startsidans kort (2026-09-04)",
+    ],
+  },
+  {
     title: "Allt sparas + Flow hör av sig",
     items: [
       "Namnet i Min profil sparas automatiskt medan du skriver (2026-09-04)",
