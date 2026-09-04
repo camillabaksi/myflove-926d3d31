@@ -97,12 +97,12 @@ export default function SimpleCheckin({
     window.setTimeout(() => setSaved(false), 2500);
   };
 
-  const step = Math.max(1, Math.min(5, Math.round(battery / 2)));
+  const ork = orkFromValue10(battery);
 
   return (
     <MyFloveBlock
       title="Logga just nu"
-      subtitle="Berätta hur du mår och vad som påverkar dig – helt frivilligt utom energin."
+      subtitle="Två snabba frågor. MyFlove gör resten."
       eyebrow="Logga"
       icon={Pencil}
       tone="lavender"
@@ -119,36 +119,41 @@ export default function SimpleCheckin({
     >
       <div className="space-y-2">
         <div className="flex items-center justify-between gap-2">
-          <p className="text-sm font-semibold text-ink">Energi</p>
-          <WhyHint label="logga energi">
-            Det hjälper Flow se vad som brukar ge eller ta energi för dig.
+          <p className="text-sm font-semibold text-ink">
+            <span aria-hidden>🔋</span> Hur mycket ork har du idag?
+          </p>
+          <WhyHint label="logga ork">
+            Du väljer bara ett ord – MyFlove ser mönstren åt dig över tid.
           </WhyHint>
         </div>
         {energyExplainer && <p className="text-xs text-muted-foreground">{energyExplainer}</p>}
-        <div className="flex gap-1.5">
-          {LEVELS.map((l) => (
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+          {ORK_LEVELS.map((l) => (
             <button
-              key={l.step}
+              key={l.id}
               type="button"
-              aria-pressed={step === l.step}
-              aria-label={`${l.step} av 5 – ${l.label}`}
+              aria-pressed={ork?.id === l.id}
+              aria-label={l.label}
               onClick={() => {
                 markStarted("battery");
-                setBattery(l.step * 2);
+                setBattery(l.value10);
               }}
               className={cn(
-                "flex flex-1 flex-col items-center gap-1 rounded-2xl border p-2 transition-all",
-                step === l.step
-                  ? "border-primary bg-primary/10 scale-[1.03]"
-                  : "border-transparent bg-card/80 opacity-75 hover:opacity-100",
+                "flex min-h-11 flex-1 items-center justify-center gap-2 rounded-2xl border px-3 py-2.5 text-sm font-medium transition-all",
+                ork?.id === l.id
+                  ? "border-primary bg-primary/10 text-ink scale-[1.02]"
+                  : "border-transparent bg-card/80 text-muted-foreground hover:opacity-100",
               )}
             >
-              <span className="text-xl">{l.emoji}</span>
-              <span className="text-[11px] font-medium text-muted-foreground">{l.step}/5</span>
+              <span aria-hidden className="text-base">
+                {l.dot}
+              </span>
+              {l.label}
             </button>
           ))}
         </div>
       </div>
+
 
       <div className="space-y-2">
         <div className="flex items-center justify-between gap-2">
