@@ -57,7 +57,7 @@ export default function Home() {
   const [editingName, setEditingName] = useState(false);
   const [nameDraft, setNameDraft] = useState(name);
   const { activeArea } = useActiveArea();
-  const { reading, suggestions } = useEnergyBattery();
+  const { reading } = useEnergyBattery();
   const { energyValue } = useQuickCheckin();
   const { activeTasks } = useTasks();
   const { activeReminders } = useReminders();
@@ -78,7 +78,7 @@ export default function Home() {
       .slice(0, 5);
   }, [activeReminders, activeTasks, todayIso]);
 
-  const nextTimed = todayEntries.filter((e) => e.time).slice(0, 3);
+  
   const battery = Math.round(reading.now);
   const batteryLine =
     battery >= 70
@@ -133,7 +133,7 @@ export default function Home() {
             <h1 className="text-2xl sm:text-3xl font-bold text-ink">
               {name ? `Hej ${name}!` : "Hej!"} <span aria-hidden>💜</span>
             </h1>
-            <p className="text-sm text-muted-foreground">Vad behöver du just nu?</p>
+            <p className="text-sm text-muted-foreground">Du gör ett fantastiskt jobb!</p>
             {editingName ? (
               <form
                 onSubmit={(e) => {
