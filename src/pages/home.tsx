@@ -344,50 +344,19 @@ export default function Home() {
           </section>
         </MyFloveWide>
 
-        {/* Batteri & återhämtning – lugna förslag, aldrig pekpinnar. */}
-        <MyFloveWide style={{ order: 4 }} className="min-w-0">
+        {/* Uppmuntrande citat – lugnt avslut, som i mockupen. */}
+        <MyFloveWide style={{ order: 5 }} className="min-w-0">
           <section
-            aria-label="Ditt batteri och återhämtning"
-            data-testid="home-recovery"
-            className="rounded-3xl border border-border/60 bg-mint/25 p-4 shadow-soft"
+            aria-label="Dagens tanke"
+            className="rounded-3xl border border-border/60 bg-lavender/25 p-5 shadow-soft"
           >
-            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
-              <h2 className="truncate text-base font-semibold text-ink">
-                <span aria-hidden>💜</span> Ditt batteri
-              </h2>
-              <span className="shrink-0 text-lg font-bold tabular-nums text-primary">
-                {battery}%
-              </span>
-            </div>
-            <p className="mt-1 text-sm text-muted-foreground">{batteryLine}</p>
-            {suggestions.length > 0 && (
-              <>
-                <p className="mt-3 text-xs font-medium text-ink">Kanske dags för en paus?</p>
-                <ul className="mt-1.5 space-y-1">
-                  {suggestions.slice(0, 3).map((s) => (
-                    <li key={s.id} className="text-sm text-muted-foreground">
-                      {s.text}
-                    </li>
-                  ))}
-                </ul>
-              </>
-            )}
-            <div className="mt-3 flex flex-wrap gap-3">
-              <Link
-                href="/mitt-batteri"
-                className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
-                onClick={() => track("home_widget_opened", { source: "batteri" })}
-              >
-                <BatteryMedium size={13} /> Öppna batteriet
-              </Link>
-              <Link
-                href="/mitt-batteri"
-                className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
-                onClick={() => track("home_widget_opened", { source: "logga" })}
-              >
-                <HeartPulse size={13} />{" "}
-                {energyValue != null ? "Uppdatera hur du mår" : "Logga energi & mående"}
-              </Link>
+            <div className="flex items-start gap-3">
+              <Heart className="mt-0.5 h-6 w-6 shrink-0 text-primary" aria-hidden />
+              <p className="text-sm text-ink leading-relaxed">
+                Små steg varje dag
+                <br />
+                skapar stora förändringar.
+              </p>
             </div>
           </section>
         </MyFloveWide>
