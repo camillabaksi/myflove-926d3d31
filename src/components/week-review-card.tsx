@@ -19,6 +19,10 @@ export function WeekReviewCard({
   review: WeekReview;
   showLink?: boolean;
 }) {
+  useEffect(() => {
+    track("week_review_viewed");
+  }, []);
+
   const rows = [
     { icon: CalendarDays, label: "Aktiviteter", value: `${review.activityCount}` },
     { icon: Brain, label: "Quickflow", value: `${review.quickflowCount} saker` },
