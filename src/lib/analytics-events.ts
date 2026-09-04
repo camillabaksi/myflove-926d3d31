@@ -86,6 +86,14 @@ export const ANALYTICS_EVENTS = [
   "account_deletion_started",
   "account_deletion_cancelled",
   "account_deleted",
+  /** Historiksidan öppnad (aktivitetshistorik och energipåverkan). */
+  "history_viewed",
+  /** Söndagens veckoöversikt visad. */
+  "week_review_viewed",
+  /** Energipåverkan besvarad efter en genomförd aktivitet. */
+  "activity_energy_logged",
+  /** "Jag gjorde något" – spontan registrering som påverkar batteriet. */
+  "did_this_logged",
 ] as const;
 
 export type AnalyticsEventName = (typeof ANALYTICS_EVENTS)[number];
@@ -179,6 +187,10 @@ const EVENT_SECTION: Record<AnalyticsEventName, string> = {
   account_deletion_started: "konto",
   account_deletion_cancelled: "konto",
   account_deleted: "konto",
+  history_viewed: "historik",
+  week_review_viewed: "veckooversikt",
+  activity_energy_logged: "energi",
+  did_this_logged: "energi",
 };
 
 export function eventSection(name: AnalyticsEventName): string {

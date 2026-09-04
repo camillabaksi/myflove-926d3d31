@@ -21,8 +21,7 @@ function isPrimaryActivity(item: FlowItem): boolean {
   return (
     item.source === "uppgift" ||
     item.source === "tanke" ||
-    item.source === "quickflow" ||
-    item.source === "gjort"
+    item.source === "quickflow"
   );
 }
 

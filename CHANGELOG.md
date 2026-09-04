@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-04 – Energiloggning påverkar bara batteriet
+
+- Det du loggar som energi- eller måendepåverkan hamnar inte längre i kalendern eller dagens lista – det påverkar batteriet, energihistoriken och mönstren.
+- Appstatistiken loggar nu även historik, söndagens veckoöversikt, energipåverkan efter genomförd aktivitet och "jag gjorde något" – allt via serverfunktionerna och helt anonymt.
+
 ## 2026-09-05 – Investerarsidan öppen för investerarkontot
 
 - Investerarsidan (/pitch) kan nu nås både med grundarkontot och med investerarkontots egen inloggning.

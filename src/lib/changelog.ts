@@ -6,9 +6,16 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-09-05";
+export const CHANGELOG_UPDATED = "2026-09-04";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  {
+    title: "Energiloggning påverkar bara batteriet",
+    items: [
+      "Energi- och måendeloggningar syns inte längre i kalendern eller dagens lista – de påverkar batteriet, energihistoriken och mönstren (2026-09-04)",
+      "Appstatistiken loggar nu historik, veckoöversikt, energipåverkan efter aktivitet och \"jag gjorde något\" via serverfunktionerna (2026-09-04)",
+    ],
+  },
   {
     title: "Investerarsidan öppen för investerarkontot",
     items: [

@@ -8,7 +8,6 @@ import { usePriorityList } from "@/hooks/use-priority-list";
 import { normalizeQuickflowText } from "@/lib/quickflow";
 import { bucketRank } from "@/lib/quickflow-priority";
 import { useFrictionLibrary } from "@/hooks/use-friction-library";
-import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import { useDoneLog } from "@/hooks/use-done-log";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { getArea } from "@/lib/life-areas";
@@ -51,7 +50,6 @@ export function useFlowItems(dateISO?: string): {
   const { items: quickflowItems, complete, uncomplete } = useQuickflow();
   const { items: priorityItems, update: updatePriority } = usePriorityList();
   const { suggestFor } = useFrictionLibrary();
-  const { entries: energyEntries } = useEnergyFlow();
   const { isDone, toggleDone } = useDoneLog(targetDay);
   const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
 
@@ -264,29 +262,9 @@ export function useFlowItems(dateISO?: string): {
       });
     }
 
-    // "Jag gjorde något" – spontana saker användaren loggat. De är redan
-    // genomförda och hör till samma dag, så de syns bland dagens gjorda saker.
-    // Samma post kan finnas både lokalt och i molnet under en sync – därför
-    // visas varje unik post (titel + tidpunkt) bara en gång.
-    const seenGjort = new Set<string>();
-    for (const e of energyEntries) {
-      const iso = (e.occurredAt ?? "").slice(0, 10);
-      if (iso !== today) continue;
-      const key = `${e.title.trim().toLowerCase()}|${(e.occurredAt ?? "").slice(0, 16)}`;
-      if (seenGjort.has(key)) continue;
-      seenGjort.add(key);
-      out.push({
-        id: `gjort-${e.id}`,
-        title: e.title,
-        source: "gjort",
-        area: "vardag",
-        emoji: e.direction === "gives" ? "🌿" : "💪",
-        priority: "idag",
-        done: true,
-        completable: false,
-        href: "/energifloede",
-      });
-    }
+    // Energi- och måendeloggningar ("Jag gjorde något") hör INTE hemma i
+    // kalendern eller dagens lista. De är en känslo-/orkregistrering och
+    // påverkar bara batteriet, energihistoriken och mönstren.
 
     return sortFlowItems(out);
   }, [
@@ -297,7 +275,6 @@ export function useFlowItems(dateISO?: string): {
     routines,
     quickflowItems,
     priorityItems,
-    energyEntries,
     suggestFor,
     isDone,
     targetDay,

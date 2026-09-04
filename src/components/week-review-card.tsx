@@ -1,8 +1,10 @@
+import { useEffect } from "react";
 import { Link } from "wouter";
 import { ArrowRight, CalendarDays, Brain, BatteryMedium, Heart } from "lucide-react";
 import { FlowMascot } from "@/components/flow-mascot";
 import { ENERGY_META, ENERGY_CHOICES } from "@/lib/activity-history";
 import type { WeekReview } from "@/lib/week-review";
+import { track } from "@/lib/analytics";
 
 /**
  * 💜 Din vecka – lugn sammanfattning av veckan som varit.
@@ -17,6 +19,10 @@ export function WeekReviewCard({
   review: WeekReview;
   showLink?: boolean;
 }) {
+  useEffect(() => {
+    track("week_review_viewed");
+  }, []);
+
   const rows = [
     { icon: CalendarDays, label: "Aktiviteter", value: `${review.activityCount}` },
     { icon: Brain, label: "Quickflow", value: `${review.quickflowCount} saker` },

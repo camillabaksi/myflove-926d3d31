@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Layout from "@/components/layout";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import WeekReviewCard from "@/components/week-review-card";
@@ -13,6 +13,7 @@ import {
 import { weekDates, weekStartISO, weekdayName } from "@/lib/week-review";
 import { addDaysISO, todayISO, parseISODate } from "@/lib/day";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { track } from "@/lib/analytics";
 
 function formatDay(iso: string): string {
   const d = parseISODate(iso);
@@ -27,6 +28,10 @@ function formatDay(iso: string): string {
  * aktivitet har sin egen dag, sin egen status och sin egen energipåverkan.
  */
 export default function History() {
+  useEffect(() => {
+    track("history_viewed");
+  }, []);
+
   const [weekStart, setWeekStart] = useState(() => weekStartISO(todayISO()));
   const { instancesBetween, setEnergy } = useActivityHistory();
   const review = useWeekReview(weekStart);

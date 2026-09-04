@@ -6,6 +6,7 @@ import HelpHint from "@/components/help-hint";
 import { useToast } from "@/hooks/use-toast";
 import { useVoiceInput } from "@/hooks/use-voice-input";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
+import { track } from "@/lib/analytics";
 import {
   DID_SUGGESTIONS,
   FRICTION_LEVELS,
@@ -87,8 +88,9 @@ export function DidThisQuickAdd({ className }: { className?: string }) {
         friction: s.friction,
         occurredAt: occurredAtFor(when),
       });
+      track("did_this_logged", { source: "lagg-till" });
       setLast(entry ?? null);
-      toast({ description: `${s.title} – tillagt. Det räknas med i din dag.` });
+      toast({ description: `${s.title} – tillagt. Det påverkar ditt batteri.` });
     } catch {
       toast({ description: "Kunde inte spara just nu.", variant: "destructive" });
     } finally {
