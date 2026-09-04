@@ -249,39 +249,10 @@ export function QuickflowList() {
       >
         {needsAnswer.length > 0 && (
           <div className="space-y-3">
-            {needsAnswer.map((item) =>
-              renderRow(
-                item,
-                <div className="rounded-2xl bg-secondary/50 border border-border p-3 space-y-2">
-                  <p className="text-sm text-ink">
-                    Du bad mig komma ihåg detta. Vill du fortfarande göra det?
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    <button
-                      type="button"
-                      onClick={() => update(item.id, { askedAt: Date.now() })}
-                      className="rounded-full bg-primary text-primary-foreground px-4 py-1.5 text-xs font-medium"
-                    >
-                      Ja – behåll
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setSnoozeFor(item.id)}
-                      className="rounded-full border border-border bg-card px-4 py-1.5 text-xs"
-                    >
-                      Senare – välj ny tid
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => remove(item.id)}
-                      className="rounded-full border border-destructive/30 text-destructive px-4 py-1.5 text-xs"
-                    >
-                      Inte längre
-                    </button>
-                  </div>
-                </div>,
-              ),
-            )}
+            <p className="text-sm text-ink">
+              Du har något i Quickflow som verkar ha blivit liggande 💜
+            </p>
+            {needsAnswer.map((item) => renderRow(item, renderStaleActions(item)))}
           </div>
         )}
 
