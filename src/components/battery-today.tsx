@@ -2,6 +2,7 @@ import { Clock, NotebookPen } from "lucide-react";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { MyFloveBlock } from "@/components/myflove/block";
 import { buildObservations } from "@/lib/battery-observations";
+import { useLang } from "@/hooks/use-language";
 
 const MOOD_EMOJI: Record<number, string> = { 1: "😢", 2: "😕", 3: "😐", 4: "🙂", 5: "😄" };
 
@@ -16,8 +17,10 @@ function partOfDay(ts: number | string): { label: string; emoji: string; tone: s
   return { label: "Kväll", emoji: "🌙", tone: "bg-lavender/80 text-ink" };
 }
 
+
 /** Ring som visar energin – lugn, mjuk och läsbar utan färg som enda signal. */
 function EnergyRing({ pct }: { pct: number }) {
+  const { t } = useLang();
   const size = 72;
   const r = 30;
   const c = 2 * Math.PI * r;
@@ -47,7 +50,7 @@ function EnergyRing({ pct }: { pct: number }) {
       </svg>
       <span className="absolute inset-0 flex flex-col items-center justify-center leading-none">
         <span className="font-display text-base font-bold text-ink">{pct}%</span>
-        <span className="text-[10px] text-muted-foreground">Energi</span>
+        <span className="text-[10px] text-muted-foreground">{t("Energi")}</span>
       </span>
     </div>
   );
@@ -59,31 +62,32 @@ function EnergyRing({ pct }: { pct: number }) {
  * Read-only: all loggning sker i formuläret på samma sida (Mitt batteri).
  */
 export default function BatteryToday() {
+  const { t } = useLang();
   const { todayEnergyEntries, todayMoods } = useQuickCheckin();
   const observations = buildObservations(todayEnergyEntries, todayMoods);
 
   return (
     <MyFloveBlock
-      title="Dagens observationer"
-      subtitle="Dina loggningar i kronologisk ordning"
+      title={t("Dagens observationer")}
+      subtitle={t("Dina loggningar i kronologisk ordning")}
       icon={Clock}
       tone="lavender"
       span
       collapsible
       collapseId="batteri::dagens-observationer"
-      status={`${observations.length} ${observations.length === 1 ? "observation" : "observationer"} idag`}
+      status={`${observations.length} ${observations.length === 1 ? t("observation") : t("observationer")} ${t("idag")}`}
       className="[&>div>div]:min-w-0"
     >
-      <div data-testid="battery-today" aria-label="Dagens observationer">
+      <div data-testid="battery-today" aria-label={t("Dagens observationer")}>
         {observations.length === 0 ? (
           <p className="text-sm text-muted-foreground">
-            Inga observationer än idag. Din första loggning ovan börjar måla dagens bild. 💜
+            {t("Inga observationer än idag. Din första loggning ovan börjar måla dagens bild. 💜")}
           </p>
         ) : (
           <>
             <div className="mb-3 flex flex-wrap gap-x-5 gap-y-1 text-xs font-semibold text-muted-foreground">
-              <span>Energi idag</span>
-              <span>Mående idag</span>
+              <span>{t("Energi idag")}</span>
+              <span>{t("Mående idag")}</span>
             </div>
             <ol className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {observations.map((o) => {
@@ -101,7 +105,7 @@ export default function BatteryToday() {
                       <span
                         className={`rounded-pill px-2.5 py-0.5 text-xs font-medium ${part.tone}`}
                       >
-                        {part.label} <span aria-hidden>{part.emoji}</span>
+                        {t(part.label)} <span aria-hidden>{part.emoji}</span>
                       </span>
                     </div>
 
@@ -115,7 +119,7 @@ export default function BatteryToday() {
                           <span className="mt-1 font-display text-sm font-bold text-ink">
                             {o.mood}/5
                           </span>
-                          <span className="text-[10px] text-muted-foreground">Mående</span>
+                          <span className="text-[10px] text-muted-foreground">{t("Mående")}</span>
                         </div>
                       )}
                     </div>

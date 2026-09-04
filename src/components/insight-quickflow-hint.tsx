@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { useTasks } from "@/hooks/use-data";
 import { buildPreparationPlan, detectPreparationIntent } from "@/lib/insight";
+import { useLang } from "@/hooks/use-language";
 
 function dateStr(offsetDays: number): string {
   const d = new Date();
@@ -17,6 +18,7 @@ function dateStr(offsetDays: number): string {
  * Känns tanken som en förberedelse-situation föreslår vi en plan – aldrig automatiskt.
  */
 export function InsightQuickflowHint() {
+  const { t } = useLang();
   const { openItems, absorb } = useQuickflow();
   const { addTask } = useTasks();
   const [dismissed, setDismissed] = useState<string[]>([]);
@@ -30,7 +32,7 @@ export function InsightQuickflowHint() {
 
   if (!candidate) return null;
 
-  const label = detectPreparationIntent(candidate.text)?.anchorLabel ?? "det som kommer";
+  const label = detectPreparationIntent(candidate.text)?.anchorLabel ?? t("det som kommer");
   const plan = buildPreparationPlan(label);
 
   const createPlan = () => {
@@ -44,8 +46,8 @@ export function InsightQuickflowHint() {
     }
     absorb(candidate.text);
     setPlanFor(null);
-    toast.success("Planen ligger i MyFlow 💙", {
-      description: "Du kan ändra tider eller ta bort stegen när du vill.",
+    toast.success(t("Planen ligger i MyFlow 💙"), {
+      description: t("Du kan ändra tider eller ta bort stegen när du vill."),
     });
   };
 
@@ -56,11 +58,11 @@ export function InsightQuickflowHint() {
         <div className="flex-1">
           <p className="text-sm text-muted-foreground">"{candidate.text}"</p>
           <p className="font-medium">
-            Det här verkar vara kopplat till en strategi för förberedelse.
+            {t("Det här verkar vara kopplat till en strategi för förberedelse.")}
           </p>
         </div>
         <button
-          aria-label="Inte nu"
+          aria-label={t("Inte nu")}
           onClick={() => setDismissed((d) => [...d, candidate.id])}
           className="p-1 text-muted-foreground hover:text-foreground"
         >
@@ -74,20 +76,20 @@ export function InsightQuickflowHint() {
             {plan.map((p, i) => (
               <li key={i}>
                 {p.offsetDays === -2
-                  ? "2 dagar innan"
+                  ? t("2 dagar innan")
                   : p.offsetDays === -1
-                    ? "Kvällen innan"
-                    : "Samma dag"}{" "}
+                    ? t("Kvällen innan")
+                    : t("Samma dag")}{" "}
                 · {p.when} – {p.text}
               </li>
             ))}
           </ul>
           <div className="flex gap-2">
             <Button className="rounded-full" onClick={createPlan}>
-              Ja, lägg till
+              {t("Ja, lägg till")}
             </Button>
             <Button variant="ghost" className="rounded-full" onClick={() => setPlanFor(null)}>
-              Nej tack
+              {t("Nej tack")}
             </Button>
           </div>
         </div>
@@ -97,7 +99,7 @@ export function InsightQuickflowHint() {
           className="rounded-full"
           onClick={() => setPlanFor(candidate.id)}
         >
-          Skapa plan
+          {t("Skapa plan")}
         </Button>
       )}
     </div>

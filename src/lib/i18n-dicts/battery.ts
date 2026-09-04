@@ -205,6 +205,7 @@ export const EN_BATTERY: Record<string, string> = {
   "Visa mindre": "Show less",
   "Visa mer": "Show more",
   "Vad påverkar dig just nu?  (valfritt)": "What's affecting you right now? (optional)",
+  "Vad påverkar dig just nu?": "What's affecting you right now?",
   "Tack": "Thanks",
   "Logga energi & mående": "Log energy & mood",
 
@@ -233,6 +234,7 @@ export const EN_BATTERY: Record<string, string> = {
   "Visa detaljer": "Show details",
   "Logga energi &amp; mående": "Log energy & mood",
   "Varje loggning blir en egen observation": "Every log becomes its own entry",
+  "Energikurva över dagen.": "Energy curve over the day.",
 
   // battery-today.tsx
   "Morgon": "Morning",

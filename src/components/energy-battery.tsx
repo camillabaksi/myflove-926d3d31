@@ -7,6 +7,7 @@ import { useAnimatedNumber } from "@/hooks/use-animated-number";
 import { minutesToTime } from "@/lib/energy-battery";
 import { MyFloveBlock, MyFloveStat } from "@/components/myflove/block";
 import { MyFloveIcon } from "@/components/myflove";
+import { useLang } from "@/hooks/use-language";
 
 /** Mitt batteri – översikt över nu-läget och den befintliga energikurvan. */
 export default function EnergyBattery({
@@ -21,6 +22,7 @@ export default function EnergyBattery({
   /** Widget-läge på Hem: stor ikon + batterinivå, inget mer. */
   widget?: boolean;
 }) {
+  const { t } = useLang();
   const { reading, suggestions } = useEnergyBattery();
   const { moodValue } = useQuickCheckin();
   const [open, setOpen] = useState(defaultOpen);
@@ -28,18 +30,18 @@ export default function EnergyBattery({
   const shownLevel = Math.round(useAnimatedNumber(level));
   const levelWord =
     level >= 75
-      ? "Gott om energi"
+      ? t("Gott om energi")
       : level >= 55
-        ? "Medelbra energi"
+        ? t("Medelbra energi")
         : level >= 35
-          ? "Energi på halvfart"
-          : "Låg energi just nu";
+          ? t("Energi på halvfart")
+          : t("Låg energi just nu");
   const trendWord =
     reading.trend === "stiger"
-      ? "på väg upp"
+      ? t("på väg upp")
       : reading.trend === "sjunker"
-        ? "på väg ner"
-        : "ganska jämn";
+        ? t("på väg ner")
+        : t("ganska jämn");
 
   // Hem-läge: rubrik + kort underrubrik + aktuellt värde. Hela kortet är en länk.
   if (widget && href) {
@@ -49,15 +51,15 @@ export default function EnergyBattery({
         onClick={onNavigate}
         data-testid="battery-card"
         data-area="halsa"
-        aria-label={`Mitt batteri, ${shownLevel} procent. Öppna för att logga energi och mående.`}
+        aria-label={`${t("Mitt batteri")}, ${shownLevel} %. ${t("Öppna för att logga energi och mående.")}`}
         className="press relative flex min-h-[9rem] min-w-0 flex-col items-center gap-2.5 rounded-3xl border-2 border-[hsl(var(--area-aterhamtning)/0.45)] bg-sun/50 p-4 text-center shadow-soft transition-shadow hover:shadow-lifted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:p-5"
       >
         <MyFloveIcon icon={BatteryCharging} tone="sun" size="lg" className="rounded-full" />
         <span className="min-w-0">
           <span className="block font-display text-base font-bold leading-tight text-ink">
-            Mitt batteri
+            {t("Mitt batteri")}
           </span>
-          <span className="block text-xs text-muted-foreground">Energi och mående</span>
+          <span className="block text-xs text-muted-foreground">{t("Energi och mående")}</span>
         </span>
         <span className="w-full space-y-1 border-t border-border/50 pt-3">
           <span className="block font-display text-3xl font-bold leading-none text-ink">
@@ -79,16 +81,16 @@ export default function EnergyBattery({
     <>
       <div className="grid grid-cols-1 gap-2 @min-[240px]:grid-cols-2 sm:gap-3">
         <MyFloveStat
-          label="Energi"
+          label={t("Energi")}
           value={`${shownLevel}%`}
           hint={`${levelWord} · ${trendWord}`}
           icon={BatteryCharging}
           tone="sun"
         />
         <MyFloveStat
-          label="Mående"
+          label={t("Mående")}
           value={moodValue != null ? `${Math.round(moodValue / 2)}/5` : "–"}
-          hint={moodValue != null ? "Senaste registrerade värde" : "Logga ett mående när du vill"}
+          hint={moodValue != null ? t("Senaste registrerade värde") : t("Logga ett mående när du vill")}
           icon={Gauge}
           tone="blush"
         />
@@ -96,27 +98,27 @@ export default function EnergyBattery({
       <BatteryCurve reading={reading} compact={false} />
       {!reading.personal && (
         <p className="text-xs text-muted-foreground">
-          Preliminär kurva – blir din egen när du loggat energi några dagar.
+          {t("Preliminär kurva – blir din egen när du loggat energi några dagar.")}
         </p>
       )}
       {open && (
         <div className="space-y-3 border-t border-border/50 pt-3">
           <p className="text-sm text-ink">
             {reading.trend === "stiger"
-              ? "Din energi ökar."
+              ? t("Din energi ökar.")
               : reading.trend === "sjunker"
-                ? "Din energi minskar."
-                : "Din energi är stabil."}
+                ? t("Din energi minskar.")
+                : t("Din energi är stabil.")}
           </p>
           <div className="flex flex-wrap gap-2 text-xs">
             {reading.peak && (
               <span className="rounded-pill bg-primary/10 px-2.5 py-1 text-foreground">
-                🌤️ Starkast {reading.peak.label}
+                🌤️ {t("Starkast")} {reading.peak.label}
               </span>
             )}
             {reading.dip && (
               <span className="rounded-pill bg-secondary/70 px-2.5 py-1 text-foreground">
-                🌙 Lägst {reading.dip.label}
+                🌙 {t("Lägst")} {reading.dip.label}
               </span>
             )}
           </div>
@@ -139,8 +141,8 @@ export default function EnergyBattery({
 
   const block = (
     <MyFloveBlock
-      title="Just nu"
-      subtitle="Din energi och ditt mående – det senaste du loggat"
+      title={t("Just nu")}
+      subtitle={t("Din energi och ditt mående – det senaste du loggat")}
       icon={BatteryCharging}
       tone="sun"
       surface="sun"
@@ -151,7 +153,7 @@ export default function EnergyBattery({
             type="button"
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
-            aria-label={open ? "Dölj detaljer" : "Visa detaljer"}
+            aria-label={open ? t("Dölj detaljer") : t("Visa detaljer")}
             className="press grid h-9 w-9 place-items-center rounded-pill bg-card/70 text-ink"
           >
             <ChevronDown size={17} className={open ? "rotate-180" : ""} aria-hidden="true" />
@@ -161,11 +163,11 @@ export default function EnergyBattery({
       footer={
         href ? (
           <span className="inline-flex items-center gap-2 text-sm font-semibold text-primary">
-            Logga energi &amp; mående <ArrowRight size={16} />
+            {t("Logga energi &amp; mående")} <ArrowRight size={16} />
           </span>
         ) : (
           <span className="inline-flex items-center gap-2 text-xs text-muted-foreground">
-            <Sparkles size={14} className="text-primary" /> Varje loggning blir en egen observation
+            <Sparkles size={14} className="text-primary" /> {t("Varje loggning blir en egen observation")}
           </span>
         )
       }
@@ -193,6 +195,7 @@ function BatteryCurve({
   reading: ReturnType<typeof useEnergyBattery>["reading"];
   compact?: boolean;
 }) {
+  const { t } = useLang();
   const slots = reading.slots;
   if (slots.length < 2) return null;
   const w = 100;
@@ -212,7 +215,7 @@ function BatteryCurve({
         preserveAspectRatio="none"
         className={compact ? "h-10 w-full" : "h-24 w-full"}
         role="img"
-        aria-label={`Energikurva över dagen. ${reading.summary}`}
+        aria-label={`${t("Energikurva över dagen.")} ${reading.summary}`}
       >
         <polygon
           points={`0,${h} ${points.join(" ")} ${w},${h}`}

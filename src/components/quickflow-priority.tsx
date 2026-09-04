@@ -39,6 +39,7 @@ import { clarifyQuickflowTask } from "@/lib/quickflow-clarify.functions";
 import { ENERGY_LEVEL_META } from "@/lib/quickflow-clarify";
 import type { FlowItem } from "@/lib/flow-items";
 import { cn } from "@/lib/utils";
+import { useLang } from "@/hooks/use-language";
 
 /**
  * "Min lista just nu" – resultatet av QuickFlow-flödet. Uppgifterna kommer
@@ -46,6 +47,7 @@ import { cn } from "@/lib/utils";
  * och prioriteringen körs av samma motor överallt.
  */
 export function QuickflowPriority() {
+  const { t } = useLang();
   const { openItems, doneItems, intro, add, update, remove, move, clear, splitItem } =
     usePriorityList();
   const { reading } = useEnergyBattery();
@@ -77,7 +79,7 @@ export function QuickflowPriority() {
       setExpandedClarificationId(item.id);
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Flow kunde inte förtydliga uppgiften just nu.";
+        error instanceof Error ? error.message : t("Flow kunde inte förtydliga uppgiften just nu.");
       toast({ description: message });
     } finally {
       setClarifyingId(null);
@@ -101,7 +103,9 @@ export function QuickflowPriority() {
     const count = splitItem(item.id);
     toast({
       description:
-        count > 1 ? `Uppdelad i ${count} enskilda saker.` : "Den här går inte att dela upp mer.",
+        count > 1
+          ? `${t("Uppdelad i")} ${count} ${t("enskilda saker.")}`
+          : t("Den här går inte att dela upp mer."),
     });
   };
 
@@ -130,12 +134,13 @@ export function QuickflowPriority() {
       });
     }
     setPlanFor(null);
-    const day = choice.dueDate === todayISO() ? "idag" : choice.dueDate;
-    const reminder = choice.reminderMinutesBefore !== undefined ? " med egen påminnelse." : ".";
+    const day = choice.dueDate === todayISO() ? t("idag") : choice.dueDate;
+    const reminder =
+      choice.reminderMinutesBefore !== undefined ? t(" med egen påminnelse.") : ".";
     toast({
       description: choice.time
-        ? `Planerad i kalendern ${day} kl ${choice.time}${reminder}`
-        : `Planerad i kalendern ${day} – utan tid.`,
+        ? `${t("Planerad i kalendern")} ${day} kl ${choice.time}${reminder}`
+        : `${t("Planerad i kalendern")} ${day}${t(" – utan tid.")}`,
     });
     navigate({ to: "/kalender" });
   };
@@ -144,9 +149,9 @@ export function QuickflowPriority() {
     <>
       {(openItems.length > 0 || doneItems.length > 0) && (
         <MyFloveBlock
-          title="Min lista just nu"
-          subtitle="Ingen tid, ingen deadline. Bara ordning."
-          eyebrow="Flows förslag"
+          title={t("Min lista just nu")}
+          subtitle={t("Ingen tid, ingen deadline. Bara ordning.")}
+          eyebrow={t("Flows förslag")}
           icon={Sparkles}
           tone="mint"
           action={
@@ -155,7 +160,7 @@ export function QuickflowPriority() {
               onClick={() => setReorder((r) => !r)}
               className="press rounded-full border-2 border-border px-3 py-1.5 text-xs font-medium"
             >
-              ↕ {reorder ? "Klar" : "Ändra ordning"}
+              ↕ {reorder ? t("Klar") : t("Ändra ordning")}
             </button>
           }
         >
@@ -164,7 +169,7 @@ export function QuickflowPriority() {
               {typeof energyPercent === "number" && (
                 <span
                   className="inline-flex items-center gap-1 rounded-full border-2 border-border/60 bg-card px-2.5 py-1 text-xs font-medium"
-                  aria-label={`Ditt batteri just nu: ${Math.round(energyPercent)} procent`}
+                  aria-label={`${t("Ditt batteri just nu:")} ${Math.round(energyPercent)} ${t("procent")}`}
                 >
                   🔋 {Math.round(energyPercent)} %
                 </span>
@@ -172,11 +177,12 @@ export function QuickflowPriority() {
               {intro ? (
                 <p className="min-w-0 flex-1 text-sm text-muted-foreground">{intro}</p>
               ) : (
-                <p className="min-w-0 flex-1 text-sm text-muted-foreground">{hint}</p>
+                <p className="min-w-0 flex-1 text-sm text-muted-foreground">{t(hint)}</p>
               )}
-              <WhyHint label="prioriteringen">
-                Flow hjälper dig att sortera när allt känns lika viktigt. Prioriteringen bygger på
-                vad som verkar viktigt, brådskande och möjligt utifrån din energi just nu.
+              <WhyHint label={t("prioriteringen")}>
+                {t(
+                  "Flow hjälper dig att sortera när allt känns lika viktigt. Prioriteringen bygger på vad som verkar viktigt, brådskande och möjligt utifrån din energi just nu.",
+                )}
               </WhyHint>
             </div>
 
@@ -187,7 +193,7 @@ export function QuickflowPriority() {
               return (
                 <div key={bucket} className="space-y-2">
                   <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                    {meta.emoji} {meta.label}
+                    {meta.emoji} {t(meta.label)}
                   </p>
                   {rows.map((item) => (
                     <div key={item.id} className="rounded-2xl border-2 border-border bg-card p-3">
@@ -214,22 +220,22 @@ export function QuickflowPriority() {
                                     ? "border-primary text-primary"
                                     : "border-border text-muted-foreground",
                                 )}
-                                aria-label={BUCKET_META[b].label}
+                                aria-label={t(BUCKET_META[b].label)}
                               >
                                 {BUCKET_META[b].emoji}
                               </button>
                             ))}
-                            <IconBtn label="Flytta upp" onClick={() => move(item.id, -1)}>
+                            <IconBtn label={t("Flytta upp")} onClick={() => move(item.id, -1)}>
                               <ArrowUp size={16} />
                             </IconBtn>
-                            <IconBtn label="Flytta ner" onClick={() => move(item.id, 1)}>
+                            <IconBtn label={t("Flytta ner")} onClick={() => move(item.id, 1)}>
                               <ArrowDown size={16} />
                             </IconBtn>
                           </span>
                         ) : (
                           <span className="flex flex-wrap items-center gap-1">
                             <IconBtn
-                              label={item.clarify ? "Visa förtydligande" : "Förtydliga uppgiften"}
+                              label={item.clarify ? t("Visa förtydligande") : t("Förtydliga uppgiften")}
                               onClick={() => clarifyTask(item)}
                             >
                               {clarifyingId === item.id ? (
@@ -243,26 +249,26 @@ export function QuickflowPriority() {
                               )}
                             </IconBtn>
                             <IconBtn
-                              label="Börja med denna"
+                              label={t("Börja med denna")}
                               onClick={() => navigate({ to: "/flow" })}
                             >
                               <Play size={16} />
                             </IconBtn>
-                            <IconBtn label="Klar" onClick={() => markDone(item)}>
+                            <IconBtn label={t("Klar")} onClick={() => markDone(item)}>
                               <Check size={16} />
                             </IconBtn>
                             {splitTasks(item.title).length > 1 && (
                               <IconBtn
-                                label="Dela upp i enskilda saker"
+                                label={t("Dela upp i enskilda saker")}
                                 onClick={() => splitIt(item)}
                               >
                                 <Scissors size={16} />
                               </IconBtn>
                             )}
-                            <IconBtn label="Planera den" onClick={() => setPlanFor(item)}>
+                            <IconBtn label={t("Planera den")} onClick={() => setPlanFor(item)}>
                               <CalendarPlus size={16} />
                             </IconBtn>
-                            <IconBtn label="Ta bort" onClick={() => remove(item.id)}>
+                            <IconBtn label={t("Ta bort")} onClick={() => remove(item.id)}>
                               <Trash2 size={16} />
                             </IconBtn>
                           </span>
@@ -289,19 +295,20 @@ export function QuickflowPriority() {
               <Input
                 value={newTitle}
                 onChange={(e) => setNewTitle(e.target.value)}
-                placeholder="Lägg till något – flera går bra, separera med komma"
+                placeholder={t("Lägg till något – flera går bra, separera med komma")}
                 className="h-11 min-w-[10rem] flex-1 rounded-xl"
               />
               <Button type="submit" variant="outline" className="h-11 rounded-xl">
-                <Plus size={16} className="mr-1" /> Lägg till
+                <Plus size={16} className="mr-1" /> {t("Lägg till")}
               </Button>
             </form>
 
             {doneItems.length > 0 && (
               <p className="text-xs text-muted-foreground">
-                {doneItems.length} klar{doneItems.length === 1 ? "" : "a"} idag.{" "}
+                {doneItems.length} {doneItems.length === 1 ? t("klar") : t("klara")}{" "}
+                {t("idag.")}{" "}
                 <button type="button" onClick={clear} className="underline underline-offset-4">
-                  Rensa listan
+                  {t("Rensa listan")}
                 </button>
               </p>
             )}
@@ -322,25 +329,26 @@ export function QuickflowPriority() {
 }
 
 function ClarificationPanel({ clarification }: { clarification: PriorityTask["clarify"] }) {
+  const { t } = useLang();
   if (!clarification) return null;
   const energyMeta = ENERGY_LEVEL_META[clarification.energyLevel];
 
   return (
     <div className="mt-3 grid gap-3 rounded-2xl border-2 border-border/70 bg-muted/30 p-3 text-sm sm:grid-cols-2">
       <div className="space-y-1 sm:col-span-2">
-        <p className="font-medium text-foreground">Varför?</p>
+        <p className="font-medium text-foreground">{t("Varför?")}</p>
         <p className="text-muted-foreground">{clarification.why}</p>
       </div>
       <div className="space-y-1">
-        <p className="font-medium text-foreground">Energi</p>
+        <p className="font-medium text-foreground">{t("Energi")}</p>
         <p className="flex items-center gap-2 text-muted-foreground">
           <span className={cn("h-2.5 w-2.5 rounded-full", energyMeta.dot)} aria-hidden="true" />
-          {energyMeta.label}
+          {t(energyMeta.label)}
         </p>
         <p className="text-xs text-muted-foreground">{clarification.energyNote}</p>
       </div>
       <div className="space-y-1">
-        <p className="font-medium text-foreground">Börja här</p>
+        <p className="font-medium text-foreground">{t("Börja här")}</p>
         <p className="text-muted-foreground">{clarification.firstStep}</p>
       </div>
     </div>

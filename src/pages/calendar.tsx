@@ -242,7 +242,7 @@ export function CalendarContent() {
     if (!editChildGroup) return;
     if (editChildIds.length === 0) {
       toast({
-        description: "Välj minst ett barn – annars tar du bort händelsen.",
+        description: t("Välj minst ett barn – annars tar du bort händelsen."),
         variant: "destructive",
       });
       return;
@@ -265,10 +265,10 @@ export function CalendarContent() {
           notes: editChildGroup.note ?? undefined,
         });
       }
-      toast({ description: "Uppdaterat vilka barn som ingår." });
+      toast({ description: t("Uppdaterat vilka barn som ingår.") });
       setEditChildGroup(null);
     } catch {
-      toast({ description: "Kunde inte spara ändringen. Försök igen.", variant: "destructive" });
+      toast({ description: t("Kunde inte spara ändringen. Försök igen."), variant: "destructive" });
     } finally {
       setSavingChildGroup(false);
     }
@@ -293,12 +293,12 @@ export function CalendarContent() {
       });
     }
     if (events.length === 0) {
-      toast({ description: "Inget att exportera ännu." });
+      toast({ description: t("Inget att exportera ännu.") });
       return;
     }
     downloadIcs(events, "myflow-kalender.ics");
     toast({
-      description: `Exporterade ${events.length} händelser. Öppna filen i din kalenderapp.`,
+      description: `${t("Exporterade")} ${events.length} ${t("händelser. Öppna filen i din kalenderapp.")}`,
     });
   };
 
@@ -307,7 +307,7 @@ export function CalendarContent() {
       const text = await file.text();
       const events = parseIcs(text);
       if (events.length === 0) {
-        toast({ description: "Hittade inga händelser i filen.", variant: "destructive" });
+        toast({ description: t("Hittade inga händelser i filen."), variant: "destructive" });
         return;
       }
       let added = 0;
@@ -315,10 +315,10 @@ export function CalendarContent() {
         addReminder(e.title, e.date, e.time);
         added++;
       }
-      toast({ description: `Importerade ${added} händelser till kalendern.` });
+      toast({ description: `${t("Importerade")} ${added} ${t("händelser till kalendern.")}` });
     } catch {
       toast({
-        description: "Kunde inte läsa filen. Kontrollera att det är en .ics-fil.",
+        description: t("Kunde inte läsa filen. Kontrollera att det är en .ics-fil."),
         variant: "destructive",
       });
     }
@@ -332,7 +332,7 @@ export function CalendarContent() {
         setNewEventTitle("");
         setNewEventTime("");
       },
-      onError: () => toast({ description: "Något gick fel. Försök igen.", variant: "destructive" }),
+      onError: () => toast({ description: t("Något gick fel. Försök igen."), variant: "destructive" }),
     },
   });
 
@@ -1129,7 +1129,7 @@ export function CalendarContent() {
                         <div className="text-xs text-primary font-medium uppercase tracking-wider mb-0.5">
                           {r.endDate
                             ? `${t("Period")} · ${periodDayLabel(r.date, r.endDate, selectedDateStr, t)}`
-                            : "Påminnelse"}{" "}
+                            : t("Påminnelse")}{" "}
                           {r.time && `kl ${r.time}${r.endTime ? `–${r.endTime}` : ""}`}
                         </div>
                         <div className="text-lg font-medium truncate">{r.title}</div>
@@ -1432,7 +1432,7 @@ export function CalendarContent() {
 
                 {editing.kind === "task" && (
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Vart hör det hemma?</label>
+                    <label className="text-sm font-medium">{t("Vart hör det hemma?")}</label>
                     <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2">
                       {ALL_AREAS.map((a) => (
                         <button

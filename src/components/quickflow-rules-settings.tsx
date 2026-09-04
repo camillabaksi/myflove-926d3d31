@@ -10,6 +10,7 @@ import {
 } from "@/lib/quickflow-rules";
 import { DESTINATION_META, type QuickflowDestination } from "@/lib/quickflow";
 import { AREA_META, ALL_AREAS, type LifeArea } from "@/lib/life-areas";
+import { useLang } from "@/hooks/use-language";
 
 const DESTINATIONS: QuickflowDestination[] = ["inkop", "kalender", "uppgift", "paminnelse", "ide"];
 
@@ -20,6 +21,7 @@ const MATCH_TYPES: RuleMatchType[] = ["startsWith", "contains", "endsWith"];
  * Färdiga mallar går att lägga till direkt eller anpassa först.
  */
 export default function QuickflowRulesSettings() {
+  const { t } = useLang();
   const { rules, addRule, updateRule, removeRule, moveRule } = useQuickflowRules();
   const formRef = useRef<HTMLDivElement | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -32,6 +34,7 @@ export default function QuickflowRulesSettings() {
 
   const hasPhrase = (p: string) =>
     rules.some((r) => r.phrase.trim().toLowerCase() === p.trim().toLowerCase());
+
 
   const fillForm = (draft: RuleDraft) => {
     setPhrase(draft.phrase);
@@ -56,7 +59,7 @@ export default function QuickflowRulesSettings() {
   const save = () => {
     const p = phrase.trim();
     if (!p) {
-      toast("Skriv ett ord först", { description: 'T.ex. "köpa" eller "boka".' });
+      toast(t("Skriv ett ord först"), { description: t('T.ex. "köpa" eller "boka".') });
       return;
     }
     const draft = {
@@ -70,7 +73,7 @@ export default function QuickflowRulesSettings() {
     if (editingId) {
       updateRule(editingId, draft);
       toast.success(
-        `Ändringen är sparad – "${p}" går till ${DESTINATION_META[destination].label}.`,
+        `${t("Ändringen är sparad")} – "${p}" ${t("går till")} ${t(DESTINATION_META[destination].label)}.`,
       );
     } else {
       addRule({
@@ -81,7 +84,9 @@ export default function QuickflowRulesSettings() {
         ...(time ? { time } : {}),
         stripPhrase: strip,
       });
-      toast.success(`Klart – "${p}" hamnar nu i ${DESTINATION_META[destination].label}.`);
+      toast.success(
+        `${t("Klart – ")}"${p}" ${t("hamnar nu i")} ${t(DESTINATION_META[destination].label)}.`,
+      );
     }
     resetForm();
   };
@@ -89,59 +94,60 @@ export default function QuickflowRulesSettings() {
   return (
     <div className="space-y-4">
       <p className="text-sm text-muted-foreground">
-        Bestäm själv vart olika sorters texter ska hamna. Den översta regeln som passar vinner –
-        annars föreslår jag som vanligt.
+        {t(
+          "Bestäm själv vart olika sorters texter ska hamna. Den översta regeln som passar vinner – annars föreslår jag som vanligt.",
+        )}
       </p>
 
       {/* Färdiga mallar */}
       <div className="rounded-2xl border border-border bg-card p-4 space-y-3">
         <div className="flex items-center gap-2">
           <Sparkles size={16} className="text-primary" />
-          <p className="text-sm font-semibold text-ink">Färdiga mallar</p>
+          <p className="text-sm font-semibold text-ink">{t("Färdiga mallar")}</p>
         </div>
         <p className="text-xs text-muted-foreground">
-          Lägg till direkt, eller välj Anpassa om du vill ändra något först.
+          {t("Lägg till direkt, eller välj Anpassa om du vill ändra något först.")}
         </p>
         <ul className="space-y-2">
-          {RULE_TEMPLATE_LIST.map((t) => {
-            const added = hasPhrase(t.rule.phrase);
+          {RULE_TEMPLATE_LIST.map((tpl) => {
+            const added = hasPhrase(tpl.rule.phrase);
             return (
               <li
-                key={t.key}
+                key={tpl.key}
                 className="rounded-xl border border-border/70 bg-background/60 p-3 flex items-start gap-2"
               >
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-ink">
-                    {t.label} → {DESTINATION_META[t.rule.destination].emoji}{" "}
-                    {DESTINATION_META[t.rule.destination].label}
+                    {t(tpl.label)} → {DESTINATION_META[tpl.rule.destination].emoji}{" "}
+                    {t(DESTINATION_META[tpl.rule.destination].label)}
                   </p>
-                  <p className="text-xs text-muted-foreground">{t.hint}</p>
-                  <p className="text-xs text-muted-foreground italic">{t.example}</p>
+                  <p className="text-xs text-muted-foreground">{t(tpl.hint)}</p>
+                  <p className="text-xs text-muted-foreground italic">{t(tpl.example)}</p>
                 </div>
                 <div className="flex flex-col gap-1.5 shrink-0">
                   <button
                     type="button"
                     disabled={added}
                     onClick={() => {
-                      addRule(t.rule);
+                      addRule(tpl.rule);
                       toast.success(
-                        `"${t.rule.phrase}" är tillagd – du kan ändra den när du vill.`,
+                        `"${tpl.rule.phrase}" ${t("är tillagd – du kan ändra den när du vill.")}`,
                       );
                     }}
                     className="rounded-full border border-primary bg-primary/10 text-primary px-3 py-1 text-xs font-semibold inline-flex items-center gap-1 disabled:opacity-40"
                   >
                     {added ? <Check size={13} /> : <Plus size={13} />}
-                    {added ? "Tillagd" : "Lägg till"}
+                    {added ? t("Tillagd") : t("Lägg till")}
                   </button>
                   <button
                     type="button"
                     onClick={() => {
                       setEditingId(null);
-                      fillForm(t.rule);
+                      fillForm(tpl.rule);
                     }}
                     className="rounded-full border border-border px-3 py-1 text-xs font-medium inline-flex items-center gap-1"
                   >
-                    <Pencil size={13} /> Anpassa
+                    <Pencil size={13} /> {t("Anpassa")}
                   </button>
                 </div>
               </li>
@@ -152,12 +158,12 @@ export default function QuickflowRulesSettings() {
           <button
             type="button"
             onClick={() => {
-              RULE_TEMPLATE_LIST.forEach((t) => addRule(t.rule));
-              toast.success("Alla mallar tillagda – ändra dem precis som du vill.");
+              RULE_TEMPLATE_LIST.forEach((tpl) => addRule(tpl.rule));
+              toast.success(t("Alla mallar tillagda – ändra dem precis som du vill."));
             }}
             className="rounded-full border border-border px-4 py-2 text-sm font-semibold"
           >
-            Lägg till alla mallar
+            {t("Lägg till alla mallar")}
           </button>
         )}
       </div>
@@ -168,19 +174,20 @@ export default function QuickflowRulesSettings() {
             <div className="flex items-start gap-2">
               <div className="flex-1 min-w-0">
                 <p className="text-sm text-ink">
-                  Text som <span className="text-muted-foreground">{MATCH_LABEL[r.matchType]}</span>{" "}
+                  {t("Text som")}{" "}
+                  <span className="text-muted-foreground">{t(MATCH_LABEL[r.matchType])}</span>{" "}
                   <span className="font-semibold">"{r.phrase}"</span> →{" "}
-                  {DESTINATION_META[r.destination].emoji} {DESTINATION_META[r.destination].label}
+                  {DESTINATION_META[r.destination].emoji} {t(DESTINATION_META[r.destination].label)}
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  {r.area ? `${AREA_META[r.area].label} · ` : ""}
+                  {r.area ? `${t(AREA_META[r.area].label)} · ` : ""}
                   {r.time ? `kl ${r.time} · ` : ""}
-                  {r.stripPhrase ? "tar bort ordet ur titeln" : "behåller hela texten"}
+                  {r.stripPhrase ? t("tar bort ordet ur titeln") : t("behåller hela texten")}
                 </p>
               </div>
               <button
                 type="button"
-                aria-label="Ändra regel"
+                aria-label={t("Ändra regel")}
                 onClick={() => {
                   setEditingId(r.id);
                   fillForm(r);
@@ -191,7 +198,7 @@ export default function QuickflowRulesSettings() {
               </button>
               <button
                 type="button"
-                aria-label="Flytta upp"
+                aria-label={t("Flytta upp")}
                 onClick={() => moveRule(r.id, -1)}
                 disabled={i === 0}
                 className="rounded-full border border-border p-1.5 disabled:opacity-30"
@@ -200,7 +207,7 @@ export default function QuickflowRulesSettings() {
               </button>
               <button
                 type="button"
-                aria-label="Flytta ner"
+                aria-label={t("Flytta ner")}
                 onClick={() => moveRule(r.id, 1)}
                 disabled={i === rules.length - 1}
                 className="rounded-full border border-border p-1.5 disabled:opacity-30"
@@ -209,7 +216,7 @@ export default function QuickflowRulesSettings() {
               </button>
               <button
                 type="button"
-                aria-label="Ta bort regel"
+                aria-label={t("Ta bort regel")}
                 onClick={() => {
                   removeRule(r.id);
                   if (editingId === r.id) resetForm();
@@ -225,7 +232,7 @@ export default function QuickflowRulesSettings() {
                 checked={r.enabled}
                 onChange={(e) => updateRule(r.id, { enabled: e.target.checked })}
               />
-              Regeln är på
+              {t("Regeln är på")}
             </label>
           </li>
         ))}
@@ -233,14 +240,14 @@ export default function QuickflowRulesSettings() {
 
       <div ref={formRef} className="rounded-2xl border border-border bg-card p-4 space-y-3">
         <div className="flex items-center justify-between">
-          <p className="text-sm font-semibold text-ink">{editingId ? "Ändra regel" : "Ny regel"}</p>
+          <p className="text-sm font-semibold text-ink">{editingId ? t("Ändra regel") : t("Ny regel")}</p>
           {(editingId || phrase) && (
             <button
               type="button"
               onClick={resetForm}
               className="text-xs text-muted-foreground inline-flex items-center gap-1"
             >
-              <X size={13} /> Avbryt
+              <X size={13} /> {t("Avbryt")}
             </button>
           )}
         </div>
@@ -256,37 +263,37 @@ export default function QuickflowRulesSettings() {
         <input
           value={phrase}
           onChange={(e) => setPhrase(e.target.value)}
-          placeholder='T.ex. "köpa"'
+          placeholder={t('T.ex. "köpa"')}
           className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
         />
 
         <div>
-          <p className="text-xs text-muted-foreground mb-1">Hamnar i:</p>
+          <p className="text-xs text-muted-foreground mb-1">{t("Hamnar i:")}</p>
           <div className="flex flex-wrap gap-1.5">
             {DESTINATIONS.map((d) => (
               <Chip key={d} active={destination === d} onClick={() => setDestination(d)}>
-                {DESTINATION_META[d].emoji} {DESTINATION_META[d].label}
+                {DESTINATION_META[d].emoji} {t(DESTINATION_META[d].label)}
               </Chip>
             ))}
           </div>
         </div>
 
         <div>
-          <p className="text-xs text-muted-foreground mb-1">Livsområde (valfritt):</p>
+          <p className="text-xs text-muted-foreground mb-1">{t("Livsområde (valfritt):")}</p>
           <div className="flex flex-wrap gap-1.5">
             <Chip active={area === ""} onClick={() => setArea("")}>
-              Låt mig gissa
+              {t("Låt mig gissa")}
             </Chip>
             {ALL_AREAS.map((a) => (
               <Chip key={a} active={area === a} onClick={() => setArea(a)}>
-                {AREA_META[a].emoji} {AREA_META[a].label}
+                {AREA_META[a].emoji} {t(AREA_META[a].label)}
               </Chip>
             ))}
           </div>
         </div>
 
         <label className="flex items-center gap-2 text-sm text-ink">
-          <span className="text-xs text-muted-foreground">Tid (valfritt):</span>
+          <span className="text-xs text-muted-foreground">{t("Tid (valfritt):")}</span>
           <input
             type="time"
             value={time}
@@ -297,7 +304,7 @@ export default function QuickflowRulesSettings() {
 
         <label className="flex items-center gap-2 text-sm text-ink">
           <input type="checkbox" checked={strip} onChange={(e) => setStrip(e.target.checked)} />
-          Ta bort ordet ur titeln
+          {t("Ta bort ordet ur titeln")}
         </label>
 
         <button
@@ -306,7 +313,7 @@ export default function QuickflowRulesSettings() {
           className="rounded-full bg-primary text-primary-foreground px-4 py-2 text-sm font-semibold inline-flex items-center gap-2"
         >
           {editingId ? <Check size={16} /> : <Plus size={16} />}
-          {editingId ? "Spara ändring" : "Spara regel"}
+          {editingId ? t("Spara ändring") : t("Spara regel")}
         </button>
       </div>
     </div>
