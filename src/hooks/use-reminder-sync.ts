@@ -8,7 +8,7 @@ import {
   medicationReminderKey,
   medicationOccursOn,
 } from "@/lib/medications";
-import { getCurrentSubscription } from "@/lib/push-client";
+import { getCurrentSubscription, refreshPushSubscription } from "@/lib/push-client";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { routineOccursOn, type Routine } from "@/lib/recurrence";
 import { useQuickflow } from "@/hooks/use-quickflow";
@@ -103,7 +103,13 @@ export function useReminderSync() {
       // Only sync when signed in AND actually subscribed to push
       const { data } = await supabase.auth.getUser();
       if (!alive || !data.user) return;
-      const sub = await getCurrentSubscription();
+      // Har användaren gett tillstånd men tappat prenumerationen (t.ex. efter
+      // en webbläsaruppdatering) återskapas den, annars kommer inga notiser
+      // när appen är stängd.
+      let sub = await getCurrentSubscription();
+      if (!sub && typeof Notification !== "undefined" && Notification.permission === "granted") {
+        sub = await refreshPushSubscription();
+      }
       if (!alive || !sub) return;
 
       const now = Date.now();
