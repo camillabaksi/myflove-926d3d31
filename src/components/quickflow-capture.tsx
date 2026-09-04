@@ -1,7 +1,20 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Brain, Check, Loader2, Mic, Pencil, Sparkles, MapPin, Trash2 } from "lucide-react";
+import {
+  Brain,
+  Check,
+  Loader2,
+  Mic,
+  Pencil,
+  Sparkles,
+  MapPin,
+  Trash2,
+  NotebookPen,
+  FolderOpen,
+  Clock,
+  Zap,
+} from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,6 +25,8 @@ import { useQuickflow } from "@/hooks/use-quickflow";
 import { useQuickflowPrioritization } from "@/hooks/use-quickflow-prioritization";
 import { splitTasks } from "@/lib/quickflow-priority";
 import { useNotes } from "@/hooks/use-notes";
+import { useNoteFolders } from "@/hooks/use-note-folders";
+import { looksLikeLongNote } from "@/lib/quickflow-longtext";
 import { track } from "@/lib/analytics";
 import {
   LEVEL_META,
@@ -45,13 +60,17 @@ export function QuickflowCapture({
   const [customValue, setCustomValue] = useState("");
   const [placeOpen, setPlaceOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
+  const [folderOpen, setFolderOpen] = useState(false);
   const [busy, setBusy] = useState(false);
+  /** Användarens val för lång text: null = Flows förslag visas, annars beslutat. */
+  const [longChoice, setLongChoice] = useState<"note" | "keep" | null>(null);
   /** Användarens egen version av uppdelningen – null = Flows förslag gäller. */
   const [edited, setEdited] = useState<string[] | null>(null);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editingValue, setEditingValue] = useState("");
   const { add } = useQuickflow();
-  const { addNote } = useNotes();
+  const { addNote, updateNote } = useNotes();
+  const { folders } = useNoteFolders();
   const { savedStores } = useSavedStores();
   const { prioritizeTitles } = useQuickflowPrioritization();
   const navigate = useNavigate();
@@ -59,16 +78,29 @@ export function QuickflowCapture({
 
   const suggestion = useMemo(() => (text.trim() ? suggestWhen(level, text) : null), [text, level]);
 
-  const detected = useMemo(() => splitTasks(text), [text]);
   const trimmed = text.trim();
-  const items = edited ?? (trimmed ? (detected.length > 0 ? detected : [trimmed]) : []);
+  const isLongNote = useMemo(() => looksLikeLongNote(trimmed), [trimmed]);
+  const detected = useMemo(() => splitTasks(text), [text]);
+  /** Lång text hålls ihop – vi delar aldrig sönder en tanketömning av oss själva. */
+  const items =
+    edited ??
+    (trimmed
+      ? isLongNote && longChoice !== "keep"
+        ? [trimmed]
+        : detected.length > 0
+          ? detected
+          : [trimmed]
+      : []);
   const hasText = items.length > 0;
 
   // Ny text = nytt förslag från Flow.
   useEffect(() => {
     setEdited(null);
     setEditingIndex(null);
+    setLongChoice(null);
+    setFolderOpen(false);
   }, [text]);
+
 
   // Bottennavigeringens +, hemskärmens + och desktop-FAB öppnar samma flöde.
   useEffect(() => {
@@ -85,6 +117,8 @@ export function QuickflowCapture({
     setCustomValue("");
     setPlaceOpen(false);
     setMoreOpen(false);
+    setFolderOpen(false);
+    setLongChoice(null);
     setBusy(false);
     setEdited(null);
     setEditingIndex(null);
@@ -142,16 +176,25 @@ export function QuickflowCapture({
     );
   };
 
-  /** Tanken får bara finnas – den landar direkt bland anteckningarna. */
-  const saveAsNote = () => {
+  /**
+   * Tanken får bara finnas – hela originaltexten landar som EN anteckning.
+   * Inga Quickflow-poster skapas, så det blir aldrig dubbletter.
+   */
+  const saveAsNote = (folderId?: string) => {
     if (!trimmed) return;
-    addNote(trimmed);
+    const note = addNote(trimmed);
+    if (folderId) updateNote(note.id, { folderId });
+    track("quickflow_created", { source: "quickflow", method: "anteckning" });
     setOpen(false);
     reset();
+    const folder = folders.find((f) => f.id === folderId);
     toast.success("Sparad som anteckning. 📝", {
-      description: "Du hittar den under Anteckningar i Quickflow – gör något av den när du vill.",
+      description: folder
+        ? `Den ligger i ${folder.emoji} ${folder.name} – hela texten är kvar.`
+        : "Hela texten är kvar. Du hittar den under Anteckningar – lägg den i en mapp när du vill.",
     });
   };
+
 
   return (
     <>
@@ -232,6 +275,39 @@ export function QuickflowCapture({
               )}
             </div>
 
+            {isLongNote && longChoice === null && (
+              <div className="space-y-3 rounded-2xl border border-primary/30 bg-primary/5 p-4">
+                <p className="flex items-start gap-2 text-sm text-ink">
+                  <NotebookPen size={16} className="mt-0.5 shrink-0 text-primary" />
+                  <span>
+                    <span className="block font-semibold">
+                      Det här ser ut som en längre anteckning.
+                    </span>
+                    <span className="block text-muted-foreground">
+                      Vill du spara den som en anteckning? Hela texten behålls som den är.
+                    </span>
+                  </span>
+                </p>
+                <div className="flex flex-col gap-2 sm:flex-row">
+                  <Button
+                    type="button"
+                    onClick={() => saveAsNote()}
+                    className="w-full rounded-xl sm:flex-1"
+                  >
+                    📝 Spara som anteckning
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setLongChoice("keep")}
+                    className="w-full rounded-xl sm:flex-1"
+                  >
+                    Behåll i Quickflow
+                  </Button>
+                </div>
+              </div>
+            )}
+
             {hasText && (
               <div className="space-y-2">
                 {items.length > 1 && (
@@ -309,22 +385,87 @@ export function QuickflowCapture({
                   ))}
                 </ul>
 
-                <Button
-                  type="button"
-                  onClick={() => void approveAndPrioritize()}
-                  disabled={busy}
-                  className="w-full rounded-xl"
-                >
-                  {busy ? (
-                    <Loader2 size={16} className="mr-2 animate-spin" />
-                  ) : (
-                    <Sparkles size={16} className="mr-2" />
-                  )}
-                  Godkänn och prioritera
-                </Button>
+                <p className="pt-1 text-xs uppercase tracking-wide text-muted-foreground">
+                  Vad vill du göra med det här?
+                </p>
+                <div className="grid gap-2 sm:grid-cols-2">
+                  <Button
+                    type="button"
+                    onClick={() => void approveAndPrioritize()}
+                    disabled={busy}
+                    className="w-full justify-start rounded-xl"
+                  >
+                    {busy ? (
+                      <Loader2 size={16} className="mr-2 animate-spin" />
+                    ) : (
+                      <Zap size={16} className="mr-2" />
+                    )}
+                    Saker att göra
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => saveAsNote()}
+                    className="w-full justify-start rounded-xl"
+                  >
+                    <NotebookPen size={16} className="mr-2" /> Spara som anteckning
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      setMoreOpen(false);
+                      setFolderOpen((v) => !v);
+                    }}
+                    aria-expanded={folderOpen}
+                    className="w-full justify-start rounded-xl"
+                  >
+                    <FolderOpen size={16} className="mr-2" /> Lägg i mapp
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      setFolderOpen(false);
+                      setMoreOpen(true);
+                    }}
+                    className="w-full justify-start rounded-xl"
+                  >
+                    <Clock size={16} className="mr-2" /> Påminn mig senare
+                  </Button>
+                </div>
+
+                {folderOpen && (
+                  <div className="space-y-2 rounded-2xl border border-border bg-card p-3">
+                    <p className="text-xs text-muted-foreground">
+                      Sparas som anteckning i vald mapp – hela texten behålls.
+                    </p>
+                    {folders.length === 0 ? (
+                      <p className="text-sm text-muted-foreground">
+                        Du har inga mappar än. Spara den som anteckning nu och skapa mappar under
+                        Anteckningar när du vill.
+                      </p>
+                    ) : (
+                      <div className="flex flex-wrap gap-2">
+                        {folders.map((folder) => (
+                          <button
+                            key={folder.id}
+                            type="button"
+                            onClick={() => saveAsNote(folder.id)}
+                            className="rounded-full border border-border bg-background px-4 py-2 text-sm hover:border-primary"
+                          >
+                            {folder.emoji} {folder.name}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 <p className="text-xs text-muted-foreground">
                   Inga tider eller deadlines skapas – bara en ordning du kan ändra.
                 </p>
+
               </div>
             )}
 
@@ -418,7 +559,7 @@ export function QuickflowCapture({
                         </button>
                         <button
                           type="button"
-                          onClick={saveAsNote}
+                          onClick={() => saveAsNote()}
                           className="w-full rounded-full border border-border bg-card px-4 py-2 text-sm hover:border-primary"
                         >
                           📝 Spara som anteckning

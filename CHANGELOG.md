@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-04 – Quickflow: flera saker eller en hel tanketömning
+
+- Quickflow kan fortfarande fånga flera saker i samma text – och nu även längre texter utan att de delas sönder.
+- Ser texten ut som en längre anteckning frågar Flow försiktigt: Spara som anteckning eller Behåll i Quickflow. Inget flyttas automatiskt.
+- Efter fångsten väljer du enkelt: ⚡ Saker att göra, 📝 Spara som anteckning, 📁 Lägg i mapp eller ⏰ Påminn mig senare.
+- Sparas texten som anteckning behålls hela originaltexten, inga uppgifter skapas och inga dubbletter uppstår. Mapp är alltid frivillig.
+
 ## 2026-09-04 – Flow som följeslagare på startsidan
 
 - Flow möter dig på hem-sidan med en kort fråga: "Hej 💜 Vad behöver du just nu?" och tre–fyra enkla val: Få ur mig något, Kolla min dag, Kolla min ork och Hjälp mig välja.
