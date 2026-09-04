@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-09-04 – Ny startsida: lugn personlig kontrollpanel
+
+- Hem har nu en liten hero ("Hej! 💜 – Vad behöver du just nu?") följd av tre huvudkort: Quickflow, Ditt batteri och Kalendern.
+- Ny "Idag"-sektion visar max 5 av dagens saker (påminnelser + uppgifter) med länk till hela dagen.
+- "Från ditt huvud" visar de senaste öppna QuickFlow-tankarna, och ett lugnt batteri-/återhämtningskort visar energinivå och befintliga förslag.
+- Insiktskortet bygger enbart på faktisk data från appen. Ingen ny datamodell – allt återanvänder befintliga hooks, vyer och routes.
+
+
 ## 2026-09-04 – Notiser fungerar även när appen är stängd
 
 - Uppgifter med tid schemaläggs nu 14 dagar framåt (tidigare bara idag + imorgon), så påminnelser kommer även om appen inte öppnas på flera dagar.
