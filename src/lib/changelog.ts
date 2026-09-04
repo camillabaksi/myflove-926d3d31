@@ -6,9 +6,17 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-09-03";
+export const CHANGELOG_UPDATED = "2026-09-04";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  {
+    title: "Notiser även när appen är stängd",
+    items: [
+      "Uppgifter med tid schemaläggs 14 dagar framåt istället för bara idag och imorgon (2026-09-04)",
+      "Påminnelserna synkas om var 15:e minut och när appen öppnas igen (2026-09-04)",
+      "Tappad push-prenumeration återskapas automatiskt när tillstånd redan finns (2026-09-04)",
+    ],
+  },
   {
     title: "QuickFlow får hjärnikon",
     items: [

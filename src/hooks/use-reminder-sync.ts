@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { useTasks, useMedications, useReminders } from "@/hooks/use-data";
@@ -8,7 +8,7 @@ import {
   medicationReminderKey,
   medicationOccursOn,
 } from "@/lib/medications";
-import { getCurrentSubscription } from "@/lib/push-client";
+import { getCurrentSubscription, refreshPushSubscription } from "@/lib/push-client";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { routineOccursOn, type Routine } from "@/lib/recurrence";
 import { useQuickflow } from "@/hooks/use-quickflow";
@@ -53,6 +53,24 @@ export function useReminderSync() {
   const reconcileFn = useServerFn(reconcileReminders);
   const lastKeys = useRef<Set<string>>(new Set());
 
+  // Regelbunden omsynk: annars ligger bara det som schemalades vid senaste
+  // ändringen kvar, och notiser kan sluta komma efter midnatt eller när
+  // webbläsaren bytt push-prenumeration medan appen varit stängd.
+  const [resyncTick, setResyncTick] = useState(0);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const bump = () => setResyncTick((n) => n + 1);
+    const id = window.setInterval(bump, 15 * 60_000);
+    const onVisible = () => {
+      if (document.visibilityState === "visible") bump();
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      window.clearInterval(id);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
+  }, []);
+
   // Signatur över allt som ska trigga en ny synk (uppgifter, medicin,
   // påminnelser, rutiner, quickflow, lektioner och barnschema).
   const syncSignature = JSON.stringify([
@@ -85,12 +103,20 @@ export function useReminderSync() {
       // Only sync when signed in AND actually subscribed to push
       const { data } = await supabase.auth.getUser();
       if (!alive || !data.user) return;
-      const sub = await getCurrentSubscription();
+      // Har användaren gett tillstånd men tappat prenumerationen (t.ex. efter
+      // en webbläsaruppdatering) återskapas den, annars kommer inga notiser
+      // när appen är stängd.
+      let sub = await getCurrentSubscription();
+      if (!sub && typeof Notification !== "undefined" && Notification.permission === "granted") {
+        sub = await refreshPushSubscription();
+      }
       if (!alive || !sub) return;
 
       const now = Date.now();
-      // Timed tasks: today + tomorrow. Medications: daily for 14 days ahead.
-      const taskDates = [todayIso(0), todayIso(1)];
+      // Uppgifter, medicin och påminnelser schemaläggs 14 dagar framåt så att
+      // notiser kommer även om appen inte öppnas på flera dagar.
+      const taskDates: string[] = [];
+      for (let i = 0; i < 14; i++) taskDates.push(todayIso(i));
       const medDates: string[] = [];
       for (let i = 0; i < 14; i++) medDates.push(todayIso(i));
       const desired = new Map<
@@ -416,5 +442,5 @@ export function useReminderSync() {
       alive = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [syncSignature]);
+  }, [syncSignature, resyncTick]);
 }

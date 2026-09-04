@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-04 – Notiser fungerar även när appen är stängd
+
+- Uppgifter med tid schemaläggs nu 14 dagar framåt (tidigare bara idag + imorgon), så påminnelser kommer även om appen inte öppnas på flera dagar.
+- Appen synkar om påminnelserna var 15:e minut och när den öppnas igen, så inget faller bort över midnatt.
+- Om notistillståndet finns men prenumerationen tappats återskapas den automatiskt.
+
 ## 2026-09-03 – QuickFlow får hjärnikon
 
 - QuickFlow visas nu med en hjärnikon (hjärnans inkorg) i sidomenyn, bottenmenyn, toppmenyn, den flytande knappen och fångstryten – istället för plus/blixt/inkorg.
