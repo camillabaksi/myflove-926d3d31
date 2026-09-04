@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-04 – Samma lugna design i hela appen
+
+- Alla sidhuvuden använder nu startsidans mjuka gradient, rundning och skugga – med samma varma ton som följer tiden på dygnet.
+- Kort och block har samma tunna kant som startsidans kort, så inget känns hårdare eller tyngre än något annat.
+- Ingen funktionalitet ändrad – bara utseendet är enhetligt.
+
 ## 2026-09-04 – Allt sparas + Flow hör av sig när det behövs
 
 - Ditt namn i Min profil sparas automatiskt medan du skriver (och när du lämnar fältet) – inget kan gå förlorat för att du glömde trycka Spara. Övriga profil- och livsprofilfält sparade redan direkt.

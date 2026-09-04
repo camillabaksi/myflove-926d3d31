@@ -211,7 +211,7 @@ export function ExpandableBlock({
         data-expanded="false"
         {...areaProps(area)}
         className={cn(
-          "@container flex min-w-0 flex-col rounded-3xl border-2 border-border/60 shadow-soft transition-shadow hover:shadow-lifted",
+          "@container flex min-w-0 flex-col rounded-3xl border border-border/60 shadow-soft transition-shadow hover:shadow-lifted",
           area && "area-border",
           "min-h-[9rem] @min-[20rem]:min-h-0",
           surface ? SURFACE[surface] : "bg-card",
@@ -237,7 +237,7 @@ export function ExpandableBlock({
       data-expanded={open ? "true" : "false"}
       {...areaProps(area)}
       className={cn(
-        "@container flex min-w-0 flex-col rounded-3xl border-2 border-border/60 shadow-soft transition-shadow",
+        "@container flex min-w-0 flex-col rounded-3xl border border-border/60 shadow-soft transition-shadow",
         area && "area-border",
         open ? "col-span-full w-full shadow-lifted" : "min-h-[9rem] @min-[20rem]:min-h-0",
         surface ? SURFACE[surface] : "bg-card",
