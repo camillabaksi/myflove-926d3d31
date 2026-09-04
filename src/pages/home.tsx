@@ -35,6 +35,7 @@ import { todayISO } from "@/lib/day";
 import { track } from "@/lib/analytics";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { useFlowSettings } from "@/hooks/use-flow-settings";
+import { useFeatureUsage, type FeatureId } from "@/lib/feature-usage";
 
 /**
  * Hem = en lugn personlig kontrollpanel.
@@ -63,6 +64,7 @@ export default function Home() {
   const { activeReminders } = useReminders();
   const { openItems } = useQuickflow();
   const { settings: flowSettings } = useFlowSettings();
+  const { record: recordFeature, order: featureOrder, adaptive, top } = useFeatureUsage();
   const todayIso = todayISO();
 
   /** Dagens saker – samma data som kalendern och Min dag, bara kortare. */
@@ -86,6 +88,45 @@ export default function Home() {
       : battery >= 40
         ? "Du har lite kvar att ge idag."
         : "Ganska tomt just nu – ta det lugnt.";
+
+  /** Samma tre kort för alla – ordningen anpassas först när data finns. */
+  const FEATURE_CARDS: Record<
+    FeatureId,
+    { id: FeatureId; title: string; subtitle: string; href: string; icon: typeof Brain }
+  > = {
+    quickflow: {
+      id: "quickflow",
+      title: "Quickflow",
+      subtitle: "Få ner det snabbt",
+      href: "/quickflow",
+      icon: Brain,
+    },
+    batteri: {
+      id: "batteri",
+      title: "Batteriet",
+      subtitle: `Din ork idag · ${battery}%`,
+      href: "/mitt-batteri",
+      icon: BatteryMedium,
+    },
+    kalender: {
+      id: "kalender",
+      title: "Kalendern",
+      subtitle: "Din överblick",
+      href: "/kalender",
+      icon: CalendarDays,
+    },
+  };
+  const featureCards = featureOrder.map((id) => FEATURE_CARDS[id]);
+
+  /** Försiktigt förslag – bara när det bygger på faktisk användning. */
+  const adaptiveNote =
+    adaptive && top
+      ? top === "quickflow"
+        ? "Du använder Quickflow mest, så den ligger först här nu."
+        : top === "kalender"
+          ? "Du använder kalendern mest, så den ligger först här nu."
+          : "Du checkar in i batteriet ofta, så det ligger först här nu."
+      : null;
 
   const openQuickflow = () => {
     track("home_widget_opened", { source: "quickflow" });
