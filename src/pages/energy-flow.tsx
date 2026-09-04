@@ -131,15 +131,15 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
   const frictionRows = useMemo(() => frictionTrends(entries, 30).slice(0, 5), [entries]);
 
   const save = async () => {
-    const t = title.trim();
-    if (!t) {
+    const value = title.trim();
+    if (!value) {
       toast({ description: t("Skriv vad det gäller – t.ex. dålig sömn eller en promenad.") });
       return;
     }
     setSaving(true);
     try {
       await addFactor({
-        title: t,
+        title: value,
         direction,
         strength,
         category,
@@ -499,12 +499,12 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
             <button
               type="button"
               onClick={async () => {
-                const t = title.trim();
-                if (!t) {
+                const value = title.trim();
+                if (!value) {
                   toast({ description: t("Skriv en titel först, så sparar jag den som snabbknapp.") });
                   return;
                 }
-                await addPreset({ title: t, direction, strength, category, kind, friction });
+                await addPreset({ title: value, direction, strength, category, kind, friction });
                 toast({ description: t("Sparad som snabbknapp.") });
               }}
               className="text-xs font-medium text-muted-foreground underline underline-offset-2 hover:text-ink"
