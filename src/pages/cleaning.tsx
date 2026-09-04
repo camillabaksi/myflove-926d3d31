@@ -190,8 +190,9 @@ export default function CleaningPage() {
         </MyFloveWide>
 
         {/* Översikt */}
-        <MyFloveBlock
-          title={`${room.emoji} ${room.label} – ${CLEAN_MODE_LABEL[mode].toLowerCase()}`}
+        <MyFloveWide>
+          <MyFloveBlock
+            title={`${room.emoji} ${room.label} – ${CLEAN_MODE_LABEL[mode].toLowerCase()}`}
           subtitle={
             minutesLeft > 0
               ? `Ca ${minutesLeft} min kvar · ${completed.length}/${steps.length} klart`
