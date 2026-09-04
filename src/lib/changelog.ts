@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-04";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Hela appen på engelska",
+    items: [
+      "Quickflow, Kalender/Idag, Mitt batteri och Mående, Historik, Veckoöversikten, Anteckningar och mappar samt adminöversikten byter språk (2026-09-04)",
+      "Veckoöversiktens genererade meningar och veckodagar översätts också (2026-09-04)",
+      "Datum och veckodagar följer språkvalet i historik och kalender (2026-09-04)",
+      "Översättningarna ligger i egna ordlistor per område – svenska är fortfarande källspråk och fallback (2026-09-04)",
+    ],
+  },
+  {
     title: "Svenska och engelska i MyFlove",
     items: [
       "Ny språkväljare i Min profil – Svenska eller English, sparat på kontot (2026-09-04)",

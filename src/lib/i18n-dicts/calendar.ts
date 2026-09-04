@@ -169,4 +169,6 @@ export const EN_CALENDAR: Record<string, string> = {
   "Barnens dag": "The children's day",
   "Hållpunkter för barnen": "Milestones for the children",
   "Något du vill bli påmind om": "Something you want to be reminded of",
+  "dag": "day",
+  "av": "of",
 };

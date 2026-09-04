@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-09-04 – Hela appen på engelska
+
+- Quickflow, Kalender/Idag, Mitt batteri och Mående, Historik, Veckoöversikten, Anteckningar och mappar samt adminöversikten och appstatistiken byter nu språk med språkvalet.
+- Veckoöversiktens genererade meningar (veckodagar, "Aktiviteter utomhus" m.m.) översätts också, inte bara fasta rubriker.
+- Datum och veckodagar följer språkvalet i historiken och kalendern i stället för fast svenskt format.
+- Översättningarna ligger i egna ordlistor per område under `src/lib/i18n-dicts/`. Svenska är fortfarande källspråket och fallback.
+
+
 ## 2026-09-04 – Svenska och engelska i MyFlove
 
 - Ny språkväljare i Min profil: Svenska eller English. Valet sparas på kontot och följer med mellan enheter.
