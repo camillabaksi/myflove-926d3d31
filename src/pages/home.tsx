@@ -180,49 +180,55 @@ export default function Home() {
           </div>
         </MyFloveWide>
 
-        {/* Tre huvudkort: Quickflow, Batteriet, Kalendern – som i mockupen. */}
+        {/* Tre huvudkort: Quickflow, Batteriet, Kalendern.
+            Alla börjar i samma ordning – den anpassas först när MyFlove sett
+            tillräckligt mycket av din egen användning. */}
         <MyFloveWide style={{ order: 1 }} className="min-w-0">
           <div
             className="grid grid-cols-3 gap-2.5 sm:gap-4"
             data-testid="home-widgets"
             aria-label="Vad vill du göra just nu?"
           >
-            <button
-              type="button"
-              onClick={openQuickflow}
-              data-testid="home-widget-quickflow"
-              className="group flex min-h-[104px] flex-col items-center justify-center gap-1.5 rounded-3xl border border-border/60 bg-card p-3 text-center shadow-soft transition hover:shadow-lifted"
-            >
-              <Brain className="h-7 w-7 text-primary" aria-hidden />
-              <span className="text-sm font-semibold text-ink">Quickflow</span>
-              <span className="text-xs text-muted-foreground leading-snug">Få ner det snabbt</span>
-            </button>
-
-            <Link
-              href="/mitt-batteri"
-              onClick={() => track("home_widget_opened", { source: "batteri" })}
-              data-testid="home-widget-batteri"
-              className="flex min-h-[104px] flex-col items-center justify-center gap-1.5 rounded-3xl border border-border/60 bg-card p-3 text-center shadow-soft transition hover:shadow-lifted"
-            >
-              <BatteryMedium className="h-7 w-7 text-primary" aria-hidden />
-              <span className="text-sm font-semibold text-ink">Batteriet</span>
-              <span className="text-xs text-muted-foreground leading-snug">
-                Din energi idag · {battery}%
-              </span>
-            </Link>
-
-            <Link
-              href="/kalender"
-              onClick={() => track("home_widget_opened", { source: "kalender" })}
-              data-testid="home-widget-kalender"
-              className="flex min-h-[104px] flex-col items-center justify-center gap-1.5 rounded-3xl border border-border/60 bg-card p-3 text-center shadow-soft transition hover:shadow-lifted"
-            >
-              <CalendarDays className="h-7 w-7 text-primary" aria-hidden />
-              <span className="text-sm font-semibold text-ink">Kalendern</span>
-              <span className="text-xs text-muted-foreground leading-snug">Din överblick</span>
-            </Link>
+            {featureCards.map((card) =>
+              card.id === "quickflow" ? (
+                <button
+                  key={card.id}
+                  type="button"
+                  onClick={() => {
+                    recordFeature("quickflow");
+                    openQuickflow();
+                  }}
+                  data-testid="home-widget-quickflow"
+                  className="group flex min-h-[104px] flex-col items-center justify-center gap-1.5 rounded-3xl border border-border/60 bg-card p-3 text-center shadow-soft transition hover:shadow-lifted"
+                >
+                  <card.icon className="h-7 w-7 text-primary" aria-hidden />
+                  <span className="text-sm font-semibold text-ink">{card.title}</span>
+                  <span className="text-xs text-muted-foreground leading-snug">
+                    {card.subtitle}
+                  </span>
+                </button>
+              ) : (
+                <Link
+                  key={card.id}
+                  href={card.href}
+                  onClick={() => {
+                    recordFeature(card.id);
+                    track("home_widget_opened", { source: card.id });
+                  }}
+                  data-testid={`home-widget-${card.id}`}
+                  className="flex min-h-[104px] flex-col items-center justify-center gap-1.5 rounded-3xl border border-border/60 bg-card p-3 text-center shadow-soft transition hover:shadow-lifted"
+                >
+                  <card.icon className="h-7 w-7 text-primary" aria-hidden />
+                  <span className="text-sm font-semibold text-ink">{card.title}</span>
+                  <span className="text-xs text-muted-foreground leading-snug">
+                    {card.subtitle}
+                  </span>
+                </Link>
+              ),
+            )}
           </div>
         </MyFloveWide>
+
 
         {/* Ditt batteri – stort, lugnt, som i mockupen. */}
         <MyFloveWide style={{ order: 2 }} className="min-w-0">
