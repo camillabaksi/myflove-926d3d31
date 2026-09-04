@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-04";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Allt sparas + Flow hör av sig",
+    items: [
+      "Namnet i Min profil sparas automatiskt medan du skriver (2026-09-04)",
+      "Flow skickar proaktiva notiser: fråga om orken, mjuk puff vid full dag och låg ork, samt hjälp att sortera Quickflow (2026-09-04)",
+      "Puffarna når dig även när appen är stängd – som mest en per dag och regel (2026-09-04)",
+    ],
+  },
+  {
     title: "Livsprofilen flyttar in i Min profil",
     items: [
       "Min livsprofil ligger nu på sidan Min profil – namn, barn och din vardag på ett ställe (2026-09-04)",
