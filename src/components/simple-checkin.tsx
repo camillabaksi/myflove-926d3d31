@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Pencil, Sparkles } from "lucide-react";
+import { Pencil, Sparkles, ChevronDown } from "lucide-react";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import type { EnergyCategory } from "@/lib/energy-flow";
@@ -9,21 +9,9 @@ import WhyHint from "@/components/why-hint";
 import { useFlowExplainer } from "@/hooks/use-flow-explainer";
 import { MyFloveBlock } from "@/components/myflove/block";
 
-const MOODS = [
-  { score10: 2, emoji: "😢", label: "Tungt" },
-  { score10: 4, emoji: "😕", label: "Låg" },
-  { score10: 6, emoji: "😐", label: "Okej" },
-  { score10: 8, emoji: "🙂", label: "Bra" },
-  { score10: 10, emoji: "😄", label: "Toppen" },
-];
+import { ORK_LEVELS, MOOD_FACES, orkFromValue10 } from "@/lib/ork";
 
-const LEVELS = [
-  { step: 1, emoji: "🪫", label: "Nästan slut" },
-  { step: 2, emoji: "🔋", label: "Lågt" },
-  { step: 3, emoji: "🔋", label: "Halvfullt" },
-  { step: 4, emoji: "🔋", label: "Bra" },
-  { step: 5, emoji: "🔋", label: "Fullt" },
-];
+const MOODS = MOOD_FACES;
 
 const FACTORS: { id: string; label: string; emoji: string; category: EnergyCategory }[] = [
   { id: "somn", label: "Sömn", emoji: "😴", category: "somn" },
@@ -59,6 +47,7 @@ export default function SimpleCheckin({
   const [note, setNote] = useState("");
   const [saved, setSaved] = useState(false);
   const [started, setStarted] = useState(false);
+  const [showMore, setShowMore] = useState(false);
 
   useEffect(() => {
     if (energyValue != null) setBattery(energyValue);
@@ -109,12 +98,12 @@ export default function SimpleCheckin({
     window.setTimeout(() => setSaved(false), 2500);
   };
 
-  const step = Math.max(1, Math.min(5, Math.round(battery / 2)));
+  const ork = orkFromValue10(battery);
 
   return (
     <MyFloveBlock
       title="Logga just nu"
-      subtitle="Berätta hur du mår och vad som påverkar dig – helt frivilligt utom energin."
+      subtitle="Två snabba frågor. MyFlove gör resten."
       eyebrow="Logga"
       icon={Pencil}
       tone="lavender"
@@ -131,32 +120,36 @@ export default function SimpleCheckin({
     >
       <div className="space-y-2">
         <div className="flex items-center justify-between gap-2">
-          <p className="text-sm font-semibold text-ink">Energi</p>
-          <WhyHint label="logga energi">
-            Det hjälper Flow se vad som brukar ge eller ta energi för dig.
+          <p className="text-sm font-semibold text-ink">
+            <span aria-hidden>🔋</span> Hur mycket ork har du idag?
+          </p>
+          <WhyHint label="logga ork">
+            Du väljer bara ett ord – MyFlove ser mönstren åt dig över tid.
           </WhyHint>
         </div>
         {energyExplainer && <p className="text-xs text-muted-foreground">{energyExplainer}</p>}
-        <div className="flex gap-1.5">
-          {LEVELS.map((l) => (
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+          {ORK_LEVELS.map((l) => (
             <button
-              key={l.step}
+              key={l.id}
               type="button"
-              aria-pressed={step === l.step}
-              aria-label={`${l.step} av 5 – ${l.label}`}
+              aria-pressed={ork?.id === l.id}
+              aria-label={l.label}
               onClick={() => {
                 markStarted("battery");
-                setBattery(l.step * 2);
+                setBattery(l.value10);
               }}
               className={cn(
-                "flex flex-1 flex-col items-center gap-1 rounded-2xl border p-2 transition-all",
-                step === l.step
-                  ? "border-primary bg-primary/10 scale-[1.03]"
-                  : "border-transparent bg-card/80 opacity-75 hover:opacity-100",
+                "flex min-h-11 flex-1 items-center justify-center gap-2 rounded-2xl border px-3 py-2.5 text-sm font-medium transition-all",
+                ork?.id === l.id
+                  ? "border-primary bg-primary/10 text-ink scale-[1.02]"
+                  : "border-transparent bg-card/80 text-muted-foreground hover:opacity-100",
               )}
             >
-              <span className="text-xl">{l.emoji}</span>
-              <span className="text-[11px] font-medium text-muted-foreground">{l.step}/5</span>
+              <span aria-hidden className="text-base">
+                {l.dot}
+              </span>
+              {l.label}
             </button>
           ))}
         </div>
@@ -165,10 +158,11 @@ export default function SimpleCheckin({
       <div className="space-y-2">
         <div className="flex items-center justify-between gap-2">
           <p className="text-sm font-semibold text-ink">
-            Mående <span className="font-normal text-muted-foreground">(valfritt)</span>
+            <span aria-hidden>💜</span> Hur känns det just nu?{" "}
+            <span className="font-normal text-muted-foreground">(valfritt)</span>
           </p>
           <WhyHint label="logga mående">
-            Det hjälper Flow förstå om ditt mående och din energi brukar hänga ihop för dig.
+            Det hjälper Flow förstå om ditt mående och din ork brukar hänga ihop för dig.
           </WhyHint>
         </div>
         {moodExplainer && <p className="text-xs text-muted-foreground">{moodExplainer}</p>}
@@ -198,50 +192,70 @@ export default function SimpleCheckin({
       </div>
 
       <div className="space-y-2">
-        <p className="text-sm font-semibold text-ink">
-          Vad påverkar dig just nu?{" "}
-          <span className="font-normal text-muted-foreground">(valfritt)</span>
-        </p>
-        <div className="flex flex-wrap gap-2">
-          {FACTORS.map((f) => {
-            const on = factors.includes(f.id);
-            return (
-              <button
-                key={f.id}
-                type="button"
-                aria-pressed={on}
-                onClick={() =>
-                  setFactors((prev) =>
-                    prev.includes(f.id) ? prev.filter((x) => x !== f.id) : [...prev, f.id],
-                  )
-                }
-                className={cn(
-                  "rounded-pill border px-3 py-1.5 text-sm transition-all",
-                  on
-                    ? "border-primary bg-primary/10 text-ink"
-                    : "border-border/60 bg-card/70 text-muted-foreground hover:text-foreground",
-                )}
-              >
-                <span aria-hidden className="mr-1">
-                  {f.emoji}
-                </span>
-                {f.label}
-              </button>
-            );
-          })}
-        </div>
         <label className="block space-y-1">
           <span className="text-xs text-muted-foreground">
-            Vill du skriva med egna ord? (valfritt)
+            Vill du skriva några ord? (valfritt)
           </span>
           <textarea
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            rows={3}
+            rows={2}
             placeholder="T.ex. ”Sovit bara 4 timmar och är dessutom sjuk.”"
             className="w-full resize-none rounded-2xl border border-border/60 bg-card/70 p-3 text-sm text-ink outline-none transition-colors focus:border-primary"
           />
         </label>
+
+        {/* Progressiv komplexitet: det avancerade ligger bakom "Visa mer". */}
+        <button
+          type="button"
+          onClick={() => setShowMore((v) => !v)}
+          aria-expanded={showMore}
+          className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+        >
+          <ChevronDown
+            size={15}
+            aria-hidden
+            className={cn("transition-transform", showMore && "rotate-180")}
+          />
+          {showMore ? "Visa mindre" : "Visa mer"}
+        </button>
+
+        {showMore && (
+          <div className="space-y-2">
+            <p className="text-sm font-semibold text-ink">
+              Vad påverkar dig just nu?{" "}
+              <span className="font-normal text-muted-foreground">(valfritt)</span>
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {FACTORS.map((f) => {
+                const on = factors.includes(f.id);
+                return (
+                  <button
+                    key={f.id}
+                    type="button"
+                    aria-pressed={on}
+                    onClick={() =>
+                      setFactors((prev) =>
+                        prev.includes(f.id) ? prev.filter((x) => x !== f.id) : [...prev, f.id],
+                      )
+                    }
+                    className={cn(
+                      "rounded-pill border px-3 py-1.5 text-sm transition-all",
+                      on
+                        ? "border-primary bg-primary/10 text-ink"
+                        : "border-border/60 bg-card/70 text-muted-foreground hover:text-foreground",
+                    )}
+                  >
+                    <span aria-hidden className="mr-1">
+                      {f.emoji}
+                    </span>
+                    {f.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
 
       <button

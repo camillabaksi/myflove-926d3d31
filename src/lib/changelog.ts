@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-04";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Enklare frågor och adaptiv personalisering",
+    items: [
+      "En enda energifråga: Hur mycket ork har du idag? med fyra svar – ingen procent eller skattningsskala (2026-09-04)",
+      "Mående är separerat, frivilligt och tar sekunder: fem ansikten plus egna ord om du vill (2026-09-04)",
+      "Påverkansfaktorer ligger bakom Visa mer – enkelt först, mer när det behövs (2026-09-04)",
+      "Alla börjar från samma grund; startsidans tre kort anpassas först efter din faktiska användning (2026-09-04)",
+    ],
+  },
+  {
     title: "Startsidan matchar ny design (mockup)",
     items: [
       "Tre huvudkort i en rad med centrerad ikon: Quickflow, Batteriet (med procent) och Kalendern (2026-09-04)",

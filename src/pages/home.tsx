@@ -35,6 +35,8 @@ import { todayISO } from "@/lib/day";
 import { track } from "@/lib/analytics";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { useFlowSettings } from "@/hooks/use-flow-settings";
+import { useFeatureUsage, type FeatureId } from "@/lib/feature-usage";
+import { orkFromValue10 } from "@/lib/ork";
 
 /**
  * Hem = en lugn personlig kontrollpanel.
@@ -63,6 +65,7 @@ export default function Home() {
   const { activeReminders } = useReminders();
   const { openItems } = useQuickflow();
   const { settings: flowSettings } = useFlowSettings();
+  const { record: recordFeature, order: featureOrder, adaptive, top } = useFeatureUsage();
   const todayIso = todayISO();
 
   /** Dagens saker – samma data som kalendern och Min dag, bara kortare. */
@@ -78,14 +81,53 @@ export default function Home() {
       .slice(0, 5);
   }, [activeReminders, activeTasks, todayIso]);
 
-  
   const battery = Math.round(reading.now);
+  const orkLabel = orkFromValue10(energyValue)?.label ?? null;
   const batteryLine =
     battery >= 70
       ? "Du har gott om kraft kvar idag."
       : battery >= 40
         ? "Du har lite kvar att ge idag."
         : "Ganska tomt just nu – ta det lugnt.";
+
+  /** Samma tre kort för alla – ordningen anpassas först när data finns. */
+  const FEATURE_CARDS: Record<
+    FeatureId,
+    { id: FeatureId; title: string; subtitle: string; href: string; icon: typeof Brain }
+  > = {
+    quickflow: {
+      id: "quickflow",
+      title: "Quickflow",
+      subtitle: "Få ner det snabbt",
+      href: "/quickflow",
+      icon: Brain,
+    },
+    batteri: {
+      id: "batteri",
+      title: "Batteriet",
+      subtitle: orkLabel ? `Din ork idag · ${orkLabel}` : "Hur mycket ork har du?",
+      href: "/mitt-batteri",
+      icon: BatteryMedium,
+    },
+    kalender: {
+      id: "kalender",
+      title: "Kalendern",
+      subtitle: "Din överblick",
+      href: "/kalender",
+      icon: CalendarDays,
+    },
+  };
+  const featureCards = featureOrder.map((id) => FEATURE_CARDS[id]);
+
+  /** Försiktigt förslag – bara när det bygger på faktisk användning. */
+  const adaptiveNote =
+    adaptive && top
+      ? top === "quickflow"
+        ? "Du använder Quickflow mest, så den ligger först här nu."
+        : top === "kalender"
+          ? "Du använder kalendern mest, så den ligger först här nu."
+          : "Du checkar in i batteriet ofta, så det ligger först här nu."
+      : null;
 
   const openQuickflow = () => {
     track("home_widget_opened", { source: "quickflow" });
@@ -180,47 +222,52 @@ export default function Home() {
           </div>
         </MyFloveWide>
 
-        {/* Tre huvudkort: Quickflow, Batteriet, Kalendern – som i mockupen. */}
+        {/* Tre huvudkort: Quickflow, Batteriet, Kalendern.
+            Alla börjar i samma ordning – den anpassas först när MyFlove sett
+            tillräckligt mycket av din egen användning. */}
         <MyFloveWide style={{ order: 1 }} className="min-w-0">
           <div
             className="grid grid-cols-3 gap-2.5 sm:gap-4"
             data-testid="home-widgets"
             aria-label="Vad vill du göra just nu?"
           >
-            <button
-              type="button"
-              onClick={openQuickflow}
-              data-testid="home-widget-quickflow"
-              className="group flex min-h-[104px] flex-col items-center justify-center gap-1.5 rounded-3xl border border-border/60 bg-card p-3 text-center shadow-soft transition hover:shadow-lifted"
-            >
-              <Brain className="h-7 w-7 text-primary" aria-hidden />
-              <span className="text-sm font-semibold text-ink">Quickflow</span>
-              <span className="text-xs text-muted-foreground leading-snug">Få ner det snabbt</span>
-            </button>
-
-            <Link
-              href="/mitt-batteri"
-              onClick={() => track("home_widget_opened", { source: "batteri" })}
-              data-testid="home-widget-batteri"
-              className="flex min-h-[104px] flex-col items-center justify-center gap-1.5 rounded-3xl border border-border/60 bg-card p-3 text-center shadow-soft transition hover:shadow-lifted"
-            >
-              <BatteryMedium className="h-7 w-7 text-primary" aria-hidden />
-              <span className="text-sm font-semibold text-ink">Batteriet</span>
-              <span className="text-xs text-muted-foreground leading-snug">
-                Din energi idag · {battery}%
-              </span>
-            </Link>
-
-            <Link
-              href="/kalender"
-              onClick={() => track("home_widget_opened", { source: "kalender" })}
-              data-testid="home-widget-kalender"
-              className="flex min-h-[104px] flex-col items-center justify-center gap-1.5 rounded-3xl border border-border/60 bg-card p-3 text-center shadow-soft transition hover:shadow-lifted"
-            >
-              <CalendarDays className="h-7 w-7 text-primary" aria-hidden />
-              <span className="text-sm font-semibold text-ink">Kalendern</span>
-              <span className="text-xs text-muted-foreground leading-snug">Din överblick</span>
-            </Link>
+            {featureCards.map((card) =>
+              card.id === "quickflow" ? (
+                <button
+                  key={card.id}
+                  type="button"
+                  onClick={() => {
+                    recordFeature("quickflow");
+                    openQuickflow();
+                  }}
+                  data-testid="home-widget-quickflow"
+                  className="group flex min-h-[104px] flex-col items-center justify-center gap-1.5 rounded-3xl border border-border/60 bg-card p-3 text-center shadow-soft transition hover:shadow-lifted"
+                >
+                  <card.icon className="h-7 w-7 text-primary" aria-hidden />
+                  <span className="text-sm font-semibold text-ink">{card.title}</span>
+                  <span className="text-xs text-muted-foreground leading-snug">
+                    {card.subtitle}
+                  </span>
+                </button>
+              ) : (
+                <Link
+                  key={card.id}
+                  href={card.href}
+                  onClick={() => {
+                    recordFeature(card.id);
+                    track("home_widget_opened", { source: card.id });
+                  }}
+                  data-testid={`home-widget-${card.id}`}
+                  className="flex min-h-[104px] flex-col items-center justify-center gap-1.5 rounded-3xl border border-border/60 bg-card p-3 text-center shadow-soft transition hover:shadow-lifted"
+                >
+                  <card.icon className="h-7 w-7 text-primary" aria-hidden />
+                  <span className="text-sm font-semibold text-ink">{card.title}</span>
+                  <span className="text-xs text-muted-foreground leading-snug">
+                    {card.subtitle}
+                  </span>
+                </Link>
+              ),
+            )}
           </div>
         </MyFloveWide>
 
@@ -234,11 +281,7 @@ export default function Home() {
             <h2 className="text-base font-semibold text-ink">Ditt batteri</h2>
             <div className="mt-3 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4">
               <div className="flex items-center gap-3 rounded-2xl bg-lavender/30 px-4 py-3">
-                <BatteryMedium
-                  className="h-10 w-10 text-primary"
-                  aria-hidden
-                  strokeWidth={1.75}
-                />
+                <BatteryMedium className="h-10 w-10 text-primary" aria-hidden strokeWidth={1.75} />
                 <div>
                   <span className="block text-3xl font-bold tabular-nums text-ink leading-none">
                     {battery}%

@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-09-04 – Enklare frågor + adaptiv personalisering
+
+- Loggningen ställer nu en enda enkel fråga: "🔋 Hur mycket ork har du idag?" med fyra svar (Mycket, Okej, Lite, Nästan slut). Ingen procent, ingen skattningsskala, ingen medicinsk terminologi.
+- Mående är separerat och frivilligt: "💜 Hur känns det just nu?" med fem ansikten, plus några egna ord om du vill.
+- Påverkansfaktorer och det mer avancerade ligger nu bakom "Visa mer" – enkelt först, mer när det behövs.
+- Alla användare börjar från exakt samma grund (Quickflow → Batteriet → Kalendern). Ordningen på startsidans tre huvudkort anpassas först när MyFlove sett tillräckligt mycket av din faktiska användning, och appen berättar diskret varför.
+- Personaliseringen bygger enbart på användarens egen data – inga antaganden om familj, diagnos eller livssituation. Ingen ny datamodell.
+
 ## 2026-09-04 – Startsidan matchar ny design (mockup)
 
 - Tre huvudkort i en rad med centrerad ikon, rubrik och kort undertext: Quickflow, Batteriet (visar aktuell procent) och Kalendern.
