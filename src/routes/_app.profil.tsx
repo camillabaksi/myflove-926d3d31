@@ -8,7 +8,7 @@ export const Route = createFileRoute("/_app/profil")({
       {
         name: "description",
         content:
-          "Berätta vad du heter och lägg till dina barns namn – så hälsar MyFlove på er rätt överallt i appen.",
+          "Ditt namn, dina barn och din livsprofil – allt om dig samlat på ett ställe i MyFlove.",
       },
       { property: "og:title", content: "Min profil – MyFlove" },
       {

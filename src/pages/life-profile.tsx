@@ -242,153 +242,151 @@ export function LifeProfileSections() {
   return (
     <div className="space-y-6">
       <div>
-              <h2 className="mb-2 flex items-center gap-2 font-display text-xl text-ink">
-                <User size={22} className="text-primary" aria-hidden="true" /> Min livsprofil
-                <HelpHint label="Min livsprofil">
-                  Allt är frivilligt. Profilen är kontext till Flow – aldrig regler och aldrig
-                  diagnoser. Du kan ändra eller ta bort vad som helst när du vill.
-                </HelpHint>
-              </h2>
-              <p className="text-sm text-muted-foreground">
-                Berätta lite om din vardag, dina styrkor och vad du vill ha hjälp med. Flow använder
-                det för att göra sina förslag mer personliga. Du kan använda appen även om profilen
-                är tom.
-              </p>
-            </div>
+        <h2 className="mb-2 flex items-center gap-2 font-display text-xl text-ink">
+          <User size={22} className="text-primary" aria-hidden="true" /> Min livsprofil
+          <HelpHint label="Min livsprofil">
+            Allt är frivilligt. Profilen är kontext till Flow – aldrig regler och aldrig diagnoser.
+            Du kan ändra eller ta bort vad som helst när du vill.
+          </HelpHint>
+        </h2>
+        <p className="text-sm text-muted-foreground">
+          Berätta lite om din vardag, dina styrkor och vad du vill ha hjälp med. Flow använder det
+          för att göra sina förslag mer personliga. Du kan använda appen även om profilen är tom.
+        </p>
+      </div>
 
-            <section className={card}>
-              <div className="flex items-center justify-between gap-3">
-                <span className="text-sm text-muted-foreground">Profil klar</span>
-                <span className="font-display text-lg text-ink">{percent} %</span>
-              </div>
-              <div className="mt-2 h-2 overflow-hidden rounded-full bg-muted">
-                <div
-                  className="h-full rounded-full bg-primary transition-all"
-                  style={{ width: `${percent}%` }}
-                />
-              </div>
-              <label className="mt-4 flex items-center gap-2 text-sm">
-                <input
-                  type="checkbox"
-                  checked={profile.enabled}
-                  onChange={(e) => update({ enabled: e.target.checked })}
-                  className="h-4 w-4 accent-[hsl(var(--primary))]"
-                />
-                <span className="text-muted-foreground">
-                  Låt Flow använda min livsprofil (stäng av utan att radera)
-                </span>
-              </label>
-            </section>
+      <section className={card}>
+        <div className="flex items-center justify-between gap-3">
+          <span className="text-sm text-muted-foreground">Profil klar</span>
+          <span className="font-display text-lg text-ink">{percent} %</span>
+        </div>
+        <div className="mt-2 h-2 overflow-hidden rounded-full bg-muted">
+          <div
+            className="h-full rounded-full bg-primary transition-all"
+            style={{ width: `${percent}%` }}
+          />
+        </div>
+        <label className="mt-4 flex items-center gap-2 text-sm">
+          <input
+            type="checkbox"
+            checked={profile.enabled}
+            onChange={(e) => update({ enabled: e.target.checked })}
+            className="h-4 w-4 accent-[hsl(var(--primary))]"
+          />
+          <span className="text-muted-foreground">
+            Låt Flow använda min livsprofil (stäng av utan att radera)
+          </span>
+        </label>
+      </section>
 
-            {/* 1. Min livssituation */}
-            <section className={card}>
-              <h2 className="font-display text-lg text-ink">Vad beskriver din vardag just nu?</h2>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Du kan välja flera – livssituationer kombineras ofta. Pausar du en försvinner
-                ingenting.
-              </p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {ALL_SITUATIONS.map((id) => (
-                  <Chip key={id} active={on(id)} onClick={() => toggle(id)}>
-                    {SITUATION_META[id].emoji} {SITUATION_META[id].label}
-                  </Chip>
-                ))}
-                <Chip
-                  active={worksBoth}
-                  onClick={() => {
-                    if (worksBoth) {
-                      toggle("jobb");
-                      toggle("studier");
-                    } else {
-                      if (!on("jobb")) toggle("jobb");
-                      if (!on("studier")) toggle("studier");
-                    }
-                  }}
-                >
-                  💼📚 Arbetar och studerar
-                </Chip>
-              </div>
+      {/* 1. Min livssituation */}
+      <section className={card}>
+        <h2 className="font-display text-lg text-ink">Vad beskriver din vardag just nu?</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Du kan välja flera – livssituationer kombineras ofta. Pausar du en försvinner ingenting.
+        </p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {ALL_SITUATIONS.map((id) => (
+            <Chip key={id} active={on(id)} onClick={() => toggle(id)}>
+              {SITUATION_META[id].emoji} {SITUATION_META[id].label}
+            </Chip>
+          ))}
+          <Chip
+            active={worksBoth}
+            onClick={() => {
+              if (worksBoth) {
+                toggle("jobb");
+                toggle("studier");
+              } else {
+                if (!on("jobb")) toggle("jobb");
+                if (!on("studier")) toggle("studier");
+              }
+            }}
+          >
+            💼📚 Arbetar och studerar
+          </Chip>
+        </div>
 
-              {on("annat") && (
-                <label className="mt-4 block space-y-1 text-sm">
-                  <span className="text-muted-foreground">Beskriv din situation</span>
-                  <Textarea
-                    value={situation.entries.annat?.note ?? ""}
-                    onChange={(e) => setNote("annat", e.target.value)}
-                    rows={2}
-                    placeholder="T.ex. tar hand om en anhörig just nu"
-                  />
-                </label>
-              )}
-            </section>
+        {on("annat") && (
+          <label className="mt-4 block space-y-1 text-sm">
+            <span className="text-muted-foreground">Beskriv din situation</span>
+            <Textarea
+              value={situation.entries.annat?.note ?? ""}
+              onChange={(e) => setNote("annat", e.target.value)}
+              rows={2}
+              placeholder="T.ex. tar hand om en anhörig just nu"
+            />
+          </label>
+        )}
+      </section>
 
-            {/* 2. Anpassade följdfrågor */}
-            {followupBlocks.length > 0 && (
-              <section className={card}>
-                <h2 className="flex items-center gap-2 font-display text-lg text-ink">
-                  <Sparkles size={16} className="text-primary" aria-hidden="true" />
-                  Lite mer om din vardag
-                </h2>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  Bara frågor som passar det du valt. Hoppa över det du inte vill svara på.
-                </p>
-                <div className="mt-4 space-y-6">{followupBlocks}</div>
-              </section>
-            )}
+      {/* 2. Anpassade följdfrågor */}
+      {followupBlocks.length > 0 && (
+        <section className={card}>
+          <h2 className="flex items-center gap-2 font-display text-lg text-ink">
+            <Sparkles size={16} className="text-primary" aria-hidden="true" />
+            Lite mer om din vardag
+          </h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Bara frågor som passar det du valt. Hoppa över det du inte vill svara på.
+          </p>
+          <div className="mt-4 space-y-6">{followupBlocks}</div>
+        </section>
+      )}
 
-            {/* 3–7 */}
-            <ChipField
-              title="Mina styrkor"
-              hint="Vad är du bra på? Flow kan luta sig mot dina styrkor."
-              options={STRENGTH_OPTIONS}
-              selected={profile.strengths}
-              onToggle={(v) => chip("strengths", v)}
-            />
-            <ChipField
-              title="Mina svårigheter"
-              hint="Vad brukar bli svårt? Ingen diagnos, bara det du känner igen."
-              options={DIFFICULTY_OPTIONS}
-              selected={profile.difficulties}
-              onToggle={(v) => chip("difficulties", v)}
-            />
-            <ChipField
-              title="Det här vill jag ha hjälp med"
-              hint="Det här väger Flow tyngst när förslagen formuleras."
-              options={HELP_OPTIONS}
-              selected={profile.helpWith}
-              onToggle={(v) => chip("helpWith", v)}
-            />
-            <ChipField
-              title="Det här ger mig energi"
-              hint="Komplement till din energilogg – inte en ersättning."
-              options={ENERGY_GIVES_OPTIONS}
-              selected={profile.energyGives}
-              onToggle={(v) => chip("energyGives", v)}
-            />
-            <ChipField
-              title="Det här tar energi"
-              options={ENERGY_TAKES_OPTIONS}
-              selected={profile.energyTakes}
-              onToggle={(v) => chip("energyTakes", v)}
-            />
-            <ChipField
-              title="Hur vill jag att Flow hjälper mig?"
-              hint="Så här vill du att Flow pratar med dig och föreslår saker."
-              options={FLOW_PREFERENCE_OPTIONS}
-              selected={profile.flowPreferences}
-              onToggle={(v) => chip("flowPreferences", v)}
-            />
+      {/* 3–7 */}
+      <ChipField
+        title="Mina styrkor"
+        hint="Vad är du bra på? Flow kan luta sig mot dina styrkor."
+        options={STRENGTH_OPTIONS}
+        selected={profile.strengths}
+        onToggle={(v) => chip("strengths", v)}
+      />
+      <ChipField
+        title="Mina svårigheter"
+        hint="Vad brukar bli svårt? Ingen diagnos, bara det du känner igen."
+        options={DIFFICULTY_OPTIONS}
+        selected={profile.difficulties}
+        onToggle={(v) => chip("difficulties", v)}
+      />
+      <ChipField
+        title="Det här vill jag ha hjälp med"
+        hint="Det här väger Flow tyngst när förslagen formuleras."
+        options={HELP_OPTIONS}
+        selected={profile.helpWith}
+        onToggle={(v) => chip("helpWith", v)}
+      />
+      <ChipField
+        title="Det här ger mig energi"
+        hint="Komplement till din energilogg – inte en ersättning."
+        options={ENERGY_GIVES_OPTIONS}
+        selected={profile.energyGives}
+        onToggle={(v) => chip("energyGives", v)}
+      />
+      <ChipField
+        title="Det här tar energi"
+        options={ENERGY_TAKES_OPTIONS}
+        selected={profile.energyTakes}
+        onToggle={(v) => chip("energyTakes", v)}
+      />
+      <ChipField
+        title="Hur vill jag att Flow hjälper mig?"
+        hint="Så här vill du att Flow pratar med dig och föreslår saker."
+        options={FLOW_PREFERENCE_OPTIONS}
+        selected={profile.flowPreferences}
+        onToggle={(v) => chip("flowPreferences", v)}
+      />
 
-            <section className={card}>
-              <h2 className="font-display text-lg text-ink">Något mer Flow bör veta?</h2>
-              <Textarea
-                className="mt-3"
-                value={profile.note}
-                onChange={(e) => update({ note: e.target.value })}
-                rows={3}
-                placeholder="Skriv fritt – helt frivilligt"
-              />
-            </section>
+      <section className={card}>
+        <h2 className="font-display text-lg text-ink">Något mer Flow bör veta?</h2>
+        <Textarea
+          className="mt-3"
+          value={profile.note}
+          onChange={(e) => update({ note: e.target.value })}
+          rows={3}
+          placeholder="Skriv fritt – helt frivilligt"
+        />
+      </section>
 
       <p className="text-xs text-muted-foreground">
         Din livsprofil sparas automatiskt och används som kontext av Flow. Allt om dig samlas här i

@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { useUserProfile } from "@/hooks/use-user-profile";
 import { useChildren, CHILD_COLORS, type Child } from "@/hooks/use-children";
 import { useToast } from "@/hooks/use-toast";
+import { LifeProfileSections } from "@/pages/life-profile";
 
 /**
  * Min profil – det lilla användaren behöver berätta:
@@ -80,7 +81,7 @@ export default function ProfilePage() {
             area="halsa"
             title="Min profil"
             emojiKey="wellness"
-            description="Vad du heter och vilka barn du vill ha med – så vi kan hälsa på er rätt."
+            description="Allt om dig på ett ställe – ditt namn, dina barn och din livsprofil."
           />
         </MyFloveWide>
 
@@ -240,6 +241,11 @@ export default function ProfilePage() {
               ))}
             </div>
           </form>
+        </MyFloveWide>
+
+        {/* Livsprofilen bor nu här – en enda profil, inga dubbla vägar */}
+        <MyFloveWide className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft">
+          <LifeProfileSections />
         </MyFloveWide>
       </MyFlovePageGrid>
     </Layout>
