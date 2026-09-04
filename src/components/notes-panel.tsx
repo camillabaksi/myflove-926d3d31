@@ -383,6 +383,25 @@ export default function NotesPanel() {
                 >
                   <Undo2 size={16} /> Tillbaka till Quickflow
                 </button>
+                {folders.length > 0 && (
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-xs text-muted-foreground">Lägg i mapp:</span>
+                    {folders.map((folder) => (
+                      <Chip
+                        key={folder.id}
+                        onClick={() =>
+                          moveToFolder(note, note.folderId === folder.id ? undefined : folder.id)
+                        }
+                        highlight={
+                          note.folderId === folder.id ||
+                          (!note.folderId && folder.id === topFolderId)
+                        }
+                      >
+                        {folder.emoji} {folder.name}
+                      </Chip>
+                    ))}
+                  </div>
+                )}
                 <div className="flex flex-wrap gap-2">
                   {CONVERSIONS.map((d) => (
                     <Chip
