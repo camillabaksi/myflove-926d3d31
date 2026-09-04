@@ -223,6 +223,7 @@ export default function Layout({ children }: LayoutProps) {
   const { isDemo } = useDemoAccount();
   const { enabled: enabledAreas } = useEnabledAreas();
   const { settings: npf } = useNpfSettings();
+  const { t } = useLang();
 
   // Använd TanStack-routerns faktiska location så tillbakaknappen alltid
   // synkar med appens historik – även vid djupa länkar eller SPA-navigering.
