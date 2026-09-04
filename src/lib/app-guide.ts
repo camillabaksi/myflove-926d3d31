@@ -128,7 +128,7 @@ export const APP_GUIDE: GuideGroup[] = [
     label: "Gör appen till din",
     hint: "Anpassning och profil",
     entries: [
-      { href: "/min-livsprofil", label: "Min livsprofil", what: "Din vardag, styrkor och behov" },
+      { href: "/profil", label: "Min profil", what: "Namn, barn, din vardag och dina behov" },
       {
         href: "/anpassa-hem",
         label: "Anpassa hemskärmen",

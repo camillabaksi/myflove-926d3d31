@@ -1,8 +1,6 @@
 import CollapsibleSection from "@/components/collapsible-section";
 import { useState } from "react";
 import { Check, Plus, Sparkles, User } from "lucide-react";
-import Layout from "@/components/layout";
-import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import HelpHint from "@/components/help-hint";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -111,8 +109,8 @@ function ChipField({
   );
 }
 
-/** 👤 Min livsprofil – en samlad profil som ersätter jobb- och studieprofilen. */
-export default function LifeProfilePage() {
+/** 👤 Min livsprofil – sektioner som lever inuti Min profil (/profil). */
+export function LifeProfileSections() {
   const { profile, update, setFollowup, toggleIn } = useLifeProfile();
   const { situation, toggle, setNote } = useSituation();
 
@@ -242,19 +240,16 @@ export default function LifeProfilePage() {
   }
 
   return (
-    <Layout>
-      <MyFlovePageGrid area="flow">
-        <MyFloveWide>
-          <div className="space-y-6">
-            <div>
-              <h1 className="mb-2 flex items-center gap-2 text-3xl font-bold">
-                <User size={26} className="text-primary" aria-hidden="true" /> Min livsprofil
+    <div className="space-y-6">
+      <div>
+              <h2 className="mb-2 flex items-center gap-2 font-display text-xl text-ink">
+                <User size={22} className="text-primary" aria-hidden="true" /> Min livsprofil
                 <HelpHint label="Min livsprofil">
                   Allt är frivilligt. Profilen är kontext till Flow – aldrig regler och aldrig
                   diagnoser. Du kan ändra eller ta bort vad som helst när du vill.
                 </HelpHint>
-              </h1>
-              <p className="text-muted-foreground">
+              </h2>
+              <p className="text-sm text-muted-foreground">
                 Berätta lite om din vardag, dina styrkor och vad du vill ha hjälp med. Flow använder
                 det för att göra sina förslag mer personliga. Du kan använda appen även om profilen
                 är tom.
@@ -395,13 +390,10 @@ export default function LifeProfilePage() {
               />
             </section>
 
-            <p className="text-xs text-muted-foreground">
-              Din livsprofil sparas automatiskt och används som kontext av Flow. Den ersätter de
-              gamla jobb- och studieprofilerna – det du fyllt i där har flyttats hit.
-            </p>
-          </div>
-        </MyFloveWide>
-      </MyFlovePageGrid>
-    </Layout>
+      <p className="text-xs text-muted-foreground">
+        Din livsprofil sparas automatiskt och används som kontext av Flow. Allt om dig samlas här i
+        Min profil.
+      </p>
+    </div>
   );
 }

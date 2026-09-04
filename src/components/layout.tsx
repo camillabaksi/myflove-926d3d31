@@ -494,10 +494,10 @@ export default function Layout({ children }: LayoutProps) {
       essential: true,
     },
     {
-      href: "/min-livsprofil",
-      label: "Min livsprofil",
-      icon: Compass,
-      hint: "Din vardag, styrkor, svårigheter och vad du vill ha hjälp med",
+      href: "/profil",
+      label: "Min profil",
+      icon: User,
+      hint: "Namn, barn, din vardag, styrkor och vad du vill ha hjälp med",
     },
     {
       href: "/anpassa-hem",
@@ -1214,21 +1214,11 @@ export default function Layout({ children }: LayoutProps) {
                     <NavRow
                       item={{
                         href: "/profil",
-                        label: "Mitt namn och barn",
+                        label: "Min profil",
                         icon: User,
-                        hint: "Så vi hälsar på er rätt",
-                      }}
-                      isActive={location === "/profil"}
-                      onClick={closeMenu}
-                    />
-                    <NavRow
-                      item={{
-                        href: "/min-livsprofil",
-                        label: "Min livsprofil",
-                        icon: Compass,
                         hint: situationLabel,
                       }}
-                      isActive={location === "/min-livsprofil"}
+                      isActive={location === "/profil"}
                       onClick={closeMenu}
                     />
                   </div>

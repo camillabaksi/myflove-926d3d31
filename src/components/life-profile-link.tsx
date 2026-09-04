@@ -12,7 +12,7 @@ export default function LifeProfileLink() {
 
   return (
     <Link
-      to="/min-livsprofil"
+      to="/profil"
       className="flex items-center gap-3 rounded-3xl border-2 border-border bg-card p-4 shadow-sm transition hover:border-primary/40"
     >
       <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-primary">
