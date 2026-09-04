@@ -4,7 +4,8 @@ import { useIsAdmin } from "@/hooks/use-is-admin";
 import { Lock, Download, ArrowLeft, FileText, Film, BookOpen, Sparkles } from "lucide-react";
 
 const BLUEPRINT_VERSIONS = [
-  { version: "3.7", label: "Senaste – en enda lugn väg genom vardagen" },
+  { version: "4.1", label: "Senaste – enkel start, adaptiv personalisering och energihistorik" },
+  { version: "3.7", label: "En enda lugn väg genom vardagen" },
   { version: "3.6", label: "Lugnare helhet, tydligare vägar och levande Flow" },
   { version: "3.5", label: "Levande Flow och Flow-chatten" },
   { version: "3.4", label: "Flow syns i blueprint och pitchdeck" },
@@ -59,42 +60,44 @@ export default function PitchPage() {
               <Film size={18} className="text-primary" /> Pitchvideo
             </h2>
             <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
-              Version 3.7 · En enda lugn väg
+              Version 4.1 · Bär mindre. Gör inte mer.
             </span>
           </div>
           <p className="text-sm text-muted-foreground">
-            Version 3.7 visar MyFlove som ett sammanhängande vardagsstöd: Flow först, Mitt batteri
-            som enda hälsologgning, Idag som nav och en gemensam blockdesign genom hela appen.
+            Version 4.1 visar den nya kärnan: en enkel och lugn startsida med Quickflow, Batteriet
+            och Kalendern – samma neutrala grund för alla. Batteriet är en enkel ork-check-in med
+            fyra nivåer, måendet är separat, aktiviteter är datumkorrekta och energihistoriken
+            visar vad som ger och tar energi. Personaliseringen växer fram datadrivet och gradvis.
           </p>
 
           <video
             controls
             playsInline
             preload="metadata"
-            poster="/pitch/myflove-pitch-3.7-poster.jpg"
+            poster="/pitch/myflove-pitch-4.1-poster.jpg"
             className="w-full rounded-xl bg-black aspect-video"
-            src="/pitch/myflove-pitch-3.7.mp4"
+            src="/pitch/myflove-pitch-4.1.mp4"
           />
           <figure className="space-y-1">
             <img
-              src="/pitch/myflove-pitch-3.7-flow-thumb.jpg"
-              alt="Scenen om Flow i pitchvideon version 3.7"
+              src="/pitch/myflove-pitch-4.1-battery-thumb.jpg"
+              alt="Batteriscenen i pitchvideon version 4.1 med fyra ork-nivåer"
               loading="lazy"
               className="w-full rounded-xl border border-border"
             />
             <figcaption className="text-xs text-muted-foreground">
-              Scenen &quot;Flow&quot; – en lugn följeslagare som finns genom appen
+              Batteriet i videon – &quot;Hur mycket ork har du idag?&quot; med fyra enkla nivåer
             </figcaption>
           </figure>
           <figure className="space-y-1">
             <img
-              src="/pitch/myflove-pitch-3.7-market-thumb.jpg"
-              alt="Marknadsscenen i pitchvideon version 3.7 med källnot"
+              src="/pitch/myflove-pitch-4.1-energy-thumb.jpg"
+              alt="Energihistorikscenen i pitchvideon version 4.1 med fyra frivilliga energisvar"
               loading="lazy"
               className="w-full rounded-xl border border-border"
             />
             <figcaption className="text-xs text-muted-foreground">
-              Marknadsscenen i videon – externa uppskattningar, inte MyFloves traction
+              Energipåverkan efter genomförd aktivitet – frivilligt svar med ett klick
             </figcaption>
           </figure>
           <div className="flex flex-wrap gap-2">
