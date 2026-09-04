@@ -8,6 +8,8 @@ export interface FlowNote {
   id: string;
   text: string;
   area?: LifeArea;
+  /** Användarens egen mapp – helt frivillig. */
+  folderId?: string;
   createdAt: number;
   /** Sätts när anteckningen omvandlats till något annat. */
   convertedAt?: number;
