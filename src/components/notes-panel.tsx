@@ -1,7 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { Check, NotebookPen, Pencil, Trash2, Undo2, Wand2, X } from "lucide-react";
+import {
+  Check,
+  FolderPlus,
+  NotebookPen,
+  Pencil,
+  Plus,
+  Trash2,
+  Undo2,
+  Wand2,
+  X,
+} from "lucide-react";
 import { useNotes } from "@/hooks/use-notes";
+import { useNoteFolders } from "@/hooks/use-note-folders";
+import { useQuickflowHabits } from "@/hooks/use-quickflow-habits";
+import { FOLDER_EMOJIS, FOLDER_SUGGESTIONS } from "@/lib/note-folders";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { useTasks, useReminders, useDumpIdeas } from "@/hooks/use-data";
 import { useSharedShoppingList } from "@/hooks/use-shared-shopping-list";
