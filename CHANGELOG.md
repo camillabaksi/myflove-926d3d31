@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-05 – Investerarsidan öppen för investerarkontot
+
+- Investerarsidan (/pitch) kan nu nås både med grundarkontot och med investerarkontots egen inloggning.
+- Tillbaka-länken pekar till hem för investerare och till admin för grundaren.
+
+
 ## 2026-09-05 – Mappar för anteckningar och mjukare Quickflow
 
 - Anteckningar kan nu sorteras i egna mappar. Skapa, byt namn eller ta bort mappar – anteckningarna finns kvar oavsett. Filtrera på Alla, en mapp eller Utan mapp.

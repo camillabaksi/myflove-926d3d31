@@ -1,7 +1,34 @@
+import { useEffect, useState } from "react";
 import Layout from "@/components/layout";
 import { Link } from "@tanstack/react-router";
 import { useIsAdmin } from "@/hooks/use-is-admin";
+import { supabase } from "@/integrations/supabase/client";
+import { isDemoUser } from "@/lib/demo-account";
 import { Lock, Download, ArrowLeft, FileText, Film, BookOpen, Sparkles } from "lucide-react";
+
+/** Investerarkontot (demokontot) har egen inloggning och får se pitchmaterialet. */
+function useIsInvestor() {
+  const [isInvestor, setIsInvestor] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let active = true;
+    const check = async () => {
+      const { data } = await supabase.auth.getUser();
+      if (!active) return;
+      setIsInvestor(isDemoUser(data.user));
+      setLoading(false);
+    };
+    void check();
+    const { data: sub } = supabase.auth.onAuthStateChange(() => void check());
+    return () => {
+      active = false;
+      sub.subscription.unsubscribe();
+    };
+  }, []);
+
+  return { isInvestor, loading };
+}
 
 const BLUEPRINT_VERSIONS = [
   { version: "4.1", label: "Senaste – enkel start, adaptiv personalisering och energihistorik" },
@@ -17,7 +44,10 @@ const BLUEPRINT_VERSIONS = [
 ] as const;
 
 export default function PitchPage() {
-  const { isAdmin, loading } = useIsAdmin();
+  const { isAdmin, loading: adminLoading } = useIsAdmin();
+  const { isInvestor, loading: investorLoading } = useIsInvestor();
+  const loading = adminLoading || investorLoading;
+  const hasAccess = isAdmin || isInvestor;
 
   if (loading) {
     return (
@@ -27,13 +57,15 @@ export default function PitchPage() {
     );
   }
 
-  if (!isAdmin) {
+  if (!hasAccess) {
     return (
       <Layout>
         <div className="max-w-md mx-auto text-center space-y-3 py-16">
           <Lock size={40} className="mx-auto text-muted-foreground" />
-          <h1 className="text-2xl font-serif font-bold">Endast för grundaren</h1>
-          <p className="text-muted-foreground">Denna sida kräver admin-behörighet.</p>
+          <h1 className="text-2xl font-serif font-bold">Endast för grundare och investerare</h1>
+          <p className="text-muted-foreground">
+            Logga in med grundar- eller investerarkontot för att se pitchmaterialet.
+          </p>
         </div>
       </Layout>
     );
@@ -43,10 +75,10 @@ export default function PitchPage() {
     <Layout>
       <div className="max-w-3xl mx-auto space-y-6">
         <Link
-          to="/admin"
+          to={isAdmin ? "/admin" : "/hem"}
           className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
         >
-          <ArrowLeft size={16} /> Tillbaka till admin
+          <ArrowLeft size={16} /> {isAdmin ? "Tillbaka till admin" : "Tillbaka till hem"}
         </Link>
 
         <header className="space-y-1">

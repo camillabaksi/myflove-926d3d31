@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-05";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Investerarsidan öppen för investerarkontot",
+    items: [
+      "Investerarsidan (/pitch) nås nu både med grundarkontot och med investerarkontots egen inloggning (2026-09-05)",
+      "Tillbaka-länken anpassas: hem för investerare, admin för grundaren (2026-09-05)",
+    ],
+  },
+  {
     title: "Mappar för anteckningar och mjukare Quickflow",
     items: [
       "Anteckningar kan sorteras i egna mappar – skapa, byt namn, ta bort och filtrera (2026-09-05)",
