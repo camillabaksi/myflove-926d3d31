@@ -179,10 +179,10 @@ export default function Home() {
           </div>
         </MyFloveWide>
 
-        {/* Tre huvudkort: QuickFlow, Batteriet, Kalendern. */}
+        {/* Tre huvudkort: Quickflow, Batteriet, Kalendern – som i mockupen. */}
         <MyFloveWide style={{ order: 1 }} className="min-w-0">
           <div
-            className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4"
+            className="grid grid-cols-3 gap-2.5 sm:gap-4"
             data-testid="home-widgets"
             aria-label="Vad vill du göra just nu?"
           >
@@ -190,52 +190,75 @@ export default function Home() {
               type="button"
               onClick={openQuickflow}
               data-testid="home-widget-quickflow"
-              className="group flex min-h-[112px] w-full flex-col justify-between rounded-3xl border border-border/60 bg-lavender/60 p-4 text-left shadow-soft transition hover:shadow-lifted"
+              className="group flex min-h-[104px] flex-col items-center justify-center gap-1.5 rounded-3xl border border-border/60 bg-card p-3 text-center shadow-soft transition hover:shadow-lifted"
             >
-              <span className="flex items-center gap-2">
-                <Brain className="h-6 w-6 shrink-0 text-primary" aria-hidden />
-                <span className="truncate text-base font-semibold text-ink">Quickflow</span>
-              </span>
-              <span className="mt-2 block text-sm text-muted-foreground">
-                Få ner det ur huvudet
-              </span>
-              <span className="mt-1 block text-xs text-muted-foreground/80">
-                Skriv eller tala in – sortera senare.
-              </span>
+              <Brain className="h-7 w-7 text-primary" aria-hidden />
+              <span className="text-sm font-semibold text-ink">Quickflow</span>
+              <span className="text-xs text-muted-foreground leading-snug">Få ner det snabbt</span>
             </button>
 
-            <ExpandableBlock
-              title="Ditt batteri"
-              titleText="Ditt batteri"
-              subtitle="Hur mycket har du kvar idag?"
-              status={`${battery}%`}
-              summary={batteryLine}
-              icon={BatteryMedium}
-              tone="sun"
-              surface="sun"
-              area="aterhamtning"
+            <Link
               href="/mitt-batteri"
-              onNavigate={() => track("home_widget_opened", { source: "batteri" })}
+              onClick={() => track("home_widget_opened", { source: "batteri" })}
               data-testid="home-widget-batteri"
-            />
+              className="flex min-h-[104px] flex-col items-center justify-center gap-1.5 rounded-3xl border border-border/60 bg-card p-3 text-center shadow-soft transition hover:shadow-lifted"
+            >
+              <BatteryMedium className="h-7 w-7 text-primary" aria-hidden />
+              <span className="text-sm font-semibold text-ink">Batteriet</span>
+              <span className="text-xs text-muted-foreground leading-snug">
+                Din energi idag · {battery}%
+              </span>
+            </Link>
 
-            <ExpandableBlock
-              title="Kalendern"
-              titleText="Kalendern"
-              subtitle="Din dag på ett ställe"
-              status={nextTimed[0]?.time ?? "Idag"}
-              summary={
-                nextTimed[0] ? nextTimed[0].title : "Inget tidsatt idag – lägg till när du vill."
-              }
-              icon={CalendarDays}
-              tone="sky"
-              surface="sky"
-              area="kalender"
+            <Link
               href="/kalender"
-              onNavigate={() => track("home_widget_opened", { source: "kalender" })}
+              onClick={() => track("home_widget_opened", { source: "kalender" })}
               data-testid="home-widget-kalender"
-            />
+              className="flex min-h-[104px] flex-col items-center justify-center gap-1.5 rounded-3xl border border-border/60 bg-card p-3 text-center shadow-soft transition hover:shadow-lifted"
+            >
+              <CalendarDays className="h-7 w-7 text-primary" aria-hidden />
+              <span className="text-sm font-semibold text-ink">Kalendern</span>
+              <span className="text-xs text-muted-foreground leading-snug">Din överblick</span>
+            </Link>
           </div>
+        </MyFloveWide>
+
+        {/* Ditt batteri – stort, lugnt, som i mockupen. */}
+        <MyFloveWide style={{ order: 2 }} className="min-w-0">
+          <section
+            aria-label="Ditt batteri"
+            data-testid="home-recovery"
+            className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+          >
+            <h2 className="text-base font-semibold text-ink">Ditt batteri</h2>
+            <div className="mt-3 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4">
+              <div className="flex items-center gap-3 rounded-2xl bg-lavender/30 px-4 py-3">
+                <BatteryMedium
+                  className="h-10 w-10 text-primary"
+                  aria-hidden
+                  strokeWidth={1.75}
+                />
+                <div>
+                  <span className="block text-3xl font-bold tabular-nums text-ink leading-none">
+                    {battery}%
+                  </span>
+                  <span className="mt-1 block text-sm text-muted-foreground">Gott jobbat!</span>
+                </div>
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm text-ink">Du har {battery}% energi</p>
+                <p className="mt-0.5 text-xs text-muted-foreground">{batteryLine}</p>
+              </div>
+            </div>
+            <Link
+              href="/mitt-batteri"
+              onClick={() => track("home_widget_opened", { source: "logga" })}
+              className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+            >
+              {energyValue != null ? "Tips för mer energi" : "Logga energi & mående"}{" "}
+              <ArrowRight size={14} />
+            </Link>
+          </section>
         </MyFloveWide>
 
         {/* Idag – bara det som är relevant idag, max 5 saker. */}
