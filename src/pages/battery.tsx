@@ -17,6 +17,7 @@ import { EnergyContent } from "@/pages/energy-map";
 import { EnergyFlowContent } from "@/pages/energy-flow";
 import { track } from "@/lib/analytics";
 import { useUserProfile } from "@/hooks/use-user-profile";
+import { useLang } from "@/hooks/use-language";
 
 /**
  * Mitt batteri – den enda platsen för energi och mående.
@@ -27,6 +28,7 @@ import { useUserProfile } from "@/hooks/use-user-profile";
  */
 export default function BatteryPage() {
   const { name } = useUserProfile();
+  const { t, lang } = useLang();
   useEffect(() => {
     track("battery_opened", { source: "sida" });
   }, []);
@@ -37,10 +39,10 @@ export default function BatteryPage() {
         <MyFloveWide>
           <MyFloveHeader
             area="halsa"
-            title={name ? `${name}s batteri` : "Mitt batteri"}
+            title={name ? `${name}${lang === "en" ? "'s battery" : "s batteri"}` : t("Mitt batteri")}
             emojiKey="wellness"
-            description="Din energi och ditt mående – checka in och se hur dagen brukar se ut."
-            why="Vi frågar för att Flow ska kunna anpassa dagens krav efter hur mycket ork du faktiskt har – inte efter hur mycket du borde ha."
+            description={t("Din energi och ditt mående – checka in och se hur dagen brukar se ut.")}
+            why={t("Vi frågar för att Flow ska kunna anpassa dagens krav efter hur mycket ork du faktiskt har – inte efter hur mycket du borde ha.")}
           />
         </MyFloveWide>
 
@@ -63,25 +65,25 @@ export default function BatteryPage() {
 
         {/* 4. Historik – sekundär, längst ner. Widget-komprimerad; expanderar i flödet. */}
         <ExpandableBlock
-          title="Se min historik"
-          titleText="Se min historik"
-          subtitle="Tidigare mående, energi och energiflöde"
+          title={t("Se min historik")}
+          titleText={t("Se min historik")}
+          subtitle={t("Tidigare mående, energi och energiflöde")}
           icon={LineChart}
           tone="lavender"
           area="halsa"
           widget
-          label="Historik"
+          label={t("Historik")}
         >
           <Tabs defaultValue="mood" className="w-full" data-testid="battery-history">
             <TabsList className="grid h-11 w-full grid-cols-3 rounded-2xl">
               <TabsTrigger value="mood" className="rounded-xl text-xs">
-                <Smile size={14} className="mr-1" /> Mående
+                <Smile size={14} className="mr-1" /> {t("Mående")}
               </TabsTrigger>
               <TabsTrigger value="energy" className="rounded-xl text-xs">
-                <Battery size={14} className="mr-1" /> Energi
+                <Battery size={14} className="mr-1" /> {t("Energi")}
               </TabsTrigger>
               <TabsTrigger value="flow" className="rounded-xl text-xs">
-                <Zap size={14} className="mr-1" /> Flöde
+                <Zap size={14} className="mr-1" /> {t("Flöde")}
               </TabsTrigger>
             </TabsList>
             <TabsContent value="mood" className="mt-6">
@@ -98,7 +100,7 @@ export default function BatteryPage() {
             href="/energifloede"
             className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
           >
-            Mer om vad som ger och tar energi <ArrowRight size={14} />
+            {t("Mer om vad som ger och tar energi")} <ArrowRight size={14} />
           </Link>
         </ExpandableBlock>
       </MyFlovePageGrid>

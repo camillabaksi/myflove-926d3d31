@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import CollapsibleSection from "@/components/collapsible-section";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import { ENERGY_KINDS, isSameDay } from "@/lib/energy-flow";
+import { useLang } from "@/hooks/use-language";
 
 /**
  * Dagens energiflöde – dagens faktiska belastning uppdelad i
@@ -19,6 +20,7 @@ export function DayEnergyFlow({
   showLink?: boolean;
   showHeader?: boolean;
 }) {
+  const { t } = useLang();
   const { entries, balance, signedIn, loading } = useEnergyFlow();
 
   const rows = useMemo(
@@ -43,7 +45,7 @@ export function DayEnergyFlow({
     <>
       {todayCount === 0 ? (
         <p className="text-sm text-muted-foreground">
-          Inget registrerat idag än. Lägg till något du gjort så syns dagens riktiga belastning här.
+          {t("Inget registrerat idag än. Lägg till något du gjort så syns dagens riktiga belastning här.")}
         </p>
       ) : (
         <div className="space-y-2">
@@ -56,7 +58,7 @@ export function DayEnergyFlow({
                   <span aria-hidden className="mr-1">
                     {emoji}
                   </span>
-                  {label}
+                  {t(label)}
                 </span>
                 <div className="h-2 flex-1 overflow-hidden rounded-full bg-secondary/50">
                   <div
@@ -76,7 +78,7 @@ export function DayEnergyFlow({
           })}
 
           <div className="mt-3 flex items-baseline justify-between border-t border-border/50 pt-3">
-            <span className="text-sm text-muted-foreground">Netto idag</span>
+            <span className="text-sm text-muted-foreground">{t("Netto idag")}</span>
             <span className="font-display text-2xl font-bold text-ink">
               {balance.net > 0 ? "+" : ""}
               {balance.net}
@@ -85,8 +87,10 @@ export function DayEnergyFlow({
 
           {balance.highFrictionCount > 0 && (
             <p className="text-xs text-muted-foreground">
-              {balance.highFrictionCount} av dagens saker var tunga att komma igång med –
-              svårighetsgrad räknas separat från energi.
+              {balance.highFrictionCount}{" "}
+              {t(
+                "av dagens saker var tunga att komma igång med – svårighetsgrad räknas separat från energi.",
+              )}
             </p>
           )}
         </div>
@@ -97,7 +101,7 @@ export function DayEnergyFlow({
           href="/energifloede"
           className="mt-3 inline-block text-sm text-primary underline-offset-2 hover:underline"
         >
-          Se hela energiflödet
+          {t("Se hela energiflödet")}
         </Link>
       )}
     </>
@@ -106,18 +110,19 @@ export function DayEnergyFlow({
   return (
     <section
       className={cn("rounded-3xl border-2 border-border/60 bg-card p-5 shadow-soft", className)}
-      aria-label="Energins historik idag"
+      aria-label={t("Energins historik idag")}
     >
       {showHeader ? (
         <CollapsibleSection
           id="energins-historik-idag"
-          title="Energins historik idag"
+          title={t("Energins historik idag")}
           headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
           className="space-y-3"
           help={
             <>
-              Mönster över vad du faktiskt gjort idag – inte din nuvarande nivå. Din energibild just
-              nu är Mitt energibatteri. Minus betyder att det tog energi, plus att det gav.
+              {t(
+                "Mönster över vad du faktiskt gjort idag – inte din nuvarande nivå. Din energibild just nu är Mitt energibatteri. Minus betyder att det tog energi, plus att det gav.",
+              )}
             </>
           }
         >

@@ -7,6 +7,13 @@
  * eller en synlig nyckel.
  */
 
+import { EN_QUICKFLOW } from "@/lib/i18n-dicts/quickflow";
+import { EN_CALENDAR } from "@/lib/i18n-dicts/calendar";
+import { EN_BATTERY } from "@/lib/i18n-dicts/battery";
+import { EN_HISTORY } from "@/lib/i18n-dicts/history";
+import { EN_NOTES } from "@/lib/i18n-dicts/notes";
+import { EN_ADMIN } from "@/lib/i18n-dicts/admin";
+
 export type Lang = "sv" | "en";
 
 export const LANGUAGE_KEY = "myflove-language";
@@ -261,10 +268,97 @@ export const EN: Record<string, string> = {
   "Appens språk – texterna byts direkt.": "The app language – texts switch right away.",
 };
 
+/** Områdesordlistor slås ihop med kärnan. Kärnan vinner vid krock. */
+const DICT: Record<string, string> = {
+  ...EN_QUICKFLOW,
+  ...EN_CALENDAR,
+  ...EN_BATTERY,
+  ...EN_HISTORY,
+  ...EN_NOTES,
+  ...EN_ADMIN,
+  ...EN,
+};
+
+/** Svenska veckodagar → engelska, för genererade meningar. */
+const WEEKDAY_EN: Record<string, string> = {
+  måndag: "Monday",
+  tisdag: "Tuesday",
+  onsdag: "Wednesday",
+  torsdag: "Thursday",
+  fredag: "Friday",
+  lördag: "Saturday",
+  söndag: "Sunday",
+  måndagar: "Mondays",
+  tisdagar: "Tuesdays",
+  onsdagar: "Wednesdays",
+  torsdagar: "Thursdays",
+  fredagar: "Fridays",
+  lördagar: "Saturdays",
+  söndagar: "Sundays",
+  och: "and",
+};
+
+function enWords(part: string): string {
+  return part
+    .split(/\b/)
+    .map((w) => WEEKDAY_EN[w.toLowerCase()] ?? w)
+    .join("");
+}
+
+/**
+ * Genererade meningar (veckoöversikt m.m.) matchas som mönster, så att
+ * dynamiska delar – veckodagar, kategorinamn – följer med över.
+ */
+export const EN_PATTERNS: { re: RegExp; en: (m: RegExpMatchArray) => string }[] = [
+  {
+    re: /^Du hade mest ork på (.+), medan (.+) verkar ha varit tyngre\.$/,
+    en: (m) => `You had the most energy on ${enWords(m[1]!)}, while ${enWords(m[2]!)} seem to have been heavier.`,
+  },
+  {
+    re: /^Du verkar ha haft mycket på (.+)\. Vill du planera lite mer luft nästa (.+)\?$/,
+    en: (m) =>
+      `You seem to have had a lot on ${enWords(m[1]!)}. Would you like to plan a bit more space next ${enWords(m[2]!)}?`,
+  },
+  {
+    re: /^(.+) verkar ha gett dig energi\.$/,
+    en: (m) => `${translateSegment(m[1]!)} seems to have given you energy.`,
+  },
+  {
+    re: /^(.+) verkar ha tagit mer av din ork\.$/,
+    en: (m) => `${translateSegment(m[1]!)} seems to have taken more of your energy.`,
+  },
+];
+
+function translateSegment(text: string): string {
+  const trimmed = text.trim();
+  const hit = DICT[trimmed];
+  if (hit) return hit;
+  for (const p of EN_PATTERNS) {
+    const m = trimmed.match(p.re);
+    if (m) return p.en(m);
+  }
+  return text;
+}
+
 /** Översätt en svensk källsträng. Okänd text returneras oförändrad. */
 export function translate(text: string, lang: Lang): string {
   if (lang === "sv") return text;
-  return EN[text] ?? text;
+  const direct = DICT[text];
+  if (direct) return direct;
+  for (const p of EN_PATTERNS) {
+    const m = text.match(p.re);
+    if (m) return p.en(m);
+  }
+  // Sammansatta meningar översätts mening för mening.
+  const parts = text.match(/[^.!?]+[.!?]+\s*/g);
+  if (parts && parts.length > 1) {
+    const out = parts.map((part) => {
+      const trailing = part.match(/\s*$/)?.[0] ?? "";
+      return translateSegment(part.trim()) + trailing;
+    });
+    return out.join("");
+  }
+  return text;
 }
 
 /** Locale för datum, tider och tal. */

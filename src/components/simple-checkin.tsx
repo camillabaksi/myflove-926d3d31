@@ -8,19 +8,20 @@ import { cn } from "@/lib/utils";
 import WhyHint from "@/components/why-hint";
 import { useFlowExplainer } from "@/hooks/use-flow-explainer";
 import { MyFloveBlock } from "@/components/myflove/block";
+import { useLang } from "@/hooks/use-language";
 
 import { ORK_LEVELS, MOOD_FACES, orkFromValue10 } from "@/lib/ork";
 
 const MOODS = MOOD_FACES;
 
-const FACTORS: { id: string; label: string; emoji: string; category: EnergyCategory }[] = [
-  { id: "somn", label: "Sömn", emoji: "😴", category: "somn" },
-  { id: "stress", label: "Stress", emoji: "🌪️", category: "stress" },
-  { id: "ljud", label: "Ljud / intryck", emoji: "🔊", category: "miljo" },
-  { id: "mat", label: "Mat", emoji: "🍽️", category: "annat" },
-  { id: "socialt", label: "Socialt", emoji: "🫂", category: "socialt" },
-  { id: "kroppen", label: "Kroppen", emoji: "💗", category: "rorelse" },
-  { id: "annat", label: "Annat", emoji: "✨", category: "annat" },
+const FACTORS: { id: string; labelSv: string; emoji: string; category: EnergyCategory }[] = [
+  { id: "somn", labelSv: "Sömn", emoji: "😴", category: "somn" },
+  { id: "stress", labelSv: "Stress", emoji: "🌪️", category: "stress" },
+  { id: "ljud", labelSv: "Ljud / intryck", emoji: "🔊", category: "miljo" },
+  { id: "mat", labelSv: "Mat", emoji: "🍽️", category: "annat" },
+  { id: "socialt", labelSv: "Socialt", emoji: "🫂", category: "socialt" },
+  { id: "kroppen", labelSv: "Kroppen", emoji: "💗", category: "rorelse" },
+  { id: "annat", labelSv: "Annat", emoji: "✨", category: "annat" },
 ];
 
 /** Den enda platsen där energi och mående loggas: Mitt batteri. */
@@ -36,6 +37,7 @@ export default function SimpleCheckin({
   /** Förvald påverkansfaktor, t.ex. sömn på morgonen. Går alltid att ändra. */
   presetFactors?: string[];
 }) {
+  const { t } = useLang();
   const { moodValue, energyValue, logMood, logEnergy } = useQuickCheckin();
   const { addFactor } = useEnergyFlow();
   const { explain } = useFlowExplainer();
@@ -84,7 +86,7 @@ export default function SimpleCheckin({
       const f = FACTORS.find((x) => x.id === id);
       if (!f) continue;
       void addFactor({
-        title: f.label,
+        title: t(f.labelSv),
         direction: battery >= 6 ? "gives" : "drains",
         strength: 2,
         category: f.category,
@@ -102,9 +104,9 @@ export default function SimpleCheckin({
 
   return (
     <MyFloveBlock
-      title="Logga just nu"
-      subtitle="Två snabba frågor. MyFlove gör resten."
-      eyebrow="Logga"
+      title={t("Logga just nu")}
+      subtitle={t("Två snabba frågor. MyFlove gör resten.")}
+      eyebrow={t("Logga")}
       icon={Pencil}
       tone="lavender"
       surface="lavender"
@@ -113,18 +115,18 @@ export default function SimpleCheckin({
       footer={
         <p aria-live="polite" className="text-center text-xs text-muted-foreground">
           {saved
-            ? "Tack – din observation är sparad."
-            : "Logga så ofta du vill – varje sparning blir en egen observation i din dag."}
+            ? t("Tack – din observation är sparad.")
+            : t("Logga så ofta du vill – varje sparning blir en egen observation i din dag.")}
         </p>
       }
     >
       <div className="space-y-2">
         <div className="flex items-center justify-between gap-2">
           <p className="text-sm font-semibold text-ink">
-            <span aria-hidden>🔋</span> Hur mycket ork har du idag?
+            <span aria-hidden>🔋</span> {t("Hur mycket ork har du idag?")}
           </p>
-          <WhyHint label="logga ork">
-            Du väljer bara ett ord – MyFlove ser mönstren åt dig över tid.
+          <WhyHint label={t("logga ork")}>
+            {t("Du väljer bara ett ord – MyFlove ser mönstren åt dig över tid.")}
           </WhyHint>
         </div>
         {energyExplainer && <p className="text-xs text-muted-foreground">{energyExplainer}</p>}
@@ -134,7 +136,7 @@ export default function SimpleCheckin({
               key={l.id}
               type="button"
               aria-pressed={ork?.id === l.id}
-              aria-label={l.label}
+              aria-label={t(l.label)}
               onClick={() => {
                 markStarted("battery");
                 setBattery(l.value10);
@@ -149,7 +151,7 @@ export default function SimpleCheckin({
               <span aria-hidden className="text-base">
                 {l.dot}
               </span>
-              {l.label}
+              {t(l.label)}
             </button>
           ))}
         </div>
@@ -158,11 +160,11 @@ export default function SimpleCheckin({
       <div className="space-y-2">
         <div className="flex items-center justify-between gap-2">
           <p className="text-sm font-semibold text-ink">
-            <span aria-hidden>💜</span> Hur känns det just nu?{" "}
-            <span className="font-normal text-muted-foreground">(valfritt)</span>
+            <span aria-hidden>💜</span> {t("Hur känns det just nu?")}{" "}
+            <span className="font-normal text-muted-foreground">{t("(valfritt)")}</span>
           </p>
-          <WhyHint label="logga mående">
-            Det hjälper Flow förstå om ditt mående och din ork brukar hänga ihop för dig.
+          <WhyHint label={t("logga mående")}>
+            {t("Det hjälper Flow förstå om ditt mående och din ork brukar hänga ihop för dig.")}
           </WhyHint>
         </div>
         {moodExplainer && <p className="text-xs text-muted-foreground">{moodExplainer}</p>}
@@ -172,7 +174,7 @@ export default function SimpleCheckin({
               key={m.score10}
               type="button"
               aria-pressed={mood === m.score10}
-              aria-label={m.label}
+              aria-label={t(m.label)}
               onClick={() => {
                 markStarted("mood");
                 setMood(m.score10);
@@ -185,7 +187,7 @@ export default function SimpleCheckin({
               )}
             >
               <span className="text-2xl">{m.emoji}</span>
-              <span className="text-[11px] text-muted-foreground">{m.label}</span>
+              <span className="text-[11px] text-muted-foreground">{t(m.label)}</span>
             </button>
           ))}
         </div>
@@ -194,13 +196,13 @@ export default function SimpleCheckin({
       <div className="space-y-2">
         <label className="block space-y-1">
           <span className="text-xs text-muted-foreground">
-            Vill du skriva några ord? (valfritt)
+            {t("Vill du skriva några ord? (valfritt)")}
           </span>
           <textarea
             value={note}
             onChange={(e) => setNote(e.target.value)}
             rows={2}
-            placeholder="T.ex. ”Sovit bara 4 timmar och är dessutom sjuk.”"
+            placeholder={t("T.ex. ”Sovit bara 4 timmar och är dessutom sjuk.”")}
             className="w-full resize-none rounded-2xl border border-border/60 bg-card/70 p-3 text-sm text-ink outline-none transition-colors focus:border-primary"
           />
         </label>
@@ -217,14 +219,14 @@ export default function SimpleCheckin({
             aria-hidden
             className={cn("transition-transform", showMore && "rotate-180")}
           />
-          {showMore ? "Visa mindre" : "Visa mer"}
+          {showMore ? t("Visa mindre") : t("Visa mer")}
         </button>
 
         {showMore && (
           <div className="space-y-2">
             <p className="text-sm font-semibold text-ink">
-              Vad påverkar dig just nu?{" "}
-              <span className="font-normal text-muted-foreground">(valfritt)</span>
+              {t("Vad påverkar dig just nu?")}{" "}
+              <span className="font-normal text-muted-foreground">{t("(valfritt)")}</span>
             </p>
             <div className="flex flex-wrap gap-2">
               {FACTORS.map((f) => {
@@ -249,7 +251,7 @@ export default function SimpleCheckin({
                     <span aria-hidden className="mr-1">
                       {f.emoji}
                     </span>
-                    {f.label}
+                    {t(f.labelSv)}
                   </button>
                 );
               })}
@@ -264,7 +266,7 @@ export default function SimpleCheckin({
         className="flex min-h-11 w-full items-center justify-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-opacity hover:opacity-90"
       >
         <Sparkles size={16} aria-hidden="true" />
-        {saved ? "Tack" : "Logga energi & mående"}
+        {saved ? t("Tack") : t("Logga energi & mående")}
       </button>
     </MyFloveBlock>
   );

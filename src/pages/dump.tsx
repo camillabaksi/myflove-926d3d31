@@ -11,6 +11,7 @@ import InsightQuickflowHint from "@/components/insight-quickflow-hint";
 import CollapsibleSection from "@/components/collapsible-section";
 import QuickflowRulesSettings from "@/components/quickflow-rules-settings";
 import WhyHint from "@/components/why-hint";
+import { useLang } from "@/hooks/use-language";
 
 /**
  * QuickFlow = få ut saker ur huvudet → Flow delar upp → du granskar →
@@ -18,6 +19,7 @@ import WhyHint from "@/components/why-hint";
  * Kalender bestämmer NÄR – QuickFlow bestämmer bara ordning.
  */
 export default function Dump() {
+  const { t } = useLang();
   useEffect(() => {
     track("quickflow_opened", { source: "sida" });
   }, []);
@@ -28,8 +30,8 @@ export default function Dump() {
         <MyFloveWide>
           <div className="space-y-8">
             <MyFloveBlock
-              title="Vad behöver du få ur huvudet?"
-              subtitle="Skriv eller prata fritt. Flow sorterar och hjälper dig prioritera."
+              title={t("Vad behöver du få ur huvudet?")}
+              subtitle={t("Skriv eller prata fritt. Flow sorterar och hjälper dig prioritera.")}
               eyebrow="QuickFlow"
               icon={Sparkles}
               tone="sun"
@@ -38,14 +40,15 @@ export default function Dump() {
             >
               <div className="space-y-4">
                 <p className="leading-relaxed text-muted-foreground">
-                  Dumpa allt som snurrar – Flow delar upp det i separata saker och föreslår en
-                  ordning utifrån viktighet, brådska och ditt batteri. Du bestämmer alltid själv.
+                  {t(
+                    "Dumpa allt som snurrar – Flow delar upp det i separata saker och föreslår en ordning utifrån viktighet, brådska och ditt batteri. Du bestämmer alltid själv.",
+                  )}
                 </p>
                 <QuickflowCapture />
                 <WhyHint label="quickflow">
-                  När huvudet är fullt ska det vara lätt att få nästa steg utan att behöva planera
-                  allt själv. Inga tider eller deadlines skapas här – det gör du i kalendern när du
-                  vill.
+                  {t(
+                    "När huvudet är fullt ska det vara lätt att få nästa steg utan att behöva planera allt själv. Inga tider eller deadlines skapas här – det gör du i kalendern när du vill.",
+                  )}
                 </WhyHint>
               </div>
             </MyFloveBlock>
@@ -61,9 +64,9 @@ export default function Dump() {
             >
               <NotebookPen size={20} className="text-primary" />
               <span className="min-w-0 flex-1">
-                <span className="block font-semibold text-ink">Anteckningar &amp; idébank</span>
+                <span className="block font-semibold text-ink">{t("Anteckningar & idébank")}</span>
                 <span className="block text-sm text-muted-foreground">
-                  Tankar utan krav bor i en egen del under Flow.
+                  {t("Tankar utan krav bor i en egen del under Flow.")}
                 </span>
               </span>
             </Link>
@@ -71,7 +74,7 @@ export default function Dump() {
             <CollapsibleSection
               title={
                 <span className="flex items-center gap-2">
-                  <Sparkles size={20} /> Mina sorteringsregler
+                  <Sparkles size={20} /> {t("Mina sorteringsregler")}
                 </span>
               }
               id="QuickFlow-regler"

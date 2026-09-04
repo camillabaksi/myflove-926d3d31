@@ -3,6 +3,7 @@ import { Moon, Sunrise } from "lucide-react";
 import { useDayWindow } from "@/hooks/use-day-window";
 import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
+import { useLang } from "@/hooks/use-language";
 
 /**
  * Morgon och kväll – du fyller själv i när morgonen startar, när dagen
@@ -10,6 +11,7 @@ import { cn } from "@/lib/utils";
  * Mitt batteri™ utgår sedan från dina egna siffror.
  */
 export default function DayEdgesCheckin({ className }: { className?: string }) {
+  const { t } = useLang();
   const { window: win, setWindow, todayEdges, setMorning, setEvening } = useDayWindow();
   const [morning, setMorningValue] = useState<number>(todayEdges.morning ?? 5);
   const [evening, setEveningValue] = useState<number>(todayEdges.evening ?? 5);
@@ -31,7 +33,7 @@ export default function DayEdgesCheckin({ className }: { className?: string }) {
 
   return (
     <section
-      aria-label="Morgon och kväll"
+      aria-label={t("Morgon och kväll")}
       className={cn(
         "space-y-4 rounded-3xl border-2 border-border/60 bg-card p-5 shadow-soft",
         className,
@@ -39,16 +41,16 @@ export default function DayEdgesCheckin({ className }: { className?: string }) {
     >
       <div>
         <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-          Morgon och kväll
+          {t("Morgon och kväll")}
         </h2>
         <p className="mt-1 text-sm text-ink">
-          Fyll i när din morgon startar och när dagen slutar – och hur batteriet känns då.
+          {t("Fyll i när din morgon startar och när dagen slutar – och hur batteriet känns då.")}
         </p>
       </div>
 
       <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-3">
         <label className="space-y-1 text-xs text-muted-foreground">
-          Morgonen startar
+          {t("Morgonen startar")}
           <input
             type="time"
             value={win.start}
@@ -57,7 +59,7 @@ export default function DayEdgesCheckin({ className }: { className?: string }) {
           />
         </label>
         <label className="space-y-1 text-xs text-muted-foreground">
-          Dagen slutar
+          {t("Dagen slutar")}
           <input
             type="time"
             value={win.end}
@@ -69,7 +71,7 @@ export default function DayEdgesCheckin({ className }: { className?: string }) {
 
       <EdgeSlider
         icon={<Sunrise size={16} className="text-primary" aria-hidden="true" />}
-        label={`Batteri vid morgonstart (${win.start})`}
+        label={`${t("Batteri vid morgonstart")} (${win.start})`}
         value={morning}
         onChange={setMorningValue}
         onSave={() => save("morning")}
@@ -78,7 +80,7 @@ export default function DayEdgesCheckin({ className }: { className?: string }) {
 
       <EdgeSlider
         icon={<Moon size={16} className="text-primary" aria-hidden="true" />}
-        label={`Batteri när dagen slutar (${win.end})`}
+        label={`${t("Batteri när dagen slutar")} (${win.end})`}
         value={evening}
         onChange={setEveningValue}
         onSave={() => save("evening")}
@@ -103,6 +105,7 @@ function EdgeSlider({
   onSave: () => void;
   saved: boolean;
 }) {
+  const { t } = useLang();
   return (
     <div className="space-y-2 rounded-2xl bg-secondary/40 p-3">
       <div className="flex items-center gap-2 text-sm text-ink">
@@ -125,7 +128,7 @@ function EdgeSlider({
         onClick={onSave}
         className="rounded-pill bg-primary px-4 py-1.5 text-xs font-medium text-primary-foreground"
       >
-        {saved ? "Uppdatera" : "Spara"}
+        {saved ? t("Uppdatera") : t("Spara")}
       </button>
     </div>
   );

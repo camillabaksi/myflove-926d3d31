@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import Layout from "@/components/layout";
 import { useIsAdmin } from "@/hooks/use-is-admin";
+import { useLang } from "@/hooks/use-language";
 import {
   listAllFrictionItemsFn,
   updateFrictionStatusFn,
@@ -39,12 +40,13 @@ const STATUS_OPTIONS = ["open", "planned", "in_progress", "done", "wontfix"] as 
 
 export default function AdminPage() {
   const { isAdmin, loading: adminLoading } = useIsAdmin();
+  const { t } = useLang();
   const [tab, setTab] = useState<"friction" | "users" | "changelog">("friction");
 
   if (adminLoading) {
     return (
       <Layout>
-        <p className="text-muted-foreground">Laddar…</p>
+        <p className="text-muted-foreground">{t("Laddar…")}</p>
       </Layout>
     );
   }
@@ -53,8 +55,8 @@ export default function AdminPage() {
       <Layout>
         <div className="max-w-md mx-auto text-center space-y-3 py-16">
           <Lock size={40} className="mx-auto text-muted-foreground" />
-          <h1 className="text-2xl font-serif font-bold">Endast för grundaren</h1>
-          <p className="text-muted-foreground">Denna sida kräver admin-behörighet.</p>
+          <h1 className="text-2xl font-serif font-bold">{t("Endast för grundaren")}</h1>
+          <p className="text-muted-foreground">{t("Denna sida kräver admin-behörighet.")}</p>
         </div>
       </Layout>
     );
@@ -65,21 +67,21 @@ export default function AdminPage() {
       <div className="max-w-5xl mx-auto space-y-6">
         <header className="flex flex-wrap items-start justify-between gap-3">
           <div className="space-y-1">
-            <h1 className="text-3xl font-serif font-bold">Adminöversikt</h1>
-            <p className="text-muted-foreground">Hantera feedback, roller och åtkomst.</p>
+            <h1 className="text-3xl font-serif font-bold">{t("Adminöversikt")}</h1>
+            <p className="text-muted-foreground">{t("Hantera feedback, roller och åtkomst.")}</p>
           </div>
           <div className="flex flex-wrap gap-2">
             <Link
               to="/admin-statistik"
               className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-medium hover:bg-secondary"
             >
-              <BarChart3 size={16} /> Appstatistik
+              <BarChart3 size={16} /> {t("Appstatistik")}
             </Link>
             <Link
               to="/pitch"
               className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
             >
-              <PlayCircle size={16} /> Pitchmaterial
+              <PlayCircle size={16} /> {t("Pitchmaterial")}
             </Link>
           </div>
         </header>
@@ -90,21 +92,21 @@ export default function AdminPage() {
             onClick={() => setTab("friction")}
             icon={<MessageSquareWarning size={16} />}
           >
-            Feedback
+            {t("Feedback")}
           </TabBtn>
           <TabBtn
             active={tab === "users"}
             onClick={() => setTab("users")}
             icon={<UsersIcon size={16} />}
           >
-            Användare & roller
+            {t("Användare & roller")}
           </TabBtn>
           <TabBtn
             active={tab === "changelog"}
             onClick={() => setTab("changelog")}
             icon={<FileDown size={16} />}
           >
-            Changelog
+            {t("Changelog")}
           </TabBtn>
         </div>
 
@@ -147,6 +149,7 @@ function TabBtn({
 }
 
 function FrictionSection() {
+  const { t, locale } = useLang();
   const qc = useQueryClient();
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["admin-friction"],
@@ -164,14 +167,14 @@ function FrictionSection() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-friction"] }),
   });
 
-  if (isLoading) return <p className="text-muted-foreground">Laddar rapporter…</p>;
-  if (isError) return <p className="text-destructive text-sm">Fel: {(error as Error).message}</p>;
+  if (isLoading) return <p className="text-muted-foreground">{t("Laddar rapporter…")}</p>;
+  if (isError) return <p className="text-destructive text-sm">{t("Fel:")} {(error as Error).message}</p>;
   if (!data || data.length === 0)
-    return <p className="text-muted-foreground">Inga rapporter ännu.</p>;
+    return <p className="text-muted-foreground">{t("Inga rapporter ännu.")}</p>;
 
   return (
     <div className="space-y-3">
-      <p className="text-sm text-muted-foreground">{data.length} rapporter totalt</p>
+      <p className="text-sm text-muted-foreground">{data.length} {t("rapporter totalt")}</p>
       {data.map((item) => (
         <div key={item.id} className="rounded-2xl border border-border bg-card p-4 space-y-3">
           <div className="flex flex-wrap items-start justify-between gap-2">
@@ -192,15 +195,15 @@ function FrictionSection() {
             {item.category && (
               <span className="rounded-full bg-muted px-2 py-0.5">{item.category}</span>
             )}
-            {item.impact != null && <span>Effekt: {item.impact}</span>}
-            {item.frequency != null && <span>Frekvens: {item.frequency}</span>}
-            {item.mental_load != null && <span>Mental last: {item.mental_load}</span>}
-            <span>Från: {item.reporter_email ?? item.reporter_id.slice(0, 8)}</span>
-            <span>{new Date(item.created_at).toLocaleString("sv-SE")}</span>
+            {item.impact != null && <span>{t("Effekt:")} {item.impact}</span>}
+            {item.frequency != null && <span>{t("Frekvens:")} {item.frequency}</span>}
+            {item.mental_load != null && <span>{t("Mental last:")} {item.mental_load}</span>}
+            <span>{t("Från:")} {item.reporter_email ?? item.reporter_id.slice(0, 8)}</span>
+            <span>{new Date(item.created_at).toLocaleString(locale)}</span>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <label className="text-xs text-muted-foreground">Status:</label>
+            <label className="text-xs text-muted-foreground">{t("Status:")}</label>
             <select
               value={item.status}
               onChange={(e) =>
@@ -214,18 +217,18 @@ function FrictionSection() {
             >
               {STATUS_OPTIONS.map((s) => (
                 <option key={s} value={s}>
-                  {STATUS_LABELS[s]}
+                  {t(STATUS_LABELS[s])}
                 </option>
               ))}
             </select>
             <button
               onClick={() => {
-                if (confirm(`Ta bort rapport "${item.title}"?`)) remove.mutate(item.id);
+                if (confirm(t("Ta bort rapport \"{title}\"?").replace("{title}", item.title))) remove.mutate(item.id);
               }}
               disabled={remove.isPending}
               className="ml-auto flex items-center gap-1 text-xs text-destructive hover:underline disabled:opacity-50"
             >
-              <Trash2 size={14} /> Ta bort
+              <Trash2 size={14} /> {t("Ta bort")}
             </button>
           </div>
         </div>
@@ -234,9 +237,9 @@ function FrictionSection() {
   );
 }
 
-function fmtDateTime(iso: string | null): string {
+function fmtDateTime(iso: string | null, locale: string): string {
   if (!iso) return "—";
-  return new Date(iso).toLocaleString("sv-SE", {
+  return new Date(iso).toLocaleString(locale, {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
@@ -249,6 +252,7 @@ type SortKey = "name" | "last_visit" | "last_login" | "created";
 type SortDir = "asc" | "desc";
 
 function UsersSection() {
+  const { t, locale } = useLang();
   const qc = useQueryClient();
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
@@ -286,7 +290,7 @@ function UsersSection() {
   const filterBar = (
     <div className="flex flex-wrap items-end gap-3 rounded-2xl border border-border bg-card p-4">
       <label className="text-xs text-muted-foreground">
-        Från
+        {t("Från")}
         <input
           type="date"
           value={from}
@@ -295,7 +299,7 @@ function UsersSection() {
         />
       </label>
       <label className="text-xs text-muted-foreground">
-        Till
+        {t("Till")}
         <input
           type="date"
           value={to}
@@ -312,11 +316,11 @@ function UsersSection() {
           }}
           className="rounded-xl border border-border px-3 py-2 text-sm hover:bg-secondary"
         >
-          Rensa filter
+          {t("Rensa filter")}
         </button>
       )}
       <p className="ml-auto text-xs text-muted-foreground">
-        Filtret gäller besök, inloggning och registrering.
+        {t("Filtret gäller besök, inloggning och registrering.")}
       </p>
     </div>
   );
@@ -325,28 +329,28 @@ function UsersSection() {
     return (
       <div className="space-y-3">
         {filterBar}
-        <p className="text-muted-foreground">Laddar användare…</p>
+        <p className="text-muted-foreground">{t("Laddar användare…")}</p>
       </div>
     );
   if (isError)
     return (
       <div className="space-y-3">
         {filterBar}
-        <p className="text-destructive text-sm">Fel: {(error as Error).message}</p>
+        <p className="text-destructive text-sm">{t("Fel:")} {(error as Error).message}</p>
       </div>
     );
   if (!data || data.length === 0)
     return (
       <div className="space-y-3">
         {filterBar}
-        <p className="text-muted-foreground">Inga användare i vald period.</p>
+        <p className="text-muted-foreground">{t("Inga användare i vald period.")}</p>
       </div>
     );
 
   return (
     <div className="space-y-3">
       {filterBar}
-      <p className="text-sm text-muted-foreground">{data.length} användare</p>
+      <p className="text-sm text-muted-foreground">{data.length} {t("användare")}</p>
       <div className="overflow-x-auto rounded-2xl border border-border">
         <table className="w-full text-sm">
           <thead className="bg-muted text-left">
@@ -356,25 +360,25 @@ function UsersSection() {
                 dir={sortDir}
                 onClick={() => handleSort("name")}
               >
-                Namn
+                {t("Namn")}
               </SortHeader>
-              <th className="p-3">Senast aktiv</th>
+              <th className="p-3">{t("Senast aktiv")}</th>
               <SortHeader
                 active={sortKey === "last_login"}
                 dir={sortDir}
                 onClick={() => handleSort("last_login")}
               >
-                Senaste inloggning
+                {t("Senaste inloggning")}
               </SortHeader>
               <SortHeader
                 active={sortKey === "created"}
                 dir={sortDir}
                 onClick={() => handleSort("created")}
               >
-                Skapad
+                {t("Skapad")}
               </SortHeader>
-              <th className="p-3">Roller</th>
-              <th className="p-3 text-right">Åtgärd</th>
+              <th className="p-3">{t("Roller")}</th>
+              <th className="p-3 text-right">{t("Åtgärd")}</th>
             </tr>
           </thead>
 
@@ -388,18 +392,18 @@ function UsersSection() {
                     <div className="text-xs text-muted-foreground">{u.email ?? "—"}</div>
                   </td>
                   <td className="p-3 text-xs text-muted-foreground">
-                    {fmtDateTime(u.last_visit_at)}
+                    {fmtDateTime(u.last_visit_at, locale)}
                   </td>
                   <td className="p-3 text-xs text-muted-foreground">
-                    {fmtDateTime(u.last_sign_in_at)}
+                    {fmtDateTime(u.last_sign_in_at, locale)}
                   </td>
                   <td className="p-3 text-xs text-muted-foreground">
-                    {u.created_at ? new Date(u.created_at).toLocaleDateString("sv-SE") : "—"}
+                    {u.created_at ? new Date(u.created_at).toLocaleDateString(locale) : "—"}
                   </td>
 
                   <td className="p-3">
                     {u.roles.length === 0 ? (
-                      <span className="text-xs text-muted-foreground">användare</span>
+                      <span className="text-xs text-muted-foreground">{t("användare")}</span>
                     ) : (
                       <div className="flex flex-wrap gap-1">
                         {u.roles.map((r) => (
@@ -419,13 +423,13 @@ function UsersSection() {
                     {isAdminRow ? (
                       <button
                         onClick={() => {
-                          if (confirm(`Ta bort admin-roll från ${u.email}?`))
+                          if (confirm(t("Ta bort admin-roll från {email}?").replace("{email}", u.email ?? "")))
                             revoke.mutate({ userId: u.user_id, role: "admin" });
                         }}
                         disabled={revoke.isPending}
                         className="inline-flex items-center gap-1 text-xs text-destructive hover:underline disabled:opacity-50"
                       >
-                        <ShieldOff size={14} /> Ta bort admin
+                        <ShieldOff size={14} /> {t("Ta bort admin")}
                       </button>
                     ) : (
                       <button
@@ -433,7 +437,7 @@ function UsersSection() {
                         disabled={grant.isPending}
                         className="inline-flex items-center gap-1 text-xs text-primary hover:underline disabled:opacity-50"
                       >
-                        <Shield size={14} /> Gör till admin
+                        <Shield size={14} /> {t("Gör till admin")}
                       </button>
                     )}
                   </td>

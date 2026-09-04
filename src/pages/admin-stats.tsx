@@ -2,18 +2,20 @@ import Layout from "@/components/layout";
 import { useGetAnalyticsSummary } from "@workspace/api-client-react";
 import { BarChart3, Users, Activity, Flame, Lock } from "lucide-react";
 import { useIsAdmin } from "@/hooks/use-is-admin";
+import { useLang } from "@/hooks/use-language";
 import CollapsibleSection from "@/components/collapsible-section";
 import AnalyticsExport from "@/components/admin/analytics-export";
 import { actionLabel, pageLabel, sectionLabel } from "@/lib/analytics-labels";
 
 export default function AdminStats() {
   const { isAdmin, loading: adminLoading } = useIsAdmin();
+  const { t } = useLang();
   const { data, isLoading, isError } = useGetAnalyticsSummary();
 
   if (adminLoading) {
     return (
       <Layout>
-        <p className="text-muted-foreground">Laddar…</p>
+        <p className="text-muted-foreground">{t("Laddar…")}</p>
       </Layout>
     );
   }
@@ -23,8 +25,8 @@ export default function AdminStats() {
       <Layout>
         <div className="max-w-md mx-auto text-center space-y-3 py-16">
           <Lock size={40} className="mx-auto text-muted-foreground" />
-          <h1 className="text-2xl font-bold">Endast för grundaren</h1>
-          <p className="text-muted-foreground">Den här sidan är privat.</p>
+          <h1 className="text-2xl font-bold">{t("Endast för grundaren")}</h1>
+          <p className="text-muted-foreground">{t("Den här sidan är privat.")}</p>
         </div>
       </Layout>
     );
@@ -52,22 +54,20 @@ export default function AdminStats() {
       <div className="space-y-8">
         <div>
           <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
-            <BarChart3 className="text-primary" /> Appstatistik
+            <BarChart3 className="text-primary" /> {t("Appstatistik")}
           </h1>
           <p className="text-muted-foreground">
-            Anonym, sammanslagen statistik om hur MyFlove används.
+            {t("Anonym, sammanslagen statistik om hur MyFlove används.")}
           </p>
           <p className="mt-2 text-xs text-muted-foreground bg-secondary/40 border border-border rounded-2xl p-3">
-            <strong>Integritet:</strong> vi mäter bara vilken del av appen som används och vilken
-            typ av handling som sker. Inget användar-id, ingen e-post, ingen IP och inget innehåll
-            (mående, texter, uppgifter) sparas — händelser går inte att koppla till en person.
+            <strong>{t("Integritet:")}</strong> {t("vi mäter bara vilken del av appen som används och vilken typ av handling som sker. Inget användar-id, ingen e-post, ingen IP och inget innehåll (mående, texter, uppgifter) sparas — händelser går inte att koppla till en person.")}
           </p>
         </div>
 
         <AnalyticsExport />
 
-        {isLoading && <p className="text-muted-foreground">Laddar statistik…</p>}
-        {isError && <p className="text-destructive">Kunde inte hämta statistik just nu.</p>}
+        {isLoading && <p className="text-muted-foreground">{t("Laddar statistik…")}</p>}
+        {isError && <p className="text-destructive">{t("Kunde inte hämta statistik just nu.")}</p>}
 
         {data && (
           <>
@@ -75,72 +75,72 @@ export default function AdminStats() {
               <div className="bg-card p-5 rounded-3xl border-2 border-border shadow-sm space-y-1">
                 <Users size={20} className="text-primary" />
                 <p className="text-2xl font-bold">{data.totalUsers ?? 0}</p>
-                <p className="text-xs text-muted-foreground">Registrerade användare</p>
+                <p className="text-xs text-muted-foreground">{t("Registrerade användare")}</p>
               </div>
               <div className="bg-card p-5 rounded-3xl border-2 border-border shadow-sm space-y-1">
                 <Users size={20} className="text-primary" />
                 <p className="text-2xl font-bold">{data.newUsers7d ?? 0}</p>
-                <p className="text-xs text-muted-foreground">Nya senaste 7 dagarna</p>
+                <p className="text-xs text-muted-foreground">{t("Nya senaste 7 dagarna")}</p>
               </div>
               <div className="bg-card p-5 rounded-3xl border-2 border-border shadow-sm space-y-1">
                 <Activity size={20} className="text-primary" />
                 <p className="text-2xl font-bold">{data.totalSessions}</p>
-                <p className="text-xs text-muted-foreground">Besökare (30 d)</p>
+                <p className="text-xs text-muted-foreground">{t("Besökare (30 d)")}</p>
               </div>
               <div className="bg-card p-5 rounded-3xl border-2 border-border shadow-sm space-y-1">
                 <Activity size={20} className="text-primary" />
                 <p className="text-2xl font-bold">{data.activeSessions1d}</p>
-                <p className="text-xs text-muted-foreground">Aktiva idag</p>
+                <p className="text-xs text-muted-foreground">{t("Aktiva idag")}</p>
               </div>
               <div className="bg-card p-5 rounded-3xl border-2 border-border shadow-sm space-y-1">
                 <Activity size={20} className="text-primary" />
                 <p className="text-2xl font-bold">{data.activeSessions7d}</p>
-                <p className="text-xs text-muted-foreground">Aktiva senaste 7 dagarna</p>
+                <p className="text-xs text-muted-foreground">{t("Aktiva senaste 7 dagarna")}</p>
               </div>
               <div className="bg-card p-5 rounded-3xl border-2 border-border shadow-sm space-y-1">
                 <Flame size={20} className="text-primary" />
                 <p className="text-2xl font-bold">{data.activeSessions30d}</p>
-                <p className="text-xs text-muted-foreground">Aktiva senaste 30 dagarna</p>
+                <p className="text-xs text-muted-foreground">{t("Aktiva senaste 30 dagarna")}</p>
               </div>
             </div>
 
             <CollapsibleSection
-              title="Nyckeltal vi mäter"
+              title={t("Nyckeltal vi mäter")}
               headingClassName="text-lg font-semibold"
               className="bg-card p-6 rounded-3xl border-2 border-border shadow-sm"
-              description="Sammanslagna mått som visar om appen faktiskt hjälper — helt utan personlig data."
+              description={t("Sammanslagna mått som visar om appen faktiskt hjälper — helt utan personlig data.")}
             >
               <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] md:grid-cols-3 gap-4">
                 {[
                   {
-                    label: "Händelser per besökare",
+                    label: t("Händelser per besökare"),
                     value: `${data.avgEventsPerSession ?? 0}`,
-                    hint: "Hur mycket appen används per person",
+                    hint: t("Hur mycket appen används per person"),
                   },
                   {
-                    label: "Återkommer",
+                    label: t("Återkommer"),
                     value: `${data.returningRate ?? 0}%`,
-                    hint: "Andel som använt appen fler än en dag",
+                    hint: t("Andel som använt appen fler än en dag"),
                   },
                   {
-                    label: "Dagligt bruk (DAU/MAU)",
+                    label: t("Dagligt bruk (DAU/MAU)"),
                     value: `${data.stickiness ?? 0}%`,
-                    hint: "Hur ofta månadens användare är inne i dag",
+                    hint: t("Hur ofta månadens användare är inne i dag"),
                   },
                   {
-                    label: "Delar per besökare",
+                    label: t("Delar per besökare"),
                     value: `${data.avgSectionsPerSession ?? 0}`,
-                    hint: "Hur brett appen används",
+                    hint: t("Hur brett appen används"),
                   },
                   {
-                    label: "Gör något",
+                    label: t("Gör något"),
                     value: `${data.actionRate ?? 0}%`,
-                    hint: "Andel som gör en handling, inte bara tittar",
+                    hint: t("Andel som gör en handling, inte bara tittar"),
                   },
                   {
-                    label: "Händelser (30 d)",
+                    label: t("Händelser (30 d)"),
                     value: `${data.totalEvents ?? 0}`,
-                    hint: "Totalt antal mätpunkter",
+                    hint: t("Totalt antal mätpunkter"),
                   },
                 ].map((kpi) => (
                   <div
@@ -156,10 +156,10 @@ export default function AdminStats() {
             </CollapsibleSection>
 
             <CollapsibleSection
-              title="Dagliga loopen: Fånga → Planera → Göra → Reflektera"
+              title={t("Dagliga loopen: Fånga → Planera → Göra → Reflektera")}
               headingClassName="text-lg font-semibold"
               className="bg-card p-6 rounded-3xl border-2 border-border shadow-sm"
-              description="Hur många anonyma besökare som når varje steg i MyFloves kärnflöde."
+              description={t("Hur många anonyma besökare som når varje steg i MyFloves kärnflöde.")}
             >
               <div className="space-y-3">
                 {(data.coreLoop ?? []).map((step) => {
@@ -168,7 +168,7 @@ export default function AdminStats() {
                     <div key={step.step}>
                       <div className="flex justify-between text-sm mb-1">
                         <span className="font-medium">{step.step}</span>
-                        <span className="text-muted-foreground">{step.sessions} besökare</span>
+                        <span className="text-muted-foreground">{step.sessions} {t("besökare")}</span>
                       </div>
                       <div className="h-2 rounded-full bg-secondary/50 overflow-hidden">
                         <div
@@ -183,7 +183,7 @@ export default function AdminStats() {
             </CollapsibleSection>
 
             <CollapsibleSection
-              title="Händelser per dag (senaste 14 dagarna)"
+              title={t("Händelser per dag (senaste 14 dagarna)")}
               headingClassName="text-lg font-semibold"
               className="bg-card p-6 rounded-3xl border-2 border-border shadow-sm"
             >
@@ -211,12 +211,12 @@ export default function AdminStats() {
             </CollapsibleSection>
 
             <CollapsibleSection
-              title="Nya registreringar (senaste 14 dagarna)"
+              title={t("Nya registreringar (senaste 14 dagarna)")}
               headingClassName="text-lg font-semibold"
               className="bg-card p-6 rounded-3xl border-2 border-border shadow-sm"
             >
               {(data.dailySignups ?? []).length === 0 && (
-                <p className="text-sm text-muted-foreground">Ingen data än.</p>
+                <p className="text-sm text-muted-foreground">{t("Ingen data än.")}</p>
               )}
               <div className="flex items-end gap-1.5 h-32">
                 {(data.dailySignups ?? []).map((day) => (
@@ -239,20 +239,20 @@ export default function AdminStats() {
             </CollapsibleSection>
 
             <CollapsibleSection
-              title="Mest använda delar av appen"
+              title={t("Mest använda delar av appen")}
               headingClassName="text-lg font-semibold"
               className="bg-card p-6 rounded-3xl border-2 border-border shadow-sm"
             >
               {viewsBySection.length === 0 && (
-                <p className="text-sm text-muted-foreground">Ingen data än.</p>
+                <p className="text-sm text-muted-foreground">{t("Ingen data än.")}</p>
               )}
               <div className="space-y-3">
                 {viewsBySection.map((row) => (
                   <div key={`${row.section}-${row.action}`}>
                     <div className="flex justify-between text-sm mb-1">
-                      <span className="font-medium">{sectionLabel(row.section)}</span>
+                      <span className="font-medium">{t(sectionLabel(row.section))}</span>
                       <span className="text-muted-foreground">
-                        {row.events} besök · {row.sessions} användare
+                        {row.events} {t("besök")} · {row.sessions} {t("användare")}
                       </span>
                     </div>
                     <div className="h-2 rounded-full bg-secondary/50 overflow-hidden">
@@ -267,24 +267,24 @@ export default function AdminStats() {
             </CollapsibleSection>
 
             <CollapsibleSection
-              title="Mest besökta sidor"
+              title={t("Mest besökta sidor")}
               headingClassName="text-lg font-semibold"
               className="bg-card p-6 rounded-3xl border-2 border-border shadow-sm"
-              description="Varje sidvisning i appen loggas anonymt — här ser du vilka sidor besökarna faktiskt öppnar."
+              description={t("Varje sidvisning i appen loggas anonymt — här ser du vilka sidor besökarna faktiskt öppnar.")}
             >
               {pageViews.length === 0 && (
-                <p className="text-sm text-muted-foreground">Ingen data än.</p>
+                <p className="text-sm text-muted-foreground">{t("Ingen data än.")}</p>
               )}
               <div className="space-y-3">
                 {pageViews.map((row) => (
                   <div key={row.action}>
                     <div className="flex justify-between text-sm mb-1">
                       <span className="font-medium">
-                        {pageLabel(row.action)}{" "}
+                        {t(pageLabel(row.action))}{" "}
                         <span className="text-xs text-muted-foreground">/{row.action}</span>
                       </span>
                       <span className="text-muted-foreground">
-                        {row.events} visningar · {row.sessions} besökare
+                        {row.events} {t("visningar")} · {row.sessions} {t("besökare")}
                       </span>
                     </div>
                     <div className="h-2 rounded-full bg-secondary/50 overflow-hidden">
@@ -299,13 +299,13 @@ export default function AdminStats() {
             </CollapsibleSection>
 
             <CollapsibleSection
-              title="Funktioner som faktiskt används"
+              title={t("Funktioner som faktiskt används")}
               headingClassName="text-lg font-semibold"
               className="bg-card p-6 rounded-3xl border-2 border-border shadow-sm"
-              description="Konkreta handlingar (inte bara besök) — visar vad som fungerar bra och vad som knappt rörs."
+              description={t("Konkreta handlingar (inte bara besök) — visar vad som fungerar bra och vad som knappt rörs.")}
             >
               {otherActions.length === 0 && (
-                <p className="text-sm text-muted-foreground">Ingen data än.</p>
+                <p className="text-sm text-muted-foreground">{t("Ingen data än.")}</p>
               )}
               <div className="divide-y divide-border">
                 {otherActions.map((row) => (
@@ -314,10 +314,10 @@ export default function AdminStats() {
                     className="flex items-center justify-between py-2 text-sm"
                   >
                     <span>
-                      {sectionLabel(row.section)} — {actionLabel(row.action)}
+                      {t(sectionLabel(row.section))} — {t(actionLabel(row.action))}
                     </span>
                     <span className="text-muted-foreground">
-                      {row.events} ggr · {row.sessions} användare
+                      {row.events} {t("ggr")} · {row.sessions} {t("användare")}
                     </span>
                   </div>
                 ))}
@@ -325,12 +325,12 @@ export default function AdminStats() {
             </CollapsibleSection>
 
             <CollapsibleSection
-              title="Aktiva användare per dag (senaste 14 dagarna)"
+              title={t("Aktiva användare per dag (senaste 14 dagarna)")}
               headingClassName="text-lg font-semibold"
               className="bg-card p-6 rounded-3xl border-2 border-border shadow-sm"
             >
               {(data.dailyActiveSessions ?? []).length === 0 && (
-                <p className="text-sm text-muted-foreground">Ingen data än.</p>
+                <p className="text-sm text-muted-foreground">{t("Ingen data än.")}</p>
               )}
               <div className="flex items-end gap-1.5 h-32">
                 {data.dailyActiveSessions.map((day) => (

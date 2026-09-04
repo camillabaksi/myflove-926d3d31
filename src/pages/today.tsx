@@ -27,6 +27,7 @@ import { isUntimedActivity } from "@/lib/activity-semantics";
 import type { Routine } from "@/lib/recurrence";
 import { CalendarDays, ListOrdered, Sparkles, Heart, Waves, ListChecks } from "lucide-react";
 import { MyFloveTransition } from "@/components/myflove/motion";
+import { useLang } from "@/hooks/use-language";
 
 type DayView = "flow" | "lista";
 
@@ -40,6 +41,7 @@ type DayView = "flow" | "lista";
  *  📋 Lista – allt som ska göras idag, avbockningsbart.
  */
 export function TodayContent() {
+  const { t } = useLang();
   useEffect(() => {
     track("today_viewed", { source: "sida" });
   }, []);
@@ -142,18 +144,18 @@ export function TodayContent() {
     <MyFlovePageGrid area="idag">
       <MyFloveWide>
         <h1 className="flex items-center gap-2 font-display text-3xl text-ink">
-          <Heart className="h-7 w-7 text-primary" /> Idag
+          <Heart className="h-7 w-7 text-primary" /> {t("Idag")}
         </h1>
-        <p className="mt-1 text-sm font-medium text-primary">Vad som händer idag</p>
+        <p className="mt-1 text-sm font-medium text-primary">{t("Vad som händer idag")}</p>
         <p className="mt-0.5 text-muted-foreground">
-          Allt som hör till idag – på ett ställe. Vill du ändra ordningen gör du det i Planera.
+          {t("Allt som hör till idag – på ett ställe. Vill du ändra ordningen gör du det i Planera.")}
         </p>
       </MyFloveWide>
 
       {/* 🌊 Flow / 📋 Lista – två vyer av samma dag */}
       <MyFloveWide
         role="tablist"
-        aria-label="Visningsläge för dagen"
+        aria-label={t("Visningsläge för dagen")}
         className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-1 rounded-2xl bg-muted/60 p-1"
       >
         {(
@@ -175,7 +177,7 @@ export function TodayContent() {
                 active ? "bg-card text-ink shadow-soft" : "text-muted-foreground"
               }`}
             >
-              <Icon size={16} /> {v.label}
+              <Icon size={16} /> {t(v.label)}
             </button>
           );
         })}
@@ -187,8 +189,8 @@ export function TodayContent() {
         step={1}
         className="col-span-full"
         id="idag::steg-mabra"
-        title="Så mår du just nu"
-        description="Energin styr dagens förslag – öppna Mitt batteri om du vill checka in."
+        title={t("Så mår du just nu")}
+        description={t("Energin styr dagens förslag – öppna Mitt batteri om du vill checka in.")}
       >
         <EnergyBattery
           href="/mitt-batteri"
@@ -204,8 +206,8 @@ export function TodayContent() {
             step={2}
             className="col-span-full md:col-span-2 xl:col-span-2"
             id="idag::det-har-gjort"
-            title="Det här har du gjort idag"
-            description={`Du har gjort ${doneActivities.length} ${doneActivities.length === 1 ? "sak" : "saker"} idag.`}
+            title={t("Det här har du gjort idag")}
+            description={`${t("Du har gjort")} ${doneActivities.length} ${doneActivities.length === 1 ? t("sak") : t("saker")} ${t("idag.")}`}
           >
             {doneActivities.length > 0 ? (
               <ul className="space-y-2">
@@ -224,7 +226,7 @@ export function TodayContent() {
                 ))}
               </ul>
             ) : (
-              <p className="text-sm text-muted-foreground">Det du bär och gör får ta plats här.</p>
+              <p className="text-sm text-muted-foreground">{t("Det du bär och gör får ta plats här.")}</p>
             )}
           </StepSection>
 
@@ -233,26 +235,26 @@ export function TodayContent() {
             step={3}
             className="col-span-full md:col-span-2 xl:col-span-2"
             id="idag::tider"
-            title="Tider idag"
-            description="Det tidsbestämda – resten av dagen behöver ingen klocka."
+            title={t("Tider idag")}
+            description={t("Det tidsbestämda – resten av dagen behöver ingen klocka.")}
           >
             {entries.length > 0 ? (
               <DayTimeline entries={entries} isToday energyByHour={energyByHour} />
             ) : (
-              <p className="text-sm text-muted-foreground">Inga tider idag.</p>
+              <p className="text-sm text-muted-foreground">{t("Inga tider idag.")}</p>
             )}
           </StepSection>
 
           {/* 📋 Dagens ordning – planen du valt i Planera */}
           {dayPlan && dayPlan.steps.length > 0 && (
             <ExpandableBlock
-              title="Dagens ordning"
-              subtitle="Planen du valt i Planera"
+              title={t("Dagens ordning")}
+              subtitle={t("Planen du valt i Planera")}
               icon={ListOrdered}
               tone="lavender"
               area="planera"
               widget
-              label="Ordning"
+              label={t("Ordning")}
               status={`${dayPlan.steps.length}`}
             >
               {dayPlan.intro && <p className="text-sm text-foreground">{dayPlan.intro}</p>}
@@ -268,7 +270,7 @@ export function TodayContent() {
                     <div className="min-w-0 flex-1">
                       <p className="font-medium text-ink">{step.title}</p>
                       <p className="text-xs text-muted-foreground">
-                        {step.estimatedMin ? `ca ${step.estimatedMin} min · ` : ""}
+                        {step.estimatedMin ? `${t("ca")} ${step.estimatedMin} ${t("min")} · ` : ""}
                         {step.why}
                       </p>
                     </div>
@@ -279,7 +281,7 @@ export function TodayContent() {
                 href="/flow"
                 className="inline-flex items-center gap-2 text-sm text-primary underline-offset-2 hover:underline"
               >
-                <ListOrdered size={16} /> Ändra ordningen i Planera
+                <ListOrdered size={16} /> {t("Ändra ordningen i Planera")}
               </Link>
             </ExpandableBlock>
           )}
@@ -302,18 +304,19 @@ export function TodayContent() {
             step={4}
             className="col-span-full md:col-span-2 xl:col-span-2"
             id="idag::steg-far-plats"
-            title="Det som får plats idag"
-            help={
-              'MyFlove väljer utifrån din kapacitet just nu. Det som inte får plats försvinner inte – det ligger kvar under "Resten kan vänta".'
-            }
+            title={t("Det som får plats idag")}
+            help={t(
+              'MyFlove väljer utifrån din kapacitet just nu. Det som inte får plats försvinner inte – det ligger kvar under "Resten kan vänta".',
+            )}
           >
             <p className="text-sm text-muted-foreground">
-              Samlat från hela ditt liv – uppgifter, deadlines, lektioner, barnens dag och tankar du
-              lagt i Quickflow.
+              {t(
+                "Samlat från hela ditt liv – uppgifter, deadlines, lektioner, barnens dag och tankar du lagt i Quickflow.",
+              )}
             </p>
             {keep.length === 0 ? (
               <p className="text-sm text-muted-foreground">
-                Inga uppgifter väntar. Det räcker att bara vara idag. 💙
+                {t("Inga uppgifter väntar. Det räcker att bara vara idag. 💙")}
               </p>
             ) : (
               <ul className="space-y-2">
@@ -332,7 +335,7 @@ export function TodayContent() {
             {rest.length > 0 && (
               <details className="rounded-2xl bg-muted/50 p-3">
                 <summary className="cursor-pointer text-sm font-medium text-ink">
-                  Resten kan vänta ({rest.length})
+                  {t("Resten kan vänta")} ({rest.length})
                 </summary>
                 <ul className="mt-3 space-y-2">
                   {rest.slice(0, 8).map((item) => (
@@ -352,24 +355,24 @@ export function TodayContent() {
           <StepSection
             step={5}
             id="idag::steg-energibalans"
-            title="Dagens energibalans"
-            description="Hur dagen belastar dig – och ett förslag från Flow."
+            title={t("Dagens energibalans")}
+            description={t("Hur dagen belastar dig – och ett förslag från Flow.")}
             defaultCollapsed
           >
             <p className="text-sm text-foreground">{load.summary}</p>
             {reading.peak && (
               <p className="text-xs text-muted-foreground">
-                Starkast {reading.peak.label}
-                {reading.dip ? ` · lägst ${reading.dip.label}` : ""}
+                {t("Starkast")} {reading.peak.label}
+                {reading.dip ? ` · ${t("lägst")} ${reading.dip.label}` : ""}
               </p>
             )}
             <div className="flex items-start gap-2 rounded-2xl bg-secondary/40 px-3 py-2 text-sm text-foreground">
               <Sparkles size={16} className="mt-0.5 shrink-0 text-primary" />
               <p>
-                {suggestion.headline}
-                {suggestion.task ? ` Börja gärna med "${suggestion.task.title}".` : ""}{" "}
+                {t(suggestion.headline)}
+                {suggestion.task ? ` ${t(`Börja gärna med "${suggestion.task.title}".`)}` : ""}{" "}
                 <Link href="/flow" className="text-primary underline-offset-2 hover:underline">
-                  Öppna Flow
+                  {t("Öppna Flow")}
                 </Link>
               </p>
             </div>
@@ -380,10 +383,10 @@ export function TodayContent() {
           step={2}
           className="col-span-full md:col-span-2 xl:col-span-2"
           id="idag::steg-lista"
-          title="Dagens lista"
+          title={t("Dagens lista")}
         >
           <p className="text-sm text-muted-foreground">
-            Samma dag, samma aktiviteter – även sådant som inte behöver en tid.
+            {t("Samma dag, samma aktiviteter – även sådant som inte behöver en tid.")}
           </p>
           <ul className="space-y-2">
             {[...todaysItems, ...todayDone].map((item) => (
@@ -398,7 +401,7 @@ export function TodayContent() {
             href="/tasks"
             className="inline-flex items-center gap-2 text-sm text-primary underline-offset-2 hover:underline"
           >
-            <ListOrdered size={16} /> Öppna alla uppgifter
+            <ListOrdered size={16} /> {t("Öppna alla uppgifter")}
           </Link>
         </StepSection>
       )}

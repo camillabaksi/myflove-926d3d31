@@ -11,24 +11,9 @@ import { useTasks, useReminders } from "@/hooks/use-data";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import { ENERGY_CATEGORIES, type EnergyCategory, type EnergyDirection } from "@/lib/energy-flow";
 import type { FlowNote } from "@/lib/notes";
+import { useLang } from "@/hooks/use-language";
 
 export type ConvertTarget = "uppgift" | "kalender" | "energi";
-
-const TARGETS: { id: ConvertTarget; emoji: string; label: string; hint: string }[] = [
-  {
-    id: "uppgift",
-    emoji: "✅",
-    label: "Uppgift",
-    hint: "Något du vill göra – utan datum om du vill",
-  },
-  {
-    id: "kalender",
-    emoji: "📅",
-    label: "Kalenderhändelse",
-    hint: "Något som händer en viss dag och tid",
-  },
-  { id: "energi", emoji: "🔋", label: "Energifaktor", hint: "Något som gav eller tog energi" },
-];
 
 const todayStr = () => new Date().toISOString().slice(0, 10);
 
@@ -47,6 +32,7 @@ export default function NoteConvertDialog({
   onOpenChange: (v: boolean) => void;
   onConverted: (target: ConvertTarget) => void;
 }) {
+  const { t } = useLang();
   const { addTask } = useTasks();
   const { addReminder } = useReminders();
   const { addFactor } = useEnergyFlow();
@@ -74,6 +60,22 @@ export default function NoteConvertDialog({
     }
   }, [open, note]);
 
+  const TARGETS: { id: ConvertTarget; emoji: string; label: string; hint: string }[] = [
+    {
+      id: "uppgift",
+      emoji: "✅",
+      label: t("Uppgift"),
+      hint: t("Något du vill göra – utan datum om du vill"),
+    },
+    {
+      id: "kalender",
+      emoji: "📅",
+      label: t("Kalenderhändelse"),
+      hint: t("Något som händer en viss dag och tid"),
+    },
+    { id: "energi", emoji: "🔋", label: t("Energifaktor"), hint: t("Något som gav eller tog energi") },
+  ];
+
   if (!note) return null;
 
   const confirm = async () => {
@@ -82,7 +84,7 @@ export default function NoteConvertDialog({
     try {
       if (target === "uppgift") {
         addTask(title.trim(), undefined, { area: note.area });
-        toast.success("Anteckningen blev en uppgift. ✅");
+        toast.success(t("Anteckningen blev en uppgift. ✅"));
       } else if (target === "kalender") {
         addTask(title.trim(), date, {
           area: note.area,
@@ -90,13 +92,13 @@ export default function NoteConvertDialog({
           ...(remind ? { reminderMinutesBefore: 30 } : {}),
         });
         if (remind) addReminder(title.trim(), date, time);
-        toast.success("Anteckningen ligger nu i kalendern. 📅");
+        toast.success(t("Anteckningen ligger nu i kalendern. 📅"));
       } else {
         await addFactor({ title: title.trim(), direction, strength, category });
         toast.success(
           direction === "gives"
-            ? "Sparad som något som ger energi. 🔋"
-            : "Sparad som något som tar energi. 🪫",
+            ? t("Sparad som något som ger energi. 🔋")
+            : t("Sparad som något som tar energi. 🪫"),
         );
       }
       onConverted(target);
@@ -110,9 +112,9 @@ export default function NoteConvertDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>Omvandla till …</DialogTitle>
+          <DialogTitle>{t("Omvandla till …")}</DialogTitle>
           <DialogDescription>
-            Välj vad anteckningen ska bli. Inget sparas förrän du bekräftar.
+            {t("Välj vad anteckningen ska bli. Inget sparas förrän du bekräftar.")}
           </DialogDescription>
         </DialogHeader>
 
@@ -140,7 +142,7 @@ export default function NoteConvertDialog({
           {target && (
             <div className="space-y-3">
               <label className="block text-sm">
-                <span className="text-muted-foreground">Text</span>
+                <span className="text-muted-foreground">{t("Text")}</span>
                 <input
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
@@ -152,7 +154,7 @@ export default function NoteConvertDialog({
                 <div className="space-y-3">
                   <div className="flex gap-2">
                     <label className="flex-1 text-sm">
-                      <span className="text-muted-foreground">Datum</span>
+                      <span className="text-muted-foreground">{t("Datum")}</span>
                       <input
                         type="date"
                         value={date}
@@ -161,7 +163,7 @@ export default function NoteConvertDialog({
                       />
                     </label>
                     <label className="w-32 text-sm">
-                      <span className="text-muted-foreground">Tid</span>
+                      <span className="text-muted-foreground">{t("Tid")}</span>
                       <input
                         type="time"
                         value={time}
@@ -176,7 +178,7 @@ export default function NoteConvertDialog({
                       checked={remind}
                       onChange={(e) => setRemind(e.target.checked)}
                     />
-                    Påminn mig innan
+                    {t("Påminn mig innan")}
                   </label>
                 </div>
               )}
@@ -185,14 +187,14 @@ export default function NoteConvertDialog({
                 <div className="space-y-3">
                   <div className="flex gap-2">
                     <Chip active={direction === "gives"} onClick={() => setDirection("gives")}>
-                      🔋 Gav energi
+                      {t("🔋 Gav energi")}
                     </Chip>
                     <Chip active={direction === "drains"} onClick={() => setDirection("drains")}>
-                      🪫 Tog energi
+                      {t("🪫 Tog energi")}
                     </Chip>
                   </div>
                   <label className="block text-sm">
-                    <span className="text-muted-foreground">Styrka: {strength}</span>
+                    <span className="text-muted-foreground">{t("Styrka: ")}{strength}</span>
                     <input
                       type="range"
                       min={1}
@@ -205,7 +207,7 @@ export default function NoteConvertDialog({
                   <div className="flex flex-wrap gap-2">
                     {ENERGY_CATEGORIES.map((c) => (
                       <Chip key={c.id} active={category === c.id} onClick={() => setCategory(c.id)}>
-                        {c.emoji} {c.label}
+                        {c.emoji} {t(c.label)}
                       </Chip>
                     ))}
                   </div>
@@ -220,7 +222,7 @@ export default function NoteConvertDialog({
               onClick={() => onOpenChange(false)}
               className="rounded-full border border-border px-4 py-2 text-sm"
             >
-              Avbryt
+              {t("Avbryt")}
             </button>
             <button
               type="button"
@@ -228,7 +230,7 @@ export default function NoteConvertDialog({
               onClick={confirm}
               className="rounded-full bg-primary text-primary-foreground px-4 py-2 text-sm font-semibold disabled:opacity-50"
             >
-              Bekräfta
+              {t("Bekräfta")}
             </button>
           </div>
         </div>

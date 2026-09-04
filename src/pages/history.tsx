@@ -14,11 +14,13 @@ import { weekDates, weekStartISO, weekdayName } from "@/lib/week-review";
 import { addDaysISO, todayISO, parseISODate } from "@/lib/day";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { track } from "@/lib/analytics";
+import { useLang } from "@/hooks/use-language";
 
-function formatDay(iso: string): string {
+function formatDay(iso: string, locale: string): string {
   const d = parseISODate(iso);
-  const month = d.toLocaleDateString("sv-SE", { month: "long" });
-  return `${weekdayName(iso)} ${d.getDate()} ${month}`;
+  const month = d.toLocaleDateString(locale, { month: "long" });
+  const weekday = d.toLocaleDateString(locale, { weekday: "long" });
+  return `${weekday} ${d.getDate()} ${month}`;
 }
 
 /**
@@ -28,6 +30,7 @@ function formatDay(iso: string): string {
  * aktivitet har sin egen dag, sin egen status och sin egen energipåverkan.
  */
 export default function History() {
+  const { t, locale } = useLang();
   useEffect(() => {
     track("history_viewed");
   }, []);
@@ -50,9 +53,9 @@ export default function History() {
         <MyFloveWide>
           <div className="space-y-6">
             <header>
-              <h1 className="text-3xl font-bold text-ink">Historik</h1>
+              <h1 className="text-3xl font-bold text-ink">{t("Historik")}</h1>
               <p className="mt-1 text-muted-foreground">
-                Vad hände de här dagarna – och hur påverkade det din ork?
+                {t("Vad hände de här dagarna – och hur påverkade det din ork?")}
               </p>
             </header>
 
@@ -62,10 +65,10 @@ export default function History() {
                 onClick={() => setWeekStart(addDaysISO(weekStart, -7))}
                 className="inline-flex items-center gap-1 rounded-full border border-border/60 px-3 py-1.5 text-sm text-ink"
               >
-                <ChevronLeft size={16} aria-hidden /> Förra veckan
+                <ChevronLeft size={16} aria-hidden /> {t("Förra veckan")}
               </button>
               <p className="text-sm text-muted-foreground">
-                {formatDay(days[0]!)} – {formatDay(days[6]!)}
+                {formatDay(days[0]!, locale)} – {formatDay(days[6]!, locale)}
               </p>
               <button
                 type="button"
@@ -73,7 +76,7 @@ export default function History() {
                 onClick={() => setWeekStart(addDaysISO(weekStart, 7))}
                 className="inline-flex items-center gap-1 rounded-full border border-border/60 px-3 py-1.5 text-sm text-ink disabled:opacity-40"
               >
-                Nästa <ChevronRight size={16} aria-hidden />
+                {t("Nästa")} <ChevronRight size={16} aria-hidden />
               </button>
             </div>
 
@@ -81,17 +84,17 @@ export default function History() {
 
             {grouped.length === 0 ? (
               <p className="rounded-3xl border border-border/60 bg-card p-5 text-sm text-muted-foreground shadow-soft">
-                Inga aktiviteter den här veckan.
+                {t("Inga aktiviteter den här veckan.")}
               </p>
             ) : (
               grouped.map((day) => (
                 <section
                   key={day.date}
-                  aria-label={formatDay(day.date)}
+                  aria-label={formatDay(day.date, locale)}
                   className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
                 >
                   <h2 className="text-base font-semibold capitalize text-ink">
-                    {formatDay(day.date)}
+                    {formatDay(day.date, locale)}
                   </h2>
                   <ul className="mt-3 space-y-3">
                     {day.items.map((item) => (
@@ -102,19 +105,19 @@ export default function History() {
                             {item.title}
                           </span>
                           <span className="rounded-full border border-border/60 px-2 py-0.5 text-[11px] text-muted-foreground">
-                            {STATUS_LABELS[item.status]}
+                            {t(STATUS_LABELS[item.status])}
                           </span>
                           {item.energyImpact && (
                             <span className="text-xs text-ink">
                               {ENERGY_META[item.energyImpact].dot}{" "}
-                              {ENERGY_META[item.energyImpact].label}
+                              {t(ENERGY_META[item.energyImpact].label)}
                             </span>
                           )}
                         </div>
                         {item.status === "genomford" && !item.energyImpact && (
                           <div className="mt-2">
                             <p className="text-[11px] text-muted-foreground">
-                              Hur påverkade den din ork? (frivilligt)
+                              {t("Hur påverkade den din ork? (frivilligt)")}
                             </p>
                             <div className="mt-1.5 flex flex-wrap gap-1.5">
                               {ENERGY_CHOICES.map((choice: ActivityEnergy) => (
@@ -124,7 +127,7 @@ export default function History() {
                                   onClick={() => setEnergy(item.sourceId, item.plannedDate, choice)}
                                   className="rounded-full border border-border/60 bg-card px-2.5 py-1 text-xs text-ink hover:border-primary"
                                 >
-                                  {ENERGY_META[choice].dot} {ENERGY_META[choice].label}
+                                  {ENERGY_META[choice].dot} {t(ENERGY_META[choice].label)}
                                 </button>
                               ))}
                             </div>
@@ -132,8 +135,8 @@ export default function History() {
                         )}
                         {item.expectedEnergy && item.energyImpact && (
                           <p className="mt-1 text-[11px] text-muted-foreground">
-                            Du trodde: {ENERGY_META[item.expectedEnergy].ask} · Det blev:{" "}
-                            {ENERGY_META[item.energyImpact].ask}
+                            {t("Du trodde")}: {t(ENERGY_META[item.expectedEnergy].ask)} · {t("Det blev")}:{" "}
+                            {t(ENERGY_META[item.energyImpact].ask)}
                           </p>
                         )}
                       </li>
