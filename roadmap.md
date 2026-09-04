@@ -9,3 +9,4 @@
 - [x] QuickFlow-uppgifter ska kunna ha egna påminnelser i kalendern
 - [x] Kontosynka för kvarvarande inloggad användardata och personliga inställningar
 - [x] Live-synk mellan enheter för kalender, Min dag, QuickFlow och energi (2026-09-03)
+- [x] Veckoöversikt på söndagar, datumkorrekt aktivitetslogik och historik med energipåverkan (2026-09-04)

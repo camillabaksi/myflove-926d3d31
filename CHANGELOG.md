@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-09-04 – Din vecka, historik och energi per aktivitet
+
+- 💜 Din vecka: på söndagar visar startsidan en lugn sammanfattning av veckan – antal aktiviteter, Quickflow-saker, ork och mående, plus milda förslag inför nästa vecka. Inget hittas på: saknas underlag säger MyFlove bara att den fortfarande lär sig.
+- Ny sida Historik: dag för dag ser du vad som faktiskt hände och vad som gav eller tog energi. Du kan bläddra bakåt vecka för vecka.
+- Aktiviteter hör till sitt datum. Varje förekomst av en återkommande aktivitet är en egen dag med egen status (planerad, pågår, genomförd, inställd, flyttad) och egen energipåverkan.
+- Flyttar du något från torsdag till fredag följer historiken med – ingenting ligger kvar som genomfört en dag det aldrig hände.
+- Energifrågan efter en aktivitet har nu fyra tydliga svar: 🟢 gav energi, 🟡 neutral, 🟠 tog lite, 🔴 tog mycket. Alltid frivilligt, alltid ett klick – och MyFlove kan jämföra vad du trodde med hur det blev.
+
 ## 2026-09-04 – MyFlove lär sig din vardag
 
 - Startsidan visar nu "Din vardag" – vilka veckodagar som brukar bli fullast, vilka som brukar vara lugnast och vilka aktiviteter som brukar ta mer energi.

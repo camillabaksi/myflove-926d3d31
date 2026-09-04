@@ -6,13 +6,22 @@ import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import { useTasks } from "@/hooks/use-data";
 import type { EnergyImpact } from "@/lib/task-agenda";
 import type { FlowItem } from "@/lib/flow-items";
+import { useActivityHistory } from "@/hooks/use-activity-history";
+import type { ActivityEnergy } from "@/lib/activity-history";
+import { todayISO } from "@/lib/day";
 
 /** Fyra svar – alltid frivilliga, alltid ett klick. */
-const CHOICES: { id: EnergyImpact; emoji: string; label: string; strength: number }[] = [
-  { id: "gives", emoji: "❤️", label: "Gav energi", strength: 3 },
-  { id: "drains", emoji: "🔻", label: "Tog lite energi", strength: 2 },
-  { id: "both", emoji: "⚡", label: "Tog mycket energi", strength: 5 },
-  { id: "unknown", emoji: "🤷", label: "Vet inte", strength: 0 },
+const CHOICES: {
+  id: EnergyImpact;
+  history: ActivityEnergy | null;
+  emoji: string;
+  label: string;
+  strength: number;
+}[] = [
+  { id: "gives", history: "gives", emoji: "🟢", label: "Gav energi", strength: 3 },
+  { id: "unknown", history: "neutral", emoji: "🟡", label: "Neutral", strength: 0 },
+  { id: "drains", history: "drains_little", emoji: "🟠", label: "Tog lite energi", strength: 2 },
+  { id: "both", history: "drains_much", emoji: "🔴", label: "Tog mycket energi", strength: 5 },
 ];
 
 /**
@@ -31,6 +40,7 @@ export function ActivityEnergyPrompt({
 }) {
   const { addFactor } = useEnergyFlow();
   const { setTaskActualEnergy } = useTasks();
+  const { setEnergy: setHistoryEnergy } = useActivityHistory();
   const [busy, setBusy] = useState(false);
 
   const pick = async (choice: (typeof CHOICES)[number]) => {
@@ -40,6 +50,13 @@ export function ActivityEnergyPrompt({
     // Uppgifter minns sitt eget svar, så Flow kan jämföra gissning med utfall.
     if (item.id.startsWith("task-")) {
       setTaskActualEnergy(item.id.slice("task-".length), choice.id);
+    }
+
+    // Historiken minns svaret på exakt den dag aktiviteten hörde till.
+    if (choice.history) {
+      const date = item.dueDate ?? todayISO();
+      const sourceId = item.id.startsWith("task-") ? item.id : `task-${item.id}`;
+      setHistoryEnergy(sourceId, date, choice.history);
     }
 
     // Energiloggen skapas bara när användaren faktiskt sagt något om energin.

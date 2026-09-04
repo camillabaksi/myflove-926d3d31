@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-04";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Din vecka, historik och energi per aktivitet",
+    items: [
+      "💜 Din vecka på söndagar – lugn sammanfattning av veckan som varit (2026-09-04)",
+      "Ny sida Historik: vad hände den här dagen, och vad gav eller tog energi (2026-09-04)",
+      "Varje förekomst av en återkommande aktivitet har egen dag, status och energi (2026-09-04)",
+      "Fyra snabba svar efter en aktivitet: gav / neutral / tog lite / tog mycket (2026-09-04)",
+    ],
+  },
+  {
     title: "MyFlove lär sig din vardag",
     items: [
       "Startsidan visar vilka veckodagar som brukar bli fullast och lugnast (2026-09-04)",
