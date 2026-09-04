@@ -102,7 +102,7 @@ export default function PitchPage() {
           </figure>
           <div className="flex flex-wrap gap-2">
             <a
-              href="/pitch/myflove-pitch-3.7.mp4"
+              href="/pitch/myflove-pitch-4.1.mp4"
               download
               className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
             >
@@ -123,19 +123,21 @@ export default function PitchPage() {
               <FileText size={18} className="text-primary" /> Pitchdeck
             </h2>
             <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
-              Version 4.0 · Investor upgrade
+              Version 4.1 · Enkel start & adaptiv personalisering
             </span>
           </div>
           <p className="text-sm text-muted-foreground">
-            Pitchdecket (4.0) behåller MyFloves lugna kärna och kompletterar produktberättelsen med
-            founder, validering, affärsmodell, differentiering, go-to-market, kapital och roadmap.
+            Pitchdecket (4.1) beskriver den nya kärnan: en gemensam enkel start med Quickflow,
+            Batteriet och Kalendern, enkel ork-check-in med fyra nivåer, datumkorrekta aktiviteter,
+            energihistorik och söndagens veckoöversikt – tillsammans med validering, affärsmodell,
+            differentiering, go-to-market, kapital och roadmap från 4.0.
           </p>
 
           <div className="grid gap-3 sm:grid-cols-2">
             <figure className="space-y-1">
               <img
-                src="/pitch/MyFlove_Pitchdeck_4.0-thumb.jpg"
-                alt="Titelsidan i MyFlove Pitchdeck 4.0 med Flow-karaktären"
+                src="/pitch/MyFlove_Pitchdeck_4.1-thumb.jpg"
+                alt="Titelsidan i MyFlove Pitchdeck 4.1 med Flow-karaktären"
                 loading="lazy"
                 className="w-full rounded-xl border border-border"
               />
@@ -143,31 +145,31 @@ export default function PitchPage() {
             </figure>
             <figure className="space-y-1">
               <img
-                src="/pitch/MyFlove_Pitchdeck_4.0-thumb.jpg"
-                alt="Förhandsbild av MyFlove Pitchdeck 4.0"
+                src="/pitch/MyFlove_Pitchdeck_4.1-start-thumb.jpg"
+                alt="Sliden om den enkla starten i MyFlove Pitchdeck 4.1"
                 loading="lazy"
                 className="w-full rounded-xl border border-border"
               />
               <figcaption className="text-xs text-muted-foreground">
-                Investor upgrade: byggt, validering och nästa steg
+                En enkel och lugn start: Quickflow, Batteriet och Kalendern
               </figcaption>
             </figure>
           </div>
 
           <div className="flex flex-wrap gap-2">
             <a
-              href="/pitch/MyFlove_Pitchdeck_4.0.pptx"
+              href="/pitch/MyFlove_Pitchdeck_4.1.pptx"
               download
               className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
             >
-              <Download size={16} /> Ladda ner PowerPoint (4.0)
+              <Download size={16} /> Ladda ner PowerPoint (4.1)
             </a>
             <a
-              href="/pitch/MyFlove_Pitchdeck_4.0.pdf"
+              href="/pitch/MyFlove_Pitchdeck_4.1.pdf"
               download
               className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-medium hover:bg-secondary"
             >
-              <Download size={16} /> Ladda ner PDF (4.0)
+              <Download size={16} /> Ladda ner PDF (4.1)
             </a>
           </div>
         </section>
