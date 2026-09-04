@@ -327,20 +327,21 @@ export function MyFloveHeader({
     <header
       {...areaProps(area)}
       className={cn(
-        "rounded-3xl border-2 border-border/60 p-5 shadow-soft page-enter",
+        "relative overflow-hidden rounded-3xl border border-border/60 p-5 shadow-lifted page-enter",
         area ? "area-hero area-border" : "",
         className,
       )}
       {...(area
         ? {}
         : {
-            style: {
-              backgroundImage:
-                "linear-gradient(135deg, hsl(var(--lavender)) 0%, hsl(var(--cream)) 60%, hsl(var(--blush) / 0.8) 100%)",
-            },
+            style: { backgroundImage: heroGradient() },
           })}
     >
-      <div className="flex items-start gap-3">
+      <div
+        className="pointer-events-none absolute -top-16 -right-12 h-32 w-32 rounded-full bg-blush opacity-50 blur-md"
+        aria-hidden
+      />
+      <div className="relative flex items-start gap-3">
         {back && (
           <button
             type="button"
@@ -360,7 +361,9 @@ export function MyFloveHeader({
         />
 
         <div className="min-w-0 flex-1">
-          <h1 className="font-display text-2xl font-bold leading-tight text-ink">{title}</h1>
+          <h1 className="font-display text-2xl font-bold leading-tight text-ink sm:text-3xl">
+            {title}
+          </h1>
           {description && <p className="mt-1 text-sm text-muted-foreground">{description}</p>}
           {why && (
             <div className="mt-2">
@@ -371,10 +374,11 @@ export function MyFloveHeader({
 
         {action}
       </div>
-      {children && <div className="mt-4">{children}</div>}
+      {children && <div className="relative mt-4">{children}</div>}
     </header>
   );
 }
+
 
 /* ------------------------------------------------------------------ */
 /* Chip                                                                */
