@@ -104,6 +104,7 @@ import { useEnabledAreas } from "@/lib/life-areas";
 
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { useNpfSettings, plainLabel } from "@/lib/npf-mode";
+import { useLang } from "@/hooks/use-language";
 import { track } from "@/lib/analytics";
 import { rememberPlace } from "@/lib/flow-context";
 import { Button } from "@/components/ui/button";
