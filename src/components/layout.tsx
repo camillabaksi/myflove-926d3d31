@@ -1272,7 +1272,7 @@ export default function Layout({ children }: LayoutProps) {
                   </div>
 
                   {/* Din bottenmeny – hör hemma under Anpassa MyFlove */}
-                  <div className="mb-5 rounded-3xl border-2 border-border bg-card p-4 shadow-sm">
+                  <div className="mb-5 rounded-3xl border border-border/60 bg-card p-4 shadow-soft">
                     <div className="flex items-center justify-between gap-2">
                       <div>
                         <p className="text-sm font-semibold">Din bottenmeny</p>

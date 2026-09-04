@@ -13,6 +13,7 @@ import { useCollapsible } from "@/lib/collapse-store";
 import { useSmartBack } from "@/hooks/use-smart-back";
 import { areaProps, type AreaId } from "@/lib/areas";
 import WhyHint from "@/components/why-hint";
+import { heroGradient } from "@/lib/hero-gradient";
 
 /* ------------------------------------------------------------------ */
 /* Emoji – samma storlekar och samma lilla liv överallt                */
@@ -202,7 +203,7 @@ export function MyFloveCard({
   return (
     <div
       className={cn(
-        "rounded-3xl border-2 border-border/60 p-5 shadow-soft pop-in",
+        "rounded-3xl border border-border/60 p-5 shadow-soft pop-in",
         tone && tone !== "plain" ? TONE_BG[tone].split(" ")[0] : "bg-card",
         className,
       )}
@@ -430,7 +431,7 @@ export function MyFloveEmptyState({
     <div
       className={cn(
         // Kompakt och horisontell så fort det finns bredd – inget högt "torn".
-        "flex flex-col items-center gap-3 rounded-3xl border-2 border-dashed border-border/70 bg-card/60 px-5 py-7 text-center pop-in",
+        "flex flex-col items-center gap-3 rounded-3xl border border-dashed border-border/70 bg-card/60 px-5 py-7 text-center pop-in",
         "sm:flex-row sm:items-center sm:gap-4 sm:px-6 sm:py-5 sm:text-left",
         className,
       )}

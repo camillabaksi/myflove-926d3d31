@@ -36,7 +36,7 @@ export function FlowItemCard({
   return (
     <div
       className={cn(
-        "rounded-3xl border-2 border-border/60 bg-card p-4 shadow-soft transition-all duration-300",
+        "rounded-3xl border border-border/60 bg-card p-4 shadow-soft transition-all duration-300",
         item.done && "opacity-90",
         className,
       )}
