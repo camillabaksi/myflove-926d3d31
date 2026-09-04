@@ -22,6 +22,7 @@ import {
   ArrowUp,
   ArrowDown,
   PlayCircle,
+  BarChart3,
 } from "lucide-react";
 import ChangelogExport from "@/components/changelog-export";
 import type { AdminUserRow } from "@/lib/admin.functions";
