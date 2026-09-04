@@ -167,13 +167,13 @@ export default function Home() {
         >
           <div className="pointer-events-none absolute -top-16 -right-12 h-32 w-32 rounded-full bg-blush opacity-50 blur-md" />
           <div
-            className="pointer-events-none absolute right-3 top-1 select-none sm:right-6"
+            className="pointer-events-none absolute right-2 top-0 select-none sm:right-5"
             aria-hidden
           >
-            <FlowMascot size="sm" mood="calm" className="flow-alive" alt="" />
+            <FlowMascot size="md" mood="calm" className="flow-alive" alt="" />
           </div>
 
-          <div className="relative min-w-0 pr-16 space-y-1">
+          <div className="relative min-w-0 pr-24 space-y-1">
             <h1 className="text-2xl sm:text-3xl font-bold text-ink">
               {name ? `Hej ${name}!` : "Hej!"} <span aria-hidden>💜</span>
             </h1>

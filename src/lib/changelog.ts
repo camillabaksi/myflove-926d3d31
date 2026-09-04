@@ -10,6 +10,12 @@ export const CHANGELOG_UPDATED = "2026-09-04";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Större Flow på startsidan",
+    items: [
+      "Flow syns tydligare i morgonhälsningen på hem-sidan – maskoten är större och texten får mer luft (2026-09-04)",
+    ],
+  },
+  {
     title: "Energiloggning påverkar bara batteriet",
     items: [
       "Energi- och måendeloggningar syns inte längre i kalendern eller dagens lista – de påverkar batteriet, energihistoriken och mönstren (2026-09-04)",
