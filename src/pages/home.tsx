@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FlowMascot } from "@/components/flow-mascot";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { ExpandableBlock } from "@/components/myflove/expandable-block";
@@ -10,8 +10,8 @@ import { Link } from "wouter";
 import Layout from "@/components/layout";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
 import { useUserProfile } from "@/hooks/use-user-profile";
-import { getGreeting } from "@/lib/greeting";
-import { useTasks } from "@/hooks/use-data";
+import { useTasks, useReminders } from "@/hooks/use-data";
+import { useQuickflow } from "@/hooks/use-quickflow";
 
 import { AreaOnboarding } from "@/components/area-onboarding";
 import PwaInstallCard from "@/components/pwa-install-card";
@@ -27,106 +27,69 @@ import {
   BatteryMedium,
   HeartPulse,
   Pill,
-  type LucideIcon,
+  ArrowRight,
+  Sparkles,
 } from "lucide-react";
 import { todayISO } from "@/lib/day";
 import { track } from "@/lib/analytics";
-import { homeContextLine } from "@/lib/flow-tone";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { useFlowSettings } from "@/hooks/use-flow-settings";
-import type { AreaId } from "@/lib/areas";
-import type { MyFloveTone } from "@/components/myflove";
 
 /**
- * Hem = "Vad vill jag göra just nu?"
+ * Hem = en lugn personlig kontrollpanel.
  *
- * Fyra primära widgets – inget annat konkurrerar visuellt med dem. Varje
- * widget är en ren genväg in i en befintlig funktion (ingen ny datamodell):
- * Kalender, QuickFlow (hjärnans inkorg), Mitt batteri och Logga energi &
- * mående. Sekundärt innehåll (rutiner/medicin, områdesväljare) ligger under.
+ * Prioritering: QuickFlow (få ut det ur huvudet) → Batteriet (förstå energin)
+ * → Kalendern (förstå dagen) → Idag (vad som faktiskt behöver göras).
+ * Allt bygger på befintlig datamodell och befintliga vyer – Hem ändrar bara
+ * presentation och informationshierarki.
  */
-interface HomeWidget {
+
+interface TodayEntry {
   id: string;
-  href: string;
-  icon: LucideIcon;
+  time?: string;
   title: string;
-  subtitle: string;
-  area: AreaId;
-  tone: MyFloveTone;
-  surface: MyFloveTone;
+  note?: string;
 }
 
-const HOME_WIDGETS: HomeWidget[] = [
-  {
-    id: "kalender",
-    href: "/kalender",
-    icon: CalendarDays,
-    title: "Kalender",
-    subtitle: "Se och lägg till",
-    area: "kalender",
-    tone: "sky",
-    surface: "sky",
-  },
-  {
-    id: "quickflow",
-    href: "/quickflow",
-    icon: Brain,
-    title: "QuickFlow",
-    subtitle: "Få ur dig det som snurrar",
-    area: "flow",
-    tone: "lavender",
-    surface: "lavender",
-  },
-  {
-    id: "batteri",
-    href: "/mitt-batteri",
-    icon: BatteryMedium,
-    title: "Mitt batteri",
-    subtitle: "Din energi just nu",
-    area: "aterhamtning",
-    tone: "sun",
-    surface: "sun",
-  },
-  {
-    id: "logga",
-    href: "/mitt-batteri",
-    icon: HeartPulse,
-    title: "Logga energi & mående",
-    subtitle: "Hur är det just nu?",
-    area: "halsa",
-    tone: "mint",
-    surface: "mint",
-  },
-];
-
 export default function Home() {
-  const { name, setName, lastVisit } = useUserProfile();
-  const greeting = getGreeting({ name, lastVisit });
+  const { name, setName, lastVisit: _lastVisit } = useUserProfile();
   const [editingName, setEditingName] = useState(false);
   const [nameDraft, setNameDraft] = useState(name);
   const { activeArea } = useActiveArea();
-  const { reading } = useEnergyBattery();
+  const { reading, suggestions } = useEnergyBattery();
   const { energyValue } = useQuickCheckin();
-  const { tasks, activeTasks } = useTasks();
+  const { activeTasks } = useTasks();
+  const { activeReminders } = useReminders();
+  const { openItems } = useQuickflow();
   const { settings: flowSettings } = useFlowSettings();
   const todayIso = todayISO();
 
-  /* Hem säger olika saker beroende på dagen – samma kort, levande innehåll. */
-  const completedToday = tasks.filter(
-    (t) =>
-      t.completed &&
-      t.completedAt != null &&
-      new Date(t.completedAt).toISOString().slice(0, 10) === todayIso,
-  ).length;
-  const remainingToday = activeTasks.filter((t) => !t.dueDate || t.dueDate === todayIso).length;
-  const contextLine = homeContextLine({
-    hour: new Date().getHours(),
-    battery: Math.round(reading.now),
-    completedToday,
-    remainingToday,
-    nextTitle: null,
-    checkedIn: energyValue != null,
-  });
+  /** Dagens saker – samma data som kalendern och Min dag, bara kortare. */
+  const todayEntries = useMemo<TodayEntry[]>(() => {
+    const fromReminders: TodayEntry[] = activeReminders
+      .filter((r) => r.date === todayIso && !r.canceled)
+      .map((r) => ({ id: `r-${r.id}`, time: r.time, title: r.title, note: r.note }));
+    const fromTasks: TodayEntry[] = activeTasks
+      .filter((t) => t.dueDate === todayIso)
+      .map((t) => ({ id: `t-${t.id}`, time: t.time, title: t.title }));
+    return [...fromReminders, ...fromTasks]
+      .sort((a, b) => (a.time ?? "99:99").localeCompare(b.time ?? "99:99"))
+      .slice(0, 5);
+  }, [activeReminders, activeTasks, todayIso]);
+
+  const nextTimed = todayEntries.filter((e) => e.time).slice(0, 3);
+  const battery = Math.round(reading.now);
+  const batteryLine =
+    battery >= 70
+      ? "Du har gott om kraft kvar idag."
+      : battery >= 40
+        ? "Du har lite kvar att ge idag."
+        : "Ganska tomt just nu – ta det lugnt.";
+
+  const openQuickflow = () => {
+    track("home_widget_opened", { source: "quickflow" });
+    window.dispatchEvent(new CustomEvent("myflove:quickflow"));
+  };
 
   useEffect(() => {
     track("home_viewed");
@@ -139,12 +102,12 @@ export default function Home() {
   const hour = new Date().getHours();
   const heroGradient =
     hour < 10
-      ? "linear-gradient(135deg, hsl(var(--sky) / 0.75) 0%, hsl(var(--cream)) 55%, hsl(var(--lavender) / 0.85) 100%)"
+      ? "linear-gradient(135deg, hsl(var(--sky) / 0.65) 0%, hsl(var(--cream)) 60%, hsl(var(--lavender) / 0.8) 100%)"
       : hour < 17
-        ? "linear-gradient(135deg, hsl(var(--lavender) / 0.9) 0%, hsl(var(--cream)) 58%, hsl(var(--mint) / 0.7) 100%)"
+        ? "linear-gradient(135deg, hsl(var(--lavender) / 0.85) 0%, hsl(var(--cream)) 62%, hsl(var(--mint) / 0.6) 100%)"
         : hour < 22
-          ? "linear-gradient(135deg, hsl(var(--blush) / 0.8) 0%, hsl(var(--cream)) 55%, hsl(var(--lavender) / 0.85) 100%)"
-          : "linear-gradient(135deg, hsl(var(--lavender) / 0.7) 0%, hsl(var(--card)) 70%)";
+          ? "linear-gradient(135deg, hsl(var(--blush) / 0.75) 0%, hsl(var(--cream)) 60%, hsl(var(--lavender) / 0.8) 100%)"
+          : "linear-gradient(135deg, hsl(var(--lavender) / 0.65) 0%, hsl(var(--card)) 72%)";
 
   return (
     <Layout>
@@ -152,29 +115,24 @@ export default function Home() {
       <FlowOnboarding />
 
       <MyFlovePageGrid className="gap-5 xl:grid-cols-6">
-        {/* Hero: välkommen, namn, kort undertext */}
+        {/* Hero – personligt men litet. */}
         <MyFloveWide
-          className="relative overflow-hidden rounded-3xl border border-border/60 p-6 shadow-lifted pop-in sm:pr-36"
+          className="relative overflow-hidden rounded-3xl border border-border/60 p-5 shadow-lifted pop-in"
           style={{ background: heroGradient }}
         >
-          <div className="pointer-events-none absolute -top-20 -right-16 h-40 w-40 rounded-full bg-blush opacity-60 blur-md" />
-          <div className="pointer-events-none absolute -bottom-16 -left-10 h-32 w-32 rounded-full bg-mint opacity-50 blur-[2px]" />
+          <div className="pointer-events-none absolute -top-16 -right-12 h-32 w-32 rounded-full bg-blush opacity-50 blur-md" />
           <div
-            className="pointer-events-none absolute right-4 top-1 select-none sm:right-8"
+            className="pointer-events-none absolute right-3 top-1 select-none sm:right-6"
             aria-hidden
           >
-            <FlowMascot
-              size="md"
-              imgClassName="sm:h-36 sm:w-36"
-              mood="calm"
-              className="flow-alive"
-              alt=""
-            />
+            <FlowMascot size="sm" mood="calm" className="flow-alive" alt="" />
           </div>
 
-          <div className="relative space-y-2">
-            <h1 className="text-3xl sm:text-4xl font-bold text-ink pr-14">{greeting.title}</h1>
-            <p className="text-muted-foreground animate-fade-in">{contextLine}</p>
+          <div className="relative min-w-0 pr-16 space-y-1">
+            <h1 className="text-2xl sm:text-3xl font-bold text-ink">
+              {name ? `Hej ${name}!` : "Hej!"} <span aria-hidden>💜</span>
+            </h1>
+            <p className="text-sm text-muted-foreground">Vad behöver du just nu?</p>
             {editingName ? (
               <form
                 onSubmit={(e) => {
@@ -221,41 +179,200 @@ export default function Home() {
           </div>
         </MyFloveWide>
 
-        {/* De fyra primära widgetarna – balanserad 2x2, hela kortet klickbart. */}
+        {/* Tre huvudkort: QuickFlow, Batteriet, Kalendern. */}
         <MyFloveWide style={{ order: 1 }} className="min-w-0">
           <div
-            className="grid grid-cols-2 gap-3 sm:gap-4"
+            className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4"
             data-testid="home-widgets"
             aria-label="Vad vill du göra just nu?"
           >
-            {HOME_WIDGETS.map((w) => (
-              <ExpandableBlock
-                key={w.id}
-                title={w.title}
-                titleText={w.title}
-                subtitle={w.subtitle}
-                status={w.id === "batteri" ? `${Math.round(reading.now)}%` : undefined}
-                icon={w.icon}
-                tone={w.tone}
-                surface={w.surface}
-                area={w.area}
-                href={w.href}
-                onNavigate={() => track("home_widget_opened", { source: w.id })}
-                data-testid={`home-widget-${w.id}`}
-              />
-            ))}
+            <button
+              type="button"
+              onClick={openQuickflow}
+              data-testid="home-widget-quickflow"
+              className="group flex min-h-[112px] w-full flex-col justify-between rounded-3xl border border-border/60 bg-lavender/60 p-4 text-left shadow-soft transition hover:shadow-lifted"
+            >
+              <span className="flex items-center gap-2">
+                <Brain className="h-6 w-6 shrink-0 text-primary" aria-hidden />
+                <span className="truncate text-base font-semibold text-ink">Quickflow</span>
+              </span>
+              <span className="mt-2 block text-sm text-muted-foreground">
+                Få ner det ur huvudet
+              </span>
+              <span className="mt-1 block text-xs text-muted-foreground/80">
+                Skriv eller tala in – sortera senare.
+              </span>
+            </button>
+
+            <ExpandableBlock
+              title="Ditt batteri"
+              titleText="Ditt batteri"
+              subtitle="Hur mycket har du kvar idag?"
+              status={`${battery}%`}
+              summary={batteryLine}
+              icon={BatteryMedium}
+              tone="sun"
+              surface="sun"
+              area="aterhamtning"
+              href="/mitt-batteri"
+              onNavigate={() => track("home_widget_opened", { source: "batteri" })}
+              data-testid="home-widget-batteri"
+            />
+
+            <ExpandableBlock
+              title="Kalendern"
+              titleText="Kalendern"
+              subtitle="Din dag på ett ställe"
+              status={nextTimed[0]?.time ?? "Idag"}
+              summary={
+                nextTimed[0] ? nextTimed[0].title : "Inget tidsatt idag – lägg till när du vill."
+              }
+              icon={CalendarDays}
+              tone="sky"
+              surface="sky"
+              area="kalender"
+              href="/kalender"
+              onNavigate={() => track("home_widget_opened", { source: "kalender" })}
+              data-testid="home-widget-kalender"
+            />
           </div>
         </MyFloveWide>
 
-        {/* Flow – en liten notering, konkurrerar inte med widgetarna. */}
+        {/* Idag – bara det som är relevant idag, max 5 saker. */}
+        <MyFloveWide style={{ order: 2 }} className="min-w-0">
+          <section
+            aria-label="Idag"
+            data-testid="home-today"
+            className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft"
+          >
+            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+              <h2 className="truncate text-base font-semibold text-ink">Idag</h2>
+              <Link
+                href="/idag"
+                className="shrink-0 inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+              >
+                Visa hela dagen <ArrowRight size={13} />
+              </Link>
+            </div>
+            {todayEntries.length === 0 ? (
+              <p className="mt-3 text-sm text-muted-foreground">
+                Inget inlagt för idag ännu. Det är också helt okej.
+              </p>
+            ) : (
+              <ul className="mt-3 space-y-2">
+                {todayEntries.map((e) => (
+                  <li
+                    key={e.id}
+                    className="grid grid-cols-[3.4rem_minmax(0,1fr)] items-start gap-3 rounded-2xl bg-lavender/25 px-3 py-2"
+                  >
+                    <span className="shrink-0 text-sm font-semibold tabular-nums text-primary">
+                      {e.time ?? "–"}
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block truncate text-sm font-medium text-ink">{e.title}</span>
+                      {e.note && (
+                        <span className="block truncate text-xs text-muted-foreground">
+                          {e.note}
+                        </span>
+                      )}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        </MyFloveWide>
+
+        {/* Från ditt huvud – senaste QuickFlow-tankarna. */}
+        <MyFloveWide style={{ order: 3 }} className="min-w-0">
+          <section
+            aria-label="Från ditt huvud"
+            data-testid="home-quickflow-latest"
+            className="rounded-3xl border border-border/60 bg-lavender/25 p-4 shadow-soft"
+          >
+            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+              <h2 className="truncate text-base font-semibold text-ink">Från ditt huvud</h2>
+              <Link
+                href="/quickflow"
+                className="shrink-0 inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+              >
+                Visa alla <ArrowRight size={13} />
+              </Link>
+            </div>
+            {openItems.length === 0 ? (
+              <p className="mt-3 text-sm text-muted-foreground">
+                Inget som snurrar just nu – tryck på Quickflow när något dyker upp.
+              </p>
+            ) : (
+              <ul className="mt-3 space-y-1.5">
+                {openItems.slice(0, 3).map((item) => (
+                  <li key={item.id} className="flex items-start gap-2 text-sm text-ink">
+                    <Sparkles size={14} className="mt-0.5 shrink-0 text-primary" aria-hidden />
+                    <span className="min-w-0 truncate">{item.text}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        </MyFloveWide>
+
+        {/* Batteri & återhämtning – lugna förslag, aldrig pekpinnar. */}
+        <MyFloveWide style={{ order: 4 }} className="min-w-0">
+          <section
+            aria-label="Ditt batteri och återhämtning"
+            data-testid="home-recovery"
+            className="rounded-3xl border border-border/60 bg-mint/25 p-4 shadow-soft"
+          >
+            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+              <h2 className="truncate text-base font-semibold text-ink">
+                <span aria-hidden>💜</span> Ditt batteri
+              </h2>
+              <span className="shrink-0 text-lg font-bold tabular-nums text-primary">
+                {battery}%
+              </span>
+            </div>
+            <p className="mt-1 text-sm text-muted-foreground">{batteryLine}</p>
+            {suggestions.length > 0 && (
+              <>
+                <p className="mt-3 text-xs font-medium text-ink">Kanske dags för en paus?</p>
+                <ul className="mt-1.5 space-y-1">
+                  {suggestions.slice(0, 3).map((s) => (
+                    <li key={s.id} className="text-sm text-muted-foreground">
+                      {s.text}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+            <div className="mt-3 flex flex-wrap gap-3">
+              <Link
+                href="/mitt-batteri"
+                className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+                onClick={() => track("home_widget_opened", { source: "batteri" })}
+              >
+                <BatteryMedium size={13} /> Öppna batteriet
+              </Link>
+              <Link
+                href="/mitt-batteri"
+                className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+                onClick={() => track("home_widget_opened", { source: "logga" })}
+              >
+                <HeartPulse size={13} />{" "}
+                {energyValue != null ? "Uppdatera hur du mår" : "Logga energi & mående"}
+              </Link>
+            </div>
+          </section>
+        </MyFloveWide>
+
+        {/* Liten insikt – bara när Flow faktiskt har något att säga. */}
         {flowSettings.enabled && flowSettings.learning && (
-          <div style={{ order: 2 }} data-testid="home-flow-note" className="min-w-0 xl:col-span-6">
+          <div style={{ order: 5 }} data-testid="home-flow-note" className="min-w-0 xl:col-span-6">
             <ExpandableBlock
-              title="Flow lär känna dig"
-              titleText="Flow lär känna dig"
+              title="MyFlove har lagt märke till…"
+              titleText="MyFlove har lagt märke till"
               area="flow"
               visual={<FlowMascot size="xs" mood="calm" bump className="flow-alive" alt="" />}
-              subtitle="Små mönster Flow lagt märke till"
+              subtitle="Små mönster i din egen data"
               status="Insikter"
               tone="lavender"
               surface="lavender"
@@ -303,7 +420,7 @@ export default function Home() {
           <AreaOnboarding />
         </MyFloveWide>
 
-        {/* Liten, diskret notering längst ner – konkurrerar inte med widgetarna. */}
+        {/* Liten, diskret notering längst ner – konkurrerar inte med korten. */}
         <MyFloveWide style={{ order: 98.5 }} data-testid="home-install-note" className="pt-1">
           <PwaInstallCard compact />
         </MyFloveWide>
