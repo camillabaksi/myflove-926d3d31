@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-04";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Health Connect borttaget ur Android-MVP:n",
+    items: [
+      "Steg-behörigheten READ_STEPS och Health Connect-intent-filtret borttagna ur Android-manifestet (2026-09-04)",
+      "capacitor-health-beroendet och dess Gradle-moduler borttagna ur Android-bygget (2026-09-04)",
+      "Träningssidan fungerar som förut med manuell inmatning av steg (2026-09-04)",
+    ],
+  },
+  {
+
     title: "Android-projekt redo för Google Play",
     items: [
       "Native Android-projekt skapat med paketnamn app.myflove.mobile och version 4.1 (2026-09-04)",
