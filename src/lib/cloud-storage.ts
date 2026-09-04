@@ -145,6 +145,8 @@ export const CLOUD_USER_DATA_KEYS = new Set([
   "myflove-wake-steps",
   "myflove-insight-strategies",
   "myflove-quiet-mode",
+  "myflove-note-folders",
+  "myflove-quickflow-habits",
 ]);
 
 /** Lista över nycklar som hanteras av molnsynken (device-nyckel, rensas ej). */
