@@ -1,10 +1,18 @@
 # Changelog
 
+## 2026-09-04 – Health Connect borttaget ur Android-MVP:n
+
+- Steg-behörigheten (`READ_STEPS`) och Health Connect-intent-filtret är borttagna ur Android-manifestet.
+- `capacitor-health`-beroendet och dess Gradle-moduler är borttagna ur Android-bygget.
+- `src/lib/health-steps.ts` behåller samma API men returnerar "ej tillgängligt" – `/traning` fungerar som förut med manuell inmatning av steg.
+- Syfte: första Google Play Internal Test slipper hälsodata-deklarationer och Health Connect-granskning.
+
 ## 2026-09-04 – Android-projekt redo för Google Play
+
 
 - Native Android-projektet (`android/`) är nu skapat med paketnamnet `app.myflove.mobile` och versionsnamn 4.1.
 - Release-signering läses från en lokal `android/keystore.properties` eller miljövariabler – inga nycklar ligger i repot.
-- Behörigheter för notiser, vibration och steg (Health Connect) finns i manifestet.
+- Behörigheter för notiser och vibration finns i manifestet.
 - Nya kommandon: `npm run cap:sync`, `npm run android:open` och `npm run android:aab`.
 - `webDir` pekar på en liten `mobile-webroot/`-fallback eftersom appen laddar den publicerade webben via `server.url`.
 
