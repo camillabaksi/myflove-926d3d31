@@ -105,6 +105,7 @@ export function DidThisCta({
         friction: picked.friction ?? null,
         occurredAt: new Date().toISOString(),
       });
+      track("did_this_logged", { source: "hem" });
       setSaved(entry ?? null);
       closeTimer.current = setTimeout(() => setOpen(false), 2600);
     } catch {

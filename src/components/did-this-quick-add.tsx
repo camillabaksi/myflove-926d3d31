@@ -88,8 +88,9 @@ export function DidThisQuickAdd({ className }: { className?: string }) {
         friction: s.friction,
         occurredAt: occurredAtFor(when),
       });
+      track("did_this_logged", { source: "lagg-till" });
       setLast(entry ?? null);
-      toast({ description: `${s.title} – tillagt. Det räknas med i din dag.` });
+      toast({ description: `${s.title} – tillagt. Det påverkar ditt batteri.` });
     } catch {
       toast({ description: "Kunde inte spara just nu.", variant: "destructive" });
     } finally {
