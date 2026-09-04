@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-04";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Läsbar appstatistik och tydligare adminöversikt",
+    items: [
+      "Appstatistiken visar begripliga svenska namn på alla delar och handlingar i stället för tekniska koder (2026-09-04)",
+      "Mest besökta sidor visar sidans namn med sökvägen som liten hjälptext (2026-09-04)",
+      "Okända händelser snyggas till automatiskt i stället för att visas råa (2026-09-04)",
+      "Adminöversikten har en direktknapp till Appstatistik (2026-09-04)",
+    ],
+  },
+  {
     title: "Helhetsgenomgång: historiken visar avbockade aktiviteter rätt",
     items: [
       "En engångsaktivitet som bockas av en annan dag visas som genomförd på sin planerade dag, med den faktiska dagen sparad separat (2026-09-04)",

@@ -4,44 +4,7 @@ import { BarChart3, Users, Activity, Flame, Lock } from "lucide-react";
 import { useIsAdmin } from "@/hooks/use-is-admin";
 import CollapsibleSection from "@/components/collapsible-section";
 import AnalyticsExport from "@/components/admin/analytics-export";
-
-const SECTION_LABELS: Record<string, string> = {
-  page: "Sidvisning",
-  mood: "Mående",
-  dump: "Dumping",
-  calendar: "Kalender",
-  fokus: "Fokus",
-  tasks: "Att göra",
-  pomodoro: "Timer",
-  medicin: "Medicin",
-  shopping: "Inköp",
-  finances: "Ekonomi",
-  travel: "Resor",
-  statistik: "Statistik",
-  beloningar: "Belöningar",
-  assistant: "Hjälp",
-  admin: "Appstatistik",
-};
-
-const ACTION_LABELS: Record<string, string> = {
-  view: "Besök",
-  task_completed: "Uppgift klar",
-  item_bought: "Vara köpt",
-  mood_logged: "Mående loggat",
-  transaction_added: "Transaktion tillagd",
-  reminder_added: "Påminnelse tillagd",
-  dose_taken: "Dos tagen",
-  idea_saved: "Idé sparad",
-  session_completed: "Pass klart",
-};
-
-function sectionLabel(section: string): string {
-  return SECTION_LABELS[section] ?? section;
-}
-
-function actionLabel(action: string): string {
-  return ACTION_LABELS[action] ?? action;
-}
+import { actionLabel, pageLabel, sectionLabel } from "@/lib/analytics-labels";
 
 export default function AdminStats() {
   const { isAdmin, loading: adminLoading } = useIsAdmin();
@@ -316,7 +279,10 @@ export default function AdminStats() {
                 {pageViews.map((row) => (
                   <div key={row.action}>
                     <div className="flex justify-between text-sm mb-1">
-                      <span className="font-medium">/{row.action}</span>
+                      <span className="font-medium">
+                        {pageLabel(row.action)}{" "}
+                        <span className="text-xs text-muted-foreground">/{row.action}</span>
+                      </span>
                       <span className="text-muted-foreground">
                         {row.events} visningar · {row.sessions} besökare
                       </span>

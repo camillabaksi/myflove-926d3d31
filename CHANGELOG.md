@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-04 – Läsbar appstatistik och tydligare adminöversikt
+
+- Appstatistiken visar nu begripliga svenska namn på alla delar och handlingar – Quickflow, Mitt batteri, Mående, Historik, Veckoöversikt, Energipåverkan med flera – i stället för tekniska koder.
+- Mest besökta sidor visar sidans namn med sökvägen som liten hjälptext.
+- Okända händelser snyggas till automatiskt i stället för att visas råa.
+- Adminöversikten har en direktknapp till Appstatistik högst upp.
+
 ## 2026-09-04 – Helhetsgenomgång: historiken visar avbockade aktiviteter rätt
 
 - En engångsaktivitet som bockas av en annan dag än den planerade visas nu som genomförd på sin planerade dag i historiken, med den faktiska dagen sparad separat. Tidigare kunde den ligga kvar som "planerad" för alltid.
