@@ -213,7 +213,7 @@ export const EN_QUICKFLOW: Record<string, string> = {
   "Arbete": "Work",
   "Socialt": "Social",
   "Egen tid": "Own time",
-  "När du är nära": "When you"re nearby",
+  "När du är nära": "When you are nearby",
   "Sparad bland anteckningarna – välj mapp": "Saved in your notes – choose a folder",
   "där.": "there.",
 };
