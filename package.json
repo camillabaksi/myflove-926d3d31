@@ -11,7 +11,10 @@
     "lint": "eslint .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "cap:sync": "cap sync android",
+    "android:open": "cap open android",
+    "android:aab": "cd android && ./gradlew bundleRelease"
   },
   "dependencies": {
     "@ai-sdk/openai-compatible": "^3.0.5",
