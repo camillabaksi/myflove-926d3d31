@@ -37,6 +37,7 @@ import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { useFlowSettings } from "@/hooks/use-flow-settings";
 import { useFeatureUsage, type FeatureId } from "@/lib/feature-usage";
 import { orkFromValue10 } from "@/lib/ork";
+import { heroGradient } from "@/lib/hero-gradient";
 
 /**
  * Hem = en lugn personlig kontrollpanel.
@@ -142,15 +143,7 @@ export default function Home() {
   const shows = (id: HomeBlockId) => visible.includes(id);
   const pos = (id: HomeBlockId) => ({ order: visible.indexOf(id) + 10 });
 
-  const hour = new Date().getHours();
-  const heroGradient =
-    hour < 10
-      ? "linear-gradient(135deg, hsl(var(--sky) / 0.65) 0%, hsl(var(--cream)) 60%, hsl(var(--lavender) / 0.8) 100%)"
-      : hour < 17
-        ? "linear-gradient(135deg, hsl(var(--lavender) / 0.85) 0%, hsl(var(--cream)) 62%, hsl(var(--mint) / 0.6) 100%)"
-        : hour < 22
-          ? "linear-gradient(135deg, hsl(var(--blush) / 0.75) 0%, hsl(var(--cream)) 60%, hsl(var(--lavender) / 0.8) 100%)"
-          : "linear-gradient(135deg, hsl(var(--lavender) / 0.65) 0%, hsl(var(--card)) 72%)";
+  const gradient = heroGradient();
 
   return (
     <Layout>
@@ -161,7 +154,7 @@ export default function Home() {
         {/* Hero – personligt men litet. */}
         <MyFloveWide
           className="relative overflow-hidden rounded-3xl border border-border/60 p-5 shadow-lifted pop-in"
-          style={{ background: heroGradient }}
+          style={{ background: gradient }}
         >
           <div className="pointer-events-none absolute -top-16 -right-12 h-32 w-32 rounded-full bg-blush opacity-50 blur-md" />
           <div
