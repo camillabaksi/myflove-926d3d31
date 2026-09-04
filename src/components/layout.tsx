@@ -55,6 +55,7 @@ import {
   ChevronRight,
   MessageCircle,
   Hand,
+  User,
 } from "lucide-react";
 import {
   isAlarmSoundEnabled,
@@ -1210,6 +1211,16 @@ export default function Layout({ children }: LayoutProps) {
                     Vem du är och hur din vardag ser ut just nu.
                   </p>
                   <div className="mb-5 space-y-2">
+                    <NavRow
+                      item={{
+                        href: "/profil",
+                        label: "Mitt namn och barn",
+                        icon: User,
+                        hint: "Så vi hälsar på er rätt",
+                      }}
+                      isActive={location === "/profil"}
+                      onClick={closeMenu}
+                    />
                     <NavRow
                       item={{
                         href: "/min-livsprofil",
