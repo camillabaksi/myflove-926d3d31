@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-04";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Ny startsida: lugn personlig kontrollpanel",
+    items: [
+      "Liten hero med hälsning och tre huvudkort: Quickflow, Ditt batteri och Kalendern (2026-09-04)",
+      "Ny Idag-sektion med max 5 av dagens saker och länk till hela dagen (2026-09-04)",
+      "Från ditt huvud visar senaste QuickFlow-tankarna, plus ett lugnt batteri- och återhämtningskort (2026-09-04)",
+    ],
+  },
+  {
     title: "Notiser även när appen är stängd",
     items: [
       "Uppgifter med tid schemaläggs 14 dagar framåt istället för bara idag och imorgon (2026-09-04)",
