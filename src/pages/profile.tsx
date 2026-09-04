@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Baby, Check, Pencil, Plus, Trash2, User } from "lucide-react";
 import Layout from "@/components/layout";
 import { MyFloveHeader } from "@/components/myflove";
@@ -30,7 +30,22 @@ export default function ProfilePage() {
   const [editingChildId, setEditingChildId] = useState<string | null>(null);
   const [childDraft, setChildDraft] = useState("");
 
+  // Autospara – det användaren skriver ska aldrig kunna gå förlorat
+  // bara för att man lämnar sidan utan att trycka Spara.
+  const lastSaved = useRef(name);
+  useEffect(() => {
+    if (nameDraft.trim() === lastSaved.current.trim()) return;
+    const id = window.setTimeout(() => {
+      lastSaved.current = nameDraft;
+      setName(nameDraft);
+      setSavedName(true);
+      window.setTimeout(() => setSavedName(false), 1500);
+    }, 700);
+    return () => window.clearTimeout(id);
+  }, [nameDraft, setName]);
+
   const saveName = () => {
+    lastSaved.current = nameDraft;
     setName(nameDraft);
     setSavedName(true);
     toast({
@@ -95,6 +110,7 @@ export default function ProfilePage() {
               <h2 className="text-base font-semibold text-ink">Vad ska jag kalla dig?</h2>
               <p className="text-xs text-muted-foreground">
                 Används i “Hej {name || "…"}!” på startsidan och på ditt batteri.
+                {savedName ? " Sparat ✓" : " Sparas automatiskt."}
               </p>
             </div>
           </div>
@@ -111,6 +127,7 @@ export default function ProfilePage() {
               placeholder="Ditt namn"
               maxLength={40}
               className="rounded-2xl"
+              onBlur={() => saveName()}
               data-testid="profile-name-input"
             />
             <Button type="submit" className="rounded-2xl" data-testid="profile-name-save">
