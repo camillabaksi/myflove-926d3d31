@@ -45,7 +45,7 @@ export default function FlowHomeCard() {
   if (closed) return null;
 
   const go = (id: FlowHomeChoiceId) => {
-    track("flow_home_choice", { source: id });
+    track("flow_interaction", { source: id });
     if (id === "quickflow") {
       recordFeature("quickflow");
       window.dispatchEvent(new CustomEvent("myflove:quickflow"));
@@ -255,7 +255,7 @@ export default function FlowHomeCard() {
                     <button
                       type="button"
                       onClick={() => {
-                        track("flow_home_choice", { source: "valj-ja" });
+                        track("flow_interaction", { source: "valj-ja" });
                         navigate("/idag");
                       }}
                       className="press inline-flex items-center gap-1 rounded-full bg-primary px-3.5 py-1.5 text-xs font-medium text-primary-foreground"
