@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-04 – Städningssidan följer appens layout
+
+- Städningssidan har samma sidhuvud som övriga sidor (tillbaka-knapp, emoji och mjuk gradient).
+- Lägesvalen (Vardagsstädning/Storstädning), översiktskortet och "Det här behöver du" tar hela bredden igen – inget kläms ihop i halva kolumnbredden eller trunkeras som "Kök –…".
+
 ## 2026-09-04 – Läsbar appstatistik och tydligare adminöversikt
 
 - Appstatistiken visar nu begripliga svenska namn på alla delar och handlingar – Quickflow, Mitt batteri, Mående, Historik, Veckoöversikt, Energipåverkan med flera – i stället för tekniska koder.
