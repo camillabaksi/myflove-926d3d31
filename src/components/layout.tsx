@@ -631,9 +631,14 @@ export default function Layout({ children }: LayoutProps) {
     ];
 
     return groups
-      .map((g) => ({ ...g, items: g.hrefs.map(byHref).filter(Boolean) as typeof navItems }))
+      .map((g) => ({
+        ...g,
+        label: t(g.label),
+        hint: t(g.hint),
+        items: g.hrefs.map(byHref).filter(Boolean) as typeof navItems,
+      }))
       .filter((g) => g.items.length > 0);
-  }, [navItems]);
+  }, [navItems, t]);
 
   const [openCategory, setOpenCategory] = useState<string | null>(null);
   const [navSearch, setNavSearch] = useState("");
