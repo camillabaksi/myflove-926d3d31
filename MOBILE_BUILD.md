@@ -118,26 +118,20 @@ Säg till när du är där, så gör jag den migreringen.
 
 ---
 
-## Steg från hälsoappen (Apple Health / Health Connect)
+## Steg från hälsoappen (Apple Health / Health Connect) — AVSTÄNGT i MVP
 
-Pluginet `capacitor-health` är installerat och används av `/traning`. På webben
-faller sidan tillbaka på manuell inmatning – ingen extra konfiguration behövs där.
-För native-bygget:
+Health Connect-integrationen är **borttagen ur Android-bygget** (2026-09-04) så att
+första Google Play Internal Test slipper hälsodata-deklarationer och Health
+Connect-granskning. `/traning` fungerar oförändrat med manuell inmatning av steg.
 
-1. Kör `bunx cap sync` så att pluginet länkas in i `ios/` och `android/`.
+Borttaget: `capacitor-health`-beroendet, `READ_STEPS`-behörigheten och Health
+Connect-intent-filtret i `android/app/src/main/AndroidManifest.xml`.
+`src/lib/health-steps.ts` finns kvar med samma API men returnerar "ej tillgängligt".
 
-**iOS** (Xcode):
-- Signing & Capabilities → **+ Capability** → *HealthKit*.
-- I `ios/App/App/Info.plist`, lägg till:
+För att återaktivera senare:
 
-```xml
-<key>NSHealthShareUsageDescription</key>
-<string>MyFlove läser dina steg för att visa din veckoaktivitet och anpassa träningsprogram.</string>
-<key>NSHealthUpdateUsageDescription</key>
-<string>MyFlove skriver inte hälsodata, men behovet anges av systemet.</string>
-```
-
-**Android** (`android/app/src/main/AndroidManifest.xml`):
+1. `bun add capacitor-health` och återinför plugin-anropen i `src/lib/health-steps.ts`.
+2. Lägg tillbaka i `AndroidManifest.xml`:
 
 ```xml
 <uses-permission android:name="android.permission.health.READ_STEPS" />
@@ -148,13 +142,11 @@ För native-bygget:
 </intent-filter>
 ```
 
-- Health Connect måste vara installerat på telefonen (Android 13 och äldre:
-  installeras från Play Store; Android 14+: inbyggt).
-- I Play Console krävs en motivering för hälsodata-behörigheten samt länk till
-  integritetspolicyn (`/integritet`).
+3. iOS (Xcode): HealthKit-capability + `NSHealthShareUsageDescription` i Info.plist.
+4. Kör `bun run cap:sync`.
+5. I Play Console krävs då en skriftlig motivering för hälsodata-behörigheten samt
+   länk till integritetspolicyn (`/integritet`).
 
-Första gången användaren trycker **Hämta steg** visas systemets
-behörighetsdialog. Nekas den öppnar appen hälsoinställningarna automatiskt.
 
 ---
 
