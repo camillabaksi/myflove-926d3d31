@@ -199,7 +199,7 @@ export default function Home() {
                   maxLength={32}
                 />
                 <button type="submit" className="text-xs font-medium text-primary hover:underline">
-                  Spara
+                  {t("Spara")}
                 </button>
                 <button
                   type="button"
@@ -209,7 +209,7 @@ export default function Home() {
                   }}
                   className="text-xs text-muted-foreground hover:underline"
                 >
-                  Avbryt
+                  {t("Avbryt")}
                 </button>
               </form>
             ) : (
