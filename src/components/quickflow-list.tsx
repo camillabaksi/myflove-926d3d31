@@ -261,10 +261,10 @@ export function QuickflowList() {
       {
         key: "klart",
         label: "✓ Markera som klart",
-        onClick: (() => () => {
+        onClick: () => {
           complete(item.id);
           recordAction("klart");
-        })(),
+        },
       },
       {
         key: "mapp",
