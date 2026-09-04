@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Baby, Check, Pencil, Plus, Trash2, User } from "lucide-react";
+import { Baby, Check, Languages, Pencil, Plus, Trash2, User } from "lucide-react";
 import Layout from "@/components/layout";
 import { MyFloveHeader } from "@/components/myflove";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input";
 import { useUserProfile } from "@/hooks/use-user-profile";
 import { useChildren, CHILD_COLORS, type Child } from "@/hooks/use-children";
 import { useToast } from "@/hooks/use-toast";
+import { useLang } from "@/hooks/use-language";
+import { LANGUAGES } from "@/lib/i18n";
 import { LifeProfileSections } from "@/pages/life-profile";
 
 /**
@@ -18,6 +20,7 @@ import { LifeProfileSections } from "@/pages/life-profile";
 export default function ProfilePage() {
   const { toast } = useToast();
   const { name, setName } = useUserProfile();
+  const { lang, setLang, t } = useLang();
   const [nameDraft, setNameDraft] = useState(name);
   const [savedName, setSavedName] = useState(false);
 
