@@ -184,6 +184,7 @@ const CATEGORY_THEMES: Record<string, Record<string, string>> = {
   "/familj": T.gold,
   "/beloningar": T.gold,
   "/statistik": T.ink,
+  "/historik": T.ink,
   "/friktionsindex": T.terracotta,
   "/insight": {
     "--primary": "285 52% 58%",
@@ -389,6 +390,12 @@ export default function Layout({ children }: LayoutProps) {
     },
     { href: "/familj", label: "Familj", icon: Users, hint: "Dela listor och kalender med andra" },
     { href: "/barn", label: "Barn", icon: Baby, hint: "Scheman och rutiner för barnen" },
+    {
+      href: "/historik",
+      label: "Historik",
+      icon: CalendarDays,
+      hint: "Vad hände dina dagar – och vad gav eller tog energi",
+    },
     { href: "/statistik", label: "Statistik", icon: BarChart3, hint: "Se dina mönster över tid" },
     {
       href: "/beloningar",
@@ -601,7 +608,7 @@ export default function Layout({ children }: LayoutProps) {
         label: "Mina mönster",
         hint: "Vad Flow har lärt sig om dig",
         icon: Brain,
-        hrefs: ["/insight", "/statistik", "/beloningar"],
+        hrefs: ["/insight", "/historik", "/statistik", "/beloningar"],
       },
       {
         id: "avancerat",

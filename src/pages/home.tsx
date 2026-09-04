@@ -39,6 +39,10 @@ import { useFeatureUsage, type FeatureId } from "@/lib/feature-usage";
 import { orkFromValue10 } from "@/lib/ork";
 import { heroGradient } from "@/lib/hero-gradient";
 import { useEverydayPatterns } from "@/hooks/use-everyday-patterns";
+import WeekReviewCard from "@/components/week-review-card";
+import { useWeekReview } from "@/hooks/use-activity-history";
+import { weekStartISO } from "@/lib/week-review";
+import { parseISODate } from "@/lib/day";
 
 /**
  * Hem = en lugn personlig kontrollpanel.
@@ -70,6 +74,9 @@ export default function Home() {
   const patterns = useEverydayPatterns();
   const { record: recordFeature, order: featureOrder, adaptive, top } = useFeatureUsage();
   const todayIso = todayISO();
+  // Veckoöversikten hör hemma på söndagen – veckan som varit, i lugn takt.
+  const isSunday = parseISODate(todayIso).getDay() === 0;
+  const weekReview = useWeekReview(weekStartISO(todayIso));
 
   /** Dagens saker – samma data som kalendern och Min dag, bara kortare. */
   const todayEntries = useMemo<TodayEntry[]>(() => {
@@ -399,6 +406,13 @@ export default function Home() {
             </div>
           </section>
         </MyFloveWide>
+
+        {/* 💜 Din vecka – visas på söndagar som en lugn sammanfattning. */}
+        {isSunday && (
+          <MyFloveWide style={{ order: 4.4 }} className="min-w-0">
+            <WeekReviewCard review={weekReview} />
+          </MyFloveWide>
+        )}
 
         {/* Din vardag – vad MyFlove lärt sig av dina egna aktiviteter och loggar. */}
         {patterns.ready && (

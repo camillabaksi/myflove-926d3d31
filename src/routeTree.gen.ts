@@ -54,6 +54,7 @@ import { Route as AppKalenderRouteImport } from './routes/_app.kalender'
 import { Route as AppJobbRouteImport } from './routes/_app.jobb'
 import { Route as AppInsightRouteImport } from './routes/_app.insight'
 import { Route as AppIdagRouteImport } from './routes/_app.idag'
+import { Route as AppHistorikRouteImport } from './routes/_app.historik'
 import { Route as AppHemRouteImport } from './routes/_app.hem'
 import { Route as AppHalsaRouteImport } from './routes/_app.halsa'
 import { Route as AppFriktionsindexRouteImport } from './routes/_app.friktionsindex'
@@ -311,6 +312,11 @@ const AppIdagRoute = AppIdagRouteImport.update({
   path: '/idag',
   getParentRoute: () => AppRoute,
 } as any)
+const AppHistorikRoute = AppHistorikRouteImport.update({
+  id: '/historik',
+  path: '/historik',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppHemRoute = AppHemRouteImport.update({
   id: '/hem',
   path: '/hem',
@@ -508,6 +514,7 @@ export interface FileRoutesByFullPath {
   '/friktionsindex': typeof AppFriktionsindexRoute
   '/halsa': typeof AppHalsaRoute
   '/hem': typeof AppHemRoute
+  '/historik': typeof AppHistorikRoute
   '/idag': typeof AppIdagRoute
   '/insight': typeof AppInsightRoute
   '/jobb': typeof AppJobbRoute
@@ -585,6 +592,7 @@ export interface FileRoutesByTo {
   '/friktionsindex': typeof AppFriktionsindexRoute
   '/halsa': typeof AppHalsaRoute
   '/hem': typeof AppHemRoute
+  '/historik': typeof AppHistorikRoute
   '/idag': typeof AppIdagRoute
   '/insight': typeof AppInsightRoute
   '/jobb': typeof AppJobbRoute
@@ -664,6 +672,7 @@ export interface FileRoutesById {
   '/_app/friktionsindex': typeof AppFriktionsindexRoute
   '/_app/halsa': typeof AppHalsaRoute
   '/_app/hem': typeof AppHemRoute
+  '/_app/historik': typeof AppHistorikRoute
   '/_app/idag': typeof AppIdagRoute
   '/_app/insight': typeof AppInsightRoute
   '/_app/jobb': typeof AppJobbRoute
@@ -743,6 +752,7 @@ export interface FileRouteTypes {
     | '/friktionsindex'
     | '/halsa'
     | '/hem'
+    | '/historik'
     | '/idag'
     | '/insight'
     | '/jobb'
@@ -820,6 +830,7 @@ export interface FileRouteTypes {
     | '/friktionsindex'
     | '/halsa'
     | '/hem'
+    | '/historik'
     | '/idag'
     | '/insight'
     | '/jobb'
@@ -898,6 +909,7 @@ export interface FileRouteTypes {
     | '/_app/friktionsindex'
     | '/_app/halsa'
     | '/_app/hem'
+    | '/_app/historik'
     | '/_app/idag'
     | '/_app/insight'
     | '/_app/jobb'
@@ -1279,6 +1291,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIdagRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/historik': {
+      id: '/_app/historik'
+      path: '/historik'
+      fullPath: '/historik'
+      preLoaderRoute: typeof AppHistorikRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/hem': {
       id: '/_app/hem'
       path: '/hem'
@@ -1523,6 +1542,7 @@ interface AppRouteChildren {
   AppFriktionsindexRoute: typeof AppFriktionsindexRoute
   AppHalsaRoute: typeof AppHalsaRoute
   AppHemRoute: typeof AppHemRoute
+  AppHistorikRoute: typeof AppHistorikRoute
   AppIdagRoute: typeof AppIdagRoute
   AppInsightRoute: typeof AppInsightRoute
   AppJobbRoute: typeof AppJobbRoute
@@ -1582,6 +1602,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppFriktionsindexRoute: AppFriktionsindexRoute,
   AppHalsaRoute: AppHalsaRoute,
   AppHemRoute: AppHemRoute,
+  AppHistorikRoute: AppHistorikRoute,
   AppIdagRoute: AppIdagRoute,
   AppInsightRoute: AppInsightRoute,
   AppJobbRoute: AppJobbRoute,
