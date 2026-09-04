@@ -81,7 +81,6 @@ export default function Home() {
       .slice(0, 5);
   }, [activeReminders, activeTasks, todayIso]);
 
-  
   const battery = Math.round(reading.now);
   const orkLabel = orkFromValue10(energyValue)?.label ?? null;
   const batteryLine =
@@ -272,7 +271,6 @@ export default function Home() {
           </div>
         </MyFloveWide>
 
-
         {/* Ditt batteri – stort, lugnt, som i mockupen. */}
         <MyFloveWide style={{ order: 2 }} className="min-w-0">
           <section
@@ -283,11 +281,7 @@ export default function Home() {
             <h2 className="text-base font-semibold text-ink">Ditt batteri</h2>
             <div className="mt-3 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4">
               <div className="flex items-center gap-3 rounded-2xl bg-lavender/30 px-4 py-3">
-                <BatteryMedium
-                  className="h-10 w-10 text-primary"
-                  aria-hidden
-                  strokeWidth={1.75}
-                />
+                <BatteryMedium className="h-10 w-10 text-primary" aria-hidden strokeWidth={1.75} />
                 <div>
                   <span className="block text-3xl font-bold tabular-nums text-ink leading-none">
                     {battery}%

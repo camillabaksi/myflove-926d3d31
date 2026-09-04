@@ -155,7 +155,6 @@ export default function SimpleCheckin({
         </div>
       </div>
 
-
       <div className="space-y-2">
         <div className="flex items-center justify-between gap-2">
           <p className="text-sm font-semibold text-ink">
@@ -258,7 +257,6 @@ export default function SimpleCheckin({
           </div>
         )}
       </div>
-
 
       <button
         type="button"
