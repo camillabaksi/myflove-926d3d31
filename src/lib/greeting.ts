@@ -69,7 +69,7 @@ export function getGreeting(opts?: {
   const slot = slotFor(hour);
   const seed = daySeed() + hour;
 
-  const salutation = pick(SALUTATIONS[slot], seed);
+  const salutation = tr(pick(SALUTATIONS[slot], seed));
   const ending = pick(SOFT_ENDINGS, seed + 3);
   const title = name
     ? `${salutation}, ${name}${ending ? " " + ending : ""}`
