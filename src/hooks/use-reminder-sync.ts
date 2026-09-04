@@ -53,6 +53,24 @@ export function useReminderSync() {
   const reconcileFn = useServerFn(reconcileReminders);
   const lastKeys = useRef<Set<string>>(new Set());
 
+  // Regelbunden omsynk: annars ligger bara det som schemalades vid senaste
+  // ändringen kvar, och notiser kan sluta komma efter midnatt eller när
+  // webbläsaren bytt push-prenumeration medan appen varit stängd.
+  const [resyncTick, setResyncTick] = useState(0);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const bump = () => setResyncTick((n) => n + 1);
+    const id = window.setInterval(bump, 15 * 60_000);
+    const onVisible = () => {
+      if (document.visibilityState === "visible") bump();
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      window.clearInterval(id);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
+  }, []);
+
   // Signatur över allt som ska trigga en ny synk (uppgifter, medicin,
   // påminnelser, rutiner, quickflow, lektioner och barnschema).
   const syncSignature = JSON.stringify([
