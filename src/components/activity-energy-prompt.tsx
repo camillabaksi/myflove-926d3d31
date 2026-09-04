@@ -9,6 +9,7 @@ import type { FlowItem } from "@/lib/flow-items";
 import { useActivityHistory } from "@/hooks/use-activity-history";
 import type { ActivityEnergy } from "@/lib/activity-history";
 import { todayISO } from "@/lib/day";
+import { track } from "@/lib/analytics";
 
 /** Fyra svar – alltid frivilliga, alltid ett klick. */
 const CHOICES: {
@@ -75,6 +76,11 @@ export function ActivityEnergyPrompt({
         // Energiloggen är en bonus – aktiviteten är redan avbockad.
       }
     }
+
+    track("activity_energy_logged", {
+      source: "idag",
+      result: choice.id === "unknown" ? "cancelled" : "completed",
+    });
 
     setBusy(false);
     onClose();
