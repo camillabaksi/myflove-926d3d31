@@ -234,6 +234,102 @@ export function QuickflowList() {
     </div>
   );
 
+  /**
+   * Något har blivit liggande. Vi frågar försiktigt – vi påstår aldrig att du glömt.
+   * Ordningen anpassas efter vad du oftast brukar välja.
+   */
+  const renderStaleActions = (item: QuickflowItem) => {
+    const actions: { key: QuickflowAction; label: string; onClick: () => void }[] = [
+      {
+        key: "paminn",
+        label: "🔔 Påminn mig senare",
+        onClick: () => {
+          setSnoozeFor(item.id);
+          recordAction("paminn");
+        },
+      },
+      {
+        key: "kalender",
+        label: "📅 Lägg i kalendern",
+        onClick: () => {
+          addReminder(item.text, todayISO(), "09:00");
+          remove(item.id);
+          recordAction("kalender");
+          toast.success("Den ligger i kalendern idag kl 09:00 – ändra när du vill.");
+        },
+      },
+      {
+        key: "klart",
+        label: "✓ Markera som klart",
+        onClick: (() => () => {
+          complete(item.id);
+          recordAction("klart");
+        })(),
+      },
+      {
+        key: "mapp",
+        label: "📁 Flytta till en mapp",
+        onClick: () => {
+          const folder = folders.find((f) => f.id === topFolderId) ?? folders[0];
+          addNote(item.text, guessArea(item.text));
+          if (folder) recordAction("mapp", folder.id);
+          else recordAction("anteckning");
+          remove(item.id);
+          toast.success(
+            folder
+              ? `Sparad bland anteckningarna – välj mapp ${folder.emoji} ${folder.name} där.`
+              : "Sparad bland anteckningarna – där kan du skapa en mapp.",
+          );
+        },
+      },
+      {
+        key: "bort",
+        label: "🗑️ Jag behöver inte detta längre",
+        onClick: () => {
+          remove(item.id);
+          recordAction("bort");
+        },
+      },
+    ];
+    const sorted = topAction
+      ? [...actions].sort(
+          (a, b) => (b.key === topAction ? 1 : 0) - (a.key === topAction ? 1 : 0),
+        )
+      : actions;
+
+    return (
+      <div className="rounded-2xl bg-secondary/50 border border-border p-3 space-y-2">
+        <p className="text-sm text-ink">
+          Det här har blivit liggande – vill du göra något med det?
+        </p>
+        <div className="flex flex-wrap gap-2">
+          {sorted.map((action, index) => (
+            <button
+              key={action.key}
+              type="button"
+              onClick={action.onClick}
+              className={`rounded-full px-4 py-1.5 text-xs font-medium ${
+                index === 0
+                  ? "bg-primary text-primary-foreground"
+                  : "border border-border bg-card text-ink"
+              }`}
+            >
+              {action.label}
+            </button>
+          ))}
+          <button
+            type="button"
+            onClick={() => update(item.id, { askedAt: Date.now() })}
+            className="rounded-full px-4 py-1.5 text-xs text-muted-foreground hover:underline"
+          >
+            Låt den ligga kvar
+          </button>
+        </div>
+      </div>
+    );
+  };
+
+
   return (
     <section className="space-y-4">
       <CollapsibleSection
