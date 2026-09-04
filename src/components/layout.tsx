@@ -521,7 +521,7 @@ export default function Layout({ children }: LayoutProps) {
       hint: "Lugnare färger, färre saker, tyst läge och enkla ord",
       essential: true,
     },
-  ].map((i) => ({ ...i, label: plainLabel(i.label, npf.plainWords) }));
+  ].map((i) => ({ ...i, label: t(plainLabel(i.label, npf.plainWords)), hint: t(i.hint) }));
 
   // Kategorier – gör navigationen lugnare genom att gruppera sektionerna.
   const categories = useMemo(() => {
