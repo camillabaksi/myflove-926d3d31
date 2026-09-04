@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-04";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "MyFlove lär sig din vardag",
+    items: [
+      "Startsidan visar vilka veckodagar som brukar bli fullast och lugnast (2026-09-04)",
+      "MyFlove ser vilka aktiviteter som brukar ta mer energi – utifrån dina egna loggar (2026-09-04)",
+      "Inget visas förrän underlaget räcker – inga gissningar (2026-09-04)",
+    ],
+  },
+  {
     title: "Samma lugna design i hela appen",
     items: [
       "Alla sidhuvuden följer startsidans mjuka gradient, rundning och skugga (2026-09-04)",
