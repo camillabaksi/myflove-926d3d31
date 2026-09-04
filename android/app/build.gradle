@@ -1,5 +1,13 @@
 apply plugin: 'com.android.application'
 
+// Signeringsuppgifter läses från android/keystore.properties (git-ignorerad)
+// eller från miljövariabler i CI. Inga nycklar ligger i repot.
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
 android {
     namespace = "app.myflove.mobile"
     compileSdk = rootProject.ext.compileSdkVersion
@@ -8,7 +16,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0"
+        versionName "4.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -16,8 +24,22 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    signingConfigs {
+        release {
+            def storePath = keystoreProperties['storeFile'] ?: System.getenv("MYFLOVE_KEYSTORE_FILE")
+            if (storePath) {
+                storeFile file(storePath)
+                storePassword keystoreProperties['storePassword'] ?: System.getenv("MYFLOVE_KEYSTORE_PASSWORD")
+                keyAlias keystoreProperties['keyAlias'] ?: System.getenv("MYFLOVE_KEY_ALIAS")
+                keyPassword keystoreProperties['keyPassword'] ?: System.getenv("MYFLOVE_KEY_PASSWORD")
+            }
+        }
+    }
     buildTypes {
         release {
+            if (signingConfigs.release.storeFile != null) {
+                signingConfig signingConfigs.release
+            }
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
