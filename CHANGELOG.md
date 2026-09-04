@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-04 – Appstatistiken visar rätt antal användare igen
+
+- "Registrerade användare", "Nya senaste 7 dagarna" och registreringsdiagrammet visade 0 trots att nya användare fanns. Orsaken var att databasfunktionen som räknar användare avvisade serverns anrop.
+- Funktionen tillåter nu serverns säkra anrop men är samtidigt helt stängd för direktanrop från vanliga konton.
+- Verifierat inloggad i webbläsaren: statistiken visar nu rätt antal registrerade och nya användare.
+
 ## 2026-09-04 – Städningssidan följer appens layout
 
 - Städningssidan har samma sidhuvud som övriga sidor (tillbaka-knapp, emoji och mjuk gradient).
