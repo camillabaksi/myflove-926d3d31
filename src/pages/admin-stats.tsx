@@ -279,7 +279,10 @@ export default function AdminStats() {
                 {pageViews.map((row) => (
                   <div key={row.action}>
                     <div className="flex justify-between text-sm mb-1">
-                      <span className="font-medium">/{row.action}</span>
+                      <span className="font-medium">
+                        {pageLabel(row.action)}{" "}
+                        <span className="text-xs text-muted-foreground">/{row.action}</span>
+                      </span>
                       <span className="text-muted-foreground">
                         {row.events} visningar · {row.sessions} besökare
                       </span>
