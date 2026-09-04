@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-04 – Livsprofilen flyttar in i Min profil
+
+- Min livsprofil är nu en del av sidan Min profil (/profil) – namn, barn, livssituation, styrkor, svårigheter och behov på ett enda ställe.
+- Menyn har bara en profilingång; /min-livsprofil och /min-situation leder vidare till Min profil.
+- Ingen data ändrad – samma hooks och lagring som tidigare.
+
 ## 2026-09-04 – Min profil: namn och barn
 
 - Ny sida "Min profil" (Mer → Mitt namn och barn) där du sätter ditt namn och valfritt lägger till barnens namn och färger.

@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-04";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Livsprofilen flyttar in i Min profil",
+    items: [
+      "Min livsprofil ligger nu på sidan Min profil – namn, barn och din vardag på ett ställe (2026-09-04)",
+      "En enda profilingång i menyn; gamla länkar leder vidare dit (2026-09-04)",
+    ],
+  },
+  {
     title: "Min profil: namn och barn",
     items: [
       "Ny profilsida där du sätter ditt namn och lägger till barnens namn och färger (2026-09-04)",

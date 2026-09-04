@@ -411,7 +411,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
       >
         <p data-npf="optional" className="text-xs text-muted-foreground">
           Flow utgår från din profil och dina mönster i appen.{" "}
-          <Link to="/min-livsprofil" className="underline underline-offset-2">
+          <Link to="/profil" className="underline underline-offset-2">
             Justera din profil
           </Link>
         </p>
