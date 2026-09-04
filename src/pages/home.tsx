@@ -40,6 +40,7 @@ import { orkFromValue10 } from "@/lib/ork";
 import { heroGradient } from "@/lib/hero-gradient";
 import { useEverydayPatterns } from "@/hooks/use-everyday-patterns";
 import WeekReviewCard from "@/components/week-review-card";
+import FlowHomeCard from "@/components/flow/flow-home-card";
 import { useWeekReview } from "@/hooks/use-activity-history";
 import { weekStartISO } from "@/lib/week-review";
 import { parseISODate } from "@/lib/day";
