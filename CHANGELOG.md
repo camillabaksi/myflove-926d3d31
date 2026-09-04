@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-04 – Min profil: namn och barn
+
+- Ny sida "Min profil" (Mer → Mitt namn och barn) där du sätter ditt namn och valfritt lägger till barnens namn och färger.
+- Namnet driver hälsningen "Hej [namn]!" på startsidan och rubriken "[Namn]s batteri" på Mitt batteri – samma namn överallt, synkat mellan enheter.
+- Barnen återanvänder den befintliga barnfunktionen (lägg till, byt namn, ta bort) – ingen ny datamodell.
+
 ## 2026-09-04 – Enklare frågor + adaptiv personalisering
 
 - Loggningen ställer nu en enda enkel fråga: "🔋 Hur mycket ork har du idag?" med fyra svar (Mycket, Okej, Lite, Nästan slut). Ingen procent, ingen skattningsskala, ingen medicinsk terminologi.
