@@ -95,7 +95,7 @@ export default function FlowHomeCard() {
           label: "📁 Flytta till mapp",
           onClick: () => {
             const folder = folders.find((f) => f.id === topFolderId) ?? folders[0];
-            const note = addNote(stale.text, guessArea(stale.text));
+            addNote(stale.text, guessArea(stale.text));
             if (folder) recordAction("mapp", folder.id);
             else recordAction("anteckning");
             remove(stale.id);
@@ -104,7 +104,6 @@ export default function FlowHomeCard() {
                 ? `Sparad i ${folder.emoji} ${folder.name} bland anteckningarna.`
                 : "Sparad bland anteckningarna – där kan du skapa en mapp.",
             );
-            void note;
           },
         },
         {
