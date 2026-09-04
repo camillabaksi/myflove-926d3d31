@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-04";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Quickflow: flera saker eller en hel tanketömning",
+    items: [
+      "Quickflow fångar både flera saker i samma text och längre tanketömningar utan att dela sönder texten (2026-09-04)",
+      "Ser det ut som en längre anteckning frågar Flow försiktigt: spara som anteckning eller behåll i Quickflow – inget flyttas automatiskt (2026-09-04)",
+      "Efter fångsten väljer du: Saker att göra, Spara som anteckning, Lägg i mapp eller Påminn mig senare (2026-09-04)",
+      "Anteckningen behåller hela originaltexten, mapp är frivillig och inga dubbletter skapas (2026-09-04)",
+    ],
+  },
+  {
     title: "Flow som följeslagare på startsidan",
     items: [
       "Flow möter dig på hem-sidan med en kort fråga och tre–fyra enkla val: Få ur mig något, Kolla min dag, Kolla min ork, Hjälp mig välja (2026-09-04)",
