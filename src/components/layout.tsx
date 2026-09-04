@@ -1073,7 +1073,7 @@ export default function Layout({ children }: LayoutProps) {
             >
               <Menu size={22} strokeWidth={mobileMenuOpen ? 2.6 : 2} />
             </span>
-            <span className="text-[10px] font-medium">Mer</span>
+            <span className="text-[10px] font-medium">{t("Mer")}</span>
           </button>
         </div>
       </nav>
