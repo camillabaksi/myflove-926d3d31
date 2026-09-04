@@ -62,6 +62,18 @@ describe("expandInstances", () => {
     expect(tuesday?.energyImpact).toBe("drains_much");
     expect(monday?.energyImpact).toBeUndefined();
   });
+
+  it("visar en engångsaktivitet som genomförd på sin planerade dag även om avbockningen skedde senare", () => {
+    const done: ActivitySource = {
+      ...fotboll,
+      completed: true,
+      completedAt: Date.parse("2026-09-12T20:00:00"),
+    };
+    const week = expandInstances([done], [], "2026-09-07", "2026-09-13");
+    expect(week.map((i) => i.date)).toEqual(["2026-09-10"]);
+    expect(week[0]!.status).toBe("genomford");
+    expect(week[0]!.actualDate).toBe("2026-09-12");
+  });
 });
 
 describe("groupByDay", () => {

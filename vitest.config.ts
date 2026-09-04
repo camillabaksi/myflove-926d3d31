@@ -28,5 +28,8 @@ export default defineConfig({
     setupFiles: ["./src/test/setup.ts"],
     include: ["src/**/*.test.{ts,tsx}"],
     css: false,
+    // Komponenttester med fake timers blir flakiga på 5 s när hela sviten
+    // körs parallellt – de passerar i isolering. Ger dem mer marginal.
+    testTimeout: 20000,
   },
 });

@@ -179,11 +179,12 @@ export function expandInstances(
           ? record.status
           : completedDay && completedDay === shownDate
             ? "genomford"
-            : !recurring && source.completed && !completedDay
+            : // En engångsaktivitet som bockats av hör till sin planerade dag,
+              // även om avbockningen gjordes en annan dag. Annars skulle den
+              // ligga kvar som "planerad" för alltid och aldrig synas i historiken.
+              !recurring && source.completed
               ? "genomford"
-              : record?.movedTo
-                ? "planerad"
-                : "planerad";
+              : "planerad";
 
       out.push({
         key: instanceKey(source.id, plannedDate),
@@ -195,7 +196,9 @@ export function expandInstances(
         endTime: source.endTime,
         status: derivedStatus,
         completedAt,
-        actualDate: record?.actualDate ?? (derivedStatus === "genomford" ? shownDate : undefined),
+        actualDate:
+          record?.actualDate ??
+          (derivedStatus === "genomford" ? (completedDay ?? shownDate) : undefined),
         expectedEnergy: record?.expectedEnergy ?? source.expectedEnergy,
         energyImpact: record?.energyImpact ?? (recurring ? undefined : source.actualEnergy),
         energyImpactRecordedAt: record?.energyImpactRecordedAt,

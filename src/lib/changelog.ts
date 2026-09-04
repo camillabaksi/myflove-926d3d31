@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-04";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Helhetsgenomgång: historiken visar avbockade aktiviteter rätt",
+    items: [
+      "En engångsaktivitet som bockas av en annan dag visas som genomförd på sin planerade dag, med den faktiska dagen sparad separat (2026-09-04)",
+      "Flyttade aktiviteter ligger kvar bara på sitt nya datum och räknas aldrig som genomförda på ursprungsdagen (2026-09-04)",
+      "Stabilare testkörning så hela sviten inte blir slumpmässigt röd (2026-09-04)",
+    ],
+  },
+  {
     title: "Quickflow: flera saker eller en hel tanketömning",
     items: [
       "Quickflow fångar både flera saker i samma text och längre tanketömningar utan att dela sönder texten (2026-09-04)",
