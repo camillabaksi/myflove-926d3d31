@@ -67,12 +67,20 @@ export default function AdminPage() {
             <h1 className="text-3xl font-serif font-bold">Adminöversikt</h1>
             <p className="text-muted-foreground">Hantera feedback, roller och åtkomst.</p>
           </div>
-          <Link
-            to="/pitch"
-            className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
-          >
-            <PlayCircle size={16} /> Pitchmaterial
-          </Link>
+          <div className="flex flex-wrap gap-2">
+            <Link
+              to="/admin-statistik"
+              className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-medium hover:bg-secondary"
+            >
+              <BarChart3 size={16} /> Appstatistik
+            </Link>
+            <Link
+              to="/pitch"
+              className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
+            >
+              <PlayCircle size={16} /> Pitchmaterial
+            </Link>
+          </div>
         </header>
 
         <div className="flex gap-2 border-b border-border">
