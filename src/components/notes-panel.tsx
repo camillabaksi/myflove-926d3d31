@@ -1,7 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { Check, NotebookPen, Pencil, Trash2, Undo2, Wand2, X } from "lucide-react";
+import {
+  Check,
+  FolderPlus,
+  NotebookPen,
+  Pencil,
+  Plus,
+  Trash2,
+  Undo2,
+  Wand2,
+  X,
+} from "lucide-react";
 import { useNotes } from "@/hooks/use-notes";
+import { useNoteFolders } from "@/hooks/use-note-folders";
+import { useQuickflowHabits } from "@/hooks/use-quickflow-habits";
+import { FOLDER_EMOJIS, FOLDER_SUGGESTIONS } from "@/lib/note-folders";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { useTasks, useReminders, useDumpIdeas } from "@/hooks/use-data";
 import { useSharedShoppingList } from "@/hooks/use-shared-shopping-list";
@@ -49,6 +62,30 @@ export default function NotesPanel() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editText, setEditText] = useState("");
   const [editArea, setEditArea] = useState<LifeArea | "">("");
+
+  const { folders, addFolder, renameFolder, removeFolder } = useNoteFolders();
+  const { recordAction, topFolderId } = useQuickflowHabits();
+  const [activeFolder, setActiveFolder] = useState<string | "all" | "none">("all");
+  const [showFolderManager, setShowFolderManager] = useState(false);
+  const [newFolderName, setNewFolderName] = useState("");
+  const [newFolderEmoji, setNewFolderEmoji] = useState("📁");
+
+  const moveToFolder = (note: FlowNote, folderId: string | undefined) => {
+    updateNote(note.id, { folderId });
+    if (folderId) recordAction("mapp", folderId);
+    const folder = folders.find((f) => f.id === folderId);
+    toast.success(folder ? `Flyttad till ${folder.emoji} ${folder.name}.` : "Ligger utan mapp nu.");
+  };
+
+  const createFolder = (name: string, emoji: string) => {
+    if (!name.trim()) return;
+    if (folders.some((f) => f.name.toLowerCase() === name.trim().toLowerCase())) {
+      toast("Du har redan en mapp med det namnet.");
+      return;
+    }
+    addFolder(name, emoji);
+    toast.success(`Mappen ${emoji} ${name.trim()} är skapad.`);
+  };
 
   const startEdit = (note: FlowNote) => {
     setEditingId(note.id);
@@ -108,6 +145,14 @@ export default function NotesPanel() {
 
   const CONVERSIONS: QuickflowDestination[] = ["paminnelse", "inkop", "studier", "jobb"];
 
+  const visibleNotes = openNotes.filter((n) =>
+    activeFolder === "all"
+      ? true
+      : activeFolder === "none"
+        ? !n.folderId
+        : n.folderId === activeFolder,
+  );
+
   return (
     <div className="space-y-3">
       <form
@@ -134,12 +179,113 @@ export default function NotesPanel() {
         </button>
       </form>
 
-      {openNotes.length === 0 ? (
+      <div className="surface-card space-y-3 p-4">
+        <div className="flex flex-wrap items-center gap-2">
+          <Chip onClick={() => setActiveFolder("all")} highlight={activeFolder === "all"}>
+            Alla
+          </Chip>
+          {folders.map((folder) => (
+            <Chip
+              key={folder.id}
+              onClick={() => setActiveFolder(folder.id)}
+              highlight={activeFolder === folder.id}
+            >
+              {folder.emoji} {folder.name}
+            </Chip>
+          ))}
+          <Chip onClick={() => setActiveFolder("none")} highlight={activeFolder === "none"}>
+            Utan mapp
+          </Chip>
+          <button
+            type="button"
+            onClick={() => setShowFolderManager((v) => !v)}
+            className="ml-auto inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-2 text-xs text-muted-foreground hover:border-primary/50"
+          >
+            <FolderPlus size={14} /> Mina mappar
+          </button>
+        </div>
+
+        {showFolderManager && (
+          <div className="space-y-3 border-t border-border/60 pt-3">
+            <p className="text-xs text-muted-foreground">
+              Mapparna är helt dina. Skapa, byt namn eller ta bort – anteckningarna finns kvar.
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <select
+                value={newFolderEmoji}
+                onChange={(e) => setNewFolderEmoji(e.target.value)}
+                aria-label="Välj ikon"
+                className="rounded-xl border border-border bg-card px-2 py-2 text-sm outline-none"
+              >
+                {FOLDER_EMOJIS.map((emoji) => (
+                  <option key={emoji} value={emoji}>
+                    {emoji}
+                  </option>
+                ))}
+              </select>
+              <input
+                value={newFolderName}
+                onChange={(e) => setNewFolderName(e.target.value)}
+                placeholder="Ny mapp, t.ex. Familj"
+                className="min-w-[10rem] flex-1 rounded-2xl border border-border bg-card px-3 py-2 text-sm outline-none focus:border-primary/50"
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  createFolder(newFolderName, newFolderEmoji);
+                  setNewFolderName("");
+                }}
+                disabled={!newFolderName.trim()}
+                className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-40"
+              >
+                <Plus size={16} /> Skapa
+              </button>
+            </div>
+
+            {folders.length === 0 && (
+              <div className="flex flex-wrap gap-2">
+                {FOLDER_SUGGESTIONS.map((s) => (
+                  <Chip key={s.name} onClick={() => createFolder(s.name, s.emoji)}>
+                    {s.emoji} {s.name}
+                  </Chip>
+                ))}
+              </div>
+            )}
+
+            {folders.map((folder) => (
+              <div key={folder.id} className="flex items-center gap-2">
+                <input
+                  value={folder.name}
+                  onChange={(e) => renameFolder(folder.id, { name: e.target.value })}
+                  aria-label={`Byt namn på ${folder.name}`}
+                  className="flex-1 rounded-xl border border-border bg-card px-3 py-1.5 text-sm outline-none focus:border-primary/50"
+                />
+                <button
+                  type="button"
+                  aria-label={`Ta bort mappen ${folder.name}`}
+                  onClick={() => {
+                    removeFolder(folder.id);
+                    if (activeFolder === folder.id) setActiveFolder("all");
+                    toast("Mappen är borttagen – anteckningarna ligger kvar utan mapp.");
+                  }}
+                  className="text-muted-foreground hover:text-destructive"
+                >
+                  <Trash2 size={16} />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {visibleNotes.length === 0 ? (
         <p className="text-sm text-muted-foreground">
-          Inga anteckningar än. Det du sparar här får bara finnas.
+          {openNotes.length === 0
+            ? "Inga anteckningar än. Det du sparar här får bara finnas."
+            : "Inget i den här mappen än."}
         </p>
       ) : (
-        openNotes.map((note) => {
+        visibleNotes.map((note) => {
           const suggestion = suggestForNote(note);
           return (
             <div key={note.id} className="surface-card p-4 space-y-3">
@@ -188,6 +334,11 @@ export default function NotesPanel() {
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-ink break-words">{note.text}</p>
                     <p className="text-xs text-muted-foreground">
+                      {note.folderId
+                        ? `${folders.find((f) => f.id === note.folderId)?.emoji ?? "📁"} ${
+                            folders.find((f) => f.id === note.folderId)?.name ?? "Mapp"
+                          } · `
+                        : ""}
                       {note.area ? `${AREA_META[note.area].label} · ` : ""}
                       Ingen deadline, inget krav.
                     </p>
@@ -232,6 +383,25 @@ export default function NotesPanel() {
                 >
                   <Undo2 size={16} /> Tillbaka till Quickflow
                 </button>
+                {folders.length > 0 && (
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-xs text-muted-foreground">Lägg i mapp:</span>
+                    {folders.map((folder) => (
+                      <Chip
+                        key={folder.id}
+                        onClick={() =>
+                          moveToFolder(note, note.folderId === folder.id ? undefined : folder.id)
+                        }
+                        highlight={
+                          note.folderId === folder.id ||
+                          (!note.folderId && folder.id === topFolderId)
+                        }
+                      >
+                        {folder.emoji} {folder.name}
+                      </Chip>
+                    ))}
+                  </div>
+                )}
                 <div className="flex flex-wrap gap-2">
                   {CONVERSIONS.map((d) => (
                     <Chip

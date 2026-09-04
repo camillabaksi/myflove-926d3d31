@@ -3,6 +3,10 @@ import { toast } from "sonner";
 import { Check, Clock, MapPin, NotebookPen, Trash2, Undo2, X } from "lucide-react";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { useNotes } from "@/hooks/use-notes";
+import { useNoteFolders } from "@/hooks/use-note-folders";
+import { useQuickflowHabits, type QuickflowAction } from "@/hooks/use-quickflow-habits";
+import { useReminders } from "@/hooks/use-data";
+import { todayISO } from "@/lib/day";
 import CollapsibleSection from "@/components/collapsible-section";
 import { useSavedStores } from "@/hooks/use-data";
 import { sendPushNotification } from "@/lib/push-notifications";
@@ -40,6 +44,9 @@ const SNOOZE_OPTIONS = [
 export function QuickflowList() {
   const { items, openItems, complete, uncomplete, remove, snooze, update } = useQuickflow();
   const { addNote } = useNotes();
+  const { folders } = useNoteFolders();
+  const { addReminder } = useReminders();
+  const { recordAction, topAction, topFolderId } = useQuickflowHabits();
 
   const { savedStores } = useSavedStores();
   const [now, setNow] = useState(() => Date.now());
@@ -227,6 +234,102 @@ export function QuickflowList() {
     </div>
   );
 
+  /**
+   * Något har blivit liggande. Vi frågar försiktigt – vi påstår aldrig att du glömt.
+   * Ordningen anpassas efter vad du oftast brukar välja.
+   */
+  const renderStaleActions = (item: QuickflowItem) => {
+    const actions: { key: QuickflowAction; label: string; onClick: () => void }[] = [
+      {
+        key: "paminn",
+        label: "🔔 Påminn mig senare",
+        onClick: () => {
+          setSnoozeFor(item.id);
+          recordAction("paminn");
+        },
+      },
+      {
+        key: "kalender",
+        label: "📅 Lägg i kalendern",
+        onClick: () => {
+          addReminder(item.text, todayISO(), "09:00");
+          remove(item.id);
+          recordAction("kalender");
+          toast.success("Den ligger i kalendern idag kl 09:00 – ändra när du vill.");
+        },
+      },
+      {
+        key: "klart",
+        label: "✓ Markera som klart",
+        onClick: () => {
+          complete(item.id);
+          recordAction("klart");
+        },
+      },
+      {
+        key: "mapp",
+        label: "📁 Flytta till en mapp",
+        onClick: () => {
+          const folder = folders.find((f) => f.id === topFolderId) ?? folders[0];
+          addNote(item.text, guessArea(item.text));
+          if (folder) recordAction("mapp", folder.id);
+          else recordAction("anteckning");
+          remove(item.id);
+          toast.success(
+            folder
+              ? `Sparad bland anteckningarna – välj mapp ${folder.emoji} ${folder.name} där.`
+              : "Sparad bland anteckningarna – där kan du skapa en mapp.",
+          );
+        },
+      },
+      {
+        key: "bort",
+        label: "🗑️ Jag behöver inte detta längre",
+        onClick: () => {
+          remove(item.id);
+          recordAction("bort");
+        },
+      },
+    ];
+    const sorted = topAction
+      ? [...actions].sort(
+          (a, b) => (b.key === topAction ? 1 : 0) - (a.key === topAction ? 1 : 0),
+        )
+      : actions;
+
+    return (
+      <div className="rounded-2xl bg-secondary/50 border border-border p-3 space-y-2">
+        <p className="text-sm text-ink">
+          Det här har blivit liggande – vill du göra något med det?
+        </p>
+        <div className="flex flex-wrap gap-2">
+          {sorted.map((action, index) => (
+            <button
+              key={action.key}
+              type="button"
+              onClick={action.onClick}
+              className={`rounded-full px-4 py-1.5 text-xs font-medium ${
+                index === 0
+                  ? "bg-primary text-primary-foreground"
+                  : "border border-border bg-card text-ink"
+              }`}
+            >
+              {action.label}
+            </button>
+          ))}
+          <button
+            type="button"
+            onClick={() => update(item.id, { askedAt: Date.now() })}
+            className="rounded-full px-4 py-1.5 text-xs text-muted-foreground hover:underline"
+          >
+            Låt den ligga kvar
+          </button>
+        </div>
+      </div>
+    );
+  };
+
+
   return (
     <section className="space-y-4">
       <CollapsibleSection
@@ -242,39 +345,10 @@ export function QuickflowList() {
       >
         {needsAnswer.length > 0 && (
           <div className="space-y-3">
-            {needsAnswer.map((item) =>
-              renderRow(
-                item,
-                <div className="rounded-2xl bg-secondary/50 border border-border p-3 space-y-2">
-                  <p className="text-sm text-ink">
-                    Du bad mig komma ihåg detta. Vill du fortfarande göra det?
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    <button
-                      type="button"
-                      onClick={() => update(item.id, { askedAt: Date.now() })}
-                      className="rounded-full bg-primary text-primary-foreground px-4 py-1.5 text-xs font-medium"
-                    >
-                      Ja – behåll
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setSnoozeFor(item.id)}
-                      className="rounded-full border border-border bg-card px-4 py-1.5 text-xs"
-                    >
-                      Senare – välj ny tid
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => remove(item.id)}
-                      className="rounded-full border border-destructive/30 text-destructive px-4 py-1.5 text-xs"
-                    >
-                      Inte längre
-                    </button>
-                  </div>
-                </div>,
-              ),
-            )}
+            <p className="text-sm text-ink">
+              Du har något i Quickflow som verkar ha blivit liggande 💜
+            </p>
+            {needsAnswer.map((item) => renderRow(item, renderStaleActions(item)))}
           </div>
         )}
 

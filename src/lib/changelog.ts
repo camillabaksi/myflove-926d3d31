@@ -6,9 +6,18 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-09-04";
+export const CHANGELOG_UPDATED = "2026-09-05";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  {
+    title: "Mappar för anteckningar och mjukare Quickflow",
+    items: [
+      "Anteckningar kan sorteras i egna mappar – skapa, byt namn, ta bort och filtrera (2026-09-05)",
+      "Förslag på mappar när du inte har några egna än (2026-09-05)",
+      "Quickflow frågar mjukare om saker som blivit liggande, med fem enkla alternativ (2026-09-05)",
+      "MyFlove lär sig vilket alternativ du oftast väljer och lägger det först (2026-09-05)",
+    ],
+  },
   {
     title: "Investerarmaterial version 4.1",
     items: [
