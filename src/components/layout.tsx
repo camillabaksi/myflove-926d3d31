@@ -72,6 +72,7 @@ import { useNotificationScheduler } from "@/hooks/use-notification-scheduler";
 import { useAchievementPush } from "@/hooks/use-achievement-push";
 import { usePurgeRevisions } from "@/hooks/use-purge-revisions";
 import { usePushSubscriptionSync } from "@/hooks/use-push-subscription-sync";
+import { useFlowProactivePush } from "@/hooks/use-flow-proactive-push";
 import { useNotificationActions } from "@/hooks/use-notification-actions";
 
 import { useIsAdmin } from "@/hooks/use-is-admin";
@@ -214,6 +215,7 @@ export default function Layout({ children }: LayoutProps) {
   useAchievementPush();
   usePurgeRevisions();
   usePushSubscriptionSync();
+  useFlowProactivePush();
   useNotificationActions();
 
   const { isAdmin } = useIsAdmin();
