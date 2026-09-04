@@ -36,6 +36,7 @@ import { track } from "@/lib/analytics";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { useFlowSettings } from "@/hooks/use-flow-settings";
 import { useFeatureUsage, type FeatureId } from "@/lib/feature-usage";
+import { orkFromValue10 } from "@/lib/ork";
 
 /**
  * Hem = en lugn personlig kontrollpanel.
@@ -82,6 +83,7 @@ export default function Home() {
 
   
   const battery = Math.round(reading.now);
+  const orkLabel = orkFromValue10(energyValue)?.label ?? null;
   const batteryLine =
     battery >= 70
       ? "Du har gott om kraft kvar idag."
@@ -104,7 +106,7 @@ export default function Home() {
     batteri: {
       id: "batteri",
       title: "Batteriet",
-      subtitle: `Din ork idag · ${battery}%`,
+      subtitle: orkLabel ? `Din ork idag · ${orkLabel}` : "Hur mycket ork har du?",
       href: "/mitt-batteri",
       icon: BatteryMedium,
     },
