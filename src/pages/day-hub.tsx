@@ -5,6 +5,7 @@ import { CalendarContent } from "@/pages/calendar";
 import { TodayContent } from "@/pages/today";
 import AddToDay from "@/components/day/add-to-day";
 import { track } from "@/lib/analytics";
+import { useLang } from "@/hooks/use-language";
 import { CalendarDays, Heart, Plus } from "lucide-react";
 
 export type DayTab = "idag" | "kalender" | "lagg-till";
@@ -26,6 +27,7 @@ const TABS: { id: DayTab; href: string; label: string; icon: typeof Heart }[] = 
  * Varje flik har en egen adress, så länkar, bakåtknapp och delning fungerar.
  */
 export function DayHub({ tab }: { tab: DayTab }) {
+  const { t } = useLang();
   useEffect(() => {
     track("day_hub_viewed", { source: tab });
   }, [tab]);
@@ -48,7 +50,7 @@ export function DayHub({ tab }: { tab: DayTab }) {
                 active ? "bg-card text-ink shadow-soft" : "text-muted-foreground hover:text-ink"
               }`}
             >
-              <Icon size={16} aria-hidden /> {t.label}
+              <Icon size={16} aria-hidden /> {t(t_label(t))}
             </Link>
           );
         })}
