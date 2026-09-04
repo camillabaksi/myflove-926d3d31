@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-04 – Allt sparas + Flow hör av sig när det behövs
+
+- Ditt namn i Min profil sparas automatiskt medan du skriver (och när du lämnar fältet) – inget kan gå förlorat för att du glömde trycka Spara. Övriga profil- och livsprofilfält sparade redan direkt.
+- Flow kan nu skicka proaktiva notiser: en enkel fråga om orken om du inte loggat idag, en mjuk puff när dagen är full och orken låg, och ett erbjudande att sortera när Quickflow-inkorgen växer.
+- Puffarna ligger i samma påminnelsekö som allt annat, så de kommer fram även när appen är stängd – och skickas som mest en gång per dag och regel.
+
 ## 2026-09-04 – Livsprofilen flyttar in i Min profil
 
 - Min livsprofil är nu en del av sidan Min profil (/profil) – namn, barn, livssituation, styrkor, svårigheter och behov på ett enda ställe.
