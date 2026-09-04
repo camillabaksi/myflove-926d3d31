@@ -47,6 +47,7 @@ export default function SimpleCheckin({
   const [note, setNote] = useState("");
   const [saved, setSaved] = useState(false);
   const [started, setStarted] = useState(false);
+  const [showMore, setShowMore] = useState(false);
 
   useEffect(() => {
     if (energyValue != null) setBattery(energyValue);
