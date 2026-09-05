@@ -153,7 +153,7 @@ För att återaktivera senare:
 ## Android App Bundle (.aab) — uppdaterat 2026-09-04
 
 Native Android-projektet ligger nu i `android/` i repot (paket `app.myflove.mobile`,
-versionName `4.1`, versionCode `1`). `webDir` pekar på `mobile-webroot/` — en liten
+versionName `4.1`, versionCode `2`). `webDir` pekar på `mobile-webroot/` — en liten
 fallback-sida, eftersom appen laddar den publicerade webben via `server.url`.
 
 ### 1. Skapa din keystore (en gång, lokalt — commit den ALDRIG)
