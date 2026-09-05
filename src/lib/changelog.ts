@@ -6,9 +6,18 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-09-04";
+export const CHANGELOG_UPDATED = "2026-09-05";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  {
+    title: "MyFlove-ikon i Android-appen",
+    items: [
+      "Standardikonen (Capacitor) ersatt med MyFloves officiella logotyp (2026-09-05)",
+      "Ikoner genererade från public/logo.svg för alla Android-densiteter, inklusive rund ikon och adaptive icon (2026-09-05)",
+      "Adaptive icon-bakgrunden är nu MyFloves lila i stället för vitt (2026-09-05)",
+      "versionCode höjt till 2, versionName fortfarande 4.1 (2026-09-05)",
+    ],
+  },
   {
     title: "Health Connect borttaget ur Android-MVP:n",
     items: [

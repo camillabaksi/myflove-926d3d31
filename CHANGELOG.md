@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-09-05 – MyFlove-ikon i Android-appen
+
+- Standardikonen (Capacitor) ersatt med MyFloves officiella logotyp: lila ruta med vitt M och rosa prick.
+- Ikonerna genererade från `public/logo.svg` för alla densiteter (mdpi–xxxhdpi): vanlig ikon, rund ikon och adaptive icon-foreground.
+- Adaptive icon-bakgrunden är nu MyFloves lila (#7C5CE0) i stället för vitt.
+- Gamla Capacitor-standardikoner (`drawable/ic_launcher_background.xml`, `drawable-v24/ic_launcher_foreground.xml`) borttagna.
+- versionCode höjt från 1 till 2 (versionName fortfarande 4.1) så nästa signerade AAB kan laddas upp som ny version i Google Play Console.
+
 ## 2026-09-04 – Health Connect borttaget ur Android-MVP:n
 
 - Steg-behörigheten (`READ_STEPS`) och Health Connect-intent-filtret är borttagna ur Android-manifestet.
