@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-06";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Android AAB versionCode 3 förberedd",
+    items: [
+      "Webbprojektet byggt och typkontrollerat inför ny Android-release (2026-09-06)",
+      "versionCode höjd från 2 till 3 i android/app/build.gradle (2026-09-06)",
+      "Capacitor-konfigurationen och mobile-webroot uppdaterade till nya ljuslila bakgrundsfärgen #F9F7FD (2026-09-06)",
+      "Lokal byggning: bun install && bun run cap:sync && bun run android:aab (2026-09-06)",
+    ],
+  },
+  {
     title: "Vardagsrutiner dyker inte upp på helgen",
     items: [
       "Rutiner inställda på vardagar visas inte längre på lördag/söndag, även om de skapades en helgdag (2026-09-06)",
