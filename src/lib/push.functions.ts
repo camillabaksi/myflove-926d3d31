@@ -86,6 +86,24 @@ export const sendTestPush = createServerFn({ method: "POST" })
     return { sent };
   });
 
+// ---- Status: vilka enheter kan ta emot notiser -----------------------------
+
+/** Returnerar de enheter (endpoints) som kan ta emot notiser för kontot. */
+export const getPushStatus = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { supabase, userId } = context;
+    const { data, error } = await supabase
+      .from("push_subscriptions")
+      .select("endpoint, last_seen_at")
+      .eq("user_id", userId);
+    if (error) throw new Error(error.message);
+    return {
+      devices: (data ?? []).length,
+      endpoints: (data ?? []).map((d) => d.endpoint as string),
+    };
+  });
+
 // ---- Sync a scheduled reminder ---------------------------------------------
 
 const ReminderKind = z.enum(["medication", "task", "loop", "weather", "custom"]);

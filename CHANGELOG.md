@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-09-06 – Notiser: tydlig status och "Testa notis"
+
+- Nytt lugnt notiskort på Rutiner & medicin och Påminnelser: visar om just den här enheten är registrerad för notiser, inte bara om webbläsaren gett lov.
+- Ny knapp "Testa notis" skickar en riktig push via servern, så man kan kontrollera hela kedjan.
+- Morgonstart visar en lugn förklaring när notiser inte är påslagna, i stället för att låtsas att alarmet fungerar.
+- iPhone-hjälp när appen inte ligger på hemskärmen, och en tydlig not om att tyst läge/Stör ej och strömsparläge styrs av telefonen.
+- Rotorsak vid felsökningen: Morgonstart schemaläggs korrekt i svensk lokaltid varje minut på servern, men utskicket når ingen enhet om kontot saknar en aktiv push-prenumeration.
+
 ## 2026-09-06 – Återkommande aktiviteter är en rutin, inte fem kopior
 
 - En återkommande aktivitet (t.ex. "Lämna barnen på förskolan", vardagar) sparas som EN post med repetitionsregel och visas automatiskt på rätt dagar i Idag, Kalender och Flow.

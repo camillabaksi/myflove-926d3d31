@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-06";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Notiser: tydlig status och \"Testa notis\"",
+    items: [
+      "Nytt notiskort visar om den här enheten verkligen är registrerad för notiser (2026-09-06)",
+      "Knappen \"Testa notis\" skickar en riktig push via servern (2026-09-06)",
+      "Morgonstart förklarar lugnt när notiser inte är påslagna i stället för att låtsas fungera (2026-09-06)",
+      "Hjälp för iPhone-hemskärm samt not om tyst läge, Stör ej och strömsparläge (2026-09-06)",
+    ],
+  },
+  {
     title: "Återkommande aktiviteter är en rutin, inte fem kopior",
     items: [
       "En återkommande aktivitet sparas som en post med repetitionsregel och visas på rätt dagar (2026-09-06)",

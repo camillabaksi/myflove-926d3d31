@@ -6,7 +6,7 @@ import CollapsibleSection from "@/components/collapsible-section";
 import { Button } from "@/components/ui/button";
 import { useReminders, type Reminder, type RepeatMode } from "@/hooks/use-data";
 import { useReminderSync } from "@/hooks/use-reminder-sync";
-import { EnablePushButton } from "@/components/enable-push-button";
+import PushStatusCard from "@/components/push-status-card";
 import { MedicationContent } from "@/pages/medication";
 import {
   getNotificationPermission,
@@ -266,12 +266,7 @@ export default function RemindersPage() {
               </Button>
             )}
           </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <EnablePushButton />
-            <p className="min-w-0 flex-1 text-xs text-muted-foreground">
-              Push når dig även när appen är stängd. Avbokade påminnelser skickar aldrig något.
-            </p>
-          </div>
+          <PushStatusCard className="mt-2" />
         </MyFloveBlock>
 
         <MyFloveWide>
