@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-06 – Påverkan och menscykel styr dagens prioriteringar
+
+- Flow väger nu in dagens registrerade påverkan (val + grad) och – om användaren aktiverat den – menscykeln när Quickflow-listan prioriteras.
+- Samma bakgrund används när en enskild uppgift förtydligas, så första steg och energinot anpassas efter dagens kapacitet.
+- Ny gemensam hook `useCapacityContext` – ingen ny datakälla, ingen ny insamling.
+- Batteriprocenten ändras aldrig av detta, och MyFlove diagnostiserar inte och ger inga medicinska råd.
+
 ## 2026-09-06 – Påverkan i historiken och valbara mönster
 
 - Historik visar nu dagens registrerade påverkan (val + grad) diskret under datumet – även för dagar utan aktiviteter.

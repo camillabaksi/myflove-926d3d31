@@ -6,6 +6,8 @@ const InputSchema = z.object({
   titles: z.array(z.string().min(1).max(200)).min(1).max(20),
   /** Batterinivå 0–100 om den finns. */
   energyPercent: z.number().min(0).max(100).optional(),
+  /** Dagens påverkan/menscykel som bakgrund – aldrig diagnos. */
+  context: z.string().max(1500).optional(),
 });
 
 const OutputSchema = z.object({
@@ -50,6 +52,7 @@ export const prioritizeQuickflow = createServerFn({ method: "POST" })
       typeof data.energyPercent === "number"
         ? `Energinivå just nu: ${Math.round(data.energyPercent)}/100`
         : "Energinivå: okänd",
+      ...(data.context ? ["", data.context] : []),
       "",
       "Saker användaren behöver få gjort:",
       ...data.titles.map((t) => `- ${t}`),

@@ -6,6 +6,8 @@ const InputSchema = z.object({
   title: z.string().min(1).max(200),
   /** Batterinivå 0–100 om den finns. */
   energyPercent: z.number().min(0).max(100).optional(),
+  /** Dagens påverkan/menscykel som bakgrund – aldrig diagnos. */
+  context: z.string().max(1500).optional(),
 });
 
 const OutputSchema = z.object({
@@ -46,6 +48,7 @@ export const clarifyQuickflowTask = createServerFn({ method: "POST" })
       typeof data.energyPercent === "number"
         ? `Energinivå just nu: ${Math.round(data.energyPercent)}/100`
         : "Energinivå: okänd",
+      ...(data.context ? ["", data.context] : []),
       "",
       `Uppgift: ${data.title}`,
     ].join("\n");

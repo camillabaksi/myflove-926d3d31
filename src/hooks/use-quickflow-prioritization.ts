@@ -3,6 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { prioritizeQuickflow } from "@/lib/quickflow-priority.functions";
 import { heuristicPriority } from "@/lib/quickflow-priority";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
+import { useCapacityContext } from "@/hooks/use-capacity-context";
 import { usePriorityList } from "@/hooks/use-priority-list";
 import { useTasks } from "@/hooks/use-data";
 import { dayOf, todayISO } from "@/lib/day";
@@ -15,6 +16,7 @@ import { dayOf, todayISO } from "@/lib/day";
 export function useQuickflowPrioritization() {
   const run = useServerFn(prioritizeQuickflow);
   const { reading } = useEnergyBattery();
+  const capacityContext = useCapacityContext();
   const { items: priorityItems, merge, setIntro } = usePriorityList();
   const { tasks, addTask, updateTask } = useTasks();
 
@@ -51,7 +53,7 @@ export function useQuickflowPrioritization() {
       const energyPercent = reading?.now;
       const now = Date.now();
       try {
-        const result = await run({ data: { titles: clean, energyPercent } });
+        const result = await run({ data: { titles: clean, energyPercent, context: capacityContext } });
         merge(
           result.items.map((it, i) => ({
             id: `${now}-${i}`,
@@ -68,7 +70,7 @@ export function useQuickflowPrioritization() {
         setIntro("Jag sorterade dem så gott jag kunde. Du får gärna ändra ordningen.");
       }
     },
-    [run, reading?.now, merge, setIntro],
+    [run, reading?.now, capacityContext, merge, setIntro],
   );
 
   return { prioritizeTitles, energyPercent: reading?.now };
