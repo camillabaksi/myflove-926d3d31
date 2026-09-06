@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Baby, Check, Languages, Pencil, Plus, Trash2, User } from "lucide-react";
+import { Baby, Check, Flower2, Languages, Pencil, Plus, Trash2, User } from "lucide-react";
 import Layout from "@/components/layout";
 import { MyFloveHeader } from "@/components/myflove";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
@@ -300,6 +300,52 @@ export default function ProfilePage() {
               </button>
             ))}
           </div>
+        </MyFloveWide>
+
+        {/* Menscykel – helt frivillig, avstängd tills användaren svarar ja */}
+        <MyFloveWide className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft">
+          <div className="flex items-center gap-2">
+            <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+              <Flower2 size={18} />
+            </span>
+            <div>
+              <h2 className="text-base font-semibold text-ink">
+                {t("Vill du använda menscykel i MyFlove?")}
+              </h2>
+              <p className="text-xs text-muted-foreground">
+                {t("Helt frivilligt. Väljer du Nej visas ingenting om menscykel och Flow tar inte hänsyn till det.")}
+              </p>
+            </div>
+          </div>
+          <div
+            className="mt-3 flex flex-wrap gap-2"
+            role="radiogroup"
+            aria-label={t("Vill du använda menscykel i MyFlove?")}
+          >
+            {[true, false].map((v) => (
+              <button
+                key={String(v)}
+                type="button"
+                role="radio"
+                aria-checked={cycle.answered && cycle.enabled === v}
+                onClick={() => setCycleEnabled(v)}
+                data-testid={`profile-cycle-${v ? "yes" : "no"}`}
+                className={`flex items-center gap-2 rounded-2xl border px-4 py-2 text-sm font-medium transition ${
+                  cycle.answered && cycle.enabled === v
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-border/60 bg-background/60 text-ink hover:bg-muted/40"
+                }`}
+              >
+                {v ? t("Ja") : t("Nej")}
+                {cycle.answered && cycle.enabled === v && <Check size={14} />}
+              </button>
+            ))}
+          </div>
+          {cycle.enabled && (
+            <p className="mt-2 text-xs text-muted-foreground">
+              {t("Du hittar menscykeln under Mitt batteri.")}
+            </p>
+          )}
         </MyFloveWide>
 
         {/* Livsprofilen bor nu här – en enda profil, inga dubbla vägar */}
