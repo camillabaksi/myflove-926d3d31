@@ -10,6 +10,16 @@ export const CHANGELOG_UPDATED = "2026-09-06";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Kapacitet, påverkan och frivillig menscykel",
+    items: [
+      "\"Vad påverkar din kapacitet?\" – diskret kort under batteriet med grupperna Kropp & hälsa, Känslor & tankar och Omgivning (2026-09-06)",
+      "Flera val samtidigt, grad Lite/Måttligt/Mycket, enkelt att ändra eller ta bort (2026-09-06)",
+      "Frivillig menscykel: aktiveras med Ja/Nej i Min profil, helt dold om man väljer Nej (2026-09-06)",
+      "Enkel cykelvy på Mitt batteri: mensdag, uppskattad tidslinje och symtom – uppskattningar, inga medicinska påståenden (2026-09-06)",
+      "Personliga mönster byggs bara på egen registrerad data och kan stängas av för Flow (2026-09-06)",
+    ],
+  },
+  {
     title: "Påverkan i Mitt batteri",
     items: [
       "Ny funktion: ange vad som påverkar dagens kapacitet (känslomässigt, mentalt, familj, jobb, oro m.m.) – flera val möjliga – med graden Lite/Måttligt/Mycket (2026-09-06)",

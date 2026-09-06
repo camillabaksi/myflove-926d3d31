@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-09-06 – Kapacitet, påverkan och frivillig menscykel
+
+- "Påverkan" är nu "Vad påverkar din kapacitet?" – ett diskret, hopfällbart kort direkt under batteriet med tre lugna grupper: Kropp & hälsa, Känslor & tankar och Omgivning, plus "Inget särskilt".
+- Flera val samtidigt, grad Lite/Måttligt/Mycket, och registreringen går att ändra eller ta bort direkt.
+- Ny frivillig menscykel: frågan "Vill du använda menscykel i MyFlove?" (Ja/Nej) finns i Min profil. Väljs Nej visas ingenting och Flow tar inte hänsyn till det.
+- Är den på visas ett diskret kort på Mitt batteri: markera mensdag, uppskattad tidslinje (Mens → Follikulär → Ägglossning → Luteal), cykeldag och symtom (smärta, extra trötthet, känslomässig påverkan, annat).
+- Personliga mönster byggs bara på användarens egen registrerade data, formuleras försiktigt och kan stängas av för Flow.
+- Kapacitetsprocenten är fortfarande enbart användarens egen bedömning – inget av detta ändrar batterinivån automatiskt. MyFlove diagnostiserar inte och ger inga medicinska råd.
+
 ## 2026-09-06 – Påverkan i Mitt batteri
 
 - Ny enkel funktion "Påverkan" på Mitt batteri-sidan: användaren anger om något känslomässigt, mentalt eller omgivningsrelaterat belastar kapaciteten just nu.

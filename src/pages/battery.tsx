@@ -8,6 +8,7 @@ import { ExpandableBlock } from "@/components/myflove/expandable-block";
 import EnergyBattery from "@/components/energy-battery";
 import SimpleCheckin from "@/components/simple-checkin";
 import ImpactCheckin from "@/components/impact-checkin";
+import CycleCard from "@/components/cycle-card";
 import BatteryToday from "@/components/battery-today";
 import DayEdgesCheckin from "@/components/day-edges-checkin";
 import DayEnergyFlow from "@/components/day-energy-flow";
@@ -57,6 +58,11 @@ export default function BatteryPage() {
         <MyFloveWide className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">
           <ImpactCheckin />
           <BatteryToday />
+        </MyFloveWide>
+
+        {/* 2b. Menscykel – visas bara om användaren själv aktiverat den */}
+        <MyFloveWide className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">
+          <CycleCard />
         </MyFloveWide>
 
         {/* 3. Morgon/kväll */}
