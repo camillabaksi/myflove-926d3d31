@@ -126,6 +126,35 @@ export default function ImpactCheckin() {
         {kinds.length > 0 && !onlyNothing && (
           <div className="space-y-1.5">
             <p className="text-xs text-muted-foreground">
+              {t("Påverkar det dig nu, eller har det påverkat dig?")}
+            </p>
+            <div className="grid grid-cols-2 gap-2">
+              {IMPACT_TIMINGS.map((tm) => {
+                const on = timing === tm.id;
+                return (
+                  <button
+                    key={tm.id}
+                    type="button"
+                    aria-pressed={on}
+                    onClick={() => setTiming(tm.id)}
+                    className={cn(
+                      "min-h-11 rounded-2xl border px-3 py-2 text-sm font-medium transition-all",
+                      on
+                        ? "border-primary bg-primary/10 text-ink"
+                        : "border-border/60 bg-card/70 text-muted-foreground hover:text-foreground",
+                    )}
+                  >
+                    {t(tm.labelSv)}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {kinds.length > 0 && !onlyNothing && (
+          <div className="space-y-1.5">
+            <p className="text-xs text-muted-foreground">
               {t("Hur mycket påverkar det dig just nu?")}
             </p>
             <div className="grid grid-cols-3 gap-2">
