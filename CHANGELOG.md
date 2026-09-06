@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-06 – Påverkan i historiken och valbara mönster
+
+- Historik visar nu dagens registrerade påverkan (val + grad) diskret under datumet – även för dagar utan aktiviteter.
+- Nytt hopfällbart kort "Mina mönster" på Mitt batteri: stängt som standard, öppnas bara när användaren vill titta.
+- Mönstren bygger enbart på egen data (påverkan + energi), formuleras försiktigt och saknas underlag visas en lugn förklaring i stället för påhittade mönster.
+
 ## 2026-09-06 – Kapacitet, påverkan och frivillig menscykel
 
 - "Påverkan" är nu "Vad påverkar din kapacitet?" – ett diskret, hopfällbart kort direkt under batteriet med tre lugna grupper: Kropp & hälsa, Känslor & tankar och Omgivning, plus "Inget särskilt".
