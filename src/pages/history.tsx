@@ -104,6 +104,26 @@ export default function History() {
 
             <WeekReviewCard review={review} showLink={false} />
 
+            {/* Dagar med bara påverkan registrerad (inga aktiviteter) */}
+            {days
+              .filter(
+                (d) =>
+                  !grouped.some((g) => g.date === d) &&
+                  impactHistory.some((h) => h.day === d),
+              )
+              .map((d) => (
+                <section
+                  key={d}
+                  aria-label={formatDay(d, locale)}
+                  className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+                >
+                  <h2 className="text-base font-semibold capitalize text-ink">
+                    {formatDay(d, locale)}
+                  </h2>
+                  <DayImpact day={d} history={impactHistory} />
+                </section>
+              ))}
+
             {grouped.length === 0 ? (
               <p className="rounded-3xl border border-border/60 bg-card p-5 text-sm text-muted-foreground shadow-soft">
                 {t("Inga aktiviteter den här veckan.")}
