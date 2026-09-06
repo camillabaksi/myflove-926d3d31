@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-06";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Android AAB versionCode 5 förberedd",
+    items: [
+      "versionCode höjd till 5 i android/app/build.gradle – 4 fanns redan i Google Play Console (2026-09-06)",
+      "Innehåller senaste webbändringar: rutiner i kalendern, påverkan, rätt vardagslogik och tydlig notisstatus (2026-09-06)",
+      "Lokal byggning: bun install && bun run cap:sync && bun run android:aab (2026-09-06)",
+    ],
+  },
+  {
     title: "Android AAB versionCode 4 förberedd",
     items: [
       "versionCode höjd från 3 till 4 i android/app/build.gradle (2026-09-06)",
