@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-06 – Android AAB versionCode 3 förberedd
+
+- Byggt och typkontrollerat webbprojektet inför ny Android-release.
+- `versionCode` höjd från 2 till 3 i `android/app/build.gradle` så Google Play accepterar uppladdningen.
+- Capacitor-konfigurationen och fallback-sidan (`mobile-webroot`) uppdaterade till den nya ljuslila bakgrundsfärgen (`#F9F7FD`) i stället för den gamla beige tonen.
+- Instruktioner för lokal byggning: `bun install && bun run cap:sync && bun run android:aab`.
+
 ## 2026-09-06 – Vardagsrutiner dyker inte upp på helgen
 
 - En rutin som är inställd på "vardagar" visas inte längre på lördag/söndag, även om den skapades en helgdag. Samma sak för "varje vecka" – den följer nu sin veckodag i stället för att också dyka upp på startdagen.
