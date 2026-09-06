@@ -29,6 +29,7 @@ export function useFlowPersonalContext(): string {
   const { situation } = useSituation();
   const { moods } = useMoods();
   const { todayEnergyEntries } = useQuickCheckin();
+  const { impact } = useImpactCheckin();
 
   return useMemo(() => {
     const lines: string[] = ["Om användaren (personlig kontext, inte regler):"];

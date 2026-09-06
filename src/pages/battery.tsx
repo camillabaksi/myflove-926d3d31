@@ -52,9 +52,14 @@ export default function BatteryPage() {
           <EnergyBattery defaultOpen />
         </MyFloveWide>
 
-        {/* 2. Dagens tidsstämplade observationer + morgon/kväll */}
+        {/* 2. Påverkan + dagens tidsstämplade observationer */}
         <MyFloveWide className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">
+          <ImpactCheckin />
           <BatteryToday />
+        </MyFloveWide>
+
+        {/* 3. Morgon/kväll */}
+        <MyFloveWide className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">
           <DayEdgesCheckin />
         </MyFloveWide>
 
