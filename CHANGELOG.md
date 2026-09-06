@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-06 – Android AAB versionCode 4 förberedd
+
+- `versionCode` höjd från 3 till 4 i `android/app/build.gradle` så nästa AAB kan laddas upp i Google Play Console.
+- Innehåller alla senaste webbändringar: rutiner i kalendern, påverkan, rätt vardagslogik och tydlig notisstatus.
+- Instruktioner för lokal byggning: `bun install && bun run cap:sync && bun run android:aab`.
+
 ## 2026-09-06 – Android AAB versionCode 3 förberedd
 
 - Byggt och typkontrollerat webbprojektet inför ny Android-release.
