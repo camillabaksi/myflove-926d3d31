@@ -20,7 +20,14 @@ import {
 } from "lucide-react";
 import { requestNotificationPermission, getNotificationPermission } from "@/lib/push-notifications";
 import { downloadIcs, parseIcs, type IcsEvent } from "@/lib/ics";
-import { occursOn, REPEAT_LABELS, type RepeatMode } from "@/lib/recurrence";
+import {
+  occursOn,
+  routineOccursOn,
+  REPEAT_LABELS,
+  type RepeatMode,
+  type Routine,
+} from "@/lib/recurrence";
+import ImpactCheckin from "@/components/impact-checkin";
 import { useUser } from "@clerk/react";
 import {
   useGetMyHousehold,
@@ -173,6 +180,8 @@ export function CalendarContent() {
     "myflove-calendar-categories",
     ALL_CATEGORIES,
   );
+  // Rutiner ("myflove-routines") visas som återkommande hållpunkter i kalendern.
+  const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
   // Migrerar gamla filter ("familj") en gång, utan att tappa vad du valt.
   useEffect(() => {
     if (!visible.some((c) => (c as string) === "familj")) return;
