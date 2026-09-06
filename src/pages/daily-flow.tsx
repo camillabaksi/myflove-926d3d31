@@ -7,6 +7,7 @@ import { Sun, Repeat, Pill, Sunrise } from "lucide-react";
 import CollapsibleSection from "@/components/collapsible-section";
 import WakeUpCard from "@/components/wake-up-card";
 import WakeUpSettings from "@/components/wake-up-settings";
+import PushStatusCard from "@/components/push-status-card";
 
 function MorningContent() {
   return (
@@ -15,6 +16,7 @@ function MorningContent() {
         Dagen behöver inte börja perfekt. Kryssa ett steg så vet jag att du är igång.
       </p>
       <WakeUpCard always />
+      <PushStatusCard />
       <WakeUpSettings />
     </div>
   );
