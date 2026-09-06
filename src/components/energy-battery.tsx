@@ -3,6 +3,7 @@ import { ArrowRight, BatteryCharging, ChevronDown, Gauge, Sparkles } from "lucid
 import { Link } from "wouter";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";
+import ImpactBatteryNudge from "@/components/impact-battery-nudge";
 import { useAnimatedNumber } from "@/hooks/use-animated-number";
 import { minutesToTime } from "@/lib/energy-battery";
 import { MyFloveBlock, MyFloveStat } from "@/components/myflove/block";
@@ -96,6 +97,7 @@ export default function EnergyBattery({
         />
       </div>
       <BatteryCurve reading={reading} compact={false} />
+      <ImpactBatteryNudge />
       {!reading.personal && (
         <p className="text-xs text-muted-foreground">
           {t("Preliminär kurva – blir din egen när du loggat energi några dagar.")}
