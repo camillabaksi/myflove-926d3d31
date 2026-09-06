@@ -271,4 +271,26 @@ export const EN_BATTERY: Record<string, string> = {
   "Mönster över vad du faktiskt gjort idag – inte din nuvarande nivå. Din energibild just nu är Mitt energibatteri. Minus betyder att det tog energi, plus att det gav.":
     "Patterns of what you've actually done today – not your current level. Your current energy picture is My energy battery. Minus means it took energy, plus means it gave energy.",
   "Energins historik idag ": "Energy history today ",
+
+  // impact-checkin.tsx
+  "Påverkan": "Impact",
+  "Något som tynger just nu? Det hjälper Flow anpassa dagen.":
+    "Something weighing on you right now? It helps Flow adapt the day.",
+  "Jag är känslomässigt påverkad": "I'm emotionally affected",
+  "Mitt huvud är överbelastat": "My head is overloaded",
+  "Familj/barn tar mycket energi": "Family/kids take a lot of energy",
+  "Jobb/ekonomi påverkar mig": "Work/finances are affecting me",
+  "Någon annans mående påverkar mig": "Someone else's mood is affecting me",
+  "Oro eller något som hänt": "Worry or something that happened",
+  "Annat": "Other",
+  "Inget särskilt": "Nothing in particular",
+  "Hur mycket påverkar det dig?": "How much does it affect you?",
+  "Lite": "A little",
+  "Måttligt": "Moderately",
+  "Mycket": "A lot",
+  "Tack – sparat": "Thanks – saved",
+  "Spara påverkan": "Save impact",
+  "Sparat för idag – du kan ändra när du vill.": "Saved for today – you can change it anytime.",
+  "Påverkan ändrar inte din batterinivå – den ger Flow sammanhang.":
+    "Impact doesn't change your battery level – it gives Flow context.",
 };
