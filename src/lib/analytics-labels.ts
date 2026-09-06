@@ -97,6 +97,7 @@ export const ACTION_LABELS: Record<string, string> = {
   battery_checkin_completed: "Orkkoll klar",
   battery_checked: "Ork kollad",
   battery_logged: "Ork loggad",
+  impact_logged: "Påverkan registrerad",
   mood_checkin_started: "Måendekoll påbörjad",
   mood_checkin_completed: "Måendekoll klar",
   mood_logged: "Mående loggat",
