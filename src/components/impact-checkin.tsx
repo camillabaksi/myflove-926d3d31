@@ -42,8 +42,8 @@ export default function ImpactCheckin() {
   const onlyNothing = kinds.length > 0 && kinds.every((k) => k === "inget");
 
   const save = () => {
-    if (!kinds.length || !degree) return;
-    logImpact(kinds, degree);
+    if (!kinds.length) return;
+    logImpact(kinds, degree ?? "lite");
     track("impact_logged", { source: "mitt-batteri" });
     setSaved(true);
     window.setTimeout(() => setSaved(false), 2500);
