@@ -96,6 +96,8 @@ export default function History() {
                   <h2 className="text-base font-semibold capitalize text-ink">
                     {formatDay(day.date, locale)}
                   </h2>
+                  <DayImpact day={day.date} history={impactHistory} />
+
                   <ul className="mt-3 space-y-3">
                     {day.items.map((item) => (
                       <li key={item.key} className="rounded-2xl bg-lavender/20 px-3 py-2.5">
