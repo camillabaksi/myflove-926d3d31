@@ -15,6 +15,27 @@ import { addDaysISO, todayISO, parseISODate } from "@/lib/day";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { track } from "@/lib/analytics";
 import { useLang } from "@/hooks/use-language";
+import { useImpactCheckin } from "@/hooks/use-impact-checkin";
+import { IMPACT_DEGREES, impactOption, type ImpactEntry } from "@/lib/impact-checkin";
+
+/** Dagens registrerade påverkan – visas diskret överst i dagens historik. */
+function DayImpact({ day, history }: { day: string; history: ImpactEntry[] }) {
+  const { t } = useLang();
+  const entry = history.find((h) => h.day === day);
+  if (!entry) return null;
+  const labels = entry.kinds
+    .map((k) => impactOption(k))
+    .filter(Boolean)
+    .map((o) => `${o!.emoji} ${t(o!.labelSv)}`);
+  const degree = IMPACT_DEGREES.find((d) => d.id === entry.degree);
+  return (
+    <p className="mt-1.5 text-xs text-muted-foreground">
+      {t("Påverkan")}: {labels.join(", ")}
+      {degree ? ` · ${t(degree.labelSv)}` : ""}
+    </p>
+  );
+}
+
 
 function formatDay(iso: string, locale: string): string {
   const d = parseISODate(iso);
@@ -37,6 +58,7 @@ export default function History() {
 
   const [weekStart, setWeekStart] = useState(() => weekStartISO(todayISO()));
   const { instancesBetween, setEnergy } = useActivityHistory();
+  const { impactHistory } = useImpactCheckin();
   const review = useWeekReview(weekStart);
 
   const days = weekDates(weekStart);
