@@ -34,7 +34,7 @@ export default function ImpactCheckin() {
   const save = () => {
     if (!kind || !degree) return;
     logImpact(kind, degree);
-    track("impact_logged", { source: "mitt-batteri", kind, degree });
+    track("impact_logged", { source: "mitt-batteri" });
     setSaved(true);
     window.setTimeout(() => setSaved(false), 2500);
   };

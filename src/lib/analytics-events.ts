@@ -146,6 +146,7 @@ const EVENT_SECTION: Record<AnalyticsEventName, string> = {
   battery_checkin_completed: "batteri",
   battery_checked: "batteri",
   battery_logged: "batteri",
+  impact_logged: "batteri",
   mood_checkin_started: "mood",
   mood_checkin_completed: "mood",
   mood_logged: "mood",
