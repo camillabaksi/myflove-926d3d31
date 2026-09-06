@@ -24,6 +24,7 @@ import ActivityEnergyPrompt from "@/components/activity-energy-prompt";
 import QuickflowPlanDialog, { type PlanChoice } from "@/components/quickflow-plan-dialog";
 import { usePriorityList } from "@/hooks/use-priority-list";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
+import { useCapacityContext } from "@/hooks/use-capacity-context";
 import { useTasks } from "@/hooks/use-data";
 import { useToast } from "@/hooks/use-toast";
 import { guessArea, guessEmoji } from "@/lib/quickflow";
@@ -51,6 +52,7 @@ export function QuickflowPriority() {
   const { openItems, doneItems, intro, add, update, remove, move, clear, splitItem } =
     usePriorityList();
   const { reading } = useEnergyBattery();
+  const capacityContext = useCapacityContext();
   const { tasks, addTask, updateTask } = useTasks();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -74,7 +76,7 @@ export function QuickflowPriority() {
 
     setClarifyingId(item.id);
     try {
-      const result = await clarify({ data: { title: item.title, energyPercent } });
+      const result = await clarify({ data: { title: item.title, energyPercent, context: capacityContext } });
       update(item.id, { clarify: result });
       setExpandedClarificationId(item.id);
     } catch (error) {
