@@ -465,6 +465,16 @@ export function CalendarContent() {
           time: e.time ?? "",
           color: e.child?.color ?? "#a06cd5",
         })),
+      // Rutiner – återkommande aktiviteter med repetitionsregel – visas på
+      // alla dagar där regeln infaller, inte bara på startdatumet.
+      ...routines
+        .filter((r) => r.enabled && routineOccursOn(r, dateStr))
+        .map((r) => ({
+          id: `ro-${r.id}`,
+          title: r.title,
+          time: r.time ?? "",
+          color: "hsl(258 62% 60%)",
+        })),
     ];
 
     return { focus, tasks, reminders, familyEvents, childEvents, recurring };
