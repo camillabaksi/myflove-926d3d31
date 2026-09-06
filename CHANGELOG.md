@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-06 – Påverkan kan föreslå lägre batteri – du bestämmer
+
+- När du registrerat påverkan idag (t.ex. sjuk, dålig sömn, oro) och batteriet står tydligt högre än rimligt, föreslår batterikortet varsamt en lägre nivå. Batteriprocenten ändras aldrig automatiskt – du godkänner alltid själv.
+- Förslaget anpassas efter graden (lite/måttligt/mycket) och om det "påverkar mig nu" eller "har påverkat mig".
+- Avböjer du frågan ställs den inte igen samma dag. Godkänner du loggas det som en vanlig energiobservation via befintlig dataväg.
+
 ## 2026-09-06 – Android AAB versionCode 5 förberedd
 
 - `versionCode` höjd till 5 i `android/app/build.gradle` (4 fanns redan i Google Play Console).

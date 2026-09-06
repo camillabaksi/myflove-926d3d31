@@ -293,8 +293,12 @@ export const EN_BATTERY: Record<string, string> = {
   "Tack – sparat": "Thanks – saved",
   "Spara påverkan": "Save impact",
   "Sparat för idag – du kan ändra när du vill.": "Saved for today – you can change it anytime.",
-  "Påverkan ändrar inte din batterinivå – den ger Flow sammanhang.":
-    "Impact doesn't change your battery level – it gives Flow context.",
+  "Påverkan ändrar aldrig batteriet automatiskt – men batteriet kan föreslå en lägre nivå som du själv godkänner.":
+    "Impact never changes your battery automatically – but the battery may suggest a lower level that you approve yourself.",
+  "Du har sagt att något påverkar dig idag. Vill du sänka batteriet till":
+    "You've said something is affecting you today. Do you want to lower the battery to",
+  "Ja, sätt": "Yes, set",
+  "Nej tack, det stämmer": "No thanks, it's right",
 
   // Påverkan & menscykel
   "Vad påverkar din kapacitet?": "What is affecting your capacity?",

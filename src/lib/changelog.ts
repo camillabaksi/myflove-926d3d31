@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-06";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Påverkan kan föreslå lägre batteri – du bestämmer",
+    items: [
+      "När du registrerat påverkan idag och batteriet står högre än rimligt föreslår batterikortet varsamt en lägre nivå – inget ändras automatiskt (2026-09-06)",
+      "Förslaget anpassas efter grad (lite/måttligt/mycket) och om det påverkar nu eller har påverkat (2026-09-06)",
+      "Avböjer du frågan ställs den inte igen samma dag (2026-09-06)",
+      "Godkännande loggas som en vanlig energiobservation – befintlig dataväg, inga nya system (2026-09-06)",
+    ],
+  },
+  {
     title: "Android AAB versionCode 5 förberedd",
     items: [
       "versionCode höjd till 5 i android/app/build.gradle – 4 fanns redan i Google Play Console (2026-09-06)",
