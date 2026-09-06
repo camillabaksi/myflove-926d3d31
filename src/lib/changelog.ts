@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-06";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Kalendern visar rutiner och påverkan",
+    items: [
+      "Återkommande rutiner syns i månads-, vecko- och dagvyn på alla dagar där regeln infaller (2026-09-06)",
+      "Påverkan-kortet finns i kalenderns dagvy för idag – registrera direkt där (2026-09-06)",
+    ],
+  },
+  {
     title: "Notiser: tydlig status och \"Testa notis\"",
     items: [
       "Nytt notiskort visar om den här enheten verkligen är registrerad för notiser (2026-09-06)",
