@@ -9,6 +9,7 @@ import { normalizeQuickflowText } from "@/lib/quickflow";
 import { bucketRank } from "@/lib/quickflow-priority";
 import { useFrictionLibrary } from "@/hooks/use-friction-library";
 import { useDoneLog } from "@/hooks/use-done-log";
+import { useInstanceStatus } from "@/hooks/use-instance-status";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { getArea } from "@/lib/life-areas";
 import { routineOccursOn, type Routine } from "@/lib/recurrence";
@@ -51,6 +52,7 @@ export function useFlowItems(dateISO?: string): {
   const { items: priorityItems, update: updatePriority } = usePriorityList();
   const { suggestFor } = useFrictionLibrary();
   const { isDone, toggleDone } = useDoneLog(targetDay);
+  const { isInstanceDone, setInstanceDone } = useInstanceStatus();
   const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
 
   const items = useMemo<FlowItem[]>(() => {
@@ -120,6 +122,11 @@ export function useFlowItems(dateISO?: string): {
       if (!occursOn(r.date, r.repeat, today) && !inPeriod) continue;
       // Mitt i en period finns inget klockslag – bara på startdagen.
       const time = inPeriod && today !== r.date ? undefined : r.time;
+      // En återkommande post är EN aktivitet med en repetitionsregel. Varje
+      // dag den inträffar har sin egen status – att bocka av idag får aldrig
+      // ta bort morgondagens förekomst.
+      const recurring = (r.repeat ?? "none") !== "none";
+      const doneToday = recurring ? isInstanceDone(`reminder-${r.id}`, today) : r.completed;
       out.push({
         id: `rem-${r.id}`,
         title: r.title,
@@ -130,7 +137,7 @@ export function useFlowItems(dateISO?: string): {
         dueDate: r.date,
         daysUntil: 0,
         priority: priorityFor({ time, daysUntil: 0, fixed: true }),
-        done: r.completed,
+        done: doneToday,
         // En kalenderhändelse är oftast något man faktiskt genomför
         // (möte, läkarbesök, lämning) – därför går den att bocka av.
         completable: true,
@@ -277,6 +284,7 @@ export function useFlowItems(dateISO?: string): {
     priorityItems,
     suggestFor,
     isDone,
+    isInstanceDone,
     targetDay,
     isTodayView,
   ]);
@@ -301,7 +309,14 @@ export function useFlowItems(dateISO?: string): {
         item.id.slice(item.id.indexOf("-") + 1),
       ];
       if (item.id.startsWith("task-")) return toggleTask(rest);
-      if (item.id.startsWith("rem-")) return toggleReminder(rest);
+      if (item.id.startsWith("rem-")) {
+        const reminder = reminders.find((r) => r.id === rest);
+        if (reminder && (reminder.repeat ?? "none") !== "none") {
+          setInstanceDone(`reminder-${rest}`, targetDay, !item.done);
+          return;
+        }
+        return toggleReminder(rest);
+      }
       if (item.id.startsWith("childitem-")) {
         void toggleChildItem(rest, !item.done);
         return;
@@ -322,7 +337,18 @@ export function useFlowItems(dateISO?: string): {
       // Rutiner, lektioner och schemarader: dagsbaserad genomförandelogg.
       toggleDone(item.id);
     },
-    [toggleTask, toggleReminder, toggleChildItem, complete, uncomplete, toggleDone, updatePriority],
+    [
+      toggleTask,
+      toggleReminder,
+      reminders,
+      setInstanceDone,
+      targetDay,
+      toggleChildItem,
+      complete,
+      uncomplete,
+      toggleDone,
+      updatePriority,
+    ],
   );
 
   return { items, today, todayOpen, todayDone, toggleItem };

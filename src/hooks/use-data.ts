@@ -844,7 +844,9 @@ export function useReminders() {
   };
 
   const activeReminders = reminders
-    .filter((r) => !r.completed && !r.canceled)
+    // Återkommande poster ligger kvar: deras "klart" gäller en enskild dag,
+    // inte hela rutinen. Engångsposter försvinner som förut när de är klara.
+    .filter((r) => !r.canceled && (!r.completed || (r.repeat ?? "none") !== "none"))
     .sort((a, b) => {
       // Sort by date then time
       const dateCompare = a.date.localeCompare(b.date);
