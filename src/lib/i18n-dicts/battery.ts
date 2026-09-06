@@ -7,7 +7,6 @@ export const EN_BATTERY: Record<string, string> = {
   "Det finns mönster att se när du öppnar.": "There are patterns to see when you open it.",
   "Vi visar mönster här när du registrerat lite mer.": "We'll show patterns here once you've logged a bit more.",
   "Ännu finns inget tydligt mönster. När du checkat in några dagar kan MyFlove visa försiktiga mönster ur din egen data – aldrig påhittade.": "There's no clear pattern yet. Once you've checked in for a few days, MyFlove can show gentle patterns from your own data – never made up.",
-  "Påverkan": "Impact",
   "Din energi och ditt mående – checka in och se hur dagen brukar se ut.":
     "Your energy and mood – check in and see how the day tends to go.",
   "Vi frågar för att Flow ska kunna anpassa dagens krav efter hur mycket ork du faktiskt har – inte efter hur mycket du borde ha.":
