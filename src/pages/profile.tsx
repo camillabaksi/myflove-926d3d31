@@ -9,6 +9,7 @@ import { useUserProfile } from "@/hooks/use-user-profile";
 import { useChildren, CHILD_COLORS, type Child } from "@/hooks/use-children";
 import { useToast } from "@/hooks/use-toast";
 import { useLang } from "@/hooks/use-language";
+import { useCycle } from "@/hooks/use-cycle";
 import { LANGUAGES } from "@/lib/i18n";
 import { LifeProfileSections } from "@/pages/life-profile";
 
@@ -25,6 +26,7 @@ export default function ProfilePage() {
   const [savedName, setSavedName] = useState(false);
 
   const { userId, children, addChild, updateChild, deleteChild } = useChildren();
+  const { cycle, setEnabled: setCycleEnabled } = useCycle();
   const myChildren = children.filter((c) => c.owner_id === userId);
 
   const [newChildName, setNewChildName] = useState("");
