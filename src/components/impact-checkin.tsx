@@ -62,13 +62,13 @@ export default function ImpactCheckin() {
       <div className="space-y-3">
         <div className="flex flex-wrap gap-2">
           {IMPACT_OPTIONS.map((o) => {
-            const on = kind === o.id;
+            const on = kinds.includes(o.id);
             return (
               <button
                 key={o.id}
                 type="button"
                 aria-pressed={on}
-                onClick={() => setKind(o.id)}
+                onClick={() => toggle(o.id)}
                 className={cn(
                   "rounded-pill border px-3 py-1.5 text-sm transition-all",
                   on
