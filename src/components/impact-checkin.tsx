@@ -14,26 +14,36 @@ import { useLang } from "@/hooks/use-language";
 
 /**
  * Påverkan – vad som belastar kapaciteten just nu. Enkel registrering
- * (en påverkan + grad) som sparas med dagen och ges till Flow som kontext.
- * Ändrar aldrig batterinivån.
+ * (en eller flera påverkningar + grad) som sparas med dagen och ges till
+ * Flow som kontext. Ändrar aldrig batterinivån.
  */
 export default function ImpactCheckin() {
   const { t } = useLang();
   const { impact, logImpact } = useImpactCheckin();
-  const [kind, setKind] = useState<ImpactKind | null>(impact?.kind ?? null);
+  const [kinds, setKinds] = useState<ImpactKind[]>(impact?.kinds ?? []);
   const [degree, setDegree] = useState<ImpactDegree | null>(impact?.degree ?? null);
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     if (impact) {
-      setKind(impact.kind);
+      setKinds(impact.kinds);
       setDegree(impact.degree);
     }
   }, [impact]);
 
+  const toggle = (id: ImpactKind) => {
+    setKinds((prev) => {
+      if (id === "inget") return prev.includes("inget") ? [] : ["inget"];
+      const without = prev.filter((k) => k !== "inget");
+      return without.includes(id) ? without.filter((k) => k !== id) : [...without, id];
+    });
+  };
+
+  const onlyNothing = kinds.length > 0 && kinds.every((k) => k === "inget");
+
   const save = () => {
-    if (!kind || !degree) return;
-    logImpact(kind, degree);
+    if (!kinds.length || !degree) return;
+    logImpact(kinds, degree);
     track("impact_logged", { source: "mitt-batteri" });
     setSaved(true);
     window.setTimeout(() => setSaved(false), 2500);
