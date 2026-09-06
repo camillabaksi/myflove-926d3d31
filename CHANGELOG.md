@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-06 – Återkommande aktiviteter är en rutin, inte fem kopior
+
+- En återkommande aktivitet (t.ex. "Lämna barnen på förskolan", vardagar) sparas som EN post med repetitionsregel och visas automatiskt på rätt dagar i Idag, Kalender och Flow.
+- Att bocka av dagens förekomst gäller bara den dagen – nästa vardag ligger kvar som ej klar.
+- Genomföranden sparas per förekomst i instansjournalen, så historiken finns kvar även om rutinen ändras.
+- Engångsaktiviteter fungerar exakt som förut.
+
 ## 2026-09-06 – Påverkan: nu eller tidigare
 
 - Vid registrering av påverkan kan användaren nu välja om det "Påverkar mig nu" eller "Har påverkat mig" – utöver graden Lite/Måttligt/Mycket.

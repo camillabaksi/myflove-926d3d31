@@ -24,7 +24,7 @@ import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { useDayPlan } from "@/lib/day-plan";
 import { todayISO as todayStr } from "@/lib/day";
 import { isUntimedActivity } from "@/lib/activity-semantics";
-import type { Routine } from "@/lib/recurrence";
+import { occursOn, type Routine } from "@/lib/recurrence";
 import { CalendarDays, ListOrdered, Sparkles, Heart, Waves, ListChecks } from "lucide-react";
 import { MyFloveTransition } from "@/components/myflove/motion";
 import { useLang } from "@/hooks/use-language";
@@ -81,7 +81,9 @@ export function TodayContent() {
   const entries = useMemo<TimelineEntry[]>(() => {
     const list: TimelineEntry[] = [];
     for (const r of activeReminders) {
-      if (r.date !== today) continue;
+      // Återkommande poster visas på varje dag de faktiskt inträffar.
+      const inPeriod = !!r.endDate && today >= r.date && today <= r.endDate;
+      if (!occursOn(r.date, r.repeat, today) && !inPeriod) continue;
       list.push({
         id: `rem-${r.id}`,
         title: r.title,
