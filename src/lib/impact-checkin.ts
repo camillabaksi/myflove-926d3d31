@@ -19,9 +19,20 @@ export type ImpactDegree = "lite" | "mattligt" | "mycket";
 
 export interface ImpactEntry {
   day: string; // YYYY-MM-DD
-  kind: ImpactKind;
+  /** Ett eller flera val. "inget" kan inte kombineras med andra. */
+  kinds: ImpactKind[];
   degree: ImpactDegree;
   ts: number;
+}
+
+/** Bakåtkompatibilitet: tidigare poster hade ett enda `kind`. */
+export function normalizeImpactEntry(raw: ImpactEntry | null): ImpactEntry | null {
+  if (!raw) return null;
+  const legacy = raw as ImpactEntry & { kind?: ImpactKind };
+  if (!Array.isArray(raw.kinds)) {
+    return legacy.kind ? { ...raw, kinds: [legacy.kind] } : null;
+  }
+  return raw.kinds.length ? raw : null;
 }
 
 export const IMPACT_OPTIONS: { id: ImpactKind; labelSv: string; emoji: string }[] = [
@@ -66,8 +77,13 @@ export function impactContext(entry: ImpactEntry | null, now: Date = new Date())
   if (!entry) return null;
   const today = now.toISOString().slice(0, 10);
   if (entry.day !== today) return null;
+  const labels = entry.kinds.map((k) => KIND_AI_LABEL[k]);
+  const beskrivning =
+    labels.length === 1
+      ? `Användaren är ${labels[0]} – i graden ${DEGREE_AI_LABEL[entry.degree]}.`
+      : `Användaren är ${labels.slice(0, -1).join(", ")} och ${labels[labels.length - 1]} – i graden ${DEGREE_AI_LABEL[entry.degree]}.`;
   return [
-    `Dagens påverkan (användarens egen registrering): Användaren är ${KIND_AI_LABEL[entry.kind]} – i graden ${DEGREE_AI_LABEL[entry.degree]}.`,
+    `Dagens påverkan (användarens egen registrering): ${beskrivning}`,
     "Använd detta som bakgrund när du föreslår dagens prioriteringar: anpassa ton och kravnivå varsamt, men ändra inte användarens batterinivå och ställ inga diagnoser.",
   ].join("\n");
 }
