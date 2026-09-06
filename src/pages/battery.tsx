@@ -59,6 +59,11 @@ export default function BatteryPage() {
           <BatteryToday />
         </MyFloveWide>
 
+        {/* 2b. Menscykel – visas bara om användaren själv aktiverat den */}
+        <MyFloveWide className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">
+          <CycleCard />
+        </MyFloveWide>
+
         {/* 3. Morgon/kväll */}
         <MyFloveWide className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">
           <DayEdgesCheckin />
