@@ -45,6 +45,8 @@ export const ANALYTICS_EVENTS = [
   "mood_checkin_started",
   "mood_checkin_completed",
   "mood_logged",
+  /** Påverkan registrerad i Mitt batteri. Aldrig ett värde – bara att det hände. */
+  "impact_logged",
   /** Hälsoobservation registrerad (sömn, stress, kropp …). Aldrig ett värde – bara att det hände. */
   "health_factor_logged",
   "my_day_viewed",
@@ -144,6 +146,7 @@ const EVENT_SECTION: Record<AnalyticsEventName, string> = {
   battery_checkin_completed: "batteri",
   battery_checked: "batteri",
   battery_logged: "batteri",
+  impact_logged: "batteri",
   mood_checkin_started: "mood",
   mood_checkin_completed: "mood",
   mood_logged: "mood",

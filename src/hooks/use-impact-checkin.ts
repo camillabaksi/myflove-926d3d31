@@ -1,0 +1,30 @@
+import { useCallback, useMemo } from "react";
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
+import type { ImpactDegree, ImpactEntry, ImpactKind } from "@/lib/impact-checkin";
+
+const KEY = "myflove-impact-checkin";
+
+const todayKey = () => new Date().toISOString().slice(0, 10);
+
+/**
+ * Dagens påverkan – en post per dag, kontosynkad via befintliga
+ * user_kv-lagringen. Ingen ny tabell, ingen ny datakälla.
+ * Påverkan ändrar aldrig batteriprocenten – den är enbart kontext.
+ */
+export function useImpactCheckin() {
+  const [entry, setEntry] = useCloudSyncedStorage<ImpactEntry | null>(KEY, null);
+
+  const today = useMemo<ImpactEntry | null>(
+    () => (entry && entry.day === todayKey() ? entry : null),
+    [entry],
+  );
+
+  const logImpact = useCallback(
+    (kind: ImpactKind, degree: ImpactDegree) => {
+      setEntry({ day: todayKey(), kind, degree, ts: Date.now() });
+    },
+    [setEntry],
+  );
+
+  return { impact: today, logImpact };
+}

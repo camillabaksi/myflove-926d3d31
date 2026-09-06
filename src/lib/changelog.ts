@@ -6,9 +6,16 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-09-05";
+export const CHANGELOG_UPDATED = "2026-09-06";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  {
+    title: "Påverkan i Mitt batteri",
+    items: [
+      "Ny funktion: ange vad som påverkar dagens kapacitet (känslomässigt, mentalt, familj, jobb, oro m.m.) med graden Lite/Måttligt/Mycket (2026-09-06)",
+      "Påverkan sparas med dagen och ges till Flow som kontext för dagens prioriteringar – batterinivån ändras aldrig automatiskt (2026-09-06)",
+    ],
+  },
   {
     title: "MyFlove-ikon i Android-appen",
     items: [

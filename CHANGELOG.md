@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-06 – Påverkan i Mitt batteri
+
+- Ny enkel funktion "Påverkan" på Mitt batteri-sidan: användaren anger om något känslomässigt, mentalt eller omgivningsrelaterat belastar kapaciteten just nu.
+- Åtta val: känslomässigt påverkad, överbelastat huvud, familj/barn, jobb/ekonomi, någon annans mående, oro/något som hänt, annat eller inget särskilt – plus graden Lite, Måttligt eller Mycket.
+- Påverkan sparas per dag i den kontosynkade lagringen (user_kv) och ges till Flow/AI som kontext när dagens prioriteringar och rekommendationer skapas.
+- Påverkan ändrar aldrig batteriprocenten automatiskt – den är enbart sammanhang.
+
 ## 2026-09-05 – MyFlove-ikon i Android-appen
 
 - Standardikonen (Capacitor) ersatt med MyFloves officiella logotyp: lila ruta med vitt M och rosa prick.

@@ -8,6 +8,8 @@ import { useSituation } from "@/hooks/use-situation";
 import { lifeProfileContext } from "@/lib/life-profile";
 import { situationContext } from "@/lib/situation";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";
+import { useImpactCheckin } from "@/hooks/use-impact-checkin";
+import { impactContext } from "@/lib/impact-checkin";
 import { checkinContext } from "@/lib/flow-checkin-context";
 
 const TONE: Record<string, string> = {
@@ -29,6 +31,7 @@ export function useFlowPersonalContext(): string {
   const { situation } = useSituation();
   const { moods } = useMoods();
   const { todayEnergyEntries } = useQuickCheckin();
+  const { impact: impactEntry } = useImpactCheckin();
 
   return useMemo(() => {
     const lines: string[] = ["Om användaren (personlig kontext, inte regler):"];
@@ -41,6 +44,10 @@ export function useFlowPersonalContext(): string {
     if (sit) lines.push(sit);
 
     lines.push(checkinContext(moods, todayEnergyEntries));
+
+    const impact = impactContext(impactEntry);
+    if (impact) lines.push(impact);
+
 
     // Användarens egna ord från Mitt batteri – kontext, aldrig diagnos.
     const week = Date.now() - 7 * 24 * 60 * 60 * 1000;
@@ -75,5 +82,5 @@ export function useFlowPersonalContext(): string {
     lines.push(TONE[settings.level] ?? TONE["diskret"] ?? "");
 
     return lines.filter(Boolean).join("\n");
-  }, [name, profile, situation, knowledge, settings.level, moods, todayEnergyEntries]);
+  }, [name, profile, situation, knowledge, settings.level, moods, todayEnergyEntries, impactEntry]);
 }
