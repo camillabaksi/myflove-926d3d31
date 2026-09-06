@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-06 – Kalendern visar rutiner och påverkan
+
+- Återkommande rutiner (t.ex. "Lämna barnen på förskolan", vardagar) syns nu i kalenderns månads-, vecko- och dagvy på alla dagar där regeln infaller – markerade med ↻.
+- Påverkan-kortet ("Vad påverkar din kapacitet?") finns nu även i kalenderns dagvy när du tittar på idag, så du kan registrera påverkan direkt där.
+
 ## 2026-09-06 – Notiser: tydlig status och "Testa notis"
 
 - Nytt lugnt notiskort på Rutiner & medicin och Påminnelser: visar om just den här enheten är registrerad för notiser, inte bara om webbläsaren gett lov.

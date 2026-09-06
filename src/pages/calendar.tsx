@@ -20,7 +20,14 @@ import {
 } from "lucide-react";
 import { requestNotificationPermission, getNotificationPermission } from "@/lib/push-notifications";
 import { downloadIcs, parseIcs, type IcsEvent } from "@/lib/ics";
-import { occursOn, REPEAT_LABELS, type RepeatMode } from "@/lib/recurrence";
+import {
+  occursOn,
+  routineOccursOn,
+  REPEAT_LABELS,
+  type RepeatMode,
+  type Routine,
+} from "@/lib/recurrence";
+import ImpactCheckin from "@/components/impact-checkin";
 import { useUser } from "@clerk/react";
 import {
   useGetMyHousehold,
@@ -173,6 +180,8 @@ export function CalendarContent() {
     "myflove-calendar-categories",
     ALL_CATEGORIES,
   );
+  // Rutiner ("myflove-routines") visas som återkommande hållpunkter i kalendern.
+  const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
   // Migrerar gamla filter ("familj") en gång, utan att tappa vad du valt.
   useEffect(() => {
     if (!visible.some((c) => (c as string) === "familj")) return;
@@ -455,6 +464,16 @@ export function CalendarContent() {
           title: e.title,
           time: e.time ?? "",
           color: e.child?.color ?? "#a06cd5",
+        })),
+      // Rutiner – återkommande aktiviteter med repetitionsregel – visas på
+      // alla dagar där regeln infaller, inte bara på startdatumet.
+      ...routines
+        .filter((r) => r.enabled && routineOccursOn(r, dateStr))
+        .map((r) => ({
+          id: `ro-${r.id}`,
+          title: r.title,
+          time: r.time ?? "",
+          color: "hsl(258 62% 60%)",
         })),
     ];
 
@@ -756,13 +775,20 @@ export function CalendarContent() {
                         time: e.time ?? "",
                         color: e.member?.color ?? "#8a9a5b",
                       })),
-                      ...items.reminders.map((r) => ({
-                        id: `r-${r.id}`,
-                        title: r.title,
-                        time: r.time ?? "",
-                        color: "hsl(var(--primary))",
-                      })),
-                      ...items.tasks.map((t) => ({
+                       ...items.reminders.map((r) => ({
+                         id: `r-${r.id}`,
+                         title: r.title,
+                         time: r.time ?? "",
+                         color: "hsl(var(--primary))",
+                       })),
+                       // Återkommande hållpunkter och rutiner syns även i veckovyn.
+                       ...items.recurring.map((r) => ({
+                         id: r.id,
+                         title: `↻ ${r.title}`,
+                         time: r.time,
+                         color: r.color ?? "hsl(var(--muted-foreground))",
+                       })),
+                       ...items.tasks.map((t) => ({
                         id: `t-${t.id}`,
                         title: t.title,
                         time: t.time ?? "",
@@ -880,6 +906,10 @@ export function CalendarContent() {
                 }}
                 onClose={() => setQuickAddOpen(false)}
               />
+            )}
+
+            {allInDay && selectedDateStr === todayStr && (
+              <ImpactCheckin />
             )}
 
             {allInDay && (
