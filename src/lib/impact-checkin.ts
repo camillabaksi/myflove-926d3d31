@@ -34,11 +34,16 @@ export type ImpactKind =
 
 export type ImpactDegree = "lite" | "mattligt" | "mycket";
 
+/** Pågår det just nu, eller är det något som redan har påverkat? */
+export type ImpactTiming = "nu" | "tidigare";
+
 export interface ImpactEntry {
   day: string; // YYYY-MM-DD
   /** Ett eller flera val. "inget" kan inte kombineras med andra. */
   kinds: ImpactKind[];
   degree: ImpactDegree;
+  /** Saknas i äldre poster – tolkas som "nu". */
+  timing?: ImpactTiming;
   ts: number;
 }
 
@@ -121,6 +126,11 @@ export const IMPACT_DEGREES: { id: ImpactDegree; labelSv: string }[] = [
   { id: "lite", labelSv: "Lite" },
   { id: "mattligt", labelSv: "Måttligt" },
   { id: "mycket", labelSv: "Mycket" },
+];
+
+export const IMPACT_TIMINGS: { id: ImpactTiming; labelSv: string }[] = [
+  { id: "nu", labelSv: "Påverkar mig nu" },
+  { id: "tidigare", labelSv: "Har påverkat mig" },
 ];
 
 const KIND_AI_LABEL: Record<ImpactKind, string> = {
