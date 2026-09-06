@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-06";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Påverkan i historiken och valbara mönster",
+    items: [
+      "Historik visar dagens registrerade påverkan (val + grad) per dag – även dagar utan aktiviteter (2026-09-06)",
+      "Nytt hopfällbart kort \"Mina mönster\" på Mitt batteri – stängt som standard, öppnas bara när man vill (2026-09-06)",
+      "Mönster byggs enbart på egen data och visar lugn text i stället för påhittade mönster när underlaget är litet (2026-09-06)",
+    ],
+  },
+  {
     title: "Kapacitet, påverkan och frivillig menscykel",
     items: [
       "\"Vad påverkar din kapacitet?\" – diskret kort under batteriet med grupperna Kropp & hälsa, Känslor & tankar och Omgivning (2026-09-06)",

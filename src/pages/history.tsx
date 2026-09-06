@@ -15,6 +15,27 @@ import { addDaysISO, todayISO, parseISODate } from "@/lib/day";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { track } from "@/lib/analytics";
 import { useLang } from "@/hooks/use-language";
+import { useImpactCheckin } from "@/hooks/use-impact-checkin";
+import { IMPACT_DEGREES, impactOption, type ImpactEntry } from "@/lib/impact-checkin";
+
+/** Dagens registrerade påverkan – visas diskret överst i dagens historik. */
+function DayImpact({ day, history }: { day: string; history: ImpactEntry[] }) {
+  const { t } = useLang();
+  const entry = history.find((h) => h.day === day);
+  if (!entry) return null;
+  const labels = entry.kinds
+    .map((k) => impactOption(k))
+    .filter(Boolean)
+    .map((o) => `${o!.emoji} ${t(o!.labelSv)}`);
+  const degree = IMPACT_DEGREES.find((d) => d.id === entry.degree);
+  return (
+    <p className="mt-1.5 text-xs text-muted-foreground">
+      {t("Påverkan")}: {labels.join(", ")}
+      {degree ? ` · ${t(degree.labelSv)}` : ""}
+    </p>
+  );
+}
+
 
 function formatDay(iso: string, locale: string): string {
   const d = parseISODate(iso);
@@ -37,6 +58,7 @@ export default function History() {
 
   const [weekStart, setWeekStart] = useState(() => weekStartISO(todayISO()));
   const { instancesBetween, setEnergy } = useActivityHistory();
+  const { impactHistory } = useImpactCheckin();
   const review = useWeekReview(weekStart);
 
   const days = weekDates(weekStart);
@@ -82,6 +104,26 @@ export default function History() {
 
             <WeekReviewCard review={review} showLink={false} />
 
+            {/* Dagar med bara påverkan registrerad (inga aktiviteter) */}
+            {days
+              .filter(
+                (d) =>
+                  !grouped.some((g) => g.date === d) &&
+                  impactHistory.some((h) => h.day === d),
+              )
+              .map((d) => (
+                <section
+                  key={d}
+                  aria-label={formatDay(d, locale)}
+                  className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+                >
+                  <h2 className="text-base font-semibold capitalize text-ink">
+                    {formatDay(d, locale)}
+                  </h2>
+                  <DayImpact day={d} history={impactHistory} />
+                </section>
+              ))}
+
             {grouped.length === 0 ? (
               <p className="rounded-3xl border border-border/60 bg-card p-5 text-sm text-muted-foreground shadow-soft">
                 {t("Inga aktiviteter den här veckan.")}
@@ -96,6 +138,8 @@ export default function History() {
                   <h2 className="text-base font-semibold capitalize text-ink">
                     {formatDay(day.date, locale)}
                   </h2>
+                  <DayImpact day={day.date} history={impactHistory} />
+
                   <ul className="mt-3 space-y-3">
                     {day.items.map((item) => (
                       <li key={item.key} className="rounded-2xl bg-lavender/20 px-3 py-2.5">
