@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from "react";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
-import { normalizeImpactEntry, type ImpactDegree, type ImpactEntry, type ImpactKind } from "@/lib/impact-checkin";
+import { normalizeImpactEntry, type ImpactDegree, type ImpactEntry, type ImpactKind, type ImpactTiming } from "@/lib/impact-checkin";
 
 const KEY = "myflove-impact-checkin";
 const HISTORY_KEY = "myflove-impact-history";
@@ -24,9 +24,9 @@ export function useImpactCheckin() {
   }, [entry]);
 
   const logImpact = useCallback(
-    (kinds: ImpactKind[], degree: ImpactDegree) => {
+    (kinds: ImpactKind[], degree: ImpactDegree, timing: ImpactTiming = "nu") => {
       const day = todayKey();
-      const next: ImpactEntry = { day, kinds, degree, ts: Date.now() };
+      const next: ImpactEntry = { day, kinds, degree, timing, ts: Date.now() };
       setEntry(next);
       const cutoff = Date.now() - HISTORY_DAYS * 86_400_000;
       setHistory([
