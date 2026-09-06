@@ -8,6 +8,8 @@ import { useSituation } from "@/hooks/use-situation";
 import { lifeProfileContext } from "@/lib/life-profile";
 import { situationContext } from "@/lib/situation";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";
+import { useImpactCheckin } from "@/hooks/use-impact-checkin";
+import { impactContext } from "@/lib/impact-checkin";
 import { checkinContext } from "@/lib/flow-checkin-context";
 
 const TONE: Record<string, string> = {
