@@ -14,26 +14,36 @@ import { useLang } from "@/hooks/use-language";
 
 /**
  * Påverkan – vad som belastar kapaciteten just nu. Enkel registrering
- * (en påverkan + grad) som sparas med dagen och ges till Flow som kontext.
- * Ändrar aldrig batterinivån.
+ * (en eller flera påverkningar + grad) som sparas med dagen och ges till
+ * Flow som kontext. Ändrar aldrig batterinivån.
  */
 export default function ImpactCheckin() {
   const { t } = useLang();
   const { impact, logImpact } = useImpactCheckin();
-  const [kind, setKind] = useState<ImpactKind | null>(impact?.kind ?? null);
+  const [kinds, setKinds] = useState<ImpactKind[]>(impact?.kinds ?? []);
   const [degree, setDegree] = useState<ImpactDegree | null>(impact?.degree ?? null);
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     if (impact) {
-      setKind(impact.kind);
+      setKinds(impact.kinds);
       setDegree(impact.degree);
     }
   }, [impact]);
 
+  const toggle = (id: ImpactKind) => {
+    setKinds((prev) => {
+      if (id === "inget") return prev.includes("inget") ? [] : ["inget"];
+      const without = prev.filter((k) => k !== "inget");
+      return without.includes(id) ? without.filter((k) => k !== id) : [...without, id];
+    });
+  };
+
+  const onlyNothing = kinds.length > 0 && kinds.every((k) => k === "inget");
+
   const save = () => {
-    if (!kind || !degree) return;
-    logImpact(kind, degree);
+    if (!kinds.length) return;
+    logImpact(kinds, degree ?? "lite");
     track("impact_logged", { source: "mitt-batteri" });
     setSaved(true);
     window.setTimeout(() => setSaved(false), 2500);
@@ -52,13 +62,13 @@ export default function ImpactCheckin() {
       <div className="space-y-3">
         <div className="flex flex-wrap gap-2">
           {IMPACT_OPTIONS.map((o) => {
-            const on = kind === o.id;
+            const on = kinds.includes(o.id);
             return (
               <button
                 key={o.id}
                 type="button"
                 aria-pressed={on}
-                onClick={() => setKind(o.id)}
+                onClick={() => toggle(o.id)}
                 className={cn(
                   "rounded-pill border px-3 py-1.5 text-sm transition-all",
                   on
@@ -75,7 +85,7 @@ export default function ImpactCheckin() {
           })}
         </div>
 
-        {kind && kind !== "inget" && (
+        {kinds.length > 0 && !onlyNothing && (
           <div className="space-y-1.5">
             <p className="text-xs text-muted-foreground">{t("Hur mycket påverkar det dig?")}</p>
             <div className="grid grid-cols-3 gap-2">
@@ -102,11 +112,11 @@ export default function ImpactCheckin() {
           </div>
         )}
 
-        {kind && (
+        {kinds.length > 0 && (
           <button
             type="button"
             onClick={save}
-            disabled={kind !== "inget" && !degree}
+            disabled={!onlyNothing && !degree}
             className="flex min-h-11 w-full items-center justify-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-opacity hover:opacity-90 disabled:opacity-50"
           >
             {saved ? t("Tack – sparat") : t("Spara påverkan")}
