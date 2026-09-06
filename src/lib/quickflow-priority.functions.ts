@@ -52,6 +52,7 @@ export const prioritizeQuickflow = createServerFn({ method: "POST" })
       typeof data.energyPercent === "number"
         ? `Energinivå just nu: ${Math.round(data.energyPercent)}/100`
         : "Energinivå: okänd",
+      ...(data.context ? ["", data.context] : []),
       "",
       "Saker användaren behöver få gjort:",
       ...data.titles.map((t) => `- ${t}`),
