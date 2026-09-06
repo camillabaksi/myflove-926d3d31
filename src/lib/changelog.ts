@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-06";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Återkommande aktiviteter är en rutin, inte fem kopior",
+    items: [
+      "En återkommande aktivitet sparas som en post med repetitionsregel och visas på rätt dagar (2026-09-06)",
+      "Avbockning gäller bara dagens förekomst – nästa dag ligger kvar som ej klar (2026-09-06)",
+      "Genomföranden sparas per förekomst, så historiken finns kvar även om rutinen ändras (2026-09-06)",
+      "Engångsaktiviteter fungerar exakt som tidigare (2026-09-06)",
+    ],
+  },
+  {
     title: "Påverkan: nu eller tidigare",
     items: [
       "Välj om det påverkar dig nu eller har påverkat dig – plus graden Lite/Måttligt/Mycket (2026-09-06)",
