@@ -28,10 +28,13 @@ function DayImpact({ day, history }: { day: string; history: ImpactEntry[] }) {
     .filter(Boolean)
     .map((o) => `${o!.emoji} ${t(o!.labelSv)}`);
   const degree = IMPACT_DEGREES.find((d) => d.id === entry.degree);
+  const timing = IMPACT_TIMINGS.find((tm) => tm.id === (entry.timing ?? "nu"));
+  const showTiming = !entry.kinds.every((k) => k === "inget");
   return (
     <p className="mt-1.5 text-xs text-muted-foreground">
       {t("Påverkan")}: {labels.join(", ")}
-      {degree ? ` · ${t(degree.labelSv)}` : ""}
+      {showTiming && timing ? ` · ${t(timing.labelSv)}` : ""}
+      {degree && showTiming ? ` · ${t(degree.labelSv)}` : ""}
     </p>
   );
 }
