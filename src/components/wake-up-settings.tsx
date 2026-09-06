@@ -27,6 +27,12 @@ export function WakeUpSettings() {
   const loadFn = useServerFn(getPushPreferences);
   const saveFn = useServerFn(savePushPreferences);
   const [wake, setWake] = useState<Wake | null>(null);
+  const [notifOk, setNotifOk] = useState(true);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    setNotifOk("Notification" in window && Notification.permission === "granted");
+  }, []);
 
   useEffect(() => {
     let alive = true;
@@ -86,6 +92,13 @@ export function WakeUpSettings() {
           onCheckedChange={(v) => update({ wake_enabled: v })}
         />
       </div>
+
+      {wake.wake_enabled && !notifOk && (
+        <p className="rounded-xl bg-muted/60 p-3 text-sm text-muted-foreground">
+          För att få påminnelser från MyFlove behöver notiser vara aktiverade. Slå på dem i rutan
+          ovan, annars syns Morgonstart bara när appen är öppen.
+        </p>
+      )}
 
       <div className="flex items-center justify-between gap-3">
         <Label htmlFor="wake-time" className="font-normal">
