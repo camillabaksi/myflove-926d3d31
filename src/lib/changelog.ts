@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-06";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Påverkan och menscykel styr dagens prioriteringar",
+    items: [
+      "Flow väger in dagens påverkan (val + grad) när Quickflow-listan prioriteras (2026-09-06)",
+      "Menscykeln används som bakgrund om användaren själv aktiverat den för Flow (2026-09-06)",
+      "Samma bakgrund används när en uppgift förtydligas – första steg och energinot anpassas (2026-09-06)",
+      "Batterinivån ändras aldrig automatiskt och inga medicinska slutsatser dras (2026-09-06)",
+    ],
+  },
+  {
     title: "Påverkan i historiken och valbara mönster",
     items: [
       "Historik visar dagens registrerade påverkan (val + grad) per dag – även dagar utan aktiviteter (2026-09-06)",
