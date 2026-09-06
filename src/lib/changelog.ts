@@ -12,7 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Påverkan i Mitt batteri",
     items: [
-      "Ny funktion: ange vad som påverkar dagens kapacitet (känslomässigt, mentalt, familj, jobb, oro m.m.) med graden Lite/Måttligt/Mycket (2026-09-06)",
+      "Ny funktion: ange vad som påverkar dagens kapacitet (känslomässigt, mentalt, familj, jobb, oro m.m.) – flera val möjliga – med graden Lite/Måttligt/Mycket (2026-09-06)",
       "Påverkan sparas med dagen och ges till Flow som kontext för dagens prioriteringar – batterinivån ändras aldrig automatiskt (2026-09-06)",
     ],
   },
