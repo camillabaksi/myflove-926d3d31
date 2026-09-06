@@ -8,6 +8,7 @@ import { ExpandableBlock } from "@/components/myflove/expandable-block";
 import EnergyBattery from "@/components/energy-battery";
 import SimpleCheckin from "@/components/simple-checkin";
 import ImpactCheckin from "@/components/impact-checkin";
+import CycleCard from "@/components/cycle-card";
 import BatteryToday from "@/components/battery-today";
 import DayEdgesCheckin from "@/components/day-edges-checkin";
 import DayEnergyFlow from "@/components/day-energy-flow";
