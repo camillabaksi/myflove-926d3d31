@@ -16,7 +16,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { track } from "@/lib/analytics";
 import { useLang } from "@/hooks/use-language";
 import { useImpactCheckin } from "@/hooks/use-impact-checkin";
-import { IMPACT_DEGREES, impactOption, type ImpactEntry } from "@/lib/impact-checkin";
+import { IMPACT_DEGREES, IMPACT_TIMINGS, impactOption, type ImpactEntry } from "@/lib/impact-checkin";
 
 /** Dagens registrerade påverkan – visas diskret överst i dagens historik. */
 function DayImpact({ day, history }: { day: string; history: ImpactEntry[] }) {

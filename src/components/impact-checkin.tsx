@@ -63,13 +63,15 @@ export default function ImpactCheckin() {
   };
 
   const summary = impact
-    ? impact.kinds
+    ? `${impact.kinds
         .map((k) => {
           const o = impactOption(k);
           return o ? `${o.emoji} ${t(o.labelSv)}` : null;
         })
         .filter(Boolean)
-        .join(" · ")
+        .join(" · ")} · ${t(
+        IMPACT_TIMINGS.find((tm) => tm.id === (impact.timing ?? "nu"))!.labelSv,
+      )}`
     : t("Lägg till om något påverkar dig idag.");
 
   const chip = (id: ImpactKind, emoji: string, label: string) => {
