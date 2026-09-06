@@ -6,9 +6,11 @@ import {
   IMPACT_DEGREES,
   IMPACT_GROUPS,
   IMPACT_NOTHING,
+  IMPACT_TIMINGS,
   impactOption,
   type ImpactDegree,
   type ImpactKind,
+  type ImpactTiming,
 } from "@/lib/impact-checkin";
 import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
@@ -24,12 +26,14 @@ export default function ImpactCheckin() {
   const { impact, logImpact, clearImpact } = useImpactCheckin();
   const [kinds, setKinds] = useState<ImpactKind[]>(impact?.kinds ?? []);
   const [degree, setDegree] = useState<ImpactDegree | null>(impact?.degree ?? null);
+  const [timing, setTiming] = useState<ImpactTiming>(impact?.timing ?? "nu");
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     if (impact) {
       setKinds(impact.kinds);
       setDegree(impact.degree);
+      setTiming(impact.timing ?? "nu");
     }
   }, [impact]);
 
@@ -45,7 +49,7 @@ export default function ImpactCheckin() {
 
   const save = () => {
     if (!kinds.length) return;
-    logImpact(kinds, degree ?? "lite");
+    logImpact(kinds, degree ?? "lite", timing);
     track("impact_logged", { source: "mitt-batteri" });
     setSaved(true);
     window.setTimeout(() => setSaved(false), 2500);
@@ -55,6 +59,7 @@ export default function ImpactCheckin() {
     clearImpact();
     setKinds([]);
     setDegree(null);
+    setTiming("nu");
   };
 
   const summary = impact
