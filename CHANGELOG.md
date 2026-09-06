@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-06 – Påverkan: nu eller tidigare
+
+- Vid registrering av påverkan kan användaren nu välja om det "Påverkar mig nu" eller "Har påverkat mig" – utöver graden Lite/Måttligt/Mycket.
+- Valet sparas med dagen, syns i Historik och ges till Flow som bakgrund ("påverkar just nu" respektive "har påverkat").
+- Äldre registreringar utan val tolkas som "Påverkar mig nu" – inget går förlorat.
+
 ## 2026-09-06 – Påverkan och menscykel styr dagens prioriteringar
 
 - Flow väger nu in dagens registrerade påverkan (val + grad) och – om användaren aktiverat den – menscykeln när Quickflow-listan prioriteras.

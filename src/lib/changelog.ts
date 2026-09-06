@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-06";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Påverkan: nu eller tidigare",
+    items: [
+      "Välj om det påverkar dig nu eller har påverkat dig – plus graden Lite/Måttligt/Mycket (2026-09-06)",
+      "Valet sparas med dagen, syns i Historik och används som bakgrund av Flow (2026-09-06)",
+      "Äldre registreringar tolkas som \"Påverkar mig nu\" – inget går förlorat (2026-09-06)",
+    ],
+  },
+  {
     title: "Påverkan och menscykel styr dagens prioriteringar",
     items: [
       "Flow väger in dagens påverkan (val + grad) när Quickflow-listan prioriteras (2026-09-06)",

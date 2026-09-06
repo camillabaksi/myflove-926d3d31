@@ -34,11 +34,16 @@ export type ImpactKind =
 
 export type ImpactDegree = "lite" | "mattligt" | "mycket";
 
+/** Pågår det just nu, eller är det något som redan har påverkat? */
+export type ImpactTiming = "nu" | "tidigare";
+
 export interface ImpactEntry {
   day: string; // YYYY-MM-DD
   /** Ett eller flera val. "inget" kan inte kombineras med andra. */
   kinds: ImpactKind[];
   degree: ImpactDegree;
+  /** Saknas i äldre poster – tolkas som "nu". */
+  timing?: ImpactTiming;
   ts: number;
 }
 
@@ -123,6 +128,11 @@ export const IMPACT_DEGREES: { id: ImpactDegree; labelSv: string }[] = [
   { id: "mycket", labelSv: "Mycket" },
 ];
 
+export const IMPACT_TIMINGS: { id: ImpactTiming; labelSv: string }[] = [
+  { id: "nu", labelSv: "Påverkar mig nu" },
+  { id: "tidigare", labelSv: "Har påverkat mig" },
+];
+
 const KIND_AI_LABEL: Record<ImpactKind, string> = {
   sjuk: "sjuk idag",
   halsa: "påverkad av sin sjukdom eller fysiska hälsa",
@@ -158,10 +168,15 @@ export function impactContext(entry: ImpactEntry | null, now: Date = new Date())
   const today = now.toISOString().slice(0, 10);
   if (entry.day !== today) return null;
   const labels = entry.kinds.map((k) => KIND_AI_LABEL[k] ?? "påverkad av något");
+  const timing = entry.timing ?? "nu";
+  const timingText =
+    timing === "tidigare"
+      ? "Det har påverkat användaren (inte nödvändigtvis just nu)"
+      : "Det påverkar användaren just nu";
   const beskrivning =
     labels.length === 1
-      ? `Användaren är ${labels[0]} – i graden ${DEGREE_AI_LABEL[entry.degree]}.`
-      : `Användaren är ${labels.slice(0, -1).join(", ")} och ${labels[labels.length - 1]} – i graden ${DEGREE_AI_LABEL[entry.degree]}.`;
+      ? `Användaren är ${labels[0]} – i graden ${DEGREE_AI_LABEL[entry.degree]}. ${timingText}.`
+      : `Användaren är ${labels.slice(0, -1).join(", ")} och ${labels[labels.length - 1]} – i graden ${DEGREE_AI_LABEL[entry.degree]}. ${timingText}.`;
   return [
     `Dagens påverkan (användarens egen registrering): ${beskrivning}`,
     "Använd detta som bakgrund när du föreslår dagens prioriteringar: anpassa ton och kravnivå varsamt, men ändra inte användarens batterinivå, ställ inga diagnoser och ge inga medicinska råd.",

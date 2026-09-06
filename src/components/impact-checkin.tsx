@@ -6,9 +6,11 @@ import {
   IMPACT_DEGREES,
   IMPACT_GROUPS,
   IMPACT_NOTHING,
+  IMPACT_TIMINGS,
   impactOption,
   type ImpactDegree,
   type ImpactKind,
+  type ImpactTiming,
 } from "@/lib/impact-checkin";
 import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
@@ -24,12 +26,14 @@ export default function ImpactCheckin() {
   const { impact, logImpact, clearImpact } = useImpactCheckin();
   const [kinds, setKinds] = useState<ImpactKind[]>(impact?.kinds ?? []);
   const [degree, setDegree] = useState<ImpactDegree | null>(impact?.degree ?? null);
+  const [timing, setTiming] = useState<ImpactTiming>(impact?.timing ?? "nu");
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     if (impact) {
       setKinds(impact.kinds);
       setDegree(impact.degree);
+      setTiming(impact.timing ?? "nu");
     }
   }, [impact]);
 
@@ -45,7 +49,7 @@ export default function ImpactCheckin() {
 
   const save = () => {
     if (!kinds.length) return;
-    logImpact(kinds, degree ?? "lite");
+    logImpact(kinds, degree ?? "lite", timing);
     track("impact_logged", { source: "mitt-batteri" });
     setSaved(true);
     window.setTimeout(() => setSaved(false), 2500);
@@ -55,16 +59,19 @@ export default function ImpactCheckin() {
     clearImpact();
     setKinds([]);
     setDegree(null);
+    setTiming("nu");
   };
 
   const summary = impact
-    ? impact.kinds
+    ? `${impact.kinds
         .map((k) => {
           const o = impactOption(k);
           return o ? `${o.emoji} ${t(o.labelSv)}` : null;
         })
         .filter(Boolean)
-        .join(" · ")
+        .join(" · ")} · ${t(
+        IMPACT_TIMINGS.find((tm) => tm.id === (impact.timing ?? "nu"))!.labelSv,
+      )}`
     : t("Lägg till om något påverkar dig idag.");
 
   const chip = (id: ImpactKind, emoji: string, label: string) => {
@@ -117,6 +124,35 @@ export default function ImpactCheckin() {
         <div className="flex flex-wrap gap-2 border-t border-border/50 pt-3">
           {chip(IMPACT_NOTHING.id, IMPACT_NOTHING.emoji, t(IMPACT_NOTHING.labelSv))}
         </div>
+
+        {kinds.length > 0 && !onlyNothing && (
+          <div className="space-y-1.5">
+            <p className="text-xs text-muted-foreground">
+              {t("Påverkar det dig nu, eller har det påverkat dig?")}
+            </p>
+            <div className="grid grid-cols-2 gap-2">
+              {IMPACT_TIMINGS.map((tm) => {
+                const on = timing === tm.id;
+                return (
+                  <button
+                    key={tm.id}
+                    type="button"
+                    aria-pressed={on}
+                    onClick={() => setTiming(tm.id)}
+                    className={cn(
+                      "min-h-11 rounded-2xl border px-3 py-2 text-sm font-medium transition-all",
+                      on
+                        ? "border-primary bg-primary/10 text-ink"
+                        : "border-border/60 bg-card/70 text-muted-foreground hover:text-foreground",
+                    )}
+                  >
+                    {t(tm.labelSv)}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {kinds.length > 0 && !onlyNothing && (
           <div className="space-y-1.5">

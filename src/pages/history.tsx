@@ -16,7 +16,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { track } from "@/lib/analytics";
 import { useLang } from "@/hooks/use-language";
 import { useImpactCheckin } from "@/hooks/use-impact-checkin";
-import { IMPACT_DEGREES, impactOption, type ImpactEntry } from "@/lib/impact-checkin";
+import { IMPACT_DEGREES, IMPACT_TIMINGS, impactOption, type ImpactEntry } from "@/lib/impact-checkin";
 
 /** Dagens registrerade påverkan – visas diskret överst i dagens historik. */
 function DayImpact({ day, history }: { day: string; history: ImpactEntry[] }) {
@@ -28,10 +28,13 @@ function DayImpact({ day, history }: { day: string; history: ImpactEntry[] }) {
     .filter(Boolean)
     .map((o) => `${o!.emoji} ${t(o!.labelSv)}`);
   const degree = IMPACT_DEGREES.find((d) => d.id === entry.degree);
+  const timing = IMPACT_TIMINGS.find((tm) => tm.id === (entry.timing ?? "nu"));
+  const showTiming = !entry.kinds.every((k) => k === "inget");
   return (
     <p className="mt-1.5 text-xs text-muted-foreground">
       {t("Påverkan")}: {labels.join(", ")}
-      {degree ? ` · ${t(degree.labelSv)}` : ""}
+      {showTiming && timing ? ` · ${t(timing.labelSv)}` : ""}
+      {degree && showTiming ? ` · ${t(degree.labelSv)}` : ""}
     </p>
   );
 }
