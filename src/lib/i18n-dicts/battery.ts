@@ -1,5 +1,4 @@
 /** Engelska översättningar (sv → en). Nycklarna ÄR de svenska källsträngarna. */
-// impact-checkin.tsx läggs till i slutet av filen
 export const EN_BATTERY: Record<string, string> = {
   // battery.tsx
   "Mitt batteri": "My battery",
