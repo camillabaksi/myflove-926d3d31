@@ -48,6 +48,7 @@ export const clarifyQuickflowTask = createServerFn({ method: "POST" })
       typeof data.energyPercent === "number"
         ? `Energinivå just nu: ${Math.round(data.energyPercent)}/100`
         : "Energinivå: okänd",
+      ...(data.context ? ["", data.context] : []),
       "",
       `Uppgift: ${data.title}`,
     ].join("\n");
