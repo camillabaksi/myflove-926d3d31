@@ -22,13 +22,12 @@ export function occursOn(
   dateStr: string,
 ): boolean {
   if (!startDate) return false;
-  if (startDate === dateStr) return true;
   const mode = repeat ?? "none";
-  if (mode === "none") return false;
+  if (mode === "none") return startDate === dateStr;
 
   const start = toDate(startDate);
   const day = toDate(dateStr);
-  if (!start || !day) return false;
+  if (!start || !day) return startDate === dateStr;
   if (day.getTime() < start.getTime()) return false;
 
   if (mode === "daily") return true;
@@ -38,6 +37,7 @@ export function occursOn(
   }
   return day.getDay() === start.getDay();
 }
+
 
 /** Enkel tolkning av svenska upprepningsord i fritext. */
 export function detectRepeat(text: string): RepeatMode {

@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-06";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Vardagsrutiner dyker inte upp på helgen",
+    items: [
+      "Rutiner inställda på vardagar visas inte längre på lördag/söndag, även om de skapades en helgdag (2026-09-06)",
+      "Veckovisa rutiner följer sin veckodag i stället för att också dyka upp på startdagen (2026-09-06)",
+    ],
+  },
+  {
+
     title: "Kalendern visar rutiner och påverkan",
     items: [
       "Återkommande rutiner syns i månads-, vecko- och dagvyn på alla dagar där regeln infaller (2026-09-06)",
