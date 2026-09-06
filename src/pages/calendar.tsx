@@ -775,13 +775,20 @@ export function CalendarContent() {
                         time: e.time ?? "",
                         color: e.member?.color ?? "#8a9a5b",
                       })),
-                      ...items.reminders.map((r) => ({
-                        id: `r-${r.id}`,
-                        title: r.title,
-                        time: r.time ?? "",
-                        color: "hsl(var(--primary))",
-                      })),
-                      ...items.tasks.map((t) => ({
+                       ...items.reminders.map((r) => ({
+                         id: `r-${r.id}`,
+                         title: r.title,
+                         time: r.time ?? "",
+                         color: "hsl(var(--primary))",
+                       })),
+                       // Återkommande hållpunkter och rutiner syns även i veckovyn.
+                       ...items.recurring.map((r) => ({
+                         id: r.id,
+                         title: `↻ ${r.title}`,
+                         time: r.time,
+                         color: r.color ?? "hsl(var(--muted-foreground))",
+                       })),
+                       ...items.tasks.map((t) => ({
                         id: `t-${t.id}`,
                         title: t.title,
                         time: t.time ?? "",
@@ -899,6 +906,10 @@ export function CalendarContent() {
                 }}
                 onClose={() => setQuickAddOpen(false)}
               />
+            )}
+
+            {allInDay && selectedDateStr === todayStr && (
+              <ImpactCheckin />
             )}
 
             {allInDay && (
