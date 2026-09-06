@@ -18,7 +18,8 @@ import {
 } from "@/lib/activity-history";
 import { buildWeekReview, weekDates, type WeekReview } from "@/lib/week-review";
 
-export const ACTIVITY_HISTORY_KEY = "myflove-activity-history";
+export { ACTIVITY_HISTORY_KEY } from "@/hooks/use-instance-status";
+const ACTIVITY_HISTORY_KEY = "myflove-activity-history";
 
 /**
  * Historiken läser aktiviteterna där de redan bor (uppgifter och påminnelser)
