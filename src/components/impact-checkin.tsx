@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { CloudRain } from "lucide-react";
-import { MyFloveBlock } from "@/components/myflove/block";
+import { ExpandableBlock } from "@/components/myflove/expandable-block";
 import { useImpactCheckin } from "@/hooks/use-impact-checkin";
 import {
   IMPACT_DEGREES,
-  IMPACT_OPTIONS,
+  IMPACT_GROUPS,
+  IMPACT_NOTHING,
+  impactOption,
   type ImpactDegree,
   type ImpactKind,
 } from "@/lib/impact-checkin";
@@ -13,13 +15,13 @@ import { cn } from "@/lib/utils";
 import { useLang } from "@/hooks/use-language";
 
 /**
- * Påverkan – vad som belastar kapaciteten just nu. Enkel registrering
- * (en eller flera påverkningar + grad) som sparas med dagen och ges till
- * Flow som kontext. Ändrar aldrig batterinivån.
+ * Vad påverkar din kapacitet? – diskret, frivillig registrering direkt under
+ * batteriet. Kropp & hälsa, känslor & tankar, omgivning + grad. Ändrar aldrig
+ * batteriprocenten; den är enbart kontext till Flow.
  */
 export default function ImpactCheckin() {
   const { t } = useLang();
-  const { impact, logImpact } = useImpactCheckin();
+  const { impact, logImpact, clearImpact } = useImpactCheckin();
   const [kinds, setKinds] = useState<ImpactKind[]>(impact?.kinds ?? []);
   const [degree, setDegree] = useState<ImpactDegree | null>(impact?.degree ?? null);
   const [saved, setSaved] = useState(false);
@@ -49,45 +51,78 @@ export default function ImpactCheckin() {
     window.setTimeout(() => setSaved(false), 2500);
   };
 
+  const remove = () => {
+    clearImpact();
+    setKinds([]);
+    setDegree(null);
+  };
+
+  const summary = impact
+    ? impact.kinds
+        .map((k) => {
+          const o = impactOption(k);
+          return o ? `${o.emoji} ${t(o.labelSv)}` : null;
+        })
+        .filter(Boolean)
+        .join(" · ")
+    : t("Lägg till om något påverkar dig idag.");
+
+  const chip = (id: ImpactKind, emoji: string, label: string) => {
+    const on = kinds.includes(id);
+    return (
+      <button
+        key={id}
+        type="button"
+        aria-pressed={on}
+        onClick={() => toggle(id)}
+        className={cn(
+          "min-h-11 rounded-pill border px-3 py-1.5 text-left text-sm transition-all",
+          on
+            ? "border-primary bg-primary/10 text-ink"
+            : "border-border/60 bg-card/70 text-muted-foreground hover:text-foreground",
+        )}
+      >
+        <span aria-hidden className="mr-1">
+          {emoji}
+        </span>
+        {label}
+      </button>
+    );
+  };
+
   return (
-    <MyFloveBlock
-      title={t("Påverkan")}
-      subtitle={t("Något som tynger just nu? Det hjälper Flow anpassa dagen.")}
+    <ExpandableBlock
+      title={t("Vad påverkar din kapacitet?")}
+      titleText={t("Vad påverkar din kapacitet?")}
+      subtitle={t("Frivilligt – det hjälper Flow att anpassa dagen.")}
+      summary={summary}
       icon={CloudRain}
       tone="blush"
       surface="blush"
       area="halsa"
       data-testid="impact-checkin"
     >
-      <div className="space-y-3">
-        <div className="flex flex-wrap gap-2">
-          {IMPACT_OPTIONS.map((o) => {
-            const on = kinds.includes(o.id);
-            return (
-              <button
-                key={o.id}
-                type="button"
-                aria-pressed={on}
-                onClick={() => toggle(o.id)}
-                className={cn(
-                  "rounded-pill border px-3 py-1.5 text-sm transition-all",
-                  on
-                    ? "border-primary bg-primary/10 text-ink"
-                    : "border-border/60 bg-card/70 text-muted-foreground hover:text-foreground",
-                )}
-              >
-                <span aria-hidden className="mr-1">
-                  {o.emoji}
-                </span>
-                {t(o.labelSv)}
-              </button>
-            );
-          })}
+      <div className="space-y-4">
+        {IMPACT_GROUPS.map((group) => (
+          <div key={group.id} className="space-y-2">
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              {t(group.titleSv)}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {group.options.map((o) => chip(o.id, o.emoji, t(o.labelSv)))}
+            </div>
+          </div>
+        ))}
+
+        <div className="flex flex-wrap gap-2 border-t border-border/50 pt-3">
+          {chip(IMPACT_NOTHING.id, IMPACT_NOTHING.emoji, t(IMPACT_NOTHING.labelSv))}
         </div>
 
         {kinds.length > 0 && !onlyNothing && (
           <div className="space-y-1.5">
-            <p className="text-xs text-muted-foreground">{t("Hur mycket påverkar det dig?")}</p>
+            <p className="text-xs text-muted-foreground">
+              {t("Hur mycket påverkar det dig just nu?")}
+            </p>
             <div className="grid grid-cols-3 gap-2">
               {IMPACT_DEGREES.map((d) => {
                 const on = degree === d.id;
@@ -113,22 +148,33 @@ export default function ImpactCheckin() {
         )}
 
         {kinds.length > 0 && (
-          <button
-            type="button"
-            onClick={save}
-            disabled={!onlyNothing && !degree}
-            className="flex min-h-11 w-full items-center justify-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-opacity hover:opacity-90 disabled:opacity-50"
-          >
-            {saved ? t("Tack – sparat") : t("Spara påverkan")}
-          </button>
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <button
+              type="button"
+              onClick={save}
+              disabled={!onlyNothing && !degree}
+              className="flex min-h-11 flex-1 items-center justify-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-opacity hover:opacity-90 disabled:opacity-50"
+            >
+              {saved ? t("Tack – sparat") : t("Spara påverkan")}
+            </button>
+            {impact && (
+              <button
+                type="button"
+                onClick={remove}
+                className="min-h-11 rounded-2xl border border-border/60 px-4 py-3 text-sm font-medium text-muted-foreground hover:text-foreground"
+              >
+                {t("Ta bort")}
+              </button>
+            )}
+          </div>
         )}
 
         <p aria-live="polite" className="text-center text-xs text-muted-foreground">
           {impact && !saved
-            ? t("Sparat för idag – du kan ändra när du vill.")
+            ? t("Sparat för idag – du kan ändra eller ta bort när du vill.")
             : t("Påverkan ändrar inte din batterinivå – den ger Flow sammanhang.")}
         </p>
       </div>
-    </MyFloveBlock>
+    </ExpandableBlock>
   );
 }
