@@ -1,6 +1,13 @@
 # Changelog
 
+## 2026-09-07 – Steg 3: förslag på flytt, förenkling och uppdelning
+
+- Planera har fått ett nytt **Steg 3 – Behöver du planera om?** där Flow föreslår konkreta justeringar av dagens saker: flytta till imorgon, gör en mindre version eller dela upp i två små steg.
+- Varje förslag har en egen godkännandeknapp ("Ja, flytta till imorgon", "Ja, gör den mindre", "Ja, dela upp den") och en "Nej, låt den vara" – ingenting ändras förrän du säger ja.
+- Fasta hållpunkter och deadlines inom ett dygn flyttas aldrig, och en sammanfattning visar vad som ändrats.
+
 ## 2026-09-07 – Kvällschecken kopplad till dagens energi
+
 
 - "Hur blev dagen?" sparas nu tillsammans med dagens ork, batterinivå, antal planerade och klara saker samt kvarvarande tankar.
 - Nytt avsnitt **Förväntat och faktiskt** i kvällschecken: en rad om dagen jämfört med planen, och efter några kvällar ett lugnt mönster – t.ex. vid hur många saker dina dagar brukar bli som väntat.
