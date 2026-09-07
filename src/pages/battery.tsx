@@ -49,10 +49,9 @@ export default function BatteryPage() {
           />
         </MyFloveWide>
 
-        {/* 1. Primär incheckning: ork/mående + påverkan + nu-läge – samma befintliga dataväg */}
-        <MyFloveWide className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:items-start">
+        {/* 1. Primär incheckning: ork/mående + nu-läge – samma befintliga dataväg */}
+        <MyFloveWide className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">
           <SimpleCheckin source="mitt-batteri" />
-          <ImpactCheckin />
           <EnergyBattery defaultOpen />
         </MyFloveWide>
 
@@ -71,9 +70,14 @@ export default function BatteryPage() {
           <CycleCard />
         </MyFloveWide>
 
-        {/* 3. Morgon/kväll */}
+        {/* 3. Morgon/kväll – "god morgon"-kortet … */}
         <MyFloveWide className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">
           <DayEdgesCheckin />
+        </MyFloveWide>
+
+        {/* 3b. … och direkt efter det: Påverkan – vad som påverkar kapaciteten just nu */}
+        <MyFloveWide className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">
+          <ImpactCheckin />
         </MyFloveWide>
 
         {/* 3. Dagens energiflöde – graf, hela bredden */}
