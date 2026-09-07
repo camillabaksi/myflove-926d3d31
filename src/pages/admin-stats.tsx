@@ -44,6 +44,27 @@ export default function AdminStats() {
     .filter((row) => row.action !== "view" && row.section !== "page")
     .sort((a, b) => b.events - a.events);
 
+  // Energi, Påverkan & Flow – nyckelhändelser samlade på ett ställe.
+  const usage = data?.featureUsage ?? [];
+  const findUsage = (section: string, action: string) =>
+    usage.find((row) => row.section === section && row.action === action);
+  const sumSection = (sections: string[]) =>
+    usage
+      .filter((row) => sections.includes(row.section))
+      .reduce(
+        (acc, row) => ({ events: acc.events + row.events, sessions: acc.sessions + row.sessions }),
+        { events: 0, sessions: 0 },
+      );
+  const energyFlowStats = [
+    { label: t("Påverkan registrerad"), ...findUsage("batteri", "impact_logged") },
+    { label: t("Energi loggad"), ...findUsage("batteri", "battery_logged") },
+    { label: t("Mående loggat"), ...findUsage("mood", "mood_logged") },
+    { label: t("Hälsofaktor loggad"), ...findUsage("halsa", "health_factor_logged") },
+    { label: t("Energipåverkan efter aktivitet"), ...findUsage("energi", "activity_energy_logged") },
+    { label: t("Flow totalt"), ...sumSection(["flow", "flowplan"]) },
+  ].map((row) => ({ label: row.label, events: row.events ?? 0, sessions: row.sessions ?? 0 }));
+  const maxEnergyFlow = Math.max(1, ...energyFlowStats.map((row) => row.events));
+
   const maxViews = Math.max(1, ...viewsBySection.map((row) => row.events));
   const maxPageViews = Math.max(1, ...pageViews.map((row) => row.events));
   const maxDaily = Math.max(1, ...(data?.dailyActiveSessions ?? []).map((d) => d.sessions));
@@ -179,6 +200,32 @@ export default function AdminStats() {
                     </div>
                   );
                 })}
+              </div>
+            </CollapsibleSection>
+
+            <CollapsibleSection
+              title={t("Energi, Påverkan & Flow")}
+              headingClassName="text-lg font-semibold"
+              className="bg-card p-6 rounded-3xl border-2 border-border shadow-sm"
+              description={t("Hur ofta användare loggar energi, mående, påverkan och använder Flow.")}
+            >
+              <div className="space-y-3">
+                {energyFlowStats.map((row) => (
+                  <div key={row.label}>
+                    <div className="flex justify-between text-sm mb-1">
+                      <span className="font-medium">{row.label}</span>
+                      <span className="text-muted-foreground">
+                        {row.events} {t("gånger")} · {row.sessions} {t("besökare")}
+                      </span>
+                    </div>
+                    <div className="h-2 rounded-full bg-secondary/50 overflow-hidden">
+                      <div
+                        className="h-full bg-primary rounded-full"
+                        style={{ width: `${(row.events / maxEnergyFlow) * 100}%` }}
+                      />
+                    </div>
+                  </div>
+                ))}
               </div>
             </CollapsibleSection>
 

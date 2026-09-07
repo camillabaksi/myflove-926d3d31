@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-07 – Energi, Påverkan & Flow i adminstatistiken
+
+- Ny sektion i adminstatistiken som samlar hur ofta Påverkan, Energi, Mående, Hälsofaktorer och Flow används – antal gånger och antal besökare per händelse.
+- Helt anonymt: bara att händelsen inträffade, aldrig några värden.
+
 ## 2026-09-07 – Påverkan flyttad upp i incheckningen
 
 - "Påverkan"-kortet ligger nu högst upp på Mitt batteri, direkt bredvid "Logga just nu" (ork & mående) – du ser vad som påverkar din kapacitet i samma ögonblick som du loggar, utan att scrolla.

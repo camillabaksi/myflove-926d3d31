@@ -1,5 +1,13 @@
 /** Engelska översättningar (sv → en). Nycklarna ÄR de svenska källsträngarna. */
 export const EN_ADMIN: Record<string, string> = {
+  // src/pages/admin-stats.tsx – Energi, Påverkan & Flow
+  "Energi, Påverkan & Flow": "Energy, Impact & Flow",
+  "Hur ofta användare loggar energi, mående, påverkan och använder Flow.":
+    "How often users log energy, mood, impact and use Flow.",
+  "Påverkan registrerad": "Impact logged",
+  "Energi loggad": "Energy logged",
+  "Energipåverkan efter aktivitet": "Energy impact after activity",
+  "Flow totalt": "Flow total",
   // src/pages/admin.tsx
   "Öppen": "Open",
   "Planerad": "Planned",
