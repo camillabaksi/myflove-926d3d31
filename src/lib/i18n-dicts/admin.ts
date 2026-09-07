@@ -6,8 +6,6 @@ export const EN_ADMIN: Record<string, string> = {
     "How often users log energy, mood, impact and use Flow.",
   "Påverkan registrerad": "Impact logged",
   "Energi loggad": "Energy logged",
-  "Mående loggat": "Mood logged",
-  "Hälsofaktor loggad": "Health factor logged",
   "Energipåverkan efter aktivitet": "Energy impact after activity",
   "Flow totalt": "Flow total",
   // src/pages/admin.tsx
