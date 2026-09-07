@@ -1,10 +1,14 @@
 import { Link } from "wouter";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Plus } from "lucide-react";
 import { useLang } from "@/hooks/use-language";
 import { track } from "@/lib/analytics";
 import { useDayJourney } from "@/hooks/use-day-journey";
 import type { JourneyStepId } from "@/lib/day-journey";
 import { cn } from "@/lib/utils";
+
+interface JourneyStepsProps {
+  onAddOpen?: () => void;
+}
 
 interface StepDef {
   id: JourneyStepId;
