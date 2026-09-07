@@ -270,175 +270,186 @@ export default function Home() {
             headingClassName="text-base font-semibold text-ink"
           >
             <div className="grid gap-4">
-        {/* Tre huvudkort: Quickflow, Batteriet, Kalendern.
+              {/* Tre huvudkort: Quickflow, Batteriet, Kalendern.
             Alla börjar i samma ordning – den anpassas först när MyFlove sett
 
             tillräckligt mycket av din egen användning. */}
-          <MyFloveWide style={{ order: 1 }} className="min-w-0">
-          <div
-            className="grid grid-cols-3 gap-2.5 sm:gap-4"
-            data-testid="home-widgets"
-            aria-label={t("Vad vill du göra just nu?")}
-          >
-            {featureCards.map((card) =>
-              card.id === "quickflow" ? (
-                <button
-                  key={card.id}
-                  type="button"
-                  onClick={() => {
-                    recordFeature("quickflow");
-                    openQuickflow();
-                  }}
-                  data-testid="home-widget-quickflow"
-                  className="group flex min-h-[104px] flex-col items-center justify-center gap-1.5 rounded-3xl border border-border/60 bg-card p-3 text-center shadow-soft transition hover:shadow-lifted"
+              <MyFloveWide style={{ order: 1 }} className="min-w-0">
+                <div
+                  className="grid grid-cols-3 gap-2.5 sm:gap-4"
+                  data-testid="home-widgets"
+                  aria-label={t("Vad vill du göra just nu?")}
                 >
-                  <card.icon className="h-7 w-7 text-primary" aria-hidden />
-                  <span className="text-sm font-semibold text-ink">{card.title}</span>
-                  <span className="text-xs text-muted-foreground leading-snug">
-                    {card.subtitle}
-                  </span>
-                </button>
-              ) : (
-                <Link
-                  key={card.id}
-                  href={card.href}
-                  onClick={() => {
-                    recordFeature(card.id);
-                    track("home_widget_opened", { source: card.id });
-                  }}
-                  data-testid={`home-widget-${card.id}`}
-                  className="flex min-h-[104px] flex-col items-center justify-center gap-1.5 rounded-3xl border border-border/60 bg-card p-3 text-center shadow-soft transition hover:shadow-lifted"
-                >
-                  <card.icon className="h-7 w-7 text-primary" aria-hidden />
-                  <span className="text-sm font-semibold text-ink">{card.title}</span>
-                  <span className="text-xs text-muted-foreground leading-snug">
-                    {card.subtitle}
-                  </span>
-                </Link>
-              ),
-            )}
-          </div>
-          </MyFloveWide>
-
-        {/* Ditt batteri – stort, lugnt, som i mockupen. */}
-          <MyFloveWide style={{ order: 2 }} className="min-w-0">
-          <section
-            aria-label={t("Ditt batteri")}
-            data-testid="home-recovery"
-            className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
-          >
-            <h2 className="text-base font-semibold text-ink">{t("Ditt batteri")}</h2>
-            <div className="mt-3 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4">
-              <div className="flex items-center gap-3 rounded-2xl bg-lavender/30 px-4 py-3">
-                <BatteryMedium className="h-10 w-10 text-primary" aria-hidden strokeWidth={1.75} />
-                <div>
-                  <span className="block text-3xl font-bold tabular-nums text-ink leading-none">
-                    {battery}%
-                  </span>
-                  <span className="mt-1 block text-sm text-muted-foreground">{t("Gott jobbat!")}</span>
+                  {featureCards.map((card) =>
+                    card.id === "quickflow" ? (
+                      <button
+                        key={card.id}
+                        type="button"
+                        onClick={() => {
+                          recordFeature("quickflow");
+                          openQuickflow();
+                        }}
+                        data-testid="home-widget-quickflow"
+                        className="group flex min-h-[104px] flex-col items-center justify-center gap-1.5 rounded-3xl border border-border/60 bg-card p-3 text-center shadow-soft transition hover:shadow-lifted"
+                      >
+                        <card.icon className="h-7 w-7 text-primary" aria-hidden />
+                        <span className="text-sm font-semibold text-ink">{card.title}</span>
+                        <span className="text-xs text-muted-foreground leading-snug">
+                          {card.subtitle}
+                        </span>
+                      </button>
+                    ) : (
+                      <Link
+                        key={card.id}
+                        href={card.href}
+                        onClick={() => {
+                          recordFeature(card.id);
+                          track("home_widget_opened", { source: card.id });
+                        }}
+                        data-testid={`home-widget-${card.id}`}
+                        className="flex min-h-[104px] flex-col items-center justify-center gap-1.5 rounded-3xl border border-border/60 bg-card p-3 text-center shadow-soft transition hover:shadow-lifted"
+                      >
+                        <card.icon className="h-7 w-7 text-primary" aria-hidden />
+                        <span className="text-sm font-semibold text-ink">{card.title}</span>
+                        <span className="text-xs text-muted-foreground leading-snug">
+                          {card.subtitle}
+                        </span>
+                      </Link>
+                    ),
+                  )}
                 </div>
-              </div>
-              <div className="min-w-0">
-                <p className="text-sm text-ink">
-                  {t("Du har")} {battery}% {t("energi")}
-                </p>
-                <p className="mt-0.5 text-xs text-muted-foreground">{batteryLine}</p>
-              </div>
-            </div>
-            <Link
-              href="/mitt-batteri"
-              onClick={() => track("home_widget_opened", { source: "logga" })}
-              className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
-            >
-              {energyValue != null ? t("Tips för mer energi") : t("Logga energi & mående")}{" "}
-              <ArrowRight size={14} />
-            </Link>
-          </section>
-          </MyFloveWide>
+              </MyFloveWide>
 
-        {/* Idag – tider och saker, som i mockupen. */}
-          <MyFloveWide style={{ order: 3 }} className="min-w-0">
-          <section
-            aria-label={t("Idag")}
-            data-testid="home-today"
-            className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
-          >
-            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
-              <h2 className="truncate text-base font-semibold text-ink">{t("Idag")}</h2>
-              <Link
-                href="/idag"
-                className="shrink-0 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
-              >
-                {t("Visa dagsschema")} <ChevronRight size={15} />
-              </Link>
-            </div>
-            {todayEntries.length === 0 ? (
-              <p className="mt-3 text-sm text-muted-foreground">
-                {t("Inget inlagt för idag ännu. Det är också helt okej.")}
-              </p>
-            ) : (
-              <ul className="mt-2">
-                {todayEntries.map((e) => (
-                  <li key={e.id}>
+              {/* Ditt batteri – stort, lugnt, som i mockupen. */}
+              <MyFloveWide style={{ order: 2 }} className="min-w-0">
+                <section
+                  aria-label={t("Ditt batteri")}
+                  data-testid="home-recovery"
+                  className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+                >
+                  <h2 className="text-base font-semibold text-ink">{t("Ditt batteri")}</h2>
+                  <div className="mt-3 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4">
+                    <div className="flex items-center gap-3 rounded-2xl bg-lavender/30 px-4 py-3">
+                      <BatteryMedium
+                        className="h-10 w-10 text-primary"
+                        aria-hidden
+                        strokeWidth={1.75}
+                      />
+                      <div>
+                        <span className="block text-3xl font-bold tabular-nums text-ink leading-none">
+                          {battery}%
+                        </span>
+                        <span className="mt-1 block text-sm text-muted-foreground">
+                          {t("Gott jobbat!")}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-sm text-ink">
+                        {t("Du har")} {battery}% {t("energi")}
+                      </p>
+                      <p className="mt-0.5 text-xs text-muted-foreground">{batteryLine}</p>
+                    </div>
+                  </div>
+                  <Link
+                    href="/mitt-batteri"
+                    onClick={() => track("home_widget_opened", { source: "logga" })}
+                    className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+                  >
+                    {energyValue != null ? t("Tips för mer energi") : t("Logga energi & mående")}{" "}
+                    <ArrowRight size={14} />
+                  </Link>
+                </section>
+              </MyFloveWide>
+
+              {/* Idag – tider och saker, som i mockupen. */}
+              <MyFloveWide style={{ order: 3 }} className="min-w-0">
+                <section
+                  aria-label={t("Idag")}
+                  data-testid="home-today"
+                  className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+                >
+                  <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+                    <h2 className="truncate text-base font-semibold text-ink">{t("Idag")}</h2>
                     <Link
                       href="/idag"
-                      className="grid grid-cols-[3.2rem_minmax(0,1fr)_auto] items-center gap-3 border-b border-border/40 px-1 py-3 last:border-b-0"
+                      className="shrink-0 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
                     >
-                      <span className="shrink-0 text-sm font-semibold tabular-nums text-muted-foreground">
-                        {e.time ?? "–"}
-                      </span>
-                      <span className="min-w-0">
-                        <span className="block truncate text-sm font-semibold text-ink">
-                          {e.title}
-                        </span>
-                        {e.note && (
-                          <span className="block truncate text-xs text-muted-foreground">
-                            {e.note}
-                          </span>
-                        )}
-                      </span>
-                      <ChevronRight size={18} className="shrink-0 text-muted-foreground" />
+                      {t("Visa dagsschema")} <ChevronRight size={15} />
                     </Link>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </section>
-          </MyFloveWide>
+                  </div>
+                  {todayEntries.length === 0 ? (
+                    <p className="mt-3 text-sm text-muted-foreground">
+                      {t("Inget inlagt för idag ännu. Det är också helt okej.")}
+                    </p>
+                  ) : (
+                    <ul className="mt-2">
+                      {todayEntries.map((e) => (
+                        <li key={e.id}>
+                          <Link
+                            href="/idag"
+                            className="grid grid-cols-[3.2rem_minmax(0,1fr)_auto] items-center gap-3 border-b border-border/40 px-1 py-3 last:border-b-0"
+                          >
+                            <span className="shrink-0 text-sm font-semibold tabular-nums text-muted-foreground">
+                              {e.time ?? "–"}
+                            </span>
+                            <span className="min-w-0">
+                              <span className="block truncate text-sm font-semibold text-ink">
+                                {e.title}
+                              </span>
+                              {e.note && (
+                                <span className="block truncate text-xs text-muted-foreground">
+                                  {e.note}
+                                </span>
+                              )}
+                            </span>
+                            <ChevronRight size={18} className="shrink-0 text-muted-foreground" />
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </section>
+              </MyFloveWide>
 
-        {/* Från ditt huvud – senaste QuickFlow-tankarna. */}
-          <MyFloveWide style={{ order: 4 }} className="min-w-0">
-          <section
-            aria-label={t("Från ditt huvud")}
-            data-testid="home-quickflow-latest"
-            className="rounded-3xl border border-border/60 bg-lavender/25 p-4 shadow-soft"
-          >
-            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
-              <h2 className="truncate text-base font-semibold text-ink">{t("Från ditt huvud")}</h2>
-              <Link
-                href="/quickflow"
-                className="shrink-0 inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
-              >
-                {t("Visa alla")} <ArrowRight size={13} />
-              </Link>
-            </div>
-            {openItems.length === 0 ? (
-              <p className="mt-3 text-sm text-muted-foreground">
-                {t("Inget som snurrar just nu – tryck på Quickflow när något dyker upp.")}
-              </p>
-            ) : (
-              <ul className="mt-3 space-y-1.5">
-                {openItems.slice(0, 3).map((item) => (
-                  <li key={item.id} className="flex items-start gap-2 text-sm text-ink">
-                    <Sparkles size={14} className="mt-0.5 shrink-0 text-primary" aria-hidden />
-                    <span className="min-w-0 truncate">{item.text}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </section>
-          </MyFloveWide>
-
+              {/* Från ditt huvud – senaste QuickFlow-tankarna. */}
+              <MyFloveWide style={{ order: 4 }} className="min-w-0">
+                <section
+                  aria-label={t("Från ditt huvud")}
+                  data-testid="home-quickflow-latest"
+                  className="rounded-3xl border border-border/60 bg-lavender/25 p-4 shadow-soft"
+                >
+                  <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+                    <h2 className="truncate text-base font-semibold text-ink">
+                      {t("Från ditt huvud")}
+                    </h2>
+                    <Link
+                      href="/quickflow"
+                      className="shrink-0 inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+                    >
+                      {t("Visa alla")} <ArrowRight size={13} />
+                    </Link>
+                  </div>
+                  {openItems.length === 0 ? (
+                    <p className="mt-3 text-sm text-muted-foreground">
+                      {t("Inget som snurrar just nu – tryck på Quickflow när något dyker upp.")}
+                    </p>
+                  ) : (
+                    <ul className="mt-3 space-y-1.5">
+                      {openItems.slice(0, 3).map((item) => (
+                        <li key={item.id} className="flex items-start gap-2 text-sm text-ink">
+                          <Sparkles
+                            size={14}
+                            className="mt-0.5 shrink-0 text-primary"
+                            aria-hidden
+                          />
+                          <span className="min-w-0 truncate">{item.text}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </section>
+              </MyFloveWide>
             </div>
           </CollapsibleSection>
         </MyFloveWide>
@@ -505,10 +516,7 @@ export default function Home() {
 
         {/* Insikter + Rutiner & medicin visas bredvid varandra som ett par. */}
         {(flowSettings.enabled && flowSettings.learning) || shows("medicin") ? (
-          <div
-            className="col-span-full grid grid-cols-2 gap-3"
-            style={{ order: 9 }}
-          >
+          <div className="col-span-full grid grid-cols-2 gap-3" style={{ order: 9 }}>
             {flowSettings.enabled && flowSettings.learning && (
               <div data-testid="home-flow-note" className="min-w-0">
                 <ExpandableBlock
@@ -527,10 +535,7 @@ export default function Home() {
             )}
 
             {shows("medicin") && (
-              <section
-                className="min-w-0"
-                aria-label={t("Rutiner och medicin")}
-              >
+              <section className="min-w-0" aria-label={t("Rutiner och medicin")}>
                 <ExpandableBlock
                   title={t("Rutiner & medicin")}
                   titleText={t("Rutiner och medicin")}
