@@ -524,7 +524,7 @@ export default function Home() {
 
         {/* Liten insikt – bara när Flow faktiskt har något att säga. */}
         {flowSettings.enabled && flowSettings.learning && (
-          <div style={{ order: 5 }} data-testid="home-flow-note" className="min-w-0 xl:col-span-6">
+          <div style={{ order: 4.9 }} data-testid="home-flow-note" className="min-w-0 xl:col-span-3">
             <ExpandableBlock
               title={t("MyFlove har lagt märke till…")}
               titleText={t("MyFlove har lagt märke till")}
