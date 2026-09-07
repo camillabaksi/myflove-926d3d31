@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-07 – Påverkan efter morgonkortet + allt går att fälla ihop
+
+- "Påverkan"-kortet ligger nu direkt efter "Morgon och kväll" (god morgon-kortet) på Mitt batteri.
+- Alla kort på Mitt batteri kan nu minimeras/expanderas: Logga just nu, Morgon och kväll, Påverkan, Dagens observationer, Mina mönster, Menscykel, Energins historik och Historik. Läget sparas och ligger kvar.
+
 ## 2026-09-07 – Energi, Påverkan & Flow i adminstatistiken
 
 - Ny sektion i adminstatistiken som samlar hur ofta Påverkan, Energi, Mående, Hälsofaktorer och Flow används – antal gånger och antal besökare per händelse.

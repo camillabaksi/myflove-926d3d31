@@ -110,6 +110,8 @@ export default function SimpleCheckin({
       icon={Pencil}
       tone="lavender"
       surface="lavender"
+      collapsible
+      collapseId="batteri::logga-just-nu"
       data-testid="battery-log-form"
       className={cn("h-full", className)}
       footer={
