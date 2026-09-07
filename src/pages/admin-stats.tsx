@@ -204,6 +204,32 @@ export default function AdminStats() {
             </CollapsibleSection>
 
             <CollapsibleSection
+              title={t("Energi, Påverkan & Flow")}
+              headingClassName="text-lg font-semibold"
+              className="bg-card p-6 rounded-3xl border-2 border-border shadow-sm"
+              description={t("Hur ofta användare loggar energi, mående, påverkan och använder Flow.")}
+            >
+              <div className="space-y-3">
+                {energyFlowStats.map((row) => (
+                  <div key={row.label}>
+                    <div className="flex justify-between text-sm mb-1">
+                      <span className="font-medium">{row.label}</span>
+                      <span className="text-muted-foreground">
+                        {row.events} {t("gånger")} · {row.sessions} {t("besökare")}
+                      </span>
+                    </div>
+                    <div className="h-2 rounded-full bg-secondary/50 overflow-hidden">
+                      <div
+                        className="h-full bg-primary rounded-full"
+                        style={{ width: `${(row.events / maxEnergyFlow) * 100}%` }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CollapsibleSection>
+
+            <CollapsibleSection
               title={t("Händelser per dag (senaste 14 dagarna)")}
               headingClassName="text-lg font-semibold"
               className="bg-card p-6 rounded-3xl border-2 border-border shadow-sm"
