@@ -503,45 +503,50 @@ export default function Home() {
           </MyFloveWide>
         )}
 
-        {/* Liten insikt – bara när Flow faktiskt har något att säga. */}
-        {flowSettings.enabled && flowSettings.learning && (
-          <div style={{ order: 9.5 }} data-testid="home-flow-note" className="min-w-0 xl:col-span-3">
-            <ExpandableBlock
-              title={t("MyFlove har lagt märke till…")}
-              titleText={t("MyFlove har lagt märke till")}
-              area="flow"
-              visual={<FlowMascot size="xs" mood="calm" bump className="flow-alive" alt="" />}
-              subtitle={t("Små mönster i din egen data")}
-              status={t("Insikter")}
-              tone="lavender"
-              surface="lavender"
-              href="/insight"
-              onNavigate={() => track("flow_learning_opened", { source: "hem" })}
-            />
-          </div>
-        )}
-
-        {/* Dagens medicin – samma data och samma avbockning som i Rutiner & medicin */}
-        {shows("medicin") && (
-          <section
-            className="min-w-0 xl:col-span-3"
-            style={pos("medicin")}
-            aria-label={t("Rutiner och medicin")}
+        {/* Insikter + Rutiner & medicin visas bredvid varandra som ett par. */}
+        {(flowSettings.enabled && flowSettings.learning) || shows("medicin") ? (
+          <div
+            className="col-span-full grid grid-cols-2 gap-3"
+            style={{ order: 9 }}
           >
-            <ExpandableBlock
-              title={t("Rutiner & medicin")}
-              titleText={t("Rutiner och medicin")}
-              area="halsa"
-              icon={Pill}
-              subtitle={t("Dagens rutiner och doser")}
-              status={t("Idag")}
-              tone="blush"
-              surface="blush"
-            >
-              <RoutinesMedicationToday />
-            </ExpandableBlock>
-          </section>
-        )}
+            {flowSettings.enabled && flowSettings.learning && (
+              <div data-testid="home-flow-note" className="min-w-0">
+                <ExpandableBlock
+                  title={t("MyFlove har lagt märke till…")}
+                  titleText={t("MyFlove har lagt märke till")}
+                  area="flow"
+                  visual={<FlowMascot size="xs" mood="calm" bump className="flow-alive" alt="" />}
+                  subtitle={t("Små mönster i din egen data")}
+                  status={t("Insikter")}
+                  tone="lavender"
+                  surface="lavender"
+                  href="/insight"
+                  onNavigate={() => track("flow_learning_opened", { source: "hem" })}
+                />
+              </div>
+            )}
+
+            {shows("medicin") && (
+              <section
+                className="min-w-0"
+                aria-label={t("Rutiner och medicin")}
+              >
+                <ExpandableBlock
+                  title={t("Rutiner & medicin")}
+                  titleText={t("Rutiner och medicin")}
+                  area="halsa"
+                  icon={Pill}
+                  subtitle={t("Dagens rutiner och doser")}
+                  status={t("Idag")}
+                  tone="blush"
+                  surface="blush"
+                >
+                  <RoutinesMedicationToday />
+                </ExpandableBlock>
+              </section>
+            )}
+          </div>
+        ) : null}
 
         {/* Områdesväljare – litet, längst ner */}
         {shows("omrade") && (
