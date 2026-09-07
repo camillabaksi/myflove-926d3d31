@@ -32,7 +32,6 @@ import {
   ArrowRight,
   ChevronRight,
   Sparkles,
-  Plus,
 } from "lucide-react";
 import { todayISO } from "@/lib/day";
 import { track } from "@/lib/analytics";
