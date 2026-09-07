@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-07 – Lägg till ligger i "Vad händer?"
+
+- "＋ Lägg till"-knappen har flyttat från toppen av Hem in i steg 02 **Vad händer?** – där den hör hemma i dagens resa.
+- Kortet får nu två tydliga vägar: **Planera dagen** (gå till Idag) och **Lägg till** (fånga en aktivitet, händelse, påminnelse eller tanke direkt).
+
 ## 2026-09-07 – Insikter och Rutiner & medicin sida vid sida
 
 - "MyFlove har lagt märke till…" (Insikter) ligger nu bredvid "Rutiner & medicin" på Hem – två halvbredda kort i samma rad på breda skärmar.
