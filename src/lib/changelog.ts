@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-07";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Android AAB versionCode 8",
+    items: [
+      "versionCode höjd till 8 och versionName till 4.4 efter att Play Console meddelat att tidigare kod redan använts (2026-09-07)",
+      "Bygg om AAB:n lokalt med bun run cap:sync && bun run android:aab innan uppladdning (2026-09-07)",
+    ],
+  },
+  {
     title: "Android AAB versionCode 7",
     items: [
       "versionCode höjd till 7 och versionName till 4.3 i android/app/build.gradle (2026-09-07)",

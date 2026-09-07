@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-07 – Android AAB versionCode 8
+
+- `versionCode` höjd till 8 och `versionName` till 4.4 i `android/app/build.gradle` efter att Play Console meddelat att tidigare kod redan använts.
+- Bygg om AAB:n lokalt (`bun run cap:sync && bun run android:aab`) så att den nya koden kommer med innan uppladdning.
+
 ## 2026-09-07 – Android AAB versionCode 7 förberedd
 
 - `versionCode` höjd till 7 och `versionName` till 4.3 i `android/app/build.gradle` så nästa AAB kan laddas upp i Google Play Console.
