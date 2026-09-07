@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-07 – Kvällschecken kopplad till dagens energi
+
+- "Hur blev dagen?" sparas nu tillsammans med dagens ork, batterinivå, antal planerade och klara saker samt kvarvarande tankar.
+- Nytt avsnitt **Förväntat och faktiskt** i kvällschecken: en rad om dagen jämfört med planen, och efter några kvällar ett lugnt mönster – t.ex. vid hur många saker dina dagar brukar bli som väntat.
+
 ## 2026-09-07 – Lägg till ligger i "Vad händer?"
 
 - "＋ Lägg till"-knappen har flyttat från toppen av Hem in i steg 02 **Vad händer?** – där den hör hemma i dagens resa.
