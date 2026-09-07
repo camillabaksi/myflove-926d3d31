@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-07 – Insikter och Rutiner & medicin sida vid sida
+
+- "MyFlove har lagt märke till…" (Insikter) ligger nu bredvid "Rutiner & medicin" på Hem – två halvbredda kort i samma rad på breda skärmar.
+
 ## 2026-09-07 – Påverkan efter morgonkortet + allt går att fälla ihop
 
 - "Påverkan"-kortet ligger nu direkt efter "Morgon och kväll" (god morgon-kortet) på Mitt batteri.
