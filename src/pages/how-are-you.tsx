@@ -34,7 +34,7 @@ export default function HowAreYou() {
   const { t } = useLang();
   const { energyValue, logEnergy } = useQuickCheckin();
   const { impact, logImpact } = useImpactCheckin();
-  const { data: cycle } = useCycle();
+  const { cycle } = useCycle();
   const [ork, setOrk] = useState<number | null>(energyValue ?? null);
   const [kinds, setKinds] = useState<ImpactKind[]>(impact?.kinds ?? []);
   const [done, setDone] = useState(false);
