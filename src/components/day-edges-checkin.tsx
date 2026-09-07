@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Moon, Sunrise } from "lucide-react";
+import CollapsibleSection from "@/components/collapsible-section";
 import { useDayWindow } from "@/hooks/use-day-window";
 import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
