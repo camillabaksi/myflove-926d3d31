@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-07";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Lägg till i Vad händer?",
+    items: [
+      "＋ Lägg till-knappen ligger nu i steg 02 Vad händer? på Hem (2026-09-07)",
+      "Steg 02 har två vägar: Planera dagen och Lägg till (2026-09-07)",
+    ],
+  },
+  {
     title: "Insikter bredvid Rutiner & medicin",
     items: [
       "Insikter-kortet (MyFlove har lagt märke till…) ligger nu bredvid Rutiner & medicin på Hem (2026-09-07)",

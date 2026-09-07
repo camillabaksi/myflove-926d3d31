@@ -1,10 +1,14 @@
 import { Link } from "wouter";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Plus } from "lucide-react";
 import { useLang } from "@/hooks/use-language";
 import { track } from "@/lib/analytics";
 import { useDayJourney } from "@/hooks/use-day-journey";
 import type { JourneyStepId } from "@/lib/day-journey";
 import { cn } from "@/lib/utils";
+
+interface JourneyStepsProps {
+  onAddOpen?: () => void;
+}
 
 interface StepDef {
   id: JourneyStepId;
@@ -55,7 +59,7 @@ const STEPS: StepDef[] = [
  * Varje steg leder in i funktioner som redan finns; korten lägger bara
  * en tydlig ordning och en lugn status ovanpå.
  */
-export default function JourneySteps() {
+export default function JourneySteps({ onAddOpen }: JourneyStepsProps) {
   const { t } = useLang();
   const { steps, needsReplan } = useDayJourney();
 
@@ -64,6 +68,7 @@ export default function JourneySteps() {
       {STEPS.map((step) => {
         const status = steps[step.id];
         const highlight = step.id === "planera" && needsReplan;
+        const isHander = step.id === "hander";
         return (
           <section
             key={step.id}
@@ -96,18 +101,34 @@ export default function JourneySteps() {
               ))}
             </ul>
 
-            <Link
-              href={step.href}
-              onClick={() => track(step.event, { source: "hem" })}
-              className={cn(
-                "press mt-4 inline-flex min-h-11 items-center gap-2 rounded-full px-5 text-sm font-semibold",
-                highlight || !status.complete
-                  ? "bg-primary text-primary-foreground"
-                  : "border border-border bg-card text-ink hover:border-primary",
+            <div className="mt-4 flex flex-wrap items-center gap-2">
+              <Link
+                href={step.href}
+                onClick={() => track(step.event, { source: "hem" })}
+                className={cn(
+                  "press inline-flex min-h-11 items-center gap-2 rounded-full px-5 text-sm font-semibold",
+                  highlight || !status.complete
+                    ? "bg-primary text-primary-foreground"
+                    : "border border-border bg-card text-ink hover:border-primary",
+                )}
+              >
+                {t(step.cta)} <ArrowRight size={15} aria-hidden />
+              </Link>
+
+              {isHander && onAddOpen && (
+                <button
+                  type="button"
+                  data-testid="home-add"
+                  onClick={() => {
+                    track("add_opened", { source: "hem-steg2" });
+                    onAddOpen();
+                  }}
+                  className="press inline-flex min-h-11 items-center gap-2 rounded-full border border-border bg-card px-5 text-sm font-semibold text-ink hover:border-primary"
+                >
+                  <Plus size={16} aria-hidden /> {t("Lägg till")}
+                </button>
               )}
-            >
-              {t(step.cta)} <ArrowRight size={15} aria-hidden />
-            </Link>
+            </div>
           </section>
         );
       })}

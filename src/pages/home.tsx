@@ -32,7 +32,6 @@ import {
   ArrowRight,
   ChevronRight,
   Sparkles,
-  Plus,
 } from "lucide-react";
 import { todayISO } from "@/lib/day";
 import { track } from "@/lib/analytics";
@@ -238,24 +237,6 @@ export default function Home() {
           </div>
         </MyFloveWide>
 
-        {/* Lägg till – den snabbaste vägen in. Fånga först, strukturera sen. */}
-        <MyFloveWide style={{ order: -1 }} className="min-w-0">
-          <button
-            type="button"
-            data-testid="home-add"
-            onClick={() => {
-              track("add_opened", { source: "hem" });
-              setAddOpen(true);
-            }}
-            className="flex min-h-14 w-full items-center justify-center gap-2 rounded-3xl bg-primary px-5 text-base font-semibold text-primary-foreground shadow-lifted transition-opacity hover:opacity-90"
-          >
-            <Plus size={20} aria-hidden /> {t("Lägg till")}
-          </button>
-          <p className="mt-1.5 text-center text-xs text-muted-foreground">
-            {t("Aktivitet, händelse, påminnelse – eller bara en tanke.")}
-          </p>
-        </MyFloveWide>
-
         {/* Flow – binder ihop Quickflow, Batteriet och Kalendern. En sak i taget. */}
         <MyFloveWide style={{ order: 0 }} className="min-w-0">
           <FlowHomeCard />
@@ -263,7 +244,7 @@ export default function Home() {
 
         {/* Dagens tre steg – den primära vägen genom MyFlove. */}
         <MyFloveWide style={{ order: 0.3 }} className="min-w-0">
-          <JourneySteps />
+          <JourneySteps onAddOpen={() => setAddOpen(true)} />
         </MyFloveWide>
 
         {/* Ett tydligt nästa steg – aldrig en lista. */}
