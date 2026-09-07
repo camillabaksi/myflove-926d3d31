@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-07";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Kvällschecken kopplad till dagens energi",
+    items: [
+      "Hur blev dagen? sparas med dagens ork, batteri, planerade och klara saker (2026-09-07)",
+      "Nytt avsnitt Förväntat och faktiskt visar sambandet mellan planen och hur dagen kändes (2026-09-07)",
+      "Efter några kvällar syns ett mönster: vid hur många saker dagarna brukar bli som väntat (2026-09-07)",
+    ],
+  },
+  {
     title: "Lägg till i Vad händer?",
     items: [
       "＋ Lägg till-knappen ligger nu i steg 02 Vad händer? på Hem (2026-09-07)",

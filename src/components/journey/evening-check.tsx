@@ -1,18 +1,25 @@
+import { useMemo } from "react";
 import { useLang } from "@/hooks/use-language";
 import { useEveningCheck } from "@/hooks/use-evening-check";
 import { useDayJourney } from "@/hooks/use-day-journey";
 import { EVENING_ANSWERS, eveningReply } from "@/lib/day-journey";
+import { buildEveningInsight } from "@/lib/evening-insight";
 import { track } from "@/lib/analytics";
 
 /**
  * 🌙 Hur blev dagen? – frivillig och klar på ett tryck.
- * Svaret sparas tillsammans med dagens ork och antal saker, så att
- * MyFlove senare kan visa sambandet mellan förväntad och faktisk dag.
+ * Svaret sparas tillsammans med dagens ork, batteri och antal saker, så att
+ * MyFlove kan visa sambandet mellan förväntad och faktisk dag.
  */
 export default function EveningCheck() {
   const { t } = useLang();
-  const { evening, logEvening } = useEveningCheck();
+  const { evening, eveningHistory, logEvening } = useEveningCheck();
   const { input } = useDayJourney();
+
+  const insight = useMemo(
+    () => buildEveningInsight(eveningHistory, evening),
+    [eveningHistory, evening],
+  );
 
   return (
     <section
@@ -40,8 +47,10 @@ export default function EveningCheck() {
               onClick={() => {
                 logEvening(option.id, {
                   ork10: input.ork10,
+                  battery: input.batteryNow,
                   planned: input.planned,
                   done: input.done,
+                  openThoughts: input.openThoughts,
                 });
                 track("evening_check_completed", { source: "hem", method: option.id });
               }}
@@ -56,6 +65,18 @@ export default function EveningCheck() {
           );
         })}
       </div>
+
+      {(insight.todayLine || insight.patternLine) && (
+        <div className="mt-4 rounded-2xl bg-muted/50 p-4">
+          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+            {t("Förväntat och faktiskt")}
+          </p>
+          {insight.todayLine && <p className="mt-1 text-sm text-ink">{t(insight.todayLine)}</p>}
+          {insight.patternLine && (
+            <p className="mt-1 text-sm text-muted-foreground">{t(insight.patternLine)}</p>
+          )}
+        </div>
+      )}
     </section>
   );
 }
