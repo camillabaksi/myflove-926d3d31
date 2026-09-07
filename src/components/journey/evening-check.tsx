@@ -1,0 +1,61 @@
+import { useLang } from "@/hooks/use-language";
+import { useEveningCheck } from "@/hooks/use-evening-check";
+import { useDayJourney } from "@/hooks/use-day-journey";
+import { EVENING_ANSWERS, eveningReply } from "@/lib/day-journey";
+import { track } from "@/lib/analytics";
+
+/**
+ * 🌙 Hur blev dagen? – frivillig och klar på ett tryck.
+ * Svaret sparas tillsammans med dagens ork och antal saker, så att
+ * MyFlove senare kan visa sambandet mellan förväntad och faktisk dag.
+ */
+export default function EveningCheck() {
+  const { t } = useLang();
+  const { evening, logEvening } = useEveningCheck();
+  const { input } = useDayJourney();
+
+  return (
+    <section
+      aria-label={t("Hur blev dagen?")}
+      data-testid="home-evening-check"
+      className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+    >
+      <h2 className="text-base font-semibold text-ink">
+        <span aria-hidden>🌙</span> {t("Hur blev dagen?")}
+      </h2>
+
+      {evening ? (
+        <p className="mt-2 text-sm text-muted-foreground">{t(eveningReply(evening.answer))}</p>
+      ) : (
+        <p className="mt-1 text-xs text-muted-foreground">{t("Helt frivilligt – ett tryck räcker.")}</p>
+      )}
+
+      <div className="mt-3 flex flex-wrap gap-2">
+        {EVENING_ANSWERS.map((option) => {
+          const active = evening?.answer === option.id;
+          return (
+            <button
+              key={option.id}
+              type="button"
+              onClick={() => {
+                logEvening(option.id, {
+                  ork10: input.ork10,
+                  planned: input.planned,
+                  done: input.done,
+                });
+                track("evening_check_completed", { source: "hem", method: option.id });
+              }}
+              className={`press min-h-11 rounded-full px-4 text-sm font-medium ${
+                active
+                  ? "bg-primary text-primary-foreground"
+                  : "border border-border bg-card text-ink hover:border-primary"
+              }`}
+            >
+              <span aria-hidden>{option.emoji}</span> {t(option.label)}
+            </button>
+          );
+        })}
+      </div>
+    </section>
+  );
+}

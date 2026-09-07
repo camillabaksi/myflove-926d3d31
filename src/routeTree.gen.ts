@@ -54,6 +54,7 @@ import { Route as AppKalenderRouteImport } from './routes/_app.kalender'
 import { Route as AppJobbRouteImport } from './routes/_app.jobb'
 import { Route as AppInsightRouteImport } from './routes/_app.insight'
 import { Route as AppIdagRouteImport } from './routes/_app.idag'
+import { Route as AppHurMarDuRouteImport } from './routes/_app.hur-mar-du'
 import { Route as AppHistorikRouteImport } from './routes/_app.historik'
 import { Route as AppHemRouteImport } from './routes/_app.hem'
 import { Route as AppHalsaRouteImport } from './routes/_app.halsa'
@@ -312,6 +313,11 @@ const AppIdagRoute = AppIdagRouteImport.update({
   path: '/idag',
   getParentRoute: () => AppRoute,
 } as any)
+const AppHurMarDuRoute = AppHurMarDuRouteImport.update({
+  id: '/hur-mar-du',
+  path: '/hur-mar-du',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppHistorikRoute = AppHistorikRouteImport.update({
   id: '/historik',
   path: '/historik',
@@ -515,6 +521,7 @@ export interface FileRoutesByFullPath {
   '/halsa': typeof AppHalsaRoute
   '/hem': typeof AppHemRoute
   '/historik': typeof AppHistorikRoute
+  '/hur-mar-du': typeof AppHurMarDuRoute
   '/idag': typeof AppIdagRoute
   '/insight': typeof AppInsightRoute
   '/jobb': typeof AppJobbRoute
@@ -593,6 +600,7 @@ export interface FileRoutesByTo {
   '/halsa': typeof AppHalsaRoute
   '/hem': typeof AppHemRoute
   '/historik': typeof AppHistorikRoute
+  '/hur-mar-du': typeof AppHurMarDuRoute
   '/idag': typeof AppIdagRoute
   '/insight': typeof AppInsightRoute
   '/jobb': typeof AppJobbRoute
@@ -673,6 +681,7 @@ export interface FileRoutesById {
   '/_app/halsa': typeof AppHalsaRoute
   '/_app/hem': typeof AppHemRoute
   '/_app/historik': typeof AppHistorikRoute
+  '/_app/hur-mar-du': typeof AppHurMarDuRoute
   '/_app/idag': typeof AppIdagRoute
   '/_app/insight': typeof AppInsightRoute
   '/_app/jobb': typeof AppJobbRoute
@@ -753,6 +762,7 @@ export interface FileRouteTypes {
     | '/halsa'
     | '/hem'
     | '/historik'
+    | '/hur-mar-du'
     | '/idag'
     | '/insight'
     | '/jobb'
@@ -831,6 +841,7 @@ export interface FileRouteTypes {
     | '/halsa'
     | '/hem'
     | '/historik'
+    | '/hur-mar-du'
     | '/idag'
     | '/insight'
     | '/jobb'
@@ -910,6 +921,7 @@ export interface FileRouteTypes {
     | '/_app/halsa'
     | '/_app/hem'
     | '/_app/historik'
+    | '/_app/hur-mar-du'
     | '/_app/idag'
     | '/_app/insight'
     | '/_app/jobb'
@@ -1291,6 +1303,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIdagRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/hur-mar-du': {
+      id: '/_app/hur-mar-du'
+      path: '/hur-mar-du'
+      fullPath: '/hur-mar-du'
+      preLoaderRoute: typeof AppHurMarDuRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/historik': {
       id: '/_app/historik'
       path: '/historik'
@@ -1543,6 +1562,7 @@ interface AppRouteChildren {
   AppHalsaRoute: typeof AppHalsaRoute
   AppHemRoute: typeof AppHemRoute
   AppHistorikRoute: typeof AppHistorikRoute
+  AppHurMarDuRoute: typeof AppHurMarDuRoute
   AppIdagRoute: typeof AppIdagRoute
   AppInsightRoute: typeof AppInsightRoute
   AppJobbRoute: typeof AppJobbRoute
@@ -1603,6 +1623,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppHalsaRoute: AppHalsaRoute,
   AppHemRoute: AppHemRoute,
   AppHistorikRoute: AppHistorikRoute,
+  AppHurMarDuRoute: AppHurMarDuRoute,
   AppIdagRoute: AppIdagRoute,
   AppInsightRoute: AppInsightRoute,
   AppJobbRoute: AppJobbRoute,

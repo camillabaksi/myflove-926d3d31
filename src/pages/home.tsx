@@ -44,6 +44,10 @@ import { heroGradient } from "@/lib/hero-gradient";
 import { useEverydayPatterns } from "@/hooks/use-everyday-patterns";
 import WeekReviewCard from "@/components/week-review-card";
 import FlowHomeCard from "@/components/flow/flow-home-card";
+import JourneySteps from "@/components/journey/journey-steps";
+import NextStepCard from "@/components/journey/next-step-card";
+import EveningCheck from "@/components/journey/evening-check";
+import CollapsibleSection from "@/components/collapsible-section";
 import { useWeekReview } from "@/hooks/use-activity-history";
 import { weekStartISO } from "@/lib/week-review";
 import { parseISODate } from "@/lib/day";
@@ -182,9 +186,12 @@ export default function Home() {
 
           <div className="relative min-w-0 pr-24 space-y-1">
             <h1 className="text-2xl sm:text-3xl font-bold text-ink">
-              {name ? `${t("Hej")} ${name}!` : t("Hej!")} <span aria-hidden>💜</span>
+              {t("Din dag börjar här")} <span aria-hidden>❤️</span>
             </h1>
-            <p className="text-sm text-muted-foreground">{t("Du gör ett fantastiskt jobb!")}</p>
+            <p className="text-sm text-muted-foreground">
+              {name ? `${t("Hej")} ${name}! ` : ""}
+              {t("Vi tar reda på vad som är rimligt idag.")}
+            </p>
             {editingName ? (
               <form
                 onSubmit={(e) => {
@@ -254,11 +261,39 @@ export default function Home() {
           <FlowHomeCard />
         </MyFloveWide>
 
+        {/* Dagens tre steg – den primära vägen genom MyFlove. */}
+        <MyFloveWide style={{ order: 0.3 }} className="min-w-0">
+          <JourneySteps />
+        </MyFloveWide>
+
+        {/* Ett tydligt nästa steg – aldrig en lista. */}
+        <MyFloveWide style={{ order: 0.5 }} className="min-w-0">
+          <NextStepCard />
+        </MyFloveWide>
+
+        {/* Kvällscheck – frivillig, dyker upp när dagen lider mot sitt slut. */}
+        {new Date().getHours() >= 18 && (
+          <MyFloveWide style={{ order: 0.7 }} className="min-w-0">
+            <EveningCheck />
+          </MyFloveWide>
+        )}
+
+        {/* Allt annat ligger kvar – men ur vägen tills du vill se det. */}
+        <MyFloveWide style={{ order: 6 }} className="min-w-0">
+          <CollapsibleSection
+            id="mer-i-myflove"
+            title={t("Mer i MyFlove")}
+            description={t("Quickflow, batteriet, dagens lista och dina mönster.")}
+            defaultCollapsed
+            className="rounded-3xl border border-border/60 bg-card/60 p-4 shadow-soft"
+            headingClassName="text-base font-semibold text-ink"
+          >
+            <div className="grid gap-4">
         {/* Tre huvudkort: Quickflow, Batteriet, Kalendern.
             Alla börjar i samma ordning – den anpassas först när MyFlove sett
 
             tillräckligt mycket av din egen användning. */}
-        <MyFloveWide style={{ order: 1 }} className="min-w-0">
+          <MyFloveWide style={{ order: 1 }} className="min-w-0">
           <div
             className="grid grid-cols-3 gap-2.5 sm:gap-4"
             data-testid="home-widgets"
@@ -302,10 +337,10 @@ export default function Home() {
               ),
             )}
           </div>
-        </MyFloveWide>
+          </MyFloveWide>
 
         {/* Ditt batteri – stort, lugnt, som i mockupen. */}
-        <MyFloveWide style={{ order: 2 }} className="min-w-0">
+          <MyFloveWide style={{ order: 2 }} className="min-w-0">
           <section
             aria-label={t("Ditt batteri")}
             data-testid="home-recovery"
@@ -338,10 +373,10 @@ export default function Home() {
               <ArrowRight size={14} />
             </Link>
           </section>
-        </MyFloveWide>
+          </MyFloveWide>
 
         {/* Idag – tider och saker, som i mockupen. */}
-        <MyFloveWide style={{ order: 3 }} className="min-w-0">
+          <MyFloveWide style={{ order: 3 }} className="min-w-0">
           <section
             aria-label={t("Idag")}
             data-testid="home-today"
@@ -388,10 +423,10 @@ export default function Home() {
               </ul>
             )}
           </section>
-        </MyFloveWide>
+          </MyFloveWide>
 
         {/* Från ditt huvud – senaste QuickFlow-tankarna. */}
-        <MyFloveWide style={{ order: 4 }} className="min-w-0">
+          <MyFloveWide style={{ order: 4 }} className="min-w-0">
           <section
             aria-label={t("Från ditt huvud")}
             data-testid="home-quickflow-latest"
@@ -421,6 +456,10 @@ export default function Home() {
               </ul>
             )}
           </section>
+          </MyFloveWide>
+
+            </div>
+          </CollapsibleSection>
         </MyFloveWide>
 
         {/* Uppmuntrande citat – lugnt avslut, som i mockupen. */}
