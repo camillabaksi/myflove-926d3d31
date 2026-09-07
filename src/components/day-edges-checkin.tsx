@@ -40,53 +40,54 @@ export default function DayEdgesCheckin({ className }: { className?: string }) {
         className,
       )}
     >
-      <div>
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-          {t("Morgon och kväll")}
-        </h2>
-        <p className="mt-1 text-sm text-ink">
+      <CollapsibleSection
+        id="morgon-och-kvall"
+        title={t("Morgon och kväll")}
+        headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
+        className="space-y-3"
+      >
+        <p className="text-sm text-ink">
           {t("Fyll i när din morgon startar och när dagen slutar – och hur batteriet känns då.")}
         </p>
-      </div>
 
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-3">
-        <label className="space-y-1 text-xs text-muted-foreground">
-          {t("Morgonen startar")}
-          <input
-            type="time"
-            value={win.start}
-            onChange={(e) => setWindow({ start: e.target.value })}
-            className="w-full rounded-2xl border border-border bg-background px-3 py-2 text-sm text-ink"
-          />
-        </label>
-        <label className="space-y-1 text-xs text-muted-foreground">
-          {t("Dagen slutar")}
-          <input
-            type="time"
-            value={win.end}
-            onChange={(e) => setWindow({ end: e.target.value })}
-            className="w-full rounded-2xl border border-border bg-background px-3 py-2 text-sm text-ink"
-          />
-        </label>
-      </div>
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-3">
+          <label className="space-y-1 text-xs text-muted-foreground">
+            {t("Morgonen startar")}
+            <input
+              type="time"
+              value={win.start}
+              onChange={(e) => setWindow({ start: e.target.value })}
+              className="w-full rounded-2xl border border-border bg-background px-3 py-2 text-sm text-ink"
+            />
+          </label>
+          <label className="space-y-1 text-xs text-muted-foreground">
+            {t("Dagen slutar")}
+            <input
+              type="time"
+              value={win.end}
+              onChange={(e) => setWindow({ end: e.target.value })}
+              className="w-full rounded-2xl border border-border bg-background px-3 py-2 text-sm text-ink"
+            />
+          </label>
+        </div>
 
-      <EdgeSlider
-        icon={<Sunrise size={16} className="text-primary" aria-hidden="true" />}
-        label={`${t("Batteri vid morgonstart")} (${win.start})`}
-        value={morning}
-        onChange={setMorningValue}
-        onSave={() => save("morning")}
-        saved={todayEdges.morning != null}
-      />
+        <EdgeSlider
+          icon={<Sunrise size={16} className="text-primary" aria-hidden="true" />}
+          label={`${t("Batteri vid morgonstart")} (${win.start})`}
+          value={morning}
+          onChange={setMorningValue}
+          onSave={() => save("morning")}
+          saved={todayEdges.morning != null}
+        />
 
-      <EdgeSlider
-        icon={<Moon size={16} className="text-primary" aria-hidden="true" />}
-        label={`${t("Batteri när dagen slutar")} (${win.end})`}
-        value={evening}
-        onChange={setEveningValue}
-        onSave={() => save("evening")}
-        saved={todayEdges.evening != null}
-      />
+        <EdgeSlider
+          icon={<Moon size={16} className="text-primary" aria-hidden="true" />}
+          label={`${t("Batteri när dagen slutar")} (${win.end})`}
+          value={evening}
+          onChange={setEveningValue}
+          onSave={() => save("evening")}
+          saved={todayEdges.evening != null}
+        />
       </CollapsibleSection>
     </section>
   );
