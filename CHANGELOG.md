@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-07 – Insikter & Rutiner ligger bredvid varandra igen
+
+- "MyFlove har lagt märke till…" och "Rutiner & medicin" ligger nu i en gemensam tvåkolumnsrad på Hem, även på mobil.
+- Båda korten behåller sin expanderbara funktion och hamnar på samma rad så länge båda är synliga.
+
 ## 2026-09-07 – Steg 3: förslag på flytt, förenkling och uppdelning
 
 - Planera har fått ett nytt **Steg 3 – Behöver du planera om?** där Flow föreslår konkreta justeringar av dagens saker: flytta till imorgon, gör en mindre version eller dela upp i två små steg.
