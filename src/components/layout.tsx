@@ -106,6 +106,7 @@ import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { useNpfSettings, plainLabel } from "@/lib/npf-mode";
 import { useLang } from "@/hooks/use-language";
 import { track } from "@/lib/analytics";
+import { trackRetention } from "@/lib/analytics-retention";
 import { rememberPlace } from "@/lib/flow-context";
 import { Button } from "@/components/ui/button";
 import { useClerk, Show } from "@clerk/react";
@@ -252,6 +253,7 @@ export default function Layout({ children }: LayoutProps) {
       if (window.sessionStorage.getItem("myflove-app-opened") !== "1") {
         window.sessionStorage.setItem("myflove-app-opened", "1");
         track("app_opened");
+        trackRetention();
       }
     } catch {
       // Statistik får aldrig störa appen.

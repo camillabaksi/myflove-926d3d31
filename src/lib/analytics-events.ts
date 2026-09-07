@@ -15,6 +15,17 @@ import { sanitizeCount, sanitizeLabel } from "@/lib/analytics-sanitize";
 
 export const ANALYTICS_EVENTS = [
   "app_opened",
+  /** Allra första gången appen öppnas på en enhet. */
+  "first_open",
+  /** En ny aktiv dag på enheten (räknas högst en gång per dygn). */
+  "active_day",
+  "return_d1",
+  "return_d7",
+  "return_d30",
+  /** "Lägg till" öppnad från Hem. */
+  "add_opened",
+  /** Något sparades via "Lägg till". */
+  "add_created",
   "signup_started",
   "signup_completed",
   "login",
@@ -120,6 +131,13 @@ export interface AnalyticsPayload {
 /** Vilken del av appen ett event hör till (används i statistikvyerna). */
 const EVENT_SECTION: Record<AnalyticsEventName, string> = {
   app_opened: "app",
+  first_open: "app",
+  active_day: "app",
+  return_d1: "app",
+  return_d7: "app",
+  return_d30: "app",
+  add_opened: "lagg-till",
+  add_created: "lagg-till",
   signup_started: "konto",
   signup_completed: "konto",
   login: "konto",

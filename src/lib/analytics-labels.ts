@@ -31,6 +31,7 @@ export const SECTION_LABELS: Record<string, string> = {
   friktionsindex: "Friktionsindex",
   halsa: "Hälsa",
   hem: "Hem",
+  "lagg-till": "Lägg till",
   historik: "Historik",
   idag: "Idag",
   insight: "Insikter",
@@ -72,6 +73,13 @@ export const ACTION_LABELS: Record<string, string> = {
   app_opened: "Appen öppnad",
   home_viewed: "Hem visad",
   home_widget_opened: "Widget öppnad på hem",
+  first_open: "Första öppning",
+  active_day: "Aktiv dag",
+  return_d1: "Återkom efter 1 dag",
+  return_d7: "Återkom efter 7 dagar",
+  return_d30: "Återkom efter 30 dagar",
+  add_opened: "Lägg till öppnad",
+  add_created: "Skapat via Lägg till",
 
   // Konto & onboarding
   signup_started: "Registrering påbörjad",
