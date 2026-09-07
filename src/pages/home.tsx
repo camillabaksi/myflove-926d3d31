@@ -244,7 +244,7 @@ export default function Home() {
 
         {/* Dagens tre steg – den primära vägen genom MyFlove. */}
         <MyFloveWide style={{ order: 0.3 }} className="min-w-0">
-          <JourneySteps />
+          <JourneySteps onAddOpen={() => setAddOpen(true)} />
         </MyFloveWide>
 
         {/* Ett tydligt nästa steg – aldrig en lista. */}
