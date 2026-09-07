@@ -87,6 +87,7 @@ export default function DayEdgesCheckin({ className }: { className?: string }) {
         onSave={() => save("evening")}
         saved={todayEdges.evening != null}
       />
+      </CollapsibleSection>
     </section>
   );
 }
