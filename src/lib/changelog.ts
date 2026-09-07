@@ -23,7 +23,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
       "Varje förslag har en tydlig godkännandeknapp – inget ändras förrän du säger ja (2026-09-07)",
       "Fasta tider och deadlines inom ett dygn flyttas aldrig (2026-09-07)",
     ],
-  }
+  },
   {
     title: "Kvällschecken kopplad till dagens energi",
     items: [
