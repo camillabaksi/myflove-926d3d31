@@ -7,8 +7,12 @@ export interface EveningEntry {
   answer: EveningAnswer;
   /** Ork 1–10 som var loggad när dagen summerades. */
   ork10?: number | null;
+  /** Batterinivån 0–100 när dagen summerades. */
+  battery?: number | null;
   planned?: number;
   done?: number;
+  /** Tankar som låg kvar i Quickflow. */
+  openThoughts?: number;
   ts: number;
 }
 
@@ -32,7 +36,16 @@ export function useEveningCheck() {
   );
 
   const logEvening = useCallback(
-    (answer: EveningAnswer, context?: { ork10?: number | null; planned?: number; done?: number }) => {
+    (
+      answer: EveningAnswer,
+      context?: {
+        ork10?: number | null;
+        battery?: number | null;
+        planned?: number;
+        done?: number;
+        openThoughts?: number;
+      },
+    ) => {
       const day = todayKey();
       const next: EveningEntry = { day, answer, ...context, ts: Date.now() };
       setEntry(next);
