@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-07 – Försenade uppgifter följer med in i idag
+
+- En öppen uppgift vars datum passerat visas nu i Idag/Min dag tills den blir gjord – den försvinner inte tyst bara för att den blev sen.
+- Framtida uppgifter ligger kvar på sin planerade dag; avklarade poster hör fortfarande till sitt planerade datum.
+
 ## 2026-09-06 – Påverkan kan föreslå lägre batteri – du bestämmer
 
 - När du registrerat påverkan idag (t.ex. sjuk, dålig sömn, oro) och batteriet står tydligt högre än rimligt, föreslår batterikortet varsamt en lägre nivå. Batteriprocenten ändras aldrig automatiskt – du godkänner alltid själv.

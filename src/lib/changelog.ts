@@ -6,9 +6,16 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-09-06";
+export const CHANGELOG_UPDATED = "2026-09-07";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  {
+    title: "Försenade uppgifter följer med in i idag",
+    items: [
+      "En öppen uppgift vars datum passerat (t.ex. ”Ring tandläkaren” igår) visas nu i Idag/Min dag tills den blir gjord – den försvinner inte tyst längre (2026-09-07)",
+      "Framtida uppgifter ligger kvar på sin planerade dag, och avklarade poster hör fortfarande till sitt planerade datum (2026-09-07)",
+    ],
+  },
   {
     title: "Påverkan kan föreslå lägre batteri – du bestämmer",
     items: [
