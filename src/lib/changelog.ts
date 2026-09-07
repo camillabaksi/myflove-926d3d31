@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-07";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Energi, Påverkan & Flow i adminstatistiken",
+    items: [
+      "Ny sektion i adminstatistiken som visar hur ofta Påverkan, Energi, Mående, Hälsofaktorer och Flow används (2026-09-07)",
+      "Visar antal gånger och antal besökare per händelse, helt anonymt (2026-09-07)",
+    ],
+  },
+  {
     title: "Påverkan flyttad upp i incheckningen",
     items: [
       "Påverkan-kortet ligger nu högst upp på Mitt batteri, direkt bredvid Logga just nu (ork & mående) (2026-09-07)",
