@@ -49,15 +49,15 @@ export default function BatteryPage() {
           />
         </MyFloveWide>
 
-        {/* 1. Primär incheckning + nu-läge – samma befintliga dataväg */}
-        <MyFloveWide className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">
+        {/* 1. Primär incheckning: ork/mående + påverkan + nu-läge – samma befintliga dataväg */}
+        <MyFloveWide className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:items-start">
           <SimpleCheckin source="mitt-batteri" />
+          <ImpactCheckin />
           <EnergyBattery defaultOpen />
         </MyFloveWide>
 
-        {/* 2. Påverkan + dagens tidsstämplade observationer */}
+        {/* 2. Dagens tidsstämplade observationer */}
         <MyFloveWide className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">
-          <ImpactCheckin />
           <BatteryToday />
         </MyFloveWide>
 

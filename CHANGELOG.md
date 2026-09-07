@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-07 – Påverkan flyttad upp i incheckningen
+
+- "Påverkan"-kortet ligger nu högst upp på Mitt batteri, direkt bredvid "Logga just nu" (ork & mående) – du ser vad som påverkar din kapacitet i samma ögonblick som du loggar, utan att scrolla.
+- Dagens observationer ("Idag på batteriet") ligger kvar men visas nu som egen sektion under incheckningen.
+
 ## 2026-09-07 – Lägg till direkt från Hem + mätning av återkommande användning
 
 - Ny tydlig "＋ Lägg till"-knapp högst upp på Hem. Skriv en rad och välj Aktivitet, Händelse, Påminnelse eller Bara en tanke – datum och tid är valfria.

@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-07";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Påverkan flyttad upp i incheckningen",
+    items: [
+      "Påverkan-kortet ligger nu högst upp på Mitt batteri, direkt bredvid Logga just nu (ork & mående) (2026-09-07)",
+      "Dagens observationer visas som egen sektion under incheckningen (2026-09-07)",
+    ],
+  },
+  {
     title: "Lägg till direkt från Hem + mätning av återkommande användning",
     items: [
       "Ny tydlig ＋ Lägg till-knapp högst upp på Hem – skriv en rad och välj Aktivitet, Händelse, Påminnelse eller Bara en tanke (2026-09-07)",
