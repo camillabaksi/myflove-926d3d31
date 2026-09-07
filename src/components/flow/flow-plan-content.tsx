@@ -25,6 +25,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import WhyHint from "@/components/why-hint";
+import DayAdjust from "@/components/journey/day-adjust";
 import { useFlowExplainer } from "@/hooks/use-flow-explainer";
 
 type DeadlineInfo = { daysUntilDue: number; hasReminder: boolean; activeNow: boolean };
@@ -543,6 +544,22 @@ export function FlowPlanContent() {
           </div>
         </MyFloveBlock>
       )}
+
+      <MyFloveBlock
+        title="Behöver du planera om?"
+        subtitle="Flytta, förenkla eller dela upp – inget händer förrän du säger ja"
+        eyebrow="Steg 3"
+        icon={Sparkles}
+        tone="mint"
+        surface="mint"
+        area="planera"
+        span
+        collapsible
+        collapseId="planering::steg-planera-om"
+      >
+        <DayAdjust />
+      </MyFloveBlock>
     </MyFlovePageGrid>
+
   );
 }

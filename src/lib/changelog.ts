@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-07";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Steg 3: planera om dagen",
+    items: [
+      "Nytt Steg 3 i Planera: Flow föreslår att flytta, förenkla eller dela upp dagens saker (2026-09-07)",
+      "Varje förslag har en tydlig godkännandeknapp – inget ändras förrän du säger ja (2026-09-07)",
+      "Fasta tider och deadlines inom ett dygn flyttas aldrig (2026-09-07)",
+    ],
+  },
+  {
     title: "Kvällschecken kopplad till dagens energi",
     items: [
       "Hur blev dagen? sparas med dagens ork, batteri, planerade och klara saker (2026-09-07)",
