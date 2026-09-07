@@ -10,6 +10,12 @@ export const CHANGELOG_UPDATED = "2026-09-07";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Insikter bredvid Rutiner & medicin",
+    items: [
+      "Insikter-kortet (MyFlove har lagt märke till…) ligger nu bredvid Rutiner & medicin på Hem (2026-09-07)",
+    ],
+  },
+  {
     title: "Din dag börjar här – tre tydliga steg",
     items: [
       "Hem är nu en guide: 01 Hur mår du?, 02 Vad händer?, 03 Behöver du planera om? (2026-09-07)",
