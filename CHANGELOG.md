@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-07 – Android AAB versionCode 7 förberedd
+
+- `versionCode` höjd till 7 och `versionName` till 4.3 i `android/app/build.gradle` så nästa AAB kan laddas upp i Google Play Console.
+- Innehåller alla senaste webbändringar: guidad dagsresa (Hur mår du?, Vad händer?, Behöver du planera om?), kvällscheck kopplad till energi, Steg 3 med justeringsförslag, och Insikter bredvid Rutiner & medicin.
+- Instruktioner för lokal byggning: `bun install && bun run cap:sync && bun run android:aab`.
+
 ## 2026-09-07 – Insikter & Rutiner ligger bredvid varandra igen
 
 - "MyFlove har lagt märke till…" och "Rutiner & medicin" ligger nu i en gemensam tvåkolumnsrad på Hem, även på mobil.
