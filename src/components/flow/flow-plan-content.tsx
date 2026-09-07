@@ -543,6 +543,22 @@ export function FlowPlanContent() {
           </div>
         </MyFloveBlock>
       )}
+
+      <MyFloveBlock
+        title="Behöver du planera om?"
+        subtitle="Flytta, förenkla eller dela upp – inget händer förrän du säger ja"
+        eyebrow="Steg 3"
+        icon={Sparkles}
+        tone="mint"
+        surface="mint"
+        area="planera"
+        span
+        collapsible
+        collapseId="planering::steg-planera-om"
+      >
+        <DayAdjust />
+      </MyFloveBlock>
     </MyFlovePageGrid>
+
   );
 }
