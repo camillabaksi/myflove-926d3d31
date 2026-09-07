@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-07";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Påverkan efter morgonkortet + allt går att fälla ihop",
+    items: [
+      "Påverkan-kortet ligger nu direkt efter Morgon och kväll (god morgon-kortet) på Mitt batteri (2026-09-07)",
+      "Alla kort på Mitt batteri kan minimeras/expanderas och läget sparas (2026-09-07)",
+    ],
+  },
+  {
     title: "Energi, Påverkan & Flow i adminstatistiken",
     items: [
       "Ny sektion i adminstatistiken som visar hur ofta Påverkan, Energi, Mående, Hälsofaktorer och Flow används (2026-09-07)",
