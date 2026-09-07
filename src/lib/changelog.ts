@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-07";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Android AAB versionCode 7",
+    items: [
+      "versionCode höjd till 7 och versionName till 4.3 i android/app/build.gradle (2026-09-07)",
+      "Innehåller guidad dagsresa, kvällscheck kopplad till energi, Steg 3-justeringar och Insikter bredvid Rutiner & medicin (2026-09-07)",
+      "Bygg lokalt med: bun install && bun run cap:sync && bun run android:aab (2026-09-07)",
+    ],
+  },
+  {
     title: "Insikter & Rutiner sida vid sida",
     items: [
       "Insikter-kortet och Rutiner & medicin ligger nu i en gemensam tvåkolumnsrad på Hem, även på mobil (2026-09-07)",
