@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-07 – Lägg till direkt från Hem + mätning av återkommande användning
+
+- Ny tydlig "＋ Lägg till"-knapp högst upp på Hem. Skriv en rad och välj Aktivitet, Händelse, Påminnelse eller Bara en tanke – datum och tid är valfria.
+- Allt sparas i MyFloves befintliga data: uppgifter hamnar i Kalender/Idag/Flow, händelser och påminnelser bland påminnelserna, tankar i Quickflow. Inga nya system, inga dubbletter.
+- Anonym mätning av återkomst: första öppning, aktiva dagar och återkomst efter 1, 7 och 30 dagar – bara datum lokalt på enheten, aldrig innehåll.
+- Nya statistikhändelser "Lägg till öppnad" och "Skapat via Lägg till" med läsbara namn i adminstatistiken.
+
 ## 2026-09-07 – Försenade uppgifter följer med in i idag
 
 - En öppen uppgift vars datum passerat visas nu i Idag/Min dag tills den blir gjord – den försvinner inte tyst bara för att den blev sen.

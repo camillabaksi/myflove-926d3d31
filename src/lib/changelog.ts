@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-07";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Lägg till direkt från Hem + mätning av återkommande användning",
+    items: [
+      "Ny tydlig ＋ Lägg till-knapp högst upp på Hem – skriv en rad och välj Aktivitet, Händelse, Påminnelse eller Bara en tanke (2026-09-07)",
+      "Allt sparas i befintlig data: uppgifter i Kalender/Idag/Flow, händelser och påminnelser bland påminnelserna, tankar i Quickflow (2026-09-07)",
+      "Anonym mätning av återkomst: första öppning, aktiva dagar och återkomst efter 1, 7 och 30 dagar (2026-09-07)",
+      "Nya statistikhändelser Lägg till öppnad och Skapat via Lägg till, med läsbara namn i adminstatistiken (2026-09-07)",
+    ],
+  },
+  {
     title: "Försenade uppgifter följer med in i idag",
     items: [
       "En öppen uppgift vars datum passerat (t.ex. ”Ring tandläkaren” igår) visas nu i Idag/Min dag tills den blir gjord – den försvinner inte tyst längre (2026-09-07)",
