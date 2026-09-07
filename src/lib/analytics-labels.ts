@@ -18,6 +18,7 @@ export const SECTION_LABELS: Record<string, string> = {
   beloningar: "Belöningar",
   calendar: "Kalender",
   "daglig-rutin": "Daglig rutin",
+  dagsresa: "Dagens resa (3 steg)",
   dump: "Hjärndump",
   energi: "Energipåverkan",
   energifloede: "Energiflöde",

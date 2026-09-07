@@ -2159,3 +2159,13 @@ Initial baseline av MyFlove — ett svenskspråkigt "lugnt livsflöde"-dashboard
 
 - Batterivärdet från Mitt batteri visas i QuickFlow och påverkar prioriteringen mer nyanserat: lätt före tungt vid lågt batteri, tungt tidigt vid högt.
 - Fallback-prioriteringen väger viktighet, brådska och energinivå även utan AI.
+
+## 2026-09-07 – Din dag börjar här (tre steg)
+
+- Hem guidar nu genom dagen: 01 Hur mår du?, 02 Vad händer?, 03 Behöver du planera om?
+- Varje steg visar status (energi/påverkan registrerad, planerade och klara saker, om dagen behöver anpassas).
+- Ny sida "Hur mår du?" med fyra ork-val och frivillig påverkan – befintlig datamodell återanvänds.
+- "Nästa rimliga steg" visar ett förslag i taget, med ett mindre steg vid låg energi.
+- Frivillig kvällscheck "Hur blev dagen?" kopplas till dagens ork och aktiviteter.
+- Övriga hem-kort ligger kvar under "Mer i MyFlove". Ny statistik för hela dagsresan.
+

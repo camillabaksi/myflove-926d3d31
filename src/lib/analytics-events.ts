@@ -107,6 +107,18 @@ export const ANALYTICS_EVENTS = [
   "activity_energy_logged",
   /** "Jag gjorde något" – spontan registrering som påverkar batteriet. */
   "did_this_logged",
+  /** Steg 01 "Hur mår du?" öppnat från Hem. */
+  "step1_opened",
+  /** Steg 02 "Vad händer?" öppnat från Hem. */
+  "step2_opened",
+  /** Steg 03 "Behöver du planera om?" öppnat från Hem. */
+  "step3_opened",
+  /** "Nästa rimliga steg" visades på Hem. */
+  "next_step_shown",
+  /** Användaren valde att göra "Nästa rimliga steg". */
+  "next_step_accepted",
+  /** Kvällschecken "Hur blev dagen?" besvarad. */
+  "evening_check_completed",
 ] as const;
 
 export type AnalyticsEventName = (typeof ANALYTICS_EVENTS)[number];
@@ -212,6 +224,12 @@ const EVENT_SECTION: Record<AnalyticsEventName, string> = {
   week_review_viewed: "veckooversikt",
   activity_energy_logged: "energi",
   did_this_logged: "energi",
+  step1_opened: "dagsresa",
+  step2_opened: "dagsresa",
+  step3_opened: "dagsresa",
+  next_step_shown: "dagsresa",
+  next_step_accepted: "dagsresa",
+  evening_check_completed: "dagsresa",
 };
 
 export function eventSection(name: AnalyticsEventName): string {

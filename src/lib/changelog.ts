@@ -10,6 +10,18 @@ export const CHANGELOG_UPDATED = "2026-09-07";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Din dag börjar här – tre tydliga steg",
+    items: [
+      "Hem är nu en guide: 01 Hur mår du?, 02 Vad händer?, 03 Behöver du planera om? (2026-09-07)",
+      "Varje steg visar sin egen status: energi/påverkan registrerad, antal planerade och klara saker, och om dagen behöver anpassas (2026-09-07)",
+      "Ny enkel sida Hur mår du? med fyra ork-val och frivillig påverkan – sparas i befintlig energi- och påverkansdata (2026-09-07)",
+      "Nästa rimliga steg visar ETT förslag i taget, med ett mindre steg när energin är låg (2026-09-07)",
+      "Kvällscheck: Hur blev dagen? – lättare, som väntat eller tyngre än väntat, sparas med dagens ork och aktiviteter (2026-09-07)",
+      "Övriga kort på Hem ligger kvar i den hopfällbara sektionen Mer i MyFlove (2026-09-07)",
+      "Ny statistik för dagsresan: steg 1/2/3 öppnade, nästa steg visat/accepterat och kvällscheck genomförd (2026-09-07)",
+    ],
+  },
+  {
     title: "Påverkan efter morgonkortet + allt går att fälla ihop",
     items: [
       "Påverkan-kortet ligger nu direkt efter Morgon och kväll (god morgon-kortet) på Mitt batteri (2026-09-07)",
