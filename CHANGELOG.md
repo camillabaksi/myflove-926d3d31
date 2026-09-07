@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-07 – Insikter & Rutiner ligger bredvid varandra igen
+
+- "MyFlove har lagt märke till…" och "Rutiner & medicin" ligger nu i en gemensam tvåkolumnsrad på Hem, även på mobil.
+- Båda korten behåller sin expanderbara funktion och hamnar på samma rad så länge båda är synliga.
+
 ## 2026-09-07 – Steg 3: förslag på flytt, förenkling och uppdelning
 
 - Planera har fått ett nytt **Steg 3 – Behöver du planera om?** där Flow föreslår konkreta justeringar av dagens saker: flytta till imorgon, gör en mindre version eller dela upp i två små steg.
@@ -7,7 +12,6 @@
 - Fasta hållpunkter och deadlines inom ett dygn flyttas aldrig, och en sammanfattning visar vad som ändrats.
 
 ## 2026-09-07 – Kvällschecken kopplad till dagens energi
-
 
 - "Hur blev dagen?" sparas nu tillsammans med dagens ork, batterinivå, antal planerade och klara saker samt kvarvarande tankar.
 - Nytt avsnitt **Förväntat och faktiskt** i kvällschecken: en rad om dagen jämfört med planen, och efter några kvällar ett lugnt mönster – t.ex. vid hur många saker dina dagar brukar bli som väntat.
@@ -79,7 +83,6 @@
 
 ## 2026-09-06 – Kalendern visar rutiner och påverkan
 
-
 - Återkommande rutiner (t.ex. "Lämna barnen på förskolan", vardagar) syns nu i kalenderns månads-, vecko- och dagvy på alla dagar där regeln infaller – markerade med ↻.
 - Påverkan-kortet ("Vad påverkar din kapacitet?") finns nu även i kalenderns dagvy när du tittar på idag, så du kan registrera påverkan direkt där.
 
@@ -150,7 +153,6 @@
 
 ## 2026-09-04 – Android-projekt redo för Google Play
 
-
 - Native Android-projektet (`android/`) är nu skapat med paketnamnet `app.myflove.mobile` och versionsnamn 4.1.
 - Release-signering läses från en lokal `android/keystore.properties` eller miljövariabler – inga nycklar ligger i repot.
 - Behörigheter för notiser och vibration finns i manifestet.
@@ -163,7 +165,6 @@
 - Veckoöversiktens genererade meningar (veckodagar, "Aktiviteter utomhus" m.m.) översätts också, inte bara fasta rubriker.
 - Datum och veckodagar följer språkvalet i historiken och kalendern i stället för fast svenskt format.
 - Översättningarna ligger i egna ordlistor per område under `src/lib/i18n-dicts/`. Svenska är fortfarande källspråket och fallback.
-
 
 ## 2026-09-04 – Svenska och engelska i MyFlove
 
@@ -196,8 +197,6 @@
 - Flyttade aktiviteter ligger fortfarande kvar bara på sitt nya datum – de räknas aldrig som genomförda på ursprungsdagen.
 - Stabilare testkörning: komponenttester med simulerad klocka får mer marginal så hela sviten inte blir slumpmässigt röd.
 
-
-
 ## 2026-09-04 – Quickflow: flera saker eller en hel tanketömning
 
 - Quickflow kan fortfarande fånga flera saker i samma text – och nu även längre texter utan att de delas sönder.
@@ -225,7 +224,6 @@
 
 - Investerarsidan (/pitch) kan nu nås både med grundarkontot och med investerarkontots egen inloggning.
 - Tillbaka-länken pekar till hem för investerare och till admin för grundaren.
-
 
 ## 2026-09-05 – Mappar för anteckningar och mjukare Quickflow
 
@@ -301,7 +299,6 @@
 - Ny "Idag"-sektion visar max 5 av dagens saker (påminnelser + uppgifter) med länk till hela dagen.
 - "Från ditt huvud" visar de senaste öppna QuickFlow-tankarna, och ett lugnt batteri-/återhämtningskort visar energinivå och befintliga förslag.
 - Insiktskortet bygger enbart på faktisk data från appen. Ingen ny datamodell – allt återanvänder befintliga hooks, vyer och routes.
-
 
 ## 2026-09-04 – Notiser fungerar även när appen är stängd
 
@@ -2189,4 +2186,3 @@ Initial baseline av MyFlove — ett svenskspråkigt "lugnt livsflöde"-dashboard
 - "Nästa rimliga steg" visar ett förslag i taget, med ett mindre steg vid låg energi.
 - Frivillig kvällscheck "Hur blev dagen?" kopplas till dagens ork och aktiviteter.
 - Övriga hem-kort ligger kvar under "Mer i MyFlove". Ny statistik för hela dagsresan.
-

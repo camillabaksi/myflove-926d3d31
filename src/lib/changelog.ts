@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-07";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Insikter & Rutiner sida vid sida",
+    items: [
+      "Insikter-kortet och Rutiner & medicin ligger nu i en gemensam tvåkolumnsrad på Hem, även på mobil (2026-09-07)",
+      "Båda korten behåller sin expanderbara funktion och hamnar på samma rad när båda är synliga (2026-09-07)",
+    ],
+  },
+  {
     title: "Steg 3: planera om dagen",
     items: [
       "Nytt Steg 3 i Planera: Flow föreslår att flytta, förenkla eller dela upp dagens saker (2026-09-07)",
@@ -129,7 +136,6 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     ],
   },
   {
-
     title: "Kalendern visar rutiner och påverkan",
     items: [
       "Återkommande rutiner syns i månads-, vecko- och dagvyn på alla dagar där regeln infaller (2026-09-06)",
@@ -137,10 +143,10 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     ],
   },
   {
-    title: "Notiser: tydlig status och \"Testa notis\"",
+    title: 'Notiser: tydlig status och "Testa notis"',
     items: [
       "Nytt notiskort visar om den här enheten verkligen är registrerad för notiser (2026-09-06)",
-      "Knappen \"Testa notis\" skickar en riktig push via servern (2026-09-06)",
+      'Knappen "Testa notis" skickar en riktig push via servern (2026-09-06)',
       "Morgonstart förklarar lugnt när notiser inte är påslagna i stället för att låtsas fungera (2026-09-06)",
       "Hjälp för iPhone-hemskärm samt not om tyst läge, Stör ej och strömsparläge (2026-09-06)",
     ],
@@ -159,7 +165,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     items: [
       "Välj om det påverkar dig nu eller har påverkat dig – plus graden Lite/Måttligt/Mycket (2026-09-06)",
       "Valet sparas med dagen, syns i Historik och används som bakgrund av Flow (2026-09-06)",
-      "Äldre registreringar tolkas som \"Påverkar mig nu\" – inget går förlorat (2026-09-06)",
+      'Äldre registreringar tolkas som "Påverkar mig nu" – inget går förlorat (2026-09-06)',
     ],
   },
   {
@@ -175,14 +181,14 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     title: "Påverkan i historiken och valbara mönster",
     items: [
       "Historik visar dagens registrerade påverkan (val + grad) per dag – även dagar utan aktiviteter (2026-09-06)",
-      "Nytt hopfällbart kort \"Mina mönster\" på Mitt batteri – stängt som standard, öppnas bara när man vill (2026-09-06)",
+      'Nytt hopfällbart kort "Mina mönster" på Mitt batteri – stängt som standard, öppnas bara när man vill (2026-09-06)',
       "Mönster byggs enbart på egen data och visar lugn text i stället för påhittade mönster när underlaget är litet (2026-09-06)",
     ],
   },
   {
     title: "Kapacitet, påverkan och frivillig menscykel",
     items: [
-      "\"Vad påverkar din kapacitet?\" – diskret kort under batteriet med grupperna Kropp & hälsa, Känslor & tankar och Omgivning (2026-09-06)",
+      '"Vad påverkar din kapacitet?" – diskret kort under batteriet med grupperna Kropp & hälsa, Känslor & tankar och Omgivning (2026-09-06)',
       "Flera val samtidigt, grad Lite/Måttligt/Mycket, enkelt att ändra eller ta bort (2026-09-06)",
       "Frivillig menscykel: aktiveras med Ja/Nej i Min profil, helt dold om man väljer Nej (2026-09-06)",
       "Enkel cykelvy på Mitt batteri: mensdag, uppskattad tidslinje och symtom – uppskattningar, inga medicinska påståenden (2026-09-06)",
@@ -214,7 +220,6 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     ],
   },
   {
-
     title: "Android-projekt redo för Google Play",
     items: [
       "Native Android-projekt skapat med paketnamn app.myflove.mobile och version 4.1 (2026-09-04)",
@@ -253,7 +258,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     title: "Städningssidan följer appens layout",
     items: [
       "Städningssidan har samma sidhuvud som övriga sidor, med tillbaka-knapp, emoji och mjuk gradient (2026-09-04)",
-      "Lägesval, översiktskort och \"Det här behöver du\" tar hela bredden igen – inget kläms ihop eller trunkeras (2026-09-04)",
+      'Lägesval, översiktskort och "Det här behöver du" tar hela bredden igen – inget kläms ihop eller trunkeras (2026-09-04)',
     ],
   },
   {
@@ -300,7 +305,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     title: "Energiloggning påverkar bara batteriet",
     items: [
       "Energi- och måendeloggningar syns inte längre i kalendern eller dagens lista – de påverkar batteriet, energihistoriken och mönstren (2026-09-04)",
-      "Appstatistiken loggar nu historik, veckoöversikt, energipåverkan efter aktivitet och \"jag gjorde något\" via serverfunktionerna (2026-09-04)",
+      'Appstatistiken loggar nu historik, veckoöversikt, energipåverkan efter aktivitet och "jag gjorde något" via serverfunktionerna (2026-09-04)',
     ],
   },
   {
