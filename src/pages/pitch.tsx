@@ -98,8 +98,8 @@ export default function PitchPage() {
           <p className="text-sm text-muted-foreground">
             Version 4.1 visar den nya kärnan: en enkel och lugn startsida med Quickflow, Batteriet
             och Kalendern – samma neutrala grund för alla. Batteriet är en enkel ork-check-in med
-            fyra nivåer, måendet är separat, aktiviteter är datumkorrekta och energihistoriken
-            visar vad som ger och tar energi. Personaliseringen växer fram datadrivet och gradvis.
+            fyra nivåer, måendet är separat, aktiviteter är datumkorrekta och energihistoriken visar
+            vad som ger och tar energi. Personaliseringen växer fram datadrivet och gradvis.
           </p>
 
           <video
