@@ -6,9 +6,16 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-09-07";
+export const CHANGELOG_UPDATED = "2026-09-08";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  {
+    title: "3-minuters investerarpitch på engelska",
+    items: [
+      "Nytt engelskt pitchdeck i tolv slides för Connect Östs Online Pitch Review 10 september 2026 (2026-09-08)",
+      "Talarmanus finns som anteckningar per slide; PowerPoint och PDF länkas från investerarsidan (2026-09-08)",
+    ],
+  },
   {
     title: "Android AAB versionCode 8",
     items: [
