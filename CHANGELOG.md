@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-08 – 3-minuters investerarpitch på engelska
+
+- Nytt engelskt pitchdeck i tolv slides för Connect Östs Online Pitch Review 10 september 2026, med talarmanus som anteckningar per slide.
+- Filerna finns som PowerPoint och PDF under `/pitch/MyFlove_Investor_Pitch_3min_EN.*` och länkas från investerarsidan.
+
 ## 2026-09-07 – Android AAB versionCode 8
 
 - `versionCode` höjd till 8 och `versionName` till 4.4 i `android/app/build.gradle` efter att Play Console meddelat att tidigare kod redan använts.

@@ -98,8 +98,8 @@ export default function PitchPage() {
           <p className="text-sm text-muted-foreground">
             Version 4.1 visar den nya kärnan: en enkel och lugn startsida med Quickflow, Batteriet
             och Kalendern – samma neutrala grund för alla. Batteriet är en enkel ork-check-in med
-            fyra nivåer, måendet är separat, aktiviteter är datumkorrekta och energihistoriken
-            visar vad som ger och tar energi. Personaliseringen växer fram datadrivet och gradvis.
+            fyra nivåer, måendet är separat, aktiviteter är datumkorrekta och energihistoriken visar
+            vad som ger och tar energi. Personaliseringen växer fram datadrivet och gradvis.
           </p>
 
           <video
@@ -146,6 +146,38 @@ export default function PitchPage() {
             >
               <Sparkles size={16} /> Visa Flow live
             </Link>
+          </div>
+        </section>
+
+        <section className="rounded-2xl border border-border bg-card p-4 space-y-3">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h2 className="flex items-center gap-2 font-serif text-xl font-semibold">
+              <FileText size={18} className="text-primary" /> 3-minuters investerarpitch (engelska)
+            </h2>
+            <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
+              Connect Öst · 10 sep 2026
+            </span>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            Tolv slides på engelska, byggda för exakt tre minuter: problem, insikt, lösning,
+            produkt, differentiering, marknad, traction, affärsmodell, team, kapital och avslut.
+            Talarmanus finns som anteckningar i PowerPoint-filen.
+          </p>
+          <div className="flex flex-wrap gap-2">
+            <a
+              href="/pitch/MyFlove_Investor_Pitch_3min_EN.pptx"
+              download
+              className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
+            >
+              <Download size={16} /> Ladda ner PowerPoint
+            </a>
+            <a
+              href="/pitch/MyFlove_Investor_Pitch_3min_EN.pdf"
+              download
+              className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-medium hover:bg-secondary"
+            >
+              <Download size={16} /> Ladda ner PDF
+            </a>
           </div>
         </section>
 
