@@ -35,6 +35,14 @@ function getSessionId(): string {
   }
 }
 
+/**
+ * Läser webbläsarens anonyma statistik-id. Används av adminvyn för att kunna
+ * märka den här webbläsaren som intern (grundare/test) — aldrig för spårning.
+ */
+export function getAnalyticsSessionId(): string {
+  return getSessionId();
+}
+
 /** Respekterar användarens val att stänga av anonym statistik. */
 export function analyticsEnabled(): boolean {
   if (typeof window === "undefined") return false;
