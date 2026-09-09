@@ -10,7 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-09";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Ladda ner analysen",
+    items: [
+      "CSV- och PDF-nedladdning direkt i Analys per användare, med samma filtrering som vyn visar (2026-09-09)",
+    ],
+  },
+  {
     title: "Analys per användare och Endast externa användare",
+
     items: [
       "Ny adminvy med händelser per webbläsare, aktiva dagar, senaste aktivitet och admin-/demomärkning (2026-09-09)",
       "Växlare som räknar bort grundar-, admin-, demo- och testanvändning utan att någon befintlig händelse ändras (2026-09-09)",

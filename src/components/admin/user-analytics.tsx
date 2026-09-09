@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { Users, ShieldCheck, HelpCircle } from "lucide-react";
+import { Users, ShieldCheck, HelpCircle, Download, FileText } from "lucide-react";
 import {
   getUserAnalyticsFn,
   setSessionInternalFn,
   type UserAnalytics,
+  type SessionRow,
 } from "@/lib/analytics-audit.functions";
 import { getAnalyticsSessionId } from "@/lib/analytics";
 import CollapsibleSection from "@/components/collapsible-section";
@@ -15,6 +16,102 @@ import { useLang } from "@/hooks/use-language";
 
 function fmt(iso: string): string {
   return iso.slice(0, 16).replace("T", " ");
+}
+
+function saveBlob(blob: Blob, filename: string) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function label(s: SessionRow): string {
+  if (s.isInternal === true) return "intern";
+  if (s.isInternal === false) return "extern";
+  return "okänd";
+}
+
+function toCsv(data: UserAnalytics, rows: SessionRow[]): string {
+  const esc = (v: string | number) => `"${String(v).replace(/"/g, '""')}"`;
+  const lines: string[] = [];
+  lines.push(`"MyFlove – analys per användare"`);
+  lines.push(
+    `"Händelser totalt",${data.totals.events},"Interna",${data.totals.internalEvents},"Externa",${data.totals.externalEvents},"Okända",${data.totals.unknownEvents}`,
+  );
+  lines.push(
+    `"Webbläsare totalt",${data.totals.sessions},"Interna",${data.totals.internalSessions},"Externa",${data.totals.externalSessions},"Registrerade konton",${data.registeredUsers}`,
+  );
+  lines.push("");
+  lines.push(
+    `"Webbläsar-ID","E-post","Typ","Händelser","Aktiva dagar","Först sedd","Senast sedd","Admin","Demo"`,
+  );
+  for (const s of rows) {
+    lines.push(
+      [
+        esc(s.sessionId),
+        esc(s.email ?? ""),
+        esc(label(s)),
+        s.events,
+        s.activeDays,
+        esc(fmt(s.firstSeen)),
+        esc(fmt(s.lastSeen)),
+        esc(s.isAdmin ? "ja" : "nej"),
+        esc(s.isDemo ? "ja" : "nej"),
+      ].join(","),
+    );
+  }
+  return `\uFEFF${lines.join("\n")}`;
+}
+
+async function toPdf(data: UserAnalytics, rows: SessionRow[]): Promise<Blob> {
+  const { jsPDF } = await import("jspdf");
+  const doc = new jsPDF({ unit: "pt", format: "a4" });
+  const margin = 48;
+  const pageHeight = doc.internal.pageSize.getHeight();
+  let y = margin;
+
+  doc.setFontSize(18);
+  doc.text("MyFlove - analys per anvandare", margin, y);
+  y += 24;
+  doc.setFontSize(11);
+  doc.text(
+    `Handelser: ${data.totals.events}  ·  interna: ${data.totals.internalEvents}  ·  externa: ${data.totals.externalEvents}  ·  okanda: ${data.totals.unknownEvents}`,
+    margin,
+    y,
+  );
+  y += 16;
+  doc.text(
+    `Webblasare: ${data.totals.sessions}  ·  registrerade konton: ${data.registeredUsers}`,
+    margin,
+    y,
+  );
+  y += 26;
+
+  const xs = [0, 170, 230, 290, 360, 450];
+  const line = (cells: Array<string | number>, bold = false) => {
+    if (y > pageHeight - margin) {
+      doc.addPage();
+      y = margin;
+    }
+    doc.setFont("helvetica", bold ? "bold" : "normal");
+    cells.forEach((c, i) => doc.text(String(c), margin + xs[i], y));
+    y += 15;
+  };
+
+  doc.setFontSize(10);
+  line(["Anvandare / ID", "Typ", "Hand.", "Dagar", "Senast"], true);
+  for (const s of rows) {
+    line([
+      (s.email ?? s.sessionId).slice(0, 28),
+      label(s),
+      s.events,
+      s.activeDays,
+      fmt(s.lastSeen),
+    ]);
+  }
+  return doc.output("blob");
 }
 
 export default function UserAnalytics() {
@@ -93,6 +190,32 @@ export default function UserAnalytics() {
             >
               <ShieldCheck size={16} className="mr-2" />
               {t("Markera den här webbläsaren som intern")}
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() =>
+                saveBlob(
+                  new Blob([toCsv(data, rows)], { type: "text/csv;charset=utf-8" }),
+                  `myflove-analys-${new Date().toISOString().slice(0, 10)}.csv`,
+                )
+              }
+            >
+              <Download size={16} className="mr-2" />
+              {t("Ladda ner CSV")}
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={async () =>
+                saveBlob(
+                  await toPdf(data, rows),
+                  `myflove-analys-${new Date().toISOString().slice(0, 10)}.pdf`,
+                )
+              }
+            >
+              <FileText size={16} className="mr-2" />
+              {t("Ladda ner PDF")}
             </Button>
             <span className="text-xs text-muted-foreground">
               {t("Visar nu")}: {rows.length} {t("webbläsare")} · {shownEvents} {t("händelser")}
