@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-09 – Ladda ner analysen
+
+- Knappar för "Ladda ner CSV" och "Ladda ner PDF" i "Analys per användare"; filen följer valet "Endast externa användare".
+
+
+
 ## 2026-09-09 – Analys per användare och "Endast externa användare"
 
 - Ny adminvy som visar händelser per webbläsare, aktiva dagar, senaste aktivitet och vilka som är admin/demo/interna.
