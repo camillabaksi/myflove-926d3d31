@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-09 – Analys per användare och "Endast externa användare"
+
+- Ny adminvy som visar händelser per webbläsare, aktiva dagar, senaste aktivitet och vilka som är admin/demo/interna.
+- Ny tabell `analytics_session_owners` kopplar ett anonymt statistik-id till ett konto vid inloggning; endast admin kan läsa märkningarna.
+- Växlare "Endast externa användare" räknar bort grundar-, admin-, demo- och testmärkta webbläsare. Inga befintliga händelser ändras eller raderas.
+
+
 ## 2026-09-08 – 3-minuters investerarpitch på engelska
 
 - Nytt engelskt pitchdeck i tolv slides för Connect Östs Online Pitch Review 10 september 2026, med talarmanus som anteckningar per slide.

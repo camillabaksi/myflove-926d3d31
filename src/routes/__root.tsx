@@ -10,6 +10,7 @@ import { useEffect, type ReactNode } from "react";
 
 import { initCacheBusting } from "@/lib/cache-busting";
 import { trackPageView } from "@/lib/analytics";
+import { useAnalyticsClaim } from "@/hooks/use-analytics-claim";
 
 import appCss from "../styles.css?url";
 import { Toaster } from "@/components/ui/toaster";
@@ -110,6 +111,8 @@ function RootComponent() {
   useEffect(() => {
     initCacheBusting();
   }, []);
+  // Kopplar enhetens anonyma id till kontot en gång, så interna test kan filtreras bort.
+  useAnalyticsClaim();
   // Besöksanalys: logga varje sidvisning anonymt (sektion "page").
   useEffect(() => {
     trackPageView(pathname);

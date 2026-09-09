@@ -38,6 +38,36 @@ export type Database = {
         }
         Relationships: []
       }
+      analytics_session_owners: {
+        Row: {
+          created_at: string
+          is_internal: boolean
+          marked_by: string | null
+          note: string | null
+          session_id: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          is_internal?: boolean
+          marked_by?: string | null
+          note?: string | null
+          session_id: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          is_internal?: boolean
+          marked_by?: string | null
+          note?: string | null
+          session_id?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       child_item_shares: {
         Row: {
           created_at: string

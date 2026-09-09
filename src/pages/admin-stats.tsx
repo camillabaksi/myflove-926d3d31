@@ -5,6 +5,7 @@ import { useIsAdmin } from "@/hooks/use-is-admin";
 import { useLang } from "@/hooks/use-language";
 import CollapsibleSection from "@/components/collapsible-section";
 import AnalyticsExport from "@/components/admin/analytics-export";
+import UserAnalytics from "@/components/admin/user-analytics";
 import { actionLabel, pageLabel, sectionLabel } from "@/lib/analytics-labels";
 
 export default function AdminStats() {
@@ -60,7 +61,10 @@ export default function AdminStats() {
     { label: t("Energi loggad"), ...findUsage("batteri", "battery_logged") },
     { label: t("Mående loggat"), ...findUsage("mood", "mood_logged") },
     { label: t("Hälsofaktor loggad"), ...findUsage("halsa", "health_factor_logged") },
-    { label: t("Energipåverkan efter aktivitet"), ...findUsage("energi", "activity_energy_logged") },
+    {
+      label: t("Energipåverkan efter aktivitet"),
+      ...findUsage("energi", "activity_energy_logged"),
+    },
     { label: t("Flow totalt"), ...sumSection(["flow", "flowplan"]) },
   ].map((row) => ({ label: row.label, events: row.events ?? 0, sessions: row.sessions ?? 0 }));
   const maxEnergyFlow = Math.max(1, ...energyFlowStats.map((row) => row.events));
@@ -81,9 +85,14 @@ export default function AdminStats() {
             {t("Anonym, sammanslagen statistik om hur MyFlove används.")}
           </p>
           <p className="mt-2 text-xs text-muted-foreground bg-secondary/40 border border-border rounded-2xl p-3">
-            <strong>{t("Integritet:")}</strong> {t("vi mäter bara vilken del av appen som används och vilken typ av handling som sker. Inget användar-id, ingen e-post, ingen IP och inget innehåll (mående, texter, uppgifter) sparas — händelser går inte att koppla till en person.")}
+            <strong>{t("Integritet:")}</strong>{" "}
+            {t(
+              "vi mäter bara vilken del av appen som används och vilken typ av handling som sker. Inget användar-id, ingen e-post, ingen IP och inget innehåll (mående, texter, uppgifter) sparas — händelser går inte att koppla till en person.",
+            )}
           </p>
         </div>
+
+        <UserAnalytics />
 
         <AnalyticsExport />
 
@@ -129,7 +138,9 @@ export default function AdminStats() {
               title={t("Nyckeltal vi mäter")}
               headingClassName="text-lg font-semibold"
               className="bg-card p-6 rounded-3xl border-2 border-border shadow-sm"
-              description={t("Sammanslagna mått som visar om appen faktiskt hjälper — helt utan personlig data.")}
+              description={t(
+                "Sammanslagna mått som visar om appen faktiskt hjälper — helt utan personlig data.",
+              )}
             >
               <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] md:grid-cols-3 gap-4">
                 {[
@@ -189,7 +200,9 @@ export default function AdminStats() {
                     <div key={step.step}>
                       <div className="flex justify-between text-sm mb-1">
                         <span className="font-medium">{step.step}</span>
-                        <span className="text-muted-foreground">{step.sessions} {t("besökare")}</span>
+                        <span className="text-muted-foreground">
+                          {step.sessions} {t("besökare")}
+                        </span>
                       </div>
                       <div className="h-2 rounded-full bg-secondary/50 overflow-hidden">
                         <div
@@ -207,7 +220,9 @@ export default function AdminStats() {
               title={t("Energi, Påverkan & Flow")}
               headingClassName="text-lg font-semibold"
               className="bg-card p-6 rounded-3xl border-2 border-border shadow-sm"
-              description={t("Hur ofta användare loggar energi, mående, påverkan och använder Flow.")}
+              description={t(
+                "Hur ofta användare loggar energi, mående, påverkan och använder Flow.",
+              )}
             >
               <div className="space-y-3">
                 {energyFlowStats.map((row) => (
@@ -317,7 +332,9 @@ export default function AdminStats() {
               title={t("Mest besökta sidor")}
               headingClassName="text-lg font-semibold"
               className="bg-card p-6 rounded-3xl border-2 border-border shadow-sm"
-              description={t("Varje sidvisning i appen loggas anonymt — här ser du vilka sidor besökarna faktiskt öppnar.")}
+              description={t(
+                "Varje sidvisning i appen loggas anonymt — här ser du vilka sidor besökarna faktiskt öppnar.",
+              )}
             >
               {pageViews.length === 0 && (
                 <p className="text-sm text-muted-foreground">{t("Ingen data än.")}</p>
@@ -349,7 +366,9 @@ export default function AdminStats() {
               title={t("Funktioner som faktiskt används")}
               headingClassName="text-lg font-semibold"
               className="bg-card p-6 rounded-3xl border-2 border-border shadow-sm"
-              description={t("Konkreta handlingar (inte bara besök) — visar vad som fungerar bra och vad som knappt rörs.")}
+              description={t(
+                "Konkreta handlingar (inte bara besök) — visar vad som fungerar bra och vad som knappt rörs.",
+              )}
             >
               {otherActions.length === 0 && (
                 <p className="text-sm text-muted-foreground">{t("Ingen data än.")}</p>
