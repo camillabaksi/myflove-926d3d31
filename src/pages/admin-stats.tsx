@@ -5,6 +5,7 @@ import { useIsAdmin } from "@/hooks/use-is-admin";
 import { useLang } from "@/hooks/use-language";
 import CollapsibleSection from "@/components/collapsible-section";
 import AnalyticsExport from "@/components/admin/analytics-export";
+import UserAnalytics from "@/components/admin/user-analytics";
 import { actionLabel, pageLabel, sectionLabel } from "@/lib/analytics-labels";
 
 export default function AdminStats() {
@@ -84,6 +85,8 @@ export default function AdminStats() {
             <strong>{t("Integritet:")}</strong> {t("vi mäter bara vilken del av appen som används och vilken typ av handling som sker. Inget användar-id, ingen e-post, ingen IP och inget innehåll (mående, texter, uppgifter) sparas — händelser går inte att koppla till en person.")}
           </p>
         </div>
+
+        <UserAnalytics />
 
         <AnalyticsExport />
 
