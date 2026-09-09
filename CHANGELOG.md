@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-09 – Ny adminöversikt: "Hur går MyFlove?"
+
+- Statistiksidan är ombyggd till fyra tydliga KPI-kort: Aktivitet, Aktiva användare, Återkomst och Flow-användning, med tidsperiod och en tydlig MVP-reservation.
+- Nya block för kärnflödet (Fånga → Planera → Göra → Reflektera), "Vad använder människor?" med begripliga namn, "Kapacitet & mående" och "Återkomst".
+- Korta förklaringar "Vad mäter vi?" och "Varför är det viktigt?" under varje block.
+- All detaljerad eventstatistik, analys per användare och export ligger nu hopfällt längst ner. Ingen ändring i datainsamling eller integritetsskydd.
+
 ## 2026-09-09 – Ladda ner analysen
 
 - Knappar för "Ladda ner CSV" och "Ladda ner PDF" i "Analys per användare"; filen följer valet "Endast externa användare".

@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-09";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Ny adminöversikt: Hur går MyFlove?",
+    items: [
+      "Fyra tydliga KPI-kort högst upp: Aktivitet, Aktiva användare, Återkomst och Flow-användning (2026-09-09)",
+      "Nya block för kärnflödet, mest använda delar med begripliga namn, kapacitet & mående samt återkomst (2026-09-09)",
+      "Detaljerad eventstatistik och export ligger hopfällt längst ner; datainsamling och integritet oförändrade (2026-09-09)",
+    ],
+  },
+  {
     title: "Ladda ner analysen",
     items: [
       "CSV- och PDF-nedladdning direkt i Analys per användare, med samma filtrering som vyn visar (2026-09-09)",
