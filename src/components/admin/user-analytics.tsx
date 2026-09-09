@@ -44,7 +44,9 @@ export default function UserAnalytics() {
       title={t("Analys per användare")}
       headingClassName="text-lg font-semibold"
       className="bg-card p-6 rounded-3xl border-2 border-border shadow-sm"
-      description={t("Händelser per webbläsare, med möjlighet att räkna bort dina egna och andra interna test.")}
+      description={t(
+        "Händelser per webbläsare, med möjlighet att räkna bort dina egna och andra interna test.",
+      )}
     >
       {isLoading && <p className="text-muted-foreground">{t("Laddar…")}</p>}
       {isError && <p className="text-destructive">{t("Kunde inte hämta granskningen.")}</p>}
@@ -72,7 +74,10 @@ export default function UserAnalytics() {
               { label: t("Externa webbläsare"), value: data.totals.externalSessions },
               { label: t("Registrerade konton"), value: data.registeredUsers },
             ].map((kpi) => (
-              <div key={kpi.label} className="rounded-2xl border border-border bg-card p-4 space-y-1">
+              <div
+                key={kpi.label}
+                className="rounded-2xl border border-border bg-card p-4 space-y-1"
+              >
                 <p className="text-xl font-bold">{kpi.value}</p>
                 <p className="text-xs text-muted-foreground">{kpi.label}</p>
               </div>
@@ -96,7 +101,10 @@ export default function UserAnalytics() {
 
           <div className="divide-y divide-border rounded-2xl border border-border overflow-hidden">
             {rows.slice(0, 100).map((s) => (
-              <div key={s.sessionId} className="flex items-center justify-between gap-3 p-3 text-sm">
+              <div
+                key={s.sessionId}
+                className="flex items-center justify-between gap-3 p-3 text-sm"
+              >
                 <div className="min-w-0">
                   <p className="font-medium truncate">
                     {s.email ?? (
@@ -109,8 +117,8 @@ export default function UserAnalytics() {
                     )}
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    {s.events} {t("händelser")} · {s.activeDays} {t("aktiva dagar")} ·{" "}
-                    {t("senast")} {fmt(s.lastSeen)}
+                    {s.events} {t("händelser")} · {s.activeDays} {t("aktiva dagar")} · {t("senast")}{" "}
+                    {fmt(s.lastSeen)}
                   </p>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
@@ -125,7 +133,11 @@ export default function UserAnalytics() {
                     </span>
                   )}
                   {s.isInternal === null && (
-                    <HelpCircle size={14} className="text-muted-foreground" aria-label={t("okänd")} />
+                    <HelpCircle
+                      size={14}
+                      className="text-muted-foreground"
+                      aria-label={t("okänd")}
+                    />
                   )}
                   <Button
                     variant="ghost"
@@ -147,7 +159,9 @@ export default function UserAnalytics() {
 
           <p className="text-xs text-muted-foreground flex items-start gap-2">
             <Users size={14} className="mt-0.5 shrink-0" />
-            {t("Historiska händelser saknar kontokoppling — de visas som okänd härkomst tills du märker dem. Ingen befintlig händelse ändras eller raderas.")}
+            {t(
+              "Historiska händelser saknar kontokoppling — de visas som okänd härkomst tills du märker dem. Ingen befintlig händelse ändras eller raderas.",
+            )}
           </p>
         </div>
       )}

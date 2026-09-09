@@ -106,7 +106,10 @@ export const getUserAnalyticsFn = createServerFn({ method: "GET" })
     if (ownerErr) throw new Error(ownerErr.message);
 
     const ownerMap = new Map(
-      (owners ?? []).map((o) => [o.session_id, o as { user_id: string | null; is_internal: boolean }]),
+      (owners ?? []).map((o) => [
+        o.session_id,
+        o as { user_id: string | null; is_internal: boolean },
+      ]),
     );
 
     // Slå upp e-post och adminstatus för de konton som faktiskt är kopplade.
@@ -190,7 +193,9 @@ export const getUserAnalyticsFn = createServerFn({ method: "GET" })
 /** Kopplar den inloggade användarens webbläsar-id till kontot (första gången). */
 export const claimAnalyticsSessionFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: unknown) => z.object({ sessionId: z.string().min(1).max(128) }).parse(data))
+  .inputValidator((data: unknown) =>
+    z.object({ sessionId: z.string().min(1).max(128) }).parse(data),
+  )
   .handler(async ({ data, context }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: existing } = await supabaseAdmin
