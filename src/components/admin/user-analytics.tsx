@@ -114,7 +114,6 @@ async function toPdf(data: UserAnalytics, rows: SessionRow[]): Promise<Blob> {
   return doc.output("blob");
 }
 
-
 export default function UserAnalytics() {
   const { t } = useLang();
   const qc = useQueryClient();
@@ -222,7 +221,6 @@ export default function UserAnalytics() {
               {t("Visar nu")}: {rows.length} {t("webbläsare")} · {shownEvents} {t("händelser")}
             </span>
           </div>
-
 
           <div className="divide-y divide-border rounded-2xl border border-border overflow-hidden">
             {rows.slice(0, 100).map((s) => (
