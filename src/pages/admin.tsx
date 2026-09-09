@@ -26,6 +26,7 @@ import {
   BarChart3,
 } from "lucide-react";
 import ChangelogExport from "@/components/changelog-export";
+import UserAnalytics from "@/components/admin/user-analytics";
 import type { AdminUserRow } from "@/lib/admin.functions";
 
 const STATUS_LABELS: Record<string, string> = {
@@ -85,6 +86,9 @@ export default function AdminPage() {
             </Link>
           </div>
         </header>
+
+        <UserAnalytics />
+
 
         <div className="flex gap-2 border-b border-border">
           <TabBtn
