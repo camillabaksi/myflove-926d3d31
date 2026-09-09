@@ -192,10 +192,37 @@ export default function UserAnalytics() {
               <ShieldCheck size={16} className="mr-2" />
               {t("Markera den här webbläsaren som intern")}
             </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() =>
+                saveBlob(
+                  new Blob([toCsv(data, rows)], { type: "text/csv;charset=utf-8" }),
+                  `myflove-analys-${new Date().toISOString().slice(0, 10)}.csv`,
+                )
+              }
+            >
+              <Download size={16} className="mr-2" />
+              {t("Ladda ner CSV")}
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={async () =>
+                saveBlob(
+                  await toPdf(data, rows),
+                  `myflove-analys-${new Date().toISOString().slice(0, 10)}.pdf`,
+                )
+              }
+            >
+              <FileText size={16} className="mr-2" />
+              {t("Ladda ner PDF")}
+            </Button>
             <span className="text-xs text-muted-foreground">
               {t("Visar nu")}: {rows.length} {t("webbläsare")} · {shownEvents} {t("händelser")}
             </span>
           </div>
+
 
           <div className="divide-y divide-border rounded-2xl border border-border overflow-hidden">
             {rows.slice(0, 100).map((s) => (
