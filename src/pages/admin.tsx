@@ -86,6 +86,9 @@ export default function AdminPage() {
           </div>
         </header>
 
+        <UserAnalytics />
+
+
         <div className="flex gap-2 border-b border-border">
           <TabBtn
             active={tab === "friction"}
