@@ -7,7 +7,6 @@
 - Korta förklaringar "Vad mäter vi?" och "Varför är det viktigt?" under varje block.
 - All detaljerad eventstatistik, analys per användare och export ligger nu hopfällt längst ner. Ingen ändring i datainsamling eller integritetsskydd.
 
-
 ## 2026-09-09 – Ladda ner analysen
 
 - Knappar för "Ladda ner CSV" och "Ladda ner PDF" i "Analys per användare"; filen följer valet "Endast externa användare".
