@@ -82,7 +82,9 @@ export default function AdminStats() {
     .filter((row) => row.action === "view" && row.section !== "page")
     .sort((a, b) => b.events - a.events);
 
-  const pageViews = usage.filter((row) => row.section === "page").sort((a, b) => b.events - a.events);
+  const pageViews = usage
+    .filter((row) => row.section === "page")
+    .sort((a, b) => b.events - a.events);
 
   const otherActions = usage
     .filter((row) => row.action !== "view" && row.section !== "page")
@@ -187,7 +189,10 @@ export default function AdminStats() {
             {/* 1. Överst: fyra tydliga KPI-kort */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
               {kpis.map((kpi) => (
-                <div key={kpi.label} className="bg-card p-4 rounded-3xl border-2 border-border shadow-sm space-y-1">
+                <div
+                  key={kpi.label}
+                  className="bg-card p-4 rounded-3xl border-2 border-border shadow-sm space-y-1"
+                >
                   <kpi.icon size={18} className="text-primary" />
                   <p className="text-2xl font-bold leading-tight">{kpi.value}</p>
                   <p className="text-sm font-medium leading-tight">{kpi.label}</p>
@@ -266,7 +271,9 @@ export default function AdminStats() {
               </div>
               <WhyBox
                 what={t("Hur ofta människor loggar energi, mående och påverkan — helt anonymt.")}
-                why={t("Det här är MyFloves kärna: att planera efter kapacitet, inte bara att-göra.")}
+                why={t(
+                  "Det här är MyFloves kärna: att planera efter kapacitet, inte bara att-göra.",
+                )}
               />
             </section>
 
@@ -280,7 +287,10 @@ export default function AdminStats() {
                   { label: t("Aktiva 30 dagar"), value: `${data.activeSessions30d}` },
                   { label: t("Återkommer"), value: `${data.returningRate ?? 0}%` },
                 ].map((row) => (
-                  <div key={row.label} className="rounded-2xl border border-border bg-secondary/30 p-3">
+                  <div
+                    key={row.label}
+                    className="rounded-2xl border border-border bg-secondary/30 p-3"
+                  >
                     <p className="text-xl font-bold">{row.value}</p>
                     <p className="text-xs text-muted-foreground">{row.label}</p>
                   </div>
