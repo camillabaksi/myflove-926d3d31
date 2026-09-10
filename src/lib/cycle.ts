@@ -54,7 +54,9 @@ export const PHASE_LABEL_SV: Record<CyclePhase, string> = {
 export const PHASE_ORDER: CyclePhase[] = ["mens", "follikular", "agglossning", "luteal"];
 
 export const dayKey = (d: Date | string = new Date()): string =>
-  typeof d === "string" ? d.slice(0, 10) : new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+  typeof d === "string"
+    ? d.slice(0, 10)
+    : new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
 
 const parse = (day: string) => new Date(`${day}T12:00:00`);
 
@@ -138,4 +140,38 @@ export function cycleContext(data: CycleData, today: string = dayKey()): string 
     "Använd detta enbart som bakgrund när du hjälper till att prioritera. Säg aldrig att användaren känner något på grund av en fas, dra inga medicinska slutsatser och utgå alltid från det användaren själv har registrerat.",
   );
   return lines.join("\n");
+}
+
+/** Alla datum mellan start och slut (inklusive), max 14 dagar. */
+export function daysInRange(start: string, end: string): string[] {
+  const from = parse(start);
+  const to = parse(end);
+  if (Number.isNaN(from.getTime()) || Number.isNaN(to.getTime()) || to < from) return [];
+  const out: string[] = [];
+  for (let t = from.getTime(); t <= to.getTime() && out.length < 14; t += 86_400_000) {
+    out.push(dayKey(new Date(t)));
+  }
+  return out;
+}
+
+/** Perioden (sammanhängande mensdagar) som innehåller ett visst datum. */
+export function periodRangeFor(
+  periodDays: string[],
+  day: string,
+): { start: string; end: string } | null {
+  const sorted = [...new Set(periodDays)].sort();
+  if (!sorted.includes(day)) return null;
+  let start = day;
+  let end = day;
+  for (;;) {
+    const prev = dayKey(new Date(parse(start).getTime() - 86_400_000));
+    if (!sorted.includes(prev)) break;
+    start = prev;
+  }
+  for (;;) {
+    const next = dayKey(new Date(parse(end).getTime() + 86_400_000));
+    if (!sorted.includes(next)) break;
+    end = next;
+  }
+  return { start, end };
 }

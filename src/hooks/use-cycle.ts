@@ -4,6 +4,8 @@ import {
   EMPTY_CYCLE,
   cycleStatus,
   dayKey,
+  daysInRange,
+  periodRangeFor,
   type CycleData,
   type CycleSymptom,
 } from "@/lib/cycle";
@@ -41,6 +43,25 @@ export function useCycle() {
     [data, setData],
   );
 
+  /** Spara en hel period: från första till sista mensdagen. */
+  const setPeriodRange = useCallback(
+    (start: string, end: string) => {
+      const days = daysInRange(start, end);
+      if (!days.length) return;
+      setData({ ...data, periodDays: [...new Set([...data.periodDays, ...days])].sort() });
+    },
+    [data, setData],
+  );
+
+  /** Ta bort alla dagar i en registrerad period. */
+  const removePeriodRange = useCallback(
+    (start: string, end: string) => {
+      const days = new Set(daysInRange(start, end));
+      setData({ ...data, periodDays: data.periodDays.filter((d) => !days.has(d)) });
+    },
+    [data, setData],
+  );
+
   const setSymptoms = useCallback(
     (kinds: CycleSymptom[], day: string = dayKey()) => {
       const rest = data.symptoms.filter((s) => s.day !== day);
@@ -55,5 +76,18 @@ export function useCycle() {
     [data.symptoms],
   );
 
-  return { cycle: data, status, todaySymptoms, setEnabled, setUseInFlow, togglePeriodDay, setSymptoms };
+  const currentPeriod = useMemo(() => periodRangeFor(data.periodDays, dayKey()), [data.periodDays]);
+
+  return {
+    cycle: data,
+    status,
+    todaySymptoms,
+    currentPeriod,
+    setEnabled,
+    setUseInFlow,
+    togglePeriodDay,
+    setPeriodRange,
+    removePeriodRange,
+    setSymptoms,
+  };
 }
