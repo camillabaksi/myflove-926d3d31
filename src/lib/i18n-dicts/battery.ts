@@ -237,7 +237,7 @@ export const EN_BATTERY: Record<string, string> = {
   "Din energi och ditt mående – det senaste du loggat": "Your energy and mood – the latest you've logged",
   "Dölj detaljer": "Hide details",
   "Visa detaljer": "Show details",
-  "Logga energi &amp; mående": "Log energy & mood",
+  
   "Varje loggning blir en egen observation": "Every log becomes its own entry",
   "Energikurva över dagen.": "Energy curve over the day.",
 
