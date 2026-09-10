@@ -1,4 +1,5 @@
-import { Flower2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Flower2, Trash2 } from "lucide-react";
 import { ExpandableBlock } from "@/components/myflove/expandable-block";
 import { useCycle } from "@/hooks/use-cycle";
 import { useImpactCheckin } from "@/hooks/use-impact-checkin";
@@ -11,6 +12,8 @@ import {
   PHASE_ORDER,
   cycleIndicator,
   dayKey,
+  periodRangeFor,
+  periodStarts,
   type CycleSymptom,
 } from "@/lib/cycle";
 import { cn } from "@/lib/utils";
@@ -23,7 +26,26 @@ import { useLang } from "@/hooks/use-language";
  */
 export default function CycleCard() {
   const { t } = useLang();
-  const { cycle, status, todaySymptoms, setUseInFlow, togglePeriodDay, setSymptoms } = useCycle();
+  const {
+    cycle,
+    status,
+    todaySymptoms,
+    currentPeriod,
+    setUseInFlow,
+    togglePeriodDay,
+    setPeriodRange,
+    removePeriodRange,
+    setSymptoms,
+  } = useCycle();
+  const [start, setStart] = useState(() => currentPeriod?.start ?? dayKey());
+  const [end, setEnd] = useState(() => currentPeriod?.end ?? dayKey());
+
+  useEffect(() => {
+    if (currentPeriod) {
+      setStart(currentPeriod.start);
+      setEnd(currentPeriod.end);
+    }
+  }, [currentPeriod?.start, currentPeriod?.end]);
   const { impactHistory } = useImpactCheckin();
   const [energyLog] = useCloudSyncedStorage<EnergyLogEntry[]>("myflove-energy-log", []);
 
@@ -34,12 +56,14 @@ export default function CycleCard() {
   const byDay = energyByDay(energyLog ?? []);
   const patterns = [...cyclePatterns(cycle, byDay), ...impactPatterns(impactHistory, byDay)];
   const indicator = cycleIndicator(status);
+  const registeredPeriods = periodStarts(cycle.periodDays)
+    .slice(0, 3)
+    .map((d) => periodRangeFor(cycle.periodDays, d))
+    .filter((p): p is { start: string; end: string } => p !== null);
 
   const toggleSymptom = (id: CycleSymptom) => {
     setSymptoms(
-      todaySymptoms.includes(id)
-        ? todaySymptoms.filter((s) => s !== id)
-        : [...todaySymptoms, id],
+      todaySymptoms.includes(id) ? todaySymptoms.filter((s) => s !== id) : [...todaySymptoms, id],
     );
   };
 
@@ -48,7 +72,11 @@ export default function CycleCard() {
       title={t("Menscykel")}
       titleText={t("Menscykel")}
       subtitle={t("Frivilligt – bara för dig som vill följa din cykel.")}
-      summary={indicator ? `🌸 ${t(indicator.split(" · ")[1] ?? "")} · ${indicator.split(" · ")[0]}` : t("Registrera när mensen börjar för att komma igång.")}
+      summary={
+        indicator
+          ? `🌸 ${t(indicator.split(" · ")[1] ?? "")} · ${indicator.split(" · ")[0]}`
+          : t("Registrera när mensen börjar för att komma igång.")
+      }
       icon={Flower2}
       tone="blush"
       surface="blush"
@@ -56,6 +84,63 @@ export default function CycleCard() {
       data-testid="cycle-card"
     >
       <div className="space-y-4">
+        <div className="space-y-2 rounded-2xl border border-border/60 bg-card/70 p-3">
+          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            {t("Välj vilka dagar mensen varade")}
+          </p>
+          <div className="flex flex-wrap gap-2">
+            <label className="flex-1 min-w-[9rem] text-xs text-muted-foreground">
+              {t("Började")}
+              <input
+                type="date"
+                value={start}
+                max={end}
+                onChange={(e) => setStart(e.target.value)}
+                className="mt-1 min-h-11 w-full rounded-xl border border-border/60 bg-card px-3 py-2 text-sm text-ink outline-none focus:border-primary"
+              />
+            </label>
+            <label className="flex-1 min-w-[9rem] text-xs text-muted-foreground">
+              {t("Slutade")}
+              <input
+                type="date"
+                value={end}
+                min={start}
+                onChange={(e) => setEnd(e.target.value)}
+                className="mt-1 min-h-11 w-full rounded-xl border border-border/60 bg-card px-3 py-2 text-sm text-ink outline-none focus:border-primary"
+              />
+            </label>
+          </div>
+          <button
+            type="button"
+            onClick={() => setPeriodRange(start, end)}
+            className="min-h-11 w-full rounded-2xl border border-primary bg-primary/10 px-4 py-3 text-sm font-semibold text-ink transition-all hover:bg-primary/15"
+          >
+            {t("Spara mensperiod")}
+          </button>
+          {registeredPeriods.length > 0 && (
+            <ul className="space-y-1 pt-1">
+              {registeredPeriods.map((p) => (
+                <li
+                  key={p.start}
+                  className="flex items-center justify-between gap-2 text-sm text-ink"
+                >
+                  <span>
+                    {p.start} – {p.end}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => removePeriodRange(p.start, p.end)}
+                    aria-label={t("Ta bort period")}
+                    className="rounded-lg p-2 text-muted-foreground hover:text-destructive"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
         <button
           type="button"
           onClick={() => togglePeriodDay()}
@@ -87,11 +172,16 @@ export default function CycleCard() {
               ))}
             </div>
             <p className="text-sm text-ink">
-              {t("Du är ungefär på")} <strong>{t("dag")} {status.day}</strong>{" "}
+              {t("Du är ungefär på")}{" "}
+              <strong>
+                {t("dag")} {status.day}
+              </strong>{" "}
               {t("av en uppskattad cykel på")} {status.length} {t("dagar")}.
             </p>
             <p className="text-xs text-muted-foreground">
-              {t("Fas och ägglossning är uppskattningar och varierar mellan personer och mellan cykler. MyFlove säger inget om hur du bör må.")}
+              {t(
+                "Fas och ägglossning är uppskattningar och varierar mellan personer och mellan cykler. MyFlove säger inget om hur du bör må.",
+              )}
             </p>
           </div>
         )}

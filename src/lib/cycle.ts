@@ -54,7 +54,9 @@ export const PHASE_LABEL_SV: Record<CyclePhase, string> = {
 export const PHASE_ORDER: CyclePhase[] = ["mens", "follikular", "agglossning", "luteal"];
 
 export const dayKey = (d: Date | string = new Date()): string =>
-  typeof d === "string" ? d.slice(0, 10) : new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+  typeof d === "string"
+    ? d.slice(0, 10)
+    : new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
 
 const parse = (day: string) => new Date(`${day}T12:00:00`);
 
@@ -153,7 +155,10 @@ export function daysInRange(start: string, end: string): string[] {
 }
 
 /** Perioden (sammanhängande mensdagar) som innehåller ett visst datum. */
-export function periodRangeFor(periodDays: string[], day: string): { start: string; end: string } | null {
+export function periodRangeFor(
+  periodDays: string[],
+  day: string,
+): { start: string; end: string } | null {
   const sorted = [...new Set(periodDays)].sort();
   if (!sorted.includes(day)) return null;
   let start = day;

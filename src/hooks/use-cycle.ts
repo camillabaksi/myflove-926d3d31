@@ -76,10 +76,7 @@ export function useCycle() {
     [data.symptoms],
   );
 
-  const currentPeriod = useMemo(
-    () => periodRangeFor(data.periodDays, dayKey()),
-    [data.periodDays],
-  );
+  const currentPeriod = useMemo(() => periodRangeFor(data.periodDays, dayKey()), [data.periodDays]);
 
   return {
     cycle: data,
