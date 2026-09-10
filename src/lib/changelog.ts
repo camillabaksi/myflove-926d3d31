@@ -10,6 +10,12 @@ export const CHANGELOG_UPDATED = "2026-09-10";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Sluttid i Lägg till",
+    items: [
+      "När du lägger till något med tid kan du nu också välja sluttid (2026-09-10)",
+    ],
+  },
+  {
     title: "Fix: konstiga tecken i loggningsknappen",
     items: [
       "Knappen på Hem visade \"&amp;\" – visar nu korrekt \"Logga energi & mående\" (2026-09-10)",
