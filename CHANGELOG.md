@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-10 – Välj start- och slutdag för mensen
+
+- I Menscykel kan du nu välja vilket datum mensen började och slutade och spara hela perioden på en gång.
+- Sparade perioder listas och kan tas bort. Snabbknappen "Markera mensdag idag" finns kvar.
+
 ## 2026-09-09 – Ny adminöversikt: "Hur går MyFlove?"
 
 - Statistiksidan är ombyggd till fyra tydliga KPI-kort: Aktivitet, Aktiva användare, Återkomst och Flow-användning, med tidsperiod och en tydlig MVP-reservation.
