@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-10 – Fix: konstiga tecken i "Logga energi & mående"
+
+- Knappen på Hem visade "&amp;" i stället för "&". Texten visas nu korrekt som "Logga energi & mående".
+
+
 ## 2026-09-10 – Välj start- och slutdag för mensen
 
 - I Menscykel kan du nu välja vilket datum mensen började och slutade och spara hela perioden på en gång.
