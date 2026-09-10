@@ -42,6 +42,7 @@ export default function QuickAddSheet({
   const [kind, setKind] = useState<Kind>("aktivitet");
   const [date, setDate] = useState(todayISO());
   const [time, setTime] = useState("");
+  const [endTime, setEndTime] = useState("");
   const [saved, setSaved] = useState<string | null>(null);
 
   const area = activeArea === "alla" ? "vardag" : activeArea;
@@ -50,6 +51,7 @@ export default function QuickAddSheet({
   const reset = () => {
     setText("");
     setTime("");
+    setEndTime("");
     setDate(todayISO());
   };
 
@@ -59,7 +61,11 @@ export default function QuickAddSheet({
     if (kind === "tanke") {
       addThought({ text: title, level: "tanke" });
     } else if (kind === "aktivitet") {
-      addTask(title, date, { time: time || undefined, area });
+      addTask(title, date, {
+        time: time || undefined,
+        endTime: time && endTime ? endTime : undefined,
+        area,
+      });
     } else {
       addReminder(
         title,
@@ -145,6 +151,18 @@ export default function QuickAddSheet({
                 />
               </label>
             </div>
+          )}
+          {needsWhen && time && (
+            <label className="block text-xs text-muted-foreground">
+              {t("Sluttid (valfritt)")}
+              <input
+                type="time"
+                value={endTime}
+                min={time}
+                onChange={(e) => setEndTime(e.target.value)}
+                className="mt-1 min-h-11 w-full rounded-2xl border border-border bg-background px-3 text-sm text-ink"
+              />
+            </label>
           )}
 
           <button

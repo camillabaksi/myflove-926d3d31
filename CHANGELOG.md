@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-10 – Sluttid i Lägg till
+
+- När du lägger till en aktivitet eller händelse med tid kan du nu även välja en valfri sluttid, som visas i dagens tidslinje.
+
 ## 2026-09-10 – Fix: konstiga tecken i "Logga energi & mående"
 
 - Knappen på Hem visade "&amp;" i stället för "&". Texten visas nu korrekt som "Logga energi & mående".
