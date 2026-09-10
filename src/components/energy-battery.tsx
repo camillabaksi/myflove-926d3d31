@@ -165,7 +165,7 @@ export default function EnergyBattery({
       footer={
         href ? (
           <span className="inline-flex items-center gap-2 text-sm font-semibold text-primary">
-            {t("Logga energi &amp; mående")} <ArrowRight size={16} />
+            {t("Logga energi & mående")} <ArrowRight size={16} />
           </span>
         ) : (
           <span className="inline-flex items-center gap-2 text-xs text-muted-foreground">
