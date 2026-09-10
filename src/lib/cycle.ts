@@ -139,3 +139,34 @@ export function cycleContext(data: CycleData, today: string = dayKey()): string 
   );
   return lines.join("\n");
 }
+
+/** Alla datum mellan start och slut (inklusive), max 14 dagar. */
+export function daysInRange(start: string, end: string): string[] {
+  const from = parse(start);
+  const to = parse(end);
+  if (Number.isNaN(from.getTime()) || Number.isNaN(to.getTime()) || to < from) return [];
+  const out: string[] = [];
+  for (let t = from.getTime(); t <= to.getTime() && out.length < 14; t += 86_400_000) {
+    out.push(dayKey(new Date(t)));
+  }
+  return out;
+}
+
+/** Perioden (sammanhängande mensdagar) som innehåller ett visst datum. */
+export function periodRangeFor(periodDays: string[], day: string): { start: string; end: string } | null {
+  const sorted = [...new Set(periodDays)].sort();
+  if (!sorted.includes(day)) return null;
+  let start = day;
+  let end = day;
+  for (;;) {
+    const prev = dayKey(new Date(parse(start).getTime() - 86_400_000));
+    if (!sorted.includes(prev)) break;
+    start = prev;
+  }
+  for (;;) {
+    const next = dayKey(new Date(parse(end).getTime() + 86_400_000));
+    if (!sorted.includes(next)) break;
+    end = next;
+  }
+  return { start, end };
+}
