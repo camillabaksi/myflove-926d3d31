@@ -1,3 +1,8 @@
+## 2026-09-11 – Synlig andningsglöd på Hem
+
+- Andningsglöden bakom ”Din dag, i din takt” ligger nu i rätt lager och syns tydligt även på mobil.
+- Pulsen är förstärkt utan att ändra innehåll, dagslogik eller inställningen för minskad rörelse.
+
 ## 2026-09-11 – Visuellt starkare 3-minuters investerarpitch
 
 - Den engelska investerarpitchen har byggts om med riktiga appbilder och en tydligare berättelse från problem till genomförbar dag.
