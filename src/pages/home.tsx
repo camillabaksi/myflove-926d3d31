@@ -538,7 +538,6 @@ export default function Home() {
           </MyFloveWide>
         )}
 
-
         {/* Områdesväljare – litet, längst ner */}
         {shows("omrade") && (
           <MyFloveWide style={pos("omrade")} className="space-y-2 pt-2" data-npf="optional">

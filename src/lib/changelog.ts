@@ -11,12 +11,9 @@ export const CHANGELOG_UPDATED = "2026-09-11";
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Lugnare Hem",
-    items: [
-      'Dagens tanke och Rutiner & medicin ligger nu under "Mer i MyFlove" (2026-09-11)',
-    ],
+    items: ['Dagens tanke och Rutiner & medicin ligger nu under "Mer i MyFlove" (2026-09-11)'],
   },
   {
-
     title: "Enhetlig design och tydligare andningsljus",
     items: [
       "Hela appen har samma mjuka pastelllila bakgrund bakom de vita korten (2026-09-11)",
