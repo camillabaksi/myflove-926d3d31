@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-11";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Outlook-kopplingen är aktiv",
+    items: [
+      "Microsoft Outlook App User Connector är nu länkad till projektet (2026-09-11)",
+      "Outlook visas som alternativ i Kalender bredvid Google (2026-09-11)",
+      "Samma Lovable gateway-återvändandeadress används för Microsoft OAuth (2026-09-11)",
+    ],
+  },
+  {
     title: "Koppla kalendern till Google eller Outlook",
     items: [
       'Du kan koppla ditt eget Google- eller Outlook-konto i Kalender under "Din riktiga kalender" (2026-09-11)',
