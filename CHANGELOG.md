@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-11 – Handla/köpa hamnar i Inköpslistan
+
+- När du skriver något som handlar om att handla eller köpa i ＋ Lägg till föreslår MyFlove att varan också läggs i Inköpslistan.
+- Förslaget är förkryssat men kan alltid stängas av, och varunamnet rensas ("köpa schampo på Ica" → "schampo").
+
 ## 2026-09-11 – Pitchdeck som PDF och Word
 
 - Pitchdecket 4.2 finns nu även som Word (DOCX) med alla slides, inklusive demosliden sist.
