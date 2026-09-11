@@ -195,8 +195,8 @@ export default function PitchPage() {
             Pitchdecket (4.2) beskriver appen som den är utformad nu: den guidade dagsresan i tre
             steg, det lugna gränssnittet med andningsljus, enkelt läge och hopfällbara block,
             batteriet mätt mot faktisk belastning och tid, belastningskartan i Insikter och
-            kvällschecken – tillsammans med validering, affärsmodell, differentiering,
-            go-to-market, kapital och roadmap.
+            kvällschecken – tillsammans med validering, affärsmodell, differentiering, go-to-market,
+            kapital och roadmap.
           </p>
 
           <div className="grid gap-3 sm:grid-cols-2">
