@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-11";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Fäll ihop block på Hem",
+    items: [
+      "Flow, de tre huvudstegen, nästa rimliga steg, kvällschecken och övriga informationskort på Hem kan minimeras var för sig (2026-09-11)",
+      "Varje val sparas så Hem behåller den mängd information användaren valt (2026-09-11)",
+    ],
+  },
+  {
     title: "Enklare läge för NPF",
     items: [
       'Ny knapp på Hem: "Vill du ha det lugnare? Visa mindre på skärmen" slår på enkelt läge med ett tryck (2026-09-11)',

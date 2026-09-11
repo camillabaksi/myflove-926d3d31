@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { toast } from "sonner";
-import { X, ArrowRight } from "lucide-react";
+import { ArrowRight, ChevronDown } from "lucide-react";
 import { FlowMascot } from "@/components/flow-mascot";
 import ActivityEnergyPrompt from "@/components/activity-energy-prompt";
 import { useFlowHome } from "@/hooks/use-flow-home";
@@ -18,6 +18,8 @@ import { todayISO } from "@/lib/day";
 import { CHOICE_LABELS, type FlowHomeChoiceId } from "@/lib/flow-home";
 import type { FlowItem } from "@/lib/flow-items";
 import { track } from "@/lib/analytics";
+import { useCollapsible } from "@/lib/collapse-store";
+import { cn } from "@/lib/utils";
 
 /**
  * Flow på startsidan – lugn följeslagare, inte chatbot.
@@ -38,11 +40,9 @@ export default function FlowHomeCard() {
   const { reading } = useEnergyBattery();
   const [, navigate] = useLocation();
 
-  const [closed, setClosed] = useState(false);
   const [suggesting, setSuggesting] = useState(false);
   const [energyItem, setEnergyItem] = useState<FlowItem | null>(null);
-
-  if (closed) return null;
+  const { collapsed, toggle } = useCollapsible("home-flow");
 
   const go = (id: FlowHomeChoiceId) => {
     track("flow_interaction", { source: id });
@@ -127,7 +127,9 @@ export default function FlowHomeCard() {
 
   // Adaptivt: den handling du oftast väljer hamnar först.
   const sortedStale = topAction
-    ? [...staleActions].sort((a, b) => (b.key === topAction ? 1 : 0) - (a.key === topAction ? 1 : 0))
+    ? [...staleActions].sort(
+        (a, b) => (b.key === topAction ? 1 : 0) - (a.key === topAction ? 1 : 0),
+      )
     : staleActions;
 
   const askEnergy = () => {
@@ -149,14 +151,20 @@ export default function FlowHomeCard() {
       data-testid="home-flow"
       className="relative overflow-hidden rounded-3xl border border-border/60 bg-card p-4 shadow-soft sm:p-5"
     >
-      <button
-        type="button"
-        aria-label="Stäng Flow"
-        onClick={() => setClosed(true)}
-        className="absolute right-3 top-3 rounded-full p-1 text-muted-foreground/70 transition hover:text-foreground"
-      >
-        <X size={15} />
-      </button>
+      <div className="absolute right-3 top-3 z-10">
+        <button
+          type="button"
+          aria-label={collapsed ? "Öppna Flow" : "Minimera Flow"}
+          aria-expanded={!collapsed}
+          onClick={toggle}
+          className="rounded-full p-1 text-muted-foreground/70 transition hover:text-foreground"
+        >
+          <ChevronDown
+            size={17}
+            className={cn("transition-transform", collapsed && "-rotate-90")}
+          />
+        </button>
+      </div>
 
       <div className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-3">
         <FlowMascot
@@ -165,10 +173,10 @@ export default function FlowHomeCard() {
           className="flow-alive shrink-0"
           alt=""
         />
-        <div className="min-w-0 space-y-3 pr-5">
+        <div className="min-w-0 space-y-3 pr-7">
           <p className="text-sm font-medium leading-snug text-ink">{prompt.message}</p>
 
-          {prompt.mode === "liggande" && stale && (
+          {!collapsed && prompt.mode === "liggande" && stale && (
             <div className="space-y-2">
               <p className="rounded-2xl bg-secondary/50 px-3 py-2 text-sm text-ink">{stale.text}</p>
               <div className="flex flex-wrap gap-2">
@@ -197,7 +205,7 @@ export default function FlowHomeCard() {
             </div>
           )}
 
-          {prompt.mode === "energi" && pending && (
+          {!collapsed && prompt.mode === "energi" && pending && (
             <div className="space-y-2">
               <p className="rounded-2xl bg-secondary/50 px-3 py-2 text-sm text-ink">
                 {pending.title}
@@ -212,7 +220,7 @@ export default function FlowHomeCard() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => setClosed(true)}
+                  onClick={toggle}
                   className="rounded-full px-3 py-1.5 text-xs text-muted-foreground hover:underline"
                 >
                   Inte nu
@@ -221,7 +229,7 @@ export default function FlowHomeCard() {
             </div>
           )}
 
-          {prompt.choices.length > 0 && (
+          {!collapsed && prompt.choices.length > 0 && (
             <div className="flex flex-wrap gap-2">
               {prompt.choices.map((choice, index) => (
                 <button
@@ -241,7 +249,7 @@ export default function FlowHomeCard() {
             </div>
           )}
 
-          {suggestion && (
+          {!collapsed && suggestion && (
             <div className="space-y-2 rounded-2xl bg-lavender/30 p-3">
               <p className="text-sm text-ink">{suggestion.headline}</p>
               {suggestion.task ? (

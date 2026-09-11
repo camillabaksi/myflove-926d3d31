@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-11 – Fäll ihop block på Hem
+
+- Flow, de tre huvudstegen, nästa rimliga steg, kvällschecken och övriga informationskort på Hem kan nu minimeras och öppnas igen var för sig.
+- Varje val sparas, så Hem behåller den mängd information användaren själv valt.
+
 ## 2026-09-11 – Tydligare enkelt läge på Hem
 
 - Enkelt läge visar nu bara hälsningen och den centrala dagsresan: Hur mår du?, Vad händer? och Behöver du planera om?
@@ -14,7 +19,6 @@
 ## 2026-09-10 – Fix: konstiga tecken i "Logga energi & mående"
 
 - Knappen på Hem visade "&amp;" i stället för "&". Texten visas nu korrekt som "Logga energi & mående".
-
 
 ## 2026-09-10 – Välj start- och slutdag för mensen
 
