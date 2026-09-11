@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import flowAsset from "@/assets/flow-mascot.png.asset.json";
 import { cn } from "@/lib/utils";
+import { useNpfSettings } from "@/lib/npf-mode";
 
 /**
  * Flows samtalsstatus – styr andningstempo, blinkrytm och blick
@@ -158,8 +159,12 @@ export function FlowMascot({
   alt?: string;
 }) {
   const tempo = STATUS_TEMPO[status];
-  const blinking = useFlowBlink(alive, tempo);
-  const { ref, tilt } = useFlowGaze(alive);
+  // "Ingen rörelse" (NPF-läget) stoppar även blinkningar och blicken,
+  // som styrs via JavaScript och inte fångas av CSS-regeln.
+  const { settings: npf } = useNpfSettings();
+  const lively = alive && !npf.stillness;
+  const blinking = useFlowBlink(lively, tempo);
+  const { ref, tilt } = useFlowGaze(lively);
   // Under tänkandet vandrar blicken uppåt/bort i stället för att följa pekaren.
   const gx = tilt.x * tempo.gaze;
   const gy = tilt.y * tempo.gaze - (status === "thinking" ? 0.35 : 0);
