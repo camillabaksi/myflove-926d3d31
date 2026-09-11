@@ -87,7 +87,7 @@ export default function NpfPage() {
           <header className="space-y-2">
             <div className="flex items-center gap-2 text-primary">
               <Accessibility size={22} />
-              <h1 className="text-2xl font-bold">Anpassa appen</h1>
+              <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl">Anpassa appen</h1>
             </div>
             <p className="text-muted-foreground">Välj hur MyFlove ska se ut och kännas.</p>
           </header>

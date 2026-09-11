@@ -166,7 +166,7 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
           <header className="space-y-1">
             <div className="flex items-center gap-2">
               <Battery className="text-primary" size={28} />
-              <h1 className="text-2xl font-semibold tracking-tight">{t("Energikarta")}</h1>
+              <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl">{t("Energikarta")}</h1>
             </div>
             <p className="text-sm text-muted-foreground">
               {t(

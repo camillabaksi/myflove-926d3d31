@@ -77,7 +77,7 @@ export default function HowAreYou() {
           <div className="flex items-start gap-3">
             <FlowMascot size="sm" mood="calm" className="mt-0.5 shrink-0 flow-alive" alt="" />
             <div>
-              <h1 className="text-2xl font-bold text-ink">{t("Hur mår du?")}</h1>
+              <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl">{t("Hur mår du?")}</h1>
               <p className="text-sm text-muted-foreground">
                 {t("Så vet vi vad du har att jobba med idag.")}
               </p>

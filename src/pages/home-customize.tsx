@@ -49,7 +49,7 @@ export default function HomeCustomizePage() {
             >
               <ArrowLeft size={14} /> Till Hem
             </Link>
-            <h1 className="mt-2 text-2xl font-bold text-ink">Anpassa hemskärmen</h1>
+            <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl mt-2">Anpassa hemskärmen</h1>
             <p className="text-sm text-muted-foreground">
               Slå av det du inte vill se och flytta resten dit du vill ha det.
             </p>

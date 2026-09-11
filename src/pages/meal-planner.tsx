@@ -267,7 +267,7 @@ export default function MealPlannerPage() {
           <div className="space-y-6">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <h1 className="text-3xl font-bold mb-1 flex items-center gap-3">
+                <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl mb-1 flex items-center gap-3">
                   Veckomatlista <MyFloveFloatingElement tone="sun" size={18} />
                 </h1>
                 <p className="text-sm text-muted-foreground">

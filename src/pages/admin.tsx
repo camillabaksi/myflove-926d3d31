@@ -56,7 +56,7 @@ export default function AdminPage() {
       <Layout>
         <div className="max-w-md mx-auto text-center space-y-3 py-16">
           <Lock size={40} className="mx-auto text-muted-foreground" />
-          <h1 className="text-2xl font-serif font-bold">{t("Endast för grundaren")}</h1>
+          <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl">{t("Endast för grundaren")}</h1>
           <p className="text-muted-foreground">{t("Denna sida kräver admin-behörighet.")}</p>
         </div>
       </Layout>
@@ -68,7 +68,7 @@ export default function AdminPage() {
       <div className="max-w-5xl mx-auto space-y-6">
         <header className="flex flex-wrap items-start justify-between gap-3">
           <div className="space-y-1">
-            <h1 className="text-3xl font-serif font-bold">{t("Adminöversikt")}</h1>
+            <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl">{t("Adminöversikt")}</h1>
             <p className="text-muted-foreground">{t("Hantera feedback, roller och åtkomst.")}</p>
           </div>
           <div className="flex flex-wrap gap-2">

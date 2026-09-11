@@ -19,7 +19,7 @@ export default function OverviewPage() {
           >
             <ArrowLeft size={14} /> Till Hem
           </Link>
-          <h1 className="mt-2 text-2xl font-bold text-ink">Så funkar MyFlove</h1>
+          <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl mt-2">Så funkar MyFlove</h1>
           <p className="text-sm text-muted-foreground">
             Allt som finns i appen, kort förklarat. Du behöver inte använda allt – börja med det
             översta och lägg till när du vill.

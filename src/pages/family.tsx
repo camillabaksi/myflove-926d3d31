@@ -324,7 +324,7 @@ export default function FamilyPage() {
         <MyFloveWide>
           <div className="space-y-8">
             <div>
-              <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
+              <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl mb-2 flex items-center gap-2">
                 <MyFloveHeart size={26} /> Familj
               </h1>
               <p className="text-muted-foreground">
