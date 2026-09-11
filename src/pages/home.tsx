@@ -404,8 +404,8 @@ export default function Home() {
         </MyFloveWide>
 
         <MyFloveWide style={{ order: 0 }} className="min-w-0">
-
           <CalmChoices onPause={() => setCalmMode("micro")} />
+
         </MyFloveWide>
 
         {/* Enkelt läge – ett tryck för den som vill ha det lugnare. */}
