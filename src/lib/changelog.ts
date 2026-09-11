@@ -14,6 +14,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     items: [
       '"Nästa rimliga steg" ligger nu inuti "Din dag, i din takt" direkt under "Idag" (2026-09-11)',
       'Dagens tanke och Rutiner & medicin ligger nu under "Mer i MyFlove" (2026-09-11)',
+      "God morgon-kortet är tillfälligt borttaget från Hem för att hålla startsidan lugnare; det finns kvar under Rutiner & medicin (2026-09-11)",
     ],
   },
 
@@ -33,12 +34,12 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     ],
   },
   {
-    title: "God morgon direkt på Hem",
+    title: "God morgon borttaget från Hem",
     items: [
-      "Morgonstart-kortet ligger nu högst upp i huvudytan på Hem, under hälsningen (2026-09-11)",
-      "Kortet syns bara i morgonfönstret innan du kvitterat att du är vaken (2026-09-11)",
+      "Morgonstart-kortet ligger inte längre direkt på Hem; det finns kvar under Rutiner & medicin (2026-09-11)",
     ],
   },
+
   {
     title: "Visuell belastningskarta",
     items: [

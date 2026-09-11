@@ -4,7 +4,7 @@
 
 - "Nästa rimliga steg" ligger nu inuti "Din dag, i din takt" direkt under "Idag", så förslaget kommer i samma sammanhang som dagens schema.
 - Dagens tanke och Rutiner & medicin ligger nu under "Mer i MyFlove" i stället för direkt på Hem.
-
+- God morgon-kortet är tillfälligt borttaget från Hem för att hålla startsidan ännu lugnare; det finns kvar under Rutiner & medicin.
 
 ## 2026-09-11 – Enhetlig design och tydligare andningsljus
 
@@ -17,10 +17,9 @@
 - Lugna pausskärmen visas nu i helskärm på mobilen i stället för att klippas mellan sidhuvud och bottenmeny.
 - Texter, timer och Flow är anpassade till små skärmar och respekterar mobilens säkra ytor.
 
-## 2026-09-11 – God morgon direkt på Hem
+## 2026-09-11 – God morgon borttaget från Hem
 
-- Morgonstart-kortet ligger nu högst upp i huvudytan på Hem, under hälsningen "Din dag, i din takt".
-- Kortet syns bara i morgonfönstret innan du kvitterat att du är vaken, precis som tidigare.
+- Morgonstart-kortet ligger inte längre direkt på Hem; det finns kvar under Rutiner & medicin för den som vill ha en guidad morgonstart.
 
 ## 2026-09-11 – Visuell belastningskarta
 
