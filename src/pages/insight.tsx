@@ -209,6 +209,7 @@ export default function InsightPage() {
   const knowledge = useFlowLearning();
   const { totalDays } = useVisitStreak();
   const [energyLog] = useCloudSyncedStorage<unknown[]>("myflove-energy-log", []);
+  const patterns = useEverydayPatterns();
 
   const personal = useMemo(
     () =>
