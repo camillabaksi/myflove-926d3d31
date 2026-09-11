@@ -267,6 +267,7 @@ export default function AdminStats() {
               headingClassName="text-lg font-semibold"
               className={cardClass}
             >
+              <AdminListSorter value={partsSort} onChange={setPartsSort} />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
                 {friendlyParts.map((part) => (
                   <div key={part.label}>
@@ -293,8 +294,9 @@ export default function AdminStats() {
               headingClassName="text-lg font-semibold"
               className={cardClass}
             >
+              <AdminListSorter value={capacitySort} onChange={setCapacitySort} />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
-                {capacityStats.map((row) => (
+                {sortedCapacity.map((row) => (
                   <div key={row.label}>
                     <div className="flex justify-between text-sm mb-1">
                       <span className="font-medium">{row.label}</span>
