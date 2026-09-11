@@ -241,7 +241,9 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
       await saveFlowMessage(id, "user", trimmed);
 
       // Håll anropet inom serverns gränser: max 50 meddelanden och 4000 tecken kontext.
-      const context = `${personalContext}\n\n${contextPrompt}`.trim().slice(0, 4000);
+      const context = `${personalContext}\n\n${contextPrompt}\n\nDagens uppgifter (dagens datum ${todayStr()}, imorgon ${tomorrowISO()}):\n${taskListContext}`
+        .trim()
+        .slice(0, 4000);
       const { reply } = await chat({
         data: {
           messages: history.slice(-40).map((m) => ({ role: m.role, content: m.content })),
