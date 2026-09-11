@@ -21,11 +21,11 @@ export function batteryTone(level: number): BatteryTone {
 export function batteryLine(level: number): string {
   switch (batteryTone(level)) {
     case "high":
-      return "Du verkar ha bra med energi idag. 🌱 Kanske ett bra läge för den lite större saken.";
+      return "Du verkar ha bra med energi idag. Kanske finns det utrymme för en lite större sak.";
     case "medium":
       return "Du har ganska lagom med energi. Vi kan ta en sak i taget.";
     case "low":
-      return "Du verkar ha lite mindre energi idag. ❤️ Jag skulle göra resten lite enklare.";
+      return "Du verkar ha lite mindre energi idag. Jag skulle göra resten lite enklare.";
     case "verylow":
       return "Vi behöver inte pressa idag. Vad är viktigast just nu?";
   }
@@ -96,29 +96,31 @@ export function completionReaction(ctx: CompletionContext): { message: string; f
   const tone = batteryTone(ctx.battery);
 
   if (ctx.remainingToday === 0) {
-    return { message: `${what ? `${what} klart. ` : "Klart. "}Du är klar för idag. 🌙` };
+    return {
+      message: `${what ? `${what} klart. ` : "Klart. "}Nu andas vi ut. Du är klar för idag.`,
+    };
   }
   if (tone === "verylow" || tone === "low") {
     return {
-      message: `${what ? `${what} är avklarat. ` : "Klart. ❤️ "}Det räckte gott – vila lite nu.`,
+      message: `${what ? `${what} är klart. ` : "Klart. "}Nu andas vi ut. Det räckte gott. Hur känns axlarna just nu?`,
     };
   }
   if (tone === "high") {
     return {
-      message: `${what ? `Yes! ${what} är klar. 👏` : "Yes! Den är klar. 👏"}`,
-      followUp: "Vill du ta nästa eller pausa en stund?",
+      message: `${what ? `${what} är klart. ` : "Klart. "}Nu andas vi ut.`,
+      followUp: "Hur känns axlarna just nu?",
     };
   }
   return {
-    message: `${what ? `${what} klart. ` : "Klart. ❤️ "}En sak mindre i huvudet.`,
-    followUp: "Vill du ta nästa eller pausa en stund?",
+    message: `${what ? `${what} klart. ` : "Klart. "}En sak mindre i huvudet.`,
+    followUp: "Nu andas vi ut. Hur känns axlarna just nu?",
   };
 }
 
 /** När något passerat utan att bli gjort – aldrig skuld, alltid en väg vidare. */
 export function missedTaskLine(title: string, battery: number): string {
   const low = batteryTone(battery) === "low" || batteryTone(battery) === "verylow";
-  const base = `${title} blev inte riktigt som planerat. ❤️`;
+  const base = `${title} får vänta tills det finns mer utrymme.`;
   return low
     ? `${base} Du har också ganska lite energi idag – jag tycker vi gör det enklare.`
     : `${base} Vill du flytta den eller släppa den idag?`;

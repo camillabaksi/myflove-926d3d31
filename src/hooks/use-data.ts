@@ -4,6 +4,7 @@ import { useCloudSyncedList } from "../lib/cloud-list";
 import { track } from "../lib/analytics";
 import type { LifeArea } from "../lib/life-areas";
 import { flowDone } from "@/lib/flow-signal";
+import { haptic } from "@/lib/haptics";
 import { todayISO } from "@/lib/day";
 import { SECURE_UNLOCK_EVENT, unlockSecureLocal } from "@/lib/secure-local";
 import {
@@ -378,6 +379,7 @@ export function useTasks() {
     }
     if (task && !task.completed) {
       track("task_completed", { source: "app" });
+      haptic("success");
       flowDone(task.title);
     } else if (task) {
       track("task_reopened", { source: "app" });
@@ -571,6 +573,11 @@ export function useTasks() {
     until.setDate(until.getDate() + days);
     const untilStr = until.toISOString().split("T")[0] as string;
     setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, snoozedUntil: untilStr } : t)));
+    haptic("soft");
+    flowDone(
+      undefined,
+      "Nu andas vi ut. Du gjorde helt rätt som sparade det där till imorgon. Hur känns axlarna just nu?",
+    );
   };
 
   const unsnoozeTask = (id: string) => {

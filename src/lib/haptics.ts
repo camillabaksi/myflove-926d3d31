@@ -16,7 +16,7 @@ const PATTERNS: Record<HapticPattern, number | number[]> = {
   /** Du är längst ut i flödet och kan inte gå längre. */
   bump: [8, 40, 8],
   /** Något blev klart. */
-  success: [12, 50, 20],
+  success: 18,
 };
 
 function allowed(): boolean {

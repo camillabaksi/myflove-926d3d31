@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-11 – Zero-Guilt UX och Akut Lugn
+
+- Hem öppnar nu med en lugn hälsning, tydlig batterinivå och exakt två konkreta val från FlowScore.
+- Nytt Akut Lugn-läge pausar påminnelser i 15 minuter, döljer dagens krav och visar en stillsam nedräkning med Flow.
+- Passerade och uppskjutna uppgifter samlas under "Saker vi tar när du har energi" utan varningsspråk.
+- Slutförande och uppskjutning ger mjuk haptik, en diskret upplösning och varm återkoppling i stället för konfetti.
+
 ## 2026-09-11 – Fäll ihop block i hela appen
 
 - Alla gemensamma MyFlove-block kan nu minimeras och öppnas på appens olika sidor.

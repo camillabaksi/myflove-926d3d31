@@ -28,7 +28,7 @@ export interface PriorityTask {
 export const BUCKETS: PriorityBucket[] = ["nu", "sedan", "om-du-orkar", "kan-vanta"];
 
 export const BUCKET_META: Record<PriorityBucket, { emoji: string; label: string; dot: string }> = {
-  nu: { emoji: "🔴", label: "Gör nu", dot: "bg-destructive" },
+  nu: { emoji: "◉", label: "När det passar", dot: "bg-primary" },
   sedan: { emoji: "🟠", label: "Gör sedan", dot: "bg-sun" },
   "om-du-orkar": { emoji: "🟢", label: "Om du orkar", dot: "bg-mint" },
   "kan-vanta": { emoji: "⚪", label: "Kan vänta", dot: "bg-muted" },

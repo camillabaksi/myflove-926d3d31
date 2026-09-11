@@ -80,11 +80,14 @@ export function useFlowMoment(): FlowMoment {
   const [celebrating, setCelebrating] = useState(false);
 
   const [doneTitle, setDoneTitle] = useState<string | null>(null);
+  const [doneMessage, setDoneMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const onDone = (e: Event) => {
-      const title = (e as CustomEvent<{ title?: string }>).detail?.title ?? null;
+      const detail = (e as CustomEvent<{ title?: string; message?: string }>).detail;
+      const title = detail?.title ?? null;
       setDoneTitle(title);
+      setDoneMessage(detail?.message ?? null);
       setCelebrating(true);
       window.setTimeout(() => setCelebrating(false), 3200);
     };
@@ -149,7 +152,9 @@ export function useFlowMoment(): FlowMoment {
         ...base,
         id: "done",
         scene: "done",
-        message: reaction.followUp ? `${reaction.message} ${reaction.followUp}` : reaction.message,
+        message:
+          doneMessage ??
+          (reaction.followUp ? `${reaction.message} ${reaction.followUp}` : reaction.message),
         link: { href: "/idag", label: "Idag" },
       };
     }
@@ -396,6 +401,7 @@ export function useFlowMoment(): FlowMoment {
   }, [
     celebrating,
     doneTitle,
+    doneMessage,
     priorities,
     quietFrom,
     quietTo,

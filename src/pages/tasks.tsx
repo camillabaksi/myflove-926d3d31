@@ -26,7 +26,7 @@ import {
   Sparkles,
   Sun,
   CalendarClock,
-  AlertCircle,
+  Cloud,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { getRandomEncouragement } from "@/lib/encouragements";
@@ -673,10 +673,10 @@ export default function Tasks() {
                   headingClassName="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2"
                   title={
                     <>
-                      <AlertCircle size={14} /> Från tidigare
+                      <Cloud size={14} /> Saker vi tar när du har energi
                     </>
                   }
-                  help="Sånt som låg på en dag som passerat. Flytta eller gör – inget skäl till skam."
+                  help="De ligger tryggt här. Du behöver inte bestämma något om dem just nu."
                 >
                   {agenda.overdue.map(renderTask)}
                 </CollapsibleSection>
@@ -726,7 +726,7 @@ export default function Tasks() {
                   headingClassName="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2"
                   title={
                     <>
-                      <Moon size={16} /> Undanstoppat ett tag
+                      <Moon size={16} /> Saker vi tar när du har energi
                     </>
                   }
                   help="Sådant du skjutit upp. Tryck för att ta tillbaka det när du orkar."

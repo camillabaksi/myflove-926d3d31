@@ -73,14 +73,15 @@ describe("homeContextLine", () => {
 describe("completionReaction", () => {
   it("firar utan att pusha vid låg energi", () => {
     const r = completionReaction({ title: "Ring tandläkaren", battery: 20, remainingToday: 3 });
-    expect(r.message).toMatch(/vila lite/);
+    expect(r.message).toMatch(/andas vi ut/);
+    expect(r.message).toMatch(/axlarna/);
     expect(r.followUp).toBeUndefined();
   });
 
-  it("erbjuder nästa steg vid bra energi", () => {
+  it("landar mjukt även vid bra energi", () => {
     const r = completionReaction({ title: "Ring tandläkaren", battery: 85, remainingToday: 2 });
-    expect(r.message).toMatch(/Yes!/);
-    expect(r.followUp).toMatch(/pausa/);
+    expect(r.message).toMatch(/andas vi ut/);
+    expect(r.followUp).toMatch(/axlarna/);
   });
 
   it("avslutar dagen när inget är kvar", () => {

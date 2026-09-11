@@ -169,7 +169,7 @@ export const FRICTION_LABEL = (f: number) =>
   f <= 3 ? "låg friktion" : f <= 6 ? "medel friktion" : "hög friktion";
 
 export const PRIORITY_DOT: Record<Priority, string> = {
-  hög: "🔴",
+  hög: "◯",
   medel: "🟠",
   låg: "🟢",
 };

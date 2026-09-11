@@ -31,7 +31,7 @@ export const FRICTION_META: Record<
 > = {
   small: { emoji: "🟢", label: "Litet", minutes: 10 },
   medium: { emoji: "🟡", label: "Mellan", minutes: 30 },
-  large: { emoji: "🔴", label: "Stort", minutes: 60 },
+  large: { emoji: "◯", label: "Stort", minutes: 60 },
 };
 
 export const FRICTIONS: TaskFriction[] = ["small", "medium", "large"];

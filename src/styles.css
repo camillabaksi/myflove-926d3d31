@@ -146,6 +146,32 @@
   --border-accent: 2px solid hsl(var(--primary) / 0.35);
 }
 
+@keyframes calm-breathe {
+  0%,
+  100% {
+    transform: scale(0.94);
+    opacity: 0.72;
+  }
+  50% {
+    transform: scale(1.04);
+    opacity: 1;
+  }
+}
+
+.calm-breathing-halo {
+  animation: calm-breathe 8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .calm-breathing-halo {
+    animation: none;
+  }
+}
+
+html[data-npf-still="true"] .calm-breathing-halo {
+  animation: none;
+}
+
 .dark {
   --background: 260 30% 10%;
   --foreground: 264 40% 95%;
@@ -267,7 +293,6 @@
     overflow-wrap: anywhere;
   }
 }
-
 
 @utility surface-card {
   background-color: hsl(var(--card));

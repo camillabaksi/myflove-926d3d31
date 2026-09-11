@@ -313,7 +313,7 @@ export default function WorkflowPage() {
                     {capacityPlan.tooHeavy.slice(0, 3).map(({ task, meta }) => (
                       <li key={task.id} className="flex items-center justify-between gap-2">
                         <span>
-                          🔴 {task.title} · svårighetsgrad {meta.friction}/10
+                          ◯ {task.title} · svårighetsgrad {meta.friction}/10
                         </span>
                         <Button
                           size="sm"
