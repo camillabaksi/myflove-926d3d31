@@ -5,6 +5,9 @@ import { useDayJourney } from "@/hooks/use-day-journey";
 import { EVENING_ANSWERS, eveningReply } from "@/lib/day-journey";
 import { buildEveningInsight } from "@/lib/evening-insight";
 import { track } from "@/lib/analytics";
+import { ChevronDown } from "lucide-react";
+import { useCollapsible } from "@/lib/collapse-store";
+import { cn } from "@/lib/utils";
 
 /**
  * 🌙 Hur blev dagen? – frivillig och klar på ett tryck.
@@ -15,6 +18,7 @@ export default function EveningCheck() {
   const { t } = useLang();
   const { evening, eveningHistory, logEvening } = useEveningCheck();
   const { input } = useDayJourney();
+  const { collapsed, toggle } = useCollapsible("home-evening-check");
 
   const insight = useMemo(
     () => buildEveningInsight(eveningHistory, evening),
@@ -27,17 +31,20 @@ export default function EveningCheck() {
       data-testid="home-evening-check"
       className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
     >
-      <h2 className="text-base font-semibold text-ink">
-        <span aria-hidden>🌙</span> {t("Hur blev dagen?")}
-      </h2>
+      <button type="button" onClick={toggle} aria-expanded={!collapsed} className="flex w-full items-center gap-2 text-left">
+        <h2 className="min-w-0 flex-1 text-base font-semibold text-ink">
+          <span aria-hidden>🌙</span> {t("Hur blev dagen?")}
+        </h2>
+        <ChevronDown size={18} className={cn("text-muted-foreground transition-transform", collapsed && "-rotate-90")} />
+      </button>
 
-      {evening ? (
+      {!collapsed && (evening ? (
         <p className="mt-2 text-sm text-muted-foreground">{t(eveningReply(evening.answer))}</p>
       ) : (
         <p className="mt-1 text-xs text-muted-foreground">{t("Helt frivilligt – ett tryck räcker.")}</p>
-      )}
+      ))}
 
-      <div className="mt-3 flex flex-wrap gap-2">
+      {!collapsed && <div className="mt-3 flex flex-wrap gap-2">
         {EVENING_ANSWERS.map((option) => {
           const active = evening?.answer === option.id;
           return (
@@ -64,9 +71,9 @@ export default function EveningCheck() {
             </button>
           );
         })}
-      </div>
+      </div>}
 
-      {(insight.todayLine || insight.patternLine) && (
+      {!collapsed && (insight.todayLine || insight.patternLine) && (
         <div className="mt-4 rounded-2xl bg-muted/50 p-4">
           <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
             {t("Förväntat och faktiskt")}
