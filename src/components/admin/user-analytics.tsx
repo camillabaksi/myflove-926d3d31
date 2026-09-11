@@ -143,7 +143,14 @@ export default function UserAnalytics() {
   });
 
   const myId = typeof window !== "undefined" ? getAnalyticsSessionId() : "";
-  const rows = (data?.sessions ?? []).filter((s) => (externalOnly ? s.isInternal !== true : true));
+  const rows = [...(data?.sessions ?? [])]
+    .filter((s) => (externalOnly ? s.isInternal !== true : true))
+    .sort((a, b) => {
+      if (sortKey === "newest") return b.lastSeen.localeCompare(a.lastSeen);
+      if (sortKey === "oldest") return a.firstSeen.localeCompare(b.firstSeen);
+      if (sortKey === "most") return b.events - a.events;
+      return a.events - b.events;
+    });
   const shownEvents = rows.reduce((sum, s) => sum + s.events, 0);
 
   return (
