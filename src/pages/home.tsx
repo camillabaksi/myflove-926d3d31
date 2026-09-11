@@ -191,13 +191,17 @@ export default function Home() {
           <section className="home-main-surface pop-in" aria-label={t("Din lugna start")}>
             <header className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4">
               <div className="min-w-0">
-                <p className="mb-1 text-xs font-semibold uppercase text-primary">{t("Din dag, i din takt")}</p>
+                <p className="mb-1 text-xs font-semibold uppercase text-primary">
+                  {t("Din dag, i din takt")}
+                </p>
                 <h1 className="truncate font-display text-2xl font-bold text-ink sm:text-3xl">
                   {name ? `${t("Hej")} ${name}` : t("Hej")}
                 </h1>
                 <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">
                   {awayForDays
-                    ? t("Vad skönt att se dig. Vi tar det lugnt idag, oavsett hur dagarna har varit.")
+                    ? t(
+                        "Vad skönt att se dig. Vi tar det lugnt idag, oavsett hur dagarna har varit.",
+                      )
                     : t("Vi tar reda på vad som känns rimligt idag.")}
                 </p>
                 {editingName ? (
@@ -217,7 +221,9 @@ export default function Home() {
                       className="min-w-0 rounded-full border border-border bg-background px-3 py-1.5 text-sm"
                       maxLength={32}
                     />
-                    <Button type="submit" size="sm">{t("Spara")}</Button>
+                    <Button type="submit" size="sm">
+                      {t("Spara")}
+                    </Button>
                     <Button
                       type="button"
                       variant="ghost"
@@ -292,7 +298,9 @@ export default function Home() {
                 );
               })}
             </div>
-            {adaptiveNote && <p className="mt-2 text-center text-xs text-muted-foreground">{adaptiveNote}</p>}
+            {adaptiveNote && (
+              <p className="mt-2 text-center text-xs text-muted-foreground">{adaptiveNote}</p>
+            )}
 
             <div className="mt-5 grid gap-4 md:grid-cols-5">
               <CollapsibleSection
@@ -304,18 +312,30 @@ export default function Home() {
               >
                 <div className="flex items-end justify-between gap-3">
                   <div>
-                    <span className="block text-4xl font-bold tabular-nums text-ink">{battery}%</span>
+                    <span className="block text-4xl font-bold tabular-nums text-ink">
+                      {battery}%
+                    </span>
                     <p className="mt-1 text-xs text-muted-foreground">{batteryLine}</p>
                   </div>
-                  <BatteryMedium className="h-10 w-10 shrink-0 text-primary" aria-hidden strokeWidth={1.75} />
+                  <BatteryMedium
+                    className="h-10 w-10 shrink-0 text-primary"
+                    aria-hidden
+                    strokeWidth={1.75}
+                  />
                 </div>
-                <progress className="home-battery-progress" max={100} value={battery} aria-label={`${t("Ditt batteri")} ${battery}%`} />
+                <progress
+                  className="home-battery-progress"
+                  max={100}
+                  value={battery}
+                  aria-label={`${t("Ditt batteri")} ${battery}%`}
+                />
                 <Link
                   href="/mitt-batteri"
                   onClick={() => track("home_widget_opened", { source: "logga" })}
                   className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
                 >
-                  {energyValue != null ? t("Tips för mer energi") : t("Logga energi & mående")} <ArrowRight size={14} />
+                  {energyValue != null ? t("Tips för mer energi") : t("Logga energi & mående")}{" "}
+                  <ArrowRight size={14} />
                 </Link>
               </CollapsibleSection>
 
@@ -323,7 +343,10 @@ export default function Home() {
                 id="home-today-summary"
                 title={t("Idag")}
                 actions={
-                  <Link href="/idag" className="shrink-0 text-xs font-medium text-primary hover:underline">
+                  <Link
+                    href="/idag"
+                    className="shrink-0 text-xs font-medium text-primary hover:underline"
+                  >
                     {t("Visa allt")}
                   </Link>
                 }
@@ -332,14 +355,23 @@ export default function Home() {
                 headingClassName="text-base font-semibold text-ink"
               >
                 {todayEntries.length === 0 ? (
-                  <p className="text-sm text-muted-foreground">{t("Inget inlagt för idag ännu. Det är också helt okej.")}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {t("Inget inlagt för idag ännu. Det är också helt okej.")}
+                  </p>
                 ) : (
                   <ul>
                     {todayEntries.slice(0, 3).map((entry) => (
                       <li key={entry.id} className="border-b border-border/50 last:border-b-0">
-                        <Link href="/idag" className="grid grid-cols-[3rem_minmax(0,1fr)_auto] items-center gap-2 py-2.5">
-                          <span className="text-xs font-semibold tabular-nums text-muted-foreground">{entry.time ?? "–"}</span>
-                          <span className="truncate text-sm font-medium text-ink">{entry.title}</span>
+                        <Link
+                          href="/idag"
+                          className="grid grid-cols-[3rem_minmax(0,1fr)_auto] items-center gap-2 py-2.5"
+                        >
+                          <span className="text-xs font-semibold tabular-nums text-muted-foreground">
+                            {entry.time ?? "–"}
+                          </span>
+                          <span className="truncate text-sm font-medium text-ink">
+                            {entry.title}
+                          </span>
                           <ChevronRight size={16} className="shrink-0 text-muted-foreground" />
                         </Link>
                       </li>
