@@ -5,6 +5,7 @@
 - Enkelt läge visar nu bara hälsningen och den centrala dagsresan: Hur mår du?, Vad händer? och Behöver du planera om?
 - Flow-kort, nästa steg, kvällscheck, extrafunktioner, insikter, rutiner och övriga sekundära block döljs tills du väljer "visa allt igen".
 - De tre huvudstegen får kortare förklaringar och visar bara den viktigaste statusraden i enkelt läge.
+- Knappen visar nu rätt läge genom att följa samma inställning som faktiskt döljer innehållet.
 
 ## 2026-09-10 – Sluttid i Lägg till
 

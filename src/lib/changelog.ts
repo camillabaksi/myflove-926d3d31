@@ -15,6 +15,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
       'Ny knapp på Hem: "Vill du ha det lugnare? Visa mindre på skärmen" slår på enkelt läge med ett tryck (2026-09-11)',
       "Enkelt läge visar bara hälsningen och kärnflödet Hur mår du? → Vad händer? → Planera om? (2026-09-11)",
       "Huvudstegen får kortare förklaringar och bara den viktigaste statusraden; allt annat återkommer med Visa allt igen (2026-09-11)",
+      "Knappen visar rätt läge genom att följa samma inställning som faktiskt döljer innehållet (2026-09-11)",
       'Flow-maskoten blir helt stilla vid "Ingen rörelse" – även blinkningar och blick (2026-09-11)',
     ],
   },

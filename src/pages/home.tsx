@@ -83,8 +83,8 @@ export default function Home() {
   const { settings: flowSettings } = useFlowSettings();
   const patterns = useEverydayPatterns();
   const { settings: npf, update: updateNpf } = useNpfSettings();
-  /** Enkelt läge = färre saker + lugnare färger + ingen rörelse + enkla ord. */
-  const simpleMode = npf.less && npf.calm && npf.stillness;
+  /** Enkelt läge följer det val som faktiskt gömmer innehåll. */
+  const simpleMode = npf.less;
   const toggleSimpleMode = () =>
     updateNpf(
       simpleMode
