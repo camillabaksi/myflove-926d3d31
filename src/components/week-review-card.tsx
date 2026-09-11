@@ -1,11 +1,13 @@
 import { useEffect } from "react";
 import { Link } from "wouter";
-import { ArrowRight, CalendarDays, Brain, BatteryMedium, Heart } from "lucide-react";
+import { ArrowRight, CalendarDays, Brain, BatteryMedium, Heart, ChevronDown } from "lucide-react";
 import { FlowMascot } from "@/components/flow-mascot";
 import { ENERGY_META, ENERGY_CHOICES } from "@/lib/activity-history";
 import type { WeekReview } from "@/lib/week-review";
 import { track } from "@/lib/analytics";
 import { useLang } from "@/hooks/use-language";
+import { useCollapsible } from "@/lib/collapse-store";
+import { cn } from "@/lib/utils";
 
 /**
  * 💜 Din vecka – lugn sammanfattning av veckan som varit.
@@ -21,6 +23,7 @@ export function WeekReviewCard({
   showLink?: boolean;
 }) {
   const { t } = useLang();
+  const { collapsed, toggle } = useCollapsible("home-week-review");
   useEffect(() => {
     track("week_review_viewed");
   }, []);
@@ -41,10 +44,13 @@ export function WeekReviewCard({
       <div className="flex items-start gap-3">
         <FlowMascot size="xs" mood="calm" className="mt-0.5 shrink-0 flow-alive" alt="" />
         <div className="min-w-0 flex-1">
-          <h2 className="text-base font-semibold text-ink">{t("💜 Din vecka")}</h2>
-          <p className="mt-0.5 text-xs text-muted-foreground">{t("Den här veckan, i lugn takt")}</p>
+          <button type="button" onClick={toggle} aria-expanded={!collapsed} className="flex w-full items-center gap-2 text-left">
+            <h2 className="min-w-0 flex-1 text-base font-semibold text-ink">{t("💜 Din vecka")}</h2>
+            <ChevronDown size={18} className={cn("text-muted-foreground transition-transform", collapsed && "-rotate-90")} />
+          </button>
+          {!collapsed && <p className="mt-0.5 text-xs text-muted-foreground">{t("Den här veckan, i lugn takt")}</p>}
 
-          <dl className="mt-3 grid grid-cols-2 gap-2">
+          {!collapsed && <dl className="mt-3 grid grid-cols-2 gap-2">
             {rows.map((row) => (
               <div
                 key={row.label}
@@ -57,11 +63,11 @@ export function WeekReviewCard({
                 </div>
               </div>
             ))}
-          </dl>
+          </dl>}
 
-          <p className="mt-3 text-sm leading-relaxed text-ink">{t(review.summary)}</p>
+          {!collapsed && <p className="mt-3 text-sm leading-relaxed text-ink">{t(review.summary)}</p>}
 
-          {review.enoughData && review.completedCount > 0 && (
+          {!collapsed && review.enoughData && review.completedCount > 0 && (
             <ul className="mt-3 flex flex-wrap gap-2">
               {ENERGY_CHOICES.filter((c) => review.impact[c] > 0).map((choice) => (
                 <li
@@ -74,7 +80,7 @@ export function WeekReviewCard({
             </ul>
           )}
 
-          {review.observations.length > 1 && (
+          {!collapsed && review.observations.length > 1 && (
             <ul className="mt-3 space-y-1.5">
               {review.observations.slice(1).map((line) => (
                 <li key={line} className="text-sm text-ink">
@@ -84,7 +90,7 @@ export function WeekReviewCard({
             </ul>
           )}
 
-          {review.suggestions.length > 0 && (
+          {!collapsed && review.suggestions.length > 0 && (
             <div className="mt-4 rounded-2xl bg-lavender/30 p-3">
               <p className="text-sm font-medium text-ink">{t("Inför nästa vecka 💜")}</p>
               <ul className="mt-1.5 space-y-1.5">
@@ -100,7 +106,7 @@ export function WeekReviewCard({
             </div>
           )}
 
-          {showLink && (
+          {!collapsed && showLink && (
             <Link
               href="/historik"
               className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"

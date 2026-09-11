@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { toast } from "sonner";
-import { X, ArrowRight, ChevronDown } from "lucide-react";
+import { ArrowRight, ChevronDown } from "lucide-react";
 import { FlowMascot } from "@/components/flow-mascot";
 import ActivityEnergyPrompt from "@/components/activity-energy-prompt";
 import { useFlowHome } from "@/hooks/use-flow-home";
@@ -40,12 +40,9 @@ export default function FlowHomeCard() {
   const { reading } = useEnergyBattery();
   const [, navigate] = useLocation();
 
-  const [closed, setClosed] = useState(false);
   const [suggesting, setSuggesting] = useState(false);
   const [energyItem, setEnergyItem] = useState<FlowItem | null>(null);
   const { collapsed, toggle } = useCollapsible("home-flow");
-
-  if (closed) return null;
 
   const go = (id: FlowHomeChoiceId) => {
     track("flow_interaction", { source: id });
@@ -152,7 +149,7 @@ export default function FlowHomeCard() {
       data-testid="home-flow"
       className="relative overflow-hidden rounded-3xl border border-border/60 bg-card p-4 shadow-soft sm:p-5"
     >
-      <div className="absolute right-3 top-3 z-10 flex items-center gap-1">
+      <div className="absolute right-3 top-3 z-10">
         <button
           type="button"
           aria-label={collapsed ? "Öppna Flow" : "Minimera Flow"}
@@ -161,14 +158,6 @@ export default function FlowHomeCard() {
           className="rounded-full p-1 text-muted-foreground/70 transition hover:text-foreground"
         >
           <ChevronDown size={17} className={cn("transition-transform", collapsed && "-rotate-90")} />
-        </button>
-        <button
-          type="button"
-          aria-label="Stäng Flow"
-          onClick={() => setClosed(true)}
-          className="rounded-full p-1 text-muted-foreground/70 transition hover:text-foreground"
-        >
-          <X size={15} />
         </button>
       </div>
 
@@ -179,7 +168,7 @@ export default function FlowHomeCard() {
           className="flow-alive shrink-0"
           alt=""
         />
-        <div className="min-w-0 space-y-3 pr-12">
+        <div className="min-w-0 space-y-3 pr-7">
           <p className="text-sm font-medium leading-snug text-ink">{prompt.message}</p>
 
           {!collapsed && prompt.mode === "liggande" && stale && (
@@ -226,7 +215,7 @@ export default function FlowHomeCard() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => setClosed(true)}
+                  onClick={toggle}
                   className="rounded-full px-3 py-1.5 text-xs text-muted-foreground hover:underline"
                 >
                   Inte nu

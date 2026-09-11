@@ -2,7 +2,7 @@
 
 ## 2026-09-11 – Fäll ihop block på Hem
 
-- Flow, de tre huvudstegen, nästa rimliga steg och kvällschecken kan nu minimeras och öppnas igen var för sig.
+- Flow, de tre huvudstegen, nästa rimliga steg, kvällschecken och övriga informationskort på Hem kan nu minimeras och öppnas igen var för sig.
 - Varje val sparas, så Hem behåller den mängd information användaren själv valt.
 
 ## 2026-09-11 – Tydligare enkelt läge på Hem

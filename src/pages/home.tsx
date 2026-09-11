@@ -350,12 +350,13 @@ export default function Home() {
 
               {/* Ditt batteri – stort, lugnt, som i mockupen. */}
               <MyFloveWide style={{ order: 2 }} className="min-w-0">
-                <section
-                  aria-label={t("Ditt batteri")}
+                <CollapsibleSection
+                  id="home-battery-summary"
+                  title={t("Ditt batteri")}
                   data-testid="home-recovery"
                   className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+                  headingClassName="text-base font-semibold text-ink"
                 >
-                  <h2 className="text-base font-semibold text-ink">{t("Ditt batteri")}</h2>
                   <div className="mt-3 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4">
                     <div className="flex items-center gap-3 rounded-2xl bg-lavender/30 px-4 py-3">
                       <BatteryMedium
@@ -387,25 +388,26 @@ export default function Home() {
                     {energyValue != null ? t("Tips för mer energi") : t("Logga energi & mående")}{" "}
                     <ArrowRight size={14} />
                   </Link>
-                </section>
+                </CollapsibleSection>
               </MyFloveWide>
 
               {/* Idag – tider och saker, som i mockupen. */}
               <MyFloveWide style={{ order: 3 }} className="min-w-0">
-                <section
-                  aria-label={t("Idag")}
-                  data-testid="home-today"
-                  className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
-                >
-                  <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
-                    <h2 className="truncate text-base font-semibold text-ink">{t("Idag")}</h2>
+                <CollapsibleSection
+                  id="home-today-summary"
+                  title={t("Idag")}
+                  actions={
                     <Link
                       href="/idag"
                       className="shrink-0 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
                     >
                       {t("Visa dagsschema")} <ChevronRight size={15} />
                     </Link>
-                  </div>
+                  }
+                  data-testid="home-today"
+                  className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+                  headingClassName="text-base font-semibold text-ink"
+                >
                   {todayEntries.length === 0 ? (
                     <p className="mt-3 text-sm text-muted-foreground">
                       {t("Inget inlagt för idag ännu. Det är också helt okej.")}
@@ -437,27 +439,26 @@ export default function Home() {
                       ))}
                     </ul>
                   )}
-                </section>
+                </CollapsibleSection>
               </MyFloveWide>
 
               {/* Från ditt huvud – senaste QuickFlow-tankarna. */}
               <MyFloveWide style={{ order: 4 }} className="min-w-0">
-                <section
-                  aria-label={t("Från ditt huvud")}
-                  data-testid="home-quickflow-latest"
-                  className="rounded-3xl border border-border/60 bg-lavender/25 p-4 shadow-soft"
-                >
-                  <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
-                    <h2 className="truncate text-base font-semibold text-ink">
-                      {t("Från ditt huvud")}
-                    </h2>
+                <CollapsibleSection
+                  id="home-quickflow-latest"
+                  title={t("Från ditt huvud")}
+                  actions={
                     <Link
                       href="/quickflow"
                       className="shrink-0 inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
                     >
                       {t("Visa alla")} <ArrowRight size={13} />
                     </Link>
-                  </div>
+                  }
+                  data-testid="home-quickflow-latest"
+                  className="rounded-3xl border border-border/60 bg-lavender/25 p-4 shadow-soft"
+                  headingClassName="text-base font-semibold text-ink"
+                >
                   {openItems.length === 0 ? (
                     <p className="mt-3 text-sm text-muted-foreground">
                       {t("Inget som snurrar just nu – tryck på Quickflow när något dyker upp.")}
@@ -476,7 +477,7 @@ export default function Home() {
                       ))}
                     </ul>
                   )}
-                </section>
+                </CollapsibleSection>
               </MyFloveWide>
             </div>
           </CollapsibleSection>
@@ -484,9 +485,11 @@ export default function Home() {
 
         {/* Uppmuntrande citat – lugnt avslut, som i mockupen. */}
         <MyFloveWide style={{ order: 5 }} className="min-w-0" data-npf="optional">
-          <section
-            aria-label={t("Dagens tanke")}
+          <CollapsibleSection
+            id="home-daily-thought"
+            title={t("Dagens tanke")}
             className="rounded-3xl border border-border/60 bg-lavender/25 p-5 shadow-soft"
+            headingClassName="text-base font-semibold text-ink"
           >
             <div className="flex items-start gap-3">
               <Heart className="mt-0.5 h-6 w-6 shrink-0 text-primary" aria-hidden />
@@ -496,7 +499,7 @@ export default function Home() {
                 {t("skapar stora förändringar.")}
               </p>
             </div>
-          </section>
+          </CollapsibleSection>
         </MyFloveWide>
 
         {/* 💜 Din vecka – visas på söndagar som en lugn sammanfattning. */}
@@ -509,18 +512,17 @@ export default function Home() {
         {/* Din vardag – vad MyFlove lärt sig av dina egna aktiviteter och loggar. */}
         {patterns.ready && (
           <MyFloveWide style={{ order: 4.5 }} className="min-w-0" data-npf="optional">
-            <section
-              aria-label={t("Det här har MyFlove lärt sig om din vardag")}
+            <CollapsibleSection
+              id="home-everyday-patterns"
+              title={t("Din vardag")}
+              description={t("Det här har MyFlove lärt sig av dina egna dagar")}
               data-testid="home-everyday-patterns"
               className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+              headingClassName="text-base font-semibold text-ink"
             >
               <div className="flex items-start gap-3">
                 <FlowMascot size="xs" mood="calm" className="mt-0.5 shrink-0 flow-alive" alt="" />
                 <div className="min-w-0 flex-1">
-                  <h2 className="text-base font-semibold text-ink">{t("Din vardag")}</h2>
-                  <p className="mt-0.5 text-xs text-muted-foreground">
-                    {t("Det här har MyFlove lärt sig av dina egna dagar")}
-                  </p>
                   <ul className="mt-3 space-y-2">
                     {patterns.lines.map((line) => (
                       <li key={line} className="flex items-start gap-2 text-sm text-ink">
@@ -538,7 +540,7 @@ export default function Home() {
                   </Link>
                 </div>
               </div>
-            </section>
+            </CollapsibleSection>
           </MyFloveWide>
         )}
 
