@@ -31,7 +31,11 @@ function useIsInvestor() {
 }
 
 const BLUEPRINT_VERSIONS = [
-  { version: "4.1", label: "Senaste – enkel start, adaptiv personalisering och energihistorik" },
+  {
+    version: "4.2",
+    label: "Senaste – guidad dagsresa, enkelt läge, andningsljus och batteri mot faktisk tid",
+  },
+  { version: "4.1", label: "Enkel start, adaptiv personalisering och energihistorik" },
   { version: "3.7", label: "En enda lugn väg genom vardagen" },
   { version: "3.6", label: "Lugnare helhet, tydligare vägar och levande Flow" },
   { version: "3.5", label: "Levande Flow och Flow-chatten" },
