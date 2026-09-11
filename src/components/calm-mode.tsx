@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { Moon, X } from "lucide-react";
 import { FlowMascot } from "@/components/flow-mascot";
 import { Button } from "@/components/ui/button";
