@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-11";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Handla/köpa hamnar i Inköpslistan",
+    items: [
+      "Skriver du något om att handla eller köpa i ＋ Lägg till föreslås varan också till Inköpslistan (2026-09-11)",
+      "Förslaget kan stängas av, och varunamnet rensas automatiskt (2026-09-11)",
+    ],
+  },
+
+  {
     title: "Pitchdeck som PDF och Word",
     items: [
       "Pitchdecket 4.2 finns nu även som Word (DOCX) med alla slides, inklusive demosliden sist (2026-09-11)",

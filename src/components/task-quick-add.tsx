@@ -2,7 +2,10 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { looksLikeShopping, shoppingTitleFrom } from "@/lib/quickflow";
+import { useSharedShoppingList } from "@/hooks/use-shared-shopping-list";
 import { todayISO, type TaskFriction, type EnergyImpact } from "@/lib/task-agenda";
 
 export interface QuickAddResult {
@@ -14,6 +17,36 @@ export interface QuickAddResult {
   /** Behålls i resultatet för bakåtkompatibilitet med befintliga anrop. */
   energyImpact?: EnergyImpact;
   friction?: TaskFriction;
+}
+
+/** Erbjuder att lägga varan i Inköpslistan när texten låter som ett inköp. */
+function ShoppingHint({
+  title,
+  checked,
+  onChange,
+}: {
+  title: string;
+  checked: boolean;
+  onChange: (next: boolean) => void;
+}) {
+  if (!looksLikeShopping(title)) return null;
+  const item = shoppingTitleFrom(title);
+  return (
+    <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-primary/30 bg-primary/5 px-3 py-2 text-left text-sm">
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={(event) => onChange(event.target.checked)}
+        className="mt-0.5 h-4 w-4 accent-[hsl(var(--primary))]"
+      />
+      <span>
+        <span className="block font-semibold text-ink">Lägg också i Inköpslistan</span>
+        <span className="block text-xs text-muted-foreground">
+          Det här låter som ett inköp – ”{item}” hamnar i listan.
+        </span>
+      </span>
+    </label>
+  );
 }
 
 type AddMode = "done" | "planned";
@@ -49,12 +82,15 @@ export function TaskQuickAdd({
     defaultDate && /^\d{4}-\d{2}-\d{2}$/.test(defaultDate) ? defaultDate : todayISO();
   const [date, setDate] = useState(baseDate);
   const [time, setTime] = useState("");
+  const [alsoShopping, setAlsoShopping] = useState(true);
+  const { addItem: addShoppingItem } = useSharedShoppingList();
 
   const reset = () => {
     setMode(null);
     setTitle("");
     setDate(baseDate);
     setTime("");
+    setAlsoShopping(true);
   };
 
   const chooseMode = (nextMode: AddMode) => {
@@ -67,6 +103,10 @@ export function TaskQuickAdd({
     const trimmed = title.trim();
     const safeDate = /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : baseDate;
     if (!trimmed || !mode) return;
+    if (alsoShopping && looksLikeShopping(trimmed)) {
+      addShoppingItem(shoppingTitleFrom(trimmed));
+      toast.success("Tillagd i Inköpslistan också. 💙");
+    }
     onAdd({
       title: trimmed.slice(0, 240),
       dueDate: safeDate,
@@ -171,6 +211,8 @@ export function TaskQuickAdd({
                 aria-label="Vad"
               />
 
+              <ShoppingHint title={title} checked={alsoShopping} onChange={setAlsoShopping} />
+
               <div className="space-y-2">
                 <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                   När?
@@ -253,11 +295,17 @@ export function QuickAddInline({
   const [mode, setMode] = useState<AddMode | null>(null);
   const [title, setTitle] = useState("");
   const [time, setTime] = useState("");
+  const [alsoShopping, setAlsoShopping] = useState(true);
+  const { addItem: addShoppingItem } = useSharedShoppingList();
   const baseDate = /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : todayISO();
 
   const save = () => {
     const trimmed = title.trim();
     if (!trimmed || !mode) return;
+    if (alsoShopping && looksLikeShopping(trimmed)) {
+      addShoppingItem(shoppingTitleFrom(trimmed));
+      toast.success("Tillagd i Inköpslistan också. 💙");
+    }
     onAdd({
       title: trimmed.slice(0, 240),
       dueDate: baseDate,
@@ -268,6 +316,7 @@ export function QuickAddInline({
     setMode(null);
     setTitle("");
     setTime("");
+    setAlsoShopping(true);
     onClose?.();
   };
 
@@ -357,6 +406,8 @@ export function QuickAddInline({
             className="h-12 rounded-2xl bg-card text-base"
             aria-label="Vad"
           />
+
+          <ShoppingHint title={title} checked={alsoShopping} onChange={setAlsoShopping} />
 
           <div className="flex items-center gap-2">
             <Input

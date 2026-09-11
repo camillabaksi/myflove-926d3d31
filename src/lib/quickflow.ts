@@ -579,6 +579,12 @@ const ENERGY_WORDS =
 const IDEA_WORDS = /(kanske|idé|ide|skulle vilja|drömmer|tänkte att|någon gång|vore kul)/;
 
 /** Ren varutitel ur en fritext: "köpa schampo på ica" → "schampo". */
+/** Känns texten som ett inköp? ("handla mjölk", "köpa schampo") */
+export function looksLikeShopping(text: string): boolean {
+  const t = text.toLowerCase();
+  return SHOPPING_WORDS.test(t) && !/(ring|boka|betala)/.test(t);
+}
+
 export function shoppingTitleFrom(text: string): string {
   const cleaned = text
     .replace(/^\s*(kom ihåg att|glöm inte att|jag (ska|måste|behöver))\s+/i, "")
