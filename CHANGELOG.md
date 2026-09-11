@@ -1,3 +1,8 @@
+## 2026-09-11 – Sortering i användare och roller
+
+- Användarlistan i admin kan nu sorteras på alla kolumner: namn, senast aktiv, senaste inloggning, skapad och roller.
+- Klicka på kolumnrubriken för att byta sorteringsriktning.
+
 ## 2026-09-11 – Sortering i hela statistikdelen
 
 - Alla listor på adminsidans statistik kan nu sorteras: "Vad använder människor?", "Kapacitet & mående", "Mest använda delar av appen", "Mest besökta sidor" och "Funktioner som faktiskt används".

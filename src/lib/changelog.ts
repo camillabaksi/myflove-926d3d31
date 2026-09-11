@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-11";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Sortering i användare och roller",
+    items: [
+      "Användarlistan i admin kan sorteras på alla kolumner: namn, senast aktiv, senaste inloggning, skapad och roller (2026-09-11)",
+      "Klicka på kolumnrubriken för att byta sorteringsriktning (2026-09-11)",
+    ],
+  },
+  {
     title: "Sortering i hela statistikdelen",
     items: [
       "Alla listor på adminsidans statistik kan nu sorteras: vad människor använder, kapacitet & mående, mest använda delar, mest besökta sidor och funktioner som faktiskt används.",
