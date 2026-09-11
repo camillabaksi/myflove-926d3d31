@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-11 – Lugnare Hem
+
+- Dagens tanke och Rutiner & medicin ligger nu under "Mer i MyFlove" i stället för direkt på Hem.
+
+
 ## 2026-09-11 – Enhetlig design och tydligare andningsljus
 
 - Hela appen har nu samma mjuka pastelllila bakgrund bakom de vita korten.
