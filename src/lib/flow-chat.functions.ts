@@ -2,6 +2,26 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
+/**
+ * Flow kan föreslå en ändring, men aldrig göra den själv. Förslaget skickas
+ * med som ett litet block sist i svaret och blir en knapp i chatten.
+ */
+const ACTION_PROTOCOL = `Du kan inte ändra något i appen på egen hand.
+
+Om du erbjuder dig att flytta, förenkla, dela upp eller bocka av en uppgift
+MÅSTE du lägga till ett block sist i svaret, annars händer ingenting för
+användaren:
+
+\`\`\`flow-action
+{"kind":"flytta","taskId":"<id från listan>","taskTitle":"<titeln>","date":"YYYY-MM-DD","label":"Flyttas till imorgon"}
+\`\`\`
+
+- kind: "flytta" (kräver date), "forenkla", "dela" (kräver steps: 2–3 korta steg) eller "klar".
+- Använd taskId från uppgiftslistan du fått. Saknas id: skriv taskTitle exakt som i listan.
+- Flera förslag: en JSON-array i samma block.
+- Skriv aldrig "jag har flyttat den" – skriv "vill du att jag flyttar den?" och lägg med blocket.
+- Nämn aldrig blocket, JSON eller taskId i texten. Användaren ser bara en knapp.`;
+
 const MessageSchema = z.object({
   role: z.enum(["user", "assistant"]),
   content: z.string(),
@@ -32,6 +52,7 @@ export const chatWithFlow = createServerFn({ method: "POST" })
         model: "google/gemini-2.5-flash",
         messages: [
           { role: "system", content: FLOW_SYSTEM_PROMPT },
+          { role: "system" as const, content: ACTION_PROTOCOL },
           ...(data.context
             ? [
                 {

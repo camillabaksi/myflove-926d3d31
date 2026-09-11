@@ -45,10 +45,24 @@ import {
   type FlowMessage,
 } from "@/hooks/use-flow-chats";
 import { todayISO } from "@/lib/day";
+import {
+  ACTION_EMOJI,
+  ACTION_LABEL,
+  actionCta,
+  matchTask,
+  parseFlowReply,
+  type FlowAction,
+} from "@/lib/flow-actions";
 import { relativeDayLabel } from "@/lib/flow-chat-history";
 import { track } from "@/lib/analytics";
 
 const todayStr = (): string => todayISO();
+
+const tomorrowISO = (): string => {
+  const d = new Date();
+  d.setDate(d.getDate() + 1);
+  return todayISO(d);
+};
 
 const NEW_CHAT_FLAG = "myflove-flow-new-chat";
 
@@ -138,7 +152,44 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
     setPlace(placeFor(home[area]));
   };
 
-  const { activeTasks } = useTasks();
+  const { activeTasks, setTaskDueDate, addTaskSteps, updateTask, toggleTask } = useTasks();
+  const [doneActions, setDoneActions] = useState<Record<string, string>>({});
+
+  /** Uppgifterna Flow får referera till – bara titel och id, inget privat. */
+  const taskListContext = activeTasks
+    .slice(0, 20)
+    .map((t) => `- id:${t.id} · ${t.title}${t.dueDate ? ` (datum ${t.dueDate})` : ""}`)
+    .join("\n");
+
+  const runAction = (key: string, action: FlowAction) => {
+    const task = matchTask(action, activeTasks);
+    if (!task) {
+      setDoneActions((p) => ({ ...p, [key]: "Jag hittar inte uppgiften längre." }));
+      return;
+    }
+    if (action.kind === "flytta") {
+      const date = action.date ?? tomorrowISO();
+      setTaskDueDate(task.id, date);
+      if (action.steps?.length)
+        addTaskSteps(
+          task.id,
+          action.steps.map((title) => ({ title })),
+        );
+      setDoneActions((p) => ({ ...p, [key]: `Flyttad till ${date}.` }));
+    } else if (action.kind === "forenkla") {
+      updateTask(task.id, { friction: "small" });
+      setDoneActions((p) => ({ ...p, [key]: "Nu räcker en mindre version." }));
+    } else if (action.kind === "dela") {
+      addTaskSteps(
+        task.id,
+        (action.steps ?? ["Första lilla steget"]).map((title) => ({ title })),
+      );
+      setDoneActions((p) => ({ ...p, [key]: "Uppdelad i små steg." }));
+    } else {
+      toggleTask(task.id);
+      setDoneActions((p) => ({ ...p, [key]: "Avbockad." }));
+    }
+  };
   const { moods } = useMoods();
   const { currentFocus } = useFocus();
   const { activeReminders } = useReminders();
@@ -203,7 +254,10 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
       await saveFlowMessage(id, "user", trimmed);
 
       // Håll anropet inom serverns gränser: max 50 meddelanden och 4000 tecken kontext.
-      const context = `${personalContext}\n\n${contextPrompt}`.trim().slice(0, 4000);
+      const context =
+        `${personalContext}\n\n${contextPrompt}\n\nDagens uppgifter (dagens datum ${todayStr()}, imorgon ${tomorrowISO()}):\n${taskListContext}`
+          .trim()
+          .slice(0, 4000);
       const { reply } = await chat({
         data: {
           messages: history.slice(-40).map((m) => ({ role: m.role, content: m.content })),
@@ -560,31 +614,91 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                       </div>
                     </div>
                   )}
-                  {messages.map((m) => (
-                    <div
-                      key={m.id}
-                      className={`flex items-end gap-2 ${m.role === "user" ? "justify-end" : "justify-start"}`}
-                    >
-                      {m.role !== "user" && (
-                        <FlowMascot
-                          size="sm"
-                          mood="calm"
-                          status={flowStatus}
-                          bump
-                          className="shrink-0"
-                        />
-                      )}
-                      <div
-                        className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
-                          m.role === "user"
-                            ? "bg-primary text-primary-foreground rounded-br-sm"
-                            : "bg-secondary text-foreground rounded-bl-sm"
-                        }`}
-                      >
-                        {m.content}
+                  {messages.map((m) => {
+                    const parsed =
+                      m.role === "assistant"
+                        ? parseFlowReply(m.content)
+                        : { text: m.content, actions: [] as FlowAction[] };
+                    return (
+                      <div key={m.id} className="space-y-2">
+                        <div
+                          className={`flex items-end gap-2 ${m.role === "user" ? "justify-end" : "justify-start"}`}
+                        >
+                          {m.role !== "user" && (
+                            <FlowMascot
+                              size="sm"
+                              mood="calm"
+                              status={flowStatus}
+                              bump
+                              className="shrink-0"
+                            />
+                          )}
+                          <div
+                            className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
+                              m.role === "user"
+                                ? "bg-primary text-primary-foreground rounded-br-sm"
+                                : "bg-secondary text-foreground rounded-bl-sm"
+                            }`}
+                          >
+                            {parsed.text}
+                          </div>
+                        </div>
+
+                        {parsed.actions.map((a, i) => {
+                          const key = `${m.id}:${i}`;
+                          const done = doneActions[key];
+                          return (
+                            <div
+                              key={key}
+                              className="ml-10 max-w-[80%] rounded-2xl border border-border bg-card p-3"
+                            >
+                              <p className="text-sm font-medium text-foreground">
+                                <span aria-hidden>{ACTION_EMOJI[a.kind]}</span>{" "}
+                                {a.label ?? ACTION_LABEL[a.kind]}
+                              </p>
+                              {a.taskTitle && (
+                                <p className="truncate text-xs text-muted-foreground">
+                                  {a.taskTitle}
+                                </p>
+                              )}
+                              {a.steps && (
+                                <ul className="mt-1 space-y-0.5">
+                                  {a.steps.map((s) => (
+                                    <li key={s} className="text-xs text-muted-foreground">
+                                      · {s}
+                                    </li>
+                                  ))}
+                                </ul>
+                              )}
+                              {done ? (
+                                <p className="mt-2 text-xs font-medium text-primary">{done}</p>
+                              ) : (
+                                <div className="mt-2 flex flex-wrap gap-2">
+                                  <Button
+                                    size="sm"
+                                    className="rounded-xl"
+                                    onClick={() => runAction(key, a)}
+                                  >
+                                    {actionCta(a)}
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    className="rounded-xl"
+                                    onClick={() =>
+                                      setDoneActions((p) => ({ ...p, [key]: "Vi lät den vara." }))
+                                    }
+                                  >
+                                    Nej, låt den vara
+                                  </Button>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </>
               )}
               {isSending && (
