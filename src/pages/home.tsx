@@ -428,10 +428,6 @@ export default function Home() {
           <FlowHomeCard />
         </MyFloveWide>
 
-        {/* Ett tydligt nästa steg – aldrig en lista. */}
-        <MyFloveWide style={{ order: 0.5 }} className="min-w-0" data-npf="optional">
-          <NextStepCard />
-        </MyFloveWide>
 
         {/* Kvällscheck – frivillig, dyker upp när dagen lider mot sitt slut. */}
         {new Date().getHours() >= 18 && (
