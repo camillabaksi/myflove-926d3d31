@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-11";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Lugnare hemskärm",
+    items: [
+      'Korten "Insikter" och "Din vardag" är borttagna från hemskärmen (2026-09-11)',
+      "Mönstren från din vardag visas nu inne i Insikter (2026-09-11)",
+      "Rutiner & medicin ligger kvar på Hem som ett eget block (2026-09-11)",
+    ],
+  },
+  {
     title: "Zero-Guilt UX och Akut Lugn",
     items: [
       "Hem öppnar med en lugn hälsning, tydligt batteri och exakt två konkreta val från FlowScore (2026-09-11)",
