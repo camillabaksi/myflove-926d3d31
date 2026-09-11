@@ -93,7 +93,7 @@ export default function PitchPage() {
         <section className="rounded-2xl border border-border bg-card p-4 space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <h2 className="flex items-center gap-2 font-serif text-xl font-semibold">
-              <Film size={18} className="text-primary" /> 20-sekunders produktdemo
+              <Film size={18} className="text-primary" /> Kort produktdemo (27 sek)
             </h2>
             <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
               QuickFlow → Flow → Min dag
@@ -102,9 +102,11 @@ export default function PitchPage() {
           <p className="text-sm text-muted-foreground">
             En kort demo på engelska som visar att MyFlove finns på riktigt. Den följer bara den
             viktigaste kedjan: allt ur huvudet i QuickFlow, Flow som anpassar dagen efter energin
-            och tiden som faktiskt finns, och Min dag som visar hur dagen ser ut. Avslutas med ”The
-            goal isn’t to get more done. It’s to make the day more doable.” Samma demo finns som en
-            egen slide i pitchdecket.
+            och tiden som faktiskt finns, och Min dag som visar hur dagen ser ut. Demon visar också
+            samma uppgiftslista planerad två gånger – med hög energi och 4 timmar, och med låg
+            energi och 30 minuter – så man ser hur planen faktiskt ändras efter förutsättningarna.
+            Avslutas med ”The goal isn’t to get more done. It’s to make the day more doable.” Samma
+            demo finns som en egen slide i pitchdecket.
           </p>
           <video
             controls

@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-11";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Demon visar hur planen ändras",
+    items: [
+      "Demofilmen visar samma uppgiftslista planerad med hög energi och 4 timmar respektive låg energi och 30 minuter (2026-09-11)",
+      "Riktiga skärmar visar att stegen blir kortare när kapaciteten är låg; demon är nu 27 sekunder (2026-09-11)",
+    ],
+  },
+
+  {
     title: "Handla/köpa hamnar i Inköpslistan",
     items: [
       "Skriver du något om att handla eller köpa i ＋ Lägg till föreslås varan också till Inköpslistan (2026-09-11)",

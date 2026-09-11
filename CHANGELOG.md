@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-11 – Demon visar hur planen ändras
+
+- Demofilmen har en ny del: samma uppgiftslista planerad med hög energi och 4 timmar, och med låg energi och 30 minuter.
+- Skärmarna är riktiga och visar att stegen blir kortare och färre när kapaciteten är låg.
+- Demon är nu 27 sekunder och kan fortfarande laddas ner separat från pitchsidan.
+
 ## 2026-09-11 – Handla/köpa hamnar i Inköpslistan
 
 - När du skriver något som handlar om att handla eller köpa i ＋ Lägg till föreslår MyFlove att varan också läggs i Inköpslistan.
