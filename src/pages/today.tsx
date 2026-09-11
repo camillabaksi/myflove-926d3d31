@@ -145,7 +145,7 @@ export function TodayContent() {
   return (
     <MyFlovePageGrid area="idag">
       <MyFloveWide>
-        <h1 className="flex items-center gap-2 font-display text-3xl text-ink">
+        <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl flex items-center gap-2">
           <Heart className="h-7 w-7 text-primary" /> {t("Idag")}
         </h1>
         <p className="mt-1 text-sm font-medium text-primary">{t("Vad som händer idag")}</p>

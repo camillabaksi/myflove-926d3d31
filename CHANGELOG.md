@@ -1,3 +1,11 @@
+## 2026-09-11 – Genomgång av hela appen: dubbletter, länkar och enhetlig design
+
+- Alla sidor och genvägar har gåtts igenom: varje länk och gammal adress leder rätt, inga sidor är tomma eller trasiga.
+- Rubriken på varje sida ser likadan ut i hela appen (samma typsnitt, storlek och färg).
+- Barn, Familj och Kalender använder nu samma lila/rosa personfärger; de gamla jord- och grönfärgerna är borta.
+- Ett fel på Barn-sidan (knapp inuti knapp i schemarubriken) är rättat – hjälptexten ligger nu bredvid rubriken.
+- Tio oanvända dubblettvyer har tagits bort ur koden utan att någon funktion i appen påverkas.
+
 ## 2026-09-11 – Andningsglöd inne i ”Din dag, i din takt”
 
 - Andningsglöden ligger nu inne i kortet ”Din dag, i din takt” i stället för i sidans bakgrund, och pulserar tydligt bakom hälsningen och batteriet.

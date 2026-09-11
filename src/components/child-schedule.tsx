@@ -208,11 +208,13 @@ export default function ChildSchedule({
           <span className="flex items-center gap-2">
             <CalendarClock size={18} className="text-primary" />
             {childName}s skolschema
-            <HelpHint label="barnets skolschema">
-              Lägg in skolschemat en gång – det ligger kvar vecka efter vecka. Dagens lektioner
-              markeras och nästa lektion visas överst.
-            </HelpHint>
           </span>
+        }
+        help={
+          <>
+            Lägg in skolschemat en gång – det ligger kvar vecka efter vecka. Dagens lektioner
+            markeras och nästa lektion visas överst.
+          </>
         }
         headingClassName="text-lg font-semibold"
         className="space-y-4"

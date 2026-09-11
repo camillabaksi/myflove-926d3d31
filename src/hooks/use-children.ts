@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { PERSON_COLOR_VALUES } from "@/lib/palette";
 
 // Barn-delen: allt är privat för den som lagt in det, men varje sak kan
 // delas med en eller flera familjemedlemmar.
@@ -40,7 +41,8 @@ export interface FamilyMember {
   color: string;
 }
 
-export const CHILD_COLORS = ["#c17a56", "#8a9a5b", "#e8c547", "#6b8e9e", "#a06cd5", "#d16d6d"];
+/** Barnens färger följer MyFloves gemensamma personpalett. */
+export const CHILD_COLORS = PERSON_COLOR_VALUES;
 
 /* ------------------------------------------------------------------ */
 /* Delad butik – alla vyer (t.ex. Barn-sidan och Kalendern) läser samma  */

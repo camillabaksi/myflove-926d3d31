@@ -40,7 +40,7 @@ export default function Stats() {
         <MyFloveWide>
           <div className="space-y-8">
             <div>
-              <h1 className="text-3xl font-bold mb-2 flex items-center gap-3">
+              <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl mb-2 flex items-center gap-3">
                 Veckostatistik <MyFloveInsightGather className="shrink-0" />
               </h1>
               <p className="text-muted-foreground">

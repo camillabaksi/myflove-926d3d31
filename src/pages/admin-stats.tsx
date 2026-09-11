@@ -69,7 +69,9 @@ export default function AdminStats() {
       <Layout>
         <div className="max-w-md mx-auto text-center space-y-3 py-16">
           <Lock size={40} className="mx-auto text-muted-foreground" />
-          <h1 className="text-2xl font-bold">{t("Endast för grundaren")}</h1>
+          <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl">
+            {t("Endast för grundaren")}
+          </h1>
           <p className="text-muted-foreground">{t("Den här sidan är privat.")}</p>
         </div>
       </Layout>
@@ -164,7 +166,7 @@ export default function AdminStats() {
     <Layout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
+          <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl mb-2 flex items-center gap-2">
             <BarChart3 className="text-primary" /> {t("Hur går MyFlove?")}
           </h1>
           <p className="text-muted-foreground">

@@ -8,15 +8,9 @@ import { Input } from "@/components/ui/input";
 import { Users, Copy, LogOut, Check } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { PERSON_COLORS } from "@/lib/palette";
 
-const COLORS = [
-  { value: "#7C5CE0", label: "Violett" },
-  { value: "#F5B8D0", label: "Rosa" },
-  { value: "#A78BFA", label: "Lavendel" },
-  { value: "#6C8FE0", label: "Blå" },
-  { value: "#5FBFA6", label: "Mint" },
-  { value: "#E2719B", label: "Körsbär" },
-];
+const COLORS = PERSON_COLORS;
 
 type Member = { user_id: string; display_name: string; color: string };
 type Household = {
@@ -80,7 +74,7 @@ function CreateOrJoin({ onReady }: { onReady: () => void }) {
   const [name, setName] = useState("");
   const [inviteCode, setInviteCode] = useState("");
   const [displayName, setDisplayName] = useState("");
-  const [color, setColor] = useState(COLORS[0].value);
+  const [color, setColor] = useState<string>(COLORS[0].value);
   const [pending, setPending] = useState(false);
   const { toast } = useToast();
 
@@ -330,7 +324,7 @@ export default function FamilyPage() {
         <MyFloveWide>
           <div className="space-y-8">
             <div>
-              <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
+              <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl mb-2 flex items-center gap-2">
                 <MyFloveHeart size={26} /> Familj
               </h1>
               <p className="text-muted-foreground">

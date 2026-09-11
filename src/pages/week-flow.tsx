@@ -75,7 +75,7 @@ export default function WeekFlowPage() {
             <header className="space-y-1">
               <div className="flex items-center gap-2">
                 <CalendarRange className="text-primary" size={26} />
-                <h1 className="text-3xl font-bold flex items-center gap-3">
+                <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl flex items-center gap-3">
                   Veckans översikt <MyFloveInsightGather className="shrink-0" />
                 </h1>
               </div>

@@ -16,7 +16,7 @@ export default function NotesPage() {
       <MyFlovePageGrid>
         <MyFloveWide>
           <header className="space-y-1">
-            <h1 className="flex items-center gap-2 font-display text-3xl text-ink">
+            <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl flex items-center gap-2">
               <NotebookPen className="h-7 w-7 text-primary" /> {t("Anteckningar")}
             </h1>
             <p className="text-muted-foreground">

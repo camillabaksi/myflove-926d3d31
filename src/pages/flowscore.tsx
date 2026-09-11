@@ -19,7 +19,7 @@ export default function FlowScorePage() {
       <MyFlovePageGrid>
         <MyFloveWide>
           <header>
-            <h1 className="flex items-center gap-2 font-display text-3xl text-ink">
+            <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl flex items-center gap-2">
               <Gauge className="h-7 w-7 text-primary" /> Dagens balans
             </h1>
             <p className="mt-1 text-muted-foreground">
