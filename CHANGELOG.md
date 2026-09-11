@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-11 – Ny demoslide i pitchdecket
+
+- Demosliden i pitchdecket 4.2 (PDF, Word, PowerPoint) och i den engelska 3-minuterspitchen är utbytt.
+- Sliden visar nu hela kedjan: QuickFlow → Flow → planen anpassas efter kapacitet → Min dag, och att demon är 27 sekunder.
+
 ## 2026-09-11 – Demon visar hur planen ändras
 
 - Demofilmen har en ny del: samma uppgiftslista planerad med hög energi och 4 timmar, och med låg energi och 30 minuter.

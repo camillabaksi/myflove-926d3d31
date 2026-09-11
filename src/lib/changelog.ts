@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-11";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Ny demoslide i pitchdecket",
+    items: [
+      "Demosliden i pitchdecket 4.2 och i den engelska 3-minuterspitchen är utbytt mot den nya 27-sekundersdemon (2026-09-11)",
+      "Sliden visar QuickFlow → Flow → planen anpassas efter kapacitet → Min dag (2026-09-11)",
+    ],
+  },
+
+  {
     title: "Demon visar hur planen ändras",
     items: [
       "Demofilmen visar samma uppgiftslista planerad med hög energi och 4 timmar respektive låg energi och 30 minuter (2026-09-11)",
