@@ -254,16 +254,20 @@ export const getAnalyticsExportFn = createServerFn({ method: "GET" })
     const fromIso = new Date(`${data.from}T00:00:00.000Z`).toISOString();
     const toIso = new Date(`${data.to}T23:59:59.999Z`).toISOString();
 
-    const { data: events, error } = await supabaseAdmin
-      .from("analytics_events")
-      .select("session_id, section, action, created_at")
-      .gte("created_at", fromIso)
-      .lte("created_at", toIso)
-      .order("created_at", { ascending: true })
-      .limit(50000);
-    if (error) throw new Error(error.message);
-
-    const rows = events ?? [];
+    type EvRow = { session_id: string; section: string; action: string; created_at: string };
+    const rows: EvRow[] = [];
+    for (let from = 0; from < 500000; from += 1000) {
+      const { data: chunk, error } = await supabaseAdmin
+        .from("analytics_events")
+        .select("session_id, section, action, created_at")
+        .gte("created_at", fromIso)
+        .lte("created_at", toIso)
+        .order("created_at", { ascending: true })
+        .range(from, from + 999);
+      if (error) throw new Error(error.message);
+      rows.push(...((chunk ?? []) as EvRow[]));
+      if (!chunk || chunk.length < 1000) break;
+    }
     const byKey = new Map<string, { events: number; sessions: Set<string> }>();
     const byDay = new Map<string, { events: number; sessions: Set<string> }>();
     const allSessions = new Set<string>();
