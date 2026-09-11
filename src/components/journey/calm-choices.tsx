@@ -4,7 +4,6 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { useTasks } from "@/hooks/use-data";
 import { useFlowScore } from "@/hooks/use-flowscore";
-import { track } from "@/lib/analytics";
 
 export default function CalmChoices({ onPause }: { onPause: () => void }) {
   const { activeTasks } = useTasks();
@@ -34,7 +33,6 @@ export default function CalmChoices({ onPause }: { onPause: () => void }) {
         <Button asChild size="lg" className="min-h-14 justify-between rounded-2xl px-5">
           <Link
             href={easiest ? "/idag" : "/quickflow"}
-            onClick={() => track("calm_choice_selected", { source: "easiest" })}
           >
             <span className="min-w-0 text-left">
               <span className="block">{easiest ? "Gör den enklaste saken" : "Fånga en sak"}</span>
@@ -47,10 +45,7 @@ export default function CalmChoices({ onPause }: { onPause: () => void }) {
           type="button"
           size="lg"
           variant="secondary"
-          onClick={() => {
-            track("calm_choice_selected", { source: "micro-pause" });
-            onPause();
-          }}
+          onClick={onPause}
           className="min-h-14 justify-between rounded-2xl px-5"
         >
           <span className="min-w-0 text-left">

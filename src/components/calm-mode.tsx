@@ -4,12 +4,10 @@ import { FlowMascot } from "@/components/flow-mascot";
 import { Button } from "@/components/ui/button";
 import { haptic } from "@/lib/haptics";
 import {
-  getQuietMode,
   pauseRemindersFor,
   resumeReminders,
   subscribeQuietMode,
 } from "@/lib/quiet-mode";
-import { track } from "@/lib/analytics";
 
 type CalmModeKind = "acute" | "micro";
 
@@ -38,7 +36,6 @@ export default function CalmMode({
     setPausedUntil(state.pausedUntil);
     setSeconds(remainingSeconds(state.pausedUntil));
     haptic("soft");
-    track("calm_mode_started", { source: kind });
   }, [kind, minutes, open]);
 
   useEffect(() => {
@@ -56,7 +53,6 @@ export default function CalmMode({
   const end = () => {
     resumeReminders();
     onOpenChange(false);
-    track("calm_mode_ended", { source: kind });
   };
   const mm = String(Math.floor(seconds / 60)).padStart(2, "0");
   const ss = String(seconds % 60).padStart(2, "0");
