@@ -44,7 +44,7 @@ export type UserAnalytics = {
 
 const DEMO_EMAIL = "investor@myflove.se";
 
-async function assertAdmin(context: { supabase: any; userId: string }) {
+async function assertAdmin(context: { supabase: SupabaseClient<Database>; userId: string }) {
   const { data } = await context.supabase
     .from("user_roles")
     .select("role")
