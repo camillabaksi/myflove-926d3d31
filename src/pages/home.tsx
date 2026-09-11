@@ -185,7 +185,10 @@ export default function Home() {
           className="relative overflow-hidden rounded-3xl border border-border/60 p-5 shadow-lifted pop-in"
           style={{ background: gradient }}
         >
-          <div className="pointer-events-none absolute -top-16 -right-12 h-32 w-32 rounded-full bg-blush opacity-50 blur-md" />
+          <div
+            data-npf="optional"
+            className="pointer-events-none absolute -top-16 -right-12 h-32 w-32 rounded-full bg-blush opacity-50 blur-md"
+          />
           <div
             className="pointer-events-none absolute right-2 top-0 select-none sm:right-5"
             aria-hidden
@@ -250,6 +253,21 @@ export default function Home() {
         {/* Flow – binder ihop Quickflow, Batteriet och Kalendern. En sak i taget. */}
         <MyFloveWide style={{ order: 0 }} className="min-w-0">
           <FlowHomeCard />
+        </MyFloveWide>
+
+        {/* Enkelt läge – ett tryck för den som vill ha det lugnare. */}
+        <MyFloveWide style={{ order: 0.1 }} className="min-w-0">
+          <button
+            type="button"
+            onClick={toggleSimpleMode}
+            aria-pressed={simpleMode}
+            className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-card/70 px-3.5 py-2 text-xs font-medium text-muted-foreground shadow-soft transition-colors hover:text-foreground hover:bg-muted"
+          >
+            <Sparkles size={13} aria-hidden className="text-primary" />
+            {simpleMode
+              ? t("Enkelt läge är på – visa allt igen")
+              : t("Vill du ha det lugnare? Visa mindre på skärmen")}
+          </button>
         </MyFloveWide>
 
         {/* Dagens tre steg – den primära vägen genom MyFlove. */}
