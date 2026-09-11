@@ -8,6 +8,13 @@
       "when": 1789126533062,
       "tag": "0000_create_app_user_connections",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1789147892081,
+      "tag": "0001_lock_app_user_connections",
+      "breakpoints": true
     }
   ]
 }
