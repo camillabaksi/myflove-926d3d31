@@ -6,7 +6,6 @@
 - Mönstren från din vardag visas nu inne i Insikter.
 - Rutiner & medicin ligger kvar på Hem som ett eget block.
 
-
 ## 2026-09-11 – Zero-Guilt UX och Akut Lugn
 
 - Hem öppnar nu med en lugn hälsning, tydlig batterinivå och exakt två konkreta val från FlowScore.
