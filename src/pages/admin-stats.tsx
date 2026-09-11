@@ -137,6 +137,7 @@ export default function AdminStats() {
     { label: t("Hälsofaktor loggad"), ...findUsage("halsa", "health_factor_logged") },
     { label: t("Flow totalt"), ...sumSection(["flow", "flowplan"]) },
   ].map((row) => ({ label: row.label, events: row.events ?? 0, sessions: row.sessions ?? 0 }));
+  const sortedCapacity = sortAdminRows(capacityStats, capacitySort);
   const maxCapacity = Math.max(1, ...capacityStats.map((row) => row.events));
 
   const friendlyParts = sortAdminRows(
