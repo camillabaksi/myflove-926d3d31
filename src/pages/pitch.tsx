@@ -276,7 +276,19 @@ export default function PitchPage() {
             >
               <Download size={16} /> Ladda ner PDF (4.2)
             </a>
+            <a
+              href="/pitch/MyFlove_Pitchdeck_4.2.docx"
+              download
+              className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-medium hover:bg-secondary"
+            >
+              <Download size={16} /> Ladda ner Word (4.2)
+            </a>
           </div>
+          <p className="text-xs text-muted-foreground">
+            Både PDF och Word innehåller demosliden sist (QuickFlow → Flow → Min dag). Videofilen
+            heter myflove-demo-20s.mp4 och kan bifogas separat i mejlet till investerare.
+          </p>
+
         </section>
 
         <section className="rounded-2xl border border-border bg-card p-4 space-y-3">
