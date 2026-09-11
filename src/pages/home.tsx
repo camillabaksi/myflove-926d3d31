@@ -544,83 +544,25 @@ export default function Home() {
           </MyFloveWide>
         )}
 
-        {/* Din vardag – vad MyFlove lärt sig av dina egna aktiviteter och loggar. */}
-        {patterns.ready && (
-          <MyFloveWide style={{ order: 4.5 }} className="min-w-0" data-npf="optional">
-            <CollapsibleSection
-              id="home-everyday-patterns"
-              title={t("Din vardag")}
-              description={t("Det här har MyFlove lärt sig av dina egna dagar")}
-              data-testid="home-everyday-patterns"
-              className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
-              headingClassName="text-base font-semibold text-ink"
-            >
-              <div className="flex items-start gap-3">
-                <FlowMascot size="xs" mood="calm" className="mt-0.5 shrink-0 flow-alive" alt="" />
-                <div className="min-w-0 flex-1">
-                  <ul className="mt-3 space-y-2">
-                    {patterns.lines.map((line) => (
-                      <li key={line} className="flex items-start gap-2 text-sm text-ink">
-                        <Sparkles size={14} className="mt-0.5 shrink-0 text-primary" aria-hidden />
-                        <span className="min-w-0">{line}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <Link
-                    href="/insight"
-                    onClick={() => track("home_widget_opened", { source: "insight" })}
-                    className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
-                  >
-                    {t("Se fler mönster")} <ArrowRight size={14} />
-                  </Link>
-                </div>
-              </div>
-            </CollapsibleSection>
+        {/* Rutiner & medicin – dagens doser och rutiner. */}
+        {shows("medicin") && (
+          <MyFloveWide style={{ order: 9 }} className="min-w-0" data-npf="optional">
+            <section aria-label={t("Rutiner och medicin")}>
+              <ExpandableBlock
+                title={t("Rutiner & medicin")}
+                titleText={t("Rutiner och medicin")}
+                area="halsa"
+                icon={Pill}
+                subtitle={t("Dagens rutiner och doser")}
+                status={t("Idag")}
+                tone="blush"
+                surface="blush"
+              >
+                <RoutinesMedicationToday />
+              </ExpandableBlock>
+            </section>
           </MyFloveWide>
         )}
-
-        {/* Insikter + Rutiner & medicin visas bredvid varandra som ett par. */}
-        {(flowSettings.enabled && flowSettings.learning) || shows("medicin") ? (
-          <div
-            className="col-span-full grid grid-cols-2 gap-3"
-            style={{ order: 9 }}
-            data-npf="optional"
-          >
-            {flowSettings.enabled && flowSettings.learning && (
-              <div data-testid="home-flow-note" className="min-w-0">
-                <ExpandableBlock
-                  title={t("MyFlove har lagt märke till…")}
-                  titleText={t("MyFlove har lagt märke till")}
-                  area="flow"
-                  visual={<FlowMascot size="xs" mood="calm" bump className="flow-alive" alt="" />}
-                  subtitle={t("Små mönster i din egen data")}
-                  status={t("Insikter")}
-                  tone="lavender"
-                  surface="lavender"
-                  href="/insight"
-                  onNavigate={() => track("flow_learning_opened", { source: "hem" })}
-                />
-              </div>
-            )}
-
-            {shows("medicin") && (
-              <section className="min-w-0" aria-label={t("Rutiner och medicin")}>
-                <ExpandableBlock
-                  title={t("Rutiner & medicin")}
-                  titleText={t("Rutiner och medicin")}
-                  area="halsa"
-                  icon={Pill}
-                  subtitle={t("Dagens rutiner och doser")}
-                  status={t("Idag")}
-                  tone="blush"
-                  surface="blush"
-                >
-                  <RoutinesMedicationToday />
-                </ExpandableBlock>
-              </section>
-            )}
-          </div>
-        ) : null}
 
         {/* Områdesväljare – litet, längst ner */}
         {shows("omrade") && (
