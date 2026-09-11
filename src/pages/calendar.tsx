@@ -515,7 +515,9 @@ export function CalendarContent() {
     <MyFlovePageGrid area="kalender">
       <MyFloveWide>
         <div>
-          <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl mb-2">{t("Kalender")}</h1>
+          <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl mb-2">
+            {t("Kalender")}
+          </h1>
           <p className="text-muted-foreground">
             {t("Översikt över dina dagar. Inga stressiga detaljer.")}
           </p>
@@ -1056,7 +1058,10 @@ export function CalendarContent() {
                 })().map((group) => {
                   const e = group[0]!;
                   const names = group.map((g) => g.child?.name ?? t("Barn"));
-                  const color = group.length > 1 ? DEFAULT_CHILD_COLOR : (e.child?.color ?? DEFAULT_CHILD_COLOR);
+                  const color =
+                    group.length > 1
+                      ? DEFAULT_CHILD_COLOR
+                      : (e.child?.color ?? DEFAULT_CHILD_COLOR);
                   return (
                     <div
                       key={`child-${e.id}`}
@@ -1107,7 +1112,10 @@ export function CalendarContent() {
                           {pictogramFor(e.title, "👨‍👩‍👧")}
                         </span>
                       ) : (
-                        <Users style={{ color: e.member?.color ?? DEFAULT_MEMBER_COLOR }} size={24} />
+                        <Users
+                          style={{ color: e.member?.color ?? DEFAULT_MEMBER_COLOR }}
+                          size={24}
+                        />
                       )}
                       <div>
                         <div

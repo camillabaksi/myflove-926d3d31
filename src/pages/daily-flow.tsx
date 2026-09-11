@@ -31,7 +31,9 @@ export default function DailyFlowPage() {
             <header className="space-y-1">
               <div className="flex items-center gap-2">
                 <Sun className="text-primary" size={26} />
-                <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl">Rutiner &amp; medicin</h1>
+                <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl">
+                  Rutiner &amp; medicin
+                </h1>
               </div>
               <p className="text-muted-foreground">
                 Morgonstart, dina fasta rutiner och doser. Dagens plan och förslag bor i Idag och

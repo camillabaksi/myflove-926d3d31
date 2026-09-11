@@ -300,7 +300,9 @@ export default function InsightPage() {
             </button>
             <MyFloveInsightGather emoji="🧠" />
             <div className="min-w-0 flex-1">
-              <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl">MyFlove Insight</h1>
+              <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl">
+                MyFlove Insight
+              </h1>
               <p className="mt-1 text-sm text-muted-foreground">
                 Förstå behov. Hitta strategier. Gör vardagen enklare.
               </p>

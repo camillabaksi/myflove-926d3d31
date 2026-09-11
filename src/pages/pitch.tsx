@@ -66,7 +66,9 @@ export default function PitchPage() {
       <Layout>
         <div className="max-w-md mx-auto text-center space-y-3 py-16">
           <Lock size={40} className="mx-auto text-muted-foreground" />
-          <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl">Endast för grundare och investerare</h1>
+          <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl">
+            Endast för grundare och investerare
+          </h1>
           <p className="text-muted-foreground">
             Logga in med grundar- eller investerarkontot för att se pitchmaterialet.
           </p>

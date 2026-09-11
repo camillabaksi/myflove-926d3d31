@@ -218,7 +218,6 @@ export default function ChildSchedule({
         }
         headingClassName="text-lg font-semibold"
         className="space-y-4"
-
       >
         <div className="space-y-3">
           {canEdit && (
