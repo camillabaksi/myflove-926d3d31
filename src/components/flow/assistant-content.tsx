@@ -121,7 +121,6 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
     void navigate({ to: "/assistant/$chatId", params: { chatId: latest.id }, replace: true });
   }, [conversationId, loadingConversations, conversations, isSending, navigate]);
 
-
   /**
    * Påbörjad text sparas per samtal så inget försvinner om du lämnar vyn.
    * Den ligger i sessionStorage – aldrig i klartext på disken – och rensas

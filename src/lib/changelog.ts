@@ -17,7 +17,6 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     ],
   },
   {
-
     title: "Flow kan faktiskt flytta, dela och förenkla en uppgift",
     items: [
       "Flows förslag om att flytta, dela upp eller förenkla en uppgift blir en knapp i chatten (2026-09-11)",
