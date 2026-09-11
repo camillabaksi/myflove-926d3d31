@@ -1,3 +1,8 @@
+## 2026-09-11 – Statistiken visar nu alla dagar
+
+- Analys per användare hämtade bara de första 1 000 händelserna, som alla låg på samma tidiga datum.
+- Nu läses hela perioden in, så både händelser, användare och datum stämmer.
+
 ## 2026-09-11 – Flyttade uppgifter hamnar aldrig bakåt i tiden
 
 - När Flow föreslår "flytta till imorgon" hamnar uppgiften nu alltid på ett kommande datum.
