@@ -1,3 +1,8 @@
+## 2026-09-11 – Flyttade uppgifter hamnar aldrig bakåt i tiden
+
+- När Flow föreslår "flytta till imorgon" hamnar uppgiften nu alltid på ett kommande datum.
+- Tidigare kunde ett felaktigt datum från Flow göra att uppgiften såg ut att vara flera hundra dagar försenad.
+
 ## 2026-09-11 – Flow fortsätter i din senaste chatt
 
 - När du öppnar Flow landar du i ditt senaste samtal istället för en tom, ny chatt.
