@@ -83,8 +83,8 @@ export default function Home() {
   const { settings: flowSettings } = useFlowSettings();
   const patterns = useEverydayPatterns();
   const { settings: npf, update: updateNpf } = useNpfSettings();
-  /** Enkelt läge = färre saker + lugnare färger + ingen rörelse + enkla ord. */
-  const simpleMode = npf.less && npf.calm && npf.stillness;
+  /** Enkelt läge följer det val som faktiskt gömmer innehåll. */
+  const simpleMode = npf.less;
   const toggleSimpleMode = () =>
     updateNpf(
       simpleMode
@@ -251,7 +251,7 @@ export default function Home() {
         </MyFloveWide>
 
         {/* Flow – binder ihop Quickflow, Batteriet och Kalendern. En sak i taget. */}
-        <MyFloveWide style={{ order: 0 }} className="min-w-0">
+        <MyFloveWide style={{ order: 0 }} className="min-w-0" data-npf="optional">
           <FlowHomeCard />
         </MyFloveWide>
 
@@ -276,19 +276,19 @@ export default function Home() {
         </MyFloveWide>
 
         {/* Ett tydligt nästa steg – aldrig en lista. */}
-        <MyFloveWide style={{ order: 0.5 }} className="min-w-0">
+        <MyFloveWide style={{ order: 0.5 }} className="min-w-0" data-npf="optional">
           <NextStepCard />
         </MyFloveWide>
 
         {/* Kvällscheck – frivillig, dyker upp när dagen lider mot sitt slut. */}
         {new Date().getHours() >= 18 && (
-          <MyFloveWide style={{ order: 0.7 }} className="min-w-0">
+          <MyFloveWide style={{ order: 0.7 }} className="min-w-0" data-npf="optional">
             <EveningCheck />
           </MyFloveWide>
         )}
 
         {/* Allt annat ligger kvar – men ur vägen tills du vill se det. */}
-        <MyFloveWide style={{ order: 6 }} className="min-w-0">
+        <MyFloveWide style={{ order: 6 }} className="min-w-0" data-npf="optional">
           <CollapsibleSection
             id="mer-i-myflove"
             title={t("Mer i MyFlove")}
@@ -501,7 +501,7 @@ export default function Home() {
 
         {/* 💜 Din vecka – visas på söndagar som en lugn sammanfattning. */}
         {isSunday && (
-          <MyFloveWide style={{ order: 4.4 }} className="min-w-0">
+          <MyFloveWide style={{ order: 4.4 }} className="min-w-0" data-npf="optional">
             <WeekReviewCard review={weekReview} />
           </MyFloveWide>
         )}
@@ -544,7 +544,11 @@ export default function Home() {
 
         {/* Insikter + Rutiner & medicin visas bredvid varandra som ett par. */}
         {(flowSettings.enabled && flowSettings.learning) || shows("medicin") ? (
-          <div className="col-span-full grid grid-cols-2 gap-3" style={{ order: 9 }}>
+          <div
+            className="col-span-full grid grid-cols-2 gap-3"
+            style={{ order: 9 }}
+            data-npf="optional"
+          >
             {flowSettings.enabled && flowSettings.learning && (
               <div data-testid="home-flow-note" className="min-w-0">
                 <ExpandableBlock
@@ -583,7 +587,11 @@ export default function Home() {
 
         {/* Områdesväljare – litet, längst ner */}
         {shows("omrade") && (
-          <MyFloveWide style={pos("omrade")} className="space-y-2 pt-2">
+          <MyFloveWide
+            style={pos("omrade")}
+            className="space-y-2 pt-2"
+            data-npf="optional"
+          >
             <AreaSwitcher size="sm" />
             <p className="text-xs text-muted-foreground">
               {activeArea === "alla"
@@ -593,7 +601,7 @@ export default function Home() {
           </MyFloveWide>
         )}
 
-        <MyFloveWide style={{ order: 98 }} className="space-y-3 pt-2">
+        <MyFloveWide style={{ order: 98 }} className="space-y-3 pt-2" data-npf="optional">
           <AreaOnboarding />
         </MyFloveWide>
 
@@ -610,6 +618,7 @@ export default function Home() {
         <MyFloveWide
           style={{ order: 99 }}
           className="flex flex-wrap items-center justify-center gap-4 pb-2 text-center"
+          data-npf="optional"
         >
           <Link
             href="/oversikt"
