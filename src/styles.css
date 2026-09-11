@@ -162,51 +162,52 @@
   animation: calm-breathe 8s ease-in-out infinite;
 }
 
+/* Andningsglöd: 4s in (0–40%), 5s ut (40–90%), 1s vila (90–100%). */
 @keyframes home-glow-light {
-  0%,
-  100% {
-    transform: scale(0.86) translate3d(0, 2%, 0);
-    opacity: 0.24;
+  0% {
+    transform: scale(0.82);
+    opacity: 0.28;
   }
   40% {
-    transform: scale(1.08) translate3d(2%, -2%, 0);
-    opacity: 0.72;
+    transform: scale(1.18);
+    opacity: 0.85;
   }
-  90% {
-    transform: scale(0.86) translate3d(0, 2%, 0);
-    opacity: 0.24;
+  90%,
+  100% {
+    transform: scale(0.82);
+    opacity: 0.28;
   }
 }
 
 @keyframes home-glow-busy {
-  0%,
+  0% {
+    transform: scale(0.85);
+    opacity: 0.24;
+  }
+  40% {
+    transform: scale(1.14);
+    opacity: 0.72;
+  }
+  90%,
   100% {
-    transform: scale(0.88) translate3d(0, 2%, 0);
-    opacity: 0.18;
-  }
-  33.333% {
-    transform: scale(1.05) translate3d(-2%, -1%, 0);
-    opacity: 0.54;
-  }
-  91.667% {
-    transform: scale(0.88) translate3d(0, 2%, 0);
-    opacity: 0.18;
+    transform: scale(0.85);
+    opacity: 0.24;
   }
 }
 
 @keyframes home-glow-overloaded {
-  0%,
+  0% {
+    transform: scale(0.92);
+    opacity: 0.16;
+  }
+  40% {
+    transform: scale(1.04);
+    opacity: 0.42;
+  }
+  90%,
   100% {
-    transform: scale(0.94);
-    opacity: 0.1;
-  }
-  45% {
-    transform: scale(1.015);
-    opacity: 0.2;
-  }
-  90% {
-    transform: scale(0.94);
-    opacity: 0.1;
+    transform: scale(0.92);
+    opacity: 0.16;
   }
 }
 
@@ -219,33 +220,43 @@
 @utility home-ambient-glow {
   position: absolute;
   z-index: -1;
-  inset: -2rem -1rem;
+  inset: -6rem -1rem;
+  pointer-events: none;
   border-radius: 42% 58% 54% 46% / 48% 42% 58% 52%;
   background:
-    radial-gradient(circle at 28% 38%, hsl(var(--blush) / 0.98), transparent 55%),
-    radial-gradient(circle at 74% 62%, hsl(var(--lavender) / 0.95), transparent 60%);
-  filter: blur(32px);
+    radial-gradient(circle at 30% 34%, hsl(var(--blush) / 1), transparent 62%),
+    radial-gradient(circle at 70% 66%, hsl(var(--lavender) / 1), transparent 66%),
+    radial-gradient(circle at 52% 50%, hsl(var(--primary) / 0.4), transparent 70%);
+  filter: blur(72px);
   transform-origin: center;
   transition:
-    background 1200ms ease,
-    filter 1200ms ease,
-    opacity 1200ms ease;
-  animation: home-glow-light 10s linear infinite;
+    background 1400ms ease,
+    filter 1400ms ease;
+  animation: home-glow-light 10s ease-in-out infinite;
   will-change: transform, opacity;
 }
 
 [data-glow-level="busy"] .home-ambient-glow {
   background:
-    radial-gradient(circle at 30% 40%, hsl(var(--terracotta-soft) / 0.48), transparent 56%),
-    radial-gradient(circle at 72% 62%, hsl(var(--primary) / 0.42), transparent 62%);
-  filter: blur(38px) saturate(0.78);
-  animation: home-glow-busy 12s linear infinite;
+    radial-gradient(circle at 32% 38%, hsl(268 46% 62% / 0.85), transparent 62%),
+    radial-gradient(circle at 70% 64%, hsl(288 34% 48% / 0.75), transparent 66%);
+  filter: blur(78px) saturate(0.85);
+  animation: home-glow-busy 12s ease-in-out infinite;
 }
 
 [data-glow-level="overloaded"] .home-ambient-glow {
-  background: radial-gradient(circle at 50% 50%, hsl(var(--forest-deep) / 0.5), transparent 68%);
-  filter: blur(46px) saturate(0.22);
-  animation: home-glow-overloaded 18s linear infinite;
+  background: radial-gradient(circle at 50% 50%, hsl(266 26% 34% / 0.9), transparent 72%);
+  filter: blur(88px) saturate(0.35);
+  animation: home-glow-overloaded 18s ease-in-out infinite;
+}
+
+@utility app-shell-bg {
+  background-color: hsl(var(--background));
+  background-image:
+    radial-gradient(circle at 12% 8%, hsl(var(--lavender) / 0.85), transparent 55%),
+    radial-gradient(circle at 88% 92%, hsl(var(--blush) / 0.7), transparent 55%),
+    linear-gradient(180deg, hsl(264 60% 98%), hsl(268 52% 95%));
+  background-attachment: fixed;
 }
 
 @utility home-main-surface {
