@@ -4,17 +4,17 @@ import Page from "@/pages/pitch";
 export const Route = createFileRoute("/_app/pitch")({
   head: () => ({
     meta: [
-      { title: "Investerare – MyFlove version 4.1" },
+      { title: "Investerare – MyFlove version 4.2" },
       {
         name: "description",
         content:
-          "MyFloves investerarmaterial version 4.1: pitchvideo, pitchdeck och Living Blueprint – enkel start, adaptiv personalisering och energihistorik.",
+          "MyFloves investerarmaterial version 4.2: visuell investerarpitch, produktdemo, pitchdeck och Living Blueprint.",
       },
-      { property: "og:title", content: "Investerare – MyFlove version 4.1" },
+      { property: "og:title", content: "Investerare – MyFlove version 4.2" },
       {
         property: "og:description",
         content:
-          "MyFloves investerarmaterial version 4.1: pitchvideo, pitchdeck och Living Blueprint – enkel start, adaptiv personalisering och energihistorik.",
+          "MyFloves investerarmaterial version 4.2: visuell investerarpitch, produktdemo, pitchdeck och Living Blueprint.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

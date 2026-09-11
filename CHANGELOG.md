@@ -1,3 +1,9 @@
+## 2026-09-11 – Visuellt starkare 3-minuters investerarpitch
+
+- Den engelska investerarpitchen har byggts om med riktiga appbilder och en tydligare berättelse från problem till genomförbar dag.
+- Samma uppgifter med hög energi/4 timmar och låg energi/30 minuter är presentationens visuella kärna.
+- PowerPoint, PDF och Word innehåller samma 13 visuella slides; talarmanuset finns kvar i PowerPoint.
+
 # Changelog
 
 ## 2026-09-11 – Ny demoslide i pitchdecket
