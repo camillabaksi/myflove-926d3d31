@@ -2233,3 +2233,9 @@ Initial baseline av MyFlove — ett svenskspråkigt "lugnt livsflöde"-dashboard
 - "Nästa rimliga steg" visar ett förslag i taget, med ett mindre steg vid låg energi.
 - Frivillig kvällscheck "Hur blev dagen?" kopplas till dagens ork och aktiviteter.
 - Övriga hem-kort ligger kvar under "Mer i MyFlove". Ny statistik för hela dagsresan.
+
+## 2026-09-11 – Enklare läge för NPF
+
+- Ny knapp på Hem: "Vill du ha det lugnare? Visa mindre på skärmen" slår på enkelt läge med ett tryck (färre saker, lugnare färger, ingen rörelse, enkla ord).
+- Enkelt läge gömmer nu faktiskt sekundära block (dekor, dagens tanke, vardagsmönster, installationsnotering) – kärnflödet Hur mår du? → Vad händer? → Planera om? syns alltid.
+- Flow-maskoten blir helt stilla vid "Ingen rörelse" – även blinkningar och blick som styrs via JavaScript.
