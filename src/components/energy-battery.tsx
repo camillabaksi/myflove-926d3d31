@@ -91,7 +91,9 @@ export default function EnergyBattery({
         <MyFloveStat
           label={t("Mående")}
           value={moodValue != null ? `${Math.round(moodValue / 2)}/5` : "–"}
-          hint={moodValue != null ? t("Senaste registrerade värde") : t("Logga ett mående när du vill")}
+          hint={
+            moodValue != null ? t("Senaste registrerade värde") : t("Logga ett mående när du vill")
+          }
           icon={Gauge}
           tone="blush"
         />
@@ -169,7 +171,8 @@ export default function EnergyBattery({
           </span>
         ) : (
           <span className="inline-flex items-center gap-2 text-xs text-muted-foreground">
-            <Sparkles size={14} className="text-primary" /> {t("Varje loggning blir en egen observation")}
+            <Sparkles size={14} className="text-primary" />{" "}
+            {t("Varje loggning blir en egen observation")}
           </span>
         )
       }
