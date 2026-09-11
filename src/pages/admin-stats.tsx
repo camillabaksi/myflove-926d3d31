@@ -139,10 +139,13 @@ export default function AdminStats() {
   ].map((row) => ({ label: row.label, events: row.events ?? 0, sessions: row.sessions ?? 0 }));
   const maxCapacity = Math.max(1, ...capacityStats.map((row) => row.events));
 
-  const friendlyParts = FRIENDLY_PARTS.map((part) => ({
-    label: t(part.label),
-    ...sumSection(part.sections),
-  })).sort((a, b) => b.events - a.events);
+  const friendlyParts = sortAdminRows(
+    FRIENDLY_PARTS.map((part) => ({
+      label: t(part.label),
+      ...sumSection(part.sections),
+    })),
+    partsSort,
+  );
   const maxFriendly = Math.max(1, ...friendlyParts.map((p) => p.events));
 
   const maxViews = Math.max(1, ...viewsBySection.map((row) => row.events));
