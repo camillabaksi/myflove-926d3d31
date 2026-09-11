@@ -12,3 +12,5 @@
 - [x] Veckoöversikt på söndagar, datumkorrekt aktivitetslogik och historik med energipåverkan (2026-09-04)
 - [x] Investerarmaterial version 4.1: pitchvideo, pitchdeck, Living Blueprint och investerarsida i samma version (2026-09-04)
 - [x] Health Connect/steg borttaget ur Android-MVP:n inför Google Play Internal Test (2026-09-04)
+- [x] MyFlove 5.0: samlad release med lugn dagsresa, Flow-åtgärder, kalenderkoppling, belastningskarta och sorterad adminanalys (2026-09-11)
+- [x] Investerarmaterial och Android AAB synkade till MyFlove 5.0 / versionCode 9 (2026-09-11)

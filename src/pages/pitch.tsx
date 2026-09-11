@@ -32,8 +32,12 @@ function useIsInvestor() {
 
 const BLUEPRINT_VERSIONS = [
   {
+    version: "5.0",
+    label: "Senaste – Flow-åtgärder, riktig kalendersynkning och komplett belastningsbild",
+  },
+  {
     version: "4.2",
-    label: "Senaste – guidad dagsresa, enkelt läge, andningsljus och batteri mot faktisk tid",
+    label: "Guidad dagsresa, enkelt läge, andningsljus och batteri mot faktisk tid",
   },
   { version: "4.1", label: "Enkel start, adaptiv personalisering och energihistorik" },
   { version: "3.7", label: "En enda lugn väg genom vardagen" },
@@ -135,29 +139,30 @@ export default function PitchPage() {
               <Film size={18} className="text-primary" /> Pitchvideo
             </h2>
             <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
-              Version 4.2 · Din dag, i din takt
+              Version 5.0 · Din dag, i din takt
             </span>
           </div>
           <p className="text-sm text-muted-foreground">
-            Version 4.2 visar appen som den ser ut nu: en guidad dagsresa i tre steg – Hur mår du?,
+            Version 5.0 visar appen som den ser ut nu: en guidad dagsresa i tre steg – Hur mår du?,
             Vad händer? och Behöver du planera om? – på en lugn startsida med vita kort och ett
             andningsljus som pulserar 4 sekunder in, 5 ut och 1 sekunds vila. Batteriet mäts mot
             faktiskt genomförda aktiviteter och faktisk tid, kvällschecken jämför förväntad och
-            faktisk energi, och alla block kan fällas ihop eller döljas i enkelt läge.
+            faktisk energi, och alla block kan fällas ihop eller döljas i enkelt läge. Flow kan
+            efter godkännande ändra uppgifter, och Kalender kan synkas med Google eller Outlook.
           </p>
 
           <video
             controls
             playsInline
             preload="metadata"
-            poster="/pitch/myflove-pitch-4.2-poster.jpg"
+            poster="/pitch/myflove-pitch-5.0-poster.jpg"
             className="w-full rounded-xl bg-black aspect-video"
-            src="/pitch/myflove-pitch-4.2.mp4"
+            src="/pitch/myflove-pitch-5.0.mp4"
           />
           <figure className="space-y-1">
             <img
-              src="/pitch/myflove-pitch-4.2-journey-thumb.jpg"
-              alt="Scenen om dagsresan i pitchvideon version 4.2 med tre steg"
+              src="/pitch/myflove-pitch-5.0-journey-thumb.jpg"
+              alt="Scenen om dagsresan i pitchvideon version 5.0 med tre steg"
               loading="lazy"
               className="w-full rounded-xl border border-border"
             />
@@ -167,8 +172,8 @@ export default function PitchPage() {
           </figure>
           <figure className="space-y-1">
             <img
-              src="/pitch/myflove-pitch-4.2-load-thumb.jpg"
-              alt="Belastningskartan i pitchvideon version 4.2 med dagar, veckor och månader"
+              src="/pitch/myflove-pitch-5.0-load-thumb.jpg"
+              alt="Belastningskartan i pitchvideon version 5.0 med dagar, veckor och månader"
               loading="lazy"
               className="w-full rounded-xl border border-border"
             />
@@ -178,7 +183,7 @@ export default function PitchPage() {
           </figure>
           <div className="flex flex-wrap gap-2">
             <a
-              href="/pitch/myflove-pitch-4.2.mp4"
+              href="/pitch/myflove-pitch-5.0.mp4"
               download
               className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
             >
@@ -239,22 +244,23 @@ export default function PitchPage() {
               <FileText size={18} className="text-primary" /> Pitchdeck
             </h2>
             <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
-              Version 4.2 · Guidad dagsresa & lugnt gränssnitt
+              Version 5.0 · Kapacitetsstyrd vardag
             </span>
           </div>
           <p className="text-sm text-muted-foreground">
-            Pitchdecket (4.2) beskriver appen som den är utformad nu: den guidade dagsresan i tre
+            Pitchdecket (5.0) beskriver appen som den är utformad nu: den guidade dagsresan i tre
             steg, det lugna gränssnittet med andningsljus, enkelt läge och hopfällbara block,
             batteriet mätt mot faktisk belastning och tid, belastningskartan i Insikter och
             kvällschecken – tillsammans med validering, affärsmodell, differentiering, go-to-market,
-            kapital och roadmap.
+            kapital och roadmap. Det inkluderar även Flow-åtgärder, sparad chatthistorik, riktig
+            kalendersynkning samt administratörens aggregerade och anonymiserade analys.
           </p>
 
           <div className="grid gap-3 sm:grid-cols-2">
             <figure className="space-y-1">
               <img
-                src="/pitch/MyFlove_Pitchdeck_4.2-thumb.jpg"
-                alt="Titelsidan i MyFlove Pitchdeck 4.2 med Flow-karaktären"
+                src="/pitch/MyFlove_Pitchdeck_5.0-thumb.jpg"
+                alt="Titelsidan i MyFlove Pitchdeck 5.0 med Flow-karaktären"
                 loading="lazy"
                 className="w-full rounded-xl border border-border"
               />
@@ -262,8 +268,8 @@ export default function PitchPage() {
             </figure>
             <figure className="space-y-1">
               <img
-                src="/pitch/MyFlove_Pitchdeck_4.2-journey-thumb.jpg"
-                alt="Sliden om den guidade dagsresan i MyFlove Pitchdeck 4.2"
+                src="/pitch/MyFlove_Pitchdeck_5.0-journey-thumb.jpg"
+                alt="Sliden om den guidade dagsresan i MyFlove Pitchdeck 5.0"
                 loading="lazy"
                 className="w-full rounded-xl border border-border"
               />
@@ -275,25 +281,25 @@ export default function PitchPage() {
 
           <div className="flex flex-wrap gap-2">
             <a
-              href="/pitch/MyFlove_Pitchdeck_4.2.pptx"
+              href="/pitch/MyFlove_Pitchdeck_5.0.pptx"
               download
               className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
             >
-              <Download size={16} /> Ladda ner PowerPoint (4.2)
+              <Download size={16} /> Ladda ner PowerPoint (5.0)
             </a>
             <a
-              href="/pitch/MyFlove_Pitchdeck_4.2.pdf"
+              href="/pitch/MyFlove_Pitchdeck_5.0.pdf"
               download
               className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-medium hover:bg-secondary"
             >
-              <Download size={16} /> Ladda ner PDF (4.2)
+              <Download size={16} /> Ladda ner PDF (5.0)
             </a>
             <a
-              href="/pitch/MyFlove_Pitchdeck_4.2.docx"
+              href="/pitch/MyFlove_Pitchdeck_5.0.docx"
               download
               className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-medium hover:bg-secondary"
             >
-              <Download size={16} /> Ladda ner Word (4.2)
+              <Download size={16} /> Ladda ner Word (5.0)
             </a>
           </div>
           <p className="text-xs text-muted-foreground">

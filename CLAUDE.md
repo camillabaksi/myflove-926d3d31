@@ -11,13 +11,13 @@
 
 - **Framework:** TanStack Start (SSR, filbaserad routing i `src/routes/`, server-funktioner i `.server.ts`).
 - **UI & Style:** React 19, Tailwind CSS, Lucide Icons, Shadcn/ui.
-- **Backend & Auth:** Supabase (Databas/Storage) + Clerk (Autentisering).
+- **Backend & Auth:** Supabase (databas, lagring och autentisering). `src/compat/clerk.tsx` är endast ett kompatibilitetslager.
 - **Language:** TypeScript. Använd **aldrig** `any` — skriv tydliga typer och interfaces.
 
 ## ⚠️ Strikta Skyddsregler (Bryt inte dessa)
 
 1. **Rör inte `.env`:** Ändra aldrig miljövariabler eller Supabase/Clerk-nycklar utan explicit instruktion.
-2. **Bevara Clerk-auth:** Ändra inte autentiseringsflödet eller hur Clerk-tokens skickas till Supabase utan godkännande.
+2. **Bevara authflödet:** Ändra inte Supabase-autentiseringen eller hur sessionstoken skickas till serverfunktioner utan godkännande.
 3. **Bevara TanStack-routing:** Följ TanStack Starts filkonventioner under `src/routes/`. Skapa inte egna ad hoc-routrar.
 4. **Inga onödiga paket:** Installera inga nya npm-paket om uppgiften kan lösas med befintlig tech-stack.
 

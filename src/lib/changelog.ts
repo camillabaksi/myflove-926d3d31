@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-11";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "MyFlove 5.0 och ny Android AAB",
+    items: [
+      "Webbappen, Living Blueprint, pitchdeck, pitchvideo, investerarpitch och byggdokumentation är synkade till MyFlove 5.0 (2026-09-11)",
+      "5.0 omfattar den guidade dagsresan, Flow-åtgärder efter godkännande, sparad chatthistorik, Google-/Outlook-kalender, belastningskarta och sorterad anonymiserad adminanalys (2026-09-11)",
+      "Android använder versionName 5.0 och versionCode 9; en osignerad AAB måste signeras före uppladdning till Google Play (2026-09-11)",
+    ],
+  },
+  {
     title: "Sortering i användare och roller",
     items: [
       "Användarlistan i admin kan sorteras på alla kolumner: namn, senast aktiv, senaste inloggning, skapad och roller (2026-09-11)",

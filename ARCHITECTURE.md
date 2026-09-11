@@ -64,7 +64,7 @@ MyFlove är en svenskspråkig "lugnt livsflöde"-app (fokus, uppgifter, humör, 
 - **`pages/`** – En komponent per funktionsyta (t.ex. `dashboard.tsx`, `mood.tsx`, `finances.tsx`). Dessa importeras och renderas av motsvarande fil i `routes/`, vilket separerar _route-definition_ (URL, guards, SSR-läge) från _sidinnehåll_.
 - **`routes/`** – TanStack Starts filbaserade routingträd. `__root.tsx` är app-skalet (HTML-dokument, meta-taggar, globala providers). `_app.tsx` är en layout-route (`ssr: false`) vars `beforeLoad` läser Supabase-sessionen och redirectar till `/sign-in` om ingen finns — detta är en **UX-guard, inte en säkerhetsgräns** (se avsnitt 6). Varje `_app.<namn>.tsx`-fil motsvarar en sida bakom den guarden (kalender, ekonomi, familj m.m.); `[.mcp]/` och `[.well-known]/` exponerar MCP-/OAuth-relaterade API-endpoints, och `api/public/` publika endpoints utan auth.
 - **`hooks/`** – Återanvändbar stateful logik frikopplad från rendering: t.ex. `use-data.ts` (domän-hooks för tasks/reminders/moods/etc.), `use-commute-alerts.ts`, `use-notification-scheduler.ts`, `use-is-admin.ts`. Hooks kombinerar ofta `lib/`-funktioner med lokal React-state.
-- **`lib/`** – Ren logik och integrationer utan JSX: domänhjälpare (`achievements.ts`, `mood-stats.ts`, `ics.ts`), lagring (`storage.ts`, `cloud-storage.ts`), AI (`ai-assistant.ts`, `ai-gateway.server.ts`, `flow-chat.functions.ts`), push (`push.server.ts`, `push-notifications.ts`), analytics (`analytics.ts`/`.functions.ts`) och MCP-verktyg (`mcp/`). Filer med suffixet `.functions.ts` eller `.server.ts` körs (delvis) på servern som TanStack Start server-funktioner.
+- **`lib/`** – Ren logik och integrationer utan JSX: domänhjälpare (`achievements.ts`, `mood-stats.ts`, `battery-load-trend.ts`), lagring (`storage.ts`, `cloud-storage.ts`), AI (`ai-assistant.ts`, `ai-gateway.server.ts`, `flow-chat.functions.ts`), kalenderkoppling (`calendar-connect.functions.ts`), push (`push.server.ts`, `push-notifications.ts`) och analytics (`analytics.ts`/`.functions.ts`). Filer med suffixet `.functions.ts` eller `.server.ts` körs (delvis) på servern som TanStack Start server-funktioner.
 - **`integrations/supabase/`** – Genererad/central plats för Supabase-klienten: `client.ts` (browser, lazy-init via `Proxy`), `client.server.ts` (server), `types.ts` (auto-genererade databastyper), `auth-middleware.ts` (server-middleware `requireSupabaseAuth` som verifierar användarens JWT via `supabase.auth.getClaims()` och skapar en RLS-scopad klient), `auth-attacher.ts` (bifogar access-token till utgående server-funktionsanrop).
 - **`compat/`** – Tunna shim-lager så att koden kan importera bekanta API:er (`wouter`, `@clerk/react`, en intern API-klient) trots att den faktiska implementationen skiljer sig: TanStack Router under huven och **Supabase Auth** bakom Clerk-API:et.
 
@@ -147,7 +147,7 @@ Säkerheten vilar på **tre lager**. Det är viktigt att förstå vad varje lage
 
 ## 9. Testning
 
-**Det finns i dagsläget inga automatiska tester i projektet** — inget testramverk, inga `*.test.ts`-filer och inget `test`-script i `package.json`. Kvalitetssäkringen sker via TypeScript, ESLint och manuell testning.
+Projektet använder Vitest för enhetstester och Playwright-skript för riktade visuella kontroller. Kvalitetssäkringen kompletteras med TypeScript, ESLint och produktionsbygge.
 
 Kommandon som finns idag:
 
@@ -156,17 +156,18 @@ npm run dev      # Dev-server
 npm run build    # Produktionsbygge
 npm run lint     # ESLint
 npm run format   # Prettier
+npm run test     # Vitest
 npx tsc --noEmit # Typkontroll (inget npm-script finns)
 ```
 
-Rekommenderad ordning om testning införs:
+Rekommenderad fortsatt testordning:
 
-1. **Enhetstester (Vitest)** för `lib/` — ren logik utan JSX (`achievements.ts`, `mood-stats.ts`, `ics.ts`, `flowscore.ts`) ger mest värde per insats.
+1. **Enhetstester (Vitest)** för `lib/` — ren logik utan JSX (`achievements.ts`, `mood-stats.ts`, `battery-load-trend.ts`, `flowscore.ts`) ger mest värde per insats.
 2. **Hook-tester** för `useLocalStorage`/`useCloudSyncedStorage` — synk och last-write-wins är den mest buggkänsliga delen av appen.
 3. **RLS-tester** mot en lokal Supabase-instans: verifiera att användare A inte kan läsa användare B:s rader. Detta är den enda kontroll som faktiskt skyddar data.
 4. **E2E (Playwright)** för de kritiska flödena: inloggning, skapa uppgift, logga humör, utloggning.
 
-Lägg till `"typecheck": "tsc --noEmit"` och `"test": "vitest"` i `package.json` när detta införs.
+Behåll testerna nära berörd logik och kör hela Vitest-sviten inför release.
 
 ## 10. Kända begränsningar & teknisk skuld
 
@@ -177,5 +178,5 @@ Lägg till `"typecheck": "tsc --noEmit"` och `"test": "vitest"` i `package.json`
 | Två routingsystem        | `wouter`-shimmet ovanpå TanStack Router betyder att prefetch, typade länkar och `beforeLoad`-integration går förlorade i komponentkoden. | Migrera successivt till TanStack Routers `<Link>`.                         |
 | Clerk-shimmet            | Namnet antyder ett beroende som inte finns och missleder både utvecklare och dokumentation.                                              | Byt namn till t.ex. `compat/auth.tsx` och uppdatera `CLAUDE.md`.           |
 | Utloggning               | Lokal data rensas inte.                                                                                                                  | Rensa app-nycklar på `SIGNED_OUT`.                                         |
-| Inga tester              | Ingen regressionssäkring alls.                                                                                                           | Se avsnitt 9.                                                              |
+| Testtäckning             | Kritiska flöden har ännu inte fullständig E2E-täckning.                                                                                  | Utöka Playwright-sviten stegvis.                                           |
 | MCP på Windows           | Pluginet är avstängt i dev på Windows, så MCP-endpoints kan inte testas lokalt där.                                                      | Dokumentera arbetsflödet, eller kör via WSL.                               |

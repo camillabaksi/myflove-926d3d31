@@ -1,25 +1,13 @@
 /** Engelska översättningar (sv → en). Nycklarna ÄR de svenska källsträngarna. */
 export const EN_CALENDAR: Record<string, string> = {
-  // calendar.tsx – header & export/import
+  // calendar.tsx – header
   Kalender: "Calendar",
   "Översikt över dina dagar. Inga stressiga detaljer.":
     "An overview of your days. No stressful details.",
-  "Importera från telefonens kalender": "Import from your phone's calendar",
-  "Exportera till kalender (.ics)": "Export to calendar (.ics)",
-  "Tips: exportera i telefonens kalender som .ics och importera här för att få in dina möten i MyFlove.":
-    "Tip: export from your phone's calendar as .ics and import it here to get your meetings into MyFlove.",
   "Välj minst ett barn – annars tar du bort händelsen.":
     "Choose at least one child – otherwise you'll delete the event.",
   "Uppdaterat vilka barn som ingår.": "Updated which children are included.",
   "Kunde inte spara ändringen. Försök igen.": "Couldn't save the change. Try again.",
-  "Inget att exportera ännu.": "Nothing to export yet.",
-  Exporterade: "Exported",
-  "händelser. Öppna filen i din kalenderapp.": "events. Open the file in your calendar app.",
-  "Hittade inga händelser i filen.": "No events found in the file.",
-  Importerade: "Imported",
-  "händelser till kalendern.": "events to the calendar.",
-  "Kunde inte läsa filen. Kontrollera att det är en .ics-fil.":
-    "Couldn't read the file. Check that it's an .ics file.",
   "Något gick fel. Försök igen.": "Something went wrong. Try again.",
 
   // calendar.tsx – view controls & categories
