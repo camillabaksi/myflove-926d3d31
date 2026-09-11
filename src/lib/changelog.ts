@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-11";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Pitchdeck som PDF och Word",
+    items: [
+      "Pitchdecket 4.2 finns nu även som Word (DOCX) med alla slides, inklusive demosliden sist (2026-09-11)",
+      "PDF och Word kan laddas ner direkt från pitchsidan (2026-09-11)",
+    ],
+  },
+
+  {
     title: "20-sekunders produktdemo",
     items: [
       "Kort demo på engelska som visar kedjan QuickFlow → Flow → Min dag med riktiga skärmar (2026-09-11)",
