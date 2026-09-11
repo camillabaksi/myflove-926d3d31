@@ -260,7 +260,6 @@ export default function Home() {
               <WakeUpCard />
             </div>
 
-
             <div
               className="mt-5 grid grid-cols-3 gap-2 sm:gap-3"
               data-testid="home-widgets"

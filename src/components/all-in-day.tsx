@@ -18,11 +18,7 @@ function minutesOf(time?: string): number {
  * huvudflödet; tider, barn, påminnelser och rutiner får en egen sekundär vy.
  */
 function isPrimaryActivity(item: FlowItem): boolean {
-  return (
-    item.source === "uppgift" ||
-    item.source === "tanke" ||
-    item.source === "quickflow"
-  );
+  return item.source === "uppgift" || item.source === "tanke" || item.source === "quickflow";
 }
 
 function ItemList({

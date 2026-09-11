@@ -53,7 +53,9 @@ export function useQuickflowPrioritization() {
       const energyPercent = reading?.now;
       const now = Date.now();
       try {
-        const result = await run({ data: { titles: clean, energyPercent, context: capacityContext } });
+        const result = await run({
+          data: { titles: clean, energyPercent, context: capacityContext },
+        });
         merge(
           result.items.map((it, i) => ({
             id: `${now}-${i}`,

@@ -2,30 +2,30 @@
 
 MyFlove är en svenskspråkig "lugnt livsflöde"-app (fokus, uppgifter, humör, ekonomi, resor, familj m.m.) byggd som en TanStack Start-app med Supabase som backend. Detta dokument beskriver hur systemet hänger ihop.
 
-> **Viktigt om autentisering:** Appen använder **Supabase Auth** — inte Clerk. `src/compat/clerk.tsx` är enbart ett *shim* som exponerar Clerk-liknande API:er (`useUser`, `useClerk`, `SignedIn`/`SignedOut`) ovanpå `supabase.auth`. Det finns inget Clerk-beroende i körtid. Äldre dokumentation (inkl. `CLAUDE.md`) som talar om "Clerk för autentisering" syftar i praktiken på detta shim-lager.
+> **Viktigt om autentisering:** Appen använder **Supabase Auth** — inte Clerk. `src/compat/clerk.tsx` är enbart ett _shim_ som exponerar Clerk-liknande API:er (`useUser`, `useClerk`, `SignedIn`/`SignedOut`) ovanpå `supabase.auth`. Det finns inget Clerk-beroende i körtid. Äldre dokumentation (inkl. `CLAUDE.md`) som talar om "Clerk för autentisering" syftar i praktiken på detta shim-lager.
 
 ## 1. Tech Stack & Beroenden
 
-| Kategori | Teknologi | Varför |
-| --- | --- | --- |
-| Framework | **TanStack Start** (`@tanstack/react-start`) + **TanStack Router** | Fullstack React-ramverk med filbaserad routing, SSR och server-funktioner (`.server.ts`), ersätter Next.js i detta projekt. |
-| UI-bibliotek | **React 19** | Komponentmodell, concurrent rendering. |
-| Byggverktyg | **Vite 8** (`@lovable.dev/vite-tanstack-config`) | Snabb dev-server/HMR och produktionsbygge; projektets Lovable-preset lindrar in TanStack Start, React-plugin, path-alias m.m. |
-| Språk | **TypeScript 5** | Typsäkerhet över hela kodbasen, inkl. Supabase-genererade typer. |
-| Styling | **Tailwind CSS 4** (`@tailwindcss/vite`) + `tailwind-merge`, `class-variance-authority` | Utility-first CSS med temavariabler (HSL custom properties) för färgteman per sida/kategori. |
-| UI-komponenter | **Radix UI**-primitiver (dialog, dropdown, tabs, osv.) inpackade i `src/components/ui/*` (shadcn/ui-mönster) | Tillgängliga, ostylade primitiver som stylas med Tailwind — konsekvent design-system. |
-| Ikoner | `lucide-react`, `react-icons` | Ikonuppsättning för navigation och UI. |
-| State/data-fetching | **TanStack Query** (`@tanstack/react-query`) | Cache/async state för server-data; `QueryClient` skapas i routern och delas via router-context. |
-| Formulär | `react-hook-form` + `@hookform/resolvers` + `zod` | Formulärhantering med schemavalidering. |
-| Backend-as-a-service | **Supabase** (`@supabase/supabase-js`) | Postgres-databas med Row Level Security, auth, nyckel/värde-lagring (`user_kv`) och migrationer i `supabase/migrations/`. |
-| Autentisering | **Supabase Auth**, exponerat via ett Clerk-kompatibelt shim (`src/compat/clerk.tsx`) | Inloggning/registrering, sessionshantering och JWT. Shimmet ger `useUser()`/`useClerk()`-API:er så att komponentkoden slipper känna till Supabase-detaljer. |
-| Klientnavigering (komponentnivå) | **wouter** (via `src/compat/wouter.tsx`) | Lättviktig `<Link>`/`useLocation`-API som används inuti komponenter (t.ex. `Layout`), ovanpå TanStack Routers faktiska route-träd. |
-| AI | `ai` (Vercel AI SDK) + `@ai-sdk/openai-compatible`, `@ai-sdk/react` | Chatt-/assistentfunktioner (Flow-assistenten) och MCP-verktygsanrop. |
-| MCP | `@lovable.dev/mcp-js` | Exponerar/ansluter Model Context Protocol-verktyg (se `src/lib/mcp/`), avstängt på Windows i dev pga path-separator-bugg. |
-| Mobil | Capacitor (`@capacitor/android`, `@capacitor/ios`, m.fl.) | Paketering av webbappen som native iOS/Android-app. |
-| Push-notiser | `@block65/webcrypto-web-push` | Web Push-notifikationer server-side. |
-| Diagram/övrigt | `recharts`, `embla-carousel-react`, `framer-motion`, `date-fns`, `cmdk`, `sonner`, `vaul` | Statistik-diagram, karuseller, animationer, datumhantering, kommandopalett, toasts, drawers. |
-| Kvalitet | ESLint 9 + `typescript-eslint`, Prettier | Lint och formattering. |
+| Kategori                         | Teknologi                                                                                                    | Varför                                                                                                                                                      |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Framework                        | **TanStack Start** (`@tanstack/react-start`) + **TanStack Router**                                           | Fullstack React-ramverk med filbaserad routing, SSR och server-funktioner (`.server.ts`), ersätter Next.js i detta projekt.                                 |
+| UI-bibliotek                     | **React 19**                                                                                                 | Komponentmodell, concurrent rendering.                                                                                                                      |
+| Byggverktyg                      | **Vite 8** (`@lovable.dev/vite-tanstack-config`)                                                             | Snabb dev-server/HMR och produktionsbygge; projektets Lovable-preset lindrar in TanStack Start, React-plugin, path-alias m.m.                               |
+| Språk                            | **TypeScript 5**                                                                                             | Typsäkerhet över hela kodbasen, inkl. Supabase-genererade typer.                                                                                            |
+| Styling                          | **Tailwind CSS 4** (`@tailwindcss/vite`) + `tailwind-merge`, `class-variance-authority`                      | Utility-first CSS med temavariabler (HSL custom properties) för färgteman per sida/kategori.                                                                |
+| UI-komponenter                   | **Radix UI**-primitiver (dialog, dropdown, tabs, osv.) inpackade i `src/components/ui/*` (shadcn/ui-mönster) | Tillgängliga, ostylade primitiver som stylas med Tailwind — konsekvent design-system.                                                                       |
+| Ikoner                           | `lucide-react`, `react-icons`                                                                                | Ikonuppsättning för navigation och UI.                                                                                                                      |
+| State/data-fetching              | **TanStack Query** (`@tanstack/react-query`)                                                                 | Cache/async state för server-data; `QueryClient` skapas i routern och delas via router-context.                                                             |
+| Formulär                         | `react-hook-form` + `@hookform/resolvers` + `zod`                                                            | Formulärhantering med schemavalidering.                                                                                                                     |
+| Backend-as-a-service             | **Supabase** (`@supabase/supabase-js`)                                                                       | Postgres-databas med Row Level Security, auth, nyckel/värde-lagring (`user_kv`) och migrationer i `supabase/migrations/`.                                   |
+| Autentisering                    | **Supabase Auth**, exponerat via ett Clerk-kompatibelt shim (`src/compat/clerk.tsx`)                         | Inloggning/registrering, sessionshantering och JWT. Shimmet ger `useUser()`/`useClerk()`-API:er så att komponentkoden slipper känna till Supabase-detaljer. |
+| Klientnavigering (komponentnivå) | **wouter** (via `src/compat/wouter.tsx`)                                                                     | Lättviktig `<Link>`/`useLocation`-API som används inuti komponenter (t.ex. `Layout`), ovanpå TanStack Routers faktiska route-träd.                          |
+| AI                               | `ai` (Vercel AI SDK) + `@ai-sdk/openai-compatible`, `@ai-sdk/react`                                          | Chatt-/assistentfunktioner (Flow-assistenten) och MCP-verktygsanrop.                                                                                        |
+| MCP                              | `@lovable.dev/mcp-js`                                                                                        | Exponerar/ansluter Model Context Protocol-verktyg (se `src/lib/mcp/`), avstängt på Windows i dev pga path-separator-bugg.                                   |
+| Mobil                            | Capacitor (`@capacitor/android`, `@capacitor/ios`, m.fl.)                                                    | Paketering av webbappen som native iOS/Android-app.                                                                                                         |
+| Push-notiser                     | `@block65/webcrypto-web-push`                                                                                | Web Push-notifikationer server-side.                                                                                                                        |
+| Diagram/övrigt                   | `recharts`, `embla-carousel-react`, `framer-motion`, `date-fns`, `cmdk`, `sonner`, `vaul`                    | Statistik-diagram, karuseller, animationer, datumhantering, kommandopalett, toasts, drawers.                                                                |
+| Kvalitet                         | ESLint 9 + `typescript-eslint`, Prettier                                                                     | Lint och formattering.                                                                                                                                      |
 
 ## 2. Katalogstruktur
 
@@ -61,7 +61,7 @@ MyFlove är en svenskspråkig "lugnt livsflöde"-app (fokus, uppgifter, humör, 
 ### Ansvar per mapp
 
 - **`components/`** – Presentationsnära, återanvändbara React-komponenter. `ui/` innehåller "dumma" designsystem-primitiver (Button, Dialog, Card osv.) utan appspecifik logik. Övriga filer (t.ex. `layout.tsx`, `flow-insights-modal.tsx`) är appspecifika komponenter som kombinerar UI-primitiver med hooks.
-- **`pages/`** – En komponent per funktionsyta (t.ex. `dashboard.tsx`, `mood.tsx`, `finances.tsx`). Dessa importeras och renderas av motsvarande fil i `routes/`, vilket separerar *route-definition* (URL, guards, SSR-läge) från *sidinnehåll*.
+- **`pages/`** – En komponent per funktionsyta (t.ex. `dashboard.tsx`, `mood.tsx`, `finances.tsx`). Dessa importeras och renderas av motsvarande fil i `routes/`, vilket separerar _route-definition_ (URL, guards, SSR-läge) från _sidinnehåll_.
 - **`routes/`** – TanStack Starts filbaserade routingträd. `__root.tsx` är app-skalet (HTML-dokument, meta-taggar, globala providers). `_app.tsx` är en layout-route (`ssr: false`) vars `beforeLoad` läser Supabase-sessionen och redirectar till `/sign-in` om ingen finns — detta är en **UX-guard, inte en säkerhetsgräns** (se avsnitt 6). Varje `_app.<namn>.tsx`-fil motsvarar en sida bakom den guarden (kalender, ekonomi, familj m.m.); `[.mcp]/` och `[.well-known]/` exponerar MCP-/OAuth-relaterade API-endpoints, och `api/public/` publika endpoints utan auth.
 - **`hooks/`** – Återanvändbar stateful logik frikopplad från rendering: t.ex. `use-data.ts` (domän-hooks för tasks/reminders/moods/etc.), `use-commute-alerts.ts`, `use-notification-scheduler.ts`, `use-is-admin.ts`. Hooks kombinerar ofta `lib/`-funktioner med lokal React-state.
 - **`lib/`** – Ren logik och integrationer utan JSX: domänhjälpare (`achievements.ts`, `mood-stats.ts`, `ics.ts`), lagring (`storage.ts`, `cloud-storage.ts`), AI (`ai-assistant.ts`, `ai-gateway.server.ts`, `flow-chat.functions.ts`), push (`push.server.ts`, `push-notifications.ts`), analytics (`analytics.ts`/`.functions.ts`) och MCP-verktyg (`mcp/`). Filer med suffixet `.functions.ts` eller `.server.ts` körs (delvis) på servern som TanStack Start server-funktioner.
@@ -77,6 +77,7 @@ MyFlove har tre parallella state-lager, valda efter datans känslighet/delningsb
 3. **Molnsynkad state** (`lib/cloud-storage.ts` → `useCloudSyncedStorage`) — bygger ovanpå `useLocalStorage` men pushar/hämtar också värdet till/från Supabase-tabellen `user_kv` (per `user_id` + `key`), med "last-write-wins" baserat på en lokalt sparad `updated_at`-tidsstämpel. Appen fungerar offline-first: `localStorage` är sanningskällan, molnet är best-effort och debouncead (600 ms) vid skrivning. Används för data som ska följa användaren mellan enheter, t.ex. `tasks` och `reminders` (se `hooks/use-data.ts`).
 
 **Server-/nätverksdata:**
+
 - **Supabase** (`integrations/supabase/client.ts`) är huvudkällan för persistent, delad data (t.ex. `user_kv`, admin-statistik, familjedata). Klienten skapas lazy via en `Proxy` så miljövariabler först behöver läsas vid första anropet (fungerar för både klient- och SSR-kontext via `import.meta.env`/`process.env`).
 - **TanStack Query** (`QueryClient`, instansierad i `router.tsx` och delad via routerns `context`) hanterar cache, refetch och laddningsstate för asynkrona anrop, exponerad genom `QueryClientProvider` i `routes/__root.tsx`.
 - **Server-funktioner** (filer med `.functions.ts`/`.server.ts` i `lib/`) körs på servern (TanStack Start) för saker som kräver hemligheter eller backend-åtkomst: AI-anrop (`ai-gateway.server.ts`), push (`push.server.ts`), admin-, konto- och analysfunktioner.
@@ -89,7 +90,7 @@ Flöde i praktik: **Sida (`pages/*.tsx`) → domän-hook (`hooks/use-data.ts` m.
 - **Filbaserad routing** via TanStack Router/Start: varje fil i `src/routes/` blir en URL (se `src/routes/README.md` för konventionerna: `index.tsx` → `/`, `$id.tsx` → dynamisk param, `_layout.tsx` → layout-route, `__root.tsx` → app-skal). `routeTree.gen.ts` genereras automatiskt av router-pluginet och ska aldrig redigeras manuellt.
 - **`__root.tsx`** sätter upp HTML-dokumentet (meta-taggar, fonter, manifest), globala providers (`QueryClientProvider`, `TooltipProvider`) och globala toasts (`Toaster`, `Sonner`).
 - **`_app.tsx`** är app-layoutrouten: `beforeLoad` kontrollerar Supabase-sessionen och redirectar oautentiserade användare till `/sign-in`; alla appens huvudsidor (`_app.hem.tsx`, `_app.kalender.tsx`, `_app.finances.tsx`, osv.) ligger under detta prefix och renderas via `<Outlet />`. Eftersom routen är `ssr: false` körs kontrollen i webbläsaren mot den lokalt lagrade sessionen — den skyddar vyer, inte data.
-- Route-filerna är tunna — de importerar och renderar motsvarande komponent i `pages/` (separation mellan *routing/guards* och *sidinnehåll*).
+- Route-filerna är tunna — de importerar och renderar motsvarande komponent i `pages/` (separation mellan _routing/guards_ och _sidinnehåll_).
 - **`components/layout.tsx`** är den centrala UI-skalkomponenten för inloggade sidor: sido-/bottennavigering (med användarbara, anpassningsbara snabbval), sidspecifika färgteman (`CATEGORY_THEMES`, via CSS custom properties för `--primary`/`--accent`), globala varningsbanners (pendel-, medicin- och närhetsalarm) samt inloggnings-/utloggningskontroller via Clerk.
 - Intern länknavigering inuti komponenter använder `wouter`s `<Link>`/`useLocation` (via kompatibilitetslagret `src/compat/wouter.tsx`) snarare än TanStack Routers egna primitiver — ett medvetet abstraktionslager ovanpå det faktiska routträdet.
 - **Centrala komponenter:** `Layout` (navigationsskal), `components/ui/*` (designsystem: `Button`, `Dialog`, `Card`, `Sidebar`, `Chart` osv.), samt funktionsspecifika modaler (`flow-insights-modal.tsx`, `help-me-modal.tsx`, `stop-modal.tsx`, `overwhelmed-modal.tsx`) och widgets (`widget-grid.tsx`, `weather-card.tsx`, `home-shortcuts.tsx`) som används på dashboard/hem-sidan.
@@ -109,17 +110,17 @@ Flöde i praktik: **Sida (`pages/*.tsx`) → domän-hook (`hooks/use-data.ts` m.
 
 Säkerheten vilar på **tre lager**. Det är viktigt att förstå vad varje lager faktiskt skyddar, eftersom det är lätt att övertolka route-guarden.
 
-| Lager | Var | Vad det skyddar | Vad det *inte* skyddar |
-| --- | --- | --- | --- |
-| 1. Route-guard | `routes/_app.tsx` (`beforeLoad`) | Att inloggade vyer inte renderas för utloggade användare. Ren UX. | Ingenting datamässigt — routen är `ssr: false` och sessionen läses från `localStorage`, vilket en användare kan manipulera. |
-| 2. Row Level Security | `supabase/migrations/*.sql` | Den faktiska datagränsen. Varje användartabell har `ENABLE ROW LEVEL SECURITY` med policies som matchar `auth.uid() = user_id` (se `user_kv`). | Data som nås via service-role-nyckeln (lager 3). |
-| 3. Server-funktioner | `requireSupabaseAuth` i `integrations/supabase/auth-middleware.ts` | Betrodda operationer. Middlewaret kräver `Authorization: Bearer <jwt>`, verifierar token med `supabase.auth.getClaims()` och exponerar `userId`/`claims`/RLS-scopad klient i context. | Inget om en server-funktion glömmer att lägga till middlewaret. |
+| Lager                 | Var                                                                | Vad det skyddar                                                                                                                                                                       | Vad det _inte_ skyddar                                                                                                      |
+| --------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| 1. Route-guard        | `routes/_app.tsx` (`beforeLoad`)                                   | Att inloggade vyer inte renderas för utloggade användare. Ren UX.                                                                                                                     | Ingenting datamässigt — routen är `ssr: false` och sessionen läses från `localStorage`, vilket en användare kan manipulera. |
+| 2. Row Level Security | `supabase/migrations/*.sql`                                        | Den faktiska datagränsen. Varje användartabell har `ENABLE ROW LEVEL SECURITY` med policies som matchar `auth.uid() = user_id` (se `user_kv`).                                        | Data som nås via service-role-nyckeln (lager 3).                                                                            |
+| 3. Server-funktioner  | `requireSupabaseAuth` i `integrations/supabase/auth-middleware.ts` | Betrodda operationer. Middlewaret kräver `Authorization: Bearer <jwt>`, verifierar token med `supabase.auth.getClaims()` och exponerar `userId`/`claims`/RLS-scopad klient i context. | Inget om en server-funktion glömmer att lägga till middlewaret.                                                             |
 
 **Regler att följa:**
 
-- **RLS är sanningskällan.** Varje ny tabell måste ha RLS aktiverat *och* explicita policies i samma migration. En tabell utan policies är antingen helt låst eller helt öppen — båda är buggar.
+- **RLS är sanningskällan.** Varje ny tabell måste ha RLS aktiverat _och_ explicita policies i samma migration. En tabell utan policies är antingen helt låst eller helt öppen — båda är buggar.
 - **Service-role-nyckeln får aldrig nå klienten.** `integrations/supabase/client.server.ts` (`supabaseAdmin`) kringgår RLS och får endast importeras **dynamiskt inuti** en server-funktions handler, aldrig på toppnivå i en fil som kan bundlas till klienten.
-- **Behörighetskontroll före privilegierad åtkomst.** Mönstret i `lib/admin.functions.ts` är normen: `requireSupabaseAuth` → `assertAdmin()` mot den RLS-scopade klienten → *först därefter* `supabaseAdmin`. Klient-hooken `useIsAdmin()` styr endast om menyval visas och är inte en behörighetskontroll.
+- **Behörighetskontroll före privilegierad åtkomst.** Mönstret i `lib/admin.functions.ts` är normen: `requireSupabaseAuth` → `assertAdmin()` mot den RLS-scopade klienten → _först därefter_ `supabaseAdmin`. Klient-hooken `useIsAdmin()` styr endast om menyval visas och är inte en behörighetskontroll.
 - **Publika endpoints ska vara medvetet publika.** Allt under `routes/api/public/` saknar auth (t.ex. `csp-report.ts`). Lägg inte något där som läser eller skriver användardata.
 - **CSP-rapportering:** Browsern postar policy-överträdelser till `/api/public/csp-report`, som loggar dem till serverloggen. Endpointen är oautentiserad och saknar rate limiting — den bör betraktas som best-effort telemetri, inte som en tillförlitlig signal.
 
@@ -169,12 +170,12 @@ Lägg till `"typecheck": "tsc --noEmit"` och `"test": "vitest"` i `package.json`
 
 ## 10. Kända begränsningar & teknisk skuld
 
-| Område | Problem | Möjlig åtgärd |
-| --- | --- | --- |
-| Synkkonflikter | Last-write-wins per nyckel. Redigerar man på två enheter offline försvinner den ena ändringen tyst. | Per-post-tidsstämplar eller CRDT-liknande sammanslagning för listdata. |
-| `user_kv` som datamodell | Hela domänen lagras som JSON-blobbar, vilket omöjliggör frågor, index och partiella uppdateringar på serversidan. | Flytta datatunga domäner (uppgifter, transaktioner) till riktiga tabeller. |
-| Två routingsystem | `wouter`-shimmet ovanpå TanStack Router betyder att prefetch, typade länkar och `beforeLoad`-integration går förlorade i komponentkoden. | Migrera successivt till TanStack Routers `<Link>`. |
-| Clerk-shimmet | Namnet antyder ett beroende som inte finns och missleder både utvecklare och dokumentation. | Byt namn till t.ex. `compat/auth.tsx` och uppdatera `CLAUDE.md`. |
-| Utloggning | Lokal data rensas inte. | Rensa app-nycklar på `SIGNED_OUT`. |
-| Inga tester | Ingen regressionssäkring alls. | Se avsnitt 9. |
-| MCP på Windows | Pluginet är avstängt i dev på Windows, så MCP-endpoints kan inte testas lokalt där. | Dokumentera arbetsflödet, eller kör via WSL. |
+| Område                   | Problem                                                                                                                                  | Möjlig åtgärd                                                              |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| Synkkonflikter           | Last-write-wins per nyckel. Redigerar man på två enheter offline försvinner den ena ändringen tyst.                                      | Per-post-tidsstämplar eller CRDT-liknande sammanslagning för listdata.     |
+| `user_kv` som datamodell | Hela domänen lagras som JSON-blobbar, vilket omöjliggör frågor, index och partiella uppdateringar på serversidan.                        | Flytta datatunga domäner (uppgifter, transaktioner) till riktiga tabeller. |
+| Två routingsystem        | `wouter`-shimmet ovanpå TanStack Router betyder att prefetch, typade länkar och `beforeLoad`-integration går förlorade i komponentkoden. | Migrera successivt till TanStack Routers `<Link>`.                         |
+| Clerk-shimmet            | Namnet antyder ett beroende som inte finns och missleder både utvecklare och dokumentation.                                              | Byt namn till t.ex. `compat/auth.tsx` och uppdatera `CLAUDE.md`.           |
+| Utloggning               | Lokal data rensas inte.                                                                                                                  | Rensa app-nycklar på `SIGNED_OUT`.                                         |
+| Inga tester              | Ingen regressionssäkring alls.                                                                                                           | Se avsnitt 9.                                                              |
+| MCP på Windows           | Pluginet är avstängt i dev på Windows, så MCP-endpoints kan inte testas lokalt där.                                                      | Dokumentera arbetsflödet, eller kör via WSL.                               |

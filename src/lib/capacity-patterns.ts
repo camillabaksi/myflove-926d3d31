@@ -87,7 +87,8 @@ export function impactPatterns(
     {
       kind: "familj",
       id: "familj-lag-kapacitet",
-      textSv: "Du har ofta registrerat lägre kapacitet de dagar då familj och barn tar mycket energi.",
+      textSv:
+        "Du har ofta registrerat lägre kapacitet de dagar då familj och barn tar mycket energi.",
     },
   ];
   for (const c of check) {

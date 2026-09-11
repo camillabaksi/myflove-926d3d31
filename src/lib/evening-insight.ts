@@ -42,7 +42,10 @@ export function expectedLoad(sample: EveningSample): "lugn" | "rimlig" | "full" 
 const avg = (values: number[]): number | null =>
   values.length ? values.reduce((a, b) => a + b, 0) / values.length : null;
 
-export function buildEveningInsight(history: EveningSample[], today?: EveningSample | null): EveningInsight {
+export function buildEveningInsight(
+  history: EveningSample[],
+  today?: EveningSample | null,
+): EveningInsight {
   const days = history.length;
 
   let todayLine: string | null = null;

@@ -45,7 +45,9 @@ export function DayEnergyFlow({
     <>
       {todayCount === 0 ? (
         <p className="text-sm text-muted-foreground">
-          {t("Inget registrerat idag än. Lägg till något du gjort så syns dagens riktiga belastning här.")}
+          {t(
+            "Inget registrerat idag än. Lägg till något du gjort så syns dagens riktiga belastning här.",
+          )}
         </p>
       ) : (
         <div className="space-y-2">

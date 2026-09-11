@@ -80,9 +80,7 @@ export default function NotesPanel() {
     if (folderId) recordAction("mapp", folderId);
     const folder = folders.find((f) => f.id === folderId);
     toast.success(
-      folder
-        ? `${t("Flyttad till")} ${folder.emoji} ${folder.name}.`
-        : t("Ligger utan mapp nu."),
+      folder ? `${t("Flyttad till")} ${folder.emoji} ${folder.name}.` : t("Ligger utan mapp nu."),
     );
   };
 
@@ -93,9 +91,7 @@ export default function NotesPanel() {
       return;
     }
     addFolder(name, emoji);
-    toast.success(
-      t("Mappen {{name}} är skapad.").replace("{{name}}", `${emoji} ${name.trim()}`),
-    );
+    toast.success(t("Mappen {{name}} är skapad.").replace("{{name}}", `${emoji} ${name.trim()}`));
   };
 
   const startEdit = (note: FlowNote) => {

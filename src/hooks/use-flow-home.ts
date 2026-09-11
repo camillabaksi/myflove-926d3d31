@@ -31,7 +31,11 @@ export function useFlowHome(): FlowHomeState {
 
   const stale = useMemo(() => {
     const now = Date.now();
-    return openItems.filter((i) => shouldAskAboutThought(i, now)).sort((a, b) => a.createdAt - b.createdAt)[0] ?? null;
+    return (
+      openItems
+        .filter((i) => shouldAskAboutThought(i, now))
+        .sort((a, b) => a.createdAt - b.createdAt)[0] ?? null
+    );
   }, [openItems]);
 
   const pending = useMemo(() => {

@@ -42,10 +42,14 @@ export default function BatteryPage() {
         <MyFloveWide>
           <MyFloveHeader
             area="halsa"
-            title={name ? `${name}${lang === "en" ? "'s battery" : "s batteri"}` : t("Mitt batteri")}
+            title={
+              name ? `${name}${lang === "en" ? "'s battery" : "s batteri"}` : t("Mitt batteri")
+            }
             emojiKey="wellness"
             description={t("Din energi och ditt mående – checka in och se hur dagen brukar se ut.")}
-            why={t("Vi frågar för att Flow ska kunna anpassa dagens krav efter hur mycket ork du faktiskt har – inte efter hur mycket du borde ha.")}
+            why={t(
+              "Vi frågar för att Flow ska kunna anpassa dagens krav efter hur mycket ork du faktiskt har – inte efter hur mycket du borde ha.",
+            )}
           />
         </MyFloveWide>
 

@@ -51,15 +51,7 @@ export interface WeekReview {
   suggestions: string[];
 }
 
-const WEEKDAY_NAMES = [
-  "söndag",
-  "måndag",
-  "tisdag",
-  "onsdag",
-  "torsdag",
-  "fredag",
-  "lördag",
-];
+const WEEKDAY_NAMES = ["söndag", "måndag", "tisdag", "onsdag", "torsdag", "fredag", "lördag"];
 
 const WEEKDAY_PLURAL = [
   "söndagar",

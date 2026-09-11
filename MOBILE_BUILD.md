@@ -147,7 +147,6 @@ För att återaktivera senare:
 5. I Play Console krävs då en skriftlig motivering för hälsodata-behörigheten samt
    länk till integritetspolicyn (`/integritet`).
 
-
 ---
 
 ## Android App Bundle (.aab) — uppdaterat 2026-09-04

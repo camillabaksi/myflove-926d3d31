@@ -7,8 +7,7 @@ export const Route = createFileRoute("/_app/historik")({
       { title: "Historik – MyFlove" },
       {
         name: "description",
-        content:
-          "Se vad som faktiskt hände dina dagar och hur aktiviteterna påverkade din ork.",
+        content: "Se vad som faktiskt hände dina dagar och hur aktiviteterna påverkade din ork.",
       },
       { property: "og:title", content: "Historik – MyFlove" },
       {

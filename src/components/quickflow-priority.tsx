@@ -76,7 +76,9 @@ export function QuickflowPriority() {
 
     setClarifyingId(item.id);
     try {
-      const result = await clarify({ data: { title: item.title, energyPercent, context: capacityContext } });
+      const result = await clarify({
+        data: { title: item.title, energyPercent, context: capacityContext },
+      });
       update(item.id, { clarify: result });
       setExpandedClarificationId(item.id);
     } catch (error) {
@@ -137,8 +139,7 @@ export function QuickflowPriority() {
     }
     setPlanFor(null);
     const day = choice.dueDate === todayISO() ? t("idag") : choice.dueDate;
-    const reminder =
-      choice.reminderMinutesBefore !== undefined ? t(" med egen påminnelse.") : ".";
+    const reminder = choice.reminderMinutesBefore !== undefined ? t(" med egen påminnelse.") : ".";
     toast({
       description: choice.time
         ? `${t("Planerad i kalendern")} ${day} kl ${choice.time}${reminder}`
@@ -237,7 +238,9 @@ export function QuickflowPriority() {
                         ) : (
                           <span className="flex flex-wrap items-center gap-1">
                             <IconBtn
-                              label={item.clarify ? t("Visa förtydligande") : t("Förtydliga uppgiften")}
+                              label={
+                                item.clarify ? t("Visa förtydligande") : t("Förtydliga uppgiften")
+                              }
                               onClick={() => clarifyTask(item)}
                             >
                               {clarifyingId === item.id ? (
@@ -307,8 +310,7 @@ export function QuickflowPriority() {
 
             {doneItems.length > 0 && (
               <p className="text-xs text-muted-foreground">
-                {doneItems.length} {doneItems.length === 1 ? t("klar") : t("klara")}{" "}
-                {t("idag.")}{" "}
+                {doneItems.length} {doneItems.length === 1 ? t("klar") : t("klara")} {t("idag.")}{" "}
                 <button type="button" onClick={clear} className="underline underline-offset-4">
                   {t("Rensa listan")}
                 </button>

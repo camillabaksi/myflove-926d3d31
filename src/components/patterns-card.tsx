@@ -44,10 +44,7 @@ export default function PatternsCard() {
       ) : (
         <ul className="space-y-2">
           {patterns.map((p) => (
-            <li
-              key={p.id}
-              className="rounded-2xl bg-lavender/20 px-3 py-2.5 text-sm text-ink"
-            >
+            <li key={p.id} className="rounded-2xl bg-lavender/20 px-3 py-2.5 text-sm text-ink">
               {t(p.textSv)}
             </li>
           ))}

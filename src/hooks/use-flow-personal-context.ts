@@ -54,7 +54,6 @@ export function useFlowPersonalContext(): string {
     const cycleLine = cycleContext(cycle);
     if (cycleLine) lines.push(cycleLine);
 
-
     // Användarens egna ord från Mitt batteri – kontext, aldrig diagnos.
     const week = Date.now() - 7 * 24 * 60 * 60 * 1000;
     const notes = moods
@@ -88,5 +87,15 @@ export function useFlowPersonalContext(): string {
     lines.push(TONE[settings.level] ?? TONE["diskret"] ?? "");
 
     return lines.filter(Boolean).join("\n");
-  }, [name, profile, situation, knowledge, settings.level, moods, todayEnergyEntries, impactEntry, cycle]);
+  }, [
+    name,
+    profile,
+    situation,
+    knowledge,
+    settings.level,
+    moods,
+    todayEnergyEntries,
+    impactEntry,
+    cycle,
+  ]);
 }

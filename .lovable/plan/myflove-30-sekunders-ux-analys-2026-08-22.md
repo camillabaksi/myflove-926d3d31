@@ -60,14 +60,14 @@ Sammanlagt: 2 modaler + ~12 ytor innan användaren gjort en enda nyttig sak.
 
 ## 6. Billiga ändringar via befintliga komponenter
 
-| Ändring | Återanvänder |
-|---|---|
+| Ändring                | Återanvänder                                            |
+| ---------------------- | ------------------------------------------------------- |
 | Batteritext i klartext | `reading.trendLabel`, `reading.peak`, `reading.summary` |
-| Alltid synlig kurva | befintlig `BatteryCurve` |
-| Situationskortet | samma `Link`-kort som "Korta vägar" idag |
-| Färre block för nya | `DEFAULT_PREFS.hidden` i `src/lib/home-layout.ts` |
-| Uppskjuten målfråga | `FlowOnboarding` med annan trigger, ingen ny komponent |
-| Rekommendationen | oförändrad `suggestNow()` |
+| Alltid synlig kurva    | befintlig `BatteryCurve`                                |
+| Situationskortet       | samma `Link`-kort som "Korta vägar" idag                |
+| Färre block för nya    | `DEFAULT_PREFS.hidden` i `src/lib/home-layout.ts`       |
+| Uppskjuten målfråga    | `FlowOnboarding` med annan trigger, ingen ny komponent  |
+| Rekommendationen       | oförändrad `suggestNow()`                               |
 
 ## 7. Gör INTE nu
 

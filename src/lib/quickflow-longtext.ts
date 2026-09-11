@@ -39,14 +39,16 @@ export function looksLikeLongNote(text: string): boolean {
   if (trimmed.length >= LONG_CHARS) return true;
   if (wordCount(trimmed) >= LONG_WORDS) return true;
   const lower = trimmed.toLowerCase();
-  return (
-    trimmed.length >= REFLECTIVE_CHARS && REFLECTIVE_PHRASES.some((p) => lower.includes(p))
-  );
+  return trimmed.length >= REFLECTIVE_CHARS && REFLECTIVE_PHRASES.some((p) => lower.includes(p));
 }
 
 /** Förslag på titel – första meningen, kortad. Aldrig obligatorisk. */
 export function suggestNoteTitle(text: string, max = 60): string {
-  const first = text.trim().split(/(?<=[.!?])\s+/)[0]?.trim() ?? text.trim();
+  const first =
+    text
+      .trim()
+      .split(/(?<=[.!?])\s+/)[0]
+      ?.trim() ?? text.trim();
   if (first.length <= max) return first;
   const cut = first.slice(0, max);
   const lastSpace = cut.lastIndexOf(" ");

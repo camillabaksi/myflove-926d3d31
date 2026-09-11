@@ -89,7 +89,6 @@ export default function AdminPage() {
 
         <UserAnalytics />
 
-
         <div className="flex gap-2 border-b border-border">
           <TabBtn
             active={tab === "friction"}
@@ -172,13 +171,20 @@ function FrictionSection() {
   });
 
   if (isLoading) return <p className="text-muted-foreground">{t("Laddar rapporter…")}</p>;
-  if (isError) return <p className="text-destructive text-sm">{t("Fel:")} {(error as Error).message}</p>;
+  if (isError)
+    return (
+      <p className="text-destructive text-sm">
+        {t("Fel:")} {(error as Error).message}
+      </p>
+    );
   if (!data || data.length === 0)
     return <p className="text-muted-foreground">{t("Inga rapporter ännu.")}</p>;
 
   return (
     <div className="space-y-3">
-      <p className="text-sm text-muted-foreground">{data.length} {t("rapporter totalt")}</p>
+      <p className="text-sm text-muted-foreground">
+        {data.length} {t("rapporter totalt")}
+      </p>
       {data.map((item) => (
         <div key={item.id} className="rounded-2xl border border-border bg-card p-4 space-y-3">
           <div className="flex flex-wrap items-start justify-between gap-2">
@@ -199,10 +205,24 @@ function FrictionSection() {
             {item.category && (
               <span className="rounded-full bg-muted px-2 py-0.5">{item.category}</span>
             )}
-            {item.impact != null && <span>{t("Effekt:")} {item.impact}</span>}
-            {item.frequency != null && <span>{t("Frekvens:")} {item.frequency}</span>}
-            {item.mental_load != null && <span>{t("Mental last:")} {item.mental_load}</span>}
-            <span>{t("Från:")} {item.reporter_email ?? item.reporter_id.slice(0, 8)}</span>
+            {item.impact != null && (
+              <span>
+                {t("Effekt:")} {item.impact}
+              </span>
+            )}
+            {item.frequency != null && (
+              <span>
+                {t("Frekvens:")} {item.frequency}
+              </span>
+            )}
+            {item.mental_load != null && (
+              <span>
+                {t("Mental last:")} {item.mental_load}
+              </span>
+            )}
+            <span>
+              {t("Från:")} {item.reporter_email ?? item.reporter_id.slice(0, 8)}
+            </span>
             <span>{new Date(item.created_at).toLocaleString(locale)}</span>
           </div>
 
@@ -227,7 +247,8 @@ function FrictionSection() {
             </select>
             <button
               onClick={() => {
-                if (confirm(t("Ta bort rapport \"{title}\"?").replace("{title}", item.title))) remove.mutate(item.id);
+                if (confirm(t('Ta bort rapport "{title}"?').replace("{title}", item.title)))
+                  remove.mutate(item.id);
               }}
               disabled={remove.isPending}
               className="ml-auto flex items-center gap-1 text-xs text-destructive hover:underline disabled:opacity-50"
@@ -340,7 +361,9 @@ function UsersSection() {
     return (
       <div className="space-y-3">
         {filterBar}
-        <p className="text-destructive text-sm">{t("Fel:")} {(error as Error).message}</p>
+        <p className="text-destructive text-sm">
+          {t("Fel:")} {(error as Error).message}
+        </p>
       </div>
     );
   if (!data || data.length === 0)
@@ -354,7 +377,9 @@ function UsersSection() {
   return (
     <div className="space-y-3">
       {filterBar}
-      <p className="text-sm text-muted-foreground">{data.length} {t("användare")}</p>
+      <p className="text-sm text-muted-foreground">
+        {data.length} {t("användare")}
+      </p>
       <div className="overflow-x-auto rounded-2xl border border-border">
         <table className="w-full text-sm">
           <thead className="bg-muted text-left">
@@ -427,7 +452,14 @@ function UsersSection() {
                     {isAdminRow ? (
                       <button
                         onClick={() => {
-                          if (confirm(t("Ta bort admin-roll från {email}?").replace("{email}", u.email ?? "")))
+                          if (
+                            confirm(
+                              t("Ta bort admin-roll från {email}?").replace(
+                                "{email}",
+                                u.email ?? "",
+                              ),
+                            )
+                          )
                             revoke.mutate({ userId: u.user_id, role: "admin" });
                         }}
                         disabled={revoke.isPending}

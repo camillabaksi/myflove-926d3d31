@@ -103,7 +103,6 @@ export function QuickflowCapture({
     setFolderOpen(false);
   }, [text]);
 
-
   // Bottennavigeringens +, hemskärmens + och desktop-FAB öppnar samma flöde.
   useEffect(() => {
     if (variant !== "global") return;
@@ -167,7 +166,9 @@ export function QuickflowCapture({
     setOpen(false);
     reset();
     toast.success(
-      mergedAny ? t("Några fanns redan – jag slog ihop dem. 💙") : t("Lugn. Jag håller det åt dig. 💙"),
+      mergedAny
+        ? t("Några fanns redan – jag slog ihop dem. 💙")
+        : t("Lugn. Jag håller det åt dig. 💙"),
       {
         description: opts.remindAt
           ? `Jag säger till ${formatWhen(opts.remindAt).toLowerCase()}.`
@@ -200,7 +201,6 @@ export function QuickflowCapture({
           ),
     });
   };
-
 
   return (
     <>
@@ -262,7 +262,9 @@ export function QuickflowCapture({
                 value={text}
                 onChange={(e) => setText(e.target.value)}
                 rows={3}
-                placeholder={t("T.ex. Hämta barnen, handla, ring skolan, tvätta och fixa inför imorgon")}
+                placeholder={t(
+                  "T.ex. Hämta barnen, handla, ring skolan, tvätta och fixa inför imorgon",
+                )}
                 className="w-full rounded-2xl border border-border bg-background p-3 pr-12 text-base outline-none focus:border-primary"
               />
               {voice.isSupported && (
@@ -473,7 +475,6 @@ export function QuickflowCapture({
                 <p className="text-xs text-muted-foreground">
                   {t("Inga tider eller deadlines skapas – bara en ordning du kan ändra.")}
                 </p>
-
               </div>
             )}
 
