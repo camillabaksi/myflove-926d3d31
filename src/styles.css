@@ -218,9 +218,9 @@
 }
 
 @utility home-ambient-glow {
-  position: fixed;
+  position: absolute;
   z-index: -1;
-  inset: -14vh -18vw;
+  inset: -6rem -1rem;
   pointer-events: none;
   border-radius: 42% 58% 54% 46% / 48% 42% 58% 52%;
   background:
