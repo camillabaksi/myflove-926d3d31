@@ -176,7 +176,7 @@ export default function EnergyBattery({
           </span>
         )
       }
-      collapsible
+      collapsible={!href}
       collapseId="energy-battery-now"
       className="@container"
     >
