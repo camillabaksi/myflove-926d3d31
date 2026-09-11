@@ -106,12 +106,12 @@ export function buildBatteryLoadTrend(input: {
   let direction: BatteryLoadTrend["direction"] = "learning";
   if (observed.length >= 4) {
     const midpoint = Math.floor(observed.length / 2);
-    const earlier = observed.slice(0, midpoint).flatMap((day) =>
-      day.battery == null ? [] : [day.battery],
-    );
-    const later = observed.slice(midpoint).flatMap((day) =>
-      day.battery == null ? [] : [day.battery],
-    );
+    const earlier = observed
+      .slice(0, midpoint)
+      .flatMap((day) => (day.battery == null ? [] : [day.battery]));
+    const later = observed
+      .slice(midpoint)
+      .flatMap((day) => (day.battery == null ? [] : [day.battery]));
     change = Math.round(mean(later) - mean(earlier));
     direction = change >= 8 ? "up" : change <= -8 ? "down" : "steady";
   }
@@ -124,8 +124,12 @@ export function buildBatteryLoadTrend(input: {
     const lighter = observed.filter((day) => day.loadCount < averageLoad);
     const heavier = observed.filter((day) => day.loadCount >= averageLoad);
     if (lighter.length >= 2 && heavier.length >= 2) {
-      const lightBattery = mean(lighter.flatMap((day) => (day.battery == null ? [] : [day.battery])));
-      const heavyBattery = mean(heavier.flatMap((day) => (day.battery == null ? [] : [day.battery])));
+      const lightBattery = mean(
+        lighter.flatMap((day) => (day.battery == null ? [] : [day.battery])),
+      );
+      const heavyBattery = mean(
+        heavier.flatMap((day) => (day.battery == null ? [] : [day.battery])),
+      );
       loadEffect = Math.round(heavyBattery - lightBattery);
     }
   }
@@ -136,10 +140,17 @@ export function buildBatteryLoadTrend(input: {
   for (const instance of actualInstances) {
     const moment = activityMoment(instance);
     if (moment == null) continue;
-    const sameDay = validEnergy.filter((entry) => dayKey(new Date(entry.timestamp)) === dayKey(new Date(moment)));
-    const before = [...sameDay].reverse().find((entry) => entry.timestamp <= moment && moment - entry.timestamp <= fourHours);
-    const after = sameDay.find((entry) => entry.timestamp > moment && entry.timestamp - moment <= fourHours);
-    if (before && after) pairedChanges.push(levelToPercent(after.level) - levelToPercent(before.level));
+    const sameDay = validEnergy.filter(
+      (entry) => dayKey(new Date(entry.timestamp)) === dayKey(new Date(moment)),
+    );
+    const before = [...sameDay]
+      .reverse()
+      .find((entry) => entry.timestamp <= moment && moment - entry.timestamp <= fourHours);
+    const after = sameDay.find(
+      (entry) => entry.timestamp > moment && entry.timestamp - moment <= fourHours,
+    );
+    if (before && after)
+      pairedChanges.push(levelToPercent(after.level) - levelToPercent(before.level));
   }
 
   const pairedEffect = pairedChanges.length >= 2 ? Math.round(mean(pairedChanges)) : null;
@@ -163,7 +174,9 @@ export function buildBatteryLoadTrend(input: {
   return {
     days,
     energyLogs: validEnergy.length,
-    loadOccasions: actualInstances.filter((instance) => days.some((day) => day.day === (instance.actualDate ?? instance.date))).length,
+    loadOccasions: actualInstances.filter((instance) =>
+      days.some((day) => day.day === (instance.actualDate ?? instance.date)),
+    ).length,
     observedDays: observed.length,
     direction,
     change,

@@ -21,7 +21,12 @@ export default function BatteryLoadTrend() {
     )
     .filter((point): point is { x: number; y: number } => point !== null);
   const line = observed.map((point) => `${point.x},${point.y}`).join(" ");
-  const TrendIcon = trend.direction === "up" ? TrendingUp : trend.direction === "down" ? TrendingDown : BatteryMedium;
+  const TrendIcon =
+    trend.direction === "up"
+      ? TrendingUp
+      : trend.direction === "down"
+        ? TrendingDown
+        : BatteryMedium;
 
   return (
     <CollapsibleSection
@@ -40,7 +45,8 @@ export default function BatteryLoadTrend() {
           <div className="min-w-0">
             <p className="font-medium text-ink">{trend.summary}</p>
             <p className="mt-1 text-xs text-muted-foreground">
-              Senaste 14 dagarna · {trend.loadOccasions} genomförda tillfällen · {trend.energyLogs} incheckningar
+              Senaste 14 dagarna · {trend.loadOccasions} genomförda tillfällen · {trend.energyLogs}{" "}
+              incheckningar
             </p>
           </div>
         </div>
@@ -60,8 +66,22 @@ export default function BatteryLoadTrend() {
             role="img"
             aria-label={`Batteritrend för 14 dagar med ${trend.loadOccasions} genomförda aktiviteter`}
           >
-            <line x1={PAD_X} y1="55" x2={WIDTH - PAD_X} y2="55" className="stroke-border" strokeDasharray="4 6" />
-            <line x1={PAD_X} y1="111" x2={WIDTH - PAD_X} y2="111" className="stroke-border" strokeDasharray="4 6" />
+            <line
+              x1={PAD_X}
+              y1="55"
+              x2={WIDTH - PAD_X}
+              y2="55"
+              className="stroke-border"
+              strokeDasharray="4 6"
+            />
+            <line
+              x1={PAD_X}
+              y1="111"
+              x2={WIDTH - PAD_X}
+              y2="111"
+              className="stroke-border"
+              strokeDasharray="4 6"
+            />
             {trend.days.map((day, index) => {
               const x = PAD_X + index * pointGap;
               const barHeight = Math.min(34, day.loadCount * 8);
@@ -78,7 +98,12 @@ export default function BatteryLoadTrend() {
                     />
                   )}
                   {index % 2 === 0 && (
-                    <text x={x} y={HEIGHT - 7} textAnchor="middle" className="fill-muted-foreground text-[10px]">
+                    <text
+                      x={x}
+                      y={HEIGHT - 7}
+                      textAnchor="middle"
+                      className="fill-muted-foreground text-[10px]"
+                    >
                       {day.label}
                     </text>
                   )}
@@ -86,14 +111,30 @@ export default function BatteryLoadTrend() {
               );
             })}
             {observed.length > 1 && (
-              <polyline points={line} fill="none" className="stroke-primary" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+              <polyline
+                points={line}
+                fill="none"
+                className="stroke-primary"
+                strokeWidth="4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             )}
             {observed.map((point) => (
-              <circle key={`${point.x}-${point.y}`} cx={point.x} cy={point.y} r="5" className="fill-card stroke-primary" strokeWidth="3" />
+              <circle
+                key={`${point.x}-${point.y}`}
+                cx={point.x}
+                cy={point.y}
+                r="5"
+                className="fill-card stroke-primary"
+                strokeWidth="3"
+              />
             ))}
           </svg>
           {trend.observedDays === 0 && (
-            <p className="py-2 text-center text-sm text-muted-foreground">Din trend börjar synas efter dina första batteriincheckningar.</p>
+            <p className="py-2 text-center text-sm text-muted-foreground">
+              Din trend börjar synas efter dina första batteriincheckningar.
+            </p>
           )}
         </div>
 
@@ -111,7 +152,8 @@ export default function BatteryLoadTrend() {
         </div>
 
         <p className="text-xs leading-relaxed text-muted-foreground">
-          Bara genomförda aktiviteter räknas som belastning. Planerade saker påverkar inte denna trend. Innehåll och privata anteckningar visas aldrig här.
+          Bara genomförda aktiviteter räknas som belastning. Planerade saker påverkar inte denna
+          trend. Innehåll och privata anteckningar visas aldrig här.
         </p>
       </div>
     </CollapsibleSection>
