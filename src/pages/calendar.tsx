@@ -14,12 +14,9 @@ import {
   Trash2,
   Users,
   Plus,
-  Download,
-  Upload,
   Baby,
 } from "lucide-react";
 import { requestNotificationPermission, getNotificationPermission } from "@/lib/push-notifications";
-import { downloadIcs, parseIcs, type IcsEvent } from "@/lib/ics";
 import {
   occursOn,
   routineOccursOn,
@@ -54,7 +51,6 @@ import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { pictogramFor } from "@/lib/pictograms";
 import { useNpfSettings } from "@/lib/npf-mode";
 import { ALL_AREAS, AREA_META, getArea, type LifeArea } from "@/lib/life-areas";
-import { ACCEPT_CALENDAR } from "@/lib/file-formats";
 import { useLang } from "@/hooks/use-language";
 import { DEFAULT_CHILD_COLOR, DEFAULT_MEMBER_COLOR } from "@/lib/palette";
 
@@ -290,56 +286,6 @@ export function CalendarContent() {
     }
   };
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleExportAll = () => {
-    const events: IcsEvent[] = [];
-    for (const r of activeReminders) {
-      events.push({ title: r.title, date: r.date, time: r.time, uid: `reminder-${r.id}@myflow` });
-    }
-    for (const t of allTasks) {
-      if (t.dueDate)
-        events.push({ title: t.title, date: t.dueDate, time: t.time, uid: `task-${t.id}@myflow` });
-    }
-    if (currentFocus) {
-      events.push({
-        title: `Fokus: ${currentFocus.text}`,
-        date: todayStr,
-        uid: `focus-${todayStr}@myflow`,
-      });
-    }
-    if (events.length === 0) {
-      toast({ description: t("Inget att exportera ännu.") });
-      return;
-    }
-    downloadIcs(events, "myflow-kalender.ics");
-    toast({
-      description: `${t("Exporterade")} ${events.length} ${t("händelser. Öppna filen i din kalenderapp.")}`,
-    });
-  };
-
-  const handleImportFile = async (file: File) => {
-    try {
-      const text = await file.text();
-      const events = parseIcs(text);
-      if (events.length === 0) {
-        toast({ description: t("Hittade inga händelser i filen."), variant: "destructive" });
-        return;
-      }
-      let added = 0;
-      for (const e of events) {
-        addReminder(e.title, e.date, e.time);
-        added++;
-      }
-      toast({ description: `${t("Importerade")} ${added} ${t("händelser till kalendern.")}` });
-    } catch {
-      toast({
-        description: t("Kunde inte läsa filen. Kontrollera att det är en .ics-fil."),
-        variant: "destructive",
-      });
-    }
-  };
-
   const createEventMutation = useCreateFamilyEvent({
     mutation: {
       onSuccess: () => {
@@ -536,41 +482,6 @@ export function CalendarContent() {
           </p>
         </div>
       </MyFloveWide>
-
-      <div className="min-w-0 space-y-3">
-        <div className="flex flex-wrap gap-2">
-          <button
-            onClick={() => fileInputRef.current?.click()}
-            className="flex items-center gap-2 px-4 py-2.5 bg-card border area-border rounded-2xl text-sm font-medium shadow-soft hover:bg-secondary transition-colors"
-          >
-            <Upload size={16} />
-            {t("Importera från telefonens kalender")}
-          </button>
-          <button
-            onClick={handleExportAll}
-            className="flex items-center gap-2 px-4 py-2.5 bg-card border area-border rounded-2xl text-sm font-medium shadow-soft hover:bg-secondary transition-colors"
-          >
-            <Download size={16} />
-            {t("Exportera till kalender (.ics)")}
-          </button>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept={ACCEPT_CALENDAR}
-            className="hidden"
-            onChange={(e) => {
-              const f = e.target.files?.[0];
-              if (f) handleImportFile(f);
-              e.target.value = "";
-            }}
-          />
-        </div>
-        <p className="text-xs text-muted-foreground -mt-4">
-          {t(
-            "Tips: exportera i telefonens kalender som .ics och importera här för att få in dina möten i MyFlove.",
-          )}
-        </p>
-      </div>
 
       <div className="min-w-0">
         <EnergyBattery widget href="/mitt-batteri" />

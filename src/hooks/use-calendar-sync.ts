@@ -26,8 +26,7 @@ export const PROVIDER_LABELS: Record<CalendarProvider, string> = {
 /** Väntar på att popup-fönstret ska bli klart och lämna tillbaka sin engångskod. */
 function waitForOAuthCompletion(popup: Window, connectorId: string) {
   return new Promise<string | null>((resolve, reject) => {
-    let poll: number | undefined;
-    const cleanup = () => {
+    const cleanup = (poll: number | undefined) => {
       window.removeEventListener("message", onMessage);
       if (poll !== undefined) window.clearInterval(poll);
     };
@@ -42,7 +41,7 @@ function waitForOAuthCompletion(popup: Window, connectorId: string) {
       ) {
         return;
       }
-      cleanup();
+      cleanup(poll);
       if (type === "appUserConnectorOAuthComplete") {
         resolve(typeof data?.code === "string" ? data.code : null);
         return;
@@ -50,12 +49,12 @@ function waitForOAuthCompletion(popup: Window, connectorId: string) {
       popup.close();
       reject(new Error("Kopplingen blev inte klar."));
     };
-    window.addEventListener("message", onMessage);
-    poll = window.setInterval(() => {
+    const poll = window.setInterval(() => {
       if (!popup.closed) return;
-      cleanup();
+      cleanup(poll);
       reject(new Error("Fönstret stängdes innan kopplingen blev klar."));
     }, 500);
+    window.addEventListener("message", onMessage);
   });
 }
 
