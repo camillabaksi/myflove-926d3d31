@@ -12,6 +12,7 @@ import { useLang } from "@/hooks/use-language";
 import { useCycle } from "@/hooks/use-cycle";
 import { LANGUAGES } from "@/lib/i18n";
 import { LifeProfileSections } from "@/pages/life-profile";
+import CollapsibleSection from "@/components/collapsible-section";
 
 /**
  * Min profil – det lilla användaren behöver berätta:
@@ -106,19 +107,14 @@ export default function ProfilePage() {
         </MyFloveWide>
 
         {/* Namn – driver "Hej [namn]!" på Hem och på Mitt batteri */}
-        <MyFloveWide className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft">
-          <div className="flex items-center gap-2">
-            <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-              <User size={18} />
-            </span>
-            <div>
-              <h2 className="text-base font-semibold text-ink">Vad ska jag kalla dig?</h2>
-              <p className="text-xs text-muted-foreground">
-                Används i “Hej {name || "…"}!” på startsidan och på ditt batteri.
-                {savedName ? " Sparat ✓" : " Sparas automatiskt."}
-              </p>
-            </div>
-          </div>
+        <MyFloveWide>
+          <CollapsibleSection
+            id="profile-name"
+            title="Vad ska jag kalla dig?"
+            headingClassName="text-base font-semibold"
+            description={`Används i “Hej ${name || "…"}!” på startsidan och på ditt batteri.${savedName ? " Sparat ✓" : " Sparas automatiskt."}`}
+            className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+          >
           <form
             className="mt-3 flex items-center gap-2"
             onSubmit={(e) => {
@@ -139,21 +135,18 @@ export default function ProfilePage() {
               {savedName ? <Check size={16} /> : "Spara"}
             </Button>
           </form>
+          </CollapsibleSection>
         </MyFloveWide>
 
         {/* Barn – valfritt, driver barnvyn och kalendern */}
-        <MyFloveWide className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft">
-          <div className="flex items-center gap-2">
-            <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-              <Baby size={18} />
-            </span>
-            <div>
-              <h2 className="text-base font-semibold text-ink">Mina barn</h2>
-              <p className="text-xs text-muted-foreground">
-                Valfritt – lägg till barnens namn så får de en egen plats i appen.
-              </p>
-            </div>
-          </div>
+        <MyFloveWide>
+          <CollapsibleSection
+            id="profile-children"
+            title="Mina barn"
+            headingClassName="text-base font-semibold"
+            description="Valfritt – lägg till barnens namn så får de en egen plats i appen."
+            className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+          >
 
           {myChildren.length > 0 && (
             <ul className="mt-3 space-y-2" data-testid="profile-children-list">
@@ -263,21 +256,18 @@ export default function ProfilePage() {
               ))}
             </div>
           </form>
+          </CollapsibleSection>
         </MyFloveWide>
 
         {/* Språk – svenska eller engelska, byts direkt */}
-        <MyFloveWide className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft">
-          <div className="flex items-center gap-2">
-            <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-              <Languages size={18} />
-            </span>
-            <div>
-              <h2 className="text-base font-semibold text-ink">{t("Språk")}</h2>
-              <p className="text-xs text-muted-foreground">
-                {t("Appens språk – texterna byts direkt.")}
-              </p>
-            </div>
-          </div>
+        <MyFloveWide>
+          <CollapsibleSection
+            id="profile-language"
+            title={t("Språk")}
+            headingClassName="text-base font-semibold"
+            description={t("Appens språk – texterna byts direkt.")}
+            className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+          >
           <div
             className="mt-3 flex flex-wrap gap-2"
             role="radiogroup"
@@ -302,23 +292,18 @@ export default function ProfilePage() {
               </button>
             ))}
           </div>
+          </CollapsibleSection>
         </MyFloveWide>
 
         {/* Menscykel – helt frivillig, avstängd tills användaren svarar ja */}
-        <MyFloveWide className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft">
-          <div className="flex items-center gap-2">
-            <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-              <Flower2 size={18} />
-            </span>
-            <div>
-              <h2 className="text-base font-semibold text-ink">
-                {t("Vill du använda menscykel i MyFlove?")}
-              </h2>
-              <p className="text-xs text-muted-foreground">
-                {t("Helt frivilligt. Väljer du Nej visas ingenting om menscykel och Flow tar inte hänsyn till det.")}
-              </p>
-            </div>
-          </div>
+        <MyFloveWide>
+          <CollapsibleSection
+            id="profile-cycle"
+            title={t("Vill du använda menscykel i MyFlove?")}
+            headingClassName="text-base font-semibold"
+            description={t("Helt frivilligt. Väljer du Nej visas ingenting om menscykel och Flow tar inte hänsyn till det.")}
+            className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+          >
           <div
             className="mt-3 flex flex-wrap gap-2"
             role="radiogroup"
@@ -348,11 +333,19 @@ export default function ProfilePage() {
               {t("Du hittar menscykeln under Mitt batteri.")}
             </p>
           )}
+          </CollapsibleSection>
         </MyFloveWide>
 
         {/* Livsprofilen bor nu här – en enda profil, inga dubbla vägar */}
-        <MyFloveWide className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft">
-          <LifeProfileSections />
+        <MyFloveWide>
+          <CollapsibleSection
+            id="profile-life-profile"
+            title="Min livsprofil"
+            headingClassName="text-base font-semibold"
+            className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+          >
+            <LifeProfileSections />
+          </CollapsibleSection>
         </MyFloveWide>
       </MyFlovePageGrid>
     </Layout>
