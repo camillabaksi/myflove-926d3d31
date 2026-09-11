@@ -55,6 +55,7 @@ import { useNpfSettings } from "@/lib/npf-mode";
 import { ALL_AREAS, AREA_META, getArea, type LifeArea } from "@/lib/life-areas";
 import { ACCEPT_CALENDAR } from "@/lib/file-formats";
 import { useLang } from "@/hooks/use-language";
+import { DEFAULT_CHILD_COLOR, DEFAULT_MEMBER_COLOR } from "@/lib/palette";
 
 export type CalCategory = "privat" | "relationer" | "barn" | "jobb" | "studier";
 
@@ -469,7 +470,7 @@ export function CalendarContent() {
           id: `c-${e.id}`,
           title: e.title,
           time: e.time ?? "",
-          color: e.child?.color ?? "#a06cd5",
+          color: e.child?.color ?? DEFAULT_CHILD_COLOR,
         })),
       // Rutiner – återkommande aktiviteter med repetitionsregel – visas på
       // alla dagar där regeln infaller, inte bara på startdatumet.
@@ -733,7 +734,7 @@ export function CalendarContent() {
                                   style={{
                                     backgroundColor: isSelected
                                       ? "white"
-                                      : (e.child?.color ?? "#a06cd5"),
+                                      : (e.child?.color ?? DEFAULT_CHILD_COLOR),
                                   }}
                                 />
                               ))}
@@ -744,7 +745,7 @@ export function CalendarContent() {
                                   style={{
                                     backgroundColor: isSelected
                                       ? "white"
-                                      : (e.member?.color ?? "#8a9a5b"),
+                                      : (e.member?.color ?? DEFAULT_MEMBER_COLOR),
                                   }}
                                 />
                               ))}
@@ -773,13 +774,13 @@ export function CalendarContent() {
                         id: `c-${e.id}`,
                         title: e.title,
                         time: e.time ?? "",
-                        color: e.child?.color ?? "#a06cd5",
+                        color: e.child?.color ?? DEFAULT_CHILD_COLOR,
                       })),
                       ...items.familyEvents.map((e) => ({
                         id: `f-${e.id}`,
                         title: e.title,
                         time: e.time ?? "",
-                        color: e.member?.color ?? "#8a9a5b",
+                        color: e.member?.color ?? DEFAULT_MEMBER_COLOR,
                       })),
                       ...items.reminders.map((r) => ({
                         id: `r-${r.id}`,
@@ -1014,14 +1015,14 @@ export function CalendarContent() {
                     id: `c-${e.id}`,
                     title: e.title,
                     time: e.time ?? "",
-                    color: e.child?.color ?? "#a06cd5",
+                    color: e.child?.color ?? DEFAULT_CHILD_COLOR,
                     emoji: pictoMode ? pictogramFor(e.title, "🐣") : undefined,
                   })),
                   ...selectedItems.familyEvents.map((e) => ({
                     id: `f-${e.id}`,
                     title: e.title,
                     time: e.time ?? "",
-                    color: e.member?.color ?? "#8a9a5b",
+                    color: e.member?.color ?? DEFAULT_MEMBER_COLOR,
                     emoji: pictoMode ? pictogramFor(e.title, "👨‍👩‍👧") : undefined,
                   })),
                   ...selectedItems.reminders.map((r) => ({
@@ -1055,7 +1056,7 @@ export function CalendarContent() {
                 })().map((group) => {
                   const e = group[0]!;
                   const names = group.map((g) => g.child?.name ?? t("Barn"));
-                  const color = group.length > 1 ? "#a06cd5" : (e.child?.color ?? "#a06cd5");
+                  const color = group.length > 1 ? DEFAULT_CHILD_COLOR : (e.child?.color ?? DEFAULT_CHILD_COLOR);
                   return (
                     <div
                       key={`child-${e.id}`}
@@ -1106,12 +1107,12 @@ export function CalendarContent() {
                           {pictogramFor(e.title, "👨‍👩‍👧")}
                         </span>
                       ) : (
-                        <Users style={{ color: e.member?.color ?? "#8a9a5b" }} size={24} />
+                        <Users style={{ color: e.member?.color ?? DEFAULT_MEMBER_COLOR }} size={24} />
                       )}
                       <div>
                         <div
                           className="text-xs font-medium uppercase tracking-wider mb-0.5"
-                          style={{ color: e.member?.color ?? "#8a9a5b" }}
+                          style={{ color: e.member?.color ?? DEFAULT_MEMBER_COLOR }}
                         >
                           {e.member?.displayName ?? t("Familj")} {e.time && `${t("kl")} ${e.time}`}
                         </div>
