@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-11";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Living Blueprint 4.2",
+    items: [
+      "Ny blueprint 4.2 som beskriver dagsresan i tre steg, enkelt läge och hopfällbara block (2026-09-11)",
+      "Batteri mot faktisk tid, belastningskarta och kvällscheck finns med i dokumentet (2026-09-11)",
+      "Kan laddas ner som DOCX och PDF från pitchsidan (2026-09-11)",
+    ],
+  },
+  {
     title: "Pitchvideo och pitchdeck 4.2",
     items: [
       "Nytt pitchdeck 4.2 som speglar dagens app: guidad dagsresa, lugnt gränssnitt, enkelt läge och hopfällbara block (2026-09-11)",

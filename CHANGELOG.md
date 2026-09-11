@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-11 – Living Blueprint 4.2
+
+- Ny version 4.2 av Living Blueprint som beskriver appen som den är utformad nu: guidad dagsresa i tre steg, enkelt läge, hopfällbara block som sparas, andningsljus, batteri mot faktisk tid, belastningskarta och kvällscheck.
+- Blueprinten kan laddas ner som DOCX och PDF från pitchsidan.
+
 ## 2026-09-11 – Pitchvideo och pitchdeck 4.2
 
 - Nytt pitchdeck (4.2) som beskriver appen som den är utformad nu: guidad dagsresa i tre steg, lugnt gränssnitt med andningsljus, enkelt läge, hopfällbara block, batteri mot faktisk tid, belastningskarta och kvällscheck.
