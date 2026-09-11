@@ -103,15 +103,24 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
   /**
    * Fortsätt där du slutade: när du öppnar Flow utan att välja samtal
    * hoppar vi tillbaka in i det senaste – om du inte aktivt bad om en ny chatt.
+   * "Nytt samtal" gäller bara den här vyn: flaggan konsumeras direkt så att
+   * nästa gång du öppnar Flow landar du i historiken igen.
    */
+  const wantsNewChat = useRef(false);
+  if (typeof window !== "undefined" && !wantsNewChat.current) {
+    if (window.sessionStorage.getItem(NEW_CHAT_FLAG) === "1") {
+      wantsNewChat.current = true;
+      window.sessionStorage.removeItem(NEW_CHAT_FLAG);
+    }
+  }
   useEffect(() => {
     if (conversationId || loadingConversations || isSending) return;
-    if (typeof window === "undefined") return;
-    if (window.sessionStorage.getItem(NEW_CHAT_FLAG) === "1") return;
+    if (wantsNewChat.current) return;
     const latest = conversations[0];
     if (!latest) return;
     void navigate({ to: "/assistant/$chatId", params: { chatId: latest.id }, replace: true });
   }, [conversationId, loadingConversations, conversations, isSending, navigate]);
+
 
   /**
    * Påbörjad text sparas per samtal så inget försvinner om du lämnar vyn.
