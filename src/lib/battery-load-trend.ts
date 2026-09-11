@@ -8,6 +8,8 @@ export interface BatteryLoadDay {
   label: string;
   battery: number | null;
   loadCount: number;
+  /** Faktiska minuter som gått åt (start/sluttid, annars uppskattat 30 min per sak). */
+  loadMinutes: number;
 }
 
 export type BatteryLoadRange = "days" | "weeks" | "months";
@@ -18,6 +20,7 @@ export interface BatteryLoadPeriod {
   accessibleLabel: string;
   battery: number | null;
   loadCount: number;
+  loadMinutes: number;
   observedDays: number;
 }
 
@@ -26,10 +29,12 @@ export interface BatteryLoadTrend {
   periods: Record<BatteryLoadRange, BatteryLoadPeriod[]>;
   energyLogs: number;
   loadOccasions: number;
+  loadMinutes: number;
   observedDays: number;
   direction: "up" | "steady" | "down" | "learning";
   change: number | null;
   loadEffect: number | null;
+  timeEffect: number | null;
   pairedOccasions: number;
   summary: string;
 }
@@ -84,6 +89,7 @@ function aggregatePeriods(
       accessibleLabel,
       battery: batteries.length > 0 ? Math.round(mean(batteries)) : null,
       loadCount: entries.reduce((sum, entry) => sum + entry.loadCount, 0),
+      loadMinutes: entries.reduce((sum, entry) => sum + entry.loadMinutes, 0),
       observedDays: batteries.length,
     };
   });
@@ -103,6 +109,27 @@ function activityMoment(instance: ActivityInstance): number | null {
   if (!time) return null;
   const timestamp = new Date(`${instance.actualDate ?? instance.date}T${time}:00`).getTime();
   return Number.isFinite(timestamp) ? timestamp : null;
+}
+
+const DEFAULT_ACTIVITY_MINUTES = 30;
+
+/**
+ * Faktisk tid som gått åt: sluttid minus starttid. Saknas tider uppskattar vi
+ * 30 minuter så att dagen inte felaktigt ser helt tidfri ut.
+ */
+function activityMinutes(instance: ActivityInstance): number {
+  const toMinutes = (time?: string) => {
+    if (!time) return null;
+    const [hours, minutes] = time.split(":").map(Number);
+    if (!Number.isFinite(hours) || !Number.isFinite(minutes)) return null;
+    return hours * 60 + minutes;
+  };
+  const start = toMinutes(instance.startTime);
+  const end = toMinutes(instance.endTime);
+  if (start == null || end == null) return DEFAULT_ACTIVITY_MINUTES;
+  let diff = end - start;
+  if (diff <= 0) diff += 24 * 60; // passerar midnatt
+  return Math.min(diff, 16 * 60);
 }
 
 /**
@@ -146,21 +173,26 @@ export function buildBatteryLoadTrend(input: {
   const actualInstances = input.instances.filter(
     (instance) => instance.status === "genomford" || Boolean(instance.energyImpact),
   );
-  const loadsByDay = new Map<string, number>();
+  const loadsByDay = new Map<string, { count: number; minutes: number }>();
   for (const instance of actualInstances) {
     const key = instance.actualDate ?? instance.date;
-    loadsByDay.set(key, (loadsByDay.get(key) ?? 0) + 1);
+    const entry = loadsByDay.get(key) ?? { count: 0, minutes: 0 };
+    entry.count += 1;
+    entry.minutes += activityMinutes(instance);
+    loadsByDay.set(key, entry);
   }
 
   for (let index = 0; index < BATTERY_TREND_DAYS; index += 1) {
     const date = new Date(start.getTime() + index * DAY_MS);
     const key = dayKey(date);
     const levels = energyByDay.get(key) ?? [];
+    const load = loadsByDay.get(key) ?? { count: 0, minutes: 0 };
     days.push({
       day: key,
       label: new Intl.DateTimeFormat("sv-SE", { weekday: "short" }).format(date).replace(".", ""),
       battery: levels.length > 0 ? Math.round(mean(levels)) : null,
-      loadCount: loadsByDay.get(key) ?? 0,
+      loadCount: load.count,
+      loadMinutes: load.minutes,
     });
   }
 
@@ -198,6 +230,22 @@ export function buildBatteryLoadTrend(input: {
     }
   }
 
+  // Samma jämförelse, men mot faktisk tid som gått åt i stället för antal saker.
+  let timeEffect: number | null = null;
+  const timeLevels = observed.map((day) => day.loadMinutes);
+  if (observed.length >= 5 && new Set(timeLevels).size >= 2) {
+    const averageMinutes = mean(timeLevels);
+    const shorter = observed.filter((day) => day.loadMinutes < averageMinutes);
+    const longer = observed.filter((day) => day.loadMinutes >= averageMinutes);
+    if (shorter.length >= 2 && longer.length >= 2) {
+      const shortBattery = mean(
+        shorter.flatMap((day) => (day.battery == null ? [] : [day.battery])),
+      );
+      const longBattery = mean(longer.flatMap((day) => (day.battery == null ? [] : [day.battery])));
+      timeEffect = Math.round(longBattery - shortBattery);
+    }
+  }
+
   // Extra starkt underlag: en incheckning före och efter ett faktiskt tillfälle.
   const fourHours = 4 * 60 * 60 * 1000;
   const pairedChanges: number[] = [];
@@ -223,17 +271,23 @@ export function buildBatteryLoadTrend(input: {
   const summary =
     observed.length < 4
       ? "Fortsätt checka in batteriet. När det finns minst fyra dagar kan Flow visa en trygg trend."
-      : loadEffect == null
-        ? direction === "up"
-          ? "Batteriet har stigit under den senaste delen av perioden."
-          : direction === "down"
-            ? "Batteriet har varit lägre under den senaste delen av perioden."
-            : "Batteriet har legat ganska jämnt under perioden."
-        : loadEffect <= -8
-          ? `Vid högre faktisk belastning har batteriet i snitt varit ${Math.abs(loadEffect)} punkter lägre.`
-          : loadEffect >= 8
-            ? `Vid högre faktisk belastning har batteriet i snitt varit ${loadEffect} punkter högre.`
-            : "Batteriet har varit ungefär lika även när den faktiska belastningen varierat.";
+      : timeEffect != null
+        ? timeEffect <= -8
+          ? `Dagar med mer faktisk tid på aktiviteter har batteriet i snitt varit ${Math.abs(timeEffect)} punkter lägre.`
+          : timeEffect >= 8
+            ? `Dagar med mer faktisk tid på aktiviteter har batteriet i snitt varit ${timeEffect} punkter högre.`
+            : "Batteriet har varit ungefär lika även när den faktiska tiden varierat."
+        : loadEffect == null
+          ? direction === "up"
+            ? "Batteriet har stigit under den senaste delen av perioden."
+            : direction === "down"
+              ? "Batteriet har varit lägre under den senaste delen av perioden."
+              : "Batteriet har legat ganska jämnt under perioden."
+          : loadEffect <= -8
+            ? `Vid högre faktisk belastning har batteriet i snitt varit ${Math.abs(loadEffect)} punkter lägre.`
+            : loadEffect >= 8
+              ? `Vid högre faktisk belastning har batteriet i snitt varit ${loadEffect} punkter högre.`
+              : "Batteriet har varit ungefär lika även när den faktiska belastningen varierat.";
 
   return {
     days,
@@ -250,6 +304,7 @@ export function buildBatteryLoadTrend(input: {
         }).format(new Date(`${day.day}T12:00:00`)),
         battery: day.battery,
         loadCount: day.loadCount,
+        loadMinutes: day.loadMinutes,
         observedDays: day.battery == null ? 0 : 1,
       })),
       weeks: aggregatePeriods(days, "weeks").slice(-12),
@@ -259,10 +314,12 @@ export function buildBatteryLoadTrend(input: {
     loadOccasions: actualInstances.filter((instance) =>
       days.some((day) => day.day === (instance.actualDate ?? instance.date)),
     ).length,
+    loadMinutes: days.reduce((sum, day) => sum + day.loadMinutes, 0),
     observedDays: observed.length,
     direction,
     change,
     loadEffect,
+    timeEffect,
     pairedOccasions: pairedChanges.length,
     summary,
   };
