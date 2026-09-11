@@ -74,7 +74,7 @@ function CreateOrJoin({ onReady }: { onReady: () => void }) {
   const [name, setName] = useState("");
   const [inviteCode, setInviteCode] = useState("");
   const [displayName, setDisplayName] = useState("");
-  const [color, setColor] = useState(COLORS[0].value);
+  const [color, setColor] = useState<string>(COLORS[0].value);
   const [pending, setPending] = useState(false);
   const { toast } = useToast();
 
