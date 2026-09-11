@@ -114,10 +114,20 @@ async function toPdf(data: UserAnalytics, rows: SessionRow[]): Promise<Blob> {
   return doc.output("blob");
 }
 
+type SortKey = "newest" | "oldest" | "most" | "fewest";
+
+const SORTS: Array<{ key: SortKey; label: string }> = [
+  { key: "newest", label: "Nyast aktiv först" },
+  { key: "oldest", label: "Äldst först (först sedda)" },
+  { key: "most", label: "Flest händelser" },
+  { key: "fewest", label: "Färst händelser" },
+];
+
 export default function UserAnalytics() {
   const { t } = useLang();
   const qc = useQueryClient();
   const [externalOnly, setExternalOnly] = useState(true);
+  const [sortKey, setSortKey] = useState<SortKey>("newest");
   const load = useServerFn(getUserAnalyticsFn);
   const mark = useServerFn(setSessionInternalFn);
 
