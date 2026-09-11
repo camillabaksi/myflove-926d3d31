@@ -92,49 +92,50 @@ export default function PitchPage() {
               <Film size={18} className="text-primary" /> Pitchvideo
             </h2>
             <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
-              Version 4.1 · Bär mindre. Gör inte mer.
+              Version 4.2 · Din dag, i din takt
             </span>
           </div>
           <p className="text-sm text-muted-foreground">
-            Version 4.1 visar den nya kärnan: en enkel och lugn startsida med Quickflow, Batteriet
-            och Kalendern – samma neutrala grund för alla. Batteriet är en enkel ork-check-in med
-            fyra nivåer, måendet är separat, aktiviteter är datumkorrekta och energihistoriken visar
-            vad som ger och tar energi. Personaliseringen växer fram datadrivet och gradvis.
+            Version 4.2 visar appen som den ser ut nu: en guidad dagsresa i tre steg – Hur mår du?,
+            Vad händer? och Behöver du planera om? – på en lugn startsida med vita kort och ett
+            andningsljus som pulserar 4 sekunder in, 5 ut och 1 sekunds vila. Batteriet mäts mot
+            faktiskt genomförda aktiviteter och faktisk tid, kvällschecken jämför förväntad och
+            faktisk energi, och alla block kan fällas ihop eller döljas i enkelt läge.
           </p>
 
           <video
             controls
             playsInline
             preload="metadata"
-            poster="/pitch/myflove-pitch-4.1-poster.jpg"
+            poster="/pitch/myflove-pitch-4.2-poster.jpg"
             className="w-full rounded-xl bg-black aspect-video"
-            src="/pitch/myflove-pitch-4.1.mp4"
+            src="/pitch/myflove-pitch-4.2.mp4"
           />
           <figure className="space-y-1">
             <img
-              src="/pitch/myflove-pitch-4.1-battery-thumb.jpg"
-              alt="Batteriscenen i pitchvideon version 4.1 med fyra ork-nivåer"
+              src="/pitch/myflove-pitch-4.2-journey-thumb.jpg"
+              alt="Scenen om dagsresan i pitchvideon version 4.2 med tre steg"
               loading="lazy"
               className="w-full rounded-xl border border-border"
             />
             <figcaption className="text-xs text-muted-foreground">
-              Batteriet i videon – &quot;Hur mycket ork har du idag?&quot; med fyra enkla nivåer
+              Dagsresan i videon – Hur mår du?, Vad händer? och Behöver du planera om?
             </figcaption>
           </figure>
           <figure className="space-y-1">
             <img
-              src="/pitch/myflove-pitch-4.1-energy-thumb.jpg"
-              alt="Energihistorikscenen i pitchvideon version 4.1 med fyra frivilliga energisvar"
+              src="/pitch/myflove-pitch-4.2-load-thumb.jpg"
+              alt="Belastningskartan i pitchvideon version 4.2 med dagar, veckor och månader"
               loading="lazy"
               className="w-full rounded-xl border border-border"
             />
             <figcaption className="text-xs text-muted-foreground">
-              Energipåverkan efter genomförd aktivitet – frivilligt svar med ett klick
+              Belastningskartan – batteriet jämfört med faktisk tid per dag, vecka och månad
             </figcaption>
           </figure>
           <div className="flex flex-wrap gap-2">
             <a
-              href="/pitch/myflove-pitch-4.1.mp4"
+              href="/pitch/myflove-pitch-4.2.mp4"
               download
               className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
             >
@@ -187,21 +188,22 @@ export default function PitchPage() {
               <FileText size={18} className="text-primary" /> Pitchdeck
             </h2>
             <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
-              Version 4.1 · Enkel start & adaptiv personalisering
+              Version 4.2 · Guidad dagsresa & lugnt gränssnitt
             </span>
           </div>
           <p className="text-sm text-muted-foreground">
-            Pitchdecket (4.1) beskriver den nya kärnan: en gemensam enkel start med Quickflow,
-            Batteriet och Kalendern, enkel ork-check-in med fyra nivåer, datumkorrekta aktiviteter,
-            energihistorik och söndagens veckoöversikt – tillsammans med validering, affärsmodell,
-            differentiering, go-to-market, kapital och roadmap från 4.0.
+            Pitchdecket (4.2) beskriver appen som den är utformad nu: den guidade dagsresan i tre
+            steg, det lugna gränssnittet med andningsljus, enkelt läge och hopfällbara block,
+            batteriet mätt mot faktisk belastning och tid, belastningskartan i Insikter och
+            kvällschecken – tillsammans med validering, affärsmodell, differentiering, go-to-market,
+            kapital och roadmap.
           </p>
 
           <div className="grid gap-3 sm:grid-cols-2">
             <figure className="space-y-1">
               <img
-                src="/pitch/MyFlove_Pitchdeck_4.1-thumb.jpg"
-                alt="Titelsidan i MyFlove Pitchdeck 4.1 med Flow-karaktären"
+                src="/pitch/MyFlove_Pitchdeck_4.2-thumb.jpg"
+                alt="Titelsidan i MyFlove Pitchdeck 4.2 med Flow-karaktären"
                 loading="lazy"
                 className="w-full rounded-xl border border-border"
               />
@@ -209,31 +211,31 @@ export default function PitchPage() {
             </figure>
             <figure className="space-y-1">
               <img
-                src="/pitch/MyFlove_Pitchdeck_4.1-start-thumb.jpg"
-                alt="Sliden om den enkla starten i MyFlove Pitchdeck 4.1"
+                src="/pitch/MyFlove_Pitchdeck_4.2-journey-thumb.jpg"
+                alt="Sliden om den guidade dagsresan i MyFlove Pitchdeck 4.2"
                 loading="lazy"
                 className="w-full rounded-xl border border-border"
               />
               <figcaption className="text-xs text-muted-foreground">
-                En enkel och lugn start: Quickflow, Batteriet och Kalendern
+                Din dag, i din takt – tre steg på startsidan
               </figcaption>
             </figure>
           </div>
 
           <div className="flex flex-wrap gap-2">
             <a
-              href="/pitch/MyFlove_Pitchdeck_4.1.pptx"
+              href="/pitch/MyFlove_Pitchdeck_4.2.pptx"
               download
               className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
             >
-              <Download size={16} /> Ladda ner PowerPoint (4.1)
+              <Download size={16} /> Ladda ner PowerPoint (4.2)
             </a>
             <a
-              href="/pitch/MyFlove_Pitchdeck_4.1.pdf"
+              href="/pitch/MyFlove_Pitchdeck_4.2.pdf"
               download
               className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-medium hover:bg-secondary"
             >
-              <Download size={16} /> Ladda ner PDF (4.1)
+              <Download size={16} /> Ladda ner PDF (4.2)
             </a>
           </div>
         </section>

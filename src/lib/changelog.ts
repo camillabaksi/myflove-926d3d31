@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-11";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Pitchvideo och pitchdeck 4.2",
+    items: [
+      "Nytt pitchdeck 4.2 som speglar dagens app: guidad dagsresa, lugnt gränssnitt, enkelt läge och hopfällbara block (2026-09-11)",
+      "Batteriet mot faktisk tid, belastningskartan och kvällschecken finns med i decket (2026-09-11)",
+      "Ny 60-sekunders pitchvideo 4.2 och uppdaterade nedladdningar på pitchsidan (2026-09-11)",
+    ],
+  },
+  {
     title: "Lugnare Hem",
     items: [
       '"Nästa rimliga steg" ligger nu inuti "Din dag, i din takt" direkt under "Idag" (2026-09-11)',
