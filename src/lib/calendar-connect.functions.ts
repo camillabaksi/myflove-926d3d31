@@ -225,7 +225,10 @@ async function keyFor(userId: string, provider: CalendarProvider) {
 export const listExternalEvents = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: { from: string; to: string }) => {
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(input?.from ?? "") || !/^\d{4}-\d{2}-\d{2}$/.test(input?.to ?? "")) {
+    if (
+      !/^\d{4}-\d{2}-\d{2}$/.test(input?.from ?? "") ||
+      !/^\d{4}-\d{2}-\d{2}$/.test(input?.to ?? "")
+    ) {
       throw new Error("Ogiltigt datumintervall");
     }
     return { from: input.from, to: input.to };
@@ -331,9 +334,7 @@ export const pushEventToCalendar = createServerFn({ method: "POST" })
       data.provider === "google"
         ? {
             summary: data.title,
-            start: data.time
-              ? { dateTime: startIso, timeZone: timeZone() }
-              : { date: data.date },
+            start: data.time ? { dateTime: startIso, timeZone: timeZone() } : { date: data.date },
             end: data.time ? { dateTime: endIso, timeZone: timeZone() } : { date: data.date },
           }
         : {

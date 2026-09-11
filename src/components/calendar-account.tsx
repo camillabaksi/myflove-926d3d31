@@ -125,9 +125,7 @@ export default function CalendarAccount({
     >
       <div className="space-y-3">
         {available.length === 0 && (
-          <p className="text-sm text-muted-foreground">
-            Kalenderkoppling är inte påslagen ännu.
-          </p>
+          <p className="text-sm text-muted-foreground">Kalenderkoppling är inte påslagen ännu.</p>
         )}
 
         <div className="flex flex-wrap gap-2">
@@ -148,7 +146,9 @@ export default function CalendarAccount({
                 ) : (
                   <Link2 className="mr-2" size={16} />
                 )}
-                {isConnected ? `Koppla från ${PROVIDER_LABELS[provider]}` : `Koppla ${PROVIDER_LABELS[provider]}`}
+                {isConnected
+                  ? `Koppla från ${PROVIDER_LABELS[provider]}`
+                  : `Koppla ${PROVIDER_LABELS[provider]}`}
               </Button>
             );
           })}
