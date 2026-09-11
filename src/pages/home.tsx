@@ -387,6 +387,10 @@ export default function Home() {
               </CollapsibleSection>
             </div>
 
+            <div className="mt-4" data-npf="optional">
+              <NextStepCard />
+            </div>
+
             <Button
               type="button"
               variant="ghost"
@@ -404,6 +408,7 @@ export default function Home() {
         </MyFloveWide>
 
         {/* Enkelt läge – ett tryck för den som vill ha det lugnare. */}
+
         <MyFloveWide style={{ order: 0.1 }} className="min-w-0">
           <button
             type="button"
@@ -428,12 +433,8 @@ export default function Home() {
           <FlowHomeCard />
         </MyFloveWide>
 
-        {/* Ett tydligt nästa steg – aldrig en lista. */}
-        <MyFloveWide style={{ order: 0.5 }} className="min-w-0" data-npf="optional">
-          <NextStepCard />
-        </MyFloveWide>
-
         {/* Kvällscheck – frivillig, dyker upp när dagen lider mot sitt slut. */}
+
         {new Date().getHours() >= 18 && (
           <MyFloveWide style={{ order: 0.7 }} className="min-w-0" data-npf="optional">
             <EveningCheck />
