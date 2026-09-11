@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-11";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Lugn, kapacitetsstyrd Hem-skärm",
+    items: [
+      "Hälsning, snabba val, batteri och dagens schema samlas i en lugn vit huvudyta (2026-09-11)",
+      "En mjuk bakgrundsglöd anpassar färg och andningsrytm efter dagens kalender- och Quickflow-belastning (2026-09-11)",
+      "Minskad rörelse och NPF-stillhet stänger av bakgrundens animation (2026-09-11)",
+    ],
+  },
+  {
     title: "Lugnare hemskärm",
     items: [
       'Korten "Insikter" och "Din vardag" är borttagna från hemskärmen (2026-09-11)',
