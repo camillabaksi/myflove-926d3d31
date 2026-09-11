@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-11";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Statistiken visar nu alla dagar",
+    items: [
+      "Analys per användare läste bara de första 1 000 händelserna, alla från samma tidiga datum (2026-09-11)",
+      "Hela perioden läses nu in, så händelser, användare och datum stämmer (2026-09-11)",
+    ],
+  },
+  {
     title: "Flyttade uppgifter hamnar aldrig bakåt i tiden",
     items: [
       'Flows "flytta till imorgon" ger alltid ett kommande datum (2026-09-11)',
