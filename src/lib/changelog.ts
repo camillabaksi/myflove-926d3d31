@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-11";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Zero-Guilt UX och Akut Lugn",
+    items: [
+      "Hem öppnar med en lugn hälsning, tydligt batteri och exakt två konkreta val från FlowScore (2026-09-11)",
+      "Akut Lugn pausar påminnelser i 15 minuter och döljer dagens krav bakom en stillsam paus med Flow (2026-09-11)",
+      'Passerade och uppskjutna uppgifter samlas under "Saker vi tar när du har energi" utan varningsspråk (2026-09-11)',
+      "Mjuk haptik, upplösning och varm återkoppling ersätter konfetti vid slutförande och uppskjutning (2026-09-11)",
+    ],
+  },
+  {
     title: "Fäll ihop block i hela appen",
     items: [
       "Alla gemensamma MyFlove-block kan nu minimeras och öppnas på appens olika sidor (2026-09-11)",

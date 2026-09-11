@@ -34,20 +34,17 @@ const SALUTATIONS: Record<Slot, string[]> = {
 };
 
 const RETURN_LINES = [
-  "Kul att se dig igen.",
-  "Fint att du kom tillbaka.",
-  "Skönt att ha dig här.",
-  "Välkommen tillbaka.",
+  "Vad skönt att se dig. Vi tar det lugnt idag.",
+  "Fint att se dig. Vi börjar precis här.",
+  "Skönt att ha dig här. En sak i taget.",
 ];
 
 const AWAY_LINES = [
-  "Välkommen tillbaka efter pausen.",
-  "Hoppas du haft det bra sen sist.",
-  "Kul att du hittade tillbaka.",
+  "Vad skönt att se dig. Vi tar det lugnt idag, oavsett hur dagarna har varit.",
 ];
 
 const FIRST_TIME_LINES = [
-  "Vad kul att du är här!",
+  "Vad fint att du är här.",
   "Välkommen. Ta det i din takt.",
   "Så fint att du hittade hit.",
 ];

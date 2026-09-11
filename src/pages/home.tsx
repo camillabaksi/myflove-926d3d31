@@ -51,6 +51,9 @@ import { useWeekReview } from "@/hooks/use-activity-history";
 import { useNpfSettings } from "@/lib/npf-mode";
 import { weekStartISO } from "@/lib/week-review";
 import { parseISODate } from "@/lib/day";
+import { Button } from "@/components/ui/button";
+import CalmMode from "@/components/calm-mode";
+import CalmChoices from "@/components/journey/calm-choices";
 
 /**
  * Hem = en lugn personlig kontrollpanel.
@@ -69,11 +72,12 @@ interface TodayEntry {
 }
 
 export default function Home() {
-  const { name, setName, lastVisit: _lastVisit } = useUserProfile();
+  const { name, setName, lastVisit } = useUserProfile();
   const { t } = useLang();
   const [editingName, setEditingName] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
   const [nameDraft, setNameDraft] = useState(name);
+  const [calmMode, setCalmMode] = useState<"acute" | "micro" | null>(null);
   const { activeArea } = useActiveArea();
   const { reading } = useEnergyBattery();
   const { energyValue } = useQuickCheckin();
@@ -172,12 +176,18 @@ export default function Home() {
   const pos = (id: HomeBlockId) => ({ order: visible.indexOf(id) + 10 });
 
   const gradient = heroGradient();
+  const awayForDays = lastVisit ? Date.now() - lastVisit >= 3 * 24 * 60 * 60 * 1000 : false;
 
   return (
     <Layout>
       <QuickAddSheet open={addOpen} onOpenChange={setAddOpen} />
       <IntroTour />
       <FlowOnboarding />
+      <CalmMode
+        kind={calmMode ?? "acute"}
+        open={calmMode != null}
+        onOpenChange={(open) => !open && setCalmMode(null)}
+      />
 
       <MyFlovePageGrid className="gap-5 xl:grid-cols-6">
         {/* Hero – personligt men litet. */}
@@ -196,14 +206,24 @@ export default function Home() {
             <FlowMascot size="md" mood="calm" className="flow-alive" alt="" />
           </div>
 
-          <div className="relative min-w-0 pr-24 space-y-1">
-            <h1 className="text-2xl sm:text-3xl font-bold text-ink">
-              {t("Din dag börjar här")} <span aria-hidden>❤️</span>
-            </h1>
-            <p className="text-sm text-muted-foreground">
-              {name ? `${t("Hej")} ${name}! ` : ""}
-              {t("Vi tar reda på vad som är rimligt idag.")}
-            </p>
+          <div className="relative min-w-0 pr-24 space-y-3">
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold text-ink">
+                {name ? `${t("Hej")} ${name}` : t("Hej")}
+              </h1>
+              <p className="mt-1 max-w-xl text-sm leading-relaxed text-muted-foreground">
+                {awayForDays
+                  ? t("Vad skönt att se dig. Vi tar det lugnt idag, oavsett hur dagarna har varit.")
+                  : t("Vi tar reda på vad som känns rimligt idag.")}
+              </p>
+            </div>
+            <div className="flex w-fit items-center gap-3 rounded-2xl border border-border/50 bg-card/55 px-4 py-3">
+              <BatteryMedium className="h-8 w-8 shrink-0 text-primary" aria-hidden />
+              <div>
+                <span className="block text-xs font-medium text-muted-foreground">{t("Mitt batteri")}</span>
+                <span className="block text-2xl font-bold tabular-nums text-ink">{battery}%</span>
+              </div>
+            </div>
             {editingName ? (
               <form
                 onSubmit={(e) => {
@@ -248,11 +268,19 @@ export default function Home() {
               </button>
             )}
           </div>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => setCalmMode("acute")}
+            className="absolute bottom-4 right-4 rounded-full border border-border/60 bg-card/60 text-xs text-muted-foreground hover:bg-card hover:text-foreground"
+          >
+            {t("Akut Lugn")}
+          </Button>
         </MyFloveWide>
 
-        {/* Flow – binder ihop Quickflow, Batteriet och Kalendern. En sak i taget. */}
-        <MyFloveWide style={{ order: 0 }} className="min-w-0" data-npf="optional">
-          <FlowHomeCard />
+        <MyFloveWide style={{ order: 0 }} className="min-w-0">
+          <CalmChoices onPause={() => setCalmMode("micro")} />
         </MyFloveWide>
 
         {/* Enkelt läge – ett tryck för den som vill ha det lugnare. */}
@@ -273,6 +301,11 @@ export default function Home() {
         {/* Dagens tre steg – den primära vägen genom MyFlove. */}
         <MyFloveWide style={{ order: 0.3 }} className="min-w-0">
           <JourneySteps onAddOpen={() => setAddOpen(true)} />
+        </MyFloveWide>
+
+        {/* Flow finns kvar, men efter dagens två tydliga val. */}
+        <MyFloveWide style={{ order: 0.4 }} className="min-w-0" data-npf="optional">
+          <FlowHomeCard />
         </MyFloveWide>
 
         {/* Ett tydligt nästa steg – aldrig en lista. */}
@@ -369,7 +402,7 @@ export default function Home() {
                           {battery}%
                         </span>
                         <span className="mt-1 block text-sm text-muted-foreground">
-                          {t("Gott jobbat!")}
+                          {t("Precis som det är just nu")}
                         </span>
                       </div>
                     </div>

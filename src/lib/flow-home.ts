@@ -11,7 +11,7 @@
  *  2. Något i Quickflow har blivit liggande.
  *  3. Låg ork – då erbjuder Flow färre val, inte fler.
  *  4. Söndag – veckan som varit ligger nära till hands.
- *  5. Annars: en lugn hälsning med samma grundval för alla.
+ *  5. Annars: en lugn hälsning utan en öppen fråga.
  */
 
 export type FlowHomeChoiceId = "quickflow" | "kalender" | "batteri" | "valj" | "vecka";
@@ -93,11 +93,11 @@ export function flowHomePrompt(input: FlowHomeInput): FlowHomePrompt {
     mode: "halsning",
     message:
       hour < 11
-        ? "God morgon 💜 Vad behöver du just nu?"
+        ? "God morgon 💜 Vi börjar lugnt."
         : hour >= 20
-          ? "Kväll 💜 Vad behöver du just nu?"
-          : "Hej 💜 Vad behöver du just nu?",
+          ? "Kväll 💜 Det som inte ryms kan vänta."
+          : "Hej 💜 Vi tar en sak i taget.",
     mood: hour < 11 ? "wave" : "calm",
-    choices: [...order, "valj"],
+    choices: [order[0] ?? "quickflow", "valj"],
   };
 }
