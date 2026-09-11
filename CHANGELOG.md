@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-11 – Pitchvideo och pitchdeck 4.2
+
+- Nytt pitchdeck (4.2) som beskriver appen som den är utformad nu: guidad dagsresa i tre steg, lugnt gränssnitt med andningsljus, enkelt läge, hopfällbara block, batteri mot faktisk tid, belastningskarta och kvällscheck.
+- Ny pitchvideo (4.2) på 60 sekunder med de uppdaterade bilderna.
+- Pitchsidan länkar nu till version 4.2 av video, PowerPoint och PDF.
+
 ## 2026-09-11 – Lugnare Hem
 
 - "Nästa rimliga steg" ligger nu inuti "Din dag, i din takt" direkt under "Idag", så förslaget kommer i samma sammanhang som dagens schema.
