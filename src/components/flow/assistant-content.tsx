@@ -170,13 +170,20 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
     if (action.kind === "flytta") {
       const date = action.date ?? tomorrowISO();
       setTaskDueDate(task.id, date);
-      if (action.steps?.length) addTaskSteps(task.id, action.steps.map((title) => ({ title })));
+      if (action.steps?.length)
+        addTaskSteps(
+          task.id,
+          action.steps.map((title) => ({ title })),
+        );
       setDoneActions((p) => ({ ...p, [key]: `Flyttad till ${date}.` }));
     } else if (action.kind === "forenkla") {
       updateTask(task.id, { friction: "small" });
       setDoneActions((p) => ({ ...p, [key]: "Nu räcker en mindre version." }));
     } else if (action.kind === "dela") {
-      addTaskSteps(task.id, (action.steps ?? ["Första lilla steget"]).map((title) => ({ title })));
+      addTaskSteps(
+        task.id,
+        (action.steps ?? ["Första lilla steget"]).map((title) => ({ title })),
+      );
       setDoneActions((p) => ({ ...p, [key]: "Uppdelad i små steg." }));
     } else {
       toggleTask(task.id);
@@ -247,9 +254,10 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
       await saveFlowMessage(id, "user", trimmed);
 
       // Håll anropet inom serverns gränser: max 50 meddelanden och 4000 tecken kontext.
-      const context = `${personalContext}\n\n${contextPrompt}\n\nDagens uppgifter (dagens datum ${todayStr()}, imorgon ${tomorrowISO()}):\n${taskListContext}`
-        .trim()
-        .slice(0, 4000);
+      const context =
+        `${personalContext}\n\n${contextPrompt}\n\nDagens uppgifter (dagens datum ${todayStr()}, imorgon ${tomorrowISO()}):\n${taskListContext}`
+          .trim()
+          .slice(0, 4000);
       const { reply } = await chat({
         data: {
           messages: history.slice(-40).map((m) => ({ role: m.role, content: m.content })),
