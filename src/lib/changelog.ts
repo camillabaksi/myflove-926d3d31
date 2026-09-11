@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-11";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Enhetlig design och tydligare andningsljus",
+    items: [
+      "Hela appen har samma mjuka pastelllila bakgrund bakom de vita korten (2026-09-11)",
+      "Andningsljuset är starkare: 4 sekunder in, 5 sekunder ut, 1 sekunds vila (2026-09-11)",
+      "Ljusets färg och tempo följer dagens belastning (2026-09-11)",
+    ],
+  },
+  {
     title: "Akut Lugn och Mikropaus på mobil",
     items: [
       "Den lugna pausskärmen visas i helskärm på mobilen i stället för att klippas (2026-09-11)",
