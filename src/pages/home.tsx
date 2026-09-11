@@ -36,11 +36,9 @@ import {
 import { todayISO } from "@/lib/day";
 import { track } from "@/lib/analytics";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";
-import { useFlowSettings } from "@/hooks/use-flow-settings";
 import { useFeatureUsage, type FeatureId } from "@/lib/feature-usage";
 import { orkFromValue10 } from "@/lib/ork";
 import { heroGradient } from "@/lib/hero-gradient";
-import { useEverydayPatterns } from "@/hooks/use-everyday-patterns";
 import WeekReviewCard from "@/components/week-review-card";
 import FlowHomeCard from "@/components/flow/flow-home-card";
 import JourneySteps from "@/components/journey/journey-steps";
