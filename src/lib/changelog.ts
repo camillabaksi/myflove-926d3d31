@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-11";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Akut Lugn och Mikropaus på mobil",
+    items: [
+      "Den lugna pausskärmen visas i helskärm på mobilen i stället för att klippas (2026-09-11)",
+      "Text, timer och Flow är anpassade till små skärmar och mobilens säkra ytor (2026-09-11)",
+    ],
+  },
+  {
     title: "God morgon direkt på Hem",
     items: [
       "Morgonstart-kortet ligger nu högst upp i huvudytan på Hem, under hälsningen (2026-09-11)",

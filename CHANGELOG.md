@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-11 – Akut Lugn och Mikropaus på mobil
+
+- Lugna pausskärmen visas nu i helskärm på mobilen i stället för att klippas mellan sidhuvud och bottenmeny.
+- Texter, timer och Flow är anpassade till små skärmar och respekterar mobilens säkra ytor.
+
+
 ## 2026-09-11 – God morgon direkt på Hem
 
 - Morgonstart-kortet ligger nu högst upp i huvudytan på Hem, under hälsningen "Din dag, i din takt".
