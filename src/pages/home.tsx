@@ -186,8 +186,8 @@ export default function Home() {
 
       <MyFlovePageGrid className="gap-5 xl:grid-cols-6">
         <MyFloveWide className="home-ambient-shell" data-glow-level={glowLevel}>
-          <div className="home-ambient-glow" aria-hidden />
           <section className="home-main-surface pop-in" aria-label={t("Din lugna start")}>
+            <div className="home-ambient-glow" aria-hidden />
             <header className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4">
               <div className="min-w-0">
                 <p className="mb-1 text-xs font-semibold uppercase text-primary">
@@ -420,7 +420,6 @@ export default function Home() {
         <MyFloveWide style={{ order: 0.3 }} className="min-w-0">
           <JourneySteps onAddOpen={() => setAddOpen(true)} />
         </MyFloveWide>
-
 
         {/* Kvällscheck – frivillig, dyker upp när dagen lider mot sitt slut. */}
 

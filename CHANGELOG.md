@@ -1,7 +1,7 @@
-## 2026-09-11 – Synlig andningsglöd på Hem
+## 2026-09-11 – Andningsglöd inne i ”Din dag, i din takt”
 
-- Andningsglöden bakom ”Din dag, i din takt” ligger nu i rätt lager och syns tydligt även på mobil.
-- Pulsen är förstärkt utan att ändra innehåll, dagslogik eller inställningen för minskad rörelse.
+- Andningsglöden ligger nu inne i kortet ”Din dag, i din takt” i stället för i sidans bakgrund, och pulserar tydligt bakom hälsningen och batteriet.
+- Innehåll, dagslogik och inställningen för minskad rörelse är oförändrade.
 
 ## 2026-09-11 – Visuellt starkare 3-minuters investerarpitch
 

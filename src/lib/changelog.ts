@@ -10,10 +10,10 @@ export const CHANGELOG_UPDATED = "2026-09-11";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
-    title: "Synlig andningsglöd på Hem",
+    title: 'Andningsglöd inne i "Din dag, i din takt"',
     items: [
-      'Andningsglöden bakom "Din dag, i din takt" ligger nu i rätt lager och syns tydligt även på mobil (2026-09-11)',
-      "Pulsen är förstärkt utan att ändra innehåll, dagslogik eller inställningen för minskad rörelse (2026-09-11)",
+      'Andningsglöden ligger nu inne i kortet "Din dag, i din takt" i stället för i sidans bakgrund, och pulserar tydligt bakom hälsningen och batteriet (2026-09-11)',
+      "Innehåll, dagslogik och inställningen för minskad rörelse är oförändrade (2026-09-11)",
     ],
   },
   {
