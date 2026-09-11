@@ -1,3 +1,8 @@
+## 2026-09-11 – Säkerhetslås för kalenderkopplingar
+
+- Tabellen med krypterade kalenderkopplingar är nu uttryckligen låst: ingen åtkomst från webbläsaren, endast serverns egen kod.
+- Säkerhetskontrollen är körd om och visar inga kvarstående kritiska fynd, så 5.0 kan publiceras.
+
 ## 2026-09-11 – MyFlove 5.0 och ny Android AAB
 
 - Webbappen, Living Blueprint, pitchdeck, pitchvideo, investerarpitch och byggdokumentation är synkade till MyFlove 5.0.

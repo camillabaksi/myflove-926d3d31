@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-11";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Säkerhetslås för kalenderkopplingar",
+    items: [
+      "Krypterade kalenderkopplingar är låsta för all klientåtkomst och nås bara av serverns egen kod (2026-09-11)",
+      "Säkerhetskontrollen är omkörd utan kvarstående kritiska fynd, så 5.0 kan publiceras (2026-09-11)",
+    ],
+  },
+  {
     title: "MyFlove 5.0 och ny Android AAB",
     items: [
       "Webbappen, Living Blueprint, pitchdeck, pitchvideo, investerarpitch och byggdokumentation är synkade till MyFlove 5.0 (2026-09-11)",
