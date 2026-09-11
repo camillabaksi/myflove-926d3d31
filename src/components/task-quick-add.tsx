@@ -82,12 +82,15 @@ export function TaskQuickAdd({
     defaultDate && /^\d{4}-\d{2}-\d{2}$/.test(defaultDate) ? defaultDate : todayISO();
   const [date, setDate] = useState(baseDate);
   const [time, setTime] = useState("");
+  const [alsoShopping, setAlsoShopping] = useState(true);
+  const { addItem: addShoppingItem } = useSharedShoppingList();
 
   const reset = () => {
     setMode(null);
     setTitle("");
     setDate(baseDate);
     setTime("");
+    setAlsoShopping(true);
   };
 
   const chooseMode = (nextMode: AddMode) => {
@@ -100,6 +103,10 @@ export function TaskQuickAdd({
     const trimmed = title.trim();
     const safeDate = /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : baseDate;
     if (!trimmed || !mode) return;
+    if (alsoShopping && looksLikeShopping(trimmed)) {
+      addShoppingItem(shoppingTitleFrom(trimmed));
+      toast.success("Tillagd i Inköpslistan också. 💙");
+    }
     onAdd({
       title: trimmed.slice(0, 240),
       dueDate: safeDate,
@@ -204,6 +211,8 @@ export function TaskQuickAdd({
                 aria-label="Vad"
               />
 
+              <ShoppingHint title={title} checked={alsoShopping} onChange={setAlsoShopping} />
+
               <div className="space-y-2">
                 <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                   När?
@@ -286,11 +295,17 @@ export function QuickAddInline({
   const [mode, setMode] = useState<AddMode | null>(null);
   const [title, setTitle] = useState("");
   const [time, setTime] = useState("");
+  const [alsoShopping, setAlsoShopping] = useState(true);
+  const { addItem: addShoppingItem } = useSharedShoppingList();
   const baseDate = /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : todayISO();
 
   const save = () => {
     const trimmed = title.trim();
     if (!trimmed || !mode) return;
+    if (alsoShopping && looksLikeShopping(trimmed)) {
+      addShoppingItem(shoppingTitleFrom(trimmed));
+      toast.success("Tillagd i Inköpslistan också. 💙");
+    }
     onAdd({
       title: trimmed.slice(0, 240),
       dueDate: baseDate,
@@ -301,6 +316,7 @@ export function QuickAddInline({
     setMode(null);
     setTitle("");
     setTime("");
+    setAlsoShopping(true);
     onClose?.();
   };
 
@@ -390,6 +406,8 @@ export function QuickAddInline({
             className="h-12 rounded-2xl bg-card text-base"
             aria-label="Vad"
           />
+
+          <ShoppingHint title={title} checked={alsoShopping} onChange={setAlsoShopping} />
 
           <div className="flex items-center gap-2">
             <Input
