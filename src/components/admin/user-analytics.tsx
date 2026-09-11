@@ -114,10 +114,20 @@ async function toPdf(data: UserAnalytics, rows: SessionRow[]): Promise<Blob> {
   return doc.output("blob");
 }
 
+type SortKey = "newest" | "oldest" | "most" | "fewest";
+
+const SORTS: Array<{ key: SortKey; label: string }> = [
+  { key: "newest", label: "Nyast aktiv först" },
+  { key: "oldest", label: "Äldst först (först sedda)" },
+  { key: "most", label: "Flest händelser" },
+  { key: "fewest", label: "Färst händelser" },
+];
+
 export default function UserAnalytics() {
   const { t } = useLang();
   const qc = useQueryClient();
   const [externalOnly, setExternalOnly] = useState(true);
+  const [sortKey, setSortKey] = useState<SortKey>("newest");
   const load = useServerFn(getUserAnalyticsFn);
   const mark = useServerFn(setSessionInternalFn);
 
@@ -133,7 +143,14 @@ export default function UserAnalytics() {
   });
 
   const myId = typeof window !== "undefined" ? getAnalyticsSessionId() : "";
-  const rows = (data?.sessions ?? []).filter((s) => (externalOnly ? s.isInternal !== true : true));
+  const rows = [...(data?.sessions ?? [])]
+    .filter((s) => (externalOnly ? s.isInternal !== true : true))
+    .sort((a, b) => {
+      if (sortKey === "newest") return b.lastSeen.localeCompare(a.lastSeen);
+      if (sortKey === "oldest") return a.firstSeen.localeCompare(b.firstSeen);
+      if (sortKey === "most") return b.events - a.events;
+      return a.events - b.events;
+    });
   const shownEvents = rows.reduce((sum, s) => sum + s.events, 0);
 
   return (
@@ -220,6 +237,20 @@ export default function UserAnalytics() {
             <span className="text-xs text-muted-foreground">
               {t("Visar nu")}: {rows.length} {t("webbläsare")} · {shownEvents} {t("händelser")}
             </span>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs text-muted-foreground">{t("Sortera")}:</span>
+            {SORTS.map((s) => (
+              <Button
+                key={s.key}
+                variant={sortKey === s.key ? "default" : "outline"}
+                size="sm"
+                onClick={() => setSortKey(s.key)}
+              >
+                {t(s.label)}
+              </Button>
+            ))}
           </div>
 
           <div className="divide-y divide-border rounded-2xl border border-border overflow-hidden">
