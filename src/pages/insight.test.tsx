@@ -28,7 +28,8 @@ vi.mock("@/components/layout", () => ({
   default: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
 }));
 vi.mock("@/hooks/use-data", () => ({
-  useTasks: () => ({ addTask: vi.fn(), completedTasks: state.completed }),
+  useTasks: () => ({ addTask: vi.fn(), completedTasks: state.completed, tasks: state.completed }),
+  useReminders: () => ({ reminders: [] }),
 }));
 vi.mock("@/hooks/use-flowscore", () => ({ useFlowScore: () => ({ flow: { maxFriction: 5 } }) }));
 vi.mock("@/hooks/use-insight", () => ({

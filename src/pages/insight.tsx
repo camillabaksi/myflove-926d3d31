@@ -32,6 +32,7 @@ import {
 } from "@/lib/insight";
 import { buildPersonalInsight, INSIGHT_EXAMPLES } from "@/lib/insight-personal";
 import { useFlowLearning } from "@/hooks/use-flow-learning";
+import { useEverydayPatterns } from "@/hooks/use-everyday-patterns";
 import { useVisitStreak } from "@/hooks/use-visit-streak";
 import { useIsAdmin } from "@/hooks/use-is-admin";
 import { track } from "@/lib/analytics";
@@ -209,6 +210,7 @@ export default function InsightPage() {
   const knowledge = useFlowLearning();
   const { totalDays } = useVisitStreak();
   const [energyLog] = useCloudSyncedStorage<unknown[]>("myflove-energy-log", []);
+  const patterns = useEverydayPatterns();
 
   const personal = useMemo(
     () =>
@@ -330,6 +332,26 @@ export default function InsightPage() {
                 />
               </div>
             </div>
+
+            {patterns.ready && (
+              <CollapsibleSection
+                id="insight-everyday-patterns"
+                title="Din vardag"
+                description="Det här har MyFlove lärt sig av dina egna dagar"
+                data-testid="insight-everyday-patterns"
+                className="rounded-3xl border border-border bg-card p-5"
+                headingClassName="font-semibold"
+              >
+                <ul className="mt-3 space-y-2">
+                  {patterns.lines.map((line) => (
+                    <li key={line} className="flex items-start gap-2 text-sm text-ink">
+                      <Sparkles size={14} className="mt-0.5 shrink-0 text-primary" aria-hidden />
+                      <span className="min-w-0">{line}</span>
+                    </li>
+                  ))}
+                </ul>
+              </CollapsibleSection>
+            )}
 
             {personal.ready ? (
               <>
