@@ -21,6 +21,7 @@ import { Route as DevSessionRouteImport } from './routes/dev-session'
 import { Route as CookiesRouteImport } from './routes/cookies'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as OauthKalenderReturRouteImport } from './routes/oauth.kalender-retur'
 import { Route as GuideAdhdPlannerForAdultsRouteImport } from './routes/guide.adhd-planner-for-adults'
 import { Route as AppWorkflowRouteImport } from './routes/_app.workflow'
 import { Route as AppVeckansFlowRouteImport } from './routes/_app.veckans-flow'
@@ -145,6 +146,11 @@ const AppRoute = AppRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OauthKalenderReturRoute = OauthKalenderReturRouteImport.update({
+  id: '/oauth/kalender-retur',
+  path: '/oauth/kalender-retur',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GuideAdhdPlannerForAdultsRoute =
@@ -555,6 +561,7 @@ export interface FileRoutesByFullPath {
   '/veckans-flow': typeof AppVeckansFlowRoute
   '/workflow': typeof AppWorkflowRoute
   '/guide/adhd-planner-for-adults': typeof GuideAdhdPlannerForAdultsRoute
+  '/oauth/kalender-retur': typeof OauthKalenderReturRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/assistant/$chatId': typeof AppAssistantChatIdRoute
@@ -634,6 +641,7 @@ export interface FileRoutesByTo {
   '/veckans-flow': typeof AppVeckansFlowRoute
   '/workflow': typeof AppWorkflowRoute
   '/guide/adhd-planner-for-adults': typeof GuideAdhdPlannerForAdultsRoute
+  '/oauth/kalender-retur': typeof OauthKalenderReturRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/assistant/$chatId': typeof AppAssistantChatIdRoute
@@ -715,6 +723,7 @@ export interface FileRoutesById {
   '/_app/veckans-flow': typeof AppVeckansFlowRoute
   '/_app/workflow': typeof AppWorkflowRoute
   '/guide/adhd-planner-for-adults': typeof GuideAdhdPlannerForAdultsRoute
+  '/oauth/kalender-retur': typeof OauthKalenderReturRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/_app/assistant_/$chatId': typeof AppAssistantChatIdRoute
@@ -796,6 +805,7 @@ export interface FileRouteTypes {
     | '/veckans-flow'
     | '/workflow'
     | '/guide/adhd-planner-for-adults'
+    | '/oauth/kalender-retur'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/assistant/$chatId'
@@ -875,6 +885,7 @@ export interface FileRouteTypes {
     | '/veckans-flow'
     | '/workflow'
     | '/guide/adhd-planner-for-adults'
+    | '/oauth/kalender-retur'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/assistant/$chatId'
@@ -955,6 +966,7 @@ export interface FileRouteTypes {
     | '/_app/veckans-flow'
     | '/_app/workflow'
     | '/guide/adhd-planner-for-adults'
+    | '/oauth/kalender-retur'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/_app/assistant_/$chatId'
@@ -979,6 +991,7 @@ export interface RootRouteChildren {
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   GuideAdhdPlannerForAdultsRoute: typeof GuideAdhdPlannerForAdultsRoute
+  OauthKalenderReturRoute: typeof OauthKalenderReturRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicCspReportRoute: typeof ApiPublicCspReportRoute
@@ -1070,6 +1083,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/oauth/kalender-retur': {
+      id: '/oauth/kalender-retur'
+      path: '/oauth/kalender-retur'
+      fullPath: '/oauth/kalender-retur'
+      preLoaderRoute: typeof OauthKalenderReturRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/guide/adhd-planner-for-adults': {
@@ -1678,6 +1698,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   GuideAdhdPlannerForAdultsRoute: GuideAdhdPlannerForAdultsRoute,
+  OauthKalenderReturRoute: OauthKalenderReturRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicCspReportRoute: ApiPublicCspReportRoute,
