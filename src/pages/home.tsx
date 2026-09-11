@@ -48,6 +48,7 @@ import NextStepCard from "@/components/journey/next-step-card";
 import EveningCheck from "@/components/journey/evening-check";
 import CollapsibleSection from "@/components/collapsible-section";
 import { useWeekReview } from "@/hooks/use-activity-history";
+import { useNpfSettings } from "@/lib/npf-mode";
 import { weekStartISO } from "@/lib/week-review";
 import { parseISODate } from "@/lib/day";
 
@@ -81,6 +82,15 @@ export default function Home() {
   const { openItems } = useQuickflow();
   const { settings: flowSettings } = useFlowSettings();
   const patterns = useEverydayPatterns();
+  const { settings: npf, update: updateNpf } = useNpfSettings();
+  /** Enkelt läge = färre saker + lugnare färger + ingen rörelse + enkla ord. */
+  const simpleMode = npf.less && npf.calm && npf.stillness;
+  const toggleSimpleMode = () =>
+    updateNpf(
+      simpleMode
+        ? { less: false, stillness: false }
+        : { less: true, calm: true, stillness: true, plainWords: true },
+    );
   const { record: recordFeature, order: featureOrder, adaptive, top } = useFeatureUsage();
   const todayIso = todayISO();
   // Veckoöversikten hör hemma på söndagen – veckan som varit, i lugn takt.
