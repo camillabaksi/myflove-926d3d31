@@ -214,20 +214,21 @@
 @utility home-ambient-shell {
   position: relative;
   isolation: isolate;
+  overflow: visible;
   padding-block: 1rem;
 }
 
 @utility home-ambient-glow {
   position: absolute;
-  z-index: -1;
-  inset: -6rem -1rem;
+  z-index: 0;
+  inset: -2.5rem -0.75rem;
   pointer-events: none;
   border-radius: 42% 58% 54% 46% / 48% 42% 58% 52%;
   background:
-    radial-gradient(circle at 30% 34%, hsl(var(--blush) / 1), transparent 62%),
-    radial-gradient(circle at 70% 66%, hsl(var(--lavender) / 1), transparent 66%),
-    radial-gradient(circle at 52% 50%, hsl(var(--primary) / 0.4), transparent 70%);
-  filter: blur(72px);
+    radial-gradient(circle at 28% 30%, hsl(327 76% 76% / 0.96), transparent 58%),
+    radial-gradient(circle at 72% 70%, hsl(268 76% 74% / 0.92), transparent 60%),
+    radial-gradient(circle at 52% 50%, hsl(var(--primary) / 0.72), transparent 72%);
+  filter: blur(42px) saturate(1.18);
   transform-origin: center;
   transition:
     background 1400ms ease,
@@ -238,15 +239,17 @@
 
 [data-glow-level="busy"] .home-ambient-glow {
   background:
-    radial-gradient(circle at 32% 38%, hsl(268 46% 62% / 0.85), transparent 62%),
-    radial-gradient(circle at 70% 64%, hsl(288 34% 48% / 0.75), transparent 66%);
-  filter: blur(78px) saturate(0.85);
+    radial-gradient(circle at 32% 38%, hsl(268 58% 62% / 0.94), transparent 60%),
+    radial-gradient(circle at 70% 64%, hsl(327 62% 68% / 0.88), transparent 64%);
+  filter: blur(48px) saturate(1.05);
   animation: home-glow-busy 12s ease-in-out infinite;
 }
 
 [data-glow-level="overloaded"] .home-ambient-glow {
-  background: radial-gradient(circle at 50% 50%, hsl(266 26% 34% / 0.9), transparent 72%);
-  filter: blur(88px) saturate(0.35);
+  background:
+    radial-gradient(circle at 38% 42%, hsl(266 42% 48% / 0.9), transparent 62%),
+    radial-gradient(circle at 68% 58%, hsl(327 38% 58% / 0.7), transparent 68%);
+  filter: blur(56px) saturate(0.72);
   animation: home-glow-overloaded 18s ease-in-out infinite;
 }
 
@@ -261,6 +264,7 @@
 
 @utility home-main-surface {
   position: relative;
+  z-index: 1;
   overflow: hidden;
   border: 1px solid hsl(var(--border) / 0.65);
   border-radius: 2rem;

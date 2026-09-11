@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-11";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Synlig andningsglöd på Hem",
+    items: [
+      'Andningsglöden bakom "Din dag, i din takt" ligger nu i rätt lager och syns tydligt även på mobil (2026-09-11)',
+      "Pulsen är förstärkt utan att ändra innehåll, dagslogik eller inställningen för minskad rörelse (2026-09-11)",
+    ],
+  },
+  {
     title: "Visuellt starkare 3-minuters investerarpitch",
     items: [
       "Den engelska investerarpitchen har byggts om med riktiga appbilder och en tydligare berättelse från problem till genomförbar dag (2026-09-11)",
