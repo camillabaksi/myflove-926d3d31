@@ -331,7 +331,11 @@ export default function RemindersPage() {
         </MyFloveWide>
 
         <MyFloveWide>
-          <MyFloveBlock title={`Aktiva (${active.length})`} icon={BellRing}>
+          <MyFloveBlock
+            title={`Aktiva (${active.length})`}
+            collapseId="reminders-active"
+            icon={BellRing}
+          >
             <CollapsibleSection
               title={`Aktiva (${active.length})`}
               id="Aktiva påminnelser"
@@ -378,7 +382,12 @@ export default function RemindersPage() {
             </CollapsibleSection>
           </MyFloveBlock>
 
-          <MyFloveBlock title={`Avbokade (${canceled.length})`} icon={BellRing} surface="plain">
+          <MyFloveBlock
+            title={`Avbokade (${canceled.length})`}
+            collapseId="reminders-canceled"
+            icon={BellRing}
+            surface="plain"
+          >
             <CollapsibleSection
               title={`Avbokade (${canceled.length})`}
               id="Avbokade påminnelser"

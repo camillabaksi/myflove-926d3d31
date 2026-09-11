@@ -202,8 +202,12 @@ export default function AdminStats() {
             </div>
 
             {/* 2. Kärnflödet som funnel */}
-            <section className={`${cardClass} space-y-4`}>
-              <h2 className="text-lg font-semibold">{t("MyFloves kärnflöde")}</h2>
+            <CollapsibleSection
+              title={t("MyFloves kärnflöde")}
+              id="admin-core-flow"
+              headingClassName="text-lg font-semibold"
+              className={cardClass}
+            >
               <p className="text-sm text-muted-foreground -mt-2">
                 🧠 {t("Fånga")} → 📋 {t("Planera")} → ✨ {t("Göra")} → 💭 {t("Reflektera")}
               </p>
@@ -229,11 +233,15 @@ export default function AdminStats() {
                 what={t("Hur många användare som når varje steg i MyFloves dagliga loop.")}
                 why={t("Visar om hela flödet håller ihop eller om något steg tappar folk.")}
               />
-            </section>
+            </CollapsibleSection>
 
             {/* 3. Vad använder människor? */}
-            <section className={`${cardClass} space-y-4`}>
-              <h2 className="text-lg font-semibold">{t("Vad använder människor?")}</h2>
+            <CollapsibleSection
+              title={t("Vad använder människor?")}
+              id="admin-feature-use"
+              headingClassName="text-lg font-semibold"
+              className={cardClass}
+            >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
                 {friendlyParts.map((part) => (
                   <div key={part.label}>
@@ -251,11 +259,15 @@ export default function AdminStats() {
                 what={t("Vilka delar av appen som faktiskt öppnas och används.")}
                 why={t("Visar var värdet finns i dag och vad vi ska bygga vidare på.")}
               />
-            </section>
+            </CollapsibleSection>
 
             {/* 4. Kapacitet & mående */}
-            <section className={`${cardClass} space-y-4`}>
-              <h2 className="text-lg font-semibold">🔋 {t("Kapacitet & mående")}</h2>
+            <CollapsibleSection
+              title={`🔋 ${t("Kapacitet & mående")}`}
+              id="admin-capacity"
+              headingClassName="text-lg font-semibold"
+              className={cardClass}
+            >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
                 {capacityStats.map((row) => (
                   <div key={row.label}>
@@ -275,11 +287,15 @@ export default function AdminStats() {
                   "Det här är MyFloves kärna: att planera efter kapacitet, inte bara att-göra.",
                 )}
               />
-            </section>
+            </CollapsibleSection>
 
             {/* 5. Återkomst */}
-            <section className={`${cardClass} space-y-4`}>
-              <h2 className="text-lg font-semibold">🔄 {t("Återkomst")}</h2>
+            <CollapsibleSection
+              title={`🔄 ${t("Återkomst")}`}
+              id="admin-returning"
+              headingClassName="text-lg font-semibold"
+              className={cardClass}
+            >
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                 {[
                   { label: t("Aktiva idag"), value: `${data.activeSessions1d}` },
@@ -305,7 +321,7 @@ export default function AdminStats() {
                 what={t("Hur många som är aktiva över tid och hur stor andel som kommer tillbaka.")}
                 why={t("Återkomst är den starkaste signalen på att appen gör verklig nytta.")}
               />
-            </section>
+            </CollapsibleSection>
 
             {/* 6. Detaljerad statistik – sekundär och expanderbar */}
             <CollapsibleSection

@@ -8,7 +8,6 @@ import { MyFloveHeart } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import CollapsibleSection from "@/components/collapsible-section";
-import HelpHint from "@/components/help-hint";
 import { useRelations } from "@/hooks/use-relations";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import {

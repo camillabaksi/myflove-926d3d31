@@ -181,6 +181,7 @@ export function MedicationContent({ showHeader = true }: MedicationContentProps)
             {medications.map((med) => (
               <MyFloveBlock
                 key={med.id}
+                collapseId={`medication-${med.id}`}
                 title={med.name}
                 icon={Pill}
                 subtitle={`${med.dosage ? `${med.dosage} · ` : ""}${REPEAT_LABELS[med.repeat ?? "daily"]}${

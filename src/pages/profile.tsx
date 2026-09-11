@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Baby, Check, Flower2, Languages, Pencil, Plus, Trash2, User } from "lucide-react";
+import { Check, Pencil, Plus, Trash2 } from "lucide-react";
 import Layout from "@/components/layout";
 import { MyFloveHeader } from "@/components/myflove";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
