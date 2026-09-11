@@ -1,3 +1,8 @@
+## 2026-09-11 – Sortering i hela statistikdelen
+
+- Alla listor på adminsidans statistik kan nu sorteras: "Vad använder människor?", "Kapacitet & mående", "Mest använda delar av appen", "Mest besökta sidor" och "Funktioner som faktiskt används".
+- Varje lista har knapparna Mest först, Minst först och A–Ö.
+
 ## 2026-09-11 – Sortera analysen per användare
 
 - Under "Analys per användare" kan du nu sortera listan: nyast aktiv först, äldst först, flest eller färst händelser.

@@ -3,7 +3,9 @@ import { useGetAnalyticsSummary } from "@workspace/api-client-react";
 import { BarChart3, Users, Activity, Repeat, Sparkles, Lock, Info } from "lucide-react";
 import { useIsAdmin } from "@/hooks/use-is-admin";
 import { useLang } from "@/hooks/use-language";
+import { useState } from "react";
 import CollapsibleSection from "@/components/collapsible-section";
+import { AdminListSorter, sortAdminRows, type AdminSortKey } from "@/components/admin/list-sorter";
 import AnalyticsExport from "@/components/admin/analytics-export";
 import UserAnalytics from "@/components/admin/user-analytics";
 import { actionLabel, pageLabel, sectionLabel } from "@/lib/analytics-labels";
@@ -55,6 +57,11 @@ export default function AdminStats() {
   const { isAdmin, loading: adminLoading } = useIsAdmin();
   const { t } = useLang();
   const { data, isLoading, isError } = useGetAnalyticsSummary();
+  const [partsSort, setPartsSort] = useState<AdminSortKey>("most");
+  const [capacitySort, setCapacitySort] = useState<AdminSortKey>("most");
+  const [viewsSort, setViewsSort] = useState<AdminSortKey>("most");
+  const [pagesSort, setPagesSort] = useState<AdminSortKey>("most");
+  const [actionsSort, setActionsSort] = useState<AdminSortKey>("most");
 
   if (adminLoading) {
     return (
@@ -80,17 +87,29 @@ export default function AdminStats() {
 
   const usage = data?.featureUsage ?? [];
 
-  const viewsBySection = usage
-    .filter((row) => row.action === "view" && row.section !== "page")
-    .sort((a, b) => b.events - a.events);
+  const viewsBySection = sortAdminRows(
+    usage
+      .filter((row) => row.action === "view" && row.section !== "page")
+      .map((row) => ({ ...row, label: t(sectionLabel(row.section)) })),
+    viewsSort,
+  );
 
-  const pageViews = usage
-    .filter((row) => row.section === "page")
-    .sort((a, b) => b.events - a.events);
+  const pageViews = sortAdminRows(
+    usage
+      .filter((row) => row.section === "page")
+      .map((row) => ({ ...row, label: t(pageLabel(row.action)) })),
+    pagesSort,
+  );
 
-  const otherActions = usage
-    .filter((row) => row.action !== "view" && row.section !== "page")
-    .sort((a, b) => b.events - a.events);
+  const otherActions = sortAdminRows(
+    usage
+      .filter((row) => row.action !== "view" && row.section !== "page")
+      .map((row) => ({
+        ...row,
+        label: `${t(sectionLabel(row.section))} — ${t(actionLabel(row.action))}`,
+      })),
+    actionsSort,
+  );
 
   const findUsage = (section: string, action: string) =>
     usage.find((row) => row.section === section && row.action === action);
@@ -118,12 +137,16 @@ export default function AdminStats() {
     { label: t("Hälsofaktor loggad"), ...findUsage("halsa", "health_factor_logged") },
     { label: t("Flow totalt"), ...sumSection(["flow", "flowplan"]) },
   ].map((row) => ({ label: row.label, events: row.events ?? 0, sessions: row.sessions ?? 0 }));
+  const sortedCapacity = sortAdminRows(capacityStats, capacitySort);
   const maxCapacity = Math.max(1, ...capacityStats.map((row) => row.events));
 
-  const friendlyParts = FRIENDLY_PARTS.map((part) => ({
-    label: t(part.label),
-    ...sumSection(part.sections),
-  })).sort((a, b) => b.events - a.events);
+  const friendlyParts = sortAdminRows(
+    FRIENDLY_PARTS.map((part) => ({
+      label: t(part.label),
+      ...sumSection(part.sections),
+    })),
+    partsSort,
+  );
   const maxFriendly = Math.max(1, ...friendlyParts.map((p) => p.events));
 
   const maxViews = Math.max(1, ...viewsBySection.map((row) => row.events));
@@ -244,6 +267,7 @@ export default function AdminStats() {
               headingClassName="text-lg font-semibold"
               className={cardClass}
             >
+              <AdminListSorter value={partsSort} onChange={setPartsSort} />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
                 {friendlyParts.map((part) => (
                   <div key={part.label}>
@@ -270,8 +294,9 @@ export default function AdminStats() {
               headingClassName="text-lg font-semibold"
               className={cardClass}
             >
+              <AdminListSorter value={capacitySort} onChange={setCapacitySort} />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
-                {capacityStats.map((row) => (
+                {sortedCapacity.map((row) => (
                   <div key={row.label}>
                     <div className="flex justify-between text-sm mb-1">
                       <span className="font-medium">{row.label}</span>
@@ -437,6 +462,7 @@ export default function AdminStats() {
 
                 <div>
                   <h3 className="text-sm font-semibold mb-2">{t("Mest använda delar av appen")}</h3>
+                  <AdminListSorter value={viewsSort} onChange={setViewsSort} />
                   {viewsBySection.length === 0 && (
                     <p className="text-sm text-muted-foreground">{t("Ingen data än.")}</p>
                   )}
@@ -444,7 +470,7 @@ export default function AdminStats() {
                     {viewsBySection.map((row) => (
                       <div key={`${row.section}-${row.action}`}>
                         <div className="flex justify-between text-sm mb-1">
-                          <span className="font-medium">{t(sectionLabel(row.section))}</span>
+                          <span className="font-medium">{row.label}</span>
                           <span className="text-muted-foreground">
                             {row.events} {t("besök")} · {row.sessions} {t("användare")}
                           </span>
@@ -457,6 +483,7 @@ export default function AdminStats() {
 
                 <div>
                   <h3 className="text-sm font-semibold mb-2">{t("Mest besökta sidor")}</h3>
+                  <AdminListSorter value={pagesSort} onChange={setPagesSort} />
                   {pageViews.length === 0 && (
                     <p className="text-sm text-muted-foreground">{t("Ingen data än.")}</p>
                   )}
@@ -465,7 +492,7 @@ export default function AdminStats() {
                       <div key={row.action}>
                         <div className="flex justify-between text-sm mb-1">
                           <span className="font-medium">
-                            {t(pageLabel(row.action))}{" "}
+                            {row.label}{" "}
                             <span className="text-xs text-muted-foreground">/{row.action}</span>
                           </span>
                           <span className="text-muted-foreground">
@@ -482,6 +509,7 @@ export default function AdminStats() {
                   <h3 className="text-sm font-semibold mb-2">
                     {t("Funktioner som faktiskt används")}
                   </h3>
+                  <AdminListSorter value={actionsSort} onChange={setActionsSort} />
                   {otherActions.length === 0 && (
                     <p className="text-sm text-muted-foreground">{t("Ingen data än.")}</p>
                   )}
@@ -491,9 +519,7 @@ export default function AdminStats() {
                         key={`${row.section}-${row.action}`}
                         className="flex items-center justify-between gap-3 py-2 text-sm"
                       >
-                        <span>
-                          {t(sectionLabel(row.section))} — {t(actionLabel(row.action))}
-                        </span>
+                        <span>{row.label}</span>
                         <span className="text-muted-foreground whitespace-nowrap">
                           {row.events} {t("ggr")} · {row.sessions} {t("användare")}
                         </span>

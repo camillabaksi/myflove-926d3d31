@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-11";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Sortering i hela statistikdelen",
+    items: [
+      "Alla listor på adminsidans statistik kan nu sorteras: vad människor använder, kapacitet & mående, mest använda delar, mest besökta sidor och funktioner som faktiskt används.",
+      "Varje lista har knapparna Mest först, Minst först och A–Ö.",
+    ],
+  },
+  {
     title: "Sortera analysen per användare",
     items: [
       "Listan under Analys per användare kan sorteras: nyast aktiv först, äldst först, flest eller färst händelser (2026-09-11)",
