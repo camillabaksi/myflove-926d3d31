@@ -51,7 +51,7 @@ import { parseISODate } from "@/lib/day";
 import { Button } from "@/components/ui/button";
 import CalmMode from "@/components/calm-mode";
 import CalmChoices from "@/components/journey/calm-choices";
-import WakeUpCard from "@/components/wake-up-card";
+
 
 /**
  * Hem = en lugn personlig kontrollpanel.
