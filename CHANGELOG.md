@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-11 – Pitchdeck som PDF och Word
+
+- Pitchdecket 4.2 finns nu även som Word (DOCX) med alla slides, inklusive demosliden sist.
+- PDF och Word kan laddas ner direkt från pitchsidan och skickas vidare till investerare.
+
 ## 2026-09-11 – 20-sekunders produktdemo
 
 - Ny kort demo (engelska) som visar kedjan QuickFlow → Flow → Min dag med riktiga skärmar från appen.
