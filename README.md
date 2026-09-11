@@ -8,11 +8,11 @@ Ett lugnare hem för hjärnan – för dig som lever med ADHD, autism eller bara
 
 MyFlove är inte en produktivitetsapp. Det är en lugn, intelligent följeslagare som hjälper dig genom vardagen – utan att tjata eller skuldbelägga.
 
-Kärnan är **Flow** – en AI-assistent som läser av hela din vardag och hjälper dig med helheten. Inte sju appar. En hjärna.
+Kärnan är **Flow** och en guidad dagsresa: **Hur mår du? → Vad händer? → Behöver du planera om?** Flow hjälper till att flytta, förenkla eller dela upp nästa steg, men användaren godkänner alltid förändringen.
 
 ## Funktioner
 
-- 📅 Kalender & påminnelser
+- 📅 Kalender & påminnelser, med personlig Google- eller Outlook-synkning
 - 💳 Ekonomi
 - ❤️ Hälsa & humör
 - 👪 Familj & hushåll
@@ -20,19 +20,27 @@ Kärnan är **Flow** – en AI-assistent som läser av hela din vardag och hjäl
 - ✅ Uppgifter & ärenden
 - 🧠 FlowPlan™ – rätt sak, i rätt ordning
 - 🤖 Flow AI – som en vän i fickan
+- 🔋 Batteri och belastningstrend mot faktiskt använd tid
+- 🌙 Kvällscheck som jämför förväntad och faktisk energi
+- 🧩 Enkelt läge och hopfällbara block som kommer ihåg sitt läge
+
+## Aktuell release
+
+**MyFlove 5.0 · 2026-09-11** — den samlade versionen för webb, investerarmaterial och Android. Android-paketet använder `versionCode 9`.
 
 ## Tech-stack
 
 - React + TypeScript
 - TanStack Router
-- Supabase (auth, databas)
+- Lovable Cloud (auth, databas och synkning)
 - Vite / PWA
+- Capacitor för Android och iOS
 
 ## Kom igång
 
 ```bash
-npm install
-npm run dev
+bun install
+bun run dev
 ```
 
 ---

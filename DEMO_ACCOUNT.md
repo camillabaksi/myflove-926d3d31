@@ -23,7 +23,7 @@ Om Cloud-konsolen inte erbjuder metadataredigering räcker adressen `investor@my
 
 Logga in en gång på [https://myflove.lovable.app/sign-in](https://myflove.lovable.app/sign-in). Appen fyller då automatiskt kontots befintliga användardata med syntetiska QuickFlow-, Flow-, Min dag-, Hälsa-, mående- och energiexempel. Seedingen är idempotent och körs inte på riktiga konton.
 
-Efter första inloggningen kan du börja i **QuickFlow** och följa kedjan till **Flow → Prioritering → Min dag**. Demoetiketten `Demokonto · Exempeldata` visas i appens skal.
+Efter första inloggningen kan du börja i **QuickFlow** och följa kedjan till **Flow → planen anpassas efter kapacitet → Min dag**. På Hem visas även kärnresan **Hur mår du? → Vad händer? → Behöver du planera om?**. Demoetiketten `Demokonto · Exempeldata` visas i appens skal.
 
 ## Viktigt
 

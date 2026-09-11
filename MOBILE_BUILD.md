@@ -149,10 +149,10 @@ För att återaktivera senare:
 
 ---
 
-## Android App Bundle (.aab) — uppdaterat 2026-09-04
+## Android App Bundle (.aab) — uppdaterat 2026-09-11
 
 Native Android-projektet ligger nu i `android/` i repot (paket `app.myflove.mobile`,
-versionName `4.1`, versionCode `2`). `webDir` pekar på `mobile-webroot/` — en liten
+versionName `5.0`, versionCode `9`). `webDir` pekar på `mobile-webroot/` — en liten
 fallback-sida, eftersom appen laddar den publicerade webben via `server.url`.
 
 ### 1. Skapa din keystore (en gång, lokalt — commit den ALDRIG)
@@ -192,10 +192,9 @@ eller Android Studio (**Build → Generate Signed Bundle / APK → Android App B
 1. Skapa appen med paketnamn `app.myflove.mobile`.
 2. Aktivera **Play App Signing** (rekommenderat) och ladda upp din upload-key.
 3. Ladda upp `.aab` till ett **Internt test**-spår för testning.
-4. Fyll i datasäkerhetsformuläret: appen samlar konto-/hälsodata (steg) och
+4. Fyll i datasäkerhetsformuläret utifrån den data som appens aktuella funktioner hanterar och
    länka integritetspolicyn `https://myflove.lovable.app/integritet`.
-5. Health Connect-behörigheten (`READ_STEPS`) kräver en skriftlig motivering i
-   Play Console-formuläret för hälsodata.
+5. Health Connect och `READ_STEPS` ingår inte i denna MVP-version.
 
 ### 4. Vid varje ny release
 
