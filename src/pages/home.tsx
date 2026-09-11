@@ -421,7 +421,6 @@ export default function Home() {
           <JourneySteps onAddOpen={() => setAddOpen(true)} />
         </MyFloveWide>
 
-
         {/* Kvällscheck – frivillig, dyker upp när dagen lider mot sitt slut. */}
 
         {new Date().getHours() >= 18 && (
