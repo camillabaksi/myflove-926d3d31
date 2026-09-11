@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-11 – God morgon direkt på Hem
+
+- Morgonstart-kortet ligger nu högst upp i huvudytan på Hem, under hälsningen "Din dag, i din takt".
+- Kortet syns bara i morgonfönstret innan du kvitterat att du är vaken, precis som tidigare.
+
+
 ## 2026-09-11 – Visuell belastningskarta
 
 - Insikter har fått en visuell karta för dagar, veckor och månader med batterinivå och faktiskt genomförda aktiviteter.
