@@ -40,6 +40,7 @@ import CollapsibleSection from "@/components/collapsible-section";
 import InsightApplySetting from "@/components/insight-apply-setting";
 import { MyFloveInsightGather } from "@/components/myflove/motion";
 import WhyHint from "@/components/why-hint";
+import BatteryLoadTrend from "@/components/battery-load-trend";
 
 const ANALYSIS_STEPS = [
   "Identifierar styrkor",
@@ -332,6 +333,8 @@ export default function InsightPage() {
                 />
               </div>
             </div>
+
+            <BatteryLoadTrend />
 
             {patterns.ready && (
               <CollapsibleSection
