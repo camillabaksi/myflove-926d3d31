@@ -57,6 +57,11 @@ export default function AdminStats() {
   const { isAdmin, loading: adminLoading } = useIsAdmin();
   const { t } = useLang();
   const { data, isLoading, isError } = useGetAnalyticsSummary();
+  const [partsSort, setPartsSort] = useState<AdminSortKey>("most");
+  const [capacitySort, setCapacitySort] = useState<AdminSortKey>("most");
+  const [viewsSort, setViewsSort] = useState<AdminSortKey>("most");
+  const [pagesSort, setPagesSort] = useState<AdminSortKey>("most");
+  const [actionsSort, setActionsSort] = useState<AdminSortKey>("most");
 
   if (adminLoading) {
     return (
