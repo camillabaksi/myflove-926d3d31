@@ -598,7 +598,12 @@ export default function Home() {
         </MyFloveWide>
 
         {/* Liten, diskret notering längst ner – konkurrerar inte med korten. */}
-        <MyFloveWide style={{ order: 98.5 }} data-testid="home-install-note" className="pt-1" data-npf="optional">
+        <MyFloveWide
+          style={{ order: 98.5 }}
+          data-testid="home-install-note"
+          className="pt-1"
+          data-npf="optional"
+        >
           <PwaInstallCard compact />
         </MyFloveWide>
 
