@@ -45,7 +45,10 @@ export default function HowAreYou() {
   }, []);
 
   const options = cycle?.enabled
-    ? [...QUICK_IMPACTS, { id: "halsa" as ImpactKind, label: "Min cykel påverkar mig", emoji: "🌸" }]
+    ? [
+        ...QUICK_IMPACTS,
+        { id: "halsa" as ImpactKind, label: "Min cykel påverkar mig", emoji: "🌸" },
+      ]
     : QUICK_IMPACTS;
 
   const chooseOrk = (value10: number) => {
