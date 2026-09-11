@@ -5,6 +5,7 @@ import { track } from "@/lib/analytics";
 import { useDayJourney } from "@/hooks/use-day-journey";
 import type { JourneyStepId } from "@/lib/day-journey";
 import { cn } from "@/lib/utils";
+import { useNpfSettings } from "@/lib/npf-mode";
 
 interface JourneyStepsProps {
   onAddOpen?: () => void;
@@ -16,6 +17,7 @@ interface StepDef {
   emoji: string;
   title: string;
   body: string;
+  simpleBody: string;
   cta: string;
   href: string;
   event: "step1_opened" | "step2_opened" | "step3_opened";
@@ -28,6 +30,7 @@ const STEPS: StepDef[] = [
     emoji: "🔋",
     title: "Hur mår du?",
     body: "Logga ditt mående, din ork och vad som påverkar dig – så förstår vi vad du har kapacitet till idag.",
+    simpleBody: "Känn efter hur du mår och hur mycket du orkar.",
     cta: "Logga hur du mår",
     href: "/hur-mar-du",
     event: "step1_opened",
@@ -38,6 +41,7 @@ const STEPS: StepDef[] = [
     emoji: "📅",
     title: "Vad händer?",
     body: "Planera din dag och få med allt som faktiskt händer – även det osynliga arbetet – så kan vi se hur din energi och dina aktiviteter hänger ihop.",
+    simpleBody: "Se dagens saker eller lägg till något nytt.",
     cta: "Planera dagen",
     href: "/idag",
     event: "step2_opened",
@@ -48,6 +52,7 @@ const STEPS: StepDef[] = [
     emoji: "🌿",
     title: "Behöver du planera om?",
     body: "FlowPlan hjälper dig att anpassa dagen efter din kapacitet – flytta, förenkla eller hitta nästa rimliga steg.",
+    simpleBody: "Ändra dagen om den känns för tung.",
     cta: "Hjälp mig planera om",
     href: "/flowplan",
     event: "step3_opened",
@@ -62,6 +67,7 @@ const STEPS: StepDef[] = [
 export default function JourneySteps({ onAddOpen }: JourneyStepsProps) {
   const { t } = useLang();
   const { steps, needsReplan } = useDayJourney();
+  const { settings: npf } = useNpfSettings();
 
   return (
     <div className="space-y-3" data-testid="home-journey">
@@ -91,10 +97,12 @@ export default function JourneySteps({ onAddOpen }: JourneyStepsProps) {
               </h2>
             </div>
 
-            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t(step.body)}</p>
+            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+              {t(npf.less ? step.simpleBody : step.body)}
+            </p>
 
             <ul className="mt-3 space-y-1">
-              {status.lines.map((line) => (
+              {(npf.less ? status.lines.slice(0, 1) : status.lines).map((line) => (
                 <li key={line} className="text-sm text-ink">
                   {t(line)}
                 </li>

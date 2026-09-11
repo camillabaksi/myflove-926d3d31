@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-11 – Tydligare enkelt läge på Hem
+
+- Enkelt läge visar nu bara hälsningen och den centrala dagsresan: Hur mår du?, Vad händer? och Behöver du planera om?
+- Flow-kort, nästa steg, kvällscheck, extrafunktioner, insikter, rutiner och övriga sekundära block döljs tills du väljer "visa allt igen".
+- De tre huvudstegen får kortare förklaringar och visar bara den viktigaste statusraden i enkelt läge.
+
 ## 2026-09-10 – Sluttid i Lägg till
 
 - När du lägger till en aktivitet eller händelse med tid kan du nu även välja en valfri sluttid, som visas i dagens tidslinje.

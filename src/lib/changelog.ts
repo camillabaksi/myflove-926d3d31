@@ -13,7 +13,8 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     title: "Enklare läge för NPF",
     items: [
       'Ny knapp på Hem: "Vill du ha det lugnare? Visa mindre på skärmen" slår på enkelt läge med ett tryck (2026-09-11)',
-      "Enkelt läge gömmer sekundära block – kärnflödet Hur mår du? → Vad händer? → Planera om? syns alltid (2026-09-11)",
+      "Enkelt läge visar bara hälsningen och kärnflödet Hur mår du? → Vad händer? → Planera om? (2026-09-11)",
+      "Huvudstegen får kortare förklaringar och bara den viktigaste statusraden; allt annat återkommer med Visa allt igen (2026-09-11)",
       'Flow-maskoten blir helt stilla vid "Ingen rörelse" – även blinkningar och blick (2026-09-11)',
     ],
   },
