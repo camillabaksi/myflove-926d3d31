@@ -58,6 +58,12 @@ import { track } from "@/lib/analytics";
 
 const todayStr = (): string => todayISO();
 
+const tomorrowISO = (): string => {
+  const d = new Date();
+  d.setDate(d.getDate() + 1);
+  return todayISO(d);
+};
+
 const NEW_CHAT_FLAG = "myflove-flow-new-chat";
 
 const GREETING =
