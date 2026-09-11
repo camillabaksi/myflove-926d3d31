@@ -53,7 +53,7 @@ describe("buildBatteryLoadTrend", () => {
     });
 
     expect(trend.periods.days).toHaveLength(28);
-    expect(trend.periods.weeks.at(-2)?.loadCount).toBe(3);
+    expect(trend.periods.weeks.find((period) => period.key === "2026-08-31")?.loadCount).toBe(3);
     expect(trend.periods.months.find((period) => period.key === "2026-08")?.loadCount).toBe(1);
     expect(trend.periods.months.find((period) => period.key === "2026-09")?.loadCount).toBe(2);
   });
