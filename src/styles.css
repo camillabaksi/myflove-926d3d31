@@ -218,17 +218,18 @@
   padding-block: 1rem;
 }
 
+/* Glöden bor inuti "Din dag, i din takt"-kortet, bakom innehållet. */
 @utility home-ambient-glow {
   position: absolute;
   z-index: 0;
-  inset: -2.5rem -0.75rem;
+  inset: -1.25rem -1rem;
   pointer-events: none;
   border-radius: 42% 58% 54% 46% / 48% 42% 58% 52%;
   background:
-    radial-gradient(circle at 28% 30%, hsl(327 76% 76% / 0.96), transparent 58%),
-    radial-gradient(circle at 72% 70%, hsl(268 76% 74% / 0.92), transparent 60%),
-    radial-gradient(circle at 52% 50%, hsl(var(--primary) / 0.72), transparent 72%);
-  filter: blur(42px) saturate(1.18);
+    radial-gradient(circle at 28% 30%, hsl(327 76% 78% / 0.9), transparent 58%),
+    radial-gradient(circle at 72% 70%, hsl(268 76% 76% / 0.85), transparent 60%),
+    radial-gradient(circle at 52% 50%, hsl(var(--primary) / 0.6), transparent 72%);
+  filter: blur(30px) saturate(1.15);
   transform-origin: center;
   transition:
     background 1400ms ease,
@@ -239,17 +240,17 @@
 
 [data-glow-level="busy"] .home-ambient-glow {
   background:
-    radial-gradient(circle at 32% 38%, hsl(268 58% 62% / 0.94), transparent 60%),
-    radial-gradient(circle at 70% 64%, hsl(327 62% 68% / 0.88), transparent 64%);
-  filter: blur(48px) saturate(1.05);
+    radial-gradient(circle at 32% 38%, hsl(268 58% 66% / 0.88), transparent 60%),
+    radial-gradient(circle at 70% 64%, hsl(327 62% 72% / 0.82), transparent 64%);
+  filter: blur(34px) saturate(1.05);
   animation: home-glow-busy 12s ease-in-out infinite;
 }
 
 [data-glow-level="overloaded"] .home-ambient-glow {
   background:
-    radial-gradient(circle at 38% 42%, hsl(266 42% 48% / 0.9), transparent 62%),
-    radial-gradient(circle at 68% 58%, hsl(327 38% 58% / 0.7), transparent 68%);
-  filter: blur(56px) saturate(0.72);
+    radial-gradient(circle at 38% 42%, hsl(266 42% 54% / 0.85), transparent 62%),
+    radial-gradient(circle at 68% 58%, hsl(327 38% 64% / 0.65), transparent 68%);
+  filter: blur(40px) saturate(0.75);
   animation: home-glow-overloaded 18s ease-in-out infinite;
 }
 
@@ -271,6 +272,11 @@
   background: hsl(var(--card) / 0.97);
   padding: 1.25rem;
   box-shadow: var(--shadow-lifted);
+  /* Allt innehåll ligger över glöden inne i kortet. */
+  & > *:not(.home-ambient-glow) {
+    position: relative;
+    z-index: 1;
+  }
 }
 
 @utility home-quick-action {
