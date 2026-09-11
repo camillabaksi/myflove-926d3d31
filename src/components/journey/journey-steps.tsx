@@ -93,7 +93,10 @@ function JourneyStep({
         aria-label={collapsed ? `Öppna ${t(step.title)}` : `Minimera ${t(step.title)}`}
         className="flex w-full items-center gap-2 text-left"
       >
-        <span aria-hidden className="text-xs font-semibold tabular-nums tracking-widest text-primary">
+        <span
+          aria-hidden
+          className="text-xs font-semibold tabular-nums tracking-widest text-primary"
+        >
           {step.number}
         </span>
         <h2 className="min-w-0 flex-1 text-base font-semibold text-ink">
@@ -102,7 +105,10 @@ function JourneyStep({
         <ChevronDown
           size={18}
           aria-hidden
-          className={cn("shrink-0 text-muted-foreground transition-transform", collapsed && "-rotate-90")}
+          className={cn(
+            "shrink-0 text-muted-foreground transition-transform",
+            collapsed && "-rotate-90",
+          )}
         />
       </button>
 
@@ -113,7 +119,9 @@ function JourneyStep({
           </p>
           <ul className="mt-3 space-y-1">
             {(simple ? status.lines.slice(0, 1) : status.lines).map((line) => (
-              <li key={line} className="text-sm text-ink">{t(line)}</li>
+              <li key={line} className="text-sm text-ink">
+                {t(line)}
+              </li>
             ))}
           </ul>
           <div className="mt-4 flex flex-wrap items-center gap-2">

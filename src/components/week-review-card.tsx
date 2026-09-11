@@ -44,28 +44,47 @@ export function WeekReviewCard({
       <div className="flex items-start gap-3">
         <FlowMascot size="xs" mood="calm" className="mt-0.5 shrink-0 flow-alive" alt="" />
         <div className="min-w-0 flex-1">
-          <button type="button" onClick={toggle} aria-expanded={!collapsed} className="flex w-full items-center gap-2 text-left">
+          <button
+            type="button"
+            onClick={toggle}
+            aria-expanded={!collapsed}
+            className="flex w-full items-center gap-2 text-left"
+          >
             <h2 className="min-w-0 flex-1 text-base font-semibold text-ink">{t("💜 Din vecka")}</h2>
-            <ChevronDown size={18} className={cn("text-muted-foreground transition-transform", collapsed && "-rotate-90")} />
+            <ChevronDown
+              size={18}
+              className={cn(
+                "text-muted-foreground transition-transform",
+                collapsed && "-rotate-90",
+              )}
+            />
           </button>
-          {!collapsed && <p className="mt-0.5 text-xs text-muted-foreground">{t("Den här veckan, i lugn takt")}</p>}
+          {!collapsed && (
+            <p className="mt-0.5 text-xs text-muted-foreground">
+              {t("Den här veckan, i lugn takt")}
+            </p>
+          )}
 
-          {!collapsed && <dl className="mt-3 grid grid-cols-2 gap-2">
-            {rows.map((row) => (
-              <div
-                key={row.label}
-                className="flex items-center gap-2 rounded-2xl bg-lavender/25 px-3 py-2"
-              >
-                <row.icon size={16} className="shrink-0 text-primary" aria-hidden />
-                <div className="min-w-0">
-                  <dt className="text-[11px] text-muted-foreground">{row.label}</dt>
-                  <dd className="truncate text-sm font-medium text-ink">{row.value}</dd>
+          {!collapsed && (
+            <dl className="mt-3 grid grid-cols-2 gap-2">
+              {rows.map((row) => (
+                <div
+                  key={row.label}
+                  className="flex items-center gap-2 rounded-2xl bg-lavender/25 px-3 py-2"
+                >
+                  <row.icon size={16} className="shrink-0 text-primary" aria-hidden />
+                  <div className="min-w-0">
+                    <dt className="text-[11px] text-muted-foreground">{row.label}</dt>
+                    <dd className="truncate text-sm font-medium text-ink">{row.value}</dd>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </dl>}
+              ))}
+            </dl>
+          )}
 
-          {!collapsed && <p className="mt-3 text-sm leading-relaxed text-ink">{t(review.summary)}</p>}
+          {!collapsed && (
+            <p className="mt-3 text-sm leading-relaxed text-ink">{t(review.summary)}</p>
+          )}
 
           {!collapsed && review.enoughData && review.completedCount > 0 && (
             <ul className="mt-3 flex flex-wrap gap-2">

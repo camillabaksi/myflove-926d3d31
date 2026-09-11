@@ -589,11 +589,7 @@ export default function Home() {
 
         {/* Områdesväljare – litet, längst ner */}
         {shows("omrade") && (
-          <MyFloveWide
-            style={pos("omrade")}
-            className="space-y-2 pt-2"
-            data-npf="optional"
-          >
+          <MyFloveWide style={pos("omrade")} className="space-y-2 pt-2" data-npf="optional">
             <AreaSwitcher size="sm" />
             <p className="text-xs text-muted-foreground">
               {activeArea === "alla"

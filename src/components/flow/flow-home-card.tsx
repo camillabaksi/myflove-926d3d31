@@ -127,7 +127,9 @@ export default function FlowHomeCard() {
 
   // Adaptivt: den handling du oftast väljer hamnar först.
   const sortedStale = topAction
-    ? [...staleActions].sort((a, b) => (b.key === topAction ? 1 : 0) - (a.key === topAction ? 1 : 0))
+    ? [...staleActions].sort(
+        (a, b) => (b.key === topAction ? 1 : 0) - (a.key === topAction ? 1 : 0),
+      )
     : staleActions;
 
   const askEnergy = () => {
@@ -157,7 +159,10 @@ export default function FlowHomeCard() {
           onClick={toggle}
           className="rounded-full p-1 text-muted-foreground/70 transition hover:text-foreground"
         >
-          <ChevronDown size={17} className={cn("transition-transform", collapsed && "-rotate-90")} />
+          <ChevronDown
+            size={17}
+            className={cn("transition-transform", collapsed && "-rotate-90")}
+          />
         </button>
       </div>
 
