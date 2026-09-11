@@ -331,6 +331,28 @@ export default function InsightPage() {
               </div>
             </div>
 
+            {patterns.ready && (
+              <CollapsibleSection
+                id="insight-everyday-patterns"
+                title="Din vardag"
+                description="Det här har MyFlove lärt sig av dina egna dagar"
+                data-testid="insight-everyday-patterns"
+                className="rounded-3xl border border-border bg-card p-5"
+                headingClassName="font-semibold"
+              >
+                <ul className="mt-3 space-y-2">
+                  {patterns.lines.map((line) => (
+                    <li key={line} className="flex items-start gap-2 text-sm text-ink">
+                      <Sparkles size={14} className="mt-0.5 shrink-0 text-primary" aria-hidden />
+                      <span className="min-w-0">{line}</span>
+                    </li>
+                  ))}
+                </ul>
+              </CollapsibleSection>
+            )}
+
+
+
             {personal.ready ? (
               <>
                 <ul data-testid="insight-personal-list" className="space-y-3">
