@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-11";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Flow kan faktiskt flytta, dela och förenkla en uppgift",
+    items: [
+      "Flows förslag om att flytta, dela upp eller förenkla en uppgift blir en knapp i chatten (2026-09-11)",
+      "Inget ändras förrän du godkänner förslaget (2026-09-11)",
+      "Tidigare sa Flow att den flyttade uppgiften utan att något hände (2026-09-11)",
+    ],
+  },
+  {
     title: "ICS-import/export borttagen från Kalender",
     items: [
       'Knapparna "Importera från telefonens kalender" och "Exportera till kalender (.ics)" är borta (2026-09-11)',

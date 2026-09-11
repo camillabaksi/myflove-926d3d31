@@ -1,3 +1,9 @@
+## 2026-09-11 – Flow kan faktiskt flytta, dela och förenkla en uppgift
+
+- När Flow erbjuder sig att flytta en uppgift till imorgon, dela upp den i små steg eller göra den mindre visas nu en knapp i chatten.
+- Ingenting ändras förrän du trycker på knappen – Flow gör aldrig något i tysthet.
+- Tidigare skrev Flow bara att den skulle flytta uppgiften, men uppgiften låg kvar oförändrad.
+
 ## 2026-09-11 – ICS-import/export borttagen från Kalender
 
 - Knapparna "Importera från telefonens kalender" och "Exportera till kalender (.ics)" är borta.
