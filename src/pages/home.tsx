@@ -255,12 +255,8 @@ export default function Home() {
               </div>
             </header>
 
-            {/* God morgon-kortet högst upp – syns bara i morgonfönstret innan du kvitterat. */}
-            <div className="mt-4">
-              <WakeUpCard />
-            </div>
-
             <div
+
               className="mt-5 grid grid-cols-3 gap-2 sm:gap-3"
               data-testid="home-widgets"
               aria-label={t("Vad vill du göra just nu?")}
