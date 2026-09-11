@@ -277,7 +277,7 @@ function fmtDateTime(iso: string | null, locale: string): string {
   });
 }
 
-type SortKey = "name" | "last_visit" | "last_login" | "created";
+type SortKey = "name" | "last_visit" | "last_login" | "created" | "roles";
 type SortDir = "asc" | "desc";
 
 function UsersSection() {
@@ -395,7 +395,13 @@ function UsersSection() {
               >
                 {t("Namn")}
               </SortHeader>
-              <th className="p-3">{t("Senast aktiv")}</th>
+              <SortHeader
+                active={sortKey === "last_visit"}
+                dir={sortDir}
+                onClick={() => handleSort("last_visit")}
+              >
+                {t("Senast aktiv")}
+              </SortHeader>
               <SortHeader
                 active={sortKey === "last_login"}
                 dir={sortDir}
@@ -410,7 +416,13 @@ function UsersSection() {
               >
                 {t("Skapad")}
               </SortHeader>
-              <th className="p-3">{t("Roller")}</th>
+              <SortHeader
+                active={sortKey === "roles"}
+                dir={sortDir}
+                onClick={() => handleSort("roles")}
+              >
+                {t("Roller")}
+              </SortHeader>
               <th className="p-3 text-right">{t("Åtgärd")}</th>
             </tr>
           </thead>
@@ -532,6 +544,9 @@ function sortUsers(key: SortKey, dir: SortDir) {
         break;
       case "created":
         cmp = (a.created_at ?? "").localeCompare(b.created_at ?? "");
+        break;
+      case "roles":
+        cmp = (a.roles[0] ?? "användare").localeCompare(b.roles[0] ?? "användare", "sv");
         break;
     }
     return cmp * mult;
