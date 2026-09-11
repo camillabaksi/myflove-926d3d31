@@ -509,6 +509,7 @@ export default function AdminStats() {
                   <h3 className="text-sm font-semibold mb-2">
                     {t("Funktioner som faktiskt används")}
                   </h3>
+                  <AdminListSorter value={actionsSort} onChange={setActionsSort} />
                   {otherActions.length === 0 && (
                     <p className="text-sm text-muted-foreground">{t("Ingen data än.")}</p>
                   )}
@@ -518,9 +519,7 @@ export default function AdminStats() {
                         key={`${row.section}-${row.action}`}
                         className="flex items-center justify-between gap-3 py-2 text-sm"
                       >
-                        <span>
-                          {t(sectionLabel(row.section))} — {t(actionLabel(row.action))}
-                        </span>
+                        <span>{row.label}</span>
                         <span className="text-muted-foreground whitespace-nowrap">
                           {row.events} {t("ggr")} · {row.sessions} {t("användare")}
                         </span>
