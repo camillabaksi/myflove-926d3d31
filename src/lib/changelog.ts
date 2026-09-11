@@ -6,19 +6,25 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-09-10";
+export const CHANGELOG_UPDATED = "2026-09-11";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
-    title: "Sluttid i Lägg till",
+    title: "Enklare läge för NPF",
     items: [
-      "När du lägger till något med tid kan du nu också välja sluttid (2026-09-10)",
+      'Ny knapp på Hem: "Vill du ha det lugnare? Visa mindre på skärmen" slår på enkelt läge med ett tryck (2026-09-11)',
+      "Enkelt läge gömmer sekundära block – kärnflödet Hur mår du? → Vad händer? → Planera om? syns alltid (2026-09-11)",
+      'Flow-maskoten blir helt stilla vid "Ingen rörelse" – även blinkningar och blick (2026-09-11)',
     ],
+  },
+  {
+    title: "Sluttid i Lägg till",
+    items: ["När du lägger till något med tid kan du nu också välja sluttid (2026-09-10)"],
   },
   {
     title: "Fix: konstiga tecken i loggningsknappen",
     items: [
-      "Knappen på Hem visade \"&amp;\" – visar nu korrekt \"Logga energi & mående\" (2026-09-10)",
+      'Knappen på Hem visade "&amp;" – visar nu korrekt "Logga energi & mående" (2026-09-10)',
     ],
   },
   {

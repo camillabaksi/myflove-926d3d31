@@ -48,6 +48,7 @@ import NextStepCard from "@/components/journey/next-step-card";
 import EveningCheck from "@/components/journey/evening-check";
 import CollapsibleSection from "@/components/collapsible-section";
 import { useWeekReview } from "@/hooks/use-activity-history";
+import { useNpfSettings } from "@/lib/npf-mode";
 import { weekStartISO } from "@/lib/week-review";
 import { parseISODate } from "@/lib/day";
 
@@ -81,6 +82,15 @@ export default function Home() {
   const { openItems } = useQuickflow();
   const { settings: flowSettings } = useFlowSettings();
   const patterns = useEverydayPatterns();
+  const { settings: npf, update: updateNpf } = useNpfSettings();
+  /** Enkelt läge = färre saker + lugnare färger + ingen rörelse + enkla ord. */
+  const simpleMode = npf.less && npf.calm && npf.stillness;
+  const toggleSimpleMode = () =>
+    updateNpf(
+      simpleMode
+        ? { less: false, stillness: false }
+        : { less: true, calm: true, stillness: true, plainWords: true },
+    );
   const { record: recordFeature, order: featureOrder, adaptive, top } = useFeatureUsage();
   const todayIso = todayISO();
   // Veckoöversikten hör hemma på söndagen – veckan som varit, i lugn takt.
@@ -175,7 +185,10 @@ export default function Home() {
           className="relative overflow-hidden rounded-3xl border border-border/60 p-5 shadow-lifted pop-in"
           style={{ background: gradient }}
         >
-          <div className="pointer-events-none absolute -top-16 -right-12 h-32 w-32 rounded-full bg-blush opacity-50 blur-md" />
+          <div
+            data-npf="optional"
+            className="pointer-events-none absolute -top-16 -right-12 h-32 w-32 rounded-full bg-blush opacity-50 blur-md"
+          />
           <div
             className="pointer-events-none absolute right-2 top-0 select-none sm:right-5"
             aria-hidden
@@ -240,6 +253,21 @@ export default function Home() {
         {/* Flow – binder ihop Quickflow, Batteriet och Kalendern. En sak i taget. */}
         <MyFloveWide style={{ order: 0 }} className="min-w-0">
           <FlowHomeCard />
+        </MyFloveWide>
+
+        {/* Enkelt läge – ett tryck för den som vill ha det lugnare. */}
+        <MyFloveWide style={{ order: 0.1 }} className="min-w-0">
+          <button
+            type="button"
+            onClick={toggleSimpleMode}
+            aria-pressed={simpleMode}
+            className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-card/70 px-3.5 py-2 text-xs font-medium text-muted-foreground shadow-soft transition-colors hover:text-foreground hover:bg-muted"
+          >
+            <Sparkles size={13} aria-hidden className="text-primary" />
+            {simpleMode
+              ? t("Enkelt läge är på – visa allt igen")
+              : t("Vill du ha det lugnare? Visa mindre på skärmen")}
+          </button>
         </MyFloveWide>
 
         {/* Dagens tre steg – den primära vägen genom MyFlove. */}
@@ -455,7 +483,7 @@ export default function Home() {
         </MyFloveWide>
 
         {/* Uppmuntrande citat – lugnt avslut, som i mockupen. */}
-        <MyFloveWide style={{ order: 5 }} className="min-w-0">
+        <MyFloveWide style={{ order: 5 }} className="min-w-0" data-npf="optional">
           <section
             aria-label={t("Dagens tanke")}
             className="rounded-3xl border border-border/60 bg-lavender/25 p-5 shadow-soft"
@@ -480,7 +508,7 @@ export default function Home() {
 
         {/* Din vardag – vad MyFlove lärt sig av dina egna aktiviteter och loggar. */}
         {patterns.ready && (
-          <MyFloveWide style={{ order: 4.5 }} className="min-w-0">
+          <MyFloveWide style={{ order: 4.5 }} className="min-w-0" data-npf="optional">
             <section
               aria-label={t("Det här har MyFlove lärt sig om din vardag")}
               data-testid="home-everyday-patterns"
@@ -570,7 +598,12 @@ export default function Home() {
         </MyFloveWide>
 
         {/* Liten, diskret notering längst ner – konkurrerar inte med korten. */}
-        <MyFloveWide style={{ order: 98.5 }} data-testid="home-install-note" className="pt-1">
+        <MyFloveWide
+          style={{ order: 98.5 }}
+          data-testid="home-install-note"
+          className="pt-1"
+          data-npf="optional"
+        >
           <PwaInstallCard compact />
         </MyFloveWide>
 
