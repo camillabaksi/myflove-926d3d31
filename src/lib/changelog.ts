@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-11";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Flyttade uppgifter hamnar aldrig bakåt i tiden",
+    items: [
+      'Flows "flytta till imorgon" ger alltid ett kommande datum (2026-09-11)',
+      "Ett felaktigt datum kunde tidigare få uppgiften att se flera hundra dagar försenad ut (2026-09-11)",
+    ],
+  },
+  {
     title: "Flow fortsätter i din senaste chatt",
     items: [
       "Öppnar du Flow landar du i ditt senaste samtal istället för en ny tom chatt (2026-09-11)",
