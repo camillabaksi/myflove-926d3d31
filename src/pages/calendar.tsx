@@ -514,8 +514,8 @@ export function CalendarContent() {
 
   // Dagens aktiviteter med tid som kan skickas till det kopplade kalenderkontot.
   const pushItems: CalendarPushItem[] = selectedDateStr
-    ? selectedItems.tasks
-        .filter((task) => !task.completed)
+    ? allTasks
+        .filter((task) => task.dueDate === selectedDateStr && !task.completed)
         .map((task) => ({
           title: task.title,
           date: selectedDateStr,

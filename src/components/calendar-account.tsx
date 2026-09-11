@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { CalendarCheck, CalendarPlus, Link2, Loader2, RefreshCw, Unlink } from "lucide-react";
+import { CalendarPlus, Link2, Loader2, RefreshCw, Unlink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CollapsibleSection from "@/components/collapsible-section";
 import { useToast } from "@/hooks/use-toast";
@@ -121,7 +121,6 @@ export default function CalendarAccount({
     <CollapsibleSection
       id="kalender-konto"
       title="Din riktiga kalender"
-      icon={<CalendarCheck size={18} />}
       help="Koppla ditt Google- eller Outlook-konto. Då syns kalenderns händelser här, och dagens aktiviteter kan skickas dit."
     >
       <div className="space-y-3">
