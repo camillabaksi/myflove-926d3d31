@@ -398,8 +398,8 @@ export default function Home() {
               onClick={() => setCalmMode("acute")}
               className="mt-4 rounded-full border border-border bg-background text-xs text-muted-foreground"
             >
-
               {t("Akut Lugn")}
+
             </Button>
           </section>
         </MyFloveWide>
