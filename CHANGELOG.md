@@ -1,3 +1,10 @@
+## 2026-09-11 – MyFlove 5.0 och ny Android AAB
+
+- Webbappen, Living Blueprint, pitchdeck, pitchvideo, investerarpitch och byggdokumentation är synkade till MyFlove 5.0.
+- 5.0-materialet omfattar den guidade dagsresan, Flow-åtgärder efter godkännande, sparad chatthistorik, Google-/Outlook-kalender, belastningskarta och sorterad anonymiserad adminanalys.
+- Android har `versionName 5.0` och `versionCode 9`, så paketet ligger efter den tidigare dokumenterade koden 8.
+- Ny AAB byggs från samma webbversion. Utan lokal uppladdningsnyckel blir paketet osignerat och måste signeras före uppladdning till Google Play.
+
 ## 2026-09-11 – Sortering i användare och roller
 
 - Användarlistan i admin kan nu sorteras på alla kolumner: namn, senast aktiv, senaste inloggning, skapad och roller.

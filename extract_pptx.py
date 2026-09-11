@@ -14,5 +14,5 @@ def extract_text(file_path):
     print("\n")
 
 if __name__ == "__main__":
-    extract_text("public/pitch/MyFlove_Pitchdeck_4.2.pptx")
+    extract_text("public/pitch/MyFlove_Pitchdeck_5.0.pptx")
     extract_text("public/pitch/MyFlove_Investor_Pitch_3min_EN.pptx")
