@@ -39,7 +39,6 @@ import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { useFeatureUsage, type FeatureId } from "@/lib/feature-usage";
 import { orkFromValue10 } from "@/lib/ork";
 import WeekReviewCard from "@/components/week-review-card";
-import FlowHomeCard from "@/components/flow/flow-home-card";
 import JourneySteps from "@/components/journey/journey-steps";
 import NextStepCard from "@/components/journey/next-step-card";
 import EveningCheck from "@/components/journey/evening-check";
