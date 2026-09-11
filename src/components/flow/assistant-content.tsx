@@ -598,31 +598,91 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                       </div>
                     </div>
                   )}
-                  {messages.map((m) => (
-                    <div
-                      key={m.id}
-                      className={`flex items-end gap-2 ${m.role === "user" ? "justify-end" : "justify-start"}`}
-                    >
-                      {m.role !== "user" && (
-                        <FlowMascot
-                          size="sm"
-                          mood="calm"
-                          status={flowStatus}
-                          bump
-                          className="shrink-0"
-                        />
-                      )}
-                      <div
-                        className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
-                          m.role === "user"
-                            ? "bg-primary text-primary-foreground rounded-br-sm"
-                            : "bg-secondary text-foreground rounded-bl-sm"
-                        }`}
-                      >
-                        {m.content}
+                  {messages.map((m) => {
+                    const parsed =
+                      m.role === "assistant"
+                        ? parseFlowReply(m.content)
+                        : { text: m.content, actions: [] as FlowAction[] };
+                    return (
+                      <div key={m.id} className="space-y-2">
+                        <div
+                          className={`flex items-end gap-2 ${m.role === "user" ? "justify-end" : "justify-start"}`}
+                        >
+                          {m.role !== "user" && (
+                            <FlowMascot
+                              size="sm"
+                              mood="calm"
+                              status={flowStatus}
+                              bump
+                              className="shrink-0"
+                            />
+                          )}
+                          <div
+                            className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
+                              m.role === "user"
+                                ? "bg-primary text-primary-foreground rounded-br-sm"
+                                : "bg-secondary text-foreground rounded-bl-sm"
+                            }`}
+                          >
+                            {parsed.text}
+                          </div>
+                        </div>
+
+                        {parsed.actions.map((a, i) => {
+                          const key = `${m.id}:${i}`;
+                          const done = doneActions[key];
+                          return (
+                            <div
+                              key={key}
+                              className="ml-10 max-w-[80%] rounded-2xl border border-border bg-card p-3"
+                            >
+                              <p className="text-sm font-medium text-foreground">
+                                <span aria-hidden>{ACTION_EMOJI[a.kind]}</span>{" "}
+                                {a.label ?? ACTION_LABEL[a.kind]}
+                              </p>
+                              {a.taskTitle && (
+                                <p className="truncate text-xs text-muted-foreground">
+                                  {a.taskTitle}
+                                </p>
+                              )}
+                              {a.steps && (
+                                <ul className="mt-1 space-y-0.5">
+                                  {a.steps.map((s) => (
+                                    <li key={s} className="text-xs text-muted-foreground">
+                                      · {s}
+                                    </li>
+                                  ))}
+                                </ul>
+                              )}
+                              {done ? (
+                                <p className="mt-2 text-xs font-medium text-primary">{done}</p>
+                              ) : (
+                                <div className="mt-2 flex flex-wrap gap-2">
+                                  <Button
+                                    size="sm"
+                                    className="rounded-xl"
+                                    onClick={() => runAction(key, a)}
+                                  >
+                                    {actionCta(a)}
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    className="rounded-xl"
+                                    onClick={() =>
+                                      setDoneActions((p) => ({ ...p, [key]: "Vi lät den vara." }))
+                                    }
+                                  >
+                                    Nej, låt den vara
+                                  </Button>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </>
               )}
               {isSending && (
