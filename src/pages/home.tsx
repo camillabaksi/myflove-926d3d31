@@ -422,10 +422,6 @@ export default function Home() {
           <JourneySteps onAddOpen={() => setAddOpen(true)} />
         </MyFloveWide>
 
-        {/* Flow finns kvar, men efter dagens två tydliga val. */}
-        <MyFloveWide style={{ order: 0.4 }} className="min-w-0" data-npf="optional">
-          <FlowHomeCard />
-        </MyFloveWide>
 
         {/* Kvällscheck – frivillig, dyker upp när dagen lider mot sitt slut. */}
 
