@@ -51,6 +51,7 @@ import { parseISODate } from "@/lib/day";
 import { Button } from "@/components/ui/button";
 import CalmMode from "@/components/calm-mode";
 import CalmChoices from "@/components/journey/calm-choices";
+import WakeUpCard from "@/components/wake-up-card";
 
 /**
  * Hem = en lugn personlig kontrollpanel.
@@ -253,6 +254,12 @@ export default function Home() {
                 <FlowMascot size="md" mood="calm" className="flow-alive" alt="" />
               </div>
             </header>
+
+            {/* God morgon-kortet högst upp – syns bara i morgonfönstret innan du kvitterat. */}
+            <div className="mt-4">
+              <WakeUpCard />
+            </div>
+
 
             <div
               className="mt-5 grid grid-cols-3 gap-2 sm:gap-3"

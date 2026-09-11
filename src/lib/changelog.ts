@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-11";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "God morgon direkt på Hem",
+    items: [
+      "Morgonstart-kortet ligger nu högst upp i huvudytan på Hem, under hälsningen (2026-09-11)",
+      "Kortet syns bara i morgonfönstret innan du kvitterat att du är vaken (2026-09-11)",
+    ],
+  },
+  {
     title: "Visuell belastningskarta",
     items: [
       "Insikter visar batteri och faktiskt genomförda aktiviteter per dag, vecka och månad (2026-09-11)",
