@@ -202,12 +202,12 @@ export function FlowMascot({
       <span
         aria-hidden={false}
         className={cn(
-          alive && "flow-gaze inline-flex",
+          lively && "flow-gaze inline-flex",
           blinking && "flow-blinking",
           bump && "absolute inset-0 inline-flex items-center justify-center",
         )}
         style={
-          alive
+          lively
             ? {
                 transform: `translate3d(${gx * 3}px, ${gy * 2}px, 0) rotate(${gx * 2}deg)`,
               }
