@@ -407,8 +407,8 @@ export default function Home() {
           <CalmChoices onPause={() => setCalmMode("micro")} />
         </MyFloveWide>
 
-
         {/* Enkelt läge – ett tryck för den som vill ha det lugnare. */}
+
         <MyFloveWide style={{ order: 0.1 }} className="min-w-0">
           <button
             type="button"
