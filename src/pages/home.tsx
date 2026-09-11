@@ -84,8 +84,6 @@ export default function Home() {
   const { activeTasks } = useTasks();
   const { activeReminders } = useReminders();
   const { openItems } = useQuickflow();
-  const { settings: flowSettings } = useFlowSettings();
-  const patterns = useEverydayPatterns();
   const { settings: npf, update: updateNpf } = useNpfSettings();
   /** Enkelt läge följer det val som faktiskt gömmer innehåll. */
   const simpleMode = npf.less;
