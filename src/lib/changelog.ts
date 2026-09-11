@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-11";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Koppla kalendern till Google eller Outlook",
+    items: [
+      'Du kan koppla ditt eget Google- eller Outlook-konto i Kalender under "Din riktiga kalender" (2026-09-11)',
+      "Händelser från ditt konto visas i appen för den valda dagen (2026-09-11)",
+      "Dagens aktiviteter kan skickas till kalendern och uppdateras i stället för att dubbleras (2026-09-11)",
+      "Kopplingen är personlig och kan tas bort när som helst (2026-09-11)",
+    ],
+  },
+  {
     title: "Genomgång av hela appen: dubbletter, länkar och enhetlig design",
     items: [
       "Alla sidor och genvägar har gåtts igenom: varje länk och gammal adress leder rätt (2026-09-11)",

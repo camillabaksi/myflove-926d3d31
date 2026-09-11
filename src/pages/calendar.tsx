@@ -43,6 +43,7 @@ import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import CollapsibleSection from "@/components/collapsible-section";
+import CalendarAccount, { type CalendarPushItem } from "@/components/calendar-account";
 import DayTimeline from "@/components/day-timeline";
 import { QuickAddInline, type QuickAddResult } from "@/components/task-quick-add";
 import AllInDay from "@/components/all-in-day";
@@ -511,6 +512,18 @@ export function CalendarContent() {
         recurring: [] as Array<{ id: string; title: string; time: string; color?: string }>,
       };
 
+  // Dagens aktiviteter med tid som kan skickas till det kopplade kalenderkontot.
+  const pushItems: CalendarPushItem[] = selectedDateStr
+    ? allTasks
+        .filter((task) => task.dueDate === selectedDateStr && !task.completed)
+        .map((task) => ({
+          title: task.title,
+          date: selectedDateStr,
+          time: task.time,
+          endTime: task.endTime,
+        }))
+    : [];
+
   return (
     <MyFlovePageGrid area="kalender">
       <MyFloveWide>
@@ -853,6 +866,8 @@ export function CalendarContent() {
             </CollapsibleSection>
           </div>
         </div>
+
+        {selectedDateStr && <CalendarAccount date={selectedDateStr} itemsToPush={pushItems} />}
 
         {selectedDateStr && (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-4">

@@ -1,3 +1,10 @@
+## 2026-09-11 – Koppla kalendern till Google eller Outlook
+
+- Du kan koppla ditt eget Google- eller Outlook-konto i Kalender, under "Din riktiga kalender".
+- Händelser från ditt konto visas i appen för den dag du tittar på.
+- Dagens aktiviteter kan skickas till kalendern med en knapp, och uppdateras i stället för att dubbleras.
+- Kopplingen är personlig och kan när som helst tas bort igen.
+
 ## 2026-09-11 – Genomgång av hela appen: dubbletter, länkar och enhetlig design
 
 - Alla sidor och genvägar har gåtts igenom: varje länk och gammal adress leder rätt, inga sidor är tomma eller trasiga.
