@@ -90,7 +90,8 @@ export function useQuickCheckin() {
         return;
       }
       const since = new Date();
-      since.setDate(since.getDate() - 60);
+      // Ett års historik behövs för den långsiktiga belastningskartan i Insikter.
+      since.setDate(since.getDate() - 365);
       since.setHours(0, 0, 0, 0);
       const { data, error } = await supabase
         .from("energy_logs")

@@ -1,7 +1,7 @@
 import type { ActivityInstance } from "@/lib/activity-history";
 import type { EnergyLogEntry } from "@/hooks/use-quick-checkin";
 
-export const BATTERY_TREND_DAYS = 14;
+export const BATTERY_TREND_DAYS = 365;
 
 export interface BatteryLoadDay {
   day: string;
@@ -10,8 +10,20 @@ export interface BatteryLoadDay {
   loadCount: number;
 }
 
+export type BatteryLoadRange = "days" | "weeks" | "months";
+
+export interface BatteryLoadPeriod {
+  key: string;
+  label: string;
+  accessibleLabel: string;
+  battery: number | null;
+  loadCount: number;
+  observedDays: number;
+}
+
 export interface BatteryLoadTrend {
   days: BatteryLoadDay[];
+  periods: Record<BatteryLoadRange, BatteryLoadPeriod[]>;
   energyLogs: number;
   loadOccasions: number;
   observedDays: number;
@@ -33,6 +45,57 @@ const dayKey = (date: Date) => {
 
 const mean = (values: number[]) => values.reduce((sum, value) => sum + value, 0) / values.length;
 const levelToPercent = (level: number) => Math.round(((level - 1) / 4) * 100);
+
+function mondayKey(day: string): string {
+  const date = new Date(`${day}T12:00:00`);
+  const offset = (date.getDay() + 6) % 7;
+  date.setDate(date.getDate() - offset);
+  return dayKey(date);
+}
+
+function monthKey(day: string): string {
+  return day.slice(0, 7);
+}
+
+function aggregatePeriods(
+  days: BatteryLoadDay[],
+  range: Exclude<BatteryLoadRange, "days">,
+): BatteryLoadPeriod[] {
+  const grouped = new Map<string, BatteryLoadDay[]>();
+  for (const day of days) {
+    const key = range === "weeks" ? mondayKey(day.day) : monthKey(day.day);
+    grouped.set(key, [...(grouped.get(key) ?? []), day]);
+  }
+
+  return [...grouped.entries()].map(([key, entries]) => {
+    const batteries = entries.flatMap((entry) => (entry.battery == null ? [] : [entry.battery]));
+    const date = new Date(`${key}${range === "months" ? "-01" : ""}T12:00:00`);
+    const label =
+      range === "weeks"
+        ? `v${weekNumber(date)}`
+        : new Intl.DateTimeFormat("sv-SE", { month: "short" }).format(date).replace(".", "");
+    const accessibleLabel =
+      range === "weeks"
+        ? `Vecka ${weekNumber(date)}`
+        : new Intl.DateTimeFormat("sv-SE", { month: "long", year: "numeric" }).format(date);
+    return {
+      key,
+      label,
+      accessibleLabel,
+      battery: batteries.length > 0 ? Math.round(mean(batteries)) : null,
+      loadCount: entries.reduce((sum, entry) => sum + entry.loadCount, 0),
+      observedDays: batteries.length,
+    };
+  });
+}
+
+function weekNumber(date: Date): number {
+  const utc = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const weekday = utc.getUTCDay() || 7;
+  utc.setUTCDate(utc.getUTCDate() + 4 - weekday);
+  const yearStart = new Date(Date.UTC(utc.getUTCFullYear(), 0, 1));
+  return Math.ceil(((utc.getTime() - yearStart.getTime()) / DAY_MS + 1) / 7);
+}
 
 function activityMoment(instance: ActivityInstance): number | null {
   if (instance.completedAt) return instance.completedAt;
@@ -101,7 +164,8 @@ export function buildBatteryLoadTrend(input: {
     });
   }
 
-  const observed = days.filter((day) => day.battery != null);
+  const recentDays = days.slice(-14);
+  const observed = recentDays.filter((day) => day.battery != null);
   let change: number | null = null;
   let direction: BatteryLoadTrend["direction"] = "learning";
   if (observed.length >= 4) {
@@ -173,6 +237,24 @@ export function buildBatteryLoadTrend(input: {
 
   return {
     days,
+    periods: {
+      days: days.slice(-28).map((day) => ({
+        key: day.day,
+        label: new Intl.DateTimeFormat("sv-SE", { day: "numeric", month: "short" })
+          .format(new Date(`${day.day}T12:00:00`))
+          .replace(".", ""),
+        accessibleLabel: new Intl.DateTimeFormat("sv-SE", {
+          weekday: "long",
+          day: "numeric",
+          month: "long",
+        }).format(new Date(`${day.day}T12:00:00`)),
+        battery: day.battery,
+        loadCount: day.loadCount,
+        observedDays: day.battery == null ? 0 : 1,
+      })),
+      weeks: aggregatePeriods(days, "weeks").slice(-12),
+      months: aggregatePeriods(days, "months").slice(-12),
+    },
     energyLogs: validEnergy.length,
     loadOccasions: actualInstances.filter((instance) =>
       days.some((day) => day.day === (instance.actualDate ?? instance.date)),
