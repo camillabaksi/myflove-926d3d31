@@ -353,8 +353,6 @@ export default function InsightPage() {
               </CollapsibleSection>
             )}
 
-
-
             {personal.ready ? (
               <>
                 <ul data-testid="insight-personal-list" className="space-y-3">
