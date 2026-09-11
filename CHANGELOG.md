@@ -2,7 +2,9 @@
 
 ## 2026-09-11 – Lugnare Hem
 
+- "Nästa rimliga steg" ligger nu inuti "Din dag, i din takt" direkt under "Idag", så förslaget kommer i samma sammanhang som dagens schema.
 - Dagens tanke och Rutiner & medicin ligger nu under "Mer i MyFlove" i stället för direkt på Hem.
+
 
 ## 2026-09-11 – Enhetlig design och tydligare andningsljus
 
