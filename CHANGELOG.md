@@ -1,3 +1,9 @@
+## 2026-09-11 – ICS-import/export borttagen från Kalender
+
+- Knapparna "Importera från telefonens kalender" och "Exportera till kalender (.ics)" är borta.
+- Istället synkas kalendern via "Din riktiga kalender" med Google eller Outlook.
+- Underliggande ICS-hjälpfil (`src/lib/ics.ts`) och tillhörande översättningar är borttagna.
+
 ## 2026-09-11 – Outlook-kopplingen är aktiv
 
 - Microsoft Outlook App User Connector är nu länkad till projektet, så Outlook visas som alternativ i Kalender bredvid Google.

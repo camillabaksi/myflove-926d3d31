@@ -7,7 +7,7 @@ export const Route = createFileRoute("/_app/kalender")({
       { title: "Kalender – MyFlove" },
       {
         name: "description",
-        content: "Din kalender med uppgifter, påminnelser och import/export till mobilen.",
+        content: "Din kalender med uppgifter, påminnelser och synk mot Google Kalender/Outlook.",
       },
       { name: "robots", content: "noindex, nofollow" },
     ],

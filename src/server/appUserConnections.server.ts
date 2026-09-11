@@ -34,10 +34,7 @@ export async function getConnectionKeyForUser(
   return data ? decryptConnectionKey(data.connection_key_ciphertext) : null;
 }
 
-export async function deleteConnectionForUser(
-  userId: string,
-  connectorId: string,
-): Promise<void> {
+export async function deleteConnectionForUser(userId: string, connectorId: string): Promise<void> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { error } = await supabaseAdmin
     .from("app_user_connections")

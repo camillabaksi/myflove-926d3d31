@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-11";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "ICS-import/export borttagen från Kalender",
+    items: [
+      'Knapparna "Importera från telefonens kalender" och "Exportera till kalender (.ics)" är borta (2026-09-11)',
+      'Kalendern synkas istället via "Din riktiga kalender" med Google eller Outlook (2026-09-11)',
+      "Underliggande ICS-hjälpfil och tillhörande översättningar är borttagna (2026-09-11)",
+    ],
+  },
+  {
     title: "Outlook-kopplingen är aktiv",
     items: [
       "Microsoft Outlook App User Connector är nu länkad till projektet (2026-09-11)",
