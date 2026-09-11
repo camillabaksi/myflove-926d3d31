@@ -29,7 +29,8 @@ function LoadMap({ periods }: { periods: BatteryLoadPeriod[] }) {
   return (
     <div className="grid grid-cols-4 gap-2 sm:grid-cols-6" role="list">
       {periods.map((period) => {
-        const loadHeight = period.loadCount === 0 ? 0 : Math.max(12, (period.loadCount / maxLoad) * 100);
+        const loadHeight =
+          period.loadCount === 0 ? 0 : Math.max(12, (period.loadCount / maxLoad) * 100);
         const description = `${period.accessibleLabel}: ${period.battery == null ? "ingen batteriincheckning" : `${period.battery} procent batteri`}, ${period.loadCount} genomförda aktiviteter`;
         return (
           <div
@@ -54,7 +55,9 @@ function LoadMap({ periods }: { periods: BatteryLoadPeriod[] }) {
                 </span>
               )}
             </div>
-            <span className="mt-1 block truncate text-[10px] text-muted-foreground">{period.label}</span>
+            <span className="mt-1 block truncate text-[10px] text-muted-foreground">
+              {period.label}
+            </span>
           </div>
         );
       })}
@@ -91,7 +94,8 @@ export default function BatteryLoadTrend() {
           <div className="min-w-0">
             <p className="font-medium text-ink">{trend.summary}</p>
             <p className="mt-1 text-xs text-muted-foreground">
-              Upp till 12 månader · {trend.loadOccasions} genomförda tillfällen · {trend.energyLogs} incheckningar
+              Upp till 12 månader · {trend.loadOccasions} genomförda tillfällen · {trend.energyLogs}{" "}
+              incheckningar
             </p>
           </div>
         </div>

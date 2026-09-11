@@ -68,9 +68,7 @@ function aggregatePeriods(
   }
 
   return [...grouped.entries()].map(([key, entries]) => {
-    const batteries = entries.flatMap((entry) =>
-      entry.battery == null ? [] : [entry.battery],
-    );
+    const batteries = entries.flatMap((entry) => (entry.battery == null ? [] : [entry.battery]));
     const date = new Date(`${key}${range === "months" ? "-01" : ""}T12:00:00`);
     const label =
       range === "weeks"
