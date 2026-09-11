@@ -483,7 +483,7 @@ export default function Home() {
         </MyFloveWide>
 
         {/* Uppmuntrande citat – lugnt avslut, som i mockupen. */}
-        <MyFloveWide style={{ order: 5 }} className="min-w-0">
+        <MyFloveWide style={{ order: 5 }} className="min-w-0" data-npf="optional">
           <section
             aria-label={t("Dagens tanke")}
             className="rounded-3xl border border-border/60 bg-lavender/25 p-5 shadow-soft"
@@ -508,7 +508,7 @@ export default function Home() {
 
         {/* Din vardag – vad MyFlove lärt sig av dina egna aktiviteter och loggar. */}
         {patterns.ready && (
-          <MyFloveWide style={{ order: 4.5 }} className="min-w-0">
+          <MyFloveWide style={{ order: 4.5 }} className="min-w-0" data-npf="optional">
             <section
               aria-label={t("Det här har MyFlove lärt sig om din vardag")}
               data-testid="home-everyday-patterns"
@@ -598,7 +598,7 @@ export default function Home() {
         </MyFloveWide>
 
         {/* Liten, diskret notering längst ner – konkurrerar inte med korten. */}
-        <MyFloveWide style={{ order: 98.5 }} data-testid="home-install-note" className="pt-1">
+        <MyFloveWide style={{ order: 98.5 }} data-testid="home-install-note" className="pt-1" data-npf="optional">
           <PwaInstallCard compact />
         </MyFloveWide>
 
