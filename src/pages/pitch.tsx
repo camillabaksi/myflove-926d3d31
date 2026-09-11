@@ -93,6 +93,41 @@ export default function PitchPage() {
         <section className="rounded-2xl border border-border bg-card p-4 space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <h2 className="flex items-center gap-2 font-serif text-xl font-semibold">
+              <Film size={18} className="text-primary" /> 20-sekunders produktdemo
+            </h2>
+            <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
+              QuickFlow → Flow → Min dag
+            </span>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            En kort demo på engelska som visar att MyFlove finns på riktigt. Den följer bara den
+            viktigaste kedjan: allt ur huvudet i QuickFlow, Flow som anpassar dagen efter energin
+            och tiden som faktiskt finns, och Min dag som visar hur dagen ser ut. Avslutas med ”The
+            goal isn’t to get more done. It’s to make the day more doable.” Samma demo finns som en
+            egen slide i pitchdecket.
+          </p>
+          <video
+            controls
+            playsInline
+            preload="metadata"
+            poster="/pitch/myflove-demo-20s-poster.jpg"
+            className="w-full rounded-xl bg-black aspect-video"
+            src="/pitch/myflove-demo-20s.mp4"
+          />
+          <div className="flex flex-wrap gap-2">
+            <a
+              href="/pitch/myflove-demo-20s.mp4"
+              download
+              className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
+            >
+              <Download size={16} /> Ladda ner demon (MP4)
+            </a>
+          </div>
+        </section>
+
+        <section className="rounded-2xl border border-border bg-card p-4 space-y-3">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h2 className="flex items-center gap-2 font-serif text-xl font-semibold">
               <Film size={18} className="text-primary" /> Pitchvideo
             </h2>
             <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">

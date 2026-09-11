@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-11";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "20-sekunders produktdemo",
+    items: [
+      "Kort demo på engelska som visar kedjan QuickFlow → Flow → Min dag med riktiga skärmar (2026-09-11)",
+      "Demon kan laddas ner separat som MP4 från pitchsidan (2026-09-11)",
+      "Demon finns som egen slide i pitchdecket 4.2 och i den engelska 3-minuterspitchen (2026-09-11)",
+    ],
+  },
+  {
     title: "Living Blueprint 4.2",
     items: [
       "Ny blueprint 4.2 som beskriver dagsresan i tre steg, enkelt läge och hopfällbara block (2026-09-11)",

@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-11 – 20-sekunders produktdemo
+
+- Ny kort demo (engelska) som visar kedjan QuickFlow → Flow → Min dag med riktiga skärmar från appen.
+- Demon kan laddas ner separat som MP4 från pitchsidan.
+- Demon finns också som en egen slide i pitchdecket 4.2 och i den engelska 3-minuterspitchen.
+
 ## 2026-09-11 – Living Blueprint 4.2
 
 - Ny version 4.2 av Living Blueprint som beskriver appen som den är utformad nu: guidad dagsresa i tre steg, enkelt läge, hopfällbara block som sparas, andningsljus, batteri mot faktisk tid, belastningskarta och kvällscheck.
