@@ -400,8 +400,8 @@ export default function Home() {
             >
               {t("Akut Lugn")}
             </Button>
-
           </section>
+
         </MyFloveWide>
 
         <MyFloveWide style={{ order: 0 }} className="min-w-0">
