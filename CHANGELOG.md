@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-11 – Visuell belastningskarta
+
+- Insikter har fått en visuell karta för dagar, veckor och månader med batterinivå och faktiskt genomförda aktiviteter.
+- Dagvyn visar 28 dagar, veckovyn 12 veckor och månadsvyn 12 månader för att göra långsiktiga mönster lättare att se.
+- Kartan visar bara sammanställda nivåer och antal; aktivitetsnamn och privata anteckningar visas aldrig.
+
 ## 2026-09-11 – Batteritrend mot faktisk belastning
 
 - Insikter visar nu batteriets utveckling över 14 dagar tillsammans med aktiviteter som faktiskt genomförts.

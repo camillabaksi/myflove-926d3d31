@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-11";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Visuell belastningskarta",
+    items: [
+      "Insikter visar batteri och faktiskt genomförda aktiviteter per dag, vecka och månad (2026-09-11)",
+      "Dagvyn omfattar 28 dagar, veckovyn 12 veckor och månadsvyn 12 månader (2026-09-11)",
+      "Kartan visar bara sammanställda nivåer och antal, aldrig aktivitetsnamn eller privata anteckningar (2026-09-11)",
+    ],
+  },
+  {
     title: "Batteritrend mot faktisk belastning",
     items: [
       "Insikter visar batteriets utveckling över 14 dagar tillsammans med faktiskt genomförda aktiviteter (2026-09-11)",

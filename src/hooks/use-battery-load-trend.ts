@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useActivityHistory } from "@/hooks/use-activity-history";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import type { EnergyLogEntry } from "@/hooks/use-quick-checkin";
-import { buildBatteryLoadTrend } from "@/lib/battery-load-trend";
+import { BATTERY_TREND_DAYS, buildBatteryLoadTrend } from "@/lib/battery-load-trend";
 
 const DAY_MS = 86_400_000;
 
@@ -19,7 +19,7 @@ export function useBatteryLoadTrend() {
 
   return useMemo(() => {
     const now = new Date();
-    const from = new Date(now.getTime() - 13 * DAY_MS);
+    const from = new Date(now.getTime() - (BATTERY_TREND_DAYS - 1) * DAY_MS);
     return buildBatteryLoadTrend({
       energy: energy ?? [],
       instances: instancesBetween(localDay(from), localDay(now)),
