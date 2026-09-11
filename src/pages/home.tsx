@@ -393,8 +393,8 @@ export default function Home() {
 
             <Button
               type="button"
-
               variant="ghost"
+
               size="sm"
               onClick={() => setCalmMode("acute")}
               className="mt-4 rounded-full border border-border bg-background text-xs text-muted-foreground"
