@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { Moon, X } from "lucide-react";
 import { FlowMascot } from "@/components/flow-mascot";
 import { Button } from "@/components/ui/button";
@@ -44,7 +45,7 @@ export default function CalmMode({
     return () => window.clearInterval(timer);
   }, [onOpenChange, open, pausedUntil]);
 
-  if (!open) return null;
+  if (!open || typeof document === "undefined") return null;
 
   const end = () => {
     resumeReminders();
@@ -53,12 +54,18 @@ export default function CalmMode({
   const mm = String(Math.floor(seconds / 60)).padStart(2, "0");
   const ss = String(seconds % 60).padStart(2, "0");
 
-  return (
+  // Portal till <body> – annars fastnar den fasta ytan inne i sidans
+  // animerade/transformerade lager på mobilen och innehållet hamnar utanför.
+  return createPortal(
     <div
       role="dialog"
       aria-modal="true"
       aria-labelledby="calm-mode-title"
       className="fixed inset-0 z-[100] grid place-items-center overflow-y-auto bg-foreground px-5 py-10 text-background"
+      style={{
+        paddingTop: "max(2.5rem, env(safe-area-inset-top))",
+        paddingBottom: "max(2.5rem, env(safe-area-inset-bottom))",
+      }}
     >
       <Button
         type="button"
@@ -67,18 +74,26 @@ export default function CalmMode({
         onClick={end}
         aria-label="Avsluta lugn paus"
         className="absolute right-4 top-4 rounded-full text-background hover:bg-background/10 hover:text-background"
+        style={{ marginTop: "env(safe-area-inset-top)" }}
       >
         <X aria-hidden />
       </Button>
 
-      <div className="mx-auto flex max-w-md flex-col items-center text-center">
-        <div className="calm-breathing-halo relative grid size-52 place-items-center rounded-full bg-background/10">
-          <FlowMascot size="xl" mood="calm" glow alive alt="Flow vilar tillsammans med dig" />
+      <div className="mx-auto flex w-full max-w-md flex-col items-center text-center">
+        <div className="calm-breathing-halo relative grid size-40 place-items-center rounded-full bg-background/10 sm:size-52">
+          <FlowMascot
+            size="lg"
+            mood="calm"
+            glow
+            alive
+            alt="Flow vilar tillsammans med dig"
+            className="sm:scale-125"
+          />
         </div>
-        <p className="mt-8 flex items-center gap-2 text-sm font-semibold text-background/70">
+        <p className="mt-6 flex items-center gap-2 text-sm font-semibold text-background/70 sm:mt-8">
           <Moon className="size-4" aria-hidden /> {kind === "acute" ? "Akut Lugn" : "Mikropaus"}
         </p>
-        <h2 id="calm-mode-title" className="mt-3 text-2xl font-bold text-background">
+        <h2 id="calm-mode-title" className="mt-3 text-xl font-bold text-background sm:text-2xl">
           {kind === "acute"
             ? "Du behöver inte göra någonting alls just nu."
             : "Vi pausar en stund."}
@@ -88,18 +103,19 @@ export default function CalmMode({
             ? "Världen väntar på dig. Jag håller koll på tiden, blunda en stund."
             : "Låt axlarna sjunka. Det finns inget du behöver hinna under de här två minuterna."}
         </p>
-        <p className="mt-7 font-display text-3xl font-bold tabular-nums" aria-live="polite">
+        <p className="mt-6 font-display text-3xl font-bold tabular-nums sm:mt-7" aria-live="polite">
           {mm}:{ss}
         </p>
         <Button
           type="button"
           variant="ghost"
           onClick={end}
-          className="mt-8 rounded-full border border-background/20 text-background hover:bg-background/10 hover:text-background"
+          className="mt-7 rounded-full border border-background/20 text-background hover:bg-background/10 hover:text-background sm:mt-8"
         >
           Jag är redo att fortsätta
         </Button>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
