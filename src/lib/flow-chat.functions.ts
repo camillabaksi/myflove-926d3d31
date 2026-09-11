@@ -32,6 +32,7 @@ export const chatWithFlow = createServerFn({ method: "POST" })
         model: "google/gemini-2.5-flash",
         messages: [
           { role: "system", content: FLOW_SYSTEM_PROMPT },
+          { role: "system" as const, content: ACTION_PROTOCOL },
           ...(data.context
             ? [
                 {
