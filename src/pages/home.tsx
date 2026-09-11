@@ -392,8 +392,8 @@ export default function Home() {
             </div>
 
             <Button
-
               type="button"
+
               variant="ghost"
               size="sm"
               onClick={() => setCalmMode("acute")}
@@ -433,8 +433,8 @@ export default function Home() {
           <FlowHomeCard />
         </MyFloveWide>
 
-
         {/* Kvällscheck – frivillig, dyker upp när dagen lider mot sitt slut. */}
+
         {new Date().getHours() >= 18 && (
           <MyFloveWide style={{ order: 0.7 }} className="min-w-0" data-npf="optional">
             <EveningCheck />
