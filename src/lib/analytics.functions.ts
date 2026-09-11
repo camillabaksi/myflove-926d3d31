@@ -82,15 +82,20 @@ export const getAnalyticsSummaryFn = createServerFn({ method: "GET" })
 
     // Pull last 30 days of events (bounded read).
     const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
-    const { data: events, error } = await supabaseAdmin
-      .from("analytics_events")
-      .select("session_id, section, action, created_at")
-      .gte("created_at", since)
-      .order("created_at", { ascending: false })
-      .limit(50000);
-    if (error) throw new Error(error.message);
-
-    const rows = events ?? [];
+    // PostgREST returnerar max 1000 rader per anrop – hämta i sidor.
+    type EvRow = { session_id: string; section: string; action: string; created_at: string };
+    const rows: EvRow[] = [];
+    for (let from = 0; from < 500000; from += 1000) {
+      const { data: chunk, error } = await supabaseAdmin
+        .from("analytics_events")
+        .select("session_id, section, action, created_at")
+        .gte("created_at", since)
+        .order("created_at", { ascending: false })
+        .range(from, from + 999);
+      if (error) throw new Error(error.message);
+      rows.push(...((chunk ?? []) as EvRow[]));
+      if (!chunk || chunk.length < 1000) break;
+    }
     const now = Date.now();
     const oneDay = 24 * 60 * 60 * 1000;
 
