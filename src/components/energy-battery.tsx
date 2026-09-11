@@ -173,7 +173,8 @@ export default function EnergyBattery({
           </span>
         )
       }
-      collapsible={false}
+      collapsible
+      collapseId="energy-battery-now"
       className="@container"
     >
       {content}

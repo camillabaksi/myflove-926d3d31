@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
 import CollapsibleSection from "@/components/collapsible-section";
+import { MyFloveBlock } from "@/components/myflove/block";
 
 /**
  * Minimera/maximera är en ren UI-preferens: innehållet ska försvinna och
@@ -50,5 +51,24 @@ describe("CollapsibleSection", () => {
       </CollapsibleSection>,
     );
     expect(screen.queryByText("innehåll")).toBeNull();
+  });
+
+  it("gör vanliga MyFlove-block hopfällbara som standard och sparar valet", () => {
+    const view = render(
+      <MyFloveBlock title="Min plan">
+        <p>planens innehåll</p>
+      </MyFloveBlock>,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /Min plan/ }));
+    expect(screen.queryByText("planens innehåll")).toBeNull();
+    view.unmount();
+
+    render(
+      <MyFloveBlock title="Min plan">
+        <p>planens innehåll</p>
+      </MyFloveBlock>,
+    );
+    expect(screen.queryByText("planens innehåll")).toBeNull();
   });
 });
