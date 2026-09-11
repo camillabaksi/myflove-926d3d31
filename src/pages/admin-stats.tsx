@@ -87,17 +87,29 @@ export default function AdminStats() {
 
   const usage = data?.featureUsage ?? [];
 
-  const viewsBySection = usage
-    .filter((row) => row.action === "view" && row.section !== "page")
-    .sort((a, b) => b.events - a.events);
+  const viewsBySection = sortAdminRows(
+    usage
+      .filter((row) => row.action === "view" && row.section !== "page")
+      .map((row) => ({ ...row, label: t(sectionLabel(row.section)) })),
+    viewsSort,
+  );
 
-  const pageViews = usage
-    .filter((row) => row.section === "page")
-    .sort((a, b) => b.events - a.events);
+  const pageViews = sortAdminRows(
+    usage
+      .filter((row) => row.section === "page")
+      .map((row) => ({ ...row, label: t(pageLabel(row.action)) })),
+    pagesSort,
+  );
 
-  const otherActions = usage
-    .filter((row) => row.action !== "view" && row.section !== "page")
-    .sort((a, b) => b.events - a.events);
+  const otherActions = sortAdminRows(
+    usage
+      .filter((row) => row.action !== "view" && row.section !== "page")
+      .map((row) => ({
+        ...row,
+        label: `${t(sectionLabel(row.section))} — ${t(actionLabel(row.action))}`,
+      })),
+    actionsSort,
+  );
 
   const findUsage = (section: string, action: string) =>
     usage.find((row) => row.section === section && row.action === action);
