@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Activity, BatteryMedium, TrendingDown, TrendingUp } from "lucide-react";
+import { Activity, BatteryMedium, Clock, TrendingDown, TrendingUp } from "lucide-react";
 import CollapsibleSection from "@/components/collapsible-section";
 import { useBatteryLoadTrend } from "@/hooks/use-battery-load-trend";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -17,6 +17,13 @@ const RANGE_DESCRIPTIONS: Record<BatteryLoadRange, string> = {
   months: "Senaste 12 månaderna",
 };
 
+function formatMinutes(minutes: number): string {
+  if (minutes < 60) return `${minutes} min`;
+  const hours = Math.floor(minutes / 60);
+  const rest = minutes % 60;
+  return rest === 0 ? `${hours} h` : `${hours} h ${rest} min`;
+}
+
 function batteryTone(battery: number | null): string {
   if (battery == null) return "bg-muted/60";
   if (battery >= 70) return "bg-primary/75";
@@ -25,13 +32,13 @@ function batteryTone(battery: number | null): string {
 }
 
 function LoadMap({ periods }: { periods: BatteryLoadPeriod[] }) {
-  const maxLoad = Math.max(1, ...periods.map((period) => period.loadCount));
+  const maxMinutes = Math.max(1, ...periods.map((period) => period.loadMinutes));
   return (
     <div className="grid grid-cols-4 gap-2 sm:grid-cols-6" role="list">
       {periods.map((period) => {
         const loadHeight =
-          period.loadCount === 0 ? 0 : Math.max(12, (period.loadCount / maxLoad) * 100);
-        const description = `${period.accessibleLabel}: ${period.battery == null ? "ingen batteriincheckning" : `${period.battery} procent batteri`}, ${period.loadCount} genomförda aktiviteter`;
+          period.loadMinutes === 0 ? 0 : Math.max(12, (period.loadMinutes / maxMinutes) * 100);
+        const description = `${period.accessibleLabel}: ${period.battery == null ? "ingen batteriincheckning" : `${period.battery} procent batteri`}, ${formatMinutes(period.loadMinutes)} på ${period.loadCount} genomförda aktiviteter`;
         return (
           <div
             key={period.key}
@@ -49,9 +56,9 @@ function LoadMap({ periods }: { periods: BatteryLoadPeriod[] }) {
                 className={`absolute left-1/2 h-4 w-4 -translate-x-1/2 rounded-full border-2 border-card shadow-sm transition-[bottom,background-color] duration-500 ${batteryTone(period.battery)}`}
                 style={{ bottom: `${Math.max(5, Math.min(82, period.battery ?? 5))}%` }}
               />
-              {period.loadCount > 0 && (
+              {period.loadMinutes > 0 && (
                 <span className="absolute bottom-1 left-0 right-0 text-center text-[10px] font-semibold text-ink">
-                  {period.loadCount}
+                  {formatMinutes(period.loadMinutes)}
                 </span>
               )}
             </div>
@@ -80,8 +87,8 @@ export default function BatteryLoadTrend() {
   return (
     <CollapsibleSection
       id="insight-battery-load-trend"
-      title="Batteri & faktisk belastning"
-      description="Din energi över tid, jämförd med det du faktiskt genomförde"
+      title="Batteri & faktisk tid"
+      description="Din energi över tid, jämförd med den tid som faktiskt gått åt"
       className="rounded-3xl border border-border bg-card p-5"
       headingClassName="font-semibold"
       data-testid="battery-load-trend"
@@ -94,8 +101,8 @@ export default function BatteryLoadTrend() {
           <div className="min-w-0">
             <p className="font-medium text-ink">{trend.summary}</p>
             <p className="mt-1 text-xs text-muted-foreground">
-              Upp till 12 månader · {trend.loadOccasions} genomförda tillfällen · {trend.energyLogs}{" "}
-              incheckningar
+              Upp till 12 månader · {formatMinutes(trend.loadMinutes)} på {trend.loadOccasions}{" "}
+              genomförda tillfällen · {trend.energyLogs} incheckningar
             </p>
           </div>
         </div>
@@ -116,7 +123,7 @@ export default function BatteryLoadTrend() {
               <span className="h-3 w-3 rounded-full bg-primary/75" /> Batteri
             </span>
             <span className="inline-flex items-center gap-1.5">
-              <span className="h-2.5 w-2.5 rounded-sm bg-accent" /> Genomförda aktiviteter
+              <span className="h-2.5 w-2.5 rounded-sm bg-accent" /> Tid som gått åt
             </span>
           </div>
           <p className="mb-3 text-xs font-medium text-ink">{RANGE_DESCRIPTIONS[range]}</p>
@@ -130,9 +137,9 @@ export default function BatteryLoadTrend() {
 
         <div className="grid grid-cols-2 gap-3 text-sm">
           <div className="rounded-2xl bg-secondary/30 p-3">
-            <BatteryMedium size={16} className="mb-1 text-primary" aria-hidden />
-            <p className="font-medium text-ink">{visibleEnergyPeriods} perioder</p>
-            <p className="text-xs text-muted-foreground">med batteridata i vald vy</p>
+            <Clock size={16} className="mb-1 text-primary" aria-hidden />
+            <p className="font-medium text-ink">{formatMinutes(trend.loadMinutes)}</p>
+            <p className="text-xs text-muted-foreground">faktisk tid på aktiviteter</p>
           </div>
           <div className="rounded-2xl bg-secondary/30 p-3">
             <Activity size={16} className="mb-1 text-primary" aria-hidden />
@@ -142,8 +149,9 @@ export default function BatteryLoadTrend() {
         </div>
 
         <p className="text-xs leading-relaxed text-muted-foreground">
-          Punkten visar genomsnittligt batteri. Den mjuka stapeln visar faktisk belastning. Bara
-          genomförda aktiviteter räknas; namn och privata anteckningar visas aldrig här.
+          Punkten visar genomsnittligt batteri. Den mjuka stapeln visar faktisk tid som gått åt —
+          sluttid minus starttid, eller uppskattat 30 minuter när tider saknas. Bara genomförda
+          aktiviteter räknas; namn och privata anteckningar visas aldrig här.
         </p>
       </div>
     </CollapsibleSection>
