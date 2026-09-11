@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-11 – Enhetlig design och tydligare andningsljus
+
+- Hela appen har nu samma mjuka pastelllila bakgrund bakom de vita korten.
+- Andningsljuset bakom huvudytan är starkare och syns tydligt: 4 sekunder in, 5 sekunder ut, 1 sekunds vila.
+- Ljusets färg och tempo följer dagens belastning – ljus lavendel, dämpad plommon eller djup tyst lila.
+
 ## 2026-09-11 – Akut Lugn och Mikropaus på mobil
 
 - Lugna pausskärmen visas nu i helskärm på mobilen i stället för att klippas mellan sidhuvud och bottenmeny.
