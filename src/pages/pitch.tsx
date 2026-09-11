@@ -201,10 +201,10 @@ export default function PitchPage() {
             </span>
           </div>
           <p className="text-sm text-muted-foreground">
-            Tretton visuella slides på engelska, byggda för exakt tre minuter: problem, insikt, lösning,
-            produkt, differentiering, marknad, traction, affärsmodell, team, kapital och avslut.
-            Riktiga appbilder visar hur samma dag anpassas efter kapacitet. Talarmanus finns som
-            anteckningar i PowerPoint-filen.
+            Tretton visuella slides på engelska, byggda för exakt tre minuter: problem, insikt,
+            lösning, produkt, differentiering, marknad, traction, affärsmodell, team, kapital och
+            avslut. Riktiga appbilder visar hur samma dag anpassas efter kapacitet. Talarmanus finns
+            som anteckningar i PowerPoint-filen.
           </p>
           <div className="flex flex-wrap gap-2">
             <a
