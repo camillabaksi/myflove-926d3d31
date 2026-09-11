@@ -1,4 +1,10 @@
+## 2026-09-11 – Flow fortsätter i din senaste chatt
+
+- När du öppnar Flow landar du i ditt senaste samtal istället för en tom, ny chatt.
+- "Nytt samtal" gäller bara just den gången – nästa gång du öppnar Flow är historiken tillbaka.
+
 ## 2026-09-11 – Flow kan faktiskt flytta, dela och förenkla en uppgift
+
 
 - När Flow erbjuder sig att flytta en uppgift till imorgon, dela upp den i små steg eller göra den mindre visas nu en knapp i chatten.
 - Ingenting ändras förrän du trycker på knappen – Flow gör aldrig något i tysthet.
