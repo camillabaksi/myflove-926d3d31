@@ -445,7 +445,7 @@ export default function Home() {
           <CollapsibleSection
             id="mer-i-myflove"
             title={t("Mer i MyFlove")}
-            description={t("Quickflow, batteriet, dagens lista och dina mönster.")}
+            description={t("Quickflow, dagens tanke, rutiner & medicin och dina mönster.")}
             defaultCollapsed
             className="rounded-3xl border border-border/60 bg-card/60 p-4 shadow-soft"
             headingClassName="text-base font-semibold text-ink"
@@ -488,25 +488,45 @@ export default function Home() {
                   )}
                 </CollapsibleSection>
               </MyFloveWide>
-            </div>
-          </CollapsibleSection>
-        </MyFloveWide>
 
-        {/* Uppmuntrande citat – lugnt avslut, som i mockupen. */}
-        <MyFloveWide style={{ order: 5 }} className="min-w-0" data-npf="optional">
-          <CollapsibleSection
-            id="home-daily-thought"
-            title={t("Dagens tanke")}
-            className="rounded-3xl border border-border/60 bg-lavender/25 p-5 shadow-soft"
-            headingClassName="text-base font-semibold text-ink"
-          >
-            <div className="flex items-start gap-3">
-              <Heart className="mt-0.5 h-6 w-6 shrink-0 text-primary" aria-hidden />
-              <p className="text-sm text-ink leading-relaxed">
-                {t("Små steg varje dag")}
-                <br />
-                {t("skapar stora förändringar.")}
-              </p>
+              {/* Uppmuntrande citat – lugnt avslut, som i mockupen. */}
+              <MyFloveWide style={{ order: 5 }} className="min-w-0">
+                <CollapsibleSection
+                  id="home-daily-thought"
+                  title={t("Dagens tanke")}
+                  className="rounded-3xl border border-border/60 bg-lavender/25 p-5 shadow-soft"
+                  headingClassName="text-base font-semibold text-ink"
+                >
+                  <div className="flex items-start gap-3">
+                    <Heart className="mt-0.5 h-6 w-6 shrink-0 text-primary" aria-hidden />
+                    <p className="text-sm text-ink leading-relaxed">
+                      {t("Små steg varje dag")}
+                      <br />
+                      {t("skapar stora förändringar.")}
+                    </p>
+                  </div>
+                </CollapsibleSection>
+              </MyFloveWide>
+
+              {/* Rutiner & medicin – dagens doser och rutiner. */}
+              {shows("medicin") && (
+                <MyFloveWide style={{ order: 9 }} className="min-w-0">
+                  <section aria-label={t("Rutiner och medicin")}>
+                    <ExpandableBlock
+                      title={t("Rutiner & medicin")}
+                      titleText={t("Rutiner och medicin")}
+                      area="halsa"
+                      icon={Pill}
+                      subtitle={t("Dagens rutiner och doser")}
+                      status={t("Idag")}
+                      tone="blush"
+                      surface="blush"
+                    >
+                      <RoutinesMedicationToday />
+                    </ExpandableBlock>
+                  </section>
+                </MyFloveWide>
+              )}
             </div>
           </CollapsibleSection>
         </MyFloveWide>
@@ -515,26 +535,6 @@ export default function Home() {
         {isSunday && (
           <MyFloveWide style={{ order: 4.4 }} className="min-w-0" data-npf="optional">
             <WeekReviewCard review={weekReview} />
-          </MyFloveWide>
-        )}
-
-        {/* Rutiner & medicin – dagens doser och rutiner. */}
-        {shows("medicin") && (
-          <MyFloveWide style={{ order: 9 }} className="min-w-0" data-npf="optional">
-            <section aria-label={t("Rutiner och medicin")}>
-              <ExpandableBlock
-                title={t("Rutiner & medicin")}
-                titleText={t("Rutiner och medicin")}
-                area="halsa"
-                icon={Pill}
-                subtitle={t("Dagens rutiner och doser")}
-                status={t("Idag")}
-                tone="blush"
-                surface="blush"
-              >
-                <RoutinesMedicationToday />
-              </ExpandableBlock>
-            </section>
           </MyFloveWide>
         )}
 
