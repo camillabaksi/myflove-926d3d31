@@ -1,3 +1,8 @@
+## 2026-09-11 – Sortera analysen per användare
+
+- Under "Analys per användare" kan du nu sortera listan: nyast aktiv först, äldst först, flest eller färst händelser.
+- Standard är nyast aktiv först.
+
 ## 2026-09-11 – Statistiken visar nu alla dagar
 
 - Analys per användare hämtade bara de första 1 000 händelserna, som alla låg på samma tidiga datum.
