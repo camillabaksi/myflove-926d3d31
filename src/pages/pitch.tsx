@@ -102,9 +102,9 @@ export default function PitchPage() {
           <p className="text-sm text-muted-foreground">
             En kort demo på engelska som visar att MyFlove finns på riktigt. Den följer bara den
             viktigaste kedjan: allt ur huvudet i QuickFlow, Flow som anpassar dagen efter energin
-            och tiden som faktiskt finns, och Min dag som visar hur dagen ser ut. Avslutas med
-            ”The goal isn’t to get more done. It’s to make the day more doable.” Samma demo finns
-            som en egen slide i pitchdecket.
+            och tiden som faktiskt finns, och Min dag som visar hur dagen ser ut. Avslutas med ”The
+            goal isn’t to get more done. It’s to make the day more doable.” Samma demo finns som en
+            egen slide i pitchdecket.
           </p>
           <video
             controls
