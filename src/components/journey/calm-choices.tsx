@@ -31,9 +31,7 @@ export default function CalmChoices({ onPause }: { onPause: () => void }) {
       </div>
       <div className="grid gap-3 sm:grid-cols-2">
         <Button asChild size="lg" className="min-h-14 justify-between rounded-2xl px-5">
-          <Link
-            href={easiest ? "/idag" : "/quickflow"}
-          >
+          <Link href={easiest ? "/idag" : "/quickflow"}>
             <span className="min-w-0 text-left">
               <span className="block">{easiest ? "Gör den enklaste saken" : "Fånga en sak"}</span>
               <span className="block text-xs font-normal opacity-80">Cirka 5 minuter</span>

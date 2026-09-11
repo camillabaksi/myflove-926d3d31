@@ -3,11 +3,7 @@ import { Moon, X } from "lucide-react";
 import { FlowMascot } from "@/components/flow-mascot";
 import { Button } from "@/components/ui/button";
 import { haptic } from "@/lib/haptics";
-import {
-  pauseRemindersFor,
-  resumeReminders,
-  subscribeQuietMode,
-} from "@/lib/quiet-mode";
+import { pauseRemindersFor, resumeReminders, subscribeQuietMode } from "@/lib/quiet-mode";
 
 type CalmModeKind = "acute" | "micro";
 
