@@ -96,7 +96,9 @@ export function completionReaction(ctx: CompletionContext): { message: string; f
   const tone = batteryTone(ctx.battery);
 
   if (ctx.remainingToday === 0) {
-    return { message: `${what ? `${what} klart. ` : "Klart. "}Nu andas vi ut. Du är klar för idag.` };
+    return {
+      message: `${what ? `${what} klart. ` : "Klart. "}Nu andas vi ut. Du är klar för idag.`,
+    };
   }
   if (tone === "verylow" || tone === "low") {
     return {

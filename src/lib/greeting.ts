@@ -39,9 +39,7 @@ const RETURN_LINES = [
   "Skönt att ha dig här. En sak i taget.",
 ];
 
-const AWAY_LINES = [
-  "Vad skönt att se dig. Vi tar det lugnt idag, oavsett hur dagarna har varit.",
-];
+const AWAY_LINES = ["Vad skönt att se dig. Vi tar det lugnt idag, oavsett hur dagarna har varit."];
 
 const FIRST_TIME_LINES = [
   "Vad fint att du är här.",

@@ -294,7 +294,6 @@ html[data-npf-still="true"] .calm-breathing-halo {
   }
 }
 
-
 @utility surface-card {
   background-color: hsl(var(--card));
   border: var(--border-hairline);

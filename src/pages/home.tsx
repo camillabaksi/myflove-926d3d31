@@ -220,7 +220,9 @@ export default function Home() {
             <div className="flex w-fit items-center gap-3 rounded-2xl border border-border/50 bg-card/55 px-4 py-3">
               <BatteryMedium className="h-8 w-8 shrink-0 text-primary" aria-hidden />
               <div>
-                <span className="block text-xs font-medium text-muted-foreground">{t("Mitt batteri")}</span>
+                <span className="block text-xs font-medium text-muted-foreground">
+                  {t("Mitt batteri")}
+                </span>
                 <span className="block text-2xl font-bold tabular-nums text-ink">{battery}%</span>
               </div>
             </div>

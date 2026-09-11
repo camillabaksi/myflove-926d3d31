@@ -87,7 +87,9 @@ export default function CalmMode({
           <Moon className="size-4" aria-hidden /> {kind === "acute" ? "Akut Lugn" : "Mikropaus"}
         </p>
         <h2 id="calm-mode-title" className="mt-3 text-2xl font-bold text-background">
-          {kind === "acute" ? "Du behöver inte göra någonting alls just nu." : "Vi pausar en stund."}
+          {kind === "acute"
+            ? "Du behöver inte göra någonting alls just nu."
+            : "Vi pausar en stund."}
         </h2>
         <p className="mt-4 text-base leading-relaxed text-background/80">
           {kind === "acute"
