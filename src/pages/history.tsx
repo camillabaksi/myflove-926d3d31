@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import Layout from "@/components/layout";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import WeekReviewCard from "@/components/week-review-card";
+import CollapsibleSection from "@/components/collapsible-section";
 import { useActivityHistory, useWeekReview } from "@/hooks/use-activity-history";
 import {
   ENERGY_CHOICES,
@@ -115,16 +116,15 @@ export default function History() {
                   impactHistory.some((h) => h.day === d),
               )
               .map((d) => (
-                <section
+                <CollapsibleSection
                   key={d}
-                  aria-label={formatDay(d, locale)}
+                  id={`history-impact-${d}`}
+                  title={formatDay(d, locale)}
+                  headingClassName="text-base font-semibold capitalize"
                   className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
                 >
-                  <h2 className="text-base font-semibold capitalize text-ink">
-                    {formatDay(d, locale)}
-                  </h2>
                   <DayImpact day={d} history={impactHistory} />
-                </section>
+                </CollapsibleSection>
               ))}
 
             {grouped.length === 0 ? (
@@ -133,14 +133,13 @@ export default function History() {
               </p>
             ) : (
               grouped.map((day) => (
-                <section
+                <CollapsibleSection
                   key={day.date}
-                  aria-label={formatDay(day.date, locale)}
+                  id={`history-day-${day.date}`}
+                  title={formatDay(day.date, locale)}
+                  headingClassName="text-base font-semibold capitalize"
                   className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
                 >
-                  <h2 className="text-base font-semibold capitalize text-ink">
-                    {formatDay(day.date, locale)}
-                  </h2>
                   <DayImpact day={day.date} history={impactHistory} />
 
                   <ul className="mt-3 space-y-3">
@@ -189,7 +188,7 @@ export default function History() {
                       </li>
                     ))}
                   </ul>
-                </section>
+                </CollapsibleSection>
               ))
             )}
           </div>

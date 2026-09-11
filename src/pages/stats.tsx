@@ -5,6 +5,7 @@ import { useMoods } from "@/hooks/use-data";
 import { getWeeklyMoodStats } from "@/lib/mood-stats";
 import { TrendingUp, TrendingDown, Minus, BarChart3 } from "lucide-react";
 import { Link } from "wouter";
+import CollapsibleSection from "@/components/collapsible-section";
 
 const EMOJI_BY_ROUNDED_SCORE: Record<number, string> = {
   1: "😢",
@@ -47,7 +48,12 @@ export default function Stats() {
               </p>
             </div>
 
-            <div className="bg-card p-6 md:p-8 rounded-3xl shadow-sm border border-border space-y-8">
+            <CollapsibleSection
+              title="Den här veckan"
+              id="weekly-mood-statistics"
+              headingClassName="text-base font-semibold"
+              className="bg-card p-6 md:p-8 rounded-3xl shadow-sm border border-border"
+            >
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
                   <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">
@@ -106,7 +112,7 @@ export default function Stats() {
                   statistik här.
                 </p>
               )}
-            </div>
+            </CollapsibleSection>
 
             <Link
               href="/admin-statistik"

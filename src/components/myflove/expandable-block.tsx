@@ -115,7 +115,7 @@ export function ExpandableBlock({
     }
 
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape" && sectionId) setCollapsed(sectionId, true, true);
     };
     window.addEventListener("keydown", onKey);
 
