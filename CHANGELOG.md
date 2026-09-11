@@ -1,3 +1,8 @@
+## 2026-09-11 – Outlook-kopplingen är aktiv
+
+- Microsoft Outlook App User Connector är nu länkad till projektet, så Outlook visas som alternativ i Kalender bredvid Google.
+- Du behöver fortfarande registrera samma Lovable gateway-återvändandeadress (`https://connector-gateway.lovable.dev/api/v1/app-users/oauth2/callback`) i din Microsoft OAuth-app.
+
 ## 2026-09-11 – Koppla kalendern till Google eller Outlook
 
 - Du kan koppla ditt eget Google- eller Outlook-konto i Kalender, under "Din riktiga kalender".
