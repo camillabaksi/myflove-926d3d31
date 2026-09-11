@@ -192,6 +192,7 @@ export default function CleaningPage() {
         {/* Översikt */}
         <MyFloveWide>
           <MyFloveBlock
+            collapseId={`cleaning-overview-${room.id}`}
             title={`${room.emoji} ${room.label} – ${CLEAN_MODE_LABEL[mode].toLowerCase()}`}
             subtitle={
               minutesLeft > 0

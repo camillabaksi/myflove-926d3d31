@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import Layout from "@/components/layout";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import WeekReviewCard from "@/components/week-review-card";
+import CollapsibleSection from "@/components/collapsible-section";
 import { useActivityHistory, useWeekReview } from "@/hooks/use-activity-history";
 import {
   ENERGY_CHOICES,
@@ -16,7 +17,12 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { track } from "@/lib/analytics";
 import { useLang } from "@/hooks/use-language";
 import { useImpactCheckin } from "@/hooks/use-impact-checkin";
-import { IMPACT_DEGREES, IMPACT_TIMINGS, impactOption, type ImpactEntry } from "@/lib/impact-checkin";
+import {
+  IMPACT_DEGREES,
+  IMPACT_TIMINGS,
+  impactOption,
+  type ImpactEntry,
+} from "@/lib/impact-checkin";
 
 /** Dagens registrerade påverkan – visas diskret överst i dagens historik. */
 function DayImpact({ day, history }: { day: string; history: ImpactEntry[] }) {
@@ -38,7 +44,6 @@ function DayImpact({ day, history }: { day: string; history: ImpactEntry[] }) {
     </p>
   );
 }
-
 
 function formatDay(iso: string, locale: string): string {
   const d = parseISODate(iso);
@@ -65,10 +70,7 @@ export default function History() {
   const review = useWeekReview(weekStart);
 
   const days = weekDates(weekStart);
-  const instances = useMemo(
-    () => instancesBetween(days[0]!, days[6]!),
-    [instancesBetween, days],
-  );
+  const instances = useMemo(() => instancesBetween(days[0]!, days[6]!), [instancesBetween, days]);
   const grouped = groupByDay(instances);
   const isCurrentWeek = weekStart === weekStartISO(todayISO());
 
@@ -110,21 +112,18 @@ export default function History() {
             {/* Dagar med bara påverkan registrerad (inga aktiviteter) */}
             {days
               .filter(
-                (d) =>
-                  !grouped.some((g) => g.date === d) &&
-                  impactHistory.some((h) => h.day === d),
+                (d) => !grouped.some((g) => g.date === d) && impactHistory.some((h) => h.day === d),
               )
               .map((d) => (
-                <section
+                <CollapsibleSection
                   key={d}
-                  aria-label={formatDay(d, locale)}
+                  id={`history-impact-${d}`}
+                  title={formatDay(d, locale)}
+                  headingClassName="text-base font-semibold capitalize"
                   className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
                 >
-                  <h2 className="text-base font-semibold capitalize text-ink">
-                    {formatDay(d, locale)}
-                  </h2>
                   <DayImpact day={d} history={impactHistory} />
-                </section>
+                </CollapsibleSection>
               ))}
 
             {grouped.length === 0 ? (
@@ -133,14 +132,13 @@ export default function History() {
               </p>
             ) : (
               grouped.map((day) => (
-                <section
+                <CollapsibleSection
                   key={day.date}
-                  aria-label={formatDay(day.date, locale)}
+                  id={`history-day-${day.date}`}
+                  title={formatDay(day.date, locale)}
+                  headingClassName="text-base font-semibold capitalize"
                   className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
                 >
-                  <h2 className="text-base font-semibold capitalize text-ink">
-                    {formatDay(day.date, locale)}
-                  </h2>
                   <DayImpact day={day.date} history={impactHistory} />
 
                   <ul className="mt-3 space-y-3">
@@ -182,14 +180,14 @@ export default function History() {
                         )}
                         {item.expectedEnergy && item.energyImpact && (
                           <p className="mt-1 text-[11px] text-muted-foreground">
-                            {t("Du trodde")}: {t(ENERGY_META[item.expectedEnergy].ask)} · {t("Det blev")}:{" "}
-                            {t(ENERGY_META[item.energyImpact].ask)}
+                            {t("Du trodde")}: {t(ENERGY_META[item.expectedEnergy].ask)} ·{" "}
+                            {t("Det blev")}: {t(ENERGY_META[item.energyImpact].ask)}
                           </p>
                         )}
                       </li>
                     ))}
                   </ul>
-                </section>
+                </CollapsibleSection>
               ))
             )}
           </div>

@@ -5,6 +5,7 @@ import { track } from "@/lib/analytics";
 import { HOME_BLOCKS, useHomeLayout } from "@/lib/home-layout";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowUp, ArrowDown, Eye, EyeOff, RotateCcw, PlayCircle } from "lucide-react";
+import CollapsibleSection from "@/components/collapsible-section";
 
 /**
  * Anpassa hemskärmen – välj vilka block som syns, i vilken ordning,
@@ -58,10 +59,12 @@ export default function HomeCustomizePage() {
           </Button>
         </div>
 
-        <section className="rounded-3xl border-2 border-border/60 bg-card p-4 shadow-soft">
-          <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-            Block på Hem
-          </h2>
+        <CollapsibleSection
+          title="Block på Hem"
+          id="home-customize-blocks"
+          headingClassName="text-sm font-semibold uppercase tracking-wide"
+          className="rounded-3xl border-2 border-border/60 bg-card p-4 shadow-soft"
+        >
           <ul className="space-y-2">
             {order.map((id, idx) => {
               const meta = HOME_BLOCKS.find((b) => b.id === id);
@@ -115,19 +118,21 @@ export default function HomeCustomizePage() {
               );
             })}
           </ul>
-        </section>
+        </CollapsibleSection>
 
-        <section className="rounded-3xl border-2 border-border/60 bg-card p-4 shadow-soft">
-          <h2 className="mb-1 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-            Introduktionen
-          </h2>
+        <CollapsibleSection
+          title="Introduktionen"
+          id="home-customize-intro"
+          headingClassName="text-sm font-semibold uppercase tracking-wide"
+          className="rounded-3xl border-2 border-border/60 bg-card p-4 shadow-soft"
+        >
           <p className="mb-3 text-sm text-muted-foreground">
             Vill du se den korta introduktionen igen? Den dyker upp nästa gång du öppnar Hem.
           </p>
           <Button variant="outline" className="rounded-xl gap-2" onClick={replayIntro}>
             <PlayCircle size={16} /> Visa introduktionen igen
           </Button>
-        </section>
+        </CollapsibleSection>
       </div>
     </Layout>
   );

@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import Layout from "@/components/layout";
 import { APP_GUIDE } from "@/lib/app-guide";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import CollapsibleSection from "@/components/collapsible-section";
 
 /**
  * Översikt – en enkel sammanfattning av vad som finns i MyFlove
@@ -26,14 +27,17 @@ export default function OverviewPage() {
         </div>
 
         {APP_GUIDE.map((group) => (
-          <section
+          <CollapsibleSection
             key={group.id}
-            aria-label={group.label}
+            id={`overview-${group.id}`}
+            title={
+              <span className="flex items-center gap-2">
+                <span aria-hidden>{group.emoji}</span> {group.label}
+              </span>
+            }
+            headingClassName="text-base font-semibold"
             className="rounded-3xl border-2 border-border/60 bg-card p-5 shadow-soft"
           >
-            <h2 className="flex items-center gap-2 text-base font-semibold text-ink">
-              <span aria-hidden>{group.emoji}</span> {group.label}
-            </h2>
             <p className="mt-0.5 text-xs text-muted-foreground">{group.hint}</p>
 
             <ul className="mt-3 space-y-2">
@@ -55,7 +59,7 @@ export default function OverviewPage() {
                 </li>
               ))}
             </ul>
-          </section>
+          </CollapsibleSection>
         ))}
       </div>
     </Layout>

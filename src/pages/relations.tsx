@@ -8,7 +8,6 @@ import { MyFloveHeart } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import CollapsibleSection from "@/components/collapsible-section";
-import HelpHint from "@/components/help-hint";
 import { useRelations } from "@/hooks/use-relations";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import {
@@ -282,14 +281,18 @@ function RelationsContent() {
         );
       })}
 
-      <div className="surface-card space-y-3 p-5">
-        <div className="flex items-center gap-2">
-          <h2 className="font-semibold text-ink">Vilka relationer vill du ha med?</h2>
-          <HelpHint>
+      <CollapsibleSection
+        title="Vilka relationer vill du ha med?"
+        id="relation-types"
+        headingClassName="text-base font-semibold"
+        className="surface-card p-5"
+        help={
+          <>
             Du väljer själv vilka relationstyper som visas. Inget läggs till automatiskt och du kan
             stänga av när du vill.
-          </HelpHint>
-        </div>
+          </>
+        }
+      >
         <div className="flex flex-wrap gap-2">
           {RELATION_TYPES.map((t) => {
             const on = enabledTypes.includes(t.id);
@@ -314,7 +317,7 @@ function RelationsContent() {
             Personer du lagt in finns kvar även om du gömmer en relationstyp.
           </p>
         )}
-      </div>
+      </CollapsibleSection>
     </div>
   );
 }

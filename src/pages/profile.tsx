@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Baby, Check, Flower2, Languages, Pencil, Plus, Trash2, User } from "lucide-react";
+import { Check, Pencil, Plus, Trash2 } from "lucide-react";
 import Layout from "@/components/layout";
 import { MyFloveHeader } from "@/components/myflove";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
@@ -12,6 +12,7 @@ import { useLang } from "@/hooks/use-language";
 import { useCycle } from "@/hooks/use-cycle";
 import { LANGUAGES } from "@/lib/i18n";
 import { LifeProfileSections } from "@/pages/life-profile";
+import CollapsibleSection from "@/components/collapsible-section";
 
 /**
  * Min profil – det lilla användaren behöver berätta:
@@ -106,253 +107,246 @@ export default function ProfilePage() {
         </MyFloveWide>
 
         {/* Namn – driver "Hej [namn]!" på Hem och på Mitt batteri */}
-        <MyFloveWide className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft">
-          <div className="flex items-center gap-2">
-            <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-              <User size={18} />
-            </span>
-            <div>
-              <h2 className="text-base font-semibold text-ink">Vad ska jag kalla dig?</h2>
-              <p className="text-xs text-muted-foreground">
-                Används i “Hej {name || "…"}!” på startsidan och på ditt batteri.
-                {savedName ? " Sparat ✓" : " Sparas automatiskt."}
-              </p>
-            </div>
-          </div>
-          <form
-            className="mt-3 flex items-center gap-2"
-            onSubmit={(e) => {
-              e.preventDefault();
-              saveName();
-            }}
+        <MyFloveWide>
+          <CollapsibleSection
+            id="profile-name"
+            title="Vad ska jag kalla dig?"
+            headingClassName="text-base font-semibold"
+            description={`Används i “Hej ${name || "…"}!” på startsidan och på ditt batteri.${savedName ? " Sparat ✓" : " Sparas automatiskt."}`}
+            className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
           >
-            <Input
-              value={nameDraft}
-              onChange={(e) => setNameDraft(e.target.value)}
-              placeholder="Ditt namn"
-              maxLength={40}
-              className="rounded-2xl"
-              onBlur={() => saveName()}
-              data-testid="profile-name-input"
-            />
-            <Button type="submit" className="rounded-2xl" data-testid="profile-name-save">
-              {savedName ? <Check size={16} /> : "Spara"}
-            </Button>
-          </form>
+            <form
+              className="mt-3 flex items-center gap-2"
+              onSubmit={(e) => {
+                e.preventDefault();
+                saveName();
+              }}
+            >
+              <Input
+                value={nameDraft}
+                onChange={(e) => setNameDraft(e.target.value)}
+                placeholder="Ditt namn"
+                maxLength={40}
+                className="rounded-2xl"
+                onBlur={() => saveName()}
+                data-testid="profile-name-input"
+              />
+              <Button type="submit" className="rounded-2xl" data-testid="profile-name-save">
+                {savedName ? <Check size={16} /> : "Spara"}
+              </Button>
+            </form>
+          </CollapsibleSection>
         </MyFloveWide>
 
         {/* Barn – valfritt, driver barnvyn och kalendern */}
-        <MyFloveWide className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft">
-          <div className="flex items-center gap-2">
-            <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-              <Baby size={18} />
-            </span>
-            <div>
-              <h2 className="text-base font-semibold text-ink">Mina barn</h2>
-              <p className="text-xs text-muted-foreground">
-                Valfritt – lägg till barnens namn så får de en egen plats i appen.
-              </p>
-            </div>
-          </div>
-
-          {myChildren.length > 0 && (
-            <ul className="mt-3 space-y-2" data-testid="profile-children-list">
-              {myChildren.map((child) => (
-                <li
-                  key={child.id}
-                  className="flex items-center gap-2 rounded-2xl border border-border/50 bg-background/60 px-3 py-2"
-                >
-                  <span
-                    className="h-3 w-3 shrink-0 rounded-full"
-                    style={{ background: child.color }}
-                    aria-hidden
-                  />
-                  {editingChildId === child.id ? (
-                    <form
-                      className="flex flex-1 items-center gap-2"
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        void saveChildName(child);
-                      }}
-                    >
-                      <Input
-                        autoFocus
-                        value={childDraft}
-                        onChange={(e) => setChildDraft(e.target.value)}
-                        maxLength={40}
-                        className="h-8 rounded-xl"
-                      />
-                      <Button type="submit" size="sm" variant="ghost" aria-label="Spara namn">
-                        <Check size={16} />
-                      </Button>
-                    </form>
-                  ) : (
-                    <>
-                      <span className="flex-1 text-sm font-medium text-ink">{child.name}</span>
-                      <Button
-                        type="button"
-                        size="sm"
-                        variant="ghost"
-                        aria-label={`Byt namn på ${child.name}`}
-                        onClick={() => startEditChild(child)}
-                      >
-                        <Pencil size={14} />
-                      </Button>
-                      <Button
-                        type="button"
-                        size="sm"
-                        variant="ghost"
-                        aria-label={`Ta bort ${child.name}`}
-                        onClick={() => {
-                          void deleteChild(child.id).then(() =>
-                            toast({
-                              title: "Borttaget",
-                              description: `${child.name} är borttagen.`,
-                            }),
-                          );
+        <MyFloveWide>
+          <CollapsibleSection
+            id="profile-children"
+            title="Mina barn"
+            headingClassName="text-base font-semibold"
+            description="Valfritt – lägg till barnens namn så får de en egen plats i appen."
+            className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+          >
+            {myChildren.length > 0 && (
+              <ul className="mt-3 space-y-2" data-testid="profile-children-list">
+                {myChildren.map((child) => (
+                  <li
+                    key={child.id}
+                    className="flex items-center gap-2 rounded-2xl border border-border/50 bg-background/60 px-3 py-2"
+                  >
+                    <span
+                      className="h-3 w-3 shrink-0 rounded-full"
+                      style={{ background: child.color }}
+                      aria-hidden
+                    />
+                    {editingChildId === child.id ? (
+                      <form
+                        className="flex flex-1 items-center gap-2"
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          void saveChildName(child);
                         }}
                       >
-                        <Trash2 size={14} />
-                      </Button>
-                    </>
-                  )}
-                </li>
-              ))}
-            </ul>
-          )}
+                        <Input
+                          autoFocus
+                          value={childDraft}
+                          onChange={(e) => setChildDraft(e.target.value)}
+                          maxLength={40}
+                          className="h-8 rounded-xl"
+                        />
+                        <Button type="submit" size="sm" variant="ghost" aria-label="Spara namn">
+                          <Check size={16} />
+                        </Button>
+                      </form>
+                    ) : (
+                      <>
+                        <span className="flex-1 text-sm font-medium text-ink">{child.name}</span>
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="ghost"
+                          aria-label={`Byt namn på ${child.name}`}
+                          onClick={() => startEditChild(child)}
+                        >
+                          <Pencil size={14} />
+                        </Button>
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="ghost"
+                          aria-label={`Ta bort ${child.name}`}
+                          onClick={() => {
+                            void deleteChild(child.id).then(() =>
+                              toast({
+                                title: "Borttaget",
+                                description: `${child.name} är borttagen.`,
+                              }),
+                            );
+                          }}
+                        >
+                          <Trash2 size={14} />
+                        </Button>
+                      </>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
 
-          <form
-            className="mt-3 space-y-2"
-            onSubmit={(e) => {
-              e.preventDefault();
-              void addChildHandler();
-            }}
-          >
-            <div className="flex items-center gap-2">
-              <Input
-                value={newChildName}
-                onChange={(e) => setNewChildName(e.target.value)}
-                placeholder="Barnets namn"
-                maxLength={40}
-                className="rounded-2xl"
-                data-testid="profile-child-input"
-              />
-              <Button
-                type="submit"
-                className="rounded-2xl"
-                disabled={!newChildName.trim() || addingChild}
-                data-testid="profile-child-add"
-              >
-                <Plus size={16} className="mr-1" /> Lägg till
-              </Button>
-            </div>
-            <div className="flex items-center gap-1.5" role="radiogroup" aria-label="Färg">
-              {CHILD_COLORS.map((color) => (
-                <button
-                  key={color}
-                  type="button"
-                  role="radio"
-                  aria-checked={newChildColor === color}
-                  aria-label={`Färg ${color}`}
-                  onClick={() => setNewChildColor(color)}
-                  className={`h-6 w-6 rounded-full border-2 transition ${
-                    newChildColor === color ? "border-ink scale-110" : "border-transparent"
-                  }`}
-                  style={{ background: color }}
+            <form
+              className="mt-3 space-y-2"
+              onSubmit={(e) => {
+                e.preventDefault();
+                void addChildHandler();
+              }}
+            >
+              <div className="flex items-center gap-2">
+                <Input
+                  value={newChildName}
+                  onChange={(e) => setNewChildName(e.target.value)}
+                  placeholder="Barnets namn"
+                  maxLength={40}
+                  className="rounded-2xl"
+                  data-testid="profile-child-input"
                 />
-              ))}
-            </div>
-          </form>
+                <Button
+                  type="submit"
+                  className="rounded-2xl"
+                  disabled={!newChildName.trim() || addingChild}
+                  data-testid="profile-child-add"
+                >
+                  <Plus size={16} className="mr-1" /> Lägg till
+                </Button>
+              </div>
+              <div className="flex items-center gap-1.5" role="radiogroup" aria-label="Färg">
+                {CHILD_COLORS.map((color) => (
+                  <button
+                    key={color}
+                    type="button"
+                    role="radio"
+                    aria-checked={newChildColor === color}
+                    aria-label={`Färg ${color}`}
+                    onClick={() => setNewChildColor(color)}
+                    className={`h-6 w-6 rounded-full border-2 transition ${
+                      newChildColor === color ? "border-ink scale-110" : "border-transparent"
+                    }`}
+                    style={{ background: color }}
+                  />
+                ))}
+              </div>
+            </form>
+          </CollapsibleSection>
         </MyFloveWide>
 
         {/* Språk – svenska eller engelska, byts direkt */}
-        <MyFloveWide className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft">
-          <div className="flex items-center gap-2">
-            <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-              <Languages size={18} />
-            </span>
-            <div>
-              <h2 className="text-base font-semibold text-ink">{t("Språk")}</h2>
-              <p className="text-xs text-muted-foreground">
-                {t("Appens språk – texterna byts direkt.")}
-              </p>
-            </div>
-          </div>
-          <div
-            className="mt-3 flex flex-wrap gap-2"
-            role="radiogroup"
-            aria-label={t("Välj språk för appen")}
+        <MyFloveWide>
+          <CollapsibleSection
+            id="profile-language"
+            title={t("Språk")}
+            headingClassName="text-base font-semibold"
+            description={t("Appens språk – texterna byts direkt.")}
+            className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
           >
-            {LANGUAGES.map((l) => (
-              <button
-                key={l.value}
-                type="button"
-                role="radio"
-                aria-checked={lang === l.value}
-                onClick={() => setLang(l.value)}
-                data-testid={`profile-lang-${l.value}`}
-                className={`flex items-center gap-2 rounded-2xl border px-4 py-2 text-sm font-medium transition ${
-                  lang === l.value
-                    ? "border-primary bg-primary/10 text-primary"
-                    : "border-border/60 bg-background/60 text-ink hover:bg-muted/40"
-                }`}
-              >
-                <span aria-hidden>{l.flag}</span> {l.label}
-                {lang === l.value && <Check size={14} />}
-              </button>
-            ))}
-          </div>
+            <div
+              className="mt-3 flex flex-wrap gap-2"
+              role="radiogroup"
+              aria-label={t("Välj språk för appen")}
+            >
+              {LANGUAGES.map((l) => (
+                <button
+                  key={l.value}
+                  type="button"
+                  role="radio"
+                  aria-checked={lang === l.value}
+                  onClick={() => setLang(l.value)}
+                  data-testid={`profile-lang-${l.value}`}
+                  className={`flex items-center gap-2 rounded-2xl border px-4 py-2 text-sm font-medium transition ${
+                    lang === l.value
+                      ? "border-primary bg-primary/10 text-primary"
+                      : "border-border/60 bg-background/60 text-ink hover:bg-muted/40"
+                  }`}
+                >
+                  <span aria-hidden>{l.flag}</span> {l.label}
+                  {lang === l.value && <Check size={14} />}
+                </button>
+              ))}
+            </div>
+          </CollapsibleSection>
         </MyFloveWide>
 
         {/* Menscykel – helt frivillig, avstängd tills användaren svarar ja */}
-        <MyFloveWide className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft">
-          <div className="flex items-center gap-2">
-            <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-              <Flower2 size={18} />
-            </span>
-            <div>
-              <h2 className="text-base font-semibold text-ink">
-                {t("Vill du använda menscykel i MyFlove?")}
-              </h2>
-              <p className="text-xs text-muted-foreground">
-                {t("Helt frivilligt. Väljer du Nej visas ingenting om menscykel och Flow tar inte hänsyn till det.")}
-              </p>
-            </div>
-          </div>
-          <div
-            className="mt-3 flex flex-wrap gap-2"
-            role="radiogroup"
-            aria-label={t("Vill du använda menscykel i MyFlove?")}
+        <MyFloveWide>
+          <CollapsibleSection
+            id="profile-cycle"
+            title={t("Vill du använda menscykel i MyFlove?")}
+            headingClassName="text-base font-semibold"
+            description={t(
+              "Helt frivilligt. Väljer du Nej visas ingenting om menscykel och Flow tar inte hänsyn till det.",
+            )}
+            className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
           >
-            {[true, false].map((v) => (
-              <button
-                key={String(v)}
-                type="button"
-                role="radio"
-                aria-checked={cycle.answered && cycle.enabled === v}
-                onClick={() => setCycleEnabled(v)}
-                data-testid={`profile-cycle-${v ? "yes" : "no"}`}
-                className={`flex items-center gap-2 rounded-2xl border px-4 py-2 text-sm font-medium transition ${
-                  cycle.answered && cycle.enabled === v
-                    ? "border-primary bg-primary/10 text-primary"
-                    : "border-border/60 bg-background/60 text-ink hover:bg-muted/40"
-                }`}
-              >
-                {v ? t("Ja") : t("Nej")}
-                {cycle.answered && cycle.enabled === v && <Check size={14} />}
-              </button>
-            ))}
-          </div>
-          {cycle.enabled && (
-            <p className="mt-2 text-xs text-muted-foreground">
-              {t("Du hittar menscykeln under Mitt batteri.")}
-            </p>
-          )}
+            <div
+              className="mt-3 flex flex-wrap gap-2"
+              role="radiogroup"
+              aria-label={t("Vill du använda menscykel i MyFlove?")}
+            >
+              {[true, false].map((v) => (
+                <button
+                  key={String(v)}
+                  type="button"
+                  role="radio"
+                  aria-checked={cycle.answered && cycle.enabled === v}
+                  onClick={() => setCycleEnabled(v)}
+                  data-testid={`profile-cycle-${v ? "yes" : "no"}`}
+                  className={`flex items-center gap-2 rounded-2xl border px-4 py-2 text-sm font-medium transition ${
+                    cycle.answered && cycle.enabled === v
+                      ? "border-primary bg-primary/10 text-primary"
+                      : "border-border/60 bg-background/60 text-ink hover:bg-muted/40"
+                  }`}
+                >
+                  {v ? t("Ja") : t("Nej")}
+                  {cycle.answered && cycle.enabled === v && <Check size={14} />}
+                </button>
+              ))}
+            </div>
+            {cycle.enabled && (
+              <p className="mt-2 text-xs text-muted-foreground">
+                {t("Du hittar menscykeln under Mitt batteri.")}
+              </p>
+            )}
+          </CollapsibleSection>
         </MyFloveWide>
 
         {/* Livsprofilen bor nu här – en enda profil, inga dubbla vägar */}
-        <MyFloveWide className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft">
-          <LifeProfileSections />
+        <MyFloveWide>
+          <CollapsibleSection
+            id="profile-life-profile"
+            title="Min livsprofil"
+            headingClassName="text-base font-semibold"
+            className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+          >
+            <LifeProfileSections />
+          </CollapsibleSection>
         </MyFloveWide>
       </MyFlovePageGrid>
     </Layout>

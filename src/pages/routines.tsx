@@ -290,6 +290,7 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
               {sorted.map((r) => (
                 <MyFloveBlock
                   key={r.id}
+                  collapseId={`routine-${r.id}`}
                   title={r.title}
                   icon={Clock}
                   surface={r.enabled ? undefined : "plain"}

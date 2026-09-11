@@ -16,6 +16,7 @@ import { ArrowRight, ChevronDown, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MyFloveIcon, type MyFloveTone } from "@/components/myflove";
 import { areaProps, type AreaId } from "@/lib/areas";
+import { setCollapsed, useCollapsible, useSectionId } from "@/lib/collapse-store";
 
 const SURFACE: Record<MyFloveTone, string> = {
   lavender: "bg-lavender/60",
@@ -86,8 +87,10 @@ export function ExpandableBlock({
   "data-testid": dataTestId,
   children,
 }: ExpandableBlockProps) {
-  const [open, setOpen] = React.useState(false);
   const ariaLabel = titleText ?? (typeof title === "string" ? title : "block");
+  const sectionId = useSectionId(href ? null : `expandable::${ariaLabel}`);
+  const { collapsed, toggle: toggleCollapsed } = useCollapsible(sectionId, true);
+  const open = !collapsed;
   const sectionRef = React.useRef<HTMLElement | null>(null);
   const triggerRef = React.useRef<HTMLButtonElement | null>(null);
 
@@ -97,7 +100,9 @@ export function ExpandableBlock({
   React.useEffect(() => {
     if (!open) return;
     const containsNavigation = sectionRef.current?.querySelector("a[href]") != null;
-    const onPop = () => setOpen(false);
+    const onPop = () => {
+      if (sectionId) setCollapsed(sectionId, true, true);
+    };
     const openedPath = window.location.pathname;
 
     // Menykort med riktiga länkar ska följa routerns vanliga historik. Ett
@@ -110,7 +115,7 @@ export function ExpandableBlock({
     }
 
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape" && sectionId) setCollapsed(sectionId, true, true);
     };
     window.addEventListener("keydown", onKey);
 
@@ -128,20 +133,16 @@ export function ExpandableBlock({
         window.history.back();
       }
     };
-  }, [open, ariaLabel]);
+  }, [open, ariaLabel, sectionId]);
 
   const toggle = () => {
-    setOpen((prev) => {
-      const next = !prev;
-      if (!next) {
-        // Kollaps: håll kvar kortet i vy så att sidan inte hoppar.
-        requestAnimationFrame(() => {
-          triggerRef.current?.focus({ preventScroll: true });
-          sectionRef.current?.scrollIntoView({ block: "nearest" });
-        });
-      }
-      return next;
-    });
+    if (open) {
+      requestAnimationFrame(() => {
+        triggerRef.current?.focus({ preventScroll: true });
+        sectionRef.current?.scrollIntoView({ block: "nearest" });
+      });
+    }
+    toggleCollapsed();
   };
 
   /**

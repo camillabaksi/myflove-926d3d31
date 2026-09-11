@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-11 – Fäll ihop block i hela appen
+
+- Alla gemensamma MyFlove-block kan nu minimeras och öppnas på appens olika sidor.
+- Öppet eller minimerat läge sparas per sida och block på den aktuella enheten.
+- Större specialbyggda block har fått samma tydliga pil och sparade beteende.
+
 ## 2026-09-11 – Fäll ihop block på Hem
 
 - Flow, de tre huvudstegen, nästa rimliga steg, kvällschecken och övriga informationskort på Hem kan nu minimeras och öppnas igen var för sig.

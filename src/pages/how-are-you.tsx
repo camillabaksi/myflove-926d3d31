@@ -11,6 +11,7 @@ import { useCycle } from "@/hooks/use-cycle";
 import { ORK_LEVELS, orkFromValue10 } from "@/lib/ork";
 import type { ImpactKind } from "@/lib/impact-checkin";
 import { track } from "@/lib/analytics";
+import CollapsibleSection from "@/components/collapsible-section";
 
 /** Ett kort urval av befintliga påverkanstyper – resten finns kvar i Mitt batteri. */
 const QUICK_IMPACTS: { id: ImpactKind; label: string; emoji: string }[] = [
@@ -44,7 +45,10 @@ export default function HowAreYou() {
   }, []);
 
   const options = cycle?.enabled
-    ? [...QUICK_IMPACTS, { id: "halsa" as ImpactKind, label: "Min cykel påverkar mig", emoji: "🌸" }]
+    ? [
+        ...QUICK_IMPACTS,
+        { id: "halsa" as ImpactKind, label: "Min cykel påverkar mig", emoji: "🌸" },
+      ]
     : QUICK_IMPACTS;
 
   const chooseOrk = (value10: number) => {
@@ -82,13 +86,16 @@ export default function HowAreYou() {
         </MyFloveWide>
 
         <MyFloveWide className="min-w-0">
-          <section
-            aria-label={t("Hur mycket ork har du idag?")}
+          <CollapsibleSection
+            id="how-are-you-energy"
+            title={
+              <span>
+                <span aria-hidden>🔋</span> {t("Hur mycket ork har du idag?")}
+              </span>
+            }
+            headingClassName="text-base font-semibold"
             className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
           >
-            <h2 className="text-base font-semibold text-ink">
-              <span aria-hidden>🔋</span> {t("Hur mycket ork har du idag?")}
-            </h2>
             <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
               {ORK_LEVELS.map((level) => (
                 <button
@@ -107,20 +114,21 @@ export default function HowAreYou() {
                 </button>
               ))}
             </div>
-          </section>
+          </CollapsibleSection>
         </MyFloveWide>
 
         <MyFloveWide className="min-w-0">
-          <section
-            aria-label={t("Vad påverkar dig idag?")}
+          <CollapsibleSection
+            id="how-are-you-impact"
+            title={
+              <span>
+                <span aria-hidden>🌿</span> {t("Vad påverkar dig idag?")}
+              </span>
+            }
+            headingClassName="text-base font-semibold"
+            description={t("Du kan välja flera – och du behöver inte välja något alls.")}
             className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
           >
-            <h2 className="text-base font-semibold text-ink">
-              <span aria-hidden>🌿</span> {t("Vad påverkar dig idag?")}
-            </h2>
-            <p className="mt-0.5 text-xs text-muted-foreground">
-              {t("Du kan välja flera – och du behöver inte välja något alls.")}
-            </p>
             <div className="mt-3 flex flex-wrap gap-2">
               {options.map((option) => (
                 <button
@@ -138,7 +146,7 @@ export default function HowAreYou() {
                 </button>
               ))}
             </div>
-          </section>
+          </CollapsibleSection>
         </MyFloveWide>
 
         <MyFloveWide className="min-w-0 space-y-3">
