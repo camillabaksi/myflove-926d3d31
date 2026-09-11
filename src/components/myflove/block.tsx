@@ -12,7 +12,7 @@
 import * as React from "react";
 import { ChevronDown, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useCollapsible } from "@/lib/collapse-store";
+import { useCollapsible, useSectionId } from "@/lib/collapse-store";
 import { areaProps, type AreaId } from "@/lib/areas";
 import { MyFloveIcon, type MyFloveTone } from "@/components/myflove";
 
@@ -69,7 +69,7 @@ export function MyFloveBlock({
   action,
   status,
   footer,
-  collapsible = false,
+  collapsible = true,
   collapseId,
   defaultCollapsed = false,
   surface,
@@ -81,7 +81,8 @@ export function MyFloveBlock({
   children,
 }: MyFloveBlockProps) {
   const key = collapseId ?? (typeof title === "string" ? title : "block");
-  const storeId = collapsible ? `myflove-block::${key.slice(0, 60)}` : null;
+  const sectionId = useSectionId(collapsible ? `myflove-block::${key}` : null);
+  const storeId = collapsible ? sectionId : null;
   const { collapsed, toggle } = useCollapsible(storeId, defaultCollapsed);
 
   const heading = (

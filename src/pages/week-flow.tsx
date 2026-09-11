@@ -12,6 +12,7 @@ import {
   type FlowUsageKind,
 } from "@/hooks/use-daily-flow";
 import { estimateFriction } from "@/lib/daily-flow";
+import CollapsibleSection from "@/components/collapsible-section";
 
 const WEEK = 7 * 86_400_000;
 
@@ -83,18 +84,26 @@ export default function WeekFlowPage() {
               </p>
             </header>
 
-            <section className="surface-card p-5 space-y-2">
-              <h2 className="font-semibold text-ink">Din vecka</h2>
+            <CollapsibleSection
+              title="Din vecka"
+              id="week-summary"
+              headingClassName="text-base font-semibold"
+              className="surface-card p-5"
+            >
               <ul className="text-sm text-muted-foreground space-y-1">
                 <li>✓ {doneCount} saker genomförda</li>
                 <li>↻ {snoozedTasks.length} omplanerade</li>
                 <li>⚡ {capturedCount} saker fångade i QuickFlow</li>
                 <li>🗑️ {removedCount} saker som hanterades eller togs bort</li>
               </ul>
-            </section>
+            </CollapsibleSection>
 
-            <section className="surface-card p-5 space-y-2">
-              <h2 className="font-semibold text-ink">Vad hjälpte dig mest?</h2>
+            <CollapsibleSection
+              title="Vad hjälpte dig mest?"
+              id="week-helped-most"
+              headingClassName="text-base font-semibold"
+              className="surface-card p-5"
+            >
               {usageRows.length === 0 ? (
                 <p className="text-sm text-muted-foreground">
                   Ännu för lite data. Jag börjar lära mig hur du fungerar bäst.
@@ -108,11 +117,15 @@ export default function WeekFlowPage() {
                   ))}
                 </ul>
               )}
-            </section>
+            </CollapsibleSection>
 
             {patterns.length > 0 && (
-              <section className="surface-card p-5 space-y-2">
-                <h2 className="font-semibold text-ink">Jag börjar lära mig hur du fungerar bäst</h2>
+              <CollapsibleSection
+                title="Jag börjar lära mig hur du fungerar bäst"
+                id="week-patterns"
+                headingClassName="text-base font-semibold"
+                className="surface-card p-5"
+              >
                 <ul className="text-sm text-muted-foreground space-y-1">
                   {patterns.map((p) => (
                     <li key={p}>· {p}</li>
@@ -121,7 +134,7 @@ export default function WeekFlowPage() {
                 <p className="text-xs text-muted-foreground/80">
                   Det här är observationer från din egen användning – inget annat.
                 </p>
-              </section>
+              </CollapsibleSection>
             )}
           </div>
         </MyFloveWide>

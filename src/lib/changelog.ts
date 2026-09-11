@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-11";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Fäll ihop block i hela appen",
+    items: [
+      "Alla gemensamma MyFlove-block kan nu minimeras och öppnas på appens olika sidor (2026-09-11)",
+      "Öppet eller minimerat läge sparas per sida och block på den aktuella enheten (2026-09-11)",
+      "Större specialbyggda block använder samma tydliga pil och sparade beteende (2026-09-11)",
+    ],
+  },
+  {
     title: "Fäll ihop block på Hem",
     items: [
       "Flow, de tre huvudstegen, nästa rimliga steg, kvällschecken och övriga informationskort på Hem kan minimeras var för sig (2026-09-11)",
