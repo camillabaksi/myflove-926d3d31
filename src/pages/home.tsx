@@ -38,7 +38,6 @@ import { track } from "@/lib/analytics";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { useFeatureUsage, type FeatureId } from "@/lib/feature-usage";
 import { orkFromValue10 } from "@/lib/ork";
-import { heroGradient } from "@/lib/hero-gradient";
 import WeekReviewCard from "@/components/week-review-card";
 import FlowHomeCard from "@/components/flow/flow-home-card";
 import JourneySteps from "@/components/journey/journey-steps";
@@ -171,8 +170,9 @@ export default function Home() {
   const shows = (id: HomeBlockId) => visible.includes(id);
   const pos = (id: HomeBlockId) => ({ order: visible.indexOf(id) + 10 });
 
-  const gradient = heroGradient();
   const awayForDays = lastVisit ? Date.now() - lastVisit >= 3 * 24 * 60 * 60 * 1000 : false;
+  const dayLoad = todayEntries.length + openItems.length;
+  const glowLevel = dayLoad <= 3 ? "light" : dayLoad <= 7 ? "busy" : "overloaded";
 
   return (
     <Layout>
@@ -186,95 +186,211 @@ export default function Home() {
       />
 
       <MyFlovePageGrid className="gap-5 xl:grid-cols-6">
-        {/* Hero – personligt men litet. */}
-        <MyFloveWide
-          className="relative overflow-hidden rounded-3xl border border-border/60 p-5 shadow-lifted pop-in"
-          style={{ background: gradient }}
-        >
-          <div
-            data-npf="optional"
-            className="pointer-events-none absolute -top-16 -right-12 h-32 w-32 rounded-full bg-blush opacity-50 blur-md"
-          />
-          <div
-            className="pointer-events-none absolute right-2 top-0 select-none sm:right-5"
-            aria-hidden
-          >
-            <FlowMascot size="md" mood="calm" className="flow-alive" alt="" />
-          </div>
-
-          <div className="relative min-w-0 pr-24 space-y-3">
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-ink">
-                {name ? `${t("Hej")} ${name}` : t("Hej")}
-              </h1>
-              <p className="mt-1 max-w-xl text-sm leading-relaxed text-muted-foreground">
-                {awayForDays
-                  ? t("Vad skönt att se dig. Vi tar det lugnt idag, oavsett hur dagarna har varit.")
-                  : t("Vi tar reda på vad som känns rimligt idag.")}
-              </p>
-            </div>
-            <div className="flex w-fit items-center gap-3 rounded-2xl border border-border/50 bg-card/55 px-4 py-3">
-              <BatteryMedium className="h-8 w-8 shrink-0 text-primary" aria-hidden />
-              <div>
-                <span className="block text-xs font-medium text-muted-foreground">
-                  {t("Mitt batteri")}
-                </span>
-                <span className="block text-2xl font-bold tabular-nums text-ink">{battery}%</span>
+        <MyFloveWide className="home-ambient-shell" data-glow-level={glowLevel}>
+          <div className="home-ambient-glow" aria-hidden />
+          <section className="home-main-surface pop-in" aria-label={t("Din lugna start")}>
+            <header className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4">
+              <div className="min-w-0">
+                <p className="mb-1 text-xs font-semibold uppercase text-primary">
+                  {t("Din dag, i din takt")}
+                </p>
+                <h1 className="truncate font-display text-2xl font-bold text-ink sm:text-3xl">
+                  {name ? `${t("Hej")} ${name}` : t("Hej")}
+                </h1>
+                <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">
+                  {awayForDays
+                    ? t(
+                        "Vad skönt att se dig. Vi tar det lugnt idag, oavsett hur dagarna har varit.",
+                      )
+                    : t("Vi tar reda på vad som känns rimligt idag.")}
+                </p>
+                {editingName ? (
+                  <form
+                    onSubmit={(event) => {
+                      event.preventDefault();
+                      setName(nameDraft);
+                      setEditingName(false);
+                    }}
+                    className="mt-3 flex flex-wrap items-center gap-2"
+                  >
+                    <input
+                      autoFocus
+                      value={nameDraft}
+                      onChange={(event) => setNameDraft(event.target.value)}
+                      placeholder={t("Vad ska jag kalla dig?")}
+                      className="min-w-0 rounded-full border border-border bg-background px-3 py-1.5 text-sm"
+                      maxLength={32}
+                    />
+                    <Button type="submit" size="sm">
+                      {t("Spara")}
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        setNameDraft(name);
+                        setEditingName(false);
+                      }}
+                    >
+                      {t("Avbryt")}
+                    </Button>
+                  </form>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setNameDraft(name);
+                      setEditingName(true);
+                    }}
+                    className="mt-2 text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground"
+                  >
+                    {name ? t("Byt namn") : t("Vad ska jag kalla dig?")}
+                  </button>
+                )}
               </div>
+              <div className="pointer-events-none shrink-0 select-none" aria-hidden>
+                <FlowMascot size="md" mood="calm" className="flow-alive" alt="" />
+              </div>
+            </header>
+
+            <div
+              className="mt-5 grid grid-cols-3 gap-2 sm:gap-3"
+              data-testid="home-widgets"
+              aria-label={t("Vad vill du göra just nu?")}
+            >
+              {featureCards.map((card) => {
+                const Icon = card.icon;
+                const content = (
+                  <>
+                    <span className="grid h-10 w-10 place-items-center rounded-2xl bg-secondary text-primary">
+                      <Icon className="h-5 w-5" aria-hidden />
+                    </span>
+                    <span className="text-xs font-semibold text-ink sm:text-sm">{card.title}</span>
+                  </>
+                );
+                return card.id === "quickflow" ? (
+                  <button
+                    key={card.id}
+                    type="button"
+                    onClick={() => {
+                      recordFeature("quickflow");
+                      openQuickflow();
+                    }}
+                    data-testid="home-widget-quickflow"
+                    className="home-quick-action"
+                  >
+                    {content}
+                  </button>
+                ) : (
+                  <Link
+                    key={card.id}
+                    href={card.href}
+                    onClick={() => {
+                      recordFeature(card.id);
+                      track("home_widget_opened", { source: card.id });
+                    }}
+                    data-testid={`home-widget-${card.id}`}
+                    className="home-quick-action"
+                  >
+                    {content}
+                  </Link>
+                );
+              })}
             </div>
-            {editingName ? (
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setName(nameDraft);
-                  setEditingName(false);
-                }}
-                className="flex flex-wrap items-center gap-2 pt-1"
-              >
-                <input
-                  autoFocus
-                  value={nameDraft}
-                  onChange={(e) => setNameDraft(e.target.value)}
-                  placeholder={t("Vad ska jag kalla dig?")}
-                  className="rounded-full bg-background/80 border border-border px-3 py-1 text-sm min-w-0"
-                  maxLength={32}
-                />
-                <button type="submit" className="text-xs font-medium text-primary hover:underline">
-                  {t("Spara")}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setNameDraft(name);
-                    setEditingName(false);
-                  }}
-                  className="text-xs text-muted-foreground hover:underline"
-                >
-                  {t("Avbryt")}
-                </button>
-              </form>
-            ) : (
-              <button
-                type="button"
-                onClick={() => {
-                  setNameDraft(name);
-                  setEditingName(true);
-                }}
-                className="text-xs text-muted-foreground/80 hover:text-foreground underline underline-offset-2"
-              >
-                {name ? t("Byt namn") : t("Vad ska jag kalla dig?")}
-              </button>
+            {adaptiveNote && (
+              <p className="mt-2 text-center text-xs text-muted-foreground">{adaptiveNote}</p>
             )}
-          </div>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={() => setCalmMode("acute")}
-            className="absolute bottom-4 right-4 rounded-full border border-border/60 bg-card/60 text-xs text-muted-foreground hover:bg-card hover:text-foreground"
-          >
-            {t("Akut Lugn")}
-          </Button>
+
+            <div className="mt-5 grid gap-4 md:grid-cols-5">
+              <CollapsibleSection
+                id="home-battery-summary"
+                title={t("Ditt batteri")}
+                data-testid="home-recovery"
+                className="home-bento-card md:col-span-2"
+                headingClassName="text-base font-semibold text-ink"
+              >
+                <div className="flex items-end justify-between gap-3">
+                  <div>
+                    <span className="block text-4xl font-bold tabular-nums text-ink">
+                      {battery}%
+                    </span>
+                    <p className="mt-1 text-xs text-muted-foreground">{batteryLine}</p>
+                  </div>
+                  <BatteryMedium
+                    className="h-10 w-10 shrink-0 text-primary"
+                    aria-hidden
+                    strokeWidth={1.75}
+                  />
+                </div>
+                <progress
+                  className="home-battery-progress"
+                  max={100}
+                  value={battery}
+                  aria-label={`${t("Ditt batteri")} ${battery}%`}
+                />
+                <Link
+                  href="/mitt-batteri"
+                  onClick={() => track("home_widget_opened", { source: "logga" })}
+                  className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+                >
+                  {energyValue != null ? t("Tips för mer energi") : t("Logga energi & mående")}{" "}
+                  <ArrowRight size={14} />
+                </Link>
+              </CollapsibleSection>
+
+              <CollapsibleSection
+                id="home-today-summary"
+                title={t("Idag")}
+                actions={
+                  <Link
+                    href="/idag"
+                    className="shrink-0 text-xs font-medium text-primary hover:underline"
+                  >
+                    {t("Visa allt")}
+                  </Link>
+                }
+                data-testid="home-today"
+                className="home-bento-card md:col-span-3"
+                headingClassName="text-base font-semibold text-ink"
+              >
+                {todayEntries.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">
+                    {t("Inget inlagt för idag ännu. Det är också helt okej.")}
+                  </p>
+                ) : (
+                  <ul>
+                    {todayEntries.slice(0, 3).map((entry) => (
+                      <li key={entry.id} className="border-b border-border/50 last:border-b-0">
+                        <Link
+                          href="/idag"
+                          className="grid grid-cols-[3rem_minmax(0,1fr)_auto] items-center gap-2 py-2.5"
+                        >
+                          <span className="text-xs font-semibold tabular-nums text-muted-foreground">
+                            {entry.time ?? "–"}
+                          </span>
+                          <span className="truncate text-sm font-medium text-ink">
+                            {entry.title}
+                          </span>
+                          <ChevronRight size={16} className="shrink-0 text-muted-foreground" />
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </CollapsibleSection>
+            </div>
+
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => setCalmMode("acute")}
+              className="mt-4 rounded-full border border-border bg-background text-xs text-muted-foreground"
+            >
+              {t("Akut Lugn")}
+            </Button>
+          </section>
         </MyFloveWide>
 
         <MyFloveWide style={{ order: 0 }} className="min-w-0">
@@ -329,150 +445,6 @@ export default function Home() {
             headingClassName="text-base font-semibold text-ink"
           >
             <div className="grid gap-4">
-              {/* Tre huvudkort: Quickflow, Batteriet, Kalendern.
-            Alla börjar i samma ordning – den anpassas först när MyFlove sett
-
-            tillräckligt mycket av din egen användning. */}
-              <MyFloveWide style={{ order: 1 }} className="min-w-0">
-                <div
-                  className="grid grid-cols-3 gap-2.5 sm:gap-4"
-                  data-testid="home-widgets"
-                  aria-label={t("Vad vill du göra just nu?")}
-                >
-                  {featureCards.map((card) =>
-                    card.id === "quickflow" ? (
-                      <button
-                        key={card.id}
-                        type="button"
-                        onClick={() => {
-                          recordFeature("quickflow");
-                          openQuickflow();
-                        }}
-                        data-testid="home-widget-quickflow"
-                        className="group flex min-h-[104px] flex-col items-center justify-center gap-1.5 rounded-3xl border border-border/60 bg-card p-3 text-center shadow-soft transition hover:shadow-lifted"
-                      >
-                        <card.icon className="h-7 w-7 text-primary" aria-hidden />
-                        <span className="text-sm font-semibold text-ink">{card.title}</span>
-                        <span className="text-xs text-muted-foreground leading-snug">
-                          {card.subtitle}
-                        </span>
-                      </button>
-                    ) : (
-                      <Link
-                        key={card.id}
-                        href={card.href}
-                        onClick={() => {
-                          recordFeature(card.id);
-                          track("home_widget_opened", { source: card.id });
-                        }}
-                        data-testid={`home-widget-${card.id}`}
-                        className="flex min-h-[104px] flex-col items-center justify-center gap-1.5 rounded-3xl border border-border/60 bg-card p-3 text-center shadow-soft transition hover:shadow-lifted"
-                      >
-                        <card.icon className="h-7 w-7 text-primary" aria-hidden />
-                        <span className="text-sm font-semibold text-ink">{card.title}</span>
-                        <span className="text-xs text-muted-foreground leading-snug">
-                          {card.subtitle}
-                        </span>
-                      </Link>
-                    ),
-                  )}
-                </div>
-              </MyFloveWide>
-
-              {/* Ditt batteri – stort, lugnt, som i mockupen. */}
-              <MyFloveWide style={{ order: 2 }} className="min-w-0">
-                <CollapsibleSection
-                  id="home-battery-summary"
-                  title={t("Ditt batteri")}
-                  data-testid="home-recovery"
-                  className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
-                  headingClassName="text-base font-semibold text-ink"
-                >
-                  <div className="mt-3 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4">
-                    <div className="flex items-center gap-3 rounded-2xl bg-lavender/30 px-4 py-3">
-                      <BatteryMedium
-                        className="h-10 w-10 text-primary"
-                        aria-hidden
-                        strokeWidth={1.75}
-                      />
-                      <div>
-                        <span className="block text-3xl font-bold tabular-nums text-ink leading-none">
-                          {battery}%
-                        </span>
-                        <span className="mt-1 block text-sm text-muted-foreground">
-                          {t("Precis som det är just nu")}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-sm text-ink">
-                        {t("Du har")} {battery}% {t("energi")}
-                      </p>
-                      <p className="mt-0.5 text-xs text-muted-foreground">{batteryLine}</p>
-                    </div>
-                  </div>
-                  <Link
-                    href="/mitt-batteri"
-                    onClick={() => track("home_widget_opened", { source: "logga" })}
-                    className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
-                  >
-                    {energyValue != null ? t("Tips för mer energi") : t("Logga energi & mående")}{" "}
-                    <ArrowRight size={14} />
-                  </Link>
-                </CollapsibleSection>
-              </MyFloveWide>
-
-              {/* Idag – tider och saker, som i mockupen. */}
-              <MyFloveWide style={{ order: 3 }} className="min-w-0">
-                <CollapsibleSection
-                  id="home-today-summary"
-                  title={t("Idag")}
-                  actions={
-                    <Link
-                      href="/idag"
-                      className="shrink-0 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
-                    >
-                      {t("Visa dagsschema")} <ChevronRight size={15} />
-                    </Link>
-                  }
-                  data-testid="home-today"
-                  className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
-                  headingClassName="text-base font-semibold text-ink"
-                >
-                  {todayEntries.length === 0 ? (
-                    <p className="mt-3 text-sm text-muted-foreground">
-                      {t("Inget inlagt för idag ännu. Det är också helt okej.")}
-                    </p>
-                  ) : (
-                    <ul className="mt-2">
-                      {todayEntries.map((e) => (
-                        <li key={e.id}>
-                          <Link
-                            href="/idag"
-                            className="grid grid-cols-[3.2rem_minmax(0,1fr)_auto] items-center gap-3 border-b border-border/40 px-1 py-3 last:border-b-0"
-                          >
-                            <span className="shrink-0 text-sm font-semibold tabular-nums text-muted-foreground">
-                              {e.time ?? "–"}
-                            </span>
-                            <span className="min-w-0">
-                              <span className="block truncate text-sm font-semibold text-ink">
-                                {e.title}
-                              </span>
-                              {e.note && (
-                                <span className="block truncate text-xs text-muted-foreground">
-                                  {e.note}
-                                </span>
-                              )}
-                            </span>
-                            <ChevronRight size={18} className="shrink-0 text-muted-foreground" />
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </CollapsibleSection>
-              </MyFloveWide>
-
               {/* Från ditt huvud – senaste QuickFlow-tankarna. */}
               <MyFloveWide style={{ order: 4 }} className="min-w-0">
                 <CollapsibleSection

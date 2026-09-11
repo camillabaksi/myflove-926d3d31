@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-11 – Lugn, kapacitetsstyrd Hem-skärm
+
+- Hem har fått en centrerad vit huvudyta med hälsning, snabba val, batteri och dagens schema samlade i ett mjukt bento-rutnät.
+- Bakgrundens organiska glöd andas i 10 sekunder på lätta dagar, 12 sekunder på upptagna dagar och blir nästan stilla vid hög belastning.
+- Belastningen räknas från dagens befintliga kalenderposter och öppna Quickflow-saker; ingen ny personlig data samlas in.
+- Minskad rörelse och NPF-stillhet stänger av animationen helt.
+
 ## 2026-09-11 – Lugnare hemskärm
 
 - "Insikter" och "Din vardag" har tagits bort från hemskärmen.
