@@ -387,7 +387,12 @@ export default function Home() {
               </CollapsibleSection>
             </div>
 
+            <div className="mt-4" data-npf="optional">
+              <NextStepCard />
+            </div>
+
             <Button
+
               type="button"
               variant="ghost"
               size="sm"
