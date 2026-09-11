@@ -189,7 +189,9 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
         <MyFloveWide>
           <CollapsibleSection
             title={t("Hur känns det just nu?")}
-            help={t("Tryck på en nivå. Det tar två sekunder och styr hur mycket appen föreslår idag.")}
+            help={t(
+              "Tryck på en nivå. Det tar två sekunder och styr hur mycket appen föreslår idag.",
+            )}
             headingClassName="font-medium"
             description={t("Välj det som passar närmast – det finns inga fel svar.")}
             className="rounded-2xl bg-card border border-border p-5 shadow-sm"
@@ -293,7 +295,9 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
           <MyFloveWide span="wide">
             <CollapsibleSection
               title={t("Din vecka i snitt")}
-              help={t("Ser du ett mönster? Använd det för att lägga tunga saker när du brukar orka.")}
+              help={t(
+                "Ser du ett mönster? Använd det för att lägga tunga saker när du brukar orka.",
+              )}
               headingClassName="font-medium"
               description={t("Snittenergi per timme, senaste 7 dagarna.")}
               className="rounded-2xl bg-card border border-border p-5 shadow-sm"
@@ -325,8 +329,9 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
                     <div className="mt-4 flex items-start gap-2 rounded-xl bg-secondary/40 p-3 text-sm">
                       <Sparkles size={16} className="text-primary shrink-0 mt-0.5" />
                       <p className="leading-snug">
-                        {t("Du är oftast som mest på runt")} <strong>{peakHour.hour}</strong> {t("och lägre")}{" "}
-                        {t("kring")} <strong>{lowHour.hour}</strong>{t(". Planera det tunga när kroppen är med.")}
+                        {t("Du är oftast som mest på runt")} <strong>{peakHour.hour}</strong>{" "}
+                        {t("och lägre")} {t("kring")} <strong>{lowHour.hour}</strong>
+                        {t(". Planera det tunga när kroppen är med.")}
                       </p>
                     </div>
                   )}

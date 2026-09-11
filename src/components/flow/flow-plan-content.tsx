@@ -560,6 +560,5 @@ export function FlowPlanContent() {
         <DayAdjust />
       </MyFloveBlock>
     </MyFlovePageGrid>
-
   );
 }

@@ -2,12 +2,14 @@
 export const EN_CALENDAR: Record<string, string> = {
   // calendar.tsx – header & export/import
   Kalender: "Calendar",
-  "Översikt över dina dagar. Inga stressiga detaljer.": "An overview of your days. No stressful details.",
+  "Översikt över dina dagar. Inga stressiga detaljer.":
+    "An overview of your days. No stressful details.",
   "Importera från telefonens kalender": "Import from your phone's calendar",
   "Exportera till kalender (.ics)": "Export to calendar (.ics)",
   "Tips: exportera i telefonens kalender som .ics och importera här för att få in dina möten i MyFlove.":
     "Tip: export from your phone's calendar as .ics and import it here to get your meetings into MyFlove.",
-  "Välj minst ett barn – annars tar du bort händelsen.": "Choose at least one child – otherwise you'll delete the event.",
+  "Välj minst ett barn – annars tar du bort händelsen.":
+    "Choose at least one child – otherwise you'll delete the event.",
   "Uppdaterat vilka barn som ingår.": "Updated which children are included.",
   "Kunde inte spara ändringen. Försök igen.": "Couldn't save the change. Try again.",
   "Inget att exportera ännu.": "Nothing to export yet.",
@@ -16,7 +18,8 @@ export const EN_CALENDAR: Record<string, string> = {
   "Hittade inga händelser i filen.": "No events found in the file.",
   Importerade: "Imported",
   "händelser till kalendern.": "events to the calendar.",
-  "Kunde inte läsa filen. Kontrollera att det är en .ics-fil.": "Couldn't read the file. Check that it's an .ics file.",
+  "Kunde inte läsa filen. Kontrollera att det är en .ics-fil.":
+    "Couldn't read the file. Check that it's an .ics file.",
   "Något gick fel. Försök igen.": "Something went wrong. Try again.",
 
   // calendar.tsx – view controls & categories
@@ -132,7 +135,8 @@ export const EN_CALENDAR: Record<string, string> = {
   "idag.": "today.",
   "Det du bär och gör får ta plats här.": "What you carry and do gets to take up space here.",
   "Tider idag": "Times today",
-  "Det tidsbestämda – resten av dagen behöver ingen klocka.": "The time-bound stuff – the rest of the day doesn't need a clock.",
+  "Det tidsbestämda – resten av dagen behöver ingen klocka.":
+    "The time-bound stuff – the rest of the day doesn't need a clock.",
   "Inga tider idag.": "No times today.",
   "Dagens ordning": "Today's order",
   "Planen du valt i Planera": "The plan you chose in Plan",
@@ -142,13 +146,15 @@ export const EN_CALENDAR: Record<string, string> = {
   "Ändra ordningen i Planera": "Change the order in Plan",
   "Det som får plats idag": "What fits today",
   'MyFlove väljer utifrån din kapacitet just nu. Det som inte får plats försvinner inte – det ligger kvar under "Resten kan vänta".':
-    'MyFlove picks based on your capacity right now. What doesn\'t fit doesn\'t disappear – it stays under "The rest can wait".',
+    "MyFlove picks based on your capacity right now. What doesn't fit doesn't disappear – it stays under \"The rest can wait\".",
   "Samlat från hela ditt liv – uppgifter, deadlines, lektioner, barnens dag och tankar du lagt i Quickflow.":
     "Gathered from your whole life – tasks, deadlines, lessons, the children's day, and thoughts you've put in Quickflow.",
-  "Inga uppgifter väntar. Det räcker att bara vara idag. 💙": "No tasks are waiting. It's enough to just be today. 💙",
+  "Inga uppgifter väntar. Det räcker att bara vara idag. 💙":
+    "No tasks are waiting. It's enough to just be today. 💙",
   "Resten kan vänta": "The rest can wait",
   "Dagens energibalans": "Today's energy balance",
-  "Hur dagen belastar dig – och ett förslag från Flow.": "How the day is affecting you – and a suggestion from Flow.",
+  "Hur dagen belastar dig – och ett förslag från Flow.":
+    "How the day is affecting you – and a suggestion from Flow.",
   Starkast: "Strongest",
   lägst: "lowest",
   "Öppna Flow": "Open Flow",
@@ -161,7 +167,8 @@ export const EN_CALENDAR: Record<string, string> = {
   "Dagens planering": "Today's plan",
 
   // add-to-day.tsx
-  "Synliggör det du bär – eller lägg något på en dag.": "Make what you're carrying visible – or add something to a day.",
+  "Synliggör det du bär – eller lägg något på en dag.":
+    "Make what you're carrying visible – or add something to a day.",
   Rutin: "Routine",
   "Något som återkommer": "Something recurring",
   Medicin: "Medicine",
@@ -169,6 +176,6 @@ export const EN_CALENDAR: Record<string, string> = {
   "Barnens dag": "The children's day",
   "Hållpunkter för barnen": "Milestones for the children",
   "Något du vill bli påmind om": "Something you want to be reminded of",
-  "dag": "day",
-  "av": "of",
+  dag: "day",
+  av: "of",
 };

@@ -4,7 +4,12 @@ import { useImpactCheckin } from "@/hooks/use-impact-checkin";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { useFlowItems } from "@/hooks/use-flow-items";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
-import { journeyStatus, type JourneyInput, type JourneyStepId, type JourneyStepStatus } from "@/lib/day-journey";
+import {
+  journeyStatus,
+  type JourneyInput,
+  type JourneyStepId,
+  type JourneyStepStatus,
+} from "@/lib/day-journey";
 
 export interface DayJourney {
   input: JourneyInput;
@@ -35,7 +40,15 @@ export function useDayJourney(): DayJourney {
       openThoughts: openItems.length,
       batteryNow: Math.round(reading.now),
     }),
-    [energyValue, moodValue, impact, todayOpen.length, todayDone.length, openItems.length, reading.now],
+    [
+      energyValue,
+      moodValue,
+      impact,
+      todayOpen.length,
+      todayDone.length,
+      openItems.length,
+      reading.now,
+    ],
   );
 
   const steps = useMemo(() => journeyStatus(input), [input]);

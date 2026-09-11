@@ -22,7 +22,6 @@ import { ACTIVITY_HISTORY_KEY } from "@/hooks/use-instance-status";
 
 export { ACTIVITY_HISTORY_KEY };
 
-
 /**
  * Historiken läser aktiviteterna där de redan bor (uppgifter och påminnelser)
  * och lägger bara till det som är unikt per dag: status, flytt och faktisk

@@ -17,7 +17,6 @@ function partOfDay(ts: number | string): { label: string; emoji: string; tone: s
   return { label: "Kväll", emoji: "🌙", tone: "bg-lavender/80 text-ink" };
 }
 
-
 /** Ring som visar energin – lugn, mjuk och läsbar utan färg som enda signal. */
 function EnergyRing({ pct }: { pct: number }) {
   const { t } = useLang();

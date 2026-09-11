@@ -6,18 +6,18 @@ Endast analys och plan. Ingen kod ändras, inget raderas i detta steg.
 
 Flow-relaterade vyer och routes:
 
-| Route | Fil | Vad den gör |
-|---|---|---|
-| `/assistant` (heter "Flow" i navet) | `src/pages/assistant.tsx` (457 rader) | AI-chatt med historik, snabbprompter, coach-hälsning |
-| `/flowplan` | `src/pages/flowplan.tsx` (515 rader) | AI-sekvens av dagens uppgifter + `DailyFocusCard` |
-| `/vad-nu` | `src/pages/what-now.tsx` (216 rader) | "Vad ska jag göra nu?" – ett förslag i taget + fokusläge |
-| `/min-dag` | `src/pages/my-day.tsx` (259 rader) | Cockpit: batteri, tidslinje, `DailyFocusCard`, `FlowReplan` |
-| `/flowscore` | `src/pages/flowscore.tsx` | FlowScore-poäng som eget system |
-| `/energifloede` | `src/pages/energy-flow.tsx` (394 rader) | Energipoäng, vikter, inställningar |
-| `/friktionsindex` | `src/pages/friction-index.tsx` (470 rader) | Friktionsbibliotek med röstning |
-| `/veckans-flow` | `src/pages/week-flow.tsx` | Veckoöversikt |
-| `/daglig-rutin` | `src/pages/daily-flow.tsx` | **Inte Flow** – rutiner + medicin (namnet vilseleder) |
-| `/quickflow` | infångning | Överlappar Flow endast i triage/förslag |
+| Route                               | Fil                                        | Vad den gör                                                 |
+| ----------------------------------- | ------------------------------------------ | ----------------------------------------------------------- |
+| `/assistant` (heter "Flow" i navet) | `src/pages/assistant.tsx` (457 rader)      | AI-chatt med historik, snabbprompter, coach-hälsning        |
+| `/flowplan`                         | `src/pages/flowplan.tsx` (515 rader)       | AI-sekvens av dagens uppgifter + `DailyFocusCard`           |
+| `/vad-nu`                           | `src/pages/what-now.tsx` (216 rader)       | "Vad ska jag göra nu?" – ett förslag i taget + fokusläge    |
+| `/min-dag`                          | `src/pages/my-day.tsx` (259 rader)         | Cockpit: batteri, tidslinje, `DailyFocusCard`, `FlowReplan` |
+| `/flowscore`                        | `src/pages/flowscore.tsx`                  | FlowScore-poäng som eget system                             |
+| `/energifloede`                     | `src/pages/energy-flow.tsx` (394 rader)    | Energipoäng, vikter, inställningar                          |
+| `/friktionsindex`                   | `src/pages/friction-index.tsx` (470 rader) | Friktionsbibliotek med röstning                             |
+| `/veckans-flow`                     | `src/pages/week-flow.tsx`                  | Veckoöversikt                                               |
+| `/daglig-rutin`                     | `src/pages/daily-flow.tsx`                 | **Inte Flow** – rutiner + medicin (namnet vilseleder)       |
+| `/quickflow`                        | infångning                                 | Överlappar Flow endast i triage/förslag                     |
 
 Logiklager: `daily-flow.ts`, `focus-rules.ts`, `task-agenda.ts`, `energy-battery.ts`, `flowscore.ts`, `energy-flow.ts`, `friction-match.ts`, `replan.ts`, `flow-diff.ts`, `coach.ts`, `help-me.ts`, `flow-insights.ts`, `life-puzzle.ts`, `flow-personality.ts`, `flowplan.functions.ts`, `flow-chat.functions.ts`.
 
@@ -34,11 +34,13 @@ Logiklager: `daily-flow.ts`, `focus-rules.ts`, `task-agenda.ts`, `energy-battery
 ## Klassificering
 
 **1. BEHÅLL SOM PRIMÄR DEL AV FLOW**
+
 - Flow-chatten (`assistant.tsx`) – blir lagret HJÄLP
 - `flow-personality.ts`, `flow-voice.ts`, `flow-chat.functions.ts`
 - `energy-battery.ts` + `EnergyBattery` – enda synliga energimåttet
 
 **2. SLÅ IHOP MED FLOW**
+
 - `/vad-nu` → blir lagret NU inuti Flow
 - `DailyFocusCard` → uppgår i NU
 - `FlowReplan` + `replan.ts` + `flow-diff.ts` → blir lagret IDAG
@@ -46,16 +48,20 @@ Logiklager: `daily-flow.ts`, `focus-rules.ts`, `task-agenda.ts`, `energy-battery
 - `coach.ts` + `help-me.ts` → en enda ingång till HJÄLP
 
 **3. GÖM SOM AVANCERAD FUNKTION** (finns kvar under Mer → Avancerat)
+
 - `/flowscore`, `/energifloede`, `/friktionsindex`, `/veckans-flow`, `/insight`
 
 **4. FLYTTA TILL QUICKFLOW**
+
 - Inget. QuickFlow är infångning, Flow är beslut – gränsen är redan tydlig. Enda justeringen: QuickFlow-triagens "föreslå destination" ska anropa samma rankningsmotor som Flow, inte sin egen.
 
 **5. TA BORT SOM SEPARAT VY MEN BEHÅLL LOGIKEN**
+
 - `/vad-nu` och `/flowplan` som egna routes (redirect till `/flow`)
 - `flowscore.ts`, `energy-flow.ts`, `friction-match.ts` fortsätter köra internt som insignal till batteri och rankning – men slutar vara egna "system" i gränssnittet
 
 **6. VERKLIG DUBBLETT SOM KAN TAS BORT** (senare, efter verifiering)
+
 - `proactive-suggestions.tsx`, `daily-flow-card.tsx`, `help-me-modal.tsx`, `week-in-flow.tsx` – oanvända
 - Dubbelrenderingen av `DailyFocusCard` i `/flowplan`
 - Filnamnet `daily-flow.tsx` byter namn till `daily-routine.tsx` (routen `/daglig-rutin` behålls)

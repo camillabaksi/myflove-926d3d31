@@ -167,7 +167,8 @@ export function QuickflowList() {
             )}
             {(item.mergedCount ?? 0) > 0 && (
               <span className="ml-1 rounded-full border border-border bg-secondary/60 px-2 py-0.5 text-[11px] text-muted-foreground">
-                {t("Sammanfogad ×")}{(item.mergedCount ?? 0) + 1}
+                {t("Sammanfogad ×")}
+                {(item.mergedCount ?? 0) + 1}
               </span>
             )}
           </p>
@@ -294,9 +295,7 @@ export function QuickflowList() {
       },
     ];
     const sorted = topAction
-      ? [...actions].sort(
-          (a, b) => (b.key === topAction ? 1 : 0) - (a.key === topAction ? 1 : 0),
-        )
+      ? [...actions].sort((a, b) => (b.key === topAction ? 1 : 0) - (a.key === topAction ? 1 : 0))
       : actions;
 
     return (
@@ -330,7 +329,6 @@ export function QuickflowList() {
       </div>
     );
   };
-
 
   return (
     <section className="space-y-4">
@@ -390,7 +388,9 @@ export function QuickflowList() {
 
         {thoughts.length > 0 && (
           <div className="space-y-3">
-            <p className="text-xs uppercase tracking-wide text-muted-foreground">{t("Öppna tankar")}</p>
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">
+              {t("Öppna tankar")}
+            </p>
             {thoughts.map((item) =>
               renderRow(
                 item,

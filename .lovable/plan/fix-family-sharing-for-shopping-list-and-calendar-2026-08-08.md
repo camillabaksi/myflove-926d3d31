@@ -3,7 +3,7 @@
 ## Confirmed problem
 
 Creating or joining a family works — it writes real rows to the database. But every
-part of the app that *reads* the family goes through a placeholder module
+part of the app that _reads_ the family goes through a placeholder module
 (`src/compat/api-client.ts`) that returns empty data and fake "success" for every
 action. So:
 

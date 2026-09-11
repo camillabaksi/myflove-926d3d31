@@ -180,7 +180,9 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
       <MyFloveEmptyState
         emoji="🔋"
         title={t("Logga in för att använda Min energi")}
-        description={t("Dina energiposter sparas till ditt konto så att Flow kan förstå din kapacitet.")}
+        description={t(
+          "Dina energiposter sparas till ditt konto så att Flow kan förstå din kapacitet.",
+        )}
       />
     );
   }
@@ -438,7 +440,9 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
 
           <div className="space-y-2">
             <div className="flex flex-wrap items-center gap-2">
-              <div className="text-sm font-medium text-ink">{t("Hur svårt var det att komma igång?")}</div>
+              <div className="text-sm font-medium text-ink">
+                {t("Hur svårt var det att komma igång?")}
+              </div>
               <WhyHint label={t("svårighetsgrad")}>
                 {t(
                   "Svårighetsgrad är något annat än energi – tvätt kan kosta lite energi men vara tungt att börja med.",
@@ -501,7 +505,9 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
               onClick={async () => {
                 const value = title.trim();
                 if (!value) {
-                  toast({ description: t("Skriv en titel först, så sparar jag den som snabbknapp.") });
+                  toast({
+                    description: t("Skriv en titel först, så sparar jag den som snabbknapp."),
+                  });
                   return;
                 }
                 await addPreset({ title: value, direction, strength, category, kind, friction });
@@ -536,7 +542,9 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
             <MyFloveEmptyState
               emoji="📈"
               title={t("Mönstren dyker upp efter hand")}
-              description={t("När du registrerat några poster visar jag vad som oftast ger och tar energi.")}
+              description={t(
+                "När du registrerat några poster visar jag vad som oftast ger och tar energi.",
+              )}
             />
           ) : (
             <div className="space-y-2">

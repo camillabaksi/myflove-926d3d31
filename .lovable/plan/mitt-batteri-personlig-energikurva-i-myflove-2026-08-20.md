@@ -28,7 +28,7 @@ Ett lugnt, levande batteri som visar hur mycket energi du har nu, hur den rör s
 **Ny komponent: `src/components/energy-battery.tsx`**
 
 - Kompakt läge: liggande batteri, mjuk vätskefyllning som animeras med CSS-transition (600–900 ms, ease-out), procent + en rad text ("Stiger – toppen runt 10–12"). Respekterar `prefers-reduced-motion` (då: statisk fyllning, ingen puls).
-- Expanderat läge (progressiv fördjupning, samma kort): liten kurva över dagen med markerade peak/dip, "nu"-markör, och 2–3 konkreta förslag ("Flytta *Deklaration* till 10:00", "Lägg in 20 min paus 14:30").
+- Expanderat läge (progressiv fördjupning, samma kort): liten kurva över dagen med markerade peak/dip, "nu"-markör, och 2–3 konkreta förslag ("Flytta _Deklaration_ till 10:00", "Lägg in 20 min paus 14:30").
 
 ## 3. Var det ligger i gränssnittet
 

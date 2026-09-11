@@ -1,9 +1,11 @@
 # Slutlig helhetsstädning av MyFlove
 
 ## Mål
+
 Konsolidera befintlig funktionalitet till en sammanhållen app utan nya produktfunktioner, dataförlust eller borttagna legacy-routes.
 
 ## Genomförande
+
 1. **Flow och navigation**
    - Göra `/flow` till den tydliga huvudingången med Hjälp, Planera och Chatta med Flow.
    - Behålla `/flowplan`, `/assistant` och äldre routes som kompatibilitetsroutes, men ta bort nya interna redirectkedjor och konkurrerande CTA-mål.
@@ -33,6 +35,7 @@ Konsolidera befintlig funktionalitet till en sammanhållen app utan nya produktf
    - Uppdatera `CHANGELOG.md` och `src/lib/changelog.ts` med exakt genomförda ändringar. Legacy-routes, användardata och befintliga produktregler lämnas kvar.
 
 ## Säkerhetsregler
+
 - Ingen big-bang-migrering eller radering av befintliga poster.
 - Alla kompatibilitets-/synksteg ska vara idempotenta och behålla gamla data vid fel.
 - Osäkra flöden behåller kompatibilitetslagret tills de är verifierade.

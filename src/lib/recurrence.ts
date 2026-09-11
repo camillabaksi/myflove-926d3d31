@@ -38,7 +38,6 @@ export function occursOn(
   return day.getDay() === start.getDay();
 }
 
-
 /** Enkel tolkning av svenska upprepningsord i fritext. */
 export function detectRepeat(text: string): RepeatMode {
   const lower = text.toLowerCase();

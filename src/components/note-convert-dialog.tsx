@@ -73,7 +73,12 @@ export default function NoteConvertDialog({
       label: t("Kalenderhändelse"),
       hint: t("Något som händer en viss dag och tid"),
     },
-    { id: "energi", emoji: "🔋", label: t("Energifaktor"), hint: t("Något som gav eller tog energi") },
+    {
+      id: "energi",
+      emoji: "🔋",
+      label: t("Energifaktor"),
+      hint: t("Något som gav eller tog energi"),
+    },
   ];
 
   if (!note) return null;
@@ -194,7 +199,10 @@ export default function NoteConvertDialog({
                     </Chip>
                   </div>
                   <label className="block text-sm">
-                    <span className="text-muted-foreground">{t("Styrka: ")}{strength}</span>
+                    <span className="text-muted-foreground">
+                      {t("Styrka: ")}
+                      {strength}
+                    </span>
                     <input
                       type="range"
                       min={1}

@@ -208,7 +208,9 @@ export default function ImpactCheckin() {
         <p aria-live="polite" className="text-center text-xs text-muted-foreground">
           {impact && !saved
             ? t("Sparat för idag – du kan ändra eller ta bort när du vill.")
-            : t("Påverkan ändrar aldrig batteriet automatiskt – men batteriet kan föreslå en lägre nivå som du själv godkänner.")}
+            : t(
+                "Påverkan ändrar aldrig batteriet automatiskt – men batteriet kan föreslå en lägre nivå som du själv godkänner.",
+              )}
         </p>
       </div>
     </ExpandableBlock>

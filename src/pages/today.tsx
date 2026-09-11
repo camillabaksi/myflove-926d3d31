@@ -150,7 +150,9 @@ export function TodayContent() {
         </h1>
         <p className="mt-1 text-sm font-medium text-primary">{t("Vad som händer idag")}</p>
         <p className="mt-0.5 text-muted-foreground">
-          {t("Allt som hör till idag – på ett ställe. Vill du ändra ordningen gör du det i Planera.")}
+          {t(
+            "Allt som hör till idag – på ett ställe. Vill du ändra ordningen gör du det i Planera.",
+          )}
         </p>
       </MyFloveWide>
 
@@ -228,7 +230,9 @@ export function TodayContent() {
                 ))}
               </ul>
             ) : (
-              <p className="text-sm text-muted-foreground">{t("Det du bär och gör får ta plats här.")}</p>
+              <p className="text-sm text-muted-foreground">
+                {t("Det du bär och gör får ta plats här.")}
+              </p>
             )}
           </StepSection>
 

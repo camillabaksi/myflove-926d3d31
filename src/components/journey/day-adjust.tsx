@@ -74,7 +74,10 @@ export default function DayAdjust() {
       updateTask(s.taskId, { friction: "small" });
       toast.success("Nu räcker en mindre version idag.");
     } else {
-      addTaskSteps(s.taskId, (s.steps ?? []).map((title) => ({ title })));
+      addTaskSteps(
+        s.taskId,
+        (s.steps ?? []).map((title) => ({ title })),
+      );
       toast.success("Uppdelad i två små steg.");
     }
     setHandled((prev) => ({ ...prev, [`${s.taskId}:${s.kind}`]: s.kind }));

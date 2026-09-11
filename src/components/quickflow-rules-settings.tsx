@@ -35,7 +35,6 @@ export default function QuickflowRulesSettings() {
   const hasPhrase = (p: string) =>
     rules.some((r) => r.phrase.trim().toLowerCase() === p.trim().toLowerCase());
 
-
   const fillForm = (draft: RuleDraft) => {
     setPhrase(draft.phrase);
     setMatchType(draft.matchType);
@@ -240,7 +239,9 @@ export default function QuickflowRulesSettings() {
 
       <div ref={formRef} className="rounded-2xl border border-border bg-card p-4 space-y-3">
         <div className="flex items-center justify-between">
-          <p className="text-sm font-semibold text-ink">{editingId ? t("Ändra regel") : t("Ny regel")}</p>
+          <p className="text-sm font-semibold text-ink">
+            {editingId ? t("Ändra regel") : t("Ny regel")}
+          </p>
           {(editingId || phrase) && (
             <button
               type="button"

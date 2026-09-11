@@ -78,7 +78,12 @@ function normalizeCategory(value: string): CalCategory {
 }
 
 /** "Dag 2 av 7" för en längre period, så att man ser var i resan man är. */
-function periodDayLabel(start: string, end: string, current: string, t: (s: string) => string): string {
+function periodDayLabel(
+  start: string,
+  end: string,
+  current: string,
+  t: (s: string) => string,
+): string {
   const day = (iso: string) => parseISODate(iso).getTime();
   const oneDay = 86_400_000;
   const total = Math.round((day(end) - day(start)) / oneDay) + 1;
@@ -341,7 +346,8 @@ export function CalendarContent() {
         setNewEventTitle("");
         setNewEventTime("");
       },
-      onError: () => toast({ description: t("Något gick fel. Försök igen."), variant: "destructive" }),
+      onError: () =>
+        toast({ description: t("Något gick fel. Försök igen."), variant: "destructive" }),
     },
   });
 
@@ -775,20 +781,20 @@ export function CalendarContent() {
                         time: e.time ?? "",
                         color: e.member?.color ?? "#8a9a5b",
                       })),
-                       ...items.reminders.map((r) => ({
-                         id: `r-${r.id}`,
-                         title: r.title,
-                         time: r.time ?? "",
-                         color: "hsl(var(--primary))",
-                       })),
-                       // Återkommande hållpunkter och rutiner syns även i veckovyn.
-                       ...items.recurring.map((r) => ({
-                         id: r.id,
-                         title: `↻ ${r.title}`,
-                         time: r.time,
-                         color: r.color ?? "hsl(var(--muted-foreground))",
-                       })),
-                       ...items.tasks.map((t) => ({
+                      ...items.reminders.map((r) => ({
+                        id: `r-${r.id}`,
+                        title: r.title,
+                        time: r.time ?? "",
+                        color: "hsl(var(--primary))",
+                      })),
+                      // Återkommande hållpunkter och rutiner syns även i veckovyn.
+                      ...items.recurring.map((r) => ({
+                        id: r.id,
+                        title: `↻ ${r.title}`,
+                        time: r.time,
+                        color: r.color ?? "hsl(var(--muted-foreground))",
+                      })),
+                      ...items.tasks.map((t) => ({
                         id: `t-${t.id}`,
                         title: t.title,
                         time: t.time ?? "",
@@ -908,9 +914,7 @@ export function CalendarContent() {
               />
             )}
 
-            {allInDay && selectedDateStr === todayStr && (
-              <ImpactCheckin />
-            )}
+            {allInDay && selectedDateStr === todayStr && <ImpactCheckin />}
 
             {allInDay && (
               <>

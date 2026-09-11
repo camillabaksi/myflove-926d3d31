@@ -76,8 +76,7 @@ export const EN: Record<string, string> = {
   "Din överblick över dagen": "Your overview of the day",
   "Vad som händer idag – hela dagens lista": "What's happening today – the full list",
   "Energi, mående, träning, medicin och vila": "Energy, mood, exercise, meds and rest",
-  "Energi och mående – checka in på några sekunder":
-    "Energy and mood – check in in a few seconds",
+  "Energi och mående – checka in på några sekunder": "Energy and mood – check in in a few seconds",
   "Mönster: vad som brukar ge och ta energi": "Patterns: what usually gives and takes energy",
   "🛑 En paus mellan impuls och beslut": "🛑 A pause between impulse and decision",
   "Enkla pass anpassade efter din ork": "Simple sessions matched to your energy",
@@ -137,8 +136,7 @@ export const EN: Record<string, string> = {
     "You haven't logged anything today – only if you want to.",
   "Inga mediciner tillagda än – lägg till när det passar.":
     "No medications added yet – add them when it suits you.",
-  "Inga transaktioner än – börja när du är redo.":
-    "No transactions yet – start when you're ready.",
+  "Inga transaktioner än – börja när du är redo.": "No transactions yet – start when you're ready.",
   "Huvudet får vara tomt här. Skriv när det kommer något.":
     "Your head can be empty here. Write when something comes.",
   "Inget skaver just nu – kul att höra.": "Nothing feels off right now – good to hear.",
@@ -151,8 +149,7 @@ export const EN: Record<string, string> = {
   "Bockat. Bra jobbat.": "Ticked off. Nicely done.",
   Sparat: "Saved",
   "Sparat.": "Saved.",
-  "Då kör vi på det – bara det, inget annat.":
-    "Then let's go with that – just that, nothing else.",
+  "Då kör vi på det – bara det, inget annat.": "Then let's go with that – just that, nothing else.",
 
   // ── Flow-röst: fel ──────────────────────────────────────────────────────
   "Det gick inte just nu. Prova igen om en stund.":
@@ -312,7 +309,8 @@ function enWords(part: string): string {
 export const EN_PATTERNS: { re: RegExp; en: (m: RegExpMatchArray) => string }[] = [
   {
     re: /^Du hade mest ork på (.+), medan (.+) verkar ha varit tyngre\.$/,
-    en: (m) => `You had the most energy on ${enWords(m[1]!)}, while ${enWords(m[2]!)} seem to have been heavier.`,
+    en: (m) =>
+      `You had the most energy on ${enWords(m[1]!)}, while ${enWords(m[2]!)} seem to have been heavier.`,
   },
   {
     re: /^Du verkar ha haft mycket på (.+)\. Vill du planera lite mer luft nästa (.+)\?$/,

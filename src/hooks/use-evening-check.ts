@@ -30,10 +30,7 @@ export function useEveningCheck() {
   const [entry, setEntry] = useCloudSyncedStorage<EveningEntry | null>(KEY, null);
   const [history, setHistory] = useCloudSyncedStorage<EveningEntry[]>(HISTORY_KEY, []);
 
-  const today = useMemo(
-    () => (entry && entry.day === todayKey() ? entry : null),
-    [entry],
-  );
+  const today = useMemo(() => (entry && entry.day === todayKey() ? entry : null), [entry]);
 
   const logEvening = useCallback(
     (

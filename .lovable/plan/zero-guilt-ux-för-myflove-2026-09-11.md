@@ -1,6 +1,7 @@
 # Zero-Guilt UX för MyFlove
 
 ## Mål
+
 Göra MyFlove lugnare och lättare att förstå vid hög kognitiv belastning, utan att ta bort funktioner eller ändra användarens sparade innehåll.
 
 ## Det här byggs
@@ -37,6 +38,7 @@ Göra MyFlove lugnare och lättare att förstå vid hög kognitiv belastning, ut
    - Behåll säkerhetskritiska meddelanden tydliga där de måste vara det.
 
 ## Teknisk kontroll
+
 - Återanvänd befintliga hooks för batteri, FlowScore, uppgifter, NPF-läge, haptik och pausade påminnelser.
 - Lägg beteendet i små återanvändbara komponenter och ren logik med tester.
 - Uppdatera båda ändringsloggarna.

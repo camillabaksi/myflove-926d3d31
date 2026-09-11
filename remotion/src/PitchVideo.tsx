@@ -532,7 +532,9 @@ const SceneWeek: React.FC = () => (
       <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
         <Eyebrow>Veckoöversikt</Eyebrow>
         <Title size={70}>Din vecka – varje söndag</Title>
-        <Sub delay={10}>En enkel sammanfattning byggd på faktisk data. Aldrig påhittade mönster.</Sub>
+        <Sub delay={10}>
+          En enkel sammanfattning byggd på faktisk data. Aldrig påhittade mönster.
+        </Sub>
       </div>
       <div style={{ display: "flex", gap: 28 }}>
         <Card

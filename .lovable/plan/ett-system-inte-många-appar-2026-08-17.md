@@ -1,6 +1,6 @@
 # Ett system, inte många appar
 
-Analys först: nästan allt som behövs finns redan. Uppgifter har livsområde, datum, tid, steg och friktionsdata. Livspusslet samlar redan signaler från uppgifter, energi, humör, schema och barnens dag. FlowScore räknar redan kapacitet. Det som saknas är att informationen *rör sig* konsekvent mellan delarna – och att språket ser likadant ut överallt.
+Analys först: nästan allt som behövs finns redan. Uppgifter har livsområde, datum, tid, steg och friktionsdata. Livspusslet samlar redan signaler från uppgifter, energi, humör, schema och barnens dag. FlowScore räknar redan kapacitet. Det som saknas är att informationen _rör sig_ konsekvent mellan delarna – och att språket ser likadant ut överallt.
 
 Nedan är förslaget, i tre steg. Jag bygger steg 1 först och visar innan jag går vidare.
 
