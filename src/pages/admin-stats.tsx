@@ -483,6 +483,7 @@ export default function AdminStats() {
 
                 <div>
                   <h3 className="text-sm font-semibold mb-2">{t("Mest besökta sidor")}</h3>
+                  <AdminListSorter value={pagesSort} onChange={setPagesSort} />
                   {pageViews.length === 0 && (
                     <p className="text-sm text-muted-foreground">{t("Ingen data än.")}</p>
                   )}
@@ -491,7 +492,7 @@ export default function AdminStats() {
                       <div key={row.action}>
                         <div className="flex justify-between text-sm mb-1">
                           <span className="font-medium">
-                            {t(pageLabel(row.action))}{" "}
+                            {row.label}{" "}
                             <span className="text-xs text-muted-foreground">/{row.action}</span>
                           </span>
                           <span className="text-muted-foreground">
