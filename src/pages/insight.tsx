@@ -32,6 +32,7 @@ import {
 } from "@/lib/insight";
 import { buildPersonalInsight, INSIGHT_EXAMPLES } from "@/lib/insight-personal";
 import { useFlowLearning } from "@/hooks/use-flow-learning";
+import { useEverydayPatterns } from "@/hooks/use-everyday-patterns";
 import { useVisitStreak } from "@/hooks/use-visit-streak";
 import { useIsAdmin } from "@/hooks/use-is-admin";
 import { track } from "@/lib/analytics";
