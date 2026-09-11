@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-11";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Flow fortsätter i din senaste chatt",
+    items: [
+      "Öppnar du Flow landar du i ditt senaste samtal istället för en ny tom chatt (2026-09-11)",
+      '"Nytt samtal" gäller bara den gången – nästa gång är historiken tillbaka (2026-09-11)',
+    ],
+  },
+  {
+
     title: "Flow kan faktiskt flytta, dela och förenkla en uppgift",
     items: [
       "Flows förslag om att flytta, dela upp eller förenkla en uppgift blir en knapp i chatten (2026-09-11)",
