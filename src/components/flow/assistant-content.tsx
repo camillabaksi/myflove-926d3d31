@@ -138,7 +138,37 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
     setPlace(placeFor(home[area]));
   };
 
-  const { activeTasks } = useTasks();
+  const { activeTasks, setTaskDueDate, addTaskSteps, updateTask, toggleTask } = useTasks();
+  const [doneActions, setDoneActions] = useState<Record<string, string>>({});
+
+  /** Uppgifterna Flow får referera till – bara titel och id, inget privat. */
+  const taskListContext = activeTasks
+    .slice(0, 20)
+    .map((t) => `- id:${t.id} · ${t.title}${t.dueDate ? ` (datum ${t.dueDate})` : ""}`)
+    .join("\n");
+
+  const runAction = (key: string, action: FlowAction) => {
+    const task = matchTask(action, activeTasks);
+    if (!task) {
+      setDoneActions((p) => ({ ...p, [key]: "Jag hittar inte uppgiften längre." }));
+      return;
+    }
+    if (action.kind === "flytta") {
+      const date = action.date ?? tomorrowISO();
+      setTaskDueDate(task.id, date);
+      if (action.steps?.length) addTaskSteps(task.id, action.steps.map((title) => ({ title })));
+      setDoneActions((p) => ({ ...p, [key]: `Flyttad till ${date}.` }));
+    } else if (action.kind === "forenkla") {
+      updateTask(task.id, { friction: "small" });
+      setDoneActions((p) => ({ ...p, [key]: "Nu räcker en mindre version." }));
+    } else if (action.kind === "dela") {
+      addTaskSteps(task.id, (action.steps ?? ["Första lilla steget"]).map((title) => ({ title })));
+      setDoneActions((p) => ({ ...p, [key]: "Uppdelad i små steg." }));
+    } else {
+      toggleTask(task.id);
+      setDoneActions((p) => ({ ...p, [key]: "Avbockad." }));
+    }
+  };
   const { moods } = useMoods();
   const { currentFocus } = useFocus();
   const { activeReminders } = useReminders();
