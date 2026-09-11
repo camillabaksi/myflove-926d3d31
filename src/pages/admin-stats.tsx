@@ -462,6 +462,7 @@ export default function AdminStats() {
 
                 <div>
                   <h3 className="text-sm font-semibold mb-2">{t("Mest använda delar av appen")}</h3>
+                  <AdminListSorter value={viewsSort} onChange={setViewsSort} />
                   {viewsBySection.length === 0 && (
                     <p className="text-sm text-muted-foreground">{t("Ingen data än.")}</p>
                   )}
@@ -469,7 +470,7 @@ export default function AdminStats() {
                     {viewsBySection.map((row) => (
                       <div key={`${row.section}-${row.action}`}>
                         <div className="flex justify-between text-sm mb-1">
-                          <span className="font-medium">{t(sectionLabel(row.section))}</span>
+                          <span className="font-medium">{row.label}</span>
                           <span className="text-muted-foreground">
                             {row.events} {t("besök")} · {row.sessions} {t("användare")}
                           </span>
