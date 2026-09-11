@@ -46,7 +46,7 @@ export const LEVEL_META: Record<
     emoji: "📌",
     label: "Viktigt",
     hint: 'Prioriteras och påminns tydligare. "Jag måste ringa vårdcentralen."',
-    className: "bg-destructive/10 text-destructive border-destructive/30",
+    className: "bg-accent/30 text-ink border-accent/60",
   },
   tanke: {
     emoji: "💭",

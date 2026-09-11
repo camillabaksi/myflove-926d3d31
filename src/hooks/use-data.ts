@@ -574,7 +574,10 @@ export function useTasks() {
     const untilStr = until.toISOString().split("T")[0] as string;
     setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, snoozedUntil: untilStr } : t)));
     haptic("soft");
-    flowDone("Det där får vila till imorgon. Du gjorde helt rätt som gav det mer tid.");
+    flowDone(
+      undefined,
+      "Nu andas vi ut. Du gjorde helt rätt som sparade det där till imorgon. Hur känns axlarna just nu?",
+    );
   };
 
   const unsnoozeTask = (id: string) => {

@@ -11,10 +11,10 @@ const base: FlowHomeInput = {
 };
 
 describe("flowHomePrompt", () => {
-  it("ger samma neutrala hälsning med fyra val som grund", () => {
+  it("ger en neutral hälsning med exakt två val som grund", () => {
     const p = flowHomePrompt(base);
     expect(p.mode).toBe("halsning");
-    expect(p.choices).toEqual(["quickflow", "batteri", "kalender", "valj"]);
+    expect(p.choices).toEqual(["quickflow", "valj"]);
   });
 
   it("frågar om energipåverkan först av allt", () => {
