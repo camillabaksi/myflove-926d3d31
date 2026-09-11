@@ -445,7 +445,7 @@ export default function Home() {
           <CollapsibleSection
             id="mer-i-myflove"
             title={t("Mer i MyFlove")}
-            description={t("Quickflow, batteriet, dagens lista och dina mönster.")}
+            description={t("Quickflow, dagens tanke, rutiner & medicin och dina mönster.")}
             defaultCollapsed
             className="rounded-3xl border border-border/60 bg-card/60 p-4 shadow-soft"
             headingClassName="text-base font-semibold text-ink"
