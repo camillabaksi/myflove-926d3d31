@@ -14,10 +14,9 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     items: [
       '"Nästa rimliga steg" ligger nu inuti "Din dag, i din takt" direkt under "Idag" (2026-09-11)',
       'Dagens tanke och Rutiner & medicin ligger nu under "Mer i MyFlove" (2026-09-11)',
-      'God morgon-kortet är tillfälligt borttaget från Hem för att hålla startsidan lugnare; det finns kvar under Rutiner & medicin (2026-09-11)',
+      "God morgon-kortet är tillfälligt borttaget från Hem för att hålla startsidan lugnare; det finns kvar under Rutiner & medicin (2026-09-11)",
     ],
   },
-
 
   {
     title: "Enhetlig design och tydligare andningsljus",

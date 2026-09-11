@@ -6,9 +6,7 @@
 - Dagens tanke och Rutiner & medicin ligger nu under "Mer i MyFlove" i stället för direkt på Hem.
 - God morgon-kortet är tillfälligt borttaget från Hem för att hålla startsidan ännu lugnare; det finns kvar under Rutiner & medicin.
 
-
 ## 2026-09-11 – Enhetlig design och tydligare andningsljus
-
 
 - Hela appen har nu samma mjuka pastelllila bakgrund bakom de vita korten.
 - Andningsljuset bakom huvudytan är starkare och syns tydligt: 4 sekunder in, 5 sekunder ut, 1 sekunds vila.
@@ -22,7 +20,6 @@
 ## 2026-09-11 – God morgon borttaget från Hem
 
 - Morgonstart-kortet ligger inte längre direkt på Hem; det finns kvar under Rutiner & medicin för den som vill ha en guidad morgonstart.
-
 
 ## 2026-09-11 – Visuell belastningskarta
 

@@ -52,7 +52,6 @@ import { Button } from "@/components/ui/button";
 import CalmMode from "@/components/calm-mode";
 import CalmChoices from "@/components/journey/calm-choices";
 
-
 /**
  * Hem = en lugn personlig kontrollpanel.
  *
@@ -256,7 +255,6 @@ export default function Home() {
             </header>
 
             <div
-
               className="mt-5 grid grid-cols-3 gap-2 sm:gap-3"
               data-testid="home-widgets"
               aria-label={t("Vad vill du göra just nu?")}
