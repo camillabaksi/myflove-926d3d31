@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-11";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Batteritrend mot faktisk belastning",
+    items: [
+      "Insikter visar batteriets utveckling över 14 dagar tillsammans med faktiskt genomförda aktiviteter (2026-09-11)",
+      "Planerade men inte genomförda aktiviteter räknas inte som belastning, och samband visas först när underlaget räcker (2026-09-11)",
+      "Incheckningar före och efter aktiviteter ger en mer direkt jämförelse när sådant underlag finns (2026-09-11)",
+    ],
+  },
+  {
     title: "Lugn, kapacitetsstyrd Hem-skärm",
     items: [
       "Hälsning, snabba val, batteri och dagens schema samlas i en lugn vit huvudyta (2026-09-11)",

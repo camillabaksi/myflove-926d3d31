@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-11 – Batteritrend mot faktisk belastning
+
+- Insikter visar nu batteriets utveckling över 14 dagar tillsammans med aktiviteter som faktiskt genomförts.
+- Planerade men inte genomförda aktiviteter räknas inte som belastning, och samband visas först när underlaget räcker.
+- När det finns incheckningar före och efter en aktivitet används de för en mer direkt jämförelse.
+
 ## 2026-09-11 – Lugn, kapacitetsstyrd Hem-skärm
 
 - Hem har fått en centrerad vit huvudyta med hälsning, snabba val, batteri och dagens schema samlade i ett mjukt bento-rutnät.
