@@ -176,14 +176,20 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
       return;
     }
     if (action.kind === "flytta") {
-      const date = action.date ?? tomorrowISO();
+      // Flow kan råka föreslå ett datum som redan passerat – då blir det alltid
+      // imorgon i stället, så inget hamnar bakåt i tiden.
+      const wanted = action.date;
+      const date = wanted && wanted > todayStr() ? wanted : tomorrowISO();
       setTaskDueDate(task.id, date);
       if (action.steps?.length)
         addTaskSteps(
           task.id,
           action.steps.map((title) => ({ title })),
         );
-      setDoneActions((p) => ({ ...p, [key]: `Flyttad till ${date}.` }));
+      setDoneActions((p) => ({
+        ...p,
+        [key]: date === tomorrowISO() ? "Flyttad till imorgon." : `Flyttad till ${date}.`,
+      }));
     } else if (action.kind === "forenkla") {
       updateTask(task.id, { friction: "small" });
       setDoneActions((p) => ({ ...p, [key]: "Nu räcker en mindre version." }));
