@@ -403,8 +403,8 @@ export default function Home() {
           </section>
         </MyFloveWide>
 
-
         <MyFloveWide style={{ order: 0 }} className="min-w-0">
+
           <CalmChoices onPause={() => setCalmMode("micro")} />
         </MyFloveWide>
 
