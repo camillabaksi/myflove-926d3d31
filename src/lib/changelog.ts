@@ -10,6 +10,12 @@ export const CHANGELOG_UPDATED = "2026-09-11";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Sortera analysen per användare",
+    items: [
+      "Listan under Analys per användare kan sorteras: nyast aktiv först, äldst först, flest eller färst händelser (2026-09-11)",
+    ],
+  },
+  {
     title: "Statistiken visar nu alla dagar",
     items: [
       "Analys per användare läste bara de första 1 000 händelserna, alla från samma tidiga datum (2026-09-11)",
