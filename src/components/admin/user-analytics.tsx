@@ -239,6 +239,20 @@ export default function UserAnalytics() {
             </span>
           </div>
 
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs text-muted-foreground">{t("Sortera")}:</span>
+            {SORTS.map((s) => (
+              <Button
+                key={s.key}
+                variant={sortKey === s.key ? "default" : "outline"}
+                size="sm"
+                onClick={() => setSortKey(s.key)}
+              >
+                {t(s.label)}
+              </Button>
+            ))}
+          </div>
+
           <div className="divide-y divide-border rounded-2xl border border-border overflow-hidden">
             {rows.slice(0, 100).map((s) => (
               <div
