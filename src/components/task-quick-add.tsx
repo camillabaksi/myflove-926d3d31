@@ -2,7 +2,10 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { looksLikeShopping, shoppingTitleFrom } from "@/lib/quickflow";
+import { useSharedShoppingList } from "@/hooks/use-shared-shopping-list";
 import { todayISO, type TaskFriction, type EnergyImpact } from "@/lib/task-agenda";
 
 export interface QuickAddResult {
@@ -14,6 +17,36 @@ export interface QuickAddResult {
   /** Behålls i resultatet för bakåtkompatibilitet med befintliga anrop. */
   energyImpact?: EnergyImpact;
   friction?: TaskFriction;
+}
+
+/** Erbjuder att lägga varan i Inköpslistan när texten låter som ett inköp. */
+function ShoppingHint({
+  title,
+  checked,
+  onChange,
+}: {
+  title: string;
+  checked: boolean;
+  onChange: (next: boolean) => void;
+}) {
+  if (!looksLikeShopping(title)) return null;
+  const item = shoppingTitleFrom(title);
+  return (
+    <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-primary/30 bg-primary/5 px-3 py-2 text-left text-sm">
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={(event) => onChange(event.target.checked)}
+        className="mt-0.5 h-4 w-4 accent-[hsl(var(--primary))]"
+      />
+      <span>
+        <span className="block font-semibold text-ink">Lägg också i Inköpslistan</span>
+        <span className="block text-xs text-muted-foreground">
+          Det här låter som ett inköp – ”{item}” hamnar i listan.
+        </span>
+      </span>
+    </label>
+  );
 }
 
 type AddMode = "done" | "planned";
