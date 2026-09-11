@@ -201,9 +201,10 @@ export default function PitchPage() {
             </span>
           </div>
           <p className="text-sm text-muted-foreground">
-            Tolv slides på engelska, byggda för exakt tre minuter: problem, insikt, lösning,
-            produkt, differentiering, marknad, traction, affärsmodell, team, kapital och avslut.
-            Talarmanus finns som anteckningar i PowerPoint-filen.
+            Tretton visuella slides på engelska, byggda för exakt tre minuter: problem, insikt,
+            lösning, produkt, differentiering, marknad, traction, affärsmodell, team, kapital och
+            avslut. Riktiga appbilder visar hur samma dag anpassas efter kapacitet. Talarmanus finns
+            som anteckningar i PowerPoint-filen.
           </p>
           <div className="flex flex-wrap gap-2">
             <a
@@ -219,6 +220,13 @@ export default function PitchPage() {
               className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-medium hover:bg-secondary"
             >
               <Download size={16} /> Ladda ner PDF
+            </a>
+            <a
+              href="/pitch/MyFlove_Investor_Pitch_3min_EN.docx"
+              download
+              className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-medium hover:bg-secondary"
+            >
+              <Download size={16} /> Ladda ner Word
             </a>
           </div>
         </section>
