@@ -71,8 +71,10 @@ export const getUserAnalyticsFn = createServerFn({ method: "GET" })
     // Läs händelser i sidor så att inget tappas när volymen växer.
     type Ev = { session_id: string; created_at: string };
     const rows: Ev[] = [];
-    const page = 10000;
-    for (let from = 0; from < 200000; from += page) {
+    // PostgREST returnerar max 1000 rader per anrop – större sidor tystnar och
+    // gav tidigare bara den allra äldsta dagen.
+    const page = 1000;
+    for (let from = 0; from < 500000; from += page) {
       const { data: chunk, error } = await supabaseAdmin
         .from("analytics_events")
         .select("session_id, created_at")
