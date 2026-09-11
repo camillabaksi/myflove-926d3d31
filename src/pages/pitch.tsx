@@ -287,9 +287,11 @@ export default function PitchPage() {
             </a>
           </div>
           <p className="text-xs text-muted-foreground">
-            Både PDF och Word innehåller demosliden sist (QuickFlow → Flow → Min dag). Videofilen
-            heter myflove-demo-20s.mp4 och kan bifogas separat i mejlet till investerare.
+            Både PDF och Word innehåller den uppdaterade demosliden sist (QuickFlow → Flow → planen
+            anpassas efter kapacitet → Min dag). Videofilen heter myflove-demo-20s.mp4 (27 sek) och
+            kan bifogas separat i mejlet till investerare.
           </p>
+
         </section>
 
         <section className="rounded-2xl border border-border bg-card p-4 space-y-3">
