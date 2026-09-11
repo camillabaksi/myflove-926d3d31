@@ -10,6 +10,16 @@ export const CHANGELOG_UPDATED = "2026-09-11";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Genomgång av hela appen: dubbletter, länkar och enhetlig design",
+    items: [
+      "Alla sidor och genvägar har gåtts igenom: varje länk och gammal adress leder rätt (2026-09-11)",
+      "Rubriken på varje sida ser likadan ut i hela appen (2026-09-11)",
+      "Barn, Familj och Kalender använder samma lila/rosa personfärger (2026-09-11)",
+      "Fel på Barn-sidan med knapp inuti knapp i schemarubriken är rättat (2026-09-11)",
+      "Tio oanvända dubblettvyer har tagits bort ur koden utan att någon funktion påverkas (2026-09-11)",
+    ],
+  },
+  {
     title: 'Andningsglöd inne i "Din dag, i din takt"',
     items: [
       'Andningsglöden ligger nu inne i kortet "Din dag, i din takt" i stället för i sidans bakgrund, och pulserar tydligt bakom hälsningen och batteriet (2026-09-11)',
