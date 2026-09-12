@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-12";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Investerarpitchen fokuserar på Sverige först",
+    items: [
+      "Ny marknadsslide med svenska siffror: ≈500 000 barn och vuxna med ADHD eller autism, ~3 % av vuxna med ADHD (källa Socialstyrelsen) (2026-09-12)",
+      "Go-to-market omarbetad till 'Prove it in Sweden. Then scale.' med stegen Pilot → Validate → B2C Sweden → Nordics & B2B/B2G (2026-09-12)",
+      "Sidnumreringen är rättad och konsekvent (01–13); PowerPoint, PDF och Word-versionen är uppdaterade (2026-09-12)",
+    ],
+  },
+  {
     title: "Inga dubbletter i Dagens lista",
     items: [
       "Samma sak som finns både som rutin och kalenderpost visas nu bara en gång i Dagens lista, Idag, Hem och Flow (2026-09-12)",

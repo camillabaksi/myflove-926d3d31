@@ -1,3 +1,9 @@
+## 2026-09-12 – Investerarpitchen fokuserar på Sverige först
+
+- Ny marknadsslide: "A huge everyday need. We start in Sweden." med svenska siffror (≈500 000 barn och vuxna med ADHD eller autism, ~3 % av vuxna med ADHD, källa Socialstyrelsen).
+- Go-to-market-sliden är omarbetad till "Prove it in Sweden. Then scale." med stegen Pilot → Validate → B2C Sweden → Nordics & B2B/B2G.
+- Sidnumreringen är rättad och konsekvent (01–13) genom hela decket, och PowerPoint, PDF och Word-versionen är uppdaterade.
+
 ## 2026-09-12 – Inga dubbletter i Dagens lista
 
 - Samma sak som finns både som rutin och kalenderpost (t.ex. "Göra frukost 06:00") visas nu bara en gång i Dagens lista, Idag, Hem och Flow.
