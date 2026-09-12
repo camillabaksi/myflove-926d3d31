@@ -62,6 +62,29 @@ export const EN_ADMIN: Record<string, string> = {
     "we only measure which part of the app is used and what type of action occurs. No user ID, no email, no IP, and no content (moods, texts, tasks) are saved — events cannot be linked to a person.",
   "Laddar statistik…": "Loading statistics…",
   "Kunde inte hämta statistik just nu.": "Could not fetch statistics right now.",
+  "Marknadsanalys – Sverige först": "Market analysis – Sweden first",
+  "En stor vardagsutmaning. Vi börjar i Sverige.":
+    "A major everyday challenge. We start in Sweden.",
+  "Sverige är första marknaden där MyFlove kan validera nytta, återkomst och betalningsvilja innan nordisk expansion.":
+    "Sweden is the first market where MyFlove can validate value, retention, and willingness to pay before Nordic expansion.",
+  "barn och vuxna med adhd eller autism": "children and adults with ADHD or autism",
+  "Svensk uppskattning; grupperna kan överlappa.":
+    "Swedish estimate; the groups may overlap.",
+  "vuxna i Sverige med adhd": "adults in Sweden with ADHD",
+  "Extern prevalensuppskattning från Socialstyrelsen.":
+    "External prevalence estimate from the Swedish National Board of Health and Welfare.",
+  "Sverige först": "Sweden first",
+  "pilot → validering → B2C": "pilot → validation → B2C",
+  "Därefter Norden och B2B/B2G.": "Then the Nordics and B2B/B2G.",
+  "Källa:": "Source:",
+  "Socialstyrelsen – förekomst, trend och könsskillnader vid adhd":
+    "The Swedish National Board of Health and Welfare – ADHD prevalence, trends, and gender differences",
+  "Siffrorna är externa marknadsuppskattningar, inte MyFloves användardata.":
+    "These figures are external market estimates, not MyFlove user data.",
+  "Målgruppens storlek i den första marknaden och vägen vidare.":
+    "The target audience size in the first market and the path forward.",
+  "Binder ihop svenska behov, tidig validering och MyFloves expansionsplan.":
+    "Connects Swedish needs, early validation, and MyFlove's expansion plan.",
   "Registrerade användare": "Registered users",
   "Nya senaste 7 dagarna": "New last 7 days",
   "Besökare (30 d)": "Visitors (30 d)",

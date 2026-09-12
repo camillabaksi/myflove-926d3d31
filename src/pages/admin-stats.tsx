@@ -1,6 +1,15 @@
 import Layout from "@/components/layout";
 import { useGetAnalyticsSummary } from "@workspace/api-client-react";
-import { BarChart3, Users, Activity, Repeat, Sparkles, Lock, Info } from "lucide-react";
+import {
+  BarChart3,
+  Users,
+  Activity,
+  Repeat,
+  Sparkles,
+  Lock,
+  Info,
+  MapPinned,
+} from "lucide-react";
 import { useIsAdmin } from "@/hooks/use-is-admin";
 import { useLang } from "@/hooks/use-language";
 import { useState } from "react";
@@ -225,6 +234,74 @@ export default function AdminStats() {
                 </div>
               ))}
             </div>
+
+            <CollapsibleSection
+              title={t("Marknadsanalys – Sverige först")}
+              id="admin-market-analysis-sweden"
+              headingClassName="text-lg font-semibold"
+              className={cardClass}
+            >
+              <div className="flex items-start gap-3 rounded-2xl border border-border bg-secondary/30 p-4">
+                <MapPinned className="mt-0.5 shrink-0 text-primary" size={22} />
+                <div className="space-y-1">
+                  <p className="font-semibold">{t("En stor vardagsutmaning. Vi börjar i Sverige.")}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {t(
+                      "Sverige är första marknaden där MyFlove kan validera nytta, återkomst och betalningsvilja innan nordisk expansion.",
+                    )}
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                {[
+                  {
+                    value: "≈500 000",
+                    label: t("barn och vuxna med adhd eller autism"),
+                    detail: t("Svensk uppskattning; grupperna kan överlappa."),
+                  },
+                  {
+                    value: "~3 %",
+                    label: t("vuxna i Sverige med adhd"),
+                    detail: t("Extern prevalensuppskattning från Socialstyrelsen."),
+                  },
+                  {
+                    value: t("Sverige först"),
+                    label: t("pilot → validering → B2C"),
+                    detail: t("Därefter Norden och B2B/B2G."),
+                  },
+                ].map((item) => (
+                  <div
+                    key={item.label}
+                    className="rounded-2xl border border-border bg-card p-4 shadow-sm"
+                  >
+                    <p className="text-2xl font-bold text-primary">{item.value}</p>
+                    <p className="mt-1 text-sm font-semibold">{item.label}</p>
+                    <p className="mt-1 text-xs text-muted-foreground">{item.detail}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="text-xs text-muted-foreground">
+                <p>
+                  {t("Källa:")} {" "}
+                  <a
+                    href="https://www.socialstyrelsen.se/publikationer/diagnostik-och-lakemedelsbehandling-vid-adhd--forekomst-trend-och-konsskillnader-2023-11-8862/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-medium text-primary underline underline-offset-2"
+                  >
+                    {t("Socialstyrelsen – förekomst, trend och könsskillnader vid adhd")}
+                  </a>
+                  . {t("Siffrorna är externa marknadsuppskattningar, inte MyFloves användardata.")}
+                </p>
+              </div>
+
+              <WhyBox
+                what={t("Målgruppens storlek i den första marknaden och vägen vidare.")}
+                why={t("Binder ihop svenska behov, tidig validering och MyFloves expansionsplan.")}
+              />
+            </CollapsibleSection>
 
             {/* 2. Kärnflödet som funnel */}
             <CollapsibleSection
