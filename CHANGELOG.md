@@ -1,3 +1,8 @@
+## 2026-09-12 – Svensk marknadsanalys i admin
+
+- Analysdelen har fått ett eget Sverige-först-block med samma svenska målgruppssiffror och marknadsresa som investerarpitchen.
+- Siffrorna är tydligt märkta som externa uppskattningar, separerade från MyFloves anonyma användningsdata och länkade till Socialstyrelsen.
+
 ## 2026-09-12 – Investerarpitchen fokuserar på Sverige först
 
 - Ny marknadsslide: "A huge everyday need. We start in Sweden." med svenska siffror (≈500 000 barn och vuxna med ADHD eller autism, ~3 % av vuxna med ADHD, källa Socialstyrelsen).

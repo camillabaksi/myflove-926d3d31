@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-12";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Svensk marknadsanalys i admin",
+    items: [
+      "Analysdelen har ett Sverige-först-block med samma svenska målgruppssiffror och marknadsresa som investerarpitchen (2026-09-12)",
+      "Externa marknadsuppskattningar är tydligt separerade från MyFloves anonyma användningsdata och länkade till Socialstyrelsen (2026-09-12)",
+    ],
+  },
+  {
     title: "Investerarpitchen fokuserar på Sverige först",
     items: [
       "Ny marknadsslide med svenska siffror: ≈500 000 barn och vuxna med ADHD eller autism, ~3 % av vuxna med ADHD (källa Socialstyrelsen) (2026-09-12)",
