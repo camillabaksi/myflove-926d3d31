@@ -19,8 +19,8 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Uppdaterad engelsk investerarpitch",
     items: [
-      "Den engelska investerarpitchen har korrekt sidnumrering på samtliga 14 sidor (2026-09-12)",
-      "Den inbäddade 27-sekundersvideon har fått en videosida i samma visuella stil som presentationen (2026-09-12)",
+      "Den engelska investerarpitchen har korrekt sidnumrering (2026-09-12)",
+      "Den inbäddade 27-sekundersvideon ligger nu på slide 5, och den tidigare slide 6 är borttagen (2026-09-12)",
       "En ny marknadssida visar 140M+ vuxna med ADHD, cirka 3 % vuxenprevalens och marknadstillväxt från $1.9B till $6.7B år 2033 (2026-09-12)",
     ],
   },
