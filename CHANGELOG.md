@@ -1,3 +1,8 @@
+## 2026-09-12 – Android 5.1 (versionCode 10)
+
+- Android-appens versionCode höjd 9 → 10 och versionName till 5.1 inför nästa Play-uppladdning.
+- Capacitor-projektet omsynkat (`cap sync android`) med config, plugins och webbrot.
+
 ## 2026-09-12 – Svensk marknadsanalys i admin
 
 - Analysdelen har fått ett eget Sverige-först-block med samma svenska målgruppssiffror och marknadsresa som investerarpitchen.
