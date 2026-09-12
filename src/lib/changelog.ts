@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-12";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Android 5.1 (versionCode 10)",
+    items: [
+      "Android-appens versionCode höjd 9 → 10 och versionName till 5.1 inför nästa Play-uppladdning (2026-09-12)",
+      "Capacitor-projektet omsynkat med config, plugins och webbrot (2026-09-12)",
+    ],
+  },
+  {
     title: "Svensk marknadsanalys i admin",
     items: [
       "Analysdelen har ett Sverige-först-block med samma svenska målgruppssiffror och marknadsresa som investerarpitchen (2026-09-12)",
