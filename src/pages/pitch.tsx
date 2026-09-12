@@ -210,8 +210,8 @@ export default function PitchPage() {
           <p className="text-sm text-muted-foreground">
             Tretton visuella slides på engelska, byggda för exakt tre minuter: problem, insikt,
             lösning, produkt, differentiering, marknad (Sverige först), traction och go-to-market
-            (Sverige först). Riktiga appbilder visar hur samma dag anpassas efter kapacitet. Talarmanus finns
-            som anteckningar i PowerPoint-filen.
+            (Sverige först). Riktiga appbilder visar hur samma dag anpassas efter kapacitet.
+            Talarmanus finns som anteckningar i PowerPoint-filen.
           </p>
           <div className="flex flex-wrap gap-2">
             <a
