@@ -208,9 +208,9 @@ export default function PitchPage() {
             </span>
           </div>
           <p className="text-sm text-muted-foreground">
-            Tolv visuella slides på engelska, byggda för exakt tre minuter: problem, insikt,
-            lösning, produkt, differentiering, marknad, traction, affärsmodell, team, kapital och
-            avslut. Riktiga appbilder visar hur samma dag anpassas efter kapacitet. Talarmanus finns
+            Tretton visuella slides på engelska, byggda för exakt tre minuter: problem, insikt,
+            lösning, produkt, differentiering, marknad (Sverige först), traction och go-to-market
+            (Sverige först). Riktiga appbilder visar hur samma dag anpassas efter kapacitet. Talarmanus finns
             som anteckningar i PowerPoint-filen.
           </p>
           <div className="flex flex-wrap gap-2">
