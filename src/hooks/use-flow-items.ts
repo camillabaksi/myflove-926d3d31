@@ -274,7 +274,31 @@ export function useFlowItems(dateISO?: string): {
     // kalendern eller dagens lista. De är en känslo-/orkregistrering och
     // påverkar bara batteriet, energihistoriken och mönstren.
 
-    return sortFlowItems(out);
+    // Dubbletter: samma sak kan finnas både som rutin och som kalenderpost
+    // (t.ex. "Göra frukost 06:00"). Slå ihop dem – samma normaliserade titel
+    // och samma klockslag på samma dag räknas som EN sak. Posten som redan
+    // är gjord, eller som inte är en rutin, vinner.
+    const normTitle = (s: string) => s.toLowerCase().replace(/\s+/g, " ").trim();
+    const seen = new Map<string, number>();
+    const deduped: FlowItem[] = [];
+    for (const item of out) {
+      const key = `${normTitle(item.title)}|${item.time ?? ""}`;
+      const prevIdx = seen.get(key);
+      if (prevIdx === undefined) {
+        seen.set(key, deduped.length);
+        deduped.push(item);
+        continue;
+      }
+      const prev = deduped[prevIdx]!;
+      // Behåll den som är gjord; annars behåll den som inte är en rutin
+      // (kalenderposten/uppgiften är oftast den användaren bockar i).
+      const keepNew =
+        (item.done && !prev.done) ||
+        (item.done === prev.done && prev.source === "rutin" && item.source !== "rutin");
+      if (keepNew) deduped[prevIdx] = item;
+    }
+
+    return sortFlowItems(deduped);
   }, [
     tasks,
     reminders,

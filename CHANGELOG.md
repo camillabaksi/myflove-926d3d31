@@ -1,3 +1,8 @@
+## 2026-09-12 – Inga dubbletter i Dagens lista
+
+- Samma sak som finns både som rutin och kalenderpost (t.ex. "Göra frukost 06:00") visas nu bara en gång i Dagens lista, Idag, Hem och Flow.
+- Vid sammanslagning behålls den post som redan är avbockad, annars kalenderposten/uppgiften framför rutinen.
+
 ## 2026-09-12 – Uppdaterad engelsk investerarpitch
 
 - Den engelska investerarpitchen har nu korrekt sidnumrering på samtliga 14 sidor.
