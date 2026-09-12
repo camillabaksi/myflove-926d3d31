@@ -68,8 +68,7 @@ export const EN_ADMIN: Record<string, string> = {
   "Sverige är första marknaden där MyFlove kan validera nytta, återkomst och betalningsvilja innan nordisk expansion.":
     "Sweden is the first market where MyFlove can validate value, retention, and willingness to pay before Nordic expansion.",
   "barn och vuxna med adhd eller autism": "children and adults with ADHD or autism",
-  "Svensk uppskattning; grupperna kan överlappa.":
-    "Swedish estimate; the groups may overlap.",
+  "Svensk uppskattning; grupperna kan överlappa.": "Swedish estimate; the groups may overlap.",
   "vuxna i Sverige med adhd": "adults in Sweden with ADHD",
   "Extern prevalensuppskattning från Socialstyrelsen.":
     "External prevalence estimate from the Swedish National Board of Health and Welfare.",
