@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-12";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Inga dubbletter i Dagens lista",
+    items: [
+      "Samma sak som finns både som rutin och kalenderpost visas nu bara en gång i Dagens lista, Idag, Hem och Flow (2026-09-12)",
+      "Vid sammanslagning behålls den avbockade posten, annars kalenderposten/uppgiften framför rutinen (2026-09-12)",
+    ],
+  },
+  {
     title: "Uppdaterad engelsk investerarpitch",
     items: [
       "Den engelska investerarpitchen har korrekt sidnumrering på samtliga 14 sidor (2026-09-12)",
