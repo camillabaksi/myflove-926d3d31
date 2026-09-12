@@ -5,8 +5,8 @@
 
 ## 2026-09-12 – Uppdaterad engelsk investerarpitch
 
-- Den engelska investerarpitchen har nu korrekt sidnumrering på samtliga 14 sidor.
-- Den inbäddade 27-sekundersvideon har fått en videosida i samma visuella stil som resten av presentationen.
+- Den engelska investerarpitchen har nu korrekt sidnumrering.
+- Den inbäddade 27-sekundersvideon ligger nu på slide 5, och den tidigare slide 6 är borttagen.
 - En ny marknadssida visar 140M+ vuxna med ADHD, cirka 3 % vuxenprevalens och marknadstillväxt från $1.9B till $6.7B år 2033.
 
 ## 2026-09-11 – Säkerhetslås för kalenderkopplingar
