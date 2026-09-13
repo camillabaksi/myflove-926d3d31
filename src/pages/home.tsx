@@ -231,7 +231,9 @@ export default function Home() {
                   <Brain className="h-5 w-5" aria-hidden />
                 </span>
                 <span className="text-sm font-semibold text-ink">{t("QuickFlow")}</span>
-                <span className="text-xs text-muted-foreground">{t("Få ur dig det som snurrar")}</span>
+                <span className="text-xs text-muted-foreground">
+                  {t("Få ur dig det som snurrar")}
+                </span>
               </Button>
               <Link
                 href="/mitt-batteri"
