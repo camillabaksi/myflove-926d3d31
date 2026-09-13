@@ -1,3 +1,9 @@
+## 2026-09-13 – Samma enkla ingång i Kalender och QuickFlow
+
+- Kalender visar dagens innehåll direkt; månadsöversikten med vyer och filter ligger hopfälld bakom ett sparat klick.
+- QuickFlow börjar med en enda fråga – "Vad snurrar i huvudet?" – och den befintliga infångningen; sortering, listan, anteckningar och regler ligger bakom "Det du fått ur huvudet".
+- Alla ingångar från Hem (Kalender, QuickFlow, Mitt batteri, Energi & mående, Min dag, Flow) följer nu samma mönster: enkel huvudvy först, fördjupning bakom klick.
+
 ## 2026-09-13 – Enklare Flow-ingång
 
 - Flow öppnar nu med en enkel ingång: frågan "Vad passar bäst just nu?" och en tydlig knapp "Visa mitt förslag".
