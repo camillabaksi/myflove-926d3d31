@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-13";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Enkla ingångar i hela appen",
+    items: [
+      "Planera i Flow: energi + tid + 'Skapa min FlowPlan' är enda huvudsteget; 'Behöver du planera om?' ligger hopfällt (2026-09-13)",
+      "Chatt i Flow öppnar direkt i samtalet; lägesbilden 'Idag' är hopfälld från start (2026-09-13)",
+      "Rutiner, Medicin, Städning och Feedback: huvudhandlingen först, sekundära block hopfällda från start – läget sparas (2026-09-13)",
+    ],
+  },
+  {
     title: "Samma enkla ingång i Kalender och QuickFlow",
     items: [
       "Kalender visar dagens innehåll direkt; månadsöversikten med vyer och filter ligger hopfälld bakom ett sparat klick (2026-09-13)",

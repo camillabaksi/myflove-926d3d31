@@ -224,6 +224,7 @@ export default function CleaningPage() {
             subtitle="Grejer för dagens städning"
             icon={ShoppingBasket}
             tone="sky"
+            defaultCollapsed
           >
             {supplies.length === 0 ? (
               <p className="text-sm text-muted-foreground">Inget särskilt – bara du 💛</p>
@@ -302,6 +303,7 @@ export default function CleaningPage() {
             subtitle="Dina egna steg sparas per rum och läge"
             icon={Plus}
             tone="blush"
+            defaultCollapsed
           >
             <div className="space-y-3">
               <div className="flex flex-wrap gap-2">

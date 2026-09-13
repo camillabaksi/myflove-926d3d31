@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import Layout from "@/components/layout";
-import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
+import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { Flame, Plus, ThumbsUp, Loader2, AlertTriangle } from "lucide-react";
@@ -258,12 +258,36 @@ export default function FrictionIndexPage() {
                 <Flame className="text-primary" /> Feedback & förslag
               </h1>
               <p className="text-muted-foreground">
-                Lämna feedback, förslag eller rapportera saker som skaver. Varje friktion bedöms på
-                tre skalor – <strong>påverkan</strong>, <strong>frekvens</strong> och{" "}
-                <strong>mental belastning</strong> (1–5 vardera) – som ger en totalpoäng 3–15.
-                Röster används som tiebreaker.
+                Säg till om något skaver – varje liten notis gör appen bättre.
               </p>
-              <div className="mt-3 flex flex-wrap gap-2 text-xs">
+            </div>
+
+            {error && (
+              <div className="bg-destructive/10 text-destructive rounded-2xl p-3 text-sm flex items-center gap-2">
+                <AlertTriangle size={16} /> {error}
+              </div>
+            )}
+
+            <div>
+              <Button onClick={() => setShowForm((s) => !s)} className="rounded-full">
+                <Plus size={16} className="mr-1" /> {showForm ? "Stäng" : "Lämna feedback"}
+              </Button>
+            </div>
+
+            <MyFloveBlock
+              title="Så räknas poängen"
+              subtitle="Påverkan, frekvens och mental belastning"
+              icon={Flame}
+              tone="lavender"
+              defaultCollapsed
+              collapseId="feedback::poang"
+            >
+              <p className="text-sm text-muted-foreground">
+                Varje friktion bedöms på tre skalor – <strong>påverkan</strong>,{" "}
+                <strong>frekvens</strong> och <strong>mental belastning</strong> (1–5 vardera) – som
+                ger en totalpoäng 3–15. Röster används som tiebreaker.
+              </p>
+              <div className="flex flex-wrap gap-2 text-xs">
                 <span className="px-2 py-1 rounded-full border bg-destructive/15 text-destructive border-destructive/30">
                   Kritisk 13–15
                 </span>
@@ -277,19 +301,7 @@ export default function FrictionIndexPage() {
                   Låg 3–5
                 </span>
               </div>
-            </div>
-
-            {error && (
-              <div className="bg-destructive/10 text-destructive rounded-2xl p-3 text-sm flex items-center gap-2">
-                <AlertTriangle size={16} /> {error}
-              </div>
-            )}
-
-            <div className="flex justify-end">
-              <Button onClick={() => setShowForm((s) => !s)} className="rounded-full">
-                <Plus size={16} className="mr-1" /> {showForm ? "Stäng" : "Lämna feedback"}
-              </Button>
-            </div>
+            </MyFloveBlock>
 
             {showForm && (
               <form

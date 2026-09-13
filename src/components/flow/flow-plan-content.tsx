@@ -556,6 +556,7 @@ export function FlowPlanContent() {
         span
         collapsible
         collapseId="planering::steg-planera-om"
+        defaultCollapsed
       >
         <DayAdjust />
       </MyFloveBlock>

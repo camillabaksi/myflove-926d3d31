@@ -598,6 +598,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
             surface="lavender"
             collapsible
             collapseId="assistant::idag"
+            defaultCollapsed
           >
             <p className="text-sm leading-snug">{coachMessage.text}</p>
           </MyFloveBlock>

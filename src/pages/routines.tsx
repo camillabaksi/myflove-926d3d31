@@ -244,6 +244,7 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
           icon={Sparkles}
           subtitle="Klicka för att lägga till"
           surface="lavender"
+          defaultCollapsed
         >
           <div className="flex flex-wrap gap-2">
             {SUGGESTIONS.map((s) => {
