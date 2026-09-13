@@ -127,10 +127,9 @@ function LandingPage() {
       {/* Så hjälper Flow */}
       <section className="px-5 pb-16 sm:px-6">
         <div className="mx-auto max-w-xl space-y-4">
-          <FlowSays
-            mood="wave"
-            text="Du behöver inte göra allt. Vi börjar med det som spelar roll just nu."
-          />
+          <FlowSays mood="wave">
+            Du behöver inte göra allt. Vi börjar med det som spelar roll just nu.
+          </FlowSays>
           {HELP_POINTS.map((point) => (
             <article
               key={point.title}
