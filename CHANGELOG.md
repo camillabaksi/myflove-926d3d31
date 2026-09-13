@@ -1,3 +1,8 @@
+## 2026-09-13 – Dagvyn syns direkt i kalendern
+
+- När du väljer Dag i kalendern visas dagens innehåll direkt under vyvalet – tidigare hamnade det långt ned under kalenderkopplingen så att vyn såg tom ut.
+- "Din riktiga kalender" (Google/Outlook) ligger nu under dagens innehåll.
+
 ## 2026-09-13 – Kalenderns dagvy och batterikort
 
 - Kalenderns tidslinje visas åter när Dag är vald, samtidigt som den förenklade dagsöversikten finns kvar.
