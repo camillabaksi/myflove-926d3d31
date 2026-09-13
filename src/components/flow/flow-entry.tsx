@@ -38,7 +38,7 @@ export default function FlowEntry({
           size="lg"
           className="rounded-2xl px-8"
           onClick={() => {
-            track("flow_deck_opened");
+            track("flow_opened", { section: "entry" });
             onOpen();
           }}
         >
