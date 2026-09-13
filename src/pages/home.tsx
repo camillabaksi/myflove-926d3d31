@@ -294,6 +294,7 @@ export default function Home() {
               <JourneySteps onAddOpen={() => setAddOpen(true)} />
               <NextStepCard />
               <CalmChoices onPause={() => setCalmMode("micro")} />
+              {isSunday && <WeekReviewCard review={weekReview} />}
               <Button
                 type="button"
                 variant="outline"
@@ -405,13 +406,6 @@ export default function Home() {
             </div>
           </CollapsibleSection>
         </MyFloveWide>
-
-        {/* 💜 Din vecka – visas på söndagar som en lugn sammanfattning. */}
-        {isSunday && (
-          <MyFloveWide style={{ order: 4.4 }} className="min-w-0" data-npf="optional">
-            <WeekReviewCard review={weekReview} />
-          </MyFloveWide>
-        )}
 
         {/* Områdesväljare – litet, längst ner */}
         {shows("omrade") && (
