@@ -136,8 +136,11 @@ function LandingPage() {
               key={point.title}
               className="flex items-start gap-4 rounded-3xl border border-[#2A2140]/5 bg-white p-5 shadow-sm"
             >
-              <span aria-hidden className="mt-0.5 text-2xl">
-                {point.icon}
+              <span
+                aria-hidden
+                className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-[#7C5CE0]/10 text-[#7C5CE0]"
+              >
+                <point.icon className="h-5 w-5" strokeWidth={1.8} />
               </span>
               <div className="min-w-0">
                 <h2 className="font-display text-base font-bold">{point.title}</h2>
