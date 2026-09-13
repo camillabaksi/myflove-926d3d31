@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-13";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Enklare Flow-ingång",
+    items: [
+      "Flow öppnar med en enkel ingång: 'Vad passar bäst just nu?' och knappen 'Visa mitt förslag' (2026-09-13)",
+      "Planera och Chatta nås som diskreta val och en hopfälld 'Mer om Flow'-sektion förklarar lägena (2026-09-13)",
+      "Hjälpkarusellen, planeringen, chatten och all funktionalitet finns kvar bakom klick (2026-09-13)",
+    ],
+  },
+  {
     title: "Enklare första upplevelse",
     items: [
       "Hem börjar med frågan 'Vad behöver du just nu?', en tydlig QuickFlow-handling och fyra jämna kärnkort (2026-09-13)",
