@@ -810,8 +810,6 @@ export function CalendarContent() {
           </div>
         </div>
 
-        {selectedDateStr && <CalendarAccount date={selectedDateStr} itemsToPush={pushItems} />}
-
         {selectedDateStr && (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-3">
@@ -1216,6 +1214,8 @@ export function CalendarContent() {
             )}
           </div>
         )}
+
+        {selectedDateStr && <CalendarAccount date={selectedDateStr} itemsToPush={pushItems} />}
 
         <Dialog open={isAddingReminder} onOpenChange={setIsAddingReminder}>
           <DialogContent className="max-h-[85dvh] overflow-y-auto rounded-3xl">
