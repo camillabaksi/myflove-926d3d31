@@ -1,3 +1,8 @@
+## 2026-09-13 – Enklare startsida
+
+- Startsidan (previewen innan inloggning) är förenklad: ett lugnt flöde med Flow, rubriken "Bär mindre. Gör inte mer.", en tydlig knapp "Kom igång" och länk "Jag har redan ett konto".
+- Det tidigare svepbara introt med tio vyer är ersatt av tre enkla kort som förklarar hur Flow hjälper, plus en liten sidfot med länkar. Ingen funktionalitet i appen är ändrad.
+
 ## 2026-09-13 – Enkla ingångar i hela appen
 
 - Planera i Flow behåller energi + tid + "Skapa min FlowPlan" som enda huvudsteg; "Behöver du planera om?" ligger nu hopfällt tills du behöver det.
