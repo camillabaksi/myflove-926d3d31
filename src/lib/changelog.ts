@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-13";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Dagvyn syns direkt i kalendern",
+    items: [
+      "När Dag väljs i kalendern visas dagens innehåll direkt under vyvalet – tidigare låg det under kalenderkopplingen så vyn såg tom ut (2026-09-13)",
+      "Kalenderkopplingen (Google/Outlook) ligger nu under dagens innehåll (2026-09-13)",
+    ],
+  },
+  {
     title: "Kalenderns dagvy och batterikort",
     items: [
       "Kalenderns tidslinje visas åter när Dag är vald, utan att den förenklade dagsöversikten tas bort (2026-09-13)",
