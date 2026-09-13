@@ -1,3 +1,9 @@
+## 2026-09-13 – Enkla ingångar i hela appen
+
+- Planera i Flow behåller energi + tid + "Skapa min FlowPlan" som enda huvudsteg; "Behöver du planera om?" ligger nu hopfällt tills du behöver det.
+- Chatt i Flow öppnar direkt i samtalet; lägesbilden "Idag" är hopfälld från start.
+- Rutiner, Medicin, Städning och Feedback följer samma mönster: huvudlistan eller huvudhandlingen först, sekundära block (Snabbstart, "Det här behöver du", "Lägg till eget steg", poängförklaring) hopfällda från start. Läget sparas som du lämnade det.
+
 ## 2026-09-13 – Samma enkla ingång i Kalender och QuickFlow
 
 - Kalender visar dagens innehåll direkt; månadsöversikten med vyer och filter ligger hopfälld bakom ett sparat klick.
