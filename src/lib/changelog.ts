@@ -15,6 +15,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
       "Hem börjar med frågan 'Vad behöver du just nu?', en tydlig QuickFlow-handling och fyra jämna kärnkort (2026-09-13)",
       "Dagens steg, nästa rimliga sak och lugna pauser finns kvar bakom ett sparat, hopfällbart block (2026-09-13)",
       "Första introduktionen leder direkt till en enkel QuickFlow-handling eller vidare till Hem (2026-09-13)",
+      "Mitt batteri och Min dag visar nu en enkel huvudhandling först, med befintliga detaljer bakom ett sparat klick (2026-09-13)",
     ],
   },
   {

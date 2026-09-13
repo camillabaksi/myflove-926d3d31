@@ -3,6 +3,8 @@
 - Hem börjar nu med frågan ”Vad behöver du just nu?”, en tydlig QuickFlow-handling och fyra jämna kärnkort för Kalender, QuickFlow, Mitt batteri och Energi & mående.
 - Dagens steg, nästa rimliga sak och lugna pauser finns kvar men ligger bakom ett sparat, hopfällbart block så första skärmen blir lugnare.
 - Första introduktionen är kortad till en enda handling: skriv en tanke i befintliga QuickFlow eller gå vidare till Hem.
+- Mitt batteri visar incheckningen först; batteridetaljer, mönster och påverkan öppnas vid behov.
+- Min dag visar en enkel sammanfattning först; plan, tider, uppgifter och energibalans öppnas med ett tryck.
 
 ## 2026-09-12 – Android 5.1 (versionCode 10)
 

@@ -122,6 +122,7 @@ export default function HowAreYou() {
         <MyFloveWide className="min-w-0">
           <CollapsibleSection
             id="how-are-you-impact"
+            defaultCollapsed
             title={
               <span>
                 <span aria-hidden>🌿</span> {t("Vad påverkar dig idag?")}

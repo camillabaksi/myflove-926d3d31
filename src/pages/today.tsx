@@ -156,36 +156,47 @@ export function TodayContent() {
         </p>
       </MyFloveWide>
 
-      {/* 🌊 Flow / 📋 Lista – två vyer av samma dag */}
-      <MyFloveWide
-        role="tablist"
-        aria-label={t("Visningsläge för dagen")}
-        className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-1 rounded-2xl bg-muted/60 p-1"
+      <CollapsibleSection
+        id="today-details"
+        defaultCollapsed
+        title={t("Visa min dag")}
+        description={t(
+          `${todaysItems.length} ${todaysItems.length === 1 ? "sak" : "saker"} väntar idag. Öppna när du vill se planen.`,
+        )}
+        className="col-span-full rounded-3xl border border-border/60 bg-card/70 p-4 shadow-soft"
+        headingClassName="text-base font-semibold text-ink"
       >
-        {(
-          [
-            { id: "flow", label: "Flow", icon: Waves },
-            { id: "lista", label: "Lista", icon: ListChecks },
-          ] as const
-        ).map((v) => {
-          const Icon = v.icon;
-          const active = view === v.id;
-          return (
-            <button
-              key={v.id}
-              type="button"
-              role="tab"
-              aria-selected={active}
-              onClick={() => setView(v.id)}
-              className={`flex items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-sm font-medium transition-colors ${
-                active ? "bg-card text-ink shadow-soft" : "text-muted-foreground"
-              }`}
-            >
-              <Icon size={16} /> {t(v.label)}
-            </button>
-          );
-        })}
-      </MyFloveWide>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+          {/* 🌊 Flow / 📋 Lista – två vyer av samma dag */}
+          <MyFloveWide
+            role="tablist"
+            aria-label={t("Visningsläge för dagen")}
+            className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-1 rounded-2xl bg-muted/60 p-1"
+          >
+            {(
+              [
+                { id: "flow", label: "Flow", icon: Waves },
+                { id: "lista", label: "Lista", icon: ListChecks },
+              ] as const
+            ).map((v) => {
+              const Icon = v.icon;
+              const active = view === v.id;
+              return (
+                <button
+                  key={v.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={active}
+                  onClick={() => setView(v.id)}
+                  className={`flex items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-sm font-medium transition-colors ${
+                    active ? "bg-card text-ink shadow-soft" : "text-muted-foreground"
+                  }`}
+                >
+                  <Icon size={16} /> {t(v.label)}
+                </button>
+              );
+            })}
+          </MyFloveWide>
 
       {/* Steg 1 – hur du mår just nu. Incheckningen bor i Mitt batteri,
             här visas bara statusen som en klickbar sammanfattning. */}
@@ -203,7 +214,7 @@ export function TodayContent() {
         <FlowCompanion stage="mini" />
       </StepSection>
 
-      {view === "flow" ? (
+          {view === "flow" ? (
         <>
           {/* Primärt: dagens faktiska arbete, utan krav på klockslag. */}
           <StepSection
@@ -384,7 +395,7 @@ export function TodayContent() {
             </div>
           </StepSection>
         </>
-      ) : (
+          ) : (
         <StepSection
           step={2}
           className="col-span-full md:col-span-2 xl:col-span-2"
@@ -410,7 +421,9 @@ export function TodayContent() {
             <ListOrdered size={16} /> {t("Öppna alla uppgifter")}
           </Link>
         </StepSection>
-      )}
+          )}
+        </div>
+      </CollapsibleSection>
       <ActivityEnergyPrompt item={energyItem} onClose={() => setEnergyItem(null)} />
     </MyFlovePageGrid>
   );
