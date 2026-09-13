@@ -30,8 +30,8 @@ export default function Dump() {
         <MyFloveWide>
           <div className="space-y-8">
             <MyFloveBlock
-              title={t("Vad behöver du få ur huvudet?")}
-              subtitle={t("Skriv eller prata fritt. Flow sorterar och hjälper dig prioritera.")}
+              title={t("Vad snurrar i huvudet?")}
+              subtitle={t("Skriv eller prata fritt – Flow hjälper dig sortera sen.")}
               eyebrow="QuickFlow"
               icon={Sparkles}
               tone="sun"
@@ -39,11 +39,6 @@ export default function Dump() {
               className="pop-in"
             >
               <div className="space-y-4">
-                <p className="leading-relaxed text-muted-foreground">
-                  {t(
-                    "Dumpa allt som snurrar – Flow delar upp det i separata saker och föreslår en ordning utifrån viktighet, brådska och ditt batteri. Du bestämmer alltid själv.",
-                  )}
-                </p>
                 <QuickflowCapture />
                 <WhyHint label="quickflow">
                   {t(
@@ -53,35 +48,51 @@ export default function Dump() {
               </div>
             </MyFloveBlock>
 
-            <QuickflowPriority />
-
-            <InsightQuickflowHint />
-            <QuickflowList />
-
-            <Link
-              to="/anteckningar"
-              className="surface-card mt-4 flex items-center gap-3 p-4 text-left hover:border-primary/40"
-            >
-              <NotebookPen size={20} className="text-primary" />
-              <span className="min-w-0 flex-1">
-                <span className="block font-semibold text-ink">{t("Anteckningar & idébank")}</span>
-                <span className="block text-sm text-muted-foreground">
-                  {t("Tankar utan krav bor i en egen del under Flow.")}
-                </span>
-              </span>
-            </Link>
-
+            {/* Allt som redan är ur huvudet ligger kvar – men ur vägen tills du vill se det. */}
             <CollapsibleSection
-              title={
-                <span className="flex items-center gap-2">
-                  <Sparkles size={20} /> {t("Mina sorteringsregler")}
-                </span>
-              }
-              id="QuickFlow-regler"
-              headingClassName="font-semibold"
-              className="pt-4"
+              id="quickflow-det-du-fatt-ur"
+              defaultCollapsed
+              title={t("Det du fått ur huvudet")}
+              description={t(
+                "Flow har sorterat det du dumpat efter viktighet, brådska och ditt batteri. Du bestämmer alltid själv.",
+              )}
+              className="rounded-3xl border border-border/60 bg-card/70 p-4 shadow-soft"
+              headingClassName="text-base font-semibold text-ink"
             >
-              <QuickflowRulesSettings />
+              <div className="space-y-8 pt-2">
+                <QuickflowPriority />
+
+                <InsightQuickflowHint />
+                <QuickflowList />
+
+                <Link
+                  to="/anteckningar"
+                  className="surface-card mt-4 flex items-center gap-3 p-4 text-left hover:border-primary/40"
+                >
+                  <NotebookPen size={20} className="text-primary" />
+                  <span className="min-w-0 flex-1">
+                    <span className="block font-semibold text-ink">
+                      {t("Anteckningar & idébank")}
+                    </span>
+                    <span className="block text-sm text-muted-foreground">
+                      {t("Tankar utan krav bor i en egen del under Flow.")}
+                    </span>
+                  </span>
+                </Link>
+
+                <CollapsibleSection
+                  title={
+                    <span className="flex items-center gap-2">
+                      <Sparkles size={20} /> {t("Mina sorteringsregler")}
+                    </span>
+                  }
+                  id="QuickFlow-regler"
+                  headingClassName="font-semibold"
+                  className="pt-4"
+                >
+                  <QuickflowRulesSettings />
+                </CollapsibleSection>
+              </div>
             </CollapsibleSection>
           </div>
         </MyFloveWide>
