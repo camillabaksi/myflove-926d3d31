@@ -1,3 +1,8 @@
+## 2026-09-13 – Kalenderns dagvy och batterikort
+
+- Kalenderns tidslinje visas åter när Dag är vald, samtidigt som den förenklade dagsöversikten finns kvar.
+- Batterikortet ovanför kalendern använder hela tillgängliga bredden så mobilvyn inte lämnar en tom kolumn.
+
 ## 2026-09-13 – Enklare startsida
 
 - Startsidan (previewen innan inloggning) är förenklad: ett lugnt flöde med Flow, rubriken "Bär mindre. Gör inte mer.", en tydlig knapp "Kom igång" och länk "Jag har redan ett konto".
