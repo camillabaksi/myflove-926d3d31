@@ -1,5 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
+import { Battery, Brain, Heart } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { FlowMascot, FlowSays } from "@/components/flow-mascot";
@@ -43,17 +44,17 @@ export const Route = createFileRoute("/")({
 
 const HELP_POINTS = [
   {
-    icon: "🧠",
+    icon: Brain,
     title: "Säg vad som snurrar",
     text: "Skriv eller säg allt du bär på. Flow sorterar det åt dig – du behöver inte organisera något själv.",
   },
   {
-    icon: "🔋",
+    icon: Battery,
     title: "Få en plan efter din energi",
     text: "FlowPlan lägger dagen i en ordning som matchar din kapacitet. Lågt batteri? Då blir planen lättare.",
   },
   {
-    icon: "💜",
+    icon: Heart,
     title: "Bär mindre, utan skuld",
     text: "Det som inte måste göras flyttas framåt. Kvar blir det som faktiskt räknas idag.",
   },
