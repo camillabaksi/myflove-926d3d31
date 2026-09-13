@@ -14,3 +14,4 @@
 - [x] Health Connect/steg borttaget ur Android-MVP:n inför Google Play Internal Test (2026-09-04)
 - [x] MyFlove 5.0: samlad release med lugn dagsresa, Flow-åtgärder, kalenderkoppling, belastningskarta och sorterad adminanalys (2026-09-11)
 - [x] Investerarmaterial och Android AAB synkade till MyFlove 5.0 / versionCode 9 (2026-09-11)
+- [ ] Förenklad första upplevelse: en huvudhandling, fyra kärnkort och stegvis information på Hem (2026-09-13)

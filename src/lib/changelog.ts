@@ -6,9 +6,17 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-09-12";
+export const CHANGELOG_UPDATED = "2026-09-13";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  {
+    title: "Enklare första upplevelse",
+    items: [
+      "Hem börjar med frågan 'Vad behöver du just nu?', en tydlig QuickFlow-handling och fyra jämna kärnkort (2026-09-13)",
+      "Dagens steg, nästa rimliga sak och lugna pauser finns kvar bakom ett sparat, hopfällbart block (2026-09-13)",
+      "Första introduktionen leder direkt till en enkel QuickFlow-handling eller vidare till Hem (2026-09-13)",
+    ],
+  },
   {
     title: "Android 5.1 (versionCode 10)",
     items: [
