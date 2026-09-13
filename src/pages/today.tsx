@@ -156,177 +156,263 @@ export function TodayContent() {
         </p>
       </MyFloveWide>
 
-      {/* 🌊 Flow / 📋 Lista – två vyer av samma dag */}
-      <MyFloveWide
-        role="tablist"
-        aria-label={t("Visningsläge för dagen")}
-        className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-1 rounded-2xl bg-muted/60 p-1"
+      <CollapsibleSection
+        id="today-details"
+        defaultCollapsed
+        title={t("Visa min dag")}
+        description={t(
+          `${todaysItems.length} ${todaysItems.length === 1 ? "sak" : "saker"} väntar idag. Öppna när du vill se planen.`,
+        )}
+        className="col-span-full rounded-3xl border border-border/60 bg-card/70 p-4 shadow-soft"
+        headingClassName="text-base font-semibold text-ink"
       >
-        {(
-          [
-            { id: "flow", label: "Flow", icon: Waves },
-            { id: "lista", label: "Lista", icon: ListChecks },
-          ] as const
-        ).map((v) => {
-          const Icon = v.icon;
-          const active = view === v.id;
-          return (
-            <button
-              key={v.id}
-              type="button"
-              role="tab"
-              aria-selected={active}
-              onClick={() => setView(v.id)}
-              className={`flex items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-sm font-medium transition-colors ${
-                active ? "bg-card text-ink shadow-soft" : "text-muted-foreground"
-              }`}
-            >
-              <Icon size={16} /> {t(v.label)}
-            </button>
-          );
-        })}
-      </MyFloveWide>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+          {/* 🌊 Flow / 📋 Lista – två vyer av samma dag */}
+          <MyFloveWide
+            role="tablist"
+            aria-label={t("Visningsläge för dagen")}
+            className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-1 rounded-2xl bg-muted/60 p-1"
+          >
+            {(
+              [
+                { id: "flow", label: "Flow", icon: Waves },
+                { id: "lista", label: "Lista", icon: ListChecks },
+              ] as const
+            ).map((v) => {
+              const Icon = v.icon;
+              const active = view === v.id;
+              return (
+                <button
+                  key={v.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={active}
+                  onClick={() => setView(v.id)}
+                  className={`flex items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-sm font-medium transition-colors ${
+                    active ? "bg-card text-ink shadow-soft" : "text-muted-foreground"
+                  }`}
+                >
+                  <Icon size={16} /> {t(v.label)}
+                </button>
+              );
+            })}
+          </MyFloveWide>
 
-      {/* Steg 1 – hur du mår just nu. Incheckningen bor i Mitt batteri,
+          {/* Steg 1 – hur du mår just nu. Incheckningen bor i Mitt batteri,
             här visas bara statusen som en klickbar sammanfattning. */}
-      <StepSection
-        step={1}
-        className="col-span-full"
-        id="idag::steg-mabra"
-        title={t("Så mår du just nu")}
-        description={t("Energin styr dagens förslag – öppna Mitt batteri om du vill checka in.")}
-      >
-        <EnergyBattery
-          href="/mitt-batteri"
-          onNavigate={() => track("battery_opened", { source: "idag" })}
-        />
-        <FlowCompanion stage="mini" />
-      </StepSection>
-
-      {view === "flow" ? (
-        <>
-          {/* Primärt: dagens faktiska arbete, utan krav på klockslag. */}
           <StepSection
-            step={2}
-            className="col-span-full md:col-span-2 xl:col-span-2"
-            id="idag::det-har-gjort"
-            title={t("Det här har du gjort idag")}
-            description={`${t("Du har gjort")} ${doneActivities.length} ${doneActivities.length === 1 ? t("sak") : t("saker")} ${t("idag.")}`}
-          >
-            {doneActivities.length > 0 ? (
-              <ul className="space-y-2">
-                {doneActivities.map((task) => (
-                  <li
-                    key={task.id}
-                    className="flex items-center gap-3 rounded-2xl bg-secondary/40 px-3 py-2.5"
-                  >
-                    <span aria-hidden className="text-primary">
-                      ✓
-                    </span>
-                    <span className="min-w-0 flex-1 text-sm font-medium text-ink">
-                      {task.title}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-sm text-muted-foreground">
-                {t("Det du bär och gör får ta plats här.")}
-              </p>
+            step={1}
+            className="col-span-full"
+            id="idag::steg-mabra"
+            title={t("Så mår du just nu")}
+            description={t(
+              "Energin styr dagens förslag – öppna Mitt batteri om du vill checka in.",
             )}
-          </StepSection>
-
-          {/* Sekundärt: bara sådant som faktiskt har en tid. */}
-          <StepSection
-            step={3}
-            className="col-span-full md:col-span-2 xl:col-span-2"
-            id="idag::tider"
-            title={t("Tider idag")}
-            description={t("Det tidsbestämda – resten av dagen behöver ingen klocka.")}
           >
-            {entries.length > 0 ? (
-              <DayTimeline entries={entries} isToday energyByHour={energyByHour} />
-            ) : (
-              <p className="text-sm text-muted-foreground">{t("Inga tider idag.")}</p>
-            )}
-          </StepSection>
-
-          {/* 📋 Dagens ordning – planen du valt i Planera */}
-          {dayPlan && dayPlan.steps.length > 0 && (
-            <ExpandableBlock
-              title={t("Dagens ordning")}
-              subtitle={t("Planen du valt i Planera")}
-              icon={ListOrdered}
-              tone="lavender"
-              area="planera"
-              widget
-              label={t("Ordning")}
-              status={`${dayPlan.steps.length}`}
-            >
-              {dayPlan.intro && <p className="text-sm text-foreground">{dayPlan.intro}</p>}
-              <ol className="space-y-2">
-                {dayPlan.steps.map((step, i) => (
-                  <li
-                    key={`${step.taskId}-${i}`}
-                    className="flex items-start gap-3 rounded-2xl bg-secondary/40 p-3"
-                  >
-                    <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
-                      {i + 1}
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <p className="font-medium text-ink">{step.title}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {step.estimatedMin ? `${t("ca")} ${step.estimatedMin} ${t("min")} · ` : ""}
-                        {step.why}
-                      </p>
-                    </div>
-                  </li>
-                ))}
-              </ol>
-              <Link
-                href="/flow"
-                className="inline-flex items-center gap-2 text-sm text-primary underline-offset-2 hover:underline"
-              >
-                <ListOrdered size={16} /> {t("Ändra ordningen i Planera")}
-              </Link>
-            </ExpandableBlock>
-          )}
-
-          {offerReplan && (
-            <FlowReplan
-              className="col-span-full md:col-span-2"
-              flow={flow}
-              items={todaysItems}
-              mode={mode}
-              chosen={chosen}
-              onChange={setMode}
-              keepCount={keep.length}
-              restCount={rest.length}
+            <EnergyBattery
+              href="/mitt-batteri"
+              onNavigate={() => track("battery_opened", { source: "idag" })}
             />
-          )}
+            <FlowCompanion stage="mini" />
+          </StepSection>
 
-          {/* Steg 4 – Nu → Nästa → Senare */}
-          <StepSection
-            step={4}
-            className="col-span-full md:col-span-2 xl:col-span-2"
-            id="idag::steg-far-plats"
-            title={t("Det som får plats idag")}
-            help={t(
-              'MyFlove väljer utifrån din kapacitet just nu. Det som inte får plats försvinner inte – det ligger kvar under "Resten kan vänta".',
-            )}
-          >
-            <p className="text-sm text-muted-foreground">
-              {t(
-                "Samlat från hela ditt liv – uppgifter, deadlines, lektioner, barnens dag och tankar du lagt i Quickflow.",
+          {view === "flow" ? (
+            <>
+              {/* Primärt: dagens faktiska arbete, utan krav på klockslag. */}
+              <StepSection
+                step={2}
+                className="col-span-full md:col-span-2 xl:col-span-2"
+                id="idag::det-har-gjort"
+                title={t("Det här har du gjort idag")}
+                description={`${t("Du har gjort")} ${doneActivities.length} ${doneActivities.length === 1 ? t("sak") : t("saker")} ${t("idag.")}`}
+              >
+                {doneActivities.length > 0 ? (
+                  <ul className="space-y-2">
+                    {doneActivities.map((task) => (
+                      <li
+                        key={task.id}
+                        className="flex items-center gap-3 rounded-2xl bg-secondary/40 px-3 py-2.5"
+                      >
+                        <span aria-hidden className="text-primary">
+                          ✓
+                        </span>
+                        <span className="min-w-0 flex-1 text-sm font-medium text-ink">
+                          {task.title}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-sm text-muted-foreground">
+                    {t("Det du bär och gör får ta plats här.")}
+                  </p>
+                )}
+              </StepSection>
+
+              {/* Sekundärt: bara sådant som faktiskt har en tid. */}
+              <StepSection
+                step={3}
+                className="col-span-full md:col-span-2 xl:col-span-2"
+                id="idag::tider"
+                title={t("Tider idag")}
+                description={t("Det tidsbestämda – resten av dagen behöver ingen klocka.")}
+              >
+                {entries.length > 0 ? (
+                  <DayTimeline entries={entries} isToday energyByHour={energyByHour} />
+                ) : (
+                  <p className="text-sm text-muted-foreground">{t("Inga tider idag.")}</p>
+                )}
+              </StepSection>
+
+              {/* 📋 Dagens ordning – planen du valt i Planera */}
+              {dayPlan && dayPlan.steps.length > 0 && (
+                <ExpandableBlock
+                  title={t("Dagens ordning")}
+                  subtitle={t("Planen du valt i Planera")}
+                  icon={ListOrdered}
+                  tone="lavender"
+                  area="planera"
+                  widget
+                  label={t("Ordning")}
+                  status={`${dayPlan.steps.length}`}
+                >
+                  {dayPlan.intro && <p className="text-sm text-foreground">{dayPlan.intro}</p>}
+                  <ol className="space-y-2">
+                    {dayPlan.steps.map((step, i) => (
+                      <li
+                        key={`${step.taskId}-${i}`}
+                        className="flex items-start gap-3 rounded-2xl bg-secondary/40 p-3"
+                      >
+                        <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
+                          {i + 1}
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <p className="font-medium text-ink">{step.title}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {step.estimatedMin
+                              ? `${t("ca")} ${step.estimatedMin} ${t("min")} · `
+                              : ""}
+                            {step.why}
+                          </p>
+                        </div>
+                      </li>
+                    ))}
+                  </ol>
+                  <Link
+                    href="/flow"
+                    className="inline-flex items-center gap-2 text-sm text-primary underline-offset-2 hover:underline"
+                  >
+                    <ListOrdered size={16} /> {t("Ändra ordningen i Planera")}
+                  </Link>
+                </ExpandableBlock>
               )}
-            </p>
-            {keep.length === 0 ? (
+
+              {offerReplan && (
+                <FlowReplan
+                  className="col-span-full md:col-span-2"
+                  flow={flow}
+                  items={todaysItems}
+                  mode={mode}
+                  chosen={chosen}
+                  onChange={setMode}
+                  keepCount={keep.length}
+                  restCount={rest.length}
+                />
+              )}
+
+              {/* Steg 4 – Nu → Nästa → Senare */}
+              <StepSection
+                step={4}
+                className="col-span-full md:col-span-2 xl:col-span-2"
+                id="idag::steg-far-plats"
+                title={t("Det som får plats idag")}
+                help={t(
+                  'MyFlove väljer utifrån din kapacitet just nu. Det som inte får plats försvinner inte – det ligger kvar under "Resten kan vänta".',
+                )}
+              >
+                <p className="text-sm text-muted-foreground">
+                  {t(
+                    "Samlat från hela ditt liv – uppgifter, deadlines, lektioner, barnens dag och tankar du lagt i Quickflow.",
+                  )}
+                </p>
+                {keep.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">
+                    {t("Inga uppgifter väntar. Det räcker att bara vara idag. 💙")}
+                  </p>
+                ) : (
+                  <ul className="space-y-2">
+                    {keep.map((item) => (
+                      <li key={item.id}>
+                        <MyFloveTransition transitionKey={String(item.done)}>
+                          <FlowItemCard
+                            item={item}
+                            {...(item.completable ? { onToggle: toggle } : {})}
+                          />
+                        </MyFloveTransition>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {rest.length > 0 && (
+                  <details className="rounded-2xl bg-muted/50 p-3">
+                    <summary className="cursor-pointer text-sm font-medium text-ink">
+                      {t("Resten kan vänta")} ({rest.length})
+                    </summary>
+                    <ul className="mt-3 space-y-2">
+                      {rest.slice(0, 8).map((item) => (
+                        <li key={item.id}>
+                          <FlowItemCard
+                            item={item}
+                            {...(item.completable ? { onToggle: toggle } : {})}
+                          />
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
+                )}
+              </StepSection>
+
+              {/* Extra – energibalans och ett förslag, hopfällt tills du vill se det */}
+              <StepSection
+                step={5}
+                id="idag::steg-energibalans"
+                title={t("Dagens energibalans")}
+                description={t("Hur dagen belastar dig – och ett förslag från Flow.")}
+                defaultCollapsed
+              >
+                <p className="text-sm text-foreground">{load.summary}</p>
+                {reading.peak && (
+                  <p className="text-xs text-muted-foreground">
+                    {t("Starkast")} {reading.peak.label}
+                    {reading.dip ? ` · ${t("lägst")} ${reading.dip.label}` : ""}
+                  </p>
+                )}
+                <div className="flex items-start gap-2 rounded-2xl bg-secondary/40 px-3 py-2 text-sm text-foreground">
+                  <Sparkles size={16} className="mt-0.5 shrink-0 text-primary" />
+                  <p>
+                    {t(suggestion.headline)}
+                    {suggestion.task
+                      ? ` ${t(`Börja gärna med "${suggestion.task.title}".`)}`
+                      : ""}{" "}
+                    <Link href="/flow" className="text-primary underline-offset-2 hover:underline">
+                      {t("Öppna Flow")}
+                    </Link>
+                  </p>
+                </div>
+              </StepSection>
+            </>
+          ) : (
+            <StepSection
+              step={2}
+              className="col-span-full md:col-span-2 xl:col-span-2"
+              id="idag::steg-lista"
+              title={t("Dagens lista")}
+            >
               <p className="text-sm text-muted-foreground">
-                {t("Inga uppgifter väntar. Det räcker att bara vara idag. 💙")}
+                {t("Samma dag, samma aktiviteter – även sådant som inte behöver en tid.")}
               </p>
-            ) : (
               <ul className="space-y-2">
-                {keep.map((item) => (
+                {[...todaysItems, ...todayDone].map((item) => (
                   <li key={item.id}>
                     <MyFloveTransition transitionKey={String(item.done)}>
                       <FlowItemCard
@@ -337,80 +423,16 @@ export function TodayContent() {
                   </li>
                 ))}
               </ul>
-            )}
-            {rest.length > 0 && (
-              <details className="rounded-2xl bg-muted/50 p-3">
-                <summary className="cursor-pointer text-sm font-medium text-ink">
-                  {t("Resten kan vänta")} ({rest.length})
-                </summary>
-                <ul className="mt-3 space-y-2">
-                  {rest.slice(0, 8).map((item) => (
-                    <li key={item.id}>
-                      <FlowItemCard
-                        item={item}
-                        {...(item.completable ? { onToggle: toggle } : {})}
-                      />
-                    </li>
-                  ))}
-                </ul>
-              </details>
-            )}
-          </StepSection>
-
-          {/* Extra – energibalans och ett förslag, hopfällt tills du vill se det */}
-          <StepSection
-            step={5}
-            id="idag::steg-energibalans"
-            title={t("Dagens energibalans")}
-            description={t("Hur dagen belastar dig – och ett förslag från Flow.")}
-            defaultCollapsed
-          >
-            <p className="text-sm text-foreground">{load.summary}</p>
-            {reading.peak && (
-              <p className="text-xs text-muted-foreground">
-                {t("Starkast")} {reading.peak.label}
-                {reading.dip ? ` · ${t("lägst")} ${reading.dip.label}` : ""}
-              </p>
-            )}
-            <div className="flex items-start gap-2 rounded-2xl bg-secondary/40 px-3 py-2 text-sm text-foreground">
-              <Sparkles size={16} className="mt-0.5 shrink-0 text-primary" />
-              <p>
-                {t(suggestion.headline)}
-                {suggestion.task ? ` ${t(`Börja gärna med "${suggestion.task.title}".`)}` : ""}{" "}
-                <Link href="/flow" className="text-primary underline-offset-2 hover:underline">
-                  {t("Öppna Flow")}
-                </Link>
-              </p>
-            </div>
-          </StepSection>
-        </>
-      ) : (
-        <StepSection
-          step={2}
-          className="col-span-full md:col-span-2 xl:col-span-2"
-          id="idag::steg-lista"
-          title={t("Dagens lista")}
-        >
-          <p className="text-sm text-muted-foreground">
-            {t("Samma dag, samma aktiviteter – även sådant som inte behöver en tid.")}
-          </p>
-          <ul className="space-y-2">
-            {[...todaysItems, ...todayDone].map((item) => (
-              <li key={item.id}>
-                <MyFloveTransition transitionKey={String(item.done)}>
-                  <FlowItemCard item={item} {...(item.completable ? { onToggle: toggle } : {})} />
-                </MyFloveTransition>
-              </li>
-            ))}
-          </ul>
-          <Link
-            href="/tasks"
-            className="inline-flex items-center gap-2 text-sm text-primary underline-offset-2 hover:underline"
-          >
-            <ListOrdered size={16} /> {t("Öppna alla uppgifter")}
-          </Link>
-        </StepSection>
-      )}
+              <Link
+                href="/tasks"
+                className="inline-flex items-center gap-2 text-sm text-primary underline-offset-2 hover:underline"
+              >
+                <ListOrdered size={16} /> {t("Öppna alla uppgifter")}
+              </Link>
+            </StepSection>
+          )}
+        </div>
+      </CollapsibleSection>
       <ActivityEnergyPrompt item={energyItem} onClose={() => setEnergyItem(null)} />
     </MyFlovePageGrid>
   );

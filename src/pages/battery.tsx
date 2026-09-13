@@ -53,40 +53,33 @@ export default function BatteryPage() {
           />
         </MyFloveWide>
 
-        {/* 1. Primär incheckning: ork/mående + nu-läge – samma befintliga dataväg */}
-        <MyFloveWide className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">
+        {/* 1. En enda primär handling – samma befintliga dataväg. */}
+        <MyFloveWide>
           <SimpleCheckin source="mitt-batteri" />
-          <EnergyBattery defaultOpen />
         </MyFloveWide>
 
-        {/* 2. Dagens tidsstämplade observationer */}
-        <MyFloveWide className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">
-          <BatteryToday />
-        </MyFloveWide>
-
-        {/* 2c. Mina mönster – valfritt, hopfällt som standard */}
+        {/* All befintlig fördjupning finns kvar, men visas först efter klick. */}
         <MyFloveWide>
-          <PatternsCard />
-        </MyFloveWide>
-
-        {/* 2b. Menscykel – visas bara om användaren själv aktiverat den */}
-        <MyFloveWide className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">
-          <CycleCard />
-        </MyFloveWide>
-
-        {/* 3. Morgon/kväll – "god morgon"-kortet … */}
-        <MyFloveWide className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">
-          <DayEdgesCheckin />
-        </MyFloveWide>
-
-        {/* 3b. … och direkt efter det: Påverkan – vad som påverkar kapaciteten just nu */}
-        <MyFloveWide className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">
-          <ImpactCheckin />
-        </MyFloveWide>
-
-        {/* 3. Dagens energiflöde – graf, hela bredden */}
-        <MyFloveWide>
-          <DayEnergyFlow />
+          <CollapsibleSection
+            id="battery-more-details"
+            defaultCollapsed
+            title={t("Mer om din energi")}
+            description={t("Se batteriet, dagens mönster och vad som påverkar dig.")}
+            className="rounded-3xl border border-border/60 bg-card/70 p-4 shadow-soft"
+            headingClassName="text-base font-semibold text-ink"
+          >
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">
+              <EnergyBattery />
+              <BatteryToday />
+              <PatternsCard />
+              <CycleCard />
+              <DayEdgesCheckin />
+              <ImpactCheckin />
+              <div className="lg:col-span-2">
+                <DayEnergyFlow />
+              </div>
+            </div>
+          </CollapsibleSection>
         </MyFloveWide>
 
         {/* 4. Historik – sekundär, längst ner. Widget-komprimerad; expanderar i flödet. */}
