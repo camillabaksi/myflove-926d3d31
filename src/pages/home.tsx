@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import QuickAddSheet from "@/components/quick-add-sheet";
 import { FlowMascot } from "@/components/flow-mascot";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
@@ -20,7 +20,6 @@ import PwaInstallCard from "@/components/pwa-install-card";
 import { AreaSwitcher } from "@/components/area-switcher";
 import { AREA_META, useActiveArea } from "@/lib/life-areas";
 import IntroTour from "@/components/intro-tour";
-import FlowOnboarding from "@/components/flow-onboarding";
 import {
   SlidersHorizontal,
   Compass,
@@ -30,13 +29,11 @@ import {
   Heart,
   Pill,
   ArrowRight,
-  ChevronRight,
   Sparkles,
 } from "lucide-react";
 import { todayISO } from "@/lib/day";
 import { track } from "@/lib/analytics";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";
-import { useFeatureUsage, type FeatureId } from "@/lib/feature-usage";
 import { orkFromValue10 } from "@/lib/ork";
 import WeekReviewCard from "@/components/week-review-card";
 import JourneySteps from "@/components/journey/journey-steps";
@@ -60,13 +57,6 @@ import CalmChoices from "@/components/journey/calm-choices";
  * presentation och informationshierarki.
  */
 
-interface TodayEntry {
-  id: string;
-  time?: string;
-  title: string;
-  note?: string;
-}
-
 export default function Home() {
   const { name, setName, lastVisit } = useUserProfile();
   const { t } = useLang();
@@ -89,72 +79,13 @@ export default function Home() {
         ? { less: false, stillness: false }
         : { less: true, calm: true, stillness: true, plainWords: true },
     );
-  const { record: recordFeature, order: featureOrder, adaptive, top } = useFeatureUsage();
   const todayIso = todayISO();
   // Veckoöversikten hör hemma på söndagen – veckan som varit, i lugn takt.
   const isSunday = parseISODate(todayIso).getDay() === 0;
   const weekReview = useWeekReview(weekStartISO(todayIso));
 
-  /** Dagens saker – samma data som kalendern och Min dag, bara kortare. */
-  const todayEntries = useMemo<TodayEntry[]>(() => {
-    const fromReminders: TodayEntry[] = activeReminders
-      .filter((r) => r.date === todayIso && !r.canceled)
-      .map((r) => ({ id: `r-${r.id}`, time: r.time, title: r.title, note: r.note }));
-    const fromTasks: TodayEntry[] = activeTasks
-      .filter((t) => t.dueDate === todayIso)
-      .map((t) => ({ id: `t-${t.id}`, time: t.time, title: t.title }));
-    return [...fromReminders, ...fromTasks]
-      .sort((a, b) => (a.time ?? "99:99").localeCompare(b.time ?? "99:99"))
-      .slice(0, 5);
-  }, [activeReminders, activeTasks, todayIso]);
-
   const battery = Math.round(reading.now);
   const orkLabel = orkFromValue10(energyValue)?.label ?? null;
-  const batteryLine =
-    battery >= 70
-      ? t("Du har gott om kraft kvar idag.")
-      : battery >= 40
-        ? t("Du har lite kvar att ge idag.")
-        : t("Ganska tomt just nu – ta det lugnt.");
-
-  /** Samma tre kort för alla – ordningen anpassas först när data finns. */
-  const FEATURE_CARDS: Record<
-    FeatureId,
-    { id: FeatureId; title: string; subtitle: string; href: string; icon: typeof Brain }
-  > = {
-    quickflow: {
-      id: "quickflow",
-      title: t("Quickflow"),
-      subtitle: t("Få ner det snabbt"),
-      href: "/quickflow",
-      icon: Brain,
-    },
-    batteri: {
-      id: "batteri",
-      title: t("Batteriet"),
-      subtitle: orkLabel ? `${t("Din ork idag")} · ${orkLabel}` : t("Hur mycket ork har du?"),
-      href: "/mitt-batteri",
-      icon: BatteryMedium,
-    },
-    kalender: {
-      id: "kalender",
-      title: t("Kalendern"),
-      subtitle: t("Din överblick"),
-      href: "/kalender",
-      icon: CalendarDays,
-    },
-  };
-  const featureCards = featureOrder.map((id) => FEATURE_CARDS[id]);
-
-  /** Försiktigt förslag – bara när det bygger på faktisk användning. */
-  const adaptiveNote =
-    adaptive && top
-      ? top === "quickflow"
-        ? t("Du använder Quickflow mest, så den ligger först här nu.")
-        : top === "kalender"
-          ? t("Du använder kalendern mest, så den ligger först här nu.")
-          : t("Du checkar in i batteriet ofta, så det ligger först här nu.")
-      : null;
 
   const openQuickflow = () => {
     track("home_widget_opened", { source: "quickflow" });
@@ -170,14 +101,16 @@ export default function Home() {
   const pos = (id: HomeBlockId) => ({ order: visible.indexOf(id) + 10 });
 
   const awayForDays = lastVisit ? Date.now() - lastVisit >= 3 * 24 * 60 * 60 * 1000 : false;
-  const dayLoad = todayEntries.length + openItems.length;
+  const todayLoad =
+    activeTasks.filter((task) => task.dueDate === todayIso).length +
+    activeReminders.filter((reminder) => reminder.date === todayIso && !reminder.canceled).length;
+  const dayLoad = todayLoad + openItems.length;
   const glowLevel = dayLoad <= 3 ? "light" : dayLoad <= 7 ? "busy" : "overloaded";
 
   return (
     <Layout>
       <QuickAddSheet open={addOpen} onOpenChange={setAddOpen} />
       <IntroTour />
-      <FlowOnboarding />
       <CalmMode
         kind={calmMode ?? "acute"}
         open={calmMode != null}
@@ -201,7 +134,7 @@ export default function Home() {
                     ? t(
                         "Vad skönt att se dig. Vi tar det lugnt idag, oavsett hur dagarna har varit.",
                       )
-                    : t("Vi tar reda på vad som känns rimligt idag.")}
+                    : t("Vad behöver du just nu?")}
                 </p>
                 {editingName ? (
                   <form
@@ -253,161 +186,92 @@ export default function Home() {
               </div>
             </header>
 
-            <div
-              className="mt-5 grid grid-cols-3 gap-2 sm:gap-3"
-              data-testid="home-widgets"
-              aria-label={t("Vad vill du göra just nu?")}
-            >
-              {featureCards.map((card) => {
-                const Icon = card.icon;
-                const content = (
-                  <>
-                    <span className="grid h-10 w-10 place-items-center rounded-2xl bg-secondary text-primary">
-                      <Icon className="h-5 w-5" aria-hidden />
-                    </span>
-                    <span className="text-xs font-semibold text-ink sm:text-sm">{card.title}</span>
-                  </>
-                );
-                return card.id === "quickflow" ? (
-                  <button
-                    key={card.id}
-                    type="button"
-                    onClick={() => {
-                      recordFeature("quickflow");
-                      openQuickflow();
-                    }}
-                    data-testid="home-widget-quickflow"
-                    className="home-quick-action"
-                  >
-                    {content}
-                  </button>
-                ) : (
-                  <Link
-                    key={card.id}
-                    href={card.href}
-                    onClick={() => {
-                      recordFeature(card.id);
-                      track("home_widget_opened", { source: card.id });
-                    }}
-                    data-testid={`home-widget-${card.id}`}
-                    className="home-quick-action"
-                  >
-                    {content}
-                  </Link>
-                );
-              })}
-            </div>
-            {adaptiveNote && (
-              <p className="mt-2 text-center text-xs text-muted-foreground">{adaptiveNote}</p>
-            )}
-
-            <div className="mt-5 grid gap-4 md:grid-cols-5">
-              <CollapsibleSection
-                id="home-battery-summary"
-                title={t("Ditt batteri")}
-                data-testid="home-recovery"
-                className="home-bento-card md:col-span-2"
-                headingClassName="text-base font-semibold text-ink"
-              >
-                <div className="flex items-end justify-between gap-3">
-                  <div>
-                    <span className="block text-4xl font-bold tabular-nums text-ink">
-                      {battery}%
-                    </span>
-                    <p className="mt-1 text-xs text-muted-foreground">{batteryLine}</p>
-                  </div>
-                  <BatteryMedium
-                    className="h-10 w-10 shrink-0 text-primary"
-                    aria-hidden
-                    strokeWidth={1.75}
-                  />
-                </div>
-                <progress
-                  className="home-battery-progress"
-                  max={100}
-                  value={battery}
-                  aria-label={`${t("Ditt batteri")} ${battery}%`}
-                />
-                <Link
-                  href="/mitt-batteri"
-                  onClick={() => track("home_widget_opened", { source: "logga" })}
-                  className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
-                >
-                  {energyValue != null ? t("Tips för mer energi") : t("Logga energi & mående")}{" "}
-                  <ArrowRight size={14} />
-                </Link>
-              </CollapsibleSection>
-
-              <CollapsibleSection
-                id="home-today-summary"
-                title={t("Idag")}
-                actions={
-                  <Link
-                    href="/idag"
-                    className="shrink-0 text-xs font-medium text-primary hover:underline"
-                  >
-                    {t("Visa allt")}
-                  </Link>
-                }
-                data-testid="home-today"
-                className="home-bento-card md:col-span-3"
-                headingClassName="text-base font-semibold text-ink"
-              >
-                {todayEntries.length === 0 ? (
-                  <p className="text-sm text-muted-foreground">
-                    {t("Inget inlagt för idag ännu. Det är också helt okej.")}
-                  </p>
-                ) : (
-                  <ul>
-                    {todayEntries.slice(0, 3).map((entry) => (
-                      <li key={entry.id} className="border-b border-border/50 last:border-b-0">
-                        <Link
-                          href="/idag"
-                          className="grid grid-cols-[3rem_minmax(0,1fr)_auto] items-center gap-2 py-2.5"
-                        >
-                          <span className="text-xs font-semibold tabular-nums text-muted-foreground">
-                            {entry.time ?? "–"}
-                          </span>
-                          <span className="truncate text-sm font-medium text-ink">
-                            {entry.title}
-                          </span>
-                          <ChevronRight size={16} className="shrink-0 text-muted-foreground" />
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </CollapsibleSection>
-            </div>
-
-            <div className="mt-4" data-npf="optional">
-              <NextStepCard />
-            </div>
-
             <Button
               type="button"
-              variant="ghost"
-              size="sm"
-              onClick={() => setCalmMode("acute")}
-              className="mt-4 rounded-full border border-border bg-background text-xs text-muted-foreground"
+              onClick={openQuickflow}
+              className="mt-5 min-h-12 w-full justify-between rounded-2xl px-5 text-left sm:w-auto"
             >
-              {t("Akut Lugn")}
+              <span className="flex min-w-0 items-center gap-3">
+                <Brain className="h-5 w-5 shrink-0" aria-hidden />
+                <span>
+                  <span className="block font-semibold">{t("Vad snurrar i huvudet?")}</span>
+                  <span className="block text-xs font-normal opacity-80">
+                    {t("Få ur dig en sak")}
+                  </span>
+                </span>
+              </span>
+              <Sparkles className="h-4 w-4 shrink-0" aria-hidden />
             </Button>
+
+            <div
+              className="mt-5 grid grid-cols-2 gap-3"
+              data-testid="home-widgets"
+              aria-label={t("Fyra sätt att gå vidare")}
+            >
+              <Link
+                href="/kalender"
+                onClick={() => track("home_widget_opened", { source: "kalender" })}
+                data-testid="home-widget-kalender"
+                className="home-quick-action"
+              >
+                <span className="grid h-10 w-10 place-items-center rounded-2xl bg-secondary text-primary">
+                  <CalendarDays className="h-5 w-5" aria-hidden />
+                </span>
+                <span className="text-sm font-semibold text-ink">{t("Kalender")}</span>
+                <span className="text-xs text-muted-foreground">{t("Se och lägg till")}</span>
+              </Link>
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={openQuickflow}
+                data-testid="home-widget-quickflow"
+                className="home-quick-action"
+              >
+                <span className="grid h-10 w-10 place-items-center rounded-2xl bg-secondary text-primary">
+                  <Brain className="h-5 w-5" aria-hidden />
+                </span>
+                <span className="text-sm font-semibold text-ink">{t("QuickFlow")}</span>
+                <span className="text-xs text-muted-foreground">
+                  {t("Få ur dig det som snurrar")}
+                </span>
+              </Button>
+              <Link
+                href="/mitt-batteri"
+                onClick={() => track("home_widget_opened", { source: "batteri" })}
+                data-testid="home-widget-batteri"
+                className="home-quick-action"
+              >
+                <span className="grid h-10 w-10 place-items-center rounded-2xl bg-secondary text-primary">
+                  <BatteryMedium className="h-5 w-5" aria-hidden />
+                </span>
+                <span className="text-sm font-semibold text-ink">{t("Mitt batteri")}</span>
+                <span className="text-xs text-muted-foreground">
+                  {battery}%{orkLabel ? ` · ${orkLabel}` : ""}
+                </span>
+              </Link>
+              <Link
+                href="/hur-mar-du"
+                onClick={() => track("home_widget_opened", { source: "logga" })}
+                data-testid="home-widget-checkin"
+                className="home-quick-action"
+              >
+                <span className="grid h-10 w-10 place-items-center rounded-2xl bg-accent text-accent-foreground">
+                  <Heart className="h-5 w-5" aria-hidden />
+                </span>
+                <span className="text-sm font-semibold text-ink">{t("Energi & mående")}</span>
+                <span className="text-xs text-muted-foreground">{t("Hur är det just nu?")}</span>
+              </Link>
+            </div>
           </section>
         </MyFloveWide>
 
-        <MyFloveWide style={{ order: 0 }} className="min-w-0">
-          <CalmChoices onPause={() => setCalmMode("micro")} />
-        </MyFloveWide>
-
         {/* Enkelt läge – ett tryck för den som vill ha det lugnare. */}
-
-        <MyFloveWide style={{ order: 0.1 }} className="min-w-0">
+        <MyFloveWide style={{ order: 0.1 }} className="min-w-0 text-center">
           <button
             type="button"
             onClick={toggleSimpleMode}
             aria-pressed={simpleMode}
-            className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-card/70 px-3.5 py-2 text-xs font-medium text-muted-foreground shadow-soft transition-colors hover:text-foreground hover:bg-muted"
+            className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-card/70 px-3.5 py-2 text-xs font-medium text-muted-foreground shadow-soft transition-colors hover:bg-muted hover:text-foreground"
           >
             <Sparkles size={13} aria-hidden className="text-primary" />
             {simpleMode
@@ -416,9 +280,32 @@ export default function Home() {
           </button>
         </MyFloveWide>
 
-        {/* Dagens tre steg – den primära vägen genom MyFlove. */}
+        {/* Dagens detaljer finns kvar, men visas först när användaren ber om dem. */}
         <MyFloveWide style={{ order: 0.3 }} className="min-w-0">
-          <JourneySteps onAddOpen={() => setAddOpen(true)} />
+          <CollapsibleSection
+            id="home-day-support"
+            title={t("Din dag – när du vill fördjupa")}
+            description={t("Se dagens steg, nästa rimliga sak eller ta en lugn paus.")}
+            defaultCollapsed
+            className="rounded-3xl border border-border/60 bg-card/70 p-4 shadow-soft"
+            headingClassName="text-base font-semibold text-ink"
+          >
+            <div className="space-y-4">
+              <JourneySteps onAddOpen={() => setAddOpen(true)} />
+              <NextStepCard />
+              <CalmChoices onPause={() => setCalmMode("micro")} />
+              {isSunday && <WeekReviewCard review={weekReview} />}
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => setCalmMode("acute")}
+                className="rounded-full"
+              >
+                {t("Akut Lugn")}
+              </Button>
+            </div>
+          </CollapsibleSection>
         </MyFloveWide>
 
         {/* Kvällscheck – frivillig, dyker upp när dagen lider mot sitt slut. */}
@@ -519,13 +406,6 @@ export default function Home() {
             </div>
           </CollapsibleSection>
         </MyFloveWide>
-
-        {/* 💜 Din vecka – visas på söndagar som en lugn sammanfattning. */}
-        {isSunday && (
-          <MyFloveWide style={{ order: 4.4 }} className="min-w-0" data-npf="optional">
-            <WeekReviewCard review={weekReview} />
-          </MyFloveWide>
-        )}
 
         {/* Områdesväljare – litet, längst ner */}
         {shows("omrade") && (
