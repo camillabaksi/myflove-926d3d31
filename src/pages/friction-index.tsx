@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import Layout from "@/components/layout";
-import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
+import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { Flame, Plus, ThumbsUp, Loader2, AlertTriangle } from "lucide-react";
