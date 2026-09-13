@@ -470,6 +470,36 @@ export function CalendarContent() {
         }))
     : [];
 
+  const selectedTimelineEntries = [
+    ...selectedItems.childEvents.map((event) => ({
+      id: `c-${event.id}`,
+      title: event.title,
+      time: event.time ?? "",
+      color: event.child?.color ?? DEFAULT_CHILD_COLOR,
+      emoji: pictoMode ? pictogramFor(event.title, "🐣") : undefined,
+    })),
+    ...selectedItems.familyEvents.map((event) => ({
+      id: `f-${event.id}`,
+      title: event.title,
+      time: event.time ?? "",
+      color: event.member?.color ?? DEFAULT_MEMBER_COLOR,
+      emoji: pictoMode ? pictogramFor(event.title, "👨‍👩‍👧") : undefined,
+    })),
+    ...selectedItems.reminders.map((reminder) => ({
+      id: `r-${reminder.id}`,
+      title: reminder.title,
+      time: reminder.time ?? "",
+      emoji: pictoMode ? pictogramFor(reminder.title, "🔔") : undefined,
+    })),
+    ...selectedItems.tasks.map((task) => ({
+      id: `t-${task.id}`,
+      title: task.title,
+      time: task.time ?? "",
+      endTime: task.endTime,
+      emoji: pictoMode ? pictogramFor(task.title, "✅") : undefined,
+    })),
+  ];
+
   return (
     <MyFlovePageGrid area="kalender">
       <MyFloveWide>
@@ -483,9 +513,9 @@ export function CalendarContent() {
         </div>
       </MyFloveWide>
 
-      <div className="min-w-0">
+      <MyFloveWide>
         <EnergyBattery widget href="/mitt-batteri" />
-      </div>
+      </MyFloveWide>
 
       <MyFloveWide>
         <div className="bg-card rounded-3xl border-2 area-border shadow-soft overflow-hidden">
@@ -856,6 +886,13 @@ export function CalendarContent() {
                     selectedItems.familyEvents.length > 0 || selectedItems.recurring.length > 0
                   }
                 />
+                {view === "dag" && (
+                  <DayTimeline
+                    isToday={selectedDateStr === todayStr}
+                    energyByHour={selectedDateStr === todayStr ? batteryByHour : undefined}
+                    entries={selectedTimelineEntries}
+                  />
+                )}
                 {(selectedItems.familyEvents.length > 0 || selectedItems.recurring.length > 0) && (
                   <CollapsibleSection
                     id="kalenderdagen::kalenderhandelser"
@@ -934,42 +971,6 @@ export function CalendarContent() {
                   </span>
                 ))}
               </div>
-            )}
-
-            {!allInDay && view === "dag" && (
-              <DayTimeline
-                isToday={selectedDateStr === todayStr}
-                energyByHour={selectedDateStr === todayStr ? batteryByHour : undefined}
-                entries={[
-                  ...selectedItems.childEvents.map((e) => ({
-                    id: `c-${e.id}`,
-                    title: e.title,
-                    time: e.time ?? "",
-                    color: e.child?.color ?? DEFAULT_CHILD_COLOR,
-                    emoji: pictoMode ? pictogramFor(e.title, "🐣") : undefined,
-                  })),
-                  ...selectedItems.familyEvents.map((e) => ({
-                    id: `f-${e.id}`,
-                    title: e.title,
-                    time: e.time ?? "",
-                    color: e.member?.color ?? DEFAULT_MEMBER_COLOR,
-                    emoji: pictoMode ? pictogramFor(e.title, "👨‍👩‍👧") : undefined,
-                  })),
-                  ...selectedItems.reminders.map((r) => ({
-                    id: `r-${r.id}`,
-                    title: r.title,
-                    time: r.time ?? "",
-                    emoji: pictoMode ? pictogramFor(r.title, "🔔") : undefined,
-                  })),
-                  ...selectedItems.tasks.map((t) => ({
-                    id: `t-${t.id}`,
-                    title: t.title,
-                    time: t.time ?? "",
-                    endTime: t.endTime,
-                    emoji: pictoMode ? pictogramFor(t.title, "✅") : undefined,
-                  })),
-                ]}
-              />
             )}
 
             {!allInDay && (

@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-13";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Kalenderns dagvy och batterikort",
+    items: [
+      "Kalenderns tidslinje visas åter när Dag är vald, utan att den förenklade dagsöversikten tas bort (2026-09-13)",
+      "Batterikortet ovanför kalendern använder hela bredden på mobil och lämnar inte längre en tom kolumn (2026-09-13)",
+    ],
+  },
+  {
     title: "Enklare startsida",
     items: [
       "Startsidan är förenklad: ett lugnt flöde med Flow, tydlig 'Kom igång'-knapp och länk för befintliga användare (2026-09-13)",
