@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-13";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Samma enkla ingång i Kalender och QuickFlow",
+    items: [
+      "Kalender visar dagens innehåll direkt; månadsöversikten med vyer och filter ligger hopfälld bakom ett sparat klick (2026-09-13)",
+      "QuickFlow börjar med frågan 'Vad snurrar i huvudet?' och infångningen; sortering, lista, anteckningar och regler ligger bakom 'Det du fått ur huvudet' (2026-09-13)",
+      "Alla ingångar från Hem följer nu samma mönster: enkel huvudvy först, fördjupning bakom klick (2026-09-13)",
+    ],
+  },
+  {
     title: "Enklare Flow-ingång",
     items: [
       "Flow öppnar med en enkel ingång: 'Vad passar bäst just nu?' och knappen 'Visa mitt förslag' (2026-09-13)",

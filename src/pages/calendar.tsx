@@ -493,6 +493,8 @@ export function CalendarContent() {
             <CollapsibleSection
               title={periodLabel}
               id="månadsöversikt"
+              defaultCollapsed
+              description={t("Öppna för att välja månad, vecka eller dag och filtrera kategorier.")}
               help={t("Välj månad, vecka eller dag – och kryssa i vilka kategorier du vill se.")}
               headingClassName="text-xl font-medium capitalize"
               actions={
