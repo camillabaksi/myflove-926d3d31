@@ -28,6 +28,7 @@ import {
   BatteryMedium,
   Heart,
   Pill,
+  ArrowRight,
   Sparkles,
 } from "lucide-react";
 import { todayISO } from "@/lib/day";
@@ -78,7 +79,6 @@ export default function Home() {
         ? { less: false, stillness: false }
         : { less: true, calm: true, stillness: true, plainWords: true },
     );
-  const { record: recordFeature, order: featureOrder, adaptive, top } = useFeatureUsage();
   const todayIso = todayISO();
   // Veckoöversikten hör hemma på söndagen – veckan som varit, i lugn takt.
   const isSunday = parseISODate(todayIso).getDay() === 0;
@@ -220,8 +220,9 @@ export default function Home() {
                 <span className="text-sm font-semibold text-ink">{t("Kalender")}</span>
                 <span className="text-xs text-muted-foreground">{t("Se och lägg till")}</span>
               </Link>
-              <button
+              <Button
                 type="button"
+                variant="ghost"
                 onClick={openQuickflow}
                 data-testid="home-widget-quickflow"
                 className="home-quick-action"
@@ -231,7 +232,7 @@ export default function Home() {
                 </span>
                 <span className="text-sm font-semibold text-ink">{t("QuickFlow")}</span>
                 <span className="text-xs text-muted-foreground">{t("Få ur dig det som snurrar")}</span>
-              </button>
+              </Button>
               <Link
                 href="/mitt-batteri"
                 onClick={() => track("home_widget_opened", { source: "batteri" })}
