@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-13";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Enklare startsida",
+    items: [
+      "Startsidan är förenklad: ett lugnt flöde med Flow, tydlig 'Kom igång'-knapp och länk för befintliga användare (2026-09-13)",
+      "Det svepbara tio-vyers-introet är ersatt av tre enkla kort som förklarar hur Flow hjälper, plus en liten sidfot (2026-09-13)",
+    ],
+  },
+  {
     title: "Enkla ingångar i hela appen",
     items: [
       "Planera i Flow: energi + tid + 'Skapa min FlowPlan' är enda huvudsteget; 'Behöver du planera om?' ligger hopfällt (2026-09-13)",
