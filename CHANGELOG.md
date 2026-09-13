@@ -1,3 +1,9 @@
+## 2026-09-13 – Enklare Flow-ingång
+
+- Flow öppnar nu med en enkel ingång: frågan "Vad passar bäst just nu?" och en tydlig knapp "Visa mitt förslag".
+- Planera och Chatta nås som diskreta val från ingången, och en hopfälld "Mer om Flow"-sektion förklarar lägena.
+- Hjälpkarusellen, planeringen, chatten och all funktionalitet finns kvar – bakom klick.
+
 ## 2026-09-13 – Enklare första upplevelse
 
 - Hem börjar nu med frågan ”Vad behöver du just nu?”, en tydlig QuickFlow-handling och fyra jämna kärnkort för Kalender, QuickFlow, Mitt batteri och Energi & mående.
