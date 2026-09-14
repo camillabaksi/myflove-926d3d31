@@ -20,3 +20,4 @@
 - [x] Kalender: dagens innehåll visas direkt när Dag väljs, kalenderkopplingen flyttad under (2026-09-13)
 - [x] Kalender: dagsvyn placerad inuti kalenderkortet direkt under valet Dag (2026-09-14)
 - [x] Mobil-layout: kapacitetskortets rubrik och sammanfattning överlappar inte längre (2026-09-14)
+- [x] Upptäckbarhet: kompakt påminnelse om öppna QuickFlow-saker och anteckningar på Hem utan dubbla listor (2026-09-14)

@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-14";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Det du sparat blir lättare att hitta igen",
+    items: [
+      'Hem visar en liten "Kom ihåg"-rad när det finns öppna saker i QuickFlow eller öppna anteckningar (2026-09-14)',
+      "Raden visar bara antal och leder till den befintliga fullständiga hanteringen; den dubbla QuickFlow-listan på Hem är borttagen (2026-09-14)",
+      "Saker som väntat ett tag får en lugn påminnelse utan skuldbeläggande språk (2026-09-14)",
+    ],
+  },
+  {
     title: "Kapacitetskortet fungerar på mobil",
     items: [
       'Kortet "Vad påverkar din kapacitet?" staplar ikon, rubrik och förklaring på smala skärmar så texten inte längre överlappar (2026-09-14)',

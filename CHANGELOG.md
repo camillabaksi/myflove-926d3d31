@@ -1,3 +1,9 @@
+## 2026-09-14 – Det du sparat blir lättare att hitta igen
+
+- Hem visar en liten "Kom ihåg"-rad efter de fyra kärnkorten när det finns öppna saker i QuickFlow eller öppna anteckningar.
+- Raden visar bara antal och leder till den befintliga fullständiga hanteringen; den tidigare dubbla QuickFlow-listan på Hem är borttagen.
+- Saker som väntat ett tag får en lugn påminnelse utan skuldbeläggande språk.
+
 ## 2026-09-14 – Kapacitetskortet fungerar på mobil
 
 - Kortet "Vad påverkar din kapacitet?" staplar ikon, rubrik och förklaring på smala skärmar så texten inte längre överlappar.
