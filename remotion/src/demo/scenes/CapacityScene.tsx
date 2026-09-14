@@ -1,10 +1,12 @@
 import React from "react";
 import { AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { DEMO_COLORS, DEMO_FONTS, DemoShell, enter } from "../theme";
+import { useDemoCopy } from "../lang";
 
 export const CapacityScene: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+  const copy = useDemoCopy();
   const compare = enter(frame, fps, 4, 28);
   const message = enter(frame, fps, 132, 20);
   const imageScale = interpolate(frame, [0, 255], [1.02, 1.065], {
@@ -44,7 +46,7 @@ export const CapacityScene: React.FC = () => {
           boxShadow: "0 20px 48px rgba(56,38,79,0.22)",
         }}
       >
-        Move it. Simplify it. Split it. You decide.
+        {copy("capacity")}
       </div>
     </DemoShell>
   );

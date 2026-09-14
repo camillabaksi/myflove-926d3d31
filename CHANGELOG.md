@@ -1,3 +1,8 @@
+## 2026-09-14 – Svensk version av 30-sekundersdemon
+
+- Demon finns nu även på svenska med samma design, tempo och berättelse.
+- Skärmtexterna i demon är översatta: "En lugnare vardag", "Flytta. Förenkla. Dela upp. Du bestämmer." och avslutet.
+
 ## 2026-09-14 – Ny 30-sekunders produktdemo
 
 - En engelskspråkig demo följer kärnresan QuickFlow → Flow → kapacitetsanpassning → Min dag.

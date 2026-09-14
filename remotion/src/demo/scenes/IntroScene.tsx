@@ -1,10 +1,12 @@
 import React from "react";
 import { AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import { BrandMark, DEMO_COLORS, DEMO_FONTS, DemoShell, enter } from "../theme";
+import { useDemoCopy } from "../lang";
 
 export const IntroScene: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+  const copy = useDemoCopy();
   const title = enter(frame, fps, 5, 44);
   const sub = enter(frame, fps, 18, 28);
   const ring = interpolate(frame, [0, 120], [0.82, 1.15], {
@@ -75,7 +77,7 @@ export const IntroScene: React.FC = () => {
             color: DEMO_COLORS.muted,
           }}
         >
-          A calmer everyday life.
+          {copy("tagline")}
         </div>
       </AbsoluteFill>
       <BrandMark />
