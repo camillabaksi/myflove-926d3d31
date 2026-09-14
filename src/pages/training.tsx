@@ -31,7 +31,6 @@ import {
   Scale,
   ChevronLeft,
   ChevronRight,
-  Route,
   type LucideIcon,
 } from "lucide-react";
 import { generateTrainingProgram } from "@/lib/training.functions";
