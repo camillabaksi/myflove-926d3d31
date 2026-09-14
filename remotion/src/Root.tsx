@@ -71,6 +71,16 @@ export const RemotionRoot: React.FC = () => (
       fps={DEMO_FPS}
       width={DEMO_WIDTH}
       height={DEMO_HEIGHT}
+      defaultProps={{ lang: "en" as const }}
+    />
+    <Composition
+      id="investor-demo-sv"
+      component={DemoVideo}
+      durationInFrames={DEMO_TOTAL_FRAMES}
+      fps={DEMO_FPS}
+      width={DEMO_WIDTH}
+      height={DEMO_HEIGHT}
+      defaultProps={{ lang: "sv" as const }}
     />
   </>
 );
