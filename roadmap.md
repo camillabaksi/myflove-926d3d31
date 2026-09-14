@@ -33,4 +33,4 @@
 
 - Jobb samlat på en sida (2026-09-14): plan, jobbhjälp, uppgifter och "Mer i jobb"; /workflow redirectar till /jobb.
 
-- [ ] Skapa och kvalitetsgranska 30-sekunders MyFlove-demo i investerarpitchens design (2026-09-14)
+- [x] Skapa och kvalitetsgranska 30-sekunders MyFlove-demo i investerarpitchens design (2026-09-14)
