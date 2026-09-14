@@ -28,11 +28,10 @@ describe("En enda plats för energi & mående", () => {
     expect(existsSync("src/components/quick-checkin.tsx")).toBe(false);
   });
 
-  it("Flow loggar inte själv utan hänvisar till Mitt batteri", () => {
-    const deck = read("src/components/flow/flow-deck.tsx");
-    expect(deck).not.toContain("onLogMood");
-    expect(deck).not.toContain("logEnergy");
-    expect(deck).toContain('href="/mitt-batteri"');
+  it("Flow-karusellen är borttagen – planering och chatt finns kvar", () => {
+    expect(existsSync("src/components/flow/flow-deck.tsx")).toBe(false);
+    expect(existsSync("src/components/flow/flow-plan-content.tsx")).toBe(true);
+    expect(existsSync("src/components/flow/assistant-content.tsx")).toBe(true);
   });
 
   it("QuickFlow skapar ingen egen energiloggning", () => {
