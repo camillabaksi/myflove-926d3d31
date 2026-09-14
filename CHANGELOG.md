@@ -1,3 +1,9 @@
+## 2026-09-14 – Lugnare hem: Paus samlat och Flow kopplat till nästa steg
+
+- "Dagens tanke" och "Gör den enklaste saken" är borttagna som egna funktioner på Hem.
+- Ny samlad Paus-väg (/paus) med Mikropaus, Akut Lugn och Stopp-knappen; diskret ingång på Hem och egen väg under Mer/Hälsa.
+- FlowScore visas nu direkt ovanför "Nästa rimliga steg" som en sammanhängande upplevelse, med "Varför just detta?" för fördjupning. Steget fungerar även utan score.
+
 ## 2026-09-14 – Flow-karusellen är borttagen
 
 - Flows svepbara hjälpkarusell (Flow-decket) är borttagen; "Visa mitt förslag" leder direkt till Flows planeringsläge.

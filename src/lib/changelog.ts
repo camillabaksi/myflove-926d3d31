@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-14";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Lugnare hem: Paus samlat och Flow kopplat till nästa steg",
+    items: [
+      'Dagens tanke och "Gör den enklaste saken" är borttagna som egna funktioner på Hem (2026-09-14)',
+      "Ny samlad Paus-väg med Mikropaus, Akut Lugn och Stopp-knappen – diskret ingång på Hem och egen väg under Mer (2026-09-14)",
+      'FlowScore visas direkt ovanför "Nästa rimliga steg" med "Varför just detta?" för fördjupning (2026-09-14)',
+    ],
+  },
+  {
     title: "Resor och Promenadvägar är borttagna",
     items: [
       "Resesidan och pendlingsvarningarna är borttagna ur menyer, guider och layout (2026-09-14)",

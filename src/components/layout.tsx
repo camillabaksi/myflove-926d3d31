@@ -55,6 +55,7 @@ import {
   MessageCircle,
   Hand,
   User,
+  Wind,
 } from "lucide-react";
 import {
   isAlarmSoundEnabled,
@@ -298,11 +299,17 @@ export default function Layout({ children }: LayoutProps) {
       hint: "Mönster: vad som brukar ge och ta energi",
     },
     {
+      href: "/paus",
+      label: "Paus",
+      icon: Wind,
+      hint: "Mikropaus, akut lugn och stopp-knappen",
+      essential: true,
+    },
+    {
       href: "/stop-paus",
       label: "Stop-paus",
       icon: Hand,
       hint: "🛑 En paus mellan impuls och beslut",
-      essential: true,
     },
 
     {
@@ -554,6 +561,7 @@ export default function Layout({ children }: LayoutProps) {
         hrefs: [
           "/halsa",
           "/mitt-batteri",
+          "/paus",
           "/stop-paus",
           "/traning",
           "/daglig-rutin",
