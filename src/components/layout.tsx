@@ -65,7 +65,6 @@ import {
   initAlarmAudioUnlock,
 } from "@/lib/push-notifications";
 import { initPersonalization } from "@/lib/personalization";
-import { useCommuteAlerts } from "@/hooks/use-commute-alerts";
 import { useMedicationAlerts } from "@/hooks/use-medication-alerts";
 import { useShoppingProximityAlerts } from "@/hooks/use-shopping-proximity-alerts";
 import { useNotificationScheduler } from "@/hooks/use-notification-scheduler";
@@ -127,7 +126,6 @@ const CATEGORY_HUE: Record<string, string> = {
   familyflow: "348 62% 66%",
   studyflow: "232 58% 64%",
   workflow: "212 48% 52%",
-  travelflow: "172 44% 46%",
   avancerat: "258 20% 48%",
   ovrigt: "258 12% 52%",
 };
@@ -182,7 +180,6 @@ const CATEGORY_THEMES: Record<string, Record<string, string>> = {
   "/shopping": T.sage,
   "/matlista": T.sage,
   "/stadning": T.sage,
-  "/travel": T.ink,
   "/familj": T.gold,
   "/beloningar": T.gold,
   "/statistik": T.ink,
@@ -205,7 +202,6 @@ export default function Layout({ children }: LayoutProps) {
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { signOut } = useClerk();
-  const { alerts, dismissAlert } = useCommuteAlerts();
   const {
     alerts: medicationAlerts,
     dismissAlert: dismissMedicationAlert,
@@ -378,13 +374,6 @@ export default function Layout({ children }: LayoutProps) {
     },
     { href: "/stadning", label: "Städning", icon: SprayCan, hint: "Vad som behöver göras hemma" },
     { href: "/finances", label: "Ekonomi", icon: Wallet, hint: "Räkningar och budget" },
-    {
-      href: "/travel",
-      label: "Resor",
-      icon: Navigation,
-      hint: "Buss och tåg i realtid",
-      essential: true,
-    },
     {
       href: "/relationer",
       label: "Relationer",
@@ -599,13 +588,6 @@ export default function Layout({ children }: LayoutProps) {
         hint: "Mat, inköp, städning och pengar",
         icon: House,
         hrefs: ["/matlista", "/shopping", "/stadning", "/finances"],
-      },
-      {
-        id: "travelflow",
-        label: "Resor",
-        hint: "Buss och tåg i realtid",
-        icon: Navigation,
-        hrefs: ["/travel"],
       },
       {
         id: "insightflow",
@@ -874,35 +856,6 @@ export default function Layout({ children }: LayoutProps) {
           <ViewCollapseToggle />
         </div>
 
-        {alerts.length > 0 && (
-          <div className="px-4 pt-4 md:px-6 md:pt-4 space-y-2">
-            {alerts.map((alert) => (
-              <div
-                key={alert.tripId}
-                className="flex items-center justify-between gap-3 bg-gold/15 border border-gold/30 text-ink rounded-2xl px-4 py-3 shadow-sm animate-in fade-in slide-in-from-top-2"
-              >
-                <div className="flex items-center gap-3">
-                  <BellRing size={20} className="shrink-0" />
-                  <p className="text-sm font-medium">
-                    Dags att gå! <strong>{alert.label}</strong> avgår{" "}
-                    {alert.minutesUntilDeparture <= 0
-                      ? "nu"
-                      : `om ${alert.minutesUntilDeparture} min`}{" "}
-                    ({alert.departureTime}, {alert.lineName})
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => dismissAlert(alert)}
-                  aria-label="Stäng varning"
-                  className="shrink-0 p-1.5 rounded-full hover:bg-gold/25"
-                >
-                  <X size={18} />
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
 
         {medicationAlerts.length > 0 && (
           <div className="px-4 pt-4 md:px-6 md:pt-4 space-y-2">

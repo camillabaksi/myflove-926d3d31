@@ -48,7 +48,6 @@ import {
 
 import { useToast } from "@/hooks/use-toast";
 import CollapsibleSection from "@/components/collapsible-section";
-import WalkRoutesSection from "@/components/walk-routes";
 import { celebrateFromEvent } from "@/lib/celebrate";
 
 const FOCUS: { id: TrainingGoal["focus"]; label: string }[] = [
@@ -63,7 +62,7 @@ const LAST_SYNC_KEY = "myflove.steps.lastSync";
 /** Veckodagar för pass-schemat – måndag först. */
 const WEEKDAYS = ["Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag", "Söndag"] as const;
 
-type TrainingView = "overview" | "steg" | "plan" | "motion" | "program" | "vikt" | "promenad";
+type TrainingView = "overview" | "steg" | "plan" | "motion" | "program" | "vikt";
 
 const SECTIONS: {
   id: Exclude<TrainingView, "overview">;
@@ -99,13 +98,6 @@ const SECTIONS: {
     desc: "Mål som justeras efter hur veckan kändes.",
     icon: CalendarRange,
     hue: "265 32% 45%",
-  },
-  {
-    id: "promenad",
-    label: "Promenadvägar",
-    desc: "Förslag på rundor nära dig – efter tid eller avstånd.",
-    icon: Route,
-    hue: "180 32% 34%",
   },
   {
     id: "vikt",
@@ -453,7 +445,6 @@ export default function TrainingPage() {
     plan: weeklyPlan
       ? `${sessionsThisWeek}/${weeklyPlan.sessionTarget} pass denna vecka`
       : "Ingen plan ännu",
-    promenad: "Hitta en runda nära dig",
     vikt: latestWeight ? `${latestWeight.kg} kg senast` : "Ingen vikt inlagd",
   };
 
@@ -1185,8 +1176,6 @@ export default function TrainingPage() {
                 )}
               </>
             )}
-
-            {view === "promenad" && <WalkRoutesSection />}
 
             {view === "vikt" && (
               <CollapsibleSection
