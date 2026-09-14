@@ -1,3 +1,7 @@
+## 2026-09-14 – Kapacitetskortet fungerar på mobil
+
+- Kortet "Vad påverkar din kapacitet?" staplar ikon, rubrik och förklaring på smala skärmar så texten inte längre överlappar.
+
 ## 2026-09-14 – Dagsvyn ligger under Dag i kalendern
 
 - När Dag är vald ligger rubriken, Lägg till-knappen, dagens innehåll och tidslinjen nu inuti kalenderkortet direkt under vyvalet.
