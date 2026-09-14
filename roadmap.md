@@ -18,3 +18,4 @@
 - [x] Förenklad Energi och Min dag: primär handling först, befintliga detaljer bakom klick (2026-09-13)
 - [x] Återställd tidslinje i Kalenderns dagvy och fullbrett batterikort på mobil (2026-09-13)
 - [x] Kalender: dagens innehåll visas direkt när Dag väljs, kalenderkopplingen flyttad under (2026-09-13)
+- [x] Kalender: dagsvyn placerad inuti kalenderkortet direkt under valet Dag (2026-09-14)

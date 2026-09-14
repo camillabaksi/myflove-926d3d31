@@ -10,6 +10,12 @@ export const CHANGELOG_UPDATED = "2026-09-14";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Dagsvyn ligger under Dag i kalendern",
+    items: [
+      "När Dag är vald ligger rubriken, Lägg till-knappen, dagens innehåll och tidslinjen inuti kalenderkortet direkt under vyvalet (2026-09-14)",
+    ],
+  },
+  {
     title: "Kalenderkopplingen säger till när åtkomsten behöver förnyas",
     items: [
       "Om Google/Outlook nekar läsning av kalendern (401/403) ber appen dig nu koppla om kontot i stället för att tyst visa en tom kalender (2026-09-14)",
