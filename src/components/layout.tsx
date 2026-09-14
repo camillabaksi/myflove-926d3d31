@@ -453,14 +453,8 @@ export default function Layout({ children }: LayoutProps) {
             href: "/jobb",
             label: "Jobb",
             icon: Briefcase,
-            hint: "Dina arbetsuppgifter och möten",
+            hint: "Plan, uppgifter, projekt och jobbhjälp",
             essential: true,
-          },
-          {
-            href: "/workflow",
-            label: "Jobbplanering",
-            icon: Zap,
-            hint: "Vad du ska göra härnäst på jobbet",
           },
         ]
       : []),
@@ -574,7 +568,7 @@ export default function Layout({ children }: LayoutProps) {
         label: "Jobb",
         hint: "Uppgifter och möten",
         icon: Building2,
-        hrefs: ["/jobb", "/workflow"],
+        hrefs: ["/jobb"],
       },
       {
         id: "familyflow",

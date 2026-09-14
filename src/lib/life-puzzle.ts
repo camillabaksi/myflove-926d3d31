@@ -140,11 +140,7 @@ export function buildLifePuzzle(input: LifePuzzleInput): LifePuzzle {
         ? "Vi tar en liten bit av den idag – inte hela."
         : "Ska vi dela upp den i mindre steg?",
       href:
-        nearest.area === "studier"
-          ? "/studyflow"
-          : nearest.area === "jobb"
-            ? "/workflow"
-            : "/tasks",
+        nearest.area === "studier" ? "/studyflow" : nearest.area === "jobb" ? "/jobb" : "/tasks",
       hrefLabel: "Dela upp den",
     });
   }

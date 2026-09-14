@@ -86,7 +86,7 @@ export default function FlowScorePage() {
         >
           <div className="grid gap-2 sm:grid-cols-2">
             <Link
-              href="/workflow"
+              href="/jobb"
               className="flex items-center gap-2 rounded-2xl border border-border bg-background px-4 py-3 text-sm text-ink transition hover:bg-muted"
             >
               <Briefcase className="h-4 w-4 text-primary" /> Jobb

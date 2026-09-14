@@ -108,8 +108,7 @@ export function useFlowItems(dateISO?: string): {
         order: t.quickflowOrder,
         done: t.completed,
         completable: true,
-        href:
-          getArea(t) === "studier" ? "/studyflow" : getArea(t) === "jobb" ? "/workflow" : "/tasks",
+        href: getArea(t) === "studier" ? "/studyflow" : getArea(t) === "jobb" ? "/jobb" : "/tasks",
       });
     }
 

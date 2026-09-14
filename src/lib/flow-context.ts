@@ -44,7 +44,7 @@ export const AREA_SHORTCUTS: Record<LifeArea, FlowShortcut[]> = {
     { href: "/pomodoro", label: "Fokus", emoji: "⏱️" },
   ],
   jobb: [
-    { href: "/workflow", label: "WorkFlow", emoji: "💼" },
+    { href: "/jobb", label: "Jobb", emoji: "💼" },
     { href: "/tasks", label: "Att göra", emoji: "✅" },
     { href: "/kalender", label: "Möten", emoji: "🗓️" },
     { href: "/pomodoro", label: "Fokus", emoji: "⏱️" },
@@ -96,7 +96,6 @@ const PLACES: Record<string, { label: string; prompt: string; area: LifeArea }> 
     area: "studier",
   },
   "/jobb": { label: "Jobb", prompt: "Hjälp mig prioritera på jobbet idag.", area: "jobb" },
-  "/workflow": { label: "Jobb", prompt: "Vad tar jag härnäst på jobbet?", area: "jobb" },
   "/mitt-batteri": {
     label: "Mitt batteri",
     prompt: "Jag känner så här idag – vad är rimligt?",

@@ -27,6 +27,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { celebrateFromEvent } from "@/lib/celebrate";
 import CollapsibleSection from "@/components/collapsible-section";
+import { QuickflowCapture } from "@/components/quickflow-capture";
+import { QuickflowList } from "@/components/quickflow-list";
+import { WorkflowContent } from "@/pages/workflow";
 import LifeProfileLink from "@/components/life-profile-link";
 
 const BUCKET = "work-docs";
@@ -222,127 +225,167 @@ export default function WorkPage() {
         <MyFloveWide>
           <div className="space-y-8">
             <MyFloveHeader
-              title="Jobbplanering"
+              title="Jobb"
               emojiKey="work"
-              description="Din arbetsdag – projekt, uppgifter och dokument på ett ställe."
+              description="Din arbetsdag – plan, uppgifter, projekt och dokument på ett ställe."
             />
 
-            <LifeProfileLink />
+            {/* Dagens plan: vad som är rimligt just nu */}
+            <WorkflowContent section="plan" />
 
-            {/* Projekt */}
-
-            <CollapsibleSection
-              title="Dina projekt"
-              help="Samla uppgifter per projekt så blir listan lättare att överblicka."
-              headingClassName="text-lg font-semibold"
-              className="surface-card p-5"
+            {/* Jobbhjälp */}
+            <section
+              className="rounded-3xl border-2 border-border bg-card p-5 shadow-sm"
+              aria-labelledby="jobbhjalp"
             >
-              <form onSubmit={handleAddProject} className="flex gap-2">
-                <Input
-                  value={projectDraft}
-                  onChange={(e) => setProjectDraft(e.target.value)}
-                  placeholder="T.ex. Kvartalsrapport"
-                  className="h-11 rounded-2xl bg-secondary/50 border-transparent"
-                />
-                <Button type="submit" disabled={!projectDraft.trim()} className="h-11 rounded-2xl">
-                  <Plus size={18} />
-                </Button>
-              </form>
-              {activeProjects.length === 0 ? (
-                <p className="text-sm text-muted-foreground">
-                  Inga projekt än. Lägg till ett så vet Flow vad uppgiften hör till.
-                </p>
-              ) : (
-                <ul className="flex flex-wrap gap-2">
-                  {activeProjects.map((p) => (
-                    <li key={p.id}>
-                      <span
-                        className="inline-flex items-center gap-2 text-sm px-3 py-1.5 rounded-full border"
-                        style={{
-                          borderColor: `hsl(${p.color} / 0.35)`,
-                          background: `hsl(${p.color} / 0.08)`,
-                          color: `hsl(${p.color})`,
-                        }}
+              <h2 id="jobbhjalp" className="font-display text-lg text-ink">
+                Jobbhjälp
+              </h2>
+              <p className="mt-1 text-sm text-muted-foreground">Vad behöver du hjälp med?</p>
+
+              <div className="mt-4 space-y-3">
+                <CollapsibleSection
+                  className="rounded-2xl border border-border/70 bg-background p-4"
+                  headingClassName="font-display text-base text-ink"
+                  defaultCollapsed
+                  id="jobbhjalp-kom-igang"
+                  title="Kom igång"
+                >
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    Töm huvudet först – skriv ner det du bär på, så tar vi en sak i taget. 💙
+                  </p>
+                  <div className="mt-3 space-y-3">
+                    <QuickflowCapture />
+                    <QuickflowList />
+                  </div>
+                </CollapsibleSection>
+
+                <CollapsibleSection
+                  defaultCollapsed
+                  id="jobbhjalp-projekt"
+                  className="rounded-2xl border border-border/70 bg-background p-4"
+                  title="Dina projekt"
+                  help="Samla uppgifter per projekt så blir listan lättare att överblicka."
+                  headingClassName="font-display text-base text-ink"
+                >
+                  <form onSubmit={handleAddProject} className="flex gap-2">
+                    <Input
+                      value={projectDraft}
+                      onChange={(e) => setProjectDraft(e.target.value)}
+                      placeholder="T.ex. Kvartalsrapport"
+                      className="h-11 rounded-2xl bg-secondary/50 border-transparent"
+                    />
+                    <Button
+                      type="submit"
+                      disabled={!projectDraft.trim()}
+                      className="h-11 rounded-2xl"
+                    >
+                      <Plus size={18} />
+                    </Button>
+                  </form>
+                  {activeProjects.length === 0 ? (
+                    <p className="text-sm text-muted-foreground">
+                      Inga projekt än. Lägg till ett så vet Flow vad uppgiften hör till.
+                    </p>
+                  ) : (
+                    <ul className="flex flex-wrap gap-2">
+                      {activeProjects.map((p) => (
+                        <li key={p.id}>
+                          <span
+                            className="inline-flex items-center gap-2 text-sm px-3 py-1.5 rounded-full border"
+                            style={{
+                              borderColor: `hsl(${p.color} / 0.35)`,
+                              background: `hsl(${p.color} / 0.08)`,
+                              color: `hsl(${p.color})`,
+                            }}
+                          >
+                            💼 {p.title}
+                            <button
+                              type="button"
+                              onClick={() => deleteProject(p.id)}
+                              aria-label={`Ta bort projektet ${p.title}`}
+                              className="opacity-60 hover:opacity-100"
+                            >
+                              <Trash2 size={13} />
+                            </button>
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </CollapsibleSection>
+
+                {/* Ny arbetsuppgift */}
+                <CollapsibleSection
+                  defaultCollapsed
+                  id="jobbhjalp-ny-uppgift"
+                  title="Ny arbetsuppgift"
+                  headingClassName="font-display text-base text-ink"
+                  className="rounded-2xl border border-border/70 bg-background p-4"
+                >
+                  <form onSubmit={handleAddWorkTask} className="space-y-3">
+                    <Input
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      placeholder="Vad ska göras? T.ex. Skicka underlag till chefen"
+                      className="h-12 rounded-2xl bg-secondary/50 border-transparent"
+                    />
+                    <div className="flex flex-wrap gap-3">
+                      <label className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <CalendarDays size={16} />
+                        <Input
+                          type="date"
+                          value={dueDate}
+                          onChange={(e) => setDueDate(e.target.value)}
+                          className="h-11 rounded-2xl bg-background w-44"
+                        />
+                      </label>
+                      <select
+                        value={projectId}
+                        onChange={(e) => setProjectId(e.target.value)}
+                        className="h-11 rounded-2xl border border-border bg-background px-3 text-sm"
+                        aria-label="Välj projekt"
                       >
-                        💼 {p.title}
-                        <button
-                          type="button"
-                          onClick={() => deleteProject(p.id)}
-                          aria-label={`Ta bort projektet ${p.title}`}
-                          className="opacity-60 hover:opacity-100"
-                        >
-                          <Trash2 size={13} />
-                        </button>
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </CollapsibleSection>
-
-            {/* Ny arbetsuppgift */}
-            <CollapsibleSection
-              title="Ny arbetsuppgift"
-              headingClassName="text-lg font-semibold"
-              className="surface-card p-5"
-            >
-              <form onSubmit={handleAddWorkTask} className="space-y-3">
-                <Input
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  placeholder="Vad ska göras? T.ex. Skicka underlag till chefen"
-                  className="h-12 rounded-2xl bg-secondary/50 border-transparent"
-                />
-                <div className="flex flex-wrap gap-3">
-                  <label className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <CalendarDays size={16} />
-                    <Input
-                      type="date"
-                      value={dueDate}
-                      onChange={(e) => setDueDate(e.target.value)}
-                      className="h-11 rounded-2xl bg-background w-44"
+                        <option value="">Inget projekt</option>
+                        {activeProjects.map((p) => (
+                          <option key={p.id} value={p.id}>
+                            {p.title}
+                          </option>
+                        ))}
+                      </select>
+                      <label className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <BellRing size={16} />
+                        <Input
+                          type="time"
+                          value={reminderTime}
+                          onChange={(e) => setReminderTime(e.target.value)}
+                          aria-label="Klockslag för deadline-påminnelser"
+                          className="h-11 rounded-2xl bg-background w-28"
+                        />
+                      </label>
+                      <Button
+                        type="submit"
+                        disabled={!title.trim()}
+                        className="h-11 rounded-2xl px-5"
+                      >
+                        <Plus size={18} className="mr-1" /> Lägg till
+                      </Button>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Med deadline får du automatiskt notis 7, 3 och 1 dag innan – du kan ändra per
+                      uppgift.
+                    </p>
+                    <textarea
+                      value={details}
+                      onChange={(e) => setDetails(e.target.value)}
+                      placeholder="Valfritt: klistra in uppdraget så kan Flow dela upp det bättre."
+                      rows={2}
+                      className="w-full rounded-2xl border border-border bg-background p-3 text-sm"
                     />
-                  </label>
-                  <select
-                    value={projectId}
-                    onChange={(e) => setProjectId(e.target.value)}
-                    className="h-11 rounded-2xl border border-border bg-background px-3 text-sm"
-                    aria-label="Välj projekt"
-                  >
-                    <option value="">Inget projekt</option>
-                    {activeProjects.map((p) => (
-                      <option key={p.id} value={p.id}>
-                        {p.title}
-                      </option>
-                    ))}
-                  </select>
-                  <label className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <BellRing size={16} />
-                    <Input
-                      type="time"
-                      value={reminderTime}
-                      onChange={(e) => setReminderTime(e.target.value)}
-                      aria-label="Klockslag för deadline-påminnelser"
-                      className="h-11 rounded-2xl bg-background w-28"
-                    />
-                  </label>
-                  <Button type="submit" disabled={!title.trim()} className="h-11 rounded-2xl px-5">
-                    <Plus size={18} className="mr-1" /> Lägg till
-                  </Button>
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  Med deadline får du automatiskt notis 7, 3 och 1 dag innan – du kan ändra per
-                  uppgift.
-                </p>
-                <textarea
-                  value={details}
-                  onChange={(e) => setDetails(e.target.value)}
-                  placeholder="Valfritt: klistra in uppdraget så kan Flow dela upp det bättre."
-                  rows={2}
-                  className="w-full rounded-2xl border border-border bg-background p-3 text-sm"
-                />
-              </form>
-            </CollapsibleSection>
+                  </form>
+                </CollapsibleSection>
+              </div>
+            </section>
 
             {/* Uppgifter */}
             <CollapsibleSection
@@ -630,6 +673,20 @@ export default function WorkPage() {
                   </article>
                 );
               })}
+            </CollapsibleSection>
+
+            {/* Mer i jobb */}
+            <CollapsibleSection
+              defaultCollapsed
+              id="mer-i-jobb"
+              title="Mer i jobb"
+              help="Tid, övergångar, mötesläge, avslutningscheck och hjälp när dagen spårar ur."
+              headingClassName="text-lg font-semibold"
+            >
+              <div className="space-y-4">
+                <LifeProfileLink />
+                <WorkflowContent section="more" />
+              </div>
             </CollapsibleSection>
           </div>
         </MyFloveWide>
