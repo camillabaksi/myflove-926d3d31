@@ -464,7 +464,7 @@ export function CalendarContent() {
     title: event.title,
     time: event.time ?? undefined,
     source: "kalender",
-    area: "relationer",
+    area: "socialt",
     emoji: pictoMode ? pictogramFor(event.title, "👨‍👩‍👧") : "👨‍👩‍👧",
     priority: "idag",
     done: false,
