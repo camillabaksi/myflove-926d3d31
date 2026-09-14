@@ -262,6 +262,11 @@ export const listExternalEvents = createServerFn({ method: "GET" })
       }
       if (!res.ok) {
         console.error(`Kalenderläsning misslyckades (${provider}): ${res.status}`);
+        // 401/403 = åtkomsten räcker inte (t.ex. gamla scope). Be användaren
+        // koppla om i stället för att tyst visa en tom kalender.
+        if (res.status === 401 || res.status === 403) {
+          reconnectRequired = provider;
+        }
         continue;
       }
       const body = (await res.json()) as { items?: GoogleEvent[]; value?: GraphEvent[] };

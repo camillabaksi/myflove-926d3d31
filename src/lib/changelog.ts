@@ -6,9 +6,15 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-09-13";
+export const CHANGELOG_UPDATED = "2026-09-14";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  {
+    title: "Kalenderkopplingen säger till när åtkomsten behöver förnyas",
+    items: [
+      "Om Google/Outlook nekar läsning av kalendern (401/403) ber appen dig nu koppla om kontot i stället för att tyst visa en tom kalender (2026-09-14)",
+    ],
+  },
   {
     title: "Dagvyn syns direkt i kalendern",
     items: [
