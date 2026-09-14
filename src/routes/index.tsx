@@ -101,8 +101,8 @@ function LandingPage() {
             Gör inte mer.
           </h1>
           <p className="mx-auto mt-4 max-w-md text-base leading-relaxed text-[#6B647F] sm:text-lg">
-            Flow håller ihop kalender, hem, hälsa och ärenden – så att du kan
-            släppa det du bär i huvudet.
+            Flow håller ihop kalender, hem, hälsa och ärenden – så att du kan släppa det du bär i
+            huvudet.
           </p>
 
           <div className="mt-8 flex flex-col items-center gap-3">
@@ -144,9 +144,7 @@ function LandingPage() {
               </span>
               <div className="min-w-0">
                 <h2 className="font-display text-base font-bold">{point.title}</h2>
-                <p className="mt-1 text-sm leading-relaxed text-[#6B647F]">
-                  {point.text}
-                </p>
+                <p className="mt-1 text-sm leading-relaxed text-[#6B647F]">{point.text}</p>
               </div>
             </article>
           ))}
