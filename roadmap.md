@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Lugnare Barn, Familj och Relationer: vem det gäller först, fördjupning under Mer (2026-09-14)
+
 - [x] Studier samlat på en sida: Mitt schema med rast/lunch, valfri nästa lektion på Hem och all studiehjälp på plats (2026-09-14)
 
 - [x] Pitchdeck 4.0 med investerarunderlag, tydliga statusar och valideringsplatshållare
