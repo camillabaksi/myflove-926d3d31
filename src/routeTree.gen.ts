@@ -26,7 +26,6 @@ import { Route as GuideAdhdPlannerForAdultsRouteImport } from './routes/guide.ad
 import { Route as AppWorkflowRouteImport } from './routes/_app.workflow'
 import { Route as AppVeckansFlowRouteImport } from './routes/_app.veckans-flow'
 import { Route as AppVadNuRouteImport } from './routes/_app.vad-nu'
-import { Route as AppTravelRouteImport } from './routes/_app.travel'
 import { Route as AppTraningRouteImport } from './routes/_app.traning'
 import { Route as AppTasksRouteImport } from './routes/_app.tasks'
 import { Route as AppStudyflowRouteImport } from './routes/_app.studyflow'
@@ -172,11 +171,6 @@ const AppVeckansFlowRoute = AppVeckansFlowRouteImport.update({
 const AppVadNuRoute = AppVadNuRouteImport.update({
   id: '/vad-nu',
   path: '/vad-nu',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppTravelRoute = AppTravelRouteImport.update({
-  id: '/travel',
-  path: '/travel',
   getParentRoute: () => AppRoute,
 } as any)
 const AppTraningRoute = AppTraningRouteImport.update({
@@ -556,7 +550,6 @@ export interface FileRoutesByFullPath {
   '/studyflow': typeof AppStudyflowRoute
   '/tasks': typeof AppTasksRoute
   '/traning': typeof AppTraningRoute
-  '/travel': typeof AppTravelRoute
   '/vad-nu': typeof AppVadNuRoute
   '/veckans-flow': typeof AppVeckansFlowRoute
   '/workflow': typeof AppWorkflowRoute
@@ -636,7 +629,6 @@ export interface FileRoutesByTo {
   '/studyflow': typeof AppStudyflowRoute
   '/tasks': typeof AppTasksRoute
   '/traning': typeof AppTraningRoute
-  '/travel': typeof AppTravelRoute
   '/vad-nu': typeof AppVadNuRoute
   '/veckans-flow': typeof AppVeckansFlowRoute
   '/workflow': typeof AppWorkflowRoute
@@ -718,7 +710,6 @@ export interface FileRoutesById {
   '/_app/studyflow': typeof AppStudyflowRoute
   '/_app/tasks': typeof AppTasksRoute
   '/_app/traning': typeof AppTraningRoute
-  '/_app/travel': typeof AppTravelRoute
   '/_app/vad-nu': typeof AppVadNuRoute
   '/_app/veckans-flow': typeof AppVeckansFlowRoute
   '/_app/workflow': typeof AppWorkflowRoute
@@ -800,7 +791,6 @@ export interface FileRouteTypes {
     | '/studyflow'
     | '/tasks'
     | '/traning'
-    | '/travel'
     | '/vad-nu'
     | '/veckans-flow'
     | '/workflow'
@@ -880,7 +870,6 @@ export interface FileRouteTypes {
     | '/studyflow'
     | '/tasks'
     | '/traning'
-    | '/travel'
     | '/vad-nu'
     | '/veckans-flow'
     | '/workflow'
@@ -961,7 +950,6 @@ export interface FileRouteTypes {
     | '/_app/studyflow'
     | '/_app/tasks'
     | '/_app/traning'
-    | '/_app/travel'
     | '/_app/vad-nu'
     | '/_app/veckans-flow'
     | '/_app/workflow'
@@ -1118,13 +1106,6 @@ declare module '@tanstack/react-router' {
       path: '/vad-nu'
       fullPath: '/vad-nu'
       preLoaderRoute: typeof AppVadNuRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/travel': {
-      id: '/_app/travel'
-      path: '/travel'
-      fullPath: '/travel'
-      preLoaderRoute: typeof AppTravelRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/traning': {
@@ -1611,7 +1592,6 @@ interface AppRouteChildren {
   AppStudyflowRoute: typeof AppStudyflowRoute
   AppTasksRoute: typeof AppTasksRoute
   AppTraningRoute: typeof AppTraningRoute
-  AppTravelRoute: typeof AppTravelRoute
   AppVadNuRoute: typeof AppVadNuRoute
   AppVeckansFlowRoute: typeof AppVeckansFlowRoute
   AppWorkflowRoute: typeof AppWorkflowRoute
@@ -1672,7 +1652,6 @@ const AppRouteChildren: AppRouteChildren = {
   AppStudyflowRoute: AppStudyflowRoute,
   AppTasksRoute: AppTasksRoute,
   AppTraningRoute: AppTraningRoute,
-  AppTravelRoute: AppTravelRoute,
   AppVadNuRoute: AppVadNuRoute,
   AppVeckansFlowRoute: AppVeckansFlowRoute,
   AppWorkflowRoute: AppWorkflowRoute,

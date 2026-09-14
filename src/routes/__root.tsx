@@ -26,7 +26,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "MyFlove är ett mjukt dashboard för vardagen: fokus, uppgifter, humör, ekonomi, resor och mer — allt på ett ställe.",
+          "MyFlove är ett mjukt dashboard för vardagen: fokus, uppgifter, humör, ekonomi och mer — allt på ett ställe.",
       },
       { name: "author", content: "MyFlove" },
       { property: "og:title", content: "MyFlove — ditt lugna livsflöde" },
