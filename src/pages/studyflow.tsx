@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import Layout from "@/components/layout";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
@@ -36,16 +35,14 @@ import LifeProfileLink from "@/components/life-profile-link";
 import { useLifeProfile } from "@/hooks/use-life-profile";
 import { lifeProfileContext, toStudyProfile } from "@/lib/life-profile";
 import { ScheduleImport } from "@/components/schedule-import";
+import { MySchedule } from "@/components/study/my-schedule";
+import { StudyHelp } from "@/components/study/study-help";
 import { NextLectureCard } from "@/components/next-lecture-card";
 import { FlowReplanDiff } from "@/components/flow-replan-diff";
 import { diffSnapshots, makeSnapshot, type FlowDiff, type FlowSnapshot } from "@/lib/flow-diff";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { useVoiceInput } from "@/hooks/use-voice-input";
-import { QuickflowCapture } from "@/components/quickflow-capture";
-import { QuickflowList } from "@/components/quickflow-list";
 import { breakDownAssignment } from "@/lib/study.functions";
-import { StudiesSection } from "@/pages/studies";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { celebrateFromEvent } from "@/lib/celebrate";
 import {
   MINUTE_CHOICES,
@@ -269,24 +266,30 @@ export default function StudyflowPage() {
               </form>
             </header>
 
-            <Tabs defaultValue="nu" className="w-full">
-              <TabsList className="grid w-full grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] rounded-full">
-                <TabsTrigger value="nu" className="rounded-full">
-                  Plugga nu
-                </TabsTrigger>
-                <TabsTrigger value="kurser" className="rounded-full">
-                  Kurser & inlämningar
-                </TabsTrigger>
-              </TabsList>
-              <TabsContent value="kurser" className="mt-4">
-                <StudiesSection />
-              </TabsContent>
-              <TabsContent value="nu" className="mt-4 space-y-5">
+            <MySchedule />
+
+            <div id="schema-import">
+              <ScheduleImport />
+            </div>
+
+            <StudyHelp />
+
+            <CollapsibleSection
+              className={card}
+              headingClassName={sectionTitle}
+              id="mer-i-studier"
+              defaultCollapsed
+              title={
+                <>
+                  <Sparkles className="h-5 w-5 text-gold" /> Mer i studier
+                </>
+              }
+              help="Veckoschema, prov och repetition, pluggpass och avslut – här när du vill ha det."
+            >
+              <div className="mt-4 space-y-5">
                 <LifeProfileLink />
 
                 <NextLectureCard />
-
-                <ScheduleImport />
 
                 <StudyCalendarSync />
 
@@ -392,9 +395,6 @@ export default function StudyflowPage() {
                     🃏 {stats.dueCards} flashcards och ❓ {stats.dueQuestions} frågor väntar på
                     repetition.
                   </p>
-                  <Button asChild variant="secondary" className="mt-3 rounded-full">
-                    <Link to="/studybuddy">Öppna Studiehjälp</Link>
-                  </Button>
                 </CollapsibleSection>
 
                 {/* Vad ska jag plugga nu? */}
@@ -813,21 +813,8 @@ export default function StudyflowPage() {
                   )}
                 </CollapsibleSection>
 
-                {/* Quickflow för studierna */}
-                <CollapsibleSection
-                  className="space-y-3"
-                  headingClassName={sectionTitle}
-                  title={
-                    <>
-                      <Sparkles className="h-5 w-5 text-gold" /> Quickflow i studierna
-                    </>
-                  }
-                >
-                  <QuickflowCapture />
-                  <QuickflowList />
-                </CollapsibleSection>
-              </TabsContent>
-            </Tabs>
+              </div>
+            </CollapsibleSection>
           </div>
         </MyFloveWide>
       </MyFlovePageGrid>

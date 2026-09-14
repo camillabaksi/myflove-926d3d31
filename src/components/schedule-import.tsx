@@ -17,7 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useStudySchedule } from "@/hooks/use-study-schedule";
 import { useScheduleFiles, type ScheduleFile } from "@/hooks/use-schedule-files";
-import { WEEKDAYS } from "@/lib/study-calendar";
+import { WEEKDAYS, LECTURE_KIND_LABEL, type LectureKind } from "@/lib/study-calendar";
 import {
   dedupe,
   parseScheduleIcs,
@@ -380,6 +380,18 @@ export function ScheduleImport() {
                               updateLecture(idx, { location: e.target.value.slice(0, 80) })
                             }
                           />
+                          <select
+                            aria-label="Typ"
+                            className="mt-2 h-9 w-full rounded-lg border border-border bg-background px-2 text-sm"
+                            value={l.kind ?? "lecture"}
+                            onChange={(e) =>
+                              updateLecture(idx, { kind: e.target.value as LectureKind })
+                            }
+                          >
+                            <option value="lecture">Lektion</option>
+                            <option value="break">Rast</option>
+                            <option value="lunch">Lunch</option>
+                          </select>
                           <div className="mt-2 flex gap-2">
                             <Button
                               size="sm"
@@ -413,6 +425,11 @@ export function ScheduleImport() {
                               {l.title}
                               {l.location ? ` · ${l.location}` : ""}
                             </span>
+                            {l.kind && l.kind !== "lecture" && (
+                              <span className="shrink-0 self-center rounded-full bg-muted px-2 py-0.5 text-[11px] text-muted-foreground">
+                                {LECTURE_KIND_LABEL[l.kind]}
+                              </span>
+                            )}
                             {existingKeys.has(keyOf(l)) && (
                               <span className="shrink-0 text-xs text-muted-foreground">
                                 finns redan

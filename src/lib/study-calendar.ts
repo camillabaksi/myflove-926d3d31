@@ -2,6 +2,9 @@
 // Ren logik: förvandlar schema (föreläsningar), prov och repetitionsbehov
 // till konkreta kalenderposter som läggs i lediga tidsluckor.
 
+/** Lektion, rast eller lunch. Saknas värdet är posten en vanlig lektion. */
+export type LectureKind = "lecture" | "break" | "lunch";
+
 export interface Lecture {
   id: string;
   title: string;
@@ -11,7 +14,15 @@ export interface Lecture {
   start: string; // HH:MM
   end: string; // HH:MM
   location?: string;
+  /** "lecture" (standard), "break" eller "lunch" – hållpunkter, inte uppgifter. */
+  kind?: LectureKind;
 }
+
+export const LECTURE_KIND_LABEL: Record<LectureKind, string> = {
+  lecture: "Lektion",
+  break: "Rast",
+  lunch: "Lunch",
+};
 
 export interface StudyScheduleSettings {
   /** Tidigast på dagen som plugg får läggas, HH:MM */
@@ -165,6 +176,8 @@ export function planStudyCalendar(input: PlanInput): PlannedEntry[] {
       const start = toMin(lec.start);
       const end = Math.max(start + 30, toMin(lec.end));
       busy.push({ date, start, end });
+      // Rast och lunch är hållpunkter i schemat – de blir aldrig uppgifter.
+      if (lec.kind && lec.kind !== "lecture") continue;
       if (date === today && end <= nowMinutes) continue;
       entries.push({
         syncKey: `${SYNC_PREFIX}lecture:${lec.id}:${date}`,

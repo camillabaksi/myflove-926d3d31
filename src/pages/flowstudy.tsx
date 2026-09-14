@@ -1,6 +1,5 @@
 import { useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import Layout from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -41,7 +40,7 @@ import CollapsibleSection from "@/components/collapsible-section";
 import { ACCEPT_DOCUMENTS, UPLOAD_HINT, prepareUpload } from "@/lib/file-formats";
 import { MyFloveThinking, MyFloveEmptyIllustration } from "@/components/myflove/motion";
 
-export default function StudyBuddyPage() {
+export function StudyBuddyContent() {
   const { activeCourses } = useCourses();
   const { toast } = useToast();
   const run = useServerFn(generateStudySet);
@@ -145,22 +144,12 @@ export default function StudyBuddyPage() {
   };
 
   return (
-    <Layout>
       <div className="space-y-8">
-        <header className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center">
-            <Brain size={20} />
-          </div>
-          <div>
-            <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl leading-tight">
-              Studiehjälp
-            </h1>
-            <p className="text-sm text-muted-foreground">
-              Ladda upp materialet – Flow gör flashcards och quiz, och kommer ihåg vad du behöver
-              repetera.
-            </p>
-          </div>
-        </header>
+        <p className="text-sm text-muted-foreground">
+          Ladda upp materialet – Flow gör flashcards och quiz, och kommer ihåg vad du behöver
+          repetera.
+        </p>
+
 
         <LifeProfileLink />
 
@@ -454,7 +443,6 @@ export default function StudyBuddyPage() {
           })}
         </CollapsibleSection>
       </div>
-    </Layout>
   );
 }
 

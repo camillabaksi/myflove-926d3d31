@@ -115,8 +115,11 @@ export const APP_GUIDE: GuideGroup[] = [
     label: "Studier & jobb",
     hint: "När vardagen har krav utifrån",
     entries: [
-      { href: "/studyflow", label: "StudyFlow", what: "Schema, prov och pluggplan" },
-      { href: "/studybuddy", label: "StudyBuddy", what: "Quiz och flashcards från ditt material" },
+      {
+        href: "/studyflow",
+        label: "Studier",
+        what: "Schema, pluggplan och studiehjälp på ett ställe",
+      },
       { href: "/jobb", label: "Jobb", what: "Uppgifter och möten" },
       { href: "/workflow", label: "WorkFlow", what: "Din kapacitet på jobbet" },
     ],

@@ -9,6 +9,7 @@ import {
 const LECTURES_KEY = "myflove-study-lectures";
 const SETTINGS_KEY = "myflove-study-schedule-settings";
 const AUTO_KEY = "myflove-study-schedule-auto";
+const HOME_KEY = "myflove-study-next-lecture-home";
 
 const newId = () => Math.random().toString(36).slice(2, 11);
 
@@ -19,6 +20,10 @@ export function useStudySchedule() {
     DEFAULT_SCHEDULE_SETTINGS,
   );
   const [autoSync, setAutoSync] = useCloudSyncedStorage<boolean>(AUTO_KEY, true);
+  const [showNextLectureOnHome, setShowNextLectureOnHome] = useCloudSyncedStorage<boolean>(
+    HOME_KEY,
+    false,
+  );
 
   const addLecture = useCallback(
     (input: Omit<Lecture, "id">) => {
@@ -54,5 +59,7 @@ export function useStudySchedule() {
     patchSettings,
     autoSync,
     setAutoSync,
+    showNextLectureOnHome,
+    setShowNextLectureOnHome,
   };
 }
