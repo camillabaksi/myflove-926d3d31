@@ -14,7 +14,18 @@ import {
   type NotificationPermissionState,
 } from "@/lib/push-notifications";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowRight, BellRing, Plus, Trash2, Undo2, Pencil, Check, X, CalendarClock, Pill } from "lucide-react";
+import {
+  ArrowRight,
+  BellRing,
+  Plus,
+  Trash2,
+  Undo2,
+  Pencil,
+  Check,
+  X,
+  CalendarClock,
+  Pill,
+} from "lucide-react";
 
 const todayIso = () => new Date().toISOString().slice(0, 10);
 

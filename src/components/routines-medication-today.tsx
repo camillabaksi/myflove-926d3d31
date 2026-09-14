@@ -30,7 +30,11 @@ function minutesOf(time: string): number {
   return h * 60 + m;
 }
 
-export default function RoutinesMedicationToday({ showManageLink = true }: { showManageLink?: boolean }) {
+export default function RoutinesMedicationToday({
+  showManageLink = true,
+}: {
+  showManageLink?: boolean;
+}) {
   const { medications, isTaken, toggleTaken } = useMedications();
   const { reminders, toggleReminder } = useReminders();
   const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
