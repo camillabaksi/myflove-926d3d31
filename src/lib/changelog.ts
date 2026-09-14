@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-14";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Idag är nu ett utvecklat dagkort",
+    items: [
+      "Idag visar datum och alla dagens aktiviteter i en enda kompakt lista med Lägg till och Påminnelse nära till hands (2026-09-14)",
+      "Tider, uppgifter, rutiner och kalenderposter visas tillsammans; genomförda saker ligger kvar dämpade i samma lista (2026-09-14)",
+      "Separata gjort-/att göra-/tider-/kalenderblock och den tomma 06–22-tidslinjen är borttagna från dagvyn (2026-09-14)",
+      "Kalenderns Dag-läge följer samma enkla listidé utan att ändra vecka eller månad (2026-09-14)",
+    ],
+  },
+  {
     title: "Lugnare hem: Paus samlat och Flow kopplat till nästa steg",
     items: [
       'Dagens tanke och "Gör den enklaste saken" är borttagna som egna funktioner på Hem (2026-09-14)',
