@@ -810,406 +810,408 @@ export function CalendarContent() {
 
             {selectedDateStr && view === "dag" && (
               <div className="animate-in fade-in slide-in-from-bottom-4 mt-5 space-y-4 border-t border-border/60 pt-5 duration-500">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <h3 className="min-w-0 truncate text-lg font-medium sm:text-xl">
-                {selectedDateStr === todayStr
-                  ? t("Idag")
-                  : parseISODate(selectedDateStr).toLocaleDateString(locale, {
-                      weekday: "long",
-                      day: "numeric",
-                      month: "long",
-                    })}
-              </h3>
-              <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
-                <button
-                  type="button"
-                  onClick={() => setQuickAddOpen((prev) => !prev)}
-                  aria-expanded={quickAddOpen}
-                  className={`flex items-center gap-1.5 rounded-2xl border px-3 py-2 text-sm font-semibold transition-colors ${
-                    quickAddOpen
-                      ? "border-primary bg-primary text-primary-foreground"
-                      : "border-primary/30 bg-primary/10 text-primary hover:bg-primary/15"
-                  }`}
-                >
-                  <Plus size={16} /> {t("Lägg till")}
-                </button>
-                <button
-                  onClick={() => setIsAddingReminder(true)}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-2xl text-sm font-medium border transition-colors bg-card border-border text-foreground hover:border-primary/40 hover:bg-secondary/50"
-                >
-                  <Plus size={16} className="text-primary" />
-                  {t("Påminnelse")}
-                </button>
-                <button
-                  onClick={() => setPictoMode(!pictoMode)}
-                  aria-pressed={pictoMode}
-                  title={t("Visa stora symboler för varje händelse")}
-                  className={`flex items-center gap-1.5 px-3 py-2 rounded-2xl text-sm font-medium border transition-colors ${
-                    pictoMode
-                      ? "bg-accent/30 border-accent/40 text-foreground"
-                      : "bg-card border-border text-muted-foreground hover:border-primary/40 hover:bg-secondary/50"
-                  }`}
-                >
-                  <span aria-hidden>🖼️</span>
-                  {t("Bildstöd")}
-                </button>
-                <span className="rounded-full border border-primary/20 bg-primary/5 px-3 py-1.5 text-xs font-medium text-primary">
-                  {t("Gjort först · tider efteråt")}
-                </span>
-              </div>
-            </div>
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <h3 className="min-w-0 truncate text-lg font-medium sm:text-xl">
+                    {selectedDateStr === todayStr
+                      ? t("Idag")
+                      : parseISODate(selectedDateStr).toLocaleDateString(locale, {
+                          weekday: "long",
+                          day: "numeric",
+                          month: "long",
+                        })}
+                  </h3>
+                  <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
+                    <button
+                      type="button"
+                      onClick={() => setQuickAddOpen((prev) => !prev)}
+                      aria-expanded={quickAddOpen}
+                      className={`flex items-center gap-1.5 rounded-2xl border px-3 py-2 text-sm font-semibold transition-colors ${
+                        quickAddOpen
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : "border-primary/30 bg-primary/10 text-primary hover:bg-primary/15"
+                      }`}
+                    >
+                      <Plus size={16} /> {t("Lägg till")}
+                    </button>
+                    <button
+                      onClick={() => setIsAddingReminder(true)}
+                      className="flex items-center gap-1.5 px-3 py-2 rounded-2xl text-sm font-medium border transition-colors bg-card border-border text-foreground hover:border-primary/40 hover:bg-secondary/50"
+                    >
+                      <Plus size={16} className="text-primary" />
+                      {t("Påminnelse")}
+                    </button>
+                    <button
+                      onClick={() => setPictoMode(!pictoMode)}
+                      aria-pressed={pictoMode}
+                      title={t("Visa stora symboler för varje händelse")}
+                      className={`flex items-center gap-1.5 px-3 py-2 rounded-2xl text-sm font-medium border transition-colors ${
+                        pictoMode
+                          ? "bg-accent/30 border-accent/40 text-foreground"
+                          : "bg-card border-border text-muted-foreground hover:border-primary/40 hover:bg-secondary/50"
+                      }`}
+                    >
+                      <span aria-hidden>🖼️</span>
+                      {t("Bildstöd")}
+                    </button>
+                    <span className="rounded-full border border-primary/20 bg-primary/5 px-3 py-1.5 text-xs font-medium text-primary">
+                      {t("Gjort först · tider efteråt")}
+                    </span>
+                  </div>
+                </div>
 
-            {quickAddOpen && (
-              <QuickAddInline
-                key={selectedDateStr}
-                date={selectedDateStr}
-                onAdd={(result) => {
-                  handleQuickAdd(result);
-                  setQuickAddOpen(false);
-                }}
-                onClose={() => setQuickAddOpen(false)}
-              />
-            )}
-
-            {allInDay && selectedDateStr === todayStr && <ImpactCheckin />}
-
-            {allInDay && (
-              <>
-                <AllInDay
-                  date={selectedDateStr}
-                  isToday={selectedDateStr === todayStr}
-                  hasCalendarEvents={
-                    selectedItems.familyEvents.length > 0 || selectedItems.recurring.length > 0
-                  }
-                />
-                {view === "dag" && (
-                  <DayTimeline
-                    isToday={selectedDateStr === todayStr}
-                    energyByHour={selectedDateStr === todayStr ? batteryByHour : undefined}
-                    entries={selectedTimelineEntries}
+                {quickAddOpen && (
+                  <QuickAddInline
+                    key={selectedDateStr}
+                    date={selectedDateStr}
+                    onAdd={(result) => {
+                      handleQuickAdd(result);
+                      setQuickAddOpen(false);
+                    }}
+                    onClose={() => setQuickAddOpen(false)}
                   />
                 )}
-                {(selectedItems.familyEvents.length > 0 || selectedItems.recurring.length > 0) && (
-                  <CollapsibleSection
-                    id="kalenderdagen::kalenderhandelser"
-                    title={t("Kalenderhändelser")}
-                    headingClassName="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
-                    className="space-y-2"
-                  >
-                    <p className="text-sm text-muted-foreground">
-                      {t("Delade händelser och återkommande hållpunkter.")}
-                    </p>
-                    <ul className="space-y-2">
-                      {selectedItems.familyEvents.map((event) => (
-                        <li
-                          key={`family-day-${event.id}`}
-                          className="flex items-center gap-3 rounded-2xl border border-border/60 bg-secondary/30 px-3 py-2.5"
-                        >
-                          <Users className="h-5 w-5 shrink-0 text-primary" />
-                          <span className="min-w-0 flex-1 text-sm font-medium text-foreground">
-                            {event.title}
-                          </span>
-                          <span className="shrink-0 text-xs text-muted-foreground">
-                            {event.time ? `${t("kl")} ${event.time}` : t("utan tid")}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                    {selectedItems.recurring.length > 0 && (
-                      <div className="flex flex-wrap gap-2 pt-1">
-                        {selectedItems.recurring.map((event) => (
-                          <span
-                            key={`recurring-day-${event.id}`}
-                            className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-secondary/50 px-2.5 py-1 text-xs text-muted-foreground"
-                          >
-                            <span aria-hidden>↻</span>
-                            {event.title}
-                            {event.time && ` · ${event.time}`}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </CollapsibleSection>
-                )}
-              </>
-            )}
 
-            {!allInDay &&
-              !selectedItems.focus &&
-              selectedItems.tasks.length === 0 &&
-              selectedItems.reminders.length === 0 &&
-              selectedItems.familyEvents.length === 0 &&
-              selectedItems.childEvents.length === 0 &&
-              selectedItems.recurring.length === 0 && (
-                <div className="text-center py-10 bg-card/50 border border-border/50 rounded-3xl text-muted-foreground">
-                  <MyFloveEmptyIllustration kind="calendar" className="mb-2 block" />
-                  {t("Inget inplanerat denna dag.")}
-                </div>
-              )}
+                {allInDay && selectedDateStr === todayStr && <ImpactCheckin />}
 
-            {!allInDay && selectedItems.recurring.length > 0 && (
-              <div className="flex flex-wrap items-center gap-2 px-1">
-                <span className="text-xs uppercase tracking-wider text-muted-foreground">
-                  {t("Återkommande")}
-                </span>
-                {selectedItems.recurring.map((r) => (
-                  <span
-                    key={r.id}
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary/60 border border-border/50 text-xs text-muted-foreground"
-                  >
-                    <span
-                      className="w-1.5 h-1.5 rounded-full"
-                      style={{ backgroundColor: r.color ?? "hsl(var(--primary))" }}
+                {allInDay && (
+                  <>
+                    <AllInDay
+                      date={selectedDateStr}
+                      isToday={selectedDateStr === todayStr}
+                      hasCalendarEvents={
+                        selectedItems.familyEvents.length > 0 || selectedItems.recurring.length > 0
+                      }
                     />
-                    {pictoMode && <span aria-hidden>{pictogramFor(r.title, "🔁")}</span>}
-                    {r.title}
-                    {r.time && ` · ${r.time}`}
-                  </span>
-                ))}
-              </div>
-            )}
+                    {view === "dag" && (
+                      <DayTimeline
+                        isToday={selectedDateStr === todayStr}
+                        energyByHour={selectedDateStr === todayStr ? batteryByHour : undefined}
+                        entries={selectedTimelineEntries}
+                      />
+                    )}
+                    {(selectedItems.familyEvents.length > 0 ||
+                      selectedItems.recurring.length > 0) && (
+                      <CollapsibleSection
+                        id="kalenderdagen::kalenderhandelser"
+                        title={t("Kalenderhändelser")}
+                        headingClassName="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+                        className="space-y-2"
+                      >
+                        <p className="text-sm text-muted-foreground">
+                          {t("Delade händelser och återkommande hållpunkter.")}
+                        </p>
+                        <ul className="space-y-2">
+                          {selectedItems.familyEvents.map((event) => (
+                            <li
+                              key={`family-day-${event.id}`}
+                              className="flex items-center gap-3 rounded-2xl border border-border/60 bg-secondary/30 px-3 py-2.5"
+                            >
+                              <Users className="h-5 w-5 shrink-0 text-primary" />
+                              <span className="min-w-0 flex-1 text-sm font-medium text-foreground">
+                                {event.title}
+                              </span>
+                              <span className="shrink-0 text-xs text-muted-foreground">
+                                {event.time ? `${t("kl")} ${event.time}` : t("utan tid")}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                        {selectedItems.recurring.length > 0 && (
+                          <div className="flex flex-wrap gap-2 pt-1">
+                            {selectedItems.recurring.map((event) => (
+                              <span
+                                key={`recurring-day-${event.id}`}
+                                className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-secondary/50 px-2.5 py-1 text-xs text-muted-foreground"
+                              >
+                                <span aria-hidden>↻</span>
+                                {event.title}
+                                {event.time && ` · ${event.time}`}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </CollapsibleSection>
+                    )}
+                  </>
+                )}
 
-            {!allInDay && (
-              <div className="space-y-3">
-                {/* Samma händelse för flera barn (t.ex. lämning av Bella och Bianca) visas ihop. */}
-                {(() => {
-                  type ChildEv = (typeof selectedItems.childEvents)[number];
-                  const groups = new Map<string, ChildEv[]>();
-                  for (const e of selectedItems.childEvents) {
-                    const key = `${e.title}|${e.time ?? ""}|${e.completed ? 1 : 0}`;
-                    groups.set(key, [...(groups.get(key) ?? []), e]);
-                  }
-                  return Array.from(groups.values());
-                })().map((group) => {
-                  const e = group[0]!;
-                  const names = group.map((g) => g.child?.name ?? t("Barn"));
-                  const color =
-                    group.length > 1
-                      ? DEFAULT_CHILD_COLOR
-                      : (e.child?.color ?? DEFAULT_CHILD_COLOR);
-                  return (
-                    <div
-                      key={`child-${e.id}`}
-                      className="flex items-center justify-between gap-3 p-4 bg-card border border-border rounded-2xl"
-                    >
-                      <Link href="/barn" className="flex items-center gap-4 min-w-0 flex-1">
+                {!allInDay &&
+                  !selectedItems.focus &&
+                  selectedItems.tasks.length === 0 &&
+                  selectedItems.reminders.length === 0 &&
+                  selectedItems.familyEvents.length === 0 &&
+                  selectedItems.childEvents.length === 0 &&
+                  selectedItems.recurring.length === 0 && (
+                    <div className="text-center py-10 bg-card/50 border border-border/50 rounded-3xl text-muted-foreground">
+                      <MyFloveEmptyIllustration kind="calendar" className="mb-2 block" />
+                      {t("Inget inplanerat denna dag.")}
+                    </div>
+                  )}
+
+                {!allInDay && selectedItems.recurring.length > 0 && (
+                  <div className="flex flex-wrap items-center gap-2 px-1">
+                    <span className="text-xs uppercase tracking-wider text-muted-foreground">
+                      {t("Återkommande")}
+                    </span>
+                    {selectedItems.recurring.map((r) => (
+                      <span
+                        key={r.id}
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary/60 border border-border/50 text-xs text-muted-foreground"
+                      >
+                        <span
+                          className="w-1.5 h-1.5 rounded-full"
+                          style={{ backgroundColor: r.color ?? "hsl(var(--primary))" }}
+                        />
+                        {pictoMode && <span aria-hidden>{pictogramFor(r.title, "🔁")}</span>}
+                        {r.title}
+                        {r.time && ` · ${r.time}`}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                {!allInDay && (
+                  <div className="space-y-3">
+                    {/* Samma händelse för flera barn (t.ex. lämning av Bella och Bianca) visas ihop. */}
+                    {(() => {
+                      type ChildEv = (typeof selectedItems.childEvents)[number];
+                      const groups = new Map<string, ChildEv[]>();
+                      for (const e of selectedItems.childEvents) {
+                        const key = `${e.title}|${e.time ?? ""}|${e.completed ? 1 : 0}`;
+                        groups.set(key, [...(groups.get(key) ?? []), e]);
+                      }
+                      return Array.from(groups.values());
+                    })().map((group) => {
+                      const e = group[0]!;
+                      const names = group.map((g) => g.child?.name ?? t("Barn"));
+                      const color =
+                        group.length > 1
+                          ? DEFAULT_CHILD_COLOR
+                          : (e.child?.color ?? DEFAULT_CHILD_COLOR);
+                      return (
+                        <div
+                          key={`child-${e.id}`}
+                          className="flex items-center justify-between gap-3 p-4 bg-card border border-border rounded-2xl"
+                        >
+                          <Link href="/barn" className="flex items-center gap-4 min-w-0 flex-1">
+                            {pictoMode ? (
+                              <span className="text-3xl leading-none shrink-0" aria-hidden>
+                                {pictogramFor(e.title, "🐣")}
+                              </span>
+                            ) : (
+                              <Baby style={{ color }} size={24} />
+                            )}
+                            <div className="min-w-0">
+                              <div
+                                className="text-xs font-medium uppercase tracking-wider mb-0.5"
+                                style={{ color }}
+                              >
+                                {names.join(" & ")} {e.time && `${t("kl")} ${e.time}`}
+                                {e.sharedWith.length > 0 && ` · ${t("delad")}`}
+                              </div>
+                              <div
+                                className={`text-lg font-medium truncate ${e.completed ? "line-through opacity-60" : ""}`}
+                              >
+                                {e.title}
+                              </div>
+                            </div>
+                          </Link>
+                          <button
+                            type="button"
+                            onClick={() => openChildGroupEditor(group)}
+                            className="shrink-0 text-xs font-medium px-3 py-2 rounded-full bg-secondary/60 hover:bg-secondary transition-colors"
+                          >
+                            {t("Ändra barn")}
+                          </button>
+                        </div>
+                      );
+                    })}
+
+                    {selectedItems.familyEvents.map((e) => (
+                      <div
+                        key={`fam-${e.id}`}
+                        className="flex items-center justify-between gap-4 p-4 bg-card border border-border rounded-2xl group"
+                      >
+                        <div className="flex items-center gap-4">
+                          {pictoMode ? (
+                            <span className="text-3xl leading-none shrink-0" aria-hidden>
+                              {pictogramFor(e.title, "👨‍👩‍👧")}
+                            </span>
+                          ) : (
+                            <Users
+                              style={{ color: e.member?.color ?? DEFAULT_MEMBER_COLOR }}
+                              size={24}
+                            />
+                          )}
+                          <div>
+                            <div
+                              className="text-xs font-medium uppercase tracking-wider mb-0.5"
+                              style={{ color: e.member?.color ?? DEFAULT_MEMBER_COLOR }}
+                            >
+                              {e.member?.displayName ?? t("Familj")}{" "}
+                              {e.time && `${t("kl")} ${e.time}`}
+                            </div>
+                            <div className="text-lg font-medium">{e.title}</div>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => deleteEventMutation.mutate({ id: e.id })}
+                          aria-label={t("Ta bort familjehändelse")}
+                          className="p-2 text-muted-foreground hover:text-destructive rounded-xl hover:bg-destructive/10 shrink-0"
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </div>
+                    ))}
+
+                    {selectedItems.focus && (
+                      <div className="flex items-center gap-4 p-4 bg-accent/20 border border-accent/30 rounded-2xl">
                         {pictoMode ? (
                           <span className="text-3xl leading-none shrink-0" aria-hidden>
-                            {pictogramFor(e.title, "🐣")}
+                            {pictogramFor(selectedItems.focus.text, "🎯")}
                           </span>
                         ) : (
-                          <Baby style={{ color }} size={24} />
+                          <Target className="text-accent-foreground" size={24} />
                         )}
-                        <div className="min-w-0">
-                          <div
-                            className="text-xs font-medium uppercase tracking-wider mb-0.5"
-                            style={{ color }}
-                          >
-                            {names.join(" & ")} {e.time && `${t("kl")} ${e.time}`}
-                            {e.sharedWith.length > 0 && ` · ${t("delad")}`}
+                        <div>
+                          <div className="text-xs text-accent-foreground font-medium uppercase tracking-wider mb-0.5">
+                            {t("Viktigast idag")}
                           </div>
-                          <div
-                            className={`text-lg font-medium truncate ${e.completed ? "line-through opacity-60" : ""}`}
-                          >
-                            {e.title}
-                          </div>
+                          <div className="text-lg font-medium">{selectedItems.focus.text}</div>
                         </div>
-                      </Link>
-                      <button
-                        type="button"
-                        onClick={() => openChildGroupEditor(group)}
-                        className="shrink-0 text-xs font-medium px-3 py-2 rounded-full bg-secondary/60 hover:bg-secondary transition-colors"
-                      >
-                        {t("Ändra barn")}
-                      </button>
-                    </div>
-                  );
-                })}
-
-                {selectedItems.familyEvents.map((e) => (
-                  <div
-                    key={`fam-${e.id}`}
-                    className="flex items-center justify-between gap-4 p-4 bg-card border border-border rounded-2xl group"
-                  >
-                    <div className="flex items-center gap-4">
-                      {pictoMode ? (
-                        <span className="text-3xl leading-none shrink-0" aria-hidden>
-                          {pictogramFor(e.title, "👨‍👩‍👧")}
-                        </span>
-                      ) : (
-                        <Users
-                          style={{ color: e.member?.color ?? DEFAULT_MEMBER_COLOR }}
-                          size={24}
-                        />
-                      )}
-                      <div>
-                        <div
-                          className="text-xs font-medium uppercase tracking-wider mb-0.5"
-                          style={{ color: e.member?.color ?? DEFAULT_MEMBER_COLOR }}
-                        >
-                          {e.member?.displayName ?? t("Familj")} {e.time && `${t("kl")} ${e.time}`}
-                        </div>
-                        <div className="text-lg font-medium">{e.title}</div>
                       </div>
-                    </div>
-                    <button
-                      onClick={() => deleteEventMutation.mutate({ id: e.id })}
-                      aria-label={t("Ta bort familjehändelse")}
-                      className="p-2 text-muted-foreground hover:text-destructive rounded-xl hover:bg-destructive/10 shrink-0"
-                    >
-                      <Trash2 size={18} />
-                    </button>
-                  </div>
-                ))}
-
-                {selectedItems.focus && (
-                  <div className="flex items-center gap-4 p-4 bg-accent/20 border border-accent/30 rounded-2xl">
-                    {pictoMode ? (
-                      <span className="text-3xl leading-none shrink-0" aria-hidden>
-                        {pictogramFor(selectedItems.focus.text, "🎯")}
-                      </span>
-                    ) : (
-                      <Target className="text-accent-foreground" size={24} />
                     )}
-                    <div>
-                      <div className="text-xs text-accent-foreground font-medium uppercase tracking-wider mb-0.5">
-                        {t("Viktigast idag")}
+
+                    {selectedItems.reminders.map((r) => (
+                      <div
+                        key={r.id}
+                        className="flex items-center justify-between gap-4 p-4 bg-primary/5 border border-primary/10 rounded-2xl"
+                      >
+                        <div className="flex items-center gap-4 min-w-0">
+                          {pictoMode ? (
+                            <span className="text-3xl leading-none shrink-0" aria-hidden>
+                              {pictogramFor(r.title, "🔔")}
+                            </span>
+                          ) : (
+                            <Bell className="text-primary shrink-0" size={24} />
+                          )}
+                          <div className="min-w-0">
+                            <div className="text-xs text-primary font-medium uppercase tracking-wider mb-0.5">
+                              {r.endDate
+                                ? `${t("Period")} · ${periodDayLabel(r.date, r.endDate, selectedDateStr, t)}`
+                                : t("Påminnelse")}{" "}
+                              {r.time && `kl ${r.time}${r.endTime ? `–${r.endTime}` : ""}`}
+                            </div>
+                            <div className="text-lg font-medium truncate">{r.title}</div>
+                            {r.note && (
+                              <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">
+                                {r.note}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-1 shrink-0">
+                          <button
+                            onClick={() =>
+                              setEditing({
+                                kind: "reminder",
+                                id: r.id,
+                                title: r.title,
+                                date: r.date,
+                                time: r.time ?? "",
+                                endTime: r.endTime ?? "",
+                                remind: r.remindMinutesBefore ?? null,
+                                note: r.note ?? "",
+                                area: "vardag",
+                                repeat: r.repeat ?? "none",
+                              })
+                            }
+                            aria-label={t("Ändra påminnelse")}
+                            className="px-3 py-2 text-sm text-primary rounded-xl hover:bg-primary/10"
+                          >
+                            {t("Ändra")}
+                          </button>
+                          <button
+                            onClick={() => deleteReminder(r.id)}
+                            aria-label={t("Ta bort påminnelse")}
+                            className="p-2 text-muted-foreground hover:text-destructive rounded-xl hover:bg-destructive/10"
+                          >
+                            <Trash2 size={18} />
+                          </button>
+                        </div>
                       </div>
-                      <div className="text-lg font-medium">{selectedItems.focus.text}</div>
-                    </div>
+                    ))}
+
+                    {selectedItems.tasks.map((task) => (
+                      <div
+                        key={task.id}
+                        className={`flex items-center justify-between gap-4 p-4 bg-card border border-border rounded-2xl ${task.completed ? "opacity-60" : ""}`}
+                      >
+                        <div className="flex items-center gap-4 min-w-0">
+                          {pictoMode ? (
+                            <span className="text-3xl leading-none shrink-0" aria-hidden>
+                              {pictogramFor(task.title, "✅")}
+                            </span>
+                          ) : (
+                            <CheckSquare
+                              className={task.completed ? "text-primary" : "text-muted-foreground"}
+                              size={24}
+                            />
+                          )}
+                          <div className="flex-1 min-w-0">
+                            {task.time && (
+                              <div className="text-xs text-primary font-medium uppercase tracking-wider mb-0.5">
+                                {t("kl")} {task.time}
+                                {task.endTime ? `–${task.endTime}` : ""}
+                                {task.reminderMinutesBefore != null &&
+                                  ` · ${t("påminn")} ${task.reminderMinutesBefore} ${t("min innan")}`}
+                              </div>
+                            )}
+                            <div
+                              className={`text-lg font-medium truncate ${task.completed ? "line-through text-muted-foreground" : ""}`}
+                            >
+                              {task.title}
+                            </div>
+                            {task.note && (
+                              <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">
+                                {task.note}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-1 shrink-0">
+                          <button
+                            onClick={() =>
+                              setEditing({
+                                kind: "task",
+                                id: task.id,
+                                title: task.title,
+                                date: task.dueDate ?? selectedDateStr,
+                                time: task.time ?? "",
+                                endTime: task.endTime ?? "",
+                                remind: task.reminderMinutesBefore ?? null,
+                                note: task.note ?? "",
+                                area: getArea(task),
+                                repeat: "none",
+                              })
+                            }
+                            aria-label={t("Ändra uppgift")}
+                            className="px-3 py-2 text-sm text-primary rounded-xl hover:bg-primary/10"
+                          >
+                            {t("Ändra")}
+                          </button>
+                          <button
+                            onClick={() => deleteTask(task.id)}
+                            aria-label={t("Ta bort uppgift")}
+                            className="p-2 text-muted-foreground hover:text-destructive rounded-xl hover:bg-destructive/10"
+                          >
+                            <Trash2 size={18} />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 )}
-
-                {selectedItems.reminders.map((r) => (
-                  <div
-                    key={r.id}
-                    className="flex items-center justify-between gap-4 p-4 bg-primary/5 border border-primary/10 rounded-2xl"
-                  >
-                    <div className="flex items-center gap-4 min-w-0">
-                      {pictoMode ? (
-                        <span className="text-3xl leading-none shrink-0" aria-hidden>
-                          {pictogramFor(r.title, "🔔")}
-                        </span>
-                      ) : (
-                        <Bell className="text-primary shrink-0" size={24} />
-                      )}
-                      <div className="min-w-0">
-                        <div className="text-xs text-primary font-medium uppercase tracking-wider mb-0.5">
-                          {r.endDate
-                            ? `${t("Period")} · ${periodDayLabel(r.date, r.endDate, selectedDateStr, t)}`
-                            : t("Påminnelse")}{" "}
-                          {r.time && `kl ${r.time}${r.endTime ? `–${r.endTime}` : ""}`}
-                        </div>
-                        <div className="text-lg font-medium truncate">{r.title}</div>
-                        {r.note && (
-                          <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">
-                            {r.note}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-1 shrink-0">
-                      <button
-                        onClick={() =>
-                          setEditing({
-                            kind: "reminder",
-                            id: r.id,
-                            title: r.title,
-                            date: r.date,
-                            time: r.time ?? "",
-                            endTime: r.endTime ?? "",
-                            remind: r.remindMinutesBefore ?? null,
-                            note: r.note ?? "",
-                            area: "vardag",
-                            repeat: r.repeat ?? "none",
-                          })
-                        }
-                        aria-label={t("Ändra påminnelse")}
-                        className="px-3 py-2 text-sm text-primary rounded-xl hover:bg-primary/10"
-                      >
-                        {t("Ändra")}
-                      </button>
-                      <button
-                        onClick={() => deleteReminder(r.id)}
-                        aria-label={t("Ta bort påminnelse")}
-                        className="p-2 text-muted-foreground hover:text-destructive rounded-xl hover:bg-destructive/10"
-                      >
-                        <Trash2 size={18} />
-                      </button>
-                    </div>
-                  </div>
-                ))}
-
-                {selectedItems.tasks.map((task) => (
-                  <div
-                    key={task.id}
-                    className={`flex items-center justify-between gap-4 p-4 bg-card border border-border rounded-2xl ${task.completed ? "opacity-60" : ""}`}
-                  >
-                    <div className="flex items-center gap-4 min-w-0">
-                      {pictoMode ? (
-                        <span className="text-3xl leading-none shrink-0" aria-hidden>
-                          {pictogramFor(task.title, "✅")}
-                        </span>
-                      ) : (
-                        <CheckSquare
-                          className={task.completed ? "text-primary" : "text-muted-foreground"}
-                          size={24}
-                        />
-                      )}
-                      <div className="flex-1 min-w-0">
-                        {task.time && (
-                          <div className="text-xs text-primary font-medium uppercase tracking-wider mb-0.5">
-                            {t("kl")} {task.time}
-                            {task.endTime ? `–${task.endTime}` : ""}
-                            {task.reminderMinutesBefore != null &&
-                              ` · ${t("påminn")} ${task.reminderMinutesBefore} ${t("min innan")}`}
-                          </div>
-                        )}
-                        <div
-                          className={`text-lg font-medium truncate ${task.completed ? "line-through text-muted-foreground" : ""}`}
-                        >
-                          {task.title}
-                        </div>
-                        {task.note && (
-                          <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">
-                            {task.note}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-1 shrink-0">
-                      <button
-                        onClick={() =>
-                          setEditing({
-                            kind: "task",
-                            id: task.id,
-                            title: task.title,
-                            date: task.dueDate ?? selectedDateStr,
-                            time: task.time ?? "",
-                            endTime: task.endTime ?? "",
-                            remind: task.reminderMinutesBefore ?? null,
-                            note: task.note ?? "",
-                            area: getArea(task),
-                            repeat: "none",
-                          })
-                        }
-                        aria-label={t("Ändra uppgift")}
-                        className="px-3 py-2 text-sm text-primary rounded-xl hover:bg-primary/10"
-                      >
-                        {t("Ändra")}
-                      </button>
-                      <button
-                        onClick={() => deleteTask(task.id)}
-                        aria-label={t("Ta bort uppgift")}
-                        className="p-2 text-muted-foreground hover:text-destructive rounded-xl hover:bg-destructive/10"
-                      >
-                        <Trash2 size={18} />
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
               </div>
             )}
           </div>
