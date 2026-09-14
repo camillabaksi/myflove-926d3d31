@@ -31,6 +31,7 @@ import {
   Heart,
   Pill,
   ArrowRight,
+  Wind,
   Sparkles,
   NotebookPen,
 } from "lucide-react";
@@ -48,8 +49,6 @@ import { useNpfSettings } from "@/lib/npf-mode";
 import { weekStartISO } from "@/lib/week-review";
 import { parseISODate } from "@/lib/day";
 import { Button } from "@/components/ui/button";
-import CalmMode from "@/components/calm-mode";
-import CalmChoices from "@/components/journey/calm-choices";
 
 /**
  * Hem = en lugn personlig kontrollpanel.
@@ -66,7 +65,6 @@ export default function Home() {
   const [editingName, setEditingName] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
   const [nameDraft, setNameDraft] = useState(name);
-  const [calmMode, setCalmMode] = useState<"acute" | "micro" | null>(null);
   const { activeArea } = useActiveArea();
   const { reading } = useEnergyBattery();
   const { energyValue } = useQuickCheckin();
@@ -128,11 +126,8 @@ export default function Home() {
     <Layout>
       <QuickAddSheet open={addOpen} onOpenChange={setAddOpen} />
       <IntroTour />
-      <CalmMode
-        kind={calmMode ?? "acute"}
-        open={calmMode != null}
-        onOpenChange={(open) => !open && setCalmMode(null)}
-      />
+
+
 
       <MyFlovePageGrid className="gap-5 xl:grid-cols-6">
         <MyFloveWide className="home-ambient-shell" data-glow-level={glowLevel}>
@@ -318,6 +313,17 @@ export default function Home() {
                 <ArrowRight className="h-4 w-4 shrink-0 text-primary sm:hidden" aria-hidden />
               </Link>
             )}
+
+            {/* Paus – en diskret återhämtningsväg, inte tre konkurrerande knappar. */}
+            <Link
+              href="/paus"
+              onClick={() => track("home_widget_opened", { source: "paus" })}
+              data-testid="home-pause-entry"
+              className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-full border border-border/60 bg-card/70 px-4 text-sm font-medium text-ink shadow-soft transition-colors hover:border-primary/35 hover:bg-card"
+            >
+              <Wind className="h-4 w-4 shrink-0 text-primary" aria-hidden />
+              {t("Paus")}
+            </Link>
           </section>
         </MyFloveWide>
 
@@ -341,7 +347,7 @@ export default function Home() {
           <CollapsibleSection
             id="home-day-support"
             title={t("Din dag – när du vill fördjupa")}
-            description={t("Se dagens steg, nästa rimliga sak eller ta en lugn paus.")}
+            description={t("Se dagens steg och nästa rimliga sak.")}
             defaultCollapsed
             className="rounded-3xl border border-border/60 bg-card/70 p-4 shadow-soft"
             headingClassName="text-base font-semibold text-ink"
@@ -349,17 +355,7 @@ export default function Home() {
             <div className="space-y-4">
               <JourneySteps onAddOpen={() => setAddOpen(true)} />
               <NextStepCard />
-              <CalmChoices onPause={() => setCalmMode("micro")} />
               {isSunday && <WeekReviewCard review={weekReview} />}
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => setCalmMode("acute")}
-                className="rounded-full"
-              >
-                {t("Akut Lugn")}
-              </Button>
             </div>
           </CollapsibleSection>
         </MyFloveWide>
@@ -377,30 +373,13 @@ export default function Home() {
           <CollapsibleSection
             id="mer-i-myflove"
             title={t("Mer i MyFlove")}
-            description={t("Dagens tanke, rutiner & medicin och dina mönster.")}
+            description={t("Rutiner & medicin och dina mönster.")}
             defaultCollapsed
             className="rounded-3xl border border-border/60 bg-card/60 p-4 shadow-soft"
             headingClassName="text-base font-semibold text-ink"
           >
             <div className="grid gap-4">
-              {/* Uppmuntrande citat – lugnt avslut, som i mockupen. */}
-              <MyFloveWide style={{ order: 5 }} className="min-w-0">
-                <CollapsibleSection
-                  id="home-daily-thought"
-                  title={t("Dagens tanke")}
-                  className="rounded-3xl border border-border/60 bg-lavender/25 p-5 shadow-soft"
-                  headingClassName="text-base font-semibold text-ink"
-                >
-                  <div className="flex items-start gap-3">
-                    <Heart className="mt-0.5 h-6 w-6 shrink-0 text-primary" aria-hidden />
-                    <p className="text-sm text-ink leading-relaxed">
-                      {t("Små steg varje dag")}
-                      <br />
-                      {t("skapar stora förändringar.")}
-                    </p>
-                  </div>
-                </CollapsibleSection>
-              </MyFloveWide>
+
 
               {/* Rutiner & medicin – dagens doser och rutiner. */}
               {shows("medicin") && (

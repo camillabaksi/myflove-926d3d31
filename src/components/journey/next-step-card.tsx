@@ -5,6 +5,7 @@ import { FlowMascot } from "@/components/flow-mascot";
 import { useLang } from "@/hooks/use-language";
 import { useTasks } from "@/hooks/use-data";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
+import { useFlowScore } from "@/hooks/use-flowscore";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { suggestNow } from "@/lib/flow-engine";
 import { LOW_ORK_MAX } from "@/lib/day-journey";
@@ -23,9 +24,12 @@ export default function NextStepCard() {
   const { energyValue } = useQuickCheckin();
   const [smaller, setSmaller] = useState(false);
   const { collapsed, toggle } = useCollapsible("home-next-step");
+  const { flow } = useFlowScore();
 
   const battery = Math.round(reading.now);
   const lowOrk = energyValue != null && energyValue <= LOW_ORK_MAX;
+  /** FlowScore och nästa steg hör ihop – men steget funkar även utan score. */
+  const flowScore = typeof flow?.score === "number" ? Math.round(flow.score) : null;
 
   const suggestion = useMemo(
     () =>
@@ -55,6 +59,11 @@ export default function NextStepCard() {
             className="flex w-full items-center gap-2 text-left"
           >
             <h2 className="min-w-0 flex-1 text-base font-semibold text-ink">
+              {flowScore != null && (
+                <span className="mb-0.5 block text-xs font-semibold uppercase text-primary">
+                  {t("Ditt Flow")}: {flowScore}
+                </span>
+              )}
               <span aria-hidden>🌿</span> {t("Nästa rimliga steg")}
             </h2>
             <ChevronDown
@@ -97,6 +106,14 @@ export default function NextStepCard() {
                 >
                   {t("Gör detta")} <ArrowRight size={15} aria-hidden />
                 </Link>
+                {flowScore != null && (
+                  <Link
+                    href="/flowscore"
+                    className="mt-2 block text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground"
+                  >
+                    {t("Varför just detta?")}
+                  </Link>
+                )}
               </>
             ))}
         </div>
