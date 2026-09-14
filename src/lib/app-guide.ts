@@ -101,7 +101,7 @@ export const APP_GUIDE: GuideGroup[] = [
   {
     id: "livet",
     emoji: "👨‍👩‍👧",
-    label: "Människor & resor",
+    label: "Människor",
     hint: "De du delar vardagen med",
     entries: [
       { href: "/relationer", label: "Relationer", what: "Partner, vänner, familj och husdjur" },

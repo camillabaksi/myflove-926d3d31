@@ -8,7 +8,6 @@ import {
   ShoppingBag,
   Sparkles,
   Wallet,
-  Navigation,
   NotebookPen,
   Calendar,
   Menu,
