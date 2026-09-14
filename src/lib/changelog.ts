@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-14";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Rutiner och Medicin är en samlad sida",
+    items: [
+      "Dagens rutiner och doser visas först i en gemensam kompakt lista (2026-09-14)",
+      "Flikarna är ersatta av ett enkelt flöde med Rutiner, Medicin och Morgonstart bakom tydliga val (2026-09-14)",
+      "Påminnelser leder nu till den samlade sidan i stället för att visa en andra medicinhantering (2026-09-14)",
+      "Avbockning, tider, upprepning, påminnelser och synkning fungerar som tidigare (2026-09-14)",
+    ],
+  },
+  {
     title: "Lugnare Barn, Familj och Relationer",
     items: [
       'Barn: barnvalen högst upp, "Lägg till barn" fälls ut vid behov och dagens hållpunkter i en kompakt lista (2026-09-14)',

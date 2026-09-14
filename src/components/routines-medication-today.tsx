@@ -30,7 +30,7 @@ function minutesOf(time: string): number {
   return h * 60 + m;
 }
 
-export default function RoutinesMedicationToday() {
+export default function RoutinesMedicationToday({ showManageLink = true }: { showManageLink?: boolean }) {
   const { medications, isTaken, toggleTaken } = useMedications();
   const { reminders, toggleReminder } = useReminders();
   const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
@@ -112,12 +112,14 @@ export default function RoutinesMedicationToday() {
         <p className="rounded-2xl bg-secondary/30 p-4 text-sm text-muted-foreground">
           Inga rutiner eller mediciner tillagda än. Lägg till dem när det passar.
         </p>
-        <Link
-          href="/daglig-rutin"
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
-        >
-          Öppna Rutiner &amp; medicin <ArrowRight size={14} />
-        </Link>
+        {showManageLink && (
+          <Link
+            href="/daglig-rutin"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+          >
+            Öppna Rutiner &amp; medicin <ArrowRight size={14} />
+          </Link>
+        )}
       </div>
     );
   }
@@ -187,12 +189,14 @@ export default function RoutinesMedicationToday() {
         </ul>
       )}
 
-      <Link
-        href="/daglig-rutin"
-        className="inline-flex items-center gap-1.5 text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground"
-      >
-        Alla rutiner &amp; mediciner <ArrowRight size={12} />
-      </Link>
+      {showManageLink && (
+        <Link
+          href="/daglig-rutin"
+          className="inline-flex items-center gap-1.5 text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground"
+        >
+          Alla rutiner &amp; mediciner <ArrowRight size={12} />
+        </Link>
+      )}
     </div>
   );
 }
