@@ -147,7 +147,7 @@ export function ExpandableBlock({
 
   /**
    * Komprimerat innehåll. Smala kort (t.ex. mobilens tvåkolumnsrutnät)
-   * staplar innehållet, men så fort kortet får utrymme (container ≥ 20rem)
+   * staplar innehållet, men så fort kortet får utrymme (container ≥ 28rem)
    * läggs ikon, text och status på EN horisontell rad i stället för ett
    * högt "torn". Ren presentation – ingen logik ändras.
    */
@@ -164,14 +164,14 @@ export function ExpandableBlock({
             />
           ))}
       </span>
-      <div className="min-w-0 @min-[20rem]:flex-1">
+      <div className="min-w-0 @min-[28rem]:flex-1">
         <h2 className="font-display text-base font-bold leading-tight text-ink">{title}</h2>
         {subtitle && (
           <p className="mt-0.5 line-clamp-2 text-xs text-muted-foreground">{subtitle}</p>
         )}
       </div>
       {(status != null || summary != null) && (
-        <div className="w-full space-y-1 border-t border-border/50 pt-3 @min-[20rem]:w-auto @min-[20rem]:max-w-[45%] @min-[20rem]:shrink-0 @min-[20rem]:border-0 @min-[20rem]:pt-0 @min-[20rem]:text-right">
+        <div className="w-full space-y-1 border-t border-border/50 pt-3 @min-[28rem]:w-auto @min-[28rem]:max-w-[45%] @min-[28rem]:shrink-0 @min-[28rem]:border-0 @min-[28rem]:pt-0 @min-[28rem]:text-right">
           {status != null && (
             <div
               className={cn(
@@ -190,7 +190,7 @@ export function ExpandableBlock({
       <span
         aria-hidden="true"
         className={cn(
-          "absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full @min-[20rem]:static @min-[20rem]:shrink-0",
+          "absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full @min-[28rem]:static @min-[28rem]:shrink-0",
           area ? "area-bg-soft area-text" : "bg-card/70 text-muted-foreground",
         )}
       >
@@ -200,7 +200,7 @@ export function ExpandableBlock({
   );
 
   const compactLayout =
-    "press relative flex w-full min-w-0 flex-col items-center gap-2.5 rounded-3xl p-4 text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:p-5 @min-[20rem]:flex-row @min-[20rem]:items-center @min-[20rem]:gap-4 @min-[20rem]:text-left";
+    "press relative flex w-full min-w-0 flex-col items-center gap-2.5 rounded-3xl p-4 text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:p-5 @min-[28rem]:flex-row @min-[28rem]:items-center @min-[28rem]:gap-4 @min-[28rem]:text-left";
 
   // Länkläge: hela kortet navigerar (som Mitt batteri-kortet). Samma
   // komprimerade design, men ingen expansion.

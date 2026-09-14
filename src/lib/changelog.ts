@@ -10,6 +10,12 @@ export const CHANGELOG_UPDATED = "2026-09-14";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Kapacitetskortet fungerar på mobil",
+    items: [
+      'Kortet "Vad påverkar din kapacitet?" staplar ikon, rubrik och förklaring på smala skärmar så texten inte längre överlappar (2026-09-14)',
+    ],
+  },
+  {
     title: "Dagsvyn ligger under Dag i kalendern",
     items: [
       "När Dag är vald ligger rubriken, Lägg till-knappen, dagens innehåll och tidslinjen inuti kalenderkortet direkt under vyvalet (2026-09-14)",
