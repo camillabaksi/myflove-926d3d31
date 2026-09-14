@@ -32,3 +32,5 @@
 - [x] Idag och Kalenderns Dag-läge förenklade till ett utvecklat dagkort med en gemensam kompakt lista (2026-09-14)
 
 - Jobb samlat på en sida (2026-09-14): plan, jobbhjälp, uppgifter och "Mer i jobb"; /workflow redirectar till /jobb.
+
+- [ ] Skapa och kvalitetsgranska 30-sekunders MyFlove-demo i investerarpitchens design (2026-09-14)
