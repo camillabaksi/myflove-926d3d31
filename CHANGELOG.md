@@ -1,3 +1,9 @@
+## 2026-09-14 – Ny 30-sekunders produktdemo
+
+- En engelskspråkig demo följer kärnresan QuickFlow → Flow → kapacitetsanpassning → Min dag.
+- Videons ljusa lavendel-, rosa- och plommonfärgade uttryck följer investerarpitchen.
+- Riktiga MyFlove-vyer visar hur samma uppgifter blir en annan plan när dagens kapacitet ändras.
+
 ## 2026-09-14 – Rutiner och Medicin är en samlad sida
 
 - Rutiner och Medicin visar nu dagens rutiner och doser först i en gemensam, kompakt lista.

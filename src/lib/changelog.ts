@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-14";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Ny 30-sekunders produktdemo",
+    items: [
+      "Engelsk demo följer QuickFlow → Flow → kapacitetsanpassning → Min dag (2026-09-14)",
+      "Designen följer investerarpitchens ljusa lavendel-, rosa- och plommonfärgade uttryck (2026-09-14)",
+      "Riktiga MyFlove-vyer visar hur samma uppgifter anpassas efter dagens kapacitet (2026-09-14)",
+    ],
+  },
+  {
     title: "Rutiner och Medicin är en samlad sida",
     items: [
       "Dagens rutiner och doser visas först i en gemensam kompakt lista (2026-09-14)",
