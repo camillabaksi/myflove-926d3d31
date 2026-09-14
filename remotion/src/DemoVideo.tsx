@@ -6,6 +6,7 @@ import { QuickFlowScene } from "./demo/scenes/QuickFlowScene";
 import { FlowScene } from "./demo/scenes/FlowScene";
 import { CapacityScene } from "./demo/scenes/CapacityScene";
 import { MyDayOutroScene } from "./demo/scenes/MyDayOutroScene";
+import { DemoLangProvider, type DemoLang } from "./demo/lang";
 
 export const DEMO_FPS = 30;
 export const DEMO_WIDTH = 1920;
@@ -15,7 +16,8 @@ export const DEMO_TOTAL_FRAMES = 900;
 const TRANSITION_FRAMES = 15;
 const transitionTiming = linearTiming({ durationInFrames: TRANSITION_FRAMES });
 
-export const DemoVideo: React.FC = () => (
+export const DemoVideo: React.FC<{ lang?: DemoLang }> = ({ lang = "en" }) => (
+  <DemoLangProvider lang={lang}>
   <TransitionSeries>
     <TransitionSeries.Sequence durationInFrames={120}>
       <IntroScene />
@@ -37,4 +39,5 @@ export const DemoVideo: React.FC = () => (
       <MyDayOutroScene />
     </TransitionSeries.Sequence>
   </TransitionSeries>
+  </DemoLangProvider>
 );
