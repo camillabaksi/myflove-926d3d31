@@ -1,3 +1,11 @@
+## 2026-09-14 – Studier är en samlad sida
+
+- Studier, Studiehjälp och kursvyn ligger nu på samma sida: Mitt schema, dagens och kommande lektioner, Studiehjälp och en hopfälld "Mer i studier".
+- Mitt schema visar din senast uppladdade schemafil med "Öppna schema" och "Lägg till/byt schema"; originalet sparas även när avläsningen misslyckas.
+- Schemaavläsningen tar nu med rast och lunch som hållpunkter – de visas i schemat men blir aldrig uppgifter att bocka av.
+- Nytt val: "Visa nästa lektion på Hem". Är det på visas en diskret rad med nästa lektion på Hem, annars ingenting.
+- Studiehjälp är inte längre en egen vy i menyn; /studybuddy och /flowstudy skickar vidare till Studier.
+
 ## 2026-09-14 – Idag är nu ett utvecklat dagkort
 
 - Idag visar datum, Lägg till, Påminnelse och alla dagens aktiviteter i en enda kompakt lista.

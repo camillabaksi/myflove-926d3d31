@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Studier samlat på en sida: Mitt schema med rast/lunch, valfri nästa lektion på Hem och all studiehjälp på plats (2026-09-14)
+
 - [x] Pitchdeck 4.0 med investerarunderlag, tydliga statusar och valideringsplatshållare
 - [x] Resor, Promenadvägar och Flow-karusellen borttagna; Flow kvar som planering/chatt (2026-09-14)
 - [x] Isolerat investerar-/demokonto med syntetisk seed, demoetikett och filtrerad analytics

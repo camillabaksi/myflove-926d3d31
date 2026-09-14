@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-14";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Studier är en samlad sida",
+    items: [
+      "Studier, Studiehjälp och kurser ligger nu på samma sida med Mitt schema överst (2026-09-14)",
+      "Schemafilen sparas och kan öppnas igen; rast och lunch läses av som hållpunkter (2026-09-14)",
+      'Nytt val: "Visa nästa lektion på Hem" – diskret rad på Hem när du vill ha den (2026-09-14)',
+      "Studiehjälp är borttagen som egen menypost; gamla länkar leder till Studier (2026-09-14)",
+    ],
+  },
+  {
     title: "Idag är nu ett utvecklat dagkort",
     items: [
       "Idag visar datum och alla dagens aktiviteter i en enda kompakt lista med Lägg till och Påminnelse nära till hands (2026-09-14)",
