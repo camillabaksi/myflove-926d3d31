@@ -1,10 +1,12 @@
 import React from "react";
 import { AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { DEMO_COLORS, DEMO_FONTS, DemoShell, enter } from "../theme";
+import { useDemoCopy } from "../lang";
 
 export const MyDayOutroScene: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+  const copy = useDemoCopy();
   const imageOpacity = interpolate(frame, [78, 112], [1, 0], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
@@ -40,9 +42,9 @@ export const MyDayOutroScene: React.FC = () => {
             maxWidth: 1440,
           }}
         >
-          The goal isn’t to get more done.
+          {copy("outroLine1")}
           <br />
-          <span style={{ color: DEMO_COLORS.violet }}>It’s to make the day more doable.</span>
+          <span style={{ color: DEMO_COLORS.violet }}>{copy("outroLine2")}</span>
         </div>
         <div
           style={{
@@ -54,7 +56,7 @@ export const MyDayOutroScene: React.FC = () => {
             color: DEMO_COLORS.muted,
           }}
         >
-          ♡ MyFlove · A calmer everyday life
+          {copy("outroBrand")}
         </div>
       </AbsoluteFill>
     </DemoShell>
