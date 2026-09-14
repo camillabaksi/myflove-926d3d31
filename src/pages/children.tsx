@@ -34,6 +34,7 @@ import { syncReminder, cancelReminder } from "@/lib/push.functions";
 import { celebrateFromEvent } from "@/lib/celebrate";
 import CollapsibleSection from "@/components/collapsible-section";
 import ChildSchedule from "@/components/child-schedule";
+import { useChildEvents } from "@/hooks/use-child-events";
 import ChildReminderSettings from "@/components/child-reminder-settings";
 import { ACCEPT_DOCUMENTS } from "@/lib/file-formats";
 
@@ -81,6 +82,7 @@ function ChildrenContent() {
   const [childBirth, setChildBirth] = useState("");
   const [selectedChild, setSelectedChild] = useState<string | null>(null);
   const [filter, setFilter] = useState<"alla" | ChildItemKind>("alla");
+  const [addChildOpen, setAddChildOpen] = useState(false);
 
   const [kind, setKind] = useState<ChildItemKind>("activity");
   const [title, setTitle] = useState("");
@@ -117,6 +119,13 @@ function ChildrenContent() {
           return (a.date ?? "9999").localeCompare(b.date ?? "9999");
         }),
     [items, activeChildId, filter],
+  );
+
+  /** Dagens hållpunkter för valt barn – skolschema och tidsatta aktiviteter. */
+  const childEvents = useChildEvents();
+  const todaysPoints = useMemo(
+    () => (activeChild ? childEvents.filter((e) => e.childName === activeChild.name) : []),
+    [childEvents, activeChild],
   );
 
   const memberName = (id: string) =>
@@ -247,12 +256,8 @@ function ChildrenContent() {
   return (
     <div className="space-y-8">
       <ChildConflictDialog conflict={conflict} onResolve={(c) => void resolveConflict(c)} />
-      {/* Barnprofiler */}
-      <CollapsibleSection
-        title="Barn"
-        headingClassName="text-lg font-semibold"
-        className="space-y-3"
-      >
+      {/* Barnprofiler – alltid synliga högst upp */}
+      <section className="space-y-3">
         <div className="flex gap-2 flex-wrap">
           {children.map((c) => (
             <button
@@ -271,58 +276,86 @@ function ChildrenContent() {
               )}
             </button>
           ))}
+          <button
+            type="button"
+            onClick={() => setAddChildOpen((v) => !v)}
+            aria-expanded={addChildOpen}
+            className="px-4 py-2 rounded-2xl border border-dashed border-border text-sm text-muted-foreground hover:border-primary/50 hover:text-ink flex items-center gap-1"
+          >
+            <Plus size={16} /> Lägg till barn
+          </button>
         </div>
 
-        <form onSubmit={handleAddChild} className="surface-card p-4 space-y-3">
-          <div className="flex flex-col sm:flex-row gap-2">
-            <Input
-              value={childName}
-              onChange={(e) => setChildName(e.target.value)}
-              placeholder="Barnets namn"
-              className="h-11 rounded-2xl"
-            />
-            <Input
-              type="date"
-              value={childBirth}
-              onChange={(e) => setChildBirth(e.target.value)}
-              aria-label="Födelsedatum"
-              className="h-11 rounded-2xl sm:w-44"
-            />
-            <Button type="submit" className="h-11 rounded-2xl">
-              <Plus size={18} className="mr-1" /> Lägg till
-            </Button>
-          </div>
-          <div className="flex gap-2">
-            {CHILD_COLORS.map((c) => (
-              <button
-                key={c}
-                type="button"
-                aria-label={`Färg ${c}`}
-                onClick={() => setChildColor(c)}
-                className="w-8 h-8 rounded-full border-2 flex items-center justify-center"
-                style={{
-                  backgroundColor: c,
-                  borderColor: childColor === c ? "var(--foreground)" : "transparent",
-                }}
-              >
-                {childColor === c && <Check size={14} className="text-white drop-shadow" />}
-              </button>
-            ))}
-          </div>
-        </form>
-      </CollapsibleSection>
+        {addChildOpen && (
+          <form onSubmit={handleAddChild} className="surface-card p-4 space-y-3">
+            <div className="flex flex-col sm:flex-row gap-2">
+              <Input
+                value={childName}
+                onChange={(e) => setChildName(e.target.value)}
+                placeholder="Barnets namn"
+                className="h-11 rounded-2xl"
+              />
+              <Input
+                type="date"
+                value={childBirth}
+                onChange={(e) => setChildBirth(e.target.value)}
+                aria-label="Födelsedatum"
+                className="h-11 rounded-2xl sm:w-44"
+              />
+              <Button type="submit" className="h-11 rounded-2xl">
+                <Plus size={18} className="mr-1" /> Lägg till
+              </Button>
+            </div>
+            <div className="flex gap-2">
+              {CHILD_COLORS.map((c) => (
+                <button
+                  key={c}
+                  type="button"
+                  aria-label={`Färg ${c}`}
+                  onClick={() => setChildColor(c)}
+                  className="w-8 h-8 rounded-full border-2 flex items-center justify-center"
+                  style={{
+                    backgroundColor: c,
+                    borderColor: childColor === c ? "var(--foreground)" : "transparent",
+                  }}
+                >
+                  {childColor === c && <Check size={14} className="text-white drop-shadow" />}
+                </button>
+              ))}
+            </div>
+          </form>
+        )}
+      </section>
 
       {activeChild && (
         <>
-          <ChildSchedule childId={activeChild.id} childName={activeChild.name} canEdit={isOwner} />
-
-          <ChildReminderSettings />
+          <section className="surface-card space-y-3 p-5">
+            <h2 className="font-display text-base text-ink">Idag för {activeChild.name}</h2>
+            {todaysPoints.length === 0 ? (
+              <p className="text-sm text-muted-foreground">Inga tider inlagda idag.</p>
+            ) : (
+              <ul className="space-y-1.5">
+                {todaysPoints.map((e, i) => (
+                  <li
+                    key={`${e.time}-${e.title}-${i}`}
+                    className={`flex items-start gap-3 rounded-2xl border border-border bg-card px-3 py-2 text-sm ${
+                      e.completed ? "text-muted-foreground line-through" : "text-ink"
+                    }`}
+                  >
+                    <span className="font-mono text-xs pt-0.5 text-muted-foreground">{e.time}</span>
+                    <span className="min-w-0 flex-1 truncate">{e.title}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
 
           {isOwner && (
             <section className="surface-card p-5">
               <CollapsibleSection
                 title={`Lägg till för ${activeChild.name}`}
                 id="Lägg till för barn"
+                defaultCollapsed
                 headingClassName="text-lg font-semibold"
                 className="space-y-3"
               >
@@ -597,19 +630,35 @@ function ChildrenContent() {
             )}
           </section>
 
-          {isOwner && (
-            <Button
-              variant="ghost"
-              className="text-destructive rounded-2xl"
-              onClick={async () => {
-                if (!confirm(`Ta bort ${activeChild.name} och allt som hör dit?`)) return;
-                await deleteChild(activeChild.id);
-                setSelectedChild(null);
-              }}
-            >
-              <Trash2 size={16} className="mr-2" /> Ta bort {activeChild.name}
-            </Button>
-          )}
+          <CollapsibleSection
+            title="Mer om barnen"
+            id="barn-mer"
+            defaultCollapsed
+            headingClassName="text-lg font-semibold"
+            className="surface-card space-y-4 p-5"
+          >
+            <ChildSchedule
+              childId={activeChild.id}
+              childName={activeChild.name}
+              canEdit={isOwner}
+            />
+
+            <ChildReminderSettings />
+
+            {isOwner && (
+              <Button
+                variant="ghost"
+                className="text-destructive rounded-2xl"
+                onClick={async () => {
+                  if (!confirm(`Ta bort ${activeChild.name} och allt som hör dit?`)) return;
+                  await deleteChild(activeChild.id);
+                  setSelectedChild(null);
+                }}
+              >
+                <Trash2 size={16} className="mr-2" /> Ta bort {activeChild.name}
+              </Button>
+            )}
+          </CollapsibleSection>
         </>
       )}
     </div>

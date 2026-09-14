@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { useUser, useClerk, Show } from "@clerk/react";
 import Layout from "@/components/layout";
+import CollapsibleSection from "@/components/collapsible-section";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { MyFloveHeart } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
@@ -11,6 +13,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { PERSON_COLORS } from "@/lib/palette";
 
 const COLORS = PERSON_COLORS;
+
+/** Det som familjen delar – länkar till befintliga vyer. */
+const SHARED_LINKS = [
+  { href: "/kalender", label: "Kalender" },
+  { href: "/shopping", label: "Inköpslista" },
+  { href: "/matlista", label: "Matlista" },
+] as const;
 
 type Member = { user_id: string; display_name: string; color: string };
 type Household = {
@@ -116,32 +125,32 @@ function CreateOrJoin({ onReady }: { onReady: () => void }) {
   };
 
   return (
-    <div className="max-w-md mx-auto space-y-6">
-      <div className="flex bg-secondary rounded-2xl p-1">
-        <button
-          type="button"
-          onClick={() => setMode("create")}
-          className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-colors ${
-            mode === "create" ? "bg-card shadow-sm" : "text-muted-foreground"
-          }`}
-        >
-          Skapa familj
-        </button>
-        <button
-          type="button"
-          onClick={() => setMode("join")}
-          className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-colors ${
-            mode === "join" ? "bg-card shadow-sm" : "text-muted-foreground"
-          }`}
-        >
-          Gå med i familj
-        </button>
-      </div>
-
+    <div className="max-w-md mx-auto">
       <form
         onSubmit={handleSubmit}
         className="space-y-4 bg-card border border-border rounded-3xl p-6 shadow-sm"
       >
+        <div className="flex bg-secondary rounded-2xl p-1">
+          <button
+            type="button"
+            onClick={() => setMode("create")}
+            className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+              mode === "create" ? "bg-card shadow-sm" : "text-muted-foreground"
+            }`}
+          >
+            Skapa familj
+          </button>
+          <button
+            type="button"
+            onClick={() => setMode("join")}
+            className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+              mode === "join" ? "bg-card shadow-sm" : "text-muted-foreground"
+            }`}
+          >
+            Gå med med kod
+          </button>
+        </div>
+
         {mode === "create" ? (
           <div className="space-y-2">
             <label className="text-sm font-medium">Familjens namn</label>
@@ -255,32 +264,61 @@ function HouseholdView({
             <Copy size={20} />
           </button>
         </div>
+
+        <div className="flex flex-wrap gap-2">
+          {household.members.map((m) => (
+            <span
+              key={m.user_id}
+              className="flex items-center gap-2 rounded-2xl border border-border bg-secondary/40 px-3 py-2 text-sm"
+            >
+              <span
+                className="h-3 w-3 shrink-0 rounded-full"
+                style={{ backgroundColor: m.color }}
+              />
+              {m.display_name}
+              {m.user_id === currentUserId && (
+                <span className="text-xs text-muted-foreground">Du</span>
+              )}
+            </span>
+          ))}
+        </div>
       </div>
 
-      <div className="space-y-2">
-        {household.members.map((m) => (
-          <div
-            key={m.user_id}
-            className="flex items-center gap-3 bg-card border border-border rounded-2xl p-4"
-          >
-            <div className="w-4 h-4 rounded-full shrink-0" style={{ backgroundColor: m.color }} />
-            <span className="text-lg">{m.display_name}</span>
-            {m.user_id === currentUserId && (
-              <span className="text-xs text-muted-foreground ml-auto">Du</span>
-            )}
-          </div>
-        ))}
-      </div>
+      <section className="bg-card border border-border rounded-3xl p-5 shadow-sm space-y-3">
+        <h2 className="font-display text-base text-ink">Vad ni delar</h2>
+        <p className="text-sm text-muted-foreground">
+          Kalender och listor är gemensamma för alla i familjen.
+        </p>
+        <div className="flex flex-wrap gap-2">
+          {SHARED_LINKS.map((l) => (
+            <Link
+              key={l.href}
+              to={l.href}
+              className="rounded-2xl border border-border bg-secondary/40 px-3 py-2 text-sm text-ink hover:border-primary/50"
+            >
+              {l.label}
+            </Link>
+          ))}
+        </div>
+      </section>
 
-      <Button
-        variant="outline"
-        onClick={leave}
-        disabled={pending}
-        className="w-full h-12 rounded-2xl text-destructive hover:text-destructive"
+      <CollapsibleSection
+        title="Mer"
+        id="familj-mer"
+        defaultCollapsed
+        headingClassName="font-display text-base text-ink"
+        className="bg-card border border-border rounded-3xl p-5 shadow-sm"
       >
-        <LogOut size={18} className="mr-2" />
-        Lämna familjen
-      </Button>
+        <Button
+          variant="outline"
+          onClick={leave}
+          disabled={pending}
+          className="w-full h-12 rounded-2xl text-destructive hover:text-destructive"
+        >
+          <LogOut size={18} className="mr-2" />
+          Lämna familjen
+        </Button>
+      </CollapsibleSection>
     </div>
   );
 }
