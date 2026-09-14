@@ -1,3 +1,10 @@
+## 2026-09-14 – Lugnare Barn, Familj och Relationer
+
+- Barn börjar med barnen som val högst upp, "Lägg till barn" fälls ut vid behov och dagens hållpunkter för valt barn visas i en kompakt lista.
+- "Lägg till för barnet" är hopfälld från start; veckoschema, påminnelseinställningar och ta bort barn ligger under "Mer om barnen".
+- Familj visar din familj med medlemmar och inbjudningskod, en rad "Vad ni delar" med kalender, inköpslista och matlista, och "Lämna familjen" under "Mer".
+- Relationer visar alla dina personer i en enda lista; "Lägg till person" låter dig välja relationstyp, och typvalen samt länkarna till Familj och Barn ligger under "Mer".
+
 ## 2026-09-14 – Jobb är en samlad sida
 
 - Jobb och Jobbplanering ligger nu på samma sida: dagens plan överst, sedan Jobbhjälp, uppgifter och deadlines.

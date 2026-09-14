@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-14";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Lugnare Barn, Familj och Relationer",
+    items: [
+      'Barn: barnvalen högst upp, "Lägg till barn" fälls ut vid behov och dagens hållpunkter i en kompakt lista (2026-09-14)',
+      'Barn: veckoschema, påminnelser och ta bort barn samlade under "Mer om barnen" (2026-09-14)',
+      'Familj: din familj med medlemmar och kod, raden "Vad ni delar" och "Lämna familjen" under "Mer" (2026-09-14)',
+      'Relationer: alla personer i en lista, typval vid tillägg och övriga inställningar under "Mer" (2026-09-14)',
+    ],
+  },
+  {
     title: "Jobb är en samlad sida",
     items: [
       "Jobb och Jobbplanering ligger nu på samma sida med dagens plan överst (2026-09-14)",

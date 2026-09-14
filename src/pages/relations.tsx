@@ -12,22 +12,20 @@ import { useRelations } from "@/hooks/use-relations";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import {
   RELATION_TYPES,
-  peopleOfType,
   relationTypeMeta,
   type RelationPerson,
   type RelationTypeId,
 } from "@/lib/relations";
 
-/** Lägg till en person under en relationstyp. */
+/** Lägg till en person – du väljer namn och vilken sorts relation det är. */
 function AddPerson({
-  type,
   onAdd,
 }: {
-  type: RelationTypeId;
-  onAdd: (name: string, note: string) => void;
+  onAdd: (type: RelationTypeId, name: string, note: string) => void;
 }) {
   const [name, setName] = useState("");
   const [note, setNote] = useState("");
+  const [type, setType] = useState<RelationTypeId>(RELATION_TYPES[0]!.id);
   const [open, setOpen] = useState(false);
 
   if (!open) {
@@ -35,9 +33,9 @@ function AddPerson({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="flex items-center gap-2 rounded-2xl border border-dashed border-border px-3 py-2 text-sm text-muted-foreground hover:border-primary/50 hover:text-ink"
+        className="flex w-full items-center gap-2 rounded-2xl border border-dashed border-border px-3 py-3 text-sm text-muted-foreground hover:border-primary/50 hover:text-ink"
       >
-        <Plus size={16} /> Lägg till {relationTypeMeta(type).label.toLowerCase()}
+        <Plus size={16} /> Lägg till person
       </button>
     );
   }
@@ -47,7 +45,7 @@ function AddPerson({
       onSubmit={(e) => {
         e.preventDefault();
         if (!name.trim()) return;
-        onAdd(name, note);
+        onAdd(type, name, note);
         setName("");
         setNote("");
         setOpen(false);
@@ -61,6 +59,23 @@ function AddPerson({
         placeholder="Namn – t.ex. Johan"
         className="h-11 rounded-2xl"
       />
+      <div className="flex flex-wrap gap-2">
+        {RELATION_TYPES.map((t) => (
+          <button
+            key={t.id}
+            type="button"
+            onClick={() => setType(t.id)}
+            aria-pressed={type === t.id}
+            className={`rounded-full border px-3 py-1.5 text-sm transition-colors ${
+              type === t.id
+                ? "border-primary/50 bg-primary/10 text-ink"
+                : "border-border bg-card text-muted-foreground hover:border-primary/40"
+            }`}
+          >
+            {t.emoji} {t.label}
+          </button>
+        ))}
+      </div>
       <Input
         value={note}
         onChange={(e) => setNote(e.target.value)}
@@ -208,6 +223,14 @@ function RelationsContent() {
     [enabledTypes],
   );
 
+  /** Alla personer i en enda lista, i relationstypernas ordning. */
+  const visiblePeople = useMemo(() => {
+    const order = RELATION_TYPES.map((t) => t.id);
+    return people
+      .filter((p) => enabledTypes.includes(p.type))
+      .sort((a, b) => order.indexOf(a.type) - order.indexOf(b.type) || a.createdAt - b.createdAt);
+  }, [people, enabledTypes]);
+
   const logEnergy = async (person: RelationPerson, direction: "gives" | "drains") => {
     await addFactor({
       title: person.name,
@@ -224,67 +247,37 @@ function RelationsContent() {
   };
 
   return (
-    <div className="space-y-6">
-      {enabledTypes.length === 0 && (
-        <div className="surface-card space-y-2 p-5 text-center">
-          <p className="text-ink">Du har inga relationstyper valda än.</p>
+    <div className="space-y-4">
+      <section className="surface-card space-y-3 p-5">
+        <h2 className="font-display text-base text-ink">Dina personer</h2>
+        {visiblePeople.length === 0 ? (
           <p className="text-sm text-muted-foreground">
-            Välj bara det som stämmer för dig – ingen behöver ha alla.
+            Inga personer än – lägg till den första när du vill.
           </p>
-        </div>
-      )}
-
-      {enabledTypes.map((type) => {
-        const meta = relationTypeMeta(type);
-        const list = peopleOfType({ enabledTypes, people }, type);
-        return (
-          <CollapsibleSection
-            key={type}
-            id={`relationer-${type}`}
-            title={`${meta.emoji} ${meta.label}`}
-            description={meta.blurb}
-          >
-            <div className="space-y-2">
-              {list.map((p) => (
-                <PersonRow
-                  key={p.id}
-                  person={p}
-                  onSave={(patch) => updatePerson(p.id, patch)}
-                  onRemove={() => {
-                    removePerson(p.id);
-                    toast.success("Borttagen.");
-                  }}
-                  onEnergy={(dir) => logEnergy(p, dir)}
-                />
-              ))}
-              <AddPerson type={type} onAdd={(name, note) => addPerson(type, name, { note })} />
-              {type === "familj" && (
-                <p className="text-xs text-muted-foreground">
-                  Vill ni dela kalender och listor?{" "}
-                  <Link to="/familj" className="underline underline-offset-2">
-                    Öppna hushållet
-                  </Link>
-                  .
-                </p>
-              )}
-              {type === "barn" && (
-                <p className="text-xs text-muted-foreground">
-                  Scheman och rutiner för barnen finns i{" "}
-                  <Link to="/barn" className="underline underline-offset-2">
-                    Barn
-                  </Link>
-                  .
-                </p>
-              )}
-            </div>
-          </CollapsibleSection>
-        );
-      })}
+        ) : (
+          <div className="space-y-2">
+            {visiblePeople.map((p) => (
+              <PersonRow
+                key={p.id}
+                person={p}
+                onSave={(patch) => updatePerson(p.id, patch)}
+                onRemove={() => {
+                  removePerson(p.id);
+                  toast.success("Borttagen.");
+                }}
+                onEnergy={(dir) => logEnergy(p, dir)}
+              />
+            ))}
+          </div>
+        )}
+        <AddPerson onAdd={(type, name, note) => addPerson(type, name, { note })} />
+      </section>
 
       <CollapsibleSection
-        title="Vilka relationer vill du ha med?"
-        id="relation-types"
-        headingClassName="text-base font-semibold"
+        title="Mer"
+        id="relationer-mer"
+        defaultCollapsed
+        headingClassName="font-display text-base text-ink"
         className="surface-card p-5"
         help={
           <>
@@ -293,30 +286,44 @@ function RelationsContent() {
           </>
         }
       >
-        <div className="flex flex-wrap gap-2">
-          {RELATION_TYPES.map((t) => {
-            const on = enabledTypes.includes(t.id);
-            return (
-              <button
-                key={t.id}
-                type="button"
-                onClick={() => toggleType(t.id)}
-                className={`rounded-full border px-3 py-1.5 text-sm font-medium transition-colors ${
-                  on
-                    ? "border-primary/50 bg-primary/10 text-ink"
-                    : "border-border bg-card text-muted-foreground hover:border-primary/40"
-                }`}
-              >
-                {t.emoji} {t.label}
-              </button>
-            );
-          })}
-        </div>
-        {hidden.length > 0 && (
+        <div className="space-y-3">
+          <p className="text-sm text-ink">Vilka relationer vill du ha med?</p>
+          <div className="flex flex-wrap gap-2">
+            {RELATION_TYPES.map((t) => {
+              const on = enabledTypes.includes(t.id);
+              return (
+                <button
+                  key={t.id}
+                  type="button"
+                  onClick={() => toggleType(t.id)}
+                  className={`rounded-full border px-3 py-1.5 text-sm font-medium transition-colors ${
+                    on
+                      ? "border-primary/50 bg-primary/10 text-ink"
+                      : "border-border bg-card text-muted-foreground hover:border-primary/40"
+                  }`}
+                >
+                  {t.emoji} {t.label}
+                </button>
+              );
+            })}
+          </div>
+          {hidden.length > 0 && (
+            <p className="text-xs text-muted-foreground">
+              Personer du lagt in finns kvar även om du gömmer en relationstyp.
+            </p>
+          )}
           <p className="text-xs text-muted-foreground">
-            Personer du lagt in finns kvar även om du gömmer en relationstyp.
+            Vill ni dela kalender och listor?{" "}
+            <Link to="/familj" className="underline underline-offset-2">
+              Öppna hushållet
+            </Link>
+            . Scheman och rutiner för barnen finns i{" "}
+            <Link to="/barn" className="underline underline-offset-2">
+              Barn
+            </Link>
+            .
           </p>
-        )}
+        </div>
       </CollapsibleSection>
     </div>
   );
