@@ -284,8 +284,8 @@ export default function Home() {
               <Link
                 href={savedItemsHref}
                 onClick={() =>
-                  track("home_saved_items_opened", {
-                    source: openItems.length > 0 ? "quickflow" : "anteckningar",
+                  track("home_widget_opened", {
+                    source: openItems.length > 0 ? "sparat_quickflow" : "sparat_anteckningar",
                   })
                 }
                 data-testid="home-saved-items-reminder"
