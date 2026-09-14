@@ -11,12 +11,9 @@ import CollapsibleSection from "@/components/collapsible-section";
 import { track } from "@/lib/analytics";
 
 export default function FlowEntry({
-  onOpen,
   onPlan,
   onChat,
 }: {
-  /** Öppnar Flow-decket (hjälpens karusell). */
-  onOpen: () => void;
   /** Går till Planera-läget. */
   onPlan: () => void;
   /** Går till chatt-läget. */
@@ -39,7 +36,7 @@ export default function FlowEntry({
           className="rounded-2xl px-8"
           onClick={() => {
             track("flow_opened", { source: "entry" });
-            onOpen();
+            onPlan();
           }}
         >
           Visa mitt förslag

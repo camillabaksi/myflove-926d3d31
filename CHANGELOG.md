@@ -1,3 +1,8 @@
+## 2026-09-14 – Flow-karusellen är borttagen
+
+- Flows svepbara hjälpkarusell (Flow-decket) är borttagen; "Visa mitt förslag" leder direkt till Flows planeringsläge.
+- Planera, Chatta, FlowPlan och all planeringslogik finns kvar oförändrade – inga routes eller data har ändrats.
+
 ## 2026-09-14 – Resor och Promenadvägar är borttagna
 
 - Resesidan (buss och tåg i realtid) och pendlingsvarningarna är borttagna ur menyer, guider och appens layout.
