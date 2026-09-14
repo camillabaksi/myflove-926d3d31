@@ -85,7 +85,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     items: [
       "Flow öppnar med en enkel ingång: 'Vad passar bäst just nu?' och knappen 'Visa mitt förslag' (2026-09-13)",
       "Planera och Chatta nås som diskreta val och en hopfälld 'Mer om Flow'-sektion förklarar lägena (2026-09-13)",
-      "Hjälpkarusellen, planeringen, chatten och all funktionalitet finns kvar bakom klick (2026-09-13)",
+      "Hjälpkarusellen är borttagen – 'Visa mitt förslag' leder direkt till planeringen, och planering, chatt och all funktionalitet finns kvar (2026-09-14)",
     ],
   },
   {
