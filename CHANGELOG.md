@@ -1,3 +1,7 @@
+## 2026-09-14 – Dagsvyn ligger under Dag i kalendern
+
+- När Dag är vald ligger rubriken, Lägg till-knappen, dagens innehåll och tidslinjen nu inuti kalenderkortet direkt under vyvalet.
+
 ## 2026-09-14 – Kalenderkopplingen varnar när åtkomsten behöver förnyas
 
 - Tidigare loggades bara felet om Google/Outlook nekade läsning av kalenderhändelser (401/403) och kalendern såg tom ut. Nu visas i stället texten om att kopplingen behöver förnyas, så du kan koppla om kontot direkt.
