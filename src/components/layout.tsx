@@ -855,7 +855,6 @@ export default function Layout({ children }: LayoutProps) {
           <ViewCollapseToggle />
         </div>
 
-
         {medicationAlerts.length > 0 && (
           <div className="px-4 pt-4 md:px-6 md:pt-4 space-y-2">
             {medicationAlerts.map((alert) => (

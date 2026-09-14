@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-14";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Resor och Promenadvägar är borttagna",
+    items: [
+      "Resesidan och pendlingsvarningarna är borttagna ur menyer, guider och layout (2026-09-14)",
+      "Promenadvägar är borttaget från Träning (2026-09-14)",
+      "Fokus ligger på QuickFlow, energi, Flow, Min dag, anteckningar och vardagsstöd (2026-09-14)",
+    ],
+  },
+  {
     title: "Det du sparat blir lättare att hitta igen",
     items: [
       'Hem visar en liten "Kom ihåg"-rad när det finns öppna saker i QuickFlow eller öppna anteckningar (2026-09-14)',

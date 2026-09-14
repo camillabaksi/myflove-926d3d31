@@ -1,3 +1,9 @@
+## 2026-09-14 – Resor och Promenadvägar är borttagna
+
+- Resesidan (buss och tåg i realtid) och pendlingsvarningarna är borttagna ur menyer, guider och appens layout.
+- Promenadvägar är borttaget från Träning.
+- MyFlove fokuserar på QuickFlow, energi och kapacitet, Flow, Min dag, anteckningar och vardagsstöd.
+
 ## 2026-09-14 – Det du sparat blir lättare att hitta igen
 
 - Hem visar en liten "Kom ihåg"-rad efter de fyra kärnkorten när det finns öppna saker i QuickFlow eller öppna anteckningar.
