@@ -1,13 +1,13 @@
 import Layout from "@/components/layout";
-import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { RoutinesContent } from "@/pages/routines";
 import { MedicationContent } from "@/pages/medication";
-import { Sun, Repeat, Pill, Sunrise } from "lucide-react";
+import { CheckCircle2, Pill, Repeat, Sun, Sunrise } from "lucide-react";
 import CollapsibleSection from "@/components/collapsible-section";
 import WakeUpCard from "@/components/wake-up-card";
 import WakeUpSettings from "@/components/wake-up-settings";
 import PushStatusCard from "@/components/push-status-card";
+import RoutinesMedicationToday from "@/components/routines-medication-today";
 
 function MorningContent() {
   return (
@@ -41,72 +41,61 @@ export default function DailyFlowPage() {
               </p>
             </header>
 
-            <Tabs defaultValue="both" className="w-full">
-              <TabsList className="grid h-auto w-full grid-cols-2 gap-1 rounded-2xl sm:h-11 sm:grid-cols-4">
-                <TabsTrigger value="both" className="rounded-xl">
-                  Alla
-                </TabsTrigger>
-                <TabsTrigger value="morgon" className="rounded-xl">
-                  <Sunrise size={14} className="mr-1.5" /> Morgon
-                </TabsTrigger>
-                <TabsTrigger value="rutiner" className="rounded-xl">
-                  <Repeat size={14} className="mr-1.5" /> Rutiner
-                </TabsTrigger>
-                <TabsTrigger value="medicin" className="rounded-xl">
-                  <Pill size={14} className="mr-1.5" /> Medicin
-                </TabsTrigger>
-              </TabsList>
+            <MyFloveBlock
+              title="I dag"
+              subtitle="Dagens rutiner och doser i samma lista"
+              icon={CheckCircle2}
+              surface="blush"
+            >
+              <RoutinesMedicationToday showManageLink={false} />
+            </MyFloveBlock>
 
-              <TabsContent value="both" className="mt-6 space-y-10">
-                <CollapsibleSection
-                  title={
-                    <span className="flex items-center gap-2">
-                      <Sunrise size={18} className="text-primary" /> Morgonstart
-                    </span>
-                  }
-                  id="Morgonstart"
-                  headingClassName="text-lg font-semibold"
-                >
-                  <MorningContent />
-                </CollapsibleSection>
-                <div className="h-px bg-border" />
-                <CollapsibleSection
-                  title={
-                    <span className="flex items-center gap-2">
-                      <Repeat size={18} className="text-primary" /> Rutiner
-                    </span>
-                  }
-                  id="Rutiner"
-                  headingClassName="text-lg font-semibold"
-                >
-                  <RoutinesContent showHeader={false} />
-                </CollapsibleSection>
-                <div className="h-px bg-border" />
-                <CollapsibleSection
-                  title={
-                    <span className="flex items-center gap-2">
-                      <Pill size={18} className="text-primary" /> Medicin
-                    </span>
-                  }
-                  id="Medicin"
-                  headingClassName="text-lg font-semibold"
-                >
-                  <MedicationContent showHeader={false} />
-                </CollapsibleSection>
-              </TabsContent>
-
-              <TabsContent value="morgon" className="mt-6">
-                <MorningContent />
-              </TabsContent>
-
-              <TabsContent value="rutiner" className="mt-6">
+            <div className="space-y-3">
+              <CollapsibleSection
+                title={
+                  <span className="flex items-center gap-2">
+                    <Repeat size={18} className="text-primary" /> Rutiner
+                  </span>
+                }
+                description="Lägg till, ändra eller pausa dina återkommande hållpunkter."
+                id="Rutiner"
+                defaultCollapsed
+                className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft sm:p-5"
+                headingClassName="text-lg font-semibold"
+              >
                 <RoutinesContent showHeader={false} />
-              </TabsContent>
+              </CollapsibleSection>
 
-              <TabsContent value="medicin" className="mt-6">
+              <CollapsibleSection
+                title={
+                  <span className="flex items-center gap-2">
+                    <Pill size={18} className="text-primary" /> Medicin
+                  </span>
+                }
+                description="Hantera mediciner, doser och tider på samma ställe."
+                id="Medicin"
+                defaultCollapsed
+                className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft sm:p-5"
+                headingClassName="text-lg font-semibold"
+              >
                 <MedicationContent showHeader={false} />
-              </TabsContent>
-            </Tabs>
+              </CollapsibleSection>
+
+              <CollapsibleSection
+                title={
+                  <span className="flex items-center gap-2">
+                    <Sunrise size={18} className="text-primary" /> Morgonstart
+                  </span>
+                }
+                description="Ditt lugna stöd för att komma igång med dagen."
+                id="Morgonstart"
+                defaultCollapsed
+                className="rounded-3xl border border-border/60 bg-card/70 p-4 shadow-soft sm:p-5"
+                headingClassName="text-lg font-semibold"
+              >
+                <MorningContent />
+              </CollapsibleSection>
+            </div>
           </div>
         </MyFloveWide>
       </MyFlovePageGrid>

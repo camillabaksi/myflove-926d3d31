@@ -1,3 +1,10 @@
+## 2026-09-14 – Rutiner och Medicin är en samlad sida
+
+- Rutiner och Medicin visar nu dagens rutiner och doser först i en gemensam, kompakt lista.
+- De tidigare flikarna är ersatta av ett enkelt flöde där Rutiner, Medicin och Morgonstart öppnas vid behov.
+- Påminnelser visar inte längre en andra fullständig medicinhantering, utan leder till den samlade sidan.
+- Befintlig avbockning, tider, upprepning, påminnelser och synkning är oförändrade.
+
 ## 2026-09-14 – Lugnare Barn, Familj och Relationer
 
 - Barn börjar med barnen som val högst upp, "Lägg till barn" fälls ut vid behov och dagens hållpunkter för valt barn visas i en kompakt lista.

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "wouter";
 import Layout from "@/components/layout";
 import { MyFloveHeader } from "@/components/myflove";
 import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
@@ -7,14 +8,24 @@ import { Button } from "@/components/ui/button";
 import { useReminders, type Reminder, type RepeatMode } from "@/hooks/use-data";
 import { useReminderSync } from "@/hooks/use-reminder-sync";
 import PushStatusCard from "@/components/push-status-card";
-import { MedicationContent } from "@/pages/medication";
 import {
   getNotificationPermission,
   requestNotificationPermission,
   type NotificationPermissionState,
 } from "@/lib/push-notifications";
 import { useToast } from "@/hooks/use-toast";
-import { BellRing, Plus, Trash2, Undo2, Pencil, Check, X, CalendarClock } from "lucide-react";
+import {
+  ArrowRight,
+  BellRing,
+  Plus,
+  Trash2,
+  Undo2,
+  Pencil,
+  Check,
+  X,
+  CalendarClock,
+  Pill,
+} from "lucide-react";
 
 const todayIso = () => new Date().toISOString().slice(0, 10);
 
@@ -367,19 +378,18 @@ export default function RemindersPage() {
             </CollapsibleSection>
           </MyFloveBlock>
 
-          <MyFloveBlock title="Medicinpåminnelser" icon={BellRing} surface="mint">
-            <CollapsibleSection
-              title="Medicinpåminnelser"
-              id="Medicinpåminnelser"
-              headingClassName="sr-only"
-              className="space-y-3"
-            >
+          <MyFloveBlock title="Medicinpåminnelser" icon={Pill} surface="mint">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm text-muted-foreground">
-                Dina mediciner och tider bor här tillsammans med övriga påminnelser. Bocka av när du
-                tagit dem.
+                Mediciner, doser och tider hanteras tillsammans med dina rutiner.
               </p>
-              <MedicationContent showHeader={false} />
-            </CollapsibleSection>
+              <Link
+                href="/daglig-rutin"
+                className="inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
+              >
+                Öppna Rutiner &amp; medicin <ArrowRight size={15} aria-hidden />
+              </Link>
+            </div>
           </MyFloveBlock>
 
           <MyFloveBlock

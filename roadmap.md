@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Rutiner och Medicin samlade på en sida: dagens lista först, hantering vid behov och ingen dubblett i Påminnelser (2026-09-14)
+
 - [x] Lugnare Barn, Familj och Relationer: vem det gäller först, fördjupning under Mer (2026-09-14)
 
 - [x] Studier samlat på en sida: Mitt schema med rast/lunch, valfri nästa lektion på Hem och all studiehjälp på plats (2026-09-14)
