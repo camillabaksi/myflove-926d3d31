@@ -23,3 +23,4 @@
 - [x] Mobil-layout: kapacitetskortets rubrik och sammanfattning överlappar inte längre (2026-09-14)
 - [x] Upptäckbarhet: kompakt påminnelse om öppna QuickFlow-saker och anteckningar på Hem utan dubbla listor (2026-09-14)
 - [x] Paus-vägen samlar Akut Lugn, Mikropaus och Stopp-knappen; FlowScore kopplat till nästa rimliga steg (2026-09-14)
+- [x] Idag och Kalenderns Dag-läge förenklade till ett utvecklat dagkort med en gemensam kompakt lista (2026-09-14)

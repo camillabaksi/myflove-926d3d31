@@ -1,3 +1,10 @@
+## 2026-09-14 – Idag är nu ett utvecklat dagkort
+
+- Idag visar datum, Lägg till, Påminnelse och alla dagens aktiviteter i en enda kompakt lista.
+- Tider, uppgifter, rutiner och kalenderposter ligger i samma flöde med små typmarkeringar; genomförda saker ligger kvar dämpade i listan.
+- De separata blocken för gjort, ska göras, tider och kalenderposter samt den tomma 06–22-tidslinjen är borttagna från dagvyn.
+- Kalenderns utvecklade Dag-läge använder samma lista, medan vecka och månad fortsätter fungera som tidigare.
+
 ## 2026-09-14 – Lugnare hem: Paus samlat och Flow kopplat till nästa steg
 
 - "Dagens tanke" och "Gör den enklaste saken" är borttagna som egna funktioner på Hem.

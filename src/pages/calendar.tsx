@@ -41,11 +41,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { useToast } from "@/hooks/use-toast";
 import CollapsibleSection from "@/components/collapsible-section";
 import CalendarAccount, { type CalendarPushItem } from "@/components/calendar-account";
-import DayTimeline from "@/components/day-timeline";
 import { QuickAddInline, type QuickAddResult } from "@/components/task-quick-add";
-import AllInDay from "@/components/all-in-day";
+import DailyFlowList from "@/components/day/daily-flow-list";
 import EnergyBattery from "@/components/energy-battery";
-import { useEnergyBattery } from "@/hooks/use-energy-battery";
+import type { FlowItem } from "@/lib/flow-items";
 
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { pictogramFor } from "@/lib/pictograms";
@@ -158,16 +157,6 @@ export function CalendarContent() {
   } = useChildren();
   const { toast } = useToast();
   const queryClient = useQueryClient();
-
-  const { reading: batteryReading } = useEnergyBattery();
-  const batteryByHour = useMemo(() => {
-    const out: Record<number, number> = {};
-    for (const s of batteryReading.slots) {
-      const h = Math.floor(s.minutes / 60);
-      out[h] = Math.max(out[h] ?? 0, s.level);
-    }
-    return out;
-  }, [batteryReading.slots]);
 
   const [currentDate, setCurrentDate] = useState(new Date());
   const [view, setView] = useCloudSyncedStorage<CalView>("myflove-calendar-view", "manad");
@@ -470,35 +459,18 @@ export function CalendarContent() {
         }))
     : [];
 
-  const selectedTimelineEntries = [
-    ...selectedItems.childEvents.map((event) => ({
-      id: `c-${event.id}`,
-      title: event.title,
-      time: event.time ?? "",
-      color: event.child?.color ?? DEFAULT_CHILD_COLOR,
-      emoji: pictoMode ? pictogramFor(event.title, "🐣") : undefined,
-    })),
-    ...selectedItems.familyEvents.map((event) => ({
-      id: `f-${event.id}`,
-      title: event.title,
-      time: event.time ?? "",
-      color: event.member?.color ?? DEFAULT_MEMBER_COLOR,
-      emoji: pictoMode ? pictogramFor(event.title, "👨‍👩‍👧") : undefined,
-    })),
-    ...selectedItems.reminders.map((reminder) => ({
-      id: `r-${reminder.id}`,
-      title: reminder.title,
-      time: reminder.time ?? "",
-      emoji: pictoMode ? pictogramFor(reminder.title, "🔔") : undefined,
-    })),
-    ...selectedItems.tasks.map((task) => ({
-      id: `t-${task.id}`,
-      title: task.title,
-      time: task.time ?? "",
-      endTime: task.endTime,
-      emoji: pictoMode ? pictogramFor(task.title, "✅") : undefined,
-    })),
-  ];
+  const selectedSharedEvents: FlowItem[] = selectedItems.familyEvents.map((event) => ({
+    id: `f-${event.id}`,
+    title: event.title,
+    time: event.time ?? undefined,
+    source: "kalender",
+    area: "socialt",
+    emoji: pictoMode ? pictogramFor(event.title, "👨‍👩‍👧") : "👨‍👩‍👧",
+    priority: "idag",
+    done: false,
+    completable: false,
+    href: "/familj",
+  }));
 
   return (
     <MyFlovePageGrid area="kalender">
@@ -853,9 +825,6 @@ export function CalendarContent() {
                       <span aria-hidden>🖼️</span>
                       {t("Bildstöd")}
                     </button>
-                    <span className="rounded-full border border-primary/20 bg-primary/5 px-3 py-1.5 text-xs font-medium text-primary">
-                      {t("Gjort först · tider efteråt")}
-                    </span>
                   </div>
                 </div>
 
@@ -874,65 +843,9 @@ export function CalendarContent() {
                 {allInDay && selectedDateStr === todayStr && <ImpactCheckin />}
 
                 {allInDay && (
-                  <>
-                    <AllInDay
-                      date={selectedDateStr}
-                      isToday={selectedDateStr === todayStr}
-                      hasCalendarEvents={
-                        selectedItems.familyEvents.length > 0 || selectedItems.recurring.length > 0
-                      }
-                    />
-                    {view === "dag" && (
-                      <DayTimeline
-                        isToday={selectedDateStr === todayStr}
-                        energyByHour={selectedDateStr === todayStr ? batteryByHour : undefined}
-                        entries={selectedTimelineEntries}
-                      />
-                    )}
-                    {(selectedItems.familyEvents.length > 0 ||
-                      selectedItems.recurring.length > 0) && (
-                      <CollapsibleSection
-                        id="kalenderdagen::kalenderhandelser"
-                        title={t("Kalenderhändelser")}
-                        headingClassName="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
-                        className="space-y-2"
-                      >
-                        <p className="text-sm text-muted-foreground">
-                          {t("Delade händelser och återkommande hållpunkter.")}
-                        </p>
-                        <ul className="space-y-2">
-                          {selectedItems.familyEvents.map((event) => (
-                            <li
-                              key={`family-day-${event.id}`}
-                              className="flex items-center gap-3 rounded-2xl border border-border/60 bg-secondary/30 px-3 py-2.5"
-                            >
-                              <Users className="h-5 w-5 shrink-0 text-primary" />
-                              <span className="min-w-0 flex-1 text-sm font-medium text-foreground">
-                                {event.title}
-                              </span>
-                              <span className="shrink-0 text-xs text-muted-foreground">
-                                {event.time ? `${t("kl")} ${event.time}` : t("utan tid")}
-                              </span>
-                            </li>
-                          ))}
-                        </ul>
-                        {selectedItems.recurring.length > 0 && (
-                          <div className="flex flex-wrap gap-2 pt-1">
-                            {selectedItems.recurring.map((event) => (
-                              <span
-                                key={`recurring-day-${event.id}`}
-                                className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-secondary/50 px-2.5 py-1 text-xs text-muted-foreground"
-                              >
-                                <span aria-hidden>↻</span>
-                                {event.title}
-                                {event.time && ` · ${event.time}`}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                      </CollapsibleSection>
-                    )}
-                  </>
+                  <div className="rounded-3xl border border-border/60 bg-card px-4 shadow-soft sm:px-5">
+                    <DailyFlowList date={selectedDateStr} extraItems={selectedSharedEvents} />
+                  </div>
                 )}
 
                 {!allInDay &&
