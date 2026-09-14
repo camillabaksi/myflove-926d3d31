@@ -1,6 +1,7 @@
 # Roadmap
 
 - [x] Pitchdeck 4.0 med investerarunderlag, tydliga statusar och valideringsplatshållare
+- [x] Resor, Promenadvägar och Flow-karusellen borttagna; Flow kvar som planering/chatt (2026-09-14)
 - [x] Isolerat investerar-/demokonto med syntetisk seed, demoetikett och filtrerad analytics
 - [x] Förenklat aktivitetsflöde: gjort/planerat, fast ordning i Kalenderns dagvy, separata kalenderposter, borttaget gammalt händelseflöde, datumseparering och dubblettsäker QuickFlow-synk (2026-09-03)
 - [x] Kalender först på Hem: Min dag/Vecka/Månad-genvägar och synlig Lägg till-knapp (2026-09-03)
