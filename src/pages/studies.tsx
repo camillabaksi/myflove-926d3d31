@@ -219,17 +219,6 @@ export function StudiesSection() {
 
   return (
     <div className="space-y-8">
-      <a
-        href="/studybuddy"
-        className="block rounded-2xl border border-primary/25 bg-primary/5 p-4 hover:bg-primary/10 transition-colors"
-      >
-        <p className="font-medium">Studiehjälp – plugga smartare</p>
-        <p className="text-sm text-muted-foreground">
-          Ladda upp PDF, bilder eller text. Flow gör flashcards och quiz, kommer ihåg vad du har
-          svårt för och lägger upp pluggandet inför provet.
-        </p>
-      </a>
-
       {/* Kurser */}
       <CollapsibleSection
         title="Dina kurser"

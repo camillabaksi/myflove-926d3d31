@@ -441,14 +441,8 @@ export default function Layout({ children }: LayoutProps) {
             href: "/studyflow",
             label: "Studier",
             icon: GraduationCap,
-            hint: "Schema, prov och vad du ska plugga nu",
+            hint: "Schema, studiehjälp och vad du ska plugga nu",
             essential: true,
-          },
-          {
-            href: "/studybuddy",
-            label: "Studiehjälp",
-            icon: Brain,
-            hint: "Flashcards och quiz på ditt material",
           },
         ]
       : []),

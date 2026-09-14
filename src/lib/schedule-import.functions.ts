@@ -23,6 +23,7 @@ const LectureSchema = z.object({
   start: z.string().regex(/^\d{2}:\d{2}$/),
   end: z.string().regex(/^\d{2}:\d{2}$/),
   location: z.string().max(60).optional(),
+  kind: z.enum(["lecture", "break", "lunch"]).optional(),
 });
 
 export type ParsedScheduleLecture = z.infer<typeof LectureSchema>;
@@ -36,8 +37,9 @@ Regler:
 - start/end i formatet HH:MM (24h). Saknas sluttid: lägg till 60 minuter.
 - title: kort namn på lektionen/kursen, utan tid eller sal.
 - location: sal/rum/plats om det finns, annars utelämna.
-- Ta bara med återkommande lektioner/föreläsningar, inte raster.
-- Svara ENDAST med JSON: { "lectures": [{ "title", "weekday", "start", "end", "location" }] }`;
+- Ta med återkommande lektioner/föreläsningar OCH raster och lunch – de är viktiga hållpunkter.
+- kind: "lecture" för lektioner, "break" för rast/paus, "lunch" för lunch. Sätt alltid kind.
+- Svara ENDAST med JSON: { "lectures": [{ "title", "weekday", "start", "end", "location", "kind" }] }`;
 
 type Part = { type: "text"; text: string } | { type: "image_url"; image_url: { url: string } };
 
