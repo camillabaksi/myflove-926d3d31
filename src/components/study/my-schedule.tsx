@@ -1,5 +1,12 @@
 import { useMemo, useState } from "react";
-import { CalendarDays, FileText, ImageIcon, Paperclip, Coffee, UtensilsCrossed } from "lucide-react";
+import {
+  CalendarDays,
+  FileText,
+  ImageIcon,
+  Paperclip,
+  Coffee,
+  UtensilsCrossed,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useStudySchedule } from "@/hooks/use-study-schedule";
@@ -14,7 +21,8 @@ function scrollToImport() {
 }
 
 function kindIcon(lecture: Lecture) {
-  if (lecture.kind === "break") return <Coffee className="h-4 w-4 shrink-0 text-muted-foreground" />;
+  if (lecture.kind === "break")
+    return <Coffee className="h-4 w-4 shrink-0 text-muted-foreground" />;
   if (lecture.kind === "lunch")
     return <UtensilsCrossed className="h-4 w-4 shrink-0 text-muted-foreground" />;
   return <CalendarDays className="h-4 w-4 shrink-0 text-primary" />;
@@ -53,7 +61,11 @@ export function MySchedule() {
         </div>
         <div className="flex flex-wrap gap-2">
           {latest && (
-            <Button variant="secondary" className="rounded-full" onClick={() => setViewFile(latest)}>
+            <Button
+              variant="secondary"
+              className="rounded-full"
+              onClick={() => setViewFile(latest)}
+            >
               <Paperclip className="mr-2 h-4 w-4" /> Öppna schema
             </Button>
           )}

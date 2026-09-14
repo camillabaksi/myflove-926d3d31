@@ -812,7 +812,6 @@ export default function StudyflowPage() {
                     </div>
                   )}
                 </CollapsibleSection>
-
               </div>
             </CollapsibleSection>
           </div>
