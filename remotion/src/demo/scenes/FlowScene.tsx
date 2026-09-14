@@ -1,10 +1,12 @@
 import React from "react";
 import { AbsoluteFill, useCurrentFrame, useVideoConfig } from "remotion";
 import { DEMO_COLORS, DEMO_FONTS, ProductFrame, enter } from "../theme";
+import { useDemoCopy } from "../lang";
 
 export const FlowScene: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+  const copy = useDemoCopy();
   const note = enter(frame, fps, 72, 18);
   return (
     <AbsoluteFill>
@@ -22,7 +24,7 @@ export const FlowScene: React.FC = () => {
           transform: `${note.transform} rotate(-3deg)`,
         }}
       >
-        Same list. A plan that fits today. ↗
+        {copy("flowNote")}
       </div>
     </AbsoluteFill>
   );
