@@ -44,6 +44,7 @@ import JourneySteps from "@/components/journey/journey-steps";
 import NextStepCard from "@/components/journey/next-step-card";
 import EveningCheck from "@/components/journey/evening-check";
 import CollapsibleSection from "@/components/collapsible-section";
+import NextLectureHomeRow from "@/components/study/next-lecture-home-row";
 import { useWeekReview } from "@/hooks/use-activity-history";
 import { useNpfSettings } from "@/lib/npf-mode";
 import { weekStartISO } from "@/lib/week-review";
@@ -311,6 +312,8 @@ export default function Home() {
                 <ArrowRight className="h-4 w-4 shrink-0 text-primary sm:hidden" aria-hidden />
               </Link>
             )}
+
+            <NextLectureHomeRow />
 
             {/* Paus – en diskret återhämtningsväg, inte tre konkurrerande knappar. */}
             <Link
