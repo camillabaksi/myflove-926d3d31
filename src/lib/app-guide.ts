@@ -121,7 +121,6 @@ export const APP_GUIDE: GuideGroup[] = [
         what: "Schema, pluggplan och studiehjälp på ett ställe",
       },
       { href: "/jobb", label: "Jobb", what: "Uppgifter och möten" },
-      { href: "/workflow", label: "WorkFlow", what: "Din kapacitet på jobbet" },
     ],
   },
   {

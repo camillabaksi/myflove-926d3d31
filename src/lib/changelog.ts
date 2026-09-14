@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-14";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Jobb är en samlad sida",
+    items: [
+      "Jobb och Jobbplanering ligger nu på samma sida med dagens plan överst (2026-09-14)",
+      'Ny Jobbhjälp-sektion med "Kom igång", "Dina projekt" och "Ny arbetsuppgift" (2026-09-14)',
+      'Fördjupat innehåll som kapacitet, övergångar och avslut ligger under "Mer i jobb" (2026-09-14)',
+      "Jobbplanering är borttagen som egen menypost; gamla länkar leder till Jobb (2026-09-14)",
+    ],
+  },
+  {
     title: "Studier är en samlad sida",
     items: [
       "Studier, Studiehjälp och kurser ligger nu på samma sida med Mitt schema överst (2026-09-14)",

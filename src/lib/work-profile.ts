@@ -187,7 +187,7 @@ export function workSuggestions(
     out.push({
       title: "Flera möten och dokumentation samma dag",
       body: `${meetingsToday.length} möten ligger idag och ${docToday.length} dokumentationsuppgift(er) väntar. Vill du att jag hjälper dig hitta en realistisk tid för dokumentationen?`,
-      href: "/workflow",
+      href: "/jobb",
       hrefLabel: "Hitta en tid",
     });
   } else if (
@@ -197,7 +197,7 @@ export function workSuggestions(
     out.push({
       title: "Efterarbetet behöver plats",
       body: `Med ${meetingsToday.length} möten idag brukar efterarbetet bli kvar. Boka 10 minuter direkt efter varje möte istället för allt på slutet.`,
-      href: "/workflow",
+      href: "/jobb",
       hrefLabel: "Planera efterarbetet",
     });
   }
@@ -215,7 +215,7 @@ export function workSuggestions(
     out.push({
       title: "Kom igång i det lilla",
       body: `Ungefär ${ctx.capacityMinutes} minuters fokus finns kvar. Välj en sak som tar högst 15 minuter så är dagen igång.`,
-      href: "/workflow",
+      href: "/jobb",
       hrefLabel: "Vad tar jag härnäst?",
     });
   }

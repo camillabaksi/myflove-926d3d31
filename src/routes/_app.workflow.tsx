@@ -1,17 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
-import Page from "@/pages/workflow";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_app/workflow")({
-  head: () => ({
-    meta: [
-      { title: "Jobbplanering – vad ska jag göra nu? | MyFlove" },
-      {
-        name: "description",
-        content:
-          "Jobbplanering visar vad du ska göra just nu utifrån deadline, tid, svårighetsgrad och energi – och bygger om dagen när allt spårar ur.",
-      },
-      { name: "robots", content: "noindex, nofollow" },
-    ],
-  }),
-  component: Page,
+  beforeLoad: () => {
+    throw redirect({ to: "/jobb" });
+  },
 });

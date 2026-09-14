@@ -1,3 +1,10 @@
+## 2026-09-14 – Jobb är en samlad sida
+
+- Jobb och Jobbplanering ligger nu på samma sida: dagens plan överst, sedan Jobbhjälp, uppgifter och deadlines.
+- Ny Jobbhjälp-sektion samlar "Kom igång" (QuickFlow), "Dina projekt" och "Ny arbetsuppgift" som hopfällda val.
+- Allt fördjupat innehåll – kapacitet, mötesläge, övergångar och avslut – ligger under en hopfälld "Mer i jobb".
+- Jobbplanering är borttagen som egen menypost; /workflow skickar vidare till Jobb och inga länkar dör.
+
 ## 2026-09-14 – Studier är en samlad sida
 
 - Studier, Studiehjälp och kursvyn ligger nu på samma sida: Mitt schema, dagens och kommande lektioner, Studiehjälp och en hopfälld "Mer i studier".

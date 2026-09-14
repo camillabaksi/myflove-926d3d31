@@ -151,7 +151,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
       privat: "/familj",
       barn: "/barn",
       studier: "/studyflow",
-      jobb: "/workflow",
+      jobb: "/jobb",
       halsa: "/mitt-batteri",
       ekonomi: "/finances",
       socialt: "/relationer",
