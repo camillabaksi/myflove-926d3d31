@@ -127,8 +127,6 @@ export default function Home() {
       <QuickAddSheet open={addOpen} onOpenChange={setAddOpen} />
       <IntroTour />
 
-
-
       <MyFlovePageGrid className="gap-5 xl:grid-cols-6">
         <MyFloveWide className="home-ambient-shell" data-glow-level={glowLevel}>
           <section className="home-main-surface pop-in" aria-label={t("Din lugna start")}>
@@ -379,8 +377,6 @@ export default function Home() {
             headingClassName="text-base font-semibold text-ink"
           >
             <div className="grid gap-4">
-
-
               {/* Rutiner & medicin – dagens doser och rutiner. */}
               {shows("medicin") && (
                 <MyFloveWide style={{ order: 9 }} className="min-w-0">
