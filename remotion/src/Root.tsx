@@ -22,6 +22,13 @@ import {
   WIDTH as PITCH_WIDTH,
   HEIGHT as PITCH_HEIGHT,
 } from "./PitchVideo";
+import {
+  DemoVideo,
+  DEMO_TOTAL_FRAMES,
+  DEMO_FPS,
+  DEMO_WIDTH,
+  DEMO_HEIGHT,
+} from "./DemoVideo";
 
 export const RemotionRoot: React.FC = () => (
   <>
@@ -56,6 +63,14 @@ export const RemotionRoot: React.FC = () => (
       fps={PITCH_FPS}
       width={PITCH_WIDTH}
       height={PITCH_HEIGHT}
+    />
+    <Composition
+      id="investor-demo"
+      component={DemoVideo}
+      durationInFrames={DEMO_TOTAL_FRAMES}
+      fps={DEMO_FPS}
+      width={DEMO_WIDTH}
+      height={DEMO_HEIGHT}
     />
   </>
 );
