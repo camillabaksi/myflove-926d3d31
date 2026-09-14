@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-14";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Svensk version av 30-sekundersdemon",
+    items: [
+      "Demon finns nu även på svenska med samma design och berättelse (2026-09-14)",
+      "Demons texter är översatta, från \"En lugnare vardag\" till avslutet (2026-09-14)",
+    ],
+  },
+  {
     title: "Ny 30-sekunders produktdemo",
     items: [
       "Engelsk demo följer QuickFlow → Flow → kapacitetsanpassning → Min dag (2026-09-14)",
