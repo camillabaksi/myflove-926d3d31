@@ -44,7 +44,11 @@ export function TodayContent() {
   const { today: todaysItems } = useFlowItems();
   const { mode, chosen, setMode } = useReplanMode();
   const { keep, rest } = useMemo(
-    () => withinCapacity(todaysItems.filter((item) => !item.done), capacityForMode(flow, mode)),
+    () =>
+      withinCapacity(
+        todaysItems.filter((item) => !item.done),
+        capacityForMode(flow, mode),
+      ),
     [todaysItems, flow, mode],
   );
   const offerReplan = shouldOfferReplan(flow.score) || chosen;
@@ -64,7 +68,9 @@ export function TodayContent() {
         <h1 className="flex items-center gap-2 font-display text-2xl font-bold text-ink sm:text-3xl">
           <Heart className="h-7 w-7 text-primary" /> {t("Idag")}
         </h1>
-        <p className="mt-1 text-sm text-muted-foreground">{t("Vad händer idag och vad behöver du göra?")}</p>
+        <p className="mt-1 text-sm text-muted-foreground">
+          {t("Vad händer idag och vad behöver du göra?")}
+        </p>
       </MyFloveWide>
 
       <MyFloveWide>
@@ -78,10 +84,14 @@ export function TodayContent() {
             </div>
             <div className="flex flex-wrap gap-2">
               <Button asChild size="sm" className="rounded-full">
-                <Link href="/lagg-till"><Plus size={15} /> {t("Lägg till")}</Link>
+                <Link href="/lagg-till">
+                  <Plus size={15} /> {t("Lägg till")}
+                </Link>
               </Button>
               <Button asChild size="sm" variant="outline" className="rounded-full">
-                <Link href="/paminnelser"><Bell size={15} /> {t("Påminnelse")}</Link>
+                <Link href="/paminnelser">
+                  <Bell size={15} /> {t("Påminnelse")}
+                </Link>
               </Button>
             </div>
           </header>
@@ -110,7 +120,9 @@ export function TodayContent() {
                 </p>
                 <ol className="space-y-1.5 text-sm text-foreground">
                   {dayPlan.steps.map((step, index) => (
-                    <li key={`${step.taskId}-${index}`}>{index + 1}. {step.title}</li>
+                    <li key={`${step.taskId}-${index}`}>
+                      {index + 1}. {step.title}
+                    </li>
                   ))}
                 </ol>
               </div>
@@ -128,7 +140,10 @@ export function TodayContent() {
             )}
             <div className="rounded-2xl bg-secondary/30 p-4 text-sm text-foreground">
               <p>{load.summary}</p>
-              <Link href="/flow" className="mt-2 inline-flex items-center gap-2 text-primary hover:underline">
+              <Link
+                href="/flow"
+                className="mt-2 inline-flex items-center gap-2 text-primary hover:underline"
+              >
                 <CalendarDays size={15} /> {t("Öppna Flow för mer stöd")}
               </Link>
             </div>
