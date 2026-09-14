@@ -1,3 +1,7 @@
+## 2026-09-14 – Kalenderkopplingen varnar när åtkomsten behöver förnyas
+
+- Tidigare loggades bara felet om Google/Outlook nekade läsning av kalenderhändelser (401/403) och kalendern såg tom ut. Nu visas i stället texten om att kopplingen behöver förnyas, så du kan koppla om kontot direkt.
+
 ## 2026-09-13 – Dagvyn syns direkt i kalendern
 
 - När du väljer Dag i kalendern visas dagens innehåll direkt under vyvalet – tidigare hamnade det långt ned under kalenderkopplingen så att vyn såg tom ut.
