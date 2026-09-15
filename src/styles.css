@@ -1545,19 +1545,35 @@ html[data-npf-less="true"] [data-npf="optional"] {
 
 @keyframes lb-breathe-warmth {
   0%,
-  100% { opacity: 0.02; }
+  100% {
+    opacity: 0.02;
+  }
   33.333%,
-  50% { opacity: 0.2; }
+  50% {
+    opacity: 0.2;
+  }
 }
 
 @keyframes lb-water-light {
   0%,
-  100% { transform: translate3d(-5vw, 1vh, 0); opacity: 0.25; }
-  50% { transform: translate3d(5vw, -1vh, 0); opacity: 0.8; }
+  100% {
+    transform: translate3d(-5vw, 1vh, 0);
+    opacity: 0.25;
+  }
+  50% {
+    transform: translate3d(5vw, -1vh, 0);
+    opacity: 0.8;
+  }
 }
 
 .lb-scene-shade {
-  background: linear-gradient(180deg, hsl(var(--foreground) / 0.22), transparent 24%, transparent 70%, hsl(var(--foreground) / 0.42));
+  background: linear-gradient(
+    180deg,
+    hsl(var(--foreground) / 0.22),
+    transparent 24%,
+    transparent 70%,
+    hsl(var(--foreground) / 0.42)
+  );
 }
 
 .lb-breath-warmth {
@@ -1567,7 +1583,12 @@ html[data-npf-less="true"] [data-npf="optional"] {
 }
 
 .lb-sun-glow {
-  background: radial-gradient(circle, hsl(var(--cream) / 0.92) 0%, hsl(var(--sun) / 0.55) 34%, transparent 72%);
+  background: radial-gradient(
+    circle,
+    hsl(var(--cream) / 0.92) 0%,
+    hsl(var(--sun) / 0.55) 34%,
+    transparent 72%
+  );
   filter: blur(18px);
   mix-blend-mode: screen;
   animation: lb-breathe-glow 12s cubic-bezier(0.45, 0, 0.2, 1) 6s infinite backwards;
@@ -1580,15 +1601,25 @@ html[data-npf-less="true"] [data-npf="optional"] {
   animation: lb-water-light 20s ease-in-out infinite;
 }
 
-.lb-beach-video { filter: saturate(0.94) contrast(0.98); }
+.lb-beach-video {
+  filter: saturate(0.94) contrast(0.98);
+}
 
-.lb-still .lb-beach-video { display: none; }
+.lb-still .lb-beach-video {
+  display: none;
+}
 .lb-still .lb-breath-warmth,
 .lb-still .lb-sun-glow,
-.lb-still .lb-water-light { animation: none; }
+.lb-still .lb-water-light {
+  animation: none;
+}
 @media (prefers-reduced-motion: reduce) {
-  .lb-beach-video { display: none; }
+  .lb-beach-video {
+    display: none;
+  }
   .lb-breath-warmth,
   .lb-sun-glow,
-  .lb-water-light { animation: none; }
+  .lb-water-light {
+    animation: none;
+  }
 }

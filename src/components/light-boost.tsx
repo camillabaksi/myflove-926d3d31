@@ -193,8 +193,14 @@ export default function LightBoost({
       {phase === "running" && (
         <>
           <div aria-hidden className="lb-breath-warmth absolute inset-0" />
-          <div aria-hidden className="lb-sun-glow absolute left-1/2 top-[39%] size-[34vmin] -translate-x-1/2 -translate-y-1/2 rounded-full" />
-          <span aria-hidden className="lb-water-light absolute left-[49%] top-[54%] block size-1.5 rounded-full" />
+          <div
+            aria-hidden
+            className="lb-sun-glow absolute left-1/2 top-[39%] size-[34vmin] -translate-x-1/2 -translate-y-1/2 rounded-full"
+          />
+          <span
+            aria-hidden
+            className="lb-water-light absolute left-[49%] top-[54%] block size-1.5 rounded-full"
+          />
         </>
       )}
 
@@ -253,10 +259,17 @@ export default function LightBoost({
                 </Button>
               ))}
             </div>
-            <Button type="button" onClick={start} variant="secondary" className="mt-5 min-h-12 w-full rounded-2xl text-base font-semibold">
+            <Button
+              type="button"
+              onClick={start}
+              variant="secondary"
+              className="mt-5 min-h-12 w-full rounded-2xl text-base font-semibold"
+            >
               <Sun aria-hidden /> Starta upplevelsen
             </Button>
-            <p className="mt-3 text-xs text-cream/70">En sensorisk paus – ingen ljusterapi eller behandling.</p>
+            <p className="mt-3 text-xs text-cream/70">
+              En sensorisk paus – ingen ljusterapi eller behandling.
+            </p>
           </div>
         )}
 
@@ -273,7 +286,12 @@ export default function LightBoost({
           <div className="mx-auto w-full max-w-sm rounded-3xl bg-foreground/60 p-5 text-cream shadow-lifted backdrop-blur-md">
             <p className="font-display text-xl font-bold">Lite mer landad?</p>
             <div className="mt-4 space-y-2">
-              <Button type="button" variant="secondary" onClick={close} className="min-h-12 w-full rounded-2xl text-base font-semibold">
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={close}
+                className="min-h-12 w-full rounded-2xl text-base font-semibold"
+              >
                 Ja, lite bättre
               </Button>
               <Button
@@ -287,7 +305,12 @@ export default function LightBoost({
               >
                 Nej, jag behöver mer paus
               </Button>
-              <Button type="button" variant="ghost" onClick={close} className="min-h-11 w-full rounded-2xl text-sm text-cream/80 hover:bg-cream/10 hover:text-cream">
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={close}
+                className="min-h-11 w-full rounded-2xl text-sm text-cream/80 hover:bg-cream/10 hover:text-cream"
+              >
                 Tillbaka till min dag
               </Button>
             </div>
