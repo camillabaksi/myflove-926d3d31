@@ -1525,3 +1525,104 @@ html[data-npf-less="true"] [data-npf="optional"] {
     hsl(var(--area, var(--primary)) / 0.16) 100%
   );
 }
+
+/* --- Ljusboost: strand vid solnedgång ---------------------------------- */
+@keyframes lb-sun-breathe {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.95;
+  }
+  50% {
+    transform: translateY(-1.2%) scale(1.035);
+    opacity: 1;
+  }
+}
+@keyframes lb-wave-drift {
+  0% {
+    transform: translate3d(-12%, 0, 0) scaleY(1);
+  }
+  50% {
+    transform: translate3d(0%, 0.6%, 0) scaleY(1.06);
+  }
+  100% {
+    transform: translate3d(-12%, 0, 0) scaleY(1);
+  }
+}
+@keyframes lb-glitter {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: translateY(0) scaleX(1);
+  }
+  50% {
+    opacity: 0.75;
+    transform: translateY(-0.4%) scaleX(1.05);
+  }
+}
+@keyframes lb-bird {
+  0% {
+    transform: translate3d(-10vw, 8vh, 0) scale(0.75);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  50% {
+    transform: translate3d(45vw, 0vh, 0) scale(1);
+  }
+  90% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate3d(108vw, 7vh, 0) scale(0.8);
+    opacity: 0;
+  }
+}
+@keyframes lb-spark {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translateY(-10px);
+    opacity: 1;
+  }
+}
+.lb-sun {
+  animation: lb-sun-breathe 12s ease-in-out infinite;
+}
+.lb-wave {
+  animation: lb-wave-drift 26s ease-in-out infinite;
+}
+.lb-wave-slow {
+  animation: lb-wave-drift 38s ease-in-out infinite reverse;
+}
+.lb-glitter {
+  animation: lb-glitter 9s ease-in-out infinite;
+}
+.lb-bird {
+  animation: lb-bird 46s linear infinite;
+}
+.lb-spark {
+  animation: lb-spark 10s ease-in-out infinite;
+}
+.lb-still .lb-sun,
+.lb-still .lb-wave,
+.lb-still .lb-wave-slow,
+.lb-still .lb-glitter,
+.lb-still .lb-bird,
+.lb-still .lb-spark {
+  animation: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lb-sun,
+  .lb-wave,
+  .lb-wave-slow,
+  .lb-glitter,
+  .lb-bird,
+  .lb-spark {
+    animation: none;
+  }
+}
