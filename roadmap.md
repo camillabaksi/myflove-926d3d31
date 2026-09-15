@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Ljusboost med varmare solnedgång, organisk andningspuls och sömlös havsloop (2026-09-15)
+
 - [x] Ljusboost ombyggd till en verklig filmisk strand med naturligt havsljud och 4–2–6-andning (2026-09-15)
 
 - [x] Reklamvideo om hur Flow faktiskt hjälper, i 16:9 och 9:16 (2026-09-15)

@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Sun, Volume2, VolumeX, X } from "lucide-react";
-import beachPoster from "@/assets/light-boost-beach.jpg";
-import beachVideoMp4 from "@/assets/light-boost-beach-loop.mp4.asset.json";
-import beachVideoWebm from "@/assets/light-boost-beach-loop.webm.asset.json";
+import beachPoster from "@/assets/light-boost-beach-warm.jpg";
+import beachVideoMp4 from "@/assets/light-boost-beach-seamless.mp4.asset.json";
+import beachVideoWebm from "@/assets/light-boost-beach-seamless.webm.asset.json";
 import { Button } from "@/components/ui/button";
 import { useReducedMotion } from "@/components/myflove/motion";
 import { haptic } from "@/lib/haptics";
@@ -166,7 +166,7 @@ export default function LightBoost({
       role="dialog"
       aria-modal="true"
       aria-label="Ljusboost"
-      className={`light-boost-scene fixed inset-0 z-[110] overflow-hidden bg-foreground ${reduced ? "lb-still" : ""}`}
+        className={`light-boost-scene fixed inset-0 z-[110] overflow-hidden ${reduced ? "lb-still" : ""}`}
     >
       <img
         src={beachPoster}
@@ -217,7 +217,7 @@ export default function LightBoost({
               variant="ghost"
               onClick={toggleSound}
               aria-label={soundOn ? "Stäng av havsljudet" : "Slå på havsljudet"}
-              className="rounded-full bg-foreground/20 text-cream backdrop-blur-sm hover:bg-foreground/35 hover:text-cream"
+              className="lb-control rounded-full text-cream backdrop-blur-sm hover:text-cream"
             >
               {soundOn ? <Volume2 aria-hidden /> : <VolumeX aria-hidden />}
             </Button>
@@ -227,7 +227,7 @@ export default function LightBoost({
               variant="ghost"
               onClick={close}
               aria-label="Avsluta Ljusboost"
-              className="rounded-full bg-foreground/20 text-cream backdrop-blur-sm hover:bg-foreground/35 hover:text-cream"
+              className="lb-control rounded-full text-cream backdrop-blur-sm hover:text-cream"
             >
               <X aria-hidden />
             </Button>
@@ -235,7 +235,7 @@ export default function LightBoost({
         </div>
 
         {phase === "intro" && (
-          <div className="mx-auto w-full max-w-sm rounded-3xl bg-foreground/55 p-5 text-cream shadow-lifted backdrop-blur-md">
+          <div className="lb-panel mx-auto w-full max-w-sm rounded-3xl p-5 text-cream shadow-lifted backdrop-blur-md">
             <p className="font-display text-xl font-bold">Ljusboost</p>
             <p className="mt-2 text-sm leading-relaxed text-cream/85">
               Välj en stund vid havet. Ljudet börjar först när du startar.
@@ -276,14 +276,14 @@ export default function LightBoost({
         {phase === "running" && (
           <p
             aria-live="polite"
-            className={`mb-[16vh] max-w-xs rounded-full bg-foreground/18 px-5 py-2 text-base font-medium text-cream shadow-float backdrop-blur-sm transition-opacity duration-1000 sm:text-lg ${line ? "opacity-100" : "opacity-0"}`}
+            className={`lb-caption mb-[16vh] max-w-xs rounded-full px-5 py-2 text-base font-medium text-cream shadow-float backdrop-blur-sm transition-opacity duration-1000 sm:text-lg ${line ? "opacity-100" : "opacity-0"}`}
           >
             {line || "Lugn strandpaus"}
           </p>
         )}
 
         {phase === "checkin" && (
-          <div className="mx-auto w-full max-w-sm rounded-3xl bg-foreground/60 p-5 text-cream shadow-lifted backdrop-blur-md">
+          <div className="lb-panel mx-auto w-full max-w-sm rounded-3xl p-5 text-cream shadow-lifted backdrop-blur-md">
             <p className="font-display text-xl font-bold">Lite mer landad?</p>
             <div className="mt-4 space-y-2">
               <Button

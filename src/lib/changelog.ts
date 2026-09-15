@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-15";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Varmare och sömlös Ljusboost",
+    items: [
+      "Naturligare gyllene, orange och aprikosfärgad solnedgång med mjuka rosa/lila toner (2026-09-15)",
+      "Ny sömlös strandloop utan hopp i sol, vågor eller färg när filmen börjar om (2026-09-15)",
+      "Mjukare och mer organisk 4–2–6-andningspuls i ljuset (2026-09-15)",
+    ],
+  },
+  {
     title: "Ljusboost är en verklig strandupplevelse",
     items: [
       "Filmisk strand med tydlig horisont, solnedgång och verkligt rörliga vågor (2026-09-15)",
