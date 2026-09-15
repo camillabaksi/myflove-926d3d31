@@ -6,6 +6,7 @@ import { HOME_BLOCKS, useHomeLayout } from "@/lib/home-layout";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowUp, ArrowDown, Eye, EyeOff, RotateCcw, PlayCircle } from "lucide-react";
 import CollapsibleSection from "@/components/collapsible-section";
+import HomeShortcuts from "@/components/home-shortcuts";
 
 /**
  * Anpassa hemskärmen – välj vilka block som syns, i vilken ordning,
