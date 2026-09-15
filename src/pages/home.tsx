@@ -313,6 +313,8 @@ export default function Home() {
               </Link>
             )}
 
+            <HomeShortcuts />
+
             <NextLectureHomeRow />
 
             {/* Återhämtning – en lugn, tydligt centrerad trygghetsväg. */}
