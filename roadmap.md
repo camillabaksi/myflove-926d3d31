@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Visa mindre på Hem viker allt utom översta kortet (2026-09-15)
+
 - [x] Egna genvägar på startsidan – välj själv vad som ska ligga på Hem (2026-09-15)
 
 - [x] Anonym statistik per pausväg (Mikropaus, Akut Lugn, Ljusboost, Stopp) med adminkort (2026-09-15)
