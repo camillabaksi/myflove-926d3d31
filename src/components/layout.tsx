@@ -923,7 +923,7 @@ export default function Layout({ children }: LayoutProps) {
         )}
 
         <div
-          className="flex-1 overflow-y-auto pb-24 md:pb-8"
+          className="flex-1 overflow-y-auto pb-[calc(6rem+env(safe-area-inset-bottom))] md:pb-8"
           style={CATEGORY_THEMES[location] as React.CSSProperties}
         >
           <div key={location} className="max-w-6xl mx-auto w-full p-4 md:p-6 page-enter">
