@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-15";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Ljusboost i Paus",
+    items: [
+      "Strand vid solnedgång med varmt ljus, långsamma vågor och en liten fågel (2026-09-15)",
+      "Mjukt havsljud som du själv startar och kan stänga av (2026-09-15)",
+      "Diskreta texter: \"Följ ljuset\", andningsrytm och \"Du behöver inte göra något just nu.\" (2026-09-15)",
+      "Välj 90 sekunder, 5, 10 eller 15 minuter och avsluta med \"Lite mer landad?\" (2026-09-15)",
+    ],
+  },
+  {
     title: "Ärlig användarstatistik i adminvyn",
     items: [
       "Nytt kort \"Användare (konton)\" som räknar personer, inte webbläsare (2026-09-15)",
