@@ -115,14 +115,17 @@ export function StudyBuddyContent() {
         },
       });
 
+      const cards = wantCards ? result.cards : [];
+      const quiz = wantQuiz ? result.quiz : [];
+
       const record = addSet({
         title: title.trim(),
         courseId: courseId || undefined,
         examDate: examDate || undefined,
         summary: result.summary,
         topics: result.topics,
-        cards: result.cards,
-        quiz: result.quiz,
+        cards,
+        quiz,
       });
 
       setTitle("");
@@ -130,10 +133,15 @@ export function StudyBuddyContent() {
       setFile(null);
       setExamDateInput("");
       setOpenSetId(record.id);
-      setMode("cards");
+      setMode(cards.length > 0 ? "cards" : "quiz");
       toast({
         title: "Klart – materialet är förvandlat",
-        description: `${result.cards.length} flashcards och ${result.quiz.length} quizfrågor.`,
+        description: [
+          cards.length > 0 ? `${cards.length} flashcards` : null,
+          quiz.length > 0 ? `${quiz.length} quizfrågor` : null,
+        ]
+          .filter(Boolean)
+          .join(" och "),
       });
     } catch (err) {
       toast({
