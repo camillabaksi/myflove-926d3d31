@@ -60,6 +60,7 @@ export default function AdminStats() {
   const { data, isLoading, isError } = useGetAnalyticsSummary();
   const [partsSort, setPartsSort] = useState<AdminSortKey>("most");
   const [capacitySort, setCapacitySort] = useState<AdminSortKey>("most");
+  const [recoverySort, setRecoverySort] = useState<AdminSortKey>("most");
   const [viewsSort, setViewsSort] = useState<AdminSortKey>("most");
   const [pagesSort, setPagesSort] = useState<AdminSortKey>("most");
   const [actionsSort, setActionsSort] = useState<AdminSortKey>("most");
@@ -139,6 +140,18 @@ export default function AdminStats() {
     { label: t("Flow totalt"), ...sumSection(["flow", "flowplan"]) },
   ].map((row) => ({ label: row.label, events: row.events ?? 0, sessions: row.sessions ?? 0 }));
   const sortedCapacity = sortAdminRows(capacityStats, capacitySort);
+
+  // Återhämtning: vilka pausvägar som faktiskt används.
+  const recoveryStats = [
+    { label: t("Mikropaus"), ...findUsage("aterhamtning", "recovery_micro_opened") },
+    { label: t("Akut Lugn"), ...findUsage("aterhamtning", "recovery_acute_opened") },
+    { label: t("Ljusboost"), ...findUsage("aterhamtning", "recovery_lightboost_opened") },
+    { label: t("Stopp-knappen"), ...findUsage("aterhamtning", "recovery_stop_opened") },
+  ].map((row) => ({ label: row.label, events: row.events ?? 0, sessions: row.sessions ?? 0 }));
+  const sortedRecovery = sortAdminRows(recoveryStats, recoverySort);
+  const maxRecovery = Math.max(1, ...recoveryStats.map((row) => row.events));
+  const recoveryTotal = recoveryStats.reduce((acc, row) => acc + row.events, 0);
+  const recoveryViews = findUsage("aterhamtning", "recovery_viewed")?.events ?? 0;
   const maxCapacity = Math.max(1, ...capacityStats.map((row) => row.events));
 
   const friendlyParts = sortAdminRows(
@@ -228,6 +241,40 @@ export default function AdminStats() {
             </div>
 
             <UserFunnelCard className={cardClass} />
+
+            <CollapsibleSection
+              title={t("Återhämtning – vilka pausvägar används?")}
+              id="admin-recovery-usage"
+              headingClassName="text-lg font-semibold"
+              className={cardClass}
+            >
+              <div className="flex flex-wrap items-center justify-between gap-2 -mt-2">
+                <p className="text-sm text-muted-foreground">
+                  {recoveryTotal} {t("pauser startade")} · {recoveryViews}{" "}
+                  {t("besök på Återhämtning")}
+                </p>
+                <AdminListSorter value={recoverySort} onChange={setRecoverySort} />
+              </div>
+              <div className="space-y-3">
+                {sortedRecovery.map((row) => (
+                  <div key={row.label}>
+                    <div className="flex justify-between text-sm mb-1">
+                      <span className="font-medium">{row.label}</span>
+                      <span className="text-muted-foreground">
+                        {row.events} {t("gånger")} · {row.sessions} {t("användare")}
+                      </span>
+                    </div>
+                    <Bar value={row.events} max={maxRecovery} />
+                  </div>
+                ))}
+              </div>
+              <WhyBox
+                what={t(
+                  "Hur många gånger Mikropaus, Akut Lugn, Ljusboost och Stopp-knappen startas.",
+                )}
+                why={t("Visar vilken återhämtningsväg som hjälper mest och vad vi bör utveckla.")}
+              />
+            </CollapsibleSection>
 
             <CollapsibleSection
               title={t("Marknadsanalys – Sverige först")}

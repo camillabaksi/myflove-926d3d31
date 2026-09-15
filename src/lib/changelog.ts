@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-15";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Statistik för Återhämtning",
+    items: [
+      "Mikropaus, Akut Lugn, Ljusboost och Stopp-knappen räknas var för sig, anonymt (2026-09-15)",
+      "Nytt adminkort visar vilka pausvägar som används mest (2026-09-15)",
+    ],
+  },
+  {
     title: "Uppdaterat material: blueprint 4.3, pitchdeck 4.3 och nya videor",
     items: [
       "Living Blueprint 4.3 med Återhämtning, Ljusboost, fasta vägar och ärlig statistik (2026-09-15)",

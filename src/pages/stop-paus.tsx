@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Hand } from "lucide-react";
 import Layout from "@/components/layout";
 import { MyFloveHeader } from "@/components/myflove";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import StopModal from "@/components/stop-modal";
 import { useSmartBack } from "@/hooks/use-smart-back";
+import { track } from "@/lib/analytics";
 
 /**
  * Stop-paus – en egen sida under Mer.
@@ -14,6 +15,11 @@ import { useSmartBack } from "@/hooks/use-smart-back";
 export default function StopPausPage() {
   const [open, setOpen] = useState(true);
   const goBack = useSmartBack("/hem");
+
+  // Räknas oavsett om Stopp-knappen öppnas från Återhämtning eller direkt.
+  useEffect(() => {
+    track("recovery_stop_opened");
+  }, []);
 
   return (
     <Layout>

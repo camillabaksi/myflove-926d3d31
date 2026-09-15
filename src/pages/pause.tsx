@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "wouter";
 import { ArrowRight, Hand, Wind, Moon, Sunset } from "lucide-react";
 import Layout from "@/components/layout";
@@ -19,8 +19,13 @@ export default function PausePage() {
   const [calmMode, setCalmMode] = useState<"acute" | "micro" | null>(null);
   const [lightBoost, setLightBoost] = useState(false);
 
+  useEffect(() => {
+    track("recovery_viewed");
+  }, []);
+
   const open = (kind: "acute" | "micro") => {
     track("home_widget_opened", { source: kind === "acute" ? "akut_lugn" : "mikropaus" });
+    track(kind === "acute" ? "recovery_acute_opened" : "recovery_micro_opened");
     setCalmMode(kind);
   };
 
@@ -87,6 +92,7 @@ export default function PausePage() {
                 data-testid="pause-light-boost"
                 onClick={() => {
                   track("home_widget_opened", { source: "ljusboost" });
+                  track("recovery_lightboost_opened");
                   setLightBoost(true);
                 }}
                 className="press flex min-h-16 w-full items-center gap-3 rounded-3xl border border-border/60 bg-card px-4 py-3 text-left shadow-soft transition-colors hover:border-primary/35"

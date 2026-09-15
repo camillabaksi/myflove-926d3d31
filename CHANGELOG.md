@@ -1,3 +1,9 @@
+## 2026-09-15 – Statistik för Återhämtning
+
+- Mikropaus, Akut Lugn, Ljusboost och Stopp-knappen räknas nu var för sig (anonymt).
+- Stopp-knappen räknas oavsett om den öppnas från Återhämtning eller direkt.
+- Nytt kort i adminstatistiken: "Återhämtning – vilka pausvägar används?" med antal gånger och antal användare.
+
 ## 2026-09-15 – Uppdaterat material: blueprint 4.3, pitchdeck 4.3 och nya videor
 
 - Living Blueprint 4.3 (docx + pdf) med Återhämtning, Ljusboost, fasta vägar, samlade områdesvyer, kalenderkoppling och ärlig statistik.
