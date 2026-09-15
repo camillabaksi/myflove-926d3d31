@@ -110,8 +110,8 @@ export function StudyBuddyContent() {
           file: filePayload,
           profileContext: lifeProfileContext(lifeProfile) || undefined,
           focus: plan.focus || undefined,
-          cardCount: plan.cardCount,
-          quizCount: plan.quizCount,
+          cardCount: wantCards ? plan.cardCount : 0,
+          quizCount: wantQuiz ? plan.quizCount : 0,
         },
       });
 
