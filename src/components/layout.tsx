@@ -691,15 +691,15 @@ export default function Layout({ children }: LayoutProps) {
   }, [navSearch, navItems]);
 
   /**
-   * Bottennavet: Hem är fast, sedan två platser du väljer själv.
-   * Standard: Idag och Planera.
+   * Bottennavet under utvärderingsperioden: fyra fasta huvudvägar för alla –
+   * Hem, QuickFlow, Kalender och Paus. Inga val, ingen kontostatus styr detta.
    */
   const primaryNav = useMemo(() => {
     const pick = (href: string) => navItems.find((i) => i.href === href);
-    const slot1 = pick(navSlots[0] ?? "") ?? pick("/idag") ?? pick("/kalender");
-    const slot2 = pick(navSlots[1] ?? "") ?? pick("/flowplan") ?? pick("/flow");
-    return [pick("/hem"), slot1, slot2].filter(Boolean) as typeof navItems;
-  }, [navItems, navSlots]);
+    return [pick("/hem"), pick("/kalender"), pick("/paus")].filter(Boolean) as typeof navItems;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navItems]);
+
 
   return (
     <div className="app-shell-bg h-[100dvh] overflow-hidden overscroll-none flex flex-col md:flex-row relative">
