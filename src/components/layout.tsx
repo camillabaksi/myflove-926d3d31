@@ -2,6 +2,7 @@ import { ReactNode, useState, useEffect, useMemo } from "react";
 import { Link, useLocation } from "wouter";
 import { useRouter } from "@tanstack/react-router";
 import {
+  MessageCircle,
   Home,
   Target,
   CheckSquare,
@@ -336,6 +337,13 @@ export default function Layout({ children }: LayoutProps) {
       label: "Anteckningar",
       icon: NotebookPen,
       hint: "Din idébank – tankar utan krav",
+    },
+    {
+      href: "/assistant",
+      label: "Prata med Flow",
+      icon: MessageCircle,
+      hint: "Chatta med Flow – din personliga följeslagare",
+      essential: true,
     },
     {
       href: "/kalender",
