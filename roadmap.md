@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Android AAB 5.2 (versionCode 11) byggd (2026-09-15)
+
 - [x] Återhämtning som samlad paussida med centrerad ingång på Hem och redirect från /paus (2026-09-15)
 
 - [x] Prata med Flow som fast plats i bottenmenyn, kort "Flow", tydligt aktiv markering (2026-09-15)
