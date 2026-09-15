@@ -2,7 +2,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Sun, Volume2, VolumeX, X } from "lucide-react";
 import beachPoster from "@/assets/light-boost-beach.jpg";
-import beachVideoAsset from "@/assets/light-boost-beach-loop.mp4.asset.json";
+import beachVideoMp4 from "@/assets/light-boost-beach-loop.mp4.asset.json";
+import beachVideoWebm from "@/assets/light-boost-beach-loop.webm.asset.json";
 import { Button } from "@/components/ui/button";
 import { useReducedMotion } from "@/components/myflove/motion";
 import { haptic } from "@/lib/haptics";
@@ -176,7 +177,6 @@ export default function LightBoost({
       />
       <video
         ref={videoRef}
-        src={beachVideoAsset.url}
         poster={beachPoster}
         muted
         loop
@@ -184,7 +184,10 @@ export default function LightBoost({
         preload="metadata"
         aria-hidden="true"
         className="lb-beach-video absolute inset-0 h-full w-full object-cover"
-      />
+      >
+        <source src={beachVideoWebm.url} type="video/webm" />
+        <source src={beachVideoMp4.url} type="video/mp4" />
+      </video>
 
       <div aria-hidden className="lb-scene-shade absolute inset-0" />
       {phase === "running" && (
