@@ -556,7 +556,7 @@ export default function Layout({ children }: LayoutProps) {
         hrefs: [
           "/halsa",
           "/mitt-batteri",
-          "/paus",
+          "/aterhamtning",
           "/stop-paus",
           "/traning",
           "/daglig-rutin",
