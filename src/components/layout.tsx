@@ -642,7 +642,7 @@ export default function Layout({ children }: LayoutProps) {
       setNavSlots(navSlots.map((h) => (h === "/flow" ? "/flowplan" : h)));
     }
   }, [navMigrated, navSlots, setNavMigrated, setNavSlots]);
-  const [editingNav, setEditingNav] = useState(false);
+  
 
   /** Stänger "Mer" och nollställer vilken kategori som var öppen. */
   const closeMenu = () => {
