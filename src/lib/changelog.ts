@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-15";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Fast bottenmeny: Hem, QuickFlow, Kalender och Paus",
+    items: [
+      "Samma fyra huvudvägar i bottenmenyn för alla användare (2026-09-15)",
+      "Paus leder till den befintliga pausvägen med Mikropaus, Akut Lugn och Ljusboost (2026-09-15)",
+      "Egna platser i bottenmenyn pausade; övriga sidor nås via Mer (2026-09-15)",
+    ],
+  },
+  {
     title: "Varmare sol och dovare reflektion i Ljusboost",
     items: [
       "Solen mer orange i kärna och sken, från gult mot djupare orange (2026-09-15)",

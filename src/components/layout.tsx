@@ -642,7 +642,7 @@ export default function Layout({ children }: LayoutProps) {
       setNavSlots(navSlots.map((h) => (h === "/flow" ? "/flowplan" : h)));
     }
   }, [navMigrated, navSlots, setNavMigrated, setNavSlots]);
-  const [editingNav, setEditingNav] = useState(false);
+  
 
   /** Stänger "Mer" och nollställer vilken kategori som var öppen. */
   const closeMenu = () => {
@@ -691,15 +691,15 @@ export default function Layout({ children }: LayoutProps) {
   }, [navSearch, navItems]);
 
   /**
-   * Bottennavet: Hem är fast, sedan två platser du väljer själv.
-   * Standard: Idag och Planera.
+   * Bottennavet under utvärderingsperioden: fyra fasta huvudvägar för alla –
+   * Hem, QuickFlow, Kalender och Paus. Inga val, ingen kontostatus styr detta.
    */
   const primaryNav = useMemo(() => {
     const pick = (href: string) => navItems.find((i) => i.href === href);
-    const slot1 = pick(navSlots[0] ?? "") ?? pick("/idag") ?? pick("/kalender");
-    const slot2 = pick(navSlots[1] ?? "") ?? pick("/flowplan") ?? pick("/flow");
-    return [pick("/hem"), slot1, slot2].filter(Boolean) as typeof navItems;
-  }, [navItems, navSlots]);
+    return [pick("/hem"), pick("/kalender"), pick("/paus")].filter(Boolean) as typeof navItems;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navItems]);
+
 
   return (
     <div className="app-shell-bg h-[100dvh] overflow-hidden overscroll-none flex flex-col md:flex-row relative">
@@ -923,7 +923,7 @@ export default function Layout({ children }: LayoutProps) {
         )}
 
         <div
-          className="flex-1 overflow-y-auto pb-24 md:pb-8"
+          className="flex-1 overflow-y-auto pb-[calc(6rem+env(safe-area-inset-bottom))] md:pb-8"
           style={CATEGORY_THEMES[location] as React.CSSProperties}
         >
           <div key={location} className="max-w-6xl mx-auto w-full p-4 md:p-6 page-enter">
@@ -974,14 +974,14 @@ export default function Layout({ children }: LayoutProps) {
           öppnar alla samma flöde via händelsen "myflove:quickflow". */}
       <QuickflowCapture variant="global" />
 
-      {/* Mobile Bottom Bar – Hem · Idag · QuickFlow · Planera · Mer */}
+      {/* Mobile Bottom Bar – Hem · Kalender · QuickFlow · Paus · Mer */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-md border-t border-border/70 pb-[env(safe-area-inset-bottom)] z-40">
         <div className="flex items-end justify-around px-1 pt-1.5 pb-1">
           {primaryNav.slice(0, 2).map((item) => (
             <BottomNavLink
               key={item.href}
               item={item}
-              active={location === item.href}
+              active={location === item.href || location.startsWith(`${item.href}/`)}
               onClick={() => setMobileMenuOpen(false)}
             />
           ))}
@@ -1003,11 +1003,12 @@ export default function Layout({ children }: LayoutProps) {
             <BottomNavLink
               key={item.href}
               item={item}
-              active={location.startsWith(item.href)}
+              active={location === item.href || location.startsWith(`${item.href}/`)}
               onClick={() => setMobileMenuOpen(false)}
               label={item.label}
             />
           ))}
+
 
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -1234,69 +1235,15 @@ export default function Layout({ children }: LayoutProps) {
                     />
                   </div>
 
-                  {/* Din bottenmeny – hör hemma under Anpassa MyFlove */}
+                  {/* Bottenmenyn är fast under utvärderingsperioden. */}
                   <div className="mb-5 rounded-3xl border border-border/60 bg-card p-4 shadow-soft">
-                    <div className="flex items-center justify-between gap-2">
-                      <div>
-                        <p className="text-sm font-semibold">Din bottenmeny</p>
-                        <p data-npf="optional" className="text-xs text-muted-foreground">
-                          Hem, QuickFlow och Mer ligger fast. Två platser väljer du själv – normalt
-                          Idag och Planera.
-                        </p>
-                      </div>
-                      <Button
-                        variant={editingNav ? "default" : "outline"}
-                        size="sm"
-                        className="rounded-xl gap-1"
-                        onClick={() => setEditingNav((v) => !v)}
-                      >
-                        {editingNav ? (
-                          <>
-                            <Check size={14} /> Klar
-                          </>
-                        ) : (
-                          "Ändra"
-                        )}
-                      </Button>
-                    </div>
-
-                    {editingNav && (
-                      <div className="mt-3 space-y-3">
-                        {[0, 1].map((slot) => (
-                          <label key={slot} className="block">
-                            <span className="mb-1 block text-xs font-medium text-muted-foreground">
-                              Plats {slot + 1}
-                            </span>
-                            <select
-                              value={navSlots[slot] ?? ""}
-                              onChange={(e) => {
-                                const next = [navSlots[0] ?? "", navSlots[1] ?? ""];
-                                next[slot] = e.target.value;
-                                setNavSlots(next);
-                              }}
-                              className="w-full rounded-2xl border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                            >
-                              {navItems
-                                .filter((i) => i.href !== "/hem")
-                                .map((i) => (
-                                  <option key={i.href} value={i.href}>
-                                    {i.label}
-                                  </option>
-                                ))}
-                            </select>
-                          </label>
-                        ))}
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="rounded-xl gap-1"
-                          onClick={() => setNavSlots(["/idag", "/flowplan"])}
-                        >
-                          <RotateCcw size={14} /> Återställ
-                        </Button>
-                      </div>
-                    )}
+                    <p className="text-sm font-semibold">Din bottenmeny</p>
+                    <p data-npf="optional" className="mt-1 text-xs text-muted-foreground">
+                      Hem, QuickFlow, Kalender och Paus ligger fast för alla just nu. Allt annat
+                      finns kvar här i Mer.
+                    </p>
                   </div>
+
 
                   {/* Kom igång */}
                   <h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
