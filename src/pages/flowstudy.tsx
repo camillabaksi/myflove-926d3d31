@@ -406,27 +406,31 @@ export function StudyBuddyContent() {
               )}
 
               <div className="flex flex-wrap gap-2">
-                <Button
-                  size="sm"
-                  variant="secondary"
-                  className="rounded-xl"
-                  onClick={() => {
-                    setOpenSetId(set.id);
-                    setMode("cards");
-                  }}
-                >
-                  <RotateCcw size={14} className="mr-2" /> Flashcards
-                </Button>
-                <Button
-                  size="sm"
-                  className="rounded-xl"
-                  onClick={() => {
-                    setOpenSetId(set.id);
-                    setMode("quiz");
-                  }}
-                >
-                  <ListChecks size={14} className="mr-2" /> Kör quiz
-                </Button>
+                {set.cards.length > 0 && (
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    className="rounded-xl"
+                    onClick={() => {
+                      setOpenSetId(set.id);
+                      setMode("cards");
+                    }}
+                  >
+                    <RotateCcw size={14} className="mr-2" /> Flashcards
+                  </Button>
+                )}
+                {set.quiz.length > 0 && (
+                  <Button
+                    size="sm"
+                    className="rounded-xl"
+                    onClick={() => {
+                      setOpenSetId(set.id);
+                      setMode("quiz");
+                    }}
+                  >
+                    <ListChecks size={14} className="mr-2" /> Kör quiz
+                  </Button>
+                )}
                 <Button
                   size="sm"
                   variant="outline"
