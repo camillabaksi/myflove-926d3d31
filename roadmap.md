@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Prata med Flow som fast plats i bottenmenyn, kort "Flow", tydligt aktiv markering (2026-09-15)
+
 - [x] Fast bottenmeny med Hem, QuickFlow, Kalender och Paus för alla användare (2026-09-15)
 
 - [x] Varmare orange sol, borttagen vit prickmarkering och dovare ljusreflektion i Ljusboost (2026-09-15)
