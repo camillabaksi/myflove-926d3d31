@@ -317,7 +317,8 @@ export function StudyBuddyContent() {
                 </>
               ) : (
                 <>
-                  <Sparkles size={16} className="mr-2" /> Skapa flashcards och quiz
+                  <Sparkles size={16} className="mr-2" /> Skapa{" "}
+                  {output === "cards" ? "flashcards" : output === "quiz" ? "quiz" : "flashcards och quiz"}
                 </>
               )}
             </Button>
