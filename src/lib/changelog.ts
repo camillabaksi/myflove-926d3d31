@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-15";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Solen visar andningen i Ljusboost",
+    items: [
+      "Solen växer under inandningen, vilar i maxläget och krymper under utandningen (2026-09-15)",
+      "Solstorlek, sken, värme, reflektion och kursiv text följer samma 4–2–6-animation (2026-09-15)",
+    ],
+  },
+  {
     title: "Färgstarkare och närmare Ljusboost",
     items: [
       "Mättad solnedgång i guld, orange, aprikos, korall, rosa och mjuk lavendel (2026-09-15)",

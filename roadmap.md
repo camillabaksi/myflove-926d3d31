@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Solen själv som tydlig andningsguide, exakt synkad med sken, reflektion och text (2026-09-15)
+
 - [x] Färgstarkare Ljusboost med större närmare sol, tydligare sken och högre kursiv andningstext (2026-09-15)
 
 - [x] Ljusboost närmare referensen med större sol, bred gyllene reflektion och synkad 4–2–6-andning (2026-09-15)

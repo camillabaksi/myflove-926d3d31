@@ -1528,64 +1528,66 @@ html[data-npf-less="true"] [data-npf="optional"] {
 
 /* --- Ljusboost: varm, sömlös strand och 4s in, 2s paus, 6s ut --------- */
 @keyframes lb-breathe-glow {
-  0%,
-  100% {
-    opacity: 0.82;
-    transform: translate(-50%, -50%) scale(1.16);
+  0% {
+    opacity: 0.38;
+    transform: translate(-50%, -50%) scale(0.78);
   }
-  33.333% {
-    opacity: 0.3;
-    transform: translate(-50%, -50%) scale(0.84);
-  }
+  33.333%,
   50% {
-    opacity: 0.3;
-    transform: translate(-50%, -50%) scale(0.84);
+    opacity: 0.9;
+    transform: translate(-50%, -50%) scale(1.2);
   }
-  74% {
-    opacity: 0.56;
-    transform: translate(-50%, -50%) scale(1.01);
+  100% {
+    opacity: 0.38;
+    transform: translate(-50%, -50%) scale(0.78);
   }
 }
 
 @keyframes lb-breathe-disc {
-  0%,
-  100% {
-    opacity: 0.98;
-    transform: translate(-50%, -50%) scale(1.04);
-    filter: blur(2px);
+  0% {
+    opacity: 0.9;
+    transform: translate(-50%, -50%) scale(0.76);
+    filter: saturate(0.9) brightness(0.94) blur(3px);
   }
   33.333%,
   50% {
-    opacity: 0.84;
-    transform: translate(-50%, -50%) scale(0.96);
-    filter: blur(3px);
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.2);
+    filter: saturate(1.16) brightness(1.1) blur(2px);
+  }
+  100% {
+    opacity: 0.9;
+    transform: translate(-50%, -50%) scale(0.76);
+    filter: saturate(0.9) brightness(0.94) blur(3px);
   }
 }
 
 @keyframes lb-breathe-reflection {
-  0%,
-  100% {
-    opacity: 0.72;
-    transform: translateX(-50%) scaleX(1.12);
+  0% {
+    opacity: 0.34;
+    transform: translateX(-50%) scaleX(0.84);
   }
   33.333%,
   50% {
+    opacity: 0.78;
+    transform: translateX(-50%) scaleX(1.16);
+  }
+  100% {
     opacity: 0.34;
-    transform: translateX(-50%) scaleX(0.88);
+    transform: translateX(-50%) scaleX(0.84);
   }
 }
 
 @keyframes lb-breathe-warmth {
-  0%,
-  100% {
-    opacity: 0.34;
+  0% {
+    opacity: 0.12;
   }
   33.333%,
   50% {
-    opacity: 0.12;
+    opacity: 0.38;
   }
-  74% {
-    opacity: 0.23;
+  100% {
+    opacity: 0.12;
   }
 }
 
@@ -1601,11 +1603,11 @@ html[data-npf-less="true"] [data-npf="optional"] {
 
 @keyframes lb-breath-in-copy {
   0%,
-  24% {
+  46% {
     opacity: 0.92;
   }
-  33.333%,
-  88% {
+  54%,
+  92% {
     opacity: 0;
   }
   100% {
@@ -1615,11 +1617,11 @@ html[data-npf-less="true"] [data-npf="optional"] {
 
 @keyframes lb-breath-out-copy {
   0%,
-  44% {
+  46% {
     opacity: 0;
   }
   54%,
-  88% {
+  92% {
     opacity: 0.92;
   }
   100% {
@@ -1688,7 +1690,7 @@ html[data-npf-less="true"] [data-npf="optional"] {
     radial-gradient(circle at 50% 40%, hsl(49 100% 84% / 0.92), hsl(34 100% 63% / 0.58) 29%, hsl(13 100% 61% / 0.3) 51%, transparent 71%),
     linear-gradient(180deg, hsl(326 86% 74% / 0.22), hsl(19 100% 61% / 0.42) 57%, transparent 88%);
   mix-blend-mode: screen;
-  animation: lb-breathe-warmth 12s cubic-bezier(0.37, 0, 0.2, 1) 6s infinite backwards;
+  animation: lb-breathe-warmth 12s ease-in-out 6s infinite backwards;
 }
 
 .lb-sun-glow {
@@ -1703,7 +1705,7 @@ html[data-npf-less="true"] [data-npf="optional"] {
   );
   filter: blur(34px);
   mix-blend-mode: screen;
-  animation: lb-breathe-glow 12s cubic-bezier(0.37, 0, 0.2, 1) 6s infinite backwards;
+  animation: lb-breathe-glow 12s ease-in-out 6s infinite backwards;
   will-change: transform, opacity;
 }
 
