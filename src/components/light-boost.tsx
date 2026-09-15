@@ -202,10 +202,6 @@ export default function LightBoost({
             className="lb-sun-disc absolute left-1/2 top-[40%] size-[34vmin] min-h-28 min-w-28 max-h-72 max-w-72 -translate-x-1/2 -translate-y-1/2 rounded-full"
           />
           <div aria-hidden className="lb-sun-reflection absolute left-1/2 top-[44%] h-[50%] w-[58vw] min-w-52 max-w-3xl -translate-x-1/2" />
-          <span
-            aria-hidden
-            className="lb-water-light absolute left-[49%] top-[57%] block size-1.5 rounded-full"
-          />
         </>
       )}
 
