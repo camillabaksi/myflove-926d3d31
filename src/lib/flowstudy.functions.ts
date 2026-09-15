@@ -19,8 +19,8 @@ const InputSchema = z.object({
   profileContext: z.string().max(2000).optional(),
   /** Anpassning utifrån stödbehov och inlärningspreferenser. */
   focus: z.string().max(1500).optional(),
-  cardCount: z.number().int().min(4).max(30).default(12),
-  quizCount: z.number().int().min(4).max(20).default(10),
+  cardCount: z.number().int().min(0).max(30).default(12),
+  quizCount: z.number().int().min(0).max(20).default(10),
 });
 
 const OutputSchema = z.object({
@@ -75,7 +75,11 @@ export const generateStudySet = createServerFn({ method: "POST" })
       `Material: ${data.title}`,
       data.course ? `Kurs: ${data.course}` : null,
       "",
-      `Skapa ${data.cardCount} flashcards och ${data.quizCount} flervalsfrågor utifrån materialet.`,
+      data.cardCount > 0 && data.quizCount > 0
+        ? `Skapa ${data.cardCount} flashcards och ${data.quizCount} flervalsfrågor utifrån materialet.`
+        : data.cardCount > 0
+          ? `Skapa ${data.cardCount} flashcards utifrån materialet. Skapa INGA quizfrågor – returnera quiz som en tom lista.`
+          : `Skapa ${data.quizCount} flervalsfrågor utifrån materialet. Skapa INGA flashcards – returnera cards som en tom lista.`,
       data.focus?.trim() ? `Anpassning efter användarens stödbehov: ${data.focus.trim()}` : null,
       "Returnera JSON: { summary, topics: [string], cards: [{ front, back, topic }], quiz: [{ question, options: [4 st], correctIndex, explanation, topic }] }.",
 

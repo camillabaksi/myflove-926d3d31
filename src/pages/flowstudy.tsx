@@ -69,6 +69,9 @@ export function StudyBuddyContent() {
   const [mode, setMode] = useState<"cards" | "quiz" | null>(null);
   const [addingId, setAddingId] = useState<string | null>(null);
   const [emphasis, setEmphasis] = useState<StudyEmphasis | null>(null);
+  const [output, setOutput] = useState<"both" | "cards" | "quiz">("both");
+  const wantCards = output !== "quiz";
+  const wantQuiz = output !== "cards";
 
   const basePlan = useMemo(() => studyMaterialPlan(toStudyProfile(lifeProfile)), [lifeProfile]);
   const plan = useMemo(
@@ -107,10 +110,13 @@ export function StudyBuddyContent() {
           file: filePayload,
           profileContext: lifeProfileContext(lifeProfile) || undefined,
           focus: plan.focus || undefined,
-          cardCount: plan.cardCount,
-          quizCount: plan.quizCount,
+          cardCount: wantCards ? plan.cardCount : 0,
+          quizCount: wantQuiz ? plan.quizCount : 0,
         },
       });
+
+      const cards = wantCards ? result.cards : [];
+      const quiz = wantQuiz ? result.quiz : [];
 
       const record = addSet({
         title: title.trim(),
@@ -118,8 +124,8 @@ export function StudyBuddyContent() {
         examDate: examDate || undefined,
         summary: result.summary,
         topics: result.topics,
-        cards: result.cards,
-        quiz: result.quiz,
+        cards,
+        quiz,
       });
 
       setTitle("");
@@ -127,10 +133,15 @@ export function StudyBuddyContent() {
       setFile(null);
       setExamDateInput("");
       setOpenSetId(record.id);
-      setMode("cards");
+      setMode(cards.length > 0 ? "cards" : "quiz");
       toast({
         title: "Klart – materialet är förvandlat",
-        description: `${result.cards.length} flashcards och ${result.quiz.length} quizfrågor.`,
+        description: [
+          cards.length > 0 ? `${cards.length} flashcards` : null,
+          quiz.length > 0 ? `${quiz.length} quizfrågor` : null,
+        ]
+          .filter(Boolean)
+          .join(" och "),
       });
     } catch (err) {
       toast({
@@ -252,9 +263,46 @@ export function StudyBuddyContent() {
                 ))}
               </div>
               <p className="text-[11px] text-muted-foreground">
-                Blir ungefär {plan.cardCount} flashcards och {plan.quizCount} quizfrågor. Du kan
-                alltid ändra.
+                Blir ungefär{" "}
+                {[
+                  wantCards ? `${plan.cardCount} flashcards` : null,
+                  wantQuiz ? `${plan.quizCount} quizfrågor` : null,
+                ]
+                  .filter(Boolean)
+                  .join(" och ")}
+                . Du kan alltid ändra.
               </p>
+            </div>
+
+            <div
+              className="rounded-xl border border-border bg-secondary/30 p-3 space-y-2"
+              role="group"
+              aria-label="Vad vill du få?"
+            >
+              <p className="text-xs font-medium">Vad vill du få?</p>
+              <div className="flex flex-wrap gap-1.5">
+                {(
+                  [
+                    ["both", "Både och"],
+                    ["cards", "Bara flashcards"],
+                    ["quiz", "Bara quiz"],
+                  ] as const
+                ).map(([key, label]) => (
+                  <button
+                    key={key}
+                    type="button"
+                    aria-pressed={output === key}
+                    onClick={() => setOutput(key)}
+                    className={`rounded-full px-3 py-1 text-[11px] border transition ${
+                      output === key
+                        ? "bg-primary text-primary-foreground border-primary"
+                        : "bg-background border-border text-muted-foreground"
+                    }`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
             </div>
             {busy && (
               <MyFloveThinking
@@ -269,7 +317,8 @@ export function StudyBuddyContent() {
                 </>
               ) : (
                 <>
-                  <Sparkles size={16} className="mr-2" /> Skapa flashcards och quiz
+                  <Sparkles size={16} className="mr-2" /> Skapa{" "}
+                  {output === "cards" ? "flashcards" : output === "quiz" ? "quiz" : "flashcards och quiz"}
                 </>
               )}
             </Button>
@@ -357,27 +406,31 @@ export function StudyBuddyContent() {
               )}
 
               <div className="flex flex-wrap gap-2">
-                <Button
-                  size="sm"
-                  variant="secondary"
-                  className="rounded-xl"
-                  onClick={() => {
-                    setOpenSetId(set.id);
-                    setMode("cards");
-                  }}
-                >
-                  <RotateCcw size={14} className="mr-2" /> Flashcards
-                </Button>
-                <Button
-                  size="sm"
-                  className="rounded-xl"
-                  onClick={() => {
-                    setOpenSetId(set.id);
-                    setMode("quiz");
-                  }}
-                >
-                  <ListChecks size={14} className="mr-2" /> Kör quiz
-                </Button>
+                {set.cards.length > 0 && (
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    className="rounded-xl"
+                    onClick={() => {
+                      setOpenSetId(set.id);
+                      setMode("cards");
+                    }}
+                  >
+                    <RotateCcw size={14} className="mr-2" /> Flashcards
+                  </Button>
+                )}
+                {set.quiz.length > 0 && (
+                  <Button
+                    size="sm"
+                    className="rounded-xl"
+                    onClick={() => {
+                      setOpenSetId(set.id);
+                      setMode("quiz");
+                    }}
+                  >
+                    <ListChecks size={14} className="mr-2" /> Kör quiz
+                  </Button>
+                )}
                 <Button
                   size="sm"
                   variant="outline"
