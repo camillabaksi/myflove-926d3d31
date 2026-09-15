@@ -1,3 +1,9 @@
+## 2026-09-15 – Solen visar andningen i Ljusboost
+
+- Solen växer tydligt under hela inandningen, stannar i maxläget under pausen och krymper under hela utandningen.
+- Solens sken, värme och vattenreflektion följer exakt samma 4–2–6-animation som solens storlek.
+- Den kursiva texten växlar sömlöst på samma fasta plats när solen byter riktning.
+
 ## 2026-09-15 – Färgstarkare och närmare Ljusboost
 
 - Solnedgången är tydligare mättad i guld, orange, aprikos, korall, rosa och en mjuk lavendelton högst upp.
