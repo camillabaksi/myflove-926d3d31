@@ -1,21 +1,23 @@
 import { useState } from "react";
 import { Link } from "wouter";
-import { ArrowRight, Hand, Wind, Moon } from "lucide-react";
+import { ArrowRight, Hand, Wind, Moon, Sunset } from "lucide-react";
 import Layout from "@/components/layout";
 import { MyFloveHeader } from "@/components/myflove";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import CalmMode from "@/components/calm-mode";
+import LightBoost from "@/components/light-boost";
 import { useLang } from "@/hooks/use-language";
 import { track } from "@/lib/analytics";
 
 /**
  * Paus – en samlad återhämtningsväg.
- * Samlar befintliga funktioner (Akut Lugn, Mikropaus, Stop-paus) på ett ställe
- * i stället för tre konkurrerande ingångar på Hem. Ingen ny logik.
+ * Samlar befintliga funktioner (Akut Lugn, Mikropaus, Stop-paus, Ljusboost) på
+ * ett ställe i stället för konkurrerande ingångar på Hem. Ingen ny logik.
  */
 export default function PausePage() {
   const { t } = useLang();
   const [calmMode, setCalmMode] = useState<"acute" | "micro" | null>(null);
+  const [lightBoost, setLightBoost] = useState(false);
 
   const open = (kind: "acute" | "micro") => {
     track("home_widget_opened", { source: kind === "acute" ? "akut_lugn" : "mikropaus" });
@@ -29,6 +31,8 @@ export default function PausePage() {
         open={calmMode != null}
         onOpenChange={(next) => !next && setCalmMode(null)}
       />
+      <LightBoost open={lightBoost} onOpenChange={setLightBoost} />
+
       <MyFlovePageGrid area="halsa">
         <MyFloveWide>
           <div className="space-y-5">
