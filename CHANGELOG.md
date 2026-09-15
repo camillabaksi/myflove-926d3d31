@@ -1,3 +1,11 @@
+## 2026-09-15 – Ljusboost i Paus
+
+- Ny sensorisk paus under Paus: en nästan skärmfyllande strand vid solnedgång med varmt ljus, långsamma vågor, glitter på vattnet och en fågel som långsamt passerar.
+- Mjukt havsljud som du själv startar och kan stänga av, byggt direkt i webbläsaren utan ljudfiler.
+- Diskreta texter: "Följ ljuset", "Andas in …/Andas ut …" och "Du behöver inte göra något just nu.".
+- Välj 90 sekunder, 5, 10 eller 15 minuter. Avsluta när du vill och möt en lugn check-in: "Lite mer landad?".
+- Skärmen hålls vaken när webbläsaren tillåter det, och allt respekterar reducerad rörelse. Det här är en sensorisk paus, inte ljusterapi.
+
 ## 2026-09-15 – Ärlig användarstatistik i adminvyn
 
 - Nytt kort "Användare (konton)" med tydliga definitioner: aktiva senaste 30 dagarna, aktiva 7 dagar, med egen data, aktiverade, registrerade, aldrig inloggade, inloggade utan data och test/interna konton.
