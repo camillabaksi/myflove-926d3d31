@@ -1,3 +1,10 @@
+## 2026-09-15 – Uppdaterat material: blueprint 4.3, pitchdeck 4.3 och nya videor
+
+- Living Blueprint 4.3 (docx + pdf) med Återhämtning, Ljusboost, fasta vägar, samlade områdesvyer, kalenderkoppling och ärlig statistik.
+- Pitchdeck 4.3 (pptx + pdf) med två nya sidor: Återhämtning och de fasta vägarna, samt uppdaterad status och validering.
+- Demovideorna (EN/SV) har en ny Återhämtningsscen där solen andas 4–2–6.
+- Reklamfilmerna 16:9 och 9:16 lyfter fram Återhämtning.
+
 ## 2026-09-15 – Återhämtning som samlad paussida
 
 - Paus heter nu Återhämtning och samlar Mikropaus, Akut Lugn, Ljusboost och Stopp-knappen.

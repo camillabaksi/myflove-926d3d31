@@ -5,6 +5,7 @@ import { IntroScene } from "./demo/scenes/IntroScene";
 import { QuickFlowScene } from "./demo/scenes/QuickFlowScene";
 import { FlowScene } from "./demo/scenes/FlowScene";
 import { CapacityScene } from "./demo/scenes/CapacityScene";
+import { RecoveryScene } from "./demo/scenes/RecoveryScene";
 import { MyDayOutroScene } from "./demo/scenes/MyDayOutroScene";
 import { DemoLangProvider, type DemoLang } from "./demo/lang";
 
@@ -27,15 +28,19 @@ export const DemoVideo: React.FC<{ lang?: DemoLang }> = ({ lang = "en" }) => (
       <QuickFlowScene />
     </TransitionSeries.Sequence>
     <TransitionSeries.Transition presentation={fade()} timing={transitionTiming} />
-    <TransitionSeries.Sequence durationInFrames={225}>
+    <TransitionSeries.Sequence durationInFrames={175}>
       <FlowScene />
     </TransitionSeries.Sequence>
     <TransitionSeries.Transition presentation={fade()} timing={transitionTiming} />
-    <TransitionSeries.Sequence durationInFrames={255}>
+    <TransitionSeries.Sequence durationInFrames={205}>
       <CapacityScene />
     </TransitionSeries.Sequence>
     <TransitionSeries.Transition presentation={fade()} timing={transitionTiming} />
-    <TransitionSeries.Sequence durationInFrames={195}>
+    <TransitionSeries.Sequence durationInFrames={150}>
+      <RecoveryScene />
+    </TransitionSeries.Sequence>
+    <TransitionSeries.Transition presentation={fade()} timing={transitionTiming} />
+    <TransitionSeries.Sequence durationInFrames={160}>
       <MyDayOutroScene />
     </TransitionSeries.Sequence>
   </TransitionSeries>

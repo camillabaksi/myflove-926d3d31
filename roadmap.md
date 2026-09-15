@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Blueprint 4.3, pitchdeck 4.3 och alla fyra videor uppdaterade med nytt material (2026-09-15)
+
 - [x] Android AAB 5.2 (versionCode 11) byggd (2026-09-15)
 
 - [x] Återhämtning som samlad paussida med centrerad ingång på Hem och redirect från /paus (2026-09-15)

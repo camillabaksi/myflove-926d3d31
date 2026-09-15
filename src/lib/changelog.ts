@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-15";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Uppdaterat material: blueprint 4.3, pitchdeck 4.3 och nya videor",
+    items: [
+      "Living Blueprint 4.3 med Återhämtning, Ljusboost, fasta vägar och ärlig statistik (2026-09-15)",
+      "Pitchdeck 4.3 med nya sidor om Återhämtning och de fasta vägarna (2026-09-15)",
+      "Demovideor EN/SV med ny Återhämtningsscen där solen andas 4–2–6 (2026-09-15)",
+      "Reklamfilmer 16:9 och 9:16 uppdaterade med Återhämtning (2026-09-15)",
+    ],
+  },
+  {
     title: "Återhämtning som samlad paussida",
     items: [
       "Paus heter Återhämtning och samlar Mikropaus, Akut Lugn, Ljusboost och Stopp-knappen (2026-09-15)",
