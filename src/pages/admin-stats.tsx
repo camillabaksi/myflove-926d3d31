@@ -8,6 +8,7 @@ import CollapsibleSection from "@/components/collapsible-section";
 import { AdminListSorter, sortAdminRows, type AdminSortKey } from "@/components/admin/list-sorter";
 import AnalyticsExport from "@/components/admin/analytics-export";
 import UserAnalytics from "@/components/admin/user-analytics";
+import UserFunnelCard from "@/components/admin/user-funnel";
 import { actionLabel, pageLabel, sectionLabel } from "@/lib/analytics-labels";
 
 /** Kort förklaring under varje block: vad vi mäter och varför det spelar roll. */
@@ -164,9 +165,9 @@ export default function AdminStats() {
         },
         {
           icon: Users,
-          label: t("Aktiva användare"),
+          label: t("Aktiva enheter"),
           value: `${data.activeSessions7d ?? 0}`,
-          hint: t("Senaste 7 dagarna"),
+          hint: t("Webbläsare senaste 7 dagarna"),
         },
         {
           icon: Repeat,
@@ -395,9 +396,9 @@ export default function AdminStats() {
             >
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                 {[
-                  { label: t("Aktiva idag"), value: `${data.activeSessions1d}` },
-                  { label: t("Aktiva 7 dagar"), value: `${data.activeSessions7d}` },
-                  { label: t("Aktiva 30 dagar"), value: `${data.activeSessions30d}` },
+                  { label: t("Aktiva enheter idag"), value: `${data.activeSessions1d}` },
+                  { label: t("Aktiva enheter 7 dagar"), value: `${data.activeSessions7d}` },
+                  { label: t("Aktiva enheter 30 dagar"), value: `${data.activeSessions30d}` },
                   { label: t("Återkommer"), value: `${data.returningRate ?? 0}%` },
                 ].map((row) => (
                   <div
@@ -431,9 +432,9 @@ export default function AdminStats() {
               <div className="space-y-6">
                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
                   {[
-                    { label: t("Registrerade användare"), value: `${data.totalUsers ?? 0}` },
-                    { label: t("Nya senaste 7 dagarna"), value: `${data.newUsers7d ?? 0}` },
-                    { label: t("Besökare (30 d)"), value: `${data.totalSessions}` },
+                    { label: t("Registrerade konton (alla)"), value: `${data.totalUsers ?? 0}` },
+                    { label: t("Nya konton senaste 7 dagarna"), value: `${data.newUsers7d ?? 0}` },
+                    { label: t("Aktiva enheter (30 d)"), value: `${data.totalSessions}` },
                     { label: t("Händelser (30 d)"), value: `${data.totalEvents ?? 0}` },
                     { label: t("Dagligt bruk (DAU/MAU)"), value: `${data.stickiness ?? 0}%` },
                     { label: t("Delar per besökare"), value: `${data.avgSectionsPerSession ?? 0}` },
