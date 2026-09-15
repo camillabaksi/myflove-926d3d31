@@ -69,6 +69,9 @@ export function StudyBuddyContent() {
   const [mode, setMode] = useState<"cards" | "quiz" | null>(null);
   const [addingId, setAddingId] = useState<string | null>(null);
   const [emphasis, setEmphasis] = useState<StudyEmphasis | null>(null);
+  const [output, setOutput] = useState<"both" | "cards" | "quiz">("both");
+  const wantCards = output !== "quiz";
+  const wantQuiz = output !== "cards";
 
   const basePlan = useMemo(() => studyMaterialPlan(toStudyProfile(lifeProfile)), [lifeProfile]);
   const plan = useMemo(
