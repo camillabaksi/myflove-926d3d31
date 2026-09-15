@@ -164,9 +164,11 @@ export function ScheduleImport() {
   return (
     <section className={card}>
       <CollapsibleSection
+        id="ladda-upp-schema"
+        defaultCollapsed
         title={
           <span className="inline-flex items-center gap-2">
-            <Upload className="h-5 w-5 text-primary" /> Ladda upp ditt schema
+            <Upload className="h-5 w-5 text-primary" /> Ladda upp eller byt schema
           </span>
         }
         headingClassName={sectionTitle}
