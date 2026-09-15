@@ -1010,15 +1010,16 @@ export default function Layout({ children }: LayoutProps) {
             <span className="text-[10px] font-semibold text-primary">QuickFlow</span>
           </button>
 
-          {primaryNav.slice(2, 3).map((item) => (
+          {primaryNav.slice(2, 4).map((item) => (
             <BottomNavLink
               key={item.href}
               item={item}
               active={location === item.href || location.startsWith(`${item.href}/`)}
               onClick={() => setMobileMenuOpen(false)}
-              label={item.label}
+              label={item.href === "/assistant" ? "Flow" : item.label}
             />
           ))}
+
 
 
           <button
