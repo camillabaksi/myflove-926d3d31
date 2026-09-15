@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-15";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Ärlig användarstatistik i adminvyn",
+    items: [
+      "Nytt kort \"Användare (konton)\" som räknar personer, inte webbläsare (2026-09-15)",
+      "Aktiva användare = inloggad senaste 30 dagarna och har egen sparad data (2026-09-15)",
+      "Gamla enhetsmåttet heter nu \"Aktiva enheter\" (2026-09-15)",
+      "Test- och demokonton redovisas separat och påverkar inte statistiken (2026-09-15)",
+    ],
+  },
+  {
     title: "Studier är en lugnare sida",
     items: [
       "Schemauppladdningen är hopfälld under \"Ladda upp eller byt schema\" (2026-09-15)",

@@ -1,3 +1,10 @@
+## 2026-09-15 – Ärlig användarstatistik i adminvyn
+
+- Nytt kort "Användare (konton)" med tydliga definitioner: aktiva senaste 30 dagarna, aktiva 7 dagar, med egen data, aktiverade, registrerade, aldrig inloggade, inloggade utan data och test/interna konton.
+- "Aktiva användare" som egentligen räknade webbläsare heter nu "Aktiva enheter" överallt i statistiken.
+- Varje siffra har en kort förklaring så det framgår exakt vad den betyder.
+- Demokontot och admin räknas separat och påverkar inte den externa användarstatistiken. Inga konton eller data har ändrats.
+
 ## 2026-09-15 – Studier är en lugnare sida
 
 - Schemauppladdningen ligger nu hopfälld under "Ladda upp eller byt schema" så sidan börjar med Mitt schema.
