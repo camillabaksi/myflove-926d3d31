@@ -1,3 +1,10 @@
+## 2026-09-15 – Varmare och sömlös Ljusboost
+
+- Solnedgången har fått ett naturligare gyllene, orange och aprikosfärgat ljus med mjuka rosa/lila toner i himlen.
+- Strandfilmen har en inbyggd mjuk övergång där slutet möter början utan hopp i sol, vågor eller färg.
+- Andningsljuset följer fortsatt 4 sekunder in, 2 sekunder paus och 6 sekunder ut, men förändras nu mjukare och mer organiskt.
+- Ljusboost är fortsatt en lugn sensorisk paus – ingen ljusterapi eller behandling.
+
 ## 2026-09-15 – Ljusboost är en verklig strandupplevelse
 
 - Den abstrakta illustrationen är ersatt av en filmisk strand med tydlig horisont, hav, strand, solnedgång och verkligt rörliga vågor.
