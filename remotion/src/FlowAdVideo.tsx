@@ -36,9 +36,9 @@ const beats = [
     from: 570,
     duration: 180,
     source: 1770,
-    eyebrow: "ETT LITET NÄSTA STEG",
+    eyebrow: "ÅTERHÄMTNING NÄR DU BEHÖVER",
     title: "Vila först. Börja sedan mindre.",
-    body: "En plan som faktiskt passar dagen.",
+    body: "Mikropaus, Akut Lugn, Ljusboost och Stopp-knappen – på samma plats.",
   },
 ] as const;
 

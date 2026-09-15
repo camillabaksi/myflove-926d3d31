@@ -22,6 +22,19 @@ export const DEMO_COPY = {
     en: "Move it. Simplify it. Split it. You decide.",
     sv: "Flytta. Förenkla. Dela upp. Du bestämmer.",
   },
+  recoveryLabel: { en: "RECOVERY", sv: "ÅTERHÄMTNING" },
+  recoveryTitle: {
+    en: "One calm place to land",
+    sv: "En samlad väg tillbaka",
+  },
+  recoveryCard1: { en: "Micro pause", sv: "Mikropaus" },
+  recoveryCard2: { en: "Urgent calm", sv: "Akut Lugn" },
+  recoveryCard3: { en: "Light boost", sv: "Ljusboost" },
+  recoveryCard4: { en: "The stop button", sv: "Stopp-knappen" },
+  recoveryBreath: {
+    en: "The sun breathes with you – 4 in, 2 hold, 6 out.",
+    sv: "Solen andas med dig – 4 in, 2 håll, 6 ut.",
+  },
   outroLine1: {
     en: "The goal isn’t to get more done.",
     sv: "Målet är inte att hinna mer.",
