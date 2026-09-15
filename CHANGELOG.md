@@ -1,3 +1,9 @@
+## 2026-09-15 – Välj flashcards, quiz eller båda i Studier
+
+- Nytt val "Vad vill du få?" när du skapar studiematerial: Både och, Bara flashcards eller Bara quiz.
+- Flow skapar bara det du valt, och knappen visar vad som kommer.
+- Material utan quiz visar ingen quizknapp, och tvärtom.
+
 ## 2026-09-15 – Visa mindre viker allt utom översta kortet
 
 - "Visa mindre" på Hem lämnar bara översta kortet med hälsning och snabbknappar.
