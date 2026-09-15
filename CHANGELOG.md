@@ -930,11 +930,19 @@
 - Godkända QuickFlow-poster visas nu automatiskt i Idag utan att tid eller kalenderhändelse krävs.
 - Idag och QuickFlow använder samma post och status: avbockning, prioriteringsordning, redigering och borttagning följer med mellan vyerna.
 - Befintliga poster i dagens lista visas inte dubbelt när de redan finns i QuickFlow.
+## 2026-09-15 – Android-bundle 5.2 (versionCode 11)
+
+- Ny AAB byggd från senaste webbkoden (Återhämtning, fast bottenmeny, Prata med Flow).
+- versionCode höjt 10 → 11, versionName 5.1 → 5.2. Byggs osignerad utan keystore – signeras med egen keystore eller Play App Signing innan uppladdning.
 
 ## 2026-08-31 – QuickFlow: nya dumpar skriver inte längre över listan
 
 - "Godkänn och prioritera" slog tidigare ut hela "Min lista just nu" – inklusive saker du redan hunnit bocka av.
 - Nu slås nya prioriterade saker ihop med befintliga: öppna och klara poster bevaras, och dubbletter av samma sak ersätts av den nya versionen.
+## 2026-09-15 – Android-bundle 5.2 (versionCode 11)
+
+- Ny AAB byggd från senaste webbkoden (Återhämtning, fast bottenmeny, Prata med Flow).
+- versionCode höjt 10 → 11, versionName 5.1 → 5.2. Byggs osignerad utan keystore – signeras med egen keystore eller Play App Signing innan uppladdning.
 
 ## 2026-08-31 – QuickFlow: EN ingång, ett flöde
 
@@ -942,6 +950,10 @@
 - Flödet är alltid detsamma: dumpa allt → Flow delar upp i separata saker → du granskar, redigerar eller tar bort → Flow föreslår en ordning (utan hittade tider) → du godkänner.
 - Bottennavigeringens +, desktopknappen och QuickFlow-sidan öppnar nu exakt samma dialog och samma logik – inga parallella QuickFlow-flöden finns kvar.
 - Prioriteringsförslaget och "Varför?"-förklaringen ligger i "Min lista just nu" tillsammans med ditt batteri från Mitt batteri.
+## 2026-09-15 – Android-bundle 5.2 (versionCode 11)
+
+- Ny AAB byggd från senaste webbkoden (Återhämtning, fast bottenmeny, Prata med Flow).
+- versionCode höjt 10 → 11, versionName 5.1 → 5.2. Byggs osignerad utan keystore – signeras med egen keystore eller Play App Signing innan uppladdning.
 
 ## 2026-08-31 – QuickFlow: ett brain dump blir flera uppgifter
 
@@ -949,29 +961,49 @@
 - Du kan redigera eller ta bort varje punkt, godkänna och prioritera, eller bara spara texten.
 - Modalen är ombyggd för mobil: full bredd minus marginal, inget kapas åt höger och knapparna ligger under varandra.
 - Prioriteringen har fått en liten "Varför?" som förklarar hur Flow tänker.
+## 2026-09-15 – Android-bundle 5.2 (versionCode 11)
+
+- Ny AAB byggd från senaste webbkoden (Återhämtning, fast bottenmeny, Prata med Flow).
+- versionCode höjt 10 → 11, versionName 5.1 → 5.2. Byggs osignerad utan keystore – signeras med egen keystore eller Play App Signing innan uppladdning.
 
 ## 2026-08-31 – QuickFlow: flera saker blir flera aktiviteter
 
 - "Planera den" delar nu upp text som innehåller flera saker i enskilda aktiviteter i stället för att spara allt som en enda.
 - Fler skiljeord känns igen vid uppdelning (sen, sedan, dessutom).
 - Dialogrutor scrollar nu vid mycket text, så hela innehållet och knapparna alltid syns.
+## 2026-09-15 – Android-bundle 5.2 (versionCode 11)
+
+- Ny AAB byggd från senaste webbkoden (Återhämtning, fast bottenmeny, Prata med Flow).
+- versionCode höjt 10 → 11, versionName 5.1 → 5.2. Byggs osignerad utan keystore – signeras med egen keystore eller Play App Signing innan uppladdning.
 
 ## 2026-08-31 – QuickFlow: planera med din egen tid
 
 - "Planera den" öppnar nu ett litet val: idag, imorgon eller valfritt datum – med eller utan tid.
 - Saken hamnar i kalendern precis som du valt. Flow föreslår aldrig tider eller deadlines själv.
+## 2026-09-15 – Android-bundle 5.2 (versionCode 11)
+
+- Ny AAB byggd från senaste webbkoden (Återhämtning, fast bottenmeny, Prata med Flow).
+- versionCode höjt 10 → 11, versionName 5.1 → 5.2. Byggs osignerad utan keystore – signeras med egen keystore eller Play App Signing innan uppladdning.
 
 ## 2026-08-31 – QuickFlow: dela upp i enskilda saker
 
 - Saker som innehåller flera händelser kan nu delas upp i enskilda saker med en knapp direkt i "Min lista just nu".
 - Fältet "Lägg till något" delar automatiskt upp flera saker som skrivs in på en gång.
 - Uppdelningen skapar inga tider, deadlines, påminnelser eller kalenderhändelser.
+## 2026-09-15 – Android-bundle 5.2 (versionCode 11)
+
+- Ny AAB byggd från senaste webbkoden (Återhämtning, fast bottenmeny, Prata med Flow).
+- versionCode höjt 10 → 11, versionName 5.1 → 5.2. Byggs osignerad utan keystore – signeras med egen keystore eller Play App Signing innan uppladdning.
 
 ## 2026-08-31 – QuickFlow: förtydliga varje uppgift
 
 - Varje sak i "Min lista just nu" har nu en diskret Flow-knapp för att se varför uppgiften kan vara värd att göra, uppskattad energinivå och ett litet första steg.
 - Förtydligandet använder Mitt batteri som kontext och sparas tillsammans med QuickFlow-listan – ingen separat loggning, tid, deadline eller kalenderhändelse skapas.
 - Om AI inte är tillgänglig visas ett lugnt lokalt förtydligande i stället.
+## 2026-09-15 – Android-bundle 5.2 (versionCode 11)
+
+- Ny AAB byggd från senaste webbkoden (Återhämtning, fast bottenmeny, Prata med Flow).
+- versionCode höjt 10 → 11, versionName 5.1 → 5.2. Byggs osignerad utan keystore – signeras med egen keystore eller Play App Signing innan uppladdning.
 
 ## 2026-08-31 – QuickFlow: "Jag har mycket på en gång"
 
@@ -980,6 +1012,10 @@
 - Prioriteringen tar hänsyn till din nivå i Mitt batteri: små viktiga saker först när energin är låg, det tyngsta först när den är hög.
 - "Min lista just nu" ligger kvar: börja med en sak, bocka av, ändra ordning eller nivå, lägg till nytt och ta bort.
 - Klart-markering frågar (frivilligt) hur det påverkade energin via den befintliga energiloggningen. "Planera den" skickar saken vidare till Planera – annars skapas ingen kalenderhändelse eller påminnelse.
+## 2026-09-15 – Android-bundle 5.2 (versionCode 11)
+
+- Ny AAB byggd från senaste webbkoden (Återhämtning, fast bottenmeny, Prata med Flow).
+- versionCode höjt 10 → 11, versionName 5.1 → 5.2. Byggs osignerad utan keystore – signeras med egen keystore eller Play App Signing innan uppladdning.
 
 ## 2026-08-31 – Min energi följer MyFloves designspråk
 
@@ -988,39 +1024,67 @@
 - Idag visar varje registrering som en horisontell rad med påverkan, svårighetsgrad och små ikonknappar för ta bort.
 - Mönster över tid och Dina återkommande faktorer visas som rena rader i stället för smala kolumner, med "Varför?" bredvid rubriken.
 - All loggning, beräkning och synk är oförändrad – det här är enbart en presentationsändring.
+## 2026-09-15 – Android-bundle 5.2 (versionCode 11)
+
+- Ny AAB byggd från senaste webbkoden (Återhämtning, fast bottenmeny, Prata med Flow).
+- versionCode höjt 10 → 11, versionName 5.1 → 5.2. Byggs osignerad utan keystore – signeras med egen keystore eller Play App Signing innan uppladdning.
 
 ## 2026-08-31 – Välj själv vilka dagar programmet läggs på
 
 - "Dagar/vecka" i Ditt mål är nu veckodags-chips (Mån–Sön) i stället för en siffra.
 - Programmet skapas på exakt de dagar du valt – Flow får dina dagar och passen läggs ut på dem.
 - Dina valda dagar sparas med målet och fylls i igen när du redigerar programmet.
+## 2026-09-15 – Android-bundle 5.2 (versionCode 11)
+
+- Ny AAB byggd från senaste webbkoden (Återhämtning, fast bottenmeny, Prata med Flow).
+- versionCode höjt 10 → 11, versionName 5.1 → 5.2. Byggs osignerad utan keystore – signeras med egen keystore eller Play App Signing innan uppladdning.
 
 ## 2026-08-31 – "Visa bara det viktigaste" är av tills du själv slår på det
 
 - Enkelt läge i Mer-menyn är nu AV som standard i stället för PÅ.
 - Tidigare sparat standardvärde rensas automatiskt – läget aktiveras bara när du själv trycker på knappen.
+## 2026-09-15 – Android-bundle 5.2 (versionCode 11)
+
+- Ny AAB byggd från senaste webbkoden (Återhämtning, fast bottenmeny, Prata med Flow).
+- versionCode höjt 10 → 11, versionName 5.1 → 5.2. Byggs osignerad utan keystore – signeras med egen keystore eller Play App Signing innan uppladdning.
 
 ## 2026-08-31 – Välj flera dagar för ett träningspass
 
 - Pass-dialogen i Träning har nu veckodags-chips (Mån–Sön) i stället för fritext för dagen.
 - När du lägger till ett pass kan du välja flera dagar – samma pass skapas på varje vald dag.
 - Vid redigering av ett befintligt pass väljs en dag, och befintliga pass med annan dagtext mappas till närmaste veckodag.
+## 2026-09-15 – Android-bundle 5.2 (versionCode 11)
+
+- Ny AAB byggd från senaste webbkoden (Återhämtning, fast bottenmeny, Prata med Flow).
+- versionCode höjt 10 → 11, versionName 5.1 → 5.2. Byggs osignerad utan keystore – signeras med egen keystore eller Play App Signing innan uppladdning.
 
 ## 2026-08-31 – Bottennavigationen sitter alltid fast längst ner
 
 - Appens layout-root är nu exakt en skärmhöjd (`h-[100dvh]`, `overflow-hidden`, `overscroll-none`) så dokumentet aldrig kan scrolla under bottennaven.
 - `overscroll-behavior-y: none` på html/body stoppar gummibands-scroll i mobila webbvyer som tidigare kunde få den fasta bottennaven att åka med uppåt.
 - Verifierat på /hem, /kalender och /anpassa: naven ligger kvar vid botten vid scroll medan innehållet scrollar inuti som vanligt.
+## 2026-09-15 – Android-bundle 5.2 (versionCode 11)
+
+- Ny AAB byggd från senaste webbkoden (Återhämtning, fast bottenmeny, Prata med Flow).
+- versionCode höjt 10 → 11, versionName 5.1 → 5.2. Byggs osignerad utan keystore – signeras med egen keystore eller Play App Signing innan uppladdning.
 
 ## 2026-08-31 – Flow-hjälparen är mindre och tydligare
 
 - Maskoten i "Flow hjälper" är nu kompaktare (ny `compact`-scenstorlek) så att den inte dominerar vyn.
 - Slide-ytan har fått mindre vertikal höjd och tätare spacing, vilket gör Flow-karusellen lugnare och lättare att läsa.
+## 2026-09-15 – Android-bundle 5.2 (versionCode 11)
+
+- Ny AAB byggd från senaste webbkoden (Återhämtning, fast bottenmeny, Prata med Flow).
+- versionCode höjt 10 → 11, versionName 5.1 → 5.2. Byggs osignerad utan keystore – signeras med egen keystore eller Play App Signing innan uppladdning.
 
 ## 2026-08-31 – Flow ser dagens check-ins i sin kontext
 
 - Flows personliga kontext innehåller nu dagens morgon-, dag- och kvällscheck-ins från den befintliga energi- och måendeloggen.
 - Flow får tid, energi, mående och användarens eventuella fritext – utan att skapa en ny datakälla eller blanda ihop hälsologgning med aktiviteter.
+## 2026-09-15 – Android-bundle 5.2 (versionCode 11)
+
+- Ny AAB byggd från senaste webbkoden (Återhämtning, fast bottenmeny, Prata med Flow).
+- versionCode höjt 10 → 11, versionName 5.1 → 5.2. Byggs osignerad utan keystore – signeras med egen keystore eller Play App Signing innan uppladdning.
 
 ## 2026-08-31 – Flow bjuder in till mjuka check-ins under dagen
 
@@ -1028,6 +1092,10 @@
 - Popupen använder den befintliga centrala "Logga energi & mående"-vägen; ingen separat energi-, mående- eller aktivitetskälla skapas.
 - "Hoppa över" stänger utan skuld och respekteras resten av tidsfönstret. En befintlig observation i tidsfönstret suppressar en ny popup.
 - Varför?-förklaringen beskriver kort hur flera observationer hjälper Flow att se förändringar över dagen. Hälsokontext skapar aldrig aktiviteter, kalenderposter eller påminnelser.
+## 2026-09-15 – Android-bundle 5.2 (versionCode 11)
+
+- Ny AAB byggd från senaste webbkoden (Återhämtning, fast bottenmeny, Prata med Flow).
+- versionCode höjt 10 → 11, versionName 5.1 → 5.2. Byggs osignerad utan keystore – signeras med egen keystore eller Play App Signing innan uppladdning.
 
 ## 2026-08-31 – Mående, energi och ekonomi är nu kontobundna
 
@@ -1035,10 +1103,18 @@
 - Energiloggar har `energy_logs` som source of truth. `myflove-energy-log` är nu enbart en lokal cache som speglar molnet (60 dagar) för insikter och mönster. Loggningar gjorda utan inloggning hamnar i `myflove-energy-pending` och flyttas upp till kontot vid nästa inloggning.
 - Efter utloggning rensas den lokala krypterade kopian som tidigare, men allt hämtas tillbaka vid inloggning: energi, mående, fritext/orsak och ekonomi överlever logga ut → logga in.
 - Fritext och "vad påverkar" sparas fortsatt på måendeobservationen som hälsokontext – aldrig som aktivitet, kalenderpost eller påminnelse.
+## 2026-09-15 – Android-bundle 5.2 (versionCode 11)
+
+- Ny AAB byggd från senaste webbkoden (Återhämtning, fast bottenmeny, Prata med Flow).
+- versionCode höjt 10 → 11, versionName 5.1 → 5.2. Byggs osignerad utan keystore – signeras med egen keystore eller Play App Signing innan uppladdning.
 
 ## 2026-08-31 – Namn och morgon/kväll-batteri stannar kvar vid utloggning
 
 - Ditt namn (`myflove-preferred-name`), dagens tidsramar (`myflove-day-window`) och morgon-/kvällsvärdena i Mitt batteri (`myflove-day-edges`) läggs till i enhetsnycklarna i `clearLocalUserData` – de rensas inte längre när du loggar ut, så appen känns igen dig vid nästa besök på samma enhet.
+## 2026-09-15 – Android-bundle 5.2 (versionCode 11)
+
+- Ny AAB byggd från senaste webbkoden (Återhämtning, fast bottenmeny, Prata med Flow).
+- versionCode höjt 10 → 11, versionName 5.1 → 5.2. Byggs osignerad utan keystore – signeras med egen keystore eller Play App Signing innan uppladdning.
 
 ## 2026-08-31 – Fix: länkar i expanderade kort navigerar igen
 
@@ -2649,6 +2725,10 @@ Initial baseline av MyFlove — ett svenskspråkigt "lugnt livsflöde"-dashboard
 
 - Städningssidan använder nu samma MyFlove-block, 2px-borders och rundningar som resten av appen.
 - Översikt, material, steg och eget steg ligger i symmetriska block i det gemensamma rutnätet.
+## 2026-09-15 – Android-bundle 5.2 (versionCode 11)
+
+- Ny AAB byggd från senaste webbkoden (Återhämtning, fast bottenmeny, Prata med Flow).
+- versionCode höjt 10 → 11, versionName 5.1 → 5.2. Byggs osignerad utan keystore – signeras med egen keystore eller Play App Signing innan uppladdning.
 
 ## 2026-08-31 – QuickFlow räknar med batteriet
 
