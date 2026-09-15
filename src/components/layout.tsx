@@ -2,7 +2,6 @@ import { ReactNode, useState, useEffect, useMemo } from "react";
 import { Link, useLocation } from "wouter";
 import { useRouter } from "@tanstack/react-router";
 import {
-  MessageCircle,
   Home,
   Target,
   CheckSquare,
