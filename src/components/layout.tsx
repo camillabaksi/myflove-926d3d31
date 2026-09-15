@@ -299,10 +299,10 @@ export default function Layout({ children }: LayoutProps) {
       hint: "Mönster: vad som brukar ge och ta energi",
     },
     {
-      href: "/paus",
+      href: "/aterhamtning",
       label: "Paus",
       icon: Wind,
-      hint: "Mikropaus, akut lugn och stopp-knappen",
+      hint: "Återhämtning: mikropaus, akut lugn, ljusboost och stopp-knappen",
       essential: true,
     },
     {
