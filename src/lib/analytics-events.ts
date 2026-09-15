@@ -119,6 +119,16 @@ export const ANALYTICS_EVENTS = [
   "next_step_accepted",
   /** Kvällschecken "Hur blev dagen?" besvarad. */
   "evening_check_completed",
+  /** Återhämtningssidan visad. */
+  "recovery_viewed",
+  /** Mikropaus startad från Återhämtning. */
+  "recovery_micro_opened",
+  /** Akut Lugn startat från Återhämtning. */
+  "recovery_acute_opened",
+  /** Ljusboost startad från Återhämtning. */
+  "recovery_lightboost_opened",
+  /** Stopp-knappen öppnad. */
+  "recovery_stop_opened",
 ] as const;
 
 export type AnalyticsEventName = (typeof ANALYTICS_EVENTS)[number];
@@ -230,6 +240,11 @@ const EVENT_SECTION: Record<AnalyticsEventName, string> = {
   next_step_shown: "dagsresa",
   next_step_accepted: "dagsresa",
   evening_check_completed: "dagsresa",
+  recovery_viewed: "aterhamtning",
+  recovery_micro_opened: "aterhamtning",
+  recovery_acute_opened: "aterhamtning",
+  recovery_lightboost_opened: "aterhamtning",
+  recovery_stop_opened: "aterhamtning",
 };
 
 export function eventSection(name: AnalyticsEventName): string {

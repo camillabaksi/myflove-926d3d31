@@ -9,6 +9,7 @@
 /** Vilken del av appen händelsen hör till. */
 export const SECTION_LABELS: Record<string, string> = {
   app: "Appen",
+  aterhamtning: "Återhämtning",
   admin: "Admin",
   anpassa: "Anpassa",
   "anpassa-hem": "Anpassa hem",
@@ -165,6 +166,13 @@ export const ACTION_LABELS: Record<string, string> = {
   idea_saved: "Idé sparad",
   session_completed: "Pass klart",
   settings_opened: "Inställningar öppnade",
+
+  // Återhämtning
+  recovery_viewed: "Återhämtning visad",
+  recovery_micro_opened: "Mikropaus startad",
+  recovery_acute_opened: "Akut Lugn startat",
+  recovery_lightboost_opened: "Ljusboost startad",
+  recovery_stop_opened: "Stopp-knappen öppnad",
   install_prompt_shown: "Installationsfråga visad",
   install_started: "Installation påbörjad",
   install_completed: "Installation klar",
