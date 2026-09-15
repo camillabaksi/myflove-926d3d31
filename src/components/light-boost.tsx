@@ -153,20 +153,34 @@ export default function LightBoost({
             boxShadow: "0 0 24vmin 8vmin rgba(255,170,90,0.35)",
           }}
         />
+        {/* Horisontens varma linje */}
+        <div
+          className="absolute inset-x-0 bottom-[46%] h-[6vmin] -translate-y-1/2"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(255,214,150,0) 0%, rgba(255,226,170,0.55) 50%, rgba(255,214,150,0) 100%)",
+            filter: "blur(10px)",
+          }}
+        />
         {/* Hav */}
         <div
           className="absolute inset-x-0 bottom-0 h-[46%]"
           style={{ background: "linear-gradient(180deg, #e78a52 0%, #a4527a 28%, #4b2c60 66%, #241a3c 100%)" }}
         >
-          {/* Solglitter på vattnet */}
+          {/* Solglitter på vattnet – en mjuk kon som breder ut sig mot stranden */}
           <div
-            className="lb-glitter absolute left-1/2 top-0 h-full w-[34vmin] -translate-x-1/2"
+            className="lb-glitter absolute left-1/2 top-0 h-full w-[72vmin] -translate-x-1/2"
             style={{
               background:
-                "linear-gradient(180deg, rgba(255,226,160,0.85) 0%, rgba(255,196,120,0.4) 40%, rgba(255,180,110,0.06) 100%)",
-              filter: "blur(6px)",
+                "linear-gradient(180deg, rgba(255,232,180,0.9) 0%, rgba(255,200,130,0.45) 38%, rgba(255,185,120,0.05) 100%)",
+              clipPath: "polygon(43% 0%, 57% 0%, 100% 100%, 0% 100%)",
+              filter: "blur(18px)",
+              maskImage: "radial-gradient(70% 100% at 50% 0%, #000 0%, rgba(0,0,0,0.35) 60%, transparent 100%)",
+              WebkitMaskImage:
+                "radial-gradient(70% 100% at 50% 0%, #000 0%, rgba(0,0,0,0.35) 60%, transparent 100%)",
             }}
           />
+
           <div
             className="lb-wave absolute inset-x-[-20%] top-[26%] h-[14%] rounded-[50%]"
             style={{ background: "rgba(255,214,160,0.18)", filter: "blur(10px)" }}
