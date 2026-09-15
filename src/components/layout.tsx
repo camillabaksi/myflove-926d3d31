@@ -699,12 +699,15 @@ export default function Layout({ children }: LayoutProps) {
   }, [navSearch, navItems]);
 
   /**
-   * Bottennavet under utvärderingsperioden: fyra fasta huvudvägar för alla –
-   * Hem, QuickFlow, Kalender och Paus. Inga val, ingen kontostatus styr detta.
+   * Bottennavet under utvärderingsperioden: fem fasta huvudvägar för alla –
+   * Hem, QuickFlow, Kalender, Paus och Prata med Flow. Inga val, ingen
+   * kontostatus styr detta.
    */
   const primaryNav = useMemo(() => {
     const pick = (href: string) => navItems.find((i) => i.href === href);
-    return [pick("/hem"), pick("/kalender"), pick("/paus")].filter(Boolean) as typeof navItems;
+    return [pick("/hem"), pick("/kalender"), pick("/paus"), pick("/assistant")].filter(
+      Boolean,
+    ) as typeof navItems;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navItems]);
 
