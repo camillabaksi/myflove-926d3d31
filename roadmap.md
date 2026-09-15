@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Egna genvägar på startsidan – välj själv vad som ska ligga på Hem (2026-09-15)
+
 - [x] Anonym statistik per pausväg (Mikropaus, Akut Lugn, Ljusboost, Stopp) med adminkort (2026-09-15)
 
 - [x] Blueprint 4.3, pitchdeck 4.3 och alla fyra videor uppdaterade med nytt material (2026-09-15)
