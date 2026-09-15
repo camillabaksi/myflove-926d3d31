@@ -1641,10 +1641,9 @@ html[data-npf-less="true"] [data-npf="optional"] {
 
 .lb-scene-shade {
   background:
-    linear-gradient(180deg, hsl(283 52% 78% / 0.2), hsl(337 91% 72% / 0.3) 25%, hsl(8 100% 66% / 0.27) 43%, hsl(31 100% 58% / 0.2) 56%, transparent 69%),
-    radial-gradient(ellipse at 50% 40%, hsl(48 100% 69% / 0.62), hsl(27 100% 57% / 0.42) 27%, hsl(354 94% 64% / 0.22) 49%, transparent 69%),
+    linear-gradient(180deg, hsl(283 58% 73% / 0.25), hsl(337 94% 65% / 0.38) 25%, hsl(8 100% 57% / 0.37) 43%, hsl(31 100% 50% / 0.28) 58%, transparent 72%),
+    radial-gradient(ellipse at 50% 40%, hsl(47 100% 57% / 0.58), hsl(25 100% 50% / 0.5) 28%, hsl(351 98% 57% / 0.3) 51%, transparent 72%),
     linear-gradient(0deg, hsl(17 62% 16% / 0.12), transparent 34%);
-  mix-blend-mode: screen;
 }
 
 .light-boost-scene {
@@ -1711,10 +1710,10 @@ html[data-npf-less="true"] [data-npf="optional"] {
 .lb-sun-disc {
   background: radial-gradient(
     circle,
-    hsl(51 100% 94% / 0.99) 0%,
-    hsl(47 100% 76% / 0.99) 48%,
-    hsl(38 100% 60% / 0.92) 73%,
-    hsl(25 100% 55% / 0.3) 100%
+    hsl(51 100% 88% / 0.99) 0%,
+    hsl(46 100% 67% / 0.99) 48%,
+    hsl(36 100% 52% / 0.94) 73%,
+    hsl(21 100% 49% / 0.38) 100%
   );
   box-shadow:
     0 0 22px 8px hsl(47 100% 73% / 0.86),

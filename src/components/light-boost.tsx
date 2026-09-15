@@ -195,11 +195,11 @@ export default function LightBoost({
           <div aria-hidden className="lb-breath-warmth absolute inset-0" />
           <div
             aria-hidden
-            className="lb-sun-glow absolute left-1/2 top-[40%] size-[82vmin] min-h-72 min-w-72 max-h-[52rem] max-w-[52rem] -translate-x-1/2 -translate-y-1/2 rounded-full"
+            className="lb-sun-glow absolute left-1/2 top-[40%] size-[96vmin] min-h-80 min-w-80 max-h-[58rem] max-w-[58rem] -translate-x-1/2 -translate-y-1/2 rounded-full"
           />
           <div
             aria-hidden
-            className="lb-sun-disc absolute left-1/2 top-[40%] size-[23vmin] min-h-20 min-w-20 max-h-56 max-w-56 -translate-x-1/2 -translate-y-1/2 rounded-full"
+            className="lb-sun-disc absolute left-1/2 top-[40%] size-[34vmin] min-h-28 min-w-28 max-h-72 max-w-72 -translate-x-1/2 -translate-y-1/2 rounded-full"
           />
           <div aria-hidden className="lb-sun-reflection absolute left-1/2 top-[44%] h-[50%] w-[58vw] min-w-52 max-w-3xl -translate-x-1/2" />
           <span
@@ -280,7 +280,7 @@ export default function LightBoost({
 
         {phase === "running" && (
           <div
-            className={`lb-guidance absolute left-1/2 top-[68%] h-12 w-full max-w-xs -translate-x-1/2 transition-opacity duration-1000 ${elapsed < 45 ? "opacity-100" : "opacity-0"}`}
+            className={`lb-guidance absolute left-1/2 top-[64%] h-12 w-full max-w-xs -translate-x-1/2 transition-opacity duration-1000 ${elapsed < 45 ? "opacity-100" : "opacity-0"}`}
           >
             <p aria-live="polite" className="sr-only">
               {line}
