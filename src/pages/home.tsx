@@ -315,16 +315,18 @@ export default function Home() {
 
             <NextLectureHomeRow />
 
-            {/* Paus – en diskret återhämtningsväg, inte tre konkurrerande knappar. */}
-            <Link
-              href="/paus"
-              onClick={() => track("home_widget_opened", { source: "paus" })}
-              data-testid="home-pause-entry"
-              className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-full border border-border/60 bg-card/70 px-4 text-sm font-medium text-ink shadow-soft transition-colors hover:border-primary/35 hover:bg-card"
-            >
-              <Wind className="h-4 w-4 shrink-0 text-primary" aria-hidden />
-              {t("Paus")}
-            </Link>
+            {/* Återhämtning – en lugn, tydligt centrerad trygghetsväg. */}
+            <div className="mt-4 flex w-full justify-center">
+              <Link
+                href="/aterhamtning"
+                onClick={() => track("home_widget_opened", { source: "paus" })}
+                data-testid="home-pause-entry"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-border/60 bg-card/70 px-6 text-sm font-semibold text-ink shadow-soft transition-colors hover:border-primary/35 hover:bg-card"
+              >
+                <Wind className="h-4 w-4 shrink-0 text-primary" aria-hidden />
+                {t("Återhämtning")}
+              </Link>
+            </div>
           </section>
         </MyFloveWide>
 

@@ -299,10 +299,10 @@ export default function Layout({ children }: LayoutProps) {
       hint: "Mönster: vad som brukar ge och ta energi",
     },
     {
-      href: "/paus",
+      href: "/aterhamtning",
       label: "Paus",
       icon: Wind,
-      hint: "Mikropaus, akut lugn och stopp-knappen",
+      hint: "Återhämtning: mikropaus, akut lugn, ljusboost och stopp-knappen",
       essential: true,
     },
     {
@@ -556,7 +556,7 @@ export default function Layout({ children }: LayoutProps) {
         hrefs: [
           "/halsa",
           "/mitt-batteri",
-          "/paus",
+          "/aterhamtning",
           "/stop-paus",
           "/traning",
           "/daglig-rutin",
@@ -704,7 +704,7 @@ export default function Layout({ children }: LayoutProps) {
    */
   const primaryNav = useMemo(() => {
     const pick = (href: string) => navItems.find((i) => i.href === href);
-    return [pick("/hem"), pick("/kalender"), pick("/paus"), pick("/assistant")].filter(
+    return [pick("/hem"), pick("/kalender"), pick("/aterhamtning"), pick("/assistant")].filter(
       Boolean,
     ) as typeof navItems;
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-15";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Återhämtning som samlad paussida",
+    items: [
+      "Paus heter Återhämtning och samlar Mikropaus, Akut Lugn, Ljusboost och Stopp-knappen (2026-09-15)",
+      "Centrerad Återhämtning-knapp på Hem (2026-09-15)",
+      "Bottenmenyns Paus öppnar Återhämtning och gamla /paus-länkar leder vidare dit (2026-09-15)",
+    ],
+  },
+  {
     title: "Prata med Flow i bottenmenyn",
     items: [
       "\"Prata med Flow\" är en fast plats i bottenmenyn vid sidan av Hem, Kalender och Paus (2026-09-15)",

@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Återhämtning som samlad paussida med centrerad ingång på Hem och redirect från /paus (2026-09-15)
+
 - [x] Prata med Flow som fast plats i bottenmenyn, kort "Flow", tydligt aktiv markering (2026-09-15)
 
 - [x] Fast bottenmeny med Hem, QuickFlow, Kalender och Paus för alla användare (2026-09-15)

@@ -1,3 +1,10 @@
+## 2026-09-15 – Återhämtning som samlad paussida
+
+- Paus heter nu Återhämtning och samlar Mikropaus, Akut Lugn, Ljusboost och Stopp-knappen.
+- Knappen på Hem är tydligt centrerad och leder direkt till Återhämtning.
+- Bottenmenyn behåller "Paus" som fjärde fasta väg och öppnar Återhämtning.
+- Gamla /paus-länkar leder automatiskt vidare till /aterhamtning.
+
 ## 2026-09-15 – Prata med Flow i bottenmenyn
 
 - "Prata med Flow" är nu en fast plats i bottenmenyn vid sidan av Hem, Kalender och Paus.

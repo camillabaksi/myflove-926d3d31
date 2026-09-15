@@ -74,6 +74,7 @@ import { Route as AppDagligRutinRouteImport } from './routes/_app.daglig-rutin'
 import { Route as AppCalendarRouteImport } from './routes/_app.calendar'
 import { Route as AppBeloningarRouteImport } from './routes/_app.beloningar'
 import { Route as AppBarnRouteImport } from './routes/_app.barn'
+import { Route as AppAterhamtningRouteImport } from './routes/_app.aterhamtning'
 import { Route as AppAssistantRouteImport } from './routes/_app.assistant'
 import { Route as AppAnteckningarRouteImport } from './routes/_app.anteckningar'
 import { Route as AppAnpassaHemRouteImport } from './routes/_app.anpassa-hem'
@@ -414,6 +415,11 @@ const AppBarnRoute = AppBarnRouteImport.update({
   path: '/barn',
   getParentRoute: () => AppRoute,
 } as any)
+const AppAterhamtningRoute = AppAterhamtningRouteImport.update({
+  id: '/aterhamtning',
+  path: '/aterhamtning',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppAssistantRoute = AppAssistantRouteImport.update({
   id: '/assistant',
   path: '/assistant',
@@ -509,6 +515,7 @@ export interface FileRoutesByFullPath {
   '/anpassa-hem': typeof AppAnpassaHemRoute
   '/anteckningar': typeof AppAnteckningarRoute
   '/assistant': typeof AppAssistantRoute
+  '/aterhamtning': typeof AppAterhamtningRoute
   '/barn': typeof AppBarnRoute
   '/beloningar': typeof AppBeloningarRoute
   '/calendar': typeof AppCalendarRoute
@@ -589,6 +596,7 @@ export interface FileRoutesByTo {
   '/anpassa-hem': typeof AppAnpassaHemRoute
   '/anteckningar': typeof AppAnteckningarRoute
   '/assistant': typeof AppAssistantRoute
+  '/aterhamtning': typeof AppAterhamtningRoute
   '/barn': typeof AppBarnRoute
   '/beloningar': typeof AppBeloningarRoute
   '/calendar': typeof AppCalendarRoute
@@ -671,6 +679,7 @@ export interface FileRoutesById {
   '/_app/anpassa-hem': typeof AppAnpassaHemRoute
   '/_app/anteckningar': typeof AppAnteckningarRoute
   '/_app/assistant': typeof AppAssistantRoute
+  '/_app/aterhamtning': typeof AppAterhamtningRoute
   '/_app/barn': typeof AppBarnRoute
   '/_app/beloningar': typeof AppBeloningarRoute
   '/_app/calendar': typeof AppCalendarRoute
@@ -753,6 +762,7 @@ export interface FileRouteTypes {
     | '/anpassa-hem'
     | '/anteckningar'
     | '/assistant'
+    | '/aterhamtning'
     | '/barn'
     | '/beloningar'
     | '/calendar'
@@ -833,6 +843,7 @@ export interface FileRouteTypes {
     | '/anpassa-hem'
     | '/anteckningar'
     | '/assistant'
+    | '/aterhamtning'
     | '/barn'
     | '/beloningar'
     | '/calendar'
@@ -914,6 +925,7 @@ export interface FileRouteTypes {
     | '/_app/anpassa-hem'
     | '/_app/anteckningar'
     | '/_app/assistant'
+    | '/_app/aterhamtning'
     | '/_app/barn'
     | '/_app/beloningar'
     | '/_app/calendar'
@@ -1456,6 +1468,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppBarnRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/aterhamtning': {
+      id: '/_app/aterhamtning'
+      path: '/aterhamtning'
+      fullPath: '/aterhamtning'
+      preLoaderRoute: typeof AppAterhamtningRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/assistant': {
       id: '/_app/assistant'
       path: '/assistant'
@@ -1564,6 +1583,7 @@ interface AppRouteChildren {
   AppAnpassaHemRoute: typeof AppAnpassaHemRoute
   AppAnteckningarRoute: typeof AppAnteckningarRoute
   AppAssistantRoute: typeof AppAssistantRoute
+  AppAterhamtningRoute: typeof AppAterhamtningRoute
   AppBarnRoute: typeof AppBarnRoute
   AppBeloningarRoute: typeof AppBeloningarRoute
   AppCalendarRoute: typeof AppCalendarRoute
@@ -1625,6 +1645,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppAnpassaHemRoute: AppAnpassaHemRoute,
   AppAnteckningarRoute: AppAnteckningarRoute,
   AppAssistantRoute: AppAssistantRoute,
+  AppAterhamtningRoute: AppAterhamtningRoute,
   AppBarnRoute: AppBarnRoute,
   AppBeloningarRoute: AppBeloningarRoute,
   AppCalendarRoute: AppCalendarRoute,
