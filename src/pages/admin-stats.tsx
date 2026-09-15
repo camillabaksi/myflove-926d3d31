@@ -227,6 +227,8 @@ export default function AdminStats() {
               ))}
             </div>
 
+            <UserFunnelCard className={cardClass} />
+
             <CollapsibleSection
               title={t("Marknadsanalys – Sverige först")}
               id="admin-market-analysis-sweden"
@@ -481,7 +483,7 @@ export default function AdminStats() {
 
                 <div>
                   <h3 className="text-sm font-semibold mb-2">
-                    {t("Aktiva användare per dag (senaste 14 dagarna)")}
+                    {t("Aktiva enheter per dag (senaste 14 dagarna)")}
                   </h3>
                   <div className="flex items-end gap-1.5 h-28">
                     {(data.dailyActiveSessions ?? []).map((day) => (
