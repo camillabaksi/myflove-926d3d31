@@ -10,28 +10,29 @@ export const CHANGELOG_UPDATED = "2026-09-15";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
-    title: "Ljusboost i Paus",
+    title: "Ljusboost är en verklig strandupplevelse",
     items: [
-      "Strand vid solnedgång med varmt ljus, långsamma vågor och en liten fågel (2026-09-15)",
-      "Mjukt havsljud som du själv startar och kan stänga av (2026-09-15)",
-      "Diskreta texter: \"Följ ljuset\", andningsrytm och \"Du behöver inte göra något just nu.\" (2026-09-15)",
-      "Välj 90 sekunder, 5, 10 eller 15 minuter och avsluta med \"Lite mer landad?\" (2026-09-15)",
+      "Filmisk strand med tydlig horisont, solnedgång och verkligt rörliga vågor (2026-09-15)",
+      "Varmt ljus andas i rytmen 4 sekunder in, 2 sekunder paus och 6 sekunder ut (2026-09-15)",
+      "Verkligt CC0-inspelat havsljud som du själv startar och kan stänga av (2026-09-15)",
+      'Diskreta texter: "Följ ljuset", andningsrytm och "Du behöver inte göra något just nu." (2026-09-15)',
+      'Välj 90 sekunder, 5, 10 eller 15 minuter och avsluta med "Lite mer landad?" (2026-09-15)',
     ],
   },
   {
     title: "Ärlig användarstatistik i adminvyn",
     items: [
-      "Nytt kort \"Användare (konton)\" som räknar personer, inte webbläsare (2026-09-15)",
+      'Nytt kort "Användare (konton)" som räknar personer, inte webbläsare (2026-09-15)',
       "Aktiva användare = inloggad senaste 30 dagarna och har egen sparad data (2026-09-15)",
-      "Gamla enhetsmåttet heter nu \"Aktiva enheter\" (2026-09-15)",
+      'Gamla enhetsmåttet heter nu "Aktiva enheter" (2026-09-15)',
       "Test- och demokonton redovisas separat och påverkar inte statistiken (2026-09-15)",
     ],
   },
   {
     title: "Studier är en lugnare sida",
     items: [
-      "Schemauppladdningen är hopfälld under \"Ladda upp eller byt schema\" (2026-09-15)",
-      "Hem-valet heter nu \"Vill du visa nästa lektion på Hem?\" och är frivilligt (2026-09-15)",
+      'Schemauppladdningen är hopfälld under "Ladda upp eller byt schema" (2026-09-15)',
+      'Hem-valet heter nu "Vill du visa nästa lektion på Hem?" och är frivilligt (2026-09-15)',
     ],
   },
   {
@@ -46,7 +47,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     title: "Svensk version av 30-sekundersdemon",
     items: [
       "Demon finns nu även på svenska med samma design och berättelse (2026-09-14)",
-      "Demons texter är översatta, från \"En lugnare vardag\" till avslutet (2026-09-14)",
+      'Demons texter är översatta, från "En lugnare vardag" till avslutet (2026-09-14)',
     ],
   },
   {

@@ -1526,103 +1526,100 @@ html[data-npf-less="true"] [data-npf="optional"] {
   );
 }
 
-/* --- Ljusboost: strand vid solnedgång ---------------------------------- */
-@keyframes lb-sun-breathe {
+/* --- Ljusboost: verklig strand och 4s in, 2s paus, 6s ut --------------- */
+@keyframes lb-breathe-glow {
   0%,
   100% {
-    transform: translateY(0) scale(1);
-    opacity: 0.95;
+    opacity: 0.08;
+    transform: translate(-50%, -50%) scale(0.82);
+  }
+  33.333% {
+    opacity: 0.48;
+    transform: translate(-50%, -50%) scale(1.12);
   }
   50% {
-    transform: translateY(-1.2%) scale(1.035);
-    opacity: 1;
+    opacity: 0.48;
+    transform: translate(-50%, -50%) scale(1.12);
   }
 }
-@keyframes lb-wave-drift {
-  0% {
-    transform: translate3d(-12%, 0, 0) scaleY(1);
-  }
-  50% {
-    transform: translate3d(0%, 0.6%, 0) scaleY(1.06);
-  }
-  100% {
-    transform: translate3d(-12%, 0, 0) scaleY(1);
-  }
-}
-@keyframes lb-glitter {
+
+@keyframes lb-breathe-warmth {
   0%,
   100% {
-    opacity: 0.35;
-    transform: translateY(0) scaleX(1);
+    opacity: 0.02;
   }
+  33.333%,
   50% {
-    opacity: 0.75;
-    transform: translateY(-0.4%) scaleX(1.05);
+    opacity: 0.2;
   }
 }
-@keyframes lb-bird {
-  0% {
-    transform: translate3d(-10vw, 8vh, 0) scale(0.75);
-    opacity: 0;
+
+@keyframes lb-water-light {
+  0%,
+  100% {
+    transform: translate3d(-5vw, 1vh, 0);
+    opacity: 0.25;
   }
-  10% {
+  50% {
+    transform: translate3d(5vw, -1vh, 0);
     opacity: 0.8;
   }
-  50% {
-    transform: translate3d(45vw, 0vh, 0) scale(1);
-  }
-  90% {
-    opacity: 0.8;
-  }
-  100% {
-    transform: translate3d(108vw, 7vh, 0) scale(0.8);
-    opacity: 0;
-  }
 }
-@keyframes lb-spark {
-  0%,
-  100% {
-    transform: translateY(0);
-    opacity: 0.55;
-  }
-  50% {
-    transform: translateY(-10px);
-    opacity: 1;
-  }
+
+.lb-scene-shade {
+  background: linear-gradient(
+    180deg,
+    hsl(var(--foreground) / 0.22),
+    transparent 24%,
+    transparent 70%,
+    hsl(var(--foreground) / 0.42)
+  );
 }
-.lb-sun {
-  animation: lb-sun-breathe 12s ease-in-out infinite;
+
+.lb-breath-warmth {
+  background: radial-gradient(circle at 50% 42%, hsl(var(--sun) / 0.55), transparent 54%);
+  mix-blend-mode: screen;
+  animation: lb-breathe-warmth 12s cubic-bezier(0.45, 0, 0.2, 1) 6s infinite backwards;
 }
-.lb-wave {
-  animation: lb-wave-drift 26s ease-in-out infinite;
+
+.lb-sun-glow {
+  background: radial-gradient(
+    circle,
+    hsl(var(--cream) / 0.92) 0%,
+    hsl(var(--sun) / 0.55) 34%,
+    transparent 72%
+  );
+  filter: blur(18px);
+  mix-blend-mode: screen;
+  animation: lb-breathe-glow 12s cubic-bezier(0.45, 0, 0.2, 1) 6s infinite backwards;
+  will-change: transform, opacity;
 }
-.lb-wave-slow {
-  animation: lb-wave-drift 38s ease-in-out infinite reverse;
+
+.lb-water-light {
+  background: hsl(var(--cream) / 0.88);
+  box-shadow: 0 0 18px 6px hsl(var(--sun) / 0.48);
+  animation: lb-water-light 20s ease-in-out infinite;
 }
-.lb-glitter {
-  animation: lb-glitter 9s ease-in-out infinite;
+
+.lb-beach-video {
+  filter: saturate(0.94) contrast(0.98);
 }
-.lb-bird {
-  animation: lb-bird 46s linear infinite;
+
+.lb-still .lb-beach-video {
+  display: none;
 }
-.lb-spark {
-  animation: lb-spark 10s ease-in-out infinite;
-}
-.lb-still .lb-sun,
-.lb-still .lb-wave,
-.lb-still .lb-wave-slow,
-.lb-still .lb-glitter,
-.lb-still .lb-bird,
-.lb-still .lb-spark {
+.lb-still .lb-breath-warmth,
+.lb-still .lb-sun-glow,
+.lb-still .lb-water-light {
   animation: none;
 }
 @media (prefers-reduced-motion: reduce) {
-  .lb-sun,
-  .lb-wave,
-  .lb-wave-slow,
-  .lb-glitter,
-  .lb-bird,
-  .lb-spark {
+  .lb-beach-video {
+    display: none;
+  }
+  .lb-breath-warmth,
+  .lb-sun-glow,
+  .lb-water-light {
     animation: none;
   }
 }
