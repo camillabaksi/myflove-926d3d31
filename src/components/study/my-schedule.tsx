@@ -117,7 +117,7 @@ export function MySchedule() {
           onChange={(e) => setShowNextLectureOnHome(e.target.checked)}
           className="h-4 w-4 accent-current"
         />
-        Visa nästa lektion på Hem
+        Vill du visa nästa lektion på Hem?
       </label>
 
       <Dialog open={!!viewFile} onOpenChange={(open) => !open && setViewFile(null)}>

@@ -1,3 +1,8 @@
+## 2026-09-15 – Studier är en lugnare sida
+
+- Schemauppladdningen ligger nu hopfälld under "Ladda upp eller byt schema" så sidan börjar med Mitt schema.
+- Valet på Hem heter nu "Vill du visa nästa lektion på Hem?" och är fortsatt helt frivilligt.
+
 ## 2026-09-15 – Reklamvideo: Så hjälper Flow
 
 - Den verkliga Flow-dialogen har klippts till en 30-sekunders reklamfilm om låg energi, omplanering och ett litet nästa steg.

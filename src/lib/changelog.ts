@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-15";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Studier är en lugnare sida",
+    items: [
+      "Schemauppladdningen är hopfälld under \"Ladda upp eller byt schema\" (2026-09-15)",
+      "Hem-valet heter nu \"Vill du visa nästa lektion på Hem?\" och är frivilligt (2026-09-15)",
+    ],
+  },
+  {
     title: "Reklamvideo: Så hjälper Flow",
     items: [
       "En verklig Flow-dialog visar hur låg energi möts med omplanering och ett litet nästa steg (2026-09-15)",
