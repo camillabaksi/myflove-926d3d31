@@ -1,3 +1,9 @@
+## 2026-09-15 – Visa mindre viker allt utom översta kortet
+
+- "Visa mindre" på Hem lämnar bara översta kortet med hälsning och snabbknappar.
+- Även "Din dag – när du vill fördjupa" viks nu ihop, inte bara övriga block.
+- Tryck "Enkelt läge är på – visa allt igen" för att få tillbaka allt som vanligt.
+
 ## 2026-09-15 – Egna genvägar på startsidan
 
 - Nytt block "Mina genvägar" på Hem där du själv lägger till det du behöver.

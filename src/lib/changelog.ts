@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-15";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Visa mindre viker allt utom översta kortet",
+    items: [
+      "\"Visa mindre\" på Hem lämnar bara översta kortet med hälsning och snabbknappar (2026-09-15)",
+      "Även \"Din dag – när du vill fördjupa\" viks ihop i enkelt läge (2026-09-15)",
+      "\"Visa allt igen\" återställer allt som vanligt (2026-09-15)",
+    ],
+  },
+  {
     title: "Egna genvägar på startsidan",
     items: [
       "Nytt block \"Mina genvägar\" på Hem – lägg till det du behöver (2026-09-15)",

@@ -348,8 +348,9 @@ export default function Home() {
           </button>
         </MyFloveWide>
 
-        {/* Dagens detaljer finns kvar, men visas först när användaren ber om dem. */}
-        <MyFloveWide style={{ order: 0.3 }} className="min-w-0">
+        {/* Dagens detaljer finns kvar, men visas först när användaren ber om dem.
+            Enkelt läge ("Visa mindre") viker också detta – bara översta kortet syns. */}
+        <MyFloveWide style={{ order: 0.3 }} className="min-w-0" data-npf="optional">
           <CollapsibleSection
             id="home-day-support"
             title={t("Din dag – när du vill fördjupa")}
