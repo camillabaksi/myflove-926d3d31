@@ -123,6 +123,18 @@ export default function HomeCustomizePage() {
         </CollapsibleSection>
 
         <CollapsibleSection
+          title="Mina genvägar"
+          id="home-customize-shortcuts"
+          headingClassName="text-sm font-semibold uppercase tracking-wide"
+          className="rounded-3xl border-2 border-border/60 bg-card p-4 shadow-soft"
+        >
+          <p className="mb-3 text-sm text-muted-foreground">
+            Välj vad du vill ha direkt på startsidan. Tryck för att lägga till eller ta bort.
+          </p>
+          <HomeShortcuts />
+        </CollapsibleSection>
+
+        <CollapsibleSection
           title="Introduktionen"
           id="home-customize-intro"
           headingClassName="text-sm font-semibold uppercase tracking-wide"
