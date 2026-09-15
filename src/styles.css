@@ -1723,12 +1723,14 @@ html[data-npf-less="true"] [data-npf="optional"] {
 }
 
 .lb-sun-reflection {
-  clip-path: polygon(42% 0, 58% 0, 82% 100%, 18% 100%);
   background:
-    repeating-linear-gradient(180deg, hsl(48 100% 95% / 0.72) 0 3px, transparent 3px 11px),
-    linear-gradient(180deg, hsl(45 100% 88% / 0.82), hsl(31 100% 72% / 0.52) 55%, transparent 100%);
-  filter: blur(3px);
-  mask-image: linear-gradient(180deg, transparent, black 8%, black 72%, transparent);
+    linear-gradient(90deg, transparent 0 31%, hsl(45 100% 91% / 0.18) 43%, hsl(48 100% 96% / 0.7) 50%, hsl(36 100% 78% / 0.2) 59%, transparent 72%),
+    repeating-linear-gradient(176deg, transparent 0 7px, hsl(47 100% 94% / 0.5) 8px 10px, transparent 11px 21px);
+  filter: blur(5px);
+  mask-image:
+    linear-gradient(180deg, transparent, black 9%, black 74%, transparent 100%),
+    radial-gradient(ellipse 42% 100% at 50% 0%, black 0 64%, transparent 100%);
+  mask-composite: intersect;
   mix-blend-mode: screen;
   transform-origin: 50% 0;
   animation: lb-breathe-reflection 12s ease-in-out 6s infinite backwards;
