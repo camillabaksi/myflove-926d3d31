@@ -6,6 +6,7 @@ import { HOME_BLOCKS, useHomeLayout } from "@/lib/home-layout";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowUp, ArrowDown, Eye, EyeOff, RotateCcw, PlayCircle } from "lucide-react";
 import CollapsibleSection from "@/components/collapsible-section";
+import HomeShortcuts from "@/components/home-shortcuts";
 
 /**
  * Anpassa hemskärmen – välj vilka block som syns, i vilken ordning,
@@ -120,6 +121,18 @@ export default function HomeCustomizePage() {
               );
             })}
           </ul>
+        </CollapsibleSection>
+
+        <CollapsibleSection
+          title="Mina genvägar"
+          id="home-customize-shortcuts"
+          headingClassName="text-sm font-semibold uppercase tracking-wide"
+          className="rounded-3xl border-2 border-border/60 bg-card p-4 shadow-soft"
+        >
+          <p className="mb-3 text-sm text-muted-foreground">
+            Välj vad du vill ha direkt på startsidan. Tryck för att lägga till eller ta bort.
+          </p>
+          <HomeShortcuts />
         </CollapsibleSection>
 
         <CollapsibleSection

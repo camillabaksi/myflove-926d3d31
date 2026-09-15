@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-15";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Egna genvägar på startsidan",
+    items: [
+      "Nytt block \"Mina genvägar\" på Hem – lägg till det du behöver (2026-09-15)",
+      "Ta bort genvägar direkt på Hem eller under Anpassa hemskärmen (2026-09-15)",
+      "Valen sparas per konto och följer med mellan enheter (2026-09-15)",
+    ],
+  },
+  {
     title: "Statistik för Återhämtning",
     items: [
       "Mikropaus, Akut Lugn, Ljusboost och Stopp-knappen räknas var för sig, anonymt (2026-09-15)",

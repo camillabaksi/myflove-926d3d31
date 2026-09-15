@@ -6,6 +6,7 @@ import { ExpandableBlock } from "@/components/myflove/expandable-block";
 
 import { useHomeLayout, type HomeBlockId } from "@/lib/home-layout";
 import RoutinesMedicationToday from "@/components/routines-medication-today";
+import HomeShortcuts from "@/components/home-shortcuts";
 
 import { Link } from "wouter";
 import Layout from "@/components/layout";
@@ -312,6 +313,8 @@ export default function Home() {
                 <ArrowRight className="h-4 w-4 shrink-0 text-primary sm:hidden" aria-hidden />
               </Link>
             )}
+
+            <HomeShortcuts />
 
             <NextLectureHomeRow />
 

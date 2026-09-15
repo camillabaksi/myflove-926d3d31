@@ -1,3 +1,10 @@
+## 2026-09-15 – Egna genvägar på startsidan
+
+- Nytt block "Mina genvägar" på Hem där du själv lägger till det du behöver.
+- Välj bland befintliga sidor: inköpslista, timer, ekonomi, kalender, familj, rutiner med flera.
+- Ta bort en genväg direkt på Hem; samma val finns även under "Anpassa hemskärmen".
+- Valen sparas per konto och följer med mellan enheter.
+
 ## 2026-09-15 – Statistik för Återhämtning
 
 - Mikropaus, Akut Lugn, Ljusboost och Stopp-knappen räknas nu var för sig (anonymt).
