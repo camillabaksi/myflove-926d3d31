@@ -195,7 +195,7 @@ export default function LightBoost({
           <div aria-hidden className="lb-breath-warmth absolute inset-0" />
           <div
             aria-hidden
-            className="lb-sun-glow absolute left-1/2 top-[39%] size-[34vmin] -translate-x-1/2 -translate-y-1/2 rounded-full"
+            className="lb-sun-glow absolute left-1/2 top-[40.5%] size-[46vmin] min-h-40 min-w-40 -translate-x-1/2 -translate-y-1/2 rounded-full"
           />
           <span
             aria-hidden
@@ -274,12 +274,22 @@ export default function LightBoost({
         )}
 
         {phase === "running" && (
-          <p
-            aria-live="polite"
-            className={`lb-caption mb-[16vh] max-w-xs rounded-full px-5 py-2 text-base font-medium text-cream shadow-float backdrop-blur-sm transition-opacity duration-1000 sm:text-lg ${line ? "opacity-100" : "opacity-0"}`}
+          <div
+            className={`lb-guidance relative mb-[16vh] h-10 w-full max-w-xs transition-opacity duration-1000 ${elapsed < 45 ? "opacity-100" : "opacity-0"}`}
           >
-            {line || "Lugn strandpaus"}
-          </p>
+            <p aria-live="polite" className="sr-only">
+              {line}
+            </p>
+            <span aria-hidden className="lb-follow-light absolute inset-0 flex items-center justify-center text-base font-medium text-cream sm:text-lg">
+              Följ ljuset
+            </span>
+            <span aria-hidden className="lb-breath-in absolute inset-0 flex items-center justify-center text-base font-medium text-cream sm:text-lg">
+              Andas in …
+            </span>
+            <span aria-hidden className="lb-breath-out absolute inset-0 flex items-center justify-center text-base font-medium text-cream sm:text-lg">
+              Andas ut …
+            </span>
+          </div>
         )}
 
         {phase === "checkin" && (

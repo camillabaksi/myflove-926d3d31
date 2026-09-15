@@ -1,3 +1,10 @@
+## 2026-09-15 – Mjukare sol och andningssynk i Ljusboost
+
+- Solen är större och mer framträdande, med varmare gyllene/aprikos ljus och mjuka korall- och lavendeltoner över scenen.
+- Ljusskenet tonar ned under inandning och växer långsamt under utandning, exakt synkat med texten i samma 4–2–6-rytm.
+- Andningstexterna ligger stilla på samma plats och övergår mjukt i varandra utan kort, hopp eller hårda etiketter.
+- Den sömlösa strandloopen, vågrörelsen och havsljudet är oförändrade.
+
 ## 2026-09-15 – Varmare och sömlös Ljusboost
 
 - Solnedgången har fått ett naturligare gyllene, orange och aprikosfärgat ljus med mjuka rosa/lila toner i himlen.

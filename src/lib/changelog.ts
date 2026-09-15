@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-15";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Mjukare sol och andningssynk i Ljusboost",
+    items: [
+      "Större, tydligare sol med varmare gyllene, aprikos, korall och mjuka lavendeltoner (2026-09-15)",
+      "Ljusskenet tonar ned vid inandning och växer långsamt vid utandning i samma 4–2–6-rytm som texten (2026-09-15)",
+      "Andningstexten övergår mjukt på en fast plats utan kort eller layoutskiften (2026-09-15)",
+    ],
+  },
+  {
     title: "Varmare och sömlös Ljusboost",
     items: [
       "Naturligare gyllene, orange och aprikosfärgad solnedgång med mjuka rosa/lila toner (2026-09-15)",
