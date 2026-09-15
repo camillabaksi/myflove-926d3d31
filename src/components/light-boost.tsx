@@ -240,10 +240,14 @@ export default function LightBoost({
                   key={item.seconds}
                   type="button"
                   size="sm"
-                  variant={seconds === item.seconds ? "secondary" : "ghost"}
+                  variant="ghost"
                   onClick={() => setSeconds(item.seconds)}
                   aria-pressed={seconds === item.seconds}
-                  className="rounded-full border border-cream/25 text-cream hover:bg-cream/15 hover:text-cream data-[state=active]:text-foreground"
+                  className={`rounded-full border ${
+                    seconds === item.seconds
+                      ? "border-secondary bg-secondary text-secondary-foreground hover:bg-secondary/90 hover:text-secondary-foreground"
+                      : "border-cream/25 text-cream hover:bg-cream/15 hover:text-cream"
+                  }`}
                 >
                   {item.label}
                 </Button>

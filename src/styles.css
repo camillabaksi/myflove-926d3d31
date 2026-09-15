@@ -1563,14 +1563,14 @@ html[data-npf-less="true"] [data-npf="optional"] {
 .lb-breath-warmth {
   background: radial-gradient(circle at 50% 42%, hsl(var(--sun) / 0.55), transparent 54%);
   mix-blend-mode: screen;
-  animation: lb-breathe-warmth 12s cubic-bezier(0.45, 0, 0.2, 1) infinite;
+  animation: lb-breathe-warmth 12s cubic-bezier(0.45, 0, 0.2, 1) 6s infinite backwards;
 }
 
 .lb-sun-glow {
   background: radial-gradient(circle, hsl(var(--cream) / 0.92) 0%, hsl(var(--sun) / 0.55) 34%, transparent 72%);
   filter: blur(18px);
   mix-blend-mode: screen;
-  animation: lb-breathe-glow 12s cubic-bezier(0.45, 0, 0.2, 1) infinite;
+  animation: lb-breathe-glow 12s cubic-bezier(0.45, 0, 0.2, 1) 6s infinite backwards;
   will-change: transform, opacity;
 }
 
