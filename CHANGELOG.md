@@ -1,7 +1,8 @@
-## 2026-09-15 – Ljusboost i Paus
+## 2026-09-15 – Ljusboost är en verklig strandupplevelse
 
-- Ny sensorisk paus under Paus: en nästan skärmfyllande strand vid solnedgång med varmt ljus, långsamma vågor, glitter på vattnet och en fågel som långsamt passerar.
-- Mjukt havsljud som du själv startar och kan stänga av, byggt direkt i webbläsaren utan ljudfiler.
+- Den abstrakta illustrationen är ersatt av en filmisk strand med tydlig horisont, hav, strand, solnedgång och verkligt rörliga vågor.
+- Solen och scenens varma ljus följer en lugn rytm: 4 sekunder in, 2 sekunder paus och 6 sekunder ut.
+- Mjukt, verkligt CC0-inspelat havsljud startar först när du startar och kan stängas av när som helst.
 - Diskreta texter: "Följ ljuset", "Andas in …/Andas ut …" och "Du behöver inte göra något just nu.".
 - Välj 90 sekunder, 5, 10 eller 15 minuter. Avsluta när du vill och möt en lugn check-in: "Lite mer landad?".
 - Skärmen hålls vaken när webbläsaren tillåter det, och allt respekterar reducerad rörelse. Det här är en sensorisk paus, inte ljusterapi.

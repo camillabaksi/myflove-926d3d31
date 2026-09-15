@@ -10,10 +10,11 @@ export const CHANGELOG_UPDATED = "2026-09-15";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
-    title: "Ljusboost i Paus",
+    title: "Ljusboost är en verklig strandupplevelse",
     items: [
-      "Strand vid solnedgång med varmt ljus, långsamma vågor och en liten fågel (2026-09-15)",
-      "Mjukt havsljud som du själv startar och kan stänga av (2026-09-15)",
+      "Filmisk strand med tydlig horisont, solnedgång och verkligt rörliga vågor (2026-09-15)",
+      "Varmt ljus andas i rytmen 4 sekunder in, 2 sekunder paus och 6 sekunder ut (2026-09-15)",
+      "Verkligt CC0-inspelat havsljud som du själv startar och kan stänga av (2026-09-15)",
       "Diskreta texter: \"Följ ljuset\", andningsrytm och \"Du behöver inte göra något just nu.\" (2026-09-15)",
       "Välj 90 sekunder, 5, 10 eller 15 minuter och avsluta med \"Lite mer landad?\" (2026-09-15)",
     ],
