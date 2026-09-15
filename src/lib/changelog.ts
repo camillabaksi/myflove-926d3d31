@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-15";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Varmare sol och dovare reflektion i Ljusboost",
+    items: [
+      "Solen mer orange i kärna och sken, från gult mot djupare orange (2026-09-15)",
+      "Vit prickmarkering i vattnet borttagen (2026-09-15)",
+      "Ljusreflektionen i vågorna dovare och mer subtil (2026-09-15)",
+    ],
+  },
+  {
     title: "Solen visar andningen i Ljusboost",
     items: [
       "Solen växer under inandningen, vilar i maxläget och krymper under utandningen (2026-09-15)",

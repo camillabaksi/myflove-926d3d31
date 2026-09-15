@@ -1,3 +1,9 @@
+## 2026-09-15 – Varmare sol och dovare reflektion i Ljusboost
+
+- Solen är mer orange i kärna och sken, från gult mot djupare orange toner.
+- Den vita lilla prickmarkeringen i vattnet är borttagen.
+- Ljusreflektionen i vågorna är dovare och mer subtil, i fas med andningen.
+
 ## 2026-09-15 – Solen visar andningen i Ljusboost
 
 - Solen växer tydligt under hela inandningen, stannar i maxläget under pausen och krymper under hela utandningen.

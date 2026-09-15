@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Varmare orange sol, borttagen vit prickmarkering och dovare ljusreflektion i Ljusboost (2026-09-15)
+
 - [x] Solen själv som tydlig andningsguide, exakt synkad med sken, reflektion och text (2026-09-15)
 
 - [x] Färgstarkare Ljusboost med större närmare sol, tydligare sken och högre kursiv andningstext (2026-09-15)
