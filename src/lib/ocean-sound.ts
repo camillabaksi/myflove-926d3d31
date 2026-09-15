@@ -1,4 +1,4 @@
-import oceanAudioAsset from "@/assets/light-boost-ocean.ogg.asset.json";
+import oceanAudioAsset from "@/assets/light-boost-ocean.mp3.asset.json";
 
 /**
  * Ett verkligt, CC0-licensierat havsljud från Wikimedia Commons.
