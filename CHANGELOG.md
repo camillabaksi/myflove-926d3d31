@@ -1,3 +1,8 @@
+## 2026-09-15 – Reklamvideo: Så hjälper Flow
+
+- Den verkliga Flow-dialogen har klippts till en 30-sekunders reklamfilm om låg energi, omplanering och ett litet nästa steg.
+- Filmen finns i både 16:9 för pitch och 9:16 för sociala medier, med MyFloves lavendel-, rosa- och plommonfärgade uttryck.
+
 ## 2026-09-14 – Svensk version av 30-sekundersdemon
 
 - Demon finns nu även på svenska med samma design, tempo och berättelse.

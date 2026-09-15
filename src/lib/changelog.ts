@@ -6,9 +6,16 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-09-14";
+export const CHANGELOG_UPDATED = "2026-09-15";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  {
+    title: "Reklamvideo: Så hjälper Flow",
+    items: [
+      "En verklig Flow-dialog visar hur låg energi möts med omplanering och ett litet nästa steg (2026-09-15)",
+      "Reklamfilmen finns i både 16:9 för pitch och 9:16 för sociala medier (2026-09-15)",
+    ],
+  },
   {
     title: "Svensk version av 30-sekundersdemon",
     items: [

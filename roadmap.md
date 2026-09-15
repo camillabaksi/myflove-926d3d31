@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Reklamvideo om hur Flow faktiskt hjälper, i 16:9 och 9:16 (2026-09-15)
+
 - [x] Rutiner och Medicin samlade på en sida: dagens lista först, hantering vid behov och ingen dubblett i Påminnelser (2026-09-14)
 
 - [x] Lugnare Barn, Familj och Relationer: vem det gäller först, fördjupning under Mer (2026-09-14)
