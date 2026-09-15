@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Fast bottenmeny med Hem, QuickFlow, Kalender och Paus för alla användare (2026-09-15)
+
 - [x] Varmare orange sol, borttagen vit prickmarkering och dovare ljusreflektion i Ljusboost (2026-09-15)
 
 - [x] Solen själv som tydlig andningsguide, exakt synkad med sken, reflektion och text (2026-09-15)

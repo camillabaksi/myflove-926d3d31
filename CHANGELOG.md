@@ -1,3 +1,10 @@
+## 2026-09-15 – Fast bottenmeny: Hem, QuickFlow, Kalender och Paus
+
+- Bottenmenyn visar samma fyra huvudvägar för alla användare, oavsett konto eller läge.
+- Paus leder direkt till den befintliga pausvägen med Mikropaus, Akut Lugn och Ljusboost.
+- Valet av egna platser i bottenmenyn är pausat; allt annat nås som vanligt via Mer.
+- Extra bottenutrymme med safe-area så innehåll aldrig hamnar bakom menyn.
+
 ## 2026-09-15 – Varmare sol och dovare reflektion i Ljusboost
 
 - Solen är mer orange i kärna och sken, från gult mot djupare orange toner.
