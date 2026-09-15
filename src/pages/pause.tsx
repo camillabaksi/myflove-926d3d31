@@ -38,7 +38,7 @@ export default function PausePage() {
           <div className="space-y-5">
             <MyFloveHeader
               area="aterhamtning"
-              title={t("Paus")}
+              title={t("Återhämtning")}
               emojiKey="wellness"
               description={t("Vad behöver du just nu?")}
             />
