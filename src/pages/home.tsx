@@ -6,6 +6,7 @@ import { ExpandableBlock } from "@/components/myflove/expandable-block";
 
 import { useHomeLayout, type HomeBlockId } from "@/lib/home-layout";
 import RoutinesMedicationToday from "@/components/routines-medication-today";
+import HomeShortcuts from "@/components/home-shortcuts";
 
 import { Link } from "wouter";
 import Layout from "@/components/layout";
