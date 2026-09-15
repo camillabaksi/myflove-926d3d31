@@ -14,6 +14,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     items: [
       "En verklig Flow-dialog visar hur låg energi möts med omplanering och ett litet nästa steg (2026-09-15)",
       "Reklamfilmen finns i både 16:9 för pitch och 9:16 för sociala medier (2026-09-15)",
+      "Den stående filmen har mer luft mellan budskapet och mobilen (2026-09-15)",
     ],
   },
   {
