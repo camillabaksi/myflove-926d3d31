@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Ljusboost med tydligare varm sol, utandningsstyrt ljussken och mjukt synkad text (2026-09-15)
+
 - [x] Ljusboost med varmare solnedgång, organisk andningspuls och sömlös havsloop (2026-09-15)
 
 - [x] Ljusboost ombyggd till en verklig filmisk strand med naturligt havsljud och 4–2–6-andning (2026-09-15)

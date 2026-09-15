@@ -1530,23 +1530,19 @@ html[data-npf-less="true"] [data-npf="optional"] {
 @keyframes lb-breathe-glow {
   0%,
   100% {
-    opacity: 0.12;
-    transform: translate(-50%, -50%) scale(0.9);
-  }
-  18% {
-    opacity: 0.24;
-    transform: translate(-50%, -50%) scale(0.96);
+    opacity: 0.48;
+    transform: translate(-50%, -50%) scale(1.08);
   }
   33.333% {
-    opacity: 0.42;
-    transform: translate(-50%, -50%) scale(1.06);
+    opacity: 0.18;
+    transform: translate(-50%, -50%) scale(0.91);
   }
   50% {
-    opacity: 0.4;
-    transform: translate(-50%, -50%) scale(1.055);
+    opacity: 0.18;
+    transform: translate(-50%, -50%) scale(0.91);
   }
-  72% {
-    opacity: 0.25;
+  74% {
+    opacity: 0.29;
     transform: translate(-50%, -50%) scale(0.98);
   }
 }
@@ -1554,17 +1550,52 @@ html[data-npf-less="true"] [data-npf="optional"] {
 @keyframes lb-breathe-warmth {
   0%,
   100% {
-    opacity: 0.04;
-  }
-  18% {
-    opacity: 0.1;
+    opacity: 0.2;
   }
   33.333%,
   50% {
-    opacity: 0.18;
+    opacity: 0.055;
   }
-  72% {
-    opacity: 0.1;
+  74% {
+    opacity: 0.12;
+  }
+}
+
+@keyframes lb-follow-light {
+  0%,
+  58% {
+    opacity: 0.92;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes lb-breath-in-copy {
+  0%,
+  24% {
+    opacity: 0.92;
+  }
+  33.333%,
+  88% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0.92;
+  }
+}
+
+@keyframes lb-breath-out-copy {
+  0%,
+  44% {
+    opacity: 0;
+  }
+  54%,
+  88% {
+    opacity: 0.92;
+  }
+  100% {
+    opacity: 0;
   }
 }
 
@@ -1582,8 +1613,9 @@ html[data-npf-less="true"] [data-npf="optional"] {
 
 .lb-scene-shade {
   background:
-    linear-gradient(180deg, hsl(292 35% 34% / 0.08), transparent 28%),
-    linear-gradient(0deg, hsl(18 35% 12% / 0.3), transparent 34%);
+    linear-gradient(180deg, hsl(286 40% 72% / 0.1), hsl(350 72% 78% / 0.06) 28%, transparent 48%),
+    radial-gradient(ellipse at 50% 42%, hsl(38 100% 76% / 0.24), hsl(18 92% 68% / 0.08) 28%, transparent 56%),
+    linear-gradient(0deg, hsl(18 42% 13% / 0.22), transparent 32%);
 }
 
 .light-boost-scene {
@@ -1600,14 +1632,32 @@ html[data-npf-less="true"] [data-npf="optional"] {
   background: hsl(18 32% 14% / 0.3);
 }
 
+.lb-guidance {
+  filter: drop-shadow(0 2px 12px hsl(18 45% 16% / 0.42));
+}
+
+.lb-follow-light {
+  animation: lb-follow-light 6.8s ease-in-out both;
+}
+
+.lb-breath-in {
+  opacity: 0;
+  animation: lb-breath-in-copy 12s ease-in-out 6s infinite;
+}
+
+.lb-breath-out {
+  opacity: 0;
+  animation: lb-breath-out-copy 12s ease-in-out 6s infinite;
+}
+
 .lb-control:hover {
   background: hsl(18 32% 14% / 0.48);
 }
 
 .lb-breath-warmth {
   background:
-    radial-gradient(circle at 50% 40%, hsl(38 100% 76% / 0.58), transparent 40%),
-    linear-gradient(180deg, hsl(326 70% 77% / 0.08), hsl(24 100% 67% / 0.2) 58%, transparent 82%);
+    radial-gradient(circle at 50% 41%, hsl(42 100% 84% / 0.68), hsl(30 100% 72% / 0.26) 28%, transparent 48%),
+    linear-gradient(180deg, hsl(326 72% 79% / 0.1), hsl(22 100% 67% / 0.24) 58%, transparent 84%);
   mix-blend-mode: screen;
   animation: lb-breathe-warmth 12s cubic-bezier(0.37, 0, 0.2, 1) 6s infinite backwards;
 }
@@ -1615,12 +1665,13 @@ html[data-npf-less="true"] [data-npf="optional"] {
 .lb-sun-glow {
   background: radial-gradient(
     circle,
-    hsl(45 100% 94% / 0.96) 0%,
-    hsl(38 100% 72% / 0.72) 26%,
-    hsl(24 100% 66% / 0.3) 48%,
-    transparent 72%
+    hsl(48 100% 96% / 0.98) 0%,
+    hsl(42 100% 82% / 0.82) 18%,
+    hsl(32 100% 70% / 0.52) 40%,
+    hsl(18 96% 68% / 0.16) 62%,
+    transparent 78%
   );
-  filter: blur(22px);
+  filter: blur(26px);
   mix-blend-mode: screen;
   animation: lb-breathe-glow 12s cubic-bezier(0.37, 0, 0.2, 1) 6s infinite backwards;
   will-change: transform, opacity;
@@ -1633,7 +1684,7 @@ html[data-npf-less="true"] [data-npf="optional"] {
 }
 
 .lb-beach-video {
-  filter: saturate(1.06) contrast(1.01) brightness(1.01);
+  filter: saturate(1.12) sepia(0.06) contrast(0.99) brightness(1.035);
 }
 
 .lb-still .lb-beach-video {
@@ -1641,8 +1692,17 @@ html[data-npf-less="true"] [data-npf="optional"] {
 }
 .lb-still .lb-breath-warmth,
 .lb-still .lb-sun-glow,
-.lb-still .lb-water-light {
+.lb-still .lb-water-light,
+.lb-still .lb-follow-light,
+.lb-still .lb-breath-in,
+.lb-still .lb-breath-out {
   animation: none;
+}
+.lb-still .lb-follow-light {
+  opacity: 0;
+}
+.lb-still .lb-breath-in {
+  opacity: 0.9;
 }
 @media (prefers-reduced-motion: reduce) {
   .lb-beach-video {
@@ -1650,7 +1710,17 @@ html[data-npf-less="true"] [data-npf="optional"] {
   }
   .lb-breath-warmth,
   .lb-sun-glow,
-  .lb-water-light {
+  .lb-water-light,
+  .lb-follow-light,
+  .lb-breath-in,
+  .lb-breath-out {
     animation: none;
+  }
+  .lb-follow-light,
+  .lb-breath-out {
+    opacity: 0;
+  }
+  .lb-breath-in {
+    opacity: 0.9;
   }
 }
