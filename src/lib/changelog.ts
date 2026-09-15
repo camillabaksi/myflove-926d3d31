@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-15";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Färgstarkare och närmare Ljusboost",
+    items: [
+      "Mättad solnedgång i guld, orange, aprikos, korall, rosa och mjuk lavendel (2026-09-15)",
+      "Större och närmare sol med ett tydligare varmt sken över himmel och vatten (2026-09-15)",
+      "Kursiv andningstext högre i nedre mitten, sömlöst synkad med skenets 4–2–6-rytm (2026-09-15)",
+    ],
+  },
+  {
     title: "Ljusboost närmare den varma strandreferensen",
     items: [
       "Större, närmare sol med mjuk fotografisk kärna och tydlig visuell tyngd (2026-09-15)",

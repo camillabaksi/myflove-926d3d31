@@ -1,3 +1,10 @@
+## 2026-09-15 – Färgstarkare och närmare Ljusboost
+
+- Solnedgången är tydligare mättad i guld, orange, aprikos, korall, rosa och en mjuk lavendelton högst upp.
+- Solen och dess fotografiska sken är större, närmare och mer närvarande över himlen och vattenreflektionen.
+- Den kursiva andningstexten ligger högre i nedre mitten och tonar sömlöst på samma fasta plats.
+- Utandningen förstärker värme och sken medan inandningen lugnt tonar ned dem i samma 4–2–6-rytm.
+
 ## 2026-09-15 – Ljusboost närmare den varma strandreferensen
 
 - Solen har fått större visuell tyngd och en mjuk, fotografisk kärna i scenens fokus.

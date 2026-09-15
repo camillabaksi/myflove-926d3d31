@@ -173,7 +173,7 @@ export default function LightBoost({
         width={1080}
         height={1920}
         alt="En stilla strand och ett varmt hav i solnedgång"
-        className="absolute inset-0 h-full w-full object-cover"
+        className="lb-beach-image absolute inset-0 h-full w-full object-cover"
       />
       <video
         ref={videoRef}
@@ -195,13 +195,13 @@ export default function LightBoost({
           <div aria-hidden className="lb-breath-warmth absolute inset-0" />
           <div
             aria-hidden
-            className="lb-sun-glow absolute left-1/2 top-[41%] size-[58vmin] min-h-52 min-w-52 -translate-x-1/2 -translate-y-1/2 rounded-full"
+            className="lb-sun-glow absolute left-1/2 top-[40%] size-[96vmin] min-h-80 min-w-80 max-h-[58rem] max-w-[58rem] -translate-x-1/2 -translate-y-1/2 rounded-full"
           />
           <div
             aria-hidden
-            className="lb-sun-disc absolute left-1/2 top-[41%] size-[13vmin] min-h-14 min-w-14 -translate-x-1/2 -translate-y-1/2 rounded-full"
+            className="lb-sun-disc absolute left-1/2 top-[40%] size-[34vmin] min-h-28 min-w-28 max-h-72 max-w-72 -translate-x-1/2 -translate-y-1/2 rounded-full"
           />
-          <div aria-hidden className="lb-sun-reflection absolute left-1/2 top-[45%] h-[46%] w-[42vw] min-w-36 -translate-x-1/2" />
+          <div aria-hidden className="lb-sun-reflection absolute left-1/2 top-[44%] h-[50%] w-[58vw] min-w-52 max-w-3xl -translate-x-1/2" />
           <span
             aria-hidden
             className="lb-water-light absolute left-[49%] top-[57%] block size-1.5 rounded-full"
@@ -280,18 +280,18 @@ export default function LightBoost({
 
         {phase === "running" && (
           <div
-            className={`lb-guidance relative mb-[16vh] h-10 w-full max-w-xs transition-opacity duration-1000 ${elapsed < 45 ? "opacity-100" : "opacity-0"}`}
+            className={`lb-guidance absolute left-1/2 top-[64%] h-12 w-full max-w-xs -translate-x-1/2 transition-opacity duration-1000 ${elapsed < 45 ? "opacity-100" : "opacity-0"}`}
           >
             <p aria-live="polite" className="sr-only">
               {line}
             </p>
-            <span aria-hidden className="lb-follow-light absolute inset-0 flex items-center justify-center text-base font-medium text-cream sm:text-lg">
+            <span aria-hidden className="lb-follow-light absolute inset-0 flex items-center justify-center font-display text-lg font-normal italic text-cream sm:text-xl">
               Följ ljuset
             </span>
-            <span aria-hidden className="lb-breath-in absolute inset-0 flex items-center justify-center text-base font-medium text-cream sm:text-lg">
+            <span aria-hidden className="lb-breath-in absolute inset-0 flex items-center justify-center font-display text-lg font-normal italic text-cream sm:text-xl">
               Andas in …
             </span>
-            <span aria-hidden className="lb-breath-out absolute inset-0 flex items-center justify-center text-base font-medium text-cream sm:text-lg">
+            <span aria-hidden className="lb-breath-out absolute inset-0 flex items-center justify-center font-display text-lg font-normal italic text-cream sm:text-xl">
               Andas ut …
             </span>
           </div>
