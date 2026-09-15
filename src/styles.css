@@ -1530,20 +1530,48 @@ html[data-npf-less="true"] [data-npf="optional"] {
 @keyframes lb-breathe-glow {
   0%,
   100% {
-    opacity: 0.48;
-    transform: translate(-50%, -50%) scale(1.08);
+    opacity: 0.58;
+    transform: translate(-50%, -50%) scale(1.12);
   }
   33.333% {
-    opacity: 0.18;
-    transform: translate(-50%, -50%) scale(0.91);
+    opacity: 0.2;
+    transform: translate(-50%, -50%) scale(0.88);
   }
   50% {
-    opacity: 0.18;
-    transform: translate(-50%, -50%) scale(0.91);
+    opacity: 0.2;
+    transform: translate(-50%, -50%) scale(0.88);
   }
   74% {
-    opacity: 0.29;
-    transform: translate(-50%, -50%) scale(0.98);
+    opacity: 0.38;
+    transform: translate(-50%, -50%) scale(1.01);
+  }
+}
+
+@keyframes lb-breathe-disc {
+  0%,
+  100% {
+    opacity: 0.98;
+    transform: translate(-50%, -50%) scale(1.04);
+    filter: blur(2px);
+  }
+  33.333%,
+  50% {
+    opacity: 0.84;
+    transform: translate(-50%, -50%) scale(0.96);
+    filter: blur(3px);
+  }
+}
+
+@keyframes lb-breathe-reflection {
+  0%,
+  100% {
+    opacity: 0.72;
+    transform: translateX(-50%) scaleX(1.12);
+  }
+  33.333%,
+  50% {
+    opacity: 0.34;
+    transform: translateX(-50%) scaleX(0.88);
   }
 }
 
@@ -1613,9 +1641,9 @@ html[data-npf-less="true"] [data-npf="optional"] {
 
 .lb-scene-shade {
   background:
-    linear-gradient(180deg, hsl(286 40% 72% / 0.1), hsl(350 72% 78% / 0.06) 28%, transparent 48%),
-    radial-gradient(ellipse at 50% 42%, hsl(38 100% 76% / 0.24), hsl(18 92% 68% / 0.08) 28%, transparent 56%),
-    linear-gradient(0deg, hsl(18 42% 13% / 0.22), transparent 32%);
+    linear-gradient(180deg, hsl(286 42% 80% / 0.11), hsl(345 84% 79% / 0.12) 28%, hsl(24 100% 72% / 0.08) 48%, transparent 64%),
+    radial-gradient(ellipse at 50% 41%, hsl(44 100% 83% / 0.38), hsl(26 100% 69% / 0.18) 28%, hsl(354 82% 70% / 0.07) 48%, transparent 65%),
+    linear-gradient(0deg, hsl(18 42% 13% / 0.16), transparent 30%);
 }
 
 .light-boost-scene {
@@ -1633,7 +1661,8 @@ html[data-npf-less="true"] [data-npf="optional"] {
 }
 
 .lb-guidance {
-  filter: drop-shadow(0 2px 12px hsl(18 45% 16% / 0.42));
+  filter: drop-shadow(0 2px 14px hsl(18 45% 16% / 0.48));
+  text-wrap: balance;
 }
 
 .lb-follow-light {
@@ -1656,8 +1685,8 @@ html[data-npf-less="true"] [data-npf="optional"] {
 
 .lb-breath-warmth {
   background:
-    radial-gradient(circle at 50% 41%, hsl(42 100% 84% / 0.68), hsl(30 100% 72% / 0.26) 28%, transparent 48%),
-    linear-gradient(180deg, hsl(326 72% 79% / 0.1), hsl(22 100% 67% / 0.24) 58%, transparent 84%);
+    radial-gradient(circle at 50% 41%, hsl(45 100% 88% / 0.72), hsl(32 100% 72% / 0.34) 28%, hsl(15 94% 67% / 0.13) 48%, transparent 64%),
+    linear-gradient(180deg, hsl(326 74% 80% / 0.1), hsl(22 100% 68% / 0.26) 58%, transparent 86%);
   mix-blend-mode: screen;
   animation: lb-breathe-warmth 12s cubic-bezier(0.37, 0, 0.2, 1) 6s infinite backwards;
 }
@@ -1665,15 +1694,46 @@ html[data-npf-less="true"] [data-npf="optional"] {
 .lb-sun-glow {
   background: radial-gradient(
     circle,
-    hsl(48 100% 96% / 0.98) 0%,
-    hsl(42 100% 82% / 0.82) 18%,
-    hsl(32 100% 70% / 0.52) 40%,
-    hsl(18 96% 68% / 0.16) 62%,
-    transparent 78%
+    hsl(49 100% 97% / 0.94) 0%,
+    hsl(44 100% 84% / 0.88) 14%,
+    hsl(34 100% 71% / 0.58) 34%,
+    hsl(18 98% 68% / 0.22) 58%,
+    transparent 80%
   );
-  filter: blur(26px);
+  filter: blur(30px);
   mix-blend-mode: screen;
   animation: lb-breathe-glow 12s cubic-bezier(0.37, 0, 0.2, 1) 6s infinite backwards;
+  will-change: transform, opacity;
+}
+
+.lb-sun-disc {
+  background: radial-gradient(
+    circle,
+    hsl(50 100% 98% / 0.99) 0%,
+    hsl(47 100% 92% / 0.98) 48%,
+    hsl(39 100% 76% / 0.86) 72%,
+    hsl(29 100% 68% / 0.22) 100%
+  );
+  box-shadow:
+    0 0 16px 5px hsl(46 100% 88% / 0.74),
+    0 0 42px 16px hsl(32 100% 70% / 0.38);
+  mix-blend-mode: screen;
+  animation: lb-breathe-disc 12s ease-in-out 6s infinite backwards;
+  will-change: transform, opacity, filter;
+}
+
+.lb-sun-reflection {
+  background:
+    linear-gradient(90deg, transparent 0 31%, hsl(45 100% 91% / 0.18) 43%, hsl(48 100% 96% / 0.7) 50%, hsl(36 100% 78% / 0.2) 59%, transparent 72%),
+    repeating-linear-gradient(176deg, transparent 0 7px, hsl(47 100% 94% / 0.5) 8px 10px, transparent 11px 21px);
+  filter: blur(5px);
+  mask-image:
+    linear-gradient(180deg, transparent, black 9%, black 74%, transparent 100%),
+    radial-gradient(ellipse 42% 100% at 50% 0%, black 0 64%, transparent 100%);
+  mask-composite: intersect;
+  mix-blend-mode: screen;
+  transform-origin: 50% 0;
+  animation: lb-breathe-reflection 12s ease-in-out 6s infinite backwards;
   will-change: transform, opacity;
 }
 
@@ -1684,7 +1744,7 @@ html[data-npf-less="true"] [data-npf="optional"] {
 }
 
 .lb-beach-video {
-  filter: saturate(1.12) sepia(0.06) contrast(0.99) brightness(1.035);
+  filter: saturate(1.18) sepia(0.09) contrast(0.98) brightness(1.075);
 }
 
 .lb-still .lb-beach-video {
@@ -1692,6 +1752,8 @@ html[data-npf-less="true"] [data-npf="optional"] {
 }
 .lb-still .lb-breath-warmth,
 .lb-still .lb-sun-glow,
+.lb-still .lb-sun-disc,
+.lb-still .lb-sun-reflection,
 .lb-still .lb-water-light,
 .lb-still .lb-follow-light,
 .lb-still .lb-breath-in,
@@ -1710,6 +1772,8 @@ html[data-npf-less="true"] [data-npf="optional"] {
   }
   .lb-breath-warmth,
   .lb-sun-glow,
+  .lb-sun-disc,
+  .lb-sun-reflection,
   .lb-water-light,
   .lb-follow-light,
   .lb-breath-in,

@@ -1,3 +1,10 @@
+## 2026-09-15 – Ljusboost närmare den varma strandreferensen
+
+- Solen har fått större visuell tyngd och en mjuk, fotografisk kärna i scenens fokus.
+- En bred gyllene reflektion följer solen genom vågorna mot betraktaren.
+- Himlen och havet är ljusare och varmare i guld, aprikos, korall och rosa med diskret lavendel högst upp.
+- Sol, sken, reflektion och andningstext följer samma mjuka 4–2–6-rytm utan blinkning eller layoutskiften.
+
 ## 2026-09-15 – Mjukare sol och andningssynk i Ljusboost
 
 - Solen är större och mer framträdande, med varmare gyllene/aprikos ljus och mjuka korall- och lavendeltoner över scenen.
