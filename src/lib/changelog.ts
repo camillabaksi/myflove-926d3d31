@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-15";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Ljusboost närmare den varma strandreferensen",
+    items: [
+      "Större, närmare sol med mjuk fotografisk kärna och tydlig visuell tyngd (2026-09-15)",
+      "Bred gyllene reflektion genom vågorna mot betraktaren (2026-09-15)",
+      "Sol, sken, reflektion och text exakt synkade i en mjuk 4–2–6-rytm (2026-09-15)",
+    ],
+  },
+  {
     title: "Mjukare sol och andningssynk i Ljusboost",
     items: [
       "Större, tydligare sol med varmare gyllene, aprikos, korall och mjuka lavendeltoner (2026-09-15)",

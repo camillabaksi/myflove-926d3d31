@@ -195,11 +195,16 @@ export default function LightBoost({
           <div aria-hidden className="lb-breath-warmth absolute inset-0" />
           <div
             aria-hidden
-            className="lb-sun-glow absolute left-1/2 top-[40.5%] size-[46vmin] min-h-40 min-w-40 -translate-x-1/2 -translate-y-1/2 rounded-full"
+            className="lb-sun-glow absolute left-1/2 top-[41%] size-[58vmin] min-h-52 min-w-52 -translate-x-1/2 -translate-y-1/2 rounded-full"
           />
+          <div
+            aria-hidden
+            className="lb-sun-disc absolute left-1/2 top-[41%] size-[13vmin] min-h-14 min-w-14 -translate-x-1/2 -translate-y-1/2 rounded-full"
+          />
+          <div aria-hidden className="lb-sun-reflection absolute left-1/2 top-[45%] h-[46%] w-[42vw] min-w-36 -translate-x-1/2" />
           <span
             aria-hidden
-            className="lb-water-light absolute left-[49%] top-[54%] block size-1.5 rounded-full"
+            className="lb-water-light absolute left-[49%] top-[57%] block size-1.5 rounded-full"
           />
         </>
       )}

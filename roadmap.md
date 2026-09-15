@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Ljusboost närmare referensen med större sol, bred gyllene reflektion och synkad 4–2–6-andning (2026-09-15)
+
 - [x] Ljusboost med tydligare varm sol, utandningsstyrt ljussken och mjukt synkad text (2026-09-15)
 
 - [x] Ljusboost med varmare solnedgång, organisk andningspuls och sömlös havsloop (2026-09-15)
