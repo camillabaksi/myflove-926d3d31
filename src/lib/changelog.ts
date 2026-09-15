@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-15";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Välj flashcards, quiz eller båda i Studier",
+    items: [
+      "Nytt val \"Vad vill du få?\": Både och, Bara flashcards eller Bara quiz (2026-09-15)",
+      "Flow skapar bara det du valt och knappen visar vad som kommer (2026-09-15)",
+      "Material utan quiz visar ingen quizknapp, och tvärtom (2026-09-15)",
+    ],
+  },
+  {
     title: "Visa mindre viker allt utom översta kortet",
     items: [
       "\"Visa mindre\" på Hem lämnar bara översta kortet med hälsning och snabbknappar (2026-09-15)",
