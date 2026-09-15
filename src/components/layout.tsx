@@ -1024,7 +1024,7 @@ export default function Layout({ children }: LayoutProps) {
 
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className={`flex flex-col items-center gap-1 rounded-2xl px-2 py-1.5 min-w-[3.7rem] press ${
+            className={`flex flex-col items-center gap-1 rounded-2xl px-1.5 py-1.5 min-w-[3.2rem] press ${
               mobileMenuOpen ? "text-primary" : "text-muted-foreground hover:text-foreground"
             }`}
           >
@@ -1251,8 +1251,8 @@ export default function Layout({ children }: LayoutProps) {
                   <div className="mb-5 rounded-3xl border border-border/60 bg-card p-4 shadow-soft">
                     <p className="text-sm font-semibold">Din bottenmeny</p>
                     <p data-npf="optional" className="mt-1 text-xs text-muted-foreground">
-                      Hem, QuickFlow, Kalender och Paus ligger fast för alla just nu. Allt annat
-                      finns kvar här i Mer.
+                      Hem, QuickFlow, Kalender, Paus och Prata med Flow ligger fast för alla
+                      just nu. Allt annat finns kvar här i Mer.
                     </p>
                   </div>
 
@@ -1410,7 +1410,7 @@ function BottomNavLink({
     <Link
       href={item.href}
       onClick={onClick}
-      className={`flex flex-col items-center gap-1 rounded-2xl px-2 py-1.5 min-w-[3.7rem] press ${
+      className={`flex flex-col items-center gap-1 rounded-2xl px-1.5 py-1.5 min-w-[3.2rem] press ${
         active ? "text-primary" : "text-muted-foreground hover:text-foreground"
       }`}
     >
