@@ -263,9 +263,46 @@ export function StudyBuddyContent() {
                 ))}
               </div>
               <p className="text-[11px] text-muted-foreground">
-                Blir ungefär {plan.cardCount} flashcards och {plan.quizCount} quizfrågor. Du kan
-                alltid ändra.
+                Blir ungefär{" "}
+                {[
+                  wantCards ? `${plan.cardCount} flashcards` : null,
+                  wantQuiz ? `${plan.quizCount} quizfrågor` : null,
+                ]
+                  .filter(Boolean)
+                  .join(" och ")}
+                . Du kan alltid ändra.
               </p>
+            </div>
+
+            <div
+              className="rounded-xl border border-border bg-secondary/30 p-3 space-y-2"
+              role="group"
+              aria-label="Vad vill du få?"
+            >
+              <p className="text-xs font-medium">Vad vill du få?</p>
+              <div className="flex flex-wrap gap-1.5">
+                {(
+                  [
+                    ["both", "Både och"],
+                    ["cards", "Bara flashcards"],
+                    ["quiz", "Bara quiz"],
+                  ] as const
+                ).map(([key, label]) => (
+                  <button
+                    key={key}
+                    type="button"
+                    aria-pressed={output === key}
+                    onClick={() => setOutput(key)}
+                    className={`rounded-full px-3 py-1 text-[11px] border transition ${
+                      output === key
+                        ? "bg-primary text-primary-foreground border-primary"
+                        : "bg-background border-border text-muted-foreground"
+                    }`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
             </div>
             {busy && (
               <MyFloveThinking
