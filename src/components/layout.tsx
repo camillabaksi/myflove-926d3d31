@@ -338,6 +338,13 @@ export default function Layout({ children }: LayoutProps) {
       hint: "Din idébank – tankar utan krav",
     },
     {
+      href: "/assistant",
+      label: "Prata med Flow",
+      icon: MessageCircle,
+      hint: "Chatta med Flow – din personliga följeslagare",
+      essential: true,
+    },
+    {
       href: "/kalender",
       label: "Kalender",
       icon: Calendar,
@@ -691,12 +698,15 @@ export default function Layout({ children }: LayoutProps) {
   }, [navSearch, navItems]);
 
   /**
-   * Bottennavet under utvärderingsperioden: fyra fasta huvudvägar för alla –
-   * Hem, QuickFlow, Kalender och Paus. Inga val, ingen kontostatus styr detta.
+   * Bottennavet under utvärderingsperioden: fem fasta huvudvägar för alla –
+   * Hem, QuickFlow, Kalender, Paus och Prata med Flow. Inga val, ingen
+   * kontostatus styr detta.
    */
   const primaryNav = useMemo(() => {
     const pick = (href: string) => navItems.find((i) => i.href === href);
-    return [pick("/hem"), pick("/kalender"), pick("/paus")].filter(Boolean) as typeof navItems;
+    return [pick("/hem"), pick("/kalender"), pick("/paus"), pick("/assistant")].filter(
+      Boolean,
+    ) as typeof navItems;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navItems]);
 
@@ -974,7 +984,7 @@ export default function Layout({ children }: LayoutProps) {
           öppnar alla samma flöde via händelsen "myflove:quickflow". */}
       <QuickflowCapture variant="global" />
 
-      {/* Mobile Bottom Bar – Hem · Kalender · QuickFlow · Paus · Mer */}
+      {/* Mobile Bottom Bar – Hem · Kalender · QuickFlow · Paus · Flow · Mer */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-md border-t border-border/70 pb-[env(safe-area-inset-bottom)] z-40">
         <div className="flex items-end justify-around px-1 pt-1.5 pb-1">
           {primaryNav.slice(0, 2).map((item) => (
@@ -999,20 +1009,21 @@ export default function Layout({ children }: LayoutProps) {
             <span className="text-[10px] font-semibold text-primary">QuickFlow</span>
           </button>
 
-          {primaryNav.slice(2, 3).map((item) => (
+          {primaryNav.slice(2, 4).map((item) => (
             <BottomNavLink
               key={item.href}
               item={item}
               active={location === item.href || location.startsWith(`${item.href}/`)}
               onClick={() => setMobileMenuOpen(false)}
-              label={item.label}
+              label={item.href === "/assistant" ? "Flow" : item.label}
             />
           ))}
 
 
+
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className={`flex flex-col items-center gap-1 rounded-2xl px-2 py-1.5 min-w-[3.7rem] press ${
+            className={`flex flex-col items-center gap-1 rounded-2xl px-1.5 py-1.5 min-w-[3.2rem] press ${
               mobileMenuOpen ? "text-primary" : "text-muted-foreground hover:text-foreground"
             }`}
           >
@@ -1239,8 +1250,8 @@ export default function Layout({ children }: LayoutProps) {
                   <div className="mb-5 rounded-3xl border border-border/60 bg-card p-4 shadow-soft">
                     <p className="text-sm font-semibold">Din bottenmeny</p>
                     <p data-npf="optional" className="mt-1 text-xs text-muted-foreground">
-                      Hem, QuickFlow, Kalender och Paus ligger fast för alla just nu. Allt annat
-                      finns kvar här i Mer.
+                      Hem, QuickFlow, Kalender, Paus och Prata med Flow ligger fast för alla
+                      just nu. Allt annat finns kvar här i Mer.
                     </p>
                   </div>
 
@@ -1398,7 +1409,7 @@ function BottomNavLink({
     <Link
       href={item.href}
       onClick={onClick}
-      className={`flex flex-col items-center gap-1 rounded-2xl px-2 py-1.5 min-w-[3.7rem] press ${
+      className={`flex flex-col items-center gap-1 rounded-2xl px-1.5 py-1.5 min-w-[3.2rem] press ${
         active ? "text-primary" : "text-muted-foreground hover:text-foreground"
       }`}
     >

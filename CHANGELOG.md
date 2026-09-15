@@ -1,3 +1,9 @@
+## 2026-09-15 – Prata med Flow i bottenmenyn
+
+- "Prata med Flow" är nu en fast plats i bottenmenyn vid sidan av Hem, Kalender och Paus.
+- Länken visas kort som "Flow" i menyn och markeras tydligt när chatten är öppen.
+- Alla övriga funktioner finns kvar som vanligt via Mer.
+
 ## 2026-09-15 – Fast bottenmeny: Hem, QuickFlow, Kalender och Paus
 
 - Bottenmenyn visar samma fyra huvudvägar för alla användare, oavsett konto eller läge.

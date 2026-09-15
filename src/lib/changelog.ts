@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-15";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Prata med Flow i bottenmenyn",
+    items: [
+      "\"Prata med Flow\" är en fast plats i bottenmenyn vid sidan av Hem, Kalender och Paus (2026-09-15)",
+      "Länken visas kort som \"Flow\" i menyn och markeras tydligt när chatten är öppen (2026-09-15)",
+      "Alla övriga funktioner finns kvar som vanligt via Mer (2026-09-15)",
+    ],
+  },
+  {
     title: "Fast bottenmeny: Hem, QuickFlow, Kalender och Paus",
     items: [
       "Samma fyra huvudvägar i bottenmenyn för alla användare (2026-09-15)",
