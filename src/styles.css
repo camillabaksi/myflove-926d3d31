@@ -1629,17 +1629,6 @@ html[data-npf-less="true"] [data-npf="optional"] {
   }
 }
 
-@keyframes lb-water-light {
-  0%,
-  100% {
-    transform: translate3d(-5vw, 1vh, 0);
-    opacity: 0.25;
-  }
-  50% {
-    transform: translate3d(5vw, -1vh, 0);
-    opacity: 0.8;
-  }
-}
 
 .lb-scene-shade {
   background:
@@ -1752,7 +1741,6 @@ html[data-npf-less="true"] [data-npf="optional"] {
 .lb-still .lb-sun-glow,
 .lb-still .lb-sun-disc,
 .lb-still .lb-sun-reflection,
-.lb-still .lb-water-light,
 .lb-still .lb-follow-light,
 .lb-still .lb-breath-in,
 .lb-still .lb-breath-out {
