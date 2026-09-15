@@ -29,6 +29,7 @@ import {
   DEMO_WIDTH,
   DEMO_HEIGHT,
 } from "./DemoVideo";
+import { FlowAdVideo, FLOW_AD_FPS, FLOW_AD_FRAMES } from "./FlowAdVideo";
 
 export const RemotionRoot: React.FC = () => (
   <>
@@ -81,6 +82,24 @@ export const RemotionRoot: React.FC = () => (
       width={DEMO_WIDTH}
       height={DEMO_HEIGHT}
       defaultProps={{ lang: "sv" as const }}
+    />
+    <Composition
+      id="flow-ad-pitch"
+      component={FlowAdVideo}
+      durationInFrames={FLOW_AD_FRAMES}
+      fps={FLOW_AD_FPS}
+      width={1920}
+      height={1080}
+      defaultProps={{ format: "pitch" as const }}
+    />
+    <Composition
+      id="flow-ad-social"
+      component={FlowAdVideo}
+      durationInFrames={FLOW_AD_FRAMES}
+      fps={FLOW_AD_FPS}
+      width={1080}
+      height={1920}
+      defaultProps={{ format: "social" as const }}
     />
   </>
 );
