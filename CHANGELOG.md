@@ -2,6 +2,7 @@
 
 - Den verkliga Flow-dialogen har klippts till en 30-sekunders reklamfilm om låg energi, omplanering och ett litet nästa steg.
 - Filmen finns i både 16:9 för pitch och 9:16 för sociala medier, med MyFloves lavendel-, rosa- och plommonfärgade uttryck.
+- I den stående filmen har mobilen flyttats ned och gjorts något mindre så den inte ligger över budskapet.
 
 ## 2026-09-14 – Svensk version av 30-sekundersdemon
 

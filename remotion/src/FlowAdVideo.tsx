@@ -68,10 +68,10 @@ const Phone: React.FC<{ source: number; duration: number; format: Format; source
     <div
       style={{
         position: "absolute",
-        width: pitch ? 540 : 760,
+        width: pitch ? 540 : 690,
         aspectRatio: "1080 / 2340",
-        right: pitch ? 190 : 160,
-        top: pitch ? 74 : 365,
+        right: pitch ? 190 : 195,
+        top: pitch ? 74 : 405,
         borderRadius: pitch ? 52 : 74,
         overflow: "hidden",
         background: DEMO_COLORS.white,
