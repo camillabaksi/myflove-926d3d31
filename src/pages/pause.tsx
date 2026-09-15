@@ -82,6 +82,32 @@ export default function PausePage() {
                 <ArrowRight className="h-4 w-4 shrink-0 text-primary" aria-hidden />
               </button>
 
+              <button
+                type="button"
+                data-testid="pause-light-boost"
+                onClick={() => {
+                  track("home_widget_opened", { source: "ljusboost" });
+                  setLightBoost(true);
+                }}
+                className="press flex min-h-16 w-full items-center gap-3 rounded-3xl border border-border/60 bg-card px-4 py-3 text-left shadow-soft transition-colors hover:border-primary/35"
+              >
+                <span
+                  aria-hidden
+                  className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-accent text-accent-foreground"
+                >
+                  <Sunset className="h-5 w-5" />
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-sm font-semibold text-ink">{t("Ljusboost")}</span>
+                  <span className="block text-xs text-muted-foreground">
+                    {t("Varmt ljus och långsamma vågor")}
+                  </span>
+                </span>
+                <ArrowRight className="h-4 w-4 shrink-0 text-primary" aria-hidden />
+              </button>
+
+
+
               <Link
                 href="/stop-paus"
                 onClick={() => track("home_widget_opened", { source: "stop_paus" })}
