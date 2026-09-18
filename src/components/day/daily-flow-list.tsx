@@ -118,6 +118,8 @@ export function DailyFlowList({
         </li>
       ))}
     </ul>
+    <ActivityEnergyPrompt item={energyItem} onClose={() => setEnergyItem(null)} />
+    </>
   );
 }
 
