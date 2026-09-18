@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-19";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Ingen vit skärm längre",
+    items: [
+      "Om något oväntat går fel visas en lugn sida med \"Ladda om\" i stället för en tom skärm (2026-09-19)",
+      "Omladdningen rensar gamla sparade filer så appen startar på senaste versionen (2026-09-19)",
+    ],
+  },
+  {
     title: "Flow anpassar det du vill göra efter dagens kapacitet",
     items: [
       "Säg \"Jag vill träna\" eller \"Jag behöver plugga\" – Flow föreslår en rimlig version (2026-09-19)",

@@ -2793,3 +2793,6 @@ Initial baseline av MyFlove — ett svenskspråkigt "lugnt livsflöde"-dashboard
 - Flow kan nu ta det du vill göra ("Jag vill träna", "Jag behöver plugga") och föreslå en rimlig version utifrån dagens kapacitet.
 - Finns på Hem (Nästa steg), i QuickFlow, på rader i Min dag/Kalendern samt i Studier och Träning.
 - Fast tid ändras aldrig; vid låg kapacitet föreslås Återhämtning. Ingen ny datamodell – förslag blir vanliga uppgifter/steg.
+
+## 5.3.1 – 2026-09-18
+- Fix: vit skärm ersätts av lugn felsida med "Ladda om" (rensar gammal cache).
