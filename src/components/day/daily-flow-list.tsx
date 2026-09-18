@@ -1,6 +1,7 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "wouter";
 import { ArrowRight, CheckCircle2, Circle } from "lucide-react";
+import ActivityEnergyPrompt from "@/components/activity-energy-prompt";
 import { FlowItemActions } from "@/components/flow-item-actions";
 import { MyFloveTransition } from "@/components/myflove/motion";
 import { useFlowItems } from "@/hooks/use-flow-items";

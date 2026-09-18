@@ -11,7 +11,7 @@ import type { ActivityEnergy } from "@/lib/activity-history";
 import { todayISO } from "@/lib/day";
 import { track } from "@/lib/analytics";
 
-/** Fyra svar – alltid frivilliga, alltid ett klick. */
+/** Fyra svar – alltid frivilliga, alltid ett tryck. */
 const CHOICES: {
   id: EnergyImpact;
   history: ActivityEnergy | null;
@@ -20,9 +20,9 @@ const CHOICES: {
   strength: number;
 }[] = [
   { id: "gives", history: "gives", emoji: "🟢", label: "Gav energi", strength: 3 },
-  { id: "unknown", history: "neutral", emoji: "🟡", label: "Neutral", strength: 0 },
-  { id: "drains", history: "drains_little", emoji: "🟠", label: "Tog lite energi", strength: 2 },
-  { id: "both", history: "drains_much", emoji: "🔴", label: "Tog mycket energi", strength: 5 },
+  { id: "drains", history: "drains_much", emoji: "🔴", label: "Tog energi", strength: 4 },
+  { id: "both", history: "drains_little", emoji: "🟣", label: "Både och", strength: 2 },
+  { id: "unknown", history: null, emoji: "⚪", label: "Vet inte", strength: 0 },
 ];
 
 /**
@@ -30,7 +30,9 @@ const CHOICES: {
  *
  * En planerad aktivitet ändrar aldrig energin av sig själv. Först när
  * användaren markerat den som genomförd – och själv svarar här – skapas en
- * energipost. "Vet inte" loggar ingenting alls.
+ * energipost. "Vet inte" loggar ingenting alls. Finns redan ett svar för
+ * samma förekomst uppdateras det befintliga i stället för att en ny
+ * energilogg skapas.
  */
 export function ActivityEnergyPrompt({
   item,
@@ -41,12 +43,20 @@ export function ActivityEnergyPrompt({
 }) {
   const { addFactor } = useEnergyFlow();
   const { setTaskActualEnergy } = useTasks();
-  const { setEnergy: setHistoryEnergy } = useActivityHistory();
+  const { setEnergy: setHistoryEnergy, records } = useActivityHistory();
   const [busy, setBusy] = useState(false);
 
   const pick = async (choice: (typeof CHOICES)[number]) => {
     if (!item || busy) return;
     setBusy(true);
+
+    const date = item.dueDate ?? todayISO();
+    const sourceId = item.id.startsWith("task-") ? item.id : `task-${item.id}`;
+    // Har förekomsten redan ett energisvar? Då uppdaterar vi det befintliga
+    // och skapar ingen ny post i energiflödet.
+    const already = records.some(
+      (r) => r.sourceId === sourceId && r.date === date && !!r.energyImpact,
+    );
 
     // Uppgifter minns sitt eget svar, så Flow kan jämföra gissning med utfall.
     if (item.id.startsWith("task-")) {
@@ -55,13 +65,11 @@ export function ActivityEnergyPrompt({
 
     // Historiken minns svaret på exakt den dag aktiviteten hörde till.
     if (choice.history) {
-      const date = item.dueDate ?? todayISO();
-      const sourceId = item.id.startsWith("task-") ? item.id : `task-${item.id}`;
       setHistoryEnergy(sourceId, date, choice.history);
     }
 
     // Energiloggen skapas bara när användaren faktiskt sagt något om energin.
-    if (choice.id !== "unknown") {
+    if (choice.id !== "unknown" && !already) {
       try {
         await addFactor({
           title: item.title,
@@ -90,14 +98,14 @@ export function ActivityEnergyPrompt({
     <Dialog open={!!item} onOpenChange={(o) => !o && onClose()}>
       <DialogContent className="max-w-sm rounded-3xl">
         <DialogHeader>
-          <DialogTitle>Klart! Hur påverkade det din energi?</DialogTitle>
+          <DialogTitle>Hur kändes det?</DialogTitle>
         </DialogHeader>
         {item && <p className="-mt-2 text-sm text-muted-foreground">{item.title}</p>}
         <WhyHint label="vi frågar om energin" className="self-start">
           Vi frågar hur aktiviteten påverkade dig för att Flow över tid ska kunna förstå vad som ger
           och tar energi för just dig. Svaret är alltid frivilligt.
         </WhyHint>
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2 pt-1">
+        <div className="grid grid-cols-2 gap-2 pt-1">
           {CHOICES.map((c) => (
             <button
               key={c.id}
@@ -105,7 +113,7 @@ export function ActivityEnergyPrompt({
               disabled={busy}
               onClick={() => pick(c)}
               className={cn(
-                "press rounded-2xl border-2 border-border bg-background px-3 py-4 text-sm font-medium",
+                "press min-h-[4.5rem] rounded-2xl border-2 border-border bg-background px-2 py-3 text-sm font-medium",
                 "hover:border-primary hover:text-primary disabled:opacity-60",
               )}
             >
