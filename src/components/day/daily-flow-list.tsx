@@ -60,65 +60,71 @@ export function DailyFlowList({
 
   return (
     <>
-    <ul className="divide-y divide-border/50" aria-label="Dagens innehåll">
-      {items.map((item) => (
-        <li key={item.id}>
-          <MyFloveTransition transitionKey={String(item.done)}>
-            <div className={cn("flex min-w-0 items-center gap-2 py-3", item.done && "opacity-60")}>
-              <span className="w-11 shrink-0 text-right text-xs font-medium tabular-nums text-muted-foreground">
-                {item.time ?? ""}
-              </span>
-              {item.completable ? (
-                <button
-                  type="button"
-                  onClick={() => {
-                    const wasDone = item.done;
-                    toggleItem(item);
-                    if (!wasDone) {
-                      setEnergyItem(item);
-                      onCompleted?.(item);
-                    }
-                  }}
-                  aria-label={item.done ? `Ångra ${item.title}` : `Klarmarkera ${item.title}`}
-                  className="press shrink-0 rounded-full p-1 text-muted-foreground hover:text-primary"
-                >
-                  {item.done ? <CheckCircle2 size={19} /> : <Circle size={19} />}
-                </button>
-              ) : (
-                <span className="w-7 shrink-0 text-center text-sm" aria-hidden>
-                  {item.emoji}
+      <ul className="divide-y divide-border/50" aria-label="Dagens innehåll">
+        {items.map((item) => (
+          <li key={item.id}>
+            <MyFloveTransition transitionKey={String(item.done)}>
+              <div
+                className={cn("flex min-w-0 items-center gap-2 py-3", item.done && "opacity-60")}
+              >
+                <span className="w-11 shrink-0 text-right text-xs font-medium tabular-nums text-muted-foreground">
+                  {item.time ?? ""}
                 </span>
-              )}
-              <div className="min-w-0 flex-1">
-                <p
-                  className={cn(
-                    "break-words text-sm font-medium text-ink",
-                    item.done && "line-through",
-                  )}
-                >
-                  {item.source === "rutin" && <span aria-hidden>↻ </span>}
-                  {item.title}
-                </p>
-                <span className="mt-0.5 inline-flex rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
-                  {SOURCE_LABEL[item.source]}
-                </span>
+                {item.completable ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const wasDone = item.done;
+                      toggleItem(item);
+                      if (!wasDone) {
+                        setEnergyItem(item);
+                        onCompleted?.(item);
+                      }
+                    }}
+                    aria-label={item.done ? `Ångra ${item.title}` : `Klarmarkera ${item.title}`}
+                    className="press shrink-0 rounded-full p-1 text-muted-foreground hover:text-primary"
+                  >
+                    {item.done ? <CheckCircle2 size={19} /> : <Circle size={19} />}
+                  </button>
+                ) : (
+                  <span className="w-7 shrink-0 text-center text-sm" aria-hidden>
+                    {item.emoji}
+                  </span>
+                )}
+                <div className="min-w-0 flex-1">
+                  <p
+                    className={cn(
+                      "break-words text-sm font-medium text-ink",
+                      item.done && "line-through",
+                    )}
+                  >
+                    {item.source === "rutin" && <span aria-hidden>↻ </span>}
+                    {item.title}
+                  </p>
+                  <span className="mt-0.5 inline-flex rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+                    {SOURCE_LABEL[item.source]}
+                  </span>
+                </div>
+                <FlowItemActions
+                  itemId={item.id}
+                  size={14}
+                  className="flex shrink-0 items-center"
+                />
+                {item.href && (
+                  <Link
+                    href={item.href}
+                    aria-label={`Öppna ${item.title}`}
+                    className="press shrink-0 rounded-full p-1.5 text-muted-foreground hover:text-primary"
+                  >
+                    <ArrowRight size={16} />
+                  </Link>
+                )}
               </div>
-              <FlowItemActions itemId={item.id} size={14} className="flex shrink-0 items-center" />
-              {item.href && (
-                <Link
-                  href={item.href}
-                  aria-label={`Öppna ${item.title}`}
-                  className="press shrink-0 rounded-full p-1.5 text-muted-foreground hover:text-primary"
-                >
-                  <ArrowRight size={16} />
-                </Link>
-              )}
-            </div>
-          </MyFloveTransition>
-        </li>
-      ))}
-    </ul>
-    <ActivityEnergyPrompt item={energyItem} onClose={() => setEnergyItem(null)} />
+            </MyFloveTransition>
+          </li>
+        ))}
+      </ul>
+      <ActivityEnergyPrompt item={energyItem} onClose={() => setEnergyItem(null)} />
     </>
   );
 }
