@@ -58,6 +58,26 @@ export default function BatteryPage() {
           <SimpleCheckin source="mitt-batteri" />
         </MyFloveWide>
 
+        {/* Kort väg till den befintliga historiken – ingen ny vy, ingen ny data. */}
+        <MyFloveWide>
+          <Link
+            href="/historik"
+            data-testid="battery-patterns-link"
+            onClick={() => track("history_opened", { source: "mitt-batteri" })}
+            className="press flex items-center justify-between gap-3 rounded-3xl border-2 border-border/60 bg-card px-4 py-4 shadow-soft hover:border-primary sm:px-5"
+          >
+            <span className="min-w-0">
+              <span className="block font-display text-base font-bold text-ink">
+                {t("Vad ger dig energi?")}
+              </span>
+              <span className="mt-0.5 block text-sm text-muted-foreground">
+                {t("Se dina mönster – vad som gav och tog energi tidigare dagar.")}
+              </span>
+            </span>
+            <ArrowRight size={18} className="shrink-0 text-primary" />
+          </Link>
+        </MyFloveWide>
+
         {/* All befintlig fördjupning finns kvar, men visas först efter klick. */}
         <MyFloveWide>
           <CollapsibleSection
