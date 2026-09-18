@@ -59,6 +59,7 @@ export function DailyFlowList({
   }
 
   return (
+    <>
     <ul className="divide-y divide-border/50" aria-label="Dagens innehåll">
       {items.map((item) => (
         <li key={item.id}>
