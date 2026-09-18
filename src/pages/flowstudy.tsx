@@ -20,6 +20,7 @@ import { useToast } from "@/hooks/use-toast";
 import { celebrateFromEvent } from "@/lib/celebrate";
 import { generateStudySet } from "@/lib/flowstudy.functions";
 import LifeProfileLink from "@/components/life-profile-link";
+import AdaptiveIntentPrompt from "@/components/adaptive-intent-prompt";
 import { useLifeProfile } from "@/hooks/use-life-profile";
 import { lifeProfileContext, toStudyProfile } from "@/lib/life-profile";
 import {
@@ -162,6 +163,14 @@ export function StudyBuddyContent() {
       </p>
 
       <LifeProfileLink />
+
+      {/* Samma adaptiva princip som i resten av appen. */}
+      <AdaptiveIntentPrompt
+        source="studier"
+        chips={["Jag behöver plugga", "Jag behöver repetera", "Jag har prov snart"]}
+        placeholder="Vad behöver du plugga?"
+        className="rounded-3xl border border-border/60 bg-card/70 p-4 shadow-soft"
+      />
 
       {(stats.dueCards > 0 || stats.dueQuestions > 0) && (
         <p className="text-sm rounded-2xl border border-primary/20 bg-primary/5 p-3">

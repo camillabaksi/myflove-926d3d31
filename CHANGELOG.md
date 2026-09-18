@@ -2788,3 +2788,8 @@ Initial baseline av MyFlove — ett svenskspråkigt "lugnt livsflöde"-dashboard
 - Ny knapp på Hem: "Vill du ha det lugnare? Visa mindre på skärmen" slår på enkelt läge med ett tryck (färre saker, lugnare färger, ingen rörelse, enkla ord).
 - Enkelt läge gömmer nu faktiskt sekundära block (dekor, dagens tanke, vardagsmönster, installationsnotering) – kärnflödet Hur mår du? → Vad händer? → Planera om? syns alltid.
 - Flow-maskoten blir helt stilla vid "Ingen rörelse" – även blinkningar och blick som styrs via JavaScript.
+
+## 5.3 – Anpassa efter dagens kapacitet
+- Flow kan nu ta det du vill göra ("Jag vill träna", "Jag behöver plugga") och föreslå en rimlig version utifrån dagens kapacitet.
+- Finns på Hem (Nästa steg), i QuickFlow, på rader i Min dag/Kalendern samt i Studier och Träning.
+- Fast tid ändras aldrig; vid låg kapacitet föreslås Återhämtning. Ingen ny datamodell – förslag blir vanliga uppgifter/steg.

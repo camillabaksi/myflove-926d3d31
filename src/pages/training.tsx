@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import Layout from "@/components/layout";
+import AdaptiveIntentPrompt from "@/components/adaptive-intent-prompt";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { MyFloveThinking } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
@@ -474,6 +475,15 @@ export default function TrainingPage() {
                   : (SECTIONS.find((s) => s.id === view)?.desc ?? "")}
               </p>
             </header>
+
+            {view === "overview" && (
+              <AdaptiveIntentPrompt
+                source="traning"
+                chips={["Jag vill träna", "Jag vill gå en promenad", "Jag vill röra på mig lite"]}
+                placeholder="Vad vill du göra idag?"
+                className="rounded-3xl border border-border/60 bg-card/70 p-4 shadow-soft"
+              />
+            )}
 
             {view === "overview" && (
               <div className="grid gap-3 sm:grid-cols-2">
