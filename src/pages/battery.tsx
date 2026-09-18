@@ -63,7 +63,6 @@ export default function BatteryPage() {
           <Link
             href="/historik"
             data-testid="battery-patterns-link"
-            onClick={() => track("history_opened", { source: "mitt-batteri" })}
             className="press flex items-center justify-between gap-3 rounded-3xl border-2 border-border/60 bg-card px-4 py-4 shadow-soft hover:border-primary sm:px-5"
           >
             <span className="min-w-0">
