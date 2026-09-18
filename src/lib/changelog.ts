@@ -6,9 +6,18 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-09-18";
+export const CHANGELOG_UPDATED = "2026-09-19";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  {
+    title: "Flow anpassar det du vill göra efter dagens kapacitet",
+    items: [
+      "Säg \"Jag vill träna\" eller \"Jag behöver plugga\" – Flow föreslår en rimlig version (2026-09-19)",
+      "Finns på Hem, i QuickFlow, på raderna i Min dag och Kalendern samt i Studier och Träning (2026-09-19)",
+      "Mindre, Större eller Senare – du bestämmer, och fasta tider ändras aldrig (2026-09-19)",
+      "Vid låg kapacitet föreslås Återhämtning i stället för att pressa igenom (2026-09-19)",
+    ],
+  },
   {
     title: "\"Hur kändes det?\" direkt när du bockar av",
     items: [
