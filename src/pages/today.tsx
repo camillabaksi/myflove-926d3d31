@@ -1,9 +1,8 @@
 import { track } from "@/lib/analytics";
-import { useMemo, useEffect, useState } from "react";
+import { useMemo, useEffect } from "react";
 import { Link } from "wouter";
 import CollapsibleSection from "@/components/collapsible-section";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
-import ActivityEnergyPrompt from "@/components/activity-energy-prompt";
 import EnergyBattery from "@/components/energy-battery";
 import DailyFlowList from "@/components/day/daily-flow-list";
 import { FlowReplan } from "@/components/flow-replan";
@@ -14,7 +13,7 @@ import { useEnergyBattery } from "@/hooks/use-energy-battery";
 
 import { capacityForMode, shouldOfferReplan } from "@/lib/replan";
 import { assessToday } from "@/lib/flow-engine";
-import { withinCapacity, type FlowItem } from "@/lib/flow-items";
+import { withinCapacity } from "@/lib/flow-items";
 import { useDayPlan } from "@/lib/day-plan";
 import { todayISO as todayStr } from "@/lib/day";
 import { Bell, CalendarDays, Heart, ListOrdered, Plus } from "lucide-react";
@@ -56,7 +55,6 @@ export function TodayContent() {
   /** Dagens belastning – samma bedömning som Flow → IDAG. */
   const load = useMemo(() => assessToday(reading, batteryItems), [reading, batteryItems]);
 
-  const [energyItem, setEnergyItem] = useState<FlowItem | null>(null);
   const dateLabel = new Date(`${today}T12:00:00`).toLocaleDateString("sv-SE", {
     weekday: "short",
     day: "numeric",
@@ -95,7 +93,7 @@ export function TodayContent() {
               </Button>
             </div>
           </header>
-          <DailyFlowList onCompleted={setEnergyItem} />
+          <DailyFlowList />
         </section>
       </MyFloveWide>
 
@@ -150,7 +148,6 @@ export function TodayContent() {
           </div>
         </CollapsibleSection>
       </MyFloveWide>
-      <ActivityEnergyPrompt item={energyItem} onClose={() => setEnergyItem(null)} />
     </MyFlovePageGrid>
   );
 }
