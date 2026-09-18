@@ -1,6 +1,9 @@
 import { useMemo, useState } from "react";
 import { Link } from "wouter";
-import { ArrowRight, CheckCircle2, Circle } from "lucide-react";
+import { ArrowRight, CheckCircle2, Circle, Sparkles } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import AdaptiveActivityCard from "@/components/adaptive-activity-card";
+import { kindFromId } from "@/components/flow-item-actions";
 import ActivityEnergyPrompt from "@/components/activity-energy-prompt";
 import { FlowItemActions } from "@/components/flow-item-actions";
 import { MyFloveTransition } from "@/components/myflove/motion";
@@ -40,6 +43,8 @@ export function DailyFlowList({
    * en gång per avbockning oavsett var den sker.
    */
   const [energyItem, setEnergyItem] = useState<FlowItem | null>(null);
+  /** Anpassa en aktivitet som redan finns – inget nytt skapas. */
+  const [adaptItem, setAdaptItem] = useState<FlowItem | null>(null);
   const items = useMemo(() => {
     const merged = new Map<string, FlowItem>();
     for (const item of [...today, ...extraItems]) {
@@ -125,6 +130,26 @@ export function DailyFlowList({
         ))}
       </ul>
       <ActivityEnergyPrompt item={energyItem} onClose={() => setEnergyItem(null)} />
+      <Dialog open={!!adaptItem} onOpenChange={(o) => !o && setAdaptItem(null)}>
+        <DialogContent className="max-w-sm rounded-3xl">
+          <DialogHeader>
+            <DialogTitle>Anpassa efter idag</DialogTitle>
+          </DialogHeader>
+          {adaptItem && (
+            <AdaptiveActivityCard
+              text={adaptItem.title}
+              source="min-dag"
+              existingTaskId={
+                kindFromId(adaptItem.id).kind === "uppgift"
+                  ? kindFromId(adaptItem.id).realId
+                  : undefined
+              }
+              readOnly={kindFromId(adaptItem.id).kind !== "uppgift"}
+              onDone={() => setAdaptItem(null)}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

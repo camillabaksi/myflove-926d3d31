@@ -19,6 +19,8 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import WhyHint from "@/components/why-hint";
+import AdaptiveActivityCard from "@/components/adaptive-activity-card";
+import { detectIntent } from "@/lib/adaptive-activity";
 import { useLang } from "@/hooks/use-language";
 import { useVoiceInput } from "@/hooks/use-voice-input";
 import { useSavedStores } from "@/hooks/use-data";
@@ -94,6 +96,9 @@ export function QuickflowCapture({
           : [trimmed]
       : []);
   const hasText = items.length > 0;
+  /** En enda sak med tydlig avsikt kan Flow anpassa efter dagens kapacitet. */
+  const adaptable = items.length === 1 && detectIntent(items[0]) !== "generisk" ? items[0] : null;
+  const [adaptOpen, setAdaptOpen] = useState(false);
 
   // Ny text = nytt förslag från Flow.
   useEffect(() => {
@@ -313,6 +318,31 @@ export function QuickflowCapture({
                     {t("Behåll i Quickflow")}
                   </Button>
                 </div>
+              </div>
+            )}
+
+            {adaptable && (
+              <div className="space-y-2">
+                {adaptOpen ? (
+                  <AdaptiveActivityCard
+                    text={adaptable}
+                    source="quickflow"
+                    onDone={() => {
+                      setAdaptOpen(false);
+                      setOpen(false);
+                      reset();
+                    }}
+                  />
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setAdaptOpen(true)}
+                    className="press w-full rounded-2xl border-2 border-border bg-lavender/25 px-3 py-3 text-left text-sm font-medium text-ink hover:border-primary"
+                  >
+                    <Sparkles size={14} className="mr-2 inline" aria-hidden />
+                    {t("Anpassa efter min kapacitet idag")}
+                  </button>
+                )}
               </div>
             )}
 

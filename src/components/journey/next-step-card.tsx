@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Link } from "wouter";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { FlowMascot } from "@/components/flow-mascot";
+import AdaptiveIntentPrompt from "@/components/adaptive-intent-prompt";
 import { useLang } from "@/hooks/use-language";
 import { useTasks } from "@/hooks/use-data";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
@@ -41,8 +42,6 @@ export default function NextStepCard() {
     [activeTasks, battery, lowOrk, smaller],
   );
 
-  if (!suggestion.task) return null;
-
   return (
     <section
       aria-label={t("Nästa rimliga steg")}
@@ -75,7 +74,7 @@ export default function NextStepCard() {
             />
           </button>
 
-          {!collapsed &&
+          {!collapsed && suggestion.task &&
             (lowOrk && !smaller ? (
               <>
                 <p className="mt-2 text-sm text-ink">
@@ -116,6 +115,19 @@ export default function NextStepCard() {
                 )}
               </>
             ))}
+
+          {/* Samma kapacitet, men utifrån det DU vill göra just nu. */}
+          {!collapsed && (
+            <div className="mt-4 border-t border-border/50 pt-3">
+              <p className="text-sm font-semibold text-ink">
+                {t("Vill du göra något annat?")}
+              </p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                {t("Säg vad du vill eller behöver göra, så anpassar jag det efter dagen.")}
+              </p>
+              <AdaptiveIntentPrompt source="hem" className="mt-3" />
+            </div>
+          )}
         </div>
       </div>
     </section>

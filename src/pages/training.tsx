@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import Layout from "@/components/layout";
+import AdaptiveIntentPrompt from "@/components/adaptive-intent-prompt";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { MyFloveThinking } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
