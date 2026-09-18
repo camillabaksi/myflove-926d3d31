@@ -77,12 +77,12 @@ export function AdaptiveActivityCard({
       data-testid="adaptive-activity-card"
       aria-label={t("Anpassat förslag")}
       className={cn(
-        "rounded-3xl border border-border/60 bg-lavender/25 p-4 shadow-soft sm:p-5",
+        "rounded-3xl border border-border/60 bg-lavender/25 p-3.5 shadow-soft sm:p-5",
         className,
       )}
     >
       <div className="flex items-start gap-3">
-        <FlowMascot size="xs" mood="calm" className="mt-0.5 shrink-0" alt="" />
+        <FlowMascot size="xs" mood="calm" className="mt-0.5 hidden shrink-0 sm:block" alt="" />
         <div className="min-w-0 flex-1">
           <p className="text-sm font-semibold text-ink">{t(s.headline)}</p>
           <p className="mt-0.5 text-xs text-muted-foreground">
@@ -118,7 +118,7 @@ export function AdaptiveActivityCard({
                   type="button"
                   onClick={accept}
                   disabled={saved}
-                  className="press inline-flex min-h-11 items-center gap-2 rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground disabled:opacity-60"
+                  className="press inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground disabled:opacity-60 sm:flex-none"
                 >
                   {existingTaskId ? t("Lägg till steget") : t("Lägg i min dag")}
                   <ArrowRight size={15} aria-hidden />

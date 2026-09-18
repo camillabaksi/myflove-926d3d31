@@ -51,19 +51,19 @@ export function AdaptiveIntentPrompt({
           e.preventDefault();
           setText(draft.trim());
         }}
-        className="flex flex-wrap gap-2"
+        className="grid gap-2 sm:grid-cols-[1fr_auto]"
       >
         <input
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
           placeholder={t(placeholder)}
           aria-label={t("Vad vill du göra?")}
-          className="min-h-11 min-w-0 flex-1 rounded-full border border-border bg-card px-4 text-sm text-ink outline-none placeholder:text-muted-foreground focus:border-primary"
+          className="min-h-11 w-full min-w-0 rounded-full border border-border bg-card px-4 text-sm text-ink outline-none placeholder:text-muted-foreground focus:border-primary"
         />
         <button
           type="submit"
           disabled={!draft.trim()}
-          className="press min-h-11 rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground disabled:opacity-50"
+          className="press min-h-11 w-full rounded-full bg-primary px-4 sm:w-auto text-sm font-semibold text-primary-foreground disabled:opacity-50"
         >
           {t("Fråga Flow")}
         </button>
