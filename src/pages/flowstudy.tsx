@@ -20,6 +20,7 @@ import { useToast } from "@/hooks/use-toast";
 import { celebrateFromEvent } from "@/lib/celebrate";
 import { generateStudySet } from "@/lib/flowstudy.functions";
 import LifeProfileLink from "@/components/life-profile-link";
+import AdaptiveIntentPrompt from "@/components/adaptive-intent-prompt";
 import { useLifeProfile } from "@/hooks/use-life-profile";
 import { lifeProfileContext, toStudyProfile } from "@/lib/life-profile";
 import {

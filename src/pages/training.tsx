@@ -477,6 +477,15 @@ export default function TrainingPage() {
             </header>
 
             {view === "overview" && (
+              <AdaptiveIntentPrompt
+                source="traning"
+                chips={["Jag vill träna", "Jag vill gå en promenad", "Jag vill röra på mig lite"]}
+                placeholder="Vad vill du göra idag?"
+                className="rounded-3xl border border-border/60 bg-card/70 p-4 shadow-soft"
+              />
+            )}
+
+            {view === "overview" && (
               <div className="grid gap-3 sm:grid-cols-2">
                 {SECTIONS.map((s) => {
                   const Icon = s.icon;
