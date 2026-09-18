@@ -95,7 +95,7 @@ export function TodayContent() {
               </Button>
             </div>
           </header>
-          <DailyFlowList onCompleted={setEnergyItem} />
+          <DailyFlowList />
         </section>
       </MyFloveWide>
 
@@ -150,7 +150,6 @@ export function TodayContent() {
           </div>
         </CollapsibleSection>
       </MyFloveWide>
-      <ActivityEnergyPrompt item={energyItem} onClose={() => setEnergyItem(null)} />
     </MyFlovePageGrid>
   );
 }
