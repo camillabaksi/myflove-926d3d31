@@ -34,6 +34,12 @@ export function DailyFlowList({
   onCompleted?: (item: FlowItem) => void;
 }) {
   const { today, toggleItem } = useFlowItems(date);
+  /**
+   * "Hur kändes det?" hör ihop med själva avbockningen och bor därför här –
+   * samma lista används i både Min dag och Kalendern, så frågan ställs exakt
+   * en gång per avbockning oavsett var den sker.
+   */
+  const [energyItem, setEnergyItem] = useState<FlowItem | null>(null);
   const items = useMemo(() => {
     const merged = new Map<string, FlowItem>();
     for (const item of [...today, ...extraItems]) {
