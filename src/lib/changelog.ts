@@ -6,9 +6,18 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-09-15";
+export const CHANGELOG_UPDATED = "2026-09-18";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  {
+    title: "\"Hur kändes det?\" direkt när du bockar av",
+    items: [
+      "Mjuk check-in efter avbockning i både Min dag och Kalendern (2026-09-18)",
+      "Gav energi, Tog energi, Både och, Vet inte – eller Hoppa över (2026-09-18)",
+      "Frågan ställs en gång per avbockning, utan dubbla energiloggar (2026-09-18)",
+      "Nytt kort \"Vad ger dig energi?\" på Mitt batteri leder till historiken (2026-09-18)",
+    ],
+  },
   {
     title: "Välj flashcards, quiz eller båda i Studier",
     items: [

@@ -1,3 +1,10 @@
+## 2026-09-18 – "Hur kändes det?" direkt när du bockar av
+
+- När du bockar av något i Min dag eller Kalendern kommer en mjuk fråga: Gav energi, Tog energi, Både och eller Vet inte.
+- Ett tryck räcker, och "Hoppa över" finns alltid – aktiviteten är klar oavsett.
+- Frågan ställs en gång per avbockning och skapar inga dubbla energiloggar.
+- Nytt kort på Mitt batteri: "Vad ger dig energi?" som leder till din befintliga historik.
+
 ## 2026-09-15 – Välj flashcards, quiz eller båda i Studier
 
 - Nytt val "Vad vill du få?" när du skapar studiematerial: Både och, Bara flashcards eller Bara quiz.
