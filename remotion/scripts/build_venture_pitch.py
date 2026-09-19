@@ -3,7 +3,7 @@ from pathlib import Path
 import subprocess, os, textwrap, sys
 ROOT=Path(__file__).resolve().parents[1]; AS=ROOT/'public/live'; TMP=Path('/tmp/venture-final'); TMP.mkdir(exist_ok=True)
 BG=(247,243,252); BG2=(238,229,250); INK=(26,13,89); V=(118,87,182); MUT=(113,102,128); PINK=(242,201,226); MINT=(205,239,231); WHITE=(255,255,255); LILAC=(216,200,242)
-font='/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'; bold='/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'
+font='/nix/store/dg3hd9mqha517djbgpgnq8r4q1j1wn30-noto-fonts-2025.11.01/share/fonts/noto/NotoSans[wdth,wght].ttf'; bold='/nix/store/dg3hd9mqha517djbgpgnq8r4q1j1wn30-noto-fonts-2025.11.01/share/fonts/noto/NotoSans[wdth,wght].ttf'
 D=[13,13,13,15,15,15,13,14,15,13,14,15,12]
 SV=[
 ('PROBLEMET','Vi planerar tid. Men lever med|begränsad kapacitet.','När vardagen blir komplex räcker kalendern inte alltid till. Mental belastning, osynligt arbete och förändrad energi avgör vad som faktiskt är möjligt.',None,None),
