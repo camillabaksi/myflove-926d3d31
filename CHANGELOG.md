@@ -1,3 +1,9 @@
+## 2026-09-19 – Incheckningen dyker upp varje gång
+
+- "Hur kändes det?" visas nu oavsett var i appen du bockar av något – dagslistan, kalendern, Att göra, Jobb och Studier.
+- Samma fyra svar som förut: Gav energi, Tog energi, Både och, Vet inte – plus Hoppa över.
+- En enda ruta per avbockning, inga dubbla energiloggar.
+
 ## 2026-09-19 – Stabilare livevideo för mobil
 
 - Livevideorna har byggts om utan överlappande scener för att ta bort blinkningar, dubbla bilder och hopp.
