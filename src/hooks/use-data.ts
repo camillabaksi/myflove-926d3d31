@@ -381,6 +381,8 @@ export function useTasks() {
       track("task_completed", { source: "app" });
       haptic("success");
       flowDone(task.title);
+      // Snabb, frivillig incheckning: "Hur kändes det?" – samma befintliga logik.
+      emitActivityDone({ id: `task-${task.id}`, title: task.title, ...(task.dueDate ? { dueDate: task.dueDate } : {}) });
     } else if (task) {
       track("task_reopened", { source: "app" });
     }
