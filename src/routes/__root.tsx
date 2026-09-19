@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 import { initCacheBusting } from "@/lib/cache-busting";
 import { trackPageView } from "@/lib/analytics";
 import { useAnalyticsClaim } from "@/hooks/use-analytics-claim";
+import { RootErrorBoundary } from "@/components/root-error-boundary";
 
 import appCss from "../styles.css?url";
 import { Toaster } from "@/components/ui/toaster";
@@ -98,7 +99,7 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        {children}
+        <RootErrorBoundary>{children}</RootErrorBoundary>
         <Scripts />
       </body>
     </html>
