@@ -68,7 +68,7 @@ def build(lang,portrait):
  for i,(it,dur) in enumerate(zip(data,D)):
   p=od/f'{i:02}.png';slide(it,w,h,portrait).save(p); inputs+=['-loop','1','-t',str(dur),'-i',str(p)]
  filters=[]
- for i,dur in enumerate(D): filters.append(f'[{i}:v]fps=30,fade=t=in:st=0:d=.6:color=#EEE5FA,fade=t=out:st={dur-.6}:d=.6:color=#EEE5FA,format=yuv420p[v{i}]')
+ for i,dur in enumerate(D): filters.append(f'[{i}:v]fps=30,fade=t=in:st=0:d=0.6:color=#EEE5FA,fade=t=out:st={dur-.6}:d=0.6:color=#EEE5FA,format=yuv420p[v{i}]')
  filters.append(''.join(f'[v{i}]' for i in range(len(D)))+f'concat=n={len(D)}:v=1:a=0[out]')
  out=Path('/mnt/documents')/f'MyFlove_Venture_Cup_2026_{lang}_{"9x16" if portrait else "16x9"}.mp4'
  cmd=['ffmpeg','-y']+inputs+['-filter_complex',';'.join(filters),'-map','[out]','-an','-c:v','libx264','-preset','veryfast','-crf','18','-profile:v','high','-level','4.1','-r','30','-g','30','-pix_fmt','yuv420p','-colorspace','bt709','-color_primaries','bt709','-color_trc','bt709','-movflags','+faststart',str(out)]
