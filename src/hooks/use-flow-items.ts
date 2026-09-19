@@ -1,3 +1,4 @@
+import { emitActivityDone } from "@/lib/activity-energy-event";
 import { useCallback, useMemo } from "react";
 import { useTasks, useReminders } from "@/hooks/use-data";
 import { useStudySchedule } from "@/hooks/use-study-schedule";
