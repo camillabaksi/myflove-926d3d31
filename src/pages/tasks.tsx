@@ -34,7 +34,6 @@ import { confirmations } from "@/lib/flow-voice";
 import { AreaSwitcher } from "@/components/area-switcher";
 import CollapsibleSection from "@/components/collapsible-section";
 import TaskQuickAdd, { type QuickAddResult } from "@/components/task-quick-add";
-import TaskEnergyPrompt from "@/components/task-energy-prompt";
 import {
   ENERGY_IMPACTS,
   ENERGY_IMPACT_META,
@@ -103,7 +102,6 @@ export default function Tasks() {
     setTaskStatus,
     setTaskKind,
     setTaskNote,
-    setTaskActualEnergy,
     updateTask,
     addTaskStep,
     addTaskSteps,
@@ -118,7 +116,6 @@ export default function Tasks() {
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const [stepDrafts, setStepDrafts] = useState<Record<string, string>>({});
   const [waitingDrafts, setWaitingDrafts] = useState<Record<string, string>>({});
-  const [energyPrompt, setEnergyPrompt] = useState<Task | null>(null);
 
   const toggleExpand = (id: string) => {
     setExpanded((prev) => {
@@ -133,8 +130,6 @@ export default function Tasks() {
     toggleTask(task.id);
     if (!task.completed) {
       toast({ description: `${confirmations.taskDone} ${getRandomEncouragement()}` });
-      // Frivillig fråga om faktisk energi – Flow lär sig av skillnaden.
-      setEnergyPrompt(task);
     }
   };
 
@@ -837,11 +832,6 @@ export default function Tasks() {
         )}
       </MyFlovePageGrid>
 
-      <TaskEnergyPrompt
-        task={energyPrompt}
-        onClose={() => setEnergyPrompt(null)}
-        onSave={(id, impact) => setTaskActualEnergy(id, impact)}
-      />
     </Layout>
   );
 }

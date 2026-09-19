@@ -5,6 +5,7 @@ import { track } from "../lib/analytics";
 import type { LifeArea } from "../lib/life-areas";
 import { flowDone } from "@/lib/flow-signal";
 import { haptic } from "@/lib/haptics";
+import { emitActivityDone } from "@/lib/activity-energy-event";
 import { todayISO } from "@/lib/day";
 import { SECURE_UNLOCK_EVENT, unlockSecureLocal } from "@/lib/secure-local";
 import {
@@ -381,6 +382,8 @@ export function useTasks() {
       track("task_completed", { source: "app" });
       haptic("success");
       flowDone(task.title);
+      // Snabb, frivillig incheckning: "Hur kändes det?" – samma befintliga logik.
+      emitActivityDone({ id: `task-${task.id}`, title: task.title, ...(task.dueDate ? { dueDate: task.dueDate } : {}) });
     } else if (task) {
       track("task_reopened", { source: "app" });
     }

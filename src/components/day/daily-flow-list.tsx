@@ -4,7 +4,6 @@ import { ArrowRight, CheckCircle2, Circle, Sparkles } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import AdaptiveActivityCard from "@/components/adaptive-activity-card";
 import { kindFromId } from "@/components/flow-item-actions";
-import ActivityEnergyPrompt from "@/components/activity-energy-prompt";
 import { FlowItemActions } from "@/components/flow-item-actions";
 import { MyFloveTransition } from "@/components/myflove/motion";
 import { useFlowItems } from "@/hooks/use-flow-items";
@@ -42,7 +41,6 @@ export function DailyFlowList({
    * samma lista används i både Min dag och Kalendern, så frågan ställs exakt
    * en gång per avbockning oavsett var den sker.
    */
-  const [energyItem, setEnergyItem] = useState<FlowItem | null>(null);
   /** Anpassa en aktivitet som redan finns – inget nytt skapas. */
   const [adaptItem, setAdaptItem] = useState<FlowItem | null>(null);
   const items = useMemo(() => {
@@ -79,12 +77,9 @@ export function DailyFlowList({
                   <button
                     type="button"
                     onClick={() => {
-                      const wasDone = item.done;
+      const wasDone = item.done;
                       toggleItem(item);
-                      if (!wasDone) {
-                        setEnergyItem(item);
-                        onCompleted?.(item);
-                      }
+                      if (!wasDone) onCompleted?.(item);
                     }}
                     aria-label={item.done ? `Ångra ${item.title}` : `Klarmarkera ${item.title}`}
                     className="press shrink-0 rounded-full p-1 text-muted-foreground hover:text-primary"
@@ -129,7 +124,6 @@ export function DailyFlowList({
           </li>
         ))}
       </ul>
-      <ActivityEnergyPrompt item={energyItem} onClose={() => setEnergyItem(null)} />
       <Dialog open={!!adaptItem} onOpenChange={(o) => !o && setAdaptItem(null)}>
         <DialogContent className="max-w-sm rounded-3xl">
           <DialogHeader>

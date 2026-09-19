@@ -18,6 +18,13 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     ],
   },
   {
+    title: "Incheckningen dyker upp varje gång",
+    items: [
+      "\"Hur kändes det?\" visas nu oavsett var du bockar av något – dagslistan, kalendern, Att göra, Jobb och Studier (2026-09-19)",
+      "Samma fyra svar som förut, plus Hoppa över – och bara en ruta per avbockning (2026-09-19)",
+    ],
+  },
+  {
     title: "Livevideo med riktiga MyFlove-skärmar",
     items: [
       "Ny 90-sekunders video i 16:9 och 9:16 där varje scen visar en riktig inloggad MyFlove-skärm i telefonram (2026-09-19)",
