@@ -1,0 +1,2 @@
+import React from "react"; import { ScreenScene } from "../theme";
+export const CaptureScene:React.FC<{duration:number}>=({duration})=><ScreenScene duration={duration} label="QuickFlow" title={<>Få ut allt ur huvudet.</>} body={<>Skriv eller prata fritt. QuickFlow delar upp det i verkliga, hanterbara saker.</>} image="myflove-demo-quickflow-crop.jpg" note="Ett ställe. Mindre att bära."/>;
