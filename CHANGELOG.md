@@ -1,3 +1,9 @@
+## 2026-09-19 – Venture Cup 2026 pitchvideo
+
+- Ny tre minuter lång Venture Cup-pitch på svenska och engelska, i både 16:9 och 9:16.
+- Pitchen visar problem, lösning, riktiga produktskärmar, kundsegment, marknad, positionering, affärsmodell, valideringsplan och kapitalcase.
+- Alla fyra filmer är helt tysta och använder mjuka, blinkfria toningar. Osäkra affärsuppgifter märks som hypoteser eller arbetsantaganden.
+
 ## 2026-09-19 – Incheckningen dyker upp varje gång
 
 - "Hur kändes det?" visas nu oavsett var i appen du bockar av något – dagslistan, kalendern, Att göra, Jobb och Studier.

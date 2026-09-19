@@ -67,4 +67,4 @@
 
 - [x] Skapa och kvalitetsgranska 30-sekunders MyFlove-demo i investerarpitchens design (2026-09-14)
 
-- [ ] Venture Cup 2026 pitchvideo: 3 min, SV+EN, 16:9+9:16, helt utan ljud
+- [x] Venture Cup 2026 pitchvideo: 3 min, SV+EN, 16:9+9:16, helt utan ljud (2026-09-19)
