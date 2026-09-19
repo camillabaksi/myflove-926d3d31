@@ -1,3 +1,10 @@
+## 2026-09-19 – Livevideo med riktiga MyFlove-skärmar
+
+- Ny 90-sekunders video i 16:9 och 9:16 där varje scen visar en riktig, inloggad MyFlove-skärm i en telefonram.
+- Mjuk fade in och fade out mellan alla bilder och scener.
+- Skärmar: Mitt batteri, QuickFlow, Min dag, Flow, Kalender, Återhämtning och Historik.
+- Utan musik, så egen ljudsättning kan läggas på.
+
 ## 2026-09-19 – Ny 90-sekunders marknadsföringsvideo
 
 - Två svenska versioner i 16:9 och 9:16, baserade på investerarpitchens layout.
