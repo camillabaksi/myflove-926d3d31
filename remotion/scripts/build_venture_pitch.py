@@ -72,7 +72,7 @@ def build(lang,portrait):
  filters.append(''.join(f'[v{i}]' for i in range(len(D)))+f'concat=n={len(D)}:v=1:a=0[out]')
  out=Path('/mnt/documents')/f'MyFlove_Venture_Cup_2026_{lang}_{"9x16" if portrait else "16x9"}.mp4'
  cmd=['ffmpeg','-y']+inputs+['-filter_complex',';'.join(filters),'-map','[out]','-an','-c:v','libx264','-preset','veryfast','-crf','18','-profile:v','high','-level','4.1','-r','30','-g','30','-pix_fmt','yuv420p','-colorspace','bt709','-color_primaries','bt709','-color_trc','bt709','-movflags','+faststart',str(out)]
- subprocess.run(cmd,check=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL);print(out)
+ subprocess.run(cmd,check=True,stdout=subprocess.DEVNULL,stderr=None);print(out)
 if __name__=='__main__':
  jobs={'sv-landscape':('SV',False),'sv-portrait':('SV',True),'en-landscape':('EN',False),'en-portrait':('EN',True)}
  for key in (sys.argv[1:] or jobs): build(*jobs[key])
