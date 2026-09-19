@@ -1,30 +1,41 @@
 import React from "react";
-import { TransitionSeries, linearTiming } from "@remotion/transitions";
-import { fade } from "@remotion/transitions/fade";
+import { AbsoluteFill, interpolate, Series, useCurrentFrame } from "remotion";
 import { ProblemScene } from "./marketing90/scenes/ProblemScene";
 import { OutroScene } from "./marketing90/scenes/OutroScene";
 import { PhoneScene } from "./live/PhoneScene";
-import { NoSelfFade } from "./marketing90/theme";
+import { C, NoSelfFade } from "./marketing90/theme";
 
 export const LIVE_FPS = 30;
 export const LIVE_FRAMES = 2700; // 90 s
 
-const T = 25; // längre crossfade = tydlig fade in/fade out mellan bilderna
-const timing = linearTiming({ durationInFrames: T });
 const V = "#7657B6";
 
-// 9 scener, 8 övergångar: summan minus 8*25 = 2700
-const D = [300, 330, 330, 330, 330, 320, 320, 320, 320];
+// Nio separata 10-sekundersscener. De överlappar aldrig varandra.
+const D = Array.from({ length: 9 }, () => 300);
+const FADE_FRAMES = 18;
+
+const SceneFade: React.FC<{ children: React.ReactNode; duration: number }> = ({ children, duration }) => {
+  const frame = useCurrentFrame();
+  const opacity = interpolate(
+    frame,
+    [0, FADE_FRAMES, duration - FADE_FRAMES, duration - 1],
+    [0, 1, 1, 0],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" },
+  );
+
+  return <AbsoluteFill style={{ opacity }}>{children}</AbsoluteFill>;
+};
 
 export const LiveVideo: React.FC = () => (
   <NoSelfFade.Provider value={true}>
-  <TransitionSeries>
-    <TransitionSeries.Sequence durationInFrames={D[0]}>
-      <ProblemScene duration={D[0]} />
-    </TransitionSeries.Sequence>
-    <TransitionSeries.Transition presentation={fade()} timing={timing} />
+    <AbsoluteFill style={{ backgroundColor: C.bg2 }}>
+    <Series>
+    <Series.Sequence durationInFrames={D[0]}>
+      <SceneFade duration={D[0]}><ProblemScene duration={D[0]} /></SceneFade>
+    </Series.Sequence>
 
-    <TransitionSeries.Sequence durationInFrames={D[1]}>
+    <Series.Sequence durationInFrames={D[1]}>
+      <SceneFade duration={D[1]}>
       <PhoneScene
         duration={D[1]}
         label="Ditt levande batteri"
@@ -32,10 +43,11 @@ export const LiveVideo: React.FC = () => (
         body={<>Du loggar ork och mående på några sekunder. MyFlove bygger bilden av hur din energi rör sig över tid.</>}
         image="batteri.png"
       />
-    </TransitionSeries.Sequence>
-    <TransitionSeries.Transition presentation={fade()} timing={timing} />
+      </SceneFade>
+    </Series.Sequence>
 
-    <TransitionSeries.Sequence durationInFrames={D[2]}>
+    <Series.Sequence durationInFrames={D[2]}>
+      <SceneFade duration={D[2]}>
       <PhoneScene
         duration={D[2]}
         label="QuickFlow"
@@ -43,10 +55,11 @@ export const LiveVideo: React.FC = () => (
         body={<>Skriv eller prata fritt. Flow sorterar sen — du behöver inte ha ordning på tankarna först.</>}
         image="quickflow2.png"
       />
-    </TransitionSeries.Sequence>
-    <TransitionSeries.Transition presentation={fade()} timing={timing} />
+      </SceneFade>
+    </Series.Sequence>
 
-    <TransitionSeries.Sequence durationInFrames={D[3]}>
+    <Series.Sequence durationInFrames={D[3]}>
+      <SceneFade duration={D[3]}>
       <PhoneScene
         duration={D[3]}
         label="Din dag"
@@ -54,10 +67,11 @@ export const LiveVideo: React.FC = () => (
         body={<>Kalender, uppgifter och rutiner samlat. Tider visas bara där de faktiskt finns.</>}
         image="minday.png"
       />
-    </TransitionSeries.Sequence>
-    <TransitionSeries.Transition presentation={fade()} timing={timing} />
+      </SceneFade>
+    </Series.Sequence>
 
-    <TransitionSeries.Sequence durationInFrames={D[4]}>
+    <Series.Sequence durationInFrames={D[4]}>
+      <SceneFade duration={D[4]}>
       <PhoneScene
         duration={D[4]}
         label="Flow"
@@ -66,10 +80,11 @@ export const LiveVideo: React.FC = () => (
         image="vadnu.png"
         note="Du godkänner alltid förändringen."
       />
-    </TransitionSeries.Sequence>
-    <TransitionSeries.Transition presentation={fade()} timing={timing} />
+      </SceneFade>
+    </Series.Sequence>
 
-    <TransitionSeries.Sequence durationInFrames={D[5]}>
+    <Series.Sequence durationInFrames={D[5]}>
+      <SceneFade duration={D[5]}>
       <PhoneScene
         duration={D[5]}
         label="Kalender"
@@ -77,10 +92,11 @@ export const LiveVideo: React.FC = () => (
         body={<>Träning, studier, arbete och vardagssysslor kan bli mindre eller flyttas. Fasta tider lämnas kvar.</>}
         image="kalender.png"
       />
-    </TransitionSeries.Sequence>
-    <TransitionSeries.Transition presentation={fade()} timing={timing} />
+      </SceneFade>
+    </Series.Sequence>
 
-    <TransitionSeries.Sequence durationInFrames={D[6]}>
+    <Series.Sequence durationInFrames={D[6]}>
+      <SceneFade duration={D[6]}>
       <PhoneScene
         duration={D[6]}
         label="Återhämtning"
@@ -88,10 +104,11 @@ export const LiveVideo: React.FC = () => (
         body={<>Mikropaus, Akut Lugn, Ljusboost och Stopp-knappen — alltid ett tryck bort.</>}
         image="aterhamtning.png"
       />
-    </TransitionSeries.Sequence>
-    <TransitionSeries.Transition presentation={fade()} timing={timing} />
+      </SceneFade>
+    </Series.Sequence>
 
-    <TransitionSeries.Sequence durationInFrames={D[7]}>
+    <Series.Sequence durationInFrames={D[7]}>
+      <SceneFade duration={D[7]}>
       <PhoneScene
         duration={D[7]}
         label="Dina mönster"
@@ -99,12 +116,13 @@ export const LiveVideo: React.FC = () => (
         body={<>Över tid blir det osynliga arbetet synligt. Du gör förmodligen mycket mer än du själv hinner se.</>}
         image="historik.png"
       />
-    </TransitionSeries.Sequence>
-    <TransitionSeries.Transition presentation={fade()} timing={timing} />
+      </SceneFade>
+    </Series.Sequence>
 
-    <TransitionSeries.Sequence durationInFrames={D[8]}>
-      <OutroScene duration={D[8]} />
-    </TransitionSeries.Sequence>
-  </TransitionSeries>
+    <Series.Sequence durationInFrames={D[8]}>
+      <SceneFade duration={D[8]}><OutroScene duration={D[8]} /></SceneFade>
+    </Series.Sequence>
+    </Series>
+    </AbsoluteFill>
   </NoSelfFade.Provider>
 );

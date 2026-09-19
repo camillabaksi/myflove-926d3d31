@@ -1,3 +1,9 @@
+## 2026-09-19 – Stabilare livevideo för mobil
+
+- Livevideorna har byggts om utan överlappande scener för att ta bort blinkningar, dubbla bilder och hopp.
+- De nya filerna saknar ljudspår och använder standardiserad mobilkompatibel färg, bildfrekvens och nyckelbilder.
+- Fade in och fade out sker nu mot MyFloves lugna lavendelbakgrund.
+
 ## 2026-09-19 – Livevideo med riktiga MyFlove-skärmar
 
 - Ny 90-sekunders video i 16:9 och 9:16 där varje scen visar en riktig, inloggad MyFlove-skärm i en telefonram.
