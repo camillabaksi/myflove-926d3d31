@@ -4,6 +4,7 @@ import { fade } from "@remotion/transitions/fade";
 import { ProblemScene } from "./marketing90/scenes/ProblemScene";
 import { OutroScene } from "./marketing90/scenes/OutroScene";
 import { PhoneScene } from "./live/PhoneScene";
+import { NoSelfFade } from "./marketing90/theme";
 
 export const LIVE_FPS = 30;
 export const LIVE_FRAMES = 2700; // 90 s
@@ -16,6 +17,7 @@ const V = "#7657B6";
 const D = [300, 330, 330, 330, 330, 320, 320, 320, 320];
 
 export const LiveVideo: React.FC = () => (
+  <NoSelfFade.Provider value={true}>
   <TransitionSeries>
     <TransitionSeries.Sequence durationInFrames={D[0]}>
       <ProblemScene duration={D[0]} />
@@ -104,4 +106,5 @@ export const LiveVideo: React.FC = () => (
       <OutroScene duration={D[8]} />
     </TransitionSeries.Sequence>
   </TransitionSeries>
+  </NoSelfFade.Provider>
 );
