@@ -15,10 +15,14 @@ export const rise = (frame: number, delay = 0, distance = 45) => {
   return { opacity: p, transform: `translateY(${interpolate(p, [0, 1], [distance, 0])}px)` } as React.CSSProperties;
 };
 
+/** När true sköter TransitionSeries all toning – scenen tonar inte själv (undviker dubbel fade/blink). */
+export const NoSelfFade = React.createContext(false);
+
 export const Shell: React.FC<{ children: React.ReactNode; duration: number; label?: string }> = ({ children, duration, label }) => {
   const frame = useCurrentFrame(); const { width, height } = useVideoConfig(); const portrait = height > width;
+  const noSelfFade = React.useContext(NoSelfFade);
   const drift = Math.sin(frame / 60) * 18;
-  return <AbsoluteFill style={{ background: `linear-gradient(135deg, ${C.bg}, ${C.bg2})`, color: C.ink, fontFamily: displayFont, overflow: "hidden", opacity: fade(frame, duration) }}>
+  return <AbsoluteFill style={{ background: `linear-gradient(135deg, ${C.bg}, ${C.bg2})`, color: C.ink, fontFamily: displayFont, overflow: "hidden", opacity: noSelfFade ? 1 : fade(frame, duration) }}>
     <div style={{ position: "absolute", width: portrait ? 760 : 1000, height: portrait ? 760 : 1000, borderRadius: "48% 52% 61% 39% / 55% 42% 58% 45%", background: C.pink, opacity: .25, right: portrait ? -390 : -320, top: -430 + drift }} />
     <div style={{ position: "absolute", width: portrait ? 680 : 850, height: portrait ? 680 : 850, borderRadius: "60% 40% 46% 54%", background: C.lilac, opacity: .22, left: portrait ? -390 : -300, bottom: -460 - drift }} />
     {label && <div style={{ position: "absolute", left: portrait ? 64 : 92, top: portrait ? 68 : 58, fontSize: portrait ? 25 : 23, fontWeight: 800, color: C.violet, letterSpacing: 4, zIndex: 10 }}>{label.toUpperCase()}</div>}

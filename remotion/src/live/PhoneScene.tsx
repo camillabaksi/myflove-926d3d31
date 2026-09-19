@@ -18,13 +18,12 @@ export const PhoneScene: React.FC<{
   const { width, height } = useVideoConfig();
   const portrait = height > width;
 
-  const imgOpacity = interpolate(
-    frame,
-    [6, 34, duration - 30, duration - 6],
-    [0, 1, 1, 0],
-    { extrapolateLeft: "clamp", extrapolateRight: "clamp" },
-  );
-  const scale = interpolate(frame, [0, duration], [1.0, 1.045], { extrapolateRight: "clamp" });
+  // Ingen egen ut-toning: TransitionSeries sköter övergången mellan scenerna.
+  const imgOpacity = interpolate(frame, [4, 26], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  const scale = interpolate(frame, [0, duration], [1.0, 1.03], { extrapolateRight: "clamp" });
   const float = Math.sin(frame / 55) * 8;
 
   const phoneH = portrait ? 1020 : 830;
