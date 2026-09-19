@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-19";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Livevideo med riktiga MyFlove-skärmar",
+    items: [
+      "Ny 90-sekunders video i 16:9 och 9:16 där varje scen visar en riktig inloggad MyFlove-skärm i telefonram (2026-09-19)",
+      "Mjuk fade in och fade out mellan alla bilder och scener (2026-09-19)",
+      "Visar Mitt batteri, QuickFlow, Min dag, Flow, Kalender, Återhämtning och Historik – utan musik (2026-09-19)",
+    ],
+  },
+  {
     title: "Ny 90-sekunders marknadsföringsvideo",
     items: [
       "Svensk marknadsföringsvideo i både 16:9 och 9:16, baserad på investerarpitchens layout (2026-09-19)",

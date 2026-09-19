@@ -31,6 +31,7 @@ import {
 } from "./DemoVideo";
 import { FlowAdVideo, FLOW_AD_FPS, FLOW_AD_FRAMES } from "./FlowAdVideo";
 import { Marketing90Video, MARKETING_90_FPS, MARKETING_90_FRAMES } from "./Marketing90Video";
+import { LiveVideo, LIVE_FPS, LIVE_FRAMES } from "./LiveVideo";
 
 export const RemotionRoot: React.FC = () => (
   <>
@@ -104,5 +105,7 @@ export const RemotionRoot: React.FC = () => (
     />
     <Composition id="marketing-90-landscape" component={Marketing90Video} durationInFrames={MARKETING_90_FRAMES} fps={MARKETING_90_FPS} width={1920} height={1080} />
     <Composition id="marketing-90-portrait" component={Marketing90Video} durationInFrames={MARKETING_90_FRAMES} fps={MARKETING_90_FPS} width={1080} height={1920} />
+    <Composition id="live-90-landscape" component={LiveVideo} durationInFrames={LIVE_FRAMES} fps={LIVE_FPS} width={1920} height={1080} />
+    <Composition id="live-90-portrait" component={LiveVideo} durationInFrames={LIVE_FRAMES} fps={LIVE_FPS} width={1080} height={1920} />
   </>
 );
