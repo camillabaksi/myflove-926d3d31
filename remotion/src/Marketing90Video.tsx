@@ -1,5 +1,4 @@
 import React from "react";
-import { Audio, staticFile } from "remotion";
 import { TransitionSeries, linearTiming } from "@remotion/transitions";
 import { fade } from "@remotion/transitions/fade";
 import { ProblemScene } from "./marketing90/scenes/ProblemScene";
