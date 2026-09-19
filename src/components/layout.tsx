@@ -81,6 +81,7 @@ import { lifeProfileSummary } from "@/lib/life-profile";
 import ViewCollapseToggle from "@/components/view-collapse-toggle";
 import FlowCompanion from "@/components/flow/flow-companion";
 import FlowCheckinPopup from "@/components/flow-checkin-popup";
+import GlobalActivityEnergyPrompt from "@/components/global-activity-energy-prompt";
 import DemoBanner from "@/components/demo-banner";
 import { useDemoAccount } from "@/hooks/use-demo-account";
 import PwaInstallButton from "@/components/pwa-install-button";
@@ -939,6 +940,7 @@ export default function Layout({ children }: LayoutProps) {
           <div key={location} className="max-w-6xl mx-auto w-full p-4 md:p-6 page-enter">
             {!FLOW_HIDDEN_PATHS.has(location) && <FlowCompanion stage="mini" className="mb-4" />}
             <FlowCheckinPopup />
+            <GlobalActivityEnergyPrompt />
             {children}
           </div>
 

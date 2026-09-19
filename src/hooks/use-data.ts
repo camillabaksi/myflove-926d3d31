@@ -5,6 +5,7 @@ import { track } from "../lib/analytics";
 import type { LifeArea } from "../lib/life-areas";
 import { flowDone } from "@/lib/flow-signal";
 import { haptic } from "@/lib/haptics";
+import { emitActivityDone } from "@/lib/activity-energy-event";
 import { todayISO } from "@/lib/day";
 import { SECURE_UNLOCK_EVENT, unlockSecureLocal } from "@/lib/secure-local";
 import {
