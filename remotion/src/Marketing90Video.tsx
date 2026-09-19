@@ -14,7 +14,7 @@ import { OutroScene } from "./marketing90/scenes/OutroScene";
 export const MARKETING_90_FPS=30; export const MARKETING_90_FRAMES=2700;
 const T=15; const timing=linearTiming({durationInFrames:T});
 const D=[300,345,345,345,375,375,345,375];
-export const Marketing90Video:React.FC=()=> <><Audio src={staticFile("marketing90/myflove-ambient.mp3")} volume={0.48}/><TransitionSeries>
+export const Marketing90Video:React.FC=()=> <><TransitionSeries>
   <TransitionSeries.Sequence durationInFrames={D[0]}><ProblemScene duration={D[0]}/></TransitionSeries.Sequence><TransitionSeries.Transition presentation={fade()} timing={timing}/>
   <TransitionSeries.Sequence durationInFrames={D[1]}><InvisibleScene duration={D[1]}/></TransitionSeries.Sequence><TransitionSeries.Transition presentation={fade()} timing={timing}/>
   <TransitionSeries.Sequence durationInFrames={D[2]}><BatteryScene duration={D[2]}/></TransitionSeries.Sequence><TransitionSeries.Transition presentation={fade()} timing={timing}/>
