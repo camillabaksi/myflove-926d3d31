@@ -1,3 +1,9 @@
+## 2026-09-19 – Ny 90-sekunders marknadsföringsvideo
+
+- Två svenska versioner i 16:9 och 9:16, baserade på investerarpitchens layout.
+- Berättelsen går från mental belastning och osynligt arbete till levande batteri, QuickFlow, Flow, kapacitetsanpassning och energimönster.
+- Videorna använder riktiga MyFlove-skärmar, tydlig text och lugn originalmusik utan berättarröst.
+
 ## 2026-09-18 – "Hur kändes det?" direkt när du bockar av
 
 - När du bockar av något i Min dag eller Kalendern kommer en mjuk fråga: Gav energi, Tog energi, Både och eller Vet inte.

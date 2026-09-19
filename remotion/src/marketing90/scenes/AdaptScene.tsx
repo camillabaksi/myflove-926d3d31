@@ -1,0 +1,2 @@
+import React from "react"; import { ScreenScene } from "../theme";
+export const AdaptScene:React.FC<{duration:number}>=({duration})=><ScreenScene duration={duration} label="Samma sak · olika kapacitet" title={<>Planera för kapacitet — <span style={{color:"#7657B6"}}>inte bara tid.</span></>} body={<>Träning, studier, arbete och vardagssysslor kan bli mindre, enklare eller flyttas. Fasta tider lämnas kvar.</>} image="myflove-demo-adapt-a-crop.jpg" note="Du godkänner alltid förändringen."/>;

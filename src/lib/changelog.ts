@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-19";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Ny 90-sekunders marknadsföringsvideo",
+    items: [
+      "Svensk marknadsföringsvideo i både 16:9 och 9:16, baserad på investerarpitchens layout (2026-09-19)",
+      "Visar problemet, det levande batteriet, QuickFlow, Flow, kapacitetsanpassning och energimönster (2026-09-19)",
+      "Riktiga MyFlove-skärmar, tydlig text och lugn originalmusik utan berättarröst (2026-09-19)",
+    ],
+  },
+  {
     title: "Ingen vit skärm längre",
     items: [
       "Om något oväntat går fel visas en lugn sida med \"Ladda om\" i stället för en tom skärm (2026-09-19)",

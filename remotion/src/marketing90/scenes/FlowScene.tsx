@@ -1,0 +1,2 @@
+import React from "react"; import { ScreenScene } from "../theme";
+export const FlowScene:React.FC<{duration:number}>=({duration})=><ScreenScene duration={duration} label="Flow" title={<>Hur mycket har du faktiskt <span style={{color:"#7657B6"}}>kapacitet för idag?</span></>} body={<>Flow väger ihop dagens signaler och hjälper dig hitta ett konkret nästa steg.</>} image="myflove-demo-flow-crop.jpg" note="Inte mer att göra. Rätt sak just nu."/>;
