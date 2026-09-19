@@ -328,6 +328,14 @@ export function useFlowItems(dateISO?: string): {
   const toggleItem = useCallback(
     (item: FlowItem) => {
       if (!item.completable) return;
+      // Uppgifter skickar sin egen signal i useTasks – övriga källor gör det här.
+      if (!item.done && !item.id.startsWith("task-")) {
+        emitActivityDone({
+          id: item.id,
+          title: item.title,
+          ...(item.dueDate ? { dueDate: item.dueDate } : {}),
+        });
+      }
       const [, rest] = [
         item.id.slice(0, item.id.indexOf("-")),
         item.id.slice(item.id.indexOf("-") + 1),

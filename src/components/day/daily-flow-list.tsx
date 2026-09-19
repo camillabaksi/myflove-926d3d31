@@ -79,12 +79,9 @@ export function DailyFlowList({
                   <button
                     type="button"
                     onClick={() => {
-                      const wasDone = item.done;
+      const wasDone = item.done;
                       toggleItem(item);
-                      if (!wasDone) {
-                        setEnergyItem(item);
-                        onCompleted?.(item);
-                      }
+                      if (!wasDone) onCompleted?.(item);
                     }}
                     aria-label={item.done ? `Ångra ${item.title}` : `Klarmarkera ${item.title}`}
                     className="press shrink-0 rounded-full p-1 text-muted-foreground hover:text-primary"
