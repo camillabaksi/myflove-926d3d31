@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-19";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Stabilare livevideo för mobil",
+    items: [
+      "Livevideorna har byggts om utan överlappande scener för att ta bort blinkningar, dubbla bilder och hopp (2026-09-19)",
+      "De nya filerna saknar ljudspår och använder mobilkompatibel färg, bildfrekvens och nyckelbilder (2026-09-19)",
+      "Fade in och fade out sker nu mot MyFloves lugna lavendelbakgrund (2026-09-19)",
+    ],
+  },
+  {
     title: "Livevideo med riktiga MyFlove-skärmar",
     items: [
       "Ny 90-sekunders video i 16:9 och 9:16 där varje scen visar en riktig inloggad MyFlove-skärm i telefonram (2026-09-19)",
