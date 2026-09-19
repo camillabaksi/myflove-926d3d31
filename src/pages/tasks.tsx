@@ -102,7 +102,6 @@ export default function Tasks() {
     setTaskStatus,
     setTaskKind,
     setTaskNote,
-    setTaskActualEnergy,
     updateTask,
     addTaskStep,
     addTaskSteps,
