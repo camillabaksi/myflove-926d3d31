@@ -72,3 +72,5 @@
 - [x] Venture Cup-videorna omdesignade med redaktionell typografi, skrivstil, ritade ikoner och säkra textmarginaler (2026-09-20)
 
 - [x] De tre återkommande ikonrutorna borttagna ur Venture Cup-videons illustrerade scener (2026-09-20)
+
+- [x] Relevanta riktiga MyFlove-vyer används genom hela Venture Cup-videon (2026-09-20)

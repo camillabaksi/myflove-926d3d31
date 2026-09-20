@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-20";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Riktiga MyFlove-vyer genom hela Venture Cup-videon",
+    items: [
+      "De abstrakta bildytorna har ersatts med relevanta delar ur den riktiga MyFlove-produkten (2026-09-20)",
+      "Kalender, Historik, Hem, QuickFlow, Mitt batteri, Flow, Min dag och Återhämtning stödjer nu berättelsen visuellt (2026-09-20)",
+      "Pitchens text, språk, format, längd och mjuka toningar är oförändrade (2026-09-20)",
+    ],
+  },
+  {
     title: "Renare bildytor i Venture Cup-videon",
     items: [
       "De återkommande grupperna med tre flytande ikonrutor har tagits bort ur alla illustrerade scener (2026-09-20)",
