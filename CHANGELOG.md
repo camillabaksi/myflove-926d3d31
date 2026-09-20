@@ -1,3 +1,9 @@
+## 2026-09-20 – Renare bildytor i Venture Cup-videon
+
+- De återkommande grupperna med tre flytande ikonrutor har tagits bort ur alla illustrerade scener.
+- Bildytorna använder nu lugna organiska färgfält och en diskret handritad linje i samma redaktionella stil.
+- Produktbilder, texter, språk, format, längd och toningar är oförändrade.
+
 ## 2026-09-20 – Ny redaktionell design för Venture Cup-videon
 
 - Alla fyra pitchvideor har fått större typografisk kontrast, riktiga MyFlove-skärmar och handskrivna kommentarer.

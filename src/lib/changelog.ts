@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-20";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Renare bildytor i Venture Cup-videon",
+    items: [
+      "De återkommande grupperna med tre flytande ikonrutor har tagits bort ur alla illustrerade scener (2026-09-20)",
+      "Bildytorna använder nu lugna organiska färgfält och en diskret handritad linje i samma redaktionella stil (2026-09-20)",
+      "Produktbilder, texter, språk, format, längd och toningar är oförändrade (2026-09-20)",
+    ],
+  },
+  {
     title: "Ny redaktionell design för Venture Cup-videon",
     items: [
       "Alla fyra pitchvideor har fått större typografisk kontrast, riktiga MyFlove-skärmar och handskrivna kommentarer (2026-09-20)",

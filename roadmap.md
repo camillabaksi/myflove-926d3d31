@@ -70,3 +70,5 @@
 - [x] Venture Cup 2026 pitchvideo: 3 min, SV+EN, 16:9+9:16, helt utan ljud (2026-09-19)
 
 - [x] Venture Cup-videorna omdesignade med redaktionell typografi, skrivstil, ritade ikoner och säkra textmarginaler (2026-09-20)
+
+- [x] De tre återkommande ikonrutorna borttagna ur Venture Cup-videons illustrerade scener (2026-09-20)
