@@ -6,9 +6,17 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-09-19";
+export const CHANGELOG_UPDATED = "2026-09-20";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  {
+    title: "Ny redaktionell design för Venture Cup-videon",
+    items: [
+      "Alla fyra pitchvideor har fått större typografisk kontrast, riktiga MyFlove-skärmar och handskrivna kommentarer (2026-09-20)",
+      "Saknade symboler har ersatts med ritade ikoner och all text har fått säkra marginaler i båda formaten (2026-09-20)",
+      "Filmerna är fortsatt exakt tre minuter, helt tysta och använder mjuka toningar (2026-09-20)",
+    ],
+  },
   {
     title: "Venture Cup 2026 pitchvideo",
     items: [
