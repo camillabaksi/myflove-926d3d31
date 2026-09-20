@@ -1,3 +1,9 @@
+## 2026-09-20 – Riktiga MyFlove-vyer genom hela Venture Cup-videon
+
+- De abstrakta bildytorna har ersatts med relevanta delar ur den riktiga MyFlove-produkten.
+- Kalender, Historik, Hem, QuickFlow, Mitt batteri, Flow, Min dag och Återhämtning används där de stödjer berättelsen.
+- Pitchens text, språk, format, längd och mjuka toningar är oförändrade.
+
 ## 2026-09-20 – Renare bildytor i Venture Cup-videon
 
 - De återkommande grupperna med tre flytande ikonrutor har tagits bort ur alla illustrerade scener.
