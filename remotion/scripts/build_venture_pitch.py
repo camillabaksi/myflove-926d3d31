@@ -1,78 +1,286 @@
-from PIL import Image,ImageDraw,ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
 from pathlib import Path
-import subprocess, os, textwrap, sys
-ROOT=Path(__file__).resolve().parents[1]; AS=ROOT/'public/live'; TMP=Path('/tmp/venture-final'); TMP.mkdir(exist_ok=True)
-BG=(247,243,252); BG2=(238,229,250); INK=(26,13,89); V=(118,87,182); MUT=(113,102,128); PINK=(242,201,226); MINT=(205,239,231); WHITE=(255,255,255); LILAC=(216,200,242)
-font='/nix/store/dg3hd9mqha517djbgpgnq8r4q1j1wn30-noto-fonts-2025.11.01/share/fonts/noto/NotoSans[wdth,wght].ttf'; bold='/nix/store/dg3hd9mqha517djbgpgnq8r4q1j1wn30-noto-fonts-2025.11.01/share/fonts/noto/NotoSans[wdth,wght].ttf'
-D=[13,13,13,15,15,15,13,14,15,13,14,15,12]
-SV=[
-('PROBLEMET','Vi planerar tid. Men lever med|begränsad kapacitet.','När vardagen blir komplex räcker kalendern inte alltid till. Mental belastning, osynligt arbete och förändrad energi avgör vad som faktiskt är möjligt.',None,None),
-('INSIKTEN','En tom kalender kan fortfarande kännas|helt full.','Det som tar kraft syns sällan i en att-göra-lista. MyFlove gör kapaciteten till en del av planeringen — utan skuld.',None,None),
-('LÖSNINGEN','Ett vardagsstöd som|anpassar sig efter dig.','MyFlove hjälper dig att fånga det som snurrar, förstå dagens kapacitet och hitta ett genomförbart nästa steg.',None,None),
-('PRODUKTEN · QUICKFLOW','Fånga först.|Sortera sen.','Skriv eller prata fritt. QuickFlow tar emot tanken utan att kräva att användaren först väljer rätt funktion.','quickflow2.png','Riktig MyFlove-skärm'),
-('PRODUKTEN · MITT BATTERI','Din kapacitet blir|synlig.','Energi, mående och aktiviteternas påverkan bygger ett levande batteri över tid — med snabb incheckning, inte långa formulär.','batteri.png','Riktig MyFlove-skärm'),
-('PRODUKTEN · FLOW','Nästa steg som faktiskt|går.','Flow väger ihop dagens kapacitet och det som behöver göras. Användaren kan acceptera, justera eller göra senare.','vadnu.png','Flow ändrar inget utan godkännande.'),
-('SAMMANHÄNGANDE VÄRDE','Från tanke till en rimligare|vardag.','Ett sammanhängande flöde — inte ännu en fristående kalender.',None,'Fånga · Förstå · Anpassa · Göra · Återhämta · Synliggöra'),
-('KUNDSEGMENT','För människor med hög|mental belastning.','Första hypotesen är personer som lätt blir överväldigade i en komplex vardag. NPF, stress, studier, familjeliv och arbetsliv är behovsområden som valideras — inte etiketter som begränsar produkten.',None,'Primärt segment och betalande kund ska valideras vidare.'),
-('MARKNAD','Ett stort behov i en växande|digital marknad.','Över 140 miljoner vuxna globalt uppskattas leva med ADHD. I Sverige uppskattas omkring 3 % av vuxna ha ADHD. MyFlove börjar med ett tydligt behov men byggs för bredare vardagskomplexitet.',None,'140M+ vuxna globalt · ~3 % av vuxna i Sverige*\n*Externa uppskattningar: Song et al., Journal of Global Health 2021; Socialstyrelsen. Inte MyFloves traction.'),
-('POSITIONERING','Tid + uppgifter räcker inte.|Kapacitet förändrar svaret.','Kalendrar visar när. Att-göra-listor visar vad. MyFlove hjälper användaren förstå vad som är rimligt nu — och hur det kan genomföras.',None,'Kapacitetsanpassning · Osynligt arbete · Nästa rimliga steg · Återhämtning'),
-('AFFÄR & VALIDERING','B2C först.|Fler vägar testas.','Free/Premium är utgångspunkten. Arbetsgivare och offentlig sektor är möjliga framtida spår — först efter validerade piloter, betalningsvilja och återkommande användning.',None,'Fungerande MVP · Tidiga testare · Retention och pris ska mätas · B2B/B2G är hypoteser'),
-('KAPITAL & NÄSTA STEG','€250 000 för 18 månaders|validering.','Arbetscaset finansierar en stabil produkt, retention- och prisvalidering, piloter, regelefterlevnad och ett bevisat kommersiellt spår.',None,'Stabilisera · Mäta återkommande värde · Validera betalningsvilja · Bygga ett skalbart case\nKapital och värdering är arbetsantaganden, inte fastställda villkor.'),
-('MYFLOVE','Bygg vardagen efter den kapacitet|du faktiskt har.','MyFlove anpassar sig efter dig — så att du slipper bära allt själv.',None,'myflove.lovable.app · Venture Cup 2026')]
-EN=[
-('THE PROBLEM','We plan time. But live with|limited capacity.','When everyday life gets complex, a calendar is not always enough. Mental load, invisible work and changing energy determine what is actually possible.',None,None),
-('THE INSIGHT','An empty calendar can still feel|completely full.','What drains us rarely appears on a to-do list. MyFlove makes capacity part of planning — without guilt.',None,None),
-('THE SOLUTION','Everyday support that|adapts to you.','MyFlove helps you capture what is spinning, understand today’s capacity and find one achievable next step.',None,None),
-('THE PRODUCT · QUICKFLOW','Capture first.|Sort later.','Write or speak freely. QuickFlow receives the thought without asking the user to choose the right feature first.','quickflow2.png','Real MyFlove screen'),
-('THE PRODUCT · MY BATTERY','Your capacity becomes|visible.','Energy, wellbeing and activity impact build a living battery over time — through quick check-ins, not long forms.','batteri.png','Real MyFlove screen'),
-('THE PRODUCT · FLOW','A next step that actually|works.','Flow combines today’s capacity with what needs to be done. The user can accept, adjust or choose later.','vadnu.png','Flow changes nothing without approval.'),
-('CONNECTED VALUE','From thought to a more|manageable day.','One connected flow — not another standalone calendar.',None,'Capture · Understand · Adapt · Do · Recover · Reveal'),
-('CUSTOMER SEGMENTS','For people carrying a high|mental load.','The first hypothesis is people easily overwhelmed by complex everyday life. Neurodivergence, stress, studies, family and work are need areas to validate — not labels that limit the product.',None,'The primary segment and paying customer require further validation.'),
-('MARKET','A major need in a growing|digital market.','More than 140 million adults worldwide are estimated to live with ADHD. In Sweden, around 3% of adults are estimated to have ADHD. MyFlove starts with a clear need and is built for broader everyday complexity.',None,'140M+ adults globally · ~3% of adults in Sweden*\n*External estimates: Song et al., Journal of Global Health 2021; Swedish National Board of Health and Welfare. Not MyFlove traction.'),
-('POSITIONING','Time + tasks are not enough.|Capacity changes the answer.','Calendars show when. To-do lists show what. MyFlove helps users understand what is reasonable now — and how to get started.',None,'Capacity adaptation · Invisible work · Next reasonable step · Recovery'),
-('BUSINESS & VALIDATION','B2C first.|More paths to test.','Free/Premium is the starting point. Employers and public services are possible future paths — after validated pilots, willingness to pay and recurring use.',None,'Working MVP · Early testers · Retention and pricing to measure · B2B/B2G remain hypotheses'),
-('FUNDING & NEXT STEP','€250,000 for 18 months of|validation.','The working case funds product stability, retention and pricing validation, pilots, compliance and one proven commercial path.',None,'Stabilise · Measure recurring value · Validate willingness to pay · Build a scalable case\nFunding and valuation are working assumptions, not final terms.'),
-('MYFLOVE','Build everyday life around the capacity|you actually have.','MyFlove adapts to you — so you do not have to carry everything alone.',None,'myflove.lovable.app · Venture Cup 2026')]
-def fit(text,size,maxw,draw,path=bold):
- while size>18 and max(draw.textbbox((0,0),x,font=ImageFont.truetype(path,size))[2] for x in text.split('|'))>maxw: size-=2
- return ImageFont.truetype(path,size)
-def wrap(draw,text,f,maxw):
- words=text.split(); lines=[]; cur=''
- for w in words:
-  test=(cur+' '+w).strip()
-  if draw.textbbox((0,0),test,font=f)[2]<=maxw:cur=test
-  else: lines.append(cur);cur=w
- if cur:lines.append(cur)
- return lines
-def slide(item,w,h,portrait):
- im=Image.new('RGB',(w,h),BG);d=ImageDraw.Draw(im)
- d.ellipse((w*.68,-h*.35,w*1.18,h*.38),fill=PINK);d.ellipse((-w*.22,h*.72,w*.30,h*1.25),fill=MINT)
- mx=int(w*.07); top=int(h*.11); content_w=int(w*.52 if item[3] and not portrait else w*.86)
- d.text((mx,top),item[0],font=ImageFont.truetype(bold,int(h*.022)),fill=V)
- fs=int(h*(.066 if portrait else .075)); tf=fit(item[1],fs,content_w,d); y=top+int(h*.06)
- for j,line in enumerate(item[1].split('|')): d.text((mx,y+j*int(tf.size*1.08)),line,font=tf,fill=V if j else INK)
- y+=len(item[1].split('|'))*int(tf.size*1.08)+int(h*.035); bf=ImageFont.truetype(font,int(h*(.026 if portrait else .029)))
- for line in wrap(d,item[2],bf,content_w): d.text((mx,y),line,font=bf,fill=MUT);y+=int(bf.size*1.45)
- if item[4]:
-  y+=int(h*.03); nf=ImageFont.truetype(bold,int(h*.019));
-  for line in item[4].split('\n'):
-   for wl in wrap(d,line,nf,content_w): d.text((mx,y),wl,font=nf,fill=V);y+=int(nf.size*1.4)
- if item[3]:
-  app=Image.open(AS/item[3]).convert('RGB'); ph=int(h*(.56 if portrait else .73)); pw=int(ph*430/932); app=app.resize((pw-16,ph-16),Image.Resampling.LANCZOS)
-  phone=Image.new('RGB',(pw,ph),INK); phone.paste(app,(8,8)); x=int((w-pw)/2 if portrait else w*.76-pw/2); yy=int(h*.42 if portrait else h*.14); im.paste(phone,(x,yy))
- d.text((mx,h-int(h*.055)),'♡ MyFlove',font=ImageFont.truetype(bold,int(h*.022)),fill=INK); d.text((w-int(w*.18),h-int(h*.052)),'VENTURE CUP 2026',font=ImageFont.truetype(bold,int(h*.014)),fill=V)
- return im
+import subprocess, sys
+
+ROOT = Path(__file__).resolve().parents[1]
+ASSETS = ROOT / "public/live"
+FONTS = ROOT / "assets/fonts"
+TMP = Path("/tmp/venture-editorial")
+TMP.mkdir(exist_ok=True)
+
+BG = (248, 246, 251)
+PAPER = (255, 255, 255)
+INK = (31, 17, 78)
+VIOLET = (119, 82, 184)
+PINK = (239, 190, 220)
+LILAC = (221, 207, 244)
+MINT = (202, 237, 226)
+MUTED = (103, 94, 117)
+LINE = (226, 219, 235)
+
+DISPLAY = str(FONTS / "PlusJakartaSans.ttf")
+BODY = str(FONTS / "Inter.ttf")
+SCRIPT = str(FONTS / "Caveat.ttf")
+
+DURATIONS = [13, 13, 13, 15, 15, 15, 13, 14, 15, 13, 14, 15, 12]
+
+SV = [
+    ("PROBLEMET", "Vi planerar tid. Men lever med|begränsad kapacitet.", "När vardagen blir komplex räcker kalendern inte alltid till. Mental belastning, osynligt arbete och förändrad energi avgör vad som faktiskt är möjligt.", None, "Tid är bara halva bilden."),
+    ("INSIKTEN", "En tom kalender kan fortfarande kännas|helt full.", "Det som tar kraft syns sällan i en att-göra-lista. MyFlove gör kapaciteten till en del av planeringen — utan skuld.", None, "Det osynliga arbetet räknas också."),
+    ("LÖSNINGEN", "Ett vardagsstöd som|anpassar sig efter dig.", "MyFlove hjälper dig att fånga det som snurrar, förstå dagens kapacitet och hitta ett genomförbart nästa steg.", None, "Mindre press. Mer riktning."),
+    ("PRODUKTEN · QUICKFLOW", "Fånga först.|Sortera sen.", "Skriv eller prata fritt. QuickFlow tar emot tanken utan att kräva att användaren först väljer rätt funktion.", "quickflow2.png", "En tanke räcker för att börja."),
+    ("PRODUKTEN · MITT BATTERI", "Din kapacitet blir|synlig.", "Energi, mående och aktiviteternas påverkan bygger ett levande batteri över tid — med snabb incheckning, inte långa formulär.", "batteri.png", "Ditt eget levande batteri."),
+    ("PRODUKTEN · FLOW", "Nästa steg som faktiskt|går.", "Flow väger ihop dagens kapacitet och det som behöver göras. Användaren kan acceptera, justera eller göra senare.", "vadnu.png", "Du godkänner alltid förändringen."),
+    ("SAMMANHÄNGANDE VÄRDE", "Från tanke till en rimligare|vardag.", "Ett sammanhängande flöde — inte ännu en fristående kalender.", None, "Fånga · Förstå · Anpassa · Göra · Återhämta · Synliggöra"),
+    ("KUNDSEGMENT", "För människor med hög|mental belastning.", "Första hypotesen är personer som lätt blir överväldigade i en komplex vardag. NPF, stress, studier, familjeliv och arbetsliv är behovsområden som valideras — inte etiketter som begränsar produkten.", None, "Primärt segment och betalande kund valideras vidare."),
+    ("MARKNAD", "Ett stort behov i en växande|digital marknad.", "Över 140 miljoner vuxna globalt uppskattas leva med ADHD. I Sverige uppskattas omkring 3 % av vuxna ha ADHD. MyFlove börjar med ett tydligt behov men byggs för bredare vardagskomplexitet.", None, "140M+ globalt · cirka 3 % i Sverige*\n*Externa uppskattningar: Song et al. 2021; Socialstyrelsen."),
+    ("POSITIONERING", "Tid + uppgifter räcker inte.|Kapacitet förändrar svaret.", "Kalendrar visar när. Att-göra-listor visar vad. MyFlove hjälper användaren förstå vad som är rimligt nu — och hur det kan genomföras.", None, "Kapacitet · Osynligt arbete · Nästa steg · Återhämtning"),
+    ("AFFÄR & VALIDERING", "B2C först.|Fler vägar testas.", "Free/Premium är utgångspunkten. Arbetsgivare och offentlig sektor är möjliga framtida spår — först efter validerade piloter, betalningsvilja och återkommande användning.", None, "Fungerande MVP · Tidiga testare · Retention och pris ska mätas"),
+    ("KAPITAL & NÄSTA STEG", "€250 000 för 18 månaders|validering.", "Arbetscaset finansierar en stabil produkt, retention- och prisvalidering, piloter, regelefterlevnad och ett bevisat kommersiellt spår.", None, "Stabilisera · Mäta värde · Validera betalning · Skala\nKapital och värdering är arbetsantaganden."),
+    ("MYFLOVE", "Bygg vardagen efter den kapacitet|du faktiskt har.", "MyFlove anpassar sig efter dig — så att du slipper bära allt själv.", None, "myflove.lovable.app · Venture Cup 2026"),
+]
+
+EN = [
+    ("THE PROBLEM", "We plan time. But live with|limited capacity.", "When everyday life gets complex, a calendar is not always enough. Mental load, invisible work and changing energy determine what is actually possible.", None, "Time is only half the picture."),
+    ("THE INSIGHT", "An empty calendar can still feel|completely full.", "What drains us rarely appears on a to-do list. MyFlove makes capacity part of planning — without guilt.", None, "Invisible work counts too."),
+    ("THE SOLUTION", "Everyday support that|adapts to you.", "MyFlove helps you capture what is spinning, understand today’s capacity and find one achievable next step.", None, "Less pressure. More direction."),
+    ("THE PRODUCT · QUICKFLOW", "Capture first.|Sort later.", "Write or speak freely. QuickFlow receives the thought without asking the user to choose the right feature first.", "quickflow2.png", "One thought is enough to begin."),
+    ("THE PRODUCT · MY BATTERY", "Your capacity becomes|visible.", "Energy, wellbeing and activity impact build a living battery over time — through quick check-ins, not long forms.", "batteri.png", "Your own living battery."),
+    ("THE PRODUCT · FLOW", "A next step that actually|works.", "Flow combines today’s capacity with what needs to be done. The user can accept, adjust or choose later.", "vadnu.png", "You always approve the change."),
+    ("CONNECTED VALUE", "From thought to a more|manageable day.", "One connected flow — not another standalone calendar.", None, "Capture · Understand · Adapt · Do · Recover · Reveal"),
+    ("CUSTOMER SEGMENTS", "For people carrying a high|mental load.", "The first hypothesis is people easily overwhelmed by complex everyday life. Neurodivergence, stress, studies, family and work are need areas to validate — not labels that limit the product.", None, "The primary segment and paying customer require validation."),
+    ("MARKET", "A major need in a growing|digital market.", "More than 140 million adults worldwide are estimated to live with ADHD. In Sweden, around 3% of adults are estimated to have ADHD. MyFlove starts with a clear need and is built for broader everyday complexity.", None, "140M+ globally · around 3% in Sweden*\n*External estimates: Song et al. 2021; Swedish National Board."),
+    ("POSITIONING", "Time + tasks are not enough.|Capacity changes the answer.", "Calendars show when. To-do lists show what. MyFlove helps users understand what is reasonable now — and how to get started.", None, "Capacity · Invisible work · Next step · Recovery"),
+    ("BUSINESS & VALIDATION", "B2C first.|More paths to test.", "Free/Premium is the starting point. Employers and public services are possible future paths — after validated pilots, willingness to pay and recurring use.", None, "Working MVP · Early testers · Retention and pricing to measure"),
+    ("FUNDING & NEXT STEP", "€250,000 for 18 months of|validation.", "The working case funds product stability, retention and pricing validation, pilots, compliance and one proven commercial path.", None, "Stabilise · Measure value · Validate payment · Scale\nFunding and valuation are working assumptions."),
+    ("MYFLOVE", "Build everyday life around the capacity|you actually have.", "MyFlove adapts to you — so you do not have to carry everything alone.", None, "myflove.lovable.app · Venture Cup 2026"),
+]
+
+
+def font(path, size, variation=None):
+    f = ImageFont.truetype(path, max(12, int(size)))
+    if variation:
+        try:
+            f.set_variation_by_name(variation)
+        except OSError:
+            pass
+    return f
+
+
+def wrapped(draw, text, f, width):
+    lines = []
+    for paragraph in text.split("\n"):
+        current = ""
+        for word in paragraph.split():
+            candidate = f"{current} {word}".strip()
+            if draw.textbbox((0, 0), candidate, font=f)[2] <= width or not current:
+                current = candidate
+            else:
+                lines.append(current)
+                current = word
+        if current:
+            lines.append(current)
+    return lines
+
+
+def fitting_lines(draw, text, path, start, min_size, width, max_lines, variation=None):
+    size = start
+    while size >= min_size:
+        f = font(path, size, variation)
+        lines = wrapped(draw, text.replace("|", "\n"), f, width)
+        if len(lines) <= max_lines and all(draw.textbbox((0, 0), line, font=f)[2] <= width for line in lines):
+            return f, lines
+        size -= 1
+    f = font(path, min_size, variation)
+    return f, wrapped(draw, text.replace("|", "\n"), f, width)[:max_lines]
+
+
+def heart(draw, x, y, size, color, width=3):
+    points = []
+    for i in range(101):
+        t = 6.28318 * i / 100
+        px = 16 * __import__("math").sin(t) ** 3
+        py = 13 * __import__("math").cos(t) - 5 * __import__("math").cos(2*t) - 2 * __import__("math").cos(3*t) - __import__("math").cos(4*t)
+        points.append((x + size * (px + 17) / 34, y + size * (17 - py) / 34))
+    draw.line(points, fill=color, width=width, joint="curve")
+
+
+def line_icon(draw, kind, box, color):
+    x0, y0, x1, y1 = box
+    w, h = x1-x0, y1-y0
+    sw = max(2, int(w*.07))
+    if kind == 0:  # battery
+        draw.rounded_rectangle((x0+w*.12,y0+h*.25,x1-w*.12,y1-h*.25), radius=int(w*.12), outline=color, width=sw)
+        draw.rectangle((x1-w*.1,y0+h*.42,x1,y1-h*.42), fill=color)
+        draw.rectangle((x0+w*.25,y0+h*.38,x0+w*.55,y1-h*.38), fill=color)
+    elif kind == 1:  # spark
+        pts=[(x0+w*.58,y0),(x0+w*.18,y0+h*.58),(x0+w*.48,y0+h*.58),(x0+w*.38,y1),(x0+w*.84,y0+h*.4),(x0+w*.56,y0+h*.4)]
+        draw.line(pts+[pts[0]], fill=color, width=sw, joint="curve")
+    elif kind == 2:  # check
+        draw.ellipse(box, outline=color, width=sw)
+        draw.line((x0+w*.22,y0+h*.52,x0+w*.43,y0+h*.72,x0+w*.8,y0+h*.3), fill=color, width=sw, joint="curve")
+    else:  # path
+        draw.arc((x0,y0,x0+w*.55,y0+h*.55), 200, 20, fill=color, width=sw)
+        draw.arc((x0+w*.42,y0+h*.42,x1,y1), 20, 200, fill=color, width=sw)
+
+
+def shadow_panel(im, box, radius, fill=PAPER):
+    layer = Image.new("RGBA", im.size, (0,0,0,0))
+    ld = ImageDraw.Draw(layer)
+    x0,y0,x1,y1=box
+    ld.rounded_rectangle((x0+8,y0+12,x1+8,y1+12), radius=radius, fill=(42,22,85,34))
+    layer = layer.filter(ImageFilter.GaussianBlur(14))
+    im.paste(layer, (0,0), layer)
+    ImageDraw.Draw(im).rounded_rectangle(box, radius=radius, fill=fill)
+
+
+def phone(im, src, box):
+    x0,y0,x1,y1=map(int,box)
+    shadow_panel(im, (x0,y0,x1,y1), max(18,int((x1-x0)*.11)), INK)
+    pad=max(6,int((x1-x0)*.025))
+    app=Image.open(ASSETS/src).convert("RGB")
+    inner=(x1-x0-2*pad,y1-y0-2*pad)
+    app.thumbnail(inner, Image.Resampling.LANCZOS)
+    canvas=Image.new("RGB",inner,PAPER)
+    canvas.paste(app,((inner[0]-app.width)//2,(inner[1]-app.height)//2))
+    mask=Image.new("L",inner,0)
+    ImageDraw.Draw(mask).rounded_rectangle((0,0,inner[0],inner[1]),radius=max(14,int(inner[0]*.09)),fill=255)
+    im.paste(canvas,(x0+pad,y0+pad),mask)
+
+
+def visual_panel(im, draw, idx, item, box, portrait):
+    x0,y0,x1,y1=map(int,box)
+    draw.rounded_rectangle(box, radius=int(min(x1-x0,y1-y0)*.08), fill=(241,234,249))
+    draw.ellipse((x1-(x1-x0)*.62,y0-(y1-y0)*.08,x1+(x1-x0)*.12,y0+(y1-y0)*.48), fill=PINK)
+    if item[3]:
+        ph=(y1-y0)*.86
+        pw=ph*430/932
+        phone(im,item[3],((x0+x1-pw)/2,y0+(y1-y0)*.07,(x0+x1+pw)/2,y0+(y1-y0)*.93))
+        return
+    # Editorial infographic, all shapes are drawn to avoid missing glyphs.
+    cx=(x0+x1)/2
+    size=min(x1-x0,y1-y0)*(.20 if portrait else .24)
+    for n,(dx,dy,c) in enumerate([(-.22,-.18,LILAC),(.19,-.03,PINK),(-.04,.24,MINT)]):
+        bx=cx+dx*(x1-x0)-size/2
+        by=(y0+y1)/2+dy*(y1-y0)-size/2
+        draw.rounded_rectangle((bx,by,bx+size,by+size),radius=int(size*.24),fill=PAPER,outline=LINE,width=2)
+        line_icon(draw,(idx+n)%4,(bx+size*.27,by+size*.22,bx+size*.73,by+size*.68),INK)
+    if idx in (8,11):
+        big="140M+" if idx==8 else "18"
+        sub="GLOBAL ESTIMATE" if idx==8 else "MONTHS"
+        bf=font(DISPLAY,size*.42,"ExtraBold")
+        sf=font(BODY,size*.09,"Bold")
+        tw=draw.textbbox((0,0),big,font=bf)[2]
+        draw.text((cx-tw/2,y0+(y1-y0)*.12),big,font=bf,fill=INK)
+        tw=draw.textbbox((0,0),sub,font=sf)[2]
+        draw.text((cx-tw/2,y0+(y1-y0)*.12+bf.size*1.05),sub,font=sf,fill=VIOLET)
+
+
+def draw_note(draw, note, x, y, width, max_height, portrait):
+    if not note:
+        return
+    start=34 if portrait else 29
+    f, lines=fitting_lines(draw,note,SCRIPT,start,19,width,3,"Bold")
+    line_h=int(f.size*1.12)
+    if line_h*len(lines)>max_height:
+        return
+    for line in lines:
+        draw.text((x,y),line,font=f,fill=VIOLET)
+        y+=line_h
+    # Hand-drawn underline rather than a font symbol.
+    draw.arc((x,y-3,x+min(width, f.size*5),y+11),190,350,fill=VIOLET,width=2)
+
+
+def footer(draw,w,h,portrait):
+    y=h-int(h*.055)
+    size=int(h*(.020 if portrait else .024))
+    heart(draw,int(w*.06),y-size*.12,size*.8,INK,max(2,int(size*.09)))
+    f=font(DISPLAY,size,"ExtraBold")
+    draw.text((int(w*.06)+size,y-size*.12),"MyFlove",font=f,fill=INK)
+    rf=font(BODY,int(size*.47),"Bold")
+    right="VENTURE CUP 2026"
+    rw=draw.textbbox((0,0),right,font=rf)[2]
+    draw.text((w-int(w*.06)-rw,y+size*.12),right,font=rf,fill=VIOLET)
+
+
+def slide(item,w,h,portrait,idx):
+    im=Image.new("RGB",(w,h),BG)
+    draw=ImageDraw.Draw(im)
+    # Restrained editorial backdrop.
+    draw.ellipse((w*.72,-h*.20,w*1.18,h*.27),fill=PINK)
+    draw.ellipse((-w*.18,h*.76,w*.32,h*1.17),fill=LILAC)
+    margin=int(w*(.060 if portrait else .065))
+    top=int(h*(.060 if portrait else .075))
+    footer_y=int(h*.89)
+
+    if portrait:
+        text_x=margin; text_w=w-2*margin
+        visual_box=(margin,int(h*.50),w-margin,int(h*.84))
+        title_start=int(h*.050); title_min=int(h*.033); title_lines=3
+        body_start=int(h*.019); body_min=int(h*.014); body_lines=6
+    else:
+        text_x=margin; text_w=int(w*.52)
+        visual_box=(int(w*.64),int(h*.10),int(w*.94),int(h*.86))
+        title_start=int(h*.070); title_min=int(h*.042); title_lines=3
+        body_start=int(h*.027); body_min=int(h*.020); body_lines=6
+
+    # Label pill, always plain text and safe within bounds.
+    label_f=font(BODY,int(h*(.014 if portrait else .017)),"Bold")
+    label=item[0]
+    lw=draw.textbbox((0,0),label,font=label_f)[2]
+    pad=int(h*.014)
+    draw.rounded_rectangle((text_x,top,text_x+lw+2*pad,top+label_f.size+pad),radius=int(pad*.65),fill=INK)
+    draw.text((text_x+pad,top+pad*.28),label,font=label_f,fill=PAPER)
+
+    y=top+label_f.size+int(h*.045)
+    title_f,title_lines_text=fitting_lines(draw,item[1],DISPLAY,title_start,title_min,text_w,title_lines,"ExtraBold")
+    title_h=int(title_f.size*1.12)
+    for n,line in enumerate(title_lines_text):
+        draw.text((text_x,y),line,font=title_f,fill=INK if n==0 else VIOLET)
+        y+=title_h
+    y+=int(h*.025)
+
+    body_f,body_lines_text=fitting_lines(draw,item[2],BODY,body_start,body_min,text_w,body_lines,"Regular")
+    body_h=int(body_f.size*1.43)
+    # Keep text and handwritten note above the visual panel in portrait.
+    text_limit=int(h*.455) if portrait else int(h*.70)
+    allowed=max(1,(text_limit-y)//body_h)
+    if len(body_lines_text)>allowed:
+        body_f,body_lines_text=fitting_lines(draw,item[2],BODY,max(body_f.size-2,12),12,text_w,allowed,"Regular")
+        body_h=int(body_f.size*1.38)
+    for line in body_lines_text:
+        draw.text((text_x,y),line,font=body_f,fill=MUTED)
+        y+=body_h
+
+    note_y=y+int(h*.018)
+    note_limit=(int(h*.485) if portrait else footer_y-int(h*.07))-note_y
+    draw_note(draw,item[4],text_x,note_y,text_w,max(0,note_limit),portrait)
+    visual_panel(im,draw,idx,item,visual_box,portrait)
+    footer(draw,w,h,portrait)
+    return im
+
+
 def build(lang,portrait):
- data=SV if lang=='SV' else EN; w,h=((720,1280) if portrait else (1280,720)); od=TMP/f'{lang}_{"9x16" if portrait else "16x9"}'; od.mkdir(exist_ok=True)
- inputs=[]
- for i,(it,dur) in enumerate(zip(data,D)):
-  p=od/f'{i:02}.png';slide(it,w,h,portrait).save(p); inputs+=['-loop','1','-t',str(dur),'-i',str(p)]
- filters=[]
- for i,dur in enumerate(D): filters.append(f'[{i}:v]fps=30,fade=t=in:st=0:d=0.6:color=#EEE5FA,fade=t=out:st={dur-.6}:d=0.6:color=#EEE5FA,format=yuv420p[v{i}]')
- filters.append(''.join(f'[v{i}]' for i in range(len(D)))+f'concat=n={len(D)}:v=1:a=0[out]')
- out=Path('/mnt/documents')/f'MyFlove_Venture_Cup_2026_{lang}_{"9x16" if portrait else "16x9"}.mp4'
- cmd=['ffmpeg','-y']+inputs+['-filter_complex',';'.join(filters),'-map','[out]','-an','-c:v','libx264','-preset','veryfast','-crf','18','-profile:v','high','-level','4.1','-r','30','-g','30','-pix_fmt','yuv420p','-colorspace','bt709','-color_primaries','bt709','-color_trc','bt709','-movflags','+faststart',str(out)]
- subprocess.run(cmd,check=True,stdout=subprocess.DEVNULL,stderr=None);print(out)
-if __name__=='__main__':
- jobs={'sv-landscape':('SV',False),'sv-portrait':('SV',True),'en-landscape':('EN',False),'en-portrait':('EN',True)}
- for key in (sys.argv[1:] or jobs): build(*jobs[key])
+    data=SV if lang=="SV" else EN
+    w,h=((720,1280) if portrait else (1280,720))
+    out_dir=TMP/f'{lang}_{"9x16" if portrait else "16x9"}'
+    out_dir.mkdir(exist_ok=True)
+    inputs=[]
+    for idx,(item,duration) in enumerate(zip(data,DURATIONS)):
+        path=out_dir/f"{idx:02}.png"
+        slide(item,w,h,portrait,idx).save(path,quality=95)
+        inputs += ["-loop","1","-t",str(duration),"-i",str(path)]
+    filters=[]
+    for idx,duration in enumerate(DURATIONS):
+        filters.append(f"[{idx}:v]fps=30,fade=t=in:st=0:d=0.6:color=#EEE5FA,fade=t=out:st={duration-0.6}:d=0.6:color=#EEE5FA,format=yuv420p[v{idx}]")
+    filters.append("".join(f"[v{i}]" for i in range(len(DURATIONS)))+f"concat=n={len(DURATIONS)}:v=1:a=0[out]")
+    output=Path("/mnt/documents")/f'MyFlove_Venture_Cup_2026_{lang}_{"9x16" if portrait else "16x9"}_v2.mp4'
+    cmd=["ffmpeg","-y",*inputs,"-filter_complex",";".join(filters),"-map","[out]","-an","-c:v","libx264","-preset","veryfast","-crf","18","-profile:v","high","-level","4.1","-r","30","-g","30","-pix_fmt","yuv420p","-colorspace","bt709","-color_primaries","bt709","-color_trc","bt709","-movflags","+faststart",str(output)]
+    subprocess.run(cmd,check=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+    print(output)
+
+
+if __name__=="__main__":
+    jobs={"sv-landscape":("SV",False),"sv-portrait":("SV",True),"en-landscape":("EN",False),"en-portrait":("EN",True)}
+    for key in (sys.argv[1:] or jobs):
+        build(*jobs[key])

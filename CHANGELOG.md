@@ -1,3 +1,9 @@
+## 2026-09-20 – Ny redaktionell design för Venture Cup-videon
+
+- Alla fyra pitchvideor har fått större typografisk kontrast, riktiga MyFlove-skärmar och handskrivna kommentarer.
+- Saknade symboler har ersatts med ritade ikoner och all text har fått säkra marginaler i både 16:9 och 9:16.
+- Filmerna är fortsatt exakt tre minuter, helt tysta och använder mjuka toningar.
+
 ## 2026-09-19 – Venture Cup 2026 pitchvideo
 
 - Ny tre minuter lång Venture Cup-pitch på svenska och engelska, i både 16:9 och 9:16.
