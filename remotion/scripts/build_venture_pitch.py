@@ -196,8 +196,9 @@ def visual_panel(im, draw, idx, item, box, portrait):
     if idx in (8,11):
         big="140M+" if idx==8 else "18"
         sub="GLOBAL ESTIMATE" if idx==8 else "MONTHS"
-        bf=font(DISPLAY,size*.42,"ExtraBold")
-        sf=font(BODY,size*.09,"Bold")
+        stat_size=min(panel_w,panel_h)*(.20 if portrait else .24)
+        bf=font(DISPLAY,stat_size*.42,"ExtraBold")
+        sf=font(BODY,stat_size*.09,"Bold")
         tw=draw.textbbox((0,0),big,font=bf)[2]
         draw.text((cx-tw/2,y0+(y1-y0)*.12),big,font=bf,fill=INK)
         tw=draw.textbbox((0,0),sub,font=sf)[2]
