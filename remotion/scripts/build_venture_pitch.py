@@ -157,14 +157,42 @@ def visual_panel(im, draw, idx, item, box, portrait):
         pw=ph*430/932
         phone(im,item[3],((x0+x1-pw)/2,y0+(y1-y0)*.07,(x0+x1+pw)/2,y0+(y1-y0)*.93))
         return
-    # Editorial infographic, all shapes are drawn to avoid missing glyphs.
+    # Calm editorial artwork. Keep non-product slides free from floating icon cards.
     cx=(x0+x1)/2
-    size=min(x1-x0,y1-y0)*(.20 if portrait else .24)
-    for n,(dx,dy,c) in enumerate([(-.22,-.18,LILAC),(.19,-.03,PINK),(-.04,.24,MINT)]):
-        bx=cx+dx*(x1-x0)-size/2
-        by=(y0+y1)/2+dy*(y1-y0)-size/2
-        draw.rounded_rectangle((bx,by,bx+size,by+size),radius=int(size*.24),fill=PAPER,outline=LINE,width=2)
-        line_icon(draw,(idx+n)%4,(bx+size*.27,by+size*.22,bx+size*.73,by+size*.68),INK)
+    cy=(y0+y1)/2
+    panel_w=x1-x0
+    panel_h=y1-y0
+
+    # Layered fields echo the deck's hand-cut paper shapes without suggesting UI.
+    draw.ellipse(
+        (x0-panel_w*.10, cy-panel_h*.29, x0+panel_w*.58, cy+panel_h*.15),
+        fill=LILAC,
+    )
+    draw.ellipse(
+        (cx-panel_w*.04, y0+panel_h*.12, x1+panel_w*.17, y0+panel_h*.57),
+        fill=PINK,
+    )
+    draw.rounded_rectangle(
+        (x0+panel_w*.14, cy+panel_h*.08, x1-panel_w*.11, y1-panel_h*.10),
+        radius=int(min(panel_w,panel_h)*.12),
+        fill=MINT,
+    )
+
+    # A single hand-drawn path gives the artwork direction without recurring icons.
+    path_color=(142, 112, 193)
+    sw=max(2,int(min(panel_w,panel_h)*.008))
+    path=[
+        (x0+panel_w*.13, y0+panel_h*.72),
+        (x0+panel_w*.30, y0+panel_h*.62),
+        (x0+panel_w*.43, y0+panel_h*.67),
+        (x0+panel_w*.58, y0+panel_h*.52),
+        (x0+panel_w*.73, y0+panel_h*.57),
+        (x0+panel_w*.88, y0+panel_h*.39),
+    ]
+    draw.line(path, fill=path_color, width=sw, joint="curve")
+    for px,py in (path[0],path[-1]):
+        r=sw*1.8
+        draw.ellipse((px-r,py-r,px+r,py+r),fill=path_color)
     if idx in (8,11):
         big="140M+" if idx==8 else "18"
         sub="GLOBAL ESTIMATE" if idx==8 else "MONTHS"
@@ -274,7 +302,7 @@ def build(lang,portrait):
     for idx,duration in enumerate(DURATIONS):
         filters.append(f"[{idx}:v]fps=30,fade=t=in:st=0:d=0.6:color=#EEE5FA,fade=t=out:st={duration-0.6}:d=0.6:color=#EEE5FA,format=yuv420p[v{idx}]")
     filters.append("".join(f"[v{i}]" for i in range(len(DURATIONS)))+f"concat=n={len(DURATIONS)}:v=1:a=0[out]")
-    output=Path("/mnt/documents")/f'MyFlove_Venture_Cup_2026_{lang}_{"9x16" if portrait else "16x9"}_v2.mp4'
+    output=Path("/mnt/documents")/f'MyFlove_Venture_Cup_2026_{lang}_{"9x16" if portrait else "16x9"}_v3.mp4'
     cmd=["ffmpeg","-y",*inputs,"-filter_complex",";".join(filters),"-map","[out]","-an","-c:v","libx264","-preset","veryfast","-crf","18","-profile:v","high","-level","4.1","-r","30","-g","30","-pix_fmt","yuv420p","-colorspace","bt709","-color_primaries","bt709","-color_trc","bt709","-movflags","+faststart",str(output)]
     subprocess.run(cmd,check=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
     print(output)
