@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-21";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Ny Android-app (version 5.3, versionCode 12)",
+    items: [
+      "Appfilen för Google Play är uppdaterad till version 5.3 med allt det senaste i appen (2026-09-21)",
+      "Filen är osignerad och signeras med egen keystore eller via Play App Signing (2026-09-21)",
+    ],
+  },
+  {
     title: "Redigerbar PowerPoint av Venture Cup-pitchen",
     items: [
       "Den svenska Venture Cup-filmen finns som en redigerbar 16:9-PowerPoint med samma 13 delar och riktiga MyFlove-skärmar (2026-09-21)",
