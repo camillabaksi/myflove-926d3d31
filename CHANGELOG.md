@@ -1,3 +1,8 @@
+## 2026-09-21 – Ny Android-app (version 5.3, versionCode 12)
+
+- Appfilen för Google Play är uppdaterad till version 5.3 med allt det senaste i appen.
+- Filen är osignerad och signeras med egen keystore eller via Play App Signing.
+
 ## 2026-09-21 – Redigerbar PowerPoint av Venture Cup-pitchen
 
 - Den svenska Venture Cup-filmen finns nu som en redigerbar 16:9-PowerPoint med samma 13 delar och riktiga MyFlove-skärmar.
