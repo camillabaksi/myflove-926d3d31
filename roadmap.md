@@ -1,5 +1,7 @@
 # Roadmap
 
+- [ ] Återställ öppning av vald kalenderdag från månadsvy och veckovy (2026-09-21)
+
 - [x] Visa mindre på Hem viker allt utom översta kortet (2026-09-15)
 
 - [x] Egna genvägar på startsidan – välj själv vad som ska ligga på Hem (2026-09-15)
