@@ -780,7 +780,7 @@ export function CalendarContent() {
               )}
             </CollapsibleSection>
 
-            {selectedDateStr && view === "dag" && (
+            {selectedDateStr && (
               <div className="animate-in fade-in slide-in-from-bottom-4 mt-5 space-y-4 border-t border-border/60 pt-5 duration-500">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <h3 className="min-w-0 truncate text-lg font-medium sm:text-xl">

@@ -6,9 +6,24 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-09-20";
+export const CHANGELOG_UPDATED = "2026-09-21";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  {
+    title: "Redigerbar PowerPoint av Venture Cup-pitchen",
+    items: [
+      "Den svenska Venture Cup-filmen finns som en redigerbar 16:9-PowerPoint med samma 13 delar och riktiga MyFlove-skärmar (2026-09-21)",
+      "Texter, former, färger och bildplaceringar kan ändras direkt; produktbilderna kan ersättas i PowerPoint (2026-09-21)",
+      "Mjuka toningar och sammanlagt tre minuters automatisk visningstid gör presentationen redo för filmexport (2026-09-21)",
+    ],
+  },
+  {
+    title: "Kalenderdagar öppnas från månad och vecka",
+    items: [
+      "Ett tryck på ett datum i månadsvyn eller veckovyn visar åter dagens innehåll och åtgärder direkt under kalendern (2026-09-21)",
+      "Lägg till, Påminnelse, dagens samlade lista och befintliga redigeringsval fungerar utan byte till Dag (2026-09-21)",
+    ],
+  },
   {
     title: "Riktiga MyFlove-vyer genom hela Venture Cup-videon",
     items: [

@@ -1,3 +1,14 @@
+## 2026-09-21 – Redigerbar PowerPoint av Venture Cup-pitchen
+
+- Den svenska Venture Cup-filmen finns nu som en redigerbar 16:9-PowerPoint med samma 13 delar och riktiga MyFlove-skärmar.
+- Texter, former, färger och bildplaceringar kan ändras direkt; produktbilderna kan ersättas i PowerPoint.
+- Slidesen har mjuka toningar och sammanlagt tre minuters automatisk visningstid för export till film.
+
+## 2026-09-21 – Kalenderdagar öppnas från månad och vecka
+
+- Ett tryck på ett datum i månadsvyn eller veckovyn visar åter dagens innehåll och åtgärder direkt under kalendern.
+- Lägg till, Påminnelse, dagens samlade lista och befintliga redigeringsval finns kvar utan att användaren behöver byta till Dag.
+
 ## 2026-09-20 – Riktiga MyFlove-vyer genom hela Venture Cup-videon
 
 - De abstrakta bildytorna har ersatts med relevanta delar ur den riktiga MyFlove-produkten.
