@@ -1,3 +1,8 @@
+## 2026-09-21 – Kalenderdagar öppnas från månad och vecka
+
+- Ett tryck på ett datum i månadsvyn eller veckovyn visar åter dagens innehåll och åtgärder direkt under kalendern.
+- Lägg till, Påminnelse, dagens samlade lista och befintliga redigeringsval finns kvar utan att användaren behöver byta till Dag.
+
 ## 2026-09-20 – Riktiga MyFlove-vyer genom hela Venture Cup-videon
 
 - De abstrakta bildytorna har ersatts med relevanta delar ur den riktiga MyFlove-produkten.

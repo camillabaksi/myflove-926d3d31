@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Återställ öppning av vald kalenderdag från månadsvy och veckovy (2026-09-21)
+- [x] Återställ öppning av vald kalenderdag från månadsvy och veckovy (2026-09-21)
 
 - [x] Visa mindre på Hem viker allt utom översta kortet (2026-09-15)
 
