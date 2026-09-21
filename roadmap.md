@@ -78,3 +78,5 @@
 - [x] De tre återkommande ikonrutorna borttagna ur Venture Cup-videons illustrerade scener (2026-09-20)
 
 - [x] Relevanta riktiga MyFlove-vyer används genom hela Venture Cup-videon (2026-09-20)
+
+- [x] Android AAB 5.3 (versionCode 12) byggd (2026-09-21)
