@@ -183,7 +183,104 @@ function shape(variant: IllustrationKey) {
           <circle cx="60" cy="40" r="30" stroke="hsl(330 55% 78%)" />
         </>
       );
+    case "plank":
+      return (
+        <>
+          {head(26, 52)}
+          <path d="M32 54 L92 64" />
+          <path d="M34 54 L34 68 L46 68" />
+          <path d="M92 64 L96 74" />
+        </>
+      );
+    case "sideplank":
+      return (
+        <>
+          {head(30, 34)}
+          <path d="M36 38 L90 68" />
+          <path d="M34 40 L34 68 L46 68" />
+          <path d="M60 52 L60 30" />
+        </>
+      );
+    case "pushup":
+      return (
+        <>
+          {head(28, 44)}
+          <path d="M34 46 L86 62" />
+          <path d="M44 50 L44 70" />
+          <path d="M86 62 L92 74" />
+          <path d="M82 62 L104 62 L104 74" fill="hsl(272 40% 88%)" />
+        </>
+      );
+    case "swing":
+      return (
+        <>
+          {head(46, 24)}
+          <path d="M50 30 L66 48 L66 72" />
+          <path d="M66 48 L84 34" />
+          <circle cx="88" cy="30" r="7" fill="hsl(330 60% 62%)" stroke="none" />
+          <path d="M52 62 Q68 50 84 40" stroke="hsl(330 55% 74%)" strokeDasharray="4 5" />
+        </>
+      );
+    case "jump":
+      return (
+        <>
+          {head(60, 20)}
+          <path d="M60 28 L60 52" />
+          <path d="M60 52 L44 74" />
+          <path d="M60 52 L76 74" />
+          <path d="M60 34 L40 26" />
+          <path d="M60 34 L80 26" />
+        </>
+      );
+    case "overhead":
+      return (
+        <>
+          {head(60, 34)}
+          <path d="M60 42 L60 62 L50 76" />
+          <path d="M60 62 L70 76" />
+          <path d="M60 46 L46 26" />
+          <path d="M60 46 L74 26" />
+        </>
+      );
+    case "twist":
+      return (
+        <>
+          {head(56, 20)}
+          <path d="M56 28 L56 54 L46 74" />
+          <path d="M56 54 L68 74" />
+          <path d="M40 38 Q56 30 74 40" stroke="hsl(330 60% 58%)" />
+        </>
+      );
+    case "childpose":
+      return (
+        <>
+          {head(88, 56)}
+          <path d="M28 62 L82 56" />
+          <path d="M78 56 L84 70 L62 70" />
+          <path d="M28 62 L40 66" />
+        </>
+      );
+    case "hamstring":
+      return (
+        <>
+          {head(38, 32)}
+          <path d="M44 38 L58 56" />
+          <path d="M58 56 L92 62" />
+          <path d="M58 56 L50 74" />
+          <path d="M44 40 L84 58" />
+        </>
+      );
+    case "neck":
+      return (
+        <>
+          {head(52, 24)}
+          <path d="M56 32 L58 56" />
+          <path d="M40 40 L76 40" />
+          <path d="M44 30 Q52 18 62 22" stroke="hsl(330 60% 58%)" />
+        </>
+      );
     case "march":
+
     default:
       return (
         <>
