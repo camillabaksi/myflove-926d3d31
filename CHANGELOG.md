@@ -1,3 +1,9 @@
+## 2026-09-22 – Fler övningar i passbiblioteket
+
+- Biblioteket har växt från 26 till 58 övningar med fler val i helkropp, överkropp, underkropp, bål och rörlighet.
+- Varje ny övning har en egen bild, korta teknikpunkter och en tydlig säkerhetsnotis.
+- Nya övningar finns i flera svårighetsgrader, så passen kan bli både mjukare och tuffare beroende på dagens energi.
+
 ## 2026-09-22 – Flow skapar ditt pass
 
 - Ny sida "Skapa mitt pass": välj Styrka, Rörlighet, Återhämtning eller Eget upplägg, beskriv fritt vad du behöver och få ett färdigt pass.
