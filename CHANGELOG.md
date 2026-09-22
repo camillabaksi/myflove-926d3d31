@@ -1,3 +1,8 @@
+## 2026-09-22 – Enklare Mer med samlade inställningar
+
+- Mer visar nu främst MyFloves områden och har en enda tydlig ingång till Inställningar.
+- Profil, anpassning, Flow-inställningar, introduktion, ljud och konto finns kvar grupperade på en egen sida.
+
 ## 2026-09-22 – Pitchmaterial utan Venture Cup-märkning
 
 - Venture Cup har tagits bort från filnamn och synligt innehåll i de fyra pitchfilmerna och de två redigerbara presentationerna.

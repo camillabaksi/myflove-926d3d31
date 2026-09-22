@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-22";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Enklare Mer med samlade inställningar",
+    items: [
+      "Mer visar främst MyFloves områden och har en enda tydlig ingång till Inställningar (2026-09-22)",
+      "Profil, anpassning, Flow-inställningar, introduktion, ljud och konto finns kvar grupperade på en egen sida (2026-09-22)",
+    ],
+  },
+  {
     title: "Pitchmaterial utan Venture Cup-märkning",
     items: [
       "Venture Cup har tagits bort från filnamn och synligt innehåll i pitchfilmerna och de redigerbara presentationerna (2026-09-22)",
