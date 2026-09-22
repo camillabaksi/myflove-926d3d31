@@ -4,16 +4,16 @@ import Page from "@/pages/training";
 export const Route = createFileRoute("/_app/traning")({
   head: () => ({
     meta: [
-      { title: "Träning – program och steg | MyFlove" },
+      { title: "Träningsprogram – pass, program och historik | MyFlove" },
       {
         name: "description",
         content:
-          "Få ett träningsprogram med styrka och kondition utifrån dina mål, och följ dina steg från mobilens hälsoapp.",
+          "Skapa energianpassade pass med Flow, använd färdiga träningsprogram och se sparade och genomförda pass på samma plats.",
       },
-      { property: "og:title", content: "Träning – program och steg | MyFlove" },
+      { property: "og:title", content: "Träningsprogram | MyFlove" },
       {
         property: "og:description",
-        content: "Träningsprogram anpassat efter ditt mål, plus stegräkning från hälsoappen.",
+        content: "Flow-pass, färdiga program och träningshistorik samlat i en lugn träningssektion.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

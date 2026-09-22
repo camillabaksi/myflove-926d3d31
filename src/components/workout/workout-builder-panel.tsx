@@ -114,8 +114,8 @@ export default function WorkoutBuilderPanel({
   const suggestedEnergy = useMemo(() => energyFromScore(flow.score), [flow.score]);
 
   useEffect(() => {
-    track("workout_builder_opened", { source: "traningsprogram" });
-  }, []);
+    if (showBuilder) track("workout_builder_opened", { source: "traningsprogram" });
+  }, [showBuilder]);
 
   useEffect(() => {
     setReq((r) => ({ ...r, energy: suggestedEnergy }));
@@ -409,6 +409,13 @@ export default function WorkoutBuilderPanel({
                     }}
                   >
                     <Save size={16} className="mr-1" aria-hidden /> Spara
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="h-12 flex-1 rounded-2xl"
+                    onClick={() => onAddToProgram(workout)}
+                  >
+                    <Dumbbell size={16} className="mr-1" aria-hidden /> Lägg i mitt program
                   </Button>
                   <Button
                     variant="outline"

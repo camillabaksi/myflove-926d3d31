@@ -1,3 +1,10 @@
+## 2026-09-22 – All träning samlad i Träningsprogram
+
+- "Skapa mitt pass med Flow" ligger nu högst upp inne i Träningsprogram i stället för på en separat träningssida.
+- Skapade pass kan startas, sparas eller läggas direkt i det befintliga träningsprogrammet.
+- Mina pass, genomförda pass och färdiga veckoprogram finns nu i samma träningssektion utan att tidigare data har ändrats.
+- Den gamla adressen till passbyggaren leder vidare till Träningsprogram, så sparade länkar fortsätter fungera.
+
 ## 2026-09-22 – Flow bygger passet med AI
 
 - "Skapa mitt pass" använder nu AI som väger in din energi, din fritext, tid, plats, utrustning, fokus och ömma områden.
