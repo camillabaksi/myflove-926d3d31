@@ -41,24 +41,52 @@ function skipNode(node: Node): boolean {
   return false;
 }
 
+// Originaltexterna lever kvar mellan språkbyten så att svenska kan återställas
+// direkt i sidan, utan omladdning.
+const originals = new WeakMap<Node, string>();
+const applied = new WeakMap<Node, string>();
+const attrOriginals = new WeakMap<Element, Record<string, string>>();
+
+/** Sätter tillbaka all text och alla attribut som översatts till engelska. */
+function restoreSwedish() {
+  const walker = document.createTreeWalker(
+    document.body,
+    NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT,
+  );
+  let node: Node | null = document.body;
+  while (node) {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const source = originals.get(node);
+      if (source !== undefined && node.nodeValue !== source) {
+        node.nodeValue = source;
+        applied.delete(node);
+        originals.delete(node);
+      }
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      const el = node as Element;
+      const store = attrOriginals.get(el);
+      if (store) {
+        for (const [attr, value] of Object.entries(store)) {
+          el.setAttribute(attr, value);
+        }
+        attrOriginals.delete(el);
+      }
+    }
+    node = walker.nextNode();
+  }
+}
+
 export default function AutoTranslateProvider() {
   const { lang } = useLang();
 
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const originals = new WeakMap<Node, string>();
-    const applied = new WeakMap<Node, string>();
-    const attrOriginals = new WeakMap<Element, Record<string, string>>();
-
-    const flag = window as unknown as { __myfloveTranslated?: boolean };
     if (lang !== "en") {
-      // Tillbaka till svenska: ladda om sidan så originaltexten kommer fram.
-      if (flag.__myfloveTranslated) {
-        flag.__myfloveTranslated = false;
-        window.location.reload();
-      }
-      return;
+      restoreSwedish();
+      // Sent inkommande React-renderingar kan hinna före: gör ett extra pass.
+      const again = window.setTimeout(restoreSwedish, 120);
+      return () => window.clearTimeout(again);
     }
     flag.__myfloveTranslated = true;
 
