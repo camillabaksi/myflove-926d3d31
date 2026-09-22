@@ -88,7 +88,6 @@ export default function AutoTranslateProvider() {
       const again = window.setTimeout(restoreSwedish, 120);
       return () => window.clearTimeout(again);
     }
-    flag.__myfloveTranslated = true;
 
     const translateTextNode = (node: Text) => {
       if (skipNode(node)) return;
