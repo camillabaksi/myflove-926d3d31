@@ -49,6 +49,33 @@ function safeNext(next?: string): string {
   return next;
 }
 
+function FlagSE({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 60 36" className={`h-full w-full ${className}`} aria-hidden>
+      <rect width="60" height="36" rx="4" fill="#006AA7" />
+      <rect x="17" width="12" height="36" fill="#FECC02" />
+      <rect y="12" width="60" height="12" fill="#FECC02" />
+    </svg>
+  );
+}
+
+function FlagEN({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 60 36" className={`h-full w-full ${className}`} aria-hidden>
+      <rect width="60" height="36" rx="4" fill="#012169" />
+      <path d="M0,0 L60,36 M60,0 L0,36" stroke="#fff" strokeWidth="7.2" />
+      <path d="M0,0 L60,36 M60,0 L0,36" stroke="#C8102E" strokeWidth="3" />
+      <path d="M30,0 V36 M0,18 H60" stroke="#fff" strokeWidth="12" />
+      <path d="M30,0 V36 M0,18 H60" stroke="#C8102E" strokeWidth="7" />
+    </svg>
+  );
+}
+
+const FLAGS: Record<string, React.ComponentType<{ className?: string }>> = {
+  sv: FlagSE,
+  en: FlagEN,
+};
+
 function SignInPage() {
   const navigate = useNavigate();
   const { next } = Route.useSearch();
@@ -88,24 +115,31 @@ function SignInPage() {
     <div className="flex min-h-[100dvh] items-center justify-center bg-background px-4">
       <div className="w-full max-w-md rounded-3xl border border-border bg-card p-8 shadow-sm">
         <div className="flex justify-end mb-3" data-no-translate>
-          <div className="inline-flex rounded-full border border-border p-1" role="group" aria-label="Språk">
-            {LANGUAGES.map((l) => (
-              <button
-                key={l.value}
-                type="button"
-                aria-pressed={lang === l.value}
-                onClick={() => {
-                  if (l.value === lang) return;
-                  if (l.value === "sv") clearTranslationCache();
-                  setLang(l.value);
-                }}
-                className={`rounded-full px-3 py-1 text-xs font-semibold transition-colors ${
-                  lang === l.value ? "bg-primary/10 text-primary" : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                <span aria-hidden>{l.flag}</span> {l.label}
-              </button>
-            ))}
+          <div className="flex items-center gap-2" role="group" aria-label="Språk">
+            {LANGUAGES.map((l) => {
+              const Flag = FLAGS[l.value];
+              return (
+                <button
+                  key={l.value}
+                  type="button"
+                  title={l.label}
+                  aria-label={l.label}
+                  aria-pressed={lang === l.value}
+                  onClick={() => {
+                    if (l.value === lang) return;
+                    if (l.value === "sv") clearTranslationCache();
+                    setLang(l.value);
+                  }}
+                  className={`h-7 w-10 overflow-hidden rounded transition-all ${
+                    lang === l.value
+                      ? "ring-2 ring-primary/50 scale-105 shadow-sm"
+                      : "opacity-45 hover:opacity-100"
+                  }`}
+                >
+                  <Flag />
+                </button>
+              );
+            })}
           </div>
         </div>
         <h1 className="mb-2 text-3xl font-bold text-primary tracking-tight">
