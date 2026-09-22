@@ -180,6 +180,18 @@ function EditSlotDialog({
 
 export default function MealPlannerPage() {
   const [plans, setPlans] = useCloudSyncedStorage<MealPlan[]>("myflow-meal-plans", []);
+  // Vilka måltider användaren vill planera – sparas till nästa gång.
+  const [mealTypes, setMealTypes] = useCloudSyncedStorage<string[]>(
+    "myflove-meal-types",
+    DEFAULT_MEAL_TYPES,
+  );
+  const activeMealTypes = ALL_MEAL_TYPES.filter((m) => mealTypes.includes(m));
+  const toggleMealType = (m: string) =>
+    setMealTypes((prev) => {
+      const list = prev ?? DEFAULT_MEAL_TYPES;
+      const next = list.includes(m) ? list.filter((x) => x !== m) : [...list, m];
+      return next.length ? next : list;
+    });
   const { addItem, isShared } = useSharedShoppingList();
   const { toast } = useToast();
   const [editing, setEditing] = useState<EditingSlot | null>(null);
