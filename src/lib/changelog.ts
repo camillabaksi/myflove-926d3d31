@@ -10,6 +10,21 @@ export const CHANGELOG_UPDATED = "2026-09-22";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Ny struktur: Översikt, Flow, Hälsa och Återhämtning",
+    items: [
+      "Huvudmenyn är Översikt, Flow, QuickFlow, Hälsa, Återhämtning och Mer – samma för alla (2026-09-22)",
+      "Återhämtning har en paus där du väljer 5/10/20/30/60 minuter eller egen tid; Mikropaus och Akut Lugn är borta som separata val (2026-09-22)",
+      "Efter paus eller Ljusboost kan du med ett tryck säga om energin känns mer, samma eller mindre – sparas i befintlig energilogg (2026-09-22)",
+      "Stopp-knappen och Ljusboost finns kvar oförändrade (2026-09-22)",
+      "Veckoplan är inte längre en egen sektion; gamla adressen leder till Översikt och träningsdata är orörd (2026-09-22)",
+      "Vikt kan döljas helt i Träningsprogram och tas fram igen när du vill (2026-09-22)",
+      "Morgonstart syns under Hälsa i stället för som egen huvudsektion (2026-09-22)",
+      "I Matplanering väljer du själv vilka måltider som ska planeras – valet sparas (2026-09-22)",
+      "Studier börjar med Nästa steg, med Bryt ner och Klar direkt (2026-09-22)",
+      "Mina mönster heter nu Insikter och beskriver vad som syns i din egen data (2026-09-22)",
+    ],
+  },
+  {
     title: "All träning samlad i Träningsprogram",
     items: [
       "Skapa mitt pass med Flow ligger nu högst upp inne i Träningsprogram i stället för på en separat träningssida (2026-09-22)",
