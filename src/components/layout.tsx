@@ -334,6 +334,13 @@ export default function Layout({ children }: LayoutProps) {
       hint: "Fasta rutiner och dagens doser",
     },
     {
+      href: "/morgonstart",
+      label: "Morgonstart",
+      icon: Sun,
+      hint: "Kom igång på morgonen – finns under rutiner",
+    },
+
+    {
       href: "/quickflow",
       label: "QuickFlow",
       icon: Brain,
