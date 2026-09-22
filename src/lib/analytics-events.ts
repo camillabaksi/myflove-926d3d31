@@ -132,6 +132,10 @@ export const ANALYTICS_EVENTS = [
   "recovery_lightboost_opened",
   /** Stopp-knappen öppnad. */
   "recovery_stop_opened",
+  /** Paus startad med vald längd. */
+  "recovery_pause_started",
+  /** Frivillig energikoll efter en återhämtning. */
+  "recovery_energy_checkin",
 ] as const;
 
 export type AnalyticsEventName = (typeof ANALYTICS_EVENTS)[number];
@@ -251,6 +255,8 @@ const EVENT_SECTION: Record<AnalyticsEventName, string> = {
   recovery_acute_opened: "aterhamtning",
   recovery_lightboost_opened: "aterhamtning",
   recovery_stop_opened: "aterhamtning",
+  recovery_pause_started: "aterhamtning",
+  recovery_energy_checkin: "aterhamtning",
 };
 
 export function eventSection(name: AnalyticsEventName): string {

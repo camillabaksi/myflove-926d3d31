@@ -271,7 +271,14 @@ export default function Layout({ children }: LayoutProps) {
     essential?: boolean;
   };
   const navItems: NavItem[] = [
-    { href: "/hem", label: "Hem", icon: Home, hint: "Din överblick över dagen", essential: true },
+    {
+      href: "/hem",
+      label: "Översikt",
+      icon: Home,
+      hint: "Dagen, energin och nästa steg",
+      essential: true,
+    },
+
     {
       href: "/idag",
       label: "Idag",
@@ -301,9 +308,10 @@ export default function Layout({ children }: LayoutProps) {
     },
     {
       href: "/aterhamtning",
-      label: "Paus",
+      label: "Återhämtning",
       icon: Wind,
-      hint: "Återhämtning: mikropaus, akut lugn, ljusboost och stopp-knappen",
+      hint: "Paus du väljer längden på, Ljusboost och Stopp-knappen",
+
       essential: true,
     },
     {
@@ -325,6 +333,13 @@ export default function Layout({ children }: LayoutProps) {
       icon: Sun,
       hint: "Fasta rutiner och dagens doser",
     },
+    {
+      href: "/morgonstart",
+      label: "Morgonstart",
+      icon: Sun,
+      hint: "Kom igång på morgonen – finns under rutiner",
+    },
+
     {
       href: "/quickflow",
       label: "QuickFlow",
@@ -371,12 +386,6 @@ export default function Layout({ children }: LayoutProps) {
       icon: Gauge,
       hint: "Hur dagens krav matchar din ork",
     },
-    {
-      href: "/veckans-flow",
-      label: "Veckans översikt",
-      icon: CalendarDays,
-      hint: "Lugn tillbakablick på veckan",
-    },
     { href: "/pomodoro", label: "Timer", icon: Timer, hint: "Jobba en stund, ta paus" },
     { href: "/shopping", label: "Inköpslista", icon: ShoppingBag, hint: "Inköpslista du kan dela" },
     {
@@ -412,9 +421,9 @@ export default function Layout({ children }: LayoutProps) {
     },
     {
       href: "/insight",
-      label: "Mina mönster",
+      label: "Insikter",
       icon: Brain,
-      hint: "Vad som brukar funka för dig",
+      hint: "Beskrivande mönster från din egen data",
       essential: true,
     },
     {
@@ -530,51 +539,50 @@ export default function Layout({ children }: LayoutProps) {
     }[] = [
       {
         id: "myflow",
-        label: "Idag",
-        hint: "Vad som händer idag – hela dagens lista",
+        label: "Översikt",
+        hint: "Dagen, energin och nästa steg",
         icon: CalendarDays,
-        hrefs: ["/idag", "/kalender", "/lagg-till", "/paminnelser", "/pomodoro"],
+        hrefs: ["/hem", "/idag", "/kalender", "/lagg-till", "/paminnelser", "/pomodoro"],
       },
       {
         id: "flowflow",
         label: "Flow",
-        hint: "Hjälp, planering och chatt på ett ställe",
+        hint: "Chatt, planering, QuickFlow och anteckningar",
         icon: Sparkles,
-        hrefs: ["/flow", "/tasks"],
-      },
-      {
-        id: "quickflow",
-        label: "QuickFlow",
-        hint: "Fånga något snabbt – sortera sedan",
-        icon: Brain,
-        hrefs: ["/quickflow", "/anteckningar"],
+        hrefs: ["/flow", "/assistant", "/flowplan", "/quickflow", "/anteckningar", "/tasks"],
       },
       {
         id: "healthflow",
         label: "Hälsa",
-        hint: "Energi, mående, träning, medicin och vila",
+        hint: "Energi, mående, träning, rutiner och medicin",
         icon: HeartPulse,
         hrefs: [
           "/halsa",
           "/mitt-batteri",
-          "/aterhamtning",
-          "/stop-paus",
+          "/energifloede",
           "/traning",
           "/daglig-rutin",
-          "/energifloede",
+          "/morgonstart",
         ],
+      },
+      {
+        id: "recoveryflow",
+        label: "Återhämtning",
+        hint: "Paus, Ljusboost och Stopp-knappen",
+        icon: Wind,
+        hrefs: ["/aterhamtning", "/stop-paus"],
       },
       {
         id: "studyflow",
         label: "Studier",
-        hint: "Schema, prov och plugg",
+        hint: "Nästa steg, deadlines och uppgifter",
         icon: BookOpen,
         hrefs: ["/studyflow", "/studybuddy"],
       },
       {
         id: "workflow",
         label: "Jobb",
-        hint: "Uppgifter och möten",
+        hint: "Uppgifter, möten och deadlines",
         icon: Building2,
         hrefs: ["/jobb"],
       },
@@ -594,8 +602,8 @@ export default function Layout({ children }: LayoutProps) {
       },
       {
         id: "insightflow",
-        label: "Mina mönster",
-        hint: "Vad Flow har lärt sig om dig",
+        label: "Insikter",
+        hint: "Beskrivande mönster från din egen data",
         icon: Brain,
         hrefs: ["/insight", "/historik", "/statistik", "/beloningar"],
       },
@@ -604,7 +612,7 @@ export default function Layout({ children }: LayoutProps) {
         label: "Avancerat",
         hint: "Detaljerna bakom planeringen – bara om du vill se dem",
         icon: Gauge,
-        hrefs: ["/flowscore", "/veckans-flow", "/friktionsindex"],
+        hrefs: ["/flowscore", "/friktionsindex"],
       },
       // Inställningar har en egen sektion längre ner i "Mer" – därför ligger
       // de inte som kategori här. Admin är det enda som blir kvar som grupp.
@@ -615,6 +623,7 @@ export default function Layout({ children }: LayoutProps) {
         icon: LayoutGrid,
         hrefs: ["/admin", "/admin-statistik"],
       },
+
     ];
 
     return groups
@@ -699,13 +708,12 @@ export default function Layout({ children }: LayoutProps) {
   }, [navSearch, navItems]);
 
   /**
-   * Bottennavet under utvärderingsperioden: fem fasta huvudvägar för alla –
-   * Hem, QuickFlow, Kalender, Paus och Prata med Flow. Inga val, ingen
-   * kontostatus styr detta.
+   * Huvudnavigationen: Översikt · Flow · QuickFlow · Hälsa · Återhämtning,
+   * med allt annat under "Mer". Samma för alla, oavsett konto eller läge.
    */
   const primaryNav = useMemo(() => {
     const pick = (href: string) => navItems.find((i) => i.href === href);
-    return [pick("/hem"), pick("/kalender"), pick("/aterhamtning"), pick("/assistant")].filter(
+    return [pick("/hem"), pick("/flow"), pick("/halsa"), pick("/aterhamtning")].filter(
       Boolean,
     ) as typeof navItems;
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -986,7 +994,7 @@ export default function Layout({ children }: LayoutProps) {
           öppnar alla samma flöde via händelsen "myflove:quickflow". */}
       <QuickflowCapture variant="global" />
 
-      {/* Mobile Bottom Bar – Hem · Kalender · QuickFlow · Paus · Flow · Mer */}
+      {/* Mobile Bottom Bar – Översikt · Flow · QuickFlow · Hälsa · Återhämtning · Mer */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-md border-t border-border/70 pb-[env(safe-area-inset-bottom)] z-40">
         <div className="flex items-end justify-around px-1 pt-1.5 pb-1">
           {primaryNav.slice(0, 2).map((item) => (

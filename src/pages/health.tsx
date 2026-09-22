@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "wouter";
-import { ArrowRight, Battery, Dumbbell, Pill } from "lucide-react";
+import { ArrowRight, Battery, Dumbbell, Pill, Sunrise } from "lucide-react";
 import Layout from "@/components/layout";
 import { MyFloveHeader } from "@/components/myflove";
 import EnergyBattery from "@/components/energy-battery";
@@ -30,6 +30,12 @@ const AREAS: {
     icon: Pill,
     title: "Rutiner & medicin",
     what: "Rutiner och dagens doser.",
+  },
+  {
+    href: "/morgonstart",
+    icon: Sunrise,
+    title: "Morgonstart",
+    what: "En lugn start på dagen.",
   },
 ];
 

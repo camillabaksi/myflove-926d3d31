@@ -1,16 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
-import Page from "@/pages/week-flow";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
+/** Veckoplanen finns inte längre som egen sektion – gamla länkar går till Översikt. */
 export const Route = createFileRoute("/_app/veckans-flow")({
-  head: () => ({
-    meta: [
-      { title: "Veckans översikt – MyFlove" },
-      {
-        name: "description",
-        content: "En lugn tillbakablick på veckan – vad du hann med och vad som hjälpte dig mest.",
-      },
-      { name: "robots", content: "noindex, nofollow" },
-    ],
-  }),
-  component: Page,
+  beforeLoad: () => {
+    throw redirect({ to: "/hem", replace: true });
+  },
 });

@@ -36,6 +36,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { generateTrainingProgram } from "@/lib/training.functions";
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { useTraining, type TrainingGoal, type TrainingSession } from "@/hooks/use-training";
 import { FEEDBACK_LABEL, weekStartKey, type WeekFeedback } from "@/lib/weekly-plan";
 import { isHealthAppAvailable, openHealthSettings, readStepsForDays } from "@/lib/health-steps";
@@ -94,13 +95,6 @@ const SECTIONS: {
     desc: "Små rörelser som räknas – varje dag.",
     icon: Sparkles,
     hue: "42 62% 45%",
-  },
-  {
-    id: "plan",
-    label: "Veckoplan",
-    desc: "Mål som justeras efter hur veckan kändes.",
-    icon: CalendarRange,
-    hue: "265 32% 45%",
   },
   {
     id: "vikt",
@@ -163,6 +157,11 @@ export default function TrainingPage() {
   const run = useServerFn(generateTrainingProgram);
 
   const [view, setView] = useState<TrainingView>("overview");
+  // Vikt är frivilligt – den som inte vill se vikt alls kan dölja delen helt.
+  const [hideWeight, setHideWeight] = useCloudSyncedStorage<boolean>(
+    "myflove-hide-weight",
+    false,
+  );
   const [showWorkoutBuilder, setShowWorkoutBuilder] = useState(false);
   const [weightInput, setWeightInput] = useState("");
   const [weightDate, setWeightDate] = useState(() => new Date().toISOString().slice(0, 10));
@@ -536,7 +535,7 @@ export default function TrainingPage() {
 
             {view === "overview" && (
               <div className="grid gap-3 sm:grid-cols-2">
-                {SECTIONS.map((s) => {
+                {SECTIONS.filter((s) => s.id !== "vikt" || !hideWeight).map((s) => {
                   const Icon = s.icon;
                   return (
                     <button
@@ -569,6 +568,17 @@ export default function TrainingPage() {
                 })}
               </div>
             )}
+
+            {view === "overview" && (
+              <button
+                type="button"
+                onClick={() => setHideWeight(!hideWeight)}
+                className="text-xs text-muted-foreground underline underline-offset-2"
+              >
+                {hideWeight ? "Visa vikt igen" : "Dölj vikt helt"}
+              </button>
+            )}
+
 
             {view === "steg" && (
               <CollapsibleSection

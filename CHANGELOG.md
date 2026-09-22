@@ -1,3 +1,16 @@
+## 2026-09-22 – Ny struktur: Översikt, Flow, Hälsa och Återhämtning
+
+- Huvudmenyn är nu Översikt, Flow, QuickFlow, Hälsa, Återhämtning och Mer – samma för alla.
+- Återhämtning har EN paus där du väljer 5, 10, 20, 30, 60 minuter eller egen tid. Mikropaus och Akut Lugn är borta som separata val.
+- Efter en paus eller Ljusboost kan du med ett tryck säga om energin känns mer, samma eller mindre – det sparas i din vanliga energilogg.
+- Stopp-knappen och Ljusboost finns kvar precis som förut.
+- Veckoplan är inte längre en egen sektion; den gamla adressen leder till Översikt och träningsdata är orörd.
+- Vikt kan döljas helt i Träningsprogram och tas fram igen när du vill.
+- Morgonstart syns nu under Hälsa i stället för som egen huvudsektion.
+- I Matplanering väljer du själv vilka måltider du vill planera – frukost, lunch, middag, mellis eller kvällsmål. Valet sparas.
+- Studier börjar med Nästa steg: den uppgift som är närmast, med Bryt ner och Klar direkt.
+- "Mina mönster" heter nu Insikter och beskriver vad som syns i din egen data.
+
 ## 2026-09-22 – All träning samlad i Träningsprogram
 
 - "Skapa mitt pass med Flow" ligger nu högst upp inne i Träningsprogram i stället för på en separat träningssida.

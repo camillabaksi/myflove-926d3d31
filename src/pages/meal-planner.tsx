@@ -14,7 +14,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import CollapsibleSection from "@/components/collapsible-section";
 
 const WEEKDAYS = ["Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag", "Söndag"];
-const MEAL_TYPES = ["Frukost", "Lunch", "Middag"];
+/** Alla måltider som går att planera – användaren väljer själv vilka som visas. */
+const ALL_MEAL_TYPES = ["Frukost", "Lunch", "Middag", "Mellis", "Kvällsmål"];
+const DEFAULT_MEAL_TYPES = ["Frukost", "Lunch", "Middag"];
 
 interface MealPlan {
   weekday: number;
@@ -178,6 +180,18 @@ function EditSlotDialog({
 
 export default function MealPlannerPage() {
   const [plans, setPlans] = useCloudSyncedStorage<MealPlan[]>("myflow-meal-plans", []);
+  // Vilka måltider användaren vill planera – sparas till nästa gång.
+  const [mealTypes, setMealTypes] = useCloudSyncedStorage<string[]>(
+    "myflove-meal-types",
+    DEFAULT_MEAL_TYPES,
+  );
+  const activeMealTypes = ALL_MEAL_TYPES.filter((m) => mealTypes.includes(m));
+  const toggleMealType = (m: string) =>
+    setMealTypes((prev) => {
+      const list = prev ?? DEFAULT_MEAL_TYPES;
+      const next = list.includes(m) ? list.filter((x) => x !== m) : [...list, m];
+      return next.length ? next : list;
+    });
   const { addItem, isShared } = useSharedShoppingList();
   const { toast } = useToast();
   const [editing, setEditing] = useState<EditingSlot | null>(null);
@@ -394,6 +408,30 @@ export default function MealPlannerPage() {
               </div>
             )}
 
+            <div className="rounded-3xl border border-border bg-card p-5 shadow-sm">
+              <h2 className="text-sm font-semibold text-ink">Vilka måltider vill du planera?</h2>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Välj bara det du orkar. Ditt val sparas till nästa gång.
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {ALL_MEAL_TYPES.map((m) => {
+                  const on = activeMealTypes.includes(m);
+                  return (
+                    <Button
+                      key={m}
+                      type="button"
+                      variant={on ? "default" : "secondary"}
+                      aria-pressed={on}
+                      className="min-h-11 rounded-2xl"
+                      onClick={() => toggleMealType(m)}
+                    >
+                      {m}
+                    </Button>
+                  );
+                })}
+              </div>
+            </div>
+
             <div className="space-y-4">
               {WEEKDAYS.map((day, weekday) => (
                 <div
@@ -401,8 +439,9 @@ export default function MealPlannerPage() {
                   className="bg-card border border-border rounded-3xl p-5 shadow-sm space-y-3"
                 >
                   <h3 className="font-medium text-lg">{day}</h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    {MEAL_TYPES.map((mealType) => {
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                    {activeMealTypes.map((mealType) => {
+
                       const plan = findPlan(weekday, mealType);
                       return (
                         <div

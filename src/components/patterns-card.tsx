@@ -22,9 +22,9 @@ export default function PatternsCard() {
 
   return (
     <ExpandableBlock
-      title={t("Mina mönster")}
-      titleText={t("Mina mönster")}
-      subtitle={t("Mönster ur din egen data – titta bara när du vill.")}
+      title={t("Insikter")}
+      titleText={t("Insikter")}
+      subtitle={t("Observationer ur din egen data – titta bara när du vill.")}
       summary={
         patterns.length > 0
           ? t("Det finns mönster att se när du öppnar.")
