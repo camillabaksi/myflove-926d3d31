@@ -994,7 +994,7 @@ export default function Layout({ children }: LayoutProps) {
           öppnar alla samma flöde via händelsen "myflove:quickflow". */}
       <QuickflowCapture variant="global" />
 
-      {/* Mobile Bottom Bar – Hem · Kalender · QuickFlow · Paus · Flow · Mer */}
+      {/* Mobile Bottom Bar – Översikt · Flow · QuickFlow · Hälsa · Återhämtning · Mer */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-md border-t border-border/70 pb-[env(safe-area-inset-bottom)] z-40">
         <div className="flex items-end justify-around px-1 pt-1.5 pb-1">
           {primaryNav.slice(0, 2).map((item) => (
