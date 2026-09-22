@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "wouter";
+
 import { useServerFn } from "@tanstack/react-start";
 import Layout from "@/components/layout";
 import AdaptiveIntentPrompt from "@/components/adaptive-intent-prompt";
