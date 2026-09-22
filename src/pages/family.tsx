@@ -293,6 +293,16 @@ function HouseholdView({
           </button>
         </div>
 
+        <Button
+          type="button"
+          variant="outline"
+          onClick={shareInvite}
+          className="h-12 w-full rounded-2xl"
+        >
+          <Share2 size={18} className="mr-2" />
+          Bjud in med länk
+        </Button>
+
         <div className="flex flex-wrap gap-2">
           {household.members.map((m) => (
             <span
