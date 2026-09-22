@@ -569,6 +569,17 @@ export default function TrainingPage() {
               </div>
             )}
 
+            {view === "overview" && (
+              <button
+                type="button"
+                onClick={() => setHideWeight(!hideWeight)}
+                className="text-xs text-muted-foreground underline underline-offset-2"
+              >
+                {hideWeight ? "Visa vikt igen" : "Dölj vikt helt"}
+              </button>
+            )}
+
+
             {view === "steg" && (
               <CollapsibleSection
                 className="surface-card p-5"
