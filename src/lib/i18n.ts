@@ -263,6 +263,23 @@ export const EN: Record<string, string> = {
   Språk: "Language",
   "Välj språk för appen": "Choose the app language",
   "Appens språk – texterna byts direkt.": "The app language – texts switch right away.",
+
+  // ── Inloggning ──────────────────────────────────────────────────────────
+  "Logga in på MyFlove — Ditt stöd i vardagen":
+    "Sign in to MyFlove — Your support in everyday life",
+  "Välkommen tillbaka. Logga in för att fortsätta din flow.":
+    "Welcome back. Sign in to continue your flow.",
+  "E-post": "Email",
+  "Lösenord": "Password",
+  "Logga in": "Sign in",
+  "Loggar in…": "Signing in…",
+  "Väcker tjänsten…": "Waking the service…",
+  "Kunde inte logga in": "Couldn't sign in",
+  "Tjänsten vaknar fortfarande. Vänta en liten stund och försök igen.":
+    "The service is still waking up. Wait a moment and try again.",
+  "Glömt lösenord?": "Forgot password?",
+  "Inget konto?": "No account?",
+  "Skapa ett här": "Create one here",
 };
 
 /** Områdesordlistor slås ihop med kärnan. Kärnan vinner vid krock. */
