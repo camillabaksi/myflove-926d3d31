@@ -12,7 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Ny struktur: Översikt, Flow, Hälsa och Återhämtning",
     items: [
-      "Huvudmenyn är Översikt, Flow, QuickFlow, Hälsa, Återhämtning och Mer – samma för alla (2026-09-22)",
+      "Huvudmenyn är Översikt, Flow, Hälsa, Återhämtning och Mer – QuickFlow ligger inne i Flow (2026-09-22)",
       "Återhämtning har en paus där du väljer 5/10/20/30/60 minuter eller egen tid; Mikropaus och Akut Lugn är borta som separata val (2026-09-22)",
       "Efter paus eller Ljusboost kan du med ett tryck säga om energin känns mer, samma eller mindre – sparas i befintlig energilogg (2026-09-22)",
       "Stopp-knappen och Ljusboost finns kvar oförändrade (2026-09-22)",
