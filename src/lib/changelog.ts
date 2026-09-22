@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-22";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Realistiska instruktionsbilder i Träningsprogram",
+    items: [
+      "Alla 58 övningar har en egen realistisk bild med tydliga rörelsefaser (2026-09-22)",
+      "Visa hur visar bilden större tillsammans med korta teknikpunkter (2026-09-22)",
+    ],
+  },
+  {
     title: "Enklare Mer med samlade inställningar",
     items: [
       "Mer visar främst MyFloves områden och har en enda tydlig ingång till Inställningar (2026-09-22)",

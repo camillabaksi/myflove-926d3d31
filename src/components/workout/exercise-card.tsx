@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Check, ChevronDown, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import ExerciseIllustration from "@/components/workout/exercise-illustration";
+import ExerciseVisual from "@/components/workout/exercise-visual";
 import { exerciseById } from "@/lib/exercise-library";
 import type { WorkoutBlock } from "@/lib/workout-generator";
 import { cn } from "@/lib/utils";
@@ -39,9 +39,10 @@ export default function ExerciseCard({
       )}
     >
       <div className="flex min-w-0 gap-3">
-        <ExerciseIllustration
-          variant={ex.illustration}
-          className="h-20 w-24 shrink-0 rounded-2xl sm:h-24 sm:w-28"
+        <ExerciseVisual
+          visual={ex.visual}
+          name={ex.name}
+          className="h-20 w-24 shrink-0 rounded-2xl border border-border/50 object-cover sm:h-24 sm:w-28"
         />
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
@@ -98,7 +99,13 @@ export default function ExerciseCard({
       </div>
 
       {open && (
-        <div className="mt-3 space-y-2 rounded-2xl bg-muted/50 p-3 text-sm text-ink">
+        <div className="mt-3 space-y-3 rounded-2xl bg-muted/50 p-3 text-sm text-ink">
+          <ExerciseVisual
+            visual={ex.visual}
+            name={ex.name}
+            className="aspect-square w-full rounded-2xl border border-border/50 bg-card object-cover"
+          />
+          <p className="font-semibold text-ink">Teknik</p>
           <ul className="list-disc space-y-1 pl-5">
             {ex.cues.map((cue) => (
               <li key={cue}>{cue}</li>

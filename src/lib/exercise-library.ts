@@ -44,8 +44,10 @@ export interface Exercise {
   defaultSeconds?: number;
   /** Ungefärlig intensitet, används för grov kaloriuppskattning (MET-liknande). */
   intensity: 1 | 2 | 3;
-  /** Enkel illustrationsnyckel – mappar till en ritad figur i UI:t. */
+  /** Bakåtkompatibel rörelsekategori för generatorn. */
   illustration: IllustrationKey;
+  /** Unik realistisk instruktionsbild för just den här övningen. */
+  visual: ExerciseVisualKey;
 }
 
 export type IllustrationKey =
@@ -76,6 +78,66 @@ export type IllustrationKey =
   | "hamstring"
   | "neck";
 
+export type ExerciseVisualKey =
+  | "glute-bridge"
+  | "hip-thrust-floor"
+  | "rdl"
+  | "sit-to-stand"
+  | "calf-raise"
+  | "bird-dog"
+  | "dead-bug"
+  | "pelvic-tilt"
+  | "one-arm-row"
+  | "seated-row-band"
+  | "chest-press"
+  | "biceps-curl"
+  | "suitcase-carry"
+  | "band-side-walk"
+  | "low-step-up"
+  | "reverse-lunge"
+  | "med-ball-twist"
+  | "march-in-place"
+  | "shoulder-rolls"
+  | "cat-cow"
+  | "hip-opener"
+  | "chest-stretch"
+  | "breathing-down"
+  | "wall-pushup"
+  | "kb-deadlift"
+  | "kb-swing-low"
+  | "squat-to-press"
+  | "step-touch"
+  | "low-impact-jack"
+  | "farmer-carry"
+  | "sit-to-stand-reach"
+  | "incline-pushup"
+  | "shoulder-press-seated"
+  | "band-pull-apart"
+  | "triceps-kickback"
+  | "lateral-raise"
+  | "band-face-pull"
+  | "shrug"
+  | "wall-sit"
+  | "goblet-squat"
+  | "single-leg-bridge"
+  | "side-lying-leg-raise"
+  | "hamstring-curl-standing"
+  | "split-squat-support"
+  | "forearm-plank"
+  | "side-plank-knees"
+  | "heel-taps"
+  | "standing-twist"
+  | "pallof-band"
+  | "hollow-hold-easy"
+  | "childs-pose"
+  | "hamstring-stretch"
+  | "neck-release"
+  | "thoracic-rotation"
+  | "ankle-mobility"
+  | "figure-four-stretch"
+  | "standing-side-bend"
+  | "wrist-mobility";
+
 
 export const EXERCISES: Exercise[] = [
   {
@@ -95,6 +157,7 @@ export const EXERCISES: Exercise[] = [
     defaultReps: 12,
     intensity: 1,
     illustration: "bridge",
+    visual: "glute-bridge",
   },
   {
     id: "hip-thrust-floor",
@@ -111,6 +174,7 @@ export const EXERCISES: Exercise[] = [
     defaultReps: 10,
     intensity: 2,
     illustration: "bridge",
+    visual: "hip-thrust-floor",
   },
   {
     id: "rdl",
@@ -130,6 +194,7 @@ export const EXERCISES: Exercise[] = [
     defaultReps: 10,
     intensity: 2,
     illustration: "hinge",
+    visual: "rdl",
   },
   {
     id: "sit-to-stand",
@@ -148,6 +213,7 @@ export const EXERCISES: Exercise[] = [
     defaultReps: 10,
     intensity: 2,
     illustration: "squat",
+    visual: "sit-to-stand",
   },
   {
     id: "calf-raise",
@@ -164,6 +230,7 @@ export const EXERCISES: Exercise[] = [
     defaultReps: 15,
     intensity: 1,
     illustration: "calf",
+    visual: "calf-raise",
   },
   {
     id: "bird-dog",
@@ -182,6 +249,7 @@ export const EXERCISES: Exercise[] = [
     defaultReps: 8,
     intensity: 1,
     illustration: "quadruped",
+    visual: "bird-dog",
   },
   {
     id: "dead-bug",
@@ -199,6 +267,7 @@ export const EXERCISES: Exercise[] = [
     defaultReps: 10,
     intensity: 1,
     illustration: "core",
+    visual: "dead-bug",
   },
   {
     id: "pelvic-tilt",
@@ -215,6 +284,7 @@ export const EXERCISES: Exercise[] = [
     defaultReps: 12,
     intensity: 1,
     illustration: "core",
+    visual: "pelvic-tilt",
   },
   {
     id: "one-arm-row",
@@ -233,6 +303,7 @@ export const EXERCISES: Exercise[] = [
     defaultReps: 10,
     intensity: 2,
     illustration: "row",
+    visual: "one-arm-row",
   },
   {
     id: "seated-row-band",
@@ -249,6 +320,7 @@ export const EXERCISES: Exercise[] = [
     defaultReps: 12,
     intensity: 1,
     illustration: "row",
+    visual: "seated-row-band",
   },
   {
     id: "chest-press",
@@ -267,6 +339,7 @@ export const EXERCISES: Exercise[] = [
     defaultReps: 10,
     intensity: 2,
     illustration: "press",
+    visual: "chest-press",
   },
   {
     id: "biceps-curl",
@@ -284,6 +357,7 @@ export const EXERCISES: Exercise[] = [
     defaultReps: 12,
     intensity: 1,
     illustration: "curl",
+    visual: "biceps-curl",
   },
   {
     id: "suitcase-carry",
@@ -302,6 +376,7 @@ export const EXERCISES: Exercise[] = [
     defaultSeconds: 30,
     intensity: 2,
     illustration: "carry",
+    visual: "suitcase-carry",
   },
   {
     id: "band-side-walk",
@@ -318,6 +393,7 @@ export const EXERCISES: Exercise[] = [
     defaultSeconds: 30,
     intensity: 1,
     illustration: "band",
+    visual: "band-side-walk",
   },
   {
     id: "low-step-up",
@@ -336,6 +412,7 @@ export const EXERCISES: Exercise[] = [
     defaultReps: 8,
     intensity: 2,
     illustration: "step",
+    visual: "low-step-up",
   },
   {
     id: "reverse-lunge",
@@ -354,6 +431,7 @@ export const EXERCISES: Exercise[] = [
     defaultReps: 8,
     intensity: 3,
     illustration: "lunge",
+    visual: "reverse-lunge",
   },
   {
     id: "med-ball-twist",
@@ -371,6 +449,7 @@ export const EXERCISES: Exercise[] = [
     defaultSeconds: 30,
     intensity: 2,
     illustration: "core",
+    visual: "med-ball-twist",
   },
   {
     id: "march-in-place",
@@ -387,6 +466,7 @@ export const EXERCISES: Exercise[] = [
     defaultSeconds: 60,
     intensity: 1,
     illustration: "march",
+    visual: "march-in-place",
   },
   {
     id: "shoulder-rolls",
@@ -403,6 +483,7 @@ export const EXERCISES: Exercise[] = [
     defaultSeconds: 40,
     intensity: 1,
     illustration: "stretch",
+    visual: "shoulder-rolls",
   },
   {
     id: "cat-cow",
@@ -420,6 +501,7 @@ export const EXERCISES: Exercise[] = [
     defaultSeconds: 45,
     intensity: 1,
     illustration: "quadruped",
+    visual: "cat-cow",
   },
   {
     id: "hip-opener",
@@ -436,6 +518,7 @@ export const EXERCISES: Exercise[] = [
     defaultSeconds: 30,
     intensity: 1,
     illustration: "stretch",
+    visual: "hip-opener",
   },
   {
     id: "chest-stretch",
@@ -453,6 +536,7 @@ export const EXERCISES: Exercise[] = [
     defaultSeconds: 25,
     intensity: 1,
     illustration: "stretch",
+    visual: "chest-stretch",
   },
   {
     id: "breathing-down",
@@ -469,6 +553,7 @@ export const EXERCISES: Exercise[] = [
     defaultSeconds: 60,
     intensity: 1,
     illustration: "breath",
+    visual: "breathing-down",
   },
   {
     id: "wall-pushup",
@@ -486,6 +571,7 @@ export const EXERCISES: Exercise[] = [
     defaultReps: 12,
     intensity: 1,
     illustration: "press",
+    visual: "wall-pushup",
   },
   {
     id: "kb-deadlift",
@@ -504,6 +590,7 @@ export const EXERCISES: Exercise[] = [
     defaultReps: 10,
     intensity: 2,
     illustration: "hinge",
+    visual: "kb-deadlift",
   },
   // ---- Helkropp ----
   {
@@ -525,6 +612,7 @@ export const EXERCISES: Exercise[] = [
     defaultReps: 12,
     intensity: 3,
     illustration: "swing",
+    visual: "kb-swing-low",
   },
   {
     id: "squat-to-press",
@@ -544,6 +632,7 @@ export const EXERCISES: Exercise[] = [
     defaultReps: 8,
     intensity: 3,
     illustration: "overhead",
+    visual: "squat-to-press",
   },
   {
     id: "step-touch",
@@ -561,6 +650,7 @@ export const EXERCISES: Exercise[] = [
     defaultSeconds: 60,
     intensity: 2,
     illustration: "jump",
+    visual: "step-touch",
   },
   {
     id: "low-impact-jack",
@@ -581,6 +671,7 @@ export const EXERCISES: Exercise[] = [
     defaultSeconds: 40,
     intensity: 2,
     illustration: "jump",
+    visual: "low-impact-jack",
   },
   {
     id: "farmer-carry",
@@ -600,6 +691,7 @@ export const EXERCISES: Exercise[] = [
     defaultSeconds: 40,
     intensity: 2,
     illustration: "carry",
+    visual: "farmer-carry",
   },
   {
     id: "sit-to-stand-reach",
@@ -617,6 +709,7 @@ export const EXERCISES: Exercise[] = [
     defaultReps: 10,
     intensity: 1,
     illustration: "overhead",
+    visual: "sit-to-stand-reach",
   },
 
   // ---- Överkropp ----
@@ -639,6 +732,7 @@ export const EXERCISES: Exercise[] = [
     defaultReps: 10,
     intensity: 2,
     illustration: "pushup",
+    visual: "incline-pushup",
   },
   {
     id: "shoulder-press-seated",
@@ -658,6 +752,7 @@ export const EXERCISES: Exercise[] = [
     defaultReps: 10,
     intensity: 2,
     illustration: "overhead",
+    visual: "shoulder-press-seated",
   },
   {
     id: "band-pull-apart",
@@ -675,6 +770,7 @@ export const EXERCISES: Exercise[] = [
     defaultReps: 15,
     intensity: 1,
     illustration: "band",
+    visual: "band-pull-apart",
   },
   {
     id: "triceps-kickback",
@@ -693,6 +789,7 @@ export const EXERCISES: Exercise[] = [
     defaultReps: 12,
     intensity: 1,
     illustration: "curl",
+    visual: "triceps-kickback",
   },
   {
     id: "lateral-raise",
@@ -712,6 +809,7 @@ export const EXERCISES: Exercise[] = [
     defaultReps: 12,
     intensity: 2,
     illustration: "press",
+    visual: "lateral-raise",
   },
   {
     id: "band-face-pull",
@@ -729,6 +827,7 @@ export const EXERCISES: Exercise[] = [
     defaultReps: 12,
     intensity: 1,
     illustration: "row",
+    visual: "band-face-pull",
   },
   {
     id: "shrug",
@@ -747,6 +846,7 @@ export const EXERCISES: Exercise[] = [
     defaultReps: 12,
     intensity: 1,
     illustration: "neck",
+    visual: "shrug",
   },
 
   // ---- Underkropp ----
@@ -768,6 +868,7 @@ export const EXERCISES: Exercise[] = [
     defaultSeconds: 30,
     intensity: 2,
     illustration: "squat",
+    visual: "wall-sit",
   },
   {
     id: "goblet-squat",
@@ -787,6 +888,7 @@ export const EXERCISES: Exercise[] = [
     defaultReps: 10,
     intensity: 3,
     illustration: "squat",
+    visual: "goblet-squat",
   },
   {
     id: "single-leg-bridge",
@@ -805,6 +907,7 @@ export const EXERCISES: Exercise[] = [
     defaultReps: 8,
     intensity: 2,
     illustration: "bridge",
+    visual: "single-leg-bridge",
   },
   {
     id: "side-lying-leg-raise",
@@ -822,6 +925,7 @@ export const EXERCISES: Exercise[] = [
     defaultReps: 12,
     intensity: 1,
     illustration: "band",
+    visual: "side-lying-leg-raise",
   },
   {
     id: "hamstring-curl-standing",
@@ -839,6 +943,7 @@ export const EXERCISES: Exercise[] = [
     defaultReps: 12,
     intensity: 1,
     illustration: "calf",
+    visual: "hamstring-curl-standing",
   },
   {
     id: "split-squat-support",
@@ -858,6 +963,7 @@ export const EXERCISES: Exercise[] = [
     defaultReps: 8,
     intensity: 3,
     illustration: "lunge",
+    visual: "split-squat-support",
   },
 
   // ---- Bål ----
@@ -880,6 +986,7 @@ export const EXERCISES: Exercise[] = [
     defaultSeconds: 25,
     intensity: 2,
     illustration: "plank",
+    visual: "forearm-plank",
   },
   {
     id: "side-plank-knees",
@@ -900,6 +1007,7 @@ export const EXERCISES: Exercise[] = [
     defaultSeconds: 20,
     intensity: 2,
     illustration: "sideplank",
+    visual: "side-plank-knees",
   },
   {
     id: "heel-taps",
@@ -917,6 +1025,7 @@ export const EXERCISES: Exercise[] = [
     defaultReps: 12,
     intensity: 1,
     illustration: "core",
+    visual: "heel-taps",
   },
   {
     id: "standing-twist",
@@ -935,6 +1044,7 @@ export const EXERCISES: Exercise[] = [
     defaultSeconds: 40,
     intensity: 1,
     illustration: "twist",
+    visual: "standing-twist",
   },
   {
     id: "pallof-band",
@@ -952,6 +1062,7 @@ export const EXERCISES: Exercise[] = [
     defaultSeconds: 30,
     intensity: 2,
     illustration: "twist",
+    visual: "pallof-band",
   },
   {
     id: "hollow-hold-easy",
@@ -971,6 +1082,7 @@ export const EXERCISES: Exercise[] = [
     defaultSeconds: 20,
     intensity: 2,
     illustration: "core",
+    visual: "hollow-hold-easy",
   },
 
   // ---- Rörlighet ----
@@ -991,6 +1103,7 @@ export const EXERCISES: Exercise[] = [
     defaultSeconds: 45,
     intensity: 1,
     illustration: "childpose",
+    visual: "childs-pose",
   },
   {
     id: "hamstring-stretch",
@@ -1008,6 +1121,7 @@ export const EXERCISES: Exercise[] = [
     defaultSeconds: 30,
     intensity: 1,
     illustration: "hamstring",
+    visual: "hamstring-stretch",
   },
   {
     id: "neck-release",
@@ -1026,6 +1140,7 @@ export const EXERCISES: Exercise[] = [
     defaultSeconds: 25,
     intensity: 1,
     illustration: "neck",
+    visual: "neck-release",
   },
   {
     id: "thoracic-rotation",
@@ -1043,6 +1158,7 @@ export const EXERCISES: Exercise[] = [
     defaultSeconds: 30,
     intensity: 1,
     illustration: "twist",
+    visual: "thoracic-rotation",
   },
   {
     id: "ankle-mobility",
@@ -1060,6 +1176,7 @@ export const EXERCISES: Exercise[] = [
     defaultSeconds: 25,
     intensity: 1,
     illustration: "calf",
+    visual: "ankle-mobility",
   },
   {
     id: "figure-four-stretch",
@@ -1078,6 +1195,7 @@ export const EXERCISES: Exercise[] = [
     defaultSeconds: 30,
     intensity: 1,
     illustration: "stretch",
+    visual: "figure-four-stretch",
   },
   {
     id: "standing-side-bend",
@@ -1095,6 +1213,7 @@ export const EXERCISES: Exercise[] = [
     defaultSeconds: 25,
     intensity: 1,
     illustration: "stretch",
+    visual: "standing-side-bend",
   },
   {
     id: "wrist-mobility",
@@ -1112,6 +1231,7 @@ export const EXERCISES: Exercise[] = [
     defaultSeconds: 30,
     intensity: 1,
     illustration: "stretch",
+    visual: "wrist-mobility",
   },
 ];
 
