@@ -408,6 +408,30 @@ export default function MealPlannerPage() {
               </div>
             )}
 
+            <div className="rounded-3xl border border-border bg-card p-5 shadow-sm">
+              <h2 className="text-sm font-semibold text-ink">Vilka måltider vill du planera?</h2>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Välj bara det du orkar. Ditt val sparas till nästa gång.
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {ALL_MEAL_TYPES.map((m) => {
+                  const on = activeMealTypes.includes(m);
+                  return (
+                    <Button
+                      key={m}
+                      type="button"
+                      variant={on ? "default" : "secondary"}
+                      aria-pressed={on}
+                      className="min-h-11 rounded-2xl"
+                      onClick={() => toggleMealType(m)}
+                    >
+                      {m}
+                    </Button>
+                  );
+                })}
+              </div>
+            </div>
+
             <div className="space-y-4">
               {WEEKDAYS.map((day, weekday) => (
                 <div
@@ -415,8 +439,9 @@ export default function MealPlannerPage() {
                   className="bg-card border border-border rounded-3xl p-5 shadow-sm space-y-3"
                 >
                   <h3 className="font-medium text-lg">{day}</h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    {MEAL_TYPES.map((mealType) => {
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                    {activeMealTypes.map((mealType) => {
+
                       const plan = findPlan(weekday, mealType);
                       return (
                         <div
