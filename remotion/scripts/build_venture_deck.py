@@ -87,9 +87,9 @@ def build(lang):
         r.font.name = "Inter"
         r.font.color.rgb = PAPER
 
-        textbox(s, 0.85, 1.15, 6.4, 1.9, title.replace("|", "\n"), 40, INK, bold=True, font="Plus Jakarta Sans", spacing=1.05)
-        textbox(s, 0.85, 3.05, 6.4, 1.6, body, 16, MUTED, font="Inter", spacing=1.3)
-        textbox(s, 0.85, 4.7, 6.4, 1.1, note.replace("\n", "  "), 17, VIOLET, italic=True, font="Caveat", spacing=1.15)
+        textbox(s, 0.85, 1.15, 6.5, 2.3, title.replace("|", "\n"), 32, INK, bold=True, font="Plus Jakarta Sans", spacing=1.05)
+        textbox(s, 0.85, 3.45, 6.5, 1.5, body, 15, MUTED, font="Inter", spacing=1.3)
+        textbox(s, 0.85, 5.05, 6.5, 1.0, note.replace("\n", "  "), 17, VIOLET, italic=True, font="Caveat", spacing=1.15)
 
         panel = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, inch(8.1), inch(0.7), inch(4.4), inch(5.9))
         solid(panel, PANEL)
