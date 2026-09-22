@@ -14,7 +14,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import CollapsibleSection from "@/components/collapsible-section";
 
 const WEEKDAYS = ["Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag", "Söndag"];
-const MEAL_TYPES = ["Frukost", "Lunch", "Middag"];
+/** Alla måltider som går att planera – användaren väljer själv vilka som visas. */
+const ALL_MEAL_TYPES = ["Frukost", "Lunch", "Middag", "Mellis", "Kvällsmål"];
+const DEFAULT_MEAL_TYPES = ["Frukost", "Lunch", "Middag"];
 
 interface MealPlan {
   weekday: number;
