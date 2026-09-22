@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
+import { Brain } from "lucide-react";
+
 import Layout from "@/components/layout";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { track } from "@/lib/analytics";
