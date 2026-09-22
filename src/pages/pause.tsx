@@ -37,7 +37,7 @@ export default function PausePage() {
   const startPause = (m: number) => {
     const safe = Math.min(240, Math.max(1, Math.round(m)));
     setMinutes(safe);
-    track("recovery_pause_started", { minutes: safe });
+    track("recovery_pause_started", { count: safe });
     setRunning(true);
   };
 

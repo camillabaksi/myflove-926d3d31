@@ -25,7 +25,7 @@ export default function EnergyAfterCheck({
   const choose = async (direction: "gives" | "neutral" | "drains") => {
     if (saving) return;
     setSaving(true);
-    track("recovery_energy_checkin", { source, direction });
+    track("recovery_energy_checkin", { source, method: direction });
     try {
       await addFactor({
         title,
