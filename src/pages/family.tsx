@@ -88,6 +88,15 @@ function CreateOrJoin({ onReady }: { onReady: () => void }) {
   const [pending, setPending] = useState(false);
   const { toast } = useToast();
 
+  // Kommer man via en inbjudningslänk är koden redan ifylld.
+  useEffect(() => {
+    const code = new URLSearchParams(window.location.search).get("kod");
+    if (code) {
+      setInviteCode(code.toUpperCase());
+      setMode("join");
+    }
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!displayName.trim()) return;
