@@ -4,6 +4,8 @@ import Layout from "@/components/layout";
 import { MyFloveHeader } from "@/components/myflove";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import StopModal from "@/components/stop-modal";
+import EnergyAfterCheck from "@/components/recovery/energy-after-check";
+
 import { useSmartBack } from "@/hooks/use-smart-back";
 import { track } from "@/lib/analytics";
 
