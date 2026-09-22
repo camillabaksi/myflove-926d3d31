@@ -156,6 +156,11 @@ export default function TrainingPage() {
   const run = useServerFn(generateTrainingProgram);
 
   const [view, setView] = useState<TrainingView>("overview");
+  // Vikt är frivilligt – den som inte vill se vikt alls kan dölja delen helt.
+  const [hideWeight, setHideWeight] = useCloudSyncedStorage<boolean>(
+    "myflove-hide-weight",
+    false,
+  );
   const [showWorkoutBuilder, setShowWorkoutBuilder] = useState(false);
   const [weightInput, setWeightInput] = useState("");
   const [weightDate, setWeightDate] = useState(() => new Date().toISOString().slice(0, 10));
