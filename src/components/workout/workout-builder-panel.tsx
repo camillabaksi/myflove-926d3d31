@@ -12,8 +12,6 @@ import {
   Sparkles,
   Trash2,
 } from "lucide-react";
-import Layout from "@/components/layout";
-import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import ExerciseCard from "@/components/workout/exercise-card";
@@ -90,7 +88,19 @@ function toggle<T>(list: T[], value: T): T[] {
  * Återanvänder befintlig energi (FlowScore), befintliga uppgifter för
  * historiken och MyFloves vanliga block/typografi.
  */
-export default function WorkoutBuilderPage() {
+export interface WorkoutBuilderPanelProps {
+  showBuilder: boolean;
+  onOpenBuilder: () => void;
+  onCloseBuilder: () => void;
+  onAddToProgram: (workout: Workout) => void;
+}
+
+export default function WorkoutBuilderPanel({
+  showBuilder,
+  onOpenBuilder,
+  onCloseBuilder,
+  onAddToProgram,
+}: WorkoutBuilderPanelProps) {
   const [step, setStep] = useState<Step>("intent");
   const [req, setReq] = useState<WorkoutRequest>(DEFAULT_REQUEST);
   const [workout, setWorkout] = useState<Workout | null>(null);
@@ -104,7 +114,7 @@ export default function WorkoutBuilderPage() {
   const suggestedEnergy = useMemo(() => energyFromScore(flow.score), [flow.score]);
 
   useEffect(() => {
-    track("workout_builder_opened", { source: "sida" });
+    track("workout_builder_opened", { source: "traningsprogram" });
   }, []);
 
   useEffect(() => {
@@ -185,10 +195,9 @@ export default function WorkoutBuilderPage() {
   };
 
   return (
-    <Layout>
-      <MyFlovePageGrid area="flow">
-        <MyFloveWide>
-          <header className="mb-4">
+    <div className="space-y-5">
+        {showBuilder && (
+          <header className="space-y-3">
             <p className="text-xs font-semibold uppercase tracking-wide text-primary">Träning</p>
             <h1 className="text-2xl font-semibold text-ink">Flow skapar ditt pass</h1>
             <p className="mt-1 text-sm text-muted-foreground">
@@ -197,11 +206,14 @@ export default function WorkoutBuilderPage() {
             <p className="mt-2 inline-flex items-center gap-2 rounded-full bg-muted/60 px-3 py-1 text-xs text-muted-foreground">
               <BatteryMedium size={14} aria-hidden /> Din energi just nu: {energyPercent} %
             </p>
+            <Button type="button" variant="ghost" size="sm" onClick={onCloseBuilder}>
+              Stäng skaparen
+            </Button>
           </header>
-        </MyFloveWide>
+        )}
 
-        {step === "intent" && (
-          <MyFloveWide>
+        {showBuilder && step === "intent" && (
+          <>
             <section className="space-y-3" aria-label="Vad vill du göra idag?">
               <h2 className="text-lg font-semibold text-ink">Vad vill du göra idag?</h2>
               <div className="grid gap-3 sm:grid-cols-2">
@@ -226,11 +238,11 @@ export default function WorkoutBuilderPage() {
                 })}
               </div>
             </section>
-          </MyFloveWide>
+          </>
         )}
 
-        {step === "beskriv" && (
-          <MyFloveWide>
+        {showBuilder && step === "beskriv" && (
+          <>
             <section className="space-y-4" aria-label="Beskriv vad du behöver">
               <div className="surface-card p-4">
                 <label htmlFor="workout-text" className="text-base font-semibold text-ink">
@@ -320,21 +332,21 @@ export default function WorkoutBuilderPage() {
                 </Button>
               </div>
             </section>
-          </MyFloveWide>
+          </>
         )}
 
-        {step === "tanker" && (
-          <MyFloveWide>
+        {showBuilder && step === "tanker" && (
+          <>
             <div className="surface-card p-8 text-center">
               <Sparkles size={28} className="mx-auto animate-pulse text-primary" aria-hidden />
               <p className="mt-3 text-base font-medium text-ink">Flow tänker...</p>
               <p className="text-sm text-muted-foreground">Sätter ihop något som passar dagen.</p>
             </div>
-          </MyFloveWide>
+          </>
         )}
 
-        {step === "resultat" && workout && (
-          <MyFloveWide>
+        {showBuilder && step === "resultat" && workout && (
+          <>
             <section className="space-y-4" aria-label="Ditt pass">
               <div className="surface-card p-4">
                 <h2 className="text-xl font-semibold text-ink">{workout.title}</h2>
@@ -411,17 +423,17 @@ export default function WorkoutBuilderPage() {
                 </div>
               </div>
             </section>
-          </MyFloveWide>
+          </>
         )}
 
-        {step === "kor" && workout && (
-          <MyFloveWide>
+        {showBuilder && step === "kor" && workout && (
+          <>
             <WorkoutRunner workout={workout} onFinish={finish} onClose={() => setStep("resultat")} />
-          </MyFloveWide>
+          </>
         )}
 
-        {step === "klar" && workout && (
-          <MyFloveWide>
+        {showBuilder && step === "klar" && workout && (
+          <>
             <section className="surface-card p-6 text-center">
               <h2 className="text-2xl font-semibold text-ink">Du gjorde det! 💜</h2>
               <p className="mt-2 text-sm text-muted-foreground">
@@ -439,10 +451,10 @@ export default function WorkoutBuilderPage() {
                 </Link>
               </div>
             </section>
-          </MyFloveWide>
+          </>
         )}
 
-        <MyFloveWide>
+        <>
           <section className="space-y-3" aria-label="Mina pass">
             <h2 className="text-lg font-semibold text-ink">Mina pass</h2>
             {logs.length === 0 && saved.length === 0 && (
@@ -492,6 +504,7 @@ export default function WorkoutBuilderPage() {
                         setWorkout(w);
                         setDoneIds([]);
                         setStep("resultat");
+                        onOpenBuilder();
                       }}
                     >
                       Gör om
@@ -510,9 +523,8 @@ export default function WorkoutBuilderPage() {
               </div>
             )}
           </section>
-        </MyFloveWide>
-      </MyFlovePageGrid>
-    </Layout>
+        </>
+    </div>
   );
 }
 
