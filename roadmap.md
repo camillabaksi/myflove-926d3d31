@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Förenkla Mer och samla profil, anpassning, app- och kontoval i en egen Inställningar-vy (2026-09-22)
+
 - [x] Samla Flow skapar ditt pass, Mina pass och historik i Träningsprogram som enda träningssektion (2026-09-22)
 
 - [x] Utökat övningsbibliotek till 58 övningar med bild och säkerhetsnotis (2026-09-22)

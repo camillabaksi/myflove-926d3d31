@@ -54,6 +54,7 @@ import { Route as AppMaBraRouteImport } from './routes/_app.ma-bra'
 import { Route as AppLaggTillRouteImport } from './routes/_app.lagg-till'
 import { Route as AppKalenderRouteImport } from './routes/_app.kalender'
 import { Route as AppJobbRouteImport } from './routes/_app.jobb'
+import { Route as AppInstallningarRouteImport } from './routes/_app.installningar'
 import { Route as AppInsightRouteImport } from './routes/_app.insight'
 import { Route as AppIdagRouteImport } from './routes/_app.idag'
 import { Route as AppHurMarDuRouteImport } from './routes/_app.hur-mar-du'
@@ -316,6 +317,11 @@ const AppJobbRoute = AppJobbRouteImport.update({
   path: '/jobb',
   getParentRoute: () => AppRoute,
 } as any)
+const AppInstallningarRoute = AppInstallningarRouteImport.update({
+  id: '/installningar',
+  path: '/installningar',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppInsightRoute = AppInsightRouteImport.update({
   id: '/insight',
   path: '/insight',
@@ -543,6 +549,7 @@ export interface FileRoutesByFullPath {
   '/hur-mar-du': typeof AppHurMarDuRoute
   '/idag': typeof AppIdagRoute
   '/insight': typeof AppInsightRoute
+  '/installningar': typeof AppInstallningarRoute
   '/jobb': typeof AppJobbRoute
   '/kalender': typeof AppKalenderRoute
   '/lagg-till': typeof AppLaggTillRoute
@@ -625,6 +632,7 @@ export interface FileRoutesByTo {
   '/hur-mar-du': typeof AppHurMarDuRoute
   '/idag': typeof AppIdagRoute
   '/insight': typeof AppInsightRoute
+  '/installningar': typeof AppInstallningarRoute
   '/jobb': typeof AppJobbRoute
   '/kalender': typeof AppKalenderRoute
   '/lagg-till': typeof AppLaggTillRoute
@@ -709,6 +717,7 @@ export interface FileRoutesById {
   '/_app/hur-mar-du': typeof AppHurMarDuRoute
   '/_app/idag': typeof AppIdagRoute
   '/_app/insight': typeof AppInsightRoute
+  '/_app/installningar': typeof AppInstallningarRoute
   '/_app/jobb': typeof AppJobbRoute
   '/_app/kalender': typeof AppKalenderRoute
   '/_app/lagg-till': typeof AppLaggTillRoute
@@ -793,6 +802,7 @@ export interface FileRouteTypes {
     | '/hur-mar-du'
     | '/idag'
     | '/insight'
+    | '/installningar'
     | '/jobb'
     | '/kalender'
     | '/lagg-till'
@@ -875,6 +885,7 @@ export interface FileRouteTypes {
     | '/hur-mar-du'
     | '/idag'
     | '/insight'
+    | '/installningar'
     | '/jobb'
     | '/kalender'
     | '/lagg-till'
@@ -958,6 +969,7 @@ export interface FileRouteTypes {
     | '/_app/hur-mar-du'
     | '/_app/idag'
     | '/_app/insight'
+    | '/_app/installningar'
     | '/_app/jobb'
     | '/_app/kalender'
     | '/_app/lagg-till'
@@ -1340,6 +1352,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppJobbRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/installningar': {
+      id: '/_app/installningar'
+      path: '/installningar'
+      fullPath: '/installningar'
+      preLoaderRoute: typeof AppInstallningarRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/insight': {
       id: '/_app/insight'
       path: '/insight'
@@ -1624,6 +1643,7 @@ interface AppRouteChildren {
   AppHurMarDuRoute: typeof AppHurMarDuRoute
   AppIdagRoute: typeof AppIdagRoute
   AppInsightRoute: typeof AppInsightRoute
+  AppInstallningarRoute: typeof AppInstallningarRoute
   AppJobbRoute: typeof AppJobbRoute
   AppKalenderRoute: typeof AppKalenderRoute
   AppLaggTillRoute: typeof AppLaggTillRoute
@@ -1687,6 +1707,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppHurMarDuRoute: AppHurMarDuRoute,
   AppIdagRoute: AppIdagRoute,
   AppInsightRoute: AppInsightRoute,
+  AppInstallningarRoute: AppInstallningarRoute,
   AppJobbRoute: AppJobbRoute,
   AppKalenderRoute: AppKalenderRoute,
   AppLaggTillRoute: AppLaggTillRoute,
