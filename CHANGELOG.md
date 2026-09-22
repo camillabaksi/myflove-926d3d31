@@ -1,3 +1,7 @@
+## 2026-09-22 – Svenska språkvalet återställs korrekt
+
+- Svenska flaggan återställer nu alltid hela inloggningssidan till svenska, även om en engelsk översättning låg kvar från ett tidigare val.
+
 ## 2026-09-22 – Flaggval på inloggningssidan
 
 - Språkväljaren på inloggningssidan är nu två små flaggor (svensk och brittisk) i stället för textknappar.
