@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Flow skapar ditt pass: övningsbibliotek, generator, träningskort, steg-för-steg-läge och Mina pass (2026-09-22)
+
 - [x] Redigerbar svensk 16:9-PowerPoint av Venture Cup-pitchfilmen med 13 slides och filmexporttider (2026-09-21)
 
 - [x] Återställ öppning av vald kalenderdag från månadsvy och veckovy (2026-09-21)

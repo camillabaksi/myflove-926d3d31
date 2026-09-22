@@ -1,3 +1,11 @@
+## 2026-09-22 – Flow skapar ditt pass
+
+- Ny sida "Skapa mitt pass": välj Styrka, Rörlighet, Återhämtning eller Eget upplägg, beskriv fritt vad du behöver och få ett färdigt pass.
+- Flow läser tid, plats, utrustning, fokus och det som känns känsligt ur din text och anpassar passet efter dagens energi.
+- Övningskorten visar illustration, set och reps, korta teknikpunkter, "Visa hur", byt övning och markera klar.
+- "Starta passet" ger en övning i taget med vilotimer och tydlig progress; klart pass loggas i historiken och sparas under "Mina pass".
+- Kalorier visas som ett grovt intervall och all vägledning är allmän träning, inte vård.
+
 ## 2026-09-21 – Ny Android-app (version 5.3, versionCode 12)
 
 - Appfilen för Google Play är uppdaterad till version 5.3 med allt det senaste i appen.
