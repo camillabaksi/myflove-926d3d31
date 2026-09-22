@@ -36,6 +36,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { generateTrainingProgram } from "@/lib/training.functions";
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { useTraining, type TrainingGoal, type TrainingSession } from "@/hooks/use-training";
 import { FEEDBACK_LABEL, weekStartKey, type WeekFeedback } from "@/lib/weekly-plan";
 import { isHealthAppAvailable, openHealthSettings, readStepsForDays } from "@/lib/health-steps";
