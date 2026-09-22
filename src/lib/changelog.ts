@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-22";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Ändra schemat för hand",
+    items: [
+      "Mitt schema går att ändra själv: lägg till, ändra eller ta bort tider (2026-09-22)",
+      "Även tider som Flow läst in från ett uppladdat schema kan justeras (2026-09-22)",
+    ],
+  },
+  {
     title: "Automatiskt pass i Träningsprogram",
     items: [
       "Passet kan köras automatiskt med stor timer, förvarning och automatisk start av nästa övning (2026-09-22)",

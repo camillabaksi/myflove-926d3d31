@@ -1,3 +1,8 @@
+## 2026-09-22 – Ändra schemat för hand
+
+- I Mitt schema går det nu att ändra, lägga till och ta bort tider – även de som Flow läst in från ett uppladdat schema.
+- Dag, tid, namn, plats och typ (lektion, rast, lunch) kan ändras direkt; allt sparas och följer med mellan enheter.
+
 ## 2026-09-22 – Automatiskt pass i Träningsprogram
 
 - "Starta passet (automatiskt)" kör passet åt dig: stor nedräkning, förvarning "Nästa övning", automatisk start av nästa moment och vilotimer.
