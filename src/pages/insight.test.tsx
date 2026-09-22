@@ -30,6 +30,7 @@ vi.mock("@/components/layout", () => ({
 vi.mock("@/hooks/use-data", () => ({
   useTasks: () => ({ addTask: vi.fn(), completedTasks: state.completed, tasks: state.completed }),
   useReminders: () => ({ reminders: [] }),
+  useMoods: () => ({ moods: [], addMood: vi.fn(), setMoods: vi.fn() }),
 }));
 vi.mock("@/hooks/use-flowscore", () => ({ useFlowScore: () => ({ flow: { maxFriction: 5 } }) }));
 vi.mock("@/hooks/use-insight", () => ({
