@@ -21,6 +21,9 @@ import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove
 import PwaInstallButton from "@/components/pwa-install-button";
 import { Button } from "@/components/ui/button";
 import { track } from "@/lib/analytics";
+import { useLang } from "@/hooks/use-language";
+import { LANGUAGES } from "@/lib/i18n";
+import { clearTranslationCache } from "@/lib/auto-translate";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import {
   isAlarmSoundEnabled,
