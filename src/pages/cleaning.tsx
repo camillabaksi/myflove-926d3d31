@@ -7,6 +7,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { useToast } from "@/hooks/use-toast";
 import { celebrateFromEvent } from "@/lib/celebrate";
+import { emitActivityDone } from "@/lib/activity-energy-event";
+
 import {
   CLEAN_ROOMS,
   CLEAN_MODE_BLURB,
