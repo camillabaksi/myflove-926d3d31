@@ -1,6 +1,7 @@
 ## 2026-09-22 – Ny struktur: Översikt, Flow, Hälsa och Återhämtning
 
 - Aktiviteter i Studier, Jobb, Familj, Hem (städpass) och Återhämtning (Paus, Ljusboost, Stopp-knappen) frågar nu frivilligt hur energin kändes – svaret sparas i din vanliga energilogg.
+- Även ett genomfört träningspass i Träningsprogram frågar hur energin kändes efteråt.
 - Huvudmenyn är nu Översikt, Flow, Hälsa, Återhämtning och Mer – samma för alla. QuickFlow ligger inne i Flow (och som flytande knapp) i stället för som egen menypunkt.
 - Återhämtning har EN paus där du väljer 5, 10, 20, 30, 60 minuter eller egen tid. Mikropaus och Akut Lugn är borta som separata val.
 - Efter en paus eller Ljusboost kan du med ett tryck säga om energin känns mer, samma eller mindre – det sparas i din vanliga energilogg.
