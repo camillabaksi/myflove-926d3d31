@@ -8,7 +8,7 @@ const entry = (occurredAt: string, direction: "gives" | "drains", strength: numb
     title: "x",
     direction,
     strength,
-    category: "vardag",
+    category: "rorelse",
     kind: "vardag",
     friction: null,
     note: null,
