@@ -305,6 +305,92 @@ export function generateWorkout(input: WorkoutRequest, now = Date.now()): Workou
   };
 }
 
+/** Ett förslag från AI:n – samma form som passet, men bara det nödvändiga. */
+export interface AiWorkoutPlan {
+  title?: string;
+  note?: string;
+  blocks: {
+    exerciseId: string;
+    sets?: number;
+    reps?: number;
+    seconds?: number;
+    restSeconds?: number;
+    section?: WorkoutBlock["section"];
+  }[];
+}
+
+const SECTION_ORDER: WorkoutBlock["section"][] = ["uppvärmning", "huvuddel", "nedvarvning"];
+
+/**
+ * Bygger ett riktigt `Workout` av AI:ns förslag. Allt valideras mot det
+ * befintliga biblioteket: okända övningar och sådant som krockar med ömma
+ * områden tas bort. Blir det för tunt returneras null och den lokala
+ * generatorn får ta över.
+ */
+export function buildWorkoutFromPlan(
+  plan: AiWorkoutPlan,
+  input: WorkoutRequest,
+  now = Date.now(),
+): Workout | null {
+  const req: WorkoutRequest = {
+    ...input,
+    equipment: input.equipment.length ? input.equipment : ["kroppsvikt"],
+    focus: input.focus.length ? input.focus : ["helkropp"],
+    minutes: Math.max(10, Math.min(90, input.minutes)),
+  };
+
+  const seen = new Set<string>();
+  const blocks: WorkoutBlock[] = [];
+  for (const item of plan.blocks) {
+    const ex = exerciseById(item.exerciseId);
+    if (!ex || seen.has(ex.id)) continue;
+    if (ex.avoid?.some((a) => req.limitations.includes(a))) continue;
+    seen.add(ex.id);
+    const section = item.section ?? ex.role;
+    const base = toBlock(ex, req, section);
+    blocks.push({
+      ...base,
+      sets: clamp(item.sets ?? base.sets, 1, 5),
+      ...(ex.measure === "tid"
+        ? { seconds: clamp(item.seconds ?? base.seconds ?? 30, 15, 180) }
+        : { reps: clamp(item.reps ?? base.reps ?? 10, 3, 30) }),
+      restSeconds: clamp(item.restSeconds ?? base.restSeconds, 10, 120),
+      section,
+    });
+  }
+
+  if (blocks.length < 3) return null;
+
+  const ordered = SECTION_ORDER.flatMap((s) => blocks.filter((b) => b.section === s));
+  const totalSeconds = ordered.reduce((sum, b) => sum + blockSeconds(b), 0);
+  const realMinutes = Math.max(5, Math.round(totalSeconds / 60));
+  const avgIntensity =
+    ordered.reduce((sum, b) => sum + (exerciseById(b.exerciseId)?.intensity ?? 1), 0) /
+    Math.max(1, ordered.length);
+
+  return {
+    id: `w-${now.toString(36)}-${Math.random().toString(36).slice(2, 7)}`,
+    title: plan.title?.trim() || `${TITLES[req.intent]} – ${focusLabel(req.focus)}`,
+    note: plan.note?.trim() || "Ett pass anpassat efter hur du har det idag.",
+    createdAt: now,
+    minutes: realMinutes,
+    energy: req.energy,
+    place: req.place,
+    equipment: req.equipment,
+    focus: req.focus,
+    limitations: req.limitations,
+    intent: req.intent,
+    blocks: ordered,
+    kcalLow: Math.round(realMinutes * (2.5 + avgIntensity)),
+    kcalHigh: Math.round(realMinutes * (4 + avgIntensity * 1.5)),
+  };
+}
+
+function clamp(value: number, min: number, max: number): number {
+  if (!Number.isFinite(value)) return min;
+  return Math.max(min, Math.min(max, Math.round(value)));
+}
+
 /** Byter ut en övning mot närmaste rimliga alternativ. */
 export function swapExercise(workout: Workout, index: number): Workout {
   const block = workout.blocks[index];
