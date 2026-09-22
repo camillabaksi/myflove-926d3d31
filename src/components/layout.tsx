@@ -27,9 +27,6 @@ import {
   RotateCcw,
   ArrowUp,
   ArrowDown,
-  LogOut,
-  Volume2,
-  VolumeX,
   Shield,
   Heart,
   Sun,
@@ -49,21 +46,12 @@ import {
   Zap,
   Gauge,
   ArrowLeft,
-  Accessibility,
-  Compass,
   ChevronRight,
   MessageCircle,
   Hand,
-  User,
   Wind,
 } from "lucide-react";
-import {
-  isAlarmSoundEnabled,
-  setAlarmSoundEnabled,
-  subscribeAlarmPref,
-  playAlarmPreview,
-  initAlarmAudioUnlock,
-} from "@/lib/push-notifications";
+import { initAlarmAudioUnlock } from "@/lib/push-notifications";
 import { initPersonalization } from "@/lib/personalization";
 import { useMedicationAlerts } from "@/hooks/use-medication-alerts";
 import { useShoppingProximityAlerts } from "@/hooks/use-shopping-proximity-alerts";
@@ -105,7 +93,7 @@ import { track } from "@/lib/analytics";
 import { trackRetention } from "@/lib/analytics-retention";
 import { rememberPlace } from "@/lib/flow-context";
 import { Button } from "@/components/ui/button";
-import { useClerk, Show } from "@clerk/react";
+import { Show } from "@clerk/react";
 
 interface LayoutProps {
   children: ReactNode;
@@ -198,7 +186,6 @@ export default function Layout({ children }: LayoutProps) {
   const [location] = useLocation();
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { signOut } = useClerk();
   const {
     alerts: medicationAlerts,
     dismissAlert: dismissMedicationAlert,
@@ -227,19 +214,10 @@ export default function Layout({ children }: LayoutProps) {
   const canGoBack = tanstackLocation !== "/";
   const handleBack = goBack;
 
-  const [alarmEnabled, setAlarmEnabledState] = useState<boolean>(() => isAlarmSoundEnabled());
-  useEffect(() => subscribeAlarmPref((v) => setAlarmEnabledState(v)), []);
   useEffect(() => {
     initAlarmAudioUnlock();
     initPersonalization();
   }, []);
-  const toggleAlarm = () => {
-    const next = !alarmEnabled;
-    setAlarmSoundEnabled(next);
-    setAlarmEnabledState(next);
-    if (next) playAlarmPreview();
-  };
-
   // Ett app_opened per webbläsarsession (inte per navigering).
   useEffect(() => {
     try {
@@ -490,38 +468,6 @@ export default function Layout({ children }: LayoutProps) {
         ]
       : []),
     {
-      href: "/flow-installningar",
-      label: "Flow-inställningar",
-      icon: Sparkles,
-      hint: "Hjälpnivå, när Flow får höra av sig och vad han prioriterar",
-    },
-    {
-      href: "/oversikt",
-      label: "Så funkar MyFlove",
-      icon: Compass,
-      hint: "Enkel sammanfattning av allt i appen – och vart du går",
-      essential: true,
-    },
-    {
-      href: "/profil",
-      label: "Min profil",
-      icon: User,
-      hint: "Namn, barn, din vardag, styrkor och vad du vill ha hjälp med",
-    },
-    {
-      href: "/anpassa-hem",
-      label: "Anpassa hemskärmen",
-      icon: Home,
-      hint: "Välj vilka block som syns på Hem, ordning och dina genvägar",
-    },
-    {
-      href: "/anpassa",
-      label: "Anpassa appen",
-      icon: Accessibility,
-      hint: "Lugnare färger, färre saker, tyst läge och enkla ord",
-      essential: true,
-    },
-    {
       href: "/installningar",
       label: "Inställningar",
       icon: Settings2,
@@ -756,35 +702,12 @@ export default function Layout({ children }: LayoutProps) {
             </div>
           ))}
         </div>
-        <div className="mt-auto pt-3 pb-1 space-y-1.5">
-          <Link href="/anpassa">
+        <div className="mt-auto pt-3 pb-1">
+          <Link href="/installningar">
             <Button variant="outline" size="sm" className="w-full rounded-lg gap-2">
-              <Accessibility size={15} /> Anpassa appen
+              <Settings2 size={15} /> Inställningar
             </Button>
           </Link>
-          <Button
-            variant="outline"
-            size="sm"
-            className="w-full rounded-lg gap-2"
-            onClick={toggleAlarm}
-            title={alarmEnabled ? "Stäng av alarmljud" : "Slå på alarmljud"}
-          >
-            {alarmEnabled ? <Volume2 size={15} /> : <VolumeX size={15} />}
-            Alarmljud: {alarmEnabled ? "på" : "av"}
-          </Button>
-          <Show when="signed-in">
-            <Button
-              variant="outline"
-              size="sm"
-              className="w-full rounded-lg gap-2"
-              onClick={() => {
-                track("logout");
-                signOut();
-              }}
-            >
-              <LogOut size={15} /> Logga ut
-            </Button>
-          </Show>
         </div>
       </nav>
 
