@@ -271,7 +271,14 @@ export default function Layout({ children }: LayoutProps) {
     essential?: boolean;
   };
   const navItems: NavItem[] = [
-    { href: "/hem", label: "Hem", icon: Home, hint: "Din överblick över dagen", essential: true },
+    {
+      href: "/hem",
+      label: "Översikt",
+      icon: Home,
+      hint: "Dagen, energin och nästa steg",
+      essential: true,
+    },
+
     {
       href: "/idag",
       label: "Idag",
