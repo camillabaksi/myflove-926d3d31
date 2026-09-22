@@ -117,7 +117,10 @@ export default function CleaningPage() {
       const allDone = steps.every((s) => s.id === stepId || isDone(s.id));
       celebrateFromEvent(e);
       toast({ description: allDone ? finishCheer(mode, room.label) : cleaningCheer() });
+      // Hela passet klart → frivillig energikoll, inte för varje litet steg.
+      if (allDone) emitActivityDone({ id: `stad-${listKey}`, title: `Städning – ${room.label}` });
     }
+
   };
 
   const resetRoom = () => {
