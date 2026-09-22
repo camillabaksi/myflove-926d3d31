@@ -132,6 +132,9 @@ export const ACTION_LABELS: Record<string, string> = {
   plan_updated: "Plan uppdaterad",
   history_viewed: "Historik visad",
   week_review_viewed: "Veckoöversikt visad",
+  workout_builder_opened: "Skapa mitt pass öppnad",
+  workout_generated: "Pass skapat",
+  workout_completed: "Pass genomfört",
 
   // Flow
   flow_viewed: "Flow visad",

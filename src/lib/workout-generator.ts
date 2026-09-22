@@ -112,9 +112,9 @@ export function parseWorkoutText(text: string, base: WorkoutRequest): WorkoutReq
     next.minutes = allowed.reduce((a, b) => (Math.abs(b - m) < Math.abs(a - m) ? b : a), 30);
   }
 
-  if (/(gym|gymmet)/.test(t)) next.place = "gym";
-  else if (/(ute|utomhus|parken)/.test(t)) next.place = "ute";
-  else if (/(hemma|hemmet)/.test(t)) next.place = "hemma";
+  if (/(hemma|hemmet)/.test(t)) next.place = "hemma";
+  else if (/\b(gym|gymmet)\b/.test(t)) next.place = "gym";
+  else if (/\b(ute|utomhus|parken)\b/.test(t)) next.place = "ute";
 
   if (/(orkar inte|trött|låg energi|slut på energi|tung dag)/.test(t)) next.energy = "låg";
   else if (/(pigg|mycket energi|full av energi)/.test(t)) next.energy = "mycket";

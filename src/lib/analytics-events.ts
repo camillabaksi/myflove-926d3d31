@@ -103,6 +103,9 @@ export const ANALYTICS_EVENTS = [
   "history_viewed",
   /** Söndagens veckoöversikt visad. */
   "week_review_viewed",
+  "workout_builder_opened",
+  "workout_generated",
+  "workout_completed",
   /** Energipåverkan besvarad efter en genomförd aktivitet. */
   "activity_energy_logged",
   /** "Jag gjorde något" – spontan registrering som påverkar batteriet. */
@@ -232,6 +235,9 @@ const EVENT_SECTION: Record<AnalyticsEventName, string> = {
   account_deleted: "konto",
   history_viewed: "historik",
   week_review_viewed: "veckooversikt",
+  workout_builder_opened: "traning",
+  workout_generated: "traning",
+  workout_completed: "traning",
   activity_energy_logged: "energi",
   did_this_logged: "energi",
   step1_opened: "dagsresa",
