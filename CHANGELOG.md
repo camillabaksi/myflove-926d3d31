@@ -1,3 +1,8 @@
+## 2026-09-22 – Flaggval på inloggningssidan
+
+- Språkväljaren på inloggningssidan är nu två små flaggor (svensk och brittisk) i stället för textknappar.
+- Aktiva flaggan lyser med violett kant; hela sidan byter språk direkt som förut.
+
 ## 2026-09-22 – Språkval på inloggningssidan
 
 - Längst upp på inloggningssidan går det att välja Svenska eller English innan man loggar in.
