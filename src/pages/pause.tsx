@@ -1,42 +1,63 @@
 import { useEffect, useState } from "react";
 import { Link } from "wouter";
-import { ArrowRight, Hand, Wind, Moon, Sunset } from "lucide-react";
+import { ArrowRight, Hand, Sunset, Timer } from "lucide-react";
 import Layout from "@/components/layout";
 import { MyFloveHeader } from "@/components/myflove";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
-import CalmMode from "@/components/calm-mode";
 import LightBoost from "@/components/light-boost";
+import PauseSession from "@/components/recovery/pause-session";
+import EnergyAfterCheck from "@/components/recovery/energy-after-check";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { useLang } from "@/hooks/use-language";
 import { track } from "@/lib/analytics";
 
+const PRESETS = [5, 10, 20, 30, 60];
+
 /**
- * Paus – en samlad återhämtningsväg.
- * Samlar befintliga funktioner (Akut Lugn, Mikropaus, Stop-paus, Ljusboost) på
- * ett ställe i stället för konkurrerande ingångar på Hem. Ingen ny logik.
+ * Återhämtning – egen huvudsektion.
+ * EN paus där användaren väljer tid (inga separata mikropauser eller akut lugn),
+ * Ljusboost och Stopp-knappen. Efter paus och Ljusboost erbjuds en frivillig
+ * energikoll som sparas i befintlig energilogg.
+ * Strukturen är listbaserad så att fler återhämtningssätt kan läggas till.
  */
 export default function PausePage() {
   const { t } = useLang();
-  const [calmMode, setCalmMode] = useState<"acute" | "micro" | null>(null);
+  const [minutes, setMinutes] = useCloudSyncedStorage<number>("myflove-pause-minutes", 10);
+  const [custom, setCustom] = useState("");
+  const [running, setRunning] = useState(false);
+  const [check, setCheck] = useState<{ title: string; source: string } | null>(null);
   const [lightBoost, setLightBoost] = useState(false);
 
   useEffect(() => {
     track("recovery_viewed");
   }, []);
 
-  const open = (kind: "acute" | "micro") => {
-    track("home_widget_opened", { source: kind === "acute" ? "akut_lugn" : "mikropaus" });
-    track(kind === "acute" ? "recovery_acute_opened" : "recovery_micro_opened");
-    setCalmMode(kind);
+  const startPause = (m: number) => {
+    const safe = Math.min(240, Math.max(1, Math.round(m)));
+    setMinutes(safe);
+    track("recovery_pause_started", { minutes: safe });
+    setRunning(true);
   };
 
   return (
     <Layout>
-      <CalmMode
-        kind={calmMode ?? "acute"}
-        open={calmMode != null}
-        onOpenChange={(next) => !next && setCalmMode(null)}
+      <PauseSession
+        minutes={minutes}
+        open={running}
+        onClose={() => {
+          setRunning(false);
+          setCheck({ title: `Paus ${minutes} min`, source: "paus" });
+        }}
       />
-      <LightBoost open={lightBoost} onOpenChange={setLightBoost} />
+      <LightBoost
+        open={lightBoost}
+        onOpenChange={(next) => {
+          setLightBoost(next);
+          if (!next) setCheck({ title: "Ljusboost", source: "ljusboost" });
+        }}
+      />
 
       <MyFlovePageGrid area="halsa">
         <MyFloveWide>
@@ -48,45 +69,72 @@ export default function PausePage() {
               description={t("Vad behöver du just nu?")}
             />
 
-            <div className="grid gap-3" data-testid="pause-choices">
-              <button
-                type="button"
-                onClick={() => open("micro")}
-                className="press flex min-h-16 w-full items-center gap-3 rounded-3xl border border-border/60 bg-card px-4 py-3 text-left shadow-soft transition-colors hover:border-primary/35"
-              >
+            {check && (
+              <EnergyAfterCheck
+                title={check.title}
+                source={check.source}
+                onDone={() => setCheck(null)}
+              />
+            )}
+
+            <section
+              className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft"
+              aria-label={t("Paus")}
+              data-testid="pause-choices"
+            >
+              <div className="flex items-start gap-3">
                 <span
                   aria-hidden
                   className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-secondary text-primary"
                 >
-                  <Wind className="h-5 w-5" />
+                  <Timer className="h-5 w-5" />
                 </span>
-                <span className="min-w-0 flex-1">
-                  <span className="block text-sm font-semibold text-ink">{t("Mikropaus")}</span>
-                  <span className="block text-xs text-muted-foreground">{t("2 minuter")}</span>
-                </span>
-                <ArrowRight className="h-4 w-4 shrink-0 text-primary" aria-hidden />
-              </button>
+                <div className="min-w-0">
+                  <h2 className="text-base font-semibold text-ink">{t("Paus")}</h2>
+                  <p className="text-xs text-muted-foreground">
+                    {t("Välj hur länge. Påminnelser är tysta under pausen.")}
+                  </p>
+                </div>
+              </div>
 
-              <button
-                type="button"
-                onClick={() => open("acute")}
-                className="press flex min-h-16 w-full items-center gap-3 rounded-3xl border border-border/60 bg-card px-4 py-3 text-left shadow-soft transition-colors hover:border-primary/35"
-              >
-                <span
-                  aria-hidden
-                  className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-lavender/60 text-primary"
+              <div className="mt-3 grid grid-cols-3 gap-2 sm:grid-cols-5">
+                {PRESETS.map((m) => (
+                  <Button
+                    key={m}
+                    type="button"
+                    variant={m === minutes ? "default" : "secondary"}
+                    className="min-h-12 rounded-2xl"
+                    onClick={() => startPause(m)}
+                  >
+                    {m} min
+                  </Button>
+                ))}
+              </div>
+
+              <div className="mt-3 flex gap-2">
+                <Input
+                  inputMode="numeric"
+                  value={custom}
+                  onChange={(e) => setCustom(e.target.value.replace(/\D/g, ""))}
+                  placeholder={t("Egen tid i minuter")}
+                  aria-label={t("Egen tid i minuter")}
+                  className="h-12 rounded-2xl"
+                />
+                <Button
+                  type="button"
+                  className="min-h-12 shrink-0 rounded-2xl"
+                  disabled={!custom}
+                  onClick={() => {
+                    startPause(Number(custom));
+                    setCustom("");
+                  }}
                 >
-                  <Moon className="h-5 w-5" />
-                </span>
-                <span className="min-w-0 flex-1">
-                  <span className="block text-sm font-semibold text-ink">{t("Akut Lugn")}</span>
-                  <span className="block text-xs text-muted-foreground">
-                    {t("15 minuter utan påminnelser")}
-                  </span>
-                </span>
-                <ArrowRight className="h-4 w-4 shrink-0 text-primary" aria-hidden />
-              </button>
+                  {t("Starta")}
+                </Button>
+              </div>
+            </section>
 
+            <div className="grid gap-3">
               <button
                 type="button"
                 data-testid="pause-light-boost"
@@ -112,8 +160,6 @@ export default function PausePage() {
                 <ArrowRight className="h-4 w-4 shrink-0 text-primary" aria-hidden />
               </button>
 
-
-
               <Link
                 href="/stop-paus"
                 onClick={() => track("home_widget_opened", { source: "stop_paus" })}
@@ -128,7 +174,7 @@ export default function PausePage() {
                 <span className="min-w-0 flex-1">
                   <span className="block text-sm font-semibold text-ink">{t("Stopp-knappen")}</span>
                   <span className="block text-xs text-muted-foreground">
-                    {t("En paus mellan impuls och beslut")}
+                    {t("En paus mellan impuls och beslut – och ett lugnt nästa steg")}
                   </span>
                 </span>
                 <ArrowRight className="h-4 w-4 shrink-0 text-primary" aria-hidden />
