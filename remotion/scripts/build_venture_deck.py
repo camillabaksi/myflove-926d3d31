@@ -107,7 +107,7 @@ def build(lang):
 
         s.notes_slide.notes_text_frame.text = f"{vp.DURATIONS[idx]} sekunder i filmversionen."
 
-    out = Path("/mnt/documents") / f"MyFlove_Venture_Cup_2026_Redigerbar_{lang}_16x9_v2.pptx"
+    out = Path("/mnt/documents") / f"MyFlove_Venture_Cup_2026_Redigerbar_{lang}_16x9_v3.pptx"
     prs.save(out)
     print(out)
 
