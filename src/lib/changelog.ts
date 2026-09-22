@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-22";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Språkval på inloggningssidan",
+    items: [
+      "Välj Svenska eller English uppe på inloggningssidan, innan du loggar in (2026-09-22)",
+      "Hela sidan byter språk direkt och valet följer med in i appen (2026-09-22)",
+    ],
+  },
+  {
     title: "Hela appen på engelska",
     items: [
       "Inställningar → Språk: välj Svenska eller English, valet följer kontot (2026-09-22)",

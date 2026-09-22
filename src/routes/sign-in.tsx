@@ -7,6 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { useLang } from "@/hooks/use-language";
+import { LANGUAGES } from "@/lib/i18n";
+import { clearTranslationCache } from "@/lib/auto-translate";
 import { withBackendRecovery, isBackendAsleepError } from "@/lib/backend-wake";
 import PwaInstallButton from "@/components/pwa-install-button";
 
@@ -50,6 +53,7 @@ function SignInPage() {
   const navigate = useNavigate();
   const { next } = Route.useSearch();
   const { toast } = useToast();
+  const { lang, setLang, t } = useLang();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -66,9 +70,9 @@ function SignInPage() {
     setWaking(false);
     if (result.error) {
       toast({
-        title: "Kunde inte logga in",
+        title: t("Kunde inte logga in"),
         description: isBackendAsleepError(result.error)
-          ? "Tjänsten vaknar fortfarande. Vänta en liten stund och försök igen."
+          ? t("Tjänsten vaknar fortfarande. Vänta en liten stund och försök igen.")
           : (result.error as { message?: string }).message,
         variant: "destructive",
       });
@@ -83,15 +87,36 @@ function SignInPage() {
   return (
     <div className="flex min-h-[100dvh] items-center justify-center bg-background px-4">
       <div className="w-full max-w-md rounded-3xl border border-border bg-card p-8 shadow-sm">
+        <div className="flex justify-end mb-3" data-no-translate>
+          <div className="inline-flex rounded-full border border-border p-1" role="group" aria-label="Språk">
+            {LANGUAGES.map((l) => (
+              <button
+                key={l.value}
+                type="button"
+                aria-pressed={lang === l.value}
+                onClick={() => {
+                  if (l.value === lang) return;
+                  if (l.value === "sv") clearTranslationCache();
+                  setLang(l.value);
+                }}
+                className={`rounded-full px-3 py-1 text-xs font-semibold transition-colors ${
+                  lang === l.value ? "bg-primary/10 text-primary" : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <span aria-hidden>{l.flag}</span> {l.label}
+              </button>
+            ))}
+          </div>
+        </div>
         <h1 className="mb-2 text-3xl font-bold text-primary tracking-tight">
-          Logga in på MyFlove — Ditt stöd i vardagen
+          {t("Logga in på MyFlove — Ditt stöd i vardagen")}
         </h1>
         <p className="mb-6 text-sm text-muted-foreground">
-          Välkommen tillbaka. Logga in för att fortsätta din flow.
+          {t("Välkommen tillbaka. Logga in för att fortsätta din flow.")}
         </p>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">E-post</Label>
+            <Label htmlFor="email">{t("E-post")}</Label>
             <Input
               id="email"
               type="email"
@@ -101,7 +126,7 @@ function SignInPage() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password">Lösenord</Label>
+            <Label htmlFor="password">{t("Lösenord")}</Label>
             <Input
               id="password"
               type="password"
@@ -111,22 +136,22 @@ function SignInPage() {
             />
           </div>
           <Button type="submit" disabled={loading} className="w-full">
-            {waking ? "Väcker tjänsten…" : loading ? "Loggar in…" : "Logga in"}
+            {waking ? t("Väcker tjänsten…") : loading ? t("Loggar in…") : t("Logga in")}
           </Button>
         </form>
         <p className="mt-4 text-center text-sm">
           <Link to="/glomt-losenord" className="text-muted-foreground underline underline-offset-4">
-            Glömt lösenord?
+            {t("Glömt lösenord?")}
           </Link>
         </p>
         <p className="mt-2 text-center text-sm text-muted-foreground">
-          Inget konto?{" "}
+          {t("Inget konto?")}{" "}
           <Link
             to="/sign-up"
             search={{ next }}
             className="text-primary underline underline-offset-4"
           >
-            Skapa ett här
+            {t("Skapa ett här")}
           </Link>
         </p>
         <div className="mt-6 border-t border-border pt-4">

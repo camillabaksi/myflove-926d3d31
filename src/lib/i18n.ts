@@ -263,6 +263,38 @@ export const EN: Record<string, string> = {
   Språk: "Language",
   "Välj språk för appen": "Choose the app language",
   "Appens språk – texterna byts direkt.": "The app language – texts switch right away.",
+
+  // ── Inloggning ──────────────────────────────────────────────────────────
+  "Logga in på MyFlove — Ditt stöd i vardagen":
+    "Sign in to MyFlove — Your support in everyday life",
+  "Välkommen tillbaka. Logga in för att fortsätta din flow.":
+    "Welcome back. Sign in to continue your flow.",
+  "E-post": "Email",
+  "Lösenord": "Password",
+  "Logga in": "Sign in",
+  "Loggar in…": "Signing in…",
+  "Väcker tjänsten…": "Waking the service…",
+  "Kunde inte logga in": "Couldn't sign in",
+  "Tjänsten vaknar fortfarande. Vänta en liten stund och försök igen.":
+    "The service is still waking up. Wait a moment and try again.",
+  "Glömt lösenord?": "Forgot password?",
+  "Inget konto?": "No account?",
+  "Skapa ett här": "Create one here",
+
+  // ── PWA-installation ────────────────────────────────────────────────────
+  "Lägg till MyFlove på hemskärmen": "Add MyFlove to your home screen",
+  "Öppna MyFlove snabbare när du behöver Flow.": "Open MyFlove faster when you need Flow.",
+  "Lägg till på hemskärmen": "Add to home screen",
+  "Så lägger du till MyFlove": "How to add MyFlove",
+  "Ha Flow nära till hands 💜 – appen hamnar direkt på din hemskärm.":
+    "Keep Flow close 💜 – the app lands right on your home screen.",
+  "1. Tryck på Dela längst ner i Safari.": "1. Tap Share at the bottom of Safari.",
+  "2. Välj ”Lägg till på hemskärmen” och tryck Lägg till.":
+    "2. Choose “Add to home screen” and tap Add.",
+  "1. Öppna webbläsarens meny (⋮ eller ☰).": "1. Open the browser menu (⋮ or ☰).",
+  "2. Välj ”Installera app” eller ”Lägg till på startskärmen”.":
+    "2. Choose “Install app” or “Add to home screen”.",
+  "Okej, jag fixar det": "Okay, I'll do it",
 };
 
 /** Områdesordlistor slås ihop med kärnan. Kärnan vinner vid krock. */
