@@ -22,7 +22,7 @@ DISPLAY = str(FONTS / "PlusJakartaSans.ttf")
 BODY = str(FONTS / "Inter.ttf")
 SCRIPT = str(FONTS / "Caveat.ttf")
 
-DURATIONS = [12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12]
+DURATIONS = [10] * 18
 
 SV = [
     ("PROBLEMET", "Vi planerar tid. Men lever med|begränsad kapacitet.", "När vardagen blir komplex räcker kalendern inte alltid till. Mental belastning, osynligt arbete och förändrad energi avgör vad som faktiskt är möjligt.", "kalender.png", "Tid är bara halva bilden."),
