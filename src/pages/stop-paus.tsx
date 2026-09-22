@@ -66,9 +66,3 @@ export default function StopPausPage() {
     </Layout>
   );
 }
-
-        </MyFloveWide>
-      </MyFlovePageGrid>
-    </Layout>
-  );
-}
