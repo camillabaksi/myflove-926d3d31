@@ -21,6 +21,7 @@ import { useFlowScore } from "@/hooks/use-flowscore";
 import { useTasks } from "@/hooks/use-data";
 import { useToast } from "@/hooks/use-toast";
 import { track } from "@/lib/analytics";
+import { emitActivityDone } from "@/lib/activity-energy-event";
 import { cn } from "@/lib/utils";
 import { BODY_AREAS, EQUIPMENT_LABEL, type BodyArea, type Equipment, type ExerciseFocus } from "@/lib/exercise-library";
 import {
@@ -191,6 +192,11 @@ export default function WorkoutBuilderPanel({
       energyImpact: "gives",
     });
     track("workout_completed", { source: workout.intent });
+    emitActivityDone({
+      id: `workout-${workout.id}`,
+      title: `Träningspass: ${workout.title}`,
+      dueDate: new Date().toISOString().slice(0, 10),
+    });
     setStep("klar");
   };
 
