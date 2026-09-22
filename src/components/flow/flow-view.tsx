@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
+import { Brain } from "lucide-react";
+
 import Layout from "@/components/layout";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { track } from "@/lib/analytics";
@@ -48,11 +50,25 @@ export default function FlowView({
         <MyFlovePageGrid area="flow">
           <MyFloveWide>
             <main className="mx-auto w-full max-w-xl" aria-label="Flow – vad passar bäst just nu">
+              <button
+                type="button"
+                onClick={() => window.dispatchEvent(new CustomEvent("myflove:quickflow"))}
+                className="mb-4 flex w-full items-center gap-3 rounded-3xl bg-primary px-4 py-4 text-left text-primary-foreground shadow-lifted press"
+              >
+                <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-foreground/20">
+                  <Brain size={22} strokeWidth={2.4} />
+                </span>
+                <span className="min-w-0">
+                  <span className="block font-semibold">QuickFlow</span>
+                  <span className="block text-sm opacity-90">Få ut det ur huvudet direkt</span>
+                </span>
+              </button>
               <FlowEntry onPlan={() => changeTab("planera")} onChat={() => changeTab("chatt")} />
             </main>
           </MyFloveWide>
         </MyFlovePageGrid>
       )}
+
       {tab === "planera" && <FlowPlanContent />}
       {tab === "chatt" && <AssistantContent chatId={chatId} />}
     </Layout>
