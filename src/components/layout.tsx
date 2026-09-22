@@ -862,6 +862,7 @@ export default function Layout({ children }: LayoutProps) {
             {!FLOW_HIDDEN_PATHS.has(location) && <FlowCompanion stage="mini" className="mb-4" />}
             <FlowCheckinPopup />
             <GlobalActivityEnergyPrompt />
+            <AutoTranslateProvider />
             {children}
           </div>
 
