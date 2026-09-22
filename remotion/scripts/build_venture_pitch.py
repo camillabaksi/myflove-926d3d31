@@ -43,7 +43,7 @@ SV = [
     ("POSITIONERING", "Tid + uppgifter räcker inte.|Kapacitet förändrar svaret.", "Kalendrar visar när. Att-göra-listor visar vad. MyFlove hjälper användaren förstå vad som är rimligt nu — och hur det kan genomföras.", "kalender.png", "Kapacitet · Osynligt arbete · Nästa steg · Återhämtning"),
     ("AFFÄR & VALIDERING", "B2C först.|Fler vägar testas.", "Free/Premium är utgångspunkten. Arbetsgivare och offentlig sektor är möjliga framtida spår — först efter validerade piloter, betalningsvilja och återkommande användning.", "hem.png", "Fungerande MVP · Tidiga testare · Retention och pris ska mätas"),
     ("KAPITAL & NÄSTA STEG", "€250 000 för 18 månaders|validering.", "Arbetscaset finansierar en stabil produkt, retention- och prisvalidering, piloter, regelefterlevnad och ett bevisat kommersiellt spår.", "minday.png", "Stabilisera · Mäta värde · Validera betalning · Skala\nKapital och värdering är arbetsantaganden."),
-    ("MYFLOVE", "Bygg vardagen efter den kapacitet|du faktiskt har.", "MyFlove anpassar sig efter dig — så att du slipper bära allt själv.", "aterhamtning.png", "myflove.lovable.app · Venture Cup 2026"),
+    ("MYFLOVE", "Bygg vardagen efter den kapacitet|du faktiskt har.", "MyFlove anpassar sig efter dig — så att du slipper bära allt själv.", "aterhamtning.png", "myflove.lovable.app"),
 ]
 
 EN = [
@@ -65,7 +65,7 @@ EN = [
     ("POSITIONING", "Time + tasks are not enough.|Capacity changes the answer.", "Calendars show when. To-do lists show what. MyFlove helps users understand what is reasonable now — and how to get started.", "kalender.png", "Capacity · Invisible work · Next step · Recovery"),
     ("BUSINESS & VALIDATION", "B2C first.|More paths to test.", "Free/Premium is the starting point. Employers and public services are possible future paths — after validated pilots, willingness to pay and recurring use.", "hem.png", "Working MVP · Early testers · Retention and pricing to measure"),
     ("FUNDING & NEXT STEP", "€250,000 for 18 months of|validation.", "The working case funds product stability, retention and pricing validation, pilots, compliance and one proven commercial path.", "minday.png", "Stabilise · Measure value · Validate payment · Scale\nFunding and valuation are working assumptions."),
-    ("MYFLOVE", "Build everyday life around the capacity|you actually have.", "MyFlove adapts to you — so you do not have to carry everything alone.", "aterhamtning.png", "myflove.lovable.app · Venture Cup 2026"),
+    ("MYFLOVE", "Build everyday life around the capacity|you actually have.", "MyFlove adapts to you — so you do not have to carry everything alone.", "aterhamtning.png", "myflove.lovable.app"),
 ]
 
 
@@ -239,7 +239,7 @@ def footer(draw,w,h,portrait):
     f=font(DISPLAY,size,"ExtraBold")
     draw.text((int(w*.06)+size,y-size*.12),"MyFlove",font=f,fill=INK)
     rf=font(BODY,int(size*.47),"Bold")
-    right="VENTURE CUP 2026"
+    right="MYFLOVE · 2026"
     rw=draw.textbbox((0,0),right,font=rf)[2]
     draw.text((w-int(w*.06)-rw,y+size*.12),right,font=rf,fill=VIOLET)
 
@@ -315,7 +315,7 @@ def build(lang,portrait):
     for idx,duration in enumerate(DURATIONS):
         filters.append(f"[{idx}:v]fps=30,fade=t=in:st=0:d=0.6:color=#EEE5FA,fade=t=out:st={duration-0.6}:d=0.6:color=#EEE5FA,format=yuv420p[v{idx}]")
     filters.append("".join(f"[v{i}]" for i in range(len(DURATIONS)))+f"concat=n={len(DURATIONS)}:v=1:a=0[out]")
-    output=Path("/mnt/documents")/f'MyFlove_Venture_Cup_2026_{lang}_{"9x16" if portrait else "16x9"}_v6.mp4'
+    output=Path("/mnt/documents")/f'MyFlove_Pitchfilm_2026_{lang}_{"9x16" if portrait else "16x9"}_v7.mp4'
     cmd=["ffmpeg","-y",*inputs,"-filter_complex",";".join(filters),"-map","[out]","-an","-c:v","libx264","-preset","veryfast","-crf","18","-profile:v","high","-level","4.1","-r","30","-g","30","-pix_fmt","yuv420p","-colorspace","bt709","-color_primaries","bt709","-color_trc","bt709","-movflags","+faststart",str(output)]
     subprocess.run(cmd,check=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
     print(output)

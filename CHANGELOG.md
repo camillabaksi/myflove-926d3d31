@@ -1,3 +1,8 @@
+## 2026-09-22 – Pitchmaterial utan Venture Cup-märkning
+
+- Venture Cup har tagits bort från filnamn och synligt innehåll i de fyra pitchfilmerna och de två redigerbara presentationerna.
+- Materialet är nu neutralt MyFlove-pitchmaterial; innehåll, språk, format och längd är oförändrade.
+
 ## 2026-09-22 – Material uppdaterat med Insikter, familjedelning och energikopplingen
 
 - Pitchfilmerna (svenska och engelska, 16:9 och 9:16) har tre nya scener: energikopplingen, Insikter och familjedelning. 18 scener, fortfarande exakt 3 minuter.

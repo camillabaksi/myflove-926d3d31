@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-22";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Pitchmaterial utan Venture Cup-märkning",
+    items: [
+      "Venture Cup har tagits bort från filnamn och synligt innehåll i pitchfilmerna och de redigerbara presentationerna (2026-09-22)",
+      "Innehåll, språk, format och längd är oförändrade (2026-09-22)",
+    ],
+  },
+  {
     title: "Material uppdaterat med Insikter, familjedelning och energikopplingen",
     items: [
       "Pitchfilmerna (svenska och engelska, 16:9 och 9:16) har nya scener om energikopplingen, Insikter och familjedelning (2026-09-22)",
