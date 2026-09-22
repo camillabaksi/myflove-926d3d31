@@ -1,4 +1,12 @@
+## 2026-09-22 – Material uppdaterat med Insikter, familjedelning och energikopplingen
+
+- Pitchfilmerna (svenska och engelska, 16:9 och 9:16) har tre nya scener: energikopplingen, Insikter och familjedelning. 18 scener, fortfarande exakt 3 minuter.
+- Nya, avidentifierade skärmbilder från Insikter och Familj används i film och deck.
+- Redigerbar pitchdeck v3 på svenska och engelska med samma 18 avsnitt.
+- Living Blueprint 4.5 har egna avsnitt för energikopplingen, Insikter med trender och full familjedelning.
+
 ## 2026-09-22 – Uppdaterat material och version 5.4
+
 
 - Pitchfilmerna (svenska och engelska, 16:9 och 9:16) är uppdaterade med den nya strukturen, Återhämtning och färska skärmbilder.
 - Ny redigerbar pitchdeck på svenska och engelska med samma innehåll som filmerna.

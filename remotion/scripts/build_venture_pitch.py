@@ -22,7 +22,7 @@ DISPLAY = str(FONTS / "PlusJakartaSans.ttf")
 BODY = str(FONTS / "Inter.ttf")
 SCRIPT = str(FONTS / "Caveat.ttf")
 
-DURATIONS = [12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12]
+DURATIONS = [10] * 18
 
 SV = [
     ("PROBLEMET", "Vi planerar tid. Men lever med|begränsad kapacitet.", "När vardagen blir komplex räcker kalendern inte alltid till. Mental belastning, osynligt arbete och förändrad energi avgör vad som faktiskt är möjligt.", "kalender.png", "Tid är bara halva bilden."),
@@ -32,7 +32,11 @@ SV = [
     ("PRODUKTEN · MITT BATTERI", "Din kapacitet blir|synlig.", "Energi, mående och aktiviteternas påverkan bygger ett levande batteri över tid — med snabb incheckning, inte långa formulär.", "batteri.png", "Ditt eget levande batteri."),
     ("PRODUKTEN · FLOW", "Nästa steg som faktiskt|går.", "Flow väger ihop dagens kapacitet och det som behöver göras. Användaren kan acceptera, justera eller göra senare.", "vadnu.png", "Du godkänner alltid förändringen."),
     ("PRODUKTEN · ÅTERHÄMTNING", "Vila är en del av|planeringen.", "Återhämtning samlar en paus där du väljer 5 till 60 minuter, Ljusboost och Stopp-knappen. Efteråt räcker ett tryck: mer, samma eller mindre energi.", "aterhamtning.png", "Paus · Ljusboost · Stopp · Snabb energikoll"),
-    ("PRODUKTEN · STRUKTUREN", "Fem vägar in.|Inget mer letande.", "Översikt, Flow, Hälsa, Återhämtning och Mer. Träning, studier, jobb, familj och hem ligger där de hör hemma, och Insikter visar energi och mående vecka för vecka.", "historik.png", "Översikt · Flow · Hälsa · Återhämtning · Mer"),
+    ("PRODUKTEN · STRUKTUREN", "Fem vägar in.|Inget mer letande.", "Översikt, Flow, Hälsa, Återhämtning och Mer. Träning, studier, jobb, familj och hem ligger där de hör hemma.", "historik.png", "Översikt · Flow · Hälsa · Återhämtning · Mer"),
+    ("PRODUKTEN · ENERGIKOPPLINGEN", "Varje avklarad sak|kan svara på en fråga.", "Efter studier, jobb, familj, hem, träningspass, paus, Ljusboost och Stopp frågar appen frivilligt: mer, samma eller mindre energi? Ett tryck räcker, och det syns direkt i batteriet.", "batteri.png", "Mer · Samma · Mindre — alltid frivilligt."),
+    ("PRODUKTEN · INSIKTER", "Energi och mående|vecka för vecka.", "Insikter visar hur energin och måendet rört sig över veckor och månader, tillsammans med faktisk tid på aktiviteter. Beskrivande språk, inga diagnoser eller betyg.", "insikter.png", "Mönster som beskriver, inte dömer."),
+    ("PRODUKTEN · FAMILJEDELNING", "Dela det du vill.|Inget annat.", "Bjud in familjen med en länk där koden fylls i automatiskt, och välj sak för sak vem som ska se vad. Allt är privat tills användaren väljer delning.", "familj.png", "Privat som standard · Delning sak för sak"),
+
     ("SAMMANHÄNGANDE VÄRDE", "Från tanke till en rimligare|vardag.", "Ett sammanhängande flöde — inte ännu en fristående kalender.", "hem.png", "Fånga · Förstå · Anpassa · Göra · Återhämta · Synliggöra"),
     ("KUNDSEGMENT", "För människor med hög|mental belastning.", "Första hypotesen är personer som lätt blir överväldigade i en komplex vardag. NPF, stress, studier, familjeliv och arbetsliv är behovsområden som valideras — inte etiketter som begränsar produkten.", "quickflow2.png", "Primärt segment och betalande kund valideras vidare."),
     ("MARKNAD", "Ett stort behov i en växande|digital marknad.", "Över 140 miljoner vuxna globalt uppskattas leva med ADHD. I Sverige uppskattas omkring 3 % av vuxna ha ADHD. MyFlove börjar med ett tydligt behov men byggs för bredare vardagskomplexitet.", "historik.png", "140M+ globalt · cirka 3 % i Sverige*\n*Externa uppskattningar: Song et al. 2021; Socialstyrelsen."),
@@ -50,7 +54,11 @@ EN = [
     ("THE PRODUCT · MY BATTERY", "Your capacity becomes|visible.", "Energy, wellbeing and activity impact build a living battery over time — through quick check-ins, not long forms.", "batteri.png", "Your own living battery."),
     ("THE PRODUCT · FLOW", "A next step that actually|works.", "Flow combines today’s capacity with what needs to be done. The user can accept, adjust or choose later.", "vadnu.png", "You always approve the change."),
     ("THE PRODUCT · RECOVERY", "Rest is part of|the plan.", "Recovery gathers one pause of 5 to 60 minutes, Light Boost and the Stop button. Afterwards one tap is enough: more, same or less energy.", "aterhamtning.png", "Pause · Light Boost · Stop · Quick energy check"),
-    ("THE PRODUCT · STRUCTURE", "Five ways in.|No more searching.", "Overview, Flow, Health, Recovery and More. Training, studies, work, family and home live where they belong, and Insights show energy and mood week by week.", "historik.png", "Overview · Flow · Health · Recovery · More"),
+    ("THE PRODUCT · STRUCTURE", "Five ways in.|No more searching.", "Overview, Flow, Health, Recovery and More. Training, studies, work, family and home live where they belong.", "historik.png", "Overview · Flow · Health · Recovery · More"),
+    ("THE PRODUCT · ENERGY LINK", "Every finished task|can answer one question.", "After studies, work, family, home, workouts, pause, Light Boost and Stop the app optionally asks: more, same or less energy? One tap, and the battery reflects it right away.", "batteri.png", "More · Same · Less — always optional."),
+    ("THE PRODUCT · INSIGHTS", "Energy and mood,|week by week.", "Insights show how energy and wellbeing have moved across weeks and months, alongside the actual time spent on activities. Descriptive language, no diagnoses or scores.", "insikter.png", "Patterns that describe, never judge."),
+    ("THE PRODUCT · FAMILY SHARING", "Share what you want.|Nothing else.", "Invite the family with a link that fills in the code automatically, then choose item by item who sees what. Everything stays private until the user shares it.", "familj.png", "Private by default · Item-by-item sharing"),
+
     ("CONNECTED VALUE", "From thought to a more|manageable day.", "One connected flow — not another standalone calendar.", "hem.png", "Capture · Understand · Adapt · Do · Recover · Reveal"),
     ("CUSTOMER SEGMENTS", "For people carrying a high|mental load.", "The first hypothesis is people easily overwhelmed by complex everyday life. Neurodivergence, stress, studies, family and work are need areas to validate — not labels that limit the product.", "quickflow2.png", "The primary segment and paying customer require validation."),
     ("MARKET", "A major need in a growing|digital market.", "More than 140 million adults worldwide are estimated to live with ADHD. In Sweden, around 3% of adults are estimated to have ADHD. MyFlove starts with a clear need and is built for broader everyday complexity.", "historik.png", "140M+ globally · around 3% in Sweden*\n*External estimates: Song et al. 2021; Swedish National Board."),
@@ -307,7 +315,7 @@ def build(lang,portrait):
     for idx,duration in enumerate(DURATIONS):
         filters.append(f"[{idx}:v]fps=30,fade=t=in:st=0:d=0.6:color=#EEE5FA,fade=t=out:st={duration-0.6}:d=0.6:color=#EEE5FA,format=yuv420p[v{idx}]")
     filters.append("".join(f"[v{i}]" for i in range(len(DURATIONS)))+f"concat=n={len(DURATIONS)}:v=1:a=0[out]")
-    output=Path("/mnt/documents")/f'MyFlove_Venture_Cup_2026_{lang}_{"9x16" if portrait else "16x9"}_v5.mp4'
+    output=Path("/mnt/documents")/f'MyFlove_Venture_Cup_2026_{lang}_{"9x16" if portrait else "16x9"}_v6.mp4'
     cmd=["ffmpeg","-y",*inputs,"-filter_complex",";".join(filters),"-map","[out]","-an","-c:v","libx264","-preset","veryfast","-crf","18","-profile:v","high","-level","4.1","-r","30","-g","30","-pix_fmt","yuv420p","-colorspace","bt709","-color_primaries","bt709","-color_trc","bt709","-movflags","+faststart",str(output)]
     subprocess.run(cmd,check=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
     print(output)

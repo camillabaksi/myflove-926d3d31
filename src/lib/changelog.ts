@@ -10,7 +10,17 @@ export const CHANGELOG_UPDATED = "2026-09-22";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Material uppdaterat med Insikter, familjedelning och energikopplingen",
+    items: [
+      "Pitchfilmerna (svenska och engelska, 16:9 och 9:16) har nya scener om energikopplingen, Insikter och familjedelning (2026-09-22)",
+      "Nya avidentifierade skärmbilder från Insikter och Familj används i film och deck (2026-09-22)",
+      "Redigerbar pitchdeck v3 på svenska och engelska med samma 18 avsnitt (2026-09-22)",
+      "Living Blueprint 4.5 har egna avsnitt för energikopplingen, Insikter och familjedelning (2026-09-22)",
+    ],
+  },
+  {
     title: "Uppdaterat material och version 5.4",
+
     items: [
       "Pitchfilmerna (svenska och engelska, 16:9 och 9:16) är uppdaterade med den nya strukturen, Återhämtning och färska skärmbilder (2026-09-22)",
       "Ny redigerbar pitchdeck på svenska och engelska med samma innehåll som filmerna (2026-09-22)",
