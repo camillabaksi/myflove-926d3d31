@@ -217,9 +217,61 @@ export function StudiesSection() {
     setTaskDeadlineReminders(task.id, next, task.deadlineReminderTime ?? "09:00");
   };
 
+  // Nästa steg: den öppna uppgift som har närmast deadline (annars den första).
+  const nextUp =
+    [...assignments]
+      .filter((t) => !t.completed)
+      .sort((a, b) => (a.dueDate ?? "9999").localeCompare(b.dueDate ?? "9999"))[0] ?? null;
+
   return (
     <div className="space-y-8">
+      {/* Nästa steg – en sak i taget */}
+      <section className="rounded-3xl border border-border bg-card p-5 shadow-sm">
+        <h2 className="text-sm font-semibold text-ink">Nästa steg</h2>
+        {nextUp ? (
+          <>
+            <p className="mt-1 text-lg font-semibold text-ink">{nextUp.title}</p>
+            {deadlineLabel(nextUp.dueDate) && (
+              <p className="mt-1 text-xs text-muted-foreground">
+                {deadlineLabel(nextUp.dueDate)?.text}
+              </p>
+            )}
+            <div className="mt-3 flex flex-wrap gap-2">
+              <Button
+                type="button"
+                className="min-h-11 rounded-2xl"
+                disabled={busyId === nextUp.id}
+                onClick={() => void handleBreakDown(nextUp)}
+              >
+                {busyId === nextUp.id ? (
+                  <Loader2 size={16} className="mr-1 animate-spin" />
+                ) : (
+                  <Sparkles size={16} className="mr-1" />
+                )}
+                Bryt ner
+              </Button>
+              <Button
+                type="button"
+                variant="secondary"
+                className="min-h-11 rounded-2xl"
+                onClick={(e) => {
+                  toggleTask(nextUp.id);
+                  celebrateFromEvent(e);
+                }}
+              >
+                <CheckCircle2 size={16} className="mr-1" /> Klar
+              </Button>
+            </div>
+          </>
+        ) : (
+          <p className="mt-1 text-sm text-muted-foreground">
+            Inget som väntar just nu. Lägg till en uppgift när du vill.
+          </p>
+        )}
+      </section>
+
       {/* Kurser */}
+
       <CollapsibleSection
         title="Dina kurser"
         help="Kurserna du läser. Lägg till en kurs så kan uppgifter kopplas till den."
