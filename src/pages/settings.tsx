@@ -27,6 +27,11 @@ import {
   setAlarmSoundEnabled,
   subscribeAlarmPref,
 } from "@/lib/push-notifications";
+import {
+  isWorkoutSoundEnabled,
+  setWorkoutSoundEnabled,
+  subscribeWorkoutSound,
+} from "@/lib/workout-voice";
 
 type SettingsLinkProps = {
   href: string;
@@ -62,7 +67,16 @@ export default function SettingsPage() {
     false,
   );
 
+  const [workoutSound, setWorkoutSoundState] = useState(() => isWorkoutSoundEnabled());
+
   useEffect(() => subscribeAlarmPref(setAlarmEnabledState), []);
+  useEffect(() => subscribeWorkoutSound(setWorkoutSoundState), []);
+
+  const toggleWorkoutSound = () => {
+    const next = !workoutSound;
+    setWorkoutSoundEnabled(next);
+    setWorkoutSoundState(next);
+  };
 
   const simpleMode = simpleModeChosen && simpleModeRaw;
   const toggleSimpleMode = () => {
@@ -141,6 +155,21 @@ export default function SettingsPage() {
           <Button variant="outline" className="h-auto w-full justify-start gap-3 rounded-2xl py-3" onClick={toggleAlarm}>
             {alarmEnabled ? <Volume2 className="size-5 shrink-0" /> : <VolumeX className="size-5 shrink-0" />}
             Alarmljud: {alarmEnabled ? "på" : "av"}
+          </Button>
+          <Button
+            variant="outline"
+            className="h-auto w-full justify-start gap-3 rounded-2xl py-3 text-left"
+            onClick={toggleWorkoutSound}
+          >
+            {workoutSound ? <Volume2 className="size-5 shrink-0" /> : <VolumeX className="size-5 shrink-0" />}
+            <span>
+              <span className="block text-sm font-semibold">
+                Ljud i träningspass: {workoutSound ? "på" : "av"}
+              </span>
+              <span className="block text-xs font-normal text-muted-foreground">
+                Pling och röst för "Byt sida", "Nästa övning" och "Vila"
+              </span>
+            </span>
           </Button>
         </MyFloveBlock>
       </MyFlovePageGrid>

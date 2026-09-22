@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import ExerciseCard from "@/components/workout/exercise-card";
 import WorkoutRunner from "@/components/workout/workout-runner";
+import WorkoutAutoRunner from "@/components/workout/workout-auto-runner";
 import { useWorkouts } from "@/hooks/use-workouts";
 import { useFlowScore } from "@/hooks/use-flowscore";
 import { useTasks } from "@/hooks/use-data";
@@ -106,6 +107,7 @@ export default function WorkoutBuilderPanel({
   const [req, setReq] = useState<WorkoutRequest>(DEFAULT_REQUEST);
   const [workout, setWorkout] = useState<Workout | null>(null);
   const [doneIds, setDoneIds] = useState<string[]>([]);
+  const [autoMode, setAutoMode] = useState(true);
   const { saved, logs, saveWorkout, removeWorkout, logWorkout } = useWorkouts();
   const { flow } = useFlowScore();
   const { addTask } = useTasks();
@@ -402,8 +404,28 @@ export default function WorkoutBuilderPanel({
               </p>
 
               <div className="grid gap-2">
-                <Button size="lg" className="h-14 rounded-2xl text-base" onClick={() => setStep("kor")}>
-                  <Play size={18} className="mr-2" aria-hidden /> Starta passet
+                <Button
+                  size="lg"
+                  className="h-14 rounded-2xl text-base"
+                  onClick={() => {
+                    setAutoMode(true);
+                    setStep("kor");
+                  }}
+                >
+                  <Play size={18} className="mr-2" aria-hidden /> Starta passet (automatiskt)
+                </Button>
+                <p className="text-xs text-muted-foreground">
+                  Timern räknar ner, säger till vid byt sida och startar nästa övning åt dig.
+                </p>
+                <Button
+                  variant="outline"
+                  className="h-12 rounded-2xl"
+                  onClick={() => {
+                    setAutoMode(false);
+                    setStep("kor");
+                  }}
+                >
+                  Kör manuellt i egen takt
                 </Button>
                 <div className="flex flex-wrap gap-2">
                   <Button
@@ -441,7 +463,16 @@ export default function WorkoutBuilderPanel({
 
         {showBuilder && step === "kor" && workout && (
           <>
-            <WorkoutRunner workout={workout} onFinish={finish} onClose={() => setStep("resultat")} />
+            {autoMode ? (
+              <WorkoutAutoRunner
+                workout={workout}
+                onFinish={finish}
+                onClose={() => setStep("resultat")}
+                onManual={() => setAutoMode(false)}
+              />
+            ) : (
+              <WorkoutRunner workout={workout} onFinish={finish} onClose={() => setStep("resultat")} />
+            )}
           </>
         )}
 

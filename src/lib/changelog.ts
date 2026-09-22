@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-22";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Automatiskt pass i Träningsprogram",
+    items: [
+      "Passet kan köras automatiskt med stor timer, förvarning och automatisk start av nästa övning (2026-09-22)",
+      "Ensidiga övningar delar tiden och säger till vid Byt sida; repetitioner väntar på dig (2026-09-22)",
+      "Pausa, hoppa över, gå tillbaka, progress och vilotimer – ljudet kan stängas av (2026-09-22)",
+    ],
+  },
+  {
     title: "Realistiska instruktionsbilder i Träningsprogram",
     items: [
       "Alla 58 övningar har en egen realistisk bild med tydliga rörelsefaser (2026-09-22)",

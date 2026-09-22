@@ -1,3 +1,10 @@
+## 2026-09-22 – Automatiskt pass i Träningsprogram
+
+- "Starta passet (automatiskt)" kör passet åt dig: stor nedräkning, förvarning "Nästa övning", automatisk start av nästa moment och vilotimer.
+- Övningar som görs en sida i taget delar tiden och säger till vid "Byt sida"; repetitioner väntar tills du trycker Klar.
+- Pausa, fortsätt, hoppa över och föregående finns hela tiden; progress visas som "Övning 3 av 8" och skärmen hålls tänd när det går.
+- Ljud och röst kan stängas av direkt i passet eller i Inställningar. Manuellt läge finns kvar.
+
 ## 2026-09-22 – Realistiska instruktionsbilder i Träningsprogram
 
 - Alla 58 övningar har nu en egen realistisk bild med en riktig person och relevanta rörelsefaser.
