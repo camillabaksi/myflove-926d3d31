@@ -6,13 +6,21 @@ import {
   Paperclip,
   Coffee,
   UtensilsCrossed,
+  Pencil,
+  Plus,
+  Trash2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useStudySchedule } from "@/hooks/use-study-schedule";
 import { useScheduleFiles, type ScheduleFile } from "@/hooks/use-schedule-files";
 import { nextOccurrence } from "@/lib/schedule-parse";
-import { WEEKDAYS, LECTURE_KIND_LABEL, type Lecture } from "@/lib/study-calendar";
+import {
+  WEEKDAYS,
+  LECTURE_KIND_LABEL,
+  type Lecture,
+  type LectureKind,
+} from "@/lib/study-calendar";
 
 const card = "rounded-3xl border-2 border-border bg-card p-5 shadow-sm";
 
