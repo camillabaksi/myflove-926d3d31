@@ -115,28 +115,31 @@ function SignInPage() {
     <div className="flex min-h-[100dvh] items-center justify-center bg-background px-4">
       <div className="w-full max-w-md rounded-3xl border border-border bg-card p-8 shadow-sm">
         <div className="flex justify-end mb-3" data-no-translate>
-          <div className="flex items-center gap-1.5" role="group" aria-label="Språk">
-            {LANGUAGES.map((l) => (
-              <button
-                key={l.value}
-                type="button"
-                title={l.label}
-                aria-label={l.label}
-                aria-pressed={lang === l.value}
-                onClick={() => {
-                  if (l.value === lang) return;
-                  if (l.value === "sv") clearTranslationCache();
-                  setLang(l.value);
-                }}
-                className={`flex h-9 w-9 items-center justify-center rounded-full text-lg transition-all ${
-                  lang === l.value
-                    ? "bg-primary/10 ring-2 ring-primary/40 scale-105"
-                    : "opacity-50 hover:opacity-100 hover:bg-muted"
-                }`}
-              >
-                <span aria-hidden>{l.flag}</span>
-              </button>
-            ))}
+          <div className="flex items-center gap-2" role="group" aria-label="Språk">
+            {LANGUAGES.map((l) => {
+              const Flag = FLAGS[l.value];
+              return (
+                <button
+                  key={l.value}
+                  type="button"
+                  title={l.label}
+                  aria-label={l.label}
+                  aria-pressed={lang === l.value}
+                  onClick={() => {
+                    if (l.value === lang) return;
+                    if (l.value === "sv") clearTranslationCache();
+                    setLang(l.value);
+                  }}
+                  className={`h-7 w-10 overflow-hidden rounded transition-all ${
+                    lang === l.value
+                      ? "ring-2 ring-primary/50 scale-105 shadow-sm"
+                      : "opacity-45 hover:opacity-100"
+                  }`}
+                >
+                  <Flag />
+                </button>
+              );
+            })}
           </div>
         </div>
         <h1 className="mb-2 text-3xl font-bold text-primary tracking-tight">
