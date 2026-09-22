@@ -49,6 +49,33 @@ function safeNext(next?: string): string {
   return next;
 }
 
+function FlagSE({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 60 36" className={`h-full w-full ${className}`} aria-hidden>
+      <rect width="60" height="36" rx="4" fill="#006AA7" />
+      <rect x="17" width="12" height="36" fill="#FECC02" />
+      <rect y="12" width="60" height="12" fill="#FECC02" />
+    </svg>
+  );
+}
+
+function FlagEN({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 60 36" className={`h-full w-full ${className}`} aria-hidden>
+      <rect width="60" height="36" rx="4" fill="#012169" />
+      <path d="M0,0 L60,36 M60,0 L0,36" stroke="#fff" strokeWidth="7.2" />
+      <path d="M0,0 L60,36 M60,0 L0,36" stroke="#C8102E" strokeWidth="3" />
+      <path d="M30,0 V36 M0,18 H60" stroke="#fff" strokeWidth="12" />
+      <path d="M30,0 V36 M0,18 H60" stroke="#C8102E" strokeWidth="7" />
+    </svg>
+  );
+}
+
+const FLAGS: Record<string, React.ComponentType<{ className?: string }>> = {
+  sv: FlagSE,
+  en: FlagEN,
+};
+
 function SignInPage() {
   const navigate = useNavigate();
   const { next } = Route.useSearch();
