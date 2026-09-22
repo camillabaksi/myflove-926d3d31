@@ -340,6 +340,8 @@ function HouseholdView({
         </div>
       </section>
 
+      <FamilySharing members={household.members} />
+
       <CollapsibleSection
         title="Mer"
         id="familj-mer"
