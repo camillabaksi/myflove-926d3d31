@@ -1,3 +1,8 @@
+## 2026-09-22 – Språkval på inloggningssidan
+
+- Längst upp på inloggningssidan går det att välja Svenska eller English innan man loggar in.
+- Hela sidan – rubriker, fält, knappar och länkar – byter språk direkt, och valet följer med in i appen.
+
 ## 2026-09-22 – Hela appen på engelska
 
 - Under Inställningar → Språk går det nu att välja Svenska eller English; valet följer kontot mellan enheter.
