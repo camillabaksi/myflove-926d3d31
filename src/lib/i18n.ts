@@ -280,6 +280,21 @@ export const EN: Record<string, string> = {
   "Glömt lösenord?": "Forgot password?",
   "Inget konto?": "No account?",
   "Skapa ett här": "Create one here",
+
+  // ── PWA-installation ────────────────────────────────────────────────────
+  "Lägg till MyFlove på hemskärmen": "Add MyFlove to your home screen",
+  "Öppna MyFlove snabbare när du behöver Flow.": "Open MyFlove faster when you need Flow.",
+  "Lägg till på hemskärmen": "Add to home screen",
+  "Så lägger du till MyFlove": "How to add MyFlove",
+  "Ha Flow nära till hands 💜 – appen hamnar direkt på din hemskärm.":
+    "Keep Flow close 💜 – the app lands right on your home screen.",
+  "1. Tryck på Dela längst ner i Safari.": "1. Tap Share at the bottom of Safari.",
+  "2. Välj ”Lägg till på hemskärmen” och tryck Lägg till.":
+    "2. Choose “Add to home screen” and tap Add.",
+  "1. Öppna webbläsarens meny (⋮ eller ☰).": "1. Open the browser menu (⋮ or ☰).",
+  "2. Välj ”Installera app” eller ”Lägg till på startskärmen”.":
+    "2. Choose “Install app” or “Add to home screen”.",
+  "Okej, jag fixar det": "Okay, I'll do it",
 };
 
 /** Områdesordlistor slås ihop med kärnan. Kärnan vinner vid krock. */
