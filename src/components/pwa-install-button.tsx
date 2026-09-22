@@ -57,8 +57,8 @@ export default function PwaInstallButton({
             <Download size={22} strokeWidth={2} />
           </span>
           <span className="min-w-0">
-            <span className="block text-sm font-medium leading-tight">Lägg till på hemskärmen</span>
-            <span className="block text-xs leading-snug text-muted-foreground">{hint}</span>
+            <span className="block text-sm font-medium leading-tight">{t("Lägg till på hemskärmen")}</span>
+            <span className="block text-xs leading-snug text-muted-foreground">{t(hint)}</span>
           </span>
         </button>
       ) : (
@@ -69,7 +69,7 @@ export default function PwaInstallButton({
           onClick={start}
         >
           <Download className="mr-2 size-4" />
-          {label}
+          {t(label)}
         </Button>
       )}
 
