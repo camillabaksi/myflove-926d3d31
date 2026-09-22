@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft, ArrowRight, Check, Pause, Play, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import ExerciseIllustration from "@/components/workout/exercise-illustration";
+import ExerciseVisual from "@/components/workout/exercise-visual";
 import { exerciseById } from "@/lib/exercise-library";
 import type { Workout } from "@/lib/workout-generator";
 
@@ -80,9 +80,11 @@ export default function WorkoutRunner({
       </div>
 
       <section className="surface-card p-4 text-center">
-        <ExerciseIllustration
-          variant={ex.illustration}
-          className="mx-auto h-36 w-full max-w-[280px] rounded-3xl"
+        <ExerciseVisual
+          visual={ex.visual}
+          name={ex.name}
+          eager
+          className="mx-auto aspect-square w-full max-w-[360px] rounded-3xl border border-border/50 object-cover"
         />
         <h2 className="mt-3 text-xl font-semibold text-ink">{ex.name}</h2>
         <p className="mt-1 text-base font-medium text-primary">{dose}</p>

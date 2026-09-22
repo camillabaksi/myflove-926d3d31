@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { exerciseById } from "@/lib/exercise-library";
+import { EXERCISES, exerciseById } from "@/lib/exercise-library";
 import {
   DEFAULT_REQUEST,
   energyFromScore,
@@ -31,6 +31,14 @@ describe("parseWorkoutText", () => {
 });
 
 describe("generateWorkout", () => {
+  it("har en unik realistisk visual för varje övning", () => {
+    expect(EXERCISES).toHaveLength(58);
+    expect(new Set(EXERCISES.map((exercise) => exercise.visual)).size).toBe(EXERCISES.length);
+    for (const exercise of EXERCISES) {
+      expect(exercise.visual).toBe(exercise.id);
+    }
+  });
+
   it("undviker övningar som belastar angivna områden", () => {
     const w = generateWorkout({
       ...DEFAULT_REQUEST,

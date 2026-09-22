@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Ersätt streckfigurer med 58 realistiska instruktionsbilder i Träningsprogram (2026-09-22)
+
 - [x] Förenkla Mer och samla profil, anpassning, app- och kontoval i en egen Inställningar-vy (2026-09-22)
 
 - [x] Samla Flow skapar ditt pass, Mina pass och historik i Träningsprogram som enda träningssektion (2026-09-22)

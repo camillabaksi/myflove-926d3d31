@@ -1,3 +1,8 @@
+## 2026-09-22 – Realistiska instruktionsbilder i Träningsprogram
+
+- Alla 58 övningar har nu en egen realistisk bild med en riktig person och relevanta rörelsefaser.
+- Visa hur öppnar bilden större tillsammans med korta teknikpunkter; kort, byte och träningslogik är oförändrade.
+
 ## 2026-09-22 – Enklare Mer med samlade inställningar
 
 - Mer visar nu främst MyFloves områden och har en enda tydlig ingång till Inställningar.
