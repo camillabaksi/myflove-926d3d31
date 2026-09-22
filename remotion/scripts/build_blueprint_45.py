@@ -135,11 +135,6 @@ def build():
     for i, p in enumerate(doc.paragraphs):
         if p.text.strip() == "Versionshistorik":
             entry = doc.paragraphs[i + 1]
-            para_after(
-                entry,
-                "4.5  ·  Egna avsnitt för energikopplingen, Insikter med trender och full familjedelning.",
-                entry.style,
-            ).._p.addprevious(entry._p) if False else None
             new = copy.deepcopy(entry._p)
             entry._p.addprevious(new)
             from docx.text.paragraph import Paragraph
