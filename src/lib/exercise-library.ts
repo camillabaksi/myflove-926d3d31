@@ -64,7 +64,18 @@ export type IllustrationKey =
   | "core"
   | "stretch"
   | "breath"
-  | "march";
+  | "march"
+  | "plank"
+  | "sideplank"
+  | "pushup"
+  | "swing"
+  | "jump"
+  | "overhead"
+  | "twist"
+  | "childpose"
+  | "hamstring"
+  | "neck";
+
 
 export const EXERCISES: Exercise[] = [
   {
