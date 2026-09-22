@@ -6,6 +6,7 @@ import {
   Check,
   Compass,
   Home,
+  Languages,
   LayoutGrid,
   LogOut,
   Settings,
@@ -20,6 +21,9 @@ import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove
 import PwaInstallButton from "@/components/pwa-install-button";
 import { Button } from "@/components/ui/button";
 import { track } from "@/lib/analytics";
+import { useLang } from "@/hooks/use-language";
+import { LANGUAGES } from "@/lib/i18n";
+import { clearTranslationCache } from "@/lib/auto-translate";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import {
   isAlarmSoundEnabled,
@@ -57,6 +61,7 @@ function SettingsLink({ href, icon: Icon, label, hint }: SettingsLinkProps) {
 
 export default function SettingsPage() {
   const { signOut } = useClerk();
+  const { lang, setLang } = useLang();
   const [alarmEnabled, setAlarmEnabledState] = useState(() => isAlarmSoundEnabled());
   const [simpleModeChosen, setSimpleModeChosen] = useCloudSyncedStorage<boolean>(
     "myflove-simple-mode-chosen",
@@ -128,6 +133,36 @@ export default function SettingsPage() {
               <LogOut className="size-5" /> Logga ut
             </Button>
           </Show>
+        </MyFloveBlock>
+
+        <MyFloveBlock
+          title="Språk"
+          subtitle="Hela appen på svenska eller engelska"
+          icon={Languages}
+          tone="lavender"
+          surface="lavender"
+        >
+          <div className="grid grid-cols-2 gap-2" data-no-translate>
+            {LANGUAGES.map((l) => (
+              <Button
+                key={l.value}
+                variant={lang === l.value ? "default" : "outline"}
+                className="h-auto justify-start gap-2 rounded-2xl py-3"
+                onClick={() => {
+                  if (l.value === lang) return;
+                  if (l.value === "sv") clearTranslationCache();
+                  setLang(l.value);
+                }}
+              >
+                <span aria-hidden>{l.flag}</span>
+                <span className="text-sm font-semibold">{l.label}</span>
+              </Button>
+            ))}
+          </div>
+          <p className="text-xs text-muted-foreground">
+            I engelskt läge översätts hela appen. Första gången en ny skärm visas kan några ord
+            dröja en sekund innan de byter språk.
+          </p>
         </MyFloveBlock>
 
         <MyFloveBlock title="Anpassning" subtitle="Vad som visas och hur Flow hjälper" icon={LayoutGrid} tone="mint" surface="mint">
