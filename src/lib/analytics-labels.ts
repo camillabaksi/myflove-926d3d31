@@ -176,6 +176,8 @@ export const ACTION_LABELS: Record<string, string> = {
   recovery_acute_opened: "Akut Lugn startat",
   recovery_lightboost_opened: "Ljusboost startad",
   recovery_stop_opened: "Stopp-knappen öppnad",
+  recovery_pause_started: "Paus startad",
+  recovery_energy_checkin: "Energikoll efter återhämtning",
   install_prompt_shown: "Installationsfråga visad",
   install_started: "Installation påbörjad",
   install_completed: "Installation klar",
