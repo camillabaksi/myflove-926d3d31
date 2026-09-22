@@ -51,10 +51,16 @@ export default function AutoTranslateProvider() {
     const applied = new WeakMap<Node, string>();
     const attrOriginals = new WeakMap<Element, Record<string, string>>();
 
+    const flag = window as unknown as { __myfloveTranslated?: boolean };
     if (lang !== "en") {
-      // Tillbaka till svenska: enklast och säkrast är att rendera om sidan.
+      // Tillbaka till svenska: ladda om sidan så originaltexten kommer fram.
+      if (flag.__myfloveTranslated) {
+        flag.__myfloveTranslated = false;
+        window.location.reload();
+      }
       return;
     }
+    flag.__myfloveTranslated = true;
 
     const translateTextNode = (node: Text) => {
       if (skipNode(node)) return;

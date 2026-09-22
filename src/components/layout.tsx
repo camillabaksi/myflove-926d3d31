@@ -67,6 +67,7 @@ import ViewCollapseToggle from "@/components/view-collapse-toggle";
 import FlowCompanion from "@/components/flow/flow-companion";
 import FlowCheckinPopup from "@/components/flow-checkin-popup";
 import GlobalActivityEnergyPrompt from "@/components/global-activity-energy-prompt";
+import AutoTranslateProvider from "@/components/auto-translate-provider";
 import DemoBanner from "@/components/demo-banner";
 import { useDemoAccount } from "@/hooks/use-demo-account";
 
