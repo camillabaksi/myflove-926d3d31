@@ -27,6 +27,7 @@ import { cn } from "@/lib/utils";
 import { BODY_AREAS, EQUIPMENT_LABEL, type BodyArea, type Equipment, type ExerciseFocus } from "@/lib/exercise-library";
 import {
   DEFAULT_REQUEST,
+  buildWorkoutFromPlan,
   energyFromScore,
   generateWorkout,
   parseWorkoutText,
@@ -37,6 +38,7 @@ import {
   type WorkoutIntent,
   type WorkoutRequest,
 } from "@/lib/workout-generator";
+import { generateAiWorkout } from "@/lib/workout-ai.functions";
 
 type Step = "intent" | "beskriv" | "tanker" | "resultat" | "kor" | "klar";
 
