@@ -223,6 +223,24 @@ function HouseholdView({
     toast({ description: "Koden är kopierad!" });
   };
 
+  const inviteLink = () =>
+    `${window.location.origin}/familj?kod=${encodeURIComponent(household.invite_code)}`;
+
+  const shareInvite = async () => {
+    const url = inviteLink();
+    const text = `Gå med i ${household.name} i MyFlove: ${url}`;
+    try {
+      if (typeof navigator.share === "function") {
+        await navigator.share({ title: "Gå med i familjen", text, url });
+        return;
+      }
+    } catch {
+      return;
+    }
+    navigator.clipboard.writeText(url).catch(() => {});
+    toast({ description: "Inbjudningslänken är kopierad!" });
+  };
+
   const leave = async () => {
     setPending(true);
     try {
