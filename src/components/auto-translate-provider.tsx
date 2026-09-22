@@ -101,7 +101,7 @@ export default function AutoTranslateProvider() {
           queueForTranslation(source.trim());
           continue;
         }
-        if (en === source) continue;
+        if (en === source || en === value) continue;
         store[attr] = source;
         attrOriginals.set(el, store);
         el.setAttribute(attr, en);
