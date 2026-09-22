@@ -41,6 +41,7 @@ import InsightApplySetting from "@/components/insight-apply-setting";
 import { MyFloveInsightGather } from "@/components/myflove/motion";
 import WhyHint from "@/components/why-hint";
 import BatteryLoadTrend from "@/components/battery-load-trend";
+import EnergyMoodTrend from "@/components/energy-mood-trend";
 
 const ANALYSIS_STEPS = [
   "Identifierar styrkor",
@@ -335,6 +336,8 @@ export default function InsightPage() {
                 />
               </div>
             </div>
+
+            <EnergyMoodTrend />
 
             <BatteryLoadTrend />
 
