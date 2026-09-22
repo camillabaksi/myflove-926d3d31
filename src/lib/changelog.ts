@@ -10,9 +10,9 @@ export const CHANGELOG_UPDATED = "2026-09-22";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
-    title: "Svenska språkvalet återställs korrekt",
+    title: "Svenska språkvalet stannar på svenska",
     items: [
-      "Svenska flaggan återställer nu alltid hela inloggningssidan till svenska, även om engelsk text låg kvar (2026-09-22)",
+      "Svenska flaggan byter direkt utan en omladdning som kunde hämta tillbaka engelska (2026-09-22)",
     ],
   },
   {
