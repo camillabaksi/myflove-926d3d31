@@ -1,3 +1,7 @@
+## 2026-09-22 – Svenska återställs i hela appen
+
+- Byte tillbaka till svenska sätter nu tillbaka all översatt text direkt i sidan, så inga engelska rubriker eller menyord blir kvar.
+
 ## 2026-09-22 – Svenska språkvalet stannar på svenska
 
 - Svenska flaggan byter nu direkt till svenska utan en omladdning som kunde hämta tillbaka engelska.
