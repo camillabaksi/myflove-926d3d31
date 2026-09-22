@@ -61,6 +61,7 @@ function SettingsLink({ href, icon: Icon, label, hint }: SettingsLinkProps) {
 
 export default function SettingsPage() {
   const { signOut } = useClerk();
+  const { lang, setLang } = useLang();
   const [alarmEnabled, setAlarmEnabledState] = useState(() => isAlarmSoundEnabled());
   const [simpleModeChosen, setSimpleModeChosen] = useCloudSyncedStorage<boolean>(
     "myflove-simple-mode-chosen",
