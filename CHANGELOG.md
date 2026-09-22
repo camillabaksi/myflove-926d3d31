@@ -1,3 +1,10 @@
+## 2026-09-22 – Uppdaterat material och version 5.4
+
+- Pitchfilmerna (svenska och engelska, 16:9 och 9:16) är uppdaterade med den nya strukturen, Återhämtning och färska skärmbilder.
+- Ny redigerbar pitchdeck på svenska och engelska med samma innehåll som filmerna.
+- Living Blueprint 4.4 beskriver de fem vägarna, den samlade pausen, energikopplingen och familjedelningen.
+- Androidversion 5.4 byggd från samma kodbas som webben.
+
 ## 2026-09-22 – Ny struktur: Översikt, Flow, Hälsa och Återhämtning
 
 - Aktiviteter i Studier, Jobb, Familj, Hem (städpass) och Återhämtning (Paus, Ljusboost, Stopp-knappen) frågar nu frivilligt hur energin kändes – svaret sparas i din vanliga energilogg.

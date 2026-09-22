@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-22";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Uppdaterat material och version 5.4",
+    items: [
+      "Pitchfilmerna (svenska och engelska, 16:9 och 9:16) är uppdaterade med den nya strukturen, Återhämtning och färska skärmbilder (2026-09-22)",
+      "Ny redigerbar pitchdeck på svenska och engelska med samma innehåll som filmerna (2026-09-22)",
+      "Living Blueprint 4.4 beskriver de fem vägarna, den samlade pausen, energikopplingen och familjedelningen (2026-09-22)",
+      "Androidversion 5.4 byggd från samma kodbas som webben (2026-09-22)",
+    ],
+  },
+  {
     title: "Ny struktur: Översikt, Flow, Hälsa och Återhämtning",
     items: [
       "Aktiviteter i Studier, Jobb, Familj, Hem och Återhämtning kopplas till energiloggen med en frivillig energikoll (2026-09-22)",
