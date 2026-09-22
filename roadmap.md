@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Utökat övningsbibliotek till 58 övningar med bild och säkerhetsnotis (2026-09-22)
+
 - [x] Flow skapar ditt pass: övningsbibliotek, generator, träningskort, steg-för-steg-läge och Mina pass (2026-09-22)
 
 - [x] Redigerbar svensk 16:9-PowerPoint av Venture Cup-pitchfilmen med 13 slides och filmexporttider (2026-09-21)

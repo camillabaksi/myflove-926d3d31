@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-22";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Fler övningar i passbiblioteket",
+    items: [
+      "Övningsbiblioteket har växt till 58 övningar i helkropp, överkropp, underkropp, bål och rörlighet (2026-09-22)",
+      "Varje ny övning har egen bild, korta teknikpunkter och en tydlig säkerhetsnotis (2026-09-22)",
+      "Fler svårighetsgrader gör att passen kan bli både mjukare och tuffare efter dagens energi (2026-09-22)",
+    ],
+  },
+  {
     title: "Flow skapar ditt pass",
     items: [
       "Ny sida Skapa mitt pass med val av Styrka, Rörlighet, Återhämtning eller Eget upplägg (2026-09-22)",
