@@ -535,7 +535,7 @@ export default function TrainingPage() {
 
             {view === "overview" && (
               <div className="grid gap-3 sm:grid-cols-2">
-                {SECTIONS.map((s) => {
+                {SECTIONS.filter((s) => s.id !== "vikt" || !hideWeight).map((s) => {
                   const Icon = s.icon;
                   return (
                     <button
