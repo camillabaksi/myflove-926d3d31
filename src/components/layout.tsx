@@ -701,13 +701,12 @@ export default function Layout({ children }: LayoutProps) {
   }, [navSearch, navItems]);
 
   /**
-   * Bottennavet under utvärderingsperioden: fem fasta huvudvägar för alla –
-   * Hem, QuickFlow, Kalender, Paus och Prata med Flow. Inga val, ingen
-   * kontostatus styr detta.
+   * Huvudnavigationen: Översikt · Flow · QuickFlow · Hälsa · Återhämtning,
+   * med allt annat under "Mer". Samma för alla, oavsett konto eller läge.
    */
   const primaryNav = useMemo(() => {
     const pick = (href: string) => navItems.find((i) => i.href === href);
-    return [pick("/hem"), pick("/kalender"), pick("/aterhamtning"), pick("/assistant")].filter(
+    return [pick("/hem"), pick("/flow"), pick("/halsa"), pick("/aterhamtning")].filter(
       Boolean,
     ) as typeof navItems;
     // eslint-disable-next-line react-hooks/exhaustive-deps
