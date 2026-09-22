@@ -7,6 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { useLang } from "@/hooks/use-language";
+import { LANGUAGES } from "@/lib/i18n";
+import { clearTranslationCache } from "@/lib/auto-translate";
 import { withBackendRecovery, isBackendAsleepError } from "@/lib/backend-wake";
 import PwaInstallButton from "@/components/pwa-install-button";
 
@@ -50,6 +53,7 @@ function SignInPage() {
   const navigate = useNavigate();
   const { next } = Route.useSearch();
   const { toast } = useToast();
+  const { lang, setLang, t } = useLang();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -66,9 +70,9 @@ function SignInPage() {
     setWaking(false);
     if (result.error) {
       toast({
-        title: "Kunde inte logga in",
+        title: t("Kunde inte logga in"),
         description: isBackendAsleepError(result.error)
-          ? "Tjänsten vaknar fortfarande. Vänta en liten stund och försök igen."
+          ? t("Tjänsten vaknar fortfarande. Vänta en liten stund och försök igen.")
           : (result.error as { message?: string }).message,
         variant: "destructive",
       });
