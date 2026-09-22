@@ -530,51 +530,50 @@ export default function Layout({ children }: LayoutProps) {
     }[] = [
       {
         id: "myflow",
-        label: "Idag",
-        hint: "Vad som händer idag – hela dagens lista",
+        label: "Översikt",
+        hint: "Dagen, energin och nästa steg",
         icon: CalendarDays,
-        hrefs: ["/idag", "/kalender", "/lagg-till", "/paminnelser", "/pomodoro"],
+        hrefs: ["/hem", "/idag", "/kalender", "/lagg-till", "/paminnelser", "/pomodoro"],
       },
       {
         id: "flowflow",
         label: "Flow",
-        hint: "Hjälp, planering och chatt på ett ställe",
+        hint: "Chatt, planering, QuickFlow och anteckningar",
         icon: Sparkles,
-        hrefs: ["/flow", "/tasks"],
-      },
-      {
-        id: "quickflow",
-        label: "QuickFlow",
-        hint: "Fånga något snabbt – sortera sedan",
-        icon: Brain,
-        hrefs: ["/quickflow", "/anteckningar"],
+        hrefs: ["/flow", "/assistant", "/flowplan", "/quickflow", "/anteckningar", "/tasks"],
       },
       {
         id: "healthflow",
         label: "Hälsa",
-        hint: "Energi, mående, träning, medicin och vila",
+        hint: "Energi, mående, träning, rutiner och medicin",
         icon: HeartPulse,
         hrefs: [
           "/halsa",
           "/mitt-batteri",
-          "/aterhamtning",
-          "/stop-paus",
+          "/energifloede",
           "/traning",
           "/daglig-rutin",
-          "/energifloede",
+          "/morgonstart",
         ],
+      },
+      {
+        id: "recoveryflow",
+        label: "Återhämtning",
+        hint: "Paus, Ljusboost och Stopp-knappen",
+        icon: Wind,
+        hrefs: ["/aterhamtning", "/stop-paus"],
       },
       {
         id: "studyflow",
         label: "Studier",
-        hint: "Schema, prov och plugg",
+        hint: "Nästa steg, deadlines och uppgifter",
         icon: BookOpen,
         hrefs: ["/studyflow", "/studybuddy"],
       },
       {
         id: "workflow",
         label: "Jobb",
-        hint: "Uppgifter och möten",
+        hint: "Uppgifter, möten och deadlines",
         icon: Building2,
         hrefs: ["/jobb"],
       },
@@ -594,8 +593,8 @@ export default function Layout({ children }: LayoutProps) {
       },
       {
         id: "insightflow",
-        label: "Mina mönster",
-        hint: "Vad Flow har lärt sig om dig",
+        label: "Insikter",
+        hint: "Beskrivande mönster från din egen data",
         icon: Brain,
         hrefs: ["/insight", "/historik", "/statistik", "/beloningar"],
       },
@@ -604,7 +603,7 @@ export default function Layout({ children }: LayoutProps) {
         label: "Avancerat",
         hint: "Detaljerna bakom planeringen – bara om du vill se dem",
         icon: Gauge,
-        hrefs: ["/flowscore", "/veckans-flow", "/friktionsindex"],
+        hrefs: ["/flowscore", "/friktionsindex"],
       },
       // Inställningar har en egen sektion längre ner i "Mer" – därför ligger
       // de inte som kategori här. Admin är det enda som blir kvar som grupp.
@@ -615,6 +614,7 @@ export default function Layout({ children }: LayoutProps) {
         icon: LayoutGrid,
         hrefs: ["/admin", "/admin-statistik"],
       },
+
     ];
 
     return groups
