@@ -4,6 +4,8 @@ import Layout from "@/components/layout";
 import { MyFloveHeader } from "@/components/myflove";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import StopModal from "@/components/stop-modal";
+import EnergyAfterCheck from "@/components/recovery/energy-after-check";
+
 import { useSmartBack } from "@/hooks/use-smart-back";
 import { track } from "@/lib/analytics";
 
@@ -14,6 +16,7 @@ import { track } from "@/lib/analytics";
  */
 export default function StopPausPage() {
   const [open, setOpen] = useState(true);
+  const [check, setCheck] = useState(false);
   const goBack = useSmartBack("/hem");
 
   // Räknas oavsett om Stopp-knappen öppnas från Återhämtning eller direkt.
@@ -32,6 +35,16 @@ export default function StopPausPage() {
               emojiKey="wellness"
               description="En paus mellan impuls och beslut – andas, sätt ord, välj."
             />
+            {check && (
+              <EnergyAfterCheck
+                title="Stopp-knappen"
+                source="stop_paus"
+                onDone={() => {
+                  setCheck(false);
+                  goBack();
+                }}
+              />
+            )}
             <button
               type="button"
               onClick={() => setOpen(true)}
@@ -43,7 +56,8 @@ export default function StopPausPage() {
               open={open}
               onOpenChange={(next) => {
                 setOpen(next);
-                if (!next) goBack();
+                // Efter en stop-paus: samma frivilliga energikoll som efter Paus/Ljusboost.
+                if (!next) setCheck(true);
               }}
             />
           </div>

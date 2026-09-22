@@ -7,6 +7,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { useToast } from "@/hooks/use-toast";
 import { celebrateFromEvent } from "@/lib/celebrate";
+import { emitActivityDone } from "@/lib/activity-energy-event";
+
 import {
   CLEAN_ROOMS,
   CLEAN_MODE_BLURB,
@@ -115,7 +117,10 @@ export default function CleaningPage() {
       const allDone = steps.every((s) => s.id === stepId || isDone(s.id));
       celebrateFromEvent(e);
       toast({ description: allDone ? finishCheer(mode, room.label) : cleaningCheer() });
+      // Hela passet klart → frivillig energikoll, inte för varje litet steg.
+      if (allDone) emitActivityDone({ id: `stad-${listKey}`, title: `Städning – ${room.label}` });
     }
+
   };
 
   const resetRoom = () => {
