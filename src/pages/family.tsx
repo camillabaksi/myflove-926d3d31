@@ -7,7 +7,8 @@ import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { MyFloveHeart } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Users, Copy, LogOut, Check } from "lucide-react";
+import { Users, Copy, LogOut, Check, Share2 } from "lucide-react";
+import FamilySharing from "@/components/family/family-sharing";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { PERSON_COLORS } from "@/lib/palette";
@@ -86,6 +87,15 @@ function CreateOrJoin({ onReady }: { onReady: () => void }) {
   const [color, setColor] = useState<string>(COLORS[0].value);
   const [pending, setPending] = useState(false);
   const { toast } = useToast();
+
+  // Kommer man via en inbjudningslänk är koden redan ifylld.
+  useEffect(() => {
+    const code = new URLSearchParams(window.location.search).get("kod");
+    if (code) {
+      setInviteCode(code.toUpperCase());
+      setMode("join");
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -213,6 +223,24 @@ function HouseholdView({
     toast({ description: "Koden är kopierad!" });
   };
 
+  const inviteLink = () =>
+    `${window.location.origin}/familj?kod=${encodeURIComponent(household.invite_code)}`;
+
+  const shareInvite = async () => {
+    const url = inviteLink();
+    const text = `Gå med i ${household.name} i MyFlove: ${url}`;
+    try {
+      if (typeof navigator.share === "function") {
+        await navigator.share({ title: "Gå med i familjen", text, url });
+        return;
+      }
+    } catch {
+      return;
+    }
+    navigator.clipboard.writeText(url).catch(() => {});
+    toast({ description: "Inbjudningslänken är kopierad!" });
+  };
+
   const leave = async () => {
     setPending(true);
     try {
@@ -265,6 +293,16 @@ function HouseholdView({
           </button>
         </div>
 
+        <Button
+          type="button"
+          variant="outline"
+          onClick={shareInvite}
+          className="h-12 w-full rounded-2xl"
+        >
+          <Share2 size={18} className="mr-2" />
+          Bjud in med länk
+        </Button>
+
         <div className="flex flex-wrap gap-2">
           {household.members.map((m) => (
             <span
@@ -301,6 +339,8 @@ function HouseholdView({
           ))}
         </div>
       </section>
+
+      <FamilySharing members={household.members} />
 
       <CollapsibleSection
         title="Mer"
