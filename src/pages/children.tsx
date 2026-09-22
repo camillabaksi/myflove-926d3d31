@@ -210,7 +210,15 @@ function ChildrenContent() {
     if (next) celebrateFromEvent(e);
     await toggleItem(item.id, next);
     if (next) await cancel({ data: { clientKey: `child:${item.id}` } }).catch(() => {});
+    // Genomförd familjeaktivitet → samma frivilliga "Hur kändes det?" som i övriga appen.
+    if (next)
+      emitActivityDone({
+        id: `child-${item.id}`,
+        title: item.title,
+        ...(item.date ? { dueDate: item.date } : {}),
+      });
   };
+
 
   const handleShareToggle = async (item: ChildItem, memberId: string) => {
     const next = item.sharedWith.includes(memberId)
