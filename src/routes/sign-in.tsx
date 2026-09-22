@@ -86,6 +86,16 @@ function SignInPage() {
   const [loading, setLoading] = useState(false);
   const [waking, setWaking] = useState(false);
 
+  function handleLanguageSelect(nextLang: "sv" | "en") {
+    // Skriv alltid valet, även om state redan visar samma språk. Det återställer
+    // sidan om en tidigare automatisk översättning ligger kvar i dokumentet.
+    if (nextLang === "sv") clearTranslationCache();
+    setLang(nextLang);
+    if (nextLang === "sv") {
+      window.setTimeout(() => window.location.reload(), 50);
+    }
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
@@ -119,25 +129,23 @@ function SignInPage() {
             {LANGUAGES.map((l) => {
               const Flag = FLAGS[l.value];
               return (
-                <button
+                <Button
                   key={l.value}
                   type="button"
+                  variant="ghost"
+                  size="icon"
                   title={l.label}
                   aria-label={l.label}
                   aria-pressed={lang === l.value}
-                  onClick={() => {
-                    if (l.value === lang) return;
-                    if (l.value === "sv") clearTranslationCache();
-                    setLang(l.value);
-                  }}
-                  className={`h-7 w-10 overflow-hidden rounded transition-all ${
+                  onClick={() => handleLanguageSelect(l.value)}
+                  className={`h-7 w-10 overflow-hidden rounded p-0 transition-all ${
                     lang === l.value
                       ? "ring-2 ring-primary/50 scale-105 shadow-sm"
                       : "opacity-45 hover:opacity-100"
                   }`}
                 >
                   <Flag />
-                </button>
+                </Button>
               );
             })}
           </div>
