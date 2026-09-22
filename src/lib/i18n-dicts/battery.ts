@@ -3,6 +3,9 @@ export const EN_BATTERY: Record<string, string> = {
   // battery.tsx
   "Mitt batteri": "My battery",
   "Mina mönster": "My patterns",
+  Insikter: "Insights",
+  "Observationer ur din egen data – titta bara när du vill.":
+    "Observations from your own data – look only when you want to.",
   "Mönster ur din egen data – titta bara när du vill.":
     "Patterns from your own data – look only when you want to.",
   "Det finns mönster att se när du öppnar.": "There are patterns to see when you open it.",
