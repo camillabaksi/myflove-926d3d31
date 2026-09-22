@@ -96,13 +96,6 @@ const SECTIONS: {
     hue: "42 62% 45%",
   },
   {
-    id: "plan",
-    label: "Veckoplan",
-    desc: "Mål som justeras efter hur veckan kändes.",
-    icon: CalendarRange,
-    hue: "265 32% 45%",
-  },
-  {
     id: "vikt",
     label: "Vikt",
     desc: "Följ vikten över tid om viktnedgång är ditt mål.",
