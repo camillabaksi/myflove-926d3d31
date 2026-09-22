@@ -315,7 +315,7 @@ def build(lang,portrait):
     for idx,duration in enumerate(DURATIONS):
         filters.append(f"[{idx}:v]fps=30,fade=t=in:st=0:d=0.6:color=#EEE5FA,fade=t=out:st={duration-0.6}:d=0.6:color=#EEE5FA,format=yuv420p[v{idx}]")
     filters.append("".join(f"[v{i}]" for i in range(len(DURATIONS)))+f"concat=n={len(DURATIONS)}:v=1:a=0[out]")
-    output=Path("/mnt/documents")/f'MyFlove_Venture_Cup_2026_{lang}_{"9x16" if portrait else "16x9"}_v5.mp4'
+    output=Path("/mnt/documents")/f'MyFlove_Venture_Cup_2026_{lang}_{"9x16" if portrait else "16x9"}_v6.mp4'
     cmd=["ffmpeg","-y",*inputs,"-filter_complex",";".join(filters),"-map","[out]","-an","-c:v","libx264","-preset","veryfast","-crf","18","-profile:v","high","-level","4.1","-r","30","-g","30","-pix_fmt","yuv420p","-colorspace","bt709","-color_primaries","bt709","-color_trc","bt709","-movflags","+faststart",str(output)]
     subprocess.run(cmd,check=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
     print(output)
