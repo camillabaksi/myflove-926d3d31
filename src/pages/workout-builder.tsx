@@ -121,16 +121,54 @@ export default function WorkoutBuilderPage() {
     setStep("beskriv");
   };
 
-  const create = () => {
+  /**
+   * Flow bygger passet. Först AI:n, som väger in energi, fritext och ömma
+   * områden. Går det inte fram används den lokala generatorn – användaren
+   * får alltid ett pass.
+   */
+  const create = async () => {
     const parsed = parseWorkoutText(req.text ?? "", req);
     setReq(parsed);
     setStep("tanker");
     track("workout_generated", { source: parsed.intent });
-    setTimeout(() => {
-      setWorkout(generateWorkout(parsed));
-      setDoneIds([]);
-      setStep("resultat");
-    }, 900);
+
+    let result: Workout | null = null;
+    try {
+      const plan = await generateAiWorkout({
+        data: {
+          intent: parsed.intent,
+          text: parsed.text?.slice(0, 600) || undefined,
+          minutes: parsed.minutes,
+          energy: parsed.energy,
+          energyPercent,
+          place: parsed.place,
+          equipment: parsed.equipment,
+          focus: parsed.focus,
+          limitations: parsed.limitations,
+        },
+      });
+      result = buildWorkoutFromPlan(
+        {
+          title: plan.title,
+          note: plan.note,
+          blocks: plan.blocks.map((b) => ({
+            exerciseId: b.exerciseId,
+            section: b.section,
+            sets: b.sets,
+            reps: b.reps ?? undefined,
+            seconds: b.seconds ?? undefined,
+            restSeconds: b.restSeconds,
+          })),
+        },
+        parsed,
+      );
+    } catch {
+      result = null;
+    }
+
+    setWorkout(result ?? generateWorkout(parsed));
+    setDoneIds([]);
+    setStep("resultat");
   };
 
   const finish = (doneCount: number) => {
