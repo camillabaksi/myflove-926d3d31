@@ -1,3 +1,10 @@
+## 2026-09-22 – Flow bygger passet med AI
+
+- "Skapa mitt pass" använder nu AI som väger in din energi, din fritext, tid, plats, utrustning, fokus och ömma områden.
+- AI:n väljer bara bland övningarna i MyFloves eget bibliotek, så alla bilder, teknikpunkter och säkerhetsnotiser finns kvar.
+- Passet får en kort förklaring i du-form till varför det ser ut som det gör just idag.
+- Om AI:n inte kan svara byggs passet som tidigare, så du alltid får ett pass.
+
 ## 2026-09-22 – Fler övningar i passbiblioteket
 
 - Biblioteket har växt från 26 till 58 övningar med fler val i helkropp, överkropp, underkropp, bål och rörlighet.
