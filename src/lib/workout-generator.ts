@@ -39,6 +39,10 @@ export interface WorkoutBlock {
   seconds?: number;
   restSeconds: number;
   section: "uppvärmning" | "huvuddel" | "nedvarvning";
+  /** Görs en sida i taget – tiden delas mellan höger och vänster. */
+  sideSplit?: boolean;
+  /** Nedräkning innan övningen startar i automatiskt läge. */
+  transitionSeconds?: number;
 }
 
 export interface Workout {
@@ -172,6 +176,8 @@ function toBlock(ex: Exercise, req: WorkoutRequest, section: WorkoutBlock["secti
   const light = section !== "huvuddel" || req.intent === "återhämtning";
   const sets = light ? ex.defaultSets : Math.max(1, ENERGY_SETS[req.energy]);
   const rest = light ? 20 : ENERGY_REST[req.energy];
+  const sideSplit = ex.sideSplit === true;
+  const transitionSeconds = 5;
   if (ex.measure === "tid") {
     return {
       exerciseId: ex.id,
@@ -179,6 +185,8 @@ function toBlock(ex: Exercise, req: WorkoutRequest, section: WorkoutBlock["secti
       seconds: Math.round((ex.defaultSeconds ?? 30) * (light ? 1 : ENERGY_REP_FACTOR[req.energy])),
       restSeconds: rest,
       section,
+      sideSplit,
+      transitionSeconds,
     };
   }
   return {
@@ -187,6 +195,8 @@ function toBlock(ex: Exercise, req: WorkoutRequest, section: WorkoutBlock["secti
     reps: Math.max(5, Math.round((ex.defaultReps ?? 10) * ENERGY_REP_FACTOR[req.energy])),
     restSeconds: rest,
     section,
+    sideSplit,
+    transitionSeconds,
   };
 }
 
