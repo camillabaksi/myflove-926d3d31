@@ -31,6 +31,12 @@ const AREAS: {
     title: "Rutiner & medicin",
     what: "Rutiner och dagens doser.",
   },
+  {
+    href: "/morgonstart",
+    icon: Sunrise,
+    title: "Morgonstart",
+    what: "En lugn start på dagen.",
+  },
 ];
 
 export default function HealthPage() {
