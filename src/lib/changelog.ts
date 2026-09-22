@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-22";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Flow bygger passet med AI",
+    items: [
+      "Skapa mitt pass använder AI som väger in energi, fritext, tid, plats, utrustning, fokus och ömma områden (2026-09-22)",
+      "AI:n väljer endast övningar ur MyFloves eget bibliotek, med bild, teknikpunkter och säkerhetsnotis kvar (2026-09-22)",
+      "Passet får en kort förklaring i du-form till varför det ser ut som det gör idag (2026-09-22)",
+      "Om AI:n inte svarar byggs passet lokalt som tidigare, så du alltid får ett pass (2026-09-22)",
+    ],
+  },
+  {
     title: "Fler övningar i passbiblioteket",
     items: [
       "Övningsbiblioteket har växt till 58 övningar i helkropp, överkropp, underkropp, bål och rörlighet (2026-09-22)",
