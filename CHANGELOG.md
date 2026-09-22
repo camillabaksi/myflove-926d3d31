@@ -1,3 +1,9 @@
+## 2026-09-22 – Hela appen på engelska
+
+- Under Inställningar → Språk går det nu att välja Svenska eller English; valet följer kontot mellan enheter.
+- I engelskt läge översätts hela gränssnittet, även skärmar som tidigare bara fanns på svenska. Ordlistan används först, resten översätts av Flow och sparas så att det går direkt nästa gång.
+- Går översättningen inte igenom står den svenska texten kvar – aldrig tom text. Byte tillbaka till svenska laddar om sidan.
+
 ## 2026-09-22 – Ändra schemat för hand
 
 - I Mitt schema går det nu att ändra, lägga till och ta bort tider – även de som Flow läst in från ett uppladdat schema.

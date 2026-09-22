@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-22";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Hela appen på engelska",
+    items: [
+      "Inställningar → Språk: välj Svenska eller English, valet följer kontot (2026-09-22)",
+      "Hela gränssnittet översätts i engelskt läge, även skärmar utan färdig ordlista (2026-09-22)",
+      "Översatt text sparas lokalt så att den visas direkt nästa gång (2026-09-22)",
+    ],
+  },
+  {
     title: "Ändra schemat för hand",
     items: [
       "Mitt schema går att ändra själv: lägg till, ändra eller ta bort tider (2026-09-22)",
