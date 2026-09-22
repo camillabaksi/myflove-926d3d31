@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { FlowMascot } from "@/components/flow-mascot";
 import { usePwaInstall } from "@/hooks/use-pwa-install";
+import { useLang } from "@/hooks/use-language";
 import { haptic } from "@/lib/haptics";
 import { cn } from "@/lib/utils";
 
@@ -32,6 +33,7 @@ export default function PwaInstallButton({
   hint?: string;
 }) {
   const { installed, isIos, showInstallHelp, setShowInstallHelp, install } = usePwaInstall();
+  const { t } = useLang();
 
   if (installed) return null;
 
