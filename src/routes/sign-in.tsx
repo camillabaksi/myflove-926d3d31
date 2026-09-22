@@ -87,13 +87,8 @@ function SignInPage() {
   const [waking, setWaking] = useState(false);
 
   function handleLanguageSelect(nextLang: "sv" | "en") {
-    // Skriv alltid valet, även om state redan visar samma språk. Det återställer
-    // sidan om en tidigare automatisk översättning ligger kvar i dokumentet.
     if (nextLang === "sv") clearTranslationCache();
     setLang(nextLang);
-    if (nextLang === "sv") {
-      window.setTimeout(() => window.location.reload(), 50);
-    }
   }
 
   async function handleSubmit(e: React.FormEvent) {
