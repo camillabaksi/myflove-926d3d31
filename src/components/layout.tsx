@@ -308,9 +308,10 @@ export default function Layout({ children }: LayoutProps) {
     },
     {
       href: "/aterhamtning",
-      label: "Paus",
+      label: "Återhämtning",
       icon: Wind,
-      hint: "Återhämtning: mikropaus, akut lugn, ljusboost och stopp-knappen",
+      hint: "Paus du väljer längden på, Ljusboost och Stopp-knappen",
+
       essential: true,
     },
     {
@@ -378,12 +379,6 @@ export default function Layout({ children }: LayoutProps) {
       icon: Gauge,
       hint: "Hur dagens krav matchar din ork",
     },
-    {
-      href: "/veckans-flow",
-      label: "Veckans översikt",
-      icon: CalendarDays,
-      hint: "Lugn tillbakablick på veckan",
-    },
     { href: "/pomodoro", label: "Timer", icon: Timer, hint: "Jobba en stund, ta paus" },
     { href: "/shopping", label: "Inköpslista", icon: ShoppingBag, hint: "Inköpslista du kan dela" },
     {
@@ -419,9 +414,9 @@ export default function Layout({ children }: LayoutProps) {
     },
     {
       href: "/insight",
-      label: "Mina mönster",
+      label: "Insikter",
       icon: Brain,
-      hint: "Vad som brukar funka för dig",
+      hint: "Beskrivande mönster från din egen data",
       essential: true,
     },
     {
