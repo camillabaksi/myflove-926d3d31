@@ -57,7 +57,8 @@ export function isTranslatable(text: string): boolean {
 const pending = new Set<string>();
 const failed = new Set<string>();
 let flushTimer: ReturnType<typeof setTimeout> | null = null;
-let inFlight = false;
+let inFlight = 0;
+const MAX_PARALLEL = 3;
 
 type Listener = () => void;
 const listeners = new Set<Listener>();
@@ -73,16 +74,16 @@ export function queueForTranslation(text: string) {
   if (failed.has(text) || pending.has(text) || readCache()[text]) return;
   pending.add(text);
   if (flushTimer) clearTimeout(flushTimer);
-  flushTimer = setTimeout(() => void flush(), 400);
+  flushTimer = setTimeout(() => void flush(), 250);
 }
 
 async function flush() {
   flushTimer = null;
-  if (inFlight || pending.size === 0) return;
+  if (inFlight >= MAX_PARALLEL || pending.size === 0) return;
 
-  const batch = Array.from(pending).slice(0, 60);
+  const batch = Array.from(pending).slice(0, 40);
   batch.forEach((t) => pending.delete(t));
-  inFlight = true;
+  inFlight += 1;
   try {
     const { autoTranslateToEnglish } = await import("@/lib/auto-translate.functions");
     const result = await autoTranslateToEnglish({ data: { texts: batch } });
@@ -105,8 +106,8 @@ async function flush() {
     // Misslyckas översättningen står svenskan kvar – aldrig tom text.
     batch.forEach((t) => failed.add(t));
   } finally {
-    inFlight = false;
-    if (pending.size > 0) flushTimer = setTimeout(() => void flush(), 600);
+    inFlight -= 1;
+    if (pending.size > 0) flushTimer = setTimeout(() => void flush(), 150);
   }
 }
 
