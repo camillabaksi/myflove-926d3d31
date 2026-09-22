@@ -708,7 +708,7 @@ export default function Layout({ children }: LayoutProps) {
   }, [navSearch, navItems]);
 
   /**
-   * Huvudnavigationen: Översikt · Flow · QuickFlow · Hälsa · Återhämtning,
+   * Huvudnavigationen: Översikt · Flow · Hälsa · Återhämtning,
    * med allt annat under "Mer". Samma för alla, oavsett konto eller läge.
    */
   const primaryNav = useMemo(() => {
