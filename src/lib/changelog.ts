@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-22";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "All träning samlad i Träningsprogram",
+    items: [
+      "Skapa mitt pass med Flow ligger nu högst upp inne i Träningsprogram i stället för på en separat träningssida (2026-09-22)",
+      "Skapade pass kan startas, sparas eller läggas direkt i det befintliga träningsprogrammet (2026-09-22)",
+      "Mina pass, genomförda pass och färdiga veckoprogram finns i samma träningssektion utan att tidigare data ändrats (2026-09-22)",
+      "Den gamla adressen till passbyggaren leder vidare till Träningsprogram (2026-09-22)",
+    ],
+  },
+  {
     title: "Flow bygger passet med AI",
     items: [
       "Skapa mitt pass använder AI som väger in energi, fritext, tid, plats, utrustning, fokus och ömma områden (2026-09-22)",

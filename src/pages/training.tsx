@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "wouter";
-
 import { useServerFn } from "@tanstack/react-start";
 import Layout from "@/components/layout";
 import AdaptiveIntentPrompt from "@/components/adaptive-intent-prompt";
+import WorkoutBuilderPanel from "@/components/workout/workout-builder-panel";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { MyFloveThinking } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
@@ -51,6 +50,8 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import CollapsibleSection from "@/components/collapsible-section";
 import { celebrateFromEvent } from "@/lib/celebrate";
+import { exerciseById } from "@/lib/exercise-library";
+import type { Workout } from "@/lib/workout-generator";
 
 const FOCUS: { id: TrainingGoal["focus"]; label: string }[] = [
   { id: "styrka", label: "Styrka" },
@@ -162,6 +163,7 @@ export default function TrainingPage() {
   const run = useServerFn(generateTrainingProgram);
 
   const [view, setView] = useState<TrainingView>("overview");
+  const [showWorkoutBuilder, setShowWorkoutBuilder] = useState(false);
   const [weightInput, setWeightInput] = useState("");
   const [weightDate, setWeightDate] = useState(() => new Date().toISOString().slice(0, 10));
   const [weightNote, setWeightNote] = useState("");
@@ -401,6 +403,50 @@ export default function TrainingPage() {
     await generateWith(payload);
   };
 
+  const addWorkoutToProgram = (workout: Workout) => {
+    const session: TrainingSession = {
+      day: "Valfri dag",
+      title: workout.title,
+      type:
+        workout.intent === "rörlighet"
+          ? "rörlighet"
+          : workout.intent === "återhämtning"
+            ? "vila"
+            : "styrka",
+      minutes: workout.minutes,
+      exercises: workout.blocks
+        .map((block) => exerciseById(block.exerciseId)?.name)
+        .filter((name): name is string => name != null),
+    };
+
+    if (state.program) {
+      addSession(session);
+    } else {
+      saveProgram(
+        {
+          goal: "Träna på ett sätt som passar dagens energi",
+          focus: workout.intent === "styrka" ? "styrka" : "blandat",
+          daysPerWeek: 1,
+          minutesPerSession: workout.minutes,
+          level: "nybörjare",
+          days: ["Valfri dag"],
+          equipment: workout.equipment.join(", "),
+          limitations: workout.limitations.join(", "),
+        },
+        {
+          intro: "Ditt Flow-pass ligger redo i programmet.",
+          sessions: [session],
+          note: "Du väljer själv när passet passar.",
+        },
+      );
+    }
+
+    toast({
+      title: "Tillagt i ditt program",
+      description: `${workout.title} finns nu bland dina färdiga pass.`,
+    });
+  };
+
   const week = lastDays(7);
   const maxSteps = Math.max(state.stepGoal, ...week.map((d) => d.steps), 1);
   const stepPct = Math.min(100, Math.round((stepsToday / state.stepGoal) * 100));
@@ -477,24 +523,6 @@ export default function TrainingPage() {
                   : (SECTIONS.find((s) => s.id === view)?.desc ?? "")}
               </p>
             </header>
-
-            {view === "overview" && (
-              <Link
-                href="/skapa-pass"
-                className="surface-card flex items-center gap-3 p-4 transition hover:opacity-90"
-              >
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                  <Sparkles size={20} />
-                </span>
-                <span className="min-w-0 flex-1">
-                  <span className="block font-semibold text-ink">✨ Skapa mitt pass</span>
-                  <span className="block text-sm text-muted-foreground">
-                    Beskriv vad du behöver – Flow bygger ett pass efter dagens energi.
-                  </span>
-                </span>
-                <ChevronRight size={16} className="shrink-0 text-muted-foreground" />
-              </Link>
-            )}
 
             {view === "overview" && (
 
@@ -948,6 +976,42 @@ export default function TrainingPage() {
 
             {view === "program" && (
               <>
+                <section className="surface-card space-y-3 p-5" aria-label="Skapa mitt pass med Flow">
+                  <div className="flex items-start gap-3">
+                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                      <Sparkles size={20} aria-hidden />
+                    </span>
+                    <div className="min-w-0">
+                      <h2 className="text-lg font-semibold text-ink">Skapa mitt pass med Flow</h2>
+                      <p className="text-sm text-muted-foreground">
+                        Flow bygger ett pass efter din energi, tid och det kroppen behöver idag.
+                      </p>
+                    </div>
+                  </div>
+                  <Button
+                    type="button"
+                    size="lg"
+                    className="min-h-12 w-full rounded-2xl"
+                    onClick={() => setShowWorkoutBuilder(true)}
+                  >
+                    <Sparkles size={18} aria-hidden /> Skapa mitt pass med Flow
+                  </Button>
+                </section>
+
+                <WorkoutBuilderPanel
+                  showBuilder={showWorkoutBuilder}
+                  onOpenBuilder={() => setShowWorkoutBuilder(true)}
+                  onCloseBuilder={() => setShowWorkoutBuilder(false)}
+                  onAddToProgram={addWorkoutToProgram}
+                />
+
+                <div className="pt-2">
+                  <h2 className="font-display text-xl font-bold text-ink">Mina program</h2>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    Dina färdiga veckoprogram och inställningar finns kvar här.
+                  </p>
+                </div>
+
                 <CollapsibleSection
                   className="surface-card p-5"
                   headingClassName="text-lg font-semibold text-ink"
