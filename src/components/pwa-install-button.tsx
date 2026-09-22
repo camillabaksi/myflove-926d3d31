@@ -78,37 +78,37 @@ export default function PwaInstallButton({
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <FlowMascot size="xs" mood="wave" bump />
-              Så lägger du till MyFlove
+              {t("Så lägger du till MyFlove")}
             </DialogTitle>
             <DialogDescription>
-              Ha Flow nära till hands 💜 – appen hamnar direkt på din hemskärm.
+              {t("Ha Flow nära till hands 💜 – appen hamnar direkt på din hemskärm.")}
             </DialogDescription>
           </DialogHeader>
           {isIos ? (
             <ol className="space-y-2 text-sm text-muted-foreground">
               <li className="flex items-start gap-2">
                 <Share className="mt-0.5 size-4 shrink-0" />
-                <span>1. Tryck på Dela längst ner i Safari.</span>
+                <span>{t("1. Tryck på Dela längst ner i Safari.")}</span>
               </li>
               <li className="flex items-start gap-2">
                 <Check className="mt-0.5 size-4 shrink-0" />
-                <span>2. Välj ”Lägg till på hemskärmen” och tryck Lägg till.</span>
+                <span>{t("2. Välj ”Lägg till på hemskärmen” och tryck Lägg till.")}</span>
               </li>
             </ol>
           ) : (
             <ol className="space-y-2 text-sm text-muted-foreground">
               <li className="flex items-start gap-2">
                 <Menu className="mt-0.5 size-4 shrink-0" />
-                <span>1. Öppna webbläsarens meny (⋮ eller ☰).</span>
+                <span>{t("1. Öppna webbläsarens meny (⋮ eller ☰).")}</span>
               </li>
               <li className="flex items-start gap-2">
                 <Check className="mt-0.5 size-4 shrink-0" />
-                <span>2. Välj ”Installera app” eller ”Lägg till på startskärmen”.</span>
+                <span>{t("2. Välj ”Installera app” eller ”Lägg till på startskärmen”.")}</span>
               </li>
             </ol>
           )}
           <Button className="mt-2 w-full rounded-full" onClick={() => setShowInstallHelp(false)}>
-            Okej, jag fixar det
+            {t("Okej, jag fixar det")}
           </Button>
         </DialogContent>
       </Dialog>
