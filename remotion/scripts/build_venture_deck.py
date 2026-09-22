@@ -1,4 +1,4 @@
-"""Bygger en redigerbar Venture Cup-pitchdeck (PPTX) med samma innehåll som pitchfilmerna."""
+"""Bygger en redigerbar MyFlove-pitchdeck (PPTX) med samma innehåll som pitchfilmerna."""
 from pathlib import Path
 import importlib.util
 
@@ -102,12 +102,12 @@ def build(lang):
             s.shapes.add_picture(str(img), inch(8.1 + (4.4 - pw) / 2), inch(1.13), inch(pw), inch(ph))
 
         textbox(s, 0.85, 6.25, 3.0, 0.4, "MyFlove", 14, INK, bold=True, font="Plus Jakarta Sans")
-        foot = textbox(s, 9.3, 6.3, 3.2, 0.4, "VENTURE CUP 2026", 10, VIOLET, bold=True, font="Inter")
+        foot = textbox(s, 9.3, 6.3, 3.2, 0.4, "MYFLOVE · 2026", 10, VIOLET, bold=True, font="Inter")
         foot.text_frame.paragraphs[0].alignment = PP_ALIGN.RIGHT
 
         s.notes_slide.notes_text_frame.text = f"{vp.DURATIONS[idx]} sekunder i filmversionen."
 
-    out = Path("/mnt/documents") / f"MyFlove_Venture_Cup_2026_Redigerbar_{lang}_16x9_v3.pptx"
+    out = Path("/mnt/documents") / f"MyFlove_Pitchdeck_2026_Redigerbar_{lang}_16x9_v4.pptx"
     prs.save(out)
     print(out)
 
