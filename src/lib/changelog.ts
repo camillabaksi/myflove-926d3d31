@@ -6,9 +6,20 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-09-21";
+export const CHANGELOG_UPDATED = "2026-09-22";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  {
+    title: "Flow skapar ditt pass",
+    items: [
+      "Ny sida Skapa mitt pass med val av Styrka, Rörlighet, Återhämtning eller Eget upplägg (2026-09-22)",
+      "Fritext och chips för energi, tid, plats, utrustning, fokus och känsliga områden (2026-09-22)",
+      "Passet anpassas efter dagens energi och väljer bort övningar som ofta belastar det du angett (2026-09-22)",
+      "Övningskort med illustration, set och reps, teknikpunkter, byt övning och markera klar (2026-09-22)",
+      "Steg-för-steg-läge med vilotimer, samt loggning i historiken och Mina pass (2026-09-22)",
+      "Kalorier visas som grov uppskattning och texten är allmän träningsvägledning, inte vård (2026-09-22)",
+    ],
+  },
   {
     title: "Ny Android-app (version 5.3, versionCode 12)",
     items: [

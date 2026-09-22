@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "wouter";
+
 import { useServerFn } from "@tanstack/react-start";
 import Layout from "@/components/layout";
 import AdaptiveIntentPrompt from "@/components/adaptive-intent-prompt";
@@ -477,6 +479,25 @@ export default function TrainingPage() {
             </header>
 
             {view === "overview" && (
+              <Link
+                href="/skapa-pass"
+                className="surface-card flex items-center gap-3 p-4 transition hover:opacity-90"
+              >
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                  <Sparkles size={20} />
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block font-semibold text-ink">✨ Skapa mitt pass</span>
+                  <span className="block text-sm text-muted-foreground">
+                    Beskriv vad du behöver – Flow bygger ett pass efter dagens energi.
+                  </span>
+                </span>
+                <ChevronRight size={16} className="shrink-0 text-muted-foreground" />
+              </Link>
+            )}
+
+            {view === "overview" && (
+
               <AdaptiveIntentPrompt
                 source="traning"
                 chips={["Jag vill träna", "Jag vill gå en promenad", "Jag vill röra på mig lite"]}

@@ -34,6 +34,7 @@ import { Route as AppStudierRouteImport } from './routes/_app.studier'
 import { Route as AppStopPausRouteImport } from './routes/_app.stop-paus'
 import { Route as AppStatistikRouteImport } from './routes/_app.statistik'
 import { Route as AppStadningRouteImport } from './routes/_app.stadning'
+import { Route as AppSkapaPassRouteImport } from './routes/_app.skapa-pass'
 import { Route as AppShoppingRouteImport } from './routes/_app.shopping'
 import { Route as AppRelationerRouteImport } from './routes/_app.relationer'
 import { Route as AppQuickflowRouteImport } from './routes/_app.quickflow'
@@ -213,6 +214,11 @@ const AppStatistikRoute = AppStatistikRouteImport.update({
 const AppStadningRoute = AppStadningRouteImport.update({
   id: '/stadning',
   path: '/stadning',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSkapaPassRoute = AppSkapaPassRouteImport.update({
+  id: '/skapa-pass',
+  path: '/skapa-pass',
   getParentRoute: () => AppRoute,
 } as any)
 const AppShoppingRoute = AppShoppingRouteImport.update({
@@ -556,6 +562,7 @@ export interface FileRoutesByFullPath {
   '/quickflow': typeof AppQuickflowRoute
   '/relationer': typeof AppRelationerRoute
   '/shopping': typeof AppShoppingRoute
+  '/skapa-pass': typeof AppSkapaPassRoute
   '/stadning': typeof AppStadningRoute
   '/statistik': typeof AppStatistikRoute
   '/stop-paus': typeof AppStopPausRoute
@@ -637,6 +644,7 @@ export interface FileRoutesByTo {
   '/quickflow': typeof AppQuickflowRoute
   '/relationer': typeof AppRelationerRoute
   '/shopping': typeof AppShoppingRoute
+  '/skapa-pass': typeof AppSkapaPassRoute
   '/stadning': typeof AppStadningRoute
   '/statistik': typeof AppStatistikRoute
   '/stop-paus': typeof AppStopPausRoute
@@ -720,6 +728,7 @@ export interface FileRoutesById {
   '/_app/quickflow': typeof AppQuickflowRoute
   '/_app/relationer': typeof AppRelationerRoute
   '/_app/shopping': typeof AppShoppingRoute
+  '/_app/skapa-pass': typeof AppSkapaPassRoute
   '/_app/stadning': typeof AppStadningRoute
   '/_app/statistik': typeof AppStatistikRoute
   '/_app/stop-paus': typeof AppStopPausRoute
@@ -803,6 +812,7 @@ export interface FileRouteTypes {
     | '/quickflow'
     | '/relationer'
     | '/shopping'
+    | '/skapa-pass'
     | '/stadning'
     | '/statistik'
     | '/stop-paus'
@@ -884,6 +894,7 @@ export interface FileRouteTypes {
     | '/quickflow'
     | '/relationer'
     | '/shopping'
+    | '/skapa-pass'
     | '/stadning'
     | '/statistik'
     | '/stop-paus'
@@ -966,6 +977,7 @@ export interface FileRouteTypes {
     | '/_app/quickflow'
     | '/_app/relationer'
     | '/_app/shopping'
+    | '/_app/skapa-pass'
     | '/_app/stadning'
     | '/_app/statistik'
     | '/_app/stop-paus'
@@ -1186,6 +1198,13 @@ declare module '@tanstack/react-router' {
       path: '/stadning'
       fullPath: '/stadning'
       preLoaderRoute: typeof AppStadningRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/skapa-pass': {
+      id: '/_app/skapa-pass'
+      path: '/skapa-pass'
+      fullPath: '/skapa-pass'
+      preLoaderRoute: typeof AppSkapaPassRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/shopping': {
@@ -1624,6 +1643,7 @@ interface AppRouteChildren {
   AppQuickflowRoute: typeof AppQuickflowRoute
   AppRelationerRoute: typeof AppRelationerRoute
   AppShoppingRoute: typeof AppShoppingRoute
+  AppSkapaPassRoute: typeof AppSkapaPassRoute
   AppStadningRoute: typeof AppStadningRoute
   AppStatistikRoute: typeof AppStatistikRoute
   AppStopPausRoute: typeof AppStopPausRoute
@@ -1686,6 +1706,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppQuickflowRoute: AppQuickflowRoute,
   AppRelationerRoute: AppRelationerRoute,
   AppShoppingRoute: AppShoppingRoute,
+  AppSkapaPassRoute: AppSkapaPassRoute,
   AppStadningRoute: AppStadningRoute,
   AppStatistikRoute: AppStatistikRoute,
   AppStopPausRoute: AppStopPausRoute,

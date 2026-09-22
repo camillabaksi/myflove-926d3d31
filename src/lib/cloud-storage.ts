@@ -99,6 +99,8 @@ export const CLOUD_USER_DATA_KEYS = new Set([
   "myflove-routines",
   "myflove-routines-done",
   "myflove-training",
+  "myflove-workouts-saved",
+  "myflove-workout-logs",
   "myflove-workflow-meta",
   "myflove-workflow-endofday",
   "myflove-workflow-settings",
