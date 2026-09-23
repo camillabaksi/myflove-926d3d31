@@ -6,6 +6,7 @@ import { MyFloveHeader } from "@/components/myflove";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import LightBoost from "@/components/light-boost";
 import PauseSession from "@/components/recovery/pause-session";
+import RecoveryGapCard from "@/components/recovery/recovery-gap-card";
 import EnergyAfterCheck from "@/components/recovery/energy-after-check";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -76,6 +77,8 @@ export default function PausePage() {
                 onDone={() => setCheck(null)}
               />
             )}
+
+            <RecoveryGapCard />
 
             <section
               className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft"
