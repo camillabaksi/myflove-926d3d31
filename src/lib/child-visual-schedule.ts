@@ -11,6 +11,8 @@ export interface VisualActivityMeta {
   pictogram: PictogramId;
   category: VisualActivityCategory;
   tone: VisualActivityTone;
+  /** Optional end time kept in the existing visual metadata envelope. */
+  endTime?: string;
 }
 
 export interface ActivityBankItem extends VisualActivityMeta { title: string; keywords?: string[] }
@@ -90,7 +92,19 @@ export const ACTIVITY_BANK: Record<VisualActivityCategory, ActivityBankItem[]> =
   ],
 };
 
-export const CATEGORY_LABELS: Record<VisualActivityCategory, string> = { hemma: "Hemma", skola: "Skola", mat: "Mat", hygien: "Hygien", transport: "Transport", fritid: "Fritid", träning: "Träning", återhämtning: "Återhämtning", familj: "Familj", vård: "Vård" };
+export const CATEGORY_LABELS: Record<VisualActivityCategory, string> = { hemma: "Hemma", skola: "Skola", mat: "Mat", hygien: "Rutiner", transport: "Transport", fritid: "Fritid", träning: "Aktivitet", återhämtning: "Återhämtning", familj: "Familj", vård: "Vård" };
+export const CATEGORY_STYLES: Record<VisualActivityCategory, { card: string; subtle: string; marker: string }> = {
+  hemma: { card: "border-sun bg-sun/55", subtle: "border-sun/80 bg-sun/20", marker: "bg-sun" },
+  skola: { card: "border-sky bg-sky/65", subtle: "border-sky/80 bg-sky/20", marker: "bg-sky" },
+  mat: { card: "border-mint bg-mint/65", subtle: "border-mint/80 bg-mint/20", marker: "bg-mint" },
+  hygien: { card: "border-lavender bg-lavender/70", subtle: "border-lavender bg-lavender/20", marker: "bg-lavender" },
+  transport: { card: "border-border bg-secondary/80", subtle: "border-border bg-secondary/35", marker: "bg-muted-foreground/45" },
+  fritid: { card: "border-blush bg-blush/65", subtle: "border-blush/80 bg-blush/20", marker: "bg-blush" },
+  träning: { card: "border-sun bg-sun/75", subtle: "border-sun bg-sun/25", marker: "bg-sun" },
+  återhämtning: { card: "border-mint bg-mint/75", subtle: "border-mint bg-mint/25", marker: "bg-mint" },
+  familj: { card: "border-sky bg-mint/55", subtle: "border-sky/70 bg-mint/20", marker: "bg-sky" },
+  vård: { card: "border-blush bg-blush/75", subtle: "border-blush bg-blush/25", marker: "bg-blush" },
+};
 export const VISUAL_TONES: VisualActivityTone[] = ["lavender", "blush", "mint", "sky", "sun"];
 export const ALL_PICTOGRAMS = Object.values(ACTIVITY_BANK).flat();
 const VALID_PICTOGRAMS = new Set<PictogramId>(ALL_PICTOGRAMS.map((item) => item.pictogram));
@@ -99,7 +113,7 @@ const META_PREFIX = "[myflove-visual:";
 const FALLBACK_META: VisualActivityMeta = { pictogram: "home", category: "hemma", tone: "lavender" };
 
 export function encodeVisualNotes(meta: VisualActivityMeta, note = ""): string {
-  const safeMeta = { pictogram: meta.pictogram, category: meta.category, tone: meta.tone };
+  const safeMeta = { pictogram: meta.pictogram, category: meta.category, tone: meta.tone, ...(meta.endTime ? { endTime: meta.endTime } : {}) };
   return `${META_PREFIX}${JSON.stringify(safeMeta)}]\n${note.trim()}`;
 }
 
@@ -116,8 +130,49 @@ export function decodeVisualNotes(notes?: string | null): { meta: VisualActivity
     if (!category || !(category in ACTIVITY_BANK) || !tone || !VISUAL_TONES.includes(tone)) return { meta: FALLBACK_META, note: notes.slice(end + 2) };
     const legacy = typeof candidate.emoji === "string" ? LEGACY_EMOJI[candidate.emoji] : undefined;
     const pictogram = candidate.pictogram && VALID_PICTOGRAMS.has(candidate.pictogram) ? candidate.pictogram : legacy ?? "home";
-    return { meta: { pictogram, category, tone }, note: notes.slice(end + 2) };
+    const endTime = typeof candidate.endTime === "string" && /^([01]\d|2[0-3]):[0-5]\d$/.test(candidate.endTime) ? candidate.endTime : undefined;
+    return { meta: { pictogram, category, tone, ...(endTime ? { endTime } : {}) }, note: notes.slice(end + 2) };
   } catch { return { meta: FALLBACK_META, note: notes.slice(end + 2) }; }
+}
+
+export type ChildRepeatMode = "none" | "daily" | "weekdays" | "weekly";
+
+export function activityOccursOn(item: { date: string | null; repeat: ChildRepeatMode }, date: string): boolean {
+  if (!item.date || date < item.date) return false;
+  if (item.repeat === "none") return item.date === date;
+  const target = parseISODate(date);
+  if (item.repeat === "daily") return true;
+  if (item.repeat === "weekdays") return target.getDay() >= 1 && target.getDay() <= 5;
+  const source = parseISODate(item.date);
+  return target.getDay() === source.getDay();
+}
+
+export function minutesFromTime(time?: string | null): number | null {
+  if (!time || !/^([01]\d|2[0-3]):[0-5]\d/.test(time)) return null;
+  const [hours, minutes] = time.split(":").map(Number);
+  return hours * 60 + minutes;
+}
+
+export function timeFromMinutes(value: number): string {
+  const safe = Math.max(0, Math.min(23 * 60 + 59, value));
+  return `${String(Math.floor(safe / 60)).padStart(2, "0")}:${String(safe % 60).padStart(2, "0")}`;
+}
+
+export function buildMultiMovePatches<T extends { id: string; date: string | null; time: string | null }>(
+  items: T[],
+  targetDate: string,
+  targetTime?: string,
+): Array<{ id: string; date: string; time: string | null }> {
+  const sorted = [...items].sort((a, b) => (a.date ?? "").localeCompare(b.date ?? "") || (a.time ?? "99:99").localeCompare(b.time ?? "99:99"));
+  const firstMinutes = minutesFromTime(sorted[0]?.time);
+  const targetMinutes = minutesFromTime(targetTime);
+  return sorted.map((item) => {
+    const itemMinutes = minutesFromTime(item.time);
+    const shifted = targetMinutes !== null && firstMinutes !== null && itemMinutes !== null
+      ? timeFromMinutes(targetMinutes + itemMinutes - firstMinutes)
+      : item.time?.slice(0, 5) ?? null;
+    return { id: item.id, date: targetDate, time: shifted };
+  });
 }
 
 export function searchActivityBank(query: string, category?: VisualActivityCategory): ActivityBankItem[] {
