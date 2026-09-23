@@ -12,7 +12,15 @@ export interface Child {
   birthdate: string | null;
   color: string;
   note: string | null;
+  /**
+   * Förälderns egna observationer: "det här brukar hjälpa mitt barn".
+   * Detta är privat familjeinformation – inte diagnos eller medicinsk data.
+   */
+  helps: string[];
+  /** Valfri avatar (emoji eller bild-url). */
+  avatar: string | null;
 }
+
 
 export type ChildItemKind = "activity" | "task" | "note" | "doc";
 
