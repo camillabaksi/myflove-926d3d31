@@ -21,6 +21,26 @@ export function applyCloudStorageUpdate<T>(current: T, update: T | ((previous: T
   return update instanceof Function ? update(current) : update;
 }
 
+/**
+ * Slår ihop en lokal lista med molnets lista utan att tappa något.
+ *
+ * Skyddar mot att en enhet med en gammal kopia (t.ex. en flik som legat
+ * öppen sedan igår) skriver bort saker som lagts till på en annan enhet.
+ * Poster matchas på `id`; molnets extra poster läggs först och lokala
+ * ändringar vinner för poster som finns på båda ställena.
+ */
+export function mergeMissingCloudEntries<T>(local: T, cloud: unknown): T {
+  if (!Array.isArray(local) || !Array.isArray(cloud)) return local;
+  const hasId = (v: unknown): v is { id: string } =>
+    !!v && typeof v === "object" && typeof (v as { id?: unknown }).id === "string";
+  if (local.length > 0 && !local.every(hasId)) return local;
+  if (!cloud.every(hasId)) return local;
+  const localIds = new Set((local as unknown[]).filter(hasId).map((v) => v.id));
+  const missing = (cloud as unknown[]).filter((v) => hasId(v) && !localIds.has(v.id));
+  if (missing.length === 0) return local;
+  return [...missing, ...(local as unknown[])] as T;
+}
+
 export async function getSyncUser(): Promise<User | null> {
   if (cachedUser) return cachedUser.user;
   if (!inflightUser) {
