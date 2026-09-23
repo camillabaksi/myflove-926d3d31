@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-23";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Family Flow 1.0",
+    items: [
+      "Nytt område Familj under Mer – få vardagen att fungera för hela familjen (2026-09-23)",
+      "Skriv en familjesituation, välj om det gäller dig, ett barn eller familjen, och få små steg utifrån dagens kapacitet (2026-09-23)",
+      "Barnprofiler med namn, bild och \"det här brukar hjälpa mitt barn\" – privat, utan diagnosfält (2026-09-23)",
+      "Godkända förslag hamnar som vanliga uppgifter i din dag och använder befintligt Nästa rimliga steg (2026-09-23)",
+    ],
+  },
+  {
     title: "Privat Pitch & Investor i admin",
     items: [
       "Ny privat sektion i adminvyn där pitchdeck, ekonomi, financial model, BMC, quick answers och KPI-material kan samlas (2026-09-23)",
