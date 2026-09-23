@@ -24,6 +24,8 @@ export const EN_ADMIN: Record<string, string> = {
   Feedback: "Feedback",
   "Användare & roller": "Users & Roles",
   Changelog: "Changelog",
+  "Pitch & Investor": "Pitch & Investor",
+
   "Laddar rapporter…": "Loading reports…",
   "Fel:": "Error:",
   "Inga rapporter ännu.": "No reports yet.",
