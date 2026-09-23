@@ -16,6 +16,25 @@ export interface VisualActivityMeta {
   endTime?: string;
   /** Optional label inside the existing Family area; never a top-level area. */
   familyLabel?: FamilyActivityLabel;
+  /**
+   * Förälderns egen information om aktiviteten – aldrig ett energivärde och
+   * aldrig något om barnets kapacitet. Allt är frivilligt.
+   */
+  parentPresence?: boolean;
+  /** Förberedelse före, minuter. */
+  prepMinutes?: number;
+  /** Resa/förflyttning, minuter. */
+  travelMinutes?: number;
+  /** Användaren vill gärna ha en lugn stund efteråt. */
+  recoveryAfter?: boolean;
+}
+
+/** Valbara minutvärden – inga påhittade siffror, användaren väljer själv. */
+export const PREP_MINUTE_CHOICES = [5, 10, 15] as const;
+export const TRAVEL_MINUTE_CHOICES = [5, 10, 15, 20] as const;
+
+function safeMinutes(value: unknown, allowed: readonly number[]): number | undefined {
+  return typeof value === "number" && allowed.includes(value) ? value : undefined;
 }
 
 export interface ActivityBankItem extends VisualActivityMeta { title: string; keywords?: string[] }
