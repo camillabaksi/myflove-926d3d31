@@ -11,6 +11,7 @@ import {
   ImagePlus,
   Images,
   Library,
+  Search,
   Heart,
   Pencil,
   Plus,
@@ -34,10 +35,13 @@ import {
   CATEGORY_LABELS,
   VISUAL_TONES,
   activityDedupKey,
+  copiedVisualNotes,
   dayPart,
   decodeVisualNotes,
   encodeVisualNotes,
   getScheduleGuidance,
+  searchActivityBank,
+  shiftDateBetween,
   transitionPrompt,
   weekDates,
   type ActivityBankItem,
@@ -45,6 +49,8 @@ import {
   type VisualActivityMeta,
   type VisualActivityTone,
 } from "@/lib/child-visual-schedule";
+import { ActivityPictogram } from "@/components/family/activity-pictogram";
+import type { ChildScheduleTemplate } from "@/lib/child-schedule-templates";
 import { emitActivityDone } from "@/lib/activity-energy-event";
 import type { Child, ChildItem, ChildItemPatch } from "@/hooks/use-children";
 import type { ChildScheduleEntry } from "@/components/child-schedule";
@@ -52,6 +58,7 @@ import { isoWeekNumberFromString } from "@/lib/iso-week";
 import { cn } from "@/lib/utils";
 
 const SCHEDULE_KEY = "myflove-child-schedules";
+const TEMPLATE_KEY = "myflove-child-schedule-templates";
 const DAY_NAMES = ["Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag", "Söndag"];
 const SHORT_DAYS = ["Mån", "Tis", "Ons", "Tor", "Fre", "Lör", "Sön"];
 const CATEGORY_KEYS = Object.keys(ACTIVITY_BANK) as VisualActivityCategory[];
@@ -86,7 +93,7 @@ const defaultDraft = (date: string): Draft => ({
   date,
   time: "",
   note: "",
-  meta: { emoji: "⭐", category: "hemma", tone: "lavender" },
+  meta: { pictogram: "home", category: "hemma", tone: "lavender" },
   file: null,
 });
 
@@ -112,14 +119,13 @@ function ActivityVisual({ item, className, openDoc }: { item: ChildItem; classNa
   return item.file_path ? (
     <ActivityImage path={item.file_path} title={item.title} openDoc={openDoc} />
   ) : (
-    <span className={cn("flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border text-2xl", TONE_CLASS[meta.tone], className)} aria-hidden>
-      {meta.emoji}
-    </span>
+    <ActivityPictogram id={meta.pictogram} tone={meta.tone} className={cn("rounded-2xl", className)} />
   );
 }
 
 export default function VisualChildSchedule({
   child,
+  children,
   items,
   onClose,
   addItem,
@@ -127,9 +133,11 @@ export default function VisualChildSchedule({
   toggleItem,
   deleteItem,
   uploadDoc,
+  copyDoc,
   openDoc,
 }: {
   child: Child;
+  children: Child[];
   items: ChildItem[];
   onClose: () => void;
   addItem: (input: { childId: string; kind: "activity"; title: string; notes?: string; date?: string; time?: string; filePath?: string }) => Promise<string>;
@@ -137,18 +145,27 @@ export default function VisualChildSchedule({
   toggleItem: (id: string, completed: boolean) => Promise<void>;
   deleteItem: (item: ChildItem) => Promise<void>;
   uploadDoc: (childId: string, file: File) => Promise<string>;
+  copyDoc: (sourcePath: string, targetChildId: string) => Promise<string>;
   openDoc: (path: string) => Promise<string>;
 }) {
   const { t, locale } = useLang();
   const { flow } = useFlowScore();
   const { openItems: quickItems, absorb } = useQuickflow();
   const [schedules] = useCloudSyncedStorage<Record<string, ChildScheduleEntry[]>>(SCHEDULE_KEY, {});
+  const [templates, setTemplates] = useCloudSyncedStorage<ChildScheduleTemplate[]>(TEMPLATE_KEY, []);
   const [mode, setMode] = useState<"week" | "today">("today");
   const [anchor, setAnchor] = useState(todayISO());
   const [adding, setAdding] = useState(false);
   const [editing, setEditing] = useState<ChildItem | null>(null);
   const [draft, setDraft] = useState<Draft>(() => defaultDraft(todayISO()));
   const [saving, setSaving] = useState(false);
+  const [search, setSearch] = useState("");
+  const [pickerCategory, setPickerCategory] = useState<VisualActivityCategory | "alla">("alla");
+  const [copying, setCopying] = useState<{ scope: "activity" | "day" | "week"; item?: ChildItem; sourceDate?: string } | null>(null);
+  const [copyDate, setCopyDate] = useState(addDaysISO(todayISO(), 1));
+  const [copyChildId, setCopyChildId] = useState(child.id);
+  const [includePrivateNote, setIncludePrivateNote] = useState(false);
+  const [copyingNow, setCopyingNow] = useState(false);
   const galleryRef = useRef<HTMLInputElement>(null);
   const cameraRef = useRef<HTMLInputElement>(null);
 
@@ -174,6 +191,7 @@ export default function VisualChildSchedule({
   const guidance = getScheduleGuidance(openToday.length, capacityFromScore(score));
   const wantsWarning = child.helps.includes("Förvarna vid förändringar");
   const quickMatches = quickItems.filter((item) => item.text.toLocaleLowerCase("sv").includes(child.name.toLocaleLowerCase("sv")));
+  const pickerItems = useMemo(() => searchActivityBank(search, pickerCategory === "alla" ? undefined : pickerCategory), [search, pickerCategory]);
 
   const openAdd = (preset?: ActivityBankItem, date = mode === "today" ? today : anchor) => {
     setEditing(null);
@@ -226,20 +244,67 @@ export default function VisualChildSchedule({
     if (!item.completed) emitActivityDone({ id: `child-${item.id}`, title: item.title, ...(item.date ? { dueDate: item.date } : {}) });
   };
 
-  const copyWeek = async () => {
-    if (!window.confirm(t("Vill du kopiera den här veckan till nästa vecka?"))) return;
-    const source = childItems.filter((item) => item.date && dates.includes(item.date));
-    const existing = new Set(childItems.map((item) => activityDedupKey({ childId: item.child_id, title: item.title, date: item.date, time: item.time })));
+  const copyItems = async (source: ChildItem[], targetChildId: string, targetAnchor: string, sourceAnchor: string) => {
+    const existing = new Set(items.map((item) => activityDedupKey({ childId: item.child_id, title: item.title, date: item.date, time: item.time })));
     let copied = 0;
     for (const item of source) {
-      const targetDate = addDaysISO(item.date ?? dates[0]!, 7);
-      const key = activityDedupKey({ childId: child.id, title: item.title, date: targetDate, time: item.time });
+      if (!item.date) continue;
+      const targetDate = shiftDateBetween(item.date, sourceAnchor, targetAnchor);
+      const key = activityDedupKey({ childId: targetChildId, title: item.title, date: targetDate, time: item.time });
       if (existing.has(key)) continue;
-      await addItem({ childId: child.id, kind: "activity", title: item.title, date: targetDate, time: item.time ?? undefined, notes: item.notes ?? undefined });
+      let filePath = item.file_path ?? undefined;
+      if (filePath && targetChildId !== item.child_id) filePath = await copyDoc(filePath, targetChildId);
+      await addItem({ childId: targetChildId, kind: "activity", title: item.title, date: targetDate, time: item.time ?? undefined, notes: copiedVisualNotes(item.notes, targetChildId === item.child_id || includePrivateNote), filePath });
       existing.add(key);
       copied += 1;
     }
-    toast.success(t(copied ? `${copied} aktiviteter kopierades.` : "Nästa vecka innehåller redan aktiviteterna."));
+    return copied;
+  };
+
+  const performCopy = async () => {
+    if (!copying) return;
+    setCopyingNow(true);
+    try {
+      const source = copying.scope === "activity" && copying.item
+        ? [copying.item]
+        : copying.scope === "day" && copying.sourceDate
+          ? childItems.filter((item) => item.date === copying.sourceDate)
+          : childItems.filter((item) => item.date && dates.includes(item.date));
+      const sourceAnchor = copying.scope === "activity" ? copying.item?.date ?? today : copying.scope === "day" ? copying.sourceDate ?? today : dates[0] ?? today;
+      const copied = await copyItems(source, copyChildId, copyDate, sourceAnchor);
+      toast.success(t(copied ? `${copied} aktiviteter kopierades.` : "Aktiviteterna finns redan på måldatumet."));
+      setCopying(null);
+    } catch { toast.error(t("Kunde inte kopiera aktiviteterna.")); }
+    finally { setCopyingNow(false); }
+  };
+
+  const openCopy = (scope: "activity" | "day" | "week", item?: ChildItem, sourceDate?: string) => {
+    const sourceAnchor = item?.date ?? sourceDate ?? dates[0] ?? today;
+    setCopyDate(addDaysISO(sourceAnchor, scope === "week" ? 7 : 1));
+    setCopyChildId(child.id);
+    setIncludePrivateNote(false);
+    setCopying({ scope, item, sourceDate });
+  };
+
+  const saveDayTemplate = (sourceDate: string) => {
+    const source = childItems.filter((item) => item.date === sourceDate);
+    if (!source.length) { toast.info(t("Dagen har inga aktiviteter att spara.")); return; }
+    const name = window.prompt(t("Namn på mallen"), t("Min dagsmall"))?.trim();
+    if (!name) return;
+    setTemplates((currentTemplates) => [...currentTemplates, { id: crypto.randomUUID(), name, createdAt: new Date().toISOString(), items: source.map((item) => { const { meta } = decodeVisualNotes(item.notes); return { title: item.title, time: item.time?.slice(0, 5) ?? null, pictogram: meta.pictogram, category: meta.category, tone: meta.tone }; }) }]);
+    toast.success(t("Mallen är sparad utan privata anteckningar."));
+  };
+
+  const applyTemplate = async (template: ChildScheduleTemplate, targetDate: string) => {
+    const existing = new Set(items.map((item) => activityDedupKey({ childId: item.child_id, title: item.title, date: item.date, time: item.time })));
+    let copied = 0;
+    for (const templateItem of template.items) {
+      const key = activityDedupKey({ childId: child.id, title: templateItem.title, date: targetDate, time: templateItem.time });
+      if (existing.has(key)) continue;
+      await addItem({ childId: child.id, kind: "activity", title: templateItem.title, date: targetDate, time: templateItem.time ?? undefined, notes: encodeVisualNotes(templateItem) });
+      existing.add(key); copied += 1;
+    }
+    toast.success(t(copied ? `${copied} aktiviteter lades till.` : "Aktiviteterna finns redan den dagen."));
   };
 
   const importQuickItem = async (text: string, remindAt?: number) => {
@@ -248,7 +313,7 @@ export default function VisualChildSchedule({
     const time = when ? `${String(when.getHours()).padStart(2, "0")}:${String(when.getMinutes()).padStart(2, "0")}` : undefined;
     const key = activityDedupKey({ childId: child.id, title: text, date, time });
     if (!childItems.some((item) => activityDedupKey({ childId: item.child_id, title: item.title, date: item.date, time: item.time }) === key)) {
-      await addItem({ childId: child.id, kind: "activity", title: text, date, time, notes: encodeVisualNotes({ emoji: "🎒", category: "hemma", tone: "mint" }) });
+      await addItem({ childId: child.id, kind: "activity", title: text, date, time, notes: encodeVisualNotes({ pictogram: "bag", category: "hemma", tone: "mint" }) });
     }
     absorb(text);
     toast.success(t("Tillagd i barnets schema."));
