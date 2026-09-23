@@ -136,7 +136,8 @@ export function optionsForGap(
 ): RecoveryOption[] {
   const pool = [...CATALOGUE[capacity]];
   if (energyBoostTitle && capacity !== "låg") {
-    pool.unshift({
+    // Egna loggade aktiviteter är ett alternativ, inte det första förslaget.
+    pool.splice(1, 0, {
       id: "eget",
       label: energyBoostTitle,
       emoji: "💜",

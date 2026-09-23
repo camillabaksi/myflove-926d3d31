@@ -74,7 +74,7 @@ describe("optionsForGap", () => {
 
   it("använder det användaren loggat som energigivande", () => {
     const options = optionsForGap(30, "hög", "Promenad");
-    expect(options[0]?.label).toBe("Promenad");
+    expect(options.map((o) => o.label)).toContain("Promenad");
   });
 });
 
