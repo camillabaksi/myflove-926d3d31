@@ -206,6 +206,7 @@ export default function VisualChildSchedule({
   const nowMinutes = localNowMinutes(nowDate);
   const today = todayISO(nowDate);
   const dayDate = viewDate ?? today;
+  const dayChips = useMemo(() => weekDates(dayDate), [dayDate]);
   const isViewingToday = dayDate === today;
   const todayItems = useMemo(
     () => childItems.filter((item) => activityOccursOn(item, dayDate)).sort(compareDayItems),
