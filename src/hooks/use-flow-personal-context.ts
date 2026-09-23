@@ -13,6 +13,8 @@ import { impactContext } from "@/lib/impact-checkin";
 import { useCycle } from "@/hooks/use-cycle";
 import { cycleContext } from "@/lib/cycle";
 import { checkinContext } from "@/lib/flow-checkin-context";
+import { useFamilyLoad } from "@/hooks/use-family-load";
+import { familyLoadContext } from "@/lib/family-load";
 
 const TONE: Record<string, string> = {
   tyst: "Användaren vill ha få ord. Svara kort och bara på det som frågas.",
@@ -35,6 +37,7 @@ export function useFlowPersonalContext(): string {
   const { todayEnergyEntries } = useQuickCheckin();
   const { impact: impactEntry } = useImpactCheckin();
   const { cycle } = useCycle();
+  const familyLoad = useFamilyLoad();
 
   return useMemo(() => {
     const lines: string[] = ["Om användaren (personlig kontext, inte regler):"];
@@ -53,6 +56,9 @@ export function useFlowPersonalContext(): string {
 
     const cycleLine = cycleContext(cycle);
     if (cycleLine) lines.push(cycleLine);
+
+    const family = familyLoadContext(familyLoad);
+    if (family) lines.push(family);
 
     // Användarens egna ord från Mitt batteri – kontext, aldrig diagnos.
     const week = Date.now() - 7 * 24 * 60 * 60 * 1000;
@@ -97,5 +103,6 @@ export function useFlowPersonalContext(): string {
     todayEnergyEntries,
     impactEntry,
     cycle,
+    familyLoad,
   ]);
 }
