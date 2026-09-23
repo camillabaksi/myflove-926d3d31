@@ -1,3 +1,11 @@
+## 2026-09-23 – Återhämtning när dagen inte går att ändra
+
+- Flow letar efter realistiska luckor före, mellan och efter dagens fasta hållpunkter, med marginal för restid och förberedelse.
+- Förslagen anpassas efter dagens kapacitet och luckans längd – korta och lågtröskliga vid låg energi, fler alternativ vid högre.
+- Mikropaus, Ljusboost, Stopp och egna vardagsaktiviteter föreslås via befintliga vägar, och det du tidigare loggat som energigivande kan komma som alternativ.
+- Inget läggs in automatiskt: du väljer Ja, Välj annan eller Nej tack, och accepterad återhämtning blir en vanlig aktivitet i din dag utan dubbletter.
+- Kortet finns i Återhämtning och i Familj, där barnens schema räknas med utan att något av barnets aktiviteter tas bort.
+
 ## 2026-09-23 – Veckonummer i kalendrarna
 
 - Månadsvyn visar veckonummer i en egen kolumn till vänster.
