@@ -45,6 +45,7 @@ import {
   getScheduleGuidance,
   pictogramForActivity,
   searchActivityBank,
+  shiftEndTime,
   shiftDateBetween,
   transitionPrompt,
   weekDates,
@@ -282,7 +283,17 @@ export default function VisualChildSchedule({
     }
     setMovingNow(true);
     try {
-      for (const patch of patches) await updateItem(patch.id, { date: patch.date, time: patch.time });
+      for (const patch of patches) {
+        const source = selected.find((item) => item.id === patch.id);
+        if (!source) continue;
+        const decoded = decodeVisualNotes(source.notes);
+        const endTime = shiftEndTime(source.time, decoded.meta.endTime, patch.time);
+        await updateItem(patch.id, {
+          date: patch.date,
+          time: patch.time,
+          ...(endTime !== decoded.meta.endTime ? { notes: encodeVisualNotes({ ...decoded.meta, ...(endTime ? { endTime } : {}) }, decoded.note) } : {}),
+        });
+      }
       toast.success(t(patches.length === 1 ? "Aktiviteten har flyttats." : `${patches.length} aktiviteter har flyttats.`));
       setMovingIds(null);
       setSelectedIds([]);

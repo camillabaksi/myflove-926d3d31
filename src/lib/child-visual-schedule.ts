@@ -158,6 +158,14 @@ export function timeFromMinutes(value: number): string {
   return `${String(Math.floor(safe / 60)).padStart(2, "0")}:${String(safe % 60).padStart(2, "0")}`;
 }
 
+export function shiftEndTime(startTime: string | null, endTime: string | undefined, nextStartTime: string | null): string | undefined {
+  const start = minutesFromTime(startTime);
+  const end = minutesFromTime(endTime);
+  const nextStart = minutesFromTime(nextStartTime);
+  if (start === null || end === null || nextStart === null) return endTime;
+  return timeFromMinutes(nextStart + Math.max(0, end - start));
+}
+
 export function buildMultiMovePatches<T extends { id: string; date: string | null; time: string | null }>(
   items: T[],
   targetDate: string,

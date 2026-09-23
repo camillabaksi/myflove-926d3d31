@@ -13,6 +13,7 @@ import {
   copiedVisualNotes,
   searchActivityBank,
   shiftDateBetween,
+  shiftEndTime,
   startOfWeekISO,
   transitionPrompt,
   weekDates,
@@ -96,6 +97,11 @@ describe("child visual schedule", () => {
       { id: "dentist", date: "2026-09-24", time: "15:00" },
       { id: "bus", date: "2026-09-24", time: "16:30" },
     ]);
+  });
+
+  it("keeps the activity duration when its start time moves", () => {
+    expect(shiftEndTime("14:00", "14:45", "15:00")).toBe("15:45");
+    expect(shiftEndTime("14:00", undefined, "15:00")).toBeUndefined();
   });
 
   it("defines a distinct semantic area treatment for every category", () => {
