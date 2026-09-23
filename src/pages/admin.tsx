@@ -45,7 +45,7 @@ const STATUS_OPTIONS = ["open", "planned", "in_progress", "done", "wontfix"] as 
 export default function AdminPage() {
   const { isAdmin, loading: adminLoading } = useIsAdmin();
   const { t } = useLang();
-  const [tab, setTab] = useState<"friction" | "users" | "changelog">("friction");
+  const [tab, setTab] = useState<"friction" | "users" | "investor" | "changelog">("friction");
 
   if (adminLoading) {
     return (
