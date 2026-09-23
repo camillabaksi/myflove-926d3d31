@@ -1,3 +1,10 @@
+## 2026-09-23 – Family Flow möter Mitt batteri och Flow
+
+- Varje familjeaktivitet kan frivilligt märkas med om den kräver dig, förberedelse, resa och lugn stund efteråt.
+- Familj visar "Vad kräver dig idag?" utifrån ditt befintliga batteri – barnens aktiviteter får aldrig egna energivärden.
+- Återhämtningsförslag räknar med förberedelse och resa och lägger luckan efter det du själv markerat.
+- Flow ser familjens åtaganden i helheten och föreslår, men bokar aldrig om fasta tider.
+
 ## 2026-09-23 – Skydd mot att aktiviteter försvinner
 
 - Återställde 11 aktiviteter som försvann när en äldre enhet skrev över listan.

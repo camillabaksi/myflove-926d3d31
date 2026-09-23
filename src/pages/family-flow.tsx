@@ -5,6 +5,7 @@ import { HeartPulse, Lock } from "lucide-react";
 import Layout from "@/components/layout";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import ChildProfiles from "@/components/family/child-profiles";
+import FamilyLoadCard from "@/components/family/family-load-card";
 import FamilySituation from "@/components/family/family-situation";
 import VisualChildSchedule from "@/components/family/visual-child-schedule";
 import RecoveryGapCard from "@/components/recovery/recovery-gap-card";
@@ -89,6 +90,8 @@ export default function FamilyFlowPage() {
                 />
               )}
             </section>
+
+            <FamilyLoadCard />
 
             <RecoveryGapCard title={t("Du kan inte ändra dagen. Men vi kan göra den lite snällare.")} />
 

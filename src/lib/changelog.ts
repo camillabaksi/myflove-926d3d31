@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-23";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Family Flow möter Mitt batteri och Flow",
+    items: [
+      "Familjeaktiviteter kan märkas med närvaro, förberedelse, resa och lugn stund efteråt (2026-09-23)",
+      "Familj visar \"Vad kräver dig idag?\" utifrån ditt befintliga batteri (2026-09-23)",
+      "Återhämtning räknar med förberedelse och resa och prioriterar tiden efteråt (2026-09-23)",
+      "Flow väger in familjens åtaganden utan att boka om fasta tider (2026-09-23)",
+    ],
+  },
+  {
     title: "Skydd mot att aktiviteter försvinner",
     items: [
       "Återställde 11 aktiviteter som skrevs över av en äldre enhet (2026-09-23)",

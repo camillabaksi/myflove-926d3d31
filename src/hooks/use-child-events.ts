@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { useChildren } from "@/hooks/use-children";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
+import { decodeVisualNotes } from "@/lib/child-visual-schedule";
 import type { ChildScheduleEntry } from "@/components/child-schedule";
 
 const SCHEDULE_KEY = "myflove-child-schedules";
@@ -8,6 +9,8 @@ const SCHEDULE_KEY = "myflove-child-schedules";
 export interface ChildEvent {
   /** HH:MM */
   time: string;
+  /** HH:MM, när sluttid finns. */
+  endTime?: string;
   title: string;
   childName: string;
   childId: string;
@@ -15,6 +18,11 @@ export interface ChildEvent {
   /** Id på barnaktiviteten när den kommer från barnens lista (kan bockas av). */
   itemId?: string;
   completed?: boolean;
+  /** Förälderns egen markering – aldrig ett energivärde. */
+  requiresParent?: boolean;
+  prepMinutes?: number;
+  travelMinutes?: number;
+  recoveryAfter?: boolean;
 }
 
 function todayISO(): string {
@@ -48,13 +56,19 @@ export function useChildEvents(dateISO?: string): ChildEvent[] {
       if (!i.time || i.date !== today) continue;
       const childName = nameOf.get(i.child_id);
       if (!childName) continue;
+      const { meta } = decodeVisualNotes(i.notes);
       out.push({
         time: i.time.slice(0, 5),
+        ...(meta.endTime ? { endTime: meta.endTime } : {}),
         title: i.title,
         childName,
         childId: i.child_id,
         itemId: i.id,
         completed: i.completed,
+        ...(typeof meta.parentPresence === "boolean" ? { requiresParent: meta.parentPresence } : {}),
+        ...(meta.prepMinutes ? { prepMinutes: meta.prepMinutes } : {}),
+        ...(meta.travelMinutes ? { travelMinutes: meta.travelMinutes } : {}),
+        ...(meta.recoveryAfter ? { recoveryAfter: true } : {}),
       });
     }
 

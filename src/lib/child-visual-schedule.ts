@@ -16,6 +16,25 @@ export interface VisualActivityMeta {
   endTime?: string;
   /** Optional label inside the existing Family area; never a top-level area. */
   familyLabel?: FamilyActivityLabel;
+  /**
+   * Förälderns egen information om aktiviteten – aldrig ett energivärde och
+   * aldrig något om barnets kapacitet. Allt är frivilligt.
+   */
+  parentPresence?: boolean;
+  /** Förberedelse före, minuter. */
+  prepMinutes?: number;
+  /** Resa/förflyttning, minuter. */
+  travelMinutes?: number;
+  /** Användaren vill gärna ha en lugn stund efteråt. */
+  recoveryAfter?: boolean;
+}
+
+/** Valbara minutvärden – inga påhittade siffror, användaren väljer själv. */
+export const PREP_MINUTE_CHOICES = [5, 10, 15] as const;
+export const TRAVEL_MINUTE_CHOICES = [5, 10, 15, 20] as const;
+
+function safeMinutes(value: unknown, allowed: readonly number[]): number | undefined {
+  return typeof value === "number" && allowed.includes(value) ? value : undefined;
 }
 
 export interface ActivityBankItem extends VisualActivityMeta { title: string; keywords?: string[] }
@@ -130,7 +149,17 @@ const META_PREFIX = "[myflove-visual:";
 const FALLBACK_META: VisualActivityMeta = { pictogram: "home", category: "hemma", tone: "lavender" };
 
 export function encodeVisualNotes(meta: VisualActivityMeta, note = ""): string {
-  const safeMeta = { pictogram: meta.pictogram, category: meta.category, tone: meta.tone, ...(meta.endTime ? { endTime: meta.endTime } : {}), ...(meta.category === "familj" && meta.familyLabel ? { familyLabel: meta.familyLabel } : {}) };
+  const safeMeta = {
+    pictogram: meta.pictogram,
+    category: meta.category,
+    tone: meta.tone,
+    ...(meta.endTime ? { endTime: meta.endTime } : {}),
+    ...(meta.category === "familj" && meta.familyLabel ? { familyLabel: meta.familyLabel } : {}),
+    ...(typeof meta.parentPresence === "boolean" ? { parentPresence: meta.parentPresence } : {}),
+    ...(safeMinutes(meta.prepMinutes, PREP_MINUTE_CHOICES) ? { prepMinutes: meta.prepMinutes } : {}),
+    ...(safeMinutes(meta.travelMinutes, TRAVEL_MINUTE_CHOICES) ? { travelMinutes: meta.travelMinutes } : {}),
+    ...(meta.recoveryAfter ? { recoveryAfter: true } : {}),
+  };
   return `${META_PREFIX}${JSON.stringify(safeMeta)}]\n${note.trim()}`;
 }
 
@@ -149,7 +178,22 @@ export function decodeVisualNotes(notes?: string | null): { meta: VisualActivity
     const pictogram = candidate.pictogram && VALID_PICTOGRAMS.has(candidate.pictogram) ? candidate.pictogram : legacy ?? "home";
     const endTime = typeof candidate.endTime === "string" && /^([01]\d|2[0-3]):[0-5]\d$/.test(candidate.endTime) ? candidate.endTime : undefined;
     const familyLabel = category === "familj" && (candidate.familyLabel === "child" || candidate.familyLabel === "shared" || candidate.familyLabel === "caregiver") ? candidate.familyLabel : undefined;
-    return { meta: { pictogram, category, tone, ...(endTime ? { endTime } : {}), ...(familyLabel ? { familyLabel } : {}) }, note: notes.slice(end + 2) };
+    const prepMinutes = safeMinutes(candidate.prepMinutes, PREP_MINUTE_CHOICES);
+    const travelMinutes = safeMinutes(candidate.travelMinutes, TRAVEL_MINUTE_CHOICES);
+    return {
+      meta: {
+        pictogram,
+        category,
+        tone,
+        ...(endTime ? { endTime } : {}),
+        ...(familyLabel ? { familyLabel } : {}),
+        ...(typeof candidate.parentPresence === "boolean" ? { parentPresence: candidate.parentPresence } : {}),
+        ...(prepMinutes ? { prepMinutes } : {}),
+        ...(travelMinutes ? { travelMinutes } : {}),
+        ...(candidate.recoveryAfter === true ? { recoveryAfter: true } : {}),
+      },
+      note: notes.slice(end + 2),
+    };
   } catch { return { meta: FALLBACK_META, note: notes.slice(end + 2) }; }
 }
 

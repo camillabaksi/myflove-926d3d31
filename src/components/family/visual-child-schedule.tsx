@@ -25,6 +25,7 @@ import { toast } from "sonner";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 import { useFlowScore } from "@/hooks/use-flowscore";
 import { useLang } from "@/hooks/use-language";
 import { useQuickflow } from "@/hooks/use-quickflow";
@@ -43,6 +44,8 @@ import {
   dayPart,
   decodeVisualNotes,
   encodeVisualNotes,
+  PREP_MINUTE_CHOICES,
+  TRAVEL_MINUTE_CHOICES,
   getScheduleGuidance,
   pictogramForActivity,
   searchActivityBank,
@@ -470,7 +473,7 @@ export default function VisualChildSchedule({
                  const category = decodeVisualNotes(item.notes).meta.category;
                  return <li key={item.id} className={cn("flex items-center gap-2 rounded-xl border px-2 py-1.5 shadow-sm transition-opacity", CATEGORY_STYLES[category].subtle, item.completed && "opacity-60", (isCurrent || isNext) && "ring-1 ring-primary/30")}>
                    {selectionMode ? <Button type="button" variant={selectedIds.includes(item.id) ? "default" : "outline"} size="icon" onClick={() => toggleSelected(item.id)} className="h-10 w-10 shrink-0 rounded-full" aria-label={t("Välj aktivitet")}><Check size={16} /></Button> : <Button type="button" variant="ghost" size="icon" onClick={() => void markDone(item)} className="h-10 w-10 shrink-0 rounded-full" aria-label={t(item.completed ? "Markera som inte klar" : "Markera som klar")}>{item.completed ? <CheckCircle2 className="text-primary" /> : isCurrent ? <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground">›</span> : <span className="h-5 w-5 rounded-full border-2 border-muted-foreground" />}</Button>}
-                    <ActivityVisual item={item} className="h-11 w-11 rounded-xl" openDoc={openDoc} /><div className="min-w-0 flex-1"><p className={cn("font-semibold text-ink", item.completed && "line-through")}>{item.title}</p><p className="text-xs text-muted-foreground">{item.time?.slice(0, 5) || t("Ingen tid")}{decodeVisualNotes(item.notes).meta.endTime ? `–${decodeVisualNotes(item.notes).meta.endTime}` : ""} · {contextLabel(decodeVisualNotes(item.notes).meta)}{isCurrent ? ` · ${t("Nu")}` : isNext ? ` · ${t("Nästa")}` : ""}</p></div>{!selectionMode && <div className="flex shrink-0"><Button type="button" variant="ghost" size="icon" onClick={() => openMove([item.id])} className="h-10 w-10 rounded-full" aria-label={t("Flytta")}><Move size={16} /></Button><Button type="button" variant="ghost" size="icon" onClick={() => openEdit(item)} className="h-10 w-10 rounded-full" aria-label={t("Ändra")}><Ellipsis size={18} /></Button></div>}</li>;
+                    <ActivityVisual item={item} className="h-11 w-11 rounded-xl" openDoc={openDoc} /><div className="min-w-0 flex-1"><p className={cn("font-semibold text-ink", item.completed && "line-through")}>{item.title}</p><p className="text-xs text-muted-foreground">{item.time?.slice(0, 5) || t("Ingen tid")}{decodeVisualNotes(item.notes).meta.endTime ? `–${decodeVisualNotes(item.notes).meta.endTime}` : ""} · {contextLabel(decodeVisualNotes(item.notes).meta)}{isCurrent ? ` · ${t("Nu")}` : isNext ? ` · ${t("Nästa")}` : ""}{decodeVisualNotes(item.notes).meta.parentPresence === true ? ` · ${t("Kräver dig")}` : ""}</p></div>{!selectionMode && <div className="flex shrink-0"><Button type="button" variant="ghost" size="icon" onClick={() => openMove([item.id])} className="h-10 w-10 rounded-full" aria-label={t("Flytta")}><Move size={16} /></Button><Button type="button" variant="ghost" size="icon" onClick={() => openEdit(item)} className="h-10 w-10 rounded-full" aria-label={t("Ändra")}><Ellipsis size={18} /></Button></div>}</li>;
               })}</ul></section>;
             })}
           </div>
@@ -527,6 +530,32 @@ export default function VisualChildSchedule({
           <div className="flex items-center gap-3 rounded-xl border border-border bg-card p-3"><ActivityPictogram id={draft.meta.pictogram} tone={draft.meta.tone} /><div><p className="text-sm font-semibold text-ink">{t("Valt pictogram")}</p><p className="text-xs text-muted-foreground">{t(CATEGORY_LABELS[draft.meta.category])}</p></div></div>
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2"><label className="space-y-1 text-sm font-medium text-ink"><span>{t("Område")}</span><select value={draft.meta.category} onChange={(event) => { const category = event.target.value as VisualActivityCategory; setDraft({ ...draft, meta: { ...draft.meta, category, ...(category === "familj" ? { familyLabel: draft.meta.familyLabel ?? "shared" } : { familyLabel: undefined }) } }); }} className={cn("h-12 w-full rounded-2xl border px-3", CATEGORY_STYLES[draft.meta.category].subtle)}>{CATEGORY_KEYS.map((category) => <option key={category} value={category}>{t(CATEGORY_LABELS[category])}</option>)}</select></label><label className="space-y-1 text-sm font-medium text-ink"><span>{t("Återkommer")}</span><select value={draft.repeat} onChange={(event) => setDraft({ ...draft, repeat: event.target.value as ChildRepeatMode })} className="h-12 w-full rounded-2xl border border-border bg-card px-3"><option value="none">{t("Inte återkommande")}</option><option value="daily">{t("Varje dag")}</option><option value="weekdays">{t("Vardagar")}</option><option value="weekly">{t("Varje vecka")}</option></select></label></div>
           {draft.meta.category === "familj" && <label className="space-y-1 text-sm font-medium text-ink"><span>{t("Gäller inom Familj")}</span><select value={draft.meta.familyLabel ?? "shared"} onChange={(event) => setDraft({ ...draft, meta: { ...draft.meta, familyLabel: event.target.value as FamilyActivityLabel } })} className={cn("h-12 w-full rounded-2xl border px-3", CATEGORY_STYLES.familj.subtle)}><option value="child">{t(`Barn · ${child.name}`)}</option><option value="shared">{t("Familj gemensamt")}</option><option value="caregiver">{t("Förälder/omsorg")}</option></select></label>}
+          <div className="space-y-3 rounded-2xl border border-border bg-muted/40 p-3">
+            <p className="text-sm font-semibold text-ink">{t("Kräver mig")}</p>
+            <p className="text-xs text-muted-foreground">{t("Frivilligt. Handlar om dig, inte om barnet.")}</p>
+            <label className="flex items-center justify-between gap-2 text-sm text-ink">
+              <span>{t("Jag behöver vara med")}</span>
+              <Switch checked={draft.meta.parentPresence !== false} onCheckedChange={(checked) => setDraft({ ...draft, meta: { ...draft.meta, parentPresence: checked } })} />
+            </label>
+            <div className="grid grid-cols-2 gap-2">
+              <label className="space-y-1 text-sm font-medium text-ink"><span>{t("Förberedelse")}</span>
+                <select value={draft.meta.prepMinutes ?? 0} onChange={(event) => setDraft({ ...draft, meta: { ...draft.meta, prepMinutes: Number(event.target.value) || undefined } })} className="h-12 w-full rounded-2xl border border-border bg-card px-3">
+                  <option value={0}>{t("Ingen")}</option>
+                  {PREP_MINUTE_CHOICES.map((m) => <option key={m} value={m}>{`${m} min`}</option>)}
+                </select>
+              </label>
+              <label className="space-y-1 text-sm font-medium text-ink"><span>{t("Resa")}</span>
+                <select value={draft.meta.travelMinutes ?? 0} onChange={(event) => setDraft({ ...draft, meta: { ...draft.meta, travelMinutes: Number(event.target.value) || undefined } })} className="h-12 w-full rounded-2xl border border-border bg-card px-3">
+                  <option value={0}>{t("Ingen")}</option>
+                  {TRAVEL_MINUTE_CHOICES.map((m) => <option key={m} value={m}>{`${m} min`}</option>)}
+                </select>
+              </label>
+            </div>
+            <label className="flex items-center justify-between gap-2 text-sm text-ink">
+              <span>{t("Lugn stund efteråt")}</span>
+              <Switch checked={!!draft.meta.recoveryAfter} onCheckedChange={(checked) => setDraft({ ...draft, meta: { ...draft.meta, recoveryAfter: checked || undefined } })} />
+            </label>
+          </div>
           <Input value={draft.note} onChange={(event) => setDraft({ ...draft, note: event.target.value })} placeholder={t("Kort anteckning (valfritt)")} className="h-12 rounded-2xl" />
           <input ref={galleryRef} type="file" accept="image/*" className="hidden" onChange={(event) => setDraft({ ...draft, file: event.target.files?.[0] ?? null })} />
           <input ref={cameraRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={(event) => setDraft({ ...draft, file: event.target.files?.[0] ?? null })} />

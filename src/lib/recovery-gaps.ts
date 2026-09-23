@@ -24,6 +24,12 @@ export interface FixedSlot {
   title: string;
   /** Egen hållpunkt eller något i familjen. */
   who?: "jag" | "familj";
+  /** Förberedelse före hållpunkten, minuter. Ersätter standardbufferten. */
+  prepMinutes?: number;
+  /** Resa/förflyttning efter hållpunkten, minuter. */
+  travelMinutes?: number;
+  /** Användaren har själv sagt att det brukar behövas lugn stund efteråt. */
+  preferAfter?: boolean;
 }
 
 export type RecoveryKind = "paus" | "ljusboost" | "stopp" | "vardag";
@@ -156,6 +162,16 @@ interface Range {
   start: number;
   end: number;
   title: string;
+  preferAfter?: boolean;
+}
+
+export interface RawGap {
+  start: number;
+  end: number;
+  before: string | null;
+  after: string | null;
+  /** Luckan ligger direkt efter något användaren själv markerat. */
+  preferred?: boolean;
 }
 
 /** Slår ihop hållpunkterna och returnerar luckorna emellan. */
@@ -168,47 +184,66 @@ export function findGaps(
     bufferMinutes?: number;
     minGap?: number;
   },
-): { start: number; end: number; before: string | null; after: string | null }[] {
+): RawGap[] {
   const buffer = opts.bufferMinutes ?? 10;
   const minGap = opts.minGap ?? MIN_GAP_MINUTES;
   const from = Math.max(opts.startMinutes, opts.nowMinutes);
 
-  const ranges: Range[] = slots
+  const prepared = slots
     .filter((s) => /^\d{1,2}:\d{2}$/.test(s.start ?? ""))
     .map((s) => {
       const start = toMinutes(s.start);
       const rawEnd = s.end && /^\d{1,2}:\d{2}$/.test(s.end) ? toMinutes(s.end) : start + DEFAULT_SLOT_MINUTES;
-      return { start, end: Math.max(rawEnd, start + 15), title: s.title };
+      // Förberedelse och resa är användarens egen information om hållpunkten.
+      // Saknas den används samma standardbuffert som tidigare.
+      const before = Math.max(0, s.prepMinutes ?? buffer);
+      const after = Math.max(0, s.travelMinutes ?? buffer);
+      return {
+        range: { start, end: Math.max(rawEnd, start + 15), title: s.title, preferAfter: s.preferAfter },
+        before,
+        after,
+      };
     })
-    .sort((a, b) => a.start - b.start);
+    .sort((a, b) => a.range.start - b.range.start);
 
+  const ranges: Range[] = prepared.map((p) => p.range);
   // Restid och förberedelse räknas som upptaget, inte som ledig tid.
-  const padded = ranges.map((r) => ({ ...r, start: r.start - buffer, end: r.end + buffer }));
+  const padded = prepared.map((p) => ({
+    start: p.range.start - p.before,
+    end: p.range.end + p.after,
+  }));
 
-  const out: { start: number; end: number; before: string | null; after: string | null }[] = [];
+  const out: RawGap[] = [];
   let cursor = from;
-  let previous: string | null = null;
+  let previous: Range | null = null;
 
   for (let i = 0; i < padded.length; i++) {
     const r = padded[i]!;
     if (r.end <= cursor) {
-      previous = ranges[i]!.title;
+      previous = ranges[i]!;
       continue;
     }
     if (r.start - cursor >= minGap) {
       out.push({
         start: cursor,
         end: Math.min(r.start, opts.endMinutes),
-        before: previous,
+        before: previous?.title ?? null,
         after: ranges[i]!.title,
+        preferred: !!previous?.preferAfter,
       });
     }
     cursor = Math.max(cursor, r.end);
-    previous = ranges[i]!.title;
+    previous = ranges[i]!;
   }
 
   if (opts.endMinutes - cursor >= minGap) {
-    out.push({ start: cursor, end: opts.endMinutes, before: previous, after: null });
+    out.push({
+      start: cursor,
+      end: opts.endMinutes,
+      before: previous?.title ?? null,
+      after: null,
+      preferred: !!previous?.preferAfter,
+    });
   }
 
   return out.filter((g) => g.end - g.start >= minGap && g.start < opts.endMinutes);
@@ -232,8 +267,9 @@ export function buildRecoveryGaps(input: RecoveryGapsInput): RecoveryGapsResult 
 
   const gaps: RecoveryGap[] = raw
     // Långa tomma kvällar är sällan det mest hjälpsamma förslaget – korta
-    // luckor mellan hållpunkter kommer först.
-    .sort((a, b) => a.start - b.start)
+    // luckor mellan hållpunkter kommer först. En lucka direkt efter något
+    // användaren själv markerat med "lugn stund efteråt" kommer allra först.
+    .sort((a, b) => (a.preferred === b.preferred ? a.start - b.start : a.preferred ? -1 : 1))
     .map((g) => {
       const minutes = Math.min(45, g.end - g.start);
       const options = optionsForGap(minutes, capacity, input.energyBoostTitle);
