@@ -3,6 +3,7 @@ import type { CapacityLevel } from "@/lib/adaptive-activity";
 
 export type VisualActivityCategory = "hemma" | "skola" | "mat" | "hygien" | "transport" | "fritid" | "träning" | "återhämtning" | "familj" | "vård";
 export type VisualActivityTone = "lavender" | "blush" | "mint" | "sky" | "sun";
+export type FamilyActivityLabel = "child" | "shared" | "caregiver";
 export type PictogramId = "breakfast" | "meal" | "dress" | "teeth" | "shower" | "sleep" | "bag" | "home" | "clean" | "laundry" | "shopping" | "school" | "break" | "study" | "childcare" | "walk" | "car" | "bus" | "train" | "bike" | "play" | "friends" | "exercise" | "swim" | "game" | "tv" | "craft" | "music" | "pause" | "quiet" | "headphones" | "rest" | "family" | "visit" | "doctor" | "dentist" | "hospital" | "pharmacy" | "clinic" | "vaccination" | "nurse" | "examination" | "emergency" | "conversation" | "optician" | "hearing" | "physio" | "followup";
 
 export interface VisualActivityMeta {
@@ -13,6 +14,8 @@ export interface VisualActivityMeta {
   tone: VisualActivityTone;
   /** Optional end time kept in the existing visual metadata envelope. */
   endTime?: string;
+  /** Optional label inside the existing Family area; never a top-level area. */
+  familyLabel?: FamilyActivityLabel;
 }
 
 export interface ActivityBankItem extends VisualActivityMeta { title: string; keywords?: string[] }
@@ -71,8 +74,21 @@ export const ACTIVITY_BANK: Record<VisualActivityCategory, ActivityBankItem[]> =
     { title: "Vila", pictogram: "rest", category: "återhämtning", tone: "blush" },
   ],
   familj: [
-    { title: "Familjetid", pictogram: "family", category: "familj", tone: "blush" },
-    { title: "Besök", pictogram: "visit", category: "familj", tone: "sun" },
+    { title: "Barnomsorg", pictogram: "childcare", category: "familj", tone: "mint", familyLabel: "child", keywords: ["barn", "omsorg", "passa barn"] },
+    { title: "Hämta/lämna barn", pictogram: "bag", category: "familj", tone: "sky", familyLabel: "child", keywords: ["hämta barn", "lämna barn", "hämtning", "lämning"] },
+    { title: "Lek", pictogram: "play", category: "familj", tone: "blush", familyLabel: "child", keywords: ["leka med barn"] },
+    { title: "Barnets bad/dusch", pictogram: "shower", category: "familj", tone: "sky", familyLabel: "child", keywords: ["bada barn", "duscha barn"] },
+    { title: "Borsta tänder", pictogram: "teeth", category: "familj", tone: "sky", familyLabel: "child", keywords: ["barnets tänder", "tandborstning"] },
+    { title: "Barnets måltid", pictogram: "meal", category: "familj", tone: "sun", familyLabel: "child", keywords: ["barnmat", "äta med barn"] },
+    { title: "Läggning", pictogram: "sleep", category: "familj", tone: "lavender", familyLabel: "child", keywords: ["lägga barn", "nattning", "sova"] },
+    { title: "Lek/fri tid", pictogram: "game", category: "familj", tone: "blush", familyLabel: "child", keywords: ["fri lek", "fritid"] },
+    { title: "Läsa med barn", pictogram: "study", category: "familj", tone: "lavender", familyLabel: "child", keywords: ["saga", "läsa bok", "högläsning"] },
+    { title: "Förskola/skola", pictogram: "school", category: "familj", tone: "sky", familyLabel: "child", keywords: ["förskola", "skola", "fritids"] },
+    { title: "Barnläkare/vårdbesök", pictogram: "doctor", category: "familj", tone: "blush", familyLabel: "child", keywords: ["barnläkare", "barnets vårdbesök", "läkarbesök"] },
+    { title: "Barnets medicin", pictogram: "pharmacy", category: "familj", tone: "mint", familyLabel: "child", keywords: ["medicin barn", "läkemedel barn"] },
+    { title: "Familjetid", pictogram: "family", category: "familj", tone: "blush", familyLabel: "shared" },
+    { title: "Besök", pictogram: "visit", category: "familj", tone: "sun", familyLabel: "shared" },
+    { title: "Förälder/omsorg", pictogram: "family", category: "familj", tone: "mint", familyLabel: "caregiver", keywords: ["förälder", "omsorg", "vuxen"] },
   ],
   vård: [
     { title: "Doktor", pictogram: "doctor", category: "vård", tone: "sky", keywords: ["läkare", "läkarbesök", "doktorsbesök"] },
@@ -93,6 +109,7 @@ export const ACTIVITY_BANK: Record<VisualActivityCategory, ActivityBankItem[]> =
 };
 
 export const CATEGORY_LABELS: Record<VisualActivityCategory, string> = { hemma: "Hemma", skola: "Skola", mat: "Mat", hygien: "Rutiner", transport: "Transport", fritid: "Fritid", träning: "Aktivitet", återhämtning: "Återhämtning", familj: "Familj", vård: "Vård" };
+export const FAMILY_LABELS: Record<FamilyActivityLabel, string> = { child: "Barn", shared: "Familj gemensamt", caregiver: "Förälder/omsorg" };
 export const CATEGORY_STYLES: Record<VisualActivityCategory, { card: string; subtle: string; marker: string }> = {
   hemma: { card: "border-sun bg-sun/55", subtle: "border-sun/80 bg-sun/20", marker: "bg-sun" },
   skola: { card: "border-sky bg-sky/65", subtle: "border-sky/80 bg-sky/20", marker: "bg-sky" },
@@ -113,7 +130,7 @@ const META_PREFIX = "[myflove-visual:";
 const FALLBACK_META: VisualActivityMeta = { pictogram: "home", category: "hemma", tone: "lavender" };
 
 export function encodeVisualNotes(meta: VisualActivityMeta, note = ""): string {
-  const safeMeta = { pictogram: meta.pictogram, category: meta.category, tone: meta.tone, ...(meta.endTime ? { endTime: meta.endTime } : {}) };
+  const safeMeta = { pictogram: meta.pictogram, category: meta.category, tone: meta.tone, ...(meta.endTime ? { endTime: meta.endTime } : {}), ...(meta.category === "familj" && meta.familyLabel ? { familyLabel: meta.familyLabel } : {}) };
   return `${META_PREFIX}${JSON.stringify(safeMeta)}]\n${note.trim()}`;
 }
 
@@ -131,7 +148,8 @@ export function decodeVisualNotes(notes?: string | null): { meta: VisualActivity
     const legacy = typeof candidate.emoji === "string" ? LEGACY_EMOJI[candidate.emoji] : undefined;
     const pictogram = candidate.pictogram && VALID_PICTOGRAMS.has(candidate.pictogram) ? candidate.pictogram : legacy ?? "home";
     const endTime = typeof candidate.endTime === "string" && /^([01]\d|2[0-3]):[0-5]\d$/.test(candidate.endTime) ? candidate.endTime : undefined;
-    return { meta: { pictogram, category, tone, ...(endTime ? { endTime } : {}) }, note: notes.slice(end + 2) };
+    const familyLabel = category === "familj" && (candidate.familyLabel === "child" || candidate.familyLabel === "shared" || candidate.familyLabel === "caregiver") ? candidate.familyLabel : undefined;
+    return { meta: { pictogram, category, tone, ...(endTime ? { endTime } : {}), ...(familyLabel ? { familyLabel } : {}) }, note: notes.slice(end + 2) };
   } catch { return { meta: FALLBACK_META, note: notes.slice(end + 2) }; }
 }
 

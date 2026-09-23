@@ -1,4 +1,4 @@
-import type { PictogramId, VisualActivityCategory, VisualActivityTone } from "@/lib/child-visual-schedule";
+import type { FamilyActivityLabel, PictogramId, VisualActivityCategory, VisualActivityTone } from "@/lib/child-visual-schedule";
 
 export interface ChildScheduleTemplateItem {
   title: string;
@@ -6,6 +6,7 @@ export interface ChildScheduleTemplateItem {
   pictogram: PictogramId;
   category: VisualActivityCategory;
   tone: VisualActivityTone;
+  familyLabel?: FamilyActivityLabel;
 }
 
 export interface ChildScheduleTemplate {

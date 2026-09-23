@@ -35,6 +35,17 @@ describe("child visual schedule", () => {
     });
   });
 
+  it("stores Barn as a label inside Familj, not as a new area", () => {
+    const notes = encodeVisualNotes({ pictogram: "childcare", category: "familj", tone: "mint", familyLabel: "child" }, "Bella");
+    expect(decodeVisualNotes(notes)).toEqual({
+      meta: { pictogram: "childcare", category: "familj", tone: "mint", familyLabel: "child" },
+      note: "Bella",
+    });
+    expect(searchActivityBank("hämta barn", "familj").map((item) => item.title)).toContain("Hämta/lämna barn");
+    expect(searchActivityBank("barnläkare", "familj").map((item) => item.title)).toContain("Barnläkare/vårdbesök");
+    expect(Object.keys(CATEGORY_STYLES)).not.toContain("barn");
+  });
+
   it("maps old emoji metadata to a current pictogram", () => {
     const legacy = '[myflove-visual:{"emoji":"🚌","category":"transport","tone":"sun"}]\nHållplatsen';
     expect(decodeVisualNotes(legacy)).toEqual({ meta: { pictogram: "bus", category: "transport", tone: "sun" }, note: "Hållplatsen" });
