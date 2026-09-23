@@ -96,7 +96,7 @@ export function DailyFlowList({
   return (
     <>
       <ul className="divide-y divide-border/50" aria-label="Dagens innehåll">
-        {items.map((item) => (
+        {items.map((item, index) => (
           <li key={item.id}>
             <MyFloveTransition transitionKey={String(item.done)}>
               <div
