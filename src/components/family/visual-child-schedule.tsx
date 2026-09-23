@@ -11,10 +11,12 @@ import {
   ImagePlus,
   Images,
   Library,
+  Heart,
   Pencil,
   Plus,
   Sparkles,
   Trash2,
+  UserRound,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -257,7 +259,7 @@ export default function VisualChildSchedule({
     <section className="mx-auto min-h-[70vh] w-full max-w-5xl space-y-4 overflow-hidden rounded-3xl border border-border bg-card p-3 shadow-soft sm:p-5" data-testid="visual-child-schedule">
       <header className="flex items-center gap-3 border-b border-border/70 pb-4">
         <Button type="button" variant="ghost" size="icon" onClick={onClose} className="h-11 w-11 rounded-full" aria-label={t("Tillbaka")}><ChevronLeft /></Button>
-        <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-blush text-2xl" aria-hidden>{child.avatar || "💜"}</span>
+        <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-blush text-primary" aria-hidden>{child.avatar ? <span className="text-2xl">{child.avatar}</span> : <UserRound size={24} />}</span>
         <div className="min-w-0 flex-1">
           <h2 className="truncate font-display text-xl font-bold text-ink">{child.name}</h2>
           <p className="text-sm text-muted-foreground">{t(mode === "week" ? "Veckoschema" : `Idag – ${new Intl.DateTimeFormat(locale, { weekday: "long", day: "numeric", month: "short" }).format(parseISODate(today))}`)}</p>
@@ -265,7 +267,7 @@ export default function VisualChildSchedule({
         <Button type="button" variant="outline" onClick={() => openAdd()} className="h-10 rounded-xl px-3"><Pencil size={15} /><span className="hidden sm:inline">{t("Redigera")}</span></Button>
       </header>
 
-      {mode === "today" && <p className="rounded-xl bg-lavender/70 px-4 py-2 text-center text-sm font-medium text-primary">💜 {t("Du klarar det! Ett steg i taget.")} 💜</p>}
+      {mode === "today" && <p className="flex items-center justify-center gap-2 rounded-xl bg-lavender/70 px-4 py-2 text-center text-sm font-medium text-primary"><Heart size={15} fill="currentColor" /> {t("Du klarar det! Ett steg i taget.")} <Heart size={15} fill="currentColor" /></p>}
 
       <div className="grid grid-cols-2 gap-1 rounded-xl bg-muted/70 p-1" role="tablist" aria-label={t("Välj schemavy") }>
         <Button type="button" variant={mode === "week" ? "default" : "ghost"} onClick={() => setMode("week")} className="h-10 rounded-lg shadow-none" role="tab" aria-selected={mode === "week"}>{t("Vecka")}</Button>

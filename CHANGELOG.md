@@ -3,6 +3,7 @@
 - Barnets schema öppnas som en egen lugn vy med barnets namn och avatar högst upp.
 - Veckan visas som ett kompakt färgkodat rutnät med bildstöd och snabblänkar.
 - Dagens schema har tydliga dagsdelar, kompakta aktivitetsrader och klar/nu/nästa-status.
+- Dekorativa symboler i schemats fasta gränssnitt använder tydliga ikoner som visas korrekt på alla enheter.
 
 ## 2026-09-23 – Visuellt barnschema 1.0
 

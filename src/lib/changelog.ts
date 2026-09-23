@@ -15,6 +15,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
       "Barnets schema öppnas som en egen lugn vy med barnets namn och avatar högst upp (2026-09-23)",
       "Veckan visas som ett kompakt färgkodat rutnät med bildstöd och snabblänkar (2026-09-23)",
       "Dagens schema har tydliga dagsdelar och klar, nu och nästa-status (2026-09-23)",
+      "Fasta symboler använder tydliga ikoner som visas korrekt på alla enheter (2026-09-23)",
     ],
   },
   {
