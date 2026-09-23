@@ -452,7 +452,33 @@ export default function VisualChildSchedule({
         <Button type="button" variant={mode === "today" ? "default" : "ghost"} onClick={() => { setMode("today"); setViewDate(null); }} className="h-10 rounded-lg shadow-none" role="tab" aria-selected={mode === "today"}>{t("Idag")}</Button>
       </div>
 
-      {mode === "today" && <div className="flex items-center justify-between gap-2 rounded-xl border border-border bg-card p-1"><Button type="button" variant="ghost" onClick={() => setViewDate(addDaysISO(dayDate, -1))} className="h-10 rounded-lg px-3" aria-label={t("Föregående dag")}>‹</Button><div className="flex min-w-0 flex-1 items-center justify-center gap-2"><p className="truncate text-sm font-semibold text-ink">{isViewingToday ? t("Idag") : new Intl.DateTimeFormat(locale, { weekday: "long", day: "numeric", month: "short" }).format(parseISODate(dayDate))}</p>{!isViewingToday && <Button type="button" variant="outline" onClick={() => setViewDate(null)} className="h-8 rounded-full px-3 text-xs">{t("Till idag")}</Button>}</div><Button type="button" variant="ghost" onClick={() => setViewDate(addDaysISO(dayDate, 1))} className="h-10 rounded-lg px-3" aria-label={t("Nästa dag")}>›</Button></div>}
+      {mode === "today" && (
+        <div className="space-y-1.5">
+          <div className="grid grid-cols-7 gap-1" role="tablist" aria-label={t("Välj dag")}>
+            {dayChips.map((date) => {
+              const selected = date === dayDate;
+              const isToday = date === today;
+              return (
+                <button key={date} type="button" role="tab" aria-selected={selected} aria-label={`${t(DAY_NAMES[(parseISODate(date).getDay() + 6) % 7] ?? "")} ${new Intl.DateTimeFormat(locale, { day: "numeric", month: "short" }).format(parseISODate(date))}`}
+                  onClick={() => setViewDate(isToday && selected ? null : date)}
+                  className={cn("flex h-12 min-w-0 flex-col items-center justify-center gap-0.5 rounded-xl px-0.5 text-[11px] font-semibold transition-colors", selected ? "bg-primary text-primary-foreground shadow-soft" : isToday ? "border border-primary/40 bg-card text-primary" : "border border-border bg-card text-muted-foreground")}>
+                  <span className="truncate">{t(SHORT_DAYS[(parseISODate(date).getDay() + 6) % 7] ?? "")}</span>
+                  <span className={cn("text-[10px] font-medium", selected ? "text-primary-foreground/80" : "text-muted-foreground/80")}>{new Intl.DateTimeFormat(locale, { day: "numeric" }).format(parseISODate(date))}</span>
+                  <span className={cn("h-1 w-1 rounded-full", isToday ? (selected ? "bg-primary-foreground" : "bg-primary") : "bg-transparent")} aria-hidden />
+                </button>
+              );
+            })}
+          </div>
+          <div className="flex items-center justify-between gap-2 rounded-xl border border-border bg-card p-1">
+            <Button type="button" variant="ghost" onClick={() => setViewDate(addDaysISO(dayDate, -1))} className="h-10 rounded-lg px-3" aria-label={t("Föregående dag")}>‹</Button>
+            <div className="flex min-w-0 flex-1 items-center justify-center gap-2">
+              <p className="truncate text-sm font-semibold text-ink">{isViewingToday ? t("Idag") : new Intl.DateTimeFormat(locale, { weekday: "long", day: "numeric", month: "short" }).format(parseISODate(dayDate))}</p>
+              {!isViewingToday && <Button type="button" variant="outline" onClick={() => setViewDate(null)} className="h-8 rounded-full px-3 text-xs">{t("Till idag")}</Button>}
+            </div>
+            <Button type="button" variant="ghost" onClick={() => setViewDate(addDaysISO(dayDate, 1))} className="h-10 rounded-lg px-3" aria-label={t("Nästa dag")}>›</Button>
+          </div>
+        </div>
+      )}
 
       {mode === "today" ? (
         <div className="space-y-5">
