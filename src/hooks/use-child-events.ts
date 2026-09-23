@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { useChildren } from "@/hooks/use-children";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
+import { decodeVisualNotes } from "@/lib/child-visual-schedule";
 import type { ChildScheduleEntry } from "@/components/child-schedule";
 
 const SCHEDULE_KEY = "myflove-child-schedules";
@@ -8,6 +9,8 @@ const SCHEDULE_KEY = "myflove-child-schedules";
 export interface ChildEvent {
   /** HH:MM */
   time: string;
+  /** HH:MM, när sluttid finns. */
+  endTime?: string;
   title: string;
   childName: string;
   childId: string;
@@ -15,6 +18,11 @@ export interface ChildEvent {
   /** Id på barnaktiviteten när den kommer från barnens lista (kan bockas av). */
   itemId?: string;
   completed?: boolean;
+  /** Förälderns egen markering – aldrig ett energivärde. */
+  requiresParent?: boolean;
+  prepMinutes?: number;
+  travelMinutes?: number;
+  recoveryAfter?: boolean;
 }
 
 function todayISO(): string {
