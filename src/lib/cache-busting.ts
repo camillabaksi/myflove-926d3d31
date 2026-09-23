@@ -84,7 +84,13 @@ export function initCacheBusting(): void {
       } catch {
         return;
       }
-      window.location.reload();
+      // En uppdatering får inte kasta bort en ändring som fortfarande väntar i
+      // synkens korta debounce-fönster. Importera sent för att undvika att
+      // molnklienten dras in i den vanliga cachekontrollen vid modulstart.
+      void import("@/lib/cloud-storage")
+        .then(({ flushCloudSync }) => flushCloudSync())
+        .catch(() => undefined)
+        .finally(() => window.location.reload());
     });
   }
 }
