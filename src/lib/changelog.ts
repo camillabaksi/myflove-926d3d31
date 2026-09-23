@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-23";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Skydd mot att aktiviteter försvinner",
+    items: [
+      "Återställde 11 aktiviteter som skrevs över av en äldre enhet (2026-09-23)",
+      "Listor slås nu ihop i stället för att skrivas över vid synk (2026-09-23)",
+    ],
+  },
+  {
     title: "Områdesfärger i Family Flow",
     items: [
       "Aktiviteter visar sin områdesfärg i Vecka och Idag (2026-09-23)",

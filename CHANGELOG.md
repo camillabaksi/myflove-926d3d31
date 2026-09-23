@@ -1,3 +1,8 @@
+## 2026-09-23 – Skydd mot att aktiviteter försvinner
+
+- Återställde 11 aktiviteter som försvann när en äldre enhet skrev över listan.
+- En enhet med gammal kopia kan inte längre radera saker som lagts till någon annanstans – listorna slås ihop i stället.
+
 ## 2026-09-23 – Områdesfärger i Family Flow
 
 - Aktiviteter visar sin områdesfärg i Vecka och Idag.
