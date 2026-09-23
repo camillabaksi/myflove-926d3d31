@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-23";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Veckonummer i kalendrarna",
+    items: [
+      "Månadsvyn visar veckonummer i en egen kolumn till vänster (2026-09-23)",
+      "Vecko- och dagsvyn visar veckonumret i rubriken (2026-09-23)",
+      "Barnets veckoschema visar veckonumret ovanför veckan (2026-09-23)",
+    ],
+  },
+  {
     title: "Starkare skydd för sparade aktiviteter",
     items: [
       "Samtidiga vyer delar samma aktuella aktivitetslista så äldre kopior inte skriver över nya ändringar (2026-09-23)",

@@ -1,3 +1,9 @@
+## 2026-09-23 – Veckonummer i kalendrarna
+
+- Månadsvyn visar veckonummer i en egen kolumn till vänster.
+- Vecko- och dagsvyn visar veckonumret i rubriken.
+- Barnets veckoschema visar veckonumret ovanför veckan.
+
 ## 2026-09-23 – Starkare skydd för sparade aktiviteter
 
 - Samtidiga vyer delar nu samma aktuella aktivitetslista innan den synkas, så en äldre lokal kopia inte kan skriva över en nyare ändring.
