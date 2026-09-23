@@ -1,4 +1,6 @@
+import type { ReactNode } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { isoWeekNumber, isoWeekNumberFromString } from "@/lib/iso-week";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { parseISODate } from "@/lib/day";
 import { MyFloveEmptyIllustration } from "@/components/myflove/motion";
@@ -346,16 +348,17 @@ export function CalendarContent() {
   const weekDays = Array.from({ length: 7 }, (_, i) =>
     fmtDate(addDays(startOfWeek(currentDate), i)),
   );
+  const currentWeekNo = isoWeekNumber(currentDate);
   const periodLabel =
     view === "manad"
       ? monthName
       : view === "vecka"
-        ? `${new Date(`${weekDays[0]}T12:00:00`).toLocaleDateString("sv-SE", { day: "numeric", month: "short" })} – ${new Date(`${weekDays[6]}T12:00:00`).toLocaleDateString("sv-SE", { day: "numeric", month: "short" })}`
-        : currentDate.toLocaleDateString("sv-SE", {
+        ? `v. ${currentWeekNo} · ${new Date(`${weekDays[0]}T12:00:00`).toLocaleDateString("sv-SE", { day: "numeric", month: "short" })} – ${new Date(`${weekDays[6]}T12:00:00`).toLocaleDateString("sv-SE", { day: "numeric", month: "short" })}`
+        : `${currentDate.toLocaleDateString("sv-SE", {
             weekday: "long",
             day: "numeric",
             month: "long",
-          });
+          })} · v. ${currentWeekNo}`;
 
   const allTasks = [...activeTasks, ...completedTasks];
 
@@ -599,7 +602,10 @@ export function CalendarContent() {
 
               {view === "manad" && (
                 <div className="pt-2">
-                  <div className="grid grid-cols-7 gap-1 mb-2 text-center text-sm font-medium text-muted-foreground">
+                  <div className="grid grid-cols-[1.75rem_repeat(7,minmax(0,1fr))] gap-1 mb-2 text-center text-sm font-medium text-muted-foreground">
+                    <div className="text-xs" title={t("Veckonummer")}>
+                      {t("v.")}
+                    </div>
                     <div>{t("Må")}</div>
                     <div>{t("Ti")}</div>
                     <div>{t("On")}</div>
@@ -609,11 +615,25 @@ export function CalendarContent() {
                     <div>{t("Sö")}</div>
                   </div>
 
-                  <div className="grid grid-cols-7 gap-1">
-                    {days.map((dateStr, index) => {
-                      if (!dateStr) {
-                        return <div key={`empty-${index}`} className="aspect-square" />;
+                  <div className="grid grid-cols-[1.75rem_repeat(7,minmax(0,1fr))] gap-1">
+                    {days.flatMap((dateStr, index) => {
+                      const cells: ReactNode[] = [];
+                      if (index % 7 === 0) {
+                        const rowDate = days.slice(index, index + 7).find(Boolean);
+                        cells.push(
+                          <div
+                            key={`wk-${index}`}
+                            className="flex items-center justify-center text-[11px] font-medium text-muted-foreground"
+                          >
+                            {rowDate ? isoWeekNumberFromString(rowDate) : ""}
+                          </div>,
+                        );
                       }
+                      if (!dateStr) {
+                        cells.push(<div key={`empty-${index}`} className="aspect-square" />);
+                        return cells;
+                      }
+
 
                       const dNum = parseInt(dateStr.split("-")[2], 10);
                       const isSelected = dateStr === selectedDateStr;
@@ -627,7 +647,7 @@ export function CalendarContent() {
                         items.childEvents.length > 0 ||
                         items.recurring.length > 0;
 
-                      return (
+                      cells.push(
                         <button
                           key={dateStr}
                           onClick={() => setSelectedDateStr(dateStr)}
@@ -687,8 +707,9 @@ export function CalendarContent() {
                               )}
                             </div>
                           )}
-                        </button>
+                        </button>,
                       );
+                      return cells;
                     })}
                   </div>
                 </div>

@@ -48,6 +48,7 @@ import {
 import { emitActivityDone } from "@/lib/activity-energy-event";
 import type { Child, ChildItem, ChildItemPatch } from "@/hooks/use-children";
 import type { ChildScheduleEntry } from "@/components/child-schedule";
+import { isoWeekNumberFromString } from "@/lib/iso-week";
 import { cn } from "@/lib/utils";
 
 const SCHEDULE_KEY = "myflove-child-schedules";
@@ -253,7 +254,7 @@ export default function VisualChildSchedule({
     toast.success(t("Tillagd i barnets schema."));
   };
 
-  const weekLabel = `${new Intl.DateTimeFormat(locale, { day: "numeric", month: "short" }).format(parseISODate(dates[0]!))}–${new Intl.DateTimeFormat(locale, { day: "numeric", month: "short" }).format(parseISODate(dates[6]!))}`;
+  const weekLabel = `v. ${isoWeekNumberFromString(dates[0]!)} · ${new Intl.DateTimeFormat(locale, { day: "numeric", month: "short" }).format(parseISODate(dates[0]!))}–${new Intl.DateTimeFormat(locale, { day: "numeric", month: "short" }).format(parseISODate(dates[6]!))}`;
 
   return (
     <section className="mx-auto min-h-[70vh] w-full max-w-5xl space-y-4 overflow-hidden rounded-3xl border border-border bg-card p-3 shadow-soft sm:p-5" data-testid="visual-child-schedule">
