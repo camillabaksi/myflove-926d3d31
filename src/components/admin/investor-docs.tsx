@@ -45,7 +45,16 @@ export default function InvestorDocs() {
       const { url } = await getInvestorDocUrlFn({ data: { path } });
       return url;
     },
-    onSuccess: (url) => window.open(url, "_blank", "noopener,noreferrer"),
+    onSuccess: (url) => {
+      // Anchor-klick är mer pålitligt än window.open efter ett await (popup-blockare).
+      const a = document.createElement("a");
+      a.href = url;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    },
     onError: (e: Error) => setError(e.message),
   });
 

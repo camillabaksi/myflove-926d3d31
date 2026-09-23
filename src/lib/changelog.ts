@@ -14,6 +14,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     items: [
       "Ny privat sektion i adminvyn där pitchdeck, ekonomi, financial model, BMC, quick answers och KPI-material kan samlas (2026-09-23)",
       "Filerna ligger i privat lagring och öppnas med tillfälliga länkar – osynligt för vanliga användare, testare och besökare (2026-09-23)",
+      "Pitchdeck 5.0 finns nu upplagt, och öppna-knappen stoppas inte längre av popup-blockare (2026-09-23)",
     ],
   },
   {

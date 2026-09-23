@@ -2,6 +2,7 @@
 
 - Ny privat sektion i adminvyn för pitchdeck, ekonomi & investeringsplan, financial model, Business Model Canvas, investor quick answers och KPI-material.
 - Dokumenten ligger i privat lagring och öppnas med tillfälliga länkar; endast konton med admin-roll kan se eller hämta dem.
+- Pitchdeck 5.0 (PDF och PowerPoint) är upplagt i sektionen, och öppna-knappen använder nu en länk som inte stoppas av popup-blockare.
 
 ## 2026-09-22 – Svenska återställs i hela appen
 
