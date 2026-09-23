@@ -274,4 +274,37 @@ export function copiedVisualNotes(notes: string | null | undefined, includePriva
 export function dayPart(time?: string | null): "Morgon" | "Dag" | "Efter skolan" | "Kväll" { if (!time) return "Dag"; const hour = Number(time.slice(0, 2)); if (hour < 10) return "Morgon"; if (hour < 15) return "Dag"; if (hour < 18) return "Efter skolan"; return "Kväll"; }
 export interface ScheduleGuidance { capacity: CapacityLevel; message: string | null; recovery: string | null }
 export function getScheduleGuidance(count: number, capacity: CapacityLevel): ScheduleGuidance { const busyLimit = capacity === "låg" ? 4 : capacity === "medel" ? 6 : 8; const busy = count >= busyLimit; return { capacity, message: busy ? "Det här ser ut som en ganska full dag. Vill du göra planen lite enklare?" : null, recovery: count >= 3 ? "En lugn stund mellan aktiviteterna kan ge mer luft. Du väljer själv om den ska läggas in." : null }; }
-export function transitionPrompt(title: string, minutes = 10): string { return `Om ${minutes} minuter är det dags för ${title.toLocaleLowerCase("sv")}.`; }
+/** Minuter från lokal "nu" (minuter sedan midnatt) till HH:MM. Negativ när tiden passerat. */
+export function minutesUntilTime(time: string, nowMinutes: number): number {
+  const [h, m] = time.slice(0, 5).split(":").map(Number);
+  return (h ?? 0) * 60 + (m ?? 0) - nowMinutes;
+}
+
+/** Lokal tid som minuter sedan midnatt – samma lokala klocka som lib/day. */
+export function localNowMinutes(now: Date = new Date()): number {
+  return now.getHours() * 60 + now.getMinutes();
+}
+
+export function transitionPrompt(title: string, minutes: number): string | null {
+  const what = title.toLocaleLowerCase("sv");
+  if (minutes < 0) return null;
+  if (minutes === 0) return `Det är dags för ${what} nu.`;
+  return `Om ${minutes} ${minutes === 1 ? "minut" : "minuter"} är det dags för ${what}.`;
+}
+
+/**
+ * Nu/Nästa utifrån faktisk lokal tid. Nu = senast startade öppna aktivitet
+ * (vars sluttid inte passerat); annars första öppna. Nästa = första öppna
+ * aktivitet som startar efter nu.
+ */
+export function pickNowNext<T extends { time: string | null; notes?: string | null }>(open: T[], nowMinutes: number): { current: T | null; next: T | null } {
+  const started = open.filter((item) => {
+    if (!item.time) return false;
+    if (minutesUntilTime(item.time, nowMinutes) > 0) return false;
+    const end = decodeVisualNotes(item.notes ?? null).meta.endTime;
+    return !end || minutesUntilTime(end, nowMinutes) > 0;
+  });
+  const current = started[started.length - 1] ?? open.find((item) => !item.time) ?? open.find((item) => item.time && minutesUntilTime(item.time, nowMinutes) > 0) ?? open[0] ?? null;
+  const next = open.find((item) => item !== current && item.time && minutesUntilTime(item.time, nowMinutes) > 0) ?? null;
+  return { current, next };
+}
