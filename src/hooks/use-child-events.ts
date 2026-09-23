@@ -10,6 +10,7 @@ export interface ChildEvent {
   time: string;
   title: string;
   childName: string;
+  childId: string;
   place?: string;
   /** Id på barnaktiviteten när den kommer från barnens lista (kan bockas av). */
   itemId?: string;
@@ -39,7 +40,7 @@ export function useChildEvents(dateISO?: string): ChildEvent[] {
       if (!childName) continue;
       for (const e of entries ?? []) {
         if (e.weekday !== weekday) continue;
-        out.push({ time: e.start, title: e.title, childName, place: e.location });
+        out.push({ time: e.start, title: e.title, childName, childId, place: e.location });
       }
     }
 
@@ -51,6 +52,7 @@ export function useChildEvents(dateISO?: string): ChildEvent[] {
         time: i.time.slice(0, 5),
         title: i.title,
         childName,
+        childId: i.child_id,
         itemId: i.id,
         completed: i.completed,
       });

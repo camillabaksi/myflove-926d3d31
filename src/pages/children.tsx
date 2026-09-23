@@ -126,7 +126,7 @@ function ChildrenContent() {
   /** Dagens hållpunkter för valt barn – skolschema och tidsatta aktiviteter. */
   const childEvents = useChildEvents();
   const todaysPoints = useMemo(
-    () => (activeChild ? childEvents.filter((e) => e.childName === activeChild.name) : []),
+    () => (activeChild ? childEvents.filter((e) => e.childId === activeChild.id) : []),
     [childEvents, activeChild],
   );
 

@@ -70,7 +70,7 @@ export interface ChildItemConflict {
 }
 
 export type ChildItemPatch = Partial<
-  Pick<ChildItem, "title" | "notes" | "date" | "time" | "remind" | "completed" | "kind" | "repeat">
+  Pick<ChildItem, "title" | "notes" | "date" | "time" | "remind" | "completed" | "kind" | "repeat" | "file_path">
 >;
 
 interface ChildrenState {

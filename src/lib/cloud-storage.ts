@@ -125,6 +125,7 @@ export const CLOUD_USER_DATA_KEYS = new Set([
   "myflove-meal-favorites",
   "myflove-replan-mode",
   "myflove-child-schedules",
+  "myflove-child-schedule-files",
   "myflove-child-reminders",
   "myflove-insight-strategies",
   "myflove-day-plan",
