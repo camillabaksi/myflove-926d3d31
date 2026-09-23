@@ -1,13 +1,14 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Link } from "wouter";
-import { ArrowRight, CheckCircle2, Circle, Sparkles } from "lucide-react";
+import { ArrowDown, ArrowRight, ArrowUp, CheckCircle2, Circle } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import AdaptiveActivityCard from "@/components/adaptive-activity-card";
 import { kindFromId } from "@/components/flow-item-actions";
 import { FlowItemActions } from "@/components/flow-item-actions";
 import { MyFloveTransition } from "@/components/myflove/motion";
 import { useFlowItems } from "@/hooks/use-flow-items";
-import { SOURCE_LABEL, type FlowItem } from "@/lib/flow-items";
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
+import { SOURCE_LABEL, todayISO, type FlowItem } from "@/lib/flow-items";
 import { cn } from "@/lib/utils";
 
 function itemKey(item: FlowItem) {
@@ -43,6 +44,12 @@ export function DailyFlowList({
    */
   /** Anpassa en aktivitet som redan finns – inget nytt skapas. */
   const [adaptItem, setAdaptItem] = useState<FlowItem | null>(null);
+  /** Egen ordning per dag – sparas som nycklar så den överlever omladdning. */
+  const dayISO = date ?? todayISO();
+  const [orderMap, setOrderMap] = useCloudSyncedStorage<Record<string, string[]>>(
+    "myflove-day-order",
+    {},
+  );
   const items = useMemo(() => {
     const merged = new Map<string, FlowItem>();
     for (const item of [...today, ...extraItems]) {
@@ -50,8 +57,33 @@ export function DailyFlowList({
       const previous = merged.get(key);
       if (!previous || (item.done && !previous.done)) merged.set(key, item);
     }
-    return sortAsDay([...merged.values()]);
-  }, [today, extraItems]);
+    const sorted = sortAsDay([...merged.values()]);
+    const saved = orderMap[dayISO];
+    if (!saved || saved.length === 0) return sorted;
+    const byKey = new Map(sorted.map((item) => [itemKey(item), item]));
+    const out: FlowItem[] = [];
+    for (const key of saved) {
+      const found = byKey.get(key);
+      if (found) {
+        out.push(found);
+        byKey.delete(key);
+      }
+    }
+    for (const item of sorted) if (byKey.has(itemKey(item))) out.push(item);
+    return out;
+  }, [today, extraItems, orderMap, dayISO]);
+
+  const move = useCallback(
+    (index: number, direction: -1 | 1) => {
+      const target = index + direction;
+      if (target < 0 || target >= items.length) return;
+      const keys = items.map(itemKey);
+      const [moved] = keys.splice(index, 1);
+      keys.splice(target, 0, moved);
+      setOrderMap((prev) => ({ ...prev, [dayISO]: keys }));
+    },
+    [items, dayISO, setOrderMap],
+  );
 
   if (items.length === 0) {
     return (
@@ -64,7 +96,7 @@ export function DailyFlowList({
   return (
     <>
       <ul className="divide-y divide-border/50" aria-label="Dagens innehåll">
-        {items.map((item) => (
+        {items.map((item, index) => (
           <li key={item.id}>
             <MyFloveTransition transitionKey={String(item.done)}>
               <div
@@ -104,6 +136,26 @@ export function DailyFlowList({
                   <span className="mt-0.5 inline-flex rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
                     {SOURCE_LABEL[item.source]}
                   </span>
+                </div>
+                <div className="flex shrink-0 flex-col">
+                  <button
+                    type="button"
+                    onClick={() => move(index, -1)}
+                    disabled={index === 0}
+                    aria-label={`Flytta upp ${item.title}`}
+                    className="press rounded-full p-1 text-muted-foreground hover:text-primary disabled:opacity-30"
+                  >
+                    <ArrowUp size={14} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => move(index, 1)}
+                    disabled={index === items.length - 1}
+                    aria-label={`Flytta ner ${item.title}`}
+                    className="press rounded-full p-1 text-muted-foreground hover:text-primary disabled:opacity-30"
+                  >
+                    <ArrowDown size={14} />
+                  </button>
                 </div>
                 <FlowItemActions
                   itemId={item.id}
