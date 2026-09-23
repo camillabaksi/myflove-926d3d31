@@ -363,6 +363,14 @@ export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
           hydratedRef.current = true;
           return;
         }
+        // Den lokala kopian vinner, men molnet kan innehålla saker som den
+        // här enheten aldrig sett. Slå ihop dem i stället för att skriva bort.
+        const merged = mergeMissingCloudEntries(valueRef.current, data.value);
+        if (merged !== valueRef.current) {
+          sharedValues.set(key, merged);
+          valueRef.current = merged;
+          setValue(merged);
+        }
       }
 
       hydratedRef.current = true;
