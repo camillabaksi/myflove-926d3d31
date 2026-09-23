@@ -1,19 +1,26 @@
 import {
-  Apple, Bed, Bike, BookOpen, BriefcaseBusiness, BrushCleaning, Bus, Car, CirclePause,
-  Dumbbell, Gamepad2, Headphones, HeartHandshake, Home, House, Medal, Music, Palette,
-  PersonStanding, School, ShowerHead, Smile, Soup, Sparkles, TrainFront, Tv, Users,
-  Utensils, Waves, type LucideIcon,
+  Accessibility, Ambulance, Apple, Bandage, Bed, Bike, BookOpen, BriefcaseBusiness,
+  BriefcaseMedical, BrushCleaning, Bus, Car, CirclePause, ClipboardCheck, Dumbbell, Ear,
+  Gamepad2, Glasses, Headphones, HeartHandshake, HeartPulse, Home, Hospital, House, Medal,
+  MessagesSquare, Music, Palette, PersonStanding, Pill, School, ShoppingCart, ShowerHead,
+  Smile, SmilePlus, Sparkles, Stethoscope, Syringe, TestTube2, TrainFront, Tv, Users,
+  Utensils, WashingMachine, Waves, type LucideIcon,
 } from "lucide-react";
 import type { PictogramId, VisualActivityTone } from "@/lib/child-visual-schedule";
 import { cn } from "@/lib/utils";
 
 const ICONS: Record<PictogramId, LucideIcon> = {
   breakfast: Apple, meal: Utensils, dress: PersonStanding, teeth: BrushCleaning, shower: ShowerHead,
-  sleep: Bed, bag: BriefcaseBusiness, home: Home, school: School, break: Sparkles, study: BookOpen,
+  sleep: Bed, bag: BriefcaseBusiness, home: Home, clean: BrushCleaning, laundry: WashingMachine,
+  shopping: ShoppingCart, school: School, break: Sparkles, study: BookOpen,
   childcare: Smile, walk: PersonStanding, car: Car, bus: Bus, train: TrainFront, bike: Bike,
   play: Smile, friends: Users, exercise: Dumbbell, swim: Waves, game: Gamepad2, tv: Tv,
   craft: Palette, music: Music, pause: CirclePause, quiet: HeartHandshake, headphones: Headphones,
-  rest: Bed, family: House, visit: Users,
+  rest: Bed, family: House, visit: Users, doctor: Stethoscope, dentist: SmilePlus,
+  hospital: Hospital, pharmacy: Pill, clinic: HeartPulse, vaccination: Syringe,
+  nurse: BriefcaseMedical, examination: TestTube2, emergency: Ambulance,
+  conversation: MessagesSquare, optician: Glasses, hearing: Ear, physio: Accessibility,
+  followup: ClipboardCheck,
 };
 
 const TONES: Record<VisualActivityTone, string> = {

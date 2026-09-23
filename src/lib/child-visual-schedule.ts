@@ -1,9 +1,9 @@
 import { addDaysISO, parseISODate, toISODate } from "@/lib/day";
 import type { CapacityLevel } from "@/lib/adaptive-activity";
 
-export type VisualActivityCategory = "hemma" | "skola" | "mat" | "hygien" | "transport" | "fritid" | "träning" | "återhämtning" | "familj";
+export type VisualActivityCategory = "hemma" | "skola" | "mat" | "hygien" | "transport" | "fritid" | "träning" | "återhämtning" | "familj" | "vård";
 export type VisualActivityTone = "lavender" | "blush" | "mint" | "sky" | "sun";
-export type PictogramId = "breakfast" | "meal" | "dress" | "teeth" | "shower" | "sleep" | "bag" | "home" | "school" | "break" | "study" | "childcare" | "walk" | "car" | "bus" | "train" | "bike" | "play" | "friends" | "exercise" | "swim" | "game" | "tv" | "craft" | "music" | "pause" | "quiet" | "headphones" | "rest" | "family" | "visit";
+export type PictogramId = "breakfast" | "meal" | "dress" | "teeth" | "shower" | "sleep" | "bag" | "home" | "clean" | "laundry" | "shopping" | "school" | "break" | "study" | "childcare" | "walk" | "car" | "bus" | "train" | "bike" | "play" | "friends" | "exercise" | "swim" | "game" | "tv" | "craft" | "music" | "pause" | "quiet" | "headphones" | "rest" | "family" | "visit" | "doctor" | "dentist" | "hospital" | "pharmacy" | "clinic" | "vaccination" | "nurse" | "examination" | "emergency" | "conversation" | "optician" | "hearing" | "physio" | "followup";
 
 export interface VisualActivityMeta {
   /** Legacy value retained only so old saved activities decode safely. */
@@ -18,8 +18,11 @@ export interface ActivityBankItem extends VisualActivityMeta { title: string; ke
 export const ACTIVITY_BANK: Record<VisualActivityCategory, ActivityBankItem[]> = {
   hemma: [
     { title: "Klä på sig", pictogram: "dress", category: "hemma", tone: "blush" },
-    { title: "Packa väskan", pictogram: "bag", category: "hemma", tone: "mint" },
+    { title: "Packa", pictogram: "bag", category: "hemma", tone: "mint", keywords: ["packa väskan", "ryggsäck", "väska"] },
     { title: "Hemma", pictogram: "home", category: "hemma", tone: "lavender" },
+    { title: "Städa", pictogram: "clean", category: "hemma", tone: "mint", keywords: ["städa rummet", "dammsuga", "plocka undan"] },
+    { title: "Tvätta", pictogram: "laundry", category: "hemma", tone: "sky", keywords: ["tvätt", "tvättmaskin", "kläder"] },
+    { title: "Handla", pictogram: "shopping", category: "hemma", tone: "sun", keywords: ["affär", "mataffär", "butik", "inköp"] },
   ],
   skola: [
     { title: "Skola", pictogram: "school", category: "skola", tone: "sky" },
@@ -49,7 +52,7 @@ export const ACTIVITY_BANK: Record<VisualActivityCategory, ActivityBankItem[]> =
   fritid: [
     { title: "Lek", pictogram: "play", category: "fritid", tone: "blush" },
     { title: "Kompis", pictogram: "friends", category: "fritid", tone: "blush" },
-    { title: "Spela", pictogram: "game", category: "fritid", tone: "lavender" },
+    { title: "Fritid", pictogram: "game", category: "fritid", tone: "lavender", keywords: ["spela", "tv-spel", "gaming"] },
     { title: "TV", pictogram: "tv", category: "fritid", tone: "sky" },
     { title: "Pyssla", pictogram: "craft", category: "fritid", tone: "sun" },
     { title: "Musik", pictogram: "music", category: "fritid", tone: "lavender" },
@@ -69,13 +72,29 @@ export const ACTIVITY_BANK: Record<VisualActivityCategory, ActivityBankItem[]> =
     { title: "Familjetid", pictogram: "family", category: "familj", tone: "blush" },
     { title: "Besök", pictogram: "visit", category: "familj", tone: "sun" },
   ],
+  vård: [
+    { title: "Doktor", pictogram: "doctor", category: "vård", tone: "sky", keywords: ["läkare", "läkarbesök", "doktorsbesök"] },
+    { title: "Tandläkare", pictogram: "dentist", category: "vård", tone: "sky", keywords: ["tandvård", "tänder", "tandhygienist"] },
+    { title: "Sjukhus", pictogram: "hospital", category: "vård", tone: "lavender", keywords: ["sjukhusbesök", "mottagning"] },
+    { title: "Apotek", pictogram: "pharmacy", category: "vård", tone: "mint", keywords: ["hämta medicin", "hämta läkemedel", "recept"] },
+    { title: "Vårdcentral", pictogram: "clinic", category: "vård", tone: "sky", keywords: ["hälsocentral", "mottagning", "vårdbesök"] },
+    { title: "Vaccination", pictogram: "vaccination", category: "vård", tone: "sun", keywords: ["vaccin", "spruta"] },
+    { title: "Sjuksköterska", pictogram: "nurse", category: "vård", tone: "mint", keywords: ["sköterska", "sjuksköterskebesök"] },
+    { title: "Undersökning", pictogram: "examination", category: "vård", tone: "sun", keywords: ["provtagning", "prov", "blodprov", "test"] },
+    { title: "Akut vård", pictogram: "emergency", category: "vård", tone: "blush", keywords: ["akuten", "ambulans", "akutmottagning"] },
+    { title: "Samtal", pictogram: "conversation", category: "vård", tone: "lavender", keywords: ["psykolog", "BUP", "kurator", "samtalsbesök"] },
+    { title: "Optiker", pictogram: "optician", category: "vård", tone: "sky", keywords: ["syn", "synundersökning", "glasögon"] },
+    { title: "Hörselmottagning", pictogram: "hearing", category: "vård", tone: "mint", keywords: ["hörsel", "audiolog", "öra", "hörseltest"] },
+    { title: "Fysioterapi", pictogram: "physio", category: "vård", tone: "sun", keywords: ["rehab", "rehabilitering", "fysioterapeut", "sjukgymnastik"] },
+    { title: "Återbesök", pictogram: "followup", category: "vård", tone: "lavender", keywords: ["vårdbesök", "uppföljning", "kontroll"] },
+  ],
 };
 
-export const CATEGORY_LABELS: Record<VisualActivityCategory, string> = { hemma: "Hemma", skola: "Skola", mat: "Mat", hygien: "Hygien", transport: "Transport", fritid: "Fritid", träning: "Träning", återhämtning: "Återhämtning", familj: "Familj" };
+export const CATEGORY_LABELS: Record<VisualActivityCategory, string> = { hemma: "Hemma", skola: "Skola", mat: "Mat", hygien: "Hygien", transport: "Transport", fritid: "Fritid", träning: "Träning", återhämtning: "Återhämtning", familj: "Familj", vård: "Vård" };
 export const VISUAL_TONES: VisualActivityTone[] = ["lavender", "blush", "mint", "sky", "sun"];
 export const ALL_PICTOGRAMS = Object.values(ACTIVITY_BANK).flat();
 const VALID_PICTOGRAMS = new Set<PictogramId>(ALL_PICTOGRAMS.map((item) => item.pictogram));
-const LEGACY_EMOJI: Record<string, PictogramId> = { "⭐": "home", "🎒": "bag", "🏫": "school", "🍎": "breakfast", "🍽️": "meal", "🪥": "teeth", "👕": "dress", "🛁": "shower", "😴": "sleep", "🎧": "headphones", "⚽": "exercise", "🏊": "swim", "🎨": "craft", "🚌": "bus", "🚗": "car", "🚆": "train", "🚶": "walk", "👫": "friends", "🌿": "pause", "🛋️": "rest", "📚": "study", "🎮": "game", "📺": "tv", "🧩": "play", "☀️": "break" };
+const LEGACY_EMOJI: Record<string, PictogramId> = { "⭐": "home", "🎒": "bag", "🏫": "school", "🍎": "breakfast", "🍽️": "meal", "🪥": "teeth", "👕": "dress", "🧥": "dress", "🛁": "shower", "🚿": "shower", "😴": "sleep", "🎧": "headphones", "⚽": "exercise", "🏊": "swim", "🎨": "craft", "🚌": "bus", "🚗": "car", "🚆": "train", "🚶": "walk", "👫": "friends", "👭": "friends", "🌿": "pause", "🛋️": "rest", "📚": "study", "🎮": "game", "📺": "tv", "🧩": "play", "☀️": "break", "🛒": "shopping", "🧹": "clean", "🧺": "laundry", "👩‍⚕️": "doctor", "🧑‍⚕️": "nurse", "🦷": "dentist", "🏥": "hospital", "💊": "pharmacy", "🩺": "clinic", "💉": "vaccination", "🩹": "examination", "🚑": "emergency", "🧠": "conversation", "👓": "optician", "👂": "hearing", "🧑‍🦽": "physio", "📋": "followup" };
 const META_PREFIX = "[myflove-visual:";
 const FALLBACK_META: VisualActivityMeta = { pictogram: "home", category: "hemma", tone: "lavender" };
 
