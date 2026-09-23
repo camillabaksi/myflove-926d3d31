@@ -19,6 +19,8 @@ import {
   Sparkles,
   Trash2,
   UserRound,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -38,6 +40,7 @@ import {
   CATEGORY_STYLES,
   FAMILY_LABELS,
   activityDedupKey,
+  compareDayItems,
   activityOccursOn,
   buildMultiMovePatches,
   copiedVisualNotes,
@@ -254,6 +257,8 @@ export default function VisualChildSchedule({
     event.preventDefault();
     if (!draft.title.trim() || !draft.date) return;
     setSaving(true);
+    if (mode === "today") setViewDate(draft.date === today ? null : draft.date);
+    else setAnchor(draft.date);
     try {
       let filePath = editing?.file_path ?? undefined;
       if (draft.file) filePath = await uploadDoc(child.id, draft.file);
@@ -273,6 +278,7 @@ export default function VisualChildSchedule({
           return;
         }
         await addItem({ childId: child.id, kind: "activity", title: draft.title.trim(), date: draft.date, time: draft.time || undefined, repeat: draft.repeat, notes: encodeVisualNotes({ ...draft.meta, ...(draft.endTime ? { endTime: draft.endTime } : { endTime: undefined }) }, draft.note), filePath });
+        toast.success(t("Aktiviteten är tillagd."));
       }
       setAdding(false);
       setEditing(null);
