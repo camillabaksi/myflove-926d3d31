@@ -53,8 +53,9 @@ export const HOME_SHORTCUT_CATALOG: HomeShortcut[] = [
   { href: "/matlista", label: "Matplanering", hint: "Veckans mat", icon: UtensilsCrossed },
   { href: "/stadning", label: "Städning", hint: "Vad som behöver göras hemma", icon: SprayCan },
   { href: "/finances", label: "Ekonomi", hint: "Räkningar och budget", icon: Wallet },
-  { href: "/familj", label: "Familj", hint: "Dela listor och kalender", icon: Users },
+  { href: "/familjeflow", label: "Familj", hint: "Få vardagen att fungera för familjen", icon: Users },
   { href: "/barn", label: "Barn", hint: "Scheman och rutiner", icon: Baby },
+
   { href: "/statistik", label: "Statistik", hint: "Se dina mönster", icon: BarChart3 },
   { href: "/beloningar", label: "Belöningar", hint: "Det du klarat av", icon: Sparkles },
 ];
@@ -66,13 +67,24 @@ export function findShortcut(href: string): HomeShortcut | undefined {
 const STORAGE_KEY = "myflove-home-shortcuts";
 const DEFAULT_SHORTCUTS: string[] = [];
 
+/** Gamla sparade genvägar som pekat på fel sida – Familj ska öppna Family Flow. */
+const LEGACY_HREFS: Record<string, string> = { "/familj": "/familjeflow" };
+
 export function useHomeShortcuts() {
   const [saved, setSaved] = useCloudSyncedStorage<string[]>(STORAGE_KEY, DEFAULT_SHORTCUTS);
 
-  const shortcuts = useMemo<HomeShortcut[]>(
-    () => (saved ?? []).map(findShortcut).filter((item): item is HomeShortcut => item != null),
+  const shortcuts = useMemo<(HomeShortcut & { storedHref: string })[]>(
+    () =>
+      (saved ?? [])
+        .map((href) => {
+          const item = findShortcut(LEGACY_HREFS[href] ?? href);
+          return item ? { ...item, storedHref: href } : null;
+        })
+        .filter((item): item is HomeShortcut & { storedHref: string } => item != null),
     [saved],
   );
+
+
 
   const add = useCallback(
     (href: string) =>

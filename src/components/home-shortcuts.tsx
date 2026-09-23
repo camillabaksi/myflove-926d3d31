@@ -125,7 +125,7 @@ export default function HomeShortcuts() {
               </Link>
               <button
                 type="button"
-                onClick={() => remove(item.href)}
+                onClick={() => remove(item.storedHref)}
                 aria-label={`${t("Ta bort")} ${t(item.label)}`}
                 className="absolute right-1.5 top-1.5 grid h-7 w-7 place-items-center rounded-full bg-secondary/80 text-muted-foreground hover:text-foreground"
               >
