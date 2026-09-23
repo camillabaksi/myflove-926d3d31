@@ -17,6 +17,10 @@ let inflightUser: Promise<User | null> | null = null;
 // aldrig räknas från varsin gammal React-snapshot och skriver över varandra.
 const sharedValues = new Map<string, unknown>();
 
+export function applyCloudStorageUpdate<T>(current: T, update: T | ((previous: T) => T)): T {
+  return update instanceof Function ? update(current) : update;
+}
+
 export async function getSyncUser(): Promise<User | null> {
   if (cachedUser) return cachedUser.user;
   if (!inflightUser) {
@@ -416,7 +420,7 @@ export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
       localRevisionRef.current += 1;
       setLocalUpdatedAt(Date.now());
       const current = (sharedValues.get(key) as T | undefined) ?? valueRef.current;
-      const next = v instanceof Function ? v(current) : v;
+      const next = applyCloudStorageUpdate(current, v);
       sharedValues.set(key, next);
       valueRef.current = next;
       setValue(next);
