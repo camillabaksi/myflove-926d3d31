@@ -417,6 +417,14 @@ export function useChildren() {
     return path;
   };
 
+  /** Duplicerar ett privat barnfoto till ett annat barns egen skyddade mapp. */
+  const copyDoc = async (sourcePath: string, targetChildId: string) => {
+    const { data, error: downloadError } = await supabase.storage.from("child-docs").download(sourcePath);
+    if (downloadError) throw downloadError;
+    const sourceName = sourcePath.split("/").pop() || "bild.jpg";
+    return uploadDoc(targetChildId, new File([data], `kopia-${sourceName}`, { type: data.type || "image/jpeg" }));
+  };
+
   const openDoc = async (path: string) => {
     const { data, error: err } = await supabase.storage
       .from("child-docs")
@@ -445,6 +453,7 @@ export function useChildren() {
     deleteItem,
     setItemShares,
     uploadDoc,
+    copyDoc,
     openDoc,
   };
 }

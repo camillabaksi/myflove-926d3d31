@@ -29,6 +29,7 @@ export default function FamilyFlowPage() {
     toggleItem,
     deleteItem,
     uploadDoc,
+    copyDoc,
     openDoc,
   } = useChildren();
   const [showSituation, setShowSituation] = useState(false);
@@ -41,7 +42,7 @@ export default function FamilyFlowPage() {
       <Layout>
         <MyFlovePageGrid area="hem">
           <MyFloveWide>
-            <VisualChildSchedule child={scheduleChild} items={items} onClose={() => setScheduleChildId(null)} addItem={addItem} updateItem={updateItem} toggleItem={toggleItem} deleteItem={deleteItem} uploadDoc={uploadDoc} openDoc={openDoc} />
+            <VisualChildSchedule child={scheduleChild} children={children} items={items} onClose={() => setScheduleChildId(null)} addItem={addItem} updateItem={updateItem} toggleItem={toggleItem} deleteItem={deleteItem} uploadDoc={uploadDoc} copyDoc={copyDoc} openDoc={openDoc} />
           </MyFloveWide>
         </MyFlovePageGrid>
       </Layout>
