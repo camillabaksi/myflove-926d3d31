@@ -148,6 +148,10 @@ export default function VisualChildSchedule({
     () => childItems.filter((item) => item.date === today).sort((a, b) => (a.time ?? "99:99").localeCompare(b.time ?? "99:99") || a.created_at.localeCompare(b.created_at)),
     [childItems, today],
   );
+  const todayWeekday = (parseISODate(today).getDay() + 6) % 7;
+  const todaySchoolEntries = schoolEntries
+    .filter((entry) => entry.weekday === todayWeekday)
+    .sort((a, b) => a.start.localeCompare(b.start));
   const openToday = todayItems.filter((item) => !item.completed);
   const current = openToday[0] ?? null;
   const next = openToday[1] ?? null;
@@ -216,7 +220,7 @@ export default function VisualChildSchedule({
       const targetDate = addDaysISO(item.date ?? dates[0]!, 7);
       const key = activityDedupKey({ childId: child.id, title: item.title, date: targetDate, time: item.time });
       if (existing.has(key)) continue;
-      await addItem({ childId: child.id, kind: "activity", title: item.title, date: targetDate, time: item.time ?? undefined, notes: item.notes ?? undefined, filePath: item.file_path ?? undefined });
+      await addItem({ childId: child.id, kind: "activity", title: item.title, date: targetDate, time: item.time ?? undefined, notes: item.notes ?? undefined });
       existing.add(key);
       copied += 1;
     }
@@ -280,6 +284,21 @@ export default function VisualChildSchedule({
               <p className="font-semibold text-ink"><Sparkles size={16} className="mr-1 inline text-primary" />{t(guidance.message)}</p>
               {guidance.recovery && <p className="mt-1 text-sm text-muted-foreground">{t(guidance.recovery)}</p>}
               <Button type="button" variant="outline" onClick={() => openAdd(ACTIVITY_BANK.återhämtning[1], today)} className="mt-3 h-11 rounded-2xl">{t("Lägg in lugn stund")}</Button>
+            </section>
+          )}
+
+          {todaySchoolEntries.length > 0 && (
+            <section className="space-y-2" aria-label={t("Skolschema idag")}>
+              <h3 className="text-sm font-bold text-ink">🏫 {t("Skolschema idag")}</h3>
+              {todaySchoolEntries.map((entry) => (
+                <div key={entry.id} className="flex items-center gap-3 rounded-2xl border border-sky bg-sky/40 p-3">
+                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-card text-2xl" aria-hidden>🏫</span>
+                  <div className="min-w-0 flex-1">
+                    <p className="font-medium text-ink">{entry.title}</p>
+                    <p className="text-xs text-muted-foreground">{entry.start}{entry.end ? `–${entry.end}` : ""} · {t("återkommer varje vecka")}</p>
+                  </div>
+                </div>
+              ))}
             </section>
           )}
 

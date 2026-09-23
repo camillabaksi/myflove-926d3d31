@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Visuellt barnschema 1.0 i Family Flow: vecka, idag, Nu/Nästa, aktivitetsbank, privata bilder, kopiera vecka och Flow-koppling (2026-09-23)
+- [x] Visuellt barnschema 1.0 i Family Flow: vecka, idag, Nu/Nästa, aktivitetsbank, privata bilder, kopiera vecka och Flow-koppling (2026-09-23)
 
 - [x] Ersätt streckfigurer med 58 realistiska instruktionsbilder i Träningsprogram (2026-09-22)
 
