@@ -1,6 +1,7 @@
 ## 2026-09-23 – Barnschema: andra dagar och egen ordning
 
 - Idag-vyn kan bläddra till andra dagar, och nya aktiviteter visas på den dag de läggs in.
+- Tryckbara dagsrutor (Mån–Sön) visar vilken dag som är vald, och formuläret visar vilken dag aktiviteten läggs in på.
 - Aktiviteter kan flyttas upp och ner i dagens ordning.
 
 ## 2026-09-23 – Stress föreslås aldrig som energikälla
