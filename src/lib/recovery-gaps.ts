@@ -24,6 +24,12 @@ export interface FixedSlot {
   title: string;
   /** Egen hållpunkt eller något i familjen. */
   who?: "jag" | "familj";
+  /** Förberedelse före hållpunkten, minuter. Ersätter standardbufferten. */
+  prepMinutes?: number;
+  /** Resa/förflyttning efter hållpunkten, minuter. */
+  travelMinutes?: number;
+  /** Användaren har själv sagt att det brukar behövas lugn stund efteråt. */
+  preferAfter?: boolean;
 }
 
 export type RecoveryKind = "paus" | "ljusboost" | "stopp" | "vardag";
