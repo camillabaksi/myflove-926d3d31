@@ -164,6 +164,7 @@ export default function VisualChildSchedule({
   const [schedules] = useCloudSyncedStorage<Record<string, ChildScheduleEntry[]>>(SCHEDULE_KEY, {});
   const [templates, setTemplates] = useCloudSyncedStorage<ChildScheduleTemplate[]>(TEMPLATE_KEY, []);
   const [mode, setMode] = useState<"week" | "today">("today");
+  const [viewDate, setViewDate] = useState<string | null>(null);
   const [anchor, setAnchor] = useState(todayISO());
   const [adding, setAdding] = useState(false);
   const [editing, setEditing] = useState<ChildItem | null>(null);
@@ -201,16 +202,18 @@ export default function VisualChildSchedule({
   const nowDate = new Date(nowTick);
   const nowMinutes = localNowMinutes(nowDate);
   const today = todayISO(nowDate);
+  const dayDate = viewDate ?? today;
+  const isViewingToday = dayDate === today;
   const todayItems = useMemo(
-    () => childItems.filter((item) => activityOccursOn(item, today)).sort((a, b) => (a.time ?? "99:99").localeCompare(b.time ?? "99:99") || a.created_at.localeCompare(b.created_at)),
-    [childItems, today],
+    () => childItems.filter((item) => activityOccursOn(item, dayDate)).sort(compareDayItems),
+    [childItems, dayDate],
   );
-  const todayWeekday = (parseISODate(today).getDay() + 6) % 7;
+  const todayWeekday = (parseISODate(dayDate).getDay() + 6) % 7;
   const todaySchoolEntries = schoolEntries
     .filter((entry) => entry.weekday === todayWeekday)
     .sort((a, b) => a.start.localeCompare(b.start));
   const openToday = todayItems.filter((item) => !item.completed);
-  const { current, next } = pickNowNext(openToday, nowMinutes);
+  const { current, next } = isViewingToday ? pickNowNext(openToday, nowMinutes) : { current: null, next: null };
   const nextPrompt = next?.time ? transitionPrompt(next.title, minutesUntilTime(next.time, nowMinutes)) : null;
   const score = typeof flow?.score === "number" ? flow.score : null;
   const guidance = getScheduleGuidance(openToday.length, capacityFromScore(score));
@@ -221,10 +224,23 @@ export default function VisualChildSchedule({
     ? `${t(FAMILY_LABELS[meta.familyLabel])}${meta.familyLabel === "child" ? ` · ${child.name}` : ""}`
     : t(CATEGORY_LABELS[meta.category]);
 
-  const openAdd = (preset?: ActivityBankItem, date = mode === "today" ? today : anchor) => {
+  const openAdd = (preset?: ActivityBankItem, date = mode === "today" ? dayDate : anchor) => {
     setEditing(null);
     setDraft({ ...defaultDraft(date), ...(preset ? { title: preset.title, meta: preset } : {}) });
     setAdding(true);
+  };
+
+  const reorderItem = async (id: string, direction: -1 | 1) => {
+    const list = [...todayItems];
+    const index = list.findIndex((item) => item.id === id);
+    const target = index + direction;
+    if (index < 0 || target < 0 || target >= list.length) return;
+    [list[index], list[target]] = [list[target]!, list[index]!];
+    for (const [position, item] of list.entries()) {
+      const decoded = decodeVisualNotes(item.notes);
+      if (decoded.meta.order === position) continue;
+      await updateItem(item.id, { notes: encodeVisualNotes({ ...decoded.meta, order: position }, decoded.note) });
+    }
   };
 
   const openEdit = (item: ChildItem) => {
@@ -426,8 +442,10 @@ export default function VisualChildSchedule({
 
       <div className="grid grid-cols-2 gap-1 rounded-xl bg-muted/70 p-1" role="tablist" aria-label={t("Välj schemavy") }>
         <Button type="button" variant={mode === "week" ? "default" : "ghost"} onClick={() => setMode("week")} className="h-10 rounded-lg shadow-none" role="tab" aria-selected={mode === "week"}>{t("Vecka")}</Button>
-        <Button type="button" variant={mode === "today" ? "default" : "ghost"} onClick={() => setMode("today")} className="h-10 rounded-lg shadow-none" role="tab" aria-selected={mode === "today"}>{t("Idag")}</Button>
+        <Button type="button" variant={mode === "today" ? "default" : "ghost"} onClick={() => { setMode("today"); setViewDate(null); }} className="h-10 rounded-lg shadow-none" role="tab" aria-selected={mode === "today"}>{t("Idag")}</Button>
       </div>
+
+      {mode === "today" && <div className="flex items-center justify-between gap-2 rounded-xl border border-border bg-card p-1"><Button type="button" variant="ghost" onClick={() => setViewDate(addDaysISO(dayDate, -1))} className="h-10 rounded-lg px-3" aria-label={t("Föregående dag")}>‹</Button><div className="flex min-w-0 flex-1 items-center justify-center gap-2"><p className="truncate text-sm font-semibold text-ink">{isViewingToday ? t("Idag") : new Intl.DateTimeFormat(locale, { weekday: "long", day: "numeric", month: "short" }).format(parseISODate(dayDate))}</p>{!isViewingToday && <Button type="button" variant="outline" onClick={() => setViewDate(null)} className="h-8 rounded-full px-3 text-xs">{t("Till idag")}</Button>}</div><Button type="button" variant="ghost" onClick={() => setViewDate(addDaysISO(dayDate, 1))} className="h-10 rounded-lg px-3" aria-label={t("Nästa dag")}>›</Button></div>}
 
       {mode === "today" ? (
         <div className="space-y-5">
@@ -484,7 +502,7 @@ export default function VisualChildSchedule({
                  const category = decodeVisualNotes(item.notes).meta.category;
                  return <li key={item.id} className={cn("flex items-center gap-2 rounded-xl border px-2 py-1.5 shadow-sm transition-opacity", CATEGORY_STYLES[category].subtle, item.completed && "opacity-60", (isCurrent || isNext) && "ring-1 ring-primary/30")}>
                    {selectionMode ? <Button type="button" variant={selectedIds.includes(item.id) ? "default" : "outline"} size="icon" onClick={() => toggleSelected(item.id)} className="h-10 w-10 shrink-0 rounded-full" aria-label={t("Välj aktivitet")}><Check size={16} /></Button> : <Button type="button" variant="ghost" size="icon" onClick={() => void markDone(item)} className="h-10 w-10 shrink-0 rounded-full" aria-label={t(item.completed ? "Markera som inte klar" : "Markera som klar")}>{item.completed ? <CheckCircle2 className="text-primary" /> : isCurrent ? <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground">›</span> : <span className="h-5 w-5 rounded-full border-2 border-muted-foreground" />}</Button>}
-                    <ActivityVisual item={item} className="h-11 w-11 rounded-xl" openDoc={openDoc} /><div className="min-w-0 flex-1"><p className={cn("font-semibold text-ink", item.completed && "line-through")}>{item.title}</p><p className="text-xs text-muted-foreground">{item.time?.slice(0, 5) || t("Ingen tid")}{decodeVisualNotes(item.notes).meta.endTime ? `–${decodeVisualNotes(item.notes).meta.endTime}` : ""} · {contextLabel(decodeVisualNotes(item.notes).meta)}{isCurrent ? ` · ${t("Nu")}` : isNext ? ` · ${t("Nästa")}` : ""}{decodeVisualNotes(item.notes).meta.parentPresence === true ? ` · ${t("Kräver dig")}` : ""}</p></div>{!selectionMode && <div className="flex shrink-0"><Button type="button" variant="ghost" size="icon" onClick={() => openMove([item.id])} className="h-10 w-10 rounded-full" aria-label={t("Flytta")}><Move size={16} /></Button><Button type="button" variant="ghost" size="icon" onClick={() => openEdit(item)} className="h-10 w-10 rounded-full" aria-label={t("Ändra")}><Ellipsis size={18} /></Button></div>}</li>;
+                    <ActivityVisual item={item} className="h-11 w-11 rounded-xl" openDoc={openDoc} /><div className="min-w-0 flex-1"><p className={cn("font-semibold text-ink", item.completed && "line-through")}>{item.title}</p><p className="text-xs text-muted-foreground">{item.time?.slice(0, 5) || t("Ingen tid")}{decodeVisualNotes(item.notes).meta.endTime ? `–${decodeVisualNotes(item.notes).meta.endTime}` : ""} · {contextLabel(decodeVisualNotes(item.notes).meta)}{isCurrent ? ` · ${t("Nu")}` : isNext ? ` · ${t("Nästa")}` : ""}{decodeVisualNotes(item.notes).meta.parentPresence === true ? ` · ${t("Kräver dig")}` : ""}</p></div>{!selectionMode && <div className="flex shrink-0"><div className="flex flex-col"><Button type="button" variant="ghost" size="icon" disabled={todayItems[0]?.id === item.id} onClick={() => void reorderItem(item.id, -1)} className="h-5 w-8 rounded-md" aria-label={t("Flytta upp")}><ChevronUp size={14} /></Button><Button type="button" variant="ghost" size="icon" disabled={todayItems[todayItems.length - 1]?.id === item.id} onClick={() => void reorderItem(item.id, 1)} className="h-5 w-8 rounded-md" aria-label={t("Flytta ner")}><ChevronDown size={14} /></Button></div><Button type="button" variant="ghost" size="icon" onClick={() => openMove([item.id])} className="h-10 w-10 rounded-full" aria-label={t("Flytta")}><Move size={16} /></Button><Button type="button" variant="ghost" size="icon" onClick={() => openEdit(item)} className="h-10 w-10 rounded-full" aria-label={t("Ändra")}><Ellipsis size={18} /></Button></div>}</li>;
               })}</ul></section>;
             })}
           </div>
