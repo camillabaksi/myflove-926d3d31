@@ -527,6 +527,32 @@ export default function VisualChildSchedule({
           <div className="flex items-center gap-3 rounded-xl border border-border bg-card p-3"><ActivityPictogram id={draft.meta.pictogram} tone={draft.meta.tone} /><div><p className="text-sm font-semibold text-ink">{t("Valt pictogram")}</p><p className="text-xs text-muted-foreground">{t(CATEGORY_LABELS[draft.meta.category])}</p></div></div>
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2"><label className="space-y-1 text-sm font-medium text-ink"><span>{t("Område")}</span><select value={draft.meta.category} onChange={(event) => { const category = event.target.value as VisualActivityCategory; setDraft({ ...draft, meta: { ...draft.meta, category, ...(category === "familj" ? { familyLabel: draft.meta.familyLabel ?? "shared" } : { familyLabel: undefined }) } }); }} className={cn("h-12 w-full rounded-2xl border px-3", CATEGORY_STYLES[draft.meta.category].subtle)}>{CATEGORY_KEYS.map((category) => <option key={category} value={category}>{t(CATEGORY_LABELS[category])}</option>)}</select></label><label className="space-y-1 text-sm font-medium text-ink"><span>{t("Återkommer")}</span><select value={draft.repeat} onChange={(event) => setDraft({ ...draft, repeat: event.target.value as ChildRepeatMode })} className="h-12 w-full rounded-2xl border border-border bg-card px-3"><option value="none">{t("Inte återkommande")}</option><option value="daily">{t("Varje dag")}</option><option value="weekdays">{t("Vardagar")}</option><option value="weekly">{t("Varje vecka")}</option></select></label></div>
           {draft.meta.category === "familj" && <label className="space-y-1 text-sm font-medium text-ink"><span>{t("Gäller inom Familj")}</span><select value={draft.meta.familyLabel ?? "shared"} onChange={(event) => setDraft({ ...draft, meta: { ...draft.meta, familyLabel: event.target.value as FamilyActivityLabel } })} className={cn("h-12 w-full rounded-2xl border px-3", CATEGORY_STYLES.familj.subtle)}><option value="child">{t(`Barn · ${child.name}`)}</option><option value="shared">{t("Familj gemensamt")}</option><option value="caregiver">{t("Förälder/omsorg")}</option></select></label>}
+          <div className="space-y-3 rounded-2xl border border-border bg-muted/40 p-3">
+            <p className="text-sm font-semibold text-ink">{t("Kräver mig")}</p>
+            <p className="text-xs text-muted-foreground">{t("Frivilligt. Handlar om dig, inte om barnet.")}</p>
+            <label className="flex items-center justify-between gap-2 text-sm text-ink">
+              <span>{t("Jag behöver vara med")}</span>
+              <Switch checked={draft.meta.parentPresence !== false} onCheckedChange={(checked) => setDraft({ ...draft, meta: { ...draft.meta, parentPresence: checked } })} />
+            </label>
+            <div className="grid grid-cols-2 gap-2">
+              <label className="space-y-1 text-sm font-medium text-ink"><span>{t("Förberedelse")}</span>
+                <select value={draft.meta.prepMinutes ?? 0} onChange={(event) => setDraft({ ...draft, meta: { ...draft.meta, prepMinutes: Number(event.target.value) || undefined } })} className="h-12 w-full rounded-2xl border border-border bg-card px-3">
+                  <option value={0}>{t("Ingen")}</option>
+                  {PREP_MINUTE_CHOICES.map((m) => <option key={m} value={m}>{`${m} min`}</option>)}
+                </select>
+              </label>
+              <label className="space-y-1 text-sm font-medium text-ink"><span>{t("Resa")}</span>
+                <select value={draft.meta.travelMinutes ?? 0} onChange={(event) => setDraft({ ...draft, meta: { ...draft.meta, travelMinutes: Number(event.target.value) || undefined } })} className="h-12 w-full rounded-2xl border border-border bg-card px-3">
+                  <option value={0}>{t("Ingen")}</option>
+                  {TRAVEL_MINUTE_CHOICES.map((m) => <option key={m} value={m}>{`${m} min`}</option>)}
+                </select>
+              </label>
+            </div>
+            <label className="flex items-center justify-between gap-2 text-sm text-ink">
+              <span>{t("Lugn stund efteråt")}</span>
+              <Switch checked={!!draft.meta.recoveryAfter} onCheckedChange={(checked) => setDraft({ ...draft, meta: { ...draft.meta, recoveryAfter: checked || undefined } })} />
+            </label>
+          </div>
           <Input value={draft.note} onChange={(event) => setDraft({ ...draft, note: event.target.value })} placeholder={t("Kort anteckning (valfritt)")} className="h-12 rounded-2xl" />
           <input ref={galleryRef} type="file" accept="image/*" className="hidden" onChange={(event) => setDraft({ ...draft, file: event.target.files?.[0] ?? null })} />
           <input ref={cameraRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={(event) => setDraft({ ...draft, file: event.target.files?.[0] ?? null })} />
