@@ -68,6 +68,9 @@ EN = [
     ("MYFLOVE", "Build everyday life around the capacity|you actually have.", "MyFlove adapts to you — so you do not have to carry everything alone.", "aterhamtning.png", "myflove.lovable.app"),
 ]
 
+# Version 5.1 has one canonical bilingual source shared with the editable deck.
+from pitch_content_51 import DURATIONS, SV, EN
+
 
 def font(path, size, variation=None):
     f = ImageFont.truetype(path, max(12, int(size)))
@@ -205,9 +208,10 @@ def visual_panel(im, draw, idx, item, box, portrait):
     for px,py in (path[0],path[-1]):
         r=sw*1.8
         draw.ellipse((px-r,py-r,px+r,py+r),fill=path_color)
-    if idx in (10,13):
-        big="140M+" if idx==10 else "18"
-        sub="GLOBAL ESTIMATE" if idx==10 else "MONTHS"
+    if item[0] in ("MARKNAD", "MARKET", "KAPITAL & NÄSTA STEG", "FUNDING & NEXT STEP"):
+        market = item[0] in ("MARKNAD", "MARKET")
+        big="140M+" if market else "18"
+        sub="GLOBAL ESTIMATE" if market else "MONTHS"
         stat_size=min(panel_w,panel_h)*(.20 if portrait else .24)
         bf=font(DISPLAY,stat_size*.42,"ExtraBold")
         sf=font(BODY,stat_size*.09,"Bold")
@@ -315,7 +319,7 @@ def build(lang,portrait):
     for idx,duration in enumerate(DURATIONS):
         filters.append(f"[{idx}:v]fps=30,fade=t=in:st=0:d=0.6:color=#EEE5FA,fade=t=out:st={duration-0.6}:d=0.6:color=#EEE5FA,format=yuv420p[v{idx}]")
     filters.append("".join(f"[v{i}]" for i in range(len(DURATIONS)))+f"concat=n={len(DURATIONS)}:v=1:a=0[out]")
-    output=Path("/mnt/documents")/f'MyFlove_Pitchfilm_2026_{lang}_{"9x16" if portrait else "16x9"}_v7.mp4'
+    output=Path("/mnt/documents")/f'MyFlove_Pitchfilm_5.1_{lang}_{"9x16" if portrait else "16x9"}.mp4'
     cmd=["ffmpeg","-y",*inputs,"-filter_complex",";".join(filters),"-map","[out]","-an","-c:v","libx264","-preset","veryfast","-crf","18","-profile:v","high","-level","4.1","-r","30","-g","30","-pix_fmt","yuv420p","-colorspace","bt709","-color_primaries","bt709","-color_trc","bt709","-movflags","+faststart",str(output)]
     subprocess.run(cmd,check=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
     print(output)
