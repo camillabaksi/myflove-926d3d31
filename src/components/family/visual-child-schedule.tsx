@@ -6,7 +6,6 @@ import {
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
-  Clock3,
   Copy,
   ImagePlus,
   Pencil,
@@ -224,7 +223,7 @@ export default function VisualChildSchedule({
     toast.success(t(copied ? `${copied} aktiviteter kopierades.` : "Nästa vecka innehåller redan aktiviteterna."));
   };
 
-  const importQuickItem = async (id: string, text: string, remindAt?: number) => {
+  const importQuickItem = async (text: string, remindAt?: number) => {
     const when = remindAt ? new Date(remindAt) : null;
     const date = when ? `${when.getFullYear()}-${String(when.getMonth() + 1).padStart(2, "0")}-${String(when.getDate()).padStart(2, "0")}` : today;
     const time = when ? `${String(when.getHours()).padStart(2, "0")}:${String(when.getMinutes()).padStart(2, "0")}` : undefined;
@@ -315,7 +314,7 @@ export default function VisualChildSchedule({
       )}
 
       {quickMatches.length > 0 && (
-        <section className="rounded-3xl border border-border bg-sky/25 p-4"><h3 className="font-semibold text-ink">{t("Från QuickFlow")}</h3><div className="mt-2 space-y-2">{quickMatches.map((item) => <div key={item.id} className="flex items-center gap-2"><p className="min-w-0 flex-1 text-sm text-ink">{item.text}</p><Button type="button" variant="outline" onClick={() => void importQuickItem(item.id, item.text, item.remindAt)} className="h-11 rounded-2xl">{t("Lägg till")}</Button></div>)}</div></section>
+        <section className="rounded-3xl border border-border bg-sky/25 p-4"><h3 className="font-semibold text-ink">{t("Från QuickFlow")}</h3><div className="mt-2 space-y-2">{quickMatches.map((item) => <div key={item.id} className="flex items-center gap-2"><p className="min-w-0 flex-1 text-sm text-ink">{item.text}</p><Button type="button" variant="outline" onClick={() => void importQuickItem(item.text, item.remindAt)} className="h-11 rounded-2xl">{t("Lägg till")}</Button></div>)}</div></section>
       )}
 
       {!adding && <Button type="button" onClick={() => openAdd()} className="h-12 w-full rounded-2xl"><Plus size={18} /> {t("Lägg till aktivitet")}</Button>}

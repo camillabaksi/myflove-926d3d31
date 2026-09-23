@@ -1,3 +1,10 @@
+## 2026-09-23 – Visuellt barnschema 1.0
+
+- **Barnets vecka och idag** (2026-09-23): Family Flow visar ett lugnt bildschema med Vecka, Idag samt tydliga Nu och Nästa.
+- **Samma aktiviteter överallt** (2026-09-23): Nya schemaaktiviteter använder barnets befintliga aktiviteter och fortsätter till Min dag och kalendern utan parallella listor.
+- **Aktivitetsbank och egna bilder** (2026-09-23): Föräldern kan välja färdiga aktiviteter, skapa egna och använda privata foton med tillfälliga säkra länkar.
+- **Flow och övergångar** (2026-09-23): Täta dagar kan få frivilliga förenklings- och pausförslag, och barnets sparade önskemål om förvarning används inför Nästa.
+
 ## 2026-09-23 – Family Flow 1.0
 
 - Nytt område Familj under Mer: "Få vardagen att fungera för hela familjen."

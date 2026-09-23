@@ -6,6 +6,7 @@ import Layout from "@/components/layout";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import ChildProfiles from "@/components/family/child-profiles";
 import FamilySituation from "@/components/family/family-situation";
+import VisualChildSchedule from "@/components/family/visual-child-schedule";
 import { useChildren, CHILD_COLORS } from "@/hooks/use-children";
 import { useLang } from "@/hooks/use-language";
 
@@ -15,9 +16,24 @@ import { useLang } from "@/hooks/use-language";
  */
 export default function FamilyFlowPage() {
   const { t } = useLang();
-  const { children, loading, addChild, updateChild, deleteChild } = useChildren();
+  const {
+    children,
+    items,
+    loading,
+    addChild,
+    updateChild,
+    deleteChild,
+    addItem,
+    updateItem,
+    toggleItem,
+    deleteItem,
+    uploadDoc,
+    openDoc,
+  } = useChildren();
   const [showSituation, setShowSituation] = useState(false);
   const [showChildren, setShowChildren] = useState(false);
+  const [scheduleChildId, setScheduleChildId] = useState<string | null>(null);
+  const scheduleChild = children.find((child) => child.id === scheduleChildId) ?? null;
 
   return (
     <Layout>
@@ -83,9 +99,24 @@ export default function FamilyFlowPage() {
                     updateChild(id, { name: d.name, helps: d.helps, avatar: d.avatar })
                   }
                   onDelete={async (id) => deleteChild(id)}
+                  onSchedule={(child) => setScheduleChildId(child.id)}
                 />
               )}
             </section>
+
+            {scheduleChild && (
+              <VisualChildSchedule
+                child={scheduleChild}
+                items={items}
+                onClose={() => setScheduleChildId(null)}
+                addItem={addItem}
+                updateItem={updateItem}
+                toggleItem={toggleItem}
+                deleteItem={deleteItem}
+                uploadDoc={uploadDoc}
+                openDoc={openDoc}
+              />
+            )}
 
             <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
               <Lock size={12} aria-hidden />
