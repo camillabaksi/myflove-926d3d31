@@ -10,7 +10,16 @@ export const CHANGELOG_UPDATED = "2026-09-23";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Familj-genvägen öppnar Family Flow",
+    items: [
+      "Genvägen Familj på Hem öppnar nu Family Flow-vyn (2026-09-23)",
+      "Delningssidan når du fortfarande inifrån Family Flow (2026-09-23)",
+      "Redan sparade Familj-genvägar uppdateras automatiskt (2026-09-23)",
+    ],
+  },
+  {
     title: "Barn som etikett inom Familj",
+
     items: [
       "Barn, Familj gemensamt och Förälder/omsorg finns som etiketter inom Familj (2026-09-23)",
       "Barnaktiviteter kopplas till den befintliga barnprofilen och behåller Familjs färg (2026-09-23)",

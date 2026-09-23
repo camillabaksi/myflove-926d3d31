@@ -1,4 +1,11 @@
+## 2026-09-23 – Familj-genvägen öppnar Family Flow
+
+- Genvägen "Familj" på Hem öppnar nu Family Flow-vyn (barnprofilerna och schemat) i stället för delningssidan.
+- Delningssidan för listor och kalender når du som vanligt inifrån Family Flow.
+- Redan sparade Familj-genvägar på hemskärmen följer med automatiskt.
+
 ## 2026-09-23 – Barn som etikett inom Familj
+
 
 - Familj har fått de interna etiketterna Barn, Familj gemensamt och Förälder/omsorg utan ett nytt huvudområde.
 - Barnaktiviteter visar barnets befintliga profilnamn och använder samma lugna Familj-färg i Vecka, Idag och Nu/Nästa.
