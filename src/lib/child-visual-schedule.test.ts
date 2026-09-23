@@ -6,6 +6,9 @@ import {
   decodeVisualNotes,
   encodeVisualNotes,
   getScheduleGuidance,
+  copiedVisualNotes,
+  searchActivityBank,
+  shiftDateBetween,
   startOfWeekISO,
   transitionPrompt,
   weekDates,
@@ -20,11 +23,28 @@ describe("child visual schedule", () => {
   });
 
   it("round-trips visual metadata without losing a note", () => {
-    const notes = encodeVisualNotes({ emoji: "🎒", category: "hemma", tone: "mint" }, "Vid dörren");
+    const notes = encodeVisualNotes({ pictogram: "bag", category: "hemma", tone: "mint" }, "Vid dörren");
     expect(decodeVisualNotes(notes)).toEqual({
-      meta: { emoji: "🎒", category: "hemma", tone: "mint" },
+      meta: { pictogram: "bag", category: "hemma", tone: "mint" },
       note: "Vid dörren",
     });
+  });
+
+  it("maps old emoji metadata to a current pictogram", () => {
+    const legacy = '[myflove-visual:{"emoji":"🚌","category":"transport","tone":"sun"}]\nHållplatsen';
+    expect(decodeVisualNotes(legacy)).toEqual({ meta: { pictogram: "bus", category: "transport", tone: "sun" }, note: "Hållplatsen" });
+  });
+
+  it("searches pictograms by title and keyword", () => {
+    expect(searchActivityBank("sim").map((item) => item.title)).toContain("Simning");
+    expect(searchActivityBank("bok").map((item) => item.title)).toContain("Läxa");
+  });
+
+  it("shifts dates and strips private notes for cross-child copies", () => {
+    expect(shiftDateBetween("2026-09-23", "2026-09-21", "2026-09-28")).toBe("2026-09-30");
+    const notes = encodeVisualNotes({ pictogram: "headphones", category: "återhämtning", tone: "sky" }, "Behöver hörselkåpor");
+    expect(decodeVisualNotes(copiedVisualNotes(notes, false)).note).toBe("");
+    expect(decodeVisualNotes(copiedVisualNotes(notes, true)).note).toBe("Behöver hörselkåpor");
   });
 
   it("normalizes duplicate activities", () => {

@@ -112,6 +112,10 @@ export function startOfWeekISO(dateISO: string): string { const date = parseISOD
 export function weekDates(dateISO: string): string[] { const monday = startOfWeekISO(dateISO); return Array.from({ length: 7 }, (_, index) => addDaysISO(monday, index)); }
 export function activityDedupKey(input: { childId: string; title: string; date?: string | null; time?: string | null }) { return [input.childId, input.date ?? "", input.time?.slice(0, 5) ?? "", input.title.toLocaleLowerCase("sv").replace(/\s+/g, " ").trim()].join("|"); }
 export function shiftDateBetween(sourceDate: string, sourceAnchor: string, targetAnchor: string): string { const source = parseISODate(sourceDate); const anchor = parseISODate(sourceAnchor); const target = parseISODate(targetAnchor); const offset = Math.round((source.getTime() - anchor.getTime()) / 86400000); target.setDate(target.getDate() + offset); return toISODate(target); }
+export function copiedVisualNotes(notes: string | null | undefined, includePrivateNote: boolean): string {
+  const decoded = decodeVisualNotes(notes);
+  return encodeVisualNotes(decoded.meta, includePrivateNote ? decoded.note : "");
+}
 export function dayPart(time?: string | null): "Morgon" | "Dag" | "Efter skolan" | "Kväll" { if (!time) return "Dag"; const hour = Number(time.slice(0, 2)); if (hour < 10) return "Morgon"; if (hour < 15) return "Dag"; if (hour < 18) return "Efter skolan"; return "Kväll"; }
 export interface ScheduleGuidance { capacity: CapacityLevel; message: string | null; recovery: string | null }
 export function getScheduleGuidance(count: number, capacity: CapacityLevel): ScheduleGuidance { const busyLimit = capacity === "låg" ? 4 : capacity === "medel" ? 6 : 8; const busy = count >= busyLimit; return { capacity, message: busy ? "Det här ser ut som en ganska full dag. Vill du göra planen lite enklare?" : null, recovery: count >= 3 ? "En lugn stund mellan aktiviteterna kan ge mer luft. Du väljer själv om den ska läggas in." : null }; }
