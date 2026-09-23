@@ -1,3 +1,9 @@
+## 2026-09-23 – Barnschemat följer den visuella referensen
+
+- Barnets schema öppnas som en egen lugn vy med barnets namn och avatar högst upp.
+- Veckan visas som ett kompakt färgkodat rutnät med bildstöd och snabblänkar.
+- Dagens schema har tydliga dagsdelar, kompakta aktivitetsrader och klar/nu/nästa-status.
+
 ## 2026-09-23 – Visuellt barnschema 1.0
 
 - **Barnets vecka och idag** (2026-09-23): Family Flow visar ett lugnt bildschema med Vecka, Idag samt tydliga Nu och Nästa.

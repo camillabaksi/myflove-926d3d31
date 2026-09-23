@@ -7,7 +7,10 @@ import {
   ChevronLeft,
   ChevronRight,
   Copy,
+  Ellipsis,
   ImagePlus,
+  Images,
+  Library,
   Pencil,
   Plus,
   Sparkles,
@@ -56,6 +59,15 @@ const TONE_CLASS: Record<VisualActivityTone, string> = {
   sky: "bg-sky/55 border-sky",
   sun: "bg-sun/55 border-sun",
 };
+const DAY_COLUMN_CLASS = [
+  "bg-lavender/75",
+  "bg-mint/70",
+  "bg-sky/70",
+  "bg-sun/75",
+  "bg-blush/70",
+  "bg-secondary/80",
+  "bg-accent/60",
+];
 
 interface Draft {
   title: string;
@@ -242,31 +254,33 @@ export default function VisualChildSchedule({
   const weekLabel = `${new Intl.DateTimeFormat(locale, { day: "numeric", month: "short" }).format(parseISODate(dates[0]!))}–${new Intl.DateTimeFormat(locale, { day: "numeric", month: "short" }).format(parseISODate(dates[6]!))}`;
 
   return (
-    <section className="space-y-5 rounded-3xl border border-border bg-card p-4 shadow-soft sm:p-5" data-testid="visual-child-schedule">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <p className="text-xs font-semibold uppercase text-primary">{t("Visuellt schema")}</p>
-          <h2 className="font-display text-xl font-bold text-ink">{child.avatar || "💜"} {child.name}</h2>
-          <p className="text-sm text-muted-foreground">{t("Vad händer nu – och vad kommer sedan?")}</p>
+    <section className="mx-auto min-h-[70vh] w-full max-w-5xl space-y-4 overflow-hidden rounded-3xl border border-border bg-card p-3 shadow-soft sm:p-5" data-testid="visual-child-schedule">
+      <header className="flex items-center gap-3 border-b border-border/70 pb-4">
+        <Button type="button" variant="ghost" size="icon" onClick={onClose} className="h-11 w-11 rounded-full" aria-label={t("Tillbaka")}><ChevronLeft /></Button>
+        <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-blush text-2xl" aria-hidden>{child.avatar || "💜"}</span>
+        <div className="min-w-0 flex-1">
+          <h2 className="truncate font-display text-xl font-bold text-ink">{child.name}</h2>
+          <p className="text-sm text-muted-foreground">{t(mode === "week" ? "Veckoschema" : `Idag – ${new Intl.DateTimeFormat(locale, { weekday: "long", day: "numeric", month: "short" }).format(parseISODate(today))}`)}</p>
         </div>
-        <Button type="button" variant="ghost" onClick={onClose} className="rounded-2xl">{t("Stäng")}</Button>
-      </div>
+        <Button type="button" variant="outline" onClick={() => openAdd()} className="h-10 rounded-xl px-3"><Pencil size={15} /><span className="hidden sm:inline">{t("Redigera")}</span></Button>
+      </header>
 
-      <div className="grid grid-cols-2 gap-2 rounded-2xl bg-muted/50 p-1" role="tablist" aria-label={t("Välj schemavy") }>
-        <Button type="button" variant={mode === "week" ? "default" : "ghost"} onClick={() => setMode("week")} className="h-11 rounded-xl" role="tab" aria-selected={mode === "week"}>{t("Vecka")}</Button>
-        <Button type="button" variant={mode === "today" ? "default" : "ghost"} onClick={() => setMode("today")} className="h-11 rounded-xl" role="tab" aria-selected={mode === "today"}>{t("Idag")}</Button>
+      {mode === "today" && <p className="rounded-xl bg-lavender/70 px-4 py-2 text-center text-sm font-medium text-primary">💜 {t("Du klarar det! Ett steg i taget.")} 💜</p>}
+
+      <div className="grid grid-cols-2 gap-1 rounded-xl bg-muted/70 p-1" role="tablist" aria-label={t("Välj schemavy") }>
+        <Button type="button" variant={mode === "week" ? "default" : "ghost"} onClick={() => setMode("week")} className="h-10 rounded-lg shadow-none" role="tab" aria-selected={mode === "week"}>{t("Vecka")}</Button>
+        <Button type="button" variant={mode === "today" ? "default" : "ghost"} onClick={() => setMode("today")} className="h-10 rounded-lg shadow-none" role="tab" aria-selected={mode === "today"}>{t("Idag")}</Button>
       </div>
 
       {mode === "today" ? (
         <div className="space-y-5">
           {current ? (
-            <section className="space-y-3 rounded-3xl border border-primary/25 bg-lavender/35 p-4" aria-label={t("Nu och nästa") }>
-              <p className="text-xs font-bold uppercase text-primary">{t("Nu")}</p>
+            <section className="space-y-3 rounded-2xl border border-primary/25 bg-lavender/35 p-3" aria-label={t("Nu och nästa") }>
               <div className="flex items-center gap-3">
                 <ActivityVisual item={current} openDoc={openDoc} />
-                <div className="min-w-0 flex-1"><p className="font-display text-lg font-bold text-ink">{current.title}</p>{current.time && <p className="text-sm text-muted-foreground">{current.time.slice(0, 5)}</p>}</div>
+                <div className="min-w-0 flex-1"><p className="text-xs font-bold uppercase text-primary">{t("Nu")}</p><p className="font-display text-lg font-bold text-ink">{current.title}</p>{current.time && <p className="text-sm text-muted-foreground">{current.time.slice(0, 5)}</p>}</div>
+                <Button type="button" onClick={() => void markDone(current)} className="h-11 rounded-full px-4"><Check size={18} /> {t("Klar")}</Button>
               </div>
-              <Button type="button" onClick={() => void markDone(current)} className="h-12 w-full rounded-2xl"><Check size={18} /> {t("Klar")}</Button>
               {next && (
                 <div className="border-t border-primary/15 pt-3">
                   <p className="text-xs font-bold uppercase text-muted-foreground">{t("Nästa")}</p>
@@ -276,11 +290,11 @@ export default function VisualChildSchedule({
               )}
             </section>
           ) : (
-            <div className="rounded-3xl bg-mint/45 p-5 text-center"><CheckCircle2 className="mx-auto mb-2 text-primary" /><p className="font-semibold text-ink">{t(todayItems.length ? "Allt är klart för idag." : "Inget inlagt idag än.")}</p></div>
+            <div className="rounded-2xl bg-mint/45 p-5 text-center"><CheckCircle2 className="mx-auto mb-2 text-primary" /><p className="font-semibold text-ink">{t(todayItems.length ? "Allt är klart för idag." : "Inget inlagt idag än.")}</p></div>
           )}
 
           {guidance.message && (
-            <section className="rounded-3xl border border-border bg-blush/35 p-4">
+            <section className="rounded-2xl border border-border bg-blush/35 p-4">
               <p className="font-semibold text-ink"><Sparkles size={16} className="mr-1 inline text-primary" />{t(guidance.message)}</p>
               {guidance.recovery && <p className="mt-1 text-sm text-muted-foreground">{t(guidance.recovery)}</p>}
               <Button type="button" variant="outline" onClick={() => openAdd(ACTIVITY_BANK.återhämtning[1], today)} className="mt-3 h-11 rounded-2xl">{t("Lägg in lugn stund")}</Button>
@@ -291,8 +305,8 @@ export default function VisualChildSchedule({
             <section className="space-y-2" aria-label={t("Skolschema idag")}>
               <h3 className="text-sm font-bold text-ink">🏫 {t("Skolschema idag")}</h3>
               {todaySchoolEntries.map((entry) => (
-                <div key={entry.id} className="flex items-center gap-3 rounded-2xl border border-sky bg-sky/40 p-3">
-                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-card text-2xl" aria-hidden>🏫</span>
+                <div key={entry.id} className="flex items-center gap-3 rounded-xl border border-sky bg-card px-3 py-2 shadow-sm">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-sky/50 text-2xl" aria-hidden>🏫</span>
                   <div className="min-w-0 flex-1">
                     <p className="font-medium text-ink">{entry.title}</p>
                     <p className="text-xs text-muted-foreground">{entry.start}{entry.end ? `–${entry.end}` : ""} · {t("återkommer varje vecka")}</p>
@@ -309,7 +323,7 @@ export default function VisualChildSchedule({
               return <section key={part}><h3 className="mb-2 text-sm font-bold text-ink">{part === "Morgon" ? "☀️" : part === "Kväll" ? "🌙" : "💜"} {t(part)}</h3><ul className="space-y-2">{partItems.map((item) => {
                 const isCurrent = current?.id === item.id;
                 const isNext = next?.id === item.id;
-                return <li key={item.id} className={cn("flex items-center gap-3 rounded-2xl border p-3 transition-opacity", item.completed ? "border-border bg-muted/35 opacity-60" : isCurrent ? "border-primary bg-primary/5" : isNext ? "border-primary/30 bg-card" : "border-border bg-card opacity-75")}><Button type="button" variant="ghost" size="icon" onClick={() => void markDone(item)} className="h-11 w-11 shrink-0 rounded-2xl" aria-label={t(item.completed ? "Markera som inte klar" : "Markera som klar")}>{item.completed ? <CheckCircle2 className="text-primary" /> : <span className="h-5 w-5 rounded-full border-2 border-muted-foreground" />}</Button><ActivityVisual item={item} openDoc={openDoc} /><div className="min-w-0 flex-1"><p className={cn("font-medium text-ink", item.completed && "line-through")}>{item.title}</p><p className="text-xs text-muted-foreground">{item.time?.slice(0, 5) || t("Ingen tid")}{isCurrent ? ` · ${t("Nu")}` : isNext ? ` · ${t("Nästa")}` : ""}</p></div><Button type="button" variant="ghost" size="icon" onClick={() => openEdit(item)} className="h-11 w-11 rounded-2xl" aria-label={t("Ändra")}><Pencil size={16} /></Button></li>;
+                return <li key={item.id} className={cn("flex items-center gap-2 rounded-xl border px-2 py-1.5 shadow-sm transition-opacity", item.completed ? "border-border bg-muted/35 opacity-60" : isCurrent ? "border-primary bg-lavender/45" : isNext ? "border-primary/30 bg-card" : "border-border bg-card opacity-80")}><Button type="button" variant="ghost" size="icon" onClick={() => void markDone(item)} className="h-10 w-10 shrink-0 rounded-full" aria-label={t(item.completed ? "Markera som inte klar" : "Markera som klar")}>{item.completed ? <CheckCircle2 className="text-primary" /> : isCurrent ? <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground">›</span> : <span className="h-5 w-5 rounded-full border-2 border-muted-foreground" />}</Button><ActivityVisual item={item} className="h-11 w-11 rounded-xl" openDoc={openDoc} /><div className="min-w-0 flex-1"><p className={cn("font-semibold text-ink", item.completed && "line-through")}>{item.title}</p><p className="text-xs text-muted-foreground">{item.time?.slice(0, 5) || t("Ingen tid")}{isCurrent ? ` · ${t("Nu")}` : isNext ? ` · ${t("Nästa")}` : ""}</p></div><Button type="button" variant="ghost" size="icon" onClick={() => openEdit(item)} className="h-10 w-10 rounded-full" aria-label={t("Ändra")}><Ellipsis size={18} /></Button></li>;
               })}</ul></section>;
             })}
           </div>
@@ -321,14 +335,15 @@ export default function VisualChildSchedule({
             <p className="text-sm font-semibold text-ink">{weekLabel}</p>
             <Button type="button" variant="ghost" size="icon" onClick={() => setAnchor(addDaysISO(anchor, 7))} className="h-11 w-11 rounded-2xl" aria-label={t("Nästa vecka")}><ChevronRight /></Button>
           </div>
-          <div className="grid min-w-0 grid-cols-1 gap-3 md:grid-cols-7">
+          <div className="grid min-w-0 grid-cols-7 gap-1 sm:gap-2">
             {dates.map((date, index) => {
               const dated = childItems.filter((item) => item.date === date).sort((a, b) => (a.time ?? "99:99").localeCompare(b.time ?? "99:99"));
               const recurring = schoolEntries.filter((entry) => entry.weekday === index);
-              return <section key={date} className={cn("min-w-0 rounded-3xl border p-3", date === today ? "border-primary bg-primary/5" : "border-border bg-card")}><div className="mb-3 flex items-center justify-between"><div><p className="text-sm font-bold text-ink">{t(DAY_NAMES[index] ?? "")}</p><p className="text-xs text-muted-foreground">{new Intl.DateTimeFormat(locale, { day: "numeric", month: "short" }).format(parseISODate(date))}</p></div><Button type="button" variant="ghost" size="icon" onClick={() => openAdd(undefined, date)} className="h-11 w-11 rounded-2xl" aria-label={`${t("Lägg till")} ${SHORT_DAYS[index]}`}><Plus size={17} /></Button></div><div className="space-y-2">{recurring.map((entry) => <div key={`school-${entry.id}`} className="rounded-2xl border border-sky bg-sky/45 p-2"><span className="text-lg" aria-hidden>🏫</span><p className="break-words text-xs font-semibold text-ink">{entry.title}</p><p className="text-xs text-muted-foreground">{entry.start}</p></div>)}{dated.map((item) => { const { meta } = decodeVisualNotes(item.notes); return <Button key={item.id} type="button" variant="ghost" onClick={() => openEdit(item)} className={cn("h-auto min-h-11 w-full justify-start gap-2 whitespace-normal rounded-2xl border p-2 text-left", TONE_CLASS[meta.tone], item.completed && "opacity-55")}><span className="text-lg" aria-hidden>{meta.emoji}</span><span className="min-w-0"><span className={cn("block break-words text-xs font-semibold text-ink", item.completed && "line-through")}>{item.title}</span>{item.time && <span className="block text-xs text-muted-foreground">{item.time.slice(0, 5)}</span>}</span></Button>; })}{recurring.length + dated.length === 0 && <p className="py-2 text-center text-xs text-muted-foreground">{t("Lugnt")}</p>}</div></section>;
+              return <section key={date} className={cn("min-w-0 rounded-xl p-1.5 sm:p-2", DAY_COLUMN_CLASS[index], date === today && "ring-2 ring-primary")}><div className="mb-2 text-center"><p className="truncate text-[11px] font-bold text-ink sm:text-sm"><span className="sm:hidden">{t(SHORT_DAYS[index] ?? "")}</span><span className="hidden sm:inline">{t(DAY_NAMES[index] ?? "")}</span></p><p className="text-[10px] text-muted-foreground">{new Intl.DateTimeFormat(locale, { day: "numeric" }).format(parseISODate(date))}</p></div><div className="space-y-1.5">{recurring.map((entry) => <div key={`school-${entry.id}`} className="rounded-lg border border-border/70 bg-card p-1 text-center shadow-sm"><span className="block text-xl" aria-hidden>🏫</span><p className="truncate text-[9px] font-bold text-ink sm:text-xs">{entry.title}</p></div>)}{dated.map((item) => { const { meta } = decodeVisualNotes(item.notes); return <Button key={item.id} type="button" variant="ghost" onClick={() => openEdit(item)} className={cn("h-auto min-h-14 w-full flex-col gap-0 whitespace-normal rounded-lg border border-border/70 bg-card p-1 text-center shadow-sm", item.completed && "opacity-50")}><span className="text-xl leading-none" aria-hidden>{meta.emoji}</span><span className={cn("block max-w-full truncate text-[9px] font-bold text-ink sm:text-xs", item.completed && "line-through")}>{item.title}</span></Button>; })}<Button type="button" variant="ghost" onClick={() => openAdd(undefined, date)} className="h-9 w-full rounded-lg border border-dashed border-border bg-card/50 p-0" aria-label={`${t("Lägg till")} ${SHORT_DAYS[index]}`}><Plus size={14} /></Button></div></section>;
             })}
           </div>
-          <Button type="button" variant="outline" onClick={() => void copyWeek()} className="h-11 rounded-2xl"><Copy size={16} /> {t("Kopiera vecka")}</Button>
+          <Button type="button" variant="secondary" onClick={() => openAdd()} className="h-11 w-full rounded-xl"><Plus size={16} /> {t("Lägg till aktivitet")}</Button>
+          <section className="space-y-2"><h3 className="text-sm font-bold text-ink">{t("Snabblänkar")}</h3><div className="grid grid-cols-3 gap-2"><Button type="button" variant="secondary" onClick={() => openAdd()} className="h-auto min-h-20 flex-col rounded-xl px-2 py-3"><Library /><span className="text-xs">{t("Aktivitetsbank")}</span></Button><Button type="button" variant="secondary" onClick={() => { openAdd(); window.setTimeout(() => galleryRef.current?.click(), 0); }} className="h-auto min-h-20 flex-col rounded-xl px-2 py-3"><Images /><span className="text-xs">{t("Egna bilder")}</span></Button><Button type="button" variant="secondary" onClick={() => void copyWeek()} className="h-auto min-h-20 flex-col rounded-xl px-2 py-3"><Copy /><span className="text-xs">{t("Kopiera vecka")}</span></Button></div></section>
         </div>
       )}
 
@@ -336,7 +351,7 @@ export default function VisualChildSchedule({
         <section className="rounded-3xl border border-border bg-sky/25 p-4"><h3 className="font-semibold text-ink">{t("Från QuickFlow")}</h3><div className="mt-2 space-y-2">{quickMatches.map((item) => <div key={item.id} className="flex items-center gap-2"><p className="min-w-0 flex-1 text-sm text-ink">{item.text}</p><Button type="button" variant="outline" onClick={() => void importQuickItem(item.text, item.remindAt)} className="h-11 rounded-2xl">{t("Lägg till")}</Button></div>)}</div></section>
       )}
 
-      {!adding && <Button type="button" onClick={() => openAdd()} className="h-12 w-full rounded-2xl"><Plus size={18} /> {t("Lägg till aktivitet")}</Button>}
+      {!adding && mode === "today" && <Button type="button" onClick={() => openAdd()} className="h-12 w-full rounded-xl"><Plus size={18} /> {t("Lägg till aktivitet")}</Button>}
 
       {adding && (
         <form onSubmit={saveDraft} className="space-y-4 rounded-3xl border border-border bg-muted/25 p-4">
