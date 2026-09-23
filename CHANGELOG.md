@@ -1,3 +1,8 @@
+## 2026-09-23 – Ordna genvägarna på Hem
+
+- Varje genväg på Hem har fått pilar för att flyttas uppåt eller neråt i listan.
+- Ordningen sparas och följer med mellan enheter.
+
 ## 2026-09-23 – Familj-genvägen öppnar Family Flow
 
 - Genvägen "Familj" på Hem öppnar nu Family Flow-vyn (barnprofilerna och schemat) i stället för delningssidan.
