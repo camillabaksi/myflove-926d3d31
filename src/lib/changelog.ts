@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-23";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Ordna dagens lista",
+    items: [
+      "Aktiviteter i kalenderns dag och Min dag kan flyttas upp eller ner (2026-09-23)",
+      "Ordningen sparas per dag och synkas med kontot (2026-09-23)",
+    ],
+  },
+  {
     title: "Ordna genvägarna på Hem",
     items: [
       "Genvägar kan flyttas uppåt eller neråt med pilar (2026-09-23)",
