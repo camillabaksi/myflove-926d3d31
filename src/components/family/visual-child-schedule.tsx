@@ -418,7 +418,6 @@ export default function VisualChildSchedule({
       {mode === "today" ? (
         <div className="space-y-5">
           {current ? (
-            {/* Nu/Nästa hålls lugnt: neutralt kort, pictogram + kort text och bara en diskret områdesfärg som markör. */}
             <section className="space-y-3 rounded-2xl border border-border bg-card p-3" aria-label={t("Nu och nästa") }>
               <div className="flex items-center gap-3">
                 <span className={cn("h-12 w-1 shrink-0 rounded-full", CATEGORY_STYLES[decodeVisualNotes(current.notes).meta.category].marker)} aria-hidden />
