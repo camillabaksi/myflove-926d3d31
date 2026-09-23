@@ -56,13 +56,19 @@ export function useChildEvents(dateISO?: string): ChildEvent[] {
       if (!i.time || i.date !== today) continue;
       const childName = nameOf.get(i.child_id);
       if (!childName) continue;
+      const { meta } = decodeVisualNotes(i.notes);
       out.push({
         time: i.time.slice(0, 5),
+        ...(meta.endTime ? { endTime: meta.endTime } : {}),
         title: i.title,
         childName,
         childId: i.child_id,
         itemId: i.id,
         completed: i.completed,
+        ...(meta.parentPresence ? { requiresParent: true } : {}),
+        ...(meta.prepMinutes ? { prepMinutes: meta.prepMinutes } : {}),
+        ...(meta.travelMinutes ? { travelMinutes: meta.travelMinutes } : {}),
+        ...(meta.recoveryAfter ? { recoveryAfter: true } : {}),
       });
     }
 
