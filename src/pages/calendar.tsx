@@ -645,7 +645,7 @@ export function CalendarContent() {
                         items.childEvents.length > 0 ||
                         items.recurring.length > 0;
 
-                      return (
+                      cells.push(
                         <button
                           key={dateStr}
                           onClick={() => setSelectedDateStr(dateStr)}
