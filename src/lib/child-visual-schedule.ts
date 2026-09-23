@@ -131,7 +131,10 @@ export function pictogramForActivity(title: string, fallback: PictogramId): Pict
   const normalized = title.toLocaleLowerCase("sv").trim();
   const exact = ALL_PICTOGRAMS.find((item) => item.title.toLocaleLowerCase("sv") === normalized);
   if (exact) return exact.pictogram;
-  const partial = ALL_PICTOGRAMS.find((item) => [item.title, ...(item.keywords ?? [])].some((text) => normalized.includes(text.toLocaleLowerCase("sv"))));
+  const partial = ALL_PICTOGRAMS
+    .flatMap((item) => [item.title, ...(item.keywords ?? [])].map((text) => ({ item, text: text.toLocaleLowerCase("sv") })))
+    .filter(({ text }) => normalized.includes(text))
+    .sort((a, b) => b.text.length - a.text.length)[0]?.item;
   return partial?.pictogram ?? fallback;
 }
 

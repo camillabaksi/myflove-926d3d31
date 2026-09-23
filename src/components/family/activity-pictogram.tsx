@@ -1,5 +1,5 @@
 import {
-  Accessibility, Ambulance, Apple, Bandage, Bed, Bike, BookOpen, BriefcaseBusiness,
+  Accessibility, Ambulance, Apple, Bed, Bike, BookOpen, BriefcaseBusiness,
   BriefcaseMedical, BrushCleaning, Bus, Car, CirclePause, ClipboardCheck, Dumbbell, Ear,
   Gamepad2, Glasses, Headphones, HeartHandshake, HeartPulse, Home, Hospital, House, Medal,
   MessagesSquare, Music, Palette, PersonStanding, Pill, School, ShoppingCart, ShowerHead,
