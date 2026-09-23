@@ -53,7 +53,9 @@ export const HOME_SHORTCUT_CATALOG: HomeShortcut[] = [
   { href: "/matlista", label: "Matplanering", hint: "Veckans mat", icon: UtensilsCrossed },
   { href: "/stadning", label: "Städning", hint: "Vad som behöver göras hemma", icon: SprayCan },
   { href: "/finances", label: "Ekonomi", hint: "Räkningar och budget", icon: Wallet },
-  { href: "/familj", label: "Familj", hint: "Dela listor och kalender", icon: Users },
+  { href: "/familjeflow", label: "Familj", hint: "Få vardagen att fungera för familjen", icon: Users },
+  { href: "/familj", label: "Dela med familjen", hint: "Dela listor och kalender", icon: Heart },
+
   { href: "/barn", label: "Barn", hint: "Scheman och rutiner", icon: Baby },
   { href: "/statistik", label: "Statistik", hint: "Se dina mönster", icon: BarChart3 },
   { href: "/beloningar", label: "Belöningar", hint: "Det du klarat av", icon: Sparkles },
