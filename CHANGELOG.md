@@ -1,3 +1,9 @@
+## 2026-09-23 – Redigera, flytta och färgkoda i Family Flow
+
+- Aktiviteter kan ändras direkt med namn, pictogram, område, dag, start- och sluttid, återkomst och privat anteckning utan att en ny aktivitet skapas.
+- En eller flera aktiviteter kan flyttas till en annan dag eller tid med bevarad ordning. Desktop stöder dragning mellan veckodagar och mobil har en tydlig Flytta-knapp.
+- Vecka, Idag och Nu/Nästa använder samma lugna områdesfärger tillsammans med pictogram och text.
+
 ## 2026-09-23 – Fler vård- och vardagspictogram i Family Flow
 
 - Pictogramväljaren har fått en ny neutral kategori för Vård med doktor, tandläkare, sjukhus, apotek, vårdcentral, vaccination, sjuksköterska, undersökning, akut vård, samtal, optiker, hörselmottagning, fysioterapi och återbesök.

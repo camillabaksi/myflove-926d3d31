@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Family Flow: redigering, flerflytt, återkomst, områdesfärger och responsivitet (2026-09-23)
+
 - [x] Family Flow: utöka pictogramväljaren med neutral vård och fler vardagsärenden (2026-09-23)
 
 - [x] Family Flow barnschema: riktiga pictogram, kopiering mellan dagar/veckor/barn och mallar (2026-09-23)

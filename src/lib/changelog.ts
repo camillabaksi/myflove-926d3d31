@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-23";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Redigera, flytta och färgkoda i Family Flow",
+    items: [
+      "Ändra namn, pictogram, område, tider, återkomst och privata anteckningar på samma aktivitet (2026-09-23)",
+      "Flytta en eller flera aktiviteter utan att skapa kopior (2026-09-23)",
+      "Lugna, konsekventa områdesfärger i Vecka, Idag och Nu/Nästa (2026-09-23)",
+    ],
+  },
+  {
     title: "Fler vård- och vardagspictogram i Family Flow",
     items: [
       "Ny neutral Vård-kategori med 14 tydliga pictogram för besök och undersökningar (2026-09-23)",
