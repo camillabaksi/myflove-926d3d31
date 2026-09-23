@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Uppdatera komplett pitchpaket, pitchfilmer, Living Blueprint och centrala stödokument till nuvarande MyFlove (2026-09-23)
+- [x] Uppdatera komplett pitchpaket, pitchfilmer, Living Blueprint och centrala stödokument till nuvarande MyFlove (2026-09-23)
 
 - [x] Family Flow: Barn som underetikett inom Familj, kopplat till befintliga barnprofiler (2026-09-23)
 

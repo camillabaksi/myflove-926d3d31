@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-23";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Komplett pitch- och dokumentpaket 5.1",
+    items: [
+      "Pitchdeck och pitchfilmer speglar nu den aktuella MyFlove-produkten på svenska och engelska (2026-09-23)",
+      "Living Blueprint och pitchmanus uppdaterade med Family Flow, energikoppling, Insikter, Återhämtning, träning och studier (2026-09-23)",
+      "Äldre versioner bevaras och nya ekonomiska påståenden har inte lagts till (2026-09-23)",
+    ],
+  },
+  {
     title: "Stress föreslås aldrig som energikälla",
     items: [
       "Stress och konflikt räknas inte som något som ger energi i återhämtningsförslag (2026-09-23)",
