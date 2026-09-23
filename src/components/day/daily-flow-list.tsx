@@ -44,6 +44,12 @@ export function DailyFlowList({
    */
   /** Anpassa en aktivitet som redan finns – inget nytt skapas. */
   const [adaptItem, setAdaptItem] = useState<FlowItem | null>(null);
+  /** Egen ordning per dag – sparas som nycklar så den överlever omladdning. */
+  const dayISO = date ?? todayISO();
+  const [orderMap, setOrderMap] = useCloudSyncedStorage<Record<string, string[]>>(
+    "myflove-day-order",
+    {},
+  );
   const items = useMemo(() => {
     const merged = new Map<string, FlowItem>();
     for (const item of [...today, ...extraItems]) {
@@ -51,8 +57,33 @@ export function DailyFlowList({
       const previous = merged.get(key);
       if (!previous || (item.done && !previous.done)) merged.set(key, item);
     }
-    return sortAsDay([...merged.values()]);
-  }, [today, extraItems]);
+    const sorted = sortAsDay([...merged.values()]);
+    const saved = orderMap[dayISO];
+    if (!saved || saved.length === 0) return sorted;
+    const byKey = new Map(sorted.map((item) => [itemKey(item), item]));
+    const out: FlowItem[] = [];
+    for (const key of saved) {
+      const found = byKey.get(key);
+      if (found) {
+        out.push(found);
+        byKey.delete(key);
+      }
+    }
+    for (const item of sorted) if (byKey.has(itemKey(item))) out.push(item);
+    return out;
+  }, [today, extraItems, orderMap, dayISO]);
+
+  const move = useCallback(
+    (index: number, direction: -1 | 1) => {
+      const target = index + direction;
+      if (target < 0 || target >= items.length) return;
+      const keys = items.map(itemKey);
+      const [moved] = keys.splice(index, 1);
+      keys.splice(target, 0, moved);
+      setOrderMap((prev) => ({ ...prev, [dayISO]: keys }));
+    },
+    [items, dayISO, setOrderMap],
+  );
 
   if (items.length === 0) {
     return (
