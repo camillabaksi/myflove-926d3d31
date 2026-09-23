@@ -27,6 +27,8 @@ export interface VisualActivityMeta {
   travelMinutes?: number;
   /** Användaren vill gärna ha en lugn stund efteråt. */
   recoveryAfter?: boolean;
+  /** Förälderns egen ordning inom dagen. */
+  order?: number;
 }
 
 /** Valbara minutvärden – inga påhittade siffror, användaren väljer själv. */
@@ -159,6 +161,7 @@ export function encodeVisualNotes(meta: VisualActivityMeta, note = ""): string {
     ...(safeMinutes(meta.prepMinutes, PREP_MINUTE_CHOICES) ? { prepMinutes: meta.prepMinutes } : {}),
     ...(safeMinutes(meta.travelMinutes, TRAVEL_MINUTE_CHOICES) ? { travelMinutes: meta.travelMinutes } : {}),
     ...(meta.recoveryAfter ? { recoveryAfter: true } : {}),
+    ...(typeof meta.order === "number" && Number.isFinite(meta.order) ? { order: Math.round(meta.order) } : {}),
   };
   return `${META_PREFIX}${JSON.stringify(safeMeta)}]\n${note.trim()}`;
 }
@@ -191,6 +194,7 @@ export function decodeVisualNotes(notes?: string | null): { meta: VisualActivity
         ...(prepMinutes ? { prepMinutes } : {}),
         ...(travelMinutes ? { travelMinutes } : {}),
         ...(candidate.recoveryAfter === true ? { recoveryAfter: true } : {}),
+        ...(typeof candidate.order === "number" && Number.isFinite(candidate.order) ? { order: candidate.order } : {}),
       },
       note: notes.slice(end + 2),
     };
@@ -307,4 +311,15 @@ export function pickNowNext<T extends { time: string | null; notes?: string | nu
   const current = started[started.length - 1] ?? open.find((item) => !item.time) ?? open.find((item) => item.time && minutesUntilTime(item.time, nowMinutes) > 0) ?? open[0] ?? null;
   const next = open.find((item) => item !== current && item.time && minutesUntilTime(item.time, nowMinutes) > 0) ?? null;
   return { current, next };
+}
+
+/** Sorterar en dags aktiviteter: egen ordning om satt, annars tid. */
+export function compareDayItems(
+  a: { time?: string | null; notes?: string | null; created_at?: string },
+  b: { time?: string | null; notes?: string | null; created_at?: string },
+): number {
+  const oa = decodeVisualNotes(a.notes).meta.order;
+  const ob = decodeVisualNotes(b.notes).meta.order;
+  if (typeof oa === "number" && typeof ob === "number" && oa !== ob) return oa - ob;
+  return (a.time ?? "99:99").localeCompare(b.time ?? "99:99") || (a.created_at ?? "").localeCompare(b.created_at ?? "");
 }
