@@ -167,6 +167,7 @@ const CATEGORY_THEMES: Record<string, Record<string, string>> = {
   "/matlista": T.sage,
   "/stadning": T.sage,
   "/familj": T.gold,
+  "/familjeflow": T.gold,
   "/beloningar": T.gold,
   "/statistik": T.ink,
   "/historik": T.ink,
@@ -379,7 +380,14 @@ export default function Layout({ children }: LayoutProps) {
       hint: "Personerna som hör till ditt liv",
       essential: true,
     },
-    { href: "/familj", label: "Familj", icon: Users, hint: "Dela listor och kalender med andra" },
+    {
+      href: "/familjeflow",
+      label: "Familj",
+      icon: Users,
+      hint: "Få vardagen att fungera för hela familjen",
+      essential: true,
+    },
+    { href: "/familj", label: "Dela & bjud in", icon: Users, hint: "Dela listor och kalender med andra" },
     { href: "/barn", label: "Barn", icon: Baby, hint: "Scheman och rutiner för barnen" },
     {
       href: "/historik",
@@ -541,7 +549,7 @@ export default function Layout({ children }: LayoutProps) {
         label: "Familj",
         hint: "Personer du delar vardagen med",
         icon: HeartPulse,
-        hrefs: ["/relationer", "/familj", "/barn"],
+        hrefs: ["/familjeflow", "/relationer", "/familj", "/barn"],
       },
       {
         id: "homeflow",

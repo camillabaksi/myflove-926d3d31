@@ -208,9 +208,11 @@ export type Database = {
       }
       children: {
         Row: {
+          avatar: string | null
           birthdate: string | null
           color: string
           created_at: string
+          helps: string[]
           id: string
           name: string
           note: string | null
@@ -218,9 +220,11 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          avatar?: string | null
           birthdate?: string | null
           color?: string
           created_at?: string
+          helps?: string[]
           id?: string
           name: string
           note?: string | null
@@ -228,9 +232,11 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          avatar?: string | null
           birthdate?: string | null
           color?: string
           created_at?: string
+          helps?: string[]
           id?: string
           name?: string
           note?: string | null

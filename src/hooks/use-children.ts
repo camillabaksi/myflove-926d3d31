@@ -12,7 +12,15 @@ export interface Child {
   birthdate: string | null;
   color: string;
   note: string | null;
+  /**
+   * Förälderns egna observationer: "det här brukar hjälpa mitt barn".
+   * Detta är privat familjeinformation – inte diagnos eller medicinsk data.
+   */
+  helps: string[];
+  /** Valfri avatar (emoji eller bild-url). */
+  avatar: string | null;
 }
+
 
 export type ChildItemKind = "activity" | "task" | "note" | "doc";
 
@@ -113,7 +121,7 @@ async function loadAll(): Promise<void> {
         await Promise.all([
           supabase
             .from("children")
-            .select("id, owner_id, name, birthdate, color, note")
+            .select("id, owner_id, name, birthdate, color, note, helps, avatar")
             .order("created_at"),
           supabase
             .from("child_items")
@@ -236,12 +244,20 @@ export function useChildren() {
 
   const load = useCallback(() => loadAll(), []);
 
-  const addChild = async (name: string, color: string, birthdate?: string, note?: string) => {
+  const addChild = async (
+    name: string,
+    color: string,
+    birthdate?: string,
+    note?: string,
+    extra?: { helps?: string[]; avatar?: string | null },
+  ) => {
     const { error: err } = await supabase.from("children").insert({
       name,
       color,
       birthdate: birthdate || null,
       note: note || null,
+      helps: extra?.helps ?? [],
+      avatar: extra?.avatar ?? null,
     });
     if (err) throw err;
     await loadAll();
@@ -249,7 +265,7 @@ export function useChildren() {
 
   const updateChild = async (
     id: string,
-    patch: Partial<Pick<Child, "name" | "color" | "birthdate" | "note">>,
+    patch: Partial<Pick<Child, "name" | "color" | "birthdate" | "note" | "helps" | "avatar">>,
   ) => {
     setState((prev) => ({
       children: prev.children.map((c) => (c.id === id ? { ...c, ...patch } : c)),

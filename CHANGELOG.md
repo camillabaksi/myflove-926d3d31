@@ -1,3 +1,10 @@
+## 2026-09-23 – Family Flow 1.0
+
+- Nytt område Familj under Mer: "Få vardagen att fungera för hela familjen."
+- Skriv vad som behöver fungera, välj om det gäller dig, ett barn eller familjen – Flow föreslår små steg utifrån dagens kapacitet.
+- Barnprofiler med namn, bild och "det här brukar hjälpa mitt barn". Inga diagnosfält, och informationen är privat.
+- Godkända förslag blir vanliga uppgifter i din dag och använder befintligt Nästa rimliga steg.
+
 ## 2026-09-23 – Privat Pitch & Investor i admin
 
 - Ny privat sektion i adminvyn för pitchdeck, ekonomi & investeringsplan, financial model, Business Model Canvas, investor quick answers och KPI-material.

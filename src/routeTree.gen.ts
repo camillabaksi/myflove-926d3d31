@@ -69,6 +69,7 @@ import { Route as AppFlowplanRouteImport } from './routes/_app.flowplan'
 import { Route as AppFlowInstallningarRouteImport } from './routes/_app.flow-installningar'
 import { Route as AppFlowRouteImport } from './routes/_app.flow'
 import { Route as AppFinancesRouteImport } from './routes/_app.finances'
+import { Route as AppFamiljeflowRouteImport } from './routes/_app.familjeflow'
 import { Route as AppFamiljRouteImport } from './routes/_app.familj'
 import { Route as AppEnergifloedeRouteImport } from './routes/_app.energifloede'
 import { Route as AppDumpRouteImport } from './routes/_app.dump'
@@ -392,6 +393,11 @@ const AppFinancesRoute = AppFinancesRouteImport.update({
   path: '/finances',
   getParentRoute: () => AppRoute,
 } as any)
+const AppFamiljeflowRoute = AppFamiljeflowRouteImport.update({
+  id: '/familjeflow',
+  path: '/familjeflow',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppFamiljRoute = AppFamiljRouteImport.update({
   id: '/familj',
   path: '/familj',
@@ -535,6 +541,7 @@ export interface FileRoutesByFullPath {
   '/dump': typeof AppDumpRoute
   '/energifloede': typeof AppEnergifloedeRoute
   '/familj': typeof AppFamiljRoute
+  '/familjeflow': typeof AppFamiljeflowRoute
   '/finances': typeof AppFinancesRoute
   '/flow': typeof AppFlowRoute
   '/flow-installningar': typeof AppFlowInstallningarRoute
@@ -618,6 +625,7 @@ export interface FileRoutesByTo {
   '/dump': typeof AppDumpRoute
   '/energifloede': typeof AppEnergifloedeRoute
   '/familj': typeof AppFamiljRoute
+  '/familjeflow': typeof AppFamiljeflowRoute
   '/finances': typeof AppFinancesRoute
   '/flow': typeof AppFlowRoute
   '/flow-installningar': typeof AppFlowInstallningarRoute
@@ -703,6 +711,7 @@ export interface FileRoutesById {
   '/_app/dump': typeof AppDumpRoute
   '/_app/energifloede': typeof AppEnergifloedeRoute
   '/_app/familj': typeof AppFamiljRoute
+  '/_app/familjeflow': typeof AppFamiljeflowRoute
   '/_app/finances': typeof AppFinancesRoute
   '/_app/flow': typeof AppFlowRoute
   '/_app/flow-installningar': typeof AppFlowInstallningarRoute
@@ -788,6 +797,7 @@ export interface FileRouteTypes {
     | '/dump'
     | '/energifloede'
     | '/familj'
+    | '/familjeflow'
     | '/finances'
     | '/flow'
     | '/flow-installningar'
@@ -871,6 +881,7 @@ export interface FileRouteTypes {
     | '/dump'
     | '/energifloede'
     | '/familj'
+    | '/familjeflow'
     | '/finances'
     | '/flow'
     | '/flow-installningar'
@@ -955,6 +966,7 @@ export interface FileRouteTypes {
     | '/_app/dump'
     | '/_app/energifloede'
     | '/_app/familj'
+    | '/_app/familjeflow'
     | '/_app/finances'
     | '/_app/flow'
     | '/_app/flow-installningar'
@@ -1457,6 +1469,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppFinancesRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/familjeflow': {
+      id: '/_app/familjeflow'
+      path: '/familjeflow'
+      fullPath: '/familjeflow'
+      preLoaderRoute: typeof AppFamiljeflowRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/familj': {
       id: '/_app/familj'
       path: '/familj'
@@ -1629,6 +1648,7 @@ interface AppRouteChildren {
   AppDumpRoute: typeof AppDumpRoute
   AppEnergifloedeRoute: typeof AppEnergifloedeRoute
   AppFamiljRoute: typeof AppFamiljRoute
+  AppFamiljeflowRoute: typeof AppFamiljeflowRoute
   AppFinancesRoute: typeof AppFinancesRoute
   AppFlowRoute: typeof AppFlowRoute
   AppFlowInstallningarRoute: typeof AppFlowInstallningarRoute
@@ -1693,6 +1713,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppDumpRoute: AppDumpRoute,
   AppEnergifloedeRoute: AppEnergifloedeRoute,
   AppFamiljRoute: AppFamiljRoute,
+  AppFamiljeflowRoute: AppFamiljeflowRoute,
   AppFinancesRoute: AppFinancesRoute,
   AppFlowRoute: AppFlowRoute,
   AppFlowInstallningarRoute: AppFlowInstallningarRoute,
