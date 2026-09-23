@@ -617,7 +617,7 @@ export function CalendarContent() {
 
                   <div className="grid grid-cols-[1.75rem_repeat(7,minmax(0,1fr))] gap-1">
                     {days.flatMap((dateStr, index) => {
-                      const cells: React.ReactNode[] = [];
+                      const cells: ReactNode[] = [];
                       if (index % 7 === 0) {
                         const rowDate = days.slice(index, index + 7).find(Boolean);
                         cells.push(
