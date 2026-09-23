@@ -137,6 +137,26 @@ export function DailyFlowList({
                     {SOURCE_LABEL[item.source]}
                   </span>
                 </div>
+                <div className="flex shrink-0 flex-col">
+                  <button
+                    type="button"
+                    onClick={() => move(index, -1)}
+                    disabled={index === 0}
+                    aria-label={`Flytta upp ${item.title}`}
+                    className="press rounded-full p-1 text-muted-foreground hover:text-primary disabled:opacity-30"
+                  >
+                    <ArrowUp size={14} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => move(index, 1)}
+                    disabled={index === items.length - 1}
+                    aria-label={`Flytta ner ${item.title}`}
+                    className="press rounded-full p-1 text-muted-foreground hover:text-primary disabled:opacity-30"
+                  >
+                    <ArrowDown size={14} />
+                  </button>
+                </div>
                 <FlowItemActions
                   itemId={item.id}
                   size={14}
