@@ -7,6 +7,7 @@ import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import ChildProfiles from "@/components/family/child-profiles";
 import FamilySituation from "@/components/family/family-situation";
 import VisualChildSchedule from "@/components/family/visual-child-schedule";
+import RecoveryGapCard from "@/components/recovery/recovery-gap-card";
 import { useChildren, CHILD_COLORS } from "@/hooks/use-children";
 import { useLang } from "@/hooks/use-language";
 
@@ -87,6 +88,8 @@ export default function FamilyFlowPage() {
                 />
               )}
             </section>
+
+            <RecoveryGapCard title={t("Du kan inte ändra dagen. Men vi kan göra den lite snällare.")} />
 
             <section className="space-y-3">
               <h2 className="text-base font-semibold text-ink">{t("Barnen")}</h2>

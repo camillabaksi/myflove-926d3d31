@@ -10,6 +10,16 @@ export const CHANGELOG_UPDATED = "2026-09-23";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Återhämtning när dagen inte går att ändra",
+    items: [
+      "Flow hittar realistiska luckor mellan dagens fasta hållpunkter, med marginal för restid (2026-09-23)",
+      "Förslagen anpassas efter dagens kapacitet och hur lång luckan är (2026-09-23)",
+      "Mikropaus, Ljusboost, Stopp och egna vardagsaktiviteter föreslås via befintliga vägar (2026-09-23)",
+      "Inget bokas automatiskt – du väljer Ja, Välj annan eller Nej tack (2026-09-23)",
+      "Kortet finns i Återhämtning och i Familj, där barnens schema räknas med (2026-09-23)",
+    ],
+  },
+  {
     title: "Veckonummer i kalendrarna",
     items: [
       "Månadsvyn visar veckonummer i en egen kolumn till vänster (2026-09-23)",
