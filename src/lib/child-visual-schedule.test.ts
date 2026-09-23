@@ -6,6 +6,7 @@ import {
   decodeVisualNotes,
   encodeVisualNotes,
   getScheduleGuidance,
+  pictogramForActivity,
   copiedVisualNotes,
   searchActivityBank,
   shiftDateBetween,
@@ -38,6 +39,7 @@ describe("child visual schedule", () => {
   it("searches pictograms by title and keyword", () => {
     expect(searchActivityBank("sim").map((item) => item.title)).toContain("Simning");
     expect(searchActivityBank("bok").map((item) => item.title)).toContain("Läxa");
+    expect(pictogramForActivity("Buss", "home")).toBe("bus");
   });
 
   it("shifts dates and strips private notes for cross-child copies", () => {

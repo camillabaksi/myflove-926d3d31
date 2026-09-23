@@ -108,6 +108,14 @@ export function searchActivityBank(query: string, category?: VisualActivityCateg
   return source.filter((item) => [item.title, ...(item.keywords ?? [])].some((text) => text.toLocaleLowerCase("sv").includes(normalized)));
 }
 
+export function pictogramForActivity(title: string, fallback: PictogramId): PictogramId {
+  const normalized = title.toLocaleLowerCase("sv").trim();
+  const exact = ALL_PICTOGRAMS.find((item) => item.title.toLocaleLowerCase("sv") === normalized);
+  if (exact) return exact.pictogram;
+  const partial = ALL_PICTOGRAMS.find((item) => [item.title, ...(item.keywords ?? [])].some((text) => normalized.includes(text.toLocaleLowerCase("sv"))));
+  return partial?.pictogram ?? fallback;
+}
+
 export function startOfWeekISO(dateISO: string): string { const date = parseISODate(dateISO); date.setDate(date.getDate() - ((date.getDay() + 6) % 7)); return toISODate(date); }
 export function weekDates(dateISO: string): string[] { const monday = startOfWeekISO(dateISO); return Array.from({ length: 7 }, (_, index) => addDaysISO(monday, index)); }
 export function activityDedupKey(input: { childId: string; title: string; date?: string | null; time?: string | null }) { return [input.childId, input.date ?? "", input.time?.slice(0, 5) ?? "", input.title.toLocaleLowerCase("sv").replace(/\s+/g, " ").trim()].join("|"); }
