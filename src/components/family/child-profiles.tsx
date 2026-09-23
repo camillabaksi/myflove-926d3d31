@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Lock, Pencil, Plus, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -160,15 +160,22 @@ export default function ChildProfiles({
   onAdd,
   onUpdate,
   onDelete,
+  startAdding = false,
 }: {
   childrenList: Child[];
+  /** Öppna formuläret direkt, t.ex. från knappen "Lägg till barn" högre upp. */
+  startAdding?: boolean;
   onAdd: (d: { name: string; avatar: string; helps: string[] }) => Promise<void>;
   onUpdate: (id: string, d: { name: string; avatar: string; helps: string[] }) => Promise<void>;
   onDelete: (id: string) => Promise<void>;
 }) {
   const { t } = useLang();
   const { toast } = useToast();
-  const [adding, setAdding] = useState(false);
+  const [adding, setAdding] = useState(startAdding);
+
+  useEffect(() => {
+    if (startAdding) setAdding(true);
+  }, [startAdding]);
   const [editing, setEditing] = useState<string | null>(null);
 
   return (

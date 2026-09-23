@@ -62,15 +62,17 @@ export default function FamilyFlowPage() {
 
             <section className="space-y-3">
               <h2 className="text-base font-semibold text-ink">{t("Barnen")}</h2>
-              {loading ? (
-                <p className="text-sm text-muted-foreground">{t("Laddar...")}</p>
-              ) : children.length === 0 && !showChildren ? (
+              {children.length === 0 && !showChildren && !loading && (
                 <p className="text-sm text-muted-foreground">
                   {t("Inga barn tillagda än. Du kan använda Familj ändå.")}
                 </p>
+              )}
+              {loading ? (
+                <p className="text-sm text-muted-foreground">{t("Laddar...")}</p>
               ) : (
                 <ChildProfiles
                   childrenList={children}
+                  startAdding={showChildren}
                   onAdd={async (d) =>
                     addChild(d.name, CHILD_COLORS[0]!, undefined, undefined, {
                       helps: d.helps,
