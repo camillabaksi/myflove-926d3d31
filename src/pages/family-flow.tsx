@@ -35,6 +35,18 @@ export default function FamilyFlowPage() {
   const [scheduleChildId, setScheduleChildId] = useState<string | null>(null);
   const scheduleChild = children.find((child) => child.id === scheduleChildId) ?? null;
 
+  if (scheduleChild) {
+    return (
+      <Layout>
+        <MyFlovePageGrid area="hem">
+          <MyFloveWide>
+            <VisualChildSchedule child={scheduleChild} items={items} onClose={() => setScheduleChildId(null)} addItem={addItem} updateItem={updateItem} toggleItem={toggleItem} deleteItem={deleteItem} uploadDoc={uploadDoc} openDoc={openDoc} />
+          </MyFloveWide>
+        </MyFlovePageGrid>
+      </Layout>
+    );
+  }
+
   return (
     <Layout>
       <MyFlovePageGrid area="hem">
@@ -103,20 +115,6 @@ export default function FamilyFlowPage() {
                 />
               )}
             </section>
-
-            {scheduleChild && (
-              <VisualChildSchedule
-                child={scheduleChild}
-                items={items}
-                onClose={() => setScheduleChildId(null)}
-                addItem={addItem}
-                updateItem={updateItem}
-                toggleItem={toggleItem}
-                deleteItem={deleteItem}
-                uploadDoc={uploadDoc}
-                openDoc={openDoc}
-              />
-            )}
 
             <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
               <Lock size={12} aria-hidden />

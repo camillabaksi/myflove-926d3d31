@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-23";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Barnschemat följer den visuella referensen",
+    items: [
+      "Barnets schema öppnas som en egen lugn vy med barnets namn och avatar högst upp (2026-09-23)",
+      "Veckan visas som ett kompakt färgkodat rutnät med bildstöd och snabblänkar (2026-09-23)",
+      "Dagens schema har tydliga dagsdelar och klar, nu och nästa-status (2026-09-23)",
+      "Fasta symboler använder tydliga ikoner som visas korrekt på alla enheter (2026-09-23)",
+    ],
+  },
+  {
     title: "Visuellt barnschema 1.0",
     items: [
       "Family Flow visar barnets vecka, idag och ett lugnt fokusläge med Nu och Nästa (2026-09-23)",
