@@ -28,7 +28,9 @@ describe("familjens belastning", () => {
   });
 
   it("lägger till förberedelse och resa i tiden", () => {
-    expect(itemMinutes({ ...base, time: "16:00", endTime: "17:00", prepMinutes: 10, travelMinutes: 15 })).toBe(85);
+    expect(
+      itemMinutes({ ...base, title: "Tandläkare", time: "16:00", endTime: "17:00", prepMinutes: 10, travelMinutes: 15 }),
+    ).toBe(85);
   });
 
   it("låg kapacitet gör en enda aktivitet krävande", () => {
