@@ -101,7 +101,7 @@ describe("child visual schedule", () => {
     expect(p(18, 30)).toBe("Det är dags för sova nu.");
     expect(p(18, 31)).toBeNull();
     const a = { time: "18:10:00", notes: null }, b = { time: "18:30:00", notes: null };
-    expect(pickNowNext([a, b], at(17, 59))).toEqual({ current: b, next: b === a ? null : b }.current === b ? { current: b, next: null } : {});
+    expect(pickNowNext([a, b], at(17, 59))).toEqual({ current: a, next: b });
     expect(pickNowNext([a, b], at(18, 15))).toEqual({ current: a, next: b });
     expect(pickNowNext([a, b], at(18, 31))).toEqual({ current: b, next: null });
   });
