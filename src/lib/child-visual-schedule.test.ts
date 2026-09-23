@@ -16,6 +16,8 @@ import {
   shiftEndTime,
   startOfWeekISO,
   transitionPrompt,
+  minutesUntilTime,
+  pickNowNext,
   weekDates,
 } from "@/lib/child-visual-schedule";
 
@@ -90,7 +92,18 @@ describe("child visual schedule", () => {
   });
 
   it("creates a transition prompt from the next activity", () => {
-    expect(transitionPrompt("Gå till bussen")).toBe("Om 10 minuter är det dags för gå till bussen.");
+    const at = (h: number, m: number) => h * 60 + m;
+    const p = (h: number, m: number) => transitionPrompt("Sova", minutesUntilTime("18:30", at(h, m)));
+    expect(p(18, 0)).toBe("Om 30 minuter är det dags för sova.");
+    expect(p(18, 10)).toBe("Om 20 minuter är det dags för sova.");
+    expect(p(18, 20)).toBe("Om 10 minuter är det dags för sova.");
+    expect(p(18, 29)).toBe("Om 1 minut är det dags för sova.");
+    expect(p(18, 30)).toBe("Det är dags för sova nu.");
+    expect(p(18, 31)).toBeNull();
+    const a = { time: "18:10:00", notes: null }, b = { time: "18:30:00", notes: null };
+    expect(pickNowNext([a, b], at(17, 59))).toEqual({ current: b, next: b === a ? null : b }.current === b ? { current: b, next: null } : {});
+    expect(pickNowNext([a, b], at(18, 15))).toEqual({ current: a, next: b });
+    expect(pickNowNext([a, b], at(18, 31))).toEqual({ current: b, next: null });
   });
 
   it("uses the existing repeat value to show recurring activities", () => {
