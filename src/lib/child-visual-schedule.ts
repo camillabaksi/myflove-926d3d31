@@ -149,7 +149,17 @@ const META_PREFIX = "[myflove-visual:";
 const FALLBACK_META: VisualActivityMeta = { pictogram: "home", category: "hemma", tone: "lavender" };
 
 export function encodeVisualNotes(meta: VisualActivityMeta, note = ""): string {
-  const safeMeta = { pictogram: meta.pictogram, category: meta.category, tone: meta.tone, ...(meta.endTime ? { endTime: meta.endTime } : {}), ...(meta.category === "familj" && meta.familyLabel ? { familyLabel: meta.familyLabel } : {}) };
+  const safeMeta = {
+    pictogram: meta.pictogram,
+    category: meta.category,
+    tone: meta.tone,
+    ...(meta.endTime ? { endTime: meta.endTime } : {}),
+    ...(meta.category === "familj" && meta.familyLabel ? { familyLabel: meta.familyLabel } : {}),
+    ...(meta.parentPresence ? { parentPresence: true } : {}),
+    ...(safeMinutes(meta.prepMinutes, PREP_MINUTE_CHOICES) ? { prepMinutes: meta.prepMinutes } : {}),
+    ...(safeMinutes(meta.travelMinutes, TRAVEL_MINUTE_CHOICES) ? { travelMinutes: meta.travelMinutes } : {}),
+    ...(meta.recoveryAfter ? { recoveryAfter: true } : {}),
+  };
   return `${META_PREFIX}${JSON.stringify(safeMeta)}]\n${note.trim()}`;
 }
 
