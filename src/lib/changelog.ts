@@ -24,13 +24,6 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     ],
   },
   {
-    title: "Ordna genvägarna på Hem",
-    items: [
-      "Genvägar kan flyttas uppåt eller neråt med pilar (2026-09-23)",
-      "Ordningen sparas och synkas mellan enheter (2026-09-23)",
-    ],
-  },
-  {
     title: "Familj-genvägen öppnar Family Flow",
     items: [
       "Genvägen Familj på Hem öppnar nu Family Flow-vyn (2026-09-23)",

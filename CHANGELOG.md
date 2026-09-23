@@ -8,10 +8,6 @@
 - Aktiviteter i kalenderns dag och Min dag kan flyttas upp eller ner med pilknappar.
 - Ordningen sparas per dag och synkas med kontot.
 
-## 2026-09-23 – Ordna genvägarna på Hem
-
-- Varje genväg på Hem har fått pilar för att flyttas uppåt eller neråt i listan.
-- Ordningen sparas och följer med mellan enheter.
 
 ## 2026-09-23 – Familj-genvägen öppnar Family Flow
 

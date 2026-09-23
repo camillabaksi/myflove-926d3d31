@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "wouter";
-import { Plus, X, Check, ArrowUp, ArrowDown } from "lucide-react";
+import { Plus, X, Check } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -85,7 +85,7 @@ export function HomeShortcutsPicker({
 
 export default function HomeShortcuts() {
   const { t } = useLang();
-  const { shortcuts, remove, move } = useHomeShortcuts();
+  const { shortcuts, remove } = useHomeShortcuts();
   const [pickerOpen, setPickerOpen] = useState(false);
 
   return (
@@ -110,7 +110,7 @@ export default function HomeShortcuts() {
         </p>
       ) : (
         <ul className="grid grid-cols-2 gap-3">
-          {shortcuts.map((item, index) => (
+          {shortcuts.map((item) => (
             <li key={item.href} className="relative min-w-0">
               <Link
                 href={item.href}
@@ -131,26 +131,6 @@ export default function HomeShortcuts() {
               >
                 <X className="h-3.5 w-3.5" aria-hidden />
               </button>
-              <div className="absolute bottom-1.5 right-1.5 flex items-center gap-1">
-                <button
-                  type="button"
-                  onClick={() => move(item.storedHref, -1)}
-                  disabled={index === 0}
-                  aria-label={`${t("Flytta upp")} ${t(item.label)}`}
-                  className="grid h-7 w-7 place-items-center rounded-full bg-secondary/80 text-muted-foreground hover:text-foreground disabled:opacity-30"
-                >
-                  <ArrowUp className="h-3.5 w-3.5" aria-hidden />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => move(item.storedHref, 1)}
-                  disabled={index === shortcuts.length - 1}
-                  aria-label={`${t("Flytta ner")} ${t(item.label)}`}
-                  className="grid h-7 w-7 place-items-center rounded-full bg-secondary/80 text-muted-foreground hover:text-foreground disabled:opacity-30"
-                >
-                  <ArrowDown className="h-3.5 w-3.5" aria-hidden />
-                </button>
-              </div>
             </li>
           ))}
         </ul>
