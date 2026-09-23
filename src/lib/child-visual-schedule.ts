@@ -178,7 +178,22 @@ export function decodeVisualNotes(notes?: string | null): { meta: VisualActivity
     const pictogram = candidate.pictogram && VALID_PICTOGRAMS.has(candidate.pictogram) ? candidate.pictogram : legacy ?? "home";
     const endTime = typeof candidate.endTime === "string" && /^([01]\d|2[0-3]):[0-5]\d$/.test(candidate.endTime) ? candidate.endTime : undefined;
     const familyLabel = category === "familj" && (candidate.familyLabel === "child" || candidate.familyLabel === "shared" || candidate.familyLabel === "caregiver") ? candidate.familyLabel : undefined;
-    return { meta: { pictogram, category, tone, ...(endTime ? { endTime } : {}), ...(familyLabel ? { familyLabel } : {}) }, note: notes.slice(end + 2) };
+    const prepMinutes = safeMinutes(candidate.prepMinutes, PREP_MINUTE_CHOICES);
+    const travelMinutes = safeMinutes(candidate.travelMinutes, TRAVEL_MINUTE_CHOICES);
+    return {
+      meta: {
+        pictogram,
+        category,
+        tone,
+        ...(endTime ? { endTime } : {}),
+        ...(familyLabel ? { familyLabel } : {}),
+        ...(candidate.parentPresence === true ? { parentPresence: true } : {}),
+        ...(prepMinutes ? { prepMinutes } : {}),
+        ...(travelMinutes ? { travelMinutes } : {}),
+        ...(candidate.recoveryAfter === true ? { recoveryAfter: true } : {}),
+      },
+      note: notes.slice(end + 2),
+    };
   } catch { return { meta: FALLBACK_META, note: notes.slice(end + 2) }; }
 }
 
