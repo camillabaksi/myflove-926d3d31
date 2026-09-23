@@ -318,7 +318,9 @@ export function balanceFor(
     if (e.direction === "gives") {
       gives += e.strength;
       weightedNet += e.strength * catFactor;
-      if (!topBoost || e.strength > topBoost.strength) topBoost = e;
+      // Stress & konflikt föreslås aldrig som "något som ger energi".
+      const isStress = e.category === "stress" || /stress|konflikt/i.test(e.title);
+      if (!isStress && (!topBoost || e.strength > topBoost.strength)) topBoost = e;
     } else if (e.direction === "drains") {
       drains += e.strength;
       weightedNet -= e.strength * catFactor;
