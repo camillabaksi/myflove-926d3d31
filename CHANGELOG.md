@@ -1,3 +1,8 @@
+## 2026-09-23 – Stress föreslås aldrig som energikälla
+
+- Stress och konflikt räknas inte längre som "något som ger dig energi" i återhämtningsförslag.
+- Texten säger nu ärligt vad du loggat idag i stället för att påstå ett mönster.
+
 ## 2026-09-23 – Rätt tid till nästa aktivitet i barnschemat
 
 - "Om X minuter" räknas nu från den faktiska klockan och uppdateras av sig själv.
