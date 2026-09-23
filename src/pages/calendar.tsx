@@ -600,7 +600,10 @@ export function CalendarContent() {
 
               {view === "manad" && (
                 <div className="pt-2">
-                  <div className="grid grid-cols-7 gap-1 mb-2 text-center text-sm font-medium text-muted-foreground">
+                  <div className="grid grid-cols-[1.75rem_repeat(7,minmax(0,1fr))] gap-1 mb-2 text-center text-sm font-medium text-muted-foreground">
+                    <div className="text-xs" title={t("Veckonummer")}>
+                      {t("v.")}
+                    </div>
                     <div>{t("Må")}</div>
                     <div>{t("Ti")}</div>
                     <div>{t("On")}</div>
