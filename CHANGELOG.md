@@ -651,6 +651,13 @@
 
 # Changelog
 
+## 2026-09-23 – Komplett pitch- och dokumentpaket 5.1
+
+- Svenska och engelska pitchdeck uppdaterade med nuvarande informationsarkitektur, energiloop, Återhämtning, Insikter, Family Flow, träning, studier och integritet.
+- Fyra treminuters pitchfilmer skapade i svenska/engelska och 16:9/9:16 med riktiga MyFlove-vyer och mjuka övergångar.
+- Living Blueprint 5.1 och tvåspråkiga pitchmanus skapade utan att skriva över äldre versioner.
+- Endast tidigare belagda marknadsuppskattningar återanvänds; kapitalbehov och tidsplan är tydligt märkta som arbetsantaganden.
+
 ## 2026-09-11 – Ny demoslide i pitchdecket
 
 - Demosliden i pitchdecket 4.2 (PDF, Word, PowerPoint) och i den engelska 3-minuterspitchen är utbytt.

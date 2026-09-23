@@ -56,6 +56,14 @@ SECTIONS = [
 
 def build():
     doc = Document(SRC)
+    # Keep the established blueprint design while making the new file's cover truthful.
+    for paragraph in doc.paragraphs[:12]:
+        if "Version 5.0" in paragraph.text:
+            for run in paragraph.runs:
+                run.text = run.text.replace("Version 5.0", "Version 5.1")
+        if "Om version 5.0" in paragraph.text:
+            for run in paragraph.runs:
+                run.text = run.text.replace("Om version 5.0", "Om version 5.1")
     doc.add_page_break()
     for index, (title, paragraphs) in enumerate(SECTIONS):
         doc.add_heading(title, level=1 if index == 0 else 2)
