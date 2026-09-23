@@ -346,16 +346,17 @@ export function CalendarContent() {
   const weekDays = Array.from({ length: 7 }, (_, i) =>
     fmtDate(addDays(startOfWeek(currentDate), i)),
   );
+  const currentWeekNo = isoWeekNumber(currentDate);
   const periodLabel =
     view === "manad"
       ? monthName
       : view === "vecka"
-        ? `${new Date(`${weekDays[0]}T12:00:00`).toLocaleDateString("sv-SE", { day: "numeric", month: "short" })} – ${new Date(`${weekDays[6]}T12:00:00`).toLocaleDateString("sv-SE", { day: "numeric", month: "short" })}`
-        : currentDate.toLocaleDateString("sv-SE", {
+        ? `v. ${currentWeekNo} · ${new Date(`${weekDays[0]}T12:00:00`).toLocaleDateString("sv-SE", { day: "numeric", month: "short" })} – ${new Date(`${weekDays[6]}T12:00:00`).toLocaleDateString("sv-SE", { day: "numeric", month: "short" })}`
+        : `${currentDate.toLocaleDateString("sv-SE", {
             weekday: "long",
             day: "numeric",
             month: "long",
-          });
+          })} · v. ${currentWeekNo}`;
 
   const allTasks = [...activeTasks, ...completedTasks];
 
