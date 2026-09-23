@@ -65,7 +65,7 @@ export function useChildEvents(dateISO?: string): ChildEvent[] {
         childId: i.child_id,
         itemId: i.id,
         completed: i.completed,
-        ...(meta.parentPresence ? { requiresParent: true } : {}),
+        ...(typeof meta.parentPresence === "boolean" ? { requiresParent: meta.parentPresence } : {}),
         ...(meta.prepMinutes ? { prepMinutes: meta.prepMinutes } : {}),
         ...(meta.travelMinutes ? { travelMinutes: meta.travelMinutes } : {}),
         ...(meta.recoveryAfter ? { recoveryAfter: true } : {}),
