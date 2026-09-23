@@ -2,6 +2,9 @@ import { describe, expect, it } from "vitest";
 
 import {
   activityDedupKey,
+  activityOccursOn,
+  buildMultiMovePatches,
+  CATEGORY_STYLES,
   dayPart,
   decodeVisualNotes,
   encodeVisualNotes,
@@ -24,9 +27,9 @@ describe("child visual schedule", () => {
   });
 
   it("round-trips visual metadata without losing a note", () => {
-    const notes = encodeVisualNotes({ pictogram: "bag", category: "hemma", tone: "mint" }, "Vid dörren");
+    const notes = encodeVisualNotes({ pictogram: "bag", category: "hemma", tone: "mint", endTime: "08:30" }, "Vid dörren");
     expect(decodeVisualNotes(notes)).toEqual({
-      meta: { pictogram: "bag", category: "hemma", tone: "mint" },
+      meta: { pictogram: "bag", category: "hemma", tone: "mint", endTime: "08:30" },
       note: "Vid dörren",
     });
   });
@@ -76,5 +79,27 @@ describe("child visual schedule", () => {
 
   it("creates a transition prompt from the next activity", () => {
     expect(transitionPrompt("Gå till bussen")).toBe("Om 10 minuter är det dags för gå till bussen.");
+  });
+
+  it("uses the existing repeat value to show recurring activities", () => {
+    expect(activityOccursOn({ date: "2026-09-21", repeat: "daily" }, "2026-09-23")).toBe(true);
+    expect(activityOccursOn({ date: "2026-09-21", repeat: "weekdays" }, "2026-09-26")).toBe(false);
+    expect(activityOccursOn({ date: "2026-09-21", repeat: "weekly" }, "2026-09-28")).toBe(true);
+    expect(activityOccursOn({ date: "2026-09-21", repeat: "none" }, "2026-09-22")).toBe(false);
+  });
+
+  it("moves several existing ids while preserving their time spacing", () => {
+    expect(buildMultiMovePatches([
+      { id: "dentist", date: "2026-09-23", time: "14:00" },
+      { id: "bus", date: "2026-09-23", time: "15:30" },
+    ], "2026-09-24", "15:00")).toEqual([
+      { id: "dentist", date: "2026-09-24", time: "15:00" },
+      { id: "bus", date: "2026-09-24", time: "16:30" },
+    ]);
+  });
+
+  it("defines a distinct semantic area treatment for every category", () => {
+    expect(Object.keys(CATEGORY_STYLES)).toEqual(expect.arrayContaining(["hemma", "skola", "mat", "hygien", "träning", "vård", "familj", "återhämtning", "fritid"]));
+    expect(CATEGORY_STYLES.vård.card).not.toBe(CATEGORY_STYLES.skola.card);
   });
 });
