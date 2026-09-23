@@ -25,6 +25,7 @@ import { toast } from "sonner";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 import { useFlowScore } from "@/hooks/use-flowscore";
 import { useLang } from "@/hooks/use-language";
 import { useQuickflow } from "@/hooks/use-quickflow";
@@ -43,6 +44,8 @@ import {
   dayPart,
   decodeVisualNotes,
   encodeVisualNotes,
+  PREP_MINUTE_CHOICES,
+  TRAVEL_MINUTE_CHOICES,
   getScheduleGuidance,
   pictogramForActivity,
   searchActivityBank,
