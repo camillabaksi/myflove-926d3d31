@@ -68,13 +68,20 @@ export function findShortcut(href: string): HomeShortcut | undefined {
 const STORAGE_KEY = "myflove-home-shortcuts";
 const DEFAULT_SHORTCUTS: string[] = [];
 
+/** Gamla sparade genvägar som pekat på fel sida – Familj ska öppna Family Flow. */
+const LEGACY_HREFS: Record<string, string> = { "/familj": "/familjeflow" };
+
 export function useHomeShortcuts() {
   const [saved, setSaved] = useCloudSyncedStorage<string[]>(STORAGE_KEY, DEFAULT_SHORTCUTS);
 
   const shortcuts = useMemo<HomeShortcut[]>(
-    () => (saved ?? []).map(findShortcut).filter((item): item is HomeShortcut => item != null),
+    () =>
+      (saved ?? [])
+        .map((href) => findShortcut(LEGACY_HREFS[href] ?? href))
+        .filter((item): item is HomeShortcut => item != null),
     [saved],
   );
+
 
   const add = useCallback(
     (href: string) =>
