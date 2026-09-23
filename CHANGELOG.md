@@ -1,3 +1,9 @@
+## 2026-09-23 – Fler vård- och vardagspictogram i Family Flow
+
+- Pictogramväljaren har fått en ny neutral kategori för Vård med doktor, tandläkare, sjukhus, apotek, vårdcentral, vaccination, sjuksköterska, undersökning, akut vård, samtal, optiker, hörselmottagning, fysioterapi och återbesök.
+- Vardagsstödet har kompletterats med Handla, Städa, Tvätta, Packa och Fritid; befintliga skola-, transport-, hygien-, familje- och återhämtningsval finns kvar.
+- Alla nya pictogram använder samma kommersiellt tillåtna Lucide/ISC-källa, kort svensk text och svenska sökord. Egna privata bilder finns kvar som alternativ.
+
 ## 2026-09-23 – Pictogram och flexibel kopiering i barnschemat
 
 - Emoji och stjärnor i barnschemat ersattes av tydliga, konsekventa Lucide-pictogram med kort svensk text och dokumenterad ISC-licens.

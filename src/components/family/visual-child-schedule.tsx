@@ -370,7 +370,7 @@ export default function VisualChildSchedule({
             <section className="rounded-2xl border border-border bg-blush/35 p-4">
               <p className="font-semibold text-ink"><Sparkles size={16} className="mr-1 inline text-primary" />{t(guidance.message)}</p>
               {guidance.recovery && <p className="mt-1 text-sm text-muted-foreground">{t(guidance.recovery)}</p>}
-              <Button type="button" variant="outline" onClick={() => openAdd(ACTIVITY_BANK.återhämtning[1], today)} className="mt-3 h-11 rounded-2xl">{t("Lägg in lugn stund")}</Button>
+              <Button type="button" variant="outline" onClick={() => openAdd(ACTIVITY_BANK.återhämtning.find((item) => item.pictogram === "quiet"), today)} className="mt-3 h-11 rounded-2xl">{t("Lägg in lugn stund")}</Button>
             </section>
           )}
 

@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-23";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Fler vård- och vardagspictogram i Family Flow",
+    items: [
+      "Ny neutral Vård-kategori med 14 tydliga pictogram för besök och undersökningar (2026-09-23)",
+      "Handla, Städa, Tvätta, Packa och Fritid kompletterar vardagsstödet (2026-09-23)",
+      "Kort svensk text och fler svenska sökord gör pictogrammen enklare att hitta (2026-09-23)",
+      "Alla pictogram använder Lucide med ISC-licens; egna privata bilder finns kvar (2026-09-23)",
+    ],
+  },
+  {
     title: "Pictogram och flexibel kopiering i barnschemat",
     items: [
       "Emoji och stjärnor ersattes av tydliga Lucide-pictogram med kort svensk text (2026-09-23)",

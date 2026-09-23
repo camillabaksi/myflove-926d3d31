@@ -40,6 +40,18 @@ describe("child visual schedule", () => {
     expect(searchActivityBank("sim").map((item) => item.title)).toContain("Simning");
     expect(searchActivityBank("bok").map((item) => item.title)).toContain("Läxa");
     expect(pictogramForActivity("Buss", "home")).toBe("bus");
+    expect(searchActivityBank("läkare").map((item) => item.title)).toContain("Doktor");
+    expect(searchActivityBank("BUP").map((item) => item.title)).toContain("Samtal");
+    expect(searchActivityBank("mataffär").map((item) => item.title)).toContain("Handla");
+    expect(pictogramForActivity("Besök hos tandläkare", "home")).toBe("dentist");
+  });
+
+  it("keeps neutral healthcare metadata in the existing schedule format", () => {
+    const notes = encodeVisualNotes({ pictogram: "clinic", category: "vård", tone: "sky" });
+    expect(decodeVisualNotes(notes)).toEqual({
+      meta: { pictogram: "clinic", category: "vård", tone: "sky" },
+      note: "",
+    });
   });
 
   it("shifts dates and strips private notes for cross-child copies", () => {
