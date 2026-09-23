@@ -56,7 +56,18 @@ export function useRecoveryGaps(opts?: { includeFamily?: boolean }): {
     if (includeFamily) {
       for (const e of childEvents) {
         if (e.completed) continue;
-        out.push({ start: e.time, title: e.title, who: "familj" });
+        // Bara det som faktiskt kräver förälderns närvaro blir en hållpunkt
+        // för föräldern. Aktiviteter utan markering räknas som tidigare.
+        if (e.requiresParent === false) continue;
+        out.push({
+          start: e.time,
+          ...(e.endTime ? { end: e.endTime } : {}),
+          title: `${e.title} (${e.childName})`,
+          who: "familj",
+          ...(e.prepMinutes ? { prepMinutes: e.prepMinutes } : {}),
+          ...(e.travelMinutes ? { travelMinutes: e.travelMinutes } : {}),
+          ...(e.recoveryAfter ? { preferAfter: true } : {}),
+        });
       }
     }
     return out;
