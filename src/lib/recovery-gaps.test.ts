@@ -111,6 +111,6 @@ describe("buildRecoveryGaps", () => {
 
   it("formulerar tidigare loggar som observation, inte sanning", () => {
     const r = buildRecoveryGaps({ ...base, score: 60, energyBoostTitle: "Promenad" });
-    expect(r.preferenceNote).toContain("tidigare loggat");
+    expect(r.preferenceNote).toContain("har du loggat");
   });
 });

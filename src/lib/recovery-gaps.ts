@@ -318,7 +318,7 @@ export function buildRecoveryGaps(input: RecoveryGapsInput): RecoveryGapsResult 
       ? null
       : "Jag hittar ingen lucka just nu. Det är inte ditt fel – vi kan titta igen senare idag.",
     preferenceNote: input.energyBoostTitle
-      ? `Du har tidigare loggat att ${input.energyBoostTitle.toLowerCase()} ofta ger dig energi.`
+      ? `Idag har du loggat att ${input.energyBoostTitle.toLowerCase()} gav dig energi.`
       : null,
   };
 }

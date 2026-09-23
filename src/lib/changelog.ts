@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-23";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Stress föreslås aldrig som energikälla",
+    items: [
+      "Stress och konflikt räknas inte som något som ger energi i återhämtningsförslag (2026-09-23)",
+      "Texten beskriver ärligt dagens logg i stället för ett påstått mönster (2026-09-23)",
+    ],
+  },
+  {
     title: "Rätt tid till nästa aktivitet i barnschemat",
     items: [
       "Minuter kvar räknas från faktisk lokal tid och uppdateras automatiskt (2026-09-23)",
