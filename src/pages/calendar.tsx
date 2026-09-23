@@ -613,11 +613,25 @@ export function CalendarContent() {
                     <div>{t("Sö")}</div>
                   </div>
 
-                  <div className="grid grid-cols-7 gap-1">
-                    {days.map((dateStr, index) => {
-                      if (!dateStr) {
-                        return <div key={`empty-${index}`} className="aspect-square" />;
+                  <div className="grid grid-cols-[1.75rem_repeat(7,minmax(0,1fr))] gap-1">
+                    {days.flatMap((dateStr, index) => {
+                      const cells: React.ReactNode[] = [];
+                      if (index % 7 === 0) {
+                        const rowDate = days.slice(index, index + 7).find(Boolean);
+                        cells.push(
+                          <div
+                            key={`wk-${index}`}
+                            className="flex items-center justify-center text-[11px] font-medium text-muted-foreground"
+                          >
+                            {rowDate ? isoWeekNumberFromString(rowDate) : ""}
+                          </div>,
+                        );
                       }
+                      if (!dateStr) {
+                        cells.push(<div key={`empty-${index}`} className="aspect-square" />);
+                        return cells;
+                      }
+
 
                       const dNum = parseInt(dateStr.split("-")[2], 10);
                       const isSelected = dateStr === selectedDateStr;
