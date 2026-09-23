@@ -705,8 +705,9 @@ export function CalendarContent() {
                               )}
                             </div>
                           )}
-                        </button>
+                        </button>,
                       );
+                      return cells;
                     })}
                   </div>
                 </div>
