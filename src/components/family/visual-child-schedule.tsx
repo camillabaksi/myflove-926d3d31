@@ -163,6 +163,7 @@ export default function VisualChildSchedule({
   const [pickerCategory, setPickerCategory] = useState<VisualActivityCategory | "alla">("alla");
   const [copying, setCopying] = useState<{ scope: "activity" | "day" | "week"; item?: ChildItem; sourceDate?: string } | null>(null);
   const [copyDate, setCopyDate] = useState(addDaysISO(todayISO(), 1));
+  const [copyExtraDates, setCopyExtraDates] = useState<string[]>([]);
   const [copyChildId, setCopyChildId] = useState(child.id);
   const [includePrivateNote, setIncludePrivateNote] = useState(false);
   const [copyingNow, setCopyingNow] = useState(false);
@@ -253,7 +254,7 @@ export default function VisualChildSchedule({
       const key = activityDedupKey({ childId: targetChildId, title: item.title, date: targetDate, time: item.time });
       if (existing.has(key)) continue;
       let filePath = item.file_path ?? undefined;
-      if (filePath && targetChildId !== item.child_id) filePath = await copyDoc(filePath, targetChildId);
+      if (filePath) filePath = await copyDoc(filePath, targetChildId);
       await addItem({ childId: targetChildId, kind: "activity", title: item.title, date: targetDate, time: item.time ?? undefined, notes: copiedVisualNotes(item.notes, targetChildId === item.child_id || includePrivateNote), filePath });
       existing.add(key);
       copied += 1;
@@ -271,7 +272,9 @@ export default function VisualChildSchedule({
           ? childItems.filter((item) => item.date === copying.sourceDate)
           : childItems.filter((item) => item.date && dates.includes(item.date));
       const sourceAnchor = copying.scope === "activity" ? copying.item?.date ?? today : copying.scope === "day" ? copying.sourceDate ?? today : dates[0] ?? today;
-      const copied = await copyItems(source, copyChildId, copyDate, sourceAnchor);
+      let copied = 0;
+      const targetDates = copying.scope === "day" ? [copyDate, ...copyExtraDates.filter((date) => date !== copyDate)] : [copyDate];
+      for (const targetDate of targetDates) copied += await copyItems(source, copyChildId, targetDate, sourceAnchor);
       toast.success(t(copied ? `${copied} aktiviteter kopierades.` : "Aktiviteterna finns redan på måldatumet."));
       setCopying(null);
     } catch { toast.error(t("Kunde inte kopiera aktiviteterna.")); }
@@ -282,6 +285,7 @@ export default function VisualChildSchedule({
     const sourceAnchor = item?.date ?? sourceDate ?? dates[0] ?? today;
     setCopyDate(addDaysISO(sourceAnchor, scope === "week" ? 7 : 1));
     setCopyChildId(child.id);
+    setCopyExtraDates([]);
     setIncludePrivateNote(false);
     setCopying({ scope, item, sourceDate });
   };
@@ -425,9 +429,10 @@ export default function VisualChildSchedule({
         <section className="space-y-4 rounded-3xl border border-primary/20 bg-lavender/25 p-4" aria-label={t("Kopiera till") }>
           <div className="flex items-center justify-between gap-2"><h3 className="font-display text-lg font-bold text-ink">{t(copying.scope === "activity" ? "Kopiera aktivitet" : copying.scope === "day" ? "Kopiera dagen" : "Kopiera vecka")}</h3><Button type="button" variant="ghost" onClick={() => setCopying(null)} className="rounded-xl">{t("Avbryt")}</Button></div>
           <div className="grid gap-3 sm:grid-cols-2">
-            <label className="space-y-1 text-sm font-medium text-ink"><span>{t(copying.scope === "week" ? "Veckan som börjar" : "Kopiera till datum")}</span><Input type="date" value={copyDate} onChange={(event) => setCopyDate(event.target.value)} className="h-12 rounded-xl" /></label>
+            <label className="space-y-1 text-sm font-medium text-ink"><span>{t(copying.scope === "week" ? "Veckan som börjar" : "Kopiera till datum")}</span><Input type="date" value={copyDate} onChange={(event) => setCopyDate(event.target.value)} className="h-12 rounded-xl" /><span className="flex flex-wrap gap-1.5 pt-1"><Button type="button" variant="outline" onClick={() => setCopyDate(today)} className="h-8 rounded-full px-3 text-xs">{t("Idag")}</Button><Button type="button" variant="outline" onClick={() => setCopyDate(addDaysISO(today, 1))} className="h-8 rounded-full px-3 text-xs">{t("Imorgon")}</Button>{copying.scope === "week" && <Button type="button" variant="outline" onClick={() => setCopyDate(addDaysISO(dates[0] ?? today, 7))} className="h-8 rounded-full px-3 text-xs">{t("Nästa vecka")}</Button>}</span></label>
             {children.length > 1 && <label className="space-y-1 text-sm font-medium text-ink"><span>{t("Kopiera till barn")}</span><select value={copyChildId} onChange={(event) => setCopyChildId(event.target.value)} className="h-12 w-full rounded-xl border border-border bg-card px-3">{children.map((option) => <option key={option.id} value={option.id}>{option.name}</option>)}</select></label>}
           </div>
+          {copying.scope === "day" && <fieldset className="space-y-2"><legend className="text-sm font-medium text-ink">{t("Flera dagar (valfritt)")}</legend><div className="grid grid-cols-4 gap-1.5 sm:grid-cols-7">{Array.from({ length: 7 }, (_, index) => addDaysISO(copyDate, index)).map((date) => { const selected = date === copyDate || copyExtraDates.includes(date); return <Button key={date} type="button" variant={selected ? "default" : "outline"} onClick={() => { if (date === copyDate) return; setCopyExtraDates((currentDates) => currentDates.includes(date) ? currentDates.filter((item) => item !== date) : [...currentDates, date]); }} className="h-auto min-h-11 flex-col rounded-lg px-1 py-1 text-xs" aria-pressed={selected}><span>{new Intl.DateTimeFormat(locale, { weekday: "short" }).format(parseISODate(date))}</span><span>{new Intl.DateTimeFormat(locale, { day: "numeric" }).format(parseISODate(date))}</span></Button>; })}</div></fieldset>}
           {copyChildId !== child.id && <label className="flex items-start gap-3 rounded-xl bg-card p-3 text-sm text-ink"><input type="checkbox" checked={includePrivateNote} onChange={(event) => setIncludePrivateNote(event.target.checked)} className="mt-1 h-4 w-4 accent-primary" /><span><strong>{t("Ta med privata anteckningar")}</strong><span className="mt-0.5 block text-xs text-muted-foreground">{t("Av som standard så barnspecifika uppgifter inte följer med.")}</span></span></label>}
           <p className="text-xs text-muted-foreground">{t("Originalet ändras inte och exakta dubbletter hoppas över.")}</p>
           <Button type="button" onClick={() => void performCopy()} disabled={copyingNow || !copyDate} className="h-12 w-full rounded-xl"><Copy size={17} /> {copyingNow ? t("Kopierar...") : t("Kopiera")}</Button>
