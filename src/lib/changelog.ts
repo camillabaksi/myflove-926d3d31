@@ -6,10 +6,18 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-09-22";
+export const CHANGELOG_UPDATED = "2026-09-23";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Privat Pitch & Investor i admin",
+    items: [
+      "Ny privat sektion i adminvyn där pitchdeck, ekonomi, financial model, BMC, quick answers och KPI-material kan samlas (2026-09-23)",
+      "Filerna ligger i privat lagring och öppnas med tillfälliga länkar – osynligt för vanliga användare, testare och besökare (2026-09-23)",
+    ],
+  },
+  {
+
     title: "Svenska återställs i hela appen",
     items: [
       "Byte tillbaka till svenska sätter tillbaka all översatt text direkt, inga engelska rubriker eller menyord blir kvar (2026-09-22)",

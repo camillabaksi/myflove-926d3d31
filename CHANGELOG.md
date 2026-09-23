@@ -1,4 +1,10 @@
+## 2026-09-23 – Privat Pitch & Investor i admin
+
+- Ny privat sektion i adminvyn för pitchdeck, ekonomi & investeringsplan, financial model, Business Model Canvas, investor quick answers och KPI-material.
+- Dokumenten ligger i privat lagring och öppnas med tillfälliga länkar; endast konton med admin-roll kan se eller hämta dem.
+
 ## 2026-09-22 – Svenska återställs i hela appen
+
 
 - Byte tillbaka till svenska sätter nu tillbaka all översatt text direkt i sidan, så inga engelska rubriker eller menyord blir kvar.
 

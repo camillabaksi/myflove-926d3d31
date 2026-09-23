@@ -24,9 +24,12 @@ import {
   ArrowDown,
   PlayCircle,
   BarChart3,
+  Briefcase,
 } from "lucide-react";
 import ChangelogExport from "@/components/changelog-export";
 import UserAnalytics from "@/components/admin/user-analytics";
+import InvestorDocs from "@/components/admin/investor-docs";
+
 import type { AdminUserRow } from "@/lib/admin.functions";
 
 const STATUS_LABELS: Record<string, string> = {
@@ -42,7 +45,7 @@ const STATUS_OPTIONS = ["open", "planned", "in_progress", "done", "wontfix"] as 
 export default function AdminPage() {
   const { isAdmin, loading: adminLoading } = useIsAdmin();
   const { t } = useLang();
-  const [tab, setTab] = useState<"friction" | "users" | "changelog">("friction");
+  const [tab, setTab] = useState<"friction" | "users" | "investor" | "changelog">("friction");
 
   if (adminLoading) {
     return (
@@ -109,6 +112,13 @@ export default function AdminPage() {
             {t("Användare & roller")}
           </TabBtn>
           <TabBtn
+            active={tab === "investor"}
+            onClick={() => setTab("investor")}
+            icon={<Briefcase size={16} />}
+          >
+            {t("Pitch & Investor")}
+          </TabBtn>
+          <TabBtn
             active={tab === "changelog"}
             onClick={() => setTab("changelog")}
             icon={<FileDown size={16} />}
@@ -121,9 +131,12 @@ export default function AdminPage() {
           <FrictionSection />
         ) : tab === "users" ? (
           <UsersSection />
+        ) : tab === "investor" ? (
+          <InvestorDocs />
         ) : (
           <ChangelogExport />
         )}
+
       </div>
     </Layout>
   );
