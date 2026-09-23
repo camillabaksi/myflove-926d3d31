@@ -267,8 +267,9 @@ export function buildRecoveryGaps(input: RecoveryGapsInput): RecoveryGapsResult 
 
   const gaps: RecoveryGap[] = raw
     // Långa tomma kvällar är sällan det mest hjälpsamma förslaget – korta
-    // luckor mellan hållpunkter kommer först.
-    .sort((a, b) => a.start - b.start)
+    // luckor mellan hållpunkter kommer först. En lucka direkt efter något
+    // användaren själv markerat med "lugn stund efteråt" kommer allra först.
+    .sort((a, b) => (a.preferred === b.preferred ? a.start - b.start : a.preferred ? -1 : 1))
     .map((g) => {
       const minutes = Math.min(45, g.end - g.start);
       const options = optionsForGap(minutes, capacity, input.energyBoostTitle);
