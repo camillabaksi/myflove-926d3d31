@@ -81,7 +81,7 @@ const FALLBACK_META: VisualActivityMeta = { pictogram: "home", category: "hemma"
 
 export function encodeVisualNotes(meta: VisualActivityMeta, note = ""): string {
   const safeMeta = { pictogram: meta.pictogram, category: meta.category, tone: meta.tone };
-  return `${META_PREFIX}${JSON.stringify(safeMeta)}]\n${note.trim()}`.trim();
+  return `${META_PREFIX}${JSON.stringify(safeMeta)}]\n${note.trim()}`;
 }
 
 export function decodeVisualNotes(notes?: string | null): { meta: VisualActivityMeta; note: string } {
