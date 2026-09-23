@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-23";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Barn som etikett inom Familj",
+    items: [
+      "Barn, Familj gemensamt och Förälder/omsorg finns som etiketter inom Familj (2026-09-23)",
+      "Barnaktiviteter kopplas till den befintliga barnprofilen och behåller Familjs färg (2026-09-23)",
+      "Familjs pictogrambank täcker fler vanliga aktiviteter kring barnets vardag (2026-09-23)",
+    ],
+  },
+  {
     title: "Redigera, flytta och färgkoda i Family Flow",
     items: [
       "Ändra namn, pictogram, område, tider, återkomst och privata anteckningar på samma aktivitet (2026-09-23)",

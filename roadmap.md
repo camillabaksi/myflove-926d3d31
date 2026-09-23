@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Family Flow: Barn som underetikett inom Familj, kopplat till befintliga barnprofiler (2026-09-23)
+
 - [x] Family Flow: redigering, flerflytt, återkomst, områdesfärger och responsivitet (2026-09-23)
 
 - [x] Family Flow: utöka pictogramväljaren med neutral vård och fler vardagsärenden (2026-09-23)

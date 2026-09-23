@@ -1,3 +1,9 @@
+## 2026-09-23 – Barn som etikett inom Familj
+
+- Familj har fått de interna etiketterna Barn, Familj gemensamt och Förälder/omsorg utan ett nytt huvudområde.
+- Barnaktiviteter visar barnets befintliga profilnamn och använder samma lugna Familj-färg i Vecka, Idag och Nu/Nästa.
+- Familjs pictogrambank har kompletterats med omsorg, hämta/lämna, lek, bad, tänder, måltid, läggning, läsning, förskola/skola, vårdbesök och medicin.
+
 ## 2026-09-23 – Redigera, flytta och färgkoda i Family Flow
 
 - Aktiviteter kan ändras direkt med namn, pictogram, område, dag, start- och sluttid, återkomst och privat anteckning utan att en ny aktivitet skapas.
