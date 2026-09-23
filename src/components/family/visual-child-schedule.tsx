@@ -418,7 +418,7 @@ export default function VisualChildSchedule({
       {mode === "today" ? (
         <div className="space-y-5">
           {current ? (
-            <section className={cn("space-y-3 rounded-2xl border p-3", CATEGORY_STYLES[decodeVisualNotes(current.notes).meta.category].subtle)} aria-label={t("Nu och nästa") }>
+            <section className="space-y-3 rounded-2xl border border-border bg-card p-3" aria-label={t("Nu och nästa") }>
               <div className="flex items-center gap-3">
                 <span className={cn("h-12 w-1 shrink-0 rounded-full", CATEGORY_STYLES[decodeVisualNotes(current.notes).meta.category].marker)} aria-hidden />
                 <ActivityVisual item={current} openDoc={openDoc} />

@@ -1,3 +1,8 @@
+## 2026-09-23 – Områdesfärger i Family Flow
+
+- Aktiviteter visar sin områdesfärg i Vecka och Idag.
+- Nu/Nästa hålls lugnt med pictogram, kort text och bara en diskret färgmarkering.
+
 ## 2026-09-23 – Ordna dagens lista
 
 - Aktiviteter i kalenderns dag och Min dag kan flyttas upp eller ner med pilknappar.
