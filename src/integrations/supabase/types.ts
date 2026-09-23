@@ -95,6 +95,33 @@ export type Database = {
         }
         Relationships: []
       }
+      child_item_revisions: {
+        Row: {
+          archived_at: string
+          id: number
+          item_id: string
+          operation: string
+          owner_id: string
+          snapshot: Json
+        }
+        Insert: {
+          archived_at?: string
+          id?: number
+          item_id: string
+          operation: string
+          owner_id: string
+          snapshot: Json
+        }
+        Update: {
+          archived_at?: string
+          id?: number
+          item_id?: string
+          operation?: string
+          owner_id?: string
+          snapshot?: Json
+        }
+        Relationships: []
+      }
       child_item_shares: {
         Row: {
           created_at: string
@@ -793,6 +820,36 @@ export type Database = {
         Update: {
           key?: string
           updated_at?: string
+          user_id?: string
+          value?: Json
+        }
+        Relationships: []
+      }
+      user_kv_revisions: {
+        Row: {
+          archived_at: string
+          id: number
+          key: string
+          operation: string
+          source_updated_at: string | null
+          user_id: string
+          value: Json
+        }
+        Insert: {
+          archived_at?: string
+          id?: number
+          key: string
+          operation: string
+          source_updated_at?: string | null
+          user_id: string
+          value: Json
+        }
+        Update: {
+          archived_at?: string
+          id?: number
+          key?: string
+          operation?: string
+          source_updated_at?: string | null
           user_id?: string
           value?: Json
         }

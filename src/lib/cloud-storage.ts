@@ -12,6 +12,15 @@ const META_SUFFIX = "__updated_at";
 let cachedUser: { user: User | null } | null = null;
 let inflightUser: Promise<User | null> | null = null;
 
+// Flera vyer använder ibland samma lagringsnyckel samtidigt. Håll därför ett
+// gemensamt, synkront värde per nyckel så att två snabba funktionsuppdateringar
+// aldrig räknas från varsin gammal React-snapshot och skriver över varandra.
+const sharedValues = new Map<string, unknown>();
+
+export function applyCloudStorageUpdate<T>(current: T, update: T | ((previous: T) => T)): T {
+  return update instanceof Function ? update(current) : update;
+}
+
 export async function getSyncUser(): Promise<User | null> {
   if (cachedUser) return cachedUser.user;
   if (!inflightUser) {
@@ -31,6 +40,7 @@ export async function getSyncUser(): Promise<User | null> {
 
 supabase.auth.onAuthStateChange(() => {
   cachedUser = null;
+  sharedValues.clear();
 });
 
 /**
@@ -226,6 +236,7 @@ export async function flushCloudSync(): Promise<void> {
  */
 export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
   const [value, setValue] = useLocalStorage<T>(key, initialValue);
+  if (!sharedValues.has(key)) sharedValues.set(key, value);
   const hydratedRef = useRef(false);
   const dirtyRef = useRef(false);
   const localRevisionRef = useRef(0);
@@ -273,10 +284,11 @@ export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
     const stamp = Date.now();
     const revision = localRevisionRef.current;
     setLocalUpdatedAt(stamp);
+    const latestValue = (sharedValues.get(key) as T | undefined) ?? valueRef.current;
     const { error } = await supabase.from("user_kv").upsert({
       user_id: user.id,
       key,
-      value: valueRef.current as never,
+      value: latestValue as never,
     });
     if (!error) {
       setLocalSyncedAt(stamp);
@@ -323,6 +335,7 @@ export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
       if (data) {
         const cloudTs = new Date(data.updated_at as string).getTime();
         if (!dirtyRef.current && (cloudTs >= localTs || isLocalEmpty())) {
+          sharedValues.set(key, data.value as T);
           setValue(data.value as T);
           setLocalUpdatedAt(cloudTs);
           setLocalSyncedAt(cloudTs);
@@ -371,10 +384,12 @@ export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
         const cloudTs = cloudUpdatedAt ? new Date(cloudUpdatedAt).getTime() : 0;
         if (dirtyRef.current || (cloudTs > 0 && cloudTs <= getLocalUpdatedAt())) return;
         if (payload.eventType === "DELETE") {
+          sharedValues.set(key, initialRef.current);
           setValue(initialRef.current);
           return;
         }
         if (payload.new.value === undefined) return;
+        sharedValues.set(key, payload.new.value as T);
         setValue(payload.new.value as T);
         if (cloudTs > 0) {
           setLocalUpdatedAt(cloudTs);
@@ -404,7 +419,11 @@ export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
       dirtyRef.current = true;
       localRevisionRef.current += 1;
       setLocalUpdatedAt(Date.now());
-      setValue(v);
+      const current = (sharedValues.get(key) as T | undefined) ?? valueRef.current;
+      const next = applyCloudStorageUpdate(current, v);
+      sharedValues.set(key, next);
+      valueRef.current = next;
+      setValue(next);
     },
 
     // setLocalUpdatedAt är en lokal setter och behöver inte stå med här.

@@ -1,3 +1,9 @@
+## 2026-09-23 – Starkare skydd för sparade aktiviteter
+
+- Samtidiga vyer delar nu samma aktuella aktivitetslista innan den synkas, så en äldre lokal kopia inte kan skriva över en nyare ändring.
+- Före automatisk omladdning vid appuppdatering slutförs väntande molnsynk.
+- Tidigare versioner av aktivitetsdata arkiveras nu privat så att felaktiga överskrivningar kan återställas.
+
 ## 2026-09-23 – Barnschemat följer den visuella referensen
 
 - Barnets schema öppnas som en egen lugn vy med barnets namn och avatar högst upp.
