@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-23";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Områdesfärger i Family Flow",
+    items: [
+      "Aktiviteter visar sin områdesfärg i Vecka och Idag (2026-09-23)",
+      "Nu/Nästa är lugnt: pictogram, kort text och diskret färgmarkering (2026-09-23)",
+    ],
+  },
+  {
     title: "Ordna dagens lista",
     items: [
       "Aktiviteter i kalenderns dag och Min dag kan flyttas upp eller ner (2026-09-23)",
