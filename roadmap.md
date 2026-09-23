@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Family Flow barnschema: riktiga pictogram, kopiering mellan dagar/veckor/barn och mallar (2026-09-23)
+- [x] Family Flow barnschema: riktiga pictogram, kopiering mellan dagar/veckor/barn och mallar (2026-09-23)
 
 - [x] Visuellt barnschema 1.0 i Family Flow: vecka, idag, Nu/Nästa, aktivitetsbank, privata bilder, kopiera vecka och Flow-koppling (2026-09-23)
 

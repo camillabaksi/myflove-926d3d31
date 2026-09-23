@@ -1,3 +1,11 @@
+## 2026-09-23 – Pictogram och flexibel kopiering i barnschemat
+
+- Emoji och stjärnor i barnschemat ersattes av tydliga, konsekventa Lucide-pictogram med kort svensk text och dokumenterad ISC-licens.
+- Aktivitetsbanken fick sökning och kategorierna Hemma, Skola, Mat, Hygien, Transport, Fritid, Träning, Återhämtning och Familj.
+- Aktivitet, hel dag och vecka kan kopieras till valfritt datum eller annat barn; originalet ändras inte och exakta dubbletter hoppas över.
+- Privata anteckningar följer inte med mellan barn utan uttryckligt val, och egna bilder dupliceras till barnets privata lagring.
+- Dagar kan sparas som återanvändbara mallar utan privata anteckningar. Nu/Nästa, Klar och egna bilder finns kvar.
+
 ## 2026-09-23 – Återhämtning när dagen inte går att ändra
 
 - Flow letar efter realistiska luckor före, mellan och efter dagens fasta hållpunkter, med marginal för restid och förberedelse.

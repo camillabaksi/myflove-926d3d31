@@ -10,6 +10,16 @@ export const CHANGELOG_UPDATED = "2026-09-23";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Pictogram och flexibel kopiering i barnschemat",
+    items: [
+      "Emoji och stjärnor ersattes av tydliga Lucide-pictogram med kort svensk text (2026-09-23)",
+      "Aktivitetsbanken fick sökning och nio tydliga kategorier (2026-09-23)",
+      "Aktivitet, dag och vecka kan kopieras till datum eller annat barn utan dubbletter (2026-09-23)",
+      "Privata anteckningar stannar hos barnet om de inte väljs uttryckligen, och egna bilder dupliceras privat (2026-09-23)",
+      "Dagar kan sparas som återanvändbara mallar utan privata anteckningar (2026-09-23)",
+    ],
+  },
+  {
     title: "Återhämtning när dagen inte går att ändra",
     items: [
       "Flow hittar realistiska luckor mellan dagens fasta hållpunkter, med marginal för restid (2026-09-23)",
