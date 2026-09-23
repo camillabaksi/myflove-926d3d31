@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-23";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Barnschema: andra dagar och egen ordning",
+    items: [
+      "Idag-vyn kan bläddra mellan dagar och nya aktiviteter visas på rätt dag (2026-09-23)",
+      "Aktiviteter kan flyttas upp och ner i dagens ordning (2026-09-23)",
+    ],
+  },
+  {
     title: "Komplett pitch- och dokumentpaket 5.1",
     items: [
       "Pitchdeck och pitchfilmer speglar nu den aktuella MyFlove-produkten på svenska och engelska (2026-09-23)",
