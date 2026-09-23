@@ -110,7 +110,7 @@ export default function HomeShortcuts() {
         </p>
       ) : (
         <ul className="grid grid-cols-2 gap-3">
-          {shortcuts.map((item, index) => (
+          {shortcuts.map((item) => (
             <li key={item.href} className="relative min-w-0">
               <Link
                 href={item.href}
