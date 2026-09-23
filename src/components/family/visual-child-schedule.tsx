@@ -52,6 +52,9 @@ import {
   shiftEndTime,
   shiftDateBetween,
   transitionPrompt,
+  localNowMinutes,
+  minutesUntilTime,
+  pickNowNext,
   weekDates,
   type ActivityBankItem,
   type VisualActivityCategory,
@@ -189,7 +192,15 @@ export default function VisualChildSchedule({
     [items, child.id],
   );
   const schoolEntries = schedules[child.id] ?? [];
-  const today = todayISO();
+  // Lokal klocka som tickar – samma lokala tid som lib/day använder för "idag".
+  const [nowTick, setNowTick] = useState(() => Date.now());
+  useEffect(() => {
+    const id = window.setInterval(() => setNowTick(Date.now()), 15_000);
+    return () => window.clearInterval(id);
+  }, []);
+  const nowDate = new Date(nowTick);
+  const nowMinutes = localNowMinutes(nowDate);
+  const today = todayISO(nowDate);
   const todayItems = useMemo(
     () => childItems.filter((item) => activityOccursOn(item, today)).sort((a, b) => (a.time ?? "99:99").localeCompare(b.time ?? "99:99") || a.created_at.localeCompare(b.created_at)),
     [childItems, today],
@@ -199,8 +210,8 @@ export default function VisualChildSchedule({
     .filter((entry) => entry.weekday === todayWeekday)
     .sort((a, b) => a.start.localeCompare(b.start));
   const openToday = todayItems.filter((item) => !item.completed);
-  const current = openToday[0] ?? null;
-  const next = openToday[1] ?? null;
+  const { current, next } = pickNowNext(openToday, nowMinutes);
+  const nextPrompt = next?.time ? transitionPrompt(next.title, minutesUntilTime(next.time, nowMinutes)) : null;
   const score = typeof flow?.score === "number" ? flow.score : null;
   const guidance = getScheduleGuidance(openToday.length, capacityFromScore(score));
   const wantsWarning = child.helps.includes("Förvarna vid förändringar");
@@ -432,7 +443,7 @@ export default function VisualChildSchedule({
                 <div className="border-t border-primary/15 pt-3">
                   <p className="text-xs font-bold uppercase text-muted-foreground">{t("Nästa")}</p>
                    <div className="mt-2 flex items-center gap-3"><span className={cn("h-10 w-1 shrink-0 rounded-full", CATEGORY_STYLES[decodeVisualNotes(next.notes).meta.category].marker)} aria-hidden /><ActivityVisual item={next} openDoc={openDoc} /><div><p className="font-semibold text-ink">{next.title}</p><p className="text-xs text-muted-foreground">{contextLabel(decodeVisualNotes(next.notes).meta)}</p>{next.time && <p className="text-sm text-muted-foreground">{next.time.slice(0, 5)}</p>}</div></div>
-                  {wantsWarning && <p className="mt-3 rounded-2xl bg-card/80 p-3 text-sm text-ink">{transitionPrompt(next.title)}</p>}
+                  {wantsWarning && nextPrompt && <p className="mt-3 rounded-2xl bg-card/80 p-3 text-sm text-ink">{nextPrompt}</p>}
                 </div>
               )}
             </section>

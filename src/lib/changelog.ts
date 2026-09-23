@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-23";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Rätt tid till nästa aktivitet i barnschemat",
+    items: [
+      "Minuter kvar räknas från faktisk lokal tid och uppdateras automatiskt (2026-09-23)",
+      "Nu/Nästa följer klockan i stället för listans ordning (2026-09-23)",
+    ],
+  },
+  {
     title: "Family Flow möter Mitt batteri och Flow",
     items: [
       "Familjeaktiviteter kan märkas med närvaro, förberedelse, resa och lugn stund efteråt (2026-09-23)",

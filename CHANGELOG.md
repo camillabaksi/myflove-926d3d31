@@ -1,3 +1,8 @@
+## 2026-09-23 – Rätt tid till nästa aktivitet i barnschemat
+
+- "Om X minuter" räknas nu från den faktiska klockan och uppdateras av sig själv.
+- "Nu" visar den aktivitet som faktiskt pågår, inte bara den första i listan.
+
 ## 2026-09-23 – Family Flow möter Mitt batteri och Flow
 
 - Varje familjeaktivitet kan frivilligt märkas med om den kräver dig, förberedelse, resa och lugn stund efteråt.
