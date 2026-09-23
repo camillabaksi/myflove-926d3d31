@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Lock, Pencil, Plus, Trash2 } from "lucide-react";
+import { CalendarDays, Lock, Pencil, Plus, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -160,6 +160,7 @@ export default function ChildProfiles({
   onAdd,
   onUpdate,
   onDelete,
+  onSchedule,
   startAdding = false,
 }: {
   childrenList: Child[];
@@ -168,6 +169,7 @@ export default function ChildProfiles({
   onAdd: (d: { name: string; avatar: string; helps: string[] }) => Promise<void>;
   onUpdate: (id: string, d: { name: string; avatar: string; helps: string[] }) => Promise<void>;
   onDelete: (id: string) => Promise<void>;
+  onSchedule?: (child: Child) => void;
 }) {
   const { t } = useLang();
   const { toast } = useToast();
@@ -207,6 +209,16 @@ export default function ChildProfiles({
                 {c.helps.length > 0 ? c.helps.join(" · ") : t("Inget sparat än")}
               </p>
             </div>
+            {onSchedule && (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => onSchedule(c)}
+                className="h-11 shrink-0 rounded-2xl"
+              >
+                <CalendarDays size={16} aria-hidden /> {t("Schema")}
+              </Button>
+            )}
             <button
               type="button"
               onClick={() => setEditing(c.id)}

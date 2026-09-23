@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-23";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Visuellt barnschema 1.0",
+    items: [
+      "Family Flow visar barnets vecka, idag och ett lugnt fokusläge med Nu och Nästa (2026-09-23)",
+      "Aktiviteterna använder samma barnlista som Min dag och kalendern, utan parallellt planeringssystem (2026-09-23)",
+      "Aktivitetsbank, egna aktiviteter och privata foton med tillfälliga säkra länkar (2026-09-23)",
+      "Frivilliga Flow-förslag för täta dagar, återhämtning och förvarning vid övergångar (2026-09-23)",
+    ],
+  },
+  {
     title: "Family Flow 1.0",
     items: [
       "Nytt område Familj under Mer – få vardagen att fungera för hela familjen (2026-09-23)",

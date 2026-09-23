@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Visuellt barnschema 1.0 i Family Flow: vecka, idag, Nu/Nästa, aktivitetsbank, privata bilder, kopiera vecka och Flow-koppling (2026-09-23)
+
 - [x] Ersätt streckfigurer med 58 realistiska instruktionsbilder i Träningsprogram (2026-09-22)
 
 - [x] Förenkla Mer och samla profil, anpassning, app- och kontoval i en egen Inställningar-vy (2026-09-22)
