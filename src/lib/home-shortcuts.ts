@@ -73,13 +73,17 @@ const LEGACY_HREFS: Record<string, string> = { "/familj": "/familjeflow" };
 export function useHomeShortcuts() {
   const [saved, setSaved] = useCloudSyncedStorage<string[]>(STORAGE_KEY, DEFAULT_SHORTCUTS);
 
-  const shortcuts = useMemo<HomeShortcut[]>(
+  const shortcuts = useMemo<(HomeShortcut & { storedHref: string })[]>(
     () =>
       (saved ?? [])
-        .map((href) => findShortcut(LEGACY_HREFS[href] ?? href))
-        .filter((item): item is HomeShortcut => item != null),
+        .map((href) => {
+          const item = findShortcut(LEGACY_HREFS[href] ?? href);
+          return item ? { ...item, storedHref: href } : null;
+        })
+        .filter((item): item is HomeShortcut & { storedHref: string } => item != null),
     [saved],
   );
+
 
 
   const add = useCallback(
