@@ -1,18 +1,13 @@
 import { useCallback, useMemo, useState } from "react";
 import { Link } from "wouter";
-import { ArrowDown, ArrowRight, ArrowUp, CheckCircle2, Circle, MoreHorizontal } from "lucide-react";
+import { ArrowDown, ArrowRight, ArrowUp, CheckCircle2, Circle } from "lucide-react";
 import AdaptiveActivityCard from "@/components/adaptive-activity-card";
 import { ActivityPictogram } from "@/components/family/activity-pictogram";
 import { FlowItemActions, kindFromId } from "@/components/flow-item-actions";
 import { MyFloveTransition } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { useFlowItems } from "@/hooks/use-flow-items";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { dailyActivityVisual } from "@/lib/daily-activity-visual";
@@ -161,31 +156,26 @@ export function DailyFlowList({
                         </span>
                       </div>
                     </div>
-                    <div className="flex shrink-0 items-center gap-0.5">
-                      <FlowItemActions itemId={item.id} size={14} className="flex shrink-0 items-center" />
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground" aria-label={`Fler val för ${item.title}`}>
-                            <MoreHorizontal />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem onSelect={() => move(index, -1)} disabled={index === 0}>
-                            <ArrowUp /> Flytta upp
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onSelect={() => move(index, 1)} disabled={index === items.length - 1}>
-                            <ArrowDown /> Flytta ner
-                          </DropdownMenuItem>
-                          {item.href && (
-                            <DropdownMenuItem asChild>
-                              <Link href={item.href}>
-                                <ArrowRight /> Öppna aktivitet
-                              </Link>
-                            </DropdownMenuItem>
-                          )}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
+                    <FlowItemActions
+                      itemId={item.id}
+                      size={14}
+                      compact
+                      className="h-9 w-9 text-muted-foreground"
+                    >
+                      <DropdownMenuItem onSelect={() => move(index, -1)} disabled={index === 0}>
+                        <ArrowUp /> Flytta upp
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onSelect={() => move(index, 1)} disabled={index === items.length - 1}>
+                        <ArrowDown /> Flytta ner
+                      </DropdownMenuItem>
+                      {item.href && (
+                        <DropdownMenuItem asChild>
+                          <Link href={item.href}>
+                            <ArrowRight /> Öppna aktivitet
+                          </Link>
+                        </DropdownMenuItem>
+                      )}
+                    </FlowItemActions>
                   </div>
                 </div>
               </MyFloveTransition>

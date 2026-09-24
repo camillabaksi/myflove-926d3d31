@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react";
-import { Pencil, Trash2 } from "lucide-react";
+import { type ReactNode, useMemo, useState } from "react";
+import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -9,6 +9,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useTasks, useReminders } from "@/hooks/use-data";
@@ -58,18 +65,56 @@ export function FlowItemActions({
   className,
   size = 16,
   only,
+  compact = false,
+  children,
 }: {
   itemId: string;
   className?: string;
   size?: number;
   /** "edit" när vyn redan har en egen ta bort-knapp. */
   only?: "edit";
+  /** Samlar åtgärder i en enda meny på ytor där aktiviteten behöver mer plats. */
+  compact?: boolean;
+  /** Vy-specifika val som flytta/öppna, före ändra och ta bort. */
+  children?: ReactNode;
 }) {
   const [open, setOpen] = useState(false);
   const { kind } = kindFromId(itemId);
   const home = externalHome(itemId);
 
   if (kind === "extern" && !home) return null;
+
+  if (compact) {
+    return (
+      <>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className={className ?? "h-9 w-9 text-muted-foreground"}
+              aria-label="Fler val"
+            >
+              <MoreHorizontal size={size + 2} />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {children}
+            {children ? <DropdownMenuSeparator /> : null}
+            <DropdownMenuItem onSelect={() => setOpen(true)}>
+              <Pencil /> Ändra
+            </DropdownMenuItem>
+            {kind !== "extern" && only !== "edit" && (
+              <DropdownMenuItem onSelect={() => setOpen(true)} className="text-destructive focus:text-destructive">
+                <Trash2 /> Ta bort
+              </DropdownMenuItem>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+        {open && <FlowItemEditDialog itemId={itemId} onClose={() => setOpen(false)} />}
+      </>
+    );
+  }
 
   return (
     <>
