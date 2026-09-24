@@ -2,7 +2,7 @@
  * Kopplingar mellan separata aktiviteter – lagras i det befintliga
  * metadata-kuvertet på barnaktiviteter. Ingen ny tabell och inga nya delningar.
  */
-import { decodeVisualNotes, encodeVisualNotes } from "@/lib/child-visual-schedule";
+import { activityPresetForTitle, decodeVisualNotes, encodeVisualNotes } from "@/lib/child-visual-schedule";
 
 export interface LinkPatch {
   linkGroup?: string | null;
@@ -10,9 +10,15 @@ export interface LinkPatch {
 }
 
 /** Returnerar nya notes med ändrad koppling; övrig metadata och anteckning bevaras. */
-export function withLinkMeta(notes: string | null | undefined, patch: LinkPatch): string {
-  const { meta, note } = decodeVisualNotes(notes ?? null);
-  const next = { ...meta };
+export function withLinkMeta(notes: string | null | undefined, patch: LinkPatch, title = ""): string {
+  const decoded = decodeVisualNotes(notes ?? null);
+  const hasMeta = !!notes?.startsWith("[myflove-visual:");
+  const preset = hasMeta ? undefined : activityPresetForTitle(title);
+  const base = preset
+    ? { pictogram: preset.pictogram, category: preset.category, tone: preset.tone }
+    : decoded.meta;
+  const note = decoded.note;
+  const next = { ...base };
   if (patch.linkGroup === null) delete next.linkGroup;
   else if (patch.linkGroup) next.linkGroup = patch.linkGroup;
   if (patch.parentTaskId === null) delete next.parentTaskId;

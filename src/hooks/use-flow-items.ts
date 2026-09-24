@@ -3,6 +3,7 @@ import { useCallback, useMemo } from "react";
 import { useTasks, useReminders } from "@/hooks/use-data";
 import { useStudySchedule } from "@/hooks/use-study-schedule";
 import { useChildEvents } from "@/hooks/use-child-events";
+import { childEventsForMyDay, linkLabelsByTask } from "@/lib/family-perspective";
 import { useChildren } from "@/hooks/use-children";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { usePriorityList } from "@/hooks/use-priority-list";
@@ -165,7 +166,17 @@ export function useFlowItems(dateISO?: string): {
       });
     }
 
-    for (const e of childEvents) {
+    // Min dag = användarens dag. Barnens aktiviteter kommer bara med när de
+    // uttryckligen kräver föräldern och inte redan har en kopplad egen uppgift.
+    const myTaskIds = new Set(tasks.map((t) => t.id));
+    const taskLinks = linkLabelsByTask(childEvents);
+    for (const item of out) {
+      if (item.source !== "uppgift") continue;
+      const label = taskLinks.get(item.id.replace(/^task-/, ""));
+      if (label) item.linkedLabel = label;
+    }
+
+    for (const e of childEventsForMyDay(childEvents, myTaskIds)) {
       const id = e.itemId ? `childitem-${e.itemId}` : `child-${e.childName}-${e.time}-${e.title}`;
       out.push({
         id,
@@ -180,6 +191,7 @@ export function useFlowItems(dateISO?: string): {
         done: e.itemId ? !!e.completed : isDone(id),
         completable: true,
         href: "/barn",
+        linkedLabel: `${e.childName} – ${e.title}`,
       });
     }
 
