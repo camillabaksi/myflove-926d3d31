@@ -15,6 +15,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
       "Idag-vyn kan bläddra mellan dagar och nya aktiviteter visas på rätt dag (2026-09-23)",
       "Tryckbara dagsrutor markerar vilken dag som är vald, och formuläret visar måldagen (2026-09-23)",
       "Aktiviteter kan flyttas upp och ner i dagens ordning (2026-09-23)",
+      "Tomma/klara dagar visar 'den här dagen' när en annan dag är vald (2026-09-24)",
     ],
   },
   {
