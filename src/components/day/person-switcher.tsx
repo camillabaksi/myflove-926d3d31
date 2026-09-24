@@ -24,8 +24,10 @@ export function PersonAvatar({ person, className }: { person: Person; className?
     >
       {isImage ? (
         <img src={avatar} alt="" className="h-full w-full object-cover" />
+      ) : avatar && /\p{L}/u.test(avatar.charAt(0)) ? (
+        avatar.charAt(0).toUpperCase()
       ) : avatar ? (
-        avatar.slice(0, 2)
+        firstGrapheme(avatar)
       ) : person.id === ME_ID ? (
         "Du"
       ) : (
@@ -33,6 +35,14 @@ export function PersonAvatar({ person, className }: { person: Person; className?
       )}
     </span>
   );
+}
+
+function firstGrapheme(value: string): string {
+  if (typeof Intl !== "undefined" && "Segmenter" in Intl) {
+    const seg = new Intl.Segmenter(undefined, { granularity: "grapheme" });
+    for (const part of seg.segment(value)) return part.segment;
+  }
+  return Array.from(value)[0] ?? "";
 }
 
 export function possessive(name: string): string {

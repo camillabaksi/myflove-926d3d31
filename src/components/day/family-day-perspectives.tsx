@@ -203,7 +203,7 @@ export default function FamilyDayPerspectives({
     return null;
   };
 
-  const EntryRow = ({ entry, avatars }: { entry: TimelineEntry; avatars?: string[] }) => {
+  const EntryRow = ({ entry, avatars, compact }: { entry: TimelineEntry; avatars?: string[]; compact?: boolean }) => {
     const visual = visualFor(entry);
     const color = visual.colorArea ? areaColor(visual.colorArea) : undefined;
     const status = statusFor(entry);
@@ -218,8 +218,8 @@ export default function FamilyDayPerspectives({
         )}
         style={color ? { borderLeft: `4px solid ${color}` } : undefined}
       >
-        <span className="w-10 shrink-0 text-center text-xs font-semibold tabular-nums text-muted-foreground">{entry.time}</span>
-        <ActivityPictogram id={visual.pictogram} tone={visual.tone} className="h-10 w-10 rounded-xl" iconClassName="h-5 w-5" style={color ? { color } : undefined} />
+        {!compact && <span className="w-10 shrink-0 text-center text-xs font-semibold tabular-nums text-muted-foreground">{entry.time}</span>}
+        <ActivityPictogram id={visual.pictogram} tone={visual.tone} className={compact ? "h-8 w-8 rounded-lg" : "h-10 w-10 rounded-xl"} iconClassName={compact ? "h-4 w-4" : "h-5 w-5"} style={color ? { color } : undefined} />
         <div className="min-w-0 flex-1">
           <p className={cn("break-words text-sm font-semibold leading-snug text-ink", entry.completed && "line-through")}>{entry.title}</p>
           <div className="mt-0.5 flex min-w-0 flex-wrap items-center gap-1.5 text-[10px] font-medium text-muted-foreground">
@@ -311,28 +311,29 @@ export default function FamilyDayPerspectives({
               })}
             </div>
             {rows.map((row) => (
-              <div key={row.time} className="grid items-start gap-2 border-b border-border/40 py-2"
-                style={{ gridTemplateColumns: `3.5rem repeat(${order.length}, minmax(0, 1fr))` }}>
-                <span className="pt-3 text-xs font-semibold tabular-nums text-muted-foreground" style={{ gridColumn: 1, gridRow: "1 / span 9" }}>{row.time}</span>
+              <div key={row.time} className="flex items-start gap-2 border-b border-border/40 py-2">
+                <span className="w-14 shrink-0 pt-3 text-xs font-semibold tabular-nums text-muted-foreground">{row.time}</span>
+                <div className="grid min-w-0 flex-1 items-start gap-2" style={{ gridTemplateColumns: `repeat(${order.length}, minmax(0, 1fr))` }}>
                 {row.cells.flatMap((cell) => {
                   const idx = cell.personIds.map((id) => order.indexOf(id)).sort((a, b) => a - b);
                   const contiguous = idx.every((v, i) => i === 0 || v === idx[i - 1]! + 1);
                   if (contiguous) {
                     return [
-                      <div key={cell.key} style={{ gridColumn: `${idx[0]! + 2} / span ${idx.length}` }}>
-                        {EntryRow({ entry: cellEntry(cell), avatars: idx.length > 1 ? cell.personIds : undefined })}
+                      <div key={cell.key} style={{ gridColumn: `${idx[0]! + 1} / span ${idx.length}` }}>
+                        {EntryRow({ entry: cellEntry(cell), avatars: idx.length > 1 ? cell.personIds : undefined, compact: true })}
                       </div>,
                     ];
                   }
                   return cell.personIds.map((pid) => {
                     const e = cell.entries.find((x) => x.personId === pid) ?? cellEntry(cell);
                     return (
-                      <div key={`${cell.key}-${pid}`} style={{ gridColumn: order.indexOf(pid) + 2 }}>
-                        {EntryRow({ entry: e })}
+                      <div key={`${cell.key}-${pid}`} style={{ gridColumn: order.indexOf(pid) + 1 }}>
+                        {EntryRow({ entry: e, compact: true })}
                       </div>
                     );
                   });
                 })}
+                </div>
               </div>
             ))}
           </div>
