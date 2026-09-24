@@ -241,7 +241,7 @@ export default function FamilyDayPerspectives({
             })}
           </span>
         )}
-        <EntryMenu entry={entry} />
+        {EntryMenu({ entry })}
       </div>
     );
   };
@@ -251,7 +251,7 @@ export default function FamilyDayPerspectives({
     if (own.length === 0) return <p className="rounded-2xl bg-secondary/30 px-4 py-5 text-sm text-muted-foreground">Inget med klockslag den här dagen.</p>;
     return (
       <ul className="space-y-2">
-        {own.map((e) => <li key={e.key}><EntryRow entry={e} /></li>)}
+        {own.map((e) => <li key={e.key}>{EntryRow({ entry: e })}</li>)}
       </ul>
     );
   };
@@ -293,7 +293,7 @@ export default function FamilyDayPerspectives({
           {rows.map((row) => (
             <li key={row.time} className="space-y-1.5">
               {row.cells.map((cell) => (
-                <EntryRow key={cell.key} entry={cellEntry(cell)} avatars={cell.personIds} />
+                <div key={cell.key}>{EntryRow({ entry: cellEntry(cell), avatars: cell.personIds })}</div>
               ))}
             </li>
           ))}
@@ -320,7 +320,7 @@ export default function FamilyDayPerspectives({
                   if (contiguous) {
                     return [
                       <div key={cell.key} style={{ gridColumn: `${idx[0]! + 2} / span ${idx.length}` }}>
-                        <EntryRow entry={cellEntry(cell)} avatars={idx.length > 1 ? cell.personIds : undefined} />
+                        {EntryRow({ entry: cellEntry(cell), avatars: idx.length > 1 ? cell.personIds : undefined })}
                       </div>,
                     ];
                   }
@@ -328,7 +328,7 @@ export default function FamilyDayPerspectives({
                     const e = cell.entries.find((x) => x.personId === pid) ?? cellEntry(cell);
                     return (
                       <div key={`${cell.key}-${pid}`} style={{ gridColumn: order.indexOf(pid) + 2 }}>
-                        <EntryRow entry={e} />
+                        {EntryRow({ entry: e })}
                       </div>
                     );
                   });
@@ -348,7 +348,7 @@ export default function FamilyDayPerspectives({
         {current ? <PersonAvatar person={current} /> : null}
         {heading}
       </p>
-      {perspective === ME_ID ? myDay : perspective === FAMILY_ID ? <FamilyView /> : <PersonDay personId={perspective} />}
+      {perspective === ME_ID ? myDay : perspective === FAMILY_ID ? FamilyView() : PersonDay({ personId: perspective })}
 
       <TimeDialog
         entry={dialog?.kind === "time" ? dialog.entry : null}
