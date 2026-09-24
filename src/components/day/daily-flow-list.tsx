@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import { Link } from "wouter";
-import { ArrowDown, ArrowRight, ArrowUp, CheckCircle2, Circle } from "lucide-react";
+import { ArrowDown, ArrowRight, ArrowUp, CheckCircle2, Circle, Link2 } from "lucide-react";
 import AdaptiveActivityCard from "@/components/adaptive-activity-card";
 import { ActivityPictogram } from "@/components/family/activity-pictogram";
 import { FlowItemActions, kindFromId } from "@/components/flow-item-actions";
@@ -154,6 +154,13 @@ export function DailyFlowList({
                         <span className="text-[10px] font-medium text-muted-foreground">
                           {SOURCE_LABEL[item.source]}
                         </span>
+                        {item.linkedLabel && (
+                          <span className="inline-flex min-w-0 items-center gap-1 text-[10px] font-medium text-muted-foreground">
+                            <Link2 size={11} aria-hidden />
+                            <span className="sr-only">Kopplad familjeaktivitet:</span>
+                            <span className="truncate">{item.linkedLabel}</span>
+                          </span>
+                        )}
                       </div>
                     </div>
                     <FlowItemActions

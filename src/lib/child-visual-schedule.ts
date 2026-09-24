@@ -29,6 +29,15 @@ export interface VisualActivityMeta {
   recoveryAfter?: boolean;
   /** Förälderns egen ordning inom dagen. */
   order?: number;
+  /** Koppling mellan separata aktiviteter (t.ex. samma middag för flera barn). */
+  linkGroup?: string;
+  /** Koppling till förälderns egen uppgift (id på uppgiften). */
+  parentTaskId?: string;
+}
+
+const LINK_ID = /^[A-Za-z0-9_-]{1,80}$/;
+function safeLinkId(value: unknown): string | undefined {
+  return typeof value === "string" && LINK_ID.test(value) ? value : undefined;
 }
 
 /** Valbara minutvärden – inga påhittade siffror, användaren väljer själv. */
@@ -166,6 +175,8 @@ export function encodeVisualNotes(meta: VisualActivityMeta, note = ""): string {
     ...(safeMinutes(meta.travelMinutes, TRAVEL_MINUTE_CHOICES) ? { travelMinutes: meta.travelMinutes } : {}),
     ...(meta.recoveryAfter ? { recoveryAfter: true } : {}),
     ...(typeof meta.order === "number" && Number.isFinite(meta.order) ? { order: Math.round(meta.order) } : {}),
+    ...(safeLinkId(meta.linkGroup) ? { linkGroup: meta.linkGroup } : {}),
+    ...(safeLinkId(meta.parentTaskId) ? { parentTaskId: meta.parentTaskId } : {}),
   };
   return `${META_PREFIX}${JSON.stringify(safeMeta)}]\n${note.trim()}`;
 }
@@ -199,6 +210,8 @@ export function decodeVisualNotes(notes?: string | null): { meta: VisualActivity
         ...(travelMinutes ? { travelMinutes } : {}),
         ...(candidate.recoveryAfter === true ? { recoveryAfter: true } : {}),
         ...(typeof candidate.order === "number" && Number.isFinite(candidate.order) ? { order: candidate.order } : {}),
+        ...(safeLinkId(candidate.linkGroup) ? { linkGroup: candidate.linkGroup } : {}),
+        ...(safeLinkId(candidate.parentTaskId) ? { parentTaskId: candidate.parentTaskId } : {}),
       },
       note: notes.slice(end + 2),
     };
