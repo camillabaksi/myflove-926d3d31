@@ -4,7 +4,7 @@ import type { CapacityLevel } from "@/lib/adaptive-activity";
 export type VisualActivityCategory = "hemma" | "skola" | "mat" | "hygien" | "transport" | "fritid" | "träning" | "återhämtning" | "familj" | "vård";
 export type VisualActivityTone = "lavender" | "blush" | "mint" | "sky" | "sun";
 export type FamilyActivityLabel = "child" | "shared" | "caregiver";
-export type PictogramId = "breakfast" | "meal" | "dress" | "teeth" | "shower" | "sleep" | "bag" | "home" | "clean" | "laundry" | "shopping" | "school" | "break" | "study" | "childcare" | "walk" | "car" | "bus" | "train" | "bike" | "play" | "friends" | "exercise" | "swim" | "game" | "tv" | "craft" | "music" | "pause" | "quiet" | "headphones" | "rest" | "family" | "visit" | "doctor" | "dentist" | "hospital" | "pharmacy" | "clinic" | "vaccination" | "nurse" | "examination" | "emergency" | "conversation" | "optician" | "hearing" | "physio" | "followup";
+export type PictogramId = "breakfast" | "meal" | "dress" | "teeth" | "shower" | "sleep" | "bag" | "home" | "clean" | "laundry" | "shopping" | "school" | "break" | "study" | "childcare" | "walk" | "car" | "bus" | "train" | "bike" | "play" | "friends" | "exercise" | "swim" | "game" | "tv" | "craft" | "music" | "pause" | "quiet" | "headphones" | "rest" | "family" | "visit" | "doctor" | "dentist" | "hospital" | "pharmacy" | "clinic" | "vaccination" | "nurse" | "examination" | "emergency" | "conversation" | "optician" | "hearing" | "physio" | "followup" | "work" | "money" | "calendar" | "task";
 
 export interface VisualActivityMeta {
   /** Legacy value retained only so old saved activities decode safely. */
@@ -145,7 +145,11 @@ export const CATEGORY_STYLES: Record<VisualActivityCategory, { card: string; sub
 };
 export const VISUAL_TONES: VisualActivityTone[] = ["lavender", "blush", "mint", "sky", "sun"];
 export const ALL_PICTOGRAMS = Object.values(ACTIVITY_BANK).flat();
-const VALID_PICTOGRAMS = new Set<PictogramId>(ALL_PICTOGRAMS.map((item) => item.pictogram));
+const GENERIC_PICTOGRAMS: PictogramId[] = ["work", "money", "calendar", "task"];
+const VALID_PICTOGRAMS = new Set<PictogramId>([
+  ...ALL_PICTOGRAMS.map((item) => item.pictogram),
+  ...GENERIC_PICTOGRAMS,
+]);
 const LEGACY_EMOJI: Record<string, PictogramId> = { "⭐": "home", "🎒": "bag", "🏫": "school", "🍎": "breakfast", "🍽️": "meal", "🪥": "teeth", "👕": "dress", "🧥": "dress", "🛁": "shower", "🚿": "shower", "😴": "sleep", "🎧": "headphones", "⚽": "exercise", "🏊": "swim", "🎨": "craft", "🚌": "bus", "🚗": "car", "🚆": "train", "🚶": "walk", "👫": "friends", "👭": "friends", "🌿": "pause", "🛋️": "rest", "📚": "study", "🎮": "game", "📺": "tv", "🧩": "play", "☀️": "break", "🛒": "shopping", "🧹": "clean", "🧺": "laundry", "👩‍⚕️": "doctor", "🧑‍⚕️": "nurse", "🦷": "dentist", "🏥": "hospital", "💊": "pharmacy", "🩺": "clinic", "💉": "vaccination", "🩹": "examination", "🚑": "emergency", "🧠": "conversation", "👓": "optician", "👂": "hearing", "🧑‍🦽": "physio", "📋": "followup" };
 const META_PREFIX = "[myflove-visual:";
 const FALLBACK_META: VisualActivityMeta = { pictogram: "home", category: "hemma", tone: "lavender" };
@@ -256,15 +260,23 @@ export function searchActivityBank(query: string, category?: VisualActivityCateg
   return source.filter((item) => [item.title, ...(item.keywords ?? [])].some((text) => text.toLocaleLowerCase("sv").includes(normalized)));
 }
 
-export function pictogramForActivity(title: string, fallback: PictogramId): PictogramId {
+export function activityPresetForTitle(title: string): ActivityBankItem | undefined {
   const normalized = title.toLocaleLowerCase("sv").trim();
   const exact = ALL_PICTOGRAMS.find((item) => item.title.toLocaleLowerCase("sv") === normalized);
-  if (exact) return exact.pictogram;
-  const partial = ALL_PICTOGRAMS
+  if (exact) return exact;
+  return ALL_PICTOGRAMS
     .flatMap((item) => [item.title, ...(item.keywords ?? [])].map((text) => ({ item, text: text.toLocaleLowerCase("sv") })))
     .filter(({ text }) => normalized.includes(text))
     .sort((a, b) => b.text.length - a.text.length)[0]?.item;
-  return partial?.pictogram ?? fallback;
+}
+
+export function pictogramForActivity(title: string, fallback: PictogramId): PictogramId {
+  const normalized = title.toLocaleLowerCase("sv").trim();
+  const preset = activityPresetForTitle(title);
+  if (preset) return preset.pictogram;
+  if (/\b(jobb|jobba|arbete|arbetsdag|kund|möte|deadline)\b/.test(normalized)) return "work";
+  if (/\b(räkning|faktura|betala|budget|lön|ekonomi)\b/.test(normalized)) return "money";
+  return fallback;
 }
 
 export function startOfWeekISO(dateISO: string): string { const date = parseISODate(dateISO); date.setDate(date.getDate() - ((date.getDay() + 6) % 7)); return toISODate(date); }

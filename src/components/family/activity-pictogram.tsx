@@ -1,10 +1,11 @@
+import type { CSSProperties } from "react";
 import {
   Accessibility, Ambulance, Apple, Bed, Bike, BookOpen, BriefcaseBusiness,
   BriefcaseMedical, BrushCleaning, Bus, Car, CirclePause, ClipboardCheck, Dumbbell, Ear,
   Gamepad2, Glasses, Headphones, HeartHandshake, HeartPulse, Home, Hospital, House, Medal,
-  MessagesSquare, Music, Palette, PersonStanding, Pill, School, ShoppingCart, ShowerHead,
+  CalendarDays, CircleCheckBig, MessagesSquare, Music, Palette, PersonStanding, Pill, School, ShoppingCart, ShowerHead,
   Smile, SmilePlus, Sparkles, Stethoscope, Syringe, TestTube2, TrainFront, Tv, Users,
-  Utensils, WashingMachine, Waves, type LucideIcon,
+  Utensils, WalletCards, WashingMachine, Waves, type LucideIcon,
 } from "lucide-react";
 import type { PictogramId, VisualActivityTone } from "@/lib/child-visual-schedule";
 import { cn } from "@/lib/utils";
@@ -21,6 +22,7 @@ const ICONS: Record<PictogramId, LucideIcon> = {
   nurse: BriefcaseMedical, examination: TestTube2, emergency: Ambulance,
   conversation: MessagesSquare, optician: Glasses, hearing: Ear, physio: Accessibility,
   followup: ClipboardCheck,
+  work: BriefcaseBusiness, money: WalletCards, calendar: CalendarDays, task: CircleCheckBig,
 };
 
 const TONES: Record<VisualActivityTone, string> = {
@@ -31,10 +33,10 @@ const TONES: Record<VisualActivityTone, string> = {
   sun: "bg-sun/75 border-sun text-ink",
 };
 
-export function ActivityPictogram({ id, tone, className, iconClassName }: { id: PictogramId; tone: VisualActivityTone; className?: string; iconClassName?: string }) {
+export function ActivityPictogram({ id, tone, className, iconClassName, style }: { id: PictogramId; tone: VisualActivityTone; className?: string; iconClassName?: string; style?: CSSProperties }) {
   const PictogramIcon = ICONS[id] ?? Medal;
   return (
-    <span className={cn("flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border", TONES[tone], className)} aria-hidden>
+    <span className={cn("flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border", TONES[tone], className)} style={style} aria-hidden>
       <PictogramIcon className={cn("h-7 w-7", iconClassName)} strokeWidth={2.2} absoluteStrokeWidth />
     </span>
   );
