@@ -3,6 +3,7 @@
 - Idag-vyn kan bläddra till andra dagar, och nya aktiviteter visas på den dag de läggs in.
 - Tryckbara dagsrutor (Mån–Sön) visar vilken dag som är vald, och formuläret visar vilken dag aktiviteten läggs in på.
 - Aktiviteter kan flyttas upp och ner i dagens ordning.
+- Tomma/klara dagar visar "den här dagen" i stället för "idag" när en annan dag är vald.
 
 ## 2026-09-23 – Stress föreslås aldrig som energikälla
 
