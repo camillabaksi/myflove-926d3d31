@@ -40,6 +40,18 @@ const AREA_TONE: Record<LifeArea, VisualActivityTone> = {
   egentid: "lavender",
 };
 
+const CATEGORY_AREA: Record<VisualActivityCategory, LifeArea> = {
+  hemma: "vardag",
+  hygien: "egentid",
+  mat: "vardag",
+  skola: "studier",
+  resa: "vardag",
+  fritid: "socialt",
+  lugn: "egentid",
+  familj: "privat",
+  vard: "halsa",
+};
+
 /** Visuell tolkning av samma FlowItem – ingen ny aktivitet eller lagring skapas. */
 export function dailyActivityVisual(item: FlowItem): DailyActivityVisual {
   const preset = activityPresetForTitle(item.title);
@@ -68,11 +80,12 @@ export function dailyActivityVisual(item: FlowItem): DailyActivityVisual {
       tone: preset.tone,
       label: CATEGORY_LABELS[preset.category],
       category: preset.category,
+      colorArea: CATEGORY_AREA[preset.category],
     };
   }
 
   if (item.source === "rutin") {
-    return { pictogram: "task", tone: "lavender", label: "Rutiner", category: "hygien" };
+    return { pictogram: "task", tone: "lavender", label: "Rutiner", category: "hygien", colorArea: "egentid" };
   }
 
   if (item.source === "kalender") {

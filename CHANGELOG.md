@@ -1,3 +1,9 @@
+## 2026-09-24 – Lugnare visuell dagsvy
+
+- Dagsvyn och Kalenderns dagläge visar nu samma tydliga aktivitetsrad med tid, pictogram, kort text och konsekvent områdesfärg.
+- Family Flows licensierade Lucide-pictogram återanvänds; okända aktiviteter får en neutral symbol utan emojis.
+- Klara aktiviteter ligger kvar nedtonade och genomstrukna, medan befintliga åtgärder finns kvar i en lugnare meny.
+
 ## 2026-09-24 – Pitch & Investor uppdaterat med uppladdat huvudmaterial
 
 - Tio uppladdade pitch-, video-, BMC-, statistik- och marknadsfiler har lagts in i den privata adminsektionen Pitch & Investor.

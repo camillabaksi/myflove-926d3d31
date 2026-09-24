@@ -10,6 +10,13 @@ export const CHANGELOG_UPDATED = "2026-09-24";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Lugnare visuell dagsvy",
+    items: [
+      "Dagsvyn och Kalenderns dagläge visar tid, pictogram, aktivitet och konsekvent områdesfärg (2026-09-24)",
+      "Klara aktiviteter ligger kvar lugnt nedtonade och alla befintliga åtgärder finns kvar (2026-09-24)",
+    ],
+  },
+  {
     title: "Pitch & Investor uppdaterat med nytt huvudmaterial",
     items: [
       "Tio uppladdade pitch-, video-, BMC-, statistik- och marknadsfiler finns nu i den privata adminsektionen (2026-09-24)",
