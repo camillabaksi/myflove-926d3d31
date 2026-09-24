@@ -45,11 +45,12 @@ const CATEGORY_AREA: Record<VisualActivityCategory, LifeArea> = {
   hygien: "egentid",
   mat: "vardag",
   skola: "studier",
-  resa: "vardag",
+  transport: "vardag",
   fritid: "socialt",
-  lugn: "egentid",
+  "träning": "halsa",
+  "återhämtning": "egentid",
   familj: "privat",
-  vard: "halsa",
+  "vård": "halsa",
 };
 
 /** Visuell tolkning av samma FlowItem – ingen ny aktivitet eller lagring skapas. */
