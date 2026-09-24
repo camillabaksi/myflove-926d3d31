@@ -1,14 +1,18 @@
 import { useCallback, useMemo, useState } from "react";
 import { Link } from "wouter";
 import { ArrowDown, ArrowRight, ArrowUp, CheckCircle2, Circle } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import AdaptiveActivityCard from "@/components/adaptive-activity-card";
-import { kindFromId } from "@/components/flow-item-actions";
-import { FlowItemActions } from "@/components/flow-item-actions";
+import { ActivityPictogram } from "@/components/family/activity-pictogram";
+import { FlowItemActions, kindFromId } from "@/components/flow-item-actions";
 import { MyFloveTransition } from "@/components/myflove/motion";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { useFlowItems } from "@/hooks/use-flow-items";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
+import { dailyActivityVisual } from "@/lib/daily-activity-visual";
 import { SOURCE_LABEL, todayISO, type FlowItem } from "@/lib/flow-items";
+import { areaChipStyle, areaColor } from "@/lib/life-areas";
 import { cn } from "@/lib/utils";
 
 function itemKey(item: FlowItem) {
@@ -96,85 +100,88 @@ export function DailyFlowList({
   return (
     <>
       <ul className="divide-y divide-border/50" aria-label="Dagens innehåll">
-        {items.map((item, index) => (
-          <li key={item.id}>
-            <MyFloveTransition transitionKey={String(item.done)}>
-              <div
-                className={cn("flex min-w-0 items-center gap-2 py-3", item.done && "opacity-60")}
-              >
-                <span className="w-11 shrink-0 text-right text-xs font-medium tabular-nums text-muted-foreground">
-                  {item.time ?? ""}
-                </span>
-                {item.completable ? (
-                  <button
-                    type="button"
-                    onClick={() => {
-      const wasDone = item.done;
-                      toggleItem(item);
-                      if (!wasDone) onCompleted?.(item);
-                    }}
-                    aria-label={item.done ? `Ångra ${item.title}` : `Klarmarkera ${item.title}`}
-                    className="press shrink-0 rounded-full p-1 text-muted-foreground hover:text-primary"
-                  >
-                    {item.done ? <CheckCircle2 size={19} /> : <Circle size={19} />}
-                  </button>
-                ) : (
-                  <span className="w-7 shrink-0 text-center text-sm" aria-hidden>
-                    {item.emoji}
-                  </span>
-                )}
-                <div className="min-w-0 flex-1">
-                  <p
-                    className={cn(
-                      "break-words text-sm font-medium text-ink",
-                      item.done && "line-through",
-                    )}
-                  >
-                    {item.source === "rutin" && <span aria-hidden>↻ </span>}
-                    {item.title}
-                  </p>
-                  <span className="mt-0.5 inline-flex rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
-                    {SOURCE_LABEL[item.source]}
-                  </span>
+        {items.map((item, index) => {
+          const visual = dailyActivityVisual(item);
+          const visualColor = visual.colorArea ? areaColor(visual.colorArea) : undefined;
+          const visualChip = visual.colorArea ? areaChipStyle(visual.colorArea) : undefined;
+          return (
+            <li key={item.id}>
+              <MyFloveTransition transitionKey={String(item.done)}>
+                <div
+                  className={cn(
+                    "relative my-2 overflow-hidden rounded-2xl border border-border/60 bg-card px-2.5 py-3 shadow-sm sm:px-3",
+                    item.done && "bg-muted/35 opacity-70",
+                  )}
+                  style={visualColor ? { borderLeft: `4px solid ${visualColor}` } : undefined}
+                >
+                  <div className="grid min-w-0 grid-cols-[2.5rem_2.75rem_minmax(0,1fr)_auto] items-center gap-2 sm:grid-cols-[3rem_3rem_minmax(0,1fr)_auto] sm:gap-3">
+                    <span className="text-center text-xs font-semibold tabular-nums text-muted-foreground sm:text-sm">
+                      {item.time ?? ""}
+                    </span>
+                    <ActivityPictogram
+                      id={visual.pictogram}
+                      tone={visual.tone}
+                      className="h-11 w-11 rounded-xl sm:h-12 sm:w-12"
+                      iconClassName="h-6 w-6 sm:h-7 sm:w-7"
+                      style={visualColor ? { color: visualColor } : undefined}
+                    />
+                    <div className="min-w-0">
+                      <div className="flex min-w-0 items-start gap-1">
+                        {item.completable && (
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => {
+                              const wasDone = item.done;
+                              toggleItem(item);
+                              if (!wasDone) onCompleted?.(item);
+                            }}
+                            aria-label={item.done ? `Ångra ${item.title}` : `Klarmarkera ${item.title}`}
+                            className="-ml-1 h-8 w-8 rounded-full text-muted-foreground hover:text-primary"
+                          >
+                            {item.done ? <CheckCircle2 className="text-primary" /> : <Circle />}
+                          </Button>
+                        )}
+                        <p className={cn("min-w-0 flex-1 break-words pt-1 text-sm font-semibold leading-snug text-ink sm:text-[15px]", item.done && "line-through")}>
+                          {item.title}
+                        </p>
+                      </div>
+                      <div className={cn("mt-1 flex min-w-0 flex-wrap items-center gap-1.5", item.completable && "sm:pl-7")}>
+                        <span className="rounded-full border px-2 py-0.5 text-[10px] font-semibold" style={visualChip}>
+                          {visual.label}
+                        </span>
+                        <span className="text-[10px] font-medium text-muted-foreground">
+                          {SOURCE_LABEL[item.source]}
+                        </span>
+                      </div>
+                    </div>
+                    <FlowItemActions
+                      itemId={item.id}
+                      size={14}
+                      compact
+                      className="h-9 w-9 text-muted-foreground"
+                    >
+                      <DropdownMenuItem onSelect={() => move(index, -1)} disabled={index === 0}>
+                        <ArrowUp /> Flytta upp
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onSelect={() => move(index, 1)} disabled={index === items.length - 1}>
+                        <ArrowDown /> Flytta ner
+                      </DropdownMenuItem>
+                      {item.href && (
+                        <DropdownMenuItem asChild>
+                          <Link href={item.href}>
+                            <ArrowRight /> Öppna aktivitet
+                          </Link>
+                        </DropdownMenuItem>
+                      )}
+                    </FlowItemActions>
+                  </div>
                 </div>
-                <div className="flex shrink-0 flex-col">
-                  <button
-                    type="button"
-                    onClick={() => move(index, -1)}
-                    disabled={index === 0}
-                    aria-label={`Flytta upp ${item.title}`}
-                    className="press rounded-full p-1 text-muted-foreground hover:text-primary disabled:opacity-30"
-                  >
-                    <ArrowUp size={14} />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => move(index, 1)}
-                    disabled={index === items.length - 1}
-                    aria-label={`Flytta ner ${item.title}`}
-                    className="press rounded-full p-1 text-muted-foreground hover:text-primary disabled:opacity-30"
-                  >
-                    <ArrowDown size={14} />
-                  </button>
-                </div>
-                <FlowItemActions
-                  itemId={item.id}
-                  size={14}
-                  className="flex shrink-0 items-center"
-                />
-                {item.href && (
-                  <Link
-                    href={item.href}
-                    aria-label={`Öppna ${item.title}`}
-                    className="press shrink-0 rounded-full p-1.5 text-muted-foreground hover:text-primary"
-                  >
-                    <ArrowRight size={16} />
-                  </Link>
-                )}
-              </div>
-            </MyFloveTransition>
-          </li>
-        ))}
+              </MyFloveTransition>
+            </li>
+          );
+        })}
       </ul>
       <Dialog open={!!adaptItem} onOpenChange={(o) => !o && setAdaptItem(null)}>
         <DialogContent className="max-w-sm rounded-3xl">
