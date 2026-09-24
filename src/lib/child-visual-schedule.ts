@@ -35,7 +35,7 @@ export interface VisualActivityMeta {
   parentTaskId?: string;
 }
 
-const LINK_ID = /^[A-Za-z0-9_-]{4,80}$/;
+const LINK_ID = /^[A-Za-z0-9_-]{1,80}$/;
 function safeLinkId(value: unknown): string | undefined {
   return typeof value === "string" && LINK_ID.test(value) ? value : undefined;
 }
