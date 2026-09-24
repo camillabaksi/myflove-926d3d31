@@ -5,6 +5,7 @@ import CollapsibleSection from "@/components/collapsible-section";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import EnergyBattery from "@/components/energy-battery";
 import DailyFlowList from "@/components/day/daily-flow-list";
+import FamilyDayPerspectives from "@/components/day/family-day-perspectives";
 import { FlowReplan } from "@/components/flow-replan";
 import { useFlowScore } from "@/hooks/use-flowscore";
 import { useFlowItems } from "@/hooks/use-flow-items";
@@ -93,7 +94,9 @@ export function TodayContent() {
               </Button>
             </div>
           </header>
-          <DailyFlowList />
+          <div className="pt-3">
+            <FamilyDayPerspectives myDay={<DailyFlowList />} />
+          </div>
         </section>
       </MyFloveWide>
 

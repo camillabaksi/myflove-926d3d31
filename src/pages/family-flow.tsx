@@ -6,6 +6,8 @@ import Layout from "@/components/layout";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import ChildProfiles from "@/components/family/child-profiles";
 import FamilyLoadCard from "@/components/family/family-load-card";
+import DailyFlowList from "@/components/day/daily-flow-list";
+import FamilyDayPerspectives from "@/components/day/family-day-perspectives";
 import FamilySituation from "@/components/family/family-situation";
 import VisualChildSchedule from "@/components/family/visual-child-schedule";
 import RecoveryGapCard from "@/components/recovery/recovery-gap-card";
@@ -90,6 +92,13 @@ export default function FamilyFlowPage() {
                 />
               )}
             </section>
+
+            {children.length > 0 && (
+              <section className="space-y-3 rounded-3xl border border-border bg-card p-4 shadow-soft sm:p-5">
+                <h2 className="text-base font-semibold text-ink">{t("Dagen för hela familjen")}</h2>
+                <FamilyDayPerspectives myDay={<DailyFlowList />} defaultPerspective="familj" />
+              </section>
+            )}
 
             <FamilyLoadCard />
 
