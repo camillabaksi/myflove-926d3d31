@@ -6,9 +6,16 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-09-23";
+export const CHANGELOG_UPDATED = "2026-09-24";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  {
+    title: "Pitch & Investor uppdaterat med nytt huvudmaterial",
+    items: [
+      "Tio uppladdade pitch-, video-, BMC-, statistik- och marknadsfiler finns nu i den privata adminsektionen (2026-09-24)",
+      "Materialet är sorterat i rätt kategorier och öppnas fortsatt med kortlivade adminlänkar (2026-09-24)",
+    ],
+  },
   {
     title: "Barnschema: andra dagar och egen ordning",
     items: [
