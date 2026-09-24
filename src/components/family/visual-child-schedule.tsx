@@ -499,7 +499,7 @@ export default function VisualChildSchedule({
               )}
             </section>
           ) : (
-            <div className="rounded-2xl bg-mint/45 p-5 text-center"><CheckCircle2 className="mx-auto mb-2 text-primary" /><p className="font-semibold text-ink">{t(todayItems.length ? "Allt är klart för idag." : "Inget inlagt idag än.")}</p></div>
+            <div className="rounded-2xl bg-mint/45 p-5 text-center"><CheckCircle2 className="mx-auto mb-2 text-primary" /><p className="font-semibold text-ink">{isViewingToday ? t(todayItems.length ? "Allt är klart för idag." : "Inget inlagt idag än.") : t(todayItems.length ? "Allt är klart för dagen." : "Inget inlagt den här dagen än.")}</p></div>
           )}
 
           {guidance.message && (
