@@ -58,6 +58,8 @@ export interface FlowItem {
   completable?: boolean;
   /** Vart användaren kan gå för att jobba med saken. */
   href?: string;
+  /** Diskret koppling till en familjemedlems aktivitet, t.ex. "Bella – Förskola". */
+  linkedLabel?: string;
 }
 
 export const SOURCE_LABEL: Record<FlowItemSource, string> = {

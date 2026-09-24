@@ -23,6 +23,10 @@ export interface ChildEvent {
   prepMinutes?: number;
   travelMinutes?: number;
   recoveryAfter?: boolean;
+  /** Koppling till andra barns aktiviteter. */
+  linkGroup?: string;
+  /** Koppling till förälderns egen uppgift. */
+  parentTaskId?: string;
 }
 
 function todayISO(): string {
@@ -69,6 +73,8 @@ export function useChildEvents(dateISO?: string): ChildEvent[] {
         ...(meta.prepMinutes ? { prepMinutes: meta.prepMinutes } : {}),
         ...(meta.travelMinutes ? { travelMinutes: meta.travelMinutes } : {}),
         ...(meta.recoveryAfter ? { recoveryAfter: true } : {}),
+        ...(meta.linkGroup ? { linkGroup: meta.linkGroup } : {}),
+        ...(meta.parentTaskId ? { parentTaskId: meta.parentTaskId } : {}),
       });
     }
 
