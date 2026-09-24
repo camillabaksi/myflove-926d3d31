@@ -1,3 +1,9 @@
+## 2026-09-24 – Pitch & Investor uppdaterat med uppladdat huvudmaterial
+
+- Tio uppladdade pitch-, video-, BMC-, statistik- och marknadsfiler har lagts in i den privata adminsektionen Pitch & Investor.
+- Filerna är sorterade under Pitchdeck, Business Model Canvas, KPI & traction och Övrigt internt.
+- Materialet öppnas fortsatt endast via kortlivade signerade länkar för administratörer.
+
 ## 2026-09-23 – Barnschema: andra dagar och egen ordning
 
 - Idag-vyn kan bläddra till andra dagar, och nya aktiviteter visas på den dag de läggs in.
