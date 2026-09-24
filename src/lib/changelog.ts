@@ -10,6 +10,14 @@ export const CHANGELOG_UPDATED = "2026-09-24";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Min dag, barnens dagar och Familj",
+    items: [
+      "Personväxlare: Min dag, varje barn och Familj med parallell tidslinje (2026-09-24)",
+      "Kopplade familjeaktiviteter som kan ändras var för sig eller tillsammans (2026-09-24)",
+      "Förslag om återhämtning när eftermiddagen är tät och batteriet lågt (2026-09-24)",
+    ],
+  },
+  {
     title: "Lugnare visuell dagsvy",
     items: [
       "Dagsvyn och Kalenderns dagläge visar tid, pictogram, aktivitet och konsekvent områdesfärg (2026-09-24)",

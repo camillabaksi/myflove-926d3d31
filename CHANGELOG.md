@@ -1,3 +1,11 @@
+## 2026-09-24 – Min dag, barnens dagar och Familj
+
+- Ny personväxlare i Idag och Familj: Min dag, varje barn och Familj – det syns alltid vems dag som visas.
+- Min dag visar bara dina egna aktiviteter; barnaktiviteter kommer bara med när de kräver dig och märks som kopplade.
+- Familjevyn visar flera personers dagar parallellt (kolumner på dator, staplad vy på mobil) och gemensamma aktiviteter visas en gång.
+- Aktiviteter kan kopplas, få ändrad tid för bara en eller alla kopplade, och kopplingen kan tas bort utan att något raderas.
+- Täta eftermiddagar med lågt batteri ger ett konkret förslag om att förenkla och lägga in återhämtning – inga energivärden på barnens aktiviteter.
+
 ## 2026-09-24 – Lugnare visuell dagsvy
 
 - Dagsvyn och Kalenderns dagläge visar nu samma tydliga aktivitetsrad med tid, pictogram, kort text och konsekvent områdesfärg.
