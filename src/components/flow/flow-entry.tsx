@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { FlowMascot } from "@/components/flow-mascot";
 import CollapsibleSection from "@/components/collapsible-section";
 import { track } from "@/lib/analytics";
+import { useCapacityMode } from "@/hooks/use-capacity-mode";
 
 export default function FlowEntry({
   onPlan,
@@ -19,6 +20,9 @@ export default function FlowEntry({
   /** Går till chatt-läget. */
   onChat: () => void;
 }) {
+  const { mode } = useCapacityMode();
+  const low = mode === "lagt";
+
   return (
     <section className="space-y-4" aria-label="Flow – vad passar bäst just nu">
       <div className="surface-card flex flex-col items-center gap-4 rounded-3xl p-6 text-center animate-fade-in sm:p-8">
@@ -41,7 +45,7 @@ export default function FlowEntry({
         >
           Visa mitt förslag
         </Button>
-        <div className="flex flex-wrap justify-center gap-2">
+        {!low && <div className="flex flex-wrap justify-center gap-2">
           <Button variant="outline" className="rounded-2xl" onClick={onPlan}>
             <ListOrdered size={16} aria-hidden />
             Planera
@@ -50,10 +54,10 @@ export default function FlowEntry({
             <MessageCircle size={16} aria-hidden />
             Chatta
           </Button>
-        </div>
+        </div>}
       </div>
 
-      <CollapsibleSection
+      {!low && <CollapsibleSection
         title="Mer om Flow"
         id="flow-mer-om"
         defaultCollapsed
@@ -73,7 +77,7 @@ export default function FlowEntry({
             känns för mycket, en uppgift känns klurig eller du bara vill fundera högt.
           </li>
         </ul>
-      </CollapsibleSection>
+      </CollapsibleSection>}
     </section>
   );
 }
