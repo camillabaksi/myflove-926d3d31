@@ -96,7 +96,8 @@ export default function PitchPage() {
           <p className="text-muted-foreground">Spela upp pitchvideon och ladda ner pitchdecken.</p>
         </header>
 
-        <section className="rounded-2xl border border-border bg-card p-4 space-y-3">
+        <details open className="group rounded-2xl border border-border bg-card p-4 space-y-3">
+          <summary className="cursor-pointer list-none [&::-webkit-details-marker]:hidden">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <h2 className="flex items-center gap-2 font-serif text-xl font-semibold">
               <Film size={18} className="text-primary" /> Kort produktdemo (27 sek)
@@ -105,6 +106,7 @@ export default function PitchPage() {
               QuickFlow → Flow → Min dag
             </span>
           </div>
+          </summary>
           <p className="text-sm text-muted-foreground">
             En kort demo på engelska som visar att MyFlove finns på riktigt. Den följer bara den
             viktigaste kedjan: allt ur huvudet i QuickFlow, Flow som anpassar dagen efter energin
@@ -131,9 +133,10 @@ export default function PitchPage() {
               <Download size={16} /> Ladda ner demon (MP4)
             </a>
           </div>
-        </section>
+        </details>
 
-        <section className="rounded-2xl border border-border bg-card p-4 space-y-3">
+        <details open className="group rounded-2xl border border-border bg-card p-4 space-y-3">
+          <summary className="cursor-pointer list-none [&::-webkit-details-marker]:hidden">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <h2 className="flex items-center gap-2 font-serif text-xl font-semibold">
               <Film size={18} className="text-primary" /> Pitchvideo
@@ -142,6 +145,7 @@ export default function PitchPage() {
               Version 5.0 · Din dag, i din takt
             </span>
           </div>
+          </summary>
           <p className="text-sm text-muted-foreground">
             Version 5.0 visar appen som den ser ut nu: en guidad dagsresa i tre steg – Hur mår du?,
             Vad händer? och Behöver du planera om? – på en lugn startsida med vita kort och ett
@@ -196,9 +200,10 @@ export default function PitchPage() {
               <Sparkles size={16} /> Visa Flow live
             </Link>
           </div>
-        </section>
+        </details>
 
-        <section className="rounded-2xl border border-border bg-card p-4 space-y-3">
+        <details open className="group rounded-2xl border border-border bg-card p-4 space-y-3">
+          <summary className="cursor-pointer list-none [&::-webkit-details-marker]:hidden">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <h2 className="flex items-center gap-2 font-serif text-xl font-semibold">
               <FileText size={18} className="text-primary" /> 3-minuters investerarpitch (engelska)
@@ -207,6 +212,7 @@ export default function PitchPage() {
               Connect Öst · 10 sep 2026
             </span>
           </div>
+          </summary>
           <p className="text-sm text-muted-foreground">
             Tretton visuella slides på engelska, byggda för exakt tre minuter: problem, insikt,
             lösning, produkt, differentiering, marknad (Sverige först), traction och go-to-market
@@ -236,9 +242,10 @@ export default function PitchPage() {
               <Download size={16} /> Ladda ner Word
             </a>
           </div>
-        </section>
+        </details>
 
-        <section className="rounded-2xl border border-border bg-card p-4 space-y-3">
+        <details open className="group rounded-2xl border border-border bg-card p-4 space-y-3">
+          <summary className="cursor-pointer list-none [&::-webkit-details-marker]:hidden">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <h2 className="flex items-center gap-2 font-serif text-xl font-semibold">
               <FileText size={18} className="text-primary" /> Pitchdeck
@@ -247,6 +254,7 @@ export default function PitchPage() {
               Version 5.0 · Kapacitetsstyrd vardag
             </span>
           </div>
+          </summary>
           <p className="text-sm text-muted-foreground">
             Pitchdecket (5.0) beskriver appen som den är utformad nu: den guidade dagsresan i tre
             steg, det lugna gränssnittet med andningsljus, enkelt läge och hopfällbara block,
@@ -307,12 +315,14 @@ export default function PitchPage() {
             anpassas efter kapacitet → Min dag). Videofilen heter myflove-demo-20s.mp4 (27 sek) och
             kan bifogas separat i mejlet till investerare.
           </p>
-        </section>
+        </details>
 
-        <section className="rounded-2xl border border-border bg-card p-4 space-y-3">
+        <details open className="group rounded-2xl border border-border bg-card p-4 space-y-3">
+          <summary className="cursor-pointer list-none [&::-webkit-details-marker]:hidden">
           <h2 className="flex items-center gap-2 font-serif text-xl font-semibold">
             <BookOpen size={18} className="text-primary" /> Living Blueprint
           </h2>
+          </summary>
           <p className="text-sm text-muted-foreground">
             Ladda ner blueprinten som Word (DOCX) eller PDF – en knapp per version.
           </p>
@@ -345,7 +355,7 @@ export default function PitchPage() {
               </li>
             ))}
           </ul>
-        </section>
+        </details>
       </div>
     </Layout>
   );
