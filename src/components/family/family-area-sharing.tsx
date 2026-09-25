@@ -60,7 +60,7 @@ function itemsFor(area: Area, rows: SharedRow[]): Item[] {
     return asList(raw("myflow-dump-ideas")).slice(0, 12).map((e) => ({ id: str(e.id), text: label(e), done: false, by: str(e.editedBy) || undefined })).filter((i) => i.id && i.text);
   }
   if (area === "rutiner") {
-    const doneToday = asList([]).length ? [] : (asObj(raw("myflove-done-log"))[today] as unknown);
+    const doneToday = asObj(raw("myflove-done-log"))[today];
     const ids = new Set(Array.isArray(doneToday) ? (doneToday as string[]) : []);
     return asList(raw("myflove-routines"))
       .filter((r) => r.enabled !== false)
@@ -97,7 +97,7 @@ function itemsFor(area: Area, rows: SharedRow[]): Item[] {
 
 /** Läsrader för delar som bara visas. */
 function linesFor(area: Area, rows: SharedRow[]): string[] {
-  if (EDITABLE.has(area)) return itemsFor(area, rows).map((i) => `${i.text}${i.done ? " – klar" : ""}`);
+  if (EDITABLE.has(area) && area !== "rutiner") return itemsFor(area, rows).map((i) => `${i.text}${i.done ? " – klar" : ""}`);
   const today = todayISO();
   const get = (key: string) => asList(rows.find((r) => r.key === key)?.value);
   if (area !== "rutiner") {
@@ -211,7 +211,7 @@ export default function FamilyAreaSharing() {
       <div className="space-y-1">
         <h2 className="font-display text-base text-ink">Vad familjen får se</h2>
         <p className="text-sm text-muted-foreground">
-          Allt är privat tills du väljer. Inköp, städning, uppgifter och kalender kan familjen få bocka av. Bara du kan ta bort saker.
+          Allt är privat tills du väljer. Inköp, städning, uppgifter, kalender och rutiner kan familjen få bocka av, och i anteckningar kan de skriva. Bara du kan ta bort saker.
         </p>
       </div>
       <ul className="space-y-2">
@@ -302,12 +302,18 @@ export default function FamilyAreaSharing() {
                   return (
                     <div key={a.id} className="space-y-1">
                       <p className="flex items-center gap-1 text-xs font-medium text-muted-foreground">
-                        {a.label} <Users size={12} /> <span>du kan bocka av</span>
+                        {a.label} <Users size={12} /> <span>{a.id === "anteckningar" ? "du kan skriva till" : "du kan bocka av"}</span>
                       </p>
                       {items.length === 0 && <p className="text-xs text-muted-foreground">Inget just nu.</p>}
                       <ul className="space-y-1">
                         {items.map((i) => (
                           <li key={i.id}>
+                            {a.id === "anteckningar" ? (
+                              <p className="flex items-start gap-2 px-1 py-1 text-sm text-ink">
+                                <span className="min-w-0 flex-1 break-words">{i.text}</span>
+                                {i.by && <span className="shrink-0 text-[11px] text-muted-foreground">{i.by}</span>}
+                              </p>
+                            ) : (
                             <button
                               type="button"
                               onClick={() => edit(ownerId, a.id, "toggle", i.id, null)}
@@ -319,10 +325,14 @@ export default function FamilyAreaSharing() {
                               <span className={`min-w-0 flex-1 break-words ${i.done ? "line-through text-muted-foreground" : "text-ink"}`}>{i.text}</span>
                               {i.by && <span className="shrink-0 text-[11px] text-muted-foreground">{i.by}</span>}
                             </button>
+                            )}
                           </li>
                         ))}
                       </ul>
-                      {a.id === "inkop" && (
+                      {a.id === "rutiner" && linesFor("rutiner", rows).filter((l) => l.includes("·") && !items.some((i) => i.text === l)).map((l) => (
+                        <p key={l} className="px-1 text-xs text-muted-foreground break-words">{l}</p>
+                      ))}
+                      {ADDABLE[a.id] && (
                         <form
                           className="flex gap-2 pt-1"
                           onSubmit={(e) => {
@@ -336,8 +346,8 @@ export default function FamilyAreaSharing() {
                           <input
                             value={drafts[draftKey] ?? ""}
                             onChange={(e) => setDrafts((d) => ({ ...d, [draftKey]: e.target.value }))}
-                            maxLength={200}
-                            placeholder="Lägg till vara"
+                            maxLength={a.id === "inkop" ? 200 : 500}
+                            placeholder={ADDABLE[a.id]}
                             className="min-w-0 flex-1 rounded-xl border border-border bg-card px-3 py-1.5 text-sm"
                           />
                           <button type="submit" aria-label="Lägg till" className="rounded-xl bg-primary px-3 text-primary-foreground">
