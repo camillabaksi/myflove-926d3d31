@@ -1,43 +1,34 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Link } from "wouter";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { FlowMascot } from "@/components/flow-mascot";
 import AdaptiveIntentPrompt from "@/components/adaptive-intent-prompt";
 import { useLang } from "@/hooks/use-language";
-import { useTasks } from "@/hooks/use-data";
-import { useCapacityMode } from "@/hooks/use-capacity-mode";
-import { useFlowScore } from "@/hooks/use-flowscore";
-import { suggestNow } from "@/lib/flow-engine";
+import { useFlowPlan } from "@/hooks/use-flow-plan";
+import { simplifyTask } from "@/lib/priority-engine";
 import { track } from "@/lib/analytics";
 import { useCollapsible } from "@/lib/collapse-store";
 import { cn } from "@/lib/utils";
 
 /**
  * 🌿 Nästa rimliga steg – ETT förslag i taget, aldrig en lista.
- * Bygger på befintlig Flow-motor och befintliga uppgifter.
+ * Visar FlowPlans "Nu" – samma nästa steg som Hem och Flow. Ingen egen
+ * rankning, inget batteri.
  */
 export default function NextStepCard() {
   const { t } = useLang();
-  const { activeTasks } = useTasks();
-  const { percent, mode } = useCapacityMode();
+  const plan = useFlowPlan();
+  const mode = plan.mode;
   const lowOrk = mode === "lagt";
   const [smaller, setSmaller] = useState(false);
   const { collapsed, toggle } = useCollapsible("home-next-step");
-  const { flow } = useFlowScore();
 
-  const battery = percent;
-  /** FlowScore och nästa steg hör ihop – men steget funkar även utan score. */
-  const flowScore = typeof flow?.score === "number" ? Math.round(flow.score) : null;
-
-  const suggestion = useMemo(
-    () =>
-      suggestNow({
-        tasks: activeTasks,
-        batteryNow: battery,
-        availableMinutes: smaller ? 5 : undefined,
-      }),
-    [activeTasks, battery, smaller],
-  );
+  const now = plan.now;
+  const simpler = now ? simplifyTask(now.item.title, mode) : null;
+  const suggestion = {
+    task: now ? { title: now.item.title } : null,
+    reason: smaller && simpler ? simpler : (now?.reason ?? ""),
+  };
 
   return (
     <section
@@ -55,11 +46,6 @@ export default function NextStepCard() {
             className="flex w-full items-center gap-2 text-left"
           >
             <h2 className="min-w-0 flex-1 text-base font-semibold text-ink">
-              {flowScore != null && (
-                <span className="mb-0.5 block text-xs font-semibold uppercase text-primary">
-                  {t("Ditt Flow")}: {flowScore}
-                </span>
-              )}
               <span aria-hidden>🌿</span> {t("Nästa rimliga steg")}
             </h2>
             <ChevronDown
@@ -92,8 +78,7 @@ export default function NextStepCard() {
               <>
                 <p className="mt-2 text-sm font-medium text-ink">{suggestion.task.title}</p>
                 <p className="mt-0.5 text-xs text-muted-foreground">
-                  {suggestion.reason ||
-                    `${t("Det tar ungefär")} ${suggestion.minutes} ${t("minuter och passar din nuvarande energinivå.")}`}
+                  {t(suggestion.reason)}
                 </p>
                 <Link
                   href="/idag"
@@ -102,13 +87,10 @@ export default function NextStepCard() {
                 >
                   {t("Gör detta")} <ArrowRight size={15} aria-hidden />
                 </Link>
-                {flowScore != null && (
-                  <Link
-                    href="/flowscore"
-                    className="mt-2 block text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground"
-                  >
-                    {t("Varför just detta?")}
-                  </Link>
+                {plan.next && (
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    {t("Sedan:")} {plan.next.item.title}
+                  </p>
                 )}
               </>
             ))}

@@ -23,6 +23,8 @@ import { FlowMascot, type FlowStatus } from "@/components/flow-mascot";
 import { chatWithFlow } from "@/lib/flow-chat.functions";
 import { useTasks, useMoods, useFocus, useReminders } from "@/hooks/use-data";
 import { useLifePuzzle } from "@/hooks/use-life-puzzle";
+import { useFlowPlan } from "@/hooks/use-flow-plan";
+import { flowPlanContext } from "@/lib/flow-plan";
 import { useFlowPersonalContext } from "@/hooks/use-flow-personal-context";
 import { lastPlace, placeFor, shortcutsFor, type FlowPlace } from "@/lib/flow-context";
 import {
@@ -140,6 +142,8 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
   const chat = useServerFn(chatWithFlow);
   const { puzzle, contextPrompt } = useLifePuzzle();
   const personalContext = useFlowPersonalContext();
+  // Flow kommunicerar FlowPlans nästa steg – aldrig en egen rekommendation.
+  const flowPlan = useFlowPlan();
   const [place, setPlace] = useState<FlowPlace | null>(null);
   useEffect(() => {
     setPlace(lastPlace());
@@ -269,7 +273,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
 
       // Håll anropet inom serverns gränser: max 50 meddelanden och 4000 tecken kontext.
       const context =
-        `${personalContext}\n\n${contextPrompt}\n\nDagens uppgifter (dagens datum ${todayStr()}, imorgon ${tomorrowISO()}):\n${taskListContext}`
+        `${flowPlanContext(flowPlan)}\n\n${personalContext}\n\n${contextPrompt}\n\nDagens uppgifter (dagens datum ${todayStr()}, imorgon ${tomorrowISO()}):\n${taskListContext}`
           .trim()
           .slice(0, 4000);
       const { reply } = await chat({

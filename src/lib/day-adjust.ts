@@ -59,6 +59,11 @@ function splitSteps(title: string): string[] {
 export interface AdjustContext {
   /** Hur många saker som rimligen får plats idag (från FlowScore/kapacitet). */
   capacity: number;
+  /**
+   * Uppgifter FlowPlan lagt under "Kan vänta". När den finns avgör FlowPlan
+   * vad som föreslås flyttas – inte listans position.
+   */
+  deferIds?: Set<string>;
 }
 
 /**
@@ -76,7 +81,7 @@ export function suggestAdjustments(tasks: AdjustTask[], ctx: AdjustContext): Adj
   });
 
   ordered.forEach((t, index) => {
-    const overflow = index >= capacity;
+    const overflow = ctx.deferIds ? ctx.deferIds.has(t.id) : index >= capacity;
     const fixed = Boolean(t.time);
 
     if (heavy(t) && (t.steps ?? 0) === 0) {

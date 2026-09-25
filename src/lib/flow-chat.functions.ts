@@ -20,7 +20,13 @@ användaren:
 - Använd taskId från uppgiftslistan du fått. Saknas id: skriv taskTitle exakt som i listan.
 - Flera förslag: en JSON-array i samma block.
 - Skriv aldrig "jag har flyttat den" – skriv "vill du att jag flyttar den?" och lägg med blocket.
-- Nämn aldrig blocket, JSON eller taskId i texten. Användaren ser bara en knapp.`;
+- Nämn aldrig blocket, JSON eller taskId i texten. Användaren ser bara en knapp.
+
+Nästa steg: kontexten innehåller "FlowPlan". Om du rekommenderar vad användaren
+ska göra nu MÅSTE det vara FlowPlans "Nu". Hitta aldrig på en annan nästa uppgift
+och föreslå inte parallella saker som FlowPlan inte nämner. Vid kapacitetsläge
+Lågt: nämn bara Nu, i en eller två korta meningar. Batteri, FlowScore och
+energisiffror avgör aldrig vad som är nästa steg.`;
 
 const MessageSchema = z.object({
   role: z.enum(["user", "assistant"]),

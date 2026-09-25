@@ -1,7 +1,7 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { ArrowRight, Undo2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useFlowItems } from "@/hooks/use-flow-items";
+import { useFlowPlan } from "@/hooks/use-flow-plan";
 import { useTasks } from "@/hooks/use-data";
 import { useCapacityMode } from "@/hooks/use-capacity-mode";
 import { useLang } from "@/hooks/use-language";
@@ -10,8 +10,6 @@ import {
   CAPACITY_META,
   PRIORITY_LABEL,
   isDayFull,
-  parallelTip,
-  planForCapacity,
   recalcMessage,
   simplifyTask,
   type CapacityMode,
@@ -25,34 +23,17 @@ const MODES: CapacityMode[] = ["fullt", "mellan", "lagt"];
  */
 export default function CapacityPlanCard() {
   const { t } = useLang();
-  const { todayOpen } = useFlowItems();
   const { updateTask } = useTasks();
   const { mode, setMode } = useCapacityMode();
   const [note, setNote] = useState<string | null>(null);
   const [moved, setMoved] = useState<Array<{ id: string; title: string; prev?: string }>>([]);
   const today = todayISO();
 
-  const plan = useMemo(
-    () =>
-      planForCapacity(
-        todayOpen.map((i) => ({
-          id: i.id,
-          title: i.title,
-          time: i.time,
-          dueDate: i.dueDate,
-          fixed: i.source === "kalender" || i.source === "lektion",
-          movable: i.id.startsWith("task-"),
-        })),
-        mode,
-        today,
-      ),
-    [todayOpen, mode, today],
-  );
-
-  const movable = plan.deferred.filter((d) => d.item.movable);
-  const tip = mode === "fullt" ? parallelTip(plan.planned) : null;
-  const shown = mode === "lagt" ? plan.planned.slice(0, 1) : plan.planned;
-
+  // FlowPlan äger ordningen och urvalet – kortet visar bara resultatet.
+  const plan = useFlowPlan();
+  const movable = plan.waiting.filter((d) => d.item.movable);
+  const tip = mode === "fullt" ? plan.parallel : null;
+  const shown = mode === "lagt" ? plan.order.slice(0, 1) : plan.order;
 
   const choose = (next: CapacityMode) => {
     setNote(recalcMessage(mode, next));
@@ -102,7 +83,7 @@ export default function CapacityPlanCard() {
       </div>
 
       <p className="mt-3 text-sm text-muted-foreground" aria-live="polite">
-        {t(note ?? plan.message)}
+        {t(note ?? (mode === "lagt" && plan.now ? `Vi tar en sak i taget. Först: ${plan.now.item.title}.` : plan.message))}
       </p>
 
       {shown.length > 0 && (
@@ -128,10 +109,8 @@ export default function CapacityPlanCard() {
           })}
         </ol>
       )}
-      {mode === "lagt" && plan.planned.length > 1 && (
-        <p className="mt-2 text-xs text-muted-foreground">
-          {t("Sen:")} {plan.planned[1].item.title}
-        </p>
+      {mode === "lagt" && plan.now && (
+        <p className="mt-2 text-xs text-muted-foreground">{t("Det räcker just nu.")}</p>
       )}
 
       {tip && (
@@ -147,7 +126,7 @@ export default function CapacityPlanCard() {
         </p>
       )}
 
-      {isDayFull(plan.planned.length, mode) && (
+      {isDayFull(plan.order.length, mode) && (
         <p className="mt-3 text-xs text-muted-foreground">
           {t("Dagen är redan ganska full. Det är okej att flytta något.")}
         </p>
