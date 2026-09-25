@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
+import { orkWord } from "@/lib/ork-word";
 
 let state: {
   todayEnergyEntries: { id: string; level: number; logged_at: string }[];
