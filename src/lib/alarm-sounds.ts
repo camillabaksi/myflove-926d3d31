@@ -86,7 +86,35 @@ const SPECS: Record<AlarmSoundId, SoundSpec> = {
       { start: 1.35, freq: 1046.5, dur: 0.9, gain: 0.24 },
     ],
   },
+  // Sensoriskt mjuka signaler: långsam intoning, inga skarpa kanter.
+  klangskal: {
+    seconds: 3.2,
+    tones: [
+      { start: 0, freq: 174.61, dur: 3, gain: 0.3, attack: 0.5 },
+      { start: 0, freq: 349.23, dur: 2.8, gain: 0.16, attack: 0.6 },
+      { start: 0.2, freq: 523.25, dur: 2.4, gain: 0.07, attack: 0.8 },
+    ],
+  },
+  regndroppe: {
+    seconds: 2.6,
+    tones: [
+      { start: 0, freq: 0, dur: 2.6, gain: 0.04, noise: true, attack: 0.6 },
+      { start: 0.4, freq: 660, dur: 0.5, gain: 0.14, attack: 0.12, slideTo: 520 },
+      { start: 1.2, freq: 590, dur: 0.5, gain: 0.12, attack: 0.12, slideTo: 470 },
+      { start: 1.9, freq: 700, dur: 0.6, gain: 0.11, attack: 0.15, slideTo: 540 },
+    ],
+  },
+  harpa: {
+    seconds: 3,
+    tones: [
+      { start: 0, freq: 392, dur: 1.6, gain: 0.2, attack: 0.25 },
+      { start: 0.35, freq: 523.25, dur: 1.6, gain: 0.18, attack: 0.25 },
+      { start: 0.7, freq: 659.25, dur: 1.7, gain: 0.16, attack: 0.3 },
+      { start: 1.05, freq: 784, dur: 1.9, gain: 0.14, attack: 0.35 },
+    ],
+  },
 };
+
 
 function encodeWav(samples: Float32Array, sampleRate: number): Blob {
   const buffer = new ArrayBuffer(44 + samples.length * 2);
