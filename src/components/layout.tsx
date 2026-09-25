@@ -211,8 +211,8 @@ export default function Layout({ children }: LayoutProps) {
   // Använd TanStack-routerns faktiska location så tillbakaknappen alltid
   // synkar med appens historik – även vid djupa länkar eller SPA-navigering.
   const goBack = useSmartBack("/hem");
-  const tanstackLocation = router.state.location.pathname;
-  const canGoBack = tanstackLocation !== "/";
+  // Tillbakapil på alla sidor utom startsidan (/hem och /).
+  const canGoBack = location !== "/" && location !== "/hem";
   const handleBack = goBack;
 
   useEffect(() => {
