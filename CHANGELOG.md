@@ -3139,3 +3139,5 @@ Initial baseline av MyFlove — ett svenskspråkigt "lugnt livsflöde"-dashboard
 
 ## 5.3.1 – 2026-09-18
 - Fix: vit skärm ersätts av lugn felsida med "Ladda om" (rensar gammal cache).
+
+- 2026-09-25: Språkval (svenska/engelska) finns nu även under Anpassa MyFlove, inte bara Inställningar.
