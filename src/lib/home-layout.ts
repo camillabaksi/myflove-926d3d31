@@ -101,6 +101,7 @@ export function useHomeLayout() {
     setPrefs((p) => {
       const current = p?.hidden ?? [];
       return {
+        ...p,
         order: p?.order ?? DEFAULT_PREFS.order,
         hidden: current.includes(id) ? current.filter((x) => x !== id) : [...current, id],
       };
@@ -113,10 +114,18 @@ export function useHomeLayout() {
       const j = i + dir;
       if (i < 0 || j < 0 || j >= arr.length) return p ?? DEFAULT_PREFS;
       [arr[i], arr[j]] = [arr[j]!, arr[i]!];
-      return { hidden: p?.hidden ?? [], order: arr };
+      return { ...p, hidden: p?.hidden ?? [], order: arr };
     });
+
+  const checklistPreview: ChecklistPreview = prefs?.checklistPreview ?? 3;
+  const setChecklistPreview = (n: ChecklistPreview) =>
+    setPrefs((p) => ({
+      hidden: p?.hidden ?? DEFAULT_PREFS.hidden,
+      order: p?.order ?? DEFAULT_PREFS.order,
+      checklistPreview: n,
+    }));
 
   const reset = () => setPrefs(DEFAULT_PREFS);
 
-  return { order, hidden, visible, toggle, move, reset };
+  return { order, hidden, visible, toggle, move, reset, checklistPreview, setChecklistPreview };
 }
