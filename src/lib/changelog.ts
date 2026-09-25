@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Passerade möten och tidsbokade aktiviteter rullar inte över till Idag; tidlösa uppgifter följer med (2026-09-25)",
       "Tillbakapil på alla sidor utom Hem; fler vyer kan fällas ihop och expanderas (2026-09-25)",
       "Mer-menyns kategorier är färre och mer sammanhängande: Min dag, Flow, Hälsa & ork, Återhämtning, Studier & jobb, Familj, Hem & vardag, Insikter (2026-09-25)",
       "Hälsa i bottennavigeringen öppnar samma kategorivyn som Mer → Hälsa, så båda vägarna leder till samma vy (2026-09-25)",
