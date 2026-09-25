@@ -3,7 +3,7 @@ import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { useImpactCheckin } from "@/hooks/use-impact-checkin";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { useFlowItems } from "@/hooks/use-flow-items";
-import { useEnergyBattery } from "@/hooks/use-energy-battery";
+import { useCapacityMode } from "@/hooks/use-capacity-mode";
 import {
   journeyStatus,
   type JourneyInput,
@@ -28,7 +28,7 @@ export function useDayJourney(): DayJourney {
   const { impact } = useImpactCheckin();
   const { openItems } = useQuickflow();
   const { todayOpen, todayDone } = useFlowItems();
-  const { reading } = useEnergyBattery();
+  const { percent: capacityPercent } = useCapacityMode();
 
   const input = useMemo<JourneyInput>(
     () => ({

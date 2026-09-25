@@ -3,7 +3,7 @@ import { sceneForTask } from "@/components/flow/scenes";
 import type { FlowScene } from "@/components/flow/flow-character";
 import { useTasks, useReminders, useMedications } from "@/hooks/use-data";
 import { useChildren } from "@/hooks/use-children";
-import { useEnergyBattery } from "@/hooks/use-energy-battery";
+import { useCapacityMode } from "@/hooks/use-capacity-mode";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { useWeather } from "@/hooks/use-weather";
 import { useWeatherForecast, forecastAt, isWetHour } from "@/hooks/use-weather-forecast";
@@ -70,7 +70,7 @@ export function useFlowMoment(): FlowMoment {
   const { activeReminders } = useReminders();
   const { medications, isTaken, toggleTaken } = useMedications();
   const { children } = useChildren();
-  const { reading } = useEnergyBattery();
+  const { percent: capacityPercent } = useCapacityMode();
   const { energyValue } = useQuickCheckin();
   const weather = useWeather();
   const forecast = useWeatherForecast();

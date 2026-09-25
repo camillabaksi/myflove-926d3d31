@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { ArrowRight, Sparkles } from "lucide-react";
-import { useEnergyBattery } from "@/hooks/use-energy-battery";
+import { useCapacityMode } from "@/hooks/use-capacity-mode";
 import { useAdaptiveActivity } from "@/hooks/use-adaptive-activity";
 import { useLang } from "@/hooks/use-language";
 import { orkWord } from "@/lib/ork-word";

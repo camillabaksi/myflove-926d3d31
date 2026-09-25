@@ -18,7 +18,7 @@ import ExerciseCard from "@/components/workout/exercise-card";
 import WorkoutRunner from "@/components/workout/workout-runner";
 import WorkoutAutoRunner from "@/components/workout/workout-auto-runner";
 import { useWorkouts } from "@/hooks/use-workouts";
-import { useFlowScore } from "@/hooks/use-flowscore";
+import { useCapacityMode } from "@/hooks/use-capacity-mode";
 import { useTasks } from "@/hooks/use-data";
 import { useToast } from "@/hooks/use-toast";
 import { track } from "@/lib/analytics";
@@ -110,12 +110,12 @@ export default function WorkoutBuilderPanel({
   const [doneIds, setDoneIds] = useState<string[]>([]);
   const [autoMode, setAutoMode] = useState(true);
   const { saved, logs, saveWorkout, removeWorkout, logWorkout } = useWorkouts();
-  const { flow } = useFlowScore();
+  const { percent: capacityPercent } = useCapacityMode();
   const { addTask } = useTasks();
   const { toast } = useToast();
 
   const energyPercent = capacityPercent;
-  const suggestedEnergy = useMemo(() => energyFromScore(flow.score), [flow.score]);
+  const suggestedEnergy = useMemo(() => energyFromScore(capacityPercent), [capacityPercent]);
 
   useEffect(() => {
     if (showBuilder) track("workout_builder_opened", { source: "traningsprogram" });
