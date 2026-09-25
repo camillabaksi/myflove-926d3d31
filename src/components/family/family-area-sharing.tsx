@@ -12,7 +12,9 @@ type Area =
 type Level = "off" | "view" | "edit";
 
 /** Delar där familjen kan få ändra. Personliga delar kan bara visas. */
-const EDITABLE: ReadonlySet<Area> = new Set<Area>(["inkop", "hem", "uppgifter", "kalender"]);
+const EDITABLE: ReadonlySet<Area> = new Set<Area>(["inkop", "hem", "uppgifter", "kalender", "rutiner", "anteckningar"]);
+/** Delar där familjen kan lägga till nya rader. */
+const ADDABLE: Partial<Record<Area, string>> = { inkop: "Lägg till vara", anteckningar: "Skriv en anteckning" };
 
 const AREAS: { id: Area; label: string; hint: string; icon: typeof CalendarDays }[] = [
   { id: "kalender", label: "Kalender & Min dag", hint: "Dina aktiviteter och möten med datum", icon: CalendarDays },
@@ -53,6 +55,19 @@ function itemsFor(area: Area, rows: SharedRow[]): Item[] {
       .slice(0, 8)
       .map((e) => ({ ...toItem(e), text: `${str(e.date) === today ? "Idag" : str(e.date)}${str(e.time) ? ` ${str(e.time)}` : ""} · ${label(e)}` }))
       .filter((i) => i.id);
+  }
+  if (area === "anteckningar") {
+    return asList(raw("myflow-dump-ideas")).slice(0, 12).map((e) => ({ id: str(e.id), text: label(e), done: false, by: str(e.editedBy) || undefined })).filter((i) => i.id && i.text);
+  }
+  if (area === "rutiner") {
+    const doneToday = asList([]).length ? [] : (asObj(raw("myflove-done-log"))[today] as unknown);
+    const ids = new Set(Array.isArray(doneToday) ? (doneToday as string[]) : []);
+    return asList(raw("myflove-routines"))
+      .filter((r) => r.enabled !== false)
+      .sort((a, b) => str(a.time).localeCompare(str(b.time)))
+      .map((r) => ({ id: str(r.id), text: `${str(r.time) ? `${str(r.time)} · ` : ""}${label(r)}`, done: ids.has(`routine-${str(r.id)}`) }))
+      .filter((i) => i.id && i.text)
+      .slice(0, 12);
   }
   // hem: egna städsteg per rum:läge, klar-markering nyckel "läge:stegId"
   const done = asObj(raw("myflove-cleaning-done"));
