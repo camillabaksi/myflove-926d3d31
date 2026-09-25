@@ -29,6 +29,13 @@
       "when": 1790145789597,
       "tag": "0003_protect_activity_sync_history",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1790353667144,
+      "tag": "0004_family_share_areas",
+      "breakpoints": true
     }
   ]
 }

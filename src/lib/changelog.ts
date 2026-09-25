@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Familj: välj vilka delar av appen familjen får se (kalender, uppgifter, inköp, rutiner & medicin), privat som standard (2026-09-25)",
       "Medicinpåminnelsen försvinner direkt när dosen markerats som tagen (2026-09-25)",
       "Barnens aktivitetslista visar bara läsbara anteckningar, inte intern pictogram- och färginformation (2026-09-25)",
       "Städning steg 5: verifierat oanvänd planeringskod har tagits bort utan datarensning. Historik, sparade omplaneringsvärden, FlowScore, energidata, QuickFlow-kompatibilitet och Jobb/Studier-stöd är kvar. (2026-09-25)",

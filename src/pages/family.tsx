@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Users, Copy, LogOut, Check, Share2 } from "lucide-react";
 import FamilySharing from "@/components/family/family-sharing";
+import FamilyAreaSharing from "@/components/family/family-area-sharing";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { PERSON_COLORS } from "@/lib/palette";
@@ -340,6 +341,7 @@ function HouseholdView({
         </div>
       </section>
 
+      <FamilyAreaSharing />
       <FamilySharing members={household.members} />
 
       <CollapsibleSection
