@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Familj: Rutiner och Anteckningar kan vara Kan ändra – bocka av rutiner, skriva anteckningar (2026-09-25)",
       "Familj: delad städlista visar både vardagsstädning och storstädning per rum (2026-09-25)",
       "Familj: välj vem som får ändra; delad städlista visar även appens städsteg (2026-09-25)",
       "Familj: välj Av, Kan se eller Kan ändra per del; familjen kan bocka av inköp, städning, uppgifter och kalender (2026-09-25)",
