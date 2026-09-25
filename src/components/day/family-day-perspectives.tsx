@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { AlertCircle, Clock, Link2, MoreHorizontal, Unlink } from "lucide-react";
+import { AlertCircle, Check, Clock, Link2, MoreHorizontal, Unlink } from "lucide-react";
 import { toast } from "sonner";
+import { emitActivityDone } from "@/lib/activity-energy-event";
 
 import { ActivityPictogram } from "@/components/family/activity-pictogram";
 import { FAMILY_ID, PersonAvatar, PersonSwitcher, possessive, type Person, type Perspective } from "@/components/day/person-switcher";
@@ -62,7 +63,7 @@ export default function FamilyDayPerspectives({
   const { children, items: childItems, updateItem } = useChildren();
   const childEvents = useChildEvents(dayISO);
   const { today: myItems } = useFlowItems(dayISO);
-  const { updateTask } = useTasks();
+  const { updateTask, toggleTask } = useTasks();
 
   const [perspective, setPerspective] = useState<Perspective>(defaultPerspective);
   const [selected, setSelected] = useState<string[] | null>(null);
@@ -165,6 +166,25 @@ export default function FamilyDayPerspectives({
     toast.success("Kopplingen är borttagen. Aktiviteterna finns kvar.");
   };
 
+  // Klarmarkering + samma "Hur kändes det?" som resten av appen.
+  const toggleDone = async (entry: TimelineEntry) => {
+    const done = !entry.completed;
+    if (entry.itemId) {
+      try {
+        await updateItem(entry.itemId, { completed: done }, { force: true });
+      } catch {
+        toast.error("Det gick inte att spara just nu. Försök igen.");
+        return;
+      }
+    } else if (entry.taskId) {
+      toggleTask(entry.taskId);
+    } else return;
+    if (done) {
+      const who = entry.personId === ME_ID ? "" : ` (${personById.get(entry.personId)?.name ?? "barn"})`;
+      emitActivityDone({ id: entry.key, title: `${entry.title}${who}`, dueDate: dayISO });
+    }
+  };
+
   // ---- Rendering ----------------------------------------------------------
   const EntryMenu = ({ entry }: { entry: TimelineEntry }) => {
     const linked = linkedSiblings(entry, allEntries).length > 0;
@@ -218,6 +238,20 @@ export default function FamilyDayPerspectives({
         )}
         style={color ? { borderLeft: `4px solid ${color}` } : undefined}
       >
+        {(entry.itemId || entry.taskId) && (
+          <button
+            type="button"
+            onClick={() => void toggleDone(entry)}
+            aria-pressed={!!entry.completed}
+            aria-label={entry.completed ? `Ångra klar: ${entry.title}` : `Markera som klar: ${entry.title}`}
+            className={cn(
+              "grid h-8 w-8 shrink-0 place-items-center rounded-full border-2 transition-colors",
+              entry.completed ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-transparent hover:border-primary/60",
+            )}
+          >
+            <Check size={15} strokeWidth={3} />
+          </button>
+        )}
         {!compact && <span className="w-10 shrink-0 text-center text-xs font-semibold tabular-nums text-muted-foreground">{entry.time}</span>}
         <ActivityPictogram id={visual.pictogram} tone={visual.tone} className={compact ? "h-8 w-8 rounded-lg" : "h-10 w-10 rounded-xl"} iconClassName={compact ? "h-4 w-4" : "h-5 w-5"} style={color ? { color } : undefined} />
         <div className="min-w-0 flex-1">

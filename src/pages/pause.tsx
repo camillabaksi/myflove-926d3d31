@@ -8,6 +8,7 @@ import LightBoost from "@/components/light-boost";
 import PauseSession from "@/components/recovery/pause-session";
 import RecoveryGapCard from "@/components/recovery/recovery-gap-card";
 import EnergyAfterCheck from "@/components/recovery/energy-after-check";
+import RecoveryLibrary from "@/components/recovery/recovery-library";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
@@ -136,6 +137,8 @@ export default function PausePage() {
                 </Button>
               </div>
             </section>
+
+            <RecoveryLibrary />
 
             <div className="grid gap-3">
               <button
