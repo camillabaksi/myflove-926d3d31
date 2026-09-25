@@ -12,6 +12,8 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Hem: en sak i taget",
     items: [
+      "Barnens dag är valfritt under Anpassa hemskärmen och visas inte innan användaren själv väljer det (2026-09-25)",
+      "Dagens checklista och barnschemat börjar som enkla sammanfattningar som kan öppnas för fler detaljer (2026-09-25)",
       "Bella och Biancas aktiviteter visas sida vid sida på Hem och kan bockas av direkt (2026-09-25)",
       "Avbockning synkas med Family Flow och använder samma fråga om hur aktiviteten kändes (2026-09-25)",
       "Just nu-kort med Klar och Inte nu, följt av Dagens checklista (2026-09-25)",

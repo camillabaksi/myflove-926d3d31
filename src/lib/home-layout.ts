@@ -9,7 +9,7 @@ import { useCloudSyncedStorage } from "@/lib/cloud-storage";
  * av anpassningen. Nedanför dem kan användaren slå av/på sekundära block:
  * hälsningen ligger alltid överst och går inte att stänga av.
  */
-export type HomeBlockId = "medicin" | "omrade";
+export type HomeBlockId = "barnens-dag" | "medicin" | "omrade";
 
 export interface HomeBlockMeta {
   id: HomeBlockId;
@@ -18,6 +18,11 @@ export interface HomeBlockMeta {
 }
 
 export const HOME_BLOCKS: HomeBlockMeta[] = [
+  {
+    id: "barnens-dag",
+    label: "Barnens dag",
+    hint: "Visa valda barns aktiviteter på Hem",
+  },
   {
     id: "medicin",
     label: "Rutiner & medicin",
@@ -32,8 +37,8 @@ export interface HomeLayoutPrefs {
 }
 
 export const DEFAULT_PREFS: HomeLayoutPrefs = {
-  hidden: [],
-  order: ["medicin", "omrade"],
+  hidden: ["barnens-dag"],
+  order: ["barnens-dag", "medicin", "omrade"],
 };
 
 const STORAGE_KEY = "myflove-home-layout";
@@ -41,7 +46,7 @@ const STORAGE_KEY = "myflove-home-layout";
  * Återställning: Hem fick fyra fasta widgets i stället för de gamla
  * konkurrerande blocken – gamla sparade ordrar/hidden nollställs en gång.
  */
-const CLEANUP_MIGRATION_KEY = "myflove-home-layout-restore-2";
+const CLEANUP_MIGRATION_KEY = "myflove-home-layout-children-opt-in-3";
 
 /** Filtrerar bort gamla block och återställer sekundärblockens standardordning. */
 export function cleanupOrder(order: HomeBlockId[] | undefined): HomeBlockId[] {
@@ -58,7 +63,10 @@ export function useHomeLayout() {
     if (typeof window === "undefined") return;
     if (window.localStorage.getItem(CLEANUP_MIGRATION_KEY)) return;
     window.localStorage.setItem(CLEANUP_MIGRATION_KEY, "1");
-    setPrefs(() => ({ order: DEFAULT_PREFS.order, hidden: DEFAULT_PREFS.hidden }));
+    setPrefs((current) => ({
+      order: cleanupOrder(current?.order),
+      hidden: Array.from(new Set([...(current?.hidden ?? []), "barnens-dag"])),
+    }));
   }, [setPrefs]);
 
   const order = useMemo<HomeBlockId[]>(() => {
