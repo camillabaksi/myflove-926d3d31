@@ -497,8 +497,8 @@ export default function Layout({ children }: LayoutProps) {
     }[] = [
       {
         id: "myflow",
-        label: "Översikt",
-        hint: "Dagen, energin och nästa steg",
+        label: "Min dag",
+        hint: "Dagen, kalendern och påminnelser",
         icon: CalendarDays,
         hrefs: ["/hem", "/idag", "/kalender", "/lagg-till", "/paminnelser", "/pomodoro"],
       },
@@ -511,7 +511,7 @@ export default function Layout({ children }: LayoutProps) {
       },
       {
         id: "healthflow",
-        label: "Hälsa",
+        label: "Hälsa & ork",
         hint: "Energi, mående, träning, rutiner och medicin",
         icon: HeartPulse,
         hrefs: [
@@ -532,28 +532,21 @@ export default function Layout({ children }: LayoutProps) {
       },
       {
         id: "studyflow",
-        label: "Studier",
-        hint: "Nästa steg, deadlines och uppgifter",
+        label: "Studier & jobb",
+        hint: "Schema, uppgifter, möten och deadlines",
         icon: BookOpen,
-        hrefs: ["/studyflow", "/studybuddy"],
-      },
-      {
-        id: "workflow",
-        label: "Jobb",
-        hint: "Uppgifter, möten och deadlines",
-        icon: Building2,
-        hrefs: ["/jobb"],
+        hrefs: ["/studyflow", "/studybuddy", "/jobb"],
       },
       {
         id: "familyflow",
         label: "Familj",
-        hint: "Personer du delar vardagen med",
-        icon: HeartPulse,
-        hrefs: ["/familjeflow", "/relationer", "/familj", "/barn"],
+        hint: "Barnens dagar och personer du delar vardagen med",
+        icon: Users,
+        hrefs: ["/familjeflow", "/barn", "/relationer", "/familj"],
       },
       {
         id: "homeflow",
-        label: "Hem",
+        label: "Hem & vardag",
         hint: "Mat, inköp, städning och pengar",
         icon: House,
         hrefs: ["/matlista", "/shopping", "/stadning", "/finances"],
@@ -561,16 +554,9 @@ export default function Layout({ children }: LayoutProps) {
       {
         id: "insightflow",
         label: "Insikter",
-        hint: "Beskrivande mönster från din egen data",
+        hint: "Mönster, historik och detaljer – bara om du vill se dem",
         icon: Brain,
-        hrefs: ["/insight", "/historik", "/statistik", "/beloningar"],
-      },
-      {
-        id: "avancerat",
-        label: "Avancerat",
-        hint: "Detaljerna bakom planeringen – bara om du vill se dem",
-        icon: Gauge,
-        hrefs: ["/flowscore", "/friktionsindex"],
+        hrefs: ["/insight", "/historik", "/statistik", "/beloningar", "/flowscore", "/friktionsindex"],
       },
       // Inställningar har en egen sektion längre ner i "Mer" – därför ligger
       // de inte som kategori här. Admin är det enda som blir kvar som grupp.
