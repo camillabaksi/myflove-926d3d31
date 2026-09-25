@@ -88,5 +88,5 @@ export function useFlowProactivePush(): void {
     };
 
     void run();
-  }, [energyValue, openItems.length, timedTodayCount, sync, tick]);
+  }, [energyValue, openItems.length, timedTodayCount, sync, tick, mode, firstMustDo]);
 }
