@@ -48,10 +48,10 @@ export function useFamilyLoad(dateISO?: string): FamilyLoadSummary {
 
     return buildFamilyLoad({
       items,
-      batteryPercent: typeof reading?.now === "number" ? Math.round(reading.now) : null,
+      batteryPercent: capacityPercent,
       capacity: capacityLevel(typeof flow?.score === "number" ? flow.score : null),
       nowMinutes: now.getHours() * 60 + now.getMinutes(),
       patternNote,
     });
-  }, [events, reading?.now, flow?.score, patternNote]);
+  }, [events, capacityPercent, flow?.score, patternNote]);
 }

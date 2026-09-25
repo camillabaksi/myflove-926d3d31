@@ -114,7 +114,7 @@ export default function WorkoutBuilderPanel({
   const { addTask } = useTasks();
   const { toast } = useToast();
 
-  const energyPercent = Math.round(flow.score);
+  const energyPercent = capacityPercent;
   const suggestedEnergy = useMemo(() => energyFromScore(flow.score), [flow.score]);
 
   useEffect(() => {

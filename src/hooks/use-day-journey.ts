@@ -38,7 +38,7 @@ export function useDayJourney(): DayJourney {
       planned: todayOpen.length + todayDone.length,
       done: todayDone.length,
       openThoughts: openItems.length,
-      batteryNow: Math.round(reading.now),
+      batteryNow: capacityPercent,
     }),
     [
       energyValue,
@@ -47,7 +47,7 @@ export function useDayJourney(): DayJourney {
       todayOpen.length,
       todayDone.length,
       openItems.length,
-      reading.now,
+      capacityPercent,
     ],
   );
 

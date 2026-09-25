@@ -21,14 +21,14 @@ import { cn } from "@/lib/utils";
 export default function NextStepCard() {
   const { t } = useLang();
   const { activeTasks } = useTasks();
-  const { reading } = useEnergyBattery();
+  const { percent } = useCapacityMode();
   const { energyValue } = useQuickCheckin();
   const [smaller, setSmaller] = useState(false);
   const { collapsed, toggle } = useCollapsible("home-next-step");
   const { flow } = useFlowScore();
 
-  const battery = Math.round(reading.now);
-  const lowOrk = energyValue != null && energyValue <= LOW_ORK_MAX;
+  const battery = percent;
+  const lowOrk = false;
   /** FlowScore och nästa steg hör ihop – men steget funkar även utan score. */
   const flowScore = typeof flow?.score === "number" ? Math.round(flow.score) : null;
 

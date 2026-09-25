@@ -2,7 +2,7 @@ import { useCallback, useEffect } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { prioritizeQuickflow } from "@/lib/quickflow-priority.functions";
 import { heuristicPriority } from "@/lib/quickflow-priority";
-import { useEnergyBattery } from "@/hooks/use-energy-battery";
+import { useCapacityMode } from "@/hooks/use-capacity-mode";
 import { useCapacityContext } from "@/hooks/use-capacity-context";
 import { usePriorityList } from "@/hooks/use-priority-list";
 import { useTasks } from "@/hooks/use-data";
@@ -11,11 +11,11 @@ import { dayOf, todayISO } from "@/lib/day";
 /**
  * EN prioriteringsmotor för QuickFlow – används av både fånga-dialogen
  * och listvyn så att det aldrig finns parallella QuickFlow-flöden.
- * Tar hänsyn till Mitt batteri men hittar aldrig på tider eller deadlines.
+ * Tar hänsyn till kapacitetsläget men hittar aldrig på tider eller deadlines.
  */
 export function useQuickflowPrioritization() {
   const run = useServerFn(prioritizeQuickflow);
-  const { reading } = useEnergyBattery();
+  const { percent } = useCapacityMode();
   const capacityContext = useCapacityContext();
   const { items: priorityItems, merge, setIntro } = usePriorityList();
   const { tasks, addTask, updateTask } = useTasks();
@@ -50,7 +50,7 @@ export function useQuickflowPrioritization() {
     async (titles: string[]) => {
       const clean = titles.map((t) => t.trim()).filter(Boolean);
       if (clean.length === 0) return;
-      const energyPercent = reading?.now;
+      const energyPercent = percent;
       const now = Date.now();
       try {
         const result = await run({
@@ -72,8 +72,8 @@ export function useQuickflowPrioritization() {
         setIntro("Jag sorterade dem så gott jag kunde. Du får gärna ändra ordningen.");
       }
     },
-    [run, reading?.now, capacityContext, merge, setIntro],
+    [run, percent, capacityContext, merge, setIntro],
   );
 
-  return { prioritizeTitles, energyPercent: reading?.now };
+  return { prioritizeTitles, energyPercent: percent };
 }

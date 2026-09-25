@@ -101,7 +101,7 @@ export function useFlowMoment(): FlowMoment {
   const rain = isWetWeather(weather?.code);
   const sunny = weather != null && weather.code <= 1 && now.getHours() >= 7 && now.getHours() <= 19;
   const kids = children?.length ?? 0;
-  const energy = Math.round(reading.now);
+  const energy = capacityPercent;
   const level = settings.level;
   const learningOn = settings.learning;
   const knowledgeSeed = knowledge.level;
