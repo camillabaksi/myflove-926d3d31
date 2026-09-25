@@ -48,6 +48,36 @@ export function PersonalizationSettings() {
   return (
     <>
       <MyFloveBlock
+        title="Språk"
+        subtitle="Hela appen på svenska eller engelska."
+        icon={Languages}
+        tone="lavender"
+        surface="lavender"
+      >
+        <div className="grid grid-cols-2 gap-2" data-no-translate>
+          {LANGUAGES.map((l) => (
+            <Button
+              key={l.value}
+              variant={lang === l.value ? "default" : "outline"}
+              className="h-auto justify-start gap-2 rounded-2xl py-3"
+              onClick={() => {
+                if (l.value === lang) return;
+                if (l.value === "sv") clearTranslationCache();
+                setLang(l.value);
+                haptic("soft");
+              }}
+            >
+              <span aria-hidden>{l.flag}</span>
+              <span className="text-sm font-semibold">{l.label}</span>
+            </Button>
+          ))}
+        </div>
+        <p className="text-xs text-muted-foreground">
+          I engelskt läge översätts hela appen. Valet följer ditt konto mellan enheter.
+        </p>
+      </MyFloveBlock>
+
+      <MyFloveBlock
         title="Ljust eller mörkt"
         subtitle="Välj hur ljus appen ska vara."
         icon={SunMoon}
