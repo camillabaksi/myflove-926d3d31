@@ -1,5 +1,7 @@
 # Roadmap
 
+- [ ] Skapa komplett tvåspråkigt materialpaket: sammanhängande Living Blueprint, svenska/engelska pitchdeck och uppdaterade pitchfilmer i 16:9 och 9:16 (2026-09-25)
+
 - [x] Förtydliga Dagsvyn med gemensamma pictogram, områdesfärger och lugnare aktivitetsrader (2026-09-24)
 
 - [x] Uppdatera privata Pitch & Investor-filer med uppladdat pitch-, BMC-, statistik- och marknadsmaterial (2026-09-24)
