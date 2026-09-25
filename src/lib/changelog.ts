@@ -12,7 +12,9 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Hem: en sak i taget",
     items: [
+      "Dagens checklista på Hem visar tre punkter direkt och resten fälls ut med Visa alla (2026-09-25)",
       "Ändringar syns direkt på alla dina enheter, även när appen legat i bakgrunden (2026-09-25)",
+
       "Planera och påminnelser använder samma prioritetsord som Hem (2026-09-25)",
       "Mjuk fråga vid full dag, erbjudande att förenkla dagen, och samma prioritering i Planera och påminnelser (2026-09-25)",
       "Hur är läget idag? Fullt, Mellan eller Lågt – planen krymper när kapaciteten minskar och det som kan vänta kan flyttas med Ångra (2026-09-25)",
