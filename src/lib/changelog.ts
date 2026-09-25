@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Hem: en sak i taget",
     items: [
+      "Hur är läget idag? Fullt, Mellan eller Lågt – planen krymper när kapaciteten minskar och det som kan vänta kan flyttas med Ångra (2026-09-25)",
       "Barnens dag är valfritt under Anpassa hemskärmen och visas inte innan användaren själv väljer det (2026-09-25)",
       "Dagens checklista och barnschemat börjar som enkla sammanfattningar som kan öppnas för fler detaljer (2026-09-25)",
       "Bella och Biancas aktiviteter visas sida vid sida på Hem och kan bockas av direkt (2026-09-25)",
