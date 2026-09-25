@@ -10,6 +10,15 @@ export const CHANGELOG_UPDATED = "2026-09-25";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Tvåspråkigt pitch- och dokumentpaket 6.0",
+    items: [
+      "Ny sammanhängande Living Blueprint på svenska och engelska, förankrad i forskningsramverkets sex lager (2026-09-25)",
+      "Redigerbara pitchdeck och pitchmanus på svenska och engelska (2026-09-25)",
+      "Fyra 180-sekunders pitchfilmer: svenska och engelska i 16:9 och 9:16 (2026-09-25)",
+      "Samma redaktionella design, verifierade siffror och försiktiga valideringspåståenden genom hela paketet (2026-09-25)",
+    ],
+  },
+  {
     title: "Hem: en sak i taget",
     items: [
       "Hjälp mig börja (2 min) på Just nu-kortet – ett litet första steg och en lugn timer (2026-09-25)",

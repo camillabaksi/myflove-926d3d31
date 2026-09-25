@@ -1,4 +1,8 @@
 ## 2026-09-25
+- Komplett tvåspråkigt materialpaket 6.0 med sammanhängande Living Blueprint, redigerbara pitchdeck, pitchmanus och 180-sekunders pitchfilmer i 16:9 och 9:16.
+- Materialet följer det nya forskningsramverkets sex lager, den aktuella produktens kapacitetslägen, prioritering, Family Flow, återhämtning och Zero-Guilt UX.
+- Svenska och engelska versioner använder samma redaktionella design, verifierade siffror och försiktiga valideringspåståenden.
+
 - "Hjälp mig börja (2 min)" på Just nu-kortet: ett litet första steg och en lugn tvåminuterstimer som sänker tröskeln att komma igång.
 - Mjuk övergång efter Klar: frågan "Vill du landa 2 minuter innan nästa?" med Landa 2 minuter eller Redo direkt.
 - "Stäng dagen" på kvällen: varm summering av dagen, ogjorda saker kan flyttas till imorgon med Ångra, och dagen avslutas utan skuld.
