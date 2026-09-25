@@ -12,6 +12,8 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Hem: en sak i taget",
     items: [
+      "Bella och Biancas aktiviteter visas sida vid sida på Hem och kan bockas av direkt (2026-09-25)",
+      "Avbockning synkas med Family Flow och använder samma fråga om hur aktiviteten kändes (2026-09-25)",
       "Just nu-kort med Klar och Inte nu, följt av Dagens checklista (2026-09-25)",
       "Orken visas i ord – Låg, Lagom eller God – med enkel förklaring (2026-09-25)",
       "Samma ordnivåer för batteriet överallt: Mitt batteri, observationer, QuickFlow, Familj och Träning (2026-09-25)",
