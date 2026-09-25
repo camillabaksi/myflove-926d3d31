@@ -8,6 +8,7 @@ import { useFlowItems } from "@/hooks/use-flow-items";
 import { isDayFull, planForCapacity } from "@/lib/priority-engine";
 import { useLang } from "@/hooks/use-language";
 import { todayISO } from "@/lib/day";
+import { Button } from "@/components/ui/button";
 import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 import { CalendarDays, Brain, Bell, CheckSquare } from "lucide-react";
