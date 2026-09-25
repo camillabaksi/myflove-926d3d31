@@ -3,7 +3,6 @@ import QuickAddSheet from "@/components/quick-add-sheet";
 import NowCard from "@/components/home/now-card";
 import CloseDay from "@/components/home/close-day";
 
-import OrkSummary from "@/components/home/ork-summary";
 import CapacityPlanCard from "@/components/home/capacity-plan-card";
 import DailyFlowList from "@/components/day/daily-flow-list";
 import ChildrenDaySummary from "@/components/home/children-day-summary";
@@ -17,7 +16,6 @@ import HomeShortcuts from "@/components/home-shortcuts";
 
 import { Link } from "wouter";
 import Layout from "@/components/layout";
-import { useEnergyBattery } from "@/hooks/use-energy-battery";
 import { useUserProfile } from "@/hooks/use-user-profile";
 import { useLang } from "@/hooks/use-language";
 import { useTasks, useReminders } from "@/hooks/use-data";
@@ -45,8 +43,6 @@ import {
 } from "lucide-react";
 import { todayISO } from "@/lib/day";
 import { track } from "@/lib/analytics";
-import { useQuickCheckin } from "@/hooks/use-quick-checkin";
-import { orkFromValue10 } from "@/lib/ork";
 import WeekReviewCard from "@/components/week-review-card";
 import JourneySteps from "@/components/journey/journey-steps";
 import NextStepCard from "@/components/journey/next-step-card";
@@ -75,8 +71,6 @@ export default function Home() {
   const [addOpen, setAddOpen] = useState(false);
   const [nameDraft, setNameDraft] = useState(name);
   const { activeArea } = useActiveArea();
-  const { reading } = useEnergyBattery();
-  const { energyValue } = useQuickCheckin();
   const { activeTasks } = useTasks();
   const { activeReminders } = useReminders();
   const { openItems } = useQuickflow();
@@ -94,9 +88,6 @@ export default function Home() {
   // Veckoöversikten hör hemma på söndagen – veckan som varit, i lugn takt.
   const isSunday = parseISODate(todayIso).getDay() === 0;
   const weekReview = useWeekReview(weekStartISO(todayIso));
-
-  const battery = Math.round(reading.now);
-  const orkLabel = orkFromValue10(energyValue)?.label ?? null;
 
   const openQuickflow = () => {
     track("home_widget_opened", { source: "quickflow" });
@@ -227,7 +218,6 @@ export default function Home() {
             <div className="mt-4 space-y-4">
               <NowCard onAdd={() => setAddOpen(true)} />
               {shows("lage") && <CapacityPlanCard />}
-              {shows("ork") && <OrkSummary />}
               {shows("checklista") && (
               <CollapsibleSection
                 id="home-daily-checklist"

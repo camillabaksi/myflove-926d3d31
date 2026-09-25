@@ -28,7 +28,7 @@ export default function FlowEntry({
             Vad passar bäst just nu?
           </h2>
           <p className="mx-auto max-w-xs text-sm leading-relaxed text-muted-foreground">
-            Flow tittar på din energi och dagens saker – och föreslår ett nästa steg i taget.
+            Flow följer dagens plan och visar ett nästa steg i taget.
           </p>
         </div>
         <Button
@@ -62,11 +62,11 @@ export default function FlowEntry({
         <ul className="space-y-2 text-sm text-muted-foreground">
           <li>
             <strong className="font-medium text-ink">Förslag</strong> – Flow föreslår en sak som
-            passar din energi just nu. Du väljer själv om du vill börja.
+            passar dagens kapacitetsläge. Du väljer själv om du vill börja.
           </li>
           <li>
             <strong className="font-medium text-ink">Planera</strong> – Flow ordnar dagens saker i
-            en rimlig ordning utifrån hur du mår.
+            en rimlig ordning utifrån vad som är viktigt och hur mycket som ryms.
           </li>
           <li>
             <strong className="font-medium text-ink">Chatta</strong> – skriv av dig till Flow. Det
