@@ -4,6 +4,7 @@ import NowCard from "@/components/home/now-card";
 import CloseDay from "@/components/home/close-day";
 
 import CapacityPlanCard from "@/components/home/capacity-plan-card";
+import EnergyBattery from "@/components/energy-battery";
 import DailyFlowList from "@/components/day/daily-flow-list";
 import ChildrenDaySummary from "@/components/home/children-day-summary";
 import { FlowMascot } from "@/components/flow-mascot";
@@ -370,6 +371,11 @@ export default function Home() {
           >
             <div className="grid gap-4">
               {shows("mina-genvagar") && <HomeShortcuts />}
+              <EnergyBattery
+                widget
+                href="/mitt-batteri"
+                onNavigate={() => track("battery_opened", { source: "hem-historik" })}
+              />
               <NextLectureHomeRow />
               {/* Rutiner & medicin – dagens doser och rutiner. */}
               {shows("medicin") && (

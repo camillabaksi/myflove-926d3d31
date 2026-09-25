@@ -16,7 +16,6 @@ const TaskSchema = z.object({
 
 const InputSchema = z.object({
   tasks: z.array(TaskSchema).min(1).max(20),
-  energy: z.enum(["low", "medium", "high"]),
   focus: z.string().optional(),
   timeAvailableMin: z.number().int().min(15).max(720).optional(),
 });
@@ -39,30 +38,14 @@ const OutputSchema = z.object({
 export type FlowPlanResult = z.infer<typeof OutputSchema>;
 
 const SYSTEM = `Du är Flow – MyFloves lugna, empatiska AI-kompanjon.
-Din uppgift här är FlowPlan: föreslå en logisk och tidseffektiv ordning på dagens uppgifter.
-
-Basera ordningen på:
-- Deadlines, särskilt uppgifter markerade [PÅMINNELSE AKTIV]
-- Uppgifternas naturliga beroenden och väntetider
-- Uppskattad tidsåtgång
-- Vad som kan ske parallellt
-- Användarens energinivå just nu
-- Tid på dygnet
-
-Deadline-regler (viktigast):
-- Uppgifter markerade [PÅMINNELSE AKTIV] har en påminnelse som redan tickat igång – de ska ligga tidigt i planen, före uppgifter utan deadline.
-- Ju färre dagar kvar, desto högre upp. Passerad deadline hamnar först.
-- För dessa: sätt "deadlineBoost": true och skriv en "why" som tydligt nämner varför den går före, t.ex. "Deadline om 2 dagar – en bit idag räcker".
-- Även vid låg energi: ta med minst en sådan uppgift, men föreslå ett litet steg.
+Uppgifterna kommer i en redan beslutad ordning. Ändra aldrig ordningen och utelämna aldrig en uppgift.
+Din uppgift är endast att ge en kort praktisk förklaring och uppskatta tid för varje uppgift.
 
 Blueprint-regler:
-- Målet är inte att få allt gjort. Målet är att få rätt saker gjorda.
-- Vid låg energi: föreslå färre uppgifter, börja med det minsta/lättaste.
-- Vid hög energi: lägg tyngre uppgifter först.
 - Varje "why" ska vara kort (max 12 ord), varm, aldrig dömande.
 - "intro" är en mening (max 20 ord) som möter användaren där hen är.
 - "note" är en avslutande mening som avlastar (t.ex. "Du behöver inte hinna allt").
-- Använd bara task-id från listan. Hoppa gärna över uppgifter som inte passar dagens energi – det är okej.
+- Använd varje task-id exakt en gång och behåll listans ordning.
 - Svara ENDAST med giltig JSON enligt schemat, ingen annan text.`;
 
 export const planFlowSequence = createServerFn({ method: "POST" })
@@ -73,7 +56,6 @@ export const planFlowSequence = createServerFn({ method: "POST" })
     if (!apiKey) throw new Error("Missing LOVABLE_API_KEY");
 
     const userPrompt = [
-      `Energinivå: ${data.energy}`,
       data.focus ? `Dagens fokus: ${data.focus}` : null,
       data.timeAvailableMin ? `Tillgänglig tid: ${data.timeAvailableMin} min` : null,
       "",
@@ -91,7 +73,7 @@ export const planFlowSequence = createServerFn({ method: "POST" })
         if (t.hasDeadlineReminder) bits.push("påminnelser på");
         const meta = bits.length ? ` (${bits.join(", ")})` : "";
         const flag = t.reminderActiveNow ? " [PÅMINNELSE AKTIV]" : "";
-        return `- id=${t.id} | ${t.title}${meta}${flag}`;
+        return `${index + 1}. id=${t.id} | ${t.title}${meta}${flag}`;
       }),
       "",
       "Returnera JSON: { intro, plan: [{ taskId, order, estimatedMin, why, deadlineBoost }], note }.",
@@ -127,5 +109,19 @@ export const planFlowSequence = createServerFn({ method: "POST" })
     } catch {
       throw new Error("AI:n svarade i fel format.");
     }
-    return OutputSchema.parse(parsed);
+    const output = OutputSchema.parse(parsed);
+    const byId = new Map(output.plan.map((item) => [item.taskId, item] as const));
+    return {
+      ...output,
+      plan: data.tasks.map((task, order) => {
+        const explanation = byId.get(task.id);
+        return {
+          taskId: task.id,
+          order,
+          estimatedMin: explanation?.estimatedMin ?? 15,
+          why: explanation?.why ?? "Ett steg i taget räcker.",
+          deadlineBoost: task.reminderActiveNow || undefined,
+        };
+      }),
+    };
   });
