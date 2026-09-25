@@ -212,7 +212,7 @@ export default function QuickAddSheet({
 
           <button
             type="button"
-            onClick={save}
+            onClick={() => save()}
             disabled={!text.trim()}
             className="min-h-12 w-full rounded-2xl bg-primary px-4 text-sm font-semibold text-primary-foreground shadow-soft transition-opacity hover:opacity-90 disabled:opacity-50"
           >
