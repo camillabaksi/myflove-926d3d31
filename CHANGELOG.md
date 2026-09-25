@@ -1,4 +1,8 @@
 ## 2026-09-25
+- Samma lugna mall på områdessidorna: "Dagens fokus" högst upp i Hälsa, Studier, Jobb, Städning och Träning – en rimlig sak att göra, anpassad efter orken.
+- Mitt batteri börjar med orken i ord; grafer och fördjupning ligger kvar hopfällt.
+- Dagens lista visar en diskret "Nu"-markör så du ser var i dagen du är.
+
 - Hem: "Just nu"-kort med en sak i taget (Klar / Inte nu), Dagens checklista, orken i ord (Låg/Lagom/God) med förklaring, färre rutor och stilla maskot vid Ingen rörelse.
 - Batteriet följer samma ordnivåer (Låg/Lagom/God ork) över hela appen: Mitt batteri, dagens observationer, QuickFlow, Familj och Träning. Procenten finns kvar bakom "Hur räknas det?".
 

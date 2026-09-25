@@ -7,6 +7,7 @@ import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { ExpandableBlock } from "@/components/myflove/expandable-block";
 import EnergyBattery from "@/components/energy-battery";
 import SimpleCheckin from "@/components/simple-checkin";
+import OrkSummary from "@/components/home/ork-summary";
 import ImpactCheckin from "@/components/impact-checkin";
 import PatternsCard from "@/components/patterns-card";
 import CycleCard from "@/components/cycle-card";
@@ -51,6 +52,11 @@ export default function BatteryPage() {
               "Vi frågar för att Flow ska kunna anpassa dagens krav efter hur mycket ork du faktiskt har – inte efter hur mycket du borde ha.",
             )}
           />
+        </MyFloveWide>
+
+        {/* 0. Orken i ord först – samma språk som på Hem. */}
+        <MyFloveWide>
+          <OrkSummary />
         </MyFloveWide>
 
         {/* 1. En enda primär handling – samma befintliga dataväg. */}

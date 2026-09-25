@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import Layout from "@/components/layout";
 import AdaptiveIntentPrompt from "@/components/adaptive-intent-prompt";
+import AreaFocus from "@/components/area-focus";
 import WorkoutBuilderPanel from "@/components/workout/workout-builder-panel";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { MyFloveThinking } from "@/components/myflove/motion";
@@ -522,6 +523,13 @@ export default function TrainingPage() {
                   : (SECTIONS.find((s) => s.id === view)?.desc ?? "")}
               </p>
             </header>
+
+            {view === "overview" && (
+              <AreaFocus
+                intent="Jag vill träna"
+                lowHint="Låg ork idag – mjuk rörlighet eller en kort promenad räcker."
+              />
+            )}
 
             {view === "overview" && (
 

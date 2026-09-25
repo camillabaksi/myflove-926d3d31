@@ -4,6 +4,7 @@ import { ArrowRight, Battery, Dumbbell, Pill, Sunrise } from "lucide-react";
 import Layout from "@/components/layout";
 import { MyFloveHeader } from "@/components/myflove";
 import EnergyBattery from "@/components/energy-battery";
+import AreaFocus from "@/components/area-focus";
 import { track } from "@/lib/analytics";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 
@@ -54,6 +55,15 @@ export default function HealthPage() {
             emojiKey="wellness"
             description="Hur du mår – energi, träning, medicin och vila på ett ställe."
             why="Allt om ditt mående ligger samlat här, så att dagens lista slipper blandas ihop med hur du känner dig."
+          />
+        </MyFloveWide>
+
+        <MyFloveWide>
+          <AreaFocus
+            intent="Jag vill göra något bra för min hälsa idag"
+            lowHint="Låg ork idag – vila och en kort promenad räcker."
+            href="/mitt-batteri"
+            hrefLabel="Checka in hur du mår"
           />
         </MyFloveWide>
 
