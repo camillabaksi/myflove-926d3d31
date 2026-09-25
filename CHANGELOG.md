@@ -1,4 +1,5 @@
 ## 2026-09-25
+- Möten och aktiviteter med fast klockslag från tidigare dagar rullar inte längre över till dagens lista; tidlösa att-göra-saker följer med som vanligt.
 - Tillbakapil och appens ram på Flow-inställningar; Pitch-sidans block kan fällas ihop.
 - Tillbakapilen visas på alla sidor utom startsidan (Hem). Familjesidans block "Dagen för hela familjen" och "Barnen" kan nu fällas ihop och expanderas som övriga vyer.
 - Mer-menyns kategorier är färre och mer sammanhängande: Min dag, Flow, Hälsa & ork, Återhämtning, Studier & jobb, Familj, Hem & vardag, Insikter (Avancerat slogs in i Insikter, Studier och Jobb i samma grupp). Länkarna och kategorivyn fungerar som tidigare.
