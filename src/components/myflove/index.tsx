@@ -9,6 +9,7 @@ import { Link, useLocation } from "wouter";
 import { ArrowLeft, ChevronDown, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MYFLOVE_EMOJI, type MyFloveEmojiKey } from "@/lib/myflove-emoji";
+import { MYFLOVE_ICON } from "@/lib/myflove-icons";
 import { useCollapsible } from "@/lib/collapse-store";
 import { useSmartBack } from "@/hooks/use-smart-back";
 import { areaProps, type AreaId } from "@/lib/areas";
