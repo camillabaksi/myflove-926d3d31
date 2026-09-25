@@ -130,6 +130,14 @@ export function DailyFlowList({
           const visualChip = visual.colorArea ? areaChipStyle(visual.colorArea) : undefined;
           return (
             <li key={item.id}>
+              {index === nowIndex && (
+                <div className="flex items-center gap-2 py-1" aria-label="Just nu">
+                  <span className="rounded-full bg-primary px-2 py-0.5 text-[10px] font-bold text-primary-foreground">
+                    Nu
+                  </span>
+                  <span className="h-px flex-1 bg-primary/40" aria-hidden />
+                </div>
+              )}
               <MyFloveTransition transitionKey={String(item.done)}>
                 <div
                   className={cn(
