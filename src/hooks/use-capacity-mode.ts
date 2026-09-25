@@ -10,6 +10,8 @@ interface Stored {
 }
 
 const VALID: CapacityMode[] = ["fullt", "mellan", "lagt"];
+const CAPACITY_MINUTES: Record<CapacityMode, number> = { fullt: 240, mellan: 120, lagt: 45 };
+const CAPACITY_TASKS: Record<CapacityMode, number> = { fullt: 5, mellan: 3, lagt: 1 };
 export const DEFAULT_CAPACITY: CapacityMode = "mellan";
 
 /** Läser sparat läge – okända/gamla värden ger null (→ standardläget). */
@@ -47,5 +49,9 @@ export function useCapacityMode() {
     setMode,
     /** Kompatibilitetssiffra härledd från läget – visas aldrig. */
     percent: CAPACITY_PERCENT[mode],
+    /** Ungefärlig tid för krävande saker idag (kompatibilitet, visas aldrig). */
+    minutes: CAPACITY_MINUTES[mode],
+    /** Hur många saker planen gärna rymmer i läget. */
+    suggestedTasks: CAPACITY_TASKS[mode],
   };
 }

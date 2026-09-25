@@ -38,9 +38,9 @@ export function useRecoveryGaps(opts?: { includeFamily?: boolean }): {
   const { lectures } = useStudySchedule();
   const childEvents = useChildEvents();
   const { window } = useDayWindow();
-  const { percent: capacityPercent } = useCapacityMode();
+  const capacity = useCapacityMode();
   // Kapacitetsläget (användarens val) är källan – inte FlowScore.
-  const flow = { score: capacityPercent };
+  const flow = { score: capacity.percent, capacityMinutes: capacity.minutes, suggestedTasks: capacity.suggestedTasks };
   const { balance } = useEnergyFlow();
 
   const today = todayISO();

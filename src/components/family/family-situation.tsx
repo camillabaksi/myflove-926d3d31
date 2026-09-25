@@ -33,9 +33,9 @@ export default function FamilySituation({
 }) {
   const { t } = useLang();
   const { addTask } = useTasks();
-  const { percent: capacityPercent } = useCapacityMode();
+  const capacity = useCapacityMode();
   // Kapacitetsläget (användarens val) är källan – inte FlowScore.
-  const flow = { score: capacityPercent };
+  const flow = { score: capacity.percent, capacityMinutes: capacity.minutes, suggestedTasks: capacity.suggestedTasks };
   const [draft, setDraft] = useState("");
   const [text, setText] = useState("");
   const [subject, setSubject] = useState<FamilySubject>("jag");

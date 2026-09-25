@@ -162,9 +162,9 @@ export default function VisualChildSchedule({
   openDoc: (path: string) => Promise<string>;
 }) {
   const { t, locale } = useLang();
-  const { percent: capacityPercent } = useCapacityMode();
+  const capacity = useCapacityMode();
   // Kapacitetsläget (användarens val) är källan – inte FlowScore.
-  const flow = { score: capacityPercent };
+  const flow = { score: capacity.percent, capacityMinutes: capacity.minutes, suggestedTasks: capacity.suggestedTasks };
   const { openItems: quickItems, absorb } = useQuickflow();
   const [schedules] = useCloudSyncedStorage<Record<string, ChildScheduleEntry[]>>(SCHEDULE_KEY, {});
   const [templates, setTemplates] = useCloudSyncedStorage<ChildScheduleTemplate[]>(TEMPLATE_KEY, []);

@@ -13,9 +13,9 @@ import { adaptActivity, type AdaptiveSuggestion } from "@/lib/adaptive-activity"
  * alltid ett svar och behöver aldrig fylla i ett formulär först.
  */
 export function useAdaptiveActivity() {
-  const { percent: capacityPercent } = useCapacityMode();
+  const capacity = useCapacityMode();
   // Kapacitetsläget (användarens val) är källan – inte FlowScore.
-  const flow = { score: capacityPercent };
+  const flow = { score: capacity.percent, capacityMinutes: capacity.minutes, suggestedTasks: capacity.suggestedTasks };
   const { energyValue } = useQuickCheckin();
 
   const score = typeof flow?.score === "number" ? flow.score : null;
