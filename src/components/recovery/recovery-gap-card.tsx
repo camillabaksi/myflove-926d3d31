@@ -147,7 +147,10 @@ export default function RecoveryGapCard({
                     }}
                     className="press flex min-h-12 w-full items-center gap-2 rounded-2xl border border-border/60 bg-card px-3 py-2 text-left text-sm text-ink"
                   >
-                    <span aria-hidden>{option.emoji}</span>
+                    {(() => {
+                      const KindIcon = KIND_ICON[option.kind];
+                      return <KindIcon className="h-4 w-4 shrink-0 text-primary" aria-hidden />;
+                    })()}
                     <span className="min-w-0 flex-1 truncate">
                       {gap.start} · {t(option.label)} {option.minutes} min
                     </span>
