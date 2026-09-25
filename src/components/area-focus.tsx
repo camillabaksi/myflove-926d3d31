@@ -3,7 +3,7 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { useCapacityMode } from "@/hooks/use-capacity-mode";
 import { useAdaptiveActivity } from "@/hooks/use-adaptive-activity";
 import { useLang } from "@/hooks/use-language";
-import { orkWord } from "@/lib/ork-word";
+import { CAPACITY_META } from "@/lib/priority-engine";
 
 /**
  * "Dagens fokus" – samma lugna mall på alla områdessidor.
@@ -26,10 +26,9 @@ export default function AreaFocus({
   hrefLabel?: string;
 }) {
   const { t } = useLang();
-  const { percent, mode } = useCapacityMode();
+  const { mode } = useCapacityMode();
   const { adapt } = useAdaptiveActivity();
 
-  const word = orkWord(percent);
   const suggestion = adapt(intent);
   const low = mode === "lagt";
 
@@ -44,7 +43,7 @@ export default function AreaFocus({
       </p>
       <p className="mt-1 font-display text-lg font-bold text-ink">{t(suggestion.suggestion)}</p>
       <p className="mt-1 text-sm text-muted-foreground">
-        {t(word.label)} · {t(suggestion.firstStep)}
+        {CAPACITY_META[mode].dot} {t(CAPACITY_META[mode].label)} · {t(suggestion.firstStep)}
       </p>
       {low && lowHint && <p className="mt-1 text-sm text-muted-foreground">{t(lowHint)}</p>}
       {href && (

@@ -4,8 +4,7 @@
 - [x] Steg 1: Konsolidera prioritet till priority-engine
 - [x] Steg 2: Fullt/Mellan/Lågt som primär kapacitetskälla
 - [x] Steg 3: FlowPlan kopplas till prioritet + kapacitet
-- [ ] Steg 4 väntar på godkännande
-- [ ] Steg 4: Sekundära planeringskort läser FlowPlans resultat
+- [x] Steg 4: En kapacitetskontroll, samma plan i UI och inventering av äldre planeringsdelar
 - [ ] Steg 5: Städa Flow-texter
 - [ ] Steg 6: UI-termer och empty states
 - [ ] Steg 7: Verifiera gammal sparad data

@@ -96,7 +96,7 @@ export default function NextStepCard() {
             ))}
 
           {/* Samma kapacitet, men utifrån det DU vill göra just nu. */}
-          {!collapsed && (
+          {!collapsed && !lowOrk && (
             <div className="mt-4 border-t border-border/50 pt-3">
               <p className="text-sm font-semibold text-ink">
                 {t("Vill du göra något annat?")}

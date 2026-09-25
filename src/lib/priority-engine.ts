@@ -17,9 +17,21 @@ export const CAPACITY_META: Record<
   CapacityMode,
   { label: string; dot: string; meaning: string }
 > = {
-  fullt: { label: "Fullt", dot: "🟢", meaning: "Relativt bra kapacitet idag." },
-  mellan: { label: "Mellan", dot: "🟡", meaning: "Jag fungerar, men hushållar." },
-  lagt: { label: "Lågt", dot: "🔴", meaning: "En sak i taget idag." },
+  fullt: {
+    label: "Fullt",
+    dot: "🟢",
+    meaning: "Du har mer utrymme idag. Jag kan planera in lite mer.",
+  },
+  mellan: {
+    label: "Mellan",
+    dot: "🟡",
+    meaning: "Vi håller planen lagom och fokuserar på det viktigaste.",
+  },
+  lagt: {
+    label: "Lågt",
+    dot: "🔴",
+    meaning: "Vi förenklar. Jag visar bara det som verkligen behöver göras.",
+  },
 };
 
 export const PRIORITY_LABEL: Record<PriorityLevel, string> = {

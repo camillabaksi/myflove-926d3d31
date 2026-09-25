@@ -52,7 +52,7 @@ const STEPS: StepDef[] = [
     number: "03",
     emoji: "🌿",
     title: "Behöver du planera om?",
-    body: "FlowPlan hjälper dig att anpassa dagen efter din kapacitet – flytta, förenkla eller hitta nästa rimliga steg.",
+    body: "MyFlove hjälper dig att anpassa dagen – flytta, förenkla eller hitta nästa rimliga steg.",
     simpleBody: "Ändra dagen om den känns för tung.",
     cta: "Hjälp mig planera om",
     href: "/flowplan",

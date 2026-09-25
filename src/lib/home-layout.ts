@@ -29,7 +29,6 @@ export interface HomeBlockMeta {
 /** "Just nu" ligger alltid överst och kan inte stängas av. */
 export const HOME_BLOCKS: HomeBlockMeta[] = [
   { id: "lage", label: "Hur är läget idag?", hint: "Välj Fullt, Mellan eller Lågt" },
-  { id: "ork", label: "Orken i ord", hint: "Låg, Lagom eller God ork" },
   { id: "checklista", label: "Dagens checklista", hint: "Möten, vardag och rutiner" },
   { id: "barnens-dag", label: "Barnens dag", hint: "Visa valda barns aktiviteter på Hem" },
   { id: "fordjupa", label: "Din dag – fördjupning", hint: "Dagens steg och nästa rimliga sak" },

@@ -3,8 +3,8 @@ import QuickAddSheet from "@/components/quick-add-sheet";
 import NowCard from "@/components/home/now-card";
 import CloseDay from "@/components/home/close-day";
 
-import OrkSummary from "@/components/home/ork-summary";
 import CapacityPlanCard from "@/components/home/capacity-plan-card";
+import EnergyBattery from "@/components/energy-battery";
 import DailyFlowList from "@/components/day/daily-flow-list";
 import ChildrenDaySummary from "@/components/home/children-day-summary";
 import { FlowMascot } from "@/components/flow-mascot";
@@ -17,9 +17,9 @@ import HomeShortcuts from "@/components/home-shortcuts";
 
 import { Link } from "wouter";
 import Layout from "@/components/layout";
-import { useEnergyBattery } from "@/hooks/use-energy-battery";
 import { useUserProfile } from "@/hooks/use-user-profile";
 import { useLang } from "@/hooks/use-language";
+import { useCapacityMode } from "@/hooks/use-capacity-mode";
 import { useTasks, useReminders } from "@/hooks/use-data";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { useNotes } from "@/hooks/use-notes";
@@ -45,8 +45,6 @@ import {
 } from "lucide-react";
 import { todayISO } from "@/lib/day";
 import { track } from "@/lib/analytics";
-import { useQuickCheckin } from "@/hooks/use-quick-checkin";
-import { orkFromValue10 } from "@/lib/ork";
 import WeekReviewCard from "@/components/week-review-card";
 import JourneySteps from "@/components/journey/journey-steps";
 import NextStepCard from "@/components/journey/next-step-card";
@@ -71,12 +69,12 @@ import { Button } from "@/components/ui/button";
 export default function Home() {
   const { name, setName, lastVisit } = useUserProfile();
   const { t } = useLang();
+  const { mode: capacityMode } = useCapacityMode();
+  const isLowCapacity = capacityMode === "lagt";
   const [editingName, setEditingName] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
   const [nameDraft, setNameDraft] = useState(name);
   const { activeArea } = useActiveArea();
-  const { reading } = useEnergyBattery();
-  const { energyValue } = useQuickCheckin();
   const { activeTasks } = useTasks();
   const { activeReminders } = useReminders();
   const { openItems } = useQuickflow();
@@ -94,9 +92,6 @@ export default function Home() {
   // Veckoöversikten hör hemma på söndagen – veckan som varit, i lugn takt.
   const isSunday = parseISODate(todayIso).getDay() === 0;
   const weekReview = useWeekReview(weekStartISO(todayIso));
-
-  const battery = Math.round(reading.now);
-  const orkLabel = orkFromValue10(energyValue)?.label ?? null;
 
   const openQuickflow = () => {
     track("home_widget_opened", { source: "quickflow" });
@@ -227,8 +222,7 @@ export default function Home() {
             <div className="mt-4 space-y-4">
               <NowCard onAdd={() => setAddOpen(true)} />
               {shows("lage") && <CapacityPlanCard />}
-              {shows("ork") && <OrkSummary />}
-              {shows("checklista") && (
+              {!isLowCapacity && shows("checklista") && (
               <CollapsibleSection
                 id="home-daily-checklist"
                 title={t("Dagens checklista")}
@@ -240,18 +234,18 @@ export default function Home() {
               </CollapsibleSection>
               )}
 
-              {shows("barnens-dag") && (
+              {!isLowCapacity && shows("barnens-dag") && (
                 <div data-npf="optional">
                   <ChildrenDaySummary />
                 </div>
               )}
 
               {/* Kvällen: en varm avslutning utan skuld. */}
-              <CloseDay />
+              {!isLowCapacity && <CloseDay />}
             </div>
 
 
-            <nav
+            {!isLowCapacity && <nav
               className="mt-5 grid grid-cols-4 gap-2"
               data-testid="home-widgets"
               aria-label={t("Genvägar")}
@@ -281,10 +275,10 @@ export default function Home() {
                 <Brain className="h-5 w-5 text-primary" aria-hidden />
                 QuickFlow
               </button>
-            </nav>
+            </nav>}
 
             <div data-npf="optional">
-              {hasSavedItems && (
+              {!isLowCapacity && hasSavedItems && (
                 <Link
                   href={savedItemsHref}
                   data-testid="home-saved-items-reminder"
@@ -307,7 +301,7 @@ export default function Home() {
             </div>
 
             {/* Återhämtning – en lugn, tydligt centrerad trygghetsväg. */}
-            <div className="mt-4 flex w-full justify-center">
+            {!isLowCapacity && <div className="mt-4 flex w-full justify-center">
               <Link
                 href="/aterhamtning"
                 onClick={() => track("home_widget_opened", { source: "paus" })}
@@ -317,7 +311,7 @@ export default function Home() {
                 <Wind className="h-4 w-4 shrink-0 text-primary" aria-hidden />
                 {t("Återhämtning")}
               </Link>
-            </div>
+            </div>}
           </section>
         </MyFloveWide>
 
@@ -338,7 +332,7 @@ export default function Home() {
 
         {/* Dagens detaljer finns kvar, men visas först när användaren ber om dem.
             Enkelt läge ("Visa mindre") viker också detta – bara översta kortet syns. */}
-        {shows("fordjupa") && (
+        {!isLowCapacity && shows("fordjupa") && (
         <MyFloveWide style={{ order: 0.3 }} className="min-w-0" data-npf="optional">
           <CollapsibleSection
             id="home-day-support"
@@ -359,14 +353,14 @@ export default function Home() {
 
         {/* Kvällscheck – frivillig, dyker upp när dagen lider mot sitt slut. */}
 
-        {shows("kvall") && new Date().getHours() >= 18 && (
+        {!isLowCapacity && shows("kvall") && new Date().getHours() >= 18 && (
           <MyFloveWide style={{ order: 0.7 }} className="min-w-0" data-npf="optional">
             <EveningCheck />
           </MyFloveWide>
         )}
 
         {/* Allt annat ligger kvar – men ur vägen tills du vill se det. */}
-        <MyFloveWide style={{ order: 6 }} className="min-w-0" data-npf="optional">
+        {!isLowCapacity && <MyFloveWide style={{ order: 6 }} className="min-w-0" data-npf="optional">
           <CollapsibleSection
             id="mer-i-myflove"
             title={t("Mer i MyFlove")}
@@ -377,6 +371,11 @@ export default function Home() {
           >
             <div className="grid gap-4">
               {shows("mina-genvagar") && <HomeShortcuts />}
+              <EnergyBattery
+                widget
+                href="/mitt-batteri"
+                onNavigate={() => track("battery_opened", { source: "hem-historik" })}
+              />
               <NextLectureHomeRow />
               {/* Rutiner & medicin – dagens doser och rutiner. */}
               {shows("medicin") && (
@@ -399,10 +398,10 @@ export default function Home() {
               )}
             </div>
           </CollapsibleSection>
-        </MyFloveWide>
+        </MyFloveWide>}
 
         {/* Områdesväljare – litet, längst ner */}
-        {shows("omrade") && (
+        {!isLowCapacity && shows("omrade") && (
           <MyFloveWide style={pos("omrade")} className="space-y-2 pt-2" data-npf="optional">
             <AreaSwitcher size="sm" />
             <p className="text-xs text-muted-foreground">
@@ -413,19 +412,19 @@ export default function Home() {
           </MyFloveWide>
         )}
 
-        <MyFloveWide style={{ order: 98 }} className="space-y-3 pt-2" data-npf="optional">
+        {!isLowCapacity && <MyFloveWide style={{ order: 98 }} className="space-y-3 pt-2" data-npf="optional">
           <AreaOnboarding />
-        </MyFloveWide>
+        </MyFloveWide>}
 
         {/* Liten, diskret notering längst ner – konkurrerar inte med korten. */}
-        <MyFloveWide
+        {!isLowCapacity && <MyFloveWide
           style={{ order: 98.5 }}
           data-testid="home-install-note"
           className="pt-1"
           data-npf="optional"
         >
           <PwaInstallCard compact />
-        </MyFloveWide>
+        </MyFloveWide>}
 
         <MyFloveWide
           style={{ order: 99 }}
