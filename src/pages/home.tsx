@@ -301,7 +301,7 @@ export default function Home() {
             </div>
 
             {/* Återhämtning – en lugn, tydligt centrerad trygghetsväg. */}
-            <div className="mt-4 flex w-full justify-center">
+            {!isLowCapacity && <div className="mt-4 flex w-full justify-center">
               <Link
                 href="/aterhamtning"
                 onClick={() => track("home_widget_opened", { source: "paus" })}
@@ -311,7 +311,7 @@ export default function Home() {
                 <Wind className="h-4 w-4 shrink-0 text-primary" aria-hidden />
                 {t("Återhämtning")}
               </Link>
-            </div>
+            </div>}
           </section>
         </MyFloveWide>
 
