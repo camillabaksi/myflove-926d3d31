@@ -104,46 +104,48 @@ export default function ChildrenDaySummary() {
                           <li
                             key={item.id}
                             className={cn(
-                              "flex min-w-0 items-center gap-1.5 rounded-2xl border border-border/50 bg-background/75 p-1.5",
+                              "min-w-0 rounded-2xl border border-border/50 bg-background/75 p-2",
                               item.completed && "bg-muted/35 opacity-65",
                             )}
                           >
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => void markDone(item, child)}
-                              aria-pressed={item.completed}
-                              aria-label={item.completed ? `${t("Ångra klar")}: ${item.title}` : `${t("Markera som klar")}: ${item.title}`}
-                              title={item.completed ? t("Ångra klar") : t("Markera som klar")}
-                              className={cn(
-                                "h-8 w-8 shrink-0 rounded-full border-2 p-0",
-                                item.completed
-                                  ? "border-primary bg-primary text-primary-foreground hover:bg-primary/90"
-                                  : "border-border bg-card text-transparent hover:border-primary/60 hover:text-transparent",
-                              )}
-                            >
-                              <Check size={14} strokeWidth={3} aria-hidden />
-                            </Button>
-                            <ActivityPictogram
-                              id={pictogramForActivity(item.title, meta.pictogram)}
-                              tone={meta.tone}
-                              className="h-8 w-8 rounded-lg"
-                              iconClassName="h-4 w-4"
-                            />
-                            <div className="min-w-0 flex-1">
-                              {item.time && (
-                                <p className="text-[10px] font-semibold tabular-nums text-muted-foreground">
-                                  {item.time.slice(0, 5)}
+                            <div className="flex min-w-0 items-center gap-1.5">
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => void markDone(item, child)}
+                                aria-pressed={item.completed}
+                                aria-label={item.completed ? `${t("Ångra klar")}: ${item.title}` : `${t("Markera som klar")}: ${item.title}`}
+                                title={item.completed ? t("Ångra klar") : t("Markera som klar")}
+                                className={cn(
+                                  "h-8 w-8 shrink-0 rounded-full border-2 p-0",
+                                  item.completed
+                                    ? "border-primary bg-primary text-primary-foreground hover:bg-primary/90"
+                                    : "border-border bg-card text-transparent hover:border-primary/60 hover:text-transparent",
+                                )}
+                              >
+                                <Check size={14} strokeWidth={3} aria-hidden />
+                              </Button>
+                              <ActivityPictogram
+                                id={pictogramForActivity(item.title, meta.pictogram)}
+                                tone={meta.tone}
+                                className="h-8 w-8 rounded-lg"
+                                iconClassName="h-4 w-4"
+                              />
+                              <div className="min-w-0 flex-1 text-right">
+                                {item.time && (
+                                  <p className="text-[10px] font-semibold tabular-nums text-muted-foreground">
+                                    {item.time.slice(0, 5)}
+                                  </p>
+                                )}
+                                <p className="truncate text-[9px] font-medium text-muted-foreground">
+                                  {t(CATEGORY_LABELS[meta.category])}
                                 </p>
-                              )}
-                              <p className={cn("break-words text-xs font-semibold leading-tight text-ink", item.completed && "line-through")}>
-                                {item.title}
-                              </p>
-                              <p className="mt-0.5 truncate text-[9px] font-medium text-muted-foreground">
-                                {t(CATEGORY_LABELS[meta.category])}
-                              </p>
+                              </div>
                             </div>
+                            <p className={cn("mt-1.5 break-words text-xs font-semibold leading-snug text-ink", item.completed && "line-through")}>
+                              {item.title}
+                            </p>
                           </li>
                         );
                       })}
