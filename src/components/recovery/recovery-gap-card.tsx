@@ -119,8 +119,11 @@ export default function RecoveryGapCard({
       ) : (
         <div className="mt-3 space-y-3">
           <div className="rounded-2xl border border-border/60 bg-secondary/40 p-3">
-            <p className="text-sm font-semibold text-ink">
-              <span aria-hidden>{current.option.emoji} </span>
+            <p className="flex items-center gap-1.5 text-sm font-semibold text-ink">
+              {(() => {
+                const KindIcon = KIND_ICON[current.option.kind];
+                return <KindIcon className="h-4 w-4 shrink-0 text-primary" aria-hidden />;
+              })()}
               {current.gap.start}–{current.gap.end}
             </p>
             <p className="text-xs text-muted-foreground">
