@@ -3,6 +3,7 @@ import QuickAddSheet from "@/components/quick-add-sheet";
 import NowCard from "@/components/home/now-card";
 import OrkSummary from "@/components/home/ork-summary";
 import DailyFlowList from "@/components/day/daily-flow-list";
+import ChildrenDaySummary from "@/components/home/children-day-summary";
 import { FlowMascot } from "@/components/flow-mascot";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { ExpandableBlock } from "@/components/myflove/expandable-block";
@@ -229,6 +230,7 @@ export default function Home() {
                 </h2>
                 <DailyFlowList />
               </section>
+              <ChildrenDaySummary />
             </div>
 
             <nav

@@ -1,4 +1,6 @@
 ## 2026-09-25
+- Hem visar nu Bella och Biancas aktiviteter sida vid sida med tid, pictogram och direkt avbockning.
+- Avbockning på Hem uppdaterar samma barnaktivitet i Family Flow och öppnar den befintliga frågan om hur det kändes.
 - Samma lugna mall på områdessidorna: "Dagens fokus" högst upp i Hälsa, Studier, Jobb, Städning och Träning – en rimlig sak att göra, anpassad efter orken.
 - Mitt batteri börjar med orken i ord; grafer och fördjupning ligger kvar hopfällt.
 - Dagens lista visar en diskret "Nu"-markör så du ser var i dagen du är.
