@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Leaf, OctagonX, Sparkles, Sunrise, Wind, type LucideIcon } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
