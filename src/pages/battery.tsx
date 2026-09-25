@@ -53,6 +53,11 @@ export default function BatteryPage() {
           />
         </MyFloveWide>
 
+        {/* 0. Orken i ord först – samma språk som på Hem. */}
+        <MyFloveWide>
+          <OrkSummary />
+        </MyFloveWide>
+
         {/* 1. En enda primär handling – samma befintliga dataväg. */}
         <MyFloveWide>
           <SimpleCheckin source="mitt-batteri" />
