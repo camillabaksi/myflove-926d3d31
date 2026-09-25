@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Barnens aktivitetslista visar bara läsbara anteckningar, inte intern pictogram- och färginformation (2026-09-25)",
       "Städning steg 5: verifierat oanvänd planeringskod har tagits bort utan datarensning. Historik, sparade omplaneringsvärden, FlowScore, energidata, QuickFlow-kompatibilitet och Jobb/Studier-stöd är kvar. (2026-09-25)",
       "Städning steg 4: Hem har en enda kapacitetskontroll med Fullt/Mellan/Lågt. Planera och Idag visar samma dagsplan utan egna energi- eller FlowScore-val; Lågt visar bara Nu och döljer extra val. Historiska energi- och mönsterdata finns kvar. (2026-09-25)",
       "Städning steg 3: FlowPlan är enda motorn för \"Vad gör jag nu?\". Den bygger bara på prioritet P1–P4 och kapacitetsläget, respekterar fasta tider och beroenden och ger Nu/Sedan/Kan vänta (i Lågt bara Nu). Just nu, Nästa rimliga steg, Hur är läget idag?, Planera, Planera om, Idag, Flow-chatten och Flows påminnelser visar samma plan; batteri och FlowScore påverkar inte längre urval eller ordning. (2026-09-25)",

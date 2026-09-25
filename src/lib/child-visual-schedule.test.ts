@@ -51,6 +51,9 @@ describe("child visual schedule", () => {
   it("maps old emoji metadata to a current pictogram", () => {
     const legacy = '[myflove-visual:{"emoji":"🚌","category":"transport","tone":"sun"}]\nHållplatsen';
     expect(decodeVisualNotes(legacy)).toEqual({ meta: { pictogram: "bus", category: "transport", tone: "sun" }, note: "Hållplatsen" });
+    expect(decodeVisualNotes('[myflove-visual:{"title":"Buss","emoji":"🚌","category":"transport","tone":"sun"}]')).toEqual({
+      meta: { pictogram: "bus", category: "transport", tone: "sun" }, note: "",
+    });
   });
 
   it("searches pictograms by title and keyword", () => {

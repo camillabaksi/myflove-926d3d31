@@ -183,15 +183,17 @@ export function encodeVisualNotes(meta: VisualActivityMeta, note = ""): string {
 
 export function decodeVisualNotes(notes?: string | null): { meta: VisualActivityMeta; note: string } {
   if (!notes?.startsWith(META_PREFIX)) return { meta: FALLBACK_META, note: notes ?? "" };
-  const end = notes.indexOf("]\n");
+  // Older activities sometimes stored only the metadata envelope, without a following newline.
+  const end = notes.indexOf("]");
   if (end < 0) return { meta: FALLBACK_META, note: notes };
+  const note = notes.slice(end + 1).replace(/^\r?\n/, "");
   try {
     const value: unknown = JSON.parse(notes.slice(META_PREFIX.length, end));
-    if (!value || typeof value !== "object") return { meta: FALLBACK_META, note: notes.slice(end + 2) };
+    if (!value || typeof value !== "object") return { meta: FALLBACK_META, note };
     const candidate = value as Partial<VisualActivityMeta>;
     const category = candidate.category;
     const tone = candidate.tone;
-    if (!category || !(category in ACTIVITY_BANK) || !tone || !VISUAL_TONES.includes(tone)) return { meta: FALLBACK_META, note: notes.slice(end + 2) };
+    if (!category || !(category in ACTIVITY_BANK) || !tone || !VISUAL_TONES.includes(tone)) return { meta: FALLBACK_META, note };
     const legacy = typeof candidate.emoji === "string" ? LEGACY_EMOJI[candidate.emoji] : undefined;
     const pictogram = candidate.pictogram && VALID_PICTOGRAMS.has(candidate.pictogram) ? candidate.pictogram : legacy ?? "home";
     const endTime = typeof candidate.endTime === "string" && /^([01]\d|2[0-3]):[0-5]\d$/.test(candidate.endTime) ? candidate.endTime : undefined;
@@ -213,9 +215,9 @@ export function decodeVisualNotes(notes?: string | null): { meta: VisualActivity
         ...(safeLinkId(candidate.linkGroup) ? { linkGroup: candidate.linkGroup } : {}),
         ...(safeLinkId(candidate.parentTaskId) ? { parentTaskId: candidate.parentTaskId } : {}),
       },
-      note: notes.slice(end + 2),
+      note,
     };
-  } catch { return { meta: FALLBACK_META, note: notes.slice(end + 2) }; }
+  } catch { return { meta: FALLBACK_META, note }; }
 }
 
 export type ChildRepeatMode = "none" | "daily" | "weekdays" | "weekly";
