@@ -386,16 +386,19 @@ export type Database = {
       family_share_areas: {
         Row: {
           area: string
+          can_edit: boolean
           created_at: string
           user_id: string
         }
         Insert: {
           area: string
+          can_edit?: boolean
           created_at?: string
           user_id: string
         }
         Update: {
           area?: string
+          can_edit?: boolean
           created_at?: string
           user_id?: string
         }
@@ -920,6 +923,24 @@ export type Database = {
       create_household: {
         Args: { _color: string; _display_name: string; _name: string }
         Returns: string
+      }
+      family_edit_shared: {
+        Args: {
+          _area: string
+          _item_id: string
+          _op: string
+          _owner: string
+          _title: string
+        }
+        Returns: undefined
+      }
+      get_family_share_permissions: {
+        Args: never
+        Returns: {
+          area: string
+          can_edit: boolean
+          owner_id: string
+        }[]
       }
       get_family_shared_data: {
         Args: never
