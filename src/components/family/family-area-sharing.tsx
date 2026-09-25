@@ -1,16 +1,25 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { CalendarDays, ListChecks, ShoppingCart, Pill, Lock, Users } from "lucide-react";
+import { CalendarDays, ListChecks, ShoppingCart, Pill, Lock, Users, Dumbbell, Smile, Wallet, GraduationCap, Briefcase, StickyNote, MapPin } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { todayISO } from "@/lib/day";
 
-type Area = "kalender" | "uppgifter" | "inkop" | "rutiner";
+type Area =
+  | "kalender" | "uppgifter" | "inkop" | "rutiner" | "traning" | "maende"
+  | "ekonomi" | "studier" | "jobb" | "anteckningar" | "resor";
 
 const AREAS: { id: Area; label: string; hint: string; icon: typeof CalendarDays }[] = [
   { id: "kalender", label: "Kalender & Min dag", hint: "Dina aktiviteter och möten med datum", icon: CalendarDays },
   { id: "uppgifter", label: "Uppgifter & QuickFlow", hint: "Dina att-göra-saker", icon: ListChecks },
   { id: "inkop", label: "Inköp & måltider", hint: "Inköpslista och matsedel", icon: ShoppingCart },
   { id: "rutiner", label: "Rutiner & medicin", hint: "Rutiner, doser och om de är tagna idag", icon: Pill },
+  { id: "traning", label: "Träning", hint: "Dina träningspass", icon: Dumbbell },
+  { id: "maende", label: "Mående & ork", hint: "Senaste måendet och orkloggar", icon: Smile },
+  { id: "ekonomi", label: "Ekonomi", hint: "Budget och senaste utgifter", icon: Wallet },
+  { id: "studier", label: "Studier", hint: "Kurser och studieplan", icon: GraduationCap },
+  { id: "jobb", label: "Jobb", hint: "Projekt", icon: Briefcase },
+  { id: "anteckningar", label: "Anteckningar & idéer", hint: "Tankar du skrivit ner", icon: StickyNote },
+  { id: "resor", label: "Resor", hint: "Sparade resor", icon: MapPin },
 ];
 
 type SharedRow = {
@@ -47,6 +56,20 @@ function linesFor(area: Area, rows: SharedRow[]): string[] {
   if (area === "inkop") {
     const shop = get("myflow-shopping").filter((e) => !e.completed && !e.checked).map(label);
     return shop.slice(0, 10).map((s) => `🛒 ${s}`);
+  }
+  if (area !== "rutiner") {
+    const list = rows.flatMap((r) => asList(r.value));
+    const out = list
+      .slice(-8)
+      .reverse()
+      .map((e) => {
+        const d = str(e.date) || str(e.createdAt).slice(0, 10);
+        const extra = typeof e.amount === "number" ? ` · ${e.amount} kr` : typeof e.level === "number" ? ` · nivå ${e.level}` : str(e.mood) ? ` · ${str(e.mood)}` : "";
+        const t = label(e) || str(e.note) || str(e.category);
+        return t || extra ? `${d ? `${d} · ` : ""}${t}${extra}` : "";
+      })
+      .filter(Boolean);
+    return out;
   }
   const log = get("myflove-medication-log").filter((l) => str(l.date) === today);
   const meds = get("myflove-medications").flatMap((m) =>
