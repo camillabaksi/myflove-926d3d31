@@ -17,6 +17,13 @@ import type { RecoveryGap, RecoveryOption } from "@/lib/recovery-gaps";
  * återhämtning som får plats. Inget bokas förrän användaren säger ja, och
  * förslagen är alltid förslag – aldrig krav eller bedömningar.
  */
+const KIND_ICON: Record<RecoveryOption["kind"], LucideIcon> = {
+  paus: Leaf,
+  ljusboost: Sunrise,
+  stopp: OctagonX,
+  vardag: Wind,
+};
+
 export default function RecoveryGapCard({
   className,
   includeFamily = true,
