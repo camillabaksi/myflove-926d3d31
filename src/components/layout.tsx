@@ -39,7 +39,6 @@ import {
   HeartPulse,
   House,
   BookOpen,
-  Building2,
   LayoutGrid,
   Dumbbell,
   SprayCan,
