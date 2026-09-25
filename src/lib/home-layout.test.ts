@@ -4,8 +4,9 @@ import { DEFAULT_PREFS, HOME_BLOCKS, cleanupOrder, type HomeBlockId } from "@/li
 describe("hemskärmens standardlayout (fyra fasta widgets)", () => {
   const visible = DEFAULT_PREFS.order.filter((id) => !DEFAULT_PREFS.hidden.includes(id));
 
-  it("visar alla anpassningsbara block som standard – inget göms bort", () => {
-    expect(visible).toHaveLength(HOME_BLOCKS.length);
+  it("visar inte Barnens dag innan användaren själv väljer det", () => {
+    expect(DEFAULT_PREFS.hidden).toContain("barnens-dag");
+    expect(visible).not.toContain("barnens-dag");
   });
 
   it("har bara sekundära block kvar – de fyra widgetarna är fasta och bor i home.tsx", () => {
@@ -28,6 +29,6 @@ describe("hemskärmens standardlayout (fyra fasta widgets)", () => {
     const gammal = ["omrade", "idag", "batteri", "vagar", "medicin"] as HomeBlockId[];
     const sorterad = cleanupOrder(gammal);
     expect(sorterad).toEqual(["medicin", "omrade"]);
-    expect(sorterad).toHaveLength(HOME_BLOCKS.length);
+    expect(sorterad).toHaveLength(HOME_BLOCKS.length - 1);
   });
 });

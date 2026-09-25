@@ -1,4 +1,6 @@
 ## 2026-09-25
+- Barnens dag är nu ett frivilligt val under Anpassa hemskärmen och visas inte på Hem förrän användaren själv slår på det.
+- Dagens checklista och det valfria barnschemat börjar som lugna sammanfattningar och kan öppnas för alla detaljer och kontroller.
 - Hem visar nu Bella och Biancas aktiviteter sida vid sida med tid, pictogram och direkt avbockning.
 - Avbockning på Hem uppdaterar samma barnaktivitet i Family Flow och öppnar den befintliga frågan om hur det kändes.
 - Samma lugna mall på områdessidorna: "Dagens fokus" högst upp i Hälsa, Studier, Jobb, Städning och Träning – en rimlig sak att göra, anpassad efter orken.

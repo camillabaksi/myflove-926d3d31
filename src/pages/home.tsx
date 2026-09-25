@@ -224,13 +224,21 @@ export default function Home() {
             <div className="mt-4 space-y-4">
               <NowCard onAdd={() => setAddOpen(true)} />
               <OrkSummary />
-              <section aria-label={t("Dagens checklista")}>
-                <h2 className="mb-1 font-display text-base font-bold text-ink">
-                  {t("Dagens checklista")}
-                </h2>
+              <CollapsibleSection
+                id="home-daily-checklist"
+                title={t("Dagens checklista")}
+                description={t("Möten, vardag och rutiner i samma lista.")}
+                defaultCollapsed
+                className="rounded-3xl border border-border/60 bg-card/80 p-4 shadow-soft"
+                headingClassName="font-display text-base font-bold text-ink"
+              >
                 <DailyFlowList />
-              </section>
-              <ChildrenDaySummary />
+              </CollapsibleSection>
+              {shows("barnens-dag") && (
+                <div data-npf="optional">
+                  <ChildrenDaySummary />
+                </div>
+              )}
             </div>
 
             <nav
