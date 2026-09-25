@@ -16,6 +16,9 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
       "Orken visas i ord – Låg, Lagom eller God – med enkel förklaring (2026-09-25)",
       "Samma ordnivåer för batteriet överallt: Mitt batteri, observationer, QuickFlow, Familj och Träning (2026-09-25)",
       "Färre rutor på Hem; resten ligger i Mer i MyFlove (2026-09-25)",
+      "Dagens fokus högst upp i Hälsa, Studier, Jobb, Städning och Träning (2026-09-25)",
+      "Mitt batteri börjar med orken i ord; grafer ligger hopfällt (2026-09-25)",
+      "Nu-markör i dagens lista så du ser var i dagen du är (2026-09-25)",
     ],
   },
   {
