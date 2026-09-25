@@ -52,6 +52,7 @@ export const DOC_EXTENSIONS = [
   ".ods",
   ".pages",
   ".epub",
+  ".odp",
 ] as const;
 
 const join = (...groups: readonly (readonly string[])[]) =>
@@ -73,7 +74,7 @@ export const ACCEPT_SCHEDULE = join(
   ["text/calendar", "text/plain", "text/csv", "application/pdf", "image/*"],
   TEXT_EXTENSIONS,
   IMAGE_EXTENSIONS,
-  [".pdf"],
+  [".pdf", ".docx", ".odt", ".pptx", ".xlsx", ".ods"],
 );
 
 /** accept för rena kalenderimporter. */
@@ -235,4 +236,4 @@ export async function prepareUpload(file: File): Promise<PreparedUpload> {
 }
 
 /** Kort hjälptext att visa under uppladdningsknappar. */
-export const UPLOAD_HINT = `PDF, bilder (även HEIC) och textfiler (txt, md, csv, rtf, html) – max ${MAX_FILE_MB} MB.`;
+export const UPLOAD_HINT = `PDF, Word, PowerPoint, Excel, OpenDocument, bilder (även HEIC) och textfiler – max ${MAX_FILE_MB} MB.`;
