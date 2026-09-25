@@ -257,7 +257,7 @@ export default function FamilyAreaSharing() {
                         );
                       })}
                     </div>
-                    <p className="text-[11px] text-muted-foreground">Övriga i familjen kan bara se.</p>
+                    {list !== null && <p className="text-[11px] text-muted-foreground">Övriga i familjen kan bara se.</p>}
                   </div>
                 );
               })()}
